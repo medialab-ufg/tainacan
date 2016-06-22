@@ -1,0 +1,212 @@
+#tainacan-breadcrumbs {
+  padding: 10px 0 10px 15px;
+  background: $collections-bg-color;
+
+  a {
+    color: $brand-medium-blue;
+    font-weight: bolder;
+
+    &:hover {
+      font-weight: normal;
+    }
+  }
+}
+
+.navbar-toggle {
+ margin-top: 15px;
+}
+.navbar-form {
+  margin-top: 10px;
+}
+
+.logo-container {
+  width: 50%;
+
+  a.repository-logo {
+    padding-top: 3px !important;
+  }
+}
+
+ul.repository-settings, .admin-configs {
+  li {
+    img {
+      height: 12px;
+      margin: -2px 2px 0 0;
+    }
+
+    &.manual {
+      a {
+        padding-right: 10px;
+        opacity: 0.85;
+
+        &:hover {
+          opacity: 1.0;
+        }
+      }
+      img {
+        height: 15px;
+      }
+    }
+
+  } // li
+}
+
+.header-navbar {
+  padding: 5px 0 5px 0;
+
+  a.logo-tainacan {
+    padding: 0;
+    margin: -10px 2% 0 0 !important;
+  }
+
+  .input-group-btn {
+    width: auto;
+    color: whitesmoke !important;
+  }
+
+  .search-tainacan-collection {
+    // width: 45%;
+    // margin-left: 4%;
+    border: none !important;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    padding-right: 0;
+    padding-left: 0;
+    margin-top: 8px;
+
+    input#search_collections, button {
+      height: 35px;
+      color: whitesmoke;
+    }
+
+    #search_collections {
+      border: 1px solid whitesmoke;
+      border-right: 0;
+    }
+
+    #search_collections {
+      width: 79%;
+    }
+
+    button {
+      border-radius: 4px;
+      padding-left: 10px;
+      padding-right: 10px;
+      padding-top: 3px;
+      border: 1px solid black;
+
+      &:hover {
+        border: 1px solid whitesmoke !important;
+      }
+
+      img {
+        height: 12px;
+      }
+      &.showing-input {
+        border-left: none !important;
+        border-radius: 0 4px 4px 0;
+      }
+    }
+
+  }
+} // .header-navbar
+
+.user-actions {
+
+  ul {
+    span.glyphicon {
+      font-size: 10px;
+      top: 0;
+    }
+  }
+
+  button {
+    padding: 5px;
+  }
+
+} // .user-actions
+
+li.admin-config-menu {
+  a.config {
+    font-weight: bolder;
+    font-size: 13px;
+  }
+  ul.admin-config-submenu {
+    padding: 10px;
+    margin: 0;
+    font-size: 12px;
+
+    li {
+      padding: 5px 0 5px 20px;
+      margin: 0;
+
+      &:hover {
+       background: $collections-bg-color;
+      }
+      a {
+        color: black;
+      }
+    }
+  }
+}
+button#iframebutton {
+  background: transparent;
+  border: none;
+}
+.collection-author {
+  margin-top: 10px;
+}
+
+.menu-ibram {
+  background: $dark-gray !important;
+  margin-bottom: 0;
+  min-height: 40px !important;
+  padding-left: 15px;
+
+  li {
+    display: inline-table;
+    padding: 10px 20px 0 20px;
+
+    &:first-child {
+      padding-left: 0 !important;
+    }
+
+    &.open {
+      background: #404040;
+    }
+
+    ul {
+      background: $dark-gray;
+      li {
+        padding-top: 0 !important;
+
+        a {
+          &:hover {
+            background: transparent;
+          }
+        }
+      }
+    }
+
+    a {
+      color: white !important;
+    }
+  }
+} // .menu-ibram
+
+.ibram-header {
+  padding: 5px 10px 10px 10px;
+  background: $brand-medium-blue;
+  height: 80px;
+
+  h3 {
+    margin-top: 10px;
+    font-weight: bolder;
+  }
+  h3, h5 {
+    padding-left: 5px;
+    color: white;
+  }
+  h5 {
+    margin-bottom: 5px; }
+}

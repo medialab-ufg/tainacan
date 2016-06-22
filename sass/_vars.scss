@@ -1,0 +1,118 @@
+$thumbless-bg: #C1D0DD;
+$brand-medium-blue: #0c698b;
+$brand-light-blue: #79a6ce;
+
+$item-light-gray: #929497;
+$lightest-gray: #ddd;
+$dark-gray: #272727;
+
+$bs-button-gray-border: #adadad;
+
+$default-link-color: #88A6CC;
+$default-link-hover-color: #1B284F;
+
+$collections-bg-color: #f1f2f2;
+$item-border: #E8E8E8;
+
+$default-golden: #d2a96D;
+
+/* Border-left color for home page titles */
+$populars: #77a6ce;
+$recents: #CAAD5B;
+$videos: #368B53;
+$images: #91597D;
+$pdfs: #874A1D;
+$texts: #BDD5B2;
+$audios: #7654A0;
+
+$default-margin: 20px 0 20px 0;
+
+@mixin set-home-title-color($name) {
+  h4 {
+    border-left: 4px solid;
+    border-color: $name;
+  }
+}
+
+@mixin edit-item-button-colors() {
+  a {
+    color: $brand-light-blue;
+    &:hover {
+      color: $item-light-gray;
+    }
+  }
+}
+
+@mixin accordion-style() {
+  border-left: 4px solid $brand-light-blue;
+  text-align: left;
+  font-size: 12px;
+  text-indent: 8%;
+  font-weight: normal;
+  background: white;
+  width: 100%;
+  border-radius: 2px;
+  padding: 5px 0 5px 0;
+}
+
+@mixin blink() {
+  text-shadow: 0 0 10px white;
+}
+
+@mixin add-box-shadow($spread, $distance, $blur, $r ,$g, $b, $opacity) {
+  -webkit-box-shadow: $spread $distance $blur 0 rgba($r, $g, $b, $opacity);
+  -moz-box-shadow:    $spread $distance $blur 0 rgba($r, $g, $b, $opacity);
+  box-shadow:         $spread $distance $blur 0 rgba($r, $g, $b, $opacity);
+}
+
+@mixin accordion_label_style() {
+  border-left: 4px solid $brand-light-blue;
+  text-align: left;
+  font-size: 12px;
+  text-indent: 5%;
+  font-weight: normal;
+  background: white;
+  width: 100%;
+  overflow: hidden;
+  // border-top-right-radius: 2px;
+  // border-bottom-right-radius: 2px;
+  border-radius: 0 2px 2px 0;
+  padding: 8px 0 8px 0;
+  span {
+    font-size: 10px;
+    text-indent: 0;
+  }
+}
+
+@mixin single_item_container_style() {
+  border: 3px solid $item-border;
+  background: white;
+  border-radius: 2px;
+  margin: 0 0 0 0;
+  padding-top: 0.7%;
+  padding-left: 15px;
+}
+
+@mixin single_item_box_style() {
+  padding: 10px 10px 20px 0;
+  // border-right: 3px solid $item-border;
+  border-bottom: 3px solid $item-border;
+
+  /*
+  &:first-child {
+    border-top: 3px solid $item-border;
+  }
+  */
+
+  .edit-field-btn {
+    float: right;
+  }
+}
+
+@mixin configs_basic_structure() {
+  background: white;
+  border: 3px solid $item-border;
+  margin-bottom: 20px;
+  padding: 20px;
+}
+

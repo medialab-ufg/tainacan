@@ -1,0 +1,147 @@
+@media all and (max-width: 767px) {
+  ul li.click_new_collection {
+    display: none;
+  }
+  form.search-tainacan-colletion {
+    .form-group {
+      display: initial !important;
+      input {
+        width: 90% !important;
+        display: inline-block;
+      }
+    }
+  }
+
+}
+
+@media all and (max-width: 450px) {
+  .home {
+   .project-info {
+     h1 {
+       font-size: 300% !important;
+     }
+     h3 {
+       font-size: 100% !important;
+     }
+   }
+  } // .home
+}
+
+@media all and (min-width: 300px) and (max-width: 479px) {
+ .home {
+   .item-individual-box.slick-slide {
+     .panel {
+       margin: 0 auto !important;
+       width: auto !important;
+     }
+   }
+   .slick-prev, .slick-next {
+     top: 10px !important;
+
+   }
+   .slick-next {
+     right: -7px !important;
+   }
+ }
+}
+
+@media all and (min-width: 765px) and (max-width: 920px) {
+  .search-tainacan-collection {
+    input {
+      font-size: 12px;
+    }
+  }
+
+  .user-actions {
+    li {
+      a {
+        padding: 17px 8px 15px 8px;
+        font-size: 13px;
+      }
+    }
+  }
+}
+
+@media all and (max-width: 767px) {
+
+  .logo-container {
+    width: auto !important;
+    margin-left: -5px !important;
+  }
+
+  .header-navbar .search-tainacan-collection {
+    width: auto;
+    float: left;
+    margin-left: 0 !important;
+    padding-left: 0;
+    padding-right: 0;
+    margin-top: 5px;
+
+    .search-home {
+      width: 100%;
+    }
+  }
+}
+
+@media all and (max-width: 450px) {
+  .header-navbar .search-tainacan-collection {
+    float: none;
+    margin: 10px 0 10px 2% !important;
+    width: 100% !important;
+  }
+
+  .navbar-toggle {
+    margin-right: 5px !important;
+  }
+}
+
+@media all and (max-width: 991px) {
+  #main_part .container-fluid .row {
+    // margin-right: 0 !important;
+  }
+
+  #div_central {
+    .item-colecao {
+      .col-md-4 {
+        float: left !important;
+      }
+    }
+  }
+}
+
+@media all and (max-width: 1009px) {
+  #main_part .container-fluid .row {
+    margin-right: 0 !important;
+  }
+  .item-colecao {
+    margin-right: 0!important;
+  }
+
+  #properties_create_opt {
+    .default-meta-config {
+      margin-left: 0 !important;
+    }
+  }
+}
+
+@media all and (max-width: 1177px) {
+  #list-viewMode {
+    .list-view-container {
+      height: auto !important;
+    }
+  }
+}
+
+// responsivo da home da coleção
+@media all and (max-width: 1009px) {
+  #div_left {
+    .expand-all {
+      margin-bottom: 2% !important;
+    }
+  }
+
+  #container_three_columns #div_central #menu_object .search-top-container .box-left {
+    width: auto !important;
+    margin-bottom: 10px;
+  }
+}

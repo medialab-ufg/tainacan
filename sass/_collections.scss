@@ -1,0 +1,385 @@
+.tainacan-breadcrumbs {
+	background: $collections-bg-color;
+	padding-top: 20px;
+}
+
+.tainacan-steps {
+	margin: 10px -30px 20px -30px;
+	background: white;
+	padding: 20px 40px 20px 40px;
+	border-bottom: 3px solid #e3e3e3;
+}
+
+#container_three_columns {
+	background: $collections-bg-color;
+
+	#div_central {
+		padding-left: 2%;
+		padding-right: 0;
+
+		#menu_object {
+			padding-top: 1.5%;
+			background: white;
+			border: 3px solid $item-border;
+			border-top: none;
+
+			.header-colecao {
+				margin-top: 10px;
+				padding: 10px 0 10px 0;
+
+				.tainacan-add-item {
+					border-radius: 4px;
+
+					.btn-group { display: block; }
+					.tainacan-add-wrapper { border-radius: 4px; }
+					button { color: white; }
+				}
+
+				optgroup, option, select, button {
+					color: black;
+				}
+			} // .header-colecao
+
+			.search-top-container {
+				.box-left {
+					padding-right: 0;
+					width: 82.5%;
+				}
+				.box-right {
+					padding-right: 6px;
+					padding-left: 5px;
+
+					button {
+						color: $brand-medium-blue;
+						width: 100%;
+						overflow: hidden;
+					}
+				}
+			} // .search-top-container
+
+		} // #menu_object
+
+		#center_pagination {
+			width: 100%;
+			margin: 20px auto 10px auto;
+			background: white;
+			border: 3px solid $item-border;
+			padding: 5px 0 5px 0;
+			color: $item-light-gray;
+
+			.pagination_items {
+				a.btn {
+					span {
+						font-size: 10px;
+					}
+				}
+			}
+
+			.center {
+				padding-top: 5px;
+			}
+
+			.pull-right {
+				margin-top: -20px;
+			}
+
+		} //#center_pagination
+
+	} // #div_central
+} // .container_three_columns
+
+.col-md-6:nth-child(even) {
+	.item-colecao {
+		margin-right: 0;
+	}
+}
+
+.single_stars {
+	.star-on-png, .star-half-png, .star-off-png {
+		font-size: 1.5em;
+		color: darkgoldenrod;
+	}
+}
+
+a.collection-thumb {
+	img {
+		margin-top: -3px;
+		border-top: 3px solid white;
+	}
+}
+
+#properties_create_opt {
+	.default-meta-config {
+		margin-left:-45px;
+	}
+}
+
+.selected-viewMode {
+	padding: 3px 2px 5px 5px;
+	border: 2px solid $item-border;
+	border-radius: 2px;
+}
+.viewMode-control {
+	padding-top: 5px;
+
+	div {
+		color: $brand-medium-blue;
+		float: left;
+		font-weight: bolder;
+		padding-top: 3px;
+	}
+	ul {
+		li {
+			display: inline;
+			margin-left: 10px;
+			a {
+				img {
+					width: 15px;
+					&:hover {
+						opacity: 0.7;
+					}
+				}
+			}
+		}
+	}
+} // .viewMode-control
+
+/*
+****************************************
+**************** CARD MODE *************
+****************************************
+*/
+
+#cards-viewMode{
+	.item-colecao {
+		border: 3px solid $item-border;
+		background: white;
+		border-radius: 2px;
+		margin: 1.5% 1.5% 0.2% 0;
+		height: 190px;
+		padding: 10px;
+
+		.item-info {
+			.colFoto {
+				min-height: 150px;
+			}
+
+			.item-meta {
+				color: $item-light-gray;
+				font-size: 12px;
+			}
+
+			.item-meta-box {
+				padding-left: 0;
+				margin-left: 0;
+				a {
+					font-weight: bolder;
+					color: black;
+				}
+				h4 {
+					margin: 0 0 3px 0;
+				}
+			}
+		}
+
+		.editing-item {
+			width: 100%;
+
+			.rankings-container {
+				float: left;
+			}
+
+			.item-funcs {
+				// float: right;
+				padding: 0;
+
+				li {
+					float:right;
+					margin: 4px !important;
+
+					@include edit-item-button-colors();
+					a {  font-size: 1.3em;  }
+				}
+			}
+
+			.item-redesocial {
+				position: relative;
+				float: right;
+				margin-top: -5px;
+
+				div {
+					font-size: 1.2em;
+					text-indent: 5px;
+				}
+
+				@include edit-item-button-colors();
+
+				span {
+					font-size: 2.7em;
+					color: #CCCCCC;
+					line-height: 1.2;
+					text-align: center;
+
+					&:last-child{
+						font-size: 2.3em;
+					}
+				}
+			} // .item-redesocial
+
+		} // .editing-item
+
+		.close-metadata-box {
+			position: absolute;
+			top: 4%;
+			right: 2%;
+			font-size: 1.3em;
+
+			span {
+				color: #aaa;
+			}
+		}
+
+		.class-meta-box {
+			overflow: scroll;
+			overflow-x: hidden;
+			height: 50px;
+			display: none;
+		}
+
+		.shown-classifications {
+			position: absolute;
+			padding: 15px;
+			z-index: 4;
+			background: white;
+			width: 100%;
+			height: 150px;
+			border-radius: 4px;
+			border: 1px solid #aaa;
+		}
+
+	} // item colecao
+}
+/*
+****************************************
+**************** LIST MODE *************
+****************************************
+*/
+#list-viewMode {
+	margin-top: 15px;
+	border: 3px solid $item-border;
+
+	.list-view-container {
+		background: white;
+		border-top: 3px solid $item-border;
+		padding-top: 15px;
+		padding-bottom: 8px;
+		height: 60px;
+		overflow: hidden;
+
+		.item-thumb {
+			// padding-top: 8px;
+		}
+
+		.item-display-title {
+			margin: 0;
+			font-size: 16px;
+		}
+
+		.item-description {
+			font-size: 12px;
+			overflow: hidden;
+		}
+
+		&:first-child {
+			border-top: none;
+		}
+		&:last-child {
+
+		}
+
+	}
+	.item-thumb {
+		a img {
+			max-width: 30px;
+		}
+	}
+} // list-viewMode
+
+/*
+****************************************
+**************** GALLERY MODE *************
+****************************************
+*/
+#gallery-viewMode {
+	margin-top: 15px;
+
+	.gallery-view-container {
+		background: white;
+		border: 3px solid $item-border;
+		padding-top: 10px;
+		text-align: center;
+		height: 240px;
+		margin-bottom: 15px;
+		margin-left: 15px;
+		width: 24%;
+		overflow: hidden;
+
+		&.first-el {
+			margin-left: 0 !important;
+		}
+
+		img {
+			display: inline-block !important;
+			max-width: 170px !important;
+		}
+
+		.item-thumb {
+			height: 170px;
+		}
+
+		.title-container {
+			margin-top: 10px;
+			border-top: 2px solid $item-border;
+
+			h4 {
+				overflow: hidden;
+
+				a {
+
+					color: black;
+					font-weight: bolder;
+				}
+			}
+		}
+
+	} // .gallery-view-container
+
+} // gallery-viewMode
+
+/*
+****************************************
+**************** SLIDESHOW MODE *************
+****************************************
+*/
+#slideshow-viewMode {
+	margin-top: 15px;
+	// padding-left: 50px;
+
+	.slick-slide img {
+		display: inline-block !important;
+	}
+
+	.main-slide {
+
+	}
+	.collection-slides {
+		.slick-slide img {
+			max-width: 150px;
+		}
+		.slick-current {
+			img {
+				border: 2px solid $brand-medium-blue;
+			}
+		}
+	}
+}

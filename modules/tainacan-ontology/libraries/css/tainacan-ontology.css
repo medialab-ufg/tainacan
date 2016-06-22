@@ -1,0 +1,118 @@
+
+/* 
+   #1 Alterando o dynatree
+*/
+
+.color1 span.dynatree-icon{
+
+    background-image: url("../images/class.png");
+}
+.color2 span.dynatree-icon{
+
+    background-image: url("../images/class.png");
+}
+.color3 span.dynatree-icon{
+
+    background-image: url("../images/class.png");
+}
+.color4 span.dynatree-icon{
+
+    background-image: url("../images/class.png");
+}
+.color5 span.dynatree-icon{
+
+    background-image: url("../images/class.png");
+}
+.color6 span.dynatree-icon{
+
+    background-image: url("../images/class.png");
+}
+.color7 span.dynatree-icon{
+
+    background-image: url("../images/class.png");
+}
+.color8 span.dynatree-icon{
+
+    background-image: url("../images/class.png");
+}
+.color9 span.dynatree-icon{
+
+    background-image: url("../images/class.png");
+}
+.color10 span.dynatree-icon{
+
+    background-image: url("../images/class.png");
+}
+.color11 span.dynatree-icon{
+
+    background-image: url("../images/class.png");
+}
+.color12 span.dynatree-icon{
+
+    background-image: url("../images/class.png");
+}
+.color13 span.dynatree-icon{
+
+    background-image: url("../images/class.png");
+}
+//propriedades
+.color_property1 span.dynatree-icon{
+
+    background-image: url("../images/property.png");
+}
+.color_property2 span.dynatree-icon{
+
+       background-image: url("../images/property.png");
+}
+.color_property3 span.dynatree-icon{
+
+       background-image: url("../images/property.png");
+}
+.color_property4 span.dynatree-icon{
+    background-image: url("../images/property.png");
+}
+.color_property5 span.dynatree-icon{
+    background-image: url("../images/property.png");
+}
+.color_property6 span.dynatree-icon{
+    background-image: url("../images/property.png");
+}
+.color_property7 span.dynatree-icon{
+    background-image: url("../images/property.png");
+}
+.color_property8 span.dynatree-icon{
+    background-image: url("../images/property.png");
+}
+.color_property9 span.dynatree-icon{
+    background-image: url("../images/property.png");
+}
+.color_property10 span.dynatree-icon{
+    background-image: url("../images/property.png");
+}
+.color_property11 span.dynatree-icon{
+    background-image: url("../images/property.png");
+}
+.color_property12 span.dynatree-icon{
+    background-image: url("../images/property.png");
+}
+.color_property13 span.dynatree-icon{
+    background-image: url("../images/property.png");
+}
+.individue span.dynatree-icon{
+    background-image: url("../images/individue.png");
+}
+.default span.dynatree-icon{
+    background-image: url("../images/individue.png");
+}
+
+
+#form{
+    display: none;
+    background: white;
+    border: 3px solid #E8E8E8;
+    min-height: 500px;
+    overflow: scroll;
+    border-top: none;
+    margin-left: -6px;
+    padding: 15px;
+}

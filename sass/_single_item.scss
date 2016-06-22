@@ -1,0 +1,336 @@
+#single_item_tainacan {
+
+  .single-title {
+    font-weight: bolder;
+    color: black !important;
+    display: inline-block;
+  }
+
+  .left-container {
+    & > div {
+      margin-left: 0;
+      padding-left: 7px !important;
+    }
+  }
+
+  .right-container, .single_list_properties {
+    & > div {
+      margin-left: 0;
+      padding-left: 20px;
+      border-right: none !important;
+    }
+
+  } // .single_list_properties
+
+  .all-metadata {
+    border-top: 3px solid $item-border;
+
+    .meta-header {
+      // border-bottom: 3px solid $item-border;
+    }
+
+    .single_list_properties {
+      & > div:last-child {
+        border-right: 3px solid #e8e8e8 !important;
+        margin-right: 13px;
+        margin-left: 3px;
+        border-left: 0;
+        background: orangered !important;
+      }
+    }
+
+    .dynamic-metadata-admin {
+      & div {
+        // margin-bottom: 20px;
+      }
+    }
+
+    ul.add-metadata {
+      width: 270px;
+      padding: 10px;
+      li {
+        &:first-child {
+          padding-bottom: 10px;
+        }
+      }
+    }
+
+    ul#single_list_properties_edit_remove {
+      width: 350px;
+
+      li {
+        // padding-bottom: 10px;
+        padding: 10px;
+        border-bottom: 1px solid $item-border;
+
+        &:last-child {
+          // padding-bottom: 0;
+          border: none;
+        }
+      }
+    }
+
+    .col-md-6 {
+      border: 3px solid $item-border;
+      //min-height: 118px;
+
+      &:nth-child(2n) {
+        border-bottom: none;
+        //border-left: none;
+        border-right: 4px solid $item-border;
+      }
+      &:nth-child(2n+1) {
+        border-bottom: none;
+      }
+      &:nth-child(odd) {
+
+      }
+
+      &:last-child {
+        background: beige !important;
+      }
+    }
+
+    .box-item-paddings {
+      margin-left: -20px;
+      padding-left: 20px !important;
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+  } // .all-metadata
+
+  .content-title, .content-title h2 small {
+    color: black !important;
+  }
+
+  .item-main-data {
+    border-left: none;
+    padding-left: 0;
+
+    .tainacan-header-info {
+      @include single_item_container_style();
+      margin-bottom: 20px;
+      padding-top: 1.2%;
+      padding-left: 8px;
+    }
+
+    .tainacan-fixed-metas {
+      @include single_item_container_style();
+      padding-top: 0;
+      padding-right: 0;
+      padding-left: 0;
+
+    } // .item-fixed-metas
+
+    .item-metadata {
+      @include single_item_container_style();
+      margin-top: 20px;
+      margin-bottom: 20px;
+      padding-left: 0;
+      padding-top: 0;
+
+      .edit-field-btn {
+        float: right;
+      }
+      .item-description {
+        border: none;
+        border-bottom: 3px solid $item-border;
+        padding: 10px 10px 20px 20px;
+        text-align: justify;
+      }
+
+    } // .item-metadata
+
+    .item-comments {
+      @include single_item_container_style();
+      padding-left: 0;
+
+      #resources_collection_dropdown {
+        li {
+          width: 30%;
+          text-align: center;
+          display: inline-block;
+        }
+      }
+
+      ul.commentlist {
+        padding-left: 0;
+        // float: left;
+
+        & > li {
+          border-bottom: 3px solid $item-border;
+          float: left;
+          width: 100%;
+          margin-top: 20px;
+
+          &:first-child {
+            margin-top: 0;
+          }
+          &:last-child {
+            border-bottom: none;
+          }
+        }
+
+        ul.children {
+          li {
+            // margin-left: 37px;
+          }
+        }
+
+        ul#resources_collection_dropdown {
+          li {
+            margin: 0 !important;
+          }
+        }
+
+      } // ul.commentlist
+
+      textarea.leave-comment {
+        width: 80%;
+        margin-left: 15px;
+        display: inline-block;
+        height:65px;
+      }
+
+      .comment-box-container {
+        margin-bottom: 20px;
+
+        .reply {
+          & > div {
+            display: inline-block;
+            float: left;
+          }
+          .right {
+            margin-top: -15px;
+            text-align: right;
+          }
+        } // .reply
+      }
+
+      #respond {
+        margin-bottom: 20px;
+        // padding-left: 5px;
+        border-bottom: 2px solid $item-border;
+      }
+    } // item-comments
+
+    #text_title {
+      display: inline-block;
+      font-weight: 800;
+      margin: 5px 10px 0 0;
+    }
+
+    ul.item-funcs {
+      padding:0;
+      margin-right: 5px;
+      text-align: right;
+
+      li {
+        display: inline;
+      }
+    } // .item-funcs
+
+    .box-item-paddings {
+      @include single_item_box_style();
+    } // box-item-paddings
+
+    .box-item-right {
+      // width: 110%;
+      padding-left: 30px;
+    }
+
+    .item-fixed-data {
+      // margin-left: -15px;
+
+      .left-container {
+        padding-right: 0;
+        border-right: 3px solid $item-border;
+      }
+      .right-container {
+        padding-left: 0;
+        padding-right: 0;
+
+        .item-ranking {
+          min-height: 106px;
+        }
+
+        .item-share {
+          border-bottom: 0 !important;
+
+          a.fb, a.twitter, a.gplus, a.data-share {
+            img {
+              width: 5%;
+              margin-right: 15px;
+            }
+          }
+        } // .item-share
+      }
+      .item-source {
+
+      }
+    }
+
+  } // .item-main-data
+
+  .box-item-paddings.item-tags {
+    border: none;
+    border-top: none !important;
+    padding-left: 20px;
+  }
+
+  .item-attachments {
+    margin-right: -30px;
+    border: 3px solid $item-border;
+    background: white;
+    border-radius: 2px;
+    width: 26.5%;
+    float: right;
+    padding-top: 0.7%;
+    border-bottom: none;
+    border-right: none;
+
+  } // .item-attachments
+
+  .single-content-divider {
+    float: left;
+    height: 30px;
+    margin-left: -30px;
+    background: $collections-bg-color;
+    width: 105.8%;
+    border-top: 3px solid $item-border;
+    border-bottom: 3px solid $item-border;
+  }
+
+} // #single_item_tainacan
+
+.item-breadcrumbs {
+  margin-top: -10px;
+  padding-top: 0;
+  background: $collections-bg-color !important;
+  color: $brand-medium-blue !important;
+  font-weight: bolder;
+
+  .content-back {
+    color: $brand-medium-blue;
+    margin: -4px 10px 5px 0;
+  }
+
+  button {
+    font-size: 11px;
+  }
+
+  li {
+    a {
+      color: $brand-medium-blue !important;
+    }
+  }
+} // .item-breadcrumbs
+
+.single-socialdb_collection {
+  .popover-content {
+    font-size: 12px !important;
+    color: $brand-medium-blue !important;
+  }
+}

@@ -1,0 +1,245 @@
+.hide-el {
+  display: none !important;
+}
+
+body {
+  //background: $collections-bg-color;
+}
+
+#configuration {
+
+  .config-temp-box {
+    /*
+    background: #f1f2f2;
+    padding-left: 20px;
+    margin-left: -30px;
+    width: 104%;
+    */
+    
+    .tainacan-config-container {
+      border: 4px solid $item-border;
+      background: white;
+      padding: 10px 40px 30px 40px;
+      margin: 0 0 40px 0;
+
+      a {
+        font-weight: bolder;
+        color: $brand-medium-blue;
+      }
+
+    }
+  }
+
+}
+
+textarea {
+  resize: vertical;
+}
+
+.multiple-items-accordion {
+  width: 95%;
+
+  h2.ui-accordion-header {
+    @include accordion-style();
+    margin: 10px 10px 0 0 !important;
+  }
+}
+
+  .ui-accordion-content {
+    // padding: 10px !important;
+    border: none;
+    margin-bottom: 10px;
+}
+
+.row {
+  margin-right: 0;
+}
+
+#main_part {
+  .container-fluid {
+    .row {
+      margin-right: -15px;
+    }
+  }
+
+} // #main_part
+
+#myModalRegister {
+  overflow: scroll;
+}
+
+/*
+* PAGE 404 >>
+*/
+body.error404 {
+  #footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    margin-top: -10px;
+
+  }
+  .page-not-found {
+    margin: 0 auto;
+    text-align: center;
+    padding: 6% 0 40px 0;
+
+    h5 {
+      a {
+        color: white;
+      }
+    }
+  }
+}
+/*
+* << PAGE 404
+*/
+
+#collection_cover_image {
+  width:100%;
+  height: 190px;
+  position: relative;
+  border:1px solid #ccc;
+}
+
+.cropControls{
+  left: -1px !important;
+}
+
+.collection_header_img {
+  max-width: 100%;
+  background-color: #6a6a6a;
+  padding:0 20px;
+  background-size: cover;
+}
+
+.single-item-title {
+  padding-left: 0px;
+}
+
+.no-padding {
+  padding: 0px;
+}
+
+#div_central {
+  .content-wrapper div {
+    display: block;
+    padding: 20px;
+    background: white;
+
+    p {
+      padding: 0px;
+    }
+  }
+
+  #filters_collection {
+    padding-top: 10px;
+    color: white;
+    font-size: 12px;
+
+    .search-resultset {
+      background: $brand-light-blue;
+      border-radius: 4px 0 0 4px;
+
+      a {
+        padding: 5px 7px 5px 7px;
+        display: inline-block;
+      }
+    }
+  }
+
+  /*------------------Busca------------------*/
+
+  .search-colecao {
+
+    input, button {
+      color: #fff;
+      box-shadow: none;
+    }
+
+    input {
+      border-color: #aaa;
+      color: black;
+      border-right: none;
+
+      &::-webkit-input-placeholder {
+        color: #AAA !important;
+      }
+    }
+
+    button {
+      color: #AAAAAA;
+      border-color: #AAAAAA;
+    }
+  }
+
+  .img-edit{
+    color: rgba(255,255,255,0.5);
+  }
+
+  .clear-top-search {
+    button {
+      display: none;
+      background: $brand-light-blue;
+      color: white;
+      border: none;
+      width: 98%;
+      text-align: left;
+      margin: 10px 0 0 2%;
+      padding: 5px 0 2px 7px;
+    }
+  }
+
+} // #div_central
+
+.item-attachments {
+  h4.text-center {
+    border-bottom: 1px dashed #CCCCCC;
+    padding-bottom: 8px;
+    width: 80%;
+    margin: 10px auto;
+  }
+}
+
+div.image-legend {
+  padding: 20px 10px 0 10px;
+}
+
+#carousel-attachment {
+  .slideshow-item {
+    display: block;
+
+    img {
+      text-align: center;
+      margin: 0 auto;
+      max-height:500px;
+      max-width:500px;
+    }
+
+    .image-caption {
+      padding: 10px;
+      text-align: justify;
+    }
+
+  }
+} // carousel attachment
+
+.titulo-colecao h3 a {
+  &:hover {
+    color: white;
+  }
+}
+
+.edit-object-box-format {
+  margin: 10px auto 20px auto;
+  text-align: center;
+}
+
+.white-background {
+  background-color: white !important;
+}
+
+hr.single-item-divider {
+  color: $brand-medium-blue;
+  margin: 3px 0 10px 0;
+}

@@ -1,0 +1,60 @@
+#div_left {
+  // padding: 1% 2% 2% 0;
+  padding: 1% 2% 0 0;
+  background: white;
+  border: 3px solid $item-border;
+  margin-left: -3px;
+  min-height: 380px;
+  border-top: none;
+  border-bottom: 0;
+
+  #accordion {
+    .ui-accordion-content {
+      border: none;
+      padding: 10px 0 0 10px;
+    }
+
+    .cssmenumaker-menu {
+      overflow: visible !important;
+    }
+  }
+
+  .tainacan-default-tags {
+    width: 100%;
+  }
+
+  .expand-all {
+    background: $brand-light-blue;
+    text-align: right;
+    margin: 0 0 8.5% 0;
+    padding-right: 10%;
+    border-radius: 0 4px 4px 0;
+
+    &:hover {
+      color: $brand-medium-blue;
+    }
+  }
+
+  .title-pipe {
+    @include accordion_label_style();
+  }
+
+  .from_to_filter {
+    span {
+      font-weight: bolder;
+      font-size: 12px;
+    }
+    input.form-control {
+      display: inline-block;
+      width: 91%;
+      margin-bottom: 10px;
+    }
+  }
+
+  .date-range-filter {
+    a {
+      font-size: 11px;
+    }
+  }
+
+} // div_left

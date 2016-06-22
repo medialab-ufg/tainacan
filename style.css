@@ -1,0 +1,83 @@
+/*
+Theme Name: Social DB
+Theme URI: https://wordpress.org/themes/twentyfifteen
+Author: the WordPress team
+Author URI: https://wordpress.org/
+Description: Our 2015 default theme is clean, blog-focused, and designed for clarity. Twenty Fifteen's simple, straightforward typography is readable on a wide variety of screen sizes, and suitable for multiple languages. We designed it using a mobile-first approach, meaning your content takes center-stage, regardless of whether your visitors arrive by smartphone, tablet, laptop, or desktop computer.
+Version: 1.0
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Tags: black, blue, gray, pink, purple, white, yellow, dark, light, two-columns, left-sidebar, fixed-layout, responsive-layout, accessibility-ready, custom-background, custom-colors, custom-header, custom-menu, editor-style, featured-images, microformats, post-formats, rtl-language-support, sticky-post, threaded-comments, translation-ready
+Text Domain: twentyfifteen
+
+This theme, like WordPress, is licensed under the GPL.
+Use it to make something cool, have fun, and share what you've learned with others.
+*/
+
+#div_central{
+    position: relative;
+    overflow-y:auto;
+    overflow-x:hidden;
+    max-height:100px;
+     overflow: auto;
+}
+#comments{
+    width:630px;
+    float:left;
+    border-top:1px solid #bebebe;
+}
+
+#comments h3{
+    font-size:14px;
+    margin:20px 0;
+}
+
+ol.commentlist{
+    list-style:none;
+}
+
+ol.commentlist li{
+    margin-bottom:30px;
+}
+
+ol.commentlist ul{
+    margin:0px;
+}
+
+ol.commentlist ul li{
+    margin:20px 20px 20px 40px;
+}
+
+#respond{
+    margin:0 0 30px 0;
+    clear:both;
+}
+
+#respond form label{
+    float:left;
+    clear:left;
+    width:60px;
+    text-align:right;
+    margin-right:10px;
+}
+
+#respond form input{
+    float:left;
+    width:250px;
+    margin-bottom:10px;
+}
+
+#respond form textarea{
+    float:left;
+    width:400px;
+    height:100px;
+    margin-bottom:10px;
+}
+
+#respond form input.commentsubmit{
+    float:left;
+    margin-left:70px;
+}
+
+
+

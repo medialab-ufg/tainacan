@@ -1,0 +1,174 @@
+
+/* These styles will be applied to all MenuMaker Menus */
+.cssmenumaker-menu,
+.cssmenumaker-menu ul,
+.cssmenumaker-menu li,
+.cssmenumaker-menu li a,
+.cssmenumaker-menu li ul li,
+.cssmenumaker-menu li ul li a {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  line-height: 1;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;  
+  background: none;
+  width: auto;
+  height: auto;
+  float: none;
+  font-weight: normal;
+  height: auto;
+  text-align: left;
+  text-transform: none;
+
+}
+
+.cssmenumaker-menu,
+.cssmenumaker-menu ul,
+.cssmenumaker-menu li {
+  display: block;
+}
+
+.cssmenumaker-menu a:after {
+
+}
+
+.cssmenumaker-menu li:hover,
+.cssmenumaker-menu li a:hover,
+.cssmenumaker-menu li:hover a,
+.cssmenumaker-menu li li a:hover,
+.cssmenumaker-menu li li:hover a {
+  background: none;
+  border: none;
+  color: none;
+}
+
+.cssmenumaker-menu li.active,
+.cssmenumaker-menu a.active {background: none;}
+
+
+.cssmenumaker-menu ul ul {
+  z-index: 1000;
+}
+
+.cssmenumaker-menu {clear: both;}  
+
+
+
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:600);
+/* Menu CSS */#cssmenu-229,
+#cssmenu-229 > ul {
+  background: url(http://localhost/tainacan/wp-content/plugins/cssmenumaker_pro/menus/137/images/highlight-bg.png) repeat;
+  padding-bottom: 3px;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 600;
+}
+#cssmenu-229:before,
+#cssmenu-229:after,
+#cssmenu-229 > ul:before,
+#cssmenu-229 > ul:after {
+  content: "";
+  display: table;
+}
+#cssmenu-229:after,
+#cssmenu-229 > ul:after {
+  clear: both;
+}
+#cssmenu-229 {
+  width: auto;
+  zoom: 1;
+}
+#cssmenu-229 > ul {
+  background: url(http://localhost/tainacan/wp-content/plugins/cssmenumaker_pro/menus/137/images/menu-bg.png) repeat;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+#cssmenu-229 > ul li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+#cssmenu-229 > ul > li {
+  float: left;
+  position: relative;
+}
+#cssmenu-229 > ul > li > a {
+  padding: 23px 26px;
+  display: block;
+  color: white;
+  font-size: 13px;
+  text-decoration: none;
+  text-transform: uppercase;
+  text-shadow: 0 -1px 0 #0d0d0d;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.7);
+  line-height: 18px;
+}
+#cssmenu-229 > ul > li:hover > a {
+  background: url(http://localhost/tainacan/wp-content/plugins/cssmenumaker_pro/menus/137/images/highlight-bg.png) repeat;
+  text-shadow: 0 -1px 0 #97321f;
+  text-shadow: 0 -1px 0 rgba(122, 42, 26, 0.64);
+}
+#cssmenu-229 > ul > li > a > span {
+  line-height: 18px;
+}
+#cssmenu-229 > ul > li.active > a,
+#cssmenu-229 > ul > li > a:active {
+  background: url(http://localhost/tainacan/wp-content/plugins/cssmenumaker_pro/menus/137/images/hover.png) repeat;
+}
+/* Childs */
+#cssmenu-229 > ul ul {
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+  top: 120px;
+  background: url(http://localhost/tainacan/wp-content/plugins/cssmenumaker_pro/menus/137/images/menu-bg.png) repeat;
+  margin: 0;
+  padding: 0;
+  z-index: -1;
+}
+#cssmenu-229 > ul li:hover ul {
+  opacity: 1;
+  visibility: visible;
+  margin: 0;
+  color: #000;
+  z-index: 2;
+  top: 64px;
+  left: 0;
+}
+#cssmenu-229 > ul ul:before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  width: 100%;
+  height: 20px;
+  background: transparent;
+}
+#cssmenu-229 > ul ul li {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+#cssmenu-229 > ul ul li a {
+  padding: 18px 26px;
+  display: block;
+  color: white;
+  font-size: 13px;
+  text-decoration: none;
+  text-transform: uppercase;
+  width: 150px;
+  border-left: 4px solid transparent;
+  -webkit-transition: all 0.35s ease-in-out;
+  -moz-transition: all 0.35s ease-in-out;
+  -ms-transition: all 0.35s ease-in-out;
+  transition: all 0.35s ease-in-out;
+}
+#cssmenu-229 > ul ul li a:hover {
+  border-left: 4px solid #d64e34;
+  background: url(http://localhost/tainacan/wp-content/plugins/cssmenumaker_pro/menus/137/images/hover.png) repeat;
+}
+#cssmenu-229 > ul ul li a:active {
+  background: url(http://localhost/tainacan/wp-content/plugins/cssmenumaker_pro/menus/137/images/menu-bg.png) repeat;
+}

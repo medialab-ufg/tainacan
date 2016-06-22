@@ -1,0 +1,8 @@
+
+# BEGIN WordPress Theme
+php_value memory_limit 2048M
+php_value upload_max_filesize 2000M
+php_value max_execution_time 259200
+php_value max_input_vars 20000
+php_value post_max_size 2048M
+# END WordPress

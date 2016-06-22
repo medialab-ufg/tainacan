@@ -1,0 +1,735 @@
+@import "vars";
+@import "header";
+@import "home";
+@import "layout";
+@import "menu_left";
+@import "custom_filter_menus";
+@import "collections";
+@import "responsive_home";
+@import "metadata_filters";
+@import "single_item";
+@import "configs";
+@import "general";
+
+@font-face {font-family: 'Oscine';font-weight: normal;font-style: normal;src: url(../fonts/Oscine_Trial_Rg.ttf) format('truetype');} 
+@font-face {font-family: 'Oscine Bold';font-weight: normal;font-style: normal;src: url(../fonts/Oscine_Trial.ttf) format('truetype');} 
+@font-face {font-family: 'Oscine Bold';font-weight: normal;font-style: normal;src: url(../fonts/Oscine_Trial.ttf) format('truetype');} 
+
+/*Font redes-sociais*/
+@font-face {
+    font-family: 'Grands';
+    src:url('../fonts/Grands.eot');
+    src:url('../fonts/Grands.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/Grands.svg#Grands') format('svg'),
+        url('../fonts/Grands.woff') format('woff'),
+        url('../fonts/Grands.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Use the following CSS code if you want to use data attributes for inserting your icons */
+[data-icon]:before {
+    font-family: 'Grands';
+    content: attr(data-icon);
+    speak: none;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Use the following CSS code if you want to have a class per icon */
+[class^="icon-"]:before, [class*=" icon-"]:before {
+    font-family: 'Grands';
+    font-style: normal;
+    speak: none;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+}
+.icon-YouTube:before {
+    content: "\e000";
+}
+.icon-Yandex:before {
+    content: "\e001";
+}
+.icon-Vkontakte:before {
+    content: "\e002";
+}
+.icon-VK:before {
+    content: "\e003";
+}
+.icon-vimeo:before {
+    content: "\e004";
+}
+.icon-twitter:before {
+    content: "\e005";
+}
+.icon-tumblr:before {
+    content: "\e006";
+}
+.icon-Steam:before {
+    content: "\e007";
+}
+.icon-StackOverflow:before {
+    content: "\e008";
+}
+.icon-SoundCloud:before {
+    content: "\e009";
+}
+.icon-Skype:before {
+    content: "\e00a";
+}
+.icon-Share:before {
+    content: "\e00b";
+}
+.icon-RSS:before {
+    content: "\e00c";
+}
+.icon-Readability:before {
+    content: "\e00d";
+}
+.icon-Read-it-Later:before {
+    content: "\e00e";
+}
+.icon-Pocket:before {
+    content: "\e00f";
+}
+.icon-Pinterest:before {
+    content: "\e010";
+}
+.icon-Picasa:before {
+    content: "\e011";
+}
+.icon-OpenID:before {
+    content: "\e012";
+}
+.icon-MySpace:before {
+    content: "\e013";
+}
+.icon-MoiKrug:before {
+    content: "\e014";
+}
+.icon-Linked-in:before {
+    content: "\e015";
+}
+.icon-LiveJournal:before {
+    content: "\e016";
+}
+.icon-lastfm:before {
+    content: "\e017";
+}
+.icon-Jabber:before {
+    content: "\e018";
+}
+.icon-Instapaper:before {
+    content: "\e019";
+}
+.icon-HabraHabr:before {
+    content: "\e01a";
+}
+.icon-google:before {
+    content: "\e01b";
+}
+.icon-GitHub-octoface:before {
+    content: "\e01c";
+}
+.icon-GitHub-circle:before {
+    content: "\e01d";
+}
+.icon-FourSquare:before {
+    content: "\e01e";
+}
+.icon-flickr:before {
+    content: "\e01f";
+}
+.icon-Flattr:before {
+    content: "\e020";
+}
+.icon-facebook:before {
+    content: "\e021";
+}
+.icon-Evernote:before {
+    content: "\e022";
+}
+.icon-Email:before {
+    content: "\e023";
+}
+.icon-DropBox:before {
+    content: "\e024";
+}
+.icon-Blogspot:before {
+    content: "\e025";
+}
+.icon-BitBucket:before {
+    content: "\e026";
+}
+.icon-YouTube-play:before {
+    content: "\e027";
+}
+
+
+/*
+                Logs
+Jordão
+J1 - iguala altura de colunas na mesma row
+J2 - ajuste de titulo de colecao da home
+J3 - delimitando tamanho do item da coleção
+J4 - ajuste de margin de interações dos itens
+J5 - classe stretch-height apagada
+J6 - Tamanho do search interno
+J7 - ajustando o Search em input-group
+J8 - breadcrumb
+----------------------------------------------
+                Sessões
+S1 - Geral
+S2 - Home
+S3 - Coleções
+*/
+
+/*------------------S1 - Geral------------------*/
+body{
+    font-family: 'Oscine';
+}
+ul{
+    list-style: none;
+}
+.flex-box{
+    display: flex;
+}
+.input-group{
+    border-radius: 4px;
+    overflow: hidden;
+}
+textarea:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="date"]:focus,
+input[type="month"]:focus,
+input[type="time"]:focus,
+input[type="week"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="color"]:focus,
+.uneditable-input:focus {   
+    border-color: #ccc;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.75) inset;
+    outline: 0 none;
+}
+.azul{
+    color: #88A6CC;
+}
+.lighter-blue{
+    color: #12152B;
+}
+.light-blue{
+    color: #1B284F;
+}
+.blue{
+    color: #3D698A;
+}
+.dark-blue{
+    color: #88A6CC;
+}
+.darker-blue{
+    color: #C5D0DD;
+}
+.pink{
+    color: #D9CABE;
+}
+.dark-brown{
+    color: #2B1A14;
+}
+.brown{
+    color: #794C25;
+}
+.light-brown{
+    color: #C7A76F;
+}
+.beige{
+    color: #C5AF5D;
+}
+.purple{
+    color: #825779;
+}
+.light-gray{
+    color: #CCCCCC;
+}
+.gray{
+    color: #AAAAAA;
+}
+.dark-gray{
+    color: #666666;
+}
+.no-margin{
+    margin: 0;
+}
+.left{
+    float: none;
+    margin: 0 auto 0 0;
+}
+.right{
+    float: none;
+    margin: 0 0 0 auto;
+}
+.center{
+    float: none;
+    margin: 0 auto;
+}
+.bottom {
+    position: absolute;
+    bottom: 0;
+}
+.relative{
+    position: relative;
+}
+.white, .white a{
+    color: white;
+}
+.blue, .blue a{
+    color: #88A6CC;
+}
+.gray, .gray a{
+    color: #aaa;
+}
+/*J1 - iguala altura de colunas na mesma row*/
+.row.same-height{
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display:         flex;
+}
+.fab {
+    width:32px;
+    height:32px;
+    border-radius:16px;
+    overflow:hidden;
+    color: white;
+    float:right;
+    box-shadow: 0px 1px 5px rgba(255, 255, 255, 0.3);
+    font-size: 24px;
+    text-align: center;
+    margin:5px;
+    background-color: black;
+
+    &:hover {
+    background: #15150f;
+    }
+    h6 {
+        color: white;
+    }
+}
+
+
+a {
+    color: $default-link-color;
+    &:hover{
+        color: $default-link-hover-color;
+        text-decoration: none !important;
+    }
+}
+
+h1, h2, h3, h4, h4, h5, h6{
+    color: #3D698A;
+}
+p {
+    color: #aaa;
+}
+
+hr{
+    border-color: #88A6CC;
+}
+input[type="checkbox"]{
+    border-radius: 0;
+}
+
+
+/*---------------------------------------------
+                P1 - Home
+-----------------------------------------------*/
+
+/*------------------Nav------------------*/
+.navbar{
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+0,000000+100&amp;0.65+0,0.2+100;Neutral+Density */
+    background: -moz-linear-gradient(top,  rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.2) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.65)), color-stop(100%,rgba(0,0,0,0.2))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.2) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.2) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.2) 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.2) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6000000', endColorstr='#33000000',GradientType=0 ); /* IE6-9 */
+
+
+    border-radius: 0;
+    border: none;
+}
+.navbar-nav button {
+    background: none;
+    color: #fff;
+}
+.navbar-nav button:hover {
+    background: white;
+    color: #000;
+}
+.navbar-nav button{
+    margin: 8px 5px;
+}
+.navbar-default .navbar-nav > li > a {
+    color: #fff;
+}
+.navbar-default .navbar-nav > li > a:hover {
+    color: #ddd;
+}
+
+/*------------------header e search------------------*/
+header{
+    background-size: 100% auto;
+}
+.search-collection.input-group{
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    border-radius: 4px;
+}
+.search-collection.input-group input{
+    background: none;
+    border-right: none;
+    border-top-left-radius: 4px !important;
+    border-bottom-left-radius: 4px !important;
+    box-shadow: none;
+}
+.search-collection.input-group button{
+    background: none;
+    border-left: none;
+    color: white;
+}
+.search-collection.input-group button:hover{
+    text-shadow: 0px 0px 10px rgba(255, 255, 255, 1);
+    border-color: #ccc;
+}
+
+/*J7*/
+.search-home input, .search-home button{
+    height: 50px;
+}
+.adv_search{
+    text-align: right;
+    text-shadow: 0px 0px 10px rgba(0, 0, 0, 1);
+}
+
+/*------------------main------------------*/
+#main_part.home{
+    // padding: 15% 0 5% 0;
+    padding: 0 0 5% 0;
+    overflow: hidden;
+}
+center.container{
+    padding-top: 20px;
+}
+.blocos{
+    padding: 0;
+}
+.blocos h5{
+    background-color: #88A6CC;
+    color: #fff;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+}
+.titulo-blocos{
+    text-align: left;
+}
+.collection_header{
+    padding: 0;
+    margin: 0;
+    border: none;
+    border-radius: 0;
+    background-image: url(../images/capa-colecao.png);
+}
+.avatar-edit{
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    color: #CCCCCC;
+    padding: 0.8em;
+}
+.avatar-edit span:last-child{
+    margin-left: 10px;
+    display: none;
+}
+.avatar-edit:hover{
+    display: block;
+    background-color: rgba(0,0,0,0.8);
+    width: 100%;
+    cursor: pointer;
+}
+.avatar-edit:hover > span:last-child{
+    display: inline;
+}
+
+.bg-edit button{
+    background: none;
+    color: #CCCCCC;
+    margin-top: 10px;
+    border: none;
+}
+.bg-edit span:last-child{
+    margin-left: 10px;
+    display: none;
+}
+.bg-edit button:hover{
+    background: rgba(0,0,0,0.8);
+    margin-top: 10px;
+    border: 1px solid white;
+    color: white;
+}
+.bg-edit button:hover > span{
+    display: inline;
+}
+
+.titulo-colecao {
+    color: white;
+    text-shadow: 0px 0px 10px rgba(0, 0, 0, 1);
+    h3.title {
+        font-size: 25px;
+    }
+}
+.am-wrapper{
+    float:left;
+    position:relative;
+    overflow:hidden;
+}
+.am-wrapper img{
+    position:absolute;
+    outline:none;
+}
+.am-container{
+    float:left;
+    margin: 1px;
+    overflow: hidden;
+}
+/*J2 - ajuste de titulo de colecao da home*/
+.am-container h5{
+    background-color: #2c2c2c;
+    font-size: 11px;
+    padding: 3px;
+}
+.bloco-item-sm{
+    height: 59px;
+    width: 59px;
+}
+.bloco-item-md{
+    height: 123px;
+    width: 123px;
+}
+.bloco-item-lg{
+    height: 248px;
+    width: 248px;
+}
+
+.bloco-item-xlg{
+    height: 248px;
+    width: 496px;
+}
+
+/*------------------Dynatree------------------*/
+span.dynatree-icon{
+    //display: none;
+}
+
+/*------------------footer------------------*/
+#footer{
+    min-height: 200px;
+    background-color: #ccc;
+    padding: 20px 0;
+    width: 100%;
+    float: left;
+}
+.logo-footer{
+    text-align: right;
+}
+
+
+/*---------------------------------------------
+                P2 - Coleções
+-----------------------------------------------*/
+
+
+/*------------------main------------------*/
+#container_socialdb {
+    padding: 0 0px 5px 0;
+}
+#list{
+    padding: 0;
+    margin:0;
+}
+#list li{
+
+    padding: 0;
+}
+
+.item-info{
+    max-height: 160px;
+    overflow: hidden;
+}
+/*J3 - delimitando tamanho do item da coleção*/
+.item-interaction{
+    max-height: 28px;
+    overflow: hidden;
+}
+
+/*J4 - ajuste de margin de interações dos itens*/
+
+
+.item-redesocial, .item-redesocial-more{
+    //max-width: 45px;
+}
+.item-redesocial-more{
+    background-color:#AAAAAA;
+    text-align:center;
+    cursor: pointer;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+.item-redesocial-more:hover{
+    background-color:#888;
+}
+.item-redesocial-more span{
+    padding-top:8px;
+    color: white;
+}
+
+/*---------------------------------------------
+                P3 - Item
+-----------------------------------------------*/
+ol.breadcrumb{
+    background-color: #fff;
+    color: #88A6CC;
+    margin-bottom: 0;
+}
+ol.breadcrumb a{
+    color: #88A6CC;
+}
+.content-back{
+    color: #88A6CC;
+    background-color: white;
+}
+.content-back:hover{
+    color: white;
+    background-color: #88A6CC;
+}
+.content-title, .content-title h2 small{
+    //color: #88A6CC;
+    color: $brand-medium-blue;
+}
+.content-title h2 small{
+    font-size: 12px;
+}
+
+.content-wrapper{
+    border-radius: 0;
+    padding: 10px;
+    //background-color: #ccc;
+    margin-bottom: 20px;
+    display: flex;
+}
+.content-wrapper div{
+    display: flex;
+    flex-grow:1;
+}
+.content-wrapper div>*{
+    flex-grow:1;
+    width: 100%;
+}
+.content-wrapper div p{
+    padding: 20px;
+    background-color: white;
+    color: black;
+    text-indent: 30px;
+    margin-bottom: 0;
+}
+.content-redesocial{
+    border: none;
+}
+.comments a b{
+    margin-right: 10px;
+}
+
+#accordion .list-group{
+    margin: 0;
+    background: none;
+}
+#accordion .list-group-item{
+    border: 0;
+    border-top: 1px solid #dddddd;
+    padding: 0;
+    line-height: 2.3em;
+    text-indent: 10px;
+    border-radius: 0;
+}
+#accordion .list-group-item input[type="checkbox"]{
+    margin-right: 5px;
+}
+#accordion .list-group-item:first-child{
+    border-radius: 0;
+}
+.popover-content{
+    display: flex;
+    font-size: 2em;
+    padding: 5px;
+}
+.popover-content {
+    margin: 0 5px;
+}
+
+.tainacan-add-item .tainacan-add-wrapper {
+    width: 100%;
+}
+
+.tainacan-add-item .btn-group > .btn-group {
+     width: 100%;
+     background: #555;
+}
+
+.tainacan-add-item .btn-group > .btn-group:hover {
+    background: #254865 !important;
+    border-radius: 4px;
+}
+
+.tainacan-add-item .btn-group > .btn-group.tainacan-add-wrapper button {
+   width: 100%;
+   border: none !important;
+}
+
+#comments h3 {
+  margin-left: 16px;
+}
+
+.tainacan-comment-fields {
+    margin: 10px 0 10px 0;
+}
+
+.tainacan-comment-msg {
+    margin: 5px 0 10px 0;
+}
+
+button.tainacan-filter-range {
+    width: 100%;
+}
+
+.tainacan-topo-categoria {
+    margin-left: 15px;
+}
+
+.multiple-items-accordion {
+    width: 95%;
+
+    .ui-accordion-content {
+         padding: 10px !important;
+    }
+} // .multiple-items-accordion
+
+#accordion .ui-accordion-content { padding: 10px; }
