@@ -1,5 +1,4 @@
 <?php
-
 get_header();
 $options = get_option('socialdb_theme_options');
 ?>
