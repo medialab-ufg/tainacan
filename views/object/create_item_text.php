@@ -19,17 +19,35 @@
     <input type="hidden" id="object_from" name="object_from" value="internal">
     <input type="hidden" id="object_type" name="object_type" value="text">
     <div class="row" style="background-color: #f1f2f2">
-        <div class="<?php echo ($view_helper->hide_main_container)?'col-md-8':'col-md-3' ?> menu_left_loader">
+        <div style="<?php echo ($view_helper->hide_main_container)?'margin-left:18%;padding-left:15px;':'' ?>"
+            class="<?php echo ($view_helper->hide_main_container)?'col-md-8':'col-md-3' ?> menu_left_loader">
              <center>
                     <img src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>">
                     <h4><?php _e('Loading metadata...', 'tainacan') ?></h4>
              </center>
         </div>
-        <div style="display: none; background: white;border: 3px solid #E8E8E8;font: 11px Arial;<?php echo ($view_helper->hide_main_container)?'margin-left:15%;':'' ?>" 
+        <div style="display: none; background: white;border: 3px solid #E8E8E8;font: 11px Arial;<?php echo ($view_helper->hide_main_container)?'margin-left:18%;padding-left:15px;':'' ?>" 
              class="<?php echo ($view_helper->hide_main_container)?'col-md-8':'col-md-3' ?> menu_left">
-            <div class="expand-all-item btn white tainacan-default-tags">
+                <?php 
+                //se estiver apenas mostrando as propriedades 
+                if($view_helper->hide_main_container):
+                ?>
+                 <h3>
+                    <?php if(has_action('label_add_item')): ?>
+                           <?php do_action('label_add_item',$object_name) ?>
+                    <?php else: ?>
+                          <?php _e('Create new item - Write text','tainacan') ?>
+                    <?php endif; ?>
+                    <button type="button" onclick="back_main_list();"class="btn btn-default pull-right">
+                        <b><?php _e('Back','tainacan') ?></b>
+                    </button>
+                </h3>
+                <hr>
+            <?php endif; ?>
+                <div style="<?php echo ($view_helper->hide_main_container)?'margin-bottom:0%':'' ?>" 
+                     class="expand-all-item btn white tainacan-default-tags">
                 <div class="action-text" 
-                     style="display: inline-block">
+                     style="display: inline-block;">
                          <?php _e('Expand all', 'tainacan') ?></div>
                 &nbsp;&nbsp;<span class="glyphicon-triangle-bottom white glyphicon"></span>
             </div>
@@ -163,6 +181,18 @@
              <!-- TAINACAN: votacoes do item -->
              <div id="create_list_ranking_<?php echo $object_id ?>"></div>
             </div>
+            <?php if($view_helper->hide_main_container): ?>
+                <br><br>
+                 <!--button onclick="back_main_list();" style="margin-bottom: 20px;"  class="btn btn-default btn-lg pull-left"><b><?php _e('Back','tainacan') ?></b></button-->
+                <button type="button" onclick="back_main_list();" 
+                        style="margin-bottom: 20px;color" class="btn btn-default btn-lg pull-left"><?php _e('Cancel','tainacan'); ?></button>
+                <div id="submit_container">
+                    <button type="submit" id="submit" style="margin-bottom: 20px;" class="btn btn-success btn-lg pull-right send-button"><?php _e('Submit','tainacan'); ?></button>
+                </div>  
+                <div id="submit_container_message" style="display: none;">
+                     <button type="button" onclick="show_message()" style="margin-bottom: 20px;" class="btn btn-success btn-lg pull-right send-button"><?php _e('Submit','tainacan'); ?></button>
+                </div> 
+            <?php endif; ?>
         </div>
         <div style="<?php echo ($view_helper->hide_main_container)?'display:none;':'' ?>background: white;border: 3px solid #E8E8E8;margin-left: 15px;width: 74%;" class="col-md-9">
             <h3>
@@ -181,7 +211,7 @@
                     <label for="object_name">
                         <?php echo ($view_helper->terms_fixed['title']) ? $view_helper->terms_fixed['title']->name :  _e('Title','tainacan') ?> 
                     </label>
-                    <input class="form-control" required="required" type="text"  id="object_name" name="object_name"  placeholder="<?php _e('Item name','tainacan'); ?>">
+                    <input class="form-control" <?php echo (!$view_helper->hide_main_container)?'required="required"':'' ?>  type="text"  id="object_name" name="object_name"  placeholder="<?php _e('Item name','tainacan'); ?>">
                 </div>
                 <!-- Tainacan: type do objeto -->
                 <div class="form-group" 
