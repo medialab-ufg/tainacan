@@ -1578,8 +1578,7 @@ function showLoginScreen(src) {
         $('#main_part').hide();
         $('#loader_collections').hide();
         $('#collection_post').hide();
-        $('#configuration').html(result);
-        $('#configuration').show();
+        $('#configuration').html(result).show();
     });
 
 }
