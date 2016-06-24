@@ -53,7 +53,7 @@
             </div>
             <div id="text_accordion" class="multiple-items-accordion">
             <!-- TAINACAN: thumbnail do item -->
-            <div id="thumbnail_id" 
+            <div id="<?php echo $view_helper->get_id_list_properties('thumbnail','thumbnail_id'); ?>" 
                 <?php echo $view_helper->get_visibility($view_helper->terms_fixed['thumbnail']) ?>  
                 <?php do_action('item_thumbnail_attributes') ?>>
                 <h2> 
@@ -77,7 +77,7 @@
                 </div>
             </div>    
             <!-- TAINACAN: a fonte do item -->
-            <div id="socialdb_object_dc_source"  
+            <div id="<?php echo $view_helper->get_id_list_properties('source','socialdb_object_dc_source'); ?>"  
                 <?php echo $view_helper->get_visibility($view_helper->terms_fixed['source']) ?>    
                 <?php do_action('item_source_attributes') ?>>
                 <h2> 
@@ -100,7 +100,7 @@
                   </div>   
             </div>
             <!-- TAINACAN: a descricao do item -->
-            <div id="post_content" 
+            <div id="<?php echo $view_helper->get_id_list_properties('description','post_content'); ?>" 
                  <?php echo $view_helper->get_visibility($view_helper->terms_fixed['description']) ?>
                  >
                 <h2>
@@ -121,7 +121,7 @@
                 </div>
             </div>
             <!-- TAINACAN: tags do item -->
-            <div id="tag" 
+            <div id="<?php echo $view_helper->get_id_list_properties('tags','tag'); ?>" 
                 <?php echo $view_helper->get_visibility($view_helper->terms_fixed['tags']) ?> 
                 <?php do_action('item_tags_attributes') ?>>
                 <h2>
@@ -149,7 +149,7 @@
                 </center>
             </div>
             <!-- TAINACAN: a licencas do item -->
-            <div id="list_licenses_items"
+            <div id="<?php echo $view_helper->get_id_list_properties('license','list_licenses_items'); ?>"
                  <?php echo $view_helper->get_visibility($view_helper->terms_fixed['license']) ?>
                  >
                 <h2>
@@ -194,7 +194,8 @@
                 </div> 
             <?php endif; ?>
         </div>
-        <div style="<?php echo ($view_helper->hide_main_container)?'display:none;':'' ?>background: white;border: 3px solid #E8E8E8;margin-left: 15px;width: 74%;" class="col-md-9">
+        <div style="<?php echo ($view_helper->hide_main_container)?'display:none;':'' ?>background: white;border: 3px solid #E8E8E8;margin-left: 15px;width: 74%;" 
+             class="col-md-9">
             <h3>
                 <?php if(has_action('label_add_item')): ?>
                        <?php do_action('label_add_item',$object_name) ?>

@@ -41,6 +41,7 @@ include_once('js/edit_js.php');
             <div class="tab-content">
                 <!-- Aba do youtube-->
                 <div id="aba-youtube-repository" class="tab-pane fade in active">
+                    <?php $socialdb_youtube_api_id = (isset($socialdb_youtube_api_id) ? $socialdb_youtube_api_id : ''); ?>
                     <h3><?php _e("Youtube",'tainacan'); ?></h3>
 
                     <form name="formYoutubeApi" id="formYoutubeApi" method="post">
@@ -54,6 +55,7 @@ include_once('js/edit_js.php');
 
                 <!-- Aba do flickr-->
                 <div id="aba-flickr-repository" class="tab-pane fade">
+                    <?php $socialdb_flickr_api_id = (isset($socialdb_flickr_api_id) ? $socialdb_flickr_api_id : ''); ?>
                     <h3><?php _e("Flickr",'tainacan'); ?></h3>
 
                     <form name="formFlickrApi" id="formFlickrApi" method="post">
@@ -66,6 +68,8 @@ include_once('js/edit_js.php');
 
                 <!-- Aba do facebook-->
                 <div id="aba-faceboook-repository" class="tab-pane fade">
+                    <?php $socialdb_fb_api_id = (isset($socialdb_fb_api_id) ? $socialdb_fb_api_id : ''); ?>
+                    <?php $socialdb_fb_api_secret = (isset($socialdb_fb_api_secret) ? $socialdb_fb_api_secret : ''); ?>
                     <h3><?php _e("Facebook",'tainacan'); ?></h3>
 
                     <form name="formFacebookApi" id="formFacebookApi" method="post">
@@ -82,6 +86,8 @@ include_once('js/edit_js.php');
                 </div>
                 <!-- Aba do instagram-->
                 <div id="aba-instagram-repository" class="tab-pane fade">
+                    <?php $socialdb_instagram_api_id = (isset($socialdb_instagram_api_id) ? $socialdb_instagram_api_id : ''); ?>
+                    <?php $socialdb_instagram_api_secret = (isset($socialdb_instagram_api_secret) ? $socialdb_instagram_api_secret : ''); ?>
                     <h3><?php _e("Instagram",'tainacan'); ?></h3>
 
                     <form name="formInstagramApi" id="formInstagramApi" method="post">
@@ -98,6 +104,8 @@ include_once('js/edit_js.php');
                 </div>
                 <!-- Aba do Vimeo-->
                 <div id="aba-vimeo-repository" class="tab-pane fade">
+                    <?php $socialdb_vimeo_client_id = (isset($socialdb_vimeo_client_id) ? $socialdb_vimeo_client_id : ''); ?>
+                    <?php $socialdb_vimeo_api_secret = (isset($socialdb_vimeo_api_secret) ? $socialdb_vimeo_api_secret : ''); ?>
                     <h3><?php _e("Vimeo",'tainacan'); ?></h3>
 
                     <form name="formVimeoApi" id="formVimeoApi" method="post">
@@ -114,6 +122,7 @@ include_once('js/edit_js.php');
                 </div>
                 <!-- Aba do Embed.Ly-->
                 <div id="aba-embed-ly-repository" class="tab-pane fade">
+                    <?php $socialdb_embed_api_id = (isset($socialdb_embed_api_id) ? $socialdb_embed_api_id : ''); ?>
                     <h3><?php _e("Embed.Ly",'tainacan'); ?></h3>
 
                     <form name="formEmbedApi" id="formEmbedApi" method="post">
@@ -125,15 +134,18 @@ include_once('js/edit_js.php');
                 </div>
                 <!-- Aba do Google-->
                 <div id="aba-google-repository" class="tab-pane fade">
+                    <?php $socialdb_google_client_id = (isset($socialdb_google_client_id) ? $socialdb_google_client_id : ''); ?>
+                    <?php $socialdb_google_secret_key = (isset($socialdb_google_secret_key) ? $socialdb_google_secret_key : ''); ?>
+                    <?php $socialdb_google_api_key = (isset($socialdb_google_api_key) ? $socialdb_google_api_key : ''); ?>
                     <h3><?php _e("Google / Google +",'tainacan'); ?></h3>
 
                     <form name="formGoogleApi" id="formGoogleApi" method="post">
                         <input type="hidden" id="operation_google" name="operation" value="update_options" />
                         <label for="socialdb_google_client_id"><?php _e('Client ID','tainacan'); ?></label>
-                        <input type="text"  name="socialdb_google_client_id" id="socialdb_google_client_id" style="width: 33.333%" placeholder="<?php _e("Type here"); ?>" class="form-control" value="<?php echo $socialdb_google_client_id; ?>"/></br>
+                        <input type="text"  name="socialdb_google_client_id" id="socialdb_google_client_id" style="width: 33.333%" placeholder="<?php _e("Type here"); ?>" class="form-control" value="<?php echo $socialdb_google_client_id; ?>"/><br>
 
                         <label for="socialdb_google_secret_key"><?php _e('Client Secret Key','tainacan'); ?></label>
-                        <input type="text"  name="socialdb_google_secret_key" id="socialdb_google_secret_key" style="width: 33.333%" placeholder="<?php _e("Type here"); ?>" class="form-control" value="<?php echo $socialdb_google_secret_key; ?>"/></br>
+                        <input type="text"  name="socialdb_google_secret_key" id="socialdb_google_secret_key" style="width: 33.333%" placeholder="<?php _e("Type here"); ?>" class="form-control" value="<?php echo $socialdb_google_secret_key; ?>"/><br>
                         
                         <label for="socialdb_google_redirect_uri"><?php _e('Redirect URI','tainacan'); ?></label>
                         <input type="text"  name="socialdb_google_redirect_uri" id="socialdb_google_redirect_uri" placeholder="<?php _e("Type here"); ?>" class="form-control" value="<?php echo site_url()."/wp-content/themes/theme_socialdb/controllers/user/user_controller.php?operation=return_login_gplus"; ?>" disabled="disabled"/></br>

@@ -174,7 +174,7 @@ function reorder_properties_add_item(array_ids){
       //  $("#text_accordion").html('');
        for (var i = 0; i< array_ids.length; i++) {
            // index is zero-based to you have to remove one from the values in your array
-             for(var j = 0; j<$items.length;j++){
+            for(var j = 0; j<$items.length;j++){
                  if($($items.get(j)).attr('id')&&$($items.get(j)).attr('id')===array_ids[i]){
                      $( $items.get(j) ).appendTo( $ul);
                  }
