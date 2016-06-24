@@ -165,7 +165,12 @@ class ViewHelper {
             }
         }
     }
-    
+    /**
+     * 
+     */
+    public function get_id_list_properties($id,$source) {
+        return ($view_helper->terms_fixed[$id]) ? 'meta-item-'.$view_helper->terms_fixed[$id]->term_id :  $source ;
+    }
     /**
      * function get_collection_by_category_root($user_id)
      * @param int a categoria raiz de uma colecao

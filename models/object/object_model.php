@@ -53,7 +53,7 @@ class ObjectModel extends Model {
         }
         $post = array(
             'ID' => $data['object_id'],
-            'post_title' => $data['object_name'],
+            'post_title' => ($data['object_name']) ? $data['object_name']:time(),
             'post_content' => $data['object_description'],
             'post_status' => 'inherit',
             'post_author' => $user_id,
