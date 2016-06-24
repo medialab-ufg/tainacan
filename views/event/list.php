@@ -149,7 +149,7 @@ include_once ('js/list_js.php');
             <div role="tabpanel" class="tab-pane" id="events_verified_tab">
                 <div id="list_events_verified">
                     <?php if (isset($events_observed)) { // se existir eventos a serem verificaos   ?>
-                        <table  id="event_verified_table"  class="table table-striped table-bordered" >
+                        <table id="event_verified_table"  class="table table-striped table-bordered" >
                             <thead>
                                 <tr>  
                                     <th><?php _e('Date', 'tainacan'); ?></th>
