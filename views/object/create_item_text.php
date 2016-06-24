@@ -44,8 +44,8 @@
                 </h3>
                 <hr>
             <?php endif; ?>
-                <div style="<?php echo ($view_helper->hide_main_container)?'margin-bottom:0%':'' ?>" 
-                     class="expand-all-item btn white tainacan-default-tags">
+            <div    style="<?php echo ($view_helper->hide_main_container)?'margin-bottom:0%':'' ?>" 
+                    class="expand-all-item btn white tainacan-default-tags">
                 <div class="action-text" 
                      style="display: inline-block;">
                          <?php _e('Expand all', 'tainacan') ?></div>

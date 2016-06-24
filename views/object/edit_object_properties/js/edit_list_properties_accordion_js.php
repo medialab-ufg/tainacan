@@ -113,39 +113,44 @@
 
                             set_field_valid(property_id,'core_validation_'+property_id);
                         });
-                        $(".form_autocomplete_value_" + property_id).change(function(){
-                            var cont = 0;
-                            $(".form_autocomplete_value_" + property_id).each(function(index,value){
-                               if( $(this).val().trim()!==''){
-                                    cont++;
-                                }
-                            });
+                        if($(".form_autocomplete_value_" + property_id)){
+                            $(".form_autocomplete_value_" + property_id).change(function(){
+                                var cont = 0;
+                                $(".form_autocomplete_value_" + property_id).each(function(index,value){
+                                   if( $(this).val().trim()!==''){
+                                        cont++;
+                                    }
+                                });
 
-                            if( cont===0){
-                                $('#core_validation_'+property_id).val('false');
-                            }else{
-                                 $('#core_validation_'+property_id).val('true');
-                            }
-                            set_field_valid(property_id,'core_validation_'+property_id);
-                        });
+                                if( cont===0){
+                                    $('#core_validation_'+property_id).val('false');
+                                }else{
+                                     $('#core_validation_'+property_id).val('true');
+                                }
+                                set_field_valid(property_id,'core_validation_'+property_id);
+                            });
+                        }
                         // end validate
-                        $(".form_edit_autocomplete_value_" + property_id).autocomplete({
-                            source: $('#src').val() + '/controllers/collection/collection_controller.php?operation=list_items_search_autocomplete&property_id=' + property_id,
-                            messages: {
-                                noResults: '',
-                                results: function () {
-                                }
-                            },
-                            minLength: 2,
-                            select: function (event, ui) {
-                                $("#form_edit_autocomplete_value_" + property_id).val('');
-                                //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
-                                var temp = $("#form_edit_autocomplete_value_" + property_id).val();
-                                if (typeof temp == "undefined") {
-                                    $("#form_edit_autocomplete_value_" + property_id).val(ui.item.value);
-                                }
-                            }
-                        });
+                        console.log($(".form_edit_autocomplete_value_" + property_id));
+                        if(typeof($(".form_edit_autocomplete_value_" + property_id))!= "undefined"){
+//                            $(".form_edit_autocomplete_value_" + property_id).autocomplete({
+//                                source: $('#src').val() + '/controllers/collection/collection_controller.php?operation=list_items_search_autocomplete&property_id=' + property_id,
+//                                messages: {
+//                                    noResults: '',
+//                                    results: function () {
+//                                    }
+//                                },
+//                                minLength: 2,
+//                                select: function (event, ui) {
+//                                    $("#form_edit_autocomplete_value_" + property_id).val('');
+//                                    //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
+//                                    var temp = $("#form_edit_autocomplete_value_" + property_id).val();
+//                                    if (typeof temp == "undefined") {
+//                                        $("#form_edit_autocomplete_value_" + property_id).val(ui.item.value);
+//                                    }
+//                                }
+//                            });
+                        }
                     });
                 }
     }
