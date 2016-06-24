@@ -10,7 +10,7 @@ include_once ('js/create_js.php');
 <style>
   #selectable .ui-selecting 
   { 
-      //border: 3px solid rgb(122,167,207); 
+      /* border: 3px solid rgb(122,167,207) ;*/ 
   }
   #container_images,
   #container_pdfs,

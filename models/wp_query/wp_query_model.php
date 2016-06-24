@@ -986,26 +986,35 @@ class WPQueryModel extends Model {
         $no_hash = [];
         $no_hash_tag = [];
         $query_synonyms = array('relation' => 'OR');
+        // buscando os sinonimos de uma categoria no array de dados de uma pesquisa,
+        // se caso a categoria nao possuir sinonimos, sera incluido seu id para 
+        // ser realizado a busca
         if(isset($recover_data['facets'])&&  is_array($recover_data['facets'])):
             foreach ($recover_data['facets'] as $key_facet => $category_by_facet) {
-                  if(is_array($category_by_facet)){
-                      foreach ($category_by_facet as $key_category => $category) {
-                          $hash = get_term_meta($category,'socialdb_term_synonyms',true);
-                          if($hash&&$hash!=''){
-                              unset($recover_data['facets'][$key_facet][$key_category]);
-                              if(empty($recover_data['facets'][$key_facet])){
-                                  unset($recover_data['facets'][$key_facet]);
-                              }
-                             $hashs[] = $hash; 
-                          }else{ // se a categoria nao possuir HASH
-                             $no_hash[$key_facet][$key_category] = $category; 
-                             $array[] = $category;
-                          } 
-                      }
-                  } 
+                if(!is_array($category_by_facet)){
+                  $category_by_facet = array($category_by_facet);
+                }
+                foreach ($category_by_facet as $key_category => $category) {
+                    $hash = get_term_meta($category,'socialdb_term_synonyms',true);
+                    if($hash&&$hash!=''){
+                        if(is_array($recover_data['facets'][$key_facet])&&isset($recover_data['facets'][$key_facet][$key_category])){
+                            unset($recover_data['facets'][$key_facet][$key_category]);
+                        }
+                        if(empty($recover_data['facets'][$key_facet])||!is_array($recover_data['facets'][$key_facet])){
+                            unset($recover_data['facets'][$key_facet]);
+                        }
+                       $hashs[] = $hash; 
+                    }else{ // se a categoria nao possuir HASH
+                       $no_hash[$key_facet][$key_category] = $category; 
+                       $array[] = $category;
+                    } 
+                }
+                  
             }
         endif;
-        
+        // buscando os sinonimos de uma tag no array de dados de uma pesquisa,
+        // se caso a tag nao possuir sinonimos, sera incluido seu id para 
+        // ser realizado a busca
         if(isset($recover_data['tags'])):
             foreach ($recover_data['tags'] as $key_tag => $tag) {
                 $hash = get_term_meta($tag,'socialdb_term_synonyms',true);
@@ -1017,6 +1026,29 @@ class WPQueryModel extends Model {
                      $hashs[] = $hash; 
                 }else{ // se a categoria nao possuir HASH
                     $no_hash_tag[$key_tag] = $tag; 
+                    $array[] = $category;
+                 }  
+            }
+        endif;
+         // buscando os sinonimos de uma categoria no array 
+         // de dados de uma pesquisa NA busca avancada,
+        // se caso a categoria nao possuir sinonimos, sera incluido seu id para 
+        // ser realizado a busca
+        if(isset($recover_data['advanced_search']['tags'])):
+            foreach ($recover_data['advanced_search']['tags'] as $key_tag => $tag) {
+                $tag_term = get_term_by('name',$tag,'socialdb_tag_type');
+                if(!$tag_term){
+                    continue;
+                }
+                $hash = get_term_meta($tag_term->term_id,'socialdb_term_synonyms',true);
+                if($hash&&$hash!=''){
+                     unset($recover_data['advanced_search']['tags'][$key_tag]); 
+                    if(empty($recover_data['advanced_search']['tags'])){
+                        unset($recover_data['advanced_search']['tags']);
+                    }
+                     $hashs[] = $hash; 
+                }else{ // se a categoria nao possuir HASH
+                    $no_hash_tag[$key_tag] = $tag_term->term_id; 
                     $array[] = $category;
                  }  
             }

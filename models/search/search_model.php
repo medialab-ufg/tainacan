@@ -104,6 +104,11 @@ public function add($data) {
     public function update($data) {
         $collection_id = $data['collection_id'];
         if ($data['property_id'] != '') {
+            $facets = get_post_meta($collection_id, 'socialdb_collection_facets');
+            if($facets  &&  is_array($facets) && !in_array($data['property_id'], $facets)){
+                add_post_meta($collection_id, 'socialdb_collection_facets', $data['property_id']);
+            }
+            
             update_post_meta($collection_id, 'socialdb_collection_facet_' . $data['property_id'] . '_widget', $data['search_data_widget']);
 
             delete_post_meta($collection_id, 'socialdb_collection_facet_' . $data['property_id'] . '_color');

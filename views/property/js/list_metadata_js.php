@@ -124,11 +124,12 @@
             if ( $ui_container === "filters-accordion" ) {
                 $("#filters-accordion").addClass("receiving-metadata");
                 $( "#" + item_id + " .action-icons").append( $sorter_span );
-
                 if ( is_fixed_meta ) {
                     setCollectionFacet("add", item_id, "tree");
                     $('.data-widget').removeClass('select-meta-filter');
                 } else {
+                    
+                console.log(' item_search_widget :'+item_search_widget);
                     if ( item_search_widget === "null" || item_search_widget == "undefined" ) {
                         $("#"+item_id + " a").first().click();
                         $(".property_data_use_filter").click();
@@ -429,11 +430,12 @@
                     if( (current_type == "date" || current_type == "numeric") && property_widget == "range") {
                         var range_obj = { counter_range: elem.counter_data_range, sent_data: elem };
                     }
-
+                    console.log(' current_operation  = '+current_operation); 
                     if ( current_operation == "add_property_data" ) {
                         setCollectionFacet( "add", new_property_id, property_widget, color_facet, range_obj);
                     } else if( current_operation == "update_property_data" ) {
                         var item_was_dragged = $(current_modal + " .data-widget").hasClass('select-meta-filter');
+                        console.log(' item was dragged  = '+item_was_dragged);
                         if( item_was_dragged ) {
                             setCollectionFacet( "add", current_property_id, property_widget, color_facet );
                             $(current_modal + " .data-widget").removeClass('select-meta-filter');
@@ -1234,6 +1236,7 @@
                     setCollectionFacet("add", new_ranking_id, ranking_widget, "", range_obj);
                 } else if (current_operation == "edit") {
                     var item_was_dragged = $("#meta-voting .data-widget").hasClass('select-meta-filter');
+                    console.log(item_was_dragged);
                     if(item_was_dragged) {
                         setCollectionFacet("add", elem.ranking_id, ranking_widget);    
                         $("#meta-voting .data-widget").removeClass('select-meta-filter');
