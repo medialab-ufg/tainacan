@@ -57,7 +57,7 @@ $(window).load(function () {
             showAlertGeneral('Error', 'Invalid Facebook identifier or no items to be imported', 'error');
         }
     }
-
+    
     $("area[rel^='prettyPhoto']").prettyPhoto();
 
     /************************* VERIFICACAO DE PAGINAS **************************/
@@ -105,9 +105,12 @@ $(window).load(function () {
         showLoginScreen(src);
     }
 
+    /*
     $('#openmyModalRegister').click(function (e) {
         $('#myModalRegister').modal('show');
     });
+    */
+
     // end
     get_collections_template(src);
     check_privacity(src);
@@ -1581,6 +1584,18 @@ function showLoginScreen(src) {
         $('#configuration').html(result).show();
     });
 
+}
+
+function registerUser(path) {
+    $.ajax({
+        url: path + "/controllers/user/user_controller.php",
+        type: 'POST',
+        data: {operation: 'register_user', collection_id: $("#collection_id").val()}
+    }).done(function(r) {
+        resetHomeStyleSettings();
+        $('#main_part').hide();
+        $('#configuration').html(r).show();
+    });
 }
 
 function showProfileScreen(src) {

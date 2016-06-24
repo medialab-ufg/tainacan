@@ -6,6 +6,8 @@
         listStandartLicenses();
         change_breadcrumbs_title('<?php _e('Licenses','tainacan') ?>');
 
+        // $("#licenses_display").DataTable();
+
         $('#formAddLicense').submit(function (e) {
             e.preventDefault();
             $.ajax({

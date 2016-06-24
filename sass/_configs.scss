@@ -83,7 +83,15 @@
       margin-bottom: 8px;
     }
   }
-}
+  .new-license {
+    border-top: 1px solid $item-border;
+    h3 {
+      border: none;
+      padding-left: 0;
+      color: $brand-medium-blue;
+    }
+  }
+} // main config containers ID's
 
 #import_settings {
   #list_oaipmh_dc, #list_csv_dc {

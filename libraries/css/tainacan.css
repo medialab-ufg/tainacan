@@ -1673,6 +1673,14 @@ h4.modal-title {
 #list_social_network .highlight table, #import_settings .highlight table, #export_settings .highlight table, #licenses_settings .highlight table {
   margin-bottom: 8px;
 }
+#list_social_network .new-license, #import_settings .new-license, #export_settings .new-license, #licenses_settings .new-license {
+  border-top: 1px solid #E8E8E8;
+}
+#list_social_network .new-license h3, #import_settings .new-license h3, #export_settings .new-license h3, #licenses_settings .new-license h3 {
+  border: none;
+  padding-left: 0;
+  color: #0c698b;
+}
 
 #import_settings #list_oaipmh_dc, #import_settings #list_csv_dc {
   border: 1px solid #adadad;
@@ -2158,20 +2166,20 @@ hr.single-item-divider {
 
 /*
                 Logs
-Jord├úo
+Jordão
 J1 - iguala altura de colunas na mesma row
 J2 - ajuste de titulo de colecao da home
-J3 - delimitando tamanho do item da cole├º├úo
-J4 - ajuste de margin de intera├º├Áes dos itens
+J3 - delimitando tamanho do item da coleção
+J4 - ajuste de margin de interações dos itens
 J5 - classe stretch-height apagada
 J6 - Tamanho do search interno
 J7 - ajustando o Search em input-group
 J8 - breadcrumb
 ----------------------------------------------
-                Sess├Áes
+                Sessões
 S1 - Geral
 S2 - Home
-S3 - Cole├º├Áes
+S3 - Coleções
 */
 /*------------------S1 - Geral------------------*/
 body {
@@ -2598,7 +2606,7 @@ center.container {
 }
 
 /*---------------------------------------------
-                P2 - Cole├º├Áes
+                P2 - Coleções
 -----------------------------------------------*/
 /*------------------main------------------*/
 #container_socialdb {
@@ -2619,13 +2627,13 @@ center.container {
   overflow: hidden;
 }
 
-/*J3 - delimitando tamanho do item da cole├º├úo*/
+/*J3 - delimitando tamanho do item da coleção*/
 .item-interaction {
   max-height: 28px;
   overflow: hidden;
 }
 
-/*J4 - ajuste de margin de intera├º├Áes dos itens*/
+/*J4 - ajuste de margin de interações dos itens*/
 .item-redesocial-more {
   background-color: #AAAAAA;
   text-align: center;
