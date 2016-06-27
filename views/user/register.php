@@ -1,3 +1,4 @@
+<?php include_once("js/register_js.php"); ?>
 <div class="col-md-12" style="background: #E8E8E8; padding-top: 50px; margin-top: -20px;">
     <div class="col-md-7 center" style="background: white; ">
         <form id="formUserRegister" name="formUserRegister" >
@@ -5,7 +6,29 @@
             <div class="modal-header">
                 <h4 class="modal-title" id="myModalLabel"><?php _e('Register', 'tainacan'); ?></h4>
             </div>
-            <div class="modal-body">
+
+            <div class="col-md-12 no-padding" style="margin: 20px 0 20px 0;">
+                <div class="col-md-6" style="padding-left: 0;">
+                    <a href="#" class="btn btn-primary" style="width: 100%;">
+                        <?php _e('Register with Facebook', 'tainacan'); ?>
+                    </a>
+                </div>
+                <div class="col-md-6" style="padding-right: 0;">
+                    <a href="#" class="btn btn-danger" style="width: 100%;">
+                        <?php _e('Register with Google Plus', 'tainacan'); ?>
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="col-md-5" style="border-bottom: 1px solid #e8e8e8"></div>
+                <div class="col-md-2 cnter" style="text-align: center">
+                    <?php _e('or', 'tainacan'); ?>
+                </div>
+                <div class="col-md-5" style="border-bottom: 1px solid #e8e8e8"></div>
+            </div>
+
+            <div>
                 <div class="form-group">
                     <label for="first_name"><?php _e('First Name', 'tainacan'); ?><span style="color: #EE0000;"> *</span></label>
                     <input type="text" required="required" class="form-control" name="first_name" id="first_name" placeholder="<?php _e('Type here your first name', 'tainacan'); ?>">
@@ -33,6 +56,25 @@
                     <input type="password" required="required" class="form-control" name="user_conf_pass" id="user_conf_pass" placeholder="<?php _e('Confirm your password', 'tainacan'); ?>">
                 </div>
             </div>
+
+            <a href="#" class="more-options-register"> <?php _e('More options', 'tainacan'); ?> </a>
+            <br> <br>
+
+            <div class="expanded-register" style="display: none">
+                <div class="form-group">
+                    <label for="about_you"> <?php _e('About you', 'tainacan'); ?> </label>
+                    <input type="text" name="about_you" class="form-control about_you">
+                </div>
+                <div class="form-group">
+                    <label for="current_work"> <?php _e('Current workplace', 'tainacan'); ?> </label>
+                    <input type="text" name="current_work" class="form-control current_work">
+                </div>
+                <div class="form-group">
+                    <label for="prof_resume"> <?php _e('Professional Resume', 'tainacan'); ?> </label>
+                    <input type="text" name="prof_resume" class="form-control prof_resume">
+                </div>
+            </div>
+
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary" onclick="check_register_fields(); return false;"><?php _e('Register', 'tainacan'); ?></button>
             </div>
