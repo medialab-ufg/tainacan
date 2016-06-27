@@ -46,16 +46,21 @@
                 .append('<option value="radio"><?php _e('Radio','tainacan') ?></option>')
                 .append('<option value="selectbox"><?php _e('Selectbox','tainacan') ?></option>');
         });
+        term_widget_options('#socialdb_property_term_widget');
     });
 
     // cardinality type n
     $('#socialdb_property_term_cardinality_n').click(function (e) {
-        $(changeable_selects).each(function (idx, el) {
-            $(el).html('')
+         $('#socialdb_property_term_widget').html('')
+                .append('<option value="tree_checkbox"><?php _e('Tree - Checkbox','tainacan') ?></option>')
                 .append('<option value="checkbox"><?php _e('Checkbox','tainacan') ?></option>')
-                .append('<option value="multipleselect"><?php _e('Multipleselect ','tainacan') ?></option>')
-                .append('<option value="tree_checkbox"><?php _e('Tree - Checkbox','tainacan') ?></option>');
-        });
+                .append('<option value="multipleselect"><?php _e('Multipleselect ','tainacan') ?></option>');
+         $('#property_term_filter_widget').html('')
+                .append('<option value="tree"><?php _e('Tree','tainacan') ?></option>')
+                .append('<option value="checkbox"><?php _e('Checkbox','tainacan') ?></option>')
+                .append('<option value="multipleselect"><?php _e('Multipleselect ','tainacan') ?></option>');
+        
+         term_widget_options('#socialdb_property_term_widget');
     });
     $('#socialdb_property_term_cardinality_1').trigger('click');
     $('.edit').click(function (e) {
@@ -1133,7 +1138,6 @@
             } else {
                 $("#meta-category #socialdb_property_term_cardinality_n").prop('checked', true);
             }
-
             var $term_create_widget = $("#meta-category #socialdb_property_term_widget");
             var curr_term_widget = elem.metas.socialdb_property_term_widget;
 
@@ -1142,7 +1146,8 @@
                 $('#socialdb_property_term_cardinality_n').click();
                 $("#meta-category #color_field_property_search").hide();
             }
-
+            
+            term_widget_options('#property_term_filter_widget');
             $($term_create_widget).val( curr_term_widget );
 
             if (elem.metas.socialdb_property_required === 'false') {
@@ -1193,7 +1198,7 @@
     function term_widget_options(el) {
         var curr_val = $(el).val();
 
-        if (curr_val == "tree") {
+        if (curr_val == "tree" || curr_val == "tree_checkbox" ) {
             $("#meta-category #color_field_property_search").fadeIn();
             $("#meta-category #select_menu_style").hide();
         } else if ( curr_val == "menu") {
@@ -1436,6 +1441,7 @@
             var cur = "#" + el;
             $(cur + " .data-widget").hide();
         });
+        $('#socialdb_property_term_cardinality_1').trigger('click');
         $("#submit_form_property_term #socialdb_property_term_root").html('');
         $('.dynatree-selected').removeClass('dynatree-selected');
         $("#meta-category .term-widget").hide();
