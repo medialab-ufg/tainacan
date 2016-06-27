@@ -117,17 +117,7 @@
         border-right: 0 !important;
       }
     }
-    a {
-      &:last-child {
-        margin-left: 10px;
-      }
-      img {
-        height: 15px;
-        &:hover {
-          opacity: 0.6;
-        }
-      }
-    }
+    @include action_buttons_style();
   }
 } // main config containers ID's
 
@@ -150,6 +140,10 @@
     table {
       margin-bottom: 0;
     }
+  }
+
+  #table_export_oaipmh_dc {
+    @include action_buttons_style();
   }
 
   #maping_container_export {

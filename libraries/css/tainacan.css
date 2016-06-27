@@ -1728,6 +1728,15 @@ h4.modal-title {
 #export_settings #list_export_oaipmh_dc table {
   margin-bottom: 0;
 }
+#export_settings #table_export_oaipmh_dc a:last-child {
+  margin-left: 10px;
+}
+#export_settings #table_export_oaipmh_dc a img {
+  height: 15px;
+}
+#export_settings #table_export_oaipmh_dc a img:hover {
+  opacity: 0.6;
+}
 #export_settings #maping_container_export .panel {
   border: 1px solid #adadad;
   border-radius: 0;

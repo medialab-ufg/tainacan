@@ -116,3 +116,16 @@ $default-margin: 20px 0 20px 0;
   padding: 20px;
 }
 
+@mixin action_buttons_style() {
+  a {
+    &:last-child {
+      margin-left: 10px;
+    }
+    img {
+      height: 15px;
+      &:hover {
+        opacity: 0.6;
+      }
+    } // img
+  } // a
+}
