@@ -12,7 +12,12 @@
 .config_default_style {
   @include configs_basic_structure();
 }
-
+#licenses_settings {
+  hr {
+    border-color: $brand-medium-blue;
+    margin-bottom: 5px;
+  }
+}
 #list_social_network, #import_settings, #export_settings, #licenses_settings {
   h3 {
     color: black;
@@ -89,6 +94,39 @@
       border: none;
       padding-left: 0;
       color: $brand-medium-blue;
+    }
+    #addLicenseBtn {
+      color: white;
+    }
+  }
+
+  #licenses_display {
+    thead {
+      th {
+        border-right: 0;
+        color: $brand-medium-blue;
+        border-bottom: 1px solid $brand-medium-blue;
+      }
+    }
+  }
+  #list_licenses_content {
+    tr {
+      font-weight: bolder;
+      border-bottom: 1px solid $bs-button-gray-border;;
+      td {
+        border-right: 0 !important;
+      }
+    }
+    a {
+      &:last-child {
+        margin-left: 10px;
+      }
+      img {
+        height: 15px;
+        &:hover {
+          opacity: 0.6;
+        }
+      }
     }
   }
 } // main config containers ID's

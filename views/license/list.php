@@ -13,12 +13,12 @@ include_once('js/list_js.php');
                         <th><?php _e('Title','tainacan'); ?></th>
                         <th><?php _e('Pattern','tainacan'); ?></th>
                         <th><?php _e('Enabled','tainacan'); ?></th>
-                        <th><?php _e('Delete and Edit','tainacan'); ?></th>
+                        <th></th>
                     </tr>
                     </thead>
 
-                    <tbody id="list_licenses_content" >
-                    </tbody>
+                    <tbody id="list_licenses_content"></tbody>
+                    
                 </table>
             </form>
         </div>
