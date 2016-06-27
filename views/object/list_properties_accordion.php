@@ -129,6 +129,9 @@ if (isset($property_object)):
 
 <?php if (isset($property_data)): 
     foreach ($property_data as $property) { 
+        if($property['id']=='license'):
+            continue;
+        endif;
         $properties_autocomplete[] = $property['id']; 
         ?>
         <div id="meta-item-<?php echo $property['id']; ?>" >

@@ -22,6 +22,7 @@ $view_helper = new ViewHelper();
         $cores = ['blue','brown','green','violet','grey'];
         $i=0;
         $collection_ordenation = $ordenation['collection_metas']['socialdb_collection_ordenation_form'];
+        $submission_visualization = $ordenation['collection_metas']['socialdb_collection_submission_visualization'];
         ?>
         <div id="layout-accordion" style="margin-top: 20px; padding-right: 0; font-size: 12px;">
             <h3 style="border-left: 4px solid #7AA7CF; border-radius: 0 2px 2px 0;"> <?php _e('Colors','tainacan'); ?> </h3>
@@ -79,6 +80,18 @@ $view_helper = new ViewHelper();
                             </option>
                             <option value="asc" <?php if ($collection_ordenation == 'asc') { echo 'selected = "selected"'; } ?> >
                                 <?php _e('ASC','tainacan'); ?>
+                            </option>
+                        </select>
+                    </div>
+                    <!------------------- Forma de visualizacao formulario de submissao -------------------------->
+                    <div class="form-group">
+                        <label for="collection_ordenation_form"><?php _e('Select the visualization in the submission form','tainacan'); ?></label>
+                        <select name="socialdb_collection_submission_visualization" class="form-control">
+                            <option value="one" <?php ( $submission_visualization == 'one' ) ? "selected = 'selected'" : ''; ?> >
+                                <?php _e('1 column','tainacan'); ?>
+                            </option>
+                            <option value="two" <?php if ($submission_visualization == 'two'|| empty($submission_visualization)) { echo 'selected = "selected"'; } ?> >
+                                <?php _e('2 column','tainacan'); ?>
                             </option>
                         </select>
                     </div>

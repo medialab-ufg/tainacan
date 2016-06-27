@@ -98,8 +98,10 @@ class ObjectController extends Controller {
             case "edit":
                 $object_name = get_post_meta($data['collection_id'], 'socialdb_collection_object_name', true);
                 $socialdb_collection_attachment = get_post_meta($data['collection_id'], 'socialdb_collection_attachment', true);
+                $collection_id = $data['collection_id'];
                 $data = $object_model->edit($data['object_id'], $data['collection_id']);
                 $data['object_name'] = $object_name;
+                $data['collection_id'] = $collection_id;
                 $data['socialdb_collection_attachment'] = $socialdb_collection_attachment;
                 $data['socialdb_object_from'] = get_post_meta($data['object']->ID, 'socialdb_object_from', true);
                 $data['socialdb_object_dc_source'] = get_post_meta($data['object']->ID, 'socialdb_object_dc_source', true);

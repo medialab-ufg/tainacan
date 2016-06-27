@@ -148,6 +148,9 @@ if (isset($property_object)):
 
 <?php if (isset($property_data)): 
     foreach ($property_data as $property) { 
+        if($property['id']=='license'):
+            continue;
+        endif;
         $properties_autocomplete[] = $property['id']; ?>
         <div id="meta-item-<?php echo $property['id']; ?>" 
              property="<?php echo $property['id']; ?>"
@@ -405,7 +408,7 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
     <?php } ?>
 <?php endif;
 ?>
- <input type="hidden" name="properties_autocomplete" id='edit_properties_autocomplete' value="<?php echo implode(',', $properties_autocomplete); ?>">
+<input type="hidden" name="properties_autocomplete" id='edit_properties_autocomplete' value="<?php echo (is_array($properties_autocomplete))?implode(',', $properties_autocomplete):''; ?>">
 <input type="hidden" name="categories_id" id='edit_object_categories_id' value="<?php echo implode(',', $categories_id); ?>">   
 <input type="hidden" name="properties_terms_radio" id='properties_terms_radio' value="<?php echo implode(',', $properties_terms_radio); ?>">
 <input type="hidden" name="properties_terms_tree" id='properties_terms_tree' value="<?php echo implode(',', $properties_terms_tree); ?>">

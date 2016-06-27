@@ -1,11 +1,15 @@
 <?php
-    include_once ('../../../../../wp-config.php');
-    include_once ('../../../../../wp-load.php');
-    include_once ('../../../../../wp-includes/wp-db.php');
     include_once ('js/create_item_text_js.php');
     include_once(dirname(__FILE__).'/../../helpers/view_helper.php');
 
     $view_helper = new ViewHelper();
+    $val = get_post_meta($collection_id, 'socialdb_collection_submission_visualization', true);
+    if($val&&$val=='one'){
+        $view_helper->hide_main_container = true;
+        $mode = true;
+    }else{
+        $mode = false;
+    }
     /**
      * 
      * View utilizado para criar um item do tipo texto, utiliza os containers 
@@ -51,7 +55,82 @@
                          <?php _e('Expand all', 'tainacan') ?></div>
                 &nbsp;&nbsp;<span class="glyphicon-triangle-bottom white glyphicon"></span>
             </div>
+<!-- TAINACAN: INICIO ACCORDEON -->
             <div id="text_accordion" class="multiple-items-accordion">
+            <?php 
+            //se for no modo de apenas um container
+            if($mode): 
+            ?>
+            <!-- TAINACAN: titulo do item -->
+            <div id="<?php echo $view_helper->get_id_list_properties('title','title'); ?>"  
+                <?php echo $view_helper->get_visibility($view_helper->terms_fixed['title']) ?>    
+                <?php do_action('item_title_attributes') ?>>
+                <h2> 
+                    <?php echo ($view_helper->terms_fixed['title']) ? $view_helper->terms_fixed['title']->name :  _e('Title','tainacan') ?> 
+                    <a class="pull-right" 
+                       style="margin-right: 20px;" 
+                        >
+                        <span title="<?php _e('Type the item name','tainacan'); ?>" 
+                       data-toggle="tooltip" data-placement="bottom" class="glyphicon glyphicon-question-sign"></span>
+                    </a>
+                </h2>
+                 <div class="form-group" >
+                    <input class="form-control"   
+                           type="text"  
+                           id="object_name" 
+                           name="object_name" 
+                           placeholder="<?php _e('Item name','tainacan'); ?>">
+                  </div>   
+            </div>    
+            <!-- TAINACAN: Campo com o ckeditor para items do tipo texto -->
+            <div id="<?php echo $view_helper->get_id_list_properties('content','object_content_text'); ?>" 
+                  <?php echo $view_helper->get_visibility($view_helper->terms_fixed['content']) ?> 
+                 class="form-group" <?php do_action('item_content_attributes') ?>>
+                <h2> 
+                    <?php echo ($view_helper->terms_fixed['content']) ? $view_helper->terms_fixed['content']->name :  _e('Content','tainacan') ?> 
+                    <a class="pull-right" 
+                       style="margin-right: 20px;" 
+                        >
+                        <span title="<?php _e('Type the content of the item','tainacan'); ?>" 
+                       data-toggle="tooltip" data-placement="bottom" class="glyphicon glyphicon-question-sign"></span>
+                    </a>
+                </h2>
+                 <div class="form-group" >
+                    <textarea class="form-control" id="object_editor" name="object_editor" placeholder="<?php _e('Object Content','tainacan'); ?>">
+                    </textarea>
+                </div>     
+            </div>
+            <!-- TAINACAN: UPLOAD DE ANEXOS DOS ITEMS -->
+            <div id="<?php echo $view_helper->get_id_list_properties('attachments','attachments'); ?>" 
+                <?php echo $view_helper->get_visibility($view_helper->terms_fixed['attachments']) ?> 
+                class="form-group" <?php do_action('item_attachments_attributes') ?> >
+                <h2> 
+                   <?php echo ($view_helper->terms_fixed['attachments']) ? $view_helper->terms_fixed['attachments']->name :  _e('Attachments','tainacan') ?> 
+                    <a class="pull-right" 
+                       style="margin-right: 20px;" 
+                        >
+                        <span title="<?php _e('Upload attachments for your item','tainacan'); ?>" 
+                       data-toggle="tooltip" data-placement="bottom" class="glyphicon glyphicon-question-sign"></span>
+                    </a>
+                </h2>
+                <div class="form-group" >
+                    <div id="dropzone_new" <?php ($socialdb_collection_attachment=='no') ? print_r('style="display:none"') : '' ?> 
+                        class="dropzone"
+                        style="margin-bottom: 15px;min-height: 150px;padding-top: 0px;">
+                            <div class="dz-message" data-dz-message>
+                             <span style="text-align: center;vertical-align: middle;">
+                                 <h3>
+                                     <span class="glyphicon glyphicon-upload"></span>
+                                     <b><?php _e('Drop Files','tainacan')  ?></b> 
+                                         <?php _e('to upload','tainacan')  ?>
+                                 </h3>
+                                 <h4>(<?php _e('or click','tainacan')  ?>)</h4>
+                             </span>
+                         </div>
+                    </div>
+                </div>    
+            </div>    
+            <?php endif; ?>
             <!-- TAINACAN: thumbnail do item -->
             <div id="<?php echo $view_helper->get_id_list_properties('thumbnail','thumbnail_id'); ?>" 
                 <?php echo $view_helper->get_visibility($view_helper->terms_fixed['thumbnail']) ?>  
@@ -181,6 +260,7 @@
              <!-- TAINACAN: votacoes do item -->
              <div id="create_list_ranking_<?php echo $object_id ?>"></div>
             </div>
+<!-- TAINACAN: FIM ACCORDEON -->
             <?php if($view_helper->hide_main_container): ?>
                 <br><br>
                  <!--button onclick="back_main_list();" style="margin-bottom: 20px;"  class="btn btn-default btn-lg pull-left"><b><?php _e('Back','tainacan') ?></b></button-->
@@ -207,6 +287,10 @@
                 </button>
             </h3>
             <hr>
+            <?php 
+            //se for no modo dois containeres
+            if(!$mode): 
+            ?>  
                 <div <?php echo $view_helper->get_visibility($view_helper->terms_fixed['title']) ?> 
                     class="form-group">
                     <label for="object_name">
@@ -274,7 +358,8 @@
                              </span>
                          </div>
                     </div>
-                </div>    
+                </div>               
+            <?php endif; ?>    
                 <input type="hidden" id="object_classifications" name="object_classifications" value="">
                 <input type="hidden" id="object_content" name="object_content" value="">
                 <input type="hidden" id="create_object_collection_id" name="collection_id" value="">
@@ -286,7 +371,7 @@
                 </div>  
                 <div id="submit_container_message" style="display: none;">
                      <button type="button" onclick="show_message()" style="margin-bottom: 20px;" class="btn btn-success btn-lg pull-right send-button"><?php _e('Submit','tainacan'); ?></button>
-                </div>  
+                </div>     
         </div>
     </div> 
 </form>

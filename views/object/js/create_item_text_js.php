@@ -68,7 +68,7 @@ $(function(){
                     if(!elem_first){
                          showAlertGeneral('<?php _e('Attention!','tainacan') ?>', '<?php _e('Invalid submission, file is too big!','tainacan') ?>', 'error');
                     }
-                    if(elem_first.validation_error){
+                    else if(elem_first.validation_error){
                         showAlertGeneral(elem_first.title, elem_first.msg, 'error');
                     }else{
                          $("#tainacan-breadcrumbs").hide();

@@ -131,6 +131,7 @@
                             });
                         }
                         // end validate
+                        console.log(property_id);
                         if($(".form_edit_autocomplete_value_" + property_id)){
                             $(".form_edit_autocomplete_value_" + property_id).autocomplete({
                                 source: $('#src').val() + '/controllers/collection/collection_controller.php?operation=list_items_search_autocomplete&property_id=' + property_id,
