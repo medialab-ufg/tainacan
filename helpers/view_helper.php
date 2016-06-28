@@ -6,6 +6,7 @@ class ViewHelper {
     public $default_metadata;
     public $special_metadata;
     public $hide_main_container = false;
+    public $collection_id;
     public static $fixed_slugs = [
         'socialdb_property_fixed_title',
         'socialdb_property_fixed_description',
@@ -39,11 +40,11 @@ class ViewHelper {
         'tags'=> get_term_by('slug', 'socialdb_property_fixed_tags','socialdb_property_type'),
         'type'=> get_term_by('slug', 'socialdb_property_fixed_type','socialdb_property_type')
         ];
-        
-        if($this->get_visibility($this->terms_fixed['attachments'],$collection_id)!==''
-                &&$this->get_visibility($this->terms_fixed['title'],$collection_id)!==''
-                &&$this->get_visibility($this->terms_fixed['type'],$collection_id)!==''
-                &&$this->get_visibility($this->terms_fixed['content'],$collection_id)!==''
+        $this->collection_id = $collection_id;
+        if($this->get_visibility($this->terms_fixed['attachments'], $this->collection_id)!==''
+                &&$this->get_visibility($this->terms_fixed['title'], $this->collection_id)!==''
+                &&$this->get_visibility($this->terms_fixed['type'], $this->collection_id)!==''
+                &&$this->get_visibility($this->terms_fixed['content'], $this->collection_id)!==''
                 ){
              $this->hide_main_container = true;
         }
@@ -82,15 +83,15 @@ class ViewHelper {
         ];
     }
     
-    public function get_visibility( $property,$collection_id = 0) {
+    public function get_visibility( $property) {
         if(isset($property->term_id)){
             $visibility = get_term_meta($property->term_id, 'socialdb_property_visibility',true);
             if($visibility=='hide'){
                 return 'style="display:none"';
-            }elseif($collection_id!=0){
-                $meta = get_post_meta($collection_id, 'socialdb_collection_fixed_properties_visibility', true);
-                $array = unserialize($meta);
-                if(is_array($array['hide']) &&  ($key = array_search($property, $array['hide'])) !== false):
+            }elseif($this->collection_id!=0){
+                $meta = get_post_meta($this->collection_id, 'socialdb_collection_fixed_properties_visibility', true);
+                $array = explode(',', $meta) ;
+                if(is_array($array) &&  ($key = array_search($property->term_id, $array)) !== false):
                     return 'style="display:none"';
                 endif;
             }else{

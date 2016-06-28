@@ -5,7 +5,7 @@ include_once ('../../../../../wp-includes/wp-db.php');
 include_once ('js/edit_item_text_js.php');
 include_once(dirname(__FILE__).'/../../helpers/view_helper.php');
 
-$view_helper = new ViewHelper();
+$view_helper = new ViewHelper($collection_id);
 $val = get_post_meta($collection_id, 'socialdb_collection_submission_visualization', true);
 if($val&&$val=='one'){
     $view_helper->hide_main_container = true;

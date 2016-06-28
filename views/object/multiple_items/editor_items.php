@@ -5,7 +5,7 @@ include_once ('../../../../../wp-includes/wp-db.php');
 include_once ('js/editor_items_js.php');
 include_once(dirname(__FILE__).'/../../../helpers/view_helper.php');
 
-$view_helper = new ViewHelper();
+$view_helper = new ViewHelper($collection_id);
 
 $properties_terms_radio = [];
 $properties_terms_tree = [];
