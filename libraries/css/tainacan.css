@@ -396,6 +396,42 @@ body.home .ibram-home-container .col-md-3 .ibram-box p:nth-child(4) {
   margin: 0 0 20px 0;
 }
 
+.customize-layout .holder {
+  padding-left: 0;
+  background: white;
+}
+.customize-layout #layout-accordion h3.title {
+  border-left: 4px solid #79a6ce;
+  border-radius: 0 2px 2px 0;
+}
+.customize-layout #layout-accordion .l-a-container {
+  padding-left: 0;
+  padding-right: 0;
+}
+.customize-layout #layout-accordion .color-container {
+  margin-left: 5px;
+  margin-bottom: 8px;
+  width: 75px;
+  display: inline-block;
+}
+.customize-layout #layout-accordion .color-container .color-input {
+  border: none;
+  color: transparent;
+  width: 35px;
+  height: 25px;
+}
+.customize-layout #layout-accordion #collection-colorset {
+  margin-top: 10px;
+  margin-left: 3.5px;
+}
+.customize-layout #layout-accordion #collection-colorset label {
+  display: block;
+  color: #0C698B;
+}
+.customize-layout #layout-accordion #collection-colorset .input {
+  margin: 5px 0 5px 0;
+}
+
 #submit_configuration {
   margin-right: 30px;
   margin-left: 10px;

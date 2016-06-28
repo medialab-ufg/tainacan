@@ -9,48 +9,44 @@ $view_helper = new ViewHelper();
 <?php $view_helper->render_header_config_steps('layout') ?>
 
 <div class="categories_menu row col-md-12 customize-layout" id="properties_tabs">
-    <div class="col-md-2" style="padding-left: 0; background: white;">
-
+    <div class="col-md-2 holder">
         <?php
-        $default_color_schemes = [
-                'blue'   => ['#7AA7CF', '#0C698B'],
-                'brown'  => ['#874A1D', '#4D311F'],
-                'green'  => ['#3D8B55', '#242D11'],
-                'violet' => ['#7852B2', '#31185C'],
-                'grey'   => ['#58595B', '#231F20'],
-            ];
         $cores = ['blue','brown','green','violet','grey'];
-        $i=0;
         $collection_ordenation = $ordenation['collection_metas']['socialdb_collection_ordenation_form'];
         $submission_visualization = $ordenation['collection_metas']['socialdb_collection_submission_visualization'];
         ?>
         <div id="layout-accordion" style="margin-top: 20px; padding-right: 0; font-size: 12px;">
-            <h3 style="border-left: 4px solid #7AA7CF; border-radius: 0 2px 2px 0;"> <?php _e('Colors','tainacan'); ?> </h3>
-            <div style="padding-left: 10px">
-                <?php foreach($default_color_schemes as $color_scheme) { ?>
-                    <div class="<?php echo $cores[$i] ?> color-container" style="margin-left: 5px; margin-bottom: 8px; width: 71px; display: inline-block; border: 1px solid darkgrey"
-                         onclick="colorize('<?php echo $cores[$i] ?>')">
-                        <input class="color1" style="border:none;color: transparent; width: 35px; height: 25px; background:<?php echo $color_scheme[0] ?>" value="<?php echo $color_scheme[0] ?>" />
-                        <input class="color2" style="margin-left: -5px; border:none;color: transparent; width: 35px; height: 25px; background:<?php echo $color_scheme[1] ?>" value="<?php echo $color_scheme[1] ?>" />
+            <h3 class="title"> <?php _e('Colors','tainacan'); ?> </h3>
+            <div class="l-a-container">
+                <?php $i=0; foreach(ViewHelper::$default_color_schemes as $color_scheme) { ?>
+                    <div class="<?php echo $cores[$i] ?> color-container" onclick="colorize('<?php echo $cores[$i] ?>')">
+                        <input class="color-input color1" style="background:<?php echo $color_scheme[0] ?>" value="<?php echo $color_scheme[0] ?>" />
+                        <input class="color-input color2" style="background:<?php echo $color_scheme[1] ?>" value="<?php echo $color_scheme[1] ?>" />
                     </div>
                     <?php $i++; } ?>
 
-                <form id="collection-colorset" class="layout-colorpicker" style="margin-top: 10px; margin-left: 3.5px;">
-                    <label for="primary-custom-color" style="display: block; color: #0C698B;"> <?php _e('More options', 'tainacan'); ?> </label>
-                    <div class="input" style="margin: 5px 0 5px 0">
-                        <input type="text" id="primary-custom-color" value="#7AA7CF" name="color_scheme[primary_color]">
-                        <input type="text" id="second-custom-color" value="#0C698B" name="color_scheme[secondary_color]">
+                <form name="custom_colors" class="custom_color_schemes">
+                    
+                </form>
+
+                <form id="collection-colorset" class="layout-colorpicker">
+                    <label for="primary-custom-color"> <?php _e('More options', 'tainacan'); ?> </label>
+                    <div class="input">
+                        <input type="text" id="primary-custom-color" value="#7AA7CF" name="color_scheme[0][primary_color]">
+                        <input type="text" id="second-custom-color" value="#0C698B" name="color_scheme[0][secondary_color]">
                     </div>
 
                     <input type="hidden" name="collection_id" value="<?php echo $collection_id; ?>">
                     <input type="hidden" name="operation" value="update_color_scheme">
 
+                    <input type="button" value="Adicionare" onclick="bgR();" class="btn btn-danger">
+
                     <input type="submit" value="<?php _e('Add','tainacan'); ?>" class="btn btn-primary">
                 </form>
             </div>
-            <h3 style="border-left: 4px solid #7AA7CF; border-radius: 0 2px 2px 0; background: white;"><?php _e('Layout','tainacan'); ?></h3>
+            <h3 class="title"> <?php _e('Layout','tainacan'); ?></h3>
             <div style="padding-left: 15px">
-                <form method="POST" name="form_ordenation_search" id="form_ordenation_search" style="">
+                <form method="POST" name="form_ordenation_search" id="form_ordenation_search">
                     <input type="hidden" name="property_category_id"  value="<?php echo $category_root_id; ?>">
                     <input type="hidden" name="selected_view_mode" class="selected_view_mode" value="<?php echo $selected_view_mode ?>"/>
 
@@ -83,6 +79,7 @@ $view_helper = new ViewHelper();
                             </option>
                         </select>
                     </div>
+
                     <!------------------- Forma de visualizacao formulario de submissao -------------------------->
                     <div class="form-group">
                         <label for="collection_ordenation_form"><?php _e('Select the visualization in the submission form','tainacan'); ?></label>

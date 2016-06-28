@@ -1,8 +1,48 @@
 .customize-layout {
+	.holder {
+		padding-left: 0;
+		background: white;
+	}
+	#layout-accordion {
+		h3.title {
+			border-left: 4px solid $brand-light-blue;
+			border-radius: 0 2px 2px 0;
+		}
+		.l-a-container {
+			padding-left: 0;
+			padding-right: 0;
+		}
+		.color-container {
+			margin-left: 5px;
+			margin-bottom: 8px;
+			width: 75px;
+			display: inline-block;
+			// border: 1px solid red;
 
+			.color-input {
+				border:none;
+				color: transparent;
+				width: 35px;
+				height: 25px;
+			}
+		} // .color-container
+
+		#collection-colorset {
+			margin-top: 10px;
+			margin-left: 3.5px;
+
+			label {
+				display: block;
+				color: #0C698B;
+			}
+			.input {
+				margin: 5px 0 5px 0
+			}
+		}
+	} // #layout-accordion
 }
 #submit_configuration {
-	margin-right:30px;
+	margin-right: 30px;
 	margin-left: 10px;
 }
 #collection-steps {

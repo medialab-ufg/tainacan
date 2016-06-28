@@ -1,6 +1,14 @@
 <script type="text/javascript">
     var src = $('#src').val();
 
+    function bgR() {
+        var c1 = $("#primary-custom-color").val();
+        var c2 = $("#second-custom-color").val();
+        $('.custom_color_schemes').append(
+            '<div class="color-container"> <input type="text" class="color-input color1" style="background:'+c1+'" value="'+c1+'" /> ' +
+            '<input type="text" class="color-input color2" style="background:'+c2+'" value="'+c2+'" /> </div>');
+    }
+
     $(function () {
         change_breadcrumbs_title('<?php _e('Layout','tainacan') ?>');
 
@@ -21,6 +29,9 @@
         $('#second-custom-color').wpColorPicker(layoutOptions);
 
         $("#collection-colorset").submit(function(event) {
+            var r = $(this).serialize();
+            cl(r);
+
             event.preventDefault();
             $.ajax({
                 url: src + "/controllers/collection/collection_controller.php",
@@ -28,8 +39,9 @@
                 data: new FormData(this),
                 processData: false,
                 contentType: false
-            }).done(function(r){
+            }).done(function(r) {
                 var el = $.parseJSON(r);
+                cl(el);
             });
         });
 

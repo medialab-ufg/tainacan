@@ -1676,6 +1676,9 @@ class VisualizationModel extends CollectionModel {
     public function set_default_color_scheme($data) {
         $colorScheme = $data['color_scheme'];
         $data['cores'] = update_post_meta( $data['collection_id'], 'socialdb_collection_color_scheme', serialize($colorScheme) );
+        
+        $data['testing'] = $colorScheme;
+        $data['testingTwice'] = serialize($colorScheme);
 
         return $data;
     }
