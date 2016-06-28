@@ -19,7 +19,7 @@ class ViewHelper {
         ];
    public $terms_fixed;
     
-    function __construct() {
+    function __construct($collection_id = 0) {
         $this->terms_fixed = [
         'title'=> get_term_by('slug', 'socialdb_property_fixed_title','socialdb_property_type'),
         'description'=> get_term_by('slug', 'socialdb_property_fixed_description','socialdb_property_type'),
@@ -32,10 +32,10 @@ class ViewHelper {
         'type'=> get_term_by('slug', 'socialdb_property_fixed_type','socialdb_property_type')
         ];
         
-        if($this->get_visibility($this->terms_fixed['attachments'])!==''
-                &&$this->get_visibility($this->terms_fixed['title'])!==''
-                &&$this->get_visibility($this->terms_fixed['type'])!==''
-                &&$this->get_visibility($this->terms_fixed['content'])!==''
+        if($this->get_visibility($this->terms_fixed['attachments'],$collection_id)!==''
+                &&$this->get_visibility($this->terms_fixed['title'],$collection_id)!==''
+                &&$this->get_visibility($this->terms_fixed['type'],$collection_id)!==''
+                &&$this->get_visibility($this->terms_fixed['content'],$collection_id)!==''
                 ){
              $this->hide_main_container = true;
         }
@@ -74,11 +74,17 @@ class ViewHelper {
         ];
     }
     
-    public function get_visibility( $property) {
+    public function get_visibility( $property,$collection_id = 0) {
         if(isset($property->term_id)){
             $visibility = get_term_meta($property->term_id, 'socialdb_property_visibility',true);
             if($visibility=='hide'){
                 return 'style="display:none"';
+            }elseif($collection_id!=0){
+                $meta = get_post_meta($collection_id, 'socialdb_collection_fixed_properties_visibility', true);
+                $array = unserialize($meta);
+                if(is_array($array['hide']) &&  ($key = array_search($property, $array['hide'])) !== false):
+                    return 'style="display:none"';
+                endif;
             }else{
               return '';   
             } 
