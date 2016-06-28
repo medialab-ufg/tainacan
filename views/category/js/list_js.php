@@ -173,7 +173,7 @@
                                     $("#category_description").val('');
 
                                 });
-                                e.preventDefault();
+                               //e.preventDefault();
                             }
                             // se nao ele quiser criar a categoria sera mostrado
                             // para edicao a categoria para edicao
@@ -254,7 +254,7 @@
                             $('#category_name').val('');
 
                         });
-                        e.preventDefault();
+                       // e.preventDefault();
                     }
                 });
     }

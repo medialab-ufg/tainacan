@@ -202,6 +202,10 @@
                         //if (elem.metas.socialdb_property_required === 'true') {
                             required = ' onclick="validate_radio(' + radio + ')"';
                         //}
+                        if(is_selected_category(children.term_id,'#object_classifications')){
+                            required  += ' checked="checked" '
+                        }
+                        
                         //  if (property.id == selected) {
                         //     $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
                         //  } else {
@@ -224,8 +228,12 @@
                 }).done(function (result) {
                     elem = jQuery.parseJSON(result);
                     $('#field_property_term_' + checkbox).html('');
+                    var checked = '';
+                    if(is_selected_category(children.term_id,'#object_classifications')){
+                        checked  += ' checked="checked" '
+                    }
                     $.each(elem.children, function (idx, children) {
-                        $('#field_property_term_' + checkbox).append('<input type="checkbox" onchange="validate_checkbox(' + checkbox + ')" name="socialdb_propertyterm_' + checkbox + '[]" value="' + children.term_id + '">&nbsp;' + children.name + '<br>');
+                        $('#field_property_term_' + checkbox).append('<input type="checkbox" '+checked+' onchange="validate_checkbox(' + checkbox + ')" name="socialdb_propertyterm_' + checkbox + '[]" value="' + children.term_id + '">&nbsp;' + children.name + '<br>');
                     });
                     var required = '';
                     if (elem.metas.socialdb_property_required === 'true') {
@@ -250,7 +258,7 @@
                     }else{
                          $('#core_validation_'+selectbox).val('true');
                     }
-                    set_field_valid(property_id,'core_validation_'+selectbox);
+                    set_field_valid(selectbox,'core_validation_'+selectbox);
                 });
                 //
                 $.ajax({
@@ -262,10 +270,14 @@
                     $('#field_property_term_' + selectbox).html('');
                     $('#field_property_term_' + selectbox).append('<option value=""><?php _e('Select','tainacan') ?>...</option>');
                     $.each(elem.children, function (idx, children) {
+                        var selected = '';
+                        if(is_selected_category(children.term_id,'#object_classifications')){
+                            selected  += ' selected="selected" '
+                        }
                         //  if (property.id == selected) {
                         //     $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
                         //  } else {
-                        $('#field_property_term_' + selectbox).append('<option value="' + children.term_id + '">' + children.name + '</option>');
+                        $('#field_property_term_' + selectbox).append('<option '+selected+' value="' + children.term_id + '">' + children.name + '</option>');
                         //  }
                     });
                 });
@@ -295,10 +307,11 @@
                     elem = jQuery.parseJSON(result);
                     $('#field_property_term_' + multipleSelect).html('');
                     $.each(elem.children, function (idx, children) {
-                        //  if (property.id == selected) {
-                        //     $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
-                        //  } else {
-                        $('#field_property_term_' + multipleSelect).append('<option value="' + children.term_id + '">' + children.name + '</option>');
+                        var selected = '';
+                        if(is_selected_category(children.term_id,'#object_classifications')){
+                            selected  += ' selected="selected" '
+                        }
+                        $('#field_property_term_' + multipleSelect).append('<option '+selected+' value="' + children.term_id + '">' + children.name + '</option>');
                         //  }
                     });
                 });
@@ -342,6 +355,9 @@
                     onCreate: function (node, span) {
                          bindContextMenuSingle(span,'field_property_term_' + treecheckbox);
                         $('.dropdown-toggle').dropdown();
+                        if(is_selected_category(node.data.key,'#object_classifications')){
+                            node.select(true);
+                        }
                     },
                     onSelect: function (flag, node) {
                         var cont = 0;
@@ -414,6 +430,9 @@
                     onCreate: function (node, span) {
                         bindContextMenuSingle(span,'field_property_term_' + tree);
                         $('.dropdown-toggle').dropdown();
+                        if(is_selected_category(node.data.key,'#object_classifications')){
+                            node.select(true);
+                        }
                     },
                     onSelect: function (flag, node) {
                         if ($("#socialdb_propertyterm_" + tree).val() === node.data.key) {
@@ -432,9 +451,6 @@
             });
         }
     }
-
-
-
     // get value of the property
     function get_val(value) {
         if (value === '' || value === undefined) {

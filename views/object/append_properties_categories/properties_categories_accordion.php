@@ -406,7 +406,7 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
 ?>
 <input type="hidden" name="pc_properties" id='pc_properties' value="<?php echo implode(',', $ids); ?>">
 <input type="hidden" name="categories" id='pc_categories' value="">
-<input type="hidden" name="properties_autocomplete" id='pc_properties_autocomplete' value="<?php echo implode(',', $properties_autocomplete); ?>">
+<input type="hidden" name="properties_autocomplete" id='pc_properties_autocomplete' value="<?php echo  (isset($properties_autocomplete)&&is_array($properties_autocomplete))?implode(',', $properties_autocomplete):''; ?>">
 <input type="hidden" name="properties_terms_radio" id='pc_properties_terms_radio' value="<?php echo implode(',', $properties_terms_radio); ?>">
 <input type="hidden" name="properties_terms_tree" id='pc_properties_terms_tree' value="<?php echo implode(',', $properties_terms_tree); ?>">
 <input type="hidden" name="properties_terms_selectbox" id='pc_properties_terms_selectbox' value="<?php echo implode(',', $properties_terms_selectbox); ?>">

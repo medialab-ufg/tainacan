@@ -2169,10 +2169,17 @@ function showAddItemText() {
     var src = $('#src').val();
     $("#form").html('');
     show_modal_main();
+    var selKeys = $.map($("#dynatree").dynatree("getSelectedNodes"), function(node) {
+                return node.data.key;
+    });
     $.ajax({
         url: src + '/controllers/object/object_controller.php',
         type: 'POST',
-        data: {operation: 'create_item_text', collection_id: $("#collection_id").val()}
+        data: {
+            operation: 'create_item_text', 
+            collection_id: $("#collection_id").val(),
+            classifications: selKeys.join(",")
+        }
     }).done(function (result) {
         hide_modal_main();
         $('#main_part').hide();
@@ -2180,6 +2187,21 @@ function showAddItemText() {
         $('#loader_collections').hide();
         $('#configuration').html(result).show();
     });
+}
+/**
+ * 
+ * @param {type} id
+ * @param {type} seletor
+ * @returns {undefined}
+ */
+function is_selected_category(id,seletor){
+    var array = $(seletor).val().split(',');
+    if(array.length>0&&array.indexOf(id)>=0){
+        return true;
+    }else{
+        return false;
+    }
+    
 }
 //--------------------------- TELA DE IMPORTACAO DE MULTIPLO ARQUIVOS --------------------------//
 // lista os autores mais participativos

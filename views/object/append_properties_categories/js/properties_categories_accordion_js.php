@@ -1,10 +1,11 @@
 <script>
     $(function () {
         var src = $('#src').val();
-       // var properties_autocomplete = edit_get_val($("#edit_properties_autocomplete").val());
+        var properties_autocomplete = edit_get_val($("#pc_properties_autocomplete").val());
        // autocomplete_edit_item_property_data(properties_autocomplete); 
         $('[data-toggle="tooltip"]').tooltip();
         pc_list_properties_term_insert_objects();
+        pc_autocomplete_edit_item_property_data(properties_autocomplete)
     });
     function autocomplete_object_property_edit(property_id, object_id) {
         $("#autocomplete_value_" + property_id + "_" + object_id).autocomplete({
@@ -54,7 +55,7 @@
      * @param {type} e
      * @returns {undefined}
      */
-    function autocomplete_edit_item_property_data(properties_autocomplete) {
+    function pc_autocomplete_edit_item_property_data(properties_autocomplete) {
          if (properties_autocomplete) {
             $.each(properties_autocomplete, function (idx, property_id) {
                         //validate
@@ -217,13 +218,13 @@
         if (selectboxes) {
             $.each(selectboxes, function (idx, selectbox) {
                 //validation
-                $('#field_property_term_' + selectbox).select(function(){
+                $('#field_property_term_' + selectbox).change(function(){
                     if( $("#field_property_term_" + selectbox).val()===''){
                         $('#core_validation_'+selectbox).val('false');
                     }else{
                          $('#core_validation_'+selectbox).val('true');
                     }
-                    set_field_valid(property_id,'core_validation_'+selectbox);
+                    set_field_valid(selectbox,'core_validation_'+selectbox);
                 });
                 //
                 $.ajax({
@@ -321,7 +322,7 @@
                     onCreate: function (node, span) {
                         $("#field_property_term_"+treecheckbox).dynatree("getRoot").visit(function(node){
                            // delete_value(node.data.key);
-                           if(categories.indexOf(node.data.key)>-1){
+                           if(categories&&categories.indexOf(node.data.key)>-1){
                                 node.select();
                             }
                         });
@@ -389,7 +390,7 @@
                     onCreate: function (node, span) {
                          $("#field_property_term_"+tree).dynatree("getRoot").visit(function(node){
                           // delete_value(node.data.key); 
-                           if(categories.indexOf(node.data.key)>-1){
+                           if(categories&&categories.indexOf(node.data.key)>-1){
                                 node.select();
                             }
                         });
