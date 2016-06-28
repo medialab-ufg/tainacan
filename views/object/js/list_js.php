@@ -13,7 +13,7 @@
 
         var default_viewMode = $("#default-viewMode").val();
         $('.viewMode-control li').removeClass('selected-viewMode');
-        $('.viewMode-control li.'+default_viewMode).addClass('selected-viewMode');
+        $('.viewMode-control li.' + default_viewMode).addClass('selected-viewMode');
 
 
         function get_colorScheme() {
@@ -21,8 +21,8 @@
             $.ajax({
                 type: "POST",
                 url: src + "/controllers/collection/collection_controller.php",
-                data: {operation: 'get_color_scheme', collection_id: coll_id }
-            }).done(function(r){
+                data: {operation: 'get_color_scheme', collection_id: coll_id}
+            }).done(function (r) {
                 var color_scheme = $.parseJSON(r);
                 if (color_scheme) {
                     $('#accordion .title-pipe').css('border-left-color', color_scheme.secondary_color);
@@ -41,74 +41,95 @@
         setMenuContainerHeight();
 
         $(".droppableClassifications").droppable({
-                hoverClass: "drophover",
-                addClasses: true,
-                //    tolerance: "pointer",
-                over: function (event, ui) {
-                    logMsg("droppable.over, %o, %o", event, ui);
-                },
-                drop: function (event, ui) {
-                    var object_id = $(this).closest('div').find('.object_id').val();
-                    if($('#add_classification_allowed_'+object_id).val()=='1'){
-                        var source = ui.helper.data("dtSourceNode") || ui.draggable;
-                        var key = source.data.key;
-                        var n = key.toString().indexOf("_");
-                        var value_id = '';
-                        var type = ' ';
-                        if (n > 0) {// se for propriedade de objeto
-                            values = key.split("_");
-                            if (values[1] === 'facet') {
-                                showAlertGeneral('<?php _e('Atention', 'tainacan') ?>', '<?php _e('You may not classificate objects with root categories, object properties and tags', 'tainacan') ?>', 'error');
-                                return;
-                            }
-                            else if (values[1] === 'tag') {
-                                type = 'tag';
-                                value_id = values[0];
-                            } else {
-                                type = values[1];
-                                value_id = values[0];
-                            }
-                        } else {
-                            type = 'category';
-                            value_id = key.toString();
+            hoverClass: "drophover",
+            addClasses: true,
+            //    tolerance: "pointer",
+            over: function (event, ui) {
+                logMsg("droppable.over, %o, %o", event, ui);
+            },
+            drop: function (event, ui) {
+                var object_id = $(this).closest('div').find('.object_id').val();
+                if ($('#add_classification_allowed_' + object_id).val() == '1') {
+                    var source = ui.helper.data("dtSourceNode") || ui.draggable;
+                    var key = source.data.key;
+                    var n = key.toString().indexOf("_");
+                    var value_id = '';
+                    var type = ' ';
+                    if (n > 0) {// se for propriedade de objeto
+                        values = key.split("_");
+                        if (values[1] === 'facet') {
+                            showAlertGeneral('<?php _e('Atention', 'tainacan') ?>', '<?php _e('You may not classificate objects with root categories, object properties and tags', 'tainacan') ?>', 'error');
+                            return;
                         }
-
-                        $.ajax({
-                            type: "POST",
-                            url: $('#src').val() + "/controllers/event/event_controller.php",
-                            data: {
-                                operation: 'add_event_classification_create',
-                                socialdb_event_create_date: '<?php echo mktime(); ?>',
-                                socialdb_event_user_id: $('#current_user_id').val(),
-                                socialdb_event_classification_object_id: object_id,
-                                socialdb_event_classification_term_id: value_id,
-                                socialdb_event_classification_type: type,
-                                socialdb_event_collection_id: $('#collection_id').val()}
-                        }).done(function (result) {
-                            elem_first = jQuery.parseJSON(result);
-                            set_containers_class($('#collection_id').val());
-                            show_classifications(object_id);
-                            showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
-
-                        });
-                    }else{
-                        showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('Action not allowed by admin!', 'tainacan') ?>', 'info');
+                        else if (values[1] === 'tag') {
+                            type = 'tag';
+                            value_id = values[0];
+                        } else {
+                            type = values[1];
+                            value_id = values[0];
+                        }
+                    } else {
+                        type = 'category';
+                        value_id = key.toString();
                     }
-                },
-                activate: function (event, ui) {
-                    // $(this).addClass("ui-state-highlight").find("p").hover();
-                    $(this).css('border-style', 'dashed');
-                    //$(".cat").removeClass("categorias");
-                    //$(".row cat").show(); 
-                },
-                deactivate: function (event, ui) {
-                    // $(this).addClass("ui-state-highlight").find("p").hover();
-                    $(this).css('border-style', 'none');
 
-                    //    $(".categorias").hide();
-                    //  $(".categorias").hover();
+                    $.ajax({
+                        type: "POST",
+                        url: $('#src').val() + "/controllers/event/event_controller.php",
+                        data: {
+                            operation: 'add_event_classification_create',
+                            socialdb_event_create_date: '<?php echo mktime(); ?>',
+                            socialdb_event_user_id: $('#current_user_id').val(),
+                            socialdb_event_classification_object_id: object_id,
+                            socialdb_event_classification_term_id: value_id,
+                            socialdb_event_classification_type: type,
+                            socialdb_event_collection_id: $('#collection_id').val()}
+                    }).done(function (result) {
+                        elem_first = jQuery.parseJSON(result);
+                        set_containers_class($('#collection_id').val());
+                        show_classifications(object_id);
+                        showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
+
+                    });
+                } else {
+                    showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('Action not allowed by admin!', 'tainacan') ?>', 'info');
                 }
-            }); 
+            },
+            activate: function (event, ui) {
+                // $(this).addClass("ui-state-highlight").find("p").hover();
+                $(this).css('border-style', 'dashed');
+                //$(".cat").removeClass("categorias");
+                //$(".row cat").show(); 
+            },
+            deactivate: function (event, ui) {
+                // $(this).addClass("ui-state-highlight").find("p").hover();
+                $(this).css('border-style', 'none');
+
+                //    $(".categorias").hide();
+                //  $(".categorias").hover();
+            }
+        });
+
+        $(".autocomplete_share_item").autocomplete({
+            source: $('#src').val() + '/controllers/collection/collection_controller.php?operation=get_collections_json',
+            messages: {
+                noResults: '',
+                results: function () {
+                    $('.ui-helper-hidden-accessible').remove();
+                }
+            },
+            minLength: 3,
+            focus: function (event, ui) {
+                event.preventDefault();
+                $("#search_collections").val(ui.item.label);
+            },
+            select: function (event, ui) {
+                event.preventDefault();
+                $("#search_collections").val(ui.item.label);
+                //window.location = ui.item.permalink;
+
+            }
+        });
     });
 
     function show_info(id) {
@@ -130,6 +151,24 @@
                 return $('#popover_content_wrapper' + id).html();
             }
         });
+    }
+
+    function showModalShareNetwork(id) {
+        $('#modal_share_network' + id).modal('show');
+    }
+
+    function send_share_item(id) {
+        if ($('#email_object_share' + id).val().trim() !== '' || $('#collections_object_share' + id).val().trim() !== '') {
+            $.ajax({
+                type: "POST",
+                url: $('#src').val() + "/controllers/user/user_controller.php",
+                data: {collection_id: $('#collection_id').val(), operation: 'share_item_email_or_collection', object_id: id, email: $('#email_object_share' + id).val(), new_collection: $('#collections_object_share' + id).val()}
+            }).done(function (result) {
+                $('#modal_share_network' + id).modal('hide');
+            });
+        } else {
+            showAlertGeneral('<?php _e('Atention', 'tainacan') ?>', '<?php _e('You need to fill the email or choose the collection', 'tainacan') ?>', 'error');
+        }
     }
 
 //BEGIN: funcao para mostrar os arquivos
@@ -241,8 +280,8 @@
 // END:fim das funcoes que mostram as propriedades
 //funcao que mostra as classificacoes apos clique no botao show_classification
     function show_classifications(object_id) {
-        var close_box = "<a href='javascript:void(0)' class='close-metadata-box' onclick='toggle_item_box_elements("+object_id+")'>" +
-            "<span class='glyphicon glyphicon-remove-circle'></span></a>";
+        var close_box = "<a href='javascript:void(0)' class='close-metadata-box' onclick='toggle_item_box_elements(" + object_id + ")'>" +
+                "<span class='glyphicon glyphicon-remove-circle'></span></a>";
 
         $.ajax({
             type: "POST",
@@ -250,7 +289,7 @@
             data: {collection_id: $('#collection_id').val(), operation: 'show_classifications', object_id: object_id}
         }).done(function (result) {
             toggle_item_box_elements(object_id);
-            $('#classifications_' + object_id).html( close_box + result).fadeIn();
+            $('#classifications_' + object_id).html(close_box + result).fadeIn();
             $('#show_classificiations_' + object_id).fadeOut();
             $('.dropdown-toggle').dropdown();
             $('.nav-tabs').tab();
@@ -258,8 +297,8 @@
     }
 
     function toggle_item_box_elements(object_id) {
-        var elements = [ '.item-display-title', '.item-description', '.item-author', '.item-creation'];
-        $.each(elements, function(index, element) {
+        var elements = ['.item-display-title', '.item-description', '.item-author', '.item-creation'];
+        $.each(elements, function (index, element) {
             $('#classifications_' + object_id).parent('.item-meta').find(element).toggle();
         });
 
@@ -288,7 +327,7 @@
             $('.nav-tabs').tab();
         });
     }
-    
+
     function edit_object_item(object_id) {
         $('#modalImportMain').modal('show');//mostro o modal de carregamento
         $.ajax({
@@ -297,7 +336,7 @@
             data: {collection_id: $('#collection_id').val(), operation: 'edit', object_id: object_id}
         }).done(function (result) {
             hide_modal_main();
-             $("#form").html('');
+            $("#form").html('');
             $('#main_part').hide();
             $('#display_view_main_page').hide();
             $('#loader_collections').hide();
@@ -341,7 +380,7 @@
             url: $('#src').val() + "/controllers/ranking/ranking_controller.php",
             data: {collection_id: $('#collection_id').val(), ordenation_id: $('#collection_single_ordenation').val(), operation: 'list_value_ordenation', object_id: object_id}
         }).done(function (result) {
-            $( btn_base + object_id).hide();
+            $(btn_base + object_id).hide();
             $(div_base + object_id).html(result).show();
         });
     }
@@ -366,8 +405,8 @@
 
 
     /*
-    * Slideshow view Mode slider
-    * */
+     * Slideshow view Mode slider
+     * */
     $('.main-slide').slick({
         slidesToShow: 1,
         slidesToScroll: 1,
