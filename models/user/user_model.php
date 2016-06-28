@@ -107,6 +107,11 @@ class UserModel extends Model {
 
         $user_id = wp_insert_user($userdata);
 
+        if(isset($data['about_you'])) {
+            $about_you = sanitize_text_field($data['about_you']);
+            update_user_meta($user_id, 'about_you', $about_you);
+        }
+
         $get_login = get_user_by('id', $user_id);
 
         //On success
