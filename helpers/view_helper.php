@@ -19,6 +19,14 @@ class ViewHelper {
         ];
    public $terms_fixed;
     
+    public static $default_color_schemes = [
+        'blue'   => ['#7AA7CF', '#0C698B'],
+        'brown'  => ['#874A1D', '#4D311F'],
+        'green'  => ['#3D8B55', '#242D11'],
+        'violet' => ['#7852B2', '#31185C'],
+        'grey'   => ['#58595B', '#231F20'],
+    ];
+    
     function __construct() {
         $this->terms_fixed = [
         'title'=> get_term_by('slug', 'socialdb_property_fixed_title','socialdb_property_type'),
