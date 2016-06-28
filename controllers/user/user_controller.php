@@ -176,6 +176,18 @@ class UserController extends Controller {
             case "register_user":
                 return $this->render(dirname(__FILE__) . '../../../views/user/register.php');
                 break;
+            case "share_item_email_or_collection":
+                $data['email'] = (!filter_var($data['email'], FILTER_VALIDATE_EMAIL) === false ? $data['email'] : null);
+                if(!empty($data['email'])){
+                    //envia email ao usuario
+                    $result['resul_email'] = $user_model->send_share_email($data);
+                }
+                if(!empty($data['new_collection'])){
+                    //relaciona o item a outra coleção
+                    
+                }
+                //return json_encode($user_model->forgot_password($data['user_login_forgot']));
+                break;
         }
     }
 

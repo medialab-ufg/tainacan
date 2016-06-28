@@ -5,7 +5,7 @@
     var $current_meta_form = "#submit_form_property_data_" + current_meta_type;
     var $form_ranking = $("#meta-voting #submit_form_ranking");
     var ranking_types = ["binary", "stars", "like"];
-
+    var visibility_properties = $('#visibility_collection_properties').val().split(',');
     change_breadcrumbs_title('<?php _e('Metadata','tainacan') ?>');
     
     $('.property_data_use_filter').click(function() {
@@ -648,12 +648,29 @@
                     }
                     if ( property.metas.is_repository_property && property.metas.is_repository_property === true ||
                         (property.metas.socialdb_property_created_category && $('#property_category_id').val() !== property.metas.socialdb_property_created_category) ) {
+                        //se o metadado do repositorio for fixo
+                        var button = '';
+                        var style = '';
+                        if(property.metas.socialdb_property_is_fixed
+                                && property.metas.socialdb_property_is_fixed=='true'
+                                && '<?php echo (isset(wp_get_current_user()->user_email))? wp_get_current_user()->user_email:'' ?>'=='<?php echo get_option('admin_email')  ?>'){
+                            console.log(visibility_properties);
+                            if(visibility_properties.length===0||(visibility_properties.indexOf(current_id.toString())<0)){
+                                button = '<a vis="show" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-open"></span></a>';
+                            }else{
+                                style = 'style="opacity:0.33;"';
+                                button = '<a vis="hide" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-close"></span></a>';
+                            }
+                        }else{
+                            button = '<span class="glyphicon glyphicon-trash no-edit"></span>';
+                        }
+                        //adiciona na listagem
                         $('ul#metadata-container').append(
                             '<li id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="root_category ui-widget-content ui-corner-tr">' +
-                            '<label class="title-pipe">' + property.name + '</label>' +
+                            '<label '+style+'   class="title-pipe">' + property.name + '</label>' +
                             '<a onclick="edit_metadata(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
                             '<div class="action-icons"> <span class="glyphicon glyphicon-edit"></span></a> ' +
-                            '<span class="glyphicon glyphicon-trash no-edit"></span></div></li>');
+                            button + '</div></li>');
                     } else {
                         if ( $.inArray(property.type, ranking_types) == -1 ) {
                             $('ul#metadata-container').append(
@@ -780,6 +797,32 @@
             } else {
                 $('#property_object_reverse').append('<option value="false"><?php _e('No properties added','tainacan'); ?></option>');
             }
+        });
+    }
+    /**
+       funcao quer altera a visibilidade os metadados fixos de uma colecao 
+     * @param {type} e
+     * @returns {undefined}     */
+    function change_visibility(property_id) {
+        if ($('#visibility_'+property_id).attr('vis')==='hide') {
+                $('#visibility_'+property_id).html('<span class="glyphicon glyphicon-eye-open"></span>');
+                $('#visibility_'+property_id).attr('vis','show');
+                $('#meta-item-'+property_id+' .title-pipe').fadeTo( "fast",1 );
+        } else {
+            //$('#meta-item-'+property_id+' .title-pipe').css('opacity','0.5');
+            $('#meta-item-'+property_id+' .title-pipe').fadeTo( "fast", 0.33 );
+            $('#visibility_'+property_id).html('<span class="glyphicon glyphicon-eye-close"></span>');
+            $('#visibility_'+property_id).attr('vis','hide');
+        }
+        $.ajax({
+            url: $('#src').val() + '/controllers/collection/collection_controller.php',
+            type: 'POST',
+            data: {
+                collection_id: $("#collection_id").val(), 
+                operation: 'alter_visibility', 
+                property_id: property_id}
+        }).done(function (result) {
+            elem = jQuery.parseJSON(result);
         });
     }
 
@@ -1063,12 +1106,28 @@
 
                     if ( repository_property === true || created_category && created_category !== $("#property_category_id").val() ) {
                         var term_root_id =  property.metas.socialdb_property_term_root;
+                       //se o metadado do repositorio for fixo
+                        var button = '';
+                        var style = '';
+                        if(property.metas.socialdb_property_is_fixed
+                                && property.metas.socialdb_property_is_fixed=='true'
+                                && '<?php echo (isset(wp_get_current_user()->user_email))? wp_get_current_user()->user_email:'' ?>'=='<?php echo get_option('admin_email')  ?>'){
+                            console.log(visibility_properties);
+                            if(visibility_properties.length===0||(visibility_properties.indexOf(current_id.toString())<0)){
+                                button = '<a vis="show" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-open"></span></a>';
+                            }else{
+                                style = 'style="opacity:0.33;"';
+                                button = '<a vis="hide" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-close"></span></a>';
+                            }
+                        }else{
+                            button = '<span class="glyphicon glyphicon-trash no-edit"></span>';
+                        }
                         $('ul#metadata-container').append(
-                            '<li id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="root_category ui-widget-content ui-corner-tr term-root-'+term_root_id+'"><label class="title-pipe">' + property.name +
+                            '<li id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="root_category ui-widget-content ui-corner-tr term-root-'+term_root_id+'"><label '+style+' class="title-pipe">' + property.name +
                             '</label><div class="action-icons">' +
                             '<a onclick="edit_term(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
                             '<span class="glyphicon glyphicon-edit"><span></a> ' +
-                            '<span class="glyphicon glyphicon-trash no-edit"><span></div></li>');
+                            button+'</div></li>');
                     } else {
                         if ( $.inArray(property.type, ranking_types) == -1 ) {
                             var term_root_id =  property.metas.socialdb_property_term_root;

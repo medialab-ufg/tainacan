@@ -267,7 +267,7 @@
                     }else{
                          $('#core_validation_'+selectbox).val('true');
                     }
-                    set_field_valid(property_id,'core_validation_'+selectbox);
+                    set_field_valid(selectbox,'core_validation_'+selectbox);
                 });
                 //
                 $.ajax({
@@ -283,6 +283,8 @@
                          delete_value(children.term_id);
                         if(categories.indexOf(children.term_id)>-1){
                             checked = 'selected="selected"';
+                            $('#core_validation_'+selectbox).val('true');
+                            set_field_valid(selectbox,'core_validation_'+selectbox);
                         }
                         $('#field_property_term_' + selectbox).append('<option '+checked+' value="' + children.term_id + '">' + children.name + '</option>');
                         //  }

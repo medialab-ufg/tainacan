@@ -6,6 +6,7 @@ class ViewHelper {
     public $default_metadata;
     public $special_metadata;
     public $hide_main_container = false;
+    public $collection_id;
     public static $fixed_slugs = [
         'socialdb_property_fixed_title',
         'socialdb_property_fixed_description',
@@ -19,7 +20,7 @@ class ViewHelper {
         ];
    public $terms_fixed;
     
-    public static $default_color_schemes = [
+   public static $default_color_schemes = [
         'blue'   => ['#7AA7CF', '#0C698B'],
         'brown'  => ['#874A1D', '#4D311F'],
         'green'  => ['#3D8B55', '#242D11'],
@@ -27,7 +28,7 @@ class ViewHelper {
         'grey'   => ['#58595B', '#231F20'],
     ];
     
-    function __construct() {
+    function __construct($collection_id = 0) {
         $this->terms_fixed = [
         'title'=> get_term_by('slug', 'socialdb_property_fixed_title','socialdb_property_type'),
         'description'=> get_term_by('slug', 'socialdb_property_fixed_description','socialdb_property_type'),
@@ -39,11 +40,11 @@ class ViewHelper {
         'tags'=> get_term_by('slug', 'socialdb_property_fixed_tags','socialdb_property_type'),
         'type'=> get_term_by('slug', 'socialdb_property_fixed_type','socialdb_property_type')
         ];
-        
-        if($this->get_visibility($this->terms_fixed['attachments'])!==''
-                &&$this->get_visibility($this->terms_fixed['title'])!==''
-                &&$this->get_visibility($this->terms_fixed['type'])!==''
-                &&$this->get_visibility($this->terms_fixed['content'])!==''
+        $this->collection_id = $collection_id;
+        if($this->get_visibility($this->terms_fixed['attachments'], $this->collection_id)!==''
+                &&$this->get_visibility($this->terms_fixed['title'], $this->collection_id)!==''
+                &&$this->get_visibility($this->terms_fixed['type'], $this->collection_id)!==''
+                &&$this->get_visibility($this->terms_fixed['content'], $this->collection_id)!==''
                 ){
              $this->hide_main_container = true;
         }
@@ -87,6 +88,12 @@ class ViewHelper {
             $visibility = get_term_meta($property->term_id, 'socialdb_property_visibility',true);
             if($visibility=='hide'){
                 return 'style="display:none"';
+            }elseif($this->collection_id!=0){
+                $meta = get_post_meta($this->collection_id, 'socialdb_collection_fixed_properties_visibility', true);
+                $array = explode(',', $meta) ;
+                if(is_array($array) &&  ($key = array_search($property->term_id, $array)) !== false):
+                    return 'style="display:none"';
+                endif;
             }else{
               return '';   
             } 

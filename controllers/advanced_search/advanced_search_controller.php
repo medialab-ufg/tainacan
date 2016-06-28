@@ -1,8 +1,5 @@
 <?php
 
-/**
- * Author: Marco Túlio Bueno Vieira
- */
 require_once(dirname(__FILE__) . '../../general/general_controller.php');
 require_once(dirname(__FILE__) . '../../../models/collection/collection_model.php');
 require_once(dirname(__FILE__) . '../../../models/wp_query/wp_query_model.php');

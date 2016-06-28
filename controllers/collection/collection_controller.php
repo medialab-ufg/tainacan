@@ -196,7 +196,23 @@ class CollectionController extends Controller {
                 }
             case 'list_items_search_autocomplete_advanced_search':
                 return $visualization_model->get_objects_by_property_json_advanced_search($data);
-            /*/******************** IMPORTACAO DE COLECAO **********************/
+            /********************* Visibilidade **********************/  
+            case 'alter_visibility':
+                $meta = get_post_meta($data['collection_id'], 'socialdb_collection_fixed_properties_visibility', true);
+                if($meta&&$meta!=''):
+                    $array = explode(',', $meta);
+                    if(is_array($array)&& count($array)>0 &&  ($key = array_search($data['property_id'], $array)) !== false):
+                        unset($array[$key]);
+                    elseif(is_array($array)):  
+                        $array[] = $data['property_id'];
+                    endif;
+                else:
+                   $array = [];
+                   $array[] = $data['property_id']; 
+                endif;
+                update_post_meta($data['collection_id'], 'socialdb_collection_fixed_properties_visibility', implode(',', $array));
+                break;
+            /********************* IMPORTACAO DE COLECAO **********************/
             case 'importCollection':
                 $collectionImportation = new CollectionImportModel;
                 return json_encode($collectionImportation->import($data));
