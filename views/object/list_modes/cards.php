@@ -83,6 +83,7 @@
                                                             <?php echo __('Share in other collection: ', 'tainacan'); ?><br>
                                                             <input type="text" id="collections_object_share<?php echo get_the_ID() ?>" class="form-control autocomplete_share_item" >
                                                             <input type="hidden" name="collection_id" id="collections_object_share<?php echo get_the_ID() ?>_id"  >
+                                                            <input type="hidden" name="collection_id" id="collections_object_share<?php echo get_the_ID() ?>_url"  >
                                                         </div>
                                                     </div>
                                                 </div>

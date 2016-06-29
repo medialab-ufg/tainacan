@@ -1019,6 +1019,7 @@ function submit_comment(object_id) {
         
         wpquery_clean();
         list_main_ordenation_filter();
+        $('.modal-backdrop').hide();
         $("#category_page").val('');
         $("#property_page").val('');
         $('#display_view_main_page').show();

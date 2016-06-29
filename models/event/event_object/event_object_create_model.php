@@ -21,7 +21,11 @@ class EventObjectCreateModel extends EventModel {
      */
     public function generate_title($data) {
         $object = get_post($data['socialdb_event_object_item_id']);
-        $title = __('Create the object ','tainacan') .' '. $object->post_title;
+        if($object->post_status == 'publish'):
+            $title = __('Add object ','tainacan') .' '. $object->post_title;
+        else:    
+            $title = __('Create the object ','tainacan') .' '. $object->post_title;
+        endif;
         return $title;
     }
 
@@ -63,12 +67,18 @@ class EventObjectCreateModel extends EventModel {
     public function update_post_status($object_id,$data,$automatically_verified) {
         $collection_id = get_post_meta($data['event_id'],'socialdb_event_collection_id',true);
         // Update the post
-        $object = array(
-            'ID' => $object_id,
-            'post_status' => 'publish'
-        );
-        // Update the post into the database
-        $value = wp_update_post($object);
+        if(get_post($object_id)->post_status!='publish'){
+            $object = array(
+                'ID' => $object_id,
+                'post_status' => 'publish'
+            );
+            // Update the post into the database
+            $value = wp_update_post($object);
+        }else{
+            wp_set_object_terms($object_id, array((int) $this->get_category_root_of($collection_id)), 'socialdb_category_type');
+            add_post_meta($collection_id, 'socialdb_collection_vinculated_object', $object_id);
+            $value = $object_id;
+        }
         $category_model = new CategoryModel();
         $all_properties = $category_model->get_properties($data['collection_id'], []);
         $this->insert_autoincrement($all_properties,$object_id);

@@ -143,9 +143,18 @@
             $.ajax({
                 type: "POST",
                 url: $('#src').val() + "/controllers/user/user_controller.php",
-                data: {collection_id: $('#collection_id').val(), operation: 'share_item_email_or_collection', object_id: id, email: $('#email_object_share' + id).val(), new_collection: $('#collections_object_share' + id).val()}
+                data: {
+                    collection_id: $('#collection_id').val(), 
+                    operation: 'share_item_email_or_collection', 
+                    object_id: id, 
+                    email: $('#email_object_share' + id).val(), 
+                    new_collection: $('#collections_object_share' + id + '_id').val()}
             }).done(function (result) {
-                $('#modal_share_network' + id).modal('hide');
+                elem_first = jQuery.parseJSON(result);
+                showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
+                if(elem_first.type&&elem_first.type==='success'){
+                    window.location = $('#collections_object_share' + id + '_url').val();
+                }
             });
         } else {
             showAlertGeneral('<?php _e('Atention', 'tainacan') ?>', '<?php _e('You need to fill the email or choose the collection', 'tainacan') ?>', 'error');
