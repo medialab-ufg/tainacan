@@ -110,26 +110,6 @@
             }
         });
 
-        $(".autocomplete_share_item").autocomplete({
-            source: $('#src').val() + '/controllers/collection/collection_controller.php?operation=get_collections_json',
-            messages: {
-                noResults: '',
-                results: function () {
-                    $('.ui-helper-hidden-accessible').remove();
-                }
-            },
-            minLength: 3,
-            focus: function (event, ui) {
-                event.preventDefault();
-                $("#search_collections").val(ui.item.label);
-            },
-            select: function (event, ui) {
-                event.preventDefault();
-                $("#search_collections").val(ui.item.label);
-                //window.location = ui.item.permalink;
-
-            }
-        });
     });
 
     function show_info(id) {
@@ -155,6 +135,7 @@
 
     function showModalShareNetwork(id) {
         $('#modal_share_network' + id).modal('show');
+        init_autocomplete('#collections_object_share' + id);
     }
 
     function send_share_item(id) {

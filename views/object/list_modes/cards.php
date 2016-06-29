@@ -1,3 +1,6 @@
+<style>
+    .ui-autocomplete { z-index:1051; }
+</style>
 <li class="col-md-6 cards-view-container top-div"
     id="object_<?php echo get_the_ID() ?>"
     <?php if ($collection_list_mode != "cards"): ?> style="display: none;" <?php endif ?> >
@@ -78,7 +81,8 @@
                                                             <?php echo __('Email: ', 'tainacan'); ?><br>
                                                             <input type="text" id="email_object_share<?php echo get_the_ID() ?>" class="form-control" /><br>
                                                             <?php echo __('Share in other collection: ', 'tainacan'); ?><br>
-                                                            <input type="text" id="collections_object_share<?php echo get_the_ID() ?>" class="form-control autocomplete_share_item" />
+                                                            <input type="text" id="collections_object_share<?php echo get_the_ID() ?>" class="form-control autocomplete_share_item" >
+                                                            <input type="hidden" name="collection_id" id="collections_object_share<?php echo get_the_ID() ?>_id"  >
                                                         </div>
                                                     </div>
                                                 </div>
@@ -91,7 +95,7 @@
                                     </div>
                                 </div>
 
-                                <li style="display:none;">
+                                <li >
                                     <div class="item-redesocial">
                                         <a id="modal_network<?php echo get_the_ID(); ?>" onclick="showModalShareNetwork(<?php echo get_the_ID(); ?>)">
                                             <div style="cursor:pointer;" data-icon="&#xe00b;"></div>
@@ -99,7 +103,7 @@
                                     </div>
                                 </li>
 
-                                <li>
+                                <li style="display:none;">
                                     <div class="item-redesocial">
                                         <a id="popover_network<?php echo get_the_ID(); ?>" rel="popover" data-placement="left"
                                            onclick="showPopover(<?php echo get_the_ID(); ?>)">

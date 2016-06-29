@@ -638,6 +638,25 @@ function show_most_participatory_authors(src) {
         $('#most_participatory_author').html(result);
     });
 }
+
+function init_autocomplete(seletor) {
+    console.log($(seletor));
+    $(seletor).autocomplete({
+        source: $('#src').val() + '/controllers/collection/collection_controller.php?operation=get_collections_json',
+        messages: {
+            noResults: '',
+            results: function () {
+            }
+        },
+        minLength: 2,
+        select: function (event, ui) {
+            event.preventDefault();
+            $(seletor).val(ui.item.label);
+            $(seletor+'_id').val(ui.item.value);
+        }
+    });
+}
+
 function populateList(src) {
     $.ajax({
         url: src + '/controllers/license/index.php',

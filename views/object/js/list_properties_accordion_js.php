@@ -227,12 +227,12 @@
                     data: {collection_id: $("#collection_id").val(), operation: 'get_children_property_terms', property_id: checkbox}
                 }).done(function (result) {
                     elem = jQuery.parseJSON(result);
-                    $('#field_property_term_' + checkbox).html('');
-                    var checked = '';
-                    if(is_selected_category(children.term_id,'#object_classifications')){
-                        checked  += ' checked="checked" '
-                    }
+                    $('#field_property_term_' + checkbox).html('');                    
                     $.each(elem.children, function (idx, children) {
+                        var checked = '';
+                        if(is_selected_category(children.term_id,'#object_classifications')){
+                            checked  += ' checked="checked" '
+                        }
                         $('#field_property_term_' + checkbox).append('<input type="checkbox" '+checked+' onchange="validate_checkbox(' + checkbox + ')" name="socialdb_propertyterm_' + checkbox + '[]" value="' + children.term_id + '">&nbsp;' + children.name + '<br>');
                     });
                     var required = '';
