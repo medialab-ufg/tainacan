@@ -1,6 +1,7 @@
 <?php
 require_once(dirname(__FILE__) . '../../../models/user/user_model.php');
 require_once(dirname(__FILE__) . '../../general/general_controller.php');
+include_once (dirname(__FILE__) . '../../../models/event/event_object/event_object_create_model.php');
 //require_once(dirname(__FILE__) . '../../../models/user/facebook.php');
 //require_once(dirname(__FILE__) . '../../../models/user/FacebookSocialDB.class.php');
 require_once(dirname(__FILE__) . '../../../models/social_network/Facebook/autoload.php');
@@ -180,13 +181,18 @@ class UserController extends Controller {
                 $data['email'] = (!filter_var($data['email'], FILTER_VALIDATE_EMAIL) === false ? $data['email'] : null);
                 if(!empty($data['email'])){
                     //envia email ao usuario
-                    $result['resul_email'] = $user_model->send_share_email($data);
+                    $result = $user_model->send_share_email($data);
                 }
                 if(!empty($data['new_collection'])){
                     //relaciona o item a outra coleção
-                    
+                    $eventAddObject = new EventObjectCreateModel();
+                    $data['socialdb_event_object_item_id'] = $data['object_id'];
+                    $data['socialdb_event_collection_id'] = trim($data['new_collection']);
+                    $data['socialdb_event_user_id'] = get_current_user_id();
+                    $data['socialdb_event_create_date'] = time();
+                    return  $eventAddObject->create_event($data);
                 }
-                //return json_encode($user_model->forgot_password($data['user_login_forgot']));
+                return json_encode($result);
                 break;
         }
     }

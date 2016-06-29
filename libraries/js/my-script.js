@@ -640,7 +640,6 @@ function show_most_participatory_authors(src) {
 }
 
 function init_autocomplete(seletor) {
-    console.log($(seletor));
     $(seletor).autocomplete({
         source: $('#src').val() + '/controllers/collection/collection_controller.php?operation=get_collections_json',
         messages: {
@@ -653,6 +652,7 @@ function init_autocomplete(seletor) {
             event.preventDefault();
             $(seletor).val(ui.item.label);
             $(seletor+'_id').val(ui.item.value);
+            $(seletor+'_url').val(ui.item.permalink);
         }
     });
 }

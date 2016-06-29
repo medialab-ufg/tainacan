@@ -1592,7 +1592,7 @@ class ObjectModel extends Model {
         }
         return $data;
     }
-
+    
     /**
      * funcao que despublica  itens de uma colecao
      * @param array $data Os dados vindo da requisicao
