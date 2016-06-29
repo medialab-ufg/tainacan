@@ -277,6 +277,8 @@
         }).done(function (result) {
             $('#category_property').html(result);
             $('#modal_category_property').modal('show');
+            $('#btn_back_collection').hide();
+            $('#btn_back_collection_hide_modal').show();
         });
     }
     function clear_buttons() {

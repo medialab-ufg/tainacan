@@ -37,6 +37,7 @@ include_once ('js/list_js.php');
         <?php else: ?>
             <h3> <?php _e('Properties','tainacan') ?><?php _e(' of ','tainacan') ?> <?php echo $category->name; ?>
                 <button onclick="backToMainPage();" id="btn_back_collection" class="btn btn-default pull-right"><?php _e('Back to collection','tainacan') ?></button>
+                <button style="display: none;"  id="btn_back_collection_hide_modal"  class="btn btn-default pull-right"  data-dismiss="modal" aria-label="Close"><?php _e('Close','tainacan') ?></button>
              <hr>
         <?php endif; ?>
 

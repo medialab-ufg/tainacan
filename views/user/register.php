@@ -91,28 +91,5 @@
         </div>
     </div>
 </div>
-<!-- TAINACAN: modal padrao bootstrap aberto via javascript pelo seu id, formulario inicial para criacao de colecao -->
-<div class="modal fade" id="modalImportCollection" tabindex="-1" role="dialog" aria-labelledby="modalImportCollectionLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form id="importCollection">
-                <input type="hidden" name="operation" value="importCollection">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel"><?php _e('Import Collection', 'tainacan'); ?></h4>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="collection_file"><?php _e('Select the file', 'tainacan'); ?></label>
-                        <input type="file" required="required" class="form-control" name="collection_file" id="collection_file" >
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal"><?php _e('Close', 'tainacan'); ?></button>
-                    <button type="submit" class="btn btn-primary"><?php _e('Import', 'tainacan'); ?></button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+
  */ ?>
