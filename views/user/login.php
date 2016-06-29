@@ -1,13 +1,16 @@
 <?php
+/*
 include_once ('../../../../../wp-config.php');
 include_once ('../../../../../wp-load.php');
 include_once ('../../../../../wp-includes/wp-db.php');
+*/
 include_once ('js/login_js.php');
 require_once(dirname(__FILE__) . '../../../models/social_network/Facebook/autoload.php');
 session_start();
 ?>
 
-<!---?php
+<?php
+
 $loginUrl = $facebook->getLoginUrl(
         array(
             'scope' => 'email,user_birthday',
@@ -15,8 +18,10 @@ $loginUrl = $facebook->getLoginUrl(
         )
 );
 
-//$logoutUrl = $facebook->getLogoutUrl();
-?-->
+var_dump($loginUrl);
+
+$logoutUrl = $facebook->getLogoutUrl();
+?>
 <?php
     $config = get_option('socialdb_theme_options');
     $app['app_id'] = $config['socialdb_fb_api_id'];
@@ -32,8 +37,10 @@ $loginUrl = $facebook->getLoginUrl(
         $helper = $fb->getRedirectLoginHelper();
         $permissions = ['email', 'user_birthday']; // optional
         $loginUrl = $helper->getLoginUrl(get_bloginfo(template_directory) . '/controllers/user/user_controller.php?collection_id=' . $collection_id . '&operation=return_login_fb', $permissions);
+
+    var_dump($loginUrl);
     }
-//echo '<a href="' . $loginUrl . '">Log in with Facebook!</a>';
+    echo '<a href="' . $loginUrl . '">Log in with Facebook!</a>';
 ?>
 <input type="hidden" id="src_login" name="src" value="<?php echo get_template_directory_uri() ?>">
 <div class="container" style="margin-bottom: 15%;">

@@ -408,17 +408,40 @@ body.home .ibram-home-container .col-md-3 .ibram-box p:nth-child(4) {
   padding-left: 0;
   padding-right: 0;
 }
-.customize-layout #layout-accordion .color-container {
+.customize-layout #layout-accordion .l-a-container .color-container {
+  position: relative;
   margin-left: 5px;
   margin-bottom: 8px;
-  width: 75px;
+  width: 83px;
   display: inline-block;
+  padding: 2px;
+  border: 2px solid white;
 }
-.customize-layout #layout-accordion .color-container .color-input {
+.customize-layout #layout-accordion .l-a-container .color-container .remove-cS {
+  display: none;
+}
+.customize-layout #layout-accordion .l-a-container .color-container .color-input {
   border: none;
   color: transparent;
   width: 35px;
   height: 25px;
+}
+.customize-layout #layout-accordion .l-a-container .color-container:hover {
+  border-color: #0c698b;
+}
+.customize-layout #layout-accordion .l-a-container .color-container:hover > .remove-cS {
+  display: block;
+  font-size: 10px;
+  font-weight: bolder;
+  float: right;
+  top: -1px;
+  position: absolute;
+  right: 0;
+}
+.customize-layout #layout-accordion .l-a-container .color-container:hover > .remove-cS a {
+  background: #0c698b;
+  padding: 2px;
+  color: white;
 }
 .customize-layout #layout-accordion #collection-colorset {
   margin-top: 10px;

@@ -20,29 +20,29 @@ $view_helper = new ViewHelper();
             <div class="l-a-container">
                 <?php $i=0; foreach(ViewHelper::$default_color_schemes as $color_scheme) { ?>
                     <div class="<?php echo $cores[$i] ?> color-container" onclick="colorize('<?php echo $cores[$i] ?>')">
+                        <?php /* <div class="remove-cS"><a href="#" class="remove-cs">x</a></div> */ ?>
                         <input class="color-input color1" style="background:<?php echo $color_scheme[0] ?>" value="<?php echo $color_scheme[0] ?>" />
                         <input class="color-input color2" style="background:<?php echo $color_scheme[1] ?>" value="<?php echo $color_scheme[1] ?>" />
                     </div>
                     <?php $i++; } ?>
 
                 <form name="custom_colors" class="custom_color_schemes">
-                    
+                    <label for="custom_options"><?php _e('Your colors', 'tainacan'); ?></label>
+                    <?php /* <div class="here"></div> */ ?>
+                    <input type="hidden" name="collection_id" value="<?php echo $collection_id; ?>">
+                    <input type="hidden" name="operation" value="update_color_scheme">
+                    <button type="submit" class="btn btn-primary"><?php _e('Save', 'tainacan'); ?></button>
                 </form>
 
-                <form id="collection-colorset" class="layout-colorpicker">
+                <div id="collection-colorset" class="layout-colorpicker">
                     <label for="primary-custom-color"> <?php _e('More options', 'tainacan'); ?> </label>
                     <div class="input">
                         <input type="text" id="primary-custom-color" value="#7AA7CF" name="color_scheme[0][primary_color]">
                         <input type="text" id="second-custom-color" value="#0C698B" name="color_scheme[0][secondary_color]">
                     </div>
 
-                    <input type="hidden" name="collection_id" value="<?php echo $collection_id; ?>">
-                    <input type="hidden" name="operation" value="update_color_scheme">
-
-                    <input type="button" value="Adicionare" onclick="bgR();" class="btn btn-danger">
-
-                    <input type="submit" value="<?php _e('Add','tainacan'); ?>" class="btn btn-primary">
-                </form>
+                    <input type="button" value="<?php _e('Add','tainacan'); ?>" class="btn btn-primary" onclick="appendColorScheme();">
+                </div>
             </div>
             <h3 class="title"> <?php _e('Layout','tainacan'); ?></h3>
             <div style="padding-left: 15px">

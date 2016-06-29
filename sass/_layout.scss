@@ -11,35 +11,66 @@
 		.l-a-container {
 			padding-left: 0;
 			padding-right: 0;
+
+
+          .color-container {
+            position: relative;
+            margin-left: 5px;
+            margin-bottom: 8px;
+            width: 83px;
+            display: inline-block;
+            padding: 2px;
+            border: 2px solid white;
+
+            .remove-cS {
+              display: none;
+            }
+
+            .color-input {
+              border:none;
+              color: transparent;
+              width: 35px;
+              height: 25px;
+            }
+
+            &:hover {
+              border-color: $brand-medium-blue;
+            }
+
+            &:hover > .remove-cS {
+              display: block;
+              font-size: 10px;
+              font-weight: bolder;
+              float: right;
+              top: -1px;
+              position: absolute;
+              right: 0;
+              a {
+                background: $brand-medium-blue;
+                padding: 2px;
+                color: white;
+              }
+            }
+
+          } // .color-container
+		} // .l-a-container
+		.brown {
+
 		}
-		.color-container {
-			margin-left: 5px;
-			margin-bottom: 8px;
-			width: 75px;
-			display: inline-block;
-			// border: 1px solid red;
 
-			.color-input {
-				border:none;
-				color: transparent;
-				width: 35px;
-				height: 25px;
-			}
-		} // .color-container
+      #collection-colorset {
+        margin-top: 10px;
+        margin-left: 3.5px;
 
-		#collection-colorset {
-			margin-top: 10px;
-			margin-left: 3.5px;
-
-			label {
-				display: block;
-				color: #0C698B;
-			}
-			.input {
-				margin: 5px 0 5px 0
-			}
-		}
-	} // #layout-accordion
+        label {
+          display: block;
+          color: #0C698B;
+        }
+        .input {
+          margin: 5px 0 5px 0
+        }
+      }
+    } // #layout-accordion
 }
 #submit_configuration {
 	margin-right: 30px;

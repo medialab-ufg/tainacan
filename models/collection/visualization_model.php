@@ -1672,7 +1672,12 @@ class VisualizationModel extends CollectionModel {
         }
     }
 
-
+    /**
+     * function set_default_color_scheme
+     * @param  array - with form's color scheme data
+     * @return array - with updated  color scheme
+     * @author Rodrigo Guimarães
+     */
     public function set_default_color_scheme($data) {
         $colorScheme = $data['color_scheme'];
         $data['cores'] = update_post_meta( $data['collection_id'], 'socialdb_collection_color_scheme', serialize($colorScheme) );
@@ -1683,6 +1688,12 @@ class VisualizationModel extends CollectionModel {
         return $data;
     }
 
+    /**
+     * function get_default_color_scheme
+     * @param  array - collection id to fetch color scheme from
+     * @return array - with collection's color scheme
+     * @author Rodrigo Guimarães
+     */
     public function get_default_color_scheme($post_id) {
         return unserialize( get_post_meta($post_id, 'socialdb_collection_color_scheme', true) );
     }

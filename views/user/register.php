@@ -1,5 +1,5 @@
 <?php include_once("js/register_js.php"); ?>
-<div class="col-md-12" style="background: #E8E8E8; padding-top: 50px; margin-top: -20px;">
+<div class="col-md-12" style="background: #E8E8E8; padding-top: 50px; margin-top: -20px; padding-bottom: 50px;">
     <div class="col-md-7 center" style="background: white; ">
         <form id="formUserRegister" name="formUserRegister" >
             <input type="hidden" name="operation" value="add">

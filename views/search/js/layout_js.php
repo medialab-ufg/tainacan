@@ -1,17 +1,66 @@
 <script type="text/javascript">
     var src = $('#src').val();
 
-    function bgR() {
-        var c1 = $("#primary-custom-color").val();
-        var c2 = $("#second-custom-color").val();
+    function appendColorScheme(color1, color2) {
+        var c1 = color1 || $("#primary-custom-color").val();
+        var c2 = color2 || $("#second-custom-color").val();
+        var items_count = $('.custom_color_schemes .color-container').length;
+
         $('.custom_color_schemes').append(
-            '<div class="color-container"> <input type="text" class="color-input color1" style="background:'+c1+'" value="'+c1+'" /> ' +
-            '<input type="text" class="color-input color2" style="background:'+c2+'" value="'+c2+'" /> </div>');
+            '<div class="color-container"><div class="remove-cS"><a href="#" class="remove-cs">x</a></div>' +
+            '<input type="text" class="color-input color1" style="background:'+c1+'" value="'+c1+'" name="color_scheme['+items_count+'][primary_color]"/> ' +
+            '<input type="text" class="color-input color2" style="background:'+c2+'" value="'+c2+'" name="color_scheme['+items_count+'][secondary_color]"/> ' +
+            '</div>');
     }
+
+    function get_colorScheme() {
+        var coll_id = $('#collection_id').val();
+        $.ajax({
+            type: "POST",
+            url: src + "/controllers/collection/collection_controller.php",
+            data: {operation: 'get_color_scheme', collection_id: coll_id }
+        }).done(function(r) {
+            var el = $.parseJSON(r);
+            $(el).each(function(idx, val) {
+                appendColorScheme(val.primary_color, val.secondary_color);
+            });
+
+            /*
+            $('#tainacan-mini .color1').css('background', el.primary_color);
+            $('#tainacan-mini .color2').css('background', el.secondary_color);
+            */
+        });
+    }
+
+    $('.custom_color_schemes a.remove-cs').click(function(e) {
+        cl('now loading ...');
+        $(this).parents('.color-container').fadeOut(300, function() {
+          $(this).remove();
+        });
+    });
+    
+    $(".custom_color_schemes .color-container").click(function (e) {
+        e.preventDefault();
+        var c1 = $(this).find('.color1').val();
+        var c2 = $(this).find('.color2').val();
+        colorize("", c1, c2);
+    });
+
+    $('form[name="custom_colors"]').submit(function(event) {
+        var form = $(this).serialize();
+        event.preventDefault();
+        $.ajax({ url: src + "/controllers/collection/collection_controller.php", type: 'POST', data: form })
+            .done(function(result) {
+                var el = $.parseJSON(result);
+                cl(el);
+                $(el.testing).each(function (idx, vl) {
+                    cl("So you have this one!! " + vl.primary_color + ". As long as this second " + vl.secondary_color);
+                });
+            });
+    });
 
     $(function () {
         change_breadcrumbs_title('<?php _e('Layout','tainacan') ?>');
-
         get_colorScheme();
 
         var layoutOptions = {
@@ -30,7 +79,6 @@
 
         $("#collection-colorset").submit(function(event) {
             var r = $(this).serialize();
-            cl(r);
 
             event.preventDefault();
             $.ajax({
@@ -91,23 +139,15 @@
     });
     $('#layout-accordion .ui-accordion-content').show();
 
-    function get_colorScheme() {
-        var coll_id = $('#collection_id').val();
-        $.ajax({
-            type: "POST",
-            url: src + "/controllers/collection/collection_controller.php",
-            data: {operation: 'get_color_scheme', collection_id: coll_id }
-        }).done(function(r){
-            var el = $.parseJSON(r);
-            $('#tainacan-mini .color1').css('background', el.primary_color);
-            $('#tainacan-mini .color2').css('background', el.secondary_color);
-        });
-    }
-
-    function colorize(color) {
-        var cor1 = $('.' + color + ' .color1').val();
-        var cor2 = $('.' + color + ' .color2').val();
-
+    function colorize(color, c1, c2) {
+        if (color) {
+            var cor1 = $('.' + color + ' .color1').val();
+            var cor2 = $('.' + color + ' .color2').val();    
+        } else {
+            var cor1 = c1;
+            var cor2 = c2;
+        }
+        
         $('#tainacan-mini .color1').css('background', cor1);
         $('#tainacan-mini .color2').css('background', cor2);
         $('a.wp-color-result').first().css('background', cor1);
@@ -116,7 +156,7 @@
         $("#second-custom-color").val(cor2);
     }
 
-    function list_properties_data_ordenation(){
+    function list_properties_data_ordenation() {
         $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/property/property_controller.php",
@@ -126,11 +166,7 @@
             if (elem.no_properties !== true) {
                 $('#collection_order_properties').html('');
                 $.each(elem.property_data, function (idx, property) {
-                    //if(!property.metas.is_repository_property&&property.metas.socialdb_property_created_category==elem.category.term_id){
-                    //if(property.metas.is_repository_property||property.metas.socialdb_property_created_category==elem.category.term_id){
-                    //if(!property.metas.is_repository_property){
                     $('#collection_order_properties').append('<option value="'+property.id+'">' + property.name + ' (<?php _e('Type','tainacan') ?>:'+property.type+')</option>');
-                    //}
                 });
             }
         });
@@ -186,8 +222,6 @@
             if (elem.no_properties !== true) {
                 $('#collection_order_selected_properties').html('');
                 $.each(elem.property_data, function (idx, property) {
-                    // $("#collection_order").append("<option value='" + data.id + "' selected='selected' >" + data.name + " - ( <?php _e('Type','tainacan') ?>:"+data.type+" ) </option>");
-                    // if(property.metas.socialdb_property_data_column_ordenation&&property.metas.socialdb_property_data_column_ordenation==='true'){
                     $('#collection_order').append('<option selected="selected" value="'+property.id+'">' + property.name + ' (<?php _e('Type','tainacan') ?>:'+property.type+')</option>');
                 });
             } else {
@@ -199,9 +233,7 @@
     }
 
     function renumber_all() {
-        // renumber_table_horizontal('#table_search_data_id');
         renumber_table_left('#table_search_data_left_column_id');
-        // renumber_table_right('#table_search_data_right_column_id');
     }
 
     function save_widget_tree(tree_type) {
@@ -237,29 +269,6 @@
             });
         }
     }
-
-/*
-    function add_property_ordenation(){
-        if($('#collection_order_properties').val()){
-            $.ajax({
-                type: "POST",
-                url: $('#src').val() + "/controllers/search/search_controller.php",
-                data: {
-                    collection_id: $('#collection_id').val(),
-                    property_id: $('#collection_order_properties').val(),
-                    operation: 'add_property_ordenation'}
-            }).done(function (result) {
-                $('#collection_order').html('');
-                list_ordenation();
-                list_properties_data_ordenation();
-                list_properties_data_selected_ordenation();
-                elem = jQuery.parseJSON(result);
-                showAlertGeneral(elem.title, elem.msg, elem.type);
-            });
-        }
-    }
-
-*/
 
     function showOrientationStyles() {
         var orientation_class = $("#search_data_orientation option:selected").attr('class');
