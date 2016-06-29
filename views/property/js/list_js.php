@@ -505,10 +505,10 @@
             selectionVisible: true, // Make sure, selected nodes are visible (expanded).  
             checkbox: true,
             initAjax: {
-                 url: src + '/controllers/collection/collection_controller.php',
+                  url: src + '/controllers/category/category_controller.php',
                 data: {
                     collection_id: $("#collection_id").val(),
-                    operation: 'initDynatreeSingleEdit',
+                    operation: 'initDynatreeTerms',
                     hideCheckbox: 'false'
                 }
                 , addActiveKey: true
@@ -519,6 +519,7 @@
                     data: {
                         collection_id: $("#collection_id").val(),
                         category_id: node.data.key,
+                        classCss: node.data.addClass,
                         operation: 'findDynatreeChild'
                     }
                 });
