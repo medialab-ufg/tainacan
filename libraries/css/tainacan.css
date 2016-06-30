@@ -443,9 +443,17 @@ body.home .ibram-home-container .col-md-3 .ibram-box p:nth-child(4) {
   padding: 2px;
   color: white;
 }
+.customize-layout #layout-accordion .l-a-container .custom_color_schemes label {
+  border-top: 1px solid #E8E8E8;
+  padding: 8px 0 0 8px;
+  width: 100%;
+}
+.customize-layout #layout-accordion .l-a-container .custom_color_schemes button {
+  margin-left: 10px;
+}
 .customize-layout #layout-accordion #collection-colorset {
   margin-top: 10px;
-  margin-left: 3.5px;
+  margin-left: 10px;
 }
 .customize-layout #layout-accordion #collection-colorset label {
   display: block;

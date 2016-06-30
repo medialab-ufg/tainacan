@@ -6,7 +6,7 @@
         var c2 = color2 || $("#second-custom-color").val();
         var items_count = $('.custom_color_schemes .color-container').length;
 
-        $('.custom_color_schemes').append(
+        $('.custom_color_schemes .here').append(
             '<div class="color-container"><div class="remove-cS"><a href="javascript:void(0)" class="remove-cs">x</a></div>' +
             '<input type="text" class="color-input color1" style="background:'+c1+'" value="'+c1+'" name="color_scheme['+items_count+'][primary_color]"/> ' +
             '<input type="text" class="color-input color2" style="background:'+c2+'" value="'+c2+'" name="color_scheme['+items_count+'][secondary_color]"/> ' +
@@ -38,8 +38,8 @@
         });
     });
     
-    $(".custom_color_schemes .color-container").click(function (e) {
-        e.preventDefault();
+    $(".custom_color_schemes").on('click', '.color-container', function (e) {
+        cl('oik');
         var c1 = $(this).find('.color1').val();
         var c2 = $(this).find('.color2').val();
         colorize("", c1, c2);
@@ -51,7 +51,6 @@
         $.ajax({ url: src + "/controllers/collection/collection_controller.php", type: 'POST', data: form })
             .done(function(result) {
                 var el = $.parseJSON(result);
-                cl(el);
                 $(el.testing).each(function (idx, vl) {
                     cl("So you have this one!! " + vl.primary_color + ". As long as this second " + vl.secondary_color);
                 });

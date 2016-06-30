@@ -27,8 +27,8 @@ $view_helper = new ViewHelper();
                     <?php $i++; } ?>
 
                 <form name="custom_colors" class="custom_color_schemes">
-                    <label for="custom_options"><?php _e('Your colors', 'tainacan'); ?></label>
-                    <?php /* <div class="here"></div> */ ?>
+                    <label class="title-pipe" for="custom_options"><?php _e('Your colors', 'tainacan'); ?></label>
+                    <div class="here"></div>
                     <input type="hidden" name="collection_id" value="<?php echo $collection_id; ?>">
                     <input type="hidden" name="operation" value="update_color_scheme">
                     <button type="submit" class="btn btn-primary"><?php _e('Save', 'tainacan'); ?></button>
