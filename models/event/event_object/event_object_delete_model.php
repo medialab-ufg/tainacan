@@ -61,14 +61,23 @@ class EventObjectDeleteModel extends EventModel {
      * Autor: Eduardo Humberto 
      */
     public function update_post_status($object_id,$data,$automatically_verified) {
-         $collection_id = get_post_meta($data['event_id'],'socialdb_event_collection_id',true);
-        // Update the post
-        $object = array(
-            'ID' => $object_id,
-            'post_status' => 'trash'
-        );
-        // Update the post into the database
-        $value = wp_update_post($object);
+        $collection_id = get_post_meta($data['event_id'],'socialdb_event_collection_id',true);
+        // verifico se o item nao eh apenas vinculado
+        $array =  get_post_meta($collection_id, 'socialdb_collection_vinculated_object');
+        if($array && is_array($array) && in_array($object_id, $array)){
+            delete_post_meta($collection_id, 'socialdb_collection_vinculated_object',$object_id);
+            $result = wp_remove_object_terms( $object_id,(int) $this->get_category_root_of($collection_id),'socialdb_category_type');
+            $value = $object_id;
+        }else{
+            // Update the post
+            $object = array(
+                'ID' => $object_id,
+                'post_status' => 'trash'
+            );
+            // Update the post into the database
+            $value = wp_update_post($object);
+        }
+        //verificando se todo
         if ($value>0) {
             $this->set_approval_metas($data['event_id'], $data['socialdb_event_observation'], $automatically_verified);
             $this->update_event_state('confirmed', $data['event_id']);

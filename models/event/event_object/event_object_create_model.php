@@ -75,7 +75,7 @@ class EventObjectCreateModel extends EventModel {
             // Update the post into the database
             $value = wp_update_post($object);
         }else{
-            wp_set_object_terms($object_id, array((int) $this->get_category_root_of($collection_id)), 'socialdb_category_type');
+            wp_set_object_terms($object_id, array((int) $this->get_category_root_of($collection_id)), 'socialdb_category_type',true);
             add_post_meta($collection_id, 'socialdb_collection_vinculated_object', $object_id);
             $value = $object_id;
         }

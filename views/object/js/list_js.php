@@ -142,6 +142,7 @@
 
     function send_share_item(id) {
         if ($('#email_object_share' + id).val().trim() !== '' || $('#collections_object_share' + id).val().trim() !== '') {
+            show_modal_main();
             $.ajax({
                 type: "POST",
                 url: $('#src').val() + "/controllers/user/user_controller.php",
@@ -152,6 +153,7 @@
                     email: $('#email_object_share' + id).val(), 
                     new_collection: $('#collections_object_share' + id + '_id').val()}
             }).done(function (result) {
+                hide_modal_main();
                 elem_first = jQuery.parseJSON(result);
                 showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
                 if(elem_first.type&&elem_first.type==='success'){
