@@ -13,22 +13,29 @@
             '</div>');
     }
 
-    function get_colorScheme() {
+    function get_colorSchemes() {
         var coll_id = $('#collection_id').val();
         $.ajax({
             type: "POST",
             url: src + "/controllers/collection/collection_controller.php",
-            data: {operation: 'get_color_scheme', collection_id: coll_id }
+            data: {operation: 'get_color_schemes', collection_id: coll_id }
         }).done(function(r) {
             var el = $.parseJSON(r);
             $(el).each(function(idx, val) {
                 appendColorScheme(val.primary_color, val.secondary_color);
             });
+        });
+    }
 
-            /*
-            $('#tainacan-mini .color1').css('background', el.primary_color);
-            $('#tainacan-mini .color2').css('background', el.secondary_color);
-            */
+    function get_defaultCS() {
+        $.ajax({
+            type: "POST",
+            url: src + "/controllers/collection/collection_controller.php",
+            data: {operation: 'get_default_color_scheme', collection_id: $('#collection_id').val() }
+        }).done(function(r) {
+            var el = $.parseJSON(r);
+            colorize("", el.primary, el.secondary);
+            $("input[type='text'][value='"+el.primary+"']").first().parent().addClass('selected');
         });
     }
 
@@ -39,7 +46,8 @@
     });
     
     $(".custom_color_schemes").on('click', '.color-container', function (e) {
-        cl('oik');
+        $('.color-container').removeClass('selected');
+        $(this).addClass('selected');
         var c1 = $(this).find('.color1').val();
         var c2 = $(this).find('.color2').val();
         colorize("", c1, c2);
@@ -49,17 +57,15 @@
         var form = $(this).serialize();
         event.preventDefault();
         $.ajax({ url: src + "/controllers/collection/collection_controller.php", type: 'POST', data: form })
-            .done(function(result) {
-                var el = $.parseJSON(result);
-                $(el.testing).each(function (idx, vl) {
-                    cl("So you have this one!! " + vl.primary_color + ". As long as this second " + vl.secondary_color);
-                });
-            });
+          .done(function(result) {
+              var el = $.parseJSON(result);
+          });
     });
 
     $(function () {
         change_breadcrumbs_title('<?php _e('Layout','tainacan') ?>');
-        get_colorScheme();
+        get_defaultCS();
+        get_colorSchemes();
 
         var layoutOptions = {
             change: function(event, ui) {
@@ -74,22 +80,6 @@
         };
         $('#primary-custom-color').wpColorPicker(layoutOptions);
         $('#second-custom-color').wpColorPicker(layoutOptions);
-
-        $("#collection-colorset").submit(function(event) {
-            var r = $(this).serialize();
-
-            event.preventDefault();
-            $.ajax({
-                url: src + "/controllers/collection/collection_controller.php",
-                type: "POST",
-                data: new FormData(this),
-                processData: false,
-                contentType: false
-            }).done(function(r) {
-                var el = $.parseJSON(r);
-                cl(el);
-            });
-        });
 
         if( window.location.search.indexOf('open_wizard') > -1 ) {
             $("#collection-steps").show();
@@ -107,9 +97,6 @@
         $("#collection_list_mode").val(selected_view_mode);
 
         list_ordenation();
-        // list_properties_data_ordenation();
-        // list_properties_data_selected_ordenation();
-
 
         $('#form_ordenation_search').submit(function (e) {
             e.preventDefault();
@@ -120,7 +107,6 @@
                 processData: false,
                 contentType: false
             }).done(function (result) {
-                $("#collection-colorset").submit();
                 elem = jQuery.parseJSON(result);
                 showAlertGeneral(elem.title, elem.msg, elem.type);
                 $("#tainacan-breadcrumbs .collection-title").click();
@@ -137,10 +123,12 @@
     });
     $('#layout-accordion .ui-accordion-content').show();
 
-    function colorize(color, c1, c2) {
-        if (color) {
-            var cor1 = $('.' + color + ' .color1').val();
-            var cor2 = $('.' + color + ' .color2').val();    
+    function colorize(color_name, c1, c2) {
+        if (color_name) {
+            $('.project-color-schemes').removeClass('selected');
+            $('.'+color_name).addClass('selected');
+            var cor1 = $('.' + color_name + ' .color1').val();
+            var cor2 = $('.' + color_name + ' .color2').val();
         } else {
             var cor1 = c1;
             var cor2 = c2;
@@ -152,6 +140,10 @@
         $('a.wp-color-result').last().css('background', cor2);
         $("#primary-custom-color").val(cor1);
         $("#second-custom-color").val(cor2);
+        $('.default-c1').val(cor1);
+        $('.default-c2').val(cor2);
+
+        var dcs = $('.custom_color_schemes .defaults input').serialize();
     }
 
     function list_properties_data_ordenation() {
@@ -187,7 +179,6 @@
                 });
             }
             if (elem.property_data) {
-                cl(elem.property_data);
                 $("#collection_order").append("<optgroup label='<?php _e('Data properties','tainacan') ?>'>");
                 $.each(elem.property_data, function (idx, data) {
                     if (data && data !== false) {

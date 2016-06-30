@@ -1672,20 +1672,38 @@ class VisualizationModel extends CollectionModel {
         }
     }
 
+
+    public function set_default_color_scheme($data) {
+        $colorScheme = $data['color_scheme'];
+        $data['cores'] = update_post_meta( $data['collection_id'], 'socialdb_collection_color_scheme', serialize($colorScheme) );
+        $data['color_schemes'] = $colorScheme;
+
+        return $data;
+    }
+
     /**
-     * function set_default_color_scheme
+     * function update_color_schemes
      * @param  array - with form's color scheme data
      * @return array - with updated  color scheme
      * @author Rodrigo Guimarães
      */
-    public function set_default_color_scheme($data) {
+    public function update_color_schemes($data) {
         $colorScheme = $data['color_scheme'];
-        $data['cores'] = update_post_meta( $data['collection_id'], 'socialdb_collection_color_scheme', serialize($colorScheme) );
-        
-        $data['testing'] = $colorScheme;
-        $data['testingTwice'] = serialize($colorScheme);
+        $collection_id = $data['collection_id'];
+        $data['cores'] = update_post_meta( $collection_id, 'socialdb_collection_color_scheme', serialize($colorScheme));
+        $data['default_cs'] = update_post_meta($collection_id, 'socialdb_default_color_scheme', serialize($data['default_color']));
 
         return $data;
+    }
+
+    /**
+     * function get_color_schemes
+     * @param  array - collection id to fetch color scheme from
+     * @return array - with collection's color schemes chosen by user
+     * @author Rodrigo Guimarães
+     */
+    public function get_color_schemes($post_id) {
+        return unserialize( get_post_meta($post_id, 'socialdb_collection_color_scheme', true) );
     }
 
     /**
@@ -1695,7 +1713,7 @@ class VisualizationModel extends CollectionModel {
      * @author Rodrigo Guimarães
      */
     public function get_default_color_scheme($post_id) {
-        return unserialize( get_post_meta($post_id, 'socialdb_collection_color_scheme', true) );
+        return unserialize(get_post_meta($post_id,'socialdb_default_color_scheme', true) );
     }
 
 }

@@ -19,8 +19,7 @@ $view_helper = new ViewHelper();
             <h3 class="title"> <?php _e('Colors','tainacan'); ?> </h3>
             <div class="l-a-container">
                 <?php $i=0; foreach(ViewHelper::$default_color_schemes as $color_scheme) { ?>
-                    <div class="<?php echo $cores[$i] ?> color-container" onclick="colorize('<?php echo $cores[$i] ?>')">
-                        <?php /* <div class="remove-cS"><a href="#" class="remove-cs">x</a></div> */ ?>
+                    <div class="<?php echo $cores[$i] ?> color-container project-color-schemes" onclick="colorize('<?php echo $cores[$i] ?>')">
                         <input class="color-input color1" style="background:<?php echo $color_scheme[0] ?>" value="<?php echo $color_scheme[0] ?>" />
                         <input class="color-input color2" style="background:<?php echo $color_scheme[1] ?>" value="<?php echo $color_scheme[1] ?>" />
                     </div>
@@ -29,9 +28,13 @@ $view_helper = new ViewHelper();
                 <form name="custom_colors" class="custom_color_schemes">
                     <label class="title-pipe" for="custom_options"><?php _e('Your colors', 'tainacan'); ?></label>
                     <div class="here"></div>
+                    <div class="defaults">
+                        <input type="hidden" class="default-c1" name="default_color[primary]" value="">
+                        <input type="hidden" class="default-c2" name="default_color[secondary]" value="">
+                    </div>
                     <input type="hidden" name="collection_id" value="<?php echo $collection_id; ?>">
-                    <input type="hidden" name="operation" value="update_color_scheme">
-                    <button type="submit" class="btn btn-primary"><?php _e('Save', 'tainacan'); ?></button>
+                    <input type="hidden" name="operation" value="update_color_schemes">
+                    <button type="submit" class="btn btn-primary btn-sm"><?php _e('Save', 'tainacan'); ?></button>
                 </form>
 
                 <div id="collection-colorset" class="layout-colorpicker">

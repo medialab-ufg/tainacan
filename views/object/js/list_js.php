@@ -21,17 +21,17 @@
             $.ajax({
                 type: "POST",
                 url: src + "/controllers/collection/collection_controller.php",
-                data: {operation: 'get_color_scheme', collection_id: coll_id}
+                data: {operation: 'get_default_color_scheme', collection_id: coll_id}
             }).done(function (r) {
                 var color_scheme = $.parseJSON(r);
                 if (color_scheme) {
-                    $('#accordion .title-pipe').css('border-left-color', color_scheme.secondary_color);
-                    $('.item-funcs li a').css('color', color_scheme.primary_color);
+                    $('#accordion .title-pipe').css('border-left-color', color_scheme.secondary);
+                    $('.item-funcs li a').css('color', color_scheme.primary);
 
-                    $('.prime-color-bg').css('background', color_scheme.primary_color);
-                    $('.prime-color').css('color', color_scheme.secondary_color);
-                    $('.sec-color-bg').css('background', color_scheme.secondary_color);
-                    $('.sec-color').css('color', color_scheme.secondary_color);
+                    $('.prime-color-bg').css('background', color_scheme.primary);
+                    $('.prime-color').css('color', color_scheme.secondary);
+                    $('.sec-color-bg').css('background', color_scheme.secondary);
+                    $('.sec-color').css('color', color_scheme.secondary);
                 }
             });
         }

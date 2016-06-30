@@ -259,11 +259,14 @@ class CollectionController extends Controller {
             case 'comments':
                 return json_encode(['html'=> $this->render(dirname(__FILE__) . '../../../views/collection/comments.php', $data)]);
                 break;
-            case 'update_color_scheme':
-                return json_encode( $visualization_model->set_default_color_scheme($data) );
+            case 'update_color_schemes':
+                return json_encode( $visualization_model->update_color_schemes($data) );
                 break;
-            case 'get_color_scheme':
-                return json_encode( $visualization_model->get_default_color_scheme($data['collection_id']) );
+            case 'get_color_schemes':
+                return json_encode( $visualization_model->get_color_schemes($data['collection_id']) );
+            break;
+            case 'get_default_color_scheme':
+                return json_encode($visualization_model->get_default_color_scheme($data['collection_id']));
             break;
         }
     }

@@ -33,7 +33,7 @@
               height: 25px;
             }
 
-            &:hover {
+            &:hover, &.selected {
               border-color: $brand-medium-blue;
             }
 

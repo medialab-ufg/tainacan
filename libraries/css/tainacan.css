@@ -426,7 +426,7 @@ body.home .ibram-home-container .col-md-3 .ibram-box p:nth-child(4) {
   width: 35px;
   height: 25px;
 }
-.customize-layout #layout-accordion .l-a-container .color-container:hover {
+.customize-layout #layout-accordion .l-a-container .color-container:hover, .customize-layout #layout-accordion .l-a-container .color-container.selected {
   border-color: #0c698b;
 }
 .customize-layout #layout-accordion .l-a-container .color-container:hover > .remove-cS {
