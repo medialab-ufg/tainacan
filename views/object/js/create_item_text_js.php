@@ -5,8 +5,7 @@ $(function(){
     $("#tainacan-breadcrumbs .current-config").text('<?php _e('Create new item - Write text','tainacan') ?>');
     //#3  -  ativo os tootips
      $('[data-toggle="tooltip"]').tooltip();
-    //#4 - ckeditor para o conteudo do item
-    showCKEditor('object_editor');
+    
     //#5 - funcao que busca os rankings de um item
     //#6 - seto o id da colecao  no form do item     
     $('#create_object_collection_id').val($('#collection_id').val());
@@ -25,6 +24,8 @@ $(function(){
                 if(json&&json.ordenation&&json.ordenation!==''){
                     reorder_properties_add_item(json.ordenation.split(','));
                 }
+                //#4 - ckeditor para o conteudo do item
+                showCKEditor('object_editor');
                 $("#text_accordion").accordion({
                     active: false,
                     collapsible: true,

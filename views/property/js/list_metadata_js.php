@@ -63,6 +63,28 @@
          term_widget_options('#socialdb_property_term_widget');
     });
     $('#socialdb_property_term_cardinality_1').trigger('click');
+    //vinculacao de categorias
+    $('#socialdb_property_vinculate_category_exist').click(function (e) {
+        if($('#socialdb_property_vinculate_category_exist').is(':checked')){
+            $('#terms_dynatree').fadeIn();
+            $('#container_add_category').fadeOut();
+        }else{
+            $('#terms_dynatree').fadeOut();
+            $('#container_add_category').fadeIn();
+        }
+    });
+    
+    $('#socialdb_property_vinculate_category_create').click(function (e) {
+        if($('#socialdb_property_vinculate_category_create').is(':checked')){
+            $('#terms_dynatree').fadeOut();
+            $('#container_add_category').fadeIn();
+        }else{
+            $('#terms_dynatree').fadeIn();
+            $('#container_add_category').fadeOut();
+        }
+    });
+    
+    
     $('.edit').click(function (e) {
         var id = $(this).closest('td').find('.post_id').val();
         $.get(src + '/views/ranking/edit.php?id=' + id, function (data) {
@@ -1935,5 +1957,40 @@
             }
         });
     }
+   // FUNCOES PARA AREA DE CRIACAO DE TAXONOMIAS
+   function click_event_taxonomy_create_zone(object){
+        var seletor = $(object).find('.taxonomy-list-name');
+        console.log(seletor.hasClass('taxonomy-category-finished'));
+        if(seletor.hasClass('taxonomy-category-finished')){
+           $(seletor).attr('contenteditable', 'true');
+        }else if(seletor.hasClass('taxonomy-category-new')){
+            $(seletor).html('').attr('contenteditable', 'true');
+        }
+   }
+   
+   function keypress_event_taxonomy_create_zone(object,e){
+        var new_category_html = 
+                    '<span class="li-default taxonomy-list-name taxonomy-category-new">'+
+                    '<span class="glyphicon glyphicon-plus"></span><?php _e('Add category','tainacan') ?></span>'+ 
+                    "<span class='li-default taxonomy-list-name taxonomy-category-new'>";
+        var seletor = $(object).find('.taxonomy-list-name');
+        //se estiver finalizando
+        if (e.keyCode == 13&&seletor.hasClass('taxonomy-category-new')) {
+           var val =  $(seletor).text();
+           seletor.removeClass('taxonomy-category-new');
+           seletor.addClass('taxonomy-category-finished');
+           $(object)
+            // create a new li item
+            .before("<li class='taxonomy-list-create' onclick='click_event_taxonomy_create_zone(this)' "+
+                    " onkeydown='keypress_event_taxonomy_create_zone(this,event)' >"+
+                    "<span class='li-default taxonomy-list-name taxonomy-category-new'>" + val + "</li>")
+            // set plus sign again
+            .html(new_category_html);
+            e.preventDefault();
+        }else if((e.keyCode == 8 || e.keyCode == 46) && $(seletor).text()===''&&(!object.id||object.id!=='root_category') ){
+            $(object).remove();
+            e.preventDefault();
+        }
+   }
     
 </script>

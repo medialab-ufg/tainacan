@@ -1,3 +1,11 @@
+<style>
+    .li-default{
+        opacity:  0.8;
+    }
+    .taxonomy-list-name{
+        width: 50%;
+    }
+</style>    
 <div id="meta-category" class="modal fade" role="dialog" aria-labelledby="Category">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -15,7 +23,12 @@
                             <div class="metadata-common-fields">
                                 <div class="create_form-group form-group">
                                     <label for="property_term_name"><?php _e('Property term name','tainacan'); ?></label>
-                                    <input type="text" class="form-control" id="property_term_name" name="property_term_name" required="required" placeholder="<?php _e('Property Term name','tainacan'); ?>">
+                                    <input type="text" 
+                                           class="form-control" 
+                                           id="property_term_name" 
+                                           name="property_term_name" 
+                                           required="required" 
+                                           placeholder="<?php _e('Property Term name','tainacan'); ?>">
                                 </div>
 
                                 <div class="create_form-group form-group">
@@ -25,13 +38,17 @@
 
                                 <div class="form-group category-fit-column" style="display: inline-block; width: 59%">
                                     <label for="property_term_required" style="display: block"><?php _e('Elements Quantity:','tainacan'); ?></label>
-                                    <input type="radio" name="socialdb_property_term_cardinality" id="socialdb_property_term_cardinality_1" checked="checked"  value="1">&nbsp;<?php _e('Unic value','tainacan') ?>
-                                    <input type="radio" name="socialdb_property_term_cardinality" id="socialdb_property_term_cardinality_n" value="n">&nbsp;<?php _e('Multiple values','tainacan') ?>
+                                    <input type="radio" 
+                                           name="socialdb_property_term_cardinality" 
+                                           id="socialdb_property_term_cardinality_1" 
+                                           checked="checked"  value="1">&nbsp;<?php _e('Unic value','tainacan') ?>
+                                    <input type="radio" 
+                                           name="socialdb_property_term_cardinality" 
+                                           id="socialdb_property_term_cardinality_n" 
+                                           value="n">&nbsp;<?php _e('Multiple values','tainacan') ?>
                                 </div>
-                                <div class="form-group" style="display: inline-block; width: 39%">
-                                    <label for="property_term_required" style="display: block"><?php _e('Required property','tainacan'); ?></label>
-                                    <input type="radio" name="property_term_required" id="property_term_required_true" value="true">&nbsp;<?php _e('Yes','tainacan'); ?>
-                                    <input type="radio" name="property_term_required" id="property_term_required_false" checked="checked" value="false">&nbsp;<?php _e('No','tainacan'); ?>
+                                <div class="form-group" >
+                                    <input type="checkbox" name="property_term_required" id="property_term_required_true" value="true">&nbsp;<b><?php _e('Required','tainacan'); ?></b>
                                 </div>
 
                                 <div class="form-group">
@@ -42,7 +59,53 @@
 
                                 <hr class="modal-hr-style">
                             </div>
+                            <hr>
+                            <!-- A categoria raiz do metadado -->
+                            <div class="category-fit-column right metadata-common-fields">
+                                <label for="socialdb_property_term_root_category">
+                                    <?php _e('Vinculate Category','tainacan'); ?>
+                                </label>
+                                <br>
+                                <!-- se a categoria ja existe  -->
+                                <input type="radio"
+                                           name="socialdb_property_vinculate_category" 
+                                           id="socialdb_property_vinculate_category_exist" 
+                                           checked="checked"  value="exist">&nbsp;<?php _e('Use existing: choose','tainacan') ?>
+                                <div style='height: 242px;margin-left: 15px;' id="terms_dynatree"></div>
+                                <input type="hidden" 
+                                       required="required" 
+                                       size='2' 
+                                       id="socialdb_property_term_root" 
+                                       class="form-control" name='socialdb_property_term_root'>
+                                <!-- se deseja criar uma nova categoria  -->
+                                <br>
+                                <input  type="radio" 
+                                        name="socialdb_property_vinculate_category" 
+                                        id="socialdb_property_vinculate_category_create" 
+                                        value="create">&nbsp;<?php _e('Create new','tainacan') ?>
+                                <div style='display: none;margin-left: 15px;' id="container_add_category">
+                                    <input type="text" 
+                                           class="form-control" 
+                                           id="property_term_new_category" 
+                                           name="property_term_new_category"  
+                                           placeholder="<?php _e('Category name','tainacan'); ?>">
+                                    <div style="margin-top: 15px;padding: 15px;;border: 1px solid #ccc;border-radius: 4px;">
+                                        <div id="taxonomy_create_zone" 
+                                            >
+                                            <li id="root_category" 
+                                                onclick="click_event_taxonomy_create_zone(this)"
+                                                onkeyup="keypress_event_taxonomy_create_zone(this,event)"
+                                                class="taxonomy-list-create">
+                                                <span class="li-default taxonomy-list-name taxonomy-category-new">
+                                                    <span class="glyphicon glyphicon-plus"></span><?php _e('Add category','tainacan') ?>    
+                                                </span>        
+                                            </li>
+                                        </div>
+                                    </div>
+                                </div>
 
+                            </div>  
+                            <hr>
                             <div class="form-group">
                                 <label for="use-filter" style="display: inline-block"><?php _e('Use as a filter','tainacan'); ?></label>
                                 <input type="checkbox" onchange="toggle_term_widget(this)" value="use_filter" name="property_data_use_filter" class="property_data_use_filter" />
@@ -71,19 +134,6 @@
                                         </optgroup>
                                     </select>
                                 </div>
-                            </div>
-
-                        </div>
-                        <div style="float: right" class="category-fit-column right metadata-common-fields">
-                            <div class="col-md-12">
-                                <label for="socialdb_property_term_root_category"><?php _e('Property Term Root Category','tainacan'); ?></label>
-                                <div style='height: 242px;' id="terms_dynatree">
-                                </div>
-                            </div>
-
-                            <div class="col-md-12">
-                                <label for="selected_category"><?php _e('Selected category','tainacan'); ?></label><br>
-                                <select required="required" size='2' id="socialdb_property_term_root" class="form-control" name='socialdb_property_term_root'></select>
                             </div>
 
                         </div>

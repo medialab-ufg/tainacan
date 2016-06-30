@@ -1369,7 +1369,7 @@ a.collection-thumb img {
   }
 }
 .category-fit-column {
-  width: 49%;
+  width: 100%;
   display: inline-block;
 }
 
