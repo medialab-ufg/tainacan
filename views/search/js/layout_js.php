@@ -7,7 +7,7 @@
         var items_count = $('.custom_color_schemes .color-container').length;
 
         $('.custom_color_schemes').append(
-            '<div class="color-container"><div class="remove-cS"><a href="#" class="remove-cs">x</a></div>' +
+            '<div class="color-container"><div class="remove-cS"><a href="javascript:void(0)" class="remove-cs">x</a></div>' +
             '<input type="text" class="color-input color1" style="background:'+c1+'" value="'+c1+'" name="color_scheme['+items_count+'][primary_color]"/> ' +
             '<input type="text" class="color-input color2" style="background:'+c2+'" value="'+c2+'" name="color_scheme['+items_count+'][secondary_color]"/> ' +
             '</div>');
@@ -32,8 +32,7 @@
         });
     }
 
-    $('.custom_color_schemes a.remove-cs').click(function(e) {
-        cl('now loading ...');
+    $('.custom_color_schemes').on('click', 'a.remove-cs', function() {
         $(this).parents('.color-container').fadeOut(300, function() {
           $(this).remove();
         });
