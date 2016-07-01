@@ -31,6 +31,8 @@
               color: transparent;
               width: 35px;
               height: 25px;
+
+              &.color2 { margin-left: -3px; }
             }
 
             &:hover, &.selected {

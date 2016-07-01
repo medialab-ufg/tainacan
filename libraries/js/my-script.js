@@ -2263,11 +2263,8 @@ function setMenuContainerHeight() {
     }
 }
 
-var t = "";
 $(window).on('resize', function(ev) {
     var window_width = $(window).width();
-    // cl("A largura atual é " + window_width );
-
     if(window_width < 1010 && t == "done") {
 
     }

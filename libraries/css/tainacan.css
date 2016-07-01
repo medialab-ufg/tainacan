@@ -426,6 +426,9 @@ body.home .ibram-home-container .col-md-3 .ibram-box p:nth-child(4) {
   width: 35px;
   height: 25px;
 }
+.customize-layout #layout-accordion .l-a-container .color-container .color-input.color2 {
+  margin-left: -3px;
+}
 .customize-layout #layout-accordion .l-a-container .color-container:hover, .customize-layout #layout-accordion .l-a-container .color-container.selected {
   border-color: #0c698b;
 }
@@ -1043,6 +1046,30 @@ a.collection-thumb img {
 **************** SLIDESHOW MODE *************
 ****************************************
 */
+#collection-slideShow .modal-dialog {
+  width: 100%;
+  height: 95%;
+}
+#collection-slideShow .modal-dialog .modal-header {
+  border: none;
+  padding-bottom: 0;
+}
+#collection-slideShow .modal-dialog .modal-content {
+  background: rgba(0, 0, 0, 0.9);
+  height: auto;
+  min-height: 100%;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+}
+#collection-slideShow .modal-dialog .modal-content .modal-title {
+  color: white;
+  font-weight: normal;
+}
+#collection-slideShow .modal-dialog .modal-content .modal-title span {
+  font-weight: bolder;
+}
+
 #slideshow-viewMode {
   margin-top: 15px;
 }

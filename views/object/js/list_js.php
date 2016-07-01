@@ -395,6 +395,8 @@
         $('#myModal').modal('show');
     }
 
+    var col_title = $('.titulo-colecao h3.title').text();
+    $("#collection-slideShow .sS-collection-name").text( col_title );
 
     /*
      * Slideshow view Mode slider
@@ -408,7 +410,7 @@
     });
 
     $('.collection-slides').slick({
-        slidesToShow: 4,
+        slidesToShow: 5,
         slidesToScroll: 1,
         asNavFor: '.main-slide',
         dots: true,

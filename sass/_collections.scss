@@ -361,6 +361,32 @@ a.collection-thumb {
 **************** SLIDESHOW MODE *************
 ****************************************
 */
+#collection-slideShow {
+	.modal-dialog {
+		width: 100%;
+		height: 95%;
+		.modal-header {
+			border: none;
+			padding-bottom: 0;
+		}
+		.modal-content {
+			background: rgba(0, 0, 0, 0.9);
+			height: auto;
+			min-height: 100%;
+			-webkit-border-radius: 0;
+			-moz-border-radius: 0;
+			border-radius: 0;
+
+			.modal-title {
+				color: white;
+				font-weight: normal;
+				span {
+					font-weight: bolder;
+				}
+			}
+		}
+	}
+} // #collection-slideShow
 #slideshow-viewMode {
 	margin-top: 15px;
 	// padding-left: 50px;
@@ -382,4 +408,4 @@ a.collection-thumb {
 			}
 		}
 	}
-}
+} // #slideshow-viewMode

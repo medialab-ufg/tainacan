@@ -252,8 +252,7 @@ $options = get_option('socialdb_theme_options');
                                     <div class="sec-color"> <?php _e('Show:', 'tainacan') ?> </div>
                                     <ul>
                                         <?php
-                                        // $viewModes = [ 'cards', 'gallery', 'list',  'slideshow' ];
-                                        $viewModes = [ 'cards', 'gallery', 'list' ];
+                                        $viewModes = [ 'cards', 'gallery', 'list',  'slideshow' ];
                                         foreach($viewModes as $mode): ?>
                                             <li class="<?php echo $mode ?>">
                                                 <a href="javascript:void(0)" onclick="changeViewMode('<?php echo $mode ?>')">
