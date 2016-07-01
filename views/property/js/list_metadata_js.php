@@ -1957,40 +1957,141 @@
             }
         });
     }
-   // FUNCOES PARA AREA DE CRIACAO DE TAXONOMIAS
+//***********************FUNCOES PARA AREA DE CRIACAO DE TAXONOMIAS*************//
+    var selected_element;
+    var new_category_html = 
+                    '<span onclick="click_event_taxonomy_create_zone($(this).parent())"  style="display: none;" class="li-default taxonomy-list-name taxonomy-category-new">'+
+                    '<span class="glyphicon glyphicon-plus"></span><?php _e('Add category','tainacan') ?></span>'+
+                    '<input type="text" '+
+                    'onblur="blur_event_taxonomy_create_zone($(this).parent())"'+  
+                    'onkeyup="keypress_event_taxonomy_create_zone($(this).parent(),event)" class="input-taxonomy-create">';
+   // quando se clica sobre a categoria
    function click_event_taxonomy_create_zone(object){
-        var seletor = $(object).find('.taxonomy-list-name');
-        console.log(seletor.hasClass('taxonomy-category-finished'));
-        if(seletor.hasClass('taxonomy-category-finished')){
-           $(seletor).attr('contenteditable', 'true');
+        $('.input-taxonomy-create').hide();    
+        $('.taxonomy-list-name').show();    
+        var seletor = $(object).find('.taxonomy-list-name').first();
+        var input = $(object).find('.input-taxonomy-create').first();
+        if(seletor.hasClass('taxonomy-category-finished')||seletor.hasClass('taxonomy-category-modified')){
+           $(input).val($(seletor).text());
+           $(seletor).hide();
+           $(input).show();
         }else if(seletor.hasClass('taxonomy-category-new')){
-            $(seletor).html('').attr('contenteditable', 'true');
+            $(seletor).hide();
+            $(input).show();
         }
+        selected_element = object;
    }
-   
-   function keypress_event_taxonomy_create_zone(object,e){
-        var new_category_html = 
-                    '<span class="li-default taxonomy-list-name taxonomy-category-new">'+
-                    '<span class="glyphicon glyphicon-plus"></span><?php _e('Add category','tainacan') ?></span>'+ 
-                    "<span class='li-default taxonomy-list-name taxonomy-category-new'>";
-        var seletor = $(object).find('.taxonomy-list-name');
-        //se estiver finalizando
-        if (e.keyCode == 13&&seletor.hasClass('taxonomy-category-new')) {
-           var val =  $(seletor).text();
-           seletor.removeClass('taxonomy-category-new');
-           seletor.addClass('taxonomy-category-finished');
-           $(object)
+   //quando uma categoria tem o foco perdido
+   function blur_event_taxonomy_create_zone(object){
+       var seletor = $(object).find('.taxonomy-list-name').first();
+       var input = $(object).find('.input-taxonomy-create').first();
+       if($(input).val()===''){
+           $(object).remove();
+       }
+       $(seletor).show();
+       $(input).hide();
+       $(seletor).text($(input).val()) ;
+   }
+   // quando algo eh escrito no container de cada categoria
+    function keypress_event_taxonomy_create_zone(object,e){
+        // pego o span com o texto
+        var seletor = $(object).find('.taxonomy-list-name').first();
+        // pego o primeiro input com o valor descartando os possiveis filhos
+        var input = $(object).find('.input-taxonomy-create').first();
+        //se estiver finalizando a edicao, isto eh, se apertar enter
+        if (e.keyCode == 13&&seletor.hasClass('taxonomy-category-modified')&&$(input).val()!=='') {
+            //pego o valor do input
+            var val =  $(input).val(); 
+            //mostro o texto
+            $(seletor).show();
+            //escondoo input
+            $(input).hide();
+            //coloco o valor do input no span do texto
+            $(seletor).text($(input).val());
+            //se exisitir filhos
+            var children = '';
+            if( $(object).find('ul').first().length>0){
+                children = "<ul >"+$(object).find('ul').first().html()+'</ul>';
+            }
+            //atraves do seletor do li ou ul 
+            $(object)
             // create a new li item
-            .before("<li class='taxonomy-list-create' onclick='click_event_taxonomy_create_zone(this)' "+
-                    " onkeydown='keypress_event_taxonomy_create_zone(this,event)' >"+
-                    "<span class='li-default taxonomy-list-name taxonomy-category-new'>" + val + "</li>")
+            .before("<li class='taxonomy-list-create'   >"+
+                    "<span onclick='click_event_taxonomy_create_zone($(this).parent())'   class='li-default taxonomy-list-name taxonomy-category-finished'>" + val + 
+                    "</span><input type='text' style='display: none;' class='input-taxonomy-create'"+
+                    " onblur='blur_event_taxonomy_create_zone($(this).parent())'  onkeyup='keypress_event_taxonomy_create_zone($(this).parent(),event)' >"+
+                    children+"</li>")
             // set plus sign again
             .html(new_category_html);
+             $('#taxonomy-root-category input').focus();
             e.preventDefault();
-        }else if((e.keyCode == 8 || e.keyCode == 46) && $(seletor).text()===''&&(!object.id||object.id!=='root_category') ){
+        }// se estiver deletando toda a linha
+        else if((e.keyCode == 8 || e.keyCode == 46) && $(input).val()===''){
             $(object).remove();
             e.preventDefault();
+        }else if($(seletor).text()!==''){
+            seletor.removeClass('taxonomy-category-new');
+            seletor.addClass('taxonomy-category-modified');
+            $(seletor).text($(input).val());
+            e.preventDefault();
         }
-   }
+    }
+    //verifica se o container possui algum li, funcao apenas caso estiver vazio
+    function verify_has_li(){
+        if($('#taxonomy_create_zone').has('li').length==0){
+           $('#taxonomy_create_zone').append('<li class="taxonomy-list-create">'+
+                   new_category_html+'</li>') 
+        }
+    }
+    //adicionando uma categoria na irma acima
+    function add_hierarchy_taxonomy_create_zone(){
+        var input = $(selected_element).find('.input-taxonomy-create').first();
+        if($(input).val()===''){
+            return false;
+        }
+        var sibling = $(selected_element).prev();
+        var children = '';
+        if( $(selected_element).find('ul').first().length>0){
+            children = "<ul >"+$(selected_element).find('ul').first().html()+'</ul>';
+        }
+        if(sibling.length>0){
+            if(sibling.find('ul').first().length>0){
+                 sibling.find('ul').first().append("<li class='taxonomy-list-create' >"+
+                    "<span onclick='click_event_taxonomy_create_zone($(this).parent())' class='li-default taxonomy-list-name taxonomy-category-finished'>" + $(input).val() + 
+                    "</span><input type='text' style='display: none;' class='input-taxonomy-create'"+
+                    " onblur='blur_event_taxonomy_create_zone($(this).parent())'  onkeyup='keypress_event_taxonomy_create_zone($(this).parent(),event)' >"+children+"</li>");
+            }else{
+                sibling.append("<ul><li class='taxonomy-list-create'  >"+
+                    "<span onclick='click_event_taxonomy_create_zone($(this).parent())' class='li-default taxonomy-list-name taxonomy-category-finished'>" + $(input).val() + 
+                    "</span><input type='text' style='display: none;' class='input-taxonomy-create'"+
+                    " onblur='blur_event_taxonomy_create_zone($(this).parent())'  onkeyup='keypress_event_taxonomy_create_zone($(this).parent(),event)' >"+children+"</li></ul>");
+            }
+            $(selected_element).remove();
+        }
+    }
     
+    function remove_hierarchy_taxonomy_create_zone(){
+        //verifico se nao esta querndo subir de hierarquia
+        var input = $(selected_element).find('.input-taxonomy-create').first();
+        if($(input).val()===''){
+            return false;
+        }
+        //pego o pai direto e verifico se ja nao eh a raiz
+        var parent_direct = $(selected_element).parent();
+        if(parent_direct.is('div')){
+            return false;
+        }
+        // guardo os filhos diretos da categoria movida
+        var children = '';
+        if( $(selected_element).find('ul').first().length>0){
+            children = "<ul >"+$(selected_element).find('ul').first().html()+'</ul>';
+        }
+        var parent_li = parent_direct.parent();
+        var parent_to_insert = parent_li.parent();
+        parent_to_insert.append("<li class='taxonomy-list-create' >"+
+                    "<span onclick='click_event_taxonomy_create_zone($(this).parent())' class='li-default taxonomy-list-name taxonomy-category-finished'>" + $(input).val() + 
+                    "</span><input type='text' style='display: none;' class='input-taxonomy-create'"+
+                    " onblur='blur_event_taxonomy_create_zone($(this).parent())'  onkeyup='keypress_event_taxonomy_create_zone($(this).parent(),event)' >"+children+"</li>");
+        $(selected_element).remove();
+    }
 </script>

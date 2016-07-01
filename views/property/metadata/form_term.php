@@ -5,6 +5,9 @@
     .taxonomy-list-name{
         width: 50%;
     }
+    ul {
+        list-style: circle; 
+    }
 </style>    
 <div id="meta-category" class="modal fade" role="dialog" aria-labelledby="Category">
     <div class="modal-dialog" role="document">
@@ -17,7 +20,7 @@
             </div>
 
             <div class="modal-body">
-                <form id="submit_form_property_term">
+                <form id="submit_form_property_term" onkeypress="return event.keyCode != 13;" >
                     <div>
                         <div class="category-fit-column">
                             <div class="metadata-common-fields">
@@ -89,21 +92,36 @@
                                            id="property_term_new_category" 
                                            name="property_term_new_category"  
                                            placeholder="<?php _e('Category name','tainacan'); ?>">
-                                    <div style="margin-top: 15px;padding: 15px;;border: 1px solid #ccc;border-radius: 4px;">
-                                        <div id="taxonomy_create_zone" 
-                                            >
-                                            <li id="root_category" 
-                                                onclick="click_event_taxonomy_create_zone(this)"
-                                                onkeyup="keypress_event_taxonomy_create_zone(this,event)"
+                                    <div style="margin-top: 15px;padding: 15px;border: 1px solid #ccc;border-radius: 4px;min-height: 20px;"
+                                         onclick="verify_has_li()"
+                                         >
+                                        
+                                        <button type="button"
+                                                class="btn btn-default pull-right" 
+                                                onclick="add_hierarchy_taxonomy_create_zone()">
+                                            <span class="glyphicon glyphicon-indent-left"></span>
+                                        </button>
+                                        <button type="button"
+                                                class="btn btn-default pull-right" 
+                                                onclick="remove_hierarchy_taxonomy_create_zone()">
+                                            <span class="glyphicon glyphicon-indent-right"></span>
+                                        </button>
+                                        <div id="taxonomy_create_zone" >
+                                            <li id="taxonomy-root-category"
                                                 class="taxonomy-list-create">
-                                                <span class="li-default taxonomy-list-name taxonomy-category-new">
-                                                    <span class="glyphicon glyphicon-plus"></span><?php _e('Add category','tainacan') ?>    
-                                                </span>        
+                                                <span onclick="click_event_taxonomy_create_zone($(this).parent())" 
+                                                      class="li-default taxonomy-list-name taxonomy-category-new">
+                                                    <span class="glyphicon glyphicon-plus"></span><?php _e('Add category','tainacan') ?>
+                                                </span>
+                                                    <input onblur="blur_event_taxonomy_create_zone($(this).parent())" 
+                                                           onkeyup="keypress_event_taxonomy_create_zone($(this).parent(),event)"
+                                                           type="text" 
+                                                           style="display: none;" 
+                                                           class="input-taxonomy-create">
                                             </li>
                                         </div>
                                     </div>
                                 </div>
-
                             </div>  
                             <hr>
                             <div class="form-group">
