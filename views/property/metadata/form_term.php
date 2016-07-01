@@ -63,7 +63,7 @@
                                 <hr class="modal-hr-style">
                             </div>
                             <hr>
-                            <!-- A categoria raiz do metadado -->
+                            <!--------- A categoria raiz do metadado -------------->
                             <div class="category-fit-column right metadata-common-fields">
                                 <label for="socialdb_property_term_root_category">
                                     <?php _e('Vinculate Category','tainacan'); ?>
@@ -76,8 +76,6 @@
                                            checked="checked"  value="exist">&nbsp;<?php _e('Use existing: choose','tainacan') ?>
                                 <div style='height: 242px;margin-left: 15px;' id="terms_dynatree"></div>
                                 <input type="hidden" 
-                                       required="required" 
-                                       size='2' 
                                        id="socialdb_property_term_root" 
                                        class="form-control" name='socialdb_property_term_root'>
                                 <!-- se deseja criar uma nova categoria  -->
@@ -116,13 +114,15 @@
                                                     <input onblur="blur_event_taxonomy_create_zone($(this).parent())" 
                                                            onkeyup="keypress_event_taxonomy_create_zone($(this).parent(),event)"
                                                            type="text" 
-                                                           style="display: none;" 
+                                                           style="display: none;border: 1px solid #ccc;border-radius: 4px;" 
                                                            class="input-taxonomy-create">
                                             </li>
                                         </div>
+                                        <input type="hidden" value="" id="socialdb_property_term_new_taxonomy" name="socialdb_property_term_new_taxonomy">
                                     </div>
                                 </div>
-                            </div>  
+                            </div> 
+                            <!--------- FIM: A categoria raiz do metadado -------------->
                             <hr>
                             <div class="form-group">
                                 <label for="use-filter" style="display: inline-block"><?php _e('Use as a filter','tainacan'); ?></label>

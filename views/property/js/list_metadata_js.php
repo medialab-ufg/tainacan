@@ -1796,10 +1796,7 @@
                         showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
                         node.select(false);
                     } else if($("#socialdb_property_term_root").val()=='null'||$("#socialdb_property_term_root").val()!=node.data.key) {
-                       // showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
-                        $("#socialdb_property_term_root").html('');
-                        $("#socialdb_property_term_root").append('<option selected="selected" value="' + node.data.key + '">' + node.data.title + '</option>');
-
+                       $("#socialdb_property_term_root").val(node.data.key );
                     }
 
                 });
@@ -2023,7 +2020,7 @@
                     children+"</li>")
             // set plus sign again
             .html(new_category_html);
-             $('#taxonomy-root-category input').focus();
+            $('#taxonomy-root-category input').focus();
             e.preventDefault();
         }// se estiver deletando toda a linha
         else if((e.keyCode == 8 || e.keyCode == 46) && $(input).val()===''){
@@ -2035,6 +2032,7 @@
             $(seletor).text($(input).val());
             e.preventDefault();
         }
+        save_taxonomy();
     }
     //verifica se o container possui algum li, funcao apenas caso estiver vazio
     function verify_has_li(){
@@ -2093,5 +2091,11 @@
                     "</span><input type='text' style='display: none;' class='input-taxonomy-create'"+
                     " onblur='blur_event_taxonomy_create_zone($(this).parent())'  onkeyup='keypress_event_taxonomy_create_zone($(this).parent(),event)' >"+children+"</li>");
         $(selected_element).remove();
+    }
+    
+    function save_taxonomy(){
+        var string = $('#taxonomy_create_zone').html();
+        console.log(string);
+        $('#socialdb_property_term_new_taxonomy').val(string.trim());
     }
 </script>
