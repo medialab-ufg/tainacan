@@ -32,6 +32,8 @@
                     $('.prime-color').css('color', color_scheme.secondary);
                     $('.sec-color-bg').css('background', color_scheme.secondary);
                     $('.sec-color').css('color', color_scheme.secondary);
+                } else {
+                    $('#div_left .expand-all').css('background', '#79a6ce');
                 }
             });
         }
