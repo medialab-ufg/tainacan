@@ -85,13 +85,13 @@ $view_helper = new ViewHelper();
 
                     <!------------------- Forma de visualizacao formulario de submissao -------------------------->
                     <div class="form-group">
-                        <label for="collection_ordenation_form"><?php _e('Select the visualization in the submission form','tainacan'); ?></label>
+                        <label for="collection_ordenation_form"><?php _e('Select the form layout to create a new text item','tainacan'); ?></label>
                         <select name="socialdb_collection_submission_visualization" class="form-control">
                             <option value="one" <?php ( $submission_visualization == 'one' ) ? "selected = 'selected'" : ''; ?> >
                                 <?php _e('1 column','tainacan'); ?>
                             </option>
                             <option value="two" <?php if ($submission_visualization == 'two'|| empty($submission_visualization)) { echo 'selected = "selected"'; } ?> >
-                                <?php _e('2 column','tainacan'); ?>
+                                <?php _e('2 columns','tainacan'); ?>
                             </option>
                         </select>
                     </div>
