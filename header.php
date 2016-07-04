@@ -190,7 +190,8 @@ $socialdb_title = get_option('blogname');
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form onsubmit="$('#myModal').modal('hide');show_modal_main();" action="<?php echo get_template_directory_uri() ?>/controllers/collection/collection_controller.php" method="POST">
+                    <form onsubmit="$('#myModal').modal('hide');
+                            show_modal_main();" action="<?php echo get_template_directory_uri() ?>/controllers/collection/collection_controller.php" method="POST">
                         <input type="hidden" name="operation" value="simple_add">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -261,5 +262,5 @@ $socialdb_title = get_option('blogname');
                 </div>
             </div>
         </div>
-        
+
 

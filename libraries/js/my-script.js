@@ -23,8 +23,6 @@ var Hook = {
     }
 };
 
-
-
 $(window).load(function () {
     var src = $('#src').val();
 
