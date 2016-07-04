@@ -260,16 +260,6 @@
     function edit_list_selectboxes(selectboxes,categories) {
         if (selectboxes) {
             $.each(selectboxes, function (idx, selectbox) {
-                //validation
-                $('#field_property_term_' + selectbox).select(function(){
-                    if( $("#field_property_term_" + selectbox).val()===''){
-                        $('#core_validation_'+selectbox).val('false');
-                    }else{
-                         $('#core_validation_'+selectbox).val('true');
-                    }
-                    set_field_valid(selectbox,'core_validation_'+selectbox);
-                });
-                //
                 $.ajax({
                     url: $('#src').val() + '/controllers/property/property_controller.php',
                     type: 'POST',
@@ -287,6 +277,9 @@
                             set_field_valid(selectbox,'core_validation_'+selectbox);
                         }
                         $('#field_property_term_' + selectbox).append('<option '+checked+' value="' + children.term_id + '">' + children.name + '</option>');
+                        if(checked!==''){
+                           $('#field_property_term_' + selectbox).trigger('change');
+                        }
                         //  }
                     });
                 });
@@ -662,7 +655,8 @@
      * @param {type} seletor
      * @param {type} property_id
      * @returns {undefined}     */
-    function validate_selectbox(seletor,property_id){
+    function edit_validate_selectbox(seletor,property_id){
+        console.log(seletor);
         if($(seletor).val()===''){
             $('#core_validation_'+property_id).val('false');
             set_field_valid(property_id,'core_validation_'+property_id);

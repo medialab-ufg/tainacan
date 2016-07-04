@@ -363,6 +363,7 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
                     ?>
                     <select class="form-control" 
                             name="socialdb_propertyterm_<?php echo $property['id']; ?>" 
+                            onchange="edit_validate_selectbox(this,'<?php echo $property['id']; ?>')"
                             id='field_property_term_<?php echo $property['id']; ?>' >
                     </select>
                     <?php
