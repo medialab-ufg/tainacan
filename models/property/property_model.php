@@ -14,6 +14,7 @@ if (isset($_GET['by_function'])) {
 include_once(dirname(__FILE__) . '../../general/general_model.php');
 include_once (dirname(__FILE__) . '../../collection/collection_model.php');
 include_once (dirname(__FILE__) . '../../category/category_model.php');
+include_once (dirname(__FILE__) . '../../../extras/SimpleHTMLDomParser/simple_html_dom.php');
 
 class PropertyModel extends Model {
 
@@ -53,7 +54,20 @@ class PropertyModel extends Model {
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_required', $data['property_term_required']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_term_cardinality', $data['socialdb_property_term_cardinality']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_term_widget', $data['socialdb_property_term_widget']);
-            $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_term_root', $data['socialdb_property_term_root']);
+            //adicionando a categoria raiz
+            if($data['socialdb_property_vinculate_category']=='create'){
+                $category_id = $this->add_category_root_property_term($data['socialdb_property_new_category']);
+                if($category_id):
+                    $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_term_root',$category_id);
+                    $html = str_get_html($data['socialdb_property_new_taxonomy']);
+                    foreach($html->find('li') as $li){
+                         $this->add_taxonomy_property_term($li,$category_id);
+                    }
+                endif;
+            }else{
+               $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_term_root', $data['socialdb_property_term_root']);
+            }
+            //adicionando a cor da faceta
             update_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $data['socialdb_property_term_root'] . '_color', 'color13');
             if($data['socialdb_property_default_value']){
                  $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_default_value', $data['socialdb_property_default_value']);
@@ -71,11 +85,11 @@ class PropertyModel extends Model {
             //possivelmente um problema
             $this->vinculate_objects_with_property($new_property['term_id'], $data['collection_id'], $data['property_category_id']);
              // se for propriedades do repositorio
-            if($this->is_repository_property($data['property_category_id'])){
-                $this->insert_property_repository($data['property_id']);
-            }else{// se possuir colecoes filhas
-                $this->insert_properties_hierarchy($data['property_category_id'], $data['property_id']);
-            }
+//            if($this->is_repository_property($data['property_category_id'])){
+//                $this->insert_property_repository($data['property_id']);
+//            }else{// se possuir colecoes filhas
+//                $this->insert_properties_hierarchy($data['property_category_id'], $data['property_id']);
+//            }
             if (!in_array(false, $result)) {
                 $data['success'] = 'true';
             } else {
@@ -1015,5 +1029,30 @@ class PropertyModel extends Model {
          
          return $data;
      }
+    /**
+     * 
+     * @param object $li
+     */
+    public function add_taxonomy_property_term($li,$parent_id = 0) {
+        $array = socialdb_insert_term(trim($li->plaintext), 'socialdb_category_type', $parent_id, sanitize_title(remove_accent(trim($li->plaintext))).'_'.  mktime());
+        foreach($li->find('ul') as $ul){
+            foreach($ul->find('li') as $li_child){
+                $this->add_taxonomy_property_term($li_child,$array['term_id']);
+            }
+        }
+    } 
+    /**
+     * 
+     * @param object $li
+     * @param type $parent_id
+     */
+    public function add_category_root_property_term($name) {
+        $new_root_category = wp_insert_term($name, 'socialdb_category_type', array('parent' => $this->get_category_root(),
+                'slug' => $this->generate_slug($name, 0)));
+         add_term_meta($new_root_category['term_id'], 'socialdb_category_owner', get_current_user_id());
+        return (isset($new_root_category['term_id']))?$new_root_category['term_id']:false;
+        
+    } 
+    
 
 }

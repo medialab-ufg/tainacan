@@ -1080,6 +1080,7 @@
             contentType: false
         }).done(function (result) {
             elem = jQuery.parseJSON(result);
+            $("#terms_dynatree").dynatree("getTree").reload();
             $('#modalImportMain').modal('hide');
 
             var item_was_dragged = $("#meta-category .term-widget").hasClass('select-meta-filter');
@@ -1958,7 +1959,7 @@
     var selected_element;
     var new_category_html = 
                     '<span onclick="click_event_taxonomy_create_zone($(this).parent())"  style="display: none;" class="li-default taxonomy-list-name taxonomy-category-new">'+
-                    '<span class="glyphicon glyphicon-plus"></span><?php _e('Add category','tainacan') ?></span>'+
+                    '<span class="glyphicon glyphicon-pencil"></span><?php _e('Click here to edit the category name','tainacan') ?></span>'+
                     '<input type="text" '+
                     'onblur="blur_event_taxonomy_create_zone($(this).parent())"'+  
                     'onkeyup="keypress_event_taxonomy_create_zone($(this).parent(),event)" class="input-taxonomy-create">';
@@ -1972,9 +1973,11 @@
            $(input).val($(seletor).text());
            $(seletor).hide();
            $(input).show();
+           $(input).focus();
         }else if(seletor.hasClass('taxonomy-category-new')){
             $(seletor).hide();
             $(input).show();
+            $(input).focus();
         }
         selected_element = object;
    }
@@ -2020,7 +2023,7 @@
                     children+"</li>")
             // set plus sign again
             .html(new_category_html);
-            $('#taxonomy-root-category input').focus();
+            $('#taxonomy_create_zone').find('.input-taxonomy-create').focus().is(':visible');
             e.preventDefault();
         }// se estiver deletando toda a linha
         else if((e.keyCode == 8 || e.keyCode == 46) && $(input).val()===''){
@@ -2067,7 +2070,7 @@
             $(selected_element).remove();
         }
     }
-    
+    //volta uma 'casa' para a categoria, subindo na hierarquia
     function remove_hierarchy_taxonomy_create_zone(){
         //verifico se nao esta querndo subir de hierarquia
         var input = $(selected_element).find('.input-taxonomy-create').first();
@@ -2092,10 +2095,44 @@
                     " onblur='blur_event_taxonomy_create_zone($(this).parent())'  onkeyup='keypress_event_taxonomy_create_zone($(this).parent(),event)' >"+children+"</li>");
         $(selected_element).remove();
     }
-    
+    //insere o input para adicao da categoria
+    function add_field_category(){
+        $('.input-taxonomy-create').hide();    
+        $('.taxonomy-list-name').show();   
+        if($(selected_element).is(':visible')&&selected_element.length>0){
+            if( $(selected_element).find('ul').first().length>0){
+                $(selected_element).find('ul').first().append('<li class="taxonomy-list-create">'+
+                   new_category_html+'</li>');
+            }else{
+                $(selected_element).append('<ul><li class="taxonomy-list-create">'+
+                   new_category_html+'</li></ul>');
+            }
+        }else{
+           $('#taxonomy_create_zone').append('<li class="taxonomy-list-create">'+
+                   new_category_html+'</li>'); 
+        }
+        
+        $('#taxonomy_create_zone').find('.input-taxonomy-create').focus().is(':visible');
+    }
+    //subir categoria entre as suas irmas na hieraquia
+    function up_category_taxonomy(){
+        if($(selected_element).is(':visible')&&selected_element.length>0){
+            var prev = $(selected_element).prev();
+            $(selected_element).insertBefore(prev);
+            click_event_taxonomy_create_zone(selected_element);
+        }
+    }
+    //descer categoria entre as suas irmas na hieraquia
+    function down_category_taxonomy(){
+        if($(selected_element).is(':visible')&&selected_element.length>0){
+            var prev = $(selected_element).next();
+            $(selected_element).insertAfter(prev);
+            click_event_taxonomy_create_zone(selected_element);
+        }
+    }
+    //salva a taxonomia craida
     function save_taxonomy(){
         var string = $('#taxonomy_create_zone').html();
-        console.log(string);
         $('#socialdb_property_term_new_taxonomy').val(string.trim());
     }
 </script>

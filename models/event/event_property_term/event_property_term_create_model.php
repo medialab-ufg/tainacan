@@ -72,6 +72,9 @@ class EventPropertyTermCreate extends EventModel {
         $data['property_term_required'] = get_post_meta($event_id, 'socialdb_event_property_term_create_required',true) ;
         $data['socialdb_property_term_root'] = get_post_meta($event_id, 'socialdb_event_property_term_create_root',true) ;
         $data['socialdb_property_help'] = get_post_meta($event_id, 'socialdb_event_property_term_create_help',true) ;   
+        $data['socialdb_property_vinculate_category'] = get_post_meta($event_id, 'socialdb_event_property_term_create_vinculate_category',true) ;   
+        $data['socialdb_property_new_category'] = get_post_meta($event_id, 'socialdb_event_property_term_create_new_category',true) ;   
+        $data['socialdb_property_new_taxonomy'] = get_post_meta($event_id, 'socialdb_event_property_term_create_new_taxonomy',true) ;   
         $data['property_id'] = get_post_meta($event_id, 'socialdb_event_property_term_create_id',true) ;
         //inserindo o metadado
         $property_category_id = get_post_meta($event_id, 'socialdb_event_property_term_create_category_root_id',true) ;

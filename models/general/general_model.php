@@ -1403,6 +1403,18 @@ class Model {
             return $result->meta_value;
         }
     }
+    
+    /**
+     * function get_category_root()
+     * @return int O term_id da categoria root de todas as categorias.
+     * 
+     * metodo responsavel em retornar a categoria root de TODAS as categorias
+     * Autor: Eduardo Humberto 
+     */
+    public function get_category_root() {
+        $term = get_term_by('name', 'socialdb_category', 'socialdb_category_type');
+        return $term->term_id;
+    }
 
     /**
      * function get_last_counter($property_id)

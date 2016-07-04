@@ -88,12 +88,11 @@
                                     <input type="text" 
                                            class="form-control" 
                                            id="property_term_new_category" 
-                                           name="property_term_new_category"  
+                                           name="socialdb_property_term_new_category"  
                                            placeholder="<?php _e('Category name','tainacan'); ?>">
-                                    <div style="margin-top: 15px;padding: 15px;border: 1px solid #ccc;border-radius: 4px;min-height: 20px;"
+                                    <div style="margin-top: 15px;padding: 15px;border: 1px solid #ccc;border-radius: 4px;min-height: 65px;"
                                          onclick="verify_has_li()"
                                          >
-                                        
                                         <button type="button"
                                                 class="btn btn-default pull-right" 
                                                 onclick="add_hierarchy_taxonomy_create_zone()">
@@ -104,22 +103,24 @@
                                                 onclick="remove_hierarchy_taxonomy_create_zone()">
                                             <span class="glyphicon glyphicon-indent-right"></span>
                                         </button>
+                                        <button type="button"
+                                                class="btn btn-default pull-right" 
+                                                onclick="up_category_taxonomy()">
+                                            <span class="glyphicon glyphicon-arrow-up"></span>
+                                        </button>
+                                        <button type="button"
+                                                class="btn btn-default pull-right" 
+                                                onclick="down_category_taxonomy()">
+                                            <span class="glyphicon glyphicon-arrow-down"></span>
+                                        </button>
                                         <div id="taxonomy_create_zone" >
-                                            <li id="taxonomy-root-category"
-                                                class="taxonomy-list-create">
-                                                <span onclick="click_event_taxonomy_create_zone($(this).parent())" 
-                                                      class="li-default taxonomy-list-name taxonomy-category-new">
-                                                    <span class="glyphicon glyphicon-plus"></span><?php _e('Add category','tainacan') ?>
-                                                </span>
-                                                    <input onblur="blur_event_taxonomy_create_zone($(this).parent())" 
-                                                           onkeyup="keypress_event_taxonomy_create_zone($(this).parent(),event)"
-                                                           type="text" 
-                                                           style="display: none;border: 1px solid #ccc;border-radius: 4px;" 
-                                                           class="input-taxonomy-create">
-                                            </li>
                                         </div>
                                         <input type="hidden" value="" id="socialdb_property_term_new_taxonomy" name="socialdb_property_term_new_taxonomy">
                                     </div>
+                                    <br>
+                                    <button type="button" onclick="add_field_category()" class="btn btn-primary btn-xs">
+                                        <span class="glyphicon glyphicon-plus"></span><?php _e('Add sub-category','tainacan') ?>
+                                    </button>
                                 </div>
                             </div> 
                             <!--------- FIM: A categoria raiz do metadado -------------->

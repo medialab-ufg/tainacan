@@ -356,8 +356,8 @@
                         //delete_value(children.term_id);
                         if (categories.indexOf(children.term_id) > -1) {
                             checked = 'selected="selected"';
-                            $("#labels_" + radio + "_<?php echo $object_id; ?>").html('');
-                            $("#labels_" + radio + "_<?php echo $object_id; ?>").append('<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' + children.term_id + ',' + radio + ')">' + children.name + '</a></b><br>');//inserindo os termos escolhidos
+                            $("#labels_" + selectbox + "_<?php echo $object_id; ?>").html('');
+                            $("#labels_" + selectbox + "_<?php echo $object_id; ?>").append('<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' + children.term_id + ',' + selectbox + ')">' + children.name + '</a></b><br>');//inserindo os termos escolhidos
                             $('#value_single_select_' + selectbox + '_<?php echo $object_id; ?>').val(children.term_id);
                         }
                         $('#field_event_single_property_term_' + selectbox + '_<?php echo $object_id; ?>').append('<option ' + checked + ' value="' + children.term_id + '">' + children.name + '</option>');
