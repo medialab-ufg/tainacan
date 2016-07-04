@@ -2272,13 +2272,21 @@ $(window).on('resize', function(ev) {
 
 
 function changeViewMode(viewMode) {
-    $("#temp-viewMode").val(viewMode);
-    $("#collection_single_ordenation").attr('data-viewMode', viewMode);
-    $('.viewMode-control li').removeClass('selected-viewMode');
-    $('.viewMode-control li.'+viewMode).addClass('selected-viewMode');
-    $('.list-mode-set').attr('id', viewMode+'-viewMode');
-    $('.top-div').hide();
-    $('.'+viewMode+'-view-container').show();
+    if(viewMode == "slideshow") {
+        getCollectionSlideshow();
+    } else {
+        $("#temp-viewMode").val(viewMode);
+        $("#collection_single_ordenation").attr('data-viewMode', viewMode);
+        $('.viewMode-control li').removeClass('selected-viewMode');
+        $('.viewMode-control li.'+viewMode).addClass('selected-viewMode');
+        $('.list-mode-set').attr('id', viewMode+'-viewMode');
+        $('.top-div').hide();
+        $('.'+viewMode+'-view-container').show();    
+    }
+}
+
+function getCollectionSlideshow() {
+    $("#collection-slideShow").modal('show');
 }
 
 function change_breadcrumbs_title(title){

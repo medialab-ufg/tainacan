@@ -4,6 +4,7 @@
  *
  */
 include_once('./../../helpers/view_helper.php');
+include_once('./../../helpers/object/object_helper.php');
 include_once ('js/list_js.php');
 
 $countLine = 0;
@@ -37,14 +38,8 @@ if( !$collection_list_mode ) {
             endwhile;
 
             include_once "list_modes/slideshow.php";
-            echo "<a href='javascript:void(0)' onclick='getCollectionSlideshow()'> ver slideshow </a>";
             ?>
         </div>
-        <script>
-            function getCollectionSlideshow() {
-                $("#collection-slideShow").modal('show');
-            }
-        </script>
     </div>
 <?php else: ?>
     <!-- TAINACAN: se a pesquisa nao encontrou nenhum item -->

@@ -12,6 +12,9 @@
         });
 
         var default_viewMode = $("#default-viewMode").val();
+        if(default_viewMode == "slideshow") {
+            getCollectionSlideshow();
+        }
         $('.viewMode-control li').removeClass('selected-viewMode');
         $('.viewMode-control li.' + default_viewMode).addClass('selected-viewMode');
 
@@ -406,18 +409,21 @@
         slidesToScroll: 1,
         arrows: true,
         fade: true,
-        asNavFor: '.collection-slides'
+        asNavFor: '.collection-slides',
+        adaptiveHeight: true
     });
 
     $('.collection-slides').slick({
         slidesToShow: 5,
         slidesToScroll: 1,
         asNavFor: '.main-slide',
+        variableWidth: true,
         dots: true,
         centerMode: true,
-        arrows: true,
+        // arrows: true,
+        arrows: false,
         adaptiveHeight: true,
-        autoplay: true,
+        autoplay: false,
         focusOnSelect: true
     });
 </script>

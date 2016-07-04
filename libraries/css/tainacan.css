@@ -1043,24 +1043,31 @@ a.collection-thumb img {
 
 /*
 ****************************************
-**************** SLIDESHOW MODE *************
+*********** SLIDESHOW MODE *************
 ****************************************
 */
 #collection-slideShow .modal-dialog {
   width: 100%;
-  height: 95%;
+  height: 98%;
 }
 #collection-slideShow .modal-dialog .modal-header {
   border: none;
   padding-bottom: 0;
 }
+#collection-slideShow .modal-dialog .modal-header span {
+  color: white;
+}
+#collection-slideShow .modal-dialog .modal-header span.close-slideshow {
+  font-size: 25px;
+}
 #collection-slideShow .modal-dialog .modal-content {
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(15, 10, 10, 0.95);
   height: auto;
   min-height: 100%;
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
+  padding: 10px;
 }
 #collection-slideShow .modal-dialog .modal-content .modal-title {
   color: white;
@@ -1069,18 +1076,34 @@ a.collection-thumb img {
 #collection-slideShow .modal-dialog .modal-content .modal-title span {
   font-weight: bolder;
 }
-
-#slideshow-viewMode {
-  margin-top: 15px;
+#collection-slideShow .modal-dialog .modal-content ul.item-funcs li {
+  display: inline;
 }
+
 #slideshow-viewMode .slick-slide img {
   display: inline-block !important;
 }
+#slideshow-viewMode .main-slide button.slick-arrow {
+  height: 138px;
+  width: 77px;
+}
+#slideshow-viewMode .main-slide button.slick-arrow.slick-prev:before, #slideshow-viewMode .main-slide button.slick-arrow.slick-next:before {
+  content: '';
+}
+#slideshow-viewMode .main-slide button.slick-arrow.slick-prev {
+  background: url(../images/ss-backward.png) no-repeat;
+}
+#slideshow-viewMode .main-slide button.slick-arrow.slick-next {
+  background: url(../images/ss-forward.png) no-repeat;
+}
+#slideshow-viewMode .collection-slides .slick-slide {
+  width: 150px;
+}
 #slideshow-viewMode .collection-slides .slick-slide img {
-  max-width: 150px;
+  max-width: 135px;
 }
 #slideshow-viewMode .collection-slides .slick-current img {
-  border: 2px solid #0c698b;
+  border: 3px solid #0c698b;
 }
 
 @media all and (max-width: 767px) {
