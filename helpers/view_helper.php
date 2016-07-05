@@ -152,6 +152,8 @@ class ViewHelper {
      public function render_cardinality_property($property,$is_data = 'false') {
         if ($property['metas']['socialdb_property_data_cardinality'] && $property['metas']['socialdb_property_data_cardinality'] == 'n'):
             return 50;
+        elseif($property['metas']['socialdb_property_object_cardinality'] && $property['metas']['socialdb_property_object_cardinality'] == 'n'):
+             return 50;
         else:
             return 1;
         endif;
