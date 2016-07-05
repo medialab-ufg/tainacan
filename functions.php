@@ -2667,5 +2667,5 @@ if (isset($_GET['activated']) && is_admin()) {
 }
 
 if ( ! defined("MANUAL_TAINACAN_URL") ) {
-    define("MANUAL_TAINACAN_URL","https://github.com/l3pufg/tainacan/blob/master/extras/Tainacan%20-Manual%20do%20Usu%C3%A1rio%20V1.1.pdf?raw=true" );
+    define("MANUAL_TAINACAN_URL","https://github.com/l3pufg/tainacan/blob/Dev/extras/manual/manual_usuario_tainacan_v1.pdf?raw=true" );
 }

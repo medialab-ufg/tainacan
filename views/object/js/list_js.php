@@ -425,7 +425,7 @@
         // arrows: true,
         arrows: false,
         adaptiveHeight: true,
-        autoplay: false,
+        autoplay: true,
         focusOnSelect: true
     });
 </script>
