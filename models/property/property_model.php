@@ -55,13 +55,13 @@ class PropertyModel extends Model {
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_term_cardinality', $data['socialdb_property_term_cardinality']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_term_widget', $data['socialdb_property_term_widget']);
             //adicionando a categoria raiz
-            if($data['socialdb_property_vinculate_category']=='create'){
+            if($data['socialdb_property_vinculate_category']=='create'&&$data['socialdb_property_new_category']){
                 $category_id = $this->add_category_root_property_term($data['socialdb_property_new_category']);
                 if($category_id):
                     $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_term_root',$category_id);
                     $html = str_get_html($data['socialdb_property_new_taxonomy']);
-                    foreach($html->find('li') as $li){
-                         $this->add_taxonomy_property_term($li,$category_id);
+                    foreach($html->find( '.root_ul', 0)->children() as $li){
+                        $this->add_taxonomy_property_term($li,$category_id);
                     }
                 endif;
             }else{
@@ -1034,9 +1034,11 @@ class PropertyModel extends Model {
      * @param object $li
      */
     public function add_taxonomy_property_term($li,$parent_id = 0) {
-        $array = socialdb_insert_term(trim($li->plaintext), 'socialdb_category_type', $parent_id, sanitize_title(remove_accent(trim($li->plaintext))).'_'.  mktime());
-        foreach($li->find('ul') as $ul){
-            foreach($ul->find('li') as $li_child){
+        $name = $li->children(0)->plaintext;
+        $array = socialdb_insert_term(trim($name), 'socialdb_category_type', $parent_id, sanitize_title(remove_accent(trim($li->plaintext))).'_'.  mktime());
+        $find = $li->find('ul',0);
+        if($find){
+            foreach($find->children() as $li_child){
                 $this->add_taxonomy_property_term($li_child,$array['term_id']);
             }
         }

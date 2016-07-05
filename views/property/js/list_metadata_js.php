@@ -1082,6 +1082,10 @@
             elem = jQuery.parseJSON(result);
             $("#terms_dynatree").dynatree("getTree").reload();
             $('#modalImportMain').modal('hide');
+            $('#socialdb_property_vinculate_category_exist').prop('checked','checked');
+            $('#socialdb_property_vinculate_category_exist').trigger('click');
+            $('#property_term_new_category').val('');            
+            $('#taxonomy_create_zone').html('');
 
             var item_was_dragged = $("#meta-category .term-widget").hasClass('select-meta-filter');
             var current_operation = elem.operation;
@@ -1195,6 +1199,11 @@
             data: { collection_id: $("#collection_id").val(), operation: 'edit_property_term', property_id: id }
         }).done(function (result) {
             elem = $.parseJSON(result);
+            $('#socialdb_property_vinculate_category_exist').prop('checked','checked');
+            $('#socialdb_property_vinculate_category_exist').trigger('click');
+            $('#property_term_new_category').val('');            
+            $('#taxonomy_create_zone').html('');
+            $('#container_add_category').hide();
             $("#meta-category").modal('show');
 
             if( $("#meta-item-"+id).hasClass('root_category') ) {
@@ -1232,10 +1241,10 @@
             term_widget_options('#property_term_filter_widget');
             $($term_create_widget).val( curr_term_widget );
 
-            if (elem.metas.socialdb_property_required === 'false') {
-                $("#property_term_required_false").prop('checked', true);
-            } else {
+            if (elem.metas.socialdb_property_required === 'true') {
                 $("#property_term_required_true").prop('checked', true);
+            } else {
+                $("#property_term_required_true").prop('checked', false);
             }
             if(elem.metas.socialdb_property_help){
                 $("#socialdb_property_help").val(elem.metas.socialdb_property_help);
@@ -1257,15 +1266,20 @@
     }
 
     function get_category_root_name(id) {
-        $.ajax({
-            type: "POST",
-            url: $('#src').val() + "/controllers/category/category_controller.php",
-            data: {operation: 'get_category_root_name', category_id: id}
-        }).done(function (result) {
-            elem_first = jQuery.parseJSON(result);
-            var item_title = elem_first.title;
-            $("#socialdb_property_term_root").html('').append('<option selected="selected" value="' + elem_first.key + '">' + item_title + '</option>');
-            $("#meta-category .dynatree-container .dynatree-title:contains('" + item_title +  "')").siblings(".dynatree-radio").click();
+//        $.ajax({
+//            type: "POST",
+//            url: $('#src').val() + "/controllers/category/category_controller.php",
+//            data: {operation: 'get_category_root_name', category_id: id}
+//        }).done(function (result) {
+//            elem_first = jQuery.parseJSON(result);
+//            var item_title = elem_first.title;
+//            $("#socialdb_property_term_root").html('').append('<option selected="selected" value="' + elem_first.key + '">' + item_title + '</option>');
+//            $("#meta-category .dynatree-container .dynatree-title:contains('" + item_title +  "')").siblings(".dynatree-radio").click();
+//        });
+        $("#terms_dynatree").dynatree("getRoot").visit(function(node){
+            if(node.data.key==id){
+                node.select(true);
+            }
         });
     }
 
@@ -1526,6 +1540,10 @@
         $('#socialdb_property_term_cardinality_1').trigger('click');
         $("#submit_form_property_term #socialdb_property_term_root").html('');
         $('.dynatree-selected').removeClass('dynatree-selected');
+        $("#terms_dynatree").dynatree("getRoot").visit(function(node){
+            node.select(false);
+        });
+        $(".modal-title .edit").text('<?php _e('Add new property','tainacan') ?>');
         $("#meta-category .term-widget").hide();
     }
 
@@ -1907,6 +1925,9 @@
         $("#property_term_title").text('<?php _e('Add new property','tainacan') ?>');
         $("#property_term_id").val('');
         $("#property_term_name").val('');
+        $("#terms_dynatree").dynatree("getRoot").visit(function(node){
+            node.select(false);
+        });
 
         $('#default_field').show();
         $('#required_field').show();
@@ -2039,9 +2060,9 @@
     }
     //verifica se o container possui algum li, funcao apenas caso estiver vazio
     function verify_has_li(){
-        if($('#taxonomy_create_zone').has('li').length==0){
-           $('#taxonomy_create_zone').append('<li class="taxonomy-list-create">'+
-                   new_category_html+'</li>') 
+        if($('#taxonomy_create_zone').has('ul').length==0){
+           $('#taxonomy_create_zone').append('<ul class="root_ul"><li class="taxonomy-list-create">'+
+                   new_category_html+'</li></ul>') 
         }
     }
     //adicionando uma categoria na irma acima
@@ -2079,7 +2100,7 @@
         }
         //pego o pai direto e verifico se ja nao eh a raiz
         var parent_direct = $(selected_element).parent();
-        if(parent_direct.is('div')){
+        if(parent_direct.is('div')||parent_direct.hasClass('root_ul')){
             return false;
         }
         // guardo os filhos diretos da categoria movida
@@ -2108,8 +2129,13 @@
                    new_category_html+'</li></ul>');
             }
         }else{
-           $('#taxonomy_create_zone').append('<li class="taxonomy-list-create">'+
+            if($('#taxonomy_create_zone').has('ul').length==0){
+                 $('#taxonomy_create_zone').append('<ul class="root_ul"><li class="taxonomy-list-create">'+
+                   new_category_html+'</li></ul>'); 
+            }else{
+                $('#taxonomy_create_zone .root_ul').append('<li class="taxonomy-list-create">'+
                    new_category_html+'</li>'); 
+            }
         }
         
         $('#taxonomy_create_zone').find('.input-taxonomy-create').focus().is(':visible');
