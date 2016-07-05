@@ -54,6 +54,17 @@ foreach( $view_helper->get_metadata_types() as $type => $label):
 
                                 <hr class="hr-style">
                             </div>
+                            <!-- Para propriedades fixas -->
+                            <div class="metadata-fixed-fields" style="display:none;">
+                                <div class="create_form-group">
+                                    <label for="property_fixed_name"><?php _e('Property name','tainacan'); ?></label>
+                                     <input type="text" 
+                                            class="form-control" 
+                                            id="property_fixed_name" 
+                                            name="property_fixed_name" 
+                                            placeholder="<?php _e('Property name','tainacan'); ?>">
+                                </div> <br />
+                            </div>    
 
                             <div class="form-group">
                                 <label for="use-filter"><?php _e('Use as a filter','tainacan'); ?></label>
@@ -146,23 +157,29 @@ foreach( ['object', 'term', 'voting', 'filter', 'tag'] as $metadata ) {
     </div>
 </div>
 <!------------ EDICAO DE METADADO FIXO ---------------------------------------->
-<div class="modal fade" id="modal_edit_fixed_property" tabindex="-1" role="dialog" aria-labelledby="modal_remove_property_data" aria-hidden="true">
+<div class="modal fade" id="modal_edit_fixed_property" tabindex="-1" role="dialog" aria-labelledby="modal_edit_fixed_property" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form id="submit_form_property_fixed"  class="form_property_fixed">
-                <div class="modal-body">
+            <div class="modal-body">
                     <div class="metadata-common-fields">
                         <div class="create_form-group">
-                            <label for="property_data_name"><?php _e('Property name','tainacan'); ?></label>
-                            <input type="text" class="form-control" id="property_data_name" name="property_data_name" placeholder="<?php _e('Property name','tainacan'); ?>">
+                            <label for="property_fixed_name">
+                                <?php _e('Property name','tainacan'); ?>
+                            </label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="property_fixed_name" 
+                                   name="property_fixed_name" 
+                                   placeholder="<?php _e('Property name','tainacan'); ?>">
+                            <input type="hidden"
+                                   id="property_fixed_id">
                         </div> 
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal"><?php _e('Close','tainacan'); ?></button>
-                    <button type="submit" class="btn btn-primary"><?php _e('Salve','tainacan'); ?></button>
-                </div>
-            </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><?php _e('Close','tainacan'); ?></button>
+                <button onclick="alter_fixed_properties_label()" type="button" class="btn btn-primary"><?php _e('Salve','tainacan'); ?></button>
+            </div>
         </div>
     </div>
 </div>

@@ -526,7 +526,10 @@
                 var default_value = elem.metas.socialdb_property_default_value;
                 var operation = 'update_property_data';
                 var search_widget = $("#meta-item-"+id).attr('data-widget');
-
+              
+                if($("#meta-item-"+id).hasClass('fixed-property')){
+                    meta_modal = "#meta-text";
+                }
                 $( meta_modal ).modal('show');
 
 
@@ -535,11 +538,17 @@
                 } else {
                     $( meta_modal + " #select-data-type").hide().removeClass('edit-metadata-type')
                 }
-
+                
                 if( $("#meta-item-"+id).hasClass('root_category') ) {
                     $( meta_modal + " .metadata-common-fields").hide();
                 } else {
                     $( meta_modal + " .metadata-common-fields").show();
+                }
+                
+                if(!$("#meta-item-"+id).hasClass('fixed-property') ) {
+                    $( meta_modal + " .metadata-fixed-fields").hide();
+                } else {
+                    $( meta_modal + " .metadata-fixed-fields").show();
                 }
 
                 if ( $("#meta-item-"+id).hasClass("date") && search_widget == "range" ) {
@@ -673,10 +682,11 @@
                         //se o metadado do repositorio for fixo
                         var button = '';
                         var style = '';
+                        var class_var = '';
                         if(property.metas.socialdb_property_is_fixed
                                 && property.metas.socialdb_property_is_fixed=='true'
                                 && '<?php echo (isset(wp_get_current_user()->user_email))? wp_get_current_user()->user_email:'' ?>'=='<?php echo get_option('admin_email')  ?>'){
-                            console.log(visibility_properties);
+                            class_var = 'fixed-property';
                             if(visibility_properties.length===0||(visibility_properties.indexOf(current_id.toString())<0)){
                                 button = '<a vis="show" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-open"></span></a>';
                             }else{
@@ -688,7 +698,7 @@
                         }
                         //adiciona na listagem
                         $('ul#metadata-container').append(
-                            '<li id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="root_category ui-widget-content ui-corner-tr">' +
+                            '<li id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="root_category '+class_var+' ui-widget-content ui-corner-tr">' +
                             '<label '+style+'   class="title-pipe">' + property.name + '</label>' +
                             '<a onclick="edit_metadata(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
                             '<div class="action-icons"> <span class="glyphicon glyphicon-edit"></span></a> ' +
@@ -1976,7 +1986,42 @@
             }
         });
     }
-//***********************FUNCOES PARA AREA DE CRIACAO DE TAXONOMIAS*************//
+    /**
+     ****************************************************************************
+     ************************* PROPERTY FIXED FUNCTIONS ************************
+     ****************************************************************************
+     **/ 
+    // mostra o modal da propriedade fixa
+    function edit_fixed_property(id,name){
+        $('#property_fixed_id').val(id);
+        $('#property_fixed_name').val(name);
+        $('#modal_edit_fixed_property').modal('show');
+    }
+    //funcao que altera o rotulo de um metadado fixo em uma colecao
+    function alter_fixed_properties_label(){
+        $.ajax({
+            url: $('#src').val() + '/controllers/property/property_controller.php',
+            type: 'POST',
+            data: {
+                collection_id: $('#collection_id').val(), 
+                operation: 'alter_label_fixed_property', 
+                property_id:  $('#property_fixed_id').val(), 
+                new_name: $('#property_fixed_name').val()}
+        }).done(function (result) {
+            $('#modalImportMain').modal('hide');
+            elem = jQuery.parseJSON(result);
+
+            if ( elem != null ) {
+                list_collection_metadata();
+                getRequestFeedback(elem.type, elem.msg);
+            }            
+        });
+    }
+     /**
+     ****************************************************************************
+     ************************* FUNCOES PARA AREA DE CRIACAO DE TAXONOMIAS ************************
+     ****************************************************************************
+     **/   
     var selected_element;
     var new_category_html = 
                     '<span onclick="click_event_taxonomy_create_zone($(this).parent())"  style="display: none;" class="li-default taxonomy-list-name taxonomy-category-new">'+
