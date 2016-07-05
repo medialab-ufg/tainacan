@@ -60,6 +60,7 @@ $view_helper = new ViewHelper();
                             <option value="cards"><?php _e('Cards', 'tainacan'); ?></option>
                             <option value="gallery"><?php _e('Gallery', 'tainacan'); ?></option>
                             <option value="list"><?php _e('List', 'tainacan'); ?></option>
+                            <option value="slideshow"><?php _e('Slideshow', 'tainacan'); ?></option>
                         </select>
                     </div>
 
