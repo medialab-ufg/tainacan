@@ -1090,6 +1090,7 @@ a.collection-thumb img {
   font-weight: bolder;
 }
 #collection-slideShow .modal-dialog .modal-content ul.item-funcs li {
+  margin-left: 15px;
   display: inline;
 }
 
