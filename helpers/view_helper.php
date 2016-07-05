@@ -259,8 +259,8 @@ class ViewHelper {
 
     public function render_modal_header($span, $title, $extra_html="") {
         $_modal_header = "<div class='modal-header'>";
-        $_modal_header .= "<button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>";
-        $_modal_header .= "<h4 class='modal-title' id='modal-$span'><span class='glyphicon glyphicon-$span'></span>" . _e( $title, 'tainacan') . $extra_html  . "</h4>";
+        $_modal_header .= "<button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true' class='glyphicon glyphicon-$span'></span></button>";
+        $_modal_header .= "<h4 class='modal-title' id='modal-$span'>" . $title . $extra_html  . "</h4>";
         $_modal_header .= "</div>";
         
         return $_modal_header;

@@ -1,6 +1,9 @@
-<?php
+<?php if (! is_user_logged_in()) { ?>
+    <style type="text/css"> #collection-slideShow .modal-dialog { margin-top: 0 !important; } </style>
+<?php }
 
-    $viewHelper = new ViewHelper();
+$viewHelper = new ViewHelper();
+$title_prefix = __("Collection", "tainacan");
 ?>
 <div class="col-md-12 no-padding slideshow-view-container top-div" <?php if ($collection_list_mode != "slideshow"): ?> style="display: none" <?php endif ?> >
     <div id="slideshow-viewMode" class="col-md-12 no-padding"></div>
@@ -10,21 +13,8 @@
     <div class="modal-dialog">
         <div class="modal-content">
 
-            <?php
-            $title_prefix = __("Collection", "tainacan");
-            echo $viewHelper->render_modal_header('remove-sign', "$title_prefix <span class='sS-collection-name'> </span>");
-            ?>
+            <?php echo $viewHelper->render_modal_header('remove-sign', $title_prefix, "<span class='sS-collection-name'> </span>"); ?>
 
-            <?php /*
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true" class="close-slideshow glyphicon glyphicon-remove-sign"></span>
-                </button>
-                <h4 class="modal-title" style="color: white">
-
-                </h4>
-            </div>
-            */ ?>
             <div class="modal-body" style="border: none">
                 <div id="slideshow-viewMode" class="col-md-12 no-padding">
                     <div class="container col-md-12 center">
@@ -65,7 +55,7 @@
                                                         <!-- TAINACAN: hidden com id do item -->
                                                         <input type="hidden" class="post_id" name="post_id" value="<?= get_the_ID() ?>">
 
-                                                        <!-- TAINACAN:  modal para compartilahr o item -->
+                                                        <!-- TAINACAN:  modal para compartilhar o item -->
                                                         <div class="modal fade" id="modal_share_network<?php echo get_the_ID() ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                                             <div class="modal-dialog">
                                                                 <div class="modal-content">
