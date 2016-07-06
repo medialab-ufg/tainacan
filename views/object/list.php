@@ -4,6 +4,7 @@
  *
  */
 include_once('./../../helpers/view_helper.php');
+include_once('./../../helpers/object/object_helper.php');
 include_once ('js/list_js.php');
 
 $countLine = 0;
@@ -30,13 +31,13 @@ if( !$collection_list_mode ) {
     ?>
     <div id="collection-view-mode">
         <div id='<?php echo $collection_list_mode; ?>-viewMode' class='col-md-12 no-padding list-mode-set'>
-            <?php
-            while ( $loop->have_posts() ) : $loop->the_post(); $countLine++;
+            <?php while ( $loop->have_posts() ) : $loop->the_post(); $countLine++;
                 include "list_modes/cards.php";
                 include "list_modes/list.php";
                 include "list_modes/gallery.php";
-                //include "list_modes/slideshow.php";
-                endwhile;
+            endwhile;
+
+            include_once "list_modes/slideshow.php";
             ?>
         </div>
     </div>

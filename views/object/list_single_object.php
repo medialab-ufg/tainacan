@@ -48,8 +48,8 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                             <span class="glyphicon glyphicon-arrow-left" ></span>
                         </button>
                         <button type="button" onclick="edit_title()" id="edit_title" class="btn btn-default btn-xs">
-                            <!--  <span class="glyphicon glyphicon-edit"></span>-->
-                            <?php viewHelper::render_icon("edit_object"); ?>
+                            <span class="glyphicon glyphicon-edit"></span>
+                            <?php // viewHelper::render_icon("edit_object"); ?>
                         </button>
                         <button type="button" onclick="save_title('<?php echo $object->ID ?>')" id="save_title" class="btn btn-default btn-xs" style="display: none;"><span class="glyphicon glyphicon-floppy-disk"></span></button>
                     <?php endif; ?>
@@ -75,14 +75,14 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                     <?php if ($is_moderator || $object->post_author == get_current_user_id()): ?>
                         <li>
                             <a onclick="single_delete_object('<?= __('Delete Object', 'tainacan') ?>', '<?= __('Are you sure to remove the object: ', 'tainacan') . $object->post_title ?>', '<?php echo $object->ID ?>', '<?= mktime() ?>')" href="#" class="remove">
-                                <!-- <span class="glyphicon glyphicon-trash"></span>-->
-                                <?php viewHelper::render_icon("remove"); ?>
+                                 <?php /* <span class="glyphicon glyphicon-trash"></span> */ ?>
+                                <?php echo viewHelper::render_icon("remove"); ?>
                             </a>
                         </li>
                         <li>
                             <a href="#" onclick="show_edit_object('<?php echo $object->ID ?>')" class="edit">
-                                <!-- <span class="glyphicon glyphicon-edit"></span>-->
-                                <?php viewHelper::render_icon("edit_type"); ?>
+                                <?php /* <span class="glyphicon glyphicon-edit"></span> */ ?>
+                                <?php echo viewHelper::render_icon("edit_type"); ?>
                             </a>
                         </li>
                         <?php

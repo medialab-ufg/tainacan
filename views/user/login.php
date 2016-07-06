@@ -10,7 +10,7 @@ session_start();
 ?>
 
 <?php
-
+/*
 $loginUrl = $facebook->getLoginUrl(
         array(
             'scope' => 'email,user_birthday',
@@ -18,9 +18,8 @@ $loginUrl = $facebook->getLoginUrl(
         )
 );
 
-var_dump($loginUrl);
-
 $logoutUrl = $facebook->getLogoutUrl();
+*/
 ?>
 <?php
     $config = get_option('socialdb_theme_options');
@@ -38,9 +37,8 @@ $logoutUrl = $facebook->getLogoutUrl();
         $permissions = ['email', 'user_birthday']; // optional
         $loginUrl = $helper->getLoginUrl(get_bloginfo(template_directory) . '/controllers/user/user_controller.php?collection_id=' . $collection_id . '&operation=return_login_fb', $permissions);
 
-    var_dump($loginUrl);
     }
-    echo '<a href="' . $loginUrl . '">Log in with Facebook!</a>';
+    // echo '<a href="' . $loginUrl . '">Log in with Facebook!</a>';
 ?>
 <input type="hidden" id="src_login" name="src" value="<?php echo get_template_directory_uri() ?>">
 <div class="container" style="margin-bottom: 15%;">
