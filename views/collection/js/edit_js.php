@@ -259,7 +259,27 @@
         //onError: function () {}
     }
     var croppicContainer = new Croppic('collection_cover_image', cover_img_options);
-    var b = new Croppic('simas', cover_img_options);
+
+    var crop_thumb_options = {
+        uploadUrl: '<?php echo get_stylesheet_directory_uri() ?>' + '/views/collection/upload_file.php',
+        cropUrl: '<?php echo get_stylesheet_directory_uri() ?>' + '/views/collection/crop_file.php',
+        imgEyecandy: true,
+        imgEyecandyOpacity: 0.1,
+        modal: true,
+        loaderHtml: '<div class="loader bubblingG"><span id="bubblingG_1"></span><span id="bubblingG_2"></span><span id="bubblingG_3"></span></div>',
+        onAfterImgCrop: function () {
+            var cropped = $('img.croppedImg').attr('src');
+            var collection_id = $("#collection_id").val();
+            $.ajax({
+                url: $('#src').val() + '/controllers/collection/collection_controller.php',
+                data: {operation: 'update_collection_thumbnail', img_url: cropped, collection_id: collection_id}
+            }).done(function(r) {
+                cl('It is done!!  ');
+                cl(r);
+            });
+        }
+    }
+    var croppicThumb = new Croppic('collection_crop_thumb', crop_thumb_options);
 
     function show_edit_cover() {
         $("#edit_cover_container").show();

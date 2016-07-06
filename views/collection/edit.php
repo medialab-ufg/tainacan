@@ -19,9 +19,18 @@ $view_helper = new ViewHelper();
                 <label for="collection_name"><?php _e('Collection name', 'tainacan'); ?></label>
                 <input type="text" class="form-control" id="collection_name" name="collection_name" required="required" value="<?php echo $collection_post->post_title; ?>">
             </div>
+
             <div id="thumb-idea-form">
                 <label for="collection_thumbnail"><?php _e('Collection thumbnail', 'tainacan'); ?></label>
                 <br>
+                <?php
+                    $correto = get_post_meta($collection_post->ID, '_thumbnail_id', true);
+                    var_dump($correto);
+
+                    var_dump(wp_get_attachment_url($correto));
+
+                    print_r( get_the_post_thumbnail($collection_post->ID) );
+                ?>
                 <?php has_post_thumbnail($collection_post->ID) ? print_r(get_the_post_thumbnail($collection_post->ID, 'thumbnail')) : ''; ?>
                 <br><br>
                 <label for="remove_thumbnail"><?php _e('Remove Thumbnail', 'tainacan'); ?></label>
@@ -30,6 +39,8 @@ $view_helper = new ViewHelper();
                 <br><br>
                 <label for="remove_thumbnail"><?php _e("Change collection's thumbnail", "tainacan"); ?></label>
                 <input type="file" size="50" id="collection_thumbnail" name="collection_thumbnail" class="btn btn-default btn-sm">
+
+                <div id="collection_crop_thumb"></div>
                 <br />
             </div>
 
@@ -56,10 +67,6 @@ $view_helper = new ViewHelper();
                     <input type="hidden" id="collection_cover_img_id" name="collection_cover_img_id" value=""/>
                 </div>
 
-            </div>
-
-            <div class="col-md-12">
-                <div id="simas"></div>
             </div>
 
             <!------------------- Descricao-------------------------->

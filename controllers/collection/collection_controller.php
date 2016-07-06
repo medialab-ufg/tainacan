@@ -176,6 +176,22 @@ class CollectionController extends Controller {
 
                 return update_post_meta($data['collection_id'],'socialdb_collection_cover_id', $img_id );
                 break;
+            case 'update_collection_thumbnail':
+                $file_extension = wp_check_filetype($data['img_url']);
+
+                // return json_encode($file_extension);
+                $file = [ 'guid' => $data['img_url'],
+                    'post_mime_type' => 'image/' . $file_extension['ext'],
+                    'post_title' => '', 'post_content' => '',
+                ];
+                $img_id = wp_insert_attachment($file);
+                $retorno['vila'] = $img_id;
+                $retorno['pai'] = $data['collection_id'];
+                $retorno['bog'] = update_post_meta($data['collection_id'], '_thumbnail_id', $img_id);
+                $retorno['pug'] = $file_extension;
+                
+                return json_encode( $retorno );
+                break;
             case 'list_items_search_autocomplete':
                 $property_model = new PropertyModel;
                 $property = get_term_by('id', $data['property_id'], 'socialdb_property_type');

@@ -95,11 +95,15 @@ body.error404 {
 * << PAGE 404
 */
 
-#collection_cover_image {
+#collection_cover_image, #collection_crop_thumb {
   width:100%;
   height: 190px;
   position: relative;
   border:1px solid #ccc;
+}
+#collection_crop_thumb {
+  width: 150px;
+  height: 150px;
 }
 
 .cropControls{
