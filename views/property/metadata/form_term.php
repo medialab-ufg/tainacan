@@ -62,7 +62,7 @@
 
                                 <hr class="modal-hr-style">
                             </div>
-                            <hr>
+                            <hr class="metadata-common-fields">
                             <!--------- A categoria raiz do metadado -------------->
                             <div class="category-fit-column right metadata-common-fields">
                                 <label for="socialdb_property_term_root_category">
@@ -124,7 +124,18 @@
                                 </div>
                             </div> 
                             <!--------- FIM: A categoria raiz do metadado -------------->
-                            <hr>
+                            <hr class="metadata-common-fields">
+                            <!-- Para propriedades fixas -->
+                            <div class="metadata-fixed-fields" style="display:none;">
+                                <div class="create_form-group">
+                                    <label for="property_fixed_name"><?php _e('Property name','tainacan'); ?></label>
+                                     <input type="text" 
+                                            class="form-control" 
+                                            id="property_fixed_name_term" 
+                                            name="property_fixed_name" 
+                                            placeholder="<?php _e('Property name','tainacan'); ?>">
+                                </div> <br />
+                            </div>    
                             <div class="form-group">
                                 <label for="use-filter" style="display: inline-block"><?php _e('Use as a filter','tainacan'); ?></label>
                                 <input type="checkbox" onchange="toggle_term_widget(this)" value="use_filter" name="property_data_use_filter" class="property_data_use_filter" />
@@ -157,7 +168,8 @@
 
                         </div>
                     </div>
-
+                    
+                    <input type="hidden" id="is_property_fixed_term" name="is_property_fixed" value="false">
                     <input type="hidden" name="property_category_id" value="<?php echo $category->term_id; ?>">
                     <input type="hidden" id="property_term_collection_id" name="collection_id" value="">
                     <input type="hidden" id="property_term_id" name="property_term_id" value="">

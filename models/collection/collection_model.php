@@ -695,7 +695,8 @@ class CollectionModel extends Model {
                     'label' => $facet->name,
                     'category' => $facet->name,
                     'id' => $facet->term_id);
-                $this->get_objects_autocomplete($property['id'], $property['metas']['socialdb_property_object_category_id'], $array_autocomplete);
+                if($property['metas']['socialdb_property_object_category_id'])
+                    $this->get_objects_autocomplete($property['id'], $property['metas']['socialdb_property_object_category_id'], $array_autocomplete);
             }
         }
     }

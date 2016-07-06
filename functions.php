@@ -1558,9 +1558,9 @@ function include_core_wp() {
         include_once (WORDPRESS_PATH . '/wp-load.php');
         include_once (WORDPRESS_PATH . '/wp-includes/wp-db.php');
     } else {
-        include_once ('../../../../../wp-config.php');
-        include_once ('../../../../../wp-load.php');
-        include_once ('../../../../../wp-includes/wp-db.php');
+        include_once (dirname(__FILE__).'../../../../../wp-config.php');
+        include_once (dirname(__FILE__).'../../../../../wp-load.php');
+        include_once (dirname(__FILE__).'../../../../../wp-includes/wp-db.php');
     }
 }
 
@@ -1916,6 +1916,9 @@ function socialdb_insert_term($name, $taxonomy, $parent, $slug, $description = '
  */
 function socialdb_term_exists_by_slug($term, $taxonomy, $parent = null) {
     global $wpdb;
+    if(!$term){
+        return false;
+    }
     if (!isset($parent)) {
         $sql = "select t.term_id, tt.term_taxonomy_id from {$wpdb->term_taxonomy} tt inner join {$wpdb->terms} t t on t.term_id = tt.term_id where t.slug LIKE '$term%' and tt.taxonomy LIKE '$taxonomy' ";
     } else {

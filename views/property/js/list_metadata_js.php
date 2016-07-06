@@ -547,9 +547,14 @@
                 
                 if(!$("#meta-item-"+id).hasClass('fixed-property') ) {
                     $( meta_modal + " .metadata-fixed-fields").hide();
+                    $('#is_property_fixed').val('false');
+                     $( meta_modal + " .form_property_data #property_data_name").val(nome);
+                    $( meta_modal + " .form_property_data #socialdb_property_data_help").val(meta_help);
+                    $( meta_modal + " .form_property_data #socialdb_property_data_default_value").val(default_value);
                 } else if('<?php echo get_user_by('email', get_option('admin_email'))->ID  ?>'==$('#current_user_id').val()) {
                     $( meta_modal + " .metadata-fixed-fields").show();
                     $('#property_fixed_name').val(nome);
+                    $('#is_property_fixed').val('true');
                 }
 
                 if ( $("#meta-item-"+id).hasClass("date") && search_widget == "range" ) {
@@ -576,9 +581,7 @@
 
                 $( meta_modal + " .form_property_data #search_add_facet").val(id);
                 $( meta_modal + " .form_property_data #property_data_id").val(id);
-                $( meta_modal + " .form_property_data #property_data_name").val(nome);
-                $( meta_modal + " .form_property_data #socialdb_property_data_help").val(meta_help);
-                $( meta_modal + " .form_property_data #socialdb_property_data_default_value").val(default_value);
+               
                 $( meta_modal + " .form_property_data #operation_property_data").val(operation);
 
                 if (item_required) {
@@ -1147,10 +1150,11 @@
                        //se o metadado do repositorio for fixo
                         var button = '';
                         var style = '';
+                        var class_var = '';
                         if(property.metas.socialdb_property_is_fixed
                                 && property.metas.socialdb_property_is_fixed=='true'
                                 && '<?php echo (isset(wp_get_current_user()->user_email))? wp_get_current_user()->user_email:'' ?>'=='<?php echo get_option('admin_email')  ?>'){
-                            console.log(visibility_properties);
+                            class_var = 'fixed-property';
                             if(visibility_properties.length===0||(visibility_properties.indexOf(current_id.toString())<0)){
                                 button = '<a vis="show" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-open"></span></a>';
                             }else{
@@ -1161,7 +1165,7 @@
                             button = '<span class="glyphicon glyphicon-trash no-edit"></span>';
                         }
                         $('ul#metadata-container').append(
-                            '<li id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="root_category ui-widget-content ui-corner-tr term-root-'+term_root_id+'"><label '+style+' class="title-pipe">' + property.name +
+                            '<li id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="root_category '+class_var+' ui-widget-content ui-corner-tr term-root-'+term_root_id+'"><label '+style+' class="title-pipe">' + property.name +
                             '</label><div class="action-icons">' +
                             '<a onclick="edit_term(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
                             '<span class="glyphicon glyphicon-edit"><span></a> ' +
@@ -1222,9 +1226,20 @@
             } else {
                 $( "#meta-category .metadata-common-fields").show();
             }
+            
+            //metadado fixo
+            if(!$("#meta-item-"+id).hasClass('fixed-property') ) {
+                $( "#meta-category .metadata-fixed-fields").hide();
+                $('#is_property_fixed_term').val('false');
+                $("#property_term_name").val(elem.name);
+            } else if('<?php echo get_user_by('email', get_option('admin_email'))->ID  ?>'==$('#current_user_id').val()) {
+                $( "#meta-category .metadata-fixed-fields").show();
+                $('#property_fixed_name_term').val(elem.name);
+                $('#is_property_fixed_term').val('true');
+            }
 
             $("#property_term_id").val(elem.id);
-            $("#property_term_name").val(elem.name);
+            
 
             if (elem.type == "menu") {
                 $("#select_menu_style").show();

@@ -956,7 +956,9 @@ class PropertyModel extends Model {
      */
      public function get_children_property_terms($data){
          $all_data = $this->get_all_property($data['property_id'],true); // pego todos os dados possiveis da propriedade       
-         $all_data['children'] = $this->getChildren($all_data['metas']['socialdb_property_term_root']);
+         if($all_data['metas']['socialdb_property_term_root']){
+            $all_data['children'] = $this->getChildren($all_data['metas']['socialdb_property_term_root']);
+         }
          return $all_data;
      }   
      /**
