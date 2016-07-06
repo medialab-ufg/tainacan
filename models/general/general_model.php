@@ -565,10 +565,17 @@ class Model {
      */
     public function get_all_property($property_id, $get_metas = false, $collection_id = "") {
         $property = get_term_by('id', $property_id, 'socialdb_property_type');
+        $labels_collection = ($collection_id!='') ? get_post_meta($collection_id, 'socialdb_collection_fixed_properties_labels', true) : false;
         $data = [];
         if ($property):
             $data['id'] = $property->term_id;
-            $data['name'] = $property->name;
+            if($labels_collection):
+                $array = unserialize($labels_collection);
+                $name = (isset($array[$property->term_id]))?$array[$property->term_id]:$property->name;
+            else:
+                $name = $property->name;
+            endif;
+            $data['name'] = $name;
             $data['slug'] = $property->slug;
             if ($property_id) {
                 $metas = $this->get_property_meta_data($property_id);

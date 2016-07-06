@@ -519,7 +519,8 @@ class PropertyModel extends Model {
      * @autor: Eduardo Humberto 
      */
     public function edit_property($data) {
-        $data = $this->get_all_property($data['property_id'], true); // pego todos os dados possiveis da propriedade
+        $collection_id = ($data['collection_id'])? $data['collection_id'] : ''; 
+        $data = $this->get_all_property($data['property_id'], true,$collection_id); // pego todos os dados possiveis da propriedade
         // $data['selected_menu_style_id'] = $this->get_selected_menu_style( $data['collection_id'] );
         return json_encode($data);
     }

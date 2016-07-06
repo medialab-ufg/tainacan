@@ -41,6 +41,11 @@ class ViewHelper {
         'type'=> get_term_by('slug', 'socialdb_property_fixed_type','socialdb_property_type')
         ];
         $this->collection_id = $collection_id;
+        //verifico se existe labels da colecao
+        if($this->collection_id):
+           $this->get_labels_fixed_properties($this->collection_id); 
+        endif;
+        //visibilidade dos metadados
         if($this->get_visibility($this->terms_fixed['attachments'], $this->collection_id)!==''
                 &&$this->get_visibility($this->terms_fixed['title'], $this->collection_id)!==''
                 &&$this->get_visibility($this->terms_fixed['type'], $this->collection_id)!==''
@@ -100,6 +105,24 @@ class ViewHelper {
         }
         return '';
     }
+    
+    public function get_labels_fixed_properties($collection_id){
+        $labels_collection = ($collection_id!='') ? get_post_meta($collection_id, 'socialdb_collection_fixed_properties_labels', true) : false;
+        foreach ($this->terms_fixed as $slug => $value) {
+            if($labels_collection):
+                $array = unserialize($labels_collection);
+                if(!isset($this->terms_fixed[$slug]->name))
+                    continue;
+                    
+                $this->terms_fixed[$slug]->name 
+                        = (isset($array[$this->terms_fixed[$slug]->term_id]))?$array[$this->terms_fixed[$slug]->term_id]:$this->terms_fixed[$slug]->name;
+            else:
+                $this->terms_fixed[$slug]->name = $this->terms_fixed[$slug]->name;
+            endif;
+        }
+        
+    }
+    
 
     public function get_special_metadata() {
         return $this->special_metadata = ['relationship', 'category', 'voting'];

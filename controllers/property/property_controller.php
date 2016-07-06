@@ -54,7 +54,22 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
                 break;
             case "update_property_data":
                 //return $property_model->update_property_data($data);
-                return $this->insert_event_property_data_update($data);
+                if(isset($data['property_fixed_name'])&&$data['property_fixed_name']!=''){
+                    $labels_collection = ($collection_id!='') ? get_post_meta($collection_id, 'socialdb_collection_fixed_properties_labels', true) : false;
+                    if($labels_collection):
+                        $array = unserialize($labels_collection);
+                        $array[ $data['property_data_id'] ] = $data['property_fixed_name'];
+                        update_post_meta($data['collection_id'], 'socialdb_collection_fixed_properties_labels',  serialize($array));
+                    else:
+                        update_post_meta($data['collection_id'], 'socialdb_collection_fixed_properties_labels',  serialize([$data['property_data_id']=>$data['property_fixed_name']]));
+                    endif;
+                    $data['new_property_id'] = $data['property_data_id'];
+                    $data['type'] = 'success';
+                    $data['msg'] =__('Operation was successfully','tainacan');
+                    return json_encode($data);
+                }else{
+                     return $this->insert_event_property_data_update($data);
+                }
                 break;
             case "update_property_object":
                 //return $property_model->update_property_object($data);

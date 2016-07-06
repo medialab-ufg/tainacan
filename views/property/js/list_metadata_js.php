@@ -547,8 +547,9 @@
                 
                 if(!$("#meta-item-"+id).hasClass('fixed-property') ) {
                     $( meta_modal + " .metadata-fixed-fields").hide();
-                } else {
+                } else if('<?php echo get_user_by('email', get_option('admin_email'))->ID  ?>'==$('#current_user_id').val()) {
                     $( meta_modal + " .metadata-fixed-fields").show();
+                    $('#property_fixed_name').val(nome);
                 }
 
                 if ( $("#meta-item-"+id).hasClass("date") && search_widget == "range" ) {
