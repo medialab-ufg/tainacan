@@ -707,6 +707,7 @@ class PropertyModel extends Model {
         $category_property = $this->set_category($data); // seto a categoria de onde vira as propriedades a partir dos dados vindos da view
         $data['is_root'] = $this->is_category_root($data); // verifico se ela e a root da colecao
         $data['category'] = $category_property; // coloco no array que sera utilizado na view
+        $collection_id = ($data['collection_id'])?$data['collection_id']:"";
        // if ($this->has_properties($category_property->term_id)||!empty($this->categoryModel->get_properties($data['collection_id'], []))) {// verifico se existe propriedades
             //$all_properties_id = get_term_meta($category_property->term_id, 'socialdb_category_property_id');
             if($category_property->slug!='socialdb_category'&&$data['is_root']){
@@ -718,7 +719,7 @@ class PropertyModel extends Model {
                 $all_properties_id = array_unique($all_properties_id);
                 foreach ($all_properties_id as $property_id) {// varro todas propriedades
                     $type = $this->get_property_type_hierachy($property_id); // pego o tipo da propriedade
-                    $all_data = $this->get_all_property($property_id,true); // pego todos os dados possiveis da propriedade
+                    $all_data = $this->get_all_property($property_id,true,$collection_id); // pego todos os dados possiveis da propriedade
                     if ($type === 'socialdb_property_term') {// pego o tipo
                         $data['property_terms'][] = $all_data;
                         $data['no_properties'] = false;
