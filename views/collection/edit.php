@@ -51,9 +51,15 @@ $view_helper = new ViewHelper();
                         <strong> <?php _e('After positioning the image cover as wished, click the green button to crop it.', 'tainacan'); ?> </strong>
                         <i>(<?php _e('Minimum width recommended: 1920px', 'tainacan') ?>)</i>
                     </div>
+
                     <div id="collection_cover_image"></div>
                     <input type="hidden" id="collection_cover_img_id" name="collection_cover_img_id" value=""/>
                 </div>
+
+            </div>
+
+            <div class="col-md-12">
+                <div id="simas"></div>
             </div>
 
             <!------------------- Descricao-------------------------->
