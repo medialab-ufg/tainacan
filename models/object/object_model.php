@@ -1275,7 +1275,7 @@ class ObjectModel extends Model {
                 endif;
                 //diferenciando os tipos
                 if ($type == 'socialdb_property_object') {// pego o tipo
-                    $all_data['metas']['objects'] = $this->get_category_root_posts($all_data['metas']['socialdb_property_object_category_id']);
+                    $all_data['metas']['objects'] = ($all_data['metas']['socialdb_property_object_category_id']) ? $this->get_category_root_posts($all_data['metas']['socialdb_property_object_category_id']) : [];
                     $all_data['metas']['collection_data'] = $this->get_collection_by_category_root($all_data['metas']['socialdb_property_object_category_id']);
                     // pegando os valores se necessario
                     if ($data['object_id']) {

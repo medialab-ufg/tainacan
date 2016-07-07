@@ -76,13 +76,6 @@ $array_visibility = ($meta&&$meta!=='') ? $meta : '';
                         </div>
                     </li>
                 <?php endforeach; ?>
-                <!--li id="tag" data-widget="tree" class="ui-widget-content ui-corner-tr fixed-meta">
-                    <label class="title-pipe"> <?php _e('Tags','tainacan') ?> </label>
-                    <div class="action-icons default-metadata">
-                        <a onclick="edit_tag(this)" class="tag" data-title="Tag"> <span class="glyphicon glyphicon-edit"></span> </a>
-                        <span class="glyphicon glyphicon-trash no-edit"></span>
-                    </div>
-                </li-->
             </ul>
             <div id="loader_metadados_page" style="display: none;font-style: normal; font-variant: normal; font-weight: normal; font-stretch: normal; font-size: 11px; line-height: normal; font-family: Arial;">
                 <center>

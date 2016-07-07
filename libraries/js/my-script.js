@@ -2085,6 +2085,32 @@ function showTools(src) {
     });
 }
 
+function showImportFull(src) {
+    $.ajax({
+        url: src + '/controllers/theme_options/theme_options_controller.php',
+        type: 'POST',
+        data: {operation: 'import_full'}
+    }).done(function (result) {
+        resetHomeStyleSettings();
+        $('#main_part').hide();
+        $('#configuration').html(result);
+        $('#configuration').show();
+    });
+}
+
+function showExportFull(src) {
+    $.ajax({
+        url: src + '/controllers/theme_options/theme_options_controller.php',
+        type: 'POST',
+        data: {operation: 'export_full'}
+    }).done(function (result) {
+        resetHomeStyleSettings();
+        $('#main_part').hide();
+        $('#configuration').html(result);
+        $('#configuration').show();
+    });
+}
+
 function resetHomeStyleSettings() {
     $('#display_view_main_page').hide();
     $('body.home').css('background', 'white');
