@@ -1,4 +1,12 @@
 <?php
+include_once ('../../../../../wp-config.php');
+include_once ('../../../../../wp-load.php');
+include_once ('../../../../../wp-includes/wp-db.php');
+
+$upload_dir = wp_upload_dir();
+$imagePath = $upload_dir["path"]."/";
+$imageURL = $upload_dir["url"]."/";
+
 $imgUrl = $_POST['imgUrl'];
 // original sizes
 $imgInitW = $_POST['imgInitW'];
@@ -17,16 +25,9 @@ $angle = $_POST['rotation'];
 
 $jpeg_quality = 100;
 
-$ano = date("Y");
-$mes = date("m");
-$imagePath = dirname(dirname(dirname(dirname(dirname(__FILE__))))).DIRECTORY_SEPARATOR . "uploads" .DIRECTORY_SEPARATOR . $ano .DIRECTORY_SEPARATOR . $mes . DIRECTORY_SEPARATOR;
-$imageURL =  "http://".$_SERVER['HTTP_HOST'].dirname(dirname(dirname(dirname(dirname($_SERVER['REQUEST_URI'])))))."/uploads/$ano/$mes/";
-
 $current_rand = rand();
 
-$output_filename = $imageURL . "cropd_" . $current_rand;
-
-// uncomment line below to save the cropped image in the same location as the original image.
+$output_filename = $imageURL . "cropped_" . $current_rand;
 // $output_filename = dirname($imgUrl). "/croppedImg_".rand();
 
 $what = getimagesize($imgUrl);
@@ -54,10 +55,7 @@ switch(strtolower($what['mime'])) {
 
 //Check write Access to Directory
 if(!is_writable(dirname($imagePath))){
-	$response = Array(
-	    "status" => 'error',
-	    "message" => 'Can`t write cropped File'
-    );
+	$response = ["status" => 'error', "message" => __("Something went wrong. Please try again.", "tainacan") ];
 } else {
 
     // resize the original image to size of editor
@@ -81,7 +79,7 @@ if(!is_writable(dirname($imagePath))){
 	imagecopyresampled($final_image, $cropped_rotated_image, 0, 0, $imgX1, $imgY1, $cropW, $cropH, $cropW, $cropH);
 	// finally output png image
 	//imagepng($final_image, $output_filename.$type, $png_quality);
-	imagejpeg($final_image, ($imagePath . "cropd_".$current_rand.$type), $jpeg_quality);
+	imagejpeg($final_image, ($imagePath . "cropped_".$current_rand.$type), $jpeg_quality);
 	$response = Array(
 	    "status" => 'success',
 	    "url" => $output_filename.$type

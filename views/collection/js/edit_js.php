@@ -255,12 +255,11 @@
                 url: $('#src').val() + '/controllers/collection/collection_controller.php',
                 data: {operation: 'set_collection_cover_img', img_url: cropped, collection_id: collection_id}
             });
-        },
-        onError: function () {
-            alert('Tente novamente mais tarde!');
         }
+        //onError: function () {}
     }
     var croppicContainer = new Croppic('collection_cover_image', cover_img_options);
+    var b = new Croppic('simas', cover_img_options);
 
     function show_edit_cover() {
         $("#edit_cover_container").show();
