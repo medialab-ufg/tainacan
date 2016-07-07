@@ -1,15 +1,4 @@
-<style>
-    .li-default{
-        opacity:  0.8;
-    }
-    .taxonomy-list-name{
-        width: 50%;
-    }
-    ul {
-        list-style: circle; 
-    }
-</style>    
-<div id="meta-category" class="modal fade" role="dialog" aria-labelledby="Category">
+  <div id="meta-category" class="modal fade" role="dialog" aria-labelledby="Category">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">

@@ -56,7 +56,8 @@
                     $('#redirect_to_caegories').show();
                     showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Configuration saved successfully!', 'tainacan') ?>', 'success');
                     if (elem.save_and_next && elem.save_and_next == 'true') {
-                        showPropertiesAndFilters('<?php echo get_template_directory_uri() ?>');
+                        showTaxonomyZone('<?php echo get_template_directory_uri() ?>');
+                        //showPropertiesAndFilters('<?php echo get_template_directory_uri() ?>');
                     } else {
                         if (elem.is_moderator) {
                             showCollectionConfiguration(src);

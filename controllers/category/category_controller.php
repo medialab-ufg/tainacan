@@ -87,6 +87,9 @@ require_once(dirname(__FILE__) . '../../../models/user/user_model.php');
                     case "list":
                         return $this->render(dirname(__FILE__).'../../../views/category/list.php', $data);
                         break;  
+                    case "taxonomy_zone":
+                        return $this->render(dirname(__FILE__).'../../../views/category/taxonomy_zone.php', $data);
+                        break;  
                     case "insert_hierarchy":
                         return json_encode($category_model->insert_hierarchy($data));
                         break;

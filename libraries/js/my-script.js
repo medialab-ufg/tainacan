@@ -1025,6 +1025,17 @@ function showCategoriesConfiguration(src, is_front) {
     });
 }
 
+function showTaxonomyZone(src) {
+    $.ajax({
+        url: src + '/controllers/category/category_controller.php',
+        type: 'POST',
+        data: {operation: 'taxonomy_zone', collection_id: $("#collection_id").val()}
+    }).done(function (result) {
+        $('#main_part').hide();
+        $('#configuration').html(result).show();
+    });
+}
+
 // funcao que mostras o menu das propriedades
 function showPropertiesConfiguration(src) {
     $("#form").html('');
