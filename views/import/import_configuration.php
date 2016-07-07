@@ -1,7 +1,4 @@
 <?php
-/**
- * Author: Marco Túlio Bueno Veira
- */
 include_once ('js/import_configuration_js.php');
 include_once ('../../helpers/view_helper.php');
 ?>

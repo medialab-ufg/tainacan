@@ -101,6 +101,9 @@ class ThemeOptionsController extends Controller {
             case "edit_tools":
                 return $this->render(dirname(__FILE__) . '../../../views/theme_options/edit_tools.php', $data);
                 break;
+            case "import_full":
+                return $this->render(dirname(__FILE__) . '../../../views/theme_options/import_full.php', $data);
+                break;
             case 'populate_collection':
                 $populateModel = new PopulateModel($data['items_category']);
                 return $populateModel->populate_collection($data);
