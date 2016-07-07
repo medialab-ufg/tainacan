@@ -167,9 +167,10 @@ class CollectionController extends Controller {
                  return $this->render(dirname(__FILE__) . '../../../views/search/menu_left.php', $data);
                  break;
             case 'set_collection_cover_img':
+                $file_extension = wp_check_filetype($data['img_url']);
                 $attachment = [
                     'guid' => $data['img_url'],
-                    'post_mime_type' => 'image/' . str_replace('.', '', $data['img_url']),
+                    'post_mime_type' => 'image/' . $file_extension['ext'],
                     'post_title' => '', 'post_content' => '',
                 ];
                 $img_id = wp_insert_attachment($attachment);
@@ -178,17 +179,12 @@ class CollectionController extends Controller {
                 break;
             case 'update_collection_thumbnail':
                 $file_extension = wp_check_filetype($data['img_url']);
-
-                // return json_encode($file_extension);
                 $file = [ 'guid' => $data['img_url'],
                     'post_mime_type' => 'image/' . $file_extension['ext'],
                     'post_title' => '', 'post_content' => '',
                 ];
                 $img_id = wp_insert_attachment($file);
-                $retorno['vila'] = $img_id;
-                $retorno['pai'] = $data['collection_id'];
-                $retorno['bog'] = update_post_meta($data['collection_id'], '_thumbnail_id', $img_id);
-                $retorno['pug'] = $file_extension;
+                $retorno['updated_thumb_id'] = update_post_meta($data['collection_id'], '_thumbnail_id', $img_id);
                 
                 return json_encode( $retorno );
                 break;

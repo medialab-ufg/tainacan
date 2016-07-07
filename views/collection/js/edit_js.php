@@ -273,9 +273,6 @@
             $.ajax({
                 url: $('#src').val() + '/controllers/collection/collection_controller.php',
                 data: {operation: 'update_collection_thumbnail', img_url: cropped, collection_id: collection_id}
-            }).done(function(r) {
-                cl('It is done!!  ');
-                cl(r);
             });
         }
     }
@@ -284,5 +281,11 @@
     function show_edit_cover() {
         $("#edit_cover_container").show();
     }
+
+    /*
+    $('.edit-collection-tumb').click(function(){
+       $("#collection_crop_thumb").fadeIn(); 
+    });
+    */
 
 </script>

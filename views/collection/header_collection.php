@@ -7,9 +7,14 @@ include_once ('js/header_js.php');
 global $config;
 $options = get_option('socialdb_theme_options');
 $current_collection_id = $collection_post->ID;
-
+$collection_thumb = get_post_meta($current_collection_id, "_thumbnail_id", true);
 $collection_img_id = get_post_meta( $current_collection_id, 'socialdb_collection_cover_id', true);
 
+if($collection_thumb) {
+    $thumb_url = wp_get_attachment_url($collection_thumb);
+} else {
+    $thumb_url = get_template_directory_uri() . "/libraries/images/colecao_thumb.svg";
+}
 ?>
 <!-- TAINACAN: panel da colecao, background-color definido pelo o usuario -->
 <!--div class="panel-heading" style="max-width: 100%;border-color: <?= $collection_metas['socialdb_collection_board_border_color'] ?>;color:<?= $collection_metas['socialdb_collection_board_font_color'] ?>;background-color: <?= $collection_metas['socialdb_collection_board_background_color'] ?>;"-->
@@ -28,12 +33,11 @@ $collection_img_id = get_post_meta( $current_collection_id, 'socialdb_collection
                                     <span><?php _e('Change image', 'tainacan'); ?></span>
                                 </div>
                             <?php endif; ?>
+
                             <a href="<?php echo get_the_permalink($current_collection_id); ?>" class="collection-thumb">
-                                <?php $url_image = get_the_post_thumbnail($current_collection_id, 'thumbnail');
-                                if ( $url_image) { echo $url_image; } else { ?>
-                                    <img src="<?php echo get_template_directory_uri() ?>/libraries/images/colecao_thumb.svg" class="attachment-thumbnail wp-post-image img-responsive">
-                                <?php } ?>
+                                <img src="<?php echo $thumb_url ?>" class="attachment-thumbnail wp-post-image img-responsive" />
                             </a>
+
                         </div>
                     </div>
                     <!-- TAINACAN: div com o titulo e a descricao -->
