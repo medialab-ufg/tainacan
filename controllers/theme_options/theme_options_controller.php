@@ -104,6 +104,9 @@ class ThemeOptionsController extends Controller {
             case "import_full":
                 return $this->render(dirname(__FILE__) . '../../../views/theme_options/import_full.php', $data);
                 break;
+            case "export_full":
+                return $this->render(dirname(__FILE__) . '../../../views/theme_options/export_full.php', $data);
+                break;
             case 'populate_collection':
                 $populateModel = new PopulateModel($data['items_category']);
                 return $populateModel->populate_collection($data);
