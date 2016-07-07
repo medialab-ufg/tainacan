@@ -30,7 +30,11 @@
 </div>
 <?php endif; ?>
 <?php if ($collectionTemplates && is_array($collectionTemplates)): ?>
-    <?php foreach ($collectionTemplates as $collectionTemplate) : ?>
+    <?php foreach ($collectionTemplates as $collectionTemplate) : 
+        if(!$collectionTemplate['title']):
+            continue;
+        endif;
+        ?>
         <div onclick="onClickTemplate('<?php echo $collectionTemplate['directory']; ?>')" class="row templates-collections">
             <div class="col-sm-3" >
                 <img class="img-responsive" src="<?php echo ($collectionTemplate['thumbnail']) ? $collectionTemplate['thumbnail'] : get_template_directory_uri() . '/libraries/images/default_thumbnail.png' ?>">
