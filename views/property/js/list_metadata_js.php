@@ -611,8 +611,7 @@
     function increase_data_range(id, modal) {
         var open_modal = get_open_model_id();
         var data_type = $( open_modal + " #data_range_submit button.range_increaser").attr('data-type');
-
-        $( open_modal + '#counter_data_range').val( parseInt(count) + 1 );
+        $( open_modal + ' #counter_data_range').val( parseInt($( open_modal + ' #counter_data_range').val()) + 1 );
         var count = $( open_modal + ' #counter_data_range').val();
 
         $.ajax({

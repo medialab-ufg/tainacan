@@ -43,7 +43,6 @@ public function add($data) {
             } else if ( $data['counter_data_range'] ){
                 $max_range = $data['counter_data_range'];
             }
-
             for ($i = 0; $i <= $max_range; $i++):
                 if ((isset($data['range_' . $i . '_1']) && $data['range_' . $i . '_1']!='') && (isset($data['range_' . $i . '_2']) && $data['range_' . $i . '_1']!='')) {
                     $options_range[] = array('value_1' => $data['range_' . $i . '_1'], 'value_2' => $data['range_' . $i . '_2']);
