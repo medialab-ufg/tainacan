@@ -1164,6 +1164,51 @@ class CategoryModel extends Model {
         }
         return false;
     }
+    /**
+     * Metodo que executa as atividades da tela de criacao de taxonomia
+     * @param array $data
+     */
+    public function taxonomy_zone($data) {
+        include_once (dirname(__FILE__) . '../../../extras/SimpleHTMLDomParser/simple_html_dom.php');
+        $category_root_id = $this->get_category_root_of($data['collection_id']);
+        //alterar o nome da categoria raiz
+        if($data['category_root_name']&&trim($data['category_root_name'])!=''){
+            wp_update_term($category_root_id, 'socialdb_category_type', array(
+                'name' => $data['category_root_name']
+            ));
+        }
+        //cria a taxonomia
+        if($data['socialdb_property_term_new_taxonomy']&&trim($data['socialdb_property_term_new_taxonomy'])!=''){
+            $html = str_get_html((stripslashes ( $data['socialdb_property_term_new_taxonomy'])));
+            foreach($html->find( '.root_ul', 0)->children() as $li){
+                $this->add_nodes_taxonomy($li,$category_root_id);
+            }
+        }
+        return json_encode($data);
+    }
+    
+    /**
+     * 
+     * @param object $li
+     */
+    public function add_nodes_taxonomy($li,$parent_id = 0) {
+        $name = $li->children(0)->plaintext;
+        if($li->getAttribute('term')&&is_numeric($li->getAttribute('term'))):
+           $array =   wp_update_term((int)$li->getAttribute('term'), 'socialdb_category_type', array(
+                'name' => $name,
+               'parent' => $parent_id
+            ));
+        else:
+            $array = wp_insert_term(trim($name), 'socialdb_category_type', array('parent' => $parent_id,
+                    'slug' => sanitize_title(remove_accent(trim($li->plaintext))).'_'.  mktime()));
+        endif;
+        $find = $li->find('ul',0);
+        if($find){
+            foreach($find->children() as $li_child){
+                $this->add_nodes_taxonomy($li_child,$array['term_id']);
+            }
+        }
+    } 
     
 
 }

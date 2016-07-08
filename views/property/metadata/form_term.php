@@ -1,4 +1,12 @@
-  <div id="meta-category" class="modal fade" role="dialog" aria-labelledby="Category">
+<style>
+    #container_add_category ul{
+        list-style: square;
+    }
+    .style-input {
+        padding: 5px;border: 1px solid #ccc;border-radius: 4px; 
+    }
+</style>    
+<div id="meta-category" class="modal fade" role="dialog" aria-labelledby="Category">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
