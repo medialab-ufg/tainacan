@@ -3,14 +3,9 @@
     $(function () {
         set_containers_class($('#collection_id').val());
         // *************** Iframe Popover Collection ****************
-        //$('#iframebutton').attr('data-content', 'Teste').data('bs.popover').setContent();
         $('[data-toggle="popover"]').popover();
         $('[data-toggle="tooltip"]').tooltip(); 
-        // var myPopover = $('#iframebutton').data('popover');
-        // $('#iframebutton').popover('hide');
-        // myPopover.options.html = true;
-        //<iframe width="560" height="315" src="https://www.youtube.com/embed/CGyEd0aKWZE" frameborder="0" allowfullscreen></iframe>
-        // myPopover.options.content = '<form><input type="text" style="width:200px;" value="<iframe width=\'800\' height=\'600\' src=\'' + $("#socialdb_permalink_collection").val() + '\' frameborder=\'0\'></iframe>" /></form>';
+
         if ($('#is_filter').val() == '1') {
             $('#form').hide();
             $('#list').hide();
@@ -1004,19 +999,12 @@ function submit_comment(object_id) {
     }
 
     function search_objects(e) {
-        // $("button#clear").show();
         var search_for = $(e).val();
         wpquery_keyword(search_for);
-        // list_all_objects(selKeys.join(", "), $("#collection_id").val(), $('#collection_single_ordenation').val(), '', search_for);
     }
 
     function backToMainPage(reload_container) {
-        // wpquery_filter();
-        // var showing_breadcrumbs = $("#tainacan-breadcrumbs").attr('style');
-        if ( $('#tainacan-breadcrumbs').is(':visible') ) {
-            $("#tainacan-breadcrumbs").hide();
-        }
-        
+        change_breadcrumbs_title('', ' ');
         wpquery_clean();
         list_main_ordenation_filter();
         $('.modal-backdrop').hide();
@@ -1039,6 +1027,7 @@ function submit_comment(object_id) {
 
     //apenas para a pagina de demonstracao do item
     function backToMainPageSingleItem() {
+        change_breadcrumbs_title('', ' ');
         wpquery_filter();
         set_containers_class($('#collection_id').val());
         list_main_ordenation_filter();

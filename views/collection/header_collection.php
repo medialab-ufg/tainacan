@@ -1,7 +1,9 @@
 <?php
+/*
 include_once ('../../../../../wp-config.php');
 include_once ('../../../../../wp-load.php');
 include_once ('../../../../../wp-includes/wp-db.php');
+*/
 include_once ('js/header_js.php');
 //$post = get_post($collection_id);
 global $config;
@@ -10,11 +12,7 @@ $current_collection_id = $collection_post->ID;
 $collection_thumb = get_post_meta($current_collection_id, "_thumbnail_id", true);
 $collection_img_id = get_post_meta( $current_collection_id, 'socialdb_collection_cover_id', true);
 
-if($collection_thumb) {
-    $thumb_url = wp_get_attachment_url($collection_thumb);
-} else {
-    $thumb_url = get_template_directory_uri() . "/libraries/images/colecao_thumb.svg";
-}
+$thumb_url = $collection_thumb ? wp_get_attachment_url($collection_thumb) : get_template_directory_uri() . "/libraries/images/colecao_thumb.svg";
 ?>
 <!-- TAINACAN: panel da colecao, background-color definido pelo o usuario -->
 <!--div class="panel-heading" style="max-width: 100%;border-color: <?= $collection_metas['socialdb_collection_board_border_color'] ?>;color:<?= $collection_metas['socialdb_collection_board_font_color'] ?>;background-color: <?= $collection_metas['socialdb_collection_board_background_color'] ?>;"-->
@@ -33,11 +31,9 @@ if($collection_thumb) {
                                     <span><?php _e('Change image', 'tainacan'); ?></span>
                                 </div>
                             <?php endif; ?>
-
                             <a href="<?php echo get_the_permalink($current_collection_id); ?>" class="collection-thumb">
                                 <img src="<?php echo $thumb_url ?>" class="attachment-thumbnail wp-post-image img-responsive" />
                             </a>
-
                         </div>
                     </div>
                     <!-- TAINACAN: div com o titulo e a descricao -->
@@ -196,11 +192,11 @@ if($collection_thumb) {
     </div>
 </div>
 
-<div id="tainacan-breadcrumbs" style="display: none;" class="config-steps">
+<div id="tainacan-breadcrumbs" class="config-steps">
     <a href="<?php echo esc_url( home_url('/')  ) ?>"> Home </a> >
     <a href="<?= get_the_permalink(get_option('collection_root_id')) . '?mycollections=true' ?>"><?php _e('My collections','tainacan'); ?></a> >
-    <a href="javascript:void(0)" onclick="backToMainPage();"> <span class="collection-title"></span></a> >
-    <div class="current-config" style="display: inline-block;"> <?php _e('Metadata','tainacan') ?> </div>
+    <a href="javascript:void(0)" onclick="backToMainPage();"> <span class="collection-title"></span></a> <span class="last-arrow"> </span>
+    <div class="current-config" style="display: inline-block;"> </div>
 </div>
 
 <?php

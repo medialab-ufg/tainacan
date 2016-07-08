@@ -2318,8 +2318,10 @@ function getCollectionSlideshow() {
     $("#collection-slideShow").modal('show');
 }
 
-function change_breadcrumbs_title(title) {
+function change_breadcrumbs_title(title, arrow_text) {
+    var arrow = arrow_text || '>';
     $("#tainacan-breadcrumbs").show().find('.current-config').text(title);
+    $("#tainacan-breadcrumbs .last-arrow").text(arrow);
 }
 
 //********************************** FUNCIONALIDADE ACORDEON *********************/
