@@ -1,6 +1,3 @@
-<style>
-    .ui-autocomplete { z-index:1051; }
-</style>
 <li class="col-md-6 cards-view-container top-div"
     id="object_<?php echo get_the_ID() ?>"
     <?php if ($collection_list_mode != "cards"): ?> style="display: none;" <?php endif ?> >

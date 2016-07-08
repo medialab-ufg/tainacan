@@ -870,12 +870,16 @@ a.collection-thumb img {
 **************** CARD MODE *************
 ****************************************
 */
+.ui-autocomplete {
+  z-index: 1051;
+}
+
 #cards-viewMode .item-colecao {
   border: 3px solid #E8E8E8;
   background: white;
   border-radius: 2px;
   margin: 1.5% 1.5% 0.2% 0;
-  height: 190px;
+  height: 165px;
   padding: 10px;
 }
 #cards-viewMode .item-colecao .item-info .colFoto {
@@ -1013,11 +1017,12 @@ a.collection-thumb img {
   border: 3px solid #E8E8E8;
   padding-top: 10px;
   text-align: center;
-  height: 240px;
   margin-bottom: 15px;
   margin-left: 15px;
-  width: 24%;
+  width: 23.8%;
   overflow: hidden;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 #gallery-viewMode .gallery-view-container.first-el {
   margin-left: 0 !important;
@@ -1033,10 +1038,10 @@ a.collection-thumb img {
   margin-top: 10px;
   border-top: 2px solid #E8E8E8;
 }
-#gallery-viewMode .gallery-view-container .title-container h4 {
+#gallery-viewMode .gallery-view-container .title-container h5 {
   overflow: hidden;
 }
-#gallery-viewMode .gallery-view-container .title-container h4 a {
+#gallery-viewMode .gallery-view-container .title-container h5 a {
   color: black;
   font-weight: bolder;
 }
