@@ -23,7 +23,7 @@ class RankingModel extends Model {
      * Metodo responsavel por instanciar o model property
      * @autor: Marco Tulio 
      */
-    public function RankingModel() {
+    public function __construct() {
         $this->property_model = new PropertyModel();
     }
 
