@@ -1920,7 +1920,7 @@ function socialdb_term_exists_by_slug($term, $taxonomy, $parent = null) {
         return false;
     }
     if (!isset($parent)) {
-        $sql = "select t.term_id, tt.term_taxonomy_id from {$wpdb->term_taxonomy} tt inner join {$wpdb->terms} t t on t.term_id = tt.term_id where t.slug LIKE '$term%' and tt.taxonomy LIKE '$taxonomy' ";
+        $sql = "select t.term_id, tt.term_taxonomy_id from {$wpdb->term_taxonomy} tt inner join {$wpdb->terms} t on t.term_id = tt.term_id where t.slug LIKE '$term%' and tt.taxonomy LIKE '$taxonomy' ";
     } else {
         $parent = str_replace('_facet_category', '', $parent);
         $sql = "select t.term_id, tt.term_taxonomy_id from {$wpdb->term_taxonomy} tt inner join {$wpdb->terms} t on t.term_id = tt.term_id where t.slug LIKE '{$term}_%' and tt.taxonomy LIKE '$taxonomy' and tt.parent = $parent ";

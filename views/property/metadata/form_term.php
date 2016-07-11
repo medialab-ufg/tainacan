@@ -1,12 +1,9 @@
 <style>
-    .li-default{
-        opacity:  0.8;
+    #container_add_category ul{
+        list-style: square;
     }
-    .taxonomy-list-name{
-        width: 50%;
-    }
-    ul {
-        list-style: circle; 
+    .style-input {
+        padding: 5px;border: 1px solid #ccc;border-radius: 4px; 
     }
 </style>    
 <div id="meta-category" class="modal fade" role="dialog" aria-labelledby="Category">

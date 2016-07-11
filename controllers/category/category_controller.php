@@ -9,7 +9,7 @@ require_once(dirname(__FILE__) . '../../../models/user/user_model.php');
 
  class CategoryController extends Controller{
 	 public function operation($operation,$data){
-		$category_model = new CategoryModel();
+                $category_model = new CategoryModel();
 		switch ($operation) {
                     //pagina da categoria
                     case 'page':
@@ -87,6 +87,9 @@ require_once(dirname(__FILE__) . '../../../models/user/user_model.php');
                     case "list":
                         return $this->render(dirname(__FILE__).'../../../views/category/list.php', $data);
                         break;  
+                    case "taxonomy_zone":
+                        return $this->render(dirname(__FILE__).'../../../views/category/taxonomy_zone.php', $data);
+                        break;  
                     case "insert_hierarchy":
                         return json_encode($category_model->insert_hierarchy($data));
                         break;
@@ -103,6 +106,9 @@ require_once(dirname(__FILE__) . '../../../models/user/user_model.php');
                         break;   
                     case 'verify_name_in_taxonomy':
                         return $category_model->verify_name_in_taxonomy($data);
+                    case 'taxonomy_zone_submit':
+                        return $category_model->taxonomy_zone($data);
+                        break;
                     case 'get_category':
                         $callback['term'] = $category_model->get_category($data['category_id']);
                         $ancestors = get_ancestors($data['category_id'], 'socialdb_category_type');

@@ -2043,7 +2043,7 @@
                     '<span class="glyphicon glyphicon-pencil"></span><?php _e('Click here to edit the category name','tainacan') ?></span>'+
                     '<input type="text" '+
                     'onblur="blur_event_taxonomy_create_zone($(this).parent())"'+  
-                    'onkeyup="keypress_event_taxonomy_create_zone($(this).parent(),event)" class="input-taxonomy-create">';
+                    'onkeyup="keypress_event_taxonomy_create_zone($(this).parent(),event)" class="input-taxonomy-create style-input">';
    // quando se clica sobre a categoria
    function click_event_taxonomy_create_zone(object){
         $('.input-taxonomy-create').hide();    
@@ -2099,7 +2099,7 @@
             // create a new li item
             .before("<li class='taxonomy-list-create'   >"+
                     "<span onclick='click_event_taxonomy_create_zone($(this).parent())'   class='li-default taxonomy-list-name taxonomy-category-finished'>" + val + 
-                    "</span><input type='text' style='display: none;' class='input-taxonomy-create'"+
+                    "</span><input type='text' style='display: none;' class='input-taxonomy-create style-input'"+
                     " onblur='blur_event_taxonomy_create_zone($(this).parent())'  onkeyup='keypress_event_taxonomy_create_zone($(this).parent(),event)' >"+
                     children+"</li>")
             // set plus sign again
@@ -2140,12 +2140,12 @@
             if(sibling.find('ul').first().length>0){
                  sibling.find('ul').first().append("<li class='taxonomy-list-create' >"+
                     "<span onclick='click_event_taxonomy_create_zone($(this).parent())' class='li-default taxonomy-list-name taxonomy-category-finished'>" + $(input).val() + 
-                    "</span><input type='text' style='display: none;' class='input-taxonomy-create'"+
+                    "</span><input type='text' style='display: none;' class='input-taxonomy-create style-input'"+
                     " onblur='blur_event_taxonomy_create_zone($(this).parent())'  onkeyup='keypress_event_taxonomy_create_zone($(this).parent(),event)' >"+children+"</li>");
             }else{
                 sibling.append("<ul><li class='taxonomy-list-create'  >"+
                     "<span onclick='click_event_taxonomy_create_zone($(this).parent())' class='li-default taxonomy-list-name taxonomy-category-finished'>" + $(input).val() + 
-                    "</span><input type='text' style='display: none;' class='input-taxonomy-create'"+
+                    "</span><input type='text' style='display: none;' class='input-taxonomy-create style-input'"+
                     " onblur='blur_event_taxonomy_create_zone($(this).parent())'  onkeyup='keypress_event_taxonomy_create_zone($(this).parent(),event)' >"+children+"</li></ul>");
             }
             $(selected_element).remove();
@@ -2172,7 +2172,7 @@
         var parent_to_insert = parent_li.parent();
         parent_to_insert.append("<li class='taxonomy-list-create' >"+
                     "<span onclick='click_event_taxonomy_create_zone($(this).parent())' class='li-default taxonomy-list-name taxonomy-category-finished'>" + $(input).val() + 
-                    "</span><input type='text' style='display: none;' class='input-taxonomy-create'"+
+                    "</span><input type='text' style='display: none;' class='input-taxonomy-create style-input'"+
                     " onblur='blur_event_taxonomy_create_zone($(this).parent())'  onkeyup='keypress_event_taxonomy_create_zone($(this).parent(),event)' >"+children+"</li>");
         $(selected_element).remove();
     }

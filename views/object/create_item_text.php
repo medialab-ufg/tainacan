@@ -255,6 +255,7 @@
                                  value='<?php echo sprintf(__('The field license is required','tainacan'),$property['name']); ?>'>
                 </h2>
                 <div id="show_form_licenses"></div>
+                <input type="hidden" id="property_license_id" value="<?php echo $view_helper->terms_fixed['license']->term_id ?>">
              </div>   
              <!-- TAINACAN: votacoes do item -->
              <div id="create_list_ranking_<?php echo $object_id ?>"></div>

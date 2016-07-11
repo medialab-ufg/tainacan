@@ -1653,11 +1653,11 @@ class Model {
         fclose($df);
     }
 
-    public function create_zip_by_folder($folder, $from = '/package/') {
+    public function create_zip_by_folder($folder, $from = '/package/',$name = 'package') {
         $rootPath = realpath($folder);
         // Initialize archive object
         $zip = new ZipArchive();
-        $zip->open($rootPath . '/package.zip', ZipArchive::CREATE | ZipArchive::OVERWRITE);
+        $zip->open($rootPath . '/'.$name.'.zip', ZipArchive::CREATE | ZipArchive::OVERWRITE);
         // Create recursive directory iterator
         /** @var SplFileInfo[] $files */
         $files = new RecursiveIteratorIterator(

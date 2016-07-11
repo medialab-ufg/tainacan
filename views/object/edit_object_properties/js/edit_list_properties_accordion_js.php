@@ -4,12 +4,13 @@
         var properties_autocomplete = edit_get_val($("#edit_properties_autocomplete").val());
         autocomplete_edit_item_property_data(properties_autocomplete); 
         //# 3 - esconde, se necessario os campos de ranking e licencas
+        if($('.hide_rankings')&&$('.hide_rankings').val()==='true'){
+            $('#list_ranking_items').hide();
+        }
+        
         if($('.hide_license')&&$('.hide_license').val()==='true'){
             $('#list_licenses_items').hide();    
             $('#core_validation_license').val('true');
-        }
-        if($('.hide_rankings')&&$('.hide_rankings').val()==='true'){
-            $('#list_ranking_items').hide();
         }else{
             if($("input[type='radio'][name='object_license']")){
                 $("input[type='radio'][name='object_license']").change(function(){

@@ -198,7 +198,7 @@ $socialdb_title = get_option('blogname');
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                             <h4 class="modal-title" id="createCollectionTitleDefault"><?php _e('Select a template', 'tainacan'); ?>
-                                <a style="margin-left: 20%;" onclick="showModalImportCollection();" href="#"><?php _e(' Or import a collection', 'tainacan') ?></a>
+                                <a style="font-size:12px; margin-left: 25%;" onclick="showModalImportCollection();" href="#"><?php _e(' Or import a collection', 'tainacan') ?></a>
                             </h4>
                             <h4 id="createCollectionTitle" style="display: none;">
                                 <?php _e('Create Collection', 'tainacan'); ?>

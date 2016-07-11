@@ -1329,6 +1329,9 @@ function ontology_modificate_values_get_all_property($data) {
     global $wpdb;
     $config = [];
     $wp_taxonomymeta = $wpdb->prefix . "termmeta";
+    if(!$data['id']){
+        return $data;
+    }
     //dados principais da propriedade
     $roots_parents = [
         get_term_by('name','socialdb_property_data','socialdb_property_type')->term_id,
