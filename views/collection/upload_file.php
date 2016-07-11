@@ -18,19 +18,19 @@ if(!is_writable($imagePath)) {
 }
 
 if ( in_array($extension, $allowedExts)) {
-  if ($_FILES["img"]["error"] > 0) {
+	if ($_FILES["img"]["error"] > 0) {
 		 $response = [ "status" => 'error', "message" => 'ERROR Return Code: '. $_FILES["img"]["error"] ];
 	} else {
-	  $filename = $_FILES["img"]["tmp_name"];
-	  list($width, $height) = getimagesize( $filename );
-
-	  move_uploaded_file($filename,  $imagePath . $_FILES["img"]["name"]);
+		$filename = $_FILES["img"]["tmp_name"];
+		list($width, $height) = getimagesize( $filename );
+		
+		move_uploaded_file($filename,  $imagePath . $_FILES["img"]["name"]);
 
 	  $response = [ "status" => 'success', "url" => $imageURL.$_FILES["img"]["name"], "width" => $width, "height" => $height ];
-	}
-  } else {
-   $response = [ "status" => 'error', "message" => __("Something went wrong. Is file too large for upload?", "tainacan") ];
-  }
+	} 
+} else {
+   $response = [ "status" => 'error', "message" => __("Something went wrong. Is file too large for upload?", "tainacan") ]; 
+}
 	  
-	  print json_encode($response);
+print json_encode($response);
 ?>

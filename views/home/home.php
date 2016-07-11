@@ -8,21 +8,22 @@
 					<div class="col-md-12 col-sm-12 blocos carousel-home">
 					<?php foreach ($item['data'] as $key => $item_data):
 						$item_id = $item_data->ID;
+						$output = "";
 						$collection_name = explode(" ", $item_data->post_title);
+						if( has_post_thumbnail( $item_id) ):
+							$thumb = wp_get_attachment_url( get_post_meta($item_id, "_thumbnail_id", true) );
+							$output = "<img src=\"$thumb\" class=\"attachment-thumbnail wp-post-image img-responsive\" />";
+						endif;
 						?>
 						<div class="item-individual-box">
 							<div class="panel panel-default">
 								<div class="panel-body">
 									<a href="<?php echo get_the_permalink($item_id); ?>">
-										<?php
-										if ( has_post_thumbnail( $item_id) ):
-											echo get_the_post_thumbnail($item_id, 'thumbnail');
-										else:
+										<?php if(empty($output)){
 											echo '<div class="tainacan-thumbless">';
-											format_home_items_char($collection_name[0]);
-											format_home_items_char($collection_name[1]);
+											format_home_items_char($collection_name[0]) . format_home_items_char($collection_name[1]);
 											echo '</div>';
-										endif; ?>
+										} else { echo $output; } ?>
 									</a>
 								</div>
 								<div class="panel-footer home-title" style="padding:3px;">

@@ -200,7 +200,8 @@ class CollectionModel extends Model {
         $array_json['collection_name'] = $post->post_title;
         return json_encode($array_json);
     }
-
+    
+    
     /**
      * function update($data)
      * @param mix $data  Os dados que serao utilizados para atualizar a colecao

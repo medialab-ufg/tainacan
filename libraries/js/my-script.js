@@ -2096,6 +2096,32 @@ function showTools(src) {
     });
 }
 
+function showImportFull(src) {
+    $.ajax({
+        url: src + '/controllers/theme_options/theme_options_controller.php',
+        type: 'POST',
+        data: {operation: 'import_full'}
+    }).done(function (result) {
+        resetHomeStyleSettings();
+        $('#main_part').hide();
+        $('#configuration').html(result);
+        $('#configuration').show();
+    });
+}
+
+function showExportFull(src) {
+    $.ajax({
+        url: src + '/controllers/theme_options/theme_options_controller.php',
+        type: 'POST',
+        data: {operation: 'export_full'}
+    }).done(function (result) {
+        resetHomeStyleSettings();
+        $('#main_part').hide();
+        $('#configuration').html(result);
+        $('#configuration').show();
+    });
+}
+
 function resetHomeStyleSettings() {
     $('#display_view_main_page').hide();
     $('body.home').css('background', 'white');
@@ -2303,8 +2329,10 @@ function getCollectionSlideshow() {
     $("#collection-slideShow").modal('show');
 }
 
-function change_breadcrumbs_title(title) {
+function change_breadcrumbs_title(title, arrow_text) {
+    var arrow = arrow_text || '>';
     $("#tainacan-breadcrumbs").show().find('.current-config').text(title);
+    $("#tainacan-breadcrumbs .last-arrow").text(arrow);
 }
 
 //********************************** FUNCIONALIDADE ACORDEON *********************/
