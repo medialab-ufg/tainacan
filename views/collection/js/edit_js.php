@@ -10,6 +10,7 @@
 
         $("#button_save_and_next").click(function(){
             $("#submit_form_edit_collection").submit();
+            $("#tainacan-breadcrumbs").show()
         });
 
         if ($('#open_wizard').val() == 'true') {
@@ -57,6 +58,7 @@
                     showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Configuration saved successfully!', 'tainacan') ?>', 'success');
                     if (elem.save_and_next && elem.save_and_next == 'true') {
                         showTaxonomyZone('<?php echo get_template_directory_uri() ?>');
+                        change_breadcrumbs_title('<?php _e('Categories', 'tainacan') ?>');
                         //showPropertiesAndFilters('<?php echo get_template_directory_uri() ?>');
                     } else {
                         if (elem.is_moderator) {

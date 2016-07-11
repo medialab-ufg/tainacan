@@ -44,7 +44,42 @@
             });
             e.preventDefault();
         });
+        // Submissao do form de importacao   
+        $('#import_taxonomy_submit').submit(function (e) {
+            e.preventDefault();
+            $("#modal_import_taxonomy").modal('hide');
+            $('#modalImportMain').modal('show');
+            $.ajax({
+                url: src + '/controllers/category/category_controller.php',
+                type: 'POST',
+                data: new FormData(this),
+                processData: false,
+                contentType: false
+            }).done(function (result) {
+                $('#modalImportMain').modal('hide');
+                $('.dropdown-toggle').dropdown();
+                elem_first = jQuery.parseJSON(result);
+                if (elem_first) {
+                    showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
+                    showTaxonomyZone(src);
+                } else {
+                    showAlertGeneral('<?php _e('Error', 'tainacan') ?>', '<?php _e('Unformated xml', 'tainacan') ?>', 'error');
+                }
+
+            });
+            e.preventDefault();
+        });
     });
+    /**
+     ****************************************************************************
+     ************************* Importar Taxonomia ************************
+     ****************************************************************************
+     **/
+    function show_modal_import_taxonomy(id, name) {
+        $("#import_taxonomy_root_category_id").val(id);
+        $("#import_taxonomy_title").text(name);
+        $("#modal_import_taxonomy").modal('show');
+    } 
     /**
      ****************************************************************************
      ************************* FUNCOES PARA AREA DE CRIACAO DE TAXONOMIAS ************************

@@ -61,8 +61,9 @@ $view_helper = new CategoryHelper;
                     </center>    
                 </div>
                 <button type="button"
-                    class="col-md-2 btn btn-default label-button"
-                    >
+                        class="col-md-2 btn btn-default label-button"
+                        onclick="show_modal_import_taxonomy('<?php echo get_post_meta($collection_id, 'socialdb_collection_object_type', true); ?>', '<?php echo $view_helper->get_category_root_name($collection_id) ?>')"
+                        >
                     <?php _e('Import Taxonomy','tainacan') ?>
                 </button>
             </div>
@@ -87,6 +88,33 @@ $view_helper = new CategoryHelper;
                     class="btn btn-primary pull-right margin-buttons" >
                 <?php _e('Save & Next', 'tainacan'); ?>
             </button>    
+        </form>
+    </div>
+</div>
+<!-- modal import taxonomy -->
+<div class="modal fade" id="modal_import_taxonomy"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog modal-lg">
+        <form method="post" id="import_taxonomy_submit"
+              enctype="multipart/form-data">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4> <?php _e('Import Taxonomy in ', 'tainacan') ?>&nbsp;<span id='import_taxonomy_title'></span></h4>
+                </div>    
+                <div class="row col-md-12" style="margin: 7px;">
+                    <div class="form-group ">
+                        <label for="input_file_import" ><?php _e('Send the xml file ', 'tainacan') ?></label>
+                        <input required="required" id="input_file_import" class="btn btn-default" type="file" name="xml"/>
+                    </div>
+                </div> 
+                <input name="operation" class="btn btn-default" type="hidden" value="insert_hierarchy"/>
+                <input name="root_category_id" id='import_taxonomy_root_category_id' type="hidden" value=""/>
+                <input name="collection_id" class="btn btn-default" type="hidden" value="" id="collection_id_hierarchy_import"/>
+                <div class="modal-footer">
+                    <input class="btn btn-primary pull-right" type="submit" value="<?php echo __('Send File', 'tainacan'); ?>"/>
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal"><?php echo __('Close', 'tainacan'); ?></button>
+                </div> 
+            </div>
         </form>
     </div>
 </div>

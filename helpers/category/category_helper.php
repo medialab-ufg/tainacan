@@ -14,6 +14,26 @@ class CategoryHelper extends ViewHelper {
         return ($id)?get_term_by('id', $id, 'socialdb_category_type')->name:'';
     }
     
+    /** 
+    * function getChildren() 
+    * receive ((int,string) parent) 
+    * Return the children of the especif parent 
+    * Author: Eduardo 
+    **/
+
+    public function getChildren($parent, $orderby = 'tt.count DESC,t.name ASC') {
+        global $wpdb;
+        $wp_term_taxonomy = $wpdb->prefix . "term_taxonomy";
+        $wp_terms = $wpdb->prefix . "terms";
+        $wp_taxonomymeta = $wpdb->prefix . "termmeta";
+        $query = "
+			SELECT * FROM $wp_terms t
+			INNER JOIN $wp_term_taxonomy tt ON t.term_id = tt.term_id
+				WHERE tt.parent = {$parent} ORDER BY $orderby  
+		";
+        return $wpdb->get_results($query);
+    }
+    
     public function inserted_children($collection_id,$term_id = 0,$string = '') {
         if($term_id===0){
             $root = true;
@@ -22,12 +42,12 @@ class CategoryHelper extends ViewHelper {
              $root = false;
         }
         //$termchildren = get_term_children( (int)$term_id, 'socialdb_category_type' );
-        $termchildren = get_term_children( (int)$term_id, 'socialdb_category_type' );
+        $termchildren = $this->getChildren((int)$term_id);
         if($termchildren&&!empty($termchildren)):
             $class_root = ($root)? 'class="root_ul"' : '';
             $string .= '<ul '.$class_root.' >';
             foreach ( $termchildren as $child ) {
-                    $term = get_term_by( 'id', $child, 'socialdb_category_type' );
+                    $term =  $child;
                     if($term->parent!=$term_id){
                         continue;
                     }
