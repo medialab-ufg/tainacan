@@ -6,7 +6,7 @@
         //// setando o valor da colecao no formulario
         $('#collection_id_hierarchy_import').val($('#collection_id').val());
         showCategoryDynatree(src);//mostra o dynatree
-<?php // Submissao do form de importacao   ?>
+        // Submissao do form de importacao   
         $('#import_taxonomy_submit').submit(function (e) {
             e.preventDefault();
             $("#modal_import_taxonomy").modal('hide');

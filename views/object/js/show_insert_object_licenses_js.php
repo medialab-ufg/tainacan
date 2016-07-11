@@ -24,6 +24,12 @@
             $('#list_licenses_items').hide();
             $('#core_validation_license').val('true');
         }
+        
+        $('input:radio[name="object_license"]').change(function() {
+            $('#core_validation_license').val('true');
+            validate_all_fields();
+            set_field_valid('license','core_validation_license')
+        });
     });
   
 </script>

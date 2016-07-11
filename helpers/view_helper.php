@@ -258,14 +258,19 @@ class ViewHelper {
                         <h4> 1. <?php _e('Configurations', 'tainacan')?> </h4>
                     </a>
                 </li>
-                <li class="col-md-2 <?php $this->is_current($current_step,'metadata'); ?> metadata">
+                <li class="col-md-2 <?php $this->is_current($current_step,'categories'); ?> categories">
+                    <a onclick="showTaxonomyZone('<?php echo $path ?>');">
+                        <h4> 2. <?php _e('Categories', 'tainacan')?> </h4>
+                    </a>
+                </li>
+                <li class="col-md-3 <?php $this->is_current($current_step,'metadata'); ?> metadata">
                     <a onclick="showPropertiesAndFilters('<?php echo $path ?>');" class="config-section-header">
-                        <h4> 2. <?php _e('Metadata and Filters', 'tainacan')?> </h4>
+                        <h4> 3. <?php _e('Metadata and Filters', 'tainacan')?> </h4>
                     </a>
                 </li>
                 <li class="col-md-2 <?php $this->is_current($current_step,'layout'); ?> layout">
                     <a onclick="showLayout('<?php echo $path ?>');">
-                        <h4> 3. <?php _e('Layout', 'tainacan')?> </h4>
+                        <h4> 4. <?php _e('Layout', 'tainacan')?> </h4>
                     </a>
                 </li>
             </ul>

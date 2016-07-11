@@ -173,8 +173,8 @@ global $config;
                 <input name="root_category_id" id='import_taxonomy_root_category_id' type="hidden" value=""/>
                 <input name="collection_id" class="btn btn-default" type="hidden" value="" id="collection_id_hierarchy_import"/>
                 <div class="modal-footer">
-                    <input class="btn btn-default" type="submit" value="Send File"/>
-                    <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo __('Close', 'tainacan'); ?></button>
+                    <input class="btn btn-primary pull-right" type="submit" value="Send File"/>
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal"><?php echo __('Close', 'tainacan'); ?></button>
                 </div> 
             </div>
         </form>
