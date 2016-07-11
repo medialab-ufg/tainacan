@@ -1,13 +1,11 @@
-<div class="col-md-2 home-back-settings">
-    </br>
+<span class=" home-back-settings">
     <a href="<?php echo bloginfo('home') ?>" class="btn btn-default pull-right back-main-page">
         <?php _e('Back to Home Page','tainacan'); ?>
     </a>
-</div>
+</span>
 
-<div class="col-md-2 back-settings">
-    </br>
+<span class="back-settings">
     <button onclick="backToMainPage();" class="btn btn-default pull-right back-main-page">
         <?php _e('Back to collection','tainacan'); ?>
     </button>
-</div>
+</span>
