@@ -156,12 +156,15 @@ a.collection-thumb {
 		background: white;
 		border-radius: 2px;
 		margin: 1.5% 1.5% 0.2% 0;
-		height: 165px;
+		height: 190px;
 		padding: 10px;
 
 		.item-info {
 			.colFoto {
-				min-height: 150px;
+				min-height: 160px;
+				img {
+					height: 160px;
+				}
 			}
 
 			.item-meta {
@@ -172,6 +175,9 @@ a.collection-thumb {
 			.item-meta-box {
 				padding-left: 0;
 				margin-left: 0;
+				position: relative;
+				height: 160px;
+
 				a {
 					font-weight: bolder;
 					color: black;
@@ -179,7 +185,27 @@ a.collection-thumb {
 				h4 {
 					margin: 0 0 3px 0;
 				}
-			}
+				.item-description {
+					overflow: hidden;
+					max-height: 35px;
+					height: 35px;
+				}
+				.item-creation {
+					text-align: right;
+				}
+				.author-created {
+					margin-top: 5px;
+					margin-bottom: 5px;
+					.author {
+						padding-right: 0;
+					}
+				}
+				.show-item-metadata {
+					position: absolute;
+					bottom: 0;
+					width: 95%;
+				}
+			} // .item-meta-box
 		}
 
 		.editing-item {
@@ -195,7 +221,11 @@ a.collection-thumb {
 
 				li {
 					float:right;
-					margin: 4px !important;
+					margin-left: 4px !important;
+
+					&:last-child {
+						margin-right: 0 !important;
+					}
 
 					@include edit-item-button-colors();
 					a {  font-size: 1.3em;  }

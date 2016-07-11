@@ -22,12 +22,21 @@
                     <h4 class="item-display-title">
                         <a href="<?php echo get_collection_item_href($collection_id); ?>"
                            onclick="<?php get_item_click_event($collection_id, get_the_ID()) ?>">
-                               <?php the_title(); ?>
+                               <?php echo wp_trim_words( get_the_title(), 13 ); ?>
                         </a>
                     </h4>
-                    <div class="item-description"><?php echo wp_trim_words(get_the_content(), 8); ?></div>
-                    <div class="item-author"><?php echo "<strong>" . __('Created by: ', 'tainacan') . "</strong>" . get_the_author(); ?></div>
-                    <div class="item-creation"><?php echo "<strong>" . __('Created at: ', 'tainacan') . "</strong>" . get_the_date('d/m/Y'); ?></div>
+                    <div class="item-description"><?php echo wp_trim_words(get_the_content(), 16); ?></div>
+                    
+                    <div class="row author-created">
+                        <div class="col-md-6 author">
+                            <div class="item-author"><?php echo "<strong>" . __('Created by: ', 'tainacan') . "</strong>" . wp_trim_words( get_the_author(), 2); ?></div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="item-creation"><?php echo "<strong>" . __('Created at: ', 'tainacan') . "</strong>" . get_the_date('d/m/Y'); ?></div>
+                        </div>
+                    </div>
+
+
 
                     <?php if (get_option('collection_root_id') != $collection_id): ?>
                         <button id="show_rankings_<?php echo get_the_ID() ?>" onclick="show_value_ordenation('<?php echo get_the_ID() ?>')"
@@ -211,7 +220,7 @@
 
                 </div>
 
-                <div class="">
+                <div class="show-item-metadata">
                     <!-- CATEGORIES AND TAGS -->
                     <input type="hidden" value="<?php echo get_the_ID() ?>" class="object_id">
                     <button id="show_classificiations_<?php echo get_the_ID() ?>" style="width:100%" class="btn btn-default"
