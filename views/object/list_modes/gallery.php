@@ -109,26 +109,7 @@
                              </a>
                          </li>
                      <?php endif; ?>
-                     <!-- TAINACAN:  modal padrao bootstrap para reportar abuso -->
-                     <div class="modal fade" id="modal_delete_object<?php echo get_the_ID() ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                         <div class="modal-dialog">
-                             <div class="modal-content">
-                                 <div class="modal-header">
-                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                     <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-trash"></span>&nbsp;<?php _e('Report Abuse', 'tainacan'); ?></h4>
-                                 </div>
-                                 <div class="modal-body">
-                                     <?php echo __('Describe why the object: ', 'tainacan') . get_the_title() . __(' is abusive: ', 'tainacan'); ?>
-                                     <textarea id="observation_delete_object<?php echo get_the_ID() ?>" class="form-control"></textarea>
-                                 </div>
-                                 <div class="modal-footer">
-                                     <button type="button" class="btn btn-default" data-dismiss="modal"><?php _e('Close', 'tainacan'); ?></button>
-                                     <button onclick="report_abuse_object('<?= __('Delete Object') ?>', '<?= __('Are you sure to remove the object: ', 'tainacan') . get_the_title() ?>', '<?php echo get_the_ID() ?>', '<?= mktime() ?>')" type="button" class="btn btn-primary"><?php echo __('Delete', 'tainacan'); ?></button>
-                                 </div>
-                                 </form>
-                             </div>
-                         </div>
-                     </div>
+
                  <?php endif; ?>
                  <!--li><a href=""><span class="glyphicon glyphicon-comment"></span></a></li-->
              <?php else: ?>
@@ -146,26 +127,6 @@
                              <span class="glyphicon glyphicon-warning-sign"></span>
                          </a>
                      </li>
-                     <!-- TAINACAN:  modal padrao bootstrap para reportar abuso -->
-                     <div class="modal fade" id="modal_delete_object<?php echo get_the_ID() ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                         <div class="modal-dialog">
-                             <div class="modal-content">
-                                 <div class="modal-header">
-                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                     <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-trash"></span>&nbsp;<?php _e('Report Abuse', 'tainacan'); ?></h4>
-                                 </div>
-                                 <div class="modal-body">
-                                     <?php echo __('Describe why the collection: ', 'tainacan') . get_the_title() . __(' is abusive: ', 'tainacan'); ?>
-                                     <textarea id="observation_delete_collection<?php echo get_the_ID() ?>" class="form-control"></textarea>
-                                 </div>
-                                 <div class="modal-footer">
-                                     <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo __('Close', 'tainacan'); ?></button>
-                                     <button onclick="report_abuse_collection('<?php _e('Delete Collection', 'tainacan') ?>', '<?php _e('Are you sure to remove the collection: ', 'tainacan') . get_the_title() ?>', '<?php echo get_the_ID() ?>', '<?= mktime() ?>', '<?php echo get_option('collection_root_id') ?>')" type="button" class="btn btn-primary"><?php echo __('Delete', 'tainacan'); ?></button>
-                                 </div>
-                                 </form>
-                             </div>
-                         </div>
-                     </div>
                  <?php endif; ?>
              <?php endif; ?>
          </ul>

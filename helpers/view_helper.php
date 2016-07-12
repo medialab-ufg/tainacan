@@ -296,4 +296,14 @@ class ViewHelper {
         return $_modal_header;
     }
 
+    public function render_modal_footer($button_action="", $title) {
+        $close_string = __('Close', 'tainacan');
+        $_modal_footer = "<div class='modal-footer'>";
+        $_modal_footer .= "<button type='button' class='btn btn-default' data-dismiss='modal'> $close_string </button>";
+        $_modal_footer .= "<button type='button' class='btn btn-primary' onclick='$button_action'>$title</button>";
+        $_modal_footer .= "</div>";
+
+        return $_modal_footer;
+    }
+
 } // ViewHelper

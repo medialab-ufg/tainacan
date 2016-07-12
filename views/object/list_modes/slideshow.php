@@ -2,7 +2,6 @@
     <style type="text/css"> #collection-slideShow .modal-dialog { margin-top: 0 !important; } </style>
 <?php }
 
-$viewHelper = new ViewHelper();
 $title_prefix = __("Collection", "tainacan");
 ?>
 <div class="col-md-12 no-padding slideshow-view-container top-div" <?php if ($collection_list_mode != "slideshow"): ?> style="display: none" <?php endif ?> >
