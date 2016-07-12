@@ -21,7 +21,7 @@ class ObjectModel extends Model {
     public $collection_model;
     public $user_model;
 
-    public function ObjectModel() {
+    public function __construct() {
         $this->collection_model = new CollectionModel();
         $this->user_model = new UserModel();
     }

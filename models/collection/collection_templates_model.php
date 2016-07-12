@@ -21,6 +21,10 @@ class CollectionTemplatesModel extends CollectionModel {
                 continue;
             
             if($fileInfo->getFilename()){
+                if(!is_file($dir.'/'.$fileInfo->getFilename().'/package/metadata/administrative_settings.xml')){
+                    continue;
+                } 
+                
                $xml = simplexml_load_file($dir.'/'.$fileInfo->getFilename().'/package/metadata/administrative_settings.xml'); 
                if(is_file($dir.'/'.$fileInfo->getFilename().'/package/metadata/thumbnail.png')){
                     $thumbnail_id = get_template_directory_uri().'/data/templates'.'/'.$fileInfo->getFilename().'/package/metadata/thumbnail.png';

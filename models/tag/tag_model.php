@@ -12,7 +12,7 @@ include_once (dirname(__FILE__).'../../user/user_model.php');
 
 class TagModel extends Model{
         var $parent;
-        public function TagModel(){
+        public function __construct(){
             $this->parent = get_term_by('name','socialdb_tag','socialdb_tag_type');
         }
 	/**
