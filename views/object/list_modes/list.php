@@ -14,7 +14,7 @@
             </a>
         </h4>
     </div>
-
+    
     <div class="col-md-3 author-created">
         <div class="item-author"><?php echo "<strong>" . __('Created by: ', 'tainacan') . "</strong>" . get_the_author(); ?></div>
         <div class="item-creation"><?php echo "<strong>" . __('Created at: ', 'tainacan') . "</strong>" . get_the_date('d/m/Y'); ?></div>
@@ -24,7 +24,7 @@
         <?php if (get_option('collection_root_id') != $collection_id): ?>
             <button id="show_rankings_list_<?php echo $curr_id ?>" onclick="show_value_ordenation('<?php echo $curr_id ?>', '#rankings_list_', '#show_rankings_list_')"
                     class="btn btn-default"><?php _e('Show rankings', 'tainacan'); ?></button>
-
+            
             <!-- TAINACAN: container(AJAX) que mostra o html com os rankings do objeto-->
             <div id="rankings_list_<?php echo $curr_id ?>" class="rankings-container"></div>
         <?php endif; ?>
@@ -33,7 +33,6 @@
     <div class="col-md-2">
 
         <ul class="item-funcs right">
-
             <input type="hidden" class="post_id" name="post_id" value="<?= $curr_id ?>">
             <li>
                 <a id="modal_network<?php echo $curr_id; ?>" onclick="showModalShareNetwork(<?php echo $curr_id; ?>)">
@@ -45,7 +44,6 @@
             
         </ul>
         
-        <!-- TAINACAN: script para disparar o evento que mostra os rankings -->
         <script>
             $('#show_rankings_list_<?php echo $curr_id ?>').hide().trigger('click');
         </script>

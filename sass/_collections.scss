@@ -150,7 +150,7 @@ a.collection-thumb {
 
 	li {
 		float:right;
-		margin-left: 4px !important;
+		margin-left: 10px !important;
 
 		&:last-child {
 			margin-right: 0 !important;
@@ -201,6 +201,8 @@ a.collection-thumb {
 				}
 				h4 {
 					margin: 0 0 3px 0;
+					height: 40px;
+					overflow: hidden;
 				}
 				.item-description {
 					overflow: hidden;
@@ -213,6 +215,8 @@ a.collection-thumb {
 				.author-created {
 					margin-top: 5px;
 					margin-bottom: 5px;
+					font-size: 11px;
+
 					.author {
 						padding-right: 0;
 					}
@@ -230,16 +234,20 @@ a.collection-thumb {
 
 			.rankings-container {
 				float: left;
+				.single-binaries {
+					margin-top: -5px;
+				}
 			}
 
 			.item-redesocial {
 				position: relative;
 				float: right;
 				margin-top: -5px;
+				margin-left: 5px !important;
 
 				div {
 					font-size: 1.2em;
-					text-indent: 5px;
+					//text-indent: 5px;
 				}
 
 				@include edit-item-button-colors();
@@ -367,11 +375,11 @@ a.collection-thumb {
 
 		img {
 			display: inline-block !important;
-			max-width: 170px !important;
+			width: 200px !important;
 		}
 
 		.item-thumb {
-			height: 170px;
+			height: 200px;
 		}
 
 		.title-container {
@@ -380,11 +388,16 @@ a.collection-thumb {
 
 			h5 {
 				overflow: hidden;
+				height: 15px;
 
 				a {
 					color: black;
 					font-weight: bolder;
 				}
+			}
+			.gallery-metadata {
+				padding-right: 25px;
+				padding-left: 25px;
 			}
 		}
 

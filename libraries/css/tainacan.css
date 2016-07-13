@@ -870,7 +870,7 @@ a.collection-thumb img {
 }
 .item-funcs li {
   float: right;
-  margin-left: 4px !important;
+  margin-left: 10px !important;
 }
 .item-funcs li:last-child {
   margin-right: 0 !important;
@@ -924,6 +924,8 @@ a.collection-thumb img {
 }
 #cards-viewMode .item-colecao .item-info .item-meta-box h4 {
   margin: 0 0 3px 0;
+  height: 40px;
+  overflow: hidden;
 }
 #cards-viewMode .item-colecao .item-info .item-meta-box .item-description {
   overflow: hidden;
@@ -936,6 +938,7 @@ a.collection-thumb img {
 #cards-viewMode .item-colecao .item-info .item-meta-box .author-created {
   margin-top: 5px;
   margin-bottom: 5px;
+  font-size: 11px;
 }
 #cards-viewMode .item-colecao .item-info .item-meta-box .author-created .author {
   padding-right: 0;
@@ -951,14 +954,17 @@ a.collection-thumb img {
 #cards-viewMode .item-colecao .editing-item .rankings-container {
   float: left;
 }
+#cards-viewMode .item-colecao .editing-item .rankings-container .single-binaries {
+  margin-top: -5px;
+}
 #cards-viewMode .item-colecao .editing-item .item-redesocial {
   position: relative;
   float: right;
   margin-top: -5px;
+  margin-left: 5px !important;
 }
 #cards-viewMode .item-colecao .editing-item .item-redesocial div {
   font-size: 1.2em;
-  text-indent: 5px;
 }
 #cards-viewMode .item-colecao .editing-item .item-redesocial a {
   color: #79a6ce;
@@ -1062,10 +1068,10 @@ a.collection-thumb img {
 }
 #gallery-viewMode .gallery-view-container img {
   display: inline-block !important;
-  max-width: 170px !important;
+  width: 200px !important;
 }
 #gallery-viewMode .gallery-view-container .item-thumb {
-  height: 170px;
+  height: 200px;
 }
 #gallery-viewMode .gallery-view-container .title-container {
   margin-top: 10px;
@@ -1073,10 +1079,15 @@ a.collection-thumb img {
 }
 #gallery-viewMode .gallery-view-container .title-container h5 {
   overflow: hidden;
+  height: 15px;
 }
 #gallery-viewMode .gallery-view-container .title-container h5 a {
   color: black;
   font-weight: bolder;
+}
+#gallery-viewMode .gallery-view-container .title-container .gallery-metadata {
+  padding-right: 25px;
+  padding-left: 25px;
 }
 
 /*

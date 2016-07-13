@@ -71,7 +71,7 @@ include_once ('js/list_ranking_js.php');
             <?php endif; ?>
         </div>  
          <!-- TAINACAN: mostra os rankings do tipo like, icones do glyphicons  -->
-        <div id="single_binaries_<?php echo $object_id; ?>">
+        <div id="single_binaries_<?php echo $object_id; ?>" class="single-binaries">
             <?php if (isset($binaries)): ?>    
                 <?php foreach ($binaries as $binary) { ?>
                     <!--span><b><?php echo $binary['name']; ?></b></span>&nbsp;<br-->

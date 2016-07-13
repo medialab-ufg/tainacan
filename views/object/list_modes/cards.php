@@ -45,12 +45,10 @@
                                 <!-- TAINACAN: hidden com id do item -->
                                 <input type="hidden" class="post_id" name="post_id" value="<?= get_the_ID() ?>">
 
-                                <li>
-                                    <div class="item-redesocial">
-                                        <a id="modal_network<?php echo get_the_ID(); ?>" onclick="showModalShareNetwork(<?php echo get_the_ID(); ?>)">
-                                            <div style="cursor:pointer;" data-icon="&#xe00b;"></div>
-                                        </a>
-                                    </div>
+                                <li class="item-redesocial">
+                                    <a id="modal_network<?php echo get_the_ID(); ?>" onclick="showModalShareNetwork(<?php echo get_the_ID(); ?>)">
+                                        <div style="cursor:pointer;" data-icon="&#xe00b;"></div>
+                                    </a>
                                 </li>
 
                                 <?php include "edit_btns.php"; ?>
