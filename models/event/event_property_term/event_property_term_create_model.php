@@ -101,7 +101,7 @@ class EventPropertyTermCreate extends EventModel {
 
         //$data['results'] = $result;
         $data['new_property_id'] = $result->property_id;
-
+        $data['socialdb_property_term_root'] = $result->socialdb_property_term_root;
         // verifying if is everything all right
         if ($result->success!=='false') {
             $this->set_approval_metas($data['event_id'], $data['socialdb_event_observation'], $automatically_verified);

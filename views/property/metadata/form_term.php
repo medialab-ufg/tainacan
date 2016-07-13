@@ -19,7 +19,7 @@
             <div class="modal-body">
                 <form id="submit_form_property_term" onkeypress="return event.keyCode != 13;" >
                     <div>
-                        <div class="category-fit-column">
+                        <div >
                             <div class="metadata-common-fields">
                                 <div class="create_form-group form-group">
                                     <label for="property_term_name"><?php _e('Property term name','tainacan'); ?></label>
@@ -61,7 +61,7 @@
                             </div>
                             <hr class="metadata-common-fields">
                             <!--------- A categoria raiz do metadado -------------->
-                            <div class="category-fit-column right metadata-common-fields">
+                            <div class="right metadata-common-fields">
                                 <label for="socialdb_property_term_root_category">
                                     <?php _e('Vinculate Category','tainacan'); ?>
                                 </label>

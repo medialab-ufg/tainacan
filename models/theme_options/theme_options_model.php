@@ -202,14 +202,22 @@ class ThemeOptionsModel extends Model {
     }
 
     function update_configuration($data) {
+        $reload = false;
         $data['socialdb_repository_permissions'] = ['socialdb_collection_permission_create_collection' => $data['socialdb_collection_permission_create_collection'], 'socialdb_collection_permission_delete_collection' => $data['socialdb_collection_permission_delete_collection']];
         $data['repository_content'] = strip_tags($data['repository_content']);
-
+   
         /*         * ***** */
 
         update_option('blogname', $data['repository_title']);
         update_option('blogdescription', $data['repository_content']);
         update_option('socialdb_repository_permissions', $data['socialdb_repository_permissions']);
+        if($data['tainacan_module_activate']&&$data['tainacan_module_activate']!='default'){
+             update_option('tainacan_module_activate', $data['tainacan_module_activate']);
+             $reload = true;
+        }else{
+            update_option('tainacan_module_activate', '');
+             $reload = false;
+        }
 
         /*         * ***** */
 
@@ -249,6 +257,7 @@ class ThemeOptionsModel extends Model {
         $data['title'] = __("Sucess", 'tainacan');
         $data['msg'] = __("Options successfully updated!", 'tainacan');
         $data['type'] = "success";
+        $data['reload'] = $reload;
 
 
         return json_encode($data);

@@ -134,7 +134,7 @@ class CollectionImportModel extends CollectionModel {
      */
    public function import_xml_taxonomies($dir) {
        //$categories_id = [];
-       foreach (new DirectoryIterator($dir) as $fileInfo) {
+        foreach (new DirectoryIterator($dir) as $fileInfo) {
                 if($fileInfo->isDot()) 
                     continue;
                 $xml = simplexml_load_file($fileInfo->getPath().'/'.$fileInfo->getFilename());

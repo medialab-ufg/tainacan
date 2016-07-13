@@ -15,6 +15,9 @@
                 contentType: false
             }).done(function (result) {
                 elem = jQuery.parseJSON(result);
+                if(elem.reload&&elem.reload===true){
+                    window.location = '<?php echo site_url(); ?>'
+                }
                 showAlertGeneral(elem.title, elem.msg, elem.type);
                 showRepositoryConfiguration(src);
                 get_collections_template($('#src').val());  
