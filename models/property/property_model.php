@@ -58,6 +58,7 @@ class PropertyModel extends Model {
             if($data['socialdb_property_vinculate_category']=='create'&&$data['socialdb_property_new_category']){
                 $category_id = $this->add_category_root_property_term($data['socialdb_property_new_category']);
                 if($category_id):
+                    $data['socialdb_property_term_root'] = $category_id;
                     $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_term_root',$category_id);
                     $html = str_get_html($data['socialdb_property_new_taxonomy']);
                     foreach($html->find( '.root_ul', 0)->children() as $li){
@@ -1039,7 +1040,8 @@ class PropertyModel extends Model {
      */
     public function add_taxonomy_property_term($li,$parent_id = 0) {
         $name = $li->children(0)->plaintext;
-        $array = socialdb_insert_term(trim($name), 'socialdb_category_type', $parent_id, sanitize_title(remove_accent(trim($li->plaintext))).'_'.  mktime());
+        $array = wp_insert_term(trim($name), 'socialdb_category_type', array('parent' => $parent_id,
+                    'slug' => sanitize_title(remove_accent(trim($li->plaintext))).'_'.  mktime()));
         $find = $li->find('ul',0);
         if($find){
             foreach($find->children() as $li_child){

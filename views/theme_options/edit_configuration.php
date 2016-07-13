@@ -1,8 +1,8 @@
 <?php
-include_once ('../../../../../wp-config.php');
-include_once ('../../../../../wp-load.php');
-include_once ('../../../../../wp-includes/wp-db.php');
 include_once ('js/edit_configuration_js.php');
+include_once(dirname(__FILE__) . '/../../helpers/view_helper.php');
+include_once(dirname(__FILE__) . '/../../helpers/repository/repository_helper.php');
+$view_helper = new RepositoryHelper();
 ?>
 <style>
     .container-repository{
@@ -66,7 +66,16 @@ include_once ('js/edit_configuration_js.php');
         <div class="form-group">
             <label for="repository_operation"><?php _e('Repository operation','tainacan'); ?></label>  
             <br>
-            <input type="radio" value="default">&nbsp;<?php _e('Default','tainacan') ?> 
+            <input <?php echo (!$view_helper->operation||$view_helper->operation=='')? 'checked="checked"':'' ?> 
+                    type="radio"
+                    name="tainacan_module_activate"
+                    value="default">&nbsp;<?php _e('Repository','tainacan') ?> <br>
+            <?php foreach ($view_helper->get_available_modules() as $module): ?>
+            <input <?php echo ($view_helper->operation==$module)? 'checked="checked"':'' ?> 
+                    type="radio" 
+                    name="tainacan_module_activate"
+                    value="<?php echo $module ?>">&nbsp;<?php _e($module,'tainacan') ?> <br>
+            <?php endforeach; ?>
         </div>  
         <!---------------- Colecoes templates --------------------------------->
         <div class="form-group">
