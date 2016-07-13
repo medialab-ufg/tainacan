@@ -144,6 +144,23 @@ a.collection-thumb {
 	}
 } // .viewMode-control
 
+.item-funcs {
+	// float: right;
+	padding: 0;
+
+	li {
+		float:right;
+		margin-left: 4px !important;
+
+		&:last-child {
+			margin-right: 0 !important;
+		}
+
+		@include edit-item-button-colors();
+		a {  font-size: 1.3em;  }
+	}
+}
+
 /*
 ****************************************
 **************** CARD MODE *************
@@ -213,23 +230,6 @@ a.collection-thumb {
 
 			.rankings-container {
 				float: left;
-			}
-
-			.item-funcs {
-				// float: right;
-				padding: 0;
-
-				li {
-					float:right;
-					margin-left: 4px !important;
-
-					&:last-child {
-						margin-right: 0 !important;
-					}
-
-					@include edit-item-button-colors();
-					a {  font-size: 1.3em;  }
-				}
 			}
 
 			.item-redesocial {
@@ -326,6 +326,10 @@ a.collection-thumb {
 		}
 		&:last-child {
 
+		}
+
+		.author-created {
+			font-size: 12px;
 		}
 
 	}

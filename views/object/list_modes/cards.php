@@ -41,14 +41,6 @@
                             <!-- TAINACAN: container(AJAX) que mostra o html com os rankings do objeto-->
                             <div id="rankings_<?php echo get_the_ID() ?>" class="rankings-container"></div>
 
-                            <?php /*
-                            <div id="popover_content_wrapper<?php echo get_the_ID(); ?>" class="hide flex-box eba">
-                                <a target="_blank" href="https://twitter.com/intent/tweet?url=<?php echo get_the_permalink($collection_id) . '?item=' . get_post(get_the_ID())->post_name; ?>&amp;text=<?php echo htmlentities(get_the_title()); ?>&amp;via=socialdb"><div data-icon="&#xe005;"></div></a>
-                                <a onclick="redirect_facebook('<?php echo get_the_ID() ?>');" href="#"><div data-icon="&#xe021;"></div></a>
-                                <a target="_blank" href="https://plus.google.com/share?url=<?php echo get_the_permalink($collection_id) . '?item=' . get_post(get_the_ID())->post_name; ?>"><div data-icon="&#xe01b;"></div></a>
-                            </div>
-                             */ ?>
-
                             <ul class="item-funcs col-md-5 right">
                                 <!-- TAINACAN: hidden com id do item -->
                                 <input type="hidden" class="post_id" name="post_id" value="<?= get_the_ID() ?>">
@@ -61,62 +53,15 @@
                                     </div>
                                 </li>
 
-                                <li style="display:none;">
-                                    <div class="item-redesocial">
-                                        <a id="popover_network<?php echo get_the_ID(); ?>" rel="popover" data-placement="left"
-                                           onclick="showPopover(<?php echo get_the_ID(); ?>)">
-                                            <div style="cursor:pointer;" data-icon="&#xe00b;"></div>
-                                        </a>
-                                    </div>
-                                </li>
+                                <?php include "edit_btns.php"; ?>
 
-                                <?php if (get_option('collection_root_id') != $collection_id): ?>
-                                    <!--------------------------- DELETE AND EDIT OBJECT------------------------------------------------>
-                                    <?php if ($is_moderator || get_post(get_the_ID())->post_author == get_current_user_id()): ?>
-                                        <li>
-                                            <a onclick="delete_object('<?= __('Delete Object', 'tainacan') ?>', '<?= __('Are you sure to remove the object: ', 'tainacan') . get_the_title() ?>', '<?php echo get_the_ID() ?>', '<?= mktime() ?>')" style="cursor: pointer;" class="remove">
-                                                <span class="glyphicon glyphicon-trash"></span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a style="cursor: pointer;" onclick="edit_object_item('<?php echo get_the_ID() ?>')">
-                                                <span class="glyphicon glyphicon-pencil"></span>
-                                            </a>
-                                        </li>
-                                    <?php else: ?>
-                                        <?php
-                                        // verifico se eh oferecido a possibilidade de remocao do objeto vindulado
-                                        if (verify_allowed_action($collection_id, 'socialdb_collection_permission_delete_object')): ?>
-                                            <li>
-                                                <a onclick="show_report_abuse('<?php echo get_the_ID() ?>')" href="#" class="report_abuse">
-                                                    <span class="glyphicon glyphicon-warning-sign"></span>
-                                                </a>
-                                            </li>
-                                        <?php endif; ?>
-                                    <?php endif; ?>
-                                <?php else: ?>
-                                    <!-- TAINACAN: mostra o modal da biblioteca sweet alert para exclusao de uma colecao -->
-                                    <?php if ($is_moderator || get_post(get_the_ID())->post_author == get_current_user_id()): ?>
-                                        <li>
-                                            <a onclick="delete_collection('<?= __('Delete Object', 'tainacan') ?>', '<?= __('Are you sure to remove the collection: ', 'tainacan') . get_the_title() ?>', '<?php echo get_the_ID() ?>', '<?= mktime() ?>', '<?php echo get_option('collection_root_id') ?>')" href="#" class="remove">
-                                                <span class="glyphicon glyphicon-trash"></span>
-                                            </a>
-                                        </li>
-                                    <?php else: ?>
-                                        <li>
-                                            <a onclick="show_report_abuse('<?php echo get_the_ID() ?>')" href="#" class="report_abuse">
-                                                <span class="glyphicon glyphicon-warning-sign"></span>
-                                            </a>
-                                        </li>
-                                    <?php endif; ?>
-                                <?php endif; ?>
                             </ul>
 
                         </div> <!-- .editing-item -->
 
                         <!-- TAINACAN: script para disparar o evento que mostra os rankings -->
                         <script>
-                            $('#show_rankings_<?php echo get_the_ID() ?>').trigger('click');
+                            $('#show_rankings_<?php echo get_the_ID() ?>').hide().trigger('click');
                         </script>
                     <?php endif; ?>
 

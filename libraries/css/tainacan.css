@@ -865,6 +865,26 @@ a.collection-thumb img {
   opacity: 0.7;
 }
 
+.item-funcs {
+  padding: 0;
+}
+.item-funcs li {
+  float: right;
+  margin-left: 4px !important;
+}
+.item-funcs li:last-child {
+  margin-right: 0 !important;
+}
+.item-funcs li a {
+  color: #79a6ce;
+}
+.item-funcs li a:hover {
+  color: #929497;
+}
+.item-funcs li a {
+  font-size: 1.3em;
+}
+
 /*
 ****************************************
 **************** CARD MODE *************
@@ -930,25 +950,6 @@ a.collection-thumb img {
 }
 #cards-viewMode .item-colecao .editing-item .rankings-container {
   float: left;
-}
-#cards-viewMode .item-colecao .editing-item .item-funcs {
-  padding: 0;
-}
-#cards-viewMode .item-colecao .editing-item .item-funcs li {
-  float: right;
-  margin-left: 4px !important;
-}
-#cards-viewMode .item-colecao .editing-item .item-funcs li:last-child {
-  margin-right: 0 !important;
-}
-#cards-viewMode .item-colecao .editing-item .item-funcs li a {
-  color: #79a6ce;
-}
-#cards-viewMode .item-colecao .editing-item .item-funcs li a:hover {
-  color: #929497;
-}
-#cards-viewMode .item-colecao .editing-item .item-funcs li a {
-  font-size: 1.3em;
 }
 #cards-viewMode .item-colecao .editing-item .item-redesocial {
   position: relative;
@@ -1028,6 +1029,9 @@ a.collection-thumb img {
 }
 #list-viewMode .list-view-container:first-child {
   border-top: none;
+}
+#list-viewMode .list-view-container .author-created {
+  font-size: 12px;
 }
 #list-viewMode .item-thumb a img {
   max-width: 30px;
