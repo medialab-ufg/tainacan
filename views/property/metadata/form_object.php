@@ -61,6 +61,11 @@
                         <hr class="hr-style">
                     </div>
                     <div class="form-group">
+                        <label for="socialdb_event_property_tab"><?php _e('Select the tab','tainacan'); ?></label>
+                        <select class="socialdb_event_property_tab form-control" name="socialdb_event_property_tab">
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="use-filter"><?php _e('Use as a filter','tainacan'); ?></label>
                         <input type="checkbox" value="use_filter" name="property_data_use_filter" class="property_data_use_filter" />
                     </div>

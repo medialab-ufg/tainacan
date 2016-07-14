@@ -21,7 +21,7 @@ class PropertyModel extends Model {
     var $collectionModel;
     var $categoryModel;
 
-    public function PropertyModel() {
+    public function __construct() {
         $this->collectionModel = new CollectionModel();
         $this->categoryModel = new CategoryModel();
     }
@@ -1061,6 +1061,26 @@ class PropertyModel extends Model {
         return (isset($new_root_category['term_id']))?$new_root_category['term_id']:false;
         
     } 
-    
+    /**
+     * 
+     *  metodo que atualiza as abas de uma propriedade
+     * 
+     * function update_tab_organization($data)
+     * @param int $collection_id
+     * @param int $tab_id
+     * @param int $property_id
+     * @autor: Eduardo Humberto 
+     */
+    public function update_tab_organization($collection_id,$tab_id,$property_id) {
+        $array = get_post_meta($collection_id, 'socialdb_collection_update_tab_organization');
+        if($array && is_array($array)):
+            $array[$property_id] = $tab_id;
+        else:
+           $array = [];
+           $array[$property_id] = $tab_id;     
+        endif;
+        update_post_meta($collection_id, 'socialdb_collection_update_tab_organization',$array);
+    }
+
 
 }

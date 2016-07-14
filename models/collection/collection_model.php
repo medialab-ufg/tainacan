@@ -1,3 +1,4 @@
+
 <?php
 
 if (isset($_GET['by_function'])) {
@@ -16,7 +17,7 @@ require_once(dirname(__FILE__) . '../../mapping/mapping_model.php');
 
 class CollectionModel extends Model {
 
-    public function CollectionModel() {
+    public function __construct() {
         //  $this->propertymodel = new PropertyModel();
     }
 

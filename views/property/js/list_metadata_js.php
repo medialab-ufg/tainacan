@@ -506,6 +506,7 @@
     }
 
     function edit_metadata(id) {
+        list_tabs();
         $.ajax({
             url: $('#src').val() + '/controllers/property/property_controller.php',
             type: 'POST',
@@ -677,6 +678,7 @@
                 $.each(elem.property_data, function (idx, property) {
                     var current_id = property.id;
                     var current_search_widget = property.search_widget;
+                    var tab_property_id = (property.metas.socialdb_property_tab_id)? property.metas.socialdb_property_tab_id:false;
                     if(property.metas.socialdb_property_visibility&&property.metas.socialdb_property_visibility==='hide'){
                         return true;
                     }
@@ -700,7 +702,7 @@
                             button = '<span class="glyphicon glyphicon-trash no-edit"></span>';
                         }
                         //adiciona na listagem
-                        $('ul#metadata-container').append(
+                        $(get_property_tab_seletor(tab_property_id)).append(
                             '<li id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="root_category '+class_var+' ui-widget-content ui-corner-tr">' +
                             '<label '+style+'   class="title-pipe">' + property.name + '</label>' +
                             '<a onclick="edit_metadata(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
@@ -708,7 +710,7 @@
                             button + '</div></li>');
                     } else {
                         if ( $.inArray(property.type, ranking_types) == -1 ) {
-                            $('ul#metadata-container').append(
+                            $(get_property_tab_seletor(tab_property_id)).append(
                                 '<li id="meta-item-' + current_id + '" data-widget="' + current_search_widget + '" class="' + property.type + ' ui-widget-content ui-corner-tr">' +
                                 '<label class="title-pipe">' + property.name + '</label><div class="action-icons">' +
                                 '<a onclick="edit_metadata(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
@@ -982,6 +984,7 @@
     }
 
     function edit_object(id) {
+        list_tabs();
         $.ajax({
             url: $('#src').val() + '/controllers/property/property_controller.php',
             type: 'POST',
@@ -1207,6 +1210,7 @@
     get_menu_property('terms');
 
     function edit_term(id) {
+        list_tabs();
         $.ajax({
             url: $('#src').val() + '/controllers/property/property_controller.php',
             type: 'POST',
@@ -1455,7 +1459,7 @@
 
         $("#meta-voting span.ranking-action").text('<?php _e('Edit', 'tainacan') ?>');
         // $('#submit_form_ranking #range_form').html('');
-
+        list_tabs();
         $.ajax({
             type: "POST",
             url: src + "/controllers/ranking/ranking_controller.php",
@@ -2008,6 +2012,7 @@
      **/ 
     // mostra o modal da propriedade fixa
     function edit_fixed_property(id,name){
+         list_tabs();
         $('#property_fixed_id').val(id);
         $('#property_fixed_name').val(name);
         $('#modal_edit_fixed_property').modal('show');

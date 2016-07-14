@@ -1,5 +1,6 @@
 <?php
 include_once('../../helpers/view_helper.php');
+include_once('js/tabs_js.php');
 include_once ('js/list_metadata_js.php');
 
 $view_helper = new ViewHelper();
@@ -58,33 +59,53 @@ $array_visibility = ($meta&&$meta!=='') ? $meta : '';
                 <button onclick="backToMainPage();" id="btn_back_collection" class="btn btn-default pull-right white"><?php _e('Back to collection','tainacan') ?></button>
             </div>
         </div>
-
+        <?php $default_tab = get_post_meta($collection_id, 'socialdb_collection_default_tab', true) ?>
         <?php $selected_menu_style_id = get_post_meta( $collection_id, 'socialdb_collection_facet_' . $f_id . '_menu_style', true); ?>
-
-        <div class="ui-widget ui-helper-clearfix col-md-12" style="background: white">
-            <ul id="metadata-container" class="gallery ui-helper-reset ui-helper-clearfix connectedSortable">
-                <?php
-                foreach($view_helper->get_default_metadata() as $meta_id => $metadata):
-                    $title = __($metadata, 'tainacan'); ?>
-                    <li id='<?php echo $meta_id ?>' data-widget='tree' class='ui-widget-content ui-corner-tr fixed-meta'>
-                        <label class='title-pipe'> <?php echo $title ?></label>
-                        <div class='action-icons default-metadata'>
-                            <a onclick='edit_filter(this)' class='<?php echo $meta_id ?>' data-title='<?php echo $title ?>'>
-                                <span class='glyphicon glyphicon-edit'> </span>
-                            </a>
-                            <span class='glyphicon glyphicon-trash no-edit'> </span>
-                        </div>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-            <div id="loader_metadados_page" style="display: none;font-style: normal; font-variant: normal; font-weight: normal; font-stretch: normal; font-size: 11px; line-height: normal; font-family: Arial;">
-                <center>
-                    <img src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>">
-                    <h4><?php _e('Loading metadata...', 'tainacan') ?></h4>
-               </center>
+        <!-- Abas para a Listagem dos metadados -->
+        <ul class="nav nav-tabs" style="background: white">
+            <li  role="presentation" class="active">
+                <a id="click-tab-default" href="#tab_default" aria-controls="tab_default" role="tab" data-toggle="tab">
+                    <span ondblclick="alter_tab_title('default')" id="default-tab-title"><?php echo (!$default_tab) ? _e('Default', 'tainacan') : $default_tab ?></span>
+                    <input id="default-tab-title-input" 
+                           class="style-input"
+                           onblur="on_blur_input_title('default')"
+                           onkeyup="on_key_input_title('default',event)"
+                           style="display: none;" 
+                           type="text" 
+                           value="<?php echo (!$default_tab) ? _e('Default', 'tainacan') : $default_tab ?>">
+                </a>
+            </li>
+            <li id="plus_tab_button" role="presentation">
+                <a style="cursor: pointer;" onclick="add_tab(this)"  role="tab" data-toggle="tab">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </a>
+            </li>
+         </ul>
+        <div id="tab-content-metadata" class="tab-content" style="background: white">
+            <div id="tab_default" class="ui-widget ui-helper-clearfix col-md-12 tab-pane fade in active" style="background: white">
+                <ul id="metadata-container-default" class="gallery ui-helper-reset ui-helper-clearfix connectedSortable metadata-container">
+                    <?php
+                    foreach($view_helper->get_default_metadata() as $meta_id => $metadata):
+                        $title = __($metadata, 'tainacan'); ?>
+                        <li id='<?php echo $meta_id ?>' data-widget='tree' class='ui-widget-content ui-corner-tr fixed-meta'>
+                            <label class='title-pipe'> <?php echo $title ?></label>
+                            <div class='action-icons default-metadata'>
+                                <a onclick='edit_filter(this)' class='<?php echo $meta_id ?>' data-title='<?php echo $title ?>'>
+                                    <span class='glyphicon glyphicon-edit'> </span>
+                                </a>
+                                <span class='glyphicon glyphicon-trash no-edit'> </span>
+                            </div>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+                <div id="loader_metadados_page" style="display: none;font-style: normal; font-variant: normal; font-weight: normal; font-stretch: normal; font-size: 11px; line-height: normal; font-family: Arial;">
+                    <center>
+                        <img src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>">
+                        <h4><?php _e('Loading metadata...', 'tainacan') ?></h4>
+                   </center>
+                </div>
             </div>
         </div>
-
         <?php include_once "metadata_forms.php"; ?>
 
         <input type="hidden" id="collection_list_ranking_id" name="collection_id" value="">
