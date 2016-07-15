@@ -1886,17 +1886,20 @@ h4.modal-title {
 #list_social_network .new-license #addLicenseBtn, #import_settings .new-license #addLicenseBtn, #export_settings .new-license #addLicenseBtn, #licenses_settings .new-license #addLicenseBtn, #events_settings .new-license #addLicenseBtn {
   color: white;
 }
-#list_social_network #event_verified_table thead th, #import_settings #event_verified_table thead th, #export_settings #event_verified_table thead th, #licenses_settings #event_verified_table thead th, #events_settings #event_verified_table thead th {
+#list_social_network #event_verified_table #list_events_verified, #list_social_network #event_not_verified_table #list_events_verified, #import_settings #event_verified_table #list_events_verified, #import_settings #event_not_verified_table #list_events_verified, #export_settings #event_verified_table #list_events_verified, #export_settings #event_not_verified_table #list_events_verified, #licenses_settings #event_verified_table #list_events_verified, #licenses_settings #event_not_verified_table #list_events_verified, #events_settings #event_verified_table #list_events_verified, #events_settings #event_not_verified_table #list_events_verified {
+  padding-top: 12px;
+}
+#list_social_network #event_verified_table thead th, #list_social_network #event_not_verified_table thead th, #import_settings #event_verified_table thead th, #import_settings #event_not_verified_table thead th, #export_settings #event_verified_table thead th, #export_settings #event_not_verified_table thead th, #licenses_settings #event_verified_table thead th, #licenses_settings #event_not_verified_table thead th, #events_settings #event_verified_table thead th, #events_settings #event_not_verified_table thead th {
   border-top: 1px solid #0c698b;
 }
-#list_social_network #event_verified_table tbody td, #import_settings #event_verified_table tbody td, #export_settings #event_verified_table tbody td, #licenses_settings #event_verified_table tbody td, #events_settings #event_verified_table tbody td {
+#list_social_network #event_verified_table tbody td, #list_social_network #event_not_verified_table tbody td, #import_settings #event_verified_table tbody td, #import_settings #event_not_verified_table tbody td, #export_settings #event_verified_table tbody td, #export_settings #event_not_verified_table tbody td, #licenses_settings #event_verified_table tbody td, #licenses_settings #event_not_verified_table tbody td, #events_settings #event_verified_table tbody td, #events_settings #event_not_verified_table tbody td {
   border-right: 0;
-  border-top: 1px solid #adadad;
+  border-top: 1px solid #E8E8E8;
 }
-#list_social_network #event_verified_table tbody tr.odd:first-child, #import_settings #event_verified_table tbody tr.odd:first-child, #export_settings #event_verified_table tbody tr.odd:first-child, #licenses_settings #event_verified_table tbody tr.odd:first-child, #events_settings #event_verified_table tbody tr.odd:first-child {
+#list_social_network #event_verified_table tbody tr.odd:first-child td, #list_social_network #event_not_verified_table tbody tr.odd:first-child td, #import_settings #event_verified_table tbody tr.odd:first-child td, #import_settings #event_not_verified_table tbody tr.odd:first-child td, #export_settings #event_verified_table tbody tr.odd:first-child td, #export_settings #event_not_verified_table tbody tr.odd:first-child td, #licenses_settings #event_verified_table tbody tr.odd:first-child td, #licenses_settings #event_not_verified_table tbody tr.odd:first-child td, #events_settings #event_verified_table tbody tr.odd:first-child td, #events_settings #event_not_verified_table tbody tr.odd:first-child td {
   border-top: 0;
 }
-#list_social_network #licenses_display thead th, #list_social_network #event_verified_table thead th, #import_settings #licenses_display thead th, #import_settings #event_verified_table thead th, #export_settings #licenses_display thead th, #export_settings #event_verified_table thead th, #licenses_settings #licenses_display thead th, #licenses_settings #event_verified_table thead th, #events_settings #licenses_display thead th, #events_settings #event_verified_table thead th {
+#list_social_network #licenses_display thead th, #list_social_network #event_verified_table thead th, #list_social_network #event_not_verified_table thead th, #import_settings #licenses_display thead th, #import_settings #event_verified_table thead th, #import_settings #event_not_verified_table thead th, #export_settings #licenses_display thead th, #export_settings #event_verified_table thead th, #export_settings #event_not_verified_table thead th, #licenses_settings #licenses_display thead th, #licenses_settings #event_verified_table thead th, #licenses_settings #event_not_verified_table thead th, #events_settings #licenses_display thead th, #events_settings #event_verified_table thead th, #events_settings #event_not_verified_table thead th {
   border-right: 0;
   color: #0c698b;
   border-bottom: 1px solid #0c698b;
@@ -1999,6 +2002,18 @@ h4.modal-title {
   width: 65%;
   display: inline-block;
   margin-left: 5px;
+}
+
+.events_menu .tab-content {
+  padding-top: 15px;
+}
+.events_menu .tab-content .datatable-result-sets {
+  border: 1px solid #E8E8E8;
+  margin-left: 0 !important;
+  border-radius: 2px;
+}
+.events_menu .tab-content .dataTables_paginate ul.pagination li a {
+  color: black !important;
 }
 
 .hide-el {
