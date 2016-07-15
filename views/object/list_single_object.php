@@ -373,9 +373,12 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                         </small>
                     <?php endif; ?>
                 </div>
-                <div id="text_description"><p><?php echo $object->post_content; ?></p></div>
-                <div id="event_description" style="display:none; min-height: 80px;">
-                    <textarea class="col-md-12 form-control" id="description_field"><?php echo $object->post_content; ?></textarea>
+
+                <div id="text_description">
+                    <div style="white-space: pre-wrap;"><?php echo $object->post_content; ?></div>
+                </div>
+                <div id="event_description" style="display:none; min-height: 150px;">
+                    <textarea class="col-md-12 form-control" id="description_field" style="width;100%; min-height: 150px;"><?php echo $object->post_content; ?></textarea>
                 </div>
             </div>
 
