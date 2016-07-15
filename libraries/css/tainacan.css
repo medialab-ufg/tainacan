@@ -1823,88 +1823,98 @@ h4.modal-title {
   margin-bottom: 5px;
 }
 
-#list_social_network h3, #import_settings h3, #export_settings h3, #licenses_settings h3 {
+#list_social_network h3, #import_settings h3, #export_settings h3, #licenses_settings h3, #events_settings h3 {
   color: black;
   border-bottom: 1px solid #adadad;
   padding: 0 0 10px 12px;
 }
-#list_social_network h3.topo, #import_settings h3.topo, #export_settings h3.topo, #licenses_settings h3.topo {
+#list_social_network h3.topo, #import_settings h3.topo, #export_settings h3.topo, #licenses_settings h3.topo, #events_settings h3.topo {
   border: none;
   color: #0c698b;
   padding: 0;
   margin-top: 0;
 }
-#list_social_network #aba-facebook-mapping h3, #list_social_network #aba-instagram-mapping h3, #list_social_network #aba-vimeo-mapping h3, #import_settings #aba-facebook-mapping h3, #import_settings #aba-instagram-mapping h3, #import_settings #aba-vimeo-mapping h3, #export_settings #aba-facebook-mapping h3, #export_settings #aba-instagram-mapping h3, #export_settings #aba-vimeo-mapping h3, #licenses_settings #aba-facebook-mapping h3, #licenses_settings #aba-instagram-mapping h3, #licenses_settings #aba-vimeo-mapping h3 {
+#list_social_network #aba-facebook-mapping h3, #list_social_network #aba-instagram-mapping h3, #list_social_network #aba-vimeo-mapping h3, #import_settings #aba-facebook-mapping h3, #import_settings #aba-instagram-mapping h3, #import_settings #aba-vimeo-mapping h3, #export_settings #aba-facebook-mapping h3, #export_settings #aba-instagram-mapping h3, #export_settings #aba-vimeo-mapping h3, #licenses_settings #aba-facebook-mapping h3, #licenses_settings #aba-instagram-mapping h3, #licenses_settings #aba-vimeo-mapping h3, #events_settings #aba-facebook-mapping h3, #events_settings #aba-instagram-mapping h3, #events_settings #aba-vimeo-mapping h3 {
   border-bottom: none;
 }
-#list_social_network ul li a, #import_settings ul li a, #export_settings ul li a, #licenses_settings ul li a {
+#list_social_network ul li a, #import_settings ul li a, #export_settings ul li a, #licenses_settings ul li a, #events_settings ul li a {
   color: #0c698b;
 }
-#list_social_network ul li.active, #import_settings ul li.active, #export_settings ul li.active, #licenses_settings ul li.active {
+#list_social_network ul li.active, #import_settings ul li.active, #export_settings ul li.active, #licenses_settings ul li.active, #events_settings ul li.active {
   border: 1px solid #adadad;
   border-bottom: 2px solid white;
   margin-bottom: -2px;
   border-radius: 4px 4px 0 0;
 }
-#list_social_network ul li.active a, #import_settings ul li.active a, #export_settings ul li.active a, #licenses_settings ul li.active a {
+#list_social_network ul li.active a, #import_settings ul li.active a, #export_settings ul li.active a, #licenses_settings ul li.active a, #events_settings ul li.active a {
   color: black;
   border: none;
 }
-#list_social_network table, #import_settings table, #export_settings table, #licenses_settings table {
+#list_social_network table, #import_settings table, #export_settings table, #licenses_settings table, #events_settings table {
   border: none;
 }
-#list_social_network table th, #list_social_network table td, #import_settings table th, #import_settings table td, #export_settings table th, #export_settings table td, #licenses_settings table th, #licenses_settings table td {
+#list_social_network table th, #list_social_network table td, #import_settings table th, #import_settings table td, #export_settings table th, #export_settings table td, #licenses_settings table th, #licenses_settings table td, #events_settings table th, #events_settings table td {
   border: none;
   border-right: 1px solid #adadad;
   padding-left: 15px;
 }
-#list_social_network table th:last-child, #list_social_network table td:last-child, #import_settings table th:last-child, #import_settings table td:last-child, #export_settings table th:last-child, #export_settings table td:last-child, #licenses_settings table th:last-child, #licenses_settings table td:last-child {
+#list_social_network table th:last-child, #list_social_network table td:last-child, #import_settings table th:last-child, #import_settings table td:last-child, #export_settings table th:last-child, #export_settings table td:last-child, #licenses_settings table th:last-child, #licenses_settings table td:last-child, #events_settings table th:last-child, #events_settings table td:last-child {
   border-right: none;
 }
-#list_social_network .social-networks-btn, #list_social_network .tainacan-blue-btn-bg, #import_settings .social-networks-btn, #import_settings .tainacan-blue-btn-bg, #export_settings .social-networks-btn, #export_settings .tainacan-blue-btn-bg, #licenses_settings .social-networks-btn, #licenses_settings .tainacan-blue-btn-bg {
+#list_social_network .social-networks-btn, #list_social_network .tainacan-blue-btn-bg, #import_settings .social-networks-btn, #import_settings .tainacan-blue-btn-bg, #export_settings .social-networks-btn, #export_settings .tainacan-blue-btn-bg, #licenses_settings .social-networks-btn, #licenses_settings .tainacan-blue-btn-bg, #events_settings .social-networks-btn, #events_settings .tainacan-blue-btn-bg {
   background: #0c698b;
 }
-#list_social_network .social-networks-btn:hover, #list_social_network .tainacan-blue-btn-bg:hover, #import_settings .social-networks-btn:hover, #import_settings .tainacan-blue-btn-bg:hover, #export_settings .social-networks-btn:hover, #export_settings .tainacan-blue-btn-bg:hover, #licenses_settings .social-networks-btn:hover, #licenses_settings .tainacan-blue-btn-bg:hover {
+#list_social_network .social-networks-btn:hover, #list_social_network .tainacan-blue-btn-bg:hover, #import_settings .social-networks-btn:hover, #import_settings .tainacan-blue-btn-bg:hover, #export_settings .social-networks-btn:hover, #export_settings .tainacan-blue-btn-bg:hover, #licenses_settings .social-networks-btn:hover, #licenses_settings .tainacan-blue-btn-bg:hover, #events_settings .social-networks-btn:hover, #events_settings .tainacan-blue-btn-bg:hover {
   opacity: 0.85;
 }
-#list_social_network .highlight, #import_settings .highlight, #export_settings .highlight, #licenses_settings .highlight {
+#list_social_network .highlight, #import_settings .highlight, #export_settings .highlight, #licenses_settings .highlight, #events_settings .highlight {
   border: 1px solid #adadad;
   padding: 0;
   margin-bottom: 20px;
 }
-#list_social_network .highlight table, #import_settings .highlight table, #export_settings .highlight table, #licenses_settings .highlight table {
+#list_social_network .highlight table, #import_settings .highlight table, #export_settings .highlight table, #licenses_settings .highlight table, #events_settings .highlight table {
   margin-bottom: 8px;
 }
-#list_social_network .new-license, #import_settings .new-license, #export_settings .new-license, #licenses_settings .new-license {
+#list_social_network .new-license, #import_settings .new-license, #export_settings .new-license, #licenses_settings .new-license, #events_settings .new-license {
   border-top: 1px solid #E8E8E8;
 }
-#list_social_network .new-license h3, #import_settings .new-license h3, #export_settings .new-license h3, #licenses_settings .new-license h3 {
+#list_social_network .new-license h3, #import_settings .new-license h3, #export_settings .new-license h3, #licenses_settings .new-license h3, #events_settings .new-license h3 {
   border: none;
   padding-left: 0;
   color: #0c698b;
 }
-#list_social_network .new-license #addLicenseBtn, #import_settings .new-license #addLicenseBtn, #export_settings .new-license #addLicenseBtn, #licenses_settings .new-license #addLicenseBtn {
+#list_social_network .new-license #addLicenseBtn, #import_settings .new-license #addLicenseBtn, #export_settings .new-license #addLicenseBtn, #licenses_settings .new-license #addLicenseBtn, #events_settings .new-license #addLicenseBtn {
   color: white;
 }
-#list_social_network #licenses_display thead th, #import_settings #licenses_display thead th, #export_settings #licenses_display thead th, #licenses_settings #licenses_display thead th {
+#list_social_network #event_verified_table thead th, #import_settings #event_verified_table thead th, #export_settings #event_verified_table thead th, #licenses_settings #event_verified_table thead th, #events_settings #event_verified_table thead th {
+  border-top: 1px solid #0c698b;
+}
+#list_social_network #event_verified_table tbody td, #import_settings #event_verified_table tbody td, #export_settings #event_verified_table tbody td, #licenses_settings #event_verified_table tbody td, #events_settings #event_verified_table tbody td {
+  border-right: 0;
+  border-top: 1px solid #adadad;
+}
+#list_social_network #event_verified_table tbody tr.odd:first-child, #import_settings #event_verified_table tbody tr.odd:first-child, #export_settings #event_verified_table tbody tr.odd:first-child, #licenses_settings #event_verified_table tbody tr.odd:first-child, #events_settings #event_verified_table tbody tr.odd:first-child {
+  border-top: 0;
+}
+#list_social_network #licenses_display thead th, #list_social_network #event_verified_table thead th, #import_settings #licenses_display thead th, #import_settings #event_verified_table thead th, #export_settings #licenses_display thead th, #export_settings #event_verified_table thead th, #licenses_settings #licenses_display thead th, #licenses_settings #event_verified_table thead th, #events_settings #licenses_display thead th, #events_settings #event_verified_table thead th {
   border-right: 0;
   color: #0c698b;
   border-bottom: 1px solid #0c698b;
 }
-#list_social_network #list_licenses_content tr, #import_settings #list_licenses_content tr, #export_settings #list_licenses_content tr, #licenses_settings #list_licenses_content tr {
+#list_social_network #list_licenses_content tr, #import_settings #list_licenses_content tr, #export_settings #list_licenses_content tr, #licenses_settings #list_licenses_content tr, #events_settings #list_licenses_content tr {
   font-weight: bolder;
   border-bottom: 1px solid #adadad;
 }
-#list_social_network #list_licenses_content tr td, #import_settings #list_licenses_content tr td, #export_settings #list_licenses_content tr td, #licenses_settings #list_licenses_content tr td {
+#list_social_network #list_licenses_content tr td, #import_settings #list_licenses_content tr td, #export_settings #list_licenses_content tr td, #licenses_settings #list_licenses_content tr td, #events_settings #list_licenses_content tr td {
   border-right: 0 !important;
 }
-#list_social_network #list_licenses_content a:last-child, #import_settings #list_licenses_content a:last-child, #export_settings #list_licenses_content a:last-child, #licenses_settings #list_licenses_content a:last-child {
+#list_social_network #list_licenses_content a:last-child, #import_settings #list_licenses_content a:last-child, #export_settings #list_licenses_content a:last-child, #licenses_settings #list_licenses_content a:last-child, #events_settings #list_licenses_content a:last-child {
   margin-left: 10px;
 }
-#list_social_network #list_licenses_content a img, #import_settings #list_licenses_content a img, #export_settings #list_licenses_content a img, #licenses_settings #list_licenses_content a img {
+#list_social_network #list_licenses_content a img, #import_settings #list_licenses_content a img, #export_settings #list_licenses_content a img, #licenses_settings #list_licenses_content a img, #events_settings #list_licenses_content a img {
   height: 15px;
 }
-#list_social_network #list_licenses_content a img:hover, #import_settings #list_licenses_content a img:hover, #export_settings #list_licenses_content a img:hover, #licenses_settings #list_licenses_content a img:hover {
+#list_social_network #list_licenses_content a img:hover, #import_settings #list_licenses_content a img:hover, #export_settings #list_licenses_content a img:hover, #licenses_settings #list_licenses_content a img:hover, #events_settings #list_licenses_content a img:hover {
   opacity: 0.6;
 }
 

@@ -1,10 +1,23 @@
 <script>
     $(document).ready(function () {
+        change_breadcrumbs_title('<?php _e('Events','tainacan') ?>');
         $('#configuration').show();
         notification_events_repository();
         $('.nav-tabs').tab();
+        var dataTable_options = {
+            "language": {
+                // "url": "dataTables."
+                search: "Pesquisar: ",
+                paginate: {
+                    first: "Primeira",
+                    previous: "Anterior",
+                    next: "Próxima",
+                    last: "Última"
+                }
+            }
+        };
         $('#event_not_verified_table').DataTable();
-        $('#event_verified_table').DataTable();
+        $('#event_verified_table').DataTable(dataTable_options);
 <?php // Submissao do form de exclusao da categoria   ?>
         $('#submit_form_event_not_confirmed').submit(function (e) {
             e.preventDefault();
