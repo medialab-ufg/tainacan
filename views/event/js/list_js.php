@@ -1,10 +1,30 @@
 <script>
     $(document).ready(function () {
+        change_breadcrumbs_title('<?php _e('Events','tainacan') ?>');
         $('#configuration').show();
         notification_events_repository();
         $('.nav-tabs').tab();
-        $('#event_not_verified_table').DataTable();
-        $('#event_verified_table').DataTable();
+        var dataTable_options = {
+            "initComplete": function() {
+                $("#event_verified_table_wrapper .row").eq(2).addClass('datatable-result-sets');
+                $("#event_not_verified_table_wrapper .row").eq(2).addClass('datatable-result-sets');
+            },
+            "language": {
+                // "url": "dataTables."
+                sInfo: "Exibindo de _START_ até _END_ de _TOTAL_ itens",
+                sLengthMenu: "Mostrar _MENU_ itens por página",
+                sInfoFiltered: "(filtrados de _MAX_ eventos)",
+                search: "Pesquisar: ",
+                paginate: {
+                    first: "Primeira",
+                    previous: "Anterior",
+                    next: "Próxima",
+                    last: "Última"
+                }
+            }
+        };
+        $('#event_not_verified_table').DataTable(dataTable_options);
+        $('#event_verified_table').DataTable(dataTable_options);
 <?php // Submissao do form de exclusao da categoria   ?>
         $('#submit_form_event_not_confirmed').submit(function (e) {
             e.preventDefault();
@@ -42,6 +62,11 @@
         $('#click_events_verified').click(function (e) {
             e.preventDefault();
             $(this).tab('show');
+            /*
+            var show_string = $('.dataTables_info').text().replace("Showing", "Exibindo: ");
+            show_string = show_string.replace("to", "a").replace("of", "de").replace("entries", "itens");
+            $('.dataTables_info').text(show_string);
+            */
         });
 
     });
