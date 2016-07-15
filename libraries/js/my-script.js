@@ -1428,6 +1428,7 @@ function showSingleObject(object_id, src) {
         type: 'POST',
         data: {operation: 'list_single_object', object_id: object_id, collection_id: $("#collection_id").val()}
     }).done(function (result) {
+        $('.in').modal('hide');
         $('#main_part').hide();
         $('#display_view_main_page').hide();
         $('#loader_collections').hide();

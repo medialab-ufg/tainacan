@@ -307,6 +307,13 @@ a.collection-thumb {
 	margin-top: 15px;
 	border: 3px solid $item-border;
 
+	.single-binaries {
+		.score-counter {
+			font-size: 11px;
+			display: inline-block;
+		}
+	}
+
 	.list-view-container {
 		background: white;
 		border-top: 3px solid $item-border;
@@ -355,6 +362,13 @@ a.collection-thumb {
 */
 #gallery-viewMode {
 	margin-top: 15px;
+
+	.single-binaries {
+		.score-counter {
+			font-size: 11px;
+			display: block;
+		}
+	}
 
 	.gallery-view-container {
 		background: white;

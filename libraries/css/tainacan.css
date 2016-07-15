@@ -1017,6 +1017,10 @@ a.collection-thumb img {
   margin-top: 15px;
   border: 3px solid #E8E8E8;
 }
+#list-viewMode .single-binaries .score-counter {
+  font-size: 11px;
+  display: inline-block;
+}
 #list-viewMode .list-view-container {
   background: white;
   border-top: 3px solid #E8E8E8;
@@ -1050,6 +1054,10 @@ a.collection-thumb img {
 */
 #gallery-viewMode {
   margin-top: 15px;
+}
+#gallery-viewMode .single-binaries .score-counter {
+  font-size: 11px;
+  display: block;
 }
 #gallery-viewMode .gallery-view-container {
   background: white;

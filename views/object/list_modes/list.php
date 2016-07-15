@@ -1,4 +1,3 @@
-<?php $curr_id = get_the_ID();  ?>
 <div class="col-md-12 no-padding list-view-container top-div" <?php if ($collection_list_mode != "list"): ?> style="display: none" <?php endif ?> >
     <div class="col-md-1 item-thumb">
         <a href="<?php echo get_collection_item_href($collection_id); ?>"

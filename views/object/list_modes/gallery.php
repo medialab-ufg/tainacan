@@ -3,8 +3,8 @@
      <div class="row">
          <div class="item-thumb">
              <a href="<?php echo get_collection_item_href($collection_id); ?>"
-                onclick="<?php get_item_click_event($collection_id, get_the_ID() )?>">
-                 <?php echo get_item_thumb_image(get_the_ID()); ?>
+                onclick="<?php get_item_click_event($collection_id, $curr_id )?>">
+                 <?php echo get_item_thumb_image($curr_id); ?>
              </a>
          </div>
      </div>
@@ -12,7 +12,7 @@
      <div class="row title-container">
          <h5 class="item-display-title">
              <a href="<?php echo get_collection_item_href($collection_id); ?>"
-                onclick="<?php get_item_click_event($collection_id, get_the_ID() )?>">
+                onclick="<?php get_item_click_event($collection_id, $curr_id )?>">
                  <?php echo wp_trim_words( get_the_title(), 4 ); ?>
              </a>
          </h5>
@@ -28,10 +28,10 @@
                  <?php endif; ?>
              </div>
              <ul class="item-funcs col-md-6 right">
-                 <input type="hidden" class="post_id" name="post_id" value="<?= get_the_ID() ?>">
+                 <input type="hidden" class="post_id" name="post_id" value="<?= $curr_id ?>">
 
                  <li>
-                     <a id="modal_network<?php echo get_the_ID(); ?>" onclick="showModalShareNetwork(<?php echo get_the_ID(); ?>)">
+                     <a id="modal_network<?php echo $curr_id; ?>" onclick="showModalShareNetwork(<?php echo $curr_id; ?>)">
                          <div style="cursor:pointer;" data-icon="&#xe00b;"></div>
                      </a>
                  </li>

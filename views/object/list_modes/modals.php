@@ -7,7 +7,7 @@ $root_id = get_option('collection_root_id');
  *
  */
 ?>
-<div class="modal fade" id="modal_share_network<?php echo get_the_ID() ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade modal-share-network" id="modal_share_network<?php echo get_the_ID() ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             
