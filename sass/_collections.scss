@@ -144,12 +144,29 @@ a.collection-thumb {
 	}
 } // .viewMode-control
 
+.item-funcs {
+	// float: right;
+	padding: 0;
+
+	li {
+		float:right;
+		margin-left: 10px !important;
+
+		&:last-child {
+			margin-right: 0 !important;
+		}
+
+		@include edit-item-button-colors();
+		a {  font-size: 1.3em;  }
+	}
+}
+
 /*
 ****************************************
 **************** CARD MODE *************
 ****************************************
 */
-
+.ui-autocomplete { z-index:1051; }
 #cards-viewMode{
 	.item-colecao {
 		border: 3px solid $item-border;
@@ -161,7 +178,10 @@ a.collection-thumb {
 
 		.item-info {
 			.colFoto {
-				min-height: 150px;
+				min-height: 160px;
+				img {
+					height: 160px;
+				}
 			}
 
 			.item-meta {
@@ -172,14 +192,41 @@ a.collection-thumb {
 			.item-meta-box {
 				padding-left: 0;
 				margin-left: 0;
+				position: relative;
+				height: 160px;
+
 				a {
 					font-weight: bolder;
 					color: black;
 				}
 				h4 {
 					margin: 0 0 3px 0;
+					height: 40px;
+					overflow: hidden;
 				}
-			}
+				.item-description {
+					overflow: hidden;
+					max-height: 35px;
+					height: 35px;
+				}
+				.item-creation {
+					text-align: right;
+				}
+				.author-created {
+					margin-top: 5px;
+					margin-bottom: 5px;
+					font-size: 11px;
+
+					.author {
+						padding-right: 0;
+					}
+				}
+				.show-item-metadata {
+					position: absolute;
+					bottom: 0;
+					width: 95%;
+				}
+			} // .item-meta-box
 		}
 
 		.editing-item {
@@ -187,18 +234,8 @@ a.collection-thumb {
 
 			.rankings-container {
 				float: left;
-			}
-
-			.item-funcs {
-				// float: right;
-				padding: 0;
-
-				li {
-					float:right;
-					margin: 4px !important;
-
-					@include edit-item-button-colors();
-					a {  font-size: 1.3em;  }
+				.single-binaries {
+					margin-top: -5px;
 				}
 			}
 
@@ -206,10 +243,11 @@ a.collection-thumb {
 				position: relative;
 				float: right;
 				margin-top: -5px;
+				margin-left: 5px !important;
 
 				div {
 					font-size: 1.2em;
-					text-indent: 5px;
+					//text-indent: 5px;
 				}
 
 				@include edit-item-button-colors();
@@ -255,6 +293,7 @@ a.collection-thumb {
 			height: 150px;
 			border-radius: 4px;
 			border: 1px solid #aaa;
+			margin-top: -5px;
 		}
 
 	} // item colecao
@@ -267,6 +306,13 @@ a.collection-thumb {
 #list-viewMode {
 	margin-top: 15px;
 	border: 3px solid $item-border;
+
+	.single-binaries {
+		.score-counter {
+			font-size: 11px;
+			display: inline-block;
+		}
+	}
 
 	.list-view-container {
 		background: white;
@@ -297,6 +343,10 @@ a.collection-thumb {
 
 		}
 
+		.author-created {
+			font-size: 12px;
+		}
+
 	}
 	.item-thumb {
 		a img {
@@ -313,16 +363,25 @@ a.collection-thumb {
 #gallery-viewMode {
 	margin-top: 15px;
 
+	.single-binaries {
+		.score-counter {
+			font-size: 11px;
+			display: block;
+		}
+	}
+
 	.gallery-view-container {
 		background: white;
 		border: 3px solid $item-border;
 		padding-top: 10px;
 		text-align: center;
-		height: 240px;
+		//height: 240px;
 		margin-bottom: 15px;
 		margin-left: 15px;
-		width: 24%;
+		width: 23.8%;
 		overflow: hidden;
+		padding-left: 5px;
+		padding-right: 5px;
 
 		&.first-el {
 			margin-left: 0 !important;
@@ -330,25 +389,29 @@ a.collection-thumb {
 
 		img {
 			display: inline-block !important;
-			max-width: 170px !important;
+			width: 200px !important;
 		}
 
 		.item-thumb {
-			height: 170px;
+			height: 200px;
 		}
 
 		.title-container {
 			margin-top: 10px;
 			border-top: 2px solid $item-border;
 
-			h4 {
+			h5 {
 				overflow: hidden;
+				height: 15px;
 
 				a {
-
 					color: black;
 					font-weight: bolder;
 				}
+			}
+			.gallery-metadata {
+				padding-right: 25px;
+				padding-left: 25px;
 			}
 		}
 

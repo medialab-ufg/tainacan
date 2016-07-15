@@ -139,9 +139,20 @@
     }
 
     function showModalShareNetwork(id) {
+        var $_modal_id = $('.in').attr('id');
+        if ($_modal_id == 'collection-slideShow') {
+            $('#modal_share_network' + id).addClass('slideshow-mode');
+            $('.in').modal('hide');
+        }
         $('#modal_share_network' + id).modal('show');
         init_autocomplete('#collections_object_share' + id);
     }
+
+    $('.modal-share-network').on('hidden.bs.modal', function() {
+       if ( $(this).hasClass('slideshow-mode') ) {
+           $("#collection-slideShow").modal('show');
+       }
+    });
 
     function send_share_item(id) {
         if ($('#email_object_share' + id).val().trim() !== '' || $('#collections_object_share' + id).val().trim() !== '') {
