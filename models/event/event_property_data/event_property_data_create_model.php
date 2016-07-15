@@ -8,7 +8,7 @@ require_once(dirname(__FILE__) . '../../../property/property_model.php');
 
 class EventPropertyDataCreate extends EventModel {
 
-    public function EventPropertyDataCreate() {
+    public function __construct() {
         $this->parent = get_term_by('name', 'socialdb_event_property_data_create', 'socialdb_event_type');
         $this->permission_name = 'socialdb_collection_permission_create_property_data';
     }
@@ -83,6 +83,7 @@ class EventPropertyDataCreate extends EventModel {
         $data['property_data_column_ordenation'] = get_post_meta($event_id, 'socialdb_event_property_data_create_ordenation_column',true) ;
         $data['property_data_help'] = get_post_meta($event_id, 'socialdb_event_property_data_create_help',true) ;
         $data['property_id'] = get_post_meta($event_id, 'socialdb_event_property_data_create_id',true) ;
+        $data['property_tab'] = get_post_meta($event_id, 'socialdb_event_property_tab',true) ;
         
         $property_category_id = get_post_meta($event_id, 'socialdb_event_property_data_create_category_root_id',true) ;
         if($property_category_id&&$property_category_id!=$this->get_category_root_of($data['collection_id'])){
@@ -94,6 +95,8 @@ class EventPropertyDataCreate extends EventModel {
             $result = json_decode($propertyModel->add_property_data($data));
             if(isset($result->property_id)){
                 do_action('after_event_add_property_data',$result->property_id,$event_id);
+                //a aba da propriedade
+                $propertyModel->update_tab_organization($data['collection_id'],$data['property_tab'], $result->property_id);
             }
         }else{
             $data['property_category_id'] =  get_post_meta($event_id, 'socialdb_event_property_data_create_category_root_id',true) ;

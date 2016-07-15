@@ -5,10 +5,15 @@ include_once ('js/list_metadata_js.php');
 
 $view_helper = new ViewHelper();
 $meta = get_post_meta($collection_id, 'socialdb_collection_fixed_properties_visibility', true);
+$tabs = unserialize(get_post_meta($collection_id, 'socialdb_collection_update_tab_organization',true));
 $array_visibility = ($meta&&$meta!=='') ? $meta : '';
 ?>
 
 <?php $view_helper->render_header_config_steps('metadata') ?>
+<input type="hidden" 
+       name="tabs_properties" 
+       id="tabs_properties" 
+       value='<?php echo ($tabs&&is_array($tabs)) ? json_encode($tabs) :  ''; ?>'/>
 <input type="hidden" name="visibility_collection_properties" id="visibility_collection_properties" value='<?php echo $array_visibility; ?>'/>
 <input type="hidden" name="property_category_id" id="property_category_id" value="<?php echo $category->term_id; ?>"/>
 <div class="categories_menu col-md-12 no-padding"  id="properties_tabs">

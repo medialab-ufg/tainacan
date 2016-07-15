@@ -76,6 +76,7 @@ class EventPropertyTermCreate extends EventModel {
         $data['socialdb_property_new_category'] = get_post_meta($event_id, 'socialdb_event_property_term_create_new_category',true) ;   
         $data['socialdb_property_new_taxonomy'] = get_post_meta($event_id, 'socialdb_event_property_term_create_new_taxonomy',true) ;   
         $data['property_id'] = get_post_meta($event_id, 'socialdb_event_property_term_create_id',true) ;
+        $data['property_tab'] = get_post_meta($event_id, 'socialdb_event_property_tab',true) ;
         //inserindo o metadado
         $property_category_id = get_post_meta($event_id, 'socialdb_event_property_term_create_category_root_id',true) ;
         if($property_category_id&&$property_category_id!=$this->get_category_root_of($data['collection_id'])){
@@ -86,6 +87,7 @@ class EventPropertyTermCreate extends EventModel {
             $result = json_decode($propertyModel->add_property_term($data));
             if(isset($result->property_id)){
                 do_action('after_event_add_property_term',$result->property_id,$event_id);
+                $propertyModel->update_tab_organization($data['collection_id'],$data['property_tab'], $result->property_id);
             }
         }else{
             add_term_meta($property_category_id, 'socialdb_category_property_id', $data['property_id']);

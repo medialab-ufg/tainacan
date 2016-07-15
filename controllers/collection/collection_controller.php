@@ -267,6 +267,7 @@ class CollectionController extends Controller {
                 $data['id'] = $collection_model->sdb_add_post_meta($data['collection_id'], 'socialdb_collection_tab', $data['tab_name']);
                 return json_encode($data);
             case 'remove_tab':
+                $collection_model->realocate_tabs_collection($data['id'], $data['collection_id']);
                 $collection_model->sdb_delete_post_meta($data['id']);
                 return json_encode($data);
             /********************** ordenacao dos metadados *******************/

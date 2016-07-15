@@ -65,7 +65,7 @@ foreach( $view_helper->get_metadata_types() as $type => $label):
                                             placeholder="<?php _e('Property name','tainacan'); ?>">
                                 </div> <br />
                             </div>   
-                            
+                            <!-- Selecao de aba -->
                             <div class="form-group">
                                 <label for="socialdb_event_property_tab"><?php _e('Select the tab','tainacan'); ?></label>
                                 <select class="socialdb_event_property_tab form-control" name="socialdb_event_property_tab">

@@ -2,29 +2,36 @@
     /* Executed by script's start */
     $(function () {
         initiate_accordeon('default');
-        initiate_tabs();
         list_tabs();
     });
     //inicializa as abas
     function initiate_tabs(){
-        $.ajax({
+        var xhr =  $.ajax({
             url: $('#src').val() + '/controllers/collection/collection_controller.php',
             type: 'POST',
             data: {
                 collection_id: $("#collection_id").val(), 
                 operation: 'get_tabs'}
-        }).done(function (result) {
+        });
+        // quando o ajax for finalizado        
+        xhr.done(function (result) {
             hide_modal_main();
             var json = jQuery.parseJSON(result);
             if(json.array.length>0){
                 var li = $('#plus_tab_button');
                 var content = $('#tab-content-metadata');
                 $.each(json.array,function(index,value){
-                   li.before(get_li_model(value.meta_id,value.meta_value));
-                   content.append(get_tab_content(value.meta_id));
+                    console.log();
+                   if($('#metadata-container-'+value.meta_id).length==0){
+                       li.before(get_li_model(value.meta_id,value.meta_value));
+                      content.append(get_tab_content(value.meta_id));
+                   } 
+                   
                 });
             }
         });
+        //retorno apenas a promess
+        return xhr;
     }
     //funcao que gera um li modelo para ser incluido
     function get_li_model(id,name){
@@ -47,8 +54,8 @@
     }
     // funcao que gera o conteudo da aba criada
     function get_tab_content(id){
-        return '<div id="tab-'+id+'" class="ui-widget ui-helper-clearfix col-md-12 tab-pane fade">'+
-                '<ul id="metadata-container-'+id+'" class="gallery ui-helper-reset ui-helper-clearfix connectedSortable metadata-container">'+
+        return '<div style="background:white;" id="tab-'+id+'" class="ui-widget ui-helper-clearfix col-md-12 tab-pane fade">'+
+                '<ul style="background:white;" id="metadata-container-'+id+'" class="gallery ui-helper-reset ui-helper-clearfix connectedSortable metadata-container">'+
                 '</ul>'+
                 '</div>';
     }
@@ -139,6 +146,8 @@
                         collection_id: $("#collection_id").val(), 
                         id: id, 
                         operation: 'remove_tab'}
+                }).done(function (result) {
+                    list_collection_metadata();
                 });
             }
         });        
@@ -221,5 +230,17 @@
 
         }).disableSelection();
     }
-
+    // funcao que retorna o id da aba ou entao retorna false se caso nao existir
+    function get_tab_property_id(current_id){
+        var tab_property_id = false;
+        var json = jQuery.parseJSON($('#tabs_properties').val());
+        if(json.length>0){
+            $.each(json,function(index,object){
+                if(object[current_id]){
+                    tab_property_id = object[current_id];
+                }
+            });
+        }
+        return tab_property_id;
+    }
 </script>
