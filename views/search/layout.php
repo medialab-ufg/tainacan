@@ -25,7 +25,7 @@ $view_helper = new ViewHelper();
                     </div>
                     <?php $i++; } ?>
 
-                <form name="custom_colors" class="custom_color_schemes">
+                <form name="custom_colors" class="custom_color_schemes" style="display: none">
                     <label class="title-pipe" for="custom_options"><?php _e('Your colors', 'tainacan'); ?></label>
                     <div class="here"></div>
                     <div class="defaults">
@@ -105,7 +105,7 @@ $view_helper = new ViewHelper();
 
     </div>
 
-    <?php $bg_url = get_stylesheet_directory_uri() . '/libraries/images/header-share-bg.png'; ?>
+    <?php // $bg_url = get_stylesheet_directory_uri() . '/libraries/images/header-share-bg.png'; ?>
 
     <div class="col-md-10 preset-filters no-padding" style="background: #414042; padding-bottom: 20px;">
         <div class="categories_menu" id="personalize_search">
