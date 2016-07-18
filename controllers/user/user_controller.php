@@ -35,7 +35,6 @@ class UserController extends Controller {
                 $data['facebook_option'] = ['api_id' => $options['socialdb_fb_api_id'], 'api_secret' => $options['socialdb_fb_api_secret']];
                 $data['gplus_option'] = ['client_id' => $options['socialdb_google_client_id'], 'secret_key' => $options['socialdb_google_secret_key'], 'api_key' => $options['socialdb_google_api_key']];
 
-                /*
                 if (!in_array('', $data['gplus_option'])):
                     try{
                         $data['gplus_client'] = new apiClient();
@@ -53,10 +52,10 @@ class UserController extends Controller {
 
                         $data['authUrl'] = $data['gplus_client']->createAuthUrl();
                     }catch(Exception $e){
-                        
+                        $data['error'] = $e->getMessage();
                     }
                 endif;
-                */
+
 
                 return $this->render(dirname(__FILE__) . '../../../views/user/login.php', $data);
                 break;
