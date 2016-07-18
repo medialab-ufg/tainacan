@@ -43,7 +43,18 @@
     }
     // funcao que gera o conteudo da aba criada
     function get_tab_content(id){
+        var html = get_expand_all_tab(id);
         return '<div style="background:white;" id="tab-'+id+'" class="col-md-12 tab-pane fade multiple-items-accordion">'+
+                html +
+                '<div id="accordeon-'+id+'" class="multiple-items-accordion"></div>'+
+                '</div>';
+    }
+    //funcao que gerar po expandir todos
+    function get_expand_all_tab(id){
+        return '<div style="margin-bottom:0%"  onclick="open_accordeon('+id+')" class="expand-all-item btn white tainacan-default-tags">'+
+                    '<div class="action-text" style="display: inline-block;">'+
+                             '<?php _e('Expand all', 'tainacan') ?></div>'+
+                    '&nbsp;&nbsp;<span class="glyphicon-triangle-bottom white glyphicon"></span>'+
                 '</div>';
     }
     //funcao responsavel em listar as abas nos selects
@@ -67,8 +78,7 @@
     }
     //inicia o accordeon de cada aba criada
     function initiate_accordeon(id){
-        console.log(id,$("#tab-"+id));
-        $("#tab-"+id).accordion({
+        $("#accordeon-"+id).accordion({
             active: false,
             collapsible: true,
             header: "h2",
@@ -101,25 +111,36 @@
         for(var j = 0; j<$items.length;j++){
              var id = ($($items.get(j)).attr('id')) ? $($items.get(j)).attr('id').replace('meta-item-','') : '';
              if(id&&get_tab_property_id(id)){
-                var $ul =  $("#tab-"+get_tab_property_id(id));
-                console.log($ul);
+                var $ul =  $("#accordeon-"+get_tab_property_id(id));
                 $( $items.get(j) ).appendTo( $ul);
              }
         }
         for(var j = 0; j<$properties.length;j++){
             var id = ($($properties.get(j)).attr('id')) ? $($properties.get(j)).attr('id').replace('meta-item-','') : '';
             if(id&&get_tab_property_id(id)){
-                 var $ul =  $("#tab-"+get_tab_property_id(id));
+                 var $ul =  $("#accordeon-"+get_tab_property_id(id));
                  $( $properties.get(j) ).appendTo( $ul);
             }
         }
         for(var j = 0; j<$items.length;j++){
             var id = ($($rankings.get(j)).attr('id')) ? $($rankings.get(j)).attr('id').replace('meta-item-','') : '';
             if(id&&get_tab_property_id(id)){
-                 var $ul =  $("#tab-"+get_tab_property_id(id)   );
+                 var $ul =  $("#accordeon-"+get_tab_property_id(id)   );
                 $( $rankings.get(j) ).appendTo( $ul);
             }
         }
         $('[data-toggle="tooltip"]').tooltip();
+    }
+    //click toggle
+    function open_accordeon(id){
+        if( $('#tab-'+id+' .ui-accordion-content').is(':visible')){
+            $('#tab-'+id).find("div.action-text").text('<?php _e('Expand all', 'tainacan') ?>');
+            $('#tab-'+id+' .ui-accordion-content').fadeOut();
+            $('.cloud_label').click();
+        }else{
+            $('#tab-'+id+' .ui-accordion-content').fadeIn();
+            $('.cloud_label').click();
+            $('#tab-'+id).find("div.action-text").text('<?php _e('Collapse all', 'tainacan') ?>');
+        }
     }
 </script>

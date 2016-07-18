@@ -52,13 +52,6 @@
                 <!--------------------------- ABAS----------------------------->
                 <?php $view_helper->add_tabs() ?>
             <?php endif; ?>
-            <div    style="<?php echo ($view_helper->hide_main_container)?'margin-bottom:0%':'' ?>" 
-                    class="expand-all-item btn white tainacan-default-tags">
-                <div class="action-text" 
-                     style="display: inline-block;">
-                         <?php _e('Expand all', 'tainacan') ?></div>
-                &nbsp;&nbsp;<span class="glyphicon-triangle-bottom white glyphicon"></span>
-            </div>
 <!-- TAINACAN: INICIO ACCORDEON -->
             <div id="text_accordion" class="multiple-items-accordion">
             <?php 
