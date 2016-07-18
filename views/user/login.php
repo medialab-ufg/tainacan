@@ -1,4 +1,7 @@
 <?php
+
+var_dump($authUrl);
+
 include_once ('js/login_js.php');
 require_once(dirname(__FILE__) . '../../../models/social_network/Facebook/autoload.php');
 session_start();
@@ -39,10 +42,9 @@ $logoutUrl = $facebook->getLogoutUrl();
 
 <div class="col-md-12" style="background: #E8E8E8; padding-top: 50px; margin-top: -20px; padding-bottom: 50px;">
 <div class="col-md-5 center container" style="background: white; margin-bottom: 15%; border: 2px solid #d8d6d6; padding: 25px">
-    <div>
-        <h4 style="font-weight: bolder; margin-bottom: 0;"><?php _e('Login', 'tainacan'); ?></h4>
-        <hr style="margin-top: 5px;">
-    </div>
+    
+    <h4 style="font-weight: bolder; margin: 0;"><?php _e('Login', 'tainacan'); ?></h4>
+    <hr style="margin-top: 5px;">
 
     <div class="col-md-12 no-padding" style="margin: 0px 0 20px 0;">
         <div class="col-md-6" style="padding-left: 0;">

@@ -25,11 +25,11 @@ if (!empty($app['app_id']) && !empty($app['app_secret'])) {
 
         <form id="formUserRegister" name="formUserRegister" type="POST">
             <input type="hidden" name="operation" value="add">
-            <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel"><?php _e('Register', 'tainacan'); ?></h4>
-            </div>
 
-            <div class="col-md-12 no-padding" style="margin: 20px 0 20px 0;">
+            <h4 style="font-weight: bolder; margin: 0;"><?php _e('Register', 'tainacan'); ?></h4>
+            <hr style="margin-top: 5px;">
+
+            <div class="col-md-12 no-padding" style="margin: 0px 0 20px 0;">
                 <div class="col-md-6" style="padding-left: 0;">
                     <?php if ($loginUrl) { ?>
                         <a href="<?php echo $loginUrl;?>" class="btn btn-primary" style="width: 100%;">
