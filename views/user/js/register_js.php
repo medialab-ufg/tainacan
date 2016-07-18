@@ -1,5 +1,4 @@
 <script type="text/javascript">
-    
     $( '#formUserRegister' ).submit( function( e ) {
         $.ajax( {
             url: $('#src').val() + '/controllers/user/user_controller.php',
@@ -11,10 +10,9 @@
             elem =jQuery.parseJSON(result);
             if(elem.login === 1){
                 window.location = elem.url;
-            }else{
+            } else {
                 showAlertGeneral(elem.title, elem.msg, elem.type);
             }
-
         });
        e.preventDefault();
     });

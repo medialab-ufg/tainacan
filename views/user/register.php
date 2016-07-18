@@ -1,6 +1,28 @@
-<?php include_once("js/register_js.php"); ?>
+<?php
+include_once("js/register_js.php");
+require_once(dirname(__FILE__) . '../../../models/social_network/Facebook/autoload.php');
+session_start();
+
+$config = get_option('socialdb_theme_options');
+$app['app_id'] = $config['socialdb_fb_api_id'];
+$app['app_secret'] = $config['socialdb_fb_api_secret'];
+
+if (!empty($app['app_id']) && !empty($app['app_secret'])) {
+    $fb = new Facebook\Facebook([
+        'app_id' => $app['app_id'],
+        'app_secret' => $app['app_secret'],
+        'default_graph_version' => 'v2.3',
+    ]);
+
+    $helper = $fb->getRedirectLoginHelper();
+    $permissions = ['email', 'user_birthday']; // optional
+    $loginUrl = $helper->getLoginUrl(get_bloginfo(template_directory) . '/controllers/user/user_controller.php?collection_id=' . $collection_id . '&operation=return_login_fb', $permissions);
+
+}
+?>
 <div class="col-md-12" style="background: #E8E8E8; padding-top: 50px; margin-top: -20px; padding-bottom: 50px;">
-    <div class="col-md-7 center" style="background: white; ">
+    <div class="col-md-7 center" style="background: white; border: 2px solid #d8d6d6; padding: 25px">
+
         <form id="formUserRegister" name="formUserRegister" type="POST">
             <input type="hidden" name="operation" value="add">
             <div class="modal-header">
@@ -9,24 +31,31 @@
 
             <div class="col-md-12 no-padding" style="margin: 20px 0 20px 0;">
                 <div class="col-md-6" style="padding-left: 0;">
-                    <a href="#" class="btn btn-primary" style="width: 100%;">
-                        <?php _e('Register with Facebook', 'tainacan'); ?>
-                    </a>
+                    <?php if ($loginUrl) { ?>
+                        <a href="<?php echo $loginUrl;?>" class="btn btn-primary" style="width: 100%;">
+                            <?php _e('Register with Facebook', 'tainacan'); ?>
+                        </a>
+                    <?php } ?>
                 </div>
                 <div class="col-md-6" style="padding-right: 0;">
-                    <a href="#" class="btn btn-danger" style="width: 100%;">
-                        <?php _e('Register with Google Plus', 'tainacan'); ?>
-                    </a>
+                    <?php if (isset($authUrl)) { ?>
+                        <a href="<?php echo $authUrl; ?>"><img src="<?php echo get_template_directory_uri(); ?>/libraries/images/plus_login.png" style="max-width: 150px;" /></a>
+                        <a href="#" class="btn btn-danger" style="width: 100%;">
+                            <?php _e('Register with Google Plus', 'tainacan'); ?>
+                        </a>
+                    <?php } ?>
                 </div>
             </div>
 
-            <div class="col-md-12">
-                <div class="col-md-5" style="border-bottom: 1px solid #e8e8e8"></div>
-                <div class="col-md-2 cnter" style="text-align: center">
-                    <?php _e('or', 'tainacan'); ?>
+            <?php if($loginUrl || $authUrl): ?>
+                <div class="col-md-12">
+                    <div class="col-md-5" style="border-bottom: 1px solid #e8e8e8"></div>
+                    <div class="col-md-2 cnter" style="text-align: center">
+                        <?php _e('or', 'tainacan'); ?>
+                    </div>
+                    <div class="col-md-5" style="border-bottom: 1px solid #e8e8e8"></div>
                 </div>
-                <div class="col-md-5" style="border-bottom: 1px solid #e8e8e8"></div>
-            </div>
+            <?php endif; ?>
 
             <div>
                 <div class="form-group">
