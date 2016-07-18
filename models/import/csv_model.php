@@ -7,6 +7,7 @@ require_once(dirname(__FILE__) . '../../general/general_model.php');
 require_once(dirname(__FILE__) . '../../property/property_model.php');
 require_once(dirname(__FILE__) . '../../category/category_model.php');
 require_once(dirname(__FILE__) . '../../mapping/mapping_model.php');
+require_once(dirname(__FILE__) . '../../collection/collection_model.php');
 
 class CsvModel extends Model {
 
@@ -269,6 +270,202 @@ class CsvModel extends Model {
             $parent = $array['term_id'];
         }
         socialdb_add_tax_terms($object_id, array($array['term_id']), 'socialdb_category_type');
+    }
+
+    /*
+     * @signature unzip_csv_package()
+     * @return string $targetdir o diretorio para onde foi descompactado o arquivo
+     */
+
+    public function unzip_csv_package($data) {
+        //var_dump($data['file']['csv_pkg']);
+        if ($data['file']['csv_pkg']["name"]) {
+            $file = $data['file']['csv_pkg'];
+            $filename = $file["name"];
+            $tmp_name = $file["tmp_name"];
+            $type = $file["type"];
+
+            $name = explode(".", $filename);
+            $accepted_types = array('application/zip', 'application/x-zip-compressed', 'multipart/x-zip', 'application/x-compressed');
+
+            if (in_array($type, $accepted_types)) { //If it is Zipped/compressed File
+                $okay = true;
+            }
+
+            $continue = strtolower($name[1]) == 'zip' ? true : false; //Checking the file Extension
+
+            if (!$continue) {
+                $message = "The file you are trying to upload is not a .zip file. Please try again.";
+            }
+
+            /* here it is really happening */
+            $ran = $name[0] . "-" . time() . "-" . rand(1, time());
+            $targetdir = dirname(__FILE__) . DIRECTORY_SEPARATOR . $ran;
+            $targetzip = dirname(__FILE__) . DIRECTORY_SEPARATOR . $ran . ".zip";
+
+            if (move_uploaded_file($tmp_name, $targetzip)) { //Uploading the Zip File
+
+                /* Extracting Zip File */
+
+                $zip = new ZipArchive();
+                $x = $zip->open($targetzip);  // open the zip file to extract
+                if ($x === true) {
+                    $zip->extractTo($targetdir); // place in the directory with same name  
+                    $zip->close();
+                    unlink($targetzip); //Deleting the Zipped file
+                }
+            }
+        }
+        return $targetdir . DIRECTORY_SEPARATOR . 'collections';
+    }
+
+    public function import_csv_full(array $csv_files, $dir) {
+        $collection_model = new CollectionModel;
+        //var_dump($csv_files, $dir);
+        ini_set('max_execution_time', '0');
+        $count = 0;
+        foreach ($csv_files as $csv) {
+            $name = explode(".", $csv);
+            if (strtolower($name[1]) == 'csv') {
+                //cria a coleção com o nome do arquivo ($name[0])
+                $data_collection['collection_name'] = html_entity_decode($name[0]);
+                $data_collection['collection_object'] = __('item', 'tainacan');
+                $collection_id = $collection_model->simple_add($data_collection, 'publish');
+                create_root_collection_category($collection_id, $data_collection['collection_object']);
+                $category_root_id = get_post_meta($collection_id, 'socialdb_collection_object_type', true);
+                //Coleção criada!
+                $objeto = fopen($dir . DIRECTORY_SEPARATOR . $csv, 'r');
+                // LEITURA DO ARQUIVO
+                $standart_metas = array(
+                    'title',
+                    'description',
+                    'content',
+                    'item_from',
+                    'item_type',
+                    'item_source',
+                    'permalink',
+                    'tags'
+                );
+                $mapping = [
+                    ['socialdb_entity' => 'post_title', 'value' => 'title'],
+                    ['socialdb_entity' => 'socialdb_object_content', 'value' => 'content'],
+                    ['socialdb_entity' => 'post_content', 'value' => 'description'],
+                    ['socialdb_entity' => 'socialdb_object_dc_type', 'value' => 'item_type'],
+                    ['socialdb_entity' => 'post_permalink', 'value' => 'permalink'],
+                    ['socialdb_entity' => 'tag', 'value' => 'tags']
+                ];
+                while (($csv_data = fgetcsv($objeto, 0, ';')) !== false) {
+                    $count++;
+                    if ($count == 1) {
+                        $lines['header'] = $csv_data;
+                        //cria os metadados da coleção
+                        $arr_metas = array();
+                        foreach ($csv_data as $key => $value) {
+                            if (!in_array($value, $standart_metas) && trim($value) != '') {
+                                $property_id = $this->add_property_data(utf8_encode($value), $category_root_id);
+                                add_term_meta($category_root_id, 'socialdb_category_property_id', $property_id);
+                                $arr_metas[] = array($key, $value, $property_id);
+                                $mapping[] = ['socialdb_entity' => 'dataproperty_' . $property_id, 'value' => $value];
+                            }
+                        }
+                        //Metadados Criados!
+                    } else {
+                        foreach ($csv_data as $key => $value) {
+                            $new_csv_data[$lines['header'][$key]] = $value;
+                        }
+                        $lines[] = $new_csv_data;
+                    }
+                }
+                //insere os itens da coleção
+                $this->insert_csv_itens($lines, $collection_id, $mapping, $category_root_id);
+                //Itens iseridos!
+                //var_dump($lines);
+            }
+        }
+    }
+
+    /**
+     * function add_property_data($property)
+     * @param object $property
+     * @return int O id da da propriedade criada.
+     * @author: Eduardo Humberto 
+     */
+    public function add_property_data($name, $category_root_id) {
+        $new_property = wp_insert_term((string) $name, 'socialdb_property_type', array('parent' => $this->get_property_type_id('socialdb_property_data'), 'slug' => $this->generate_slug((string) $name, 0)));
+        update_term_meta($new_property['term_id'], 'socialdb_property_required', false);
+        update_term_meta($new_property['term_id'], 'socialdb_property_data_widget', 'text');
+        update_term_meta($new_property['term_id'], 'socialdb_property_data_column_ordenation', false);
+        update_term_meta($new_property['term_id'], 'socialdb_property_default_value', '');
+        update_term_meta($new_property['term_id'], 'socialdb_property_created_category', $category_root_id);
+        return $new_property['term_id'];
+    }
+
+    public function get_property_type_id($property_parent_name) {
+        $property_root = get_term_by('name', $property_parent_name, 'socialdb_property_type');
+        return $property_root->term_id;
+    }
+
+    public function insert_csv_itens($lines, $collection_id, $bd_csv_data, $category_root_id) {
+        unset($lines['header']);
+        $categories = array($category_root_id);
+        for ($i = 0; $i < count($lines); $i++):
+            $object_id = socialdb_insert_object_csv('Import CSV ' . $count);
+            foreach ($bd_csv_data as $metadata) {
+                if ($metadata['socialdb_entity'] !== '') {
+                    $field_value = $lines[$i][str_replace('csv_p', '', $metadata['value'])];
+                    if ($metadata['socialdb_entity'] == 'post_title'):
+                        if (mb_detect_encoding($field_value, 'auto') == 'UTF-8') {
+                            $field_value = iconv('ISO-8859-1', 'UTF-8', $field_value);
+                        }
+                        $this->update_title($object_id, $field_value);
+                        $this->set_common_field_values($object_id, 'title', $field_value);
+                    elseif ($metadata['socialdb_entity'] == 'post_content'):
+                        $content .= $field_value . ",";
+                    elseif ($metadata['socialdb_entity'] == 'post_permalink'):
+                        update_post_meta($object_id, 'socialdb_object_dc_source', $field_value);
+                        $this->set_common_field_values($object_id, 'object_source', $field_value);
+                    elseif ($metadata['socialdb_entity'] == 'socialdb_object_content'):
+                        if (mb_detect_encoding($field_value, 'auto') == 'UTF-8') {
+                            $field_value = iconv('ISO-8859-1', 'UTF-8', $field_value);
+                        }
+                        update_post_meta($object_id, 'socialdb_object_content', $field_value);
+                        $this->set_common_field_values($object_id, 'object_content', $field_value);
+                    elseif ($metadata['socialdb_entity'] == 'socialdb_object_dc_type'):
+                        update_post_meta($object_id, 'socialdb_object_dc_type', $field_value);
+                        $this->set_common_field_values($object_id, 'object_type', $field_value);
+                    elseif ($metadata['socialdb_entity'] == 'tag' && $field_value != ''):
+                        $fields_value = explode('||', $field_value);
+                        foreach ($fields_value as $field_value):
+                            $fields[] = explode('::', $field_value);
+                        endforeach;
+                        foreach ($fields as $fields_value):
+                            foreach ($fields_value as $field_value):
+                                $this->insert_tag($field_value, $object_id, $data['collection_id']);
+                            endforeach;
+                        endforeach;
+                    elseif (strpos($metadata['socialdb_entity'], "dataproperty_") !== false):
+                        $trans = array("dataproperty_" => "");
+                        $id = strtr($metadata['socialdb_entity'], $trans);
+                        $has_inserted = add_post_meta($object_id, 'socialdb_property_' . $id, $field_value);
+                        if (!$has_inserted) {
+                            $final_test = add_post_meta($object_id, 'socialdb_property_' . $id, utf8_encode($field_value));
+                        }
+                        $this->set_common_field_values($object_id, "socialdb_property_$id", $field_value);
+                    endif;
+                }
+            }
+            if (mb_detect_encoding($content, 'auto') == 'UTF-8') {
+                $content = iconv('ISO-8859-1', 'UTF-8', $content);
+            }
+            update_post_meta($object_id, 'socialdb_object_from', 'external');
+            $this->set_common_field_values($object_id, 'object_from', 'external');
+            update_post_content($object_id, $content);
+            $this->set_common_field_values($object_id, 'description', $content);
+            socialdb_add_tax_terms($object_id, $categories, 'socialdb_category_type');
+            $content = '';
+            //$time_after_insert = microtime() - $time_start;
+            //var_dump(' Fim da insercao do item',$time_after_insert);
+        endfor;
     }
 
 }

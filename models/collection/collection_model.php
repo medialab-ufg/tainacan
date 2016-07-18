@@ -47,14 +47,14 @@ class CollectionModel extends Model {
      * Funcao que insere a colecao apenas com o nome e o tipo de objeto
      * Autor: Eduardo Humberto 
      */
-    public function simple_add($data) {
+    public function simple_add($data, $status = 'draft') {
         if ($this->verify_collection($data['collection_name'])) {
             return false;
         }
         $collection = array(
             'post_type' => 'socialdb_collection',
             'post_title' => $data['collection_name'],
-            'post_status' => 'draft',
+            'post_status' => $status,
             'post_author' => get_current_user_id(),
         );
         $collection_id = wp_insert_post($collection);

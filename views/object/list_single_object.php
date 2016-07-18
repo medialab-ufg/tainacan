@@ -1,8 +1,6 @@
 <?php
 /*
- *
  * View responsavel em mostrar um objeto especifico
- *
  *
  */
 include_once('./../../helpers/view_helper.php');
@@ -57,7 +55,7 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
 
             </div>
 
-            <div class="col-md-2 right">
+            <div class="col-md-2 right no-padding">
                 <ul class="item-funcs">
                     <?php
                     if ($collection_metas == 'allowed' || ($collection_metas == 'moderate' && is_user_logged_in()) || ($collection_metas == 'controlled' && ($is_moderator || $object->post_author == get_current_user_id()))) {
@@ -66,7 +64,9 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                             $thumbail_id = get_post_thumbnail_id($object->ID, 'full');
                             ?>
                             <li>
-                                <a class="btn btn-default btn-primary" href="<?php echo $url_image; ?>" download="<?php echo $object->post_title; ?>.jpg" onclick="downloadItem('<?php echo $thumbail_id; ?>');"><?php _e('Download', 'tainacan') ?></a>
+                                <a href="<?php echo $url_image; ?>" download="<?php echo $object->post_title; ?>.jpg" onclick="downloadItem('<?php echo $thumbail_id; ?>');">
+                                <span class="glyphicon glyphicon-download"></span>
+                                </a>
                             </li>
                             <?php
                         }
@@ -75,14 +75,14 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                     <?php if ($is_moderator || $object->post_author == get_current_user_id()): ?>
                         <li>
                             <a onclick="single_delete_object('<?= __('Delete Object', 'tainacan') ?>', '<?= __('Are you sure to remove the object: ', 'tainacan') . $object->post_title ?>', '<?php echo $object->ID ?>', '<?= mktime() ?>')" href="#" class="remove">
-                                 <?php /* <span class="glyphicon glyphicon-trash"></span> */ ?>
-                                <?php echo viewHelper::render_icon("remove"); ?>
+                                <span class="glyphicon glyphicon-trash"></span>
+                                <?php // echo viewHelper::render_icon("remove"); ?>
                             </a>
                         </li>
                         <li>
                             <a href="#" onclick="show_edit_object('<?php echo $object->ID ?>')" class="edit">
-                                <?php /* <span class="glyphicon glyphicon-edit"></span> */ ?>
-                                <?php echo viewHelper::render_icon("edit_type"); ?>
+                                <span class="glyphicon glyphicon-edit"></span>
+                                <?php // echo viewHelper::render_icon("edit_type"); ?>
                             </a>
                         </li>
                         <?php
@@ -373,9 +373,12 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                         </small>
                     <?php endif; ?>
                 </div>
-                <div id="text_description"><p><?php echo $object->post_content; ?></p></div>
-                <div id="event_description" style="display:none; min-height: 80px;">
-                    <textarea class="col-md-12 form-control" id="description_field"><?php echo $object->post_content; ?></textarea>
+
+                <div id="text_description">
+                    <div style="white-space: pre-wrap;"><?php echo $object->post_content; ?></div>
+                </div>
+                <div id="event_description" style="display:none; min-height: 150px;">
+                    <textarea class="col-md-12 form-control" id="description_field" style="width;100%; min-height: 150px;"><?php echo $object->post_content; ?></textarea>
                 </div>
             </div>
 

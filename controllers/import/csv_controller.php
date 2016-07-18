@@ -41,6 +41,11 @@ class CsvController extends Controller {
             case 'import_list_set':
                 $oaipmh_model->import_list_set($data['url'], $data['collection_id']);
                 return true;
+            case 'import_full_csv':
+                $dir = $csv_model->unzip_csv_package($data);
+                $csv_files = array_values(array_diff(scandir($dir), array('..', '.')));
+                $csv_model->import_csv_full($csv_files, $dir);
+                return true;
         }
     }
 
