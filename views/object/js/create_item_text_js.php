@@ -10,6 +10,7 @@ $(function(){
     //#6 - seto o id da colecao  no form do item     
     $('#create_object_collection_id').val($('#collection_id').val());
     //inicializando os containers da pagina
+    initiate_tabs().done(function (result) {
     $.when( 
             list_ranking_create($("#object_id_add").val()),
             show_object_properties(),
@@ -21,8 +22,10 @@ $(function(){
                 data: { operation: 'get_ordenation_properties',collection_id:$('#collection_id').val() }
             }).done(function(result) {
                 var json = $.parseJSON(result);
+                append_property_in_tabs();
+                list_tabs();
                 if(json&&json.ordenation&&json.ordenation!==''){
-                    reorder_properties_add_item(json.ordenation.split(','));
+                    //reorder_properties_add_item(json.ordenation.split(','));
                 }
                 //#4 - ckeditor para o conteudo do item
                 showCKEditor('object_editor');
@@ -37,6 +40,7 @@ $(function(){
                 $('.menu_left').show();
             });
         });
+     });    
     //caminho dos controller
     var src = $('#src').val();
     $( '#submit_form' ).submit( function( e ) {
