@@ -1,7 +1,7 @@
 <?php include_once("js/register_js.php"); ?>
 <div class="col-md-12" style="background: #E8E8E8; padding-top: 50px; margin-top: -20px; padding-bottom: 50px;">
     <div class="col-md-7 center" style="background: white; ">
-        <form id="formUserRegister" name="formUserRegister" >
+        <form id="formUserRegister" name="formUserRegister" type="POST">
             <input type="hidden" name="operation" value="add">
             <div class="modal-header">
                 <h4 class="modal-title" id="myModalLabel"><?php _e('Register', 'tainacan'); ?></h4>

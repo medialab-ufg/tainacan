@@ -110,6 +110,14 @@ class UserModel extends Model {
             $about_you = sanitize_text_field($data['about_you']);
             update_user_meta($user_id, 'about_you', $about_you);
         }
+        if ( isset($data['current_work']) ) {
+            $current_work = sanitize_text_field($data['current_work']);
+            update_user_meta($user_id, 'current_work', $current_work);
+        }
+        if (isset($data['prof_resume'])) {
+            $p_resume = sanitize_text_field($data['prof_resume']);
+            update_user_meta($user_id, 'prof_resume', $p_resume);
+        }
 
         $get_login = get_user_by('id', $user_id);
 

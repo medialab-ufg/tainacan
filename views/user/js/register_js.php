@@ -1,4 +1,24 @@
 <script type="text/javascript">
+    
+    $( '#formUserRegister' ).submit( function( e ) {
+        $.ajax( {
+            url: $('#src').val() + '/controllers/user/user_controller.php',
+            type: 'POST',
+            data: new FormData( this ),
+            processData: false,
+            contentType: false
+        } ).done(function( result ) {
+            elem =jQuery.parseJSON(result);
+            if(elem.login === 1){
+                window.location = elem.url;
+            }else{
+                showAlertGeneral(elem.title, elem.msg, elem.type);
+            }
+
+        });
+       e.preventDefault();
+    });
+
     $('a.more-options-register').click(function(e) {
         e.preventDefault();
 
