@@ -6,8 +6,10 @@
         var c2 = color2 || $("#second-custom-color").val();
         var items_count = $('.custom_color_schemes .color-container').length;
 
+        $('.custom_color_schemes').fadeIn().find(' .color-container').removeClass('selected');
+
         $('.custom_color_schemes .here').append(
-            '<div class="color-container"><div class="remove-cS"><a href="javascript:void(0)" class="remove-cs">x</a></div>' +
+            '<div class="color-container selected"><div class="remove-cS"><a href="javascript:void(0)" class="remove-cs">x</a></div>' +
             '<input type="text" class="color-input color1" style="background:'+c1+'" value="'+c1+'" name="color_scheme['+items_count+'][primary_color]"/> ' +
             '<input type="text" class="color-input color2" style="background:'+c2+'" value="'+c2+'" name="color_scheme['+items_count+'][secondary_color]"/> ' +
             '</div>');
@@ -34,8 +36,12 @@
             data: {operation: 'get_default_color_scheme', collection_id: $('#collection_id').val() }
         }).done(function(r) {
             var el = $.parseJSON(r);
-            colorize("", el.primary, el.secondary);
-            $("input[type='text'][value='"+el.primary+"']").first().parent().addClass('selected');
+            if (el) {
+                colorize("", el.primary, el.secondary);
+                $("input[type='text'][value='"+el.primary+"']").first().parent().addClass('selected');
+            } else {
+                colorize("", '#7AA7CF', '#0C698B');
+            }
         });
     }
 

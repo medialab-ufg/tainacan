@@ -305,5 +305,9 @@ class ViewHelper {
 
         return $_modal_footer;
     }
+    
+    public static function render_default_submit_button() {
+        return "<input type='submit' class='btn btn-primary pull-right' value='". __('Save', 'tainacan') ."'/>";
+    }
 
 } // ViewHelper

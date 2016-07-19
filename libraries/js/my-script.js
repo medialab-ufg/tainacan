@@ -2040,8 +2040,7 @@ function showAPIConfiguration(src) {
     }).done(function (result) {
         resetHomeStyleSettings();
         $('#main_part').hide();
-        $('#configuration').html(result);
-        $('#configuration').show();
+        $('#configuration').html(result).show();
     });
 }
 
