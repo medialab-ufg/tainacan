@@ -21,7 +21,7 @@ class PropertyModel extends Model {
     var $collectionModel;
     var $categoryModel;
 
-    public function PropertyModel() {
+    public function __construct() {
         $this->collectionModel = new CollectionModel();
         $this->categoryModel = new CategoryModel();
     }
@@ -149,6 +149,7 @@ class PropertyModel extends Model {
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_created_category', $data['property_category_id']);
             
             $data['property_id'] =$new_property['term_id'];
+            $data['new_property_id'] =$new_property['term_id'];
             //possivelmente um problema
             if($data['property_data_widget']=='autoincrement'){
                 $this->vinculate_objects_with_property_autoincrement($new_property['term_id'], $data['collection_id'], $data['property_category_id']);
@@ -626,6 +627,7 @@ class PropertyModel extends Model {
     public function list_property_data($data) {
         $collection_id = $data['collection_id'];
         $category_property = $this->set_category($data); // seto a categoria de onde vira as propriedades a partir dos dados vindos da view
+        $data['tabs'] = $this->get_tabs_list($data['collection_id']);
         $data['is_root'] = $this->is_category_root($data); // verifico se ela é a root da colecao
         $data['category'] = $category_property; // coloco no array que sera utilizado na view
         //$properties_verification = $this->categoryModel->get_properties($collection_id, []);
@@ -666,6 +668,7 @@ class PropertyModel extends Model {
 
     public function list_property_object($data,$is_reverse = false) {
         $category_property = $this->set_category($data); // seto a categoria de onde vira as propriedades a partir dos dados vindos da view
+        $data['tabs'] = $this->get_tabs_list($data['collection_id']);
         $data['is_root'] = $this->is_category_root($data); // verifico se ela e a root da colecao
         $data['category'] = $category_property; // coloco no array que sera utilizado na view
         //if ($this->has_properties($category_property->term_id)||!empty($this->categoryModel->get_properties($data['collection_id'], []))) {// verifico se existe propriedades
@@ -706,6 +709,7 @@ class PropertyModel extends Model {
      */
     public function list_property_terms($data) {
         $category_property = $this->set_category($data); // seto a categoria de onde vira as propriedades a partir dos dados vindos da view
+        $data['tabs'] = $this->get_tabs_list($data['collection_id']);
         $data['is_root'] = $this->is_category_root($data); // verifico se ela e a root da colecao
         $data['category'] = $category_property; // coloco no array que sera utilizado na view
         $collection_id = ($data['collection_id'])?$data['collection_id']:"";
@@ -734,6 +738,19 @@ class PropertyModel extends Model {
           //  $data['no_properties'] = true;
         //}
         return json_encode($data);
+    }
+    
+    /**
+     * 
+     * @param type $param
+     */
+    public function get_tabs_list($collection_id) {
+        $value = get_post_meta($collection_id, 'socialdb_collection_update_tab_organization',true);
+        if($value){
+           return json_encode(unserialize($value));
+        }else{
+          return json_encode(false);  
+        }
     }
 
     /* function get_property_object_facets() */
@@ -1061,6 +1078,26 @@ class PropertyModel extends Model {
         return (isset($new_root_category['term_id']))?$new_root_category['term_id']:false;
         
     } 
-    
+    /**
+     * 
+     *  metodo que atualiza as abas de uma propriedade
+     * 
+     * function update_tab_organization($data)
+     * @param int $collection_id
+     * @param int $tab_id
+     * @param int $property_id
+     * @autor: Eduardo Humberto 
+     */
+    public function update_tab_organization($collection_id,$tab_id,$property_id) {
+        $array = unserialize(get_post_meta($collection_id, 'socialdb_collection_update_tab_organization',true));
+        if($array && is_array($array)):
+            $array[0][$property_id] = $tab_id;
+        else:
+           $array = [];
+           $array[0][$property_id] = $tab_id;     
+        endif;
+        update_post_meta($collection_id, 'socialdb_collection_update_tab_organization',  serialize($array));
+    }
+
 
 }

@@ -4,21 +4,6 @@ include_once(dirname(__FILE__) . '/../../helpers/view_helper.php');
 include_once(dirname(__FILE__) . '/../../helpers/category/category_helper.php');
 $view_helper = new CategoryHelper;
 ?>
-<style>
-    .style-input{
-        padding: 5px;border: 1px solid #ccc;border-radius: 4px; 
-    }
-    .margin-buttons{
-        margin-left: 15px;
-        margin-top: 15px;
-    }
-    .label-button{
-        color: #0c698b;
-    }
-    #taxonomy_create_zone ul{
-        list-style: square;
-    }
-</style>    
 <div class="col-md-12 config-temp-box">
 
     <?php $view_helper->render_header_config_steps('categories') ?>

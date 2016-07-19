@@ -1880,12 +1880,17 @@ class Model {
     /**
      * funcao que busca o postmeta e retorna seu valor
      */
-    public function sdb_get_post_meta_by_value($post_id, $key, $value) {
+    public function sdb_get_post_meta_by_value($post_id, $key, $value = false) {
         global $wpdb;
-        $query = "SELECT * FROM $wpdb->postmeta WHERE post_id = $post_id AND meta_key LIKE '$key' AND meta_value LIKE '$value' ";
+        if($value){
+           $where =  " AND meta_value LIKE '$value' ";
+        }else{
+            $where =  '' ;
+        }
+        $query = "SELECT * FROM $wpdb->postmeta WHERE post_id = $post_id AND meta_key LIKE '$key'$where ";
         $result = $wpdb->get_results($query);
         if ($result && is_array($result)) {
-            return $result[0];
+            return (!$value) ? $result : $result[0];
         } elseif ($result && isset($result->ID)) {
             return $result;
         } else {

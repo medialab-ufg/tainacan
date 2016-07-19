@@ -506,6 +506,7 @@
     }
 
     function edit_metadata(id) {
+        list_tabs();
         $.ajax({
             url: $('#src').val() + '/controllers/property/property_controller.php',
             type: 'POST',
@@ -581,6 +582,8 @@
 
                 $( meta_modal + " .form_property_data #search_add_facet").val(id);
                 $( meta_modal + " .form_property_data #property_data_id").val(id);
+                $( meta_modal + " .socialdb_event_property_tab option[value='" + get_tab_property_id(elem.id) +"']").attr('selected','selected');
+
                
                 $( meta_modal + " .form_property_data #operation_property_data").val(operation);
 
@@ -671,12 +674,18 @@
         
         xhr.done(function (result) {
             elem = jQuery.parseJSON(result);
+            if(elem.tabs){
+                $('#tabs_properties').val(elem.tabs);
+            }
             list_collection_facets();
 
             if (elem.no_properties !== true) {
                 $.each(elem.property_data, function (idx, property) {
                     var current_id = property.id;
                     var current_search_widget = property.search_widget;
+                    //buscando a aba da propriedade
+                    var tab_property_id = get_tab_property_id(current_id)
+                    //visibilidade do metadado
                     if(property.metas.socialdb_property_visibility&&property.metas.socialdb_property_visibility==='hide'){
                         return true;
                     }
@@ -700,7 +709,7 @@
                             button = '<span class="glyphicon glyphicon-trash no-edit"></span>';
                         }
                         //adiciona na listagem
-                        $('ul#metadata-container').append(
+                        $(get_property_tab_seletor(tab_property_id)).append(
                             '<li id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="root_category '+class_var+' ui-widget-content ui-corner-tr">' +
                             '<label '+style+'   class="title-pipe">' + property.name + '</label>' +
                             '<a onclick="edit_metadata(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
@@ -708,7 +717,7 @@
                             button + '</div></li>');
                     } else {
                         if ( $.inArray(property.type, ranking_types) == -1 ) {
-                            $('ul#metadata-container').append(
+                            $(get_property_tab_seletor(tab_property_id)).append(
                                 '<li id="meta-item-' + current_id + '" data-widget="' + current_search_widget + '" class="' + property.type + ' ui-widget-content ui-corner-tr">' +
                                 '<label class="title-pipe">' + property.name + '</label><div class="action-icons">' +
                                 '<a onclick="edit_metadata(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
@@ -917,17 +926,23 @@
         
         xhr.done(function (result) {
             elem = jQuery.parseJSON(result);
+            if(elem.tabs){
+                $('#tabs_properties').val(elem.tabs);
+            }
             if (elem && elem.no_properties !== true) {
                 $('#no_properties_object').hide();
                 $('#table_property_object').html('');
                 $.each(elem.property_object, function (idx, property) {
                     var current_id = property.id;
+                    //buscando a aba da propriedade
+                    var tab_property_id = get_tab_property_id(current_id)
+                    //visibilidade do metadado
                     if(property.metas.socialdb_property_visibility&&property.metas.socialdb_property_visibility==='hide'){
                         return true;
                     }
                     if (property.metas.is_repository_property && property.metas.is_repository_property === true ||
                         (property.metas.socialdb_property_created_category && $('#property_category_id').val() !== property.metas.socialdb_property_created_category)) {
-                        $('ul#metadata-container').append(
+                        $(get_property_tab_seletor(tab_property_id)).append(
                             '<li id="meta-item-'+current_id+'" data-widget="' + property.search_widget + '" class="root_category ui-widget-content ui-corner-tr">' +
                             '<label class="title-pipe">' + property.name + '</label>' +
                             '<a onclick="edit_object('+ current_id +')" class="edit_property_data" href="javascript:void(0)">' +
@@ -935,7 +950,7 @@
                             ' <span class="glyphicon glyphicon-trash no-edit"><span> </div></li>' );
                     } else {
                         if ( $.inArray(property.type, ranking_types) == -1 ) {
-                            $('ul#metadata-container').append(
+                            $(get_property_tab_seletor(tab_property_id)).append(
                                 '<li id="meta-item-'+current_id+'" data-widget="' + property.search_widget + '" class="ui-widget-content ui-corner-tr"><label class="title-pipe">' + property.name +
                                 '</label><div class="action-icons">' +
                                 '<a onclick="edit_object('+ current_id +')" class="edit_property_data" href="javascript:void(0)">' +
@@ -982,6 +997,7 @@
     }
 
     function edit_object(id) {
+        list_tabs();
         $.ajax({
             url: $('#src').val() + '/controllers/property/property_controller.php',
             type: 'POST',
@@ -1004,7 +1020,7 @@
             }
 
             $("#meta-relationship").modal('show');
-            
+            $("#meta-relationship .socialdb_event_property_tab option[value='" + get_tab_property_id(elem.id) +"']").attr('selected','selected');
             //var related_collection = elem.metas.socialdb_property_object_category_id;
 //            if ( related_collection != null ) {
 //                $("#property_object_category_id").val(related_collection);
@@ -1133,14 +1149,19 @@
         
         xhr.done(function (result) {
             elem = jQuery.parseJSON(result);
-
+            if(elem.tabs){
+                $('#tabs_properties').val(elem.tabs);
+            }
             if (elem && elem.no_properties !== true) {
                 $.each(elem.property_terms, function (idx, property) {
+                    //visibilidade do metadado
                     if(property.metas.socialdb_property_visibility&&property.metas.socialdb_property_visibility==='hide'){
                         return true;
                     }
                     var current_id = property.id;
-
+                    //buscando a aba da propriedade
+                    var tab_property_id = get_tab_property_id(current_id);
+                    
                     var repository_property = property.metas.is_repository_property;
                     var created_category = property.metas.socialdb_property_created_category;
 
@@ -1163,7 +1184,7 @@
                         }else{
                             button = '<span class="glyphicon glyphicon-trash no-edit"></span>';
                         }
-                        $('ul#metadata-container').append(
+                        $(get_property_tab_seletor(tab_property_id)).append(
                             '<li id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="root_category '+class_var+' ui-widget-content ui-corner-tr term-root-'+term_root_id+'"><label '+style+' class="title-pipe">' + property.name +
                             '</label><div class="action-icons">' +
                             '<a onclick="edit_term(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
@@ -1172,7 +1193,7 @@
                     } else {
                         if ( $.inArray(property.type, ranking_types) == -1 ) {
                             var term_root_id =  property.metas.socialdb_property_term_root;
-                            $('ul#metadata-container').append(
+                            $(get_property_tab_seletor(tab_property_id)).append(
                                 '<li id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="ui-widget-content ui-corner-tr term-root-'+term_root_id+'"><label class="title-pipe">' + property.name +
                                 '</label><div class="action-icons"> <input type="hidden" class="property_data_id" value="' + current_id + '">' +
                                 '<a onclick="edit_term(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
@@ -1207,6 +1228,7 @@
     get_menu_property('terms');
 
     function edit_term(id) {
+        list_tabs();
         $.ajax({
             url: $('#src').val() + '/controllers/property/property_controller.php',
             type: 'POST',
@@ -1248,7 +1270,8 @@
             $("#meta-category .modal-title .edit").text('<?php _e('Edit property','tainacan') ?>');
             $("#meta-category #property_term_name").val( elem.name );
             $("#meta-category #socialdb_property_help").val( elem.metas.socialdb_property_help );
-
+            $("#meta-category .socialdb_event_property_tab option[value='" + get_tab_property_id(elem.id) +"']").attr('selected','selected');
+            
             if (elem.metas.socialdb_property_term_cardinality === '1') {
                 $('#meta-category #socialdb_property_term_cardinality_1').prop('checked', true);
             } else {
@@ -1424,8 +1447,18 @@
                                 $('#submit_form_ranking #range_' + $('#counter_range').val() + '_2').val(value.value_2);
                             });
                         }
-
-                        $('ul#metadata-container').append(
+                        //buscando a aba da propriedade
+                        var tab_property_id = false;
+                        var json = jQuery.parseJSON($('#tabs_properties').val());
+                        if(json.length>0){
+                            $.each(json,function(index,object){
+                                if(object[current_id]){
+                                    tab_property_id = object[current_id];
+                                }
+                            });
+                        }
+                        //visibilidade do metadado
+                        $(get_property_tab_seletor(tab_property_id)).append(
                             '<li id="meta-item-'+current_id+'" data-widget="' + ranking.search_widget + '" class="ui-widget-content ui-corner-tr"><label class="title-pipe">' + current_title +
                             '</label><div class="action-icons"> <input type="hidden" class="property_data_id" value="'+ current_id +'">' +
                             '<a onclick="edit_ranking('+ current_id + ')" class="edit_ranking" href="javascript:void(0)">' +
@@ -1455,7 +1488,7 @@
 
         $("#meta-voting span.ranking-action").text('<?php _e('Edit', 'tainacan') ?>');
         // $('#submit_form_ranking #range_form').html('');
-
+        list_tabs();
         $.ajax({
             type: "POST",
             url: src + "/controllers/ranking/ranking_controller.php",
@@ -1486,6 +1519,7 @@
             $("#submit_form_ranking #ranking_name").val(nome);
             $("#submit_form_ranking #ranking_id").val(collection_ranking_id);
             $("#submit_form_ranking #ranking_type").val(ranking_type);
+            $("#submit_form_ranking .socialdb_event_property_tab option[value='" + get_tab_property_id(elem.id) +"']").attr('selected','selected');
             $("#submit_form_ranking #operation").val(operation);
 
         });
@@ -1597,26 +1631,28 @@
         var fixed_meta = $("ul#metadata-container .fixed-meta");
         $('#loader_metadados_page').show();
         $('#metadata-container').hide();
-        $("ul#metadata-container").html('').append(fixed_meta);
+        $(".metadata-container").html('').append(fixed_meta);
         //apos o termino de$("ul#metadata-container").html('').append(fixed_meta);
         //apos o termino  todos os carregamentos
-        $.when( 
-            list_property_data(), 
-            list_property_terms(),
-            list_property_object(),
-            list_ranking()
-        ).done(function ( v1, v2 ) {
-             $.ajax({
-                type: "POST",
-                url: $('#src').val() + "/controllers/collection/collection_controller.php",
-                data: { operation: 'get_ordenation_properties',collection_id:$('#collection_id').val() }
-            }).done(function(result) {
-                var json = $.parseJSON(result);
-                if(json&&json.ordenation&&json.ordenation!==''){
-                    reorder_properties(json.ordenation.split(','));
-                }
-                $('#loader_metadados_page').hide();
-                $('#metadata-container').show();
+        initiate_tabs().done(function (result) {
+            $.when( 
+                list_property_data(), 
+                list_property_terms(),
+                list_property_object(),
+                list_ranking()
+            ).done(function ( v1, v2 ) {
+                 $.ajax({
+                    type: "POST",
+                    url: $('#src').val() + "/controllers/collection/collection_controller.php",
+                    data: { operation: 'get_ordenation_properties',collection_id:$('#collection_id').val() }
+                }).done(function(result) {
+                    var json = $.parseJSON(result);
+                    if(json&&json.ordenation&&json.ordenation!==''){
+                        reorder_properties(json.ordenation.split(','));
+                    }
+                    $('#loader_metadados_page').hide();
+                    $('#metadata-container').show();
+                });
             });
         });
 //        list_property_data();
@@ -2008,6 +2044,7 @@
      **/ 
     // mostra o modal da propriedade fixa
     function edit_fixed_property(id,name){
+         list_tabs();
         $('#property_fixed_id').val(id);
         $('#property_fixed_name').val(name);
         $('#modal_edit_fixed_property').modal('show');

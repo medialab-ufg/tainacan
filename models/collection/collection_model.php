@@ -1,3 +1,4 @@
+
 <?php
 
 if (isset($_GET['by_function'])) {
@@ -16,7 +17,7 @@ require_once(dirname(__FILE__) . '../../mapping/mapping_model.php');
 
 class CollectionModel extends Model {
 
-    public function CollectionModel() {
+    public function __construct() {
         //  $this->propertymodel = new PropertyModel();
     }
 
@@ -1123,6 +1124,23 @@ class CollectionModel extends Model {
             }
         }
         return $data;
+    }
+    /**
+     * metodo que realoca as propriedades de uma tab excluida
+     * 
+     * @param int $tab_id O id da aba
+     * @param int $collection_id O id da colecao
+     */
+    public function realocate_tabs_collection($tab_id,$collection_id){
+        $array = unserialize(get_post_meta($collection_id, 'socialdb_collection_update_tab_organization',true));
+        if($array && is_array($array) && $array[0]):
+            foreach ($array[0] as $index => $value) {
+                if($tab_id==$value){
+                    $array[0][$index] = 'default';
+                }
+            }
+        endif;
+        update_post_meta($collection_id, 'socialdb_collection_update_tab_organization',  serialize($array));
     }
 
 }
