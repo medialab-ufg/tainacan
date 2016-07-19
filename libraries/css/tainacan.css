@@ -894,7 +894,7 @@ a.collection-thumb img {
   z-index: 1051;
 }
 
-#cards-viewMode .item-colecao {
+#cards-viewMode .item-colecao, #cards_trash-viewMode .item-colecao {
   border: 3px solid #E8E8E8;
   background: white;
   border-radius: 2px;
@@ -902,101 +902,101 @@ a.collection-thumb img {
   height: 190px;
   padding: 10px;
 }
-#cards-viewMode .item-colecao .item-info .colFoto {
+#cards-viewMode .item-colecao .item-info .colFoto, #cards_trash-viewMode .item-colecao .item-info .colFoto {
   min-height: 160px;
 }
-#cards-viewMode .item-colecao .item-info .colFoto img {
+#cards-viewMode .item-colecao .item-info .colFoto img, #cards_trash-viewMode .item-colecao .item-info .colFoto img {
   height: 160px;
 }
-#cards-viewMode .item-colecao .item-info .item-meta {
+#cards-viewMode .item-colecao .item-info .item-meta, #cards_trash-viewMode .item-colecao .item-info .item-meta {
   color: #929497;
   font-size: 12px;
 }
-#cards-viewMode .item-colecao .item-info .item-meta-box {
+#cards-viewMode .item-colecao .item-info .item-meta-box, #cards_trash-viewMode .item-colecao .item-info .item-meta-box {
   padding-left: 0;
   margin-left: 0;
   position: relative;
   height: 160px;
 }
-#cards-viewMode .item-colecao .item-info .item-meta-box a {
+#cards-viewMode .item-colecao .item-info .item-meta-box a, #cards_trash-viewMode .item-colecao .item-info .item-meta-box a {
   font-weight: bolder;
   color: black;
 }
-#cards-viewMode .item-colecao .item-info .item-meta-box h4 {
+#cards-viewMode .item-colecao .item-info .item-meta-box h4, #cards_trash-viewMode .item-colecao .item-info .item-meta-box h4 {
   margin: 0 0 3px 0;
   height: 40px;
   overflow: hidden;
 }
-#cards-viewMode .item-colecao .item-info .item-meta-box .item-description {
+#cards-viewMode .item-colecao .item-info .item-meta-box .item-description, #cards_trash-viewMode .item-colecao .item-info .item-meta-box .item-description {
   overflow: hidden;
   max-height: 35px;
   height: 35px;
 }
-#cards-viewMode .item-colecao .item-info .item-meta-box .item-creation {
+#cards-viewMode .item-colecao .item-info .item-meta-box .item-creation, #cards_trash-viewMode .item-colecao .item-info .item-meta-box .item-creation {
   text-align: right;
 }
-#cards-viewMode .item-colecao .item-info .item-meta-box .author-created {
+#cards-viewMode .item-colecao .item-info .item-meta-box .author-created, #cards_trash-viewMode .item-colecao .item-info .item-meta-box .author-created {
   margin-top: 5px;
   margin-bottom: 5px;
   font-size: 11px;
 }
-#cards-viewMode .item-colecao .item-info .item-meta-box .author-created .author {
+#cards-viewMode .item-colecao .item-info .item-meta-box .author-created .author, #cards_trash-viewMode .item-colecao .item-info .item-meta-box .author-created .author {
   padding-right: 0;
 }
-#cards-viewMode .item-colecao .item-info .item-meta-box .show-item-metadata {
+#cards-viewMode .item-colecao .item-info .item-meta-box .show-item-metadata, #cards_trash-viewMode .item-colecao .item-info .item-meta-box .show-item-metadata {
   position: absolute;
   bottom: 0;
   width: 95%;
 }
-#cards-viewMode .item-colecao .editing-item {
+#cards-viewMode .item-colecao .editing-item, #cards_trash-viewMode .item-colecao .editing-item {
   width: 100%;
 }
-#cards-viewMode .item-colecao .editing-item .rankings-container {
+#cards-viewMode .item-colecao .editing-item .rankings-container, #cards_trash-viewMode .item-colecao .editing-item .rankings-container {
   float: left;
 }
-#cards-viewMode .item-colecao .editing-item .rankings-container .single-binaries {
+#cards-viewMode .item-colecao .editing-item .rankings-container .single-binaries, #cards_trash-viewMode .item-colecao .editing-item .rankings-container .single-binaries {
   margin-top: -5px;
 }
-#cards-viewMode .item-colecao .editing-item .item-redesocial {
+#cards-viewMode .item-colecao .editing-item .item-redesocial, #cards_trash-viewMode .item-colecao .editing-item .item-redesocial {
   position: relative;
   float: right;
   margin-top: -5px;
   margin-left: 5px !important;
 }
-#cards-viewMode .item-colecao .editing-item .item-redesocial div {
+#cards-viewMode .item-colecao .editing-item .item-redesocial div, #cards_trash-viewMode .item-colecao .editing-item .item-redesocial div {
   font-size: 1.2em;
 }
-#cards-viewMode .item-colecao .editing-item .item-redesocial a {
+#cards-viewMode .item-colecao .editing-item .item-redesocial a, #cards_trash-viewMode .item-colecao .editing-item .item-redesocial a {
   color: #79a6ce;
 }
-#cards-viewMode .item-colecao .editing-item .item-redesocial a:hover {
+#cards-viewMode .item-colecao .editing-item .item-redesocial a:hover, #cards_trash-viewMode .item-colecao .editing-item .item-redesocial a:hover {
   color: #929497;
 }
-#cards-viewMode .item-colecao .editing-item .item-redesocial span {
+#cards-viewMode .item-colecao .editing-item .item-redesocial span, #cards_trash-viewMode .item-colecao .editing-item .item-redesocial span {
   font-size: 2.7em;
   color: #CCCCCC;
   line-height: 1.2;
   text-align: center;
 }
-#cards-viewMode .item-colecao .editing-item .item-redesocial span:last-child {
+#cards-viewMode .item-colecao .editing-item .item-redesocial span:last-child, #cards_trash-viewMode .item-colecao .editing-item .item-redesocial span:last-child {
   font-size: 2.3em;
 }
-#cards-viewMode .item-colecao .close-metadata-box {
+#cards-viewMode .item-colecao .close-metadata-box, #cards_trash-viewMode .item-colecao .close-metadata-box {
   position: absolute;
   top: 4%;
   right: 2%;
   font-size: 1.3em;
 }
-#cards-viewMode .item-colecao .close-metadata-box span {
+#cards-viewMode .item-colecao .close-metadata-box span, #cards_trash-viewMode .item-colecao .close-metadata-box span {
   color: #aaa;
 }
-#cards-viewMode .item-colecao .class-meta-box {
+#cards-viewMode .item-colecao .class-meta-box, #cards_trash-viewMode .item-colecao .class-meta-box {
   overflow: scroll;
   overflow-x: hidden;
   height: 50px;
   display: none;
 }
-#cards-viewMode .item-colecao .shown-classifications {
+#cards-viewMode .item-colecao .shown-classifications, #cards_trash-viewMode .item-colecao .shown-classifications {
   position: absolute;
   padding: 15px;
   z-index: 4;
