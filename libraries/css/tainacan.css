@@ -1823,6 +1823,9 @@ h4.modal-title {
   margin-bottom: 5px;
 }
 
+.config_default_style#list_social_network table tbody th, .config_default_style#export_settings table tbody th, .config_default_style#import_settings table tbody th {
+  border-top: 0;
+}
 .config_default_style h3 {
   color: black;
   border-bottom: 1px solid #adadad;

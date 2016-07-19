@@ -20,6 +20,11 @@
 }
 // #list_social_network, #import_settings, #export_settings, #licenses_settings, #events_settings {
 .config_default_style {
+  &#list_social_network, &#export_settings, &#import_settings {
+    table tbody th {
+      border-top: 0;
+    }
+  }
   h3 {
     color: black;
     border-bottom: 1px solid $bs-button-gray-border;
