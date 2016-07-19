@@ -44,7 +44,7 @@
     // funcao que gera o conteudo da aba criada
     function get_tab_content(id){
         var html = get_expand_all_tab(id);
-        return '<div style="background:white;" id="tab-'+id+'" class="col-md-12 tab-pane fade multiple-items-accordion">'+
+        return '<div style="background:white;margin-bottom: 15px;margin-top: 15px;" id="tab-'+id+'" class="tab-pane fade">'+
                 html +
                 '<div id="accordeon-'+id+'" class="multiple-items-accordion"></div>'+
                 '</div>';
@@ -89,7 +89,7 @@
     function get_tab_property_id(current_id){
         var tab_property_id = false;
         var json = jQuery.parseJSON($('#tabs_properties').val());
-        if(json.length>0){
+        if(json&&json.length>0){
             $.each(json,function(index,object){
                 if(object[current_id]){
                     tab_property_id = object[current_id];
@@ -104,9 +104,19 @@
     //insere as propriedades na abacorreta
     function append_property_in_tabs(){
         $items = $("#text_accordion").children();
-        $properties = $("#show_form_properties").children();
-        $rankings = $("#create_list_ranking_<?php echo $object_id ?>").children();
-        //  $("#text_accordion").html('');
+        //propriedades
+        if($("#show_form_properties").children().length>0){
+            $properties = $("#show_form_properties").children();
+        }else if($("#show_form_properties_edit").children().length>0){
+            $properties = $("#show_form_properties_edit").children();
+        }
+        //rankings
+        var id = '<?php echo (isset($object->ID)) ? $object->ID : $object_id  ?>'
+        if($("#create_list_ranking_"+id).children().length>0){
+            $rankings = $("#create_list_ranking_"+id).children();
+        }else if($("#update_list_ranking_"+id).children().length>0){
+            $rankings = $("#update_list_ranking_"+id).children();
+        }
         // index is zero-based to you have to remove one from the values in your array
         for(var j = 0; j<$items.length;j++){
              var id = ($($items.get(j)).attr('id')) ? $($items.get(j)).attr('id').replace('meta-item-','') : '';

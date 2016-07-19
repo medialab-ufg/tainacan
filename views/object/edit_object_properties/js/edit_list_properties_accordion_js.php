@@ -40,7 +40,9 @@
             $('.cloud_label').click();
             $(this).find("div.action-text").text('<?php _e('Collapse all', 'tainacan') ?>');
         });
-        $('.expand-all-item').trigger('click');
+        if($('#tabs_properties').length==0){
+            $('.expand-all-item').trigger('click');
+        }
         // # - inicializa o campos das propriedades de termo  
         edit_list_properties_term_insert_objects();
     });

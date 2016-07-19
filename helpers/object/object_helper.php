@@ -12,6 +12,16 @@ class ObjectHelper extends ViewHelper {
     public function add_tabs() {
         $tabs = unserialize(get_post_meta($this->collection_id, 'socialdb_collection_update_tab_organization',true));
         $default_tab = get_post_meta($this->collection_id, 'socialdb_collection_default_tab', true);
+        if(!$tabs||empty($tabs)&&!$default_tab): ?>
+        <div    style="<?php echo ($this->hide_main_container)?'margin-bottom:0%':'' ?>" 
+                    class="expand-all-item btn white tainacan-default-tags">
+                <div class="action-text" 
+                     style="display: inline-block;">
+                         <?php _e('Expand all', 'tainacan') ?></div>
+                &nbsp;&nbsp;<span class="glyphicon-triangle-bottom white glyphicon"></span>
+                </div>   
+        <?php
+        else:       
         ?>
         <input  type="hidden" 
                 name="tabs_properties" 
@@ -27,8 +37,8 @@ class ObjectHelper extends ViewHelper {
                 </a>
             </li>
         </ul>
-        <div id="tab-content-metadata" class="tab-content" style="background: white">
-            <div id="tab-default"  class="col-md-12 tab-pane fade in active" style="background: white">
+        <div id="tab-content-metadata" class="tab-content" style="background: white;">
+            <div id="tab-default"  class="tab-pane fade in active" style="background: white;margin-bottom: 15px;margin-top: 15px;">
                 <div    style="margin-bottom:0%" 
                         onclick="open_accordeon('default')"
                         class="expand-all-item btn white tainacan-default-tags">
@@ -42,6 +52,7 @@ class ObjectHelper extends ViewHelper {
             </div>
         </div>    
         <?php
+         endif;
     }
     
     

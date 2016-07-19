@@ -27,11 +27,14 @@
            console.log('No dynatree found!');
         }
         //inicializando os containers da pagina
-        $.when( 
+        initiate_tabs().done(function (result) {
+            $.when( 
                 list_ranking_update($("#object_id_edit").val()),//busca os rankings do item
                 show_object_properties_edit(),//mostra as propriedades do item, com os formularios e seus widgets
                 show_collection_licenses()//mostra as licencas disponiveis
             ).done(function ( v1, v2 ) {
+                append_property_in_tabs();
+                list_tabs();
                 $.ajax({
                     type: "POST",
                     url: $('#src').val() + "/controllers/collection/collection_controller.php",
@@ -39,8 +42,17 @@
                 }).done(function(result) {
                     var json = $.parseJSON(result);
                     if(json&&json.ordenation&&json.ordenation!==''){
-                        reorder_properties_edit_item(json.ordenation.split(','));
+                        for (var $property in json.ordenation) {
+                            if (json.ordenation.hasOwnProperty($property)) {
+                                reorder_properties_edit_item($property,json.ordenation[$property].split(','));
+                                if($property==='default')
+                                    reorder_properties_edit_item($property,json.ordenation[$property].split(','),"#text_accordion");
+                            }
+                        }
                     }
+                    
+                    //ckeditor
+                    showCKEditor('objectedit_editor');
                     $("#text_accordion").accordion({
                         active: false,
                         collapsible: true,
@@ -52,9 +64,7 @@
                     $('.menu_left').show();
                 });
             });
-        //caminho dos controller
-        //ckeditor
-        showCKEditor('objectedit_editor');
+        });     
         //submit do editar
         $('#submit_form_edit_object').submit(function (e) {
             e.preventDefault();
@@ -192,9 +202,12 @@
         });
     });
     // verifica se exite uma ordencao pre definida
-    function reorder_properties_edit_item(array_ids){
-        var $ul = $("#text_accordion"),
-        $items = $("#text_accordion").children();
+    function reorder_properties_edit_item(tab_id,array_ids,seletor){
+        if(!seletor){
+            seletor = "#accordeon-"+tab_id;
+        }
+        var $ul = $(seletor),
+        $items = $(seletor).children();
         $properties = $("#show_form_properties_edit").children();
         $rankings = $("#update_list_ranking_<?php echo $object->ID ?>").children();
       //  $("#text_accordion").html('');
@@ -218,7 +231,13 @@
                      $( $rankings.get(j) ).appendTo( $ul);
                  }
              }
-      }
+        }
+        $($ul).accordion({
+            active: false,
+            collapsible: true,
+            header: "h2",
+            heightStyle: "content"
+        });
       $('[data-toggle="tooltip"]').tooltip();
     }
     

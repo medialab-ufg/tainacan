@@ -324,7 +324,6 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
                 <?php
             } elseif ($property['type'] == 'tree') {
                 $properties_terms_tree[] = $property['id'];
-                var_dump($property['metas']);
                 ?>
                 <button type="button"
                         onclick="showModalFilters('add_category','<?php echo get_term_by('id', $property['metas']['socialdb_property_term_root'] , 'socialdb_category_type')->name ?>',<?php echo $property['metas']['socialdb_property_term_root'] ?>,'field_property_term_<?php echo $property['id']; ?>')" 

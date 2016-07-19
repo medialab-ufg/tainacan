@@ -211,17 +211,21 @@
             },
             update: function( event, ui ) { 
                 var $ui_container = ui.item.context.parentNode.id;
-                var data = [];
-                $("#metadata-container="+id+" li").each(function(i, el){
+                var data = []; 
+                var tab = '';
+                $("#metadata-container-"+id+" li").each(function(i, el){
                      var p = $(el).attr('id').replace("meta-item-", "");
+                     tab = $(el).attr('tab');
                      data.push(p);
                 });
+                console.log(tab);
                 $.ajax({
                      type: "POST",
                      url: $('#src').val() + "/controllers/collection/collection_controller.php",
                      data: {
                          collection_id: $('#collection_id').val(), 
                          operation: 'update_ordenation_properties', 
+                         tab : tab, 
                          ordenation: data.join(',')}
                  });
 

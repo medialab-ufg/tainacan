@@ -710,7 +710,7 @@
                         }
                         //adiciona na listagem
                         $(get_property_tab_seletor(tab_property_id)).append(
-                            '<li id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="root_category '+class_var+' ui-widget-content ui-corner-tr">' +
+                            '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="root_category '+class_var+' ui-widget-content ui-corner-tr">' +
                             '<label '+style+'   class="title-pipe">' + property.name + '</label>' +
                             '<a onclick="edit_metadata(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
                             '<div class="action-icons"> <span class="glyphicon glyphicon-edit"></span></a> ' +
@@ -718,7 +718,7 @@
                     } else {
                         if ( $.inArray(property.type, ranking_types) == -1 ) {
                             $(get_property_tab_seletor(tab_property_id)).append(
-                                '<li id="meta-item-' + current_id + '" data-widget="' + current_search_widget + '" class="' + property.type + ' ui-widget-content ui-corner-tr">' +
+                                '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '" data-widget="' + current_search_widget + '" class="' + property.type + ' ui-widget-content ui-corner-tr">' +
                                 '<label class="title-pipe">' + property.name + '</label><div class="action-icons">' +
                                 '<a onclick="edit_metadata(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
                                 '<span class="glyphicon glyphicon-edit"><span></a> ' +
@@ -943,7 +943,7 @@
                     if (property.metas.is_repository_property && property.metas.is_repository_property === true ||
                         (property.metas.socialdb_property_created_category && $('#property_category_id').val() !== property.metas.socialdb_property_created_category)) {
                         $(get_property_tab_seletor(tab_property_id)).append(
-                            '<li id="meta-item-'+current_id+'" data-widget="' + property.search_widget + '" class="root_category ui-widget-content ui-corner-tr">' +
+                            '<li tab="'+tab_property_id+'" id="meta-item-'+current_id+'" data-widget="' + property.search_widget + '" class="root_category ui-widget-content ui-corner-tr">' +
                             '<label class="title-pipe">' + property.name + '</label>' +
                             '<a onclick="edit_object('+ current_id +')" class="edit_property_data" href="javascript:void(0)">' +
                             '<div class="action-icons default-metadata"><span class="glyphicon glyphicon-edit"><span></a> ' +
@@ -951,7 +951,7 @@
                     } else {
                         if ( $.inArray(property.type, ranking_types) == -1 ) {
                             $(get_property_tab_seletor(tab_property_id)).append(
-                                '<li id="meta-item-'+current_id+'" data-widget="' + property.search_widget + '" class="ui-widget-content ui-corner-tr"><label class="title-pipe">' + property.name +
+                                '<li tab="'+tab_property_id+'" id="meta-item-'+current_id+'" data-widget="' + property.search_widget + '" class="ui-widget-content ui-corner-tr"><label class="title-pipe">' + property.name +
                                 '</label><div class="action-icons">' +
                                 '<a onclick="edit_object('+ current_id +')" class="edit_property_data" href="javascript:void(0)">' +
                                 '<span class="glyphicon glyphicon-edit"><span></a> ' +
@@ -1185,7 +1185,7 @@
                             button = '<span class="glyphicon glyphicon-trash no-edit"></span>';
                         }
                         $(get_property_tab_seletor(tab_property_id)).append(
-                            '<li id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="root_category '+class_var+' ui-widget-content ui-corner-tr term-root-'+term_root_id+'"><label '+style+' class="title-pipe">' + property.name +
+                            '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="root_category '+class_var+' ui-widget-content ui-corner-tr term-root-'+term_root_id+'"><label '+style+' class="title-pipe">' + property.name +
                             '</label><div class="action-icons">' +
                             '<a onclick="edit_term(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
                             '<span class="glyphicon glyphicon-edit"><span></a> ' +
@@ -1194,7 +1194,7 @@
                         if ( $.inArray(property.type, ranking_types) == -1 ) {
                             var term_root_id =  property.metas.socialdb_property_term_root;
                             $(get_property_tab_seletor(tab_property_id)).append(
-                                '<li id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="ui-widget-content ui-corner-tr term-root-'+term_root_id+'"><label class="title-pipe">' + property.name +
+                                '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="ui-widget-content ui-corner-tr term-root-'+term_root_id+'"><label class="title-pipe">' + property.name +
                                 '</label><div class="action-icons"> <input type="hidden" class="property_data_id" value="' + current_id + '">' +
                                 '<a onclick="edit_term(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
                                 '<span class="glyphicon glyphicon-edit"><span></a> ' +
@@ -1459,7 +1459,7 @@
                         }
                         //visibilidade do metadado
                         $(get_property_tab_seletor(tab_property_id)).append(
-                            '<li id="meta-item-'+current_id+'" data-widget="' + ranking.search_widget + '" class="ui-widget-content ui-corner-tr"><label class="title-pipe">' + current_title +
+                            '<li tab="'+tab_property_id+'" id="meta-item-'+current_id+'" data-widget="' + ranking.search_widget + '" class="ui-widget-content ui-corner-tr"><label class="title-pipe">' + current_title +
                             '</label><div class="action-icons"> <input type="hidden" class="property_data_id" value="'+ current_id +'">' +
                             '<a onclick="edit_ranking('+ current_id + ')" class="edit_ranking" href="javascript:void(0)">' +
                             '<span class="glyphicon glyphicon-edit"><span></a> ' +
@@ -1648,23 +1648,23 @@
                 }).done(function(result) {
                     var json = $.parseJSON(result);
                     if(json&&json.ordenation&&json.ordenation!==''){
-                        reorder_properties(json.ordenation.split(','));
+                        for (var $property in json.ordenation) {
+                            if (json.ordenation.hasOwnProperty($property)) {
+                                reorder_properties($property,json.ordenation[$property].split(','));
+                            }
+                        }
                     }
                     $('#loader_metadados_page').hide();
                     $('#metadata-container').show();
                 });
             });
         });
-//        list_property_data();
-//        list_property_terms;
-//        list_property_object();
-//        list_ranking();
     }
-    
-    function reorder_properties(array_ids){
-        var $ul = $("#metadata-container"),
-        $items = $("#metadata-container").children();
-        $("#metadata-container").html('');
+ /***************************** ORDENACAO *************************************/  
+    function reorder_properties(tab_id,array_ids){
+        var $ul = $("#metadata-container-"+tab_id),
+        $items = $("#metadata-container-"+tab_id).children();
+        $("#metadata-container-"+tab_id).html('');
         // loop backwards so you can just prepend elements in the list
         // instead of trying to place them at a specific position
        for (var i = 0; i< array_ids.length; i++) {

@@ -5,7 +5,6 @@ $(function(){
     $("#tainacan-breadcrumbs .current-config").text('<?php _e('Create new item - Write text','tainacan') ?>');
     //#3  -  ativo os tootips
      $('[data-toggle="tooltip"]').tooltip();
-    
     //#5 - funcao que busca os rankings de um item
     //#6 - seto o id da colecao  no form do item     
     $('#create_object_collection_id').val($('#collection_id').val());
@@ -16,19 +15,25 @@ $(function(){
             show_object_properties(),
             show_collection_licenses()
         ).done(function ( v1, v2 ) {
+            append_property_in_tabs();
+            list_tabs();
             $.ajax({
                 type: "POST",
                 url: $('#src').val() + "/controllers/collection/collection_controller.php",
                 data: { operation: 'get_ordenation_properties',collection_id:$('#collection_id').val() }
             }).done(function(result) {
                 var json = $.parseJSON(result);
-                append_property_in_tabs();
-                list_tabs();
                 if(json&&json.ordenation&&json.ordenation!==''){
-                    //reorder_properties_add_item(json.ordenation.split(','));
+                     for (var $property in json.ordenation) {
+                        if (json.ordenation.hasOwnProperty($property)) {
+                            reorder_properties_add_item($property,json.ordenation[$property].split(','));
+                            if($property==='default')
+                                reorder_properties_add_item($property,json.ordenation[$property].split(','),"#text_accordion");
+                        }
+                    }
                 }
                 //#4 - ckeditor para o conteudo do item
-                showCKEditor('object_editor');
+                showCKEditor('object_editor');                
                 $("#text_accordion").accordion({
                     active: false,
                     collapsible: true,
@@ -171,13 +176,16 @@ $(function(){
 	
 });
 
-function reorder_properties_add_item(array_ids){
-        var $ul = $("#text_accordion"),
-        $items = $("#text_accordion").children();
+function reorder_properties_add_item(tab_id,array_ids,seletor){
+        if(!seletor){
+            seletor = "#accordeon-"+tab_id;
+        }
+        var $ul = $(seletor),
+        $items = $(seletor).children();
         $properties = $("#show_form_properties").children();
         $rankings = $("#create_list_ranking_<?php echo $object_id ?>").children();
       //  $("#text_accordion").html('');
-       for (var i = 0; i< array_ids.length; i++) {
+        for (var i = 0; i< array_ids.length; i++) {
            // index is zero-based to you have to remove one from the values in your array
             for(var j = 0; j<$items.length;j++){
                  if($($items.get(j)).attr('id')&&$($items.get(j)).attr('id')===array_ids[i]){
@@ -197,7 +205,13 @@ function reorder_properties_add_item(array_ids){
                      $( $rankings.get(j) ).appendTo( $ul);
                  }
              }
-      }
+        }
+        $($ul).accordion({
+            active: false,
+            collapsible: true,
+            header: "h2",
+            heightStyle: "content"
+        });
       $('[data-toggle="tooltip"]').tooltip();
     }
 
