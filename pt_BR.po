@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: socialdb\n"
-"POT-Creation-Date: 2016-07-18 15:49-0300\n"
-"PO-Revision-Date: 2016-07-18 15:50-0300\n"
+"POT-Creation-Date: 2016-07-19 16:49-0300\n"
+"PO-Revision-Date: 2016-07-19 16:49-0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -121,13 +121,13 @@ msgstr "Responder Comentário"
 #: views/ranking/list.php:98 views/theme_options/edit_tools.php:133
 #: views/theme_options/property/list.php:261
 #: views/theme_options/property/metadata/form_voting.php:81
-#: views/theme_options/property/metadata_forms.php:101 views/user/login.php:116
+#: views/theme_options/property/metadata_forms.php:101 views/user/login.php:111
 #: views/user/profile.php:103
 msgid "Close"
 msgstr "Fechar"
 
 #: comments.php:134 comments.php:165 views/object/list_modes/modals.php:47
-#: views/user/login.php:117
+#: views/user/login.php:112
 msgid "Send"
 msgstr "Enviar"
 
@@ -154,7 +154,7 @@ msgstr "Nos conte porque este conteúdo é abusivo"
 #: modules/tainacan-ontology/views/property/js/list_js.php:821
 #: views/advanced_search/js/advanced_search_js.php:29
 #: views/category/js/list_js.php:266 views/category/js/list_js.php:515
-#: views/event/js/list_js.php:255 views/license/js/list_js.php:149
+#: views/event/js/list_js.php:255 views/license/js/list_js.php:150
 #: views/object/edit_object_properties/js/edit_list_properties_accordion_js.php:492
 #: views/object/js/create_item_text_js.php:70
 #: views/object/js/create_item_text_js.php:146
@@ -273,11 +273,11 @@ msgstr "Nome da coleção inválido ou nome do item inválido"
 #: views/search/js/single_js.php:338 views/search/js/single_js.php:382
 #: views/search/js/single_js.php:400 views/search/js/single_js.php:478
 #: views/search/js/single_js.php:519 views/search/js/single_js.php:531
-#: views/search/js/single_js.php:570 views/theme_options/js/edit_js.php:6
-#: views/theme_options/js/edit_js.php:26 views/theme_options/js/edit_js.php:46
-#: views/theme_options/js/edit_js.php:66 views/theme_options/js/edit_js.php:86
-#: views/theme_options/js/edit_js.php:106
-#: views/theme_options/js/edit_js.php:127
+#: views/search/js/single_js.php:570 views/theme_options/js/edit_js.php:10
+#: views/theme_options/js/edit_js.php:30 views/theme_options/js/edit_js.php:50
+#: views/theme_options/js/edit_js.php:70 views/theme_options/js/edit_js.php:90
+#: views/theme_options/js/edit_js.php:110
+#: views/theme_options/js/edit_js.php:131
 #: views/theme_options/js/export_full_js.php:82
 #: views/theme_options/js/export_full_js.php:91
 #: views/theme_options/js/import_full_js.php:39
@@ -318,7 +318,7 @@ msgstr "Metadado de dado"
 #: views/property/list.php:14 views/ranking/list.php:13
 #: views/search/edit.php:14 views/search/edit.php:246
 #: views/search/js/edit_js.php:152 views/search/js/layout_js.php:196
-#: views/theme_options/edit.php:14 views/theme_options/property/list.php:14
+#: views/theme_options/property/list.php:14
 msgid "Rankings"
 msgstr "Votações"
 
@@ -331,7 +331,7 @@ msgstr "Por favor, preencha o delimitador corretamente!"
 
 #: controllers/license/license_controller.php:38
 #: controllers/license/license_controller.php:59
-#: controllers/theme_options/theme_options_controller.php:69
+#: controllers/theme_options/theme_options_controller.php:54
 #: models/category/category_model.php:996
 #: models/category/category_model.php:1002
 #: models/category/category_model.php:1103
@@ -382,19 +382,19 @@ msgstr "Erro"
 
 #: controllers/license/license_controller.php:39
 #: controllers/license/license_controller.php:60
-#: controllers/theme_options/theme_options_controller.php:70
+#: controllers/theme_options/theme_options_controller.php:55
 msgid "Please, fill the form correctly!"
 msgstr "Por favor, preencha o formulário corretamente!"
 
 #: controllers/license/license_controller.php:43
-#: controllers/theme_options/theme_options_controller.php:74
+#: controllers/theme_options/theme_options_controller.php:59
 #: views/social_network/js/update_js.php:38
 #: views/social_network/js/update_js.php:114
 msgid "Info"
 msgstr "Informação"
 
 #: controllers/license/license_controller.php:44
-#: controllers/theme_options/theme_options_controller.php:75
+#: controllers/theme_options/theme_options_controller.php:60
 msgid "This license is already registered!"
 msgstr "Esta licença já está cadastrada!"
 
@@ -462,8 +462,8 @@ msgstr "%1$s em %2$s"
 msgid "(Painel Edit )"
 msgstr "(Painel de edição)"
 
-#: functions.php:322 header.php:225 modules/contest/contest.php:75
-#: modules/contest/contest.php:106
+#: functions.php:322 header.php:225 helpers/view_helper.php:310
+#: modules/contest/contest.php:75 modules/contest/contest.php:106
 #: modules/tainacan-ontology/views/property/create.php:94
 #: modules/tainacan-ontology/views/property/create.php:159
 #: modules/tainacan-ontology/views/property/create.php:217
@@ -481,15 +481,12 @@ msgstr "(Painel de edição)"
 #: views/import/csv/maping_attributes.php:24
 #: views/import/import_configuration.php:89
 #: views/import/oaipmh/maping_attributes.php:47
-#: views/import/oaipmh/maping_attributes_1.php:40 views/license/list.php:42
+#: views/import/oaipmh/maping_attributes_1.php:40 views/license/list.php:51
 #: views/object/edit.php:240 views/object/edit_item_text.php:520
 #: views/property/metadata/form_voting.php:82 views/ranking/list.php:99
 #: views/search/edit.php:102 views/search/edit.php:315
 #: views/search/layout.php:37 views/search/layout.php:101
-#: views/theme_options/edit.php:51 views/theme_options/edit.php:65
-#: views/theme_options/edit.php:83 views/theme_options/edit.php:101
-#: views/theme_options/edit.php:119 views/theme_options/edit.php:132
-#: views/theme_options/edit.php:156 views/theme_options/licenses/edit.php:45
+#: views/theme_options/licenses/edit.php:45
 #: views/theme_options/property/metadata/form_voting.php:82
 msgid "Save"
 msgstr "Salvar"
@@ -700,7 +697,7 @@ msgid "Recents"
 msgstr "Recentes "
 
 #: functions.php:1247 models/collection/collection_model.php:538
-#: views/design/edit.php:106 views/license/list.php:13
+#: views/design/edit.php:106 views/license/list.php:22
 #: views/object/create_item_text.php:69 views/object/create_item_text.php:297
 #: views/object/edit_item_text.php:77 views/object/edit_item_text.php:320
 #: views/object/multiple_items/editor_items.php:77
@@ -849,7 +846,7 @@ msgstr "Categorias da coleção"
 #: views/category/js/taxonomy_zone_js.php:18 views/category/list.php:11
 #: views/category/list.php:217 views/collection/js/edit_js.php:61
 #: views/design/edit.php:134 views/search/menu_left.php:21
-#: views/theme_options/edit.php:12 views/theme_options/property/list.php:12
+#: views/theme_options/property/list.php:12
 msgid "Categories"
 msgstr "Categorias"
 
@@ -915,8 +912,7 @@ msgstr "Configurações do Repositório"
 #: header.php:126 views/category/list.php:216
 #: views/collection/config_menu.php:7 views/design/edit.php:11
 #: views/property/list.php:12 views/ranking/list.php:11
-#: views/search/edit.php:12 views/theme_options/edit.php:11
-#: views/theme_options/property/list.php:11
+#: views/search/edit.php:12 views/theme_options/property/list.php:11
 msgid "Configuration"
 msgstr "Configuração"
 
@@ -935,8 +931,7 @@ msgstr "Metadados"
 msgid "Users"
 msgstr "Usuários"
 
-#: header.php:129 views/theme_options/edit.php:15
-#: views/theme_options/property/list.php:15
+#: header.php:129 views/theme_options/property/list.php:15
 msgid "Social / API Keys"
 msgstr "Chaves de APIs / Redes Sociais"
 
@@ -999,7 +994,7 @@ msgstr "Exportação"
 msgid "Click to download the manual"
 msgstr "Clique para baixar o manual"
 
-#: header.php:149 views/user/login.php:43 views/user/login.php:95
+#: header.php:149 views/user/login.php:46 views/user/login.php:88
 msgid "Login"
 msgstr "Entrar"
 
@@ -3036,7 +3031,7 @@ msgstr "Opcional"
 #: views/category/list.php:218 views/category/page.php:78
 #: views/object/list_data_table.php:104 views/object/list_single_object.php:450
 #: views/property/list.php:33 views/property/list.php:38
-#: views/theme_options/edit.php:13 views/theme_options/property/list.php:13
+#: views/theme_options/property/list.php:13
 msgid "Properties"
 msgstr "Metadados"
 
@@ -3470,7 +3465,7 @@ msgstr ""
 #: modules/tainacan-ontology/tainacan-ontology.php:1724
 #: views/category/list.php:225 views/property/list.php:20
 #: views/ranking/list.php:19 views/search/edit.php:20
-#: views/theme_options/edit.php:21 views/theme_options/property/list.php:21
+#: views/theme_options/property/list.php:21
 msgid "Next"
 msgstr "Próximo passo "
 
@@ -3478,8 +3473,7 @@ msgstr "Próximo passo "
 #: modules/tainacan-ontology/tainacan-ontology.php:1725
 #: views/category/list.php:224 views/design/edit.php:18
 #: views/property/list.php:19 views/ranking/list.php:18
-#: views/search/edit.php:19 views/theme_options/edit.php:19
-#: views/theme_options/property/list.php:19
+#: views/search/edit.php:19 views/theme_options/property/list.php:19
 msgid "Previous"
 msgstr "Anterior"
 
@@ -4249,27 +4243,27 @@ msgid "Import Social Media"
 msgstr "Importar de Redes Sociais"
 
 #: single.php:767 views/social_network/list.php:22
-#: views/theme_options/edit.php:33 views/theme_options/edit.php:45
+#: views/theme_options/edit.php:12
 msgid "Youtube"
 msgstr "Youtube"
 
 #: single.php:768 views/social_network/list.php:23
-#: views/theme_options/edit.php:34 views/theme_options/edit.php:59
+#: views/theme_options/edit.php:13
 msgid "Flickr"
 msgstr "Flickr"
 
 #: single.php:769 views/social_network/list.php:24
-#: views/theme_options/edit.php:35 views/theme_options/edit.php:73
+#: views/theme_options/edit.php:14
 msgid "Facebook"
 msgstr "Facebook"
 
 #: single.php:770 views/social_network/list.php:25
-#: views/theme_options/edit.php:36 views/theme_options/edit.php:91
+#: views/theme_options/edit.php:15
 msgid "Instagram"
 msgstr "Instagram"
 
 #: single.php:771 views/social_network/list.php:26
-#: views/theme_options/edit.php:37 views/theme_options/edit.php:109
+#: views/theme_options/edit.php:16
 msgid "Vimeo"
 msgstr "Vimeo"
 
@@ -4301,15 +4295,15 @@ msgid "Entry youtube video url"
 msgstr "Digite a url do vídeo do youtube"
 
 #: single.php:792 single.php:796 single.php:798 single.php:866 single.php:885
-#: single.php:943 views/license/list.php:33 views/license/list.php:36
+#: single.php:943 views/license/list.php:42 views/license/list.php:45
 #: views/object/multiple_social_network/create.php:84
-#: views/social_network/list.php:51 views/theme_options/edit.php:50
-#: views/theme_options/edit.php:64 views/theme_options/edit.php:78
-#: views/theme_options/edit.php:81 views/theme_options/edit.php:96
-#: views/theme_options/edit.php:99 views/theme_options/edit.php:114
-#: views/theme_options/edit.php:117 views/theme_options/edit.php:145
-#: views/theme_options/edit.php:148 views/theme_options/edit.php:151
-#: views/theme_options/edit.php:154 views/theme_options/edit_tools.php:36
+#: views/social_network/list.php:51 views/theme_options/edit.php:28
+#: views/theme_options/edit.php:40 views/theme_options/edit.php:53
+#: views/theme_options/edit.php:56 views/theme_options/edit.php:70
+#: views/theme_options/edit.php:73 views/theme_options/edit.php:87
+#: views/theme_options/edit.php:90 views/theme_options/edit.php:116
+#: views/theme_options/edit.php:119 views/theme_options/edit.php:122
+#: views/theme_options/edit.php:125 views/theme_options/edit_tools.php:36
 #: views/theme_options/edit_tools.php:40 views/theme_options/edit_tools.php:48
 #: views/theme_options/edit_tools.php:56
 #: views/theme_options/licenses/edit.php:29
@@ -4758,7 +4752,7 @@ msgstr "Redes Sociais"
 #: views/category/list.php:221 views/design/edit.php:15
 #: views/design/edit.php:27 views/property/list.php:16
 #: views/ranking/list.php:15 views/search/edit.php:16
-#: views/theme_options/edit.php:16 views/theme_options/property/list.php:16
+#: views/theme_options/property/list.php:16
 msgid "Design"
 msgstr "Visual"
 
@@ -5758,7 +5752,11 @@ msgstr "Há mapeamentos duplicados"
 msgid "URL invalid or not available!"
 msgstr "URL inválida ou indisponível"
 
-#: views/license/js/list_js.php:150 views/search/js/edit_js.php:283
+#: views/license/js/list_js.php:129
+msgid "Edit license"
+msgstr "Editar licença"
+
+#: views/license/js/list_js.php:151 views/search/js/edit_js.php:283
 #: views/social_network/js/delete_js.php:16
 #: views/social_network/js/delete_js.php:63
 #: views/social_network/js/delete_js.php:111
@@ -5772,31 +5770,35 @@ msgstr "Tem certeza?"
 msgid "Collection Licenses"
 msgstr "Licenças da Coleção"
 
-#: views/license/list.php:14 views/theme_options/licenses/edit.php:16
-msgid "Pattern"
-msgstr "Padrão"
+#: views/license/list.php:11
+msgid "Current Licenses"
+msgstr "Licenças atuais"
 
-#: views/license/list.php:15
-msgid "Enabled"
-msgstr "Ativado"
-
-#: views/license/list.php:26
+#: views/license/list.php:12
 msgid "Add license"
 msgstr "Adicionar licença"
 
-#: views/license/list.php:32
+#: views/license/list.php:23 views/theme_options/licenses/edit.php:16
+msgid "Pattern"
+msgstr "Padrão"
+
+#: views/license/list.php:24
+msgid "Enabled"
+msgstr "Ativado"
+
+#: views/license/list.php:41
 msgid "License Title"
 msgstr "Título da licença"
 
-#: views/license/list.php:35
+#: views/license/list.php:44
 msgid "License URL"
 msgstr "URL  da licença"
 
-#: views/license/list.php:38
+#: views/license/list.php:47
 msgid "License Description"
 msgstr "Descrição da licença"
 
-#: views/license/list.php:40
+#: views/license/list.php:49
 msgid "Describe briefly"
 msgstr "Descreva brevemente"
 
@@ -7629,60 +7631,56 @@ msgstr "Subclasse de Tag"
 msgid "Back to Home Page"
 msgstr "Voltar para Home"
 
-#: views/theme_options/edit.php:31
+#: views/theme_options/edit.php:9 views/theme_options/js/edit_js.php:4
 msgid "API Keys Configuration"
 msgstr "Configuração de Chaves de APIs"
 
-#: views/theme_options/edit.php:38
+#: views/theme_options/edit.php:17
 msgid "Embed.ly"
 msgstr "API Embed.ly"
 
-#: views/theme_options/edit.php:39 views/theme_options/edit.php:140
+#: views/theme_options/edit.php:18
 msgid "Google / Google +"
 msgstr "Google / Google +"
 
-#: views/theme_options/edit.php:49 views/theme_options/edit.php:63
-#: views/theme_options/edit.php:77 views/theme_options/edit.php:95
+#: views/theme_options/edit.php:27 views/theme_options/edit.php:39
+#: views/theme_options/edit.php:52 views/theme_options/edit.php:69
 msgid "API ID"
 msgstr "API ID"
 
-#: views/theme_options/edit.php:80 views/theme_options/edit.php:98
+#: views/theme_options/edit.php:55 views/theme_options/edit.php:72
 msgid "API Secret"
 msgstr "API Secret"
 
-#: views/theme_options/edit.php:113
+#: views/theme_options/edit.php:86
 msgid "API Client ID"
 msgstr "API Client ID"
 
-#: views/theme_options/edit.php:116
+#: views/theme_options/edit.php:89
 msgid "API Client Secrets"
 msgstr "API Client Secrets"
 
-#: views/theme_options/edit.php:126
-msgid "Embed.Ly"
-msgstr "Embed.Ly"
-
-#: views/theme_options/edit.php:130
+#: views/theme_options/edit.php:102
 msgid "Embed Ly API ID"
 msgstr "Embed Ly API ID"
 
-#: views/theme_options/edit.php:131
+#: views/theme_options/edit.php:103
 msgid "Type the Embed Ly API ID"
 msgstr "Type the Embed Ly API ID"
 
-#: views/theme_options/edit.php:144
+#: views/theme_options/edit.php:115
 msgid "Client ID"
 msgstr "ID do cliente"
 
-#: views/theme_options/edit.php:147
+#: views/theme_options/edit.php:118
 msgid "Client Secret Key"
 msgstr "Chave secreta do cliente"
 
-#: views/theme_options/edit.php:150
+#: views/theme_options/edit.php:121
 msgid "Redirect URI"
 msgstr "URL de redirecionamento"
 
-#: views/theme_options/edit.php:153
+#: views/theme_options/edit.php:124
 msgid "API Key"
 msgstr "API Key"
 
@@ -7858,20 +7856,20 @@ msgstr "como um modelo "
 msgid "Removing the template"
 msgstr "Removendo a coleção modelo"
 
-#: views/theme_options/js/edit_js.php:6 views/theme_options/js/edit_js.php:26
-#: views/theme_options/js/edit_js.php:106
+#: views/theme_options/js/edit_js.php:10 views/theme_options/js/edit_js.php:30
+#: views/theme_options/js/edit_js.php:110
 msgid "Please set a valid API KEY"
 msgstr "Por favor, insira uma API KEY válida"
 
-#: views/theme_options/js/edit_js.php:46 views/theme_options/js/edit_js.php:66
+#: views/theme_options/js/edit_js.php:50 views/theme_options/js/edit_js.php:70
 msgid "Please set a valid API KEY or API Secret"
 msgstr "Por favor, insira uma API KEY ou API Secret válida"
 
-#: views/theme_options/js/edit_js.php:86
+#: views/theme_options/js/edit_js.php:90
 msgid "Please set a valid API Client ID or API Client Secrets"
 msgstr "Por favor insira válidos API Client ID ou API Client Secrets"
 
-#: views/theme_options/js/edit_js.php:127
+#: views/theme_options/js/edit_js.php:131
 msgid "Please, there are emtpy fields"
 msgstr "Há campos vazios"
 
@@ -7932,44 +7930,40 @@ msgstr "Metadado obrigatório"
 msgid "Less options"
 msgstr "Menos opções"
 
-#: views/user/login.php:50
+#: views/user/login.php:53
 msgid "Login with Facebook"
 msgstr "Entrar com Facebook"
 
-#: views/user/login.php:58
+#: views/user/login.php:61
 msgid "Login with Google Plus"
 msgstr "Entrar com Google Plus"
 
-#: views/user/login.php:68 views/user/register.php:54
+#: views/user/login.php:71 views/user/register.php:54
 msgid "or"
 msgstr "ou"
 
-#: views/user/login.php:77
-msgid "Please sign in"
-msgstr "Por favor, registre-se"
-
-#: views/user/login.php:78 views/user/login.php:79 views/user/profile.php:49
+#: views/user/login.php:81 views/user/login.php:82 views/user/profile.php:49
 #: views/user/register.php:74
 msgid "Username"
 msgstr "Usuário"
 
-#: views/user/login.php:81 views/user/login.php:82 views/user/register.php:80
+#: views/user/login.php:84 views/user/login.php:85 views/user/register.php:80
 msgid "Password"
 msgstr "Senha"
 
-#: views/user/login.php:94
+#: views/user/login.php:87
 msgid "Forgot password?"
 msgstr "Esqueceu sua senha?"
 
-#: views/user/login.php:107
+#: views/user/login.php:101
 msgid "Forgot Password?"
 msgstr "Esqueceu sua senha?"
 
-#: views/user/login.php:111
+#: views/user/login.php:106
 msgid "Username or Email"
 msgstr "Nome de usuário ou Email"
 
-#: views/user/login.php:112
+#: views/user/login.php:107
 msgid "Type here the username that you will use for login or your email"
 msgstr ""
 "Digite aqui seu usuário que você usará para seu login ou então seu email"
@@ -8045,6 +8039,12 @@ msgstr "Local de trabalho atual"
 #: views/user/register.php:102
 msgid "Professional Resume"
 msgstr "Resumo profissional"
+
+#~ msgid "Embed.Ly"
+#~ msgstr "Embed.Ly"
+
+#~ msgid "Please sign in"
+#~ msgstr "Por favor, registre-se"
 
 #~ msgid "Remove thumbnail"
 #~ msgstr "Apagar miniatura"

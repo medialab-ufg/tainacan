@@ -126,6 +126,7 @@
     }
 
     function editCustomLicense(id) {
+        $('.edit-license').click().text('<?php _e("Edit license", "tainacan") ?>');
         $.ajax({
             url: src + '/controllers/license/license_controller.php',
             type: 'POST',

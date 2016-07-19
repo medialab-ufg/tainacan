@@ -1875,9 +1875,6 @@ h4.modal-title {
 .config_default_style .highlight table {
   margin-bottom: 8px;
 }
-.config_default_style .new-license {
-  border-top: 1px solid #E8E8E8;
-}
 .config_default_style .new-license h3 {
   border: none;
   padding-left: 0;
@@ -2016,10 +2013,10 @@ h4.modal-title {
   color: black !important;
 }
 
-#api-keys ul li a {
+#api-keys ul li a, #licenses_settings ul li a {
   color: black;
 }
-#api-keys ul li.active {
+#api-keys ul li.active, #licenses_settings ul li.active {
   font-weight: bolder;
 }
 
