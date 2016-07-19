@@ -21,10 +21,9 @@
         }
         //# - inicializa os tooltips
         $('[data-toggle="tooltip"]').tooltip();
-         //# - se o usuario desejar abrir todos os metadados
+        //# - se o usuario desejar abrir todos os metadados
         $('.expand-all-item').toggle(function () {
             setMenuContainerHeight();
-
             $(this).find("div.action-text").text('<?php _e('Expand all', 'tainacan') ?>');
             $('#text_accordion .ui-accordion-content').fadeOut();
             $('.prepend-filter-label').switchClass('glyphicon-triangle-bottom', 'glyphicon-triangle-right');
@@ -37,7 +36,9 @@
             $('.cloud_label').click();
             $(this).find("div.action-text").text('<?php _e('Collapse all', 'tainacan') ?>');
         });
-        $('.expand-all-item').trigger('click');
+        if($('#tabs_properties').length==0){
+            $('.expand-all-item').trigger('click');
+        }
         // # - inicializa o campos das propriedades de termo  
         list_properties_term_insert_objects();
         validate_all_fields();

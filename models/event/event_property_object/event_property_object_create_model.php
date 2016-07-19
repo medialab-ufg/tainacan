@@ -74,6 +74,7 @@ class EventPropertyObjectCreate extends EventModel {
         if($data['property_object_is_reverse']=='true'){
            $data['property_object_reverse'] = get_post_meta($event_id, 'socialdb_event_property_object_create_reverse',true) ;   
         }
+        $data['property_tab'] = get_post_meta($event_id, 'socialdb_event_property_tab',true) ;
         //se estiver apenas vinculando
         $data['property_id'] = get_post_meta($event_id, 'socialdb_event_property_object_create_id',true) ;
         //bsucando a categoria que sera inserido o metadado
@@ -87,6 +88,8 @@ class EventPropertyObjectCreate extends EventModel {
             $result = json_decode($propertyModel->add_property_object($data));
             if(isset($result->new_property_id)){
                 do_action('after_event_add_property_object',$result->new_property_id,$event_id);
+                //a aba da propriedade
+                $propertyModel->update_tab_organization($data['collection_id'],$data['property_tab'], $result->new_property_id);
             }
         }else{
             add_term_meta($property_category_id, 'socialdb_category_property_id', $data['property_id']);

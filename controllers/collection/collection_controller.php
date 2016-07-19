@@ -246,26 +246,58 @@ class CollectionController extends Controller {
                 $colectionTemplateModel = new CollectionTemplatesModel;
                 return $colectionTemplateModel->delete_collection_template($data);
                 break;
-            /************************ ordenacao dos metadados *******************/
+            /************************* Tabs ***********************************/
+            case 'alter_tab_name':
+                 if($data['id']!='default'){
+                     $collection_model->sdb_update_post_meta($data['id'], $data['name']);
+                 }else{
+                     update_post_meta($data['collection_id'], 'socialdb_collection_default_tab', $data['name']);
+                 }
+                break;
+            case 'get_tabs':
+                $default_tab = get_post_meta($data['collection_id'], 'socialdb_collection_default_tab', true);
+                $tabs['default'] = (!$default_tab) ? __('Default', 'tainacan') : $default_tab ;
+                $tabs['array'] = $collection_model->sdb_get_post_meta_by_value($data['collection_id'], 'socialdb_collection_tab');
+                if($tabs &&  is_array($tabs)){
+                    return json_encode($tabs);
+                }else{
+                   return  json_encode([]);
+                }
+            case 'insert_tab':
+                $data['id'] = $collection_model->sdb_add_post_meta($data['collection_id'], 'socialdb_collection_tab', $data['tab_name']);
+                return json_encode($data);
+            case 'remove_tab':
+                $collection_model->realocate_tabs_collection($data['id'], $data['collection_id']);
+                $collection_model->sdb_delete_post_meta($data['id']);
+                return json_encode($data);
+            /********************** ordenacao dos metadados *******************/
             case 'update_ordenation_properties':
-                update_post_meta($data['collection_id'], 'socialdb_collection_properties_ordenation', $data['ordenation']);
+                $meta = unserialize(get_post_meta($data['collection_id'], 'socialdb_collection_properties_ordenation', true));
+                if(isset($data['tab'])){
+                     $index = ($data['tab']=='false')? 'default' : $data['tab'];
+                     $array = (is_array($meta)) ? $meta : [];
+                     $array[$index] = $data['ordenation'];
+                     update_post_meta($data['collection_id'], 'socialdb_collection_properties_ordenation', serialize($array));
+                }
                 break;
             case 'get_ordenation_properties':
-                $meta =  get_post_meta($data['collection_id'], 'socialdb_collection_properties_ordenation', true);
-                if(!$meta||$meta==''){
+                $meta = unserialize(get_post_meta($data['collection_id'], 'socialdb_collection_properties_ordenation', true));
+                if(!$meta||$meta==''||$data['tab']){
                      $data['ordenation'] = '';
                      return json_encode($data);
                 }
-                $ids = explode(',', $meta);
-                $new_ids = [];
-                foreach ($ids as $id) {
-                   if(is_numeric($id)){
-                       $new_ids[] = 'meta-item-'.$id;
-                   }else{
-                        $new_ids[] =$id;
-                   }
+                foreach ($meta as $tab_id => $string) {
+                    $ids = explode(',',$string);
+                    $new_ids = [];
+                    foreach ($ids as $id) {
+                       if(is_numeric($id)){
+                           $new_ids[] = 'meta-item-'.$id;
+                       }else{
+                            $new_ids[] =$id;
+                       }
+                    }
+                    $data['ordenation'][$tab_id] = implode(',', $new_ids);
                 }
-                $data['ordenation'] = implode(',', $new_ids);
                 return json_encode($data);
             /************************ Pagina de comentarios *******************/
             case 'comments':

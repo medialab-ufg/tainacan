@@ -1,8 +1,10 @@
 <?php
+    include_once ('js/tabs_item_js.php');
     include_once ('js/create_item_text_js.php');
     include_once(dirname(__FILE__).'/../../helpers/view_helper.php');
+    include_once(dirname(__FILE__).'/../../helpers/object/object_helper.php');
 
-    $view_helper = new ViewHelper($collection_id);
+    $view_helper = new ObjectHelper($collection_id);
     $val = get_post_meta($collection_id, 'socialdb_collection_submission_visualization', true);
     if($val&&$val=='one'){
         $view_helper->hide_main_container = true;
@@ -47,14 +49,17 @@
                     </button>
                 </h3>
                 <hr>
-            <?php endif; ?>
-            <div    style="<?php echo ($view_helper->hide_main_container)?'margin-bottom:0%':'' ?>" 
+                <!--------------------------- ABAS----------------------------->
+                <?php $view_helper->add_tabs() ?>
+            <?php else: ?>   
+                <div    style="<?php echo ($view_helper->hide_main_container)?'margin-bottom:0%':'' ?>" 
                     class="expand-all-item btn white tainacan-default-tags">
                 <div class="action-text" 
                      style="display: inline-block;">
                          <?php _e('Expand all', 'tainacan') ?></div>
                 &nbsp;&nbsp;<span class="glyphicon-triangle-bottom white glyphicon"></span>
-            </div>
+                </div>
+            <?php endif; ?>
 <!-- TAINACAN: INICIO ACCORDEON -->
             <div id="text_accordion" class="multiple-items-accordion">
             <?php 

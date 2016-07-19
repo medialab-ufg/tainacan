@@ -120,6 +120,7 @@
         $(seletor).show();
         $(input).hide();
         $(seletor).text($(input).val());
+         save_taxonomy();
     }
     // quando algo eh escrito no container de cada categoria
     function keypress_event_taxonomy_create_zone(object, e) {

@@ -1,11 +1,10 @@
 <?php
-include_once ('../../../../../wp-config.php');
-include_once ('../../../../../wp-load.php');
-include_once ('../../../../../wp-includes/wp-db.php');
+include_once ('js/tabs_item_js.php');
 include_once ('js/edit_item_text_js.php');
 include_once(dirname(__FILE__).'/../../helpers/view_helper.php');
+include_once(dirname(__FILE__).'/../../helpers/object/object_helper.php');
 
-$view_helper = new ViewHelper($collection_id);
+$view_helper = new ObjectHelper($collection_id);
 $val = get_post_meta($collection_id, 'socialdb_collection_submission_visualization', true);
 if($val&&$val=='one'){
     $view_helper->hide_main_container = true;
@@ -56,14 +55,17 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                     </button>
                 </h3>
                 <hr>
-            <?php endif; ?>
-             <div   style="<?php echo ($view_helper->hide_main_container)?'margin-bottom:0%':'' ?>" 
+                <!--------------------------- ABAS----------------------------->
+                <?php $view_helper->add_tabs() ?>
+            <?php else: ?>   
+                <div    style="<?php echo ($view_helper->hide_main_container)?'margin-bottom:0%':'' ?>" 
                     class="expand-all-item btn white tainacan-default-tags">
                 <div class="action-text" 
-                     style="display: inline-block">
+                     style="display: inline-block;">
                          <?php _e('Expand all', 'tainacan') ?></div>
                 &nbsp;&nbsp;<span class="glyphicon-triangle-bottom white glyphicon"></span>
-            </div>
+                </div>
+            <?php endif; ?>
             <div id="text_accordion" class="multiple-items-accordion">
             <?php 
             //se for no modo de apenas um container
@@ -105,9 +107,7 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                     </a>
                 </h2>
                  <div class="form-group" >
-                    <textarea class="form-control" id="objectedit_editor" name="object_editor" placeholder="<?php _e('Object Content','tainacan'); ?>">
-                    <?php echo get_post_meta($object->ID, 'socialdb_object_content', true); ?>
-                    </textarea>
+                    <textarea class="form-control" id="objectedit_editor" name="object_editor" placeholder="<?php _e('Object Content','tainacan'); ?>"><?php echo get_post_meta($object->ID, 'socialdb_object_content', true); ?></textarea>
                 </div>     
             </div>
             <!-- TAINACAN: UPLOAD DE ANEXOS DOS ITEMS -->
@@ -143,7 +143,7 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
             </div>    
             <?php endif; ?>
             <!-- TAINACAN: thumbnail do item -->
-             <div id="thumbnail_id" 
+             <div id="<?php echo $view_helper->get_id_list_properties('thumbnail','thumbnail_id'); ?>" 
                 <?php echo $view_helper->get_visibility($view_helper->terms_fixed['thumbnail']) ?>  
                 <?php do_action('item_thumbnail_attributes') ?>>
                 <h2> 
@@ -179,7 +179,7 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                 </div>
             </div>    
             <!-- TAINACAN: a fonte do item -->
-            <div id="socialdb_object_dc_source"  
+            <div id="<?php echo $view_helper->get_id_list_properties('source','socialdb_object_dc_source'); ?>"  
                 <?php echo $view_helper->get_visibility($view_helper->terms_fixed['source']) ?>    
                 <?php do_action('item_source_attributes') ?>>
                 <h2> 
@@ -202,7 +202,7 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                   </div>   
             </div>
             <!-- TAINACAN: a descricao do item -->
-            <div id="post_content" 
+            <div id="<?php echo $view_helper->get_id_list_properties('description','post_content'); ?>" 
                   <?php echo $view_helper->get_visibility($view_helper->terms_fixed['description']) ?>
                  >
                 <h2>
@@ -221,7 +221,7 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                 </div>
             </div>
             <!-- TAINACAN: tags do item -->
-            <div id="tag" 
+            <div id="<?php echo $view_helper->get_id_list_properties('tags','tag'); ?>" 
                 <?php echo $view_helper->get_visibility($view_helper->terms_fixed['tags']) ?> 
                 <?php do_action('item_tags_attributes') ?>>
                 <h2>
