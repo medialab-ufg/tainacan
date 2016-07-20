@@ -46,8 +46,8 @@
                             $("#list_licenses_content").append("<tr><td>" + object.nome + "</td>" +
                                     "<td><input type='radio' name='standartLicense' id='radio" + object.id + "' value=" + object.id + " onclick='changeStandartLicense(this," + object.id + ");'/></td>" +
                                     "<td><input type='checkbox' name='enabledLicense[]' id='checkbox" + object.id + "' value=" + object.id + " onclick='changeEnabledLicense(this," + object.id + ");'/></td>" +
-                                    "<td><a href='#' style='opacity:0.2'><img src="+ delete_icon +" /></a>" +
-                                    " <a href='#' style='opacity:0.2'><img src="+ edit_icon +" /></a></td>" +
+                                    "<td><a href='#'><span style='opacity:0.4' class='glyphicon glyphicon-trash'></span></a>" +
+                                    " <a href='#'><span style='opacity:0.4' class='glyphicon glyphicon-edit'></span></a></td>" +
                                     "</tr>");
 
                         });
@@ -82,8 +82,8 @@
                                 $("#list_licenses_content").append("<tr><td>" + object.nome + "</td>" +
                                         "<td><input type='radio' name='standartLicense' id='radio" + object.id + "' value=" + object.id + " onclick='changeStandartLicense(this," + object.id + ");'/></td>" +
                                         "<td><input type='checkbox' name='enabledLicense[]' id='checkbox" + object.id + "' value=" + object.id + " onclick='changeEnabledLicense(this," + object.id + ");'/></td>" +
-                                        "<td><a onclick='deleteCustomLicense("+ object.id +")' href='#formAddLicense'><img src="+ delete_icon +" /></a>" +
-                                        " <a onclick='editCustomLicense("+ object.id +")' href='#formAddLicense'><img src="+ edit_icon +" /></a></td>"+
+                                        "<td><a onclick='deleteCustomLicense("+ object.id +")' href='#formAddLicense'><span class='glyphicon glyphicon-trash'></span></a>" +
+                                        " <a onclick='editCustomLicense("+ object.id +")' href='#formAddLicense'><span class='glyphicon glyphicon-edit'></span></a></td>"+
                                         "</tr>");
                             });
                         }

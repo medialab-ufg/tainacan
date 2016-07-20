@@ -453,7 +453,7 @@
         $.ajax({
             url: src + "/controllers/mapping/mapping_controller.php", type: 'POST',
             data: { operation: 'list_mapping_csv', collection_id: collectionId },
-            success: function (data) {
+            success: function (data) { 
                 $("#table_csv").html('');
                 if (data !== '[]') {
                     var jsonObject = jQuery.parseJSON(data);
@@ -467,7 +467,7 @@
                             } else {
                                 $("#table_csv").append("<tr><td>" + object.name + "</td>" +
                                     "<td><a href='#' onclick='delete_mapping(" + object.id + "," + collectionId + ")'><span class='glyphicon glyphicon-trash'></span></a> &nbsp; " +
-                                    "<a href='#'><span style='opacity:0.4'  class='glyphicon glyphicon-edit'></span></a> &nbsp; " +
+                                    "<a href='#'><span style='opacity:0.4' class='glyphicon glyphicon-edit'></span></a> &nbsp; " +
                                     "<a href='#' ><span style='opacity:0.4' class='glyphicon glyphicon-arrow-down'>&nbsp;<?php _e('Imported in', 'tainacan') ?> " + object.lastUpdate + "</span></a></td></tr>");
                             }
                         });
