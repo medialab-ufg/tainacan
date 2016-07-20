@@ -72,7 +72,7 @@ class EventObjectDeleteModel extends EventModel {
             // Update the post
             $object = array(
                 'ID' => $object_id,
-                'post_status' => 'trash'
+                'post_status' => 'draft'
             );
             // Update the post into the database
             $value = wp_update_post($object);

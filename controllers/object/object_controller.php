@@ -153,6 +153,65 @@ class ObjectController extends Controller {
                 }
                 return json_encode($return);
                 break;
+            case "list_trash": // A listagem dos objetos na lixeira
+                $return = array();
+                $collection_model = new CollectionModel;
+                $collection_id = $data['collection_id'];
+                $recover_wpquery = $object_model->get_args($data);
+                //$post_status = ($collection_id == get_option('collection_root_id') ? 'draft' : 'trash');
+                $post_status = 'draft';
+                $args = $object_model->list_all($data, $post_status);
+                $data['loop'] = new WP_Query($args);
+                $data['collection_data'] = $collection_model->get_collection_data($collection_id);
+
+                $view_count = get_post_meta($collection_id, 'collection_view_count', true);
+                if (empty($view_count)):
+                    add_post_meta($collection_id, 'collection_view_count', 1, true);
+                else:
+                    $updated = $view_count + 1;
+                    update_post_meta($collection_id, 'collection_view_count', $updated, $view_count);
+                endif;
+
+                if (!$data['sorted_by']) {
+                    $data['sorted_by'] = 'desc';
+                }
+                $data['listed_by'] = $object_model->get_ordered_name($data['collection_id'], $data['ordenation_id'], $data['order_by']);
+                $data['is_moderator'] = CollectionModel::is_moderator($data['collection_id'], get_current_user_id());
+                $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list_trash.php', $data);
+                $return['args'] = serialize($recover_wpquery);
+                if (empty($object_model->get_collection_posts($data['collection_id']))) {
+                    $return['empty_collection'] = true;
+                } else {
+                    $return['empty_collection'] = false;
+                }
+                if (mb_detect_encoding($return['page'], 'auto') == 'UTF-8') {
+                    $return['page'] = iconv('ISO-8859-1', 'UTF-8', utf8_decode($return['page']));
+                }
+                return json_encode($return);
+                break;
+            case 'restore_object':
+                //var_dump($data);
+                if ($data['collection_id'] != get_option('collection_root_id')) {
+                    //restore item
+                    $result = $object_model->restoreItem($data['object_id']);
+                } else {
+                    //restore collection
+                    $result = $object_model->restoreItem($data['object_id']);
+                }
+                return $result;
+                break;
+            case 'delete_permanently_object':
+                //var_dump($data);
+                if ($data['collection_id'] != get_option('collection_root_id')) {
+                    //delete item
+                    $result = $object_model->delete_permanently_item($data['object_id']);
+                } else {
+                    //delete collection
+                    //$result = $object_model->delete_permanently_collection($data['object_id']);
+                    $result = $object_model->delete_permanently_item($data['object_id']);
+                }
+                return $result;
+                break;
             case 'filter': // a listagem com filtros
                 $collection_model = new CollectionModel;
                 $data['loop'] = $object_model->filter($data);
