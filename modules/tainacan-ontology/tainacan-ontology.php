@@ -157,7 +157,7 @@ function ontology_before_facets(array $facets,$collection_id) {
 }
 
 ################################################################################
-######################### #4 BOTAO DE ADICAO DE ITENS/DE FACETAS ###########################
+######################### #4 BOTAO DE ADICAO/EDICAO DE ITENS/DE FACETAS ###########################
 /**
  * Filtro que mostra o botao personalizado de adicao de individuo
  */
@@ -168,6 +168,13 @@ function alter_button_add_item_ontology($string) {
     return $string;
 }
 add_filter( 'show_custom_add_item_button', 'alter_button_add_item_ontology', 10, 3 );
+/**
+ * Filtro que mostra a view de edicao default
+ */
+function show_edit_default_ontology($collection_id) {
+    return true;
+}
+add_filter( 'show_edit_default', 'show_edit_default_ontology', 10, 3 );
 /**
  * Insere o botao para ser adicionado as facetas
  */
