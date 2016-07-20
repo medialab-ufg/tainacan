@@ -26,7 +26,7 @@ include_once ('../../helpers/view_helper.php');
                                     <table class="table table-bordered">
                                         <th class="main"><?php _e('Identifier','tainacan'); ?></th>
                                         <th class="main"><?php _e('Active Mapping','tainacan'); ?></th>
-                                        <th><?php // _e('Actions','tainacan'); ?></th>
+                                        <th></th>
                                         <tbody id="table_export_oaipmh_dc" >
                                         </tbody>
                                     </table>

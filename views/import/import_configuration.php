@@ -20,10 +20,8 @@ include_once ('../../helpers/view_helper.php');
                             <div id="list_oaipmh_dc">
                                 <table  class="table table-bordered">
                                     <th><?php _e('Identifier','tainacan'); ?></th>
-                                    <th><?php _e('Edit','tainacan'); ?></th>
-                                    <th><?php _e('Delete','tainacan'); ?></th>
-                                    <th><?php _e('Import','tainacan'); ?></th>
                                     <th><?php _e('Harvesting','tainacan'); ?></th>
+                                    <th> </th>
                                     <tbody id="table_oaipmh_dc" >
                                     </tbody>
                                 </table>
@@ -72,9 +70,7 @@ include_once ('../../helpers/view_helper.php');
                             <div id="list_csv_dc">
                                 <table  class="table table-bordered">
                                     <th><?php _e('Identifier','tainacan'); ?></th>
-                                    <th><?php _e('Edit','tainacan'); ?></th>
-                                    <th><?php _e('Delete','tainacan'); ?></th>
-                                    <th><?php _e('Import','tainacan'); ?></th>
+                                    <th></th>
                                     <tbody id="table_csv" >
                                     </tbody>
                                 </table>

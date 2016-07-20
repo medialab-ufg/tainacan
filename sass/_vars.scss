@@ -129,3 +129,26 @@ $default-margin: 20px 0 20px 0;
     } // img
   } // a
 }
+
+@mixin table_common_spacing() {
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+  .table > tbody + tbody {
+    border-top: 0;
+  }
+
+  table {
+    margin-bottom: 0;
+    th {
+      color: $brand-medium-blue;
+      border-bottom: 1px solid $brand-medium-blue;
+      padding-left: 15px;
+    }
+    td {
+      padding: 10px 0 10px 15px;
+      border-bottom: 1px solid $bs-button-gray-border;
+      border-right: 0;
+    }
+  }
+}

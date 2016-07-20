@@ -58,40 +58,30 @@
      **/
 
     function listTableOAIPMHDC() {
-
         var src = $('#src').val();
         var collectionId = $('#collection_id').val();
 
-        // $("#btn_identifiers_youtube_update").hide();
-        //$("#btn_identifiers_youtube_cancel").hide();
-        //$("#loader_videos").hide();
         $.ajax({
-            url: src + "/controllers/mapping/mapping_controller.php",
-            type: 'POST',
-            data: {operation: 'list_mapping_oaipmh_dc',
-                collection_id: collectionId
-            },
+            url: src + "/controllers/mapping/mapping_controller.php", type: 'POST',
+            data: { operation: 'list_mapping_oaipmh_dc', collection_id: collectionId },
             success: function (data) {
                 $("#table_oaipmh_dc").html('');
                 if (data !== '[]') {
                     var jsonObject = jQuery.parseJSON(data);
                     if (jsonObject && jsonObject != null && jsonObject.identifier) {
-                        $("#table_oaipmh_dc").html('');
                         $.each(jsonObject.identifier, function (id, object) {
                             if (object.size) {
                                 if (object.lastUpdate === false || object.lastUpdate === '') {
+                                    $("#table_oaipmh_dc").append("<tr><td>" + object.name + "</td><td>--</td>" +
+                                        "<td><a href='#' onclick='delete_mapping(" + object.id + "," + collectionId + " )'><span class='glyphicon glyphicon-trash'></span></a> &nbsp; " +
+                                        "<a href='#' onclick=\"edit_mapping_oaipmh('" + object.name + "'," + object.id + "," + collectionId + ")\"><span class='glyphicon glyphicon-edit'></span></a> &nbsp; " +
+                                        "<a href='#' onclick=\"do_import(" + object.id + ",'" + object.name + "','" + object.token + "','begin','" + object.size + "','" + object.sets + "')\"><span class='glyphicon glyphicon-arrow-down'></span></a></td></tr>");
+                                } else {
                                     $("#table_oaipmh_dc").append("<tr><td>" + object.name + "</td>" +
-                                            "<td><a href='#' onclick=\"edit_mapping_oaipmh('" + object.name + "'," + object.id + "," + collectionId + ")\"><span class='glyphicon glyphicon-pencil'></span></a></td>" +
-                                            "<td><a href='#' onclick='delete_mapping(" + object.id + "," + collectionId + " )'><span class='glyphicon glyphicon-trash'></span></a></td>" +
-                                            "<td><a href='#' onclick=\"do_import(" + object.id + ",'" + object.name + "','" + object.token + "','begin','" + object.size + "','" + object.sets + "')\"><span class='glyphicon glyphicon-arrow-down'></span></a></td>" +
-                                            "<td>--</td></tr>");
-                                }
-                                else {
-                                    $("#table_oaipmh_dc").append("<tr><td>" + object.name + "</td>" +
-                                            "<td><a href='#' onclick=\"edit_mapping_oaipmh('" + object.name + "'," + object.id + "," + collectionId + ")\"><span class='glyphicon glyphicon-pencil'></span></a></td>" +
-                                            "<td><a href='#' onclick='delete_mapping(" + object.id + "," + collectionId + ")'><span class='glyphicon glyphicon-trash'></span></a></td>" +
-                                            "<td><a href='#' ><span style='opacity:0.4' class='glyphicon glyphicon-arrow-down'>&nbsp;<?php _e('Imported in', 'tainacan') ?> " + object.lastUpdate + "</span></a></td>" +
-                                            "<td><a href='#' onclick=\"is_harvesting(" + object.id + ",'" + object.is_harvesting + "')\">" + object.is_harvesting + "</a></td></tr>");
+                                        "<td><a href='#' onclick=\"is_harvesting(" + object.id + ",'" + object.is_harvesting + "')\">" + object.is_harvesting + "</a></td>" +
+                                        "<td><a href='#' onclick='delete_mapping(" + object.id + "," + collectionId + ")'><span class='glyphicon glyphicon-trash'></span></a> &nbsp; " +
+                                        "<td><a href='#' onclick=\"edit_mapping_oaipmh('" + object.name + "'," + object.id + "," + collectionId + ")\"><span class='glyphicon glyphicon-edit'></span></a> &nbsp; " +
+                                        "<td><a href='#' ><span style='opacity:0.4' class='glyphicon glyphicon-arrow-down'>&nbsp;<?php _e('Imported in', 'tainacan') ?> " + object.lastUpdate + "</span></a></td></tr>");
                                 }
                             }
                         });
@@ -449,34 +439,21 @@
         $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/mapping/mapping_controller.php",
-            data: {
-                collection_id: collection_id,
-                operation: 'edit_mapping_csv',
-                mapping_id: mapping_id
-            }
+            data: { collection_id: collection_id, operation: 'edit_mapping_csv', mapping_id: mapping_id }
         }).done(function (result) {
             $('#loader_validacao').hide('slow');
-            $('#maping_container_csv').html(result);
-            $('#maping_container_csv').show();
+            $('#maping_container_csv').html(result).show();
         });
     }
 
     function listTableCSV() {
-
         var src = $('#src').val();
         var collectionId = $('#collection_id').val();
 
-        // $("#btn_identifiers_youtube_update").hide();
-        //$("#btn_identifiers_youtube_cancel").hide();
-        //$("#loader_videos").hide();
         $.ajax({
-            url: src + "/controllers/mapping/mapping_controller.php",
-            type: 'POST',
-            data: {operation: 'list_mapping_csv',
-                collection_id: collectionId
-            },
+            url: src + "/controllers/mapping/mapping_controller.php", type: 'POST',
+            data: { operation: 'list_mapping_csv', collection_id: collectionId },
             success: function (data) {
-
                 $("#table_csv").html('');
                 if (data !== '[]') {
                     var jsonObject = jQuery.parseJSON(data);
@@ -484,15 +461,14 @@
                         $.each(jsonObject.identifier, function (id, object) {
                             if (object.lastUpdate === false || object.lastUpdate === '') {
                                 $("#table_csv").append("<tr><td>" + object.name + "</td>" +
-                                        "<td><a href='#' onclick=\"edit_mapping_csv(" + object.id + "," + collectionId + ")\"><span class='glyphicon glyphicon-pencil'></span></a></td>" +
-                                        "<td><a href='#' onclick='delete_mapping(" + object.id + "," + collectionId + " )'><span class='glyphicon glyphicon-trash'></span></a></td>" +
-                                        "<td><a href='#' onclick=\"do_import_csv('" + object.id + "')\"><span class='glyphicon glyphicon-arrow-down'></span></a></td>");
-                            }
-                            else {
+                                    "<td><a href='#' onclick='delete_mapping(" + object.id + "," + collectionId + " )'><span class='glyphicon glyphicon-trash'></span></a> &nbsp; " +
+                                    "<a href='#' onclick=\"edit_mapping_csv(" + object.id + "," + collectionId + ")\"><span class='glyphicon glyphicon-edit'></span></a> &nbsp; " +
+                                    "<a href='#' onclick=\"do_import_csv('" + object.id + "')\"><span class='glyphicon glyphicon-arrow-down'></span></a></td></tr>");
+                            } else {
                                 $("#table_csv").append("<tr><td>" + object.name + "</td>" +
-                                        "<td><a href='#'><span style='opacity:0.4'  class='glyphicon glyphicon-pencil'></span></a></td>" +
-                                        "<td><a href='#' onclick='delete_mapping(" + object.id + "," + collectionId + ")'><span class='glyphicon glyphicon-trash'></span></a></td>" +
-                                        "<td><a href='#' ><span style='opacity:0.4' class='glyphicon glyphicon-arrow-down'>&nbsp;<?php _e('Imported in', 'tainacan') ?> " + object.lastUpdate + "</span></a></td>");
+                                    "<td><a href='#' onclick='delete_mapping(" + object.id + "," + collectionId + ")'><span class='glyphicon glyphicon-trash'></span></a> &nbsp; " +
+                                    "<a href='#'><span style='opacity:0.4'  class='glyphicon glyphicon-edit'></span></a> &nbsp; " +
+                                    "<a href='#' ><span style='opacity:0.4' class='glyphicon glyphicon-arrow-down'>&nbsp;<?php _e('Imported in', 'tainacan') ?> " + object.lastUpdate + "</span></a></td></tr>");
                             }
                         });
                         $("#table_csv").show();

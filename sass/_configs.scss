@@ -158,33 +158,13 @@
 
 #import_settings {
   #list_oaipmh_dc, #list_csv_dc {
-    padding-top: 10px;
-    padding-bottom: 10px;
-    table {
-      margin-bottom: 0;
-      th {
-        color: $brand-medium-blue;
-      }
-    }
+    @include table_common_spacing();
   }
 } // #import_settings
 
 #export_settings {
   #list_export_oaipmh_dc {
-    padding-top: 10px;
-    padding-bottom: 10px;
-    table {
-      margin-bottom: 0;
-      th {
-        color: $brand-medium-blue;
-        border-bottom: 1px solid $brand-medium-blue;
-        padding-left: 15px;
-      }
-      td {
-        padding: 10px 0 10px 15px;
-        border-bottom: 1px solid $bs-button-gray-border;
-      }
-    }
+    @include table_common_spacing();
   }
 
   #table_export_oaipmh_dc {
