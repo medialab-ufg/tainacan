@@ -6,6 +6,7 @@
 define('MODULE', 'archival-management');
 // Adiciono o menu para ir para a view para o gerenciamento de categorias
 add_action('add_configuration_menu_tainacan', 'add_archival_management_menu');
+load_theme_textdomain("tainacan", dirname(__FILE__) . "/languages");
 
 function add_archival_management_menu() {
     $link = "'" . get_template_directory_uri() . '/modules/' . MODULE . "'";
