@@ -23,10 +23,10 @@ include_once ('../../helpers/view_helper.php');
                         <div id="export_oaipmh_dc_container">
                             <form id="form_default">
                                 <div id="list_export_oaipmh_dc">
-                                    <table  class="table table-bordered">
-                                        <th><?php _e('Identifier','tainacan'); ?></th>
-                                        <th><?php _e('Active Mapping','tainacan'); ?></th>
-                                        <th><?php _e('Actions','tainacan'); ?></th>
+                                    <table class="table table-bordered">
+                                        <th class="main"><?php _e('Identifier','tainacan'); ?></th>
+                                        <th class="main"><?php _e('Active Mapping','tainacan'); ?></th>
+                                        <th><?php // _e('Actions','tainacan'); ?></th>
                                         <tbody id="table_export_oaipmh_dc" >
                                         </tbody>
                                     </table>

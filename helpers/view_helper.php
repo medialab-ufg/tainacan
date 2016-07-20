@@ -284,7 +284,7 @@ class ViewHelper {
 
     public static function render_config_title($title) {
         echo "<h3 class='topo'> $title <button onclick='backToMainPage();' class='btn btn-default pull-right'>";
-        echo  __('Back to collection','tainacan') . "</button></h3> <hr>";
+        echo  __('Back','tainacan') . "</button></h3> <hr>";
     }
 
     public function render_modal_header($span, $title, $extra_html="") {
