@@ -364,12 +364,8 @@ $options = get_option('socialdb_theme_options');
     <!-- TAINACAN: esta div (AJAX) mostra as configuracoes da colecao  -->
     <div id='container-fluid-configuration' class="container-fluid no-padding" style="background-color: #f1f2f2">
 
-        <?php /*
-        <div class="tainacan-breadcrumbs"> </div>
-        <div class="tainacan-steps" style=""></div>
-        */ ?>
-
         <div id="configuration" class="col-md-12 no-padding"></div>
+
     </div>
     <!-- TAINACAN: scripts utilizados para criacao e monagem dos widgets de pesquisa  -->
 

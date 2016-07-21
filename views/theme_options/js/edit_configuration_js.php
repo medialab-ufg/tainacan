@@ -1,6 +1,7 @@
 <script>
     $(function () {
         var src = $('#src').val();
+        change_breadcrumbs_title('<?php _e('Repository Configuration','tainacan') ?>');
         showCKEditor();
         list_templates();
         autocomplete_collection_templates();

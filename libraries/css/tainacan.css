@@ -2053,6 +2053,20 @@ h4.modal-title {
   }
 }
 */
+.collection-templates {
+  padding: 10px 0 10px 20px;
+  border-top: 2px solid #E8E8E8;
+  border-bottom: 2px solid #E8E8E8;
+  height: 185px;
+  margin-left: -20px;
+  margin-right: -20px;
+}
+
+.tools-internal-hr {
+  border: 1px solid #E8E8E8;
+  margin-left: -15px;
+}
+
 .hide-el {
   display: none !important;
 }

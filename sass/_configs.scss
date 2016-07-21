@@ -273,3 +273,15 @@
   }
 }
 */
+.collection-templates {
+  padding: 10px 0 10px 20px;
+  border-top: 2px solid $item-border;
+  border-bottom: 2px solid $item-border;
+  height: 185px;
+  margin-left: -20px;
+  margin-right: -20px;
+}
+.tools-internal-hr {
+  border: 1px solid $item-border;
+  margin-left: -15px;
+}
