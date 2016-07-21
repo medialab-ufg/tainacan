@@ -4,7 +4,7 @@
     $(function () {
         var src = $('#src').val();
         listStandartLicenses();
-        change_breadcrumbs_title('<?php _e('Licenses','tainacan') ?>');
+        change_breadcrumbs_title('<?php _e('Collection Licenses','tainacan') ?>');
 
         // $("#licenses_display").DataTable();
 

@@ -2077,8 +2077,7 @@ function showRepositoryConfiguration(src) {
     }).done(function (result) {
         resetHomeStyleSettings();
         $('#main_part').hide();
-        $('#configuration').html(result);
-        $('#configuration').show();
+        $('#configuration').html(result).show();
     });
 }
 
@@ -2090,8 +2089,7 @@ function showLicensesRepository(src) {
     }).done(function (result) {
         resetHomeStyleSettings();
         $('#main_part').hide();
-        $('#configuration').html(result);
-        $('#configuration').show();
+        $('#configuration').html(result).show();
     });
 }
 
@@ -2103,8 +2101,7 @@ function showWelcomeEmail(src) {
     }).done(function (result) {
         resetHomeStyleSettings();
         $('#main_part').hide();
-        $('#configuration').html(result);
-        $('#configuration').show();
+        $('#configuration').html(result).show();
     });
 }
 

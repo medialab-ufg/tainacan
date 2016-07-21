@@ -5,7 +5,6 @@ include_once('js/list_js.php');
 <div class="col-md-12">
     <div class="col-md-12 config_default_style" id="licenses_settings">
         <?php ViewHelper::render_config_title( __("Collection Licenses", 'tainacan') ); ?>
-
         <br>
         <ul class="nav nav-tabs">
             <li role="presentation" class="active"><a href="#list_licenses" aria-controls="property_data_tab" role="tab" data-toggle="tab"><?php _e('Current Licenses', 'tainacan') ?></a></li>
