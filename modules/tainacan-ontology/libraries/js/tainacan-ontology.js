@@ -1235,3 +1235,9 @@ Hook.register(
   function ( args ) {
       //args[0].expand();
   });
+// ao selecionar uma categoria
+Hook.register(
+  'tainacan_onselect_dynatree',
+  function ( args ) {
+      show_object_properties();
+  });
