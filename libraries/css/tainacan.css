@@ -1352,10 +1352,10 @@ a.collection-thumb img {
 #properties_tabs .add-property-btn .add-property-dropdown li a {
   cursor: pointer;
 }
-#properties_tabs ul.metadata-container {
+#properties_tabs ul#metadata-container {
   width: 100%;
 }
-#properties_tabs ul.metadata-container li {
+#properties_tabs ul#metadata-container li {
   float: left;
   width: 100%;
   font-weight: bolder;
@@ -1369,15 +1369,15 @@ a.collection-thumb img {
   }
   */
 }
-#properties_tabs ul.metadata-container li .metadata-facet {
+#properties_tabs ul#metadata-container li .metadata-facet {
   display: none;
 }
-#properties_tabs ul.metadata-container li.ui-sortable-helper {
+#properties_tabs ul#metadata-container li.ui-sortable-helper {
   background: #f1f2f2 !important;
   padding-bottom: 20px;
   width: 70% !important;
 }
-#properties_tabs ul.metadata-container li:hover {
+#properties_tabs ul#metadata-container li:hover {
   cursor: all-scroll;
   -webkit-box-shadow: 0px 3px 10px 0 rgba(50, 50, 50, 0.7);
   -moz-box-shadow: 0px 3px 10px 0 rgba(50, 50, 50, 0.7);
@@ -1824,7 +1824,7 @@ h4.modal-title {
 }
 
 .config_default_style#list_social_network table tbody th, .config_default_style#export_settings table tbody th, .config_default_style#import_settings table tbody th {
-  border-top: 0;
+  border: 0;
 }
 .config_default_style h3 {
   color: black;
@@ -1841,13 +1841,14 @@ h4.modal-title {
   border-bottom: none;
 }
 .config_default_style ul li a {
-  color: #0c698b;
+  color: black;
 }
 .config_default_style ul li.active {
   border: 1px solid #adadad;
   border-bottom: 2px solid white;
   margin-bottom: -2px;
   border-radius: 4px 4px 0 0;
+  font-weight: bolder;
 }
 .config_default_style ul li.active a {
   color: black;
@@ -1858,11 +1859,10 @@ h4.modal-title {
 }
 .config_default_style table th, .config_default_style table td {
   border: none;
-  border-right: 1px solid #adadad;
   padding-left: 15px;
 }
-.config_default_style table th:last-child, .config_default_style table td:last-child {
-  border-right: none;
+.config_default_style table td {
+  padding-left: 7px;
 }
 .config_default_style .social-networks-btn, .config_default_style .tainacan-blue-btn-bg {
   background: #0c698b;
@@ -1922,21 +1922,34 @@ h4.modal-title {
 }
 
 #import_settings #list_oaipmh_dc, #import_settings #list_csv_dc {
-  border: 1px solid #adadad;
   padding-top: 10px;
   padding-bottom: 10px;
 }
 #import_settings #list_oaipmh_dc table, #import_settings #list_csv_dc table {
   margin-bottom: 0;
 }
+#import_settings #list_oaipmh_dc table th, #import_settings #list_csv_dc table th {
+  color: #0c698b;
+}
 
 #export_settings #list_export_oaipmh_dc {
-  border: 1px solid #adadad;
   padding-top: 10px;
   padding-bottom: 10px;
 }
 #export_settings #list_export_oaipmh_dc table {
   margin-bottom: 0;
+}
+#export_settings #list_export_oaipmh_dc table th {
+  color: #0c698b;
+  border-bottom: 1px solid #0c698b;
+  padding-left: 15px;
+}
+#export_settings #list_export_oaipmh_dc table td {
+  padding: 10px 0 10px 15px;
+  border-bottom: 1px solid #adadad;
+}
+#export_settings #table_export_oaipmh_dc {
+  border-top: 0;
 }
 #export_settings #table_export_oaipmh_dc a:last-child {
   margin-left: 10px;
@@ -1948,16 +1961,13 @@ h4.modal-title {
   opacity: 0.6;
 }
 #export_settings #maping_container_export .panel {
-  border: 1px solid #adadad;
+  border: 0;
   border-radius: 0;
 }
 #export_settings #maping_container_export .panel label {
   border-bottom: 1px solid #adadad;
   padding-bottom: 5px;
   padding-top: 8px;
-}
-#export_settings table td {
-  padding-top: 10px;
 }
 
 #submit_oaipmh, #submit_csv {
@@ -1989,7 +1999,6 @@ h4.modal-title {
 }
 
 #form_export_csv .export-container, #form_export_zip .export-container {
-  border: 1px solid #adadad;
   padding-top: 15px;
   padding-bottom: 10px;
   padding-left: 15px;
@@ -2016,13 +2025,20 @@ h4.modal-title {
   color: black !important;
 }
 
-#api-keys ul li a, #licenses_settings ul li a {
-  color: black;
+/*
+#api-keys, #licenses_settings {
+  ul {
+    li {
+      a {
+        color: black;
+      }
+      &.active {
+        font-weight: bolder;
+      }
+    }
+  }
 }
-#api-keys ul li.active, #licenses_settings ul li.active {
-  font-weight: bolder;
-}
-
+*/
 .hide-el {
   display: none !important;
 }

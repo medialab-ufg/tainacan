@@ -2,7 +2,15 @@
     <!--------------------------- DELETE AND EDIT OBJECT------------------------------------------------>
     <?php if ($is_moderator || get_post($curr_id)->post_author == get_current_user_id()): ?>
         <li>
+            <?php 
+            if(has_filter('show_edit_default')&&apply_filters('show_edit_default', $data['collection_id'])){
+            ?>
+            <a style="cursor: pointer;" onclick="edit_object('<?php echo $curr_id ?>')">
+            <?php
+            }else{
+            ?>
             <a style="cursor: pointer;" onclick="edit_object_item('<?php echo $curr_id ?>')">
+            <?php } ?>
                 <span class="glyphicon glyphicon-edit"></span>
             </a>
         </li>

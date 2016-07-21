@@ -157,7 +157,7 @@ function ontology_before_facets(array $facets,$collection_id) {
 }
 
 ################################################################################
-######################### #4 BOTAO DE ADICAO DE ITENS/DE FACETAS ###########################
+######################### #4 BOTAO DE ADICAO/EDICAO DE ITENS/DE FACETAS ###########################
 /**
  * Filtro que mostra o botao personalizado de adicao de individuo
  */
@@ -168,6 +168,13 @@ function alter_button_add_item_ontology($string) {
     return $string;
 }
 add_filter( 'show_custom_add_item_button', 'alter_button_add_item_ontology', 10, 3 );
+/**
+ * Filtro que mostra a view de edicao default
+ */
+function show_edit_default_ontology($collection_id) {
+    return true;
+}
+add_filter( 'show_edit_default', 'show_edit_default_ontology', 10, 3 );
 /**
  * Insere o botao para ser adicionado as facetas
  */
@@ -1410,6 +1417,8 @@ add_action('form_required_property_object', 'hide_field');
 add_action('collection_create_name_object', 'hide_field');
 /******************************************************************************/
 /** ESCONDER NA HOME DO ITEM */
+add_action('home_item_add_property', 'hide_field');
+add_action('home_item_delete_property', 'hide_field');
 add_action('home_item_source_div', 'hide_field');
 add_action('home_item_type_div', 'hide_field');
 add_action('home_item_license_div', 'hide_field');

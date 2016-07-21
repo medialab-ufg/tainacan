@@ -35,8 +35,9 @@
         $('#single_event_add_property_object_is_reverse_false').click(function (e) {
             $('#single_event_add_show_reverse_properties').hide();
         });
+        showPropertyCategoryDynatree($('#src').val());
     });
-<?php // lista as propriedades da categoria que foi selecionada   ?>
+    
     function single_list_reverses_event(selected) {
         $.ajax({
             url: $('#src').val() + '/controllers/property/property_controller.php',
@@ -55,6 +56,46 @@
                 });
             } else {
                 $('#single_event_add_property_object_reverse').append('<option value="false"><?php _e('No properties added','tainacan'); ?></option>');
+            }
+        });
+    }
+    
+    
+     function showPropertyCategoryDynatree(src) {
+        $("#property_category_dynatree").dynatree({
+            selectionVisible: true, // Make sure, selected nodes are visible (expanded).  
+            checkbox: true,
+            initAjax: {
+                  url: src + '/controllers/category/category_controller.php',
+                data: {
+                    collection_id: $("#collection_id").val(),
+                    operation: 'initDynatreeTerms',
+                    hideCheckbox: 'false'
+                }
+                , addActiveKey: true
+            },
+            onLazyRead: function (node) {
+                node.appendAjax({
+                    url: src + '/controllers/category/category_controller.php',
+                    data: {
+                        collection_id: $("#collection_id").val(),
+                        category_id: node.data.key,
+                        classCss: node.data.addClass,
+                        operation: 'findDynatreeChild'
+                    }
+                });
+            },
+            onClick: function (node, event) {
+                // Close menu on click
+                //$("#property_object_category_id").val(node.data.key);
+                //$("#property_object_category_name").val(node.data.title);
+
+            },
+            onSelect: function (flag, node) {
+                concatenate_in_array(node.data.key,'#property_object_category_id');
+                <?php if(has_action('javascript_onselect_relationship_dynatree_property_object')): ?>
+                    <?php do_action('javascript_onselect_relationship_dynatree_property_object') ?>
+                <?php endif; ?>
             }
         });
     }
