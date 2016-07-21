@@ -378,7 +378,7 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                     <div style="white-space: pre-wrap;"><?php echo $object->post_content; ?></div>
                 </div>
                 <div id="event_description" style="display:none; min-height: 150px;">
-                    <textarea class="col-md-12 form-control" id="description_field" style="width;100%; min-height: 150px;"><?php echo $object->post_content; ?></textarea>
+                    <textarea class="col-md-12 form-control" id="description_field" style="width:100%; min-height: 150px;"><?php echo $object->post_content; ?></textarea>
                 </div>
             </div>
 
@@ -448,7 +448,7 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                 <div>
                     <div class="meta-header" style="padding: 10px 20px 10px 20px">
                         <h4 class="title-pipe single-title"> <?php _e('Properties', 'tainacan') ?></h4>
-                        <div class="btn-group edit-field-btn">
+                        <div <?php do_action('home_item_add_property') ?> class="btn-group edit-field-btn">
                             <?php if ($create_perm_object || $create_perm_data): ?>
                                 <button data-toggle="dropdown" class="btn btn-default dropdown-toggle" type="button" id="btnGroupVerticalDrop1" style="font-size:11px;">
                                     <span class="glyphicon glyphicon-plus grayleft" ></span> <span class="caret"></span>
@@ -463,7 +463,7 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                                 </ul>
                             <?php endif; ?>
                         </div>
-                        <div class="btn-group edit-field-btn">
+                        <div <?php do_action('home_item_delete_property') ?> class="btn-group edit-field-btn">
                             <?php if ($edit_perm_object || $delete_perm_object || $edit_perm_data || $delete_perm_data): ?>
                                 <button onclick="list_properties_edit_remove_single($('#single_object_id').val())"  data-toggle="dropdown" class="btn btn-default dropdown-toggle" type="button" id="btnGroupVerticalDrop2" style="font-size:11px;">
                                     <span class="glyphicon glyphicon-pencil grayleft"></span>

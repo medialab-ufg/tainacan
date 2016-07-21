@@ -105,6 +105,13 @@ require_once(dirname(__FILE__).'../../../models/ranking/ranking_model.php');
                      //create property data
                     case 'add_event_property_data_create':  
                         $event_property_data_create_model = new EventPropertyDataCreate();
+                        /* 
+                        * filtro que trabalha com os dados do formulario de adicao de propriedade de dados
+                        * para os eventos
+                        */
+                       if(has_filter('modificate_values_event_property_data_add')):
+                           $data = apply_filters( 'modificate_values_event_property_data_add', $data); 
+                       endif;    
                         return $event_property_data_create_model->create_event($data);
                     case 'socialdb_event_property_data_create';
                         $event_data_delete_model = new EventPropertyDataCreate();
@@ -112,6 +119,13 @@ require_once(dirname(__FILE__).'../../../models/ranking/ranking_model.php');
                     //edit property data 
                     case 'add_event_property_data_edit':  
                         $event_property_data_edit_model = new EventPropertyDataEdit();
+                        /* 
+                        * filtro que trabalha com os dados do formulario de alteracao de propriedade de dados
+                        * para os eventos
+                        */
+                        if(has_filter('modificate_values_event_property_data_update')):
+                           $data = apply_filters( 'modificate_values_event_property_data_update', $data); 
+                        endif; 
                         return $event_property_data_edit_model->create_event($data);
                     case 'socialdb_event_property_data_edit';
                         $event_property_data_edit_model = new EventPropertyDataEdit();
@@ -147,6 +161,13 @@ require_once(dirname(__FILE__).'../../../models/ranking/ranking_model.php');
                      //create property object
                     case 'add_event_property_object_create':  
                         $event_property_object_create_model = new EventPropertyObjectCreate();
+                        /* 
+                        * filtro que trabalha com os dados do formulario de adicao de propriedade de objeto
+                        * para os eventos
+                        */
+                        if(has_filter('modificate_values_event_property_object_add')):
+                           $data = apply_filters( 'modificate_values_event_property_object_add', $data); 
+                        endif;
                         return $event_property_object_create_model->create_event($data);
                     case 'socialdb_event_property_object_create';
                         $event_object_delete_model = new EventPropertyObjectCreate();
@@ -154,6 +175,13 @@ require_once(dirname(__FILE__).'../../../models/ranking/ranking_model.php');
                     //edit property object 
                     case 'add_event_property_object_edit':  
                         $event_property_object_edit_model = new EventPropertyObjectEdit();
+                        /* 
+                        * filtro que trabalha com os dados do formulario de edicao de propriedade de objeto
+                        * para os eventos
+                        */
+                        if(has_filter('modificate_values_event_property_object_update')):
+                           $data = apply_filters( 'modificate_values_event_property_object_update', $data); 
+                        endif;
                         return $event_property_object_edit_model->create_event($data);
                     case 'socialdb_event_property_object_edit';
                         $event_property_object_edit_model = new EventPropertyObjectEdit();

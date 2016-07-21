@@ -14,11 +14,12 @@ include_once ('js/data_property_form_js.php'); ?>
     <div class="form-group">
         <label for="event_add_property_data_widget"><?php _e('Property data widget','tainacan'); ?></label>
         <select class="form-control" id="single_event_add_property_data_widget" name="socialdb_event_property_data_create_widget">
-           <option value="text"><?php _e('Text','tainacan'); ?></option>
-            <option value="textarea"><?php _e('Textarea','tainacan'); ?></option>
-            <option value="date"><?php _e('Date','tainacan'); ?></option>
-            <option value="numeric"><?php _e('Numeric','tainacan'); ?></option>
-            <option value="autoincrement"><?php _e('Auto-Increment','tainacan'); ?></option>
+           <?php do_action('form_help_property_data_insert_types') ?>
+        <option <?php do_action('form_help_property_data_type_text') ?> value="text"><?php _e('Text','tainacan'); ?></option>
+        <option <?php do_action('form_help_property_data_type_textarea') ?> value="textarea"><?php _e('Textarea','tainacan'); ?></option>
+        <option <?php do_action('form_help_property_data_type_date') ?> value="date"><?php _e('Date','tainacan'); ?></option>
+        <option <?php do_action('form_help_property_data_type_numeric') ?> value="numeric"><?php _e('Numeric','tainacan'); ?></option>
+        <option <?php do_action('form_help_property_data_type_autoincrement') ?> value="autoincrement"><?php _e('Auto-Increment','tainacan'); ?></option>
         </select>
     </div>
     <!--div class="form-group">
@@ -31,6 +32,7 @@ include_once ('js/data_property_form_js.php'); ?>
         <input type="radio" name="socialdb_event_property_data_create_required" id="single_event_add_property_data_required_true" value="true">&nbsp;<?php _e('Yes','tainacan'); ?>
         <input type="radio" name="socialdb_event_property_data_create_required" id="single_event_add_property_data_required_false" checked="checked" value="false">&nbsp;<?php _e('No','tainacan'); ?>
     </div>
+    <?php  do_action('form_modify_property_data') ?>
     <input type="hidden" id="single_event_add_property_data_collection_id" name="socialdb_event_collection_id" value="<?php echo $collection_id; ?>">
     <input type="hidden" id="single_event_add_property_data_object_id" name="property_data_object_id" value="<?php echo $object_id; ?>">
     <input type="hidden" id="single_event_add_property_data_create_time" name="socialdb_event_create_date" value="<?php echo mktime(); ?>">

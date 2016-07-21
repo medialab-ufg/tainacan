@@ -1417,6 +1417,8 @@ add_action('form_required_property_object', 'hide_field');
 add_action('collection_create_name_object', 'hide_field');
 /******************************************************************************/
 /** ESCONDER NA HOME DO ITEM */
+add_action('home_item_add_property', 'hide_field');
+add_action('home_item_delete_property', 'hide_field');
 add_action('home_item_source_div', 'hide_field');
 add_action('home_item_type_div', 'hide_field');
 add_action('home_item_license_div', 'hide_field');

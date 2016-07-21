@@ -49,6 +49,7 @@ include_once ('js/edit_object_property_form_js.php');
         <select class="form-control" id="single_event_edit_property_object_reverse" name="socialdb_event_property_object_edit_reverse">
         </select>
     </div>
+    <?php do_action('form_modify_property_object') ?>
     <!-- valor do checkbox do reverse para montar o html --> 
    <input type="hidden" id="single_event_edit_property_object_is_reverse_value" name="event_edit_property_object_is_reverse_value" value="<?php echo $value->metas->socialdb_property_object_is_reverse ?>">
    <!-- valor do reverse para montar o html --> 

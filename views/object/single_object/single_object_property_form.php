@@ -15,23 +15,11 @@ include_once ('js/object_property_form_js.php'); ?>
         <label for="event_add_property_object_name"><?php _e('Property object name','tainacan'); ?></label>
         <input type="text" class="form-control" id="single_event_add_property_object_name" name="socialdb_event_property_object_create_name" required="required" placeholder="<?php _e('Property Object name','tainacan'); ?>">
     </div>
-    <div class="form-group">
-        <?php if (isset($is_root) && $is_root): ?>
+    <div class="form-group"> 
             <label for="event_add_property_object_category_id"><?php _e('Property object relationship','tainacan'); ?></label>
-            <select class="form-control" id="single_event_add_property_object_category_id" name="socialdb_event_property_object_create_category_id">
-                <?php if($property_object&& count($property_object)>0): ?>
-                    <?php foreach ($property_object as $object) { ?>
-                        <option value="<?php echo $object['category_id'] ?>"><?php echo $object['collection_name'] ?></option>   
-                    <?php } ?>
-                <?php else: ?>  
-                        <option value="<?php echo $category->term_id; ?>"><?php  echo get_post($collection_id)->post_title; ?> </option>   
-                <?php endif; ?>    
-            </select>
-        <?php else: ?>  
-            <label for="event_add_property_object_category_id"><?php _e('Property object relationship','tainacan'); ?></label>
-            <input disabled="disabled" type="text" class="form-control" id="single_event_add_property_object_category_name" value="" placeholder="<?php _e('Click on the category in the tree','tainacan'); ?>" name="property_object_category_name" >
-            <input type="hidden"  id="single_event_add_property_object_category_id"  name="property_object_category_id" value="<?php echo $category->term_id; ?>" >
-        <?php endif; ?>    
+            <div id="property_category_dynatree" style="height: 300px;overflow-y: scroll;" >
+                                    </div>
+             <input required="required" type="hidden"  id="property_object_category_id"  name="property_object_category_id" value="<?php //echo $category->term_id; ?>" >
     </div>
     <!--div class="form-group">
         <label for="event_add_property_object_required"><?php _e('Property object facet','tainacan'); ?></label>
@@ -53,6 +41,7 @@ include_once ('js/object_property_form_js.php'); ?>
         <select class="form-control" id="single_event_add_property_object_reverse" name="socialdb_event_property_object_create_reverse">
         </select>
     </div>
+    <?php do_action('form_modify_property_object') ?>
     <input type="hidden" id="single_event_add_property_object_collection_id" name="socialdb_event_collection_id" value="<?php echo $collection_id; ?>">
     <input type="hidden" id="single_event_add_property_object_id" name="property_object_id" value="<?php echo $object_id; ?>">
     <input type="hidden" id="single_event_add_property_object_create_time" name="socialdb_event_create_date" value="<?php echo mktime(); ?>">

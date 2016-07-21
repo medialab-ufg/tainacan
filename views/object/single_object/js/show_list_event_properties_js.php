@@ -316,25 +316,27 @@
                     $('#field_event_single_property_term_' + checkbox).html('');
                     
                     $("#labels_" + checkbox + "_<?php echo $object_id; ?>").html('');
-                    $.each(elem.children, function (idx, children) {
-                        var required = '';
-                        var checked = '';
-                        // event_single_delete_value(children.term_id);
-                        if (elem.metas.socialdb_property_required === 'true') {
-                            required = 'required="required"';
-                        }
-                        if (categories.indexOf(children.term_id) > -1) {
-                            checked = 'checked="checked"';
-                            //$("#labels_" + checkbox + "_<?php echo $object_id; ?>").html('');//zero o html do container que recebera os
-                            // insiro o html do link do valor atribuido
-                            $("#labels_" + checkbox + "_<?php echo $object_id; ?>").append('<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' + children.term_id + ',' + checkbox + ')">' + children.name + '</a></b><br>');//inserindo os termos escolhidos
-                        }
-                        //  if (property.id == selected) {
-                        //     $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
-                        //  } else {
-                        $('#field_event_single_property_term_' + checkbox + '_<?php echo $object_id; ?>').append('<input onchange="get_event_single_checkbox(this,<?php echo $object_id; ?>)" ' + checked + ' ' + required + ' type="checkbox" name="socialdb_propertyterm_' + checkbox + '[]" value="' + children.term_id + '">&nbsp;' + children.name + '<br>');
-                        //  }
-                    });
+                    if(elem.children){
+                        $.each(elem.children, function (idx, children) {
+                            var required = '';
+                            var checked = '';
+                            // event_single_delete_value(children.term_id);
+                            if (elem.metas.socialdb_property_required === 'true') {
+                                required = 'required="required"';
+                            }
+                            if (categories.indexOf(children.term_id) > -1) {
+                                checked = 'checked="checked"';
+                                //$("#labels_" + checkbox + "_<?php echo $object_id; ?>").html('');//zero o html do container que recebera os
+                                // insiro o html do link do valor atribuido
+                                $("#labels_" + checkbox + "_<?php echo $object_id; ?>").append('<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' + children.term_id + ',' + checkbox + ')">' + children.name + '</a></b><br>');//inserindo os termos escolhidos
+                            }
+                            //  if (property.id == selected) {
+                            //     $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
+                            //  } else {
+                            $('#field_event_single_property_term_' + checkbox + '_<?php echo $object_id; ?>').append('<input onchange="get_event_single_checkbox(this,<?php echo $object_id; ?>)" ' + checked + ' ' + required + ' type="checkbox" name="socialdb_propertyterm_' + checkbox + '[]" value="' + children.term_id + '">&nbsp;' + children.name + '<br>');
+                            //  }
+                        });
+                    }
                 });
             });
         }
