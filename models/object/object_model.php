@@ -1,8 +1,8 @@
 <?php
 
-include_once (dirname(__FILE__) .'/../../../../../wp-config.php');
-include_once (dirname(__FILE__) .'/../../../../../wp-load.php');
-include_once (dirname(__FILE__) .'/../../../../../wp-includes/wp-db.php');
+include_once (dirname(__FILE__) . '/../../../../../wp-config.php');
+include_once (dirname(__FILE__) . '/../../../../../wp-load.php');
+include_once (dirname(__FILE__) . '/../../../../../wp-includes/wp-db.php');
 include_once (dirname(__FILE__) . '../../../models/collection/collection_model.php');
 include_once (dirname(__FILE__) . '../../../models/license/license_model.php');
 include_once (dirname(__FILE__) . '../../../models/property/property_model.php');
@@ -53,7 +53,7 @@ class ObjectModel extends Model {
         }
         $post = array(
             'ID' => $data['object_id'],
-            'post_title' => ($data['object_name']) ? $data['object_name']:time(),
+            'post_title' => ($data['object_name']) ? $data['object_name'] : time(),
             'post_content' => $data['object_description'],
             'post_status' => 'inherit',
             'post_author' => $user_id,
@@ -152,12 +152,12 @@ class ObjectModel extends Model {
                 }
             }
         }
-         //insiro os valores no metadado comum
-        if(isset($data['object_name'])){
-             $data['title'] = $data['object_name'];
-             $data['description'] = $data['object_description'];
+        //insiro os valores no metadado comum
+        if (isset($data['object_name'])) {
+            $data['title'] = $data['object_name'];
+            $data['description'] = $data['object_description'];
         }
-        $this->set_common_field_values($data['ID'], 'title', $data['title']);  
+        $this->set_common_field_values($data['ID'], 'title', $data['title']);
         $this->set_common_field_values($data['ID'], 'description', $data['description']);
         $this->set_common_field_values($data['ID'], 'object_from', $data['object_from']);
         $this->set_common_field_values($data['ID'], 'object_source', $data['object_source']);
@@ -272,7 +272,7 @@ class ObjectModel extends Model {
         $data['ID'] = wp_insert_post($post);
         //categoria raiz da colecao
         wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type');
-       
+
         //inserindo as classificacoes
         if (isset($data['classifications']) && $data['classifications']) {
             $this->insert_classifications($data['classifications'], $data['ID']);
@@ -315,12 +315,12 @@ class ObjectModel extends Model {
             'post_type' => 'socialdb_object'
         );
         $data['ID'] = wp_insert_post($post);
-        $post['ID'] =  $data['ID'];
+        $post['ID'] = $data['ID'];
         //categoria raiz da colecao
         wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type');
-        
-        update_post_meta( $data['ID'], 'socialdb_object_dc_type', 'text');
-        update_post_meta( $data['ID'], 'socialdb_object_from', 'internal');
+
+        update_post_meta($data['ID'], 'socialdb_object_dc_type', 'text');
+        update_post_meta($data['ID'], 'socialdb_object_from', 'internal');
         //inserindo as classificacoes
         if (isset($data['classifications']) && $data['classifications']) {
             $this->insert_classifications($data['classifications'], $data['ID']);
@@ -332,27 +332,27 @@ class ObjectModel extends Model {
         // inserindo o evento
         $data['item'] = $post;
         $data = $this->insert_object_event($data['ID'], $data);
-        
+
         return $data;
     }
-    
+
     public function add_item_not_published($data) {
-        $object_id = socialdb_insert_object_socialnetwork([$data['title']], 'draft',$data['description']);
+        $object_id = socialdb_insert_object_socialnetwork([$data['title']], 'draft', $data['description']);
         update_post_meta($object_id, 'socialdb_object_dc_type', $data['type']);
         update_post_meta($object_id, 'socialdb_uri_imported', $data['url']);
         update_post_meta($object_id, 'socialdb_object_from', 'external');
-        if($data['type']=='text'){
+        if ($data['type'] == 'text') {
             update_post_meta($object_id, 'socialdb_object_dc_source', $data['thumbnail_url']);
             if (isset($data['thumbnail_url']) && $data['thumbnail_url'] && $data['thumbnail_url'] !== '') {
                 $this->add_thumbnail_url($data['thumbnail_url'], $object_id);
             }
-        }else{
-            if($data['content']){
+        } else {
+            if ($data['content']) {
                 update_post_meta($object_id, 'socialdb_object_dc_source', $data['content']);
-                 if($data['type']=='image'){
-                    $this->add_thumbnail_url($data['content'],$object_id);
-                 }
-                 update_post_meta($object_id, 'socialdb_object_content',$data['content']);
+                if ($data['type'] == 'image') {
+                    $this->add_thumbnail_url($data['content'], $object_id);
+                }
+                update_post_meta($object_id, 'socialdb_object_content', $data['content']);
             }
         }
         return json_encode([$object_id]);
@@ -452,14 +452,14 @@ class ObjectModel extends Model {
      */
     public function insert_tags($string_tags, $collection_id, $object_id) {
         $tagModel = new TagModel();
-        $this->concatenate_commom_field_value( $object_id, "socialdb_propertyterm_tag", '');
+        $this->concatenate_commom_field_value($object_id, "socialdb_propertyterm_tag", '');
         $tags = explode(',', $string_tags);
         if (is_array($tags) && !empty($tags)) {
             foreach ($tags as $tag) {
                 if ($tag !== ''):
                     $tag_array = $tagModel->add($tag, $collection_id);
                     $tagModel->add_tag_object($tag_array['term_id'], $object_id);
-                    $this->concatenate_commom_field_value( $object_id, "socialdb_propertyterm_tag", $tag_array['term_id']);
+                    $this->concatenate_commom_field_value($object_id, "socialdb_propertyterm_tag", $tag_array['term_id']);
                 endif;
             }
         }
@@ -478,7 +478,7 @@ class ObjectModel extends Model {
             $properties_id = explode(',', $data['properties_id']);
 
             foreach ($properties_id as $property_id) {
-                if(!isset($data["socialdb_property_$property_id"])){
+                if (!isset($data["socialdb_property_$property_id"])) {
                     continue;
                 }
                 $dados = json_decode($property_model->edit_property(array('property_id' => $property_id)));
@@ -490,20 +490,20 @@ class ObjectModel extends Model {
                 if (!is_array($data["socialdb_property_$property_id"]) && $data["socialdb_property_$property_id"] !== '') {
                     update_post_meta($object_id, "socialdb_property_$property_id", $data["socialdb_property_$property_id"]);
                     //inserir o valor no metadado de valor comu
-                    $this->set_common_field_values($object_id,  "socialdb_property_$property_id", $data["socialdb_property_$property_id"]);
+                    $this->set_common_field_values($object_id, "socialdb_property_$property_id", $data["socialdb_property_$property_id"]);
                 }// se estiver inserindo propriedade de objeto e tiver valores relacionado 
                 elseif (is_array($data["socialdb_property_$property_id"]) && !empty(is_array($data["socialdb_property_$property_id"]))) {
                     delete_post_meta($object_id, "socialdb_property_$property_id");
-                    $this->set_common_field_values($object_id,  "socialdb_property_$property_id", $data["socialdb_property_$property_id"],'item');
+                    $this->set_common_field_values($object_id, "socialdb_property_$property_id", $data["socialdb_property_$property_id"], 'item');
                     foreach ($data["socialdb_property_$property_id"] as $value) {
-                        if(empty(trim($value)))
+                        if (empty(trim($value)))
                             continue;
-                        
+
                         add_post_meta($object_id, "socialdb_property_$property_id", $value);
                         if (isset($dados->metas->socialdb_property_object_is_reverse) && ($dados->metas->socialdb_property_object_is_reverse === 'true')) {
                             add_post_meta($value, "socialdb_property_" . $dados->metas->socialdb_property_object_reverse, $object_id);
                         }//adicionando a propriedade simetrica
-                        else if(get_post($value)&&isset($dados->metas->socialdb_property_object_is_reverse)) {
+                        else if (get_post($value) && isset($dados->metas->socialdb_property_object_is_reverse)) {
                             delete_post_meta($value, "socialdb_property_$property_id", $object_id);
                             add_post_meta($value, "socialdb_property_$property_id", $object_id);
                         }
@@ -517,7 +517,7 @@ class ObjectModel extends Model {
                         $this->clean_simetric_property($object_id, $property_id);
                     }
                     update_post_meta($object_id, "socialdb_property_$property_id", '');
-                     $this->set_common_field_values($object_id,  "socialdb_property_$property_id", '');
+                    $this->set_common_field_values($object_id, "socialdb_property_$property_id", '');
                 }
             }
         }
@@ -550,13 +550,13 @@ class ObjectModel extends Model {
         if ($data['properties_id'] !== '') {
             $properties_id = explode(',', $data['properties_id']);
             foreach ($properties_id as $property_id) {
-                if (isset($data["socialdb_propertyterm_$property_id"])&&!is_array($data["socialdb_propertyterm_$property_id"]) && $data["socialdb_propertyterm_$property_id"] !== '') {
+                if (isset($data["socialdb_propertyterm_$property_id"]) && !is_array($data["socialdb_propertyterm_$property_id"]) && $data["socialdb_propertyterm_$property_id"] !== '') {
                     wp_set_object_terms($object_id, array((int) $data["socialdb_propertyterm_$property_id"]), 'socialdb_category_type', true);
-                     $this->set_common_field_values($object_id, "socialdb_propertyterm_$property_id", [(int) $data["socialdb_propertyterm_$property_id"]],'term');
+                    $this->set_common_field_values($object_id, "socialdb_propertyterm_$property_id", [(int) $data["socialdb_propertyterm_$property_id"]], 'term');
                 } elseif (is_array($data["socialdb_propertyterm_$property_id"]) && !empty(is_array($data["socialdb_propertyterm_$property_id"]))) {
                     foreach ($data["socialdb_propertyterm_$property_id"] as $value) {
                         wp_set_object_terms($object_id, array((int) $value), 'socialdb_category_type', true);
-                        $this->set_common_field_values($object_id, "socialdb_propertyterm_$property_id", $data["socialdb_propertyterm_$property_id"],'term');
+                        $this->set_common_field_values($object_id, "socialdb_propertyterm_$property_id", $data["socialdb_propertyterm_$property_id"], 'term');
                     }
                 }
             }
@@ -739,7 +739,7 @@ class ObjectModel extends Model {
         wp_delete_post($data['ID']);
         return json_encode($data);
     }
-    
+
     /**
      * 
      * @param array $data Os dados vindo do modal de upload de imagem
@@ -753,9 +753,9 @@ class ObjectModel extends Model {
         );
         $object_id = wp_insert_post($post);
         $attachment_id = $this->add_object_item($object_id);
-        if($attachment_id&&$attachment_id>0){
-            return json_encode(['attachment_id'=>$attachment_id]);
-        } else{
+        if ($attachment_id && $attachment_id > 0) {
+            return json_encode(['attachment_id' => $attachment_id]);
+        } else {
             return json_encode(false);
         }
     }
@@ -767,11 +767,11 @@ class ObjectModel extends Model {
      * Metodo reponsavel em determinar se deve listar as colecoes ou objetos
      * Autor: Eduardo Humberto 
      */
-    public function list_all($args = null) {
+    public function list_all($args = null, $post_status = 'publish') {
         if ($args['collection_id'] == get_option('collection_root_id')) {
-            return $this->list_collection($args);
+            return $this->list_collection($args, $post_status);
         } else {
-            return $this->list_object($args);
+            return $this->list_object($args, $post_status);
         }
     }
 
@@ -831,7 +831,7 @@ class ObjectModel extends Model {
      * Metodo reponsavel em  listar apenas objetos
      * Autor: Eduardo Humberto 
      */
-    public function list_object($args = null) {
+    public function list_object($args = null, $post_status = 'publish') {
         $tax_query = array('relation' => 'IN');
         $tax_query[] = array(
             'taxonomy' => 'socialdb_category_type',
@@ -856,6 +856,7 @@ class ObjectModel extends Model {
         $args = array(
             'posts_per_page' => 10,
             'post_type' => 'socialdb_object',
+            'post_status' => array($post_status),
             'paged' => 1,
             'tax_query' => $tax_query,
             'orderby' => $orderby,
@@ -1084,12 +1085,12 @@ class ObjectModel extends Model {
      * Metodo reponsavel em listar as colecoes
      * Autor: Eduardo Humberto 
      */
-    public function list_collection($data = null) {
+    public function list_collection($data = null, $post_status = 'publish') {
         global $wp_query;
         $page = $this->set_page($data);
         $args = array(
             'post_type' => 'socialdb_collection',
-            'post_status' => array('publish'),
+            'post_status' => array($post_status),
             'post__not_in' => array(get_option('collection_root_id')),
             'paged' => $page,
             'orderby' => 'date',
@@ -1270,7 +1271,7 @@ class ObjectModel extends Model {
                 $type = $property_model->get_property_type_hierachy($property_id); // pego o tipo da propriedade
                 $all_data = $property_model->get_all_property($property_id, true); // pego todos os dados possiveis da propriedade
                 //var_dump($all_data);
-                if(isset($all_data['slug'])&& in_array($all_data['slug'], $this->fixed_slugs) ):
+                if (isset($all_data['slug']) && in_array($all_data['slug'], $this->fixed_slugs)):
                     continue;
                 endif;
                 //diferenciando os tipos
@@ -1341,7 +1342,6 @@ class ObjectModel extends Model {
         return $categories_id;
     }
 
-
     /**
      * function get_objects_by_property_json()
      * @param int Os dados vindo do formulario
@@ -1365,8 +1365,8 @@ class ObjectModel extends Model {
         $result = $this->get_category_root_posts($all_data['metas']['socialdb_property_object_category_id']);
         if ($result) {
             foreach ($result as $object) {
-                if(strpos(strtolower($object->post_title), strtolower($data['term']))!==false){
-                     $json[] = array('value' => $object->ID, 'label' => $object->post_title);
+                if (strpos(strtolower($object->post_title), strtolower($data['term'])) !== false) {
+                    $json[] = array('value' => $object->ID, 'label' => $object->post_title);
                 }
             }
         }
@@ -1400,7 +1400,7 @@ class ObjectModel extends Model {
         $categories = wp_get_object_terms($data['object_id'], 'socialdb_category_type');
         if (is_array($categories)) {
             foreach ($categories as $category) {
-                if($this->get_category_root_of($data['collection_id'])==$category->term_id){
+                if ($this->get_category_root_of($data['collection_id']) == $category->term_id) {
                     continue;
                 }
                 $category_data['term'] = $category;
@@ -1592,7 +1592,7 @@ class ObjectModel extends Model {
         }
         return $data;
     }
-    
+
     /**
      * funcao que despublica  itens de uma colecao
      * @param array $data Os dados vindo da requisicao
@@ -1667,16 +1667,66 @@ class ObjectModel extends Model {
     }
 
     public function set_attachment_description($post_parent, $post_content) {
-        if ( isset($data['post_content']) && isset($data['post_parent']) ) {
+        if (isset($data['post_content']) && isset($data['post_parent'])) {
             $post_content = $data['post_content'];
             $post_parent = $data['post_parent'];
         }
-        $newest_attachment = get_posts( ['post_type' => 'attachment', 'post_parent' => $post_parent, 'exclude' => get_post_thumbnail_id($post_parent), 'numberposts' => 1] )[0];
-        wp_update_post( ['ID' => $newest_attachment->ID, 'post_content' => $post_content] );
+        $newest_attachment = get_posts(['post_type' => 'attachment', 'post_parent' => $post_parent, 'exclude' => get_post_thumbnail_id($post_parent), 'numberposts' => 1])[0];
+        wp_update_post(['ID' => $newest_attachment->ID, 'post_content' => $post_content]);
     }
 
     public function update_attachment_legend($item_id, $item_content) {
-        wp_update_post( [ 'ID' => $item_id, 'post_content' => $item_content ] );
+        wp_update_post([ 'ID' => $item_id, 'post_content' => $item_content]);
     }
+
+    public function restoreItem($object_id) {
+        $my_post = array(
+            'ID' => $object_id,
+            'post_status' => 'publish'
+        );
+
+        $result = wp_update_post($my_post);
+
+        if (is_wp_error($result)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    
+    public function delete_permanently_item($object_id){
+        $my_post = array(
+            'ID' => $object_id,
+            'post_status' => 'trash'
+        );
+
+        $result = wp_update_post($my_post);
+
+        if (is_wp_error($result)) {
+            return false;
+        } else {
+            return true;
+        }
+        /*if(wp_delete_post( $object_id, true )){
+            return true;
+        }else{
+            return false;
+        }*/
+    }
+    
+    /*public function delete_permanently_collection($collection_id){
+        $items = $this->get_collection_posts($collection_id, '*', 'trash');
+        if(!empty($items)){
+            foreach ($items as $item){
+                wp_delete_post( $item->ID, true );
+            }
+        }
+        
+        if(wp_delete_post( $collection_id, true )){
+            return true;
+        }else{
+            return false;
+        }
+    }*/
 
 }

@@ -848,7 +848,7 @@ class Model {
      * 
      * @author: Eduardo Humberto 
      */
-    public function get_collection_posts($collection_id, $field = '*') {
+    public function get_collection_posts($collection_id, $field = '*', $post_status = 'publish') {
         global $wpdb;
         $wp_posts = $wpdb->prefix . "posts";
         $term_relationships = $wpdb->prefix . "term_relationships";
@@ -858,7 +858,7 @@ class Model {
             $query = "
                     SELECT p.$field FROM $wp_posts p
                     INNER JOIN $term_relationships t ON p.ID = t.object_id    
-                    WHERE p.post_type LIKE 'socialdb_object' and t.term_taxonomy_id = {$term->term_taxonomy_id} AND p.post_status LIKE 'publish'
+                    WHERE p.post_type LIKE 'socialdb_object' and t.term_taxonomy_id = {$term->term_taxonomy_id} AND p.post_status LIKE '$post_status'
             ";
 
             $result = $wpdb->get_results($query);

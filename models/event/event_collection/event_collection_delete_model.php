@@ -68,10 +68,10 @@ class EventCollectionDeleteModel extends EventModel {
             'post_status' => 'draft'
         );
 
-        $collection_items = $this->get_collection_posts($collection_delete_id, "ID");
+        /*$collection_items = $this->get_collection_posts($collection_delete_id, "ID");
         foreach ( $collection_items as $item) {
-            wp_update_post( ['ID' => $item->ID, 'post_status' => 'trash'] );
-        }
+            wp_update_post( ['ID' => $item->ID, 'post_status' => 'draft'] );
+        }*/
 
         // Update the post into the database
         $value = wp_update_post($object);
