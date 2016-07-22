@@ -180,8 +180,6 @@
                 $("#verify_collection_name").val('allow');
                 $("#collection_name_error").hide('slow')
                 $("#collection_name_success").show('slow');
-                //$("#collection_name_success").delay(5000);
-                //$("#collection_name_success").hide('slow');
             }
         });
     }
@@ -191,16 +189,11 @@
             type: 'POST',
             data: {operation: 'list_collections_parent', collection_id: $("#collection_id").val()}
         }).done(function (result) {
-            //$("#socialdb_collection_parent").append("<option value='' selected='selected' >Selecione..</option>");
             $("#socialdb_collection_parent").append("<option value='collection_root' ><?php _e('Collection root', 'tainacan') ?></option>");
             elem = jQuery.parseJSON(result);
             generate_select_list_collections_parent(elem.children, '&nbsp;&nbsp;');
-            // $('#socialdb_collection_parent').combobox({bsVersion: '3'});
-            //console.log($("#selected_parent_collection").val());
             if ($("#selected_parent_collection").val() !== '') {
-                // $("[name=socialdb_collection_parent").val($("#selected_parent_collection").val());
                 $("#socialdb_collection_parent").val($("#selected_parent_collection").val());
-                // $('.combobox').val();
             }
         });
     }
@@ -244,41 +237,35 @@
         return '<?php echo get_template_directory_uri(); ?>';
     }
 
-    var cover_img_options = {
+    var common_config_options = {
         uploadUrl: '<?php echo get_stylesheet_directory_uri() ?>' + '/views/collection/upload_file.php',
         cropUrl: '<?php echo get_stylesheet_directory_uri() ?>' + '/views/collection/crop_file.php',
         imgEyecandy: true,
         imgEyecandyOpacity: 0.1,
         modal: true,
-        loaderHtml: '<div class="loader bubblingG"><span id="bubblingG_1"></span><span id="bubblingG_2"></span><span id="bubblingG_3"></span></div>',
-        onAfterImgCrop: function () {
-            var cropped = $('img.croppedImg').attr('src');
-            var collection_id = $("#collection_id").val();
-            $.ajax({
-                url: $('#src').val() + '/controllers/collection/collection_controller.php',
-                data: {operation: 'set_collection_cover_img', img_url: cropped, collection_id: collection_id}
-            });
-        }
-        //onError: function () {}
-    }
+        loaderHtml: '<div class="loader bubblingG"><span id="bubblingG_1"></span><span id="bubblingG_2"></span><span id="bubblingG_3"></span></div>'
+    };
+
+    var cover_img_options = common_config_options;
+    cover_img_options.onAfterImgCrop = function() {
+        var cropped = $('img.croppedImg').attr('src');
+        var collection_id = $("#collection_id").val();
+        $.ajax({
+            url: $('#src').val() + '/controllers/collection/collection_controller.php',
+            data: {operation: 'set_collection_cover_img', img_url: cropped, collection_id: collection_id}
+        });
+    };
     var croppicContainer = new Croppic('collection_cover_image', cover_img_options);
 
-    var crop_thumb_options = {
-        uploadUrl: '<?php echo get_stylesheet_directory_uri() ?>' + '/views/collection/upload_file.php',
-        cropUrl: '<?php echo get_stylesheet_directory_uri() ?>' + '/views/collection/crop_file.php',
-        imgEyecandy: true,
-        imgEyecandyOpacity: 0.1,
-        modal: true,
-        loaderHtml: '<div class="loader bubblingG"><span id="bubblingG_1"></span><span id="bubblingG_2"></span><span id="bubblingG_3"></span></div>',
-        onAfterImgCrop: function () {
-            var cropped = $('img.croppedImg').attr('src');
-            var collection_id = $("#collection_id").val();
-            $.ajax({
-                url: $('#src').val() + '/controllers/collection/collection_controller.php',
-                data: {operation: 'update_collection_thumbnail', img_url: cropped, collection_id: collection_id}
-            });
-        }
-    }
+    var crop_thumb_options = common_config_options;
+    crop_thumb_options.onAfterImgCrop = function () {
+        var cropped = $('img.croppedImg').attr('src');
+        var collection_id = $("#collection_id").val();
+        $.ajax({
+            url: $('#src').val() + '/controllers/collection/collection_controller.php',
+            data: {operation: 'update_collection_thumbnail', img_url: cropped, collection_id: collection_id}
+        });
+    };
     var croppicThumb = new Croppic('collection_crop_thumb', crop_thumb_options);
 
     function show_edit_cover() {
