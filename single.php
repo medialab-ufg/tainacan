@@ -212,8 +212,8 @@ $options = get_option('socialdb_theme_options');
                             <div class="row">
                                 <?php if (get_option('collection_root_id') != get_the_ID() && (is_user_logged_in() && verify_allowed_action(get_the_ID(), 'socialdb_collection_permission_create_object'))): ?>
                                     <div class="col-md-2 tainacan-add-item">
-                                        <?php if (apply_filters('show_custom_add_item_button', '')): ?>
-                                            <?php echo apply_filters('show_custom_add_item_button', ''); ?>
+                                        <?php if (has_action('show_custom_add_item_button')): ?>
+                                            <?php echo do_action('show_custom_add_item_button', ''); ?>
                                         <?php elseif (has_nav_menu('menu-ibram')): ?>
                                             <button type="button" class="btn btn-primary" onclick="showAddItemText()">
                                                 <?php _e('Add', 'tainacan') ?> <span class="glyphicon glyphicon-plus"></span>

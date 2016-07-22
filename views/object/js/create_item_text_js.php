@@ -195,16 +195,20 @@ function reorder_properties_add_item(tab_id,array_ids,seletor){
                       $( $items.get(j) ).appendTo( $ul);
                  }
              }
-             for(var j = 0; j<$properties.length;j++){
-                 if($($properties.get(j)).attr('id')===array_ids[i]){
-                      $( $properties.get(j) ).appendTo( $ul);
-                 }
-             }
-             for(var j = 0; j<$items.length;j++){
-                 if($($rankings.get(j)).attr('id')===array_ids[i]){
-                     $( $rankings.get(j) ).appendTo( $ul);
-                 }
-             }
+            if($properties){
+                for(var j = 0; j<$properties.length;j++){
+                    if($($properties.get(j)).attr('id')===array_ids[i]){
+                         $( $properties.get(j) ).appendTo( $ul);
+                    }
+                }
+            }
+            if($rankings){
+                for(var j = 0; j<$items.length;j++){
+                    if($($rankings.get(j)).attr('id')===array_ids[i]){
+                        $( $rankings.get(j) ).appendTo( $ul);
+                    }
+                }
+            }
         }
         $($ul).accordion({
             active: false,
