@@ -14,7 +14,7 @@ $collection_list_mode = $collection_data['collection_metas']['socialdb_collectio
 // $collection_color_scheme = $collection_data['collection_metas']['socialdb_collection_color_scheme'];
 
 $viewHelper = new ViewHelper();
-
+$collection_list_mode = "cards_trash";
 if( !$collection_list_mode ) {
     $collection_list_mode = "cards_trash";
 }
