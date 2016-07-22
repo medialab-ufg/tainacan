@@ -24,11 +24,8 @@ $cropH = $_POST['cropH'];
 $angle = $_POST['rotation'];
 
 $jpeg_quality = 100;
-
 $current_rand = rand();
-
-$output_filename = $imageURL . "cropped_" . $current_rand;
-// $output_filename = dirname($imgUrl). "/croppedImg_".rand();
+$output_filename = dirname($imgUrl). "/cropped_".$current_rand;
 
 $what = getimagesize($imgUrl);
 
