@@ -64,6 +64,7 @@
         event.preventDefault();
         $.ajax({ url: src + "/controllers/collection/collection_controller.php", type: 'POST', data: form })
           .done(function(result) {
+            location.reload();
               var el = $.parseJSON(result);
           });
     });
