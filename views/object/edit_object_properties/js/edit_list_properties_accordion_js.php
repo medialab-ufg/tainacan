@@ -1,8 +1,6 @@
 <script>
     $(function () {
         var src = $('#src').val();
-        var properties_autocomplete = edit_get_val($("#edit_properties_autocomplete").val());
-        autocomplete_edit_item_property_data(properties_autocomplete); 
         //# 3 - esconde, se necessario os campos de ranking e licencas
         if($('.hide_rankings')&&$('.hide_rankings').val()==='true'){
             $('#list_ranking_items').hide();
@@ -116,7 +114,7 @@
 
                             set_field_valid(property_id,'core_validation_'+property_id);
                         });
-                        if($(".form_autocomplete_value_" + property_id)){
+                        if($(".form_autocomplete_value_" + property_id).length>0){
                             $(".form_autocomplete_value_" + property_id).change(function(){
                                 var cont = 0;
                                 $(".form_autocomplete_value_" + property_id).each(function(index,value){
@@ -134,9 +132,8 @@
                             });
                         }
                         // end validate
-                        console.log(property_id);
-                        if($(".form_edit_autocomplete_value_" + property_id)){
-                            $(".form_edit_autocomplete_value_" + property_id).autocomplete({
+                        if($(".form_autocomplete_value_" + property_id).length>0){
+                            $(".form_autocomplete_value_" + property_id).autocomplete({
                                 source: $('#src').val() + '/controllers/collection/collection_controller.php?operation=list_items_search_autocomplete&property_id=' + property_id,
                                 messages: {
                                     noResults: '',
@@ -145,11 +142,11 @@
                                 },
                                 minLength: 2,
                                 select: function (event, ui) {
-                                    $("#form_edit_autocomplete_value_" + property_id).val('');
+                                    $(".form_autocomplete_value_" + property_id).val('');
                                     //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
-                                    var temp = $("#form_edit_autocomplete_value_" + property_id).val();
+                                    var temp = $(".form_edit_autocomplete_value_" + property_id).val();
                                     if (typeof temp == "undefined") {
-                                        $("#form_edit_autocomplete_value_" + property_id).val(ui.item.value);
+                                        $(".form_autocomplete_value_" + property_id).val(ui.item.value);
                                     }
                                 }
                             });

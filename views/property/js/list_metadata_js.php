@@ -145,14 +145,22 @@
             var $ui_container = ui.item.context.parentNode.id;
             var item_id =  ui.item.context.id;
             var item_search_widget = $("#"+item_id).attr("data-widget");
-            var is_fixed_meta = $("#"+item_id).hasClass('fixed-meta');
+            var is_fixed_meta = $("#"+item_id).hasClass('fixed-property');
+            var is_blocked = $("#"+item_id).hasClass('block-facet');
             var $sorter_span = "<span class='glyphicon glyphicon-sort sort-filter'></span>";
-
+            if(is_blocked||$( "#" + item_id.replace('meta-item-','')).length>0){
+                list_collection_metadata();
+                showAlertGeneral('<?php _e('Attention!','tainacan') ?>','<?php _e('Metadata already inserted or not allowed as filter','tainacan') ?>','info');
+                return false;
+            }
+            
             if ( $ui_container === "filters-accordion" ) {
+                list_collection_metadata();
                 $("#filters-accordion").addClass("receiving-metadata");
                 $( "#" + item_id + " .action-icons").append( $sorter_span );
                 if ( is_fixed_meta ) {
                     setCollectionFacet("add", item_id, "tree");
+                    showAlertGeneral('<?php _e('Success','tainacan') ?>','<?php _e('Metadata inserted as filter successfully','tainacan') ?>','success');
                     $('.data-widget').removeClass('select-meta-filter');
                 } else {
                     
@@ -198,22 +206,22 @@
             }
         },
         update: function( event, ui ) { 
-            var $ui_container = ui.item.context.parentNode.id;
-            if ( $ui_container === "metadata-container" ) {
-                var data = [];
-                $("#metadata-container li").each(function(i, el){
-                    var p = $(el).attr('id').replace("meta-item-", "");
-                    data.push(p);
-               });
-               $.ajax({
-                    type: "POST",
-                    url: $('#src').val() + "/controllers/collection/collection_controller.php",
-                    data: {
-                        collection_id: $('#collection_id').val(), 
-                        operation: 'update_ordenation_properties', 
-                        ordenation: data.join(',')}
-                });
-            }
+//            var $ui_container = ui.item.context.parentNode.id;
+//            if ( $ui_container === "metadata-container" ) {
+//                var data = [];
+//                $("#metadata-container li").each(function(i, el){
+//                    var p = $(el).attr('id').replace("meta-item-", "");
+//                    data.push(p);
+//               });
+//               $.ajax({
+//                    type: "POST",
+//                    url: $('#src').val() + "/controllers/collection/collection_controller.php",
+//                    data: {
+//                        collection_id: $('#collection_id').val(), 
+//                        operation: 'update_ordenation_properties', 
+//                        ordenation: data.join(',')}
+//                });
+//            }
             
         }        
 
@@ -710,7 +718,7 @@
                         }
                         //adiciona na listagem
                         $(get_property_tab_seletor(tab_property_id)).append(
-                            '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="root_category '+class_var+' ui-widget-content ui-corner-tr">' +
+                            '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="root_category '+class_var+' ui-widget-content ui-corner-tr '+is_allowed_facet(property.slug)+'">' +
                             '<label '+style+'   class="title-pipe">' + property.name + '</label>' +
                             '<a onclick="edit_metadata(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
                             '<div class="action-icons"> <span class="glyphicon glyphicon-edit"></span></a> ' +
@@ -2068,6 +2076,14 @@
                 getRequestFeedback(elem.type, elem.msg);
             }            
         });
+    }
+    // funcao que bloqueia as facetas que nao sao permitidas
+    function is_allowed_facet(slug){
+        var not_allowed = ['socialdb_property_fixed_thumbnail','socialdb_property_fixed_attachments','socialdb_property_fixed_content','socialdb_property_fixed_description']
+        if(not_allowed.indexOf(slug)>=0)
+            return ' block-facet';
+        else
+            return ''
     }
      /**
      ****************************************************************************

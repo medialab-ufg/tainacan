@@ -50,7 +50,9 @@
                             }
                         }
                     }
-                    
+                    //autocomplete na edicao
+                    var properties_autocomplete = edit_get_val($("#edit_properties_autocomplete").val());
+                    autocomplete_edit_item_property_data(properties_autocomplete); 
                     //ckeditor
                     showCKEditor('objectedit_editor');
                     $("#text_accordion").accordion({

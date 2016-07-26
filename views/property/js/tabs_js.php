@@ -185,7 +185,10 @@
             cursor: "n-resize",
             connectWith: ".connectedSortable",
             revert: 250,
-            helper: "clone",
+            helper: 'clone',
+            start: function(event, ui) {
+               $(ui.item).show();
+            },
             receive: function(event, ui) {
                 var $ui_container = ui.item.context.parentNode.id;
                 var item_id =  ui.item.context.id;
@@ -205,6 +208,7 @@
                 $("#metadata-container-"+id ).removeClass("change-meta-container");
             },
             sort: function(event, ui) {
+                $(ui.item).show();
                 $("#filters-accordion").addClass("adding-meta");
                 var filtros_atuais = get_current_filters();
                 $("#metadata-container-"+id ).addClass("change-meta-container");

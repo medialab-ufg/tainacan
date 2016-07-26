@@ -48,29 +48,30 @@
      * @param {type} e
      * @returns {undefined}
      */
-    function autocomplete_edit_item_property_data(properties_autocomplete) {
-         if (properties_autocomplete) {
-            $.each(properties_autocomplete, function (idx, property_id) {
-                        $("#form_edit_autocomplete_value_" + property_id).autocomplete({
-                            source: $('#src').val() + '/controllers/collection/collection_controller.php?operation=list_items_search_autocomplete&property_id=' + property_id,
-                            messages: {
-                                noResults: '',
-                                results: function () {
-                                }
-                            },
-                            minLength: 2,
-                            select: function (event, ui) {
-                                $("#form_edit_autocomplete_value_" + property_id).val('');
-                                //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
-                                var temp = $("#form_edit_autocomplete_value_" + property_id).val();
-                                if (typeof temp == "undefined") {
-                                    $("#form_edit_autocomplete_value_" + property_id).val(ui.item.value);
-                                }
-                            }
-                        });
-                    });
-                }
-    }
+//    function autocomplete_edit_item_property_data(properties_autocomplete) {
+//         if (properties_autocomplete) {
+//            $.each(properties_autocomplete, function (idx, property_id) {
+//                       
+//                        $("#form_edit_autocomplete_value_" + property_id).autocomplete({
+//                            source: $('#src').val() + '/controllers/collection/collection_controller.php?operation=list_items_search_autocomplete&property_id=' + property_id,
+//                            messages: {
+//                                noResults: '',
+//                                results: function () {
+//                                }
+//                            },
+//                            minLength: 2,
+//                            select: function (event, ui) {
+//                                $("#form_edit_autocomplete_value_" + property_id).val('');
+//                                //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
+//                                var temp = $("#form_edit_autocomplete_value_" + property_id).val();
+//                                if (typeof temp == "undefined") {
+//                                    $("#form_edit_autocomplete_value_" + property_id).val(ui.item.value);
+//                                }
+//                            }
+//                        });
+//                    });
+//                }
+//    }
     
      function clear_select_object_property(e,property_id,object_id) {
         $('option:selected', e).remove();

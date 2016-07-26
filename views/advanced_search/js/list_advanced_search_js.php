@@ -275,15 +275,12 @@
             }
         });
     }
-     function showPopoverSearch(id) {
-        // pop up #example1, #example2, #example3 with same content
-        $('#popover_network' + id+'_search').popover({
-            html: true,
-            content: function () {
-                return $('#popover_content_wrapper' + id+'_search').html();
-            }
-        });
+    
+    function showModalShareNetwork(id) {
+        $('#adv_modal_share_network' + id).modal('show');
+        init_autocomplete('#collections_object_share' + id);
     }
+    
     //retorno para as vusca
     function back_to_search_form(){
         $('#container_filtros').show();

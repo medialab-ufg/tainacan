@@ -211,6 +211,7 @@ class VisualizationModel extends CollectionModel {
 
     public function initDynatree($data) {
         $propertyModel = new PropertyModel;
+        $labels_collection = ($data['collection_id']!='') ? get_post_meta($data['collection_id'], 'socialdb_collection_fixed_properties_labels', true) : false;
         // $facets_id = CollectionModel::get_facets($data['collection_id']);
         $facets_id = array_filter(array_unique(get_post_meta($data['collection_id'], 'socialdb_collection_facets')));
         $facets = array();
@@ -241,6 +242,13 @@ class VisualizationModel extends CollectionModel {
                     $dynatree[] = array('title' => ucfirst(Words($facet->name, 30)), 'key' => $key, 'isLazy' => true, 'data' => $url, 'expand' => true, 'hideCheckbox' => $hide_checkbox, 'addClass' => $classCss);
                     $dynatree[end(array_keys($dynatree))] = $this->getChildrenDynatree($facet->term_id, $dynatree[end(array_keys($dynatree))], $classCss);
                 }
+            }//tags
+            elseif ('tag'==$facet_id) {
+                if ((get_post_meta($data['collection_id'], 'socialdb_collection_hide_tags', true)) != 'yes' && get_post_meta($data['collection_id'], 'socialdb_collection_facet_tag_widget', true) == 'tree') {
+                    //tags
+                    $dynatree[] = array('title' => __('Tags', 'tainacan'), 'key' => 'tag_facet_tag', 'isLazy' => true, 'data' => $url, 'expand' => true, 'hideCheckbox' => true, 'addClass' => 'tag_img');
+                    $dynatree[end(array_keys($dynatree))] = $this->getTagRelDynatree($data['collection_id'], $dynatree[end(array_keys($dynatree))], 'tag_img');
+                }
             }elseif(get_term_by('id', $facet_id, 'socialdb_property_type')){   
                 $facet = get_term_by('id', $facet_id, 'socialdb_property_type');
                 $type = $propertyModel->get_property_type($facet_id); // pego o tipo da propriedade;
@@ -249,8 +257,7 @@ class VisualizationModel extends CollectionModel {
                     $classCss = get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $facet_id . '_color', true);
                     $dynatree[] = array('title' => $facet->name, 'key' => 'socialdb_object_dc_type_facet', 'isLazy' => true, 'data' => $url, 'expand' => true, 'hideCheckbox' => true, 'addClass' => $classCss);
                     $dynatree[end(array_keys($dynatree))] = $this->getTypeDynatree($data['collection_id'], $dynatree[end(array_keys($dynatree))], $classCss);
-                }
-                if ('socialdb_property_fixed_title'==$facet->slug) {
+                }elseif ('socialdb_property_fixed_title'==$facet->slug) {
                    $classCss = get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $facet_id . '_color', true);
                     $dynatree[] = array('title' =>$facet->name, 'key' => 'socialdb_object_dc_type_facet', 'isLazy' => true, 'data' => $url, 'expand' => true, 'hideCheckbox' => true, 'addClass' => $classCss);
                     $property['metas']['socialdb_property_object_category_id'] = $this->get_category_root_of($data['collection_id']);
@@ -268,6 +275,18 @@ class VisualizationModel extends CollectionModel {
                     $classCss = get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $facet_id . '_color', true);
                     $dynatree[] = array('title' => $facet->name, 'key' => 'socialdb_object_from_facet', 'isLazy' => true, 'data' => $url, 'expand' => true, 'hideCheckbox' => true, 'addClass' => $classCss);
                     $dynatree[end(array_keys($dynatree))] = $this->getSourceDynatree($data['collection_id'], $dynatree[end(array_keys($dynatree))], $classCss);
+                }
+                //tags
+                elseif ('socialdb_property_fixed_tags'==$facet->slug) {
+                    //tags
+                    if($labels_collection){
+                        $array = unserialize($labels_collection);
+                        $name = (isset($array[$facet->term_id])) ? $array[$facet->term_id] : $facet->name;
+                    }else{        
+                        $name = $facet->name;
+                    }
+                    $dynatree[] = array('title' => $name, 'key' => 'tag_facet_tag', 'isLazy' => true, 'data' => $url, 'expand' => true, 'hideCheckbox' => true, 'addClass' => 'tag_img');
+                    $dynatree[end(array_keys($dynatree))] = $this->getTagRelDynatree($data['collection_id'], $dynatree[end(array_keys($dynatree))], 'tag_img');
                 }
                 //licencas dos itens
                 elseif ('socialdb_property_fixed_license'==$facet->slug) {
@@ -294,14 +313,7 @@ class VisualizationModel extends CollectionModel {
                     }  
                 }
             }
-            //tags
-            elseif ('tag'==$facet_id) {
-                if ((get_post_meta($data['collection_id'], 'socialdb_collection_hide_tags', true)) != 'yes' && get_post_meta($data['collection_id'], 'socialdb_collection_facet_tag_widget', true) == 'tree') {
-                    //tags
-                    $dynatree[] = array('title' => __('Tags', 'tainacan'), 'key' => 'tag_facet_tag', 'isLazy' => true, 'data' => $url, 'expand' => true, 'hideCheckbox' => true, 'addClass' => 'tag_img');
-                    $dynatree[end(array_keys($dynatree))] = $this->getTagRelDynatree($data['collection_id'], $dynatree[end(array_keys($dynatree))], 'tag_img');
-                }
-            }
+            
             
         }
         return json_encode($dynatree);
