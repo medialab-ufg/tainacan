@@ -686,7 +686,7 @@ function showList(src) {
     $.ajax({
         url: src + '/controllers/object/object_controller.php',
         type: 'POST',
-        data: {operation: 'list', mycollections: $("#mycollections").val(), keyword: $("#search_collection_field").val(), collection_id: $("#collection_id").val(), ordenation_id: $('#collection_single_ordenation').val()}
+        data: {operation: 'list', mycollections: $("#mycollections").val(),sharedcollections:$("#sharedcollections").val(), keyword: $("#search_collection_field").val(), collection_id: $("#collection_id").val(), ordenation_id: $('#collection_single_ordenation').val()}
     }).done(function (result) {
         $('#hideTrash').hide();
         elem = jQuery.parseJSON(result);
@@ -979,7 +979,7 @@ function showHeaderCollection(src) {
     $.ajax({
         url: src + '/controllers/collection/collection_controller.php',
         type: 'POST',
-        data: {operation: 'show_header', collection_id: $("#collection_id").val(), mycollections: $("#mycollections").val()}
+        data: {operation: 'show_header', collection_id: $("#collection_id").val(),sharedcollections:$("#sharedcollections").val(), mycollections: $("#mycollections").val()}
     }).done(function (result) {
         $("#collection_post").html(result);
         $('.nav-tabs').tab();

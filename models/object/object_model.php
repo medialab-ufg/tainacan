@@ -1101,6 +1101,8 @@ class ObjectModel extends Model {
         }
         if ($data['mycollections'] && $data['mycollections'] == 'true') {
             $args['author'] = get_current_user_id();
+        }
+        if ($data['sharedcollections'] && $data['sharedcollections'] == 'true') {
             $meta_query = array('relation' => 'AND');
             $meta_query[] = array(
                             'key' => 'socialdb_collection_moderator',

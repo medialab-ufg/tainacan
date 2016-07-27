@@ -55,8 +55,16 @@ $options = get_option('socialdb_theme_options');
         echo (int) base64_decode($_GET['recovery_password']);
     }
     ?>">
+    <!-- Minhas colecoes -->
     <input type="hidden" id="mycollections" name="mycollections" value="<?php
     if (isset($_GET['mycollections'])) {
+        echo 'true';
+    }
+    
+    ?>">
+    <!-- Colecoes compartilhadas -->
+    <input type="hidden" id="sharedcollections" name="sharedcollections" value="<?php
+    if (isset($_GET['sharedcollections'])) {
         echo 'true';
     }
     ?>">

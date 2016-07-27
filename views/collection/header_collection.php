@@ -40,6 +40,8 @@ $thumb_url = $collection_thumb ? wp_get_attachment_url($collection_thumb) : get_
                     <div class="col-md-12 titulo-colecao">
                         <?php if (isset($mycollections) && $mycollections == 'true') { ?>
                             <span class="bottom"><b class="white"><?php _e('My Collections', 'tainacan'); ?></b><br></span>
+                        <?php } else if (isset($sharedcollections) && $sharedcollections == 'true') { ?>
+                            <h3 class="white title"><?php _e('Shared Collections', 'tainacan'); ?></h3>
                         <?php } else { ?>
                             <h3 class="white title"> <a href="<?php echo get_the_permalink($current_collection_id); ?>"> <?php echo $collection_post->post_title; ?> </a> </h3>
                             <div class="collection-description">

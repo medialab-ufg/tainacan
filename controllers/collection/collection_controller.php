@@ -89,8 +89,10 @@ class CollectionController extends Controller {
                 break;
             case "show_header":
                 $mycollections = $data['mycollections'];
+                $sharedcollections = $data['sharedcollections'];
                 $data = $collection_model->get_collection_data($data['collection_id']);
                 $data['mycollections'] = $mycollections;
+                $data['sharedcollections'] = $sharedcollections;
                 $data['json_autocomplete'] = $collection_model->create_main_json_autocomplete($data['collection_post']->ID);
                 return $this->render(dirname(__FILE__) . '../../../views/collection/header_collection.php', $data);
                 break;

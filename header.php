@@ -109,6 +109,9 @@ $socialdb_title = get_option('blogname');
                                         <a href="<?= get_the_permalink(get_option('collection_root_id')) . '?mycollections=true' ?>"><?php _e('My collections', 'tainacan'); ?></a>
                                     </li>
                                     <li>
+                                        <a href="<?= get_the_permalink(get_option('collection_root_id')) . '?sharedcollections=true' ?>"><?php _e('Shared Collections', 'tainacan'); ?></a>
+                                    </li>
+                                    <li>
                                         <a style="cursor: pointer;" onclick="showCategoriesConfiguration('<?php echo get_template_directory_uri(); ?>', '<?php echo is_front_page(); ?>');" >
                                             <?php _e('My Categories', 'tainacan'); ?>
                                         </a>
