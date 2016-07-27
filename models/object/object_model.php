@@ -1101,6 +1101,13 @@ class ObjectModel extends Model {
         }
         if ($data['mycollections'] && $data['mycollections'] == 'true') {
             $args['author'] = get_current_user_id();
+            $meta_query = array('relation' => 'AND');
+            $meta_query[] = array(
+                            'key' => 'socialdb_collection_moderator',
+                            'value' => (string)get_current_user_id(),
+                            'compare' => 'LIKE'
+                        );
+            $args['meta_query'] = $meta_query;
         }
         return $args;
     }

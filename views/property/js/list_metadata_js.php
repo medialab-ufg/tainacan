@@ -1872,22 +1872,21 @@
                 }
             },
             onSelect: function (flag, node) {
-                $.ajax({
-                    type: "POST",
-                    url: $('#src').val() + "/controllers/category/category_controller.php",
-                    data: {collection_id: $('#collection_id').val(), operation: 'verify_has_children', category_id: node.data.key}
-                }).done(function (result) {
-//                    console.log($("#socialdb_property_term_root").val());
-                    $('.dropdown-toggle').dropdown();
-                    elem_first = jQuery.parseJSON(result);
-                    if (elem_first.type === 'error') {
-                        showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
-                        node.select(false);
-                    } else if($("#socialdb_property_term_root").val()=='null'||$("#socialdb_property_term_root").val()!=node.data.key) {
+//                $.ajax({
+//                    type: "POST",
+//                    url: $('#src').val() + "/controllers/category/category_controller.php",
+//                    data: {collection_id: $('#collection_id').val(), operation: 'verify_has_children', category_id: node.data.key}
+//                }).done(function (result) {
+////                    console.log($("#socialdb_property_term_root").val());
+//                    $('.dropdown-toggle').dropdown();
+//                    elem_first = jQuery.parseJSON(result);
+//                    if (elem_first.type === 'error') {
+//                        showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
+//                        node.select(false);
+//                    } else if($("#socialdb_property_term_root").val()=='null'||$("#socialdb_property_term_root").val()!=node.data.key) {
                        $("#socialdb_property_term_root").val(node.data.key );
-                    }
-
-                });
+                   // }
+                //});
             },
             dnd: {
                 preventVoidMoves: true, // Prevent dropping nodes 'before self', etc.
@@ -2094,7 +2093,7 @@
     var new_category_html = 
                     '<span onclick="click_event_taxonomy_create_zone($(this).parent())"  style="display: none;" class="li-default taxonomy-list-name taxonomy-category-new">'+
                     '<span class="glyphicon glyphicon-pencil"></span><?php _e('Click here to edit the category name','tainacan') ?></span>'+
-                    '<input type="text" '+
+                    '<input maxlength="255" type="text" '+
                     'onblur="blur_event_taxonomy_create_zone($(this).parent())"'+  
                     'onkeyup="keypress_event_taxonomy_create_zone($(this).parent(),event)" class="input-taxonomy-create style-input">';
    // quando se clica sobre a categoria
@@ -2152,7 +2151,7 @@
             // create a new li item
             .before("<li class='taxonomy-list-create'   >"+
                     "<span onclick='click_event_taxonomy_create_zone($(this).parent())'   class='li-default taxonomy-list-name taxonomy-category-finished'>" + val + 
-                    "</span><input type='text' style='display: none;' class='input-taxonomy-create style-input'"+
+                    "</span><input type='text' maxlength='255' style='display: none;' class='input-taxonomy-create style-input'"+
                     " onblur='blur_event_taxonomy_create_zone($(this).parent())'  onkeyup='keypress_event_taxonomy_create_zone($(this).parent(),event)' >"+
                     children+"</li>")
             // set plus sign again
@@ -2174,7 +2173,7 @@
     //verifica se o container possui algum li, funcao apenas caso estiver vazio
     function verify_has_li(){
         if($('#taxonomy_create_zone').has('ul').length==0){
-           $('#taxonomy_create_zone').append('<ul class="root_ul"><li class="taxonomy-list-create">'+
+           $('#taxonomy_create_zone').html('<ul class="root_ul"><li class="taxonomy-list-create">'+
                    new_category_html+'</li></ul>') 
         }
     }
@@ -2193,12 +2192,12 @@
             if(sibling.find('ul').first().length>0){
                  sibling.find('ul').first().append("<li class='taxonomy-list-create' >"+
                     "<span style='display: none;'  onclick='click_event_taxonomy_create_zone($(this).parent())' class='li-default taxonomy-list-name taxonomy-category-finished'>" + $(input).val() + 
-                    "</span><input type='text' value='"+ $(input).val() +"' class='input-taxonomy-create style-input'"+
+                    "</span><input type='text' maxlength='255' value='"+ $(input).val() +"' class='input-taxonomy-create style-input'"+
                     " onblur='blur_event_taxonomy_create_zone($(this).parent())'  onkeyup='keypress_event_taxonomy_create_zone($(this).parent(),event)' >"+children+"</li>");
             }else{
                 sibling.append("<ul><li class='taxonomy-list-create'  >"+
                     "<span style='display: none;' onclick='click_event_taxonomy_create_zone($(this).parent())' class='li-default taxonomy-list-name taxonomy-category-finished'>" + $(input).val() + 
-                    "</span><input type='text' value='"+ $(input).val() +"'  class='input-taxonomy-create style-input'"+
+                    "</span><input type='text' maxlength='255' value='"+ $(input).val() +"'  class='input-taxonomy-create style-input'"+
                     " onblur='blur_event_taxonomy_create_zone($(this).parent())'  onkeyup='keypress_event_taxonomy_create_zone($(this).parent(),event)' >"+children+"</li></ul>");
             }
             $(selected_element).remove();
@@ -2207,7 +2206,7 @@
     }
     //volta uma 'casa' para a categoria, subindo na hierarquia
     function remove_hierarchy_taxonomy_create_zone(){
-        //verifico se nao esta querndo subir de hierarquia
+        //verifico se nao esta querendo subir de hierarquia
         var input = $(selected_element).find('.input-taxonomy-create').first();
         if($(input).val()===''){
             return false;
@@ -2226,7 +2225,7 @@
         var parent_to_insert = parent_li.parent();
         parent_to_insert.append("<li class='taxonomy-list-create' >"+
                     "<span style='display: none;' onclick='click_event_taxonomy_create_zone($(this).parent())' class='li-default taxonomy-list-name taxonomy-category-finished'>" + $(input).val() + 
-                    "</span><input type='text' value='"+ $(input).val() +"'  class='input-taxonomy-create style-input'"+
+                    "</span><input maxlength='255' type='text' value='"+ $(input).val() +"'  class='input-taxonomy-create style-input'"+
                     " onblur='blur_event_taxonomy_create_zone($(this).parent())'  onkeyup='keypress_event_taxonomy_create_zone($(this).parent(),event)' >"+children+"</li>");
         $(selected_element).remove();
         save_taxonomy();

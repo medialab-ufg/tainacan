@@ -111,6 +111,7 @@
                                             <span class="glyphicon glyphicon-arrow-down"></span>
                                         </button>
                                         <div id="taxonomy_create_zone" >
+                                            <span style="opacity: 0.5;"><?php _e('Click here to create a sub-category','tainacan') ?></span>
                                         </div>
                                         <input type="hidden" value="" id="socialdb_property_term_new_taxonomy" name="socialdb_property_term_new_taxonomy">
                                     </div>

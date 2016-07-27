@@ -60,6 +60,9 @@ class CategoryHelper extends ViewHelper {
             }
             $string .= '</ul>';
         endif;
+        if($string==''){
+            $string = '<span style="opacity: 0.5;">'. __('Click here to create a sub-category','tainacan').'</span>';
+        }
         return $string;
     }
     

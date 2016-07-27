@@ -39,8 +39,8 @@ $array_visibility = ($meta&&$meta!=='') ? $meta : '';
         </div>
 
         <div class="add-property-btn btn-group col-md-12">
-            <button class="btn btn-default btn-lg dropdown-toggle" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true" onclick="resetAllForms()">
-                <?php _e('Add Property', 'tainacan'); ?> <span class="caret"></span>
+            <button class="btn btn-primary btn-lg dropdown-toggle" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true" onclick="resetAllForms()">
+                <span style="color:white;"><?php _e('Add Property', 'tainacan'); ?> <span style="color:white;" class="caret"></span></span> 
             </button>
 
             <?php /*

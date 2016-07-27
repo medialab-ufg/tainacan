@@ -1464,6 +1464,10 @@ a.collection-thumb img {
   padding-right: 5px;
   text-indent: 2.5%;
 }
+.metadata-container .title-pipe {
+  font-size: 12px;
+  font-weight: normal;
+}
 #preset-filters #filters-accordion .title-pipe span {
   font-size: 10px;
   text-indent: 0;

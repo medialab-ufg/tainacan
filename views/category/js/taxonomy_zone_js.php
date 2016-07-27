@@ -170,7 +170,7 @@
     //verifica se o container possui algum li, funcao apenas caso estiver vazio
     function verify_has_li() {
         if ($('#taxonomy_create_zone').has('ul').length == 0) {
-            $('#taxonomy_create_zone').append('<ul class="root_ul"><li class="taxonomy-list-create">' +
+            $('#taxonomy_create_zone').html('<ul class="root_ul"><li class="taxonomy-list-create">' +
                     new_category_html + '</li></ul>')
         }
     }
