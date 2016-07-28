@@ -184,8 +184,8 @@
         $("#metadata-container-"+id ).sortable({
             cursor: "n-resize",
             connectWith: ".connectedSortable",
+            containment: $("#metadata-container-"+id ),
             revert: 250,
-            helper: 'clone',
             start: function(event, ui) {
                $(ui.item).show();
             },
@@ -198,18 +198,16 @@
                 $(ui.item.context).addClass('hide');
             },
             remove: function(event, ui) {
-                var $ui_container = ui.item.context.parentNode.id;
-                removeFacet(ui.item.context.id);
+               // var $ui_container = ui.item.context.parentNode.id;
+               // removeFacet(ui.item.context.id);
             },
             stop: function(event, ui) {
                 var $ui_container = ui.item.context.parentNode.id;
                 var sortedIds = $("#filters-accordion").sortable("toArray");
-                $("#filters-accordion").removeClass("adding-meta");
                 $("#metadata-container-"+id ).removeClass("change-meta-container");
             },
             sort: function(event, ui) {
                 $(ui.item).show();
-                $("#filters-accordion").addClass("adding-meta");
                 var filtros_atuais = get_current_filters();
                 $("#metadata-container-"+id ).addClass("change-meta-container");
             },

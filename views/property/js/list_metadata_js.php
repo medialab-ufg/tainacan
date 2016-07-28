@@ -139,71 +139,68 @@
     $( "#filters-accordion, #metadata-container" ).sortable({
         cursor: "n-resize",
         connectWith: ".connectedSortable",
+        containment: $('#filters-accordion'),
         revert: 250,
         helper: "clone",
         receive: function(event, ui) {
+            return false;
             var $ui_container = ui.item.context.parentNode.id;
             var item_id =  ui.item.context.id;
             var item_search_widget = $("#"+item_id).attr("data-widget");
             var is_fixed_meta = $("#"+item_id).hasClass('fixed-property');
             var is_blocked = $("#"+item_id).hasClass('block-facet');
             var $sorter_span = "<span class='glyphicon glyphicon-sort sort-filter'></span>";
-            if(is_blocked||$( "#" + item_id.replace('meta-item-','')).length>0){
-                list_collection_metadata();
-                showAlertGeneral('<?php _e('Attention!','tainacan') ?>','<?php _e('Metadata already inserted or not allowed as filter','tainacan') ?>','info');
-                return false;
-            }
-            
-            if ( $ui_container === "filters-accordion" ) {
-                list_collection_metadata();
-                $("#filters-accordion").addClass("receiving-metadata");
-                $( "#" + item_id + " .action-icons").append( $sorter_span );
-                if ( is_fixed_meta ) {
-                    setCollectionFacet("add", item_id, "tree");
-                    showAlertGeneral('<?php _e('Success','tainacan') ?>','<?php _e('Metadata inserted as filter successfully','tainacan') ?>','success');
-                    $('.data-widget').removeClass('select-meta-filter');
-                } else {
-                    
-                console.log(' item_search_widget :'+item_search_widget);
-                    if ( item_search_widget === "null" || item_search_widget == "undefined" ) {
-                        $("#"+item_id + " a").first().click();
-                        $(".property_data_use_filter").click();
-                        $('.data-widget').addClass('select-meta-filter').show();
-                        $('.term-widget').addClass('select-meta-filter').show();
-                    } else {
-                        $('.data-widget').removeClass('select-meta-filter');
-                        $('.term-widget').removeClass('select-meta-filter');
-                        setCollectionFacet( "add", item_id, item_search_widget );
-                    }
-                }
-
-            } else if ( $ui_container === "metadata-container" ) {
-                $(ui.item.context).addClass('hide');
-            }
+//            if(is_blocked||$( "#" + item_id.replace('meta-item-','')).length>0){
+//                list_collection_metadata();
+//                showAlertGeneral('<?php _e('Attention!','tainacan') ?>','<?php _e('Metadata already inserted or not allowed as filter','tainacan') ?>','info');
+//                return false;
+//            }
+//            
+//            if ( $ui_container === "filters-accordion" ) {
+//                list_collection_metadata();
+//                $("#filters-accordion").addClass("receiving-metadata");
+//                $( "#" + item_id + " .action-icons").append( $sorter_span );
+//                if ( is_fixed_meta ) {
+//                    setCollectionFacet("add", item_id, "tree");
+//                    showAlertGeneral('<?php _e('Success','tainacan') ?>','<?php _e('Metadata inserted as filter successfully','tainacan') ?>','success');
+//                    $('.data-widget').removeClass('select-meta-filter');
+//                } else {
+//                    
+//                console.log(' item_search_widget :'+item_search_widget);
+//                    if ( item_search_widget === "null" || item_search_widget == "undefined" ) {
+//                        $("#"+item_id + " a").first().click();
+//                        $(".property_data_use_filter").click();
+//                        $('.data-widget').addClass('select-meta-filter').show();
+//                        $('.term-widget').addClass('select-meta-filter').show();
+//                    } else {
+//                        $('.data-widget').removeClass('select-meta-filter');
+//                        $('.term-widget').removeClass('select-meta-filter');
+//                        setCollectionFacet( "add", item_id, item_search_widget );
+//                    }
+//                }
+//
+//            } else if ( $ui_container === "metadata-container" ) {
+//                $(ui.item.context).addClass('hide');
+//            }
         },
         remove: function(event, ui) {
-            var $ui_container = ui.item.context.parentNode.id;
-            if ( $ui_container === "metadata-container" ) {
-                removeFacet(ui.item.context.id);
-            }
+//            var $ui_container = ui.item.context.parentNode.id;
+//            if ( $ui_container === "metadata-container" ) {
+//                removeFacet(ui.item.context.id);
+//            }
         },
         stop: function(event, ui) {
             var $ui_container = ui.item.context.parentNode.id;
             var sortedIds = $("#filters-accordion").sortable("toArray");
             $("#filters-accordion").removeClass("adding-meta");
-
             if ( $ui_container === "filters-accordion" ) {
                 updateFacetPosition(sortedIds);
             }
-            $("#metadata-container").removeClass("change-meta-container");
+           // $("#metadata-container").removeClass("change-meta-container");
         },
         sort: function(event, ui) {
-            $("#filters-accordion").addClass("adding-meta");
-            var filtros_atuais = get_current_filters();
-
-            if ( ui.item.context.parentNode.id === "metadata-container" ) {
-                $("#metadata-container").addClass("change-meta-container");
-            }
+           // $("#filters-accordion").addClass("adding-meta");
+           // var filtros_atuais = get_current_filters();
         },
         update: function( event, ui ) { 
 //            var $ui_container = ui.item.context.parentNode.id;
@@ -293,10 +290,15 @@
 
     function removeFacet(item_id) {
         var collection_id = $("#collection_id").val();
+        show_modal_main();
         $.ajax({
             type: "POST",
             url: src + "/controllers/search/search_controller.php",
             data: { operation: 'delete_facet', facet_id: item_id, collection_id: collection_id }
+        }).done(function(rs){
+            list_collection_metadata();
+            hide_modal_main();
+            showAlertGeneral('<?php _e('Success','tainacan') ?>','<?php _e('Filter removed successfully','tainacan') ?>','success');
         });
     }
 
@@ -325,9 +327,8 @@
                                 removeFacet(el.id);
                             } else {
                                 var current_prop = getPropertyType(el.prop);
-                                console.log(current_prop);
                                 var item_html = '<li id="'+ el.id +'" data-widget="'+el.widget+'" class="form-group metadata-facet filter-'+el.id+'">' +
-                                    '<label class="title-pipe">' + el.nome + '<div class="pull-right">';
+                                    '<label class="title-pipe">' + el.nome + '<div class="pull-right"><a><span class="glyphicon glyphicon-sort sort-filter"></span></a>';
 
                                 if ( current_prop == "data" ) {
                                     item_html += '<a onclick="edit_metadata('+ el.id +')" class="edit-filter">';
@@ -347,7 +348,7 @@
                                     }
                                 }
 
-                                item_html += '<span class="glyphicon glyphicon-edit"></span></a> <span class="glyphicon glyphicon-sort sort-filter"></span></div> </label></li>';
+                                item_html += '<span class="glyphicon glyphicon-edit"></span></a>'+add_remove_filter_button(el.id) +'</div> </label></li>';
                                 $("#filters-accordion").append( item_html );
                             }
                         });
@@ -719,7 +720,7 @@
                         //adiciona na listagem
                         $(get_property_tab_seletor(tab_property_id)).append(
                             '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="root_category '+class_var+' ui-widget-content ui-corner-tr '+is_allowed_facet(property.slug)+'">' +
-                            '<label '+style+'   class="title-pipe">' + property.name + '</label>' +
+                            '<label '+style+'   class="title-pipe">'+ add_filter_button(current_id) + property.name + '</label>' +
                             '<a onclick="edit_metadata(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
                             '<div class="action-icons"> <span class="glyphicon glyphicon-edit"></span></a> ' +
                             button + '</div></li>');
@@ -727,7 +728,7 @@
                         if ( $.inArray(property.type, ranking_types) == -1 ) {
                             $(get_property_tab_seletor(tab_property_id)).append(
                                 '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '" data-widget="' + current_search_widget + '" class="' + property.type + ' ui-widget-content ui-corner-tr">' +
-                                '<label class="title-pipe">' + property.name + '</label><div class="action-icons">' +
+                                '<label class="title-pipe">'+ add_filter_button(current_id) + property.name + '</label><div class="action-icons">' +
                                 '<a onclick="edit_metadata(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
                                 '<span class="glyphicon glyphicon-edit"><span></a> ' +
                                 '<input type="hidden" class="property_id" value="' + property.id + '">' +
@@ -820,7 +821,7 @@
 
     function delete_property(id, type) {
         $("#property_delete_collection_id").val( $("#collection_id").val() );
-        var name_html = $("#meta-item-" + id + " .property_name").val();
+        var name_html = $("#meta-item-" + id + " .title-pipe").text().trim();
         $("#property_delete_id").val( id );
         $("#modal_remove_property #property_category_id").val( $("#property_category_id").val() );
 
@@ -952,14 +953,14 @@
                         (property.metas.socialdb_property_created_category && $('#property_category_id').val() !== property.metas.socialdb_property_created_category)) {
                         $(get_property_tab_seletor(tab_property_id)).append(
                             '<li tab="'+tab_property_id+'" id="meta-item-'+current_id+'" data-widget="' + property.search_widget + '" class="root_category ui-widget-content ui-corner-tr">' +
-                            '<label class="title-pipe">' + property.name + '</label>' +
+                            '<label class="title-pipe">'+ add_filter_button(current_id) + property.name + '</label>' +
                             '<a onclick="edit_object('+ current_id +')" class="edit_property_data" href="javascript:void(0)">' +
                             '<div class="action-icons default-metadata"><span class="glyphicon glyphicon-edit"><span></a> ' +
                             ' <span class="glyphicon glyphicon-trash no-edit"><span> </div></li>' );
                     } else {
                         if ( $.inArray(property.type, ranking_types) == -1 ) {
                             $(get_property_tab_seletor(tab_property_id)).append(
-                                '<li tab="'+tab_property_id+'" id="meta-item-'+current_id+'" data-widget="' + property.search_widget + '" class="ui-widget-content ui-corner-tr"><label class="title-pipe">' + property.name +
+                                '<li tab="'+tab_property_id+'" id="meta-item-'+current_id+'" data-widget="' + property.search_widget + '" class="ui-widget-content ui-corner-tr"><label class="title-pipe">'+ add_filter_button(current_id) + property.name +
                                 '</label><div class="action-icons">' +
                                 '<a onclick="edit_object('+ current_id +')" class="edit_property_data" href="javascript:void(0)">' +
                                 '<span class="glyphicon glyphicon-edit"><span></a> ' +
@@ -1193,7 +1194,7 @@
                             button = '<span class="glyphicon glyphicon-trash no-edit"></span>';
                         }
                         $(get_property_tab_seletor(tab_property_id)).append(
-                            '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="root_category '+class_var+' ui-widget-content ui-corner-tr term-root-'+term_root_id+'"><label '+style+' class="title-pipe">' + property.name +
+                            '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '"  term_root_id="'+term_root_id+'" data-widget="' + property.search_widget + '" class="root_category '+class_var+' ui-widget-content ui-corner-tr term-root-'+term_root_id+'"><label '+style+' class="title-pipe">'+ add_filter_button(current_id) + property.name +
                             '</label><div class="action-icons">' +
                             '<a onclick="edit_term(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
                             '<span class="glyphicon glyphicon-edit"><span></a> ' +
@@ -1202,7 +1203,7 @@
                         if ( $.inArray(property.type, ranking_types) == -1 ) {
                             var term_root_id =  property.metas.socialdb_property_term_root;
                             $(get_property_tab_seletor(tab_property_id)).append(
-                                '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="ui-widget-content ui-corner-tr term-root-'+term_root_id+'"><label class="title-pipe">' + property.name +
+                                '<li tab="'+tab_property_id+'" term_root_id="'+term_root_id+'" id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="ui-widget-content ui-corner-tr term-root-'+term_root_id+'"><label class="title-pipe">'+ add_filter_button(current_id) + property.name +
                                 '</label><div class="action-icons"> <input type="hidden" class="property_data_id" value="' + current_id + '">' +
                                 '<a onclick="edit_term(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
                                 '<span class="glyphicon glyphicon-edit"><span></a> ' +
@@ -1467,7 +1468,7 @@
                         }
                         //visibilidade do metadado
                         $(get_property_tab_seletor(tab_property_id)).append(
-                            '<li tab="'+tab_property_id+'" id="meta-item-'+current_id+'" data-widget="' + ranking.search_widget + '" class="ui-widget-content ui-corner-tr"><label class="title-pipe">' + current_title +
+                            '<li tab="'+tab_property_id+'" id="meta-item-'+current_id+'" data-widget="' + ranking.search_widget + '" class="ui-widget-content ui-corner-tr"><label class="title-pipe">'+ add_filter_button(current_id) + current_title +
                             '</label><div class="action-icons"> <input type="hidden" class="property_data_id" value="'+ current_id +'">' +
                             '<a onclick="edit_ranking('+ current_id + ')" class="edit_ranking" href="javascript:void(0)">' +
                             '<span class="glyphicon glyphicon-edit"><span></a> ' +
@@ -2044,6 +2045,53 @@
             }
         });
     }
+    /**
+     ****************************************************************************
+     ************************* ACCORDEON FILTERS ACTIONS ************************
+     ****************************************************************************
+     **/ 
+    function add_filter_button(id){
+       return '<a  title="<?php _e('Add as filter','tainacan') ?>" style="cursor:pointer;" onclick="add_filter('+id+')">'+
+                '<span class="glyphicon glyphicon-arrow-left"></span></a> ';
+    }
+    function add_remove_filter_button(id){
+       return '  <a class="pull-right" title="<?php _e('Remove filter','tainacan') ?>" style="cursor:pointer;" onclick="removeFacet('+id+');">'+
+                '<span class="glyphicon glyphicon glyphicon-remove"></span></a>';
+    }
+    //add facet
+    function add_filter(id){
+        var item_id =  'meta-item-'+id;
+        var seletor = $("#"+item_id);
+        var item_search_widget = seletor.attr("data-widget");
+        var is_fixed_meta = seletor.hasClass('fixed-property');
+        var is_blocked = seletor.hasClass('block-facet');
+        if(is_blocked||$( "#" + item_id.replace('meta-item-','')).length>0||(seletor.attr('term_root_id')&&$( "#" + seletor.attr('term_root_id')).length>0)){
+            showAlertGeneral('<?php _e('Attention!','tainacan') ?>','<?php _e('Metadata already inserted or not allowed as filter','tainacan') ?>','info');
+            return false;
+        }else{
+            if ( is_fixed_meta ) {
+                setCollectionFacet("add", item_id, "tree");
+                showAlertGeneral('<?php _e('Success','tainacan') ?>','<?php _e('Metadata inserted as filter successfully','tainacan') ?>','success');
+                $('.data-widget').addClass('select-meta-filter').show();
+                $('.term-widget').addClass('select-meta-filter').show();
+            } else {
+                if ( item_search_widget === "null" || item_search_widget == "undefined" ) {
+                    $("#"+item_id + " .action-icons a").first().click();
+                    $(".property_data_use_filter").click();
+                    $(".property_data_use_filter").attr('checked','checked');
+                    $('.data-widget').addClass('select-meta-filter').show();
+                    $('.term-widget').addClass('select-meta-filter').show();
+                } else {
+                    setCollectionFacet( "add", item_id, item_search_widget );
+                    showAlertGeneral('<?php _e('Success','tainacan') ?>','<?php _e('Metadata inserted as filter successfully','tainacan') ?>','success');
+                    $('.data-widget').addClass('select-meta-filter').show();
+                    $('.term-widget').addClass('select-meta-filter').show();
+                }
+            }
+        }
+        list_collection_metadata();
+    }
+    
     /**
      ****************************************************************************
      ************************* PROPERTY FIXED FUNCTIONS ************************
