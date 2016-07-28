@@ -42,6 +42,9 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
                 //return $property_model->add_property_term($data);
                 return $this->insert_event_property_term_add($data);
                 break;
+            case "add_property_compounds":
+                //return $property_model->add_property_term($data);
+                break;
             case "edit_property_data":
                 return $property_model->edit_property($data);
                 break;
@@ -209,6 +212,8 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
                     return json_encode(['slug'=>$category->slug]);
                 }    
                 return json_encode(['slug'=>'']);
+            case 'initDynatreePropertiesFilter':
+                    return $property_model->initDynatreePropertiesFilter($data['collection_id'],false);    
                 
         }
 	}

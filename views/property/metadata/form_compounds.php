@@ -6,20 +6,42 @@
                 <h4 class="modal-title"> <span class="ranking-action"><?php _e('Add', 'tainacan'); ?></span> <?php _e('Compounds Metadata', 'tainacan'); ?> </h4>
             </div>
             <div class="modal-body">
-
-                <form id="submit_form_ranking" name="submit_ranking">
+                <form id="submit_form_compounds" name="submit_compounds">
                     <div class="form-group">
-                        <label for="ranking_name"><?php _e('Metadata name','tainacan'); ?></label>
-                        <input type="text" class="form-control" id="compounds_name" name="ranking_name" required="required" value="">
+                        <label for="compounds_name"><?php _e('Name','tainacan'); ?></label>
+                        <input type="text" class="form-control" id="compounds_name" name="compounds_name" required="required" value="">
                     </div>
                     <div class="form-group">
                         <label for="socialdb_property_help"><?php _e('Text helper','tainacan'); ?></label>
-                        <input type="text" class="form-control" id="socialdb_property_data_help" name="socialdb_property_data_help" />
+                        <input type="text" class="form-control" id="socialdb_property_help" name="socialdb_property_help" />
+                    </div>
+                    <div class="form-group">
+                        <label for="socialdb_property_help"><?php _e('Select the metadata below','tainacan'); ?></label>
+                        <div style='height: 242px;' id="dynatree_properties_filter"></div>
+                        <input type="hidden" name="search_data_orientation" value="left-column">
                     </div>
                     <div class="form-group">
                         <label for="socialdb_event_property_tab"><?php _e('Select the tab','tainacan'); ?></label>
                         <select class="socialdb_event_property_tab form-control" name="socialdb_event_property_tab">
                         </select>
+                    </div>
+                    <div class="form-group category-fit-column" style="display: inline-block; width: 59%">
+                        <label for="property_term_required" style="display: block"><?php _e('Elements Quantity:','tainacan'); ?></label>
+                        <input type="radio" 
+                               name="socialdb_property_term_cardinality" 
+                               id="socialdb_property_term_cardinality_1" 
+                               checked="checked"  value="1">&nbsp;<?php _e('Unic value','tainacan') ?>
+                        <input type="radio" 
+                               name="socialdb_property_term_cardinality" 
+                               id="socialdb_property_term_cardinality_n" 
+                               value="n">&nbsp;<?php _e('Multiple values','tainacan') ?>
+                    </div>
+                    <div class="form-group" >
+                        <input type="checkbox" 
+                               name="property_term_required" 
+                               id="property_term_required_true" 
+                               value="true">&nbsp;
+                        <b><?php _e('Required','tainacan'); ?></b>
                     </div>
                     <input type="hidden" name="search_data_orientation" value="left-column">
                     <input type="hidden" id="ranking_id" name="ranking_id" value="">
