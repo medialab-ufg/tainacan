@@ -2116,6 +2116,89 @@ class Model {
         }
         update_post_meta($collection_id, 'socialdb_collection_properties_ordenation', implode(',', $array));
     }
+    
+    /**
+     * @signature initDynatreePropertiesFilter($collection_id)
+     * @param int $collection_id O id da colecao que sera gerado o json
+     * @return json O conteudo do dynatree
+     */
+   public function initDynatreePropertiesFilter($collection_id,$hide_checkbox = true) {
+        $dynatree = [];
+        $roots_parents = [
+        get_term_by('name','socialdb_property_data','socialdb_property_type')->term_id,
+        get_term_by('name','socialdb_property_object','socialdb_property_type')->term_id,
+        get_term_by('name','socialdb_property_term','socialdb_property_type')->term_id ];
+        $facets_id = array_filter(array_unique((get_post_meta($collection_id, 'socialdb_collection_facets'))?get_post_meta($collection_id, 'socialdb_collection_facets'):[]));
+        $properties = [];
+        $this->get_collection_properties($properties,0,$facets_id);
+        $properties = array_unique($properties);
+        //busco as propriedades sem domain
+        $properties_with_no_domain = $this->list_properties_by_collection($collection_id);
+        if($properties_with_no_domain&&is_array($properties_with_no_domain)){
+            foreach ($properties_with_no_domain as $property_with_no_domain) {
+                if(!in_array($property_with_no_domain->term_id, $properties)){
+                    $properties[] = $property_with_no_domain->term_id;
+                }
+            }
+        }
+        if($properties&&  is_array($properties)){
+            foreach ($properties as $property) {
+                 // busco o objeto da propriedade
+                 $propertyObject = get_term_by('id', $property, 'socialdb_property_type');
+                 if(!$propertyObject||!in_array($propertyObject->parent, $roots_parents))
+                     continue;
+                 //insiro a propriedade da classe no dynatree
+                 $children = $this->getChildren($propertyObject->term_id);
+                 if (count($children) > 0) {
+                    $dynatree[] = array(
+                            'title' => Words($propertyObject->name, 30), 
+                            'key' => $propertyObject->term_id,  
+                            'expand' => true, 
+                            'hideCheckbox' => $hide_checkbox, 
+                            'children' => $this->childrenDynatreePropertiesFilter($propertyObject->term_id, 'color_property4'),
+                            'addClass' => 'color_property4');      
+                 }else{
+                     $dynatree[] = array(
+                            'title' => Words($propertyObject->name, 30), 
+                            'key' => $propertyObject->term_id,  
+                            'hideCheckbox' => $hide_checkbox, 
+                            'addClass' => 'color_property4'); 
+                 }
+            }
+        }
+       $this->sortDynatree($dynatree);
+        return json_encode($dynatree);
+    }
+    
+    /** function getChildrenDynatree() 
+    * receive ((int,string) id,(array) dynatree) 
+    * Return the children of the facets and insert in the array of the dynatree 
+    * Author: Eduardo **/
+
+    public function childrenDynatreePropertiesFilter($facet_id, $classCss = 'color4') {
+        $dynatree = [];
+        $children = $this->getChildren($facet_id);
+        if (count($children) > 0) {
+            foreach ($children as $child) {
+                $children_of_child = $this->getChildren($child->term_id);
+                if (count($children_of_child) > 0 || (!empty($children_of_child) && $children_of_child)) {
+                    $dynatree[] =
+                            array(
+                                'title' => $child->name, 
+                                'key' => $child->term_id,
+                                'expand' => true, 
+                                'children' => $this->childrenDynatreePropertiesFilter($child->term_id, 'color4'), 
+                                'addClass' => $classCss);
+                } else {
+                    $dynatree[] = array(
+                        'title' => $child->name, 
+                        'key' => $child->term_id, 
+                        'addClass' => $classCss);
+                }
+            }
+        }
+        return $dynatree;
+    }
 
     /**
      * 
