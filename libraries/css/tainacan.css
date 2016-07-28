@@ -1375,10 +1375,10 @@ a.collection-thumb img {
 #properties_tabs ul.metadata-container li.ui-sortable-helper {
   background: #f1f2f2 !important;
   padding-bottom: 20px;
-  width: 70% !important;
+  /*width: 70% !important;*/
 }
 #properties_tabs ul.metadata-container li:hover {
-  cursor: all-scroll;
+  cursor: n-resize;
   -webkit-box-shadow: 0px 3px 10px 0 rgba(50, 50, 50, 0.7);
   -moz-box-shadow: 0px 3px 10px 0 rgba(50, 50, 50, 0.7);
   box-shadow: 0px 3px 10px 0 rgba(50, 50, 50, 0.7);

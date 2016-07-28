@@ -183,7 +183,6 @@
     function initiate_accordeon(id){
         $("#metadata-container-"+id ).sortable({
             cursor: "n-resize",
-            connectWith: ".connectedSortable",
             containment: $("#metadata-container-"+id ),
             revert: 250,
             start: function(event, ui) {
@@ -204,12 +203,12 @@
             stop: function(event, ui) {
                 var $ui_container = ui.item.context.parentNode.id;
                 var sortedIds = $("#filters-accordion").sortable("toArray");
-                $("#metadata-container-"+id ).removeClass("change-meta-container");
+                //$("#metadata-container-"+id ).removeClass("change-meta-container");
             },
             sort: function(event, ui) {
                 $(ui.item).show();
                 var filtros_atuais = get_current_filters();
-                $("#metadata-container-"+id ).addClass("change-meta-container");
+                //$("#metadata-container-"+id ).addClass("change-meta-container");
             },
             update: function( event, ui ) { 
                 var $ui_container = ui.item.context.parentNode.id;

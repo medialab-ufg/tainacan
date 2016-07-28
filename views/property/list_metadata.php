@@ -18,11 +18,11 @@ $array_visibility = ($meta&&$meta!=='') ? $meta : '';
 <input type="hidden" name="property_category_id" id="property_category_id" value="<?php echo $category->term_id; ?>"/>
 <div class="categories_menu col-md-12 no-padding"  id="properties_tabs">
 
-    <div id="preset-filters" class="col-md-4 preset-filters ui-widget-header no-padding">
+    <div id="preset-filters" class="col-md-3 preset-filters ui-widget-header no-padding">
         <ul id="filters-accordion" class="connectedSortable"></ul>
     </div>
 
-    <div class="col-md-8 ui-widget-content metadata-actions" style="padding-right: 0;">
+    <div class="col-md-9 ui-widget-content metadata-actions" style="padding-right: 0;">
 
         <div class="col-md-12 no-padding action-messages">
             <div id="alert_success_properties" class="alert alert-success" style="display: none; margin-top: 20px;">
