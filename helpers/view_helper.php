@@ -64,7 +64,8 @@ class ViewHelper {
             'autoincrement' => __('Auto-Increment', 'tainacan'),
             'relationship' => __('Relationship', 'tainacan'),
             'category' => __('Category', 'tainacan'),
-            'voting' => __('Rankings', 'tainacan')
+            'voting' => __('Rankings', 'tainacan'),
+            'compounds' => __('Compounds', 'tainacan'),
         ];
     }
 
@@ -125,7 +126,7 @@ class ViewHelper {
     
 
     public function get_special_metadata() {
-        return $this->special_metadata = ['relationship', 'category', 'voting'];
+        return $this->special_metadata = ['relationship', 'category', 'voting','compounds'];
     }
 
     public function get_metadata_icon($metadata_type) {

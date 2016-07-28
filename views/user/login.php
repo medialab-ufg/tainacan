@@ -1,6 +1,6 @@
 <?php
 
-var_dump($authUrl);
+//var_dump($authUrl);
 
 include_once ('js/login_js.php');
 require_once(dirname(__FILE__) . '../../../models/social_network/Facebook/autoload.php');
