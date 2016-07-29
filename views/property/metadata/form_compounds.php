@@ -15,10 +15,16 @@
                         <label for="socialdb_property_help"><?php _e('Text helper','tainacan'); ?></label>
                         <input type="text" class="form-control" id="socialdb_property_help" name="socialdb_property_help" />
                     </div>
-                    <div class="form-group">
-                        <label for="socialdb_property_help"><?php _e('Select the metadata below','tainacan'); ?></label>
-                        <div style='height: 242px;' id="dynatree_properties_filter"></div>
-                        <input type="hidden" name="search_data_orientation" value="left-column">
+                    <div class="form-group col-md-12 no-padding">
+                        <label class="col-md-6 no-padding" for="socialdb_property_help"><?php _e('Select the metadata below','tainacan'); ?></label>
+                        <label class="col-md-6" for="socialdb_property_help"><?php _e('Ordenation','tainacan'); ?></label>
+                        <div class="col-md-6 no-padding">
+                            <div style='height: 242px;' id="dynatree_properties_filter"></div>
+                            <input type="hidden" id="compounds_id" name="compounds_id" value="">
+                        </div>
+                         <div  class="col-md-6 no-padding">
+                             <ul id="compounds_properties_ordenation" class="metadata-container" style="min-height: 50px;"></ul>
+                         </div>
                     </div>
                     <div class="form-group">
                         <label for="socialdb_event_property_tab"><?php _e('Select the tab','tainacan'); ?></label>

@@ -1,6 +1,7 @@
 <?php
 include_once('../../helpers/view_helper.php');
 include_once('js/tabs_js.php');
+include_once('js/compounds_js.php');
 include_once ('js/list_metadata_js.php');
 
 $view_helper = new ViewHelper();

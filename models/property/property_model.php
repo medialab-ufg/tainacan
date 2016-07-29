@@ -1098,6 +1098,119 @@ class PropertyModel extends Model {
         endif;
         update_post_meta($collection_id, 'socialdb_collection_update_tab_organization',  serialize($array));
     }
-
+    
+    /**
+     * function add_property_compounds($data)
+     * @param string $name O nome da propriedade
+     * @param int $collection_id O id da colecao
+     * @param int $category_id O id da categoria que sera vinculada a propriedade
+     * @param string $properties_id As prorpeidades que compõe a categoria raiz
+     * @param string $cardinality a ajuda para este tipo de metadado
+     * @param string $help (optional) a ajuda para este tipo de metadado
+     * @param string $required (optional) se o metadado eh obrigatorio
+     * @return json  para mostrar o resultdo insercao
+     * 
+     * <b> Metodo que adiciona o metadado compostos </b>
+     * 
+     * @autor: Eduardo Humberto 
+     */
+    public function add_property_compounds($name,$collection_id,$category_id,$properties_id,$cardinality,$help = false,$required = false) {
+        if (!empty($name)) {
+            $id_slug = $collection_id;
+            if (isset($category_id)&&$this->get_category_root_of($collection_id) != $category_id) {// verifico se eh a categoria root onde sera inserido a propriedade
+                $id_slug .= '_property' . $category_id;
+            }
+            $is_new = $this->verify_property($name,$id_slug);
+            if(!$is_new){
+                $new_property = wp_insert_term($name, 'socialdb_property_type', array('parent' => $this->get_property_type_id('socialdb_property_compounds'),
+                'slug' => $this->categoryModel->generate_slug($name, $id_slug)));
+            }
+        }
+        //apos a insercao
+        if (!is_wp_error($new_property)&&isset($new_property['term_id'])) {// se a propriedade foi inserida com sucesso
+            instantiate_metas($new_property['term_id'], 'socialdb_property_compounds', 'socialdb_property_type', true);
+            $this->add_property_position_ordenation($collection_id, $new_property['term_id']);
+            $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_collection_id',$collection_id);
+            $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_required',$required);
+            $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_compounds_cardinality', $cardinality);
+            $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_compounds_properties_id', $properties_id);
+            $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_help',$help);
+            $result[] = $this->vinculate_property($category_id, $new_property['term_id']); // vinculo com a colecao/categoria
+            $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_created_category',$category_id);// adiciono a categoria de onde partiu esta propriedade
+            $data['property_id'] = $new_property['term_id'];
+            //adiciona os meta
+            $ids = explode(',', $properties_id);
+            if(is_array($ids)){
+                foreach ($ids as $id) {
+                    update_term_meta($id, 'socialdb_property_is_compounds', 'true');
+                }
+            }
+            //possivelmente um problema
+            $this->vinculate_objects_with_property($new_property['term_id'], $collection_id,$category_id);
+            if (!in_array(false, $result)) {
+                $data['success'] = 'true';
+            } else {
+                $data['success'] = 'false';
+            }
+        } else {
+            $data['success'] = 'false';
+            if($is_new){
+                $data['msg'] = __('There is another property with this name!','tainacan');
+            }
+        }
+        return json_encode($data);
+    }
+    
+    public function update_property_compounds($property_id,$name,$collection_id,$category_id,$properties_id,$cardinality,$help = false,$required = false) {
+        $category_created = get_term_meta($property_id, 'socialdb_property_created_category', true);
+        if($category_created&&$category_created!=$category_id){ // verificando se a propriedade pertence a outra colecao
+             $data['success'] = 'false';
+             $data['msg'] = __('This property does not belong to this collection!','tainacan');
+             return json_encode($data);
+        }
+        $id_slug = $collection_id;
+        if ($this->get_category_root_of($collection_id) != $category_id) {// verifico se eh a categoria root onde sera inserido a propriedade
+            $id_slug .= '_property' . $category_id;
+        }
+        $is_new = $this->verify_property($name,$id_slug);
+        //atualizando a propriedade
+        if (!$is_new&&isset($name) && !empty($name) && !empty($property_id)) {
+            $new_property = wp_update_term($property_id, 'socialdb_property_type', array(
+                'name' => $name
+            ));
+        }
+        // removo os metas das propriedades que eram vinculadas
+        $properties_olds = get_term_meta($new_property['term_id'], 'socialdb_property_compounds_properties_id', $properties_id);
+        if($properties_olds){
+           $array = explode(',', $properties_olds);
+           if():
+           foreach ($array as $id) {
+                update_term_meta($id, 'socialdb_property_is_compounds', 'false');
+           }
+           endif;
+        }
+        // apos a atualizacao
+       if (!is_wp_error($new_property)&&isset($new_property['term_id'])) {// se a propriedade foi inserida com sucesso
+            $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_collection_id',$collection_id);
+            $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_required',$required);
+            $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_compounds_cardinality', $cardinality);
+            $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_compounds_properties_id', $properties_id);
+            $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_help',$help);
+            $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_created_category',$category_id);// adiciono a categoria de onde partiu esta propriedade
+            //possivelmente um problema
+            $this->vinculate_objects_with_property($new_property['term_id'],$collection_id,$category_id);
+            //adiciona os meta
+            $ids = explode(',', $properties_id);
+            if(is_array($ids)){
+                foreach ($ids as $id) {
+                    update_term_meta($id, 'socialdb_property_is_compounds', 'true');
+                }
+            }
+            $data['success'] = 'true';
+        } else {
+            $data['success'] = 'false';
+        }
+        return json_encode($data);
+    }
 
 }

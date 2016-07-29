@@ -492,6 +492,7 @@
 
                 list_collection_metadata();
                 getRequestFeedback(elem.type, elem.msg);
+                initDynatreeFilterProperties(src);
             });
         })
     });
@@ -925,6 +926,7 @@
 
             list_collection_metadata();
             getRequestFeedback(elem.type, elem.msg);
+            initDynatreeFilterProperties(src);
         });
     });
 
@@ -1155,6 +1157,7 @@
             $("#meta-category").modal('hide');
             list_collection_metadata();
             getRequestFeedback(elem.type, elem.msg);
+            initDynatreeFilterProperties(src);
         });
     });
 
@@ -2057,64 +2060,6 @@
             }
         });
     }
-    /**
-     ****************************************************************************
-     ************************* PROPRIEDADES COMPOSTAS ************************
-     ****************************************************************************
-     **/ 
-    /*
-     *  funcao que abre o dynatree para as propriedades de uma colecao
-     */
-    function initDynatreeFilterProperties(src) {
-       $("#dynatree_properties_filter").dynatree({
-           selectionVisible: true, // Make sure, selected nodes are visible (expanded).  
-           checkbox: true,
-             initAjax: {
-               url: src + '/controllers/property/property_controller.php',
-               data: {
-                   collection_id: $("#collection_id").val(),
-                   order: 'name',
-                   operation: 'initDynatreePropertiesFilter'
-               }
-               , addActiveKey: true
-           },
-           onLazyRead: function (node) {
-               node.appendAjax({
-                   url: src + '/controllers/filters/filters_controller.php',
-                   data: {
-                       collection: $("#collection_id").val(),
-                       key: node.data.key,
-                       hide_checkbox: 'true',
-                       //operation: 'findDynatreeChild'
-                       operation: 'childrenDynatreePropertiesFilter'
-                   }
-               });
-           },onSelect: function (flag, node) {
-                var selKeys = $.map($("#dynatree_properties_filter").dynatree("getSelectedNodes"), function (node) {
-                    return node.data.key;
-                });
-                console.log(selKeys);
-            }
-       });
-    }
-    //SUBMISSAO DO METADADO COMPOSTA
-    $('#submit_form_compounds').submit(function (e) {
-        e.preventDefault();
-        $('.modal').modal('hide');
-        $('#modalImportMain').modal('show');
-        $.ajax({
-            url: src + '/controllers/property/property_controller.php',
-            type: 'POST',
-            data: new FormData(this),
-            processData: false,
-            contentType: false
-        }).done(function (result) {
-            $('#modalImportMain').modal('hide');
-            elem = jQuery.parseJSON(result);
-            list_collection_metadata();
-            getRequestFeedback(elem.type, elem.msg);
-        });
-    });
     /**
      ****************************************************************************
      ************************* ACCORDEON FILTERS ACTIONS ************************
