@@ -1161,6 +1161,18 @@ class PropertyModel extends Model {
         return json_encode($data);
     }
     
+    /**
+     * 
+     * @param int $property_id
+     * @param type $name
+     * @param type $collection_id
+     * @param type $category_id
+     * @param type $properties_id
+     * @param type $cardinality
+     * @param type $help
+     * @param type $required
+     * @return type
+     */
     public function update_property_compounds($property_id,$name,$collection_id,$category_id,$properties_id,$cardinality,$help = false,$required = false) {
         $category_created = get_term_meta($property_id, 'socialdb_property_created_category', true);
         if($category_created&&$category_created!=$category_id){ // verificando se a propriedade pertence a outra colecao
@@ -1182,12 +1194,12 @@ class PropertyModel extends Model {
         // removo os metas das propriedades que eram vinculadas
         $properties_olds = get_term_meta($new_property['term_id'], 'socialdb_property_compounds_properties_id', $properties_id);
         if($properties_olds){
-           $array = explode(',', $properties_olds);
-           if():
-           foreach ($array as $id) {
-                update_term_meta($id, 'socialdb_property_is_compounds', 'false');
-           }
-           endif;
+            $array = explode(',', $properties_olds);
+            if(is_array($array)):
+                foreach ($array as $id) {
+                    update_term_meta($id, 'socialdb_property_is_compounds', 'false');
+                }
+            endif;
         }
         // apos a atualizacao
        if (!is_wp_error($new_property)&&isset($new_property['term_id'])) {// se a propriedade foi inserida com sucesso
