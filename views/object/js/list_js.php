@@ -7,7 +7,8 @@
             max_page: $('#number_pages').val(),
             paged: function (page) {
                 $('html,body').animate({scrollTop: 0}, 'slow');
-                wpquery_page(page);
+                var current_mode = $('.selected-viewMode').attr('class').split(" ")[0];
+                wpquery_page(page, current_mode);
             }
         });
         

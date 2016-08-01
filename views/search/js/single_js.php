@@ -852,7 +852,7 @@ function submit_comment(object_id) {
             if(temp_list_mode) {
                 changeViewMode(temp_list_mode);
             }
-
+            
             setMenuContainerHeight();
         });
     }
@@ -881,7 +881,7 @@ function submit_comment(object_id) {
         });
     }
 
-    function wpquery_page(value) {
+    function wpquery_page(value, collection_viewMode) {
         $('#list').hide();
         $('#loader_objects').show();
         $.ajax({
@@ -898,6 +898,10 @@ function submit_comment(object_id) {
                 $('#collection_empty').show();
                 $('#items_not_found').hide();
             }
+            if(collection_viewMode) {
+                changeViewMode(collection_viewMode);
+            }
+            
             setMenuContainerHeight();
         });
     }
