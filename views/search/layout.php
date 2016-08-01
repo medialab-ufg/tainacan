@@ -63,6 +63,15 @@ $view_helper = new ViewHelper();
                             <option value="slideshow"><?php _e('Slideshow', 'tainacan'); ?></option>
                         </select>
                     </div>
+                    
+                    <div class="form-group sl-time" style='display: none'>
+                        <label for="slideshow_time"><?php _e('Slideshow time (seconds)', 'tainacan'); ?></label>
+                        <select name="slideshow_time" class="form-control">
+                            <?php foreach( range(1, 20) as $num ): ?>
+                                <option value="st-<?php echo $num ?>-secs"><?php echo $num; ?></option>                            
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
 
                     <!------------------- Ordenacao-------------------------->
                     <div class="form-group">

@@ -69,6 +69,14 @@
           });
     });
 
+    $('#collection_list_mode').change(function(){
+        if( $(this).val() === 'slideshow') {
+            $('.sl-time').fadeIn();
+        } else {
+            $('.sl-time').fadeOut();
+        }
+    }); 
+    
     $(function () {
         change_breadcrumbs_title('<?php _e('Layout','tainacan') ?>');
         get_defaultCS();
@@ -102,6 +110,11 @@
 
         var selected_view_mode = $('.selected_view_mode').val();
         $("#collection_list_mode").val(selected_view_mode);
+        if( selected_view_mode == "slideshow") {
+            var s_time = $("#slideshow-time").val();
+            $('.sl-time select').val(s_time);
+            $('.sl-time').show();
+        }
 
         list_ordenation();
 

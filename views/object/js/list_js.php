@@ -1,6 +1,6 @@
-<script>
+<script>    
     $(function () {
-        var src = $('#src').val();
+        var src = $('#src').val();        
 
         $('.pagination_items').jqPagination({
             link_string: '/?page={page_number}',
@@ -10,15 +10,15 @@
                 wpquery_page(page);
             }
         });
-
+        
         var default_viewMode = $("#default-viewMode").val();
-        if(default_viewMode == "slideshow") {
+        if(default_viewMode === "slideshow") {
+            // getSlideshowTime();
             getCollectionSlideshow();
         }
         $('.viewMode-control li').removeClass('selected-viewMode');
         $('.viewMode-control li.' + default_viewMode).addClass('selected-viewMode');
-
-
+                
         function get_colorScheme() {
             var coll_id = $('#collection_id').val();
             $.ajax({
@@ -410,33 +410,41 @@
     function showModalCreateCollection() {
         $('#myModal').modal('show');
     }
-
+    
     var col_title = $('.titulo-colecao h3.title').text();
-    $("#collection-slideShow .sS-collection-name").text( col_title );
+    $("#collection-slideShow .sS-collection-name").text( col_title );     
+    
+    var default_slideshow_time;
+    if( $("#slideshow-time").val() !== "" ) {
+        default_slideshow_time = $("#slideshow-time").val().replace('st-', '').replace('-secs', '');
+        default_slideshow_time *= 1000; 
+    } else {
+        default_slideshow_time = 4000;
+    }
 
-    /*
-     * Slideshow view Mode slider
-     * */
-    $('.main-slide').slick({
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        arrows: true,
-        fade: true,
-        asNavFor: '.collection-slides',
-        adaptiveHeight: true
-    });
-
-    $('.collection-slides').slick({
-        slidesToShow: 5,
-        slidesToScroll: 1,
-        asNavFor: '.main-slide',
-        variableWidth: true,
-        dots: true,
-        centerMode: true,
-        // arrows: true,
-        arrows: false,
-        adaptiveHeight: true,
-        autoplay: true,
-        focusOnSelect: true
-    });
+    var main_slick_settings = {
+      slidesToShow: 1,
+      slidesToScroll: 1,
+      arrows: true,
+      fade: true,
+      asNavFor: '.collection-slides',
+      adaptiveHeight: true
+   };
+   var collection_slick_settings = {
+     slidesToShow: 5,
+     slidesToScroll: 1,
+     asNavFor: '.main-slide',
+     variableWidth: true,
+     dots: true,
+     centerMode: true,
+     arrows: false,
+     adaptiveHeight: true,
+     autoplay: true,
+     autoplaySpeed: default_slideshow_time,
+     focusOnSelect: true
+   };
+           
+    $('.main-slide').slick(main_slick_settings);
+    $('.collection-slides').slick(collection_slick_settings);
+    
 </script>

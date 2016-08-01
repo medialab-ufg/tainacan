@@ -378,6 +378,7 @@ public function add($data) {
     function update_ordenation($data) {
         $post_id = $data['collection_id'];
         update_post_meta($post_id, 'socialdb_collection_list_mode', $data['collection_list_mode']);
+        update_post_meta($post_id, 'socialdb_collection_slideshow_time', $data['slideshow_time']);
         update_post_meta($post_id, 'socialdb_collection_ordenation_form', $data['socialdb_collection_ordenation_form']);
         update_post_meta($post_id, 'socialdb_collection_default_ordering', $data['collection_order']);
         update_post_meta($post_id, 'socialdb_collection_submission_visualization', $data['socialdb_collection_submission_visualization']);
@@ -471,6 +472,10 @@ public function add($data) {
             }
         }
         return $data;
+    }
+    
+    public function get_slideshow_time($data) {
+        return get_post_meta($data['collection_id'], 'socialdb_collection_slideshow_time', true);        
     }
 
 }

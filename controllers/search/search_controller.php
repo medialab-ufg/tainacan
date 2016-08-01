@@ -93,6 +93,8 @@ class SearchController extends Controller {
                 $data = $search_model->get_events_data($data);
                 return $this->render(dirname(__FILE__) . '../../../views/search/feed_events.php', $data);
               break;
+            case 'get_slideshow_time':
+                return json_encode($search_model->get_slideshow_time($data));
         }
     }
 

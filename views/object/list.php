@@ -12,6 +12,7 @@ $classColumn = 12;
 $show_string = is_root_category($collection_id) ?  __('Showing collections:','tainacan') : __('Showing Items:', 'tainacan');
 $collection_list_mode = $collection_data['collection_metas']['socialdb_collection_list_mode'];
 // $collection_color_scheme = $collection_data['collection_metas']['socialdb_collection_color_scheme'];
+$_slideshow_time = get_post_meta($collection_id, 'socialdb_collection_slideshow_time', true);
 
 $viewHelper = new ViewHelper();
 
@@ -25,6 +26,7 @@ if( !$collection_list_mode ) {
 <input type="hidden" id="sorted_form" name="sorted_form" value="<?php echo $sorted_by; ?>" />
 <input type="hidden" id="default-viewMode" value="<?php echo $collection_list_mode; ?>">
 <input type="hidden" id="temp-viewMode" value="">
+<input type="hidden" id="slideshow-time" value="<?php echo $_slideshow_time; ?>">
 
 <?php if ( $loop->have_posts() ):
     // Determina # de colunas;
