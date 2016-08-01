@@ -1,15 +1,12 @@
 <?php
 
-include_once (dirname(__FILE__) . '/../../../../../../wp-config.php');
-include_once (dirname(__FILE__) . '/../../../../../../wp-load.php');
-include_once (dirname(__FILE__) . '/../../../../../../wp-includes/wp-db.php');
 require_once(dirname(__FILE__) . '../../../event/event_model.php');
 require_once(dirname(__FILE__) . '../../../property/property_model.php');
 
-class EventPropertyTermDelete extends EventModel {
+class EventPropertyCompoundsDelete extends EventModel {
 
-    public function EventPropertyTermDelete() {
-        $this->parent = get_term_by('name', 'socialdb_event_property_term_delete', 'socialdb_event_type');
+    public function __construct() {
+        $this->parent = get_term_by('name', 'socialdb_event_property_compounds_delete', 'socialdb_event_type');
         $this->permission_name = 'socialdb_collection_permission_delete_property_term';
     }
 
@@ -22,8 +19,8 @@ class EventPropertyTermDelete extends EventModel {
      */
     public function generate_title($data) {
         $collection = get_post($data['socialdb_event_collection_id']);
-        $property = get_term_by('id',$data['socialdb_event_property_term_delete_id'],'socialdb_property_type');
-        $title = __('Delete the property ','tainacan').'('.$property->name.')'.__(' in the collection ','tainacan').'<b>'.$collection->post_title.'</b>';
+        $property = get_term_by('id',$data['socialdb_event_property_compounds_delete_id'],'socialdb_property_type');
+        $title = __('Delete the compounds property ','tainacan').'('.$property->name.')'.__(' in the collection ','tainacan').'<b>'.$collection->post_title.'</b>';
         return $title;
     }
 
@@ -66,8 +63,8 @@ class EventPropertyTermDelete extends EventModel {
         $propertyModel = new PropertyModel();
         // coloco os dados necessarios para criacao da propriedade
         $data['collection_id'] = get_post_meta($event_id, 'socialdb_event_collection_id',true) ;
-        $data['property_delete_id'] = get_post_meta($event_id, 'socialdb_event_property_term_delete_id',true) ;
-        $data['property_category_id'] = get_post_meta($event_id, 'socialdb_event_property_term_delete_category_root_id',true) ;
+        $data['property_delete_id'] = get_post_meta($event_id, 'socialdb_event_property_compounds_delete_id',true) ;
+        $data['property_category_id'] = get_post_meta($event_id, 'socialdb_event_property_compounds_delete_category_root_id',true) ;
         $categories_used = get_term_meta($data['property_delete_id'], 'socialdb_property_used_by_categories') ;
         // chamo a funcao do model de propriedade para fazer a exclusao
         $verify = get_term_by('id', $data['property_delete_id'], 'socialdb_property_type');

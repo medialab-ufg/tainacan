@@ -9,7 +9,7 @@ require_once(dirname(__FILE__) . '../../../property/property_model.php');
 class EventPropertyCompoundsEdit extends EventModel {
 
     public function __construct() {
-        $this->parent = get_term_by('name', 'socialdb_event_property_term_edit', 'socialdb_event_type');
+        $this->parent = get_term_by('name', 'socialdb_event_property_compounds_edit', 'socialdb_event_type');
         $this->permission_name = 'socialdb_collection_permission_edit_property_term';
     }
 
@@ -22,8 +22,8 @@ class EventPropertyCompoundsEdit extends EventModel {
      */
     public function generate_title($data) {
         $collection = get_post($data['socialdb_event_collection_id']);
-        $property_name = $data['socialdb_event_property_term_edit_name'];
-        $title = __('Edit the term property ','tainacan').'('.$property_name.')'.__(' in the collection ','tainacan').'<b>'.$collection->post_title.'</b>';
+        $property_name = $data['socialdb_event_property_compounds_edit_name'];
+        $title = __('Edit the compounds property ','tainacan').'('.$property_name.')'.__(' in the collection ','tainacan').'<b>'.$collection->post_title.'</b>';
         return $title;
     }
 
@@ -65,26 +65,24 @@ class EventPropertyCompoundsEdit extends EventModel {
     public function update_property($event_id,$data,$automatically_verified) {
         $propertyModel = new PropertyModel();
         // coloco os dados necessarios para criacao da propriedade
-        $data['property_term_id'] = get_post_meta($event_id, 'socialdb_event_property_term_edit_id',true) ;
-        $data['property_term_name'] = get_post_meta($event_id, 'socialdb_event_property_term_edit_name',true) ;
-        $data['collection_id'] = get_post_meta($event_id, 'socialdb_event_collection_id',true) ;
-        $data['socialdb_property_term_cardinality'] = get_post_meta($event_id, 'socialdb_event_property_term_edit_cardinality',true) ;
-        $data['socialdb_property_term_widget'] = get_post_meta($event_id, 'socialdb_event_property_term_edit_widget',true) ;
-        $data['socialdb_property_vinculate_category'] = get_post_meta($event_id, 'socialdb_event_property_term_edit_vinculate_category',true) ;   
-        $data['socialdb_property_new_category'] = get_post_meta($event_id, 'socialdb_event_property_term_edit_new_category',true) ;   
-        $data['socialdb_property_new_taxonomy'] = get_post_meta($event_id, 'socialdb_event_property_term_edit_new_taxonomy',true) ; 
-        $data['property_term_required'] = get_post_meta($event_id, 'socialdb_event_property_term_edit_required',true) ;
-        $data['socialdb_property_term_root'] = get_post_meta($event_id, 'socialdb_event_property_term_edit_root',true) ;
-        $data['socialdb_property_help'] = get_post_meta($event_id, 'socialdb_event_property_term_edit_help',true) ;   
-        
-        $data['property_category_id'] = get_term_meta($data['property_term_id'], 'socialdb_property_created_category',true) ;
+        // coloco os dados necessarios para criacao da propriedade
+        $name = get_post_meta($event_id, 'socialdb_event_property_term_edit_name',true) ;
+        $collection_id = get_post_meta($event_id, 'socialdb_event_collection_id',true) ;
+        $cardinality = get_post_meta($event_id, 'socialdb_event_property_compounds_edit_cardinality',true) ;
+        $properties_id = get_post_meta($event_id, 'socialdb_event_property_compounds_edit_properties_id',true) ;
+        $required = get_post_meta($event_id, 'socialdb_event_property_compounds_edit_required',true) ;
+        $help = get_post_meta($event_id, 'socialdb_event_property_compounds_edit_help',true) ;   
+        $property_id = get_post_meta($event_id, 'socialdb_event_property_compounds_edit_id',true) ;
+        $tab_id = get_post_meta($event_id, 'socialdb_event_property_tab',true) ;
+        //inserindo o metadado
+        $property_category_id = get_post_meta($event_id, 'socialdb_event_property_compounds_edit_id',true) ;   
         // chamo a funcao do model de propriedade para fazer a insercao
-         $result = json_decode($propertyModel->update_property_term($data));
-        if(isset($result->property_term_id)){
-                do_action('after_event_update_property_term',$result->property_term_id,$event_id);
+         $result = json_decode($propertyModel->update_property_compounds($property_id, $name, $collection_id, $property_category_id, $properties_id, $cardinality, $help, $required));
+        if(isset($result->property_id)){
+                do_action('after_event_update_property_compounds',$property_id,$event_id);
         }
         // verifying if is everything all right
-        if (get_term_by('id', $data['property_term_id'], 'socialdb_property_type')&&$result->success!='false') {
+        if (get_term_by('id',$property_id, 'socialdb_property_type')&&$result->success!='false') {
             $this->set_approval_metas($data['event_id'], $data['socialdb_event_observation'], $automatically_verified);
             $this->update_event_state('confirmed', $data['event_id']);
             $data['msg'] = __('The event was successful','tainacan');

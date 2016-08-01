@@ -23,7 +23,7 @@ class EventPropertyCompoundsCreate extends EventModel {
     public function generate_title($data) {
         $collection = get_post($data['socialdb_event_collection_id']);
         $property_name = $data['socialdb_event_property_compounds_create_name'];
-        $title = __('Create the term property ','tainacan').'('.$property_name.')'.__(' in the collection ','tainacan').'<b>'.$collection->post_title.'</b>';
+        $title = __('Create the compounds property ','tainacan').'('.$property_name.')'.__(' in the collection ','tainacan').'<b>'.$collection->post_title.'</b>';
         return $title;
     }
 
@@ -65,7 +65,7 @@ class EventPropertyCompoundsCreate extends EventModel {
     public function add_property($event_id,$data,$automatically_verified) {
         $propertyModel = new PropertyModel();
         // coloco os dados necessarios para criacao da propriedade
-        $name = get_post_meta($event_id, 'socialdb_event_property_term_create_name',true) ;
+        $name = get_post_meta($event_id, 'socialdb_event_property_compounds_create_name',true) ;
         $collection_id = get_post_meta($event_id, 'socialdb_event_collection_id',true) ;
         $cardinality = get_post_meta($event_id, 'socialdb_event_property_compounds_create_cardinality',true) ;
         $properties_id = get_post_meta($event_id, 'socialdb_event_property_compounds_create_properties_id',true) ;

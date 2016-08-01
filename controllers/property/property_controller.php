@@ -9,6 +9,9 @@ require_once(dirname(__FILE__).'../../../models/event/event_property_object/even
 require_once(dirname(__FILE__).'../../../models/event/event_property_term/event_property_term_create_model.php');
 require_once(dirname(__FILE__).'../../../models/event/event_property_term/event_property_term_edit_model.php');
 require_once(dirname(__FILE__).'../../../models/event/event_property_term/event_property_term_delete_model.php');
+require_once(dirname(__FILE__).'../../../models/event/event_property_compounds/event_property_compounds_create_model.php');
+require_once(dirname(__FILE__).'../../../models/event/event_property_compounds/event_property_compounds_edit_model.php');
+require_once(dirname(__FILE__).'../../../models/event/event_property_compounds/event_property_compounds_delete_model.php');
 require_once(dirname(__FILE__).'../../general/general_controller.php');  
 
  class PropertyController extends Controller{
@@ -43,7 +46,7 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
                 return $this->insert_event_property_term_add($data);
                 break;
             case "add_property_compounds":
-                //return $property_model->add_property_term($data);
+                return $this->insert_event_property_compounds_add($data);
                 break;
             case "edit_property_data":
                 return $property_model->edit_property($data);
@@ -54,6 +57,9 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
             case 'edit_property_term':
 
                 return $property_model->edit_property($data);
+                break;
+            case 'edit_property_compounds':
+                //return $property_model->edit_property($data);
                 break;
             case "update_property_data":
                 $property_model->update_tab_organization($data['collection_id'], $data["socialdb_event_property_tab"], $data['property_data_id']);
@@ -107,12 +113,37 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
                     return $this->insert_event_property_term_update($data);
                 }
                 break;
+            case "update_property_compounds":
+                $property_model->update_tab_organization($data['collection_id'], $data["socialdb_event_property_tab"], $data['property_term_id']);
+                if(isset($data['is_property_fixed'])&&$data['is_property_fixed']=='true'){
+                    $labels_collection = ($data['collection_id']!='') ? get_post_meta($data['collection_id'], 'socialdb_collection_fixed_properties_labels', true) : false;
+                    if($labels_collection):
+                        $array = unserialize($labels_collection);
+                        if($data['property_fixed_name']&&trim($data['property_fixed_name'])!=''):
+                            $array[ $data['property_term_id'] ] = $data['property_fixed_name'];
+                        elseif($array[ $data['property_term_id'] ]):    
+                            unset($array[ $data['property_term_id'] ]);
+                        endif;
+                       update_post_meta($data['collection_id'], 'socialdb_collection_fixed_properties_labels',  serialize($array));
+                    elseif($data['property_fixed_name']&&trim($data['property_fixed_name'])!=''):
+                        update_post_meta($data['collection_id'], 'socialdb_collection_fixed_properties_labels',  serialize([$data['property_term_id']=>$data['property_fixed_name']]));
+                    endif;
+                    $data['new_property_id'] = $data['property_term_id'];
+                    $data['type'] = 'success';
+                    $data['msg'] =__('Operation was successfully','tainacan');
+                    return json_encode($data);
+                }else{
+                    return $this->insert_event_property_compounds_update($data);
+                }
+                break;
             case "delete":
                 if($data['type']=='1'):
                     return $this->insert_event_property_data_delete($data);
                 elseif($data['type']=='2'):
                     return $this->insert_event_property_object_delete($data);
                 elseif($data['type']=='3'):
+                    return $this->insert_event_property_delete($data);
+                elseif($data['type']=='4'):
                     return $this->insert_event_property_delete($data);
                 endif;
                 break;
@@ -216,7 +247,63 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
                     return $property_model->initDynatreePropertiesFilter($data['collection_id'],false);    
                 
         }
-	}
+    }
+    /**
+     * @signature - function insert_event_add($object_id, $data )
+     * @param int $object_id O id do Objeto
+     * @param array $data Os dados vindos do formulario
+     * @return array os dados para o evento
+     * @description - 
+     * @author: Eduardo 
+     */
+    public function insert_event_property_compounds_add($data) {
+        $eventProperty = new EventPropertyCompoundsCreate();
+        $data['socialdb_event_property_compounds_create_help'] = $data['socialdb_property_help'];
+        $data['socialdb_event_property_compounds_create_name'] = $data['compounds_name'];
+        $data['socialdb_event_property_compounds_create_properties_id'] = $data['compounds_id'];
+        $data['socialdb_event_property_compounds_create_cardinality'] = $data['cardinality'];
+        $data['socialdb_event_property_compounds_create_required'] = ($data['required']) ? $data['required'] : 'false';
+        $data['socialdb_event_property_compounds_create_category_root_id'] = $data['property_category_id'];
+        $data['socialdb_event_collection_id'] = $data['collection_id'];
+        $data['socialdb_event_user_id'] = get_current_user_id();
+        $data['socialdb_event_create_date'] = mktime();
+        /* 
+         * filtro que trabalha com os dados do formulario de adicao de propriedade de compostas
+         * para os eventos
+         */
+        if(has_filter('modificate_values_event_property_compounds_add')):
+            $data = apply_filters( 'modificate_values_event_property_compounds_add', $data); 
+        endif;    
+        return $eventProperty->create_event($data);
+    }
+    /**
+     * @signature - function insert_event_update($object_id, $data )
+     * @param int $object_id O id do Objeto
+     * @param array $data Os dados vindos do formulario
+     * @return array os dados para o evento
+     * @description - 
+     * @author: Eduardo 
+     */
+    public function insert_event_property_compounds_update($data) {
+        $eventProperty = new EventPropertyCompoundsEdit();
+        $data['socialdb_event_property_compounds_edit_id'] = $data['compound_id'];
+        $data['socialdb_event_property_compounds_edit_help'] = $data['socialdb_property_help'];
+        $data['socialdb_event_property_compounds_edit_name'] = $data['compounds_name'];
+        $data['socialdb_event_property_compounds_edit_properties_id'] = $data['compounds_id'];
+        $data['socialdb_event_property_compounds_edit_cardinality'] = $data['cardinality'];
+        $data['socialdb_event_property_compounds_edit_required'] = $data['required'];
+        $data['socialdb_event_collection_id'] = $data['collection_id'];
+        $data['socialdb_event_user_id'] = get_current_user_id();
+        $data['socialdb_event_create_date'] = mktime();
+        /* 
+         * filtro que trabalha com os dados do formulario de alteracao de propriedade de dados
+         * para os eventos
+         */
+        if(has_filter('modificate_values_event_property_compounds_update')):
+            $data = apply_filters( 'modificate_values_event_property_compounds_update', $data); 
+        endif;    
+        return $eventEditProperty->create_event($data);
+    }
         /**
      * @signature - function insert_event_add($object_id, $data )
      * @param int $object_id O id do Objeto

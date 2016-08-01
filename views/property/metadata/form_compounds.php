@@ -1,4 +1,9 @@
-<div id="meta-compounds" class="modal fade" role="dialog" aria-labelledby="Compounds">
+<style>
+    .modal {
+        z-index: 1049;
+    }
+</style>
+<div id="meta-compounds" class="modal fade" role="dialog" aria-labelledby="Compounds" style="z-index: 1041;">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -16,15 +21,15 @@
                         <input type="text" class="form-control" id="socialdb_property_help" name="socialdb_property_help" />
                     </div>
                     <div class="form-group col-md-12 no-padding">
-                        <label class="col-md-6 no-padding" for="socialdb_property_help"><?php _e('Select the metadata below','tainacan'); ?></label>
-                        <label class="col-md-6" for="socialdb_property_help"><?php _e('Ordenation','tainacan'); ?></label>
+                        <label class="col-md-6 no-padding" for="socialdb_property_help"><?php _e('Ordenation','tainacan'); ?></label>
+                        <label class="col-md-6 " for="socialdb_property_help"><?php _e('Select the metadata below','tainacan'); ?></label>
+                        <div  class="col-md-6 no-padding">
+                             <ul id="compounds_properties_ordenation" class="metadata-container no-padding" style="min-height: 50px;"></ul>
+                         </div>
                         <div class="col-md-6 no-padding">
                             <div style='height: 242px;' id="dynatree_properties_filter"></div>
                             <input type="hidden" id="compounds_id" name="compounds_id" value="">
                         </div>
-                         <div  class="col-md-6 no-padding">
-                             <ul id="compounds_properties_ordenation" class="metadata-container" style="min-height: 50px;"></ul>
-                         </div>
                     </div>
                     <div class="form-group">
                         <label for="socialdb_event_property_tab"><?php _e('Select the tab','tainacan'); ?></label>
@@ -34,33 +39,31 @@
                     <div class="form-group category-fit-column" style="display: inline-block; width: 59%">
                         <label for="property_term_required" style="display: block"><?php _e('Elements Quantity:','tainacan'); ?></label>
                         <input type="radio" 
-                               name="socialdb_property_term_cardinality" 
-                               id="socialdb_property_term_cardinality_1" 
+                               name="cardinality" 
+                               id="socialdb_property_compounds_cardinality_1" 
                                checked="checked"  value="1">&nbsp;<?php _e('Unic value','tainacan') ?>
                         <input type="radio" 
-                               name="socialdb_property_term_cardinality" 
-                               id="socialdb_property_term_cardinality_n" 
+                               name="cardinality" 
+                               id="socialdb_property_compounds_cardinality_n" 
                                value="n">&nbsp;<?php _e('Multiple values','tainacan') ?>
                     </div>
                     <div class="form-group" >
                         <input type="checkbox" 
-                               name="property_term_required" 
-                               id="property_term_required_true" 
+                               name="required" 
+                               id="property_cardinality_compounds_required_true" 
                                value="true">&nbsp;
                         <b><?php _e('Required','tainacan'); ?></b>
                     </div>
-                    <input type="hidden" name="search_data_orientation" value="left-column">
-                    <input type="hidden" id="ranking_id" name="ranking_id" value="">
-                    <input type="hidden" id="operation" name="operation" value="add">
-                    <input type="hidden" id="search_collection_id" name="collection_id" value="<?php echo $collection_id; ?>">
-                    <input type='hidden' id='counter_range' name="counter_range" value='0'>
+                    <input type="hidden" id="compound_id" name="compound_id" value="">
+                    <input type="hidden" id="compounds_collection_id" name="collection_id" value="<?php echo $collection_id; ?>">
+                    <input type="hidden" id="operation" name="operation" value="add_property_compounds">
                     <input type="hidden" name="property_category_id" id="property_category_id" value="<?php echo $category->term_id; ?>"><br>
                 </form>
 
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left close-modal" data-dismiss="modal"><?php _e('Cancel','tainacan') ?></button>
-                <button type="submit" class="btn btn-primary action-continue" form="submit_form_ranking">
+                <button type="submit" class="btn btn-primary action-continue" form="submit_form_compounds">
                     <?php _e('Continue','tainacan') ?>
                 </button>
 
