@@ -579,7 +579,7 @@
                     $( meta_modal + " .form_property_data select#search_data_widget").focus().val( search_widget );
                 }
 
-                $(current_filters).each(function(idx, el) { filters_ids.push($(el).attr('id')); });
+                //$(current_filters).each(function(idx, el) { filters_ids.push($(el).attr('id')); });
 
                 var formatted_id = "" + id + "";
                 if ( $.inArray(formatted_id, filters_ids) > -1 ) {
@@ -740,6 +740,7 @@
                                 '<span class="glyphicon glyphicon-edit"><span></a> ' +
                                 '<input type="hidden" class="property_id" value="' + property.id + '">' +
                                 '<input type="hidden" class="property_name" value="' + property.name + '">' +
+                                '<input type="hidden" id="property_type_' + property.id + '" value="1">' +
                                 '<a onclick="delete_property(' + current_id + ',' + 1 + ')" class="delete_property" href="#">' +
                                 '<span class="glyphicon glyphicon-trash"><span></a></div></li>');
                         }
@@ -835,7 +836,15 @@
         $("#type").val(type);
 
         $("#deleted_property_name").text(name_html);
+        $('.modal').modal('hide');
         $("#modal_remove_property").modal('show');
+    }
+    //limpando os formularios ao abrir o modal
+    function clear_form(type){
+        if(type=='compounds'){
+            initDynatreeFilterProperties(src);
+            $('#compounds_properties_ordenation').html('<center><h4><?php _e('Select a property','tainacan') ?>&nbsp;<span class="glyphicon glyphicon-arrow-right"></span></h4></center>');
+        }
     }
 
     function list_reverses(selected) {
@@ -977,6 +986,7 @@
                                 '<span class="glyphicon glyphicon-edit"><span></a> ' +
                                 '<input type="hidden" class="property_object_id" value="' + current_id + '">' +
                                 '<input type="hidden" class="property_name" value="' + property.name + '">' +
+                                '<input type="hidden" id="property_type_' + property.id + '" value="2">' +
                                 '<a onclick="delete_property('+ current_id + ',' + 2 + ')" class="delete_property" href="#">' +
                                 '<span class="glyphicon glyphicon-trash"><span></a></div></li>');
                         }
@@ -1218,6 +1228,7 @@
                             $(get_property_tab_seletor(tab_property_id)).append(
                                 '<li tab="'+tab_property_id+'" term_root_id="'+term_root_id+'" id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="ui-widget-content ui-corner-tr term-root-'+term_root_id+'"><label class="title-pipe">'+ add_filter_button(current_id) + property.name +
                                 '</label><div class="action-icons"> <input type="hidden" class="property_data_id" value="' + current_id + '">' +
+                                '<input type="hidden" id="property_type_' + property.id + '" value="3">' +
                                 '<a class="edit-filter"><span class="glyphicon glyphicon-sort sort-filter"></span></a>&nbsp;'+
                                 '<a onclick="edit_term(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
                                 '<span class="glyphicon glyphicon-edit"><span></a> ' +
@@ -1655,7 +1666,7 @@
         var fixed_meta = $("ul#metadata-container .fixed-meta");
         $('#loader_metadados_page').show();
         $('#metadata-container').hide();
-        $(".metadata-container").html('').append(fixed_meta);
+        $("#tab-content-metadata .metadata-container").html('').append(fixed_meta);
         //apos o termino de$("ul#metadata-container").html('').append(fixed_meta);
         //apos o termino  todos os carregamentos
         initiate_tabs().done(function (result) {
@@ -2080,7 +2091,7 @@
         var item_search_widget = seletor.attr("data-widget");
         var is_fixed_meta = seletor.hasClass('fixed-property');
         var is_blocked = seletor.hasClass('block-facet');
-        if(is_blocked||$( "#" + item_id.replace('meta-item-','')).length>0||(seletor.attr('term_root_id')&&$( "#" + seletor.attr('term_root_id')).length>0)){
+        if(is_blocked||$( "#" + id).length>0||(seletor.attr('term_root_id')&&$( "#" + seletor.attr('term_root_id')).length>0)){
             showAlertGeneral('<?php _e('Attention!','tainacan') ?>','<?php _e('Metadata already inserted or not allowed as filter','tainacan') ?>','info');
             return false;
         }else{
@@ -2090,8 +2101,8 @@
                 $('.data-widget').addClass('select-meta-filter').show();
                 $('.term-widget').addClass('select-meta-filter').show();
             } else {
-                if ( item_search_widget === "null" || item_search_widget == "undefined" ) {
-                    $("#"+item_id + " .action-icons a").first().click();
+                if ( item_search_widget === "null" || item_search_widget == "undefined" ) {      
+                    $("#"+item_id + " .edit_property_data").click();
                     $(".property_data_use_filter").click();
                     $(".property_data_use_filter").attr('checked','checked');
                     $('.data-widget').addClass('select-meta-filter').show();

@@ -21,7 +21,11 @@
             sort: function(event, ui) {
             },
             update: function( event, ui ) { 
-                var sortedIds = $( "#compounds_properties_ordenation" ).sortable("toArray");
+                var sortedIds = [];
+                $("#compounds_properties_ordenation li").each(function(i, el){
+                     var p = $(el).attr('id').replace("compounds-", "");
+                     sortedIds.push(p);
+                });
                 $('#compounds_id').val(sortedIds.join(','));
             }  
         }).disableSelection();
@@ -56,15 +60,23 @@
                });
            },onSelect: function (flag, node) {
                 $( "#compounds_properties_ordenation" ).html('');
+                //busco os nos selecionados
                 var selKeys = $.map($("#dynatree_properties_filter").dynatree("getSelectedNodes"), function (node) {
                     return node;
                 });
                 var keys = $.map($("#dynatree_properties_filter").dynatree("getSelectedNodes"), function (node) {
                     return node.data.key;
                 });
+                //limitacao da quantidade de propriedades selecionados
                 if(selKeys.length>0&&selKeys.length<5){
                     $.each(selKeys,function(index,node){
-                        $( "#compounds_properties_ordenation" ).append('<li id="'+node.data.key+'"><span class="glyphicon glyphicon-sort sort-filter pull-right"></span>&nbsp;'+node.data.title+'</li>')
+                        var type = $('#property_type_'+node.data.key).val();
+                        $( "#compounds_properties_ordenation" ).append('<li id="compounds-'+node.data.key+'">'+
+                                '<a onclick="edit_metadata(' + node.data.key + ')" class="edit_property_data" href="javascript:void(0)">' +
+                                '<span style="margin-right:5px;" class="glyphicon glyphicon-edit pull-right"><span></a> ' +
+                                '<a onclick="delete_property(' + node.data.key + ','+type+')" class="delete_property" href="#">' +
+                                '<span style="margin-right:5px;" class="glyphicon glyphicon-trash pull-right"><span></a>' +
+                                '<span style="margin-right:5px;" class="glyphicon glyphicon-sort sort-filter pull-right"></span>&nbsp;'+ add_filter_button(node.data.key) + node.data.title+'</li>')
                     })
                     $('#compounds_id').val(keys.join(','));
                 }else if(selKeys.length>4){
@@ -88,8 +100,10 @@
         }).done(function (result) {
             $('#modalImportMain').modal('hide');
             elem = jQuery.parseJSON(result);
-            list_collection_metadata();
-            getRequestFeedback(elem.type, elem.msg);
+            if ( elem != null ) {
+                list_collection_metadata();
+                getRequestFeedback(elem.type, elem.msg);
+            }
         });
     });
     
