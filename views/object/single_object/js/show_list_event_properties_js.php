@@ -7,10 +7,12 @@
     function edit_term_property(property_id, object_id) {
         $("#single_cancel_" + property_id + "_" + object_id).show();
         $("#single_edit_" + property_id + "_" + object_id).hide();
+        $(".single_edit_" + property_id + "_" + object_id).hide();
         $("#labels_" + property_id + "_" + object_id).hide();
         $("#widget_" + property_id + "_" + object_id).fadeIn();
     }
     function cancel_term_property(property_id, object_id) {
+        $(".single_edit_" + property_id + "_" + object_id).show();
         $("#single_edit_" + property_id + "_" + object_id).show();
         $("#single_cancel_" + property_id + "_" + object_id).hide();
         $("#widget_" + property_id + "_" + object_id).hide();
@@ -122,6 +124,7 @@
     function edit_object_property(property_id, object_id) {
         $("#single_cancel_" + property_id + "_" + object_id).show();
         $("#single_edit_" + property_id + "_" + object_id).hide();
+        $(".single_edit_" + property_id + "_" + object_id).hide();
         $("#single_save_" + property_id + "_" + object_id).show();
         $("#labels_" + property_id + "_" + object_id).hide();
         $("#widget_" + property_id + "_" + object_id).fadeIn();
@@ -159,6 +162,7 @@
                 });
                 $("#single_cancel_" + property_id + "_" + object_id).hide();
                 $("#single_edit_" + property_id + "_" + object_id).show();
+                $(".single_edit_" + property_id + "_" + object_id).show();
                 $("#single_save_" + property_id + "_" + object_id).hide();
                 $("#widget_" + property_id + "_" + object_id).hide();
                 $("#labels_" + property_id + "_" + object_id).fadeIn();

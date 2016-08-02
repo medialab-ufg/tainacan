@@ -416,8 +416,7 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                 <div class="box-item-paddings item-tags" style="" <?php if (has_action('home_item_tag_div')) do_action('home_item_tag_div') ?>>
                     <h4 class="title-pipe single-title"> <?php _e('Tags', 'tainacan'); ?></h4>
                     <div class="edit-field-btn">
-                        <?php
-// verifico se o metadado pode ser alterado
+                        <?php // verifico se o metadado pode ser alterado
                         if (verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_tag', $object->ID)):
                             ?>
                             <button type="button" onclick="cancel_tag()" id="cancel_tag" class="btn btn-default btn-xs" style="display: none;" ><span class="glyphicon glyphicon-arrow-left" ></span></button>
