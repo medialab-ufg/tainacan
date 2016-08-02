@@ -508,7 +508,6 @@ body.home .ibram-home-container .col-md-3 .ibram-box p:nth-child(4) {
   border: 3px solid #E8E8E8;
   margin-left: -3px;
   min-height: 380px;
-  border-top: none;
   border-bottom: 0;
 }
 #div_left #accordion .ui-accordion-content {
@@ -769,7 +768,6 @@ body.home .ibram-home-container .col-md-3 .ibram-box p:nth-child(4) {
   padding-top: 1.5%;
   background: white;
   border: 3px solid #E8E8E8;
-  border-top: none;
 }
 #container_three_columns #div_central #menu_object .header-colecao {
   margin-top: 10px;
@@ -1060,19 +1058,24 @@ a.collection-thumb img {
   display: block;
 }
 #gallery-viewMode .gallery-view-container {
-  background: white;
-  border: 3px solid #E8E8E8;
-  padding-top: 10px;
   text-align: center;
   margin-bottom: 15px;
-  margin-left: 15px;
-  width: 23.8%;
   overflow: hidden;
   padding-left: 5px;
-  padding-right: 5px;
+  padding-right: 7px;
+}
+#gallery-viewMode .gallery-view-container .gallery-wrapper {
+  background: white;
+  border: 3px solid #E8E8E8;
+  padding-top: 15px;
+  height: 300px;
 }
 #gallery-viewMode .gallery-view-container.first-el {
+  padding-left: 0;
   margin-left: 0 !important;
+}
+#gallery-viewMode .gallery-view-container.last-el {
+  padding-right: 0;
 }
 #gallery-viewMode .gallery-view-container img {
   display: inline-block !important;
@@ -1094,8 +1097,8 @@ a.collection-thumb img {
   font-weight: bolder;
 }
 #gallery-viewMode .gallery-view-container .title-container .gallery-metadata {
-  padding-right: 25px;
-  padding-left: 25px;
+  padding-right: 15px;
+  padding-left: 15px;
 }
 
 /*
@@ -1352,10 +1355,10 @@ a.collection-thumb img {
 #properties_tabs .add-property-btn .add-property-dropdown li a {
   cursor: pointer;
 }
-#properties_tabs ul.metadata-container {
+#properties_tabs ul#metadata-container {
   width: 100%;
 }
-#properties_tabs ul.metadata-container li {
+#properties_tabs ul#metadata-container li {
   float: left;
   width: 100%;
   font-weight: bolder;
@@ -1369,15 +1372,15 @@ a.collection-thumb img {
   }
   */
 }
-#properties_tabs ul.metadata-container li .metadata-facet {
+#properties_tabs ul#metadata-container li .metadata-facet {
   display: none;
 }
-#properties_tabs ul.metadata-container li.ui-sortable-helper {
+#properties_tabs ul#metadata-container li.ui-sortable-helper {
   background: #f1f2f2 !important;
   padding-bottom: 20px;
   width: 70% !important;
 }
-#properties_tabs ul.metadata-container li:hover {
+#properties_tabs ul#metadata-container li:hover {
   cursor: all-scroll;
   -webkit-box-shadow: 0px 3px 10px 0 rgba(50, 50, 50, 0.7);
   -moz-box-shadow: 0px 3px 10px 0 rgba(50, 50, 50, 0.7);
@@ -1463,10 +1466,6 @@ a.collection-thumb img {
   padding: 8px 0 8px 0;
   padding-right: 5px;
   text-indent: 2.5%;
-}
-.metadata-container .title-pipe {
-  font-size: 12px;
-  font-weight: normal;
 }
 #preset-filters #filters-accordion .title-pipe span {
   font-size: 10px;
