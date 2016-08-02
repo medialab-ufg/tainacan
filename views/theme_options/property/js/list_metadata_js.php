@@ -645,7 +645,7 @@
                 $.each(elem.property_data, function (idx, property) {
                     var current_id = property.id;
                     var current_search_widget = property.search_widget;
-                    
+                    console.log(property);
                     
                     if ( property.metas.socialdb_property_is_fixed && property.metas.socialdb_property_is_fixed === 'true' ) {
                         if(property.metas.socialdb_property_visibility&&property.metas.socialdb_property_visibility==='show'){
@@ -1117,7 +1117,7 @@
         
         return xhr;
     }
-
+    
     function get_menu_property(property) {
         var url = '<?php echo get_template_directory_uri() ?>' + "/controllers/search/search_controller.php";
         $.ajax({
@@ -1506,6 +1506,7 @@
             list_property_data(), 
             list_property_terms(),
             list_property_object(),
+            list_property_compounds(),
             list_ranking()
         ).done(function ( v1, v2 ) {
              $.ajax({

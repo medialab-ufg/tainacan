@@ -54,12 +54,11 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
             case "edit_property_object":
                 return $property_model->edit_property($data);
                 break;
-            case 'edit_property_term':
-
+            case 'edit_property_term':  
                 return $property_model->edit_property($data);
                 break;
             case 'edit_property_compounds':
-                //return $property_model->edit_property($data);
+                return $property_model->edit_property($data);
                 break;
             case "update_property_data":
                 $property_model->update_tab_organization($data['collection_id'], $data["socialdb_event_property_tab"], $data['property_data_id']);
@@ -144,7 +143,7 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
                 elseif($data['type']=='3'):
                     return $this->insert_event_property_delete($data);
                 elseif($data['type']=='4'):
-                    return $this->insert_event_property_delete($data);
+                    return $this->insert_event_property_compounds_delete($data);
                 endif;
                 break;
             case "list":
@@ -165,6 +164,9 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
                 break;
             case "list_property_object":
                 return $property_model->list_property_object($data);
+                break;
+            case "list_property_compounds":
+                return $property_model->list_property_compounds($data);
                 break;
             case 'show_reverses':// utiliza a mesma funcao porem muda a categoria para procuar suas propriedades
                 $array_final = [];
@@ -292,6 +294,7 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
         $data['socialdb_event_property_compounds_edit_properties_id'] = $data['compounds_id'];
         $data['socialdb_event_property_compounds_edit_cardinality'] = $data['cardinality'];
         $data['socialdb_event_property_compounds_edit_required'] = $data['required'];
+        $data['socialdb_event_property_compounds_edit_category_root_id'] = $data['property_category_id'];
         $data['socialdb_event_collection_id'] = $data['collection_id'];
         $data['socialdb_event_user_id'] = get_current_user_id();
         $data['socialdb_event_create_date'] = mktime();
@@ -302,7 +305,7 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
         if(has_filter('modificate_values_event_property_compounds_update')):
             $data = apply_filters( 'modificate_values_event_property_compounds_update', $data); 
         endif;    
-        return $eventEditProperty->create_event($data);
+        return $eventProperty->create_event($data);
     }
         /**
      * @signature - function insert_event_add($object_id, $data )
@@ -525,6 +528,23 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
         $data['socialdb_event_user_id'] = get_current_user_id();
         $data['socialdb_event_create_date'] = mktime();
         return $eventAddProperty->create_event($data);
+    }
+     /**
+     * @signature - function insert_event_update($object_id, $data )
+     * @param int $object_id O id do Objeto
+     * @param array $data Os dados vindos do formulario
+     * @return array os dados para o evento
+     * @description - 
+     * @author: Eduardo 
+     */
+    public function insert_event_property_compounds_delete($data) {
+        $eventProperty = new EventPropertyCompoundsDelete();
+        $data['socialdb_event_property_compounds_delete_id'] = $data['property_delete_id'];
+        $data['socialdb_event_property_compounds_delete_category_root_id'] = $data['property_category_id'];
+        $data['socialdb_event_collection_id'] = $data['collection_id'];
+        $data['socialdb_event_user_id'] = get_current_user_id();
+        $data['socialdb_event_create_date'] = mktime();
+        return $eventProperty->create_event($data);
     }
  }
  /*

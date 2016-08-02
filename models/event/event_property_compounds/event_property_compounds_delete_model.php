@@ -66,6 +66,9 @@ class EventPropertyCompoundsDelete extends EventModel {
         $data['property_delete_id'] = get_post_meta($event_id, 'socialdb_event_property_compounds_delete_id',true) ;
         $data['property_category_id'] = get_post_meta($event_id, 'socialdb_event_property_compounds_delete_category_root_id',true) ;
         $categories_used = get_term_meta($data['property_delete_id'], 'socialdb_property_used_by_categories') ;
+        // seto como falso as propriedades que compõe a composta
+        $properties_olds = get_term_meta($data['property_delete_id'], 'socialdb_property_compounds_properties_id', TRUE);
+        $propertyModel->update_properties_compounded($data['property_delete_id'], $properties_olds, 'false');
         // chamo a funcao do model de propriedade para fazer a exclusao
         $verify = get_term_by('id', $data['property_delete_id'], 'socialdb_property_type');
         if(!$categories_used||
