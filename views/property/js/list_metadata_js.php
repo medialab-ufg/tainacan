@@ -699,9 +699,11 @@
                     //buscando a aba da propriedade
                     var tab_property_id = get_tab_property_id(current_id)
                     //visibilidade do metadado
-                    if(property.metas.socialdb_property_visibility&&property.metas.socialdb_property_visibility==='hide'){
+                    var isCompounded = is_compounded(property.metas.socialdb_property_is_compounds);
+                    if(isCompounded||(property.metas.socialdb_property_visibility&&property.metas.socialdb_property_visibility==='hide')){
                         return true;
                     }
+                    //se for propriedade do repositorio
                     if ( property.metas.is_repository_property && property.metas.is_repository_property === true ||
                         (property.metas.socialdb_property_created_category && $('#property_category_id').val() !== property.metas.socialdb_property_created_category) ) {
                         //se o metadado do repositorio for fixo
@@ -843,6 +845,9 @@
     function clear_form(type){
         if(type=='compounds'){
             initDynatreeFilterProperties(src);
+            $('#compound_id').val('');
+            $('.compounds-action').html('<?php _e('Add','tainacan') ?>');
+            $('#operation_property_compounds').val('add_property_compounds');
             $('#compounds_properties_ordenation').html('<center><h4><?php _e('Select a property','tainacan') ?>&nbsp;<span class="glyphicon glyphicon-arrow-right"></span></h4></center>');
         }
     }
@@ -963,9 +968,11 @@
                     //buscando a aba da propriedade
                     var tab_property_id = get_tab_property_id(current_id)
                     //visibilidade do metadado
-                    if(property.metas.socialdb_property_visibility&&property.metas.socialdb_property_visibility==='hide'){
+                    var isCompounded = is_compounded(property.metas.socialdb_property_is_compounds);
+                    if(isCompounded||(property.metas.socialdb_property_visibility&&property.metas.socialdb_property_visibility==='hide')){
                         return true;
                     }
+                    //se for propriedade do repositorio
                     if (property.metas.is_repository_property && property.metas.is_repository_property === true ||
                         (property.metas.socialdb_property_created_category && $('#property_category_id').val() !== property.metas.socialdb_property_created_category)) {
                         $(get_property_tab_seletor(tab_property_id)).append(
@@ -1186,7 +1193,8 @@
             if (elem && elem.no_properties !== true) {
                 $.each(elem.property_terms, function (idx, property) {
                     //visibilidade do metadado
-                    if(property.metas.socialdb_property_visibility&&property.metas.socialdb_property_visibility==='hide'){
+                    var isCompounded = is_compounded(property.metas.socialdb_property_is_compounds);
+                    if(isCompounded||(property.metas.socialdb_property_visibility&&property.metas.socialdb_property_visibility==='hide')){
                         return true;
                     }
                     var current_id = property.id;
@@ -1275,7 +1283,7 @@
             $('#taxonomy_create_zone').html('');
             $('#container_add_category').hide();
             $("#meta-category").modal('show');
-
+            $("#meta-category").css('zIndex','1100');
             if( $("#meta-item-"+id).hasClass('root_category') ) {
                 $( "#meta-category .metadata-common-fields").hide();
             } else {
@@ -1674,6 +1682,7 @@
                 list_property_data(), 
                 list_property_terms(),
                 list_property_object(),
+                list_property_compounds(),
                 list_ranking()
             ).done(function ( v1, v2 ) {
                  $.ajax({

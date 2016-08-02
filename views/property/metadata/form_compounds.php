@@ -8,7 +8,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button class="close" data-dismiss="modal" aria-label="Fechar"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title"> <span class="ranking-action"><?php _e('Add', 'tainacan'); ?></span> <?php _e('Compounds Metadata', 'tainacan'); ?> </h4>
+                <h4 class="modal-title"> <span class="compounds-action"><?php _e('Add', 'tainacan'); ?></span> <?php _e('Compounds Metadata', 'tainacan'); ?> </h4>
             </div>
             <div class="modal-body">
                 <form id="submit_form_compounds" name="submit_compounds">
@@ -50,13 +50,13 @@
                     <div class="form-group" >
                         <input type="checkbox" 
                                name="required" 
-                               id="property_cardinality_compounds_required_true" 
+                               id="property_compounds_required_true" 
                                value="true">&nbsp;
                         <b><?php _e('Required','tainacan'); ?></b>
                     </div>
                     <input type="hidden" id="compound_id" name="compound_id" value="">
                     <input type="hidden" id="compounds_collection_id" name="collection_id" value="<?php echo $collection_id; ?>">
-                    <input type="hidden" id="operation" name="operation" value="add_property_compounds">
+                    <input type="hidden" id="operation_property_compounds" name="operation" value="add_property_compounds">
                     <input type="hidden" name="property_category_id" id="property_category_id" value="<?php echo $category->term_id; ?>"><br>
                 </form>
 

@@ -502,6 +502,7 @@ class Model {
             get_term_by('name', 'socialdb_property_data', 'socialdb_property_type')->term_id,
             get_term_by('name', 'socialdb_property_object', 'socialdb_property_type')->term_id,
             get_term_by('name', 'socialdb_property_term', 'socialdb_property_type')->term_id,
+            get_term_by('name', 'socialdb_property_compounds', 'socialdb_property_type')->term_id,
             get_term_by('name', 'socialdb_property_ranking', 'socialdb_property_type')->term_id];
 
         $term = get_term_by('id', $property_id, 'socialdb_property_type');
@@ -593,7 +594,9 @@ class Model {
                     } else {
                         $data['type'] = __('No relations', 'tainacan');
                     }
-                } else {
+                } else if(isset($metas['socialdb_property_compounds_properties_id'])){
+                     $data['type'] = __('Compounds', 'tainacan');
+                }else {
                     $type = $this->get_ranking_type($property->parent);
                     $data['type'] = $type;
                 }
@@ -757,7 +760,9 @@ class Model {
             foreach ($property_datas as $property_data) {
                 if ($property_data->meta_key == 'socialdb_property_used_by_categories' || $property_data->meta_key == 'socialdb_property_object_category_id') {
                     $config[$property_data->meta_key][] = $property_data->meta_value;
-                } else {
+                }else if($property_data->meta_key == 'socialdb_property_is_compounds'){
+                    $config[$property_data->meta_key] = (unserialize($property_data->meta_value)) ? unserialize(unserialize($property_data->meta_value)) : [];
+                }else {
                     $config[$property_data->meta_key] = $property_data->meta_value;
                 }
             }

@@ -66,7 +66,7 @@ class EventPropertyCompoundsEdit extends EventModel {
         $propertyModel = new PropertyModel();
         // coloco os dados necessarios para criacao da propriedade
         // coloco os dados necessarios para criacao da propriedade
-        $name = get_post_meta($event_id, 'socialdb_event_property_term_edit_name',true) ;
+        $name = get_post_meta($event_id, 'socialdb_event_property_compounds_edit_name',true) ;
         $collection_id = get_post_meta($event_id, 'socialdb_event_collection_id',true) ;
         $cardinality = get_post_meta($event_id, 'socialdb_event_property_compounds_edit_cardinality',true) ;
         $properties_id = get_post_meta($event_id, 'socialdb_event_property_compounds_edit_properties_id',true) ;
@@ -75,7 +75,7 @@ class EventPropertyCompoundsEdit extends EventModel {
         $property_id = get_post_meta($event_id, 'socialdb_event_property_compounds_edit_id',true) ;
         $tab_id = get_post_meta($event_id, 'socialdb_event_property_tab',true) ;
         //inserindo o metadado
-        $property_category_id = get_post_meta($event_id, 'socialdb_event_property_compounds_edit_id',true) ;   
+        $property_category_id = get_post_meta($event_id, 'socialdb_event_property_compounds_edit_category_root_id',true) ;   
         // chamo a funcao do model de propriedade para fazer a insercao
          $result = json_decode($propertyModel->update_property_compounds($property_id, $name, $collection_id, $property_category_id, $properties_id, $cardinality, $help, $required));
         if(isset($result->property_id)){
