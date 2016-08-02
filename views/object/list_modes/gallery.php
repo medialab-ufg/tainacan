@@ -10,7 +10,8 @@
 <div class="col-md-3 gallery-view-container top-div <?php echo $additional_curr_class ?>"     
     <?php if ($collection_list_mode != "gallery"): ?> style="display: none" <?php endif ?> >
     
-    <div class="gallery-wrapper">
+    <input type="hidden" id="add_classification_allowed_<?php echo get_the_ID() ?>" name="add_classification_allowed" value="<?php echo (string) verify_allowed_action($collection_id, 'socialdb_collection_permission_add_classification', get_the_ID()); ?>" />
+    <div class="gallery-wrapper droppableClassifications">
         <div class="">
             <div class="item-thumb">
                 <a href="<?php echo get_collection_item_href($collection_id); ?>"

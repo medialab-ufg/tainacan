@@ -55,7 +55,12 @@
             },
             drop: function (event, ui) {
                 var object_id = $(this).closest('div').find('.object_id').val();
-                if ($('#add_classification_allowed_' + object_id).val() == '1') {
+                if ( object_id == null ) {                   
+                    object_id = $(this).siblings().first().attr("id")
+                            .replace("add_classification_allowed_", "")
+                            .replace("modal_share_network", "");                    
+                }
+                if ( $('#add_classification_allowed_' + object_id).val() == '1' ) {
                     var source = ui.helper.data("dtSourceNode") || ui.draggable;
                     var key = source.data.key;
                     var n = key.toString().indexOf("_");
@@ -92,7 +97,6 @@
                             socialdb_event_collection_id: $('#collection_id').val()}
                     }).done(function (result) {
                         elem_first = jQuery.parseJSON(result);
-                        cl(elem_first);
                         set_containers_class($('#collection_id').val());
                         show_classifications(object_id);
                         showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
@@ -103,16 +107,15 @@
                 }
             },
             activate: function (event, ui) {
-                // $(this).addClass("ui-state-highlight").find("p").hover();
-                $(this).css('border-style', 'dashed');
+                $(this).css('border', '3px dashed black');
+                // $(this).addClass("ui-state-highlight").find("p").hover();                
                 //$(".cat").removeClass("categorias");
                 //$(".row cat").show(); 
             },
             deactivate: function (event, ui) {
-                // $(this).addClass("ui-state-highlight").find("p").hover();
                 $(this).css('border-style', 'none');
-
-                //    $(".categorias").hide();
+                // $(this).addClass("ui-state-highlight").find("p").hover();                
+                //  $(".categorias").hide();
                 //  $(".categorias").hover();
             }
         });
