@@ -4,7 +4,7 @@
         set_containers_class($('#collection_id').val());
         // *************** Iframe Popover Collection ****************
         $('[data-toggle="popover"]').popover();
-        $('[data-toggle="tooltip"]').tooltip(); 
+        $('[data-toggle="tooltip"]').tooltip();
 
         if ($('#is_filter').val() == '1') {
             $('#form').hide();
@@ -29,19 +29,19 @@
             });
         }
     });
-/**************************** Comentarios **************************************************/
-function list_comments_general(){
-    if($('#socialdb_event_comment_term_id').val()=='collection'){
-       list_comments_term('comments_term','collection'); 
-    }else if($('#socialdb_event_comment_term_id').val()==''){
-         list_comments($('#single_object_id').val());
-    }else{
-       list_comments_term('comments_term',$('#socialdb_event_comment_term_id').val()); 
+    /**************************** Comentarios **************************************************/
+    function list_comments_general() {
+        if ($('#socialdb_event_comment_term_id').val() == 'collection') {
+            list_comments_term('comments_term', 'collection');
+        } else if ($('#socialdb_event_comment_term_id').val() == '') {
+            list_comments($('#single_object_id').val());
+        } else {
+            list_comments_term('comments_term', $('#socialdb_event_comment_term_id').val());
+        }
     }
-}
 
 
-function submit_comment(object_id) {
+    function submit_comment(object_id) {
         if ($('#comment').val().trim() === '') {
             showAlertGeneral('<?php _e('Attention!', 'tainacan') ?>', '<?php _e('Fill your comment', 'tainacan') ?>', 'info');
         } else {
@@ -164,7 +164,7 @@ function submit_comment(object_id) {
         },
         function (isConfirm) {
             if (isConfirm) {
-                  show_modal_main();
+                show_modal_main();
                 $.ajax({
                     type: "POST",
                     url: $('#src').val() + "/controllers/event/event_controller.php",
@@ -202,8 +202,8 @@ function submit_comment(object_id) {
                     socialdb_event_comment_delete_id: $('#comment_id_report').val(),
                     socialdb_event_collection_id: $('#collection_id').val()}
             }).done(function (result) {
-            hide_modal_main();
-                 list_comments_general();
+                hide_modal_main();
+                list_comments_general();
                 elem_first = jQuery.parseJSON(result);
                 showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
             });
@@ -227,7 +227,7 @@ function submit_comment(object_id) {
                     socialdb_event_collection_id: $('#collection_id').val()
                 }
             }).done(function (result) {
-                 list_comments_general();
+                list_comments_general();
                 hide_modal_main();
                 $('.dropdown-toggle').dropdown();
                 $('.nav-tabs').tab();
@@ -240,7 +240,7 @@ function submit_comment(object_id) {
         }
     }
 
-/******************************************************************************/
+    /******************************************************************************/
 
     function set_popover_content(content) {
         $('[data-toggle="popover"]').popover();
@@ -269,17 +269,17 @@ function submit_comment(object_id) {
                 $('#div_left').show();
                 load_menu_left(collection_id);
             } else {
-                <?php if(!has_filter('category_root_as_facet')||apply_filters('category_root_as_facet', true)): ?>
-                $('#div_left').hide();
-                $('#div_central').removeClass('col-md-9');
-                $('#div_central').removeClass('col-md-10');
-                $('#div_central').removeClass('col-md-12');
-                $('#div_central').addClass('col-md-12');
-                $('#div_central').show();
-                $('#div_left').html('');
-                <?php else: ?>
-                 load_menu_left(collection_id);   
-                <?php endif; ?>
+<?php if (!has_filter('category_root_as_facet') || apply_filters('category_root_as_facet', true)): ?>
+                    $('#div_left').hide();
+                    $('#div_central').removeClass('col-md-9');
+                    $('#div_central').removeClass('col-md-10');
+                    $('#div_central').removeClass('col-md-12');
+                    $('#div_central').addClass('col-md-12');
+                    $('#div_central').show();
+                    $('#div_left').html('');
+<?php else: ?>
+                    load_menu_left(collection_id);
+<?php endif; ?>
                 // load_menu_top(collection_id);
             }
         });
@@ -310,7 +310,7 @@ function submit_comment(object_id) {
             $("#menu_object").hide();
             $("#container_socialdb").hide('slow');
             $("#list").hide('slow');
-            $("#loader_objects").hide();            
+            $("#loader_objects").hide();
             $("#form").html(result);
             $('#form').show('slow');
             //$('#single_category_property').html(result);
@@ -360,13 +360,13 @@ function submit_comment(object_id) {
     }
 
 
-    function bindContextMenuSingle(span,dynatree_id) {
+    function bindContextMenuSingle(span, dynatree_id) {
         // Add context menu to this node:
         var menu;
-        if(dynatree_id){
-            menu = 'myMenuNoList'; 
-        }else{
-            menu = 'myMenuSingle'; 
+        if (dynatree_id) {
+            menu = 'myMenuNoList';
+        } else {
+            menu = 'myMenuSingle';
         }
         $(span).contextMenu({menu: menu}, function (action, el, pos) {
             // The event was bound to the <span> tag, but the node object
@@ -386,7 +386,7 @@ function submit_comment(object_id) {
                             $('#modalAddCategoria').modal('show');
                             $('.dropdown-toggle').dropdown();
                             //ativando para um dynatree especifico
-                            if(dynatree_id){
+                            if (dynatree_id) {
                                 $("#category_single_add_dynatree_id").val(dynatree_id);
                             }
                         }
@@ -399,7 +399,7 @@ function submit_comment(object_id) {
                         if (!json.isAllowed) {
                             showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('This action was configured as "NOT ALLOWED" by moderators!', 'tainacan') ?>', 'info');
                         } else {
-                             
+
                             //$("#category_single_parent_name_edit").val(node.data.title);
                             //$("#category_single_parent_id_edit").val(node.data.key);
                             $("#category_single_edit_name").val(node.data.title);
@@ -407,7 +407,7 @@ function submit_comment(object_id) {
                             $("#category_edit_description").val('');
                             $("#category_single_edit_id").val(node.data.key);
                             //ativando para um dynatree especifico
-                            if(dynatree_id){
+                            if (dynatree_id) {
                                 $("#category_single_edit_dynatree_id").val(dynatree_id);
                             }
                             $('#modalEditCategoria').modal('show');
@@ -443,16 +443,16 @@ function submit_comment(object_id) {
                                 }
                                 //sinonimos
                                 clear_synonyms_tree();
-                                if(elem.socialdb_term_synonyms&&elem.socialdb_term_synonyms.length>0){
+                                if (elem.socialdb_term_synonyms && elem.socialdb_term_synonyms.length > 0) {
                                     $('#category_synonyms').val(elem.socialdb_term_synonyms.join(','));
-                                    $("#dynatree_synonyms").dynatree("getRoot").visit(function(node){
+                                    $("#dynatree_synonyms").dynatree("getRoot").visit(function (node) {
                                         var str = node.data.key.replace("_tag", "");
-                                        if(elem.socialdb_term_synonyms.indexOf(str)>=0){
-                                           node.select(true);
+                                        if (elem.socialdb_term_synonyms.indexOf(str) >= 0) {
+                                            node.select(true);
                                         }
                                     });
                                 }
-                                <?php do_action('javascript_metas_category') ?>
+<?php do_action('javascript_metas_category') ?>
                                 //if (elem.socialdb_category_permission) {
                                 //  $("#category_permission").val(elem.socialdb_category_permission);
                                 //}
@@ -480,7 +480,7 @@ function submit_comment(object_id) {
                             $("#category_single_delete_id").val(node.data.key);
                             $("#delete_category_single_name").text(node.data.title);
                             //ativando para um dynatree especifico
-                            if(dynatree_id){
+                            if (dynatree_id) {
                                 $("#category_single_delete_dynatree_id").val(dynatree_id);
                             }
                             $('#modalExcluirCategoria').modal('show');
@@ -546,13 +546,13 @@ function submit_comment(object_id) {
                                 }
                                 //sinonimos
                                 clear_synonyms_tree();
-                                if(elem.socialdb_term_synonyms&&elem.socialdb_term_synonyms.length>0){
+                                if (elem.socialdb_term_synonyms && elem.socialdb_term_synonyms.length > 0) {
                                     $('#tag_synonyms').val(elem.socialdb_term_synonyms.join(','));
-                                    $("#dynatree_synonyms_tag").dynatree("getRoot").visit(function(node){
+                                    $("#dynatree_synonyms_tag").dynatree("getRoot").visit(function (node) {
                                         var str = node.data.key.replace("_tag", "");
-                                        console.log(str,elem.socialdb_term_synonyms.indexOf(str)>=0);
-                                        if(elem.socialdb_term_synonyms.indexOf(str)>=0){
-                                           node.select(true);
+                                        console.log(str, elem.socialdb_term_synonyms.indexOf(str) >= 0);
+                                        if (elem.socialdb_term_synonyms.indexOf(str) >= 0) {
+                                            node.select(true);
                                         }
                                     });
                                 }
@@ -824,7 +824,7 @@ function submit_comment(object_id) {
                 $('#items_not_found').hide();
             }
 
-            if(temp_list_mode) {
+            if (temp_list_mode) {
                 changeViewMode(temp_list_mode);
             }
 
@@ -849,7 +849,7 @@ function submit_comment(object_id) {
                 $('#items_not_found').hide();
             }
 
-            if(temp_list_mode) {
+            if (temp_list_mode) {
                 changeViewMode(temp_list_mode);
             }
             
@@ -997,7 +997,7 @@ function submit_comment(object_id) {
     }
 
     // funcao que captura a action on change no selectbox na pagina single.php
-    function change_ordenation( order ) {
+    function change_ordenation(order) {
         var curr_viewMode = $("#collection_single_ordenation").attr('data-viewMode');
         wpquery_orderBy(order, curr_viewMode);
     }
@@ -1024,8 +1024,8 @@ function submit_comment(object_id) {
         $("#container_socialdb").show('fast');
         $('#main_part').show('slow');
         reinit_synonyms_tree();
-        if(!reload_container){
-             set_containers_class($('#collection_id').val());
+        if (!reload_container) {
+            set_containers_class($('#collection_id').val());
         }
     }
 
@@ -1046,7 +1046,7 @@ function submit_comment(object_id) {
 
     // volta a listagem e limpa as url
     function back_and_clean_url() {
-         $("#category_page").val('');
+        $("#category_page").val('');
         $("#property_page").val('');
         $('#form').hide();
         $('#create_button').show();
@@ -1340,7 +1340,7 @@ function submit_comment(object_id) {
                                             if (any_url) {
                                                 // É uma URL regular. Executar a importação através do Embed.ly.
                                                 show_modal_main();
-                                               // showFormCreateURL($('#item_url_import_all').val());
+                                                // showFormCreateURL($('#item_url_import_all').val());
                                                 import_text($('#item_url_import_all').val());
                                                 $('#item_url_import_all').val('');
                                                 $("#sites_import_icon").addClass("grayscale");
@@ -1463,7 +1463,15 @@ function submit_comment(object_id) {
             var match = url.match(regExp);
             if (match) {
                 var result = url.split('/');
-                return result[4];
+                if (typeof result[6] != 'undefined' && result[6] != '' && (result[5] == 'albums' || result[5] == 'sets')) {
+                    //console.log(result[6]);
+                    return 'albums/'+result[4]+'/'+result[6];
+                } else if (typeof result[5] != 'undefined' && result[5] != '') {
+                    //console.log(result[5]);
+                    return 'singleitem/'+result[4]+'/'+result[5];
+                } else {
+                    return 'all/'+result[4];
+                }
             }
             else {
                 // Do anything for not being valid
@@ -1513,7 +1521,7 @@ function submit_comment(object_id) {
                             var match_audio = url.match(regExp_audio);
                             if (match_audio) {
                                 return 'audio';
-                            }else{
+                            } else {
                                 return 'other';
                             }
                         }
@@ -1720,14 +1728,14 @@ function submit_comment(object_id) {
                     }
                 }
             });
-           
+
         } else {
             showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Necessary to inform Youtube video url', 'tainacan'); ?>', 'error');
         }
     }
     // faz a importacao do tipo texto e joga para a tela de multiplos
-    function import_text(url){
-       var key = $('#socialdb_embed_api_id').val();
+    function import_text(url) {
+        var key = $('#socialdb_embed_api_id').val();
         var ajaxurl = 'http://api.embed.ly/1/oembed?key=:' + key + '&url=' + url;
         //div loader
         $.getJSON(ajaxurl, {}, function (json) {
@@ -1737,7 +1745,7 @@ function submit_comment(object_id) {
                 title = json.title;
             }
             else {
-                 hide_modal_main();
+                hide_modal_main();
                 showAlertGeneral('Atenção', 'Esta URL não possui items disponíveis para importação', 'error');
                 return;
             }
@@ -1757,7 +1765,7 @@ function submit_comment(object_id) {
             //pegando a imagem
             var img = '';
             if (json.thumbnail_url !== undefined && json.thumbnail_url != null && json.thumbnail_url != false) {
-                 img = json.thumbnail_url;
+                img = json.thumbnail_url;
             }
             // verifico se existe imagem para ser importada
             $.ajax({
@@ -1787,43 +1795,43 @@ function submit_comment(object_id) {
             showAlertGeneral('Atenção', 'URL inexistente ou indisponível', 'error');
         });
     }
- 
-    function import_files_url(url,type){
-            var title = '';
-            if(type=='image'){
-                title = '<?php _e('Image','tainacan') ?>';
-            }else if(type=='video'){
-                title = '<?php _e('Video','tainacan') ?>';
-            }else if(type=='audio'){
-                title = '<?php _e('Audio','tainacan') ?>';
-            }else if(type=='other'){
-                title = '<?php _e('Other','tainacan') ?>';
-            }else if(type=='pdf'){
-                title = '<?php _e('PDF','tainacan') ?>';
+
+    function import_files_url(url, type) {
+        var title = '';
+        if (type == 'image') {
+            title = '<?php _e('Image', 'tainacan') ?>';
+        } else if (type == 'video') {
+            title = '<?php _e('Video', 'tainacan') ?>';
+        } else if (type == 'audio') {
+            title = '<?php _e('Audio', 'tainacan') ?>';
+        } else if (type == 'other') {
+            title = '<?php _e('Other', 'tainacan') ?>';
+        } else if (type == 'pdf') {
+            title = '<?php _e('PDF', 'tainacan') ?>';
+        }
+        $.ajax({
+            url: $('#src').val() + '/controllers/object/object_controller.php',
+            type: 'POST',
+            data: {
+                operation: 'add_item_not_published',
+                collection_id: $("#collection_id").val(),
+                content: url,
+                description: '',
+                type: type,
+                url: url,
+                title: title}
+        }).done(function (result) {
+            var json = JSON.parse(result);
+            if (json.length > 0) {
+                showViewMultipleItemsSocialNetwork(json);
             }
-            $.ajax({
-                url: $('#src').val() + '/controllers/object/object_controller.php',
-                type: 'POST',
-                data: {
-                    operation: 'add_item_not_published',
-                    collection_id: $("#collection_id").val(),
-                    content: url,
-                    description:'',
-                    type: type,
-                    url: url,
-                    title: title}
-            }).done(function (result) {
-                var json = JSON.parse(result);
-                if (json.length > 0) {
-                    showViewMultipleItemsSocialNetwork(json);
-                }
-                else {
-                    hide_modal_main();
-                    showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Invalid Channel/Playlist or no videos to be imported', 'tainacan'); ?>', 'error');
-                }
-            });
+            else {
+                hide_modal_main();
+                showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Invalid Channel/Playlist or no videos to be imported', 'tainacan'); ?>', 'error');
+            }
+        });
     }
-   
+
 
     function import_youtube_channel(inputIdentifierYoutube) {
         var collectionId = $('#collection_id').val();
@@ -2000,48 +2008,57 @@ function submit_comment(object_id) {
     }
     //*****************************************  END IMPORT ALL  *********************************************//
     /**
-    * funcao que concatena um array em um input, separado por virgulas
-    * @param {int} o ID do item que sera inserido no array
-    * @param {string} O id do input que esta sendo concatenado
-    * @returns {void}     */
-    function concatenate_in_array(key,seletor){
-    var ids = [];
-    if($(seletor).val()!==''){
-        ids = $(seletor).val().split(',');
-        index = ids.indexOf(key);
-        if(index>=0){
-            ids.splice(index, 1);
-        }else{
+     * funcao que concatena um array em um input, separado por virgulas
+     * @param {int} o ID do item que sera inserido no array
+     * @param {string} O id do input que esta sendo concatenado
+     * @returns {void}     */
+    function concatenate_in_array(key, seletor) {
+        var ids = [];
+        if ($(seletor).val() !== '') {
+            ids = $(seletor).val().split(',');
+            index = ids.indexOf(key);
+            if (index >= 0) {
+                ids.splice(index, 1);
+            } else {
+                ids.push(key);
+            }
+            $(seletor).val(ids.join(','));
+        } else {
             ids.push(key);
+            $(seletor).val(ids.join(','));
         }
-        $(seletor).val(ids.join(','));
-    }else{
-        ids.push(key);
-        $(seletor).val(ids.join(','));
     }
-}
-/**
-* 
-
- * @param {type} url
- * @returns {String} */
-function get_type_url(url){
-    var fileExtension = url.replace(/^.*\./, '');     // USING JAVASCRIPT REGULAR EXPRESSIONS.
-    switch (fileExtension) {
-        case 'png': case 'jpeg': case 'jpg':case 'gif':
-            return 'image';
-            break;
-        case 'mp4': case 'wmv': case 'ogv':case 'mpg':
-             return 'video';
-        case 'pdf':
-            return 'pdf';
-            break;
-        case 'mp3': case 'wav': case 'm4a':case 'ogg':
-             return 'audio';    
-        default:
-            return 'other';
+    /**
+     * 
+     
+     * @param {type} url
+     * @returns {String} */
+    function get_type_url(url) {
+        var fileExtension = url.replace(/^.*\./, '');     // USING JAVASCRIPT REGULAR EXPRESSIONS.
+        switch (fileExtension) {
+            case 'png':
+            case 'jpeg':
+            case 'jpg':
+            case 'gif':
+                return 'image';
+                break;
+            case 'mp4':
+            case 'wmv':
+            case 'ogv':
+            case 'mpg':
+                return 'video';
+            case 'pdf':
+                return 'pdf';
+                break;
+            case 'mp3':
+            case 'wav':
+            case 'm4a':
+            case 'ogg':
+                return 'audio';
+            default:
+                return 'other';
+        }
     }
-}
     /************************************************ HELPERS **********************************************************/
-    
+
 </script>
