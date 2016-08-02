@@ -2092,6 +2092,28 @@ function socialdb_insert_object_socialnetwork($post_title, $post_status = 'publi
 
 /**
  *
+ * Funcao que insere um objeto
+ *
+ * @param string $object_id O id do objeto.
+ * @param array $terms O array de IDs dos termos que serao vinculados ao objeto.
+ * @param string $taxonomy A taxonomia dos termos que serao vinculados.
+ * @return void.
+ */
+function socialdb_insert_object_socialnetwork_flickr($post_title, $post_status = 'publish',$post_content = '') {
+    $post_author = get_current_user_id();
+    $post = array(
+        'post_author' => $post_author,
+        'post_title' => $post_title,
+        'post_content' => $post_content,
+        'post_status' => $post_status,
+        'post_type' => 'socialdb_object'
+    );
+    $post_id = wp_insert_post($post);
+    return $post_id;
+}
+
+/**
+ *
  * Funcao que insere um objeto NO CSV
  *
  * @param string $object_id O id do objeto.
