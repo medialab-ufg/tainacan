@@ -33,13 +33,11 @@ $title_prefix = __("Collection", "tainacan");
                                         <h5 style="color: white; font-weight: bolder"> <?php the_title(); ?> </h5>
 
                                     <?php if (get_option('collection_root_id') != $collection_id): ?>
-                                            <div class="col-md-6 pull-left">
-                                                <button id="show_rankings_ss_<?php echo $curr_id ?>" onclick="show_value_ordenation('<?php echo $curr_id ?>', '#rankings_ss_', '#show_rankings_ss_')"
-                                                        class="btn btn-default"><?php _e('Show rankings', 'tainacan'); ?></button>
-
-                                                <!-- TAINACAN: container(AJAX) que mostra o html com os rankings do objeto-->
-                                                <div id="rankings_ss_<?php echo $curr_id ?>" class="rankings-container"></div>
-                                            </div>
+                                            
+                                        <div class="col-md-6 pull-left">
+                                            <!-- TAINACAN: container(AJAX) que mostra o html com os rankings do objeto-->
+                                            <div id="r_slideshow_<?php echo $curr_id ?>" class="rankings-container"></div>
+                                        </div>
 
 
                                         <ul class="item-funcs col-md-6 right">
@@ -52,18 +50,10 @@ $title_prefix = __("Collection", "tainacan");
                                             </li>
 
                                             <?php include "edit_btns.php"; ?>
-
                                         </ul>
                                      
-                                        <!-- TAINACAN: script para disparar o evento que mostra os rankings -->
-                                        <script>
-                                            $('#show_rankings_ss_<?php echo $curr_id ?>').hide().trigger('click');
-                                        </script>
                                     <?php endif; ?>
                                     </div>
-
-                                    <!-- TAINACAN: container(AJAX) que mostra o html com as classificacoes do objeto -->
-                                    <div id="classifications_<?php echo $curr_id ?>" class="class-meta-box"></div>
 
                                 </div>
                             <?php endwhile; ?>

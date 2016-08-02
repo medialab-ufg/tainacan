@@ -68,7 +68,9 @@ $view_helper = new ViewHelper();
                         <label for="slideshow_time"><?php _e('Slideshow time (seconds)', 'tainacan'); ?></label>
                         <select name="slideshow_time" class="form-control">
                             <?php foreach( range(1, 20) as $num ): ?>
-                                <option value="st-<?php echo $num ?>-secs"><?php echo $num; ?></option>                            
+                                <option value="st-<?php echo $num ?>-secs" <?php if($num===4) { echo "selected"; } ?> >
+                                    <?php echo $num; ?>
+                                </option>                            
                             <?php endforeach; ?>
                         </select>
                     </div>

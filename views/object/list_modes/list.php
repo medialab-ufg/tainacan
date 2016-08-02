@@ -16,16 +16,13 @@
     
     <div class="col-md-3 author-created">
         <div class="item-author"><?php echo "<strong>" . __('Created by: ', 'tainacan') . "</strong>" . get_the_author(); ?></div>
-        <div class="item-creation"><?php echo "<strong>" . __('Created at: ', 'tainacan') . "</strong>" . get_the_date('d/m/Y'); ?></div>
+        <div class="item-creation"><?php echo $curr_date ?></div>
     </div>
 
     <div class="col-md-2 no-padding">
-        <?php if (get_option('collection_root_id') != $collection_id): ?>
-            <button id="show_rankings_list_<?php echo $curr_id ?>" onclick="show_value_ordenation('<?php echo $curr_id ?>', '#rankings_list_', '#show_rankings_list_')"
-                    class="btn btn-default"><?php _e('Show rankings', 'tainacan'); ?></button>
-            
+        <?php if (get_option('collection_root_id') != $collection_id): ?>            
             <!-- TAINACAN: container(AJAX) que mostra o html com os rankings do objeto-->
-            <div id="rankings_list_<?php echo $curr_id ?>" class="rankings-container"></div>
+            <div id="r_list_<?php echo $curr_id ?>" class="rankings-container"></div>            
         <?php endif; ?>
     </div>
 
@@ -39,13 +36,8 @@
                 </a>
             </li>
 
-            <?php include "edit_btns.php"; ?>
-            
+            <?php include "edit_btns.php"; ?>            
         </ul>
-        
-        <script>
-            $('#show_rankings_list_<?php echo $curr_id ?>').hide().trigger('click');
-        </script>
-        
+
     </div>
 </div>

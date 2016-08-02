@@ -1,7 +1,7 @@
 <script>    
     $(function () {
         var src = $('#src').val();        
-
+       
         $('.pagination_items').jqPagination({
             link_string: '/?page={page_number}',
             max_page: $('#number_pages').val(),
@@ -18,7 +18,7 @@
             getCollectionSlideshow();
         }
         $('.viewMode-control li').removeClass('selected-viewMode');
-        $('.viewMode-control li.' + default_viewMode).addClass('selected-viewMode');
+        $('.viewMode-control li.' + default_viewMode).addClass('selected-viewMode');     
                 
         function get_colorScheme() {
             var coll_id = $('#collection_id').val();
@@ -51,7 +51,7 @@
             addClasses: true,
             //    tolerance: "pointer",
             over: function (event, ui) {
-                logMsg("droppable.over, %o, %o", event, ui);
+                //logMsg("droppable.over, %o, %o", event, ui);
             },
             drop: function (event, ui) {
                 var object_id = $(this).closest('div').find('.object_id').val();
@@ -92,6 +92,7 @@
                             socialdb_event_collection_id: $('#collection_id').val()}
                     }).done(function (result) {
                         elem_first = jQuery.parseJSON(result);
+                        cl(elem_first);
                         set_containers_class($('#collection_id').val());
                         show_classifications(object_id);
                         showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
@@ -366,34 +367,32 @@
             // window.location = json.redirect;
         });
     }
-
-    function show_rankings(object_id) {
+    
+    $('button.cards-ranking').on('click', function() {
+        var object_id = $(this).attr("id").replace("show_rankings_", "");        
+        var order_id = $('#collection_single_ordenation').val();
+        var col_id = $('#collection_id').val();
+        
         $.ajax({
-            type: "POST",
-            url: $('#src').val() + "/controllers/ranking/ranking_controller.php",
-            data: {collection_id: $('#collection_id').val(), operation: 'list_ranking_object', object_id: object_id}
-        }).done(function (result) {
-            $('#rankings_' + object_id).html(result);
-            $('#show_rankings_' + object_id).hide();
-            $('#rankings_' + object_id).show();
-        });
-    }
+            type: "POST", url: $('#src').val() + "/controllers/ranking/ranking_controller.php",
+            data: {collection_id: col_id, ordenation_id: order_id, operation: 'list_value_ordenation', object_id: object_id }
+        }).done(function(result) {
+            $(this).hide();          
+            $("#rankings_" + object_id).html(result).show();
+            var $_cards_ranking = $("#rankings_" + object_id).html();                      
+            var $_other_rankings = [ $("#r_list_"+object_id), $("#r_gallery_"+object_id), $("#r_slideshow_"+object_id) ];
+            
+            $($_other_rankings).each(function(idx, el) {
+                $( $_cards_ranking ).appendTo( el );
+            });                        
+        });              
+    });
+    $('button.cards-ranking').each(function(idx, el) {
+        $(this).hide();
+        $(this).click();
+    });
 
-    function show_value_ordenation(object_id, div_base, btn_base) {
-        if (!div_base) {
-            div_base = "#rankings_";
-            btn_base = "#show_rankings_";
-        }
-        $.ajax({
-            type: "POST",
-            url: $('#src').val() + "/controllers/ranking/ranking_controller.php",
-            data: {collection_id: $('#collection_id').val(), ordenation_id: $('#collection_single_ordenation').val(), operation: 'list_value_ordenation', object_id: object_id}
-        }).done(function (result) {
-            $(btn_base + object_id).hide();
-            $(div_base + object_id).html(result).show();
-        });
-    }
-
+  
     function check_privacity_info(id) {
         $.ajax({
             url: $('#src').val() + '/controllers/collection/collection_controller.php',
@@ -408,20 +407,18 @@
         });
     }
 
-    function showModalCreateCollection() {
-        $('#myModal').modal('show');
-    }
+    function showModalCreateCollection() {  $('#myModal').modal('show'); }
     
     var col_title = $('.titulo-colecao h3.title').text();
     $("#collection-slideShow .sS-collection-name").text( col_title );     
     
     var default_slideshow_time;
-    if( $("#slideshow-time").val() !== "" ) {
+    if( $("#slideshow-time").val() !== "" ) {        
         default_slideshow_time = $("#slideshow-time").val().replace('st-', '').replace('-secs', '');
         default_slideshow_time *= 1000; 
     } else {
         default_slideshow_time = 4000;
-    }
+    }  
 
     var main_slick_settings = {
       slidesToShow: 1,
@@ -430,20 +427,20 @@
       fade: true,
       asNavFor: '.collection-slides',
       adaptiveHeight: true
-   };
-   var collection_slick_settings = {
-     slidesToShow: 5,
-     slidesToScroll: 1,
-     asNavFor: '.main-slide',
-     variableWidth: true,
-     dots: true,
-     centerMode: true,
-     arrows: false,
-     adaptiveHeight: true,
-     autoplay: true,
-     autoplaySpeed: default_slideshow_time,
-     focusOnSelect: true
-   };
+    };
+    var collection_slick_settings = {
+      slidesToShow: 5,
+      slidesToScroll: 1,
+      asNavFor: '.main-slide',
+      variableWidth: true,
+      dots: true,
+      centerMode: true,
+      arrows: false,
+      adaptiveHeight: true,
+      autoplay: true,
+      autoplaySpeed: default_slideshow_time,
+      focusOnSelect: true
+    };
            
     $('.main-slide').slick(main_slick_settings);
     $('.collection-slides').slick(collection_slick_settings);
