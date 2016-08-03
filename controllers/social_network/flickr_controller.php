@@ -21,7 +21,7 @@ class FlickrController extends Controller {
                     $data['identifier'] = $profile[1];
                     $return = $flickr->insertFlickrItems($data, $object_model);
                 } elseif ($profile[0] == 'albums') {
-                    
+                    $return = $flickr->insertFlickrItemsFromAlbums($data, $profile, $object_model);
                 } elseif ($profile[0] == 'singleitem') {
                     $return = $flickr->insertFlickrSingleItem($data, $profile, $object_model);
                 }
