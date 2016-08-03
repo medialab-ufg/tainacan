@@ -170,6 +170,16 @@ class ViewHelper {
                     <span class="glyphicon glyphicon-plus"></span><?php _e('Add field', 'tainacan') ?>
                 </button>
             <?php
+        elseif ($property['metas']['socialdb_property_compounds_cardinality'] && $property['metas']['socialdb_property_compounds_cardinality'] == 'n'):
+            ?>
+               <button type="button" 
+                       id="button_property_<?php echo $property['id']; ?>_<?php echo $i; ?>"
+                       onclick="show_fields_metadata_cardinality(<?php echo $property['id'] ?>,<?php echo $i ?>)" 
+                       style="margin-top: 5px;<?php echo (is_array($property['metas']['value'])&&($i+1)<count($property['metas']['value']))? 'display:none':'' ?>" 
+                       class="btn btn-primary btn-lg btn-xs btn-block">
+                    <span class="glyphicon glyphicon-plus"></span><?php _e('Add field', 'tainacan') ?>
+                </button>
+            <?php
         endif;
     }
     
@@ -177,6 +187,8 @@ class ViewHelper {
         if ($property['metas']['socialdb_property_data_cardinality'] && $property['metas']['socialdb_property_data_cardinality'] == 'n'):
             return 50;
         elseif($property['metas']['socialdb_property_object_cardinality'] && $property['metas']['socialdb_property_object_cardinality'] == 'n'):
+             return 50;
+        elseif($property['metas']['socialdb_property_compounds_cardinality'] && $property['metas']['socialdb_property_compounds_cardinality'] == 'n'):
              return 50;
         else:
             return 1;

@@ -70,7 +70,7 @@
                 //limitacao da quantidade de propriedades selecionados
                 if(selKeys.length>0&&selKeys.length<5){
                     $.each(selKeys,function(index,node){
-                        var type = $('#property_type_'+node.data.key).val();
+                        var type = types_compounds[node.data.key];
                         var string = '';
                         if(type=='1'){
                             string = 'edit_metadata';

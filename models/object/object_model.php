@@ -1269,6 +1269,9 @@ class ObjectModel extends Model {
 
     /**
      * function set_data_object_properties()
+     * 
+     * 
+     * @uses element Description
      * @param array Array com as popriedades
      * @return Os dados que serao utilizados para construcao da view
      * @author Eduardo Humberto
@@ -1279,39 +1282,31 @@ class ObjectModel extends Model {
             foreach ($properties as $property_id) {
                 $type = $property_model->get_property_type_hierachy($property_id); // pego o tipo da propriedade
                 $all_data = $property_model->get_all_property($property_id, true); // pego todos os dados possiveis da propriedade
-                //var_dump($all_data);
+                //retirando os metadados fixos
                 if (isset($all_data['slug']) && in_array($all_data['slug'], $this->fixed_slugs)):
                     continue;
                 endif;
+                //retirando os metadados compostos
+                if(isset($all_data['metas']["socialdb_property_is_compounds"])&&  in_array('true', $all_data['metas']["socialdb_property_is_compounds"])):
+                    continue;
+                endif;
                 //diferenciando os tipos
-                if ($type == 'socialdb_property_object') {// pego o tipo
-                    $all_data['metas']['objects'] = ($all_data['metas']['socialdb_property_object_category_id']) ? $this->get_category_root_posts($all_data['metas']['socialdb_property_object_category_id']) : [];
-                    $all_data['metas']['collection_data'] = $this->get_collection_by_category_root($all_data['metas']['socialdb_property_object_category_id']);
-                    // pegando os valores se necessario
-                    if ($data['object_id']) {
-                        $all_data['metas']['value'] = $property_model->get_object_property_value($data['object_id'], $property_id);
-                        $all_data['metas']['object_id'] = $data['object_id'];
+                if(in_array($type, ['socialdb_property_object','socialdb_property_data','socialdb_property_term'])){
+                    $this->get_data_generic_types($type, $all_data, $property_id, $data);
+                }elseif ($type == 'socialdb_property_compounds') {
+                    // as propriedades 
+                    $properties = explode(',', $all_data['metas']['socialdb_property_compounds_properties_id']);
+                    if(is_array($properties)){
+                        $all_data['metas']['socialdb_property_compounds_properties_id'] = [];
+                        foreach ($properties as $id) {
+                            $_all_data = $property_model->get_all_property($id, true);
+                            $_type = $property_model->get_property_type_hierachy($id); // pego o tipo da propriedade
+                            $copy_data = $data;
+                            $all_data['metas']['socialdb_property_compounds_properties_id'][$id] = $this->get_data_generic_types($_type, $_all_data, $id, $copy_data);
+                        }
                     }
-                    $data['property_object'][] = $all_data;
-                } elseif ($type == 'socialdb_property_data') {
-                    // pegando os valores se necessario
-                    if ($data['object_id']) {
-                        $all_data['metas']['value'] = $property_model->get_object_property_value($data['object_id'], $property_id);
-                        $all_data['metas']['object_id'] = $data['object_id'];
-                    }
-                    //se caso for autoincrement
-                    if ($all_data['metas']['socialdb_property_data_widget'] == 'autoincrement') {
-                        $all_data['metas']['socialdb_property_data_value_increment'] = $this->get_last_counter($property_id);
-                    }
-                    $data['property_data'][] = $all_data;
-                } else if ($type == 'socialdb_property_term') {
-                    if ($data['object_id']) {
-                        $all_data['metas']['value'] = $property_model->get_object_property_value($data['object_id'], $property_id);
-                        $all_data['metas']['object_id'] = $data['object_id'];
-                    }
-                    $all_data['has_children'] = $this->getChildren($all_data['metas']['socialdb_property_term_root']);
-                    $data['property_term'][] = $all_data;
-                } else {
+                    $data['property_compounds'][] = $all_data;
+                }else {
                     $data['rankings'][] = $all_data;
                 }
             }
@@ -1319,7 +1314,50 @@ class ObjectModel extends Model {
         $data['category_root_id'] = $this->get_category_root_of($data['collection_id']);
         return $data;
     }
-
+    
+    /**
+     * 
+     * 
+     * @param string $type
+     * @param array $all_data
+     * @param int  $property_id
+     * @param array (reference) $data
+     * 
+     * metodo que busca as informacoes necessarias para os tipos primitivos 
+     * (data,object,term) de metadados
+     */
+    public function get_data_generic_types($type,$all_data,$property_id, &$data) {
+        $property_model = new PropertyModel();
+        if ($type == 'socialdb_property_object') {// pego o tipo
+            $all_data['metas']['objects'] = ($all_data['metas']['socialdb_property_object_category_id']) ? $this->get_category_root_posts($all_data['metas']['socialdb_property_object_category_id']) : [];
+            $all_data['metas']['collection_data'] = $this->get_collection_by_category_root($all_data['metas']['socialdb_property_object_category_id']);
+            // pegando os valores se necessario
+            if ($data['object_id']) {
+                $all_data['metas']['value'] = $property_model->get_object_property_value($data['object_id'], $property_id);
+                $all_data['metas']['object_id'] = $data['object_id'];
+            }
+            $data['property_object'][] = $all_data;
+        } elseif ($type == 'socialdb_property_data') {
+            // pegando os valores se necessario
+            if ($data['object_id']) {
+                $all_data['metas']['value'] = $property_model->get_object_property_value($data['object_id'], $property_id);
+                $all_data['metas']['object_id'] = $data['object_id'];
+            }
+            //se caso for autoincrement
+            if ($all_data['metas']['socialdb_property_data_widget'] == 'autoincrement') {
+                $all_data['metas']['socialdb_property_data_value_increment'] = $this->get_last_counter($property_id);
+            }
+            $data['property_data'][] = $all_data;
+        } else if ($type == 'socialdb_property_term') {
+            if ($data['object_id']) {
+                $all_data['metas']['value'] = $property_model->get_object_property_value($data['object_id'], $property_id);
+                $all_data['metas']['object_id'] = $data['object_id'];
+            }
+            $all_data['has_children'] = $this->getChildren($all_data['metas']['socialdb_property_term_root']);
+            $data['property_term'][] = $all_data;
+        } 
+        return $all_data;
+    }
     /**
      * function list_properties()
      * 
