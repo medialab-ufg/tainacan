@@ -174,6 +174,67 @@ button#iframebutton {
   margin-bottom: 5px;
 }
 
+ul {
+  list-style-type: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+#collections-menu {
+  width: 100px;
+  float: left;
+  padding-left: 10px;
+}
+#collections-menu .collections a img {
+  width: 10%;
+  margin-top: -3px;
+}
+#collections-menu .sub-menu {
+  background: #fff;
+  border-radius: 4px;
+  padding-left: 15px;
+  width: 150px;
+}
+#collections-menu .sub-menu:first-child {
+  margin-top: 30px !important;
+}
+#collections-menu li {
+  position: relative;
+  _float: left;
+  /*Hack para o IE6*/
+}
+#collections-menu li a {
+  display: block;
+  height: 25px;
+  line-height: 25px;
+  color: #777;
+}
+#collections-menu li a:hover ul {
+  position: absolute;
+  top: 20px;
+}
+#collections-menu li:hover ul ul {
+  display: none;
+  position: absolute;
+  top: 0px;
+  left: 100px;
+}
+
+#collections-menu li:hover ul,
+#collections-menu ul li:hover ul {
+  display: block;
+}
+
+.new-collection .modal-header {
+  border-bottom: 0;
+}
+
 body.home {
   background: black;
 }

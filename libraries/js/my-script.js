@@ -1445,6 +1445,11 @@ $(document).ready(function () {
     $('.dropdown-menu').find('form').click(function (e) {
         e.stopPropagation();
     });
+    $("#collections-menu li").hover(function(){
+       $(this).find('ul:first').css('display', 'block');
+       }, function() {
+       $(this).find('ul:first').css('display', 'none');
+    });
 });
 
 function showSingleObject(object_id, src) {

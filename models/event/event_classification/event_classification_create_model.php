@@ -163,7 +163,7 @@ class EventClassificationCreateModel extends EventModel {
                 else:
                     $data['msg'] = __('This classification is already confirmed','tainacan');
                     $data['type'] = 'info';
-                    $data['title'] = 'Attention';
+                    $data['title'] = 'Attention!';
                     $this->update_event_state('invalid', $data['event_id']); // seto a o evento como invalido
                     return $data;
                 endif;

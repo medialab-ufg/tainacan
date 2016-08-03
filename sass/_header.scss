@@ -210,3 +210,77 @@ button#iframebutton {
   h5 {
     margin-bottom: 5px; }
 }
+
+
+
+ul{list-style-type:none}
+
+a{text-decoration:none}
+
+a:hover{text-decoration:underline}
+
+#collections-menu {
+    width: 100px; 
+    // border:1px solid #ccc;
+    
+    float: left;
+    padding-left: 10px;
+    // background: #f5f5f5; 
+    
+    .collections {
+        a img {
+            width: 10%;
+            margin-top: -3px;
+        }
+    }
+        
+    .sub-menu {
+       background: #fff;
+       border-radius: 4px;
+       padding-left: 15px;
+       width: 150px;
+       
+       &:first-child {
+           margin-top: 30px !important;
+       }
+    }
+    
+    li {
+       position :relative;
+        _float: left;/*Hack para o IE6*/
+        // border-bottom:1px solid #ccc; /*define uma bordar no bottom*/
+        
+        a {            
+            display: block;
+            height: 25px; 
+            line-height: 25px; 
+            color: #777;            
+                        
+            &:hover {
+                // background:#e5e5e5;/*define a cor do fundo*/
+                // color:#333;/*define a cor da fonte*/
+                ul {
+                    position: absolute;
+                    top: 20px;
+                }
+             }
+        }
+        
+        &:hover ul ul {
+            display: none; 
+            position:absolute;
+            // width: 150px;
+            top: 0px;
+            left: 100px;
+         }
+    } // li
+} // #collections-menu
+
+#collections-menu li:hover ul,
+#collections-menu ul li:hover ul{
+   display:block;
+}
+
+.new-collection .modal-header {
+    border-bottom: 0;
+}
