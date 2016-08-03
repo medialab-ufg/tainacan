@@ -4,6 +4,7 @@
     var current_meta_type = $("#property_metadata_type").val();
     var $current_meta_form = "#submit_form_property_data_" + current_meta_type;
     var $form_ranking = $("#meta-voting #submit_form_ranking");
+    var types_compounds = []; // array que mostra o tipo das propriedades compostas
     var ranking_types = ["binary", "stars", "like"];
     var visibility_properties = $('#visibility_collection_properties').val().split(',');
     change_breadcrumbs_title('<?php _e('Metadata','tainacan') ?>');
@@ -701,6 +702,9 @@
                     //visibilidade do metadado
                     var isCompounded = is_compounded(property.metas.socialdb_property_is_compounds);
                     if(isCompounded||(property.metas.socialdb_property_visibility&&property.metas.socialdb_property_visibility==='hide')){
+                        if(isCompounded){  
+                            types_compounds[current_id] = 1;
+                        }
                         return true;
                     }
                     //se for propriedade do repositorio
@@ -970,6 +974,8 @@
                     //visibilidade do metadado
                     var isCompounded = is_compounded(property.metas.socialdb_property_is_compounds);
                     if(isCompounded||(property.metas.socialdb_property_visibility&&property.metas.socialdb_property_visibility==='hide')){
+                        if(isCompounded)  
+                            types_compounds[current_id] = 2;
                         return true;
                     }
                     //se for propriedade do repositorio
@@ -1195,6 +1201,9 @@
                     //visibilidade do metadado
                     var isCompounded = is_compounded(property.metas.socialdb_property_is_compounds);
                     if(isCompounded||(property.metas.socialdb_property_visibility&&property.metas.socialdb_property_visibility==='hide')){
+                        if(isCompounded){  
+                             types_compounds[property.id] = 3;
+                        }
                         return true;
                     }
                     var current_id = property.id;
