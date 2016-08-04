@@ -187,43 +187,47 @@ a:hover {
 }
 
 #collections-menu {
-  width: 100px;
-  float: left;
+  width: 130px;
   padding-left: 10px;
+  margin-top: -5px;
+}
+#collections-menu .collections {
+  text-align: center;
+}
+#collections-menu .collections:hover {
+  background: #1d1d1d;
+  cursor: pointer;
 }
 #collections-menu .collections a img {
-  width: 10%;
+  width: 16%;
   margin-top: -3px;
 }
 #collections-menu .sub-menu {
   background: #fff;
-  border-radius: 4px;
-  padding-left: 15px;
+  border: 1px solid #ccc;
+  padding-left: 0px;
   width: 150px;
-}
-#collections-menu .sub-menu:first-child {
-  margin-top: 30px !important;
+  border-radius: 4px;
 }
 #collections-menu li {
   position: relative;
   _float: left;
   /*Hack para o IE6*/
 }
+#collections-menu li.divider {
+  border-bottom: 1px solid #ddd;
+}
 #collections-menu li a {
   display: block;
   height: 25px;
   line-height: 25px;
-  color: #777;
-}
-#collections-menu li a:hover ul {
-  position: absolute;
-  top: 20px;
+  color: black;
 }
 #collections-menu li:hover ul ul {
   display: none;
   position: absolute;
   top: 0px;
-  left: 100px;
+  left: 135px;
 }
 
 #collections-menu li:hover ul,

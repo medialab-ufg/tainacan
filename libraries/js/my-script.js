@@ -2327,12 +2327,14 @@ function setMenuContainerHeight() {
     }
 }
 
+/*
 $(window).on('resize', function(ev) {
     var window_width = $(window).width();
-    if(window_width < 1010 && t == "done") {
+    if(window_width < 1010) {
 
     }
 });
+*/
 
 
 function changeViewMode(viewMode) {

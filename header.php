@@ -179,20 +179,20 @@ $viewHelper = new ViewHelper();
                     <div class="nav navbar-nav navbar-right repository-settings">
                         <ul id="collections-menu">
                             <li class="collections">
-                                <a href="#" style="color: white; padding-top: 14px;">
+                                <a href="#" style="color: white; padding-top: 20px;">
                                     <?php echo ViewHelper::render_icon('collection', 'png'); ?>
                                     <div style="display:inline-block; margin-left: 5px;">
                                         <?php _e('Collections', 'tainacan'); ?>
                                         <span class="glyphicon glyphicon-chevron-down"></span>    
                                     </div>                                
                                 </a>
-                                <ul style="display: none" class="sub-menu">
+                                <ul style="display: none; margin-top: 22px" class="sub-menu">
                                     <li>
                                         <a href="<?php echo get_permalink(get_option('collection_root_id')); ?>">
                                             <?php _e('Show collections', 'tainacan'); ?>
                                         </a>
                                     </li>
-                                    <?php // <li class="divider"></li> ?>
+                                    <li class="divider"></li>
                                     <li>
                                         <a href="#">
                                             <?php _e('Create collection','tainacan') ?>
@@ -204,7 +204,7 @@ $viewHelper = new ViewHelper();
                                                     <?php _e('General', 'tainacan'); ?>
                                                 </a>
                                             </li>
-                                            <li class="divider" style="border-bottom: 1px solid; padding-left: -10px"></li>
+                                            <li class="divider"></li>
                                             <li><a href="#"> <?php _e('Photo','tainacan') ?> </a></li>
                                             <li><a href="#"> <?php _e('Video','tainacan') ?> </a></li>
                                             <li><a href="#"> <?php _e('Document','tainacan') ?> </a></li>
@@ -277,10 +277,9 @@ $viewHelper = new ViewHelper();
                 <div class="modal-content">
                     <form id="importCollection">
                         <input type="hidden" name="operation" value="importCollection">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="myModalLabel"><?php _e('Import Collection', 'tainacan'); ?></h4>
-                        </div>
+                        
+                        <?php echo $viewHelper->render_modal_header('remove-sign', __('Import Collection', 'tainacan')); ?>
+                                               
                         <div class="modal-body">
                             <div class="form-group">
                                 <label for="collection_file"><?php _e('Select the file', 'tainacan'); ?></label>
@@ -288,8 +287,8 @@ $viewHelper = new ViewHelper();
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal"><?php _e('Close', 'tainacan'); ?></button>
-                            <button type="submit" class="btn btn-primary"><?php _e('Import', 'tainacan'); ?></button>
+                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal"><?php _e('Cancel', 'tainacan'); ?></button>
+                            <button type="submit" class="btn btn-primary pull-right"><?php _e('Import', 'tainacan'); ?></button>
                         </div>
                     </form>
                 </div>
