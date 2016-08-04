@@ -189,7 +189,9 @@ a:hover {
 #collections-menu {
   width: 130px;
   padding-left: 10px;
+  position: relative;
   margin-top: -5px;
+  cursor: pointer;
 }
 #collections-menu .collections {
   text-align: center;
@@ -199,7 +201,7 @@ a:hover {
   cursor: pointer;
 }
 #collections-menu .collections a img {
-  width: 16%;
+  width: 12%;
   margin-top: -3px;
 }
 #collections-menu .sub-menu {

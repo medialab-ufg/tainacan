@@ -62,7 +62,8 @@ $viewHelper = new ViewHelper();
         ?>
         <!-- TAINACAN: tag nav, utilizando classes do bootstrap nao modificadas, onde estao localizados os links que chamam paginas da administracao do repositorio -->
         <nav <?php echo set_navbar_bg_color('black'); ?> class="navbar navbar-default header-navbar">
-            <!--?php wp_nav_menu( array( 'theme_location' => 'header-menu' ) ); ?-->
+            <?php //wp_nav_menu( array( 'theme_location' => 'header-menu' ) ); ?>
+            
             <div class="container-fluid">
 
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -165,15 +166,7 @@ $viewHelper = new ViewHelper();
                         <!-- TAINACAN: mostra a busca avancada dentro da tag <div id="configuration"> localizado no arquivo single.php -->
                         <!--li><a onclick="showAdvancedSearch('<?php echo get_template_directory_uri() ?>');" href="#"><span class="glyphicon glyphicon-search"></span>&nbsp;<?php _e('Advanced Search', 'tainacan'); ?></a></li -->
                             <!--button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-chevron-down"></span></button>
-                            <!--a class="dropdown-toggle" href="#" data-toggle="dropdown">Sign In <strong class="caret"></strong></a-->
-
-                        <!-- TAINACAN: sai da pagina e vai para a colecao raiz -->
-                        <li class="collections" style="display: none"> 
-                            <a href="<?php // echo get_permalink(get_option('collection_root_id')); ?>">
-                                <?php // echo ViewHelper::render_icon('collection', 'png'); ?>
-                                <?php // _e('Collections', 'tainacan'); ?>
-                            </a>
-                        </li>
+                            <!--a class="dropdown-toggle" href="#" data-toggle="dropdown">Sign In <strong class="caret"></strong></a-->            
                     </ul>
                     
                     <div class="nav navbar-nav navbar-right repository-settings">
@@ -183,7 +176,7 @@ $viewHelper = new ViewHelper();
                                     <?php echo ViewHelper::render_icon('collection', 'png'); ?>
                                     <div style="display:inline-block; margin-left: 5px;">
                                         <?php _e('Collections', 'tainacan'); ?>
-                                        <span class="glyphicon glyphicon-chevron-down"></span>    
+                                        <span class="caret" style="font-size: 14px"></span>    
                                     </div>                                
                                 </a>
                                 <ul style="display: none; margin-top: 22px" class="sub-menu">
@@ -224,7 +217,7 @@ $viewHelper = new ViewHelper();
                         <form id="formSearchCollections" class="navbar-form navbar-right search-tainacan-collection" role="search">
                             <div class="input-group search-collection search-home">
                                 <input style="display: none" type="text" class="form-control" name="search_collections" id="search_collections" placeholder="<?php _e('Find', 'tainacan') ?>"/>
-                                <button onmouseover="setItemBorder()" onclick="showTopSearch();" id="expand-top-search" class="btn btn-default" type="button">
+                                <button onclick="showTopSearch();" id="expand-top-search" class="btn btn-default" type="button">
                                     <?php echo ViewHelper::render_icon('search-white', 'png', __('Click to expand', 'tainacan')); ?>
                                 </button>
                             </div>
@@ -238,8 +231,9 @@ $viewHelper = new ViewHelper();
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content new-collection">
-                    <form onsubmit="$('#myModal').modal('hide'); show_modal_main();" 
-                          action="<?php echo get_template_directory_uri() ?>/controllers/collection/collection_controller.php" method="POST">
+                    
+                    <?php $col_controller = get_template_directory_uri() . "/controllers/collection/collection_controller.php"; ?>
+                    <form onsubmit="$('#myModal').modal('hide'); show_modal_main();" action="<?php echo $col_controller ?>" method="POST">
                         
                         <input type="hidden" name="operation" value="simple_add">
                         
@@ -258,7 +252,7 @@ $viewHelper = new ViewHelper();
                                     <input type="text" required="required" class="form-control" name="collection_object" id="collection_object"  value="<?php _e('Item'); ?>">
                                 </div>
                                  */ ?>
-                                <input type="hidden" name="template" id='template_collection' value="">
+                                <input type="hidden" name="template" id='template_collection' value="none">
                                 <input type="hidden" name="collection_object" id='collection_object' value="<?php _e('Item'); ?>">
                             </div>
                             

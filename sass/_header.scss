@@ -53,6 +53,7 @@ ul.repository-settings, .admin-configs {
 
 .header-navbar {
   padding: 5px 0 5px 0;
+  // height: 61px;
 
   a.logo-tainacan {
     padding: 0;
@@ -222,11 +223,11 @@ a:hover{text-decoration:underline}
 #collections-menu {
     width: 130px;
     padding-left: 10px;
-    // position: relative;
+    position: relative;
     margin-top: -5px;
+    cursor: pointer;
     
     .collections {
-        //height: 120px;
         text-align: center;
         
         &:hover {
@@ -234,11 +235,9 @@ a:hover{text-decoration:underline}
             cursor: pointer;
         }
         a {
-            // color: white;
-            //padding-top: 20px;
             
             img {
-                width: 16%;
+                width: 12%;
                 margin-top: -3px;    
             }
         }                
@@ -257,12 +256,10 @@ a:hover{text-decoration:underline}
     
     li {
        position :relative;
-        _float: left; /*Hack para o IE6*/
-        // border-bottom:1px solid #ccc; /*define uma bordar no bottom*/
+       _float: left; /*Hack para o IE6*/
         
         &.divider {
             border-bottom: 1px solid $lightest-gray; 
-            // margin-left: -10px;
         }
         
         a {            

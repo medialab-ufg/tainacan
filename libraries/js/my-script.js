@@ -602,16 +602,19 @@ function showModalImportCollection() {
 }
 
 function showTopSearch() {
-    $('#search_collections').fadeTo(550, 1, function () {
-        $('#search_collections').focus();
+    $('#search_collections').fadeTo(300, 1, function () {
+        $("#expand-top-search").css('border', '1px solid whitesmoke');
+        $('#search_collections').focus();        
         $("#expand-top-search").addClass('showing-input');
     });
 
 }
 
-function setItemBorder() {
+$("#expand-top-search").hover(function(){
     $("#expand-top-search").css('border', '1px solid whitesmoke');
-}
+},function(){
+    $("#expand-top-search").css('border', '0');
+});
 
 //modal_block modal que bloqueia acoes do usuario
 function show_modal_main() {
@@ -1447,8 +1450,10 @@ $(document).ready(function () {
     });
     $("#collections-menu li").hover(function(){
        $(this).find('ul:first').css('display', 'block');
-       }, function() {
-       $(this).find('ul:first').css('display', 'none');
+       // $('.collection_header_img .row > .col-md-12').css("margin-top", "-74px");
+      }, function() {
+        $(this).find('ul:first').css('display', 'none');
+        // $('.collection_header_img .row > .col-md-12').css("margin-top", "0");
     });
 });
 
