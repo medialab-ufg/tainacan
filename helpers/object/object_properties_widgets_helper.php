@@ -9,7 +9,9 @@ class ObjectWidgetsHelper extends ViewHelper {
      * @param array $properties_compounds
      */
     public function list_properties_compounds($properties_compounds,$object_id,$references) {
+        include_once ( dirname(__FILE__).'/../../views/object/js/properties_compounds_js.php');
         $result = [];
+        $coumpounds_id = [];
         if (isset($properties_compounds)):
             foreach ($properties_compounds as $property) { 
                $result['ids'][] = $property['id']; ?>
@@ -60,13 +62,21 @@ class ObjectWidgetsHelper extends ViewHelper {
                     <?php $cardinality = $this->render_cardinality_property($property);   ?>
                     <?php $properties_compounded = $property['metas']['socialdb_property_compounds_properties_id']; ?>
                     <?php $class = 'col-md-'. (12/count($properties_compounded)); ?>
-                    <div class="form-group">
+                    <div class="form-group">                        
                         <?php for($i = 0; $i<$cardinality;$i++): ?>
                             <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
                                  class=" col-md-12"
-                                style="padding-bottom: 10px;<?php echo ($i===0||(is_array($property['metas']['value'])&&$i<count($property['metas']['value']))) ? 'display:block': 'display:none'; ?>">
-                                <?php foreach ($properties_compounded as $property_compounded): ?>
-                                    <div class="<?php echo $class ?>">
+                                 style="padding-bottom: 10px;<?php echo ($i===0||(is_array($property['metas']['value'])&&$i<count($property['metas']['value']))) ? 'display:block': 'display:none'; ?>">
+                                <?php foreach ($properties_compounded as $property_compounded): $coumpounds_id[] = $property_compounded['id']; ?>
+                                <input  type="hidden" 
+                                        id='core_validation_<?php echo $property_compounded['id']; ?>' 
+                                        class='core_validation' 
+                                        value='false'>
+                                <div style="padding-bottom: 15px; " class="<?php echo $class ?>">
+                                        <input type="hidden" 
+                                                name="cardinality_compound_<?php echo $property_compounded['id']; ?>" 
+                                                id="cardinality_compound_<?php echo $property_compounded['id']; ?>"
+                                                value="<?php echo $cardinality; ?>"> 
                                         <?php 
                                         if(isset($property_compounded['metas']['socialdb_property_data_widget'])): 
                                             $this->widget_property_data($property_compounded, $i,$references);
@@ -78,13 +88,23 @@ class ObjectWidgetsHelper extends ViewHelper {
                                         ?>
                                     </div>
                                 <?php endforeach; ?>
-                                <?php echo $this->render_button_cardinality($property,$i) ?>                                  
+                                <?php echo $this->render_button_cardinality($property,$i) ?>     
                             </div>  
                         <?php endfor; ?>
+                        <input type="hidden" 
+                               name="compounds_<?php echo $property['id']; ?>" 
+                               id="compounds_<?php echo $property['id']; ?>"
+                               value="<?php echo implode(',', $coumpounds_id); ?>"> 
                     </div>     
                 </div>   
                <?php
             }
+        ?>
+        <input type="hidden" 
+            name="properties_compounds" 
+            id="properties_compounds"
+            value="<?php echo implode(',', $result['ids']); ?>"> 
+        <?php
         endif;    
     }
     
@@ -99,18 +119,18 @@ class ObjectWidgetsHelper extends ViewHelper {
                    id="form_edit_autocomplete_value_<?php echo $property['id']; ?>" 
                    class="form-control form_autocomplete_value_<?php echo $property['id']; ?>" 
                    value="<?php if ($property['metas']['value']) echo (isset($property['metas']['value'][$i]) ? $property['metas']['value'][$i] : ''); ?>"
-                   name="socialdb_property_<?php echo $property['id']; ?>[]">
+                   name="socialdb_property_<?php echo $property['id']; ?>_<?php echo $i; ?>">
         <?php }elseif ($property['type'] == 'textarea') { ?>   
             <textarea class="form-control form_autocomplete_value_<?php echo $property['id']; ?>"
                       rows="10"
                       id="form_edit_autocomplete_value_<?php echo $property['id']; ?>" 
-                      name="socialdb_property_<?php echo $property['id']; ?>[]" ><?php if ($property['metas']['value']) echo (isset($property['metas']['value'][$i]) ? $property['metas']['value'][$i] : ''); ?></textarea>
+                      name="socialdb_property_<?php echo $property['id']; ?>_<?php echo $i; ?>" ><?php if ($property['metas']['value']) echo (isset($property['metas']['value'][$i]) ? $property['metas']['value'][$i] : ''); ?></textarea>
         <?php }elseif ($property['type'] == 'numeric') { ?>   
             <input  type="number" 
                     class="form-control form_autocomplete_value_<?php echo $property['id']; ?>"
                     onkeypress='return onlyNumbers(event)'
                     id="form_edit_autocomplete_value_<?php echo $property['id']; ?>" 
-                    name="socialdb_property_<?php echo $property['id']; ?>[]" 
+                    name="socialdb_property_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
                     value="<?php if ($property['metas']['value']) echo $property['metas']['value'][0]; ?>">
         <?php }elseif ($property['type'] == 'autoincrement') { ?>   
             <input disabled="disabled"  
@@ -143,7 +163,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                value="<?php if ($property['metas']['value']) echo (isset($property['metas']['value'][$i]) ? $property['metas']['value'][$i] : ''); ?>"
                type="text" 
                id="socialdb_property_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
-               name="socialdb_property_<?php echo $property['id']; ?>[]">   
+               name="socialdb_property_<?php echo $property['id']; ?>_<?php echo $i; ?>">   
         <?php
         }
         // gancho para tipos de metadados de dados diferentes
@@ -155,7 +175,7 @@ class ObjectWidgetsHelper extends ViewHelper {
             <input type="text"  
                    value="<?php if ($property['metas']['value']) echo (isset($property['metas']['value'][$i]) ? $property['metas']['value'][$i] : ''); ?>" 
                    class="form-control form_autocomplete_value_<?php echo $property['id']; ?>" 
-                   name="socialdb_property_<?php echo $property['id']; ?>[]" >
+                   name="socialdb_property_<?php echo $property['id']; ?>_<?php echo $i; ?>" >
         <?php
         }
     }
@@ -168,18 +188,18 @@ class ObjectWidgetsHelper extends ViewHelper {
         ?>
         <input type="hidden" 
                         id="cardinality_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"  
-                        value="<?php echo $view_helper->render_cardinality_property($property);   ?>">            
+                        value="<?php echo $this->render_cardinality_property($property);   ?>">            
         <input type="text" 
-               onkeyup="autocomplete_object_property_edit('<?php echo $property['id']; ?>', '<?php echo $object_id; ?>');" 
-               id="autocomplete_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>" 
+               onkeyup="autocomplete_object_property_compound('<?php echo $property['id']; ?>', '<?php echo $i; ?>');" 
+               id="autocomplete_value_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
                placeholder="<?php _e('Type the three first letters of the object of this collection ', 'tainacan'); ?>"  
                class="chosen-selected form-control"  />    
 
-        <select onclick="clear_select_object_property(this,'<?php echo $property['id']; ?>', '<?php echo $object_id; ?>');" 
-                id="property_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>_edit" 
+        <select onclick="clear_select_object_property_compound(this,'<?php echo $property['id']; ?>', '<?php echo $i; ?>');" 
+                id="property_value_<?php echo $property['id']; ?>_<?php echo $i; ?>_edit" 
                 multiple class="chosen-selected2 form-control" 
                 style="height: auto;" 
-                name="socialdb_property_<?php echo $property['id']; ?>[]"
+                name="socialdb_property_<?php echo $property['id']; ?>_<?php echo $i; ?>[]"
                 <?php 
                     if ($property['metas']['socialdb_property_required'] == 'true'): 
                         echo 'required="required"';
@@ -209,11 +229,10 @@ class ObjectWidgetsHelper extends ViewHelper {
      * @param int $i O indice do for da cardinalidade
      */
     public function widget_property_term($property,$i,$references) {
-        var_dump($property);
         if ($property['type'] == 'radio') {
             $references['properties_terms_radio'][] = $property['id'];
             ?>
-            <div id='field_property_term_<?php echo $property['id']; ?>'></div>
+            <div id='field_property_term_<?php echo $property['id']; ?>_<?php echo $i; ?>'></div>
             <?php
         } elseif ($property['type'] == 'tree') {
             $references['properties_terms_tree'][] = $property['id'];
@@ -226,11 +245,11 @@ class ObjectWidgetsHelper extends ViewHelper {
             <div class="row">
                 <div style='height: 150px;' 
                      class='col-lg-12'  
-                     id='field_property_term_<?php echo $property['id']; ?>'>
+                     id='field_property_term_<?php echo $property['id']; ?>_<?php echo $i; ?>'>
                 </div>
                 <input type="hidden" 
-                       id='socialdb_propertyterm_<?php echo $property['id']; ?>'
-                       name="socialdb_propertyterm_<?php echo $property['id']; ?>" 
+                       id='field_property_term_<?php echo $property['id']; ?>_<?php echo $i; ?>'
+                       name="socialdb_property_<?php echo $property['id']; ?>_<?php echo $i; ?>[]" 
                        value="">
             </div>
             <?php
@@ -238,14 +257,14 @@ class ObjectWidgetsHelper extends ViewHelper {
             $references['properties_terms_selectbox'][] = $property['id'];
             ?>
             <select class="form-control" 
-                    name="socialdb_propertyterm_<?php echo $property['id']; ?>" 
+                    name="socialdb_property_<?php echo $property['id']; ?>_<?php echo $i; ?>[]" 
                     onchange="edit_validate_selectbox(this,'<?php echo $property['id']; ?>')"
-                    id='field_property_term_<?php echo $property['id']; ?>' >
+                    id='field_property_term_<?php echo $property['id']; ?>_<?php echo $i; ?>' >
             </select>
             <?php
         }elseif ($property['type'] == 'checkbox') {
             $references['properties_terms_checkbox'][] = $property['id']; ?>
-            <div id='field_property_term_<?php echo $property['id']; ?>'></div>
+            <div id='field_property_term_<?php echo $property['id']; ?>_<?php echo $i; ?>'></div>
             <?php
         } elseif ($property['type'] == 'multipleselect') {
             $references['properties_terms_multipleselect'][] = $property['id'];
@@ -253,9 +272,8 @@ class ObjectWidgetsHelper extends ViewHelper {
              <select size='1' 
                 multiple 
                 onclick="validate_multipleselectbox(this,'<?php echo $property['id']; ?>')"
-                class="form-control" 
-                name="socialdb_propertyterm_<?php echo $property['id']; ?>[]" 
-                id='field_property_term_<?php echo $property['id']; ?>' 
+                class="form-control field_property_term_<?php echo $property['id']; ?>" 
+                name="socialdb_property_<?php echo $property['id']; ?>_<?php echo $i; ?>[]" 
                 <?php 
                 if ($property['metas']['socialdb_property_required'] == 'true'): 
                     echo 'required="required"';
@@ -266,16 +284,16 @@ class ObjectWidgetsHelper extends ViewHelper {
         }elseif ($property['type'] == 'tree_checkbox') {
             $references['properties_terms_treecheckbox'][] = $property['id']; ?>
             <button type="button"
-                onclick="showModalFilters('add_category','<?php echo get_term_by('id', $property['metas']['socialdb_property_term_root'] , 'socialdb_category_type')->name ?>',<?php echo $property['metas']['socialdb_property_term_root'] ?>,'field_property_term_<?php echo $property['id']; ?>')" 
+                onclick="showModalFilters('add_category','<?php echo get_term_by('id', $property['metas']['socialdb_property_term_root'] , 'socialdb_category_type')->name ?>',<?php echo $property['metas']['socialdb_property_term_root'] ?>,'field_property_term_<?php echo $property['id']; ?>_<?php echo $i; ?>')" 
                 class="btn btn-primary btn-xs"><?php _e('Add Category','tainacan'); ?>
             </button>
             <br><br>
             <div class="row">
                 <div style='height: 150px;' 
                      class='col-lg-12'  
-                     id='field_property_term_<?php echo $property['id']; ?>'>
+                     id='field_property_term_<?php echo $property['id']; ?>_<?php echo $i; ?>'>
                 </div>
-                <div id='socialdb_propertyterm_<?php echo $property['id']; ?>' ></div>
+                <div id='socialdb_propertyterm_<?php echo $property['id']; ?>_<?php echo $i; ?>' ></div>
             </div>
             <?php
         }
