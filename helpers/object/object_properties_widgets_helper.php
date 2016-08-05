@@ -14,7 +14,9 @@ class ObjectWidgetsHelper extends ViewHelper {
         $coumpounds_id = [];
         if (isset($properties_compounds)):
             foreach ($properties_compounds as $property) { 
-               $result['ids'][] = $property['id']; ?>
+               $result['ids'][] = $property['id']; 
+               $references['compound_id'] = $property['id']; 
+               ?>
                <div id="meta-item-<?php echo $property['id']; ?>"  class="form-group">
                     <h2>
                         <?php echo $property['name']; ?>
@@ -62,20 +64,23 @@ class ObjectWidgetsHelper extends ViewHelper {
                     <?php $cardinality = $this->render_cardinality_property($property);   ?>
                     <?php $properties_compounded = $property['metas']['socialdb_property_compounds_properties_id']; ?>
                     <?php $class = 'col-md-'. (12/count($properties_compounded)); ?>
-                    <div class="form-group">                        
+                    <div class="form-group"> 
+                         <input  type="hidden" 
+                                id='main_compound_id' 
+                                value='<?php echo $references['compound_id'] ?>'>
                         <?php for($i = 0; $i<$cardinality;$i++): ?>
                             <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
                                  class=" col-md-12"
                                  style="padding-bottom: 10px;<?php echo ($i===0||(is_array($property['metas']['value'])&&$i<count($property['metas']['value']))) ? 'display:block': 'display:none'; ?>">
                                 <?php foreach ($properties_compounded as $property_compounded): $coumpounds_id[] = $property_compounded['id']; ?>
                                 <input  type="hidden" 
-                                        id='core_validation_<?php echo $property_compounded['id']; ?>' 
-                                        class='core_validation' 
-                                        value='false'>
+                                        id='core_validation_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>' 
+                                        class='core_validation_compounds_<?php echo $property['id']; ?>' 
+                                        value='<?php echo ($i===0||(is_array($property['metas']['value'])&&$i<count($property['metas']['value']))) ? 'false': 'true'; ?>'>
                                 <div style="padding-bottom: 15px; " class="<?php echo $class ?>">
                                         <input type="hidden" 
-                                                name="cardinality_compound_<?php echo $property_compounded['id']; ?>" 
-                                                id="cardinality_compound_<?php echo $property_compounded['id']; ?>"
+                                                name="cardinality_compound_<?php echo $property['id']; ?>_<?php echo $property_compounded['id']; ?>" 
+                                                id="cardinality_compound_<?php echo $property['id']; ?>_<?php echo $property_compounded['id']; ?>"
                                                 value="<?php echo $cardinality; ?>"> 
                                         <?php 
                                         if(isset($property_compounded['metas']['socialdb_property_data_widget'])): 
@@ -187,19 +192,19 @@ class ObjectWidgetsHelper extends ViewHelper {
     public function widget_property_object($property,$i,$references) {
         ?>
         <input type="hidden" 
-                        id="cardinality_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"  
+                        id="cardinality_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"  
                         value="<?php echo $this->render_cardinality_property($property);   ?>">            
         <input type="text" 
-               onkeyup="autocomplete_object_property_compound('<?php echo $property['id']; ?>', '<?php echo $i; ?>');" 
-               id="autocomplete_value_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
+               onkeyup="autocomplete_object_property_compound('<?php echo $references['compound_id']; ?>','<?php echo $property['id']; ?>', '<?php echo $i; ?>');" 
+               id="autocomplete_value_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
                placeholder="<?php _e('Type the three first letters of the object of this collection ', 'tainacan'); ?>"  
                class="chosen-selected form-control"  />    
 
-        <select onclick="clear_select_object_property_compound(this,'<?php echo $property['id']; ?>', '<?php echo $i; ?>');" 
-                id="property_value_<?php echo $property['id']; ?>_<?php echo $i; ?>_edit" 
+        <select onclick="clear_select_object_property_compound(this,'<?php echo $references['compound_id']; ?>','<?php echo $property['id']; ?>', '<?php echo $i; ?>');" 
+                id="property_value_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>_edit" 
                 multiple class="chosen-selected2 form-control" 
                 style="height: auto;" 
-                name="socialdb_property_<?php echo $property['id']; ?>_<?php echo $i; ?>[]"
+                name="socialdb_property_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>[]"
                 <?php 
                     if ($property['metas']['socialdb_property_required'] == 'true'): 
                         echo 'required="required"';
@@ -232,7 +237,11 @@ class ObjectWidgetsHelper extends ViewHelper {
         if ($property['type'] == 'radio') {
             $references['properties_terms_radio'][] = $property['id'];
             ?>
-            <div id='field_property_term_<?php echo $property['id']; ?>_<?php echo $i; ?>'></div>
+            <div id='field_property_term_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>'></div>
+            <input type="hidden" 
+                       id='actual_field_term_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>'
+                       name="actual_field_term_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>[]" 
+                       value="">
             <?php
         } elseif ($property['type'] == 'tree') {
             $references['properties_terms_tree'][] = $property['id'];
@@ -245,11 +254,11 @@ class ObjectWidgetsHelper extends ViewHelper {
             <div class="row">
                 <div style='height: 150px;' 
                      class='col-lg-12'  
-                     id='field_property_term_<?php echo $property['id']; ?>_<?php echo $i; ?>'>
+                     id='field_property_term_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>'>
                 </div>
                 <input type="hidden" 
-                       id='field_property_term_<?php echo $property['id']; ?>_<?php echo $i; ?>'
-                       name="socialdb_property_<?php echo $property['id']; ?>_<?php echo $i; ?>[]" 
+                       id='field_property_term_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>'
+                       name="socialdb_property_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>[]" 
                        value="">
             </div>
             <?php
@@ -257,23 +266,24 @@ class ObjectWidgetsHelper extends ViewHelper {
             $references['properties_terms_selectbox'][] = $property['id'];
             ?>
             <select class="form-control" 
-                    name="socialdb_property_<?php echo $property['id']; ?>_<?php echo $i; ?>[]" 
+                    name="socialdb_property_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>[]" 
                     onchange="edit_validate_selectbox(this,'<?php echo $property['id']; ?>')"
-                    id='field_property_term_<?php echo $property['id']; ?>_<?php echo $i; ?>' >
+                    id='field_property_term_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>' >
             </select>
             <?php
         }elseif ($property['type'] == 'checkbox') {
             $references['properties_terms_checkbox'][] = $property['id']; ?>
-            <div id='field_property_term_<?php echo $property['id']; ?>_<?php echo $i; ?>'></div>
+            <div id='field_property_term_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>'></div>
             <?php
         } elseif ($property['type'] == 'multipleselect') {
             $references['properties_terms_multipleselect'][] = $property['id'];
             ?>
              <select size='1' 
                 multiple 
-                onclick="validate_multipleselectbox(this,'<?php echo $property['id']; ?>')"
+                onclick="compounds_validate_multipleselectbox(this,'<?php echo $property['id']; ?>','<?php echo $references['compound_id']; ?>','<?php echo $i ?>');"
                 class="form-control field_property_term_<?php echo $property['id']; ?>" 
-                name="socialdb_property_<?php echo $property['id']; ?>_<?php echo $i; ?>[]" 
+                id="field_property_term_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>"
+                name="socialdb_property_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>[]" 
                 <?php 
                 if ($property['metas']['socialdb_property_required'] == 'true'): 
                     echo 'required="required"';
@@ -291,9 +301,9 @@ class ObjectWidgetsHelper extends ViewHelper {
             <div class="row">
                 <div style='height: 150px;' 
                      class='col-lg-12'  
-                     id='field_property_term_<?php echo $property['id']; ?>_<?php echo $i; ?>'>
+                     id='field_property_term_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>'>
                 </div>
-                <div id='socialdb_propertyterm_<?php echo $property['id']; ?>_<?php echo $i; ?>' ></div>
+                <div id='socialdb_propertyterm_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>' ></div>
             </div>
             <?php
         }

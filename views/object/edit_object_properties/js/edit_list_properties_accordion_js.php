@@ -512,6 +512,10 @@
 //################################ adicao de propriedades de categorias #################################//    
     function append_category_properties(id,remove_id){
         //buscando as categorias selecionadas nos metadados de termo
+        if($('#selected_categories').length == 0){
+            return false;
+        }
+        console.log(typeof selected_categories);
         var selected_categories = $('#selected_categories').val();
         if(selected_categories===''){
              selected_categories= [];
