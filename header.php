@@ -179,7 +179,7 @@ $viewHelper = new ViewHelper();
                                         <span class="caret" style="font-size: 14px"></span>    
                                     </div>                                
                                 </a>
-                                <ul style="display: none; margin-top: 22px" class="sub-menu">
+                                <ul style="display:none; margin-top: 22px" class="sub-menu">
                                     <li>
                                         <a href="<?php echo get_permalink(get_option('collection_root_id')); ?>">
                                             <?php _e('Show collections', 'tainacan'); ?>
@@ -196,18 +196,7 @@ $viewHelper = new ViewHelper();
                                                 <a href="#" id="click_new_collection" onclick="showModalCreateCollection()">                                                    
                                                     <?php _e('General', 'tainacan'); ?>
                                                 </a>
-                                            </li>                                           
-                                            <?php /*
-                                                $_templates = array_diff( scandir(__DIR__ . "/data"), ['.', '..']);
-                                                foreach($_templates as $template):
-                                                    if(is_dir($template)): ?>                                                        
-                                                        <li> <a href="#"> 
-                                                            <?php echo $template; ?>
-                                                        </a> </li>
-                                                    <?php endif;
-                                                endforeach; */
-                                            ?>
-                                            
+                                            </li>                                                                                       
                                         </ul>
                                     </li>
                                     <li>
@@ -253,12 +242,7 @@ $viewHelper = new ViewHelper();
                                     <label for="collection_name"><?php _e('Collection name', 'tainacan'); ?></label>
                                     <input type="text" required="required" class="form-control" name="collection_name" id="collection_name" placeholder="<?php _e('Type the name of your collection', 'tainacan'); ?>">
                                 </div>
-                                <?php /*
-                                <div class="form-group" <?php do_action('collection_create_name_object') ?> >
-                                    <label for="collection_object"><?php _e('Collection object', 'tainacan'); ?></label>
-                                    <input type="text" required="required" class="form-control" name="collection_object" id="collection_object"  value="<?php _e('Item'); ?>">
-                                </div>
-                                 */ ?>
+
                                 <input type="hidden" name="template" id='template_collection' value="none">
                                 <input type="hidden" name="collection_object" id='collection_object' value="<?php _e('Item'); ?>">
                             </div>

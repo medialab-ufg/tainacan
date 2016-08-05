@@ -33,6 +33,7 @@ class CollectionController extends Controller {
             case 'simple_add':
                 $data['collection_name'] = trim($data['collection_name']);
                 $data['collection_object'] = trim($data['collection_object']);
+                
                 if(empty($data['collection_name'])||empty($data['collection_object'])):
                     header("location:" . get_permalink(get_option('collection_root_id')) . '?info_messages=' . __('Invalid collection name or object name!','tainacan') . '&info_title=' . __('Attention','tainacan'));
                 elseif (is_user_logged_in()):
@@ -51,8 +52,15 @@ class CollectionController extends Controller {
                     else:    
                         $import_model = new CollectionImportModel;
                         $new_collection_id = $import_model->importCollectionTemplate($data);
+                        
+                        return json_encode(['pin' => $new_collection_id]);
+                        
                         if($new_collection_id){
                             $result = json_decode($this->insert_collection_event($new_collection_id, $data));
+                            $result['meu'] = $new_collection_id;
+                            
+                            return json_encode($result);
+                            
                             if ($result->type == 'success') {
                                 header("location:" . get_permalink($new_collection_id) . '?open_wizard=true');
                             } else {

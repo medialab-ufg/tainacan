@@ -221,7 +221,6 @@ a:hover {
 }
 #collections-menu li a {
   display: block;
-  height: 25px;
   line-height: 25px;
   color: black;
 }

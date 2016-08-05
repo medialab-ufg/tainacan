@@ -60,11 +60,15 @@ class CollectionTemplatesModel extends CollectionModel {
         $collection = get_post($data['collection_id']);
         $dir = dirname(__FILE__) . "/../../data/templates";
         if(!is_dir($dir.'/'.$collection->post_name)){
-             mkdir($dir.'/'.$collection->post_name);
+             
+            $r['d'] = mkdir($dir.'/'.$collection->post_name);
+             
              $zipModel = new ZipModel;
-             if($zipModel->generate_collection_template($dir.'/'.$collection->post_name, $collection->ID)){
-                return json_encode(['result'=>true]);
+             if($zipModel->generate_collection_template($dir.'/'.$collection->post_name, $collection->ID)) {
+                 $r['r'] = ['result' => true ];
+                
              }
+             return json_encode( $r );
         }
     }
     

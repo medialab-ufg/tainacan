@@ -636,8 +636,12 @@ class CollectionImportModel extends CollectionModel {
             //capa da colecao
             $this->add_cover_collection($dir_created,$collection_id);
             $this->update_collection_data($collection_id, $data);
+            
+            return $collection_id;
+        } else {
+            return false;
         }
-        return $collection_id;
+        
     }
     /**
      * Metodo que atualiza o titulo e a categoria raiz de uma colecao  definidos pelo

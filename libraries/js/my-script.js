@@ -488,8 +488,22 @@ $(window).load(function () {
 });
 
 $(document).ready(function () {
-    $('.input_date').mask('00/00/0000');
+    $('.input_date').mask('00/00/0000');          
 });
+
+function add_collection_template(col, template_name) {
+    var path = $("#src").val() + "/controllers/collection/collection_controller.php";
+    $.ajax({
+        url: path, type: "POST",
+        data: { operation: 'simple_add', collection_object: 'Item', collection_name: col, template: template_name }
+    }).done(function(r){
+        cl('=======================');
+        cl(r);
+    });
+    
+    cl('finished adding collection');
+    
+}
 /******************* funcoes para templates de colecoes ***********************/
 function listTemplates() {
     $('#list_templates').show();
@@ -525,13 +539,13 @@ function list_templates($_element) {
        data: {  operation: 'list-collection-templates', is_json: true }
    }).done(function (result) {
         el = jQuery.parseJSON(result);
-       
+        
         if($_element) {
-            if( el.length > 0 ) {
+            if( el.length > 0 ) {                
                 $($_element).append("<li class='divider'></li>");
-                $.each(el, function(idx, value){
-                    cl(value);
-                   $( $_element ).append(value.title);
+                $.each(el, function(idx, value) {
+                   var li_item = "<li class='tmpl'><a style='background: beige; margin-bottom: 5px;' href='#' class='" + value.directory +"'>" + value.title + "</a></li>";
+                   $( $_element ).append( li_item );
                 });
             }
         } else {
@@ -541,6 +555,8 @@ function list_templates($_element) {
                      $('#collection_templates').append('<option selected="selected" value="'+value.directory+'">'+value.title+'</option>');
                 });
                 $('#show_collection_empty').show();
+                var curr_height = $('.collection-templates').height();
+                $('.collection-templates').height(curr_height + 55);               
             }else{
                 $('#show_collection_empty').hide();
             }
@@ -1670,6 +1686,14 @@ $(function () {
     });
     
     list_templates("#collections-menu ul.templates");
+    $("#collections-menu ul.templates li.tmpl a").on('click', function() {
+        var evt = $(this).attr('class');
+        var col_name =  $(this).text() + " templated!";
+        alert('fui clickado!!');        
+        if(evt && col_name) {
+            add_collection_template(col_name, evt);
+        }
+    });
     
 });
 
