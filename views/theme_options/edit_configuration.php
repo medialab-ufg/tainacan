@@ -62,6 +62,7 @@ $post_thumb = get_the_post_thumbnail($socialdb_logo, 'thumbnail');
             </div>
             <!---------------- Colecoes templates --------------------------------->
             <div class="form-group collection-templates">
+                
                 <h5 style="font-weight: bolder"> <?php _e('Collection templates','tainacan'); ?> </h5>
                 <div class="col-md-12">
                     <div class="form-group row">
@@ -69,7 +70,7 @@ $post_thumb = get_the_post_thumbnail($socialdb_logo, 'thumbnail');
                         <select onclick="clear_collection_template(this)" class="chosen-selected2 form-control" style="height: auto;" multiple name="category_moderators[]" id="collection_templates"  >
                         </select>
                     </div>
-                    <div class="form-group"  id="show_collection_empty"   style="display: none;">
+                    <div class="form-group"  id="show_collection_empty" style="display: none;">
                         <input type="checkbox"
                             <?php echo (get_option('disable_empty_collection')=='true')?'checked="checked"':''; ?>
                                value="disabled"

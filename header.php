@@ -191,16 +191,23 @@ $viewHelper = new ViewHelper();
                                             <?php _e('Create collection','tainacan') ?>
                                             <span class="glyphicon glyphicon-chevron-right"></span>
                                         </a>
-                                        <ul class="sub-menu">
+                                        <ul class="sub-menu templates">
                                             <li class="click_new_collection">
                                                 <a href="#" id="click_new_collection" onclick="showModalCreateCollection()">                                                    
                                                     <?php _e('General', 'tainacan'); ?>
                                                 </a>
-                                            </li>
-                                            <li class="divider"></li>
-                                            <li><a href="#"> <?php _e('Photo','tainacan') ?> </a></li>
-                                            <li><a href="#"> <?php _e('Video','tainacan') ?> </a></li>
-                                            <li><a href="#"> <?php _e('Document','tainacan') ?> </a></li>
+                                            </li>                                           
+                                            <?php /*
+                                                $_templates = array_diff( scandir(__DIR__ . "/data"), ['.', '..']);
+                                                foreach($_templates as $template):
+                                                    if(is_dir($template)): ?>                                                        
+                                                        <li> <a href="#"> 
+                                                            <?php echo $template; ?>
+                                                        </a> </li>
+                                                    <?php endif;
+                                                endforeach; */
+                                            ?>
+                                            
                                         </ul>
                                     </li>
                                     <li>

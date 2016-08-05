@@ -508,8 +508,7 @@ function onClickTemplate(template) {
     $('#form_new_collection').show();
 }
 
-function get_collections_template(src)
-{
+function get_collections_template(src) {
     $.ajax({
         url: src + '/controllers/collection/collection_controller.php',
         type: 'POST',
@@ -518,6 +517,37 @@ function get_collections_template(src)
         $('#list_templates').html(result);
     });
 }
+
+function list_templates($_element) {
+    $.ajax({
+       type: "POST",
+       url: $('#src').val() + "/controllers/collection/collection_controller.php",
+       data: {  operation: 'list-collection-templates', is_json: true }
+   }).done(function (result) {
+        el = jQuery.parseJSON(result);
+       
+        if($_element) {
+            if( el.length > 0 ) {
+                $($_element).append("<li class='divider'></li>");
+                $.each(el, function(idx, value){
+                    cl(value);
+                   $( $_element ).append(value.title);
+                });
+            }
+        } else {
+            $('#collection_templates').html('');
+            if( el && el.length>0){
+                $.each(el,function(index,value){
+                     $('#collection_templates').append('<option selected="selected" value="'+value.directory+'">'+value.title+'</option>');
+                });
+                $('#show_collection_empty').show();
+            }else{
+                $('#show_collection_empty').hide();
+            }
+        }    
+   });
+}
+ 
 /*************  FIM : funcoes para templates de colecoes **********************/
 /***************** funcao para gerar o modal para edicao de categoria *******/
 function show_modal_edit_category(title, key) {
@@ -1638,6 +1668,9 @@ $(function () {
             nav.removeClass("menuFixo");
         }
     });
+    
+    list_templates("#collections-menu ul.templates");
+    
 });
 
 function showLoginScreen(src) {
