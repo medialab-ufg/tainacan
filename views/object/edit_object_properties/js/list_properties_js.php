@@ -363,12 +363,12 @@
     }
     
     function delete_value(category_id){
-       var classifications =   $("#object_classifications_edit").val().split(',');
+       var classifications =   $("#object_classifications").val().split(',');
        if(classifications.length>0&&category_id){
            var index = classifications.indexOf(category_id);
            if(index>-1){
                classifications.splice(index, 1);
-               $("#object_classifications_edit").val(classifications.join());
+               $("#object_classifications").val(classifications.join());
            }
        }
     }
