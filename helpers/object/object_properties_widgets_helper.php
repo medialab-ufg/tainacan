@@ -99,7 +99,12 @@ class ObjectWidgetsHelper extends ViewHelper {
                         <input type="hidden" 
                                name="compounds_<?php echo $property['id']; ?>" 
                                id="compounds_<?php echo $property['id']; ?>"
-                               value="<?php echo implode(',', $coumpounds_id); ?>"> 
+                               value="<?php echo implode(',', array_unique($coumpounds_id)); ?>"> 
+                        <input type="hidden" 
+                               name="cardinality_<?php echo $property['id']; ?>" 
+                               id="cardinality_<?php echo $property['id']; ?>"
+                               value="<?php echo $cardinality; ?>"> 
+                        <?php $coumpounds_id = []; ?>
                     </div>     
                 </div>   
                <?php
@@ -119,22 +124,23 @@ class ObjectWidgetsHelper extends ViewHelper {
      * @param int $i O indice do for da cardinalidade
      */
     public function widget_property_data($property,$i,$references) {
+        $references['properties_autocomplete'][] = $property['id'];
         if ($property['type'] == 'text') { ?>     
             <input type="text" 
-                   id="form_edit_autocomplete_value_<?php echo $property['id']; ?>" 
-                   class="form-control form_autocomplete_value_<?php echo $property['id']; ?>" 
+                   id="compounds_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
+                   class="form-control form_autocomplete_compounds_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
                    value="<?php if ($property['metas']['value']) echo (isset($property['metas']['value'][$i]) ? $property['metas']['value'][$i] : ''); ?>"
-                   name="socialdb_property_<?php echo $property['id']; ?>_<?php echo $i; ?>">
+                   name="socialdb_property_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>[]">
         <?php }elseif ($property['type'] == 'textarea') { ?>   
-            <textarea class="form-control form_autocomplete_value_<?php echo $property['id']; ?>"
+            <textarea class="form-control form_autocomplete_compounds_<?php echo $property['id']; ?>_<?php echo $i; ?>"
                       rows="10"
-                      id="form_edit_autocomplete_value_<?php echo $property['id']; ?>" 
-                      name="socialdb_property_<?php echo $property['id']; ?>_<?php echo $i; ?>" ><?php if ($property['metas']['value']) echo (isset($property['metas']['value'][$i]) ? $property['metas']['value'][$i] : ''); ?></textarea>
+                      id="compounds_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
+                      name="socialdb_property_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>[]" ><?php if ($property['metas']['value']) echo (isset($property['metas']['value'][$i]) ? $property['metas']['value'][$i] : ''); ?></textarea>
         <?php }elseif ($property['type'] == 'numeric') { ?>   
             <input  type="number" 
-                    class="form-control form_autocomplete_value_<?php echo $property['id']; ?>"
+                    class="form-control form_autocomplete_compounds_<?php echo $property['id']; ?>_<?php echo $i; ?>"
                     onkeypress='return onlyNumbers(event)'
-                    id="form_edit_autocomplete_value_<?php echo $property['id']; ?>" 
+                    id="compounds_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
                     name="socialdb_property_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
                     value="<?php if ($property['metas']['value']) echo $property['metas']['value'][0]; ?>">
         <?php }elseif ($property['type'] == 'autoincrement') { ?>   
@@ -146,7 +152,7 @@ class ObjectWidgetsHelper extends ViewHelper {
         <?php } else if ($property['type'] == 'date' && !has_action('modificate_edit_item_properties_data')) { ?>
             <script>
                $(function() {
-                   $( "#socialdb_property_<?php echo $property['id']; ?>_<?php echo $i; ?>" ).datepicker({
+                   $( "#compounds_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>" ).datepicker({
                        dateFormat: 'dd/mm/yy',
                        dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
                        dayNamesMin: ['D','S','T','Q','Q','S','S','D'],
@@ -164,11 +170,11 @@ class ObjectWidgetsHelper extends ViewHelper {
            <input 
                style="margin-right: 5px;" 
                size="13" 
-               class="input_date form_autocomplete_value_<?php echo $property['id']; ?>" 
+               class="input_date form_autocomplete_compounds_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
                value="<?php if ($property['metas']['value']) echo (isset($property['metas']['value'][$i]) ? $property['metas']['value'][$i] : ''); ?>"
                type="text" 
-               id="socialdb_property_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
-               name="socialdb_property_<?php echo $property['id']; ?>_<?php echo $i; ?>">   
+               id="compounds_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
+               name="socialdb_property_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>[]">   
         <?php
         }
         // gancho para tipos de metadados de dados diferentes
@@ -177,10 +183,11 @@ class ObjectWidgetsHelper extends ViewHelper {
             return false;
         } else {
             ?>
-            <input type="text"  
+            <input type="text" 
+                   id="compounds_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>"
                    value="<?php if ($property['metas']['value']) echo (isset($property['metas']['value'][$i]) ? $property['metas']['value'][$i] : ''); ?>" 
-                   class="form-control form_autocomplete_value_<?php echo $property['id']; ?>" 
-                   name="socialdb_property_<?php echo $property['id']; ?>_<?php echo $i; ?>" >
+                   class="form-control form_autocomplete_compounds_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
+                   name="socialdb_property_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>[]" >
         <?php
         }
     }
