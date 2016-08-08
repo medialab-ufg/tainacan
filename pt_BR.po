@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: socialdb\n"
-"POT-Creation-Date: 2016-08-08 12:04-0300\n"
-"PO-Revision-Date: 2016-08-08 12:05-0300\n"
+"POT-Creation-Date: 2016-08-08 17:08-0300\n"
+"PO-Revision-Date: 2016-08-08 17:08-0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -57,7 +57,7 @@ msgstr "Comentar"
 
 #: comments.php:76 functions.php:321 header.php:252 header.php:276
 #: views/advanced_search/js/advanced_search_js.php:32
-#: views/collection/js/header_js.php:190
+#: views/collection/edit.php:1441 views/collection/js/header_js.php:190
 #: views/export/oaipmh/edit_maping_attributes.php:33
 #: views/export/oaipmh/mapping_attributes.php:37
 #: views/import/csv/edit_mapping.php:26
@@ -197,8 +197,8 @@ msgstr "Nome da coleção inválido ou nome do item inválido"
 #: controllers/collection/collection_controller.php:38
 #: controllers/collection/collection_controller.php:47
 #: controllers/collection/collection_controller.php:50
-#: controllers/collection/collection_controller.php:65
-#: controllers/collection/collection_controller.php:72
+#: controllers/collection/collection_controller.php:63
+#: controllers/collection/collection_controller.php:70
 #: models/category/category_model.php:1023
 #: models/category/category_model.php:1156
 #: models/collection/collection_model.php:426
@@ -279,7 +279,7 @@ msgid "Attention"
 msgstr "Atenção"
 
 #: controllers/collection/collection_controller.php:47
-#: controllers/collection/collection_controller.php:65
+#: controllers/collection/collection_controller.php:63
 msgid "Collection sent for approval"
 msgstr "Coleção enviada para aprovação"
 
@@ -287,24 +287,24 @@ msgstr "Coleção enviada para aprovação"
 msgid "Collection already exists"
 msgstr "Esta coleção já existe"
 
-#: controllers/collection/collection_controller.php:68
+#: controllers/collection/collection_controller.php:66
 msgid "Error creating template collection"
 msgstr "Erro ao criar coleção template"
 
-#: controllers/collection/collection_controller.php:72
+#: controllers/collection/collection_controller.php:70
 msgid "You must be logged in to create collecions"
 msgstr "Você precisa estar logado para criar coleção"
 
-#: controllers/collection/collection_controller.php:117
+#: controllers/collection/collection_controller.php:115
 msgid "General Ordenation"
 msgstr "Ordenação padrão "
 
-#: controllers/collection/collection_controller.php:118
+#: controllers/collection/collection_controller.php:116
 #: views/collection/edit.php:688 views/search/edit.php:209
 msgid "Property Data"
 msgstr "Metadado de dado"
 
-#: controllers/collection/collection_controller.php:119
+#: controllers/collection/collection_controller.php:117
 #: helpers/view_helper.php:67 views/category/list.php:219
 #: views/collection/js/edit_js.php:121 views/design/edit.php:13
 #: views/design/edit.php:141 views/object/create_item_url.php:147
@@ -315,7 +315,7 @@ msgstr "Metadado de dado"
 msgid "Rankings"
 msgstr "Votações"
 
-#: controllers/collection/collection_controller.php:269 functions.php:1507
+#: controllers/collection/collection_controller.php:267 functions.php:1507
 #: helpers/object/object_helper.php:35 views/property/list_metadata.php:73
 #: views/property/list_metadata.php:80
 msgid "Default"
@@ -463,8 +463,8 @@ msgstr "(Painel de edição)"
 
 #: functions.php:322 helpers/view_helper.php:310 single.php:447 single.php:517
 #: single.php:587 single.php:627 single.php:930 views/category/list.php:132
-#: views/category/taxonomy_zone.php:70 views/collection/edit.php:1440
-#: views/design/edit.php:239 views/event/list.php:284 views/event/list.php:319
+#: views/category/taxonomy_zone.php:70 views/design/edit.php:239
+#: views/event/list.php:284 views/event/list.php:319
 #: views/export/oaipmh/mapping_attributes.php:38
 #: views/import/csv/add_mapping.php:25
 #: views/import/csv/edit_maping_attributes.php:24
@@ -1017,7 +1017,8 @@ msgstr "Digite o nome de sua coleção"
 msgid "Item"
 msgstr "Item"
 
-#: header.php:253 views/property/metadata/form_filter.php:44
+#: header.php:253 views/collection/edit.php:1443
+#: views/property/metadata/form_filter.php:44
 #: views/property/metadata/form_object.php:93
 #: views/property/metadata/form_tag.php:34
 #: views/property/metadata/form_term.php:189
@@ -1173,10 +1174,9 @@ msgstr "Metadados e Filtros"
 msgid "Layout"
 msgstr "Layout"
 
-#: helpers/view_helper.php:279 views/category/taxonomy_zone.php:74
-#: views/collection/edit.php:1441
-msgid "Save & Next"
-msgstr "Salvar e Continuar"
+#: helpers/view_helper.php:279
+msgid "Conclude"
+msgstr "Finalizar"
 
 #: helpers/view_helper.php:287 views/object/create.php:14
 #: views/object/create.php:172 views/object/create_item_text.php:48
@@ -1393,7 +1393,7 @@ msgstr ""
 "Há categorias com este nome nesta hierarquia, tem certeza que deseja criar "
 "outra? Cancele para visualizar esta categoria, clique ok para criar a nova."
 
-#: models/collection/collection_import_model.php:669
+#: models/collection/collection_import_model.php:668
 #: views/advanced_search/list_advanced_search.php:160
 #: views/advanced_search/list_advanced_search.php:286
 #: views/advanced_search/loops_page/list_collection_search.php:124
@@ -3656,6 +3656,10 @@ msgstr "Adicionar sub-categoria"
 #: views/category/taxonomy_zone.php:52
 msgid "Import Taxonomy"
 msgstr "Importar Taxonomia"
+
+#: views/category/taxonomy_zone.php:74
+msgid "Save & Next"
+msgstr "Salvar e Continuar"
 
 #: views/category/taxonomy_zone.php:99
 msgid "Send File"

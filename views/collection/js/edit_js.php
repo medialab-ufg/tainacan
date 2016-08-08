@@ -10,7 +10,7 @@
 
         $("#button_save_and_next").click(function(){
             $("#submit_form_edit_collection").submit();
-            $("#tainacan-breadcrumbs").show()
+            $("#tainacan-breadcrumbs").show();
         });
 
         if ($('#open_wizard').val() == 'true') {

@@ -555,6 +555,7 @@ body.home .ibram-home-container .col-md-3 .ibram-box p:nth-child(4) {
 #collection-steps {
   background: white;
   border-bottom: 2px solid #E8E8E8;
+  margin-bottom: 20px;
 }
 #collection-steps ul li {
   padding-right: 0;
