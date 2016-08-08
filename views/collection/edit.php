@@ -1440,7 +1440,7 @@ $image_cover_url = wp_get_attachment_url(get_post_meta($collection_post->ID, 'so
             
             <button type="button" class="btn btn-default pull-left btn-lg" onclick="backToMainPage()"><?php _e('Cancel', 'tainacan'); ?></button>
             
-            <button type="submit" id="submit_configuration-nein" class="btn btn-success pull-right btn-lg"> <?php _e('Continue', 'tainacan'); ?> </button>
+            <button type="submit" id="button_save_and_next" class="btn btn-success pull-right btn-lg"> <?php _e('Continue', 'tainacan'); ?> </button>
             <?php /*
             <button type="submit" id="button_save_and_next"  class="btn btn-primary" style="float: right;" ><?php _e('Save & Next', 'tainacan'); ?></button>
              * */ ?>             

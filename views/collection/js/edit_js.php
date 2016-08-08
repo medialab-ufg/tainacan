@@ -15,7 +15,7 @@
 
         if ($('#open_wizard').val() == 'true') {
             $('#btn_back_collection').hide();
-            $('#submit_configuration').hide();
+            // $('#submit_configuration').hide();
             $('#save_and_next').val('true');
         } else {
             $('#collection-steps').hide();
