@@ -169,17 +169,44 @@ $viewHelper = new ViewHelper();
                             <!--a class="dropdown-toggle" href="#" data-toggle="dropdown">Sign In <strong class="caret"></strong></a-->            
                     </ul>
                     
-                    <div class="nav navbar-nav navbar-right repository-settings">
+                    <div class="nav navbar-nav navbar-right repository-settings clk">                        
+                       
+                        <?php /*
+                        <a href="javascript:void(0)" class="bisc"> Coleções </a>
+                        
+                        <style type="text/css">
+                            .clk:hover > #collections-menu {
+                                display: block !important;
+                            }
+                            .bisc {
+                                margin-top: 20px;
+                            }
+                            a.bisc:hover {
+                                color: beige;
+                            }
+                        </style>
+                            
+                        
+                        <a onclick="add_collection_template('Autores', 'autores')">work!</a>
+                        
+                         <img src="http://lcamtuf.coredump.cx/squirrel/">
+                         * 
+                         * 
+                         *         
+                        */ ?>
+                        
+                        
+                        
                         <ul id="collections-menu">
                             <li class="collections">
-                                <a href="#" style="color: white; padding-top: 20px;">
+                                <a href="#" style="color: white; padding-top: 17px;">
                                     <?php echo ViewHelper::render_icon('collection', 'png'); ?>
                                     <div style="display:inline-block; margin-left: 5px;">
                                         <?php _e('Collections', 'tainacan'); ?>
                                         <span class="caret" style="font-size: 14px"></span>    
                                     </div>                                
                                 </a>
-                                <ul style="display:none; margin-top: 22px" class="sub-menu">
+                                <ul style="display:none; margin-top: 0px" class="sub-menu">
                                     <li>
                                         <a href="<?php echo get_permalink(get_option('collection_root_id')); ?>">
                                             <?php _e('Show collections', 'tainacan'); ?>

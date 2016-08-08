@@ -497,13 +497,11 @@ function add_collection_template(col, template_name) {
         url: path, type: "POST",
         data: { operation: 'simple_add', collection_object: 'Item', collection_name: col, template: template_name }
     }).done(function(r){
-        cl('=======================');
+        cl(col + " ==> " + template_name);
         cl(r);
-    });
-    
-    cl('finished adding collection');
-    
+    });        
 }
+
 /******************* funcoes para templates de colecoes ***********************/
 function listTemplates() {
     $('#list_templates').show();
@@ -544,7 +542,7 @@ function list_templates($_element) {
             if( el.length > 0 ) {                
                 $($_element).append("<li class='divider'></li>");
                 $.each(el, function(idx, value) {
-                   var li_item = "<li class='tmpl'><a style='background: beige; margin-bottom: 5px;' href='#' class='" + value.directory +"'>" + value.title + "</a></li>";
+                   var li_item = "<li class='tmpl'><a style='background: beige; margin-bottom: 5px;' href='#' class='added' data-tplt='" + value.directory +"'>" + value.title + "</a></li>";
                    $( $_element ).append( li_item );
                 });
             }
@@ -1686,16 +1684,19 @@ $(function () {
     });
     
     list_templates("#collections-menu ul.templates");
-    $("#collections-menu ul.templates li.tmpl a").on('click', function() {
-        var evt = $(this).attr('class');
-        var col_name =  $(this).text() + " templated!";
-        alert('fui clickado!!');        
+
+    $(document).on("click", ".added", function(e) {
+        e.preventDefault();
+        var evt = $(this).attr('data-tplt');
+        var col_name =  $(this).text();
         if(evt && col_name) {
             add_collection_template(col_name, evt);
         }
     });
-    
+           
 });
+
+
 
 function showLoginScreen(src) {
     $.ajax({

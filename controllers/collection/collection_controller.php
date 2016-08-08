@@ -53,19 +53,22 @@ class CollectionController extends Controller {
                         $import_model = new CollectionImportModel;
                         $new_collection_id = $import_model->importCollectionTemplate($data);
                         
-                        return json_encode(['pin' => $new_collection_id]);
+                        // return json_encode(['pin' => $new_collection_id]);
                         
-                        if($new_collection_id){
-                            $result = json_decode($this->insert_collection_event($new_collection_id, $data));
-                            $result['meu'] = $new_collection_id;
+                        if($new_collection_id) {
+                            //$result['meu'] = $new_collection_id;
+                            // $result = json_decode($this->insert_collection_event($new_collection_id, $data));
+                            return ( json_decode($this->insert_collection_event($new_collection_id, $data)) );
                             
-                            return json_encode($result);
+                            // return json_encode($result);
                             
                             if ($result->type == 'success') {
                                 header("location:" . get_permalink($new_collection_id) . '?open_wizard=true');
                             } else {
                                 header("location:" . get_permalink(get_option('collection_root_id')) . '?info_messages=' . __('Collection sent for approval','tainacan') . '&info_title=' . __('Attention','tainacan'));
                             }
+                        } else {
+                            return ['b' => 'deu_ruim'];
                         }
                     endif;
                 else:

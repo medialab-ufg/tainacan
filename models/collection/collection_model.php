@@ -894,6 +894,9 @@ class CollectionModel extends Model {
                         WHERE p.post_type like 'socialdb_collection' and p.post_status like 'publish' and p.post_title LIKE '{$name}'
                 ";
         $result = $wpdb->get_results($query);
+        
+        return $result;
+        
         if ($result && is_array($result) && count($result) > 0) {
             return true;
         } else {

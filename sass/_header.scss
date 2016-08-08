@@ -212,8 +212,6 @@ button#iframebutton {
     margin-bottom: 5px; }
 }
 
-
-
 ul{list-style-type:none}
 
 a{text-decoration:none}
@@ -226,6 +224,10 @@ a:hover{text-decoration:underline}
     position: relative;
     margin-top: -5px;
     cursor: pointer;
+    
+    &:hover {
+        cursor: pointer;
+    }
     
     .collections {
         text-align: center;
@@ -249,8 +251,9 @@ a:hover{text-decoration:underline}
        padding-left: 0px;
        width: 150px;
        border-radius: 4px;
-       // position: absolute;
-       // z-index: 1;
+       position: absolute;
+       z-index: 31;
+       overflow: visible;
        //top: 0;
     }
     
@@ -264,7 +267,6 @@ a:hover{text-decoration:underline}
         
         a {            
             display: block;
-            // height: 25px; 
             line-height: 25px;   
             color: black;            
                         
@@ -279,6 +281,8 @@ a:hover{text-decoration:underline}
             position: absolute;
             top: 0px;
             left: 135px;
+            overflow: visible;
+            z-index: 20;
          }
     } // li
 } // #collections-menu

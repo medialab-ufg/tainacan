@@ -193,6 +193,9 @@ a:hover {
   margin-top: -5px;
   cursor: pointer;
 }
+#collections-menu:hover {
+  cursor: pointer;
+}
 #collections-menu .collections {
   text-align: center;
 }
@@ -210,6 +213,9 @@ a:hover {
   padding-left: 0px;
   width: 150px;
   border-radius: 4px;
+  position: absolute;
+  z-index: 31;
+  overflow: visible;
 }
 #collections-menu li {
   position: relative;
@@ -229,6 +235,8 @@ a:hover {
   position: absolute;
   top: 0px;
   left: 135px;
+  overflow: visible;
+  z-index: 20;
 }
 
 #collections-menu li:hover ul,
