@@ -1,9 +1,88 @@
 <script>
     var dynatree_object_index = [];
     $(function () {
+        // # - autocomplete para as propriedades de dados
+        var properties_autocomplete = get_val($("#properties_autocomplete").val());
+        var compounds = get_val($("#properties_compounds").val()); 
+        if(compounds&&compounds.length!=0){
+             $.each(compounds, function (idx, compound) {
+                 autocomplete_property_data_compounds(properties_autocomplete,compound)
+             });
+        }
         // # - inicializa o campos das propriedades de termo compostas 
         compounds_list_properties_term_insert_objects();
     });
+    
+    /**
+     * Autocomplete para os metadados de dados para insercao/edicao de item unico
+     * @param {type} e
+     * @returns {undefined}
+     */
+    function autocomplete_property_data_compounds(properties_autocomplete,compound_id) {
+        if (properties_autocomplete) {
+            $.each(properties_autocomplete, function (idx, property_id) {
+                if($('#cardinality_compound_'+compound_id+'_'+property_id).length>0){
+                    var cardinality = $('#cardinality_compound_'+compound_id+'_'+property_id).val();
+                    for(var i = 0;i<cardinality;i++){
+                        dynatree_object_index["compounds_"+compound_id+"_"+ property_id  + '_' + i] = i;
+                        if( $(".form_autocomplete_compounds_" + property_id + '_'+i).length==0){
+                            return false;
+                        }
+                        //validate
+                        $(".form_autocomplete_compounds_" + property_id + '_'+i).keyup(function(){
+                            var cont = 0;
+                            var i =  dynatree_object_index[$(this).attr('id')];
+                            if( $(this).val().trim()!==''){
+                                    cont++;
+                            }
+                            //contador
+                            if( cont===0){
+                                $('#core_validation_'+compound_id+'_'+property_id+'_'+i).val('false');
+                                set_field_valid_compounds(property_id,'core_validation_'+compound_id+'_'+property_id+'_'+i,compound_id);
+                            }else{
+                                $('#core_validation_'+compound_id+'_'+property_id+'_'+i).val('true');
+                                set_field_valid_compounds(property_id,'core_validation_'+compound_id+'_'+property_id+'_'+i,compound_id);
+                            }
+                        });
+                        $(".form_autocomplete_compounds_" + property_id + '_'+i).change(function(){
+                            var cont = 0;
+                            var i =  dynatree_object_index[$(this).attr('id')];
+                            if( $(this).val().trim()!==''){
+                                cont++;
+                            }
+
+                            if( cont===0){
+                                $('#core_validation_'+compound_id+'_'+property_id+'_'+i).val('false');
+                                set_field_valid_compounds(property_id,'core_validation_'+compound_id+'_'+property_id+'_'+i,compound_id);
+                            }else{
+                                $('#core_validation_'+compound_id+'_'+property_id+'_'+i).val('true');
+                                set_field_valid_compounds(property_id,'core_validation_'+compound_id+'_'+property_id+'_'+i,compound_id);
+                            }
+                        });
+                        // end validate
+                        $(".form_autocomplete_compounds_" + property_id + '_'+i).autocomplete({
+                            source: $('#src').val() + '/controllers/collection/collection_controller.php?operation=list_items_search_autocomplete&property_id=' + property_id,
+                            messages: {
+                                noResults: '',
+                                results: function () {
+                                }
+                            },
+                            minLength: 2,
+                            select: function (event, ui) {
+                                var i =  dynatree_object_index[$(this).attr('id')];
+                                $(".form_autocomplete_compounds_" + property_id + '_'+i).val('');
+                                //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
+                                var temp = $(".form_autocomplete_compounds_" + property_id + '_'+i).val();
+                                if (typeof temp == "undefined") {
+                                    $(".form_autocomplete_compounds_" + property_id + '_'+i).val(ui.item.value);
+                                }
+                            }
+                        });
+                    }
+                }    
+            });
+        }
+    }
     
     function autocomplete_object_property_compound(compound_id, property_id, object_id) {
         $("#autocomplete_value_"+compound_id+"_" + property_id + "_" + object_id).autocomplete({

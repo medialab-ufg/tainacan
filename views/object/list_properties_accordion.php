@@ -413,7 +413,7 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
     <?php } ?>
 <?php endif; ?>
 <?php $object_properties_widgets_helper->list_properties_compounds($property_compounds, $object_id,$references)  ?>    
-<input type="hidden" name="properties_autocomplete" id='properties_autocomplete' value="<?php echo implode(',', $properties_autocomplete); ?>">
+<input type="hidden" name="properties_autocomplete" id='properties_autocomplete' value="<?php echo implode(',', array_unique($properties_autocomplete)); ?>">
 <input type="hidden" name="properties_terms_radio" id='properties_terms_radio' value="<?php echo implode(',', array_unique($properties_terms_radio)); ?>">
 <input type="hidden" name="properties_terms_tree" id='properties_terms_tree' value="<?php echo implode(',', array_unique($properties_terms_tree)); ?>">
 <input type="hidden" name="properties_terms_selectbox" id='properties_terms_selectbox' value="<?php echo implode(',', array_unique($properties_terms_selectbox)); ?>">
