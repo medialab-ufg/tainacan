@@ -21,6 +21,9 @@ class CollectionController extends Controller {
             case "initDynatreeSynonyms":
                 return $visualization_model->initDynatreeSynonyms($data);
                 break;
+            case "initDynatreeTags":
+                return $visualization_model->initDynatreeTags($data);
+                break;
             case "initDynatreeSingleEdit":
                 return $visualization_model->initDynatreeSingleEdit($data);
                 break;

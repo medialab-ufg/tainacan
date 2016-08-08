@@ -326,6 +326,7 @@ $(window).load(function () {
             elem = jQuery.parseJSON(result);
             $("#dynatree").dynatree("getTree").reload();
             reinit_synonyms_tree();
+            reinit_tag_tree();
             showAlertGeneral(elem.title, elem.msg, elem.type);
             showHeaderCollection($('#src').val());
             wpquery_clean();
@@ -383,6 +384,7 @@ $(window).load(function () {
             elem = jQuery.parseJSON(result);
             $("#dynatree").dynatree("getTree").reload();
             //reinit_synonyms_tree();
+            reinit_tag_tree();
             showHeaderCollection($('#src').val());
             wpquery_clean();
             showAlertGeneral(elem.title, elem.msg, elem.type);
@@ -432,6 +434,7 @@ $(window).load(function () {
             elem = jQuery.parseJSON(result);
             $("#dynatree").dynatree("getTree").reload();
             reinit_synonyms_tree();
+            reinit_tag_tree();
             showHeaderCollection($('#src').val());
             wpquery_clean();
             showAlertGeneral(elem.title, elem.msg, elem.type);
@@ -1021,6 +1024,10 @@ function reinit_synonyms_tree() {
     $("#dynatree_synonyms_tag").dynatree("getTree").reload();
 }
 
+function reinit_tag_tree() {
+    $("#dynatree_tags").dynatree("getTree").reload();
+}
+
 
 function showHeaderCollection(src) {
     $.ajax({
@@ -1137,6 +1144,17 @@ function showLayout(src) {
         url: src + '/controllers/search/search_controller.php',
         type: 'POST',
         data: {operation: 'edit_layout', collection_id: $("#collection_id").val()}
+    }).done(function (result) {
+        $('#main_part').hide();
+        $('#configuration').html(result).show();
+    });
+}
+
+function showCollectionTags(src) {
+    $.ajax({
+        url: src + '/controllers/search/search_controller.php',
+        type: 'POST',
+        data: {operation: 'edit_tags', collection_id: $("#collection_id").val()}
     }).done(function (result) {
         $('#main_part').hide();
         $('#configuration').html(result).show();

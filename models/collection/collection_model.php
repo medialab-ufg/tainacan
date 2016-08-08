@@ -187,7 +187,7 @@ class CollectionModel extends Model {
         update_post_meta($collection_id, 'socialdb_collection_permission_create_comment', 'member');
         update_post_meta($collection_id, 'socialdb_collection_permission_edit_comment', 'approval');
         update_post_meta($collection_id, 'socialdb_collection_permission_delete_comment', 'approval');
-        //Permissions Comments
+        //Permissions Tags
         update_post_meta($collection_id, 'socialdb_collection_permission_create_tags', 'member');
         update_post_meta($collection_id, 'socialdb_collection_permission_edit_tags', 'approval');
         update_post_meta($collection_id, 'socialdb_collection_permission_delete_tags', 'approval');
