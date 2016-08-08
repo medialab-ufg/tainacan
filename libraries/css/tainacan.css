@@ -1408,7 +1408,7 @@ a.collection-thumb img {
   margin-top: -20px;
 }
 #properties_tabs .action-icons span {
-  color: black;
+  color: #79a6ce;
 }
 #properties_tabs .action-icons span:hover {
   opacity: 0.7;
@@ -1527,6 +1527,7 @@ a.collection-thumb img {
 }
 #preset-filters #filters-accordion span {
   font-size: 10px;
+  color: #79a6ce;
 }
 #preset-filters #filters-accordion span.sort-filter {
   float: right;
@@ -1730,6 +1731,12 @@ h4.modal-title {
 }
 #single_item_tainacan .item-main-data .item-metadata .edit-field-btn {
   float: right;
+}
+#single_item_tainacan .item-main-data .item-metadata .edit-field-btn button {
+  border: none;
+}
+#single_item_tainacan .item-main-data .item-metadata .edit-field-btn span {
+  color: #79a6ce;
 }
 #single_item_tainacan .item-main-data .item-metadata .item-description {
   border: none;

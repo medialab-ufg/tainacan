@@ -133,6 +133,12 @@
 
       .edit-field-btn {
         float: right;
+        button {
+            border: none;
+        }
+        span {
+            color: $brand-light-blue;
+        }
       }
       .item-description {
         border: none;

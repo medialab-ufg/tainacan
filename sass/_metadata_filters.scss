@@ -44,7 +44,7 @@
     margin-top: -20px;
 
     span {
-      color: black;
+      color: $brand-light-blue;
 
       &:hover {
         opacity: 0.7;
@@ -192,6 +192,7 @@
 
     span {
       font-size: 10px;
+      color: $brand-light-blue;
 
       &.sort-filter {
         float: right;
