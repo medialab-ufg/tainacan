@@ -238,6 +238,13 @@ a:hover {
   overflow: visible;
   z-index: 20;
 }
+#collections-menu li:hover ul ul li.tmpl a {
+  padding: 4px;
+  font-size: 12px;
+}
+#collections-menu li:hover ul ul li.tmpl a:hover {
+  background: #f2f2f2;
+}
 
 #collections-menu li:hover ul,
 #collections-menu ul li:hover ul {

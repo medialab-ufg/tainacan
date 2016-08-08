@@ -170,33 +170,7 @@ $viewHelper = new ViewHelper();
                     </ul>
                     
                     <div class="nav navbar-nav navbar-right repository-settings clk">                        
-                       
-                        <?php /*
-                        <a href="javascript:void(0)" class="bisc"> Coleções </a>
-                        
-                        <style type="text/css">
-                            .clk:hover > #collections-menu {
-                                display: block !important;
-                            }
-                            .bisc {
-                                margin-top: 20px;
-                            }
-                            a.bisc:hover {
-                                color: beige;
-                            }
-                        </style>
-                            
-                        
-                        <a onclick="add_collection_template('Autores', 'autores')">work!</a>
-                        
-                         <img src="http://lcamtuf.coredump.cx/squirrel/">
-                         * 
-                         * 
-                         *         
-                        */ ?>
-                        
-                        
-                        
+                                               
                         <ul id="collections-menu">
                             <li class="collections">
                                 <a href="#" style="color: white; padding-top: 17px;">

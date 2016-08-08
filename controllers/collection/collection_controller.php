@@ -51,16 +51,11 @@ class CollectionController extends Controller {
                         }
                     else:    
                         $import_model = new CollectionImportModel;
-                        $new_collection_id = $import_model->importCollectionTemplate($data);
-                        
-                        // return json_encode(['pin' => $new_collection_id]);
+                        $new_collection_id = $import_model->importCollectionTemplate($data);                       
                         
                         if($new_collection_id) {
-                            //$result['meu'] = $new_collection_id;
                             // $result = json_decode($this->insert_collection_event($new_collection_id, $data));
-                            return ( json_decode($this->insert_collection_event($new_collection_id, $data)) );
-                            
-                            // return json_encode($result);
+                            return ( json_decode($this->insert_collection_event($new_collection_id, $data)) );                           
                             
                             if ($result->type == 'success') {
                                 header("location:" . get_permalink($new_collection_id) . '?open_wizard=true');
@@ -68,7 +63,7 @@ class CollectionController extends Controller {
                                 header("location:" . get_permalink(get_option('collection_root_id')) . '?info_messages=' . __('Collection sent for approval','tainacan') . '&info_title=' . __('Attention','tainacan'));
                             }
                         } else {
-                            return ['b' => 'deu_ruim'];
+                            return ['error' => __('Error creating template collection', 'tainacan') ];
                         }
                     endif;
                 else:

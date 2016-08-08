@@ -620,16 +620,13 @@ class CollectionImportModel extends CollectionModel {
      */
     public function importCollectionTemplate($data) {
         $template = $data['template'];
-        //VERIFICO SE O NOME DA COLECAO PODE SER USADO]
+        // VERIFICO SE O NOME DA COLECAO PODE SER USADO
         /*
         if ( $this->verify_collection($data['collection_name']) ) {
             return false;
         }
-         * 
-         */
-        
-        // return ['temp' => $template, 'pulga' => $this->verify_collection($data['collection_name']) ];
-        
+        */
+                
         $dir_created = dirname(__FILE__) . "/../../data/templates/".$template;
         if(is_dir($dir_created.'/package/taxonomies' )){
            $this->import_xml_taxonomies($dir_created.'/package/taxonomies' );

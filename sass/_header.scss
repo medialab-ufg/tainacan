@@ -254,7 +254,6 @@ a:hover{text-decoration:underline}
        position: absolute;
        z-index: 31;
        overflow: visible;
-       //top: 0;
     }
     
     li {
@@ -283,6 +282,17 @@ a:hover{text-decoration:underline}
             left: 135px;
             overflow: visible;
             z-index: 20;
+            
+            
+            li.tmpl {
+                a {
+                    padding: 4px;
+                    font-size: 12px;
+                    &:hover {
+                        background: #f2f2f2;
+                    }
+                }
+            }            
          }
     } // li
 } // #collections-menu

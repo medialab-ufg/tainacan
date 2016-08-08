@@ -542,7 +542,7 @@ function list_templates($_element) {
             if( el.length > 0 ) {                
                 $($_element).append("<li class='divider'></li>");
                 $.each(el, function(idx, value) {
-                   var li_item = "<li class='tmpl'><a style='background: beige; margin-bottom: 5px;' href='#' class='added' data-tplt='" + value.directory +"'>" + value.title + "</a></li>";
+                   var li_item = "<li class='tmpl'><a href='#' class='added' data-tplt='" + value.directory +"'>" + value.title + "</a></li>";
                    $( $_element ).append( li_item );
                 });
             }
