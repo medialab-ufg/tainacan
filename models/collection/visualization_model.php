@@ -351,6 +351,41 @@ class VisualizationModel extends CollectionModel {
         $dynatree[end(array_keys($dynatree))] = $this->getTagRelDynatree($data['collection_id'], $dynatree[end(array_keys($dynatree))], 'tag_img');
         return json_encode($dynatree);
     }
+    
+    /**
+     * 
+     * @param array $data os
+     * @param boolean(optional) $hide_checkbox se sera mostrado o checkbox
+     */
+    public function initDynatreeTags($data,$hide_checkbox = false) {
+        $property_model = new PropertyModel;
+        $categories = [];
+        $dynatree = [];
+        /*$list_object_terms = json_decode( $property_model->list_property_terms($data));
+        if($list_object_terms->property_terms&&  is_array($list_object_terms->property_terms)){
+            foreach ($list_object_terms->property_terms as $property) {
+                if(isset($property->metas->socialdb_property_term_root)
+                        &&$property->metas->socialdb_property_term_root!=''
+                        &&!in_array($property->metas->socialdb_property_term_root, $categories)){
+                    $categories[] = $property->metas->socialdb_property_term_root;
+                }
+            }
+        }
+        //categorias
+        foreach ($categories as &$category) {
+            $facet = get_term_by('id', $category, 'socialdb_category_type');
+            $classCss = get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $category . '_color', true);
+            $classCss = ($classCss)?$classCss:'color4';
+            if ($facet) {
+                $dynatree[] = array('title' => ucfirst($facet->name), 'key' => $facet->term_id, 'isLazy' => true,  'expand' => true, 'hideCheckbox' => true, 'addClass' => $classCss);
+                $dynatree[end(array_keys($dynatree))] = $this->getChildrenDynatreeSingleEdit($facet->term_id, $dynatree[end(array_keys($dynatree))], $classCss,$hide_checkbox);
+            }
+        }*/
+        //tags
+        $dynatree[] = array('title' => __('Tags', 'tainacan'), 'key' => 'tag_facet_tag', 'isLazy' => true,  'expand' => true, 'hideCheckbox' => true, 'addClass' => 'tag_img');
+        $dynatree[end(array_keys($dynatree))] = $this->getTagRelDynatree($data['collection_id'], $dynatree[end(array_keys($dynatree))], 'tag_img');
+        return json_encode($dynatree);
+    }
     /** function initDynatreeSingleEdit() 
     * receive ((array) data) 
     * inite the div dynatree in the template index 
