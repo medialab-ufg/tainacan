@@ -72,7 +72,7 @@ include_once ('js/edit_tools_js.php');
                             <table id="dataTable_console" class="display" cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
-                                        <th style="width: 67%;"><?php _e("ID", 'tainacan'); ?></th>
+                                        <th style="width: 10%;"><?php _e("ID", 'tainacan'); ?></th>
                                         <th style="width: 30%;"><?php _e("Title", 'tainacan'); ?></th>
                                         <th style="width: 25%;"><?php _e("MD5 Initial", 'tainacan'); ?></th>
                                         <th style="width: 25%;"><?php _e("MD5 Final", 'tainacan'); ?></th>
