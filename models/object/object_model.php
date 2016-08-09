@@ -66,7 +66,7 @@ class ObjectModel extends Model {
             'post_name' => $slug
         );
         $data['ID'] = wp_update_post($post);
-        //propriedades compostos
+        //propriedades compostas
         $this->insert_compounds($data,$data['ID']);
         //inserindo o objecto do item e o seu tipo
         $this->insert_item_resource($data);
@@ -696,6 +696,8 @@ class ObjectModel extends Model {
         }
         //inserindo o objecto do item e o seu tipo
         $this->insert_item_resource($data);
+        //propriedades compostas
+        $this->insert_compounds($data,$data['ID']);
         //inserindo as classificacoes
         $this->update_classifications($data['object_classifications'], $data['ID'], $data['collection_id']);
         //inserindo tags
@@ -1823,19 +1825,19 @@ class ObjectModel extends Model {
         $type = $this->get_property_type_hierachy($property_id);
         $has_value = get_post_meta($object_id,  'socialdb_property_'.$compound_id.'_'.$position, true);
         if($has_value){
-            $value = explode(',',$has_value)[$index];
-            if(get_term_by('id', $value,'socialdb_category_type')){
-                wp_remove_object_terms( $object_id, get_term_by('id', $value,'socialdb_category_type')->term_id,'socialdb_category_type');
+            $value_before = explode(',',$has_value)[$index];
+            if(get_term_by('id', str_replace('_cat', '', $value_before),'socialdb_category_type')){
+                wp_remove_object_terms( $object_id, get_term_by('id', $value_before,'socialdb_category_type')->term_id,'socialdb_category_type');
             }else{
-                $this->sdb_delete_post_meta($value);
+                $this->sdb_delete_post_meta($value_before);
             }
         }
         //inserindo
         if($type =='socialdb_property_data' || $type =='socialdb_property_object'){
             return $this->sdb_add_post_meta($object_id, 'socialdb_property_'.$property_id,$value);
         }else if($type =='socialdb_property_term'){
-            wp_set_object_terms( $object_id,get_term_by('id', $value,'socialdb_category_type')->term_id,'socialdb_tag_type',true);
-            return $value;
+            wp_set_object_terms( $object_id,get_term_by('id', str_replace('_cat', '', $value),'socialdb_category_type')->term_id,'socialdb_tag_type',true);
+            return str_replace('_cat', '', $value).'_cat';
         }
     }
 
