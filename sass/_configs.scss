@@ -285,3 +285,12 @@
   border: 1px solid $item-border;
   margin-left: -15px;
 }
+
+#taxonomy_create_zone {
+    min-height: 350px; 
+    margin-top: 15px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}

@@ -109,7 +109,7 @@ $view_helper = new ViewHelper();
                     </div>
                     <input type="hidden" id="collection_id_order_form" name="collection_id" value="<?php echo $collection_id; ?>">
                     <input type="hidden" id="operation" name="operation" value="update_ordenation">
-                    <button type="submit" id="submit_ordenation_form" class="btn btn-primary"><?php _e('Save','tainacan') ?></button>
+                    <button type="submit" id="submit_ordenation_form" class="btn btn-primary btn-lg"><?php _e('Save','tainacan') ?></button>
                 </form>
             </div>
         </div>

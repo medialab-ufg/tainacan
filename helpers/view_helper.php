@@ -275,7 +275,7 @@ class ViewHelper {
                 </li>
             </ul>
 
-            <button type="submit" id="button_save_and_next" class="btn btn-default">
+            <button type="submit" id="conclude_config" class="btn btn-default btn-lg pull-right">
                 <?php _e('Conclude', 'tainacan'); ?>
             </button>
         </div>

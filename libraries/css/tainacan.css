@@ -579,9 +579,8 @@ body.home .ibram-home-container .col-md-3 .ibram-box p:nth-child(4) {
 #collection-steps ul li.current a h4 {
   font-weight: bolder;
 }
-#collection-steps button#button_save_and_next {
-  float: right;
-  margin: 15px 15px 0 0;
+#collection-steps button#conclude_config {
+  margin: 8px 8px 0 0;
 }
 
 #div_left {
@@ -2157,6 +2156,15 @@ h4.modal-title {
 .tools-internal-hr {
   border: 1px solid #E8E8E8;
   margin-left: -15px;
+}
+
+#taxonomy_create_zone {
+  min-height: 350px;
+  margin-top: 15px;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 15px;
 }
 
 .hide-el {

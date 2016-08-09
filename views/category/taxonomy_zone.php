@@ -52,10 +52,7 @@ $view_helper = new CategoryHelper;
                     <?php _e('Import Taxonomy','tainacan') ?>
                 </button>
             </div>
-            <div class="col-md-12" 
-                 id="taxonomy_create_zone"
-                 onclick="verify_has_li()"
-                 style="min-height:350px ;margin-top: 15px;padding: 15px;border: 1px solid #ccc;border-radius: 4px;">
+            <div class="col-md-12" id="taxonomy_create_zone" onclick="verify_has_li()">
                 <?php echo $view_helper->inserted_children($collection_id)  ?>
             </div>
             <input type="hidden" value="<?php echo str_replace( '"',"'", $view_helper->inserted_children($collection_id)) ?>" id="socialdb_property_term_new_taxonomy" name="socialdb_property_term_new_taxonomy">
@@ -64,13 +61,15 @@ $view_helper = new CategoryHelper;
             <input type="hidden" id="collection_id" name="collection_id" value="<?php echo $collection_id; ?>">
             <input type="hidden" id="operation" name="operation" value="taxonomy_zone_submit">
             <input type="hidden" id="save_and_next" name="save_and_next" value="false">
+            
+            <button type="button" class="btn btn-default pull-left btn-lg" onclick="backToMainPage()"> <?php _e('Cancel', 'tainacan'); ?> </button>
+            
             <button type="submit" 
                     id="submit_configuration"
                     class="btn btn-success pull-right margin-buttons" >
                         <?php _e('Save', 'tainacan'); ?>
             </button>
-            <button type="submit" 
-                    class="btn btn-primary pull-right margin-buttons" >
+            <button type="submit" class="btn btn-success pull-right btn-lg" >
                 <?php _e('Save & Next', 'tainacan'); ?>
             </button>    
         </form>

@@ -106,6 +106,7 @@
 
         $("#button_save_and_next").click(function(){
             $("#submit_ordenation_form").submit();
+            $("#tainacan-breadcrumbs .collection-title").click();
         });
 
         var selected_view_mode = $('.selected_view_mode').val();

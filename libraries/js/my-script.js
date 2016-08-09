@@ -1341,6 +1341,10 @@ function showFormCreateURL(url) {
     });
 }
 
+function goToCollectionHome() {
+    window.location = location.origin + location.pathname;
+}
+
 function showFormCreateURLFile(url, type) {
     var src = $('#src').val();
     $("#form").html('');
