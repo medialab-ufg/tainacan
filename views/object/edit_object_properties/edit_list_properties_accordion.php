@@ -423,15 +423,14 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
 <?php endif;
 ?>
 <?php $object_properties_widgets_helper->list_properties_compounds($property_compounds, $object_id,$references)  ?>  
-<input type="hidden" name="properties_autocomplete" id='edit_properties_autocomplete' value="<?php echo (is_array($properties_autocomplete))?implode(',', $properties_autocomplete):''; ?>">
+<input type="hidden" name="properties_autocomplete" id='properties_autocomplete' value="<?php echo (is_array($properties_autocomplete))? implode(',', array_unique($properties_autocomplete)):''; ?>">
 <input type="hidden" name="categories_id" id='edit_object_categories_id' value="<?php echo implode(',', $categories_id); ?>">   
-<input type="hidden" name="properties_terms_radio" id='properties_terms_radio' value="<?php echo implode(',', $properties_terms_radio); ?>">
-<input type="hidden" name="properties_terms_tree" id='properties_terms_tree' value="<?php echo implode(',', $properties_terms_tree); ?>">
-<input type="hidden" name="properties_terms_selectbox" id='properties_terms_selectbox' value="<?php echo implode(',', $properties_terms_selectbox); ?>">
-<input type="hidden" name="properties_terms_checkbox" id='properties_terms_checkbox' value="<?php echo implode(',', $properties_terms_checkbox); ?>">
-<input type="hidden" name="properties_terms_multipleselect" id='properties_terms_multipleselect' value="<?php echo implode(',', $properties_terms_multipleselect); ?>">
-<input type="hidden" name="properties_terms_treecheckbox" id='properties_terms_treecheckbox' value="<?php echo implode(',', $properties_terms_treecheckbox); ?>">
-<?php if (isset($all_ids)): ?>
+<input type="hidden" name="properties_terms_radio" id='properties_terms_radio' value="<?php echo implode(',', array_unique($properties_terms_radio)); ?>">
+<input type="hidden" name="properties_terms_tree" id='properties_terms_tree' value="<?php echo implode(',', array_unique($properties_terms_tree)); ?>">
+<input type="hidden" name="properties_terms_selectbox" id='properties_terms_selectbox' value="<?php echo implode(',', array_unique($properties_terms_selectbox)); ?>">
+<input type="hidden" name="properties_terms_checkbox" id='properties_terms_checkbox' value="<?php echo implode(',', array_unique($properties_terms_checkbox)); ?>">
+<input type="hidden" name="properties_terms_multipleselect" id='properties_terms_multipleselect' value="<?php echo implode(',', array_unique($properties_terms_multipleselect)); ?>">
+<input type="hidden" name="properties_terms_treecheckbox" id='properties_terms_treecheckbox' value="<?php echo implode(',', array_unique($properties_terms_treecheckbox)); ?>"><?php if (isset($all_ids)): ?>
     <input type="hidden" id="properties_id" name="properties_id" value="<?php echo $all_ids; ?>">
     <input type="hidden" id="property_origin" name="property_origin" value="<?php echo $all_ids; ?>">
     <input type="hidden" id="property_added" name="property_added" value="">
