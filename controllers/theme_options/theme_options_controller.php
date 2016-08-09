@@ -125,7 +125,11 @@ class ThemeOptionsController extends Controller {
                 if (!empty($files)) {
                     foreach ($files as $file) {
                         $file["md5_inicial"] = get_post_meta($file["ID"], 'md5_inicial', true);
-                        
+                        if(!$file["md5_inicial"] || $file["md5_inicial"] == ''){
+                            $md5_inicial = ($theme_options_model->is_url_exist($file["guid"]) ? md5_file($file["guid"]) : 'Not Found!');
+                            update_post_meta($file["ID"], 'md5_inicial', $md5_inicial);
+                            $file["md5_inicial"] = $md5_inicial;
+                        }
                         $md5_atual = ($theme_options_model->is_url_exist($file["guid"]) ? md5_file($file["guid"]) : 'Not Found!');
                         $result_test = ($file["md5_inicial"] == $md5_atual ? 'OK' : 'NOK');
                         add_post_meta($file['ID'], 'check_md5_' . time(), $md5_atual);
