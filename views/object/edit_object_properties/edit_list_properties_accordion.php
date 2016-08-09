@@ -4,15 +4,28 @@
  */
 include_once ('js/edit_list_properties_accordion_js.php');
 include_once(dirname(__FILE__).'/../../../helpers/view_helper.php');
+include_once(dirname(__FILE__).'/../../../helpers/object/object_properties_widgets_helper.php');
 
 $view_helper = new ViewHelper();
+$object_properties_widgets_helper = new ObjectWidgetsHelper();
 $ids = [];
+$properties_autocomplete = [];
 $properties_terms_radio = [];
 $properties_terms_tree = [];
 $properties_terms_selectbox = [];
 $properties_terms_checkbox = [];
 $properties_terms_multipleselect = [];
 $properties_terms_treecheckbox = [];
+//referencias
+$references = [
+    'properties_autocomplete' => &$properties_autocomplete,
+    'properties_terms_radio' => &$properties_terms_radio,
+    'properties_terms_checkbox' => &$properties_terms_checkbox,
+    'properties_terms_tree' => &$properties_terms_tree,
+    'properties_terms_selectbox' => &$properties_terms_selectbox,
+    'properties_terms_multipleselect' => &$properties_terms_multipleselect,
+    'properties_terms_treecheckbox' => &$properties_terms_treecheckbox   
+];
 if (isset($property_object)):
     foreach ($property_object as $property) {
         $ids[] = $property['id']; ?>
@@ -409,6 +422,7 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
     <?php } ?>
 <?php endif;
 ?>
+<?php $object_properties_widgets_helper->list_properties_compounds($property_compounds, $object_id,$references)  ?>  
 <input type="hidden" name="properties_autocomplete" id='edit_properties_autocomplete' value="<?php echo (is_array($properties_autocomplete))?implode(',', $properties_autocomplete):''; ?>">
 <input type="hidden" name="categories_id" id='edit_object_categories_id' value="<?php echo implode(',', $categories_id); ?>">   
 <input type="hidden" name="properties_terms_radio" id='properties_terms_radio' value="<?php echo implode(',', $properties_terms_radio); ?>">

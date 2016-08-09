@@ -66,6 +66,8 @@ class ObjectModel extends Model {
             'post_name' => $slug
         );
         $data['ID'] = wp_update_post($post);
+        //propriedades compostos
+        $this->insert_compounds($data,$data['ID']);
         //inserindo o objecto do item e o seu tipo
         $this->insert_item_resource($data);
         //categoria raiz da colecao
@@ -1775,5 +1777,66 @@ class ObjectModel extends Model {
             return false;
         }
     }*/
+    
+    /**
+     * 
+     * @param array $data Os dados vindo do formulario
+     * @param int $object_id O id do item a ser adicionado
+     */
+    public function insert_compounds($data,$object_id) {
+        if($data['properties_compounds']!==''){
+            $compounds = explode(',', $data['properties_compounds']);
+            foreach ($compounds as $compound) {
+                $properties_coumpounded = explode(',', $data['compounds_'.$compound]);
+                $cardinality = $data['cardinality_'.$compound]; 
+                for($i = 0;$i<$cardinality;$i++):
+                    $ids_metas = [];
+                    foreach ($properties_coumpounded as $index => $property_coumpounded) {
+                        $id = 0;
+                        if(isset($data['socialdb_property_'.$compound.'_'.$property_coumpounded.'_'.$i][0])&&trim($data['socialdb_property_'.$compound.'_'.$property_coumpounded.'_'.$i][0])!=''){
+                           $id =  $this->add_value_compound($object_id, $compound, $property_coumpounded, $index, $i, $data['socialdb_property_'.$compound.'_'.$property_coumpounded.'_'.$i][0]);
+                        }
+                        if($id != 0){
+                            $ids_metas[] = $id;
+                        }
+                    }
+                    //salvando os valores
+                    if(!empty($ids_metas) &&  count($ids_metas) ==  count($properties_coumpounded)){
+                        update_post_meta($object_id, 'socialdb_property_'.$compound.'_'.$i, implode(',', $ids_metas));
+                    }
+                endfor;
+            }
+        }
+    }
+    
+    /**
+     * 
+     * @param type $object_id
+     * @param type $compound_id
+     * @param type $property_id
+     * @param type $index O indice da propriedade na position passada
+     * @param type $position Aposicao na cardinalidade
+     * @param type $value
+     * @return type
+     */
+    public function add_value_compound($object_id,$compound_id,$property_id,$index,$position,$value) {
+        $type = $this->get_property_type_hierachy($property_id);
+        $has_value = get_post_meta($object_id,  'socialdb_property_'.$compound_id.'_'.$position, true);
+        if($has_value){
+            $value = explode(',',$has_value)[$index];
+            if(get_term_by('id', $value,'socialdb_category_type')){
+                wp_remove_object_terms( $object_id, get_term_by('id', $value,'socialdb_category_type')->term_id,'socialdb_category_type');
+            }else{
+                $this->sdb_delete_post_meta($value);
+            }
+        }
+        //inserindo
+        if($type =='socialdb_property_data' || $type =='socialdb_property_object'){
+            return $this->sdb_add_post_meta($object_id, 'socialdb_property_'.$property_id,$value);
+        }else if($type =='socialdb_property_term'){
+            wp_set_object_terms( $object_id,get_term_by('id', $value,'socialdb_category_type')->term_id,'socialdb_tag_type',true);
+            return $value;
+        }
+    }
 
 }
