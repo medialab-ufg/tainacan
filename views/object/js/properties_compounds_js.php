@@ -2,7 +2,7 @@
     var dynatree_object_index = [];
     $(function () {
         // # - autocomplete para as propriedades de dados
-        var properties_autocomplete = get_val($("#properties_autocomplete").val());
+        var properties_autocomplete = compounds_get_val($("#properties_autocomplete").val());
         var compounds = get_val($("#properties_compounds").val()); 
         if(compounds&&compounds.length!=0){
              $.each(compounds, function (idx, compound) {
@@ -143,7 +143,6 @@
         {
             cont++;
         });
-        console
         if(cont==0){
             $('#core_validation_'+ compound_id + "_"+property_id+"_"+object_id).val('false');
             set_field_valid_compounds(property_id,'core_validation_'+compound_id+'_'+property_id+'_'+object_id,compound_id);
@@ -156,14 +155,21 @@
     }
     //************************* properties terms ******************************************//
     function compounds_list_properties_term_insert_objects() {
+        var radio_cats = ($('#properties_terms_radio').length>0) ? $("#properties_terms_radio").val() : $("#multiple_properties_terms_radio").val();
+        var check_cats = ($('#properties_terms_checkbox').length>0) ? $("#properties_terms_checkbox").val() : $("#multiple_properties_terms_checkbox").val();
+        var select_cats = ($('#properties_terms_selectbox').length>0) ? $("#properties_terms_selectbox").val() : $("#multiple_properties_terms_selectbox").val();
+        var tree_cats = ($('#properties_terms_tree').length>0) ? $("#properties_terms_tree").val() : $("#multiple_properties_terms_tree").val();
+        var treecheck_cats = ($('#properties_terms_treecheckbox').length>0) ? $("#properties_terms_treecheckbox").val() : $("#multiple_properties_terms_treecheckbox").val();
+        var multiple_cats = ($('#properties_terms_multipleselect').length>0) ? $("#properties_terms_multipleselect").val() : $("#multiple_properties_terms_multipleselect").val();
+        //
         var all_compounds_id = $('#properties_compounds').val().split(',');
         var categories = compounds_get_val($("#edit_object_categories_id").val());
-        var radios = compounds_get_val($("#properties_terms_radio").val());
-        var selectboxes = compounds_get_val($("#properties_terms_selectbox").val());
-        var trees = compounds_get_val($("#properties_terms_tree").val());
-        var checkboxes = compounds_get_val($("#properties_terms_checkbox").val());
-        var multipleSelects = compounds_get_val($("#properties_terms_multipleselect").val());
-        var treecheckboxes = compounds_get_val($("#properties_terms_treecheckbox").val());
+        var radios = compounds_get_val(radio_cats);
+        var selectboxes = compounds_get_val(select_cats);
+        var trees = compounds_get_val(tree_cats);
+        var checkboxes = compounds_get_val(check_cats);
+        var multipleSelects = compounds_get_val(multiple_cats);
+        var treecheckboxes = compounds_get_val(treecheck_cats);
         if (all_compounds_id&&all_compounds_id.length>0) {
             $.each(all_compounds_id, function (idx, compound_id) {
                 compounds_list_radios(radios,categories,compound_id);
@@ -268,8 +274,23 @@
                         })
                     xhr.done(function (result) {
                         for(var i = 0;i<cardinality;i++){
+                            dynatree_object_index['field_property_term_'+compound_id+'_' + selectbox + '_' + i] = i;
                             elem = jQuery.parseJSON(result);
                             $('#field_property_term_'+compound_id+'_' + selectbox + '_' + i).html('');
+                            $('#field_property_term_'+compound_id+'_' + selectbox + '_' + i).change(function(){
+                                var cont = 0;
+                                var i =  dynatree_object_index[$(this).attr('id')];
+                                if( $(this).val().trim()!==''){
+                                    cont++;
+                                }
+                                if( cont===0){
+                                    $('#core_validation_'+compound_id+'_'+selectbox+'_'+i).val('false');
+                                    set_field_valid_compounds(selectbox,'core_validation_'+compound_id+'_'+selectbox+'_'+i,compound_id);
+                                }else{
+                                    $('#core_validation_'+compound_id+'_'+selectbox+'_'+i).val('true');
+                                    set_field_valid_compounds(selectbox,'core_validation_'+compound_id+'_'+selectbox+'_'+i,compound_id);
+                                }
+                            });
                             $('#field_property_term_'+compound_id+'_' + selectbox + '_' + i).append('<option value=""><?php _e('Select','tainacan') ?>...</option>');
                             $.each(elem.children, function (idx, children) {
                                 var checked = '';
@@ -524,8 +545,34 @@
         if(properties&&properties.length>0){
             for(var i = 0; i<properties.length; i++){
                   $('#core_validation_'+property_id+'_'+properties[i]+'_'+((id+1))).val('false');
-             }
+            }
+             validate_all_fields_compounds(property_id);
         }
+    }
+    //removendo o container
+    function remove_container_compounds(property_id,id){
+        var show_button = false;
+        properties = $('#compounds_'+property_id).val().split(',');
+        $('#container_field_'+property_id+'_'+(id)).hide();
+        if(properties&&properties.length>0){
+            for(var i = 0; i<properties.length; i++){
+                  $('#core_validation_'+property_id+'_'+properties[i]+'_'+(id)).val('true');
+                  $('input[name="socialdb_property_'+property_id+'_'+properties[i]+'_'+(id)+'[]"]').val('');
+            }
+            validate_all_fields_compounds(property_id);
+        }
+        //se o proximo container
+        if(!$('#container_field_'+property_id+'_'+(id+1)).is(':visible')){
+            show_button = true;
+        }
+        //busco o container que esta sendo mostrado
+        while(!$('#container_field_'+property_id+'_'+(id)).is(':visible')){
+            id--;
+        }
+        //se 
+        if(show_button)
+            $('#button_property_'+property_id+'_'+id).show();
+        
     }
     //################################ VALIDACOES##############################################//
     /**
