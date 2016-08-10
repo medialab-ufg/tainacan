@@ -38,14 +38,17 @@ if( !$collection_list_mode ) {
             <?php while ( $loop->have_posts() ) : $loop->the_post(); $countLine++;
                 $curr_id = get_the_ID();
                 $curr_date = "<strong>" . __('Created at: ', 'tainacan') . "</strong>" . get_the_date('d/m/Y');
-                
+                /*
                 include "list_modes/modals.php";
                 include "list_modes/cards.php";
                 include "list_modes/list.php";
                 include "list_modes/gallery.php";
+                */
             endwhile;
 
             include_once "list_modes/slideshow.php";
+
+            include_once "list_modes/geolocation.php";
 
             ?>
         </div>
