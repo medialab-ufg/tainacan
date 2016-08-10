@@ -12,7 +12,6 @@ $ids = [];
 if (!isset($property_object) && !isset($property_data)):
     _e('No Properties available', 'tainacan');
 endif;
-
 ?>
     <input type="hidden" name="properties_object_ids" id='properties_object_ids' value="<?php echo implode(',', $ids); ?>">
 <?php if (isset($property_object)):
@@ -22,31 +21,42 @@ endif;
     ?>
         <div class="col-md-6 property-root no-padding">
             <div class="box-item-paddings">
-                <h4 class="title-pipe single-title"> <?php echo $property['name']; ?></h4>
-            <div class="edit-field-btn">
-            <button type="button" onclick="cancel_object_property('<?php echo $property['id']; ?>', '<?php echo $object_id; ?>')" id="single_cancel_<?php echo $property['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default btn-xs" style="display: none;" ><span class="glyphicon glyphicon-arrow-left" ></span></button>
-            <?php
-            // verifico se o metadado pode ser alterado
-            if (verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_property_object_value',$object_id)):
-                ?>
-                <button type="button" onclick="edit_object_property('<?php echo $property['id']; ?>', '<?php echo $object_id; ?>')" id="single_edit_<?php echo $property['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default btn-xs" ><span class="glyphicon glyphicon-edit"></span></button>
-            <?php endif; ?>
-            <button type="button" onclick="save_object_property('<?php echo $property['id']; ?>', '<?php echo $object_id; ?>')" id="single_save_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"class="btn btn-default btn-xs" style="display: none;"><span class="glyphicon glyphicon-floppy-disk"></span></button>
-
-
-            </div>
-            <div id="labels_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">
-                <?php if (!empty($property['metas']['objects']) && !empty($property['metas']['value'])) { ?>
-                    <?php foreach ($property['metas']['objects'] as $object) { // percoro todos os objetos  ?>
-                        <?php
-                        if (isset($property['metas']['value']) && !empty($property['metas']['value']) && in_array($object->ID, $property['metas']['value'])): // verifico se ele esta na lista de objetos da colecao
-                            echo '<b><a  href="' . get_the_permalink($property['metas']['collection_data'][0]->ID) . '?item=' . $object->post_name . '" >' . $object->post_title . '</a></b><br>';
-                        endif;
-                        ?>
-                    <?php } ?>
+                <h4 class="title-pipe single-title"> <?php echo $property['name']; ?> </h4>
+            
+                <div class="edit-field-btn">
+                    <button type="button" 
+                            onclick="cancel_object_property('<?php echo $property['id']; ?>', '<?php echo $object_id; ?>')" 
+                            id="single_cancel_<?php echo $property['id']; ?>_<?php echo $object_id; ?>" 
+                            class="btn btn-default btn-xs" style="display: none;" >
+                        <span class="glyphicon glyphicon-arrow-left" ></span>
+                    </button>
                     <?php
-                }else {
-                    echo '<p>' . __('empty field', 'tainacan') . '</p>';
+                    // verifico se o metadado pode ser alterado
+                    if (verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_property_object_value',$object_id)): ?>
+                        <button type="button" onclick="edit_object_property('<?php echo $property['id']; ?>', '<?php echo $object_id; ?>')" id="single_edit_<?php echo $property['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default btn-xs" ><span class="glyphicon glyphicon-edit"></span></button>
+                    <?php endif; ?>
+
+                    <button type="button" onclick="save_object_property('<?php echo $property['id']; ?>', '<?php echo $object_id; ?>')" id="single_save_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"class="btn btn-default btn-xs" style="display: none;"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+
+                </div>
+                
+            <div id="labels_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">
+                <?php if (!empty($property['metas']['objects']) && !empty($property['metas']['value'])) {
+                    // percoro todos os objetos 
+                    foreach ($property['metas']['objects'] as $object) { 
+                        if (isset($property['metas']['value']) && !empty($property['metas']['value']) && in_array($object->ID, $property['metas']['value'])): // verifico se ele esta na lista de objetos da colecao
+                            echo '<b><a href="' . get_the_permalink($property['metas']['collection_data'][0]->ID) . '?item=' . $object->post_name . '" >' . $object->post_title . '</a></b><br>';
+                        endif;
+                    }
+                } else {                    
+                    // verifico se o metadado pode ser alterado
+                    if (verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_property_object_value',$object_id)): ?>
+                        <button type="button" onclick="edit_object_property('<?php echo $property['id']; ?>', '<?php echo $object_id; ?>')" id="single_edit_<?php echo $property['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default" >
+                            <?php _e('Empty field. Click to edit','tainacan'); ?>
+                        </button>                        
+                    <?php else:
+                        echo '<p>' . __('empty field', 'tainacan') . '</p>';
+                    endif;                    
                 }
                 ?>
             </div>
@@ -83,7 +93,6 @@ endif;
         </div>
         </div>
         <?php } ?>
-
 <?php
 endif;
 
@@ -135,7 +144,15 @@ if (isset($property_data)):
                 </p>
                 <?php endforeach; ?>
             <?php else: ?>
-                   <p><?php  _e('empty field', 'tainacan') ?></p>
+                
+            <?php // verifico se o metadado pode ser alterado
+              if (verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_property_data_value',$object_id)): ?>
+                <button type="button" onclick="edit_data_property('<?php echo $property['id']; ?>', '<?php echo $object_id; ?>')" id="single_edit_<?php echo $property['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default" >
+                    <?php _e('Empty field. Click to edit','tainacan'); ?>
+                </button>
+            <?php else: ?>
+                <?php _e('empty field','tainacan'); ?>
+              <?php endif; ?>                    
             <?php endif; ?>
             </div>
             <p>
@@ -202,9 +219,20 @@ if (isset($property_term)): ?>
                             echo $property['metas']['socialdb_property_help'];
                         } ?>
                     </p>
-                    <div id="labels_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">
-                        <?php echo '<p>' . __('empty field', 'tainacan') . '</p>'; ?>
-                    </div>
+                    
+                    <?php // verifico se o metadado pode ser alterado
+                        if (verify_allowed_action($collection_id, 'socialdb_collection_permission_add_classification',$object_id)): ?>
+                        <button type="button" onclick="edit_term_property('<?php echo $property['id']; ?>', '<?php echo $object_id; ?>')"
+                                id="single_edit_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"
+                                class="btn btn-default single_edit_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">
+                            <?php _e('Empty field. Click to edit','tainacan'); ?>
+                        </button>
+                    <?php else: ?>
+                        <div id="labels_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">                        
+                            <?php echo '<p>' . __('empty field', 'tainacan') . '</p>'; ?>
+                        </div>
+                    <?php endif; ?>                    
+                    
                     <div style="display:none;" id="widget_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">
                         <?php
                         if ($property['type'] == 'radio') {
@@ -263,8 +291,6 @@ if (isset($property_term)): ?>
     <input type="hidden" name="properties_terms_multipleselect" id='event_single_properties_terms_multipleselect' value="<?php echo implode(',', $properties_terms_multipleselect); ?>">
     <input type="hidden" name="properties_terms_treecheckbox" id='event_single_properties_terms_treecheckbox' value="<?php echo implode(',', $properties_terms_treecheckbox); ?>">
     <input type="hidden" id="object_classifications_event_single_<?php echo $object_id; ?>" name="object_classifications" value="<?php echo implode(',', $categories_id); ?>">
-
-
 
     <?php if (isset($all_ids)): ?>
         <input type="hidden" name="properties_id" value="<?php echo $all_ids; ?>">

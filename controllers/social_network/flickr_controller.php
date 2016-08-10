@@ -11,17 +11,29 @@ class FlickrController extends Controller {
             //BEGIN New Code
             case "import_flickr_items":
                 $config = get_option('socialdb_theme_options');
-                $flickr = new FlickrModel($data['identifier'], $config);
+                $profile = explode('/', $data['identifier']);
+                //var_dump($data);
+                //exit();
+                $flickr = new FlickrModel($profile[1], $config);
                 $object_model = new ObjectModel();
-                $return = $flickr->insertFlickrItems($data, $object_model);
-                if($return){
-                     return json_encode($return);
-                }else{
+
+                if ($profile[0] == 'all') {
+                    $data['identifier'] = $profile[1];
+                    $return = $flickr->insertFlickrItems($data, $object_model);
+                } elseif ($profile[0] == 'albums') {
+                    $return = $flickr->insertFlickrItemsFromAlbums($data, $profile, $object_model);
+                } elseif ($profile[0] == 'singleitem') {
+                    $return = $flickr->insertFlickrSingleItem($data, $profile, $object_model);
+                }
+
+                if ($return) {
+                    return json_encode($return);
+                } else {
                     return json_encode([]);
                 }
                 break;
-            
-            
+
+
             //END New Code
             //*********************************************************************************************//
             case "getPhotosFlickr":

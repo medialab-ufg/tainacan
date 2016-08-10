@@ -21,6 +21,9 @@ class CollectionController extends Controller {
             case "initDynatreeSynonyms":
                 return $visualization_model->initDynatreeSynonyms($data);
                 break;
+            case "initDynatreeTags":
+                return $visualization_model->initDynatreeTags($data);
+                break;
             case "initDynatreeSingleEdit":
                 return $visualization_model->initDynatreeSingleEdit($data);
                 break;
@@ -33,6 +36,7 @@ class CollectionController extends Controller {
             case 'simple_add':
                 $data['collection_name'] = trim($data['collection_name']);
                 $data['collection_object'] = trim($data['collection_object']);
+                
                 if(empty($data['collection_name'])||empty($data['collection_object'])):
                     header("location:" . get_permalink(get_option('collection_root_id')) . '?info_messages=' . __('Invalid collection name or object name!','tainacan') . '&info_title=' . __('Attention','tainacan'));
                 elseif (is_user_logged_in()):
@@ -50,14 +54,19 @@ class CollectionController extends Controller {
                         }
                     else:    
                         $import_model = new CollectionImportModel;
-                        $new_collection_id = $import_model->importCollectionTemplate($data);
-                        if($new_collection_id){
-                            $result = json_decode($this->insert_collection_event($new_collection_id, $data));
+                        $new_collection_id = $import_model->importCollectionTemplate($data);                       
+                        
+                        if($new_collection_id) {
+                            // $result = json_decode($this->insert_collection_event($new_collection_id, $data));
+                            return ( json_decode($this->insert_collection_event($new_collection_id, $data)) );                           
+                            
                             if ($result->type == 'success') {
                                 header("location:" . get_permalink($new_collection_id) . '?open_wizard=true');
                             } else {
                                 header("location:" . get_permalink(get_option('collection_root_id')) . '?info_messages=' . __('Collection sent for approval','tainacan') . '&info_title=' . __('Attention','tainacan'));
                             }
+                        } else {
+                            return ['error' => __('Error creating template collection', 'tainacan') ];
                         }
                     endif;
                 else:

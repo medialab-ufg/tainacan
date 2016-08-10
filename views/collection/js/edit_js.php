@@ -8,14 +8,13 @@
 
         $('[data-toggle="tooltip"]').tooltip();
 
-        $("#button_save_and_next").click(function(){
-            $("#submit_form_edit_collection").submit();
-            $("#tainacan-breadcrumbs").show()
-        });
+        $("#conclude_config").click(function() {
+            goToCollectionHome();
+        });        
 
         if ($('#open_wizard').val() == 'true') {
             $('#btn_back_collection').hide();
-            $('#submit_configuration').hide();
+            // $('#submit_configuration').hide();
             $('#save_and_next').val('true');
         } else {
             $('#collection-steps').hide();

@@ -16,6 +16,10 @@
         }
 
         change_breadcrumbs_title('<?php _e('Categories', 'tainacan') ?>');
+        
+        $("#conclude_config").click(function() {
+            goToCollectionHome();
+        });  
 
         $('#submit_taxonomy_zone').submit(function (e) {
             e.preventDefault();

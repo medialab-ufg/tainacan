@@ -53,6 +53,7 @@ ul.repository-settings, .admin-configs {
 
 .header-navbar {
   padding: 5px 0 5px 0;
+  // height: 61px;
 
   a.logo-tainacan {
     padding: 0;
@@ -209,4 +210,98 @@ button#iframebutton {
   }
   h5 {
     margin-bottom: 5px; }
+}
+
+ul{list-style-type:none}
+
+a{text-decoration:none}
+
+a:hover{text-decoration:underline}
+
+#collections-menu {
+    width: 130px;
+    padding-left: 10px;
+    position: relative;
+    margin-top: -5px;
+    cursor: pointer;
+    
+    &:hover {
+        cursor: pointer;
+    }
+    
+    .collections {
+        text-align: center;
+        
+        &:hover {
+            background: #1d1d1d;
+            cursor: pointer;
+        }
+        a {
+            
+            img {
+                width: 12%;
+                margin-top: -3px;    
+            }
+        }                
+    } // li.collections
+        
+    .sub-menu {
+       background: #fff;
+       border:1px solid #ccc;    
+       padding-left: 0px;
+       width: 150px;
+       border-radius: 4px;
+       position: absolute;
+       z-index: 31;
+       overflow: visible;
+    }
+    
+    li {
+       position :relative;
+       _float: left; /*Hack para o IE6*/
+        
+        &.divider {
+            border-bottom: 1px solid $lightest-gray; 
+        }
+        
+        a {            
+            display: block;
+            line-height: 25px;   
+            color: black;            
+                        
+            &:hover {
+                // background:#e5e5e5;/*define a cor do fundo*/
+                // color:#333;/*define a cor da fonte*/
+             }
+        }
+        
+        &:hover ul ul {
+            display: none; 
+            position: absolute;
+            top: 0px;
+            left: 135px;
+            overflow: visible;
+            z-index: 20;
+            
+            
+            li.tmpl {
+                a {
+                    padding: 4px;
+                    font-size: 12px;
+                    &:hover {
+                        background: #f2f2f2;
+                    }
+                }
+            }            
+         }
+    } // li
+} // #collections-menu
+
+#collections-menu li:hover ul,
+#collections-menu ul li:hover ul{
+   display:block;
+}
+
+.new-collection .modal-header {
+    border-bottom: 0;
 }

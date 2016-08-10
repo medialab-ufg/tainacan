@@ -326,6 +326,7 @@ $(window).load(function () {
             elem = jQuery.parseJSON(result);
             $("#dynatree").dynatree("getTree").reload();
             reinit_synonyms_tree();
+            reinit_tag_tree();
             showAlertGeneral(elem.title, elem.msg, elem.type);
             showHeaderCollection($('#src').val());
             wpquery_clean();
@@ -383,6 +384,7 @@ $(window).load(function () {
             elem = jQuery.parseJSON(result);
             $("#dynatree").dynatree("getTree").reload();
             //reinit_synonyms_tree();
+            reinit_tag_tree();
             showHeaderCollection($('#src').val());
             wpquery_clean();
             showAlertGeneral(elem.title, elem.msg, elem.type);
@@ -432,6 +434,7 @@ $(window).load(function () {
             elem = jQuery.parseJSON(result);
             $("#dynatree").dynatree("getTree").reload();
             reinit_synonyms_tree();
+            reinit_tag_tree();
             showHeaderCollection($('#src').val());
             wpquery_clean();
             showAlertGeneral(elem.title, elem.msg, elem.type);
@@ -488,8 +491,20 @@ $(window).load(function () {
 });
 
 $(document).ready(function () {
-    $('.input_date').mask('00/00/0000');
+    $('.input_date').mask('00/00/0000');          
 });
+
+function add_collection_template(col, template_name) {
+    var path = $("#src").val() + "/controllers/collection/collection_controller.php";
+    $.ajax({
+        url: path, type: "POST",
+        data: { operation: 'simple_add', collection_object: 'Item', collection_name: col, template: template_name }
+    }).done(function(r){
+        cl(col + " ==> " + template_name);
+        cl(r);
+    });        
+}
+
 /******************* funcoes para templates de colecoes ***********************/
 function listTemplates() {
     $('#list_templates').show();
@@ -508,8 +523,7 @@ function onClickTemplate(template) {
     $('#form_new_collection').show();
 }
 
-function get_collections_template(src)
-{
+function get_collections_template(src) {
     $.ajax({
         url: src + '/controllers/collection/collection_controller.php',
         type: 'POST',
@@ -518,6 +532,39 @@ function get_collections_template(src)
         $('#list_templates').html(result);
     });
 }
+
+function list_templates($_element) {
+    $.ajax({
+       type: "POST",
+       url: $('#src').val() + "/controllers/collection/collection_controller.php",
+       data: {  operation: 'list-collection-templates', is_json: true }
+   }).done(function (result) {
+        el = jQuery.parseJSON(result);
+        
+        if($_element) {
+            if( el.length > 0 ) {                
+                $($_element).append("<li class='divider'></li>");
+                $.each(el, function(idx, value) {
+                   var li_item = "<li class='tmpl'><a href='#' class='added' data-tplt='" + value.directory +"'>" + value.title + "</a></li>";
+                   $( $_element ).append( li_item );
+                });
+            }
+        } else {
+            $('#collection_templates').html('');
+            if( el && el.length>0){
+                $.each(el,function(index,value){
+                     $('#collection_templates').append('<option selected="selected" value="'+value.directory+'">'+value.title+'</option>');
+                });
+                $('#show_collection_empty').show();
+                var curr_height = $('.collection-templates').height();
+                $('.collection-templates').height(curr_height + 55);               
+            }else{
+                $('#show_collection_empty').hide();
+            }
+        }    
+   });
+}
+ 
 /*************  FIM : funcoes para templates de colecoes **********************/
 /***************** funcao para gerar o modal para edicao de categoria *******/
 function show_modal_edit_category(title, key) {
@@ -602,16 +649,19 @@ function showModalImportCollection() {
 }
 
 function showTopSearch() {
-    $('#search_collections').fadeTo(550, 1, function () {
-        $('#search_collections').focus();
+    $('#search_collections').fadeTo(300, 1, function () {
+        $("#expand-top-search").css('border', '1px solid whitesmoke');
+        $('#search_collections').focus();        
         $("#expand-top-search").addClass('showing-input');
     });
 
 }
 
-function setItemBorder() {
+$("#expand-top-search").hover(function(){
     $("#expand-top-search").css('border', '1px solid whitesmoke');
-}
+},function(){
+    $("#expand-top-search").css('border', '0');
+});
 
 //modal_block modal que bloqueia acoes do usuario
 function show_modal_main() {
@@ -974,6 +1024,10 @@ function reinit_synonyms_tree() {
     $("#dynatree_synonyms_tag").dynatree("getTree").reload();
 }
 
+function reinit_tag_tree() {
+    $("#dynatree_tags").dynatree("getTree").reload();
+}
+
 
 function showHeaderCollection(src) {
     $.ajax({
@@ -1090,6 +1144,17 @@ function showLayout(src) {
         url: src + '/controllers/search/search_controller.php',
         type: 'POST',
         data: {operation: 'edit_layout', collection_id: $("#collection_id").val()}
+    }).done(function (result) {
+        $('#main_part').hide();
+        $('#configuration').html(result).show();
+    });
+}
+
+function showCollectionTags(src) {
+    $.ajax({
+        url: src + '/controllers/search/search_controller.php',
+        type: 'POST',
+        data: {operation: 'edit_tags', collection_id: $("#collection_id").val()}
     }).done(function (result) {
         $('#main_part').hide();
         $('#configuration').html(result).show();
@@ -1276,6 +1341,10 @@ function showFormCreateURL(url) {
     });
 }
 
+function goToCollectionHome() {
+    window.location = location.origin + location.pathname;
+}
+
 function showFormCreateURLFile(url, type) {
     var src = $('#src').val();
     $("#form").html('');
@@ -1444,6 +1513,13 @@ $(document).ready(function () {
     //Handles menu drop down
     $('.dropdown-menu').find('form').click(function (e) {
         e.stopPropagation();
+    });
+    $("#collections-menu li").hover(function(){
+       $(this).find('ul:first').css('display', 'block');
+       // $('.collection_header_img .row > .col-md-12').css("margin-top", "-74px");
+      }, function() {
+        $(this).find('ul:first').css('display', 'none');
+        // $('.collection_header_img .row > .col-md-12').css("margin-top", "0");
     });
 });
 
@@ -1628,7 +1704,21 @@ $(function () {
             nav.removeClass("menuFixo");
         }
     });
+    
+    list_templates("#collections-menu ul.templates");
+
+    $(document).on("click", ".added", function(e) {
+        e.preventDefault();
+        var evt = $(this).attr('data-tplt');
+        var col_name =  $(this).text();
+        if(evt && col_name) {
+            add_collection_template(col_name, evt);
+        }
+    });
+           
 });
+
+
 
 function showLoginScreen(src) {
     $.ajax({
@@ -2322,12 +2412,14 @@ function setMenuContainerHeight() {
     }
 }
 
+/*
 $(window).on('resize', function(ev) {
     var window_width = $(window).width();
-    if(window_width < 1010 && t == "done") {
+    if(window_width < 1010) {
 
     }
 });
+*/
 
 
 function changeViewMode(viewMode) {

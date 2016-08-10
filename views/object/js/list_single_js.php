@@ -572,6 +572,7 @@
     //TAG
     // edit tag
     function edit_tag() {
+        $('button.edit-tag').hide();
         $('#edit_tag').hide();
         $('#cancel_tag').show();
         $('#save_tag').show();
@@ -579,6 +580,7 @@
     }
 // back Description(
     function cancel_tag() {
+        $('button.edit-tag').show();
         $('#cancel_tag').hide();
         $('#save_tag').hide();
         $('#event_tag').hide();

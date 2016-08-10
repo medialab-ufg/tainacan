@@ -16,9 +16,9 @@
         }
     });
 
-    $("#button_save_and_next").click(function(){
-        $('li.layout a').click();
-    });
+    $("#conclude_config").click(function(){
+        goToCollectionHome();
+    });  
 
     // reverse property
     $("#property_object_category_id").change(function (e) {

@@ -63,6 +63,17 @@ $view_helper = new ViewHelper();
                             <option value="slideshow"><?php _e('Slideshow', 'tainacan'); ?></option>
                         </select>
                     </div>
+                    
+                    <div class="form-group sl-time" style='display: none'>
+                        <label for="slideshow_time"><?php _e('Slideshow time (seconds)', 'tainacan'); ?></label>
+                        <select name="slideshow_time" class="form-control">
+                            <?php foreach( range(1, 20) as $num ): ?>
+                                <option value="st-<?php echo $num ?>-secs" <?php if($num===4) { echo "selected"; } ?> >
+                                    <?php echo $num; ?>
+                                </option>                            
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
 
                     <!------------------- Ordenacao-------------------------->
                     <div class="form-group">
@@ -98,7 +109,7 @@ $view_helper = new ViewHelper();
                     </div>
                     <input type="hidden" id="collection_id_order_form" name="collection_id" value="<?php echo $collection_id; ?>">
                     <input type="hidden" id="operation" name="operation" value="update_ordenation">
-                    <button type="submit" id="submit_ordenation_form" class="btn btn-primary"><?php _e('Save','tainacan') ?></button>
+                    <button type="submit" id="submit_ordenation_form" class="btn btn-primary btn-lg"><?php _e('Save','tainacan') ?></button>
                 </form>
             </div>
         </div>

@@ -135,27 +135,35 @@ class EventClassificationCreateModel extends EventModel {
      * 
      * Autor: Eduardo Humberto 
      */
-    public function insert_event_property($object_id,$data,$automatically_verified = false){
+    public function insert_event_property($object_id,$data,$automatically_verified = false) {
        //pego a propriedade de relacionamento
-        $property = get_term_by('id',  get_post_meta($data['event_id'], 'socialdb_event_classification_type',true),'socialdb_property_type');
+        $property = get_term_by('id', get_post_meta($data['event_id'], 'socialdb_event_classification_type',true),'socialdb_property_type');
         if(!isset($property)){
             $property = get_term_by('id',  get_post_meta($data['event_id'], 'socialdb_event_classification_type',true),'socialdb_category_type');
             $relationship_id = get_term_by('id',get_post_meta($data['event_id'], 'socialdb_event_classification_term_id',true),'socialdb_category_type')->term_id;
-        }
-        else{
-            $relationship_id = get_post(get_post_meta($data['event_id'], 'socialdb_event_classification_term_id',true))->ID;
-        }
+        } else {
+            $type = $this->get_property_type_hierachy($property_id);
+            if($type=='socialdb_property_data'):
+                $relationship_id = $this->sdb_get_post_meta(get_post_meta($data['event_id'], 'socialdb_event_classification_term_id',true))->meta_value;     
+            else:
+                $relationship_id = get_post(get_post_meta($data['event_id'], 'socialdb_event_classification_term_id',true))->ID;
+            endif;                   
+        }       
                   
-       if($property&&$relationship_id&&$object_id){ // faco a validacao
+       if($property&&$relationship_id&&$object_id) { // faco a validacao
             $metas = get_post_meta($object_id, 'socialdb_property_'.$property->term_id);
             if($metas&&$metas[0]!=''&&is_array($metas)){
                 if(!in_array($relationship_id, $metas)):
                     add_post_meta($object_id, 'socialdb_property_'.$property->term_id, $relationship_id);
-                    $this->concatenate_commom_field_value_object($object_id, "socialdb_property_" . $property->term_id, $relationship_id);
+                    if(is_numeric($relationship_id)) {
+                        $this->concatenate_commom_field_value_object($object_id, "socialdb_property_" . $property->term_id, $relationship_id);    
+                    } else {
+                        $this->concatenate_commom_field_value($object_id, "socialdb_property_" . $property->term_id_, $relationship_id);
+                    }                    
                 else:
                     $data['msg'] = __('This classification is already confirmed','tainacan');
                     $data['type'] = 'info';
-                    $data['title'] = 'Attention';
+                    $data['title'] = 'Attention!';
                     $this->update_event_state('invalid', $data['event_id']); // seto a o evento como invalido
                     return $data;
                 endif;
@@ -168,8 +176,9 @@ class EventClassificationCreateModel extends EventModel {
             $data['msg'] = __('The event was successful','tainacan');
             $data['type'] = 'success';
             $data['title'] = 'Success';
-        }else{ // se caso qualquer um dos itens for invalido
-            $data['msg'] = __('Object, Property or relationship invalid','tainacan');
+        } else { // se caso qualquer um dos itens for invalido
+            $property = get_post_meta($data['event_id'], 'socialdb_event_classification_type',true);
+            $data['msg']  = __('Object, Property or relationship invalid','tainacan');
             $data['type'] = 'error';
             $data['title'] = 'Error';
             $this->update_event_state('invalid', $data['event_id']); // seto a o evento como invalido

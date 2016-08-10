@@ -41,6 +41,11 @@ class SearchController extends Controller {
                 $data['ordenation'] = $object_model->get_collection_data($collection_id);
                 return $this->render(dirname(__FILE__) . '../../../views/search/layout.php', $data );
                 break;
+            case "edit_tags":
+                $object_model = new ObjectModel();
+                $data['tags'] = wp_get_object_terms($data['collection_id'], 'socialdb_tag_type');
+                return $this->render(dirname(__FILE__) . '../../../views/search/tags.php', $data );
+                break;
             case "get_menu_ids":
                 return json_encode( $data['menu_style_ids'] = $this->get_menu_styles_ids());
                 break;
@@ -93,6 +98,8 @@ class SearchController extends Controller {
                 $data = $search_model->get_events_data($data);
                 return $this->render(dirname(__FILE__) . '../../../views/search/feed_events.php', $data);
               break;
+            case 'get_slideshow_time':
+                return json_encode($search_model->get_slideshow_time($data));
         }
     }
 

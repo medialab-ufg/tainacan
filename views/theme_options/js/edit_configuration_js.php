@@ -109,8 +109,8 @@
             });       
     
     }
-    
-    function list_templates(){
+    /*
+    function list_templates() {
          $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/collection/collection_controller.php",
@@ -131,6 +131,7 @@
             }
         });
     }
+    */
     // desabilita as colecaoes vazia no repositorio
 //    function disable_empty_collection(selector){
 //        selector = $(selector);

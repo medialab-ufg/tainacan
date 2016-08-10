@@ -23,6 +23,7 @@ class FlickrModel extends Model {
     private $userName;
     private $apiKeyValue;
     private $arrItem;
+    private $albumId;
 
     //apenas um nome válido de usuário é necessário para instanciar a classe
     function __construct($uName, array $config) {
@@ -254,6 +255,44 @@ class FlickrModel extends Model {
         }
     }
 
+    private function getInfoFromItemAlbum($page) {
+        $request = self::endPoint . self::method . 'photosets.getPhotos' . self::apiKey . $this->apiKeyValue . '&photoset_id=' . $this->albumId . '&extras=license,date_upload,date_taken,owner_name,icon_server,original_format,last_update,geo,tags,machine_tags,o_dims,views,media,path_alias,url_o' . self::perPage . '&page=' . $page . self::format;
+        $reponse = $this->callFlickrAPI($request);
+        $arrayResponse = array(array('pages' => $reponse['photoset']['pages'], 'total' => $reponse['photoset']['total']));
+        if (is_array($reponse['photoset']['photo']) && !empty($reponse['photoset']['photo'])) {
+            foreach ($reponse['photoset']['photo'] as &$photo) {
+                if ($photo['media'] == 'photo') {
+                    $imageUrl = (isset($photo['url_o']) ? $photo['url_o'] : '');
+                    $itemTitle = (($photo['title'] != '') ? $photo['title'] : 'untitled');
+                    $arrayResponse[] = array(
+                        'secret' => $photo['secret'],
+                        'server' => $photo['server'],
+                        'farm' => $photo['farm'],
+                        'ispublic' => $photo['ispublic'],
+                        'title' => $itemTitle,
+                        'ownername' => $photo['ownername'],
+                        'tags' => str_replace(' ', ', ', $photo['tags']),
+                        'description' => $photo['description']["_content"],
+                        'owner' => $reponse['photoset']['owner'],
+                        'date_upload' => $photo['dateupload'],
+                        'url' => $imageUrl,
+                        'id' => $photo['id'],
+                        'content' => $imageUrl,
+                        'type' => ($photo['media'] == 'photo' ? 'image' : $photo['media']),
+                        'license' => $photo['license'],
+                        'latitude' => $photo['latitude'],
+                        'longitude' => $photo['longitude'],
+                        'source' => 'Flickr',
+                        'thumbnail' => $imageUrl
+                    );
+                }
+            }
+            return $arrayResponse;
+        } else {
+            return false;
+        }
+    }
+
     public function insertImageItem($data, $object_model, $status = 'publish') {
         $collection_id = $data['collectionId'];
         $mapping_id = $this->get_post_by_title('socialdb_channel_flickr', $data['collectionId'], 'flickr');
@@ -268,8 +307,7 @@ class FlickrModel extends Model {
             foreach ($mapping as $mp) {
                 $form[$mp['tag']] = $mp['socialdb_entity'];
             }
-            $object_id = socialdb_insert_object_socialnetwork($this->arrItem['title'], $status);
-
+            $object_id = socialdb_insert_object_socialnetwork_flickr($this->arrItem['title'], $status);
             //mapping
             add_post_meta($object_id, 'socialdb_channel_id', $mapping_id);
             $categories[] = $this->get_category_root_of($collection_id);
@@ -416,6 +454,173 @@ class FlickrModel extends Model {
                     unset($response);
                 }
             }
+            return ($numRecortedPhotos > 0) ? $arrSavedIds : false;
+        }
+        return ($numRecortedPhotos > 0) ? true : false;
+    }
+
+    public function insertFlickrItemsFromAlbums(array $data, array $profile, ObjectModel $object_model) {
+        $this->albumId = $profile[2];
+        // índice da primeira página de resposta
+        $currentPage = 1;
+        // photos inclusas no banco
+        $numRecortedPhotos = 0;
+        // primeira requisição
+        $response = $this->getInfoFromItemAlbum($currentPage);
+        
+        // número de photos na requisição
+        $numPhotos = count($response) - 1;
+        // paginação
+        $numPages = $response[0]['pages'];
+
+        if (!empty($response)) {
+            // trata a primeira resposta: máximo de 500 photos
+            for ($i = 1; $i <= $numPhotos; $i++) {
+                $this->arrItem = $response[$i];
+                $result = $this->insertImageItem($data, $object_model, 'draft');
+                if ($result) {
+                    $numRecortedPhotos++;
+                    $arrSavedIds[] = $result;
+                }
+            }
+            unset($response);
+            // verifica se há mais de 500 photos
+            if ($numPages > 1) {
+                // esse loop só se repetirá caso exista mais de 1000 photos
+                for ($i = 1; $i < $numPages; $i++) {
+                    $currentPage++;
+                    $response = $this->getInfoFromItemAlbum($currentPage);
+                    $numPhotos = count($response) - 1;
+                    // inserindo as photos no banco
+                    for ($i = 1; $i <= $numPhotos; $i++) {
+                        $this->arrItem = $response[$i];
+                        $result = $this->insertImageItem($data, $object_model, 'draft');
+                        if ($result) {
+                            $numRecortedPhotos++;
+                            $arrSavedIds[] = $result;
+                        }
+                    }
+                    unset($response);
+                }
+            }
+            return ($numRecortedPhotos > 0) ? $arrSavedIds : false;
+        }
+        return ($numRecortedPhotos > 0) ? true : false;
+    }
+
+    public function insertFlickrItems_albums(array $data, ObjectModel $object_model) {
+        // índice da primeira página de resposta
+        $currentPage = 1;
+        // photos inclusas no banco
+        $numRecortedPhotos = 0;
+        // primeira requisição
+        $response = $this->getInfoFromItem($currentPage);
+        if ($response) {
+            self::insert_flickr_identifier($data['identifier'], $data['collectionId']);
+        }
+        // número de photos na requisição
+        $numPhotos = count($response) - 1;
+        // paginação
+        $numPages = $response[0]['pages'];
+
+        if (!empty($response)) {
+            // trata a primeira resposta: máximo de 500 photos
+            for ($i = 1; $i <= $numPhotos; $i++) {
+                $this->arrItem = $response[$i];
+                $result = $this->insertImageItem($data, $object_model, 'draft');
+                if ($result) {
+                    $numRecortedPhotos++;
+                    $arrSavedIds[] = $result;
+                }
+            }
+            unset($response);
+            // verifica se há mais de 500 photos
+            if ($numPages > 1) {
+                // esse loop só se repetirá caso exista mais de 1000 photos
+                for ($i = 1; $i < $numPages; $i++) {
+                    $currentPage++;
+                    $response = $this->getInfoFromItem($currentPage);
+                    $numPhotos = count($response) - 1;
+                    // inserindo as photos no banco
+                    for ($i = 1; $i <= $numPhotos; $i++) {
+                        $this->arrItem = $response[$i];
+                        $result = $this->insertImageItem($data, $object_model, 'draft');
+                        if ($result) {
+                            $numRecortedPhotos++;
+                            $arrSavedIds[] = $result;
+                        }
+                    }
+                    unset($response);
+                }
+            }
+            return ($numRecortedPhotos > 0) ? $arrSavedIds : false;
+        }
+        return ($numRecortedPhotos > 0) ? true : false;
+    }
+
+    private function getOriginalSize($photo_id) {
+        $request = self::endPoint . self::method . 'photos.getSizes' . self::apiKey . $this->apiKeyValue . '&photo_id=' . $photo_id . self::format;
+        $reponse = $this->callFlickrAPI($request);
+        return end($reponse['sizes']['size'])['source'];
+    }
+
+    private function getInfoFromSingleItem($profile) {
+        $request = self::endPoint . self::method . 'photos.getInfo' . self::apiKey . $this->apiKeyValue . '&photo_id=' . $profile[2] . self::format;
+        $reponse = $this->callFlickrAPI($request);
+        $arrayResponse = array();
+        if (is_array($reponse['photo']) && !empty($reponse['photo'])) {
+            $photo = $reponse['photo'];
+            if ($photo['media'] == 'photo') {
+                $imageUrl = $this->getOriginalSize($profile[2]);
+                if (isset($photo['tags']['tag']) && is_array($photo['tags']['tag'])) {
+                    foreach ($photo['tags']['tag'] as $tag) {
+                        $tags .= $tag['_content'] . ', ';
+                    }
+                }
+                $arrayResponse[] = array(
+                    'secret' => $photo['secret'],
+                    'server' => $photo['server'],
+                    'farm' => $photo['farm'],
+                    'ispublic' => $photo['visibility']['ispublic'],
+                    'title' => $photo['title']['_content'],
+                    'ownername' => $photo['owner']['username'],
+                    'tags' => $tags,
+                    'description' => $photo['description']["_content"],
+                    'owner' => $photo['owner']['path_alias'],
+                    'date_upload' => $photo['dateuploaded'],
+                    'url' => $imageUrl,
+                    'id' => $photo['id'],
+                    'content' => $imageUrl,
+                    'type' => ($photo['media'] == 'photo' ? 'image' : $photo['media']),
+                    'license' => $photo['license'],
+                    'latitude' => $photo['latitude'],
+                    'longitude' => $photo['longitude'],
+                    'source' => 'Flickr',
+                    'thumbnail' => $imageUrl
+                        //'url' => 'https://farm' . $photo['farm'] . '.staticflickr.com/' . $photo['server'] . '/' . $photo['id'] . '_' . $photo['secret'] . '_b.jpg',
+                );
+            }
+
+            return $arrayResponse;
+        } else {
+            return false;
+        }
+    }
+
+    public function insertFlickrSingleItem(array $data, array $profile, ObjectModel $object_model) {
+        // única requisição
+        $response = $this->getInfoFromSingleItem($profile);
+        $numRecortedPhotos = 0;
+        if (!empty($response)) {
+            // trata a resposta
+            $this->arrItem = $response[0];
+            $result = $this->insertImageItem($data, $object_model, 'draft');
+            if ($result) {
+                $numRecortedPhotos++;
+                $arrSavedIds[] = $result;
+            }
+
+            unset($response);
             return ($numRecortedPhotos > 0) ? $arrSavedIds : false;
         }
         return ($numRecortedPhotos > 0) ? true : false;
