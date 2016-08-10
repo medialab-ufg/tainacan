@@ -69,12 +69,13 @@ class ObjectWidgetsHelper extends ViewHelper {
                                 id='main_compound_id' 
                                 value='<?php echo $references['compound_id'] ?>'>
                         <?php for($i = 0; $i<$cardinality;$i++): 
-                            $is_show_container =  $this->is_set_container($object_id,$property['id'],$property_compounded['id'],$i);
+                             $is_show_container =  $this->is_set_container($object_id,$property,$property_compounded,$i);
                             $position = 0;
                             ?>
                             <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
-                                 class=" col-md-12"
+                                 class="col-md-12 no-padding"
                                  style="padding-bottom: 10px;<?php echo ($is_show_container) ? 'display:block': 'display:none'; ?>">
+                                <div class="col-md-11">
                                 <?php foreach ($properties_compounded as $property_compounded): 
                                     $coumpounds_id[] = $property_compounded['id']; 
                                     $value = $this->get_value($object_id, $property['id'], $property_compounded['id'], $i, $position);
@@ -101,6 +102,14 @@ class ObjectWidgetsHelper extends ViewHelper {
                                     </div>
                                 <?php $position++ ?>
                                 <?php endforeach; ?>
+                                </div>    
+                                <?php if($i>0): ?>
+                                <div class="col-md-1">
+                                    <button type="button" onclick="remove_container_compounds(<?php echo $property['id'] ?>,<?php echo $i ?>)" class="btn btn-default">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </div>    
+                                <?php endif; ?>    
                                 <?php echo ($is_show_container==1) ? ''  : $this->render_button_cardinality($property,$i) ?>     
                             </div>  
                         <?php endfor; ?>
@@ -357,11 +366,19 @@ class ObjectWidgetsHelper extends ViewHelper {
             }
         }
     }
-    
-    public function is_set_container($item_id,$compound_id,$property,$i) {
+    /**
+     * 
+     * @param type $item_id
+     * @param type $compound_id
+     * @param type $property
+     * @param type $i
+     * @return boolean|int
+     */
+    public function is_set_container($item_id,$compound,$property,$i) {
+        $compound_id = $compound['id'];
         $values = get_post_meta($item_id,'socialdb_property_'.$compound_id.'_'.$i,true);
         if($values&&$values!=''){
-            if(get_post_meta($item_id,'socialdb_property_'.$compound_id.'_'.($i+1),true)){
+            if($this->has_next_compound($item_id, $compound,($i+1))){
                 return 1;
             }else{
                 return 2;  
@@ -375,5 +392,18 @@ class ObjectWidgetsHelper extends ViewHelper {
             
         }
     }
-
+    
+    /**
+     * verifico se existe algum valor nas proximas
+     */
+    public function has_next_compound($item_id,$compound,$i) {
+       $max = $this->render_cardinality_property($compound);
+       while($i<$max){
+           if(get_post_meta($item_id,'socialdb_property_'.$compound['id'].'_'.$i,true)){
+               return true;
+           }
+           $i++;
+       }
+       return false;
+    }
 }

@@ -4,8 +4,10 @@ include_once ('../../../../../wp-load.php');
 include_once ('../../../../../wp-includes/wp-db.php');
 include_once ('js/editor_items_js.php');
 include_once(dirname(__FILE__).'/../../../helpers/view_helper.php');
+include_once(dirname(__FILE__).'/../../../helpers/object/object_properties_widgets_helper.php');
 
-$view_helper = new ViewHelper($collection_id);
+$view_helper = new ViewHelper();
+$object_properties_widgets_helper = new ObjectWidgetsHelper();
 
 $properties_terms_radio = [];
 $properties_terms_tree = [];
@@ -23,6 +25,16 @@ $filesVideo= [];
 $filesAudio= [];
 $filesPdf= [];
 $filesOther= [];
+//referencias
+$references = [
+    'properties_autocomplete' => &$properties_autocomplete,
+    'properties_terms_radio' => &$properties_terms_radio,
+    'properties_terms_checkbox' => &$properties_terms_checkbox,
+    'properties_terms_tree' => &$properties_terms_tree,
+    'properties_terms_selectbox' => &$properties_terms_selectbox,
+    'properties_terms_multipleselect' => &$properties_terms_multipleselect,
+    'properties_terms_treecheckbox' => &$properties_terms_treecheckbox   
+];
 ?>
 
 <div class="row" style="padding-right: 0px;padding-left: 0px;">
@@ -270,7 +282,6 @@ $filesOther= [];
         <?php endif; 
         //lista as propriedades de dados
          if((isset($properties['property_term']))): ?>
-            <!--h4><?php _e('Term properties','tainacan'); ?></h4-->
             <?php foreach ( $properties['property_term'] as $property ) { 
 //                if(!isset($property['has_children'])||empty($property['has_children'])){
 //                    continue;
@@ -353,6 +364,7 @@ $filesOther= [];
                 </div>
              <?php  } ?>
         <?php endif; ?>
+        <?php $object_properties_widgets_helper->list_properties_compounds($properties['property_compounds'], 0,$references)  ?>
         <!-- TAINACAN: a licencas do item -->
         <div id="list_licenses_items"
              <?php echo $view_helper->get_visibility($view_helper->terms_fixed['license']) ?>  
