@@ -1,6 +1,7 @@
 <?php
 include_once('../../helpers/view_helper.php');
 include_once('js/tabs_js.php');
+include_once('js/compounds_js.php');
 include_once ('js/list_metadata_js.php');
 
 $view_helper = new ViewHelper();
@@ -53,7 +54,7 @@ $array_visibility = ($meta&&$meta!=='') ? $meta : '';
                 <?php foreach( $view_helper->get_metadata_types() as $type => $label):  ?>
                     <li>
                        <!--a  data-toggle="modal" data-target="#meta-<?php echo $type ?>"-->
-                       <a onclick="$('#meta-<?php echo $type ?>').modal('show')" > 
+                       <a onclick="$('#meta-<?php echo $type ?>').modal('show');clear_form('<?php echo $type ?>');" > 
                             <img src="<?php $view_helper->get_metadata_icon($type); ?>" alt="<?php echo $type ?>" title="<?php echo $type ?>">
                             <?php echo $label ?>
                         </a>

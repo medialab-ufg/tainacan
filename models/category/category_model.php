@@ -1180,8 +1180,10 @@ class CategoryModel extends Model {
         //cria a taxonomia
         if($data['socialdb_property_term_new_taxonomy']&&trim($data['socialdb_property_term_new_taxonomy'])!=''){
             $html = str_get_html((stripslashes ( $data['socialdb_property_term_new_taxonomy'])));
-            foreach($html->find( '.root_ul', 0)->children() as $li){
-                $this->add_nodes_taxonomy($li,$category_root_id);
+            if($html->find( '.root_ul', 0)){
+                foreach($html->find( '.root_ul', 0)->children() as $li){
+                    $this->add_nodes_taxonomy($li,$category_root_id);
+                }
             }
         }
         return json_encode($data);

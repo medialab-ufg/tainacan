@@ -132,7 +132,7 @@ foreach( $view_helper->get_metadata_types() as $type => $label):
         endif;
 endforeach;
 
-foreach( ['object', 'term', 'voting', 'filter', 'tag'] as $metadata ) {
+foreach( ['object', 'term', 'voting', 'filter', 'tag','compounds'] as $metadata ) {
     include_once "metadata/form_$metadata.php";
 }
 ?>

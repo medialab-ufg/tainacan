@@ -96,8 +96,14 @@
                 data: { operation: 'get_ordenation_properties',collection_id:$('#collection_id').val() }
             }).done(function(result) {
                 var json = $.parseJSON(result);
+                console.log(json.ordenation,' assim');
                 if(json&&json.ordenation&&json.ordenation!==''){
-                    reorder_properties_multiple_item(json.ordenation.split(','));
+                    if(json.ordenation.default){
+                         reorder_properties_multiple_item(json.ordenation.default.split(','));
+                    }else{
+                         reorder_properties_multiple_item(json.ordenation.split(','));
+                    }
+                   
                 }
             });
             //inicializo o accordeon
@@ -1355,6 +1361,16 @@
             return value.split(',');
         }
     }
+    // get value of the property
+    function get_val(value) {
+        if (value === ''||value===undefined) {
+            return false;
+        } else if (value.split(',')[0] === '' && value !== '') {
+            return [value];
+        } else {
+            return value.split(',');
+        }
+    }
     //removendo arrays com itens duplicados
     function remove_duplicates_safe(arr) {
         var obj = {};
@@ -1634,5 +1650,34 @@
                 }
             });
         }
-    }       
+    }  
+    
+    function set_field_valid(id,seletor){
+        if($('#'+seletor).val()==='false'){
+            $('#core_validation_'+id).val('false');
+            $('#ok_field_'+id).hide();
+            $('#required_field_'+id).show();
+        }else{
+            $('#core_validation_'+id).val('true');
+            $('#ok_field_'+id).show();
+            $('#required_field_'+id).hide();
+        }
+        validate_all_fields();
+    }
+    
+    function validate_all_fields(){
+        var cont = 0;
+        $( ".core_validation").each(function( index ) {
+            if($( this ).val()==='false'){
+                cont++;
+            }
+        });
+        if(cont===0){
+            $('#submit_container').show();
+            $('#submit_container_message').hide();
+        }else{
+            $('#submit_container').hide();
+            $('#submit_container_message').show();
+        }
+    }
 </script>
