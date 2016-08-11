@@ -111,7 +111,7 @@
         $wp_posts = $wpdb->prefix . "posts";
         $query = "
                         SELECT p.* FROM $wp_posts p
-                        WHERE p.post_type like 'socialdb_collection' and p.post_title LIKE '%{$data['term']}%'
+                        WHERE p.post_type like 'socialdb_collection' and p.post_status like 'publish' and p.post_title LIKE '%{$data['term']}%'
                 ";
         $result = $wpdb->get_results($query);
         if ($result) {

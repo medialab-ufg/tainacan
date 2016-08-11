@@ -423,6 +423,26 @@ class ObjectController extends Controller {
                 }
                 return true;
                 break;
+            case 'duplicate_item_same_collection':
+                $item = get_post($data['object_id']);
+                $newItem = $object_model->copyItem($item, $data['collection_id']);
+                $metas = get_post_meta($item->ID);
+                $object_model->copyItemMetas($newItem, $metas);
+                $object_model->copyItemCategories($newItem, $data['object_id']);
+                $object_model->copyItemTags($newItem, $data['object_id']);
+                //var_dump($data, $item, $metas);
+                
+                $object_name = get_post_meta($data['collection_id'], 'socialdb_collection_object_name', true);
+                $socialdb_collection_attachment = get_post_meta($data['collection_id'], 'socialdb_collection_attachment', true);
+                $data = $object_model->edit($newItem, $data['collection_id']);
+                $data['object_name'] = $object_name;
+                $data['socialdb_collection_attachment'] = $socialdb_collection_attachment;
+                $data['socialdb_object_from'] = get_post_meta($data['object']->ID, 'socialdb_object_from', true);
+                $data['socialdb_object_dc_source'] = get_post_meta($data['object']->ID, 'socialdb_object_dc_source', true);
+                $data['socialdb_object_content'] = get_post_meta($data['object']->ID, 'socialdb_object_content', true);
+                $data['socialdb_object_dc_type'] = get_post_meta($data['object']->ID, 'socialdb_object_dc_type', true);
+                return $this->render(dirname(__FILE__) . '../../../views/object/edit.php', $data);
+                break;
         }
     }
 

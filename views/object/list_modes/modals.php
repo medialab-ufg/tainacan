@@ -10,7 +10,7 @@ $root_id = get_option('collection_root_id');
 <div class="modal fade modal-share-network" id="modal_share_network<?php echo get_the_ID() ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            
+
             <?php echo $viewHelper->render_modal_header('remove-sign', '<span class="glyphicon glyphicon-share"></span> ', __('Share', 'tainacan')); ?>
 
             <div class="modal-body">
@@ -52,7 +52,34 @@ $root_id = get_option('collection_root_id');
 
 <?php
 if (get_option('collection_root_id') != $collection_id):
-    if( ! $is_moderator || get_post(get_the_ID())->post_author != get_current_user_id() ): ?>
+    /*
+     * TAINACAN: modal padrao bootstrap para duplicar item
+     */
+    ?>
+    <div class="modal fade" id="modal_duplicate_object<?php echo get_the_ID() ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form method="post" id="formDuplicateItem<?php echo get_the_ID() ?>">
+                <div class="modal-content">
+
+                    <?php echo $viewHelper->render_modal_header('remove-sign', '<span class="glyphicon glyphicon-share"></span> ', __('Duplicate Item', 'tainacan')); ?>
+
+                    <div class="modal-body">
+                        <input type="radio" name="duplicate_item" value="this_collection" onchange="hideOtherCollectionField(<?php echo get_the_ID() ?>);" checked="checked"> <?php _e('Duplicate in this collection', 'tainacan'); ?><br><br>
+                        <input type="radio" name="duplicate_item" value="other_collection" onchange="showOtherCollectionField(<?php echo get_the_ID() ?>);"> <?php _e('Duplicate in other collection', 'tainacan'); ?><br>
+                        <input type="text" class="form-control" name="other_collections" id="other_collections<?php echo get_the_ID() ?>" style="display:none;">
+                        <br>
+                        <input type="radio" name="duplicate_item" value="versioning" onchange="hideOtherCollectionField(<?php echo get_the_ID() ?>);"> <?php _e('Versioning', 'tainacan'); ?>
+
+                    </div>
+
+                    <?php echo $viewHelper->render_modal_footer("send_duplicate_item(\"$curr_id\")", __('Send', 'tainacan')); ?>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <?php if (!$is_moderator || get_post(get_the_ID())->post_author != get_current_user_id()): ?>
 
         <?php
         /*
@@ -79,8 +106,10 @@ if (get_option('collection_root_id') != $collection_id):
             </div>
         </div>
 
-    <?php endif;
-else: ?>
+        <?php
+    endif;
+else:
+    ?>
 
     <?php
     /*
@@ -92,9 +121,9 @@ else: ?>
     <div class="modal fade" id="modal_delete_object<?php echo get_the_ID() ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                
+
                 <?php echo $viewHelper->render_modal_header('remove-sign', '<span class="glyphicon glyphicon-trash"></span> ', $abuse_title); ?>
-                
+
                 <div class="modal-body">
                     <?php echo __('Describe why the collection: ', 'tainacan') . get_the_title() . __(' is abusive: ', 'tainacan'); ?>
                     <textarea id="observation_delete_collection<?php echo get_the_ID() ?>" class="form-control"></textarea>
