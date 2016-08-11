@@ -22,6 +22,10 @@
                            onclick="<?php get_item_click_event($collection_id, get_the_ID()) ?>">
                                <?php echo wp_trim_words( get_the_title(), 13 ); ?>
                         </a>
+                        <?php
+                            echo "Minha latitude eh " . $var[0];
+                            // var_dump($var[0]);
+                        ?>
                     </h4>
                     <div class="item-description"> <?php echo wp_trim_words(get_the_content(), 16); ?> </div>
                     

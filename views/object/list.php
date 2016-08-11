@@ -6,6 +6,7 @@
 include_once('./../../helpers/view_helper.php');
 include_once('./../../helpers/object/object_helper.php');
 include_once ('js/list_js.php');
+include_once ('js/geolocation_js.php');
 
 $countLine = 0;
 $classColumn = 12;
@@ -21,6 +22,20 @@ $viewHelper = new ViewHelper();
 if( !$collection_list_mode ) {
     $collection_list_mode = "cards";
 }
+$_lat = get_term_by("name", "Latitude");
+$_lat2 = get_term_by("name", "latitude");
+
+global $wpdb;
+$wp_terms = $wpdb->prefix . "terms";
+
+$q1 = "SELECT term_id FROM $wp_terms WHERE `name` LIKE '%latitude%'";
+
+// var_dump($_lat);
+$pop_id = $wpdb->get_results($q1)[0]->term_id;
+
+var_dump( $pop_id );
+
+
 ?>
 
 <!-- TAINACAN: hidden utilizados para execucao de processos desta view (list.php)  -->
@@ -40,6 +55,8 @@ if( !$collection_list_mode ) {
             <?php while ( $loop->have_posts() ) : $loop->the_post(); $countLine++;
                 $curr_id = get_the_ID();
                 $curr_date = "<strong>" . __('Created at: ', 'tainacan') . "</strong>" . get_the_date('d/m/Y');
+                
+                $var = get_post_meta($curr_id, "socialdb_property_" . $pop_id );                                
 
                 include "list_modes/modals.php";
                 include "list_modes/cards.php";
@@ -50,9 +67,7 @@ if( !$collection_list_mode ) {
             endwhile;
 
             include_once "list_modes/slideshow.php";
-
             include_once "list_modes/geolocation.php";
-
             ?>
         </div>
     </div>
