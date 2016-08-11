@@ -5,8 +5,25 @@
  */
 include_once ('js/show_list_event_properties_js.php');
 include_once('./../../helpers/view_helper.php');
-// $viewHelper = new ViewHelper();
-
+include_once('./../../helpers/object/single_properties_widgets_helper.php');
+$objectHelper = new ObjectSingleWidgetsHelper();
+$properties_autocomplete = [];
+$properties_terms_radio = [];
+$properties_terms_tree = [];
+$properties_terms_selectbox = [];
+$properties_terms_checkbox = [];
+$properties_terms_multipleselect = [];
+$properties_terms_treecheckbox = [];
+//referencias
+$references = [
+    'properties_autocomplete' => &$properties_autocomplete,
+    'properties_terms_radio' => &$properties_terms_radio,
+    'properties_terms_checkbox' => &$properties_terms_checkbox,
+    'properties_terms_tree' => &$properties_terms_tree,
+    'properties_terms_selectbox' => &$properties_terms_selectbox,
+    'properties_terms_multipleselect' => &$properties_terms_multipleselect,
+    'properties_terms_treecheckbox' => &$properties_terms_treecheckbox   
+];
 $ids = [];
 
 if (!isset($property_object) && !isset($property_data)):
@@ -282,14 +299,18 @@ if (isset($property_term)): ?>
             endif;
         }
     endif;
+    
+    if(isset($property_compounds)):
+        $objectHelper->list_properties_compounds($property_compounds, $object_id, $references);
+   endif;
     ?>
     <input type="hidden" name="categories_id" id='event_single_object_categories_id_<?php echo $object_id; ?>' value="<?php echo implode(',', $categories_id); ?>">
-    <input type="hidden" name="properties_terms_radio" id='event_single_properties_terms_radio' value="<?php echo implode(',', $properties_terms_radio); ?>">
-    <input type="hidden" name="properties_terms_tree" id='event_single_properties_terms_tree' value="<?php echo implode(',', $properties_terms_tree); ?>">
-    <input type="hidden" name="properties_terms_selectbox" id='event_single_properties_terms_selectbox' value="<?php echo implode(',', $properties_terms_selectbox); ?>">
-    <input type="hidden" name="properties_terms_checkbox" id='event_single_properties_terms_checkbox' value="<?php echo implode(',', $properties_terms_checkbox); ?>">
-    <input type="hidden" name="properties_terms_multipleselect" id='event_single_properties_terms_multipleselect' value="<?php echo implode(',', $properties_terms_multipleselect); ?>">
-    <input type="hidden" name="properties_terms_treecheckbox" id='event_single_properties_terms_treecheckbox' value="<?php echo implode(',', $properties_terms_treecheckbox); ?>">
+    <input type="hidden" name="properties_terms_radio" id='event_single_properties_terms_radio' value="<?php echo implode(',', array_unique($properties_terms_radio)); ?>">
+    <input type="hidden" name="properties_terms_tree" id='event_single_properties_terms_tree' value="<?php echo implode(',', array_unique($properties_terms_tree)); ?>">
+    <input type="hidden" name="properties_terms_selectbox" id='event_single_properties_terms_selectbox' value="<?php echo implode(',', array_unique($properties_terms_selectbox)); ?>">
+    <input type="hidden" name="properties_terms_checkbox" id='event_single_properties_terms_checkbox' value="<?php echo implode(',', array_unique($properties_terms_checkbox)); ?>">
+    <input type="hidden" name="properties_terms_multipleselect" id='event_single_properties_terms_multipleselect' value="<?php echo implode(',', array_unique($properties_terms_multipleselect)); ?>">
+    <input type="hidden" name="properties_terms_treecheckbox" id='event_single_properties_terms_treecheckbox' value="<?php echo implode(',', array_unique($properties_terms_treecheckbox)); ?>">
     <input type="hidden" id="object_classifications_event_single_<?php echo $object_id; ?>" name="object_classifications" value="<?php echo implode(',', $categories_id); ?>">
 
     <?php if (isset($all_ids)): ?>

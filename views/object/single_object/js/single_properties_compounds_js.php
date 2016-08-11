@@ -154,12 +154,12 @@
     }
     //************************* properties terms ******************************************//
     function compounds_list_properties_term_insert_objects() {
-        var radio_cats = ($('#properties_terms_radio').length>0) ? $("#properties_terms_radio").val() : $("#multiple_properties_terms_radio").val();
-        var check_cats = ($('#properties_terms_checkbox').length>0) ? $("#properties_terms_checkbox").val() : $("#multiple_properties_terms_checkbox").val();
-        var select_cats = ($('#properties_terms_selectbox').length>0) ? $("#properties_terms_selectbox").val() : $("#multiple_properties_terms_selectbox").val();
-        var tree_cats = ($('#properties_terms_tree').length>0) ? $("#properties_terms_tree").val() : $("#multiple_properties_terms_tree").val();
-        var treecheck_cats = ($('#properties_terms_treecheckbox').length>0) ? $("#properties_terms_treecheckbox").val() : $("#multiple_properties_terms_treecheckbox").val();
-        var multiple_cats = ($('#properties_terms_multipleselect').length>0) ? $("#properties_terms_multipleselect").val() : $("#multiple_properties_terms_multipleselect").val();
+        var radio_cats = ($('#event_single_properties_terms_radio').length>0) ? $("#event_single_properties_terms_radio").val() : $("#multiple_properties_terms_radio").val();
+        var check_cats = ($('#event_single_properties_terms_checkbox').length>0) ? $("#event_single_properties_terms_checkbox").val() : $("#multiple_properties_terms_checkbox").val();
+        var select_cats = ($('#event_single_properties_terms_selectbox').length>0) ? $("#event_single_properties_terms_selectbox").val() : $("#multiple_properties_terms_selectbox").val();
+        var tree_cats = ($('#event_single_properties_terms_tree').length>0) ? $("#event_single_properties_terms_tree").val() : $("#multiple_properties_terms_tree").val();
+        var treecheck_cats = ($('#event_single_properties_terms_treecheckbox').length>0) ? $("#event_single_properties_terms_treecheckbox").val() : $("#multiple_properties_terms_treecheckbox").val();
+        var multiple_cats = ($('#event_single_properties_terms_multipleselect').length>0) ? $("#event_single_properties_terms_multipleselect").val() : $("#multiple_properties_terms_multipleselect").val();
         //
         var all_compounds_id = $('#properties_compounds').val().split(',');
         var categories = compounds_get_val($("#edit_object_categories_id").val());
@@ -200,7 +200,7 @@
                                     var checked = '';
                                     var value = $('#actual_value_'+compound_id+'_' + radio + '_' + i).val();
                                     //if(elem.metas.socialdb_property_required==='true'){
-                                        required = ' onchange="compounds_validate_radio(' + radio + ','+i+','+compound_id+')"';
+                                       // required = ' onchange="compounds_validate_radio(' + radio + ','+i+','+compound_id+')"';
                                     //}
                                     //  if (property.id == selected) {
                                     //     $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
@@ -243,7 +243,7 @@
                                 if (typeof delete_value === "function") {
                                     delete_value(children.term_id);
                                 }
-                                required = ' onchange="compounds_validate_checkbox(' + checkbox + ','+ i +','+ compound_id +')"';
+                               // required = ' onchange="compounds_validate_checkbox(' + checkbox + ','+ i +','+ compound_id +')"';
                                 if(value&&value==children.term_id){
                                     checked = 'checked="checked"';
                                 }
@@ -276,20 +276,6 @@
                             dynatree_object_index['field_property_term_'+compound_id+'_' + selectbox + '_' + i] = i;
                             elem = jQuery.parseJSON(result);
                             $('#field_property_term_'+compound_id+'_' + selectbox + '_' + i).html('');
-                            $('#field_property_term_'+compound_id+'_' + selectbox + '_' + i).change(function(){
-                                var cont = 0;
-                                var i =  dynatree_object_index[$(this).attr('id')];
-                                if( $(this).val().trim()!==''){
-                                    cont++;
-                                }
-                                if( cont===0){
-                                    $('#core_validation_'+compound_id+'_'+selectbox+'_'+i).val('false');
-                                    set_field_valid_compounds(selectbox,'core_validation_'+compound_id+'_'+selectbox+'_'+i,compound_id);
-                                }else{
-                                    $('#core_validation_'+compound_id+'_'+selectbox+'_'+i).val('true');
-                                    set_field_valid_compounds(selectbox,'core_validation_'+compound_id+'_'+selectbox+'_'+i,compound_id);
-                                }
-                            });
                             $('#field_property_term_'+compound_id+'_' + selectbox + '_' + i).append('<option value=""><?php _e('Select','tainacan') ?>...</option>');
                             $.each(elem.children, function (idx, children) {
                                 var checked = '';
@@ -300,8 +286,8 @@
                                  
                                 if(value!=''&&value==children.term_id){
                                     checked = 'selected="selected"';
-                                    $('#core_validation_'+selectbox).val('true');
-                                    set_field_valid(selectbox,'core_validation_'+selectbox);
+                                    //$('#core_validation_'+selectbox).val('true');
+                                   // set_field_valid(selectbox,'core_validation_'+selectbox);
                                 }
                                 $('#field_property_term_'+compound_id+'_' + selectbox + '_' + i).append('<option '+checked+' value="' + children.term_id + '">' + children.name + '</option>');
                                 if(checked!==''){
@@ -329,15 +315,6 @@
                      xhr.done(function (result) {    
                         for(var i = 0;i<cardinality;i++){
                             var value = $('#actual_value_'+compound_id+'_' + multipleSelect + '_' + i).val();
-                            //validation
-                            $('#field_property_term_'+compound_id+'_' + multipleSelect + '_' + i).select(function(){
-                                if( $("#field_property_term_"+compound_id+'_' + multipleSelect + '_' + i).val()===''){
-                                    $('#core_validation_'+compound_id+'_' + multipleSelect + '_' + i).val('false');
-                                }else{
-                                     $('#core_validation_'+compound_id+'_' + multipleSelect + '_' + i).val('true');
-                                }
-                                set_field_valid_compounds(multipleSelect,'core_validation_'+compound_id+'_' + multipleSelect + '_' + i,compound_id);
-                            });
                             //validation
                             $('#field_property_term_'+compound_id+'_' + multipleSelect + '_' + i).change(function(){
                                 if( $("#field_property_term_"+compound_id+'_' + multipleSelect + '_' + i).val()===''){
@@ -429,23 +406,23 @@
                                 var categories = $.map(node.tree.getSelectedNodes(), function (node) {
                                     return node.data.key;
                                 });
-                                if(categories.length>0&&categories.indexOf(node.data.key)>=0){
-                                    append_category_properties(node.data.key);
-                                }else{
-                                    append_category_properties(0,node.data.key);
-                                }
+//                                if(categories.length>0&&categories.indexOf(node.data.key)>=0){
+//                                    append_category_properties(node.data.key);
+//                                }else{
+//                                    append_category_properties(0,node.data.key);
+//                                }
                                 $("#socialdb_propertyterm_"+compound_id+"_" + treecheckbox + '_' + i).html('');
                                 $.each(selKeys, function (index, key) {
                                     cont++;
                                     $("#socialdb_propertyterm_"+compound_id+"_" + treecheckbox + '_' + i).append('<input type="hidden" name="socialdb_property_'+treecheckbox+'_' + i + '[]" value="' + key.data.key + '" >');
                                 });
-                                if(cont===0){
-                                    $('#core_validation_'+compound_id+'_'+treecheckbox+ '_' + i).val('false');
-                                    set_field_valid_compounds(treecheckbox,'core_validation_'+compound_id+'_'+treecheckbox+ '_' + i,compound_id);
-                                 }else{
-                                    $('#core_validation_'+compound_id+'_'+treecheckbox+ '_' + i).val('true');
-                                    set_field_valid_compounds(treecheckbox,'core_validation_'+compound_id+'_'+treecheckbox+ '_' + i,compound_id); 
-                                 }
+//                                if(cont===0){
+//                                    $('#core_validation_'+compound_id+'_'+treecheckbox+ '_' + i).val('false');
+//                                    set_field_valid_compounds(treecheckbox,'core_validation_'+compound_id+'_'+treecheckbox+ '_' + i,compound_id);
+//                                 }else{
+//                                    $('#core_validation_'+compound_id+'_'+treecheckbox+ '_' + i).val('true');
+//                                    set_field_valid_compounds(treecheckbox,'core_validation_'+compound_id+'_'+treecheckbox+ '_' + i,compound_id); 
+//                                 }
                             }
                         });
                     }
@@ -509,15 +486,15 @@
                                 onSelect: function (flag, node) {
                                     var i = dynatree_object_index[this.$tree[0].id];
                                     if ($("#field_property_term_"+compound_id+"_" + tree + '_' + i).val() === node.data.key) {
-                                        append_category_properties(0,node.data.key);
+                                      //  append_category_properties(0,node.data.key);
                                         $("#field_property_term_"+compound_id+"_" + tree + '_' + i).val("");
                                          $('#core_validation_'+compound_id+'_' + tree + '_' + i).val('false');
-                                         set_field_valid_compounds(tree,'core_validation_'+compound_id+'_' + tree + '_' + i,compound_id);
+                                        // set_field_valid_compounds(tree,'core_validation_'+compound_id+'_' + tree + '_' + i,compound_id);
                                     } else {
-                                        append_category_properties(node.data.key,$("#field_property_term_"+compound_id+"_" + tree).val());
+                                       // append_category_properties(node.data.key,$("#field_property_term_"+compound_id+"_" + tree).val());
                                         $("#field_property_term_"+compound_id+"_" + tree + '_' + i).val(node.data.key);
                                         $('#core_validation_'+compound_id+'_'+ tree + '_' + i).val('true');
-                                        set_field_valid_compounds(tree,'core_validation_'+compound_id+'_' + tree + '_' + i,compound_id);
+                                       // set_field_valid_compounds(tree,'core_validation_'+compound_id+'_' + tree + '_' + i,compound_id);
                                     }
                                 }
                             });
@@ -545,7 +522,7 @@
             for(var i = 0; i<properties.length; i++){
                   $('#core_validation_'+property_id+'_'+properties[i]+'_'+((id+1))).val('false');
             }
-             validate_all_fields_compounds(property_id);
+            // validate_all_fields_compounds(property_id);
         }
     }
     //removendo o container
@@ -558,7 +535,7 @@
                   $('#core_validation_'+property_id+'_'+properties[i]+'_'+(id)).val('true');
                   $('input[name="socialdb_property_'+property_id+'_'+properties[i]+'_'+(id)+'[]"]').val('');
             }
-            validate_all_fields_compounds(property_id);
+            //validate_all_fields_compounds(property_id);
         }
         //se o proximo container
         if(!$('#container_field_'+property_id+'_'+(id+1)).is(':visible')){
@@ -581,13 +558,13 @@
     function compounds_validate_radio(property_id,i,compound_id){
         var selected = $("input[type='radio'][name='socialdb_property_"+compound_id+"_"+property_id+"_"+i+"[]']:checked");
         if (selected.length > 0) {
-            append_category_properties($(selected[0]).val(), $('#actual_field_term_'+compound_id+"_"+property_id+"_"+i).val());
+           // append_category_properties($(selected[0]).val(), $('#actual_field_term_'+compound_id+"_"+property_id+"_"+i).val());
             $('#actual_field_term_'+compound_id+"_"+property_id+"_"+i).val($(selected[0]).val()); 
-            $('#core_validation_'+compound_id+'_'+property_id+"_"+i).val('true');
-            set_field_valid_compounds(property_id,'core_validation_'+compound_id+'_'+property_id+"_"+i,compound_id);
+           // $('#core_validation_'+compound_id+'_'+property_id+"_"+i).val('true');
+           // set_field_valid_compounds(property_id,'core_validation_'+compound_id+'_'+property_id+"_"+i,compound_id);
         }else{
-            $('#core_validation_'+property_id+"_"+i).val('false');
-            set_field_valid_compounds(property_id,'core_validation_'+compound_id+'__'+property_id+"_"+i,compound_id);
+            //$('#core_validation_'+property_id+"_"+i).val('false');
+           // set_field_valid_compounds(property_id,'core_validation_'+compound_id+'__'+property_id+"_"+i,compound_id);
         }
     }
     /**
@@ -598,17 +575,17 @@
         var selected = $("input[type='checkbox'][name='socialdb_property_" + compound_id + "_"+property_id+"_"+i+"[]']:checked");
         if (selected.length > 0) {
             $('#core_validation_'+ compound_id + "_"+property_id+"_"+i).val('true');
-            set_field_valid_compounds(property_id,'core_validation_'+ compound_id + "_"+property_id+"_"+i,compound_id);
+           // set_field_valid_compounds(property_id,'core_validation_'+ compound_id + "_"+property_id+"_"+i,compound_id);
         }else{
             $('#core_validation_'+ compound_id + "_"+property_id+"_"+i).val('false');
-            set_field_valid_compounds(property_id,'core_validation_'+ compound_id + "_"+property_id+"_"+i,compound_id);
+            //set_field_valid_compounds(property_id,'core_validation_'+ compound_id + "_"+property_id+"_"+i,compound_id);
         }
         //verificando se existe propriedades para serem  adicionadas
         $.each($("input[type='checkbox'][name='socialdb_property_" + compound_id + "_"+property_id+"_"+i+"[]']"),function(index,value){
             if($(this).is(':checked')){
-                append_category_properties($(this).val());
+               // append_category_properties($(this).val());
             }else{
-                append_category_properties(0,$(this).val());
+               // append_category_properties(0,$(this).val());
             }
         });
     }
@@ -621,12 +598,12 @@
         console.log(seletor);
         if($(seletor).val()===''){
             $('#core_validation_'+property_id).val('false');
-            set_field_valid(property_id,'core_validation_'+property_id);
+            //set_field_valid_compounds(property_id,'core_validation_'+ compound_id + "_"+property_id+"_"+i,compound_id);
         }else{
-            append_category_properties($(seletor).val(), $('#socialdb_propertyterm_'+property_id+'_value').val());
-           $('#socialdb_propertyterm_'+property_id+'_value').val($(seletor).val()); 
+            //  append_category_properties($(seletor).val(), $('#socialdb_propertyterm_'+property_id+'_value').val());
+            $('#socialdb_propertyterm_'+property_id+'_value').val($(seletor).val()); 
             $('#core_validation_'+property_id).val('true');
-            set_field_valid(property_id,'core_validation_'+property_id);
+            // set_field_valid_compounds(property_id,'core_validation_'+ compound_id + "_"+property_id+"_"+i,compound_id);
         }
         
     }
@@ -640,28 +617,28 @@
         console.log(selected);
         if (selected.length > 0) {
             $('#core_validation_'+compound_id+'_'+property_id+'_'+i).val('true');
-            set_field_valid(property_id,'core_validation_'+compound_id+'_'+property_id+'_'+i,compound_id);
+            // set_field_valid_compounds(property_id,'core_validation_'+ compound_id + "_"+property_id+"_"+i,compound_id);
             //verificando se existe propriedades para serem  adicionadas
             $.each($("#field_property_term_"+compound_id+"_"+property_id+"_"+i+" option"),function(index,value){
                 if($(this).is(':selected')){
-                    append_category_properties($(this).val());
+                  //  append_category_properties($(this).val());
                 }else{
-                    append_category_properties(0,$(this).val());
+                   // append_category_properties(0,$(this).val());
                 }
             });
         }else{
             $('#core_validation_'+compound_id+'_'+property_id+'_'+i).val('false');
-            set_field_valid(property_id,'core_validation_'+compound_id+'_'+property_id+'_'+i,compound_id);
+            // set_field_valid_compounds(property_id,'core_validation_'+ compound_id + "_"+property_id+"_"+i,compound_id);
         }
     }
     
     function validate_selectbox(seletor,property_id,compound_id){
         if($(seletor).val()===''){
             $('#core_validation_'+property_id).val('false');
-            set_field_valid(property_id,'core_validation_'+property_id);
+             //set_field_valid_compounds(property_id,'core_validation_'+ compound_id + "_"+property_id+"_"+i,compound_id);
         }else{
             $('#core_validation_'+property_id).val('true');
-            set_field_valid(property_id,'core_validation_'+property_id);
+             //set_field_valid_compounds(property_id,'core_validation_'+ compound_id + "_"+property_id+"_"+i,compound_id);
         }
     }
     /**
@@ -686,10 +663,10 @@
         });
         if(cont===0){
             $('#core_validation_'+compound_id).val('true');
-            set_field_valid(compound_id,'core_validation_'+compound_id);
+           // set_field_valid(compound_id,'core_validation_'+compound_id);
         }else{
             $('#core_validation_'+compound_id).val('false');
-            set_field_valid(compound_id,'core_validation_'+compound_id);
+            //set_field_valid(compound_id,'core_validation_'+compound_id);
         }
     }
 
