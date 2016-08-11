@@ -65,10 +65,12 @@ if (get_option('collection_root_id') != $collection_id):
 
                     <div class="modal-body">
                         <input type="radio" name="duplicate_item" value="this_collection" onchange="hideOtherCollectionField(<?php echo get_the_ID() ?>);" checked="checked"> <?php _e('Duplicate in this collection', 'tainacan'); ?><br><br>
-                        <input type="radio" name="duplicate_item" value="other_collection" onchange="showOtherCollectionField(<?php echo get_the_ID() ?>);"> <?php _e('Duplicate in other collection', 'tainacan'); ?><br>
+                        <input type="radio" name="duplicate_item" value="other_collection" disabled="disabled" onchange="showOtherCollectionField(<?php echo get_the_ID() ?>);"> <?php _e('Duplicate in other collection', 'tainacan'); ?><br>
                         <input type="text" class="form-control" name="other_collections" id="other_collections<?php echo get_the_ID() ?>" style="display:none;">
+                        <input type="hidden" class="form-control" name="other_collections_id" id="other_collections<?php echo get_the_ID() ?>_id">
+                        <input type="hidden" class="form-control" name="other_collections_url" id="other_collections<?php echo get_the_ID() ?>_url">
                         <br>
-                        <input type="radio" name="duplicate_item" value="versioning" onchange="hideOtherCollectionField(<?php echo get_the_ID() ?>);"> <?php _e('Versioning', 'tainacan'); ?>
+                        <input type="radio" name="duplicate_item" value="versioning" disabled="disabled" onchange="hideOtherCollectionField(<?php echo get_the_ID() ?>);"> <?php _e('Versioning', 'tainacan'); ?>
 
                     </div>
 
