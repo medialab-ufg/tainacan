@@ -16,6 +16,8 @@ $_slideshow_time = get_post_meta($collection_id, 'socialdb_collection_slideshow_
 
 $viewHelper = new ViewHelper();
 
+//var_dump($po);
+
 if( !$collection_list_mode ) {
     $collection_list_mode = "cards";
 }
@@ -38,9 +40,10 @@ if( !$collection_list_mode ) {
             <?php while ( $loop->have_posts() ) : $loop->the_post(); $countLine++;
                 $curr_id = get_the_ID();
                 $curr_date = "<strong>" . __('Created at: ', 'tainacan') . "</strong>" . get_the_date('d/m/Y');
-                /*
+
                 include "list_modes/modals.php";
                 include "list_modes/cards.php";
+                /*
                 include "list_modes/list.php";
                 include "list_modes/gallery.php";
                 */

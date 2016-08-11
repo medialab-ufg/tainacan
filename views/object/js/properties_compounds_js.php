@@ -162,7 +162,7 @@
         var treecheck_cats = ($('#properties_terms_treecheckbox').length>0) ? $("#properties_terms_treecheckbox").val() : $("#multiple_properties_terms_treecheckbox").val();
         var multiple_cats = ($('#properties_terms_multipleselect').length>0) ? $("#properties_terms_multipleselect").val() : $("#multiple_properties_terms_multipleselect").val();
         //
-        var all_compounds_id = $('#properties_compounds').val().split(',');
+        //var all_compounds_id = $('#properties_compounds').val().split(',');
         var categories = compounds_get_val($("#edit_object_categories_id").val());
         var radios = compounds_get_val(radio_cats);
         var selectboxes = compounds_get_val(select_cats);
@@ -170,7 +170,8 @@
         var checkboxes = compounds_get_val(check_cats);
         var multipleSelects = compounds_get_val(multiple_cats);
         var treecheckboxes = compounds_get_val(treecheck_cats);
-        if (all_compounds_id&&all_compounds_id.length>0) {
+        /*
+        if (all_compounds_id & &all_compounds_id.length > 0 ) {
             $.each(all_compounds_id, function (idx, compound_id) {
                 compounds_list_radios(radios,categories,compound_id);
                 compounds_list_tree(trees,categories,compound_id);
@@ -180,6 +181,7 @@
                 compounds_list_treecheckboxes(treecheckboxes,categories,compound_id);
             });
         }
+        */
     }
     // radios
     function compounds_list_radios(radios,categories,compound_id) {
