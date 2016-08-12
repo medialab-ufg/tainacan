@@ -10,31 +10,24 @@ include_once ('js/geolocation_js.php');
 
 $countLine = 0;
 $classColumn = 12;
-$show_string = is_root_category($collection_id) ?  __('Showing collections:','tainacan') : __('Showing Items:', 'tainacan');
+$show_string = is_root_category($collection_id) ? __('Showing collections:','tainacan') : __('Showing Items:', 'tainacan');
 $collection_list_mode = $collection_data['collection_metas']['socialdb_collection_list_mode'];
 // $collection_color_scheme = $collection_data['collection_metas']['socialdb_collection_color_scheme'];
 $_slideshow_time = get_post_meta($collection_id, 'socialdb_collection_slideshow_time', true);
 
 $viewHelper = new ViewHelper();
 
-//var_dump($po);
-
 if( !$collection_list_mode ) {
     $collection_list_mode = "cards";
 }
-$_lat = get_term_by("name", "Latitude");
-$_lat2 = get_term_by("name", "latitude");
 
 global $wpdb;
 $wp_terms = $wpdb->prefix . "terms";
 
-$q1 = "SELECT term_id FROM $wp_terms WHERE `name` LIKE '%latitude%'";
+$lat = "SELECT term_id FROM $wp_terms WHERE `name` LIKE '%latitude%'";
+$long = "SELECT term_id FROM $wp_terms WHERE `name` LIKE '%longitude%'";
 
-// var_dump($_lat);
-$pop_id = $wpdb->get_results($q1)[0]->term_id;
-
-var_dump( $pop_id );
-
+$_coordinates = [ $wpdb->get_results($lat)[0]->term_id, $wpdb->get_results($long)[0]->term_id];
 
 ?>
 
@@ -52,18 +45,20 @@ var_dump( $pop_id );
     ?>
     <div id="collection-view-mode">
         <div id='<?php echo $collection_list_mode; ?>-viewMode' class='col-md-12 no-padding list-mode-set'>
+            
+            <?php include_once "list_modes/geolocation.php"; ?> 
+            
             <?php while ( $loop->have_posts() ) : $loop->the_post(); $countLine++;
                 $curr_id = get_the_ID();
                 $curr_date = "<strong>" . __('Created at: ', 'tainacan') . "</strong>" . get_the_date('d/m/Y');
                 
-                $var = get_post_meta($curr_id, "socialdb_property_" . $pop_id );                                
-
+                $latitude = get_post_meta($curr_id, "socialdb_property_" . $_coordinates[0] );
+                $longitude = get_post_meta($curr_id, "socialdb_property_" . $_coordinates[1] );
+                
                 include "list_modes/modals.php";
                 include "list_modes/cards.php";
-                /*
                 include "list_modes/list.php";
                 include "list_modes/gallery.php";
-                */
             endwhile;
 
             include_once "list_modes/slideshow.php";

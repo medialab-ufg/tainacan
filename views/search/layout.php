@@ -61,6 +61,7 @@ $view_helper = new ViewHelper();
                             <option value="gallery"><?php _e('Gallery', 'tainacan'); ?></option>
                             <option value="list"><?php _e('List', 'tainacan'); ?></option>
                             <option value="slideshow"><?php _e('Slideshow', 'tainacan'); ?></option>
+                            <option value="geolocation"><?php _e('Geolocation', 'tainacan'); ?></option>
                         </select>
                     </div>
                     
@@ -73,6 +74,16 @@ $view_helper = new ViewHelper();
                                 </option>                            
                             <?php endforeach; ?>
                         </select>
+                    </div>
+                    
+                    <div class="form-group geo-lat" style='display: none'>
+                        <label for="latitude"> <?php _e('Latitude', 'tainacan'); ?> </label>
+                        <select name="latitude" class="form-control"></select>
+                    </div>
+                    
+                    <div class="form-group geo-long" style='display: none'>
+                        <label for="longitude"> <?php _e('Longitude', 'tainacan'); ?> </label>
+                        <select name="longitude" class="form-control"></select>
                     </div>
 
                     <!------------------- Ordenacao-------------------------->

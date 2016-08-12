@@ -1,16 +1,34 @@
-<script type="text/javascript">
-    
-    var locations = [
-    ['CALDAS NOVAS', -17.72472, -48.61, 2],
-    ['gyn town', -16.6667,-49.2667, 1],
-    ['SBAE - SP', -22.15777, -48.06833],
-    ['CONGONHAS => SP', -23.626111111, -46.6563888]
-  ];
+<script type="text/javascript">          
+  var objs = $(".object_id");
+  
+  var ids = [];
+  var locations = [],
+          lats = [];
+  $(objs).each(function(idx, el) {      
+      ids[idx] = $(el).val();  
+      
+      var id = $(el).val();
+      var lat =  $("#object_" + id + " .latitude").val();
+      var long = $("#object_" + id + " .longitude").val();
+      var title = $.trim( $("#object_" + id + " .item-display-title").text() );      
+      
+      locations[idx] = [title, lat, long];
+      lats[idx] = parseFloat(lat);
+  });  
+  
+  
+  // var b = locations;
+  cl( lats );
+  cl( lats.sort(function(a,b) { return a -b; } ) );
+  
+  var quantos_que_eh = lats.length;
+  
+  console.log(quantos_que_eh);
     
     function initMap() {
 
     var map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 8,
+      zoom: 4,
       center: new google.maps.LatLng(-16.6667,-49.2667),
       mapTypeId: google.maps.MapTypeId.ROADMAP
     });
@@ -33,9 +51,13 @@
     }
   }
   
+  /*
   $.each( $('.cards-view-container'), function(idx, el) {
       cl( $(this).attr("id") );      
   });
+  */
+  
+  // cl( $(".post_id").val() );
   
     function get_item_coordinates() {
         $.ajax({

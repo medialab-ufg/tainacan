@@ -69,11 +69,20 @@
           });
     });
 
-    $('#collection_list_mode').change(function(){
-        if( $(this).val() === 'slideshow') {
+    $('#collection_list_mode').change(function() {
+        var v_mode = $(this).val();
+        cl("Check: " + v_mode);
+        if( v_mode === 'slideshow') {
             $('.sl-time').fadeIn();
-        } else {
+            $(['.geo-lat', '.geo-long']).each(function(ix, el){ $( el).fadeOut(); } );
+        } else if( v_mode === 'geolocation') {
             $('.sl-time').fadeOut();
+            $(['.geo-lat', '.geo-long']).each(function(ix, el){ $( el).fadeIn(); } );
+        } else {
+            var hide_divs = ['.sl-time','.geo-lat', '.geo-long'];
+            $(hide_divs).each( function(idx, div) {
+                $(div).fadeOut();
+            });
         }
     }); 
     
@@ -204,6 +213,13 @@
                 $.each(elem.property_data, function (idx, data) {
                     if (data && data !== false) {
                         $("#collection_order").append("<option value='" + data.id + "' selected='selected' >" + data.name + " - ( <?php _e('Type','tainacan') ?>:"+data.type+" ) </option>");
+                        
+                        if(data.type === "text") {
+                            var coords = [ "select[name='latitude'", "select[name='longitude'" ];
+                            $(coords).each(function(index, e){
+                               $(e).append("<option value='"+ data.id +"'>"+ data.name +"</option>"); 
+                            });
+                        }
                     }
                 });
             }
