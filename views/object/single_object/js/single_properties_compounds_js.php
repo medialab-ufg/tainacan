@@ -515,6 +515,7 @@
     }
     //################################ Cardinalidade #################################//    
     function show_fields_metadata_cardinality_compounds(property_id,id){
+        edit_compounds_property(property_id, $('#single_object_id').val());
         $('#button_property_'+property_id+'_'+id).hide();
         $('#container_field_'+property_id+'_'+(id+1)).show();   
         properties = $('#compounds_'+property_id).val().split(',');
@@ -668,6 +669,103 @@
             $('#core_validation_'+compound_id).val('false');
             //set_field_valid(compound_id,'core_validation_'+compound_id);
         }
+    }
+//########################## BOTOES DE ALTERACAO ################################
+  function edit_compounds_property(property_id, object_id) {
+        $("#single_cancel_" + property_id + "_" + object_id).show();
+        $("#single_edit_" + property_id + "_" + object_id).hide();
+        $(".compounds_buttons_" + property_id).show();
+        $(".compounds_fields_text_" + property_id).hide();
+        $(".compounds_fields_value_" + property_id).show();
+    }
+    function cancel_compounds_property(property_id, object_id) {
+        swal({
+            title: '<?php _e('Attention!', 'tainacan'); ?>',
+            text: '<?php _e('You going to lose all changes unsaved!', 'tainacan'); ?>',
+            type: "info",
+            showCancelButton: true,
+            confirmButtonClass: 'btn-primary',
+            closeOnConfirm: true,
+            closeOnCancel: true
+        },
+        function (isConfirm) {
+            if (isConfirm) {
+                $("#single_cancel_" + property_id + "_" + object_id).hide();
+                $("#single_edit_" + property_id + "_" + object_id).show();
+                $(".compounds_buttons_" + property_id).hide();
+                $(".compounds_fields_text_" + property_id).show();
+                $(".compounds_fields_value_" + property_id).hide();
+            } else {
+                edit_compounds_property(property_id, object_id);
+            }
+        });
+    }
+    //salvando um metadado composto
+    function save_compounds(object_id,property_id,row,clear_values){
+        var properties_id = $('#compounds_'+property_id).val().split(',');
+        var values = [];
+        var value = '';
+        var final_value = ''
+        if(!clear_values){
+            for(var i = 0;i<properties_id.length;i++ ){
+                value = $('[name="socialdb_property_'+property_id+'_'+properties_id[i]+'_'+row+'[]"]').val();
+                if(value){
+                    values.push(value);
+                }
+            }
+            if(values.length==properties_id.length){
+                final_value = values.join(',');
+                ajax_value_compounds(object_id,property_id,row,final_value);
+            }else{
+                 showAlertGeneral('<?php _e('Attention!','tainacan') ?>', '<?php _e('Fill all fields!','tainacan') ?>', 'info');
+            }
+        }else{
+            ajax_value_compounds(object_id,property_id,row,'');
+        }
+    }
+    //limpando uma linha do metadado composto
+    function clear_compounds(object_id,property_id,row){
+        swal({
+            title: '<?php _e('Attention!', 'tainacan'); ?>',
+            text: '<?php _e('Are you sure to clear this row?', 'tainacan'); ?>',
+            type: "info",
+            showCancelButton: true,
+            confirmButtonClass: 'btn-info',
+            closeOnConfirm: true,
+            closeOnCancel: true
+        },
+        function (isConfirm) {
+            if (isConfirm) {
+                save_compounds(object_id,property_id,row,true);
+            } else {
+                edit_compounds_property(property_id, object_id);
+            }
+        });
+    }
+    
+    function ajax_value_compounds(object_id,property_id,row,value){
+        $.ajax({
+                type: "POST",
+                url: $('#src').val() + "/controllers/event/event_controller.php",
+                data: {
+                    socialdb_event_collection_id: $('#collection_id').val(),
+                    operation: 'add_event_property_compounds_edit_value',
+                    socialdb_event_create_date: '<?php echo mktime(); ?>',
+                    socialdb_event_user_id: $('#current_user_id').val(),
+                    socialdb_event_property_compounds_edit_value_object_id: object_id,
+                    socialdb_event_property_compounds_edit_value_row:row,
+                    socialdb_event_property_compounds_edit_value_property_id: property_id,
+                    socialdb_event_property_compounds_edit_value_attribute_value: value}
+            }).done(function (result) {
+                verifyPublishedItem(object_id);
+                elem = jQuery.parseJSON(result);
+                if(!elem){
+                    return false;
+                }
+                $("#dynatree").dynatree("getTree").reload();
+                list_properties_single(object_id);
+                showAlertGeneral(elem.title, elem.msg, elem.type);
+            });
     }
 
 </script>

@@ -16,6 +16,7 @@ require_once(dirname(__FILE__).'../../../models/event/event_property_data/event_
 require_once(dirname(__FILE__).'../../../models/event/event_property_data/event_property_data_edit_model.php');
 require_once(dirname(__FILE__).'../../../models/event/event_property_data/event_property_data_delete_model.php');
 require_once(dirname(__FILE__).'../../../models/event/event_property_data/event_property_data_edit_value_model.php');
+require_once(dirname(__FILE__).'../../../models/event/event_property_compounds/event_property_compounds_edit_value_model.php');
 require_once(dirname(__FILE__).'../../../models/event/event_term/event_term_create_model.php');
 require_once(dirname(__FILE__).'../../../models/event/event_term/event_term_edit_model.php');
 require_once(dirname(__FILE__).'../../../models/event/event_term/event_term_delete_model.php');
@@ -193,6 +194,17 @@ require_once(dirname(__FILE__).'../../../models/ranking/ranking_model.php');
                     case 'socialdb_event_property_object_delete';
                         $event_property_object_delete_model = new EventPropertyObjectDelete();
                         return $event_property_object_delete_model->verify_event($data);
+                     
+                    // propriedades compostas edit_value
+                    case 'add_event_property_compounds_edit_value': 
+                        $event_property_compounds_edit_value_model = new EventPropertyCompoundsEditValue(); 
+                        if(!isset($data['socialdb_event_property_compounds_edit_value_attribute_value'])||empty($data['socialdb_event_property_compounds_edit_value_attribute_value'])){
+                            $data['socialdb_event_property_compounds_edit_value_attribute_value'] = '';
+                        }
+                        return $event_property_compounds_edit_value_model->create_event($data);
+                    case 'socialdb_event_property_data_edit_value';
+                        $event_property_compounds_edit_value_model = new EventPropertyCompoundsEditValue();
+                        return $event_property_compounds_edit_value_model->verify_event($data);
                         
                     //create category
                     case 'add_event_term_create':  

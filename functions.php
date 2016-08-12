@@ -1234,7 +1234,13 @@ function create_event_terms() {
     $event_delete_property_compounds = create_register('socialdb_event_property_compounds_delete', 'socialdb_event_type', array('parent' => $event_property_compounds_compounds['term_id']));
     create_metas($event_delete_property_compounds['term_id'], 'socialdb_event_property_compounds_delete_metas', 'socialdb_event_property_compounds_delete_id', 'socialdb_event_property_compounds_delete_id');
     create_metas($event_delete_property_compounds['term_id'], 'socialdb_event_property_compounds_delete_metas', 'socialdb_event_property_compounds_delete_category_root_id', 'socialdb_event_property_compounds_delete_category_root_id');
-
+    $event_edit_property_compounds_value = create_register('socialdb_event_property_compounds_edit_value', 'socialdb_event_type', array('parent' => $event_property_compounds_compounds['term_id']));
+    create_metas($event_edit_property_compounds_value['term_id'], 'socialdb_event_property_compounds_edit_value_metas', 'socialdb_event_property_compounds_edit_value_object_id', 'socialdb_event_property_compounds_edit_value_object_id');
+    create_metas($event_edit_property_compounds_value['term_id'], 'socialdb_event_property_compounds_edit_value_metas', 'socialdb_event_property_compounds_edit_value_property_id', 'socialdb_event_property_compounds_edit_value_property_id');
+    create_metas($event_edit_property_compounds_value['term_id'], 'socialdb_event_property_compounds_edit_value_metas', 'socialdb_event_property_compounds_edit_value_row', 'socialdb_event_property_compounds_edit_value_row');
+    create_metas($event_edit_property_compounds_value['term_id'], 'socialdb_event_property_compounds_edit_value_metas', 'socialdb_event_property_compounds_edit_value_attribute_value', 'socialdb_event_property_compounds_edit_value_attribute_value');
+    
+    
     /** tag* */
     $event_tag_tag = create_register('socialdb_event_tag', 'socialdb_event_type', array('parent' => $event_root_term['term_id']));
     $event_create_tag = create_register('socialdb_event_tag_create', 'socialdb_event_type', array('parent' => $event_tag_tag['term_id']));

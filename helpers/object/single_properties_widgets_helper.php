@@ -45,14 +45,14 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
                                 ?>
                         </h4> 
                         <div class="edit-field-btn">
-                            <button type="button" onclick="cancel_data_property('<?php echo $property['id']; ?>', '<?php echo $object_id; ?>')" 
+                            <button type="button" onclick="cancel_compounds_property('<?php echo $property['id']; ?>', '<?php echo $object_id; ?>')" 
                                     id="single_cancel_<?php echo $property['id']; ?>_<?php echo $object_id; ?>" 
                                     class="btn btn-default btn-xs"
                                     style="display: none;" >
                                 <span class="glyphicon glyphicon-arrow-left" ></span>
                             </button>
                             <button type="button" 
-                                    onclick="edit_data_property('<?php echo $property['id']; ?>', '<?php echo $object_id; ?>')" 
+                                    onclick="edit_compounds_property('<?php echo $property['id']; ?>', '<?php echo $object_id; ?>')" 
                                     id="single_edit_<?php echo $property['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default btn-xs" >
                                 <span class="glyphicon glyphicon-edit"></span>
                             </button>
@@ -71,22 +71,20 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
                                 <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
                                      class="col-md-12 no-padding"
                                      style="padding-bottom: 10px;<?php echo ($is_show_container) ? 'display:block': 'display:none'; ?>">
-                                    <?php if($i>0): ?>
                                     <div class="col-md-2 no-padding">
-                                        <button type="button" 
-                                                onclick="remove_container_compounds(<?php echo $property['id'] ?>,<?php echo $i ?>)" 
-                                                class="btn btn-default btn-xs">
-                                            <span class="glyphicon glyphicon-remove"></span>
-                                        </button>
-                                        <button type="button" 
-                                                onclick="remove_container_compounds(<?php echo $property['id'] ?>,<?php echo $i ?>)" 
-                                                class="btn btn-default btn-xs">
-                                            <span class="glyphicon glyphicon-floppy-disk"></span>
-                                        </button>
-                                    </div>    
-                                    <?php else: ?>
-                                    <div class="pull-left col-md-2"></div>   
-                                    <?php endif; ?>    
+                                        <div style="display: none;" class="pull-right compounds_buttons_<?php echo $property['id']; ?> ">    
+                                            <button type="button" 
+                                                    onclick="clear_compounds(<?php echo $object_id ?>,<?php echo $property['id'] ?>,<?php echo $i ?>)" 
+                                                    class="btn btn-default btn-xs">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                            <button type="button" 
+                                                    onclick="save_compounds(<?php echo $object_id ?>,<?php echo $property['id'] ?>,<?php echo $i ?>)" 
+                                                    class="btn btn-default btn-xs">
+                                                <span class="glyphicon glyphicon-floppy-disk"></span>
+                                            </button>
+                                        </div>    
+                                    </div>      
                                     <div class="col-md-10">
                                     <?php foreach ($properties_compounded as $property_compounded): 
                                         $coumpounds_id[] = $property_compounded['id']; 
@@ -106,10 +104,10 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
                                                     $val = (is_bool($value)) ? false : $value;
                                                     if(isset($property_compounded['metas']['socialdb_property_data_widget'])): 
                                                         ?>
-                                                        <div class="compounds_fields_text">
-                                                            <b><a><?php echo ($value) ? $value : __('empty field','tainacan') ?></a></b>
+                                                        <div class="compounds_fields_text_<?php echo $property['id']; ?>">
+                                                            <?php echo ($val) ? '<b><a>'.$val.'</a></b>' : __('empty field','tainacan') ?></a></b>
                                                         </div> 
-                                                        <div style="display: none;" class="compounds_fields_value">
+                                                        <div style="display: none;" class="compounds_fields_value_<?php echo $property['id']; ?>">
                                                             <?php 
                                                             $this->widget_property_data($property_compounded, $i,$references,$val);
                                                             ?>
@@ -117,10 +115,10 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
                                                         <?php
                                                     elseif(isset($property_compounded['metas']['socialdb_property_object_category_id'])): 
                                                         ?>
-                                                        <div class="compounds_fields_text">
-                                                            <b><a><?php echo ($value) ? get_post($value)->post_title : __('empty field','tainacan') ?></a></b>
+                                                        <div class="compounds_fields_text_<?php echo $property['id']; ?>">
+                                                            <?php echo ($val) ? '<b><a>'.get_post($val)->post_title.'</a></b>' : __('empty field','tainacan') ?>
                                                         </div> 
-                                                        <div style="display: none;" class="compounds_fields_value">
+                                                        <div style="display: none;" class="compounds_fields_value_<?php echo $property['id']; ?>">
                                                             <?php 
                                                                  $this->widget_property_object($property_compounded, $i,$references,$val);
                                                             ?>
@@ -128,10 +126,10 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
                                                         <?php 
                                                     elseif(isset($property_compounded['metas']['socialdb_property_term_widget'])): 
                                                          ?>
-                                                        <div class="compounds_fields_text">
-                                                            <b><a><?php echo ($value) ? get_term_by('id',$value,'socialdb_category_type')->name : __('empty field','tainacan') ?></a></b>
+                                                        <div class="compounds_fields_text_<?php echo $property['id']; ?>">
+                                                           <?php echo ($val) ? '<b><a>'.get_term_by('id',$val,'socialdb_category_type')->name.'</a></b>' : __('empty field','tainacan') ?>
                                                         </div> 
-                                                        <div style="display: none;" class="compounds_fields_value">
+                                                        <div style="display: none;" class="compounds_fields_value_<?php echo $property['id']; ?>">
                                                             <?php 
                                                                  $this->widget_property_term($property_compounded, $i,$references,$val);
                                                             ?>
@@ -192,7 +190,7 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
                     class="form-control form_autocomplete_compounds_<?php echo $property['id']; ?>_<?php echo $i; ?>"
                     onkeypress='return onlyNumbers(event)'
                     id="compounds_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
-                    name="socialdb_property_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
+                    name="socialdb_property_<?php echo $property['id']; ?>_<?php echo $i; ?>[]" 
                     value="<?php if ($value) echo $value; ?>">
         <?php }elseif ($property['type'] == 'autoincrement') { ?>   
             <input disabled="disabled"  
