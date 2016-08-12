@@ -215,7 +215,7 @@
                         $("#collection_order").append("<option value='" + data.id + "' selected='selected' >" + data.name + " - ( <?php _e('Type','tainacan') ?>:"+data.type+" ) </option>");
                         
                         if(data.type === "text") {
-                            var coords = [ "select[name='latitude'", "select[name='longitude'" ];
+                            var coords = ["select[name='latitude'","select[name='longitude'"];
                             $(coords).each(function(index, e){
                                $(e).append("<option value='"+ data.id +"'>"+ data.name +"</option>"); 
                             });
