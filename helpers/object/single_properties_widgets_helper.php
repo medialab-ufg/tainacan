@@ -74,9 +74,10 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
                                     <div class="col-md-2 no-padding">
                                         <div style="display: none;" class="pull-right compounds_buttons_<?php echo $property['id']; ?> ">    
                                             <button type="button" 
+                                                    title="Limpar campos"
                                                     onclick="clear_compounds(<?php echo $object_id ?>,<?php echo $property['id'] ?>,<?php echo $i ?>)" 
                                                     class="btn btn-default btn-xs">
-                                                <span class="glyphicon glyphicon-remove"></span>
+                                                <span class="glyphicon glyphicon-erase"></span>
                                             </button>
                                             <button type="button" 
                                                     onclick="save_compounds(<?php echo $object_id ?>,<?php echo $property['id'] ?>,<?php echo $i ?>)" 
@@ -105,7 +106,7 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
                                                     if(isset($property_compounded['metas']['socialdb_property_data_widget'])): 
                                                         ?>
                                                         <div class="compounds_fields_text_<?php echo $property['id']; ?>">
-                                                            <?php echo ($val) ? '<b><a>'.$val.'</a></b>' : __('empty field','tainacan') ?></a></b>
+                                                            <?php echo ($val) ? '<b><a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $val . "'" . ',' . $property['id'] . ')"  >'.$val.'</a></b>' : '<button type="button" onclick="edit_compounds_property('. $property['id'] .', '.$object_id.')" class="btn btn-default">'.__('Empty field. Click to edit!','tainacan').'</button>' ?>
                                                         </div> 
                                                         <div style="display: none;" class="compounds_fields_value_<?php echo $property['id']; ?>">
                                                             <?php 
@@ -116,7 +117,7 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
                                                     elseif(isset($property_compounded['metas']['socialdb_property_object_category_id'])): 
                                                         ?>
                                                         <div class="compounds_fields_text_<?php echo $property['id']; ?>">
-                                                            <?php echo ($val) ? '<b><a>'.get_post($val)->post_title.'</a></b>' : __('empty field','tainacan') ?>
+                                                            <?php echo ($val) ? '<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' . "'" . $val . "'" . ',' . $property['id'] . ')" >'.get_post($val)->post_title.'</a></b>' : '<button type="button" onclick="edit_compounds_property('. $property['id'] .', '.$object_id.')" class="btn btn-default">'.__('Empty field. Click to edit!','tainacan').'</button>' ?>
                                                         </div> 
                                                         <div style="display: none;" class="compounds_fields_value_<?php echo $property['id']; ?>">
                                                             <?php 
@@ -127,7 +128,7 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
                                                     elseif(isset($property_compounded['metas']['socialdb_property_term_widget'])): 
                                                          ?>
                                                         <div class="compounds_fields_text_<?php echo $property['id']; ?>">
-                                                           <?php echo ($val) ? '<b><a>'.get_term_by('id',$val,'socialdb_category_type')->name.'</a></b>' : __('empty field','tainacan') ?>
+                                                           <?php echo ($val) ? '<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' . "'" . $val . "'" . ',' . $property['id'] . ')" >'.get_term_by('id',$val,'socialdb_category_type')->name.'</a></b>' : '<button onclick="edit_compounds_property('. $property['id'] .', '.$object_id.')" type="button" class="btn btn-default">'.__('Empty field. Click to edit!','tainacan').'</button>' ?>
                                                         </div> 
                                                         <div style="display: none;" class="compounds_fields_value_<?php echo $property['id']; ?>">
                                                             <?php 

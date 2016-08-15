@@ -8,9 +8,9 @@
              $.each(compounds, function (idx, compound) {
                  autocomplete_property_data_compounds(properties_autocomplete,compound)
              });
+             // # - inicializa o campos das propriedades de termo compostas 
+            compounds_list_properties_term_insert_objects();
         }
-        // # - inicializa o campos das propriedades de termo compostas 
-        compounds_list_properties_term_insert_objects();
     });
     
     /**
