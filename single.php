@@ -271,6 +271,11 @@ $options = get_option('socialdb_theme_options');
                                                 </a>
                                             </li>
                                         <?php endforeach; ?>
+                                        <li class="geolocation">
+                                            <a href="#" onclick="changeViewMode('geolocation')">
+                                                <span class="glyphicon glyphicon-map-marker" style="color: black"></span>
+                                            </a>
+                                        </li>
                                     </ul>
                                 </div>
                                 <div class="col-md-2">

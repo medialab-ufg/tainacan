@@ -23,7 +23,16 @@ $viewHelper = new ViewHelper();
 if( !$collection_list_mode ) {
     $collection_list_mode = "cards";
 }
-?>
+
+/*
+ * TODO: Move code below to proper place
+ * */
+
+if($geo_coordinates) {
+    ?>
+
+<?php } ?>
+
 
 <!-- TAINACAN: hidden utilizados para execucao de processos desta view (list.php)  -->
 <input type="hidden" id="keyword_pagination" name="keyword_pagination" value="<?php if (isset($keyword)) echo $keyword; ?>" />
@@ -41,13 +50,9 @@ if( !$collection_list_mode ) {
     ?>
     <div id="collection-view-mode">
         <div id='<?php echo $collection_list_mode; ?>-viewMode' class='col-md-12 no-padding list-mode-set'>
-            
-            <?php include_once "list_modes/geolocation.php"; ?> 
-            
             <?php while ( $loop->have_posts() ) : $loop->the_post(); $countLine++;
                 $curr_id = get_the_ID();
                 $curr_date = "<strong>" . __('Created at: ', 'tainacan') . "</strong>" . get_the_date('d/m/Y');
-                
                 $latitude = get_post_meta($curr_id, "socialdb_property_" . $geo_coordinates["lat"]);
                 $longitude = get_post_meta($curr_id, "socialdb_property_" . $geo_coordinates["long"]);
                 
@@ -58,6 +63,7 @@ if( !$collection_list_mode ) {
             endwhile;
 
             include_once "list_modes/slideshow.php";
+            include_once "list_modes/geolocation.php";
             ?>
         </div>
     </div>
