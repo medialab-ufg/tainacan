@@ -76,12 +76,12 @@ $view_helper = new ViewHelper();
                         </select>
                     </div>
                     
-                    <div class="form-group geo-lat" style='display: none'>
+                    <div class="form-group geo-lat coordinate" style='display: none'>
                         <label for="latitude"> <?php _e('Latitude', 'tainacan'); ?> </label>
                         <select name="latitude" class="form-control"></select>
                     </div>
                     
-                    <div class="form-group geo-long" style='display: none'>
+                    <div class="form-group geo-long coordinate" style='display: none'>
                         <label for="longitude"> <?php _e('Longitude', 'tainacan'); ?> </label>
                         <select name="longitude" class="form-control"></select>
                     </div>
@@ -127,15 +127,13 @@ $view_helper = new ViewHelper();
 
     </div>
 
-    <?php // $bg_url = get_stylesheet_directory_uri() . '/libraries/images/header-share-bg.png'; ?>
 
     <div class="col-md-10 preset-filters no-padding" style="background: #414042; padding-bottom: 20px;">
         <div class="categories_menu" id="personalize_search">
             <div id="tainacan-mini" class="col-md-11" style="float: none; margin: 0 auto; padding-top: 20px;">
                 <header>
                     <div class="topo" style="background: #231F20; height: 30px; width: 100%;"></div>
-                    <div style="background: url('<?php echo $bg_url ?>') no-repeat; background-color: #58595B;
-                        background-position: right 2.8% top 10px; height: 120px; width: 100%;" class="capa-col"></div>
+                    <div style="background-color: #58595B; background-position: right 2.8% top 10px; height: 120px; width: 100%;" class="capa-col"></div>
                 </header>
                 <div class="row">
 

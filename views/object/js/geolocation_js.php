@@ -3,7 +3,8 @@
   
   var ids = [];
   var locations = [],
-          lats = [];
+          lats = [],
+          longs = [];
   $(objs).each(function(idx, el) {      
       ids[idx] = $(el).val();  
       
@@ -14,24 +15,26 @@
       
       locations[idx] = [title, lat, long];
       lats[idx] = parseFloat(lat);
-  });  
-  
-  
-  // var b = locations;
-  cl( lats );
-  cl( lats.sort(function(a,b) { return a -b; } ) );
-  
-  var quantos_que_eh = lats.length;
-  
-  console.log(quantos_que_eh);
-    
-    function initMap() {
+      longs[idx] = parseFloat(long);
+  });
 
-    var map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 4,
-      center: new google.maps.LatLng(-16.6667,-49.2667),
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    });
+  var sorted_lats = lats.sort(function(a,b) { return a - b; } );
+  cl("Latitudes ordenadas:");
+  cl( sorted_lats );
+
+  var sorted_longs = longs.sort(function(a,b) { return a - b; } );
+  cl("Longitudes ordenadas:");
+  cl(sorted_longs);
+
+  var total_lats = lats.length;
+  var half_length = parseInt( total_lats / 2 );
+
+    function initMap() {
+      var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: half_length,
+        center: new google.maps.LatLng( sorted_lats[half_length] ,sorted_longs[half_length]),
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      });
 
     var infowindow = new google.maps.InfoWindow();
     var marker, i;
