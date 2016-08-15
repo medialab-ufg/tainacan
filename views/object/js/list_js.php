@@ -345,8 +345,8 @@
             $.ajax({
                 type: "POST",
                 url: $('#src').val() + "/controllers/object/object_controller.php",
-                data: {collection_id: $('#collection_id').val(), 
-                    operation: 'duplicate_item_same_collection', 
+                data: {collection_id: $('#collection_id').val(),
+                    operation: 'duplicate_item_same_collection',
                     object_id: object_id
                 }
             }).done(function (result) {
@@ -360,7 +360,27 @@
             });
         } else if ($('input[name=duplicate_item]:checked', '#formDuplicateItem' + object_id).val() == 'other_collection') {
             //Duplicate in other collections
-
+            $('#modalImportMain').modal('show');//mostro o modal de carregamento
+            $.ajax({
+                type: "POST",
+                url: $('#src').val() + "/controllers/object/object_controller.php",
+                data: {collection_id: $('#collection_id').val(),
+                    new_collection_id: $('#other_collections' + object_id + '_id').val(),
+                    new_collection_url: $('#other_collections' + object_id + '_url').val(),
+                    operation: 'duplicate_item_other_collection',
+                    object_id: object_id
+                }
+            }).done(function (result) {
+                $('#modalImportMain').modal('hide');//escondo o modal de carregamento
+                $('#modal_duplicate_object' + object_id).modal('hide');
+                json = jQuery.parseJSON(result);
+                window.location(json.new_collection_url);
+                /*$("#container_socialdb").hide('slow');
+                 $("#form").hide().html(result).show('slow');
+                 $('#create_button').hide();
+                 $('.dropdown-toggle').dropdown();
+                 $('.nav-tabs').tab();*/
+            });
         } else if ($('input[name=duplicate_item]:checked', '#formDuplicateItem' + object_id).val() == 'versioning') {
             //Versioning
 

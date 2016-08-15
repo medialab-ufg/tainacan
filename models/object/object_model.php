@@ -1879,24 +1879,34 @@ class ObjectModel extends Model {
         return $newItem;
     }
 
-    public function copyItemMetas($itemID, array $oldMetas) {
-        foreach ($oldMetas as $key => $value) {
-            foreach ($value as $row) {
-                add_post_meta($itemID, $key, $row);
+    public function copyItemMetas($itemID, array $oldMetas, $same_collection = true) {
+        if ($same_collection) {
+            foreach ($oldMetas as $key => $value) {
+                foreach ($value as $row) {
+                    add_post_meta($itemID, $key, $row);
+                }
+            }
+        } else {
+            foreach ($oldMetas as $key => $value) {
+                foreach ($value as $row) {
+                    if (strpos($key, 'social_property_') === false) {
+                        add_post_meta($itemID, $key, $row);
+                    }
+                }
             }
         }
     }
 
     public function copyItemCategories($itemID, $oldID) {
         $categories = $this->get_object_categories_id($oldID);
-        foreach($categories as $category){
+        foreach ($categories as $category) {
             wp_set_object_terms($itemID, array((int) $category), 'socialdb_category_type', true);
         }
     }
-    
+
     public function copyItemTags($itemID, $oldID) {
         $tags = $this->get_object_tags_id($oldID);
-        foreach($tags as $tag){
+        foreach ($tags as $tag) {
             wp_set_object_terms($itemID, array((int) $tag), 'socialdb_tag_type', true);
         }
     }

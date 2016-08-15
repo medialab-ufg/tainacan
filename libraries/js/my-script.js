@@ -107,6 +107,11 @@ $(window).load(function () {
     if ($('#open_login').val() === 'true') {
         showLoginScreen(src);
     }
+    
+    //verifico se foi duplicado um item em outra colecao e abro o editar deste item
+    if ($('#open_edit_item').val() !== '') {
+        edit_object($('#open_edit_item').val());
+    }
 
     /*
      $('#openmyModalRegister').click(function (e) {

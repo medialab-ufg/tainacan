@@ -118,6 +118,11 @@ $options = get_option('socialdb_theme_options');
         echo $_GET['open_login'];
     }
     ?>">
+    <input type="hidden" id="open_edit_item" name="open_edit_item" value="<?php
+    if (isset($_GET['open_edit_item'])) {
+        echo $_GET['open_edit_item'];
+    }
+    ?>">
     <input type="hidden" id="instagramInsertedIds" name="instagramInsertedIds" value="<?php
     if (isset($_SESSION['instagramInsertedIds'])) {
         if ($_SESSION['instagramInsertedIds'] != 'instagram_error') {

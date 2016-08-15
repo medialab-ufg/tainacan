@@ -443,6 +443,17 @@ class ObjectController extends Controller {
                 $data['socialdb_object_dc_type'] = get_post_meta($data['object']->ID, 'socialdb_object_dc_type', true);
                 return $this->render(dirname(__FILE__) . '../../../views/object/edit.php', $data);
                 break;
+            case 'duplicate_item_other_collection':
+                //var_dump($data);
+                $item = get_post($data['object_id']);
+                $newItem = $object_model->copyItem($item, $data['new_collection_id']);
+                $metas = get_post_meta($item->ID);
+                $object_model->copyItemMetas($newItem, $metas, false);
+                $object_model->copyItemCategories($newItem, $data['object_id']);
+                //$object_model->copyItemTags($newItem, $data['object_id']);
+                $data['new_collection_url'] = $data['new_collection_url'].'?open_edit_item='.$newItem;
+                return json_encode($data);
+                break;
         }
     }
 
