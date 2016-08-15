@@ -25,7 +25,6 @@
   var sorted_longs = longs.sort(function(a,b) { return a - b; } );
   var half_length = parseInt( locations.length / 2 );
 
-
     function initMap() {
       document.getElementById('map').style.display = "block";
       var map = new google.maps.Map(document.getElementById('map'), {
