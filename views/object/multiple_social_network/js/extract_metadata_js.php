@@ -3,7 +3,7 @@
     //funcao que recupera o tipo para realizar o mapeamento
     function extract_metadata(string){
         if(verify_is_url(string)){
-            var split_url = string.split('/');
+            var split_url = string.replace('http://','').replace('https://','').split('/');
             //a url quebrada nos caminhos
             if(split_url.length>0){
                 //se possuir o handle na url
@@ -34,9 +34,27 @@
      * @returns {undefined}
      */
     function get_handle_metadata(split_url){
-       var index = split_url.indexOf('handle');
-       var id = split_url[index+2];
-       console.log(index,id);
+        var index = split_url.indexOf('handle');
+        var id = split_url[index+2];
+        var tag = split_url[index+1];
+        var base = split_url[0];
+        $.ajax({
+            url: $('#src').val() + '/controllers/mapping/mapping_controller.php',
+            type: 'POST',
+            data: {
+                operation: 'get_metadata_handle',
+                id: id,
+                url: base,
+                tag: tag,
+                collection_id: $("#collection_id").val()}
+        }).done(function (result) {
+           // $('#main_part').hide();
+           // $('#display_view_main_page').hide();
+           // $('#loader_collections').hide();
+            //$('#collection_post').hide();
+            //$('#configuration').html(result);
+            //$('#configuration').slideDown();
+        });
     }
     
 </script>
