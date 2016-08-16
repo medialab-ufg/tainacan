@@ -570,4 +570,10 @@
     .show-item-metadata {
         display: none;
     }
+    .not-configured {
+        border: 3px solid $item-border;
+        background: white;
+        text-align: center;
+        margin-top: 10px;
+    }
 }

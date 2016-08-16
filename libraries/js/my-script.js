@@ -2428,7 +2428,7 @@ $(window).on('resize', function(ev) {
 
 
 function changeViewMode(viewMode) {
-    if(viewMode == "slideshow") {
+    if(viewMode === "slideshow") {
         getCollectionSlideshow();
     } else {
         $("#temp-viewMode").val(viewMode);
@@ -2438,6 +2438,10 @@ function changeViewMode(viewMode) {
         $('.list-mode-set').attr('id', viewMode+'-viewMode');
         $('.top-div').hide();
         $('.'+viewMode+'-view-container').show();    
+    }
+    
+    if(viewMode != "geolocation") {
+        $('.geolocation-view-container').hide();
     }
 }
 

@@ -1291,6 +1291,12 @@ a.collection-thumb img {
 #geolocation-viewMode .show-item-metadata {
   display: none;
 }
+#geolocation-viewMode .not-configured {
+  border: 3px solid #E8E8E8;
+  background: white;
+  text-align: center;
+  margin-top: 10px;
+}
 
 @media all and (max-width: 767px) {
   ul li.click_new_collection {
