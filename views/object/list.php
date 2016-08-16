@@ -6,20 +6,33 @@
 include_once('./../../helpers/view_helper.php');
 include_once('./../../helpers/object/object_helper.php');
 include_once ('js/list_js.php');
+include_once ('js/geolocation_js.php');
 
 $countLine = 0;
 $classColumn = 12;
-$show_string = is_root_category($collection_id) ?  __('Showing collections:','tainacan') : __('Showing Items:', 'tainacan');
+$show_string = is_root_category($collection_id) ? __('Showing collections:','tainacan') : __('Showing Items:', 'tainacan');
 $collection_list_mode = $collection_data['collection_metas']['socialdb_collection_list_mode'];
 // $collection_color_scheme = $collection_data['collection_metas']['socialdb_collection_color_scheme'];
+
 $_slideshow_time = get_post_meta($collection_id, 'socialdb_collection_slideshow_time', true);
+$geo_coordinates["lat"] = get_post_meta($collection_id, "socialdb_collection_latitude_meta", true);
+$geo_coordinates["long"] = get_post_meta($collection_id, "socialdb_collection_longitude_meta", true);
 
 $viewHelper = new ViewHelper();
 
 if( !$collection_list_mode ) {
     $collection_list_mode = "cards";
 }
-?>
+
+/*
+ * TODO: Move code below to proper place
+ * */
+
+if($geo_coordinates) {
+    ?>
+
+<?php } ?>
+
 
 <!-- TAINACAN: hidden utilizados para execucao de processos desta view (list.php)  -->
 <input type="hidden" id="keyword_pagination" name="keyword_pagination" value="<?php if (isset($keyword)) echo $keyword; ?>" />
@@ -27,6 +40,8 @@ if( !$collection_list_mode ) {
 <input type="hidden" id="default-viewMode" value="<?php echo $collection_list_mode; ?>">
 <input type="hidden" id="temp-viewMode" value="">
 <input type="hidden" id="slideshow-time" value="<?php echo $_slideshow_time; ?>">
+<input type="hidden" id="set-lat" value="<?php echo $geo_coordinates["lat"]; ?>">
+<input type="hidden" id="set-long" value="<?php echo $geo_coordinates["long"]; ?>">
 
 <?php if ( $loop->have_posts() ):
     // Determina # de colunas;
@@ -38,6 +53,8 @@ if( !$collection_list_mode ) {
             <?php while ( $loop->have_posts() ) : $loop->the_post(); $countLine++;
                 $curr_id = get_the_ID();
                 $curr_date = "<strong>" . __('Created at: ', 'tainacan') . "</strong>" . get_the_date('d/m/Y');
+                $latitude = get_post_meta($curr_id, "socialdb_property_" . $geo_coordinates["lat"]);
+                $longitude = get_post_meta($curr_id, "socialdb_property_" . $geo_coordinates["long"]);
                 
                 include "list_modes/modals.php";
                 include "list_modes/cards.php";
@@ -46,7 +63,7 @@ if( !$collection_list_mode ) {
             endwhile;
 
             include_once "list_modes/slideshow.php";
-
+            include_once "list_modes/geolocation.php";
             ?>
         </div>
     </div>

@@ -196,8 +196,7 @@
             $('.nav-tabs').tab();
         });
     }
-//END
-//BEGIN: funcao para mostrar votacoes
+
     function list_ranking(id) {
         $.ajax({
             type: "POST",
@@ -210,19 +209,6 @@
         });
     }
 
-    function list_ranking_auto_load(id) {
-        $.ajax({
-            type: "POST",
-            url: $('#src').val() + "/controllers/ranking/ranking_controller.php",
-            data: {collection_id: $('#collection_id').val(), operation: 'list_ranking_object', object_id: id}
-        }).done(function (result) {
-//        $('#list_ranking_auto_load_'+id).html(result);
-//        $('#list_ranking_auto_load_'+id).show();
-            $('#ranking_auto_load').html(result);
-            $('#ranking_auto_load').shshow_classificiations_ow();
-        });
-    }
-//END
 //BEGIN:as proximas funcoes sao para mostrar os eventos
 // list_properties(id): funcao que mostra a primiera listagem de propriedades
     function list_properties(id) {
