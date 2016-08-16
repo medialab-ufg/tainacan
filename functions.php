@@ -1463,7 +1463,7 @@ if (!function_exists("theme_js")) {
 
         wp_register_script('my-script', get_template_directory_uri() . '/libraries/js/my-script.js', array('jquery'), '1.11');
         /* Dynatree JS */
-        wp_register_script('DynatreeJs', get_template_directory_uri() . '/libraries/js/dynatree/jquery.dynatree.js');
+        wp_register_script('DynatreeJs', get_template_directory_uri() . '/libraries/js/dynatree/jquery.dynatree.full.js');
         /* Ckeditor JS */
         wp_register_script('ckeditorjs', get_template_directory_uri() . '/libraries/js/ckeditor/ckeditor.js');
         /* Context Menu (Dynatree) JS */
