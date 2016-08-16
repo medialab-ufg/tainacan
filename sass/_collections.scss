@@ -195,13 +195,15 @@
                             height: 160px;
 
                             a {
-                                    font-weight: bolder;
-                                    color: black;
+                                    font-weight: bolder;                                    
                             }
                             h4 {
                                     margin: 0 0 3px 0;
                                     height: 40px;
                                     overflow: hidden;
+                                    a {
+                                        color: black;
+                                    }
                             }
                             .item-description {
                                     overflow: hidden;
@@ -262,6 +264,14 @@
                                     }
                             }
                     } // .item-redesocial
+
+                    .item-funcs {
+                        li {
+                            span {
+                               // color: $brand-light-blue;
+                            }
+                        }
+                    }
 
             } // .editing-item
 
@@ -349,7 +359,7 @@
     }
     .item-thumb {
             a img {
-                    max-width: 30px;
+                    max-width: 30px !important;
             }
     }
     } // list-viewMode
@@ -370,13 +380,8 @@
     }
 
     .gallery-view-container {
-            // background: white;
-            // border: 3px solid $item-border;
             text-align: center;
-            //height: 240px;
             margin-bottom: 15px;
-            // margin-left: 15px;
-            // width: 23.8%;
             overflow: hidden;
             padding-left: 5px;
             padding-right: 7px;
@@ -386,6 +391,20 @@
                 border: 3px solid $item-border;
                 padding-top: 15px;
                 height: 300px;
+            }
+            
+            .item-funcs li {
+                margin-left: 5px !important; 
+                a {
+                    font-size: 16px;
+                }
+            }
+            
+            .single_stars {
+                margin-top: 2.5px;                
+                .star-on-png, .star-half-png, .star-off-png {
+                    font-size: 17px;
+                }                
             }
 
             &.first-el {
@@ -533,7 +552,7 @@
                     width: 150px;
                     img {
                             cursor: pointer;
-                            max-width: 135px;
+                            max-width: 135px !important;
                     }
             }
             .slick-current {
