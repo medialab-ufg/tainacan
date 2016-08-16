@@ -11,8 +11,7 @@
       var id = $(el).val();
       var lat =  $("#object_" + id + " .latitude").val();
       var long = $("#object_" + id + " .longitude").val();
-      var title = "<h5>" + $.trim( $("#object_" + id + " .item-display-title").html() ) + "</h5>" +
-        "<p>" + $.trim( $("#object_" + id + " .item-description").text() ) + "</p>";
+      var title = "<div class='col-md-12'>"+$.trim( $("#object_" + id ).html() )+"</div>";
 
       if(lat && long) {
         locations[idx] = [title, lat, long];

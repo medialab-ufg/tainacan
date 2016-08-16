@@ -543,3 +543,12 @@
             }
     }
 } // #slideshow-viewMode
+
+#geolocation-viewMode {
+    .editing-item {
+        margin-top: 20px;
+    }
+    .show-item-metadata {
+        display: none;
+    }
+}
