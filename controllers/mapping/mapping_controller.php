@@ -2,9 +2,10 @@
 
 ini_set('max_input_vars', '10000');
 /**
- * Author: Marco Túlio Bueno Vieira
+ * Author: Eduardo Humberto
  */
 require_once(dirname(__FILE__) . '../../../models/mapping/mapping_model.php');
+require_once(dirname(__FILE__) . '../../../models/mapping/extract_metadata_model.php');
 require_once(dirname(__FILE__) . '../../general/general_controller.php');
 require_once(dirname(__FILE__) . '../../../models/import/oaipmh_model.php');
 require_once(dirname(__FILE__) . '../../../models/export/export_model.php');
@@ -13,6 +14,7 @@ class MappingController extends Controller {
 
     public function operation($operation, $data) {
         $mapping_model = new MappingModel('socialdb_channel_oaipmhdc');
+        $extract_model = new ExtractMetadataModel;
         $oaipmh_model = new OAIPMHModel();
         switch ($operation) {
             case "saving_mapping_oaipmh_dc":
@@ -103,6 +105,13 @@ class MappingController extends Controller {
             //oaipmh EXPORT
             case 'form_default_mapping':
                 return json_encode($mapping_model->set_active_mapping($data));
+            /******************************************************************/
+            /*    EXTRACAO DE METADADOS                                       */ 
+            /******************************************************************/
+            case 'get_metadata_handle':
+                return json_encode($extract_model->get_metadata_handle($data));
+                
+                
         }
     }
 
