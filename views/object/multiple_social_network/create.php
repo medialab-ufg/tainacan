@@ -3,6 +3,7 @@ include_once ('../../../../../wp-config.php');
 include_once ('../../../../../wp-load.php');
 include_once ('../../../../../wp-includes/wp-db.php');
 include_once ('js/create_js.php');
+include_once ('js/extract_metadata_js.php');
 /**
  * View responsavel em inicializar o envio de arquivos locais
  */
@@ -85,7 +86,12 @@ include_once ('js/create_js.php');
                        class="form-control"
                        /> 
                 </div>
-                <button type="button" onclick="importAll_verify()" class="col-sm-2 btn btn-primary"><?php _e('Submit', 'tainacan'); ?></button>
+                <div class="col-sm-2 no-padding">
+                    <button type="button" style="padding-bottom: 5px;padding-top: 5px;" onclick="importAll_verify()" class="col-sm-12 no-padding btn btn-primary"><?php _e('Submit', 'tainacan'); ?></button>
+                    <div class="col-sm-12 no-padding">
+                        <input type="checkbox" checked="checked" id="extract_metadata" name="extract_metadata">&nbsp;<?php _e('Extract metadata','tainacan') ?>
+                    </div>    
+                </div>
             </div>
             
         </div> 

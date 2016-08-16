@@ -1338,6 +1338,8 @@
                                         } else {
                                             var any_url = validateAnyUrl();
                                             if (any_url) {
+                                                extract_metadata(string);
+                                                return false;
                                                 // É uma URL regular. Executar a importação através do Embed.ly.
                                                 show_modal_main();
                                                 // showFormCreateURL($('#item_url_import_all').val());
