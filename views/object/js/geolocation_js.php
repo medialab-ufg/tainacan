@@ -7,6 +7,7 @@
 
   $(objs).each(function(idx, el) {      
       ids[idx] = $(el).val();  
+      cl("uai .. " + idx);
       
       var id = $(el).val();
       var lat =  $("#object_" + id + " .latitude").val();
@@ -18,43 +19,48 @@
         lats[idx] = parseFloat(lat);
         longs[idx] = parseFloat(long);
       }
+      
+      cl(locations[idx]);
   });
   
   if(lats && lats.length < 1 ) {
       $('.geolocation-view-container #map').hide();
       $('.geolocation-view-container .not-configured').show();
-  }
+  } else {    
+    var sorted_lats = lats.sort(function(a,b) { return a - b; } );
+    var sorted_longs = longs.sort(function(a,b) { return a - b; } );
+    var half_length = parseInt( locations.length / 2 );
 
-  var sorted_lats = lats.sort(function(a,b) { return a - b; } );
-  var sorted_longs = longs.sort(function(a,b) { return a - b; } );
-  var half_length = parseInt( locations.length / 2 );
+      function initMap() {
+        //document.getElementById('map').style.display = "block";
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: half_length,
+          center: new google.maps.LatLng( sorted_lats[half_length] ,sorted_longs[half_length]),
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
 
-    function initMap() {
-      //document.getElementById('map').style.display = "block";
-      var map = new google.maps.Map(document.getElementById('map'), {
-        zoom: half_length,
-        center: new google.maps.LatLng( sorted_lats[half_length] ,sorted_longs[half_length]),
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      });
+      var infowindow = new google.maps.InfoWindow();
+      var marker, i;
 
-    var infowindow = new google.maps.InfoWindow();
-    var marker, i;
+      for (i = 0; i < locations.length; i++) {
+          
+        if(locations[i]) {
+          marker = new google.maps.Marker({
+            position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+            map: map
+          });
 
-    for (i = 0; i < locations.length; i++) {
-      marker = new google.maps.Marker({
-        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-        map: map
-      });
-
-      google.maps.event.addListener(marker, 'click', (function (marker, i) {
-        return function () {
-          infowindow.setContent(locations[i][0]);
-          infowindow.open(map, marker);
+          google.maps.event.addListener(marker, 'click', (function (marker, i) {
+            return function () {
+              infowindow.setContent(locations[i][0]);
+              infowindow.open(map, marker);
+            };
+          })(marker, i));   
         }
-      })(marker, i));
+      }
     }
+
+    initMap();
   }
-  
-  initMap();
   
 </script>   
