@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: socialdb\n"
 "POT-Creation-Date: 2016-08-16 16:14-0300\n"
-"PO-Revision-Date: 2016-08-16 16:14-0300\n"
+"PO-Revision-Date: 2016-08-16 16:30-0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -6923,7 +6923,7 @@ msgstr "Slideshow"
 
 #: views/search/layout.php:64
 msgid "Geolocation"
-msgstr ""
+msgstr "Geo localização"
 
 #: views/search/layout.php:69
 msgid "Slideshow time (seconds)"

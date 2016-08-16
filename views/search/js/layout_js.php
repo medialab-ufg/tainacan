@@ -71,7 +71,6 @@
 
     $('#collection_list_mode').change(function() {
         var v_mode = $(this).val();
-        cl("Check: " + v_mode);
         if( v_mode === 'slideshow') {
             $('.sl-time').fadeIn();
             $(['.geo-lat', '.geo-long']).each(function(ix, el){ $( el).fadeOut(); } );

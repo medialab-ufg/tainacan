@@ -23,8 +23,6 @@
   if(lats && lats.length < 1 ) {
       $('.geolocation-view-container #map').hide();
       $('.geolocation-view-container .not-configured').show();
-  } else {
-      cl("Temos " + lats.length);
   }
 
   var sorted_lats = lats.sort(function(a,b) { return a - b; } );
@@ -32,7 +30,7 @@
   var half_length = parseInt( locations.length / 2 );
 
     function initMap() {
-      //document.getElementById('map').style.display = "block";
+      document.getElementById('map').style.display = "block";
       var map = new google.maps.Map(document.getElementById('map'), {
         zoom: half_length,
         center: new google.maps.LatLng( sorted_lats[half_length] ,sorted_longs[half_length]),
@@ -56,4 +54,7 @@
       })(marker, i));
     }
   }
+  
+  initMap();
+  
 </script>   
