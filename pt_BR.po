@@ -1,13 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: socialdb\n"
-<<<<<<< HEAD
 "POT-Creation-Date: 2016-08-15 15:12-0300\n"
 "PO-Revision-Date: 2016-08-15 15:24-0300\n"
-=======
-"POT-Creation-Date: 2016-08-12 15:04-0300\n"
-"PO-Revision-Date: 2016-08-12 15:06-0300\n"
->>>>>>> feature/geolocation
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -128,18 +123,14 @@ msgstr "Responder Comentário"
 #: views/theme_options/edit_tools.php:123
 #: views/theme_options/property/list.php:261
 #: views/theme_options/property/metadata/form_voting.php:81
-#: views/theme_options/property/metadata_forms.php:101 views/user/login.php:111
+#: views/theme_options/property/metadata_forms.php:101 views/user/login.php:107
 #: views/user/profile.php:103
 msgid "Close"
 msgstr "Fechar"
 
 #: comments.php:134 comments.php:165 views/advanced_search/modals_adv.php:48
-<<<<<<< HEAD
 #: views/object/list_modes/modals.php:47 views/object/list_modes/modals.php:77
 #: views/user/login.php:108
-=======
-#: views/object/list_modes/modals.php:47 views/user/login.php:112
->>>>>>> feature/geolocation
 msgid "Send"
 msgstr "Enviar"
 
@@ -226,13 +217,8 @@ msgstr "Nome da coleção inválido ou nome do item inválido"
 #: models/event/event_collection/event_collection_create_model.php:49
 #: models/event/event_collection/event_collection_delete_model.php:49
 #: models/event/event_comment/event_comment_create_model.php:51
-<<<<<<< HEAD
 #: models/event/event_model.php:352 models/object/object_model.php:1641
 #: models/object/object_model.php:1714 models/search/search_model.php:424
-=======
-#: models/event/event_model.php:352 models/object/object_model.php:1640
-#: models/object/object_model.php:1713 models/search/search_model.php:424
->>>>>>> feature/geolocation
 #: models/theme_options/theme_options_model.php:186
 #: views/collection/js/edit_js.php:40 views/collection/js/edit_js.php:77
 #: views/event/js/list_js.php:177 views/event/js/list_js.php:215
@@ -340,11 +326,7 @@ msgstr "Metadado de dado"
 msgid "Rankings"
 msgstr "Votações"
 
-<<<<<<< HEAD
 #: controllers/collection/collection_controller.php:270 functions.php:1541
-=======
-#: controllers/collection/collection_controller.php:270 functions.php:1535
->>>>>>> feature/geolocation
 #: helpers/object/object_helper.php:35 views/property/list_metadata.php:74
 #: views/property/list_metadata.php:81
 msgid "Default"
@@ -507,7 +489,7 @@ msgstr "(Painel de edição)"
 #: views/property/metadata/form_compounds.php:91
 #: views/property/metadata/form_voting.php:86 views/ranking/list.php:99
 #: views/search/edit.php:102 views/search/edit.php:315
-#: views/search/layout.php:37 views/search/layout.php:113
+#: views/search/layout.php:37 views/search/layout.php:112
 #: views/theme_options/licenses/edit.php:43
 #: views/theme_options/property/metadata/form_voting.php:82
 msgid "Save"
@@ -705,20 +687,12 @@ msgstr "Categoria pai"
 msgid "Parent Category:"
 msgstr "Categoria pai:"
 
-<<<<<<< HEAD
 #: functions.php:975 models/object/object_model.php:1559
-=======
-#: functions.php:975 models/object/object_model.php:1558
->>>>>>> feature/geolocation
 #: models/wp_query/wp_query_model.php:1125
 msgid "Recents"
 msgstr "Recentes "
 
-<<<<<<< HEAD
 #: functions.php:1284 models/collection/collection_model.php:539
-=======
-#: functions.php:1278 models/collection/collection_model.php:539
->>>>>>> feature/geolocation
 #: views/design/edit.php:106 views/license/list.php:21
 #: views/object/create_item_text.php:74 views/object/create_item_text.php:302
 #: views/object/edit_item_text.php:79 views/object/edit_item_text.php:320
@@ -732,11 +706,7 @@ msgstr "Recentes "
 msgid "Title"
 msgstr "Título"
 
-<<<<<<< HEAD
 #: functions.php:1294 single.php:773
-=======
-#: functions.php:1288 single.php:773
->>>>>>> feature/geolocation
 #: views/advanced_search/advanced_search.php:99 views/category/page.php:63
 #: views/design/edit.php:113 views/object/create_item_text.php:190
 #: views/object/edit_item_text.php:209 views/object/list_single_object.php:363
@@ -749,11 +719,7 @@ msgstr "Título"
 msgid "Description"
 msgstr "Descrição"
 
-<<<<<<< HEAD
 #: functions.php:1304 models/export/rdf_repository_model.php:75
-=======
-#: functions.php:1298 models/export/rdf_repository_model.php:75
->>>>>>> feature/geolocation
 #: models/export/rdf_repository_model.php:82
 #: views/object/create_item_text.php:95 views/object/create_item_text.php:345
 #: views/object/edit_item_text.php:101 views/object/edit_item_text.php:442
@@ -763,11 +729,7 @@ msgstr "Descrição"
 msgid "Content"
 msgstr "Conteúdo "
 
-<<<<<<< HEAD
 #: functions.php:1314 models/collection/visualization_model.php:194
-=======
-#: functions.php:1308 models/collection/visualization_model.php:194
->>>>>>> feature/geolocation
 #: models/search/search_model.php:315 views/object/create_item_text.php:167
 #: views/object/edit_item_text.php:186 views/object/list_single_object.php:223
 #: views/object/multiple_items/editor_items.php:130
@@ -778,11 +740,7 @@ msgstr "Conteúdo "
 msgid "Source"
 msgstr "Fonte"
 
-<<<<<<< HEAD
 #: functions.php:1324 models/collection/visualization_model.php:200
-=======
-#: functions.php:1318 models/collection/visualization_model.php:200
->>>>>>> feature/geolocation
 #: models/export/rdf_repository_model.php:126
 #: models/object/object_model.php:1172 models/search/search_model.php:319
 #: views/object/list_single_object.php:388
@@ -790,21 +748,13 @@ msgstr "Fonte"
 msgid "License"
 msgstr "Licença"
 
-<<<<<<< HEAD
 #: functions.php:1334 views/design/edit.php:89 views/design/edit.php:120
-=======
-#: functions.php:1328 views/design/edit.php:89 views/design/edit.php:120
->>>>>>> feature/geolocation
 #: views/design/edit.php:177 views/object/create_item_text.php:143
 #: views/object/edit_item_text.php:150 views/object/list_single_object.php:284
 msgid "Thumbnail"
 msgstr "Miniatura"
 
-<<<<<<< HEAD
 #: functions.php:1344 views/object/create_item_text.php:112
-=======
-#: functions.php:1338 views/object/create_item_text.php:112
->>>>>>> feature/geolocation
 #: views/object/create_item_text.php:354 views/object/edit_item_text.php:118
 #: views/object/edit_item_text.php:454 views/object/file/list_file.php:13
 #: views/object/file/list_file.php:56 views/object/list_data_table.php:141
@@ -813,11 +763,7 @@ msgstr "Miniatura"
 msgid "Attachments"
 msgstr "Anexos"
 
-<<<<<<< HEAD
 #: functions.php:1354 models/collection/collection_model.php:763
-=======
-#: functions.php:1348 models/collection/collection_model.php:763
->>>>>>> feature/geolocation
 #: models/collection/visualization_model.php:175
 #: models/collection/visualization_model.php:249
 #: models/collection/visualization_model.php:350
@@ -835,11 +781,7 @@ msgstr "Anexos"
 msgid "Tags"
 msgstr "Tags"
 
-<<<<<<< HEAD
 #: functions.php:1366 models/collection/collection_model.php:541
-=======
-#: functions.php:1360 models/collection/collection_model.php:541
->>>>>>> feature/geolocation
 #: models/collection/visualization_model.php:182
 #: models/search/search_model.php:311
 #: views/advanced_search/show_object_properties.php:27
@@ -859,11 +801,7 @@ msgstr "Tags"
 msgid "Type"
 msgstr "Tipo"
 
-<<<<<<< HEAD
 #: functions.php:1541 views/collection/header_collection.php:165
-=======
-#: functions.php:1535 views/collection/header_collection.php:165
->>>>>>> feature/geolocation
 #: views/object/data_property_form.php:38
 #: views/object/edit_data_property_form.php:43
 #: views/object/object_property_form.php:63
@@ -874,7 +812,6 @@ msgstr "Tipo"
 msgid "Clear"
 msgstr "Limpar"
 
-<<<<<<< HEAD
 #: functions.php:1541
 msgid "Select Color"
 msgstr "Selecionar cor"
@@ -892,25 +829,6 @@ msgid "Categories of Collection"
 msgstr "Categorias da coleção"
 
 #: functions.php:1796 functions.php:1799 functions.php:1800
-=======
-#: functions.php:1535
-msgid "Select Color"
-msgstr "Selecionar cor"
-
-#: functions.php:1550
-msgid "Tainacan - Collections"
-msgstr "Tainacan - Coleções"
-
-#: functions.php:1551
-msgid "The root collection"
-msgstr "a coleção raiz"
-
-#: functions.php:1560
-msgid "Categories of Collection"
-msgstr "Categorias da coleção"
-
-#: functions.php:1790 functions.php:1793 functions.php:1794
->>>>>>> feature/geolocation
 #: helpers/view_helper.php:276 models/general/general_model.php:1545
 #: views/category/js/taxonomy_zone_js.php:18 views/category/list.php:11
 #: views/category/list.php:217 views/collection/js/edit_js.php:60
@@ -919,16 +837,11 @@ msgstr "Categorias da coleção"
 msgid "Categories"
 msgstr "Categorias"
 
-<<<<<<< HEAD
 #: functions.php:1797 models/export/rdf_repository_model.php:115
-=======
-#: functions.php:1791 models/export/rdf_repository_model.php:115
->>>>>>> feature/geolocation
 #: models/import/oaipmh_model.php:178 single.php:611
 msgid "Tag"
 msgstr "Tag"
 
-<<<<<<< HEAD
 #: functions.php:2541
 msgid "Videos"
 msgstr "Vídeos"
@@ -958,37 +871,6 @@ msgid "Tainacan"
 msgstr "Tainacan"
 
 #: functions.php:2700
-=======
-#: functions.php:2535
-msgid "Videos"
-msgstr "Vídeos"
-
-#: functions.php:2536
-msgid "Images"
-msgstr "Imagens"
-
-#: functions.php:2537
-msgid "PDFs"
-msgstr "PDFs"
-
-#: functions.php:2538
-msgid "Texts"
-msgstr "Textos"
-
-#: functions.php:2539
-msgid "Audios"
-msgstr "Áudios"
-
-#: functions.php:2548
-msgid "Visit original page"
-msgstr "Visitar página original"
-
-#: functions.php:2586 header.php:83
-msgid "Tainacan"
-msgstr "Tainacan"
-
-#: functions.php:2694
->>>>>>> feature/geolocation
 msgid "Enable reduced menu"
 msgstr "Habilitar Menu Reduzido"
 
@@ -1028,11 +910,7 @@ msgstr "Configuração"
 #: views/advanced_search/list_advanced_search.php:257
 #: views/advanced_search/loops_page/list_collection_search.php:95
 #: views/advanced_search/loops_page/list_items_search.php:94
-<<<<<<< HEAD
 #: views/design/edit.php:12 views/object/list_modes/cards.php:70
-=======
-#: views/design/edit.php:12 views/object/list_modes/cards.php:73
->>>>>>> feature/geolocation
 #: views/property/js/list_metadata_js.php:10 views/property/list.php:13
 #: views/ranking/list.php:12 views/search/edit.php:13
 msgid "Metadata"
@@ -1099,7 +977,7 @@ msgstr "Exportação"
 msgid "Click to download the manual"
 msgstr "Clique para baixar o manual"
 
-#: header.php:154 views/user/login.php:46 views/user/login.php:88
+#: header.php:154 views/user/login.php:42 views/user/login.php:84
 msgid "Login"
 msgstr "Entrar"
 
@@ -1245,10 +1123,7 @@ msgid "The field %s is required"
 msgstr "O campo %s é obrigatório"
 
 #: helpers/object/object_properties_widgets_helper.php:224
-<<<<<<< HEAD
 #: helpers/object/single_properties_widgets_helper.php:257
-=======
->>>>>>> feature/geolocation
 #: views/object/append_properties_categories/multiple_properties_categories_accordion.php:80
 #: views/object/append_properties_categories/properties_categories_accordion.php:119
 #: views/object/edit_object_properties/edit_list_properties_accordion.php:128
@@ -1260,10 +1135,7 @@ msgid "Type the three first letters of the object of this collection "
 msgstr "Digite as três primeiras letras do item desta coleção"
 
 #: helpers/object/object_properties_widgets_helper.php:247
-<<<<<<< HEAD
 #: helpers/object/single_properties_widgets_helper.php:280
-=======
->>>>>>> feature/geolocation
 #: views/advanced_search/show_object_properties.php:274
 #: views/object/append_properties_categories/multiple_properties_categories_accordion.php:92
 #: views/object/append_properties_categories/properties_categories_accordion.php:142
@@ -1275,22 +1147,14 @@ msgstr "Digite as três primeiras letras do item desta coleção"
 #: views/object/show_insert_object_properties.php:59
 #: views/object/show_list_event_properties.php:42
 #: views/object/single_object/single_show_list_event_properties.php:64
-<<<<<<< HEAD
 #: views/object/single_object/single_show_list_event_properties_renew.php:104
-=======
-#: views/object/single_object/single_show_list_event_properties_renew.php:87
->>>>>>> feature/geolocation
 msgid "No objects added in this collection"
 msgstr "Nenhum item foi adicionado a esta coleção"
 
 #: helpers/object/object_properties_widgets_helper.php:281
-<<<<<<< HEAD
 #: helpers/object/object_properties_widgets_helper.php:328
 #: helpers/object/single_properties_widgets_helper.php:314
 #: helpers/object/single_properties_widgets_helper.php:360 single.php:417
-=======
-#: helpers/object/object_properties_widgets_helper.php:328 single.php:417
->>>>>>> feature/geolocation
 #: views/object/append_properties_categories/multiple_properties_categories_accordion.php:208
 #: views/object/append_properties_categories/multiple_properties_categories_accordion.php:250
 #: views/object/append_properties_categories/properties_categories_accordion.php:350
@@ -1306,15 +1170,12 @@ msgstr "Nenhum item foi adicionado a esta coleção"
 msgid "Add Category"
 msgstr "Adicionar Categoria"
 
-<<<<<<< HEAD
 #: helpers/object/single_properties_widgets_helper.php:109
 #: helpers/object/single_properties_widgets_helper.php:120
 #: helpers/object/single_properties_widgets_helper.php:131
 msgid "Empty field. Click to edit!"
 msgstr "Campo vazio. Clique para editar!"
 
-=======
->>>>>>> feature/geolocation
 #: helpers/view_helper.php:60 helpers/view_helper.php:73
 #: models/collection/collection_model.php:1014
 #: models/collection/visualization_model.php:530
@@ -1368,11 +1229,7 @@ msgstr "Relacionamento"
 
 #: helpers/view_helper.php:68 models/general/general_model.php:598
 msgid "Compounds"
-<<<<<<< HEAD
 msgstr "Compostas"
-=======
-msgstr ""
->>>>>>> feature/geolocation
 
 #: helpers/view_helper.php:138 models/search/search_model.php:179
 #: models/search/search_model.php:183 models/search/search_model.php:190
@@ -1523,11 +1380,8 @@ msgstr "Arquivo corrompido"
 #: models/event/event_property_compounds/event_property_compounds_delete_model.php:92
 #: models/event/event_property_compounds/event_property_compounds_edit_model.php:47
 #: models/event/event_property_compounds/event_property_compounds_edit_model.php:90
-<<<<<<< HEAD
 #: models/event/event_property_compounds/event_property_compounds_edit_value_model.php:54
 #: models/event/event_property_compounds/event_property_compounds_edit_value_model.php:150
-=======
->>>>>>> feature/geolocation
 #: models/event/event_property_data/event_property_data_create_model.php:58
 #: models/event/event_property_data/event_property_data_create_model.php:110
 #: models/event/event_property_data/event_property_data_create_model.php:122
@@ -1570,11 +1424,7 @@ msgstr "Arquivo corrompido"
 #: models/license/license_model.php:53 models/license/license_model.php:66
 #: models/license/license_model.php:174 models/mapping/mapping_model.php:58
 #: models/mapping/mapping_model.php:465 models/object/object_model.php:731
-<<<<<<< HEAD
 #: models/object/object_model.php:1637 models/object/object_model.php:1710
-=======
-#: models/object/object_model.php:1636 models/object/object_model.php:1709
->>>>>>> feature/geolocation
 #: models/object/object_multiple_model.php:49
 #: models/object/object_multiple_model.php:406
 #: models/search/search_model.php:64 models/search/search_model.php:137
@@ -1680,7 +1530,7 @@ msgstr ""
 #: views/advanced_search/list_advanced_search.php:286
 #: views/advanced_search/loops_page/list_collection_search.php:124
 #: views/advanced_search/loops_page/list_items_search.php:124
-#: views/object/list.php:111 views/object/list_trash.php:93
+#: views/object/list.php:95 views/object/list_trash.php:93
 #: views/property/list.php:38
 msgid " of "
 msgstr " de "
@@ -1856,10 +1706,7 @@ msgstr " no item "
 #: models/event/event_property_compounds/event_property_compounds_create_model.php:49
 #: models/event/event_property_compounds/event_property_compounds_delete_model.php:46
 #: models/event/event_property_compounds/event_property_compounds_edit_model.php:49
-<<<<<<< HEAD
 #: models/event/event_property_compounds/event_property_compounds_edit_value_model.php:56
-=======
->>>>>>> feature/geolocation
 #: models/event/event_property_data/event_property_data_create_model.php:60
 #: models/event/event_property_data/event_property_data_delete_model.php:49
 #: models/event/event_property_data/event_property_data_edit_model.php:49
@@ -1897,10 +1744,7 @@ msgstr "Este evento já foi confirmado"
 #: models/event/event_property_compounds/event_property_compounds_create_model.php:102
 #: models/event/event_property_compounds/event_property_compounds_delete_model.php:90
 #: models/event/event_property_compounds/event_property_compounds_edit_model.php:88
-<<<<<<< HEAD
 #: models/event/event_property_compounds/event_property_compounds_edit_value_model.php:148
-=======
->>>>>>> feature/geolocation
 #: models/event/event_property_data/event_property_data_create_model.php:108
 #: models/event/event_property_data/event_property_data_create_model.php:120
 #: models/event/event_property_data/event_property_data_delete_model.php:92
@@ -1967,10 +1811,7 @@ msgstr "Remover a tag:"
 #: models/event/event_property_compounds/event_property_compounds_create_model.php:45
 #: models/event/event_property_compounds/event_property_compounds_delete_model.php:42
 #: models/event/event_property_compounds/event_property_compounds_edit_model.php:45
-<<<<<<< HEAD
 #: models/event/event_property_compounds/event_property_compounds_edit_value_model.php:52
-=======
->>>>>>> feature/geolocation
 #: models/event/event_property_data/event_property_data_create_model.php:56
 #: models/event/event_property_data/event_property_data_delete_model.php:45
 #: models/event/event_property_data/event_property_data_edit_model.php:45
@@ -2040,10 +1881,7 @@ msgstr "Deletar Comentário "
 #: models/event/event_property_compounds/event_property_compounds_create_model.php:51
 #: models/event/event_property_compounds/event_property_compounds_delete_model.php:48
 #: models/event/event_property_compounds/event_property_compounds_edit_model.php:51
-<<<<<<< HEAD
 #: models/event/event_property_compounds/event_property_compounds_edit_value_model.php:58
-=======
->>>>>>> feature/geolocation
 #: models/event/event_property_data/event_property_data_create_model.php:62
 #: models/event/event_property_data/event_property_data_delete_model.php:51
 #: models/event/event_property_data/event_property_data_edit_model.php:51
@@ -2300,11 +2138,7 @@ msgstr "Remover item "
 
 #: models/event/event_property_compounds/event_property_compounds_create_model.php:26
 msgid "Create the compounds property "
-<<<<<<< HEAD
 msgstr "Criar propriedades compostas"
-=======
-msgstr ""
->>>>>>> feature/geolocation
 
 #: models/event/event_property_compounds/event_property_compounds_create_model.php:26
 #: models/event/event_property_compounds/event_property_compounds_delete_model.php:23
@@ -2338,11 +2172,7 @@ msgstr "Por favor, preencha o formulário corretamente! "
 
 #: models/event/event_property_compounds/event_property_compounds_delete_model.php:23
 msgid "Delete the compounds property "
-<<<<<<< HEAD
 msgstr "Deletar a propriedade composta"
-=======
-msgstr ""
->>>>>>> feature/geolocation
 
 #: models/event/event_property_compounds/event_property_compounds_delete_model.php:95
 #: models/event/event_property_data/event_property_data_delete_model.php:97
@@ -2353,34 +2183,7 @@ msgstr "Este metadado de objeto já foi removido"
 
 #: models/event/event_property_compounds/event_property_compounds_edit_model.php:26
 msgid "Edit the compounds property "
-<<<<<<< HEAD
 msgstr "Editar a propriedade compostas"
-=======
-msgstr ""
-
-#: models/event/event_property_data/event_property_data_create_model.php:34
-#: models/event/event_property_data/event_property_data_create_model.php:36
-msgid "Create the data property "
-msgstr "Criar metadado de dado"
-
-#: models/event/event_property_data/event_property_data_create_model.php:34
-msgid " in the category"
-msgstr " na categoria"
-
-#: models/event/event_property_data/event_property_data_create_model.php:36
-msgid " in the collection"
-msgstr " na coleção"
-
-#: models/event/event_property_data/event_property_data_delete_model.php:26
-#: views/object/js/show_list_event_properties_edit_remove_js.php:75
-#: views/object/single_object/js/show_list_event_properties_edit_remove_js.php:77
-msgid "Delete the data property "
-msgstr "Remover o metadado de dado"
-
-#: models/event/event_property_data/event_property_data_edit_model.php:26
-msgid "Edit the data property "
-msgstr "Editar metadado de dado"
->>>>>>> feature/geolocation
 
 #: models/event/event_property_compounds/event_property_compounds_edit_value_model.php:27
 msgid "Set the values: "
@@ -2582,11 +2385,7 @@ msgstr "Metadado de termo "
 #: views/object/append_properties_categories/js/properties_categories_accordion_js.php:237
 #: views/object/edit_object_properties/js/edit_list_properties_accordion_js.php:270
 #: views/object/js/list_properties_accordion_js.php:277
-<<<<<<< HEAD
 #: views/object/js/properties_compounds_js.php:293
-=======
-#: views/object/js/properties_compounds_js.php:296
->>>>>>> feature/geolocation
 #: views/object/multiple_items/editor_items.php:421
 #: views/object/multiple_social_network/editor_items.php:442
 #: views/object/single_object/js/single_properties_compounds_js.php:279
@@ -2600,11 +2399,7 @@ msgid "Attachment"
 msgstr "Anexos "
 
 #: models/export/rdf_repository_model.php:96
-<<<<<<< HEAD
 #: models/object/object_model.php:1556 models/wp_query/wp_query_model.php:1122
-=======
-#: models/object/object_model.php:1555 models/wp_query/wp_query_model.php:1122
->>>>>>> feature/geolocation
 #: views/object/list_single_object.php:317
 #: views/property/metadata/form_voting.php:6 views/ranking/add.php:16
 #: views/ranking/edit.php:17 views/ranking/list.php:29
@@ -2812,7 +2607,6 @@ msgstr "A licença sugerida é: "
 msgid "Something went wrong! Please try again!"
 msgstr "Algo deu errado! Por favor tente novamente!"
 
-<<<<<<< HEAD
 #: models/object/object_model.php:1554 models/wp_query/wp_query_model.php:1120
 msgid "Data property"
 msgstr "Metadados de dado"
@@ -2822,17 +2616,6 @@ msgid "All items removed successfully"
 msgstr "Item/itens removido(s) com sucesso!"
 
 #: models/object/object_model.php:1642 models/object/object_model.php:1715
-=======
-#: models/object/object_model.php:1553 models/wp_query/wp_query_model.php:1120
-msgid "Data property"
-msgstr "Metadados de dado"
-
-#: models/object/object_model.php:1637 models/object/object_model.php:1710
-msgid "All items removed successfully"
-msgstr "Item/itens removido(s) com sucesso!"
-
-#: models/object/object_model.php:1641 models/object/object_model.php:1714
->>>>>>> feature/geolocation
 msgid "No items added in this collection"
 msgstr "Nenhum item adicionados a esta coleção"
 
@@ -3612,7 +3395,7 @@ msgstr "Resultado da busca"
 #: views/advanced_search/list_advanced_search.php:217
 #: views/advanced_search/loops_page/list_collection_search.php:46
 #: views/advanced_search/loops_page/list_items_search.php:45
-#: views/object/list_modes/cards.php:33
+#: views/object/list_modes/cards.php:30
 #: views/object/list_modes/cards_trash.php:29
 #: views/object/list_modes/list.php:24
 msgid "Created by: "
@@ -3622,13 +3405,13 @@ msgstr "Criado por: "
 #: views/advanced_search/list_advanced_search.php:218
 #: views/advanced_search/loops_page/list_collection_search.php:47
 #: views/advanced_search/loops_page/list_items_search.php:46
-#: views/object/list.php:53 views/object/list_modes/cards_trash.php:32
+#: views/object/list.php:40 views/object/list_modes/cards_trash.php:32
 msgid "Created at: "
 msgstr "Criado em: "
 
 #: views/advanced_search/list_advanced_search.php:160
 #: views/advanced_search/loops_page/list_collection_search.php:124
-#: views/object/list.php:13 views/object/list_trash.php:12
+#: views/object/list.php:12 views/object/list_trash.php:12
 msgid "Showing collections:"
 msgstr "Exibindo coleções:"
 
@@ -3636,7 +3419,7 @@ msgstr "Exibindo coleções:"
 #: views/advanced_search/list_advanced_search.php:292
 #: views/advanced_search/loops_page/list_collection_search.php:129
 #: views/advanced_search/loops_page/list_items_search.php:128
-#: views/object/list.php:115 views/object/list_trash.php:97
+#: views/object/list.php:99 views/object/list_trash.php:97
 msgid "Items per page:"
 msgstr "Itens por página:"
 
@@ -5743,30 +5526,30 @@ msgstr ""
 msgid "New tab"
 msgstr "Nova aba"
 
-#: views/object/list.php:13 views/object/list_trash.php:12
+#: views/object/list.php:12 views/object/list_trash.php:12
 msgid "Showing Items:"
 msgstr "Exibindo itens:"
 
-#: views/object/list.php:72 views/object/list_advanced_search.php:82
+#: views/object/list.php:56 views/object/list_advanced_search.php:82
 #: views/object/list_trash.php:54
 msgid "No objects found!"
 msgstr "Nenhum item encontrado!"
 
-#: views/object/list.php:78 views/object/list_advanced_search.php:86
+#: views/object/list.php:62 views/object/list_advanced_search.php:86
 #: views/object/list_trash.php:60
 msgid "This collection is empty, create the first item!"
 msgstr "Esta coleção está vazia, crie seu primeiro item!"
 
-#: views/object/list.php:79 views/object/list_advanced_search.php:87
+#: views/object/list.php:63 views/object/list_advanced_search.php:87
 #: views/object/list_trash.php:61
 msgid "Click here to add a new item"
 msgstr "Clique aqui para adicionar um novo item"
 
-#: views/object/list.php:84 views/object/list_trash.php:66
+#: views/object/list.php:68 views/object/list_trash.php:66
 msgid "This repository is empty, create the first collection!"
 msgstr "Este repositório está vazio, crie sua primeira coleção!"
 
-#: views/object/list.php:85 views/object/list_trash.php:67
+#: views/object/list.php:69 views/object/list_trash.php:67
 msgid "Click here to add a new collection"
 msgstr "Clique aqui para adicionar um nova coleção! "
 
@@ -5827,7 +5610,6 @@ msgstr "Você tem certeza em remover este item permanentemente:"
 msgid "Are you sure to remove the collection permanently: "
 msgstr "Você tem certeza em remover esta coleção permanentemente:"
 
-<<<<<<< HEAD
 #: views/object/list_modes/modals.php:64
 msgid "Duplicate Item"
 msgstr "Duplicar item"
@@ -5844,8 +5626,6 @@ msgstr "Duplicar em outra coleção"
 msgid "Versioning"
 msgstr "Versionamento"
 
-=======
->>>>>>> feature/geolocation
 #: views/object/list_properties_accordion.php:121
 #: views/object/show_insert_object_properties.php:44
 msgid "Type the three first letters of the object"
@@ -6351,11 +6131,7 @@ msgstr "Metadado de dados"
 #: views/property/js/compounds_js.php:134
 #: views/property/metadata/form_compounds.php:11
 msgid "Compounds Metadata"
-<<<<<<< HEAD
 msgstr "Metadados compostos"
-=======
-msgstr ""
->>>>>>> feature/geolocation
 
 #: views/property/js/list_js.php:78
 msgid "Please,select at least one relation"
@@ -6480,19 +6256,11 @@ msgstr "Metadado inserido como filtro com sucesso"
 
 #: views/property/js/list_metadata_js.php:303
 msgid "Filter removed successfully"
-<<<<<<< HEAD
 msgstr "Filtro removido com sucesso"
 
 #: views/property/js/list_metadata_js.php:855
 msgid "Select a property"
 msgstr "Selecione o metadado"
-=======
-msgstr ""
-
-#: views/property/js/list_metadata_js.php:855
-msgid "Select a property"
-msgstr ""
->>>>>>> feature/geolocation
 
 #: views/property/js/list_metadata_js.php:1610 views/search/js/edit_js.php:377
 #: views/theme_options/property/js/list_metadata_js.php:1431
@@ -6501,19 +6269,11 @@ msgstr "Algo inesperado ocorreu. Por favor tente novamente. "
 
 #: views/property/js/list_metadata_js.php:2098
 msgid "Add as filter"
-<<<<<<< HEAD
 msgstr "Adicionar como filtro"
 
 #: views/property/js/list_metadata_js.php:2102
 msgid "Remove filter"
 msgstr "Remover filtro"
-=======
-msgstr ""
-
-#: views/property/js/list_metadata_js.php:2102
-msgid "Remove filter"
-msgstr ""
->>>>>>> feature/geolocation
 
 #: views/property/js/tabs_js.php:128
 msgid "Are you sure removing this tab?"
@@ -6673,19 +6433,11 @@ msgstr "Texto de ajuda"
 
 #: views/property/metadata/form_compounds.php:24
 msgid "Ordenation"
-<<<<<<< HEAD
 msgstr "Ordenação"
 
 #: views/property/metadata/form_compounds.php:25
 msgid "Select the metadata below"
 msgstr "Selecione o metadado abaixo"
-=======
-msgstr ""
-
-#: views/property/metadata/form_compounds.php:25
-msgid "Select the metadata below"
-msgstr ""
->>>>>>> feature/geolocation
 
 #: views/property/metadata/form_compounds.php:35
 #: views/property/metadata/form_object.php:64
@@ -6917,19 +6669,19 @@ msgstr "Ordenação"
 msgid "Select the properties for ordenation"
 msgstr "Selecionar os metadados para ordenação"
 
-#: views/search/edit.php:75 views/search/layout.php:81
+#: views/search/edit.php:75 views/search/layout.php:80
 msgid "Select the default ordination"
 msgstr "Selecionar ordenação padrão"
 
-#: views/search/edit.php:82 views/search/layout.php:88
+#: views/search/edit.php:82 views/search/layout.php:87
 msgid "Select the ordination form"
 msgstr "Selecione a forma de ordenação"
 
-#: views/search/edit.php:89 views/search/layout.php:91
+#: views/search/edit.php:89 views/search/layout.php:90
 msgid "DESC"
 msgstr "Decrescente"
 
-#: views/search/edit.php:96 views/search/layout.php:94
+#: views/search/edit.php:96 views/search/layout.php:93
 msgid "ASC"
 msgstr "Ascendente"
 
@@ -7161,27 +6913,19 @@ msgstr "Lista"
 msgid "Slideshow"
 msgstr "Slideshow"
 
-#: views/search/layout.php:64
-msgid "Geolocation"
-msgstr "Geo localização"
-
-#: views/search/layout.php:69
+#: views/search/layout.php:68
 msgid "Slideshow time (seconds)"
-<<<<<<< HEAD
 msgstr "Tempo de slideshow (segundos)"
-=======
-msgstr "Tempo do slideshow (em segundos)"
->>>>>>> feature/geolocation
 
-#: views/search/layout.php:101
+#: views/search/layout.php:100
 msgid "Select the form layout to create a new text item"
 msgstr "Selecione o layout do formulário para criar um novo item de texto"
 
-#: views/search/layout.php:104
+#: views/search/layout.php:103
 msgid "1 column"
 msgstr "1 coluna"
 
-#: views/search/layout.php:107
+#: views/search/layout.php:106
 msgid "2 columns"
 msgstr "2 colunas"
 
@@ -7584,40 +7328,40 @@ msgstr "Metadado obrigatório"
 msgid "Less options"
 msgstr "Menos opções"
 
-#: views/user/login.php:53
+#: views/user/login.php:49
 msgid "Login with Facebook"
 msgstr "Entrar com Facebook"
 
-#: views/user/login.php:61
+#: views/user/login.php:57
 msgid "Login with Google Plus"
 msgstr "Entrar com Google Plus"
 
-#: views/user/login.php:71 views/user/register.php:54
+#: views/user/login.php:67 views/user/register.php:54
 msgid "or"
 msgstr "ou"
 
-#: views/user/login.php:81 views/user/login.php:82 views/user/profile.php:49
+#: views/user/login.php:77 views/user/login.php:78 views/user/profile.php:49
 #: views/user/register.php:74
 msgid "Username"
 msgstr "Usuário"
 
-#: views/user/login.php:84 views/user/login.php:85 views/user/register.php:80
+#: views/user/login.php:80 views/user/login.php:81 views/user/register.php:80
 msgid "Password"
 msgstr "Senha"
 
-#: views/user/login.php:87
+#: views/user/login.php:83
 msgid "Forgot password?"
 msgstr "Esqueceu sua senha?"
 
-#: views/user/login.php:101
+#: views/user/login.php:97
 msgid "Forgot Password?"
 msgstr "Esqueceu sua senha?"
 
-#: views/user/login.php:106
+#: views/user/login.php:102
 msgid "Username or Email"
 msgstr "Nome de usuário ou Email"
 
-#: views/user/login.php:107
+#: views/user/login.php:103
 msgid "Type here the username that you will use for login or your email"
 msgstr ""
 "Digite aqui seu usuário que você usará para seu login ou então seu email"

@@ -427,14 +427,10 @@
     
     function delete_value(category_id){
        var seletor = ($("#object_classifications_edit").length > 0 ) ?  $("#object_classifications_edit") :  $("#object_classifications");
-<<<<<<< HEAD
        if($(seletor).length === 0){
            return false;
        }
         var classifications = $(seletor).val().split(',');
-=======
-       var classifications = $(seletor).val().split(',');
->>>>>>> feature/geolocation
        if(classifications.length>0&&category_id){
            var index = classifications.indexOf(category_id);
            if(index>-1){

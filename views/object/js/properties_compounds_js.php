@@ -3,24 +3,14 @@
     $(function () {
         // # - autocomplete para as propriedades de dados
         var properties_autocomplete = compounds_get_val($("#properties_autocomplete").val());
-<<<<<<< HEAD
         var compounds = compounds_get_val($("#properties_compounds").val()); 
-=======
-        var compounds = get_val($("#properties_compounds").val()); 
->>>>>>> feature/geolocation
         if(compounds&&compounds.length!=0){
              $.each(compounds, function (idx, compound) {
                  autocomplete_property_data_compounds(properties_autocomplete,compound)
              });
-<<<<<<< HEAD
              // # - inicializa o campos das propriedades de termo compostas 
             compounds_list_properties_term_insert_objects();
         }
-=======
-        }
-        // # - inicializa o campos das propriedades de termo compostas 
-        compounds_list_properties_term_insert_objects();
->>>>>>> feature/geolocation
     });
     
     /**
@@ -33,10 +23,6 @@
             $.each(properties_autocomplete, function (idx, property_id) {
                 if($('#cardinality_compound_'+compound_id+'_'+property_id).length>0){
                     var cardinality = $('#cardinality_compound_'+compound_id+'_'+property_id).val();
-<<<<<<< HEAD
-=======
-                    console.log(cardinality);
->>>>>>> feature/geolocation
                     for(var i = 0;i<cardinality;i++){
                         dynatree_object_index["compounds_"+compound_id+"_"+ property_id  + '_' + i] = i;
                         if( $(".form_autocomplete_compounds_" + property_id + '_'+i).length==0){
@@ -175,11 +161,7 @@
         var treecheck_cats = ($('#properties_terms_treecheckbox').length>0) ? $("#properties_terms_treecheckbox").val() : $("#multiple_properties_terms_treecheckbox").val();
         var multiple_cats = ($('#properties_terms_multipleselect').length>0) ? $("#properties_terms_multipleselect").val() : $("#multiple_properties_terms_multipleselect").val();
         //
-<<<<<<< HEAD
         var all_compounds_id = $('#properties_compounds').val().split(',');
-=======
-        //var all_compounds_id = $('#properties_compounds').val().split(',');
->>>>>>> feature/geolocation
         var categories = compounds_get_val($("#edit_object_categories_id").val());
         var radios = compounds_get_val(radio_cats);
         var selectboxes = compounds_get_val(select_cats);
@@ -187,12 +169,7 @@
         var checkboxes = compounds_get_val(check_cats);
         var multipleSelects = compounds_get_val(multiple_cats);
         var treecheckboxes = compounds_get_val(treecheck_cats);
-<<<<<<< HEAD
         if (all_compounds_id&&all_compounds_id.length>0) {
-=======
-        /*
-        if (all_compounds_id & &all_compounds_id.length > 0 ) {
->>>>>>> feature/geolocation
             $.each(all_compounds_id, function (idx, compound_id) {
                 compounds_list_radios(radios,categories,compound_id);
                 compounds_list_tree(trees,categories,compound_id);
@@ -202,10 +179,6 @@
                 compounds_list_treecheckboxes(treecheckboxes,categories,compound_id);
             });
         }
-<<<<<<< HEAD
-=======
-        */
->>>>>>> feature/geolocation
     }
     // radios
     function compounds_list_radios(radios,categories,compound_id) {
