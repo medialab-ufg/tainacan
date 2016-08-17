@@ -1897,10 +1897,25 @@ class ObjectModel extends Model {
         }
     }
 
-    public function copyItemCategories($itemID, $oldID) {
+    public function copyItemCategories($itemID, $oldID, $category_root_id = 0) {
         $categories = $this->get_object_categories_id($oldID);
         foreach ($categories as $category) {
-            wp_set_object_terms($itemID, array((int) $category), 'socialdb_category_type', true);
+            if ($category != $category_root_id) {
+                wp_set_object_terms($itemID, array((int) $category), 'socialdb_category_type', true);
+            }
+        }
+    }
+
+    public function copyItemCategoriesOtherCol($itemID, $oldID, $category_root_id = 0) {
+        $categories = $this->get_object_categories_id($oldID);
+        foreach ($categories as $category) {
+            if ($category != $category_root_id) {
+                $ancestors = get_ancestors($category, 'socialdb_category_type');
+                //var_dump($category_root_id, $ancestors);
+                if (!in_array($category_root_id, $ancestors)) {
+                    wp_set_object_terms($itemID, array((int) $category), 'socialdb_category_type', true);
+                }
+            }
         }
     }
 

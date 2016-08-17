@@ -336,11 +336,21 @@
                     object_id: object_id
                 }
             }).done(function (result) {
-                $('#modalImportMain').modal('hide');//escondo o modal de carregamento
+                /*$('#modalImportMain').modal('hide');//escondo o modal de carregamento
+                 $('#modal_duplicate_object' + object_id).modal('hide');
+                 $("#container_socialdb").hide('slow');
+                 $("#form").hide().html(result).show('slow');
+                 $('#create_button').hide();
+                 $('.dropdown-toggle').dropdown();
+                 $('.nav-tabs').tab();*/
+                $('#modalImportMain').modal('hide');
                 $('#modal_duplicate_object' + object_id).modal('hide');
-                $("#container_socialdb").hide('slow');
-                $("#form").hide().html(result).show('slow');
-                $('#create_button').hide();
+                //hide_modal_main();
+                $("#form").html('');
+                $('#main_part').hide();
+                $('#display_view_main_page').hide();
+                $('#loader_collections').hide();
+                $('#configuration').html(result).show();
                 $('.dropdown-toggle').dropdown();
                 $('.nav-tabs').tab();
             });
@@ -357,10 +367,10 @@
                     object_id: object_id
                 }
             }).done(function (result) {
-                $('#modalImportMain').modal('hide');//escondo o modal de carregamento
-                $('#modal_duplicate_object' + object_id).modal('hide');
+                //$('#modalImportMain').modal('hide');//escondo o modal de carregamento
+                //$('#modal_duplicate_object' + object_id).modal('hide');
                 json = jQuery.parseJSON(result);
-                window.location(json.new_collection_url);
+                window.location.replace(json.new_collection_url);
                 /*$("#container_socialdb").hide('slow');
                  $("#form").hide().html(result).show('slow');
                  $('#create_button').hide();

@@ -110,7 +110,20 @@ $(window).load(function () {
     
     //verifico se foi duplicado um item em outra colecao e abro o editar deste item
     if ($('#open_edit_item').val() !== '') {
-        edit_object($('#open_edit_item').val());
+        console.log($('#open_edit_item').val());
+        //edit_object($('#open_edit_item').val());
+        $.ajax({
+            type: "POST",
+            url: $('#src').val() + "/controllers/object/object_controller.php",
+            data: {collection_id: $('#collection_id').val(), operation: 'edit_default', object_id: $('#open_edit_item').val()}
+        }).done(function (result) {
+            $('#modalImportMain').modal('hide');//escondo o modal de carregamento
+            $("#container_socialdb").hide('slow');
+            $("#form").hide().html(result).show('slow');
+            $('#create_button').hide();
+            $('.dropdown-toggle').dropdown();
+            $('.nav-tabs').tab();
+        });
     }
 
     /*
