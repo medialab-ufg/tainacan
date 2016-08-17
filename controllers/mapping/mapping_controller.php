@@ -109,7 +109,11 @@ class MappingController extends Controller {
             /*    EXTRACAO DE METADADOS                                       */ 
             /******************************************************************/
             case 'get_metadata_handle':
-                return json_encode($extract_model->get_metadata_handle($data));
+                $data['generic_properties'] = $extract_model->get_metadata_handle($data);
+                $data['tainacan_properties'] = $extract_model->get_tainacan_properties($data);
+               // var_dump($data);exit();
+                $data['html'] = $this->render(dirname(__FILE__) . '../../../views/mapping/container_mapping.php',$data);
+                return json_encode($data);
                 
                 
         }

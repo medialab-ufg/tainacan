@@ -114,3 +114,10 @@ include_once ('js/extract_metadata_js.php');
 <div style="margin-bottom: 50px;" id='editor_items'>
     <!-- MOSTRA O EDITOR DOS ITENS AO FINAL DO UPLOAD -->
 </div>
+<div class="modal fade" id="modal_mapping_metadata" tabindex="-1" role="dialog" aria-labelledby="modal_mapping_metadata" aria-hidden="true">
+    <div class="modal-dialog">
+        <div  class="modal-content" id="mapping_metadata_content"> 
+            
+        </div>
+    </div>
+</div>

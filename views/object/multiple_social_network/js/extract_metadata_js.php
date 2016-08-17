@@ -48,6 +48,13 @@
                 tag: tag,
                 collection_id: $("#collection_id").val()}
         }).done(function (result) {
+           var json = JSON.parse(result);
+           if(json.hasMapping){
+              
+           }else{
+               $('#modal_mapping_metadata').modal('show');
+               $('#mapping_metadata_content').html(json.html);
+           }
            // $('#main_part').hide();
            // $('#display_view_main_page').hide();
            // $('#loader_collections').hide();

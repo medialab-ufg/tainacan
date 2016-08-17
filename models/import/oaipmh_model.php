@@ -140,7 +140,7 @@ class OAIPMHModel extends Model {
     public function generate_selects($data) {
         $html = '';
         $propertyModel = new PropertyModel;
-        $facets_id = CollectionModel::get_facets($data['collection_id']);
+        //$facets_id = CollectionModel::get_facets($data['collection_id']);
         $html .= "<option value=''>" . __('Select...','tainacan') . "</option>";
         $html .= "<option value='post_title'>" . __('Item Title','tainacan') . "</option>";
         $html .= "<option value='post_content'>" . __('Item Description','tainacan') . "</option>";
