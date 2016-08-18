@@ -1,15 +1,19 @@
 <script type="text/javascript">
+  var use_approx_mode = $("#approx_mode").val();
   var objs = $(".object_id");
   var ids = [],
     locations = [],
     lats = [],
     longs = [];
 
+
+
   $(objs).each(function(idx, el) {      
       ids[idx] = $(el).val();
-      
-      var id = $(el).val();
-      var lat =  $("#object_" + id + " .latitude").val();
+    
+    var id = $(el).val();
+
+    var lat =  $("#object_" + id + " .latitude").val();
       var long = $("#object_" + id + " .longitude").val();
       var title = "<div class='col-md-12'>"+$.trim( $("#object_" + id ).html() )+"</div>";
 

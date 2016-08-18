@@ -384,6 +384,8 @@ public function add($data) {
         if (isset($data['prox_mode'])) {
             update_post_meta($post_id, 'socialdb_collection_use_prox_mode', $data['prox_mode']);
             update_post_meta($post_id, 'socialdb_collection_location_meta', $data['location']);
+        } else {
+            update_post_meta($post_id, 'socialdb_collection_use_prox_mode', 'false');
         }
 
         update_post_meta($post_id, 'socialdb_collection_latitude_meta', $data['latitude']);

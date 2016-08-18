@@ -17,6 +17,8 @@ $collection_list_mode = $collection_data['collection_metas']['socialdb_collectio
 $_slideshow_time = get_post_meta($collection_id, 'socialdb_collection_slideshow_time', true);
 $geo_coordinates["lat"] = get_post_meta($collection_id, "socialdb_collection_latitude_meta", true);
 $geo_coordinates["long"] = get_post_meta($collection_id, "socialdb_collection_longitude_meta", true);
+$use_approx_mode = get_post_meta($collection_id, "socialdb_collection_use_prox_mode", true);
+$geo_loc = get_post_meta($collection_id, "socialdb_collection_location_meta", true);
 
 $viewHelper = new ViewHelper();
 
@@ -33,7 +35,6 @@ if($geo_coordinates) {
 
 <?php } ?>
 
-
 <!-- TAINACAN: hidden utilizados para execucao de processos desta view (list.php)  -->
 <input type="hidden" id="keyword_pagination" name="keyword_pagination" value="<?php if (isset($keyword)) echo $keyword; ?>" />
 <input type="hidden" id="sorted_form" name="sorted_form" value="<?php echo $sorted_by; ?>" />
@@ -42,6 +43,8 @@ if($geo_coordinates) {
 <input type="hidden" id="slideshow-time" value="<?php echo $_slideshow_time; ?>">
 <input type="hidden" id="set-lat" value="<?php echo $geo_coordinates["lat"]; ?>">
 <input type="hidden" id="set-long" value="<?php echo $geo_coordinates["long"]; ?>">
+<input type="hidden" id="approx_mode" value="<?php echo $use_approx_mode; ?>">
+<input type="hidden" id="approx_location" value="<?php echo $geo_loc; ?>">
 
 <?php if ( $loop->have_posts() ):
     // Determina # de colunas;
@@ -55,7 +58,8 @@ if($geo_coordinates) {
                 $curr_date = "<strong>" . __('Created at: ', 'tainacan') . "</strong>" . get_the_date('d/m/Y');
                 $latitude = get_post_meta($curr_id, "socialdb_property_" . $geo_coordinates["lat"]);
                 $longitude = get_post_meta($curr_id, "socialdb_property_" . $geo_coordinates["long"]);
-                
+                $location = get_post_meta($curr_id, "socialdb_property_" . $geo_loc);
+
                 include "list_modes/modals.php";
                 include "list_modes/cards.php";
                 include "list_modes/list.php";

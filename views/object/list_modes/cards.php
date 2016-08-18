@@ -7,7 +7,8 @@
     <div class="item-colecao" <?php if (($countLine % 2) == 0) { echo "style='margin-right: 0'"; } ?>>
         <input type="hidden" class="latitude"  value="<?php echo $latitude[0]; ?>" />
         <input type="hidden" class="longitude" value="<?php echo $longitude[0]; ?>" />
-        
+        <input type="hidden" class="longitude" value="<?php echo $location[0]; ?>" />
+
         <div class="droppableClassifications">
 
             <div class="row item-info">

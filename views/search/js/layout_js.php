@@ -136,7 +136,15 @@
             $('.sl-time select').val(s_time);
             $('.sl-time').show();
         } else if ( selected_view_mode == "geolocation" ) {
-            $('.coordinate').show();
+            var use_approx_mode = $("#approx_mode").val();
+            if(use_approx_mode && use_approx_mode === "use_approx_mode") {
+                $('.prox_mode').prop('checked', true);
+                $('.coordinate').hide();
+                $('.location').show();
+            } else if(use_approx_mode === 'false') {
+                $('.coordinate').show();
+                $('.location').hide();
+            }
         }
 
         list_ordenation();
