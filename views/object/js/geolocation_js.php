@@ -1,4 +1,4 @@
-<script type="text/javascript">          
+<script type="text/javascript">
   var objs = $(".object_id");
   var ids = [],
     locations = [],
@@ -6,8 +6,7 @@
     longs = [];
 
   $(objs).each(function(idx, el) {      
-      ids[idx] = $(el).val();  
-      cl("uai .. " + idx);
+      ids[idx] = $(el).val();
       
       var id = $(el).val();
       var lat =  $("#object_" + id + " .latitude").val();
@@ -19,8 +18,6 @@
         lats[idx] = parseFloat(lat);
         longs[idx] = parseFloat(long);
       }
-      
-      cl(locations[idx]);
   });
   
   if(lats && lats.length < 1 ) {

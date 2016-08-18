@@ -6,3 +6,16 @@
       </h5>      
   </div>
 </div>
+
+<div id="approximated"></div>
+
+<script>
+  $.getJSON( "http://maps.google.com/maps/api/geocode/json?address=Goiania&sensor=false", function( data ) {
+    var items = [];
+    $.each( data.results, function( key, val ) {
+      items.push( "<li id='" + key + "'>" + val + "</li>" );
+    });
+
+    $( "<ul/>", { "class": "google-map-list", html: items.join( "" ) }).appendTo( "#approximated" );
+  });
+</script>

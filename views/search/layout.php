@@ -75,6 +75,18 @@ $view_helper = new ViewHelper();
                             <?php endforeach; ?>
                         </select>
                     </div>
+
+                    <div class="prox-container">
+                        <div class="form-group">
+                            <label for="aprox-mode"><?php _e('Approximate mode', 'tainacan'); ?> </label>
+                            <input type="checkbox" name="prox_mode" class='prox_mode' value="use_approx_mode">
+                        </div>
+
+                        <div class="form-group geo-lat location" style='display: none'>
+                            <label for="location"> <?php _e('Location', 'tainacan'); ?> </label>
+                            <select name="location" class="form-control"></select>
+                        </div>
+                    </div>
                     
                     <div class="form-group geo-lat coordinate" style='display: none'>
                         <label for="latitude"> <?php _e('Latitude', 'tainacan'); ?> </label>

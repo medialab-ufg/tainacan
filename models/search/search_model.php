@@ -380,6 +380,12 @@ public function add($data) {
         update_post_meta($post_id, 'socialdb_collection_list_mode', $data['collection_list_mode']);
         update_post_meta($post_id, 'socialdb_collection_slideshow_time', $data['slideshow_time']);
         update_post_meta($post_id, 'socialdb_collection_ordenation_form', $data['socialdb_collection_ordenation_form']);
+
+        if (isset($data['prox_mode'])) {
+            update_post_meta($post_id, 'socialdb_collection_use_prox_mode', $data['prox_mode']);
+            update_post_meta($post_id, 'socialdb_collection_location_meta', $data['location']);
+        }
+
         update_post_meta($post_id, 'socialdb_collection_latitude_meta', $data['latitude']);
         update_post_meta($post_id, 'socialdb_collection_longitude_meta', $data['longitude']);
         update_post_meta($post_id, 'socialdb_collection_default_ordering', $data['collection_order']);

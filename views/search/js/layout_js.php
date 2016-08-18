@@ -71,20 +71,32 @@
 
     $('#collection_list_mode').change(function() {
         var v_mode = $(this).val();
+        var togglable_divs = ['.coordinate', '.prox-container'];
+
         if( v_mode === 'slideshow') {
             $('.sl-time').fadeIn();
-            $(['.geo-lat', '.geo-long']).each(function(ix, el){ $( el).fadeOut(); } );
+            $(togglable_divs).each(function(ix, el){ $( el).fadeOut(); } );
         } else if( v_mode === 'geolocation') {
             $('.sl-time').fadeOut();
-            $(['.geo-lat', '.geo-long']).each(function(ix, el){ $( el).fadeIn(); } );
+            $($(togglable_divs)).each(function(ix, el){ $( el).fadeIn(); } );
         } else {
-            var hide_divs = ['.sl-time','.geo-lat', '.geo-long'];
-            $(hide_divs).each( function(idx, div) {
+            togglable_divs.push('.sl-time');
+            $(togglable_divs).each( function(idx, div) {
                 $(div).fadeOut();
             });
         }
-    }); 
-    
+    });
+
+    $(".prox_mode").change(function() {
+        if(this.checked) {
+            $('div.location').show();
+            $('.coordinate').hide();
+        } else {
+            $('div.location').hide();
+            $('.coordinate').show();
+        }
+    });
+
     $(function () {
         change_breadcrumbs_title('<?php _e('Layout','tainacan') ?>');
         get_defaultCS();
@@ -216,7 +228,7 @@
                         $("#collection_order").append("<option value='" + data.id + "' selected='selected' >" + data.name + " - ( <?php _e('Type','tainacan') ?>:"+data.type+" ) </option>");
                         
                         if(data.type === "text") {
-                            var coords = ["select[name='latitude'","select[name='longitude'"];
+                            var coords = ["select[name='latitude'","select[name='longitude'","select[name='location'"];
                             $(coords).each(function(index, e){
                                $(e).append("<option value='"+ data.id +"'>"+ data.name +"</option>"); 
                             });

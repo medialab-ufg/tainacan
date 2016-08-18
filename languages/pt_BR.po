@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: socialdb\n"
-"POT-Creation-Date: 2016-08-16 16:14-0300\n"
-"PO-Revision-Date: 2016-08-16 16:30-0300\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2016-08-17 17:05-0300\n"
+"PO-Revision-Date: 2016-08-17 17:10-0300\n"
+"Last-Translator: Rodrigo de Oliveira <webmaster@rodrigodeoliveira.net>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 1.8.7\n"
 "X-Poedit-KeywordsList: __;_e\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -55,7 +55,7 @@ msgstr "Site:"
 msgid "Comment"
 msgstr "Comentar"
 
-#: comments.php:76 functions.php:321 header.php:252 header.php:276
+#: comments.php:76 functions.php:321 header.php:255 header.php:279
 #: views/advanced_search/js/advanced_search_js.php:32
 #: views/category/taxonomy_zone.php:65 views/collection/edit.php:1441
 #: views/collection/js/header_js.php:190
@@ -321,7 +321,7 @@ msgstr "Metadado de dado"
 #: views/design/edit.php:141 views/object/create_item_url.php:147
 #: views/object/list_data_table.php:94 views/property/list.php:14
 #: views/ranking/list.php:13 views/search/edit.php:14 views/search/edit.php:246
-#: views/search/js/edit_js.php:152 views/search/js/layout_js.php:229
+#: views/search/js/edit_js.php:152 views/search/js/layout_js.php:228
 #: views/theme_options/property/list.php:14
 msgid "Rankings"
 msgstr "Votações"
@@ -489,7 +489,7 @@ msgstr "(Painel de edição)"
 #: views/property/metadata/form_compounds.php:91
 #: views/property/metadata/form_voting.php:86 views/ranking/list.php:99
 #: views/search/edit.php:102 views/search/edit.php:315
-#: views/search/layout.php:37 views/search/layout.php:123
+#: views/search/layout.php:37 views/search/layout.php:133
 #: views/theme_options/licenses/edit.php:43
 #: views/theme_options/property/metadata/form_voting.php:82
 msgid "Save"
@@ -564,7 +564,7 @@ msgstr "Área responsável pelo uso da API do facebook para o login."
 msgid "Session responsible for the use of Embed Ly API. (http://embed.ly/)"
 msgstr "Área responsável pelo uso da API do Embed Ly. (http://embed.ly/)"
 
-#: functions.php:574 header.php:179
+#: functions.php:574 header.php:182
 #: views/advanced_search/list_advanced_search.php:37
 msgid "Collections"
 msgstr "Coleções"
@@ -793,9 +793,9 @@ msgstr "Tags"
 #: views/search/edit.php:157 views/search/edit.php:211
 #: views/search/edit.php:248 views/search/js/edit_js.php:147
 #: views/search/js/edit_js.php:155 views/search/js/edit_js.php:508
-#: views/search/js/edit_js.php:532 views/search/js/layout_js.php:191
-#: views/search/js/layout_js.php:217 views/search/js/layout_js.php:232
-#: views/search/js/layout_js.php:259
+#: views/search/js/edit_js.php:532 views/search/js/layout_js.php:190
+#: views/search/js/layout_js.php:216 views/search/js/layout_js.php:231
+#: views/search/js/layout_js.php:258
 #: views/theme_options/property/js/list_js.php:491
 #: views/theme_options/property/js/list_js.php:511
 msgid "Type"
@@ -866,7 +866,7 @@ msgstr "Áudios"
 msgid "Visit original page"
 msgstr "Visitar página original"
 
-#: functions.php:2592 header.php:83
+#: functions.php:2592 header.php:86
 msgid "Tainacan"
 msgstr "Tainacan"
 
@@ -874,38 +874,38 @@ msgstr "Tainacan"
 msgid "Enable reduced menu"
 msgstr "Habilitar Menu Reduzido"
 
-#: header.php:108
+#: header.php:111
 msgid "Profile"
 msgstr "Perfil"
 
-#: header.php:111 views/collection/header_collection.php:199
+#: header.php:114 views/collection/header_collection.php:199
 msgid "My collections"
 msgstr "Minhas Coleções"
 
-#: header.php:114 views/collection/header_collection.php:44
+#: header.php:117 views/collection/header_collection.php:44
 msgid "Shared Collections"
 msgstr "Coleções compartilhadas"
 
-#: header.php:118
+#: header.php:121
 msgid "My Categories"
 msgstr "Minhas Categorias"
 
-#: header.php:122
+#: header.php:125
 msgid "Logout"
 msgstr "Sair"
 
-#: header.php:129
+#: header.php:132
 msgid "Repository Configurations"
 msgstr "Configurações do Repositório"
 
-#: header.php:131 views/category/list.php:216
+#: header.php:134 views/category/list.php:216
 #: views/collection/config_menu.php:7 views/design/edit.php:11
 #: views/property/list.php:12 views/ranking/list.php:11
 #: views/search/edit.php:12 views/theme_options/property/list.php:11
 msgid "Configuration"
 msgstr "Configuração"
 
-#: header.php:132 single.php:365
+#: header.php:135 single.php:365
 #: views/advanced_search/list_advanced_search.php:132
 #: views/advanced_search/list_advanced_search.php:257
 #: views/advanced_search/loops_page/list_collection_search.php:95
@@ -916,15 +916,15 @@ msgstr "Configuração"
 msgid "Metadata"
 msgstr "Metadados"
 
-#: header.php:133
+#: header.php:136
 msgid "Users"
 msgstr "Usuários"
 
-#: header.php:134 views/theme_options/property/list.php:15
+#: header.php:137 views/theme_options/property/list.php:15
 msgid "Social / API Keys"
 msgstr "Chaves de APIs / Redes Sociais"
 
-#: header.php:135 models/collection/collection_model.php:543
+#: header.php:138 models/collection/collection_model.php:543
 #: views/advanced_search/show_object_properties.php:337
 #: views/collection/config_menu.php:50 views/object/create_item_text.php:239
 #: views/object/create_item_url.php:119 views/object/edit_item_text.php:257
@@ -935,22 +935,22 @@ msgstr "Chaves de APIs / Redes Sociais"
 msgid "Licenses"
 msgstr "Licenças"
 
-#: header.php:136 models/event/event_model.php:626
+#: header.php:139 models/event/event_model.php:626
 #: views/collection/config_menu.php:70 views/collection/config_menu.php:106
 #: views/event/js/list_js.php:3 views/event/list.php:8
 msgid "Events"
 msgstr "Eventos"
 
-#: header.php:137
+#: header.php:140
 msgid "Welcome Email"
 msgstr "Email de Boas Vindas"
 
-#: header.php:138 views/theme_options/edit_tools.php:7
+#: header.php:141 views/theme_options/edit_tools.php:7
 #: views/theme_options/js/edit_tools_js.php:6
 msgid "Tools"
 msgstr "Ferramentas"
 
-#: header.php:139 header.php:277 single.php:825 single.php:834 single.php:841
+#: header.php:142 header.php:280 single.php:825 single.php:834 single.php:841
 #: single.php:853 single.php:861 single.php:900 single.php:908 single.php:919
 #: single.php:933 single.php:1010 single.php:1011 views/category/list.php:11
 #: views/collection/config_menu.php:55 views/import/import_configuration.php:7
@@ -966,75 +966,75 @@ msgstr "Ferramentas"
 msgid "Import"
 msgstr "Importar"
 
-#: header.php:140 views/collection/config_menu.php:60
+#: header.php:143 views/collection/config_menu.php:60
 #: views/export/index_export.php:10 views/export/js/index_export_js.php:5
 #: views/theme_options/export_full.php:7
 #: views/theme_options/js/export_full_js.php:3
 msgid "Export"
 msgstr "Exportação"
 
-#: header.php:148
+#: header.php:151
 msgid "Click to download the manual"
 msgstr "Clique para baixar o manual"
 
-#: header.php:154 views/user/login.php:46 views/user/login.php:88
+#: header.php:157 views/user/login.php:46 views/user/login.php:88
 msgid "Login"
 msgstr "Entrar"
 
-#: header.php:159 views/user/register.php:29 views/user/register.php:108
+#: header.php:162 views/user/register.php:29 views/user/register.php:108
 msgid "Register"
 msgstr "Registrar"
 
-#: header.php:167 single.php:192 views/advanced_search/advanced_search.php:39
+#: header.php:170 single.php:192 views/advanced_search/advanced_search.php:39
 #: views/advanced_search/advanced_search.php:42
 #: views/advanced_search/advanced_search.php:121
 msgid "Advanced Search"
 msgstr "Busca Avançada"
 
-#: header.php:186
+#: header.php:189
 msgid "Show collections"
 msgstr "Mostrar coleções"
 
-#: header.php:192
+#: header.php:195
 msgid "Create collection"
 msgstr "Criar coleção"
 
-#: header.php:198
+#: header.php:201
 msgid "General"
 msgstr "Geral"
 
-#: header.php:205
+#: header.php:208
 msgid "Import collection"
 msgstr "Importar coleção"
 
-#: header.php:216 index.php:59 single.php:181
+#: header.php:219 index.php:59 single.php:181
 #: views/advanced_search/advanced_search.php:76
 #: views/advanced_search/show_object_properties.php:370
 msgid "Find"
 msgstr "Pesquisar"
 
-#: header.php:218
+#: header.php:221
 msgid "Click to expand"
 msgstr "Clique para expandir"
 
-#: header.php:237 models/event/event_model.php:240
+#: header.php:240 models/event/event_model.php:240
 #: views/theme_options/edit_configuration.php:87
 msgid "Create Collection"
 msgstr "Criar Coleção"
 
-#: header.php:243 views/collection/edit.php:22
+#: header.php:246 views/collection/edit.php:22
 msgid "Collection name"
 msgstr "Nome da coleção"
 
-#: header.php:244
+#: header.php:247
 msgid "Type the name of your collection"
 msgstr "Digite o nome de sua coleção"
 
-#: header.php:248 single.php:241 views/collection/edit.php:485
+#: header.php:251 single.php:241 views/collection/edit.php:485
 msgid "Item"
 msgstr "Item"
 
-#: header.php:253 views/collection/edit.php:1443
+#: header.php:256 views/collection/edit.php:1443
 #: views/property/metadata/form_compounds.php:67
 #: views/property/metadata/form_filter.php:44
 #: views/property/metadata/form_object.php:93
@@ -1051,11 +1051,11 @@ msgstr "Item"
 msgid "Continue"
 msgstr "Continuar"
 
-#: header.php:267
+#: header.php:270
 msgid "Import Collection"
 msgstr "Importar Coleção"
 
-#: header.php:271
+#: header.php:274
 msgid "Select the file"
 msgstr "Selecionar arquivo"
 
@@ -1290,7 +1290,7 @@ msgid "Metadata and Filters"
 msgstr "Metadados e Filtros"
 
 #: helpers/view_helper.php:286 views/collection/config_menu.php:18
-#: views/search/js/layout_js.php:90 views/search/layout.php:50
+#: views/search/js/layout_js.php:89 views/search/layout.php:50
 msgid "Layout"
 msgstr "Layout"
 
@@ -4312,7 +4312,7 @@ msgid "Please set a valid address"
 msgstr "Por favor, digite um endereço válido"
 
 #: views/collection/js/edit_js.php:103 views/search/js/edit_js.php:135
-#: views/search/js/layout_js.php:206
+#: views/search/js/layout_js.php:205
 msgid "General ordenation"
 msgstr "Ordenação padrão"
 
@@ -4320,7 +4320,7 @@ msgstr "Ordenação padrão"
 #: views/object/multiple_items/editor_items.php:217
 #: views/object/multiple_social_network/editor_items.php:248
 #: views/object/show_insert_object_properties.php:68
-#: views/search/js/edit_js.php:143 views/search/js/layout_js.php:214
+#: views/search/js/edit_js.php:143 views/search/js/layout_js.php:213
 msgid "Data properties"
 msgstr "Metadados de dados"
 
@@ -5610,7 +5610,7 @@ msgstr "Você tem certeza em remover este item permanentemente:"
 msgid "Are you sure to remove the collection permanently: "
 msgstr "Você tem certeza em remover esta coleção permanentemente:"
 
-#: views/object/list_modes/geolocation.php:8
+#: views/object/list_modes/geolocation.php:5
 msgid "This collection is not configured to use geolocation mode."
 msgstr "Esta coleção não está configurada para usar o modo de geolocalização."
 
@@ -6677,19 +6677,19 @@ msgstr "Ordenação"
 msgid "Select the properties for ordenation"
 msgstr "Selecionar os metadados para ordenação"
 
-#: views/search/edit.php:75 views/search/layout.php:91
+#: views/search/edit.php:75 views/search/layout.php:101
 msgid "Select the default ordination"
 msgstr "Selecionar ordenação padrão"
 
-#: views/search/edit.php:82 views/search/layout.php:98
+#: views/search/edit.php:82 views/search/layout.php:108
 msgid "Select the ordination form"
 msgstr "Selecione a forma de ordenação"
 
-#: views/search/edit.php:89 views/search/layout.php:101
+#: views/search/edit.php:89 views/search/layout.php:111
 msgid "DESC"
 msgstr "Decrescente"
 
-#: views/search/edit.php:96 views/search/layout.php:104
+#: views/search/edit.php:96 views/search/layout.php:114
 msgid "ASC"
 msgstr "Ascendente"
 
@@ -6799,7 +6799,7 @@ msgid "%1$d days ago"
 msgstr "Há  %1$d dia(s) atrás"
 
 #: views/search/js/edit_js.php:514 views/search/js/edit_js.php:537
-#: views/search/js/layout_js.php:263
+#: views/search/js/layout_js.php:262
 msgid "No data properties inserted"
 msgstr "Nenhum metadado de dado adicionado"
 
@@ -6930,22 +6930,30 @@ msgid "Slideshow time (seconds)"
 msgstr "Tempo de slideshow (segundos)"
 
 #: views/search/layout.php:80
-msgid "Latitude"
-msgstr ""
+msgid "Approximate mode"
+msgstr "Modo aproximado"
 
 #: views/search/layout.php:85
-msgid "Longitude"
-msgstr ""
+msgid "Location"
+msgstr "Localização"
 
-#: views/search/layout.php:111
+#: views/search/layout.php:90
+msgid "Latitude"
+msgstr "Latitude"
+
+#: views/search/layout.php:95
+msgid "Longitude"
+msgstr "Longitude"
+
+#: views/search/layout.php:121
 msgid "Select the form layout to create a new text item"
 msgstr "Selecione o layout do formulário para criar um novo item de texto"
 
-#: views/search/layout.php:114
+#: views/search/layout.php:124
 msgid "1 column"
 msgstr "1 coluna"
 
-#: views/search/layout.php:117
+#: views/search/layout.php:127
 msgid "2 columns"
 msgstr "2 colunas"
 
