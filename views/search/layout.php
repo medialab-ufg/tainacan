@@ -82,7 +82,7 @@ $view_helper = new ViewHelper();
                             <input type="checkbox" name="prox_mode" class='prox_mode' value="use_approx_mode">
                         </div>
 
-                        <div class="form-group geo-lat location" style='display: none'>
+                        <div class="form-group location" style='display: none'>
                             <label for="location"> <?php _e('Location', 'tainacan'); ?> </label>
                             <select name="location" class="form-control"></select>
                         </div>

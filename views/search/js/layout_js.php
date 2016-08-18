@@ -258,9 +258,13 @@
 
             var set_lat  = $("#set-lat").val();
             var set_long = $("#set-long").val();
+            var location = $("#approx_location").val();
             if(set_lat && set_long) {
                 $(".geo-lat select[name='latitude']").val(set_lat);
                 $(".geo-long select[name='longitude']").val(set_long);
+            }
+            if (location) {
+                $(".location select[name='location']").val(location);
             }
         });
     }
