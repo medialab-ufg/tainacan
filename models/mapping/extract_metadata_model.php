@@ -6,9 +6,33 @@
 require_once(dirname(__FILE__) . '../../general/general_model.php');
 require_once(dirname(__FILE__) . '../../property/property_model.php');
 require_once(dirname(__FILE__) . '../../category/category_model.php');
+require_once(dirname(__FILE__) . '../../import/oaipmh_model.php');
 
 class ExtractMetadataModel extends Model {
+    
+    
+    /**
+     * @signature - get_link_data_nadle($data)
+     * @param string $data O array
+     * @return string O link
+     * @description - funcao que busca o link da oai-pmh
+     * @author: Eduardo 
+     */
+    public function get_link_data_nadle($data) {
+        $remove_port = explode(':', $data['url'])[0];
+        $response_xml_data = download_page('http://' . $data['url'] . '/oai/request?verb=Identify'); // pego os 100 primeiros
+        if ($response_xml_data):
+            $xml = new SimpleXMLElement($response_xml_data);
+            $property = 'oai-identifier';
+            $identifier = explode('/', (string) $xml->Identify->description->$property->sampleIdentifier)[0];
 
+            return 'http://' . $data['url'] .
+                    '/oai/request?verb=GetRecord&metadataPrefix=oai_dc&identifier='
+                    . $identifier . '/' . $data['id'];
+        else:
+            return '';
+        endif;
+    }
     /**
      * @signature - create_mapping($data)
      * @param string $name O nome do mapeamento
@@ -112,6 +136,85 @@ class ExtractMetadataModel extends Model {
         }
         $data['metadatas'][] = array('name'=> __('Source','tainacan'),'value'=>'socialdb_object_dc_source');
         return  $data['metadatas'];
+    }
+    
+    /**
+     * 
+     * @param type $form
+     * @param type $collection_id
+     * @param type $record
+     */
+    public function insert_item_handle($form,$collection_id,$record) {
+        $oaipmh_class = new OAIPMHModel;
+        $categories[] = $this->get_category_root_of($collection_id);
+        $content = '';
+        $object_id = socialdb_insert_object($record['title'], $record['date']);
+        //mapping
+        add_post_meta($object_id, 'socialdb_channel_id',$mapping_id);
+        if ($object_id != 0) {
+            foreach ($record['metadata'] as $identifier => $metadata) {
+                if ($form[$identifier] !== '') {
+                    if ($form[$identifier] == 'post_title'):
+                        $this->update_title($object_id, implode(',', $metadata));
+                        $this->set_common_field_values($object_id, 'title', implode(',', $metadata));
+                     elseif ($form[$identifier] == 'post_content'):
+                        $content .=  implode(',', $metadata) . ",";
+                    elseif ($form[$identifier] == 'post_permalink'):
+                        update_post_meta($object_id, 'socialdb_object_dc_source', implode(',', $metadata));
+                        $this->set_common_field_values($object_id, 'object_source', implode(',', $metadata));
+                    elseif ($form[$identifier] == 'socialdb_object_content'):
+                        update_post_meta($object_id, 'socialdb_object_content', implode(',', $metadata));
+                        $this->set_common_field_values($object_id, 'object_content', implode(',', $metadata));
+                   elseif ($form[$identifier] == 'socialdb_object_dc_type'):
+                        update_post_meta($object_id, 'socialdb_object_dc_type', implode(',', $metadata));                       
+                        $this->set_common_field_values($object_id, 'object_type', implode(',', $metadata));
+                    elseif ($form[$identifier] == 'tag'):
+                        foreach ($metadata as $meta) {
+                           if(trim($meta)!==''){
+                            $fields_value = explode('||', $meta);
+                            foreach ($fields_value as $field_value):
+                                $fields[] = explode('::', $field_value);
+                            endforeach;
+                            foreach ($fields as $fields_value):
+                                foreach ($fields_value as $field_value):
+                                    $this->insert_tag($field_value,$object_id,$collection_id);
+                                endforeach;
+                            endforeach;
+                           }
+                        }
+                    elseif (strpos($form[$identifier], "termproperty_")!==false):
+                        $trans = array("termproperty_" => "");
+                        $property_id = strtr($form[$identifier], $trans);
+                        $parent = get_term_meta($property_id, 'socialdb_property_term_root', true);
+                        foreach ($metadata as $meta) {
+                            if(trim($meta)!==''){
+                                $this->insert_hierarchy($meta,$object_id,$collection_id,$parent,$property_id);
+                            }
+                        }
+                    elseif (strpos($form[$identifier], "dataproperty_")!==false):
+                        $trans = array("dataproperty_" => "");
+                        $id = strtr($form[$identifier], $trans);
+                        foreach ($metadata as $meta) {
+                             add_post_meta($object_id, 'socialdb_property_'.$id.'',$meta);
+                             $this->set_common_field_values($object_id, "socialdb_property_$id",$meta);
+                        }
+                    endif;
+                }
+            }
+            $metadata = '';
+            if($record['identifier']){
+                 add_post_meta($object_id, 'socialdb_object_identifier',$record['identifier']);
+            }
+            if($record['datestamp']){
+                 add_post_meta($object_id, 'socialdb_object_datestamp',$record['datestamp']);
+            }
+            update_post_meta($object_id, 'socialdb_object_from', 'external');
+            $this->set_common_field_values($object_id, 'object_from', 'external');
+            add_post_meta($object_id, 'socialdb_object_original_collection',$collection_id);
+            update_post_content($object_id, $content);
+            $this->set_common_field_values($object_id, 'description', $content);
+            socialdb_add_tax_terms($object_id, $categories, 'socialdb_category_type');
+        }
     }
 
 }

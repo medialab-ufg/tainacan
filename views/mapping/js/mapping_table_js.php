@@ -31,11 +31,8 @@
             },
             stop: function(event, ui) {
                 var $ui_container = ui.item.context.parentNode.id;
-                var sortedIds = $("#filters-accordion").sortable("toArray");
-                $("#filters-accordion").removeClass("adding-meta");
-                if ( $ui_container === "filters-accordion" ) {
-                    updateFacetPosition(sortedIds);
-                }
+                var sortedIds = $( "#tainacan-mapped-ul").sortable("toArray");
+                update_position_mapped(sortedIds);
                // $("#metadata-container").removeClass("change-meta-container");
             },
             sort: function(event, ui) {
@@ -46,6 +43,7 @@
             }        
 
         }).disableSelection();  
+        
        $( "#generic-mapped-ul, #generic-properties-ul" ).sortable({
             connectWith: ".connected-generic",
             revert: 250,
@@ -70,6 +68,47 @@
             }        
 
         }).disableSelection();  
+    }
+    /**
+     * 
+     * @param {type} array
+     * @returns {undefined}
+     */
+    function update_position_mapped(array){
+        var mapped_tainacan = [];
+        var mapped_extracted =  $( "#generic-mapped-ul").sortable("toArray");
+        var max = mapped_extracted.length;
+        
+        for(var i = 0;i < array.length;i++){
+            if(i>=max&&array[i].indexOf("new_")<0){
+               $copy = $('#'+array[i]).clone();
+               $("#tainacan-mapped-ul").find('#'+array[i]).remove();
+               $("#tainacan-properties-ul").append($copy);
+               //$('#'+array[i]).append("#tainacan-properties-ul");
+            }else if(i<max){
+               mapped_tainacan.push(array[i]);
+               set_name_mapped('#create_property_'+i,i);
+            }
+        }
+        
+        $('#mapped_tainacan_properties').val(mapped_tainacan.join(','));
+        $('#mapped_generic_properties').val(mapped_extracted.join(','));
+    }
+    
+    function set_name_mapped(seletor,id){
+        if($(seletor).is(':checked')){
+            //if($('#name_property_'+id).val()==''){
+                 var mapped_tainacan =  $( "#tainacan-mapped-ul").sortable("toArray");
+                 var mapped_extracted =  $( "#generic-mapped-ul").sortable("toArray");
+                if(mapped_tainacan.length>0&&mapped_extracted.length>0){
+                     for(var i = 0;i<mapped_extracted.length;i++){
+                         if(mapped_tainacan[i]=='new_'+id){
+                             $('#name_property_'+id).val(mapped_extracted[i])
+                         }
+                     }
+                 }
+            //}
+        }
     }
   
 </script>

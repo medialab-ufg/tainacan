@@ -109,10 +109,18 @@ class MappingController extends Controller {
             /*    EXTRACAO DE METADADOS                                       */ 
             /******************************************************************/
             case 'get_metadata_handle':
+                $data['base'] = 'http://' . $data['url'].'/oai/request';
                 $data['generic_properties'] = $extract_model->get_metadata_handle($data);
                 $data['tainacan_properties'] = $extract_model->get_tainacan_properties($data);
-               // var_dump($data);exit();
+                $data['oai_url'] = $extract_model->get_link_data_nadle($data);
                 $data['html'] = $this->render(dirname(__FILE__) . '../../../views/mapping/container_mapping.php',$data);
+                return json_encode($data);
+            case 'submit_mapping_handle':
+                $mapping_id = $mapping_model->saving_mapping_handle($data);
+                
+                
+                var_dump($data);
+                exit();
                 return json_encode($data);
                 
                 

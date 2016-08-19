@@ -469,5 +469,52 @@ class MappingModel extends Model {
         $data['result'] = '1';
         return $data;
     }
+    /**************************************************************************
+     *                         SALVANDO MAPEAMENTOS OAI-PMH ITEM
+     **************************************************************************/
+    /**
+     * 
+     * @param type $param
+     */
+    public function saving_mapping_handle($data) {
+        $identifier = '';
+        if($data['mapped_generic_properties']==''){
+            return false;
+        }
+        //insiro o mapeamento
+        $object_id = $this->create_mapping($data['base'], $data['collection_id']);
+        $array_generic_mapped = explode(',', $data['mapped_generic_properties']);
+        $array_tainacan_mapped = explode(',', $data['mapped_tainacan_properties']);
+        foreach ($array_generic_mapped as $key => $generic) {
+            if(strpos($array_tainacan_mapped[$key], 'new_')!==false){
+                $id = str_replace('new_', '', $array_tainacan_mapped[$key]);
+                if($data['create_property_'.$id]){
+                   $identifier =  'dataproperty_'.$this->add_property_data($data['name_property_'.$id], $data['widget_property_'.$id], $data['collection_id']);
+                }
+            }else{
+                $identifier = $array_tainacan_mapped[$key];
+            }
+            $dataInfo[] = array('tag' => $array_generic_mapped[$key], 'socialdb_entity' => $identifier);
+        }
+        add_post_meta($object_id, 'socialdb_channel_oaipmhdc_mapping', serialize($dataInfo));
+        return $object_id;
+    }
+    /**
+     * function add_property_data($property)
+     * @param object $property
+     * @return int O id da da propriedade criada.
+     * @author: Eduardo Humberto 
+     */
+   public function add_property_data($name,$widget,$collection_id) {
+        $category_root_id = $this->get_category_root_of($collection_id);
+        $new_property = wp_insert_term((string)$property->name, 'socialdb_property_type', array('parent' => $this->get_property_type_id('socialdb_property_data'),
+                'slug' => $this->generate_slug((string)$name, $collection_id)));
+        update_term_meta($new_property['term_id'], 'socialdb_property_required', 'false');
+        update_term_meta($new_property['term_id'], 'socialdb_property_data_widget',$widget);
+        update_term_meta($new_property['term_id'], 'socialdb_property_data_column_ordenation',  '');
+        update_term_meta($new_property['term_id'], 'socialdb_property_default_value',  '');
+        update_term_meta($new_property['term_id'], 'socialdb_property_created_category',$category_root_id);
+        return $new_property['term_id'];
+   }
 
 }
