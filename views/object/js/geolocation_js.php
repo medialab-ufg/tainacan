@@ -7,16 +7,17 @@
 
   var marker_item = [];
   var tot = 0;
-
+  var loaded = 0;
+  
   $(objs).each(function(idx, el) {
       var current_id = $(el).val();
       var current_content   = "<div class='col-md-12'>"+ $.trim( $("#object_" + current_id ).html() )+ "</div>";      
 
-    if ( use_approx_mode && use_approx_mode == "use_approx_mode" ) {
+    if ( use_approx_mode && use_approx_mode === "use_approx_mode" ) {
         var current_location  = $("#object_" + current_id + " .location").val();
-        cl(current_location);
 
         if(current_location) {
+            tot++;            
             var search_url = "http://maps.google.com/maps/api/geocode/json?address=" + current_location + "&sensor=false";
             $.getJSON(search_url, function(data) {
                 $.each( data.results, function( key, val ) {
@@ -27,14 +28,20 @@
                         marker_item[idx] = [ current_content, lt, lng ];
                         lats[idx] = parseFloat(lt);
                         longs[idx] = parseFloat(lng);                        
+                        
+                        loaded++;
+                        if(loaded === tot) {
+                            initMap(); 
+                        }                        
                     }
-                    cl("I got " + lats[idx]);
-                    cl("I got " + longs[idx]);
-                    cl(marker_item[idx]);
-                    tot++;
-                    cl("O total disso é : " + tot + " de modo aproximado.");
               });
             });
+            
+        }
+        
+        if(tot < 1) {
+            $('.geolocation-view-container #map').hide();
+            $('.geolocation-view-container .not-configured').show();
         }
         
     } else {
@@ -46,15 +53,14 @@
             lats[idx] = parseFloat(current_latitude);
             longs[idx] = parseFloat(current_longitude);
         }        
-    }
-      
+    }      
   });
     
     var sorted_lats = lats.sort(function(a,b) { return a - b; } );
     var sorted_longs = longs.sort(function(a,b) { return a - b; } );
     var half_length = parseInt( marker_item.length / 2 );
 
-    function initMap() {
+    function initMap() {        
         var map = new google.maps.Map(document.getElementById('map'), {
           zoom: half_length, center: new google.maps.LatLng( sorted_lats[half_length] ,sorted_longs[half_length]),
           mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -79,16 +85,8 @@
           }
         } // for
     }
-
-    initMap();  
-  
-  /*
-  if(lats && lats.length < 1 ) {
-      $('.geolocation-view-container #map').hide();
-      $('.geolocation-view-container .not-configured').show();
-  } else {    
-  */
     
-  // }
-  
+    if ( use_approx_mode && use_approx_mode !== "use_approx_mode" ) {
+        initMap();
+    }
 </script>   

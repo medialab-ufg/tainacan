@@ -25,15 +25,7 @@ $viewHelper = new ViewHelper();
 if( !$collection_list_mode ) {
     $collection_list_mode = "cards";
 }
-
-/*
- * TODO: Move code below to proper place
- * */
-
-if($geo_coordinates) {
-    ?>
-
-<?php } ?>
+?>
 
 <!-- TAINACAN: hidden utilizados para execucao de processos desta view (list.php)  -->
 <input type="hidden" id="keyword_pagination" name="keyword_pagination" value="<?php if (isset($keyword)) echo $keyword; ?>" />
