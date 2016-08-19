@@ -56,6 +56,7 @@ if( !$collection_list_mode ) {
                 include "list_modes/cards.php";
                 include "list_modes/list.php";
                 include "list_modes/gallery.php";
+                include "list_modes/table.php";
             endwhile;
 
             include_once "list_modes/slideshow.php";

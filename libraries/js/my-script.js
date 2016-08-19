@@ -2439,7 +2439,6 @@ $(window).on('resize', function(ev) {
 });
 */
 
-
 function changeViewMode(viewMode) {
     if(viewMode === "slideshow") {
         getCollectionSlideshow();

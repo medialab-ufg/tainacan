@@ -281,14 +281,19 @@ $options = get_option('socialdb_theme_options');
                                                 <span class="glyphicon glyphicon-map-marker" style="color: black"></span>
                                             </a>
                                         </li>
+                                        <li class="table">
+                                            <a href="#" onclick="changeViewMode('table')">
+                                                <span class="glyphicon glyphicon-align-justify" style="color: black"></span>
+                                            </a>
+                                        </li>
                                     </ul>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-2 pull-right">
                                     <?php
                                     if (is_user_logged_in()) {
                                         if (get_the_ID() != get_option('collection_root_id') && verify_collection_moderators(get_the_ID(), get_current_user_id())) {
                                             ?>
-                                            <button onclick="showTrash('<?php echo get_template_directory_uri(); ?>');" class="btn btn-default"><?php _e('Trash', 'tainacan'); ?></button>
+                                            <button onclick="showTrash('<?php echo get_template_directory_uri(); ?>');" class="btn btn-danger pull-right" style="color: white"><?php _e('Trash', 'tainacan'); ?></button>
                                             
                                             <?php
                                         } else {
@@ -296,7 +301,7 @@ $options = get_option('socialdb_theme_options');
                                             $user_data = get_user_by('ID', get_current_user_id())->user_email;
                                             if ($admin_email == $user_data) {
                                                 ?>
-                                                <button onclick="showTrash('<?php echo get_template_directory_uri(); ?>');" class="btn btn-default"><?php _e('Trash', 'tainacan'); ?></button>
+                                            <button onclick="showTrash('<?php echo get_template_directory_uri(); ?>');" class="btn btn-danger pull-right" style="color: white"><?php _e('Trash', 'tainacan'); ?></button>
                                                 
                                                 <?php
                                             }

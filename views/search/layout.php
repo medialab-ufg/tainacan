@@ -62,6 +62,7 @@ $view_helper = new ViewHelper();
                             <option value="list"><?php _e('List', 'tainacan'); ?></option>
                             <option value="slideshow"><?php _e('Slideshow', 'tainacan'); ?></option>
                             <option value="geolocation"><?php _e('Geolocation', 'tainacan'); ?></option>
+                            <option value="table"><?php _e('Table', 'tainacan'); ?></option>
                         </select>
                     </div>
                     
