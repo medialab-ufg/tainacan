@@ -1298,6 +1298,23 @@ a.collection-thumb img {
   margin-top: 10px;
 }
 
+.table-view-container {
+  margin-top: 10px;
+  background: white;
+  padding-top: 15px;
+  border: 3px solid #E8E8E8;
+}
+.table-view-container #table-view thead th {
+  font-weight: bolder;
+  color: #0c698b;
+}
+.table-view-container #table-view tbody ul {
+  padding: 0;
+}
+.table-view-container #table-view tbody ul li {
+  display: inline-block;
+}
+
 @media all and (max-width: 767px) {
   ul li.click_new_collection {
     display: none;
