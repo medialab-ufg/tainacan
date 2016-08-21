@@ -175,7 +175,7 @@ $options = get_option('socialdb_theme_options');
                                     <div class="col-md-10 box-left">
                                         <div class="search-colecao">
                                             <div class="input-group">
-                                                <input style="font-size: 13px;" class="form-control input-medium placeholder ui-autocomplete-input" id="search_objects"
+                                                <input style="height: 33px; font-size: 13px;" class="form-control input-medium placeholder ui-autocomplete-input" id="search_objects"
                                                        onkeyup="set_value(this)" onkeydown="if (event.keyCode === 13)
                                                                        document.getElementById('search_main').click();"
                                                        type="text" placeholder="<?php _e('Find', 'tainacan') ?>" autocomplete="off">
