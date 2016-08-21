@@ -175,7 +175,7 @@ $options = get_option('socialdb_theme_options');
                                     <div class="col-md-10 box-left">
                                         <div class="search-colecao">
                                             <div class="input-group">
-                                                <input style="font-size: 13px;" class="form-control input-medium placeholder ui-autocomplete-input" id="search_objects"
+                                                <input style="height: 33px; font-size: 13px;" class="form-control input-medium placeholder ui-autocomplete-input" id="search_objects"
                                                        onkeyup="set_value(this)" onkeydown="if (event.keyCode === 13)
                                                                        document.getElementById('search_main').click();"
                                                        type="text" placeholder="<?php _e('Find', 'tainacan') ?>" autocomplete="off">
@@ -281,14 +281,19 @@ $options = get_option('socialdb_theme_options');
                                                 <span class="glyphicon glyphicon-map-marker" style="color: black"></span>
                                             </a>
                                         </li>
+                                        <li class="table">
+                                            <a href="#" onclick="changeViewMode('table')">
+                                                <span class="glyphicon glyphicon-align-justify" style="color: black"></span>
+                                            </a>
+                                        </li>
                                     </ul>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-2 pull-right">
                                     <?php
                                     if (is_user_logged_in()) {
                                         if (get_the_ID() != get_option('collection_root_id') && verify_collection_moderators(get_the_ID(), get_current_user_id())) {
                                             ?>
-                                            <button onclick="showTrash('<?php echo get_template_directory_uri(); ?>');" class="btn btn-default"><?php _e('Trash', 'tainacan'); ?></button>
+                                            <button onclick="showTrash('<?php echo get_template_directory_uri(); ?>');" class="btn btn-danger pull-right" style="color: white"><?php _e('Trash', 'tainacan'); ?></button>
                                             
                                             <?php
                                         } else {
@@ -296,7 +301,7 @@ $options = get_option('socialdb_theme_options');
                                             $user_data = get_user_by('ID', get_current_user_id())->user_email;
                                             if ($admin_email == $user_data) {
                                                 ?>
-                                                <button onclick="showTrash('<?php echo get_template_directory_uri(); ?>');" class="btn btn-default"><?php _e('Trash', 'tainacan'); ?></button>
+                                            <button onclick="showTrash('<?php echo get_template_directory_uri(); ?>');" class="btn btn-danger pull-right" style="color: white"><?php _e('Trash', 'tainacan'); ?></button>
                                                 
                                                 <?php
                                             }

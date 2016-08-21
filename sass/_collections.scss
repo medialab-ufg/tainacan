@@ -195,7 +195,7 @@
                             height: 160px;
 
                             a {
-                                    font-weight: bolder;                                    
+                                    font-weight: bolder;
                             }
                             h4 {
                                     margin: 0 0 3px 0;
@@ -392,19 +392,19 @@
                 padding-top: 15px;
                 height: 300px;
             }
-            
+
             .item-funcs li {
-                margin-left: 5px !important; 
+                margin-left: 5px !important;
                 a {
                     font-size: 16px;
                 }
             }
-            
+
             .single_stars {
-                margin-top: 2.5px;                
+                margin-top: 2.5px;
                 .star-on-png, .star-half-png, .star-off-png {
                     font-size: 17px;
-                }                
+                }
             }
 
             &.first-el {
@@ -576,4 +576,28 @@
         text-align: center;
         margin-top: 10px;
     }
+}
+
+.table-view-container  {
+  margin-top: 10px;
+  background: white;
+  padding-top: 15px;
+  border: 3px solid $item-border;
+
+  #table-view {
+    thead {
+      th {
+        font-weight: bolder;
+        color: $brand-medium-blue;
+      }
+    }
+    tbody {
+      ul {
+        padding: 0;
+        li {
+          display: inline-block;
+        }
+      } // ul
+    }
+  }
 }
