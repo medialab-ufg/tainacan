@@ -2085,19 +2085,18 @@ function download_page($path) {
  * @return void.
  */
 function socialdb_insert_object($post_title, $post_date = null) {
-    if (!isset($post_date)) {
-        $post_date = array(date('Y-m-d H:i:s'));
-    }
     $status = 'publish';
     $post_author = 1;
     $post = array(
         'post_author' => $post_author,
         'post_title' => $post_title[0],
-        'post_date' => str_replace("Z", "", str_replace("T", " ", $post_date[0])),
         'post_content' => "",
         'post_status' => $status,
         'post_type' => 'socialdb_object'
     );
+    if($post_date):
+        $post['post_date'] = str_replace("Z", "", str_replace("T", " ", $post_date[0]));
+    endif;
     $post_id = wp_insert_post($post);
     return $post_id;
 }

@@ -23,7 +23,7 @@ $counter = 0;
                 <input type="radio" name="import_object" id="edit_import_object_true" onclick="show_message_size()"  value="true"><?php _e('Import object','tainacan'); ?><br>
                 <input type="radio" name="import_object" id="edit_import_object_false" checked="checked"  value="false"><?php _e('Import only metadata','tainacan'); ?><br>
             </div>
-            <?php while ($counter < count($mapping_array['mapping'])): $counter++ ?>
+            <?php  while($counter < count($mapping_array['mapping'])): $counter++ ?>
                 <div class='row form-group' id="edit_tag_<?php echo $counter ?>">
                     <label class='col-md-2'>
                         <select name='mapping_dublin_core_<?php echo $counter ?>' class='data_dubin_core form-control' id='mapping_dublin_core_<?php echo $counter ?>'>
