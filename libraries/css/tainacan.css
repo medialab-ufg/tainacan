@@ -831,6 +831,10 @@ body.home .ibram-home-container .col-md-3 .ibram-box p:nth-child(4) {
   padding-top: 20px;
 }
 
+button.collection-trash, button#hideTrash {
+  color: #0c698b !important;
+}
+
 .tainacan-steps {
   margin: 10px -30px 20px -30px;
   background: white;
@@ -1300,6 +1304,7 @@ a.collection-thumb img {
 
 .table-view-container {
   margin-top: 10px;
+  margin-bottom: 20px;
   background: white;
   padding-top: 15px;
   border: 3px solid #E8E8E8;
@@ -1312,6 +1317,7 @@ a.collection-thumb img {
   padding: 0;
 }
 .table-view-container #table-view tbody ul li {
+  padding: 1px;
   display: inline-block;
 }
 

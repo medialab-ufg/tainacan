@@ -2443,6 +2443,11 @@ function changeViewMode(viewMode) {
     if(viewMode === "slideshow") {
         getCollectionSlideshow();
     } else {
+        if(viewMode === "table") {
+            $("#center_pagination").hide();
+        } else {
+            $("#center_pagination").show();
+        }
         $("#temp-viewMode").val(viewMode);
         $("#collection_single_ordenation").attr('data-viewMode', viewMode);
         $('.viewMode-control li').removeClass('selected-viewMode');

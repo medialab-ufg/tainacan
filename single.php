@@ -175,7 +175,7 @@ $options = get_option('socialdb_theme_options');
                                     <div class="col-md-10 box-left">
                                         <div class="search-colecao">
                                             <div class="input-group">
-                                                <input style="height: 33px; font-size: 13px;" class="form-control input-medium placeholder ui-autocomplete-input" id="search_objects"
+                                                <input style="font-size: 13px;" class="form-control input-medium placeholder ui-autocomplete-input" id="search_objects"
                                                        onkeyup="set_value(this)" onkeydown="if (event.keyCode === 13)
                                                                        document.getElementById('search_main').click();"
                                                        type="text" placeholder="<?php _e('Find', 'tainacan') ?>" autocomplete="off">
@@ -262,7 +262,7 @@ $options = get_option('socialdb_theme_options');
                                     <button onclick="change_ordenation('desc')" type="button" id="sort_list" class="btn btn-default pull-right"><span class="glyphicon glyphicon-sort-by-attributes-alt"></span></button>
                                 </div>
 
-                                <div class="col-md-3 viewMode-control">
+                                <div class="col-md-4 viewMode-control">
                                     <div class="sec-color"> <?php _e('Show:', 'tainacan') ?> </div>
                                     <ul>
                                         <?php
@@ -293,7 +293,7 @@ $options = get_option('socialdb_theme_options');
                                     if (is_user_logged_in()) {
                                         if (get_the_ID() != get_option('collection_root_id') && verify_collection_moderators(get_the_ID(), get_current_user_id())) {
                                             ?>
-                                            <button onclick="showTrash('<?php echo get_template_directory_uri(); ?>');" class="btn btn-danger pull-right" style="color: white"><?php _e('Trash', 'tainacan'); ?></button>
+                                            <button onclick="showTrash('<?php echo get_template_directory_uri(); ?>');" class="btn btn-default pull-right collection-trash"><?php _e('Trash', 'tainacan'); ?></button>
                                             
                                             <?php
                                         } else {

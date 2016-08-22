@@ -3,6 +3,10 @@
     padding-top: 20px;
 }
 
+button.collection-trash, button#hideTrash {
+    color: $brand-medium-blue !important;
+}
+
 .tainacan-steps {
     margin: 10px -30px 20px -30px;
     background: white;
@@ -580,6 +584,7 @@
 
 .table-view-container  {
   margin-top: 10px;
+  margin-bottom: 20px;
   background: white;
   padding-top: 15px;
   border: 3px solid $item-border;
@@ -595,6 +600,7 @@
       ul {
         padding: 0;
         li {
+          padding: 1px;
           display: inline-block;
         }
       } // ul

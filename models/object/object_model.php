@@ -858,7 +858,7 @@ class ObjectModel extends Model {
         //a forma de ordenacao
         $order = $this->set_type_order($args);
         $args = array(
-            'posts_per_page' => 10,
+            'posts_per_page' => -1, // Fetchs all items
             'post_type' => 'socialdb_object',
             'post_status' => array($post_status),
             'paged' => 1,
@@ -1098,8 +1098,7 @@ class ObjectModel extends Model {
             'post__not_in' => array(get_option('collection_root_id')),
             'paged' => $page,
             'orderby' => 'date',
-            'order' => 'DESC',
-            'posts_per_page' => -1
+            'order' => 'DESC'
         );
         if (isset($data['keyword']) && $data['keyword'] != '') {
             $args['s'] = $data['keyword'];

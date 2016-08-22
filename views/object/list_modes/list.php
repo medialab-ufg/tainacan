@@ -1,4 +1,6 @@
-<div class="droppableClassifications col-md-12 no-padding list-view-container top-div" <?php if ($collection_list_mode != "list"): ?> style="display: none" <?php endif ?> >
+<div class="droppableClassifications col-md-12 no-padding list-view-container top-div" 
+    data-order="<?php echo $countLine; ?>"
+    <?php if ($collection_list_mode != "list"): ?> style="display: none" <?php endif ?> >
     
     <input type="hidden" id="add_classification_allowed_<?php echo $curr_id ?>" 
             name="add_classification_allowed"

@@ -18,8 +18,11 @@
             }
         };
 
+        var items_per_page = parseInt( $("#items-per-page").val() );
         $('.object_id').each(function(idx, el) {
           var c_id = $(this).val();
+         
+          var item_order = parseInt( $("#object_" + c_id).attr('data-order') );
 
           var title = $("#object_" + c_id + " .item-display-title").text();
           var description = $("#object_" + c_id + " .item-description").text();
@@ -29,8 +32,16 @@
             "<tr><td>" + date + "</td>" +
             "<td>" + title + "</td>" +
             "<td>" + description + "</td>" +
-            "<td> <ul>" + actions + "</ul></td></tr>"
+            "<td style='width: 10%'> <ul>" + actions + "</ul></td></tr>"
             );
+    
+          if( item_order <= items_per_page) {
+              cl("I will show the item " + item_order);
+          } else {
+              cl('This might be hidden: ' + item_order);
+              $("#object_" + c_id).hide();
+          }
+    
         });
         $("#table-view").DataTable(dataTable_options);
 
@@ -43,11 +54,30 @@
                 wpquery_page(page, current_mode);
             }
         });
+        
+        $("#items-per-page").on('change', function() {
+           var limit = parseInt(this.value);
+           var viewMode = $("#temp-viewMode").val();           
+           var container = $('.' + viewMode +'-view-container');           
+           
+           $(container).each(function(idx, el) {
+              var item_num = parseInt( $(el).attr('data-order') );
+              if( $.isNumeric( item_num ) ) {
+                  if ( item_num <= limit ) {
+                      $(el).show();
+                  } else {
+                      $(el).hide();
+                  }
+              }
+           });
+        });
 
         var default_viewMode = $("#default-viewMode").val();
         if (default_viewMode === "slideshow") {
             // getSlideshowTime();
             getCollectionSlideshow();
+        } else if(default_viewMode === "table") {
+            $("#center_pagination").hide();
         }
         $('.viewMode-control li').removeClass('selected-viewMode');
         $('.viewMode-control li.' + default_viewMode).addClass('selected-viewMode');
