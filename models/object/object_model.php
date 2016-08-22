@@ -1099,6 +1099,7 @@ class ObjectModel extends Model {
             'paged' => $page,
             'orderby' => 'date',
             'order' => 'DESC',
+            'posts_per_page' => -1
         );
         if (isset($data['keyword']) && $data['keyword'] != '') {
             $args['s'] = $data['keyword'];

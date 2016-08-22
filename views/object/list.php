@@ -38,6 +38,8 @@ if( !$collection_list_mode ) {
 <input type="hidden" id="approx_mode" value="<?php echo $use_approx_mode; ?>">
 <input type="hidden" id="approx_location" value="<?php echo $geo_loc; ?>">
 
+<?php // var_dump($loop); ?>
+
 <?php if ( $loop->have_posts() ):
     // Determina # de colunas;
     if ($collection_data['collection_metas']['socialdb_collection_columns'] != '')
@@ -88,6 +90,8 @@ if( !$collection_list_mode ) {
     </div>
 <?php
 endif;
+
+// var_dump($loop->found_posts);
 
 $numberItems = ceil($loop->found_posts / 10);
 if ($loop->found_posts > 10):
