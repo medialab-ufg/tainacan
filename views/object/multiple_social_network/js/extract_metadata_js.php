@@ -50,7 +50,21 @@
         }).done(function (result) {
            var json = JSON.parse(result);
            if(json.hasMapping){
-              
+              show_modal_main();
+              $.ajax({
+                    type: "POST",
+                    url: $('#src').val() + "/controllers/object/object_controller.php",
+                    data: {collection_id: $('#collection_id').val(), operation: 'edit', object_id: json.object_id}
+                }).done(function (result) {
+                    hide_modal_main();
+                    $("#form").html('');
+                    $('#main_part').hide();
+                    $('#display_view_main_page').hide();
+                    $('#loader_collections').hide();
+                    $('#configuration').html(result).show();
+                    $('.dropdown-toggle').dropdown();
+                    $('.nav-tabs').tab();
+                });
            }else{
                $('#modal_mapping_metadata').modal('show');
                $('#mapping_metadata_content').html(json.html);

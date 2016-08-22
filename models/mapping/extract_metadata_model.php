@@ -10,6 +10,39 @@ require_once(dirname(__FILE__) . '../../import/oaipmh_model.php');
 
 class ExtractMetadataModel extends Model {
     
+    /**
+     * Metodo que extrai os valores de um record oai-pmh retornando os valores em 
+     * um array associativo
+     * 
+     * @param string $url
+     * @return array
+     */
+    public function get_record_oaipmh($url) {
+        $response_xml_data = download_page($url); // pego os 100 primeiros
+        $xml = new SimpleXMLElement($response_xml_data);
+        $record = $xml->GetRecord->record;
+        $dc = $record->metadata->children("http://www.openarchives.org/OAI/2.0/oai_dc/");
+        if ($record->metadata->Count() > 0 ) {
+            if(!$record->header->setSpec && isset($data['sets']) && !empty($data['sets'])){
+                 $json_response['token'] = '';
+            }
+            $metadata = $dc->children('http://purl.org/dc/elements/1.1/');
+            $record_response['identifier'] = (string)$record->header->identifier;
+            $record_response['datestamp'] = (string)$record->header->datestamp;
+            $record_response['title'] = $metadata->title;
+            $record_response['date'] = $record->header->datestamp;
+            $tam_metadata = count($metadata);
+            for ($i = 0; $i < $tam_metadata; $i++) {
+                $value = (string) $metadata[$i];
+                $identifier = $this->get_identifier($metadata[$i]);
+                $record_response['metadata'][$identifier][] = $value;
+            }
+            $json_response['records'][] = $record_response;
+        }
+        $record_response['files'] = [];
+        $record_response = [];
+        return $json_response;
+    }
     
     /**
      * @signature - get_link_data_nadle($data)
@@ -18,7 +51,7 @@ class ExtractMetadataModel extends Model {
      * @description - funcao que busca o link da oai-pmh
      * @author: Eduardo 
      */
-    public function get_link_data_nadle($data) {
+    public function get_link_data_handle($data) {
         $remove_port = explode(':', $data['url'])[0];
         $response_xml_data = download_page('http://' . $data['url'] . '/oai/request?verb=Identify'); // pego os 100 primeiros
         if ($response_xml_data):
@@ -139,6 +172,8 @@ class ExtractMetadataModel extends Model {
     }
     
     /**
+     * Metodo que insere o item atraves de seu mapeamento
+     * 
      * 
      * @param type $form
      * @param type $collection_id
@@ -148,26 +183,26 @@ class ExtractMetadataModel extends Model {
         $oaipmh_class = new OAIPMHModel;
         $categories[] = $this->get_category_root_of($collection_id);
         $content = '';
-        $object_id = socialdb_insert_object($record['title'], $record['date']);
+        $object_id = socialdb_insert_object($record['title'], false);
         //mapping
         add_post_meta($object_id, 'socialdb_channel_id',$mapping_id);
         if ($object_id != 0) {
             foreach ($record['metadata'] as $identifier => $metadata) {
                 if ($form[$identifier] !== '') {
                     if ($form[$identifier] == 'post_title'):
-                        $this->update_title($object_id, implode(',', $metadata));
-                        $this->set_common_field_values($object_id, 'title', implode(',', $metadata));
+                        $oaipmh_class->update_title($object_id, implode(',', $metadata));
+                        $oaipmh_class->set_common_field_values($object_id, 'title', implode(',', $metadata));
                      elseif ($form[$identifier] == 'post_content'):
                         $content .=  implode(',', $metadata) . ",";
                     elseif ($form[$identifier] == 'post_permalink'):
                         update_post_meta($object_id, 'socialdb_object_dc_source', implode(',', $metadata));
-                        $this->set_common_field_values($object_id, 'object_source', implode(',', $metadata));
+                        $oaipmh_class->set_common_field_values($object_id, 'object_source', implode(',', $metadata));
                     elseif ($form[$identifier] == 'socialdb_object_content'):
                         update_post_meta($object_id, 'socialdb_object_content', implode(',', $metadata));
-                        $this->set_common_field_values($object_id, 'object_content', implode(',', $metadata));
+                        $oaipmh_class->set_common_field_values($object_id, 'object_content', implode(',', $metadata));
                    elseif ($form[$identifier] == 'socialdb_object_dc_type'):
                         update_post_meta($object_id, 'socialdb_object_dc_type', implode(',', $metadata));                       
-                        $this->set_common_field_values($object_id, 'object_type', implode(',', $metadata));
+                        $oaipmh_class->set_common_field_values($object_id, 'object_type', implode(',', $metadata));
                     elseif ($form[$identifier] == 'tag'):
                         foreach ($metadata as $meta) {
                            if(trim($meta)!==''){
@@ -188,7 +223,7 @@ class ExtractMetadataModel extends Model {
                         $parent = get_term_meta($property_id, 'socialdb_property_term_root', true);
                         foreach ($metadata as $meta) {
                             if(trim($meta)!==''){
-                                $this->insert_hierarchy($meta,$object_id,$collection_id,$parent,$property_id);
+                                $oaipmh_class->insert_hierarchy($meta,$object_id,$collection_id,$parent,$property_id);
                             }
                         }
                     elseif (strpos($form[$identifier], "dataproperty_")!==false):
@@ -214,6 +249,7 @@ class ExtractMetadataModel extends Model {
             update_post_content($object_id, $content);
             $this->set_common_field_values($object_id, 'description', $content);
             socialdb_add_tax_terms($object_id, $categories, 'socialdb_category_type');
+            return $object_id;
         }
     }
 

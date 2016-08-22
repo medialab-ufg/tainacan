@@ -19,7 +19,7 @@
                 hide_modal_main();
                 $('.dropdown-toggle').dropdown();
                 elem_first = jQuery.parseJSON(result);
-                if (elem_first) {
+                if (elem_first.result==true) {
                     $.ajax({
                         type: "POST",
                         url: $('#src').val() + "/controllers/object/object_controller.php",

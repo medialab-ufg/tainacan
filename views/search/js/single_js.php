@@ -1338,16 +1338,18 @@
                                         } else {
                                             var any_url = validateAnyUrl();
                                             if (any_url) {
-                                                extract_metadata($('#item_url_import_all').val());
-                                                return false;
-                                                // É uma URL regular. Executar a importação através do Embed.ly.
-                                                show_modal_main();
-                                                // showFormCreateURL($('#item_url_import_all').val());
-                                                import_text($('#item_url_import_all').val());
-                                                $('#item_url_import_all').val('');
-                                                $("#sites_import_icon").addClass("grayscale");
-                                                $('#modalshowModalImportAll').modal('hide');
-                                                console.log('URL Regular. Enviar pro Embed.ly.');
+                                                if($('#extract_metadata').is(':checked')){
+                                                    extract_metadata($('#item_url_import_all').val());
+                                                }else{
+                                                    // É uma URL regular. Executar a importação através do Embed.ly.
+                                                    show_modal_main();
+                                                    // showFormCreateURL($('#item_url_import_all').val());
+                                                    import_text($('#item_url_import_all').val());
+                                                    $('#item_url_import_all').val('');
+                                                    $("#sites_import_icon").addClass("grayscale");
+                                                    $('#modalshowModalImportAll').modal('hide');
+                                                    console.log('URL Regular. Enviar pro Embed.ly.');
+                                                }
                                             } else {
                                                 showAlertGeneral("<?php _e('Alert', 'tainacan'); ?>", "<?php _e('Please, insert a valid URL', 'tainacan'); ?>", "error");
                                             }

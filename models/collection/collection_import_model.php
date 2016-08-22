@@ -261,7 +261,7 @@ class CollectionImportModel extends CollectionModel {
        }
        return $properties_id;
    }
-      /**
+   /**
      * function get_property_type_id($property_parent_name)
      * @param string $property_parent_name
      * @return int O id da categoria que determinara o tipo da propriedade.

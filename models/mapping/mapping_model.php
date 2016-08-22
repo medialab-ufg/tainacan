@@ -53,6 +53,11 @@ class MappingModel extends Model {
             wp_delete_attachment($csv_file[0]->ID);
         }
         $post_meta = delete_post_meta($collection_id, 'socialdb_collection_channel', $mapping_id);
+        $active_import = get_post_meta($collection_id, 'socialdb_collection_mapping_import_active', true);
+        if($active_import && $active_import==$mapping_id){
+            delete_post_meta($collection_id, 'socialdb_collection_mapping_import_active');
+        }
+        
         $delete_post = wp_delete_post($mapping_id);
         if ($post_meta && $delete_post) {
             $return['title'] = __('Success', 'tainacan');
@@ -490,13 +495,16 @@ class MappingModel extends Model {
                 $id = str_replace('new_', '', $array_tainacan_mapped[$key]);
                 if($data['create_property_'.$id]){
                    $identifier =  'dataproperty_'.$this->add_property_data($data['name_property_'.$id], $data['widget_property_'.$id], $data['collection_id']);
+                   $dataInfo[] = array('tag' => $array_generic_mapped[$key], 'socialdb_entity' => $identifier);
                 }
             }else{
                 $identifier = $array_tainacan_mapped[$key];
+                $dataInfo[] = array('tag' => $array_generic_mapped[$key], 'socialdb_entity' => $identifier);
             }
-            $dataInfo[] = array('tag' => $array_generic_mapped[$key], 'socialdb_entity' => $identifier);
         }
+        add_post_meta($object_id, 'socialdb_channel_oaipmhdc_initial_size', '1');
         add_post_meta($object_id, 'socialdb_channel_oaipmhdc_mapping', serialize($dataInfo));
+        update_post_meta($data['collection_id'], 'socialdb_collection_mapping_import_active', $object_id);
         return $object_id;
     }
     /**
@@ -507,14 +515,26 @@ class MappingModel extends Model {
      */
    public function add_property_data($name,$widget,$collection_id) {
         $category_root_id = $this->get_category_root_of($collection_id);
-        $new_property = wp_insert_term((string)$property->name, 'socialdb_property_type', array('parent' => $this->get_property_type_id('socialdb_property_data'),
+        $new_property = wp_insert_term($name, 'socialdb_property_type', array('parent' => $this->get_property_type_id('socialdb_property_data'),
                 'slug' => $this->generate_slug((string)$name, $collection_id)));
         update_term_meta($new_property['term_id'], 'socialdb_property_required', 'false');
         update_term_meta($new_property['term_id'], 'socialdb_property_data_widget',$widget);
         update_term_meta($new_property['term_id'], 'socialdb_property_data_column_ordenation',  '');
         update_term_meta($new_property['term_id'], 'socialdb_property_default_value',  '');
         update_term_meta($new_property['term_id'], 'socialdb_property_created_category',$category_root_id);
+        add_term_meta($category_root_id, 'socialdb_category_property_id',$new_property['term_id']);
         return $new_property['term_id'];
    }
+   
+   /**
+     * function get_property_type_id($property_parent_name)
+     * @param string $property_parent_name
+     * @return int O id da categoria que determinara o tipo da propriedade.
+     * @author: Eduardo Humberto 
+     */
+    public function get_property_type_id($property_parent_name) {
+        $property_root = get_term_by('name', $property_parent_name, 'socialdb_property_type');
+        return $property_root->term_id;
+    }
 
 }
