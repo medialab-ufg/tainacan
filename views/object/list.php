@@ -10,15 +10,8 @@ include_once ('js/geolocation_js.php');
 
 $countLine = 0;
 $classColumn = 12;
-$show_string = is_root_category($collection_id) ? __('Showing collections:','tainacan') : __('Showing Items:', 'tainacan');
 $collection_list_mode = $collection_data['collection_metas']['socialdb_collection_list_mode'];
 // $collection_color_scheme = $collection_data['collection_metas']['socialdb_collection_color_scheme'];
-
-$_slideshow_time = get_post_meta($collection_id, 'socialdb_collection_slideshow_time', true);
-$geo_coordinates["lat"] = get_post_meta($collection_id, "socialdb_collection_latitude_meta", true);
-$geo_coordinates["long"] = get_post_meta($collection_id, "socialdb_collection_longitude_meta", true);
-$use_approx_mode = get_post_meta($collection_id, "socialdb_collection_use_prox_mode", true);
-$geo_loc = get_post_meta($collection_id, "socialdb_collection_location_meta", true);
 
 $viewHelper = new ViewHelper();
 
@@ -37,8 +30,6 @@ if( !$collection_list_mode ) {
 <input type="hidden" id="set-long" value="<?php echo $geo_coordinates["long"]; ?>">
 <input type="hidden" id="approx_mode" value="<?php echo $use_approx_mode; ?>">
 <input type="hidden" id="approx_location" value="<?php echo $geo_loc; ?>">
-
-<?php // var_dump($loop); ?>
 
 <?php if ( $loop->have_posts() ):
     // Determina # de colunas;
@@ -90,8 +81,6 @@ if( !$collection_list_mode ) {
     </div>
 <?php
 endif;
-
-// var_dump($loop->found_posts);
 
 $numberItems = ceil($loop->found_posts / 10);
 if ($loop->found_posts > 10):
