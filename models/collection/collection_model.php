@@ -86,6 +86,13 @@ class CollectionModel extends Model {
      * @param type $collection_id
      */
     public function createSocialMappingDefault($collection_id) {
+        /***** MAPEAMENTO PADRAO DUBLIN CORE **/
+        $mapping_model_dc = new MappingModel('socialdb_channel_oaipmhdc');
+        $mapping_dc_default_id =  $mapping_model_dc->create_mapping(__('Mapping Default','tainacan'), $collection_id);
+        add_post_meta($mapping_dc_default_id, 'socialdb_channel_oaipmhdc_initial_size', '1');
+        add_post_meta($mapping_dc_default_id, 'socialdb_channel_oaipmhdc_mapping', serialize([]));
+        update_post_meta($collection_id, 'socialdb_collection_mapping_import_active', $mapping_dc_default_id);
+        
         /** YOUTUBE * */
         $mapping_model_youtube = new MappingModel('socialdb_channel_youtube');
         $mapping_id_youtube = $mapping_model_youtube->create_mapping('socialdb_channel_youtube', $collection_id);

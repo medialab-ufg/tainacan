@@ -89,7 +89,7 @@ include_once ('js/extract_metadata_js.php');
                 <div class="col-sm-2 no-padding">
                     <button type="button" style="padding-bottom: 5px;padding-top: 5px;" onclick="importAll_verify()" class="col-sm-12 no-padding btn btn-primary"><?php _e('Submit', 'tainacan'); ?></button>
                     <div class="col-sm-12 no-padding">
-                        <input type="checkbox" checked="checked" id="extract_metadata" name="extract_metadata">&nbsp;<?php _e('Extract metadata','tainacan') ?>
+                        <input type="checkbox" id="extract_metadata" name="extract_metadata">&nbsp;<?php _e('Extract metadata','tainacan') ?>
                     </div>    
                 </div>
             </div>

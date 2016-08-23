@@ -3,9 +3,6 @@
 /**
  * Author: Eduardo Humberto
  */
-include_once (dirname(__FILE__) . '/../../../../../wp-config.php');
-include_once (dirname(__FILE__) . '/../../../../../wp-load.php');
-include_once (dirname(__FILE__) . '/../../../../../wp-includes/wp-db.php');
 require_once(dirname(__FILE__) . '../../general/general_model.php');
 require_once(dirname(__FILE__) . '../../property/property_model.php');
 require_once(dirname(__FILE__) . '../../category/category_model.php');
@@ -487,7 +484,8 @@ class MappingModel extends Model {
             return false;
         }
         //insiro o mapeamento
-        $object_id = $this->create_mapping($data['base'], $data['collection_id']);
+        $has_mapping = get_post_meta($data['collection_id'], 'socialdb_collection_mapping_import_active', true);
+        $object_id = (!is_numeric($has_mapping)) ? $this->create_mapping($data['base'], $data['collection_id']) : $has_mapping ;
         $array_generic_mapped = explode(',', $data['mapped_generic_properties']);
         $array_tainacan_mapped = explode(',', $data['mapped_tainacan_properties']);
         foreach ($array_generic_mapped as $key => $generic) {
@@ -502,9 +500,8 @@ class MappingModel extends Model {
                 $dataInfo[] = array('tag' => $array_generic_mapped[$key], 'socialdb_entity' => $identifier);
             }
         }
-        add_post_meta($object_id, 'socialdb_channel_oaipmhdc_initial_size', '1');
-        add_post_meta($object_id, 'socialdb_channel_oaipmhdc_mapping', serialize($dataInfo));
-        update_post_meta($data['collection_id'], 'socialdb_collection_mapping_import_active', $object_id);
+        update_post_meta($object_id, 'socialdb_channel_oaipmhdc_initial_size', '1');
+        update_post_meta($object_id, 'socialdb_channel_oaipmhdc_mapping', serialize($dataInfo));
         return $object_id;
     }
     /**

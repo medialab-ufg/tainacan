@@ -1339,8 +1339,12 @@
                                             var any_url = validateAnyUrl();
                                             if (any_url) {
                                                 var split_url = $('#item_url_import_all').val().replace('http://','').replace('https://','').split('/');
-                                                 var index = split_url.indexOf('handle');
+                                                var index = split_url.indexOf('handle');
+                                                var article = split_url.indexOf('article');
+                                                var view = split_url.indexOf('view');
                                                 if($('#extract_metadata').is(':checked')&&index>=0){
+                                                    extract_metadata($('#item_url_import_all').val());
+                                                }else if($('#extract_metadata').is(':checked')&&article>=0&&view>=0){
                                                     extract_metadata($('#item_url_import_all').val());
                                                 }else{
                                                     // É uma URL regular. Executar a importação através do Embed.ly.

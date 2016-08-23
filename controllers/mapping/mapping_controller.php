@@ -110,13 +110,14 @@ class MappingController extends Controller {
             /******************************************************************/
             case 'get_metadata_handle':
                 $has_mapping = get_post_meta($data['collection_id'], 'socialdb_collection_mapping_import_active', true);
-                if(!$has_mapping||$has_mapping==''):
+                $is_mapped = (is_numeric($has_mapping)) ? unserialize(get_post_meta($has_mapping, 'socialdb_channel_oaipmhdc_mapping', true)) : false;
+                if(!$has_mapping||$has_mapping==''||(!$is_mapped||count($is_mapped) === 0)):
                     $data['base'] = 'http://' . $data['url'].'/oai/request';
                     $data['generic_properties'] = $extract_model->get_metadata_handle($data);
                     $data['tainacan_properties'] = $extract_model->get_tainacan_properties($data);
                     $data['oai_url'] = $extract_model->get_link_data_handle($data);
                     $data['html'] = $this->render(dirname(__FILE__) . '../../../views/mapping/container_mapping.php',$data);
-                elseif(is_numeric($has_mapping)):
+                elseif(is_numeric($has_mapping) &&  count($is_mapped) > 0):
                     $url = $extract_model->get_link_data_handle($data);
                     $mapp_array = $oaipmh_model->get_mapping_oaipmh_dc($has_mapping);
                     $record_value = (isset($extract_model->get_record_oaipmh($url)['records'])) ? $extract_model->get_record_oaipmh($url)['records'][0] : [];

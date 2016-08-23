@@ -18,8 +18,13 @@ class ExtractMetadataModel extends Model {
      * @return array
      */
     public function get_record_oaipmh($url) {
-        $response_xml_data = download_page($url); // pego os 100 primeiros
-        $xml = new SimpleXMLElement($response_xml_data);
+        $response_xml_data = file_get_contents($url); // pego os 100 primeiros
+        try{
+             $xml = new SimpleXMLElement($response_xml_data);
+        } catch (Exception $ex) {
+             return false;
+        }
+       
         if(!isset($xml->GetRecord)){
             return false;
         }
@@ -56,15 +61,22 @@ class ExtractMetadataModel extends Model {
      */
     public function get_link_data_handle($data) {
         $remove_port = explode(':', $data['url'])[0];
-        $response_xml_data = download_page('http://' . $data['url'] . '/oai/request?verb=Identify'); // pego os 100 primeiros
+        $response_xml_data = file_get_contents('http://' . $data['url'] . '/oai/request?verb=Identify'); // pego os 100 primeiros
         if ($response_xml_data):
             $xml = new SimpleXMLElement($response_xml_data);
             $property = 'oai-identifier';
-            $identifier = explode('/', (string) $xml->Identify->description->$property->sampleIdentifier)[0];
-
-            return 'http://' . $data['url'] .
+            if($xml->Identify->description->$property->sampleIdentifier):
+                $identifier = explode('/', (string) $xml->Identify->description->$property->sampleIdentifier)[0];
+                $identifier = str_replace('prefix', $data['tag'] , $identifier);
+                return 'http://' . $data['url'] .
                     '/oai/request?verb=GetRecord&metadataPrefix=oai_dc&identifier='
                     . $identifier . '/' . $data['id'];
+            else:    
+                $identifier = 'oai:'.$data['url'].':'.$data['tag'].'/'.$data['id'];
+                return 'http://' . $data['url'] .
+                    '/oai/request?verb=GetRecord&metadataPrefix=oai_dc&identifier='
+                    . $identifier ;
+            endif;
         else:
             return '';
         endif;

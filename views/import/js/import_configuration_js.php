@@ -66,6 +66,10 @@
             data: { operation: 'list_mapping_oaipmh_dc', collection_id: collectionId },
             success: function (data) {
                 $("#table_oaipmh_dc").html('');
+                 $("#table_oaipmh_dc").append("<tr><td>" + object.name + "</td>" +
+                                        "<td><a href='#' onclick=\"is_harvesting(" + object.id + ",'" + object.is_harvesting + "')\">" + object.is_harvesting + "</a></td>" +
+                                        "<td><a href='#' onclick=\"edit_mapping_oaipmh('" + object.name + "'," + object.id + "," + collectionId + ")\"><span class='glyphicon glyphicon-edit'></span></a></td></tr>");
+                
                 if (data !== '[]') {
                     var jsonObject = jQuery.parseJSON(data);
                     if (jsonObject && jsonObject != null && jsonObject.identifier) {
