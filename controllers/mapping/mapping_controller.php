@@ -120,6 +120,10 @@ class MappingController extends Controller {
                     $url = $extract_model->get_link_data_handle($data);
                     $mapp_array = $oaipmh_model->get_mapping_oaipmh_dc($has_mapping);
                     $record_value = (isset($extract_model->get_record_oaipmh($url)['records'])) ? $extract_model->get_record_oaipmh($url)['records'][0] : [];
+                    if(!$record_value){
+                         $data['hasMapping'] = false;
+                         return json_encode($data);
+                    }
                     $data['object_id'] = $extract_model->insert_item_handle($mapp_array, $data['collection_id'], $record_value);
                     $data['hasMapping'] = true;
                 endif;
@@ -129,6 +133,10 @@ class MappingController extends Controller {
                     $mapping_id = $mapping_model->saving_mapping_handle($data);
                     $mapp_array = $oaipmh_model->get_mapping_oaipmh_dc($mapping_id);
                     $record_value = (isset($extract_model->get_record_oaipmh($data['url_oai'])['records'])) ? $extract_model->get_record_oaipmh($data['url_oai'])['records'][0] : [];
+                    if(!$record_value){
+                         $data['result'] = false;
+                         return json_encode($data);
+                    }
                     $data['object_id'] = $extract_model->insert_item_handle($mapp_array, $data['collection_id'], $record_value);
                     $data['result'] = true;
                 else:

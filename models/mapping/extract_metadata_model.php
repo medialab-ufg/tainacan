@@ -20,6 +20,9 @@ class ExtractMetadataModel extends Model {
     public function get_record_oaipmh($url) {
         $response_xml_data = download_page($url); // pego os 100 primeiros
         $xml = new SimpleXMLElement($response_xml_data);
+        if(!isset($xml->GetRecord)){
+            return false;
+        }
         $record = $xml->GetRecord->record;
         $dc = $record->metadata->children("http://www.openarchives.org/OAI/2.0/oai_dc/");
         if ($record->metadata->Count() > 0 ) {

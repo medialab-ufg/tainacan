@@ -38,6 +38,7 @@
         var id = split_url[index+2];
         var tag = split_url[index+1];
         var base = split_url[0];
+        show_modal_main();
         $.ajax({
             url: $('#src').val() + '/controllers/mapping/mapping_controller.php',
             type: 'POST',
@@ -50,13 +51,11 @@
         }).done(function (result) {
            var json = JSON.parse(result);
            if(json.hasMapping){
-              show_modal_main();
               $.ajax({
                     type: "POST",
                     url: $('#src').val() + "/controllers/object/object_controller.php",
                     data: {collection_id: $('#collection_id').val(), operation: 'edit', object_id: json.object_id}
                 }).done(function (result) {
-                    hide_modal_main();
                     $("#form").html('');
                     $('#main_part').hide();
                     $('#display_view_main_page').hide();
@@ -64,8 +63,11 @@
                     $('#configuration').html(result).show();
                     $('.dropdown-toggle').dropdown();
                     $('.nav-tabs').tab();
+                    hide_modal_main();
+                    wpquery_filter();
                 });
            }else{
+               hide_modal_main();
                $('#modal_mapping_metadata').modal('show');
                $('#mapping_metadata_content').html(json.html);
            }

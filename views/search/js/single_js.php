@@ -1338,7 +1338,9 @@
                                         } else {
                                             var any_url = validateAnyUrl();
                                             if (any_url) {
-                                                if($('#extract_metadata').is(':checked')){
+                                                var split_url = $('#item_url_import_all').val().replace('http://','').replace('https://','').split('/');
+                                                 var index = split_url.indexOf('handle');
+                                                if($('#extract_metadata').is(':checked')&&index>=0){
                                                     extract_metadata($('#item_url_import_all').val());
                                                 }else{
                                                     // É uma URL regular. Executar a importação através do Embed.ly.
