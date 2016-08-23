@@ -111,14 +111,9 @@ if ($loop->found_posts > 10):
             <div class="col-md-3 pull-right">
                 <?php _e('Items per page:', 'tainacan') ?>
                 <select name="items-per-page" id="items-per-page">
-                    <?php /* ?>
-                    <option disabled value="<?php echo $loop->query['posts_per_page'] ?>">
-                        <?php echo $loop->query['posts_per_page'] ?>
-                    </option>
-                     <?php */ ?>
                     <option>5</option>
                     <option>8</option>
-                    <option value="<?php echo $_per_page; ?>"> <?php echo $_per_page; ?> </option>
+                    <option value="<?php echo $_per_page; ?>" selected> <?php echo $_per_page; ?> </option>
                     <option>15</option>
                     <option>25</option>
                     <option>50</option>

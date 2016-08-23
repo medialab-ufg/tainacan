@@ -4,26 +4,27 @@
 
         var dataTable_options = {
             "language": {
-                // "url": "dataTables."
                 sInfo: "Exibindo de _START_ até _END_ de _TOTAL_ itens",
                 sLengthMenu: "Mostrar _MENU_ itens por página",
                 sInfoFiltered: "(filtrados de _MAX_ eventos)",
-                search: "Pesquisar: ",
+                search: "<?php _e('Search: ', 'tainacan'); ?>",
                 paginate: {
-                    first: "Primeira",
-                    previous: "Anterior",
-                    next: "Próxima",
-                    last: "Última"
+                    first: "<?php _e('First', 'tainacan'); ?>",
+                    previous: "<?php _e('Previous', 'tainacan'); ?>",
+                    next: "<?php _e('Next ', 'tainacan'); ?>",
+                    last: "<?php _e('Last', 'tainacan'); ?>"
                 }
             }
         };
 
-        var items_per_page = parseInt( $("#items-per-page").val() );
+        if( $("#items-per-page").val() && !isNaN(parseInt( $("#items-per-page").val() ) ) ) {
+            var items_per_page = parseInt( $("#items-per-page").val() );
+        }       
+        
         $('.object_id').each(function(idx, el) {
           var c_id = $(this).val();
          
           var item_order = parseInt( $("#object_" + c_id).attr('data-order') );
-
           var title = $("#object_" + c_id + " .item-display-title").text();
           var description = $("#object_" + c_id + " .item-description").text();
           var date = $("#object_" + c_id + " .item-creation").text().replace("Criado em: ", "");
@@ -33,15 +34,14 @@
             "<td>" + title + "</td>" +
             "<td>" + description + "</td>" +
             "<td style='width: 10%'> <ul>" + actions + "</ul></td></tr>"
-            );
+            );   
     
-          if( item_order <= items_per_page) {
-              cl("I will show the item " + item_order);
-          } else {
-              cl('This might be hidden: ' + item_order);
-              $("#object_" + c_id).hide();
+          if( items_per_page && items_per_page >= 10 ) {
+               if( item_order > items_per_page) {
+                   $("#object_" + c_id).hide();
+               }
           }
-    
+        
         });
         $("#table-view").DataTable(dataTable_options);
 
@@ -58,7 +58,10 @@
         $("#items-per-page").on('change', function() {
            var limit = parseInt(this.value);
            var viewMode = $("#temp-viewMode").val();           
-           var container = $('.' + viewMode +'-view-container');           
+           var container = $('.' + viewMode +'-view-container');
+           $('span.per-page').text(limit);
+           
+           //cl ( $('.pagination_items span.per-page').text() );
            
            $(container).each(function(idx, el) {
               var item_num = parseInt( $(el).attr('data-order') );
