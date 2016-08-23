@@ -842,6 +842,10 @@ button.collection-trash, button#hideTrash {
   border-bottom: 3px solid #e3e3e3;
 }
 
+.bkpe {
+  border: 2px solid #79a6ce !important;
+}
+
 #container_three_columns {
   background: #f1f2f2;
 }
