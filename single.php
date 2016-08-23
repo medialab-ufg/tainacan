@@ -288,10 +288,10 @@ $options = get_option('socialdb_theme_options');
                                         </li>
                                     </ul>
                                 </div>
-                                <div class="col-md-3 selectable" style="">
-                                  <div class="acs">
-                                    <a onclick="select_some()" class="select_some"> Selecionar </a> |
-                                    <a onclick="select_all()" class="select_all"> Selecionar todos </a>
+                                <div class="col-md-3 selectable-items">
+                                  <div class="selectors">
+                                    <a onclick="select_some()" class="select_some"> <span class="glyphicon glyphicon-ok"></span> </a>
+                                    <a onclick="select_all()" class="select_all"> <span class="glyphicon glyphicon-th"></span> </a>
                                     <input type="hidden" value="" class="bulk_action" name="bulk_action">
                                   </div>
 
@@ -305,7 +305,7 @@ $options = get_option('socialdb_theme_options');
                                 </div>
 
                                 <script type="text/javascript">
-                                    $('.selectable .acs a').on('click', function(ev) {
+                                    $('.selectable-items .selectors a').on('click', function(ev) {
                                       $('.selectable-actions').show();
                                       var select = $(this).attr("class");
                                       $('input.bulk_action').val( select );
@@ -332,7 +332,7 @@ $options = get_option('socialdb_theme_options');
                                     });
                                 </script>
 
-                                <div class="col-md-2">
+                                <div class="col-md-12" style="margin-top: 10px;">
                                     <?php
                                     if (is_user_logged_in()) {
                                         if (get_the_ID() != get_option('collection_root_id') && verify_collection_moderators(get_the_ID(), get_current_user_id())) {

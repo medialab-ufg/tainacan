@@ -846,6 +846,10 @@ button.collection-trash, button#hideTrash {
   border: 2px solid #79a6ce !important;
 }
 
+.selectable-items .selectable-actions, .selectable-items .selectors {
+  display: inline-block;
+}
+
 #container_three_columns {
   background: #f1f2f2;
 }

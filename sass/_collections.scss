@@ -18,6 +18,12 @@ button.collection-trash, button#hideTrash {
   border: 2px solid  $brand-light-blue !important;
 }
 
+.selectable-items {
+  .selectable-actions, .selectors {
+    display: inline-block;    
+  }
+}
+
 #container_three_columns {
     background: $collections-bg-color;
 
