@@ -14,6 +14,10 @@ button.collection-trash, button#hideTrash {
     border-bottom: 3px solid #e3e3e3;
 }
 
+.bkpe {
+  border: 2px solid  $brand-light-blue !important;
+}
+
 #container_three_columns {
     background: $collections-bg-color;
 
