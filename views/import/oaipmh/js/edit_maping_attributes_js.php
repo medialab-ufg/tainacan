@@ -77,7 +77,7 @@
 
 
     function update_mapping(url) {
-         var validation = validation_form(parseInt($('#counter_oai_dc_edit').val()));
+         var validation = validation_form_edit(parseInt($('#counter_oai_dc_edit').val()));
         if(validation===1){
              showAlertGeneral('<?php echo __('Attention','tainacan') ?>', '<?php echo __('There is duplicate mappings','tainacan') ?>', 'error');
         }else if(validation===2){

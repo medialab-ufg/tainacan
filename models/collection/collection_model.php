@@ -92,7 +92,7 @@ class CollectionModel extends Model {
         add_post_meta($mapping_dc_default_id, 'socialdb_channel_oaipmhdc_initial_size', '1');
         add_post_meta($mapping_dc_default_id, 'socialdb_channel_oaipmhdc_mapping', serialize([]));
         update_post_meta($collection_id, 'socialdb_collection_mapping_import_active', $mapping_dc_default_id);
-        
+        delete_post_meta($collection_id, 'socialdb_collection_channel');
         /** YOUTUBE * */
         $mapping_model_youtube = new MappingModel('socialdb_channel_youtube');
         $mapping_id_youtube = $mapping_model_youtube->create_mapping('socialdb_channel_youtube', $collection_id);

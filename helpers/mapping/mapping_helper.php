@@ -117,8 +117,8 @@ class MappingHelper extends ViewHelper {
     public function list_properties($generic_properties) {
         foreach ($generic_properties as $property) {
             ?>
-            <li id="<?php echo $property['name_inside_tag'] ?>" 
-                class="generic-properties-li"><?php echo $property['name_inside_tag'] ?></li>
+            <li id="<?php echo $property['name_field'] ?>" 
+                class="generic-properties-li"><?php echo $property['name_field'] ?></li>
             <?php
         }
     }

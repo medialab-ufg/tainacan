@@ -66,9 +66,8 @@
             data: { operation: 'list_mapping_oaipmh_dc', collection_id: collectionId },
             success: function (data) {
                 $("#table_oaipmh_dc").html('');
-                 $("#table_oaipmh_dc").append("<tr><td>" + object.name + "</td>" +
-                                        "<td><a href='#' onclick=\"is_harvesting(" + object.id + ",'" + object.is_harvesting + "')\">" + object.is_harvesting + "</a></td>" +
-                                        "<td><a href='#' onclick=\"edit_mapping_oaipmh('" + object.name + "'," + object.id + "," + collectionId + ")\"><span class='glyphicon glyphicon-edit'></span></a></td></tr>");
+                $("#table_oaipmh_dc").append("<tr><td><?php _e('Default Mapping') ?></td><td>--</td>" +
+                                        "<td><a href='#' onclick=\"edit_default_mapping_oaipmh(" + collectionId + ")\"><span class='glyphicon glyphicon-edit'></span></a></td></tr>");
                 
                 if (data !== '[]') {
                     var jsonObject = jQuery.parseJSON(data);
@@ -200,6 +199,30 @@
         } else {
             showAlertGeneral('<?php _e('Atention', 'tainacan') ?>', '<?php _e('URL base is empty', 'tainacan') ?>', '<?php _e('error') ?>');
         }
+    }
+    
+    function edit_default_mapping_oaipmh(collection_id){
+        $('#validate_url_container').hide('slow');
+        $('#loader_validacao').show();
+        $.ajax({
+            type: "POST",
+            url: $('#src').val() + "/controllers/mapping/mapping_controller.php",
+            data: {
+                collection_id: collection_id,
+                operation: 'edit_mapping_oaipmh_default'
+            }
+        }).done(function (result) {
+            console.log('success');
+            $('#loader_validacao').hide('slow');
+            $('#maping_container').html(result);
+            $('#maping_container').show();
+            $('#url_base_oai').attr("disable");
+
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            console.log('erro');
+            $('#loader_validacao').hide();
+            showAlertGeneral('<?php _e('Atention', 'tainacan') ?>', '<?php _e('Server not found or not available', 'tainacan') ?>', '<?php _e('error') ?>');
+        });
     }
 
     /* @name: listTableOAIPMHDC()

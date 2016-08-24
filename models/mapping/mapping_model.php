@@ -485,7 +485,13 @@ class MappingModel extends Model {
         }
         //insiro o mapeamento
         $has_mapping = get_post_meta($data['collection_id'], 'socialdb_collection_mapping_import_active', true);
-        $object_id = (!is_numeric($has_mapping)) ? $this->create_mapping($data['base'], $data['collection_id']) : $has_mapping ;
+        if(!is_numeric($has_mapping)){
+            $object_id = $this->create_mapping(__('Mapping Default','tainacan'), $data['collection_id']);
+            update_post_meta($data['collection_id'], 'socialdb_collection_mapping_import_active', $object_id);
+        }else{
+            $object_id  =  $has_mapping ;
+        }
+        // mapeamento 
         $array_generic_mapped = explode(',', $data['mapped_generic_properties']);
         $array_tainacan_mapped = explode(',', $data['mapped_tainacan_properties']);
         foreach ($array_generic_mapped as $key => $generic) {

@@ -103,28 +103,30 @@ class ExtractMetadataModel extends Model {
              $xml = new SimpleXMLElement($response_xml_data);
             $record = $xml->GetRecord->record;
             $whole_metadatas = [];
-                    
+            //verifico se existe metadados para a extracao
             if ($record->metadata) {// mas o primeiro que tiver metadodos
-                $dc = $record->metadata->children("http://www.openarchives.org/OAI/2.0/oai_dc/"); //filhos da tag metadata
-                $metadatas = $dc->children('http://purl.org/dc/elements/1.1/'); //filhos do oai_dc:dc//loop para correr todos os filhos
-                foreach ($metadatas as $metadata) {// percorro todos os dados
-                    if (!in_array($this->get_identifier($metadata), $whole_metadatas) && (string) $metadata) { // se ele ainda nao estiver no aray 
-                        $whole_metadatas[] = $this->get_identifier($metadata);
-                        $array['name_tag'] = "dc:" . $metadata->getName();
-                        $array['name_field'] = $metadata;
-                        $array['name_on_select'] = $this->get_identifier($metadata);
-                        $array['name_inside_tag'] = $metadata->getName();
-                        $attributes = $metadata->attributes(); // atributos
-                        if ($attributes) {
-                            $array['has_attribute'] = true;
-                            foreach ($attributes as $a => $b) {
-                                $array['attributes'] = array('index' => (string) $a, 'value' => (string) $b);
-                            }
-                        } else {
-                            $array['has_attribute'] = false;
-                        }
-                        $data['metadatas'][] = $array;
-                    }
+                $tags_dc = array('title',
+                                'language',
+                                'source',
+                                'keywords',
+                                'subject',
+                                'relation',
+                                'type',
+                                'date',
+                                'description',
+                                'contributors',
+                                'publisher',
+                                'creator',
+                                'rights',
+                                'identifier',
+                                'format');
+                foreach ($tags_dc as $metadata) {// percorro todos os dados
+                    $whole_metadatas[] = $metadata;
+                    $array['name_tag'] = "dc:" . $metadata;
+                    $array['name_field'] = $metadata;
+                    $array['name_on_select'] = $metadata;
+                    $array['has_attribute'] = false;
+                    $data['metadatas'][] = $array;
                 }
             }
         endif;

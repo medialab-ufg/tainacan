@@ -48,6 +48,22 @@ class MappingController extends Controller {
                 $data['mapping_id'] = $mapping_id;
                 $data['mapping_array'] = $mapping_model->get_mapping_dublin_core($mapping_id);
                 return $this->render(dirname(__FILE__) . '../../../views/import/oaipmh/edit_maping_attributes.php', $data);
+            case "edit_mapping_oaipmh_default":
+                //insiro o mapeamento
+                $has_mapping = get_post_meta($data['collection_id'], 'socialdb_collection_mapping_import_active', true);
+                if(!is_numeric($has_mapping)){
+                    $mapping_id = $this->create_mapping(__('Mapping Default','tainacan'), $data['collection_id']);
+                    add_post_meta($mapping_id, 'socialdb_channel_oaipmhdc_initial_size', '1');
+                    add_post_meta($mapping_id, 'socialdb_channel_oaipmhdc_mapping', serialize([]));
+                    update_post_meta($data['collection_id'], 'socialdb_collection_mapping_import_active', $object_id);
+                }else{
+                    $mapping_id  =  $has_mapping ;
+                }
+                //data
+                $data['number_of_objects'] = 1;
+                $data['mapping_id'] = $mapping_id;
+                $data['mapping_array'] = $mapping_model->get_mapping_dublin_core($mapping_id);
+                return $this->render(dirname(__FILE__) . '../../../views/import/oaipmh/edit_maping_attributes.php', $data);
                 break;
             case "edit_mapping_oaipmh_export":
                 $export_model = new ExportModel;
@@ -114,6 +130,10 @@ class MappingController extends Controller {
                 if(!$has_mapping||$has_mapping==''||(!$is_mapped||count($is_mapped) === 0)):
                     $data['base'] = 'http://' . $data['url'].'/oai/request';
                     $data['generic_properties'] = $extract_model->get_metadata_handle($data);
+                    if(!$data['generic_properties']){
+                         $data['hasMapping'] = false;
+                         return json_encode($data);
+                    }
                     $data['tainacan_properties'] = $extract_model->get_tainacan_properties($data);
                     $data['oai_url'] = $extract_model->get_link_data_handle($data);
                     $data['html'] = $this->render(dirname(__FILE__) . '../../../views/mapping/container_mapping.php',$data);
