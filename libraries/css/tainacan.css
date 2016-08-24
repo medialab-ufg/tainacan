@@ -842,12 +842,33 @@ button.collection-trash, button#hideTrash {
   border-bottom: 3px solid #e3e3e3;
 }
 
-.bkpe {
+.selected-item {
   border: 2px solid #79a6ce !important;
 }
 
+.selectable-items {
+  padding-top: 3px;
+}
 .selectable-items .selectable-actions, .selectable-items .selectors {
   display: inline-block;
+}
+.selectable-items .selectable-actions {
+  width: 50%;
+}
+.selectable-items .selectable-actions span {
+  margin-left: 4px;
+}
+.selectable-items .selectors {
+  width: 45%;
+}
+.selectable-items .selectors a {
+  margin-left: 5px;
+}
+.selectable-items .selectors a img {
+  width: 30%;
+}
+.selectable-items .selectors a:hover {
+  cursor: pointer;
 }
 
 #container_three_columns {

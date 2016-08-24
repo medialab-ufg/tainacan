@@ -5,6 +5,7 @@
  */
 require_once(dirname(__FILE__) . '/models/social_network/Facebook/autoload.php');
 require_once(dirname(__FILE__) . '/controllers/helpers/helpers_controller.php');
+require_once(dirname(__FILE__) . '/helpers/view_helper.php');
 ///****************************** EXECUTANDO SCRIPTS  AVULSOS*********************/
 if (isset($_GET['execute-script'])):
     error_reporting(E_ALL);
@@ -288,14 +289,18 @@ $options = get_option('socialdb_theme_options');
                                         </li>
                                     </ul>
                                 </div>
-                                <div class="col-md-3 selectable-items">
+                                <div class="col-md-2 selectable-items">
                                   <div class="selectors">
-                                    <a onclick="select_some()" class="select_some"> <span class="glyphicon glyphicon-ok"></span> </a>
-                                    <a onclick="select_all()" class="select_all"> <span class="glyphicon glyphicon-th"></span> </a>
+                                    <a onclick="select_some()" class="select_some">
+                                      <?php echo ViewHelper::render_icon("selection", "png"); ?>
+                                    </a>
+                                    <a onclick="select_all()" class="select_all">
+                                      <?php echo ViewHelper::render_icon("select-all", "png"); ?>
+                                    </a>
                                     <input type="hidden" value="" class="bulk_action" name="bulk_action">
                                   </div>
 
-                                  <div class="selectable-actions" style="display: none; margin-top: 10px;">
+                                  <div class="selectable-actions" style="display: none;">
                                     <a class="move_trash">
                                       <span class="glyphicon glyphicon-trash"></span>
                                     </a>
@@ -316,7 +321,7 @@ $options = get_option('socialdb_theme_options');
                                         $('.object_id').each(function(idx, el) {
                                           var item = $("#object_" + $(el).val() );
                                           cl(item);
-                                          $(item).find(".item-colecao").addClass('bkpe');
+                                          $(item).find(".item-colecao").addClass('selected-item');
                                         });
                                     }
 

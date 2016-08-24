@@ -14,15 +14,39 @@ button.collection-trash, button#hideTrash {
     border-bottom: 3px solid #e3e3e3;
 }
 
-.bkpe {
-  border: 2px solid  $brand-light-blue !important;
+.selected-item {
+  border: 2px solid $brand-light-blue !important;
 }
 
 .selectable-items {
+  padding-top: 3px;
   .selectable-actions, .selectors {
-    display: inline-block;    
+    display: inline-block;
   }
-}
+  .selectable-actions {
+    // border: 1px solid red;
+    width: 50%;
+    span {
+      margin-left: 4px;
+    }
+  }
+  .selectors {
+    width: 45%;
+    // border: 1px solid;
+    a {
+      margin-left: 5px;
+      img {
+        width: 30%;
+      }
+      &:hover {
+        cursor: pointer;
+      }
+      &:last-child {
+
+      }
+    } // a
+  }
+} // .selectable-items
 
 #container_three_columns {
     background: $collections-bg-color;
