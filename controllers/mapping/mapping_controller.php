@@ -32,6 +32,9 @@ class MappingController extends Controller {
             case 'list_mapping_oaipmh_dc':
                 return json_encode($mapping_model->list_mapping_dublin_core($data['collection_id']));
                 break;
+            case 'list_mapping_metatag':
+                return json_encode($mapping_model->list_mapping_metatag($data['collection_id']));
+                break;
             case "update_date":
                 return update_post_meta($data['mapping_id'], 'socialdb_channel_oaipmhdc_last_update', mktime());
                 break;
@@ -122,7 +125,7 @@ class MappingController extends Controller {
             case 'form_default_mapping':
                 return json_encode($mapping_model->set_active_mapping($data));
             /******************************************************************/
-            /*    EXTRACAO DE METADADOS                                       */ 
+            /*    EXTRACAO DE METADADOS HANDLE                                */ 
             /******************************************************************/
             case 'get_metadata_handle':
                 $has_mapping = get_post_meta($data['collection_id'], 'socialdb_collection_mapping_import_active', true);
@@ -164,8 +167,62 @@ class MappingController extends Controller {
                     $data['result'] = false;
                 endif;
                 return json_encode($data);
-                
-                
+            /******************************************************************/
+            /*    EXTRACAO DE METADADOS  OJS                                  */ 
+            /******************************************************************/
+            case 'get_metadata_ojs':
+                $has_mapping = get_post_meta($data['collection_id'], 'socialdb_collection_mapping_import_active', true);
+                $is_mapped = (is_numeric($has_mapping)) ? unserialize(get_post_meta($has_mapping, 'socialdb_channel_oaipmhdc_mapping', true)) : false;
+                if(!$has_mapping||$has_mapping==''||(!$is_mapped||count($is_mapped) === 0)):
+                    $data['base'] = 'http://' . $data['url'].'oai';
+                    $data['generic_properties'] = $extract_model->get_metadata_handle($data,true);// true pois diferencia a url
+                    if(!$data['generic_properties']){
+                         $data['hasMapping'] = false;
+                         return json_encode($data);
+                    }
+                    $data['tainacan_properties'] = $extract_model->get_tainacan_properties($data);
+                    $data['oai_url'] = $extract_model->get_link_data_handle($data,true);
+                    $data['html'] = $this->render(dirname(__FILE__) . '../../../views/mapping/container_mapping.php',$data);
+                elseif(is_numeric($has_mapping) &&  count($is_mapped) > 0):
+                    $url = $extract_model->get_link_data_handle($data,true);
+                    $mapp_array = $oaipmh_model->get_mapping_oaipmh_dc($has_mapping);
+                    $record_value = (isset($extract_model->get_record_oaipmh($url)['records'])) ? $extract_model->get_record_oaipmh($url)['records'][0] : [];
+                    if(!$record_value){
+                         $data['hasMapping'] = false;
+                         return json_encode($data);
+                    }
+                    $data['object_id'] = $extract_model->insert_item_handle($mapp_array, $data['collection_id'], $record_value);
+                    $data['hasMapping'] = true;
+                endif;
+                return json_encode($data);    
+            /******************************************************************/
+            /*    EXTRACAO DE METADADOS - METATAGS                            */ 
+            /******************************************************************/    
+                case 'get_metadata_metatags':
+                    $has_mapping = get_post_meta($data['collection_id'], 'socialdb_collection_mapping_import_active', true);
+                    $is_mapped = (is_numeric($has_mapping)) ? unserialize(get_post_meta($has_mapping, 'socialdb_channel_oaipmhdc_mapping', true)) : false;
+                    if(!$has_mapping||$has_mapping==''||(!$is_mapped||count($is_mapped) === 0)):
+                        $data['base'] = 'http://' . $data['url'].'oai';
+                        $data['generic_properties'] = $extract_model->get_metadata_handle($data,true);// true pois diferencia a url
+                        if(!$data['generic_properties']){
+                             $data['hasMapping'] = false;
+                             return json_encode($data);
+                        }
+                        $data['tainacan_properties'] = $extract_model->get_tainacan_properties($data);
+                        $data['oai_url'] = $extract_model->get_link_data_handle($data,true);
+                        $data['html'] = $this->render(dirname(__FILE__) . '../../../views/mapping/container_mapping.php',$data);
+                    elseif(is_numeric($has_mapping) &&  count($is_mapped) > 0):
+                        $url = $extract_model->get_link_data_handle($data,true);
+                        $mapp_array = $oaipmh_model->get_mapping_oaipmh_dc($has_mapping);
+                        $record_value = (isset($extract_model->get_record_oaipmh($url)['records'])) ? $extract_model->get_record_oaipmh($url)['records'][0] : [];
+                        if(!$record_value){
+                             $data['hasMapping'] = false;
+                             return json_encode($data);
+                        }
+                        $data['object_id'] = $extract_model->insert_item_handle($mapp_array, $data['collection_id'], $record_value);
+                        $data['hasMapping'] = true;
+                    endif;
+                return json_encode($data);    
         }
     }
 

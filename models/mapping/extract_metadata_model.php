@@ -55,26 +55,34 @@ class ExtractMetadataModel extends Model {
     /**
      * @signature - get_link_data_nadle($data)
      * @param string $data O array
+     * @param boolean $is_ojs Bollean para verificacao do tipo de extracao
      * @return string O link
      * @description - funcao que busca o link da oai-pmh
      * @author: Eduardo 
      */
-    public function get_link_data_handle($data) {
-        $remove_port = explode(':', $data['url'])[0];
-        $response_xml_data = file_get_contents('http://' . $data['url'] . '/oai/request?verb=Identify'); // pego os 100 primeiros
+    public function get_link_data_handle($data,$is_ojs = false) {
+        if($is_ojs){
+            $complement = 'oai';
+            $response_xml_data = file_get_contents('http://' . $data['url'] . 'oai?verb=Identify'); // pego os 100 primeiros
+        }else{
+            $remove_port = explode(':', $data['url'])[0];
+            $complement = '/oai/request';
+            $response_xml_data = file_get_contents('http://' . $data['url'] . '/oai/request?verb=Identify'); // pego os 100 primeiros
+        }
+        
         if ($response_xml_data):
             $xml = new SimpleXMLElement($response_xml_data);
             $property = 'oai-identifier';
             if($xml->Identify->description->$property->sampleIdentifier):
                 $identifier = explode('/', (string) $xml->Identify->description->$property->sampleIdentifier)[0];
                 $identifier = str_replace('prefix', $data['tag'] , $identifier);
-                return 'http://' . $data['url'] .
-                    '/oai/request?verb=GetRecord&metadataPrefix=oai_dc&identifier='
+                return 'http://' . $data['url'] . $complement .
+                    '?verb=GetRecord&metadataPrefix=oai_dc&identifier='
                     . $identifier . '/' . $data['id'];
             else:    
                 $identifier = 'oai:'.$data['url'].':'.$data['tag'].'/'.$data['id'];
-                return 'http://' . $data['url'] .
-                    '/oai/request?verb=GetRecord&metadataPrefix=oai_dc&identifier='
+                return 'http://' . $data['url'] . $complement .
+                    '?verb=GetRecord&metadataPrefix=oai_dc&identifier='
                     . $identifier ;
             endif;
         else:
@@ -89,18 +97,25 @@ class ExtractMetadataModel extends Model {
      * @description - funcao que cria o mapeamnto e vincula com a colecao
      * @author: Eduardo 
      */
-    public function get_metadata_handle($data) {
-        $remove_port = explode(':', $data['url'])[0];
-        $response_xml_data = download_page('http://' . $data['url'] . '/oai/request?verb=Identify'); // pego os 100 primeiros
+    public function get_metadata_handle($data,$is_ojs = false) {
+        if($is_ojs){
+            $complement = 'oai';
+            $response_xml_data = download_page('http://' . $data['url'] . 'oai?verb=Identify'); // pego os 100 primeiros
+        }else{
+            $complement = '/oai/request';
+            $remove_port = explode(':', $data['url'])[0];
+            $response_xml_data = download_page('http://' . $data['url'] . '/oai/request?verb=Identify'); // pego os 100 primeiros
+        }
+        
         if ($response_xml_data):
             $xml = new SimpleXMLElement($response_xml_data);
             $property = 'oai-identifier';
             $identifier = explode('/', (string) $xml->Identify->description->$property->sampleIdentifier)[0];
 
-            $response_xml_data = download_page('http://' . $data['url'] .
-                    '/oai/request?verb=GetRecord&metadataPrefix=oai_dc&identifier='
+            $response_xml_data = download_page('http://' . $data['url'] . $complement .
+                    '?verb=GetRecord&metadataPrefix=oai_dc&identifier='
                     . $identifier . '/' . $data['id']); // pego os 100 primeiros
-             $xml = new SimpleXMLElement($response_xml_data);
+            $xml = new SimpleXMLElement($response_xml_data);
             $record = $xml->GetRecord->record;
             $whole_metadatas = [];
             //verifico se existe metadados para a extracao
@@ -186,6 +201,17 @@ class ExtractMetadataModel extends Model {
         }
         $data['metadatas'][] = array('name'=> __('Source','tainacan'),'value'=>'socialdb_object_dc_source');
         return  $data['metadatas'];
+    }
+    
+    public function get_mapping_metatags($url,$collection_id) {
+        $class = new MappingModel;
+        $mappings = $class->list_mapping_metatag($collection_id);
+        if($mappings&&isset($mappings['identifier'])){
+            foreach ($mappings['identifier'] as $mapp) {
+                
+            }
+        }
+        
     }
     
     /**

@@ -3,6 +3,7 @@
         change_breadcrumbs_title('<?php _e('Import','tainacan') ?>');
         $('#validate_url_container').show('slow');
         listTableOAIPMHDC();
+        listTableMetaTag();
         var src = $('#src').val();
         $('#collection_import_id').val($('#collection_id').val());
         $('#collection_import_csv_id').val($('#collection_id').val());
@@ -15,6 +16,10 @@
             e.preventDefault()
             $(this).tab('show');
             listTableCSV();
+        });
+        $('#click_metatag_tab').click(function (e) {
+            e.preventDefault()
+            $(this).tab('show');
         });
 
     });
@@ -94,6 +99,40 @@
             }
         });// fim da inclusão de identificador youtube 
     }
+    
+    /* @name: listTableMetaTag()
+     * @description: cria dinamicamente uma tabela contendo
+     * os identificadores de mapeamentos
+     * 
+     * @author: EDUARDO
+     **/
+
+    function listTableMetaTag() {
+        var src = $('#src').val();
+        var collectionId = $('#collection_id').val();
+
+        $.ajax({
+            url: src + "/controllers/mapping/mapping_controller.php", type: 'POST',
+            data: { operation: 'list_mapping_metatag', collection_id: collectionId },
+            success: function (data) {
+                $("#table_metatag_tab").html('');
+                if (data !== '[]') {
+                    var jsonObject = jQuery.parseJSON(data);
+                    if (jsonObject && jsonObject != null && jsonObject.identifier) {
+                        $.each(jsonObject.identifier, function (id, object) {
+                           $("#table_metatag_tab").append("<tr><td>" + object.name + "</td>" +
+                                        "<td><a href='#' onclick='delete_mapping(" + object.id + "," + collectionId + ")'><span class='glyphicon glyphicon-trash'></span></a> &nbsp; " +
+                                        "<td><a href='#' onclick=\"edit_mapping_oaipmh('" + object.name + "'," + object.id + "," + collectionId + ")\"><span class='glyphicon glyphicon-edit'></span></a> &nbsp; " +
+                                        "</tr>");
+                              
+                        });
+                        $("#table_metatag_tab").show();
+                    }
+                } // caso o controller retorne false
+            }
+        });// fim da inclusão de identificador youtube 
+    }
+    
     /* @name: listTableOAIPMHDC()
      * @description: cria dinamicamente uma tabela contendo
      * os identificadores de canais salvos no banco

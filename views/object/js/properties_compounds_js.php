@@ -461,7 +461,7 @@
                 if($('#cardinality_compound_'+compound_id+'_'+tree).length>0){
                     var cardinality = $('#cardinality_compound_'+compound_id+'_'+tree).val();
                     for(var i = 0;i<cardinality;i++){
-                        var value = $('#actual_value_'+compound_id+'_' + treecheckbox + '_' + i).val();
+                        var value = $('#actual_value_'+compound_id+'_' + tree + '_' + i).val();
                         dynatree_object_index["field_property_term_"+compound_id+"_"+ tree  + '_' + i] = i;
                         $("#field_property_term_"+compound_id+"_" + tree + '_' + i).dynatree({
                                 checkbox: true,

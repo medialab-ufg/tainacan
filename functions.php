@@ -1024,6 +1024,7 @@ function create_channel_terms() {
     $channel_mapping_term = create_register('socialdb_channel_csv', 'socialdb_channel_type', array('parent' => $channel_root_term['term_id']));
     create_metas($channel_mapping_term['term_id'], 'socialdb_channel_csv_metas', 'socialdb_channel_csv_delimiter', 'socialdb_channel_csv_delimiter');
     create_metas($channel_mapping_term['term_id'], 'socialdb_channel_csv_metas', 'socialdb_channel_csv_has_header', 'socialdb_channel_csv_has_header');
+    $channel_mapping_term = create_register('socialdb_channel_metatag', 'socialdb_channel_type', array('parent' => $channel_root_term['term_id']));
 }
 
 /**

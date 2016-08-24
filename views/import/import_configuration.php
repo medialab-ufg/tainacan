@@ -11,6 +11,7 @@ include_once ('../../helpers/view_helper.php');
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active"><a id="click_oaipmhtab" href="#oaipmhtab" aria-controls="oaipmhtab" role="tab" data-toggle="tab"><?php _e('OAI-PMH','tainacan') ?></a></li>
                     <li role="presentation"><a id="click_csvtab" href="#csvtab" aria-controls="csvtab" role="tab" data-toggle="tab"><?php _e('CSV','tainacan') ?></a></li>
+                    <li role="presentation"><a id="click_metatag_tab" href="#metatag_tab" aria-controls="metatag_tab" role="tab" data-toggle="tab"><?php _e('Metatags','tainacan') ?></a></li>
                 </ul>
 
                 <!-- Tab panes -->
@@ -86,6 +87,31 @@ include_once ('../../helpers/view_helper.php');
                             </form>
                         </div>
                         <div id="maping_container_csv">
+                        </div>
+                    </div>
+                    <!-- Painel para metatags -->
+                    <div role="tabpanel" class="tab-pane" id="metatag_tab">
+                        <div id="validate_metatag_tab" >
+                            <div id="list_oaipmh_dc">
+                                <table  class="table table-bordered">
+                                    <th><?php _e('Identifier','tainacan'); ?></th>
+                                    <th><?php _e('Edit/Remove','tainacan'); ?></th>
+                                    <tbody id="table_metatag_tab" >
+                                    </tbody>
+                                </table>
+                            </div>
+                            <br>
+                            <br>
+                            <div class="form-group">
+                                <label><?php _e('URL','tainacan'); ?></label>
+                                <input type="text" 
+                                       id="url_metatag" 
+                                       class="form-control" 
+                                       placeholder="<?php _e('Insert the URL to extract metatags','tainacan'); ?>">
+                            </div>
+                            <input type="hidden" id="collection_import_id" name="collection_id" value="">
+                            <input type="hidden" id="operation" name="operation" value="validate_metatag">
+                            <button type="button" onclick="validate_url_metatag()" id="submit_oaipmh" class="btn btn-primary tainacan-blue-btn-bg"><?php _e('Validate','tainacan'); ?></button>
                         </div>
                     </div>
                 </div>

@@ -332,6 +332,36 @@ class MappingModel extends Model {
             return false;
         }
     }
+    /**
+     * @signature - list_mapping_dublin_core($collection_id)
+     * @param int $collection_id Os dados vindos do formulario
+     * @return array com os dados que serao utilizados para inserir a colecao via OAIPMH
+     * @description - funcao que retorna todos os metadatas para realizar o mapeiamento das propriedades do repositorio escolhido
+     * @author: Eduardo 
+     */
+    public function list_mapping_metatag($collection_id) {
+        //array de configuração dos parâmetros de get_posts()
+        $channels = get_post_meta($collection_id, 'socialdb_collection_channel');
+
+        if (is_array($channels)) {
+            $json = [];
+            foreach ($channels as $ch) {
+                $ch = get_post($ch);
+                $oai_pmhdc = wp_get_object_terms($ch->ID, 'socialdb_channel_type');
+                if (!empty($ch) && !empty($oai_pmhdc) && isset($oai_pmhdc[0]->name) && $oai_pmhdc[0]->name == 'socialdb_channel_metatag') {
+                    //$token = get_post_meta($ch->ID, 'socialdb_channel_oaipmhdc_first_token', true);
+                    //$size = get_post_meta($ch->ID, 'socialdb_channel_oaipmhdc_initial_size', true);
+                    //$sets = get_post_meta($ch->ID, 'socialdb_channel_oaipmhdc_sets', true);
+                    $array = array('name' => $ch->post_title,
+                        'id' => $ch->ID);
+                    $json['identifier'][] = $array;
+                }
+            }
+            return $json;
+        } else {
+            return false;
+        }
+    }
 
     /**
      * @signature - get_mapping_dublin_core($data)

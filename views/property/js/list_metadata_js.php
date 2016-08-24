@@ -493,7 +493,7 @@
 
                 list_collection_metadata();
                 getRequestFeedback(elem.type, elem.msg);
-                initDynatreeFilterProperties(src);
+                $("#dynatree_properties_filter").dynatree("getTree").reload();
             });
         })
     });
@@ -944,7 +944,7 @@
 
             list_collection_metadata();
             getRequestFeedback(elem.type, elem.msg);
-            initDynatreeFilterProperties(src);
+            $("#dynatree_properties_filter").dynatree("getTree").reload();
         });
     });
 
@@ -1180,7 +1180,7 @@
             $("#meta-category").modal('hide');
             list_collection_metadata();
             getRequestFeedback(elem.type, elem.msg);
-            initDynatreeFilterProperties(src);
+            $("#dynatree_properties_filter").dynatree("getTree").reload();
         });
     });
 
@@ -1675,7 +1675,8 @@
             if ( elem != null ) {
                 list_collection_metadata();
                 getRequestFeedback(elem.type, elem.msg);
-            }            
+            } 
+            $("#dynatree_properties_filter").dynatree("getTree").reload();
         });
     });
 
