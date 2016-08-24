@@ -292,10 +292,10 @@ $options = get_option('socialdb_theme_options');
                                 <div class="col-md-2 selectable-items">
                                   <div class="selectors">
                                     <a onclick="select_some()" class="select_some">
-                                      <?php echo ViewHelper::render_icon("selection", "png"); ?>
+                                      <?php echo ViewHelper::render_icon("selection", "png", __("Select some items", "tainacan") ); ?>
                                     </a>
                                     <a onclick="select_all()" class="select_all">
-                                      <?php echo ViewHelper::render_icon("select-all", "png"); ?>
+                                      <?php echo ViewHelper::render_icon("select-all", "png", __("Select all items", "tainacan") ); ?>
                                     </a>
                                     <input type="hidden" value="" class="bulk_action" name="bulk_action">
                                   </div>
