@@ -1926,4 +1926,120 @@ class ObjectModel extends Model {
         }
     }
 
+    public function createVersionItem($item, $collection_id, $update = false) {
+        $id = ($update ? $item->ID : 0);
+        $arrItem = [
+            'ID' => $id,
+            'post_author' => $item->post_author,
+            'post_date' => $item->post_date,
+            //'post_date_gmt' =>  $item->post_date_gmt,
+            'post_content' => $item->post_content,
+            'post_title' => $item->post_title,
+            'post_excerpt' => $item->post_excerpt,
+            'post_status' => $item->post_status,
+            'comment_status' => $item->comment_status,
+            //'ping_status' =>  $item->ping_status,
+            //'post_password' =>  $item->post_password,
+            //'post_name' =>  $item->post_name,
+            //'to_ping' =>  $item->to_ping,
+            //'pinged' =>  $item->pinged,
+            //'post_modified' =>  $item->post_modified,
+            //'post_modified_gmt' =>  $item->post_modified_gmt,
+            'post_content_filtered' => $item->post_content_filtered,
+            'post_parent' => $item->post_parent,
+            //'guid' =>  $item->guid,
+            //'menu_order' =>  $item->menu_order,
+            'post_type' => $item->post_type
+                //'post_mime_type' =>  $item->post_mime_type,
+                //'comment_count' =>  $item->comment_count,
+                //'filter' =>  $item->filter,
+        ];
+
+        $newItem = wp_insert_post($arrItem);
+
+        if (!is_wp_error($newItem) || $newItem != 0) {
+            $this->changeStatusOldVersion($item, $newItem);
+
+            $category_root_id = $this->get_category_root_of($collection_id);
+            wp_set_object_terms($newItem, array((int) $category_root_id), 'socialdb_category_type');
+
+            return $newItem;
+        } else {
+            return false;
+        }
+    }
+
+    public function changeStatusOldVersion($item, $newItem) {
+        $newItem = get_post($newItem);
+        
+        // Update old post
+        $old_post = array(
+            'ID' => $item->ID,
+            'post_status' => 'inherit',
+            'post_type' => 'revision',
+            'post_name' => $newItem->post_name
+        );
+
+        // Update the post into the database
+        wp_update_post($old_post);
+        
+        // Update new post
+        $new_post = array(
+            'ID' => $newItem->ID,
+            'post_name' => $item->post_name
+        );
+
+        // Update the post into the database
+        wp_update_post($new_post);
+    }
+
+    public function checkVersionNumber($object) {
+        $version = get_post_meta($object->ID, 'socialdb_version_number', true);
+
+        if (!$version) {
+            add_post_meta($object->ID, 'socialdb_version_number', 1);
+            add_post_meta($object->ID, 'socialdb_version_comment', __('Original Item', 'tainacan'));
+            add_post_meta($object->ID, 'socialdb_version_date', $object->post_date);
+        }
+
+        $return = ($version ? $version : 1);
+        return $return;
+    }
+
+    public function checkOriginalItem($object_id) {
+        $original = get_post_meta($object_id, 'socialdb_version_postid', true);
+
+        $return = ($original ? $original : $object_id);
+        return $return;
+    }
+
+    public function checkVersions($original) {
+        global $wpdb;
+        $wp_posts = $wpdb->prefix . "posts";
+        $wp_postmeta = $wpdb->prefix . "postmeta";
+        /* $query = "
+          SELECT p.* FROM $wp_posts p
+          INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id
+          WHERE pm.meta_key LIKE 'socialdb_version_number'
+          "; */
+        $query = "
+                    SELECT * FROM $wp_postmeta    
+                    WHERE meta_key LIKE 'socialdb_version_number' AND meta_value = {$original}
+            ";
+        $result = $wpdb->get_results($query);
+
+        if ($result && is_array($result) && count($result) > 0) {
+            return $result;
+        } else {
+            return array();
+        }
+    }
+    
+    public function createMetasVersion($post_id, $original, $new_version, $motive) {
+        update_post_meta($post_id, 'socialdb_version_postid', $original);
+        update_post_meta($post_id, 'socialdb_version_number', $new_version);
+        update_post_meta($post_id, 'socialdb_version_comment', $motive);
+        update_post_meta($post_id, 'socialdb_version_date', date('Y-m-d H:i:s'));
+    }
+
 }

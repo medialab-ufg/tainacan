@@ -439,7 +439,7 @@ class ObjectController extends Controller {
                 $object_model->copyItemCategories($newItem, $data['object_id']);
                 $object_model->copyItemTags($newItem, $data['object_id']);
                 //var_dump($data, $item, $metas);
-                
+
                 $object_name = get_post_meta($data['collection_id'], 'socialdb_collection_object_name', true);
                 $socialdb_collection_attachment = get_post_meta($data['collection_id'], 'socialdb_collection_attachment', true);
                 $data = $object_model->edit($newItem, $data['collection_id']);
@@ -461,8 +461,38 @@ class ObjectController extends Controller {
                 //$object_model->copyItemCategories($newItem, $data['object_id'], $category_root_id);
                 $object_model->copyItemCategoriesOtherCol($newItem, $data['object_id'], $category_root_id);
                 //$object_model->copyItemTags($newItem, $data['object_id']);
-                $data['new_collection_url'] = $data['new_collection_url'].'?open_edit_item='.$newItem;
+                $data['new_collection_url'] = $data['new_collection_url'] . '?open_edit_item=' . $newItem;
                 return json_encode($data);
+                break;
+            case 'versioning':
+                //var_dump($data);
+                //exit();
+                $item = get_post($data['object_id']);
+                $metas = get_post_meta($item->ID);
+                $version = $object_model->checkVersionNumber($item);
+                $original = $object_model->checkOriginalItem($item->ID);
+                $version_numbers = $object_model->checkVersionNumber($original);
+                $version = $object_model->checkVersions($original);
+                $new_version = count($version_numbers) + 1;
+                var_dump($version_numbers, $new_version);
+                exit();
+                $newItem = $object_model->createVersionItem($item, $data['collection_id']);
+                if ($newItem) {
+                    $object_model->copyItemMetas($newItem, $metas);
+                    $object_model->copyItemCategories($newItem, $data['object_id']);
+                    $object_model->copyItemTags($newItem, $data['object_id']);
+                    $object_model->createMetasVersion($newItem, $original, $new_version, $data['motive']);
+                    return true;
+                }else{
+                    return false;
+                }
+                //var_dump($version_numbers, $new_version);
+                /* $item = get_post($data['object_id']);
+                  $newItem = $object_model->createVersionItem($item, $data['collection_id']); //inherit - revision
+                  $metas = get_post_meta($item->ID);
+                  $object_model->copyItemMetas($newItem, $metas);
+                  $object_model->copyItemCategories($newItem, $data['object_id']);
+                  $object_model->copyItemTags($newItem, $data['object_id']); */
                 break;
         }
     }

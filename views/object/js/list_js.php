@@ -383,9 +383,15 @@
 
     function showOtherCollectionField(object_id) {
         $('#other_collections' + object_id).show();
+        $('#version_motive' + object_id).hide();
     }
-    function hideOtherCollectionField(object_id) {
+    function showVersionMotiveField(object_id) {
         $('#other_collections' + object_id).hide();
+        $('#version_motive' + object_id).show();
+    }
+    function hideAllFieldsDuplicate(object_id) {
+        $('#other_collections' + object_id).hide();
+        $('#version_motive' + object_id).hide();
     }
 
     function send_duplicate_item(object_id) {
@@ -444,7 +450,25 @@
             });
         } else if ($('input[name=duplicate_item]:checked', '#formDuplicateItem' + object_id).val() == 'versioning') {
             //Versioning
-
+            $('#modalImportMain').modal('show');//mostro o modal de carregamento
+            $.ajax({
+                type: "POST",
+                url: $('#src').val() + "/controllers/object/object_controller.php",
+                data: {collection_id: $('#collection_id').val(),
+                    operation: 'versioning',
+                    motive: $('#version_motive' + object_id).val(),
+                    object_id: object_id
+                }
+            }).done(function (result) {
+                $('#modalImportMain').modal('hide');
+                $('#modal_duplicate_object' + object_id).modal('hide');
+                if (result) {
+                    wpquery_clean();
+                    showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Successfully created version.', 'tainacan') ?>', 'success');
+                } else {
+                    showAlertGeneral('<?php _e('Error', 'tainacan') ?>', '<?php _e('Please try again.', 'tainacan') ?>', 'error');
+                }
+            });
         }
     }
 

@@ -64,14 +64,14 @@ if (get_option('collection_root_id') != $collection_id):
                     <?php echo $viewHelper->render_modal_header('remove-sign', '<span class="glyphicon glyphicon-share"></span> ', __('Duplicate Item', 'tainacan')); ?>
 
                     <div class="modal-body">
-                        <input type="radio" name="duplicate_item" value="this_collection" onchange="hideOtherCollectionField(<?php echo get_the_ID() ?>);" checked="checked"> <?php _e('Duplicate in this collection', 'tainacan'); ?><br><br>
+                        <input type="radio" name="duplicate_item" value="this_collection" onchange="hideAllFieldsDuplicate(<?php echo get_the_ID() ?>);" checked="checked"> <?php _e('Duplicate in this collection', 'tainacan'); ?><br><br>
                         <input type="radio" name="duplicate_item" value="other_collection" onchange="showOtherCollectionField(<?php echo get_the_ID() ?>);"> <?php _e('Duplicate in other collection', 'tainacan'); ?><br>
                         <input type="text" class="form-control" name="other_collections" id="other_collections<?php echo get_the_ID() ?>" style="display:none;">
                         <input type="hidden" class="form-control" name="other_collections_id" id="other_collections<?php echo get_the_ID() ?>_id">
                         <input type="hidden" class="form-control" name="other_collections_url" id="other_collections<?php echo get_the_ID() ?>_url">
                         <br>
-                        <input type="radio" name="duplicate_item" value="versioning" onchange="hideOtherCollectionField(<?php echo get_the_ID() ?>);"> <?php _e('Versioning', 'tainacan'); ?>
-
+                        <input type="radio" name="duplicate_item" value="versioning" onchange="showVersionMotiveField(<?php echo get_the_ID() ?>);"> <?php _e('Versioning', 'tainacan'); ?><br>
+                        <input type="text" class="form-control" name="version_motive" id="version_motive<?php echo get_the_ID() ?>" placeholder="<?php _e('Describe the motive...', 'tainacan'); ?>" style="display:none;">
                     </div>
 
                     <?php echo $viewHelper->render_modal_footer("send_duplicate_item(\"$curr_id\")", __('Send', 'tainacan')); ?>
