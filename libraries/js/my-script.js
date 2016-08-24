@@ -188,6 +188,38 @@ $(window).load(function () {
         }
     });
 
+    $('.item-colecao').on( 'click', function() {
+        cl('birl');
+        
+        if( $(this).hasClass('selecting-item') ) {
+            alert("o");
+            cl("Adding class!!!");
+            $(this).find(".item-colecao").addClass('selected-item');
+        } else {
+            cl ( $(this) );
+        }
+    });
+
+    $('a.move_trash').on('click', function() {
+        var bulk_type = $('input.bulk_action').val();
+        cl("OD");
+        if( bulk_type === 'select_all' ) {
+        cl("Bulking action for ALL items ...");
+        var collect_id = $("#collection_id").val();
+        clean_collection( '<?php _e("Clean Collection", "tainacan") ?>', '<?php _e("Are you sure to remove all items", "tainacan") ?>', collect_id );
+        } else if(bulk_type === "select_some") {
+        cl("Bulking action for SOME items  ONLY ...");
+        } else {
+            cl("Prior function not called properly");
+        }
+    });
+
+    $('.selectable-items').on('click', '.selectors a', function(ev) {
+        console.log("gd");
+        
+        var select = $(this).attr("class");
+        $('input.bulk_action').val( select );
+    });
 
     $('#create_button').click(function (e) {
         var src = $('#src').val();
@@ -511,6 +543,27 @@ $(window).load(function () {
 $(document).ready(function () {
     $('.input_date').mask('00/00/0000');          
 });
+
+ function select_some() {
+    cl("Item successfully selected");
+    $('.selectable-actions').show();
+
+    $('.object_id').each(function(idx, el) {
+        var item = $("#object_" + $(el).val() );
+        $(item).find('.item-colecao').addClass('selecting-item'); 
+        // cl("ADDED ANOTHER ITEM");
+    });
+}
+
+function select_all() {
+    $('.selectable-actions').show();
+
+    $('.object_id').each(function(idx, el) {
+        var item = $("#object_" + $(el).val() );
+        // cl(item);
+        $(item).find(".item-colecao").addClass('selected-item');
+    });
+}
 
 function add_collection_template(col, template_name) {
     var path = $("#src").val() + "/controllers/collection/collection_controller.php";

@@ -309,34 +309,6 @@ $options = get_option('socialdb_theme_options');
                                   </div>
                                 </div>
 
-                                <script type="text/javascript">
-                                    $('.selectable-items .selectors a').on('click', function(ev) {
-                                      $('.selectable-actions').show();
-                                      var select = $(this).attr("class");
-                                      $('input.bulk_action').val( select );
-                                    });
-                                    function select_some() {}
-
-                                    function select_all() {
-                                        $('.object_id').each(function(idx, el) {
-                                          var item = $("#object_" + $(el).val() );
-                                          cl(item);
-                                          $(item).find(".item-colecao").addClass('selected-item');
-                                        });
-                                    }
-
-                                    $('a.move_trash').on('click', function() {
-                                      var bulk_type = $('input.bulk_action').val();
-                                      if( bulk_type === 'select_all' ) {
-                                        cl("Bulking action for ALL items ...");
-                                        var collect_id = $("#collection_id").val();
-                                        clean_collection( '<?php _e("Clean Collection", "tainacan") ?>', '<?php _e("Are you sure to remove all items", "tainacan") ?>', collect_id );
-                                      } else if(bulk_type === "select_some") {
-                                        cl("Bulking action for SOME items  ONLY ...");
-                                      }
-                                    });
-                                </script>
-
                                 <div class="col-md-12" style="margin-top: 10px;">
                                     <?php
                                     if (is_user_logged_in()) {
