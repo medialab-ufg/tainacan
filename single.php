@@ -263,7 +263,7 @@ $options = get_option('socialdb_theme_options');
                                     <button onclick="change_ordenation('desc')" type="button" id="sort_list" class="btn btn-default pull-right"><span class="glyphicon glyphicon-sort-by-attributes-alt"></span></button>
                                 </div>
 
-                                <div class="col-md-3 viewMode-control">
+                                <div class="col-md-4 viewMode-control">
                                     <div class="sec-color"> <?php _e('Show:', 'tainacan') ?> </div>
                                     <ul>
                                         <?php
@@ -304,8 +304,9 @@ $options = get_option('socialdb_theme_options');
                                     <a class="move_trash">
                                       <span class="glyphicon glyphicon-trash"></span>
                                     </a>
-
-                                    <span class="glyphicon glyphicon-edit"></span>
+                                    <a class="move_edition">
+                                      <span class="glyphicon glyphicon-edit"></span>
+                                    </a>
                                   </div>
                                 </div>
 

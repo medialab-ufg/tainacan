@@ -185,6 +185,36 @@
             }
         });
 
+        $('a.move_trash').on('click', function() {
+            var bulk_type = $('input.bulk_action').val();
+            if( bulk_type === 'select_all' ) {
+                var collect_id = $("#collection_id").val();
+                clean_collection( '<?php _e("Clean Collection", "tainacan") ?>', '<?php _e("Are you sure to remove all items", "tainacan") ?>', collect_id );
+            } else if(bulk_type === "select_some") {
+                cl("Bulking action for SOME items  ONLY ...");
+            } else {
+                cl("Prior function not called properly");
+            }
+        });
+
+        $('a.move_edition').on('click', function(){
+            cl('ok');
+        });
+
+        $('.selectable-items').on('click', '.selectors a', function(ev) {
+            console.log("GREAT DEAL");
+            $('.selectable-actions').show();
+
+            var select = $(this).attr("class");
+            $('input.bulk_action').val( select );
+        });
+
+        $('.item-colecao').click(function() {
+            if( $(this).hasClass('selecting-item') ) {
+                $(this).addClass('selected-item');
+            }
+        })
+
     });
 
     function show_info(id) {
@@ -515,8 +545,7 @@
         });
     });
     $('button.cards-ranking').each(function (idx, el) {
-        $(this).hide();
-        $(this).click();
+        $(this).hide().click();
     });
 
 
