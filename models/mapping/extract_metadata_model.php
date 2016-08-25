@@ -203,15 +203,60 @@ class ExtractMetadataModel extends Model {
         return  $data['metadatas'];
     }
     
-    public function get_mapping_metatags($url,$collection_id) {
-        $class = new MappingModel;
-        $mappings = $class->list_mapping_metatag($collection_id);
-        if($mappings&&isset($mappings['identifier'])){
-            foreach ($mappings['identifier'] as $mapp) {
-                
-            }
+    /**
+     * Metodo que extrai os valores de um record oai-pmh retornando os valores em 
+     * um array associativo
+     * 
+     * @param string $url
+     * @return array
+     */
+    public function get_record_metatags($url) {
+        $response = $this->extract_metatags($url); // pego os 100 primeiros
+        //busca as metatags
+        if(!$response){
+            return false;
         }
+        $record_response['title'] = __('extracted item','tainacan');
+        foreach ($response as $value) {
+            if($value['name_field']=='title'){
+               $record_response['title'] = trim($value['value']);
+            }
+            $record_response['metadata'][$value['name_field']][] = trim($value['value']);
+        }
+        $json_response['records'][] = $record_response;
+        return $json_response;
+    }
+    /**
+     * 
+     * @param type $url
+     */
+    public function extract_metatags($url) {
+        $tags = getUrlData($url);
+        if(!$tags)
+            return false;
         
+        if($tags['title']):
+            $array['name_field'] = 'title';
+            $array['value'] = $tags['title'];
+            $data['metadatas'][] = $array;
+        endif;
+        //metatags
+        if($tags['metaTags'] &&  is_array($tags['metaTags'])):
+            foreach ($tags['metaTags'] as $key => $value) {// percorro todos os dados
+                    $array['name_field'] = $key;
+                    $array['value'] = $value['value'];
+                    $data['metadatas'][] = $array;
+            }
+        endif;
+        //metaproperties
+        if($tags['metaProperties'] &&  is_array($tags['metaProperties'])):
+            foreach ($tags['metaProperties'] as $key => $value) {// percorro todos os dados
+                    $array['name_field'] = $key;
+                    $array['value'] = $value['value'];
+                    $data['metadatas'][] = $array;
+            }
+        endif;
+        return $data['metadatas'];
     }
     
     /**
@@ -228,7 +273,7 @@ class ExtractMetadataModel extends Model {
         $content = '';
         $object_id = socialdb_insert_object($record['title'], false);
         //mapping
-        add_post_meta($object_id, 'socialdb_channel_id',$mapping_id);
+        //add_post_meta($object_id, 'socialdb_channel_id',$mapping_id);
         if ($object_id != 0) {
             foreach ($record['metadata'] as $identifier => $metadata) {
                 if ($form[$identifier] !== '') {

@@ -502,6 +502,63 @@ class MappingModel extends Model {
         return $data;
     }
     /**************************************************************************
+     *                         SALVANDO MAPEAMENTOS METATAGS ITEM
+     **************************************************************************/
+    /**
+     * 
+     * @param type $url
+     * @param type $collection_id
+     */
+    public function get_mapping_metatags($url,$collection_id) {
+        $parse = parse_url($url);
+        $mappings = $this->list_mapping_metatag($collection_id);
+        if($mappings&&isset($mappings['identifier'])){
+            foreach ($mappings['identifier'] as $mapp) {
+                if($mapp['name']==$parse['host']){
+                    return $mapp['id'];
+                }
+            }
+        }
+        return false;
+    }
+    /**
+     * 
+     * @param type $param
+     */
+    public function saving_mapping_metatags($data) {
+        $identifier = '';
+        if($data['mapped_generic_properties']==''){
+            return false;
+        }
+        //insiro o mapeamento
+        $has_mapping = $this->get_mapping_metatags($data['url'], $data['collection_id']);
+        if(!$has_mapping){
+            $url_parsed = parse_url($data['url']);
+            $this->parent = get_term_by('name', 'socialdb_channel_metatag', 'socialdb_channel_type');
+            $object_id = $this->create_mapping($url_parsed['host'], $data['collection_id']);
+        }else{
+            $object_id  =  $has_mapping ;
+        }
+        // mapeamento 
+        $array_generic_mapped = explode(',', $data['mapped_generic_properties']);
+        $array_tainacan_mapped = explode(',', $data['mapped_tainacan_properties']);
+        foreach ($array_generic_mapped as $key => $generic) {
+            if(strpos($array_tainacan_mapped[$key], 'new_')!==false){
+                $id = str_replace('new_', '', $array_tainacan_mapped[$key]);
+                if($data['create_property_'.$id]){
+                   $identifier =  'dataproperty_'.$this->add_property_data($data['name_property_'.$id], $data['widget_property_'.$id], $data['collection_id']);
+                   $dataInfo[] = array('tag' => $array_generic_mapped[$key], 'socialdb_entity' => $identifier);
+                }
+            }else{
+                $identifier = $array_tainacan_mapped[$key];
+                $dataInfo[] = array('tag' => $array_generic_mapped[$key], 'socialdb_entity' => $identifier);
+            }
+        }
+        update_post_meta($object_id, 'socialdb_channel_oaipmhdc_initial_size', '1');
+        update_post_meta($object_id, 'socialdb_channel_oaipmhdc_mapping', serialize($dataInfo));
+        return $object_id;
+    }
+    /**************************************************************************
      *                         SALVANDO MAPEAMENTOS OAI-PMH ITEM
      **************************************************************************/
     /**

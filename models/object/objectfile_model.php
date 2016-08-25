@@ -40,7 +40,7 @@ class ObjectFileModel extends Model {
             $arquivos = get_post_meta($post->ID, '_file_id');
             if ($attachments) {
                 foreach ($attachments as $attachment) {
-                    if (in_array($attachment->ID, $arquivos)) {
+                    if (is_array($arquivos)&&in_array($attachment->ID, $arquivos)) {
                         $object_content = get_post_meta($data['object_id'],'socialdb_object_content',true);
                         if($object_content!=$attachment->ID){
                             $metas = wp_get_attachment_metadata($attachment->ID);

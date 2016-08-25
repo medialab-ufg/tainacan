@@ -1346,6 +1346,8 @@
                                                     extract_metadata($('#item_url_import_all').val());
                                                 }else if($('#extract_metadata').is(':checked')&&article>=0&&view>=0){
                                                     extract_metadata($('#item_url_import_all').val());
+                                                }else if($('#extract_metadata').is(':checked')){
+                                                    extract_metatags($('#item_url_import_all').val());
                                                 }else{
                                                     // É uma URL regular. Executar a importação através do Embed.ly.
                                                     show_modal_main();

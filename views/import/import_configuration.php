@@ -102,16 +102,25 @@ include_once ('../../helpers/view_helper.php');
                             </div>
                             <br>
                             <br>
-                            <div class="form-group">
+                            <div id="url_container_metatags" class="form-group">
                                 <label><?php _e('URL','tainacan'); ?></label>
                                 <input type="text" 
                                        id="url_metatag" 
                                        class="form-control" 
                                        placeholder="<?php _e('Insert the URL to extract metatags','tainacan'); ?>">
+                                <button type="button" onclick="validate_url_metatag()" id="submit_oaipmh" class="btn btn-primary tainacan-blue-btn-bg"><?php _e('Validate','tainacan'); ?></button>
+                            </div>
+                            <div id="loader_validacao_metatags" style="display:none">
+                                <center>
+                                    <img src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>">
+                                    <h3><?php _e('Validating URL...','tainacan') ?></h3>
+                                </center>
+                            </div>
+                            <div style="display: none;" id="maping_container_metatags">
                             </div>
                             <input type="hidden" id="collection_import_id" name="collection_id" value="">
                             <input type="hidden" id="operation" name="operation" value="validate_metatag">
-                            <button type="button" onclick="validate_url_metatag()" id="submit_oaipmh" class="btn btn-primary tainacan-blue-btn-bg"><?php _e('Validate','tainacan'); ?></button>
+                            
                         </div>
                     </div>
                 </div>

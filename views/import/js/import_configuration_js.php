@@ -121,8 +121,8 @@
                     if (jsonObject && jsonObject != null && jsonObject.identifier) {
                         $.each(jsonObject.identifier, function (id, object) {
                            $("#table_metatag_tab").append("<tr><td>" + object.name + "</td>" +
-                                        "<td><a href='#' onclick='delete_mapping(" + object.id + "," + collectionId + ")'><span class='glyphicon glyphicon-trash'></span></a> &nbsp; " +
-                                        "<td><a href='#' onclick=\"edit_mapping_oaipmh('" + object.name + "'," + object.id + "," + collectionId + ")\"><span class='glyphicon glyphicon-edit'></span></a> &nbsp; " +
+                                        "<td><a href='#' onclick=\"edit_mapping_metatags(" + object.id + "," + collectionId + ")\"><span class='glyphicon glyphicon-edit'></span></a> &nbsp; " +
+                                        "<a href='#' onclick='delete_mapping(" + object.id + "," + collectionId + ")'><span class='glyphicon glyphicon-trash'></span></a> &nbsp;</td> " +
                                         "</tr>");
                               
                         });
@@ -164,6 +164,7 @@
                     elem_first = jQuery.parseJSON(result);
                     listTableOAIPMHDC();
                     listTableCSV();
+                    listTableMetaTag();
                     showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
 
                 });
@@ -256,6 +257,35 @@
             $('#maping_container').html(result);
             $('#maping_container').show();
             $('#url_base_oai').attr("disable");
+
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            console.log('erro');
+            $('#loader_validacao').hide();
+            showAlertGeneral('<?php _e('Atention', 'tainacan') ?>', '<?php _e('Server not found or not available', 'tainacan') ?>', '<?php _e('error') ?>');
+        });
+    }
+    
+    /**
+     * funcao que abre a tela de mapeamento de metadados para metatags
+     * 
+     * @param {type} collection_id
+     * @returns {undefined}     */
+    function edit_mapping_metatags(mapping_id,collection_id){
+        $('#url_container_metatags').hide('slow');
+        $('#loader_validacao_metatags').show();
+        $.ajax({
+            type: "POST",
+            url: $('#src').val() + "/controllers/mapping/mapping_controller.php",
+            data: {
+                collection_id: collection_id,
+                mapping_id: mapping_id,
+                operation: 'edit_mapping_metatags'
+            }
+        }).done(function (result) {
+            $('#loader_validacao_metatags').hide();
+            $('#url_container_metatags').hide('slow');
+            $('#maping_container_metatags').html(result);
+            $('#maping_container_metatags').show();
 
         }).fail(function (jqXHR, textStatus, errorThrown) {
             console.log('erro');

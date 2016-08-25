@@ -360,7 +360,7 @@
                     onCreate: function (node, span) {
                         $("#field_property_term_"+treecheckbox).dynatree("getRoot").visit(function(node){
                             delete_value(node.data.key);
-                           if(categories.indexOf(node.data.key)>-1){
+                           if(categories&&categories.indexOf(node.data.key)>-1){
                                 node.select();
                             }
                         });
@@ -438,7 +438,7 @@
                     onCreate: function (node, span) {
                          $("#field_property_term_"+tree).dynatree("getRoot").visit(function(node){
                            delete_value(node.data.key); 
-                           if(categories.indexOf(node.data.key)>-1){
+                           if(categories&&categories.indexOf(node.data.key)>-1){
                                 node.select();
                             }
                         });

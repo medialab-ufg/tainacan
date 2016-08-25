@@ -41,6 +41,11 @@ class MappingController extends Controller {
             case "delete_mapping":
                 return json_encode($mapping_model->delete_mapping($data['mapping_id'], $data['collection_id']));
                 break;
+            case "edit_mapping_metatags":
+                $mapping_id = $data['mapping_id'];
+                $data['mapping_id'] = $mapping_id;
+                $data['mapping_array'] = $mapping_model->get_mapping_dublin_core($mapping_id);
+                return $this->render(dirname(__FILE__) . '../../../views/import/metatags/edit_maping_attributes.php', $data);
             case "edit_mapping_oaipmh":
                 $mapping_id = $data['mapping_id'];
                 $set = get_post_meta($mapping_id, 'socialdb_channel_oaipmhdc_sets', true);
@@ -199,22 +204,22 @@ class MappingController extends Controller {
             /*    EXTRACAO DE METADADOS - METATAGS                            */ 
             /******************************************************************/    
                 case 'get_metadata_metatags':
-                    $has_mapping = get_post_meta($data['collection_id'], 'socialdb_collection_mapping_import_active', true);
-                    $is_mapped = (is_numeric($has_mapping)) ? unserialize(get_post_meta($has_mapping, 'socialdb_channel_oaipmhdc_mapping', true)) : false;
-                    if(!$has_mapping||$has_mapping==''||(!$is_mapped||count($is_mapped) === 0)):
-                        $data['base'] = 'http://' . $data['url'].'oai';
-                        $data['generic_properties'] = $extract_model->get_metadata_handle($data,true);// true pois diferencia a url
+                    //verifico se ja existe o mapeamento para este dominiuo
+                    $has_mapping = $mapping_model->get_mapping_metatags($data['url'],$data['collection_id'] );
+                    if(!$has_mapping||$has_mapping==''):
+                        //extraio todos os metatadados
+                        $data['generic_properties'] = $extract_model->extract_metatags($data['url']);// true pois diferencia a url
                         if(!$data['generic_properties']){
                              $data['hasMapping'] = false;
                              return json_encode($data);
                         }
+                        //busco os metadados da colecao
                         $data['tainacan_properties'] = $extract_model->get_tainacan_properties($data);
-                        $data['oai_url'] = $extract_model->get_link_data_handle($data,true);
-                        $data['html'] = $this->render(dirname(__FILE__) . '../../../views/mapping/container_mapping.php',$data);
-                    elseif(is_numeric($has_mapping) &&  count($is_mapped) > 0):
-                        $url = $extract_model->get_link_data_handle($data,true);
+                        $data['html'] = $this->render(dirname(__FILE__) . '../../../views/mapping/container_mapping_metatags.php',$data);
+                    elseif(is_numeric($has_mapping)):
                         $mapp_array = $oaipmh_model->get_mapping_oaipmh_dc($has_mapping);
-                        $record_value = (isset($extract_model->get_record_oaipmh($url)['records'])) ? $extract_model->get_record_oaipmh($url)['records'][0] : [];
+                        $record = $extract_model->get_record_metatags($data['url'])['records'][0];
+                        $record_value = (isset($record)) ? $record : [];
                         if(!$record_value){
                              $data['hasMapping'] = false;
                              return json_encode($data);
@@ -222,6 +227,25 @@ class MappingController extends Controller {
                         $data['object_id'] = $extract_model->insert_item_handle($mapp_array, $data['collection_id'], $record_value);
                         $data['hasMapping'] = true;
                     endif;
+                    return json_encode($data);  
+            case 'submit_mapping_metatags':
+                if($data['url']):
+                    //crio o mapeamento
+                    $mapping_id = $mapping_model->saving_mapping_metatags($data);
+                    //busco os valores mapeados
+                    $mapp_array = $oaipmh_model->get_mapping_oaipmh_dc($mapping_id);
+                    //array com os valores a ser inserido
+                     $record = $extract_model->get_record_metatags($data['url'])['records'][0];
+                    $record_value = (isset($record)) ? $record : [];
+                    if(!$record_value){
+                         $data['result'] = false;
+                         return json_encode($data);
+                    }
+                    $data['object_id'] = $extract_model->insert_item_handle($mapp_array, $data['collection_id'], $record_value);
+                    $data['result'] = true;
+                else:
+                    $data['result'] = false;
+                endif;
                 return json_encode($data);    
         }
     }
