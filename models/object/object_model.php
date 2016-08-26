@@ -1562,7 +1562,7 @@ class ObjectModel extends Model {
         if ($order == 'desc') {
             $result = '<span class="glyphicon glyphicon-sort-by-attributes-alt"></span>&nbsp;' . $result;
         } else {
-            $result = '<span class="glyphicon glyphicon-sort-by-attributes"></span>&nbsp;' . $result;
+            $result = '<span class="glyphicon glyphicon-sort-by-attributes"></span>& nbsp;' . $result;
         }
         return $result;
     }
@@ -1573,6 +1573,17 @@ class ObjectModel extends Model {
         $permissions['delete'] = get_post_meta($collection_id, 'socialdb_collection_permission_delete_comment', true);
 
         return $permissions;
+    }
+
+    public function move_to_trash($objs_ids) {
+        return [
+                'dump' => $objs_ids,
+                'items_to_delete' => array_sum($objs_ids),
+                'deletable' => array_pop($objs_ids)
+            ];
+        if( is_array($objs_ids) ) {
+            
+        }
     }
 
     /**

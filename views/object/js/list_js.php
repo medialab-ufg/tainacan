@@ -191,13 +191,20 @@
                 var collect_id = $("#collection_id").val();
                 clean_collection( '<?php _e("Clean Collection", "tainacan") ?>', '<?php _e("Are you sure to remove all items", "tainacan") ?>', collect_id );
             } else if(bulk_type === "select_some") {
-                cl("Bulking action for SOME items  ONLY ...");
+                var selected_total = $('.selected-item').length;
+                var bulkds = [];
+                $('.selected-item').each(function(idx, el) {
+                    var item_id = $('.selected-item').parent().attr("id").replace("object_", "");
+                    cl("OK " + item_id);
+                    bulkds.push(item_id);
+                });
+                if( selected_total > 0 ) {
+                    move_items_to_trash( '<?php _e("Attention","tainacan"); ?>' , "Enviar " + selected_total + " itens para o lixo?", bulkds);
+                }                
             }
         });
 
-        $('a.move_edition').on('click', function(){
-            
-        });
+        $('a.move_edition').on('click', function() {});
 
         $('.selectable-items').on('click', '.selectors a', function(ev) {
             $('.selectable-actions').show();
@@ -208,11 +215,25 @@
 
         $('.item-colecao').click(function() {
             if( $(this).hasClass('selecting-item') ) {
-                $(this).addClass('selected-item');
+                $(this).toggleClass('selected-item');
             }
         })
 
     });
+
+     function select_some() {
+         $('.object_id').each(function(idx, el) {
+            var item = $("#object_" + $(el).val() );
+            $(item).find('.item-colecao').addClass('selecting-item');
+         });
+    }
+
+    function select_all() {
+        $('.object_id').each(function(idx, el) {
+            var item = $("#object_" + $(el).val() );
+            $(item).find(".item-colecao").toggleClass('selected-item');
+        });
+    }
 
     function show_info(id) {
         check_privacity_info(id);

@@ -522,20 +522,6 @@ $(document).ready(function () {
 
 });
 
- function select_some() {
-    $('.object_id').each(function(idx, el) {
-        var item = $("#object_" + $(el).val() );
-        $(item).find('.item-colecao').addClass('selecting-item');
-    });
-}
-
-function select_all() {
-    $('.object_id').each(function(idx, el) {
-        var item = $("#object_" + $(el).val() );
-        $(item).find(".item-colecao").addClass('selected-item');
-    });
-}
-
 function add_collection_template(col, template_name) {
     var path = $("#src").val() + "/controllers/collection/collection_controller.php";
     $.ajax({

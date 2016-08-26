@@ -242,6 +242,29 @@ function clean_collection(title, text, collection_id) {
     });
 }
 
+function move_items_to_trash(title, text, obj_ids) {
+    swal({
+       title: title,
+       text: text,
+       showCancelButton: true,
+       closeOnCancel: true
+    }, function(isConfirm){
+        if (isConfirm) {
+            $("#modalImportMain").modal('show');
+            $.ajax({
+                type: "POST",
+                url: $("#src").val() + "/controllers/object/object_controller.php",
+                data: { operation: 'move_items_to_trash', objects_ids: obj_ids }
+            }).done(function(r){
+                $("#modalImportMain").modal('hide');
+                var res = $.parseJSON(r);
+                cl(res);
+                showAlertGeneral('Success', 'Items moved to trash successfully!', 'success');
+            });
+        }
+    });
+}
+
 function report_abuse_object(title, text, object_id, time) {
     $('#modal_delete_object' + object_id).modal('hide');
     swal({
