@@ -192,17 +192,14 @@
                 clean_collection( '<?php _e("Clean Collection", "tainacan") ?>', '<?php _e("Are you sure to remove all items", "tainacan") ?>', collect_id );
             } else if(bulk_type === "select_some") {
                 cl("Bulking action for SOME items  ONLY ...");
-            } else {
-                cl("Prior function not called properly");
             }
         });
 
         $('a.move_edition').on('click', function(){
-            cl('ok');
+            
         });
 
         $('.selectable-items').on('click', '.selectors a', function(ev) {
-            console.log("GREAT DEAL");
             $('.selectable-actions').show();
 
             var select = $(this).attr("class");
