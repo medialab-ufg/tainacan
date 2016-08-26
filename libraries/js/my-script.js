@@ -107,7 +107,7 @@ $(window).load(function () {
     if ($('#open_login').val() === 'true') {
         showLoginScreen(src);
     }
-    
+
     //verifico se foi duplicado um item em outra colecao e abro o editar deste item
     if ($('#open_edit_item').val() !== '') {
         console.log($('#open_edit_item').val());
@@ -509,18 +509,18 @@ $(window).load(function () {
 });
 
 $(document).ready(function () {
-    $('.input_date').mask('00/00/0000');          
+    $('.input_date').mask('00/00/0000');
 });
 
 function add_collection_template(col, template_name) {
     var path = $("#src").val() + "/controllers/collection/collection_controller.php";
     $.ajax({
         url: path, type: "POST",
-        data: { operation: 'simple_add', collection_object: 'Item', collection_name: col, template: template_name }
-    }).done(function(r){
+        data: {operation: 'simple_add', collection_object: 'Item', collection_name: col, template: template_name}
+    }).done(function (r) {
         cl(col + " ==> " + template_name);
         cl(r);
-    });        
+    });
 }
 
 /******************* funcoes para templates de colecoes ***********************/
@@ -553,36 +553,36 @@ function get_collections_template(src) {
 
 function list_templates($_element) {
     $.ajax({
-       type: "POST",
-       url: $('#src').val() + "/controllers/collection/collection_controller.php",
-       data: {  operation: 'list-collection-templates', is_json: true }
-   }).done(function (result) {
+        type: "POST",
+        url: $('#src').val() + "/controllers/collection/collection_controller.php",
+        data: {operation: 'list-collection-templates', is_json: true}
+    }).done(function (result) {
         el = jQuery.parseJSON(result);
-        
-        if($_element) {
-            if( el.length > 0 ) {                
+
+        if ($_element) {
+            if (el.length > 0) {
                 $($_element).append("<li class='divider'></li>");
-                $.each(el, function(idx, value) {
-                   var li_item = "<li class='tmpl'><a href='#' class='added' data-tplt='" + value.directory +"'>" + value.title + "</a></li>";
-                   $( $_element ).append( li_item );
+                $.each(el, function (idx, value) {
+                    var li_item = "<li class='tmpl'><a href='#' class='added' data-tplt='" + value.directory + "'>" + value.title + "</a></li>";
+                    $($_element).append(li_item);
                 });
             }
         } else {
             $('#collection_templates').html('');
-            if( el && el.length>0){
-                $.each(el,function(index,value){
-                     $('#collection_templates').append('<option selected="selected" value="'+value.directory+'">'+value.title+'</option>');
+            if (el && el.length > 0) {
+                $.each(el, function (index, value) {
+                    $('#collection_templates').append('<option selected="selected" value="' + value.directory + '">' + value.title + '</option>');
                 });
                 $('#show_collection_empty').show();
                 var curr_height = $('.collection-templates').height();
-                $('.collection-templates').height(curr_height + 55);               
-            }else{
+                $('.collection-templates').height(curr_height + 55);
+            } else {
                 $('#show_collection_empty').hide();
             }
-        }    
-   });
+        }
+    });
 }
- 
+
 /*************  FIM : funcoes para templates de colecoes **********************/
 /***************** funcao para gerar o modal para edicao de categoria *******/
 function show_modal_edit_category(title, key) {
@@ -669,15 +669,15 @@ function showModalImportCollection() {
 function showTopSearch() {
     $('#search_collections').fadeTo(300, 1, function () {
         $("#expand-top-search").css('border', '1px solid whitesmoke');
-        $('#search_collections').focus();        
+        $('#search_collections').focus();
         $("#expand-top-search").addClass('showing-input');
     });
 
 }
 
-$("#expand-top-search").hover(function(){
+$("#expand-top-search").hover(function () {
     $("#expand-top-search").css('border', '1px solid whitesmoke');
-},function(){
+}, function () {
     $("#expand-top-search").css('border', '0');
 });
 
@@ -754,7 +754,7 @@ function showList(src) {
     $.ajax({
         url: src + '/controllers/object/object_controller.php',
         type: 'POST',
-        data: {operation: 'list', mycollections: $("#mycollections").val(),sharedcollections:$("#sharedcollections").val(), keyword: $("#search_collection_field").val(), collection_id: $("#collection_id").val(), ordenation_id: $('#collection_single_ordenation').val()}
+        data: {operation: 'list', mycollections: $("#mycollections").val(), sharedcollections: $("#sharedcollections").val(), keyword: $("#search_collection_field").val(), collection_id: $("#collection_id").val(), ordenation_id: $('#collection_single_ordenation').val()}
     }).done(function (result) {
         $('#hideTrash').hide();
         elem = jQuery.parseJSON(result);
@@ -1051,7 +1051,7 @@ function showHeaderCollection(src) {
     $.ajax({
         url: src + '/controllers/collection/collection_controller.php',
         type: 'POST',
-        data: {operation: 'show_header', collection_id: $("#collection_id").val(),sharedcollections:$("#sharedcollections").val(), mycollections: $("#mycollections").val()}
+        data: {operation: 'show_header', collection_id: $("#collection_id").val(), sharedcollections: $("#sharedcollections").val(), mycollections: $("#mycollections").val()}
     }).done(function (result) {
         $("#collection_post").html(result);
         $('.nav-tabs').tab();
@@ -1532,10 +1532,10 @@ $(document).ready(function () {
     $('.dropdown-menu').find('form').click(function (e) {
         e.stopPropagation();
     });
-    $("#collections-menu li").hover(function(){
-       $(this).find('ul:first').css('display', 'block');
-       // $('.collection_header_img .row > .col-md-12').css("margin-top", "-74px");
-      }, function() {
+    $("#collections-menu li").hover(function () {
+        $(this).find('ul:first').css('display', 'block');
+        // $('.collection_header_img .row > .col-md-12').css("margin-top", "-74px");
+    }, function () {
         $(this).find('ul:first').css('display', 'none');
         // $('.collection_header_img .row > .col-md-12').css("margin-top", "0");
     });
@@ -1722,18 +1722,18 @@ $(function () {
             nav.removeClass("menuFixo");
         }
     });
-    
+
     list_templates("#collections-menu ul.templates");
 
-    $(document).on("click", ".added", function(e) {
+    $(document).on("click", ".added", function (e) {
         e.preventDefault();
         var evt = $(this).attr('data-tplt');
-        var col_name =  $(this).text();
-        if(evt && col_name) {
+        var col_name = $(this).text();
+        if (evt && col_name) {
             add_collection_template(col_name, evt);
         }
     });
-           
+
 });
 
 
@@ -2431,19 +2431,19 @@ function setMenuContainerHeight() {
 }
 
 /*
-$(window).on('resize', function(ev) {
-    var window_width = $(window).width();
-    if(window_width < 1010) {
-
-    }
-});
-*/
+ $(window).on('resize', function(ev) {
+ var window_width = $(window).width();
+ if(window_width < 1010) {
+ 
+ }
+ });
+ */
 
 function changeViewMode(viewMode) {
-    if(viewMode === "slideshow") {
+    if (viewMode === "slideshow") {
         getCollectionSlideshow();
     } else {
-        if(viewMode === "table") {
+        if (viewMode === "table") {
             $("#center_pagination").hide();
         } else {
             $("#center_pagination").show();
@@ -2451,13 +2451,13 @@ function changeViewMode(viewMode) {
         $("#temp-viewMode").val(viewMode);
         $("#collection_single_ordenation").attr('data-viewMode', viewMode);
         $('.viewMode-control li').removeClass('selected-viewMode');
-        $('.viewMode-control li.'+viewMode).addClass('selected-viewMode');
-        $('.list-mode-set').attr('id', viewMode+'-viewMode');
+        $('.viewMode-control li.' + viewMode).addClass('selected-viewMode');
+        $('.list-mode-set').attr('id', viewMode + '-viewMode');
         $('.top-div').hide();
-        $('.'+viewMode+'-view-container').show();    
+        $('.' + viewMode + '-view-container').show();
     }
-    
-    if(viewMode != "geolocation") {
+
+    if (viewMode != "geolocation") {
         $('.geolocation-view-container').hide();
     }
 }

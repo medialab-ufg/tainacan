@@ -471,11 +471,11 @@ class ObjectController extends Controller {
                 $metas = get_post_meta($item->ID);
                 $version = $object_model->checkVersionNumber($item);
                 $original = $object_model->checkOriginalItem($item->ID);
-                $version_numbers = $object_model->checkVersionNumber($original);
-                $version = $object_model->checkVersions($original);
-                $new_version = count($version_numbers) + 1;
-                var_dump($version_numbers, $new_version);
-                exit();
+                $version_numbers = $object_model->checkVersions($original);
+                //$version = $object_model->checkVersions($original);
+                $new_version = count($version_numbers) + 2;
+                //var_dump($version_numbers, $new_version);
+                //exit();
                 $newItem = $object_model->createVersionItem($item, $data['collection_id']);
                 if ($newItem) {
                     $object_model->copyItemMetas($newItem, $metas);

@@ -2017,14 +2017,10 @@ class ObjectModel extends Model {
         global $wpdb;
         $wp_posts = $wpdb->prefix . "posts";
         $wp_postmeta = $wpdb->prefix . "postmeta";
-        /* $query = "
-          SELECT p.* FROM $wp_posts p
-          INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id
-          WHERE pm.meta_key LIKE 'socialdb_version_number'
-          "; */
+        
         $query = "
                     SELECT * FROM $wp_postmeta    
-                    WHERE meta_key LIKE 'socialdb_version_number' AND meta_value = {$original}
+                    WHERE meta_key LIKE 'socialdb_version_postid' AND meta_value = {$original}
             ";
         $result = $wpdb->get_results($query);
 
