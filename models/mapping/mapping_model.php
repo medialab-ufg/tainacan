@@ -147,6 +147,60 @@ class MappingModel extends Model {
     }
 
     /**
+     * @signature - updating_mapping_metatags($data)
+     * @param array $data Os dados vindos do formulario
+     * @description - atualiza o metadados de um mapeamento
+     * @author: Eduardo 
+     */
+    public function save_mapping_metatags($data) {
+        $dataInfo = array();
+        parse_str($data['form'], $form); // parseio o formulario de mapeiamento de entidades
+        //insiro o mapeamento
+        $has_mapping = $this->get_mapping_metatags($form['url'], $data['collection_id']);
+        if(!$has_mapping){
+            $url_parsed = parse_url($form['url']);
+            $this->parent = get_term_by('name', 'socialdb_channel_metatag', 'socialdb_channel_type');
+            $object_id = $this->create_mapping($url_parsed['host'], $data['collection_id']);
+            $data['result'] = 1;
+        }else{
+            $url_parsed = parse_url($form['url']);
+            $object_id  =  $has_mapping;
+            $data['result'] = $url_parsed['host'];
+        }
+        //inserindo os valores do mapeamento
+        $counter_oia_dc = $form['counter_oai_dc'];
+        for ($i = 0; $i < $counter_oia_dc; $i++) {
+            if ($form['mapping_metatags_' . $i] !== '' && $form['mapping_socialdb_' . $i] !== '') {
+                $dataInfo[] = array('tag' => $form['mapping_metatags_' . $i], 'socialdb_entity' => $form['mapping_socialdb_' . $i]);
+            }
+        }
+        if (!empty($dataInfo)):
+            update_post_meta($object_id, 'socialdb_channel_oaipmhdc_mapping', serialize($dataInfo));
+        endif;
+        return $data;
+    }
+    /**
+     * @signature - updating_mapping_metatags($data)
+     * @param array $data Os dados vindos do formulario
+     * @description - atualiza o metadados de um mapeamento
+     * @author: Eduardo 
+     */
+    public function updating_mapping_metatags($data) {
+        $dataInfo = array();
+        $object_id = $data['mapping_id'];
+        parse_str($data['form'], $form); // parseio o formulario de mapeiamento de entidades
+        //inserindo os valores do mapeamento
+        $counter_oia_dc = $form['counter_oai_dc'];
+        for ($i = 1; $i <= $counter_oia_dc; $i++) {
+            if ($form['mapping_metatags_' . $i] !== '' && $form['mapping_socialdb_' . $i] !== '') {
+                $dataInfo[] = array('tag' => $form['mapping_metatags_' . $i], 'socialdb_entity' => $form['mapping_socialdb_' . $i]);
+            }
+        }
+        if (!empty($dataInfo)):
+            update_post_meta($object_id, 'socialdb_channel_oaipmhdc_mapping', serialize($dataInfo));
+        endif;
+    }
+    /**
      * @signature - updating_mapping_dublin_core($data)
      * @param array $data Os dados vindos do formulario
      * @return array com os dados que serao utilizados para inserir a colecao via OAIPMH

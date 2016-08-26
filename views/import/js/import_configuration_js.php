@@ -40,13 +40,45 @@
                     operation: 'validate_url'
                 }
             }).done(function (result) {
-                console.log('success');
                 $('#loader_validacao').hide('slow');
                 $('#maping_container').html(result);
 
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 console.log('erro');
                 $('#loader_validacao').hide();
+                $('#validate_url_container').show('slow');
+                showAlertGeneral('<?php _e('Atention', 'tainacan') ?>', '<?php _e('Server not found or not available', 'tainacan') ?>', '<?php _e('error') ?>');
+            });
+        } else {
+            showAlertGeneral('<?php _e('Atention', 'tainacan') ?>', '<?php _e('URL base is empty', 'tainacan') ?>', '<?php _e('error') ?>');
+        }
+    }
+    
+    /**
+    * 
+    * @returns {undefined}     */
+    function validate_url_metatag() {
+        var url_base = $('#url_metatag').val();
+        if (url_base !== '') {
+            $('#validate_url_container').hide();
+            $('#loader_validacao_metatags').show();
+            $.ajax({
+                type: "POST",
+                url: $('#src').val() + "/controllers/mapping/mapping_controller.php",
+                data: {
+                    url: $('#url_metatag').val(),
+                    collection_id: $('#collection_id').val(),
+                    operation: 'create_mapping_metatags'
+                }
+            }).done(function (result) {
+                $('#loader_validacao_metatags').hide('slow');
+                $('#url_container_metatags').hide();
+                $('#maping_container_metatags').show();
+                $('#maping_container_metatags').html(result);
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                console.log('erro');
+                $('#loader_validacao_metatags').hide();
                 $('#validate_url_container').show('slow');
                 showAlertGeneral('<?php _e('Atention', 'tainacan') ?>', '<?php _e('Server not found or not available', 'tainacan') ?>', '<?php _e('error') ?>');
             });

@@ -23,6 +23,16 @@ class MappingController extends Controller {
             case "saving_mapping_oaipmh_dc_export":
                 return $mapping_model->saving_mapping_dublin_core_export($data);
                 break;
+            case 'create_mapping_metatags':
+                $metadata = $extract_model->extract_metatags($data['url']);
+                $data['mapping_array'] = $metadata;
+                return $this->render(dirname(__FILE__) . '../../../views/import/metatags/mapping_attributes.php', $data);
+            case "save_mapping_metatags":
+                return json_encode($mapping_model->save_mapping_metatags($data));
+                break;
+            case "updating_mapping_metatags":
+                return $mapping_model->updating_mapping_metatags($data);
+                break;
             case "updating_mapping_oaipmh_dc":
                 return $mapping_model->updating_mapping_dublin_core($data);
                 break;

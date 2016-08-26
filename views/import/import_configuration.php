@@ -101,14 +101,23 @@ include_once ('../../helpers/view_helper.php');
                                 </table>
                             </div>
                             <br>
-                            <br>
-                            <div id="url_container_metatags" class="form-group">
-                                <label><?php _e('URL','tainacan'); ?></label>
-                                <input type="text" 
-                                       id="url_metatag" 
-                                       class="form-control" 
-                                       placeholder="<?php _e('Insert the URL to extract metatags','tainacan'); ?>">
-                                <button type="button" onclick="validate_url_metatag()" id="submit_oaipmh" class="btn btn-primary tainacan-blue-btn-bg"><?php _e('Validate','tainacan'); ?></button>
+                            
+                            <div id="url_container_metatags" class="form-group col-md-12 no-padding">
+                                <div class="col-md-12"><label><?php _e('URL','tainacan'); ?></label></div>
+                                <div class="col-md-10">
+                                    <input type="text" 
+                                        id="url_metatag" 
+                                        class="form-control" 
+                                        placeholder="<?php _e('Insert the URL to extract metatags','tainacan'); ?>">
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="button" 
+                                            onclick="validate_url_metatag()" 
+                                            id="submit_metatag" 
+                                            class="btn btn-primary tainacan-blue-btn-bg pull-left">
+                                                <?php _e('Validate','tainacan'); ?>
+                                    </button>
+                                </div>
                             </div>
                             <div id="loader_validacao_metatags" style="display:none">
                                 <center>

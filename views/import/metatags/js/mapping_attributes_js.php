@@ -30,7 +30,6 @@
             var jsonObject = jQuery.parseJSON(result);
             if (jsonObject && jsonObject != null) {
                 $.each(jsonObject.mapping, function (id, object) {
-                    console.log(object);
                     $('[name=mapping_metatags_' + (id + 1) + ']').val(object.tag);
                     $('[name=select_mapping_metatags_' + (id + 1) + ']').append('<option value="'+object.tag+'" >'+object.tag+'</option>')
                     //$('[name=mapping_dublin_core_' + (id + 1) + ']').val(object.tag);
@@ -41,28 +40,27 @@
     }
 
 
-    function update_mapping_metatags(mapping_id) {
-        var validation = validation_form_metatags(parseInt($('#metatags_counter_oai_dc_edit').val()));
-        if(validation===1){
-             showAlertGeneral('<?php echo __('Attention','tainacan') ?>', '<?php echo __('There is duplicate mappings','tainacan') ?>', 'error');
-        }else if(validation===2){
-            showAlertGeneral('<?php echo __('Attention','tainacan') ?>', '<?php echo __('Please, insert at least one mapping','tainacan') ?>', 'error');
-        }else{
-            $.ajax({
+    function save_mapping_metatags() {
+        $.ajax({
                 type: "POST",
                 url: $('#src').val() + "/controllers/mapping/mapping_controller.php",
                 data: {
                     collection_id: $('#collection_id').val(),
                     form: $("#form_import_metags").serialize(),
-                    mapping_id: mapping_id,
-                    operation: 'updating_mapping_metatags'}
+                    operation: 'save_mapping_metatags'}
             }).done(function (result) {
                 listTableMetaTag();
                 $('#maping_container_metatags').hide();
                 $('#url_container_metatags').show('slow');
-                showAlertGeneral('<?php _e('Success','tainacan'); ?>','<?php _e('Edited successfully.','tainacan'); ?>','success');
+                $('#url_metatag').val('');
+                var jsonObject = jQuery.parseJSON(result);
+                if(jsonObject.result&&jsonObject.result != 1){
+                     showAlertGeneral('<?php _e('Success','tainacan'); ?>','<?php _e('Mapping updated','tainacan'); ?>: ' + jsonObject.result ,'success');
+                }else{
+                    showAlertGeneral('<?php _e('Success','tainacan'); ?>','<?php _e('Mapping created successfully.','tainacan'); ?>','success');
+                }
+                
             });
-        }
     }
 
     function remove_tag_metatags(id) {
