@@ -406,7 +406,7 @@ class ObjectController extends Controller {
                 return json_encode($data);
                 break;
             case 'move_items_to_trash':
-                $data = $object_model->move_to_trash($data['objects_ids']);
+                $data = $object_model->move_to_trash($data['objects_ids'], $data['collection_id']);
                 return json_encode($data);
             // limpando uma colecao
             case 'clean_collection_itens':

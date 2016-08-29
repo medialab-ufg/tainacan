@@ -8,6 +8,7 @@ include_once (dirname(__FILE__) . '../../../models/license/license_model.php');
 include_once (dirname(__FILE__) . '../../../models/property/property_model.php');
 include_once (dirname(__FILE__) . '../../../models/category/category_model.php');
 include_once (dirname(__FILE__) . '../../../models/event/event_object/event_object_create_model.php');
+include_once (dirname(__FILE__) . '../../../models/event/event_object/event_object_delete_model.php');
 require_once(dirname(__FILE__) . '../../general/general_model.php');
 require_once(dirname(__FILE__) . '../../user/user_model.php');
 require_once(dirname(__FILE__) . '../../tag/tag_model.php');
@@ -1575,15 +1576,18 @@ class ObjectModel extends Model {
         return $permissions;
     }
 
-    public function move_to_trash($objs_ids) {
-        return [
-                'dump' => $objs_ids,
-                'items_to_delete' => array_sum($objs_ids),
-                'deletable' => array_pop($objs_ids)
-            ];
-        if( is_array($objs_ids) ) {
-            
+    public function move_to_trash($objs_ids, $collection_id) {    
+        $event_delete = new EventObjectDeleteModel();
+        $events = [];
+        
+        if( is_array($objs_ids) ) {            
+            foreach( $objs_ids as $item_id) {   
+                $ev_d = $event_delete->update_post_status( $item_id, ['event_id' => $collection_id], true );
+                array_push($events, $ev_d);
+            }
         }
+
+        return [ 'deleted' => $events ];
     }
 
     /**

@@ -19,11 +19,11 @@
 
         if( $("#items-per-page").val() && !isNaN(parseInt( $("#items-per-page").val() ) ) ) {
             var items_per_page = parseInt( $("#items-per-page").val() );
-        }       
-        
+        }
+
         $('.object_id').each(function(idx, el) {
           var c_id = $(this).val();
-         
+
           var item_order = parseInt( $("#object_" + c_id).attr('data-order') );
           var title = $("#object_" + c_id + " .item-display-title").text();
           var description = $("#object_" + c_id + " .item-description").text();
@@ -34,14 +34,14 @@
             "<td>" + title + "</td>" +
             "<td>" + description + "</td>" +
             "<td style='width: 10%'> <ul>" + actions + "</ul></td></tr>"
-            );   
-    
+            );
+
           if( items_per_page && items_per_page >= 10 ) {
                if( item_order > items_per_page) {
                    $("#object_" + c_id).hide();
                }
           }
-        
+
         });
         $("#table-view").DataTable(dataTable_options);
 
@@ -54,15 +54,15 @@
                 wpquery_page(page, current_mode);
             }
         });
-        
+
         $("#items-per-page").on('change', function() {
            var limit = parseInt(this.value);
-           var viewMode = $("#temp-viewMode").val();           
+           var viewMode = $("#temp-viewMode").val();
            var container = $('.' + viewMode +'-view-container');
            $('span.per-page').text(limit);
-           
+
            //cl ( $('.pagination_items span.per-page').text() );
-           
+
            $(container).each(function(idx, el) {
               var item_num = parseInt( $(el).attr('data-order') );
               if( $.isNumeric( item_num ) ) {
@@ -194,20 +194,23 @@
                 var selected_total = $('.selected-item').length;
                 var bulkds = [];
                 $('.selected-item').each(function(idx, el) {
-                    var item_id = $('.selected-item').parent().attr("id").replace("object_", "");
-                    cl("OK " + item_id);
+                    var item_id = $(el).parent().attr("id").replace("object_", "");
                     bulkds.push(item_id);
                 });
+
                 if( selected_total > 0 ) {
-                    move_items_to_trash( '<?php _e("Attention","tainacan"); ?>' , "Enviar " + selected_total + " itens para o lixo?", bulkds);
-                }                
+                    var collection_id = $('#collection_id').val();
+                    var main_title = '<?php _e("Attention","tainacan"); ?>';
+                    var desc = "Enviar " + selected_total + " itens para o lixo?";
+                    move_items_to_trash( main_title, desc, bulkds, collection_id);
+                }
             }
         });
 
         $('a.move_edition').on('click', function() {});
 
         $('.selectable-items').on('click', '.selectors a', function(ev) {
-            $('.selectable-actions').show();
+            $('.selectable-actions').fadeIn();
 
             var select = $(this).attr("class");
             $('input.bulk_action').val( select );
@@ -222,6 +225,7 @@
     });
 
      function select_some() {
+        swal('<?php _e("Select items below to edit", "tainacan") ?>');
          $('.object_id').each(function(idx, el) {
             var item = $("#object_" + $(el).val() );
             $(item).find('.item-colecao').addClass('selecting-item');
