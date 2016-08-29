@@ -17,6 +17,11 @@ class MappingController extends Controller {
         $extract_model = new ExtractMetadataModel;
         $oaipmh_model = new OAIPMHModel();
         switch ($operation) {
+            case "saving_mapping_oaipmh_dc_repository":
+                parse_str($data['form'], $form); // parseio o formulario de mapeiamento de entidades
+                $data['collection_id'] = $form['collection_id'];
+                return $mapping_model->saving_mapping_dublin_core($data);
+                break;
             case "saving_mapping_oaipmh_dc":
                 return $mapping_model->saving_mapping_dublin_core($data);
                 break;
