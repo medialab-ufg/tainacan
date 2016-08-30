@@ -158,24 +158,8 @@
                     if(property.metas.socialdb_property_visibility&&property.metas.socialdb_property_visibility==='hide'){
                         return true;
                     }
-                    if ( property.metas.is_repository_property && property.metas.is_repository_property === true ||
-                        (property.metas.socialdb_property_created_category && $('#property_category_id').val() !== property.metas.socialdb_property_created_category) ) {
-                        //se o metadado do repositorio for fixo
-                        var button = '';
-                        var style = '';
-                        var class_var = '';
-                        button = '<span class="glyphicon glyphicon-trash no-edit"></span>';
-                        //adiciona na listagem
-                        $(get_property_tab_seletor(tab_property_id)).append(
-                            '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="root_category '+class_var+' ui-widget-content ui-corner-tr '+is_allowed_facet(property.slug)+'">' +
-                            '<label '+style+'   class="title-pipe">'+ add_compounds_button() + property.name + '</label>' +
-                            '<a onclick="edit_metadata(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
-                            '<div class="action-icons">'+
-                            '<a class="edit-filter"><span class="glyphicon glyphicon-sort sort-filter"></span></a>&nbsp;'+
-                            '<span class="glyphicon glyphicon-edit"></span></a> ' +
-                            button + '</div></li>');
-                    } else {
-                        if ( $.inArray(property.type, ranking_types) == -1 ) {
+                    
+                    if ( $.inArray(property.type, ranking_types) == -1 ) {
                             $(get_property_tab_seletor(tab_property_id)).append(
                                 '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '" data-widget="' + current_search_widget + '" class="' + property.type + ' ui-widget-content ui-corner-tr">' +
                                 '<label class="title-pipe">'+ add_compounds_button() + property.name + '</label><div class="action-icons">' +
@@ -188,7 +172,7 @@
                                 '<a onclick="delete_property(' + current_id + ',' + 4 + ')" class="delete_property" href="#">' +
                                 '<span class="glyphicon glyphicon-trash"><span></a></div></li>');
                         }
-                    }
+                    
                 });
             }
         });
@@ -196,7 +180,6 @@
     }
     //editando metadado composto
     function edit_compounds(id) {
-        list_tabs();
         $.ajax({
             url: $('#src').val() + '/controllers/property/property_controller.php',
             type: 'POST',
@@ -233,5 +216,13 @@
             $('#compounds_id').val( elem.metas.socialdb_property_compounds_properties_id );
         });
     }
-    
+    //adiciona o metadado na aba correta
+    function get_property_tab_seletor(id){
+         return 'ul#metadata-container';
+    }
+    //default
+    function get_tab_property_id(current_id){
+        tab_property_id = 'default';
+        return tab_property_id;
+    }
 </script>

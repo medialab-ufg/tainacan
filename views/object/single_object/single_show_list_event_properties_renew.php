@@ -239,11 +239,13 @@ if (isset($property_term)): ?>
                     
                     <?php // verifico se o metadado pode ser alterado
                         if (verify_allowed_action($collection_id, 'socialdb_collection_permission_add_classification',$object_id)): ?>
-                        <button type="button" onclick="edit_term_property('<?php echo $property['id']; ?>', '<?php echo $object_id; ?>')"
-                                id="single_edit_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"
-                                class="btn btn-default single_edit_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">
-                            <?php _e('Empty field. Click to edit','tainacan'); ?>
-                        </button>
+                        <div id="labels_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">    
+                            <button type="button" onclick="edit_term_property('<?php echo $property['id']; ?>', '<?php echo $object_id; ?>')"
+                                    id="single_edit_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"
+                                    class="btn btn-default single_edit_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">
+                                <?php _e('Empty field. Click to edit','tainacan'); ?>
+                            </button>
+                        </div>    
                     <?php else: ?>
                         <div id="labels_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">                        
                             <?php echo '<p>' . __('empty field', 'tainacan') . '</p>'; ?>

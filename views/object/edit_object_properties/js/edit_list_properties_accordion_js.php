@@ -476,6 +476,9 @@
     }
     
     function delete_value(category_id){
+        if(!$("#object_classifications_edit")||!$("#object_classifications_edit").val()){
+            return false;
+        }
        var classifications =   $("#object_classifications_edit").val().split(',');
        if(classifications.length>0&&category_id){
            var index = classifications.indexOf(category_id);

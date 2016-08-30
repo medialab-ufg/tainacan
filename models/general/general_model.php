@@ -2139,9 +2139,9 @@ class Model {
             $term = get_term_by('slug', 'socialdb_category','socialdb_category_type');
             $properties = $this->get_parent_properties( $term->term_id, [], $term->term_id);
         }else{
-             $this->get_collection_properties($properties,0,$facets_id);
+            $this->get_collection_properties($properties,0,$facets_id);
         }
-       
+        
         $properties = array_unique($properties);
         //busco as propriedades sem domain
         $properties_with_no_domain = $this->list_properties_by_collection($collection_id);

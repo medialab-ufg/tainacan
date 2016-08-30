@@ -647,10 +647,8 @@
                 $.each(elem.property_data, function (idx, property) {
                     //visibilidade do metadado
                     var isCompounded = is_compounded(property.metas.socialdb_property_is_compounds);
+                    types_compounds[property.id] = 1;
                     if(isCompounded){
-                        if(isCompounded){  
-                             types_compounds[property.id] = 3;
-                        }
                         return true;
                     }
                     var current_id = property.id;
@@ -883,8 +881,8 @@
                 $.each(elem.property_object, function (idx, property) {
                     //visibilidade do metadado
                     var isCompounded = is_compounded(property.metas.socialdb_property_is_compounds);
+                    types_compounds[property.id] = 2;
                     if(isCompounded){
-                        types_compounds[property.id] = 3;
                         return true;
                     }
                     // o id
@@ -1096,8 +1094,8 @@
                 $.each(elem.property_terms, function (idx, property) {
                     //visibilidade do metadado
                     var isCompounded = is_compounded(property.metas.socialdb_property_is_compounds);
+                    types_compounds[property.id] = 3;
                     if(isCompounded){  
-                        types_compounds[property.id] = 3;
                         return true;
                     }
                     var current_id = property.id;

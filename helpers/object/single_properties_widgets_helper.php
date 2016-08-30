@@ -106,7 +106,7 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
                                                     if(isset($property_compounded['metas']['socialdb_property_data_widget'])): 
                                                         ?>
                                                         <div class="compounds_fields_text_<?php echo $property['id']; ?>">
-                                                            <?php echo ($val) ? '<b><a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $val . "'" . ',' . $property['id'] . ')"  >'.$val.'</a></b>' : '<button type="button" onclick="edit_compounds_property('. $property['id'] .', '.$object_id.')" class="btn btn-default">'.__('Empty field. Click to edit!','tainacan').'</button>' ?>
+                                                            <?php echo ($val) ? '<b><a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $val . "'" . ',' . $property['id'] . ')"  >'.$val.'</a></b>' : '<button type="button" onclick="edit_compounds_property('. $property['id'] .', '.$object_id.')" class="btn btn-default btn-xs">'.__('Click to edit!','tainacan').'</button>' ?>
                                                         </div> 
                                                         <div style="display: none;" class="compounds_fields_value_<?php echo $property['id']; ?>">
                                                             <?php 
@@ -148,7 +148,7 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
                             <input type="hidden" 
                                    name="compounds_<?php echo $property['id']; ?>" 
                                    id="compounds_<?php echo $property['id']; ?>"
-                                   value="<?php echo implode(',', array_unique($coumpounds_id)); ?>"> 
+                                   value="<?php echo implode(',', array_filter( array_unique($coumpounds_id))); ?>"> 
                             <input type="hidden" 
                                    name="cardinality_<?php echo $property['id']; ?>" 
                                    id="cardinality_<?php echo $property['id']; ?>"
