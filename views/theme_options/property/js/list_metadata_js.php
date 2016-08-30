@@ -5,7 +5,9 @@
     var $current_meta_form = "#submit_form_property_data_" + current_meta_type;
     var $form_ranking = $("#meta-voting #submit_form_ranking");
     var ranking_types = ["binary", "stars", "like"];
-
+     //inicia o dynatree de propriedades
+     var types_compounds = []; // array que mostra o tipo das propriedades compostas
+    initDynatreeFilterProperties(src);
     $("#tainacan-breadcrumbs").show();
     $("#tainacan-breadcrumbs .current-config").text('<?php _e('Repository Metadata','tainacan') ?>');
     
@@ -643,6 +645,14 @@
 
             if (elem.no_properties !== true) {
                 $.each(elem.property_data, function (idx, property) {
+                    //visibilidade do metadado
+                    var isCompounded = is_compounded(property.metas.socialdb_property_is_compounds);
+                    if(isCompounded||(property.metas.socialdb_property_visibility&&property.metas.socialdb_property_visibility==='hide')){
+                        if(isCompounded){  
+                             types_compounds[property.id] = 3;
+                        }
+                        return true;
+                    }
                     var current_id = property.id;
                     var current_search_widget = property.search_widget;
                     console.log(property);
@@ -871,6 +881,15 @@
                 $('#no_properties_object').hide();
                 $('#table_property_object').html('');
                 $.each(elem.property_object, function (idx, property) {
+                    //visibilidade do metadado
+                    var isCompounded = is_compounded(property.metas.socialdb_property_is_compounds);
+                    if(isCompounded||(property.metas.socialdb_property_visibility&&property.metas.socialdb_property_visibility==='hide')){
+                        if(isCompounded){  
+                             types_compounds[property.id] = 3;
+                        }
+                        return true;
+                    }
+                    // o id
                     var current_id = property.id;
                     if (property.metas.socialdb_property_is_fixed && property.metas.socialdb_property_is_fixed === 'true' ) {
                         $('ul#metadata-container').append(
@@ -1077,7 +1096,14 @@
 
             if (elem && elem.no_properties !== true) {
                 $.each(elem.property_terms, function (idx, property) {
-
+                    //visibilidade do metadado
+                    var isCompounded = is_compounded(property.metas.socialdb_property_is_compounds);
+                    if(isCompounded||(property.metas.socialdb_property_visibility&&property.metas.socialdb_property_visibility==='hide')){
+                        if(isCompounded){  
+                             types_compounds[property.id] = 3;
+                        }
+                        return true;
+                    }
                     var current_id = property.id;
 
                     var repository_property = property.metas.is_repository_property;
@@ -1515,8 +1541,9 @@
                 data: { operation: 'get_ordenation_properties',collection_id:$('#collection_id').val() }
             }).done(function(result) {
                 var json = $.parseJSON(result);
-                if(json&&json.ordenation&&json.ordenation!==''){
-                    reorder_properties(json.ordenation.split(','));
+                console.log(json.ordenation);
+                if(json&&json.ordenation&&json.ordenation.default){
+                    reorder_properties(json.ordenation.default.split(','));
                 }
                 $('#loader_metadados_page').hide();
                 $('#metadata-container').show();

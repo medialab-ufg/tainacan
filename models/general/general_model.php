@@ -2135,7 +2135,13 @@ class Model {
         get_term_by('name','socialdb_property_term','socialdb_property_type')->term_id ];
         $facets_id = array_filter(array_unique((get_post_meta($collection_id, 'socialdb_collection_facets'))?get_post_meta($collection_id, 'socialdb_collection_facets'):[]));
         $properties = [];
-        $this->get_collection_properties($properties,0,$facets_id);
+        if($collection_id=='collection_root_id'){
+            $term = get_term_by('slug', 'socialdb_category','socialdb_category_type');
+            $properties = $this->get_parent_properties( $term->term_id, [], $term->term_id);
+        }else{
+             $this->get_collection_properties($properties,0,$facets_id);
+        }
+       
         $properties = array_unique($properties);
         //busco as propriedades sem domain
         $properties_with_no_domain = $this->list_properties_by_collection($collection_id);
@@ -2146,11 +2152,11 @@ class Model {
                 }
             }
         }
-        if($properties&&  is_array($properties)){
+        if($properties  &&  is_array($properties)){
             foreach ($properties as $property) {
                  // busco o objeto da propriedade
                  $propertyObject = get_term_by('id', $property, 'socialdb_property_type');
-                 if(!$propertyObject||!in_array($propertyObject->parent, $roots_parents))
+                 if(!$propertyObject||!in_array($propertyObject->parent, $roots_parents)||in_array($propertyObject->slug, $this->fixed_slugs))
                      continue;
                  //insiro a propriedade da classe no dynatree
                  $children = $this->getChildren($propertyObject->term_id);
