@@ -647,7 +647,7 @@
                 $.each(elem.property_data, function (idx, property) {
                     //visibilidade do metadado
                     var isCompounded = is_compounded(property.metas.socialdb_property_is_compounds);
-                    if(isCompounded||(property.metas.socialdb_property_visibility&&property.metas.socialdb_property_visibility==='hide')){
+                    if(isCompounded){
                         if(isCompounded){  
                              types_compounds[property.id] = 3;
                         }
@@ -883,10 +883,8 @@
                 $.each(elem.property_object, function (idx, property) {
                     //visibilidade do metadado
                     var isCompounded = is_compounded(property.metas.socialdb_property_is_compounds);
-                    if(isCompounded||(property.metas.socialdb_property_visibility&&property.metas.socialdb_property_visibility==='hide')){
-                        if(isCompounded){  
-                             types_compounds[property.id] = 3;
-                        }
+                    if(isCompounded){
+                        types_compounds[property.id] = 3;
                         return true;
                     }
                     // o id
@@ -1098,10 +1096,8 @@
                 $.each(elem.property_terms, function (idx, property) {
                     //visibilidade do metadado
                     var isCompounded = is_compounded(property.metas.socialdb_property_is_compounds);
-                    if(isCompounded||(property.metas.socialdb_property_visibility&&property.metas.socialdb_property_visibility==='hide')){
-                        if(isCompounded){  
-                             types_compounds[property.id] = 3;
-                        }
+                    if(isCompounded){  
+                        types_compounds[property.id] = 3;
                         return true;
                     }
                     var current_id = property.id;

@@ -84,10 +84,9 @@
                                 '<span style="margin-right:5px;" class="glyphicon glyphicon-edit pull-right"><span></a> ' +
                                 '<a onclick="delete_property(' + node.data.key + ','+type+')" class="delete_property" href="#">' +
                                 '<span style="margin-right:5px;" class="glyphicon glyphicon-trash pull-right"><span></a>' +
-                                '<span style="margin-right:5px;" class="glyphicon glyphicon-sort sort-filter pull-right"></span>&nbsp;'+ add_filter_button(node.data.key) + node.data.title+'</li>')
+                                '<span style="margin-right:5px;" class="glyphicon glyphicon-sort sort-filter pull-right"></span>&nbsp;' + node.data.title+'</li>')
                     })
                     $('#compounds_id').val(keys.join(','));
-                     console.log(type,types_compounds,$( "#compounds_properties_ordenation" ));
                 }else if(selKeys.length>4){
                     node.select(false);
                 }
