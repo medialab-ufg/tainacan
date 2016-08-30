@@ -210,9 +210,12 @@
         $('a.move_edition').on('click', function() {});
 
         $('.selectable-items').on('click', '.selectors a', function(ev) {
+            $(this).toggleClass('highlight');
+            $( $(this).siblings()[0]).removeClass('highlight');
             $('.selectable-actions').fadeIn();
 
-            var select = $(this).attr("class");
+            var select = $(this).attr("class").split(" ")[0];
+            cl(select + " !!!!");
             $('input.bulk_action').val( select );
         });
 
@@ -220,7 +223,7 @@
             if( $(this).hasClass('selecting-item') ) {
                 $(this).toggleClass('selected-item');
             }
-        })
+        });
 
     });
 

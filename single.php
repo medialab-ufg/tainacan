@@ -300,7 +300,7 @@ $options = get_option('socialdb_theme_options');
                                     <input type="hidden" value="" class="bulk_action" name="bulk_action">
                                   </div>
 
-                                  <div class="selectable-actions" style="display: none;">
+                                  <div class="selectable-actions pull-right" style="display: none;">
                                     <a class="move_trash">
                                       <span class="glyphicon glyphicon-trash"></span>
                                     </a>

@@ -848,12 +848,16 @@ button.collection-trash, button#hideTrash {
 
 .selectable-items {
   padding-top: 3px;
+  padding-left: 0;
 }
 .selectable-items .selectable-actions, .selectable-items .selectors {
   display: inline-block;
 }
 .selectable-items .selectable-actions {
   width: 50%;
+}
+.selectable-items .selectable-actions a {
+  color: black;
 }
 .selectable-items .selectable-actions span {
   margin-left: 4px;
@@ -862,13 +866,19 @@ button.collection-trash, button#hideTrash {
   width: 45%;
 }
 .selectable-items .selectors a {
+  padding: 2px 2px 7px 5px;
   margin-left: 5px;
 }
 .selectable-items .selectors a img {
-  width: 30%;
+  width: 25%;
 }
 .selectable-items .selectors a:hover {
   cursor: pointer;
+}
+.selectable-items .selectors a.highlight {
+  padding: 2px 2px 7px 5px;
+  border: 2px solid #E8E8E8;
+  border-radius: 2px;
 }
 
 #container_three_columns {
@@ -959,6 +969,7 @@ a.collection-thumb img {
 
 .viewMode-control {
   padding-top: 5px;
+  padding-right: 0;
 }
 .viewMode-control div {
   color: #0c698b;

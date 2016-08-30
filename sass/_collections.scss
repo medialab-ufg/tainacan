@@ -20,11 +20,16 @@ button.collection-trash, button#hideTrash {
 
 .selectable-items {
   padding-top: 3px;
+  padding-left: 0;
+
   .selectable-actions, .selectors {
     display: inline-block;
   }
   .selectable-actions {
     // border: 1px solid red;
+    a {
+        color: black;
+    }
     width: 50%;
     span {
       margin-left: 4px;
@@ -34,16 +39,19 @@ button.collection-trash, button#hideTrash {
     width: 45%;
     // border: 1px solid;
     a {
+      padding: 2px 2px 7px 5px;
       margin-left: 5px;
       img {
-        width: 30%;
+        width: 25%;
       }
       &:hover {
         cursor: pointer;
       }
-      &:last-child {
-
+      
+      &.highlight {
+        @include mode_view_highlight( 2px 2px 7px 5px);
       }
+
     } // a
   }
 } // .selectable-items
@@ -152,12 +160,11 @@ button.collection-trash, button#hideTrash {
     }
 
     .selected-viewMode {
-    padding: 3px 2px 5px 5px;
-    border: 2px solid $item-border;
-    border-radius: 2px;
+        @include mode_view_highlight();
     }
     .viewMode-control {
     padding-top: 5px;
+    padding-right: 0;
 
     div {
             color: $brand-medium-blue;
