@@ -32,7 +32,7 @@ class OAIPMHModel extends Model {
         }else{
            $url = $data['url'] . "?verb=ListRecords&metadataPrefix=oai_dc"; // pego os 100 primeiros
          }
-        $response_xml_data =  download_page($url); // pego os 100 primeiros
+        $response_xml_data =  file_get_contents($url); // pego os 100 primeiros
         try {
             $xml = new SimpleXMLElement($response_xml_data);
             $data['number_of_objects'] = $this->count_items($xml, $data);
@@ -61,7 +61,6 @@ class OAIPMHModel extends Model {
                             $data['metadatas'][] = $array;
                         }
                     }
-                    
                 break;
                 }
                 $data['whole_metadatas'] = implode(",", $whole_metadatas);

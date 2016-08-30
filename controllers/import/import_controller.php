@@ -25,6 +25,11 @@ class ImportController extends Controller {
                 $data = $oaipmh_model->validate_url($data);
                 return $this->render(dirname(__FILE__) . '../../../views/import/oaipmh/maping_attributes.php',$data);
                 break;
+            case "validate_url_repository":
+               // $oaipmh_model->import_list_set($data['url'], $data['collection_id']);
+                $data = $oaipmh_model->validate_url($data);
+                return $this->render(dirname(__FILE__) . '../../../views/theme_options/oaipmh/mapping_attributes.php',$data);
+                break;
             case "do_import":
                 $data['all_data'][] = $oaipmh_model->do_import($data);
                 $oaipmh_model->saving_data($data);
