@@ -857,7 +857,11 @@ button.collection-trash, button#hideTrash {
   width: 50%;
 }
 .selectable-items .selectable-actions a {
+  cursor: pointer !important;
   color: black;
+}
+.selectable-items .selectable-actions a:hover {
+  cursor: pointer !important;
 }
 .selectable-items .selectable-actions span {
   margin-left: 4px;
@@ -2672,20 +2676,20 @@ hr.single-item-divider {
 
 /*
                 Logs
-Jordão
+Jord├úo
 J1 - iguala altura de colunas na mesma row
 J2 - ajuste de titulo de colecao da home
-J3 - delimitando tamanho do item da coleção
-J4 - ajuste de margin de interações dos itens
+J3 - delimitando tamanho do item da cole├º├úo
+J4 - ajuste de margin de intera├º├Áes dos itens
 J5 - classe stretch-height apagada
 J6 - Tamanho do search interno
 J7 - ajustando o Search em input-group
 J8 - breadcrumb
 ----------------------------------------------
-                Sessões
+                Sess├Áes
 S1 - Geral
 S2 - Home
-S3 - Coleções
+S3 - Cole├º├Áes
 */
 /*------------------S1 - Geral------------------*/
 body {
@@ -3112,7 +3116,7 @@ center.container {
 }
 
 /*---------------------------------------------
-                P2 - Coleções
+                P2 - Cole├º├Áes
 -----------------------------------------------*/
 /*------------------main------------------*/
 #container_socialdb {
@@ -3133,13 +3137,13 @@ center.container {
   overflow: hidden;
 }
 
-/*J3 - delimitando tamanho do item da coleção*/
+/*J3 - delimitando tamanho do item da cole├º├úo*/
 .item-interaction {
   max-height: 28px;
   overflow: hidden;
 }
 
-/*J4 - ajuste de margin de interações dos itens*/
+/*J4 - ajuste de margin de intera├º├Áes dos itens*/
 .item-redesocial-more {
   background-color: #AAAAAA;
   text-align: center;

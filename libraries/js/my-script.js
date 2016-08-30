@@ -759,6 +759,7 @@ function populateList(src) {
 }
 // mostra a listagem inicial
 function showList(src) {
+    $('.selectors a').removeClass('highlight');
     $('#list').hide();
     $('#loader_objects').show();
     $.ajax({

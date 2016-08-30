@@ -79,7 +79,7 @@ class EventObjectDeleteModel extends EventModel {
         }
         //verificando se todo
         if ($value > 0) {
-            if ( !array_key_exists("socialdb_event_observation") ) {
+            if ( !array_key_exists("socialdb_event_observation", $data) ) {
                 $_event_observation = "";
             } else {
                 $_event_observation = $data['socialdb_event_observation'];

@@ -203,6 +203,8 @@
                     var main_title = '<?php _e("Attention","tainacan"); ?>';
                     var desc = "Enviar " + selected_total + " itens para o lixo?";
                     move_items_to_trash( main_title, desc, bulkds, collection_id);
+                } else {
+                    showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e("You did not select any items to delete!", "tainacan") ?>', 'info');
                 }
             }
         });
@@ -215,7 +217,7 @@
             $('.selectable-actions').fadeIn();
 
             var select = $(this).attr("class").split(" ")[0];
-            cl(select + " !!!!");
+            // cl(select + " !!!!");
             $('input.bulk_action').val( select );
         });
 
@@ -228,7 +230,13 @@
     });
 
      function select_some() {
-        swal('<?php _e("Select items below to edit", "tainacan") ?>');
+
+         if( ! $('.item-colecao').hasClass('selecting-item') ) {
+             swal('<?php _e("Select items below to edit", "tainacan") ?>');
+         }
+
+         //if(  )
+
          $('.object_id').each(function(idx, el) {
             var item = $("#object_" + $(el).val() );
             $(item).find('.item-colecao').addClass('selecting-item');
