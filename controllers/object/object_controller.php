@@ -198,7 +198,6 @@ class ObjectController extends Controller {
                 return json_encode($return);
                 break;
             case 'restore_object':
-                //var_dump($data);
                 if ($data['collection_id'] != get_option('collection_root_id')) {
                     //restore item
                     $result = $object_model->restoreItem($data['object_id']);
@@ -209,7 +208,6 @@ class ObjectController extends Controller {
                 return $result;
                 break;
             case 'delete_permanently_object':
-                //var_dump($data);
                 if ($data['collection_id'] != get_option('collection_root_id')) {
                     //delete item
                     $result = $object_model->delete_permanently_item($data['object_id']);
@@ -407,6 +405,9 @@ class ObjectController extends Controller {
                 $data = $object_model->help_choosing_license($data);
                 return json_encode($data);
                 break;
+            case 'move_items_to_trash':
+                $data = $object_model->move_to_trash($data['objects_ids'], $data['collection_id']);
+                return json_encode($data);
             // limpando uma colecao
             case 'clean_collection_itens':
                 $data = $object_model->clean_collection($data);

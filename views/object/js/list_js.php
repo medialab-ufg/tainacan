@@ -19,11 +19,11 @@
 
         if( $("#items-per-page").val() && !isNaN(parseInt( $("#items-per-page").val() ) ) ) {
             var items_per_page = parseInt( $("#items-per-page").val() );
-        }       
-        
+        }
+
         $('.object_id').each(function(idx, el) {
           var c_id = $(this).val();
-         
+
           var item_order = parseInt( $("#object_" + c_id).attr('data-order') );
           var title = $("#object_" + c_id + " .item-display-title").text();
           var description = $("#object_" + c_id + " .item-description").text();
@@ -34,14 +34,14 @@
             "<td>" + title + "</td>" +
             "<td>" + description + "</td>" +
             "<td style='width: 10%'> <ul>" + actions + "</ul></td></tr>"
-            );   
-    
+            );
+
           if( items_per_page && items_per_page >= 10 ) {
                if( item_order > items_per_page) {
                    $("#object_" + c_id).hide();
                }
           }
-        
+
         });
         $("#table-view").DataTable(dataTable_options);
 
@@ -54,15 +54,15 @@
                 wpquery_page(page, current_mode);
             }
         });
-        
+
         $("#items-per-page").on('change', function() {
            var limit = parseInt(this.value);
-           var viewMode = $("#temp-viewMode").val();           
+           var viewMode = $("#temp-viewMode").val();
            var container = $('.' + viewMode +'-view-container');
            $('span.per-page').text(limit);
-           
+
            //cl ( $('.pagination_items span.per-page').text() );
-           
+
            $(container).each(function(idx, el) {
               var item_num = parseInt( $(el).attr('data-order') );
               if( $.isNumeric( item_num ) ) {
@@ -185,7 +185,70 @@
             }
         });
 
+        $('a.move_trash').on('click', function() {
+            var bulk_type = $('input.bulk_action').val();
+            if( bulk_type === 'select_all' ) {
+                var collect_id = $("#collection_id").val();
+                clean_collection( '<?php _e("Clean Collection", "tainacan") ?>', '<?php _e("Are you sure to remove all items", "tainacan") ?>', collect_id );
+            } else if(bulk_type === "select_some") {
+                var selected_total = $('.selected-item').length;
+                var bulkds = [];
+                $('.selected-item').each(function(idx, el) {
+                    var item_id = $(el).parent().attr("id").replace("object_", "");
+                    bulkds.push(item_id);
+                });
+
+                if( selected_total > 0 ) {
+                    var collection_id = $('#collection_id').val();
+                    var main_title = '<?php _e("Attention","tainacan"); ?>';
+                    var desc = "Enviar " + selected_total + " itens para o lixo?";
+                    move_items_to_trash( main_title, desc, bulkds, collection_id);
+                } else {
+                    showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e("You did not select any items to delete!", "tainacan") ?>', 'info');
+                }
+            }
+        });
+
+        $('a.move_edition').on('click', function() {});
+
+        $('.selectable-items').on('click', '.selectors a', function(ev) {
+            $(this).toggleClass('highlight');
+            $( $(this).siblings()[0]).removeClass('highlight');
+            $('.selectable-actions').fadeIn();
+
+            var select = $(this).attr("class").split(" ")[0];
+            // cl(select + " !!!!");
+            $('input.bulk_action').val( select );
+        });
+
+        $('.item-colecao').click(function() {
+            if( $(this).hasClass('selecting-item') ) {
+                $(this).toggleClass('selected-item');
+            }
+        });
+
     });
+
+     function select_some() {
+
+         if( ! $('.item-colecao').hasClass('selecting-item') ) {
+             swal('<?php _e("Select items below to edit", "tainacan") ?>');
+         }
+
+         //if(  )
+
+         $('.object_id').each(function(idx, el) {
+            var item = $("#object_" + $(el).val() );
+            $(item).find('.item-colecao').addClass('selecting-item');
+         });
+    }
+
+    function select_all() {
+        $('.object_id').each(function(idx, el) {
+            var item = $("#object_" + $(el).val() );
+            $(item).find(".item-colecao").toggleClass('selected-item');
+        });
+    }
 
     function show_info(id) {
         check_privacity_info(id);
@@ -539,8 +602,7 @@
         });
     });
     $('button.cards-ranking').each(function (idx, el) {
-        $(this).hide();
-        $(this).click();
+        $(this).hide().click();
     });
 
 

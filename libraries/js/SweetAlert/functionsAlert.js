@@ -242,6 +242,30 @@ function clean_collection(title, text, collection_id) {
     });
 }
 
+function move_items_to_trash(title, text, obj_ids, collection_id) {
+    swal({
+       title: title,
+       text: text,
+       showCancelButton: true,
+       closeOnCancel: true,
+       cancelButtonText: "Cancelar"
+    }, function(isConfirm){
+        if (isConfirm) {
+            $("#modalImportMain").modal('show');
+            $.ajax({
+                type: "POST",
+                url: $("#src").val() + "/controllers/object/object_controller.php",
+                data: { operation: 'move_items_to_trash', objects_ids: obj_ids, collection_id: collection_id }
+            }).done(function(r){
+                $("#modalImportMain").modal('hide');
+                var res = $.parseJSON(r);              
+                showAlertGeneral(res.deleted[0].title, res.deleted[0].msg, res.deleted[0].type);
+                showList($('#src').val());
+            });
+        }
+    });
+}
+
 function report_abuse_object(title, text, object_id, time) {
     $('#modal_delete_object' + object_id).modal('hide');
     swal({
@@ -349,7 +373,7 @@ function remove_event_tag_classication(title, text, tag_id, object_id, time) {
 }
 
 
-// CONSULTA MODELOS SWEET ALERT 
+// CONSULTA MODELOS SWEET ALERT
 //document.querySelector('.sweet-1').onclick = function () {
 //    swal("Here's a message!");
 //};
