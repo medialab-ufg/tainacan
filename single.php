@@ -304,9 +304,11 @@ $options = get_option('socialdb_theme_options');
                                     <a class="move_trash">
                                       <span class="glyphicon glyphicon-trash"></span>
                                     </a>
+                                      <?php /*
                                     <a class="move_edition">
                                       <span class="glyphicon glyphicon-edit"></span>
                                     </a>
+                                    */ ?>
                                   </div>
                                 </div>
 
