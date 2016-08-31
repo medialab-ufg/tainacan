@@ -451,7 +451,7 @@
                 }
 
                 $(current_modal).modal('hide');
-
+                $("#dynatree_properties_filter").dynatree("getTree").reload();
                 list_collection_metadata();
                 getRequestFeedback(elem.type, elem.msg);
             });
@@ -856,7 +856,7 @@
                     
                 }
             }
-
+            $("#dynatree_properties_filter").dynatree("getTree").reload();
             list_collection_metadata();
             getRequestFeedback(elem.type, elem.msg);
         });
@@ -1055,7 +1055,7 @@
         }).done(function (result) {
             elem = jQuery.parseJSON(result);
             $('#modalImportMain').modal('hide');
-
+            $("#dynatree_properties_filter").dynatree("getTree").reload();
             var item_was_dragged = $("#meta-category .term-widget").hasClass('select-meta-filter');
             var current_operation = elem.operation;
             var menu_style_id = elem.select_menu_style;

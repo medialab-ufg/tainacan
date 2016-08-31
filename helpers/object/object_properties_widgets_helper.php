@@ -63,7 +63,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                     </h2> 
                     <?php $cardinality = $this->render_cardinality_property($property);   ?>
                     <?php $properties_compounded = $property['metas']['socialdb_property_compounds_properties_id']; ?>
-                    <?php $class = 'col-md-'. (12/count($properties_compounded)); ?>
+                    <?php //$class = 'col-md-'. (12/count($properties_compounded)); ?>
                     <div class="form-group"> 
                          <input  type="hidden" 
                                 id='main_compound_id' 
@@ -74,7 +74,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                             ?>
                             <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
                                  class="col-md-12 no-padding"
-                                 style="padding-bottom: 10px;<?php echo ($is_show_container) ? 'display:block': 'display:none'; ?>">
+                                 style="border-style: solid;border-width: 1px;border-color: #ccc; padding: 10px;<?php echo ($is_show_container) ? 'display:block': 'display:none'; ?>">
                                 <div class="col-md-11">
                                 <?php foreach ($properties_compounded as $property_compounded): 
                                     $coumpounds_id[] = $property_compounded['id']; 
@@ -84,8 +84,9 @@ class ObjectWidgetsHelper extends ViewHelper {
                                             id='core_validation_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>' 
                                             class='core_validation_compounds_<?php echo $property['id']; ?>' 
                                             value='<?php echo (!$value) ? 'false' : 'true' ; ?>'>
-                                    <div style="padding-bottom: 15px; " class="<?php echo $class ?>">
-                                            <input type="hidden" 
+                                    <div style="padding-bottom: 15px; " class="col-md-12">
+                                        <p style="color: black;"><?php echo $property_compounded['name']; ?></p>
+                                        <input type="hidden" 
                                                     name="cardinality_compound_<?php echo $property['id']; ?>_<?php echo $property_compounded['id']; ?>" 
                                                     id="cardinality_compound_<?php echo $property['id']; ?>_<?php echo $property_compounded['id']; ?>"
                                                     value="<?php echo $cardinality; ?>"> 

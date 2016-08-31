@@ -744,6 +744,7 @@
     }
     
     function ajax_value_compounds(object_id,property_id,row,value){
+        show_modal_main();
         $.ajax({
                 type: "POST",
                 url: $('#src').val() + "/controllers/event/event_controller.php",
@@ -757,6 +758,7 @@
                     socialdb_event_property_compounds_edit_value_property_id: property_id,
                     socialdb_event_property_compounds_edit_value_attribute_value: value}
             }).done(function (result) {
+                hide_modal_main();
                 verifyPublishedItem(object_id);
                 elem = jQuery.parseJSON(result);
                 if(!elem){

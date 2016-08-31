@@ -70,8 +70,8 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
                                 ?>
                                 <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
                                      class="col-md-12 no-padding"
-                                     style="padding-bottom: 10px;<?php echo ($is_show_container) ? 'display:block': 'display:none'; ?>">
-                                    <div class="col-md-2 no-padding">
+                                     style="border-style: solid;border-width: 1px;border-color: #ccc; padding: 10px;<?php echo ($is_show_container) ? 'display:block': 'display:none'; ?>">
+                                    <div class="col-md-1 no-padding">
                                         <div style="display: none;" class="pull-right compounds_buttons_<?php echo $property['id']; ?> ">    
                                             <button type="button" 
                                                     title="Limpar campos"
@@ -86,7 +86,7 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
                                             </button>
                                         </div>    
                                     </div>      
-                                    <div class="col-md-10">
+                                    <div class="col-md-11">
                                     <?php foreach ($properties_compounded as $property_compounded): 
                                         $coumpounds_id[] = $property_compounded['id']; 
                                         $value = $this->get_value($object_id, $property['id'], $property_compounded['id'], $i, $position);
@@ -95,8 +95,9 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
                                                 id='core_validation_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>' 
                                                 class='core_validation_compounds_<?php echo $property['id']; ?>' 
                                                 value='<?php echo (!$value) ? 'false' : 'true' ; ?>'>
-                                        <div style="padding-bottom: 15px;border: none;background: white !important; " class="<?php echo $class ?>">
-                                                <input type="hidden" 
+                                        <div style="padding-bottom: 15px;border: none;background: white !important; " class="col-md-12">
+                                                    <p style="color: black;"><?php echo $property_compounded['name']; ?></p>
+                                                    <input type="hidden" 
                                                         name="cardinality_compound_<?php echo $property['id']; ?>_<?php echo $property_compounded['id']; ?>" 
                                                         id="cardinality_compound_<?php echo $property['id']; ?>_<?php echo $property_compounded['id']; ?>"
                                                         value="<?php echo $cardinality; ?>"> 
@@ -106,7 +107,7 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
                                                     if(isset($property_compounded['metas']['socialdb_property_data_widget'])): 
                                                         ?>
                                                         <div class="compounds_fields_text_<?php echo $property['id']; ?>">
-                                                            <?php echo ($val) ? '<b><a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $val . "'" . ',' . $property['id'] . ')"  >'.$val.'</a></b>' : '<button type="button" onclick="edit_compounds_property('. $property['id'] .', '.$object_id.')" class="btn btn-default btn-xs">'.__('Click to edit!','tainacan').'</button>' ?>
+                                                            <?php echo ($val) ? '<b><a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $val . "'" . ',' . $property['id'] . ')"  >'.$val.'</a></b>' : '<button type="button" onclick="edit_compounds_property('. $property['id'] .', '.$object_id.')" class="btn btn-default btn-xs">'.__('Empty field!','tainacan').'</button>' ?>
                                                         </div> 
                                                         <div style="display: none;" class="compounds_fields_value_<?php echo $property['id']; ?>">
                                                             <?php 
@@ -117,7 +118,7 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
                                                     elseif(isset($property_compounded['metas']['socialdb_property_object_category_id'])): 
                                                         ?>
                                                         <div class="compounds_fields_text_<?php echo $property['id']; ?>">
-                                                            <?php echo ($val) ? '<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' . "'" . $val . "'" . ',' . $property['id'] . ')" >'.get_post($val)->post_title.'</a></b>' : '<button type="button" onclick="edit_compounds_property('. $property['id'] .', '.$object_id.')" class="btn btn-default">'.__('Empty field. Click to edit!','tainacan').'</button>' ?>
+                                                            <?php echo ($val) ? '<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' . "'" . $val . "'" . ',' . $property['id'] . ')" >'.get_post($val)->post_title.'</a></b>' : '<button type="button" onclick="edit_compounds_property('. $property['id'] .', '.$object_id.')" class="btn btn-default btn-xs">'.__('Empty field!','tainacan').'</button>' ?>
                                                         </div> 
                                                         <div style="display: none;" class="compounds_fields_value_<?php echo $property['id']; ?>">
                                                             <?php 
@@ -128,7 +129,7 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
                                                     elseif(isset($property_compounded['metas']['socialdb_property_term_widget'])): 
                                                          ?>
                                                         <div class="compounds_fields_text_<?php echo $property['id']; ?>">
-                                                           <?php echo ($val) ? '<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' . "'" . $val . "'" . ',' . $property['id'] . ')" >'.get_term_by('id',$val,'socialdb_category_type')->name.'</a></b>' : '<button onclick="edit_compounds_property('. $property['id'] .', '.$object_id.')" type="button" class="btn btn-default">'.__('Empty field. Click to edit!','tainacan').'</button>' ?>
+                                                           <?php echo ($val) ? '<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' . "'" . $val . "'" . ',' . $property['id'] . ')" >'.get_term_by('id',$val,'socialdb_category_type')->name.'</a></b>' : '<button onclick="edit_compounds_property('. $property['id'] .', '.$object_id.')" type="button" class="btn btn-default btn-xs">'.__('Empty field!','tainacan').'</button>' ?>
                                                         </div> 
                                                         <div style="display: none;" class="compounds_fields_value_<?php echo $property['id']; ?>">
                                                             <?php 

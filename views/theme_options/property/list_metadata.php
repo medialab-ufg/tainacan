@@ -61,7 +61,7 @@ $view_helper = new ViewHelper();
         <?php $selected_menu_style_id = get_post_meta( $collection_id, 'socialdb_collection_facet_' . $f_id . '_menu_style', true); ?>
 
         <div class="ui-widget ui-helper-clearfix col-md-12" style="background: white">
-            <ul id="metadata-container" class="gallery ui-helper-reset ui-helper-clearfix connectedSortable">
+            <ul id="metadata-container" class="gallery ui-helper-reset ui-helper-clearfix connectedSortable  metadata-container">
                 <?php
                 foreach($view_helper->get_default_metadata() as $meta_id => $metadata):
                     $title = __($metadata, 'tainacan'); ?>

@@ -60,7 +60,6 @@
                             }
                         });
                         // end validate
-                        console.log( $(".form_autocomplete_compounds_" + property_id + '_'+i));
                         $(".form_autocomplete_compounds_" + property_id + '_'+i).autocomplete({
                             source: $('#src').val() + '/controllers/collection/collection_controller.php?operation=list_items_search_autocomplete&property_id=' + property_id,
                             messages: {

@@ -163,7 +163,7 @@
                             $(get_property_tab_seletor(tab_property_id)).append(
                                 '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '" data-widget="' + current_search_widget + '" class="' + property.type + ' ui-widget-content ui-corner-tr">' +
                                 '<label class="title-pipe">'+ add_compounds_button() + property.name + '</label><div class="action-icons">' +
-                                '<a class="edit-filter"><span class="glyphicon glyphicon-sort sort-filter"></span></a>&nbsp;'+
+                                '<a class="edit-filter"></a>&nbsp;'+
                                 '<a onclick="edit_compounds(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
                                 '<span class="glyphicon glyphicon-edit"><span></a> ' +
                                 '<input type="hidden" class="property_id" value="' + property.id + '">' +
