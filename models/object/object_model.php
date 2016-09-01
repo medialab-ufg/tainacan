@@ -2020,6 +2020,13 @@ class ObjectModel extends Model {
         $return = ($version ? $version : 1);
         return $return;
     }
+    
+    public function checkVersionActive($object) {
+        $version_id = get_post_meta($object->ID, 'socialdb_version_postid', true);
+
+        $return = ($version_id ? $version_id : $object);
+        return $return;
+    }
 
     public function checkOriginalItem($object_id) {
         $original = get_post_meta($object_id, 'socialdb_version_postid', true);
@@ -2038,7 +2045,7 @@ class ObjectModel extends Model {
                     WHERE meta_key LIKE 'socialdb_version_postid' AND meta_value = {$original}
             ";
         $result = $wpdb->get_results($query);
-
+        
         if ($result && is_array($result) && count($result) > 0) {
             return $result;
         } else {

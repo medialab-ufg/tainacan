@@ -495,6 +495,29 @@ class ObjectController extends Controller {
                   $object_model->copyItemCategories($newItem, $data['object_id']);
                   $object_model->copyItemTags($newItem, $data['object_id']); */
                 break;
+            case 'show_item_versions':
+                //var_dump($data); //collection_id, object_id
+                $user_model = new UserModel();
+                $object_id = $data['object_id'];
+                $data['object'] = get_post($object_id);
+                $data["username"] = $user_model->get_user($data['object']->post_author)['name'];
+                $data['metas'] = get_post_meta($object_id);
+                
+                $data['version_active'] = $object_model->checkVersionNumber($data['object']);
+                $data['id_active'] = $object_model->checkVersionActive($data['object']);
+                $data['original'] = $object_model->checkOriginalItem($data['object']->ID);
+                $data['version_numbers'] = $object_model->checkVersions($data['original']);
+                
+                $arrFirst['ID'] = get_post($data['original'])->ID;
+                $arrFirst['title'] = get_post($data['original'])->post_title;
+                $arrFirst['version'] = 1;
+                $arrFirst['data'] = get_post($data['original'])->post_date;
+                $arrFirst['note'] = get_post_meta($data['original'], 'socialdb_version_comment', true);
+                
+                $data['versions'][] = $arrFirst;
+                
+                return $this->render(dirname(__FILE__) . '../../../views/object/list_versions.php', $data);
+                break;
         }
     }
 
