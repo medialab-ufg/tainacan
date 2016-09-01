@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: socialdb\n"
-"POT-Creation-Date: 2016-09-01 18:10-0300\n"
-"PO-Revision-Date: 2016-09-01 18:11-0300\n"
+"POT-Creation-Date: 2016-09-01 18:52-0300\n"
+"PO-Revision-Date: 2016-09-01 18:53-0300\n"
 "Last-Translator: Rodrigo de Oliveira <webmaster@rodrigodeoliveira.net>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -82,8 +82,8 @@ msgstr "Comentar"
 #: views/object/multiple_social_network/editor_items.php:983
 #: views/object/multiple_social_network/js/create_js.php:53
 #: views/object/multiple_social_network/js/editor_items_js.php:1430
-#: views/object/temp/edit-multiple.php:406
-#: views/object/temp/edit-multiple.php:903 views/property/js/tabs_js.php:131
+#: views/object/temp/edit-multiple.php:405
+#: views/object/temp/edit-multiple.php:901 views/property/js/tabs_js.php:131
 #: views/property/metadata/form_compounds.php:65
 #: views/property/metadata/form_filter.php:42
 #: views/property/metadata/form_object.php:91
@@ -383,7 +383,7 @@ msgstr "Por favor, preencha o delimitador corretamente!"
 #: models/user/user_model.php:391 models/user/user_model.php:407
 #: models/user/user_model.php:458 views/category/js/list_js.php:28
 #: views/category/js/list_js.php:459 views/category/js/taxonomy_zone_js.php:70
-#: views/mapping/js/container_mapping_js.php:38 views/object/js/list_js.php:537
+#: views/mapping/js/container_mapping_js.php:38 views/object/js/list_js.php:546
 #: views/object/js/list_trash_js.php:90 views/object/js/list_trash_js.php:118
 #: views/object/js/list_trash_js.php:137 views/search/js/single_js.php:1104
 #: views/search/js/single_js.php:1111 views/search/js/single_js.php:1141
@@ -814,7 +814,7 @@ msgstr "Miniatura"
 #: views/object/file/list_file.php:56 views/object/list_data_table.php:141
 #: views/object/multiple_items/editor_items.php:898
 #: views/object/multiple_social_network/editor_items.php:976
-#: views/object/temp/edit-multiple.php:896
+#: views/object/temp/edit-multiple.php:894
 msgid "Attachments"
 msgstr "Anexos"
 
@@ -1544,7 +1544,7 @@ msgstr "Arquivo corrompido"
 #: views/object/js/create_item_text_js.php:121
 #: views/object/js/create_item_url_js.php:82 views/object/js/create_js.php:79
 #: views/object/js/edit_item_text_js.php:163 views/object/js/edit_js.php:113
-#: views/object/js/list_js.php:535 views/object/js/list_single_js.php:473
+#: views/object/js/list_js.php:544 views/object/js/list_single_js.php:473
 #: views/object/js/list_trash_js.php:86 views/object/js/list_trash_js.php:114
 #: views/object/js/list_trash_js.php:133
 #: views/object/multiple_items/js/create_js.php:23
@@ -2016,7 +2016,7 @@ msgstr "Deletar Comentário "
 #: views/import/js/import_configuration_js.php:325
 #: views/import/js/import_configuration_js.php:371
 #: views/import/js/import_configuration_js.php:375
-#: views/object/js/list_js.php:137 views/object/js/list_js.php:316
+#: views/object/js/list_js.php:137 views/object/js/list_js.php:325
 #: views/object/ranking/js/list_ranking_create_js.php:60
 #: views/object/ranking/js/list_ranking_create_js.php:86
 #: views/object/ranking/js/list_ranking_create_js.php:113
@@ -2496,7 +2496,7 @@ msgstr "Metadado de termo "
 #: views/object/multiple_items/editor_items.php:421
 #: views/object/multiple_social_network/editor_items.php:442
 #: views/object/single_object/js/single_properties_compounds_js.php:279
-#: views/object/temp/edit-multiple.php:419
+#: views/object/temp/edit-multiple.php:416
 #: views/property/metadata/form_term.php:154
 #: views/theme_options/property/metadata/form_term.php:57
 msgid "Select"
@@ -3268,7 +3268,7 @@ msgstr "Digite aqui sua nova senha novamente"
 #: views/object/single_object/single_edit_data_property_form.php:42
 #: views/object/single_object/single_edit_object_property_form.php:63
 #: views/object/single_object/single_object_property_form.php:50
-#: views/object/temp/edit-multiple.php:909 views/property/list.php:164
+#: views/object/temp/edit-multiple.php:907 views/property/list.php:164
 #: views/property/list.php:249 views/property/list.php:329
 #: views/ranking/add.php:51 views/ranking/edit.php:54 views/search/tags.php:55
 #: views/theme_options/edit_configuration.php:104
@@ -5630,27 +5630,35 @@ msgstr ""
 msgid "Action not allowed by admin!"
 msgstr "Ação não permitida pelo administrador!"
 
+#: views/object/js/list_js.php:204
+msgid "Send "
+msgstr "Enviar "
+
+#: views/object/js/list_js.php:204
+msgid " items to trash?"
+msgstr " itens para o lixo?"
+
 #: views/object/js/list_js.php:207
 msgid "You did not select any items to delete!"
 msgstr "Você não selecionou nenhum item para deletar!"
 
-#: views/object/js/list_js.php:241
+#: views/object/js/list_js.php:249
 msgid "Select items below to edit or exclude!"
 msgstr "Selecione os itens abaixo para editar ou excluir!"
 
-#: views/object/js/list_js.php:251
+#: views/object/js/list_js.php:260
 msgid "All items have been selected!"
 msgstr "Todos os itens foram selecionados!"
 
-#: views/object/js/list_js.php:316
+#: views/object/js/list_js.php:325
 msgid "You need to fill the email or choose the collection"
 msgstr "Você precisa preencher o email ou selecionar a coleção"
 
-#: views/object/js/list_js.php:535
+#: views/object/js/list_js.php:544
 msgid "Successfully created version."
 msgstr ""
 
-#: views/object/js/list_js.php:537
+#: views/object/js/list_js.php:546
 msgid "Please try again."
 msgstr ""
 
@@ -6015,37 +6023,37 @@ msgid "No items uploaded"
 msgstr "Nenhum item enviado "
 
 #: views/object/multiple_items/editor_items.php:417
-#: views/object/temp/edit-multiple.php:415
+#: views/object/temp/edit-multiple.php:412
 msgid "Upload more files"
 msgstr " Inserir mais arquivos "
 
 #: views/object/multiple_items/editor_items.php:424
 #: views/object/multiple_social_network/editor_items.php:445
-#: views/object/temp/edit-multiple.php:422
+#: views/object/temp/edit-multiple.php:419
 msgid "All"
 msgstr "Todos "
 
 #: views/object/multiple_items/editor_items.php:425
 #: views/object/multiple_social_network/editor_items.php:446
-#: views/object/temp/edit-multiple.php:423 views/property/js/list_js.php:260
+#: views/object/temp/edit-multiple.php:420 views/property/js/list_js.php:260
 msgid "None"
 msgstr "Nenhum "
 
 #: views/object/multiple_items/editor_items.php:432
 #: views/object/multiple_social_network/editor_items.php:453
-#: views/object/temp/edit-multiple.php:430
+#: views/object/temp/edit-multiple.php:427
 msgid "Select Attachments"
 msgstr "Selecionar anexos "
 
 #: views/object/multiple_items/editor_items.php:435
 #: views/object/multiple_social_network/editor_items.php:456
-#: views/object/temp/edit-multiple.php:433
+#: views/object/temp/edit-multiple.php:430
 msgid "Edit Items"
 msgstr "Editar itens "
 
 #: views/object/multiple_items/editor_items.php:451
 #: views/object/multiple_social_network/editor_items.php:558
-#: views/object/temp/edit-multiple.php:449
+#: views/object/temp/edit-multiple.php:447
 msgid "Image Files"
 msgstr "Arquivos de Imagem"
 
@@ -6060,35 +6068,35 @@ msgstr "Arquivos de Imagem"
 #: views/object/multiple_social_network/editor_items.php:755
 #: views/object/multiple_social_network/editor_items.php:836
 #: views/object/multiple_social_network/editor_items.php:917
-#: views/object/temp/edit-multiple.php:491
-#: views/object/temp/edit-multiple.php:575
-#: views/object/temp/edit-multiple.php:665
-#: views/object/temp/edit-multiple.php:749
-#: views/object/temp/edit-multiple.php:833
+#: views/object/temp/edit-multiple.php:489
+#: views/object/temp/edit-multiple.php:573
+#: views/object/temp/edit-multiple.php:663
+#: views/object/temp/edit-multiple.php:747
+#: views/object/temp/edit-multiple.php:831
 msgid "Add a title"
 msgstr "Adicionar um título "
 
 #: views/object/multiple_items/editor_items.php:557
 #: views/object/multiple_social_network/editor_items.php:646
-#: views/object/temp/edit-multiple.php:555
+#: views/object/temp/edit-multiple.php:553
 msgid "Videos Files"
 msgstr "Arquivos de Vídeo"
 
 #: views/object/multiple_items/editor_items.php:641
 #: views/object/multiple_social_network/editor_items.php:732
-#: views/object/temp/edit-multiple.php:639
+#: views/object/temp/edit-multiple.php:637
 msgid "PDF Files"
 msgstr "Arquivos PDF"
 
 #: views/object/multiple_items/editor_items.php:731
 #: views/object/multiple_social_network/editor_items.php:819
-#: views/object/temp/edit-multiple.php:729
+#: views/object/temp/edit-multiple.php:727
 msgid "Audio Files"
 msgstr "Arquivos de Áudio"
 
 #: views/object/multiple_items/editor_items.php:815
 #: views/object/multiple_social_network/editor_items.php:900
-#: views/object/temp/edit-multiple.php:813
+#: views/object/temp/edit-multiple.php:811
 msgid "Others Files"
 msgstr "Outros formatos de Arquivo"
 
@@ -6395,7 +6403,7 @@ msgstr "Campo vazio. Clique para editar."
 msgid "Property data"
 msgstr "Metadado de dados"
 
-#: views/object/temp/edit-multiple.php:404
+#: views/object/temp/edit-multiple.php:403
 msgid "Edit items"
 msgstr ""
 

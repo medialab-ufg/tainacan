@@ -201,7 +201,7 @@
                 if( selected_total > 0 ) {
                     var collection_id = $('#collection_id').val();
                     var main_title = '<?php _e("Attention","tainacan"); ?>';
-                    var desc = "Enviar " + selected_total + " itens para o lixo?";
+                    var desc = '<?php _e("Send ", "tainacan"); ?>' + selected_total + '<?php _e(" items to trash?", "tainacan"); ?>';
                     move_items_to_trash( main_title, desc, bulkds, collection_id);
                 } else {
                     showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e("You did not select any items to delete!", "tainacan") ?>', 'info');
@@ -210,9 +210,15 @@
         });
 
         $('a.move_edition').on('click', function() {
-          cl('clikd');
-          $('.list-mode-set').hide();
-          $("#temp-editor").show();
+            $('.list-mode-set').hide();
+            $("#temp-editor").show();
+            $('.selected-item').each(function(idx, el) {
+                var item_id = $(el).parent().attr("id").replace("object_", "");
+                var parent_src = $(el).parent().attr("id");
+                var item_img = $('#'+parent_src).find('.colFoto img');
+                // $("#selectable #container_images").show().append(item_img);
+                $("#selectable").show().append(item_img);
+            });
         });
 
         $('.selectable-items').on('click', '.selectors a', function(ev) {

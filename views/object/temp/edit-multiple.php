@@ -398,8 +398,7 @@ $references = [
         <div class='col-md-9' id="no_item_uploaded" style='display:none;'>
             <h3 style="text-align: center;"><?php _e('No items uploaded','tainacan') ?></h3>
         </div>
-        <div class='col-md-9 pull-right'
-             style="background-color: white;border: 3px solid #E8E8E8;margin-left: 15px;">
+        <div class='col-md-10 pull-right' style="background-color: white;border: 3px solid #E8E8E8;">
             <h3>
                 <?php _e('Edit items','tainacan') ?>
                 <button type="button" onclick="back_main_list();" class="btn btn-default pull-right">
@@ -409,9 +408,7 @@ $references = [
             <hr>
             <!--------------- BOTOES PARA MANIPULACAO DOS ITENS ---------------->
             <div id='buttons_upload_files'>
-                <button type="button"
-                        onclick="upload_more_files()"
-                        class="btn btn-primary">
+                <button type="button" onclick="upload_more_files()" class="btn btn-primary">
                     <span class="glyphicon glyphicon-upload"></span>&nbsp;<?php _e('Upload more files','tainacan') ?>
                 </button>
                 <div class="btn-group">
@@ -436,455 +433,455 @@ $references = [
             <!--------------- FIM: BOTOES PARA MANIPULACAO DOS ITENS ---------------->
             <!--------------- container todos os itens  ----------------------------->
             <div style="max-height: 500px;overflow-y: scroll">
-                <div  id="selectable">
-            <?php
-            // images
-            if(is_array($items['image'])){
-                ?>
-                <div  id="container_images"  class='col-md-12'>
-                    <h4>
-                        <input class="class_selected_items"
-                               type='checkbox' id='selectAllImages'
-                               onclick="selectImages()" value='#'>
-                        &nbsp;<?php _e('Image Files','tainacan') ?>
-                    </h4>
-                <?php
-                    foreach ($items['image'] as $file) {
-                        $files[] = $file['ID'];
-                        $filesImage[] = $file['ID'];
+                <div id="selectable">
+                    <?php
+                    // images
+                    if(is_array($items['image'])){
                         ?>
-                        <div onclick="focusItem('<?php echo $file['ID'] ?>')" >
-                            <div
-                                id="wrapper_<?php echo $file['ID'] ?>"
-                                class="col-md-3 item-default"
-                                style="padding-top: 20px;cursor: pointer;">
-                               <center>
-                                <!-- container do item -->
-                                <div style="padding-bottom: 10px;"
-                                     class="item"
-                                     id="panel_<?php echo $file['ID'] ?>"
-                                      >
-                                    <input style="display:none"
-                                           class="class_selected_items"
-                                           id="item_option_<?php echo $file['ID'] ?>"
-                                           onchange="selectedItems()"
-                                           type="checkbox"
-                                           name="selected_items"
-                                           value="<?php echo $file['ID'] ?>">
-                                    <input id="attachment_option_<?php echo $file['ID'] ?>"
-                                           onchange="manipulateAttachaments('<?php echo $file['ID'] ?>')"
-                                           class="class_checkboxAttachments"
-                                           style="display:none"
-                                           type="checkbox"
-                                           name="checkboxAttachments"
-                                           value="<?php echo $file['ID'] ?>">
-                                    <?php // o thumbnail do item
-                                        if(trim(wp_get_attachment_image( $file['ID'],'thumbnail',1,['alt'   =>'' ] ))){
-                                             echo wp_get_attachment_image( $file['ID'],'thumbnail',1,['alt'   =>'' ] );
-                                       }else{
-                                             echo get_template_directory_uri().'<img src="'.get_template_directory_uri().'/libraries/images/image.png">';
-                                       }
-                                    ?>
-                                </div>
-                                <input required="required"
-                                       class='input_title'
-                                       placeholder="<?php _e('Add a title','tainacan') ?>"
-                                       type="text"
-                                       id='title_<?php echo $file['ID'] ?>'
-                                       name='title_<?php echo $file['ID'] ?>' value='<?php echo $file['name'] ?>'>
-                                <!-- Hidden para as categorias, tags e attachments  -->
-                                <input type="hidden" id="source_<?php echo $file['ID'] ?>" name="source_<?php echo $file['ID'] ?>" value=''>
-                                <input type="hidden" name="type_<?php echo $file['ID'] ?>" value='image'>
-                                <input type="hidden" id='parent_<?php echo $file['ID'] ?>' name="parent_<?php echo $file['ID'] ?>" value=''>
-                                <input type="hidden" id='attachments_<?php echo $file['ID'] ?>' name="attachments_<?php echo $file['ID'] ?>" value=''>
-                                <input type="hidden" id='description_<?php echo $file['ID'] ?>' name="description_<?php echo $file['ID'] ?>" value=''>
-                                <input type="hidden" id='categorias_<?php echo $file['ID'] ?>' name="categorias_<?php echo $file['ID'] ?>" value=''>
-                                <input type="hidden" id='tags_<?php echo $file['ID'] ?>' name="tags_<?php echo $file['ID'] ?>" value=''>
-                                <input type="hidden" id='license_<?php echo $file['ID'] ?>' name="license_<?php echo $file['ID'] ?>" value=''>
-                                <!-- hiddens para valores das propriedades de dados dos items a serem criados -->
-                                <?php
-                                if(is_array($data_properties)):
-                                    foreach ($data_properties as $value) { ?>
-                                         <input type="hidden"
-                                                name='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>'
-                                                id='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>'
-                                                value='<?php if($value['default_value']&&!empty($value['default_value'])): echo $value['default_value']; endif; ?>'>
-                                <?php  }
-                                endif;
-                                ?>
-                                <!-- hiddens para valores das propriedades de OBJETO dos items a serem criados -->
-                                <?php
-                                if(is_array($object_properties)):
-                                    foreach ($object_properties as $value) { ?>
-                                         <input type="hidden"
-                                                name='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
-                                                id='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
-                                                value=''>
-                                <?php  }
-                                endif;
-                                ?>
-                                <!-- hiddens para valores das propriedades de TERMO dos items a serem criados -->
-                                <?php
-                                if(is_array($term_properties_id)):
-                                    foreach ($term_properties_id as $value) { ?>
-                                         <input type="hidden"
-                                                name='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
-                                                id='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
-                                                value=''>
-                                <?php  }
-                                endif;
-                                ?>
-                            </center>
-                            </div>
-                        </div>
-                      <?php
-                    }
-                ?>
-                </div>
-                <?php
-            }
-            // videos
-            if(is_array($items['videos'])){
-                ?>
-                <div id="container_videos" class='col-md-12'>
-                <h4>
-                    <input class="class_selected_items"
-                           type='checkbox'
-                           id='selectAllVideo'
-                           onclick="selectVideo()" value='#'>
-                    &nbsp;<?php _e('Videos Files','tainacan') ?>
-                </h4>
-                <?php
-                    foreach ($items['videos'] as $file) {
-                        $files[] = $file['ID'];
-                        $filesVideo[] = $file['ID'];
-                        ?>
-                         <div onclick="focusItem('<?php echo $file['ID'] ?>')" >
-                            <div
-                                id="wrapper_<?php echo $file['ID'] ?>"
-                                class="col-md-3 item-default"
-                                style="padding-top: 20px;cursor: pointer;">
-                               <center>
-                               <div style="padding-top: 20px;padding-bottom: 20px;cursor: pointer;" class="item" id="panel_<?php echo $file['ID'] ?>"   ><!-- container do item -->
-                               <input style="display:none" class="class_selected_items" id="item_option_<?php echo $file['ID'] ?>" onchange="selectedItems()" type="checkbox" name="selected_items" value="<?php echo $file['ID'] ?>" >
-                               <input id="attachment_option_<?php echo $file['ID'] ?>" onchange="manipulateAttachaments('<?php echo $file['ID'] ?>')" class="class_checkboxAttachments" style="display:none" type="checkbox" name="checkboxAttachments"  value="<?php echo $file['ID'] ?>">
-                               <?php echo wp_get_attachment_image( $file['ID'],'thumbnail',1,['alt'   =>'' ] ); ?>
-                               </div>
-                               <input required="required"
-                                      class='input_title'
-                                      placeholder="<?php _e('Add a title','tainacan') ?>"
-                                      type="text" id='title_<?php echo $file['ID'] ?>'
-                                      name='title_<?php echo $file['ID'] ?>'
-                                      value='<?php echo $file['name'] ?>'>
-                               <!-- Hidden para as categorias, tags e attachments  -->
-                               <input type="hidden" id="source_<?php echo $file['ID'] ?>" name="source_<?php echo $file['ID'] ?>" value=''>
-                               <input type="hidden" name="type_<?php echo $file['ID'] ?>" value='video'>
-                               <input type="hidden" id='parent_<?php echo $file['ID'] ?>' name="parent_<?php echo $file['ID'] ?>" value=''>
-                               <input type="hidden" id='attachments_<?php echo $file['ID'] ?>' name="attachments_<?php echo $file['ID'] ?>" value=''>
-                               <input type="hidden" id='description_<?php echo $file['ID'] ?>' name="description_<?php echo $file['ID'] ?>" value=''>
-                               <input type="hidden" id='categorias_<?php echo $file['ID'] ?>' name="categorias_<?php echo $file['ID'] ?>" value=''>
-                               <input type="hidden" id='tags_<?php echo $file['ID'] ?>' name="tags_<?php echo $file['ID'] ?>" value=''>
-                               <input type="hidden" id='license_<?php echo $file['ID'] ?>' name="license_<?php echo $file['ID'] ?>" value=''>
-                               <!-- hiddens para valores das propriedades de dados dos items a serem criados -->
-                               <?php
-                               if(is_array($data_properties)):
-                                   foreach ($data_properties as $value) { ?>
-                                        <input type="hidden"
-                                               name='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>'
-                                               id='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>'
-                                               value='<?php if($value['default_value']&&!empty($value['default_value'])): echo $value['default_value']; endif; ?>'>
-                               <?php  }
-                               endif;
-                               ?>
-                               <!-- hiddens para valores das propriedades de OBJETO dos items a serem criados -->
-                               <?php
-                               if(is_array($object_properties)):
-                                   foreach ($object_properties as $value) { ?>
-                                        <input type="hidden"
-                                               name='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
-                                               id='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
-                                               value=''>
-                               <?php  }
-                               endif;
-                               ?>
-                              <?php
-                               if(is_array($term_properties_id)):
-                                   foreach ($term_properties_id as $value) { ?>
-                                        <input type="hidden"
-                                               name='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
-                                               id='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
-                                               value=''>
-                               <?php  }
-                               endif;
-                               ?>
-                            </center>
-                           </div>
-                        </div>
-                      <?php
-                    }
-                ?>
-                </div>
-                <hr>
-                <?php
-            }
-            // mostra os itens do tipo pdf
-            if(is_array($items['pdf'])){
-                ?>
-                <div id="container_pdfs" class='col-md-12'>
-                    <h4>
-                        <input class="class_selected_items"
-                               type='checkbox'
-                               id='selectAllPdf'
-                               onclick="selectPdf()"
-                               value='#'> &nbsp;<?php _e('PDF Files','tainacan') ?>
-                    </h4>
-                <?php
-                    foreach ($items['pdf'] as $file) {
-                        $files[] = $file['ID'];
-                        $filesPdf[] = $file['ID'];
-                        ?>
-                    <div onclick="focusItem('<?php echo $file['ID'] ?>')" >
-                            <div
-                                id="wrapper_<?php echo $file['ID'] ?>"
-                                class="col-md-3 item-default"
-                                style="padding-top: 20px;cursor: pointer;">
-                               <center>
-                               <div style="padding-top: 20px;padding-bottom: 20px;cursor: pointer;" class="item" id="panel_<?php echo $file['ID'] ?>"   ><!-- container do item -->
+                        <div  id="container_images"  class='col-md-12'>
+                            <h4>
                                 <input class="class_selected_items"
-                                       id="item_option_<?php echo $file['ID'] ?>"
-                                       onchange="selectedItems()"
-                                       type="checkbox"
-                                       style="display:none"
-                                       name="selected_items"
-                                       value="<?php echo $file['ID'] ?>" >
-                                <input id="attachment_option_<?php echo $file['ID'] ?>" onchange="manipulateAttachaments('<?php echo $file['ID'] ?>')" class="class_checkboxAttachments" style="display:none" type="checkbox" name="checkboxAttachments"  value="<?php echo $file['ID'] ?>">
-                                <?php echo wp_get_attachment_image( $file['ID'],'thumbnail',1,['alt'   =>'' ] ); ?>
-                                 </div>
-                                <input required="required"
-                                      class='input_title'
-                                      placeholder="<?php _e('Add a title','tainacan') ?>"
-                                      type="text" id='title_<?php echo $file['ID'] ?>'
-                                      name='title_<?php echo $file['ID'] ?>'
-                                      value='<?php echo $file['name'] ?>'>
-                                <!-- Hidden para as categorias, tags e attachments  -->
-                                <input type="hidden" id="source_<?php echo $file['ID'] ?>" name="source_<?php echo $file['ID'] ?>" value=''>
-                                <input type="hidden" name="type_<?php echo $file['ID'] ?>" value='pdf'>
-                                <input type="hidden" id='parent_<?php echo $file['ID'] ?>' name="parent_<?php echo $file['ID'] ?>" value=''>
-                                <input type="hidden" id='attachments_<?php echo $file['ID'] ?>' name="attachments_<?php echo $file['ID'] ?>" value=''>
-                                <input type="hidden" id='description_<?php echo $file['ID'] ?>' name="description_<?php echo $file['ID'] ?>" value=''>
-                                <input type="hidden" id='categorias_<?php echo $file['ID'] ?>' name="categorias_<?php echo $file['ID'] ?>" value=''>
-                                <input type="hidden" id='tags_<?php echo $file['ID'] ?>' name="tags_<?php echo $file['ID'] ?>" value=''>
-                                <input type="hidden" id='license_<?php echo $file['ID'] ?>' name="license_<?php echo $file['ID'] ?>" value=''>
-                                <!-- hiddens para valores das propriedades de dados dos items a serem criados -->
-                                <?php
-                                if(is_array($data_properties)):
-                                    foreach ($data_properties as $value) { ?>
-                                         <input type="hidden"
-                                                name='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>'
-                                                id='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>'
-                                                value='<?php if($value['default_value']&&!empty($value['default_value'])): echo $value['default_value']; endif; ?>'>
-                                <?php  }
-                                endif;
+                                       type='checkbox' id='selectAllImages'
+                                       onclick="selectImages()" value='#'>
+                                &nbsp;<?php _e('Image Files','tainacan') ?>
+                            </h4>
+                        <?php
+                            foreach ($items['image'] as $file) {
+                                $files[] = $file['ID'];
+                                $filesImage[] = $file['ID'];
                                 ?>
-                                <!-- hiddens para valores das propriedades de OBJETO dos items a serem criados -->
-                                <?php
-                                if(is_array($object_properties)):
-                                    foreach ($object_properties as $value) { ?>
-                                         <input type="hidden"
-                                                name='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
-                                                id='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
-                                                value=''>
-                                <?php  }
-                                endif;
-                                ?>
-                                <?php
-                                if(is_array($term_properties_id)):
-                                    foreach ($term_properties_id as $value) { ?>
-                                         <input type="hidden"
-                                                name='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
-                                                id='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
-                                                value=''>
-                                <?php  }
-                                endif;
-                                ?>
-                            </center>
-                          </div>
-                        </div>
-                      <?php
-                    }
-                ?>
-                </div>
-                <?php
-            }
-              // AUDIO
-            if(is_array($items['audio'])){
-                ?>
-                <div id="container_audios" class='col-md-12'>
-                <h4>
-                    <input class="class_selected_items"
-                           type='checkbox'
-                           id='selectAllAudio'
-                           onclick="selectAudio()"
-                           value='#'>
-                    &nbsp;<?php _e('Audio Files','tainacan') ?>
-                </h4>
-                <?php
-                    foreach ($items['audio'] as $file) {
-                        $files[] = $file['ID'];
-                        $filesAudio[] = $file['ID'];
+                                <div onclick="focusItem('<?php echo $file['ID'] ?>')" >
+                                    <div
+                                        id="wrapper_<?php echo $file['ID'] ?>"
+                                        class="col-md-3 item-default"
+                                        style="padding-top: 20px;cursor: pointer;">
+                                       <center>
+                                        <!-- container do item -->
+                                        <div style="padding-bottom: 10px;"
+                                             class="item"
+                                             id="panel_<?php echo $file['ID'] ?>"
+                                              >
+                                            <input style="display:none"
+                                                   class="class_selected_items"
+                                                   id="item_option_<?php echo $file['ID'] ?>"
+                                                   onchange="selectedItems()"
+                                                   type="checkbox"
+                                                   name="selected_items"
+                                                   value="<?php echo $file['ID'] ?>">
+                                            <input id="attachment_option_<?php echo $file['ID'] ?>"
+                                                   onchange="manipulateAttachaments('<?php echo $file['ID'] ?>')"
+                                                   class="class_checkboxAttachments"
+                                                   style="display:none"
+                                                   type="checkbox"
+                                                   name="checkboxAttachments"
+                                                   value="<?php echo $file['ID'] ?>">
+                                            <?php // o thumbnail do item
+                                                if(trim(wp_get_attachment_image( $file['ID'],'thumbnail',1,['alt'   =>'' ] ))){
+                                                     echo wp_get_attachment_image( $file['ID'],'thumbnail',1,['alt'   =>'' ] );
+                                               }else{
+                                                     echo get_template_directory_uri().'<img src="'.get_template_directory_uri().'/libraries/images/image.png">';
+                                               }
+                                            ?>
+                                        </div>
+                                        <input required="required"
+                                               class='input_title'
+                                               placeholder="<?php _e('Add a title','tainacan') ?>"
+                                               type="text"
+                                               id='title_<?php echo $file['ID'] ?>'
+                                               name='title_<?php echo $file['ID'] ?>' value='<?php echo $file['name'] ?>'>
+                                        <!-- Hidden para as categorias, tags e attachments  -->
+                                        <input type="hidden" id="source_<?php echo $file['ID'] ?>" name="source_<?php echo $file['ID'] ?>" value=''>
+                                        <input type="hidden" name="type_<?php echo $file['ID'] ?>" value='image'>
+                                        <input type="hidden" id='parent_<?php echo $file['ID'] ?>' name="parent_<?php echo $file['ID'] ?>" value=''>
+                                        <input type="hidden" id='attachments_<?php echo $file['ID'] ?>' name="attachments_<?php echo $file['ID'] ?>" value=''>
+                                        <input type="hidden" id='description_<?php echo $file['ID'] ?>' name="description_<?php echo $file['ID'] ?>" value=''>
+                                        <input type="hidden" id='categorias_<?php echo $file['ID'] ?>' name="categorias_<?php echo $file['ID'] ?>" value=''>
+                                        <input type="hidden" id='tags_<?php echo $file['ID'] ?>' name="tags_<?php echo $file['ID'] ?>" value=''>
+                                        <input type="hidden" id='license_<?php echo $file['ID'] ?>' name="license_<?php echo $file['ID'] ?>" value=''>
+                                        <!-- hiddens para valores das propriedades de dados dos items a serem criados -->
+                                        <?php
+                                        if(is_array($data_properties)):
+                                            foreach ($data_properties as $value) { ?>
+                                                 <input type="hidden"
+                                                        name='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>'
+                                                        id='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>'
+                                                        value='<?php if($value['default_value']&&!empty($value['default_value'])): echo $value['default_value']; endif; ?>'>
+                                        <?php  }
+                                        endif;
+                                        ?>
+                                        <!-- hiddens para valores das propriedades de OBJETO dos items a serem criados -->
+                                        <?php
+                                        if(is_array($object_properties)):
+                                            foreach ($object_properties as $value) { ?>
+                                                 <input type="hidden"
+                                                        name='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
+                                                        id='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
+                                                        value=''>
+                                        <?php  }
+                                        endif;
+                                        ?>
+                                        <!-- hiddens para valores das propriedades de TERMO dos items a serem criados -->
+                                        <?php
+                                        if(is_array($term_properties_id)):
+                                            foreach ($term_properties_id as $value) { ?>
+                                                 <input type="hidden"
+                                                        name='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
+                                                        id='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
+                                                        value=''>
+                                        <?php  }
+                                        endif;
+                                        ?>
+                                    </center>
+                                    </div>
+                                </div>
+                              <?php
+                            }
                         ?>
-                        <div onclick="focusItem('<?php echo $file['ID'] ?>')" >
-                            <div
-                                id="wrapper_<?php echo $file['ID'] ?>"
-                                class="col-md-3 item-default"
-                                style="padding-top: 20px;cursor: pointer;">
-                               <center>
-                                   <div style="padding-top: 20px;padding-bottom: 20px;cursor: pointer;" class="item" id="panel_<?php echo $file['ID'] ?>"   ><!-- container do item -->
-                                <input style="display:none" class="class_selected_items" id="item_option_<?php echo $file['ID'] ?>"  onchange="selectedItems()" type="checkbox" name="selected_items" value="<?php echo $file['ID'] ?>" >
-                                <input id="attachment_option_<?php echo $file['ID'] ?>" onchange="manipulateAttachaments('<?php echo $file['ID'] ?>')" class="class_checkboxAttachments" style="display:none" type="checkbox" name="checkboxAttachments"  value="<?php echo $file['ID'] ?>">
-                                <?php echo wp_get_attachment_image( $file['ID'],'thumbnail',1,['alt'   =>'' ] ); ?>
-                                 </div>
-                                 <input required="required"
-                                      class='input_title'
-                                      placeholder="<?php _e('Add a title','tainacan') ?>"
-                                      type="text" id='title_<?php echo $file['ID'] ?>'
-                                      name='title_<?php echo $file['ID'] ?>'
-                                      value='<?php echo $file['name'] ?>'>
-                                 <!-- Hidden para as categorias, tags e attachments  -->
-                                 <input type="hidden" id="source_<?php echo $file['ID'] ?>" name="source_<?php echo $file['ID'] ?>" value=''>
-                                <input type="hidden" name="type_<?php echo $file['ID'] ?>" value='audio'>
-                                <input type="hidden" id='parent_<?php echo $file['ID'] ?>' name="parent_<?php echo $file['ID'] ?>" value=''>
-                                <input type="hidden" id='attachments_<?php echo $file['ID'] ?>' name="attachments_<?php echo $file['ID'] ?>" value=''>
-                                <input type="hidden" id='description_<?php echo $file['ID'] ?>' name="description_<?php echo $file['ID'] ?>" value=''>
-                                <input type="hidden" id='categorias_<?php echo $file['ID'] ?>' name="categorias_<?php echo $file['ID'] ?>" value=''>
-                                <input type="hidden" id='tags_<?php echo $file['ID'] ?>' name="tags_<?php echo $file['ID'] ?>" value=''>
-                                <input type="hidden" id='license_<?php echo $file['ID'] ?>' name="license_<?php echo $file['ID'] ?>" value=''>
-                                <!-- hiddens para valores das propriedades de dados dos items a serem criados -->
-                                <?php
-                                if(is_array($data_properties)):
-                                    foreach ($data_properties as $value) { ?>
-                                         <input type="hidden"
-                                                name='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>'
-                                                id='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>'
-                                                value='<?php if($value['default_value']&&!empty($value['default_value'])): echo $value['default_value']; endif; ?>'>
-                                <?php  }
-                                endif;
-                                ?>
-                                <!-- hiddens para valores das propriedades de OBJETO dos items a serem criados -->
-                                <?php
-                                if(is_array($object_properties)):
-                                    foreach ($object_properties as $value) { ?>
-                                         <input type="hidden"
-                                                name='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
-                                                id='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
-                                                value=''>
-                                <?php  }
-                                endif;
-                                ?>
-                                <?php
-                                if(is_array($term_properties_id)):
-                                    foreach ($term_properties_id as $value) { ?>
-                                         <input type="hidden"
-                                                name='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
-                                                id='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
-                                                value=''>
-                                <?php  }
-                                endif;
-                                ?>
-                             </center>
-                            </div>
                         </div>
-                      <?php
+                        <?php
                     }
-                ?>
-                </div>
-                <hr>
-                <?php
-            }
-             // OUTROS
-            if(is_array($items['others'])){
-                ?>
-                <div id="container_others" class='col-md-12'>
-                <h4>
-                    <input class="class_selected_items"
-                           type='checkbox'
-                           id='selectAllOther'
-                           onclick="selectOther()"
-                           value='#'> &nbsp;<?php _e('Others Files','tainacan') ?>
-                </h4>
-                <?php
-                    foreach ($items['others'] as $file) {
-                        $files[] = $file['ID'];
-                        $filesOther[] = $file['ID'];
+                    // videos
+                    if(is_array($items['videos'])){
                         ?>
-                        <div onclick="focusItem('<?php echo $file['ID'] ?>')" >
-                            <div
-                                id="wrapper_<?php echo $file['ID'] ?>"
-                                class="col-md-3 item-default"
-                                style="padding-top: 20px;cursor: pointer;">
-                               <center>
-                                   <div style="padding-top: 20px;padding-bottom: 20px;cursor: pointer;" class="item" id="panel_<?php echo $file['ID'] ?>"  ><!-- container do item -->
-                                <input style="display:none" class="class_selected_items" id="item_option_<?php echo $file['ID'] ?>"  onchange="selectedItems()" type="checkbox" name="selected_items" value="<?php echo $file['ID'] ?>" >
-                                <input id="attachment_option_<?php echo $file['ID'] ?>" onchange="manipulateAttachaments('<?php echo $file['ID'] ?>')" class="class_checkboxAttachments" style="display:none" type="checkbox" name="checkboxAttachments"  value="<?php echo $file['ID'] ?>">
-                                <?php echo wp_get_attachment_image( $file['ID'],'thumbnail',1,['alt'   =>'' ] ); ?>
-                                 </div>
-                                 <input required="required"
-                                      class='input_title'
-                                      placeholder="<?php _e('Add a title','tainacan') ?>"
-                                      type="text" id='title_<?php echo $file['ID'] ?>'
-                                      name='title_<?php echo $file['ID'] ?>'
-                                      value='<?php echo $file['name'] ?>'>
-                                 <!-- Hidden para as categorias, tags e attachments  -->
-                                <input type="hidden" id="source_<?php echo $file['ID'] ?>" name="source_<?php echo $file['ID'] ?>" value=''>
-                                <input type="hidden" name="type_<?php echo $file['ID'] ?>" value='other'>
-                                <input type="hidden" id='parent_<?php echo $file['ID'] ?>' name="parent_<?php echo $file['ID'] ?>" value=''>
-                                <input type="hidden" id='attachments_<?php echo $file['ID'] ?>' name="attachments_<?php echo $file['ID'] ?>" value=''>
-                                <input type="hidden" id='description_<?php echo $file['ID'] ?>' name="description_<?php echo $file['ID'] ?>" value=''>
-                                <input type="hidden" id='categorias_<?php echo $file['ID'] ?>' name="categorias_<?php echo $file['ID'] ?>" value=''>
-                                <input type="hidden" id='tags_<?php echo $file['ID'] ?>' name="tags_<?php echo $file['ID'] ?>" value=''>
-                                <input type="hidden" id='license_<?php echo $file['ID'] ?>' name="license_<?php echo $file['ID'] ?>" value=''>
-                                <!-- hiddens para valores das propriedades de dados dos items a serem criados -->
-                                <?php
-                                if(is_array($data_properties)):
-                                    foreach ($data_properties as $value) { ?>
-                                         <input type="hidden"
-                                                name='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>'
-                                                id='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>'
-                                                value='<?php if($value['default_value']&&!empty($value['default_value'])): echo $value['default_value']; endif; ?>'>
-                                <?php  }
-                                endif;
+                        <div id="container_videos" class='col-md-12'>
+                        <h4>
+                            <input class="class_selected_items"
+                                   type='checkbox'
+                                   id='selectAllVideo'
+                                   onclick="selectVideo()" value='#'>
+                            &nbsp;<?php _e('Videos Files','tainacan') ?>
+                        </h4>
+                        <?php
+                            foreach ($items['videos'] as $file) {
+                                $files[] = $file['ID'];
+                                $filesVideo[] = $file['ID'];
                                 ?>
-                                <!-- hiddens para valores das propriedades de OBJETO dos items a serem criados -->
-                                <?php
-                                if(is_array($object_properties)):
-                                    foreach ($object_properties as $value) { ?>
-                                         <input type="hidden"
-                                                name='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
-                                                id='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
-                                                value=''>
-                                <?php  }
-                                endif;
-                                ?>
-                                <?php
-                                if(is_array($term_properties_id)):
-                                    foreach ($term_properties_id as $value) { ?>
-                                         <input type="hidden"
-                                                name='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
-                                                id='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
-                                                value=''>
-                                <?php  }
-                                endif;
-                                ?>
-                           </center>
-                          </div>
+                                 <div onclick="focusItem('<?php echo $file['ID'] ?>')" >
+                                    <div
+                                        id="wrapper_<?php echo $file['ID'] ?>"
+                                        class="col-md-3 item-default"
+                                        style="padding-top: 20px;cursor: pointer;">
+                                       <center>
+                                       <div style="padding-top: 20px;padding-bottom: 20px;cursor: pointer;" class="item" id="panel_<?php echo $file['ID'] ?>"   ><!-- container do item -->
+                                       <input style="display:none" class="class_selected_items" id="item_option_<?php echo $file['ID'] ?>" onchange="selectedItems()" type="checkbox" name="selected_items" value="<?php echo $file['ID'] ?>" >
+                                       <input id="attachment_option_<?php echo $file['ID'] ?>" onchange="manipulateAttachaments('<?php echo $file['ID'] ?>')" class="class_checkboxAttachments" style="display:none" type="checkbox" name="checkboxAttachments"  value="<?php echo $file['ID'] ?>">
+                                       <?php echo wp_get_attachment_image( $file['ID'],'thumbnail',1,['alt'   =>'' ] ); ?>
+                                       </div>
+                                       <input required="required"
+                                              class='input_title'
+                                              placeholder="<?php _e('Add a title','tainacan') ?>"
+                                              type="text" id='title_<?php echo $file['ID'] ?>'
+                                              name='title_<?php echo $file['ID'] ?>'
+                                              value='<?php echo $file['name'] ?>'>
+                                       <!-- Hidden para as categorias, tags e attachments  -->
+                                       <input type="hidden" id="source_<?php echo $file['ID'] ?>" name="source_<?php echo $file['ID'] ?>" value=''>
+                                       <input type="hidden" name="type_<?php echo $file['ID'] ?>" value='video'>
+                                       <input type="hidden" id='parent_<?php echo $file['ID'] ?>' name="parent_<?php echo $file['ID'] ?>" value=''>
+                                       <input type="hidden" id='attachments_<?php echo $file['ID'] ?>' name="attachments_<?php echo $file['ID'] ?>" value=''>
+                                       <input type="hidden" id='description_<?php echo $file['ID'] ?>' name="description_<?php echo $file['ID'] ?>" value=''>
+                                       <input type="hidden" id='categorias_<?php echo $file['ID'] ?>' name="categorias_<?php echo $file['ID'] ?>" value=''>
+                                       <input type="hidden" id='tags_<?php echo $file['ID'] ?>' name="tags_<?php echo $file['ID'] ?>" value=''>
+                                       <input type="hidden" id='license_<?php echo $file['ID'] ?>' name="license_<?php echo $file['ID'] ?>" value=''>
+                                       <!-- hiddens para valores das propriedades de dados dos items a serem criados -->
+                                       <?php
+                                       if(is_array($data_properties)):
+                                           foreach ($data_properties as $value) { ?>
+                                                <input type="hidden"
+                                                       name='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>'
+                                                       id='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>'
+                                                       value='<?php if($value['default_value']&&!empty($value['default_value'])): echo $value['default_value']; endif; ?>'>
+                                       <?php  }
+                                       endif;
+                                       ?>
+                                       <!-- hiddens para valores das propriedades de OBJETO dos items a serem criados -->
+                                       <?php
+                                       if(is_array($object_properties)):
+                                           foreach ($object_properties as $value) { ?>
+                                                <input type="hidden"
+                                                       name='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
+                                                       id='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
+                                                       value=''>
+                                       <?php  }
+                                       endif;
+                                       ?>
+                                      <?php
+                                       if(is_array($term_properties_id)):
+                                           foreach ($term_properties_id as $value) { ?>
+                                                <input type="hidden"
+                                                       name='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
+                                                       id='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
+                                                       value=''>
+                                       <?php  }
+                                       endif;
+                                       ?>
+                                    </center>
+                                   </div>
+                                </div>
+                              <?php
+                            }
+                        ?>
                         </div>
-                      <?php
+                        <hr>
+                        <?php
                     }
-                ?>
-                </div>
-                <?php
-            }
-            ?>
+                    // mostra os itens do tipo pdf
+                    if(is_array($items['pdf'])){
+                        ?>
+                        <div id="container_pdfs" class='col-md-12'>
+                            <h4>
+                                <input class="class_selected_items"
+                                       type='checkbox'
+                                       id='selectAllPdf'
+                                       onclick="selectPdf()"
+                                       value='#'> &nbsp;<?php _e('PDF Files','tainacan') ?>
+                            </h4>
+                        <?php
+                            foreach ($items['pdf'] as $file) {
+                                $files[] = $file['ID'];
+                                $filesPdf[] = $file['ID'];
+                                ?>
+                            <div onclick="focusItem('<?php echo $file['ID'] ?>')" >
+                                    <div
+                                        id="wrapper_<?php echo $file['ID'] ?>"
+                                        class="col-md-3 item-default"
+                                        style="padding-top: 20px;cursor: pointer;">
+                                       <center>
+                                       <div style="padding-top: 20px;padding-bottom: 20px;cursor: pointer;" class="item" id="panel_<?php echo $file['ID'] ?>"   ><!-- container do item -->
+                                        <input class="class_selected_items"
+                                               id="item_option_<?php echo $file['ID'] ?>"
+                                               onchange="selectedItems()"
+                                               type="checkbox"
+                                               style="display:none"
+                                               name="selected_items"
+                                               value="<?php echo $file['ID'] ?>" >
+                                        <input id="attachment_option_<?php echo $file['ID'] ?>" onchange="manipulateAttachaments('<?php echo $file['ID'] ?>')" class="class_checkboxAttachments" style="display:none" type="checkbox" name="checkboxAttachments"  value="<?php echo $file['ID'] ?>">
+                                        <?php echo wp_get_attachment_image( $file['ID'],'thumbnail',1,['alt'   =>'' ] ); ?>
+                                         </div>
+                                        <input required="required"
+                                              class='input_title'
+                                              placeholder="<?php _e('Add a title','tainacan') ?>"
+                                              type="text" id='title_<?php echo $file['ID'] ?>'
+                                              name='title_<?php echo $file['ID'] ?>'
+                                              value='<?php echo $file['name'] ?>'>
+                                        <!-- Hidden para as categorias, tags e attachments  -->
+                                        <input type="hidden" id="source_<?php echo $file['ID'] ?>" name="source_<?php echo $file['ID'] ?>" value=''>
+                                        <input type="hidden" name="type_<?php echo $file['ID'] ?>" value='pdf'>
+                                        <input type="hidden" id='parent_<?php echo $file['ID'] ?>' name="parent_<?php echo $file['ID'] ?>" value=''>
+                                        <input type="hidden" id='attachments_<?php echo $file['ID'] ?>' name="attachments_<?php echo $file['ID'] ?>" value=''>
+                                        <input type="hidden" id='description_<?php echo $file['ID'] ?>' name="description_<?php echo $file['ID'] ?>" value=''>
+                                        <input type="hidden" id='categorias_<?php echo $file['ID'] ?>' name="categorias_<?php echo $file['ID'] ?>" value=''>
+                                        <input type="hidden" id='tags_<?php echo $file['ID'] ?>' name="tags_<?php echo $file['ID'] ?>" value=''>
+                                        <input type="hidden" id='license_<?php echo $file['ID'] ?>' name="license_<?php echo $file['ID'] ?>" value=''>
+                                        <!-- hiddens para valores das propriedades de dados dos items a serem criados -->
+                                        <?php
+                                        if(is_array($data_properties)):
+                                            foreach ($data_properties as $value) { ?>
+                                                 <input type="hidden"
+                                                        name='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>'
+                                                        id='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>'
+                                                        value='<?php if($value['default_value']&&!empty($value['default_value'])): echo $value['default_value']; endif; ?>'>
+                                        <?php  }
+                                        endif;
+                                        ?>
+                                        <!-- hiddens para valores das propriedades de OBJETO dos items a serem criados -->
+                                        <?php
+                                        if(is_array($object_properties)):
+                                            foreach ($object_properties as $value) { ?>
+                                                 <input type="hidden"
+                                                        name='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
+                                                        id='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
+                                                        value=''>
+                                        <?php  }
+                                        endif;
+                                        ?>
+                                        <?php
+                                        if(is_array($term_properties_id)):
+                                            foreach ($term_properties_id as $value) { ?>
+                                                 <input type="hidden"
+                                                        name='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
+                                                        id='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
+                                                        value=''>
+                                        <?php  }
+                                        endif;
+                                        ?>
+                                    </center>
+                                  </div>
+                                </div>
+                              <?php
+                            }
+                        ?>
+                        </div>
+                        <?php
+                    }
+                      // AUDIO
+                    if(is_array($items['audio'])){
+                        ?>
+                        <div id="container_audios" class='col-md-12'>
+                        <h4>
+                            <input class="class_selected_items"
+                                   type='checkbox'
+                                   id='selectAllAudio'
+                                   onclick="selectAudio()"
+                                   value='#'>
+                            &nbsp;<?php _e('Audio Files','tainacan') ?>
+                        </h4>
+                        <?php
+                            foreach ($items['audio'] as $file) {
+                                $files[] = $file['ID'];
+                                $filesAudio[] = $file['ID'];
+                                ?>
+                                <div onclick="focusItem('<?php echo $file['ID'] ?>')" >
+                                    <div
+                                        id="wrapper_<?php echo $file['ID'] ?>"
+                                        class="col-md-3 item-default"
+                                        style="padding-top: 20px;cursor: pointer;">
+                                       <center>
+                                           <div style="padding-top: 20px;padding-bottom: 20px;cursor: pointer;" class="item" id="panel_<?php echo $file['ID'] ?>"   ><!-- container do item -->
+                                        <input style="display:none" class="class_selected_items" id="item_option_<?php echo $file['ID'] ?>"  onchange="selectedItems()" type="checkbox" name="selected_items" value="<?php echo $file['ID'] ?>" >
+                                        <input id="attachment_option_<?php echo $file['ID'] ?>" onchange="manipulateAttachaments('<?php echo $file['ID'] ?>')" class="class_checkboxAttachments" style="display:none" type="checkbox" name="checkboxAttachments"  value="<?php echo $file['ID'] ?>">
+                                        <?php echo wp_get_attachment_image( $file['ID'],'thumbnail',1,['alt'   =>'' ] ); ?>
+                                         </div>
+                                         <input required="required"
+                                              class='input_title'
+                                              placeholder="<?php _e('Add a title','tainacan') ?>"
+                                              type="text" id='title_<?php echo $file['ID'] ?>'
+                                              name='title_<?php echo $file['ID'] ?>'
+                                              value='<?php echo $file['name'] ?>'>
+                                         <!-- Hidden para as categorias, tags e attachments  -->
+                                         <input type="hidden" id="source_<?php echo $file['ID'] ?>" name="source_<?php echo $file['ID'] ?>" value=''>
+                                        <input type="hidden" name="type_<?php echo $file['ID'] ?>" value='audio'>
+                                        <input type="hidden" id='parent_<?php echo $file['ID'] ?>' name="parent_<?php echo $file['ID'] ?>" value=''>
+                                        <input type="hidden" id='attachments_<?php echo $file['ID'] ?>' name="attachments_<?php echo $file['ID'] ?>" value=''>
+                                        <input type="hidden" id='description_<?php echo $file['ID'] ?>' name="description_<?php echo $file['ID'] ?>" value=''>
+                                        <input type="hidden" id='categorias_<?php echo $file['ID'] ?>' name="categorias_<?php echo $file['ID'] ?>" value=''>
+                                        <input type="hidden" id='tags_<?php echo $file['ID'] ?>' name="tags_<?php echo $file['ID'] ?>" value=''>
+                                        <input type="hidden" id='license_<?php echo $file['ID'] ?>' name="license_<?php echo $file['ID'] ?>" value=''>
+                                        <!-- hiddens para valores das propriedades de dados dos items a serem criados -->
+                                        <?php
+                                        if(is_array($data_properties)):
+                                            foreach ($data_properties as $value) { ?>
+                                                 <input type="hidden"
+                                                        name='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>'
+                                                        id='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>'
+                                                        value='<?php if($value['default_value']&&!empty($value['default_value'])): echo $value['default_value']; endif; ?>'>
+                                        <?php  }
+                                        endif;
+                                        ?>
+                                        <!-- hiddens para valores das propriedades de OBJETO dos items a serem criados -->
+                                        <?php
+                                        if(is_array($object_properties)):
+                                            foreach ($object_properties as $value) { ?>
+                                                 <input type="hidden"
+                                                        name='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
+                                                        id='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
+                                                        value=''>
+                                        <?php  }
+                                        endif;
+                                        ?>
+                                        <?php
+                                        if(is_array($term_properties_id)):
+                                            foreach ($term_properties_id as $value) { ?>
+                                                 <input type="hidden"
+                                                        name='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
+                                                        id='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
+                                                        value=''>
+                                        <?php  }
+                                        endif;
+                                        ?>
+                                     </center>
+                                    </div>
+                                </div>
+                              <?php
+                            }
+                        ?>
+                        </div>
+                        <hr>
+                        <?php
+                    }
+                     // OUTROS
+                    if(is_array($items['others'])){
+                        ?>
+                        <div id="container_others" class='col-md-12'>
+                        <h4>
+                            <input class="class_selected_items"
+                                   type='checkbox'
+                                   id='selectAllOther'
+                                   onclick="selectOther()"
+                                   value='#'> &nbsp;<?php _e('Others Files','tainacan') ?>
+                        </h4>
+                        <?php
+                            foreach ($items['others'] as $file) {
+                                $files[] = $file['ID'];
+                                $filesOther[] = $file['ID'];
+                                ?>
+                                <div onclick="focusItem('<?php echo $file['ID'] ?>')" >
+                                    <div
+                                        id="wrapper_<?php echo $file['ID'] ?>"
+                                        class="col-md-3 item-default"
+                                        style="padding-top: 20px;cursor: pointer;">
+                                       <center>
+                                           <div style="padding-top: 20px;padding-bottom: 20px;cursor: pointer;" class="item" id="panel_<?php echo $file['ID'] ?>"  ><!-- container do item -->
+                                        <input style="display:none" class="class_selected_items" id="item_option_<?php echo $file['ID'] ?>"  onchange="selectedItems()" type="checkbox" name="selected_items" value="<?php echo $file['ID'] ?>" >
+                                        <input id="attachment_option_<?php echo $file['ID'] ?>" onchange="manipulateAttachaments('<?php echo $file['ID'] ?>')" class="class_checkboxAttachments" style="display:none" type="checkbox" name="checkboxAttachments"  value="<?php echo $file['ID'] ?>">
+                                        <?php echo wp_get_attachment_image( $file['ID'],'thumbnail',1,['alt'   =>'' ] ); ?>
+                                         </div>
+                                         <input required="required"
+                                              class='input_title'
+                                              placeholder="<?php _e('Add a title','tainacan') ?>"
+                                              type="text" id='title_<?php echo $file['ID'] ?>'
+                                              name='title_<?php echo $file['ID'] ?>'
+                                              value='<?php echo $file['name'] ?>'>
+                                         <!-- Hidden para as categorias, tags e attachments  -->
+                                        <input type="hidden" id="source_<?php echo $file['ID'] ?>" name="source_<?php echo $file['ID'] ?>" value=''>
+                                        <input type="hidden" name="type_<?php echo $file['ID'] ?>" value='other'>
+                                        <input type="hidden" id='parent_<?php echo $file['ID'] ?>' name="parent_<?php echo $file['ID'] ?>" value=''>
+                                        <input type="hidden" id='attachments_<?php echo $file['ID'] ?>' name="attachments_<?php echo $file['ID'] ?>" value=''>
+                                        <input type="hidden" id='description_<?php echo $file['ID'] ?>' name="description_<?php echo $file['ID'] ?>" value=''>
+                                        <input type="hidden" id='categorias_<?php echo $file['ID'] ?>' name="categorias_<?php echo $file['ID'] ?>" value=''>
+                                        <input type="hidden" id='tags_<?php echo $file['ID'] ?>' name="tags_<?php echo $file['ID'] ?>" value=''>
+                                        <input type="hidden" id='license_<?php echo $file['ID'] ?>' name="license_<?php echo $file['ID'] ?>" value=''>
+                                        <!-- hiddens para valores das propriedades de dados dos items a serem criados -->
+                                        <?php
+                                        if(is_array($data_properties)):
+                                            foreach ($data_properties as $value) { ?>
+                                                 <input type="hidden"
+                                                        name='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>'
+                                                        id='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>'
+                                                        value='<?php if($value['default_value']&&!empty($value['default_value'])): echo $value['default_value']; endif; ?>'>
+                                        <?php  }
+                                        endif;
+                                        ?>
+                                        <!-- hiddens para valores das propriedades de OBJETO dos items a serem criados -->
+                                        <?php
+                                        if(is_array($object_properties)):
+                                            foreach ($object_properties as $value) { ?>
+                                                 <input type="hidden"
+                                                        name='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
+                                                        id='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
+                                                        value=''>
+                                        <?php  }
+                                        endif;
+                                        ?>
+                                        <?php
+                                        if(is_array($term_properties_id)):
+                                            foreach ($term_properties_id as $value) { ?>
+                                                 <input type="hidden"
+                                                        name='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
+                                                        id='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
+                                                        value=''>
+                                        <?php  }
+                                        endif;
+                                        ?>
+                                   </center>
+                                  </div>
+                                </div>
+                              <?php
+                            }
+                        ?>
+                        </div>
+                        <?php
+                    }
+                    ?>
                 </div>
             </div>
             <!--------------- FIM: container todos os itens  ----------------------------->
