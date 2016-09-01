@@ -51,6 +51,11 @@ if( !$collection_list_mode ) {
             include_once "list_modes/geolocation.php";
             ?>
         </div>
+        
+        <div id="temp-editor" style="display: none">
+            <?php include_once "temp/edit-multiple.php"; ?>
+        </div>
+        
     </div>
 
 <?php else: ?>
