@@ -216,12 +216,17 @@
         });
 
         $('.selectable-items').on('click', '.selectors a', function(ev) {
-            $(this).toggleClass('highlight');
-            $( $(this).siblings()[0]).removeClass('highlight');
-            $('.selectable-actions').fadeIn();
-
             var select = $(this).attr("class").split(" ")[0];
             $('input.bulk_action').val( select );
+            var its_highlighted = $( $(this).siblings()[0]).hasClass('highlight');
+            var action =  $('input.bulk_action').val();
+
+            $(this).toggleClass('highlight');
+
+            if ( its_highlighted && "select_all" === action ) {
+            }
+            $( $(this).siblings()[0]).removeClass('highlight');
+            $('.selectable-actions').fadeIn();
         });
 
         $('.item-colecao').click(function() {
@@ -237,7 +242,6 @@
     }
 
      function select_some() {
-
          if( ! $('.item-colecao').hasClass('selecting-item') ) {
              toastr.info('<?php _e('Select items below to edit or exclude!', 'tainacan') ?>', '', set_toastr_class());
          }
@@ -249,6 +253,8 @@
     }
 
     function select_all() {
+        $(".item-colecao").removeClass('selected-item');
+        toastr.info('<?php _e('All items have been selected!', 'tainacan') ?>', '', set_toastr_class());
         $('.object_id').each(function(idx, el) {
             var item = $("#object_" + $(el).val() );
             $(item).find(".item-colecao").toggleClass('selected-item');
