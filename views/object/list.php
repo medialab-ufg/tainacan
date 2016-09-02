@@ -52,9 +52,7 @@ if( !$collection_list_mode ) {
             ?>
         </div>
         
-        <div id="temp-editor" style="display: none">
-            <?php include_once "temp/edit-multiple.php"; ?>
-        </div>
+        <div id="temp-editor" style="display: none"> </div>
         
     </div>
 

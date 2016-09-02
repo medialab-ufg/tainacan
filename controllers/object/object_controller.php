@@ -432,6 +432,9 @@ class ObjectController extends Controller {
                 }
                 return true;
                 break;
+            case 'edit_multiple_items':
+                return $this->render( dirname(__FILE__) . '../../../views/object/temp/edit_multiple.php', ['bulked_ids' => $data["selected_ids"] ] );
+            break;
             case 'duplicate_item_same_collection':
                 $item = get_post($data['object_id']);
                 $newItem = $object_model->copyItem($item, $data['collection_id']);

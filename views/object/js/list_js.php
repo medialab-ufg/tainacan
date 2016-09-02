@@ -210,14 +210,23 @@
         });
 
         $('a.move_edition').on('click', function() {
+            show_modal_main();
+            var bulkds = [];
             $('.list-mode-set').hide();
-            $("#temp-editor").show();
             $('.selected-item').each(function(idx, el) {
                 var item_id = $(el).parent().attr("id").replace("object_", "");
-                var parent_src = $(el).parent().attr("id");
-                var item_img = $('#'+parent_src).find('.colFoto img');
-                // $("#selectable #container_images").show().append(item_img);
-                $("#selectable").show().append(item_img);
+                // var parent_src = $(el).parent().attr("id");
+                // var item_img = $('#'+parent_src).find('.colFoto img');
+                bulkds.push(item_id);
+            });
+
+            $.ajax({
+                type: "POST",
+                url: $('#src').val() + "/controllers/object/object_controller.php",
+                data: { selected_ids: bulkds, operation: 'edit_multiple_items' }
+            }).done(function(html_res){
+                hide_modal_main();
+                $("#temp-editor").show().append(html_res);
             });
         });
 

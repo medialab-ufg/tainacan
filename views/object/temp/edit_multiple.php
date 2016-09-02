@@ -1,8 +1,10 @@
 <?php
+/*
 include_once ('../../../../../wp-config.php');
 include_once ('../../../../../wp-load.php');
 include_once ('../../../../../wp-includes/wp-db.php');
-include_once ('js/editor_items_js.php');
+*/
+include_once ('js/edit_multiple_js.php');
 include_once(dirname(__FILE__).'/../../../helpers/view_helper.php');
 include_once(dirname(__FILE__).'/../../../helpers/object/object_properties_widgets_helper.php');
 
@@ -37,7 +39,10 @@ $references = [
 ];
 ?>
 <div class="row" style="padding-right: 0px;padding-left: 0px;">
-      <!-------------- METADADOS - BLOCO ESQUERDO (COL-MD-3) --------------------->
+    
+    <?php // var_dump($bulked_ids); ?>
+    
+   <!-------------- METADADOS - BLOCO ESQUERDO (COL-MD-3) --------------------->
     <div style="
          display:none;
          background: white;
@@ -57,6 +62,7 @@ $references = [
                      style="display: inline-block">
                          <?php _e('Expand all', 'tainacan') ?></div>
                 &nbsp;&nbsp;<span class="glyphicon-triangle-bottom white glyphicon"></span>
+                load data
             </div>
             <!---------------- FORMULARIO COM OS METADADOS DOS ITEMS -------------------------------------------------->
              <!--div class="list-group" id="accordion" aria-multiselectable="true">
@@ -408,9 +414,11 @@ $references = [
             <hr>
             <!--------------- BOTOES PARA MANIPULACAO DOS ITENS ---------------->
             <div id='buttons_upload_files'>
+                <?php /* ?>
                 <button type="button" onclick="upload_more_files()" class="btn btn-primary">
                     <span class="glyphicon glyphicon-upload"></span>&nbsp;<?php _e('Upload more files','tainacan') ?>
                 </button>
+                <?php */ ?>
                 <div class="btn-group">
                     <button id="selectOptions" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <?php _e('Select','tainacan') ?> <span class="caret"></span>
@@ -436,7 +444,7 @@ $references = [
                 <div id="selectable">
                     <?php
                     // images
-                    if(is_array($items['image'])){
+                    // if(is_array($items['image'])){
                         ?>
                         <div  id="container_images"  class='col-md-12'>
                             <h4>
@@ -446,21 +454,20 @@ $references = [
                                 &nbsp;<?php _e('Image Files','tainacan') ?>
                             </h4>
                         <?php
-                            foreach ($items['image'] as $file) {
+                        $items['image'] = ['ID' => 237, 'ID' => 278, 'ID' => 240];
+
+                        foreach ($items['image'] as $file) {
                                 $files[] = $file['ID'];
                                 $filesImage[] = $file['ID'];
                                 ?>
                                 <div onclick="focusItem('<?php echo $file['ID'] ?>')" >
-                                    <div
-                                        id="wrapper_<?php echo $file['ID'] ?>"
+                                    <div id="wrapper_<?php echo $file['ID'] ?>"
                                         class="col-md-3 item-default"
                                         style="padding-top: 20px;cursor: pointer;">
                                        <center>
                                         <!-- container do item -->
-                                        <div style="padding-bottom: 10px;"
-                                             class="item"
-                                             id="panel_<?php echo $file['ID'] ?>"
-                                              >
+                                        <div style="padding-bottom: 10px;" class="item"
+                                             id="panel_<?php echo $file['ID'] ?>" >
                                             <input style="display:none"
                                                    class="class_selected_items"
                                                    id="item_option_<?php echo $file['ID'] ?>"
@@ -539,7 +546,7 @@ $references = [
                         ?>
                         </div>
                         <?php
-                    }
+                   // }
                     // videos
                     if(is_array($items['videos'])){
                         ?>
@@ -885,6 +892,7 @@ $references = [
                 </div>
             </div>
             <!--------------- FIM: container todos os itens  ----------------------------->
+            <?php /*
             <div style="display: none"
                  class="col-md-12"
                  id='attachments_item_upload'
@@ -894,6 +902,8 @@ $references = [
                  <div  id="dropzone_new" class="dropzone" style="min-height: 150px;">
                  </div>
              </div>
+                */ ?>
+
               <div class="col-md-12" style="padding: 15px;">
                  <button type="button" onclick="back_main_list();"
                         class="btn btn-lg btn-default pull-left">
