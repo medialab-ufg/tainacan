@@ -8,6 +8,7 @@ include_once (dirname(__FILE__) . '../../../models/license/license_model.php');
 include_once (dirname(__FILE__) . '../../../models/property/property_model.php');
 include_once (dirname(__FILE__) . '../../../models/category/category_model.php');
 include_once (dirname(__FILE__) . '../../../models/event/event_object/event_object_create_model.php');
+include_once (dirname(__FILE__) . '../../../models/event/event_object/event_object_delete_model.php');
 require_once(dirname(__FILE__) . '../../general/general_model.php');
 require_once(dirname(__FILE__) . '../../user/user_model.php');
 require_once(dirname(__FILE__) . '../../tag/tag_model.php');
@@ -1562,7 +1563,7 @@ class ObjectModel extends Model {
         if ($order == 'desc') {
             $result = '<span class="glyphicon glyphicon-sort-by-attributes-alt"></span>&nbsp;' . $result;
         } else {
-            $result = '<span class="glyphicon glyphicon-sort-by-attributes"></span>&nbsp;' . $result;
+            $result = '<span class="glyphicon glyphicon-sort-by-attributes"></span>& nbsp;' . $result;
         }
         return $result;
     }
@@ -1573,6 +1574,20 @@ class ObjectModel extends Model {
         $permissions['delete'] = get_post_meta($collection_id, 'socialdb_collection_permission_delete_comment', true);
 
         return $permissions;
+    }
+
+    public function move_to_trash($objs_ids, $collection_id) {
+        $event_delete = new EventObjectDeleteModel();
+        $events = [];
+
+        if (is_array($objs_ids)) {
+            foreach ($objs_ids as $item_id) {
+                $ev_d = $event_delete->update_post_status($item_id, ['event_id' => $collection_id], true);
+                array_push($events, $ev_d);
+            }
+        }
+
+        return [ 'deleted' => $events];
     }
 
     /**
@@ -1971,7 +1986,7 @@ class ObjectModel extends Model {
 
     public function changeStatusOldVersion($item, $newItem) {
         $newItem = get_post($newItem);
-        
+
         // Update old post
         $old_post = array(
             'ID' => $item->ID,
@@ -1982,7 +1997,7 @@ class ObjectModel extends Model {
 
         // Update the post into the database
         wp_update_post($old_post);
-        
+
         // Update new post
         $new_post = array(
             'ID' => $newItem->ID,
@@ -2006,6 +2021,25 @@ class ObjectModel extends Model {
         return $return;
     }
 
+    public function checkVersionActive($original) {
+        global $wpdb;
+        $wp_posts = $wpdb->prefix . "posts";
+        $wp_postmeta = $wpdb->prefix . "postmeta";
+        $query = "
+                    SELECT p.* FROM $wp_posts p
+                    INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id    
+                    WHERE pm.meta_key LIKE 'socialdb_version_postid' and pm.meta_value like '$original' AND p.post_status LIKE 'publish'
+            ";
+        $result = $wpdb->get_results($query);
+
+
+        if ($result && is_array($result) && count($result) > 0) {
+            return $result[0]->ID;
+        } else {
+            return $original;
+        }
+    }
+
     public function checkOriginalItem($object_id) {
         $original = get_post_meta($object_id, 'socialdb_version_postid', true);
 
@@ -2017,7 +2051,7 @@ class ObjectModel extends Model {
         global $wpdb;
         $wp_posts = $wpdb->prefix . "posts";
         $wp_postmeta = $wpdb->prefix . "postmeta";
-        
+
         $query = "
                     SELECT * FROM $wp_postmeta    
                     WHERE meta_key LIKE 'socialdb_version_postid' AND meta_value = {$original}
@@ -2030,12 +2064,31 @@ class ObjectModel extends Model {
             return array();
         }
     }
-    
+
     public function createMetasVersion($post_id, $original, $new_version, $motive) {
         update_post_meta($post_id, 'socialdb_version_postid', $original);
         update_post_meta($post_id, 'socialdb_version_number', $new_version);
         update_post_meta($post_id, 'socialdb_version_comment', $motive);
         update_post_meta($post_id, 'socialdb_version_date', date('Y-m-d H:i:s'));
+    }
+
+    public function get_all_versions($original) {
+        global $wpdb;
+        $wp_posts = $wpdb->prefix . "posts";
+        $wp_postmeta = $wpdb->prefix . "postmeta";
+        $query = "
+                    SELECT p.* FROM $wp_posts p
+                    INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id    
+                    WHERE pm.meta_key LIKE 'socialdb_version_postid' and pm.meta_value like '$original' AND (p.post_status LIKE 'publish' OR p.post_status LIKE 'inherit')
+            ";
+        $result = $wpdb->get_results($query);
+
+
+        if ($result && is_array($result) && count($result) > 0) {
+            return $result;
+        } else {
+            return array();
+        }
     }
 
 }

@@ -94,7 +94,7 @@ $(window).load(function () {
         $('#password_user_id').val($('#recovery_password').val());
         $('#myModalPasswordReset').modal('show');
     }
-    //verifico se acabou de criar uma colecao 
+    //verifico se acabou de criar uma colecao
     if ($('#open_wizard').val() === 'true') {
 
         if (!Hook.is_register('tainacan_oncreate_collection')) {
@@ -161,8 +161,7 @@ $(window).load(function () {
         $('#myModal').modal('show');
     }
 
-    if (window != window.top)
-    {
+    if (window != window.top) {
         /* I'm in a frame! */
         $(".navbar").css("display", "none");
         $("#wpadminbar").css("height", "0px");
@@ -191,7 +190,6 @@ $(window).load(function () {
 
         }
     });
-
 
     $('#create_button').click(function (e) {
         var src = $('#src').val();
@@ -514,6 +512,18 @@ $(window).load(function () {
 
 $(document).ready(function () {
     $('.input_date').mask('00/00/0000');
+
+    //Handles menu drop down
+    $('.dropdown-menu').find('form').click(function (e) {
+        e.stopPropagation();
+    });
+
+    $("#collections-menu li").hover(function(){
+       $(this).find('ul:first').css('display', 'block');
+      }, function() {
+        $(this).find('ul:first').css('display', 'none');
+    });
+
 });
 
 function add_collection_template(col, template_name) {
@@ -563,8 +573,8 @@ function list_templates($_element) {
     }).done(function (result) {
         el = jQuery.parseJSON(result);
 
-        if ($_element) {
-            if (el.length > 0) {
+        if($_element) {
+            if( el.length > 0 ) {
                 $($_element).append("<li class='divider'></li>");
                 $.each(el, function (idx, value) {
                     var li_item = "<li class='tmpl'><a href='#' class='added' data-tplt='" + value.directory + "'>" + value.title + "</a></li>";
@@ -580,11 +590,11 @@ function list_templates($_element) {
                 $('#show_collection_empty').show();
                 var curr_height = $('.collection-templates').height();
                 $('.collection-templates').height(curr_height + 55);
-            } else {
+            }else{
                 $('#show_collection_empty').hide();
             }
         }
-    });
+   });
 }
 
 /*************  FIM : funcoes para templates de colecoes **********************/
@@ -753,6 +763,7 @@ function populateList(src) {
 }
 // mostra a listagem inicial
 function showList(src) {
+    $('.selectors a').removeClass('highlight');
     $('#list').hide();
     $('#loader_objects').show();
     $.ajax({
@@ -828,7 +839,7 @@ function toggle_container_synonyms(id) {
 
 function showDynatreeSingleEdit(src) {
     $("#dynatree_modal_edit").dynatree({
-        selectionVisible: true, // Make sure, selected nodes are visible (expanded).  
+        selectionVisible: true, // Make sure, selected nodes are visible (expanded).
         checkbox: true,
         initAjax: {
             url: src + '/controllers/collection/collection_controller.php',
@@ -921,7 +932,7 @@ function showDynatreeSingleEdit(src) {
         },
         dnd: {
             zIndex: 99999,
-            preventVoidMoves: true, // Prevent dropping nodes 'before self', etc.     
+            preventVoidMoves: true, // Prevent dropping nodes 'before self', etc.
             revert: false, // true: slide helper back to source if drop is rejected
             onDragStart: function (node) {
                 /** This function MUST be defined to enable dragging for the tree.*/
@@ -947,7 +958,7 @@ function showDynatreeSingleEdit(src) {
     });
     // dynatree para os sinonimos de uma categoria
     $("#dynatree_synonyms").dynatree({
-        selectionVisible: true, // Make sure, selected nodes are visible (expanded).  
+        selectionVisible: true, // Make sure, selected nodes are visible (expanded).
         checkbox: true,
         initAjax: {
             url: src + '/controllers/collection/collection_controller.php',
@@ -989,7 +1000,7 @@ function showDynatreeSingleEdit(src) {
     });
     // dynatree para os sinonimos de uma categoria
     $("#dynatree_synonyms_tag").dynatree({
-        selectionVisible: true, // Make sure, selected nodes are visible (expanded).  
+        selectionVisible: true, // Make sure, selected nodes are visible (expanded).
         checkbox: true,
         initAjax: {
             url: src + '/controllers/collection/collection_controller.php',
@@ -1390,7 +1401,7 @@ function showFormCreateURLFile(url, type) {
 }
 /*************** LISTA COMENTARIOS DA COLECAO ************/
 /**
- * @function showPageCollectionPage 
+ * @function showPageCollectionPage
  * @returns {void} Insere o html com os comentarios da colecao
  */
 function showPageCollectionPage() {
@@ -1405,7 +1416,7 @@ function showPageCollectionPage() {
     }).done(function (result) {
         json = JSON.parse(result);
         if (json.html) {
-            //$("#loader_objects").hide();            
+            //$("#loader_objects").hide();
             $("#form").html(json.html);
             $('#form').show('slow');
             // $('#create_button').hide();
@@ -1414,7 +1425,7 @@ function showPageCollectionPage() {
 }
 /*************** LISTA COMENTARIOS DE TERMOS ************/
 /**
- * @function list_comments_term 
+ * @function list_comments_term
  * @param {string} seletor O id da tag do html que sera jogado o html
  * @param {int} term_id O id do termo que esta inserido os comentarios
  * @returns {void} Insere o html com a listagem dos comentarios
@@ -1493,7 +1504,7 @@ function showEventsRepository(src, collection_root_id) {
     });
 }
 /**
- * 
+ *
  * @param {type} action
  * @param {type} category_root_name
  * @param {type} category_root_id
@@ -1530,20 +1541,6 @@ function showModalFilters(action, category_root_name, category_root_id, dynatree
     }
     $('.dropdown-toggle').dropdown();
 }
-
-$(document).ready(function () {
-    //Handles menu drop down
-    $('.dropdown-menu').find('form').click(function (e) {
-        e.stopPropagation();
-    });
-    $("#collections-menu li").hover(function () {
-        $(this).find('ul:first').css('display', 'block');
-        // $('.collection_header_img .row > .col-md-12').css("margin-top", "-74px");
-    }, function () {
-        $(this).find('ul:first').css('display', 'none');
-        // $('.collection_header_img .row > .col-md-12').css("margin-top", "0");
-    });
-});
 
 function showSingleObject(object_id, src) {
     $.ajax({
@@ -1952,7 +1949,7 @@ function fast_insert() {
         if (format.length > 0 && supported_images.indexOf(format[format.length - 1]) > -1) {
             insert_image_url($('#fast_insert_object').val(), selKeys);
         } else {
-            //showAlertGeneral('error', 'URL invalid or image unreacheable', 'error'); 
+            //showAlertGeneral('error', 'URL invalid or image unreacheable', 'error');
             insert_object_url($('#fast_insert_object').val(), selKeys);
         }
         //insert_object_url($('#fast_insert_object').val(), selKeys);
@@ -2379,7 +2376,7 @@ function showAddItemText() {
     });
 }
 /**
- * 
+ *
  * @param {type} id
  * @param {type} seletor
  * @returns {undefined}
@@ -2458,10 +2455,10 @@ function changeViewMode(viewMode) {
         $('.viewMode-control li.' + viewMode).addClass('selected-viewMode');
         $('.list-mode-set').attr('id', viewMode + '-viewMode');
         $('.top-div').hide();
-        $('.' + viewMode + '-view-container').show();
+        $('.'+viewMode+'-view-container').show();
     }
 
-    if (viewMode != "geolocation") {
+    if(viewMode != "geolocation") {
         $('.geolocation-view-container').hide();
     }
 }
@@ -2504,8 +2501,6 @@ jQuery.fn.darken = function (darkenPercent) {
 $(".list-group .list-group").each(function () {
     $(this).children('.list-group-item').darken(10);
 });
-
-
 //************************  CACHE  *******************************//
 function save_cache(html,operation,collection_id) {
     var src = $('#src').val();

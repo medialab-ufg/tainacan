@@ -363,6 +363,7 @@
     }
 
     function single_show_item_versions(object_id) {
+        show_modal_main();
         $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/object/object_controller.php",
@@ -372,6 +373,7 @@
                 object_id: object_id
             }
         }).done(function (result) {
+            hide_modal_main();
             $('#main_part').hide();
             $('#display_view_main_page').hide();
             $('#loader_collections').hide();

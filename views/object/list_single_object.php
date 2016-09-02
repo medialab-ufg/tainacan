@@ -25,7 +25,7 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
     <li> <a href="#" onclick="backToMainPageSingleItem()"> <?php echo get_post($collection_id)->post_title; ?> </a> </li>
     <li class="active"> <?php echo $object->post_title; ?> </li>
 
-    <button data-title="<?php printf( __("URL of %s", "tainacan"), $object->post_title ); ?>" id="iframebuttonObject" data-container="body"
+    <button data-title="<?php printf(__("URL of %s", "tainacan"), $object->post_title); ?>" id="iframebuttonObject" data-container="body"
             class="btn bt-default content-back pull-right" data-toggle="popoverObject" data-placement="left" data-content="">
         <span class="glyphicon glyphicon-link"></span>
     </button>
@@ -65,7 +65,7 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                             ?>
                             <li>
                                 <a href="<?php echo $url_image; ?>" download="<?php echo $object->post_title; ?>.jpg" onclick="downloadItem('<?php echo $thumbail_id; ?>');">
-                                <span class="glyphicon glyphicon-download"></span>
+                                    <span class="glyphicon glyphicon-download"></span>
                                 </a>
                             </li>
                             <?php
@@ -117,6 +117,11 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                             </div>
                         </div>
                     <?php endif; ?>
+                    <li>
+                        <a onclick="single_show_item_versions('<?php echo $object->ID ?>')" href="#">
+                            <span class="glyphicon glyphicon-folder-open"></span>
+                        </a>
+                    </li>
                 </ul>
             </div>
 
@@ -298,9 +303,9 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                                 if (get_the_post_thumbnail($object->ID, 'thumbnail')) {
                                     $url_image = wp_get_attachment_url(get_post_thumbnail_id($object->ID));
                                     ?>
-                                                <!--a href="#" onclick="$.prettyPhoto.open(['<?php echo $url_image; ?>'], [''], ['']);
-                                                            return false">
-                                                    <!-- <img src="< ?php echo $url_image; ?>" class="img-responsive" /> -->
+                                                                <!--a href="#" onclick="$.prettyPhoto.open(['<?php echo $url_image; ?>'], [''], ['']);
+                                                                            return false">
+                                                                    <!-- <img src="< ?php echo $url_image; ?>" class="img-responsive" /> -->
                                     <?php echo get_the_post_thumbnail($object->ID, 'thumbnail'); ?>
                                     <!--/a-->
                                 <?php } else { ?>
@@ -416,7 +421,8 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                 <div class="box-item-paddings item-tags" style="" <?php if (has_action('home_item_tag_div')) do_action('home_item_tag_div') ?>>
                     <h4 class="title-pipe single-title"> <?php _e('Tags', 'tainacan'); ?></h4>
                     <div class="edit-field-btn">
-                        <?php // verifico se o metadado pode ser alterado
+                        <?php
+                        // verifico se o metadado pode ser alterado
                         if (verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_tag', $object->ID)):
                             ?>
                             <button type="button" onclick="cancel_tag()" id="cancel_tag" class="btn btn-default btn-xs" style="display: none;" ><span class="glyphicon glyphicon-arrow-left" ></span></button>

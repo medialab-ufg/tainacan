@@ -152,3 +152,9 @@ $default-margin: 20px 0 20px 0;
     }
   }
 }
+
+@mixin mode_view_highlight($padding: 3px 2px 5px 5px) {
+    padding: $padding;
+    border: 2px solid $item-border;
+    border-radius: 2px;
+}

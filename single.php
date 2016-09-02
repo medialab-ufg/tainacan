@@ -5,6 +5,7 @@
  */
 require_once(dirname(__FILE__) . '/models/social_network/Facebook/autoload.php');
 require_once(dirname(__FILE__) . '/controllers/helpers/helpers_controller.php');
+require_once(dirname(__FILE__) . '/helpers/view_helper.php');
 ///****************************** EXECUTANDO SCRIPTS  AVULSOS*********************/
 if (isset($_GET['execute-script'])):
     error_reporting(E_ALL);
@@ -60,7 +61,7 @@ $options = get_option('socialdb_theme_options');
     if (isset($_GET['mycollections'])) {
         echo 'true';
     }
-    
+
     ?>">
     <!-- Colecoes compartilhadas -->
     <input type="hidden" id="sharedcollections" name="sharedcollections" value="<?php
@@ -251,7 +252,7 @@ $options = get_option('socialdb_theme_options');
                                                         <li class="divider" -->
                                                         <li><a onclick="showAddItemText()"  style="cursor: pointer;"><?php _e('Write text', 'tainacan') ?> </a></li>
                                                         <li><a onclick="showViewMultipleItems()" style="cursor: pointer;" ><?php _e('Send file(s)', 'tainacan') ?>  </a></li>
-                                                        <li><a onclick="showAddItemURL();" style="cursor: pointer;" ><?php _e('Insert URL', 'tainacan') ?>  </a></li>    
+                                                        <li><a onclick="showAddItemURL();" style="cursor: pointer;" ><?php _e('Insert URL', 'tainacan') ?>  </a></li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -294,30 +295,52 @@ $options = get_option('socialdb_theme_options');
                                         </li>
                                     </ul>
                                 </div>
-                                <div class="col-md-2 pull-right">
+                                <div class="col-md-2 selectable-items">
+                                  <div class="selectors">
+                                    <a onclick="select_some()" class="select_some">
+                                      <?php echo ViewHelper::render_icon("selection", "png", __("Select some items", "tainacan") ); ?>
+                                    </a>
+                                    <a onclick="select_all()" class="select_all">
+                                      <?php echo ViewHelper::render_icon("select-all", "png", __("Select all items", "tainacan") ); ?>
+                                    </a>
+                                    <input type="hidden" value="" class="bulk_action" name="bulk_action">
+                                  </div>
+
+                                  <div class="selectable-actions pull-right" style="display: none;">
+                                    <a class="move_trash">
+                                      <span class="glyphicon glyphicon-trash"></span>
+                                    </a>
+                                      <?php /*
+                                    <a class="move_edition">
+                                      <span class="glyphicon glyphicon-edit"></span>
+                                    </a>
+                                    */ ?>
+                                  </div>
+                                </div>
+
+                                <div class="col-md-12" style="margin-top: 10px;">
                                     <?php
                                     if (is_user_logged_in()) {
                                         if (get_the_ID() != get_option('collection_root_id') && verify_collection_moderators(get_the_ID(), get_current_user_id())) {
                                             ?>
-                                            <button onclick="showTrash('<?php echo get_template_directory_uri(); ?>');" class="btn btn-default pull-right collection-trash"><?php _e('Trash', 'tainacan'); ?></button>
-                                            
+                                            <button onclick="showTrash('<?php echo get_template_directory_uri(); ?>');" class="btn btn-default pull-left collection-trash"><?php _e('Trash', 'tainacan'); ?></button>
+
                                             <?php
                                         } else {
                                             $admin_email = get_option('admin_email');
                                             $user_data = get_user_by('ID', get_current_user_id())->user_email;
                                             if ($admin_email == $user_data) {
                                                 ?>
-                                            <button onclick="showTrash('<?php echo get_template_directory_uri(); ?>');" class="btn btn-danger pull-right" style="color: white"><?php _e('Trash', 'tainacan'); ?></button>
-                                                
+                                            <button onclick="showTrash('<?php echo get_template_directory_uri(); ?>');" class="btn btn-danger pull-left" style="color: white"><?php _e('Trash', 'tainacan'); ?></button>
+
                                                 <?php
                                             }
                                         }
                                         ?>
-                                        <button style="display: none;" id="hideTrash" onclick="showList('<?php echo get_template_directory_uri(); ?>');" class="btn btn-default"><?php _e('Exit', 'tainacan'); ?></button>
+                                        <button style="display: none;" id="hideTrash" onclick="showList('<?php echo get_template_directory_uri(); ?>');" class="btn btn-default pull-right"><?php _e('Exit', 'tainacan'); ?></button>
                                         <?php
                                     }
                                     ?>
-
                                 </div>
                             </div>
                         </div>
@@ -325,7 +348,7 @@ $options = get_option('socialdb_theme_options');
                     </div>
 
                     <!--div id="remove"> view removida </div> -->
-                    <!-- TAINACAN: esta div (AJAX)recebe o formulario para criacao e edicao de itens  -->
+                    <!-- TAINACAN: esta div (AJAX) recebe o formulario para criacao e edicao de itens  -->
                     <div id="form" >
                     </div>
 
@@ -342,8 +365,10 @@ $options = get_option('socialdb_theme_options');
 
                 </div>
 
+                <?php /*
                 <!-- TAINACAN: esta div (AJAX) mostra os widgets para pesquisa que estao setadas na direita  -->
                 <div id="div_right"></div>
+                */ ?>
 
             </div>
         </div>
@@ -356,24 +381,24 @@ $options = get_option('socialdb_theme_options');
         <?php if (verify_allowed_action(get_the_ID(), 'socialdb_collection_permission_create_category')): ?>
             <li class="add">
                 <a href="#add" style="background-position: 6px 50%;padding:1px 5px 1px 28px;background-repeat:no-repeat;background-image:url('<?php echo get_template_directory_uri() ?>/libraries/css/images/1462491942_page_white_add.png')">
-                    <?php echo __('Add', 'tainacan'); ?>
+                    <?php _e('Add', 'tainacan'); ?>
                 </a>
             </li>
         <?php endif; ?>
         <?php if (verify_allowed_action(get_the_ID(), 'socialdb_collection_permission_edit_category')): ?>
             <li class="edit">
-                <a href="#edit"><?php echo __('Edit', 'tainacan'); ?></a>
+                <a href="#edit"><?php _e('Edit', 'tainacan'); ?></a>
             </li>
         <?php endif; ?>
         <?php if (verify_allowed_action(get_the_ID(), 'socialdb_collection_permission_delete_category')): ?>
             <li class="delete">
-                <a href="#delete"><?php echo __('Remove', 'tainacan'); ?></a>
+                <a href="#delete"><?php _e('Remove', 'tainacan'); ?></a>
             </li>
         <?php endif; ?>
         <?php //if (verify_collection_moderators(get_the_ID(), get_current_user_id())):   ?>
         <li class="list" id="list_meta_single">
             <a href="#metadata" style="background-position: 6px 50%;padding:1px 5px 1px 28px;background-repeat:no-repeat;background-image:url('<?php echo get_template_directory_uri() ?>/libraries/css/images/properties.png')">
-                <?php echo __('Metadata', 'tainacan'); ?>
+                <?php _e('Metadata', 'tainacan'); ?>
             </a>
         </li>
         <?php // endif;   ?>
@@ -382,18 +407,18 @@ $options = get_option('socialdb_theme_options');
         <?php if (verify_allowed_action(get_the_ID(), 'socialdb_collection_permission_create_category')): ?>
             <li class="add">
                 <a href="#add" style="background-position: 6px 50%;padding:1px 5px 1px 28px;background-repeat:no-repeat;background-image:url('<?php echo get_template_directory_uri() ?>/libraries/css/images/1462491942_page_white_add.png')">
-                    <?php echo __('Add', 'tainacan'); ?>
+                    <?php _e('Add', 'tainacan'); ?>
                 </a>
             </li>
         <?php endif; ?>
         <?php if (verify_allowed_action(get_the_ID(), 'socialdb_collection_permission_edit_category')): ?>
             <li class="edit">
-                <a href="#edit"><?php echo __('Edit', 'tainacan'); ?></a>
+                <a href="#edit"><?php _e('Edit', 'tainacan'); ?></a>
             </li>
         <?php endif; ?>
         <?php if (verify_allowed_action(get_the_ID(), 'socialdb_collection_permission_delete_category')): ?>
             <li class="delete">
-                <a href="#delete"><?php echo __('Remove', 'tainacan'); ?></a>
+                <a href="#delete"><?php _e('Remove', 'tainacan'); ?></a>
             </li>
         <?php endif; ?>
         <?php //if (verify_collection_moderators(get_the_ID(), get_current_user_id())): ?>
@@ -526,7 +551,7 @@ $options = get_option('socialdb_theme_options');
                                 <div id="dynatree_synonyms" style="height: 200px;overflow-y: scroll;"></div>
                                 <input type="hidden" id="category_synonyms" name="socialdb_event_term_synonyms">
                             </div>
-                            <!-- Fim: Sinonimos -->     
+                            <!-- Fim: Sinonimos -->
                             <input type="hidden" id="category_single_edit_collection_id" name="socialdb_event_collection_id" value="<?php echo get_the_ID(); ?>">
                             <input type="hidden" id="category_single_edit_time" name="socialdb_event_create_date" value="<?php echo mktime(); ?>">
                             <input type="hidden" id="category_single_edit_user_id" name="socialdb_event_user_id" value="<?php echo get_current_user_id(); ?>">
@@ -685,7 +710,7 @@ $options = get_option('socialdb_theme_options');
                                 <div id="dynatree_synonyms_tag" style="height: 200px;overflow-y: scroll;"></div>
                                 <input type="hidden" id="tag_synonyms" name="socialdb_event_tag_synonyms">
                             </div>
-                            <!-- Fim: Sinonimos -->    
+                            <!-- Fim: Sinonimos -->
                             <input type="hidden" id="tag_single_edit_collection_id" name="socialdb_event_collection_id" value="<?php echo get_the_ID(); ?>">
                             <input type="hidden" id="tag_single_edit_time" name="socialdb_event_create_date" value="<?php echo mktime(); ?>">
                             <input type="hidden" id="tag_single_edit_user_id" name="socialdb_event_user_id" value="<?php echo get_current_user_id(); ?>">
@@ -892,7 +917,7 @@ $options = get_option('socialdb_theme_options');
                                     $collection_id = get_the_ID();
                                     $loginUrl = $helper->getLoginUrl(get_bloginfo(template_directory) . '/controllers/social_network/facebook_controller.php?collection_id=' . $collection_id . '&operation=getAccessToken', $permissions);
                                 } catch (Exception $e) {
-                                    
+
                                 }
 
                                 //echo '<a href="' . $loginUrl . '">Log in with Facebook!</a>';
@@ -986,7 +1011,7 @@ $options = get_option('socialdb_theme_options');
                             $collection_id = get_the_ID();
                             $loginUrl = $helper->getLoginUrl(get_bloginfo(template_directory) . '/controllers/social_network/facebook_controller.php?collection_id=' . $collection_id . '&operation=getAccessToken', $permissions);
                         } catch (Exception $e) {
-                            
+
                         }
 
                         //echo '<a href="' . $loginUrl . '">Log in with Facebook!</a>';
@@ -1032,5 +1057,3 @@ $options = get_option('socialdb_theme_options');
     <?php
 endwhile; // end of the loop.
 get_footer();
-
-

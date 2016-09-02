@@ -78,8 +78,13 @@ class EventObjectDeleteModel extends EventModel {
             $value = wp_update_post($object);
         }
         //verificando se todo
-        if ($value>0) {
-            $this->set_approval_metas($data['event_id'], $data['socialdb_event_observation'], $automatically_verified);
+        if ($value > 0) {
+            if ( !array_key_exists("socialdb_event_observation", $data) ) {
+                $_event_observation = "";
+            } else {
+                $_event_observation = $data['socialdb_event_observation'];
+            }
+            $this->set_approval_metas($data['event_id'], $_event_observation, $automatically_verified);
             $this->update_event_state('confirmed', $data['event_id']);
             $data['msg'] = __('The event was successful','tainacan');
             $data['type'] = 'success';
