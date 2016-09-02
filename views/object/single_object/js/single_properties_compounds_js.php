@@ -440,7 +440,8 @@
                     for(var i = 0;i<cardinality;i++){
                         var value = $('#actual_value_'+compound_id+'_' + tree + '_' + i).val();
                         dynatree_object_index["field_property_term_"+compound_id+"_"+ tree  + '_' + i] = i;
-                        $("#field_property_term_"+compound_id+"_" + tree + '_' + i).dynatree({
+                        console.log(dynatree_object_index,"field_property_term_"+compound_id+"_"+ tree  + '_' + i);
+                        $("#dynatree_property_term_"+compound_id+"_" + tree + '_' + i).dynatree({
                                 checkbox: true,
                                 // Override class name for checkbox icon:
                                 classNames: {checkbox: "dynatree-radio"},
@@ -484,18 +485,22 @@
                                     bindContextMenuSingle(span,'field_property_term_' + tree + '_');
                                 },
                                 onSelect: function (flag, node) {
+                                    console.log(this.$tree[0].id);
                                     var i = dynatree_object_index[this.$tree[0].id];
                                     if ($("#field_property_term_"+compound_id+"_" + tree + '_' + i).val() === node.data.key) {
-                                      //  append_category_properties(0,node.data.key);
+                                        //  append_category_properties(0,node.data.key);
+                                        $('[name="socialdb_property_'+compound_id+'_'+tree+'_'+i+'[]"]').val("");
                                         $("#field_property_term_"+compound_id+"_" + tree + '_' + i).val("");
                                          $('#core_validation_'+compound_id+'_' + tree + '_' + i).val('false');
                                         // set_field_valid_compounds(tree,'core_validation_'+compound_id+'_' + tree + '_' + i,compound_id);
                                     } else {
-                                       // append_category_properties(node.data.key,$("#field_property_term_"+compound_id+"_" + tree).val());
+                                        $('[name="socialdb_property_'+compound_id+'_'+tree+'_'+i+'[]"]').val(node.data.key);
+                                        // append_category_properties(node.data.key,$("#field_property_term_"+compound_id+"_" + tree).val());
                                         $("#field_property_term_"+compound_id+"_" + tree + '_' + i).val(node.data.key);
                                         $('#core_validation_'+compound_id+'_'+ tree + '_' + i).val('true');
-                                       // set_field_valid_compounds(tree,'core_validation_'+compound_id+'_' + tree + '_' + i,compound_id);
+                                        // set_field_valid_compounds(tree,'core_validation_'+compound_id+'_' + tree + '_' + i,compound_id);
                                     }
+                                    console.log($("#field_property_term_"+compound_id+"_" + tree + '_' + i),compound_id,tree,i);
                                 }
                             });
                     }

@@ -103,6 +103,10 @@ $(window).load(function () {
             Hook.call('tainacan_oncreate_collection', [src]);
         }
     }
+    //verifico se esta querendo abrir a pagina de criacao de item
+    if ($('#open_create_item_text').val() === 'true') {
+        showAddItemText();
+    }
     //verifico se o usuario se registrou
     if ($('#open_login').val() === 'true') {
         showLoginScreen(src);
@@ -2500,3 +2504,33 @@ jQuery.fn.darken = function (darkenPercent) {
 $(".list-group .list-group").each(function () {
     $(this).children('.list-group-item').darken(10);
 });
+
+
+//************************  CACHE  *******************************//
+function save_cache(html,operation,collection_id) {
+    var src = $('#src').val();
+    $.ajax({
+        url: src + '/controllers/cache_action/cache_controller.php',
+        type: 'POST',
+        data: {
+            operation: 'save_cache',
+            route: operation,
+            collection_id: collection_id,
+            html: html
+        }
+    }).done(function (result) {
+    });
+}
+function delete_cache(operation,collection_id) {
+    var src = $('#src').val();
+    $.ajax({
+        url: src + '/controllers/cache_action/cache_controller.php',
+        type: 'POST',
+        data: {
+            operation: 'delete_cache',
+            route: operation,
+            collection_id: collection_id
+        }
+    }).done(function (result) {
+    });
+}

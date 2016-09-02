@@ -18,10 +18,16 @@ class ObjectController extends Controller {
         switch ($operation) {
             // #1 ADICIONAR ITEMS TIPO TEXTO
             case "create_item_text":
-                $data['object_name'] = get_post_meta($data['collection_id'], 'socialdb_collection_object_name', true);
-                $data['socialdb_collection_attachment'] = get_post_meta($data['collection_id'], 'socialdb_collection_attachment', true);
-                $data['object_id'] = $object_model->create();
-                return $this->render(dirname(__FILE__) . '../../../views/object/create_item_text.php', $data);
+                $has_cache = $this->has_cache($data['collection_id'], 'create-item-text');
+                if($has_cache){
+                    $has_cache = htmlspecialchars_decode(stripslashes($has_cache)) .file_get_contents(dirname(__FILE__) . '../../../views/object/js/create_item_text_cache_js.php');
+                     return $has_cache;
+                }else{
+                    $data['object_name'] = get_post_meta($data['collection_id'], 'socialdb_collection_object_name', true);
+                    $data['socialdb_collection_attachment'] = get_post_meta($data['collection_id'], 'socialdb_collection_attachment', true);
+                    $data['object_id'] = $object_model->create();
+                    return $this->render(dirname(__FILE__) . '../../../views/object/create_item_text.php', $data);
+                }
                 break;
             // FIM : ADICIONAR ITEMS TIPO TEXTO
             // #1 ADICIONAR ITEMS TIPO URL

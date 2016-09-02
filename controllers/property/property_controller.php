@@ -113,7 +113,7 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
                 }
                 break;
             case "update_property_compounds":
-                $property_model->update_tab_organization($data['collection_id'], $data["socialdb_event_property_tab"], $data['property_term_id']);
+                $property_model->update_tab_organization($data['collection_id'], $data["socialdb_event_property_tab"], $data['compound_id']);
                 if(isset($data['is_property_fixed'])&&$data['is_property_fixed']=='true'){
                     $labels_collection = ($data['collection_id']!='') ? get_post_meta($data['collection_id'], 'socialdb_collection_fixed_properties_labels', true) : false;
                     if($labels_collection):

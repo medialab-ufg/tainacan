@@ -113,6 +113,12 @@ $options = get_option('socialdb_theme_options');
         echo $_GET['open_wizard'];
     }
     ?>">
+    <!-- Se devera abrir o formulario de adicao item -->
+    <input type="hidden" id="open_create_item_text" name="open_create_item_text" value="<?php
+    if (isset($_GET['create-item'])) {
+        echo $_GET['create-item'];
+    }
+    ?>">
     <input type="hidden" id="open_login" name="open_login" value="<?php
     if (isset($_GET['open_login'])) {
         echo $_GET['open_login'];

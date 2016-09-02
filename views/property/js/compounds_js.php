@@ -175,7 +175,7 @@
                             '<span class="glyphicon glyphicon-edit"></span></a> ' +
                             button + '</div></li>');
                     } else {
-                        if ( $.inArray(property.type, ranking_types) == -1 ) {
+                        if ( $.inArray(property.type, ranking_types) == -1 ) {;
                             $(get_property_tab_seletor(tab_property_id)).append(
                                 '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '" data-widget="' + current_search_widget + '" class="' + property.type + ' ui-widget-content ui-corner-tr">' +
                                 '<label class="title-pipe">'+ add_compounds_button() + property.name + '</label><div class="action-icons">' +

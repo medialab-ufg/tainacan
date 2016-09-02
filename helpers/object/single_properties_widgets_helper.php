@@ -318,7 +318,7 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
             <div class="row">
                 <div style='height: 150px;' 
                      class='col-lg-12'  
-                     id='field_property_term_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>'>
+                     id='dynatree_property_term_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>'>
                 </div>
                 <input type="hidden" 
                        id='field_property_term_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>'

@@ -278,7 +278,11 @@ class ObjectWidgetsHelper extends ViewHelper {
             $references['properties_terms_tree'][] = $property['id'];
             ?>
             <button type="button"
-                onclick="showModalFilters('add_category','<?php echo get_term_by('id', $property['metas']['socialdb_property_term_root'] , 'socialdb_category_type')->name ?>',<?php echo $property['metas']['socialdb_property_term_root'] ?>,'field_property_term_<?php echo $property['id']; ?>')" 
+                onclick="showModalFilters('add_category',
+                            '<?php echo get_term_by('id', $property['metas']['socialdb_property_term_root'] , 
+                                    'socialdb_category_type')->name ?>',
+                                    <?php echo $property['metas']['socialdb_property_term_root'] ?>,
+                                                'field_property_term_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>')" 
                 class="btn btn-primary btn-xs"><?php _e('Add Category','tainacan'); ?>
             </button>
             <br><br>
@@ -325,7 +329,8 @@ class ObjectWidgetsHelper extends ViewHelper {
         }elseif ($property['type'] == 'tree_checkbox') {
             $references['properties_terms_treecheckbox'][] = $property['id']; ?>
             <button type="button"
-                onclick="showModalFilters('add_category','<?php echo get_term_by('id', $property['metas']['socialdb_property_term_root'] , 'socialdb_category_type')->name ?>',<?php echo $property['metas']['socialdb_property_term_root'] ?>,'field_property_term_<?php echo $property['id']; ?>_<?php echo $i; ?>')" 
+                onclick="showModalFilters('add_category','<?php echo get_term_by('id', $property['metas']['socialdb_property_term_root'] , 'socialdb_category_type')->name ?>',
+                <?php echo $property['metas']['socialdb_property_term_root'] ?>,'field_property_term_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>')" 
                 class="btn btn-primary btn-xs"><?php _e('Add Category','tainacan'); ?>
             </button>
             <br><br>

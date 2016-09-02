@@ -77,7 +77,7 @@ class EventPropertyCompoundsEdit extends EventModel {
         //inserindo o metadado
         $property_category_id = get_post_meta($event_id, 'socialdb_event_property_compounds_edit_category_root_id',true) ;   
         // chamo a funcao do model de propriedade para fazer a insercao
-         $result = json_decode($propertyModel->update_property_compounds($property_id, $name, $collection_id, $property_category_id, $properties_id, $cardinality, $help, $required));
+        $result = json_decode($propertyModel->update_property_compounds($property_id, $name, $collection_id, $property_category_id, $properties_id, $cardinality, $help, $required));
         if(isset($result->property_id)){
                 do_action('after_event_update_property_compounds',$property_id,$event_id);
         }

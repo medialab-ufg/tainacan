@@ -780,7 +780,13 @@ class PropertyModel extends Model {
     public function get_tabs_list($collection_id) {
         $value = get_post_meta($collection_id, 'socialdb_collection_update_tab_organization',true);
         if($value){
-           return json_encode(unserialize($value));
+           $array =  unserialize($value);
+           if(is_array($array)){
+               unset($array[0]['']);
+               return json_encode($array);
+           }else{
+               return json_encode(false);  
+           }
         }else{
           return json_encode(false);  
         }
