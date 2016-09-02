@@ -20,10 +20,10 @@ include_once ('js/list_versions_js.php');
     <div class="item-main-data row" style="padding-right: 0; padding-left: 0;">
         <div class="col-md-12 content-title single-item-title tainacan-header-info" style="padding-bottom: 35px;">
             <div class="col-md-12">
-                <h3 id="text_title"><?php echo $object->post_title . ' - ' . __('Version History', 'tainacan'); ?></h3>
+                <h3 id="text_title"><?php echo $id_active . $object->post_title . ' - ' . __('Version History', 'tainacan'); ?></h3>
                 <hr>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <strong><?php _e('Title', 'tainacan'); ?></strong>
             </div>
             <div class="col-md-2">
@@ -32,36 +32,53 @@ include_once ('js/list_versions_js.php');
             <div class="col-md-2">
                 <strong><?php _e('Date', 'tainacan'); ?></strong>
             </div>
-            <div class="col-md-2">
+            <!--div class="col-md-2">
                 <strong><?php _e('Editor', 'tainacan'); ?></strong>
-            </div>
-            <div class="col-md-2">
+            </div-->
+            <div class="col-md-3">
                 <strong><?php _e('Note', 'tainacan'); ?></strong>
             </div>
             <div class="col-md-2">
                 <strong><?php _e('Action', 'tainacan'); ?></strong>
             </div>
             <?php foreach ($versions as $version) { ?>
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <?php echo $version['title']; ?>
                 </div>
                 <div class="col-md-2">
                     <?php echo $version['version']; ?>
                 </div>
                 <div class="col-md-2">
-                    <?php echo $version['data']; ?>
+                    <?php echo date('d/m/Y H:i', strtotime($version['data'])); ?>
                 </div>
-                <div class="col-md-2">
+                <!--div class="col-md-2">
                     Eu
-                </div>
-                <div class="col-md-2">
+                </div-->
+                <div class="col-md-3">
                     <?php echo $version['note']; ?>
                 </div>
-                <?php if ($id_active != $version['ID']) { ?>
-                    <div class="col-md-2">
-                        deletar e reverter
-                    </div>
-                <?php } ?>
+                <div class="col-md-2">
+                    <?php if ($id_active != $version['ID']) { ?>
+                        <?php if ((verify_collection_moderators($collection_id, get_current_user_id()) || current_user_can('manage_options')) && get_post_type($collection_id) == 'socialdb_collection'): ?>
+                    <ul class="item-funcs" style="float: left !important;">
+                                <li>
+                                    <a onclick="delete_version('<?php echo $version['ID'] ?>', '<?php _e('Are you sure?','tainacan'); ?>', '<?php _e('This operation is not possible reverse. If you delete the original item, all versions are deleted.','tainacan'); ?>');" href="#">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a onclick="restore_version('<?php echo $version['ID'] ?>', '<?php _e('Are you sure?','tainacan'); ?>', '<?php _e('Are you want to restore this item?','tainacan'); ?>');" href="#">
+                                        <span class="glyphicon glyphicon-repeat"></span>
+                                    </a>
+                                </li>
+                            </ul>
+                        <?php else: ?>
+                            <?php _e('Not active', 'tainacan'); ?>
+                        <?php endif; ?>
+                    <?php } else { ?>
+                        <?php _e('Active', 'tainacan'); ?>
+                    <?php } ?>
+                </div>
             <?php } //var_dump ($version_active, $original, $version_numbers, $object); ?>
         </div>
     </div>

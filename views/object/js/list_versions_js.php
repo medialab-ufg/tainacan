@@ -22,5 +22,61 @@
         $('#object_page').val($('#single_name').val());
         history.replaceState(stateObj, "page 2", $('#socialdb_permalink_object').val());
     });
+    
+    function delete_version(version_id, title, text){
+        swal({
+            title: title,
+            text: text,
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonClass: 'btn-danger',
+            closeOnConfirm: true,
+            closeOnCancel: true
+        },
+        function (isConfirm) {
+            if (isConfirm) {
+                show_modal_main();
+                $.ajax({
+                    type: "POST",
+                    url: $('#src').val() + "/controllers/object/object_controller.php",
+                    data: {
+                        operation: 'delete_version',
+                        version_id: version_id
+                    }
+                }).done(function (result) {
+                    hide_modal_main();
+
+                });
+            }
+        });
+    }
+    
+    function restore_version(version_id, title, text){
+        swal({
+            title: title,
+            text: text,
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonClass: 'btn-danger',
+            closeOnConfirm: true,
+            closeOnCancel: true
+        },
+        function (isConfirm) {
+            if (isConfirm) {
+                show_modal_main();
+                $.ajax({
+                    type: "POST",
+                    url: $('#src').val() + "/controllers/object/object_controller.php",
+                    data: {
+                        operation: 'restore_version',
+                        version_id: version_id
+                    }
+                }).done(function (result) {
+                    hide_modal_main();
+
+                });
+            }
+        });
+    }
 
 </script>

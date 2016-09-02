@@ -127,14 +127,14 @@ class ObjectController extends Controller {
                 $args = $object_model->list_all($data);
                 $data['loop'] = new WP_Query($args);
                 $data['collection_data'] = $collection_model->get_collection_data($collection_id);
-                $data["show_string"] = is_root_category($collection_id) ? __('Showing collections:','tainacan') : __('Showing Items:', 'tainacan');
-                
+                $data["show_string"] = is_root_category($collection_id) ? __('Showing collections:', 'tainacan') : __('Showing Items:', 'tainacan');
+
                 // View modes' vars                
                 $data['_slideshow_time'] = get_post_meta($collection_id, 'socialdb_collection_slideshow_time', true);
                 $data["geo_coordinates"]["lat"] = get_post_meta($collection_id, "socialdb_collection_latitude_meta", true);
                 $data["geo_coordinates"]["long"] = get_post_meta($collection_id, "socialdb_collection_longitude_meta", true);
                 $data['use_approx_mode'] = get_post_meta($collection_id, "socialdb_collection_use_prox_mode", true);
-                $data["geo_loc"] = get_post_meta($collection_id, "socialdb_collection_location_meta", true);                
+                $data["geo_loc"] = get_post_meta($collection_id, "socialdb_collection_location_meta", true);
 
                 $view_count = get_post_meta($collection_id, 'collection_view_count', true);
                 if (empty($view_count)):
@@ -484,7 +484,7 @@ class ObjectController extends Controller {
                     $object_model->copyItemTags($newItem, $data['object_id']);
                     $object_model->createMetasVersion($newItem, $original, $new_version, $data['motive']);
                     return true;
-                }else{
+                } else {
                     return false;
                 }
                 //var_dump($version_numbers, $new_version);
@@ -502,21 +502,38 @@ class ObjectController extends Controller {
                 $data['object'] = get_post($object_id);
                 $data["username"] = $user_model->get_user($data['object']->post_author)['name'];
                 $data['metas'] = get_post_meta($object_id);
-                
+
                 $data['version_active'] = $object_model->checkVersionNumber($data['object']);
-                $data['id_active'] = $object_model->checkVersionActive($data['object']);
                 $data['original'] = $object_model->checkOriginalItem($data['object']->ID);
+                $data['id_active'] = $object_model->checkVersionActive($data['original']);
                 $data['version_numbers'] = $object_model->checkVersions($data['original']);
-                
+
+                $all_versions = $object_model->get_all_versions($data['original']);
+
                 $arrFirst['ID'] = get_post($data['original'])->ID;
                 $arrFirst['title'] = get_post($data['original'])->post_title;
                 $arrFirst['version'] = 1;
                 $arrFirst['data'] = get_post($data['original'])->post_date;
                 $arrFirst['note'] = get_post_meta($data['original'], 'socialdb_version_comment', true);
-                
+
                 $data['versions'][] = $arrFirst;
-                
+
+                foreach ($all_versions as $each_version) {
+                    $arrV['ID'] = $each_version->ID;
+                    $arrV['title'] = $each_version->post_title;
+                    $arrV['version'] = get_post_meta($each_version->ID, 'socialdb_version_number', true);
+                    $arrV['data'] = get_post_meta($each_version->ID, 'socialdb_version_date', true);
+                    $arrV['note'] = get_post_meta($each_version->ID, 'socialdb_version_comment', true);
+                    $data['versions'][] = $arrV;
+                }
+
                 return $this->render(dirname(__FILE__) . '../../../views/object/list_versions.php', $data);
+                break;
+            case 'delete_version':
+                var_dump($data);
+                break;
+            case 'restore_version':
+                var_dump($data);
                 break;
         }
     }
