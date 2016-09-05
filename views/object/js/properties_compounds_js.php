@@ -457,6 +457,8 @@
     function compounds_list_tree(trees,categories,compound_id) {
         if (trees) {
             $.each(trees, function (idx, tree) {
+                
+                    console.log('#cardinality_compound_'+compound_id+'_'+tree);
                 if($('#cardinality_compound_'+compound_id+'_'+tree).length>0){
                     var cardinality = $('#cardinality_compound_'+compound_id+'_'+tree).val();
                     for(var i = 0;i<cardinality;i++){

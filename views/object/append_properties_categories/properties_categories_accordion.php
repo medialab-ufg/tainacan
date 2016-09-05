@@ -4,17 +4,31 @@
  */
 include_once ('js/properties_categories_accordion_js.php');
 include_once(dirname(__FILE__).'/../../../helpers/view_helper.php');
+include_once(dirname(__FILE__).'/../../../helpers/object/object_properties_widgets_helper.php');
 
 $properties_to_avoid = (explode(',', $properties_to_avoid));
 
 $view_helper = new ViewHelper();
+$object_properties_widgets_helper = new ObjectWidgetsHelper();
 $ids = [];
+$properties_autocomplete = [];
 $properties_terms_radio = [];
 $properties_terms_tree = [];
 $properties_terms_selectbox = [];
 $properties_terms_checkbox = [];
 $properties_terms_multipleselect = [];
 $properties_terms_treecheckbox = [];
+//referencias
+$references = [
+    'properties_autocomplete' => &$properties_autocomplete,
+    'properties_terms_radio' => &$properties_terms_radio,
+    'properties_terms_checkbox' => &$properties_terms_checkbox,
+    'properties_terms_tree' => &$properties_terms_tree,
+    'properties_terms_selectbox' => &$properties_terms_selectbox,
+    'properties_terms_multipleselect' => &$properties_terms_multipleselect,
+    'properties_terms_treecheckbox' => &$properties_terms_treecheckbox,   
+    'properties_to_avoid' => &$properties_to_avoid,   
+];
 if (isset($property_object)):
     foreach ($property_object as $property) {
         if(in_array($property['id'], $properties_to_avoid)){
@@ -404,6 +418,7 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
     <?php } ?>
 <?php endif;
 ?>
+<?php $object_properties_widgets_helper->list_properties_categories_compounds($property_compounds, $object_id,$references)  ?> 
 <input type="hidden" name="pc_properties" id='pc_properties' value="<?php echo implode(',', $ids); ?>">
 <input type="hidden" name="categories" id='pc_categories' value="">
 <input type="hidden" name="properties_autocomplete" 

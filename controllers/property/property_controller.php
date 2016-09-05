@@ -157,6 +157,11 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
                 $data['menu_style_ids'] = $this->get_menu_styles_ids();
                 return $this->render(dirname(__FILE__).'../../../views/property/list_metadata.php', $data);
                 break;
+            case "list_metadata_category":
+                $data = $property_model->list_data($data);
+                $data['menu_style_ids'] = $this->get_menu_styles_ids();
+                return $this->render(dirname(__FILE__).'../../../views/property/list_metadata_category.php', $data);
+                break;
             case "list_property_terms":
                 return $property_model->list_property_terms($data);
             case "list_property_data":

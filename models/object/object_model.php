@@ -1804,6 +1804,11 @@ class ObjectModel extends Model {
     public function insert_compounds($data, $object_id) {
         if ($data['properties_compounds'] !== '') {
             $compounds = explode(',', $data['properties_compounds']);
+            // propriedade de categorias
+            if(isset($data['pc_properties_compounds'])&&trim($data['pc_properties_compounds'])!=''){
+              $pc_compounds =   explode(',', $data['pc_properties_compounds']);
+              $compounds = array_merge($compounds, $pc_compounds);
+            }
             foreach ($compounds as $compound) {
                 $properties_coumpounded = explode(',', $data['compounds_' . $compound]);
                 $cardinality = $data['cardinality_' . $compound];

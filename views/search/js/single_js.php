@@ -305,7 +305,7 @@
         $.ajax({
             url: $('#src').val() + '/controllers/property/property_controller.php',
             type: 'POST',
-            data: {operation: 'list', hide_wizard: 'true', category_id: category_id, collection_id: $("#collection_id").val()}
+            data: {operation: 'list_metadata_category', hide_wizard: 'true', category_id: category_id, collection_id: $("#collection_id").val()}
         }).done(function (result) {
             $("#menu_object").hide();
             $("#container_socialdb").hide('slow');
