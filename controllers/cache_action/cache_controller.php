@@ -7,7 +7,9 @@ class CacheController extends Controller{
             switch ($operation) {
                 //pagina da categoria
                 case 'save_cache':
-                    $cache_model->save_cache($data['html'], $data['route'], $data['collection_id']);
+                    if(get_option('tainacan_cache')!=='false'):
+                        $cache_model->save_cache($data['html'], $data['route'], $data['collection_id']);
+                    endif;
                     break;
                 case 'delete_cache':
                     $cache_model->delete_cache($data['route'], $data['collection_id']);

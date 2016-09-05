@@ -253,6 +253,12 @@ class ThemeOptionsModel extends Model {
                 update_post_meta($socialdb_logo, 'socialdb_respository_cover_id', $cover_id);
             }
         }
+        
+        if(isset($data['tainacan_cache']) && $data['tainacan_cache'] == 'true'){
+             update_option('tainacan_cache', 'false');
+        }else{
+             update_option('tainacan_cache', 'true');
+        }
 
         $data['title'] = __("Sucess", 'tainacan');
         $data['msg'] = __("Options successfully updated!", 'tainacan');

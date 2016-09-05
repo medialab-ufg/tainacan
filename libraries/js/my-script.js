@@ -2529,3 +2529,7 @@ function delete_cache(operation,collection_id) {
     }).done(function (result) {
     });
 }
+
+function delete_all_cache_collection(){
+    delete_cache('create-item-text',$('#collection_id').val());
+}

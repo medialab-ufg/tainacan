@@ -8,12 +8,13 @@
 //
  //########################### #1 SCRIPTS INICIAIS #################################
 $(function(){
+    $('#object_id_add').val($('#temporary_id_item').val());
     //1 - inicializo as tabs
     $('.tabs').tab();
     //2 - ativo os tootips
     $('[data-toggle="tooltip"]').tooltip();
     //3 - ativo as tabs
-    list_tabs()
+    list_tabs();
     //4 - ckeditor para o conteudo do item
     showCKEditor('object_editor'); 
     //5 - O submit do form
@@ -390,7 +391,7 @@ function back_main_list() {
   $(function () {
         var src = $('#src').val();
         var object_id = $('#object_id_add').val();
-        if ($('#create_stars_id_' + object_id).val() !== '') {
+        if ($('#create_stars_id_' + object_id).val()) {
             stars = $('#create_stars_id_' + object_id).val().split(',');
             $.each(stars, function (idx, elem) {
                 $('#create_rating_' + object_id + '_' + elem).raty({

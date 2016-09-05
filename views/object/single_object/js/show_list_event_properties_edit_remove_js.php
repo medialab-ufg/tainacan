@@ -66,6 +66,8 @@ function show_confirmation_delete_property_object_event(object_id,property_id,pr
                 list_properties_single(object_id);
                 list_properties_edit_remove_single(object_id);
                 showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
+                //limpando caches
+                delete_all_cache_collection();
             });
         }
     });
@@ -101,6 +103,8 @@ function show_confirmation_delete_property_data_event(object_id,property_id,prop
                 list_properties_single(object_id);
                 list_properties_edit_remove_single(object_id);
                 showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
+                //limpando caches
+                delete_all_cache_collection();
             });
         }
     });

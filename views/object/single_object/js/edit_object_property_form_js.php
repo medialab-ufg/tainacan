@@ -13,6 +13,8 @@
                 $("#dynatree").dynatree("getTree").reload();
                 list_properties_single($('#single_event_edit_property_object_post_id').val());
                 showAlertGeneral(elem.title, elem.msg, elem.type);
+                //limpando caches
+                delete_all_cache_collection();
             });
             e.preventDefault();
         });

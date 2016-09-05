@@ -44,7 +44,7 @@ $(function(){
                 $('.menu_left_loader').hide();
                 $('.menu_left').show();
                 //salvo o cache
-                //save_cache($('#configuration').html(),'create-item-text',$('#collection_id').val());
+                save_cache($('#configuration').html(),'create-item-text',$('#collection_id').val());
             });
         });
      });    

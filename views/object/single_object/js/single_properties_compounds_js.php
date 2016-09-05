@@ -772,6 +772,8 @@
                 $("#dynatree").dynatree("getTree").reload();
                 list_properties_single(object_id);
                 showAlertGeneral(elem.title, elem.msg, elem.type);
+                //limpando caches
+                delete_all_cache_collection();
             });
     }
 

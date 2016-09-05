@@ -117,6 +117,8 @@
                 $("#labels_" + property_id + "_" + object_id).fadeIn();
                 list_properties_single(object_id);
                 showAlertGeneral(elem.title, elem.msg, elem.type);
+                //limpando caches
+                delete_all_cache_collection();
             });
         }
     }
@@ -202,11 +204,8 @@
             elem = jQuery.parseJSON(result);
             list_properties_single(object_id);
             showAlertGeneral(elem.title, elem.msg, elem.type);
-            // if (elem.pre_approved) {
-            // //    $("#property_" + property_id + "_" + object_id + "_value_before").val($("#property_value_" + property_id + "_" + object_id).val());
-            // } else {
-            //    cancel_data_property(property_id, object_id)
-            //}
+            //limpando caches
+            delete_all_cache_collection();
         });
         return;
 
@@ -594,7 +593,8 @@
                     show_classifications_single(object_id);
                     list_properties_single(object_id);
                     showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
-
+                    //limpando caches
+                    delete_all_cache_collection();
                 });
             } else {
                 list_properties_single(object_id);
@@ -632,7 +632,8 @@
                     show_classifications_single(object_id);
                     list_properties_single(object_id);
                     showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
-
+                    //limpando caches
+                    delete_all_cache_collection();
                 });
             } else {
                 list_properties_single(object_id);
@@ -704,7 +705,8 @@
                     show_classifications(object_id);
                     list_properties_single(object_id);
                     showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
-
+                    //limpando caches
+                    delete_all_cache_collection();
                 });
                 //retira a anterior
                 $.ajax({
@@ -761,7 +763,8 @@
                         show_classifications(object_id);
                         list_properties_single(object_id);
                         showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
-
+                        //limpando caches
+                        delete_all_cache_collection();
                     });
                     //retira a anterior
                     $.ajax({
@@ -816,7 +819,8 @@
                     show_classifications(object_id);
                     list_properties_single(object_id);
                     showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
-
+                    //limpando caches
+                    delete_all_cache_collection();
                 });
                 //retira a anterior
                 $.ajax({

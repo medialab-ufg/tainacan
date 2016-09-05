@@ -60,6 +60,7 @@ $post_thumb = get_the_post_thumbnail($socialdb_logo, 'thumbnail');
                         value="<?php echo $module ?>">&nbsp;<?php _e($module,'tainacan') ?> <br>
                 <?php endforeach; ?>
             </div>
+            
             <!---------------- Colecoes templates --------------------------------->
             <div class="form-group collection-templates">
                 
@@ -77,7 +78,16 @@ $post_thumb = get_the_post_thumbnail($socialdb_logo, 'thumbnail');
                     </div>
                 </div>
             </div>
-
+            <!---------------- Cache --------------------------------->
+            <div class="form-group" style="margin-bottom: 50px;" >
+                <h5 style="font-weight: bolder"> <?php _e('Tainacan Cache','tainacan'); ?> </h5>
+                <div class="col-md-12 no-padding">
+                    <input <?php echo (get_option('tainacan_cache')==='false')? 'checked="checked"':'' ?>
+                        type="checkbox"
+                        name="tainacan_cache"
+                        value="true">&nbsp;<?php _e('Disable Tainacan cache','tainacan') ?> <br>
+                </div>
+            </div>
             <div class="form-group">
                 <h5 style="font-weight: bolder; margin-bottom: 2px;"> <?php _e('Permissions','tainacan'); ?> </h5>
                 <p><?php _e('Choose the permissions for each one of the actions below','tainacan'); ?></p>

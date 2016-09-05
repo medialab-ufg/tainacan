@@ -20,7 +20,9 @@ class ObjectController extends Controller {
             case "create_item_text":
                 $has_cache = $this->has_cache($data['collection_id'], 'create-item-text');
                 if($has_cache){
-                    $has_cache = htmlspecialchars_decode(stripslashes($has_cache)) .file_get_contents(dirname(__FILE__) . '../../../views/object/js/create_item_text_cache_js.php');
+                    $has_cache = htmlspecialchars_decode(stripslashes($has_cache)) . 
+                             '<input type="hidden" id="temporary_id_item" value="'.$object_model->create().'">' .
+                            file_get_contents(dirname(__FILE__) . '../../../views/object/js/create_item_text_cache_js.php');
                      return $has_cache;
                 }else{
                     $data['object_name'] = get_post_meta($data['collection_id'], 'socialdb_collection_object_name', true);
