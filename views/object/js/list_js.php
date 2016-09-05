@@ -226,7 +226,8 @@
                 data: { selected_ids: bulkds, operation: 'edit_multiple_items' }
             }).done(function(html_res){
                 hide_modal_main();
-                $("#temp-editor").show().append(html_res);
+                //$("#center_pagination").hide();
+                $("#main_part").html(html_res);
             });
         });
 

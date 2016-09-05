@@ -52,8 +52,6 @@ if( !$collection_list_mode ) {
             ?>
         </div>
         
-        <div id="temp-editor" style="display: none"> </div>
-        
     </div>
 
 <?php else: ?>
@@ -126,5 +124,3 @@ if ($loop->found_posts > 10):
         </div>
     </div>
 <?php endif; ?>
-
-

@@ -40,8 +40,6 @@ $references = [
 ?>
 <div class="row" style="padding-right: 0px;padding-left: 0px;">
     
-    <?php // var_dump($bulked_ids); ?>
-    
    <!-------------- METADADOS - BLOCO ESQUERDO (COL-MD-3) --------------------->
     <div style="
          display:none;
@@ -176,7 +174,9 @@ $references = [
                                         });
                                     </script>
                                     <div id="popover_content_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"   class="hide ">
-                                        <form class="form-inline"  style="font-size: 12px;width: 300px;">
+                                        <form class="form-inline"  style="
+                                        
+                                        font-size: 12px;width: 300px;">
                                             <div class="form-group">
                                               <input type="text"
                                                      placeholder="<?php _e('Type the title','tainacan') ?>"
@@ -400,13 +400,13 @@ $references = [
          </h3>
     </div>
 <!------------------------------- LISTA ITEMS UPADOS - BLOCO CENTRO DIREITO (COL-MD-9) -------------------------------------------------------------->
-    <form id='sumbit_multiple_items'>
+    <form id='sumbit_multiple_items' class="col-md-9">
         <div class='col-md-9' id="no_item_uploaded" style='display:none;'>
             <h3 style="text-align: center;"><?php _e('No items uploaded','tainacan') ?></h3>
         </div>
-        <div class='col-md-10 pull-right' style="background-color: white;border: 3px solid #E8E8E8;">
+        <div class='col-md-12 pull-right' style="background-color: white;border: 3px solid #E8E8E8;">
             <h3>
-                <?php _e('Edit items','tainacan') ?>
+                <?php _e('Edit multiple items','tainacan') ?>
                 <button type="button" onclick="back_main_list();" class="btn btn-default pull-right">
                             <?php _e('Cancel','tainacan') ?>
                 </button>
@@ -441,12 +441,13 @@ $references = [
             <!--------------- FIM: BOTOES PARA MANIPULACAO DOS ITENS ---------------->
             <!--------------- container todos os itens  ----------------------------->
             <div style="max-height: 500px;overflow-y: scroll">
+
                 <div id="selectable">
                     <?php
                     // images
                     // if(is_array($items['image'])){
-                        ?>
-                        <div  id="container_images"  class='col-md-12'>
+                    ?>
+                        <div id="container_images"  class='col-md-12'>
                             <h4>
                                 <input class="class_selected_items"
                                        type='checkbox' id='selectAllImages'
@@ -454,40 +455,33 @@ $references = [
                                 &nbsp;<?php _e('Image Files','tainacan') ?>
                             </h4>
                         <?php
-                        $items['image'] = ['ID' => 237, 'ID' => 278, 'ID' => 240];
-
-                        foreach ($items['image'] as $file) {
-                                $files[] = $file['ID'];
-                                $filesImage[] = $file['ID'];
-                                ?>
-                                <div onclick="focusItem('<?php echo $file['ID'] ?>')" >
-                                    <div id="wrapper_<?php echo $file['ID'] ?>"
-                                        class="col-md-3 item-default"
-                                        style="padding-top: 20px;cursor: pointer;">
-                                       <center>
-                                        <!-- container do item -->
-                                        <div style="padding-bottom: 10px;" class="item"
-                                             id="panel_<?php echo $file['ID'] ?>" >
+                        $_selecteds = [];
+                        foreach($bulked_ids as $id) {
+                            array_push($_selecteds, ['ID' => $id]);
+                        }
+                        ?>
+                        <input type="hidden" name="total_bulk_edit" value="<?php echo count($_selecteds) ?>" />
+                            <?php
+                        foreach ($_selecteds as $file) {
+                            $files[] = $file['ID'];
+                            $filesImage[] = $file['ID'];
+                            ?>
+                            <div onclick="focusItem('<?php echo $file['ID'] ?>')" >
+                                <div id="wrapper_<?php echo $file['ID'] ?>" class="col-md-3 item-default" style="padding-top: 20px;cursor: pointer;">
+                                    <center><!-- container do item -->
+                                        <div style="padding-bottom: 10px;" class="item" id="panel_<?php echo $file['ID'] ?>" >
                                             <input style="display:none"
                                                    class="class_selected_items"
                                                    id="item_option_<?php echo $file['ID'] ?>"
-                                                   onchange="selectedItems()"
-                                                   type="checkbox"
-                                                   name="selected_items"
+                                                   onchange="selectedItems()" type="checkbox" name="selected_items"
                                                    value="<?php echo $file['ID'] ?>">
                                             <input id="attachment_option_<?php echo $file['ID'] ?>"
                                                    onchange="manipulateAttachaments('<?php echo $file['ID'] ?>')"
-                                                   class="class_checkboxAttachments"
-                                                   style="display:none"
-                                                   type="checkbox"
+                                                   class="class_checkboxAttachments" style="display:none" type="checkbox"
                                                    name="checkboxAttachments"
                                                    value="<?php echo $file['ID'] ?>">
                                             <?php // o thumbnail do item
-                                                if(trim(wp_get_attachment_image( $file['ID'],'thumbnail',1,['alt'   =>'' ] ))){
-                                                     echo wp_get_attachment_image( $file['ID'],'thumbnail',1,['alt'   =>'' ] );
-                                               }else{
-                                                     echo get_template_directory_uri().'<img src="'.get_template_directory_uri().'/libraries/images/image.png">';
-                                               }
+                                                echo get_item_thumb_image(  $file['ID'] );
                                             ?>
                                         </div>
                                         <input required="required"
@@ -920,7 +914,7 @@ $references = [
         </div>
         <div class="col-md-12">
         <input type="hidden" name="collection_id" value="<?php echo $collection_id; ?>">
-        <input type="hidden" name="operation" value="add_multiples">
+        <input type="hidden" name="operation" value="edit_multiple_items">
         <input type="hidden" name="multiple_properties_terms_radio" id='multiple_properties_terms_radio' value="<?php echo implode(',',$properties_terms_radio); ?>">
         <input type="hidden" name="multiple_properties_terms_tree" id='multiple_properties_terms_tree' value="<?php echo implode(',',$properties_terms_tree); ?>">
         <input type="hidden" name="multiple_properties_terms_selectbox" id='multiple_properties_terms_selectbox' value="<?php echo implode(',',$properties_terms_selectbox); ?>">
