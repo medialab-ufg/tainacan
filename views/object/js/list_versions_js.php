@@ -51,7 +51,7 @@
         });
     }
     
-    function restore_version(version_id, title, text){
+    function restore_version(active_id, version_id, title, text){
         swal({
             title: title,
             text: text,
@@ -69,6 +69,7 @@
                     url: $('#src').val() + "/controllers/object/object_controller.php",
                     data: {
                         operation: 'restore_version',
+                        active_id: active_id,
                         version_id: version_id
                     }
                 }).done(function (result) {

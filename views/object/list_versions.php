@@ -43,7 +43,11 @@ include_once ('js/list_versions_js.php');
             </div>
             <?php foreach ($versions as $version) { ?>
                 <div class="col-md-3">
-                    <?php echo $version['title']; ?>
+                    <a href="<?php echo get_collection_item_href($collection_id); ?>"
+                           onclick="<?php get_item_click_event($collection_id,$version['ID']) ?>">
+                               <?php echo $version['title']; ?>
+                        </a>
+                    <!--a><?php echo $version['title']; ?></a-->
                 </div>
                 <div class="col-md-2">
                     <?php echo $version['version']; ?>
@@ -67,7 +71,7 @@ include_once ('js/list_versions_js.php');
                                     </a>
                                 </li>
                                 <li>
-                                    <a onclick="restore_version('<?php echo $version['ID'] ?>', '<?php _e('Are you sure?','tainacan'); ?>', '<?php _e('Are you want to restore this item?','tainacan'); ?>');" href="#">
+                                    <a onclick="restore_version('<?php echo $id_active ?>','<?php echo $version['ID'] ?>', '<?php _e('Are you sure?','tainacan'); ?>', '<?php _e('Are you want to restore this item?','tainacan'); ?>');" href="#">
                                         <span class="glyphicon glyphicon-repeat"></span>
                                     </a>
                                 </li>

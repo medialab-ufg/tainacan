@@ -2007,6 +2007,32 @@ class ObjectModel extends Model {
         // Update the post into the database
         wp_update_post($new_post);
     }
+    
+    public function revertItem($item, $newItem) {
+        $newItem = get_post($newItem);
+
+        // Update old post
+        $old_post = array(
+            'ID' => $item->ID,
+            'post_status' => 'inherit',
+            'post_type' => 'revision',
+            'post_name' => $newItem->post_name
+        );
+
+        // Update the post into the database
+        wp_update_post($old_post);
+
+        // Update new post
+        $new_post = array(
+            'ID' => $newItem->ID,
+            'post_status' => 'publish',
+            'post_type' => 'socialdb_object',
+            'post_name' => $item->post_name
+        );
+
+        // Update the post into the database
+        wp_update_post($new_post);
+    }
 
     public function checkVersionNumber($object) {
         $version = get_post_meta($object->ID, 'socialdb_version_number', true);

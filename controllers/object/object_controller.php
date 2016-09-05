@@ -539,7 +539,11 @@ class ObjectController extends Controller {
                 var_dump($data);
                 break;
             case 'restore_version':
-                var_dump($data);
+                //var_dump($data);
+                $item = get_post($data['active_id']);
+                $newItem = $data['version_id'];
+                $object_model->revertItem($item, $newItem);
+                return true;
                 break;
         }
     }
