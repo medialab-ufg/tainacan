@@ -41,49 +41,35 @@ $references = [
 <div class="<?php /* row */ ?> " style="padding-right: 0; padding-left: 0;">
     
    <!-------------- METADADOS - BLOCO ESQUERDO (COL-MD-3) --------------------->
-    <div style="
-         display:none;
-         background: white;
-         border: 3px solid #E8E8E8;
-         font: 11px Arial;
-         max-height: 655px;
-         overflow-y: scroll;
-         min-height: 449px;"
-             id='form_properties_items'
-             class="col-md-3 menu_left_files menu-left-size">
-            <h3 style="display:none;" id='labels_items_selected' ><?php _e('Editting ','tainacan') ?>
-                <span id='number_of_items_selected'></span>
-                <?php _e(' item/items ','tainacan') ?>
-            </h3>
-            <div class="expand-all-item btn white tainacan-default-tags">
-                <div class="action-text"
-                     style="display: inline-block">
-                         <?php _e('Expand all', 'tainacan') ?></div>
-                &nbsp;&nbsp;<span class="glyphicon-triangle-bottom white glyphicon"></span>
-                load data
+    <div style="display:none; background: white; border: 3px solid #E8E8E8; font: 11px Arial;max-height: 655px;overflow-y: scroll;min-height: 449px;"
+         id='form_properties_items' class="col-md-3 menu_left_files menu-left-size">
+        <h3 style="display:none;" id='labels_items_selected' ><?php _e('Editting ','tainacan') ?>
+            <span id='number_of_items_selected'></span>
+            <?php _e(' item/items ','tainacan') ?>
+        </h3>
+        <div class="expand-all-item btn white tainacan-default-tags">
+            <div class="action-text" style="display: inline-block">
+                <?php _e('Expand all', 'tainacan') ?></div> &nbsp;&nbsp; <span class="glyphicon-triangle-bottom white glyphicon"></span>
+        </div>
+
+        <?php /*
+        <!---------------- FORMULARIO COM OS METADADOS DOS ITEMS -------------------------------------------------->
+         <div class="list-group" id="accordion" aria-multiselectable="true">
+            <div class="list-group-item list-head" id="headingOne">
+                <a style="cursor: pointer;" class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" for="collapseOne">
+                    <abel for="object_name">
+                        <?php _e('Item name','tainacan'); ?>
+                    </label>
+                </a>
             </div>
-            <!---------------- FORMULARIO COM OS METADADOS DOS ITEMS -------------------------------------------------->
-             <!--div class="list-group" id="accordion" aria-multiselectable="true">
-                <div class="list-group-item list-head" id="headingOne">
-                    <a style="cursor: pointer;" class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" for="collapseOne">
-                        <abel for="object_name">
-                            <?php _e('Item name','tainacan'); ?>
-                        </label>
-                    </a>
+            <div id="collapseOne" class="collapse in" aria-labelledby="headingOne">
+                <div class="list-group list-group-item form-group">
+                    <input class="form-control" type="text"  id="multiple_object_name" name="object_name"
+                           required="required"  onkeyup="setTitle(this)" placeholder="<?php _e('Item name','tainacan'); ?>">
                 </div>
-                <div id="collapseOne" class="collapse in" aria-labelledby="headingOne">
-                    <div class="list-group list-group-item form-group">
-                        <input class="form-control"
-                               type="text"
-                               class="form-control"
-                               id="multiple_object_name"
-                               name="object_name"
-                               required="required"
-                               onkeyup="setTitle(this)"
-                               placeholder="<?php _e('Item name','tainacan'); ?>">
-                    </div>
-                </div>
-            </div>-->
+            </div>
+        </div>
+        */ ?>
        <div id="multiple_accordion" class="multiple-items-accordion">
             <div id="item_name"
                  <?php echo $view_helper->get_visibility($view_helper->terms_fixed['title']) ?>
@@ -384,29 +370,23 @@ $references = [
     </div> <!-- Closes #accordion -->
 
         <?php if(isset($all_ids)): ?>
-        <input type="hidden" name="properties_id" value="<?php echo $all_ids; ?>">
+            <input type="hidden" name="properties_id" value="<?php echo $all_ids; ?>">
         <?php endif; ?>
+    </div>
 
+    <div id='no_properties_items' style="height: 655px;background: white;border: 3px solid #E8E8E8;font: 11px Arial;" class="col-md-2 menu-left-size">
+         <h3> <?php _e('Select items to edit...','tainacan'); ?> </h3>
     </div>
-    <div id='no_properties_items' style="height: 655px;background: white;border: 3px solid #E8E8E8;font: 11px Arial;"
-         class="col-md-2 menu-left-size">
-         <h3> <?php _e('Select items to edit...','tainacan') ?> </h3>
-    </div>
-    <div id='selectingAttachment'
-         style="height: 655px;display:none;background: white;border: 3px solid #E8E8E8;font: 11px Arial;"
-         class="col-md-3 menu-left-size">
-         <h3 ><?php _e('Select attachments to ','tainacan') ?>
-             <span id="nameItemAttachment"></span>
-         </h3>
+    <div id='selectingAttachment' style="height: 655px;display:none;background: white;border: 3px solid #E8E8E8;font: 11px Arial;" class="col-md-3 menu-left-size">
+         <h3> <?php _e('Select attachments to ','tainacan'); ?> <span id="nameItemAttachment"></span> </h3>
     </div>
 <!------------------------------- LISTA ITEMS UPADOS - BLOCO CENTRO DIREITO (COL-MD-9) -------------------------------------------------------------->
     <form id='submit_multiple_items' class="col-md-9">
         <div class='col-md-9' id="no_item_uploaded" style='display:none;'>
-            <h3 style="text-align: center;"><?php _e('No items uploaded','tainacan') ?></h3>
+            <h3 style="text-align: center;"> <?php _e('No items uploaded','tainacan'); ?> </h3>
         </div>
         <div class='col-md-12 pull-right' style="background-color: white;border: 3px solid #E8E8E8;">
-            <h3>
-                <?php _e('Edit multiple items','tainacan') ?>
+            <h3> <?php _e('Edit multiple items','tainacan') ?>
                 <button type="button" onclick="back_main_list();" class="btn btn-default pull-right">
                             <?php _e('Cancel','tainacan') ?>
                 </button>
@@ -441,27 +421,27 @@ $references = [
             <!--------------- FIM: BOTOES PARA MANIPULACAO DOS ITENS ---------------->
             <!--------------- container todos os itens  ----------------------------->
             <div <?php /* style="max-height: 500px;overflow-y: scroll" */ ?> >
-
                 <div id="selectable">
                     <?php
                     // images
                     // if(is_array($items['image'])){
                     ?>
-                        <div id="container_images"  class='col-md-12'>
-                            <h4>
-                                <input class="class_selected_items"
-                                       type='checkbox' id='selectAllImages'
-                                       onclick="selectImages()" value='#'>
-                                &nbsp;<?php _e('Image Files','tainacan') ?>
-                            </h4>
+                    <div id="container_images"  class='col-md-12'>
+                        <h4>
+                            <input class="class_selected_items" type='checkbox' id='selectAllImages' onclick="selectImages()" value='#'>
+                            &nbsp;<?php _e('Image Files','tainacan') ?>
+                        </h4>
                         <?php
                         $_selecteds = [];
+                        $_total_selected = count($_selecteds);
+
+                        $counter = 0;
                         foreach($bulked_ids as $id) {
-                            array_push($_selecteds, ['ID' => $id]);
+                            array_push($_selecteds, ['ID' => $id, 'item_title' => $bulked_titles[$counter++] ]);
                         }
                         ?>
-                        <input type="hidden" name="total_bulk_edit" value="<?php echo count($_selecteds) ?>" />
-                            <?php
+                        <input type="hidden" name="total_bulk_edit" value="<?php echo $_total_selected; ?>" />
+                        <?php
                         foreach ($_selecteds as $file) {
                             $files[] = $file['ID'];
                             $filesImage[] = $file['ID'];
@@ -471,24 +451,22 @@ $references = [
                                      style="cursor: pointer;">
                                     <center style="padding-top: 10px; padding-bottom: 10px;"><!-- container do item -->
                                         <div style="padding-bottom: 10px;" class="item" id="panel_<?php echo $file['ID'] ?>" >
-                                            <input style="display:none"
-                                                   class="class_selected_items"
-                                                   id="item_option_<?php echo $file['ID'] ?>"
-                                                   onchange="selectedItems()" type="checkbox" name="selected_items"
+                                            <input style="display:none" class="class_selected_items"
+                                                   id="item_option_<?php echo $file['ID'] ?>"  onchange="selectedItems()" type="checkbox" name="selected_items"
                                                    value="<?php echo $file['ID'] ?>">
+
                                             <input id="attachment_option_<?php echo $file['ID'] ?>"
                                                    onchange="manipulateAttachaments('<?php echo $file['ID'] ?>')"
                                                    class="class_checkboxAttachments" style="display:none" type="checkbox"
-                                                   name="checkboxAttachments"
-                                                   value="<?php echo $file['ID'] ?>">
+                                                   name="checkboxAttachments" value="<?php echo $file['ID'] ?>">
                                             <?php // o thumbnail do item
                                                 echo get_item_thumb_image(  $file['ID'] );
                                             ?>
                                         </div>
                                         <input required="required" type="text" class='input_title form-control'
-                                               placeholder="<?php _e('Add a title','tainacan') ?>"
-                                               id='title_<?php echo $file['ID'] ?>' style="width: 78%"
-                                               name='title_<?php echo $file['ID'] ?>' value='<?php echo $file['name'] ?>'>
+                                               placeholder="<?php _e('Add a title','tainacan') ?>" id='title_<?php echo $file['ID'] ?>' style="width: 78%"
+                                               name='title_<?php echo $file['ID'] ?>' value='<?php echo $file['item_title'] ?>'>
+
                                         <!-- Hidden para as categorias, tags e attachments  -->
                                         <input type="hidden" id="source_<?php echo $file['ID'] ?>" name="source_<?php echo $file['ID'] ?>" value=''>
                                         <input type="hidden" name="type_<?php echo $file['ID'] ?>" value='image'>
@@ -498,15 +476,15 @@ $references = [
                                         <input type="hidden" id='categorias_<?php echo $file['ID'] ?>' name="categorias_<?php echo $file['ID'] ?>" value=''>
                                         <input type="hidden" id='tags_<?php echo $file['ID'] ?>' name="tags_<?php echo $file['ID'] ?>" value=''>
                                         <input type="hidden" id='license_<?php echo $file['ID'] ?>' name="license_<?php echo $file['ID'] ?>" value=''>
+
                                         <!-- hiddens para valores das propriedades de dados dos items a serem criados -->
-                                        <?php
-                                        if(is_array($data_properties)):
+                                        <?php if(is_array($data_properties)):
                                             foreach ($data_properties as $value) { ?>
-                                                 <input type="hidden"
-                                                        name='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>'
-                                                        id='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>'
-                                                        value='<?php if($value['default_value']&&!empty($value['default_value'])): echo $value['default_value']; endif; ?>'>
-                                        <?php  }
+                                                <input type="hidden"
+                                                       name='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>'
+                                                       id='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>'
+                                                       value='<?php if($value['default_value']&&!empty($value['default_value'])): echo $value['default_value']; endif; ?>'>
+                                        <?php }
                                         endif;
                                         ?>
                                         <!-- hiddens para valores das propriedades de OBJETO dos items a serem criados -->
