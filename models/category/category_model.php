@@ -931,18 +931,21 @@ class CategoryModel extends Model {
     /** function export_zip_taxonomies($terms_id) 
      * @param array  terms_id com as categorias serem exportadas
      * @param string O dir aonde sera gerado os   arquivos
+     * @param string O id da colecao
      * @return array  Gera os arquivos xml dentro da pasta a ser zipada para exportacao
       @author: Eduardo */
-    public function export_zip_taxonomies($terms_id,$dir = '') {
+    public function export_zip_taxonomies($terms_id,$dir = '',$collection_id = 0) {
         if($dir==''){
            $dir =  dirname(__FILE__) . '/../export';
         }
         if (!empty($terms_id)) {
             foreach ($terms_id as $term_id) {
+                if(!is_numeric($term_id))
+                    continue;
                 ob_clean();
                 $df = fopen($dir. '/package/taxonomies/' . $term_id . '.xml', 'w');
                 $xml = '<?xml version="1.0" encoding="UTF-8"?>';
-                $this->get_hierarchy_categories_xml($term_id, $xml, '');
+                $this->get_hierarchy_categories_xml($term_id, $xml, '',$collection_id);
                 fwrite($df, $xml);
                 fclose($df);
             }
@@ -1056,9 +1059,10 @@ class CategoryModel extends Model {
      * @return void eh atribuido dinamicamente no xml a ser printado
      * @author Eduardo Humberto 
      */
-    public function get_hierarchy_categories_xml($parent_id, &$xml, $type) {
+    public function get_hierarchy_categories_xml($parent_id, &$xml, $type,$collection_id = 0) {
         $term = get_term_by('id', $parent_id, 'socialdb_category_type');
         $xml .= '<node id="' . $term->term_id . '" label="' . $term->name . '">';
+        $xml = $this->insert_properties_category($term->term_id,$xml,$collection_id);
         $children = $this->get_category_children($parent_id);
         if (!empty($children) && is_array($children)) {
             //$xml .= '<isComposedBy>';
@@ -1074,18 +1078,44 @@ class CategoryModel extends Model {
                 $child_term = get_term_by('id', $child, 'socialdb_category_type');
                 // $xml .= '<node id="'.$child_term->term_id.'" label="'.$child_term->name.'">';
                 $children_of_child = $this->get_category_children($child);
+                $xml .= '<isComposedBy>';
                 if (!empty($children_of_child) && is_array($children_of_child)) {
-                    $xml .= '<isComposedBy>';
                     $this->get_hierarchy_categories_xml($child, $xml, $type);
-                    $xml .= '</isComposedBy>';
                 } else {
-                    $xml .= '<node id="' . $child_term->term_id . '" label="' . $child_term->name . '"></node>';
+                    $xml .= '<node id="' . $child_term->term_id . '" label="' . $child_term->name . '">';
+                    $xml = $this->insert_properties_category($child,$xml,$collection_id);
+                    $xml .= '</node>';
                 }
+                $xml .= '</isComposedBy>';
                 // $xml .= '</node>';
             }
             // $xml .= '</isComposedBy>';
         }
         $xml .= '</node>';
+    }
+    
+    /**
+     * metodo que adiciona os metadados de uma categoria se existir
+     * 
+     * @param type $term_id
+     * @param type $xml
+     * @return string
+     */
+    public function insert_properties_category($term_id,$xml,$collection_id) {
+        $properties = [];
+        $properties_raw = get_term_meta($term_id, 'socialdb_category_property_id');
+        if($properties_raw  &&  is_array($properties_raw) && $term_id != $this->get_category_root_of($collection_id)){
+            $properties_raw = array_unique(array_filter($properties_raw));
+            foreach ($properties_raw as $property_id) {
+                $properties[] = $property_id;
+            }
+        }
+        if(count($properties)>0){
+            $xml .= '<properties>';
+            $xml = $this->generate_properties_xml($properties, $xml);
+            $xml .= '</properties>';
+        }
+        return $xml;
     }
 
     /**

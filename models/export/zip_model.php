@@ -3,9 +3,6 @@
 /**
  * Author: Eduardo Humberto
  */
-include_once ('../../../../../wp-config.php');
-include_once ('../../../../../wp-load.php');
-include_once ('../../../../../wp-includes/wp-db.php');
 require_once(dirname(__FILE__) . '../../general/general_model.php');
 require_once(dirname(__FILE__) . '../../property/property_model.php');
 require_once(dirname(__FILE__) . '../../category/category_model.php');
@@ -123,7 +120,7 @@ class ZipModel extends Model {
         $categoryModel = new CategoryModel;
         $terms_id = [];
         $root_category = $this->get_category_root_of($collection_id);
-        $all_properties_id = array_unique($this->get_parent_properties($root_category, []));
+        $all_properties_id = array_unique($this->get_parent_properties($root_category, [],$root_category));
         if ($all_properties_id) {
             foreach ($all_properties_id as $property_id) {
                 $type = $propertyModel->get_property_type($property_id); // pego o tipo da propriedade
@@ -135,7 +132,7 @@ class ZipModel extends Model {
         if(!in_array($root_category,$terms_id)){
             $terms_id[] = $root_category;
         }
-        $categoryModel->export_zip_taxonomies(array_unique($terms_id),$dir);
+        $categoryModel->export_zip_taxonomies(array_unique($terms_id),$dir,$collection_id);
         $xml_collection = $this->export_collection_settings($collection_id, $all_properties_id);
         $this->create_xml_file($dir.'/package/metadata/administrative_settings.xml', $xml_collection);
     }
@@ -198,6 +195,21 @@ class ZipModel extends Model {
             $xml .= '<socialdb_collection_hide_rankings>' . get_post_meta($collection_id, 'socialdb_collection_hide_rankings', true) . '</socialdb_collection_hide_rankings>';
             $xml .= '<socialdb_collection_columns>' . get_post_meta($collection_id, 'socialdb_collection_columns', true) . '</socialdb_collection_columns>';
             $xml .= '<socialdb_collection_size_thumbnail>' . get_post_meta($collection_id, 'socialdb_collection_size_thumbnail', true) . '</socialdb_collection_size_thumbnail>';
+            $xml .= '<socialdb_collection_default_tab>' . get_post_meta($collection_id, 'socialdb_collection_default_tab',true) . '</socialdb_collection_default_tab>';
+            $xml .= '<socialdb_collection_update_tab_organization>' . get_post_meta($collection_id, 'socialdb_collection_update_tab_organization',true) . '</socialdb_collection_update_tab_organization>';
+            
+            $tabs = $this->sdb_get_post_meta_by_value($collection_id, 'socialdb_collection_tab');
+            if($tabs &&  is_array($tabs)){
+                $xml .= '<tabs>';
+                foreach ($tabs as $tab) {
+                   $xml .= '<tab>'; 
+                   $xml .= '<id>'.$tab->meta_id.'</id>'; 
+                   $xml .= '<name>'.$tab->meta_value.'</name>'; 
+                   $xml .= '</tab>'; 
+                }
+                $xml .= '</tabs>';
+            }
+            
             $xml .= '<permissions>';
                 $xml .= '<socialdb_collection_permission_create_category>'.get_post_meta($collection_id, 'socialdb_collection_permission_create_category', true).'</socialdb_collection_permission_create_category>';
                 $xml .= '<socialdb_collection_permission_edit_category>'.get_post_meta($collection_id, 'socialdb_collection_permission_edit_category', true).'</socialdb_collection_permission_edit_category>';
@@ -240,103 +252,7 @@ class ZipModel extends Model {
         return $xml;
     }
     
-     /**
-     * @signature - generate_properties_xml($properties_id,$xml)
-     * @param array $properties_id 
-     * @param string $xml 
-     * @return 
-     * @description - 
-     * @author: Eduardo 
-     */
-     public function generate_properties_xml($properties_id, $xml) {
-        if (!empty($properties_id) && is_array($properties_id)) {
-            foreach ($properties_id as $property_id) {
-                $data = $this->get_all_property($property_id, true);
-                if(in_array($data['slug'], $this->fixed_slugs) ):
-                        continue;
-                    endif;
-                $xml .= '<property>';
-                $xml .= '<id>' . $property_id . '</id>';
-                $xml .= '<name>' . $data['name'] . '</name>';
-                if (isset($data['metas']['socialdb_property_data_widget'])) {
-                    $xml = $this->generate_property_data_xml($data['metas'], $xml);
-                } elseif (isset($data['metas']['socialdb_property_term_widget']) && $data['metas']['socialdb_property_term_widget'] != '') {
-                     $xml = $this->generate_property_term_xml($data['metas'], $xml);
-                } else if (isset($data['metas']['socialdb_property_ranking_vote'])) {
-                     $xml = $this->generate_ranking_xml($property_id,$data['metas'], $xml);
-                } else {
-                     $xml = $this->generate_property_object_xml($data['metas'], $xml);
-                }
-                $xml .= '</property>';
-            }
-        }
-        return $xml;
-    }
-
-    /**
-     * @signature - generate_property_data_xml($property_id,$xml)
-     * @param array $metas 
-     * @param string $xml 
-     * @return 
-     * @description - 
-     * @author: Eduardo 
-     */
-      public function generate_property_data_xml($metas,$xml) {
-          $xml .= '<socialdb_property_required>'.$metas['socialdb_property_required'].'</socialdb_property_required>';
-          $xml .= '<socialdb_property_data_widget>'.$metas['socialdb_property_data_widget'].'</socialdb_property_data_widget>';
-          $xml .= '<socialdb_property_data_column_ordenation>'.$metas['socialdb_property_data_column_ordenation'].'</socialdb_property_data_column_ordenation>';
-          $xml .= '<socialdb_property_default_value>'.$metas['socialdb_property_default_value'].'</socialdb_property_default_value>';
-          $xml .= '<socialdb_property_created_category>'.$metas['socialdb_property_created_category'].'</socialdb_property_created_category>';
-          return $xml;
-      }
-      
-      /**
-     * @signature - generate_property_object_xml($property_id,$xml)
-     * @param array $metas 
-     * @param string $xml 
-     * @return 
-     * @description - 
-     * @author: Eduardo 
-     */
-      public function generate_property_object_xml($metas,$xml) {
-          $xml .= '<socialdb_property_required>'.$metas['socialdb_property_required'].'</socialdb_property_required>';
-          $xml .= '<socialdb_property_object_category_id>'.$metas['socialdb_property_object_category_id'].'</socialdb_property_object_category_id>';
-          $xml .= '<socialdb_property_object_is_reverse>'.$metas['socialdb_property_object_is_reverse'].'</socialdb_property_object_is_reverse>';
-          $xml .= '<socialdb_property_object_reverse>'.$metas['socialdb_property_object_reverse'].'</socialdb_property_object_reverse>';
-          $xml .= '<socialdb_property_created_category>'.$metas['socialdb_property_created_category'].'</socialdb_property_created_category>';
-          return $xml;
-      }
-       /**
-     * @signature - generate_property_term_xml($property_id,$xml)
-     * @param array $metas 
-     * @param string $xml 
-     * @return 
-     * @description - 
-     * @author: Eduardo 
-     */
-      public function generate_property_term_xml($metas,$xml) {
-          $xml .= '<socialdb_property_required>'.$metas['socialdb_property_required'].'</socialdb_property_required>';
-          $xml .= '<socialdb_property_term_cardinality>'.$metas['socialdb_property_term_cardinality'].'</socialdb_property_term_cardinality>';
-          $xml .= '<socialdb_property_term_widget>'.$metas['socialdb_property_term_widget'].'</socialdb_property_term_widget>';
-          $xml .= '<socialdb_property_term_root>'.$metas['socialdb_property_term_root'].'</socialdb_property_term_root>';
-          $xml .= '<socialdb_property_created_category>'.$metas['socialdb_property_created_category'].'</socialdb_property_created_category>';
-          $xml .= '<socialdb_property_help>'.$metas['socialdb_property_help'].'</socialdb_property_help>';
-          return $xml;
-      }
-     /**
-     * @signature - generate_ranking_xml($property_id,$xml)
-     * @param array $metas 
-     * @param string $xml 
-     * @return 
-     * @description - 
-     * @author: Eduardo 
-     */
-      public function generate_ranking_xml($id,$metas,$xml) {
-          $parent = get_term_by('id', $id, 'socialdb_property_type')->parent;
-          $xml .= '<socialdb_property_created_category>'.$metas['socialdb_property_created_category'].'</socialdb_property_created_category>';
-          $xml .= '<ranking_type>'.get_term_by('id', $parent, 'socialdb_property_type')->name.'</ranking_type>';
-          return $xml;
-      }
+    
       /**
      * @signature - generate_facets_xml($property_id,$xml)
      * @param int collection_id

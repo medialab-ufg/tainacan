@@ -258,6 +258,13 @@ class CollectionImportModel extends CollectionModel {
                    $properties_id[] = $property_id;
                }
            }
+           foreach ($xml->properties->property as $property) {
+               if(isset($property->socialdb_property_compounds_properties_id)){
+                   $property_id = $this->add_property_compounds($property,$property->socialdb_property_created_category,$category_root_id);
+                    add_term_meta($category_root_id, 'socialdb_category_property_id',$property_id);
+                    $properties_id[] = $property_id;
+               }
+           }
        }
        return $properties_id;
    }
@@ -319,6 +326,37 @@ class CollectionImportModel extends CollectionModel {
         update_term_meta($new_property['term_id'], 'socialdb_property_object_category_id', $this->get_term_imported_id((string) $property->socialdb_property_object_category_id));
         update_term_meta($new_property['term_id'], 'socialdb_property_object_is_reverse',  (string)$property->socialdb_property_object_is_reverse);
         update_term_meta($new_property['term_id'], 'socialdb_property_object_reverse',  (string)$property->socialdb_property_object_reverse);
+       // update_term_meta($new_property['term_id'], 'socialdb_property_created_category',(string)$socialdb_collection_object_type);
+        update_term_meta($new_property['term_id'], 'socialdb_property_created_category',$category_root_id);
+        update_term_meta($new_property['term_id'], 'socialdb_imported_id',(string)$property->id);
+        return $new_property['term_id'];
+   }
+   /**
+     * function add_property_objec($property)
+     * @param object $property
+     * @return int O id da da propriedade criada.
+     * @author: Eduardo Humberto 
+     */
+   public function add_property_compounds($property,$socialdb_collection_object_type,$category_root_id) {
+        $new_property = wp_insert_term((string)$property->name, 'socialdb_property_type', array('parent' => $this->get_property_type_id('socialdb_property_compounds'),
+                'slug' => $this->generate_slug((string)$property->name, 0)));
+        update_term_meta($new_property['term_id'], 'socialdb_property_required', (string)$property->socialdb_property_required);
+        $old_ids = explode(',', (string)$property->socialdb_property_compounds_properties_id);
+        if($old_ids){
+            $new_ids = [];
+            foreach ($old_ids as $old_id) {
+                $meta = array();
+                if(is_numeric($old_id)){
+                   $new_id = $this->get_term_imported_id($old_id);
+                   $new_ids[] = $new_id;
+                   $meta[$new_property['term_id']] = 'true';
+                   update_term_meta($new_id, 'socialdb_property_is_compounds', serialize($meta));
+                }
+            }
+            update_term_meta($new_property['term_id'], 'socialdb_property_compounds_properties_id',  implode(',', $new_ids));
+        }
+        update_term_meta($new_property['term_id'], 'socialdb_property_compounds_cardinality',  (string)$property->socialdb_property_compounds_cardinality);
+        update_term_meta($new_property['term_id'], 'socialdb_property_help',  (string)$property->socialdb_property_help);
        // update_term_meta($new_property['term_id'], 'socialdb_property_created_category',(string)$socialdb_collection_object_type);
         update_term_meta($new_property['term_id'], 'socialdb_property_created_category',$category_root_id);
         update_term_meta($new_property['term_id'], 'socialdb_imported_id',(string)$property->id);

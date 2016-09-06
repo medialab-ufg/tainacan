@@ -2139,7 +2139,9 @@ class Model {
             $term = get_term_by('slug', 'socialdb_category','socialdb_category_type');
             $properties = $this->get_parent_properties( $term->term_id, [], $term->term_id);
         }else{
-            $this->get_collection_properties($properties,0,$facets_id);
+            $root_id = $this->get_category_root_of($collection_id);
+            $properties = $this->get_parent_properties( $root_id, [], $root_id);
+            //$this->get_collection_properties($properties,0,$facets_id);
         }
         
         $properties = array_unique($properties);
@@ -2210,6 +2212,144 @@ class Model {
         }
         return $dynatree;
     }
+    
+###################### EXPORTACAO TAINACAN #####################################    
+     /**
+     * @signature - generate_properties_xml($properties_id,$xml)
+     * @param array $properties_id 
+     * @param string $xml 
+     * @return 
+     * @description - 
+     * @author: Eduardo 
+     */
+     public function generate_properties_xml($properties_id, $xml) {
+        if (!empty($properties_id) && is_array($properties_id)) {
+            foreach ($properties_id as $property_id) {
+                $data = $this->get_all_property($property_id, true);
+                if(in_array($data['slug'], $this->fixed_slugs) ):
+                        continue;
+                    endif;
+                $xml .= '<property>';
+                $xml .= '<id>' . $property_id . '</id>';
+                $xml .= '<name>' . $data['name'] . '</name>';
+                
+                if (isset($data['metas']['socialdb_property_data_widget'])) {
+                    $xml = $this->generate_property_data_xml($data['metas'], $xml);
+                } elseif (isset($data['metas']['socialdb_property_term_widget']) && $data['metas']['socialdb_property_term_widget'] != '') {
+                     $xml = $this->generate_property_term_xml($data['metas'], $xml);
+                } else if (isset($data['metas']['socialdb_property_ranking_vote'])) {
+                     $xml = $this->generate_ranking_xml($property_id,$data['metas'], $xml);
+                }else if(isset($data['metas']['socialdb_property_compounds_properties_id'])){
+                    $xml = $this->generate_property_compounds_xml($data['metas'], $xml);
+                }else {
+                     $xml = $this->generate_property_object_xml($data['metas'], $xml);
+                }
+                $xml .= '</property>';
+            }
+        }
+        return $xml;
+    }
+
+    /**
+     * @signature - generate_property_data_xml($property_id,$xml)
+     * @param array $metas 
+     * @param string $xml 
+     * @return 
+     * @description - 
+     * @author: Eduardo 
+     */
+      public function generate_property_data_xml($metas,$xml) {
+          $xml .= '<socialdb_property_required>'.$metas['socialdb_property_required'].'</socialdb_property_required>';
+          $xml .= '<socialdb_property_data_widget>'.$metas['socialdb_property_data_widget'].'</socialdb_property_data_widget>';
+          $xml .= '<socialdb_property_data_column_ordenation>'.$metas['socialdb_property_data_column_ordenation'].'</socialdb_property_data_column_ordenation>';
+          $xml .= '<socialdb_property_default_value>'.$metas['socialdb_property_default_value'].'</socialdb_property_default_value>';
+          $xml .= $this->insert_coumpounds_xml($metas['socialdb_property_is_compounds']);
+          $xml .= '<socialdb_property_created_category>'.$metas['socialdb_property_created_category'].'</socialdb_property_created_category>';
+          return $xml;
+      }
+      
+      /**
+     * @signature - generate_property_object_xml($property_id,$xml)
+     * @param array $metas 
+     * @param string $xml 
+     * @return 
+     * @description - 
+     * @author: Eduardo 
+     */
+      public function generate_property_object_xml($metas,$xml) {
+          $xml .= '<socialdb_property_required>'.$metas['socialdb_property_required'].'</socialdb_property_required>';
+          $xml .= '<socialdb_property_object_category_id>'.$metas['socialdb_property_object_category_id'].'</socialdb_property_object_category_id>';
+          $xml .= '<socialdb_property_object_is_reverse>'.$metas['socialdb_property_object_is_reverse'].'</socialdb_property_object_is_reverse>';
+          $xml .= '<socialdb_property_object_reverse>'.$metas['socialdb_property_object_reverse'].'</socialdb_property_object_reverse>';
+          $xml .= $this->insert_coumpounds_xml($metas['socialdb_property_is_compounds']);
+          $xml .= '<socialdb_property_created_category>'.$metas['socialdb_property_created_category'].'</socialdb_property_created_category>';
+          return $xml;
+      }
+       /**
+     * @signature - generate_property_term_xml($property_id,$xml)
+     * @param array $metas 
+     * @param string $xml 
+     * @return 
+     * @description - 
+     * @author: Eduardo 
+     */
+      public function generate_property_term_xml($metas,$xml) {
+          $xml .= '<socialdb_property_required>'.$metas['socialdb_property_required'].'</socialdb_property_required>';
+          $xml .= '<socialdb_property_term_cardinality>'.$metas['socialdb_property_term_cardinality'].'</socialdb_property_term_cardinality>';
+          $xml .= '<socialdb_property_term_widget>'.$metas['socialdb_property_term_widget'].'</socialdb_property_term_widget>';
+          $xml .= '<socialdb_property_term_root>'.$metas['socialdb_property_term_root'].'</socialdb_property_term_root>';
+          $xml .= '<socialdb_property_created_category>'.$metas['socialdb_property_created_category'].'</socialdb_property_created_category>';
+          $xml .= $this->insert_coumpounds_xml($metas['socialdb_property_is_compounds']);
+          $xml .= '<socialdb_property_help>'.$metas['socialdb_property_help'].'</socialdb_property_help>';
+          return $xml;
+      }
+      
+      /**
+     * @signature - generate_property_compounds_xml($property_id,$xml)
+     * @param array $metas 
+     * @param string $xml 
+     * @return 
+     * @description - 
+     * @author: Eduardo 
+     */
+      public function generate_property_compounds_xml($metas,$xml) {
+          $xml .= '<socialdb_property_required>'.$metas['socialdb_property_required'].'</socialdb_property_required>';
+          $xml .= '<socialdb_property_compounds_cardinality>'.$metas['socialdb_property_compounds_cardinality'].'</socialdb_property_compounds_cardinality>';
+          $xml .= '<socialdb_property_compounds_properties_id>'.$metas['socialdb_property_compounds_properties_id'].'</socialdb_property_compounds_properties_id>';
+          $xml .= '<socialdb_property_created_category>'.$metas['socialdb_property_created_category'].'</socialdb_property_created_category>';
+          $xml .= '<socialdb_property_help>'.$metas['socialdb_property_help'].'</socialdb_property_help>';
+          return $xml;
+      }
+     /**
+     * @signature - generate_ranking_xml($property_id,$xml)
+     * @param array $metas 
+     * @param string $xml 
+     * @return 
+     * @description - 
+     * @author: Eduardo 
+     */
+      public function generate_ranking_xml($id,$metas,$xml) {
+          $parent = get_term_by('id', $id, 'socialdb_property_type')->parent;
+          $xml .= '<socialdb_property_created_category>'.$metas['socialdb_property_created_category'].'</socialdb_property_created_category>';
+          $xml .= '<ranking_type>'.get_term_by('id', $parent, 'socialdb_property_type')->name.'</ranking_type>';
+          return $xml;
+      }
+      
+      /**
+       * 
+       * @param type $socialdb_property_is_compounds
+       */
+      public function insert_coumpounds_xml($socialdb_property_is_compounds) {
+        $xml = '';
+        $array = [];
+        if(is_array($socialdb_property_is_compounds)){
+            foreach ($socialdb_property_is_compounds as $index=>$value) {
+                $array[] = $index;
+            }
+        }
+        $xml .= '<socialdb_property_is_compounds>'.  implode(',', $array).'</socialdb_property_is_compounds>';
+        return $xml;  
+      }
 
     /**
      * 
