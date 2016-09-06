@@ -34,7 +34,7 @@
         show_license_item('multiple');// lista as licencas de um item
         
         // envia o formulario para o controllador
-        $('#sumbit_multiple_items').submit(function (e) {
+        $('#submit_multiple_items').submit(function (e) {
             e.preventDefault();
 
             $('#modalImportMain').modal('show');
@@ -267,7 +267,9 @@
         $('[data-toggle="tooltip"]').tooltip();
     }
     /******************************** Manipulação das cores ao selecionar itens setando se eh anexo o u nao******************************************/
-    function focusItem(id) {
+    function focus_item(id) {
+        $('#wrapper_' + id + ' center').toggleClass('multiple-edit-select');
+
         if ($('#buttonBackItems').is(':visible')) { // eh pq esta selecionando anexos
             var selected_id = getOnlyItemID();
             if (selected_id != id && $('#attachment_option_' + id).is(':checked')) {
@@ -293,11 +295,11 @@
                 $('#item_option_' + id).trigger('change');
                 set_item_selected_colour(id);
             }
-
         }
     }
     /***************************** Seleciona todos os items *********************************************/
-    function selectAll() {
+    function select_all_edit() {
+        $('.item-default center').addClass('multiple-edit-select');
         $.each($("input:checkbox[name='selected_items']"), function () {
             if ($("#parent_" + $(this).val()).val() === '') {
                 set_item_selected_colour($(this).val());
@@ -307,7 +309,8 @@
         selectedItems();
     }
     /***************************** DESmarca todos os items *********************************************/
-    function unselectAll() {
+    function unselect_all_edit() {
+        $('.item-default center').removeClass('multiple-edit-select');
         $.each($("input:checkbox[name='selected_items']"), function () {
             $(this).removeAttr('checked');
             if ($("#parent_" + $(this).val()).val() === '') { // se nao for anexo

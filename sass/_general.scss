@@ -2,6 +2,10 @@
   display: none !important;
 }
 
+.multiple-edit-select {
+  border: 2px solid $brand-light-blue;
+}
+
 body {
   //background: $collections-bg-color;
 }
@@ -246,4 +250,15 @@ div.image-legend {
 hr.single-item-divider {
   color: $brand-medium-blue;
   margin: 3px 0 10px 0;
+}
+
+#submit_multiple_items {
+  #container_images {
+    .item-default {
+      height: 245px;
+      img {
+        max-width: 150px !important;
+      }
+    }
+  }
 }

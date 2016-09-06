@@ -38,7 +38,7 @@ $references = [
     'properties_terms_treecheckbox' => &$properties_terms_treecheckbox
 ];
 ?>
-<div class="row" style="padding-right: 0px;padding-left: 0px;">
+<div class="<?php /* row */ ?> " style="padding-right: 0; padding-left: 0;">
     
    <!-------------- METADADOS - BLOCO ESQUERDO (COL-MD-3) --------------------->
     <div style="
@@ -400,7 +400,7 @@ $references = [
          </h3>
     </div>
 <!------------------------------- LISTA ITEMS UPADOS - BLOCO CENTRO DIREITO (COL-MD-9) -------------------------------------------------------------->
-    <form id='sumbit_multiple_items' class="col-md-9">
+    <form id='submit_multiple_items' class="col-md-9">
         <div class='col-md-9' id="no_item_uploaded" style='display:none;'>
             <h3 style="text-align: center;"><?php _e('No items uploaded','tainacan') ?></h3>
         </div>
@@ -424,8 +424,8 @@ $references = [
                       <?php _e('Select','tainacan') ?> <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a onclick='selectAll()'  style="cursor: pointer;"> <?php _e('All','tainacan') ?></a></li>
-                      <li><a onclick='unselectAll()'  style="cursor: pointer;"><?php _e('None','tainacan') ?></a></li>
+                        <li><a onclick='select_all_edit()'  style="cursor: pointer;"> <?php _e('All','tainacan') ?></a></li>
+                      <li><a onclick='unselect_all_edit()'  style="cursor: pointer;"><?php _e('None','tainacan') ?></a></li>
                     </ul>
                 </div>
                 <button id="removeSelectedButton"  onclick='removeSelected()' type="button" class="btn btn-default" >
@@ -440,7 +440,7 @@ $references = [
             </div>
             <!--------------- FIM: BOTOES PARA MANIPULACAO DOS ITENS ---------------->
             <!--------------- container todos os itens  ----------------------------->
-            <div style="max-height: 500px;overflow-y: scroll">
+            <div <?php /* style="max-height: 500px;overflow-y: scroll" */ ?> >
 
                 <div id="selectable">
                     <?php
@@ -466,9 +466,10 @@ $references = [
                             $files[] = $file['ID'];
                             $filesImage[] = $file['ID'];
                             ?>
-                            <div onclick="focusItem('<?php echo $file['ID'] ?>')" >
-                                <div id="wrapper_<?php echo $file['ID'] ?>" class="col-md-3 item-default" style="padding-top: 20px;cursor: pointer;">
-                                    <center><!-- container do item -->
+                            <div onclick="focus_item('<?php echo $file['ID'] ?>')" >
+                                <div id="wrapper_<?php echo $file['ID'] ?>" class="col-md-3 item-default"
+                                     style="cursor: pointer;">
+                                    <center style="padding-top: 10px; padding-bottom: 10px;"><!-- container do item -->
                                         <div style="padding-bottom: 10px;" class="item" id="panel_<?php echo $file['ID'] ?>" >
                                             <input style="display:none"
                                                    class="class_selected_items"
@@ -484,11 +485,9 @@ $references = [
                                                 echo get_item_thumb_image(  $file['ID'] );
                                             ?>
                                         </div>
-                                        <input required="required"
-                                               class='input_title'
+                                        <input required="required" type="text" class='input_title form-control'
                                                placeholder="<?php _e('Add a title','tainacan') ?>"
-                                               type="text"
-                                               id='title_<?php echo $file['ID'] ?>'
+                                               id='title_<?php echo $file['ID'] ?>' style="width: 78%"
                                                name='title_<?php echo $file['ID'] ?>' value='<?php echo $file['name'] ?>'>
                                         <!-- Hidden para as categorias, tags e attachments  -->
                                         <input type="hidden" id="source_<?php echo $file['ID'] ?>" name="source_<?php echo $file['ID'] ?>" value=''>
