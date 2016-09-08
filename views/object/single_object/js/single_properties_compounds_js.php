@@ -399,7 +399,8 @@
                             },
                             onSelect: function (flag, node) {
                                 var cont = 0;
-                                var i = dynatree_object_index[this.$tree[0].id];
+                                //var i = dynatree_object_index[this.$tree[0].id];
+                                var i =  this.$tree[0].id.split('_')[5];
                                 var selKeys = $.map(node.tree.getSelectedNodes(), function (node) {
                                     return node;
                                 });
@@ -414,7 +415,7 @@
                                 $("#socialdb_propertyterm_"+compound_id+"_" + treecheckbox + '_' + i).html('');
                                 $.each(selKeys, function (index, key) {
                                     cont++;
-                                    $("#socialdb_propertyterm_"+compound_id+"_" + treecheckbox + '_' + i).append('<input type="hidden" name="socialdb_property_'+treecheckbox+'_' + i + '[]" value="' + key.data.key + '" >');
+                                    $("#socialdb_propertyterm_"+compound_id+"_" + treecheckbox + '_' + i).append('<input type="hidden" name="socialdb_property_'+compound_id+'_'+treecheckbox+'_' + i + '[]" value="' + key.data.key + '" >');
                                 });
 //                                if(cont===0){
 //                                    $('#core_validation_'+compound_id+'_'+treecheckbox+ '_' + i).val('false');
@@ -485,8 +486,8 @@
                                     bindContextMenuSingle(span,'field_property_term_' + tree + '_');
                                 },
                                 onSelect: function (flag, node) {
-                                    console.log(this.$tree[0].id);
-                                    var i = dynatree_object_index[this.$tree[0].id];
+                                    var i =  this.$tree[0].id.split('_')[5];
+                                    //var i = dynatree_object_index[this.$tree[0].id];
                                     if ($("#field_property_term_"+compound_id+"_" + tree + '_' + i).val() === node.data.key) {
                                         //  append_category_properties(0,node.data.key);
                                         $('[name="socialdb_property_'+compound_id+'_'+tree+'_'+i+'[]"]').val("");

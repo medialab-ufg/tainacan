@@ -195,6 +195,7 @@ class ZipModel extends Model {
             $xml .= '<socialdb_collection_hide_rankings>' . get_post_meta($collection_id, 'socialdb_collection_hide_rankings', true) . '</socialdb_collection_hide_rankings>';
             $xml .= '<socialdb_collection_columns>' . get_post_meta($collection_id, 'socialdb_collection_columns', true) . '</socialdb_collection_columns>';
             $xml .= '<socialdb_collection_size_thumbnail>' . get_post_meta($collection_id, 'socialdb_collection_size_thumbnail', true) . '</socialdb_collection_size_thumbnail>';
+            $xml .= '<socialdb_collection_submission_visualization>' . get_post_meta($collection_id, 'socialdb_collection_submission_visualization', true) . '</socialdb_collection_submission_visualization>';
             $xml .= '<socialdb_collection_default_tab>' . get_post_meta($collection_id, 'socialdb_collection_default_tab',true) . '</socialdb_collection_default_tab>';
             $xml .= '<socialdb_collection_update_tab_organization>' . get_post_meta($collection_id, 'socialdb_collection_update_tab_organization',true) . '</socialdb_collection_update_tab_organization>';
             

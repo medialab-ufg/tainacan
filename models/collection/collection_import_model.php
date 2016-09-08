@@ -184,6 +184,7 @@ class CollectionImportModel extends CollectionModel {
        update_post_meta($collection_id, 'socialdb_collection_hide_rankings', (string) $xml->socialdb_collection_hide_rankings);
        update_post_meta($collection_id, 'socialdb_collection_columns', (string) $xml->socialdb_collection_columns);
        update_post_meta($collection_id, 'socialdb_collection_size_thumbnail', (string) $xml->socialdb_collection_size_thumbnail);
+       update_post_meta($collection_id, 'socialdb_collection_submission_visualization', (string) $xml->socialdb_collection_submission_visualization);
        //permissions
        update_post_meta($collection_id, 'socialdb_collection_permission_create_category', (string) $xml->permissions->socialdb_collection_permission_create_category);
        update_post_meta($collection_id, 'socialdb_collection_permission_edit_category', (string) $xml->permissions->socialdb_collection_permission_edit_category);
@@ -209,8 +210,16 @@ class CollectionImportModel extends CollectionModel {
        update_post_meta($collection_id, 'socialdb_collection_permission_create_property_term', (string) $xml->permissions->socialdb_collection_permission_create_property_term);
        update_post_meta($collection_id, 'socialdb_collection_permission_edit_property_term', (string) $xml->permissions->socialdb_collection_permission_edit_property_term);
        update_post_meta($collection_id, 'socialdb_collection_permission_delete_property_term', (string) $xml->permissions->socialdb_collection_permission_delete_property_term);
+       //tab defaullt
+       if($xml->socialdb_collection_default_tab)
+            update_post_meta($collection_id, 'socialdb_collection_default_tab', (string) $xml->socialdb_collection_default_tab);
+       if($xml->socialdb_collection_update_tab_organization)
+            update_post_meta($collection_id, 'socialdb_collection_update_tab_organization', (string) $xml->socialdb_collection_update_tab_organization);
        // properties
-       $properties = $this->insert_properties($xml, $socialdb_collection_object_type);
+       $properties = $this->insert_properties($xml, $socialdb_collection_object_type, $collection_id);
+       // tabs
+       $tabs = $this->insertTabs($xml, $collection_id);
+       $this->updateTabOrganization($collection_id,$tabs);
        //facets
        $this->add_facets($xml, $collection_id);
        //channels
@@ -236,7 +245,13 @@ class CollectionImportModel extends CollectionModel {
        return $collection_id;
    }
    
-   public function insert_properties($xml,$category_root_id){
+   /**
+    * 
+    * @param type $xml O xml completo
+    * @param type $category_root_id O id da categoria raiz
+    * @return array Os ids das propriedades 
+    */
+   public function insert_properties($xml,$category_root_id,$collection_id = 0){
        $properties_id = [];
        if(isset($xml->properties->property)){
            foreach ($xml->properties->property as $property) {
@@ -257,6 +272,9 @@ class CollectionImportModel extends CollectionModel {
                    add_term_meta($category_root_id, 'socialdb_category_property_id',$property_id);
                    $properties_id[] = $property_id;
                }
+               
+               if($collection_id && $property->id)
+                    $this->updatePropertiesTabId($collection_id,(string) $property->id,$property_id);
            }
            foreach ($xml->properties->property as $property) {
                if(isset($property->socialdb_property_compounds_properties_id)){
@@ -264,7 +282,10 @@ class CollectionImportModel extends CollectionModel {
                     add_term_meta($category_root_id, 'socialdb_category_property_id',$property_id);
                     $properties_id[] = $property_id;
                }
+               if($collection_id && $property->id)
+                    $this->updatePropertiesTabId($collection_id,(string) $property->id,$property_id);
            }
+           
        }
        return $properties_id;
    }
@@ -376,6 +397,72 @@ class CollectionImportModel extends CollectionModel {
         update_term_meta($new_property['term_id'], 'socialdb_imported_id',(string)$property->id);
         return $new_property['term_id'];
    }
+   
+   /**
+    * 
+    * 
+    * @param xml $xml
+    * @param int $collection_id O id colecao
+    * 
+    */
+   public function insertTabs($xml,$collection_id) {
+        $tabs = [];
+        if(isset($xml->tabs->tab)){
+            foreach ($xml->tabs->tab as $tab) {
+                $new_id = $this->sdb_add_post_meta($collection_id, 'socialdb_collection_tab',(string)$tab->name);
+                $tabs[$new_id] = $tab;
+            }
+        }
+        return $tabs;
+   }
+   
+   /**
+    * metodo responsavel em atualizar a organizacao das abas importadas
+    *
+    * @param type $collection_id
+    * @param type $properties_id
+    * @param type $tabs
+    * @return void
+    */
+   public function updateTabOrganization($collection_id,$tabs) {
+        if(empty($tabs))
+            return true;
+        
+        $array = unserialize(get_post_meta($collection_id, 'socialdb_collection_update_tab_organization',true));
+        if($array && is_array($array[0])):
+            foreach ($tabs as $tab_new_id => $tab) {
+                foreach ($array[0] as $property_key => $tab_value) {
+                    if($tab_value==(string)$tab->id){
+                        $array[0][$property_key] = $tab_new_id;
+                    }
+                }
+            }
+        endif;
+        update_post_meta($collection_id, 'socialdb_collection_update_tab_organization',  serialize($array));
+   }
+   
+   /**
+    * metodo responsavel em atualizar a organizacao das abas importadas
+    *
+    * @param type $collection_id
+    * @param type $properties_id
+    * @param type $tabs
+    * @return void
+    */
+   public function updatePropertiesTabId($collection_id,$old_id,$new_id) {
+        $array = unserialize(get_post_meta($collection_id, 'socialdb_collection_update_tab_organization',true));
+        if($array && is_array($array[0])):
+            foreach ($array[0] as $property_key => $tab_value) {
+                if($old_id == $property_key){
+                    $array[0][$new_id] = $tab_value;
+                    unset($array[0][$property_key]);
+                }
+            }
+        endif;
+        update_post_meta($collection_id, 'socialdb_collection_update_tab_organization',  serialize($array));
+   }
+   
+   
    
    /**
      * function add_facets($xml,$collection_id)

@@ -421,7 +421,7 @@
                             },
                             onSelect: function (flag, node) {
                                 var cont = 0;
-                                var i = dynatree_object_index[this.$tree[0].id];
+                                var i =  this.$tree[0].id.split('_')[5];
                                 var selKeys = $.map(node.tree.getSelectedNodes(), function (node) {
                                     return node;
                                 });
@@ -508,7 +508,7 @@
                                     bindContextMenuSingle(span,'field_property_term_' + tree + '_');
                                 },
                                 onSelect: function (flag, node) {
-                                    var i = dynatree_object_index[this.$tree[0].id];
+                                    var i =  this.$tree[0].id.split('_')[5];
                                     if ($("#field_property_term_"+compound_id+"_" + tree + '_' + i).val() === node.data.key) {
                                         append_category_properties(0,node.data.key);
                                         $("#field_property_term_"+compound_id+"_" + tree + '_' + i).val("");
