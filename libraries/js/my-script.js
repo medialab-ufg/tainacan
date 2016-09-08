@@ -1556,6 +1556,21 @@ function showSingleObject(object_id, src) {
         $('#configuration').html(result).show();
     });
 }
+
+function showSingleObjectVersion(object_id, src) {
+    $.ajax({
+        url: src + '/controllers/object/object_controller.php',
+        type: 'POST',
+        data: {operation: 'list_single_object_version', object_id: object_id, collection_id: $("#collection_id").val()}
+    }).done(function (result) {
+        $('.in').modal('hide');
+        $('#main_part').hide();
+        $('#display_view_main_page').hide();
+        $('#loader_collections').hide();
+        $('#collection_post').hide();
+        $('#configuration').html(result).show();
+    });
+}
 /***************************** funcoes para mostrar paginas especificas  *******/
 //PARA ITEMS
 function showSingleObjectByName(object_name, src) {

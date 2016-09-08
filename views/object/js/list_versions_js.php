@@ -74,7 +74,7 @@
                     }
                 }).done(function (result) {
                     hide_modal_main();
-
+                    window.location.href = $('#socialdb_permalink_object').val();
                 });
             }
         });

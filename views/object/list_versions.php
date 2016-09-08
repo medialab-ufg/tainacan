@@ -43,9 +43,12 @@ include_once ('js/list_versions_js.php');
             </div>
             <?php foreach ($versions as $version) { ?>
                 <div class="col-md-3">
-                    <a href="<?php echo get_collection_item_href($collection_id); ?>"
-                           onclick="<?php get_item_click_event($collection_id,$version['ID']) ?>">
-                               <?php echo $version['title']; ?>
+                    <?php if ($id_active != $version['ID']) { ?>
+                        <a href="#" onclick="showSingleObjectVersion('<?php echo $version['ID']; ?>', '<?php echo get_template_directory_uri(); ?>')">
+                        <?php } else { ?>
+                            <a href="#">
+                            <?php } ?>
+                            <?php echo $version['title']; ?>
                         </a>
                     <!--a><?php echo $version['title']; ?></a-->
                 </div>
@@ -63,15 +66,15 @@ include_once ('js/list_versions_js.php');
                 </div>
                 <div class="col-md-2">
                     <?php if ($id_active != $version['ID']) { ?>
-                        <?php if ((verify_collection_moderators($collection_id, get_current_user_id()) || current_user_can('manage_options')) && get_post_type($collection_id) == 'socialdb_collection'): ?>
-                    <ul class="item-funcs" style="float: left !important;">
+                        <?php if ((verify_collection_moderators($collection_id, get_current_user_id()) || current_user_can('manage_options')) && get_post_type($collection_id) == 'socialdb_collection' && $version['ID'] != $original): ?>
+                            <ul class="item-funcs" style="float: left !important;">
                                 <li>
-                                    <a onclick="delete_version('<?php echo $version['ID'] ?>', '<?php _e('Are you sure?','tainacan'); ?>', '<?php _e('This operation is not possible reverse. If you delete the original item, all versions are deleted.','tainacan'); ?>');" href="#">
+                                    <a onclick="delete_version('<?php echo $version['ID'] ?>', '<?php _e('Are you sure?', 'tainacan'); ?>', '<?php _e('This operation is not possible reverse.', 'tainacan'); ?>');" href="#">
                                         <span class="glyphicon glyphicon-trash"></span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a onclick="restore_version('<?php echo $id_active ?>','<?php echo $version['ID'] ?>', '<?php _e('Are you sure?','tainacan'); ?>', '<?php _e('Are you want to restore this item?','tainacan'); ?>');" href="#">
+                                    <a onclick="restore_version('<?php echo $id_active ?>', '<?php echo $version['ID'] ?>', '<?php _e('Are you sure?', 'tainacan'); ?>', '<?php _e('Are you want to restore this item?', 'tainacan'); ?>');" href="#">
                                         <span class="glyphicon glyphicon-repeat"></span>
                                     </a>
                                 </li>

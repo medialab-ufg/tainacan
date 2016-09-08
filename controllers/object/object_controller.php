@@ -322,6 +322,23 @@ class ObjectController extends Controller {
                 }
                 return $this->render(dirname(__FILE__) . '../../../views/object/list_single_object.php', $data);
                 break;
+            case "list_single_object_version":
+                $user_model = new UserModel();
+                $object_id = $data['object_id'];
+                $data['object'] = get_post($object_id);
+                $data["username"] = $user_model->get_user($data['object']->post_author)['name'];
+                $data['metas'] = get_post_meta($object_id);
+                $data['collection_metas'] = get_post_meta($data['collection_id'], 'socialdb_collection_download_control', true);
+                $data['collection_metas'] = ($data['collection_metas'] ? $data['collection_metas'] : 'allowed');
+                $data['has_watermark'] = get_post_meta($data['collection_id'], 'socialdb_collection_add_watermark', true);
+                $watermark_id = get_post_meta($data['collection_id'], 'socialdb_collection_watermark_id', true);
+                if ($watermark_id) {
+                    $data['url_watermark'] = wp_get_attachment_url($watermark_id);
+                } else {
+                    $data['url_watermark'] = get_template_directory_uri() . '/libraries/images/icone.png';
+                }
+                return $this->render(dirname(__FILE__) . '../../../views/object/list_single_object_version.php', $data);
+                break;
             case "list_single_object_by_name":
                 $user_model = new UserModel();
                 $object_name = $data['object_name'];
@@ -538,7 +555,15 @@ class ObjectController extends Controller {
                 return $this->render(dirname(__FILE__) . '../../../views/object/list_versions.php', $data);
                 break;
             case 'delete_version':
-                var_dump($data);
+                //var_dump($data);
+                $original = get_post_meta($data['version_id'], 'socialdb_version_postid', true);
+                if($original){
+                    //E uma versao
+                    $result = $object_model->send_version_to_trash($data['version_id']);
+                }else{
+                    //E o item original
+                    
+                }
                 break;
             case 'restore_version':
                 //var_dump($data);

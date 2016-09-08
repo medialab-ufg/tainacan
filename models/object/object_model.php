@@ -2121,5 +2121,20 @@ class ObjectModel extends Model {
             return array();
         }
     }
+    
+    public function send_version_to_trash($object_id) {
+        $my_post = array(
+            'ID' => $object_id,
+            'post_status' => 'trash'
+        );
+
+        $result = wp_update_post($my_post);
+
+        if (is_wp_error($result)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
 }
