@@ -859,7 +859,7 @@ class ObjectModel extends Model {
         //a forma de ordenacao
         $order = $this->set_type_order($args);
         $args = array(
-            'posts_per_page' => -1, // Fetchs all items
+            'posts_per_page' => 50, // -1 to fetchs all items
             'post_type' => 'socialdb_object',
             'post_status' => array($post_status),
             'paged' => 1,

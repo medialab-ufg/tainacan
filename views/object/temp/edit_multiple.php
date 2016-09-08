@@ -381,7 +381,7 @@ $references = [
          <h3> <?php _e('Select attachments to ','tainacan'); ?> <span id="nameItemAttachment"></span> </h3>
     </div>
 <!------------------------------- LISTA ITEMS UPADOS - BLOCO CENTRO DIREITO (COL-MD-9) -------------------------------------------------------------->
-    <form id='submit_multiple_items' class="col-md-9">
+    <form id='submit_multiple_items_edit' class="col-md-9">
         <div class='col-md-9' id="no_item_uploaded" style='display:none;'>
             <h3 style="text-align: center;"> <?php _e('No items uploaded','tainacan'); ?> </h3>
         </div>
@@ -431,18 +431,10 @@ $references = [
                             <input class="class_selected_items" type='checkbox' id='selectAllImages' onclick="selectImages()" value='#'>
                             &nbsp;<?php _e('Image Files','tainacan') ?>
                         </h4>
-                        <?php
-                        $_selecteds = [];
-                        $_total_selected = count($_selecteds);
-
-                        $counter = 0;
-                        foreach($bulked_ids as $id) {
-                            array_push($_selecteds, ['ID' => $id, 'item_title' => $bulked_titles[$counter++] ]);
-                        }
-                        ?>
+                        <?php $_total_selected = count($edit_data); ?>
                         <input type="hidden" name="total_bulk_edit" value="<?php echo $_total_selected; ?>" />
                         <?php
-                        foreach ($_selecteds as $file) {
+                        foreach ($edit_data as $file) {
                             $files[] = $file['ID'];
                             $filesImage[] = $file['ID'];
                             ?>
@@ -452,7 +444,7 @@ $references = [
                                     <center style="padding-top: 10px; padding-bottom: 10px;"><!-- container do item -->
                                         <div style="padding-bottom: 10px;" class="item" id="panel_<?php echo $file['ID'] ?>" >
                                             <input style="display:none" class="class_selected_items"
-                                                   id="item_option_<?php echo $file['ID'] ?>"  onchange="selectedItems()" type="checkbox" name="selected_items"
+                                                   id="item_option_<?php echo $file['ID'] ?>" onchange="selectedItems()" type="checkbox" name="selected_items"
                                                    value="<?php echo $file['ID'] ?>">
 
                                             <input id="attachment_option_<?php echo $file['ID'] ?>"
@@ -465,14 +457,16 @@ $references = [
                                         </div>
                                         <input required="required" type="text" class='input_title form-control'
                                                placeholder="<?php _e('Add a title','tainacan') ?>" id='title_<?php echo $file['ID'] ?>' style="width: 78%"
-                                               name='title_<?php echo $file['ID'] ?>' value='<?php echo $file['item_title'] ?>'>
+                                               name='title_<?php echo $file['ID'] ?>' value='<?php echo $file['title'] ?>'>
+
+                                        <textarea id='description_<?php echo $file['ID'] ?>' style="width: 78%; margin-top: 10px;"
+                                                  class="form-control item-desc" name="description_<?php echo $file['ID'] ?>"><?php echo $file['desc'] ?></textarea>
 
                                         <!-- Hidden para as categorias, tags e attachments  -->
                                         <input type="hidden" id="source_<?php echo $file['ID'] ?>" name="source_<?php echo $file['ID'] ?>" value=''>
                                         <input type="hidden" name="type_<?php echo $file['ID'] ?>" value='image'>
                                         <input type="hidden" id='parent_<?php echo $file['ID'] ?>' name="parent_<?php echo $file['ID'] ?>" value=''>
                                         <input type="hidden" id='attachments_<?php echo $file['ID'] ?>' name="attachments_<?php echo $file['ID'] ?>" value=''>
-                                        <input type="hidden" id='description_<?php echo $file['ID'] ?>' name="description_<?php echo $file['ID'] ?>" value=''>
                                         <input type="hidden" id='categorias_<?php echo $file['ID'] ?>' name="categorias_<?php echo $file['ID'] ?>" value=''>
                                         <input type="hidden" id='tags_<?php echo $file['ID'] ?>' name="tags_<?php echo $file['ID'] ?>" value=''>
                                         <input type="hidden" id='license_<?php echo $file['ID'] ?>' name="license_<?php echo $file['ID'] ?>" value=''>

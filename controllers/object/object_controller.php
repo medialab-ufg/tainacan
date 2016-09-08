@@ -433,8 +433,11 @@ class ObjectController extends Controller {
                 return true;
                 break;
             case 'edit_multiple_items':
-                $edit_data = [ 'bulked_ids' => $data["selected_ids"], 'bulked_titles' => $data["selected_titles" ] ];
-                return $this->render( dirname(__FILE__) . '../../../views/object/temp/edit_multiple.php', $edit_data);
+                $set = [];
+                foreach($data['items_data'] as $_previous) {
+                    array_push( $set, [ 'ID' => $_previous['id'], 'title' => $_previous['title'], 'desc' => $_previous['desc'] ] );
+                }
+                return $this->render( dirname(__FILE__) . '../../../views/object/temp/edit_multiple.php', [ 'edit_data' => $set ] );
             break;
             case 'duplicate_item_same_collection':
                 $item = get_post($data['object_id']);
@@ -443,7 +446,6 @@ class ObjectController extends Controller {
                 $object_model->copyItemMetas($newItem, $metas);
                 $object_model->copyItemCategories($newItem, $data['object_id']);
                 $object_model->copyItemTags($newItem, $data['object_id']);
-                //var_dump($data, $item, $metas);
 
                 $object_name = get_post_meta($data['collection_id'], 'socialdb_collection_object_name', true);
                 $socialdb_collection_attachment = get_post_meta($data['collection_id'], 'socialdb_collection_attachment', true);
@@ -457,7 +459,7 @@ class ObjectController extends Controller {
                 return $this->render(dirname(__FILE__) . '../../../views/object/edit_item_text.php', $data);
                 break;
             case 'duplicate_item_other_collection':
-                //var_dump($data);
+
                 $item = get_post($data['object_id']);
                 $category_root_id = $object_model->get_category_root_of($data['collection_id']);
                 $newItem = $object_model->copyItem($item, $data['new_collection_id']);

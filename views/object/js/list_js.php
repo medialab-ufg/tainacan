@@ -208,24 +208,23 @@
                 }
             }
         });
-
+        
         $('a.move_edition').on('click', function() {
+            var edit_data = [];
             show_modal_main();
-            var bulkds = [];
-            var mapped_title = [];
+            
             $('.list-mode-set').hide();
             $('.selected-item').each(function(idx, el) {
                 var item_id = $(el).parent().attr("id").replace("object_", "");
                 var item_title = $("#object_" + item_id + " h4.item-display-title").text().trim();
-                
-                mapped_title.push( item_title );
-                bulkds.push(item_id);
+                var item_desc = $("#object_" + item_id + " .item-description").text().trim();
+                edit_data.push( { id: item_id, title: item_title, desc: item_desc } );
             });
 
             $.ajax({
                 type: "POST",
                 url: $('#src').val() + "/controllers/object/object_controller.php",
-                data: { selected_ids: bulkds, selected_titles: mapped_title, operation: 'edit_multiple_items' }
+                data: { operation: 'edit_multiple_items', items_data: edit_data }
             }).done(function(html_res){
                 hide_modal_main();
                 $("#main_part").html(html_res);

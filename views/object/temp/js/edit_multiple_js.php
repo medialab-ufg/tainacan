@@ -34,7 +34,7 @@
         show_license_item('multiple');// lista as licencas de um item
         
         // envia o formulario para o controllador
-        $('#submit_multiple_items').submit(function (e) {
+        $('#submit_multiple_items_edit').submit(function (e) {
             e.preventDefault();
 
             $('#modalImportMain').modal('show');
@@ -54,27 +54,13 @@
                     contentType: false
                 }).done(function (result) {
                     $('#modalImportMain').modal('hide');
-                    console.debug(result);
-
                     elem_first = jQuery.parseJSON(result);
 
                     cl(elem_first);
-
-                    if (elem_first.type && elem_first.type == 'success') {
-                        $('#form').hide();
-                        $("#tainacan-breadcrumbs").hide();
-                        $('#configuration').hide();
-                        $('#main_part').show();
-                        $('#display_view_main_page').show();
-                        $("#container_socialdb").show('fast');
-                        //$("#dynatree").dynatree("getTree").reload();
-                        //showList(src);
-                        wpquery_clean();
-                        $('#create_button').show();
-                        $('#menu_object').show();
-                        showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
-                    } else {
-                        showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
+                    
+                    if(elem_first.total_bulk_edit > 0) {
+                        showAlertGeneral("<?php _e('Success', 'tainacan') ?>", "<?php _e('Successfully edited items!', 'tainacan') ?>", 'success');
+                        location.reload();
                     }
                 });
             }else{
