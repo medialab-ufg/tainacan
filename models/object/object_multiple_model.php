@@ -327,6 +327,24 @@ class ObjectMultipleModel extends Model {
     }
     ############################################################################
     
+    public function edit_multiple($data) {
+        $_editable_ids = explode(",", $data['items_id']);
+        foreach($_editable_ids as $_c_id):
+            $title_field = "title_" . $_c_id;
+            $desc_field = "description_" . $_c_id;
+            $_new_text = $data[$title_field];
+            $_new_content = $data[$desc_field];
+
+            $data['edited_items'] = wp_update_post([
+                'ID' => $_c_id,
+                'post_title'   => $_new_text,
+                'post_content' => $_new_content
+            ]);
+        endforeach;
+
+       return json_encode($data);
+    }
+    
     /**
      * @signature - add($data)
      * @param array $data Os dados vindos do formulario

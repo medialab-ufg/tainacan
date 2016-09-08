@@ -244,11 +244,11 @@
                        data-toggle="tooltip" data-placement="bottom" class="glyphicon glyphicon-question-sign"></span>
                     </a>
                     <a id='required_field_license' style="padding: 3px;margin-left: -30px;" >
-                                <span class="glyphicon glyphicon glyphicon-star" title="<?php echo __('This metadata is required!','tainacan')?>" 
+                                &nbsp; <span class="glyphicon glyphicon glyphicon-star" title="<?php echo __('This metadata is required!','tainacan')?>" 
                                data-toggle="tooltip" data-placement="top" ></span>
                     </a>
                     <a id='ok_field_license'  style="display: none;padding: 3px;margin-left: -30px;" >
-                            <span class="glyphicon  glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>" 
+                            &nbsp; <span class="glyphicon glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>" 
                            data-toggle="tooltip" data-placement="top" ></span>
                     </a>
                     <input type="hidden" 
