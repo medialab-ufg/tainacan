@@ -66,13 +66,15 @@ include_once ('js/list_versions_js.php');
                 </div>
                 <div class="col-md-2">
                     <?php if ($id_active != $version['ID']) { ?>
-                        <?php if ((verify_collection_moderators($collection_id, get_current_user_id()) || current_user_can('manage_options')) && get_post_type($collection_id) == 'socialdb_collection' && $version['ID'] != $original): ?>
+                        <?php if ((verify_collection_moderators($collection_id, get_current_user_id()) || current_user_can('manage_options')) && get_post_type($collection_id) == 'socialdb_collection'): ?>
                             <ul class="item-funcs" style="float: left !important;">
+                                <?php if($version['ID'] != $original){ ?>
                                 <li>
                                     <a onclick="delete_version('<?php echo $version['ID'] ?>', '<?php _e('Are you sure?', 'tainacan'); ?>', '<?php _e('This operation is not possible reverse.', 'tainacan'); ?>');" href="#">
                                         <span class="glyphicon glyphicon-trash"></span>
                                     </a>
                                 </li>
+                                <?php } ?>
                                 <li>
                                     <a onclick="restore_version('<?php echo $id_active ?>', '<?php echo $version['ID'] ?>', '<?php _e('Are you sure?', 'tainacan'); ?>', '<?php _e('Are you want to restore this item?', 'tainacan'); ?>');" href="#">
                                         <span class="glyphicon glyphicon-repeat"></span>
