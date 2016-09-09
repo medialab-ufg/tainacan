@@ -99,6 +99,10 @@ $view_helper = new ViewHelper();
                         <select name="longitude" class="form-control"></select>
                     </div>
 
+                    <div class="form-group table-meta-config" style="display: none">
+                        <label for="table-metas"><?php _e('Select metadata that will show up at table', 'tainacan'); ?></label>
+                    </div>
+
                     <!------------------- Ordenacao-------------------------->
                     <div class="form-group">
                         <label for="collection_order"><?php _e('Select the default ordination','tainacan'); ?></label>

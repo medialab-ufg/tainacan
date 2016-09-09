@@ -16,6 +16,9 @@ $collection_list_mode = $collection_data['collection_metas']['socialdb_collectio
 if( !$collection_list_mode ) {
     $collection_list_mode = "cards";
 }
+foreach ($table_meta_ids as $_meta_id) { ?>
+    <input type="hidden" name="meta_id_table" value="<?php echo $_meta_id; ?>">
+<?php }
 ?>
 
 <!-- TAINACAN: hidden utilizados para execucao de processos desta view (list.php)  -->
@@ -34,7 +37,8 @@ if( !$collection_list_mode ) {
     <div id="collection-view-mode">
         <div id='<?php echo $collection_list_mode; ?>-viewMode' class='col-md-12 no-padding list-mode-set'>
             <?php while ( $loop->have_posts() ) : $loop->the_post(); $countLine++;
-                $curr_id = get_the_ID();          
+                $curr_id = get_the_ID();
+
                 $curr_date = "<strong>" . __('Created at: ', 'tainacan') . "</strong>" . get_the_date('d/m/Y');
                 $latitude = get_post_meta($curr_id, "socialdb_property_" . $geo_coordinates["lat"]);
                 $longitude = get_post_meta($curr_id, "socialdb_property_" . $geo_coordinates["long"]);

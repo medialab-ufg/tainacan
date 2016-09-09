@@ -21,10 +21,17 @@
 
             <div class="col-md-8 flex-box item-meta-box" style="flex-direction:column;">
                 <div class="item-meta col-md-12 no-padding">
+                    <?php 
+                    foreach ($table_meta_ids as $meta_id) {
+                        $__item_meta = get_post_meta($curr_id, "socialdb_property_$meta_id", true); 
+                        ?>
+                        <input type="hidden" name="item_table_meta" value="<?php echo $__item_meta; ?>" />
+                    <?php } ?>
+                    
                     <h4 class="item-display-title">
                         <a href="<?php echo get_collection_item_href($collection_id); ?>"
                            onclick="<?php get_item_click_event($collection_id,$curr_id) ?>">
-                               <?php echo wp_trim_words( get_the_title(), 13 ); ?>
+                            <?php echo wp_trim_words( get_the_title(), 13 ); ?>
                         </a>
                     </h4>
                     <div class="item-description"> <?php echo wp_trim_words(get_the_content(), 16); ?> </div>

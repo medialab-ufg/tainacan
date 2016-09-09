@@ -21,20 +21,32 @@
             var items_per_page = parseInt( $("#items-per-page").val() );
         }
 
-        $('.object_id').each(function(idx, el) {
-          var c_id = $(this).val();
+        $('input[type="hidden"][name="meta_id_table"]').each(function(idx, el) {
+            var valor = $(el).val();
+            var nome = $("#collection_single_ordenation option[value='"+valor+"'").text();
+            $('tr.dynamic-table-metas').prepend('<th>' + nome + '</th>');
+        });
 
-          var item_order = parseInt( $("#object_" + c_id).attr('data-order') );
-          var title = $("#object_" + c_id + " .item-display-title").text();
-          var description = $("#object_" + c_id + " .item-description").text();
-          var date = $("#object_" + c_id + " .item-creation").text().replace("Criado em: ", "");
-          var actions = $("#object_" + c_id + " .item-funcs").html();
-          $( "#table-view-elements" ).append(
-            "<tr><td>" + date + "</td>" +
-            "<td>" + title + "</td>" +
-            "<td>" + description + "</td>" +
-            "<td style='width: 10%'> <ul>" + actions + "</ul></td></tr>"
-            );
+        $('.object_id').each(function(idx, el) {
+            var c_id = $(this).val();
+
+            var item_order = parseInt( $("#object_" + c_id).attr('data-order') );
+          // var title = $("#object_" + c_id + " .item-display-title").text();
+          // var description = $("#object_" + c_id + " .item-description").text();
+           // var date = $("#object_" + c_id + " .item-creation").text().replace("Criado em: ", "");
+            var actions = $("#object_" + c_id + " .item-funcs").html();
+
+            var item_table_metas = $('input[type="hidden"][name="item_table_meta"]');
+            cl( item_table_metas );
+            $( "#table-view-elements" ).append("<tr>");
+            cl("OUTRO ITEM");
+            /*
+            $(item_table_metas).each(function(idx, meta){
+                cl( $(meta).val() );
+                $( "#table-view-elements" ).append( "<td>" + $(meta).val() + "</td>");
+            });
+            */
+            $( "#table-view-elements" ).append("<td style='width: 10%'> <ul>" + actions + "</ul></td></tr>");
 
           if( items_per_page && items_per_page >= 10 ) {
                if( item_order > items_per_page) {

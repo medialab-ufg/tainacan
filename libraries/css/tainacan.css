@@ -583,6 +583,12 @@ body.home .ibram-home-container .col-md-3 .ibram-box p:nth-child(4) {
   margin: 8px 8px 0 0;
 }
 
+.table-meta-config {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #E8E8E8;
+  font-size: 11px;
+}
+
 #div_left {
   padding: 1% 2% 0 0;
   background: white;

@@ -78,9 +78,15 @@
             $(togglable_divs).each(function(ix, el){ $( el).fadeOut(); } );
         } else if( v_mode === 'geolocation') {
             $('.sl-time').fadeOut();
+            $('.table-meta-config').fadeOut();
             $($(togglable_divs)).each(function(ix, el){ $( el).fadeIn(); } );
+        } else if (v_mode === "table") {
+            $('.sl-time').fadeOut();
+            $(togglable_divs).each(function(ix, el){ $( el).fadeOut(); } );
+            $('.table-meta-config').fadeIn();
         } else {
             togglable_divs.push('.sl-time');
+            togglable_divs.push('.table-meta-config');
             $(togglable_divs).each( function(idx, div) {
                 $(div).fadeOut();
             });
@@ -145,6 +151,8 @@
                 $('.coordinate').show();
                 $('.location').hide();
             }
+        } else if ( selected_view_mode == "table") {
+            $('.table-meta-config').fadeIn();
         }
 
         list_ordenation();
@@ -234,7 +242,8 @@
                 $.each(elem.property_data, function (idx, data) {
                     if (data && data !== false) {
                         $("#collection_order").append("<option value='" + data.id + "' selected='selected' >" + data.name + " - ( <?php _e('Type','tainacan') ?>:"+data.type+" ) </option>");
-                        
+                        $(".table-meta-config").append("<input type='checkbox' id='table_meta' name='table_meta[]' value='" + data.id + "'> " + data.name + "<br />");
+
                         if(data.type === "text") {
                             var coords = ["select[name='latitude'","select[name='longitude'","select[name='location'"];
                             $(coords).each(function(index, e){
