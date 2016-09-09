@@ -550,10 +550,38 @@ class ZipModel extends Model {
          $properties = $this->get_properties_object($item_id);
          if(!empty($properties)){
              foreach ($properties as $id => $values) {
-                 $xml .= '<property>';
-                 $xml .= '<id>'.$id.'</id>';
-                 $xml .= '<value>'.  htmlspecialchars(implode('|', $values)).'</value>';
-                 $xml .= '</property>';
+                if(strpos($id, "_")!==false){
+                    $values =  explode(',', htmlspecialchars(implode('|', $values)));
+                    $explode = explode('_', $id);
+                    $id_compound = $explode[0];
+                    $count = $explode[1];
+                    $xml .= '<property>';
+                    $xml .= '<id>'.$id_compound.'</id>';
+                    $xml .= '<count>'.$count.'</count>';
+                    
+                    foreach ($values as $value) {
+                        $xml .= '<compound>';
+                        if(strpos($value, "_cat")!==false){
+                            $xml .= '<cat>'.str_replace('_cat', "",$value).'</cat>';
+                        }else{
+                            $meta = $this->sdb_get_post_meta($value);
+                            $xml .= '<property_id>'.  str_replace('socialdb_property_', '', $meta->meta_key).'</property_id>';
+                            $xml .= '<value>'.$meta->meta_value.'</value>';
+                        }
+                        $xml .= '</compound>';
+                    }
+                    $xml .= '</property>';
+                 }else{
+                    $var_data = $this->get_all_property($id, true);
+                    if(!isset($var_data['metas']['socialdb_property_is_compounds'])
+                            ||!$var_data['metas']['socialdb_property_is_compounds']){ 
+                        $xml .= '<property>';
+                        $xml .= '<id>'.$id.'</id>';
+                        $xml .= '<value>'.  htmlspecialchars(implode('|', $values)).'</value>';
+                        $xml .= '</property>';
+                    }
+                 }
+                 
              }
          }
          return $xml;

@@ -679,9 +679,31 @@ class CollectionImportModel extends CollectionModel {
        $properties = $xml->properties->property; 
        if($properties){
            foreach ($properties as $property) {
-               $id = $this->get_term_imported_id((string)$property->id);
-               update_post_meta($object_id, 'socialdb_property_'.$id, (string)$property->value);
-               $this->set_common_field_values($object_id, "socialdb_property_$id",(string)$property->value);
+               if(!isset($property->count)){
+                    $id = $this->get_term_imported_id((string)$property->id);
+                    update_post_meta($object_id, 'socialdb_property_'.$id, (string)$property->value);
+                    $this->set_common_field_values($object_id, "socialdb_property_$id",(string)$property->value);
+               }else if(isset($property->count)){
+                    $id = $this->get_term_imported_id((string)$property->id);
+                    $counter = (string) $property->count;
+                    $compounds = $property->compound;
+                    $ids = [];
+                    if($compounds){
+                        foreach ($compounds as $compound) {
+                            if(isset($compound->cat)){
+                                $cat_id = (int)$this->get_term_imported_id((string)$compound->cat);
+                                $ids[] = $cat_id.'_cat';
+                                wp_set_object_terms( $object_id,(int)$cat_id,'socialdb_category_type',true);
+                            }else{
+                                $property_id = $this->get_term_imported_id((string)$compound->property_id);
+                                $ids[] = $this->sdb_add_post_meta($object_id, 'socialdb_property_'.$property_id, (string)$compound->value);
+                                $this->set_common_field_values($object_id, "socialdb_property_$property_id",(string)$property->value);
+                            }
+                        }
+                        update_post_meta($object_id, 'socialdb_property_'.$id.'_'.$counter, implode(',', $ids));
+                    }
+               }
+               
            }
        }
     }

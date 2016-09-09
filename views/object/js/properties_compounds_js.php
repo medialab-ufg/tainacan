@@ -511,12 +511,12 @@
                                     var i =  this.$tree[0].id.split('_')[5];
                                     if ($("#field_property_term_"+compound_id+"_" + tree + '_' + i).val() === node.data.key) {
                                         append_category_properties(0,node.data.key);
-                                        $("#field_property_term_"+compound_id+"_" + tree + '_' + i).val("");
+                                         $('[name="socialdb_property_'+compound_id+'_'+tree+'_'+i+'[]"]').val("");
                                          $('#core_validation_'+compound_id+'_' + tree + '_' + i).val('false');
                                          set_field_valid_compounds(tree,'core_validation_'+compound_id+'_' + tree + '_' + i,compound_id);
                                     } else {
                                         append_category_properties(node.data.key,$("#field_property_term_"+compound_id+"_" + tree).val());
-                                        $("#field_property_term_"+compound_id+"_" + tree + '_' + i).val(node.data.key);
+                                          $('[name="socialdb_property_'+compound_id+'_'+tree+'_'+i+'[]"]').val(node.data.key);
                                         $('#core_validation_'+compound_id+'_'+ tree + '_' + i).val('true');
                                         set_field_valid_compounds(tree,'core_validation_'+compound_id+'_' + tree + '_' + i,compound_id);
                                     }
