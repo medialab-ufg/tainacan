@@ -78,9 +78,15 @@
             $(togglable_divs).each(function(ix, el){ $( el).fadeOut(); } );
         } else if( v_mode === 'geolocation') {
             $('.sl-time').fadeOut();
+            $('.table-meta-config').fadeOut();
             $($(togglable_divs)).each(function(ix, el){ $( el).fadeIn(); } );
+        } else if (v_mode === "table") {
+            $('.sl-time').fadeOut();
+            $(togglable_divs).each(function(ix, el){ $( el).fadeOut(); } );
+            $('.table-meta-config').fadeIn();
         } else {
             togglable_divs.push('.sl-time');
+            togglable_divs.push('.table-meta-config');
             $(togglable_divs).each( function(idx, div) {
                 $(div).fadeOut();
             });
@@ -131,6 +137,11 @@
 
         var selected_view_mode = $('.selected_view_mode').val();
         $("#collection_list_mode").val(selected_view_mode);
+
+        if(selected_view_mode != "geolocation") {
+            $('.prox-container').hide();
+        }
+
         if( selected_view_mode == "slideshow") {
             var s_time = $("#slideshow-time").val();
             $('.sl-time select').val(s_time);
@@ -145,6 +156,8 @@
                 $('.coordinate').show();
                 $('.location').hide();
             }
+        } else if ( selected_view_mode == "table") {
+            $('.table-meta-config').fadeIn();
         }
 
         list_ordenation();
@@ -220,6 +233,10 @@
             data: {operation: 'list_ordenation', collection_id: $("#collection_id").val()}
         }).done(function (result) {
             elem = jQuery.parseJSON(result);
+            var _table_metas = [];
+            $('input[name="_tb_meta_"]').each(function(n, element) {
+                _table_metas.push( $(this).val() );
+            });
 
             if (elem.general_ordenation) {
                 $("#collection_order").append("<optgroup label='<?php _e('General ordenation','tainacan') ?>'>");
@@ -233,10 +250,18 @@
                 $("#collection_order").append("<optgroup label='<?php _e('Data properties','tainacan') ?>'>");
                 $.each(elem.property_data, function (idx, data) {
                     if (data && data !== false) {
+                        var numeric_id = data.id;
+                        var string_id = numeric_id.toString();
                         $("#collection_order").append("<option value='" + data.id + "' selected='selected' >" + data.name + " - ( <?php _e('Type','tainacan') ?>:"+data.type+" ) </option>");
-                        
+
+                        if( _table_metas.indexOf(string_id) > -1 ) {
+                            var ck = "checked";
+                        }
+
+                        $(".table-meta-config").append("<input type='checkbox' id='table_meta' " + ck + " name='table_meta[]' value='" + data.id + "'> " + data.name + "<br />");
+
                         if(data.type === "text") {
-                            var coords = ["select[name='latitude'","select[name='longitude'","select[name='location'"];
+                            var coords = ["select[name='latitude']","select[name='longitude']","select[name='location']"];
                             $(coords).each(function(index, e){
                                $(e).append("<option value='"+ data.id +"'>"+ data.name +"</option>"); 
                             });
@@ -244,6 +269,7 @@
                     }
                 });
             }
+
             if (elem.rankings) {
                 $("#collection_order").append("<optgroup label='<?php _e('Rankings','tainacan') ?>'>");
                 $.each(elem.rankings, function (idx, ranking) {

@@ -44,12 +44,6 @@ $array_visibility = ($meta&&$meta!=='') ? $meta : '';
                 <span style="color:white;"><?php _e('Add Property', 'tainacan'); ?> <span style="color:white;" class="caret"></span></span> 
             </button>
 
-            <?php /*
-            <div class="alert alert-info" style="float: left; margin-left: 20px; padding: 13px 20px 13px 20px; font-size: 12px;">
-                <i> * Arraste um metadado para o lado esquerdo para utiliza-lo como filtro </i>
-            </div>
-            */ ?>
-
             <ul class="dropdown-menu add-property-dropdown">
                 <?php foreach( $view_helper->get_metadata_types() as $type => $label):  ?>
                     <li>

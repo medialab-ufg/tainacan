@@ -34,6 +34,7 @@ class SearchController extends Controller {
                 $object_model = new ObjectModel();
                 $data = $object_model->show_object_properties($data);
                 $data['default_widget_tree'] = get_post_meta($collection_id, 'socialdb_collection_facet_widget_tree', true);
+                $data['collection_table_metas'] = unserialize( get_post_meta($collection_id, "socialdb_collection_table_metas", true) );
                 $data['default_widget_tree_orientation'] = get_post_meta($collection_id, 'socialdb_collection_facet_widget_tree_orientation', true);
                 $data['collection_id'] = $collection_id;
                 $data['category_root_id'] = $object_model->get_category_root_of($collection_id);

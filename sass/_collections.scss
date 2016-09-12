@@ -635,6 +635,10 @@ button.collection-trash, button#hideTrash {
   border: 3px solid $item-border;
 
   #table-view {
+    // max-width: 100%;
+    overflow-x: scroll;
+    overflow: auto;
+    // display: inherit;
     thead {
       th {
         font-weight: bolder;
@@ -651,4 +655,4 @@ button.collection-trash, button#hideTrash {
       } // ul
     }
   }
-}
+} // .table-view-container

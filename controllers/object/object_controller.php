@@ -143,6 +143,7 @@ class ObjectController extends Controller {
                 $data["geo_coordinates"]["long"] = get_post_meta($collection_id, "socialdb_collection_longitude_meta", true);
                 $data['use_approx_mode'] = get_post_meta($collection_id, "socialdb_collection_use_prox_mode", true);
                 $data["geo_loc"] = get_post_meta($collection_id, "socialdb_collection_location_meta", true);
+                $data["table_meta_ids"] = unserialize( get_post_meta($collection_id, "socialdb_collection_table_metas", true) );
 
                 $view_count = get_post_meta($collection_id, 'collection_view_count', true);
                 if (empty($view_count)):
