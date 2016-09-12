@@ -3,10 +3,6 @@
     <table id="table-view" class="table table-striped table-bordered">
       <thead>
       <tr class="dynamic-table-metas">
-          <?php /*
-          <th><?php _e('Item', 'tainacan'); ?></th>
-          <th><?php _e('Description', 'tainacan'); ?></th>
-           */ ?>
           <th><?php _e('Actions', 'tainacan'); ?></th>
       </tr>
       </thead>

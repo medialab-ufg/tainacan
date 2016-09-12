@@ -21,12 +21,15 @@
 
             <div class="col-md-8 flex-box item-meta-box" style="flex-direction:column;">
                 <div class="item-meta col-md-12 no-padding">
-                    <?php 
-                    foreach ($table_meta_ids as $meta_id) {
-                        $__item_meta = get_post_meta($curr_id, "socialdb_property_$meta_id", true); 
-                        ?>
-                        <input type="hidden" name="item_table_meta" value="<?php echo $__item_meta; ?>" />
-                    <?php } ?>
+                    <?php
+                    if( isset($table_meta_ids) && $table_meta_ids > 0):
+                        foreach ($table_meta_ids as $meta_id) {
+                            $__item_meta = get_post_meta($curr_id, "socialdb_property_$meta_id", true);
+                            ?>
+                            <input type="hidden" name="item_table_meta" value="<?php echo $__item_meta; ?>" />
+                        <?php }
+                    endif;
+                    ?>
                     
                     <h4 class="item-display-title">
                         <a href="<?php echo get_collection_item_href($collection_id); ?>"

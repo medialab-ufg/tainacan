@@ -1359,6 +1359,11 @@ a.collection-thumb img {
   padding-top: 15px;
   border: 3px solid #E8E8E8;
 }
+.table-view-container #table-view {
+  max-width: 100%;
+  overflow-x: scroll;
+  display: inherit;
+}
 .table-view-container #table-view thead th {
   font-weight: bolder;
   color: #0c698b;

@@ -16,9 +16,13 @@ $collection_list_mode = $collection_data['collection_metas']['socialdb_collectio
 if( !$collection_list_mode ) {
     $collection_list_mode = "cards";
 }
-foreach ($table_meta_ids as $_meta_id) { ?>
-    <input type="hidden" name="meta_id_table" value="<?php echo $_meta_id; ?>">
-<?php }
+
+if( isset($table_meta_ids) && $table_meta_ids > 0):
+    foreach ($table_meta_ids as $_meta_id): ?>
+        <input type="hidden" name="meta_id_table" value="<?php echo $_meta_id; ?>">
+    <?php 
+    endforeach;
+endif;
 ?>
 
 <!-- TAINACAN: hidden utilizados para execucao de processos desta view (list.php)  -->
