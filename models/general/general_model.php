@@ -1757,8 +1757,8 @@ class Model {
                 //}
             }
             $has_children = $xml->count();
-            if ($has_children > 0) {
-                foreach ($xml as $value) {
+            if ($xml->isComposedBy->node) {
+                foreach ($xml->isComposedBy->node as $value) {
                     $this->add_hierarchy_importing_collection($value, $collection_id, $parent, $all_ids);
                 }
             }

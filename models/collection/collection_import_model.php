@@ -143,6 +143,48 @@ class CollectionImportModel extends CollectionModel {
         }
         //return $categories_id;
    }
+   
+   /** function add_hierarchy_importing_collection($xml,$collection_id,$parent = 0) 
+     * @param 
+     * @param array 
+     * @return array 
+     * @author: Eduardo */
+    public function add_hierarchy_importing_collection($xml, $collection_id, $parent = 0, &$all_ids = []) {
+        if ($xml) {
+            $attributes = $xml->attributes();
+            if (isset($attributes['label']) && !empty($attributes['label'])) {
+                $array = wp_insert_term(trim($attributes['label']), 'socialdb_category_type', array('parent' => $parent,
+                    'slug' => $this->generate_slug(trim($attributes['label']), 0)));
+                add_term_meta($array['term_id'], 'socialdb_imported_id', (string) $attributes['id']);
+                add_term_meta($array['term_id'], 'socialdb_category_owner', get_current_user_id());
+               // $this->insert_properties($xml, $array['term_id'], false);
+                //if($parent == $this->get_category_root()){
+                //$this->add_facet($array['term_id'], $collection_id);
+                //}
+                $parent = $array['term_id'];
+                //if(!in_array($array['term_id'], $all_ids)){
+                //  $all_ids[] = $array['term_id'];
+                //}
+            }
+            $has_children = $xml->count();
+            if ($xml->isComposedBy->node) {
+                foreach ($xml->isComposedBy->node as $value) {
+                    $this->add_hierarchy_importing_collection($value, $collection_id, $parent, $all_ids);
+                }
+            }
+            $data['title'] = __('Success', 'tainacan');
+            $data['msg'] = __('All categories imported successfully', 'tainacan');
+            $data['type'] = 'success';
+            $data['ids'] = $all_ids;
+        } else {
+            $data = array();
+            $data['title'] = __('Error', 'tainacan');
+            $data['msg'] = __('Xml incompatible', 'tainacan');
+            $data['type'] = 'error';
+            $data['ids'] = $all_ids;
+        }
+        return $data;
+    }
    ############################### IMPORTAR DADOS ADMINISTRATIVOS DA COLECAO #####################
    /*
      * @signature import_xml_taxonomies($data)

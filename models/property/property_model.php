@@ -14,8 +14,9 @@ if (isset($_GET['by_function'])) {
 include_once(dirname(__FILE__) . '../../general/general_model.php');
 include_once (dirname(__FILE__) . '../../collection/collection_model.php');
 include_once (dirname(__FILE__) . '../../category/category_model.php');
-include_once (dirname(__FILE__) . '../../../extras/SimpleHTMLDomParser/simple_html_dom.php');
-
+if(!function_exists('str_get_html')){
+    include_once (dirname(__FILE__) . '../../../extras/SimpleHTMLDomParser/simple_html_dom.php');
+}
 class PropertyModel extends Model {
 
     var $collectionModel;

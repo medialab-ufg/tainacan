@@ -1065,7 +1065,7 @@ class CategoryModel extends Model {
         $xml = $this->insert_properties_category($term->term_id,$xml,$collection_id);
         $children = $this->get_category_children($parent_id);
         if (!empty($children) && is_array($children)) {
-            //$xml .= '<isComposedBy>';
+            $xml .= '<isComposedBy>';
             foreach ($children as $child) {
                 //verificando o tipo de categoria que esta seedo exportado
                 if ($type == 'user' && $this->get_category_root() == $parent_id && get_current_user_id() != get_term_meta($child, 'socialdb_category_owner', true)) {
@@ -1078,7 +1078,7 @@ class CategoryModel extends Model {
                 $child_term = get_term_by('id', $child, 'socialdb_category_type');
                 // $xml .= '<node id="'.$child_term->term_id.'" label="'.$child_term->name.'">';
                 $children_of_child = $this->get_category_children($child);
-                $xml .= '<isComposedBy>';
+                //$xml .= '<isComposedBy>';
                 if (!empty($children_of_child) && is_array($children_of_child)) {
                     $this->get_hierarchy_categories_xml($child, $xml, $type);
                 } else {
@@ -1086,10 +1086,10 @@ class CategoryModel extends Model {
                     $xml = $this->insert_properties_category($child,$xml,$collection_id);
                     $xml .= '</node>';
                 }
-                $xml .= '</isComposedBy>';
-                // $xml .= '</node>';
+                //$xml .= '</isComposedBy>';
+                //$xml .= '</node>';
             }
-            // $xml .= '</isComposedBy>';
+            $xml .= '</isComposedBy>';
         }
         $xml .= '</node>';
     }
@@ -1199,7 +1199,9 @@ class CategoryModel extends Model {
      * @param array $data
      */
     public function taxonomy_zone($data) {
-        include_once (dirname(__FILE__) . '../../../extras/SimpleHTMLDomParser/simple_html_dom.php');
+        if(!function_exists('str_get_html')){
+            include_once (dirname(__FILE__) . '../../../extras/SimpleHTMLDomParser/simple_html_dom.php');        
+        }
         $category_root_id = $this->get_category_root_of($data['collection_id']);
         //alterar o nome da categoria raiz
         if($data['category_root_name']&&trim($data['category_root_name'])!=''){
