@@ -114,7 +114,7 @@ $(window).load(function () {
 
     //verifico se foi duplicado um item em outra colecao e abro o editar deste item
     if ($('#open_edit_item').val() !== '') {
-        console.log($('#open_edit_item').val());
+        //console.log($('#open_edit_item').val());
         //edit_object($('#open_edit_item').val());
         $.ajax({
             type: "POST",

@@ -115,7 +115,7 @@
                     }
                 });
             }
-            console.log(elem.rankings);
+            //console.log(elem.rankings);
             if (elem.rankings) {
                 $("#collection_order").append("<optgroup label='<?php _e('Rankings', 'tainacan') ?>'>");
                 $.each(elem.rankings, function (idx, ranking) {
