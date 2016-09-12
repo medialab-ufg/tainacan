@@ -132,4 +132,6 @@
   padding-bottom: 10px;
   border-bottom: 1px solid $item-border;
   font-size: 11px;
+  max-height: 220px;
+  overflow-y: scroll;
 }

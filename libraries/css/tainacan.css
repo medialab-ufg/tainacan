@@ -587,6 +587,8 @@ body.home .ibram-home-container .col-md-3 .ibram-box p:nth-child(4) {
   padding-bottom: 10px;
   border-bottom: 1px solid #E8E8E8;
   font-size: 11px;
+  max-height: 220px;
+  overflow-y: scroll;
 }
 
 #div_left {
@@ -1360,9 +1362,8 @@ a.collection-thumb img {
   border: 3px solid #E8E8E8;
 }
 .table-view-container #table-view {
-  max-width: 100%;
   overflow-x: scroll;
-  display: inherit;
+  overflow: auto;
 }
 .table-view-container #table-view thead th {
   font-weight: bolder;

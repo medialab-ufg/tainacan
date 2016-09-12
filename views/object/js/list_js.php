@@ -4,8 +4,9 @@
 
         var dataTable_options = {
             "language": {
-                sInfo: "Exibindo de _START_ até _END_ de _TOTAL_ itens",
-                sLengthMenu: "Mostrar _MENU_ itens por página",
+                sInfo: "<?php _e('Showing from', 'tainacan'); ?>" + " _START_ " + "<?php _e('until', 'tainacan'); ?>"
+                + " _END_ " + "<?php _e('until', 'tainacan'); ?>" + " _TOTAL_ " + "<?php _e('items', 'tainacan'); ?>",
+                sLengthMenu: "<?php _e('Show', 'tainacan'); ?>" + " _MENU_ " + "<?php _e('items per page', 'tainacan'); ?>",
                 sInfoFiltered: "(filtrados de _MAX_ eventos)",
                 search: "<?php _e('Search: ', 'tainacan'); ?>",
                 paginate: {
@@ -26,23 +27,36 @@
             var nome = $("#collection_single_ordenation option[value='"+valor+"'").text();
             $('tr.dynamic-table-metas').prepend('<th>' + nome + '</th>');
         });
+        var qtd_table_metas = $('input[type="hidden"][name="meta_id_table"]').length;
+        if ( qtd_table_metas > 0 ) {
+            var meta_table_set = true;
+            if(qtd_table_metas > 7 ) {
+                $("#table-view").css("display", "block");
+            }
+        } else {
+            $('tr.dynamic-table-metas').prepend('<th>' + '<?php _e("Title", "tainacan"); ?>'  + '</th>');
+            meta_table_set = false;
+        }
 
         var total_objs = $('.object_id').length;
         $('.object_id').each(function(idx, el) {
             var c_id = $(this).val();
-
             var item_order = parseInt( $("#object_" + c_id).attr('data-order') );
-            var title = $("#object_" + c_id + " .item-display-title").text();
-            // var description = $("#object_" + c_id + " .item-description").text();
-            // var date = $("#object_" + c_id + " .item-creation").text().replace("Criado em: ", "");
             var actions = $("#object_" + c_id + " .item-funcs").html();
 
-            var item_table_metas = $('#object_' + c_id + ' input[type="hidden"][name="item_table_meta"]');
             var _table_html = "<tr>";
-            $( item_table_metas ).each(function(n, meta) {
-                var meta_val = $(meta).val() || "--";
-                _table_html += "<td>" + meta_val + "</td>";
-            });
+
+            if(meta_table_set) {
+                var item_table_metas = $('#object_' + c_id + ' input[type="hidden"][name="item_table_meta"]');
+                $( item_table_metas ).each(function(n, meta) {
+                    var meta_val = $(meta).val() || "--";
+                    _table_html += "<td>" + meta_val + "</td>";
+                });
+            } else {
+                var title = $("#object_" + c_id + " .item-display-title").text();
+                _table_html += "<td>" + title + "</td>";
+            }
+
             _table_html += "<td style='width: 10%'> <ul>" + actions + "</ul> </td> </tr>";
             $( "#table-view-elements" ).append( _table_html );
 

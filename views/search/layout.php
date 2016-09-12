@@ -9,7 +9,12 @@ $view_helper = new ViewHelper();
 <?php $view_helper->render_header_config_steps('layout') ?>
 
 <div class="categories_menu row col-md-12 customize-layout" id="properties_tabs">
-    <div class="col-md-2 holder">
+    <?php if( isset($collection_table_metas) && $collection_table_metas > 0 ) {
+        foreach ($collection_table_metas as $_table_meta) {
+            echo "<input type='hidden' name='_tb_meta_' value='$_table_meta'>";
+        }
+    } ?>
+    <div class="col-md-3 holder">
         <?php
         $cores = ['blue','brown','green','violet','grey'];
         $collection_ordenation = $ordenation['collection_metas']['socialdb_collection_ordenation_form'];
@@ -144,8 +149,7 @@ $view_helper = new ViewHelper();
 
     </div>
 
-
-    <div class="col-md-10 preset-filters no-padding" style="background: #414042; padding-bottom: 20px;">
+    <div class="col-md-9 preset-filters no-padding" style="background: #414042; padding-bottom: 20px;">
         <div class="categories_menu" id="personalize_search">
             <div id="tainacan-mini" class="col-md-11" style="float: none; margin: 0 auto; padding-top: 20px;">
                 <header>

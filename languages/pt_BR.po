@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: socialdb\n"
-"POT-Creation-Date: 2016-09-09 12:39-0300\n"
-"PO-Revision-Date: 2016-09-09 12:40-0300\n"
+"POT-Creation-Date: 2016-09-12 15:38-0300\n"
+"PO-Revision-Date: 2016-09-12 15:41-0300\n"
 "Last-Translator: Rodrigo de Oliveira <webmaster@rodrigodeoliveira.net>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -233,7 +233,7 @@ msgstr "Nome da coleção inválido ou nome do item inválido"
 #: models/event/event_collection/event_collection_delete_model.php:49
 #: models/event/event_comment/event_comment_create_model.php:51
 #: models/event/event_model.php:352 models/object/object_model.php:1656
-#: models/object/object_model.php:1729 models/search/search_model.php:434
+#: models/object/object_model.php:1729 models/search/search_model.php:437
 #: models/theme_options/theme_options_model.php:186
 #: views/collection/js/edit_js.php:40 views/collection/js/edit_js.php:77
 #: views/event/js/list_js.php:177 views/event/js/list_js.php:215
@@ -267,8 +267,8 @@ msgstr "Nome da coleção inválido ou nome do item inválido"
 #: views/object/js/edit_item_text_js.php:104
 #: views/object/js/edit_item_text_js.php:324 views/object/js/edit_js.php:36
 #: views/object/js/edit_js.php:65 views/object/js/edit_js.php:233
-#: views/object/js/list_js.php:171 views/object/js/list_js.php:203
-#: views/object/js/list_js.php:207
+#: views/object/js/list_js.php:196 views/object/js/list_js.php:228
+#: views/object/js/list_js.php:232
 #: views/object/js/show_list_event_properties_js.php:58
 #: views/object/multiple_items/js/editor_items_js.php:73
 #: views/object/multiple_items/js/editor_items_js.php:278
@@ -350,14 +350,14 @@ msgstr "Metadado de dado"
 #: views/design/edit.php:141 views/object/create_item_url.php:147
 #: views/object/list_data_table.php:94 views/property/list.php:14
 #: views/ranking/list.php:13 views/search/edit.php:14 views/search/edit.php:246
-#: views/search/js/edit_js.php:152 views/search/js/layout_js.php:249
+#: views/search/js/edit_js.php:152 views/search/js/layout_js.php:274
 #: views/theme_options/property/list.php:14
 msgid "Rankings"
 msgstr "Votações"
 
 #: controllers/collection/collection_controller.php:270 functions.php:1542
-#: helpers/object/object_helper.php:35 views/property/list_metadata.php:74
-#: views/property/list_metadata.php:81
+#: helpers/object/object_helper.php:35 views/property/list_metadata.php:68
+#: views/property/list_metadata.php:75
 msgid "Default"
 msgstr "Padrão"
 
@@ -390,7 +390,7 @@ msgstr "Por favor, preencha o delimitador corretamente!"
 #: models/user/user_model.php:391 models/user/user_model.php:407
 #: models/user/user_model.php:458 views/category/js/list_js.php:28
 #: views/category/js/list_js.php:459 views/category/js/taxonomy_zone_js.php:70
-#: views/mapping/js/container_mapping_js.php:38 views/object/js/list_js.php:559
+#: views/mapping/js/container_mapping_js.php:38 views/object/js/list_js.php:584
 #: views/object/js/list_trash_js.php:90 views/object/js/list_trash_js.php:118
 #: views/object/js/list_trash_js.php:137 views/search/js/single_js.php:1104
 #: views/search/js/single_js.php:1111 views/search/js/single_js.php:1141
@@ -539,7 +539,7 @@ msgstr "(Painel de edição)"
 #: views/property/metadata/form_compounds.php:91
 #: views/property/metadata/form_voting.php:86 views/ranking/list.php:99
 #: views/search/edit.php:102 views/search/edit.php:315
-#: views/search/layout.php:37 views/search/layout.php:140
+#: views/search/layout.php:42 views/search/layout.php:145
 #: views/theme_options/licenses/edit.php:43
 #: views/theme_options/oaipmh/mapping_attributes.php:25
 #: views/theme_options/property/metadata/form_compounds.php:91
@@ -751,7 +751,8 @@ msgstr "Recentes "
 #: models/mapping/extract_metadata_model.php:175 views/design/edit.php:106
 #: views/license/list.php:21 views/object/create_item_text.php:74
 #: views/object/create_item_text.php:302 views/object/edit_item_text.php:79
-#: views/object/edit_item_text.php:318 views/object/list_versions.php:27
+#: views/object/edit_item_text.php:318 views/object/js/list_js.php:37
+#: views/object/list_versions.php:27
 #: views/object/multiple_items/editor_items.php:89
 #: views/object/multiple_social_network/editor_items.php:121
 #: views/object/temp/edit_multiple.php:78 views/property/js/list_js.php:558
@@ -767,7 +768,7 @@ msgstr "Título"
 #: single.php:817 views/advanced_search/advanced_search.php:99
 #: views/category/page.php:63 views/design/edit.php:113
 #: views/object/create_item_text.php:190 views/object/edit_item_text.php:209
-#: views/object/list_modes/table.php:8 views/object/list_single_object.php:368
+#: views/object/list_single_object.php:368
 #: views/object/list_single_object_version.php:366
 #: views/object/multiple_items/editor_items.php:107
 #: views/object/multiple_social_network/editor_items.php:139
@@ -863,9 +864,9 @@ msgstr "Tags"
 #: views/search/edit.php:157 views/search/edit.php:211
 #: views/search/edit.php:248 views/search/js/edit_js.php:147
 #: views/search/js/edit_js.php:155 views/search/js/edit_js.php:508
-#: views/search/js/edit_js.php:532 views/search/js/layout_js.php:210
-#: views/search/js/layout_js.php:236 views/search/js/layout_js.php:252
-#: views/search/js/layout_js.php:283
+#: views/search/js/edit_js.php:532 views/search/js/layout_js.php:223
+#: views/search/js/layout_js.php:255 views/search/js/layout_js.php:277
+#: views/search/js/layout_js.php:308
 #: views/theme_options/property/js/list_js.php:491
 #: views/theme_options/property/js/list_js.php:511
 msgid "Type"
@@ -980,7 +981,7 @@ msgstr "Configuração"
 #: views/advanced_search/list_advanced_search.php:257
 #: views/advanced_search/loops_page/list_collection_search.php:95
 #: views/advanced_search/loops_page/list_items_search.php:94
-#: views/design/edit.php:12 views/object/list_modes/cards.php:74
+#: views/design/edit.php:12 views/object/list_modes/cards.php:84
 #: views/property/js/list_metadata_js.php:10 views/property/list.php:13
 #: views/ranking/list.php:12 views/search/edit.php:13
 msgid "Metadata"
@@ -1103,7 +1104,6 @@ msgid "Type the name of your collection"
 msgstr "Digite o nome de sua coleção"
 
 #: header.php:251 single.php:248 views/collection/edit.php:485
-#: views/object/list_modes/table.php:7
 msgid "Item"
 msgstr "Item"
 
@@ -1195,7 +1195,7 @@ msgstr "Área de texto"
 #: helpers/view_helper.php:75 views/event/list.php:52 views/event/list.php:146
 #: views/object/data_property_form.php:19
 #: views/object/edit_data_property_form.php:20
-#: views/object/list_modes/table.php:6 views/object/list_versions.php:33
+#: views/object/list_versions.php:33
 #: views/object/single_object/single_data_property_form.php:20
 #: views/object/single_object/single_edit_data_property_form.php:19
 #: views/property/list.php:140 views/theme_options/property/list.php:87
@@ -1403,7 +1403,7 @@ msgid "Metadata and Filters"
 msgstr "Metadados e Filtros"
 
 #: helpers/view_helper.php:286 views/collection/config_menu.php:18
-#: views/search/js/layout_js.php:101 views/search/layout.php:50
+#: views/search/js/layout_js.php:107 views/search/layout.php:55
 msgid "Layout"
 msgstr "Layout"
 
@@ -1542,8 +1542,8 @@ msgstr "Arquivo corrompido"
 #: models/object/object_multiple_model.php:424
 #: models/search/search_model.php:64 models/search/search_model.php:137
 #: models/search/search_model.php:154 models/search/search_model.php:253
-#: models/search/search_model.php:266 models/search/search_model.php:396
-#: models/search/search_model.php:429 models/search/search_model.php:447
+#: models/search/search_model.php:266 models/search/search_model.php:399
+#: models/search/search_model.php:432 models/search/search_model.php:450
 #: models/theme_options/theme_options_model.php:14
 #: models/theme_options/theme_options_model.php:35
 #: models/theme_options/theme_options_model.php:53
@@ -1561,7 +1561,7 @@ msgstr "Arquivo corrompido"
 #: views/object/js/create_item_text_js.php:123
 #: views/object/js/create_item_url_js.php:82 views/object/js/create_js.php:79
 #: views/object/js/edit_item_text_js.php:163 views/object/js/edit_js.php:113
-#: views/object/js/list_js.php:557 views/object/js/list_single_js.php:475
+#: views/object/js/list_js.php:582 views/object/js/list_single_js.php:475
 #: views/object/js/list_single_version_js.php:475
 #: views/object/js/list_trash_js.php:86 views/object/js/list_trash_js.php:114
 #: views/object/js/list_trash_js.php:133
@@ -1666,7 +1666,7 @@ msgstr ""
 #: views/advanced_search/list_advanced_search.php:286
 #: views/advanced_search/loops_page/list_collection_search.php:124
 #: views/advanced_search/loops_page/list_items_search.php:124
-#: views/object/list.php:108 views/object/list_trash.php:93
+#: views/object/list.php:116 views/object/list_trash.php:93
 #: views/property/list.php:38
 msgid " of "
 msgstr " de "
@@ -1780,6 +1780,7 @@ msgstr "Outro"
 #: models/collection/collection_model.php:1118
 #: models/collection/collection_model.php:1129
 #: views/advanced_search/show_object_properties.php:311
+#: views/object/js/list_js.php:7 views/object/js/list_js.php:8
 #: views/search/menu_left.php:45 views/search/menu_left.php:60
 #: views/search/menu_left.php:67 views/search/menu_left.php:69
 msgid "until"
@@ -2056,7 +2057,7 @@ msgstr "Deletar Comentário "
 #: views/import/js/import_configuration_js.php:325
 #: views/import/js/import_configuration_js.php:371
 #: views/import/js/import_configuration_js.php:375
-#: views/object/js/list_js.php:137 views/object/js/list_js.php:338
+#: views/object/js/list_js.php:162 views/object/js/list_js.php:363
 #: views/object/ranking/js/list_ranking_create_js.php:60
 #: views/object/ranking/js/list_ranking_create_js.php:86
 #: views/object/ranking/js/list_ranking_create_js.php:113
@@ -2953,19 +2954,19 @@ msgstr "Algo aconteceu errrado..."
 msgid "Colaboration Ranking"
 msgstr "Ranking de Colaborações"
 
-#: models/search/search_model.php:397
+#: models/search/search_model.php:400
 msgid "Ordenation changed successfully"
 msgstr "Ordenação alterada com sucesso"
 
-#: models/search/search_model.php:430
+#: models/search/search_model.php:433
 msgid "The property was removed as property ordination"
 msgstr "Metadado foi removido das ordenações"
 
-#: models/search/search_model.php:435
+#: models/search/search_model.php:438
 msgid "You can not remove ordination owned by another collecion"
 msgstr "Você não pode remover ordenação pertencente a outra coleção"
 
-#: models/search/search_model.php:448
+#: models/search/search_model.php:451
 msgid "The property was added as property ordination"
 msgstr "A propriedade foi adicionada como ordenação"
 
@@ -3116,7 +3117,7 @@ msgstr "Digite o título ou a URL para seu item"
 #: views/property/metadata/form_voting.php:6
 #: views/property/metadata/form_voting.php:46
 #: views/property/metadata_forms.php:95 views/search/edit.php:288
-#: views/search/layout.php:47
+#: views/search/layout.php:52
 #: views/theme_options/property/metadata/form_compounds.php:11
 #: views/theme_options/property/metadata/form_voting.php:6
 #: views/theme_options/property/metadata/form_voting.php:42
@@ -3582,7 +3583,7 @@ msgstr "Resultado da busca"
 #: views/advanced_search/list_advanced_search.php:217
 #: views/advanced_search/loops_page/list_collection_search.php:46
 #: views/advanced_search/loops_page/list_items_search.php:45
-#: views/object/list_modes/cards.php:34
+#: views/object/list_modes/cards.php:44
 #: views/object/list_modes/cards_trash.php:29
 #: views/object/list_modes/list.php:26
 msgid "Created by: "
@@ -3592,7 +3593,7 @@ msgstr "Criado por: "
 #: views/advanced_search/list_advanced_search.php:218
 #: views/advanced_search/loops_page/list_collection_search.php:47
 #: views/advanced_search/loops_page/list_items_search.php:46
-#: views/object/list.php:38 views/object/list_modes/cards_trash.php:32
+#: views/object/list.php:46 views/object/list_modes/cards_trash.php:32
 msgid "Created at: "
 msgstr "Criado em: "
 
@@ -3600,7 +3601,7 @@ msgstr "Criado em: "
 #: views/advanced_search/list_advanced_search.php:292
 #: views/advanced_search/loops_page/list_collection_search.php:129
 #: views/advanced_search/loops_page/list_items_search.php:128
-#: views/object/list.php:113 views/object/list_trash.php:97
+#: views/object/list.php:121 views/object/list_trash.php:97
 msgid "Items per page:"
 msgstr "Itens por página:"
 
@@ -3802,7 +3803,7 @@ msgstr "Clique aqui para editar o nome da categoria"
 #: views/category/list.php:12 views/category/page.php:57
 #: views/collection/comments.php:26 views/collection/edit.php:16
 #: views/design/edit.php:48 views/property/list.php:34
-#: views/property/list.php:39 views/property/list_metadata.php:65
+#: views/property/list.php:39 views/property/list_metadata.php:59
 #: views/property/list_metadata_category.php:65 views/property/page.php:54
 #: views/ranking/list.php:29 views/search/edit.php:50 views/search/edit.php:53
 #: views/search/tags.php:12 views/social_network/list.php:18
@@ -3947,7 +3948,7 @@ msgid "Design"
 msgstr "Visual"
 
 #: views/category/list.php:224 views/design/edit.php:18
-#: views/object/js/list_js.php:13 views/property/list.php:19
+#: views/object/js/list_js.php:14 views/property/list.php:19
 #: views/ranking/list.php:18 views/search/edit.php:19
 #: views/theme_options/property/list.php:19
 msgid "Previous"
@@ -4029,11 +4030,11 @@ msgstr "Enviar Arquivo"
 msgid "Comments"
 msgstr "Comentários"
 
-#: views/collection/config_menu.php:66 views/object/js/list_js.php:192
+#: views/collection/config_menu.php:66 views/object/js/list_js.php:217
 msgid "Clean Collection"
 msgstr "Remover todos os itens"
 
-#: views/collection/config_menu.php:66 views/object/js/list_js.php:192
+#: views/collection/config_menu.php:66 views/object/js/list_js.php:217
 msgid "Are you sure to remove all items"
 msgstr "Tem certeza que deseja remover TODOS os itens "
 
@@ -4500,7 +4501,7 @@ msgid "Please set a valid address"
 msgstr "Por favor, digite um endereço válido"
 
 #: views/collection/js/edit_js.php:103 views/search/js/edit_js.php:135
-#: views/search/js/layout_js.php:225
+#: views/search/js/layout_js.php:242
 msgid "General ordenation"
 msgstr "Ordenação padrão"
 
@@ -4509,7 +4510,7 @@ msgstr "Ordenação padrão"
 #: views/object/multiple_social_network/editor_items.php:248
 #: views/object/show_insert_object_properties.php:68
 #: views/object/temp/edit_multiple.php:208 views/search/js/edit_js.php:143
-#: views/search/js/layout_js.php:233
+#: views/search/js/layout_js.php:250
 msgid "Data properties"
 msgstr "Metadados de dados"
 
@@ -5303,7 +5304,7 @@ msgid "Loading Properties..."
 msgstr "Carregando metadados..."
 
 #: views/object/create_item_text.php:32 views/object/create_item_url.php:20
-#: views/object/edit_item_text.php:37 views/property/list_metadata.php:110
+#: views/object/edit_item_text.php:37 views/property/list_metadata.php:104
 #: views/property/list_metadata_category.php:91
 #: views/theme_options/property/list_metadata.php:82
 msgid "Loading metadata..."
@@ -5668,62 +5669,78 @@ msgstr "Por favor, insira um nome válido para o item"
 msgid "No properties added"
 msgstr "Sem metadados adicionados"
 
-#: views/object/js/list_js.php:10
+#: views/object/js/list_js.php:7
+msgid "Showing from"
+msgstr "Exibindo de"
+
+#: views/object/js/list_js.php:8
+msgid "items"
+msgstr "itens"
+
+#: views/object/js/list_js.php:9
+msgid "Show"
+msgstr "Exibir"
+
+#: views/object/js/list_js.php:9
+msgid "items per page"
+msgstr "itens por página"
+
+#: views/object/js/list_js.php:11
 msgid "Search: "
 msgstr "Pesquisar: "
 
-#: views/object/js/list_js.php:12
+#: views/object/js/list_js.php:13
 msgid "First"
 msgstr "Primeiro"
 
-#: views/object/js/list_js.php:14
+#: views/object/js/list_js.php:15
 msgid "Next "
 msgstr "Próximo"
 
-#: views/object/js/list_js.php:15
+#: views/object/js/list_js.php:16
 msgid "Last"
 msgstr "Último"
 
-#: views/object/js/list_js.php:137
+#: views/object/js/list_js.php:162
 msgid ""
 "You may not classificate objects with root categories, object properties and "
 "tags"
 msgstr ""
 "Não pode classificar itens com categoria raiz, metadados de objeto e tags"
 
-#: views/object/js/list_js.php:171
+#: views/object/js/list_js.php:196
 msgid "Action not allowed by admin!"
 msgstr "Ação não permitida pelo administrador!"
 
-#: views/object/js/list_js.php:204
+#: views/object/js/list_js.php:229
 msgid "Send "
 msgstr "Enviar "
 
-#: views/object/js/list_js.php:204
+#: views/object/js/list_js.php:229
 msgid " items to trash?"
 msgstr " itens para o lixo?"
 
-#: views/object/js/list_js.php:207
+#: views/object/js/list_js.php:232
 msgid "You did not select any items to delete!"
 msgstr "Você não selecionou nenhum item para deletar!"
 
-#: views/object/js/list_js.php:262
+#: views/object/js/list_js.php:287
 msgid "Select items below to edit or exclude!"
 msgstr "Selecione os itens abaixo para editar ou excluir!"
 
-#: views/object/js/list_js.php:273
+#: views/object/js/list_js.php:298
 msgid "All items have been selected!"
 msgstr "Todos os itens foram selecionados!"
 
-#: views/object/js/list_js.php:338
+#: views/object/js/list_js.php:363
 msgid "You need to fill the email or choose the collection"
 msgstr "Você precisa preencher o email ou selecionar a coleção"
 
-#: views/object/js/list_js.php:557
+#: views/object/js/list_js.php:582
 msgid "Successfully created version."
 msgstr ""
 
-#: views/object/js/list_js.php:559
+#: views/object/js/list_js.php:584
 msgid "Please try again."
 msgstr ""
 
@@ -5837,26 +5854,26 @@ msgstr ""
 msgid "New tab"
 msgstr "Nova aba"
 
-#: views/object/list.php:61 views/object/list_advanced_search.php:82
+#: views/object/list.php:69 views/object/list_advanced_search.php:82
 #: views/object/list_trash.php:54
 msgid "No objects found!"
 msgstr "Nenhum item encontrado!"
 
-#: views/object/list.php:67 views/object/list_advanced_search.php:86
+#: views/object/list.php:75 views/object/list_advanced_search.php:86
 #: views/object/list_trash.php:60
 msgid "This collection is empty, create the first item!"
 msgstr "Esta coleção está vazia, crie seu primeiro item!"
 
-#: views/object/list.php:71 views/object/list_advanced_search.php:87
+#: views/object/list.php:79 views/object/list_advanced_search.php:87
 #: views/object/list_trash.php:61
 msgid "Click here to add a new item"
 msgstr "Clique aqui para adicionar um novo item"
 
-#: views/object/list.php:77 views/object/list_trash.php:66
+#: views/object/list.php:85 views/object/list_trash.php:66
 msgid "This repository is empty, create the first collection!"
 msgstr "Este repositório está vazio, crie sua primeira coleção!"
 
-#: views/object/list.php:78 views/object/list_trash.php:67
+#: views/object/list.php:86 views/object/list_trash.php:67
 msgid "Click here to add a new collection"
 msgstr "Clique aqui para adicionar um nova coleção! "
 
@@ -5886,7 +5903,7 @@ msgstr "Descrição"
 msgid "Classifications"
 msgstr "Classificações"
 
-#: views/object/list_data_table.php:20 views/object/list_modes/table.php:9
+#: views/object/list_data_table.php:20 views/object/list_modes/table.php:5
 msgid "Actions"
 msgstr "Ações"
 
@@ -7115,19 +7132,19 @@ msgstr "Ordenação"
 msgid "Select the properties for ordenation"
 msgstr "Selecionar os metadados para ordenação"
 
-#: views/search/edit.php:75 views/search/layout.php:108
+#: views/search/edit.php:75 views/search/layout.php:113
 msgid "Select the default ordination"
 msgstr "Selecionar ordenação padrão"
 
-#: views/search/edit.php:82 views/search/layout.php:115
+#: views/search/edit.php:82 views/search/layout.php:120
 msgid "Select the ordination form"
 msgstr "Selecione a forma de ordenação"
 
-#: views/search/edit.php:89 views/search/layout.php:118
+#: views/search/edit.php:89 views/search/layout.php:123
 msgid "DESC"
 msgstr "Decrescente"
 
-#: views/search/edit.php:96 views/search/layout.php:121
+#: views/search/edit.php:96 views/search/layout.php:126
 msgid "ASC"
 msgstr "Ascendente"
 
@@ -7237,7 +7254,7 @@ msgid "%1$d days ago"
 msgstr "Há  %1$d dia(s) atrás"
 
 #: views/search/js/edit_js.php:514 views/search/js/edit_js.php:537
-#: views/search/js/layout_js.php:287
+#: views/search/js/layout_js.php:312
 msgid "No data properties inserted"
 msgstr "Nenhum metadado de dado adicionado"
 
@@ -7326,80 +7343,80 @@ msgstr "Necessário informar algo "
 msgid "Necessary to inform Instagram URL with user identifier"
 msgstr "Necessário informar a URL do Instagram com identificador do usuário"
 
-#: views/search/layout.php:19
+#: views/search/layout.php:24
 msgid "Colors"
 msgstr "Cores"
 
-#: views/search/layout.php:29
+#: views/search/layout.php:34
 msgid "Your colors"
 msgstr "Suas cores"
 
-#: views/search/layout.php:41 views/user/js/register_js.php:24
+#: views/search/layout.php:46 views/user/js/register_js.php:24
 #: views/user/register.php:89
 msgid "More options"
 msgstr "Mais opções"
 
-#: views/search/layout.php:58
+#: views/search/layout.php:63
 msgid "Default list mode"
 msgstr "Modo padrão de listagem"
 
-#: views/search/layout.php:60
+#: views/search/layout.php:65
 msgid "Cards"
 msgstr ""
 
-#: views/search/layout.php:61
+#: views/search/layout.php:66
 msgid "Gallery"
 msgstr "Galeria"
 
-#: views/search/layout.php:62
+#: views/search/layout.php:67
 msgid "List"
 msgstr "Lista"
 
-#: views/search/layout.php:63
+#: views/search/layout.php:68
 msgid "Slideshow"
 msgstr "Slideshow"
 
-#: views/search/layout.php:64
+#: views/search/layout.php:69
 msgid "Geolocation"
 msgstr "Geo localização"
 
-#: views/search/layout.php:65
+#: views/search/layout.php:70
 msgid "Table"
 msgstr "Tabela"
 
-#: views/search/layout.php:70
+#: views/search/layout.php:75
 msgid "Slideshow time (seconds)"
 msgstr "Tempo de slideshow (segundos)"
 
-#: views/search/layout.php:82
+#: views/search/layout.php:87
 msgid "Approximate mode"
 msgstr "Modo aproximado"
 
-#: views/search/layout.php:87
+#: views/search/layout.php:92
 msgid "Location"
 msgstr "Localização"
 
-#: views/search/layout.php:93
+#: views/search/layout.php:98
 msgid "Latitude"
 msgstr "Latitude"
 
-#: views/search/layout.php:98
+#: views/search/layout.php:103
 msgid "Longitude"
 msgstr "Longitude"
 
-#: views/search/layout.php:103
+#: views/search/layout.php:108
 msgid "Select metadata that will show up at table"
 msgstr "Selecione os metadados que aparecerão na tabela"
 
-#: views/search/layout.php:128
+#: views/search/layout.php:133
 msgid "Select the form layout to create a new text item"
 msgstr "Selecione o layout do formulário para criar um novo item de texto"
 
-#: views/search/layout.php:131
+#: views/search/layout.php:136
 msgid "1 column"
 msgstr "1 coluna"
 
-#: views/search/layout.php:134
+#: views/search/layout.php:139
 msgid "2 columns"
 msgstr "2 colunas"
 
