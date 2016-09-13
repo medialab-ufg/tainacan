@@ -2468,6 +2468,9 @@ function changeViewMode(viewMode) {
         $("#collection_single_ordenation").attr('data-viewMode', viewMode);
         $('.viewMode-control li').removeClass('selected-viewMode');
         $('.viewMode-control li.' + viewMode).addClass('selected-viewMode');
+
+        setCollectionViewIcon('selected-viewMode');
+        
         $('.list-mode-set').attr('id', viewMode + '-viewMode');
         $('.top-div').hide();
         $('.'+viewMode+'-view-container').show();
@@ -2476,6 +2479,15 @@ function changeViewMode(viewMode) {
     if(viewMode != "geolocation") {
         $('.geolocation-view-container').hide();
     }
+}
+
+function setCollectionViewIcon(item_class) {
+    var current_img = $( '.' + item_class + " a img").first().clone();
+    if ( current_img.length < 1 ) {
+        current_img = $( '.' + item_class + " a span").first().clone();
+    }
+
+    $("#collectionViewMode").html(current_img);
 }
 
 function getCollectionSlideshow() {

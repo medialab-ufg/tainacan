@@ -269,60 +269,67 @@ $options = get_option('socialdb_theme_options');
                                     <button onclick="change_ordenation('desc')" type="button" id="sort_list" class="btn btn-default pull-right"><span class="glyphicon glyphicon-sort-by-attributes-alt"></span></button>
                                 </div>
 
-                                <div class="col-md-4 viewMode-control">
+                                <div class="col-md-2 viewMode-control">
                                     <div class="sec-color"> <?php _e('Show:', 'tainacan') ?> </div>
-                                    <ul>
-                                        <?php
-                                        $viewModes = [ 'cards', 'gallery', 'list', 'slideshow'];
-                                        foreach ($viewModes as $mode):
-                                            ?>
+                                    <button id="collectionViewMode" data-toggle="dropdown" type="button" class="btn btn-default">
+                                        <?php _e("Show:", "tainacan"); ?>
+                                    </button>
+                                    
+                                    <ul class="dropdown-menu" aria-labelledby="collectionViewMode">
+                                        <?php foreach ( ViewHelper::collection_view_modes() as $mode => $title): ?>
                                             <li class="<?php echo $mode ?>">
                                                 <a href="javascript:void(0)" onclick="changeViewMode('<?php echo $mode ?>')">
-                                                    <img alt="<?php echo ucfirst(__($mode, 'tainacan')); ?>"
-                                                         src="<?php echo get_template_directory_uri() . '/libraries/images/icons/collection/icon-' . $mode . '.png' ?>" />
+                                                    <div class="pull-left"> <?php echo $title; ?> </div>
+                                                    <div class="pull-right">
+                                                        <img alt="<?php echo ucfirst(__($mode, 'tainacan')); ?>"
+                                                             src="<?php echo get_template_directory_uri() . '/libraries/images/icons/collection/icon-' . $mode . '.png' ?>" />
+                                                    </div>
                                                 </a>
                                             </li>
                                         <?php endforeach; ?>
                                         <li class="geolocation">
                                             <a href="#" onclick="changeViewMode('geolocation')">
-                                                <span class="glyphicon glyphicon-map-marker" style="color: black"></span>
+                                                <div class="pull-left"> <?php _e('Map', 'tainacan'); ?> </div>
+                                                <div class="pull-right"> <span class="glyphicon glyphicon-map-marker"></span> </div>
                                             </a>
                                         </li>
                                         <li class="table">
                                             <a href="#" onclick="changeViewMode('table')">
-                                                <span class="glyphicon glyphicon-align-justify" style="color: black"></span>
+                                                <div class="pull-left"> <?php _e('Table', 'tainacan'); ?> </div>
+                                                <div class="pull-right"> <span class="glyphicon glyphicon-align-justify"></span> </div>
                                             </a>
                                         </li>
                                     </ul>
                                 </div>
-                                <div class="col-md-2 selectable-items">
-                                  <div class="selectors">
-                                    <a onclick="select_some()" class="select_some">
-                                      <?php echo ViewHelper::render_icon("selection", "png", __("Select some items", "tainacan") ); ?>
-                                    </a>
-                                    <a onclick="select_all()" class="select_all">
-                                      <?php echo ViewHelper::render_icon("select-all", "png", __("Select all items", "tainacan") ); ?>
-                                    </a>
-                                    <input type="hidden" value="" class="bulk_action" name="bulk_action">
-                                  </div>
 
-                                  <div class="selectable-actions pull-right" style="display: none;">
-                                    <a class="move_trash">
-                                      <span class="glyphicon glyphicon-trash"></span>
-                                    </a>
-                                    <a class="move_edition">
-                                      <span class="glyphicon glyphicon-edit"></span>
-                                    </a>
-                                  </div>
+                                <div class="col-md-2 selectable-items">
+                                    <?php if ( is_user_logged_in() && get_the_ID() != get_option('collection_root_id') &&
+                                               verify_collection_moderators(get_the_ID(), get_current_user_id()) ):  ?>
+                                        <div class="selectors">
+                                            <a onclick="select_some()" class="select_some">
+                                                <?php echo ViewHelper::render_icon("selection", "png", __("Select some items", "tainacan") ); ?>
+                                            </a>
+                                            <a onclick="select_all()" class="select_all">
+                                                <?php echo ViewHelper::render_icon("select-all", "png", __("Select all items", "tainacan") ); ?>
+                                            </a>
+                                            <input type="hidden" value="" class="bulk_action" name="bulk_action">
+                                        </div>
+                                        <div class="selectable-actions pull-right" style="display: none;">
+                                            <a class="move_trash">
+                                                <span class="glyphicon glyphicon-trash"></span>
+                                            </a>
+                                            <a class="move_edition">
+                                              <span class="glyphicon glyphicon-edit"></span>
+                                            </a>
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
 
-                                <div class="col-md-12" style="margin-top: 10px;">
-                                    <?php
-                                    if (is_user_logged_in()) {
+                                <div class="col-md-2">
+                                    <?php if (is_user_logged_in()) {
                                         if (get_the_ID() != get_option('collection_root_id') && verify_collection_moderators(get_the_ID(), get_current_user_id())) {
                                             ?>
                                             <button onclick="showTrash('<?php echo get_template_directory_uri(); ?>');" class="btn btn-default pull-left collection-trash"><?php _e('Trash', 'tainacan'); ?></button>
-
                                             <?php
                                         } else {
                                             $admin_email = get_option('admin_email');
@@ -330,7 +337,6 @@ $options = get_option('socialdb_theme_options');
                                             if ($admin_email == $user_data) {
                                                 ?>
                                             <button onclick="showTrash('<?php echo get_template_directory_uri(); ?>');" class="btn btn-danger pull-left" style="color: white"><?php _e('Trash', 'tainacan'); ?></button>
-
                                                 <?php
                                             }
                                         }

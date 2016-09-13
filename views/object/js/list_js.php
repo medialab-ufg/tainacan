@@ -1,7 +1,6 @@
 <script>
     $(function () {
         var src = $('#src').val();
-
         var dataTable_options = {
             "language": {
                 sInfo: "<?php _e('Showing from', 'tainacan'); ?>" + " _START_ " + "<?php _e('until', 'tainacan'); ?>"
@@ -45,7 +44,6 @@
             var actions = $("#object_" + c_id + " .item-funcs").html();
 
             var _table_html = "<tr>";
-
             if(meta_table_set) {
                 var item_table_metas = $('#object_' + c_id + ' input[type="hidden"][name="item_table_meta"]');
                 $( item_table_metas ).each(function(n, meta) {
@@ -86,8 +84,6 @@
            var container = $('.' + viewMode +'-view-container');
            $('span.per-page').text(limit);
 
-           //cl ( $('.pagination_items span.per-page').text() );
-
            $(container).each(function(idx, el) {
               var item_num = parseInt( $(el).attr('data-order') );
               if( $.isNumeric( item_num ) ) {
@@ -101,6 +97,8 @@
         });
 
         var default_viewMode = $("#default-viewMode").val();
+        setCollectionViewIcon(default_viewMode);
+
         if (default_viewMode === "slideshow") {
             // getSlideshowTime();
             getCollectionSlideshow();

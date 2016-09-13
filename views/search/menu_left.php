@@ -190,14 +190,12 @@ foreach ($facets as $facet):
     elseif ($facet['widget'] == 'stars'):  ?>
          <div id="stars_widget_<?php echo $facet['id']; ?>" class="form-group">
             <label class="title-pipe"> <?php echo $facet['name']; ?> </label>
-             <div>
-                <center>
-                    <a onclick="wpquery_range('<?php echo $facet['id'] ?>', '<?php echo $facet['type'] ?>', 4.1, 5)" style="cursor: pointer;"><img src="<?php echo get_template_directory_uri() . '/libraries/images/star5.png' ?>"></a><br>
-                    <a onclick="wpquery_range('<?php echo $facet['id'] ?>', '<?php echo $facet['type'] ?>', 3.1, 4)" style="cursor: pointer;"><img src="<?php echo get_template_directory_uri() . '/libraries/images/star4.png' ?>"></a><br>
-                    <a onclick="wpquery_range('<?php echo $facet['id'] ?>', '<?php echo $facet['type'] ?>', 2.1, 3)" style="cursor: pointer;"><img src="<?php echo get_template_directory_uri() . '/libraries/images/star3.png' ?>"></a><br>
-                    <a onclick="wpquery_range('<?php echo $facet['id'] ?>', '<?php echo $facet['type'] ?>', 1.1, 2)" style="cursor: pointer;"><img src="<?php echo get_template_directory_uri() . '/libraries/images/star2.png' ?>"></a><br>
-                    <a onclick="wpquery_range('<?php echo $facet['id'] ?>', '<?php echo $facet['type'] ?>', 0, 1)" style="cursor: pointer;"><img src="<?php echo get_template_directory_uri() . '/libraries/images/star1.png' ?>"></a><br>
-                </center>
+             <div style="padding-left: 30px;">
+                 <a onclick="wpquery_range('<?php echo $facet['id'] ?>', '<?php echo $facet['type'] ?>', 4.1, 5)" style="cursor: pointer;"><img src="<?php echo get_template_directory_uri() . '/libraries/images/star5.png' ?>"></a><br>
+                 <a onclick="wpquery_range('<?php echo $facet['id'] ?>', '<?php echo $facet['type'] ?>', 3.1, 4)" style="cursor: pointer;"><img src="<?php echo get_template_directory_uri() . '/libraries/images/star4.png' ?>"></a><br>
+                 <a onclick="wpquery_range('<?php echo $facet['id'] ?>', '<?php echo $facet['type'] ?>', 2.1, 3)" style="cursor: pointer;"><img src="<?php echo get_template_directory_uri() . '/libraries/images/star3.png' ?>"></a><br>
+                 <a onclick="wpquery_range('<?php echo $facet['id'] ?>', '<?php echo $facet['type'] ?>', 1.1, 2)" style="cursor: pointer;"><img src="<?php echo get_template_directory_uri() . '/libraries/images/star2.png' ?>"></a><br>
+                 <a onclick="wpquery_range('<?php echo $facet['id'] ?>', '<?php echo $facet['type'] ?>', 0, 1)" style="cursor: pointer;"><img src="<?php echo get_template_directory_uri() . '/libraries/images/star1.png' ?>"></a><br>
              </div>
         </div>
         

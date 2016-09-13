@@ -323,4 +323,13 @@ class ViewHelper {
         return "<input type='submit' class='btn btn-primary pull-right' value='". __('Save', 'tainacan') ."'/>";
     }
 
+    public static function collection_view_modes() {
+        return [
+          'cards'   => __('Cards', 'tainacan'),
+          'list'    => __('List', 'tainacan'),
+          'gallery' => __('Gallery', 'tainacan'),
+          'slideshow' => __('Slideshow', 'tainacan'),
+        ];
+    }
+
 } // ViewHelper

@@ -973,31 +973,38 @@ a.collection-thumb img {
   margin-left: -45px;
 }
 
-.selected-viewMode {
-  padding: 3px 2px 5px 5px;
-  border: 2px solid #E8E8E8;
-  border-radius: 2px;
+/*
+ * Not used anymore by now
+ * But leave it commented
+ .selected-viewMode {
+  @include mode_view_highlight();
 }
-
+*/
 .viewMode-control {
-  padding-top: 5px;
   padding-right: 0;
 }
+.viewMode-control img {
+  width: 15px;
+}
+.viewMode-control img:hover {
+  opacity: 0.7;
+}
+.viewMode-control .sec-color {
+  margin-right: 5px;
+}
 .viewMode-control div {
-  color: #0c698b;
   float: left;
   font-weight: bolder;
   padding-top: 3px;
 }
 .viewMode-control ul li {
   display: inline;
-  margin-left: 10px;
 }
-.viewMode-control ul li a img {
-  width: 15px;
+.viewMode-control ul li a {
+  color: black;
 }
-.viewMode-control ul li a img:hover {
-  opacity: 0.7;
+.viewMode-control ul li a span {
+  color: black;
 }
 
 .item-funcs {
