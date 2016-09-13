@@ -157,7 +157,7 @@ class CollectionImportModel extends CollectionModel {
                     'slug' => $this->generate_slug(trim($attributes['label']), 0)));
                 add_term_meta($array['term_id'], 'socialdb_imported_id', (string) $attributes['id']);
                 add_term_meta($array['term_id'], 'socialdb_category_owner', get_current_user_id());
-               // $this->insert_properties($xml, $array['term_id'], false);
+                $this->insert_properties($xml, $array['term_id'], false);
                 //if($parent == $this->get_category_root()){
                 //$this->add_facet($array['term_id'], $collection_id);
                 //}

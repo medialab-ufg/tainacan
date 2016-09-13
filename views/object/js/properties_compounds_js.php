@@ -497,14 +497,12 @@
                                     });
                                 },
                                 onCreate: function (node, span) {
-//                                    $("#field_property_term_"+tree + '_' + i).dynatree("getRoot").visit(function(node){
-//                                        if (typeof delete_value === "function") {
-//                                              delete_value(node.data.key);
-//                                        }
                                     if(value&&value==node.data.key){
                                         node.select();
                                     }
-//                                    });
+                                    if(categories.length>0&&categories.indexOf(node.data.key)>=0){
+                                        node.select();
+                                    }
                                     bindContextMenuSingle(span,'field_property_term_' + tree + '_');
                                 },
                                 onSelect: function (flag, node) {

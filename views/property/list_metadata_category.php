@@ -9,7 +9,12 @@ $meta = get_post_meta($collection_id, 'socialdb_collection_fixed_properties_visi
 $tabs = unserialize(get_post_meta($collection_id, 'socialdb_collection_update_tab_organization',true));
 $array_visibility = ($meta&&$meta!=='') ? $meta : '';
 ?>
-
+<style>
+    .ui-widget-content {
+         border: none; 
+        color: #222222;
+    }
+</style>
 <?php $view_helper->render_header_config_steps('metadata') ?>
 <input type="hidden" 
        name="tabs_properties" 
