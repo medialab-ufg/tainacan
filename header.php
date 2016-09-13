@@ -176,7 +176,7 @@ $viewHelper = new ViewHelper();
                                                
                         <ul id="collections-menu">
                             <li class="collections">
-                                <a href="#" style="color: white; padding-top: 17px;">
+                                <a href="<?php echo get_permalink(get_option('collection_root_id')); ?>" style="color: white; padding-top: 17px;">
                                     <?php echo ViewHelper::render_icon('collection', 'png'); ?>
                                     <div style="display:inline-block; margin-left: 5px;">
                                         <?php _e('Collections', 'tainacan'); ?>
@@ -189,25 +189,27 @@ $viewHelper = new ViewHelper();
                                             <?php _e('Show collections', 'tainacan'); ?>
                                         </a>
                                     </li>
-                                    <li class="divider"></li>
-                                    <li>
-                                        <a href="#">
-                                            <?php _e('Create collection','tainacan') ?>
-                                            <span class="glyphicon glyphicon-chevron-right"></span>
-                                        </a>
-                                        <ul class="sub-menu templates">
-                                            <li class="click_new_collection">
-                                                <a href="#" id="click_new_collection" onclick="showModalCreateCollection()">                                                    
-                                                    <?php _e('General', 'tainacan'); ?>
-                                                </a>
-                                            </li>                                                                                       
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <a onclick="showModalImportCollection();" href="#">
-                                            <?php _e('Import collection', 'tainacan') ?>
-                                        </a>
-                                    </li>	
+                                    <?php if( is_user_logged_in() ): ?>
+                                        <li class="divider"></li>
+                                        <li> <a href="#">
+                                                <?php _e('Create collection','tainacan') ?>
+                                                <span class="glyphicon glyphicon-chevron-right"></span>
+                                            </a>
+                                            <ul class="sub-menu templates">
+                                                <li class="click_new_collection">
+                                                    <a href="#" id="click_new_collection" onclick="showModalCreateCollection()">
+                                                        <?php _e('General', 'tainacan'); ?>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a onclick="showModalImportCollection();" href="#">
+                                                <?php _e('Import collection', 'tainacan') ?>
+                                            </a>
+                                        </li>
+
+                                    <?php endif; ?>
                                 </ul>
                             </li>
                         </ul>
