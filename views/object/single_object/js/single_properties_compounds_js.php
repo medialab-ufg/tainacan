@@ -128,9 +128,7 @@
         });
     }
     
-    
-    
-     function clear_select_object_property_compound(e,compound_id,property_id,object_id) {
+    function clear_select_object_property_compound(e,compound_id,property_id,object_id) {
         $('option:selected', e).remove();
          $("#property_value_"+compound_id+"_" + property_id + "_" + object_id+"_edit option").each(function()
         {
@@ -431,7 +429,6 @@
             });
         }
     }
-    
     // tree
     function compounds_list_tree(trees,categories,compound_id) {
         if (trees) {
@@ -638,7 +635,12 @@
             // set_field_valid_compounds(property_id,'core_validation_'+ compound_id + "_"+property_id+"_"+i,compound_id);
         }
     }
-    
+    /**
+     * 
+     * @param {type} seletor
+     * @param {type} property_id
+     * @param {type} compound_id
+     * @returns {undefined}     */
     function validate_selectbox(seletor,property_id,compound_id){
         if($(seletor).val()===''){
             $('#core_validation_'+property_id).val('false');
@@ -650,8 +652,7 @@
     }
     /**
     * 
-
-     * @type Arguments     */
+    * @type Arguments     */
     function set_field_valid_compounds(id,seletor,compound_id){
         if($('#'+seletor).val()==='false'){
             $('#'+seletor).val('false');
@@ -676,14 +677,15 @@
             //set_field_valid(compound_id,'core_validation_'+compound_id);
         }
     }
-//########################## BOTOES DE ALTERACAO ################################
-  function edit_compounds_property(property_id, object_id) {
+    //########################## BOTOES DE ALTERACAO ################################
+    function edit_compounds_property(property_id, object_id) {
         $("#single_cancel_" + property_id + "_" + object_id).show();
         $("#single_edit_" + property_id + "_" + object_id).hide();
         $(".compounds_buttons_" + property_id).show();
         $(".compounds_fields_text_" + property_id).hide();
         $(".compounds_fields_value_" + property_id).show();
     }
+    
     function cancel_compounds_property(property_id, object_id) {
         swal({
             title: '<?php _e('Attention!', 'tainacan'); ?>',
