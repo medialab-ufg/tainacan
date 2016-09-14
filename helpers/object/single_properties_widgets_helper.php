@@ -58,8 +58,9 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
                             </button>
                         </div>
                         <?php $cardinality = $this->render_cardinality_property($property);   ?>
-                        <?php $properties_compounded = $property['metas']['socialdb_property_compounds_properties_id']; ?>
-                        <?php $class = 'col-md-'. (12/count($properties_compounded)); ?>
+                        <?php $properties_compounded = array_values(array_filter($property['metas']['socialdb_property_compounds_properties_id'])); ?>
+                        <?php 
+                        $class = 'col-md-'. (12/count($properties_compounded)); ?>
                         <div class="form-group"> 
                              <input  type="hidden" 
                                     id='main_compound_id' 
@@ -88,6 +89,9 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
                                     </div>      
                                     <div class="col-md-11">
                                     <?php foreach ($properties_compounded as $property_compounded): 
+                                        if(!$property_compounded['id']){
+                                            continue;
+                                        }
                                         $coumpounds_id[] = $property_compounded['id']; 
                                         $value = $this->get_value($object_id, $property['id'], $property_compounded['id'], $i, $position);
                                         ?>

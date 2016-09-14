@@ -22,7 +22,7 @@ $array_visibility = ($meta&&$meta!=='') ? $meta : '';
        value='<?php echo ($tabs&&is_array($tabs)) ? json_encode($tabs) :  ''; ?>'/>
 <input type="hidden" name="visibility_collection_properties" id="visibility_collection_properties" value='<?php echo $array_visibility; ?>'/>
 <input type="hidden" name="property_category_id" id="property_category_id" value="<?php echo $category->term_id; ?>"/>
-<div class="categories_menu col-md-12 no-padding"  id="properties_tabs">
+<div class="categories_menu col-md-12 no-padding"  id="properties_tabs" style="min-height: 600px;">
 
     <div id="preset-filters" class="preset-filters ui-widget-header no-padding hide">
         <ul id="filters-accordion" class="connectedSortable"></ul>
@@ -104,3 +104,11 @@ $array_visibility = ($meta&&$meta!=='') ? $meta : '';
     </div>
 
 </div> <!-- #properties-tabs -->
+<script>
+    function hide_arrow(){
+       $('.title-pipe .glyphicon-arrow-left').hide();
+       $('.root_category').hide();
+    }
+    
+    myVar = setTimeout(hide_arrow, 6000);
+</script>    

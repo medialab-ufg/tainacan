@@ -84,9 +84,9 @@ class EventPropertyCompoundsEditValue extends EventModel {
             // coloco os valores em um array
             $values = explode(',', $value);
             //busco os ids de estao localizados os metas
-            $ids_metas = array_filter(explode(',', get_post_meta($object_id,'socialdb_property_'.$property.'_'.$row,true))); 
+            $ids_metas = array_values(array_filter(explode(',', get_post_meta($object_id,'socialdb_property_'.$property.'_'.$row,true)))); 
             // o id das propriedades participantes
-            $properties_compounds_id = explode(',', $properties_compound);
+            $properties_compounds_id = array_values(array_filter(explode(',', $properties_compound)));
             //percorro as propriedades que compoe a composta
             foreach ($properties_compounds_id as $key => $property_compounds_id) {
                 $result = true;
