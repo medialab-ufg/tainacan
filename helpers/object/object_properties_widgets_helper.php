@@ -305,7 +305,7 @@ class ObjectWidgetsHelper extends ViewHelper {
             ?>
             <select class="form-control" 
                     name="socialdb_property_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>[]" 
-                    onchange="edit_validate_selectbox(this,'<?php echo $property['id']; ?>')"
+                    onchange="compounds_validate_selectbox(this,'<?php echo $property['id']; ?>','<?php echo $references['compound_id']; ?>','<?php echo $i ?>')"
                     id='field_property_term_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>' >
             </select>
             <?php

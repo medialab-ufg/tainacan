@@ -31,7 +31,7 @@
                         //validate
                         $(".form_autocomplete_compounds_" + property_id + '_'+i).keyup(function(){
                             var cont = 0;
-                            var i =  dynatree_object_index[$(this).attr('id')];
+                            var i =  $(this).attr('id').split('_')[3];
                             if( $(this).val().trim()!==''){
                                     cont++;
                             }
@@ -46,11 +46,10 @@
                         });
                         $(".form_autocomplete_compounds_" + property_id + '_'+i).change(function(){
                             var cont = 0;
-                            var i =  dynatree_object_index[$(this).attr('id')];
+                            var i =  $(this).attr('id').split('_')[3];
                             if( $(this).val().trim()!==''){
                                 cont++;
                             }
-
                             if( cont===0){
                                 $('#core_validation_'+compound_id+'_'+property_id+'_'+i).val('false');
                                 set_field_valid_compounds(property_id,'core_validation_'+compound_id+'_'+property_id+'_'+i,compound_id);
@@ -616,18 +615,24 @@
      * @param {type} seletor
      * @param {type} property_id
      * @returns {undefined}     */
-    function edit_validate_selectbox(seletor,property_id,compound_id){
-        console.log(seletor);
-        if($(seletor).val()===''){
-            $('#core_validation_'+property_id).val('false');
-            set_field_valid(property_id,'core_validation_'+property_id);
+    function compounds_validate_selectbox(seletor,property_id,compound_id,i){
+        var selected = $("#field_property_term_"+compound_id+"_"+property_id+"_"+i).find(":selected");
+        console.log(selected);
+        if (selected.length > 0) {
+            $('#core_validation_'+compound_id+'_'+property_id+'_'+i).val('true');
+            set_field_valid_compounds(property_id,'core_validation_'+compound_id+'_'+property_id+'_'+i,compound_id);
+            //verificando se existe propriedades para serem  adicionadas
+            $.each($("#field_property_term_"+compound_id+"_"+property_id+"_"+i+" option"),function(index,value){
+                if($(this).is(':selected')){
+                    append_category_properties($(this).val());
+                }else{
+                    append_category_properties(0,$(this).val());
+                }
+            });
         }else{
-            append_category_properties($(seletor).val(), $('#socialdb_propertyterm_'+property_id+'_value').val());
-           $('#socialdb_propertyterm_'+property_id+'_value').val($(seletor).val()); 
-            $('#core_validation_'+property_id).val('true');
-            set_field_valid(property_id,'core_validation_'+property_id);
+            $('#core_validation_'+compound_id+'_'+property_id+'_'+i).val('false');
+            set_field_valid_compounds(property_id,'core_validation_'+compound_id+'_'+property_id+'_'+i,compound_id);
         }
-        
     }
     /**
      * funcao que valida os campos de multipla selecao
@@ -668,11 +673,11 @@
 
      * @type Arguments     */
     function set_field_valid_compounds(id,seletor,compound_id){
-        if($('#'+seletor).val()==='false'){
-            $('#'+seletor).val('false');
-        }else{
-            $('#'+seletor).val('true');
-        }
+//        if($('#'+seletor).val()==='false'){
+//            $('#'+seletor).val('false');
+//        }else{
+//            $('#'+seletor).val('true');
+//        }
         validate_all_fields_compounds(compound_id);
     }
     
