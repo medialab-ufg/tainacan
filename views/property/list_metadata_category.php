@@ -14,6 +14,9 @@ $array_visibility = ($meta&&$meta!=='') ? $meta : '';
          border: none; 
         color: #222222;
     }
+    .title-pipe .glyphicon-arrow-left{
+        display: none;
+    }
 </style>
 <?php $view_helper->render_header_config_steps('metadata') ?>
 <input type="hidden" 
