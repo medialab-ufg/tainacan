@@ -51,10 +51,10 @@ class MappingModel extends Model {
         }
         $post_meta = delete_post_meta($collection_id, 'socialdb_collection_channel', $mapping_id);
         $active_import = get_post_meta($collection_id, 'socialdb_collection_mapping_import_active', true);
-        if($active_import && $active_import==$mapping_id){
+        if ($active_import && $active_import == $mapping_id) {
             delete_post_meta($collection_id, 'socialdb_collection_mapping_import_active');
         }
-        
+
         $delete_post = wp_delete_post($mapping_id);
         if ($post_meta && $delete_post) {
             $return['title'] = __('Success', 'tainacan');
@@ -157,14 +157,14 @@ class MappingModel extends Model {
         parse_str($data['form'], $form); // parseio o formulario de mapeiamento de entidades
         //insiro o mapeamento
         $has_mapping = $this->get_mapping_metatags($form['url'], $data['collection_id']);
-        if(!$has_mapping){
+        if (!$has_mapping) {
             $url_parsed = parse_url($form['url']);
             $this->parent = get_term_by('name', 'socialdb_channel_metatag', 'socialdb_channel_type');
             $object_id = $this->create_mapping($url_parsed['host'], $data['collection_id']);
             $data['result'] = 1;
-        }else{
+        } else {
             $url_parsed = parse_url($form['url']);
-            $object_id  =  $has_mapping;
+            $object_id = $has_mapping;
             $data['result'] = $url_parsed['host'];
         }
         //inserindo os valores do mapeamento
@@ -179,6 +179,7 @@ class MappingModel extends Model {
         endif;
         return $data;
     }
+
     /**
      * @signature - updating_mapping_metatags($data)
      * @param array $data Os dados vindos do formulario
@@ -200,6 +201,7 @@ class MappingModel extends Model {
             update_post_meta($object_id, 'socialdb_channel_oaipmhdc_mapping', serialize($dataInfo));
         endif;
     }
+
     /**
      * @signature - updating_mapping_dublin_core($data)
      * @param array $data Os dados vindos do formulario
@@ -386,6 +388,7 @@ class MappingModel extends Model {
             return false;
         }
     }
+
     /**
      * @signature - list_mapping_dublin_core($collection_id)
      * @param int $collection_id Os dados vindos do formulario
@@ -443,9 +446,92 @@ class MappingModel extends Model {
         return $data;
     }
 
-    public function save_delimiter_csv($mapping_id, $delimiter, $has_header = 0) {
+    public function save_delimiter_csv($mapping_id, $delimiter, $multi_values, $hierarchy, $import_zip_csv, $has_header = 0) {
         update_post_meta($mapping_id, 'socialdb_channel_csv_delimiter', $delimiter);
+        update_post_meta($mapping_id, 'socialdb_channel_csv_multi_values', $multi_values);
+        update_post_meta($mapping_id, 'socialdb_channel_csv_hierarchy', $hierarchy);
+        update_post_meta($mapping_id, 'socialdb_channel_csv_import_zip', $import_zip_csv);
         update_post_meta($mapping_id, 'socialdb_channel_csv_has_header', $has_header);
+    }
+
+    public function validate_zip(array $File, array $data, $Name = null) {
+        $result = array();
+        if ($File["error"] == 4) {
+            $result['msg'] = "Envie algum arquivo para importar!";
+            $result['error'] = 1;
+        } else {
+            $Name = ((string) $Name ? $Name : substr($File['name'], 0, strrpos($File['name'], '.')));
+            $FileType = substr($File['name'], strrpos($File['name'], '.'));
+
+            $FileAccept = [
+                'application/zip',
+                'application/x-zip-compressed',
+                'multipart/x-zip',
+                'application/x-compressed'
+            ];
+
+            $FileAcceptType = [
+                '.zip'
+            ];
+
+            $FileTypeUnd = [
+                'application/download',
+                'application/octet-stream'
+            ];
+
+            if (!in_array($File['type'], $FileAccept)):
+                if (in_array($File['type'], $FileTypeUnd)):
+                    if (!in_array($FileType, $FileAcceptType)):
+                        $result['msg'] = "Tipo de arquivo não suportado. Envie .ZIP!";
+                        $result['error'] = 1;
+                    else:
+                        $result['error'] = 0;
+                        $result['path'] = $this->unzip($File, $data);
+                    endif;
+                else:
+                    $result['msg'] = "Tipo de arquivo não suportado. Envie .ZIP!";
+                    $result['error'] = 1;
+                endif;
+            else:
+                $result['error'] = 0;
+                $result['path'] = $this->unzip($File, $data);
+            endif;
+        }
+
+        return $result;
+    }
+
+    public function unzip($file, $data) {
+        //if ($_FILES["collection_file"]["name"]) {
+        //$file = $_FILES["collection_file"];
+        $filename = $file["name"];
+        $tmp_name = $file["tmp_name"];
+        $type = $file["type"];
+
+        $name = explode(".", $filename);
+
+        /* here it is really happening */
+        $ran = $name[0] . "-" . time() . "-" . rand(1, time());
+        $targetdir = dirname(__FILE__) . "/" . $ran;
+        $targetzip = dirname(__FILE__) . "/" . $ran . ".zip";
+
+        if (move_uploaded_file($tmp_name, $targetzip)) { //Uploading the Zip File
+
+            /* Extracting Zip File */
+            //var_dump($targetzip, $targetdir);
+            $zip = new ZipArchive();
+            $x = $zip->open($targetzip);  // open the zip file to extract
+            if ($x === true) {
+                $zip->extractTo($targetdir); // place in the directory with same name  
+                $zip->close();
+                unlink($targetzip); //Deleting the Zipped file
+            }
+        }
+        //}
+        
+        $targetdir = str_replace("\\", "/", $targetdir);
+        
+        return $targetdir;
     }
 
     public function show_files_csv($mapping_id) {
@@ -555,55 +641,58 @@ class MappingModel extends Model {
         $data['result'] = '1';
         return $data;
     }
-    /**************************************************************************
+
+    /*     * ************************************************************************
      *                         SALVANDO MAPEAMENTOS METATAGS ITEM
-     **************************************************************************/
+     * ************************************************************************ */
+
     /**
      * 
      * @param type $url
      * @param type $collection_id
      */
-    public function get_mapping_metatags($url,$collection_id) {
+    public function get_mapping_metatags($url, $collection_id) {
         $parse = parse_url($url);
         $mappings = $this->list_mapping_metatag($collection_id);
-        if($mappings&&isset($mappings['identifier'])){
+        if ($mappings && isset($mappings['identifier'])) {
             foreach ($mappings['identifier'] as $mapp) {
-                if($mapp['name']==$parse['host']){
+                if ($mapp['name'] == $parse['host']) {
                     return $mapp['id'];
                 }
             }
         }
         return false;
     }
+
     /**
      * 
      * @param type $param
      */
     public function saving_mapping_metatags($data) {
         $identifier = '';
-        if($data['mapped_generic_properties']==''){
+        if ($data['mapped_generic_properties'] == '') {
             return false;
         }
         //insiro o mapeamento
         $has_mapping = $this->get_mapping_metatags($data['url'], $data['collection_id']);
-        if(!$has_mapping){
+        if (!$has_mapping) {
             $url_parsed = parse_url($data['url']);
             $this->parent = get_term_by('name', 'socialdb_channel_metatag', 'socialdb_channel_type');
             $object_id = $this->create_mapping($url_parsed['host'], $data['collection_id']);
-        }else{
-            $object_id  =  $has_mapping ;
+        } else {
+            $object_id = $has_mapping;
         }
         // mapeamento 
         $array_generic_mapped = explode(',', $data['mapped_generic_properties']);
         $array_tainacan_mapped = explode(',', $data['mapped_tainacan_properties']);
         foreach ($array_generic_mapped as $key => $generic) {
-            if(strpos($array_tainacan_mapped[$key], 'new_')!==false){
+            if (strpos($array_tainacan_mapped[$key], 'new_') !== false) {
                 $id = str_replace('new_', '', $array_tainacan_mapped[$key]);
-                if($data['create_property_'.$id]){
-                   $identifier =  'dataproperty_'.$this->add_property_data($data['name_property_'.$id], $data['widget_property_'.$id], $data['collection_id']);
-                   $dataInfo[] = array('tag' => $array_generic_mapped[$key], 'socialdb_entity' => $identifier);
+                if ($data['create_property_' . $id]) {
+                    $identifier = 'dataproperty_' . $this->add_property_data($data['name_property_' . $id], $data['widget_property_' . $id], $data['collection_id']);
+                    $dataInfo[] = array('tag' => $array_generic_mapped[$key], 'socialdb_entity' => $identifier);
                 }
-            }else{
+            } else {
                 $identifier = $array_tainacan_mapped[$key];
                 $dataInfo[] = array('tag' => $array_generic_mapped[$key], 'socialdb_entity' => $identifier);
             }
@@ -612,37 +701,39 @@ class MappingModel extends Model {
         update_post_meta($object_id, 'socialdb_channel_oaipmhdc_mapping', serialize($dataInfo));
         return $object_id;
     }
-    /**************************************************************************
+
+    /*     * ************************************************************************
      *                         SALVANDO MAPEAMENTOS OAI-PMH ITEM
-     **************************************************************************/
+     * ************************************************************************ */
+
     /**
      * 
      * @param type $param
      */
     public function saving_mapping_handle($data) {
         $identifier = '';
-        if($data['mapped_generic_properties']==''){
+        if ($data['mapped_generic_properties'] == '') {
             return false;
         }
         //insiro o mapeamento
         $has_mapping = get_post_meta($data['collection_id'], 'socialdb_collection_mapping_import_active', true);
-        if(!is_numeric($has_mapping)){
-            $object_id = $this->create_mapping(__('Mapping Default','tainacan'), $data['collection_id']);
+        if (!is_numeric($has_mapping)) {
+            $object_id = $this->create_mapping(__('Mapping Default', 'tainacan'), $data['collection_id']);
             update_post_meta($data['collection_id'], 'socialdb_collection_mapping_import_active', $object_id);
-        }else{
-            $object_id  =  $has_mapping ;
+        } else {
+            $object_id = $has_mapping;
         }
         // mapeamento 
         $array_generic_mapped = explode(',', $data['mapped_generic_properties']);
         $array_tainacan_mapped = explode(',', $data['mapped_tainacan_properties']);
         foreach ($array_generic_mapped as $key => $generic) {
-            if(strpos($array_tainacan_mapped[$key], 'new_')!==false){
+            if (strpos($array_tainacan_mapped[$key], 'new_') !== false) {
                 $id = str_replace('new_', '', $array_tainacan_mapped[$key]);
-                if($data['create_property_'.$id]){
-                   $identifier =  'dataproperty_'.$this->add_property_data($data['name_property_'.$id], $data['widget_property_'.$id], $data['collection_id']);
-                   $dataInfo[] = array('tag' => $array_generic_mapped[$key], 'socialdb_entity' => $identifier);
+                if ($data['create_property_' . $id]) {
+                    $identifier = 'dataproperty_' . $this->add_property_data($data['name_property_' . $id], $data['widget_property_' . $id], $data['collection_id']);
+                    $dataInfo[] = array('tag' => $array_generic_mapped[$key], 'socialdb_entity' => $identifier);
                 }
-            }else{
+            } else {
                 $identifier = $array_tainacan_mapped[$key];
                 $dataInfo[] = array('tag' => $array_generic_mapped[$key], 'socialdb_entity' => $identifier);
             }
@@ -651,26 +742,27 @@ class MappingModel extends Model {
         update_post_meta($object_id, 'socialdb_channel_oaipmhdc_mapping', serialize($dataInfo));
         return $object_id;
     }
+
     /**
      * function add_property_data($property)
      * @param object $property
      * @return int O id da da propriedade criada.
      * @author: Eduardo Humberto 
      */
-   public function add_property_data($name,$widget,$collection_id) {
+    public function add_property_data($name, $widget, $collection_id) {
         $category_root_id = $this->get_category_root_of($collection_id);
         $new_property = wp_insert_term($name, 'socialdb_property_type', array('parent' => $this->get_property_type_id('socialdb_property_data'),
-                'slug' => $this->generate_slug((string)$name, $collection_id)));
+            'slug' => $this->generate_slug((string) $name, $collection_id)));
         update_term_meta($new_property['term_id'], 'socialdb_property_required', 'false');
-        update_term_meta($new_property['term_id'], 'socialdb_property_data_widget',$widget);
-        update_term_meta($new_property['term_id'], 'socialdb_property_data_column_ordenation',  '');
-        update_term_meta($new_property['term_id'], 'socialdb_property_default_value',  '');
-        update_term_meta($new_property['term_id'], 'socialdb_property_created_category',$category_root_id);
-        add_term_meta($category_root_id, 'socialdb_category_property_id',$new_property['term_id']);
+        update_term_meta($new_property['term_id'], 'socialdb_property_data_widget', $widget);
+        update_term_meta($new_property['term_id'], 'socialdb_property_data_column_ordenation', '');
+        update_term_meta($new_property['term_id'], 'socialdb_property_default_value', '');
+        update_term_meta($new_property['term_id'], 'socialdb_property_created_category', $category_root_id);
+        add_term_meta($category_root_id, 'socialdb_category_property_id', $new_property['term_id']);
         return $new_property['term_id'];
-   }
-   
-   /**
+    }
+
+    /**
      * function get_property_type_id($property_parent_name)
      * @param string $property_parent_name
      * @return int O id da categoria que determinara o tipo da propriedade.

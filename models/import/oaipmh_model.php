@@ -175,6 +175,7 @@ class OAIPMHModel extends Model {
             }
         }
         $html .= "<option value='tag'>" . __('Tag','tainacan') . "</option>";
+        $html .= "<option value='attach'>" . __('Attachments','tainacan') . "</option>";
         return $html;
     }
 

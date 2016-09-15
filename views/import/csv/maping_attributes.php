@@ -6,11 +6,30 @@ include_once ('js/maping_attributes_js.php');
 ?>
 <div class='panel panel-default'>
     <div id="importForm_csv" class='panel-body'>
-        <form id="form_import_csv_delimit"> 
+        <form id="form_import_csv_delimit" name="form_import_csv_delimit" enctype="multipart/form-data" method="post"> 
             <div class="form-group">
-                <label for="library_type"><?php _e('Set Delimiter','tainacan'); ?></label><br>
                 <input type="hidden" id="socialdb_csv_mapping_id" name="socialdb_csv_mapping_id" value="<?php echo $mapping_id; ?>">
-                <input type="text" id="socialdb_delimiter_csv" name="socialdb_delimiter_csv" value=";" required="required">
+                <label for="socialdb_delimiter_csv"><?php _e('Fields delimiter','tainacan'); ?></label><br>
+                <input type="text" id="socialdb_delimiter_csv" name="socialdb_delimiter_csv" value=";" required="required" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="socialdb_delimiter_multi_values_csv"><?php _e('Multi-values delimiter','tainacan'); ?></label><br>
+                <input type="text" id="socialdb_delimiter_multi_values_csv" name="socialdb_delimiter_multi_values_csv" value="||" required="required" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="socialdb_delimiter_hierarchy_csv"><?php _e('Hierarchy delimiter','tainacan'); ?></label><br>
+                <input type="text" id="socialdb_delimiter_hierarchy_csv" name="socialdb_delimiter_hierarchy_csv" value="::" required="required" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="socialdb_delimiter_code_csv"><?php _e('Hierarchy delimiter','tainacan'); ?></label><br>
+                <select id="socialdb_delimiter_code_csv" name="socialdb_delimiter_code_csv" required="required" disabled="disabled" class="form-control">
+                    <option value="utf8">UTF8</option>  
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="radio" name="import_zip_csv" value="url_externa" checked="checked" onchange="hide_zip_input()"> <?php _e('Import external URL file (must map the content)', 'tainacan'); ?><br><br>
+                <input type="radio" name="import_zip_csv" value="url_local" onchange="show_zip_input()"> <?php _e('Import local URL file (must map the content)', 'tainacan'); ?><br>
+                <input type="file" accept=".zip" id="zip_csv_file" name="zip_csv_file" placeholder="<?php _e('Insert the ZIP file','tainacan'); ?>" style="display: none;">
             </div>
             <h5><strong><?php _e('CSV Header','tainacan'); ?></strong></h5>
             <div class="form-group">
@@ -21,7 +40,9 @@ include_once ('js/maping_attributes_js.php');
                     <input type="radio" name="socialdb_csv_has_header" id="socialdb_csv_has_header_no" value="0"> <?php _e('No','tainacan'); ?>
                 </label>
             </div>
-            <button type="button" id="submit_button_import_csv" class="btn btn-primary" onclick="save_csv_delimiter()"><?php echo __('Save','tainacan'); ?></button>
+            <input type="hidden" id="socialdb_csv_mapping_operation" name="operation" value="saving_delimiter_header_csv">
+            <input type="hidden" id="socialdb_csv_mapping_collection_id" name="collection_id" value="">
+            <button type="submit" id="submit_button_import_csv" class="btn btn-primary" ><?php echo __('Save','tainacan'); ?></button> <!--onclick="save_csv_delimiter()"-->
         </form> 
     </div>
     <div id="add_mapping_csv"></div>

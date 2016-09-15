@@ -101,6 +101,10 @@ class CsvModel extends Model {
             $delimiter = get_post_meta($data['mapping_id'], 'socialdb_channel_csv_delimiter', true);
             $csv_has_header = get_post_meta($data['mapping_id'], 'socialdb_channel_csv_has_header', true);
 
+            $multi_values = get_post_meta($data['mapping_id'], 'socialdb_channel_csv_multi_values', true);
+            $hierarchy = get_post_meta($data['mapping_id'], 'socialdb_channel_csv_hierarchy', true);
+            $import_zip_csv = get_post_meta($data['mapping_id'], 'socialdb_channel_csv_import_zip', true);
+
             $files = $mapping_model->show_files_csv($mapping_id);
             foreach ($files as $file) {
                 //$name_file =  wp_get_attachment_link($file->ID, 'thumbnail', false, true);
@@ -131,30 +135,77 @@ class CsvModel extends Model {
                                 $this->update_title($object_id, $field_value);
                                 $this->set_common_field_values($object_id, 'title', $field_value);
                             elseif ($metadata['socialdb_entity'] == 'post_content'):
+                                $authFormat = array(
+                                    'jpg',
+                                    'png',
+                                    'jpeg',
+                                    'gif',
+                                    'bmp'
+                                );
+                                $formatFile = explode('.', $field_value);
+                                if (in_array(end($formatFile), $authFormat)) {
+                                    if ($import_zip_csv == 'url_local') {
+                                        //Tem arquivo ZIP
+                                        $import_zip_path = get_post_meta($data['mapping_id'], 'socialdb_channel_csv_zip_path', true);
+                                        $this->add_thumbnail_item_zip($import_zip_path . DIRECTORY_SEPARATOR . $field_value, $object_id);
+                                        //$this->insert_attachment_file($import_zip_path . DIRECTORY_SEPARATOR . $field_value, $object_id);
+                                    } else {
+                                        //E uma URL e nao o caminho ZIP
+                                        $this->add_thumbnail_url($field_value, $object_id);
+                                        //$this->add_file_url($field_value, $object_id);
+                                    }
+                                } 
                                 $content .= $field_value . ",";
+                            elseif ($metadata['socialdb_entity'] == 'attach'):
+                                //attachment (Files)
+                                $files = explode(', ', $field_value);
+                                if (is_array($files)) {
+                                    foreach ($files as $file) {
+
+                                        if ($import_zip_csv == 'url_local') {
+                                            //Tem arquivo ZIP
+                                            $import_zip_path = get_post_meta($data['mapping_id'], 'socialdb_channel_csv_zip_path', true);
+                                            $this->insert_attachment_file($import_zip_path . DIRECTORY_SEPARATOR . $file, $object_id);
+                                        } else {
+                                            //E uma URL e nao o caminho ZIP
+                                            $this->add_file_url($file, $object_id);
+                                        }
+                                    }
+                                } else {
+                                    if ($import_zip_csv == 'url_local') {
+                                        //Tem arquivo ZIP
+                                        $import_zip_path = get_post_meta($data['mapping_id'], 'socialdb_channel_csv_zip_path', true);
+                                        $this->insert_attachment_file($import_zip_path . DIRECTORY_SEPARATOR . $field_value, $object_id);
+                                    } else {
+                                        //E uma URL e nao o caminho ZIP
+                                        $this->add_file_url($field_value, $object_id);
+                                    }
+                                }
+//update_post_meta($object_id, 'socialdb_object_dc_source', $field_value);
                             elseif ($metadata['socialdb_entity'] == 'post_permalink'):
                                 update_post_meta($object_id, 'socialdb_object_dc_source', $field_value);
                                 $this->set_common_field_values($object_id, 'object_source', $field_value);
-                            elseif ($metadata['socialdb_entity'] == 'socialdb_object_content'):
+                            elseif ($metadata['socialdb_entity'] == 'socialdb_object_content') :
                                 if (mb_detect_encoding($field_value, 'auto') == 'UTF-8') {
                                     $field_value = iconv('ISO-8859-1', 'UTF-8', $field_value);
                                 }
                                 update_post_meta($object_id, 'socialdb_object_content', $field_value);
-                                $this->set_common_field_values($object_id, 'object_content', $field_value);
-                            elseif ($metadata['socialdb_entity'] == 'socialdb_object_dc_type'):
+                                $this->set_common_field_values($object_id, 'object_content', $field_value); elseif ($metadata['socialdb_entity'] == 'socialdb_object_dc_type'):
                                 update_post_meta($object_id, 'socialdb_object_dc_type', $field_value);
                                 $this->set_common_field_values($object_id, 'object_type', $field_value);
                             elseif ($metadata['socialdb_entity'] == 'tag' && $field_value != ''):
-                                $fields_value = explode('||', $field_value);
+//$fields_value = explode('||', $field_value);
+                                $fields_value = explode($multi_values, $field_value);
                                 foreach ($fields_value as $field_value):
-                                    $fields[] = explode('::', $field_value);
+                                    //$fields[] = explode('::', $field_value);
+                                    $fields[] = explode($hierarchy, $field_value);
                                 endforeach;
                                 foreach ($fields as $fields_value):
                                     foreach ($fields_value as $field_value):
                                         $this->insert_tag($field_value, $object_id, $data['collection_id']);
                                     endforeach;
                                 endforeach;
-                            // elseif (strpos($metadata['socialdb_entity'], "facet_") !== false):
+// elseif (strpos($metadata['socialdb_entity'], "facet_") !== false):
                             elseif (strpos($metadata['socialdb_entity'], "termproperty_") !== false):
                                 if (is_array($field_value) && count($field_value) == 1) {
                                     $fields_value = $field_value[0];
@@ -165,20 +216,22 @@ class CsvModel extends Model {
                                     $fields_value = $field_value;
                                 }
                                 if (!empty($fields_value)):
-                                    if (strpos($fields_value, '||') !== false) {
-                                        $fields_value = explode('||', $fields_value);
+//if (strpos($fields_value, '||') !== false) {
+//    $fields_value = explode('||', $fields_value);
+                                    if (strpos($fields_value, $multi_values) !== false) {
+                                        $fields_value = explode($multi_values, $fields_value);
                                     } else {
                                         $fields_value = explode(', ', $fields_value);
                                     }
                                     $trans = array("termproperty_" => "");
                                     $property_id = strtr($metadata['socialdb_entity'], $trans);
                                     $parent = get_term_meta($property_id, 'socialdb_property_term_root', true);
-                                    //$fields_value = explode(', ', $field_value);
-                                    //$trans = array("facet_" => "");
-                                    //$parent = strtr($metadata['socialdb_entity'], $trans);
+//$fields_value = explode(', ', $field_value);
+//$trans = array("facet_" => "");
+//$parent = strtr($metadata['socialdb_entity'], $trans);
                                     foreach ($fields_value as $field_value):
-                                        //$this->insert_category($field_value, $object_id, $data['collection_id'], $parent);
-                                        $this->insert_hierarchy($field_value, $object_id, $data['collection_id'], $parent, $property_id);
+//$this->insert_category($field_value, $object_id, $data['collection_id'], $parent);
+                                        $this->insert_hierarchy($field_value, $object_id, $data['collection_id'], $parent, $property_id, $hierarchy);
                                     endforeach;
                                 endif;
                             elseif (strpos($metadata['socialdb_entity'], "objectproperty_") !== false):
@@ -205,11 +258,17 @@ class CsvModel extends Model {
                     $this->set_common_field_values($object_id, 'description', $content);
                     socialdb_add_tax_terms($object_id, $categories, 'socialdb_category_type');
                     $content = '';
-                    //$time_after_insert = microtime() - $time_start;
-                    //var_dump(' Fim da insercao do item',$time_after_insert);
+//$time_after_insert = microtime() - $time_start;
+//var_dump(' Fim da insercao do item',$time_after_insert);
                 endfor;
 
                 break;
+            }
+            if ($import_zip_csv == 'url_local') {
+                $import_zip_path = get_post_meta($data['mapping_id'], 'socialdb_channel_csv_zip_path', true);
+                if($import_zip_path && is_dir($import_zip_path)){
+                    unlink($import_zip_path);
+                }
             }
             return true;
         } else {
@@ -261,9 +320,9 @@ class CsvModel extends Model {
         return str_replace($a, $b, $str);
     }
 
-    public function insert_hierarchy($metadata, $object_id, $collection_id, $parent = 0, $property_id = null) {
+    public function insert_hierarchy($metadata, $object_id, $collection_id, $parent = 0, $property_id = null, $hierarchy = '::') {
         $array = array();
-        $categories = explode('::', $metadata);
+        $categories = explode($hierarchy, $metadata);
         foreach ($categories as $category) {
             $array = $this->insert_category($category, $object_id, $collection_id, $parent);
             $this->concatenate_commom_field_value($object_id, "socialdb_propertyterm_$property_id", $array['term_id']);
@@ -278,7 +337,7 @@ class CsvModel extends Model {
      */
 
     public function unzip_csv_package($data) {
-        //var_dump($data['file']['csv_pkg']);
+//var_dump($data['file']['csv_pkg']);
         if ($data['file']['csv_pkg']["name"]) {
             $file = $data['file']['csv_pkg'];
             $filename = $file["name"];
@@ -321,21 +380,21 @@ class CsvModel extends Model {
 
     public function import_csv_full(array $csv_files, $dir) {
         $collection_model = new CollectionModel;
-        //var_dump($csv_files, $dir);
+//var_dump($csv_files, $dir);
         ini_set('max_execution_time', '0');
         $count = 0;
         foreach ($csv_files as $csv) {
             $name = explode(".", $csv);
             if (strtolower($name[1]) == 'csv') {
-                //cria a coleção com o nome do arquivo ($name[0])
+//cria a coleção com o nome do arquivo ($name[0])
                 $data_collection['collection_name'] = html_entity_decode($name[0]);
                 $data_collection['collection_object'] = __('item', 'tainacan');
                 $collection_id = $collection_model->simple_add($data_collection, 'publish');
                 create_root_collection_category($collection_id, $data_collection['collection_object']);
                 $category_root_id = get_post_meta($collection_id, 'socialdb_collection_object_type', true);
-                //Coleção criada!
+//Coleção criada!
                 $objeto = fopen($dir . DIRECTORY_SEPARATOR . $csv, 'r');
-                // LEITURA DO ARQUIVO
+// LEITURA DO ARQUIVO
                 $standart_metas = array(
                     'title',
                     'description',
@@ -348,17 +407,17 @@ class CsvModel extends Model {
                 );
                 $mapping = [
                     ['socialdb_entity' => 'post_title', 'value' => 'title'],
-                    ['socialdb_entity' => 'socialdb_object_content', 'value' => 'content'],
-                    ['socialdb_entity' => 'post_content', 'value' => 'description'],
-                    ['socialdb_entity' => 'socialdb_object_dc_type', 'value' => 'item_type'],
-                    ['socialdb_entity' => 'post_permalink', 'value' => 'permalink'],
-                    ['socialdb_entity' => 'tag', 'value' => 'tags']
+                    [ 'socialdb_entity' => 'socialdb_object_content', 'value' => 'content'],
+                    [ 'socialdb_entity' => 'post_content', 'value' => 'description'],
+                    [ 'socialdb_entity' => 'socialdb_object_dc_type', 'value' => 'item_type'],
+                    [ 'socialdb_entity' => 'post_permalink', 'value' => 'permalink'],
+                    [ 'socialdb_entity' => 'tag', 'value' => 'tags']
                 ];
                 while (($csv_data = fgetcsv($objeto, 0, ';')) !== false) {
                     $count++;
                     if ($count == 1) {
                         $lines['header'] = $csv_data;
-                        //cria os metadados da coleção
+//cria os metadados da coleção
                         $arr_metas = array();
                         foreach ($csv_data as $key => $value) {
                             if (!in_array($value, $standart_metas) && trim($value) != '') {
@@ -368,7 +427,7 @@ class CsvModel extends Model {
                                 $mapping[] = ['socialdb_entity' => 'dataproperty_' . $property_id, 'value' => $value];
                             }
                         }
-                        //Metadados Criados!
+//Metadados Criados!
                     } else {
                         foreach ($csv_data as $key => $value) {
                             $new_csv_data[$lines['header'][$key]] = $value;
@@ -376,10 +435,10 @@ class CsvModel extends Model {
                         $lines[] = $new_csv_data;
                     }
                 }
-                //insere os itens da coleção
+//insere os itens da coleção
                 $this->insert_csv_itens($lines, $collection_id, $mapping, $category_root_id);
-                //Itens iseridos!
-                //var_dump($lines);
+//Itens iseridos!
+//var_dump($lines);
             }
         }
     }
@@ -418,19 +477,17 @@ class CsvModel extends Model {
                             $field_value = iconv('ISO-8859-1', 'UTF-8', $field_value);
                         }
                         $this->update_title($object_id, $field_value);
-                        $this->set_common_field_values($object_id, 'title', $field_value);
-                    elseif ($metadata['socialdb_entity'] == 'post_content'):
+                        $this->set_common_field_values($object_id, 'title', $field_value); elseif ($metadata ['socialdb_entity'] == 'post_content'):
                         $content .= $field_value . ",";
-                    elseif ($metadata['socialdb_entity'] == 'post_permalink'):
+                    elseif ($metadata ['socialdb_entity'] == 'post_permalink'):
                         update_post_meta($object_id, 'socialdb_object_dc_source', $field_value);
                         $this->set_common_field_values($object_id, 'object_source', $field_value);
-                    elseif ($metadata['socialdb_entity'] == 'socialdb_object_content'):
+                    elseif ($metadata ['socialdb_entity'] == 'socialdb_object_content'):
                         if (mb_detect_encoding($field_value, 'auto') == 'UTF-8') {
                             $field_value = iconv('ISO-8859-1', 'UTF-8', $field_value);
                         }
                         update_post_meta($object_id, 'socialdb_object_content', $field_value);
-                        $this->set_common_field_values($object_id, 'object_content', $field_value);
-                    elseif ($metadata['socialdb_entity'] == 'socialdb_object_dc_type'):
+                        $this->set_common_field_values($object_id, 'object_content', $field_value); elseif ($metadata['socialdb_entity'] == 'socialdb_object_dc_type'):
                         update_post_meta($object_id, 'socialdb_object_dc_type', $field_value);
                         $this->set_common_field_values($object_id, 'object_type', $field_value);
                     elseif ($metadata['socialdb_entity'] == 'tag' && $field_value != ''):
@@ -439,11 +496,12 @@ class CsvModel extends Model {
                             $fields[] = explode('::', $field_value);
                         endforeach;
                         foreach ($fields as $fields_value):
+
                             foreach ($fields_value as $field_value):
                                 $this->insert_tag($field_value, $object_id, $data['collection_id']);
                             endforeach;
                         endforeach;
-                    elseif (strpos($metadata['socialdb_entity'], "dataproperty_") !== false):
+                    elseif (strpos($metadata ['socialdb_entity'], "dataproperty_") !== false):
                         $trans = array("dataproperty_" => "");
                         $id = strtr($metadata['socialdb_entity'], $trans);
                         $has_inserted = add_post_meta($object_id, 'socialdb_property_' . $id, $field_value);
@@ -453,19 +511,24 @@ class CsvModel extends Model {
                         $this->set_common_field_values($object_id, "socialdb_property_$id", $field_value);
                     endif;
                 }
-            }
-            if (mb_detect_encoding($content, 'auto') == 'UTF-8') {
+            } if (mb_detect_encoding($content, 'auto') == 'UTF-8') {
                 $content = iconv('ISO-8859-1', 'UTF-8', $content);
-            }
-            update_post_meta($object_id, 'socialdb_object_from', 'external');
+            } update_post_meta($object_id, 'socialdb_object_from', 'external');
             $this->set_common_field_values($object_id, 'object_from', 'external');
             update_post_content($object_id, $content);
             $this->set_common_field_values($object_id, 'description', $content);
             socialdb_add_tax_terms($object_id, $categories, 'socialdb_category_type');
             $content = '';
-            //$time_after_insert = microtime() - $time_start;
-            //var_dump(' Fim da insercao do item',$time_after_insert);
+//$time_after_insert = microtime() - $time_start;
+//var_dump(' Fim da insercao do item',$time_after_insert);
         endfor;
+    }
+    
+    public function add_thumbnail_item_zip($dir_created,$object_id) {
+        if(is_file($dir_created)){
+            $thumbnail_id = $this->insert_attachment_file($dir_created, $object_id);
+            set_post_thumbnail($object_id, $thumbnail_id);
+        }
     }
 
 }
