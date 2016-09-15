@@ -1,6 +1,7 @@
 <?php
 include_once ('js/import_configuration_js.php');
 include_once ('../../helpers/view_helper.php');
+include_once ('../../helpers/import/import_helper.php');
 ?>
 <div class="col-md-12">
     <div id="import_settings" class="col-md-12 config_default_style">
@@ -12,6 +13,7 @@ include_once ('../../helpers/view_helper.php');
                     <li role="presentation" class="active"><a id="click_oaipmhtab" href="#oaipmhtab" aria-controls="oaipmhtab" role="tab" data-toggle="tab"><?php _e('OAI-PMH','tainacan') ?></a></li>
                     <li role="presentation"><a id="click_csvtab" href="#csvtab" aria-controls="csvtab" role="tab" data-toggle="tab"><?php _e('CSV','tainacan') ?></a></li>
                     <li role="presentation"><a id="click_metatag_tab" href="#metatag_tab" aria-controls="metatag_tab" role="tab" data-toggle="tab"><?php _e('Metatags','tainacan') ?></a></li>
+                    <li role="presentation"><a id="click_exif_tab" href="#exif_tab" aria-controls="exif_tab" role="tab" data-toggle="tab"><?php _e('Exif','tainacan'); ?></a></li>
                 </ul>
 
                 <!-- Tab panes -->
@@ -132,6 +134,18 @@ include_once ('../../helpers/view_helper.php');
                             
                         </div>
                     </div>
+
+                    <div role="tabpanel" class="tab-pane" id="exif_tab">
+                        <div id="validate_exif_tab">
+                            <?php
+                            $_EXIF = explode(" ", ImportHelper::$_exif_keys);
+                            foreach ($_EXIF as $_exif):
+                                echo "<div> $_exif </div> <br />";
+                            endforeach;
+                            ?>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

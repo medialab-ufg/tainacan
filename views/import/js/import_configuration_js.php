@@ -20,6 +20,10 @@
         $('#click_metatag_tab').click(function (e) {
             e.preventDefault()
             $(this).tab('show');
+        });     
+        $('#click_exif_tab').click(function (e) {
+            e.preventDefault()
+            $(this).tab('show');
         });
 
     });
