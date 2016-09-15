@@ -1809,7 +1809,7 @@ class ObjectModel extends Model {
               $compounds = array_merge($compounds, $pc_compounds);
             }
             foreach ($compounds as $compound) {
-                $properties_coumpounded = explode(',', $data['compounds_' . $compound]);
+                $properties_coumpounded = array_values(array_filter(explode(',', $data['compounds_' . $compound])));
                 $cardinality = $data['cardinality_' . $compound];
                 for ($i = 0; $i < $cardinality; $i++):
                     $ids_metas = [];
