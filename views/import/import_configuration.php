@@ -1,7 +1,7 @@
 <?php
-include_once ('js/import_configuration_js.php');
 include_once ('../../helpers/view_helper.php');
 include_once ('../../helpers/import/import_helper.php');
+include_once ('js/import_configuration_js.php');
 ?>
 <div class="col-md-12">
     <div id="import_settings" class="col-md-12 config_default_style">
@@ -93,7 +93,7 @@ include_once ('../../helpers/import/import_helper.php');
                     </div>
                     <!-- Painel para metatags -->
                     <div role="tabpanel" class="tab-pane" id="metatag_tab">
-                        <div id="validate_metatag_tab" >
+                        <div id="validate_metatag_tab">
                             <div id="list_oaipmh_dc">
                                 <table  class="table table-bordered">
                                     <th><?php _e('Identifier','tainacan'); ?></th>
@@ -136,12 +136,13 @@ include_once ('../../helpers/import/import_helper.php');
                     </div>
 
                     <div role="tabpanel" class="tab-pane" id="exif_tab">
-                        <div id="validate_exif_tab">
+                        <div id="validate_exif_tab" class="col-md-12">
+                            <input type="hidden" class="exif_keys" name="exif_keys" value="<?php echo ImportHelper::$_exif_keys; ?>">
                             <?php
-                            $_EXIF = explode(" ", ImportHelper::$_exif_keys);
+                            /* $_EXIF = explode(" ", );
                             foreach ($_EXIF as $_exif):
-                                echo "<div> $_exif </div> <br />";
-                            endforeach;
+                                echo "<div> $_exif </div>";
+                            endforeach; */
                             ?>
                         </div>
                     </div>
