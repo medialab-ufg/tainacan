@@ -2,7 +2,7 @@
 include_once('../../helpers/view_helper.php');
 include_once('js/tabs_js.php');
 include_once('js/compounds_js.php');
-include_once ('js/list_metadata_js.php');
+include_once ('js/list_category_metadata_js.php');
 
 $view_helper = new ViewHelper();
 $meta = get_post_meta($collection_id, 'socialdb_collection_fixed_properties_visibility', true);
@@ -16,6 +16,9 @@ $array_visibility = ($meta&&$meta!=='') ? $meta : '';
     }
     .title-pipe .glyphicon-arrow-left{
         display: none;
+    }
+    .glyphicon-eye-open{
+        color: #ddd;
     }
 </style>
 <?php $view_helper->render_header_config_steps('metadata') ?>
@@ -106,12 +109,4 @@ $array_visibility = ($meta&&$meta!=='') ? $meta : '';
         <input type="hidden" id="collection_list_ranking_id" name="collection_id" value="">
     </div>
 
-</div> <!-- #properties-tabs -->
-<script>
-    function hide_arrow(){
-       $('.title-pipe .glyphicon-arrow-left').hide();
-       $('.root_category').hide();
-    }
-    
-    myVar = setTimeout(hide_arrow, 6000);
-</script>    
+</div> 
