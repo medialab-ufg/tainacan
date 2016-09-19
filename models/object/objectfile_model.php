@@ -197,23 +197,32 @@ class ObjectFileModel extends Model {
             if ($attachments) {
                 foreach ($attachments as $attachment) {
                     if (in_array($attachment->ID, $arquivos)) {
+                        $_file_path_ = get_attached_file($attachment->ID);
                         $metas = wp_get_attachment_metadata($attachment->ID);
                         $obj['ID'] = $attachment->ID;
                         $obj['name'] = $attachment->post_title;
-                        $obj['size'] = filesize(get_attached_file($attachment->ID));
+                        $obj['size'] = filesize($_file_path_);
                         $extension = $attachment->guid;
                         $ext = pathinfo($extension, PATHINFO_EXTENSION);
                         if(in_array($ext, ['mp4','m4v','wmv','avi','mpg','ogv','3gp','3g2'])){
                                 $result['videos'][] = $obj;     
-                         }elseif (in_array($ext, ['jpg','jpeg','png','gif'])) {
-                                 $obj['metas'] = $metas;
-                                $result['image'][] = $obj;     
-                         }elseif (in_array($ext, ['mp3','m4a','ogg','wav','wma'])) {
-                                $result['audio'][] = $obj;     
-                         }elseif(in_array($ext, ['pdf'])){
-                                $result['pdf'][] = $obj;   
-                         }else{
-                                $result['others'][] = $obj;
+                         }elseif (in_array($ext, ['jpg','jpeg','png','gif', 'tiff'])) {
+                            $obj['metas'] = $metas;
+                            $result['image'][] = $obj;
+
+                            if( in_array ($ext, ['jpg', 'jpeg', 'tiff'] ) ) {
+                                $_exif_data = exif_read_data($_file_path_, 0, true);
+                                unset($_exif_data['FILE']);
+                                unset($_exif_data['COMPUTED']);
+
+                                $result['exif_metas'] = $_exif_data;
+                            }
+                         } elseif (in_array($ext, ['mp3','m4a','ogg','wav','wma'])) {
+                            $result['audio'][] = $obj;
+                         } elseif(in_array($ext, ['pdf'])){
+                            $result['pdf'][] = $obj;
+                         } else{
+                            $result['others'][] = $obj;
                          }
                         
                     }

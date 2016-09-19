@@ -52,7 +52,8 @@
         if(keys) {
             $(keys).each(function (id, chave) {
                 if(chave) {
-                    html += "<option value='eba'>"+chave+"</option>";
+                    var item_value = chave.toLowerCase().replace(/\./g, "_");
+                    html += "<option value='"+item_value+"'>"+chave+"</option>";
                 }
             });
         }

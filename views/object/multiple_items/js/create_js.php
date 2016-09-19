@@ -121,8 +121,7 @@
             hide_modal_main();
             if (data != 0) {
                 $("#upload_container").hide();
-                $('#editor_items').html(data);
-                $("#editor_items").css('display', 'block');
+                $('#editor_items').html(data).css('display', 'block');
             } else {
                 showAlertGeneral('<?php _e("Attention!", 'tainacan') ?>', '<?php _e("File is too big or Uploaded, however, not supported by wordpress, please select valid files!", 'tainacan') ?>', 'error');
             }
