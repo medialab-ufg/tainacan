@@ -1,16 +1,16 @@
 <script>
     $(function () {
-        change_breadcrumbs_title('<?php _e('Import','tainacan') ?>');
+        change_breadcrumbs_title('<?php _e('Import', 'tainacan') ?>');
 
         $('#validate_url_container').show('slow');
-        
+
         var src = $('#src').val();
         $('#collection_import_id').val($('#collection_id').val());
         $('#collection_import_csv_id').val($('#collection_id').val());
         $('#collection_id_export_csv').val($('#collection_id').val());
         $('#collection_id_zip').val($('#collection_id').val());
 
-        
+
         $('#click_zip').click(function (e) {
             e.preventDefault();
             $(this).tab('show')
@@ -38,17 +38,17 @@
             hide_modal_main();
             showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('All objects imported succesfully!', 'tainacan') ?>', 'success');
             /*try {
-                elem = jQuery.parseJSON(result);
-                if (elem.error) {
-                    showAlertGeneral('<?php _e('Error!', 'tainacan'); ?>', elem.msg, 'error');
-                }
-            }
-            catch (e)
-            {
-                $('#importForm_csv').show();
-                $('#validate_url_csv_container').hide();
-                $('#maping_container_csv').html(result);
-            }*/
+             elem = jQuery.parseJSON(result);
+             if (elem.error) {
+             showAlertGeneral('<?php _e('Error!', 'tainacan'); ?>', elem.msg, 'error');
+             }
+             }
+             catch (e)
+             {
+             $('#importForm_csv').show();
+             $('#validate_url_csv_container').hide();
+             $('#maping_container_csv').html(result);
+             }*/
         });
         e.preventDefault();
 
@@ -79,8 +79,7 @@
                                         "<td><a href='#' onclick=\"edit_mapping_csv('" + object.name + "'," + object.id + "," + collectionId + ")\"><span class='glyphicon glyphicon-pencil'></span></a></td>" +
                                         "<td><a href='#' onclick='delete_mapping(" + object.id + "," + collectionId + " )'><span class='glyphicon glyphicon-trash'></span></a></td>" +
                                         "<td><a href='#' onclick=\"do_import_csv('" + object.id + "')\"><span class='glyphicon glyphicon-arrow-down'></span></a></td>");
-                            }
-                            else {
+                            } else {
                                 $("#table_csv").append("<tr><td>" + object.name + "</td>" +
                                         "<td><a href='#' onclick=\"edit_mapping_csv('" + object.name + "'," + object.id + "," + collectionId + ")\"><span class='glyphicon glyphicon-pencil'></span></a></td>" +
                                         "<td><a href='#' onclick='delete_mapping(" + object.id + "," + collectionId + ")'><span class='glyphicon glyphicon-trash'></span></a></td>" +
@@ -146,6 +145,213 @@
         } else {
             return true;
         }
+    }
+//********************** IMPORTACAO OAIPMH - REPOSITORY ******************************/    
+    /* @name: listTableOAIPMHDC()
+     * @description: cria dinamicamente uma tabela contendo
+     * os identificadores de canais salvos no banco
+     * 
+     * @author: EDUARDO
+     **/
+    function update_date(id) {
+        $.ajax({
+            type: "POST",
+            url: $('#src').val() + "/controllers/mapping/mapping_controller.php",
+            data: {
+                mapping_id: id,
+                collection_id: $('#collection_id').val(),
+                operation: 'update_date'
+            }
+        }).done(function (result) {
+            listTableOAIPMHDC();
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+
+        });
+
+    }
+
+    /* @name: listTableOAIPMHDC()
+     * @description: cria dinamicamente uma tabela contendo
+     * os identificadores de canais salvos no banco
+     * 
+     * @author: EDUARDO
+     **/
+    function import_list_set(url_base) {
+        if (url_base !== '') {
+            $.ajax({
+                type: "POST",
+                url: $('#src').val() + "/controllers/import/import_controller.php",
+                data: {
+                    url: url_base,
+                    operation: 'import_list_set_repository'
+                }
+            }).done(function (result) {
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                showAlertGeneral('<?php _e('Atention', 'tainacan') ?>', '<?php _e('Server not found or not available', 'tainacan') ?>', '<?php _e('error') ?>');
+                return;
+            });
+        } else {
+            showAlertGeneral('<?php _e('Atention', 'tainacan') ?>', '<?php _e('URL base is empty', 'tainacan') ?>', '<?php _e('error') ?>');
+        }
+    }
+    /* @name: do_import()
+     * @description: Funcao que chama via ajax a acao que salva os dados mapeados no vanco
+     * os identificadores de canais salvos no banco
+     * 
+     * @author: EDUARDO
+     **/
+
+    function do_import(mapping_id, url_base, token, imported, size, sets) {
+        var first;
+        if (isNaN(imported)) {
+            import_list_set(url_base);
+            tempo();
+            $("#validate_url_container").hide('slow');
+            $("#cronometer").show('slow');
+            $("#progress").show('slow');
+            imported = 0;
+            first = true;
+        } else {
+            first = false;
+        }
+        $.ajax({
+            dataType: "json",
+            type: "GET",
+            url: $('#src').val() + "/controllers/import/import_controller.php",
+            data: {
+                objects_found: size,
+                collection_id: '<?php echo get_option('collection_root_id') ?>',
+                url: url_base,
+                mapping_id: mapping_id,
+                token: token,
+                first: first,
+                sets: sets,
+                operation: 'do_import'}
+        }).done(function (result) {
+            imported += result.imported;
+            update_progressbar(imported, size);
+            if (((result.token === "NULL" || result.token === ""))) {
+                window.clearInterval(intervalo);
+                update_date(mapping_id);
+                $("#progress").hide('slow');
+                $('#maping_container_repository').hide();
+                $('#validate_url_container').show('slow');
+                $("#cronometer").hide('slow');
+                showHeaderCollection($('#src').val());
+                showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('All objects imported succesfully!', 'tainacan') ?>', 'success');
+                return;
+            } else {
+                //window.clearInterval(intervalo);
+                //  saving_data(collection_id,all_data);
+                do_import(mapping_id, url_base, result.token, imported, size);
+            }
+        });
+    }
+
+    /* @name: do_import()
+     * @description: Funcao que chama via ajax a acao que salva os dados mapeados no vanco
+     * os identificadores de canais salvos no banco
+     * 
+     * @author: EDUARDO
+     **/
+
+    function update_repository(mapping_id, url_base, token, imported, size) {
+        var first;
+        if (isNaN(imported)) {
+            tempo();
+            $("#validate_url_container").hide('slow');
+            $("#cronometer").show('slow');
+            $("#progress").show('slow');
+            imported = 0;
+            first = true;
+        } else {
+            first = false;
+        }
+        $.ajax({
+            dataType: "json",
+            type: "GET",
+            url: $('#src').val() + "/controllers/import/import_controller.php",
+            data: {
+                objects_found: size,
+                collection_id: $('#collection_id').val(),
+                url: url_base,
+                mapping_id: mapping_id,
+                token: token,
+                first: first,
+                operation: 'do_import'}
+        }).done(function (result) {
+            imported += result.imported;
+            update_progressbar(imported, size);
+            if (((result.token === "NULL" || result.token === ""))) {
+                window.clearInterval(intervalo);
+                update_date(mapping_id);
+                $("#progress").hide('slow');
+                $('#maping_container').hide();
+                $('#validate_url_container').show('slow');
+                $("#cronometer").hide('slow');
+                showHeaderCollection($('#src').val());
+                showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('All objects imported succesfully!', 'tainacan') ?>', 'success');
+                return;
+            } else {
+                //window.clearInterval(intervalo);
+                //  saving_data(collection_id,all_data);
+                update_repository(mapping_id, url_base, result.token, imported, size);
+            }
+        });
+    }
+
+    /* @name: listTableOAIPMHDC()
+     * @description: cria dinamicamente uma tabela contendo
+     * os identificadores de canais salvos no banco
+     * 
+     * @author: EDUARDO
+     **/
+    function show_message_size() {
+        showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('Importing the object becomes the importation very slowly!', 'tainacan') ?>', 'info');
+    }
+    /* @name: listTableOAIPMHDC()
+     * @description: cria dinamicamente uma tabela contendo
+     * os identificadores de canais salvos no banco
+     * 
+     * @author: EDUARDO
+     **/
+    function tempo() {
+        var s = 1;
+        var m = 0;
+        var h = 0;
+        intervalo = window.setInterval(function () {
+            if (s == 60) {
+                m++;
+                s = 0;
+            }
+            if (m == 60) {
+                h++;
+                s = 0;
+                m = 0;
+            }
+            if (h < 10)
+                document.getElementById("hora").innerHTML = "0" + h + "h";
+            else
+                document.getElementById("hora").innerHTML = h + "h";
+            if (s < 10)
+                document.getElementById("segundo").innerHTML = "0" + s + "s";
+            else
+                document.getElementById("segundo").innerHTML = s + "s";
+            if (m < 10)
+                document.getElementById("minuto").innerHTML = "0" + m + "m";
+            else
+                document.getElementById("minuto").innerHTML = m + "m";
+            s++;
+        }, 1000);
+    }
+
+
+
+
+    function update_progressbar(imported, total) {
+        var percent = (imported / total) * 100;
+        $("#progressbar").val(percent);
     }
 
 </script>

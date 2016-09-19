@@ -15,7 +15,7 @@
 
         $.ajax({
             url: src + "/controllers/mapping/mapping_controller.php", type: 'POST',
-            data: { operation: 'list_mapping_oaipmh_dc', collection_id: '<?php get_option('collection_root_id') ?>' },
+            data: { operation: 'list_mapping_oaipmh_dc', collection_id: '<?php echo get_option('collection_root_id') ?>' },
             success: function (data) {
                 $("#table_oaipmh_dc").html('');
                 if (data !== '[]') {

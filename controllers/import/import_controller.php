@@ -3,6 +3,7 @@ ini_set('max_input_vars', '10000');
 
 require_once(dirname(__FILE__) . '../../../models/import/import_model.php');
 require_once(dirname(__FILE__) . '../../../models/import/oaipmh_model.php');
+require_once(dirname(__FILE__) . '../../../models/import/oaipmh_repository_model.php');
 require_once(dirname(__FILE__) . '../../../models/import/harvesting_oaipmh_model.php');
 require_once(dirname(__FILE__) . '../../general/general_controller.php');
 
@@ -39,6 +40,10 @@ class ImportController extends Controller {
                // return json_encode($oaipmh_model->saving_data($data));
             case 'import_list_set':
                 $oaipmh_model->import_list_set($data['url'], $data['collection_id']);
+                return true;
+            case 'import_list_set_repository':
+                $oaipmh_model_repository = new OAIPMHRepositoryModel();
+                $oaipmh_model_repository->import_list_set_repository($data);
                 return true;
             case "generate_new_container":
                 return $this->render(dirname(__FILE__) . '../../../views/import/oaipmh/container_mapping_attributes.php',$data);

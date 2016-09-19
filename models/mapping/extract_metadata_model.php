@@ -226,38 +226,6 @@ class ExtractMetadataModel extends Model {
         $json_response['records'][] = $record_response;
         return $json_response;
     }
-    /**
-     * 
-     * @param type $url
-     */
-    public function extract_metatags($url) {
-        $tags = getUrlData($url);
-        if(!$tags)
-            return false;
-        
-        if($tags['title']):
-            $array['name_field'] = 'title';
-            $array['value'] = $tags['title'];
-            $data['metadatas'][] = $array;
-        endif;
-        //metatags
-        if($tags['metaTags'] &&  is_array($tags['metaTags'])):
-            foreach ($tags['metaTags'] as $key => $value) {// percorro todos os dados
-                    $array['name_field'] = $key;
-                    $array['value'] = $value['value'];
-                    $data['metadatas'][] = $array;
-            }
-        endif;
-        //metaproperties
-        if($tags['metaProperties'] &&  is_array($tags['metaProperties'])):
-            foreach ($tags['metaProperties'] as $key => $value) {// percorro todos os dados
-                    $array['name_field'] = $key;
-                    $array['value'] = $value['value'];
-                    $data['metadatas'][] = $array;
-            }
-        endif;
-        return $data['metadatas'];
-    }
     
     /**
      * Metodo que insere o item atraves de seu mapeamento

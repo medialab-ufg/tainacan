@@ -2350,6 +2350,39 @@ class Model {
         $xml .= '<socialdb_property_is_compounds>'.  implode(',', $array).'</socialdb_property_is_compounds>';
         return $xml;  
       }
+      
+    /**
+     * metodo que extrai os metatags de um link
+     * @param type $url
+     */
+    public function extract_metatags($url) {
+        $tags = getUrlData($url);
+        if(!$tags)
+            return false;
+        
+        if($tags['title']):
+            $array['name_field'] = 'title';
+            $array['value'] = $tags['title'];
+            $data['metadatas'][] = $array;
+        endif;
+        //metatags
+        if($tags['metaTags'] &&  is_array($tags['metaTags'])):
+            foreach ($tags['metaTags'] as $key => $value) {// percorro todos os dados
+                    $array['name_field'] = $key;
+                    $array['value'] = $value['value'];
+                    $data['metadatas'][] = $array;
+            }
+        endif;
+        //metaproperties
+        if($tags['metaProperties'] &&  is_array($tags['metaProperties'])):
+            foreach ($tags['metaProperties'] as $key => $value) {// percorro todos os dados
+                    $array['name_field'] = $key;
+                    $array['value'] = $value['value'];
+                    $data['metadatas'][] = $array;
+            }
+        endif;
+        return $data['metadatas'];
+    }
 
     /**
      * 

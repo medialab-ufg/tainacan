@@ -2809,7 +2809,8 @@ instantiate_modules();
 
 /* Quando o tema for ativado */
 if (isset($_GET['activated']) && is_admin()) {
-
+    session_write_close();
+    ini_set('max_execution_time', '0');    
     register_post_types();
     register_taxonomies();
     wpdbfix();
