@@ -477,25 +477,35 @@ class OAIPMHModel extends Model {
                         }
                     endif;
                 }
+                if($form['import_object']=='true'&&$identifier=='identifier'){
+                     foreach ($metadata as $meta) {
+                         if(filter_var($meta, FILTER_VALIDATE_URL)&&  strpos($meta, 'handle')!==false){
+                            $tags = $this->extract_metatags($meta);
+                            if(is_array($tags)){
+                                for($i = 0;$i < count($tags); $i++ ){
+                                    if($tags[$i]['name_field'] === 'citation_pdf_url'){
+                                      $has_uploaded = true;
+                                       $attachment_id = $this->add_file_url($tags[$i]['value'], $object_id);
+                                       update_post_meta($object_id, 'socialdb_object_content', $attachment_id);
+                                       update_post_meta($object_id, 'socialdb_object_dc_type', 'pdf');
+                                       update_post_meta($object_id, 'socialdb_object_from', 'internal');
+                                    }
+                                }
+                            }
+                        }
+                     }
+                }
             }
             $metadata = '';
             //files
-            if ($form['import_object']=='true'&&isset($record['files'])):
-                foreach ($record['files'] as $file) {
-                   $this->add_file_url($file, $object_id);
-                }
-            elseif($form['import_object']=='false'&&isset($record['files'])):  
-                foreach ($record['files'] as $file) {
-                   add_post_meta($object_id, 'socialdb_files_url',$file);
-                }
-            endif;
             if($record['identifier']){
-                 add_post_meta($object_id, 'socialdb_object_identifier',$record['identifier']);
+                add_post_meta($object_id, 'socialdb_object_identifier',$record['identifier']);  
             }
             if($record['datestamp']){
                  add_post_meta($object_id, 'socialdb_object_datestamp',$record['datestamp']);
             }
-            update_post_meta($object_id, 'socialdb_object_from', 'external');
+            if(!isset($has_uploaded))
+                update_post_meta($object_id, 'socialdb_object_from', 'external');
             $this->set_common_field_values($object_id, 'object_from', 'external');
             add_post_meta($object_id, 'socialdb_object_original_collection',$collection_id);
             update_post_content($object_id, $content);

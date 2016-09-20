@@ -65,7 +65,7 @@
                 operation: 'saving_mapping_oaipmh_dc_repository'}
         }).done(function (result) {
             listTableOAIPMHDC();
-            $('#maping_container').hide();
+            $('#maping_container_repository').hide();
             $('#validate_url_container').show('slow');
         });
         }

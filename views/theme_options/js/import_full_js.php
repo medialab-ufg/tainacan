@@ -146,7 +146,42 @@
             return true;
         }
     }
-//********************** IMPORTACAO OAIPMH - REPOSITORY ******************************/    
+//********************** IMPORTACAO OAIPMH - REPOSITORY ******************************/  
+    /* @name: listTableOAIPMHDC()
+     * @description: cria dinamicamente uma tabela contendo
+     * os identificadores de canais salvos no banco
+     * 
+     * @author: EDUARDO
+     **/
+    function edit_mapping_oaipmh(url, mapping_id, collection_id) {
+        var url_base = url;
+        if (url_base !== '') {
+            $('#validate_url_container').hide('slow');
+            $('#loader_validacao').show();
+            $.ajax({
+                type: "POST",
+                url: $('#src').val() + "/controllers/mapping/mapping_controller.php",
+                data: {url: url_base,
+                    collection_id: collection_id,
+                    operation: 'edit_mapping_oaipmh_repository',
+                    mapping_id: mapping_id
+                }
+            }).done(function (result) {
+                console.log('success');
+                $('#loader_validacao').hide('slow');
+                $('#maping_container_repository').html(result);
+                $('#maping_container_repository').show();
+                $('#url_base_oai').attr("disable");
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                console.log('erro');
+                $('#loader_validacao').hide();
+                showAlertGeneral('<?php _e('Atention', 'tainacan') ?>', '<?php _e('Server not found or not available', 'tainacan') ?>', '<?php _e('error') ?>');
+            });
+        } else {
+            showAlertGeneral('<?php _e('Atention', 'tainacan') ?>', '<?php _e('URL base is empty', 'tainacan') ?>', '<?php _e('error') ?>');
+        }
+    }
     /* @name: listTableOAIPMHDC()
      * @description: cria dinamicamente uma tabela contendo
      * os identificadores de canais salvos no banco
@@ -176,13 +211,14 @@
      * 
      * @author: EDUARDO
      **/
-    function import_list_set(url_base) {
+    function import_list_set(url_base,sets) {
         if (url_base !== '') {
             $.ajax({
                 type: "POST",
                 url: $('#src').val() + "/controllers/import/import_controller.php",
                 data: {
                     url: url_base,
+                    sets:sets,
                     operation: 'import_list_set_repository'
                 }
             }).done(function (result) {
@@ -205,7 +241,7 @@
     function do_import(mapping_id, url_base, token, imported, size, sets) {
         var first;
         if (isNaN(imported)) {
-            import_list_set(url_base);
+            import_list_set(url_base,sets);
             tempo();
             $("#validate_url_container").hide('slow');
             $("#cronometer").show('slow');

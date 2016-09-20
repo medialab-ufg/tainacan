@@ -305,6 +305,7 @@ class Model {
                         }
                     }
                 }
+                return $attach_id;
             } else {
                 return false;
             }

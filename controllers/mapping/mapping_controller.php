@@ -71,6 +71,16 @@ class MappingController extends Controller {
                 $data['mapping_id'] = $mapping_id;
                 $data['mapping_array'] = $mapping_model->get_mapping_dublin_core($mapping_id);
                 return $this->render(dirname(__FILE__) . '../../../views/import/oaipmh/edit_maping_attributes.php', $data);
+            case "edit_mapping_oaipmh_repository":
+                $mapping_id = $data['mapping_id'];
+                $set = get_post_meta($mapping_id, 'socialdb_channel_oaipmhdc_sets', true);
+                if ($set !== '' && $set) {
+                    $data['sets'] = $set;
+                }
+                $data = $oaipmh_model->validate_url($data);
+                $data['mapping_id'] = $mapping_id;
+                $data['mapping_array'] = $mapping_model->get_mapping_dublin_core($mapping_id);
+                return $this->render(dirname(__FILE__) . '../../../views/theme_options/oaipmh/edit_maping_attributes.php', $data);
             case "edit_mapping_oaipmh_default":
                 //insiro o mapeamento
                 $has_mapping = get_post_meta($data['collection_id'], 'socialdb_collection_mapping_import_active', true);

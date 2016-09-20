@@ -31,7 +31,10 @@ class OAIPMHRepositoryModel extends OAIPMHModel {
             $array_list_set = $this->parse_xml_set_to_array($xml_list_set);
             if(is_array($array_list_set)){
                 foreach ($array_list_set as $slug => $name) {
-                    $this->insert_collection($slug, $name);
+                    //se o set estiver vazio ou se for igual ao slug ou nome de um dos sets
+                    if($data['sets']==''||($data['sets']==trim($slug)||$data['sets']==trim($name))):
+                        $this->insert_collection($slug, $name);
+                    endif;
                 }
             }
         }

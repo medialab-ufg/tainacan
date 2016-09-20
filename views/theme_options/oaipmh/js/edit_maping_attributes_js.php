@@ -23,7 +23,7 @@
     });
     
     function cancel_import() {
-        $('#maping_container').hide();
+        $('#maping_container_repository').hide();
         $('#validate_url_container').show('slow');
     }
     
@@ -94,7 +94,7 @@
                     operation: 'updating_mapping_oaipmh_dc'}
             }).done(function (result) {
                 listTableOAIPMHDC();
-                $('#maping_container').hide();
+                $('#maping_container_repository').hide();
                 $('#validate_url_container').show('slow');
                 showAlertGeneral('<?php _e('Success','tainacan'); ?>','<?php _e('Edited successfully.','tainacan'); ?>','success');
             });
