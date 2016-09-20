@@ -23,6 +23,10 @@ class ExportController extends Controller {
                 break;
             case "export_csv_file":
                 $data['socialdb_delimiter_csv'] = trim($data['socialdb_delimiter_csv']);
+                $data['multi_values_csv_export'] = trim($data['multi_values_csv_export']);
+                $data['hierarchy_csv_export'] = trim($data['hierarchy_csv_export']);
+                $data['encode_csv_export'] = trim($data['encode_csv_export']);
+                $data['export_zip_csv'] = trim($data['export_zip_csv']);
                 if ($data['socialdb_delimiter_csv'] != '') {
                     $csv_data = $export_model->generate_csv_data($data);
 

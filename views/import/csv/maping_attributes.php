@@ -21,7 +21,7 @@ include_once ('js/maping_attributes_js.php');
                 <input type="text" id="socialdb_delimiter_hierarchy_csv" name="socialdb_delimiter_hierarchy_csv" value="::" required="required" class="form-control">
             </div>
             <div class="form-group">
-                <label for="socialdb_delimiter_code_csv"><?php _e('Hierarchy delimiter','tainacan'); ?></label><br>
+                <label for="socialdb_delimiter_code_csv"><?php _e('File Encoding','tainacan'); ?></label><br>
                 <select id="socialdb_delimiter_code_csv" name="socialdb_delimiter_code_csv" required="required" disabled="disabled" class="form-control">
                     <option value="utf8">UTF8</option>  
                 </select>
