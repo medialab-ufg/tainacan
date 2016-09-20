@@ -378,7 +378,7 @@ class OAIPMHModel extends Model {
                 $record_response = [];
             }
         }  catch (Exception $e){
-            
+            //VAR_DUMP($response_xml_data,$data['url'] . '?verb=ListRecords&resumptionToken=' . $data['token']);
         }
         return $json_response;
     }

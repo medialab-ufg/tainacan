@@ -153,6 +153,42 @@
      * 
      * @author: EDUARDO
      **/
+    function delete_mapping(mapping_id, collection_id) {
+
+        swal({
+            title: '<?php _e('Attention', 'tainacan') ?>',
+            text: '<?php _e('Are you sure to delete this mapping?', 'tainacan') ?>',
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonClass: 'btn-danger',
+            closeOnConfirm: false,
+            closeOnCancel: true
+        },
+        function (isConfirm) {
+            if (isConfirm) {
+                $.ajax({
+                    type: "POST",
+                    url: $('#src').val() + "/controllers/mapping/mapping_controller.php",
+                    data: {
+                        operation: 'delete_mapping',
+                        mapping_id: mapping_id,
+                        collection_id: collection_id
+                    }
+                }).done(function (result) {
+                    elem_first = jQuery.parseJSON(result);
+                    listTableOAIPMHDC();
+                    showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
+
+                });
+            }
+        });
+    }
+    /* @name: listTableOAIPMHDC()
+     * @description: cria dinamicamente uma tabela contendo
+     * os identificadores de canais salvos no banco
+     * 
+     * @author: EDUARDO
+     **/
     function edit_mapping_oaipmh(url, mapping_id, collection_id) {
         var url_base = url;
         if (url_base !== '') {
