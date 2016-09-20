@@ -470,12 +470,12 @@
                     if( (current_type == "date" || current_type == "numeric") && property_widget == "range") {
                         var range_obj = { counter_range: elem.counter_data_range, sent_data: elem };
                     }
-                    console.log(' current_operation  = '+current_operation); 
+                    // console.log(' current_operation  = '+current_operation); 
                     if ( current_operation == "add_property_data" ) {
                         setCollectionFacet( "add", new_property_id, property_widget, color_facet, range_obj);
                     } else if( current_operation == "update_property_data" ) {
                         var item_was_dragged = $(current_modal + " .data-widget").hasClass('select-meta-filter');
-                        console.log(' item was dragged  = '+item_was_dragged);
+                        //console.log(' item was dragged  = '+item_was_dragged);
                         if( item_was_dragged ) {
                             setCollectionFacet( "add", current_property_id, property_widget, color_facet );
                             $(current_modal + " .data-widget").removeClass('select-meta-filter');

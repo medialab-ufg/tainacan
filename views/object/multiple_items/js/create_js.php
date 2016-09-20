@@ -26,8 +26,7 @@
                 });
                 //ao terminar o uplaod dos itens
                 this.on("queuecomplete", function (file) {
-                    $('#click_editor_items_button').show();
-                    $('#click_editor_items_button').focus();
+                    $('#click_editor_items_button').show().focus();
 //                        $.get($('#src').val()+'/controllers/object/object_controller.php?collection_id='+$('#collection_id').val()+'&operation=editor_items&object_id='+<?php echo $object_id ?>, function (data) {
 //                            try {
 //                                //var jsonObject = JSON.parse(data);
@@ -101,8 +100,7 @@
                 }).done(function (result) {
                     $('#main_part').show();
                     $('#collection_post').show();
-                    $('#configuration').slideDown();
-                    $('#configuration').hide();
+                    $('#configuration').slideDown().hide();
                 });
             }
         });

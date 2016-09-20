@@ -36,10 +36,8 @@ include_once ('js/create_js.php');
                 <span class="glyphicon glyphicon-upload"></span>&nbsp;<?php _e('Add file(s)','tainacan') ?>
             </button>
             <button
-                style="display: none;"
-                    id="click_editor_items_button"
-                    onclick="edit_items_uploaded()"
-                    class="btn btn-success  pull-right">
+                style="display: none;" id="click_editor_items_button"
+                    onclick="edit_items_uploaded()" class="btn btn-success  pull-right">
                 </span>&nbsp;<?php _e('Next step','tainacan') ?>
                 <span class="glyphicon glyphicon-arrow-right">
             </button>
