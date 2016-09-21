@@ -111,8 +111,10 @@ class OAIPMHModel extends Model {
         define('MY_URI',  get_bloginfo( 'url' ));
         $this->expirationdatetime = gmstrftime('%Y-%m-%dT%TZ', time() + TOKEN_VALID);
         /** Where token is saved and path is included */
-        define('TOKEN_PREFIX', dirname(__FILE__).'/socialdb_tokens/');
-
+        if(!is_dir(dirname(__FILE__).'/../../data/socialdb_tokens/')){
+            mkdir(dirname(__FILE__).'/../../data/socialdb_tokens/');
+        }
+        define('TOKEN_PREFIX', dirname(__FILE__).'/../../data/socialdb_tokens/');
 // define all supported sets in your repository
         $this->SETS = array(
             array('setSpec' => 'class:activity', 'setName' => 'Activities'),
