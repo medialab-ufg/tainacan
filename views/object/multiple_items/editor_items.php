@@ -1,17 +1,15 @@
 <?php
+/*
 include_once ('../../../../../wp-config.php');
 include_once ('../../../../../wp-load.php');
 include_once ('../../../../../wp-includes/wp-db.php');
+*/
 include_once ('js/editor_items_js.php');
 include_once(dirname(__FILE__).'/../../../helpers/view_helper.php');
 include_once(dirname(__FILE__).'/../../../helpers/object/object_properties_widgets_helper.php');
 
 $view_helper = new ViewHelper();
 $object_properties_widgets_helper = new ObjectWidgetsHelper();
-
-echo "</hr>";
-var_dump($items['exif_metas']);
-echo "</hr>";
 
 $properties_terms_radio = [];
 $properties_terms_tree = [];
@@ -43,16 +41,7 @@ $references = [
 
 <div class="row" style="padding-right: 0px;padding-left: 0px;">
       <!-------------- METADADOS - BLOCO ESQUERDO (COL-MD-3) --------------------->
-    <div style="
-         display:none;
-         background: white;
-         border: 3px solid #E8E8E8;
-         font: 11px Arial;
-         max-height: 655px;
-         overflow-y: scroll;
-         min-height: 449px;" 
-             id='form_properties_items' 
-             class="col-md-3 menu_left_files menu-left-size">
+    <div id='form_properties_items' class="col-md-3 menu_left_files menu-left-size">
             <h3 style="display:none;" id='labels_items_selected' ><?php _e('Editting ','tainacan') ?>
                 <span id='number_of_items_selected'></span>
                 <?php _e(' item/items ','tainacan') ?>
@@ -387,29 +376,23 @@ $references = [
         <?php endif; ?>
 
     </div> 
-    <div id='no_properties_items' style="height: 655px;background: white;border: 3px solid #E8E8E8;font: 11px Arial;"  
-         class="col-md-3 menu-left-size">
+    <div id='no_properties_items' class="col-md-3 menu-left-size">
          <h3> <?php _e('Select items to edit...','tainacan') ?> </h3>
     </div>
-    <div id='selectingAttachment'
-         style="height: 655px;display:none;background: white;border: 3px solid #E8E8E8;font: 11px Arial;"  
-         class="col-md-3 menu-left-size">
-         <h3 ><?php _e('Select attachments to ','tainacan') ?>
-             <span id="nameItemAttachment"></span>
+    <div id='selectingAttachment' class="col-md-3 menu-left-size">
+         <h3> <?php _e('Select attachments to ','tainacan') ?> <span id="nameItemAttachment"></span>
          </h3>
     </div>
 <!------------------------------- LISTA ITEMS UPADOS - BLOCO CENTRO DIREITO (COL-MD-9) -------------------------------------------------------------->
     <form id='sumbit_multiple_items'>
         <div class='col-md-9' id="no_item_uploaded" style='display:none;'>
-            <h3 style="text-align: center;"><?php _e('No items uploaded','tainacan') ?></h3>
+            <h3 style="text-align: center;"> <?php _e('No items uploaded','tainacan') ?> </h3>
         </div>
-        <div class='col-md-9 pull-right' 
-             style="background-color: white;border: 3px solid #E8E8E8;margin-left: 15px;">
+        <div class='col-md-9 pull-right' style="background-color: white;border: 3px solid #E8E8E8;margin-left: 15px;">
             <h3>
                 <?php _e('Add new item - Send local file','tainacan') ?>
-                <button type="button" onclick="back_main_list();"
-                        class="btn btn-default pull-right"> 
-                            <?php _e('Cancel','tainacan') ?>
+                <button type="button" onclick="back_main_list();" class="btn btn-default pull-right">
+                    <?php _e('Cancel','tainacan') ?>
                 </button>
             </h3>
             <hr>

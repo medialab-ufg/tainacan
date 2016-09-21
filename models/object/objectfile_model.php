@@ -3,7 +3,6 @@ include_once ('../../../../../wp-config.php');
 include_once ('../../../../../wp-load.php');
 include_once ('../../../../../wp-includes/wp-db.php');
 include_once (dirname(__FILE__) . '../../../models/collection/collection_model.php');
-include_once (dirname(__FILE__) . '../../../models/property/property_model.php');
 include_once (dirname(__FILE__) . '../../../models/category/category_model.php');
 include_once (dirname(__FILE__) . '../../../models/event/event_object/event_object_create_model.php');
 require_once(dirname(__FILE__) . '../../general/general_model.php');
@@ -204,35 +203,21 @@ class ObjectFileModel extends Model {
                         $extension = $attachment->guid;
                         $ext = pathinfo($extension, PATHINFO_EXTENSION);
                         if(in_array($ext, ['mp4','m4v','wmv','avi','mpg','ogv','3gp','3g2'])){
-                                $result['videos'][] = $obj;     
+                            $result['videos'][] = $obj;     
                          }elseif (in_array($ext, ['jpg','jpeg','png','gif', 'tiff'])) {
                             $obj['metas'] = $metas;
                             $result['image'][] = $obj;
 
+                            /*
+                             * TODO: confirm if code below should be removed
+                             * */
                             if( in_array($ext, ['jpg', 'jpeg', 'tiff']) ) {
+                                /*
                                 $property_model = new PropertyModel();
                                 $_exif_data = exif_read_data($_file_path_, 0, true);
                                 unset($_exif_data['FILE']);
                                 unset($_exif_data['COMPUTED']);
-
-                                if($_exif_data && !empty($_exif_data)):
-                                    $result['exif_metas'] = $_exif_data;
-                                    foreach($_exif_data as $exif_tag):
-                                        if(is_array($exif_tag)):
-                                            foreach($exif_tag as $exif_key => $exif_val) {
-                                                $image_exif = [
-                                                    'collection_id' =>  $data['collection_id'],
-                                                    'property_data_name' => "Exif_" . $exif_key,
-                                                    'property_metadata_type' => 'text',
-                                                    'socialdb_property_required' => false,
-                                                    'socialdb_property_data_cardinality' => '1',
-                                                    'is_repository_property' => 'true'
-                                                ];
-                                                $property_model->add_property_data($image_exif);
-                                            }
-                                        endif;
-                                    endforeach;
-                                endif;
+                                */
                             }
 
                          } elseif (in_array($ext, ['mp3','m4a','ogg','wav','wma'])) {
