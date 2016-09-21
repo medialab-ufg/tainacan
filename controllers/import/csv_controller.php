@@ -20,16 +20,31 @@ class CsvController extends Controller {
                 break;
             
             case "validate_csv":
-                $data = $csv_model->validate_csv($data['file']['csv_file'], $data);
-                
-                if($data['error'] > 0)
-                {
-                    return json_encode($data);
-                }
-                else
-                {
-                    unset($data['file']);
-                    return $this->render(dirname(__FILE__) . '../../../views/import/csv/maping_attributes.php', $data);
+                if(isset($data['file']['csv_file']['name'])){
+                    $type = pathinfo($data['file']['csv_file']['name']);
+                    if($type['extension']=='zip'){
+                        $data = $csv_model->validate_zip($data['file']['csv_file'], $data);
+                        if($data['error'] > 0){
+                            return json_encode($data);
+                        }
+                        else{
+                            unset($data['file']);
+                            return $this->render(dirname(__FILE__) . '../../../views/import/csv/maping_attributes.php', $data);
+                        }
+                    }else if($type['extension']=='csv'){
+                        $data = $csv_model->validate_csv($data['file']['csv_file'], $data);
+                        if($data['error'] > 0){
+                            return json_encode($data);
+                        }
+                        else{
+                            unset($data['file']);
+                            return $this->render(dirname(__FILE__) . '../../../views/import/csv/maping_attributes.php', $data);
+                        }
+                    }
+                }else{
+                     $data['msg'] = "Envie algum arquivo para importar!";
+                     $data['error'] = 1;
+                     return json_encode($data);
                 }
                 break;
             case "do_import_csv":

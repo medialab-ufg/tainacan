@@ -1659,7 +1659,7 @@ class Model {
         fwrite($df, $xml);
         fclose($df);
     }
-
+    
     public function create_zip_by_folder($folder, $from = '/package/', $name = 'package') {
         $rootPath = realpath($folder);
         // Initialize archive object
@@ -1678,9 +1678,9 @@ class Model {
                 $relativePath = substr($filePath, strlen($rootPath) + 1);
 
                 // Add current file to archive
-                $zip->addFile($filePath, $relativePath);
+                    $zip->addFile($filePath, $relativePath);
+                }
             }
-        }
         // Zip archive will be created only after closing object
         $zip->close();
     }

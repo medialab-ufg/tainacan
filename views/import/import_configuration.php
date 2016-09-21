@@ -79,7 +79,7 @@ include_once ('../../helpers/view_helper.php');
                             <br>
                             <form id="formCsv" name="formCsv" enctype="multipart/form-data" method="post">
                                 <div class="form-group">
-                                    <input type="file" accept=".csv" id="csv_file" name="csv_file" placeholder="<?php _e('Insert the CSV file','tainacan'); ?>">
+                                    <input type="file" accept=".csv,.zip" id="csv_file" name="csv_file" placeholder="<?php _e('Insert the CSV file','tainacan'); ?>">
                                 </div>
                                 <input type="hidden" id="collection_import_csv_id" name="collection_id" value="">
                                 <input type="hidden" id="operation_csv" name="operation" value="validate_csv">

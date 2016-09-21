@@ -56,6 +56,24 @@ class CsvModel extends Model {
 
         return $data;
     }
+    
+    /**
+     * 
+     * @param array $File
+     * @param array $data
+     * @param type $Name
+     * @return type
+     */
+    public function validate_zip(array $File, array $data, $Name = null) {
+        if ($File["error"] == 4) {
+            $data['msg'] = "Envie algum arquivo para importar!";
+            $data['error'] = 1;
+        } else {
+            $data['error'] = 0;
+            $data['mapping_id'] = $this->save_file($data);
+        }
+        return $data;
+    }
 
     public function save_file($data) {
         $_FILES = $data['file'];
