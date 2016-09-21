@@ -475,6 +475,12 @@ class ExportModel extends Model {
             if ($object->ID == $data['collection_id']) {
                 continue;
             }
+            
+            /** ID * */
+            if ($object->ID != "") {
+                $csv_data['ID'] = $object->ID;
+            }
+            
             /** Title * */
             if ($object->post_title != "") {
                 $csv_data['title'] = utf8_decode($object->post_title);

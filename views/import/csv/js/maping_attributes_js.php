@@ -13,9 +13,9 @@
 
         });
     });
-    function cancel_import() {
-        $('#maping_container').hide();
-        $('#validate_url_container').show('slow');
+    function cancel_import_csv() {
+        $('#maping_container_csv').hide();
+        $('#validate_url_csv_container').show('slow');
     }
 
     //function save_csv_delimiter(){

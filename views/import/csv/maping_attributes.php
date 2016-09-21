@@ -27,9 +27,7 @@ include_once ('js/maping_attributes_js.php');
                 </select>
             </div>
             <div class="form-group">
-                <input type="radio" name="import_zip_csv" value="url_externa" checked="checked" onchange="hide_zip_input()"> <?php _e('Import external URL file (must map the content)', 'tainacan'); ?><br><br>
-                <input type="radio" name="import_zip_csv" value="url_local" onchange="show_zip_input()"> <?php _e('Import local URL file (must map the content)', 'tainacan'); ?><br>
-                <input type="file" accept=".zip" id="zip_csv_file" name="zip_csv_file" placeholder="<?php _e('Insert the ZIP file','tainacan'); ?>" style="display: none;">
+                <input type="checkbox" name="import_url_external" value="url_externa" checked="checked" onchange="hide_zip_input()"> <?php _e('Import external URL file (must map the content)', 'tainacan'); ?><br><br>
             </div>
             <h5><strong><?php _e('CSV Header','tainacan'); ?></strong></h5>
             <div class="form-group">

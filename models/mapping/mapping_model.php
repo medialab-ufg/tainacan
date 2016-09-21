@@ -533,6 +533,41 @@ class MappingModel extends Model {
         
         return $targetdir;
     }
+    
+    /**
+     * extrao o zip e retorna o csv da colecao
+     * @param type $path
+     * @param type $delimiter
+     */
+    public function get_csv_in_zip_file($path,$delimiter) {
+         /* here it is really happening */
+        $time = time();
+        $targetdir = dirname(__FILE__) . "/" .$time;
+        $targetzip = dirname(__FILE__)."/" . $time . ".zip";
+        mkdir($targetdir);
+        /* Extracting Zip File */
+        $zip = new ZipArchive();
+        if (copy($path, $targetzip)) { //Uploading the Zip File
+            $x = $zip->open($targetzip);  // open the zip file to extract
+            $zip->extractTo($targetdir);
+            if ($x === true) {
+                $zip->extractTo($targetdir); // place in the directory with same name  
+                if(is_file($targetdir.'/csv-package/administrative-settings.csv')){
+                    $objeto = fopen($targetdir.'/csv-package/administrative-settings.csv', 'r');
+                    $csv_data = fgetcsv($objeto, 0, $delimiter);
+                    fclose($objeto);
+                    $zip->close();
+                    unlink($targetzip); //Deleting the Zipped file
+                    $this->recursiveRemoveDirectory($targetdir);
+                    return array_filter($csv_data);
+                }    
+                $zip->close();
+                unlink($targetzip); //Deleting the Zipped file
+                $this->recursiveRemoveDirectory($targetdir);
+            }
+        }
+        return [];
+    }
 
     public function show_files_csv($mapping_id) {
         $real_attachments = [];

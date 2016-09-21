@@ -127,54 +127,40 @@ class CsvModel extends Model {
             foreach ($files as $file) {
                 //$name_file =  wp_get_attachment_link($file->ID, 'thumbnail', false, true);
                 $name_file = wp_get_attachment_url($file->ID);
-                $objeto = fopen($name_file, 'r');
-                // LEITURA DO ARQUIVO
-                //$time_before_read = microtime() - $time_start;
-                while (($csv_data = fgetcsv($objeto, 0, $delimiter)) !== false) {
-                    $count++;
-                    if ($csv_has_header == 1 && $count == 1) {
-                        continue;
-                    } else {
-                        $lines[] = $csv_data;
-                    }
+                $type = pathinfo($name_file);
+                if($type['extension']=='csv'){
+                    $lines = $this->read_csv_file($name_file,$delimiter,$csv_has_header);
+                }  elseif ($type['extension']=='zip') {
+                    // metodo retornara um array com o nome do arquivo criado
+                    // e a pasta do folder criado
+                   $information = $this->get_csv_from_zip($name_file);
+                   $lines = $this->read_csv_file($information['file'],$delimiter,$csv_has_header);
                 }
                 // $time_after_read = microtime() - $time_start;
                 // var_dump(' Fim Leitura dos dados',$time_before_read,$time_after_read);
                 // insercao dos dados
                 for ($i = 0; $i < count($lines); $i++):
                     $object_id = socialdb_insert_object_csv('Import CSV ' . $count);
+                    $ID = $lines[$i][0];
                     foreach ($bd_csv_data as $metadata) {
                         if ($metadata['socialdb_entity'] !== '') {
                             $field_value = $lines[$i][str_replace('csv_p', '', $metadata['value'])];
                             if ($metadata['socialdb_entity'] == 'post_title'):
-                                if (mb_detect_encoding($field_value, 'auto') == 'UTF-8') {
+                                if (mb_detect_encoding($field_value, 'auto') == 'UTF-8') 
                                     $field_value = iconv('ISO-8859-1', 'UTF-8', $field_value);
-                                }
                                 $this->update_title($object_id, $field_value);
                                 $this->set_common_field_values($object_id, 'title', $field_value);
-                            elseif ($metadata['socialdb_entity'] == 'post_content'):
-                                $authFormat = array(
-                                    'jpg',
-                                    'png',
-                                    'jpeg',
-                                    'gif',
-                                    'bmp'
-                                );
-                                $formatFile = explode('.', $field_value);
-                                if (in_array(end($formatFile), $authFormat)) {
-                                    if ($import_zip_csv == 'url_local') {
-                                        //Tem arquivo ZIP
-                                        $import_zip_path = get_post_meta($data['mapping_id'], 'socialdb_channel_csv_zip_path', true);
-                                        $this->add_thumbnail_item_zip($import_zip_path . DIRECTORY_SEPARATOR . $field_value, $object_id);
-                                        //$this->insert_attachment_file($import_zip_path . DIRECTORY_SEPARATOR . $field_value, $object_id);
+                            elseif($metadata['socialdb_entity'] == 'post_content'):
+                                if(!isset($information)):
+                                    if (!filter_var($field_value, FILTER_VALIDATE_URL) === false && $import_zip_csv !== 'false') {
+                                        $content_id = $this->add_file_url($field_value, $object_id);
+                                        add_post_meta($object_id, '_file_id', $content_id);
+                                        update_post_meta($object_id, 'socialdb_object_content', $content_id);
                                     } else {
-                                        //E uma URL e nao o caminho ZIP
-                                        $this->add_thumbnail_url($field_value, $object_id);
-                                        //$this->add_file_url($field_value, $object_id);
+                                        $content .= $field_value . ",";
                                     }
-                                } 
-                                $content .= $field_value . ",";
-                            elseif ($metadata['socialdb_entity'] == 'attach'):
+                                endif;
+                            elseif($metadata['socialdb_entity'] == 'attach'):
                                 //attachment (Files)
                                 $files = explode(', ', $field_value);
                                 if (is_array($files)) {
@@ -199,7 +185,6 @@ class CsvModel extends Model {
                                         $this->add_file_url($field_value, $object_id);
                                     }
                                 }
-//update_post_meta($object_id, 'socialdb_object_dc_source', $field_value);
                             elseif ($metadata['socialdb_entity'] == 'post_permalink'):
                                 update_post_meta($object_id, 'socialdb_object_dc_source', $field_value);
                                 $this->set_common_field_values($object_id, 'object_source', $field_value);
@@ -212,7 +197,7 @@ class CsvModel extends Model {
                                 update_post_meta($object_id, 'socialdb_object_dc_type', $field_value);
                                 $this->set_common_field_values($object_id, 'object_type', $field_value);
                             elseif ($metadata['socialdb_entity'] == 'tag' && $field_value != ''):
-//$fields_value = explode('||', $field_value);
+                                //$fields_value = explode('||', $field_value);
                                 $fields_value = explode($multi_values, $field_value);
                                 foreach ($fields_value as $field_value):
                                     //$fields[] = explode('::', $field_value);
@@ -275,22 +260,145 @@ class CsvModel extends Model {
                     update_post_content($object_id, $content);
                     $this->set_common_field_values($object_id, 'description', $content);
                     socialdb_add_tax_terms($object_id, $categories, 'socialdb_category_type');
+                    //se estiver importando de um zip devera buscar os itens em suas pastas
+                    $this->insert_data_zip($object_id,$information,$ID);
                     $content = '';
-//$time_after_insert = microtime() - $time_start;
-//var_dump(' Fim da insercao do item',$time_after_insert);
+                //$time_after_insert = microtime() - $time_start;
+                //var_dump(' Fim da insercao do item',$time_after_insert);
                 endfor;
-
+                //como existe apeans um arquivo
                 break;
             }
-            if ($import_zip_csv == 'url_local') {
-                $import_zip_path = get_post_meta($data['mapping_id'], 'socialdb_channel_csv_zip_path', true);
-                if($import_zip_path && is_dir($import_zip_path)){
-                    unlink($import_zip_path);
-                }
+            //se caso foi importado um arquyivo zip, ele devera ser eliminado
+            if (isset($information)&&isset($information['folder'])) {
+                $targetdir = dirname(__FILE__) . "/" .$information['folder'];
+                $targetzip = dirname(__FILE__)."/" . $information['folder'] . ".zip";
+                unlink($targetzip); //Deleting the Zipped file
+                $this->recursiveRemoveDirectory($targetdir);
             }
             return true;
         } else {
             return false;
+        }
+    }
+    
+    /**
+     * 
+     * @param type $file_name
+     */
+    public function read_csv_file($file_name,$delimiter,$csv_has_header){
+        $objeto = fopen($file_name, 'r');
+        $count = 0;
+        // LEITURA DO ARQUIVO
+        //$time_before_read = microtime() - $time_start;
+        while (($csv_data = fgetcsv($objeto, 0, $delimiter)) !== false) {
+            $count++;
+            if ($csv_has_header == 1 && $count == 1) {
+                continue;
+            } else {
+                $lines[] = $csv_data;
+            }
+        }
+        return $lines;
+    }
+    
+    /**
+     * 
+     * @param type $zip_file
+     */
+    public function get_csv_from_zip($path) {
+        $time = time();
+        $targetdir = dirname(__FILE__) . "/" .$time;
+        $targetzip = dirname(__FILE__)."/" . $time . ".zip";
+        mkdir($targetdir);
+        /* Extracting Zip File */
+        $zip = new ZipArchive();
+        if (copy($path, $targetzip)) { //Uploading the Zip File
+            $x = $zip->open($targetzip);  // open the zip file to extract
+            $zip->extractTo($targetdir);
+            if ($x === true) {
+                $zip->extractTo($targetdir); // place in the directory with same name  
+                $zip->close();
+                if(is_file($targetdir.'/csv-package/administrative-settings.csv')){
+                    return ['file'=>$targetdir.'/csv-package/administrative-settings.csv','folder'=>$time];
+                }    
+            }
+        }
+        return [];
+    }
+    
+    /**
+     * metodo que chama os demais para realizar as acoes que buscam os arquivos 
+     * descompactados
+     */
+    private function insert_data_zip($object_id, $information, $ID) {
+        if (isset($information) && isset($information['folder']) && is_dir(dirname(__FILE__) . "/" . $information['folder'] . '/csv-package/items/' . $ID)) {
+            $dir = dirname(__FILE__) . "/" . $information['folder'] . '/csv-package/items/' . $ID;
+            //conteudo
+            if (is_dir($dir . '/content'))
+                $this->get_content_csv($dir . '/content', $object_id);
+            //anexos
+            if (is_dir($dir . '/files'))
+                $this->get_files_csv($dir . '/files', $object_id);
+            //thumbnail
+            if (is_file($dir . '/thumbnail.png')) {
+                $thumbnail_id = $this->insert_attachment_file($dir . '/thumbnail.png', $object_id);
+                set_post_thumbnail($object_id, $thumbnail_id);
+            } elseif (is_file($dir . '/thumbnail.jpg')) {
+                $thumbnail_id = $this->insert_attachment_file($dir . '/thumbnail.jpg', $object_id);
+                set_post_thumbnail($object_id, $thumbnail_id);
+            } elseif (is_file($dir . '/thumbnail.gif')) {
+                $thumbnail_id = $this->insert_attachment_file($dir . '/thumbnail.gif', $object_id);
+                set_post_thumbnail($object_id, $thumbnail_id);
+            } elseif (is_file($dir . '/thumbnail.jpeg')) {
+                $thumbnail_id = $this->insert_attachment_file($dir . '/thumbnail.jpeg', $object_id);
+                set_post_thumbnail($object_id, $thumbnail_id);
+            }
+        }
+    }
+
+    /**
+     * 
+     * @param string $dir O diretorio do
+     * @param int $object_id O id do item
+     */
+    public function get_content_csv($dir, $object_id) {
+        foreach (new DirectoryIterator($dir) as $fileInfo) {
+            if ($fileInfo->isDot())
+                continue;
+
+            $file_name = $fileInfo->getPath() . '/' . $fileInfo->getFilename();
+            $type = pathinfo($file_name);
+            $content_id = $this->insert_attachment_file($file_name, $object_id);
+            add_post_meta($object_id, '_file_id', $content_id);
+            update_post_meta($object_id, 'socialdb_object_content', $content_id);
+            update_post_meta($data['ID'], 'socialdb_object_from', 'internal');
+            $ext = strtolower($type['extension']);
+            if (in_array($ext, ['mp4', 'm4v', 'wmv', 'avi', 'mpg', 'ogv', '3gp', '3g2'])) {
+                update_post_meta($object_id, 'socialdb_object_dc_type', 'video');
+            } elseif (in_array($ext, ['jpg', 'jpeg', 'png', 'gif'])) {
+                update_post_meta($object_id, 'socialdb_object_dc_type', 'image');
+            } elseif (in_array($ext, ['mp3', 'm4a', 'ogg', 'wav', 'wma'])) {
+                update_post_meta($object_id, 'socialdb_object_dc_type', 'audio');
+            } elseif (in_array($ext, ['pdf'])) {
+                update_post_meta($object_id, 'socialdb_object_dc_type', 'pdf');
+            } else{
+                update_post_meta($object_id, 'socialdb_object_dc_type', 'other');
+            }
+        }
+    }
+    
+    /**
+     * 
+     * @param type $dir
+     * @param type $object_id
+     */
+    public function get_files_csv($dir, $object_id) {
+        foreach (new DirectoryIterator($dir) as $fileInfo) {
+            if ($fileInfo->isDot())
+                continue;
+            $content_id = $this->insert_attachment_file($fileInfo->getPath(). '/' .$fileInfo->getFilename(), $object_id);
+            add_post_meta($object_id, '_file_id', $content_id);
         }
     }
 
@@ -395,7 +503,12 @@ class CsvModel extends Model {
         }
         return $targetdir . DIRECTORY_SEPARATOR . 'collections';
     }
-
+    
+    /**
+     * 
+     * @param array $csv_files
+     * @param type $dir
+     */
     public function import_csv_full(array $csv_files, $dir) {
         $collection_model = new CollectionModel;
 //var_dump($csv_files, $dir);

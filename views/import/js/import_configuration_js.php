@@ -567,7 +567,7 @@
         $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/mapping/mapping_controller.php",
-            data: { collection_id: collection_id, operation: 'edit_mapping_csv', mapping_id: mapping_id }
+            data: { collection_id: collection_id, operation: 'edit_headers_mapping_csv', mapping_id: mapping_id }
         }).done(function (result) {
             $('#loader_validacao').hide('slow');
             $('#maping_container_csv').html(result).show();

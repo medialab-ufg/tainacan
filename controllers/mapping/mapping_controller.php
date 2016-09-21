@@ -115,34 +115,32 @@ class MappingController extends Controller {
                 //parse_str($data['form'], $form);
                 //var_dump($data, $data['file'], $_FILES);
                 //exit();
-                $data['file'] = (isset($_FILES) ? $_FILES['zip_csv_file'] : false);
                 $mapping_id = $data['socialdb_csv_mapping_id'];
                 $delimiter = ($data['socialdb_delimiter_csv'] == '' ? ';' : $data['socialdb_delimiter_csv']);
                 $multi_values = ($data['socialdb_delimiter_multi_values_csv'] == '' ? '||' : $data['socialdb_delimiter_multi_values_csv']);
                 $hierarchy = ($data['socialdb_delimiter_hierarchy_csv'] == '' ? '::' : $data['socialdb_delimiter_hierarchy_csv']);
-                $import_zip_csv = $data['import_zip_csv'];
+                $import_url_external = ($data['import_url_external']&&$data['import_url_external']=='url_externa') ? $data['import_url_external'] : 'false';
                 $csv_has_header = $data['socialdb_csv_has_header'];
-                $mapping_model->save_delimiter_csv($mapping_id, $delimiter, $multi_values, $hierarchy, $import_zip_csv, $csv_has_header);
-                if($import_zip_csv == 'url_local' && $data['file']){
-                    $validate = $mapping_model->validate_zip($data['file'], $data);
-                    if($validate['error'] == 0){
-                        //var_dump($validate['path']);
-                        update_post_meta($mapping_id, 'socialdb_channel_csv_zip_path', $validate['path']);
-                        //var_dump(get_post_meta($mapping_id, 'socialdb_channel_csv_zip_path', true));
-                    }
-                }
+                $mapping_model->save_delimiter_csv($mapping_id, $delimiter, $multi_values, $hierarchy, $import_url_external, $csv_has_header);
                 $files = $mapping_model->show_files_csv($mapping_id);
                 foreach ($files as $file) {
                     //$name_file =  wp_get_attachment_link($file->ID, 'thumbnail', false, true);
                     $name_file = wp_get_attachment_url($file->ID);
-                    $objeto = fopen($name_file, 'r');
-                    $data['csv_data'] = fgetcsv($objeto, 0, $delimiter);
+                    $type = pathinfo($name_file);
+                    if($type['extension']=='zip'){
+                       $data['csv_data'] = $mapping_model->get_csv_in_zip_file($name_file, $delimiter);
+                    }else if($type['extension']=='csv'){
+                        $objeto = fopen($name_file, 'r');
+                        $data['csv_data'] = fgetcsv($objeto, 0, $delimiter);
+                    }
                     break;
                 }
                 $data['mapping_id'] = $mapping_id;
                 unset($data['file']);
-                //var_dump(dirname(__FILE__) . '../../../views/import/csv/add_mapping.php', $data);
-                return $this->render(dirname(__FILE__) . '../../../views/import/csv/add_mapping.php', $data);
+                if(isset($data['socialdb_csv_is_editting']))
+                    return $this->render(dirname(__FILE__) . '../../../views/import/csv/edit_mapping.php', $data);
+                else
+                    return $this->render(dirname(__FILE__) . '../../../views/import/csv/add_mapping.php', $data);
                 break;
             /* case 'saving_delimiter_header_csv':
               //parse_str($data['form'], $form);
@@ -167,6 +165,13 @@ class MappingController extends Controller {
             case 'list_mapping_csv':
                 return json_encode($mapping_model->list_mapping_csv($data['collection_id']));
                 break;
+            case "edit_headers_mapping_csv":
+                $data['socialdb_channel_csv_delimiter'] = get_post_meta($data['mapping_id'], 'socialdb_channel_csv_delimiter', true);
+                $data['socialdb_channel_csv_multi_values'] = get_post_meta($data['mapping_id'], 'socialdb_channel_csv_multi_values', true);
+                $data['socialdb_channel_csv_hierarchy'] = get_post_meta($data['mapping_id'], 'socialdb_channel_csv_hierarchy', true);
+                $data['socialdb_channel_csv_import_zip'] = get_post_meta($data['mapping_id'], 'socialdb_channel_csv_import_zip', true);
+                $data['socialdb_channel_csv_has_header'] = get_post_meta($data['mapping_id'], 'socialdb_channel_csv_has_header', true);
+                 return $this->render(dirname(__FILE__) . '../../../views/import/csv/edit_maping_attributes.php', $data);
             case "edit_mapping_csv":
                 $mapping_id = $data['mapping_id'];
                 $delimiter = get_post_meta($mapping_id, 'socialdb_channel_csv_delimiter', true);
