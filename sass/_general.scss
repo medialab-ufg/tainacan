@@ -370,10 +370,35 @@ hr.single-item-divider {
   font: 13px Arial;
   border-radius: 5px;
 }
-.menu-left-size{
+.menu-left-size {
   width: 23%;
   padding-bottom: 15px;
 }
 /*
  * << from multiple-items/create.php
  */
+
+#form_properties_items.menu_left_files {
+  display:none;
+  background: white;
+  border: 3px solid #E8E8E8;
+  font: 11px Arial;
+  max-height: 655px;
+  overflow-y: scroll;
+  min-height: 449px;
+}
+
+#no_properties_items.menu-left-size {
+  height: 655px;
+  background: white;
+  border: 3px solid #E8E8E8;
+  font: 11px Arial;
+}
+
+#selectingAttachment {
+  height: 655px;
+  display:none;
+  background: white;
+  border: 3px solid #E8E8E8;
+  font: 11px Arial;
+}
