@@ -9,6 +9,10 @@ include_once(dirname(__FILE__).'/../../../helpers/object/object_properties_widge
 $view_helper = new ViewHelper();
 $object_properties_widgets_helper = new ObjectWidgetsHelper();
 
+echo "</hr>";
+var_dump($items['exif_metas']);
+echo "</hr>";
+
 $properties_terms_radio = [];
 $properties_terms_tree = [];
 $properties_terms_selectbox = [];

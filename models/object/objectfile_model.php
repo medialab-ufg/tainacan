@@ -1,5 +1,4 @@
 <?php
-
 include_once ('../../../../../wp-config.php');
 include_once ('../../../../../wp-load.php');
 include_once ('../../../../../wp-includes/wp-db.php');
@@ -210,13 +209,32 @@ class ObjectFileModel extends Model {
                             $obj['metas'] = $metas;
                             $result['image'][] = $obj;
 
-                            if( in_array ($ext, ['jpg', 'jpeg', 'tiff'] ) ) {
+                            if( in_array($ext, ['jpg', 'jpeg', 'tiff']) ) {
+                                $property_model = new PropertyModel();
                                 $_exif_data = exif_read_data($_file_path_, 0, true);
                                 unset($_exif_data['FILE']);
                                 unset($_exif_data['COMPUTED']);
 
-                                $result['exif_metas'] = $_exif_data;
+                                if($_exif_data && !empty($_exif_data)):
+                                    $result['exif_metas'] = $_exif_data;
+                                    foreach($_exif_data as $exif_tag):
+                                        if(is_array($exif_tag)):
+                                            foreach($exif_tag as $exif_key => $exif_val) {
+                                                $image_exif = [
+                                                    'collection_id' =>  $data['collection_id'],
+                                                    'property_data_name' => "Exif_" . $exif_key,
+                                                    'property_metadata_type' => 'text',
+                                                    'socialdb_property_required' => false,
+                                                    'socialdb_property_data_cardinality' => '1',
+                                                    'is_repository_property' => 'true'
+                                                ];
+                                                $property_model->add_property_data($image_exif);
+                                            }
+                                        endif;
+                                    endforeach;
+                                endif;
                             }
+
                          } elseif (in_array($ext, ['mp3','m4a','ogg','wav','wma'])) {
                             $result['audio'][] = $obj;
                          } elseif(in_array($ext, ['pdf'])){

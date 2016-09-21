@@ -697,10 +697,12 @@
 
             if (elem.no_properties !== true) {
                 $.each(elem.property_data, function (idx, property) {
+                    cl(property);
+
                     var current_id = property.id;
                     var current_search_widget = property.search_widget;
                     //buscando a aba da propriedade
-                    var tab_property_id = get_tab_property_id(current_id)
+                    var tab_property_id = get_tab_property_id(current_id);
                     //visibilidade do metadado
                     var isCompounded = is_compounded(property.metas.socialdb_property_is_compounds);
                     if(isCompounded||(property.metas.socialdb_property_visibility&&property.metas.socialdb_property_visibility==='hide')){
@@ -729,8 +731,9 @@
                         }else{
                             button = '<span class="glyphicon glyphicon-trash no-edit"></span>';
                         }
-                        //adiciona na listagem
+                        //adiciona na listagem                        
                         $(get_property_tab_seletor(tab_property_id)).append(
+                               
                             '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="root_category '+class_var+' ui-widget-content ui-corner-tr '+is_allowed_facet(property.slug)+'">' +
                             '<label '+style+'   class="title-pipe">'+ add_filter_button(current_id) + property.name + '</label>' +
                             '<a onclick="edit_metadata(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
@@ -739,6 +742,7 @@
                             '<span class="glyphicon glyphicon-edit"></span></a> ' +
                             button + '</div></li>');
                     } else {
+                        cl("Este não entrou: " + property.name + " => " + property.metas.is_repository_property + " e " + property.metas.socialdb_property_created_category);
                         if ( $.inArray(property.type, ranking_types) == -1 ) {
                             $(get_property_tab_seletor(tab_property_id)).append(
                                 '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '" data-widget="' + current_search_widget + '" class="' + property.type + ' ui-widget-content ui-corner-tr">' +
