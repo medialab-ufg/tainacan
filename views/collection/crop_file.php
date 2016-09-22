@@ -6,8 +6,8 @@ include_once ('../../../../../wp-includes/wp-db.php');
 $upload_dir = wp_upload_dir();
 $imagePath = $upload_dir["path"]."/";
 $imageURL = $upload_dir["url"]."/";
-
 $imgUrl = $_POST['imgUrl'];
+
 // original sizes
 $imgInitW = $_POST['imgInitW'];
 $imgInitH = $_POST['imgInitH'];
@@ -51,10 +51,9 @@ switch(strtolower($what['mime'])) {
 
 
 //Check write Access to Directory
-if(!is_writable(dirname($imagePath))){
+if(!is_writable(dirname($imagePath))) {
 	$response = ["status" => 'error', "message" => __("Something went wrong. Please try again.", "tainacan") ];
 } else {
-
     // resize the original image to size of editor
     $resizedImage = imagecreatetruecolor($imgW, $imgH);
 	imagecopyresampled($resizedImage, $source_image, 0, 0, 0, 0, $imgW, $imgH, $imgInitW, $imgInitH);
