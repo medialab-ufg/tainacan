@@ -23,10 +23,11 @@ if ( in_array($extension, $allowedExts)) {
 	} else {
 		$filename = $_FILES["img"]["tmp_name"];
 		list($width, $height) = getimagesize( $filename );
-		
-		move_uploaded_file($filename,  $imagePath . $_FILES["img"]["name"]);
+		$_sanitized_img_name = sanitize_file_name( remove_accents( $_FILES["img"]["name"]) );
+		$_new_file_name = $imagePath . $_sanitized_img_name;
+		move_uploaded_file($filename, $_new_file_name );
 
-	  $response = [ "status" => 'success', "url" => $imageURL.$_FILES["img"]["name"], "width" => $width, "height" => $height ];
+	  $response = [ "status" => 'success', "url" => $imageURL.$_sanitized_img_name, "width" => $width, "height" => $height ];
 	} 
 } else {
    $response = [ "status" => 'error', "message" => __("Something went wrong. Is file too large for upload?", "tainacan") ]; 

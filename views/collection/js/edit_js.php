@@ -1,7 +1,6 @@
 <script>
     $(function () {
         change_breadcrumbs_title('<?php _e('Configurations','tainacan') ?>');
-
         showModerationDays();
         // Adiciona borda nas entidades criadas na configuração
         $('#configuration .col-md-6:not([id])').css('border-bottom', '1px solid #e3e3e3');
@@ -78,10 +77,8 @@
                 return false;
             }
         });
-        //
         list_ordenation();
         list_collections_parent();
-        //showCKEditor();
     });
 
     function showModerationDays() {
@@ -236,6 +233,7 @@
         return '<?php echo get_template_directory_uri(); ?>';
     }
 
+    var collection_id = $("#collection_id").val();
     var common_config_options = {
         uploadUrl: '<?php echo get_stylesheet_directory_uri() ?>' + '/views/collection/upload_file.php',
         cropUrl: '<?php echo get_stylesheet_directory_uri() ?>' + '/views/collection/crop_file.php',
@@ -248,7 +246,6 @@
     var cover_img_options = common_config_options;
     cover_img_options.onAfterImgCrop = function() {
         var cropped = $('img.croppedImg').attr('src');
-        var collection_id = $("#collection_id").val();
         $.ajax({
             url: $('#src').val() + '/controllers/collection/collection_controller.php',
             data: {operation: 'set_collection_cover_img', img_url: cropped, collection_id: collection_id}
@@ -259,7 +256,6 @@
     var crop_thumb_options = common_config_options;
     crop_thumb_options.onAfterImgCrop = function () {
         var cropped = $('img.croppedImg').attr('src');
-        var collection_id = $("#collection_id").val();
         $.ajax({
             url: $('#src').val() + '/controllers/collection/collection_controller.php',
             data: {operation: 'update_collection_thumbnail', img_url: cropped, collection_id: collection_id}

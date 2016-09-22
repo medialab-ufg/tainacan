@@ -56,7 +56,7 @@ class CsvModel extends Model {
 
         return $data;
     }
-    
+
     /**
      * 
      * @param array $File
@@ -128,13 +128,13 @@ class CsvModel extends Model {
                 //$name_file =  wp_get_attachment_link($file->ID, 'thumbnail', false, true);
                 $name_file = wp_get_attachment_url($file->ID);
                 $type = pathinfo($name_file);
-                if($type['extension']=='csv'){
-                    $lines = $this->read_csv_file($name_file,$delimiter,$csv_has_header);
-                }  elseif ($type['extension']=='zip') {
+                if ($type['extension'] == 'csv') {
+                    $lines = $this->read_csv_file($name_file, $delimiter, $csv_has_header);
+                } elseif ($type['extension'] == 'zip') {
                     // metodo retornara um array com o nome do arquivo criado
                     // e a pasta do folder criado
-                   $information = $this->get_csv_from_zip($name_file);
-                   $lines = $this->read_csv_file($information['file'],$delimiter,$csv_has_header);
+                    $information = $this->get_csv_from_zip($name_file);
+                    $lines = $this->read_csv_file($information['file'], $delimiter, $csv_has_header);
                 }
                 // $time_after_read = microtime() - $time_start;
                 // var_dump(' Fim Leitura dos dados',$time_before_read,$time_after_read);
@@ -146,12 +146,13 @@ class CsvModel extends Model {
                         if ($metadata['socialdb_entity'] !== '') {
                             $field_value = $lines[$i][str_replace('csv_p', '', $metadata['value'])];
                             if ($metadata['socialdb_entity'] == 'post_title'):
-                                if (mb_detect_encoding($field_value, 'auto') == 'UTF-8') 
+                                if (mb_detect_encoding($field_value, 'auto') == 'UTF-8')
                                     $field_value = iconv('ISO-8859-1', 'UTF-8', $field_value);
                                 $this->update_title($object_id, $field_value);
                                 $this->set_common_field_values($object_id, 'title', $field_value);
-                            elseif($metadata['socialdb_entity'] == 'post_content'):
-                                if(!isset($information)):
+                            elseif ($metadata['socialdb_entity'] == 'post_content'):
+                                $content .= $field_value . ",";
+                                /*if (!isset($information)):
                                     if (!filter_var($field_value, FILTER_VALIDATE_URL) === false && $import_zip_csv !== 'false') {
                                         $content_id = $this->add_file_url($field_value, $object_id);
                                         add_post_meta($object_id, '_file_id', $content_id);
@@ -159,8 +160,8 @@ class CsvModel extends Model {
                                     } else {
                                         $content .= $field_value . ",";
                                     }
-                                endif;
-                            elseif($metadata['socialdb_entity'] == 'attach'):
+                                endif;*/ 
+                            elseif ($metadata['socialdb_entity'] == 'attach'):
                                 //attachment (Files)
                                 $files = explode(', ', $field_value);
                                 if (is_array($files)) {
@@ -184,19 +185,38 @@ class CsvModel extends Model {
                                         //E uma URL e nao o caminho ZIP
                                         $this->add_file_url($field_value, $object_id);
                                     }
-                                }
+                                } 
                             elseif ($metadata['socialdb_entity'] == 'post_permalink'):
                                 update_post_meta($object_id, 'socialdb_object_dc_source', $field_value);
                                 $this->set_common_field_values($object_id, 'object_source', $field_value);
                             elseif ($metadata['socialdb_entity'] == 'socialdb_object_content') :
-                                if (mb_detect_encoding($field_value, 'auto') == 'UTF-8') {
-                                    $field_value = iconv('ISO-8859-1', 'UTF-8', $field_value);
-                                }
-                                update_post_meta($object_id, 'socialdb_object_content', $field_value);
-                                $this->set_common_field_values($object_id, 'object_content', $field_value); elseif ($metadata['socialdb_entity'] == 'socialdb_object_dc_type'):
-                                update_post_meta($object_id, 'socialdb_object_dc_type', $field_value);
-                                $this->set_common_field_values($object_id, 'object_type', $field_value);
-                            elseif ($metadata['socialdb_entity'] == 'tag' && $field_value != ''):
+                                if (!isset($information)):
+                                    if (!filter_var($field_value, FILTER_VALIDATE_URL) === false && $import_zip_csv !== 'false') {
+                                        $content_id = $this->add_file_url($field_value, $object_id);
+                                        add_post_meta($object_id, '_file_id', $content_id);
+                                        update_post_meta($object_id, 'socialdb_object_content', $content_id);
+                                    } else {
+                                        if (mb_detect_encoding($field_value, 'auto') == 'UTF-8') {
+                                            $field_value = iconv('ISO-8859-1', 'UTF-8', $field_value);
+                                        }
+                                        //$content .= $field_value . ",";
+                                        update_post_meta($object_id, 'socialdb_object_content', $field_value);
+                                        $this->set_common_field_values($object_id, 'object_content', $field_value);
+                                    }
+                                else:
+                                    if (mb_detect_encoding($field_value, 'auto') == 'UTF-8') {
+                                        $field_value = iconv('ISO-8859-1', 'UTF-8', $field_value);
+                                    }
+                                    update_post_meta($object_id, 'socialdb_object_content', $field_value);
+                                    $this->set_common_field_values($object_id, 'object_content', $field_value); 
+                                endif;
+                            /* if (mb_detect_encoding($field_value, 'auto') == 'UTF-8') {
+                              $field_value = iconv('ISO-8859-1', 'UTF-8', $field_value);
+                              }
+                              update_post_meta($object_id, 'socialdb_object_content', $field_value);
+                              $this->set_common_field_values($object_id, 'object_content', $field_value); */ elseif ($metadata['socialdb_entity'] == 'socialdb_object_dc_type'):
+                              update_post_meta($object_id, 'socialdb_object_dc_type', $field_value);
+                              $this->set_common_field_values($object_id, 'object_type', $field_value);  elseif ($metadata['socialdb_entity'] == 'tag' && $field_value != ''):
                                 //$fields_value = explode('||', $field_value);
                                 $fields_value = explode($multi_values, $field_value);
                                 foreach ($fields_value as $field_value):
@@ -261,18 +281,18 @@ class CsvModel extends Model {
                     $this->set_common_field_values($object_id, 'description', $content);
                     socialdb_add_tax_terms($object_id, $categories, 'socialdb_category_type');
                     //se estiver importando de um zip devera buscar os itens em suas pastas
-                    $this->insert_data_zip($object_id,$information,$ID);
+                    $this->insert_data_zip($object_id, $information, $ID);
                     $content = '';
-                //$time_after_insert = microtime() - $time_start;
-                //var_dump(' Fim da insercao do item',$time_after_insert);
+                    //$time_after_insert = microtime() - $time_start;
+                    //var_dump(' Fim da insercao do item',$time_after_insert);
                 endfor;
                 //como existe apeans um arquivo
                 break;
             }
             //se caso foi importado um arquyivo zip, ele devera ser eliminado
-            if (isset($information)&&isset($information['folder'])) {
-                $targetdir = dirname(__FILE__) . "/" .$information['folder'];
-                $targetzip = dirname(__FILE__)."/" . $information['folder'] . ".zip";
+            if (isset($information) && isset($information['folder'])) {
+                $targetdir = dirname(__FILE__) . "/" . $information['folder'];
+                $targetzip = dirname(__FILE__) . "/" . $information['folder'] . ".zip";
                 unlink($targetzip); //Deleting the Zipped file
                 $this->recursiveRemoveDirectory($targetdir);
             }
@@ -281,12 +301,12 @@ class CsvModel extends Model {
             return false;
         }
     }
-    
+
     /**
      * 
      * @param type $file_name
      */
-    public function read_csv_file($file_name,$delimiter,$csv_has_header){
+    public function read_csv_file($file_name, $delimiter, $csv_has_header) {
         $objeto = fopen($file_name, 'r');
         $count = 0;
         // LEITURA DO ARQUIVO
@@ -301,15 +321,15 @@ class CsvModel extends Model {
         }
         return $lines;
     }
-    
+
     /**
      * 
      * @param type $zip_file
      */
     public function get_csv_from_zip($path) {
         $time = time();
-        $targetdir = dirname(__FILE__) . "/" .$time;
-        $targetzip = dirname(__FILE__)."/" . $time . ".zip";
+        $targetdir = dirname(__FILE__) . "/" . $time;
+        $targetzip = dirname(__FILE__) . "/" . $time . ".zip";
         mkdir($targetdir);
         /* Extracting Zip File */
         $zip = new ZipArchive();
@@ -319,14 +339,14 @@ class CsvModel extends Model {
             if ($x === true) {
                 $zip->extractTo($targetdir); // place in the directory with same name  
                 $zip->close();
-                if(is_file($targetdir.'/csv-package/administrative-settings.csv')){
-                    return ['file'=>$targetdir.'/csv-package/administrative-settings.csv','folder'=>$time];
-                }    
+                if (is_file($targetdir . '/csv-package/administrative-settings.csv')) {
+                    return ['file' => $targetdir . '/csv-package/administrative-settings.csv', 'folder' => $time];
+                }
             }
         }
         return [];
     }
-    
+
     /**
      * metodo que chama os demais para realizar as acoes que buscam os arquivos 
      * descompactados
@@ -338,8 +358,8 @@ class CsvModel extends Model {
             if (is_dir($dir . '/content'))
                 $this->get_content_csv($dir . '/content', $object_id);
             //anexos
-            if (is_dir($dir . '/files'))
-                $this->get_files_csv($dir . '/files', $object_id);
+            /*if (is_dir($dir . '/files'))
+                $this->get_files_csv($dir . '/files', $object_id);*/
             //thumbnail
             if (is_file($dir . '/thumbnail.png')) {
                 $thumbnail_id = $this->insert_attachment_file($dir . '/thumbnail.png', $object_id);
@@ -382,12 +402,12 @@ class CsvModel extends Model {
                 update_post_meta($object_id, 'socialdb_object_dc_type', 'audio');
             } elseif (in_array($ext, ['pdf'])) {
                 update_post_meta($object_id, 'socialdb_object_dc_type', 'pdf');
-            } else{
+            } else {
                 update_post_meta($object_id, 'socialdb_object_dc_type', 'other');
             }
         }
     }
-    
+
     /**
      * 
      * @param type $dir
@@ -397,7 +417,7 @@ class CsvModel extends Model {
         foreach (new DirectoryIterator($dir) as $fileInfo) {
             if ($fileInfo->isDot())
                 continue;
-            $content_id = $this->insert_attachment_file($fileInfo->getPath(). '/' .$fileInfo->getFilename(), $object_id);
+            $content_id = $this->insert_attachment_file($fileInfo->getPath() . '/' . $fileInfo->getFilename(), $object_id);
             add_post_meta($object_id, '_file_id', $content_id);
         }
     }
@@ -503,7 +523,7 @@ class CsvModel extends Model {
         }
         return $targetdir . DIRECTORY_SEPARATOR . 'collections';
     }
-    
+
     /**
      * 
      * @param array $csv_files
@@ -608,7 +628,8 @@ class CsvModel extends Model {
                             $field_value = iconv('ISO-8859-1', 'UTF-8', $field_value);
                         }
                         $this->update_title($object_id, $field_value);
-                        $this->set_common_field_values($object_id, 'title', $field_value); elseif ($metadata ['socialdb_entity'] == 'post_content'):
+                        $this->set_common_field_values($object_id, 'title', $field_value);
+                    elseif ($metadata ['socialdb_entity'] == 'post_content'):
                         $content .= $field_value . ",";
                     elseif ($metadata ['socialdb_entity'] == 'post_permalink'):
                         update_post_meta($object_id, 'socialdb_object_dc_source', $field_value);
@@ -618,7 +639,8 @@ class CsvModel extends Model {
                             $field_value = iconv('ISO-8859-1', 'UTF-8', $field_value);
                         }
                         update_post_meta($object_id, 'socialdb_object_content', $field_value);
-                        $this->set_common_field_values($object_id, 'object_content', $field_value); elseif ($metadata['socialdb_entity'] == 'socialdb_object_dc_type'):
+                        $this->set_common_field_values($object_id, 'object_content', $field_value);
+                    elseif ($metadata['socialdb_entity'] == 'socialdb_object_dc_type'):
                         update_post_meta($object_id, 'socialdb_object_dc_type', $field_value);
                         $this->set_common_field_values($object_id, 'object_type', $field_value);
                     elseif ($metadata['socialdb_entity'] == 'tag' && $field_value != ''):
@@ -654,9 +676,9 @@ class CsvModel extends Model {
 //var_dump(' Fim da insercao do item',$time_after_insert);
         endfor;
     }
-    
-    public function add_thumbnail_item_zip($dir_created,$object_id) {
-        if(is_file($dir_created)){
+
+    public function add_thumbnail_item_zip($dir_created, $object_id) {
+        if (is_file($dir_created)) {
             $thumbnail_id = $this->insert_attachment_file($dir_created, $object_id);
             set_post_thumbnail($object_id, $thumbnail_id);
         }
