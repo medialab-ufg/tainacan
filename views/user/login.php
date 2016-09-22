@@ -41,7 +41,7 @@ $logoutUrl = $facebook->getLogoutUrl();
 <input type="hidden" id="src_login" name="src" value="<?php echo get_template_directory_uri() ?>">
 
 <div class="col-md-12" style="background: #E8E8E8; padding-top: 50px; margin-top: -20px; padding-bottom: 50px;">
-<div class="col-md-5 center container" style="background: white; margin-bottom: 15%; border: 2px solid #d8d6d6; padding: 25px">
+<div class="col-md-5 center container" style="background: white; margin-bottom: 15px; border: 2px solid #d8d6d6; padding: 25px">
     
     <h4 style="font-weight: bolder; margin: 0;"><?php _e('Login', 'tainacan'); ?></h4>
     <hr style="margin-top: 5px;">

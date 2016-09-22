@@ -1766,7 +1766,6 @@ function showLoginScreen(src) {
         $('#collection_post').hide();
         $('#configuration').html(result).show();
     });
-
 }
 
 function registerUser(path) {
@@ -2267,6 +2266,8 @@ function showExportFull(src) {
 
 function resetHomeStyleSettings() {
     $('#display_view_main_page').hide();
+    $('ul.menu-ibram').hide();
+    $('.ibram-home-container').hide();
     $('body.home').css('background', 'white');
 }
 
