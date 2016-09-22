@@ -189,13 +189,6 @@ $thumb_url = $collection_thumb ? wp_get_attachment_url($collection_thumb) : get_
     </div>
 </div>
 
-<div id="tainacan-breadcrumbs" class="config-steps">
-    <a href="<?php echo esc_url( home_url('/')  ) ?>"> Home </a> >
-    <a href="<?= get_the_permalink(get_option('collection_root_id')) . '?mycollections=true' ?>"><?php _e('My collections','tainacan'); ?></a> >
-    <a href="javascript:void(0)" onclick="backToMainPage();"> <span class="collection-title"></span></a> <span class="last-arrow"> </span>
-    <div class="current-config" style="display: inline-block;"> </div>
-</div>
-
 <?php
 $root_category_cover_id = get_option('socialdb_logo');
 $cover_url = wp_get_attachment_url( get_post_meta( $root_category_cover_id , 'socialdb_respository_cover_id', true));
@@ -217,3 +210,10 @@ if ( has_nav_menu('menu-ibram') ) { ?>
         'menu_class' => 'navbar navbar-inverse menu-ibram', 'walker'    => new wp_bootstrap_navwalker() ] );
 }
 ?>
+
+<div id="tainacan-breadcrumbs" class="config-steps">
+    <a href="<?php echo esc_url( home_url('/')  ) ?>"> Home </a> >
+    <a href="<?= get_the_permalink(get_option('collection_root_id')) . '?mycollections=true' ?>"><?php _e('My collections','tainacan'); ?></a> >
+    <a href="javascript:void(0)" onclick="backToMainPage();"> <span class="collection-title"></span></a> <span class="last-arrow"> </span>
+    <div class="current-config" style="display: inline-block;"> </div>
+</div>
