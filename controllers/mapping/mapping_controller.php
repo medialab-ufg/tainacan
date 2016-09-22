@@ -51,7 +51,7 @@ class MappingController extends Controller {
                 return json_encode($mapping_model->list_mapping_metatag($data['collection_id']));
                 break;
             case "update_date":
-                return update_post_meta($data['mapping_id'], 'socialdb_channel_oaipmhdc_last_update', mktime());
+                return update_post_meta($data['mapping_id'], 'socialdb_channel_oaipmhdc_last_update',tainacan_time());
                 break;
             case "delete_mapping":
                 return json_encode($mapping_model->delete_mapping($data['mapping_id'], $data['collection_id']));

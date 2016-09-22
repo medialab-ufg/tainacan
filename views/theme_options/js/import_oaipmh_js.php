@@ -72,4 +72,37 @@
             showAlertGeneral('<?php _e('Atention', 'tainacan') ?>', '<?php _e('URL base is empty', 'tainacan') ?>', '<?php _e('error') ?>');
         }
     }
+    
+    
+    /* @name: is_harvesting()
+     * @description: permite o harvesting de um  mapeamento
+     * 
+     * @author: EDUARDO
+     **/
+    function is_harvesting(mapping_id, is_harvesting) {
+        if (is_harvesting === 'disabled') {
+            is_harvesting = 'enabled';
+        } else {
+            is_harvesting = 'disabled';
+        }
+        $.ajax({
+            type: "POST",
+            url: $('#src').val() + "/controllers/mapping/mapping_controller.php",
+            data: {
+                collection_id: $('#collection_id').val(),
+                operation: 'is_harvesting',
+                mapping_id: mapping_id,
+                is_harvesting: is_harvesting
+            }
+        }).done(function (result) {
+            listTableOAIPMHDC();
+            showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Mapping', 'tainacan') ?> ' + is_harvesting + ' successfuly', '<?php _e('success') ?>');
+
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            console.log('erro');
+            $('#loader_validacao').hide();
+            showAlertGeneral('<?php _e('Atention', 'tainacan') ?>', '<?php _e('Server not found or not available', 'tainacan') ?>', '<?php _e('error') ?>');
+        });
+
+    }
 </script>

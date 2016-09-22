@@ -2101,13 +2101,13 @@ function socialdb_insert_object($post_title, $post_date = null) {
     $post_author = 1;
     $post = array(
         'post_author' => $post_author,
-        'post_title' => $post_title[0],
+        'post_title' => (is_array($post_title)) ? $post_title[0]  : $post_title,
         'post_content' => "",
         'post_status' => $status,
         'post_type' => 'socialdb_object'
     );
     if($post_date):
-        $post['post_date'] = str_replace("Z", "", str_replace("T", " ", $post_date[0]));
+       // $post['post_date'] = str_replace("Z", "", str_replace("T", " ", $post_date[0]));
     endif;
     $post_id = wp_insert_post($post);
     return $post_id;
@@ -2381,7 +2381,16 @@ function getUrlContents($url, $maximumRedirections = null, $currentRedirection =
 /* * *****************************************************************************
  *               HARVESTING                                                    *        
  * ***************************************************************************** */
-
+/**
+ * 
+ */
+function tainacan_time(){
+    $timezone = get_option('timezone_string');
+    date_default_timezone_set($timezone);
+    $offset = (int)date('O')/100;
+    $time = time() + ( $offset * HOUR_IN_SECONDS );
+    return $time;
+}
 /**
  *
  * Funcao que atualiza o content de um post
@@ -2405,7 +2414,7 @@ function harvesting() {
     if ($harvesting_mappings && !empty($harvesting_mappings)) {
         foreach ($harvesting_mappings as $harvesting_mapping) {
             $data['collection_id'] = $harvesting_mapping['collection_id'];
-            $data['until'] = date("Y-m-d\TH:i:s\Z", time());
+            $data['until'] = date("Y-m-d\TH:i:s\Z", tainacan_time());
             foreach ($harvesting_mapping['mappings'] as $mapping_id) {
                 if (!in_array($mapping_id, $already_harvested)) {
                     $data['from'] = date("Y-m-d\TH:i:s\Z", get_post_meta($mapping_id, 'socialdb_channel_oaipmhdc_last_update', true));
@@ -2417,7 +2426,7 @@ function harvesting() {
                     $data['url'] = get_post($mapping_id)->post_title;
                     $harvesting_oaipmh_model->execute($data);
                     $already_harvested[] = $mapping_id;
-                    update_post_meta($mapping_id, 'socialdb_channel_oaipmhdc_last_update', time());
+                    update_post_meta($mapping_id, 'socialdb_channel_oaipmhdc_last_update', tainacan_time());
                 }
             }
         }
