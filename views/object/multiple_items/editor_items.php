@@ -891,18 +891,17 @@ $references = [
                         class="btn btn-lg btn-default pull-left"> 
                             <?php _e('Cancel','tainacan') ?>
                 </button>
-                 <button type="submit" 
-                          
-                         id="submit_button" 
-                         class="btn btn-lg btn-success pull-right">
-                             <?php _e('Submit','tainacan'); ?>
+                 <button type="submit" id="submit_button" class="btn btn-lg btn-success pull-right">
+                     <?php _e('Submit','tainacan'); ?>
                  </button>
              </div>
               
-        </div>    
+        </div>
+        
         <div class="col-md-12">
-        <input type="hidden" name="collection_id" value="<?php echo $collection_id; ?>">
-        <input type="hidden" name="operation" value="add_multiples">
+            <input type="hidden" name="collection_id" value="<?php echo $collection_id; ?>">
+            <input type="hidden" name="do_extract" value="<?php echo $extract_exif; ?>">
+            <input type="hidden" name="operation" value="add_multiples">
         <input type="hidden" name="multiple_properties_terms_radio" id='multiple_properties_terms_radio' value="<?php echo implode(',',$properties_terms_radio); ?>">
         <input type="hidden" name="multiple_properties_terms_tree" id='multiple_properties_terms_tree' value="<?php echo implode(',',$properties_terms_tree); ?>">
         <input type="hidden" name="multiple_properties_terms_selectbox" id='multiple_properties_terms_selectbox' value="<?php echo implode(',',$properties_terms_selectbox); ?>">

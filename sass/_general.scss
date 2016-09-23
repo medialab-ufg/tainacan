@@ -402,3 +402,24 @@ hr.single-item-divider {
   border: 3px solid #E8E8E8;
   font: 11px Arial;
 }
+
+#container-menu-left {
+  background: white;
+  border: 3px solid #E8E8E8;
+  font: 13px Arial;
+  min-height: 500px;
+  padding-right: 15px;
+  ul {
+    list-style: circle;
+  }
+}
+
+#dropzone_multiple_items {
+  margin-bottom: 15px;
+  min-height: 350px;
+  padding-top: 0;
+}
+
+form.exif_extraction {
+  margin-right: 10px;
+}

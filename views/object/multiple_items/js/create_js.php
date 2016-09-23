@@ -26,6 +26,7 @@
                 });
                 //ao terminar o uplaod dos itens
                 this.on("queuecomplete", function (file) {
+                    $('.extract-img-exif').show();
                     $('#click_editor_items_button').show().focus();
 //                        $.get($('#src').val()+'/controllers/object/object_controller.php?collection_id='+$('#collection_id').val()+'&operation=editor_items&object_id='+<?php echo $object_id ?>, function (data) {
 //                            try {
@@ -107,11 +108,13 @@
     }
 
     function edit_items_uploaded() {
+        var do_extract = $('input[name="extract_exif"]').prop("checked");
         show_modal_main();
         $.ajax({
             url: $('#src').val() + '/controllers/object/object_controller.php',
             type: 'POST',
             data: {
+                extract_exif: do_extract,
                 operation: 'editor_items',
                 collection_id: $('#collection_id').val(),
                 object_id: '<?php echo $object_id ?>'}
