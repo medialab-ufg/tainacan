@@ -50,7 +50,7 @@
                                 <div class="form-group" >
                                     <input type="checkbox" name="property_term_required" id="property_term_required_true" value="true">&nbsp;<b><?php _e('Required','tainacan'); ?></b>
                                 </div>
-
+                              
                                 <div class="form-group">
                                     <label for="socialdb_property_term_widget"><?php _e('Property Term Widget','tainacan'); ?></label>
                                     <select class="form-control" id="socialdb_property_term_widget" name="socialdb_property_term_widget">
@@ -180,15 +180,14 @@
                     <input type="hidden" id="operation_property_term" name="operation" value="add_property_term">
                     <input type="hidden" name="search_add_facet" id="search_add_facet" value="">
                 </form>
-
+            
             </div>
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left close-modal" data-dismiss="modal"><?php _e('Cancel','tainacan') ?></button>
-                <button type="submit" class="btn btn-primary action-continue" form="submit_form_property_term">
+                <button type="submit" class="btn btn-primary pull-left action-continue" form="submit_form_property_term">
                     <?php _e('Continue','tainacan') ?>
                 </button>
-<!--                <button type="button" onclick="clear_buttons()" class="btn btn-default" id="clear_categories">--><?php //_e('New','tainacan'); ?><!--</button>-->
             </div>
         </div>
     </div>
