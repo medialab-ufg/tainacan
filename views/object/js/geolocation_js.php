@@ -60,30 +60,34 @@
     var sorted_longs = longs.sort(function(a,b) { return a - b; } );
     var half_length = parseInt( marker_item.length / 2 );
 
-    function initMap() {        
-        var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: half_length, center: new google.maps.LatLng( sorted_lats[half_length] ,sorted_longs[half_length]),
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-        });
-
-        var infowindow = new google.maps.InfoWindow();
-        var marker, i;
-
-        for (i = 0; i < marker_item.length; i++) {
-          if(marker_item[i]) {
-            marker = new google.maps.Marker({
-              position: new google.maps.LatLng(marker_item[i][1], marker_item[i][2]),
-              map: map
+    function initMap() {     
+        try{
+            var map = new google.maps.Map(document.getElementById('map'), {
+              zoom: half_length, center: new google.maps.LatLng( sorted_lats[half_length] ,sorted_longs[half_length]),
+              mapTypeId: google.maps.MapTypeId.ROADMAP
             });
 
-            google.maps.event.addListener(marker, 'click', (function (marker, i) {
-              return function () {
-                infowindow.setContent(marker_item[i][0]);
-                infowindow.open(map, marker);
-              };
-            })(marker, i));   
-          }
-        } // for
+            var infowindow = new google.maps.InfoWindow();
+            var marker, i;
+
+            for (i = 0; i < marker_item.length; i++) {
+              if(marker_item[i]) {
+                marker = new google.maps.Marker({
+                  position: new google.maps.LatLng(marker_item[i][1], marker_item[i][2]),
+                  map: map
+                });
+
+                google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                  return function () {
+                    infowindow.setContent(marker_item[i][0]);
+                    infowindow.open(map, marker);
+                  };
+                })(marker, i));   
+              }
+            } // for
+        }catch(err){
+            console.log(err);
+        }
     }
     
     if ( use_approx_mode && use_approx_mode !== "use_approx_mode" ) {

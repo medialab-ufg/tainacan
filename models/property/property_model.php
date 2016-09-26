@@ -61,10 +61,12 @@ class PropertyModel extends Model {
                 if($category_id):
                     $data['socialdb_property_term_root'] = $category_id;
                     $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_term_root',$category_id);
-                    $html = str_get_html($data['socialdb_property_new_taxonomy']);
-                    foreach($html->find( '.root_ul', 0)->children() as $li){
-                        $this->add_taxonomy_property_term($li,$category_id);
-                    }
+                    if($data['socialdb_property_new_taxonomy']):
+                        $html = str_get_html($data['socialdb_property_new_taxonomy']);
+                        foreach($html->find( '.root_ul', 0)->children() as $li){
+                            $this->add_taxonomy_property_term($li,$category_id);
+                        }
+                    endif;
                 endif;
             }else{
                $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_term_root', $data['socialdb_property_term_root']);
