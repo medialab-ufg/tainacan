@@ -321,6 +321,10 @@ class ObjectController extends Controller {
                 } else {
                     $data['url_watermark'] = get_template_directory_uri() . '/libraries/images/icone.png';
                 }
+                //se existir a acao para alterar a home do item
+                if(has_action('alter_page_item')){
+                    do_action('alter_page_item',$data);
+                }
                 return $this->render(dirname(__FILE__) . '../../../views/object/list_single_object.php', $data);
                 break;
             case "list_single_object_version":

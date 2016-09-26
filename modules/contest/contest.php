@@ -158,3 +158,9 @@ add_action('collection_create_name_object', 'hide_field');
 function hide_field() {
     echo 'style="display:none;"';                          
 }
+
+##################### 12# MOSTRA PAGINA DO ITEM DESTE MODO #########################
+add_action( 'alter_page_item', 'contest_alter_page_item', 10, 1 );
+function contest_alter_page_item($data) {
+    
+}
