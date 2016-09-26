@@ -24,6 +24,17 @@ function tainacan_contest_js() {
         wp_enqueue_script($js_file);
     endforeach;
 }
+
+add_action('wp_enqueue_scripts', 'tainacan_contest_css');
+function tainacan_contest_css() {
+    $registered_css = [
+          'item-css' => '/libraries/css/item.css'
+      ];
+    foreach ($registered_css as $css_file => $css_path) {
+         wp_register_style($css_file, get_template_directory_uri() . '/modules/' . MODULE_CONTEST  . $css_path);
+         wp_enqueue_style($css_file);
+    }
+}
 ################################################################################
 
 ######################### #2 BOTAO DE ADICAO DE ARGUMENTO ###########################
@@ -160,7 +171,9 @@ function hide_field() {
 }
 
 ##################### 12# MOSTRA PAGINA DO ITEM DESTE MODO #########################
-add_action( 'alter_page_item', 'contest_alter_page_item', 10, 1 );
+add_filter( 'alter_page_item', 'contest_alter_page_item', 10, 1 );
 function contest_alter_page_item($data) {
-    
+    $html = '<script type="text/javascript">
+            init_contest_item_page("'. CONTEST_CONTROLLERS.'",'.$data['collection_id'].','.$data['object']->ID.');</script>'.$html;
+    return $html;
 }

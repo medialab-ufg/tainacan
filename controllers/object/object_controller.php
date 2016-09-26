@@ -324,8 +324,9 @@ class ObjectController extends Controller {
                 //se existir a acao para alterar a home do item
                 if(has_action('alter_page_item')){
                     do_action('alter_page_item',$data);
+                }else{
+                    return $this->render(dirname(__FILE__) . '../../../views/object/list_single_object.php', $data);
                 }
-                return $this->render(dirname(__FILE__) . '../../../views/object/list_single_object.php', $data);
                 break;
             case "list_single_object_version":
                 $user_model = new UserModel();
@@ -342,7 +343,12 @@ class ObjectController extends Controller {
                 } else {
                     $data['url_watermark'] = get_template_directory_uri() . '/libraries/images/icone.png';
                 }
-                return $this->render(dirname(__FILE__) . '../../../views/object/list_single_object_version.php', $data);
+                
+                if(has_action('alter_page_item')){
+                    do_action('alter_page_item',$data);
+                }else{
+                    return $this->render(dirname(__FILE__) . '../../../views/object/list_single_object_version.php', $data);
+                }
                 break;
             case "list_single_object_by_name":
                 $user_model = new UserModel();
@@ -376,8 +382,14 @@ class ObjectController extends Controller {
                     } else {
                         $data['url_watermark'] = get_template_directory_uri() . '/libraries/images/icone.png';
                     }
-                    $array_json['html'] = $this->render(dirname(__FILE__) . '../../../views/object/list_single_object.php', $data);
-                    return json_encode($array_json);
+                    
+                    if(has_filter('alter_page_item')){
+                        $array_json['html'] = apply_filters('alter_page_item',$data);
+                        return json_encode($array_json);
+                    }else{
+                        $array_json['html'] = $this->render(dirname(__FILE__) . '../../../views/object/list_single_object.php', $data);
+                        return json_encode($array_json);
+                    }
                 } else {
                     $array_json['redirect'] = get_the_permalink($data['collection_id']);
                     return json_encode($array_json);
