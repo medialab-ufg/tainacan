@@ -694,6 +694,7 @@
                 $('#tabs_properties').val(elem.tabs);
             }
             list_collection_facets();
+            // cl(elem);
 
             if (elem.no_properties !== true) {
                 $.each(elem.property_data, function (idx, property) {

@@ -366,8 +366,6 @@ class PropertyModel extends Model {
             $data['success'] = 'false';
         }
         
-        $data['opa'] = $result;
-
         return json_encode($data);
     }
 
@@ -1272,5 +1270,4 @@ class PropertyModel extends Model {
             }
         }
     }
-
 }
