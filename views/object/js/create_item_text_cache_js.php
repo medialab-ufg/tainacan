@@ -119,7 +119,15 @@ $(function(){
                         $('#object_file').val('');
                     }
                 }
-            });        
+            });      
+    if($("#text_accordion")){
+        $("#text_accordion").accordion({
+            active: false,
+            collapsible: true,
+            header: "h2",
+            heightStyle: "content"
+        });
+    }
 });
 
 //funcao responsavel em listar as abas nos selects

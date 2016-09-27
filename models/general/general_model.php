@@ -2129,6 +2129,7 @@ class Model {
      * @return json O conteudo do dynatree
      */
    public function initDynatreePropertiesFilter($collection_id,$hide_checkbox = true) {
+       try{
         $dynatree = [];
         $roots_parents = [
         get_term_by('name','socialdb_property_data','socialdb_property_type')->term_id,
@@ -2182,6 +2183,9 @@ class Model {
         }
        $this->sortDynatree($dynatree);
         return json_encode($dynatree);
+       }  catch (Exception $e){
+           var_dump($e);
+       }
     }
     
     /** function getChildrenDynatree() 
