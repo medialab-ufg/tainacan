@@ -1,13 +1,9 @@
+<?php $post = get_post($collection_id); ?>
 <div class="chatContainer">
-    <ol class="breadcrumb item-breadcrumbs">
+    <ol class="breadcrumb item-breadcrumbs" style="padding-top: 10px;">
         <li> <a href="<?php echo get_permalink(get_option('collection_root_id')); ?>"> <?php _e('Repository', 'tainacan') ?> </a> </li>
-        <li> <a href="#" onclick="backToMainPageSingleItem()"> <?php echo get_post($collection_id)->post_title; ?> </a> </li>
+        <li> <a href="#" onclick="backToMainPageSingleItem()"> <?php echo $post->post_title; ?> </a> </li>
         <li class="active"> <?php echo $object->post_title; ?> </li>
-
-        <button data-title="<?php printf(__("URL of %s", "tainacan"), $object->post_title); ?>" id="iframebuttonObject" data-container="body"
-                class="btn bt-default content-back pull-right" data-toggle="popoverObject" data-placement="left" data-content="">
-            <span class="glyphicon glyphicon-link"></span>
-        </button>
     </ol>
     <br>
     <div class="chatHistoryContainer">
@@ -16,16 +12,16 @@
             <li class="commentLi commentstep-1" data-commentid="4">
                 <table class="form-comments-table">
                     <tr>
-                        <td><div class="comment-timestamp">12:03 25/4/2016</div></td>
-                        <td><div class="comment-user">Ollie Bott</div></td>
+                        <td><div class="comment-timestamp"><?php echo $object->post_date_gmt ?></div></td>
+                        <td><div class="comment-user"><?php echo get_user_by('id', $object->post_author)->display_name ?></div></td>
                         <td>
                             <div class="comment-avatar">
-                                <img src="">
+                                <img src="<?php get_user ?>">
                             </div>
                         </td>
                         <td>
                             <div id="comment-4" data-commentid="4" class="comment comment-step1">
-                                This is a comment HELLO!!!!
+                                <h4><?php echo $object->post_title; ?></h4>
                                 <div id="commentactions-4" class="comment-actions">
                                     <div class="btn-group" role="group" aria-label="...">
                                         <button type="button" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> Reply</button>
@@ -119,6 +115,7 @@
                     </tr>
                 </table>
 
+            
             <li class="commentLi commentstep-3" data-commentid="8">
                 <table class="form-comments-table">
                     <tr>

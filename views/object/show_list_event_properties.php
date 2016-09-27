@@ -82,7 +82,11 @@ $properties_terms_treecheckbox = [];
                           endif;
                           ?>><?php if ($property['metas']['value']) echo $property['metas']['value'][0]; ?></textarea>
             <?php }elseif ($property['type'] == 'numeric') { ?>   
-                <input disabled="disabled" value="<?php if ($property['metas']['value']) echo $property['metas']['value'][0]; ?>" type="number" id="property_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>" class="form-control" name="socialdb_property_<?php echo $property['id']; ?>" <?php
+                <input disabled="disabled" 
+                       value="<?php if ($property['metas']['value']) echo $property['metas']['value'][0]; ?>" 
+                        type="text" 
+                        onkeypress='return onlyNumbers(event)'
+                       id="property_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>" class="form-control" name="socialdb_property_<?php echo $property['id']; ?>" <?php
                        if (!$property['metas']['socialdb_property_required']): echo 'required="required"';
                        endif;
                        ?>>

@@ -17,6 +17,10 @@
             $('div.data-widget').hide();
         }
     });
+    
+    $('.add-property-dropdown li').click(function() {
+        list_tabs();
+    });
 
     $("#conclude_config").click(function(){
         goToCollectionHome();
@@ -730,14 +734,7 @@
                             button = '<span class="glyphicon glyphicon-trash no-edit"></span>';
                         }
                         //adiciona na listagem
-                        $(get_property_tab_seletor(tab_property_id)).append(
-                            '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="root_category '+class_var+' ui-widget-content ui-corner-tr '+is_allowed_facet(property.slug)+'">' +
-                            '<label '+style+'   class="title-pipe">'+ add_filter_button(current_id) + property.name + '</label>' +
-                            '<a onclick="edit_metadata(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
-                            '<div class="action-icons">'+
-                            '<a class="edit-filter"><span class="glyphicon glyphicon-sort sort-filter"></span></a>&nbsp;'+
-                            '<span class="glyphicon glyphicon-edit"></span></a> ' +
-                            button + '</div></li>');
+                        generate_html_fixed_property(current_id,property,tab_property_id,class_var,style,button);
                     } else {
                         if ( $.inArray(property.type, ranking_types) == -1 ) {
                             $(get_property_tab_seletor(tab_property_id)).append(
@@ -1242,13 +1239,8 @@
                         }else{
                             button = '<span class="glyphicon glyphicon-trash no-edit"></span>';
                         }
-                        $(get_property_tab_seletor(tab_property_id)).append(
-                            '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '"  term_root_id="'+term_root_id+'" data-widget="' + property.search_widget + '" class="root_category '+class_var+' ui-widget-content ui-corner-tr term-root-'+term_root_id+'"><label '+style+' class="title-pipe">'+ add_filter_button(current_id) + property.name +
-                            '</label><div class="action-icons">' +
-                            '<a class="edit-filter"><span class="glyphicon glyphicon-sort sort-filter"></span></a>&nbsp;'+
-                            '<a onclick="edit_term(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
-                            '<span class="glyphicon glyphicon-edit"><span></a> ' +
-                            button+'</div></li>');
+                        //adiciona na listagem
+                        generate_html_fixed_property(current_id,property,tab_property_id,class_var,style,button);
                     } else {
                         if ( $.inArray(property.type, ranking_types) == -1 ) {
                             var term_root_id =  property.metas.socialdb_property_term_root;
@@ -2158,10 +2150,10 @@
      ****************************************************************************
      **/ 
     // mostra o modal da propriedade fixa
-    function edit_fixed_property(id,name){
-         list_tabs();
+    function edit_fixed_property(id){
         $('#property_fixed_id').val(id);
-        $('#property_fixed_name').val(name);
+        get_fixed_property_data(id);
+        //$('#property_fixed_name').val(name);
         $('#modal_edit_fixed_property').modal('show');
     }
     //funcao que altera o rotulo de um metadado fixo em uma colecao
@@ -2171,17 +2163,32 @@
             type: 'POST',
             data: {
                 collection_id: $('#collection_id').val(), 
-                operation: 'alter_label_fixed_property', 
+                operation: 'alter_fixed_property_collection', 
                 property_id:  $('#property_fixed_id').val(), 
-                new_name: $('#property_fixed_name').val()}
+                required: $('#property_fixed_required').is(':checked')}
+        }).done(function (result) {
+            $('#modal_edit_fixed_property').modal('hide');
+            elem = jQuery.parseJSON(result);
+            getRequestFeedback('success', '<?php _e('Operation successfully!','tainacan') ?>');          
+        });
+    }
+    // funcao que busca se o metadado obrigatorio
+    function get_fixed_property_data(id){
+        $.ajax({
+            url: $('#src').val() + '/controllers/property/property_controller.php',
+            type: 'POST',
+            data: {
+                collection_id: $('#collection_id').val(), 
+                operation: 'get_data_fixed_property_collection', 
+                property_id:  id}
         }).done(function (result) {
             $('#modalImportMain').modal('hide');
             elem = jQuery.parseJSON(result);
-
-            if ( elem != null ) {
-                list_collection_metadata();
-                getRequestFeedback(elem.type, elem.msg);
-            }            
+            if(elem.is_required=='true'){
+                $('#property_fixed_required').attr('checked','checked');
+            }else{
+                $('#property_fixed_required').removeAttr('checked');
+            }           
         });
     }
     // funcao que bloqueia as facetas que nao sao permitidas
@@ -2191,6 +2198,16 @@
             return ' block-facet';
         else
             return ''
+    }
+    
+    function generate_html_fixed_property(current_id,property,tab_property_id,class_var,style,button){
+        $(get_property_tab_seletor(tab_property_id)).append(
+            '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="root_category '+class_var+' ui-widget-content ui-corner-tr '+is_allowed_facet(property.slug)+'">' +
+            '<label '+style+'   class="title-pipe">'+ add_filter_button(current_id) + property.name + '</label>' +
+            '<div class="action-icons">'+
+            '<a class="edit-filter"><span class="glyphicon glyphicon-sort sort-filter"></span></a>&nbsp;'+
+            '<a style="cursor:pointer;" onclick="edit_fixed_property(' + current_id + ')" ><span class="glyphicon glyphicon-edit"></span></a> ' +
+            button + '</div></li>');
     }
      /**
      ****************************************************************************

@@ -213,7 +213,7 @@ if (isset($property_object)):
                                              echo $property['metas']['socialdb_property_default_value'];
                                              endif; ?></textarea>
                         <?php }elseif ($property['type'] == 'numeric') { ?>   
-                            <input type="number" 
+                            <input type="text" 
                                    id="form_autocomplete_value_<?php echo $property['id']; ?>_origin" 
                                    value="<?php  if ($property['metas']['socialdb_property_default_value']):
                                                     echo $property['metas']['socialdb_property_default_value'];

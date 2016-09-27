@@ -155,6 +155,7 @@
                         </div>
                         <input type="file"
                                id="object_thumbnail"
+                               
                                name="object_thumbnail"
                                class="form-control">  
                 </div>

@@ -251,7 +251,15 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
                 }    
                 return json_encode(['slug'=>'']);
             case 'initDynatreePropertiesFilter':
-                    return $property_model->initDynatreePropertiesFilter($data['collection_id'],false);    
+                    return $property_model->initDynatreePropertiesFilter($data['collection_id'],false);   
+            //colocando a obrigatoriadade nas propriedades fixas
+            case 'alter_fixed_property_collection':
+                update_post_meta($data['collection_id'], 'socialdb_collection_property_'.$data['property_id'].'_required', $data['required']);
+                return json_encode($data);
+            //buscando os dados da coleccao    
+            case 'get_data_fixed_property_collection':
+                $data['is_required'] = get_post_meta($data['collection_id'], 'socialdb_collection_property_'.$data['property_id'].'_required', true);
+                return json_encode($data);
                 
         }
     }

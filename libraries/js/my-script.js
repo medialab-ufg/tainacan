@@ -2286,7 +2286,7 @@ function onlyNumbers(e) {
     if ((tecla > 47 && tecla < 58))
         return true;
     else {
-        if (tecla == 8 || tecla == 0 || tecla == 46 || tecla == 190 || tecla == 110)
+        if (tecla == 8 || tecla == 0 || tecla == 46 || tecla == 44 || tecla == 190 || tecla == 110)
             return true;
         else
             return false;

@@ -161,6 +161,7 @@
     }
     //funcao responsavel em listar as abas nos selects
     function list_tabs(){
+        console.log('list-tabs');
         $.ajax({
             url: $('#src').val() + '/controllers/collection/collection_controller.php',
             type: 'POST',
@@ -229,7 +230,7 @@
                          tab : tab, 
                          ordenation: data.join(',')}
                  });
-
+                 delete_all_cache_collection();
             }        
 
         }).disableSelection();

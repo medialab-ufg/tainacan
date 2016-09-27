@@ -1399,6 +1399,7 @@ if (!function_exists("theme_styles")) {
         if (is_front_page()):
             $home_css = [
                 'bootstrap' => '/libraries/css/bootstrap.css',
+                'DynatreeCss' => '/libraries/css/dynatree/skin-vista/ui.dynatree.css',
                 'slick' => '/libraries/css/slick/slick.css',
                 'slick-theme' => '/libraries/css/slick/slick-theme.css',
                 'socialdbSweetAlert' => '/libraries/css/SweetAlert/sweet-alert.css',

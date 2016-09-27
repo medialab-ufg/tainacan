@@ -239,7 +239,8 @@ $references = [
                              <?php }elseif($property['type']=='numeric') { ?>
                                   <input onblur="setPropertyData(this,'<?php echo $property['id']  ?>')"
                                          onchange="setPropertyData(this,'<?php echo $property['id']  ?>')"
-                                         type="number"
+                                         type="text" 
+                                         onkeypress='return onlyNumbers(event)'
                                          id='multiple_socialdb_property_<?php echo $property['id']; ?>'
                                          value="<?php if($property['metas']['socialdb_property_default_value']): echo $property['metas']['socialdb_property_default_value']; endif; ?>"
                                          class="form-control multiple_socialdb_property_<?php echo $property['id']; ?>"
@@ -249,9 +250,9 @@ $references = [
                                   <input onblur="setPropertyData(this,'<?php echo $property['id']  ?>')"
                                          onchange="setPropertyData(this,'<?php echo $property['id']  ?>')"
                                          disabled="disabled"
-                                         onkeypress='return onlyNumbers(event)'
                                          id='multiple_socialdb_property_<?php echo $property['id']; ?>'
-                                         type="number"
+                                         type="text" 
+                                         onkeypress='return onlyNumbers(event)'
                                          class="form-control multiple_socialdb_property_<?php echo $property['id']; ?>"
                                          name="only_showed_<?php echo $property['id']; ?>" value="<?php if(is_numeric($property['metas']['socialdb_property_data_value_increment'])): echo $property['metas']['socialdb_property_data_value_increment']+1; endif; ?>">
                                   <!--input type="hidden"  name="socialdb_property_<?php echo $property['id']; ?>" value="<?php if($property['metas']['socialdb_property_data_value_increment']): echo $property['metas']['socialdb_property_data_value_increment']+1; endif; ?>" -->

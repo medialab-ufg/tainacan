@@ -69,13 +69,14 @@ class ObjectMultipleModel extends Model {
             $post = array(
                 'post_title' => $data['title_'.$item_id],
                 'post_content' => $data['description_'.$item_id],
-                'post_status' => 'publish',
+                'post_status' => 'inherit',
                 'post_author' => get_current_user_id(),
                 'post_type' => 'socialdb_object'
             );
             $object_id = wp_insert_post($post);
             $this->set_common_field_values($object_id, 'title', $post['post_title']);
             $this->set_common_field_values($object_id, 'description', $post['post_content']);
+            $this->insert_object_event($object_id, $data);
             return $object_id;
         }else{
             return false;
@@ -363,10 +364,11 @@ class ObjectMultipleModel extends Model {
                      $object = array(
                         'ID' => $post_id,
                         'post_title' => $data['title_'.$item_id],
-                        'post_status' => 'publish',
+                        'post_status' => 'inherit',
                         'post_content' => $data['description_'.$item_id]
                     );
                     wp_update_post($object);
+                    $this->insert_object_event($post_id, ['collection_id' => $data['collection_id'] ]);
                     $this->set_common_field_values($post_id, 'title', $object['post_title']);
                     $this->set_common_field_values($post_id, 'description', $object['post_content']);
                     if($post_id){
@@ -430,5 +432,22 @@ class ObjectMultipleModel extends Model {
             $result['type'] = 'error';
         }
         return json_encode($result);
+    }
+    
+    /**
+     * @signature - function insert_event($object_id, $data )
+     * @param int $object_id O id do Objeto
+     * @param array $data Os dados vindos do formulario
+     * @return array os dados para o evento
+     * @description - 
+     * @author: Eduardo 
+     */
+    public function insert_object_event($object_id, $data) {
+        $eventAddObject = new EventObjectCreateModel();
+        $data['socialdb_event_object_item_id'] = $object_id;
+        $data['socialdb_event_collection_id'] = $data['collection_id'];
+        $data['socialdb_event_user_id'] = get_current_user_id();
+        $data['socialdb_event_create_date'] = time();
+        return $eventAddObject->create_event($data);
     }
 }

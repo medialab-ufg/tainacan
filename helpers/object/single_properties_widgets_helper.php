@@ -192,7 +192,7 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
                       id="compounds_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
                       name="socialdb_property_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>[]" ><?php if ($value) echo $value; ?></textarea>
         <?php }elseif ($property['type'] == 'numeric') { ?>   
-            <input  type="number" 
+            <input  type="text" 
                     class="form-control form_autocomplete_compounds_<?php echo $property['id']; ?>_<?php echo $i; ?>"
                     onkeypress='return onlyNumbers(event)'
                     id="compounds_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>" 

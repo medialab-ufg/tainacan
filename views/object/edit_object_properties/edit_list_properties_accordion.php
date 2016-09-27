@@ -227,7 +227,7 @@ if (isset($property_object)):
                                       id="form_edit_autocomplete_value_<?php echo $property['id']; ?>" 
                                       name="socialdb_property_<?php echo $property['id']; ?>[]" ><?php if ($property['metas']['value']) echo (isset($property['metas']['value'][$i])?$property['metas']['value'][$i]:''); ?></textarea>
                     <?php }elseif ($property['type'] == 'numeric') { ?>   
-                            <input type="number" 
+                            <input type="text" 
                                    class="form-control form_autocomplete_value_<?php echo $property['id']; ?>"
                                    onkeypress='return onlyNumbers(event)'
                                    id="form_edit_autocomplete_value_<?php echo $property['id']; ?>" 

@@ -169,7 +169,8 @@ foreach( ['object', 'term', 'voting', 'filter', 'tag','compounds'] as $metadata 
         <div class="modal-content">
             <div class="modal-body">
                     <div class="metadata-common-fields">
-                        <div class="create_form-group">
+                        <input type="hidden" id="property_fixed_id">
+                        <!--div class="create_form-group">
                             <label for="property_fixed_name">
                                 <?php _e('Property name','tainacan'); ?>
                             </label>
@@ -180,6 +181,12 @@ foreach( ['object', 'term', 'voting', 'filter', 'tag','compounds'] as $metadata 
                                    placeholder="<?php _e('Property name','tainacan'); ?>">
                             <input type="hidden"
                                    id="property_fixed_id">
+                        </div --> 
+                        <div class="create_form-group">
+                             <div id="required_field" >
+                                    <label for="property_fixed_required" style="display: block"><?php _e('Required metadata','tainacan'); ?></label>
+                                    <input type="checkbox" name="property_fixed_required" id="property_fixed_required"  value="true">&nbsp;<?php _e('Yes','tainacan'); ?>
+                            </div>
                         </div> 
                     </div>
             </div>
