@@ -1,8 +1,4 @@
 <?php
-/*
- * View responsavel em mostrar o menu mais opcoes com as votacoes, propriedades e arquivos anexos
- *
- */
 include_once('./../../helpers/view_helper.php');
 include_once('./../../helpers/object/object_helper.php');
 include_once ('js/list_js.php');
@@ -75,8 +71,7 @@ endif;
                 <h2 style="text-align: center;"><?php _e('This collection is empty, create the first item!', 'tainacan') ?></h2>
                 <p style="text-align: center;">
                     <a onclick="showAddItemText()" class="btn btn-primary btn-lg" href="#" role="button">
-                        <span class="glyphicon glyphicon-plus"></span> 
-                            <?php _e('Click here to add a new item', 'tainacan') ?>
+                        <span class="glyphicon glyphicon-plus"></span> <?php _e('Click here to add a new item', 'tainacan') ?>
                     </a>
                 </p>
             </div>

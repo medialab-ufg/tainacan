@@ -19,7 +19,7 @@ include_once ('js/create_js.php');
             <li><?php _e('Text (doc, docx, otf, etc.);','tainacan') ?></li>
         </ul>
     </div>
-    <div class="col-md-9" style=" background: white;border: 3px solid #E8E8E8;margin-left: 15px;">
+    <div class="col-md-9" style="background: white;border: 3px solid #E8E8E8;margin-left: 15px;">
         <h3>
             <?php _e('Add new item - Send local file','tainacan') ?>
             <button onclick="back_main_list();" class="btn btn-default pull-right">
@@ -28,7 +28,7 @@ include_once ('js/create_js.php');
         </h3>
         <hr>
         <div id='container-buttos-upload-files'>
-            <button onclick="$('#dropzone_multiple_items').trigger('click')" class="btn btn-primary  pull-left">
+            <button onclick="$('#dropzone_multiple_items').trigger('click')" class="btn btn-primary pull-left">
                 <span class="glyphicon glyphicon-upload"></span>&nbsp;<?php _e('Add file(s)','tainacan') ?>
             </button>
 
@@ -38,7 +38,7 @@ include_once ('js/create_js.php');
                 <span class="glyphicon glyphicon-arrow-right">
             </button>
             <form class="exif_extraction pull-right">
-                <div class="extract-img-exif form-control" style="display: none">
+                <div class="extract-img-exif form-control" style="display: none; border: none; box-shadow: none">
                     <label for="extract_exif"><?php _e('Extract Exif from images?', 'tainacan'); ?></label>
                     <input type="checkbox" name="extract_exif">
                 </div>
