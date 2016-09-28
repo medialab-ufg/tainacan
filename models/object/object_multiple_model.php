@@ -59,29 +59,13 @@ class ObjectMultipleModel extends Model {
                 ];
                 $_col_metas = json_decode($property_model->list_property_data($_DATASET))->property_data;
 
-                // var_dump($_col_metas);
-                // die();
-
                 $_props_slugs = [];
                 $_props_ids = [];
                 foreach($_col_metas as $_prop_data) {
                   $_formtd = explode("_", $_prop_data->slug);
-                  /*
-                  $_obj = [
-                    'id' => $_prop_data->id,
-                    'format_slug' => $_formtd[0],
-                    'original_slug' => $_prop_data->slug
-                  ];
-                  */
-
                   array_push($_props_slugs, $_formtd[0] );
                   array_push($_props_ids, $_prop_data->id);
                 }
-
-                // $ar = new ArrayObject();
-
-                //$result['existings'] = $_props_slugs;
-                //$result['exif_metas'] = $_exif_data;
 
                 foreach($_exif_data as $exif_tag):
                   if(is_array($exif_tag)):
@@ -97,7 +81,6 @@ class ObjectMultipleModel extends Model {
                         'is_repository_property' => 'false'
                       ];
 
-                      // $_term_exists = get_term_by('name', $_meta_exif_data_name, 'socialdb_property_type');
                       $_exif_slug = strtolower( sanitize_file_name( str_replace("_", "-", $_meta_exif_data_name) ));
                       if( in_array($_exif_slug, $_props_slugs )) {
                         $prop_index = array_search($_exif_slug, $_props_slugs);
