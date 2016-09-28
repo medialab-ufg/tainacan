@@ -1,6 +1,7 @@
 <?php
     include_once ('js/tabs_item_js.php');
     include_once ('js/create_item_text_js.php');
+    include_once ('js/validation_fixed_fields.php');
     include_once(dirname(__FILE__).'/../../helpers/view_helper.php');
     include_once(dirname(__FILE__).'/../../helpers/object/object_helper.php');
 
@@ -78,6 +79,9 @@
                         <span title="<?php _e('Type the item name','tainacan'); ?>" 
                        data-toggle="tooltip" data-placement="bottom" class="glyphicon glyphicon-question-sign"></span>
                     </a>
+                    <?php 
+                        echo $view_helper->setValidation($collection_id, $view_helper->terms_fixed['title']->term_id, 'title');
+                    ?>
                 </h2>
                  <div class="form-group" >
                     <input class="form-control"   
@@ -99,6 +103,9 @@
                         <span title="<?php _e('Type the content of the item','tainacan'); ?>" 
                        data-toggle="tooltip" data-placement="bottom" class="glyphicon glyphicon-question-sign"></span>
                     </a>
+                    <?php 
+                        echo $view_helper->setValidation($collection_id, $view_helper->terms_fixed['content']->term_id, 'content');
+                    ?>
                 </h2>
                  <div class="form-group" >
                     <textarea class="form-control" id="object_editor" name="object_editor" placeholder="<?php _e('Object Content','tainacan'); ?>"></textarea>
@@ -116,6 +123,9 @@
                         <span title="<?php _e('Upload attachments for your item','tainacan'); ?>" 
                        data-toggle="tooltip" data-placement="bottom" class="glyphicon glyphicon-question-sign"></span>
                     </a>
+                    <?php 
+                        echo $view_helper->setValidation($collection_id, $view_helper->terms_fixed['attachments']->term_id, 'attachments');
+                    ?>
                 </h2>
                 <div class="form-group" >
                     <div id="dropzone_new" <?php ($socialdb_collection_attachment=='no') ? print_r('style="display:none"') : '' ?> 
@@ -148,6 +158,9 @@
                         <span  title="<?php _e('Insert a thumbnail in your item!','tainacan'); ?>" 
                        data-toggle="tooltip" data-placement="bottom" class="glyphicon glyphicon-question-sign"></span>
                     </a>
+                    <?php 
+                        echo $view_helper->setValidation($collection_id, $view_helper->terms_fixed['thumbnail']->term_id, 'thumbnail');
+                    ?>
                 </h2>
                 <div class="form-group" >
                         <input type="hidden" name="thumbnail_url" id="thumbnail_url" value="">
@@ -172,6 +185,9 @@
                         <span title="<?php _e('What\'s the item source','tainacan'); ?>" 
                        data-toggle="tooltip" data-placement="bottom" class="glyphicon glyphicon-question-sign"></span>
                     </a>
+                    <?php 
+                        echo $view_helper->setValidation($collection_id, $view_helper->terms_fixed['source']->term_id, 'source');
+                    ?>
                 </h2>
                  <div class="form-group" >
                     <input
@@ -195,6 +211,9 @@
                         <span title="<?php _e('Describe your item','tainacan'); ?>" 
                        data-toggle="tooltip" data-placement="bottom" class="glyphicon glyphicon-question-sign"></span>
                     </a>
+                    <?php 
+                        echo $view_helper->setValidation($collection_id, $view_helper->terms_fixed['description']->term_id, 'description');
+                    ?>
                 </h2>
                 <div class="form-group" >
                     <textarea class="form-control" 
@@ -216,6 +235,9 @@
                         <span  title="<?php _e('The set of tags may be inserted by comma','tainacan') ?>" 
                        data-toggle="tooltip" data-placement="bottom" class="glyphicon glyphicon-question-sign"></span>
                     </a>
+                    <?php 
+                        echo $view_helper->setValidation($collection_id, $view_helper->terms_fixed['tags']->term_id, 'tags');
+                    ?>
                 </h2>
                 <div class="form-group" >
                     <input type="text" 

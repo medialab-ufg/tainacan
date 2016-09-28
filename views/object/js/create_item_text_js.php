@@ -1,4 +1,5 @@
 <script> 
+    var myDropzone;
 $(function(){
     // #1 - breadcrumbs para localizacao da pagina
     $("#tainacan-breadcrumbs").show();
@@ -33,7 +34,9 @@ $(function(){
                     }
                 }
                 //#4 - ckeditor para o conteudo do item
-                showCKEditor('object_editor');                
+                showCKEditor('object_editor'); 
+                set_content_valid();
+                set_attachments_valid();
                 $("#text_accordion").accordion({
                     active: false,
                     collapsible: true,
@@ -105,7 +108,7 @@ $(function(){
     });
     
     
-    var myDropzone = new Dropzone("div#dropzone_new", {
+    myDropzone = new Dropzone("div#dropzone_new", {
                 accept: function(file, done) {
                       if (file.type === ".exe") {
                           done("Error! Files of this type are not accepted");
