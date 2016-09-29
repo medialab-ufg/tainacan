@@ -12,66 +12,6 @@ class MappingHelper extends ViewHelper {
     public function generate_mapping_table($tainacan_properties,$generic_properties) {
         include_once ( dirname(__FILE__).'/../../views/mapping/js/mapping_table_js.php');
         ?>
-        <style>
-            /* cabecalhos */
-            .headers-mapping{
-                border-style: solid;
-                border-color: #595959;
-                border-width: 1px;
-            }
-            /* Para os tipos tainacan - li */
-            .tainacan-properties-li{
-                color: white;
-                cursor: move;
-                height: 80px;
-                padding-left: 5px;
-                padding-bottom: 20px;
-                padding-top: 20px;
-                padding-right: 20px;
-                background-color: #3366FF;
-                border-style: solid;
-                border-color: #A6A6A6;
-                border-width: 1px;
-            }
-            /* Para os tipos de criacao - li */
-            .tainacan-create-properties-li{
-                padding-left: 5px;
-                padding-right: 10px;
-                padding-top: 10px;
-                padding-bottom: 10px;
-                height: 80px;
-                border-style: solid;
-                border-color: #A6A6A6;
-                border-width: 1px;
-            }
-            /* Para os tipos genericos - li */
-            .generic-properties-li{
-                cursor: move;
-                color: white;
-                height: 80px;
-                padding-left: 5px;
-                padding-bottom: 20px;
-                padding-top: 20px;
-                padding-right: 20px;
-                background-color: #008000;
-                border-style: solid;
-                border-color: #A6A6A6;
-                border-width: 1px;
-            }
-            /* a borda para os ul */
-            .border-table-mapping{
-                border-style: solid;
-                border-color: #A6A6A6;
-                border-width: 1px;
-                border-top-style: none;
-            }
-            /* style dos inputs bootstrap */
-            .style-input {
-                padding: 5px;
-                border: 1px solid #ccc;
-                border-radius: 4px; 
-            }
-        </style>
         <div class="col-md-12" >
             <div class="col-md-3 headers-mapping"><?php _e('Collection','tainacan') ?></div>
             <div class="col-md-3 headers-mapping"><?php _e('Map >>','tainacan') ?></div>

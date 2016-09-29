@@ -32,11 +32,12 @@
         var properties_autocomplete = multiple_get_val($("#multiple_properties_data_id").val());
         multiple_autocomplete_property_data(properties_autocomplete);  
         show_license_item('multiple');// lista as licencas de um item
+
         // envia o formulario para o controllador
         $('#sumbit_multiple_items').submit(function (e) {
             e.preventDefault();
             $('#modalImportMain').modal('show');
-             var is_empty = false;;
+             var is_empty = false;
             $.each($("input:checkbox[name='selected_items']"), function () {
                 if($('#title_' + $(this).val()).val().trim()==''){
                     is_empty = true;
@@ -52,6 +53,9 @@
                 }).done(function (result) {
                     $('#modalImportMain').modal('hide');
                     elem_first = jQuery.parseJSON(result);
+
+                    cl(elem_first);
+
                     if (elem_first.type && elem_first.type == 'success') {
                         $('#form').hide();
                         $("#tainacan-breadcrumbs").hide();

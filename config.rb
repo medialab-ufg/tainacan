@@ -8,6 +8,8 @@ images_dir = "libraries/images"
 javascripts_dir = "libraries/js"
 
 line_comments = false
+line_comments = 0
 
 # Select your preferred output style here (can be overridden via the command line):
 # output_style = :expanded or :nested or :compact or :compressed
+output_style = :compressed

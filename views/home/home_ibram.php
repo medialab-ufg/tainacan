@@ -1,5 +1,4 @@
 <?php
-
 wp_nav_menu( ['theme_location' => 'menu-ibram', 'container_class' => 'container', 'container' => false,
     'menu_class' => 'navbar navbar-inverse menu-ibram', 'walker'    => new wp_bootstrap_navwalker() ] );
 
