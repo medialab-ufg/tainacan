@@ -153,7 +153,7 @@ foreach( ['object', 'term', 'voting', 'filter', 'tag','compounds'] as $metadata 
                 </div>
 
                 <div class="modal-body">
-                    <?php echo __('Confirm the exclusion of ','tainacan'); ?> <span id="deleted_property_name"></span> ?
+                    <?php _e('Confirm the exclusion of ','tainacan'); ?> <span id="deleted_property_name"></span> ?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal"><?php _e('Close','tainacan'); ?></button>

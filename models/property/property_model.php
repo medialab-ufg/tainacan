@@ -118,7 +118,8 @@ class PropertyModel extends Model {
     public function add_property_data($data) {
         if (isset($data['property_data_name']) && !empty($data['property_data_name'])) {
             $id_slug = $data['collection_id'];
-            if (isset($data['property_category_id'])&&$this->get_category_root_of($data['collection_id']) != $data['property_category_id']) {// verifico se eh a categoria root onde sera inserido a propriedade
+            // verifico se eh a categoria root onde sera inserido a propriedade
+            if (isset($data['property_category_id'])&&$this->get_category_root_of($data['collection_id']) != $data['property_category_id']) {
                 $id_slug .= '_property' . $data['property_category_id'];
             }
             $is_new = $this->verify_property($data['property_data_name'],$id_slug);
@@ -367,8 +368,6 @@ class PropertyModel extends Model {
             $data['success'] = 'false';
         }
         
-        $data['opa'] = $result;
-
         return json_encode($data);
     }
 
@@ -1273,5 +1272,4 @@ class PropertyModel extends Model {
             }
         }
     }
-
 }

@@ -1,5 +1,6 @@
 <script>
     $(function () {
+        var exif_keys = ($(".exif_keys").val()).split(" ");
         change_breadcrumbs_title('<?php _e('Import','tainacan') ?>');
         $('#validate_url_container').show('slow');
         listTableOAIPMHDC();
@@ -9,21 +10,39 @@
         $('#collection_import_csv_id').val($('#collection_id').val());
 
         $('#click_oaipmhtab').click(function (e) {
-            e.preventDefault()
+            e.preventDefault();
             $(this).tab('show')
         });
         $('#click_csvtab').click(function (e) {
-            e.preventDefault()
+            e.preventDefault();
             $(this).tab('show');
             listTableCSV();
         });
         $('#click_metatag_tab').click(function (e) {
-            e.preventDefault()
+            e.preventDefault();
             $(this).tab('show');
+        });     
+        $('#click_exif_tab').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        });
+        
+        var src = $('#src').val();
+        var col_id = $("#collection_id").val();
+
+        $.ajax({
+            url: src + '/controllers/import/import_controller.php',
+            type: 'POST',
+            data: {operation: 'map_exif', collection_id: col_id}
+        }).done(function (result) {
+            var elem = $.parseJSON(result);
+
+            $(elem.fields).each(function (idx, el) {
+                render_exif_map(el.socialdb_entity, el.name_socialdb_entity, exif_keys);
+            });
         });
 
     });
-
 
     function validate_url() {
         var url_base = $('#url_base_oai').val();

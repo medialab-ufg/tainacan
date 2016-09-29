@@ -469,7 +469,7 @@
                     $('.dropdown-toggle').dropdown();
                     break;
                 default:
-                    alert("Todo: appply action '" + action + "' to node " + node);
+                    // alert("Todo: appply action '" + action + "' to node " + node);
             }
         });
     }

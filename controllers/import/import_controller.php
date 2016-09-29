@@ -6,6 +6,7 @@ require_once(dirname(__FILE__) . '../../../models/import/oaipmh_model.php');
 require_once(dirname(__FILE__) . '../../../models/import/oaipmh_repository_model.php');
 require_once(dirname(__FILE__) . '../../../models/import/harvesting_oaipmh_model.php');
 require_once(dirname(__FILE__) . '../../general/general_controller.php');
+require_once(dirname(__FILE__) . '../../../models/export/export_model.php');
 
 class ImportController extends Controller {
 
@@ -48,6 +49,10 @@ class ImportController extends Controller {
             case "generate_new_container":
                 return $this->render(dirname(__FILE__) . '../../../views/import/oaipmh/container_mapping_attributes.php',$data);
                 break;
+            case "map_exif":
+                $export_model = new ExportModel;
+                $data = $export_model->create_new_mapping($data['fields']);
+                return json_encode($data);
         }
     }
 

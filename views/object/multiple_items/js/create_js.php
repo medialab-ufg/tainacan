@@ -26,8 +26,8 @@
                 });
                 //ao terminar o uplaod dos itens
                 this.on("queuecomplete", function (file) {
-                    $('#click_editor_items_button').show();
-                    $('#click_editor_items_button').focus();
+                    $('.extract-img-exif').show();
+                    $('#click_editor_items_button').show().focus();
 //                        $.get($('#src').val()+'/controllers/object/object_controller.php?collection_id='+$('#collection_id').val()+'&operation=editor_items&object_id='+<?php echo $object_id ?>, function (data) {
 //                            try {
 //                                //var jsonObject = JSON.parse(data);
@@ -101,19 +101,20 @@
                 }).done(function (result) {
                     $('#main_part').show();
                     $('#collection_post').show();
-                    $('#configuration').slideDown();
-                    $('#configuration').hide();
+                    $('#configuration').slideDown().hide();
                 });
             }
         });
     }
 
     function edit_items_uploaded() {
+        var do_extract = $('input[name="extract_exif"]').prop("checked");
         show_modal_main();
         $.ajax({
             url: $('#src').val() + '/controllers/object/object_controller.php',
             type: 'POST',
             data: {
+                extract_exif: do_extract,
                 operation: 'editor_items',
                 collection_id: $('#collection_id').val(),
                 object_id: '<?php echo $object_id ?>'}
@@ -121,8 +122,7 @@
             hide_modal_main();
             if (data != 0) {
                 $("#upload_container").hide();
-                $('#editor_items').html(data);
-                $("#editor_items").css('display', 'block');
+                $('#editor_items').html(data).css('display', 'block');
             } else {
                 showAlertGeneral('<?php _e("Attention!", 'tainacan') ?>', '<?php _e("File is too big or Uploaded, however, not supported by wordpress, please select valid files!", 'tainacan') ?>', 'error');
             }

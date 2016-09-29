@@ -19,8 +19,7 @@ class ObjectMultipleController extends Controller {
                 return $data;
             case 'edit_multiple_items':
                 return $objectmultiple_model->edit_multiple($data);
-                break;
-                
+                break;             
         }
     }
 }
