@@ -474,12 +474,12 @@
                     if( (current_type == "date" || current_type == "numeric") && property_widget == "range") {
                         var range_obj = { counter_range: elem.counter_data_range, sent_data: elem };
                     }
-                    console.log(' current_operation  = '+current_operation); 
+                    // console.log(' current_operation  = '+current_operation); 
                     if ( current_operation == "add_property_data" ) {
                         setCollectionFacet( "add", new_property_id, property_widget, color_facet, range_obj);
                     } else if( current_operation == "update_property_data" ) {
                         var item_was_dragged = $(current_modal + " .data-widget").hasClass('select-meta-filter');
-                        console.log(' item was dragged  = '+item_was_dragged);
+                        //console.log(' item was dragged  = '+item_was_dragged);
                         if( item_was_dragged ) {
                             setCollectionFacet( "add", current_property_id, property_widget, color_facet );
                             $(current_modal + " .data-widget").removeClass('select-meta-filter');
@@ -698,13 +698,16 @@
                 $('#tabs_properties').val(elem.tabs);
             }
             list_collection_facets();
+            // cl(elem);
 
             if (elem.no_properties !== true) {
                 $.each(elem.property_data, function (idx, property) {
+                    cl(property);
+
                     var current_id = property.id;
                     var current_search_widget = property.search_widget;
                     //buscando a aba da propriedade
-                    var tab_property_id = get_tab_property_id(current_id)
+                    var tab_property_id = get_tab_property_id(current_id);
                     //visibilidade do metadado
                     var isCompounded = is_compounded(property.metas.socialdb_property_is_compounds);
                     if(isCompounded||(property.metas.socialdb_property_visibility&&property.metas.socialdb_property_visibility==='hide')){
@@ -736,6 +739,7 @@
                         //adiciona na listagem
                         generate_html_fixed_property(current_id,property,tab_property_id,class_var,style,button);
                     } else {
+                        cl("Este não entrou: " + property.name + " => " + property.metas.is_repository_property + " e " + property.metas.socialdb_property_created_category);
                         if ( $.inArray(property.type, ranking_types) == -1 ) {
                             $(get_property_tab_seletor(tab_property_id)).append(
                                 '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '" data-widget="' + current_search_widget + '" class="' + property.type + ' ui-widget-content ui-corner-tr">' +
