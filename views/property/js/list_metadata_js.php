@@ -698,12 +698,9 @@
                 $('#tabs_properties').val(elem.tabs);
             }
             list_collection_facets();
-            // cl(elem);
 
             if (elem.no_properties !== true) {
                 $.each(elem.property_data, function (idx, property) {
-                    cl(property);
-
                     var current_id = property.id;
                     var current_search_widget = property.search_widget;
                     //buscando a aba da propriedade
@@ -716,16 +713,20 @@
                         }
                         return true;
                     }
+
+                    var repo_prop = property.metas.is_repository_property;
+                    var created_cat = property.metas.socialdb_property_created_category;
+                    var prop_slug = property.slug;
+                    var prop_cat_id = $('#property_category_id').val();
+
                     //se for propriedade do repositorio
-                    if ( property.metas.is_repository_property && property.metas.is_repository_property === true ||
-                        (property.metas.socialdb_property_created_category && $('#property_category_id').val() !== property.metas.socialdb_property_created_category) ) {
-                        //se o metadado do repositorio for fixo
-                        var button = '';
-                        var style = '';
-                        var class_var = '';
-                        if(property.metas.socialdb_property_is_fixed
-                                && property.metas.socialdb_property_is_fixed=='true'
-                                && '<?php echo (isset(wp_get_current_user()->user_email))? wp_get_current_user()->user_email:'' ?>'=='<?php echo get_option('admin_email')  ?>'){
+                    if ( repo_prop && repo_prop === true || ( created_cat && prop_cat_id !== created_cat )
+                        || ( prop_slug && prop_slug.indexOf("exif-") >= 0 ) ) {
+                        var button = ''; var style = ''; var class_var = '';
+                        var fixed_meta = property.metas.socialdb_property_is_fixed;
+                        var current_email = '<?php echo (isset(wp_get_current_user()->user_email))? wp_get_current_user()->user_email:'' ?>';
+                        var admin_email = '<?php echo get_option('admin_email')  ?>';
+                        if( fixed_meta && fixed_meta == 'true' && current_email == admin_email ){
                             class_var = 'fixed-property';
                             if(visibility_properties.length===0||(visibility_properties.indexOf(current_id.toString())<0)){
                                 button = '<a vis="show" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-open"></span></a>';
@@ -739,7 +740,7 @@
                         //adiciona na listagem
                         generate_html_fixed_property(current_id,property,tab_property_id,class_var,style,button);
                     } else {
-                        cl("Este não entrou: " + property.name + " => " + property.metas.is_repository_property + " e " + property.metas.socialdb_property_created_category);
+                        // cl("Este não entrou: " + property.name + " => " + property.metas.is_repository_property + " e " + property.metas.socialdb_property_created_category);
                         if ( $.inArray(property.type, ranking_types) == -1 ) {
                             $(get_property_tab_seletor(tab_property_id)).append(
                                 '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '" data-widget="' + current_search_widget + '" class="' + property.type + ' ui-widget-content ui-corner-tr">' +
