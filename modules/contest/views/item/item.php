@@ -1,4 +1,8 @@
+<?php require_once(dirname(__FILE__).'/js/item-js.php'); ?>
+<?php require_once(dirname(__FILE__).'../../../helpers/view_helper.php'); ?>
 <?php $post = get_post($collection_id); ?>
+<?php $ranking = get_term_by('name', __('In favor / Against', 'tainacan'),'socialdb_property_type') ?>
+<?php $view_helper = new ViewHelper; ?>
 <div class="chatContainer">
     <ol class="breadcrumb item-breadcrumbs" style="padding-top: 10px;">
         <li> <a href="<?php echo get_permalink(get_option('collection_root_id')); ?>"> <?php _e('Repository', 'tainacan') ?> </a> </li>
@@ -9,34 +13,55 @@
     <div class="chatHistoryContainer">
 
         <ul class="formComments">
-            <li class="commentLi commentstep-1" data-commentid="4">
+            <li class="commentLi commentstep-1" data-commentid="<?php echo $object->ID; ?>">
                 <table class="form-comments-table">
                     <tr>
                         <td><div class="comment-timestamp"><?php echo $object->post_date_gmt ?></div></td>
                         <td><div class="comment-user"><?php echo get_user_by('id', $object->post_author)->display_name ?></div></td>
                         <td>
                             <div class="comment-avatar">
-                                <img src="<?php get_user ?>">
+                                <?php echo get_avatar($object->post_author) ?>
                             </div>
                         </td>
                         <td>
-                            <div id="comment-4" data-commentid="4" class="comment comment-step1">
-                                <h4><?php echo $object->post_title; ?></h4>
-                                <div id="commentactions-4" class="comment-actions">
+                            <div id="comment-<?php echo $object->ID; ?>" 
+                                 data-commentid="<?php echo $object->ID; ?>" 
+                                 class="comment comment-step1">
+                                <h5>
+                                    <span class="label label-info">
+                                        <?php echo $view_helper->get_counter_ranking($ranking->term_id, $object->ID) ?>
+                                    </span>   
+                                    &nbsp;<b><?php echo $object->post_title; ?></b>
+                                </h5>    
+                                <div id="commentactions-<?php echo $object->ID; ?>" class="comment-actions">
                                     <div class="btn-group" role="group" aria-label="...">
-                                        <button type="button" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> Reply</button>
-                                        <button type="button" class="btn btn-default btn-sm"><i class="fa fa-pencil"></i> Edit</button>
-                                        <button type="button" class="btn btn-danger btn-sm"<i class="fa fa-trash"></i >Delete</button>
+                                        <button type="button" onclick="contest_save_vote_binary_up('<?php echo $ranking->term_id; ?>', '<?php echo $object->ID; ?>')" class="btn btn-success btn-sm">
+                                            <span class="glyphicon glyphicon-menu-up"></span>
+                                        </button>
+                                        <button type="button" onclick="contest_save_vote_binary_down('<?php echo $ranking->term_id; ?>', '<?php echo $object->ID; ?>')" class="btn btn-danger btn-sm">
+                                            <span class="glyphicon glyphicon-menu-down"></span>
+                                        </button>
+                                    </div>                                
+                                    <div class="btn-group" role="group" aria-label="...">
+                                        <button type="button" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-comment"></span> <?php _e('Reply','tainacan') ?></button>
+                                        <?php if($object->post_author   ==  get_current_user_id()): ?>
+                                        <button type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-edit"></span> <?php _e('Edit','tainacan') ?></button>
+                                        <button type="button" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash"></span> <?php _e('Remove','tainacan') ?></button>
+                                        <?php else: ?>
+                                        <button type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-alert"></span><?php _e('Report abuse','tainacan') ?></button>
+                                        <?php endif; ?>
                                     </div>                                
                                 </div>
                             </div>
                         </td>
                     </tr>
                 </table>
-            </li>
+            </li>  
+            <?php
+                $view_helper->getChildrenItems($ranking,$object->ID, 2);
+            ?>
 
-
-            <li class="commentLi commentstep-1" data-commentid="5">
+            <!--li class="commentLi commentstep-1" data-commentid="5">
                 <table class="form-comments-table">
                     <tr>
                         <td><div class="comment-timestamp">12:03 25/4/2016</div></td>
@@ -297,7 +322,7 @@
                         </td>
                     </tr>
                 </table>
-            </li>
+            </li-->
 
 
 

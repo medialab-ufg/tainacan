@@ -254,6 +254,7 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
                     return $property_model->initDynatreePropertiesFilter($data['collection_id'],false);   
             //colocando a obrigatoriadade nas propriedades fixas
             case 'alter_fixed_property_collection':
+                $property_model->update_tab_organization($data['collection_id'], $data["tab"], $data['property_id']);
                 update_post_meta($data['collection_id'], 'socialdb_collection_property_'.$data['property_id'].'_required', $data['required']);
                 return json_encode($data);
             //buscando os dados da coleccao    

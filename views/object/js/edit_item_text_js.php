@@ -55,6 +55,7 @@
                     autocomplete_edit_item_property_data(properties_autocomplete); 
                     //ckeditor
                     showCKEditor('objectedit_editor');
+                    set_content_valid();
                     $("#text_accordion").accordion({
                         active: false,
                         collapsible: true,
@@ -147,16 +148,20 @@
 
         var myDropzone = new Dropzone("div#dropzone_edit", {
             accept: function(file, done) {
-                     if (file.type === ".exe") {
-                         done("Error! Files of this type are not accepted");
-                     }
-                     else { done(); }
+                    if (file.type === ".exe") {
+                        done("Error! Files of this type are not accepted");
+                    }
+                    else { 
+                        done(); 
+                        set_attachments_valid(myDropzone.getAcceptedFiles().length);
+                    }
                },
             init: function () {
                 thisDropzone = this;
                 this.on("removedfile", function (file) {
                     //    if (!file.serverId) { return; } // The file hasn't been uploaded
                     $.get($('#src').val() + '/controllers/object/object_controller.php?operation=delete_file&object_id=' + $("#object_id_edit").val() + '&file_name=' + file.name, function (data) {
+                        set_attachments_valid(thisDropzone.getAcceptedFiles().length);
                         if (data.trim() === 'false') {
                             showAlertGeneral('<?php _e("Atention!", 'tainacan') ?>', '<?php _e("An error ocurred, File already removed or corrupted!", 'tainacan') ?>', 'error');
                         } else {
@@ -169,12 +174,15 @@
                 });
                 $.get($('#src').val() + '/controllers/object/object_controller.php?operation=list_files&object_id=' + $("#object_id_edit").val(), function (data) {
                     try {
+                        var count = 0
                         $.each(data, function (key, value) {
                             if (value.name !== undefined && value.name !== 0) {
                                 var mockFile = {name: value.name, size: value.size};
                                 thisDropzone.options.addedfile.call(thisDropzone, mockFile);
+                                count++;
                             }
                         });
+                        set_attachments_valid(count);
                     }
                     catch (e) {
                     }  // handle error

@@ -36,7 +36,6 @@ $(function(){
                 //#4 - ckeditor para o conteudo do item
                 showCKEditor('object_editor'); 
                 set_content_valid();
-                set_attachments_valid();
                 $("#text_accordion").accordion({
                     active: false,
                     collapsible: true,
@@ -110,16 +109,20 @@ $(function(){
     
     myDropzone = new Dropzone("div#dropzone_new", {
                 accept: function(file, done) {
-                      if (file.type === ".exe") {
-                          done("Error! Files of this type are not accepted");
-                      }
-                      else { done(); }
+                    if (file.type === ".exe") {
+                        done("Error! Files of this type are not accepted");
+                    }
+                    else { 
+                        done(); 
+                        set_attachments_valid(myDropzone.getAcceptedFiles().length);
+                    }
                 },
                 init: function () {
                     thisDropzone = this;
                     this.on("removedfile", function (file) {
                         //    if (!file.serverId) { return; } // The file hasn't been uploaded
                         $.get($('#src').val() + '/controllers/object/object_controller.php?operation=delete_file&object_id=' + $("#object_id_add").val() + '&file_name=' + file.name, function (data) {
+                            set_attachments_valid(thisDropzone.getAcceptedFiles().length);
                             if (data.trim() === 'false') {
                                 showAlertGeneral('<?php _e("Atention!", 'tainacan') ?>', '<?php _e("An error ocurred, File already removed or corrupted!", 'tainacan') ?>', 'error');
                             } else {
@@ -136,6 +139,7 @@ $(function(){
                                     thisDropzone.options.addedfile.call(thisDropzone, mockFile);
                                 }
                             });
+                            set_attachments_valid(thisDropzone.getAcceptedFiles().length);
                         }
                         catch (e)
                         {

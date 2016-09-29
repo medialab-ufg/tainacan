@@ -182,6 +182,12 @@ foreach( ['object', 'term', 'voting', 'filter', 'tag','compounds'] as $metadata 
                             <input type="hidden"
                                    id="property_fixed_id">
                         </div --> 
+                         <!-- Selecao de aba -->
+                        <div class="form-group">
+                                <label for="socialdb_event_property_tab"><?php _e('Select the tab','tainacan'); ?></label>
+                                <select id="socialdb_event_property_tab_fixed" class="socialdb_event_property_tab form-control" name="socialdb_event_property_tab">
+                                </select>
+                        </div>
                         <div class="create_form-group">
                              <div id="required_field" >
                                     <label for="property_fixed_required" style="display: block"><?php _e('Required metadata','tainacan'); ?></label>

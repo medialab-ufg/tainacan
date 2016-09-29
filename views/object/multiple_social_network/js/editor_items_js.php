@@ -829,6 +829,7 @@
         if ($(data).val() != '') {
             $.each($("input:checkbox[name='selected_items']:checked"), function () {
                 counter++;
+                var values = [];
                 $('.multiple_socialdb_property_'+ property_id).each(function(index,value){
                     if($(this).val()!=''){
                         values.push($(this).val());

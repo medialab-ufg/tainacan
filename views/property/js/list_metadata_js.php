@@ -2165,10 +2165,12 @@
                 collection_id: $('#collection_id').val(), 
                 operation: 'alter_fixed_property_collection', 
                 property_id:  $('#property_fixed_id').val(), 
+                tab:  $('#socialdb_event_property_tab_fixed').val(), 
                 required: $('#property_fixed_required').is(':checked')}
         }).done(function (result) {
             $('#modal_edit_fixed_property').modal('hide');
             elem = jQuery.parseJSON(result);
+            list_collection_metadata();
             getRequestFeedback('success', '<?php _e('Operation successfully!','tainacan') ?>');          
         });
     }
