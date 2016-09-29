@@ -44,26 +44,6 @@
 
     });
 
-    function render_exif_map(entity, name_entity, keys) {
-        var html = "<div class='form-group col-md-12'>";
-        html += "<label class='col-md-6 meta-title no-padding'>" + name_entity + "</label>";
-        html += "<div class='col-md-6 meta-value'>";
-        html += "<select name='" + entity + "' class='data form-control exif-select' id='"+entity+"'>";
-        if(keys) {
-            $(keys).each(function (id, chave) {
-                if(chave) {
-                    var item_value = chave.toLowerCase().replace(/\./g, "_");
-                    html += "<option value='"+item_value+"'>"+chave+"</option>";
-                }
-            });
-        }
-        html += "</select></div></div>";
-
-        $("#validate_exif_tab").append( html );
-        $('select.exif-select').select2();
-    }
-
-
     function validate_url() {
         var url_base = $('#url_base_oai').val();
         if (url_base !== '') {
