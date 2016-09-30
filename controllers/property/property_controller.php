@@ -261,6 +261,15 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
             case 'get_data_fixed_property_collection':
                 $data['is_required'] = get_post_meta($data['collection_id'], 'socialdb_collection_property_'.$data['property_id'].'_required', true);
                 return json_encode($data);
+            //salvando a faceta de usuarios
+            case 'save_ranking_colaboration_facet':
+                $meta = get_post_meta($data['collection_id'], 'socialdb_collection_facets');
+                if(!in_array('ranking_colaborations', $meta)){
+                    add_post_meta($data['collection_id'], 'socialdb_collection_facets', 'ranking_colaborations');
+                    update_post_meta($data['collection_id'], 'socialdb_collection_facet_ranking_colaborations_widget', 'ranking_colaborations');
+                    //update_post_meta($data['collection_id'], 'socialdb_collection_facet_ranking_colaborations_priority', '3');
+                }
+                return json_encode($data);
                 
         }
     }

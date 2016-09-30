@@ -20,7 +20,24 @@ $array_visibility = ($meta&&$meta!=='') ? $meta : '';
 <div class="categories_menu col-md-12 no-padding"  id="properties_tabs">
 
     <div id="preset-filters" class="col-md-3 preset-filters ui-widget-header no-padding">
-        <ul id="filters-accordion" class="connectedSortable"></ul>
+        <div class="btn-group">
+            <button
+                style="margin: 20px 0px 0px 20px;width: 250px;"
+                class="btn btn-primary btn-block btn-lg dropdown-toggle" 
+                data-toggle="dropdown" 
+                aria-expanded="false" aria-haspopup="true" >
+                <span style="color:white;"><?php _e('Add Filter', 'tainacan'); ?> <span style="color:white;" class="caret"></span></span> 
+            </button>
+            <ul style="margin-left: 20px;" class="dropdown-menu" id="dropdown-filters">
+                <li>
+                    <!--a  data-toggle="modal" data-target="#meta-<?php echo $type ?>"-->
+                    <a onclick="add_colaboration_ranking()"  > 
+                         <?php _e('Colaboration Ranking','tainacan'); ?>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <ul style="margin-top: 20px;" id="filters-accordion" class="connectedSortable"></ul>
     </div>
 
     <div class="col-md-9 ui-widget-content metadata-actions" style="padding-right: 0;">

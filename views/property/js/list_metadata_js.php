@@ -299,7 +299,7 @@
         show_modal_main();
         $.ajax({
             type: "POST",
-            url: src + "/controllers/search/search_controller.php",
+            url: $('#src').val() + "/controllers/search/search_controller.php",
             data: { operation: 'delete_facet', facet_id: item_id, collection_id: collection_id }
         }).done(function(rs){
             list_collection_metadata();
@@ -2104,6 +2104,22 @@
     }
     /**
      ****************************************************************************
+     ************************* COLABORATION RANKING ************************
+     ****************************************************************************
+     **/ 
+    function add_colaboration_ranking(){
+        $.ajax({
+            type: "POST",
+            url: $('#src').val() + "/controllers/property/property_controller.php",
+            data: { operation: 'save_ranking_colaboration_facet',collection_id:$('#collection_id').val() }
+        }).done(function(result) {
+            list_collection_facets();
+            showAlertGeneral('<?php _e('Success','tainacan') ?>','<?php _e('Operation Successfully!','tainacan') ?>','success');
+        });
+    }
+   
+    /**
+     ****************************************************************************
      ************************* ACCORDEON FILTERS ACTIONS ************************
      ****************************************************************************
      **/ 
@@ -2112,8 +2128,13 @@
                 '<span class="glyphicon glyphicon-arrow-left"></span></a> ';
     }
     function add_remove_filter_button(id){
-       return '  <a class="pull-right" title="<?php _e('Remove filter','tainacan') ?>" style="cursor:pointer;" onclick="removeFacet('+id+');">'+
-                '<span class="glyphicon glyphicon glyphicon-remove"></span></a>';
+        if(id=='ranking_colaborations'){
+            return '  <a class="pull-right" title="<?php _e('Remove filter','tainacan') ?>" style="cursor:pointer;" onclick="removeFacet('+"'"+id+"'"+');">'+
+                     '<span class="glyphicon glyphicon glyphicon-remove"></span></a>';
+        }else{
+            return '  <a class="pull-right" title="<?php _e('Remove filter','tainacan') ?>" style="cursor:pointer;" onclick="removeFacet('+id+');">'+
+                     '<span class="glyphicon glyphicon glyphicon-remove"></span></a>';
+        }
     }
     //add facet
     function add_filter(id){
