@@ -535,7 +535,7 @@ class CollectionModel extends Model {
      * @ metodo responsavel em retornar as colecoes de um determinando usuario
      * @author: Eduardo Humberto 
      */
-    public function list_ordenation($data) {
+    public function list_ordenation($data, $_get_all_meta = false) {
         $data['selected'] = $this->set_default_ordenation($data['collection_id']);
         $category_root = $this->get_category_root_of($data['collection_id']);
         //$all_properties_id = get_term_meta($category_root, 'socialdb_category_property_id');
@@ -561,6 +561,12 @@ class CollectionModel extends Model {
                     $data['property_data'][] = $array;
                 } elseif ($parent_name != 'socialdb_property_term' && isset($parent_name) && $parent_name != 'socialdb_property_object') {
                     $data['rankings'][] = $array;
+                } else if($_get_all_meta === "true") {
+                    if($parent_name == 'socialdb_property_term') {
+                        $data['property_term'][] = $array;
+                    } else if($parent_name == 'socialdb_property_object') {
+                        $data['property_object'][] = $array;
+                    }
                 }
             }
         }

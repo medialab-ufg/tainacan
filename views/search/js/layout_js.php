@@ -230,13 +230,15 @@
         $.ajax({
             url: $('#src').val() + '/controllers/collection/collection_controller.php',
             type: 'POST',
-            data: {operation: 'list_ordenation', collection_id: $("#collection_id").val()}
+            data: {operation: 'list_ordenation', collection_id: $("#collection_id").val(), get_all_meta: true}
         }).done(function (result) {
             elem = jQuery.parseJSON(result);
             var _table_metas = [];
             $('input[name="_tb_meta_"]').each(function(n, element) {
                 _table_metas.push( $(this).val() );
             });
+
+            cl(elem);
 
             if (elem.general_ordenation) {
                 $("#collection_order").append("<optgroup label='<?php _e('General ordenation','tainacan') ?>'>");
@@ -266,6 +268,29 @@
                                $(e).append("<option value='"+ data.id +"'>"+ data.name +"</option>"); 
                             });
                         }
+                    }
+                });
+            }
+            if (elem.property_object) {
+                $.each(elem.property_object, function (idx, data) {
+                    if (data && data !== false) {
+                        var numeric_id = data.id; var string_id = numeric_id.toString();
+                        if( _table_metas.indexOf(string_id) > -1 )
+                            var ck = "checked";
+                        cl("object .. " + data.name);
+                        // $("#collection_single_ordenation").append("<option value='"+data.id+"'>" + data.name + "</option>");
+                        $(".table-meta-config").append("<input type='checkbox' id='table_meta' " + ck + " name='table_meta[]' value='" + data.id + "'> " + data.name + "<br />");
+                    }
+                });
+            }
+            if (elem.property_term) {
+                $.each(elem.property_term, function (idx, data) {
+                    if (data && data !== false) {
+                        var numeric_id = data.id; var string_id = numeric_id.toString();
+                        if( _table_metas.indexOf(string_id) > -1 )
+                            var ck = "checked";
+                        cl("term .. " + data.name);
+                        $(".table-meta-config").append("<input type='checkbox' id='table_meta' " + ck + " name='table_meta[]' value='" + data.id + "'> " + data.name + "<br />");
                     }
                 });
             }
