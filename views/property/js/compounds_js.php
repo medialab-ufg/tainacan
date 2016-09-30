@@ -68,7 +68,7 @@
                     return node.data.key;
                 });
                 //limitacao da quantidade de propriedades selecionados
-                if(selKeys.length>0&&selKeys.length<5){
+                if(selKeys.length>0&&selKeys.length<=6){
                     $.each(selKeys,function(index,node){
                         var type = types_compounds[node.data.key];
                         var string = '';
@@ -87,7 +87,7 @@
                                 '<span style="margin-right:5px;" class="glyphicon glyphicon-sort sort-filter pull-right"></span>&nbsp;'+ add_filter_button(node.data.key) + node.data.title+'</li>')
                     })
                     $('#compounds_id').val(keys.join(','));
-                }else if(selKeys.length>4){
+                }else if(selKeys.length>6){
                     node.select(false);
                 }
                 accordeon_ordenation_properties();

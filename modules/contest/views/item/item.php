@@ -29,7 +29,7 @@
                                  class="comment comment-step1">
                                 <h5>
                                     <span class="label label-info">
-                                        <?php echo $view_helper->get_counter_ranking($ranking->term_id, $object->ID) ?>
+                                        <span id="constest_score_<?php echo $object->ID; ?>"><?php echo $view_helper->get_counter_ranking($ranking->term_id, $object->ID) ?></span>
                                     </span>   
                                     &nbsp;<b><?php echo $object->post_title; ?></b>
                                 </h5>    

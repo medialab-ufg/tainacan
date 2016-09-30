@@ -25,7 +25,8 @@ class ViewHelper {
                         <td>
                             <div id="comment-<?php echo $child->ID ?>" data-commentid="<?php echo $child->ID ?>" class="comment commentstep-<?php echo $depth ?>">
                                 <span class="label label-<?php echo ($position=='positive') ? 'success': 'danger' ?>">
-                                        <span id="thumbs-<?php echo $child->ID; ?>" class="glyphicon glyphicon-thumbs-<?php echo ($position=='positive') ? 'up': 'down' ?>"></span> <?php echo $this->get_counter_ranking($ranking->term_id, $child->ID) ?>
+                                        <span id="thumbs-<?php echo $child->ID; ?>" class="glyphicon glyphicon-thumbs-<?php echo ($position=='positive') ? 'up': 'down' ?>"></span>
+                                        <span id="constest_score_<?php echo $child->ID; ?>"><?php echo $this->get_counter_ranking($ranking->term_id, $child->ID) ?></span>
                                  </span>&nbsp;  
                                 <?php echo $child->post_title ?>
                                 <div id="commentactions-<?php echo $child->ID ?>" class="comment-actions">
@@ -65,8 +66,7 @@ class ViewHelper {
      */
     public function get_counter_ranking($ranking_id,$item_id) {
         $ranking_model = new RankingContestModel;
-        $count = $ranking_model->count_votes_binary($all_data['id'], $data['object_id']);
+        $count = $ranking_model->count_votes_binary($ranking_id, $item_id);
         return $count['count_up'] - $count['count_down'];
-        
     }
 } // ViewHelper

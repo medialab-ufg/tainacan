@@ -18,23 +18,38 @@ class RankingController extends Controller {
                 $array_ancestors = array_merge($array_ancestors, get_ancestors($data['object_id'], 'socialdb_object'));
                 if (is_user_logged_in()) {
                     if(is_array($array_ancestors)){
-                        foreach ($array_ancestors as $ancest) {
+                        foreach ($array_ancestors as $index => $ancest) {
+                            $result_data['seletor'] = '#constest_score_'.$ancest ;
                             $position =  get_post_meta($ancest, 'socialdb_object_contest_position', true);
-                            if($position_origin == $position):
-                                $score = '1';
-                                $result_data['save_vote'][] = $ranking_model->save_vote(
-                                        ['object_id'=>$ancest,'property_id'=>$data['property_id'],'score'=>$score],true,true);
-                            else:
-                                $score = '-1';
-                                $result_data['save_vote'][] = $ranking_model->save_vote(['object_id'=>$ancest,'property_id'=>$data['property_id'],'score'=>$score],true,true);
-                            endif;
-                            $result_data['result'] = $ranking_model->calculate_vote_binary($data['property_id'], $data['object_id']);
+                            if($position):// se ele tiver uma posicao
+                                if($position_origin == $position):
+                                    $score = ($data['score']=='1') ? '1' : '-1';
+                                    $result_data['is_new'] = $ranking_model->save_vote(
+                                            ['object_id'=>$ancest,'property_id'=>$data['property_id'],'score'=>$score],true,true);
+                                else:
+                                    $score = ($data['score']=='1') ? '-1' : '1';
+                                    $result_data['is_new'] = $ranking_model->save_vote(['object_id'=>$ancest,'property_id'=>$data['property_id'],'score'=>$score],true,true);
+                                endif;
+                            else:// se nao tiver uma posicao
+                                // verifco se o anterior a ele possui
+                                if(isset($array_ancestors[$index-1])): 
+                                    $position =  get_post_meta($array_ancestors[$index-1], 'socialdb_object_contest_position', true);
+                                    $score = ($position=='positive') ? '1' : '-1';
+                                    $result_data['is_new'] = $ranking_model->save_vote(
+                                            ['object_id'=>$ancest,'property_id'=>$data['property_id'],'score'=>$score],true,true);
+                                //se nao busco o voto atual    
+                                else:  
+                                    $score = ($data['score']=='1') ? '1' : '-1';
+                                    $result_data['is_new'] = $ranking_model->save_vote(
+                                            ['object_id'=>$ancest,'property_id'=>$data['property_id'],'score'=>$score],true,true);
+                                endif; 
+                            endif;   
+                            $result_data['score'] = $ranking_model->calculate_vote_binary($data['property_id'], $ancest);
                             $data['results'][] = $result_data;
                         }
                     }
                     $data['is_user_logged_in'] = true;
                 } else {
-                    $data['results'] = $ranking_model->calculate_vote_binary($data['property_id'], $data['object_id']);
                     $data['is_user_logged_in'] = false;
                 }
                 return json_encode($data);
