@@ -25,8 +25,9 @@
         $('input[name="meta_id_table"]').each(function(idx, el) {
             var valor = $(el).val();
             var nome = $("#collection_single_ordenation option[value='"+valor+"'").text();
-            $('tr.dynamic-table-metas').prepend('<th>' + nome + '</th>');
+            $('tr.dynamic-table-metas').append('<th>' + nome + '</th>');
         });
+
         var qtd_table_metas = $('input[type="hidden"][name="meta_id_table"]').length;
         if ( qtd_table_metas > 0 ) {
             var meta_table_set = true;
@@ -34,9 +35,12 @@
                 $("#table-view").css("display", "block");
             }
         } else {
-            $('tr.dynamic-table-metas').prepend('<th>' + '<?php _e("Title", "tainacan"); ?>'  + '</th>');
+            $('tr.dynamic-table-metas').append('<th>' + '<?php _e("Title", "tainacan"); ?>'  + '</th>');
             meta_table_set = false;
         }
+
+        var action_label = '<?php _e("Actions", "tainacan"); ?>';
+        $('tr.dynamic-table-metas').append('<th>' + action_label + '</th>');
 
         var total_objs = $('.object_id').length;
         $('.object_id').each(function(idx, el) {

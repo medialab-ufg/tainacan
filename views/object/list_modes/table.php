@@ -2,7 +2,6 @@
     <table id="table-view" class="table table-striped table-bordered">
       <thead>
       <tr class="dynamic-table-metas">
-          <th><?php _e('Actions', 'tainacan'); ?></th>
       </tr>
       </thead>
       <tbody id="table-view-elements"></tbody>

@@ -1,50 +1,6 @@
 <script type="text/javascript">
     var src = $('#src').val();
 
-    function appendColorScheme(color1, color2) {
-        var c1 = color1 || $("#primary-custom-color").val();
-        var c2 = color2 || $("#second-custom-color").val();
-        var items_count = $('.custom_color_schemes .color-container').length;
-
-        $('.custom_color_schemes').fadeIn().find(' .color-container').removeClass('selected');
-
-        $('.custom_color_schemes .here').append(
-            '<div class="color-container selected"><div class="remove-cS"><a href="javascript:void(0)" class="remove-cs">x</a></div>' +
-            '<input type="text" class="color-input color1" style="background:'+c1+'" value="'+c1+'" name="color_scheme['+items_count+'][primary_color]"/> ' +
-            '<input type="text" class="color-input color2" style="background:'+c2+'" value="'+c2+'" name="color_scheme['+items_count+'][secondary_color]"/> ' +
-            '</div>');
-    }
-
-    function get_colorSchemes() {
-        var coll_id = $('#collection_id').val();
-        $.ajax({
-            type: "POST",
-            url: src + "/controllers/collection/collection_controller.php",
-            data: {operation: 'get_color_schemes', collection_id: coll_id }
-        }).done(function(r) {
-            var el = $.parseJSON(r);
-            $(el).each(function(idx, val) {
-                appendColorScheme(val.primary_color, val.secondary_color);
-            });
-        });
-    }
-
-    function get_defaultCS() {
-        $.ajax({
-            type: "POST",
-            url: src + "/controllers/collection/collection_controller.php",
-            data: {operation: 'get_default_color_scheme', collection_id: $('#collection_id').val() }
-        }).done(function(r) {
-            var el = $.parseJSON(r);
-            if (el) {
-                colorize("", el.primary, el.secondary);
-                $("input[type='text'][value='"+el.primary+"']").first().parent().addClass('selected');
-            } else {
-                colorize("", '#7AA7CF', '#0C698B');
-            }
-        });
-    }
-
     $('.custom_color_schemes').on('click', 'a.remove-cs', function() {
         $(this).parents('.color-container').fadeOut(300, function() {
           $(this).remove();
@@ -178,6 +134,11 @@
         });
     });
 
+    $( function() {
+        $( "#sortable" ).sortable();
+        $( "#sortable" ).disableSelection();
+    } );
+
     $("#layout-accordion").accordion({
         collapsible: true,
         header: "h3",
@@ -185,7 +146,52 @@
         heightStyle: "content"
         // icons: false
     });
+
     $('#layout-accordion .ui-accordion-content').show();
+
+    function appendColorScheme(color1, color2) {
+        var c1 = color1 || $("#primary-custom-color").val();
+        var c2 = color2 || $("#second-custom-color").val();
+        var items_count = $('.custom_color_schemes .color-container').length;
+
+        $('.custom_color_schemes').fadeIn().find(' .color-container').removeClass('selected');
+
+        $('.custom_color_schemes .here').append(
+            '<div class="color-container selected"><div class="remove-cS"><a href="javascript:void(0)" class="remove-cs">x</a></div>' +
+            '<input type="text" class="color-input color1" style="background:'+c1+'" value="'+c1+'" name="color_scheme['+items_count+'][primary_color]"/> ' +
+            '<input type="text" class="color-input color2" style="background:'+c2+'" value="'+c2+'" name="color_scheme['+items_count+'][secondary_color]"/> ' +
+            '</div>');
+    }
+
+    function get_colorSchemes() {
+        var coll_id = $('#collection_id').val();
+        $.ajax({
+            type: "POST",
+            url: src + "/controllers/collection/collection_controller.php",
+            data: {operation: 'get_color_schemes', collection_id: coll_id }
+        }).done(function(r) {
+            var el = $.parseJSON(r);
+            $(el).each(function(idx, val) {
+                appendColorScheme(val.primary_color, val.secondary_color);
+            });
+        });
+    }
+
+    function get_defaultCS() {
+        $.ajax({
+            type: "POST",
+            url: src + "/controllers/collection/collection_controller.php",
+            data: {operation: 'get_default_color_scheme', collection_id: $('#collection_id').val() }
+        }).done(function(r) {
+            var el = $.parseJSON(r);
+            if (el) {
+                colorize("", el.primary, el.secondary);
+                $("input[type='text'][value='"+el.primary+"']").first().parent().addClass('selected');
+            } else {
+                colorize("", '#7AA7CF', '#0C698B');
+            }
+        });
+    }
 
     function colorize(color_name, c1, c2) {
         if (color_name) {
@@ -238,6 +244,7 @@
                 _table_metas.push( $(this).val() );
             });
 
+            cl("Veja tudo que está chegando ..");
             cl(elem);
 
             if (elem.general_ordenation) {
@@ -259,8 +266,9 @@
                         if( _table_metas.indexOf(string_id) > -1 ) {
                             var ck = "checked";
                         }
-
-                        $(".table-meta-config").append("<input type='checkbox' id='table_meta' " + ck + " name='table_meta[]' value='" + data.id + "'> " + data.name + "<br />");
+                        var sort_meta = '<li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>';
+                        sort_meta += "<input type='checkbox' id='table_meta' " + ck + " name='table_meta[]' value='" + data.id + "'> " + data.name + "<br /></li>";
+                        $(".table-meta-config #sort-metas").append(sort_meta);
 
                         if(data.type === "text") {
                             var coords = ["select[name='latitude']","select[name='longitude']","select[name='location']"];
@@ -279,7 +287,10 @@
                             var ck = "checked";
                         cl("object .. " + data.name);
                         // $("#collection_single_ordenation").append("<option value='"+data.id+"'>" + data.name + "</option>");
-                        $(".table-meta-config").append("<input type='checkbox' id='table_meta' " + ck + " name='table_meta[]' value='" + data.id + "'> " + data.name + "<br />");
+                        var sort_meta = '<li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>';
+                        sort_meta += "<input type='checkbox' id='table_meta' " + ck + " name='table_meta[]' value='" + data.id + "'> " + data.name + "<br /></li>";
+                        $(".table-meta-config #sort-metas").append(sort_meta);
+
                     }
                 });
             }
@@ -290,10 +301,14 @@
                         if( _table_metas.indexOf(string_id) > -1 )
                             var ck = "checked";
                         cl("term .. " + data.name);
-                        $(".table-meta-config").append("<input type='checkbox' id='table_meta' " + ck + " name='table_meta[]' value='" + data.id + "'> " + data.name + "<br />");
+                        var sort_meta = '<li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>';
+                        sort_meta += "<input type='checkbox' id='table_meta' " + ck + " name='table_meta[]' value='" + data.id + "'> " + data.name + "<br /></li>";
+                        $(".table-meta-config #sort-metas").append(sort_meta);
                     }
                 });
             }
+
+
 
             if (elem.rankings) {
                 $("#collection_order").append("<optgroup label='<?php _e('Rankings','tainacan') ?>'>");
@@ -306,6 +321,8 @@
             if (elem.selected) {
                 $("#collection_order").val(elem.selected);
             }
+
+            $(".table-meta-config #sort-metas").sortable();
 
             var set_lat  = $("#set-lat").val();
             var set_long = $("#set-long").val();

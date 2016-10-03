@@ -124,7 +124,7 @@
 	} // ul
 
 	button#conclude_config {
-                margin: 8px 8px 0 0;
+      margin: 8px 8px 0 0;
 	}
 } // #layout-config
 
@@ -134,4 +134,19 @@
   font-size: 11px;
   max-height: 220px;
   overflow-y: scroll;
+
+  #sort-metas {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    li {
+      margin: 0 3px 3px 3px;
+      padding: 0.4em;
+      padding-left: 1.5em;
+      span {
+        margin-left: -1.3em;
+        display: inline-block;
+      }
+    }
+  }
 }
