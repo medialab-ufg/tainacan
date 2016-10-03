@@ -485,5 +485,34 @@ class UserModel extends Model {
 
         return $status;
     }
+    
+    /**
+     * funcao que busca os autores mais participativos de uma colecao a partir
+     * da quantidade de items inseridos
+     * @param int $collection_id O id da colecao que esa sendo montado o autocomplete
+     * @author: Eduardo Humberto 
+     */
+    public function search_participatory_authors($collection_id,$search) {
+        global $wpdb;
+        $category_root_id = $this->get_category_root_of($collection_id);
+        $wp_term_relationships = $wpdb->prefix . "term_relationships";
+        $wp_posts = $wpdb->prefix . "posts";
+        $wp_term_taxonomy = $wpdb->prefix . "term_taxonomy";
+        $wp_users = $wpdb->base_prefix . "users";
+        $query = "
+	SELECT p.post_author, u.display_name, u.user_nicename, count(*) AS num_posts
+	FROM $wp_posts p
+		INNER JOIN $wp_term_relationships tr ON p.ID = tr.object_id
+		INNER JOIN $wp_term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+		INNER JOIN $wp_users u ON p.post_author = u.ID
+	WHERE tt.term_id = $category_root_id
+        AND u.display_name LIKE '%$search%'
+	GROUP BY p.post_author
+	ORDER BY num_posts DESC
+	LIMIT 10";
+
+        $authors = $wpdb->get_results($query);
+        return $authors;
+    }
 
 }

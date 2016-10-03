@@ -334,7 +334,7 @@
                             } else {
                                 var current_prop = getPropertyType(el.prop);
                                 var item_html = '<li id="'+ el.id +'" data-widget="'+el.widget+'" class="form-group metadata-facet filter-'+el.id+'">' +
-                                    '<label class="title-pipe">' + el.nome + '<div class="pull-right"><a class="edit-filter"><span class="glyphicon glyphicon-sort sort-filter"></span></a>';
+                                    '<label class="title-pipe">&nbsp;&nbsp;&nbsp;&nbsp;' + el.nome + '<div class="pull-right"><a class="edit-filter"><span class="glyphicon glyphicon-sort sort-filter"></span></a>';
 
                                 if ( current_prop == "data" ) {
                                     item_html += '<a onclick="edit_metadata('+ el.id +')" class="edit-filter">';
@@ -744,7 +744,7 @@
                         if ( $.inArray(property.type, ranking_types) == -1 ) {
                             $(get_property_tab_seletor(tab_property_id)).append(
                                 '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '" data-widget="' + current_search_widget + '" class="' + property.type + ' ui-widget-content ui-corner-tr">' +
-                                '<label class="title-pipe">'+ add_filter_button(current_id) + property.name + '</label><div class="action-icons">' +
+                                '<label class="title-pipe">'+ add_filter_button(current_id) + property.name + add_text_type(current_search_widget) + '</label><div class="action-icons">' +
                                 '<a class="edit-filter"><span class="glyphicon glyphicon-sort sort-filter"></span></a>&nbsp;'+
                                 '<a onclick="edit_metadata(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
                                 '<span class="glyphicon glyphicon-edit"><span></a> ' +
@@ -993,7 +993,7 @@
                         (property.metas.socialdb_property_created_category && $('#property_category_id').val() !== property.metas.socialdb_property_created_category)) {
                         $(get_property_tab_seletor(tab_property_id)).append(
                             '<li tab="'+tab_property_id+'" id="meta-item-'+current_id+'" data-widget="' + property.search_widget + '" class="root_category ui-widget-content ui-corner-tr">' +
-                            '<label class="title-pipe">'+ add_filter_button(current_id) + property.name + '</label>' +
+                            '<label class="title-pipe">'+ add_filter_button(current_id) + property.name + add_text_type('relationship') +'</label>' +
                             '<a onclick="edit_object('+ current_id +')" class="edit_property_data" href="javascript:void(0)">' +
                             '<div class="action-icons">'+
                             '<a class="edit-filter"><span class="glyphicon glyphicon-sort sort-filter"></span></a>&nbsp;'+
@@ -1002,7 +1002,7 @@
                     } else {
                         if ( $.inArray(property.type, ranking_types) == -1 ) {
                             $(get_property_tab_seletor(tab_property_id)).append(
-                                '<li tab="'+tab_property_id+'" id="meta-item-'+current_id+'" data-widget="' + property.search_widget + '" class="ui-widget-content ui-corner-tr"><label class="title-pipe">'+ add_filter_button(current_id) + property.name +
+                                '<li tab="'+tab_property_id+'" id="meta-item-'+current_id+'" data-widget="' + property.search_widget + '" class="ui-widget-content ui-corner-tr"><label class="title-pipe">'+ add_filter_button(current_id) + property.name +add_text_type('relationship') +
                                 '</label><div class="action-icons">' +
                                 '<a class="edit-filter"><span class="glyphicon glyphicon-sort sort-filter"></span></a>&nbsp;'+
                                 '<a onclick="edit_object('+ current_id +')" class="edit_property_data" href="javascript:void(0)">' +
@@ -1250,7 +1250,7 @@
                         if ( $.inArray(property.type, ranking_types) == -1 ) {
                             var term_root_id =  property.metas.socialdb_property_term_root;
                             $(get_property_tab_seletor(tab_property_id)).append(
-                                '<li tab="'+tab_property_id+'" term_root_id="'+term_root_id+'" id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="ui-widget-content ui-corner-tr term-root-'+term_root_id+'"><label class="title-pipe">'+ add_filter_button(current_id) + property.name +
+                                '<li tab="'+tab_property_id+'" term_root_id="'+term_root_id+'" id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="ui-widget-content ui-corner-tr term-root-'+term_root_id+'"><label class="title-pipe">'+ add_filter_button(current_id) + property.name +add_text_type('category') +
                                 '</label><div class="action-icons"> <input type="hidden" class="property_data_id" value="' + current_id + '">' +
                                 '<input type="hidden" id="property_type_' + property.id + '" value="3">' +
                                 '<a class="edit-filter"><span class="glyphicon glyphicon-sort sort-filter"></span></a>&nbsp;'+
@@ -2123,9 +2123,34 @@
      ************************* ACCORDEON FILTERS ACTIONS ************************
      ****************************************************************************
      **/ 
+     function add_text_type(type){
+     var string = '<span style="opacity:0.5;padding-left:5px;">'
+       if(type==='compound'){
+            string += '(<?php echo (__('Compounds','tainacan')) ?>)';
+       }else if(type==='category'||type==='tree'){
+            string += '(<?php echo (__('Categories','tainacan')) ?>)';
+       }else if(type==='relationship'){
+            string += '(<?php echo (__('Relation','tainacan')) ?>)';
+       }else if(type==='file'){
+             string += '(<?php echo (__('File','tainacan')) ?>)';
+       }else if(type==='text'){
+             string += '(<?php echo (__('Text','tainacan')) ?>)';
+       }else if(type==='textarea'){
+             string += '(<?php echo (__('Textarea','tainacan')) ?>)';
+       }else if(type==='date'){
+             string += '(<?php echo (__('Date','tainacan')) ?>)';
+       }else if(type==='numeric'){
+             string += '(<?php echo (__('Numeric','tainacan')) ?>)';
+       }else if(type==='radio'){
+             string += '(<?php echo (__('Radio','tainacan')) ?>)';
+       }
+       string +='</span>';
+       return string.toLowerCase();
+     }
+     
     function add_filter_button(id){
-       return '<a  title="<?php _e('Add as filter','tainacan') ?>" style="cursor:pointer;" onclick="add_filter('+id+')">'+
-                '<span class="glyphicon glyphicon-arrow-left"></span></a> ';
+       return '<a  title="<?php _e('Add as filter','tainacan') ?>" style="cursor:pointer;margin-right:15px;" onclick="add_filter('+id+')">'+
+                '<span class="glyphicon glyphicon-menu-left"></span></a>';
     }
     function add_remove_filter_button(id){
         if(id=='ranking_colaborations'){
@@ -2229,9 +2254,10 @@
     }
     
     function generate_html_fixed_property(current_id,property,tab_property_id,class_var,style,button){
+        console.log(property)
         $(get_property_tab_seletor(tab_property_id)).append(
             '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="root_category '+class_var+' ui-widget-content ui-corner-tr '+is_allowed_facet(property.slug)+'">' +
-            '<label '+style+'   class="title-pipe">'+ add_filter_button(current_id) + property.name + '</label>' +
+            '<label '+style+'   class="title-pipe">'+ add_filter_button(current_id) + property.name + add_text_type(property.type) +'</label>' +
             '<div class="action-icons">'+
             '<a class="edit-filter"><span class="glyphicon glyphicon-sort sort-filter"></span></a>&nbsp;'+
             '<a style="cursor:pointer;" onclick="edit_fixed_property(' + current_id + ')" ><span class="glyphicon glyphicon-edit"></span></a> ' +

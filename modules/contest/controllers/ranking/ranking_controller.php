@@ -34,7 +34,12 @@ class RankingController extends Controller {
                                 // verifco se o anterior a ele possui
                                 if(isset($array_ancestors[$index-1])): 
                                     $position =  get_post_meta($array_ancestors[$index-1], 'socialdb_object_contest_position', true);
-                                    $score = ($position=='positive') ? '1' : '-1';
+                                    //position
+                                    if($position=='positive')
+                                        $score = ($data['score']=='1') ? '1' : '-1';
+                                    else if($position=='negative')
+                                        $score = ($data['score']=='1') ? '-1' : '1';
+                                    // is new
                                     $result_data['is_new'] = $ranking_model->save_vote(
                                             ['object_id'=>$ancest,'property_id'=>$data['property_id'],'score'=>$score],true,true);
                                 //se nao busco o voto atual    

@@ -196,6 +196,16 @@ class UserController extends Controller {
                 }
                 return json_encode($result);
                 break;
+            case 'search-colaborators':
+                $colaborators = [];
+                $result = $user_model->search_participatory_authors($data['collection_id'], $data['search']);
+                if(is_array($result)){
+                    foreach ($result as $value) {
+                        $value->avatar = get_avatar($value,64);
+                        $colaborators[] = $value;
+                    }
+                }
+                return json_encode($colaborators);
         }
     }
 

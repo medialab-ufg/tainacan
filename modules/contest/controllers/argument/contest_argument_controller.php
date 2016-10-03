@@ -4,7 +4,8 @@ require_once(dirname(__FILE__).'../../../models/item/item_model.php');
 include_once(dirname(__FILE__).'/../../../../controllers/general/general_controller.php');  
  class ContestArgumentController extends Controller{
 	 public function operation($operation,$data){
-                $model = new ItemModel;   
+                $model = new ItemModel;  
+                var_dump($data);exit();
 		switch ($operation) {
                     //adicionar um novo argumento 
                     case 'add':

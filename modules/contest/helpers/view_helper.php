@@ -28,7 +28,7 @@ class ViewHelper {
                                         <span id="thumbs-<?php echo $child->ID; ?>" class="glyphicon glyphicon-thumbs-<?php echo ($position=='positive') ? 'up': 'down' ?>"></span>
                                         <span id="constest_score_<?php echo $child->ID; ?>"><?php echo $this->get_counter_ranking($ranking->term_id, $child->ID) ?></span>
                                  </span>&nbsp;  
-                                <?php echo $child->post_title ?>
+                                <span id="text-comment-<?php echo $child->ID; ?>"><?php echo $child->post_title ?></span>
                                 <div id="commentactions-<?php echo $child->ID ?>" class="comment-actions">
                                     <div class="btn-group" role="group" aria-label="...">
                                         <button type="button" onclick="contest_save_vote_binary_up('<?php echo $ranking->term_id; ?>', '<?php echo $child->ID; ?>')" class="btn btn-success btn-sm">

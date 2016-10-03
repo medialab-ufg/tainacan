@@ -131,7 +131,7 @@
     
     //mostra icone na listagem
     function add_compounds_button(){
-        return '<a  title="<?php _e('Compounds Metadata','tainacan') ?>" style="cursor:pointer;">'+
+        return '<a  title="<?php _e('Compounds Metadata','tainacan') ?>" style="cursor:pointer;margin-right:9px;">'+
                 ' <img style="height:16px;width:16px;" src="<?php echo get_template_directory_uri() . "/libraries/images/icons/icon-compounds.png"; ?>" ></a> ';
     }
     
@@ -168,7 +168,7 @@
                         //adiciona na listagem
                         $(get_property_tab_seletor(tab_property_id)).append(
                             '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="root_category '+class_var+' ui-widget-content ui-corner-tr '+is_allowed_facet(property.slug)+'">' +
-                            '<label '+style+'   class="title-pipe">'+ add_compounds_button() + property.name + '</label>' +
+                            '<label '+style+'   class="title-pipe">'+ add_compounds_button() + property.name + add_text_type('compound') + '</label>' +
                             '<a onclick="edit_metadata(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
                             '<div class="action-icons">'+
                             '<a class="edit-filter"><span class="glyphicon glyphicon-sort sort-filter"></span></a>&nbsp;'+
@@ -178,7 +178,7 @@
                         if ( $.inArray(property.type, ranking_types) == -1 ) {;
                             $(get_property_tab_seletor(tab_property_id)).append(
                                 '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '" data-widget="' + current_search_widget + '" class="' + property.type + ' ui-widget-content ui-corner-tr">' +
-                                '<label class="title-pipe">'+ add_compounds_button() + property.name + '</label><div class="action-icons">' +
+                                '<label class="title-pipe">'+ add_compounds_button() + property.name + add_text_type('compound') + '</label><div class="action-icons">' +
                                 '<a class="edit-filter"><span class="glyphicon glyphicon-sort sort-filter"></span></a>&nbsp;'+
                                 '<a onclick="edit_compounds(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
                                 '<span class="glyphicon glyphicon-edit"><span></a> ' +
@@ -186,7 +186,7 @@
                                 '<input type="hidden" class="property_name" value="' + property.name + '">' +
                                 '<input type="hidden" id="property_type_' + property.id + '" value="4">' +
                                 '<a onclick="delete_property(' + current_id + ',' + 4 + ')" class="delete_property" href="#">' +
-                                '<span class="glyphicon glyphicon-trash"><span></a></div></li>');
+                                '<span class="glyphicon glyphicon-trash"><span></a></div><ul></ul></li>');
                         }
                     }
                 });
@@ -232,6 +232,16 @@
             });
             $('#compounds_id').val( elem.metas.socialdb_property_compounds_properties_id );
         });
+    }
+    
+    //
+    function get_children_compounds(){
+//         return '<li id="compounds-'+5+'">'+
+//                                '<a onclick="" class="edit_property_data" href="javascript:void(0)">' +
+//                                '<span style="margin-right:5px;" class="glyphicon glyphicon-edit pull-right"><span></a> ' +
+//                                '<a onclick="delete_property()" class="delete_property" href="#">' +
+//                                '<span style="margin-right:5px;" class="glyphicon glyphicon-trash pull-right"><span></a>' +
+//                                '<span style="margin-right:5px;" class="glyphicon glyphicon-sort sort-filter pull-right"></span>&nbsp;' + 'node.data.title'+'</li>';;
     }
     
 </script>

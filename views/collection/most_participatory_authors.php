@@ -2,6 +2,7 @@
 include_once ('../../../../../wp-config.php');
 include_once ('../../../../../wp-load.php');
 include_once ('../../../../../wp-includes/wp-db.php');
+include_once ('js/most_participatory_authors_js.php');
 ?>
 <div class="panel panel-default" style="margin-top: 5px;">
     <!--div class="panel-heading">
@@ -24,7 +25,9 @@ include_once ('../../../../../wp-includes/wp-db.php');
         <div class="row" >
             <div class="col-xs-12">
                 <div class="form-group has-feedback">
-                    <input type="text" class="form-control" id="search-users-autocomplete" aria-describedby="inputSuccess4Status">
+                    <input type="text" class="form-control" 
+                           id="search-users-autocomplete" 
+                           aria-describedby="inputSuccess4Status">
                     <span class="glyphicon glyphicon-search form-control-feedback" aria-hidden="true"></span>
                 </div>
             </div>

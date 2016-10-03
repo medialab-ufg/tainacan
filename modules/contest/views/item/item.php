@@ -31,7 +31,7 @@
                                     <span class="label label-info">
                                         <span id="constest_score_<?php echo $object->ID; ?>"><?php echo $view_helper->get_counter_ranking($ranking->term_id, $object->ID) ?></span>
                                     </span>   
-                                    &nbsp;<b><?php echo $object->post_title; ?></b>
+                                    &nbsp;<b id="text-comment-<?php echo $object->ID; ?>"><?php echo $object->post_title; ?></b>
                                 </h5>    
                                 <div id="commentactions-<?php echo $object->ID; ?>" class="comment-actions">
                                     <div class="btn-group" role="group" aria-label="...">
@@ -43,7 +43,7 @@
                                         </button>
                                     </div>                                
                                     <div class="btn-group" role="group" aria-label="...">
-                                        <button type="button" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-comment"></span> <?php _e('Reply','tainacan') ?></button>
+                                        <!--button type="button" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-comment"></span> <?php _e('Reply','tainacan') ?></button-->
                                         <?php if($object->post_author   ==  get_current_user_id()): ?>
                                         <button type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-edit"></span> <?php _e('Edit','tainacan') ?></button>
                                         <button type="button" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash"></span> <?php _e('Remove','tainacan') ?></button>
@@ -60,7 +60,6 @@
             <?php
                 $view_helper->getChildrenItems($ranking,$object->ID, 2);
             ?>
-
             <!--li class="commentLi commentstep-1" data-commentid="5">
                 <table class="form-comments-table">
                     <tr>
@@ -323,31 +322,113 @@
                     </tr>
                 </table>
             </li-->
-
-
-
-
-
         </ul>
-
-
-
-
-    </div>
-
-    <div class="input-group input-group-sm chatMessageControls">
-        <span class="input-group-addon" id="sizing-addon3">Comment</span>
-        <input type="text" class="form-control" placeholder="Type your message here.." aria-describedby="sizing-addon3">    
-        <span class="input-group-btn">
-            <button id="clearMessageButton" class="btn btn-default" type="button">Clear</button>
-            <button id="sendMessageButton" class="btn btn-primary" type="button"><i class="fa fa-send"></i>Send</button>
-        </span>
-        <span class="input-group-btn">
-            <button id="undoSendButton" class="btn btn-default" type="button" disabled><i class="fa fa-undo"></i>Undo</button>
-        </span>
     </div>
 </div>
-
+<!-- Positive argument -->
+    <div class="modal fade" 
+         id="modalReplyPositiveArgument" 
+         tabindex="-1" 
+         role="dialog" 
+         aria-labelledby="modalReplyPositiveArgument" 
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="form_positive_argument">
+                    <div class="modal-header">
+                        <button type="button" 
+                                style="color:black;" 
+                                class="close" 
+                                data-dismiss="modal" 
+                                aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" 
+                            id="myModalLabel">
+                                <?php _e('New argument','tainacan') ?>
+                        </h4>
+                    </div>
+                    <div class="modal-body"  >
+                        <div class="form-group">
+                            <i><b>"<span id="argument_positive_text"></span>"</b></i>
+                        </div>
+                        <hr>
+                        <div  class="form-group">
+                           <label for="exampleInputPassword1"><span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;<?php _e('Describe a positive argument','tainacan') ?></label>
+                           <textarea name="positive_argument" class="form-control"   ></textarea>
+                        </div>
+                        <div  class="form-group" style="margin-bottom: -10px;">
+                            <center>
+                                <a style="cursor: pointer;" onclick="toggle_additional_information('#properties_positive')">
+                                    <?php _e('Additional informations','tainacan') ?><br>
+                                    <span class="glyphicon glyphicon-chevron-down"></span>
+                                </a>    
+                            </center>
+                            <div style="display: none;" id="properties_positive"></div>
+                        </div>    
+                        <input type="hidden" id="collection_postive_argument_id" name="collection_id" value="">
+                        <input type="hidden" name="classifications" value="">
+                        <input type="hidden" name="argument_parent" value="">
+                        <input type="hidden" name="operation" value="add_reply_positive">
+                    </div>
+                    <div class="modal-footer">
+                        <button style="color:grey;" type="button" class="btn btn-default" data-dismiss="modal"><?php _e('Close', 'tainacan') ?></button>
+                        <button type="submit" class="btn btn-primary" ><?php _e('Save', 'tainacan') ?></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<!-- negative argument -->
+    <div class="modal fade" 
+         id="modalReplyNegativeArgument" 
+         tabindex="-1" 
+         role="dialog" 
+         aria-labelledby="modalReplyNegativeArgument" 
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="form_negative_argument">
+                    <div class="modal-header">
+                        <button type="button" 
+                                style="color:black;" 
+                                class="close" 
+                                data-dismiss="modal" 
+                                aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" 
+                            id="myModalLabel">
+                                <?php _e('New argument','tainacan') ?>
+                        </h4>
+                    </div>
+                    <div class="modal-body"  >
+                        <div class="form-group">
+                            <i><b>"<span id="argument_negative_text"></span>"</b></i>
+                        </div>
+                        <hr>
+                        <div  class="form-group">
+                           <label for="exampleInputPassword1"><span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;<?php _e('Describe a positive argument','tainacan') ?></label>
+                           <textarea name="negative_argument" class="form-control"   ></textarea>
+                        </div>
+                        <div  class="form-group" style="margin-bottom: -10px;">
+                            <center>
+                                <a style="cursor: pointer;" onclick="toggle_additional_information('#properties_negative')">
+                                    <?php _e('Additional informations','tainacan') ?><br>
+                                    <span class="glyphicon glyphicon-chevron-down"></span>
+                                </a>    
+                            </center>
+                            <div style="display: none;" id="properties_negative"></div>
+                        </div>    
+                        <input type="hidden" name="collection_id" value="">
+                        <input type="hidden" name="classifications" value="">
+                        <input type="hidden" name="argument_parent" value="">
+                        <input type="hidden" name="operation" value="add_reply_negative">
+                    </div>
+                    <div class="modal-footer">
+                        <button style="color:grey;" type="button" class="btn btn-default" data-dismiss="modal"><?php _e('Close', 'tainacan') ?></button>
+                        <button type="submit" class="btn btn-primary" ><?php _e('Save', 'tainacan') ?></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 <script>
     $(document).ready(function () {
 
