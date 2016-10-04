@@ -12,6 +12,8 @@
                 $('.nav-tabs').tab();
                 $('.dropdown-toggle').dropdown();
                 elem = jQuery.parseJSON(result);
+                if(elem.redirect)
+                    window.location = elem.redirect;
             }).error(function (error) {
             });
             e.preventDefault();
@@ -28,6 +30,8 @@
                 $('.nav-tabs').tab();
                 $('.dropdown-toggle').dropdown();
                 elem = jQuery.parseJSON(result);
+                if(elem.redirect)
+                    window.location = elem.redirect;
             }).error(function (error) {
             });
             e.preventDefault();

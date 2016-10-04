@@ -39,7 +39,6 @@ class ViewHelper {
                                         </button>
                                     </div>                                
                                     <div class="btn-group" role="group" aria-label="...">
-                                        <button type="button" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-comment"></span> <?php _e('Reply','tainacan') ?></button>
                                         <?php if($child->post_author   ==  get_current_user_id()): ?>
                                         <button type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-edit"></span> <?php _e('Edit','tainacan') ?></button>
                                         <button type="button" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash"></span> <?php _e('Remove','tainacan') ?></button>
@@ -53,6 +52,9 @@ class ViewHelper {
                     </tr>
                 </table>
             </li>
+            <?php
+                $this->getChildrenItems($ranking,$child->ID, $depth+1);
+            ?>
             <?php endforeach;  ?>
         <?php 
         endif; 

@@ -366,6 +366,7 @@
                         </div>    
                         <input type="hidden" id="collection_postive_argument_id" name="collection_id" value="">
                         <input type="hidden" name="classifications" value="">
+                        <input type="hidden" name="root_argument" value="<?php echo $object->ID; ?>">
                         <input type="hidden" name="argument_parent" value="">
                         <input type="hidden" name="operation" value="add_reply_positive">
                     </div>
@@ -404,7 +405,7 @@
                         </div>
                         <hr>
                         <div  class="form-group">
-                           <label for="exampleInputPassword1"><span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;<?php _e('Describe a positive argument','tainacan') ?></label>
+                           <label for="exampleInputPassword1"><span class="glyphicon glyphicon-thumbs-down"></span>&nbsp;<?php _e('Describe a positive argument','tainacan') ?></label>
                            <textarea name="negative_argument" class="form-control"   ></textarea>
                         </div>
                         <div  class="form-group" style="margin-bottom: -10px;">
@@ -418,6 +419,7 @@
                         </div>    
                         <input type="hidden" name="collection_id" value="">
                         <input type="hidden" name="classifications" value="">
+                        <input type="hidden" name="root_argument" value="<?php echo $object->ID; ?>">
                         <input type="hidden" name="argument_parent" value="">
                         <input type="hidden" name="operation" value="add_reply_negative">
                     </div>

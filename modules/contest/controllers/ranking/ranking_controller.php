@@ -13,16 +13,24 @@ class RankingController extends Controller {
         switch ($operation) {
             case "save_vote_binary":
                 $result_data = [];
-                $array_ancestors[] = $data['object_id'];
+                //coloco o voto em que foi realizado
+                $result_data['seletor'] = '#constest_score_'.$data['object_id'] ;
+                $result_data['is_new'] = $ranking_model->save_vote(
+                                            ['object_id'=>$data['object_id'],'property_id'=>$data['property_id'],'score'=>$data['score']],true,true);
+                $result_data['score'] = $ranking_model->calculate_vote_binary($data['property_id'], $data['object_id']);
+                //adiciono no array
+                $data['results'][] = $result_data;
+                //busco a posicao inicial
                 $position_origin =  get_post_meta($data['object_id'], 'socialdb_object_contest_position', true);
-                $array_ancestors = array_merge($array_ancestors, get_ancestors($data['object_id'], 'socialdb_object'));
+                $score_origin = $data['score'];
+                $array_ancestors = get_ancestors($data['object_id'], 'socialdb_object');
                 if (is_user_logged_in()) {
                     if(is_array($array_ancestors)){
                         foreach ($array_ancestors as $index => $ancest) {
                             $result_data['seletor'] = '#constest_score_'.$ancest ;
                             $position =  get_post_meta($ancest, 'socialdb_object_contest_position', true);
                             if($position):// se ele tiver uma posicao
-                                if($position_origin == $position):
+                                if($position_origin == 'positive'):
                                     $score = ($data['score']=='1') ? '1' : '-1';
                                     $result_data['is_new'] = $ranking_model->save_vote(
                                             ['object_id'=>$ancest,'property_id'=>$data['property_id'],'score'=>$score],true,true);
@@ -30,6 +38,8 @@ class RankingController extends Controller {
                                     $score = ($data['score']=='1') ? '-1' : '1';
                                     $result_data['is_new'] = $ranking_model->save_vote(['object_id'=>$ancest,'property_id'=>$data['property_id'],'score'=>$score],true,true);
                                 endif;
+                                $position_origin = $position;
+                                $score_origin = $score;
                             else:// se nao tiver uma posicao
                                 // verifco se o anterior a ele possui
                                 if(isset($array_ancestors[$index-1])): 
@@ -47,7 +57,9 @@ class RankingController extends Controller {
                                     $score = ($data['score']=='1') ? '1' : '-1';
                                     $result_data['is_new'] = $ranking_model->save_vote(
                                             ['object_id'=>$ancest,'property_id'=>$data['property_id'],'score'=>$score],true,true);
-                                endif; 
+                                endif;
+                                $position_origin = $position;
+                                $score_origin = $score;
                             endif;   
                             $result_data['score'] = $ranking_model->calculate_vote_binary($data['property_id'], $ancest);
                             $data['results'][] = $result_data;
