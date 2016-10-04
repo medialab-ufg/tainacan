@@ -186,9 +186,10 @@
                                 '<input type="hidden" class="property_name" value="' + property.name + '">' +
                                 '<input type="hidden" id="property_type_' + property.id + '" value="4">' +
                                 '<a onclick="delete_property(' + current_id + ',' + 4 + ')" class="delete_property" href="#">' +
-                                '<span class="glyphicon glyphicon-trash"><span></a></div><ul></ul></li>');
+                                '<span class="glyphicon glyphicon-trash"><span></a></div><ul class="list-compounded" id="list-compounded-' + property.id + '"></ul></li>');
                         }
                     }
+                    get_children_compounds(current_id,property.metas.socialdb_property_compounds_properties_id);
                 });
             }
         });
@@ -234,14 +235,42 @@
         });
     }
     
-    //
-    function get_children_compounds(){
-//         return '<li id="compounds-'+5+'">'+
-//                                '<a onclick="" class="edit_property_data" href="javascript:void(0)">' +
-//                                '<span style="margin-right:5px;" class="glyphicon glyphicon-edit pull-right"><span></a> ' +
-//                                '<a onclick="delete_property()" class="delete_property" href="#">' +
-//                                '<span style="margin-right:5px;" class="glyphicon glyphicon-trash pull-right"><span></a>' +
-//                                '<span style="margin-right:5px;" class="glyphicon glyphicon-sort sort-filter pull-right"></span>&nbsp;' + 'node.data.title'+'</li>';;
+    
+    /***************************************************************************
+    *                           LISTA AS PROPRIEDADES COMPOSTAS
+    ***************************************************************************/
+    function get_children_compounds(property_id,compounds_id){
+        $.ajax({
+            url: $('#src').val() + '/controllers/property/property_controller.php',
+            type: 'POST',
+            data: { 
+                collection_id: $("#collection_id").val(), 
+                operation: 'get_property_compounds',
+                property_id: property_id,
+                compounds_id:compounds_id }
+        }).done(function (result) {
+            $('#modalImportMain').modal('hide');
+            elem = jQuery.parseJSON(result);
+            $.each(elem.compounds,function(index,property){
+                var current_id = property.id;
+                var current_search_widget = property.type;
+                var type = types_compounds[current_id];
+                var string = '';
+                if(type=='1'){
+                    string = 'edit_metadata';
+                }else if(type=='2'){
+                    string = 'edit_object';
+                }else if(type=='3'){
+                    string = 'edit_term';
+                }
+                $( "#list-compounded-"+property_id ).append('<li id="compounds-'+current_id+'">'+
+                                '<a onclick="'+string+'(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
+                                '<span style="margin-right:5px;" class="glyphicon glyphicon-edit pull-right"><span></a> ' +
+                                '<a onclick="delete_property(' + current_id + ','+type+')" class="delete_property" href="#">' +
+                                '<span style="margin-right:5px;" class="glyphicon glyphicon-trash pull-right"><span></a>' +
+                                '<span style="margin-right:5px;" class="glyphicon glyphicon-sort sort-filter pull-right"></span>&nbsp;'+ add_filter_button(current_id) + property.name + add_text_type(current_search_widget) +'</li>')
+            });
+        });
     }
     
 </script>

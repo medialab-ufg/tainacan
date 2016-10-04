@@ -270,6 +270,12 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
                     //update_post_meta($data['collection_id'], 'socialdb_collection_facet_ranking_colaborations_priority', '3');
                 }
                 return json_encode($data);
+            case 'get_property_compounds':
+                $compounds_id = explode(',', $data['compounds_id']);
+                foreach ($compounds_id as $compound_id) {
+                    $data['compounds'][] = $property_model->get_all_property($compound_id,true, $data['collection_id']);
+                }
+                return json_encode($data);
                 
         }
     }

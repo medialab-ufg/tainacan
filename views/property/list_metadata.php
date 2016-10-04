@@ -11,6 +11,7 @@ $array_visibility = ($meta&&$meta!=='') ? $meta : '';
 ?>
 
 <?php $view_helper->render_header_config_steps('metadata') ?>
+<?php echo $view_helper->add_styles_property() ?>
 <input type="hidden" 
        name="tabs_properties" 
        id="tabs_properties" 
@@ -79,25 +80,27 @@ $array_visibility = ($meta&&$meta!=='') ? $meta : '';
         <?php $default_tab = get_post_meta($collection_id, 'socialdb_collection_default_tab', true) ?>
         <?php $selected_menu_style_id = get_post_meta( $collection_id, 'socialdb_collection_facet_' . $f_id . '_menu_style', true); ?>
         <!-- Abas para a Listagem dos metadados -->
-        <ul class="nav nav-tabs" style="background: white">
-            <li  role="presentation" class="active">
-                <a id="click-tab-default" href="#tab_default" aria-controls="tab_default" role="tab" data-toggle="tab">
-                    <span ondblclick="alter_tab_title('default')" id="default-tab-title"><?php echo (!$default_tab) ? _e('Default', 'tainacan') : $default_tab ?></span>
-                    <input id="default-tab-title-input" 
-                           class="style-input"
-                           onblur="on_blur_input_title('default')"
-                           onkeyup="on_key_input_title('default',event)"
-                           style="display: none;" 
-                           type="text" 
-                           value="<?php echo (!$default_tab) ? _e('Default', 'tainacan') : $default_tab ?>">
-                </a>
-            </li>
-            <li id="plus_tab_button" role="presentation">
-                <a style="cursor: pointer;" onclick="add_tab(this)"  role="tab" data-toggle="tab">
-                    <span class="glyphicon glyphicon-plus"></span>
-                </a>
-            </li>
+        <div style="background: white;">
+            <ul class="nav nav-tabs" style="background: white;margin-left: 15px;margin-right: 15px;">
+                <li  role="presentation" class="active">
+                    <a id="click-tab-default" href="#tab_default" aria-controls="tab_default" role="tab" data-toggle="tab">
+                        <span ondblclick="alter_tab_title('default')" id="default-tab-title"><?php echo (!$default_tab) ? _e('Default', 'tainacan') : $default_tab ?></span>
+                        <input id="default-tab-title-input" 
+                               class="style-input"
+                               onblur="on_blur_input_title('default')"
+                               onkeyup="on_key_input_title('default',event)"
+                               style="display: none;" 
+                               type="text" 
+                               value="<?php echo (!$default_tab) ? _e('Default', 'tainacan') : $default_tab ?>">
+                    </a>
+                </li>
+                <li id="plus_tab_button" role="presentation">
+                    <a style="cursor: pointer;" onclick="add_tab(this)"  role="tab" data-toggle="tab">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </a>
+                </li>
          </ul>
+        </div>    
         <div id="tab-content-metadata" class="tab-content" style="background: white">
             <div id="tab_default" class="ui-widget ui-helper-clearfix col-md-12 tab-pane fade in active" style="background: white">
                 <ul id="metadata-container-default" class="gallery ui-helper-reset ui-helper-clearfix connectedSortable metadata-container">

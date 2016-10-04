@@ -22,56 +22,63 @@ foreach( $view_helper->get_metadata_types() as $type => $label):
 
                     <div class="modal-body">
                         <form id="submit_form_property_data_<?php echo $type ?>" name="submit_form_property_data_<?php echo $type ?>" class="form_property_data">
-
-                            <div class="metadata-common-fields">
-                                <div class="create_form-group">
-                                    <label for="property_data_name"><?php _e('Property name','tainacan'); ?></label>
-                                    <input type="text" class="form-control" id="property_data_name" name="property_data_name" placeholder="<?php _e('Property name','tainacan'); ?>">
-                                </div> <br />
-
-                                <div id="default_field" class="create_form-group">
-                                    <label for="socialdb_property_default_value"><?php _e('Property data default value','tainacan'); ?></label>
-                                    <input type="text" class="form-control" id="socialdb_property_data_default_value" name="socialdb_property_default_value" placeholder="<?php _e('Property Data Default Value','tainacan'); ?>"><br>
+                            <div id="data-title-name" style="margin-bottom: 15px;">
+                                <div class="metadata-common-fields">
+                                    <div class="create_form-group">
+                                        <label for="property_data_name"><?php _e('Property name','tainacan'); ?></label>
+                                        <input type="text" class="form-control" id="property_data_name" name="property_data_name" placeholder="<?php _e('Property name','tainacan'); ?>">
+                                    </div> <br />
                                 </div>
-                                <div class="create_form-group">
-                                    <label for="socialdb_property_help"><?php _e('Text helper','tainacan'); ?></label>
-                                    <input type="text" class="form-control" id="socialdb_property_data_help" name="socialdb_property_data_help" />
-                                </div>
-                                <br>
-                                <div class="form-group category-fit-column" style="display: inline-block; width: 59%">
-                                    <label for="property_term_required" style="display: block"><?php _e('Elements Quantity:','tainacan'); ?></label>
-                                    <input type="radio" name="socialdb_property_data_cardinality" id="socialdb_property_data_cardinality_1" checked="checked"  value="1">&nbsp;<?php _e('Unic value','tainacan') ?>
-                                    <input type="radio" name="socialdb_property_data_cardinality" id="socialdb_property_data_cardinality_n" value="n">&nbsp;<?php _e('Multiple values','tainacan') ?>
-                                </div>
-                                <div id="required_field" class="form-group" style="display: inline-block; width: 59%" >
-                                    <label for="property_data_required" style="display: block"><?php _e('Required','tainacan'); ?></label>
-                                    <input type="radio" name="property_data_required" id="property_data_required_true"  value="true">&nbsp;<?php _e('Yes','tainacan'); ?>
-                                    <input type="radio" name="property_data_required" id="property_data_required_false" value="false">&nbsp;<?php _e('No','tainacan'); ?>
-                                </div>
+                                <!-- Para propriedades fixas -->
+                                <div class="metadata-fixed-fields" style="display:none;">
+                                    <div class="create_form-group">
+                                        <label for="property_fixed_name"><?php _e('Property name','tainacan'); ?></label>
+                                         <input type="text" 
+                                                class="form-control" 
+                                                id="property_fixed_name" 
+                                                name="property_fixed_name" 
+                                                placeholder="<?php _e('Property name','tainacan'); ?>">
+                                    </div> <br />
+                                </div>   
+                                <a style="cursor: pointer;" onclick="toggle_advanced_configuration('#data-advanced-configuration-<?php echo $type ?>')">
+                                    <?php _e('Advanced Configuration', 'tainacan') ?> <span class="glyphicon glyphicon-triangle-bottom"></span>
+                                </a>
+                            </div>  
+                            <div id="data-advanced-configuration-<?php echo $type ?>" style="display: none;">
+                                <div class="metadata-common-fields">
+                                    <div id="default_field" class="create_form-group">
+                                        <label for="socialdb_property_default_value"><?php _e('Property data default value','tainacan'); ?></label>
+                                        <input type="text" class="form-control" id="socialdb_property_data_default_value" name="socialdb_property_default_value" placeholder="<?php _e('Property Data Default Value','tainacan'); ?>"><br>
+                                    </div>
+                                    <div class="create_form-group">
+                                        <label for="socialdb_property_help"><?php _e('Text helper','tainacan'); ?></label>
+                                        <input type="text" class="form-control" id="socialdb_property_data_help" name="socialdb_property_data_help" />
+                                    </div>
+                                    <br>
+                                    <div class="form-group category-fit-column" style="display: inline-block; width: 59%">
+                                        <label for="property_term_required" style="display: block"><?php _e('Elements Quantity:','tainacan'); ?></label>
+                                        <input type="radio" name="socialdb_property_data_cardinality" id="socialdb_property_data_cardinality_1" checked="checked"  value="1">&nbsp;<?php _e('Unic value','tainacan') ?>
+                                        <input type="radio" name="socialdb_property_data_cardinality" id="socialdb_property_data_cardinality_n" value="n">&nbsp;<?php _e('Multiple values','tainacan') ?>
+                                    </div>
+                                    <div id="required_field" class="form-group" style="display: inline-block; width: 59%" >
+                                        <label for="property_data_required" style="display: block"><?php _e('Required','tainacan'); ?></label>
+                                        <input type="radio" name="property_data_required" id="property_data_required_true"  value="true">&nbsp;<?php _e('Yes','tainacan'); ?>
+                                        <input type="radio" name="property_data_required" id="property_data_required_false" value="false">&nbsp;<?php _e('No','tainacan'); ?>
+                                    </div>
 
-                                <input type="hidden" name="property_data_widget" value="<?php echo $type ?>" class="property_data_widget">
-                                <input type="hidden" name="orientation" value="left-column">
+                                    <input type="hidden" name="property_data_widget" value="<?php echo $type ?>" class="property_data_widget">
+                                    <input type="hidden" name="orientation" value="left-column">
 
-                                <hr class="hr-style">
-                            </div>
-                            <!-- Para propriedades fixas -->
-                            <div class="metadata-fixed-fields" style="display:none;">
-                                <div class="create_form-group">
-                                    <label for="property_fixed_name"><?php _e('Property name','tainacan'); ?></label>
-                                     <input type="text" 
-                                            class="form-control" 
-                                            id="property_fixed_name" 
-                                            name="property_fixed_name" 
-                                            placeholder="<?php _e('Property name','tainacan'); ?>">
-                                </div> <br />
-                            </div>   
-                            <!-- Selecao de aba -->
-                            <div class="form-group">
-                                <label for="socialdb_event_property_tab"><?php _e('Select the tab','tainacan'); ?></label>
-                                <select class="socialdb_event_property_tab form-control" name="socialdb_event_property_tab">
-                                </select>
-                            </div>
-
+                                    <hr class="hr-style">
+                                </div>
+                                
+                                <!-- Selecao de aba -->
+                                <div class="form-group">
+                                    <label for="socialdb_event_property_tab"><?php _e('Select the tab','tainacan'); ?></label>
+                                    <select class="socialdb_event_property_tab form-control" name="socialdb_event_property_tab">
+                                    </select>
+                                </div>
+                            </div>    
                             <div class="form-group">
                                 <label for="use-filter"><?php _e('Use as a filter','tainacan'); ?></label>
                                 <input type="checkbox" value="use_filter" name="property_data_use_filter" class="property_data_use_filter" />

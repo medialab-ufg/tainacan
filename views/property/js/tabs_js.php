@@ -47,7 +47,7 @@
                            ' style="display: none;" '+
                            'type="text" '+
                            'value="'+name+'">&nbsp;&nbsp;'+
-                           '<span class="close" style="cursor:pointer;" onclick="remove_tab(this,'+id+')">&times;</span>'
+                           '<span style="cursor:pointer;position: absolute;top: 0px;right: 0px;height: 15px;padding-left:2px;padding-right:2px;background:#0c698b;color:white" onclick="remove_tab(this,'+id+')"><span style="position: relative;top: -3px">x</span></span>'
                 '</a>'+
             '</li>';
     }

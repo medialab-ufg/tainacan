@@ -331,5 +331,23 @@ class ViewHelper {
           'slideshow' => __('Slideshow', 'tainacan'),
         ];
     }
+    
+    public function add_styles_property() {
+        ?>
+        <style>
+            #properties_tabs ul.metadata-container li{
+                border: 1px solid #e3e3e3 !important;
+            }
+            .gallery li {
+                padding: 0.4em;
+                margin: 0;
+            }
+            .list-compounded{
+                margin-left: 15px;
+                margin-top: 15px;
+            }
+        </style>    
+        <?php
+    }
 
 } // ViewHelper

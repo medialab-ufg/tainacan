@@ -2194,7 +2194,19 @@
         }
         list_collection_metadata();
     }
-    
+    /**
+     * 
+     * @param {type} seletor
+     * @returns {undefined}     */
+    function toggle_advanced_configuration(seletor) {
+        console.log(seletor);
+        if ($(seletor).is(':visible')) {
+            $(seletor).slideUp();
+        } else {
+            $(seletor).slideDown();
+        }
+
+    }
     /**
      ****************************************************************************
      ************************* PROPERTY FIXED FUNCTIONS ************************
@@ -2254,7 +2266,6 @@
     }
     
     function generate_html_fixed_property(current_id,property,tab_property_id,class_var,style,button){
-        console.log(property)
         $(get_property_tab_seletor(tab_property_id)).append(
             '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="root_category '+class_var+' ui-widget-content ui-corner-tr '+is_allowed_facet(property.slug)+'">' +
             '<label '+style+'   class="title-pipe">'+ add_filter_button(current_id) + property.name + add_text_type(property.type) +'</label>' +
