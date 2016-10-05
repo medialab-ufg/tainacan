@@ -73,11 +73,12 @@ class EventPropertyCompoundsCreate extends EventModel {
         $help = get_post_meta($event_id, 'socialdb_event_property_compounds_create_help',true) ;   
         $property_id = get_post_meta($event_id, 'socialdb_event_property_compounds_create_id',true) ;
         $tab_id = get_post_meta($event_id, 'socialdb_event_property_tab',true) ;
+        $visualization = get_post_meta($event_id, 'socialdb_event_property_visualization',true) ;
         //inserindo o metadado
         $property_category_id = get_post_meta($event_id, 'socialdb_event_property_compounds_create_category_root_id',true) ;
         // chamo a funcao do model de propriedade para fazer a insercao
         if(!$property_id||empty($property_id)||!is_numeric($property_id)){
-            $result = json_decode($propertyModel->add_property_compounds($name, $collection_id, $property_category_id, $properties_id,$cardinality, $help, $required));
+            $result = json_decode($propertyModel->add_property_compounds($name, $collection_id, $property_category_id, $properties_id,$cardinality, $help, $required,$visualization));
             if(isset($result->property_id)){
                 do_action('after_event_add_property_compounds',$result->property_id,$event_id);
                 $propertyModel->update_tab_organization($collection_id,$tab_id, $result->property_id);

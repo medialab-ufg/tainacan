@@ -60,6 +60,11 @@
 
                         <hr class="hr-style">
                     </div>
+                    <div class="form-group" style="display: inline-block;">
+                        <label for="property_term_required" style="margin-right: 10px;" ><?php _e('Visualization','tainacan'); ?> : </label>
+                        &nbsp;<input type="radio" name="socialdb_event_property_visualization" id="socialdb_property_object_visualization_public" checked="checked"  value="public">&nbsp;<?php _e('Public','tainacan') ?>
+                        &nbsp;<input type="radio" name="socialdb_event_property_visualization" id="socialdb_property_object_visualization_restrict" value="restrict">&nbsp;<?php _e('Restrict','tainacan') ?>
+                    </div>
                     <div class="form-group">
                         <label for="socialdb_event_property_tab"><?php _e('Select the tab','tainacan'); ?></label>
                         <select class="socialdb_event_property_tab form-control" name="socialdb_event_property_tab">

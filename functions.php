@@ -1130,6 +1130,7 @@ function create_event_terms() {
     $event_property_data_term = create_register('socialdb_event_property_data', 'socialdb_event_type', array('parent' => $event_root_term['term_id']));
     create_metas($event_property_data_term['term_id'], 'socialdb_event_property_data_metas', 'socialdb_event_property_used_by_categories', 'socialdb_event_property_used_by_categories');
     create_metas($event_property_data_term['term_id'], 'socialdb_event_property_data_metas', 'socialdb_event_property_tab', 'socialdb_event_property_tab');
+    create_metas($event_property_data_term['term_id'], 'socialdb_event_property_data_metas', 'socialdb_event_property_visualization', 'socialdb_event_property_visualization');
     ####### action para adicao de metadados no eventos de propriedade de dados ######
     do_action('add_new_metas_event_property_data', $event_property_data_term, 'socialdb_event_property_data_metas');
     ############################################################################
@@ -1163,6 +1164,7 @@ function create_event_terms() {
     $event_property_object_term = create_register('socialdb_event_property_object', 'socialdb_event_type', array('parent' => $event_root_term['term_id']));
     create_metas($event_property_object_term['term_id'], 'socialdb_event_property_object_metas', 'socialdb_event_property_used_by_categories', 'socialdb_event_property_used_by_categories');
     create_metas($event_property_object_term['term_id'], 'socialdb_event_property_object_metas', 'socialdb_event_property_tab', 'socialdb_event_property_tab');
+    create_metas($event_property_object_term['term_id'], 'socialdb_event_property_object_metas', 'socialdb_event_property_visualization', 'socialdb_event_property_visualization');
     ####### action para adicao de metadados no eventos de propriedade de object ######
     do_action('add_new_metas_event_property_object', $event_property_object_term, 'socialdb_event_property_object_metas');
     ############################################################################
@@ -1196,6 +1198,7 @@ function create_event_terms() {
     $event_property_term_term = create_register('socialdb_event_property_term', 'socialdb_event_type', array('parent' => $event_root_term['term_id']));
      create_metas($event_property_term_term['term_id'], 'socialdb_event_property_term_metas', 'socialdb_event_property_used_by_categories', 'socialdb_event_property_used_by_categories');
      create_metas($event_property_term_term['term_id'], 'socialdb_event_property_term_metas', 'socialdb_event_property_tab', 'socialdb_event_property_tab');
+     create_metas($event_property_term_term['term_id'], 'socialdb_event_property_term_metas', 'socialdb_event_property_visualization', 'socialdb_event_property_visualization');
     $event_create_property_term = create_register('socialdb_event_property_term_create', 'socialdb_event_type', array('parent' => $event_property_term_term['term_id']));
     create_metas($event_create_property_term['term_id'], 'socialdb_event_property_term_create_metas', 'socialdb_event_property_term_create_id', 'socialdb_event_property_term_create_id');
     create_metas($event_create_property_term['term_id'], 'socialdb_event_property_term_create_metas', 'socialdb_event_property_term_create_name', 'socialdb_event_property_term_create_name');
@@ -1227,6 +1230,7 @@ function create_event_terms() {
     $event_property_compounds_term = create_register('socialdb_event_property_compounds', 'socialdb_event_type', array('parent' => $event_root_term['term_id']));
      create_metas($event_property_compounds_term['term_id'], 'socialdb_event_property_compounds_metas', 'socialdb_event_property_used_by_categories', 'socialdb_event_property_used_by_categories');
      create_metas($event_property_compounds_term['term_id'], 'socialdb_event_property_compounds_metas', 'socialdb_event_property_tab', 'socialdb_event_property_tab');
+     create_metas($event_property_compounds_term['term_id'], 'socialdb_event_property_compounds_metas', 'socialdb_event_property_visualization', 'socialdb_event_property_visualization');
     $event_create_property_compounds = create_register('socialdb_event_property_compounds_create', 'socialdb_event_type', array('parent' => $event_property_compounds_term['term_id']));
     create_metas($event_create_property_compounds['term_id'], 'socialdb_event_property_compounds_create_metas', 'socialdb_event_property_compounds_create_id', 'socialdb_event_property_compounds_create_id');
     create_metas($event_create_property_compounds['term_id'], 'socialdb_event_property_compounds_create_metas', 'socialdb_event_property_compounds_create_name', 'socialdb_event_property_compounds_create_name');

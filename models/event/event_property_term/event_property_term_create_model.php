@@ -77,6 +77,7 @@ class EventPropertyTermCreate extends EventModel {
         $data['socialdb_property_new_taxonomy'] = get_post_meta($event_id, 'socialdb_event_property_term_create_new_taxonomy',true) ;   
         $data['property_id'] = get_post_meta($event_id, 'socialdb_event_property_term_create_id',true) ;
         $data['property_tab'] = get_post_meta($event_id, 'socialdb_event_property_tab',true) ;
+        $data['property_visualization'] = get_post_meta($event_id, 'socialdb_event_property_visualization',true) ;
         //inserindo o metadado
         $property_category_id = get_post_meta($event_id, 'socialdb_event_property_term_create_category_root_id',true) ;
         if($property_category_id&&$property_category_id!=$this->get_category_root_of($data['collection_id'])){

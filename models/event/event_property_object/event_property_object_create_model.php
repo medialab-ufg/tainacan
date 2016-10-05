@@ -71,6 +71,7 @@ class EventPropertyObjectCreate extends EventModel {
         $data['property_object_required'] = get_post_meta($event_id, 'socialdb_event_property_object_create_required',true) ;
         $data['property_object_facet'] = get_post_meta($event_id, 'socialdb_event_property_object_create_is_facet',true) ;
         $data['property_object_is_reverse'] = get_post_meta($event_id, 'socialdb_event_property_object_create_is_reverse',true) ;
+        $data['property_visualization'] = get_post_meta($event_id, 'socialdb_event_property_visualization',true) ;
         if($data['property_object_is_reverse']=='true'){
            $data['property_object_reverse'] = get_post_meta($event_id, 'socialdb_event_property_object_create_reverse',true) ;   
         }

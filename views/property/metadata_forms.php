@@ -55,15 +55,18 @@ foreach( $view_helper->get_metadata_types() as $type => $label):
                                         <input type="text" class="form-control" id="socialdb_property_data_help" name="socialdb_property_data_help" />
                                     </div>
                                     <br>
-                                    <div class="form-group category-fit-column" style="display: inline-block; width: 59%">
-                                        <label for="property_term_required" style="display: block"><?php _e('Elements Quantity:','tainacan'); ?></label>
-                                        <input type="radio" name="socialdb_property_data_cardinality" id="socialdb_property_data_cardinality_1" checked="checked"  value="1">&nbsp;<?php _e('Unic value','tainacan') ?>
-                                        <input type="radio" name="socialdb_property_data_cardinality" id="socialdb_property_data_cardinality_n" value="n">&nbsp;<?php _e('Multiple values','tainacan') ?>
+                                    <div class="form-group" style="display: inline-block;">
+                                        <label for="property_term_required" style="margin-right: 10px;" ><?php _e('Elements Quantity','tainacan'); ?> : </label>
+                                        &nbsp;<input type="radio" name="socialdb_property_data_cardinality" id="socialdb_property_data_cardinality_1" checked="checked"  value="1">&nbsp;<?php _e('Unic value','tainacan') ?>
+                                        &nbsp;<input type="radio" name="socialdb_property_data_cardinality" id="socialdb_property_data_cardinality_n" value="n">&nbsp;<?php _e('Multiple values','tainacan') ?>
                                     </div>
-                                    <div id="required_field" class="form-group" style="display: inline-block; width: 59%" >
-                                        <label for="property_data_required" style="display: block"><?php _e('Required','tainacan'); ?></label>
-                                        <input type="radio" name="property_data_required" id="property_data_required_true"  value="true">&nbsp;<?php _e('Yes','tainacan'); ?>
-                                        <input type="radio" name="property_data_required" id="property_data_required_false" value="false">&nbsp;<?php _e('No','tainacan'); ?>
+                                    <div class="form-group" style="display: inline-block;">
+                                        <label for="property_term_required" style="margin-right: 10px;" ><?php _e('Visualization','tainacan'); ?> : </label>
+                                        &nbsp;<input type="radio" name="socialdb_event_property_visualization" id="socialdb_property_data_visualization_public" checked="checked"  value="public">&nbsp;<?php _e('Public','tainacan') ?>
+                                        &nbsp;<input type="radio" name="socialdb_event_property_visualization" id="socialdb_property_data_visualization_restrict" value="restrict">&nbsp;<?php _e('Restrict','tainacan') ?>
+                                    </div>
+                                    <div id="required_field" class="form-group" >
+                                        <input type="checkbox" name="property_data_required" id="property_data_required_true"  value="true">&nbsp;<b><?php _e('Required','tainacan'); ?></b>
                                     </div>
 
                                     <input type="hidden" name="property_data_widget" value="<?php echo $type ?>" class="property_data_widget">
@@ -114,6 +117,12 @@ foreach( $view_helper->get_metadata_types() as $type => $label):
                                             echo '><img src="' . get_template_directory_uri() . '/libraries/images/cor' . $i . '.png">  </label>';
                                         }; ?>
                                     </div>
+                                </div>
+                                    
+                                <div class="form-group" style="margin-top: 15px;margin-bottom: 15px;">
+                                    <label for="property_term_required" style="margin-right: 10px;" ><?php _e('Ordenation','tainacan'); ?> : </label>
+                                    &nbsp;<input type="radio" name="filter_ordenation" id="filter_ordenation_a" checked="checked"  value="alphabetic">&nbsp;<?php _e('Alphabetic','tainacan') ?>
+                                    &nbsp;<input type="radio" name="filter_ordenation" id="filter_ordenation_1" value="number">&nbsp;<?php _e('Items number','tainacan') ?>
                                 </div>
                             </div>
 
@@ -174,6 +183,12 @@ foreach( ['object', 'term', 'voting', 'filter', 'tag','compounds'] as $metadata 
 <div class="modal fade" id="modal_edit_fixed_property" tabindex="-1" role="dialog" aria-labelledby="modal_edit_fixed_property" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
+            <div class="modal-header" style="border-bottom: none;">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel" style="display: inline-block">
+                            <?php echo __("Edit Property Fixed", "tainacan")  ?>
+                        </h4>
+            </div>
             <div class="modal-body">
                     <div class="metadata-common-fields">
                         <input type="hidden" id="property_fixed_id">

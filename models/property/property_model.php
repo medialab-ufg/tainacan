@@ -55,6 +55,7 @@ class PropertyModel extends Model {
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_required', $data['property_term_required']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_term_cardinality', $data['socialdb_property_term_cardinality']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_term_widget', $data['socialdb_property_term_widget']);
+            $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_visualization',$data['property_visualization']);
             //adicionando a categoria raiz
             if($data['socialdb_property_vinculate_category']=='create'&&$data['socialdb_property_new_category']){
                 $category_id = $this->add_category_root_property_term($data['socialdb_property_new_category']);
@@ -137,6 +138,7 @@ class PropertyModel extends Model {
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_required', $data['property_data_required']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_data_widget', $data['property_data_widget']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_data_cardinality', $data['socialdb_property_data_cardinality']);
+            $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_visualization',$data['property_visualization']);
             if($data['socialdb_property_data_help']!=''):
                 $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_help', $data['socialdb_property_data_help']);
             else:
@@ -240,6 +242,7 @@ class PropertyModel extends Model {
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_collection_id', $data['collection_id']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_required', $data['property_object_required']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_object_cardinality', $data['socialdb_property_object_cardinality']);
+            $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_visualization',$data['property_visualization']);
             //selecionando varios relacionamentos ao mesmo tempo
             if(strpos($data['property_object_category_id'], ',')!==false){
                 $categories = array_filter(explode(',', $data['property_object_category_id']));
@@ -358,6 +361,7 @@ class PropertyModel extends Model {
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_help', $data['property_data_help']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_data_column_ordenation', $data['property_data_column_ordenation']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_data_cardinality', $data['socialdb_property_data_cardinality']);
+            $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_visualization',$data['property_visualization']);
             if($data['socialdb_property_default_value']){
                  $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_default_value', $data['socialdb_property_default_value']);
             }
@@ -403,6 +407,7 @@ class PropertyModel extends Model {
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_object_is_reverse', $data['property_object_is_reverse']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_object_is_facet', $data['property_object_facet']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_object_cardinality', $data['socialdb_property_object_cardinality']);
+            $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_visualization',$data['property_visualization']);
             //selecionando varios relacionamentos ao mesmo tempo
             if(strpos($data['property_object_category_id'], ',')!==false){
                 delete_term_meta($new_property['term_id'], 'socialdb_property_object_category_id');
@@ -465,6 +470,7 @@ class PropertyModel extends Model {
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_term_cardinality', $data['socialdb_property_term_cardinality']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_term_widget', $data['socialdb_property_term_widget']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_term_root', $data['socialdb_property_term_root']);
+            $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_visualization',$data['property_visualization']);
             update_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $data['socialdb_property_term_root'] . '_color', 'color13');
             if($data['socialdb_property_default_value']&&!empty($data['socialdb_property_default_value'])){
                  $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_default_value', $data['socialdb_property_default_value']);
@@ -1155,7 +1161,7 @@ class PropertyModel extends Model {
      * 
      * @autor: Eduardo Humberto 
      */
-    public function add_property_compounds($name,$collection_id,$category_id,$properties_id,$cardinality,$help = '',$required = 'false') {
+    public function add_property_compounds($name,$collection_id,$category_id,$properties_id,$cardinality,$help = '',$required = 'false',$visualization = 'public') {
         if (!empty($name)) {
             $id_slug = $collection_id;
             if (isset($category_id)&&$this->get_category_root_of($collection_id) != $category_id) {// verifico se eh a categoria root onde sera inserido a propriedade
@@ -1178,6 +1184,7 @@ class PropertyModel extends Model {
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_help',($help) ? $help : ' ');
             $result[] = $this->vinculate_property($category_id, $new_property['term_id']); // vinculo com a colecao/categoria
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_created_category',$category_id);// adiciono a categoria de onde partiu esta propriedade
+            $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_visualization',$visualization);// adiciono a categoria de onde partiu esta propriedade
             $data['property_id'] = $new_property['term_id'];
             //adiciona os metas nas propriedades que a compoe
             $this->update_properties_compounded($data['property_id'], $properties_id, 'true');
@@ -1211,7 +1218,7 @@ class PropertyModel extends Model {
      * <b> Metodo que adiciona o metadado compostos </b>
      * @return json
      */
-    public function update_property_compounds($property_id,$name,$collection_id,$category_id,$properties_id,$cardinality,$help = false,$required = false) {
+    public function update_property_compounds($property_id,$name,$collection_id,$category_id,$properties_id,$cardinality,$help = false,$required = false,$visualization = 'public') {
         $category_created = get_term_meta($property_id, 'socialdb_property_created_category', true);
         if($category_created&&$category_created!=$category_id){ // verificando se a propriedade pertence a outra colecao
              $data['success'] = 'false';
@@ -1241,6 +1248,7 @@ class PropertyModel extends Model {
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_compounds_properties_id', $properties_id);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_help',$help);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_created_category',$category_id);// adiciono a categoria de onde partiu esta propriedade
+            $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_visualization',$visualization);// adiciono a categoria de onde partiu esta propriedade
             //possivelmente um problema
             $this->vinculate_objects_with_property($new_property['term_id'],$collection_id,$category_id);
             //adiciona os meta das propriedades que a compoe

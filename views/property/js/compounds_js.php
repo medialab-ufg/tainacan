@@ -204,6 +204,7 @@
             data: { collection_id: $("#collection_id").val(), operation: 'edit_property_compounds', property_id: id }
         }).done(function (result) {
             elem = $.parseJSON(result);
+            var visualization =elem.metas.socialdb_property_visualization;
             $("#compound_id").val(elem.id);
             $("#operation_property_compounds").val('update_property_compounds');
             // abrir o modal
@@ -223,6 +224,14 @@
                 $("#property_compounds_required_true").prop('checked', true);
             } else {
                 $("#property_compounds_required_true").prop('checked', false);
+            }
+            conso
+            if(visualization=='restrict'){
+                $( "#socialdb_property_compounds_visualization_restrict").prop('checked', true);
+                $(  "#socialdb_property_compounds_visualization_public").removeAttr('checked');
+            }else{
+                $( "#socialdb_property_compounds_visualization_public").prop('checked', true);
+                $( "#socialdb_property_compounds_visualization_restrict").removeAttr('checked');
             }
             //seleciono as propriedades
             var properties = elem.metas.socialdb_property_compounds_properties_id.split(',');

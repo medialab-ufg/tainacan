@@ -467,6 +467,7 @@
                 var current_property_id = elem.property_data_id;
                 var property_widget = elem.search_data_widget;
                 var color_facet = elem.color_facet;
+                var ordenation = elem.filter_ordenation;
                 var collection_id = $('#collection_id').val();
 
                 if ( elem.property_data_use_filter == "use_filter" )  {
@@ -541,6 +542,7 @@
 
                 var item_required = $.parseJSON(elem.metas.socialdb_property_required);
                 var cardinality =elem.metas.socialdb_property_data_cardinality;
+                var visualization =elem.metas.socialdb_property_visualization;
                 var meta_modal = "#meta-" + current_widget;
                 var nome = elem.name;
                 var meta_help = elem.metas.socialdb_property_help;
@@ -620,6 +622,14 @@
                 } else {
                     $( meta_modal + " .form_property_data #socialdb_property_data_cardinality_1").prop('checked', true);
                     $( meta_modal + " .form_property_data #socialdb_property_data_cardinality_n").removeAttr('checked');
+                }
+                
+                if(visualization=='restrict'){
+                    $( meta_modal + " .form_property_data #socialdb_property_data_visualization_restrict").prop('checked', true);
+                    $( meta_modal + " .form_property_data #socialdb_property_data_visualization_public").removeAttr('checked');
+                }else{
+                    $( meta_modal + " .form_property_data #socialdb_property_data_visualization_public").prop('checked', true);
+                    $( meta_modal + " .form_property_data #socialdb_property_data_visualization_restrict").removeAttr('checked');
                 }
                 // $( meta_modal + " h4.modal-title").text('<?php _e('Edit property','tainacan') ?> - ' +  current_widget );
                 $( meta_modal + " h4.modal-title").text('<?php _e('Edit property','tainacan') ?>');
@@ -740,11 +750,11 @@
                         //adiciona na listagem
                         generate_html_fixed_property(current_id,property,tab_property_id,class_var,style,button);
                     } else {
-                        // cl("Este não entrou: " + property.name + " => " + property.metas.is_repository_property + " e " + property.metas.socialdb_property_created_category);
+                    // cl("Este não entrou: " + property.name + " => " + property.metas.is_repository_property + " e " + property.metas.socialdb_property_created_category);
                         if ( $.inArray(property.type, ranking_types) == -1 ) {
                             $(get_property_tab_seletor(tab_property_id)).append(
                                 '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '" data-widget="' + current_search_widget + '" class="' + property.type + ' ui-widget-content ui-corner-tr">' +
-                                '<label class="title-pipe">'+ add_filter_button(current_id) + property.name + add_text_type(current_search_widget) + '</label><div class="action-icons">' +
+                                '<label class="title-pipe">'+ add_filter_button(current_id) + property.name + add_text_type(property.type) + '</label><div class="action-icons">' +
                                 '<a class="edit-filter"><span class="glyphicon glyphicon-sort sort-filter"></span></a>&nbsp;'+
                                 '<a onclick="edit_metadata(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
                                 '<span class="glyphicon glyphicon-edit"><span></a> ' +
@@ -1057,7 +1067,7 @@
             data: {collection_id: $("#collection_id").val(), operation: 'edit_property_object', property_id: id}
         }).done(function (result) {
             elem = jQuery.parseJSON(result);
-
+            var visualization =elem.metas.socialdb_property_visualization;
             if ( is_metadata_filter( elem.id ) ) {
                 var use_filter = "use_filter";
                 $( "#meta-relationship .property_data_use_filter").prop("checked", true);
@@ -1138,6 +1148,14 @@
                 $("#property_object_required_false").prop('checked', true);
             } else {
                 $("#property_object_required_true").prop('checked', true);
+            }
+            
+             if(visualization=='restrict'){
+                $( "#socialdb_property_object_visualization_restrict").prop('checked', true);
+                $( "#socialdb_property_object_visualization_public").removeAttr('checked');
+            }else{
+                $( "#socialdb_property_object_visualization_public").prop('checked', true);
+                $( "#socialdb_property_object_visualization_restrict").removeAttr('checked');
             }
             $("#operation_property_object").val('update_property_object');
 
@@ -1293,6 +1311,8 @@
             data: { collection_id: $("#collection_id").val(), operation: 'edit_property_term', property_id: id }
         }).done(function (result) {
             elem = $.parseJSON(result);
+            var visualization =elem.metas.socialdb_property_visualization;
+            
             $('#socialdb_property_vinculate_category_exist').prop('checked','checked');
             $('#socialdb_property_vinculate_category_exist').trigger('click');
             $('#property_term_new_category').val('');            
@@ -1316,6 +1336,7 @@
                 $('#property_fixed_name_term').val(elem.name);
                 $('#is_property_fixed_term').val('true');
             }
+            
 
             $("#property_term_id").val(elem.id);
             
@@ -1354,6 +1375,13 @@
             }
             if(elem.metas.socialdb_property_help){
                 $("#socialdb_property_help").val(elem.metas.socialdb_property_help);
+            }
+            if(visualization=='restrict'){
+                $( "#socialdb_property_term_visualization_restrict").prop('checked', true);
+                $(  "#socialdb_property_term_visualization_public").removeAttr('checked');
+            }else{
+                $( "#socialdb_property_term_visualization_public").prop('checked', true);
+                $( "#socialdb_property_term_visualization_restrict").removeAttr('checked');
             }
 
             var term_root = elem.metas.socialdb_property_term_root;

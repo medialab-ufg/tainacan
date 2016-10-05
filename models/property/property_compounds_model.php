@@ -32,6 +32,7 @@ class PropertyCompoundsModel extends PropertyModel {
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_required', $data['property_term_required']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_term_cardinality', $data['socialdb_property_term_cardinality']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_term_widget', $data['socialdb_property_term_widget']);
+            $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_visualization',$data['property_visualization']);
             //adicionando a categoria raiz
             if($data['socialdb_property_vinculate_category']=='create'&&$data['socialdb_property_new_category']){
                 $category_id = $this->add_category_root_property_term($data['socialdb_property_new_category']);

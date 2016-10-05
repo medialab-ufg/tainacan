@@ -74,6 +74,7 @@ class EventPropertyDataEdit extends EventModel {
         $data['property_data_column_ordenation'] = get_post_meta($event_id, 'socialdb_event_property_data_edit_ordenation_column', true);
         $data['property_category_id'] = get_term_meta($data['property_data_id'], 'socialdb_property_created_category', true);
         $data['property_data_help'] = get_post_meta($event_id, 'socialdb_event_property_data_edit_help', true);
+        $data['property_visualization'] = get_post_meta($event_id, 'socialdb_event_property_visualization',true) ;
         // chamo a funcao do model de propriedade para fazer a insercao
         $result = json_decode($propertyModel->update_property_data($data));
         // verifying if is everything all right
