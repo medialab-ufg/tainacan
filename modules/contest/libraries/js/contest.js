@@ -25,11 +25,13 @@ function contest_show_modal_create_question(){
  * @returns {undefined}
  */
 function init_contest_item_page(src,collection_id,item_id){  
+    show_modal_main();
     $.ajax({
             type: "POST",
             url: src + "/controllers/item/item_controller.php",
             data: {collection_id: collection_id, operation: 'show-item', object_id: item_id}
         }).done(function (result) {
+            hide_modal_main();
             $('#configuration').html(result).fadeIn();
             $('.dropdown-toggle').dropdown();
             $('.nav-tabs').tab();

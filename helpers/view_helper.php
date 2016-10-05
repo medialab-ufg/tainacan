@@ -346,6 +346,9 @@ class ViewHelper {
                 margin-left: 15px;
                 margin-top: 15px;
             }
+            .list-compounded li{
+                cursor: pointer;
+            }
         </style>    
         <?php
     }

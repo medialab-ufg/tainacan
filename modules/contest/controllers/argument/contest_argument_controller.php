@@ -38,6 +38,9 @@ include_once(dirname(__FILE__).'/../../../../controllers/general/general_control
                         $data['comment'] = get_post($data['object_id']);
                         $data['type'] = get_post_meta($data['object_id'], 'socialdb_object_contest_position', true);
                         return json_encode($data);
+                    case 'update_argument':  
+                        return json_encode($model->update_argument($data));
+                        
                 }
 	}
  }

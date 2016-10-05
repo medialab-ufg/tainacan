@@ -7,8 +7,14 @@ include_once(dirname(__FILE__).'/../../../../controllers/general/general_control
 		switch ($operation) {
                     //adicionar um novo argumento 
                     case 'show-item':
-                        $data['object'] = get_post($data['object_id']);
-                        return $this->render(dirname(__FILE__).'../../../views/item/item.php', $data);
+                        $type = get_post_meta($data['object_id'], 'socialdb_object_contest_type', true);
+                        if($type=='argument'):
+                            $data['object'] = get_post($data['object_id']);
+                            return $this->render(dirname(__FILE__).'../../../views/item/item.php', $data);
+                        else:
+                             $data['object'] = get_post($data['object_id']);
+                            return $this->render(dirname(__FILE__).'../../../views/item/question.php', $data);
+                        endif;
                         
                 }
 	}

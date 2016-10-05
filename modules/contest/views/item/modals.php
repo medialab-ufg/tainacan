@@ -113,7 +113,7 @@
          aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form id="form_positive_argument">
+                <form id="form_update_argument">
                     <div class="modal-header">
                         <button type="button" 
                                 style="color:black;" 
@@ -132,8 +132,8 @@
                         </div>
                         <div  class="form-group" id="edit-type-comment">
                            <label for="exampleInputPassword1"><?php _e('Argument type','tainacan') ?></label> : 
-                           <input type="radio" id="edit-argument-positive" value="positive">&nbsp;<span class="glyphicon glyphicon-thumbs-up"></span>
-                           <input type="radio" id="edit-argument-negative" value="negative">&nbsp;<span class="glyphicon glyphicon-thumbs-down"></span>
+                           <input type="radio" name="argument-type" id="edit-argument-positive" value="positive">&nbsp;<span class="glyphicon glyphicon-thumbs-up"></span>
+                           <input type="radio" name="argument-type" id="edit-argument-negative" value="negative">&nbsp;<span class="glyphicon glyphicon-thumbs-down"></span>
                         </div>
                         <div  class="form-group" style="margin-bottom: -10px;">
                             <center>
@@ -146,11 +146,67 @@
                         </div>    
                         <input type="hidden" id="collection_edit_argument_id" name="collection_id" value="">
                         <input type="hidden" name="argument_position" value="">
-                        <input type="hidden" name="argument_id" value="">
+                        <input type="hidden" id="edit_argument_id" name="argument_id" value="">
                         <input type="hidden" name="operation" value="update_argument">
                     </div>
                     <div class="modal-footer">
-                        <button style="color:grey;" type="button" class="btn btn-default pull-left" ><span class="glyphicon glyphicon-trash"></span>&nbsp;<?php _e('Send to trash', 'tainacan') ?></button>
+                        <button style="color:grey;" type="button" data-dismiss="modal" class="btn btn-default pull-left" onclick="delete_comment($('#edit_argument_id').val()) " >
+                            <span class="glyphicon glyphicon-trash"></span>&nbsp;<?php _e('Send to trash', 'tainacan') ?>
+                        </button>
+                        <button style="color:grey;" type="button" class="btn btn-default" data-dismiss="modal"><?php _e('Close', 'tainacan') ?></button>
+                        <button type="submit" class="btn btn-success" ><?php _e('Save', 'tainacan') ?></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<!--Editando comentario -->
+ <div class="modal fade" 
+         id="modalReportAbuse" 
+         tabindex="-1" 
+         role="dialog" 
+         aria-labelledby="modalReportAbuse" 
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="form_report_abuse">
+                    <div class="modal-header">
+                        <button type="button" 
+                                style="color:black;" 
+                                class="close" 
+                                data-dismiss="modal" 
+                                aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" 
+                            id="myModalLabel">
+                                <?php _e('Report abuse','tainacan') ?>
+                        </h4>
+                    </div>
+                    <div class="modal-body"  >
+                        <div class="form-group">
+                            <i><b>"<span id="argument_report_text"></span>"</b></i>
+                        </div>
+                        <hr>
+                        <div  class="form-group" id="edit-type-comment">
+                           <label for="exampleInputPassword1"><?php _e('Report type','tainacan') ?></label> : 
+                           <select name="socialdb_event_object_delete_type">
+                               <option value=""><?php _e('Select...', 'tainacan') ?></option>
+                               <option value="inappropriate_content"><?php _e('Inappropriate Content', 'tainacan') ?></option>
+                               <option value="ad_hominem">Ad Hominem</option>
+                               <option value="repeated_argument"><?php _e('Repeated argument', 'tainacan') ?></option>
+                               <option value="unrelated_matter"><?php _e('Unrelated matter', 'tainacan') ?></option>
+                           </select>   
+                        </div>
+                        <div  class="form-group">
+                           <label for="exampleInputPassword1"><?php _e('Description','tainacan') ?></label>
+                           <textarea required="required" name="socialdb_event_observation" id="text-edit-argument" class="form-control" ></textarea>
+                        </div>   
+                        <input type="hidden"  name="socialdb_event_create_date" value="<?php echo time(); ?>">
+                        <input type="hidden"  name="socialdb_event_user_id" value="<?php echo get_current_user_id() ?>">
+                        <input type="hidden" id="collection_report_argument_id" name="socialdb_event_collection_id" value="">
+                        <input type="hidden" id="report_argument_id" name="socialdb_event_object_item_id" value="">
+                        <input type="hidden" name="operation" value="add_event_object_delete">
+                    </div>
+                    <div class="modal-footer">
                         <button style="color:grey;" type="button" class="btn btn-default" data-dismiss="modal"><?php _e('Close', 'tainacan') ?></button>
                         <button type="submit" class="btn btn-success" ><?php _e('Save', 'tainacan') ?></button>
                     </div>
