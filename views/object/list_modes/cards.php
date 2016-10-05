@@ -19,12 +19,44 @@
                 </a>
             </div>
 
+                <?php
+                // $termos = wp_get_object_terms($curr_id, "socialdb_category_type", ['fields' => 'ids']);
+                // var_dump($collection_id);
+
+                $_isso_tem = get_the_terms($collection_id, "socialdb_property_type");
+
+                $plim = wp_get_object_terms($collection_id, 'socialdb_category_type', array('fields' => 'ids'));
+                // var_dump($plim);
+
+                $_item_terms_ = get_the_terms($curr_id, "socialdb_category_type");
+                // var_dump($_item_terms_);
+
+                $paps = get_term_meta(end($table_meta_ids));
+                $_binas = (int) $paps['socialdb_property_term_root'][0];
+                // echo " O term root relacionado eh " . $_binas;
+
+                if(is_array($_item_terms_)) {
+                    foreach($_item_terms_ as $_iTerm) {
+                        // var_dump($_iTerm);
+                        if($_binas === $_iTerm->parent) {
+                            echo $_iTerm->name . " => " . $_iTerm->term_id . " Meu paps eh " . $_iTerm->parent . " <br />";
+                        }
+
+                    }
+                }
+                // echo "<h3> Check bellow all the table metas that came to us</h3>";
+                //var_dump($table_meta_ids);
+                // echo "<hr/>";
+                // echo "<hr/>";
+                ?>
+
             <div class="col-md-8 flex-box item-meta-box" style="flex-direction:column;">
                 <div class="item-meta col-md-12 no-padding">
                     <?php
                     if( isset($table_meta_ids) && $table_meta_ids > 0):
                         foreach ($table_meta_ids as $meta_id) {
                             $__item_meta = get_post_meta($curr_id, "socialdb_property_$meta_id", true);
+                            // echo "<h1>" . $__item_meta . "</h1>";
                             ?>
                             <input type="hidden" name="item_table_meta" value="<?php echo $__item_meta; ?>" />
                         <?php }

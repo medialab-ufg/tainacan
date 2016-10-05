@@ -2158,7 +2158,7 @@ class Model {
                 }
             }
         }
-        if($properties  &&  is_array($properties)){
+        if($properties && is_array($properties)){
             foreach ($properties as $property) {
                  // busco o objeto da propriedade
                  $propertyObject = get_term_by('id', $property, 'socialdb_property_type');
