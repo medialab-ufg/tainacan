@@ -79,6 +79,9 @@ class SearchController extends Controller {
                 return json_encode($search_model->delete($data));
                 break;
             case 'update_ordenation':
+                /*
+                $serializado = serialize($data['table_meta']);
+                $_unseted = unserialize($serializado); */
                 return json_encode($search_model->update_ordenation($data));
                 break;
             case 'save_new_priority':

@@ -243,10 +243,6 @@
             $('input[name="_tb_meta_"]').each(function(n, element) {
                 _table_metas.push( $(this).val() );
             });
-
-            cl("Veja tudo que está chegando ..");
-            cl(elem);
-
             if (elem.general_ordenation) {
                 $("#collection_order").append("<optgroup label='<?php _e('General ordenation','tainacan') ?>'>");
                 $.each(elem.general_ordenation, function (idx, general) {
@@ -257,6 +253,7 @@
             }
             if (elem.property_data) {
                 $("#collection_order").append("<optgroup label='<?php _e('Data properties','tainacan') ?>'>");
+                var plim = 0;
                 $.each(elem.property_data, function (idx, data) {
                     if (data && data !== false) {
                         var numeric_id = data.id;
@@ -267,7 +264,10 @@
                             var ck = "checked";
                         }
                         var sort_meta = '<li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>';
-                        sort_meta += "<input type='checkbox' id='table_meta' " + ck + " name='table_meta[]' value='" + data.id + "'> " + data.name + "<br /></li>";
+                        // sort_meta += "<input type='hidden' id='table_meta' name='table_meta[tipo][]' value='metadado_de_texto'>";
+                        // sort_meta += "<input type='hidden' id='table_meta' name='table_meta[order][]' value='" + plim + "'>";
+                        var item_info = JSON.stringify({ 'id': data.id, 'order': plim, 'tipo': 'metadado_de_texto'});
+                        sort_meta += "<input type='checkbox' id='table_meta' " + ck + " name='table_meta[]' value='" + item_info + "'> " + data.name + "<br /></li>";
                         $(".table-meta-config #sort-metas").append(sort_meta);
 
                         if(data.type === "text") {
@@ -277,6 +277,7 @@
                             });
                         }
                     }
+                    plim++;
                 });
             }
             if (elem.property_object) {
@@ -300,7 +301,7 @@
                         var numeric_id = data.id; var string_id = numeric_id.toString();
                         if( _table_metas.indexOf(string_id) > -1 )
                             var ck = "checked";
-                        cl("term .. " + data.name);
+                        cl("TERMO: " + data.name);
                         var sort_meta = '<li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>';
                         sort_meta += "<input type='checkbox' id='table_meta' " + ck + " name='table_meta[]' value='" + data.id + "'> " + data.name + "<br /></li>";
                         $(".table-meta-config #sort-metas").append(sort_meta);
