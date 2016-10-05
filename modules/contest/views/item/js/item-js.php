@@ -12,7 +12,7 @@
                 $('.nav-tabs').tab();
                 $('.dropdown-toggle').dropdown();
                 elem = jQuery.parseJSON(result);
-                if(elem.redirect)
+                if (elem.redirect)
                     window.location = elem.redirect;
             }).error(function (error) {
             });
@@ -30,7 +30,7 @@
                 $('.nav-tabs').tab();
                 $('.dropdown-toggle').dropdown();
                 elem = jQuery.parseJSON(result);
-                if(elem.redirect)
+                if (elem.redirect)
                     window.location = elem.redirect;
             }).error(function (error) {
             });
@@ -129,5 +129,77 @@
             $(seletor).slideDown();
         }
 
+    }
+
+    /**
+     * 
+     * @param {type} item_id
+     * @returns {undefined}     */
+    function edit_comment(item_id) {
+        show_modal_main();
+        $.ajax({
+            url: $('#src').val() + '/modules/<?php echo MODULE_CONTEST ?>/controllers/argument/contest_argument_controller.php',
+            type: 'POST',
+            data: {
+                operation: 'edit_comment_contest',
+                object_id: item_id,
+                collection_id: $("#collection_id").val()
+            }
+        }).done(function (result) {
+            elem_first = jQuery.parseJSON(result);
+            if (elem_first.comment && elem_first.comment.post_author == '<?php echo get_current_user_id(); ?>') {
+                $('#collection_edit_argument_id').val($("#collection_id").val());
+                $('#text-edit-argument').val(elem_first.comment.post_title);
+                show_properties_argument('edit', item_id);
+                if (item_id == rootComment) {
+                    $('#edit-type-comment').hide();
+                } else {
+                    $('#edit-type-comment').show();
+                    if (elem_first.type == 'positive') {
+                        $('#edit-argument-positive').attr('checked', 'checked');
+                        $('#edit-argument-negative').removeAttr('checked');
+                    } else {
+                        $('#edit-argument-negative').attr('checked', 'checked');
+                        $('#edit-argument-positive').removeAttr('checked');
+                    }
+                }
+                hide_modal_main();
+                $('#modalEditArgument').modal('show');
+            } else {
+                // showAlertGeneral('<?php _e('Atention', 'tainacan') ?>', '<?php _e('You must sign up first to vote', 'tainacan') ?>', '<?php _e('error') ?>');
+            }
+        });
+    }
+
+    function delete_comment(item_id) {
+        swal({
+            title: '<?php _e('Attention!') ?>',
+            text: '<?php _e('Are you sure to remove this comment?') ?>',
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonClass: 'btn-danger',
+            closeOnConfirm: true,
+            closeOnCancel: true
+        },
+        function (isConfirm) {
+            if (isConfirm) {
+                $('#modalImportMain').modal('show');//mostro o modal de carregamento
+                $.ajax({
+                    type: "POST",
+                    url: $('#src').val() + "/controllers/event/event_controller.php",
+                    data: {
+                        operation: 'add_event_object_delete',
+                        socialdb_event_create_date: <?php echo time() ?>,
+                        socialdb_event_user_id: $('#current_user_id').val(),
+                        socialdb_event_object_item_id: item_id,
+                        socialdb_event_collection_id: $('#collection_id').val()}
+                }).done(function (result) {
+                    $('#modalImportMain').modal('hide');//escondo o modal de carregamento
+                    elem_first = jQuery.parseJSON(result);
+                    showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
+                    location.reload();
+                });
+            }
+        });
     }
 </script>    

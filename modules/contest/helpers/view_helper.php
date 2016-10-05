@@ -10,7 +10,8 @@ class ViewHelper {
     public function getChildrenItems($ranking,$parent,$depth) {
         $direct_children = get_children(array('post_parent' => $parent));
         if(is_array($direct_children)): ?>    
-            <?php foreach ($direct_children as $child):  ?>
+            <?php foreach ($direct_children as $child): 
+                ?>
                 <?php $position =  get_post_meta($child->ID, 'socialdb_object_contest_position', true);?>
                 <li class="commentLi commentstep-<?php echo $depth ?>" data-commentid="<?php echo $child->ID ?>">
                 <table class="form-comments-table">
@@ -40,8 +41,14 @@ class ViewHelper {
                                     </div>                                
                                     <div class="btn-group" role="group" aria-label="...">
                                         <?php if($child->post_author   ==  get_current_user_id()): ?>
-                                        <button type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-edit"></span> <?php _e('Edit','tainacan') ?></button>
-                                        <button type="button" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash"></span> <?php _e('Remove','tainacan') ?></button>
+                                        <button type="button" 
+                                                onclick="edit_comment( '<?php echo $child->ID; ?>')" 
+                                                class="btn btn-default btn-sm"><span class="glyphicon glyphicon-edit"></span> <?php _e('Edit','tainacan') ?></button>
+                                        <button type="button" 
+                                                onclick="delete_comment('<?php echo $child->ID; ?>') "
+                                                class="btn btn-danger btn-sm">
+                                            <span class="glyphicon glyphicon-trash"></span> <?php _e('Remove','tainacan') ?>
+                                        </button>
                                         <?php else: ?>
                                         <button type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-alert"></span><?php _e('Report abuse','tainacan') ?></button>
                                         <?php endif; ?>

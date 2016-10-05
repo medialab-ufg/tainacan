@@ -42,22 +42,15 @@ class RankingController extends Controller {
                                 $score_origin = $score;
                             else:// se nao tiver uma posicao
                                 // verifco se o anterior a ele possui
-                                if(isset($array_ancestors[$index-1])): 
-                                    $position =  get_post_meta($array_ancestors[$index-1], 'socialdb_object_contest_position', true);
-                                    //position
-                                    if($position=='positive')
-                                        $score = ($data['score']=='1') ? '1' : '-1';
-                                    else if($position=='negative')
-                                        $score = ($data['score']=='1') ? '-1' : '1';
-                                    // is new
-                                    $result_data['is_new'] = $ranking_model->save_vote(
-                                            ['object_id'=>$ancest,'property_id'=>$data['property_id'],'score'=>$score],true,true);
-                                //se nao busco o voto atual    
-                                else:  
-                                    $score = ($data['score']=='1') ? '1' : '-1';
-                                    $result_data['is_new'] = $ranking_model->save_vote(
-                                            ['object_id'=>$ancest,'property_id'=>$data['property_id'],'score'=>$score],true,true);
-                                endif;
+                                $position =  get_post_meta($data['object_id'], 'socialdb_object_contest_position', true);
+                                //position
+                                 if($position_origin=='positive')
+                                     $score = ($data['score']=='1') ? '1' : '-1';
+                                 else if($position_origin=='negative')
+                                     $score = ($data['score']=='1') ? '-1' : '1';
+                                 // is new
+                                 $result_data['is_new'] = $ranking_model->save_vote(
+                                         ['object_id'=>$ancest,'property_id'=>$data['property_id'],'score'=>$score],true,true);
                                 $position_origin = $position;
                                 $score_origin = $score;
                             endif;   

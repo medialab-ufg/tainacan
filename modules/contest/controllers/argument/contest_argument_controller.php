@@ -21,7 +21,7 @@ include_once(dirname(__FILE__).'/../../../../controllers/general/general_control
                             wp_redirect(get_the_permalink($data['collection_id']).'?item='.$item->post_name);
                         }
                     case 'add_reply_positive':
-                        $callback = json_decode($model->add($data['negative_argument'], $data['collection_id'], '', 'argument',$data['argument_parent'],'negative'));
+                        $callback = json_decode($model->add($data['positive_argument'], $data['collection_id'], '', 'argument',$data['argument_parent'],'positive'));
                         if(isset($callback->socialdb_event_object_item_id)&&isset($callback->type)&&$callback->type=='success'){
                             $item = get_post($data['root_argument']);
                             $data['redirect'] = get_the_permalink($data['collection_id']).'?item='.$item->post_name;
@@ -34,6 +34,10 @@ include_once(dirname(__FILE__).'/../../../../controllers/general/general_control
                             $data['redirect'] = get_the_permalink($data['collection_id']).'?item='.$item->post_name;
                             return json_encode($data);
                         }
+                    case 'edit_comment_contest':
+                        $data['comment'] = get_post($data['object_id']);
+                        $data['type'] = get_post_meta($data['object_id'], 'socialdb_object_contest_position', true);
+                        return json_encode($data);
                 }
 	}
  }
