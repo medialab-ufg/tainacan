@@ -29,6 +29,7 @@ public function add($data) {
         $collection_id = $data['collection_id'];
         add_post_meta($collection_id, 'socialdb_collection_facets', $data['search_add_facet']);
         update_post_meta($collection_id, 'socialdb_collection_facet_' . $data['search_add_facet'] . '_widget', $data['search_data_widget']);
+        update_post_meta($collection_id, 'socialdb_collection_facet_' . $data['search_add_facet'] . '_ordenation', $data['ordenation']);
         $orientation = ($orientation == '' ? 'left-column' : $orientation);
 
         if ($data['search_data_widget'] == 'tree') {
@@ -109,6 +110,7 @@ public function add($data) {
             }
             
             update_post_meta($collection_id, 'socialdb_collection_facet_' . $data['property_id'] . '_widget', $data['search_data_widget']);
+            update_post_meta($collection_id, 'socialdb_collection_facet_' . $data['property_id'] . '_ordenation', $data['ordenation']);
 
             delete_post_meta($collection_id, 'socialdb_collection_facet_' . $data['property_id'] . '_color');
             delete_post_meta($collection_id, 'socialdb_collection_facet_' . $data['property_id'] . '_range_options');

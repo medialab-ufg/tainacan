@@ -613,6 +613,8 @@ class Model {
                 }
                 if (!empty($collection_id)) {
                     $data['search_widget'] = get_post_meta($collection_id, 'socialdb_collection_facet_' . $property_id . '_widget')[0];
+                    $data['color_facet'] = get_post_meta($collection_id, 'socialdb_collection_facet_' . $property_id . '_color')[0];
+                    $data['ordenation_facet'] = get_post_meta($collection_id, 'socialdb_collection_facet_' . $property_id . '_ordenation')[0];
                 }
             }
         endif;

@@ -16,6 +16,8 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
         <?php
         if (isset($properties_compounds)):
             foreach ($properties_compounds as $property) { 
+               if(!$this->is_public_property($property))
+                    continue;
                $result['ids'][] = $property['id']; 
                $references['compound_id'] = $property['id']; 
                ?>
@@ -442,5 +444,13 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
            $i++;
        }
        return false;
+    }
+    
+    public function is_public_property($property) {
+        if($property['metas']['socialdb_property_visualization']&&$property['metas']['socialdb_property_visualization']=='restrict'){
+            return false;
+        }else{
+            return true;
+        }
     }
 }

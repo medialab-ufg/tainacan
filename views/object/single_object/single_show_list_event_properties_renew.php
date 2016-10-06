@@ -33,6 +33,8 @@ endif;
     <input type="hidden" name="properties_object_ids" id='properties_object_ids' value="<?php echo implode(',', $ids); ?>">
 <?php if (isset($property_object)):
     foreach ($property_object as $property) {
+        if(!$objectHelper->is_public_property($property))
+            continue;
         $object_id = $property['metas']['object_id'];
         $ids[] = $property['id'];
     ?>
@@ -116,6 +118,9 @@ endif;
 if (isset($property_data)):
     $counter = 0;
     foreach ($property_data as $property) {
+        if(!$objectHelper->is_public_property($property))
+            continue;
+            
         $object_id = $property['metas']['object_id']; ?>
 
         <?php
@@ -217,6 +222,8 @@ endif;
 if (isset($property_term)): ?>
     <!--h4> <?php _e('Term properties', 'tainacan'); ?></h4-->
     <?php foreach ($property_term as $property) {
+        if(!$objectHelper->is_public_property($property))
+            continue;
         if (count($property['has_children']) > 0): ?>
             <div class="col-md-6 property-term no-padding">
                 <div class="box-item-paddings">

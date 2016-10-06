@@ -7,9 +7,7 @@
             </div>
             <div class="modal-body">
                 <form id="submit_form_property_object">
-
                     <div class="metadata-common-fields">
-
                         <div class="create_form-group">
                             <label for="property_object_name"><?php _e('Property name','tainacan'); ?></label>
                             <input type="text" class="form-control" id="property_object_name" name="property_object_name" required="required" placeholder="<?php _e('Property Object name','tainacan'); ?>">
@@ -29,7 +27,12 @@
                                 <input required="required" type="hidden"  id="property_object_category_id"  name="property_object_category_id" value="<?php //echo $category->term_id; ?>" >
                             <?php // endif; ?>
                         </div>
-                         <div class="form-group category-fit-column" style="display: inline-block; width: 59%">
+                        <a style="cursor: pointer;" onclick="toggle_advanced_configuration('#data-advanced-configuration-object')">
+                            <?php _e('Advanced Configuration', 'tainacan') ?> <span class="glyphicon glyphicon-triangle-bottom"></span>
+                        </a>
+                    </div>
+                    <div id="data-advanced-configuration-object" style="display: none;">
+                        <div class="form-group category-fit-column" style="display: inline-block; width: 59%">
                             <label for="property_term_required" style="display: block"><?php _e('Elements Quantity:','tainacan'); ?></label>
                             <input type="radio" name="socialdb_property_object_cardinality" id="socialdb_property_object_cardinality_1"  value="1">&nbsp;<?php _e('Unic value','tainacan') ?>
                             <input type="radio" name="socialdb_property_object_cardinality" id="socialdb_property_object_cardinality_n" checked="checked" value="n">&nbsp;<?php _e('Multiple values','tainacan') ?>
@@ -59,18 +62,18 @@
                         */ ?>
 
                         <hr class="hr-style">
-                    </div>
-                    <div class="form-group" style="display: inline-block;">
-                        <label for="property_term_required" style="margin-right: 10px;" ><?php _e('Visualization','tainacan'); ?> : </label>
-                        &nbsp;<input type="radio" name="socialdb_event_property_visualization" id="socialdb_property_object_visualization_public" checked="checked"  value="public">&nbsp;<?php _e('Public','tainacan') ?>
-                        &nbsp;<input type="radio" name="socialdb_event_property_visualization" id="socialdb_property_object_visualization_restrict" value="restrict">&nbsp;<?php _e('Restrict','tainacan') ?>
-                    </div>
-                    <div class="form-group">
-                        <label for="socialdb_event_property_tab"><?php _e('Select the tab','tainacan'); ?></label>
-                        <select class="socialdb_event_property_tab form-control" name="socialdb_event_property_tab">
-                        </select>
-                    </div>
-                    <div class="form-group">
+                        <div class="form-group" style="display: inline-block;">
+                            <label for="property_term_required" style="margin-right: 10px;" ><?php _e('Visualization','tainacan'); ?> : </label>
+                            &nbsp;<input type="radio" name="socialdb_event_property_visualization" id="socialdb_property_object_visualization_public" checked="checked"  value="public">&nbsp;<?php _e('Public','tainacan') ?>
+                            &nbsp;<input type="radio" name="socialdb_event_property_visualization" id="socialdb_property_object_visualization_restrict" value="restrict">&nbsp;<?php _e('Restrict','tainacan') ?>
+                        </div>
+                        <div class="form-group">
+                            <label for="socialdb_event_property_tab"><?php _e('Select the tab','tainacan'); ?></label>
+                            <select class="socialdb_event_property_tab form-control" name="socialdb_event_property_tab">
+                            </select>
+                        </div>
+                    </div>    
+                    <div class="form-group" style="margin-top: 15px;">
                         <label for="use-filter"><?php _e('Use as a filter','tainacan'); ?></label>
                         <input type="checkbox" value="use_filter" name="property_data_use_filter" class="property_data_use_filter" />
                     </div>
@@ -83,7 +86,11 @@
                         </select>
 
                         <?php echo $view_helper->render_tree_colors(); ?>
-
+                        <div class="form-group" style="margin-top: 15px;margin-bottom: 15px;">
+                            <label for="property_term_required" style="margin-right: 10px;" ><?php _e('Ordenation','tainacan'); ?> : </label>
+                            &nbsp;<input type="radio" name="filter_ordenation" id="object_filter_ordenation_a" checked="checked"  value="alphabetic">&nbsp;<?php _e('Alphabetic','tainacan') ?>
+                            &nbsp;<input type="radio" name="filter_ordenation" id="object_filter_ordenation_1" value="number">&nbsp;<?php _e('Items number','tainacan') ?>
+                        </div>
                     </div>
 
                     <input type="hidden" id="property_object_collection_id" name="collection_id" value="">

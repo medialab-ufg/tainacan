@@ -250,7 +250,7 @@
         });
     }
 
-    function setCollectionFacet( operation, metadata_id, metadata_widget, color_facet, counter_obj, menu_style_id ) {
+    function setCollectionFacet( operation, metadata_id, metadata_widget, ordenation , color_facet, counter_obj, menu_style_id ) {
         var collection_id = $("#property_data_collection_id").val();
         var meta_id;
 
@@ -276,12 +276,13 @@
                 var item_counter_range = counter_obj.counter_range || "0";
                 data = counter_obj.sent_data;
             } else if( search_data_widget == "menu" && menu_style_id ) {
-                data = { collection_id: collection_id, search_data_widget: search_data_widget, operation: operation, select_menu_style: menu_style_id };
+                data = { collection_id: collection_id, search_data_widget: search_data_widget, operation: operation, select_menu_style: menu_style_id, ordenation: ordenation };
             } else {
-                data = { collection_id: collection_id, search_data_widget: search_data_widget, operation: operation };
+                data = { collection_id: collection_id, search_data_widget: search_data_widget, operation: operation, ordenation: ordenation };
             }
 
             data.operation = operation;
+            data.ordenation = ordenation;
             data.property_id = meta_id;
             data.color_facet = cf;
             data.search_add_facet = meta_id;
@@ -477,15 +478,15 @@
                     }
                     // console.log(' current_operation  = '+current_operation); 
                     if ( current_operation == "add_property_data" ) {
-                        setCollectionFacet( "add", new_property_id, property_widget, color_facet, range_obj);
+                        setCollectionFacet( "add", new_property_id, property_widget, ordenation, color_facet, range_obj);
                     } else if( current_operation == "update_property_data" ) {
                         var item_was_dragged = $(current_modal + " .data-widget").hasClass('select-meta-filter');
                         //console.log(' item was dragged  = '+item_was_dragged);
                         if( item_was_dragged ) {
-                            setCollectionFacet( "add", current_property_id, property_widget, color_facet );
+                            setCollectionFacet( "add", current_property_id, property_widget, ordenation, color_facet );
                             $(current_modal + " .data-widget").removeClass('select-meta-filter');
                         } else {
-                            setCollectionFacet( "update", current_property_id, property_widget, color_facet, range_obj );
+                            setCollectionFacet( "update", current_property_id, property_widget, ordenation, color_facet, range_obj );
                         }
                     }
                 }
@@ -549,7 +550,7 @@
                 var default_value = elem.metas.socialdb_property_default_value;
                 var operation = 'update_property_data';
                 var search_widget = $("#meta-item-"+id).attr('data-widget');
-              
+               
                 if($("#meta-item-"+id).hasClass('fixed-property')){
                     meta_modal = "#meta-text";
                 }
@@ -594,6 +595,23 @@
                 if ( $.inArray(formatted_id, filters_ids) > -1 ) {
                     var use_filter = "use_filter";
                     $( meta_modal + " .form_property_data .property_data_use_filter").prop("checked", true);
+                    $( meta_modal + " .form_property_data .data-widget").show();
+                }else if(elem.search_widget&&elem.search_widget!='false'){
+                    $( meta_modal + " .form_property_data .property_data_use_filter").prop("checked", true);
+                    //ordenations
+                    var $radios = $( meta_modal + " .form_property_data input:radio[name=filter_ordenation]");
+                    $radios.prop('checked', false);
+                    if($radios.is(':checked') === false) {
+                        $radios.filter('[value='+elem.ordenation_facet+']').prop('checked', true);
+                    }
+                    //color 
+                    if(elem.color_facet&&elem.color_facet!='false'){
+                        var $radios = $( meta_modal + " .form_property_data input:radio[name=color_facet]");
+                        $radios.prop('checked', false);
+                        if($radios.is(':checked') === false) {
+                            $radios.filter('[value='+elem.color_facet+']').prop('checked', true);
+                        }
+                    }
                     $( meta_modal + " .form_property_data .data-widget").show();
                 }
 
@@ -799,12 +817,13 @@
         var cor_faceta = $('input[name=color_facet]:checked', "#submit_form_filter").val();
         var use_filter = $("#meta-filter .property_data_use_filter").prop('checked');
         var operation = $("#meta-filter .operation").val();
+        var ordenation = $('input[name=filter_ordenation]:checked').val();
 
         if (use_filter) {
             if ( operation == "update" ) {
-                setCollectionFacet(operation, id_correto, "tree", cor_faceta);
+                setCollectionFacet(operation, id_correto, "tree",ordenation, cor_faceta);
             } else {
-                setCollectionFacet("add", id_correto, "tree", cor_faceta);
+                setCollectionFacet("add", id_correto, "tree",ordenation, cor_faceta);
             }
         } else {
             removeFacet(id_correto);
@@ -839,9 +858,9 @@
 
         $("#meta-tag").modal('hide');
         var use_filter = $("#meta-tag .property_data_use_filter").prop('checked');
-
+        var ordenation = $('#meta-tag input[name=filter_ordenation]:checked').val()
         if (use_filter) {
-            setCollectionFacet( "add", id_correto, data_widget);
+            setCollectionFacet( "add", id_correto, data_widget,ordenation);
         } else {
             removeFacet(id_correto);
         }
@@ -942,19 +961,19 @@
             $('#modalImportMain').modal('hide');
             elem = jQuery.parseJSON(result);
             $("#meta-relationship").modal('hide');
-
+            var ordenation =  $('#meta-relationship input[name=filter_ordenation]:checked').val();
             var current_operation = elem.operation;
             if ( elem.property_data_use_filter == "use_filter" ) {
                 if ( current_operation == "add_property_object" ) {
-                    setCollectionFacet("add", elem.results.new_property_id, elem.search_data_widget, elem.color_facet );
+                    setCollectionFacet("add", elem.results.new_property_id, elem.search_data_widget, ordenation, elem.color_facet );
                 } else if (current_operation == "update_property_object") {
                     var item_was_dragged = $("#meta-relationship .data-widget").hasClass('select-meta-filter');                
 
                     if (item_was_dragged) {
-                        setCollectionFacet("add", elem.property_object_id, elem.search_data_widget, elem.color_facet );
+                        setCollectionFacet("add", elem.property_object_id, elem.search_data_widget, ordenation, elem.color_facet );
                         $("#meta-relationship .data-widget").removeClass('select-meta-filter');
                     } else {
-                        setCollectionFacet("update", elem.property_object_id, elem.search_data_widget, elem.color_facet );    
+                        setCollectionFacet("update", elem.property_object_id, elem.search_data_widget, ordenation, elem.color_facet );    
                     }
                     
                 }
@@ -1074,6 +1093,23 @@
                 $( "#meta-relationship .data-widget").show();
                 var meta_widget = get_metadata_widget(elem.id);
                 $("#meta-relationship #search_data_widget").focus().val( meta_widget );
+            }else if(elem.search_widget&&elem.search_widget!='false'){
+                    $( "#meta-relationship .property_data_use_filter").prop("checked", true);
+                    //ordenations
+                    var $radios = $( "#meta-relationship input:radio[name=filter_ordenation]");
+                    $radios.prop('checked', false);
+                    if($radios.is(':checked') === false) {
+                        $radios.filter('[value='+elem.ordenation_facet+']').prop('checked', true);
+                    }
+                    //color 
+                    if(elem.color_facet&&elem.color_facet!='false'){
+                        var $radios = $("#meta-relationship input:radio[name=color_facet]");
+                        $radios.prop('checked', false);
+                        if($radios.is(':checked') === false) {
+                            $radios.filter('[value='+elem.color_facet+']').prop('checked', true);
+                        }
+                    }
+                    $("#meta-relationship .data-widget").show();
             }
 
             if( $("#meta-item-"+id).hasClass('root_category') ) {
@@ -1191,16 +1227,17 @@
             var current_operation = elem.operation;
             var menu_style_id = elem.select_menu_style;
             var term_root_id = elem.socialdb_property_term_root;
-
+            var ordenation = $('#meta-category input[name=filter_ordenation]:checked').val();
+            
             if ( elem.property_data_use_filter == "use_filter" ) {
                 if ( current_operation == "add_property_term" ) {
-                    setCollectionFacet("add", term_root_id, elem.property_term_filter_widget, elem.color_facet, "", menu_style_id );
+                    setCollectionFacet("add", term_root_id, elem.property_term_filter_widget, ordenation, elem.color_facet, "", menu_style_id );
                 } else if (current_operation == "update_property_term") {
                     if ( item_was_dragged ) {
-                        setCollectionFacet("add", term_root_id, elem.property_term_filter_widget, elem.color_facet, "", menu_style_id );
+                        setCollectionFacet("add", term_root_id, elem.property_term_filter_widget, ordenation, elem.color_facet, "", menu_style_id );
                         $("#meta-category .term-widget").removeClass('select-meta-filter');
                     } else {
-                        setCollectionFacet("update", term_root_id, elem.property_term_filter_widget, elem.color_facet, "", menu_style_id );
+                        setCollectionFacet("update", term_root_id, elem.property_term_filter_widget, ordenation, elem.color_facet, "", menu_style_id );
                     }
                 }
             }
@@ -1394,6 +1431,23 @@
                 $("#property_term_filter_widget").val(elem.metas.property_term_filter_widget);
                 $("#meta-category .property_data_use_filter").prop('checked', true);
                 $("#meta-category .term-widget").show();
+            }else if(elem.search_widget&&elem.search_widget!='false'){
+                    $( "#meta-category .property_data_use_filter").prop("checked", true);
+                    //ordenations
+                    var $radios = $( "#meta-category input:radio[name=filter_ordenation]");
+                    $radios.prop('checked', false);
+                    if($radios.is(':checked') === false) {
+                        $radios.filter('[value='+elem.ordenation_facet+']').prop('checked', true);
+                    }
+                    //color 
+                    if(elem.color_facet&&elem.color_facet!='false'){
+                        var $radios = $("#meta-category input:radio[name=color_facet]");
+                        $radios.prop('checked', false);
+                        if($radios.is(':checked') === false) {
+                            $radios.filter('[value='+elem.color_facet+']').prop('checked', true);
+                        }
+                    }
+                    $("#meta-category .data-widget").show();
             }
 
         });
@@ -1463,20 +1517,20 @@
             var new_ranking_id = elem.new_ranking_id;
             var ranking_widget = elem.search_data_widget;
             var counter_range = elem.counter_range;
-
+            var ordenation = $('#meta-category input[name=filter_ordenation]:checked').val();
             var range_obj = { counter_range: counter_range, sent_data: elem };            
 
             if ( elem.property_data_use_filter === "use_filter" ) {
                 if ( current_operation == "add" ) {
-                    setCollectionFacet("add", new_ranking_id, ranking_widget, "", range_obj);
+                    setCollectionFacet("add", new_ranking_id, ranking_widget, ordenation, "", range_obj);
                 } else if (current_operation == "edit") {
                     var item_was_dragged = $("#meta-voting .data-widget").hasClass('select-meta-filter');
                     console.log(item_was_dragged);
                     if(item_was_dragged) {
-                        setCollectionFacet("add", elem.ranking_id, ranking_widget);    
+                        setCollectionFacet("add", elem.ranking_id, ranking_widget, ordenation);    
                         $("#meta-voting .data-widget").removeClass('select-meta-filter');
                     } else {
-                        setCollectionFacet("update", elem.ranking_id, ranking_widget);    
+                        setCollectionFacet("update", elem.ranking_id, ranking_widget, ordenation);    
                     }                    
                 }
             }
@@ -2201,7 +2255,7 @@
             return false;
         }else{
             if ( is_fixed_meta ) {
-                setCollectionFacet("add", item_id, "tree");
+                setCollectionFacet("add", item_id, "tree",'alphabetic');
                 showAlertGeneral('<?php _e('Success','tainacan') ?>','<?php _e('Metadata inserted as filter successfully','tainacan') ?>','success');
                 $('.data-widget').addClass('select-meta-filter').show();
                 $('.term-widget').addClass('select-meta-filter').show();
@@ -2213,7 +2267,7 @@
                     $('.data-widget').addClass('select-meta-filter').show();
                     $('.term-widget').addClass('select-meta-filter').show();
                 } else {
-                    setCollectionFacet( "add", item_id, item_search_widget );
+                    setCollectionFacet( "add", item_id, item_search_widget,'alphabetic' );
                     showAlertGeneral('<?php _e('Success','tainacan') ?>','<?php _e('Metadata inserted as filter successfully','tainacan') ?>','success');
                     $('.data-widget').addClass('select-meta-filter').show();
                     $('.term-widget').addClass('select-meta-filter').show();
