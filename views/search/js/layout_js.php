@@ -6,7 +6,7 @@
           $(this).remove();
         });
     });
-    
+
     $(".custom_color_schemes").on('click', '.color-container', function (e) {
         $('.color-container').removeClass('selected');
         $(this).addClass('selected');
@@ -203,7 +203,7 @@
             var cor1 = c1;
             var cor2 = c2;
         }
-        
+
         $('#tainacan-mini .color1').css('background', cor1);
         $('#tainacan-mini .color2').css('background', cor2);
         $('a.wp-color-result').first().css('background', cor1);
@@ -264,16 +264,14 @@
                             var ck = "checked";
                         }
                         var sort_meta = '<li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>';
-                        // sort_meta += "<input type='hidden' id='table_meta' name='table_meta[tipo][]' value='metadado_de_texto'>";
-                        // sort_meta += "<input type='hidden' id='table_meta' name='table_meta[order][]' value='" + plim + "'>";
-                        var item_info = JSON.stringify({ 'id': data.id, 'order': plim, 'tipo': 'metadado_de_texto'});
+                        var item_info = JSON.stringify({ 'id': data.id, 'order': plim, 'tipo': 'property_data'});
                         sort_meta += "<input type='checkbox' id='table_meta' " + ck + " name='table_meta[]' value='" + item_info + "'> " + data.name + "<br /></li>";
                         $(".table-meta-config #sort-metas").append(sort_meta);
 
                         if(data.type === "text") {
                             var coords = ["select[name='latitude']","select[name='longitude']","select[name='location']"];
                             $(coords).each(function(index, e){
-                               $(e).append("<option value='"+ data.id +"'>"+ data.name +"</option>"); 
+                               $(e).append("<option value='"+ data.id +"'>"+ data.name +"</option>");
                             });
                         }
                     }
@@ -286,10 +284,9 @@
                         var numeric_id = data.id; var string_id = numeric_id.toString();
                         if( _table_metas.indexOf(string_id) > -1 )
                             var ck = "checked";
-                        cl("object .. " + data.name);
-                        // $("#collection_single_ordenation").append("<option value='"+data.id+"'>" + data.name + "</option>");
                         var sort_meta = '<li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>';
-                        sort_meta += "<input type='checkbox' id='table_meta' " + ck + " name='table_meta[]' value='" + data.id + "'> " + data.name + "<br /></li>";
+                        var item_info = JSON.stringify({ 'id': data.id, 'order': plim, 'tipo': 'property_object'});
+                        sort_meta += "<input type='checkbox' id='table_meta' " + ck + " name='table_meta[]' value='" + item_info + "'> " + data.name + "<br /></li>";
                         $(".table-meta-config #sort-metas").append(sort_meta);
 
                     }
@@ -303,7 +300,8 @@
                             var ck = "checked";
                         cl("TERMO: " + data.name);
                         var sort_meta = '<li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>';
-                        sort_meta += "<input type='checkbox' id='table_meta' " + ck + " name='table_meta[]' value='" + data.id + "'> " + data.name + "<br /></li>";
+                        var item_info = JSON.stringify({ 'id': data.id, 'order': plim, 'tipo': 'property_term'});
+                        sort_meta += "<input type='checkbox' id='table_meta' " + ck + " name='table_meta[]' value='" + item_info + "'> " + data.name + "<br /></li>";
                         $(".table-meta-config #sort-metas").append(sort_meta);
                     }
                 });

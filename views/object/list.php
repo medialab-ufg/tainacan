@@ -37,12 +37,7 @@ endif;
     <div id="collection-view-mode">
         <div id='<?php echo $collection_list_mode; ?>-viewMode' class='col-md-12 no-padding list-mode-set'>
             <?php
-            // var_dump($table_meta_array);
-            $_wk = $table_meta_array;
-            var_dump($_wk);
-
             while ( $loop->have_posts() ) : $loop->the_post(); $countLine++;
-
                 $curr_id = get_the_ID();
 
                 $curr_date = "<strong>" . __('Created at: ', 'tainacan') . "</strong>" . get_the_date('d/m/Y');

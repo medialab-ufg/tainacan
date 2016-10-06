@@ -19,78 +19,32 @@
                 </a>
             </div>
 
-                <?php
-
-                $_try = 's:124:"a:2:{i:0;s:55:"{"id":396,"order":5,"tipo":"metadado_de_texto"}";i:1;s:55:"{"id":397,"order":6,"tipo":"metadado_de_texto"}";}"';
-
-                $das = unserialize($_try);
-                $bras = json_decode($_try);
-
-                var_dump($das);
-                echo "<hr /><hr />";
-                var_dump($bras);
-
-
-                // var_dump(json_decode("{\"id\":396,\"order\":5,\"tipo\":\"metadado_de_texto\"}"));
-
-                // $termos = wp_get_object_terms($curr_id, "socialdb_category_type", ['fields' => 'ids']);
-                // var_dump($collection_id);
-
-                $_isso_tem = get_the_terms($collection_id, "socialdb_property_type");
-
-                $plim = wp_get_object_terms($collection_id, 'socialdb_category_type', array('fields' => 'ids'));
-                // var_dump($plim);
-
-                $_item_terms_ = get_the_terms($curr_id, "socialdb_category_type");
-                // var_dump($_item_terms_);
-                // var_dump($table_meta_ids);
-
-                /*
-                $_meta_term_id = get_term_meta(end($table_meta_ids));
-                $_nome_categoria_pai = get_term(end($table_meta_ids))->name;
-                //var_dump($piroca);
-
-                $_binas = (int) $_meta_term_id['socialdb_property_term_root'][0];
-                // echo " O term root relacionado eh " . $_binas;
-
-                $vb = get_term($_binas);
-                // var_dump($vb);
-                */
-
-                if(is_array($_item_terms_)) {
-                    foreach($_item_terms_ as $_iTerm) {
-                        // var_dump($_iTerm);
-                        if($_binas === $_iTerm->parent) {
-                            // var_dump($_binas);
-                            // $nomezim = get_term($_binas);
-                            // var_dump($nomezim);
-                            echo "<b>" . $_nome_categoria_pai . ": </b>" . $_iTerm->name . " => " . $_iTerm->term_id . " Meu paps eh " . $_iTerm->parent . " <br />";
-                        }
-
-                    }
-                }
-                // echo "<h3> Check bellow all the table metas that came to us</h3>";
-                //var_dump($table_meta_ids);
-                // echo "<hr/>";
-                // echo "<hr/>";
-                ?>
-
             <div class="col-md-8 flex-box item-meta-box" style="flex-direction:column;">
                 <div class="item-meta col-md-12 no-padding">
                     <?php
-                    if( isset($table_meta_ids) && $table_meta_ids > 0):
-                        foreach ($table_meta_ids as $meta_id) {
-                            $__item_meta = get_post_meta($curr_id, "socialdb_property_$meta_id", true);
-                            // echo "<h1>" . $__item_meta . "</h1>";
-                            //var_dump($__item_meta);
-                            if( $__item_meta === "") {
-                                echo '<input type="hidden" name="item_table_meta" value="VAI TOMAR NO SEU CU" />';
-                            } else {
-                            ?>
-                            <input type="hidden" name="item_table_meta" value="<?php echo $__item_meta; ?>" />
-
-                        <?php }
-                        }
+                    if( is_array($table_meta_array) && count($table_meta_array) > 0):
+                        foreach ($table_meta_array as $item_meta_info):
+                            $fmt = str_replace("\\","", $item_meta_info);
+                            if(is_string($fmt)):
+                                $_meta_obj = json_decode($fmt);
+                                if(is_object($_meta_obj)):
+                                    if($_meta_obj->tipo === 'property_data') {
+                                        $__item_meta = get_post_meta($curr_id, "socialdb_property_$_meta_obj->id", true);
+                                        if( !empty($__item_meta)) {
+                                            echo '<input type="hidden" name="item_table_meta" value="'. $__item_meta .'" />';
+                                        }
+                                    } else if($_meta_obj->tipo === 'property_term') {
+                                        $_current_object_terms_ = get_the_terms($curr_id, "socialdb_category_type");
+                                        $_father_category_id = (int) get_term_meta($_meta_obj->id)['socialdb_property_term_root'][0];
+                                        foreach ($_current_object_terms_ as $curr_term) {
+                                            if($curr_term->parent == $_father_category_id) {
+                                                echo '<input type="hidden" name="item_table_meta" value="'. $curr_term .'" />';
+                                            }
+                                        }
+                                    }
+                                endif; //is_object
+                            endif; // is_string
+                        endforeach;
                     endif;
                     ?>
                     
