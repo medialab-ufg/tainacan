@@ -180,7 +180,7 @@ function contest_alter_page_item($data) {
 ################################################################################
 ##################### 13# ADICIONANDO O TIPO DE DENUNCIA #######################
 function contest_add_meta_delete_object_event(){
-    $term = get_term_by('name', 'socialdb_event_object_delete','socialdb_event_type');
+    $term = get_term_by('slug', 'socialdb_event_object_delete','socialdb_event_type');
     create_metas($term->term_id, 'socialdb_event_object_delete_metas', 'socialdb_event_object_delete_type', 'socialdb_event_object_delete_type');
 }
 contest_add_meta_delete_object_event();

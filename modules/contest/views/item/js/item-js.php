@@ -247,7 +247,8 @@
     }
     
     function report_abuse(item_id){
-         $('#report_argument_id').val(item_id);
+        $('#collection_report_argument_id').val($('#collection_id').val());
+        $('#report_argument_id').val(item_id);
         $('#argument_report_text').text($('#text-comment-'+item_id).text());
         $('#modalReportAbuse').modal('show');
     }
@@ -267,5 +268,15 @@
             elem_first = jQuery.parseJSON(result);
             showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
         });
+    }
+    
+    function share_comment(id,text, url){
+        $('#modalShareComment').modal('show');
+        var url_twitter = 'https://twitter.com/intent/tweet?text='+text+'&via=socialdb';
+        $('#share-twitter-comment').attr('href',url_twitter);
+        var url_facebook = 'http://www.facebook.com/sharer/sharer.php?u='+url+'&t='+text;
+        $('#share-facebook-comment').attr('href',url_facebook);
+        var url_gmail = 'https://plus.google.com/share?url='+url;
+        $('#share-gmail-comment').attr('href',url_gmail);
     }
 </script>    

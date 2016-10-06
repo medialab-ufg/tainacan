@@ -2813,6 +2813,12 @@ function instantiate_modules() {
         }
     }
     if ($config['mode'] !== 0 && is_array($config['active_modules'])) {
+        session_write_close();
+        ini_set('max_execution_time', '0');    
+        register_post_types();
+        register_taxonomies();
+        wpdbfix();
+        setup_taxonomymeta();
         foreach ($config['active_modules'] as $module) {
             include_once 'modules/' . $module . '/' . $module . '.php';
         }

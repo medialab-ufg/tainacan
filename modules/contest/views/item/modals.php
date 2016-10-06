@@ -214,3 +214,38 @@
             </div>
         </div>
     </div>
+
+<!--Editando comentario -->
+ <div class="modal fade" 
+         id="modalShareComment" 
+         tabindex="-1" 
+         role="dialog" 
+         aria-labelledby="modalShareComment" 
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="form_report_abuse">
+                    <div class="modal-header">
+                        <button type="button" 
+                                style="color:black;" 
+                                class="close" 
+                                data-dismiss="modal" 
+                                aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" 
+                            id="myModalLabel">
+                                <?php _e('Share comment','tainacan') ?>
+                        </h4>
+                    </div>
+                    <div class="modal-body"  >
+                        <a id="share-twitter-comment" target="_blank" ><?php echo ViewHelper::render_icon('twitter-square', 'png', 'Twitter'); ?></a>&nbsp;
+                        <a id="share-facebook-comment" target="_blank" ><?php echo ViewHelper::render_icon('facebook-square', 'png', 'Facebook'); ?></a>&nbsp;
+                        <a id="share-google-comment" target="_blank" href="https://plus.google.com/share?url="><?php echo ViewHelper::render_icon('googleplus-square', 'png', 'Google Plus'); ?></a>
+                        <br>
+                    </div>
+                    <div class="modal-footer">
+                        <button style="color:grey;" type="button" class="btn btn-default" data-dismiss="modal"><?php _e('Close', 'tainacan') ?></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>

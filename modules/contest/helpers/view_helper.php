@@ -56,6 +56,11 @@ class ViewHelper {
                                                 class="btn btn-default btn-sm">
                                             <span class="glyphicon glyphicon-alert"></span>&nbsp;<?php _e('Report abuse','tainacan') ?></button>
                                         <?php endif; ?>
+                                        <button type="button" 
+                                                onclick="share_comment( '<?php echo $child->ID; ?>','<?php  echo htmlentities($child->post_title) ?>',$('#url-argument').val())" 
+                                                class="btn btn-default btn-sm">
+                                            <span class="glyphicon glyphicon-share"></span><?php _e('Share','tainacan') ?>
+                                        </button>
                                     </div>                                  
                                 </div>
                             </div>
@@ -99,5 +104,12 @@ class ViewHelper {
         $ranking_model = new RankingContestModel;
         $count = $ranking_model->count_votes_binary($ranking_id, $item_id);
         return $count['count_up'] - $count['count_down'];
+    }
+    
+    public static function render_icon($icon, $ext = "svg", $alt="") {
+        if ($alt == "") { $alt = __( ucfirst( $icon ), 'tainacan'); }
+        $img_path = get_template_directory_uri() . '/libraries/images/icons/icon-'.$icon.'.'.$ext;
+
+        return "<img alt='$alt' title='$alt' src='$img_path' />";
     }
 } // ViewHelper
