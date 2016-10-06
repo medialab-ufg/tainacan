@@ -28,18 +28,24 @@
                             if(is_string($fmt)):
                                 $_meta_obj = json_decode($fmt);
                                 if(is_object($_meta_obj)):
-                                    if($_meta_obj->tipo === 'property_data') {
+                                    $_META = ['id' => $_meta_obj->id, 'tipo' => $_meta_obj->tipo];
+                                    if( $loop->current_post === 0 )
+                                        echo '<input type="hidden" name="meta_id_table" value="'. $_META['id'] .'" data-mtype="'. $_META['tipo'] .'">';
+
+                                    if($_META['tipo'] === 'property_data') {
                                         $__item_meta = get_post_meta($curr_id, "socialdb_property_$_meta_obj->id", true);
                                         if( !empty($__item_meta)) {
                                             echo '<input type="hidden" name="item_table_meta" value="'. $__item_meta .'" />';
                                         }
-                                    } else if($_meta_obj->tipo === 'property_term') {
+                                    } else if($_META['tipo'] === 'property_term') {
                                         $_current_object_terms_ = get_the_terms($curr_id, "socialdb_category_type");
-                                        $_father_category_id = (int) get_term_meta($_meta_obj->id)['socialdb_property_term_root'][0];
+                                        $_father_name = get_term($_META['id'])->name;
+                                        $_father_category_id = (int) get_term_meta($_META['id'])['socialdb_property_term_root'][0];
                                         foreach ($_current_object_terms_ as $curr_term) {
-                                            if($curr_term->parent == $_father_category_id) {
-                                                echo '<input type="hidden" name="item_table_meta" value="'. $curr_term .'" />';
-                                            }
+                                            if($curr_term->parent == $_father_category_id) { ?>
+                                                <input id="tableV-meta-<?= $_META['id']; ?>" type="hidden" name="item_table_meta"
+                                                       data-parent="<?= $_father_name ?>" value="<?= $curr_term->name ?>" />
+                                            <?php }
                                         }
                                     }
                                 endif; //is_object

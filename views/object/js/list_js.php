@@ -24,7 +24,13 @@
 
         $('input[name="meta_id_table"]').each(function(idx, el) {
             var valor = $(el).val();
-            var nome = $("#collection_single_ordenation option[value='"+valor+"'").text();
+            var meta_type = $(el).attr('data-mtype');
+            var nome = "--";
+            if(meta_type == 'property_data') {
+                nome = $("#collection_single_ordenation option[value='"+valor+"'").text();
+            } else if(meta_type == 'property_term') {
+                nome = $("#tableV-meta-"+valor).attr("data-parent");
+            }
             $('tr.dynamic-table-metas').append('<th>' + nome + '</th>');
         });
 
