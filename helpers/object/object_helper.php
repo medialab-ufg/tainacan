@@ -16,13 +16,13 @@ class ObjectHelper extends ViewHelper {
         $default_tab = get_post_meta($this->collection_id, 'socialdb_collection_default_tab', true);
         if (!$tabs || empty($tabs) && !$default_tab):
             ?>
-            <div    style="<?php echo ($this->hide_main_container) ? 'margin-bottom:0%' : '' ?>" 
+            <!--div    style="<?php echo ($this->hide_main_container) ? 'margin-bottom:0%' : '' ?>" 
                     class="expand-all-item btn white tainacan-default-tags">
                 <div class="action-text" 
                      style="display: inline-block;">
             <?php _e('Expand all', 'tainacan') ?></div>
                 &nbsp;&nbsp;<span class="glyphicon-triangle-bottom white glyphicon"></span>
-            </div>   
+            </div-->   
             <?php
         else:
             ?>
@@ -42,14 +42,14 @@ class ObjectHelper extends ViewHelper {
             </ul>
             <div id="tab-content-metadata" class="tab-content" style="background: white;">
                 <div id="tab-default"  class="tab-pane fade in active" style="background: white;margin-bottom: 15px;margin-top: 15px;">
-                    <div    style="margin-bottom:0%" 
+                    <!--div    style="margin-bottom:0%" 
                             onclick="open_accordeon('default')"
                             class="expand-all-item btn white tainacan-default-tags">
                         <div class="action-text" 
                              style="display: inline-block;">
             <?php _e('Expand all', 'tainacan') ?></div>
                         &nbsp;&nbsp;<span class="glyphicon-triangle-bottom white glyphicon"></span>
-                    </div>
+                    </div-->
                     <div id="accordeon-default" class="multiple-items-accordion">
                     </div>
                 </div>

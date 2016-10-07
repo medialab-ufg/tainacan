@@ -51,11 +51,11 @@
     }
     //funcao que gerar po expandir todos
     function get_expand_all_tab(id){
-        return '<div style="margin-bottom:0%"  onclick="open_accordeon('+id+')" class="expand-all-item btn white tainacan-default-tags">'+
+        return '<!--div style="margin-bottom:0%"  onclick="open_accordeon('+id+')" class="expand-all-item btn white tainacan-default-tags">'+
                     '<div class="action-text" style="display: inline-block;">'+
                              '<?php _e('Expand all', 'tainacan') ?></div>'+
                     '&nbsp;&nbsp;<span class="glyphicon-triangle-bottom white glyphicon"></span>'+
-                '</div>';
+                '</div -->';
     }
     //funcao responsavel em listar as abas nos selects
     function list_tabs(){

@@ -26,20 +26,20 @@
     <input type="hidden" id="object_from" name="object_from" value="internal">
     <input type="hidden" id="object_type" name="object_type" value="text">
     <div class="row" style="background-color: #f1f2f2">
-        <div style="<?php echo ($view_helper->hide_main_container)?'margin-left:18%;padding-left:15px;':'' ?>"
-            class="<?php echo ($view_helper->hide_main_container)?'col-md-8':'col-md-3' ?> menu_left_loader">
+        <div style="<?php echo ($view_helper->hide_main_container)?'margin-left:1%;padding-left:15px;':'' ?>"
+            class="<?php echo ($view_helper->hide_main_container)?'col-md-12':'col-md-3' ?> menu_left_loader">
              <center>
                     <img src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>">
                     <h4><?php _e('Loading metadata...', 'tainacan') ?></h4>
              </center>
         </div>
-        <div style="display: none; background: white;border: 3px solid #E8E8E8;font: 11px Arial;<?php echo ($view_helper->hide_main_container)?'margin-left:18%;padding-left:15px;':'' ?>" 
-             class="<?php echo ($view_helper->hide_main_container)?'col-md-8':'col-md-3' ?> menu_left">
-                <?php 
+        <div style="display: none; background: white;border: 3px solid #E8E8E8;font: 11px Arial;<?php echo ($view_helper->hide_main_container)?'margin-left:1%;width: 98%;padding-left:15px;':'' ?>" 
+             class="<?php echo ($view_helper->hide_main_container)?'col-md-12':'col-md-3' ?> menu_left">
+            <?php 
                 //se estiver apenas mostrando as propriedades 
                 if($view_helper->hide_main_container):
                 ?>
-                 <h3>
+                 <h4>
                     <?php if(has_action('label_add_item')): ?>
                            <?php do_action('label_add_item',$object_name) ?>
                     <?php else: ?>
@@ -48,7 +48,7 @@
                     <button type="button" onclick="back_main_list();"class="btn btn-default pull-right">
                         <b><?php _e('Back','tainacan') ?></b>
                     </button>
-                </h3>
+                </h4>
                 <hr>
                 <!--------------------------- ABAS----------------------------->
                 <?php $view_helper->add_tabs() ?>
