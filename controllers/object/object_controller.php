@@ -323,7 +323,7 @@ class ObjectController extends Controller {
                 }
                 //se existir a acao para alterar a home do item
                 if(has_action('alter_page_item')){
-                    do_action('alter_page_item',$data);
+                    return apply_filters('alter_page_item',$data);
                 }else{
                     return $this->render(dirname(__FILE__) . '../../../views/object/list_single_object.php', $data);
                 }
@@ -345,7 +345,8 @@ class ObjectController extends Controller {
                 }
                 
                 if(has_action('alter_page_item')){
-                    do_action('alter_page_item',$data);
+                    $array_json['html'] = apply_filters('alter_page_item',$data);
+                    return json_encode($array_json);
                 }else{
                     return $this->render(dirname(__FILE__) . '../../../views/object/list_single_object_version.php', $data);
                 }

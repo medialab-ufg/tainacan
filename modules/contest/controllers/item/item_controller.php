@@ -12,8 +12,8 @@ include_once(dirname(__FILE__).'/../../../../controllers/general/general_control
                             $data['object'] = get_post($data['object_id']);
                             return $this->render(dirname(__FILE__).'../../../views/item/item.php', $data);
                         else:
-                             $data['object'] = get_post($data['object_id']);
-                            return $this->render(dirname(__FILE__).'../../../views/item/question.php', $data);
+                            $data['object'] = get_post($data['object_id']);
+                            return $this->render(dirname(__FILE__).'../../../views/question/question.php', $data);
                         endif;
                         
                 }
