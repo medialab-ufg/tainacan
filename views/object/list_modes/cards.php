@@ -23,6 +23,7 @@
                 <div class="item-meta col-md-12 no-padding">
                     <?php
                     if( is_array($table_meta_array) && count($table_meta_array) > 0):
+                        $_DEFAULT_EMPTY_VALUE = "--";
                         foreach ($table_meta_array as $item_meta_info):
                             $fmt = str_replace("\\","", $item_meta_info);
                             if(is_string($fmt)):
@@ -33,7 +34,7 @@
                                         echo '<input type="hidden" name="meta_id_table" value="'. $_META['id'] .'" data-mtype="'. $_META['tipo'] .'">';
 
                                     if($_META['tipo'] === 'property_data') {
-                                        $__item_meta = get_post_meta($curr_id, "socialdb_property_$_meta_obj->id", true);
+                                        $__item_meta = get_post_meta($curr_id, "socialdb_property_$_meta_obj->id", true) ?: $_DEFAULT_EMPTY_VALUE;
                                         if( !empty($__item_meta)) {
                                             echo '<input type="hidden" name="item_table_meta" value="'. $__item_meta .'" />';
                                         }
@@ -41,12 +42,16 @@
                                         $_current_object_terms_ = get_the_terms($curr_id, "socialdb_category_type");
                                         $_father_name = get_term($_META['id'])->name;
                                         $_father_category_id = (int) get_term_meta($_META['id'])['socialdb_property_term_root'][0];
+                                        $_item_meta_val = $_DEFAULT_EMPTY_VALUE;
+
                                         foreach ($_current_object_terms_ as $curr_term) {
-                                            if($curr_term->parent == $_father_category_id) { ?>
-                                                <input id="tableV-meta-<?= $_META['id']; ?>" type="hidden" name="item_table_meta"
-                                                       data-parent="<?= $_father_name ?>" value="<?= $curr_term->name ?>" />
-                                            <?php }
-                                        }
+                                            if($curr_term->parent == $_father_category_id) {
+                                                $_item_meta_val = $curr_term->name;
+                                            }
+                                        } ?>
+                                        <input id="tableV-meta-<?= $_META['id']; ?>" type="hidden" name="item_table_meta"
+                                               data-parent="<?= $_father_name ?>" value="<?= $_item_meta_val; ?>" />
+                                        <?php
                                     }
                                 endif; //is_object
                             endif; // is_string
