@@ -149,6 +149,7 @@ function contest_insert_default_properties_collection($category_id,$collection_i
         update_term_meta($new_property['term_id'], 'socialdb_property_object_category_id', $category_id);
         update_term_meta($new_property['term_id'], 'socialdb_property_created_category', $category_id); // adiciono a categoria de onde partiu esta propriedade
         add_term_meta($category_id, 'socialdb_category_property_id', $new_property['term_id']);
+        add_post_meta($collection_id, 'socialdb_collection_property_related_id', $new_property['term_id']);
         add_post_meta($collection_id, 'socialdb_collection_facets', $new_property['term_id']);
         add_post_meta($collection_id, 'socialdb_collection_facet_' . $new_property['term_id'] . '_color', 'color_property8');
         add_post_meta($collection_id, 'socialdb_collection_facet_' . $new_property['term_id'] . '_priority', 999);
@@ -173,9 +174,24 @@ function hide_field() {
 ##################### 12# MOSTRA PAGINA DO ITEM DESTE MODO #########################
 add_filter( 'alter_page_item', 'contest_alter_page_item', 10, 1 );
 function contest_alter_page_item($data) {
-    $html = '<script type="text/javascript">
-            init_contest_item_page("'. CONTEST_CONTROLLERS.'",'.$data['collection_id'].','.$data['object']->ID.');</script>'.$html;
-    return $html;
+    $type = get_post_meta($data['object']->ID, 'socialdb_object_contest_type', true);
+    if($type=='argument'):
+        return renderContest(dirname(__FILE__).'/views/item/item.php', $data);
+    else:
+        return renderContest(dirname(__FILE__).'/views/question/question.php', $data);
+    endif;
+    
+    //$html = '<script type="text/javascript">
+           // init_contest_item_page("'. CONTEST_CONTROLLERS.'",'.$data['collection_id'].','.$data['object']->ID.');</script>'.$html;
+    //return $html;
+}
+
+function renderContest($file, $variables = array()) {
+        extract($variables);
+        ob_start();
+        include $file;
+        $renderedView = ob_get_clean();
+        return $renderedView;
 }
 ################################################################################
 ##################### 13# ADICIONANDO O TIPO DE DENUNCIA #######################

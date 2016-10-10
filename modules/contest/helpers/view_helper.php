@@ -112,4 +112,29 @@ class ViewHelper {
 
         return "<img alt='$alt' title='$alt' src='$img_path' />";
     }
+    
+    /**
+     * 
+     * @param type $param
+     */
+    public function getRelated($collection_id,$item_id) {
+        $property = get_term_by('id',get_post_meta($collection_id, 'socialdb_collection_property_related_id',true), 'socialdb_property_type');
+        if($property){
+           $metas = get_post_meta($item_id,'socialdb_property_'.$property->term_id);
+           if($metas){
+               foreach ($metas as $value) {
+                   $related = get_post($value);
+                   ?>
+                    <li>
+                        <a target="_blank" href="<?php echo get_the_permalink($collection_id).'?item='.$related->post_name ?>">
+                        <i><?php echo $related->post_title ?></i>
+                        </a>
+                    </li>
+                   <?php
+               }
+           }else{
+               echo _e('No questions related','tainacan');
+           }
+        }
+    }
 } // ViewHelper

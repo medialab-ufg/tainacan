@@ -12,8 +12,13 @@
                 $('.nav-tabs').tab();
                 $('.dropdown-toggle').dropdown();
                 elem = jQuery.parseJSON(result);
-                if (elem.redirect)
-                    window.location = elem.redirect;
+                //show messages
+                $('.modal').modal('hide');
+                hide_modal_main();
+                showItemObject($('#item_id').val(),$('#src').val());
+                showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Operation was successfully!', 'tainacan') ?>', 'success');
+                //if (elem.redirect)
+                    //window.location = elem.redirect;
             }).error(function (error) {
             });
             e.preventDefault();
@@ -30,8 +35,13 @@
                 $('.nav-tabs').tab();
                 $('.dropdown-toggle').dropdown();
                 elem = jQuery.parseJSON(result);
-                if (elem.redirect)
-                    window.location = elem.redirect;
+                //show messages
+                $('.modal').modal('hide');
+                hide_modal_main();
+                showItemObject($('#item_id').val(),$('#src').val());
+                showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Operation was successfully!', 'tainacan') ?>', 'success');
+                //if (elem.redirect)
+                    //window.location = elem.redirect;
             }).error(function (error) {
             });
             e.preventDefault();
@@ -48,9 +58,13 @@
                 $('.nav-tabs').tab();
                 $('.dropdown-toggle').dropdown();
                 elem = jQuery.parseJSON(result);
-                location.reload();
-//                if (elem.redirect)
-//                    window.location = elem.redirect;
+               //show messages
+                $('.modal').modal('hide');
+                hide_modal_main();
+                showItemObject($('#item_id').val(),$('#src').val());
+                showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Operation was successfully!', 'tainacan') ?>', 'success');
+                //if (elem.redirect)
+                    //window.location = elem.redirect;
             }).error(function (error) {
             });
             e.preventDefault();
@@ -155,6 +169,19 @@
             $('#properties_' + type).html(result);
         });
     }
+    
+    function show_properties_argument_edit(type, object_id) {
+        var promisse;
+        promisse = $.ajax({
+            url: $('#src').val() + '/controllers/object/object_controller.php',
+            type: 'POST',
+            data: {operation: 'show_object_properties_edit', object_id: object_id, collection_id: $("#collection_id").val()}
+        });
+        promisse.done(function (result) {
+            console.log('#properties_' + type);
+            $('#properties_' + type).html(result);
+        });
+    }
 
     /**
      * 
@@ -189,7 +216,7 @@
                 $('#collection_edit_argument_id').val($("#collection_id").val());
                 $('#edit_argument_id').val(elem_first.comment.ID);
                 $('#text-edit-argument').val(elem_first.comment.post_title);
-                show_properties_argument('edit', item_id);
+                show_properties_argument_edit('edit', item_id);
                 if (item_id == rootComment) {
                     $('#edit-type-comment').hide();
                 } else {

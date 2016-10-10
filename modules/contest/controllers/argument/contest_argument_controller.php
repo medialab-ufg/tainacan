@@ -1,10 +1,12 @@
 <?php
 $_GET['is_module_active'] = TRUE;
 require_once(dirname(__FILE__).'../../../models/item/item_model.php');
-include_once(dirname(__FILE__).'/../../../../controllers/general/general_controller.php');  
+include_once(dirname(__FILE__).'/../../../../controllers/general/general_controller.php');   
+require_once(dirname(__FILE__) . '/../../../../models/object/object_model.php');
  class ContestArgumentController extends Controller{
 	 public function operation($operation,$data){
                 $model = new ItemModel;  
+                $object_model = new ObjectModel;
 		switch ($operation) {
                     //adicionar um novo argumento 
                     case 'add':
@@ -24,6 +26,12 @@ include_once(dirname(__FILE__).'/../../../../controllers/general/general_control
                         $callback = json_decode($model->add($data['positive_argument'], $data['collection_id'], '', 'argument',$data['argument_parent'],'positive'));
                         if(isset($callback->socialdb_event_object_item_id)&&isset($callback->type)&&$callback->type=='success'){
                             $item = get_post($data['root_argument']);
+                            //inserindo os valores das propriedades
+                            $object_model->insert_properties_values($data, $callback->socialdb_event_object_item_id);
+                            // propriedade de termos
+                            $object_model->insert_properties_terms($data, $callback->socialdb_event_object_item_id);
+                            //propriedades compostas
+                            $object_model->insert_compounds($data,$callback->socialdb_event_object_item_id);
                             $data['redirect'] = get_the_permalink($data['collection_id']).'?item='.$item->post_name;
                             return json_encode($data);
                         }
@@ -31,6 +39,12 @@ include_once(dirname(__FILE__).'/../../../../controllers/general/general_control
                         $callback = json_decode($model->add($data['negative_argument'], $data['collection_id'], '', 'argument',$data['argument_parent'],'negative'));
                         if(isset($callback->socialdb_event_object_item_id)&&isset($callback->type)&&$callback->type=='success'){
                             $item = get_post($data['root_argument']);
+                            //inserindo os valores das propriedades
+                            $object_model->insert_properties_values($data, $callback->socialdb_event_object_item_id);
+                            // propriedade de termos
+                            $object_model->insert_properties_terms($data, $callback->socialdb_event_object_item_id);
+                            //propriedades compostas
+                            $object_model->insert_compounds($data,$callback->socialdb_event_object_item_id);
                             $data['redirect'] = get_the_permalink($data['collection_id']).'?item='.$item->post_name;
                             return json_encode($data);
                         }
@@ -39,6 +53,12 @@ include_once(dirname(__FILE__).'/../../../../controllers/general/general_control
                         $data['type'] = get_post_meta($data['object_id'], 'socialdb_object_contest_position', true);
                         return json_encode($data);
                     case 'update_argument':  
+                        //inserindo os valores das propriedades
+                        $object_model->insert_properties_values($data, $data['argument_id']);
+                        // propriedade de termos
+                        $object_model->insert_properties_terms($data, $data['argument_id']);
+                        //propriedades compostas
+                        $object_model->insert_compounds($data,$data['argument_id']);
                         return json_encode($model->update_argument($data));
                         
                 }
