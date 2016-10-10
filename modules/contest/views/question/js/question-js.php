@@ -339,4 +339,22 @@
         $('#modalAddAnswer').modal('show');
         
     }
+    
+    function autocomplete_arguments(seletor,property_id){
+        $(seletor).autocomplete({
+            source: $('#src').val() + '/controllers/object/object_controller.php?operation=get_objects_by_property_json&property_id=' + property_id,
+            messages: {
+                noResults: '',
+                results: function () {
+                }
+            },
+            minLength: 2,
+            select: function (event, ui) {
+                console.log(event);
+                event.preventDefault();
+                var label = ui.item.label;
+                $(seletor).val(label);
+            }
+        });    
+    }
 </script>    

@@ -41,7 +41,7 @@ class ObjectHelper extends ViewHelper {
                 </li>
             </ul>
             <div id="tab-content-metadata" class="tab-content" style="background: white;">
-                <div id="tab-default"  class="tab-pane fade in active" style="background: white;margin-bottom: 15px;margin-top: 15px;">
+                <div id="tab-default"  class="tab-pane fade in active" style="background: white;margin-bottom: 15px;">
                     <!--div    style="margin-bottom:0%" 
                             onclick="open_accordeon('default')"
                             class="expand-all-item btn white tainacan-default-tags">
@@ -62,11 +62,11 @@ class ObjectHelper extends ViewHelper {
         $required = get_post_meta($collection_id, 'socialdb_collection_property_'.$id.'_required', true);
         if($required&&$required=='true'):
         ?>
-        <a id='required_field_<?php echo $slug ?>' style="padding: 3px;margin-left: -30px;" >
-            &nbsp; <span class="glyphicon glyphicon glyphicon-star" title="<?php echo __('This metadata is required!', 'tainacan') ?>" 
-                         data-toggle="tooltip" data-placement="top" ></span>
+        <a id='required_field_<?php echo $slug ?>' style="padding: 3px;"  >
+            <span title="<?php echo __('This metadata is required!', 'tainacan') ?>" 
+                         data-toggle="tooltip" data-placement="top" >*</span>
         </a>
-        <a id='ok_field_<?php echo $slug ?>'  style="display: none;padding: 3px;margin-left: -30px;" >
+        <a id='ok_field_<?php echo $slug ?>'  style="display: none;padding: 0px;margin-left: -30px;"  >
             &nbsp; <span class="glyphicon glyphicon-ok-circle" title="<?php echo __('Field filled successfully!', 'tainacan') ?>" 
                          data-toggle="tooltip" data-placement="top" ></span>
         </a>

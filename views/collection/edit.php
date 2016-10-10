@@ -84,6 +84,9 @@ $image_cover_url = wp_get_attachment_url(get_post_meta($collection_post->ID, 'so
 
             <!------------------- DIV ADVANCED -------------------------->
             <div id="advanced_config" style="display: none;">
+                <?php
+                   do_action('insert_form_edit_collection',$collection_post);
+                ?>
                 <!------------------- Endereco da colecao -------------------------->
                 <div class="form-group">
                     <label for="collection_description"><?php _e('Collection Address', 'tainacan'); ?></label>

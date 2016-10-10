@@ -43,6 +43,10 @@
         }
         // # - inicializa o campos das propriedades de termo  
         edit_list_properties_term_insert_objects();
+        if($('#properties_autocomplete')&&$('#properties_autocomplete').val()){
+            var values = $('#properties_autocomplete').val().split(',');
+            autocomplete_edit_item_property_data(values);
+        }
     });
 
    

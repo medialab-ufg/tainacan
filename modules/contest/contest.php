@@ -200,3 +200,36 @@ function contest_add_meta_delete_object_event(){
     create_metas($term->term_id, 'socialdb_event_object_delete_metas', 'socialdb_event_object_delete_type', 'socialdb_event_object_delete_type');
 }
 contest_add_meta_delete_object_event();
+################################################################################
+################### #14 acao para incluir dynatree no edit colecao #############
+add_action( 'insert_form_edit_collection', 'contest_insert_form_edit_collection', 10, 1 );
+function contest_insert_form_edit_collection($collection) {
+    include_once dirname(__FILE__).'/views/configuration/js/configuration-js.php';
+ ?>
+    <label for="socialdb_collection_download_control"><?php _e('Default search in collection ', 'tainacan'); ?></label> 
+    <div class="row">
+        <div style='height: 150px;overflow: scroll;' 
+             class='col-lg-6'  id='default_search_dynatree'>
+        </div>
+        <select multiple 
+                size='6' 
+                class='col-lg-6' 
+                name='default_search_select[]' 
+                id='default_search_select'></select>
+    </div>
+    <label for="socialdb_collection_download_control">
+        <?php _e('Search to exclude', 'tainacan'); ?>
+    </label> 
+    <div class="row">
+        <div style='height: 150px;overflow: scroll;' 
+             class='col-lg-6'  
+             id='exclude_search_dynatree'>
+        </div>
+        <select multiple 
+                size='6' 
+                class='col-lg-6' 
+                name='exclude_search_select[]' 
+                id='exclude_search_select'></select>
+    </div>
+ <?php
+}

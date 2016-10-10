@@ -44,11 +44,11 @@ class ObjectWidgetsHelper extends ViewHelper {
                             }
                             if ($property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] == 'true') {
                                 ?>
-                                <a id='required_field_<?php echo $property['id']; ?>' style="padding: 3px;margin-left: -30px;" >
-                                        <span class="glyphicon glyphicon glyphicon-star" title="<?php echo __('This metadata is required!','tainacan')?>" 
-                                       data-toggle="tooltip" data-placement="top" ></span>
+                                <a id='required_field_<?php echo $property['id']; ?>' style="padding: 3px;margin-left: -30px;" class="pull-right" >
+                                        <span  title="<?php echo __('This metadata is required!','tainacan')?>" 
+                                       data-toggle="tooltip" data-placement="top" >*</span>
                                 </a>
-                                <a id='ok_field_<?php echo $property['id']; ?>'  style="display: none;padding: 3px;margin-left: -30px;" >
+                                <a id='ok_field_<?php echo $property['id']; ?>'  style="display: none;padding: 0px;" class="pull-right" >
                                         <span class="glyphicon  glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>" 
                                        data-toggle="tooltip" data-placement="top" ></span>
                                 </a>
@@ -67,7 +67,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                     <?php $cardinality = $this->render_cardinality_property($property);   ?>
                     <?php $properties_compounded = $property['metas']['socialdb_property_compounds_properties_id']; ?>
                     <?php //$class = 'col-md-'. (12/count($properties_compounded)); ?>
-                    <div class="form-group"> 
+                    <div style="margin-right: 15px;margin-left: 15px;" > 
                          <input  type="hidden" 
                                 id='main_compound_id' 
                                 value='<?php echo $references['compound_id'] ?>'>
@@ -109,9 +109,9 @@ class ObjectWidgetsHelper extends ViewHelper {
                                 </div>    
                                 <?php if($i>0): ?>
                                 <div class="col-md-1">
-                                    <button type="button" onclick="remove_container_compounds(<?php echo $property['id'] ?>,<?php echo $i ?>)" class="btn btn-default">
+                                    <a style="cursor: pointer;" onclick="remove_container_compounds(<?php echo $property['id'] ?>,<?php echo $i ?>)" class="pull-right">
                                         <span class="glyphicon glyphicon-remove"></span>
-                                    </button>
+                                    </a>
                                 </div>    
                                 <?php endif; ?>    
                                 <?php echo ($is_show_container==1) ? ''  : $this->render_button_cardinality($property,$i) ?>     
@@ -459,11 +459,11 @@ class ObjectWidgetsHelper extends ViewHelper {
                             }
                             if ($property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] == 'true') {
                                 ?>
-                                <a id='required_field_<?php echo $property['id']; ?>' style="padding: 3px;margin-left: -30px;" >
-                                        <span class="glyphicon glyphicon glyphicon-star" title="<?php echo __('This metadata is required!','tainacan')?>" 
-                                       data-toggle="tooltip" data-placement="top" ></span>
+                                <a id='required_field_<?php echo $property['id']; ?>' style="padding: 3px;" class="pull-right" >
+                                        <span  title="<?php echo __('This metadata is required!','tainacan')?>" 
+                                       data-toggle="tooltip" data-placement="top" >*</span>
                                 </a>
-                                <a id='ok_field_<?php echo $property['id']; ?>'  style="display: none;padding: 3px;margin-left: -30px;" >
+                                <a id='ok_field_<?php echo $property['id']; ?>'  style="display: none;padding: 0px;" class="pull-right" >
                                         <span class="glyphicon  glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>" 
                                        data-toggle="tooltip" data-placement="top" ></span>
                                 </a>
@@ -482,7 +482,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                     <?php $cardinality = $this->render_cardinality_property($property);   ?>
                     <?php $properties_compounded = $property['metas']['socialdb_property_compounds_properties_id']; ?>
                     <?php //$class = 'col-md-'. (12/count($properties_compounded)); ?>
-                    <div class="form-group"> 
+                   <div class="form-group" style="margin-right: 15px;border-width: 15px;"> 
                          <input  type="hidden" 
                                 id='main_compound_id' 
                                 value='<?php echo $references['compound_id'] ?>'>
@@ -492,7 +492,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                             ?>
                             <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
                                  class="col-md-12 no-padding"
-                                 style="border-style: solid;border-width: 1px;border-color: #ccc; padding: 10px;<?php echo ($is_show_container) ? 'display:block': 'display:none'; ?>">
+                                 style="border-style: solid;margin-left: 30px;border-color: #ccc; padding: 10px;<?php echo ($is_show_container) ? 'display:block': 'display:none'; ?>">
                                 <div class="col-md-11">
                                 <?php foreach ($properties_compounded as $property_compounded): 
                                     $coumpounds_id[] = $property_compounded['id']; 
@@ -524,9 +524,9 @@ class ObjectWidgetsHelper extends ViewHelper {
                                 </div>    
                                 <?php if($i>0): ?>
                                 <div class="col-md-1">
-                                    <button type="button" onclick="remove_container_compounds(<?php echo $property['id'] ?>,<?php echo $i ?>)" class="btn btn-default">
+                                    <a style="cursor: pointer;" onclick="remove_container_compounds(<?php echo $property['id'] ?>,<?php echo $i ?>)" class="pull-right">
                                         <span class="glyphicon glyphicon-remove"></span>
-                                    </button>
+                                    </a>
                                 </div>    
                                 <?php endif; ?>    
                                 <?php echo ($is_show_container==1) ? ''  : $this->render_button_cardinality($property,$i) ?>     

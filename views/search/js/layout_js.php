@@ -129,6 +129,8 @@
             }).done(function (result) {
                 elem = jQuery.parseJSON(result);
                 showAlertGeneral(elem.title, elem.msg, elem.type);
+                showAlertGeneral(elem.title, '<?php _e('The page will be loaded to show the new design!') ?>', 'info');
+                location.reload();
                 $("#tainacan-breadcrumbs .collection-title").click();
             });
         });

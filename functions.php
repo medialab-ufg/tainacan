@@ -1447,6 +1447,15 @@ if (!function_exists("theme_styles")) {
                 'croppic' => '/libraries/css/croppic/croppic.css',
                 'tainacan' => '/libraries/css/tainacan.css'
             ];
+            $column = get_post_meta(get_the_ID(), 'socialdb_collection_submission_visualization',true);
+            if($column&&$column=='one'){
+                $registered_css['item-page'] = '/libraries/css/item-page.css';
+            }else{
+                if(wp_style_is( 'item-page' )){
+                    wp_deregister_style( 'item-page' ) ;
+                }
+            }
+            
             foreach ($registered_css as $css_file => $css_path) {
                 add_tainacan_css($css_file, $css_path);
             }

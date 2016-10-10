@@ -53,12 +53,12 @@ if (isset($property_object)):
                     }
                     if ($property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] == 'true') {
                         ?>
-                        <a id='required_field_<?php echo $property['id']; ?>' style="padding: 3px;margin-left: -30px;" >
-                                <span class="glyphicon glyphicon glyphicon-star" title="<?php echo __('This metadata is required!','tainacan')?>" 
-                               data-toggle="tooltip" data-placement="top" ></span>
+                        <a id='required_field_<?php echo $property['id']; ?>' style="padding: 3px;" >
+                                <span  title="<?php echo __('This metadata is required!','tainacan')?>" 
+                               data-toggle="tooltip" data-placement="top" >*</span>
                         </a>
                         <a id='ok_field_<?php echo $property['id']; ?>'  style="display: none;padding: 3px;margin-left: -30px;" >
-                                <span class="glyphicon  glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>" 
+                                 &nbsp;<span class="glyphicon  glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>" 
                                data-toggle="tooltip" data-placement="top" ></span>
                         </a>
                         <input type="hidden" 
@@ -73,7 +73,7 @@ if (isset($property_object)):
                     }
                     ?>
             </h2>
-            <div class="form-group" >
+            <div  >
                 <?php 
                 // botao que leva a colecao relacionada
                     if (isset($property['metas']['collection_data'][0]->post_title)):  ?>
@@ -146,7 +146,7 @@ if (isset($property_object)):
         endif;
         $properties_autocomplete[] = $property['id']; 
         ?>
-        <div id="meta-item-<?php echo $property['id']; ?>" >
+        <div id="meta-item-<?php echo $property['id']; ?>" class="form-group" >
             <h2>
                 <?php echo $property['name']; ?>
                 <?php 
@@ -166,12 +166,12 @@ if (isset($property_object)):
                 }
                 if ($property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] == 'true') {
                     ?>
-                     <a id='required_field_<?php echo $property['id']; ?>' style="padding: 3px;margin-left: -30px;" >
-                                <span class="glyphicon glyphicon glyphicon-star" title="<?php echo __('This metadata is required!','tainacan')?>" 
-                               data-toggle="tooltip" data-placement="top" ></span>
+                     <a id='required_field_<?php echo $property['id']; ?>' style="padding: 3px;" >
+                                <span  title="<?php echo __('This metadata is required!','tainacan')?>" 
+                               data-toggle="tooltip" data-placement="top" >*</span>
                         </a>
                         <a  id='ok_field_<?php echo $property['id']; ?>'  style="display: none;padding: 3px;margin-left: -30px;" >
-                                <span class="glyphicon  glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>" 
+                                 &nbsp;<span class="glyphicon  glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>" 
                                data-toggle="tooltip" data-placement="top" ></span>
                         </a>
                         <input type="hidden" 
@@ -282,7 +282,7 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
          //   continue;
         //}
         ?>
-        <div id="meta-item-<?php echo $property['id']; ?>" <?php do_action('item_property_term_attributes') ?>>
+        <div id="meta-item-<?php echo $property['id']; ?>" class="form-group" <?php do_action('item_property_term_attributes') ?>>
             <h2><?php echo $property['name']; ?>
             <?php 
             if(has_action('modificate_label_insert_item_properties')):
@@ -302,12 +302,12 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
                     }
                     if ($property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] == 'true') {
                         ?>
-                         <a id='required_field_<?php echo $property['id']; ?>' style="padding: 3px;margin-left: -30px;" >
-                                <span class="glyphicon glyphicon glyphicon-star" title="<?php echo __('This metadata is required!','tainacan')?>" 
-                               data-toggle="tooltip" data-placement="top" ></span>
+                         <a id='required_field_<?php echo $property['id']; ?>' style="padding: 3px;" >
+                                <span  title="<?php echo __('This metadata is required!','tainacan')?>" 
+                               data-toggle="tooltip" data-placement="top" >*</span>
                         </a>
                         <a id='ok_field_<?php echo $property['id']; ?>'  style="display: none;padding: 3px;margin-left: -30px;" >
-                                <span class="glyphicon  glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>" 
+                                 &nbsp;<span class="glyphicon  glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>" 
                                data-toggle="tooltip" data-placement="top" ></span>
                         </a>
                         <input type="hidden" 

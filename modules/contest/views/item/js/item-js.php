@@ -87,7 +87,9 @@
             });
             e.preventDefault();
         });
-        
+        autocomplete_arguments('#text-edit-argument',$('#related-id').val());
+        autocomplete_arguments('#positive_argument',$('#related-id').val());
+        autocomplete_arguments('#negative_argument',$('#related-id').val());
     });
     /**
      * 
@@ -305,5 +307,23 @@
         $('#share-facebook-comment').attr('href',url_facebook);
         var url_gmail = 'https://plus.google.com/share?url='+url;
         $('#share-gmail-comment').attr('href',url_gmail);
+    }
+    
+    function autocomplete_arguments(seletor,property_id){
+        $(seletor).autocomplete({
+            source: $('#src').val() + '/controllers/object/object_controller.php?operation=get_objects_by_property_json&property_id=' + property_id,
+            messages: {
+                noResults: '',
+                results: function () {
+                }
+            },
+            minLength: 2,
+            select: function (event, ui) {
+                console.log(event);
+                event.preventDefault();
+                var label = ui.item.label;
+                $(seletor).val(label);
+            }
+        });    
     }
 </script>    

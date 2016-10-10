@@ -44,7 +44,7 @@
     // funcao que gera o conteudo da aba criada
     function get_tab_content(id){
         var html = get_expand_all_tab(id);
-        return '<div style="background:white;margin-bottom: 15px;margin-top: 15px;" id="tab-'+id+'" class="tab-pane fade">'+
+        return '<div style="background:white;margin-bottom: 15px;" id="tab-'+id+'" class="tab-pane fade">'+
                 html +
                 '<div id="accordeon-'+id+'" class="multiple-items-accordion"></div>'+
                 '</div>';
