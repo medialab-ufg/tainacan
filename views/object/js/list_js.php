@@ -28,7 +28,7 @@
             var nome = "--";
             if(meta_type == 'property_data') {
                 nome = $("#collection_single_ordenation option[value='"+valor+"'").text();
-            } else if(meta_type == 'property_term') {
+            } else if( (meta_type == 'property_term') || (meta_type == 'property_object') ) {
                 nome = $("#tableV-meta-"+valor).attr("data-parent");
             }
             $('tr.dynamic-table-metas').append('<th>' + nome + '</th>');
@@ -51,8 +51,11 @@
         var total_objs = $('.object_id').length;
         $('.object_id').each(function(idx, el) {
             var c_id = $(this).val();
+            var see_more = '<?php _e( "View Object","tainacan"); ?>';
             var item_order = parseInt( $("#object_" + c_id).attr('data-order') );
+            var fixed_actions = "<a class='tview-title' data-id='"+c_id+"' title='"+see_more+"'> <span class='glyphicon glyphicon-eye-open'></span> </a>";
             var actions = $("#object_" + c_id + " .item-funcs").html();
+            fixed_actions += actions;
 
             var _table_html = "<tr>";
             if(meta_table_set) {
@@ -64,10 +67,9 @@
             } else {
                 var title = $.trim($("#object_" + c_id + " .item-display-title a").text());
                 var prepare_item = "<a class='tview-title' data-id='"+c_id+"' href='javascript:void(0)'>"+title+" </a>";
-
                 _table_html += "<td>" + prepare_item + "</td>";
             }
-            _table_html += "<td style='width: 10%'> <ul>" + actions + "</ul> </td> </tr>";
+            _table_html += "<td style='width: 12%'> <ul>" + fixed_actions + "</ul> </td> </tr>";
             $( "#table-view-elements" ).append( _table_html );
 
             if( items_per_page && items_per_page >= 10 ) {

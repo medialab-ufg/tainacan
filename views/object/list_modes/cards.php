@@ -15,9 +15,7 @@
             <div class="col-md-4 colFoto">
                 <a href="<?php echo get_collection_item_href($collection_id); ?>"
                    onclick="<?php get_item_click_event($collection_id,$curr_id) ?>">
-                       <?php // echo get_item_thumb_image( $curr_id ); ?>
-                    <?php // echo "<h1> " . get_post('173')->post_title . "</h1>"; ?>
-                    <?php // var_dump($table_meta_array); ?>
+                    <?php echo get_item_thumb_image( $curr_id ); ?>
                 </a>
             </div>
 
@@ -55,15 +53,20 @@
                                                data-parent="<?= $_father_name ?>" value="<?= $_item_meta_val; ?>" />
                                         <?php
                                     } else if($_META['tipo'] == 'property_object') {
-                                        /*
-                                         * continue from here
                                         $_prop_key = "socialdb_property_" . (string) $_META['id'];
-                                        $_related_obj_id = get_post_meta($curr_id, $_prop_key, true);
-                                        $_obj_id = get_post($_related_obj_id)->ID;
-                                        if( $_obj_id != $curr_id ) {
-                                            $_obj_name = get_post($_related_obj)->post_title;
-                                        }
-                                        */
+                                        $_related_obj_id = (int) get_post_meta($curr_id, $_prop_key, true);
+                                        $_father_name = get_term($_META['id'])->name;
+                                        $_item_meta_val = $_DEFAULT_EMPTY_VALUE;
+
+                                        if($_related_obj_id > 0) {
+                                            $_obj_id = get_post($_related_obj_id)->ID;
+                                            if( $_obj_id != $curr_id ) {
+                                                $_item_meta_val = get_post($_obj_id)->post_title;
+                                            }
+                                        } ?>
+                                        <input id="tableV-meta-<?= $_META['id']; ?>" type="hidden" name="item_table_meta"
+                                               data-parent="<?= $_father_name ?>" value="<?= $_item_meta_val; ?>" />
+                                    <?php
                                     }
                                 endif; //is_object
                             endif; // is_string
@@ -71,8 +74,6 @@
                     endif;
                     ?>
 
-                    <?php echo $_obj_name . " : " . $_obj_id; ?>
-                    
                     <h4 class="item-display-title">
                         <a href="<?php echo get_collection_item_href($collection_id); ?>"
                            onclick="<?php get_item_click_event($collection_id,$curr_id) ?>">
