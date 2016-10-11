@@ -1,5 +1,8 @@
 <script>
     $(function () {
+        //url
+        var stateObj = {foo: "bar"};
+        history.replaceState(stateObj, "page 2", $('#socialdb_permalink_object').val());
         //submissao de formulario positivo
         $('#form_positive_argument').submit(function (e) {
             $.ajax({

@@ -70,8 +70,11 @@ class RDFOntologyCategoryModel extends OntologyRDFCollectionModel {
         endif;
         
         $xml .= '<owl:Class rdf:about="'. $url.'?category='.$category->slug.'"  >';
-         if(isset($category->name)&&!empty($category->name)):
-            $xml .= "<rdfs:label>{$category->name}</rdfs:label>";
+        if(isset($category->name)&&!empty($category->name)):
+            if(mb_detect_encoding($category->name)=='UTF-8')
+              $xml .= "<rdfs:label>".$category->name."</rdfs:label>";
+            else    
+              $xml .= "<rdfs:label>".utf8_decode($category->name)."</rdfs:label>";
         endif;
         if(isset($category->description)&&!empty($category->description)):
             $xml .= "<rdfs:comment>".utf8_decode (htmlspecialchars($category->description))."</rdfs:comment>";

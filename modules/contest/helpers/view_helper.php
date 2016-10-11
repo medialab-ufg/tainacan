@@ -41,6 +41,9 @@ class ViewHelper {
                                         </button>
                                     </div>                                
                                     <div class="btn-group" role="group" aria-label="...">
+                                         <button type="button" 
+                                                        onclick="showSingleObject('<?php echo $child->ID; ?>', $('#src').val())" 
+                                                        class="btn btn-default btn-sm"><span class="glyphicon glyphicon-zoom-in"></span> <?php _e('Page','tainacan') ?></button>
                                         <?php if($child->post_author   ==  get_current_user_id()): ?>
                                         <button type="button" 
                                                 onclick="edit_comment( '<?php echo $child->ID; ?>')" 

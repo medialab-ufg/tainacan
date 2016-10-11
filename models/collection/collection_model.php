@@ -297,7 +297,7 @@ class CollectionModel extends Model {
         if ($data['socialdb_collection_moderation_type'] == 'democratico') {
             update_post_meta($post_id, 'socialdb_collection_moderation_days', $data['socialdb_collection_moderation_days']);
         }
-
+            
         update_post_meta($post_id, 'socialdb_collection_moderation_type', $data['socialdb_collection_moderation_type']);
         update_post_meta($post_id, 'socialdb_collection_object_name', $data['socialdb_collection_object_name']);
         update_post_meta($post_id, 'socialdb_collection_hide_tags', $data['socialdb_collection_hide_tags']);
@@ -335,8 +335,10 @@ class CollectionModel extends Model {
         update_post_meta($post_id, 'socialdb_collection_permission_create_tags', $data['socialdb_collection_permission_create_tags']);
         update_post_meta($post_id, 'socialdb_collection_permission_edit_tags', $data['socialdb_collection_permission_edit_tags']);
         update_post_meta($post_id, 'socialdb_collection_permission_delete_tags', $data['socialdb_collection_permission_delete_tags']);
-        
-        
+        $data['collection_id'] = $post_id;
+        if(has_action('update_collection_configuration')){
+            do_action('update_collection_configuration', $data);
+        }
         $this->update_privacity($post_id, $data['collection_privacy']);
         return json_encode($data);
     }

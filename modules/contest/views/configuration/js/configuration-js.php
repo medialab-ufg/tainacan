@@ -1,10 +1,10 @@
 <script>
      $(function () {
-        init_dynatre_contest('#default_search_dynatree','#default_search_select');
-        init_dynatre_contest('#exclude_search_dynatree','#exclude_search_select');
+        init_dynatre_contest('#default_search_dynatree','#default_search_select','#socialdb_collection_default_search_select');
+        init_dynatre_contest('#exclude_search_dynatree','#exclude_search_select','#socialdb_collection_exclude_search_select');
     });
     
-    function init_dynatre_contest(seletor_dynatree,seletor_select) {
+    function init_dynatre_contest(seletor_dynatree,seletor_select,seletor_inserted) {
              $(seletor_dynatree).dynatree({
                     selectionVisible: true, // Make sure, selected nodes are visible (expanded).  
                     checkbox: true,
@@ -34,7 +34,14 @@
                     },
                     onKeydown: function (node, event) {
                     },
-                    onCreate: function (node, span) {$('.dropdown-toggle').dropdown();
+                    onCreate: function (node, span) {
+                        var values = $(seletor_inserted).val();
+                        if(values&&values!=''){
+                            var selected = values.split(',');
+                            if(selected.indexOf(node.data.key)>=0){
+                                node.select();
+                            }
+                        }
                     },
                     onPostInit: function (isReloading, isError) {
                     },

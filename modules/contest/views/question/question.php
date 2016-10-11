@@ -3,6 +3,7 @@
 <?php $post = get_post($collection_id); ?>
 <?php $ranking = get_term_by('name', __('In favor / Against', 'tainacan'),'socialdb_property_type') ?>
 <?php $view_helper = new ViewHelper; ?>
+<input type="hidden" id="socialdb_permalink_object" name="socialdb_permalink_object" value="<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>" />
 <input type="hidden" id="item_id" value="<?php echo $object->ID; ?>">
 <div class="chatContainer">
     <ol class="breadcrumb item-breadcrumbs" style="padding-top: 10px;">
@@ -98,6 +99,9 @@
                                                 </button>
                                             </div>                                
                                             <div class="btn-group" role="group" aria-label="...">
+                                                <button type="button" 
+                                                        onclick="showSingleObject('<?php echo $child->ID; ?>', $('#src').val())" 
+                                                        class="btn btn-default btn-sm"><span class="glyphicon glyphicon-zoom-in"></span> <?php _e('Page','tainacan') ?></button>
                                                 <?php if($child->post_author   ==  get_current_user_id()): ?>
                                                 <button type="button" 
                                                         onclick="edit_comment( '<?php echo $child->ID; ?>',true)" 

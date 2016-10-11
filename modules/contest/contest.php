@@ -202,10 +202,12 @@ function contest_add_meta_delete_object_event(){
 contest_add_meta_delete_object_event();
 ################################################################################
 ################### #14 acao para incluir dynatree no edit colecao #############
-add_action( 'insert_form_edit_collection', 'contest_insert_form_edit_collection', 10, 1 );
-function contest_insert_form_edit_collection($collection) {
+add_action( 'insert_form_edit_collection', 'contest_insert_form_edit_collection', 10, 2 );
+function contest_insert_form_edit_collection($collection,$collection_metas) {
     include_once dirname(__FILE__).'/views/configuration/js/configuration-js.php';
  ?>
+    <input id="socialdb_collection_exclude_search_select" type="hidden" value="<?php echo $collection_metas['socialdb_collection_exclude_search_select'] ?>">
+    <input id="socialdb_collection_default_search_select" type="hidden" value="<?php echo $collection_metas['socialdb_collection_default_search_select'] ?>">
     <label for="socialdb_collection_download_control"><?php _e('Default search in collection ', 'tainacan'); ?></label> 
     <div class="row">
         <div style='height: 150px;overflow: scroll;' 
@@ -233,3 +235,44 @@ function contest_insert_form_edit_collection($collection) {
     </div>
  <?php
 }
+
+add_action( 'update_collection_configuration', 'contest_update_collection_configuration', 10, 1 );
+function contest_update_collection_configuration($data) {
+    if($data['default_search_select'] && is_array($data['default_search_select'])){
+        update_post_meta($data['collection_id'], 'socialdb_collection_default_search_select', implode(',', $data['default_search_select']));
+    }else{
+        update_post_meta($data['collection_id'], 'socialdb_collection_default_search_select', '');
+    }
+    //exclude
+    if($data['exclude_search_select'] && is_array($data['exclude_search_select'])){
+         update_post_meta($data['collection_id'], 'socialdb_collection_exclude_search_select', implode(',', $data['exclude_search_select']));
+    }else{
+         update_post_meta($data['collection_id'], 'socialdb_collection_exclude_search_select', '');
+    }
+}
+################################################################################
+################### #15 alterando o wp query model de taxonomia ################
+function contest_update_tax_query($tax_query,$collection_id,$is_filter = false) {
+    $default = get_post_meta($collection_id, 'socialdb_collection_default_search_select', true);
+    $exclude = get_post_meta($collection_id, 'socialdb_collection_exclude_search_select', true);
+    if($default&&$default!=''&&$is_filter==false){
+        $default = explode(',', $default);
+        $tax_query[] = array(
+            'taxonomy' => 'socialdb_category_type',
+            'field' => 'id',
+            'terms' => $default,
+            'operator' => 'IN'
+        );
+    }
+    if($exclude&&$exclude!=''){
+        $exclude = explode(',', $exclude);
+        $tax_query[] = array(
+            'taxonomy' => 'socialdb_category_type',
+            'field' => 'id',
+            'terms' => $exclude,
+            'operator' => 'NOT IN'
+        );
+    }
+    return $tax_query;
+}
+add_filter( 'update_tax_query', 'contest_update_tax_query', 10, 3 );

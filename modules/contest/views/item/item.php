@@ -3,12 +3,28 @@
 <?php $post = get_post($collection_id); ?>
 <?php $ranking = get_term_by('name', __('In favor / Against', 'tainacan'),'socialdb_property_type') ?>
 <?php $view_helper = new ViewHelper; ?>
+ <?php 
+    $temp = $object;
+    while($temp->post_parent!==0){
+        $temp = get_post($temp->post_parent);
+        $parents[] = $temp;
+    }
+?>    
+<input type="hidden" id="socialdb_permalink_object" name="socialdb_permalink_object" value="<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>" />
 <input type="hidden" id="related-id" value="<?php echo get_post_meta($post->ID, 'socialdb_collection_property_related_id', TRUE); ?>">
 <input type="hidden" id="url-argument" value="<?php echo htmlentities(get_permalink(get_option('collection_root_id')).'?item='.$object->post_name); ?>">
 <div class="chatContainer">
     <ol class="breadcrumb item-breadcrumbs" style="padding-top: 10px;">
         <li> <a href="<?php echo get_permalink(get_option('collection_root_id')); ?>"> <?php _e('Repository', 'tainacan') ?> </a> </li>
         <li> <a href="#" onclick="backToMainPageSingleItem()"> <?php echo $post->post_title; ?> </a> </li>
+        <?php 
+           $parents = (isset($parents) && is_array($parents)) ? array_reverse($parents) : [];
+           foreach ($parents as $parent) {
+               ?>
+                <li> <a href="#" onclick="showSingleObject('<?php echo $parent->ID; ?>', $('#src').val())" > <?php echo $parent->post_title; ?> </a> </li>
+               <?php
+           }
+        ?>
         <li class="active"> <?php echo $object->post_title; ?> </li>
     </ol>
     <br>
