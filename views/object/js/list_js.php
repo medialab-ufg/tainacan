@@ -259,7 +259,7 @@
             $('.selected-item').each(function(idx, el) {
                 var item_id = $(el).parent().attr("id").replace("object_", "");
                 var item_title = $("#object_" + item_id + " h4.item-display-title").text().trim();
-                var item_desc = $("#object_" + item_id + " .item-description").text().trim();
+                var item_desc = $("#object_" + item_id + " .item-desc-hidden-full").text().trim();
                 edit_data.push( { id: item_id, title: item_title, desc: item_desc } );
             });
 

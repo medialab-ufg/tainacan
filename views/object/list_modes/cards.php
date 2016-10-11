@@ -80,7 +80,8 @@
                             <?php echo wp_trim_words( get_the_title(), 13 ); ?>
                         </a>
                     </h4>
-                    <div class="item-description"> <?php echo wp_trim_words(get_the_content(), 16); ?> </div>
+                    <div class="item-description"> <?php echo wp_trim_words($_object_description, 16); ?> </div>
+                    <div class='item-desc-hidden-full' style="display: none"><?php echo $_object_description; ?></div>                        
                     
                     <div class="row author-created">
                         <div class="col-md-6 author">
