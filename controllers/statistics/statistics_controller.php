@@ -1,4 +1,5 @@
 <?php
+require_once(dirname(__FILE__) . '../../general/general_controller.php');
 
 class StatisticsController extends Controller {
     public function operation($op, $data) {

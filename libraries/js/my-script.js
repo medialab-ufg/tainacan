@@ -1751,7 +1751,6 @@ $(function () {
     });
     
     $('.repository-statistics').on('click', function() {
-        alert('Showing statistics ..');
         var src = $('#src').val();
         $.ajax({
             url: src + '/controllers/statistics/statistics_controller.php',
@@ -1760,7 +1759,7 @@ $(function () {
         }).done(function(res) {
             cl(res);
             $('#main_part').hide();
-           $('#configurarion').html(res).show(); 
+           $('#configuration').html(res).show();
         });
     });
 

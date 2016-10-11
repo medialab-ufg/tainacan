@@ -11,10 +11,8 @@ $array_visibility = ($meta&&$meta!=='') ? $meta : '';
 ?>
 
 <?php $view_helper->render_header_config_steps('metadata') ?>
-<?php echo $view_helper->add_styles_property() ?>
-<input type="hidden" 
-       name="tabs_properties" 
-       id="tabs_properties" 
+
+<input type="hidden" name="tabs_properties" id="tabs_properties"
        value='<?php echo ($tabs&&is_array($tabs)) ? json_encode($tabs) :  ''; ?>'/>
 <input type="hidden" name="visibility_collection_properties" id="visibility_collection_properties" value='<?php echo $array_visibility; ?>'/>
 <input type="hidden" name="property_category_id" id="property_category_id" value="<?php echo $category->term_id; ?>"/>
