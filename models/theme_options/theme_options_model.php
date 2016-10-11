@@ -205,18 +205,18 @@ class ThemeOptionsModel extends Model {
         $reload = false;
         $data['socialdb_repository_permissions'] = ['socialdb_collection_permission_create_collection' => $data['socialdb_collection_permission_create_collection'], 'socialdb_collection_permission_delete_collection' => $data['socialdb_collection_permission_delete_collection']];
         $data['repository_content'] = strip_tags($data['repository_content']);
-   
+
         /*         * ***** */
 
         update_option('blogname', $data['repository_title']);
         update_option('blogdescription', $data['repository_content']);
         update_option('socialdb_repository_permissions', $data['socialdb_repository_permissions']);
-        if($data['tainacan_module_activate']&&$data['tainacan_module_activate']!='default'){
-             update_option('tainacan_module_activate', $data['tainacan_module_activate']);
-             $reload = true;
-        }else{
+        if ($data['tainacan_module_activate'] && $data['tainacan_module_activate'] != 'default') {
+            update_option('tainacan_module_activate', $data['tainacan_module_activate']);
+            $reload = true;
+        } else {
             update_option('tainacan_module_activate', '');
-             $reload = false;
+            $reload = false;
         }
 
         /*         * ***** */
@@ -253,11 +253,11 @@ class ThemeOptionsModel extends Model {
                 update_post_meta($socialdb_logo, 'socialdb_respository_cover_id', $cover_id);
             }
         }
-        
-        if(isset($data['tainacan_cache']) && $data['tainacan_cache'] == 'true'){
-             update_option('tainacan_cache', 'false');
-        }else{
-             update_option('tainacan_cache', 'true');
+
+        if (isset($data['tainacan_cache']) && $data['tainacan_cache'] == 'true') {
+            update_option('tainacan_cache', 'false');
+        } else {
+            update_option('tainacan_cache', 'true');
         }
 
         $data['title'] = __("Sucess", 'tainacan');
@@ -334,6 +334,133 @@ class ThemeOptionsModel extends Model {
         } else {
             return array();
         }
+    }
+
+    public function getAipFiles() {
+        if (is_dir(dirname(__FILE__) . '../../../data/aip')) {
+            $dir = dirname(__FILE__) . '../../../data/aip';
+            $files = scandir($dir);
+            $result = array();
+
+            foreach ($files as $file) {
+                if ($file != '.' && $file != '..' && !is_dir($dir . '/' . $file)) {
+                    $arrName = explode('.', $file);
+                    $format = end($arrName);
+                    $permit = array(
+                        'zip'
+                    );
+                    if (in_array($format, $permit)) {
+                        $result[] = $file;
+                    }
+                }
+            }
+
+            return $result;
+        } else {
+            return false;
+        }
+    }
+
+    public function delete_aip_file($file) {
+        if (is_file(dirname(__FILE__) . '../../../data/aip/' . $file)) {
+            unlink(dirname(__FILE__) . '../../../data/aip/' . $file);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function upload_aip_file($file, $data) {
+        $MaxFileSize = 2048;
+        $return = array();
+        if ($data['select_aip_type'] == 'dspace') {
+
+            $FileAccept = [
+                'application/zip',
+                'application/octet-stream'
+                    //'application/x-zip-compressed', 
+                    //'multipart/x-zip', 
+                    //'application/x-compressed'
+            ];
+
+            if ($file === null):
+                $result = false;
+                $error = __("Envie um arquivo zip.", 'tainacan');
+            elseif ($file['size'] > ($MaxFileSize * (1024 * 1024))):
+                $result = false;
+                $error = __("Arquivo muito grande, tamanho máximo permitido de {$MaxFileSize}MB.", 'tainacan');
+            elseif (!in_array($file['type'], $FileAccept)):
+                $result = false;
+                $error = __("Tipo de arquivo não suportado. Envie .ZIP!", 'tainacan');
+            else:
+                $name = time() . '_' . $file['name'];
+                if (move_uploaded_file($file['tmp_name'], dirname(__FILE__) . '/../../data/aip/' . $name)):
+                    $result = true;
+                    $error = __("Arquivo enviado com sucesso!", 'tainacan');
+                else:
+                    $result = false;
+                    $error = __("Erro ao mover o arquivo. Favor tente mais tarde!", 'tainacan');
+                endif;
+            endif;
+        }else {
+            $result = false;
+            $error = __("Ainda em implementação!", 'tainacan');
+        }
+        $return['result'] = $result;
+        $return['error'] = $error;
+        return json_encode($return);
+    }
+
+    public function verify_aip_file($file) {
+        $filepath = dirname(__FILE__) . '/../../data/aip/' . $file;
+        return (is_file($filepath) && file_exists($filepath) ? true : false);
+    }
+
+    public function unzip_aip_file($file) {
+        /* here it is really happening */
+        $filename = str_replace('.zip', '', $file);
+        $targetdir = dirname(__FILE__) . '/../../data/aip/' . $filename;
+        $targetzip = dirname(__FILE__) . '/../../data/aip/' . $file;
+
+        //Se a pasta ja existir, ela é deletada
+        if(is_dir($targetdir)){
+            $this->recursiveRemoveDirectory($targetdir);
+        }
+        
+        /* Extracting Zip File */
+        $zip = new ZipArchive();
+        $x = $zip->open($targetzip);  // open the zip file to extract
+        if ($x === true) {
+            $zip->extractTo($targetdir); // place in the directory with same name  
+            $zip->close();
+        }
+
+        return $targetdir;
+    }
+
+    public function unzip_aip_general($unzip_path, $file) {
+        $filename = str_replace('.zip', '', $file);
+        $targetdir = $unzip_path . $filename;
+        $targetzip = $unzip_path . $file;
+
+        /* Extracting Zip File */
+
+        $zip = new ZipArchive();
+        $x = $zip->open($targetzip);  // open the zip file to extract
+        if ($x === true) {
+            $zip->extractTo($targetdir); // place in the directory with same name  
+            $zip->close();
+            unlink($targetzip); //Deleting the Zipped file
+        }
+
+        return $targetdir;
+    }
+    
+    public function read_site_xml($xml) {
+        $title = (string) $xml->dmdSec[0]->mdWrap->xmlData->children('http://www.loc.gov/mods/v3')->mods->titleInfo->title;
+        $groups = $xml->amdSec->techMD->mdWrap->xmlData->DSpaceRoles->Groups;
+        $persons = $xml->amdSec->techMD->mdWrap->xmlData->DSpaceRoles->People;
+        var_dump($persons);
     }
 
 }
