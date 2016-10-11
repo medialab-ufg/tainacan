@@ -1749,6 +1749,20 @@ $(function () {
             add_collection_template(col_name, evt);
         }
     });
+    
+    $('.repository-statistics').on('click', function() {
+        alert('Showing statistics ..');
+        var src = $('#src').val();
+        $.ajax({
+            url: src + '/controllers/statistics/statistics_controller.php',
+            type: 'POST',
+            data: { operation: 'show_statistics' }
+        }).done(function(res) {
+            cl(res);
+            $('#main_part').hide();
+           $('#configurarion').html(res).show(); 
+        });
+    });
 
 });
 

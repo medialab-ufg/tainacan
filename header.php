@@ -141,6 +141,10 @@ $viewHelper = new ViewHelper();
                                                 <li><a onclick="showTools('<?php echo get_template_directory_uri() ?>');" onmouseover="" href="#"><span  class="glyphicon glyphicon-tasks"></span> <?php _e('Tools', 'tainacan'); ?></a></li>
                                                 <li><a onclick="showImportFull('<?php echo get_template_directory_uri() ?>');" onmouseover="" href="#"><span  class="glyphicon glyphicon-import"></span> <?php _e('Import', 'tainacan'); ?></a></li>
                                                 <li><a onclick="showExportFull('<?php echo get_template_directory_uri() ?>');" onmouseover="" href="#"><span  class="glyphicon glyphicon-export"></span> <?php _e('Export', 'tainacan'); ?></a></li>
+                                                <li> <a class="repository-statistics" href="#" onmouseover=""> 
+                                                        <span class="glyphicon glyphicon-globe"></span> <?php _e('Statistics', 'tainacan'); ?>
+                                                    </a>
+                                                </li>
                                             </ul>
                                         </li>
                                     <?php endif; ?>
