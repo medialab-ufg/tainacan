@@ -1,5 +1,4 @@
 <?php
-// Do not delete these lines
 global $global_collection_id;
 global $global_data_permissions;
 global $global_term_id;
