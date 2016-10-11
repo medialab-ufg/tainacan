@@ -107,12 +107,19 @@ class ThemeOptionsController extends Controller {
                     if (file_exists($unzip_path . '/sitewide-aip.zip')) {
                         $unzip_site = $theme_options_model->unzip_aip_general($unzip_path . '/', 'sitewide-aip.zip');
                         $xml = (file_exists($unzip_site.'/mets.xml') ? simplexml_load_file($unzip_site.'/mets.xml') : null);
-                        $theme_options_model->read_site_xml($xml);
+                        if($xml != null){
+                            $theme_options_model->read_site_xml($xml);
+                            $theme_options_model->recursiveRemoveDirectory($unzip_site);
+                        }else{
+                            return false;
+                        }
                         //var_dump($xml);
                     } else {
                         return false;
                     }
                     //community
+                    $community_files = scandir($unzip_path);
+                    var_dump($community_files);
                     //collection
                     //item
                 } else {

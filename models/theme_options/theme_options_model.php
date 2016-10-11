@@ -423,10 +423,10 @@ class ThemeOptionsModel extends Model {
         $targetzip = dirname(__FILE__) . '/../../data/aip/' . $file;
 
         //Se a pasta ja existir, ela é deletada
-        if(is_dir($targetdir)){
+        if (is_dir($targetdir)) {
             $this->recursiveRemoveDirectory($targetdir);
         }
-        
+
         /* Extracting Zip File */
         $zip = new ZipArchive();
         $x = $zip->open($targetzip);  // open the zip file to extract
@@ -455,12 +455,79 @@ class ThemeOptionsModel extends Model {
 
         return $targetdir;
     }
-    
+
     public function read_site_xml($xml) {
         $title = (string) $xml->dmdSec[0]->mdWrap->xmlData->children('http://www.loc.gov/mods/v3')->mods->titleInfo->title;
         $groups = $xml->amdSec->techMD->mdWrap->xmlData->DSpaceRoles->Groups;
         $persons = $xml->amdSec->techMD->mdWrap->xmlData->DSpaceRoles->People;
-        var_dump($persons);
+        
+        /***************************/
+        update_option('blogname', $title);
+        foreach ($persons->Person as $person) {
+            $info = array();
+            if (!email_exists($person->Email) && !username_exists($person->Email)) {
+                $info['user_login'] = $person->Email;
+                $info['user_email'] = $person->Email;
+                $info['user_pass'] = md5(time());
+                $info['first_name'] = $person->FirstName;
+                $info['last_name'] = $person->LastName;
+                $this->register_xml_user($info);
+            }
+        }
+        foreach ($groups->Group as $group) {
+            $attributes = $group->attributes();
+            if ($attributes->Name == 'Administrator') {
+                if (isset($group->Members->Member)) {
+                    foreach ($group->Members->Member as $member) {
+                        $user = get_user_by('email', $member['Name']);
+                        if ($user) {
+                            $userdata = array(
+                                'ID' => $user->ID,
+                                'role' => 'administrator'
+                            );
+                            $user_id = wp_update_user($userdata);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public function register_xml_user($data) {
+        global $wpdb;
+
+        $login = strip_tags(trim($data['user_login']));
+        $login = str_replace(' ', '-', $login);
+        $login = str_replace(array('-----', '----', '---', '--'), '-', $login);
+        $userdata = array(
+            'user_login' => $login,
+            'user_email' => $data['user_email'],
+            'user_url' => '',
+            'user_pass' => $data['user_pass'],
+            //user meta
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name'],
+            'rich_editing' => 'true',
+            'comment_shortcuts' => false,
+            'show_admin_bar_front' => false,
+            'wp_user_level' => 0,
+            'wp_capabilities' => 'a:1:{s:10:"subscriber";b:1;}'
+        );
+
+        $user_id = wp_insert_user($userdata);
+
+        if (isset($data['about_you'])) {
+            $about_you = sanitize_text_field($data['about_you']);
+            update_user_meta($user_id, 'about_you', $about_you);
+        }
+        if (isset($data['current_work'])) {
+            $current_work = sanitize_text_field($data['current_work']);
+            update_user_meta($user_id, 'current_work', $current_work);
+        }
+        if (isset($data['prof_resume'])) {
+            $p_resume = sanitize_text_field($data['prof_resume']);
+            update_user_meta($user_id, 'prof_resume', $p_resume);
+        }
     }
 
 }
