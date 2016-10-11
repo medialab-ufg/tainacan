@@ -3,7 +3,7 @@
         var src = $('#src').val();
         edit_list_properties_term_insert_objects();
         var properties_autocomplete = edit_get_val($("#edit_properties_autocomplete").val());
-        autocomplete_edit_item_property_data(properties_autocomplete); 
+        //autocomplete_edit_item_property_data(properties_autocomplete); 
     });
 
    

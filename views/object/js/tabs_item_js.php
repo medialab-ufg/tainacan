@@ -44,18 +44,18 @@
     // funcao que gera o conteudo da aba criada
     function get_tab_content(id){
         var html = get_expand_all_tab(id);
-        return '<div style="background:white;margin-bottom: 15px;margin-top: 15px;" id="tab-'+id+'" class="tab-pane fade">'+
+        return '<div style="background:white;margin-bottom: 15px;" id="tab-'+id+'" class="tab-pane fade">'+
                 html +
                 '<div id="accordeon-'+id+'" class="multiple-items-accordion"></div>'+
                 '</div>';
     }
     //funcao que gerar po expandir todos
     function get_expand_all_tab(id){
-        return '<div style="margin-bottom:0%"  onclick="open_accordeon('+id+')" class="expand-all-item btn white tainacan-default-tags">'+
+        return '<!--div style="margin-bottom:0%"  onclick="open_accordeon('+id+')" class="expand-all-item btn white tainacan-default-tags">'+
                     '<div class="action-text" style="display: inline-block;">'+
                              '<?php _e('Expand all', 'tainacan') ?></div>'+
                     '&nbsp;&nbsp;<span class="glyphicon-triangle-bottom white glyphicon"></span>'+
-                '</div>';
+                '</div -->';
     }
     //funcao responsavel em listar as abas nos selects
     function list_tabs(){

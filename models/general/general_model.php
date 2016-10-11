@@ -890,13 +890,22 @@ class Model {
         global $wpdb;
         $wp_posts = $wpdb->prefix . "posts";
         $term_relationships = $wpdb->prefix . "term_relationships";
+        $term_taxonomy = $wpdb->prefix . "term_taxonomy";
         $category_root_id = $this->get_category_root_of($collection_id);
+        $termchildren = get_term_children( $category_root_id, 'socialdb_category_type' );
         $term = get_term_by('id', $category_root_id, 'socialdb_category_type');
+        if(is_array($termchildren)&&!empty($termchildren)){
+            $termchildren[] = $category_root_id;
+        }else{
+            $termchildren = [];
+            $termchildren[] = $category_root_id;
+        }
         if (isset($term->term_taxonomy_id)) {
             $query = "
                     SELECT p.$field FROM $wp_posts p
                     INNER JOIN $term_relationships t ON p.ID = t.object_id    
-                    WHERE p.post_type LIKE 'socialdb_object' and t.term_taxonomy_id = {$term->term_taxonomy_id} 
+                    INNER JOIN $term_taxonomy tt ON tt.term_taxonomy_id = t.term_taxonomy_id    
+                    WHERE p.post_type LIKE 'socialdb_object' and tt.term_id IN (".  implode(',', $termchildren).")
             ";
 
             $result = $wpdb->get_results($query);
@@ -2158,7 +2167,7 @@ class Model {
                 }
             }
         }
-        if($properties  &&  is_array($properties)){
+        if($properties && is_array($properties)){
             foreach ($properties as $property) {
                  // busco o objeto da propriedade
                  $propertyObject = get_term_by('id', $property, 'socialdb_property_type');

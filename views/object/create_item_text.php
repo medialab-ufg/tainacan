@@ -26,20 +26,20 @@
     <input type="hidden" id="object_from" name="object_from" value="internal">
     <input type="hidden" id="object_type" name="object_type" value="text">
     <div class="row" style="background-color: #f1f2f2">
-        <div style="<?php echo ($view_helper->hide_main_container)?'margin-left:18%;padding-left:15px;':'' ?>"
-            class="<?php echo ($view_helper->hide_main_container)?'col-md-8':'col-md-3' ?> menu_left_loader">
+        <div style="<?php echo ($view_helper->hide_main_container)?'margin-left:1%;padding-left:15px;':'' ?>"
+            class="<?php echo ($view_helper->hide_main_container)?'col-md-12':'col-md-3' ?> menu_left_loader">
              <center>
                     <img src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>">
                     <h4><?php _e('Loading metadata...', 'tainacan') ?></h4>
              </center>
         </div>
-        <div style="display: none; background: white;border: 3px solid #E8E8E8;font: 11px Arial;<?php echo ($view_helper->hide_main_container)?'margin-left:18%;padding-left:15px;':'' ?>" 
-             class="<?php echo ($view_helper->hide_main_container)?'col-md-8':'col-md-3' ?> menu_left">
-                <?php 
+        <div style="display: none; background: white;border: 3px solid #E8E8E8;font: 11px Arial;<?php echo ($view_helper->hide_main_container)?'margin-left:1%;width: 98%;padding-left:15px;':'' ?>" 
+             class="<?php echo ($view_helper->hide_main_container)?'col-md-12':'col-md-3' ?> menu_left">
+            <?php 
                 //se estiver apenas mostrando as propriedades 
                 if($view_helper->hide_main_container):
                 ?>
-                 <h3>
+                 <h4>
                     <?php if(has_action('label_add_item')): ?>
                            <?php do_action('label_add_item',$object_name) ?>
                     <?php else: ?>
@@ -48,7 +48,7 @@
                     <button type="button" onclick="back_main_list();"class="btn btn-default pull-right">
                         <b><?php _e('Back','tainacan') ?></b>
                     </button>
-                </h3>
+                </h4>
                 <hr>
                 <!--------------------------- ABAS----------------------------->
                 <?php $view_helper->add_tabs() ?>
@@ -69,6 +69,7 @@
             ?>
             <!-- TAINACAN: titulo do item -->
             <div id="<?php echo $view_helper->get_id_list_properties('title','title'); ?>"  
+                 class="form-group"
                 <?php echo $view_helper->get_visibility($view_helper->terms_fixed['title']) ?>    
                 <?php do_action('item_title_attributes') ?>>
                 <h2> 
@@ -147,6 +148,7 @@
             <?php endif; ?>
             <!-- TAINACAN: thumbnail do item -->
             <div id="<?php echo $view_helper->get_id_list_properties('thumbnail','thumbnail_id'); ?>" 
+                 class="form-group"
                 <?php echo $view_helper->get_visibility($view_helper->terms_fixed['thumbnail']) ?>  
                 <?php do_action('item_thumbnail_attributes') ?>>
                 <h2> 
@@ -175,6 +177,7 @@
             </div>    
             <!-- TAINACAN: a fonte do item -->
             <div id="<?php echo $view_helper->get_id_list_properties('source','socialdb_object_dc_source'); ?>"  
+                 class="form-group"
                 <?php echo $view_helper->get_visibility($view_helper->terms_fixed['source']) ?>    
                 <?php do_action('item_source_attributes') ?>>
                 <h2> 
@@ -201,6 +204,7 @@
             </div>
             <!-- TAINACAN: a descricao do item -->
             <div id="<?php echo $view_helper->get_id_list_properties('description','post_content'); ?>" 
+                 class="form-group"
                  <?php echo $view_helper->get_visibility($view_helper->terms_fixed['description']) ?>
                  >
                 <h2>
@@ -225,6 +229,7 @@
             </div>
             <!-- TAINACAN: tags do item -->
             <div id="<?php echo $view_helper->get_id_list_properties('tags','tag'); ?>" 
+                 class="form-group"
                 <?php echo $view_helper->get_visibility($view_helper->terms_fixed['tags']) ?> 
                 <?php do_action('item_tags_attributes') ?>>
                 <h2>
@@ -256,6 +261,7 @@
             </div>
             <!-- TAINACAN: a licencas do item -->
             <div id="<?php echo $view_helper->get_id_list_properties('license','list_licenses_items'); ?>"
+                 class="form-group"
                  <?php echo $view_helper->get_visibility($view_helper->terms_fixed['license']) ?>
                  >
                 <h2>
@@ -266,9 +272,9 @@
                         <span  title="<?php _e('Licenses available for this item','tainacan') ?>" 
                        data-toggle="tooltip" data-placement="bottom" class="glyphicon glyphicon-question-sign"></span>
                     </a>
-                    <a id='required_field_license' style="padding: 3px;margin-left: -30px;" >
-                                &nbsp; <span class="glyphicon glyphicon glyphicon-star" title="<?php echo __('This metadata is required!','tainacan')?>" 
-                               data-toggle="tooltip" data-placement="top" ></span>
+                    <a id='required_field_license'  style="padding: 3px;" >
+                                &nbsp; <span  title="<?php echo __('This metadata is required!','tainacan')?>" 
+                               data-toggle="tooltip" data-placement="top" >*</span>
                     </a>
                     <a id='ok_field_license'  style="display: none;padding: 3px;margin-left: -30px;" >
                             &nbsp; <span class="glyphicon glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>" 

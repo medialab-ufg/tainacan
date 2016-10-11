@@ -1,5 +1,8 @@
 <script>
     $(function () {
+        //url
+        var stateObj = {foo: "bar"};
+        history.replaceState(stateObj, "page 2", $('#socialdb_permalink_object').val());
         //submissao de formulario positivo
         $('#form_positive_argument').submit(function (e) {
             $.ajax({
@@ -12,8 +15,13 @@
                 $('.nav-tabs').tab();
                 $('.dropdown-toggle').dropdown();
                 elem = jQuery.parseJSON(result);
-                if (elem.redirect)
-                    window.location = elem.redirect;
+                //show messages
+                $('.modal').modal('hide');
+                hide_modal_main();
+                showItemObject($('#item_id').val(),$('#src').val());
+                showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Operation was successfully!', 'tainacan') ?>', 'success');
+                //if (elem.redirect)
+                    //window.location = elem.redirect;
             }).error(function (error) {
             });
             e.preventDefault();
@@ -30,8 +38,13 @@
                 $('.nav-tabs').tab();
                 $('.dropdown-toggle').dropdown();
                 elem = jQuery.parseJSON(result);
-                if (elem.redirect)
-                    window.location = elem.redirect;
+                //show messages
+                $('.modal').modal('hide');
+                hide_modal_main();
+                showItemObject($('#item_id').val(),$('#src').val());
+                showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Operation was successfully!', 'tainacan') ?>', 'success');
+                //if (elem.redirect)
+                    //window.location = elem.redirect;
             }).error(function (error) {
             });
             e.preventDefault();
@@ -48,9 +61,13 @@
                 $('.nav-tabs').tab();
                 $('.dropdown-toggle').dropdown();
                 elem = jQuery.parseJSON(result);
-                location.reload();
-//                if (elem.redirect)
-//                    window.location = elem.redirect;
+               //show messages
+                $('.modal').modal('hide');
+                hide_modal_main();
+                showItemObject($('#item_id').val(),$('#src').val());
+                showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Operation was successfully!', 'tainacan') ?>', 'success');
+                //if (elem.redirect)
+                    //window.location = elem.redirect;
             }).error(function (error) {
             });
             e.preventDefault();
@@ -73,7 +90,9 @@
             });
             e.preventDefault();
         });
-        
+        autocomplete_arguments('#text-edit-argument',$('#related-id').val());
+        autocomplete_arguments('#positive_argument',$('#related-id').val());
+        autocomplete_arguments('#negative_argument',$('#related-id').val());
     });
     /**
      * 
@@ -155,6 +174,19 @@
             $('#properties_' + type).html(result);
         });
     }
+    
+    function show_properties_argument_edit(type, object_id) {
+        var promisse;
+        promisse = $.ajax({
+            url: $('#src').val() + '/controllers/object/object_controller.php',
+            type: 'POST',
+            data: {operation: 'show_object_properties_edit', object_id: object_id, collection_id: $("#collection_id").val()}
+        });
+        promisse.done(function (result) {
+            console.log('#properties_' + type);
+            $('#properties_' + type).html(result);
+        });
+    }
 
     /**
      * 
@@ -189,7 +221,7 @@
                 $('#collection_edit_argument_id').val($("#collection_id").val());
                 $('#edit_argument_id').val(elem_first.comment.ID);
                 $('#text-edit-argument').val(elem_first.comment.post_title);
-                show_properties_argument('edit', item_id);
+                show_properties_argument_edit('edit', item_id);
                 if (item_id == rootComment) {
                     $('#edit-type-comment').hide();
                 } else {
@@ -278,5 +310,23 @@
         $('#share-facebook-comment').attr('href',url_facebook);
         var url_gmail = 'https://plus.google.com/share?url='+url;
         $('#share-gmail-comment').attr('href',url_gmail);
+    }
+    
+    function autocomplete_arguments(seletor,property_id){
+        $(seletor).autocomplete({
+            source: $('#src').val() + '/controllers/object/object_controller.php?operation=get_objects_by_property_json&property_id=' + property_id,
+            messages: {
+                noResults: '',
+                results: function () {
+                }
+            },
+            minLength: 2,
+            select: function (event, ui) {
+                console.log(event);
+                event.preventDefault();
+                var label = ui.item.label;
+                $(seletor).val(label);
+            }
+        });    
     }
 </script>    

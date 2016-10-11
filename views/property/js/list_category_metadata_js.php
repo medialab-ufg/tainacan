@@ -2113,6 +2113,30 @@
      ************************* ACCORDEON FILTERS ACTIONS ************************
      ****************************************************************************
      **/ 
+    function add_text_type(type){
+     var string = '<span style="opacity:0.5;padding-left:5px;">'
+       if(type==='compound'){
+            string += '(<?php echo (__('Compounds','tainacan')) ?>)';
+       }else if(type==='category'||type==='tree'){
+            string += '(<?php echo (__('Categories','tainacan')) ?>)';
+       }else if(type==='relationship'){
+            string += '(<?php echo (__('Relation','tainacan')) ?>)';
+       }else if(type==='file'){
+             string += '(<?php echo (__('File','tainacan')) ?>)';
+       }else if(type==='text'){
+             string += '(<?php echo (__('Text','tainacan')) ?>)';
+       }else if(type==='textarea'){
+             string += '(<?php echo (__('Textarea','tainacan')) ?>)';
+       }else if(type==='date'){
+             string += '(<?php echo (__('Date','tainacan')) ?>)';
+       }else if(type==='numeric'){
+             string += '(<?php echo (__('Numeric','tainacan')) ?>)';
+       }else if(type==='radio'){
+             string += '(<?php echo (__('Radio','tainacan')) ?>)';
+       }
+       string +='</span>';
+       return string.toLowerCase();
+     } 
     function add_filter_button(id){
        return '<a  title="<?php _e('Add as filter','tainacan') ?>" style="cursor:pointer;" onclick="add_filter('+id+')">'+
                 '<span class="glyphicon glyphicon-arrow-left"></span></a> ';
@@ -2194,6 +2218,19 @@
             return ' block-facet';
         else
             return ''
+    }
+    /**
+     * 
+     * @param {type} seletor
+     * @returns {undefined}     */
+    function toggle_advanced_configuration(seletor) {
+        console.log(seletor);
+        if ($(seletor).is(':visible')) {
+            $(seletor).slideUp();
+        } else {
+            $(seletor).slideDown();
+        }
+
     }
      /**
      ****************************************************************************

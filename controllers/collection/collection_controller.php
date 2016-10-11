@@ -114,7 +114,8 @@ class CollectionController extends Controller {
                 }
                 break;
             case "list_ordenation":
-                $data = $collection_model->list_ordenation($data);
+                $data = $collection_model->list_ordenation($data, $data['get_all_meta']);
+
                 $data['names']['general_ordenation'] = __('General Ordenation','tainacan');
                 $data['names']['data_property'] = __('Property Data','tainacan');
                 $data['names']['ranking'] = __('Rankings','tainacan');

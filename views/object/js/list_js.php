@@ -17,15 +17,23 @@
             }
         };
 
-        if( $("#items-per-page").val() && !isNaN(parseInt( $("#items-per-page").val() ) ) ) {
-            var items_per_page = parseInt( $("#items-per-page").val() );
+        var per_page = $("#items-per-page").val();
+        if( per_page && !isNaN(parseInt(per_page) ) ) {
+            var items_per_page = parseInt( per_page );
         }
 
-        $('input[type="hidden"][name="meta_id_table"]').each(function(idx, el) {
+        $('input[name="meta_id_table"]').each(function(idx, el) {
             var valor = $(el).val();
-            var nome = $("#collection_single_ordenation option[value='"+valor+"'").text();
-            $('tr.dynamic-table-metas').prepend('<th>' + nome + '</th>');
+            var meta_type = $(el).attr('data-mtype');
+            var nome = "--";
+            if(meta_type == 'property_data') {
+                nome = $("#collection_single_ordenation option[value='"+valor+"'").text();
+            } else if( (meta_type == 'property_term') || (meta_type == 'property_object') ) {
+                nome = $("#tableV-meta-"+valor).attr("data-parent");
+            }
+            $('tr.dynamic-table-metas').append('<th>' + nome + '</th>');
         });
+
         var qtd_table_metas = $('input[type="hidden"][name="meta_id_table"]').length;
         if ( qtd_table_metas > 0 ) {
             var meta_table_set = true;
@@ -33,15 +41,21 @@
                 $("#table-view").css("display", "block");
             }
         } else {
-            $('tr.dynamic-table-metas').prepend('<th>' + '<?php _e("Title", "tainacan"); ?>'  + '</th>');
+            $('tr.dynamic-table-metas').append('<th>' + '<?php _e("Title", "tainacan"); ?>'  + '</th>');
             meta_table_set = false;
         }
+
+        var action_label = '<?php _e("Actions", "tainacan"); ?>';
+        $('tr.dynamic-table-metas').append('<th>' + action_label + '</th>');
 
         var total_objs = $('.object_id').length;
         $('.object_id').each(function(idx, el) {
             var c_id = $(this).val();
+            var see_more = '<?php _e( "View Object","tainacan"); ?>';
             var item_order = parseInt( $("#object_" + c_id).attr('data-order') );
+            var fixed_actions = "<a class='tview-title' data-id='"+c_id+"' title='"+see_more+"'> <span class='glyphicon glyphicon-eye-open'></span> </a>";
             var actions = $("#object_" + c_id + " .item-funcs").html();
+            fixed_actions += actions;
 
             var _table_html = "<tr>";
             if(meta_table_set) {
@@ -51,11 +65,11 @@
                     _table_html += "<td>" + meta_val + "</td>";
                 });
             } else {
-                var title = $("#object_" + c_id + " .item-display-title").text();
-                _table_html += "<td>" + title + "</td>";
+                var title = $.trim($("#object_" + c_id + " .item-display-title a").text());
+                var prepare_item = "<a class='tview-title' data-id='"+c_id+"' href='javascript:void(0)'>"+title+" </a>";
+                _table_html += "<td>" + prepare_item + "</td>";
             }
-
-            _table_html += "<td style='width: 10%'> <ul>" + actions + "</ul> </td> </tr>";
+            _table_html += "<td style='width: 12%'> <ul>" + fixed_actions + "</ul> </td> </tr>";
             $( "#table-view-elements" ).append( _table_html );
 
             if( items_per_page && items_per_page >= 10 ) {
@@ -66,6 +80,11 @@
             if( total_objs == (idx+1) ) {
                 $("#table-view").DataTable(dataTable_options);
             }
+        });
+
+        $('.tview-title').on('click', function() {
+            var i_id = $(this).attr("data-id");
+            showSingleObject(i_id, src);
         });
 
         $('.pagination_items').jqPagination({
@@ -240,7 +259,7 @@
             $('.selected-item').each(function(idx, el) {
                 var item_id = $(el).parent().attr("id").replace("object_", "");
                 var item_title = $("#object_" + item_id + " h4.item-display-title").text().trim();
-                var item_desc = $("#object_" + item_id + " .item-description").text().trim();
+                var item_desc = $("#object_" + item_id + " .item-desc-hidden-full").text().trim();
                 edit_data.push( { id: item_id, title: item_title, desc: item_desc } );
             });
 

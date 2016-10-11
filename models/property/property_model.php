@@ -670,6 +670,7 @@ class PropertyModel extends Model {
       /* @author Eduardo */
 
     public function list_property_object($data,$is_reverse = false) {
+
         $category_property = $this->set_category($data); // seto a categoria de onde vira as propriedades a partir dos dados vindos da view
         $data['tabs'] = $this->get_tabs_list($data['collection_id']);
         $data['is_root'] = $this->is_category_root($data); // verifico se ela e a root da colecao

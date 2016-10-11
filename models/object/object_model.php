@@ -836,12 +836,16 @@ class ObjectModel extends Model {
      * Autor: Eduardo Humberto 
      */
     public function list_object($args = null, $post_status = 'publish') {
-        $tax_query = array('relation' => 'IN');
+        $tax_query = array('relation' => 'AND');
         $tax_query[] = array(
             'taxonomy' => 'socialdb_category_type',
             'field' => 'id',
-            'terms' => array($this->collection_model->get_category_root_of($args['collection_id']))
+            'terms' => array($this->collection_model->get_category_root_of($args['collection_id'])),
+            'operator' => 'IN'
         );
+        if(has_filter('update_tax_query')){
+            $tax_query = apply_filters('update_tax_query',$tax_query,$args['collection_id']);
+        }
         //tipo de ordenacao
         $orderby = $this->set_order_by($args);
         $array_defaults = ['socialdb_object_from', 'socialdb_object_dc_type', 'socialdb_object_dc_source', 'title', 'socialdb_license_id'];

@@ -650,7 +650,7 @@
      * @param {type} seletor
      * @param {type} property_id
      * @returns {undefined}     */
-    function validate_selectbox(seletor,property_id){
+    function list_validate_selectbox(seletor,property_id){
         if($(seletor).val()===''){
             $('#core_validation_'+property_id).val('false');
             set_field_valid(property_id,'core_validation_'+property_id);

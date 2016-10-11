@@ -147,12 +147,7 @@ foreach( $view_helper->get_metadata_types() as $type => $label):
             <?php
         endif;
 endforeach;
-
-foreach( ['object', 'term', 'voting', 'filter', 'tag','compounds'] as $metadata ) {
-    include_once "metadata/form_$metadata.php";
-}
 ?>
-
 <div class="modal fade" id="modal_remove_property" tabindex="-1" role="dialog" aria-labelledby="modal_remove_property_data" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -225,3 +220,9 @@ foreach( ['object', 'term', 'voting', 'filter', 'tag','compounds'] as $metadata 
         </div>
     </div>
 </div>
+<?php
+foreach( ['object', 'term', 'voting', 'filter', 'tag','compounds'] as $metadata ) {
+    include_once "metadata/form_$metadata.php";
+}
+?>
+

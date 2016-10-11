@@ -149,6 +149,7 @@ function contest_insert_default_properties_collection($category_id,$collection_i
         update_term_meta($new_property['term_id'], 'socialdb_property_object_category_id', $category_id);
         update_term_meta($new_property['term_id'], 'socialdb_property_created_category', $category_id); // adiciono a categoria de onde partiu esta propriedade
         add_term_meta($category_id, 'socialdb_category_property_id', $new_property['term_id']);
+        add_post_meta($collection_id, 'socialdb_collection_property_related_id', $new_property['term_id']);
         add_post_meta($collection_id, 'socialdb_collection_facets', $new_property['term_id']);
         add_post_meta($collection_id, 'socialdb_collection_facet_' . $new_property['term_id'] . '_color', 'color_property8');
         add_post_meta($collection_id, 'socialdb_collection_facet_' . $new_property['term_id'] . '_priority', 999);
@@ -173,9 +174,24 @@ function hide_field() {
 ##################### 12# MOSTRA PAGINA DO ITEM DESTE MODO #########################
 add_filter( 'alter_page_item', 'contest_alter_page_item', 10, 1 );
 function contest_alter_page_item($data) {
-    $html = '<script type="text/javascript">
-            init_contest_item_page("'. CONTEST_CONTROLLERS.'",'.$data['collection_id'].','.$data['object']->ID.');</script>'.$html;
-    return $html;
+    $type = get_post_meta($data['object']->ID, 'socialdb_object_contest_type', true);
+    if($type=='argument'):
+        return renderContest(dirname(__FILE__).'/views/item/item.php', $data);
+    else:
+        return renderContest(dirname(__FILE__).'/views/question/question.php', $data);
+    endif;
+    
+    //$html = '<script type="text/javascript">
+           // init_contest_item_page("'. CONTEST_CONTROLLERS.'",'.$data['collection_id'].','.$data['object']->ID.');</script>'.$html;
+    //return $html;
+}
+
+function renderContest($file, $variables = array()) {
+        extract($variables);
+        ob_start();
+        include $file;
+        $renderedView = ob_get_clean();
+        return $renderedView;
 }
 ################################################################################
 ##################### 13# ADICIONANDO O TIPO DE DENUNCIA #######################
@@ -184,3 +200,79 @@ function contest_add_meta_delete_object_event(){
     create_metas($term->term_id, 'socialdb_event_object_delete_metas', 'socialdb_event_object_delete_type', 'socialdb_event_object_delete_type');
 }
 contest_add_meta_delete_object_event();
+################################################################################
+################### #14 acao para incluir dynatree no edit colecao #############
+add_action( 'insert_form_edit_collection', 'contest_insert_form_edit_collection', 10, 2 );
+function contest_insert_form_edit_collection($collection,$collection_metas) {
+    include_once dirname(__FILE__).'/views/configuration/js/configuration-js.php';
+ ?>
+    <input id="socialdb_collection_exclude_search_select" type="hidden" value="<?php echo $collection_metas['socialdb_collection_exclude_search_select'] ?>">
+    <input id="socialdb_collection_default_search_select" type="hidden" value="<?php echo $collection_metas['socialdb_collection_default_search_select'] ?>">
+    <label for="socialdb_collection_download_control"><?php _e('Default search in collection ', 'tainacan'); ?></label> 
+    <div class="row">
+        <div style='height: 150px;overflow: scroll;' 
+             class='col-lg-6'  id='default_search_dynatree'>
+        </div>
+        <select multiple 
+                size='6' 
+                class='col-lg-6' 
+                name='default_search_select[]' 
+                id='default_search_select'></select>
+    </div>
+    <label for="socialdb_collection_download_control">
+        <?php _e('Search to exclude', 'tainacan'); ?>
+    </label> 
+    <div class="row">
+        <div style='height: 150px;overflow: scroll;' 
+             class='col-lg-6'  
+             id='exclude_search_dynatree'>
+        </div>
+        <select multiple 
+                size='6' 
+                class='col-lg-6' 
+                name='exclude_search_select[]' 
+                id='exclude_search_select'></select>
+    </div>
+ <?php
+}
+
+add_action( 'update_collection_configuration', 'contest_update_collection_configuration', 10, 1 );
+function contest_update_collection_configuration($data) {
+    if($data['default_search_select'] && is_array($data['default_search_select'])){
+        update_post_meta($data['collection_id'], 'socialdb_collection_default_search_select', implode(',', $data['default_search_select']));
+    }else{
+        update_post_meta($data['collection_id'], 'socialdb_collection_default_search_select', '');
+    }
+    //exclude
+    if($data['exclude_search_select'] && is_array($data['exclude_search_select'])){
+         update_post_meta($data['collection_id'], 'socialdb_collection_exclude_search_select', implode(',', $data['exclude_search_select']));
+    }else{
+         update_post_meta($data['collection_id'], 'socialdb_collection_exclude_search_select', '');
+    }
+}
+################################################################################
+################### #15 alterando o wp query model de taxonomia ################
+function contest_update_tax_query($tax_query,$collection_id,$is_filter = false) {
+    $default = get_post_meta($collection_id, 'socialdb_collection_default_search_select', true);
+    $exclude = get_post_meta($collection_id, 'socialdb_collection_exclude_search_select', true);
+    if($default&&$default!=''&&$is_filter==false){
+        $default = explode(',', $default);
+        $tax_query[] = array(
+            'taxonomy' => 'socialdb_category_type',
+            'field' => 'id',
+            'terms' => $default,
+            'operator' => 'IN'
+        );
+    }
+    if($exclude&&$exclude!=''){
+        $exclude = explode(',', $exclude);
+        $tax_query[] = array(
+            'taxonomy' => 'socialdb_category_type',
+            'field' => 'id',
+            'terms' => $exclude,
+            'operator' => 'NOT IN'
+        );
+    }
+    return $tax_query;
+}
+add_filter( 'update_tax_query', 'contest_update_tax_query', 10, 3 );

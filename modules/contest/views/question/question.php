@@ -3,6 +3,8 @@
 <?php $post = get_post($collection_id); ?>
 <?php $ranking = get_term_by('name', __('In favor / Against', 'tainacan'),'socialdb_property_type') ?>
 <?php $view_helper = new ViewHelper; ?>
+<input type="hidden" id="socialdb_permalink_object" name="socialdb_permalink_object" value="<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>" />
+<input type="hidden" id="item_id" value="<?php echo $object->ID; ?>">
 <div class="chatContainer">
     <ol class="breadcrumb item-breadcrumbs" style="padding-top: 10px;">
         <li> <a href="<?php echo get_permalink(get_option('collection_root_id')); ?>"> <?php _e('Repository', 'tainacan') ?> </a> </li>
@@ -97,6 +99,9 @@
                                                 </button>
                                             </div>                                
                                             <div class="btn-group" role="group" aria-label="...">
+                                                <button type="button" 
+                                                        onclick="showSingleObject('<?php echo $child->ID; ?>', $('#src').val())" 
+                                                        class="btn btn-default btn-sm"><span class="glyphicon glyphicon-zoom-in"></span> <?php _e('Page','tainacan') ?></button>
                                                 <?php if($child->post_author   ==  get_current_user_id()): ?>
                                                 <button type="button" 
                                                         onclick="edit_comment( '<?php echo $child->ID; ?>',true)" 
@@ -156,15 +161,9 @@
             <?php _e('Related questions','tainacan') ?>
         </h4>
         <hr>
-        <span class="input-group-addon" id="sizing-addon3">Comment</span>
-        <input type="text" class="form-control" placeholder="Type your message here.." aria-describedby="sizing-addon3">    
-        <span class="input-group-btn">
-            <button id="clearMessageButton" class="btn btn-default" type="button">Clear</button>
-            <button id="sendMessageButton" class="btn btn-primary" type="button"><i class="fa fa-send"></i>Send</button>
-        </span>
-        <span class="input-group-btn">
-            <button id="undoSendButton" class="btn btn-default" type="button" disabled><i class="fa fa-undo"></i>Undo</button>
-        </span>
+        <?php
+          $view_helper->getRelated($collection_id, $object->ID);
+        ?>
     </div>
 </div>
 <?php include_once 'modals.php'; ?>

@@ -15,29 +15,73 @@
             <div class="col-md-4 colFoto">
                 <a href="<?php echo get_collection_item_href($collection_id); ?>"
                    onclick="<?php get_item_click_event($collection_id,$curr_id) ?>">
-                       <?php echo get_item_thumb_image( $curr_id ); ?>
+                    <?php echo get_item_thumb_image( $curr_id ); ?>
                 </a>
             </div>
 
             <div class="col-md-8 flex-box item-meta-box" style="flex-direction:column;">
                 <div class="item-meta col-md-12 no-padding">
                     <?php
-                    if( isset($table_meta_ids) && $table_meta_ids > 0):
-                        foreach ($table_meta_ids as $meta_id) {
-                            $__item_meta = get_post_meta($curr_id, "socialdb_property_$meta_id", true);
-                            ?>
-                            <input type="hidden" name="item_table_meta" value="<?php echo $__item_meta; ?>" />
-                        <?php }
+                    if( is_array($table_meta_array) && count($table_meta_array) > 0):
+                        $_DEFAULT_EMPTY_VALUE = "--";
+                        foreach ($table_meta_array as $item_meta_info):
+                            $fmt = str_replace("\\","", $item_meta_info);
+                            if(is_string($fmt)):
+                                $_meta_obj = json_decode($fmt);
+                                if(is_object($_meta_obj)):
+                                    $_META = ['id' => $_meta_obj->id, 'tipo' => $_meta_obj->tipo];
+                                    if( $loop->current_post === 0 )
+                                        echo '<input type="hidden" name="meta_id_table" value="'. $_META['id'] .'" data-mtype="'. $_META['tipo'] .'">';
+
+                                    if($_META['tipo'] === 'property_data') {
+                                        $__item_meta = get_post_meta($curr_id, "socialdb_property_$_meta_obj->id", true) ?: $_DEFAULT_EMPTY_VALUE;
+                                        if( !empty($__item_meta)) {
+                                            echo '<input type="hidden" name="item_table_meta" value="'. $__item_meta .'" />';
+                                        }
+                                    } else if($_META['tipo'] === 'property_term') {
+                                        $_current_object_terms_ = get_the_terms($curr_id, "socialdb_category_type");
+                                        $_father_name = get_term($_META['id'])->name;
+                                        $_father_category_id = (int) get_term_meta($_META['id'])['socialdb_property_term_root'][0];
+                                        $_item_meta_val = $_DEFAULT_EMPTY_VALUE;
+
+                                        foreach ($_current_object_terms_ as $curr_term) {
+                                            if($curr_term->parent == $_father_category_id) {
+                                                $_item_meta_val = $curr_term->name;
+                                            }
+                                        } ?>
+                                        <input id="tableV-meta-<?= $_META['id']; ?>" type="hidden" name="item_table_meta"
+                                               data-parent="<?= $_father_name ?>" value="<?= $_item_meta_val; ?>" />
+                                        <?php
+                                    } else if($_META['tipo'] == 'property_object') {
+                                        $_prop_key = "socialdb_property_" . (string) $_META['id'];
+                                        $_related_obj_id = (int) get_post_meta($curr_id, $_prop_key, true);
+                                        $_father_name = get_term($_META['id'])->name;
+                                        $_item_meta_val = $_DEFAULT_EMPTY_VALUE;
+
+                                        if($_related_obj_id > 0) {
+                                            $_obj_id = get_post($_related_obj_id)->ID;
+                                            if( $_obj_id != $curr_id ) {
+                                                $_item_meta_val = get_post($_obj_id)->post_title;
+                                            }
+                                        } ?>
+                                        <input id="tableV-meta-<?= $_META['id']; ?>" type="hidden" name="item_table_meta"
+                                               data-parent="<?= $_father_name ?>" value="<?= $_item_meta_val; ?>" />
+                                    <?php
+                                    }
+                                endif; //is_object
+                            endif; // is_string
+                        endforeach;
                     endif;
                     ?>
-                    
+
                     <h4 class="item-display-title">
                         <a href="<?php echo get_collection_item_href($collection_id); ?>"
                            onclick="<?php get_item_click_event($collection_id,$curr_id) ?>">
                             <?php echo wp_trim_words( get_the_title(), 13 ); ?>
                         </a>
                     </h4>
-                    <div class="item-description"> <?php echo wp_trim_words(get_the_content(), 16); ?> </div>
+                    <div class="item-description"> <?php echo wp_trim_words($_object_description, 16); ?> </div>
+                    <div class='item-desc-hidden-full' style="display: none"><?php echo $_object_description; ?></div>                        
                     
                     <div class="row author-created">
                         <div class="col-md-6 author">

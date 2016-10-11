@@ -1,6 +1,6 @@
 <script>
     $(function () {
-        var exif_keys = ($(".exif_keys").val()).split(" ");
+        var exif_keys = ($(".exif_keys")&&$(".exif_keys").val())? $(".exif_keys").val().split(" ") : [];
         change_breadcrumbs_title('<?php _e('Import','tainacan') ?>');
         $('#validate_url_container').show('slow');
         listTableOAIPMHDC();

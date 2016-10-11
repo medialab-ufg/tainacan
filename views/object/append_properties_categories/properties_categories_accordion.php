@@ -29,6 +29,9 @@ $references = [
     'properties_terms_treecheckbox' => &$properties_terms_treecheckbox,   
     'properties_to_avoid' => &$properties_to_avoid,   
 ];
+?>
+<div class="property-category-list">
+<?php
 if (isset($property_object)):
     foreach ($property_object as $property) {
         if(in_array($property['id'], $properties_to_avoid)){
@@ -36,7 +39,8 @@ if (isset($property_object)):
         }
         $ids[] = $property['id'];
         ?>
-        <div id="meta-item-<?php echo $property['id']; ?>" property="<?php echo $property['id']; ?>" class="category-<?php echo $categories ?>" >
+        <div id="meta-item-<?php echo $property['id']; ?>" property="<?php echo $property['id']; ?>" 
+             class="category-<?php echo $categories ?> form-group" >
             <h2>
                 <?php echo $property['name']; ?>
                 <?php
@@ -172,7 +176,7 @@ if (isset($property_object)):
         $ids[] = $property['id'];
         $properties_autocomplete[] = $property['id']; ?>
         
-        <div id="meta-item-<?php echo $property['id']; ?>" property="<?php echo $property['id']; ?>" class="category-<?php echo $categories ?>">
+        <div id="meta-item-<?php echo $property['id']; ?>" property="<?php echo $property['id']; ?>" class="category-<?php echo $categories ?> form-group">
             <h2>
                 <?php echo $property['name']; ?>
                 <?php 
@@ -307,7 +311,7 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
         }
         $ids[] = $property['id'];
         ?>
-        <div id="meta-item-<?php echo $property['id']; ?>" <?php do_action('item_property_term_attributes') ?> property="<?php echo $property['id']; ?>" class="category-<?php echo $categories ?>">
+        <div id="meta-item-<?php echo $property['id']; ?>" <?php do_action('item_property_term_attributes') ?> property="<?php echo $property['id']; ?>" class="category-<?php echo $categories ?>  form-group">
             <h2>
                 <?php echo $property['name']; ?>
                 <?php 
@@ -419,6 +423,7 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
 <?php endif;
 ?>
 <?php $object_properties_widgets_helper->list_properties_categories_compounds($property_compounds, $object_id,$references)  ?> 
+</div>
 <input type="hidden" name="pc_properties" id='pc_properties' value="<?php echo implode(',', $ids); ?>">
 <input type="hidden" name="categories" id='pc_categories' value="">
 <input type="hidden" name="properties_autocomplete" 
