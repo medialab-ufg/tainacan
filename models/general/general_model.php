@@ -2097,18 +2097,25 @@ class Model {
      * @return array com os metadados com as mesmas iniciais
      * @author: Eduardo Humberto  
      */
-    public function add_property_position_ordenation($collection_id, $id) {
+    public function add_property_position_ordenation($collection_id, $id,$tab = 'default') {
         $array = [];
-        $meta = get_post_meta($collection_id, 'socialdb_collection_properties_ordenation', true);
-        if (!$meta || $meta == '') {
-            $array[] = $id;
-        } else {
-            $array = explode(',', $meta);
-            if (is_array($array)) {
-                $array[] = $id;
+        $meta = unserialize(get_post_meta($collection_id, 'socialdb_collection_properties_ordenation', true));
+        if (is_array($meta)) {
+            if(isset($meta[$tab])){
+                $meta[$tab] = explode(',', $meta[$tab]);
+                $meta[$tab][] = $id;
+                $meta[$tab] = implode(',', $meta[$tab]) ;
+            }else{
+                $meta[$tab] = [];
+                $meta[$tab][] = $id;
+                $meta[$tab] = implode(',', $meta[$tab]) ;
             }
+        }else{
+            $meta = [];
+            $meta[$tab][] = $id;
         }
-        update_post_meta($collection_id, 'socialdb_collection_properties_ordenation', implode(',', $array));
+        update_post_meta($data['collection_id'], 'socialdb_collection_properties_ordenation', serialize($meta));
+        
     }
 
     /**
@@ -2118,20 +2125,23 @@ class Model {
      */
     public function remove_property_position_ordenation($collection_id, $id) {
         $array = [];
-        $meta = get_post_meta($collection_id, 'socialdb_collection_properties_ordenation', true);
+        $meta = unserialize(get_post_meta($collection_id, 'socialdb_collection_properties_ordenation', true));
         if (!$meta || $meta == '') {
             
         } else {
-            $array = explode(',', $meta);
-            if (is_array($array)) {
-                foreach ($array as $index => $value) {
-                    if ($value == $id) {
-                        unset($array[$index]);
+            if (is_array($meta)) {
+                foreach ($meta as $tab => $values) {
+                    $ordenation = explode(',',$values);
+                    foreach ($ordenation as $index => $value) {
+                        if ($value == $id) {
+                            unset($ordenation[$index]);
+                        }
                     }
+                    $meta[$tab] = implode(',', $ordenation);
                 }
             }
         }
-        update_post_meta($collection_id, 'socialdb_collection_properties_ordenation', implode(',', $array));
+        update_post_meta($collection_id, 'socialdb_collection_properties_ordenation',  serialize($meta));
     }
     
     /**

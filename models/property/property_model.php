@@ -50,7 +50,7 @@ class PropertyModel extends Model {
         //apos a insercao
         if (!is_wp_error($new_property)&&isset($new_property['term_id'])) {// se a propriedade foi inserida com sucesso
             instantiate_metas($new_property['term_id'], 'socialdb_property_term', 'socialdb_property_type', true);
-            $this->add_property_position_ordenation($data['collection_id'], $new_property['term_id']);
+            $this->add_property_position_ordenation($data['collection_id'], $new_property['term_id'],$data['property_tab']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_collection_id', $data['collection_id']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_required', $data['property_term_required']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_term_cardinality', $data['socialdb_property_term_cardinality']);
@@ -133,7 +133,7 @@ class PropertyModel extends Model {
         //apos a insercao
         if (!is_wp_error($new_property)&&isset($new_property['term_id'])) { // se a propriedade foi inserida com sucesso
             instantiate_metas($new_property['term_id'], 'socialdb_property_data', 'socialdb_property_type', true);
-            $this->add_property_position_ordenation($data['collection_id'], $new_property['term_id']);
+            $this->add_property_position_ordenation($data['collection_id'], $new_property['term_id'],$data['property_tab']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_collection_id', $data['collection_id']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_required', $data['property_data_required']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_data_widget', $data['property_data_widget']);
@@ -238,7 +238,7 @@ class PropertyModel extends Model {
         //apos a insercao
         if (!is_wp_error($new_property)&&isset($new_property['term_id'])) {// se a propriedade foi inserida com sucesso
             instantiate_metas($new_property['term_id'], 'socialdb_property_object', 'socialdb_property_type', true);
-            $this->add_property_position_ordenation($data['collection_id'], $new_property['term_id']);
+             $this->add_property_position_ordenation($data['collection_id'], $new_property['term_id'],$data['property_tab']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_collection_id', $data['collection_id']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_required', $data['property_object_required']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_object_cardinality', $data['socialdb_property_object_cardinality']);
@@ -1162,7 +1162,7 @@ class PropertyModel extends Model {
      * 
      * @autor: Eduardo Humberto 
      */
-    public function add_property_compounds($name,$collection_id,$category_id,$properties_id,$cardinality,$help = '',$required = 'false',$visualization = 'public') {
+    public function add_property_compounds($name,$collection_id,$category_id,$properties_id,$cardinality,$help = '',$required = 'false',$visualization = 'public',$tab_id = 'default') {
         if (!empty($name)) {
             $id_slug = $collection_id;
             if (isset($category_id)&&$this->get_category_root_of($collection_id) != $category_id) {// verifico se eh a categoria root onde sera inserido a propriedade
@@ -1177,7 +1177,7 @@ class PropertyModel extends Model {
         //apos a insercao
         if (!is_wp_error($new_property)&&isset($new_property['term_id'])) {// se a propriedade foi inserida com sucesso
             instantiate_metas($new_property['term_id'], 'socialdb_property_compounds', 'socialdb_property_type', true);
-            $this->add_property_position_ordenation($collection_id, $new_property['term_id']);
+            $this->add_property_position_ordenation($collection_id, $new_property['term_id'],$tab_id);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_collection_id',$collection_id);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_required',($required) ? $required : 'false' );
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_compounds_cardinality', $cardinality);
