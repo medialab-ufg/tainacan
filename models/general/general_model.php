@@ -2175,9 +2175,10 @@ class Model {
                      continue;
                  //insiro a propriedade da classe no dynatree
                  $children = $this->getChildren($propertyObject->term_id);
+                 $name = (mb_detect_encoding($propertyObject->name)=='UTF-8') ? $propertyObject->name : utf8_encode($propertyObject->name);
                  if (count($children) > 0) {
                     $dynatree[] = array(
-                            'title' => Words($propertyObject->name, 30), 
+                            'title' =>$name, 
                             'key' => $propertyObject->term_id,  
                             'expand' => true, 
                             'hideCheckbox' => $hide_checkbox, 
@@ -2185,7 +2186,7 @@ class Model {
                             'addClass' => 'color_property4');      
                  }else{
                      $dynatree[] = array(
-                            'title' => Words($propertyObject->name, 30), 
+                            'title' =>$name, 
                             'key' => $propertyObject->term_id,  
                             'hideCheckbox' => $hide_checkbox, 
                             'addClass' => 'color_property4'); 
@@ -2193,7 +2194,7 @@ class Model {
             }
         }
        $this->sortDynatree($dynatree);
-        return json_encode($dynatree);
+       return json_encode($dynatree);
        }  catch (Exception $e){
            var_dump($e);
        }

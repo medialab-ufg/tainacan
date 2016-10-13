@@ -363,6 +363,9 @@
     }
     
     function delete_value(category_id){
+       if($("#object_classifications").length==0 || !$("#object_classifications").val()){
+           return;
+       }
        var classifications =   $("#object_classifications").val().split(',');
        if(classifications.length>0&&category_id){
            var index = classifications.indexOf(category_id);

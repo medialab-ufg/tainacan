@@ -30,6 +30,8 @@
         });
         //submissao de formulario positivo
         $('#form_positive_argument').submit(function (e) {
+            hide_all_modals();
+            show_modal_main();
             $.ajax({
                 url: $('#src').val() + '/modules/<?php echo MODULE_CONTEST ?>/controllers/argument/contest_argument_controller.php',
                 type: 'POST',
@@ -53,6 +55,8 @@
         });
         //submissao de formulario negativo
         $('#form_negative_argument').submit(function (e) {
+            hide_all_modals();
+            show_modal_main();
             $.ajax({
                 url: $('#src').val() + '/modules/<?php echo MODULE_CONTEST ?>/controllers/argument/contest_argument_controller.php',
                 type: 'POST',
@@ -76,6 +80,8 @@
         });
         //submissao de formulario de edicao
         $('#form_update_argument').submit(function (e) {
+            hide_all_modals();
+            show_modal_main();
             $.ajax({
                 url: $('#src').val() + '/modules/<?php echo MODULE_CONTEST ?>/controllers/argument/contest_argument_controller.php',
                 type: 'POST',
@@ -124,6 +130,8 @@
      * @returns {undefined}
      */
     function contest_save_vote_binary_up(property_id, object_id) {
+        hide_all_modals();
+        show_modal_main();
         $.ajax({
             url: $('#src').val() + '/modules/<?php echo MODULE_CONTEST ?>/controllers/ranking/ranking_controller.php',
             type: 'POST',
@@ -135,6 +143,7 @@
                 collection_id: $("#collection_id").val()
             }
         }).done(function (result) {
+            hide_modal_main();
             elem_first = jQuery.parseJSON(result);
             if (elem_first.is_user_logged_in && elem_first.results.length > 0) {
                 $.each(elem_first.results, function (index, result) {
@@ -158,6 +167,8 @@
      * @param {type} object_id
      * @returns {undefined}     */
     function contest_save_vote_binary_down(property_id, object_id) {
+        hide_all_modals();
+        show_modal_main();
         $.ajax({
             url: $('#src').val() + '/modules/<?php echo MODULE_CONTEST ?>/controllers/ranking/ranking_controller.php',
             type: 'POST',
@@ -169,6 +180,7 @@
                 collection_id: $("#collection_id").val()
             }
         }).done(function (result) {
+            hide_modal_main();
             elem_first = jQuery.parseJSON(result);
             if (elem_first.is_user_logged_in && elem_first.results.length > 0) {
                 $.each(elem_first.results, function (index, result) {

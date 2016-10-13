@@ -18,6 +18,9 @@ function showItemObject(object_id, src) {
         $('#configuration').html(result).show();
     });
 }
+function hide_all_modals(){
+    $('.modal').modal('hide');
+}
 //############################################################################## 
 
 //############## #2 Abre o modal de criacao de argumento e de pergunta############# 

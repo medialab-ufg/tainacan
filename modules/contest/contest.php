@@ -58,7 +58,7 @@ function alter_button_add_item_contest($string) {
     '<div class="modal fade" id="modalCreateArgument" tabindex="-1" role="dialog" aria-labelledby="modalCreateArgument" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form onsubmit="show_modal_main();" action="'.CONTEST_CONTROLLERS.'/controllers/argument/contest_argument_controller.php" method="POST">
+                <form onsubmit="hide_all_modals();show_modal_main();" action="'.CONTEST_CONTROLLERS.'/controllers/argument/contest_argument_controller.php" method="POST">
                     <input type="hidden" name="operation" value="simple_add">
                     <div class="modal-header">
                         <button type="button" style="color:black;" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -93,7 +93,7 @@ function alter_button_add_item_contest($string) {
     '<div class="modal fade" id="modalCreateQuestion" tabindex="-1" role="dialog" aria-labelledby="modalCreateArgument" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form onsubmit="show_modal_main();" action="'.CONTEST_CONTROLLERS.'/controllers/question/contest_question_controller.php" method="POST">
+                <form onsubmit="hide_all_modals();show_modal_main();" action="'.CONTEST_CONTROLLERS.'/controllers/question/contest_question_controller.php" method="POST">
                     <input type="hidden" name="operation" value="simple_add">
                     <div class="modal-header">
                         <button type="button" style="color:black;" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
