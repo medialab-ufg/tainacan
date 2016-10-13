@@ -2825,6 +2825,13 @@ function get_view($controller, $args = [], $method = 'POST') {
     }
 }
 
+
+if ( !function_exists('i18n_str')) {
+    function i18n_str($str, $echo = false) {
+        return ($echo) ? _e( $str , 'tainacan' ) : __( $str, 'tainacan' );
+    }
+}
+
 /* * **************************** INSTANCIANDO MODULOS ************************* */
 /*
  * funcao para inclusao dos modulos cadastrados

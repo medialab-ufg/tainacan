@@ -1,67 +1,95 @@
 <?php
 include_once(dirname(__FILE__).'/../../helpers/view_helper.php');
-
+include_once('js/list_js.php');
+ 
 $view_helper = new ViewHelper();
 ?>
-<script type="text/javascript">
-
-    // Load the Visualization API and the corechart package.
-    google.charts.load('current', {'packages':['corechart'], 'language':'pt_BR'});
-
-    // Set a callback to run when the Google Visualization API is loaded.
-    google.charts.setOnLoadCallback(drawChart);
-
-    // Callback that creates and populates a data table,
-    // instantiates the pie chart, passes in the data and
-    // draws it.
-    function drawChart() {
-
-        // Create the data table.
-        var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Topping');
-        data.addColumn('number', 'Slices');
-        data.addRows([
-            ['Mushrooms', 3],
-            ['Onions', 1],
-            ['Olives', 1],
-            ['Zucchini', 1],
-            ['Pepperoni', 2]
-        ]);
-
-        // Set chart options
-        var options = {'title':'How Much Pizza I Ate Last Night',
-            'width': 500,
-            'height':300,
-            is3D: true
-        };
-
-        // Instantiate and draw our chart, passing in some options.
-        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
-    }
-</script>
-
-<div class="col-md-12 config-temp-box">
+<div class="col-md-12 statistics-container">
 
     <?php $view_helper->render_statistic_menu('config') ?>
 
-    <div id="preset-filters" class="col-md-3 preset-filters ui-widget-header no-padding">
-        <div class="btn-group">
+    <div id="statistics-config" class="col-md-3 ui-widget-header no-padding">
+        <div class="form-group period-config">
+            <label for="object_tags" class="title-pipe"> <?php i18n_str('Period',true); ?> </label>
+            <div class="date-range-filter">
+                <p>
+                    <span> <?php _e('From','tainacan') ?> </span>
+                    <input size="7" type="text" class="input_date form-control" value="" placeholder="dd/mm/aaaa" id="facet_1" name="facet_1">    
+                </p>
+                <p>
+                    <span> <?php _e('until','tainacan') ?> </span>
+                    <input type="text" class="input_date form-control" size="7" value="" placeholder="dd/mm/aaaa" id="facet_2" name="facet_2"> <br />    
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="object_tags" class="title-pipe"> <?php i18n_str('Report type',true); ?> </label>
+            <div>
+                <ul style="padding-left: 0">
+                    <span class="caret"></span> Usuários
+                <li style="margin-left: 13px; margin-top: 5px;">
+                    <input type="radio" value="Status"> Status
+                    <br />
+                    <small style="font-size: 10px; color: #929497; padding-left: 17px"> logins / registros / banidos / excluídos </small>
+                </li>
+                <li style="margin-left: 13px;">
+                    <input type="radio" value="Status"> Itens
+                    <br />
+                    <small style="font-size: 10px; color: #929497; padding-left: 17px"> criaram / editaram / apagaram /
+                        visualizaram / baixaram </small>
+                </li>
+                <li style="margin-left: 13px;">
+                    <input type="radio" value="Status"> Perfil
+                    <br />
+                    <small style="font-size: 10px; color: #929497; padding-left: 17px"> Pessoas que aderiram a um perfil </small>
+                </li>
+                <li style="margin-left: 13px;">
+                    <input type="radio" value="Status"> Mensagens
+                    <br />
+                    <small style="font-size: 10px; color: #929497; padding-left: 17px"> enviaram / receberam / excluíram </small>
+                </li>
+                <li style="margin-left: 13px;">
+                    <input type="radio" value="Status"> Categorias
+                    <br />
+                    <small style="font-size: 10px; color: #929497; padding-left: 17px"> criaram / editaram / apagaram
+                        / visualizaram / baixaram </small>
+                </li>
+                <li style="margin-left: 13px;">
+                    <input type="radio" value="Status"> Coleção
+                    <br />
+                    <small style="font-size: 10px; color: #929497; padding-left: 17px"> criaram / editaram / apagaram
+                        / visualizaram </small>
+                </li>
+                </ul>
+                <span class="caret"></span> Itens <br />
+                <span class="caret"></span> Coleção <br />
+                <span class="caret"></span> Comentários <br />
+                <span class="caret"></span> Categorias <br />
+                <span class="caret"></span> Tags <br />
+                <span class="caret"></span> Mensagens privadas <br />
+                <span class="caret"></span> Importar / Exportar <br />
+                <span class="caret"></span> Administração <br />
+                <span class="caret"></span> Eventos <br />
+            </div>
         </div>
     </div>
 
-    <div class="col-md-9 ui-widget-content metadata-actions" style="padding-right: 0;">
+    <div class="col-md-9">
 
-        <div class="add-property-btn btn-group col-md-12" style="background: white">
+        <div class="chart-header btn-group col-md-12">
             <?php $view_helper->render_config_title(__('Repository Statistics', 'tainacan')); ?>
+            <b><?php _e("Filters:","tainacan"); ?></b>
+            <div class="user-config-control col-md-12">
+                <span class="config-title"><?php i18n_str('Filters:',true); ?></span>
+                <span class="config-title"><?php i18n_str('Orientation',true); ?></span>
+                <span class="config-title"><?php i18n_str('Mode',true); ?></span>
+                <button class="btn btn-default"> <?php i18n_str('Download',true); ?> </button>
+            </div>
         </div>
 
-        <div style="float: left; margin-top: 20px">
-            <!--Div that will hold the pie chart-->
-            <div id="chart_div"></div>
+        <div id="charts-container" class="col-md-12">
+            <div id="chart_div"></div> <!--Div that will hold the pie chart-->
         </div>
-
-
 
     </div>
 

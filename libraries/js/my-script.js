@@ -1757,9 +1757,8 @@ $(function () {
             type: 'POST',
             data: { operation: 'show_statistics' }
         }).done(function(res) {
-            cl(res);
             $('#main_part').hide();
-           $('#configuration').html(res).show();
+            $('#configuration').html(res).show();
         });
     });
 

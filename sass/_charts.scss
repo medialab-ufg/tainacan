@@ -1,0 +1,61 @@
+.statistics-container {
+
+  /* Left side */
+  #statistics-config {
+    font-size: 12px;
+    /*
+     >>> Overides 'accordion' styles
+    */
+    background: white;
+    border: none;
+    margin-left: -15px;
+    /*
+     <<< Overides 'accordion' styles
+    */
+
+    .period-config {
+      p {
+        span {
+          color: black;
+        }
+        input {
+          display: inline-block;
+          width: 80%;
+        }
+      }
+
+    } // .period-config
+  }
+
+
+  /* Right side */
+  .chart-header {
+    background: white;
+    padding-bottom: 20px;
+    .user-config-control {
+      span.config-title {
+        color: $brand-light-blue;
+      }
+    }
+  }
+
+  #charts-container {
+    // float: left;
+    // border: 1px solid;
+    margin-top: 20px;
+    text-align: center;
+    background: white;
+    padding: 20px;
+  }
+} // statistics-container
+
+.right-caret {
+  border-bottom: 4px solid transparent;
+  border-top: 4px solid transparent;
+  border-left: 4px solid #000000;
+  display: inline-block;
+  height: 0;
+  opacity: 0.3;
+  vertical-align: top;
+  width: 0;
+}

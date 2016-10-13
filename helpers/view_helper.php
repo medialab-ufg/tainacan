@@ -343,9 +343,9 @@ class ViewHelper {
                         <h4> <?php _e('Dashboard', 'tainacan')?> </h4>
                     </a>
                 </li>
-                <li class="col-md-2 <?php $this->is_current($current_step,'categories'); ?> categories">
+                <li style="border-top: 3px solid #d2a96D; width: 11%" class="col-md-2 <?php $this->is_current($current_step,'categories'); ?> categories">
                     <a onclick="showTaxonomyZone('<?php echo $path ?>');">
-                        <h4> <?php _e('Statistics', 'tainacan')?> </h4>
+                        <h4 style="font-weight: bolder"> <?php _e('Statistics', 'tainacan')?> </h4>
                     </a>
                 </li>
             </ul>
