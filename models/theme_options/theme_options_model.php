@@ -388,10 +388,10 @@ class ThemeOptionsModel extends Model {
                 $error = __("Envie um arquivo zip.", 'tainacan');
             elseif ($file['size'] > ($MaxFileSize * (1024 * 1024))):
                 $result = false;
-                $error = __("Arquivo muito grande, tamanho máximo permitido de {$MaxFileSize}MB.", 'tainacan');
+                $error = __("File is too big, max size is {$MaxFileSize}MB.", 'tainacan');
             elseif (!in_array($file['type'], $FileAccept)):
                 $result = false;
-                $error = __("Tipo de arquivo não suportado. Envie .ZIP!", 'tainacan');
+                $error = __("File not supported. Send .ZIP!", 'tainacan');
             else:
                 $name = time() . '_' . $file['name'];
                 if (move_uploaded_file($file['tmp_name'], dirname(__FILE__) . '/../../data/aip/' . $name)):
@@ -404,7 +404,7 @@ class ThemeOptionsModel extends Model {
             endif;
         }else {
             $result = false;
-            $error = __("Ainda em implementação!", 'tainacan');
+            $error = __("Not implemented yet!", 'tainacan');
         }
         $return['result'] = $result;
         $return['error'] = $error;

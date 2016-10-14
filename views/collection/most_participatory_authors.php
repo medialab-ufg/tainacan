@@ -38,13 +38,13 @@ include_once ('js/most_participatory_authors_js.php');
                 foreach ($authors as $autor) {
                     ?>
                     <li class="list-group-item" style="padding: 2px;line-height: 1.2em;text-indent: 0px;" >
-                            <div class="col-xs-12 col-sm-3">
-                               <?php echo get_avatar($autor->ID,64); ?>
+                            <div class="col-sm-3">
+                               <?php echo get_avatar($autor->ID,50); ?>
                             </div>
-                            <div class="col-xs-12 col-sm-9">
-                                <span style="font-size: 10pt;"><b><?= $autor->display_name ?></b></span><br>
-                                <span style="font-size: 8pt;"><?php _e('Last visited','tainacan') ?>: <?= date('d/m/y') ?></span><br>
-                                <span style="font-size: 10pt;"><b><?= $autor->num_posts ?> <?php _e('Colaborations','tainacan') ?></b></span>
+                            <div class="col-sm-9">
+                                <span style="font-size: 8pt;display:block; clear:both"><b><?= $autor->display_name ?></b></span>
+                                <span style="font-size: 7pt;display:block; clear:both"><?php _e('Last visited','tainacan') ?>: <?= date('d/m/y') ?></span>
+                                <span style="font-size: 8pt;display:block; clear:both"><b><?= $autor->num_posts ?> <?php _e('Colaborations','tainacan') ?></b></span>
                             </div>
                             <div class="clearfix"></div>
                     </li>                                                        
