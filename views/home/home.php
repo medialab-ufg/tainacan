@@ -13,8 +13,7 @@
                         $output = "";
                         $collection_name = explode(" ", $item_data->post_title);
                         if (has_post_thumbnail($item_id)):
-                            $thumb = wp_get_attachment_url(get_post_meta($item_id, "_thumbnail_id", true));
-                            $output = "<img src=\"$thumb\" class=\"attachment-thumbnail wp-post-image img-responsive\" />";
+                            $output = get_item_thumb_image($item_id);
                         endif;
                         ?>
                         <div class="item-individual-box">
@@ -51,7 +50,7 @@ foreach (get_home_collection_types() as $type => $title):
         <div class="featured type-container col-md-12 col-sm-12 <?= $type ?>" style="display: none;">
             <div class="row">
                 <h4 class="home-type-title"> <?= $title ?> </h4>
-                <div class="col-md-12 col-sm-12 blocos carousel-home-ajax"></div> <?php /*     * * Items are appended here ** */ ?>
+                <div class="col-md-12 col-sm-12 blocos carousel-home-ajax"></div> <?php /*** Items are appended here ***/ ?>
             </div>
         </div>
 <?php endforeach; ?>
