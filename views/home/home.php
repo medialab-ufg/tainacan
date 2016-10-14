@@ -31,7 +31,7 @@
                                         ?>
                                     </a>
                                 </div>
-                                <div class="panel-footer home-title" style="padding:3px;">
+                                <div class="panel-footer home-title">
                                     <a href="<?php echo get_the_permalink($item_data->ID); ?>">
                                         <span class="collection-name"> <?php echo Words($item_data->post_title, 20) ?> </span>
                                     </a>

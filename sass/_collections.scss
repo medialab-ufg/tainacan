@@ -64,8 +64,13 @@ button.collection-trash, button#hideTrash {
     background: $collections-bg-color;
 
     #div_central {
-            padding-left: 2%;
-            padding-right: 0;
+      position: relative;
+      overflow-y:auto;
+      overflow-x:hidden;
+      overflow: auto;
+      max-height:100px;
+      padding-left: 2%;
+      padding-right: 0;
 
             #menu_object {
                     padding-top: 1.5%;

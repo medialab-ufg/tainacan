@@ -423,3 +423,57 @@ hr.single-item-divider {
 form.exif_extraction {
   margin-right: 10px;
 }
+
+#respond{
+  margin:0 0 30px 0;
+  clear:both;
+  form {
+    label {
+      float:left;
+      clear:left;
+      width:60px;
+      text-align:right;
+      margin-right:10px;
+    }
+    input {
+      float:left;
+      width:250px;
+      margin-bottom:10px;
+
+      &.commentsubmit {
+        float:left;
+        margin-left:70px;
+      }
+    }
+    textarea {
+      float:left;
+      width:400px;
+      height:100px;
+      margin-bottom:10px;
+    }
+  } // form
+} // #respond
+
+#comments {
+  width: 630px;
+  float: left;
+  border-top:1px solid #bebebe;
+
+  h3{
+    font-size:14px;
+    margin:20px 0;
+  }
+} // #comments
+
+ol.commentlist {
+  list-style:none;
+  ul{
+    margin: 0;
+    li {
+      margin:20px 20px 20px 40px;
+    }
+  }
+  li {
+    margin-bottom:30px;
+  }
+}
