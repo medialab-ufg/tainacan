@@ -99,6 +99,7 @@
         autocomplete_arguments('#text-edit-argument',$('#related-id').val());
         autocomplete_arguments('#positive_argument',$('#related-id').val());
         autocomplete_arguments('#negative_argument',$('#related-id').val());
+        //var myVar = setInterval(function(){ myTimer() }, 60000);
     });
     /**
      * 
@@ -340,5 +341,11 @@
                 $(seletor).val(label);
             }
         });    
+    }
+
+    function myTimer() {
+        if(!$('.modal').is(':visible')){
+            showItemObject($('#item_id').val(),$('#src').val());
+        }
     }
 </script>    

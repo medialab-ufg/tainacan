@@ -196,7 +196,7 @@
 
             var currentComment = $(this).data("commentid");
 
-            $("#commentactions-" + currentComment).slideDown("fast");
+            //$("#commentactions-" + currentComment).slideDown("fast");
 
         });
 
@@ -204,7 +204,7 @@
         $(".commentLi").hover(function () {
 
             var currentComment = $(this).data("commentid");
-            //$("#commentactions-" + currentComment).slideDown("fast");    
+            $("#commentactions-" + currentComment).slideDown("fast");    
             $("#comment-" + currentComment).stop().animate({opacity: "1", backgroundColor: "#f8f8f8", borderLeftWidth: "4px"}, {duration: 100, complete: function () {}});
 
         }, function () {

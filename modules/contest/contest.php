@@ -141,6 +141,7 @@ add_action( 'insert_default_properties_collection', 'contest_insert_default_prop
 function contest_insert_default_properties_collection($category_id,$collection_id) {
         $new_property = wp_insert_term(__('In favor / Against', 'tainacan'), 'socialdb_property_type', array('parent' => get_term_by('name', 'socialdb_property_ranking_binary', 'socialdb_property_type')->term_id,
             'slug' => "contest_in_favor_against_property". mktime()));
+        $ranking_id = $new_property['term_id'];
         update_term_meta($new_property['term_id'], 'socialdb_property_created_category', $category_id); // adiciono a categoria de onde partiu esta propriedade
         add_term_meta($category_id, 'socialdb_category_property_id', $new_property['term_id']);
         //Related
@@ -160,6 +161,8 @@ function contest_insert_default_properties_collection($category_id,$collection_i
          add_post_meta($collection_id, 'socialdb_collection_facet_' . $facet_id['term_id'] . '_color', 'color1');
          add_post_meta($collection_id, 'socialdb_collection_facet_' . $facet_id['term_id'] . '_widget', 'tree');
          add_post_meta($collection_id, 'socialdb_collection_facet_' . $facet_id['term_id'] . '_priority', 2);
+        update_post_meta($collection_id, 'socialdb_collection_list_mode', 'list'); 
+        update_post_meta($collection_id, 'socialdb_collection_default_ordering', $ranking_id);
 }
 ################################################################################
 

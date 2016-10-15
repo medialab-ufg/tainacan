@@ -21,7 +21,7 @@ and open the template in the editor.
 
 .chatContainer {
     margin-top: -20px;
-    height: 100%;
+    height: auto;
     width: 100%;
     background-color: #e4e4e4;
     padding: 20px;
@@ -31,7 +31,7 @@ and open the template in the editor.
 .chatHistoryContainer {
 
     padding: 20px;
-    height: 400px;
+    height: auto;
     width: 100%;
     background-color: #f4f4f4;
     border-top: 1px solid #e1e1e1;
@@ -91,8 +91,6 @@ and open the template in the editor.
 .formComments {
 
     list-style-type: none;
-    overflow-y: scroll;
-    height: 100%;
     padding-bottom: 60px;
     padding-left: 0px;
 
@@ -147,9 +145,11 @@ and open the template in the editor.
 }
 
 .comment-user {
-
+    text-align: center;
     margin-left: 10px;
-
+    width: 70px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .form-comments-table tr td {
@@ -197,7 +197,7 @@ and open the template in the editor.
 
 .comment-avatar {
 
-    margin-left: 10px;
+    margin-left: 15px;
     margin-right: 10px;
     width: 36px;
     height: 36px;
@@ -228,7 +228,7 @@ and open the template in the editor.
 
 .comment {
 
-    width: 100%;
+    max-width: 100%;
     background-color: #fff;
     font-size: 12px;
     margin: 0;
@@ -239,7 +239,8 @@ and open the template in the editor.
     cursor: pointer;
     border: 1px solid #e6e6e6;
     border-bottom: 3px solid #dddddd;
-    border-radius: 3px;    
+    border-radius: 3px;  
+    white-space: normal;
 
 }
 

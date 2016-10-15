@@ -36,7 +36,11 @@
                 <table class="form-comments-table">
                     <tr>
                         <td><div class="comment-timestamp"><?php echo $object->post_date_gmt ?></div></td>
-                        <td><div class="comment-user"><?php echo get_user_by('id', $object->post_author)->display_name ?></div></td>
+                        <td>
+                            <div class="comment-user">
+                                <?php echo get_user_by('id', $object->post_author)->display_name ?>
+                            </div>
+                        </td>
                         <td>
                             <div class="comment-avatar">
                                 <?php echo get_avatar($object->post_author) ?>
@@ -106,7 +110,7 @@
 
             var currentComment = $(this).data("commentid");
 
-            $("#commentactions-" + currentComment).slideDown("fast");
+            //$("#commentactions-" + currentComment).slideDown("fast");
 
         });
 
@@ -114,7 +118,7 @@
         $(".commentLi").hover(function () {
 
             var currentComment = $(this).data("commentid");
-            //$("#commentactions-" + currentComment).slideDown("fast");    
+            $("#commentactions-" + currentComment).slideDown("fast");    
             $("#comment-" + currentComment).stop().animate({opacity: "1", backgroundColor: "#f8f8f8", borderLeftWidth: "4px"}, {duration: 100, complete: function () {}});
 
         }, function () {
