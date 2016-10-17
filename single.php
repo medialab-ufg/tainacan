@@ -336,7 +336,7 @@ $options = get_option('socialdb_theme_options');
                                             $user_data = get_user_by('ID', get_current_user_id())->user_email;
                                             if ($admin_email == $user_data) {
                                                 ?>
-                                            <button onclick="showTrash('<?php echo get_template_directory_uri(); ?>');" class="btn btn-danger pull-left" style="color: white"><?php _e('Trash', 'tainacan'); ?></button>
+                                            <button onclick="showTrash('<?php echo get_template_directory_uri(); ?>');" class="btn btn-default pull-left"><?php _e('Trash', 'tainacan'); ?></button>
                                                 <?php
                                             }
                                         }
