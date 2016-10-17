@@ -18,12 +18,15 @@
                 $('.dropdown-toggle').dropdown();
                 elem = jQuery.parseJSON(result);
                 //show messages
-                $('.modal').modal('hide');
-                hide_modal_main();
-                showItemObject($('#item_id').val(),$('#src').val());
-                showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Operation was successfully!', 'tainacan') ?>', 'success');
-                //if (elem.redirect)
-                    //window.location = elem.redirect;
+                var promisse = save_first_vote(elem.item_id);
+                promisse.done(function(result){
+                    $('.modal').modal('hide');
+                    hide_modal_main();
+                    showItemObject($('#item_id').val(),$('#src').val());
+                    showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Operation was successfully!', 'tainacan') ?>', 'success');
+                    //if (elem.redirect)
+                        //window.location = elem.redirect;
+                });
             }).error(function (error) {
             });
             e.preventDefault();
@@ -43,12 +46,15 @@
                 $('.dropdown-toggle').dropdown();
                 elem = jQuery.parseJSON(result);
                 //show messages
-                $('.modal').modal('hide');
-                hide_modal_main();
-                showItemObject($('#item_id').val(),$('#src').val());
-                showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Operation was successfully!', 'tainacan') ?>', 'success');
-                //if (elem.redirect)
-                    //window.location = elem.redirect;
+                var promisse = save_first_vote(elem.item_id);
+                promisse.done(function(result){
+                    $('.modal').modal('hide');
+                    hide_modal_main();
+                    showItemObject($('#item_id').val(),$('#src').val());
+                    showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Operation was successfully!', 'tainacan') ?>', 'success');
+                    //if (elem.redirect)
+                        //window.location = elem.redirect;
+                });
             }).error(function (error) {
             });
             e.preventDefault();
@@ -347,5 +353,19 @@
         if(!$('.modal').is(':visible')){
             showItemObject($('#item_id').val(),$('#src').val());
         }
+    }
+    
+    function save_first_vote(object_id){
+        return $.ajax({
+            url: $('#src').val() + '/modules/<?php echo MODULE_CONTEST ?>/controllers/ranking/ranking_controller.php',
+            type: 'POST',
+            data: {
+                operation: 'save_vote_binary',
+                score: 1,
+                property_id: $('#ranking_id').val(),
+                object_id: object_id,
+                collection_id: $("#collection_id").val()
+            }
+        });
     }
 </script>    

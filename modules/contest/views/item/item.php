@@ -1,7 +1,7 @@
 <?php require_once(dirname(__FILE__).'/js/item-js.php'); ?>
 <?php require_once(dirname(__FILE__).'../../../helpers/view_helper.php'); ?>
 <?php $post = get_post($collection_id); ?>
-<?php $ranking = get_term_by('name', __('In favor / Against', 'tainacan'),'socialdb_property_type') ?>
+<?php $ranking = (get_post_meta($collection_id, 'socialdb_collection_ranking_default_id', true)) ? get_post_meta($collection_id, 'socialdb_collection_ranking_default_id', true) : get_term_by('name', __('In favor / Against', 'tainacan'),'socialdb_property_type'); ?>
 <?php $view_helper = new ViewHelper; ?>
 <?php 
     $temp = $object;
@@ -11,6 +11,7 @@
     }
 ?>   
 <input type="hidden" id="item_id" value="<?php echo $object->ID; ?>">
+<input type="hidden" id="ranking_id" value="<?php echo $ranking; ?>">
 <input type="hidden" id="socialdb_permalink_object" name="socialdb_permalink_object" value="<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>" />
 <input type="hidden" id="related-id" value="<?php echo get_post_meta($post->ID, 'socialdb_collection_property_related_id', TRUE); ?>">
 <input type="hidden" id="url-argument" value="<?php echo htmlentities(get_permalink(get_option('collection_root_id')).'?item='.$object->post_name); ?>">
@@ -52,16 +53,16 @@
                                  class="comment comment-step1">
                                 <h5>
                                     <span class="label label-info">
-                                        <span id="constest_score_<?php echo $object->ID; ?>"><?php echo $view_helper->get_counter_ranking($ranking->term_id, $object->ID) ?></span>
+                                        <span id="constest_score_<?php echo $object->ID; ?>"><?php echo $view_helper->get_counter_ranking($ranking, $object->ID) ?></span>
                                     </span>   
                                     &nbsp;<b id="text-comment-<?php echo $object->ID; ?>"><?php echo $object->post_title; ?></b>
                                 </h5>    
                                 <div id="commentactions-<?php echo $object->ID; ?>" class="comment-actions">
                                     <div class="btn-group" role="group" aria-label="...">
-                                        <button type="button" onclick="contest_save_vote_binary_up('<?php echo $ranking->term_id; ?>', '<?php echo $object->ID; ?>')" class="btn btn-success btn-sm">
+                                        <button type="button" onclick="contest_save_vote_binary_up('<?php echo $ranking; ?>', '<?php echo $object->ID; ?>')" class="btn btn-success btn-sm">
                                             <span class="glyphicon glyphicon-menu-up"></span>
                                         </button>
-                                        <button type="button" onclick="contest_save_vote_binary_down('<?php echo $ranking->term_id; ?>', '<?php echo $object->ID; ?>')" class="btn btn-danger btn-sm">
+                                        <button type="button" onclick="contest_save_vote_binary_down('<?php echo $ranking; ?>', '<?php echo $object->ID; ?>')" class="btn btn-danger btn-sm">
                                             <span class="glyphicon glyphicon-menu-down"></span>
                                         </button>
                                     </div>                                

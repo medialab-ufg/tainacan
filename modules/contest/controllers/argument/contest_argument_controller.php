@@ -32,6 +32,7 @@ require_once(dirname(__FILE__) . '/../../../../models/object/object_model.php');
                             $object_model->insert_properties_terms($data, $callback->socialdb_event_object_item_id);
                             //propriedades compostas
                             $object_model->insert_compounds($data,$callback->socialdb_event_object_item_id);
+                            $data['item_id'] = $callback->socialdb_event_object_item_id;
                             $data['redirect'] = get_the_permalink($data['collection_id']).'?item='.$item->post_name;
                             return json_encode($data);
                         }
@@ -45,6 +46,7 @@ require_once(dirname(__FILE__) . '/../../../../models/object/object_model.php');
                             $object_model->insert_properties_terms($data, $callback->socialdb_event_object_item_id);
                             //propriedades compostas
                             $object_model->insert_compounds($data,$callback->socialdb_event_object_item_id);
+                            $data['item_id'] = $callback->socialdb_event_object_item_id;
                             $data['redirect'] = get_the_permalink($data['collection_id']).'?item='.$item->post_name;
                             return json_encode($data);
                         }

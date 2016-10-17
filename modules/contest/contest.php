@@ -144,6 +144,7 @@ function contest_insert_default_properties_collection($category_id,$collection_i
         $ranking_id = $new_property['term_id'];
         update_term_meta($new_property['term_id'], 'socialdb_property_created_category', $category_id); // adiciono a categoria de onde partiu esta propriedade
         add_term_meta($category_id, 'socialdb_category_property_id', $new_property['term_id']);
+        add_post_meta($collection_id, 'socialdb_collection_ranking_default_id', $new_property['term_id']);
         //Related
         $new_property = wp_insert_term(__('Related', 'tainacan'), 'socialdb_property_type', array('parent' => get_term_by('name', 'socialdb_property_object', 'socialdb_property_type')->term_id,
             'slug' => "contest_related_property". mktime()));
@@ -157,10 +158,20 @@ function contest_insert_default_properties_collection($category_id,$collection_i
         add_post_meta($collection_id, 'socialdb_collection_facet_' . $new_property['term_id'] . '_widget', 'tree');$parent_category_id = get_register_id('socialdb_category', 'socialdb_category_type');
         /* Criando a categoria raiz e adicionando seus metas */
         $facet_id = create_register(__('Subject','tainacan'), 'socialdb_category_type', array('parent' => $parent_category_id, 'slug' => "subject_" . mktime()));
-         add_post_meta($collection_id, 'socialdb_collection_facets', $facet_id['term_id']);
+        add_term_meta($facet_id['term_id'], 'socialdb_category_owner', get_current_user_id());
+        add_post_meta($collection_id, 'socialdb_collection_facets', $facet_id['term_id']);
          add_post_meta($collection_id, 'socialdb_collection_facet_' . $facet_id['term_id'] . '_color', 'color1');
          add_post_meta($collection_id, 'socialdb_collection_facet_' . $facet_id['term_id'] . '_widget', 'tree');
          add_post_meta($collection_id, 'socialdb_collection_facet_' . $facet_id['term_id'] . '_priority', 2);
+        //criando a propriedade de termo
+         $new_property = wp_insert_term(__('Subject', 'tainacan'), 'socialdb_property_type', array('parent' => get_term_by('name', 'socialdb_property_term', 'socialdb_property_type')->term_id,
+            'slug' => "contest_subject_property". mktime()));
+        add_term_meta($category_id, 'socialdb_category_property_id', $new_property['term_id']);
+        update_term_meta($new_property['term_id'], 'socialdb_property_term_root',$facet_id['term_id']);
+        update_term_meta($new_property['term_id'], 'socialdb_property_term_cardinality', '1');
+        update_term_meta($new_property['term_id'], 'socialdb_property_term_widget', 'tree');
+        update_term_meta($new_property['term_id'], 'socialdb_property_created_category', $category_id); // adiciono a categoria de onde partiu esta propriedade 
+         
         update_post_meta($collection_id, 'socialdb_collection_list_mode', 'list'); 
         update_post_meta($collection_id, 'socialdb_collection_default_ordering', $ranking_id);
 }
@@ -279,3 +290,63 @@ function contest_update_tax_query($tax_query,$collection_id,$is_filter = false) 
     return $tax_query;
 }
 add_filter( 'update_tax_query', 'contest_update_tax_query', 10, 3 );
+################################################################################
+################### #16 rankings container ####################################
+add_action( 'container_rankings_gallery', 'contest_ranking_gallery', 10, 2 );
+function contest_ranking_gallery($curr_id){
+    if(get_post_meta($curr_id, 'socialdb_object_contest_type', true)==='argument'){
+    ?>
+      <div id="r_gallery_<?php echo $curr_id ?>" style="margin-top: -13px;" class="rankings-container"></div>
+    <?php
+    }
+}
+add_action( 'container_rankings_list', 'contest_ranking_list', 10, 2 );
+function contest_ranking_list($curr_id){
+    if(get_post_meta($curr_id, 'socialdb_object_contest_type', true)==='argument'){
+    ?>
+      <div id="r_list_<?php echo $curr_id ?>"  class="rankings-container"></div>
+    <?php
+    }
+}
+################################################################################
+################### #17 message empty ####################################
+add_action( 'empty_collection_message', 'contest_empty_collection_message', 10, 1 );
+function contest_empty_collection_message(){
+    ?>
+      <style>
+          .alert-message
+            {
+                margin-top: 15px;
+                padding: 20px;
+                border: 3px solid #E8E8E8;
+            }
+            .alert-message h4
+            {
+                margin-top: 0;
+                margin-bottom: 5px;
+            }
+            .alert-message p:last-child
+            {
+                margin-bottom: 0;
+            }
+            .alert-message code
+            {
+                background-color: #fff;
+                border-radius: 3px;
+            }
+            .alert-message-success
+            {
+                background-color: #FFF;
+                border-color: #E8E8E8;
+            }
+      </style>    
+      <div class="alert-message alert-message-success">
+              <h4>
+                  <?php _e('Attention','tainacan') ?>
+              </h4>
+              <p>
+                  <?php _e('There is no argument or question in this contest!') ?>
+              </p>
+          </div>
+    <?php  
+}

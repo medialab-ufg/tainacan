@@ -15,6 +15,8 @@ require_once(dirname(__FILE__) . '/../../../../models/object/object_model.php');
                             if(trim($data['answer'])!==''){
                                 $model->add($data['answer'], $data['collection_id'], $data['classification'], 'argument',$callback->socialdb_event_object_item_id,'positive');
                             }
+                            $ranking_id = get_post_meta($data['collection_id'], 'socialdb_collection_ranking_default_id', true);
+                            add_post_meta($callback->socialdb_event_object_item_id, 'socialdb_property_'.$ranking_id, 0);
                             $item = get_post($callback->socialdb_event_object_item_id);
                             wp_redirect(get_the_permalink($data['collection_id']).'?item='.$item->post_name);
                         }

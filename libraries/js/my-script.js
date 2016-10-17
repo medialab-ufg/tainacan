@@ -1148,6 +1148,17 @@ function showTaxonomyZone(src) {
     });
 }
 
+function showPagePermission(src,collection_id) {
+    $.ajax({
+        url: src + '/controllers/permission/permission_controller.php',
+        type: 'POST',
+        data: {operation: 'show-page', collection_id: collection_id}
+    }).done(function (result) {
+        $('#main_part').hide();
+        $('#configuration').html(result).show();
+    });
+}
+
 // funcao que mostras o menu das propriedades
 function showPropertiesConfiguration(src) {
     $("#form").html('');

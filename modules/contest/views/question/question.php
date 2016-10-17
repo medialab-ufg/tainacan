@@ -1,7 +1,7 @@
 <?php require_once(dirname(__FILE__).'/js/question-js.php'); ?>
 <?php require_once(dirname(__FILE__).'../../../helpers/view_helper.php'); ?>
 <?php $post = get_post($collection_id); ?>
-<?php $ranking = get_term_by('name', __('In favor / Against', 'tainacan'),'socialdb_property_type') ?>
+<?php $ranking = (get_post_meta($collection_id, 'socialdb_collection_ranking_default_id', true)) ? get_post_meta($collection_id, 'socialdb_collection_ranking_default_id', true) : get_term_by('name', __('In favor / Against', 'tainacan'),'socialdb_property_type'); ?>
 <?php $view_helper = new ViewHelper; ?>
 <?php 
     $temp = $object;
@@ -10,6 +10,7 @@
         $parents[] = $temp;
     }
 ?>  
+<input type="hidden" id="ranking_id" value="<?php echo $ranking; ?>">
 <input type="hidden" id="socialdb_permalink_object" name="socialdb_permalink_object" value="<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>" />
 <input type="hidden" id="item_id" value="<?php echo $object->ID; ?>">
 <div class="chatContainer">

@@ -28,15 +28,15 @@ class ViewHelper {
                             <div id="comment-<?php echo $child->ID ?>" data-commentid="<?php echo $child->ID ?>" class="comment commentstep-<?php echo $depth ?>">
                                 <span class="label label-<?php echo ($position=='positive') ? 'success': 'danger' ?>">
                                         <span id="thumbs-<?php echo $child->ID; ?>" class="glyphicon glyphicon-thumbs-<?php echo ($position=='positive') ? 'up': 'down' ?>"></span>
-                                        <span id="constest_score_<?php echo $child->ID; ?>"><?php echo $this->get_counter_ranking($ranking->term_id, $child->ID) ?></span>
+                                        <span id="constest_score_<?php echo $child->ID; ?>"><?php echo $this->get_counter_ranking($ranking, $child->ID) ?></span>
                                  </span>&nbsp;  
                                 <span id="text-comment-<?php echo $child->ID; ?>"><?php echo $child->post_title ?></span>
                                 <div id="commentactions-<?php echo $child->ID ?>" class="comment-actions">
                                     <div class="btn-group" role="group" aria-label="...">
-                                        <button type="button" onclick="contest_save_vote_binary_up('<?php echo $ranking->term_id; ?>', '<?php echo $child->ID; ?>')" class="btn btn-success btn-sm">
+                                        <button type="button" onclick="contest_save_vote_binary_up('<?php echo $ranking; ?>', '<?php echo $child->ID; ?>')" class="btn btn-success btn-sm">
                                             <span class="glyphicon glyphicon-menu-up"></span>
                                         </button>
-                                        <button type="button" onclick="contest_save_vote_binary_down('<?php echo $ranking->term_id; ?>', '<?php echo $child->ID; ?>')" class="btn btn-danger btn-sm">
+                                        <button type="button" onclick="contest_save_vote_binary_down('<?php echo $ranking; ?>', '<?php echo $child->ID; ?>')" class="btn btn-danger btn-sm">
                                             <span class="glyphicon glyphicon-menu-down"></span>
                                         </button>
                                     </div>                                
