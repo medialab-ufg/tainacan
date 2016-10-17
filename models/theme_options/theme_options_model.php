@@ -4,6 +4,7 @@ include_once ('../../../../../wp-config.php');
 include_once ('../../../../../wp-load.php');
 include_once ('../../../../../wp-includes/wp-db.php');
 require_once(dirname(__FILE__) . '../../general/general_model.php');
+require_once(dirname(__FILE__) . '../../collection/collection_model.php');
 
 class ThemeOptionsModel extends Model {
 
@@ -460,8 +461,8 @@ class ThemeOptionsModel extends Model {
         $title = (string) $xml->dmdSec[0]->mdWrap->xmlData->children('http://www.loc.gov/mods/v3')->mods->titleInfo->title;
         $groups = $xml->amdSec->techMD->mdWrap->xmlData->DSpaceRoles->Groups;
         $persons = $xml->amdSec->techMD->mdWrap->xmlData->DSpaceRoles->People;
-        
-        /***************************/
+
+        /*         * ************************ */
         update_option('blogname', $title);
         foreach ($persons->Person as $person) {
             $info = array();
@@ -528,6 +529,78 @@ class ThemeOptionsModel extends Model {
             $p_resume = sanitize_text_field($data['prof_resume']);
             update_user_meta($user_id, 'prof_resume', $p_resume);
         }
+    }
+
+    public function read_community_xml($xml) {
+        $collection_model = new CollectionModel;
+        $objid = (string) $xml->attributes()->OBJID;
+        $id = explode(':', $objid)[1];
+        $dim = $xml->dmdSec[1]->mdWrap->xmlData->children('http://www.dspace.org/xmlns/dspace/dim')->dim->field;
+        $description = (string) $dim[0];
+        $abstract = (string) $dim[1];
+        $tableofcontents = (string) $dim[2];
+        $uri = (string) $dim[3];
+        $rights = (string) $dim[4];
+        $title = (string) $dim[5];
+
+        if (!$this->checkForAipID($id)) {
+            $data_collection['collection_name'] = $title;
+            $collection_id = $collection_model->simple_add($data_collection, 'publish');
+            //create_root_collection_category($collection_id, $data_collection['collection_object']);
+            $category_root_id = get_post_meta($collection_id, 'socialdb_collection_object_type', true);
+
+            $collection = array(
+                'ID' => $collection_id,
+                'post_content' => $description
+            );
+            wp_update_post($collection);
+
+            update_post_meta($collection_id, 'socialdb_dspace_aip_import_id', $id);
+        }
+    }
+
+    public function checkForAipID($id) {
+        global $wpdb;
+        $wp_posts = $wpdb->prefix . "posts";
+        $wp_postmeta = $wpdb->prefix . "postmeta";
+        $query = "
+                        SELECT pm.* FROM $wp_postmeta pm
+                            INNER JOIN $wp_posts p ON p.ID = pm.post_id AND p.post_status LIKE 'publish'
+                        WHERE pm.meta_key LIKE 'socialdb_dspace_aip_import_id' and pm.meta_value LIKE '{$id}'
+                ";
+        $result = $wpdb->get_results($query);
+        if ($result && is_array($result) && count($result) > 0) {
+            return $result[0]->post_id;
+        } else {
+            return false;
+        }
+    }
+
+    public function read_collection_xml($xml) {
+        $struct = $xml->structMap;
+        foreach($struct as $parent){
+            if($parent->attributes()->LABEL == 'Parent' && $parent->attributes()->TYPE == 'LOGICAL'){
+                $parent_id = $parent->div->mptr->attributes('http://www.w3.org/1999/xlink')->href;
+            }
+        }
+        $parent_collection_id = $this->checkForAipID($parent_id);
+        if(!empty($parent_id) && $parent_collection_id){
+            //eh uma subcoleção
+            
+        }else{
+            //é uma coleção
+            
+        }
+        var_dump($parent_id);
+        exit();
+        /*$category_root_id = $this->get_category_root_of($data['collection_id']);
+        $move_to = get_term_by('id', $data['socialdb_collection_parent'], 'socialdb_category_type');
+        if ($move_to && !is_wp_error($move_to)) {
+            $update_category = wp_update_term($category_root_id, 'socialdb_category_type', array(
+                'parent' => $move_to->term_id
+            ));
+            update_post_meta($post_id, 'socialdb_collection_parent', $data['socialdb_collection_parent']);
+        }*/
     }
 
 }
