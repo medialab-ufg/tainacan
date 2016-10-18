@@ -20,5 +20,5 @@ if ($_POST['operation']) {
     $data = $_GET;
 }
 
-$stat_controller = new StatisticsController();
+$stat_controller = new LogController();
 echo $stat_controller->operation($operation, $data);
