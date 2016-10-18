@@ -1,7 +1,7 @@
 <?php
 require_once(dirname(__FILE__) . '../../general/general_controller.php');
 
-class StatisticsController extends Controller {
+class LogController extends Controller {
     public function operation($op, $data) {
         switch($op):
             case "show_statistics":

@@ -1753,7 +1753,7 @@ $(function () {
     $('.repository-statistics').on('click', function() {
         var src = $('#src').val();
         $.ajax({
-            url: src + '/controllers/statistics/statistics_controller.php',
+            url: src + '/controllers/log/log_controller.php',
             type: 'POST',
             data: { operation: 'show_statistics' }
         }).done(function(res) {

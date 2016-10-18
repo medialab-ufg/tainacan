@@ -10,6 +10,8 @@ add_action('init', 'register_taxonomies');
 //load_theme_textdomain("tainacan", dirname(__FILE__) . "/languages");
 include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 include_once( dirname(__FILE__) . "/config/config.php" );
+require_once('wp_bootstrap_navwalker.php');
+include_once("models/log/log_model.php");
 
 /**
  * Criando tabela taxonomymeta
@@ -53,12 +55,14 @@ function setup_statisticsLog() {
     if (!empty($wpdb->collate))
         $charset_collate .= " COLLATE $wpdb->collate";
 
+    $_log_table_name = Log::_table();
+
     $stats_table_sql = "
-    CREATE TABLE IF NOT EXISTS {$GLOBALS['wpdb']->prefix}statistics (
+    CREATE TABLE IF NOT EXISTS {$_log_table_name} (
     id INT UNSIGNED NOT NULL auto_increment,
     collection_id BIGINT(20) UNSIGNED NOT NULL,
     ip VARCHAR(39) DEFAULT NULL,
-    user_event VARCHAR(10) NOT NULL,
+    user_event VARCHAR(20) NOT NULL,
     event_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id)
     ) $charset_collate";
@@ -2881,12 +2885,15 @@ function instantiate_modules() {
     }
 }
 
-require_once('wp_bootstrap_navwalker.php');
 function register_ibram_menu() {
     register_nav_menu('menu-ibram', __('Enable reduced menu', 'tainacan') );
 }
-
 add_action('init', 'register_ibram_menu');
+
+add_action('deleted_user', 'tainacan_log_deleted_user');
+function tainacan_log_deleted_user() {
+    return Log::add_log([ 'ip' => $_SERVER['REMOTE_ADDR'], 'user_event' => current_filter(), 'event_date' => date('Y-m-d H:i:s') ]);
+}
 
 ################# INSTANCIA OS MODULOS SE ESTIVEREM ATIVADOS#################
 instantiate_modules();

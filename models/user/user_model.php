@@ -12,6 +12,7 @@ if (isset($_GET['by_function'])) {
 }
 require_once(dirname(__FILE__) . '../../general/general_model.php');
 include_once (dirname(__FILE__) . '../../collection/collection_model.php');
+include_once (dirname(__FILE__) . '../../log/log_model.php');
 
 class UserModel extends Model {
 
@@ -128,12 +129,9 @@ class UserModel extends Model {
             $resultRegister['title'] = __('Success', 'tainacan');
             $resultRegister['msg'] = __('User registered successfully! Your login is: ', 'tainacan') . $get_login->user_login;
             $resultRegister['url'] = get_the_permalink(get_option('collection_root_id')) . '?open_login=true';
-
-//            $to = $data['user_email'];
-//            $subject = __('Welcome on the Tainacan Repository ');
-//            $body = __('Welcome');
-//            $headers = array('Content-Type: text/html; charset=UTF-8');
-//            wp_mail($to, $subject, $body, $headers);
+            
+            Log::add_log([ 'ip' => $_SERVER['REMOTE_ADDR'], 'user_event' => 'user_register', 'event_date' => date('Y-m-d H:i:s') ]);
+            
             $this->send_welcome_email($data, $get_login->user_login);
         } else {
             $resultRegister['result'] = '0';
@@ -148,7 +146,6 @@ class UserModel extends Model {
     public function send_welcome_email($data, $user_login) {
         $site_name = (get_option('blogname') == '' ? 'Tainacan' : get_option('blogname'));
         $content = (get_option('socialdb_welcome_email') == '' ? __('Welcome on the Tainacan Repository ', 'tainacan') : get_option('socialdb_welcome_email'));
-
         $content = str_replace('__USER_NAME__', $data['first_name'] . ' ' . $data['last_name'], $content);
         $content = str_replace('__USER_LOGIN__', $user_login, $content);
 
@@ -190,8 +187,6 @@ class UserModel extends Model {
     }
 
     public function create_user_gplus($me, $access_token) {
-
-        $result = array();
         $result = $this->token_save_gplus($me, $access_token);
         return $this->login_gplus($result['user_login'], $result['user_pass']);
     }
@@ -225,7 +220,6 @@ class UserModel extends Model {
                 //retornando os dados do usuÃ¡rio;
                 return $user_data;
             } else {
-
                 //atualizando os dados do usuÃ¡rio.
                 $data_user = get_user_by('email', $user['emails'][0]['value']);
 
@@ -329,7 +323,6 @@ class UserModel extends Model {
      * Logar usuario no wordpress 
      */
     public function do_login($login = '', $pass = "") {
-
         $user = wp_signon(array('user_login' => $login, 'user_password' => $pass, 'remember' => true), false);
 
         wp_clear_auth_cookie();
@@ -344,7 +337,6 @@ class UserModel extends Model {
     }
 
     public function login_gplus($login = '', $pass = "") {
-
         $user = wp_signon(array('user_login' => $login, 'user_password' => $pass, 'remember' => true), false);
 
         wp_clear_auth_cookie();
