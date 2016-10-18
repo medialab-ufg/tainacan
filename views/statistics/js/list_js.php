@@ -73,8 +73,12 @@
         };
         */
 
+        var str_log = '<?php echo json_encode( Log::get_user_events()[0] ); ?>';
+        var psd = $.parseJSON(str_log);
+        // cl(psd.COUNT(id));
+
         var data = google.visualization.arrayToDataTable([
-            ['Status de usuários', 'Status', { role: 'style' }],
+            ['Status de usuários', 'total users of ', { role: 'style' }],
             ['Login', 71.45, 'color: #0c698b' ], // CSS-style declaration
             ['Registros', 80.94, '#b87333'],            // RGB value
             ['Banidos', 10.49, 'silver'],            // English color name
