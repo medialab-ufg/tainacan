@@ -45,6 +45,27 @@ function setup_taxonomymeta() {
 			) $charset_collate;");
 }
 
+function setup_statisticsLog() {
+    global $wpdb;
+    $charset_collate = '';
+    if (!empty($wpdb->charset))
+        $charset_collate = "DEFAULT CHARACTER SET $wpdb->charset";
+    if (!empty($wpdb->collate))
+        $charset_collate .= " COLLATE $wpdb->collate";
+
+    $stats_table_sql = "
+    CREATE TABLE IF NOT EXISTS {$GLOBALS['wpdb']->prefix}statistics (
+    id INT UNSIGNED NOT NULL auto_increment,
+    collection_id BIGINT(20) UNSIGNED NOT NULL,
+    ip VARCHAR(39) DEFAULT NULL,
+    user_event VARCHAR(10) NOT NULL,
+    event_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
+    ) $charset_collate";
+
+    $wpdb->query($stats_table_sql);
+}
+
 /*
  * Quick touchup to wpdb
  */
@@ -2879,6 +2900,7 @@ if (isset($_GET['activated']) && is_admin()) {
     register_taxonomies();
     wpdbfix();
     setup_taxonomymeta();
+    setup_statisticsLog();
     create_collection_terms();
     create_property_terms();
     create_channel_terms();
