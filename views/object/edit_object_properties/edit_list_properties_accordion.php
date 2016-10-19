@@ -80,7 +80,7 @@ if (isset($property_object)):
                 }
                 ?>
             </h2>
-            <div class="form-group" >
+            <div>
             <?php 
                 // botao que leva a colecao relacionada
                     if (isset($property['metas']['collection_data'][0]->post_title)):  ?>
@@ -211,7 +211,7 @@ if (isset($property_object)):
                 ?>
             </h2>
             <?php $cardinality = $view_helper->render_cardinality_property($property);   ?>
-            <div class="form-group">
+            <div>
                  <?php for($i = 0; $i<$cardinality;$i++):   ?>
                     <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
                          style="padding-bottom: 10px;<?php echo ($i===0||(is_array($property['metas']['value'])&&$i<count($property['metas']['value']))) ? 'display:block': 'display:none'; ?>">

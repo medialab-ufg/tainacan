@@ -65,7 +65,7 @@ class ViewHelper {
             'relationship' => __('Relationship', 'tainacan'),
             'category' => __('Category', 'tainacan'),
             'voting' => __('Rankings', 'tainacan'),
-            'compounds' => __('Compounds', 'tainacan'),
+            'metadata_compound' => __('Compounds', 'tainacan'),
         ];
     }
 

@@ -115,7 +115,7 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                         echo $view_helper->setValidation($collection_id, $view_helper->terms_fixed['content']->term_id, 'content');
                     ?>
                 </h2>
-                 <div class="form-group" >
+                 <div >
                     <textarea class="form-control" id="objectedit_editor" name="object_editor" placeholder="<?php _e('Object Content','tainacan'); ?>"><?php echo get_post_meta($object->ID, 'socialdb_object_content', true); ?></textarea>
                 </div>     
             </div>
@@ -135,7 +135,7 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                         echo $view_helper->setValidation($collection_id, $view_helper->terms_fixed['attachments']->term_id, 'attachments');
                     ?>
                 </h2>
-                <div class="form-group" >
+                <div>
                      <div id="dropzone_edit"  
                         <?php do_action('item_attachments_attributes') ?> <?php if($socialdb_collection_attachment=='no') echo 'style="display:none"' ?> 
                          class="dropzone"
@@ -172,7 +172,7 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                         echo $view_helper->setValidation($collection_id, $view_helper->terms_fixed['thumbnail']->term_id, 'thumbnail');
                     ?>
                 </h2>
-                <div class="form-group" >
+                <div>
                     <div id="existent_thumbnail">
                         <?php
                         if (get_the_post_thumbnail($object->ID, 'thumbnail')) {
@@ -211,7 +211,7 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                         echo $view_helper->setValidation($collection_id, $view_helper->terms_fixed['source']->term_id, 'source');
                     ?>
                 </h2>
-                 <div class="form-group" >
+                 <div>
                       <input  
                            type="text" 
                            id="object_source" 
@@ -238,7 +238,7 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                         echo $view_helper->setValidation($collection_id, $view_helper->terms_fixed['description']->term_id, 'description');
                     ?>
                 </h2>
-                <div class="form-group" >
+                <div>
                      <textarea class="form-control" 
                                id="object_description_example" 
                                name="object_description" ><?php echo $object->post_content; ?></textarea>
@@ -261,7 +261,7 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                         echo $view_helper->setValidation($collection_id, $view_helper->terms_fixed['tags']->term_id, 'tags');
                     ?>
                 </h2>
-                <div class="form-group" >
+                <div>
                    <input type="text" 
                           class="form-control"
                           id="object_tags" 

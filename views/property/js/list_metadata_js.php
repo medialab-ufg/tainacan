@@ -2238,10 +2238,10 @@
     function add_remove_filter_button(id){
         if(id=='ranking_colaborations'){
             return '  <a class="pull-right" title="<?php _e('Remove filter','tainacan') ?>" style="cursor:pointer;" onclick="removeFacet('+"'"+id+"'"+');">'+
-                     '<span class="glyphicon glyphicon glyphicon-remove"></span></a>';
+                     '<span class="glyphicon glyphicon glyphicon-trash"></span></a>';
         }else{
             return '  <a class="pull-right" title="<?php _e('Remove filter','tainacan') ?>" style="cursor:pointer;" onclick="removeFacet('+id+');">'+
-                     '<span class="glyphicon glyphicon glyphicon-remove"></span></a>';
+                     '<span class="glyphicon glyphicon glyphicon-trash"></span></a>';
         }
     }
     //add facet

@@ -43,7 +43,7 @@
                     <?php if(has_action('label_add_item')): ?>
                            <?php do_action('label_add_item',$object_name) ?>
                     <?php else: ?>
-                          <?php _e('Create new item - Write text','tainacan') ?>
+                     <?php _e('Create new item - Write text','tainacan') ?></span>
                     <?php endif; ?>
                     <button type="button" onclick="back_main_list();"class="btn btn-default pull-right">
                         <b><?php _e('Back','tainacan') ?></b>
@@ -84,7 +84,7 @@
                         echo $view_helper->setValidation($collection_id, $view_helper->terms_fixed['title']->term_id, 'title');
                     ?>
                 </h2>
-                 <div class="form-group" >
+                 <div>
                     <input class="form-control"   
                            type="text"  
                            id="object_name" 
@@ -108,7 +108,7 @@
                         echo $view_helper->setValidation($collection_id, $view_helper->terms_fixed['content']->term_id, 'content');
                     ?>
                 </h2>
-                 <div class="form-group" >
+                 <div >
                     <textarea class="form-control" id="object_editor" name="object_editor" placeholder="<?php _e('Object Content','tainacan'); ?>"></textarea>
                 </div>     
             </div>
@@ -128,7 +128,7 @@
                         echo $view_helper->setValidation($collection_id, $view_helper->terms_fixed['attachments']->term_id, 'attachments');
                     ?>
                 </h2>
-                <div class="form-group" >
+                <div >
                     <div id="dropzone_new" <?php ($socialdb_collection_attachment=='no') ? print_r('style="display:none"') : '' ?> 
                         class="dropzone"
                         style="margin-bottom: 15px;min-height: 150px;padding-top: 0px;">
@@ -164,7 +164,7 @@
                         echo $view_helper->setValidation($collection_id, $view_helper->terms_fixed['thumbnail']->term_id, 'thumbnail');
                     ?>
                 </h2>
-                <div class="form-group" >
+                <div  >
                         <input type="hidden" name="thumbnail_url" id="thumbnail_url" value="">
                         <div id="image_side_create_object">
                         </div>
@@ -192,7 +192,7 @@
                         echo $view_helper->setValidation($collection_id, $view_helper->terms_fixed['source']->term_id, 'source');
                     ?>
                 </h2>
-                 <div class="form-group" >
+                 <div  >
                     <input
                            type="text"
                            id="object_source"
@@ -219,7 +219,7 @@
                         echo $view_helper->setValidation($collection_id, $view_helper->terms_fixed['description']->term_id, 'description');
                     ?>
                 </h2>
-                <div class="form-group" >
+                <div >
                     <textarea class="form-control" 
                               rows="8"
                               id="object_description_example" 
@@ -244,7 +244,7 @@
                         echo $view_helper->setValidation($collection_id, $view_helper->terms_fixed['tags']->term_id, 'tags');
                     ?>
                 </h2>
-                <div class="form-group" >
+                <div  >
                     <input type="text" 
                            class="form-control" 
                            id="object_tags" 

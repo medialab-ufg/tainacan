@@ -190,7 +190,7 @@ if (isset($property_object)):
                 ?>
             </h2>
             <?php $cardinality = $view_helper->render_cardinality_property($property);   ?>
-            <div class="form-group">
+            <div>
                 <?php for($i = 0; $i<$cardinality;$i++):   ?>
                 <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
                      style="padding-bottom: 10px;<?php echo ($i===0) ? 'display:block': 'display:none'; ?>">
@@ -323,7 +323,7 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
              endif; 
              ?>
             </h2>    
-            <div class="form-group">
+            <div>
             <?php
             if ($property['type'] == 'radio') {
                 $properties_terms_radio[] = $property['id'];

@@ -81,10 +81,10 @@
                         }
                         $( "#compounds_properties_ordenation" ).append('<li id="compounds-'+node.data.key+'">'+
                                 '<a onclick="'+string+'(' + node.data.key + ')" class="edit_property_data" href="javascript:void(0)">' +
-                                '<span style="margin-right:5px;" class="glyphicon glyphicon-edit pull-right"><span></a> ' +
+                                '<span style="margin-right:5px;color: #88A6CC;" class="glyphicon glyphicon-edit pull-right"><span></a> ' +
                                 '<a onclick="delete_property(' + node.data.key + ','+type+')" class="delete_property" href="#">' +
-                                '<span style="margin-right:5px;" class="glyphicon glyphicon-trash pull-right"><span></a>' +
-                                '<span style="margin-right:5px;" class="glyphicon glyphicon-sort sort-filter pull-right"></span>&nbsp;'+ add_filter_button(node.data.key) + node.data.title+'</li>')
+                                '<span style="margin-right:5px;color: #88A6CC;" class="glyphicon glyphicon-trash pull-right"><span></a>' +
+                                '<a><span style="margin-right:5px;color: #88A6CC;" class="glyphicon glyphicon-sort sort-filter pull-right"></span></a>&nbsp;'+ add_filter_button(node.data.key) + node.data.title+'</li>')
                     })
                     $('#compounds_id').val(keys.join(','));
                 }else if(selKeys.length>6){
@@ -132,7 +132,7 @@
     //mostra icone na listagem
     function add_compounds_button(){
         return '<a  title="<?php _e('Compounds Metadata','tainacan') ?>" style="cursor:pointer;margin-right:9px;">'+
-                ' <img style="height:16px;width:16px;" src="<?php echo get_template_directory_uri() . "/libraries/images/icons/icon-compounds.png"; ?>" ></a> ';
+                ' <img style="height:16px;width:16px;" src="<?php echo get_template_directory_uri() . "/libraries/images/icons/icon-metadata_compound.png"; ?>" ></a> ';
     }
     
     //LISTANDO AS PROPRIEDADES COMPOSTAS
@@ -272,11 +272,12 @@
                     string = 'edit_term';
                 }
                 $( "#list-compounded-"+property_id ).append('<li id="compounds-'+current_id+'">'+
-                                '<a onclick="'+string+'(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
-                                '<span style="margin-right:5px;" class="glyphicon glyphicon-edit pull-right"><span></a> ' +
                                 '<a onclick="delete_property(' + current_id + ','+type+')" class="delete_property" href="#">' +
-                                '<span style="margin-right:5px;" class="glyphicon glyphicon-trash pull-right"><span></a>' +
-                                '<span style="margin-right:5px;" class="glyphicon glyphicon-sort sort-filter pull-right"></span>&nbsp;'+ add_filter_button(current_id) + property.name + add_text_type(current_search_widget) +'</li>')
+                                '<span style="margin-right:5px;color: #88A6CC;" class="glyphicon glyphicon-trash pull-right"><span></a>' + 
+                                '<a onclick="'+string+'(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
+                                '<span style="margin-right:5px;color: #88A6CC;" class="glyphicon glyphicon-edit pull-right"><span></a> ' +
+                                
+                                '<span style="margin-right:5px;color: #88A6CC;" class="glyphicon glyphicon-sort sort-filter pull-right"></span>&nbsp;'+ add_filter_button(current_id) + property.name + add_text_type(current_search_widget) +'</li>')
             });
         });
     }
