@@ -160,10 +160,9 @@ class UserController extends Controller {
                     $data['login'] = 1;
                     $data['url'] = get_the_permalink($data['collection_id']);
 
-                    $_log_data = ['collection_id' => $data['collection_id'], 'ip' => $_SERVER['REMOTE_ADDR'],
-                        'user_event' => 'user_login', 'event_date' => date('Y-m-d H:i:s') ];
-                    Log::add_log($_log_data);
-
+                    $_log_data = [ 'collection_id' => $data['collection_id'], 'user_id' => $user->ID,
+                        'event_type' => 'user', 'event' => 'login'];
+                    Log::addLog($_log_data);
                 } else {
                     $data['login'] = 0;
                     $data['title'] = __('Failed to Login','tainacan');

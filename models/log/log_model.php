@@ -11,17 +11,22 @@ class Log extends Model {
         return $GLOBALS['wpdb']->prefix . self::_TABLE_SUFFIX_;
     }
 
-    public static function add_log($logData) {
+    public static function addLog($logData) {
         global $wpdb;
-        return $wpdb->insert( self::_table(), $logData);
+        $final_data = array_merge($logData, self::getCommonFields() );
+        return $wpdb->insert( self::_table(), $final_data);
+    }
+    
+    private function getCommonFields() {
+        return ['ip' => $_SERVER['REMOTE_ADDR'], 'event_date' => date('Y-m-d H:i:s')];
     }
 
-    public static function get_user_events() {
+    public static function getUserEvents() {
         global $wpdb;
         // $sql = sprintf("SELECT * FROM %s WHERE %s = %%s", self::_table(), static::$primary_key);
         // $sql = sprintf("SELECT * FROM %s WHERE user_event = 'user_login'", self::_table() );
-        $sql = sprintf("SELECT COUNT(id) FROM %s WHERE user_event = 'user_login'", self::_table() );
-        return $wpdb->get_results($sql);
+        $sql = sprintf("SELECT COUNT(id) as total_login FROM %s WHERE event_type = 'user' AND event = 'login' ", self::_table() );
+        return json_encode( $wpdb->get_results($sql) );
     }
 
     /*

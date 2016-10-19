@@ -130,7 +130,7 @@ class UserModel extends Model {
             $resultRegister['msg'] = __('User registered successfully! Your login is: ', 'tainacan') . $get_login->user_login;
             $resultRegister['url'] = get_the_permalink(get_option('collection_root_id')) . '?open_login=true';
             
-            Log::add_log([ 'ip' => $_SERVER['REMOTE_ADDR'], 'user_event' => 'user_register', 'event_date' => date('Y-m-d H:i:s') ]);
+            Log::addLog(['user_id' => $user_id, 'event_type' => 'user', 'event' => 'register']);
             
             $this->send_welcome_email($data, $get_login->user_login);
         } else {

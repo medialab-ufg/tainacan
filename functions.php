@@ -61,8 +61,10 @@ function setup_statisticsLog() {
     CREATE TABLE IF NOT EXISTS {$_log_table_name} (
     id INT UNSIGNED NOT NULL auto_increment,
     collection_id BIGINT(20) UNSIGNED NOT NULL,
+    user_id BIGINT(20) UNSIGNED NOT NULL,
     ip VARCHAR(39) DEFAULT NULL,
-    user_event VARCHAR(20) NOT NULL,
+    event_type VARCHAR(20) NOT NULL,
+    event VARCHAR(20) NOT NULL,
     event_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id)
     ) $charset_collate";
@@ -2890,9 +2892,9 @@ function register_ibram_menu() {
 }
 add_action('init', 'register_ibram_menu');
 
-add_action('deleted_user', 'tainacan_log_deleted_user');
+add_action('delete_user', 'tainacan_log_deleted_user');
 function tainacan_log_deleted_user() {
-    return Log::add_log([ 'ip' => $_SERVER['REMOTE_ADDR'], 'user_event' => current_filter(), 'event_date' => date('Y-m-d H:i:s') ]);
+    return Log::addLog( [ 'user_id' => $user_id, 'event_type' => 'user', 'event' => current_filter()] );
 }
 
 ################# INSTANCIA OS MODULOS SE ESTIVEREM ATIVADOS#################
