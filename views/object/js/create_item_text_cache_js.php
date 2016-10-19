@@ -147,6 +147,10 @@ function list_tabs(){
                 initiate_accordeon(value.meta_id);
             });
         }
+        $('#tabs_item a').click(function (e) {
+            e.preventDefault()
+            $(this).tab('show')
+        });
     });
 }
 //inicia o accordeon de cada aba criada
@@ -158,8 +162,6 @@ function initiate_accordeon(id){
         heightStyle: "content"
     });
 }
-
-
 
 
 //BEGIN: funcao para mostrar votacoes
@@ -914,7 +916,7 @@ function back_main_list() {
                 //list_all_objects(selKeys.join(", "), $("#collection_id").val());
                 $('#append_properties_categories').html(result);
                 insert_html_property_category();
-
+                
             });
             $('#selected_categories').val(selected_categories.join(','));
         }
@@ -938,7 +940,7 @@ function back_main_list() {
                 }
                flag = false;
          }
-         //$("#text_accordion").accordion("destroy");  
+         $("#text_accordion").accordion("destroy");  
          $("#text_accordion").accordion({
                     active: false,
                     collapsible: true,
@@ -1033,6 +1035,23 @@ function back_main_list() {
                 append_category_properties(0,$(this).val());
             }
         });
+    }
+    /**
+     * funcao que valida os campos de selecao unica
+     * @param {type} seletor
+     * @param {type} property_id
+     * @returns {undefined}     */
+    function list_validate_selectbox(seletor,property_id){
+        if($(seletor).val()===''){
+            $('#core_validation_'+property_id).val('false');
+            set_field_valid(property_id,'core_validation_'+property_id);
+        }else{
+            append_category_properties($(seletor).val(), $('#socialdb_propertyterm_'+property_id+'_value').val());
+           $('#socialdb_propertyterm_'+property_id+'_value').val($(seletor).val()); 
+            $('#core_validation_'+property_id).val('true');
+            set_field_valid(property_id,'core_validation_'+property_id);
+        }
+        
     }
     /**
      * funcao que valida os campos de selecao unica
@@ -1299,25 +1318,27 @@ var dynatree_object_index = [];
                          for(var i = 0;i<cardinality;i++){
                                 elem = jQuery.parseJSON(result);
                                 $('#field_property_term_'+compound_id+'_' + radio + '_' + i).html('');
-                                $.each(elem.children, function (idx, children) {
-                                    var required = '';
-                                    var checked = '';
-                                    var value = $('#actual_value_'+compound_id+'_' + radio + '_' + i).val();
-                                    //if(elem.metas.socialdb_property_required==='true'){
-                                        required = ' onchange="compounds_validate_radio(' + radio + ','+i+','+compound_id+')"';
-                                    //}
-                                    //  if (property.id == selected) {
-                                    //     $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
-                                    //  } else {
-                                    if(value!=''&&value==children.term_id){
-                                        checked = 'checked="checked"';
-                                    }
-                                    if (typeof delete_value === "function") {
-                                        delete_value(children.term_id);
-                                    }
-                                    $('#field_property_term_'+compound_id+'_' + radio + '_' + i).append('<input '+checked+' '+required+' type="radio" name="socialdb_property_'+compound_id+'_'+ radio +'_'+ i +'[]" value="' + children.term_id + '">&nbsp;' + children.name + '<br>');
-                                    //  }
-                                });
+                                if(elem.children){
+                                    $.each(elem.children, function (idx, children) {
+                                        var required = '';
+                                        var checked = '';
+                                        var value = $('#actual_value_'+compound_id+'_' + radio + '_' + i).val();
+                                        //if(elem.metas.socialdb_property_required==='true'){
+                                            required = ' onchange="compounds_validate_radio(' + radio + ','+i+','+compound_id+')"';
+                                        //}
+                                        //  if (property.id == selected) {
+                                        //     $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
+                                        //  } else {
+                                        if(value!=''&&value==children.term_id){
+                                            checked = 'checked="checked"';
+                                        }
+                                        if (typeof delete_value === "function") {
+                                            delete_value(children.term_id);
+                                        }
+                                        $('#field_property_term_'+compound_id+'_' + radio + '_' + i).append('<input '+checked+' '+required+' type="radio" name="socialdb_property_'+compound_id+'_'+ radio +'_'+ i +'[]" value="' + children.term_id + '">&nbsp;' + children.name + '<br>');
+                                        //  }
+                                    });
+                                }
                         }
                     });
                 }

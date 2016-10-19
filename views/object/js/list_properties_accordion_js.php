@@ -275,17 +275,19 @@
                     elem = jQuery.parseJSON(result);
                     $('#field_property_term_' + selectbox).html('');
                     $('#field_property_term_' + selectbox).append('<option value=""><?php _e('Select','tainacan') ?>...</option>');
-                    $.each(elem.children, function (idx, children) {
-                        var selected = '';
-                        if(is_selected_category(children.term_id,'#object_classifications')){
-                            selected  += ' selected="selected" '
-                        }
-                        //  if (property.id == selected) {
-                        //     $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
-                        //  } else {
-                        $('#field_property_term_' + selectbox).append('<option '+selected+' value="' + children.term_id + '">' + children.name + '</option>');
-                        //  }
-                    });
+                    if(elem.children){    
+                        $.each(elem.children, function (idx, children) {
+                            var selected = '';
+                            if(is_selected_category(children.term_id,'#object_classifications')){
+                                selected  += ' selected="selected" '
+                            }
+                            //  if (property.id == selected) {
+                            //     $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
+                            //  } else {
+                            $('#field_property_term_' + selectbox).append('<option '+selected+' value="' + children.term_id + '">' + children.name + '</option>');
+                            //  }
+                        });
+                    }    
                 });
             });
         }
@@ -312,14 +314,16 @@
                 }).done(function (result) {
                     elem = jQuery.parseJSON(result);
                     $('#field_property_term_' + multipleSelect).html('');
-                    $.each(elem.children, function (idx, children) {
-                        var selected = '';
-                        if(is_selected_category(children.term_id,'#object_classifications')){
-                            selected  += ' selected="selected" '
-                        }
-                        $('#field_property_term_' + multipleSelect).append('<option '+selected+' value="' + children.term_id + '">' + children.name + '</option>');
-                        //  }
-                    });
+                    if(elem.children){  
+                        $.each(elem.children, function (idx, children) {
+                            var selected = '';
+                            if(is_selected_category(children.term_id,'#object_classifications')){
+                                selected  += ' selected="selected" '
+                            }
+                            $('#field_property_term_' + multipleSelect).append('<option '+selected+' value="' + children.term_id + '">' + children.name + '</option>');
+                            //  }
+                        });
+                    }
                 });
             });
         }

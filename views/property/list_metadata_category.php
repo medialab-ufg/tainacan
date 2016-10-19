@@ -66,7 +66,10 @@ $array_visibility = ($meta&&$meta!=='') ? $meta : '';
                     <li>
                        <!--a  data-toggle="modal" data-target="#meta-<?php echo $type ?>"-->
                        <a onclick="$('#meta-<?php echo $type ?>').modal('show');clear_form('<?php echo $type ?>');" > 
-                            <img src="<?php $view_helper->get_metadata_icon($type); ?>" alt="<?php echo $type ?>" title="<?php echo $type ?>">
+                            <img 
+                                <?php if($type=='metadata_compound'): echo 'height="15" width="15"'; endif;?>
+                                src="<?php $view_helper->get_metadata_icon($type); ?>" 
+                                alt="<?php echo $type ?>" title="<?php echo $type ?>">
                             <?php echo $label ?>
                         </a>
                     </li>

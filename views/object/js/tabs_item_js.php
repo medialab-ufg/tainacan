@@ -74,6 +74,10 @@
                     initiate_accordeon(value.meta_id);
                 });
             }
+            $('#tabs_item a').click(function (e) {
+                e.preventDefault()
+                $(this).tab('show')
+            }); 
         });
     }
     //inicia o accordeon de cada aba criada
