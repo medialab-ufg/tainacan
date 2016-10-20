@@ -357,6 +357,7 @@ $references = [
                          ?> 
                     </div>  
                 </div>
+                <div id="append_properties_categories_<?php echo $property['id']; ?>"></div>
              <?php  } ?>
         <?php endif; ?>
         <?php $object_properties_widgets_helper->list_properties_compounds($properties['property_compounds'], 0,$references)  ?>

@@ -171,7 +171,7 @@
                         //  if (property.id == selected) {
                         //     $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
                         //  } else {
-                        if(categories.indexOf(children.term_id)>-1){
+                        if(categories&&categories.indexOf(children.term_id)>-1){
                             checked = 'checked="checked"';
                         }
                        //  delete_value(children.term_id);//retiro

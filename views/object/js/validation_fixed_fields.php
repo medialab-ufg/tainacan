@@ -32,7 +32,11 @@
     //conteudo
     function set_content_valid(){
         var editor  = CKEDITOR.instances.object_editor;
-        var val = editor.getData();
+        if(editor&&editor.getData()){
+           var val = editor.getData();
+        }else{
+           var val = '' 
+        }
         if($('#core_validation_content').length>0){
             if(val!==''){
                 $('#core_validation_content').val('true');

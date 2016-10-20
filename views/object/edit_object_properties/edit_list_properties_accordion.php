@@ -418,7 +418,8 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
                 }
                 ?> 
         </div>   
-    </div>              
+    </div>      
+    <div id="append_properties_categories_<?php echo $property['id']; ?>"></div>
     <?php } ?>
 <?php endif;
 ?>

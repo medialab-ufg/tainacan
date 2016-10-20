@@ -301,7 +301,7 @@
                     if( $("#field_property_term_" + multipleSelects).val()===''){
                         $('#core_validation_'+multipleSelect).val('false');
                     }else{
-                         append_category_properties($("#field_property_term_" + multipleSelects).val());
+                         append_category_properties($("#field_property_term_" + multipleSelects).val(),$("#field_property_term_" + multipleSelects).val(),multipleSelect);
                          $('#core_validation_'+multipleSelect).val('true');
                     }
                     set_field_valid(multipleSelect,'core_validation_'+multipleSelect);
@@ -378,9 +378,9 @@
                             return node.data.key;
                         });
                         if(categories.length>0&&categories.indexOf(node.data.key)>=0){
-                            append_category_properties(node.data.key);
+                            append_category_properties(node.data.key,node.data.key,treecheckbox);
                         }else{
-                            append_category_properties(0,node.data.key);
+                            append_category_properties(0,node.data.key, treecheckbox);
                         }
                         
                         
@@ -446,12 +446,12 @@
                     },
                     onSelect: function (flag, node) {
                         if ($("#socialdb_propertyterm_" + tree).val() === node.data.key) {
-                            append_category_properties(0,node.data.key);
+                            append_category_properties(0,node.data.key,tree);
                             $("#socialdb_propertyterm_" + tree).val("");
                              $('#core_validation_'+tree).val('false');
                              set_field_valid(tree,'core_validation_'+tree);
                         } else {
-                            append_category_properties(node.data.key,$("#socialdb_propertyterm_" + tree).val());
+                            append_category_properties(node.data.key,$("#socialdb_propertyterm_" + tree).val(),tree);
                             $("#socialdb_propertyterm_" + tree).val(node.data.key);
                             $('#core_validation_'+tree).val('true');
                              set_field_valid(tree,'core_validation_'+tree);
@@ -496,7 +496,7 @@
         }
     }
 //################################ adicao de propriedades de categorias #################################//    
-    function append_category_properties(id,remove_id){
+    function append_category_properties(id,remove_id,property_id ){
         //buscando as categorias selecionadas nos metadados de termo
         var selected_categories = $('#selected_categories').val();
         if(selected_categories===''){
@@ -535,18 +535,21 @@
             }).done(function (result) {
                 hide_modal_main();
                 //list_all_objects(selKeys.join(", "), $("#collection_id").val());
-                $('#append_properties_categories').html(result);
-                insert_html_property_category();
+                $('#append_properties_categories_'+property_id).html(result);
+                insert_html_property_category(property_id);
 
             });
             $('#selected_categories').val(selected_categories.join(','));
         }
     }
-    function insert_html_property_category(){
+    function insert_html_property_category(property_id){
         var flag = false;
         $ul = $("#text_accordion");
         $items = $("#text_accordion").children();
-        $properties_append = $("#append_properties_categories").children();
+        $('#append_properties_categories_'+property_id).css('margin-top','15px');
+        $properties_append = $('#append_properties_categories_'+property_id).children().children();
+        $properties_append.animate({borderWidth : '1px',borderColor: 'red',borderStyle: 'dotted'}, 'slow', 'linear');
+        setTimeout(removeBorderCat(property_id),8000);
         for (var i = 0; i <$properties_append.length; i++) {
               // index is zero-based to you have to remove one from the values in your array
                 for(var j = 0; j<$items.length;j++){
@@ -555,14 +558,16 @@
                     }
                 }
                 if(!flag){
-                   $( $properties_append.get(i) ).appendTo( $ul);
-                   var id =  $( $properties_append.get(i) ).attr('property');
-                   add_property_general(id);
+                    // $( $properties_append.get(i) ).appendTo( $ul);
+                    var id =  $( $properties_append.get(i) ).attr('property');
+                    if(id){
+                        add_property_general(id);
+                    }
                 }
                flag = false;
          }
-         $("#text_accordion").accordion("destroy");  
-         $("#text_accordion").accordion({
+         $(".multiple-items-accordion").accordion("destroy");  
+         $(".multiple-items-accordion").accordion({
                     active: false,
                     collapsible: true,
                     header: "h2",
@@ -570,6 +575,13 @@
                 });
          $('[data-toggle="tooltip"]').tooltip();
     }
+    //retira as bordas
+    function removeBorderCat(property_id){
+        $properties_append = $('#append_properties_categories_'+property_id).children().children();
+        console.log($properties_append);
+        $properties_append.animate({borderWidth : '1px',borderColor: '#d3d3d3',borderStyle:"solid"}, 'slow', 'linear');
+    }
+    
     //adicionando as propriedades das categorias no array de propriedades gerais
     function add_property_general(id){
         var ids = $('#properties_id').val().split(','); 
@@ -618,7 +630,7 @@
             $(selected[0]).removeAttr('checked');
         }
         if (selected.length > 0) {
-            append_category_properties(selected.val(), $('#socialdb_propertyterm_'+property_id+'_value').val());
+            append_category_properties(selected.val(), $('#socialdb_propertyterm_'+property_id+'_value').val(),property_id);
             $('#socialdb_propertyterm_'+property_id+'_value').val(selected.val()); 
             $('#core_validation_'+property_id).val('true');
             set_field_valid(property_id,'core_validation_'+property_id);
@@ -643,9 +655,9 @@
         //verificando se existe propriedades para serem  adicionadas
         $.each($("input[type='checkbox'][name='socialdb_propertyterm_"+property_id+"[]']"),function(index,value){
             if($(this).is(':checked')){
-                append_category_properties($(this).val());
+                append_category_properties($(this).val(),$(this).val(),property_id);
             }else{
-                append_category_properties(0,$(this).val());
+                append_category_properties(0,$(this).val(),property_id);
             }
         });
     }
@@ -659,7 +671,7 @@
             $('#core_validation_'+property_id).val('false');
             set_field_valid(property_id,'core_validation_'+property_id);
         }else{
-            append_category_properties($(seletor).val(), $('#socialdb_propertyterm_'+property_id+'_value').val());
+            append_category_properties($(seletor).val(), $('#socialdb_propertyterm_'+property_id+'_value').val(),property_id);
            $('#socialdb_propertyterm_'+property_id+'_value').val($(seletor).val()); 
             $('#core_validation_'+property_id).val('true');
             set_field_valid(property_id,'core_validation_'+property_id);
@@ -679,9 +691,9 @@
             //verificando se existe propriedades para serem  adicionadas
             $.each($("#field_property_term_"+property_id+" option"),function(index,value){
                 if($(this).is(':selected')){
-                    append_category_properties($(this).val());
+                    append_category_properties($(this).val(),$(this).val(),property_id);
                 }else{
-                    append_category_properties(0,$(this).val());
+                    append_category_properties(0,$(this).val(),property_id);
                 }
             });
         }else{
