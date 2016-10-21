@@ -345,7 +345,7 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
                  endif; 
                  ?>
             </h2>    
-            <div class="form-group">
+            <div>
                 <?php
                 if ($property['type'] == 'radio') {
                     $properties_terms_radio[] = $property['id'];
@@ -418,8 +418,8 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
                 }
                 ?> 
         </div>   
+        <div id="append_properties_categories_<?php echo $property['id']; ?>"></div>    
     </div>      
-    <div id="append_properties_categories_<?php echo $property['id']; ?>"></div>
     <?php } ?>
 <?php endif;
 ?>
@@ -436,7 +436,6 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
     <input type="hidden" id="property_origin" name="property_origin" value="<?php echo $all_ids; ?>">
     <input type="hidden" id="property_added" name="property_added" value="">
     <input type="hidden" id="selected_categories" name="selected_categories" value="">
-    <div id="append_properties_categories" class="hide"></div>
 <?php endif; ?>
 
 

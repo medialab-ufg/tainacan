@@ -30,7 +30,7 @@ $references = [
     'properties_to_avoid' => &$properties_to_avoid,   
 ];
 ?>
-<div class="property-category-list">
+<div class="property-category-list" style="margin-bottom: 15px;">
 <?php
 if (isset($property_object)):
     foreach ($property_object as $property) {
@@ -39,7 +39,8 @@ if (isset($property_object)):
         }
         $ids[] = $property['id'];
         ?>
-        <div id="meta-item-<?php echo $property['id']; ?>" property="<?php echo $property['id']; ?>" 
+        <div id="meta-item-<?php echo $property['id']; ?>" 
+             property="<?php echo $property['id']; ?>" 
              class="category-<?php echo $categories ?> form-group" >
             <h2>
                 <?php echo $property['name']; ?>

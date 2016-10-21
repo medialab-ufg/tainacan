@@ -1257,7 +1257,7 @@ class VisualizationModel extends CollectionModel {
         $metas = $this->get_property_data_values($property_id);
         foreach ($metas as $meta_id => $meta_value) {
             if ($letter !== '*' && (substr($meta_value, 0, 1) === strtoupper($letter) || substr($meta_value, 0, 1) === strtolower($letter))) {
-                $results[] = $metas[$meta_id];
+                $results[$meta_id] = $metas[$meta_id];
             }// $dynatree[end(array_keys($dynatree))] = isLazyAlpha($term_id, $valor, $dynatree[end(array_keys($dynatree))]);
         }
         return $results;

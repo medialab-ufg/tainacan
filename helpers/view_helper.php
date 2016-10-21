@@ -126,7 +126,7 @@ class ViewHelper {
     
 
     public function get_special_metadata() {
-        return $this->special_metadata = ['relationship', 'category', 'voting','compounds'];
+        return $this->special_metadata = ['relationship', 'category', 'voting','compounds','metadata_compound'];
     }
 
     public function get_metadata_icon($metadata_type) {

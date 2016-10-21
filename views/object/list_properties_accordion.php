@@ -409,9 +409,9 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
                 <?php
             }
             ?> 
-             </div>   
+            </div>   
+            <div  id="append_properties_categories_<?php echo $property['id']; ?>"></div>
         </div>
-        <div id="append_properties_categories_<?php echo $property['id']; ?>"></div>
     <?php } ?>
 <?php endif; ?>
 <?php $object_properties_widgets_helper->list_properties_compounds($property_compounds, $object_id,$references)  ?>    

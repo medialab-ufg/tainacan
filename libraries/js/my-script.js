@@ -1527,7 +1527,7 @@ function showModalFilters(action, category_root_name, category_root_id, dynatree
         category_root_name = 'Category';
     }
     if (!category_root_id) {
-        category_root_id = 'socialdb_category';
+        category_root_id = 'socialdb_taxonomy';
     }
     if (dynatree_id) {
         $("#category_single_add_dynatree_id").val(dynatree_id);

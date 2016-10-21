@@ -155,7 +155,8 @@ function contest_insert_default_properties_collection($category_id,$collection_i
         add_post_meta($collection_id, 'socialdb_collection_facets', $new_property['term_id']);
         add_post_meta($collection_id, 'socialdb_collection_facet_' . $new_property['term_id'] . '_color', 'color_property8');
         add_post_meta($collection_id, 'socialdb_collection_facet_' . $new_property['term_id'] . '_priority', 999);
-        add_post_meta($collection_id, 'socialdb_collection_facet_' . $new_property['term_id'] . '_widget', 'tree');$parent_category_id = get_register_id('socialdb_category', 'socialdb_category_type');
+        add_post_meta($collection_id, 'socialdb_collection_facet_' . $new_property['term_id'] . '_widget', 'tree');
+        $parent_category_id = get_register_id('socialdb_category', 'socialdb_category_type');
         /* Criando a categoria raiz e adicionando seus metas */
         $facet_id = create_register(__('Subject','tainacan'), 'socialdb_category_type', array('parent' => $parent_category_id, 'slug' => "subject_" . mktime()));
         add_term_meta($facet_id['term_id'], 'socialdb_category_owner', get_current_user_id());

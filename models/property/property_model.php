@@ -1120,7 +1120,7 @@ class PropertyModel extends Model {
      * @param type $parent_id
      */
     public function add_category_root_property_term($name) {
-        $new_root_category = wp_insert_term($name, 'socialdb_category_type', array('parent' => $this->get_category_root(),
+        $new_root_category = wp_insert_term($name, 'socialdb_category_type', array('parent' => $this->get_category_taxonomy_root(),
                 'slug' => $this->generate_slug($name, 0)));
          add_term_meta($new_root_category['term_id'], 'socialdb_category_owner', get_current_user_id());
         return (isset($new_root_category['term_id']))?$new_root_category['term_id']:false;

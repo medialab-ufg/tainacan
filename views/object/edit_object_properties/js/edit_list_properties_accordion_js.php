@@ -446,7 +446,6 @@
                         });
                         // $("#field_property_term_"+tree).dynatree("getRoot").visit(function(node){
                         delete_value(node.data.key); 
-                        console.log(categories&&categories.indexOf(node.data.key)>-1,node.data);
                         if(categories&&categories.indexOf(node.data.key)>-1&&selKeys.length==0){
                              node.select();
                              return true;
@@ -558,16 +557,16 @@
         }else if(id!==0){
             selected_categories.push(id);
             //adicionando metadados
-            show_modal_main();
+            //show_modal_main();
             $.ajax({
                 url: $('#src').val() + '/controllers/object/object_controller.php',
                 type: 'POST',
                 data: { operation: 'list_properties_categories_accordeon',properties_to_avoid:$('#properties_id').val(),categories: id, object_id:$('#object_id_edit').val()}
             }).done(function (result) {
-                hide_modal_main();
+                //hide_modal_main();
                 //list_all_objects(selKeys.join(", "), $("#collection_id").val());
-                 $('#append_properties_categories_'+property_id).html(result);
-                insert_html_property_category(id,property_id);
+               $('#append_properties_categories_'+property_id).html(result);
+               insert_html_property_category(id,property_id);
 
             });
             $('#selected_categories').val(selected_categories.join(','));
@@ -614,7 +613,6 @@
     //retira as bordas
     function removeBorderCat(property_id){
         $properties_append = $('#append_properties_categories_'+property_id).children().children();
-        console.log($properties_append);
         $properties_append.animate({borderWidth : '1px',borderColor: '#d3d3d3',borderStyle:"solid"}, 'slow', 'linear');
     }
     //adicionando as propriedades das categorias no array de propriedades gerais
@@ -686,7 +684,6 @@
      * @param {type} property_id
      * @returns {undefined}     */
     function edit_validate_selectbox(seletor,property_id){
-        console.log(seletor);
         if($(seletor).val()===''){
             $('#core_validation_'+property_id).val('false');
             set_field_valid(property_id,'core_validation_'+property_id);

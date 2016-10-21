@@ -60,7 +60,8 @@
 
     //properties_data_tree
     if (isset($properties_data_tree)) {
-        foreach ($properties_data_tree as $property) { ?>
+        foreach ($properties_data_tree as $property) { 
+            ?>
             <a class="remove-link-filters" onclick="remove_filter_property_data_tree('<?php echo $property['property_id']; ?>','<?php echo $property['id']; ?>')"
                href="#"><span class="glyphicon glyphicon-remove-sign white"></span>
             </a>

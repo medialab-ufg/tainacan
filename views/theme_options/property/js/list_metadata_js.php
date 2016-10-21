@@ -112,7 +112,7 @@
     ************************* FACETS FUNCTIONS *********************************
     ****************************************************************************
     **/
-    $( "#filters-accordion, #metadata-container" ).sortable({
+    $( "#filters-accordion, #metadata-container-" ).sortable({
         cursor: "n-resize",
         connectWith: ".connectedSortable",
         revert: 250,

@@ -12,7 +12,7 @@
         if($('#core_validation_title').length>0){
             if(val!==''){
                 $('#core_validation_title').val('true');
-                validate_all_fields();
+                validate_all_fields_fixed();
                 set_field_valid('title', 'core_validation_title');
             }
             
@@ -20,11 +20,11 @@
                 if($(this).val()==''){
                     $('#core_validation_title').val('false');
                     set_field_valid('title', 'core_validation_title');
-                    validate_all_fields();
+                    validate_all_fields_fixed();
                 }else{
                     $('#core_validation_title').val('true');
                     set_field_valid('title', 'core_validation_title');
-                    validate_all_fields(); 
+                    validate_all_fields_fixed(); 
                 }
             });
         }
@@ -40,7 +40,7 @@
         if($('#core_validation_content').length>0){
             if(val!==''){
                 $('#core_validation_content').val('true');
-                validate_all_fields();
+                validate_all_fields_fixed();
                 set_field_valid('content', 'core_validation_content');
             }
             editor.on('key', function() {
@@ -48,7 +48,7 @@
                if(result==''){
                     $('#core_validation_content').val('false');
                     set_field_valid('content', 'core_validation_content');
-                    validate_all_fields();
+                    validate_all_fields_fixed();
                 }else{
                     $('#core_validation_content').val('true');
                     set_field_valid('content', 'core_validation_content');

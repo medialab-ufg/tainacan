@@ -21,6 +21,22 @@ $array_visibility = ($meta&&$meta!=='') ? $meta : '';
         color: #ddd;
     }
 </style>
+<style>
+            #properties_tabs ul.metadata-container li{
+                border: 1px solid #e3e3e3 !important;
+            }
+            .gallery li {
+                padding: 0.4em;
+                margin: 0;
+            }
+            .list-compounded{
+                margin-left: 15px;
+                margin-top: 15px;
+            }
+            .list-compounded li{
+                cursor: pointer;
+            }
+</style>
 <?php $view_helper->render_header_config_steps('metadata') ?>
 <input type="hidden" 
        name="tabs_properties" 
