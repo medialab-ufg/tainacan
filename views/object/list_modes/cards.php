@@ -27,12 +27,12 @@
                     if( is_array($table_meta_array) && count($table_meta_array) > 0):
                         $_DEFAULT_EMPTY_VALUE = "--";
                         $_trim_desc = wp_trim_words($_object_description, 16);
-
                         foreach ($table_meta_array as $item_meta_info):
                             $fmt = str_replace("\\","", $item_meta_info);
                             if(is_string($fmt)):
                                 $_meta_obj = json_decode($fmt);
                                 if(is_object($_meta_obj)):
+
                                     $_META = ['id' => $_meta_obj->id, 'tipo' => $_meta_obj->tipo];
                                     if( $loop->current_post === 0 )
                                         echo '<input type="hidden" name="meta_id_table" value="'. $_META['id'] .'" data-mtype="'. $_META['tipo'] .'">';
@@ -105,7 +105,7 @@
                         endforeach;
                     endif;
                     ?>
-
+                    
                     <h4 class="item-display-title">
                         <a href="<?php echo get_collection_item_href($collection_id); ?>"
                            onclick="<?php get_item_click_event($collection_id,$curr_id) ?>">

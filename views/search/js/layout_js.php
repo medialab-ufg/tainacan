@@ -240,10 +240,13 @@
             data: {operation: 'list_ordenation', collection_id: $("#collection_id").val(), get_all_meta: true}
         }).done(function (result) {
             elem = jQuery.parseJSON(result);
-            var _table_metas = [];
-            $('input[name="_tb_meta_"]').each(function(n, element) {
-                _table_metas.push( $(this).val() );
+
+            var table_meta_ids = [];
+            $('input[name="meta_id_table"]').each(function(idx, el) {
+                var valor = $(el).val();
+                table_meta_ids.push(valor);
             });
+
             if (elem.general_ordenation) {
                 $("#collection_order").append("<optgroup label='<?php _e('General ordenation','tainacan') ?>'>");
                 $.each(elem.general_ordenation, function (idx, general) {
@@ -261,7 +264,7 @@
                         var string_id = numeric_id.toString();
                         $("#collection_order").append("<option value='" + data.id + "' selected='selected' >" + data.name + " - ( <?php _e('Type','tainacan') ?>:"+data.type+" ) </option>");
 
-                        if( _table_metas.indexOf(string_id) > -1 ) {
+                        if( table_meta_ids.indexOf(string_id) > -1 ) {
                             var ck = "checked";
                         }
                         var sort_meta = '<li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>';
@@ -283,7 +286,7 @@
                 $.each(elem.property_object, function (idx, data) {
                     if (data && data !== false) {
                         var numeric_id = data.id; var string_id = numeric_id.toString();
-                        if( _table_metas.indexOf(string_id) > -1 )
+                        if( table_meta_ids.indexOf(string_id) > -1 )
                             var ck = "checked";
                         var sort_meta = '<li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>';
                         var item_info = JSON.stringify({ 'id': data.id, 'order': plim, 'tipo': 'property_object'});
@@ -297,9 +300,9 @@
                 $.each(elem.property_term, function (idx, data) {
                     if (data && data !== false) {
                         var numeric_id = data.id; var string_id = numeric_id.toString();
-                        if( _table_metas.indexOf(string_id) > -1 )
+                        if( table_meta_ids.indexOf(string_id) > -1 )
                             var ck = "checked";
-                        cl("TERMO: " + data.name);
+                        
                         var sort_meta = '<li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>';
                         var item_info = JSON.stringify({ 'id': data.id, 'order': plim, 'tipo': 'property_term'});
                         sort_meta += "<input type='checkbox' id='table_meta' " + ck + " name='table_meta[]' value='" + item_info + "'> " + data.name + "<br /></li>";

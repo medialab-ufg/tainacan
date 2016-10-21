@@ -23,7 +23,7 @@
         if( per_page && !isNaN(parseInt(per_page) ) ) {
             var items_per_page = parseInt( per_page );
         }
-
+        
         $('input[name="meta_id_table"]').each(function(idx, el) {
             var valor = $(el).val();
             var meta_type = $(el).attr('data-mtype');
