@@ -434,8 +434,7 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                             <input type="text" style="width:50%;" class="form-control col-md-6" id="event_tag_field"  placeholder="<?php _e('Type the tag name', 'tainacan') ?>">
                         </div>
                         <script>
-                            $('#single_show_classificiations_<?php echo $object->ID ?>').hide();
-                            $('#single_show_classificiations_<?php echo $object->ID ?>').trigger('click');
+                            $('#single_show_classificiations_<?php echo $object->ID ?>').hide().trigger('click');
                         </script>
                     </div>
                 </div>

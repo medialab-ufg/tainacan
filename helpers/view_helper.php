@@ -14,7 +14,7 @@ class ViewHelper {
         'socialdb_property_fixed_source',
         'socialdb_property_fixed_license',
         'socialdb_property_fixed_thumbnail',
-        'socialdb_property_fixed_attachments',
+        'socialdb_property_fixed_attachments', 
         'socialdb_property_fixed_tags',
         'socialdb_property_fixed_type'
         ];
