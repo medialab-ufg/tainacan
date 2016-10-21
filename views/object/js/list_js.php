@@ -17,6 +17,7 @@
                 }
             }
         };
+        $('.list-view-container').eq(0).css('border-top', 0);
 
         var per_page = $("#items-per-page").val();
         if( per_page && !isNaN(parseInt(per_page) ) ) {

@@ -389,44 +389,37 @@ button.collection-trash, button#hideTrash {
     }
 
     .list-view-container {
-            background: white;
-            border-top: 3px solid $item-border;
-            padding-top: 15px;
-            padding-bottom: 8px;
-            height: 60px;
-            overflow: hidden;
+      background: white;
+      border-top: 2px solid $item-border;
+      padding-top: 15px;
+      padding-bottom: 8px;
+      height: 60px;
+      overflow: hidden;
 
-            .item-thumb {
-                    // padding-top: 8px;
-            }
+      &:first-child {
+        border-top: 0 !important;
+      }
 
-            .item-display-title {
-                    margin: 0;
-                    font-size: 16px;
-            }
+      .item-display-title {
+        margin: 0;
+        font-size: 16px;
+      }
 
-            .item-description {
-                    font-size: 12px;
-                    overflow: hidden;
-            }
+      .item-description {
+        font-size: 12px;
+        overflow: hidden;
+      }
 
-            &:first-child {
-                    border-top: none;
-            }
-            &:last-child {
+      .author-created {
+        font-size: 12px;
+      }
 
-            }
-
-            .author-created {
-                    font-size: 12px;
-            }
-
-    }
-    .item-thumb {
+    } // .list-view-container
+      .item-thumb {
             a img {
                     max-width: 30px !important;
             }
-    }
+      }
     } // list-viewMode
 
     /*
