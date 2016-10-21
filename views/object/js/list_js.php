@@ -7,6 +7,7 @@
                 + " _END_ " + "<?php _e('until', 'tainacan'); ?>" + " _TOTAL_ " + "<?php _e('items', 'tainacan'); ?>",
                 sLengthMenu: "<?php _e('Show', 'tainacan'); ?>" + " _MENU_ " + "<?php _e('items per page', 'tainacan'); ?>",
                 sInfoFiltered: "(filtrados de _MAX_ eventos)",
+                zeroRecords: "<?php _e('No matching records found', 'tainacan'); ?>",
                 search: "<?php _e('Search: ', 'tainacan'); ?>",
                 paginate: {
                     first: "<?php _e('First', 'tainacan'); ?>",
@@ -66,7 +67,7 @@
                 var title = $.trim($("#object_" + c_id + " .item-display-title a").text());
                 _table_html += "<td> <a class='tview-title' data-id='"+c_id+"' href='javascript:void(0)'>"+title+" </a></td>";
             }
-            _table_html += "<td style='width: 12%'> <ul>" + actions + "</ul> </td> </tr>";
+            _table_html += "<td style='width: 10%'> <ul>" + actions + "</ul> </td> </tr>";
             $( "#table-view-elements" ).append( _table_html );
 
             if( items_per_page && items_per_page >= 10 ) {
