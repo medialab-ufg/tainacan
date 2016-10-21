@@ -24,12 +24,14 @@
                     &nbsp;<?php _e('Tags', 'tainacan'); ?>
                 </a>
             </li>
+            <?php /*
             <li>
                 <a style="cursor: pointer;" onclick="showPagePermission('<?php echo get_template_directory_uri() ?>','<?php echo $current_collection_id ?>');" >
                     <span class="glyphicon glyphicon-user"></span>
                     &nbsp;<?php _e('User permission', 'tainacan'); ?>
                 </a>
             </li>
+ */ ?>
             <?php
             /*  <li <?php do_action('menu_collection_search_configuration') ?>><a style="cursor: pointer;" onclick="showSearchConfiguration('<?php echo get_template_directory_uri() ?>');" ><span class="glyphicon glyphicon-list-alt"></span>&nbsp;<?php _e('Search', 'tainacan'); ?></a></li>
                 <li><a style="cursor: pointer;" onclick="showRankingConfiguration('<?php echo get_template_directory_uri() ?>');" ><span class="glyphicon glyphicon-star"></span>&nbsp;<?php _e('Rankings', 'tainacan'); ?></a></li>
