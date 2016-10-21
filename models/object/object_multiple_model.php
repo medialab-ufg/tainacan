@@ -41,6 +41,15 @@ class ObjectMultipleModel extends Model {
           $this->insert_rankings($data,$post_id,$item_id);
           $this->insert_license($data,$post_id,$item_id);
           $result['ids'][] = $post_id;
+          $col_id = $data['collection_id'];
+          $user_id = get_current_user_id();
+          if ($user_id == 0) {
+            $user_id = get_option('anonimous_user');
+          }
+
+          $logData = ['collection_id' => $col_id, 'item_id' => $item_id,
+            'user_id' => $user_id, 'event_type' => 'user', 'event' => 'add_item' ];
+          Log::addLog($logData);
 
           if( isset($data['do_extract']) && $data['do_extract'] === "true" ):
             $_file_path_ = get_attached_file($item_id);
@@ -53,9 +62,9 @@ class ObjectMultipleModel extends Model {
 
                 $property_model = new PropertyModel();
                 $_DATASET = [
-                  'collection_id' => $data['collection_id'],
-                  'category_id' => $this->get_category_root_of($data['collection_id']),
-                  'property_category_id' => $this->get_category_root_of($data['collection_id'])
+                  'collection_id' => $col_id,
+                  'category_id' => $this->get_category_root_of($col_id),
+                  'property_category_id' => $this->get_category_root_of($col_id)
                 ];
                 $_col_metas = json_decode($property_model->list_property_data($_DATASET))->property_data;
 
@@ -74,8 +83,8 @@ class ObjectMultipleModel extends Model {
 
                       if( strpos($exif_key, "UndefinedTag") === false ):
                           $image_exif = [
-                              'collection_id' =>  $data['collection_id'],
-                            'property_category_id' => $this->get_category_root_of($data['collection_id']),
+                            'collection_id' =>  $col_id,
+                            'property_category_id' => $this->get_category_root_of($col_id),
                             'property_data_name' => $_meta_exif_data_name,
                             'property_metadata_type' => 'text',
                             'socialdb_property_required' => false,

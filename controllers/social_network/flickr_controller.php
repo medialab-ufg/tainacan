@@ -12,8 +12,6 @@ class FlickrController extends Controller {
             case "import_flickr_items":
                 $config = get_option('socialdb_theme_options');
                 $profile = explode('/', $data['identifier']);
-                //var_dump($data);
-                //exit();
                 $flickr = new FlickrModel($profile[1], $config);
                 $object_model = new ObjectModel();
 

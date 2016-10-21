@@ -1280,28 +1280,28 @@
             var youtube_url = validateYouTubeUrl();
             if (youtube_url) {
                 // É uma URL de um vídeo do youtube. Executar a importação do vídeo.
-                console.log(youtube_url);
+                // console.log(youtube_url);
                 import_youtube_video_url();
             } else {
                 var youtube_channel_url = validateYouTubeChannelUrl();
                 if (youtube_channel_url) {
                     // É uma URL de um canal do youtube. Executar a importação dos vídeos de canal.
                     var res = inputImportAll.split(youtube_channel_url[4]);
-                    console.log(res[1]);
+                    // console.log(res[1]);
                     import_youtube_channel(res[1]);
                 }
                 else {
                     var youtube_playlist_url = validateYouTubePlaylistUrl();
                     if (youtube_playlist_url) {
                         // É uma URL de uma playlist do youtube. Executar a importação dos vídeos da playlist.
-                        console.log(youtube_playlist_url);
+                        // console.log(youtube_playlist_url);
                         import_youtube_playlist(youtube_playlist_url);
                     }
                     else {
                         var instagram_url = validateInstagramUrl();
                         if (instagram_url) {
                             // É uma URL do instagram. Executar a importação dos imagens e vídeos do usuario.
-                            console.log(instagram_url);
+                            // console.log(instagram_url);
                             import_instagram(instagram_url);
                         } else {
                             var vimeo_url = validateVimeoUrl();
@@ -1309,10 +1309,10 @@
                                 // É uma URL do vimeo. Executar a importação dos vídeos.
                                 vimeo_url = vimeo_url.split("/");
                                 if (vimeo_url[3].localeCompare('channels') === 0) {
-                                    console.log('Canal: ' + vimeo_url[4]);
+                                    // console.log('Canal: ' + vimeo_url[4]);
                                     import_vimeo('channels', vimeo_url[4]);
                                 } else {
-                                    console.log('Usuario: ' + vimeo_url[3]);
+                                    // console.log('Usuario: ' + vimeo_url[3]);
                                     import_vimeo('users', vimeo_url[3]);
                                 }
                             }
@@ -1320,14 +1320,14 @@
                                 var flickr_url = validateFlickrUrl();
                                 if (flickr_url) {
                                     // É uma URL do Flickr. Executar a importação dos itens do usuário.
-                                    console.log(flickr_url);
+                                    // console.log(flickr_url);
                                     import_flickr(flickr_url);
                                 }
                                 else {
                                     var facebook_url = validateFacebookUrl();
                                     if (facebook_url) {
                                         // É uma URL do Facebook. Executar a importação dos itens do usuário.
-                                        console.log(facebook_url);
+                                        // console.log(facebook_url);
                                     }
                                     else {
                                         var any_file_type = validateAnyFile();
@@ -1360,7 +1360,7 @@
                                                     $('#item_url_import_all').val('');
                                                     $("#sites_import_icon").addClass("grayscale");
                                                     $('#modalshowModalImportAll').modal('hide');
-                                                    console.log('URL Regular. Enviar pro Embed.ly.');
+                                                    // console.log('URL Regular. Enviar pro Embed.ly.');
                                                 }
                                             } else {
                                                 showAlertGeneral("<?php _e('Alert', 'tainacan'); ?>", "<?php _e('Please, insert a valid URL', 'tainacan'); ?>", "error");

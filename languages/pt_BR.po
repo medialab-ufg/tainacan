@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: socialdb\n"
-"POT-Creation-Date: 2016-10-13 15:08-0300\n"
-"PO-Revision-Date: 2016-10-13 15:10-0300\n"
+"POT-Creation-Date: 2016-10-21 00:35-0200\n"
+"PO-Revision-Date: 2016-10-21 00:36-0200\n"
 "Last-Translator: Rodrigo de Oliveira <webmaster@rodrigodeoliveira.net>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.9\n"
+"X-Generator: Poedit 1.8.7\n"
 "X-Poedit-KeywordsList: __;_e;i18n_str\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SearchPath-0: languages\n"
@@ -53,11 +53,11 @@ msgstr "E-mail:"
 msgid "Site:"
 msgstr "Site:"
 
-#: comments.php:66 functions.php:370
+#: comments.php:66 functions.php:398
 msgid "Comment"
 msgstr "Comentar"
 
-#: comments.php:76 functions.php:332 header.php:263 header.php:287
+#: comments.php:76 functions.php:360 header.php:263 header.php:287
 #: views/advanced_search/js/advanced_search_js.php:32
 #: views/category/taxonomy_zone.php:65 views/collection/edit.php:1444
 #: views/collection/js/header_js.php:190
@@ -73,7 +73,7 @@ msgstr "Comentar"
 #: views/object/create_item_text.php:302 views/object/create_item_text.php:414
 #: views/object/create_item_url.php:281 views/object/edit_item_text.php:316
 #: views/object/edit_item_text.php:529 views/object/edit_item_text.php:560
-#: views/object/multiple_items/create.php:26
+#: views/object/multiple_items/create.php:21
 #: views/object/multiple_items/editor_items.php:397
 #: views/object/multiple_items/editor_items.php:894
 #: views/object/multiple_items/js/create_js.php:84
@@ -148,7 +148,7 @@ msgstr "Fechar"
 msgid "Send"
 msgstr "Enviar"
 
-#: comments.php:149 functions.php:348 views/advanced_search/modals_adv.php:62
+#: comments.php:149 functions.php:376 views/advanced_search/modals_adv.php:62
 #: views/collection/config_menu.php:72 views/collection/config_menu.php:80
 #: views/collection/config_menu.php:108
 #: views/collection/header_collection.php:177
@@ -166,7 +166,7 @@ msgstr "Nos conte porque este conteúdo é abusivo"
 #: controllers/category/category_controller.php:33
 #: controllers/category/category_controller.php:47
 #: controllers/property/property_controller.php:31
-#: controllers/tag/tag_controller.php:37 functions.php:356
+#: controllers/tag/tag_controller.php:37 functions.php:384
 #: views/advanced_search/js/advanced_search_js.php:29
 #: views/category/js/list_js.php:266 views/category/js/list_js.php:519
 #: views/event/js/list_js.php:255 views/license/js/list_js.php:150
@@ -235,8 +235,8 @@ msgstr "Nome da coleção inválido ou nome do item inválido"
 #: models/event/event_collection/event_collection_create_model.php:49
 #: models/event/event_collection/event_collection_delete_model.php:49
 #: models/event/event_comment/event_comment_create_model.php:51
-#: models/event/event_model.php:352 models/object/object_model.php:1655
-#: models/object/object_model.php:1728 models/search/search_model.php:437
+#: models/event/event_model.php:352 models/object/object_model.php:1661
+#: models/object/object_model.php:1734 models/search/search_model.php:437
 #: models/theme_options/theme_options_model.php:186
 #: views/collection/js/edit_js.php:39 views/collection/js/edit_js.php:76
 #: views/event/js/list_js.php:177 views/event/js/list_js.php:215
@@ -362,7 +362,7 @@ msgstr "Metadado de dado"
 msgid "Rankings"
 msgstr "Votações"
 
-#: controllers/collection/collection_controller.php:271 functions.php:1576
+#: controllers/collection/collection_controller.php:271 functions.php:1604
 #: helpers/object/object_helper.php:38 views/property/list_metadata.php:85
 #: views/property/list_metadata.php:92
 msgid "Default"
@@ -385,18 +385,18 @@ msgstr "Por favor, preencha o delimitador corretamente!"
 #: models/collection/collection_import_model.php:181
 #: models/event/event_object/event_object_create_model.php:95
 #: models/general/general_model.php:1734 models/general/general_model.php:1774
-#: models/mapping/mapping_model.php:64 models/object/object_model.php:183
-#: models/object/object_model.php:193 models/object/object_model.php:200
-#: models/object/object_model.php:211 models/object/object_model.php:216
-#: models/object/object_model.php:221 models/object/object_model.php:226
-#: models/object/object_model.php:235 models/object/object_model.php:240
-#: models/object/object_model.php:245 models/object/object_model.php:1179
-#: models/object/object_multiple_model.php:122
-#: models/object/object_multiple_model.php:498
-#: models/search/search_model.php:144 models/user/user_model.php:140
-#: models/user/user_model.php:366 models/user/user_model.php:382
-#: models/user/user_model.php:391 models/user/user_model.php:407
-#: models/user/user_model.php:458 views/category/js/list_js.php:28
+#: models/mapping/mapping_model.php:64 models/object/object_model.php:189
+#: models/object/object_model.php:199 models/object/object_model.php:206
+#: models/object/object_model.php:217 models/object/object_model.php:222
+#: models/object/object_model.php:227 models/object/object_model.php:232
+#: models/object/object_model.php:241 models/object/object_model.php:246
+#: models/object/object_model.php:251 models/object/object_model.php:1185
+#: models/object/object_multiple_model.php:131
+#: models/object/object_multiple_model.php:507
+#: models/search/search_model.php:144 models/user/user_model.php:138
+#: models/user/user_model.php:358 models/user/user_model.php:374
+#: models/user/user_model.php:383 models/user/user_model.php:399
+#: models/user/user_model.php:450 views/category/js/list_js.php:28
 #: views/category/js/list_js.php:463 views/category/js/taxonomy_zone_js.php:70
 #: views/mapping/js/container_mapping_js.php:38 views/object/js/list_js.php:601
 #: views/object/js/list_trash_js.php:90 views/object/js/list_trash_js.php:118
@@ -494,11 +494,11 @@ msgstr "Buscar todos vídeos, nenhuma lista de reprodução especificada"
 msgid "Tag removed!"
 msgstr "Tag removida!"
 
-#: controllers/user/user_controller.php:164
+#: controllers/user/user_controller.php:168
 msgid "Failed to Login"
 msgstr "Falha ao logar"
 
-#: controllers/user/user_controller.php:165
+#: controllers/user/user_controller.php:169
 msgid "Your username and/or password are wrong. User not Found!"
 msgstr "Seu usuário e/ou senha estão incorretos."
 
@@ -506,29 +506,29 @@ msgstr "Seu usuário e/ou senha estão incorretos."
 msgid "Tainacan is proudly powered by"
 msgstr "Tainacan é orgulhosamente mantido com"
 
-#: functions.php:147
+#: functions.php:175
 msgid "Header Menu"
 msgstr "Menu superior"
 
-#: functions.php:310
+#: functions.php:338
 #, php-format
 msgid "<span class=\"fn\">%s</span>"
 msgstr "<span class=\"fn\">%s</span>"
 
-#: functions.php:313
+#: functions.php:341
 msgid "Your comment is awaiting moderation."
 msgstr "Seu comentário está aguardando aprovação."
 
-#: functions.php:317
+#: functions.php:345
 #, php-format
 msgid "%1$s at %2$s"
 msgstr "%1$s em %2$s"
 
-#: functions.php:318
+#: functions.php:346
 msgid "(Painel Edit )"
 msgstr "(Painel de edição)"
 
-#: functions.php:333 helpers/view_helper.php:323 single.php:497 single.php:567
+#: functions.php:361 helpers/view_helper.php:323 single.php:497 single.php:567
 #: single.php:637 single.php:677 single.php:980 views/category/list.php:132
 #: views/category/taxonomy_zone.php:70 views/design/edit.php:239
 #: views/event/list.php:284 views/event/list.php:319
@@ -555,11 +555,11 @@ msgstr "(Painel de edição)"
 msgid "Save"
 msgstr "Salvar"
 
-#: functions.php:342
+#: functions.php:370
 msgid "Reply"
 msgstr "Responder"
 
-#: functions.php:353 single.php:394 single.php:420 single.php:440
+#: functions.php:381 single.php:394 single.php:420 single.php:440
 #: single.php:725 single.php:863 single.php:891 single.php:938 single.php:957
 #: views/category/list.php:105 views/collection/edit.php:351
 #: views/collection/edit.php:987 views/object/edit.php:19
@@ -584,11 +584,11 @@ msgstr "Responder"
 msgid "Edit"
 msgstr "Editar"
 
-#: functions.php:356
+#: functions.php:384
 msgid "Delete this comment?"
 msgstr "Deletar este comentário?"
 
-#: functions.php:356 single.php:605 single.php:751 single.php:864
+#: functions.php:384 single.php:605 single.php:751 single.php:864
 #: single.php:892 single.php:939 single.php:958
 #: views/advanced_search/modals_adv.php:77
 #: views/advanced_search/modals_adv.php:104 views/collection/config_menu.php:65
@@ -610,153 +610,153 @@ msgstr "Deletar este comentário?"
 msgid "Delete"
 msgstr "Deletar"
 
-#: functions.php:365 views/advanced_search/modals_adv.php:15
+#: functions.php:393 views/advanced_search/modals_adv.php:15
 #: views/object/list_modes/modals.php:14
 msgid "Share"
 msgstr "Compartilhar"
 
-#: functions.php:441
+#: functions.php:469
 msgid "Save Changes"
 msgstr "Salvar Alterações"
 
-#: functions.php:510
+#: functions.php:538
 msgid "Session responsible for the use of facebook API to login."
 msgstr "Área responsável pelo uso da API do facebook para o login."
 
-#: functions.php:517
+#: functions.php:545
 msgid "Session responsible for the use of Embed Ly API. (http://embed.ly/)"
 msgstr "Área responsável pelo uso da API do Embed Ly. (http://embed.ly/)"
 
-#: functions.php:585 header.php:188
+#: functions.php:613 header.php:188
 #: views/advanced_search/list_advanced_search.php:37
 msgid "Collections"
 msgstr "Coleções"
 
-#: functions.php:586
+#: functions.php:614
 msgid "SocialDB"
 msgstr "Tainacan"
 
-#: functions.php:587
+#: functions.php:615
 msgid "All Collections"
 msgstr "Todas as coleções "
 
-#: functions.php:588 helpers/mapping/mapping_helper.php:16
+#: functions.php:616 helpers/mapping/mapping_helper.php:16
 #: views/event/list.php:248 views/event/list.php:300 views/event/list.php:336
 #: views/object/list_modes/slideshow.php:4
 #: views/theme_options/edit_tools.php:20
 msgid "Collection"
 msgstr "Coleção"
 
-#: functions.php:589 functions.php:590
+#: functions.php:617 functions.php:618
 msgid "Add Collection"
 msgstr "Adicionar Coleção"
 
-#: functions.php:591
+#: functions.php:619
 msgid "Edit Collection"
 msgstr "Editar Coleção"
 
-#: functions.php:592
+#: functions.php:620
 msgid "New Collection"
 msgstr "Nova Coleção"
 
-#: functions.php:593
+#: functions.php:621
 msgid "View Collection"
 msgstr "Abrir Coleção "
 
-#: functions.php:594
+#: functions.php:622
 msgid "Search Collection"
 msgstr "Procurar Coleção"
 
-#: functions.php:595
+#: functions.php:623
 msgid "No Collection Found"
 msgstr "Nenhuma coleção encontrada"
 
-#: functions.php:596
+#: functions.php:624
 msgid "No Collection Found in Trash"
 msgstr "Nenhuma coleção encontradas na lixeira"
 
-#: functions.php:630 functions.php:631 functions.php:633
+#: functions.php:658 functions.php:659 functions.php:661
 msgid "Object"
 msgstr "Item"
 
-#: functions.php:632
+#: functions.php:660
 msgid "All Objects"
 msgstr "Todos Items"
 
-#: functions.php:634 functions.php:635
+#: functions.php:662 functions.php:663
 msgid "Add Object"
 msgstr "Adicionar Item"
 
-#: functions.php:636
+#: functions.php:664
 msgid "Edit Object"
 msgstr "Editar Item"
 
-#: functions.php:637
+#: functions.php:665
 msgid "New Object"
 msgstr "Novo Item"
 
-#: functions.php:638 views/object/js/list_js.php:54
+#: functions.php:666 views/object/js/list_js.php:54
 msgid "View Object"
 msgstr "Ver Item"
 
-#: functions.php:639
+#: functions.php:667
 msgid "Search Object"
 msgstr "Buscar Itens "
 
-#: functions.php:640
+#: functions.php:668
 msgid "No Object Found"
 msgstr "Nenhum item encontrado! "
 
-#: functions.php:641
+#: functions.php:669
 msgid "No Object Found in Trash"
 msgstr "Nenhum item encontrado na lixeira"
 
-#: functions.php:667 functions.php:668 helpers/view_helper.php:66
+#: functions.php:695 functions.php:696 helpers/view_helper.php:66
 #: models/collection/visualization_model.php:421 views/collection/edit.php:357
 #: views/property/metadata/form_term.php:15
 #: views/theme_options/property/metadata/form_term.php:7
 msgid "Category"
 msgstr "Categoria "
 
-#: functions.php:669 models/event/event_model.php:207 single.php:517
+#: functions.php:697 models/event/event_model.php:207 single.php:517
 #: views/collection/edit.php:1019
 msgid "Edit Category"
 msgstr "Editar Categoria"
 
-#: functions.php:670
+#: functions.php:698
 msgid "Update Category"
 msgstr "Atualizar Categoria"
 
-#: functions.php:671
+#: functions.php:699
 msgid "Add New Category"
 msgstr "Adicionar Nova Categoria"
 
-#: functions.php:672
+#: functions.php:700
 msgid "New Category Name"
 msgstr "Nome da categoria "
 
-#: functions.php:673
+#: functions.php:701
 msgid "All Categories"
 msgstr "Todas Categorias"
 
-#: functions.php:674
+#: functions.php:702
 msgid "Search Categories"
 msgstr "Buscar Categorias"
 
-#: functions.php:675
+#: functions.php:703
 msgid "Parent Category"
 msgstr "Categoria pai"
 
-#: functions.php:676
+#: functions.php:704
 msgid "Parent Category:"
 msgstr "Categoria pai:"
 
-#: functions.php:986 models/object/object_model.php:1559
+#: functions.php:1014 models/object/object_model.php:1565
 #: models/wp_query/wp_query_model.php:1125
 msgid "Recents"
 msgstr "Recentes "
 
-#: functions.php:1309 models/collection/collection_model.php:546
+#: functions.php:1337 models/collection/collection_model.php:546
 #: models/mapping/extract_metadata_model.php:175 views/design/edit.php:106
 #: views/license/list.php:21 views/object/create_item_text.php:76
 #: views/object/create_item_text.php:331 views/object/edit_item_text.php:81
@@ -773,7 +773,7 @@ msgstr "Recentes "
 msgid "Title"
 msgstr "Título"
 
-#: functions.php:1319 models/mapping/extract_metadata_model.php:176
+#: functions.php:1347 models/mapping/extract_metadata_model.php:176
 #: single.php:823 views/advanced_search/advanced_search.php:99
 #: views/category/page.php:63 views/design/edit.php:113
 #: views/object/create_item_text.php:211 views/object/edit_item_text.php:230
@@ -788,7 +788,7 @@ msgstr "Título"
 msgid "Description"
 msgstr "Descrição"
 
-#: functions.php:1329 models/export/rdf_repository_model.php:75
+#: functions.php:1357 models/export/rdf_repository_model.php:75
 #: models/export/rdf_repository_model.php:82
 #: models/mapping/extract_metadata_model.php:177
 #: views/object/create_item_text.php:100 views/object/create_item_text.php:374
@@ -799,7 +799,7 @@ msgstr "Descrição"
 msgid "Content"
 msgstr "Conteúdo "
 
-#: functions.php:1339 models/collection/visualization_model.php:194
+#: functions.php:1367 models/collection/visualization_model.php:194
 #: models/mapping/extract_metadata_model.php:180
 #: models/mapping/extract_metadata_model.php:202
 #: models/search/search_model.php:317 views/object/create_item_text.php:184
@@ -814,23 +814,23 @@ msgstr "Conteúdo "
 msgid "Source"
 msgstr "Fonte"
 
-#: functions.php:1349 models/collection/visualization_model.php:200
+#: functions.php:1377 models/collection/visualization_model.php:200
 #: models/export/rdf_repository_model.php:126
-#: models/object/object_model.php:1172 models/search/search_model.php:321
+#: models/object/object_model.php:1178 models/search/search_model.php:321
 #: views/object/list_single_object.php:393
 #: views/object/list_single_object_version.php:391
 #: views/object/ranking/list_value_ordenation.php:43
 msgid "License"
 msgstr "Licença"
 
-#: functions.php:1359 views/design/edit.php:89 views/design/edit.php:120
+#: functions.php:1387 views/design/edit.php:89 views/design/edit.php:120
 #: views/design/edit.php:177 views/object/create_item_text.php:155
 #: views/object/edit_item_text.php:163 views/object/list_single_object.php:289
 #: views/object/list_single_object_version.php:287
 msgid "Thumbnail"
 msgstr "Miniatura"
 
-#: functions.php:1369 models/import/oaipmh_model.php:175
+#: functions.php:1397 models/import/oaipmh_model.php:175
 #: views/object/create_item_text.php:120 views/object/create_item_text.php:383
 #: views/object/edit_item_text.php:127 views/object/edit_item_text.php:481
 #: views/object/file/list_file.php:13 views/object/file/list_file.php:56
@@ -840,7 +840,7 @@ msgstr "Miniatura"
 msgid "Attachments"
 msgstr "Anexos"
 
-#: functions.php:1379 models/collection/collection_model.php:776
+#: functions.php:1407 models/collection/collection_model.php:776
 #: models/collection/visualization_model.php:175
 #: models/collection/visualization_model.php:252
 #: models/collection/visualization_model.php:354
@@ -860,7 +860,7 @@ msgstr "Anexos"
 msgid "Tags"
 msgstr "Tags"
 
-#: functions.php:1391 models/collection/collection_model.php:548
+#: functions.php:1419 models/collection/collection_model.php:548
 #: models/collection/visualization_model.php:182
 #: models/mapping/extract_metadata_model.php:179
 #: models/search/search_model.php:313
@@ -882,7 +882,7 @@ msgstr "Tags"
 msgid "Type"
 msgstr "Tipo"
 
-#: functions.php:1576 views/collection/header_collection.php:160
+#: functions.php:1604 views/collection/header_collection.php:160
 #: views/object/data_property_form.php:38
 #: views/object/edit_data_property_form.php:43
 #: views/object/object_property_form.php:63
@@ -893,23 +893,23 @@ msgstr "Tipo"
 msgid "Clear"
 msgstr "Limpar"
 
-#: functions.php:1576
+#: functions.php:1604
 msgid "Select Color"
 msgstr "Selecionar cor"
 
-#: functions.php:1591
+#: functions.php:1619
 msgid "Tainacan - Collections"
 msgstr "Tainacan - Coleções"
 
-#: functions.php:1592
+#: functions.php:1620
 msgid "The root collection"
 msgstr "a coleção raiz"
 
-#: functions.php:1601
+#: functions.php:1629
 msgid "Categories of Collection"
 msgstr "Categorias da coleção"
 
-#: functions.php:1831 functions.php:1834 functions.php:1835
+#: functions.php:1859 functions.php:1862 functions.php:1863
 #: helpers/view_helper.php:276 models/general/general_model.php:1548
 #: views/category/js/taxonomy_zone_js.php:18 views/category/list.php:11
 #: views/category/list.php:217 views/collection/js/edit_js.php:59
@@ -918,40 +918,40 @@ msgstr "Categorias da coleção"
 msgid "Categories"
 msgstr "Categorias"
 
-#: functions.php:1832 models/export/rdf_repository_model.php:115
+#: functions.php:1860 models/export/rdf_repository_model.php:115
 #: models/import/oaipmh_model.php:174 single.php:661
 msgid "Tag"
 msgstr "Tag"
 
-#: functions.php:2685
+#: functions.php:2713
 msgid "Videos"
 msgstr "Vídeos"
 
-#: functions.php:2686
+#: functions.php:2714
 msgid "Images"
 msgstr "Imagens"
 
-#: functions.php:2687
+#: functions.php:2715
 msgid "PDFs"
 msgstr "PDFs"
 
-#: functions.php:2688
+#: functions.php:2716
 msgid "Texts"
 msgstr "Textos"
 
-#: functions.php:2689
+#: functions.php:2717
 msgid "Audios"
 msgstr "Áudios"
 
-#: functions.php:2698
+#: functions.php:2726
 msgid "Visit original page"
 msgstr "Visitar página original"
 
-#: functions.php:2736 header.php:85
+#: functions.php:2764 header.php:85
 msgid "Tainacan"
 msgstr "Tainacan"
 
-#: functions.php:2865
+#: functions.php:2892
 msgid "Enable reduced menu"
 msgstr "Habilitar Menu Reduzido"
 
@@ -1476,7 +1476,7 @@ msgstr "Slide show"
 
 #: helpers/view_helper.php:343
 msgid "Dashboard"
-msgstr ""
+msgstr "Dashboard"
 
 #: index.php:66
 msgid "Advanced search"
@@ -1591,10 +1591,10 @@ msgstr "Arquivo corrompido"
 #: models/license/license_model.php:29 models/license/license_model.php:42
 #: models/license/license_model.php:53 models/license/license_model.php:66
 #: models/license/license_model.php:174 models/mapping/mapping_model.php:60
-#: models/mapping/mapping_model.php:672 models/object/object_model.php:731
-#: models/object/object_model.php:1651 models/object/object_model.php:1724
-#: models/object/object_multiple_model.php:118
-#: models/object/object_multiple_model.php:494
+#: models/mapping/mapping_model.php:672 models/object/object_model.php:737
+#: models/object/object_model.php:1657 models/object/object_model.php:1730
+#: models/object/object_multiple_model.php:127
+#: models/object/object_multiple_model.php:503
 #: models/search/search_model.php:65 models/search/search_model.php:139
 #: models/search/search_model.php:156 models/search/search_model.php:255
 #: models/search/search_model.php:268 models/search/search_model.php:399
@@ -1603,8 +1603,8 @@ msgstr "Arquivo corrompido"
 #: models/theme_options/theme_options_model.php:35
 #: models/theme_options/theme_options_model.php:53
 #: models/theme_options/theme_options_model.php:128
-#: models/user/user_model.php:128 models/user/user_model.php:378
-#: models/user/user_model.php:403 models/user/user_model.php:454
+#: models/user/user_model.php:129 models/user/user_model.php:370
+#: models/user/user_model.php:395 models/user/user_model.php:446
 #: views/category/js/taxonomy_zone_js.php:38 views/collection/js/edit_js.php:56
 #: views/event/js/list_js.php:51
 #: views/import/csv/js/edit_maping_attributes_js.php:51
@@ -1830,7 +1830,7 @@ msgstr "Áudio"
 #: views/object/create_item_url.php:194 views/object/edit.php:55
 #: views/object/edit_item_text.php:379 views/object/list_single_object.php:280
 #: views/object/list_single_object_version.php:278
-#: views/object/multiple_items/create.php:17 views/search/js/single_js.php:1826
+#: views/object/multiple_items/create.php:12 views/search/js/single_js.php:1826
 msgid "PDF"
 msgstr "PDF"
 
@@ -1854,6 +1854,7 @@ msgstr "Outro"
 #: views/object/js/list_js.php:6 views/object/js/list_js.php:7
 #: views/search/menu_left.php:46 views/search/menu_left.php:61
 #: views/search/menu_left.php:68 views/search/menu_left.php:70
+#: views/statistics/list.php:21
 msgid "until"
 msgstr "até"
 
@@ -1978,7 +1979,7 @@ msgstr "Este evento já foi confirmado"
 #: models/event/event_term/event_term_create_model.php:82
 #: models/event/event_term/event_term_delete_model.php:82
 #: models/event/event_term/event_term_edit_model.php:111
-#: models/object/object_model.php:729
+#: models/object/object_model.php:735
 msgid "The event was successful"
 msgstr "O evento foi realizado com sucesso."
 
@@ -2627,7 +2628,7 @@ msgid "Attachment"
 msgstr "Anexos "
 
 #: models/export/rdf_repository_model.php:96
-#: models/object/object_model.php:1556 models/wp_query/wp_query_model.php:1122
+#: models/object/object_model.php:1562 models/wp_query/wp_query_model.php:1122
 #: views/object/list_single_object.php:322
 #: views/object/list_single_object_version.php:320
 #: views/property/metadata/form_voting.php:6 views/ranking/add.php:16
@@ -2809,69 +2810,69 @@ msgstr ""
 msgid "See repository"
 msgstr "Ver repositório"
 
-#: models/object/object_model.php:184
+#: models/object/object_model.php:190
 msgid "Please check a option in the field:"
 msgstr "Por favor verifique a opção no campo: "
 
-#: models/object/object_model.php:194
+#: models/object/object_model.php:200
 msgid "Please select a file to upload to this item"
 msgstr "Por favor, selecione um arquivo para upload neste item"
 
-#: models/object/object_model.php:201
+#: models/object/object_model.php:207
 msgid "Please select a URL to this item"
 msgstr "Por favor selecione uma URL para este item"
 
-#: models/object/object_model.php:212
+#: models/object/object_model.php:218
 msgid "The format not allowed for video"
 msgstr "Formato não permitido para vídeos"
 
-#: models/object/object_model.php:217 models/object/object_model.php:236
+#: models/object/object_model.php:223 models/object/object_model.php:242
 msgid "The format not allowed for image"
 msgstr "Formato não permitido para imagem"
 
-#: models/object/object_model.php:222 models/object/object_model.php:241
+#: models/object/object_model.php:228 models/object/object_model.php:247
 msgid "The format not allowed for audio"
 msgstr "Formato não permitido para áudio"
 
-#: models/object/object_model.php:227 models/object/object_model.php:246
+#: models/object/object_model.php:233 models/object/object_model.php:252
 msgid "This is not a PDF file!"
 msgstr "Este arquivo não está no formato PDF"
 
-#: models/object/object_model.php:1171
+#: models/object/object_model.php:1177
 msgid "Your suggested license is: "
 msgstr "A licença sugerida é: "
 
-#: models/object/object_model.php:1178
+#: models/object/object_model.php:1184
 msgid "Something went wrong! Please try again!"
 msgstr "Algo deu errado! Por favor tente novamente!"
 
-#: models/object/object_model.php:1554 models/wp_query/wp_query_model.php:1120
+#: models/object/object_model.php:1560 models/wp_query/wp_query_model.php:1120
 msgid "Data property"
 msgstr "Metadados de dado"
 
-#: models/object/object_model.php:1652 models/object/object_model.php:1725
+#: models/object/object_model.php:1658 models/object/object_model.php:1731
 msgid "All items removed successfully"
 msgstr "Item/itens removido(s) com sucesso!"
 
-#: models/object/object_model.php:1656 models/object/object_model.php:1729
+#: models/object/object_model.php:1662 models/object/object_model.php:1735
 msgid "No items added in this collection"
 msgstr "Nenhum item adicionados a esta coleção"
 
-#: models/object/object_model.php:1872
+#: models/object/object_model.php:1878
 msgid "Copy of "
 msgstr "Copiar de "
 
-#: models/object/object_model.php:2046
+#: models/object/object_model.php:2052
 msgid "Original Item"
 msgstr "Item original"
 
-#: models/object/object_multiple_model.php:119
-#: models/object/object_multiple_model.php:495
+#: models/object/object_multiple_model.php:128
+#: models/object/object_multiple_model.php:504
 msgid "item/items inserted successfully"
 msgstr " item/itens inseridos com sucesso!"
 
-#: models/object/object_multiple_model.php:123
-#: models/object/object_multiple_model.php:499
+#: models/object/object_multiple_model.php:132
+#: models/object/object_multiple_model.php:508
 msgid "No items inserted successfully!"
 msgstr ""
 "Nenhum item foi inserido, por favor, verifique possíveis títulos em branco!"
@@ -3073,115 +3074,115 @@ msgstr "Opções alteradas com sucesso"
 msgid "Options not updated!"
 msgstr "Opções não atualizadas"
 
-#: models/user/user_model.php:42
+#: models/user/user_model.php:43
 msgid "Sorry, that username already exists!"
 msgstr "Desculpe, este nome de usuário já existe! "
 
-#: models/user/user_model.php:44
+#: models/user/user_model.php:45
 msgid "Your valid username will be"
 msgstr "Seu nome de usuário válido será "
 
-#: models/user/user_model.php:46
+#: models/user/user_model.php:47
 msgid "Please type a username"
 msgstr "Por favor, digite seu usuário"
 
-#: models/user/user_model.php:129
+#: models/user/user_model.php:130
 msgid "User registered successfully! Your login is: "
 msgstr "Usuário cadastrado com sucesso! Seu login é: "
 
-#: models/user/user_model.php:141
+#: models/user/user_model.php:139
 msgid "Email already exists or login already exists!"
 msgstr "Este email já esta cadastrado ou login existente"
 
-#: models/user/user_model.php:150
+#: models/user/user_model.php:148
 msgid "Welcome on the Tainacan Repository "
 msgstr "Bem Vindo ao Repositório Tainacan"
 
-#: models/user/user_model.php:156
+#: models/user/user_model.php:153
 msgid "Welcome - "
 msgstr "Bem-Vindo(a) - "
 
-#: models/user/user_model.php:367
+#: models/user/user_model.php:359
 msgid "Your email was not found in our database!"
 msgstr "Seu email não foi encontrado em nossa base de dados!"
 
-#: models/user/user_model.php:379 models/user/user_model.php:404
+#: models/user/user_model.php:371 models/user/user_model.php:396
 msgid "Your new password was sent to your email!"
 msgstr "Sua nova senha foi enviada para seu email"
 
-#: models/user/user_model.php:383 models/user/user_model.php:408
+#: models/user/user_model.php:375 models/user/user_model.php:400
 msgid "Something went wrong. Error sending email."
 msgstr "Algo aconteceu inesperadamente. Erro ao enviar email."
 
-#: models/user/user_model.php:392
+#: models/user/user_model.php:384
 msgid "Your username was not found in our database!"
 msgstr "Nome de usuário não encontrado em nossa base de dados"
 
-#: models/user/user_model.php:422
+#: models/user/user_model.php:414
 msgid "You requested a new "
 msgstr "Você requisitou a nova"
 
-#: models/user/user_model.php:422
+#: models/user/user_model.php:414
 msgid " password"
 msgstr "senha "
 
-#: models/user/user_model.php:423 models/user/user_model.php:472
+#: models/user/user_model.php:415 models/user/user_model.php:464
 msgid "Hi"
 msgstr "Olá"
 
-#: models/user/user_model.php:424
+#: models/user/user_model.php:416
 msgid " You recently asked to reset your "
 msgstr "Você requisitou recentemente a alteração de sua "
 
-#: models/user/user_model.php:425
+#: models/user/user_model.php:417
 msgid "password"
 msgstr "senha "
 
-#: models/user/user_model.php:426
+#: models/user/user_model.php:418
 msgid "Click here to change your password"
 msgstr "Clique aqui para alterar sua senha"
 
-#: models/user/user_model.php:428
+#: models/user/user_model.php:420
 msgid "Your new password is:"
 msgstr "Sua nova senha é: "
 
-#: models/user/user_model.php:430
+#: models/user/user_model.php:422
 msgid "Didn't request this change?"
 msgstr "Não requisitou essa alteração?"
 
-#: models/user/user_model.php:431
+#: models/user/user_model.php:423
 msgid "If you didn't request a new password, let us know immediately"
 msgstr "Se não, deixe-nos saber imediatamente!"
 
-#: models/user/user_model.php:433
+#: models/user/user_model.php:425
 msgid "This message was sent to"
 msgstr "Esta mensagem foi enviada para "
 
-#: models/user/user_model.php:433
+#: models/user/user_model.php:425
 msgid "at your request"
 msgstr "como requisitado"
 
-#: models/user/user_model.php:455
+#: models/user/user_model.php:447
 msgid "Password changed successfully! Redirecting to login page..."
 msgstr "Senha alterada com sucesso! Redirecionando para a página de login..."
 
-#: models/user/user_model.php:459
+#: models/user/user_model.php:451
 msgid "Your old password do not match!"
 msgstr "Senha anterior não correspondente"
 
-#: models/user/user_model.php:471
+#: models/user/user_model.php:463
 msgid "An item has been shared with you! - "
 msgstr "Um item foi compartilhado com você! - "
 
-#: models/user/user_model.php:473
+#: models/user/user_model.php:465
 msgid " Someone shared an item with you in the "
 msgstr "Alguém compartilhou um item com você na"
 
-#: models/user/user_model.php:474
+#: models/user/user_model.php:466
 msgid "website."
 msgstr "site."
 
-#: models/user/user_model.php:475
+#: models/user/user_model.php:467
 msgid "Click here to see"
 msgstr "Clique aqui para visualizar "
 
@@ -3399,7 +3400,7 @@ msgstr "Digite aqui sua nova senha novamente"
 #: views/object/edit_item_text.php:562 views/object/edit_item_text.php:565
 #: views/object/edit_object_property_form.php:63
 #: views/object/multiple_items/editor_items.php:897
-#: views/object/multiple_social_network/create.php:90
+#: views/object/multiple_social_network/create.php:86
 #: views/object/multiple_social_network/editor_items.php:989
 #: views/object/object_property_form.php:62
 #: views/object/single_object/single_data_property_form.php:41
@@ -3478,7 +3479,7 @@ msgstr "Digite a url do vídeo do youtube"
 
 #: single.php:873 single.php:877 single.php:879 single.php:947 single.php:966
 #: single.php:1024 views/license/list.php:41 views/license/list.php:44
-#: views/object/multiple_social_network/create.php:85
+#: views/object/multiple_social_network/create.php:83
 #: views/social_network/list.php:51 views/theme_options/edit.php:28
 #: views/theme_options/edit.php:40 views/theme_options/edit.php:53
 #: views/theme_options/edit.php:56 views/theme_options/edit.php:70
@@ -5480,7 +5481,7 @@ msgstr "Faça o upload de anexos para seu item"
 
 #: views/object/create_item_text.php:139 views/object/create_item_text.php:393
 #: views/object/edit_item_text.php:147 views/object/edit_item_text.php:491
-#: views/object/multiple_items/create.php:56
+#: views/object/multiple_items/create.php:51
 #: views/object/multiple_items/js/editor_items_js.php:183
 #: views/object/multiple_social_network/js/editor_items_js.php:179
 #: views/object/temp/js/edit_multiple_js.php:173
@@ -5489,7 +5490,7 @@ msgstr "Arraste seus arquivos"
 
 #: views/object/create_item_text.php:140 views/object/create_item_text.php:394
 #: views/object/edit_item_text.php:148 views/object/edit_item_text.php:492
-#: views/object/multiple_items/create.php:57
+#: views/object/multiple_items/create.php:52
 #: views/object/multiple_items/js/editor_items_js.php:183
 #: views/object/multiple_social_network/js/editor_items_js.php:179
 #: views/object/temp/js/edit_multiple_js.php:173
@@ -5498,7 +5499,7 @@ msgstr "para upload"
 
 #: views/object/create_item_text.php:142 views/object/create_item_text.php:396
 #: views/object/edit_item_text.php:150 views/object/edit_item_text.php:494
-#: views/object/multiple_items/create.php:59
+#: views/object/multiple_items/create.php:54
 #: views/object/multiple_items/js/editor_items_js.php:183
 #: views/object/multiple_social_network/js/editor_items_js.php:179
 #: views/object/temp/js/edit_multiple_js.php:173
@@ -6230,19 +6231,19 @@ msgstr "Não ativo"
 msgid "Active"
 msgstr "Ativo"
 
-#: views/object/multiple_items/create.php:15
+#: views/object/multiple_items/create.php:10
 msgid "You may send local files like:"
 msgstr "Você pode enviar arquivos locais como: "
 
-#: views/object/multiple_items/create.php:18
+#: views/object/multiple_items/create.php:13
 msgid "Images (jpg, png, etc.);"
 msgstr "Imagens (Ex. pdf,jpg,png, etc)"
 
-#: views/object/multiple_items/create.php:19
+#: views/object/multiple_items/create.php:14
 msgid "Text (doc, docx, otf, etc.);"
 msgstr "Texto (doc, docx, otf, etc.);"
 
-#: views/object/multiple_items/create.php:24
+#: views/object/multiple_items/create.php:19
 #: views/object/multiple_items/editor_items.php:395
 #: views/object/multiple_items/js/create_js.php:5
 #: views/object/multiple_items/js/create_js.php:148
@@ -6250,19 +6251,19 @@ msgstr "Texto (doc, docx, otf, etc.);"
 msgid "Add new item - Send local file"
 msgstr "Adicionar novo item - Enviar arquivo local"
 
-#: views/object/multiple_items/create.php:32
+#: views/object/multiple_items/create.php:27
 msgid "Add file(s)"
 msgstr "Enviar arquivo(s) "
 
-#: views/object/multiple_items/create.php:37
+#: views/object/multiple_items/create.php:32
 msgid "Next step"
 msgstr "Próximo passo "
 
-#: views/object/multiple_items/create.php:42
+#: views/object/multiple_items/create.php:37
 msgid "Extract Exif from images?"
 msgstr "Extrair metadados Exif das imagens?"
 
-#: views/object/multiple_items/create.php:49
+#: views/object/multiple_items/create.php:44
 msgid "Add Multiple Items"
 msgstr "Adicionar vários arquivos"
 
@@ -6532,7 +6533,7 @@ msgstr "Anexo removido com sucesso!"
 msgid "Add new item - Insert URL"
 msgstr "Adicionar novo item  - Inserir URL"
 
-#: views/object/multiple_social_network/create.php:92
+#: views/object/multiple_social_network/create.php:88
 msgid "Extract metadata"
 msgstr "Extrair metadados"
 
@@ -7450,7 +7451,7 @@ msgstr "Metadado de termo"
 msgid "Property Term: "
 msgstr "Metadado de termo:"
 
-#: views/search/edit.php:292
+#: views/search/edit.php:292 views/statistics/list.php:88
 msgid "Orientation"
 msgstr "Orientação"
 
@@ -7642,7 +7643,7 @@ msgstr "1 coluna"
 msgid "2 columns"
 msgstr "2 colunas"
 
-#: views/search/menu_left.php:58
+#: views/search/menu_left.php:58 views/statistics/list.php:17
 msgid "From"
 msgstr "De"
 
@@ -7739,21 +7740,33 @@ msgstr "Editar Mapeamento do Instagram "
 msgid "Edit Vimeo Mapping"
 msgstr "Editar Mapeamento do Vimeo"
 
-#: views/statistics/list.php:13
+#: views/statistics/list.php:14
 msgid "Period"
 msgstr "Período"
 
-#: views/statistics/list.php:18
+#: views/statistics/list.php:27
 msgid "Report type"
 msgstr "Tipo de relatório"
 
-#: views/statistics/list.php:27
+#: views/statistics/list.php:81
 msgid "Repository Statistics"
 msgstr "Estatísticas do Repositório"
 
-#: views/statistics/list.php:28
+#: views/statistics/list.php:84
 msgid "Filters:"
 msgstr "Filtros:"
+
+#: views/statistics/list.php:85
+msgid "User Stats"
+msgstr "Status do Usuário"
+
+#: views/statistics/list.php:89
+msgid "Mode"
+msgstr "Modo"
+
+#: views/statistics/list.php:90
+msgid "Download"
+msgstr "Download"
 
 #: views/tag/page.php:49
 msgid "Subclass of Tag"
@@ -8315,9 +8328,6 @@ msgstr "Resumo profissional"
 
 #~ msgid "Vote"
 #~ msgstr "Votar"
-
-#~ msgid "Download"
-#~ msgstr "Download"
 
 #~ msgid "Your color schemes"
 #~ msgstr "Seus esquemas de cores"

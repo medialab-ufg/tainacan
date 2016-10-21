@@ -110,8 +110,8 @@ class ObjectModel extends Model {
         // inserindo o evento
         $data = $this->insert_object_event($data['ID'], $data);
 
-        $logData = ['collection_id' => $col_id, 'user_id' => $user_id,
-            'event_type' => 'user', 'event' => 'add_item' ];
+        $logData = ['collection_id' => $col_id, 'item_id' => $data['ID'],
+          'user_id' => $user_id, 'event_type' => 'user', 'event' => 'add_item' ];
         Log::addLog($logData);
 
         return $data;

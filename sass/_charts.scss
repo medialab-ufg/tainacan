@@ -31,9 +31,6 @@
   /* Right side */
   .chart-header {
     @include single_item_container_style();
-    // background: white;
-    // padding-bottom: 20px;
-    border: 3px solid $item-border;
 
     .user-config-control {
       span.config-title {
@@ -43,12 +40,14 @@
   }
 
   #charts-container {
-    // float: left;
-    // border: 1px solid;
+    @include single_item_container_style();
+
     margin-top: 20px;
+    /*
     text-align: center;
-    background: white;
     padding: 20px;
+    */
+
   }
 } // statistics-container
 

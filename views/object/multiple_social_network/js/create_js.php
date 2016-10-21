@@ -2,7 +2,7 @@
     $(function () {
         // #1 - breadcrumbs para localizacao da pagina
         $("#tainacan-breadcrumbs").show();
-        $("#tainacan-breadcrumbs .current-config").text('<?php _e('Add new item - Insert URL','tainacan') ?>');
+        $("#tainacan-breadcrumbs .current-config").text('>' + '<?php _e('Add new item - Insert URL','tainacan') ?>');
     });
     
     function back_main_list() {
@@ -19,8 +19,7 @@
         }).done(function (result) {
             $('#main_part').show();
             $('#collection_post').show();
-            $('#configuration').slideDown();
-            $('#configuration').hide();
+            $('#configuration').slideDown().hide();
         });
     }
 
@@ -37,8 +36,7 @@
             hide_modal_main();
             if (data != 0) {
                 $("#upload_container").hide();
-                $('#editor_items').html(data);
-                $("#editor_items").css('display', 'block');
+                $('#editor_items').html(data).css('display', 'block');
             } else {
                 showAlertGeneral('<?php _e("Attention!", 'tainacan') ?>', '<?php _e("File is too big or Uploaded, however, not supported by wordpress, please select valid files!", 'tainacan') ?>', 'error');
             }
@@ -58,8 +56,7 @@
         },
         function (isConfirm) {
             if (isConfirm) {
-                $("#editor_items").slideDown();
-                $("#editor_items").hide();
+                $("#editor_items").slideDown().hide();
                 $('#upload_container').show();
                 $("#tainacan-breadcrumbs .current-config").text('<?php _e('Add new item - Send local file','tainacan') ?>');
             }

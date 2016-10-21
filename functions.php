@@ -62,6 +62,7 @@ function setup_statisticsLog() {
     id INT UNSIGNED NOT NULL auto_increment,
     collection_id BIGINT(20) UNSIGNED NOT NULL,
     user_id BIGINT(20) UNSIGNED NOT NULL,
+    item_id BIGINT(20) UNSIGNED NOT NULL,
     ip VARCHAR(39) DEFAULT NULL,
     event_type VARCHAR(20) NOT NULL,
     event VARCHAR(20) NOT NULL,
@@ -2895,6 +2896,14 @@ add_action('init', 'register_ibram_menu');
 add_action('delete_user', 'tainacan_log_deleted_user');
 function tainacan_log_deleted_user($user_id) {
     return Log::addLog( [ 'user_id' => $user_id, 'event_type' => 'user', 'event' => current_filter()] );
+}
+
+function current_user_id_or_anon() {
+    $user_id = get_current_user_id();
+    if ($user_id == 0) {
+        $user_id = get_option('anonimous_user');
+    }
+    return $user_id;
 }
 
 ################# INSTANCIA OS MODULOS SE ESTIVEREM ATIVADOS#################

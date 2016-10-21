@@ -361,6 +361,11 @@ class FlickrModel extends Model {
                 $getCurrentIds[$object_id] = $this->arrItem['id'];
                 update_post_meta($mapping_id, 'socialdb_channel_flickr_inserted_ids', serialize($getCurrentIds));
 
+                $user_id = current_user_id_or_anon();
+                $logData = ['collection_id' => $collection_id, 'item_id' => $object_id,
+                  'user_id' => $user_id, 'event_type' => 'user', 'event' => 'add_item' ];
+                Log::addLog($logData);
+
                 return $object_id;
             }
             else {
