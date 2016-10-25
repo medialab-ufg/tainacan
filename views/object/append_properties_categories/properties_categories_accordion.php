@@ -65,12 +65,12 @@ if (isset($property_object)):
                 }
                 if ($property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] == 'true') {
                         ?>
-                        <a id='required_field_<?php echo $property['id']; ?>' style="padding: 3px;margin-left: -30px;" >
-                                <span class="glyphicon glyphicon glyphicon-star" title="<?php echo __('This metadata is required!','tainacan')?>" 
-                               data-toggle="tooltip" data-placement="top" ></span>
+                        <a id='required_field_<?php echo $property['id']; ?>' style="padding: 3px;" >
+                                <span  title="<?php echo __('This metadata is required!','tainacan')?>" 
+                               data-toggle="tooltip" data-placement="top" >*</span>
                         </a>
                         <a id='ok_field_<?php echo $property['id']; ?>'  style="display: none;padding: 3px;margin-left: -30px;" >
-                                <span class="glyphicon  glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>" 
+                                 &nbsp;<span class="glyphicon  glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>" 
                                data-toggle="tooltip" data-placement="top" ></span>
                         </a>
                         <input type="hidden" 
@@ -197,12 +197,12 @@ if (isset($property_object)):
                 }
                 if ($property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] == 'true') {
                     ?>
-                     <a id='required_field_<?php echo $property['id']; ?>' style="padding: 3px;margin-left: -30px;" >
-                                <span class="glyphicon glyphicon glyphicon-star" title="<?php echo __('This metadata is required!','tainacan')?>" 
-                               data-toggle="tooltip" data-placement="top" ></span>
+                     <a id='required_field_<?php echo $property['id']; ?>' style="padding: 3px;" >
+                                <span  title="<?php echo __('This metadata is required!','tainacan')?>" 
+                               data-toggle="tooltip" data-placement="top" >*</span>
                         </a>
-                        <a  id='ok_field_<?php echo $property['id']; ?>'  style="display: none;padding: 3px;margin-left: -30px;" >
-                                <span class="glyphicon  glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>" 
+                        <a id='ok_field_<?php echo $property['id']; ?>'  style="display: none;padding: 3px;margin-left: -30px;" >
+                                 &nbsp;<span class="glyphicon  glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>" 
                                data-toggle="tooltip" data-placement="top" ></span>
                         </a>
                         <input type="hidden" 
@@ -333,12 +333,12 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
                         }
                         if ($property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] == 'true') {
                             ?>
-                             <a id='required_field_<?php echo $property['id']; ?>' style="padding: 3px;margin-left: -30px;" >
-                                    <span class="glyphicon glyphicon glyphicon-star" title="<?php echo __('This metadata is required!','tainacan')?>" 
-                                   data-toggle="tooltip" data-placement="top" ></span>
+                            <a id='required_field_<?php echo $property['id']; ?>' style="padding: 3px;" >
+                                <span  title="<?php echo __('This metadata is required!','tainacan')?>" 
+                               data-toggle="tooltip" data-placement="top" >*</span>
                             </a>
                             <a id='ok_field_<?php echo $property['id']; ?>'  style="display: none;padding: 3px;margin-left: -30px;" >
-                                    <span class="glyphicon  glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>" 
+                                     &nbsp;<span class="glyphicon  glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>" 
                                    data-toggle="tooltip" data-placement="top" ></span>
                             </a>
                             <input type="hidden" 

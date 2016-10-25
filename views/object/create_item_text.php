@@ -21,7 +21,7 @@
      * 
      */    
 ?>
-<form  id="submit_form" style="margin-left: 15px;">
+<form  id="submit_form" onkeypress="return (event.keyCode == 13) ? false : true ;" style="margin-left: 15px;">
     <input type="hidden" id="object_id_add" name="object_id" value="<?php echo $object_id ?>">
     <input type="hidden" id="object_from" name="object_from" value="internal">
     <input type="hidden" id="object_type" name="object_type" value="text">
