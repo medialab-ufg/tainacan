@@ -255,22 +255,32 @@
                     }
                 });
             }
+            
+            var default_span_html = '<li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>';
+            var correct_order = [], default_order = [];
+            
             if (elem.property_data) {
                 $("#collection_order").append("<optgroup label='<?php _e('Data properties','tainacan') ?>'>");
-                var plim = 0;
+                var iOrder = 0;
                 $.each(elem.property_data, function (idx, data) {
                     if (data && data !== false) {
                         var numeric_id = data.id;
                         var string_id = numeric_id.toString();
-                        $("#collection_order").append("<option value='" + data.id + "' selected='selected' >" + data.name + " - ( <?php _e('Type','tainacan') ?>:"+data.type+" ) </option>");
-
-                        if( table_meta_ids.indexOf(string_id) > -1 ) {
-                            var ck = "checked";
+                        $("#collection_order").append("<option value='" + data.id + "' selected='selected' >" + data.name + " - ( <?php _e('Type','tainacan') ?>:"+data.type+" ) </option>");                        
+                        
+                        var curr_meta_index = table_meta_ids.indexOf(string_id);
+                        if( curr_meta_index > -1 ) {
+                            var ck = "checked";                                   
                         }
-                        var sort_meta = '<li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>';
-                        var item_info = JSON.stringify({ 'id': data.id, 'order': plim, 'tipo': 'property_data'});
-                        sort_meta += "<input type='checkbox' id='table_meta' " + ck + " name='table_meta[]' value='" + item_info + "'> " + data.name + "<br /></li>";
-                        $(".table-meta-config #sort-metas").append(sort_meta);
+
+                        var item_info = JSON.stringify({ 'id': data.id, 'order': iOrder, 'tipo': 'property_data'});
+                        var sort_meta = default_span_html + "<input type='checkbox' id='table_meta' " + ck + " name='table_meta[]' value='" + item_info + "'> " + data.name + "<br /></li>";
+                        
+                        if(ck && ck === "checked") {
+                            correct_order[curr_meta_index] = sort_meta;
+                        } else {
+                           default_order[iOrder] = sort_meta;
+                        }                                               
 
                         if(data.type === "text") {
                             var coords = ["select[name='latitude']","select[name='longitude']","select[name='location']"];
@@ -279,39 +289,65 @@
                             });
                         }
                     }
-                    plim++;
+                    iOrder++;
                 });
             }
             if (elem.property_object) {
                 $.each(elem.property_object, function (idx, data) {
                     if (data && data !== false) {
-                        var numeric_id = data.id; var string_id = numeric_id.toString();
-                        if( table_meta_ids.indexOf(string_id) > -1 )
-                            var ck = "checked";
-                        var sort_meta = '<li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>';
-                        var item_info = JSON.stringify({ 'id': data.id, 'order': plim, 'tipo': 'property_object'});
-                        sort_meta += "<input type='checkbox' id='table_meta' " + ck + " name='table_meta[]' value='" + item_info + "'> " + data.name + "<br /></li>";
-                        $(".table-meta-config #sort-metas").append(sort_meta);
-
+                        var numeric_id = data.id; 
+                        
+                        var string_id = numeric_id.toString();
+                        
+                        var curr_meta_index = table_meta_ids.indexOf(string_id);
+                        if( curr_meta_index > -1 ) {
+                            var ck = "checked";                                   
+                        }
+                        var item_info = JSON.stringify({ 'id': data.id, 'order': iOrder, 'tipo': 'property_object'});
+                        var sort_meta = default_span_html + "<input type='checkbox' id='table_meta' " + ck + " name='table_meta[]' value='" + item_info + "'> " + data.name + "<br /></li>";
+                        
+                        if(ck && ck === "checked") {
+                            correct_order[curr_meta_index] = sort_meta;
+                        } else {
+                           default_order[iOrder] = sort_meta;
+                        }                        
                     }
+                    iOrder++;
                 });
             }
             if (elem.property_term) {
                 $.each(elem.property_term, function (idx, data) {
                     if (data && data !== false) {
-                        var numeric_id = data.id; var string_id = numeric_id.toString();
-                        if( table_meta_ids.indexOf(string_id) > -1 )
-                            var ck = "checked";
+                        var numeric_id = data.id; 
+                        var string_id = numeric_id.toString();
                         
-                        var sort_meta = '<li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>';
-                        var item_info = JSON.stringify({ 'id': data.id, 'order': plim, 'tipo': 'property_term'});
-                        sort_meta += "<input type='checkbox' id='table_meta' " + ck + " name='table_meta[]' value='" + item_info + "'> " + data.name + "<br /></li>";
-                        $(".table-meta-config #sort-metas").append(sort_meta);
+                        var curr_meta_index = table_meta_ids.indexOf(string_id);
+                        if( curr_meta_index > -1 ) {
+                            var ck = "checked";                                   
+                        }
+
+                        // var sort_meta = '<li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>';
+                        var item_info = JSON.stringify({ 'id': data.id, 'order': iOrder, 'tipo': 'property_term'});
+                        // sort_meta += "<input type='checkbox' id='table_meta' " + ck + " name='table_meta[]' value='" + item_info + "'> " + data.name + "<br /></li>";
+                        
+                        var sort_meta = default_span_html + "<input type='checkbox' id='table_meta' " + ck + " name='table_meta[]' value='" + item_info + "'> " + data.name + "<br /></li>";
+                        
+                        if(ck && ck === "checked") {
+                            correct_order[curr_meta_index] = sort_meta;
+                        } else {
+                           default_order[iOrder] = sort_meta;
+                        } 
                     }
+                    iOrder++;
                 });
             }
-
-
+           
+            $(correct_order).each(function(idx, el) {
+                $(".table-meta-config #sort-metas").append(el);
+            });
+            $(default_order).each(function(idx, el) {
+                $(".table-meta-config #sort-metas").append(el);
+            });
 
             if (elem.rankings) {
                 $("#collection_order").append("<optgroup label='<?php _e('Rankings','tainacan') ?>'>");
