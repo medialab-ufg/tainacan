@@ -208,7 +208,7 @@
             $("#compound_id").val(elem.id);
             $("#operation_property_compounds").val('update_property_compounds');
             // abrir o modal
-            $("#meta-compounds").modal('show');
+            $("#meta-metadata_compound").modal('show');
             $("#meta-compounds .modal-title .compounds-action").text('<?php _e('Edit','tainacan') ?>');
             $("#meta-compounds #compounds_name").val( elem.name );
             $("#meta-compounds #socialdb_property_help").val( elem.metas.socialdb_property_help );

@@ -29,7 +29,7 @@ if(isset($tags)){
 $fields = ['text','video','image','pdf','audio'];
 $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_post_thumbnail_id( $object->ID ), 'post_parent' => $object->ID ] );
 ?>
-<form  id="submit_form_edit_object">
+<form onkeypress="return (event.keyCode == 13) ? false : true ;" id="submit_form_edit_object">
     <input type="hidden" id="object_id_edit" name="object_id" value="<?= $object->ID ?>">
     <div style="<?php echo ($view_helper->hide_main_container)?'margin-left:1%;padding-left:15px;':'' ?>"
             class="<?php echo ($view_helper->hide_main_container)?'col-md-12':'col-md-3' ?> menu_left_loader">
