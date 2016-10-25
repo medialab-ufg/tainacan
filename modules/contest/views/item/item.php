@@ -55,11 +55,13 @@
                                     <span class="label label-info">
                                         <span id="constest_score_<?php echo $object->ID; ?>"><?php echo $view_helper->get_counter_ranking($ranking, $object->ID) ?></span>
                                     </span>   
-                                    &nbsp;<b id="text-comment-<?php echo $object->ID; ?>"><?php echo $object->post_title; ?></b>
+                                    &nbsp;<span id='popover_positive_<?php echo $object->ID; ?>'></span><span id='popover_negative_<?php echo $object->ID; ?>'></span><b id="text-comment-<?php echo $object->ID; ?>"><?php echo $object->post_title; ?></b>
                                 </h5>    
                                 <div id="commentactions-<?php echo $object->ID; ?>" class="comment-actions">
                                     <div class="btn-group" role="group" aria-label="...">
-                                        <button type="button" onclick="contest_save_vote_binary_up('<?php echo $ranking; ?>', '<?php echo $object->ID; ?>')" class="btn btn-success btn-sm">
+                                        <button type="button" 
+                                                onclick="contest_save_vote_binary_up('<?php echo $ranking; ?>', '<?php echo $object->ID; ?>')" 
+                                                class="btn btn-success btn-sm">
                                             <span class="glyphicon glyphicon-menu-up"></span>
                                         </button>
                                         <button type="button" onclick="contest_save_vote_binary_down('<?php echo $ranking; ?>', '<?php echo $object->ID; ?>')" class="btn btn-danger btn-sm">

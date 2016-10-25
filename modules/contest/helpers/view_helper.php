@@ -30,6 +30,7 @@ class ViewHelper {
                                         <span id="thumbs-<?php echo $child->ID; ?>" class="glyphicon glyphicon-thumbs-<?php echo ($position=='positive') ? 'up': 'down' ?>"></span>
                                         <span id="constest_score_<?php echo $child->ID; ?>"><?php echo $this->get_counter_ranking($ranking, $child->ID) ?></span>
                                  </span>&nbsp;  
+                                 <span id='popover_positive_<?php echo $child->ID; ?>'></span><span id='popover_negative_<?php echo $child->ID; ?>'></span>
                                 <span id="text-comment-<?php echo $child->ID; ?>"><?php echo $child->post_title ?></span>
                                 <div id="commentactions-<?php echo $child->ID ?>" class="comment-actions">
                                     <div class="btn-group" role="group" aria-label="...">
