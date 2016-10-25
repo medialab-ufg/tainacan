@@ -26,6 +26,9 @@
                                 <label for="property_object_category_id"><?php _e('Property relationship','tainacan'); ?></label>
                                <div id="property_category_dynatree" style="height: 200px;overflow-y: scroll;" >
                                </div>
+                                <br>
+                                <p><?php _e('Selected relationship','tainacan') ?></p>
+                                <div id="selected_categories_relationship"></div>
                                 <input required="required" type="hidden"  id="property_object_category_id"  name="property_object_category_id" value="<?php //echo $category->term_id; ?>" >
                             <?php // endif; ?>
                         </div>
