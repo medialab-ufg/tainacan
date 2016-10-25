@@ -17,11 +17,13 @@ class WPQueryController extends Controller {
                 }
                 $collection_model = new CollectionModel;
                 $args = $wpquery_model->select_filter($data);
+                $collection_id = $args['collection_id'];
                 $paramters = $wpquery_model->do_filter($args);
                 $data['loop'] =  new WP_Query($paramters);
-                $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
-                $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);
-                $data['is_moderator'] = CollectionModel::is_moderator($args['collection_id'], get_current_user_id());
+                $data['collection_data'] = $collection_model->get_collection_data($collection_id);
+                $data['listed_by'] = $wpquery_model->get_ordered_name($collection_id, $args['ordenation_id'], $args['order_by']);
+                $data['is_moderator'] = CollectionModel::is_moderator($collection_id, get_current_user_id());
+                $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($collection_id, "socialdb_collection_table_metas", true)));
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($args);
                 if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
@@ -38,10 +40,12 @@ class WPQueryController extends Controller {
                 $collection_model = new CollectionModel;
                 $args = $wpquery_model->radio_filter($data);
                 $paramters = $wpquery_model->do_filter($args);
+                $collection_id = $args['collection_id'];
                 $data['loop'] =  new WP_Query($paramters);
-                $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
-                $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);
-                $data['is_moderator'] = CollectionModel::is_moderator($args['collection_id'], get_current_user_id());
+                $data['collection_data'] = $collection_model->get_collection_data($collection_id);
+                $data['listed_by'] = $wpquery_model->get_ordered_name($collection_id, $args['ordenation_id'], $args['order_by']);
+                $data['is_moderator'] = CollectionModel::is_moderator($collection_id, get_current_user_id());
+                $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($collection_id, "socialdb_collection_table_metas", true)));
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($args);
                 if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
@@ -58,10 +62,14 @@ class WPQueryController extends Controller {
                 $collection_model = new CollectionModel;
                 $args = $wpquery_model->checkbox_filter($data);
                 $paramters = $wpquery_model->do_filter($args);
+                $collection_id = $args['collection_id'];
+                
                 $data['loop'] =  new WP_Query($paramters);
-                $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
-                $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);
-                $data['is_moderator'] = CollectionModel::is_moderator($args['collection_id'], get_current_user_id());
+                $data['collection_data'] = $collection_model->get_collection_data($collection_id);               
+                $data['listed_by'] = $wpquery_model->get_ordered_name($collection_id, $args['ordenation_id'], $args['order_by']);
+                $data['is_moderator'] = CollectionModel::is_moderator($collection_id, get_current_user_id());               
+                $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($collection_id, "socialdb_collection_table_metas", true)));
+                
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($args);
                 if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
@@ -82,6 +90,8 @@ class WPQueryController extends Controller {
                 $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
                 $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);
                 $data['is_moderator'] = CollectionModel::is_moderator($args['collection_id'], get_current_user_id());
+                
+                $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($args['collection_id'], "socialdb_collection_table_metas", true)));
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($args);
                 if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
@@ -102,6 +112,7 @@ class WPQueryController extends Controller {
                 $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
                 $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);
                 $data['is_moderator'] = CollectionModel::is_moderator($args['collection_id'], get_current_user_id());
+                $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($args['collection_id'], "socialdb_collection_table_metas", true)));
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($args);
                 if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
@@ -122,6 +133,7 @@ class WPQueryController extends Controller {
                 $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
                 $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);
                 $data['is_moderator'] = CollectionModel::is_moderator($args['collection_id'], get_current_user_id());
+                $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($args['collection_id'], "socialdb_collection_table_metas", true)));
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($args);
                 if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
@@ -142,6 +154,7 @@ class WPQueryController extends Controller {
                 $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
                 $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);
                 $data['is_moderator'] = CollectionModel::is_moderator($args['collection_id'], get_current_user_id());
+                $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($args['collection_id'], "socialdb_collection_table_metas", true)));
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($args);
                 if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
@@ -162,6 +175,7 @@ class WPQueryController extends Controller {
                 $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
                 $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);
                 $data['is_moderator'] = CollectionModel::is_moderator($args['collection_id'], get_current_user_id());
+                $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($args['collection_id'], "socialdb_collection_table_metas", true)));
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($args);
                 if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
@@ -182,6 +196,7 @@ class WPQueryController extends Controller {
                 $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
                 $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);
                 $data['is_moderator'] = CollectionModel::is_moderator($args['collection_id'], get_current_user_id());
+                $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($args['collection_id'], "socialdb_collection_table_metas", true)));
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($args);
                 if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
@@ -197,6 +212,7 @@ class WPQueryController extends Controller {
                 $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
                 $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);
                 $data['is_moderator'] = CollectionModel::is_moderator($args['collection_id'], get_current_user_id());
+                $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($args['collection_id'], "socialdb_collection_table_metas", true)));
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($args);
                 if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
@@ -217,6 +233,7 @@ class WPQueryController extends Controller {
                 $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
                 $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);
                 $data['is_moderator'] = CollectionModel::is_moderator($args['collection_id'], get_current_user_id());
+                $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($args['collection_id'], "socialdb_collection_table_metas", true)));
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
                      $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
@@ -237,6 +254,7 @@ class WPQueryController extends Controller {
                 $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
                 $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);
                 $data['is_moderator'] = CollectionModel::is_moderator($args['collection_id'], get_current_user_id());
+                $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($args['collection_id'], "socialdb_collection_table_metas", true)));
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($args);
                 if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
@@ -258,6 +276,7 @@ class WPQueryController extends Controller {
                 $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
                 $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);
                 $data['is_moderator'] = CollectionModel::is_moderator($args['collection_id'], get_current_user_id());
+                $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($args['collection_id'], "socialdb_collection_table_metas", true)));
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($args);
                 if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
@@ -279,15 +298,13 @@ class WPQueryController extends Controller {
                 $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
                 $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);
                 $data['is_moderator'] = CollectionModel::is_moderator($args['collection_id'], get_current_user_id());
+                $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($args['collection_id'], "socialdb_collection_table_metas", true)));
                 $return['page'] =   $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($args);
                 if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
                     $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
                 }
-                //var_dump(json_encode($return,JSON_NUMERIC_CHECK),$return);
-               // $return['page'] = substr($return['page'],0,50000); 
                 return json_encode($return);
-                //return json_encode(strlen($return['page']));
             case "filter":
                 $return = array();
                 $collection_model = new CollectionModel;
@@ -297,6 +314,7 @@ class WPQueryController extends Controller {
                 $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
                 $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);
                 $data['is_moderator'] = CollectionModel::is_moderator($args['collection_id'], get_current_user_id());
+                $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($args['collection_id'], "socialdb_collection_table_metas", true)));
                 $data['pagid'] = $args['pagid'];
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($args);
@@ -319,6 +337,7 @@ class WPQueryController extends Controller {
                 $term = get_term_by('slug', 'socialdb_ordenation_recent', 'socialdb_property_type');
                 $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $term->term_id, $args['order_by']);
                 $data['is_moderator'] = CollectionModel::is_moderator($args['collection_id'], get_current_user_id());
+                $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($args['collection_id'], "socialdb_collection_table_metas", true)));
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($args);
                 $return['listed_by_value'] = $term->term_id;
@@ -345,13 +364,13 @@ class WPQueryController extends Controller {
                 $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
                 $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);
                 $data['is_moderator'] = CollectionModel::is_moderator($args['collection_id'], get_current_user_id());
+                $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($args['collection_id'], "socialdb_collection_table_metas", true)));
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($args);
                  if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
                      $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
                 }
-                return json_encode($return);
-         
+                return json_encode($return);         
          }
         
     }

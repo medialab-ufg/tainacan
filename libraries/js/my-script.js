@@ -762,7 +762,7 @@ function populateList(src) {
 
 }
 // mostra a listagem inicial
-function showList(src) {
+function showList(src) {    
     $('.selectors a').removeClass('highlight');
     $('#list').hide();
     $('#loader_objects').show();
@@ -1265,7 +1265,7 @@ function list_main_ordenation(has_category_properties) {
         } else {
             $("#collection_single_ordenation").val(default_ordenation);
         }
-        if ($('#is_filter').val() != '1') {
+        if ($('#is_filter').val() != '1') {            
             showList($('#src').val());
         }
         $('.dropdown-toggle').dropdown();

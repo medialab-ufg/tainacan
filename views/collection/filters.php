@@ -1,8 +1,5 @@
 <div class="search-resultset prime-color-bg">
     <?php
-    // include_once ('../../../../../wp-config.php');
-    // include_once ('../../../../../wp-load.php');
-    // include_once ('../../../../../wp-includes/wp-db.php');
     include_once ('js/filters_dynatree_js.php');
 
     //keyword
