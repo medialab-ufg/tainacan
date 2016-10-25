@@ -179,6 +179,7 @@ $options = get_option('socialdb_theme_options');
 
                             <div class="col-md-12 no-padding">
                                 <div class="row search-top-container">
+                                <?php /*
                                     <div class="col-md-10 box-left">
                                         <div class="search-colecao">
                                             <div class="input-group">
@@ -199,6 +200,7 @@ $options = get_option('socialdb_theme_options');
                                             <?php _e('Advanced Search', 'tainacan'); ?>
                                         </button>
                                     </div>
+                                    */ ?>
                                 </div>
                             </div>
 
