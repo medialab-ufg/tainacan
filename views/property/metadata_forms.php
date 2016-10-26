@@ -147,6 +147,7 @@ foreach( $view_helper->get_metadata_types() as $type => $label):
             <?php
         endif;
 endforeach;
+ 
 ?>
 <div class="modal fade" id="modal_remove_property" tabindex="-1" role="dialog" aria-labelledby="modal_remove_property_data" aria-hidden="true">
     <div class="modal-dialog">

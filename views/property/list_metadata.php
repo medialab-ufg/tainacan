@@ -42,7 +42,7 @@ $array_visibility = ($meta&&$meta!=='') ? $meta : '';
     </div>
 
     <div class="col-md-9 ui-widget-content metadata-actions" style="padding-right: 0;">
-
+        
         <div class="col-md-12 no-padding action-messages">
             <div id="alert_success_properties" class="alert alert-success" style="display: none; margin-top: 20px;">
                 <button type="button" class="close" onclick="hide_alert();"><span aria-hidden="true">&times;</span></button>

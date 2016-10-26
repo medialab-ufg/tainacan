@@ -2779,6 +2779,13 @@ function is_root_category($collection_id) {
     return $root_id == $collection_id;
 }
 
+if ( ! function_exists('get_menu_thumb_path') ) {
+    function get_menu_thumb_path($menu_id) {
+        return get_template_directory_uri() . '/extras/cssmenumaker/menus/' . $menu_id . '/thumbnail/css_menu_thumb.png';
+    }
+}
+
+
 /**
  * 
  * @param string $controller 

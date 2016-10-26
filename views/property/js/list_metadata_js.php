@@ -133,7 +133,7 @@
 
         showPropertyCategoryDynatree(src);
         showTermsDynatree(src); //mostra o dynatree
-        list_collection_metadata();
+        list_collection_metadata();              
     });
 
 
@@ -1386,7 +1386,7 @@
             
 
             if (elem.type == "menu") {
-                $("#select_menu_style").show();
+                $("#select_menu_style_container").show();
                 $('.select2-menu').select2('data', { id: elem.chosen_menu_style_id, text: " (Estilo selecionado)" } );
             }
 
@@ -1491,13 +1491,13 @@
 
         if (curr_val == "tree" || curr_val == "tree_checkbox" ) {
             $("#meta-category #color_field_property_search").fadeIn();
-            $("#meta-category #select_menu_style").hide();
+            $("#meta-category #select_menu_style_container").hide();
         } else if ( curr_val == "menu") {
-            $("#meta-category #select_menu_style").fadeIn();
+            $("#meta-category #select_menu_style_container").fadeIn();
             $("#meta-category #color_field_property_search").hide();
         } else {
             $("#meta-category #color_field_property_search").fadeOut();
-            $("#meta-category #select_menu_style").fadeOut();
+            $("#meta-category #select_menu_style_container").fadeOut();
         }
     }
 
@@ -1699,40 +1699,16 @@
      ************************* GENERAL META FUNCTIONS ***************************
      ****************************************************************************
      **/
-    function load_menu_style_data() {
-        $.ajax({
-            type: "POST",
-            async: false,
-            url: src + "/controllers/search/search_controller.php",
-            data: { operation: 'get_menu_ids' }
-        }).error(function() {
-            cl('<?php _e("Something went wrong. Try again later.", "tainacan") ?>');
-        }).done(function(result) {
-            var menu_item = $.parseJSON(result);
-
-            $(menu_item).each( function(index, item) {
-                $("select#select_menu_style").append('<option value="menu_style_'+ item + '" id="menu_style_'+ item +'"> #' + item + '</option>');
-                /*
-                var terms = item.terms;
-                $("select#select_menu_style").append('<option value="menu_style_'+ item.id + '" id="menu_style_'+ item.id +'"> #' + item.id + '</option>');
-                terms.map( function(class_name) {
-                    $("select#select_menu_style option#menu_style_" + item.id).addClass(class_name);
-                });
-                */
-            });
-        });
-    }
-
+    
     // Seelct2 Helper function
     function addMenuThumb(item) {
         if ( !item.id ) return item.text;
         var item_id = item.id;
-        var f = item_id.replace(/menu_style_/g, "");
-        var thumb = '<?php echo get_stylesheet_directory_uri() ?>/extras/cssmenumaker/menus/' + f + '/thumbnail/css_menu_thumb.png';
-        return "<span><img src='" + thumb + "' class='img-flag' />" + item.text + "</span>";
+        var m_id = item_id.replace(/menu_style_/g, "");
+        var thumb = '<?php echo get_stylesheet_directory_uri() ?>/extras/cssmenumaker/menus/' + m_id + '/thumbnail/css_menu_thumb.png';        
+        return "<span> <img src='" + thumb + "' class='img-flag' />" + item.text + "</span>";
     }
 
-    // Formats select menu options to show up it's thumbnail
     $('.select2-menu').select2({
         formatResult: addMenuThumb,
         formatSelection: addMenuThumb,
