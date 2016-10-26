@@ -95,13 +95,13 @@ class EventPropertyCompoundsEditValue extends EventModel {
                 if($type =='socialdb_property_data' || $type =='socialdb_property_object'){
                     //array que sera usado atualizar o indice da propriedade composta
                     if(empty($ids_metas)||(isset($ids_metas[$key])&&$ids_metas[$key]=='')){
-                        $new_ids_meta[] = $this->sdb_add_post_meta($object_id, "socialdb_property_$property", $values[$key]);
-                        $this->set_common_field_values($object_id, "socialdb_property_$property",$values[$key]);
+                        $new_ids_meta[] = $this->sdb_add_post_meta($object_id, "socialdb_property_$property_compounds_id", $values[$key]);
+                        $this->set_common_field_values($object_id, "socialdb_property_$property_compounds_id",$values[$key]);
                     }else{
                         $new_ids_meta[] = $ids_metas[$key];
                         //atualizo o postmeta com o valor alterado
                         $this->sdb_update_post_meta($ids_metas[$key], $values[$key]);
-                        $this->set_common_field_values($object_id, "socialdb_property_$property",$values[$key]);
+                        $this->set_common_field_values($object_id, "socialdb_property_$property_compounds_id",$values[$key]);
                     }
                     
                 }else{
@@ -110,7 +110,7 @@ class EventPropertyCompoundsEditValue extends EventModel {
                         wp_remove_object_terms( $object_id, get_term_by('id', str_replace('_cat', '', $ids_metas[$key]),'socialdb_category_type')->term_id,'socialdb_category_type');
                     //adiciono o novo
                     wp_set_object_terms( (int) $object_id,(int)$values[$key],'socialdb_category_type',true);
-                    $this->set_common_field_values($object_id, "socialdb_propertyterm_$property",$values[$key]);
+                    $this->set_common_field_values($object_id, "socialdb_propertyterm_$property_compounds_id",$values[$key]);
                     $new_ids_meta[] = $values[$key].'_cat';
                 }
             }

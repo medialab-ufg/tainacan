@@ -191,6 +191,7 @@
                     }
                     get_children_compounds(current_id,property.metas.socialdb_property_compounds_properties_id);
                 });
+                list_collection_facets();
             }
         });
         return xhr;
@@ -264,14 +265,18 @@
                 var current_search_widget = property.type;
                 var type = types_compounds[current_id];
                 var string = '';
+                var class_string = '';
+                var cat_id = ''
                 if(type=='1'){
                     string = 'edit_metadata';
                 }else if(type=='2'){
                     string = 'edit_object';
                 }else if(type=='3'){
                     string = 'edit_term';
+                    cat_id = '<input type="hidden" class="coumpound_id_'+property.metas.socialdb_property_term_root+'" id="'+ current_id +'">';
                 }
-                $( "#list-compounded-"+property_id ).append('<li id="compounds-'+current_id+'">'+
+                $( "#list-compounded-"+property_id ).append('<li id="compounds-'+current_id+'" class="'+class_string+'">'+
+                                cat_id +
                                 '<a onclick="delete_property(' + current_id + ','+type+')" class="delete_property" href="#">' +
                                 '<span style="margin-right:5px;color: #88A6CC;" class="glyphicon glyphicon-trash pull-right"><span></a>' + 
                                 '<a onclick="'+string+'(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +

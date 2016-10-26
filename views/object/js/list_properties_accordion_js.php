@@ -720,6 +720,7 @@
         $( ".core_validation").each(function( index ) {
             if($( this ).val()==='false'){
                 cont++;
+                console.log($( this ));
             }
         });
         if(cont===0){

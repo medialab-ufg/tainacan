@@ -296,6 +296,7 @@
     }
 
     function removeFacet(item_id) {
+        console.log(item_id);
         var collection_id = $("#collection_id").val();
         show_modal_main();
         $.ajax({
@@ -334,7 +335,7 @@
                                 removeFacet(el.id);
                             } else {
                                 var current_prop = getPropertyType(el.prop);
-                                console.log(el,(el.prop == null) , !isNaN(el.id) , $('.term-root-'+el.id).attr('id'));
+                                //console.log(el,(el.prop == null) , !isNaN(el.id) , $('.term-root-'+el.id).attr('id'));
                                 var item_html = '<li id="'+ el.id +'" data-widget="'+el.widget+'" class="form-group metadata-facet filter-'+el.id+'">' +
                                     '<label class="title-pipe">&nbsp;&nbsp;&nbsp;&nbsp;' + el.nome + '<div class="pull-right"><a class="edit-filter"><span class="glyphicon glyphicon-sort sort-filter"></span></a>';
 
@@ -345,10 +346,13 @@
                                 }
                                 else if ( current_prop == "ranking_stars" || current_prop == "ranking_binary" || current_prop == "ranking_like" ) {
                                     item_html += '<a onclick="edit_ranking('+ el.id + ')" class="edit-filter">';
-                                } else if ((el.prop == null) && !isNaN(el.id) && $('.term-root-'+el.id).attr('id')) {
+                                } else if ((el.prop == null||el.prop == 'socialdb_property_term') && !isNaN(el.id) && $('.term-root-'+el.id).attr('id')) {
                                     var item_term_id = $('.term-root-'+el.id).attr('id').replace("meta-item-","");
                                     item_html += '<a onclick="edit_term('+ item_term_id +')" class="edit-filter">';
-                                } else if( el.id == "tag" ) {
+                                } else if ((el.prop == null||el.prop == 'socialdb_property_term') && !isNaN(el.id) &&$('.coumpound_id_'+el.id)) {
+                                     var item_term_id = $('.coumpound_id_'+el.id).attr('id');
+                                    item_html += '<a onclick="edit_term('+ item_term_id +')" class="edit-filter">';
+                                }else if( el.id == "tag" ) {
                                     item_html += '<a onclick="edit_tag(this)" class="'+ el.id +'" data-filter="true" data-title="'+el.nome+'" class="edit-filter">';
                                 } else {
                                     if ( (el.id).indexOf("socialdb_") == 0 ) {
@@ -1351,7 +1355,7 @@
             data: { collection_id: $("#collection_id").val(), operation: 'edit_property_term', property_id: id }
         }).done(function (result) {
             elem = $.parseJSON(result);
-            var visualization =elem.metas.socialdb_property_visualization;
+            var visualization =(elem.metas.socialdb_property_visualization) ? elem.metas.socialdb_property_visualization : 'public';
             
             $('#socialdb_property_vinculate_category_exist').prop('checked','checked');
             $('#socialdb_property_vinculate_category_exist').trigger('click');
@@ -2245,6 +2249,9 @@
     function add_remove_filter_button(id){
         if(id=='ranking_colaborations'){
             return '  <a class="pull-right" title="<?php _e('Remove filter','tainacan') ?>" style="cursor:pointer;" onclick="removeFacet('+"'"+id+"'"+');">'+
+                     '<span class="glyphicon glyphicon glyphicon-trash"></span></a>';
+        }else if(id=='tag'){
+             return '  <a class="pull-right" title="<?php _e('Remove filter','tainacan') ?>" style="cursor:pointer;" onclick="removeFacet('+"'tag'"+');">'+
                      '<span class="glyphicon glyphicon glyphicon-trash"></span></a>';
         }else{
             return '  <a class="pull-right" title="<?php _e('Remove filter','tainacan') ?>" style="cursor:pointer;" onclick="removeFacet('+id+');">'+
