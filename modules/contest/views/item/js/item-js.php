@@ -394,7 +394,7 @@
         $("#popover_positive_"+id).popover({
             placement: 'top',
             container: 'body',
-            title: 'Contra-argumentar',
+            title: 'Argumentar',
             html: 'true',
             content: contentHtml,
             trigger: 'manual'
@@ -414,7 +414,7 @@
         $("#popover_negative_"+id).popover({
             placement: 'top',
             container: 'body',
-            title: 'Contra-argumentar',
+            title: 'Argumentar',
             html: 'true',
             content: contentHtml,
             trigger: 'manual'
