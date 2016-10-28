@@ -732,6 +732,10 @@ class ObjectModel extends Model {
         // propriedade de termos
         $this->insert_properties_terms($data, $data['ID']);
 
+        $_log_data = [ 'collection_id' => $data['collection_id'], 'user_id' => get_current_user_id(),
+          'event_type' => 'user', 'item_id' => $data['ID'], 'event' => 'edit_item'];
+        Log::addLog($_log_data);
+
         //msg
         $data['msg'] = __('The event was successful', 'tainacan');
         $data['type'] = 'success';
