@@ -62,20 +62,36 @@ if( !$collection_list_mode ) {
     <!-- TAINACAN: se a colecao estiver vazia eh mostrado -->
     <div id="collection_empty" style="display:none" >
         <?php if (get_option('collection_root_id') != $collection_id): ?>
-            <div class="jumbotron">
-                <h2 style="text-align: center;"><?php _e('This collection is empty, create the first item!', 'tainacan') ?></h2>
-                <p style="text-align: center;">
-                    <a onclick="showAddItemText()" class="btn btn-primary btn-lg" href="#" role="button">
-                        <span class="glyphicon glyphicon-plus"></span> <?php _e('Click here to add a new item', 'tainacan') ?>
-                    </a>
-                </p>
-            </div>
+            <?php 
+               if(has_action('empty_collection_message')):
+                   do_action('empty_collection_message');
+               else:
+                    ?>
+                    <div class="jumbotron">
+                        <h2 style="text-align: center;"><?php _e('This collection is empty, create the first item!', 'tainacan') ?></h2>
+                        <p style="text-align: center;">
+                            <a onclick="showAddItemText()" class="btn btn-primary btn-lg" href="#" role="button">
+                                <span class="glyphicon glyphicon-plus"></span> <?php _e('Click here to add a new item', 'tainacan') ?>
+                            </a>
+                        </p>
+                    </div>
+                  <?php 
+               endif;
+            ?>            
         <?php else: ?>
-            <div class="jumbotron">
-                <h2 style="text-align: center;"><?php _e('This repository is empty, create the first collection!', 'tainacan') ?></h2>
-                <p style="text-align: center;"><a onclick="showModalCreateCollection()" class="btn btn-primary btn-lg" href="#" role="button"><span class="glyphicon glyphicon-plus"></span>&nbsp;<?php _e('Click here to add a new collection', 'tainacan') ?></a>
-                </p>
-            </div>
+            <?php 
+               if(has_action('empty_collection_message')):
+                   do_action('empty_collection_message');
+               else:
+                    ?>
+                    <div class="jumbotron">
+                        <h2 style="text-align: center;"><?php _e('This repository is empty, create the first collection!', 'tainacan') ?></h2>
+                        <p style="text-align: center;"><a onclick="showModalCreateCollection()" class="btn btn-primary btn-lg" href="#" role="button"><span class="glyphicon glyphicon-plus"></span>&nbsp;<?php _e('Click here to add a new collection', 'tainacan') ?></a>
+                        </p>
+                    </div>
+                    <?php 
+               endif;
+            ?>
         <?php endif; ?>
     </div>
     

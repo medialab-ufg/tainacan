@@ -112,7 +112,7 @@
     ************************* FACETS FUNCTIONS *********************************
     ****************************************************************************
     **/
-    $( "#filters-accordion, #metadata-container" ).sortable({
+    $( "#filters-accordion, #metadata-container-" ).sortable({
         cursor: "n-resize",
         connectWith: ".connectedSortable",
         revert: 250,
@@ -976,6 +976,7 @@
                        $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
                                node.select(false);
                        });
+                        $('#selected_categories_relationship').html('');
                        $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
                                if(elem.metas.socialdb_property_object_category_id.indexOf(node.data.key)>-1){
                                     node.select(true);
@@ -994,6 +995,7 @@
                        $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
                                node.select(false);
                        });
+                        $('#selected_categories_relationship').html('');
                        $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
                                if(elem.metas.socialdb_property_object_category_id===node.data.key){
                                     node.select(true);
@@ -1853,6 +1855,7 @@
     function clear_relation() {
         $("#property_object_category_id").val('');
         $("#property_object_category_name").val('');
+        $('#selected_categories_relationship').html('');
     }
 
     function hide_alert() { $(".alert").hide(); }
@@ -1880,7 +1883,7 @@
 
         $('#default_field').show();
         $('#required_field').show();
-
+        $('#selected_categories_relationship').html('');
         $("#operation_property_data").val('add_property_data');
         $("#operation_property_object").val('add_property_object');
         $("#operation_property_term").val('add_property_term');
@@ -1918,7 +1921,11 @@
 
             },
             onSelect: function (flag, node) {
-                concatenate_in_array(node.data.key,'#property_object_category_id');
+                if(concatenate_in_array(node.data.key,'#property_object_category_id')){
+                    add_label_box(node.data.key,node.data.title,'#selected_categories_relationship');
+                }else{
+                    remove_label_box(node.data.key);
+                }
                 <?php if(has_action('javascript_onselect_relationship_dynatree_property_object')): ?>
                     <?php do_action('javascript_onselect_relationship_dynatree_property_object') ?>
                 <?php endif; ?>

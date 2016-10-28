@@ -482,7 +482,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                     <?php $cardinality = $this->render_cardinality_property($property);   ?>
                     <?php $properties_compounded = $property['metas']['socialdb_property_compounds_properties_id']; ?>
                     <?php //$class = 'col-md-'. (12/count($properties_compounded)); ?>
-                   <div class="form-group" style="margin-right: 15px;border-width: 15px;"> 
+                   <div class="form-group" style="margin-bottom: 15px; margin-right: 15px;margin-left: 15px;"> 
                          <input  type="hidden" 
                                 id='main_compound_id' 
                                 value='<?php echo $references['compound_id'] ?>'>
@@ -492,7 +492,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                             ?>
                             <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
                                  class="col-md-12 no-padding"
-                                 style="border-style: solid;margin-left: 30px;border-color: #ccc; padding: 10px;<?php echo ($is_show_container) ? 'display:block': 'display:none'; ?>">
+                                 style="margin-left: 30px;border-color: #ccc; padding: 10px;<?php echo ($is_show_container) ? 'display:block': 'display:none'; ?>">
                                 <div class="col-md-11">
                                 <?php foreach ($properties_compounded as $property_compounded): 
                                     $coumpounds_id[] = $property_compounded['id']; 

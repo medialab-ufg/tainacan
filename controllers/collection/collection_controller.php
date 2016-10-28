@@ -17,22 +17,16 @@ class CollectionController extends Controller {
         switch ($operation) {
             case "initDynatree":
                 return $visualization_model->initDynatree($data);
-                break;
             case "initDynatreeSynonyms":
                 return $visualization_model->initDynatreeSynonyms($data);
-                break;
             case "initDynatreeTags":
                 return $visualization_model->initDynatreeTags($data);
-                break;
             case "initDynatreeSingleEdit":
                 return $visualization_model->initDynatreeSingleEdit($data);
-                break;
             case "expand_dynatree":
                 return json_encode($visualization_model->expandDynatree($data));
-                break;
             case "create":
                 return $collection_model->create();
-                break;
             case 'simple_add':
                 $data['collection_name'] = trim($data['collection_name']);
                 $data['collection_object'] = trim($data['collection_object']);
@@ -75,10 +69,8 @@ class CollectionController extends Controller {
                 break;
             case "add":
                 return $collection_model->add($data);
-                break;
             case "edit":
                 return $collection_model->edit($data);
-                break;
             case "update":
                 if (isset($data['save_and_next']) && $data['save_and_next'] == 'true') {
                     $data['next_step'] = true;
@@ -89,13 +81,10 @@ class CollectionController extends Controller {
                 $data['update'] = $collection_model->update($data);
                 $data['is_moderator'] = CollectionModel::is_moderator($data['collection_id'], get_current_user_id());
                 return json_encode($data);
-                break;
             case "delete":
                 return $collection_model->delete($data);
-                break;
             case "list":
                 return $collection_model->list_collection();
-                break;
             case "show_header":
                 $mycollections = $data['mycollections'];
                 $sharedcollections = $data['sharedcollections'];
@@ -104,7 +93,7 @@ class CollectionController extends Controller {
                 $data['sharedcollections'] = $sharedcollections;
                 $data['json_autocomplete'] = $collection_model->create_main_json_autocomplete($data['collection_post']->ID);
                 return $this->render(dirname(__FILE__) . '../../../views/collection/header_collection.php', $data);
-                break;
+                // break;
             case "edit_configuration":
                 if (is_user_logged_in()) {
                     $data = $collection_model->get_collection_data($data['collection_id']);
@@ -120,21 +109,16 @@ class CollectionController extends Controller {
                 $data['names']['data_property'] = __('Property Data','tainacan');
                 $data['names']['ranking'] = __('Rankings','tainacan');
                 return json_encode($data);
-                break;
             case "show_form_data_property":
                 return $collection_model->list_ordenation($data);
-                break;
             case 'list_autocomplete' :
                 return json_encode($collection_model->create_main_json_autocomplete($data['collection_id'], $data['term']));
             case "initGeneralJit":
                 return $visualization_model->initJit($data);
-                break;
             case "initTreemapJit":
                 return $visualization_model->initTreemapJit($data);
-                break;
             case "get_collections_json":// pega todos as colecoes e coloca em um array json
-                return $this->get_collections_json($data);
-                break;
+                return $this->get_collections_json($data);                
             case 'get_most_participatory_authors':
                 $collection_id = $data['collection_id'];
                 $data = $collection_model->get_collection_data($collection_id);
@@ -199,7 +183,6 @@ class CollectionController extends Controller {
                 $retorno['updated_thumb_id'] = update_post_meta($data['collection_id'], '_thumbnail_id', $img_id);
                 
                 return json_encode( $retorno );
-                break;
             case 'list_items_search_autocomplete':
                 $property_model = new PropertyModel;
                 $property = get_term_by('id', $data['property_id'], 'socialdb_property_type');
@@ -253,11 +236,9 @@ class CollectionController extends Controller {
             case 'add_collection_template' :
                 $colectionTemplateModel = new CollectionTemplatesModel;
                 return $colectionTemplateModel->add_collection_template($data);
-                break;
             case 'delete_collection_template' :
                 $colectionTemplateModel = new CollectionTemplatesModel;
                 return $colectionTemplateModel->delete_collection_template($data);
-                break;
             /************************* Tabs ***********************************/
             case 'alter_tab_name':
                  if($data['id']!='default'){
@@ -314,16 +295,12 @@ class CollectionController extends Controller {
             /************************ Pagina de comentarios *******************/
             case 'comments':
                 return json_encode(['html'=> $this->render(dirname(__FILE__) . '../../../views/collection/comments.php', $data)]);
-                break;
             case 'update_color_schemes':
                 return json_encode( $visualization_model->update_color_schemes($data) );
-                break;
             case 'get_color_schemes':
                 return json_encode( $visualization_model->get_color_schemes($data['collection_id']) );
-            break;
             case 'get_default_color_scheme':
                 return json_encode($visualization_model->get_default_color_scheme($data['collection_id']));
-            break;
         }
     }
 

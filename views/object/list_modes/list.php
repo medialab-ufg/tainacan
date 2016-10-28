@@ -30,7 +30,13 @@
         <div class="col-md-2 no-padding">
             <?php if (get_option('collection_root_id') != $collection_id): ?>            
                 <!-- TAINACAN: container(AJAX) que mostra o html com os rankings do objeto-->
-                <div id="r_list_<?php echo $curr_id ?>" class="rankings-container"></div>            
+               
+                <!-- TAINACAN: container(AJAX) que mostra o html com os rankings do objeto-->
+                <?php if(has_action('container_rankings_list')): ?>
+                    <?php do_action('container_rankings_list',$curr_id) ?>
+                <?php else: ?>
+                        <div id="r_list_<?php echo $curr_id ?>" class="rankings-container"></div> 
+                <?php endif; ?>  
             <?php endif; ?>
         </div>
 

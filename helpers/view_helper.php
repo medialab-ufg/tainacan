@@ -14,7 +14,7 @@ class ViewHelper {
         'socialdb_property_fixed_source',
         'socialdb_property_fixed_license',
         'socialdb_property_fixed_thumbnail',
-        'socialdb_property_fixed_attachments',
+        'socialdb_property_fixed_attachments', 
         'socialdb_property_fixed_tags',
         'socialdb_property_fixed_type'
         ];
@@ -65,7 +65,7 @@ class ViewHelper {
             'relationship' => __('Relationship', 'tainacan'),
             'category' => __('Category', 'tainacan'),
             'voting' => __('Rankings', 'tainacan'),
-            'compounds' => __('Compounds', 'tainacan'),
+            'metadata_compound' => __('Compounds', 'tainacan'),
         ];
     }
 
@@ -126,7 +126,7 @@ class ViewHelper {
     
 
     public function get_special_metadata() {
-        return $this->special_metadata = ['relationship', 'category', 'voting','compounds'];
+        return $this->special_metadata = ['relationship', 'category', 'voting','compounds','metadata_compound'];
     }
 
     public function get_metadata_icon($metadata_type) {

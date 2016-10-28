@@ -268,7 +268,8 @@
         var selKeys = $.map($("#dynatree").dynatree("getSelectedNodes"), function (node) {
             return node.data.key;
         });
-        var selectedCategories = selKeys.join(",");
+        //var selectedCategories = selKeys.join(",");
+        var selectedCategories = '';
         var promisse;
         promisse = $.ajax({
             url: $('#src').val() + '/controllers/object/object_controller.php',

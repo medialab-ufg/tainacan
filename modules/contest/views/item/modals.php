@@ -78,7 +78,7 @@
                         </div>
                         <hr>
                         <div  class="form-group">
-                           <label for="exampleInputPassword1"><span class="glyphicon glyphicon-thumbs-down"></span>&nbsp;<?php _e('Describe a positive argument','tainacan') ?></label>
+                           <label for="exampleInputPassword1"><span class="glyphicon glyphicon-thumbs-down"></span>&nbsp;<?php _e('Describe a negative argument','tainacan') ?></label>
                            <textarea id="negative_argument" name="negative_argument" class="form-control"   ></textarea>
                         </div>
                         <div  class="form-group" style="margin-bottom: -10px;">

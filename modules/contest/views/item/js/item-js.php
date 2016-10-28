@@ -1,7 +1,14 @@
 <script>
     $(function () {
+        //url
+        
+
+        var stateObj = {foo: "bar"};
+        history.replaceState(stateObj, "page 2", $('#socialdb_permalink_object').val());
         //submissao de formulario positivo
         $('#form_positive_argument').submit(function (e) {
+            hide_all_modals();
+            show_modal_main();
             $.ajax({
                 url: $('#src').val() + '/modules/<?php echo MODULE_CONTEST ?>/controllers/argument/contest_argument_controller.php',
                 type: 'POST',
@@ -13,18 +20,51 @@
                 $('.dropdown-toggle').dropdown();
                 elem = jQuery.parseJSON(result);
                 //show messages
-                $('.modal').modal('hide');
-                hide_modal_main();
-                showItemObject($('#item_id').val(),$('#src').val());
-                showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Operation was successfully!', 'tainacan') ?>', 'success');
-                //if (elem.redirect)
+                var promisse = save_first_vote(elem.item_id);
+                promisse.done(function (result) {
+                    $('.modal').modal('hide');
+                    hide_modal_main();
+                    showItemObject($('#item_id').val(), $('#src').val());
+                    showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Operation was successfully!', 'tainacan') ?>', 'success');
+                    //if (elem.redirect)
                     //window.location = elem.redirect;
+                });
             }).error(function (error) {
             });
             e.preventDefault();
         });
         //submissao de formulario negativo
         $('#form_negative_argument').submit(function (e) {
+            hide_all_modals();
+            show_modal_main();
+            $.ajax({
+                url: $('#src').val() + '/modules/<?php echo MODULE_CONTEST ?>/controllers/argument/contest_argument_controller.php',
+                type: 'POST',
+                data: new FormData(this),
+                processData: false,
+                contentType: false
+            }).success(function (result) {
+                $('.nav-tabs').tab();
+                $('.dropdown-toggle').dropdown();
+                elem = jQuery.parseJSON(result);
+                //show messages
+                var promisse = save_first_vote(elem.item_id);
+                promisse.done(function (result) {
+                    $('.modal').modal('hide');
+                    hide_modal_main();
+                    showItemObject($('#item_id').val(), $('#src').val());
+                    showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Operation was successfully!', 'tainacan') ?>', 'success');
+                    //if (elem.redirect)
+                    //window.location = elem.redirect;
+                });
+            }).error(function (error) {
+            });
+            e.preventDefault();
+        });
+        //submissao de formulario de edicao
+        $('#form_update_argument').submit(function (e) {
+            hide_all_modals();
+            show_modal_main();
             $.ajax({
                 url: $('#src').val() + '/modules/<?php echo MODULE_CONTEST ?>/controllers/argument/contest_argument_controller.php',
                 type: 'POST',
@@ -38,33 +78,10 @@
                 //show messages
                 $('.modal').modal('hide');
                 hide_modal_main();
-                showItemObject($('#item_id').val(),$('#src').val());
+                showItemObject($('#item_id').val(), $('#src').val());
                 showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Operation was successfully!', 'tainacan') ?>', 'success');
                 //if (elem.redirect)
-                    //window.location = elem.redirect;
-            }).error(function (error) {
-            });
-            e.preventDefault();
-        });
-        //submissao de formulario de edicao
-        $('#form_update_argument').submit(function (e) {
-            $.ajax({
-                url: $('#src').val() + '/modules/<?php echo MODULE_CONTEST ?>/controllers/argument/contest_argument_controller.php',
-                type: 'POST',
-                data: new FormData(this),
-                processData: false,
-                contentType: false
-            }).success(function (result) {
-                $('.nav-tabs').tab();
-                $('.dropdown-toggle').dropdown();
-                elem = jQuery.parseJSON(result);
-               //show messages
-                $('.modal').modal('hide');
-                hide_modal_main();
-                showItemObject($('#item_id').val(),$('#src').val());
-                showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Operation was successfully!', 'tainacan') ?>', 'success');
-                //if (elem.redirect)
-                    //window.location = elem.redirect;
+                //window.location = elem.redirect;
             }).error(function (error) {
             });
             e.preventDefault();
@@ -87,9 +104,10 @@
             });
             e.preventDefault();
         });
-        autocomplete_arguments('#text-edit-argument',$('#related-id').val());
-        autocomplete_arguments('#positive_argument',$('#related-id').val());
-        autocomplete_arguments('#negative_argument',$('#related-id').val());
+        autocomplete_arguments('#text-edit-argument', $('#related-id').val());
+        autocomplete_arguments('#positive_argument', $('#related-id').val());
+        autocomplete_arguments('#negative_argument', $('#related-id').val());
+        //var myVar = setInterval(function(){ myTimer() }, 60000);
     });
     /**
      * 
@@ -98,6 +116,8 @@
      * @returns {undefined}
      */
     function contest_save_vote_binary_up(property_id, object_id) {
+        hide_all_modals();
+        show_modal_main();
         $.ajax({
             url: $('#src').val() + '/modules/<?php echo MODULE_CONTEST ?>/controllers/ranking/ranking_controller.php',
             type: 'POST',
@@ -109,6 +129,7 @@
                 collection_id: $("#collection_id").val()
             }
         }).done(function (result) {
+            hide_modal_main();
             elem_first = jQuery.parseJSON(result);
             if (elem_first.is_user_logged_in && elem_first.results.length > 0) {
                 $.each(elem_first.results, function (index, result) {
@@ -118,20 +139,22 @@
                 $('[name="argument_parent"]').val(object_id);
                 $('#argument_positive_text').text($('#text-comment-' + object_id).text());
                 show_properties_argument('positive', object_id);
-                $('#modalReplyPositiveArgument').modal('show');
+                show_popover_positive(object_id);
                 //showAlertGeneral('<?php _e('Vote successfully', 'tainacan') ?>', '<?php _e('Your like was computed', 'tainacan') ?>', '<?php _e('success') ?>');
             } else {
                 showAlertGeneral('<?php _e('Atention', 'tainacan') ?>', '<?php _e('You must sign up first to vote', 'tainacan') ?>', '<?php _e('error') ?>');
             }
         });
     }
-
+    
     /**
      * 
      * @param {type} property_id
      * @param {type} object_id
      * @returns {undefined}     */
     function contest_save_vote_binary_down(property_id, object_id) {
+        hide_all_modals();
+        show_modal_main();
         $.ajax({
             url: $('#src').val() + '/modules/<?php echo MODULE_CONTEST ?>/controllers/ranking/ranking_controller.php',
             type: 'POST',
@@ -143,6 +166,7 @@
                 collection_id: $("#collection_id").val()
             }
         }).done(function (result) {
+            hide_modal_main();
             elem_first = jQuery.parseJSON(result);
             if (elem_first.is_user_logged_in && elem_first.results.length > 0) {
                 $.each(elem_first.results, function (index, result) {
@@ -152,7 +176,7 @@
                 $('[name="argument_parent"]').val(object_id);
                 show_properties_argument('negative', object_id);
                 $('#argument_negative_text').text($('#text-comment-' + object_id).text());
-                $('#modalReplyNegativeArgument').modal('show');
+                show_popover_negative(object_id);
             } else {
                 // showAlertGeneral('<?php _e('Atention', 'tainacan') ?>', '<?php _e('You must sign up first to vote', 'tainacan') ?>', '<?php _e('error') ?>');
             }
@@ -171,7 +195,7 @@
             $('#properties_' + type).html(result);
         });
     }
-    
+
     function show_properties_argument_edit(type, object_id) {
         var promisse;
         promisse = $.ajax({
@@ -238,11 +262,11 @@
             }
         });
     }
-    
+
     /**
-    * 
-    * @param {type} item_id
-    * @returns {undefined}     */
+     * 
+     * @param {type} item_id
+     * @returns {undefined}     */
     function delete_comment(item_id) {
         swal({
             title: '<?php _e('Attention!') ?>',
@@ -253,37 +277,37 @@
             closeOnConfirm: true,
             closeOnCancel: true
         },
-        function (isConfirm) {
-            if (isConfirm) {
-                $('#modalImportMain').modal('show');//mostro o modal de carregamento
-                $.ajax({
-                    type: "POST",
-                    url: $('#src').val() + "/controllers/event/event_controller.php",
-                    data: {
-                        operation: 'add_event_object_delete',
-                        socialdb_event_create_date: <?php echo time() ?>,
-                        socialdb_event_user_id: $('#current_user_id').val(),
-                        socialdb_event_object_item_id: item_id,
-                        socialdb_event_collection_id: $('#collection_id').val()}
-                }).done(function (result) {
-                    $('#modalImportMain').modal('hide');//escondo o modal de carregamento
-                    elem_first = jQuery.parseJSON(result);
-                    showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
-                    location.reload();
+                function (isConfirm) {
+                    if (isConfirm) {
+                        $('#modalImportMain').modal('show');//mostro o modal de carregamento
+                        $.ajax({
+                            type: "POST",
+                            url: $('#src').val() + "/controllers/event/event_controller.php",
+                            data: {
+                                operation: 'add_event_object_delete',
+                                socialdb_event_create_date: <?php echo time() ?>,
+                                socialdb_event_user_id: $('#current_user_id').val(),
+                                socialdb_event_object_item_id: item_id,
+                                socialdb_event_collection_id: $('#collection_id').val()}
+                        }).done(function (result) {
+                            $('#modalImportMain').modal('hide');//escondo o modal de carregamento
+                            elem_first = jQuery.parseJSON(result);
+                            showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
+                            location.reload();
+                        });
+                    }
                 });
-            }
-        });
     }
-    
-    function report_abuse(item_id){
+
+    function report_abuse(item_id) {
         $('#collection_report_argument_id').val($('#collection_id').val());
         $('#report_argument_id').val(item_id);
-        $('#argument_report_text').text($('#text-comment-'+item_id).text());
+        $('#argument_report_text').text($('#text-comment-' + item_id).text());
         $('#modalReportAbuse').modal('show');
     }
-    
-    function submit_report_abuse(item_id){
-         $.ajax({
+
+    function submit_report_abuse(item_id) {
+        $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/event/event_controller.php",
             data: {
@@ -298,18 +322,18 @@
             showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
         });
     }
-    
-    function share_comment(id,text, url){
+
+    function share_comment(id, text, url) {
         $('#modalShareComment').modal('show');
-        var url_twitter = 'https://twitter.com/intent/tweet?text='+text+'&via=socialdb';
-        $('#share-twitter-comment').attr('href',url_twitter);
-        var url_facebook = 'http://www.facebook.com/sharer/sharer.php?u='+url+'&t='+text;
-        $('#share-facebook-comment').attr('href',url_facebook);
-        var url_gmail = 'https://plus.google.com/share?url='+url;
-        $('#share-gmail-comment').attr('href',url_gmail);
+        var url_twitter = 'https://twitter.com/intent/tweet?text=' + text + '&via=socialdb';
+        $('#share-twitter-comment').attr('href', url_twitter);
+        var url_facebook = 'http://www.facebook.com/sharer/sharer.php?u=' + url + '&t=' + text;
+        $('#share-facebook-comment').attr('href', url_facebook);
+        var url_gmail = 'https://plus.google.com/share?url=' + url;
+        $('#share-gmail-comment').attr('href', url_gmail);
     }
-    
-    function autocomplete_arguments(seletor,property_id){
+
+    function autocomplete_arguments(seletor, property_id) {
         $(seletor).autocomplete({
             source: $('#src').val() + '/controllers/object/object_controller.php?operation=get_objects_by_property_json&property_id=' + property_id,
             messages: {
@@ -324,6 +348,77 @@
                 var label = ui.item.label;
                 $(seletor).val(label);
             }
-        });    
+        });
+    }
+
+    function myTimer() {
+        if (!$('.modal').is(':visible')) {
+            showItemObject($('#item_id').val(), $('#src').val());
+        }
+    }
+
+    function save_first_vote(object_id) {
+        return $.ajax({
+            url: $('#src').val() + '/modules/<?php echo MODULE_CONTEST ?>/controllers/ranking/ranking_controller.php',
+            type: 'POST',
+            data: {
+                operation: 'save_vote_binary',
+                score: 1,
+                property_id: $('#ranking_id').val(),
+                object_id: object_id,
+                collection_id: $("#collection_id").val()
+            }
+        });
+    }
+    
+    function show_modal_reply_positive(id){
+        $('#modalReplyPositiveArgument').modal('show');
+        hide_popover_positive(id);
+    }
+    
+    function show_modal_reply_negative(id){
+        $('#modalReplyNegativeArgument').modal('show');
+        hide_popover_negative(id);
+    }
+    
+    function hide_popover_positive(id){
+        $("#popover_positive_"+id).popover('hide');
+    }
+    
+    function show_popover_positive(id){
+        var contentHtml = [
+            '<div style="heigth:30px;">',
+            '<button class="btn btn-link cancel" onclick="hide_popover_positive('+id+')"><?php _e('No','tainacan') ?></button>',
+            '<button class="btn btn-success save" onclick="show_modal_reply_positive('+id+')"><?php _e('Yes','tainacan') ?></button>',
+            '</div>'].join('\n');
+        $("#popover_positive_"+id).popover({
+            placement: 'top',
+            container: 'body',
+            title: 'Contra-argumentar',
+            html: 'true',
+            content: contentHtml,
+            trigger: 'manual'
+        });
+        $("#popover_positive_"+id).popover('show');
+    }
+    function hide_popover_negative(id){
+        $("#popover_negative_"+id).popover('hide');
+    }
+    
+    function show_popover_negative(id){
+        var contentHtml = [
+            '<div style="heigth:30px;">',
+            '<button class="btn btn-link cancel" onclick="hide_popover_negative('+id+')"><?php _e('No','tainacan') ?></button>',
+            '<button class="btn btn-success save" onclick="show_modal_reply_negative('+id+')"><?php _e('Yes','tainacan') ?></button>',
+            '</div>'].join('\n');
+        $("#popover_negative_"+id).popover({
+            placement: 'top',
+            container: 'body',
+            title: 'Contra-argumentar',
+            html: 'true',
+            content: contentHtml,
+            trigger: 'manual'
+        });
+        $("#popover_negative_"+id).popover('show');
     }
 </script>    

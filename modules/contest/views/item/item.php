@@ -1,14 +1,32 @@
 <?php require_once(dirname(__FILE__).'/js/item-js.php'); ?>
 <?php require_once(dirname(__FILE__).'../../../helpers/view_helper.php'); ?>
 <?php $post = get_post($collection_id); ?>
-<?php $ranking = get_term_by('name', __('In favor / Against', 'tainacan'),'socialdb_property_type') ?>
+<?php $ranking = (get_post_meta($collection_id, 'socialdb_collection_ranking_default_id', true)) ? get_post_meta($collection_id, 'socialdb_collection_ranking_default_id', true) : get_term_by('name', __('In favor / Against', 'tainacan'),'socialdb_property_type')->term_id; ?>
 <?php $view_helper = new ViewHelper; ?>
+<?php 
+    $temp = $object;
+    while($temp->post_parent!==0){
+        $temp = get_post($temp->post_parent);
+        $parents[] = $temp;
+    }
+?>   
+<input type="hidden" id="item_id" value="<?php echo $object->ID; ?>">
+<input type="hidden" id="ranking_id" value="<?php echo $ranking; ?>">
+<input type="hidden" id="socialdb_permalink_object" name="socialdb_permalink_object" value="<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>" />
 <input type="hidden" id="related-id" value="<?php echo get_post_meta($post->ID, 'socialdb_collection_property_related_id', TRUE); ?>">
 <input type="hidden" id="url-argument" value="<?php echo htmlentities(get_permalink(get_option('collection_root_id')).'?item='.$object->post_name); ?>">
 <div class="chatContainer">
     <ol class="breadcrumb item-breadcrumbs" style="padding-top: 10px;">
         <li> <a href="<?php echo get_permalink(get_option('collection_root_id')); ?>"> <?php _e('Repository', 'tainacan') ?> </a> </li>
         <li> <a href="#" onclick="backToMainPageSingleItem()"> <?php echo $post->post_title; ?> </a> </li>
+        <?php 
+           $parents = (isset($parents) && is_array($parents)) ? array_reverse($parents) : [];
+           foreach ($parents as $parent) {
+               ?>
+                <li> <a href="#" onclick="showSingleObject('<?php echo $parent->ID; ?>', $('#src').val())" > <?php echo $parent->post_title; ?> </a> </li>
+               <?php
+           }
+        ?>
         <li class="active"> <?php echo $object->post_title; ?> </li>
     </ol>
     <br>
@@ -19,7 +37,11 @@
                 <table class="form-comments-table">
                     <tr>
                         <td><div class="comment-timestamp"><?php echo $object->post_date_gmt ?></div></td>
-                        <td><div class="comment-user"><?php echo get_user_by('id', $object->post_author)->display_name ?></div></td>
+                        <td>
+                            <div class="comment-user">
+                                <?php echo get_user_by('id', $object->post_author)->display_name ?>
+                            </div>
+                        </td>
                         <td>
                             <div class="comment-avatar">
                                 <?php echo get_avatar($object->post_author) ?>
@@ -31,16 +53,18 @@
                                  class="comment comment-step1">
                                 <h5>
                                     <span class="label label-info">
-                                        <span id="constest_score_<?php echo $object->ID; ?>"><?php echo $view_helper->get_counter_ranking($ranking->term_id, $object->ID) ?></span>
+                                        <span id="constest_score_<?php echo $object->ID; ?>"><?php echo $view_helper->get_counter_ranking($ranking, $object->ID) ?></span>
                                     </span>   
-                                    &nbsp;<b id="text-comment-<?php echo $object->ID; ?>"><?php echo $object->post_title; ?></b>
+                                    &nbsp;<span id='popover_positive_<?php echo $object->ID; ?>'></span><span id='popover_negative_<?php echo $object->ID; ?>'></span><b id="text-comment-<?php echo $object->ID; ?>"><?php echo $object->post_title; ?></b>
                                 </h5>    
                                 <div id="commentactions-<?php echo $object->ID; ?>" class="comment-actions">
                                     <div class="btn-group" role="group" aria-label="...">
-                                        <button type="button" onclick="contest_save_vote_binary_up('<?php echo $ranking->term_id; ?>', '<?php echo $object->ID; ?>')" class="btn btn-success btn-sm">
+                                        <button type="button" 
+                                                onclick="contest_save_vote_binary_up('<?php echo $ranking; ?>', '<?php echo $object->ID; ?>')" 
+                                                class="btn btn-success btn-sm">
                                             <span class="glyphicon glyphicon-menu-up"></span>
                                         </button>
-                                        <button type="button" onclick="contest_save_vote_binary_down('<?php echo $ranking->term_id; ?>', '<?php echo $object->ID; ?>')" class="btn btn-danger btn-sm">
+                                        <button type="button" onclick="contest_save_vote_binary_down('<?php echo $ranking; ?>', '<?php echo $object->ID; ?>')" class="btn btn-danger btn-sm">
                                             <span class="glyphicon glyphicon-menu-down"></span>
                                         </button>
                                     </div>                                
@@ -89,7 +113,7 @@
 
             var currentComment = $(this).data("commentid");
 
-            $("#commentactions-" + currentComment).slideDown("fast");
+            //$("#commentactions-" + currentComment).slideDown("fast");
 
         });
 
@@ -97,7 +121,7 @@
         $(".commentLi").hover(function () {
 
             var currentComment = $(this).data("commentid");
-            //$("#commentactions-" + currentComment).slideDown("fast");    
+            $("#commentactions-" + currentComment).slideDown("fast");    
             $("#comment-" + currentComment).stop().animate({opacity: "1", backgroundColor: "#f8f8f8", borderLeftWidth: "4px"}, {duration: 100, complete: function () {}});
 
         }, function () {

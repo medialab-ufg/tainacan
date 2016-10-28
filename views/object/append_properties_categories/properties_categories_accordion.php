@@ -29,6 +29,9 @@ $references = [
     'properties_terms_treecheckbox' => &$properties_terms_treecheckbox,   
     'properties_to_avoid' => &$properties_to_avoid,   
 ];
+?>
+<div class="property-category-list" style="margin-bottom: 15px;">
+<?php
 if (isset($property_object)):
     foreach ($property_object as $property) {
         if(in_array($property['id'], $properties_to_avoid)){
@@ -36,7 +39,9 @@ if (isset($property_object)):
         }
         $ids[] = $property['id'];
         ?>
-        <div id="meta-item-<?php echo $property['id']; ?>" property="<?php echo $property['id']; ?>" class="category-<?php echo $categories ?>" >
+        <div id="meta-item-<?php echo $property['id']; ?>" 
+             property="<?php echo $property['id']; ?>" 
+             class="category-<?php echo $categories ?> form-group" >
             <h2>
                 <?php echo $property['name']; ?>
                 <?php
@@ -60,12 +65,12 @@ if (isset($property_object)):
                 }
                 if ($property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] == 'true') {
                         ?>
-                        <a id='required_field_<?php echo $property['id']; ?>' style="padding: 3px;margin-left: -30px;" >
-                                <span class="glyphicon glyphicon glyphicon-star" title="<?php echo __('This metadata is required!','tainacan')?>" 
-                               data-toggle="tooltip" data-placement="top" ></span>
+                        <a id='required_field_<?php echo $property['id']; ?>' style="padding: 3px;" >
+                                <span  title="<?php echo __('This metadata is required!','tainacan')?>" 
+                               data-toggle="tooltip" data-placement="top" >*</span>
                         </a>
                         <a id='ok_field_<?php echo $property['id']; ?>'  style="display: none;padding: 3px;margin-left: -30px;" >
-                                <span class="glyphicon  glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>" 
+                                 &nbsp;<span class="glyphicon  glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>" 
                                data-toggle="tooltip" data-placement="top" ></span>
                         </a>
                         <input type="hidden" 
@@ -85,7 +90,7 @@ if (isset($property_object)):
                 }
                 ?>
             </h2>
-            <div class="form-group" >
+            <div>
             <?php 
                 // botao que leva a colecao relacionada
                     if (isset($property['metas']['collection_data'][0]->post_title)):  ?>
@@ -172,7 +177,7 @@ if (isset($property_object)):
         $ids[] = $property['id'];
         $properties_autocomplete[] = $property['id']; ?>
         
-        <div id="meta-item-<?php echo $property['id']; ?>" property="<?php echo $property['id']; ?>" class="category-<?php echo $categories ?>">
+        <div id="meta-item-<?php echo $property['id']; ?>" property="<?php echo $property['id']; ?>" class="category-<?php echo $categories ?> form-group">
             <h2>
                 <?php echo $property['name']; ?>
                 <?php 
@@ -192,12 +197,12 @@ if (isset($property_object)):
                 }
                 if ($property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] == 'true') {
                     ?>
-                     <a id='required_field_<?php echo $property['id']; ?>' style="padding: 3px;margin-left: -30px;" >
-                                <span class="glyphicon glyphicon glyphicon-star" title="<?php echo __('This metadata is required!','tainacan')?>" 
-                               data-toggle="tooltip" data-placement="top" ></span>
+                     <a id='required_field_<?php echo $property['id']; ?>' style="padding: 3px;" >
+                                <span  title="<?php echo __('This metadata is required!','tainacan')?>" 
+                               data-toggle="tooltip" data-placement="top" >*</span>
                         </a>
-                        <a  id='ok_field_<?php echo $property['id']; ?>'  style="display: none;padding: 3px;margin-left: -30px;" >
-                                <span class="glyphicon  glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>" 
+                        <a id='ok_field_<?php echo $property['id']; ?>'  style="display: none;padding: 3px;margin-left: -30px;" >
+                                 &nbsp;<span class="glyphicon  glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>" 
                                data-toggle="tooltip" data-placement="top" ></span>
                         </a>
                         <input type="hidden" 
@@ -216,7 +221,7 @@ if (isset($property_object)):
                 ?>
             </h2>
             <?php $cardinality = $view_helper->render_cardinality_property($property);   ?>
-            <div class="form-group">
+            <div >
                  <?php for($i = 0; $i<$cardinality;$i++):   ?>
                     <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
                          style="padding-bottom: 10px;<?php echo ($i===0||(is_array($property['metas']['value'])&&$i<count($property['metas']['value']))) ? 'display:block': 'display:none'; ?>">
@@ -307,7 +312,7 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
         }
         $ids[] = $property['id'];
         ?>
-        <div id="meta-item-<?php echo $property['id']; ?>" <?php do_action('item_property_term_attributes') ?> property="<?php echo $property['id']; ?>" class="category-<?php echo $categories ?>">
+        <div id="meta-item-<?php echo $property['id']; ?>" <?php do_action('item_property_term_attributes') ?> property="<?php echo $property['id']; ?>" class="category-<?php echo $categories ?>  form-group">
             <h2>
                 <?php echo $property['name']; ?>
                 <?php 
@@ -328,12 +333,12 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
                         }
                         if ($property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] == 'true') {
                             ?>
-                             <a id='required_field_<?php echo $property['id']; ?>' style="padding: 3px;margin-left: -30px;" >
-                                    <span class="glyphicon glyphicon glyphicon-star" title="<?php echo __('This metadata is required!','tainacan')?>" 
-                                   data-toggle="tooltip" data-placement="top" ></span>
+                            <a id='required_field_<?php echo $property['id']; ?>' style="padding: 3px;" >
+                                <span  title="<?php echo __('This metadata is required!','tainacan')?>" 
+                               data-toggle="tooltip" data-placement="top" >*</span>
                             </a>
                             <a id='ok_field_<?php echo $property['id']; ?>'  style="display: none;padding: 3px;margin-left: -30px;" >
-                                    <span class="glyphicon  glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>" 
+                                     &nbsp;<span class="glyphicon  glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>" 
                                    data-toggle="tooltip" data-placement="top" ></span>
                             </a>
                             <input type="hidden" 
@@ -419,6 +424,7 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
 <?php endif;
 ?>
 <?php $object_properties_widgets_helper->list_properties_categories_compounds($property_compounds, $object_id,$references)  ?> 
+</div>
 <input type="hidden" name="pc_properties" id='pc_properties' value="<?php echo implode(',', $ids); ?>">
 <input type="hidden" name="categories" id='pc_categories' value="">
 <input type="hidden" name="properties_autocomplete" 

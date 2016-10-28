@@ -356,6 +356,7 @@ $references = [
                           }
                          ?> 
                     </div>  
+                    <div id="append_properties_categories_<?php echo $property['id']; ?>"></div>
                 </div>
              <?php  } ?>
         <?php endif; ?>

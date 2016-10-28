@@ -4,14 +4,14 @@ include_once ('js/import_oaipmh_js.php');
 include_once ('../../helpers/view_helper.php');
 ?>
 <div class="col-md-12">
-    
+
     <div id="export_settings" class="col-md-12 config_default_style">
         <?php ViewHelper::render_config_title(__("Import", 'tainacan')); ?>
         <div class="col-md-12 no-padding">
             <div role="tabpanel">
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active"><a id="click_oaipmhtab" href="#oaipmhtab-" aria-controls="oaipmhtab-" role="tab" data-toggle="tab"><?php _e('OAI-PMH','tainacan') ?></a></li>
+                    <li role="presentation" class="active"><a id="click_oaipmhtab" href="#oaipmhtab-" aria-controls="oaipmhtab-" role="tab" data-toggle="tab"><?php _e('OAI-PMH', 'tainacan') ?></a></li>
                     <li role="presentation"><a id="click_zip" href="#zip" aria-controls="zip" role="tab" data-toggle="tab"><?php _e('AIP', 'tainacan') ?></a></li>
                     <li role="presentation"><a id="click_csv" href="#csv" aria-controls="csv" role="tab" data-toggle="tab"><?php _e('CSV Package', 'tainacan') ?></a></li>
                 </ul>
@@ -19,12 +19,12 @@ include_once ('../../helpers/view_helper.php');
                 <div class="tab-content">
                     <!--  OAIPMH -->
                     <div role="tabpanel" class="tab-pane active" id="oaipmhtab-" >
-                        
+
                         <div id="validate_url_container" >
                             <div id="list_oaipmh_dc">
                                 <table  class="table table-bordered">
-                                    <th><?php _e('Identifier','tainacan'); ?></th>
-                                    <th><?php _e('Harvesting','tainacan'); ?></th>
+                                    <th><?php _e('Identifier', 'tainacan'); ?></th>
+                                    <th><?php _e('Harvesting', 'tainacan'); ?></th>
                                     <th> </th>
                                     <tbody id="table_oaipmh_dc" >
                                     </tbody>
@@ -32,29 +32,29 @@ include_once ('../../helpers/view_helper.php');
                             </div>
                             <br>
                             <div class="form-group">
-                                <label><?php _e('Base URL','tainacan'); ?></label>
-                                <input type="text" id="url_base_oai" class="form-control" placeholder="<?php _e('Insert the OAI-PMH respository URL','tainacan'); ?>">
+                                <label><?php _e('Base URL', 'tainacan'); ?></label>
+                                <input type="text" id="url_base_oai" class="form-control" placeholder="<?php _e('Insert the OAI-PMH respository URL', 'tainacan'); ?>">
                             </div>
                             <div class="form-group">
-                                <label><?php _e('Set (Optional)','tainacan'); ?></label>
-                                <input type="text" id="sets_import_oaipmh" name="sets_import_oaipmh" class="form-control" placeholder="<?php _e('Type a valid set','tainacan'); ?>">
+                                <label><?php _e('Set (Optional)', 'tainacan'); ?></label>
+                                <input type="text" id="sets_import_oaipmh" name="sets_import_oaipmh" class="form-control" placeholder="<?php _e('Type a valid set', 'tainacan'); ?>">
                             </div>
                             <input type="hidden" id="collection_import_id" name="collection_id" value="">
                             <input type="hidden" id="operation" name="operation" value="validate">
-                            <button type="button" onclick="validate_url_repository()" id="submit_oaipmh" class="btn btn-primary tainacan-blue-btn-bg"><?php _e('Validate','tainacan'); ?></button>
+                            <button type="button" onclick="validate_url_repository()" id="submit_oaipmh" class="btn btn-primary tainacan-blue-btn-bg"><?php _e('Validate', 'tainacan'); ?></button>
                         </div>
                         <div id="loader_validacao" style="display:none">
                             <center>
                                 <img src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>">
-                                <h3><?php _e('Validating Repository...','tainacan') ?></h3>
+                                <h3><?php _e('Validating Repository...', 'tainacan') ?></h3>
                             </center>
                         </div>
                         <div id="maping_container_repository">
                         </div>
-                       
+
                         <div id="progress" style="display: none;">
                             <center>
-                                <h3 id="title_import"><?php echo __("Please wait, this process may take several minutes",'tainacan'); ?></h3>
+                                <h3 id="title_import"><?php echo __("Please wait, this process may take several minutes", 'tainacan'); ?></h3>
                                 <progress id="progressbar" value="0" max="100"></progress><br>
                                 <center>
                                     <h3><span id="progressstatus"></span></h3>
@@ -71,15 +71,45 @@ include_once ('../../helpers/view_helper.php');
                     </div>
                     <!-- Tab panes -->
                     <div role="tabpanel" class="tab-pane" id="zip">
-                        <form id="form_export_zip" method="post" action="<?php echo get_template_directory_uri() ?>/controllers/import/zip_controller.php">
+                        <form id="form_export_zip" method="post" enctype="multipart/form-data">
                             <div class="export-container">
-                                <input type="hidden" id="operation_import_aip" name="operation" value="import_full_aip" />
-                                <select disabled="disabled" class="form-control">
-                                    <option selected="selected"><?php _e('Dspace Format', 'tainacan') ?></option>
+                                <input type="hidden" id="operation_import_aip" name="operation" value="upload_aip_zip" />
+                                <select class="form-control" id="select_aip_type" name="select_aip_type" onchange="show_form_by_type()">
+                                    <option selected="selected" value="dspace"><?php _e('Dspace Format', 'tainacan') ?></option>
+                                    <option value="tainacan"><?php _e('Tainacan Format', 'tainacan') ?></option>
                                 </select>
                             </div>
+                            <hr>
+                            <div id="select_file_import_dspace">
+                                <h4><?php _e('Upload an AIP package', 'tainacan'); ?></h4>
+                                <input type="file" accept=".zip" id="aip_pkg" name="aip_pkg" placeholder="<?php _e('Insert the ZIP file', 'tainacan'); ?>"><br>
+                                <button type="submit" id="export_zip" class="btn btn-primary tainacan-blue-btn-bg"><?php _e('Upload', 'tainacan'); ?></button><br><br>
+                                <!--button type="button" onclick="upload_aip_zip()" id="upload_aip_zip" class="btn btn-primary tainacan-blue-btn-bg"><?php _e('Upload', 'tainacan'); ?></button><br><br-->
+                                <h4>
+                                    <?php _e('Select the AIP file to import below', 'tainacan'); ?>
+                                    <span style="float: right;">
+                                        <a style="cursor: pointer;" onclick="refresh_list_aip()">
+                                            <span class="glyphicon glyphicon-refresh"></span>&nbsp;<?php _e('Refresh', 'tainacan'); ?>
+                                        </a>
+                                    </span>
+                                </h4>
+                                <div id="list_aip_zips">
+                                    <table  class="table table-bordered">
+                                        <th style="width: 80%"><?php _e('Identifier', 'tainacan'); ?></th>
+                                        <th><?php _e('Actions', 'tainacan'); ?></th>
+                                        <th></th>
+                                        <tbody id="table_aip" >
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <br><br>
+                                <!--input type="text" class="form-control" id="aip_pkg_input_auto" name="aip_pkg_input_auto" /><br><br-->
+                            </div>
+                            <div id="select_file_import_tainacan" style="display: none;">
+                                <h4><?php _e('Under development', 'tainacan'); ?>...</h4>
 
-                            <button type="submit" id="export_zip" class="btn btn-primary tainacan-blue-btn-bg"><?php _e('Import AIP', 'tainacan'); ?></button>
+                            </div>
+                            <!--button type="submit" id="export_zip" class="btn btn-primary tainacan-blue-btn-bg"><?php _e('Import AIP', 'tainacan'); ?></button-->
                         </form>
                     </div>
                     <!-- Tab panes -->

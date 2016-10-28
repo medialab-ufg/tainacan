@@ -105,7 +105,7 @@ $view_helper = new ViewHelper();
                     </div>
 
                     <div class="form-group table-meta-config" style="display: none">
-                        <label for="table-metas"><?php _e('Select metadata that will show up at table', 'tainacan'); ?></label>
+                        <label for="table-metas"><?php _e('Select metadata and the order that will show up at table', 'tainacan'); ?></label>
                         <ul id="sort-metas"></ul>
                     </div>
 

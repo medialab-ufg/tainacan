@@ -63,6 +63,7 @@ class ObjectModel extends Model {
             'post_type' => 'socialdb_object'
         );
         $data['ID'] = wp_update_post($post);
+        $this->insert_rankings_value($data['ID'],$data['collection_id']);
         $slug = wp_unique_post_slug(sanitize_title_with_dashes($data['object_name']), $data['ID'], 'inherit', 'socialdb_object', 0);
         $post = array(
             'ID' => $data['object_id'],
@@ -842,12 +843,16 @@ class ObjectModel extends Model {
      * Autor: Eduardo Humberto 
      */
     public function list_object($args = null, $post_status = 'publish') {
-        $tax_query = array('relation' => 'IN');
+        $tax_query = array('relation' => 'AND');
         $tax_query[] = array(
             'taxonomy' => 'socialdb_category_type',
             'field' => 'id',
-            'terms' => array($this->collection_model->get_category_root_of($args['collection_id']))
+            'terms' => array($this->collection_model->get_category_root_of($args['collection_id'])),
+            'operator' => 'IN'
         );
+        if(has_filter('update_tax_query')){
+            $tax_query = apply_filters('update_tax_query',$tax_query,$args['collection_id']);
+        }
         //tipo de ordenacao
         $orderby = $this->set_order_by($args);
         $array_defaults = ['socialdb_object_from', 'socialdb_object_dc_type', 'socialdb_object_dc_source', 'title', 'socialdb_license_id'];
@@ -1864,6 +1869,22 @@ class ObjectModel extends Model {
         } else if ($type == 'socialdb_property_term') {
             wp_set_object_terms($object_id, get_term_by('id', str_replace('_cat', '', $value), 'socialdb_category_type')->term_id, 'socialdb_category_type', true);
             return str_replace('_cat', '', $value) . '_cat';
+        }
+    }
+    
+    
+    public function insert_rankings_value($item_id,$collection_id) {
+        $property_model = new PropertyModel;
+        $category_root = $this->get_category_root_of($collection_id);
+        $category_root_id = $this->get_category_root_id();
+        //$all_properties_id = get_term_meta($category_root, 'socialdb_category_property_id');
+        $all_properties_id = $this->get_parent_properties($category_root, [], $category_root_id);
+        $data['category_root'] = $category_root; // coloco no array que sera utilizado na view
+        foreach ($all_properties_id as $property_id) {// varro todas propriedades
+            $type = $property_model->get_property_type($property_id); // pego o tipo da propriedade
+            if (($type == 'socialdb_property_ranking_like') || ($type == 'socialdb_property_ranking_binary') || ($type == 'socialdb_property_ranking_stars')) {// pego o tipo
+                add_post_meta($item_id, 'socialdb_property_'.$property_id, '');
+            }
         }
     }
 

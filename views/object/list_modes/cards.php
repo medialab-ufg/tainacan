@@ -22,22 +22,54 @@
             <div class="col-md-8 flex-box item-meta-box" style="flex-direction:column;">
                 <div class="item-meta col-md-12 no-padding">
                     <?php
+                    $_item_title_ = get_the_title();
+
                     if( is_array($table_meta_array) && count($table_meta_array) > 0):
                         $_DEFAULT_EMPTY_VALUE = "--";
+                        $_trim_desc = wp_trim_words($_object_description, 16);
                         foreach ($table_meta_array as $item_meta_info):
                             $fmt = str_replace("\\","", $item_meta_info);
                             if(is_string($fmt)):
                                 $_meta_obj = json_decode($fmt);
                                 if(is_object($_meta_obj)):
+
                                     $_META = ['id' => $_meta_obj->id, 'tipo' => $_meta_obj->tipo];
                                     if( $loop->current_post === 0 )
                                         echo '<input type="hidden" name="meta_id_table" value="'. $_META['id'] .'" data-mtype="'. $_META['tipo'] .'">';
 
                                     if($_META['tipo'] === 'property_data') {
-                                        $__item_meta = get_post_meta($curr_id, "socialdb_property_$_meta_obj->id", true) ?: $_DEFAULT_EMPTY_VALUE;
-                                        if( !empty($__item_meta)) {
-                                            echo '<input type="hidden" name="item_table_meta" value="'. $__item_meta .'" />';
+                                        $check_fixed = get_term( $_meta_obj->id );
+                                        $_out_ = $_DEFAULT_EMPTY_VALUE;
+
+                                        if (in_array($check_fixed->slug, $viewHelper::$fixed_slugs)) {
+                                            $_slug = $check_fixed->slug;
+                                            $base = str_replace("socialdb_property_fixed_", "", $_slug);
+                                            switch ($base) {
+                                                case "title":
+                                                    $_out_ = $_item_title_;
+                                                    break;
+                                                case "description":
+                                                    $_out_ = $_trim_desc;
+                                                    break;
+                                                case "source":
+                                                    $_out_ = get_post_meta($curr_id, "socialdb_object_dc_source")[0];
+                                                    break;
+                                                case "type":
+                                                    $_out_ = get_post_meta($curr_id, "socialdb_object_dc_type")[0];
+                                                    break;
+                                                case "license":
+                                                    $_out_ = get_post_meta($curr_id, "socialdb_license_id")[0];
+                                                    break;
+                                            }
+                                        } else {
+                                            $__item_meta = get_post_meta($curr_id, "socialdb_property_$_meta_obj->id", true) ?: $_DEFAULT_EMPTY_VALUE;
+                                            if( !empty($__item_meta)) {
+                                                $_out_ = $__item_meta;
+                                            }
                                         }
+
+                                        echo '<input type="hidden" name="item_table_meta" value="'. $_out_ .'" />';
+
                                     } else if($_META['tipo'] === 'property_term') {
                                         $_current_object_terms_ = get_the_terms($curr_id, "socialdb_category_type");
                                         $_father_name = get_term($_META['id'])->name;
@@ -73,14 +105,14 @@
                         endforeach;
                     endif;
                     ?>
-
+                    
                     <h4 class="item-display-title">
                         <a href="<?php echo get_collection_item_href($collection_id); ?>"
                            onclick="<?php get_item_click_event($collection_id,$curr_id) ?>">
-                            <?php echo wp_trim_words( get_the_title(), 13 ); ?>
+                            <?php echo wp_trim_words( $_item_title_, 13 ); ?>
                         </a>
                     </h4>
-                    <div class="item-description"> <?php echo wp_trim_words($_object_description, 16); ?> </div>
+                    <div class="item-description"> <?php echo $_trim_desc; ?> </div>
                     <div class='item-desc-hidden-full' style="display: none"><?php echo $_object_description; ?></div>                        
                     
                     <div class="row author-created">

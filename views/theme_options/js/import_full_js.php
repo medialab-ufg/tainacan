@@ -1,5 +1,6 @@
 <script>
     $(function () {
+        listTableAIP();
         change_breadcrumbs_title('<?php _e('Import', 'tainacan') ?>');
 
         $('#validate_url_container').show('slow');
@@ -53,6 +54,122 @@
         e.preventDefault();
 
     });
+
+    $('#form_export_zip').submit(function (e) {
+        show_modal_main();
+        $.ajax({
+            url: $('#src').val() + '/controllers/theme_options/theme_options_controller.php',
+            type: 'POST',
+            data: new FormData(this),
+            processData: false,
+            contentType: false
+        }).done(function (result) {
+            hide_modal_main();
+            var jsonObject = jQuery.parseJSON(result);
+            if (jsonObject.result) {
+                listTableAIP();
+            }
+            showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', jsonObject.error, 'info');
+        });
+        e.preventDefault();
+
+    });
+
+    function listTableAIP() {
+        var src = $('#src').val();
+
+        $.ajax({
+            url: src + "/controllers/theme_options/theme_options_controller.php",
+            type: 'POST',
+            data: {operation: 'list_aip_files'},
+            success: function (data) {
+                if (data && data !== '[]') {
+                    var jsonObject = jQuery.parseJSON(data);
+                    if (jsonObject && jsonObject != null) {
+                        $("#table_aip").html('');
+                        $.each(jsonObject, function (index, file) {
+                            $("#table_aip").append("<tr><td>" + file + "</td>" +
+                                    "<td><a href='#' onclick=\"do_import_aip_zip('" + file + "')\"><span class='glyphicon glyphicon-arrow-down'></span></a>&nbsp;&nbsp;" +
+                                    "<a href='#' onclick=\"delete_aip_zip('" + file + "')\"><span class='glyphicon glyphicon-trash'></span></a></td>");
+                        });
+                        $("#table_aip").show();
+                    }
+                } else {
+                    $("#table_aip").html('');
+                    $("#table_aip").append("<tr><td colspan='2'>" + '<?php __('No files found.', 'tainacan'); ?>' + "</td></tr>");
+
+                    $("#table_aip").show();
+                }
+
+            }
+        });// fim
+    }
+    
+    function do_import_aip_zip(file){
+        swal({
+            title: '<?php _e('Attention', 'tainacan') ?>',
+            text: '<?php _e('Are you sure about this procedure?', 'tainacan') ?>',
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonClass: 'btn-danger',
+            closeOnConfirm: true,
+            closeOnCancel: true
+        },
+        function (isConfirm) {
+            if (isConfirm) {
+                show_modal_main();
+                var src = $('#src').val();
+
+                $.ajax({
+                    url: src + "/controllers/theme_options/theme_options_controller.php",
+                    type: 'POST',
+                    data: {operation: 'import_dspace_aip', file: file},
+                    success: function (data) {
+                        hide_modal_main();
+                        if (data) {
+                            showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Import Successfully.', 'tainacan') ?>', 'success');
+                            //listTableAIP();
+                        } else {
+                            showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('Some error ocurred, please click in REFRESH and try again!', 'tainacan') ?>', 'error');
+                        }
+                    }
+                });// fim
+            }
+        });
+    }
+
+    function delete_aip_zip(file) {
+        swal({
+            title: '<?php _e('Attention', 'tainacan') ?>',
+            text: '<?php _e('Are you sure to delete this file?', 'tainacan') ?>',
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonClass: 'btn-danger',
+            closeOnConfirm: false,
+            closeOnCancel: true
+        },
+        function (isConfirm) {
+            if (isConfirm) {
+                show_modal_main();
+                var src = $('#src').val();
+
+                $.ajax({
+                    url: src + "/controllers/theme_options/theme_options_controller.php",
+                    type: 'POST',
+                    data: {operation: 'delete_aip_file', file: file},
+                    success: function (data) {
+                        hide_modal_main();
+                        if (data) {
+                            showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('File deleted.', 'tainacan') ?>', 'success');
+                            listTableAIP();
+                        } else {
+                            showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('Some error ocurred, please click in REFRESH and try again!', 'tainacan') ?>', 'error');
+                        }
+                    }
+                });// fim
+            }
+        });
+    }
 
     function listTableCSV() {
 
@@ -247,14 +364,14 @@
      * 
      * @author: EDUARDO
      **/
-    function import_list_set(url_base,sets) {
+    function import_list_set(url_base, sets) {
         if (url_base !== '') {
             $.ajax({
                 type: "POST",
                 url: $('#src').val() + "/controllers/import/import_controller.php",
                 data: {
                     url: url_base,
-                    sets:sets,
+                    sets: sets,
                     operation: 'import_list_set_repository'
                 }
             }).done(function (result) {
@@ -277,7 +394,7 @@
     function do_import(mapping_id, url_base, token, imported, size, sets) {
         var first;
         if (isNaN(imported)) {
-            import_list_set(url_base,sets);
+            import_list_set(url_base, sets);
             tempo();
             $("#validate_url_container").hide('slow');
             $("#cronometer").show('slow');
@@ -424,6 +541,41 @@
     function update_progressbar(imported, total) {
         var percent = (imported / total) * 100;
         $("#progressbar").val(percent);
+    }
+
+    // AIP
+    function show_form_by_type() {
+        if ($('#select_aip_type').val() == 'dspace') {
+            $('#select_file_import_dspace').show();
+            $('#select_file_import_tainacan').hide();
+        } else if ($('#select_aip_type').val() == 'tainacan') {
+            $('#select_file_import_dspace').hide();
+            $('#select_file_import_tainacan').show();
+        }
+    }
+
+    function refresh_list_aip() {
+        $("#table_aip").html('Loading...');
+        listTableAIP();
+    }
+
+    function upload_aip_zip() {
+        console.log('entrou aqui');
+        show_modal_main();
+        var src = $('#src').val();
+
+        $.ajax({
+            url: src + "/controllers/theme_options/theme_options_controller.php",
+            type: 'POST',
+            data: new FormData(this),
+            processData: false,
+            contentType: false
+        }).done(function (result) {
+            hide_modal_main();
+            showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('All objects imported succesfully!', 'tainacan') ?>', 'success');
+
+        });
+        e.preventDefault();
     }
 
 </script>

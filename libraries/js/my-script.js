@@ -762,7 +762,7 @@ function populateList(src) {
 
 }
 // mostra a listagem inicial
-function showList(src) {
+function showList(src) {    
     $('.selectors a').removeClass('highlight');
     $('#list').hide();
     $('#loader_objects').show();
@@ -1148,6 +1148,17 @@ function showTaxonomyZone(src) {
     });
 }
 
+function showPagePermission(src,collection_id) {
+    $.ajax({
+        url: src + '/controllers/permission/permission_controller.php',
+        type: 'POST',
+        data: {operation: 'show-page', collection_id: collection_id}
+    }).done(function (result) {
+        $('#main_part').hide();
+        $('#configuration').html(result).show();
+    });
+}
+
 // funcao que mostras o menu das propriedades
 function showPropertiesConfiguration(src) {
     $("#form").html('');
@@ -1254,7 +1265,7 @@ function list_main_ordenation(has_category_properties) {
         } else {
             $("#collection_single_ordenation").val(default_ordenation);
         }
-        if ($('#is_filter').val() != '1') {
+        if ($('#is_filter').val() != '1') {            
             showList($('#src').val());
         }
         $('.dropdown-toggle').dropdown();
@@ -1516,7 +1527,7 @@ function showModalFilters(action, category_root_name, category_root_id, dynatree
         category_root_name = 'Category';
     }
     if (!category_root_id) {
-        category_root_id = 'socialdb_category';
+        category_root_id = 'socialdb_taxonomy';
     }
     if (dynatree_id) {
         $("#category_single_add_dynatree_id").val(dynatree_id);

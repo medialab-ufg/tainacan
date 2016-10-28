@@ -179,6 +179,7 @@ $options = get_option('socialdb_theme_options');
 
                             <div class="col-md-12 no-padding">
                                 <div class="row search-top-container">
+                                
                                     <div class="col-md-10 box-left">
                                         <div class="search-colecao">
                                             <div class="input-group">
@@ -199,6 +200,7 @@ $options = get_option('socialdb_theme_options');
                                             <?php _e('Advanced Search', 'tainacan'); ?>
                                         </button>
                                     </div>
+                                    
                                 </div>
                             </div>
 
@@ -336,7 +338,7 @@ $options = get_option('socialdb_theme_options');
                                             $user_data = get_user_by('ID', get_current_user_id())->user_email;
                                             if ($admin_email == $user_data) {
                                                 ?>
-                                            <button onclick="showTrash('<?php echo get_template_directory_uri(); ?>');" class="btn btn-danger pull-left" style="color: white"><?php _e('Trash', 'tainacan'); ?></button>
+                                            <button onclick="showTrash('<?php echo get_template_directory_uri(); ?>');" class="btn btn-default pull-left"><?php _e('Trash', 'tainacan'); ?></button>
                                                 <?php
                                             }
                                         }

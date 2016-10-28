@@ -13,13 +13,15 @@ require_once(dirname(__FILE__) . '/../../../../models/object/object_model.php');
                         $callback = json_decode($model->add($data['question'], $data['collection_id'], $data['classification'], 'question'));
                         if(isset($callback->socialdb_event_object_item_id)&&isset($callback->type)&&$callback->type=='success'){
                             if(trim($data['answer'])!==''){
-                                $model->add($data['answer'], $data['collection_id'], $data['classification'], 'question',$callback->socialdb_event_object_item_id,'positive');
+                                $model->add($data['answer'], $data['collection_id'], $data['classification'], 'argument',$callback->socialdb_event_object_item_id,'positive');
                             }
+                            $ranking_id = get_post_meta($data['collection_id'], 'socialdb_collection_ranking_default_id', true);
+                            add_post_meta($callback->socialdb_event_object_item_id, 'socialdb_property_'.$ranking_id, 0);
                             $item = get_post($callback->socialdb_event_object_item_id);
                             wp_redirect(get_the_permalink($data['collection_id']).'?item='.$item->post_name);
                         }
                     case 'add_answer':
-                        $callback = json_decode($model->add($data['answer_argument'], $data['collection_id'], '', 'question',$data['root_argument'],'positive'));
+                        $callback = json_decode($model->add($data['answer_argument'], $data['collection_id'], '', 'argument',$data['root_argument'],'positive'));
                         if(isset($callback->socialdb_event_object_item_id)&&isset($callback->type)&&$callback->type=='success'){
                             $item = get_post($data['root_argument']);
                              //inserindo os valores das propriedades

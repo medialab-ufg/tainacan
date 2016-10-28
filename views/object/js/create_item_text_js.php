@@ -47,30 +47,30 @@ $(function(){
                 $('.menu_left').show();
                 //salvo o cache
                 save_cache($('#configuration').html(),'create-item-text',$('#collection_id').val());
+                $('.nav-tabs').tab();
             });
         });
      });    
     //caminho dos controller
     var src = $('#src').val();
     $( '#submit_form' ).submit( function( e ) {
-       var verify =  $( this ).serializeArray();
+        var verify =  $( this ).serializeArray();
         //hook para validacao do formulario
         if(Hook.is_register( 'tainacan_validate_create_item_form')){
             Hook.call( 'tainacan_validate_create_item_form', [ $( this ).serializeArray() ] );
-            console.log(Hook.result.is_validated);
             if(!Hook.result.is_validated){
                 $('#modalImportMain').modal('hide');//mostro o modal de carregamento
                 showAlertGeneral('<?php _e('Attention','tainacan') ?>', Hook.result.message, 'info');
                 return false;
             }
         }
-       $("#object_content").val(CKEDITOR.instances.object_editor.getData()); 
-       var selKeys = $.map($("#dynatree").dynatree("getSelectedNodes"), function(node) {
+        $("#object_content").val(CKEDITOR.instances.object_editor.getData()); 
+        var selKeys = $.map($("#dynatree").dynatree("getSelectedNodes"), function(node) {
                     return node.data.key;
-       });
-       $('#object_classifications').val(selKeys.join(", ")); 
-       $('#modalImportMain').modal('show');//mostro o modal de carregamento
-       $.ajax( {
+        });
+        $('#object_classifications').val(selKeys.join(", ")); 
+        $('#modalImportMain').modal('show');//mostro o modal de carregamento
+        $.ajax( {
               url: src+'/controllers/object/object_controller.php',
               type: 'POST',
               data: new FormData( this ),

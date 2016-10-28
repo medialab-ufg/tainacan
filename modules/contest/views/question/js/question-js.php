@@ -1,5 +1,8 @@
 <script>
     $(function () {
+        //url
+        var stateObj = {foo: "bar"};
+        history.replaceState(stateObj, "page 2", $('#socialdb_permalink_object').val());
         //submissao de formulario positivo
         $('#form_answer').submit(function (e) {
             $('.modal').modal('hide');
@@ -27,6 +30,8 @@
         });
         //submissao de formulario positivo
         $('#form_positive_argument').submit(function (e) {
+            hide_all_modals();
+            show_modal_main();
             $.ajax({
                 url: $('#src').val() + '/modules/<?php echo MODULE_CONTEST ?>/controllers/argument/contest_argument_controller.php',
                 type: 'POST',
@@ -38,18 +43,23 @@
                 $('.dropdown-toggle').dropdown();
                 elem = jQuery.parseJSON(result);
                //show messages
-                $('.modal').modal('hide');
-                hide_modal_main();
-                showItemObject($('#item_id').val(),$('#src').val());
-                showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Operation was successfully!', 'tainacan') ?>', 'success');
-                //if (elem.redirect)
-                    //window.location = elem.redirect;
+                var promisse = save_first_vote(elem.item_id);
+                promisse.done(function(result){
+                    $('.modal').modal('hide');
+                    hide_modal_main();
+                    showItemObject($('#item_id').val(),$('#src').val());
+                    showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Operation was successfully!', 'tainacan') ?>', 'success');
+                    //if (elem.redirect)
+                        //window.location = elem.redirect;
+                });
             }).error(function (error) {
             });
             e.preventDefault();
         });
         //submissao de formulario negativo
         $('#form_negative_argument').submit(function (e) {
+            hide_all_modals();
+            show_modal_main();
             $.ajax({
                 url: $('#src').val() + '/modules/<?php echo MODULE_CONTEST ?>/controllers/argument/contest_argument_controller.php',
                 type: 'POST',
@@ -61,18 +71,23 @@
                 $('.dropdown-toggle').dropdown();
                 elem = jQuery.parseJSON(result);
                 //show messages
-                $('.modal').modal('hide');
-                hide_modal_main();
-                showItemObject($('#item_id').val(),$('#src').val());
-                showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Operation was successfully!', 'tainacan') ?>', 'success');
-                //if (elem.redirect)
-                    //window.location = elem.redirect;
+                var promisse = save_first_vote(elem.item_id);
+                promisse.done(function(result){
+                    $('.modal').modal('hide');
+                    hide_modal_main();
+                    showItemObject($('#item_id').val(),$('#src').val());
+                    showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Operation was successfully!', 'tainacan') ?>', 'success');
+                    //if (elem.redirect)
+                        //window.location = elem.redirect;
+                });
             }).error(function (error) {
             });
             e.preventDefault();
         });
         //submissao de formulario de edicao
         $('#form_update_argument').submit(function (e) {
+            hide_all_modals();
+            show_modal_main();
             $.ajax({
                 url: $('#src').val() + '/modules/<?php echo MODULE_CONTEST ?>/controllers/argument/contest_argument_controller.php',
                 type: 'POST',
@@ -121,6 +136,8 @@
      * @returns {undefined}
      */
     function contest_save_vote_binary_up(property_id, object_id) {
+        hide_all_modals();
+        show_modal_main();
         $.ajax({
             url: $('#src').val() + '/modules/<?php echo MODULE_CONTEST ?>/controllers/ranking/ranking_controller.php',
             type: 'POST',
@@ -132,6 +149,7 @@
                 collection_id: $("#collection_id").val()
             }
         }).done(function (result) {
+            hide_modal_main();
             elem_first = jQuery.parseJSON(result);
             if (elem_first.is_user_logged_in && elem_first.results.length > 0) {
                 $.each(elem_first.results, function (index, result) {
@@ -155,6 +173,8 @@
      * @param {type} object_id
      * @returns {undefined}     */
     function contest_save_vote_binary_down(property_id, object_id) {
+        hide_all_modals();
+        show_modal_main();
         $.ajax({
             url: $('#src').val() + '/modules/<?php echo MODULE_CONTEST ?>/controllers/ranking/ranking_controller.php',
             type: 'POST',
@@ -166,6 +186,7 @@
                 collection_id: $("#collection_id").val()
             }
         }).done(function (result) {
+            hide_modal_main();
             elem_first = jQuery.parseJSON(result);
             if (elem_first.is_user_logged_in && elem_first.results.length > 0) {
                 $.each(elem_first.results, function (index, result) {
@@ -356,5 +377,70 @@
                 $(seletor).val(label);
             }
         });    
+    }
+    
+    function save_first_vote(object_id){
+        return $.ajax({
+            url: $('#src').val() + '/modules/<?php echo MODULE_CONTEST ?>/controllers/ranking/ranking_controller.php',
+            type: 'POST',
+            data: {
+                operation: 'save_vote_binary',
+                score: 1,
+                property_id: $('#ranking_id').val(),
+                object_id: object_id,
+                collection_id: $("#collection_id").val()
+            }
+        });
+    }
+    
+    function show_modal_reply_positive(id){
+        $('#modalReplyPositiveArgument').modal('show');
+        hide_popover_positive(id);
+    }
+    
+    function show_modal_reply_negative(id){
+        $('#modalReplyNegativeArgument').modal('show');
+        hide_popover_negative(id);
+    }
+    
+    function hide_popover_positive(id){
+        $("#popover_positive_"+id).popover('hide');
+    }
+    
+    function show_popover_positive(id){
+        var contentHtml = [
+            '<div style="heigth:30px;">',
+            '<button class="btn btn-link cancel" onclick="hide_popover_positive('+id+')"><?php _e('No','tainacan') ?></button>',
+            '<button class="btn btn-success save" onclick="show_modal_reply_positive('+id+')"><?php _e('Yes','tainacan') ?></button>',
+            '</div>'].join('\n');
+        $("#popover_positive_"+id).popover({
+            placement: 'top',
+            container: 'body',
+            title: 'Argumentar',
+            html: 'true',
+            content: contentHtml,
+            trigger: 'manual'
+        });
+        $("#popover_positive_"+id).popover('show');
+    }
+    function hide_popover_negative(id){
+        $("#popover_negative_"+id).popover('hide');
+    }
+    
+    function show_popover_negative(id){
+        var contentHtml = [
+            '<div style="heigth:30px;">',
+            '<button class="btn btn-link cancel" onclick="hide_popover_negative('+id+')"><?php _e('No','tainacan') ?></button>',
+            '<button class="btn btn-success save" onclick="show_modal_reply_negative('+id+')"><?php _e('Yes','tainacan') ?></button>',
+            '</div>'].join('\n');
+        $("#popover_negative_"+id).popover({
+            placement: 'top',
+            container: 'body',
+            title: 'Argumentar',
+            html: 'true',
+            content: contentHtml,
+            trigger: 'manual'
+        });
+        $("#popover_negative_"+id).popover('show');
     }
 </script>    

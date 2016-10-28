@@ -1104,6 +1104,14 @@ function create_category_terms() {
         }
     }
     add_fixed_properties($category_root_term);
+    //categoria 
+    $category_root_term = create_register('socialdb_taxonomy', 'socialdb_category_type');
+    create_metas($category_root_term['term_id'], 'socialdb_category_metas', 'socialdb_category_owner', 'socialdb_category_owner');
+    create_metas($category_root_term['term_id'], 'socialdb_category_metas', 'socialdb_category_moderators', 'socialdb_category_moderators');
+    create_metas($category_root_term['term_id'], 'socialdb_category_metas', 'socialdb_category_date', 'socialdb_category_date');
+    create_metas($category_root_term['term_id'], 'socialdb_category_metas', 'socialdb_term_synonyms', 'socialdb_term_synonyms');
+    create_metas($category_root_term['term_id'], 'socialdb_category_metas', 'socialdb_category_permission', 'socialdb_category_permission');
+    create_metas($category_root_term['term_id'], 'socialdb_category_metas', 'socialdb_category_property_id', 'socialdb_category_property_id');
 }
 
 /**
@@ -2798,6 +2806,13 @@ function is_root_category($collection_id) {
 
     return $root_id == $collection_id;
 }
+
+if ( ! function_exists('get_menu_thumb_path') ) {
+    function get_menu_thumb_path($menu_id) {
+        return get_template_directory_uri() . '/extras/cssmenumaker/menus/' . $menu_id . '/thumbnail/css_menu_thumb.png';
+    }
+}
+
 
 /**
  * 

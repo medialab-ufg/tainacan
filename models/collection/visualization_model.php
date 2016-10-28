@@ -307,6 +307,20 @@ class VisualizationModel extends CollectionModel {
                         $ordenation = ($ordenation =='alphabetic') ? 'pm.meta_value' : 'count DESC';
                         $dynatree[end(array_keys($dynatree))] = $this->getPropertyDataDynatree($property, $dynatree[end(array_keys($dynatree))], $classCss,$ordenation);
                     }
+                }elseif($type == 'socialdb_property_term'){
+                    $property = $propertyModel->get_all_property($facet_id, true);
+                    $new_id = $property['metas']['socialdb_property_term_root'];
+                    $widget = get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $facet_id . '_widget', true);
+                    $classCss = get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $facet_id . '_color', true);
+                    delete_post_meta($data['collection_id'], 'socialdb_collection_facets',$facet_id);
+                    add_post_meta($data['collection_id'], 'socialdb_collection_facets',$new_id);
+                    add_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $new_id . '_widget', $widget);
+                    add_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $new_id . '_color', $classCss);
+                    if ($facet && $widget == 'tree'&&  in_array( $facet_id, $facets_id)) {
+                        $property = $propertyModel->get_all_property($facet_id, true);
+                        $dynatree[] = array('title' => ucfirst($facet->name), 'key' => $facet->term_id . "_facet_property" . $facet_id, 'isLazy' => true, 'data' => $url, 'expand' => true, 'hideCheckbox' => true, 'addClass' => $classCss);
+                        $dynatree[end(array_keys($dynatree))] = $this->getChildrenDynatree($new_id, $dynatree[end(array_keys($dynatree))], $classCss);
+                     }  
                 }else{
                     $widget = get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $facet_id . '_widget', true);
                     $classCss = get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $facet_id . '_color', true);
@@ -1257,7 +1271,7 @@ class VisualizationModel extends CollectionModel {
         $metas = $this->get_property_data_values($property_id);
         foreach ($metas as $meta_id => $meta_value) {
             if ($letter !== '*' && (substr($meta_value, 0, 1) === strtoupper($letter) || substr($meta_value, 0, 1) === strtolower($letter))) {
-                $results[] = $metas[$meta_id];
+                $results[$meta_id] = $metas[$meta_id];
             }// $dynatree[end(array_keys($dynatree))] = isLazyAlpha($term_id, $valor, $dynatree[end(array_keys($dynatree))]);
         }
         return $results;

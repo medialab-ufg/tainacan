@@ -1,8 +1,5 @@
 <div class="search-resultset prime-color-bg">
     <?php
-    // include_once ('../../../../../wp-config.php');
-    // include_once ('../../../../../wp-load.php');
-    // include_once ('../../../../../wp-includes/wp-db.php');
     include_once ('js/filters_dynatree_js.php');
 
     //keyword
@@ -60,7 +57,8 @@
 
     //properties_data_tree
     if (isset($properties_data_tree)) {
-        foreach ($properties_data_tree as $property) { ?>
+        foreach ($properties_data_tree as $property) { 
+            ?>
             <a class="remove-link-filters" onclick="remove_filter_property_data_tree('<?php echo $property['property_id']; ?>','<?php echo $property['id']; ?>')"
                href="#"><span class="glyphicon glyphicon-remove-sign white"></span>
             </a>

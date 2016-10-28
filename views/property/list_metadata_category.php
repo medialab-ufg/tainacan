@@ -21,6 +21,22 @@ $array_visibility = ($meta&&$meta!=='') ? $meta : '';
         color: #ddd;
     }
 </style>
+<style>
+            #properties_tabs ul.metadata-container li{
+                border: 1px solid #e3e3e3 !important;
+            }
+            .gallery li {
+                padding: 0.4em;
+                margin: 0;
+            }
+            .list-compounded{
+                margin-left: 15px;
+                margin-top: 15px;
+            }
+            .list-compounded li{
+                cursor: pointer;
+            }
+</style>
 <?php $view_helper->render_header_config_steps('metadata') ?>
 <input type="hidden" 
        name="tabs_properties" 
@@ -66,7 +82,10 @@ $array_visibility = ($meta&&$meta!=='') ? $meta : '';
                     <li>
                        <!--a  data-toggle="modal" data-target="#meta-<?php echo $type ?>"-->
                        <a onclick="$('#meta-<?php echo $type ?>').modal('show');clear_form('<?php echo $type ?>');" > 
-                            <img src="<?php $view_helper->get_metadata_icon($type); ?>" alt="<?php echo $type ?>" title="<?php echo $type ?>">
+                            <img 
+                                <?php if($type=='metadata_compound'): echo 'height="15" width="15"'; endif;?>
+                                src="<?php $view_helper->get_metadata_icon($type); ?>" 
+                                alt="<?php echo $type ?>" title="<?php echo $type ?>">
                             <?php echo $label ?>
                         </a>
                     </li>

@@ -1072,7 +1072,7 @@
             }
         }).done(function (result) {
             $('#filters_collection').html(result);
-            $('.remove-link-filters').show();
+            $('.remove-link-filters').show();            
             var result_set = $('.search-resultset').find('a').length;
             if (result_set > 0) {
                 $("button#clear").fadeIn();
@@ -2030,19 +2030,38 @@
      * @returns {void}     */
     function concatenate_in_array(key, seletor) {
         var ids = [];
+        var result;
         if ($(seletor).val() !== '') {
             ids = $(seletor).val().split(',');
             index = ids.indexOf(key);
             if (index >= 0) {
                 ids.splice(index, 1);
+                result = false;
             } else {
                 ids.push(key);
+                result = true;
             }
             $(seletor).val(ids.join(','));
         } else {
             ids.push(key);
             $(seletor).val(ids.join(','));
+             result = true;
         }
+        return result;
+    }
+    
+    function add_label_box(id,name,seletor){
+        $(seletor).append('<span id="label-box-'+id+'" class="label label-primary">'
+                +name+' <a style="color:white;cursor:pointer;" onclick="remove_label_box('+id+')">x</a></span>&nbsp;');
+    }
+    
+    function remove_label_box(id){
+        $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
+            if(node.data.key==id){
+                node.select(false);
+                $('#label-box-'+id).remove();
+            }
+        });
     }
     /**
      * 

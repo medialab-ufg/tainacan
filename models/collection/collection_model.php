@@ -285,10 +285,10 @@ class CollectionModel extends Model {
                 $category_root_id = $this->get_category_root_of($data['collection_id']);
                 $move_to = get_term_by('id', $data['socialdb_collection_parent'], 'socialdb_category_type');
                 if ($move_to && !is_wp_error($move_to)) {
-                    $update_category = wp_update_term($category_root_id, 'socialdb_category_type', array(
-                        'parent' => $move_to->term_id
-                    ));
-                    update_post_meta($post_id, 'socialdb_collection_parent', $data['socialdb_collection_parent']);
+                $update_category = wp_update_term($category_root_id, 'socialdb_category_type', array(
+                    'parent' => $move_to->term_id
+                ));
+                update_post_meta($post_id, 'socialdb_collection_parent', $data['socialdb_collection_parent']);
                     //$this->extend_collection($data['collection_id'], $move_to->term_id);
                 }
             }
@@ -297,7 +297,7 @@ class CollectionModel extends Model {
         if ($data['socialdb_collection_moderation_type'] == 'democratico') {
             update_post_meta($post_id, 'socialdb_collection_moderation_days', $data['socialdb_collection_moderation_days']);
         }
-
+            
         update_post_meta($post_id, 'socialdb_collection_moderation_type', $data['socialdb_collection_moderation_type']);
         update_post_meta($post_id, 'socialdb_collection_object_name', $data['socialdb_collection_object_name']);
         update_post_meta($post_id, 'socialdb_collection_hide_tags', $data['socialdb_collection_hide_tags']);
@@ -335,8 +335,10 @@ class CollectionModel extends Model {
         update_post_meta($post_id, 'socialdb_collection_permission_create_tags', $data['socialdb_collection_permission_create_tags']);
         update_post_meta($post_id, 'socialdb_collection_permission_edit_tags', $data['socialdb_collection_permission_edit_tags']);
         update_post_meta($post_id, 'socialdb_collection_permission_delete_tags', $data['socialdb_collection_permission_delete_tags']);
-        
-        
+        $data['collection_id'] = $post_id;
+        if(has_action('update_collection_configuration')){
+            do_action('update_collection_configuration', $data);
+        }
         $this->update_privacity($post_id, $data['collection_privacy']);
         return json_encode($data);
     }

@@ -385,7 +385,7 @@ class Model {
      * Autor: Eduardo Humberto 
      */
     public function get_category_root_id() {
-        $term = get_term_by('name', 'socialdb_category', 'socialdb_category_type');
+        $term = get_term_by('name', 'socialdb_taxonomy', 'socialdb_category_type');
         return $term->term_id;
     }
 
@@ -890,13 +890,22 @@ class Model {
         global $wpdb;
         $wp_posts = $wpdb->prefix . "posts";
         $term_relationships = $wpdb->prefix . "term_relationships";
+        $term_taxonomy = $wpdb->prefix . "term_taxonomy";
         $category_root_id = $this->get_category_root_of($collection_id);
+        $termchildren = get_term_children( $category_root_id, 'socialdb_category_type' );
         $term = get_term_by('id', $category_root_id, 'socialdb_category_type');
+        if(is_array($termchildren)&&!empty($termchildren)){
+            $termchildren[] = $category_root_id;
+        }else{
+            $termchildren = [];
+            $termchildren[] = $category_root_id;
+        }
         if (isset($term->term_taxonomy_id)) {
             $query = "
                     SELECT p.$field FROM $wp_posts p
                     INNER JOIN $term_relationships t ON p.ID = t.object_id    
-                    WHERE p.post_type LIKE 'socialdb_object' and t.term_taxonomy_id = {$term->term_taxonomy_id} 
+                    INNER JOIN $term_taxonomy tt ON tt.term_taxonomy_id = t.term_taxonomy_id    
+                    WHERE p.post_type LIKE 'socialdb_object' and tt.term_id IN (".  implode(',', $termchildren).")
             ";
 
             $result = $wpdb->get_results($query);
@@ -1429,6 +1438,17 @@ class Model {
      */
     public function get_category_root() {
         $term = get_term_by('name', 'socialdb_category', 'socialdb_category_type');
+        return $term->term_id;
+    }
+    /**
+     * function get_category_root()
+     * @return int O term_id da categoria root de todas as categorias.
+     * 
+     * metodo responsavel em retornar a categoria root de TODAS as categorias
+     * Autor: Eduardo Humberto 
+     */
+    public function get_category_taxonomy_root() {
+        $term = get_term_by('name', 'socialdb_taxonomy', 'socialdb_category_type');
         return $term->term_id;
     }
 
@@ -2088,18 +2108,25 @@ class Model {
      * @return array com os metadados com as mesmas iniciais
      * @author: Eduardo Humberto  
      */
-    public function add_property_position_ordenation($collection_id, $id) {
+    public function add_property_position_ordenation($collection_id, $id,$tab = 'default') {
         $array = [];
-        $meta = get_post_meta($collection_id, 'socialdb_collection_properties_ordenation', true);
-        if (!$meta || $meta == '') {
-            $array[] = $id;
-        } else {
-            $array = explode(',', $meta);
-            if (is_array($array)) {
-                $array[] = $id;
+        $meta = unserialize(get_post_meta($collection_id, 'socialdb_collection_properties_ordenation', true));
+        if (is_array($meta)) {
+            if(isset($meta[$tab])){
+                $meta[$tab] = explode(',', $meta[$tab]);
+                $meta[$tab][] = $id;
+                $meta[$tab] = implode(',', $meta[$tab]) ;
+            }else{
+                $meta[$tab] = [];
+                $meta[$tab][] = $id;
+                $meta[$tab] = implode(',', $meta[$tab]) ;
             }
+        }else{
+            $meta = [];
+            $meta[$tab][] = $id;
         }
-        update_post_meta($collection_id, 'socialdb_collection_properties_ordenation', implode(',', $array));
+        update_post_meta($data['collection_id'], 'socialdb_collection_properties_ordenation', serialize($meta));
+        
     }
 
     /**
@@ -2109,20 +2136,23 @@ class Model {
      */
     public function remove_property_position_ordenation($collection_id, $id) {
         $array = [];
-        $meta = get_post_meta($collection_id, 'socialdb_collection_properties_ordenation', true);
+        $meta = unserialize(get_post_meta($collection_id, 'socialdb_collection_properties_ordenation', true));
         if (!$meta || $meta == '') {
             
         } else {
-            $array = explode(',', $meta);
-            if (is_array($array)) {
-                foreach ($array as $index => $value) {
-                    if ($value == $id) {
-                        unset($array[$index]);
+            if (is_array($meta)) {
+                foreach ($meta as $tab => $values) {
+                    $ordenation = explode(',',$values);
+                    foreach ($ordenation as $index => $value) {
+                        if ($value == $id) {
+                            unset($ordenation[$index]);
+                        }
                     }
+                    $meta[$tab] = implode(',', $ordenation);
                 }
             }
         }
-        update_post_meta($collection_id, 'socialdb_collection_properties_ordenation', implode(',', $array));
+        update_post_meta($collection_id, 'socialdb_collection_properties_ordenation',  serialize($meta));
     }
     
     /**
@@ -2166,9 +2196,10 @@ class Model {
                      continue;
                  //insiro a propriedade da classe no dynatree
                  $children = $this->getChildren($propertyObject->term_id);
+                 $name = (mb_detect_encoding($propertyObject->name)=='UTF-8') ? $propertyObject->name : utf8_encode($propertyObject->name);
                  if (count($children) > 0) {
                     $dynatree[] = array(
-                            'title' => Words($propertyObject->name, 30), 
+                            'title' =>$name, 
                             'key' => $propertyObject->term_id,  
                             'expand' => true, 
                             'hideCheckbox' => $hide_checkbox, 
@@ -2176,7 +2207,7 @@ class Model {
                             'addClass' => 'color_property4');      
                  }else{
                      $dynatree[] = array(
-                            'title' => Words($propertyObject->name, 30), 
+                            'title' =>$name, 
                             'key' => $propertyObject->term_id,  
                             'hideCheckbox' => $hide_checkbox, 
                             'addClass' => 'color_property4'); 
@@ -2184,7 +2215,7 @@ class Model {
             }
         }
        $this->sortDynatree($dynatree);
-        return json_encode($dynatree);
+       return json_encode($dynatree);
        }  catch (Exception $e){
            var_dump($e);
        }

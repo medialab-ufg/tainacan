@@ -37,7 +37,7 @@
         if(!name){
             name = '<?php _e('New tab', 'tainacan') ?>';
         }
-        return '<li role="presentation">'+
+        return '<li role="presentation" onmouseover="show_close_tab('+id+')" onmouseout="hide_close_tab('+id+')">'+
                 '<a id="click-tab-'+id+'" href="#tab-'+id+'" aria-controls="tab-'+id+'" role="tab" data-toggle="tab">'+
                     '<span class="tab-title"  ondblclick="alter_tab_title('+id+')" id="'+id+'-tab-title">'+name+'</span>'+
                     '<input id="'+id+'-tab-title-input"'+
@@ -47,9 +47,16 @@
                            ' style="display: none;" '+
                            'type="text" '+
                            'value="'+name+'">&nbsp;&nbsp;'+
-                           '<span style="cursor:pointer;position: absolute;top: 0px;right: 0px;height: 15px;padding-left:2px;padding-right:2px;background:#0c698b;color:white" onclick="remove_tab(this,'+id+')"><span style="position: relative;top: -3px">x</span></span>'
+                           '<span id="remove-button-tab-'+id+'" style="display:none;cursor:pointer;position: absolute;top: 0px;right: 0px;height: 15px;padding-left:2px;padding-right:2px;background:#0c698b;color:white" onclick="remove_tab(this,'+id+')"><span style="position: relative;top: -3px">x</span></span>'
                 '</a>'+
             '</li>';
+    }
+    
+    function show_close_tab(id){
+        $('#remove-button-tab-'+id).show();
+    }
+    function hide_close_tab(id){
+        $('#remove-button-tab-'+id).hide();
     }
     // funcao que gera o conteudo da aba criada
     function get_tab_content(id){
@@ -161,7 +168,7 @@
     }
     //funcao responsavel em listar as abas nos selects
     function list_tabs(){
-        console.log('list-tabs');
+        //console.log('list-tabs');
         $.ajax({
             url: $('#src').val() + '/controllers/collection/collection_controller.php',
             type: 'POST',

@@ -1,4 +1,5 @@
 <?php
+
 require_once(dirname(__FILE__) . '../../../models/theme_options/theme_options_model.php');
 require_once(dirname(__FILE__) . '../../../models/theme_options/populate_model.php');
 require_once(dirname(__FILE__) . '../../../models/collection/collection_templates_model.php');
@@ -89,6 +90,45 @@ class ThemeOptionsController extends Controller {
             case "import_full":
                 return $this->render(dirname(__FILE__) . '../../../views/theme_options/import_full.php', $data);
                 break;
+            case "list_aip_files":
+                $files = $theme_options_model->getAipFiles();
+                if (is_array($files)) {
+                    return json_encode($files);
+                } else {
+                    return false;
+                }
+                break;
+            case "import_dspace_aip":
+                $file = $data['file'];
+                $verify = $theme_options_model->verify_aip_file($file);
+                if ($verify) {
+                    $unzip_path = $theme_options_model->unzip_aip_file($file);
+                    //site
+                    if (file_exists($unzip_path . '/sitewide-aip.zip')) {
+                        $unzip_site = $theme_options_model->unzip_aip_general($unzip_path . '/', 'sitewide-aip.zip');
+                        $xml = (file_exists($unzip_site.'/mets.xml') ? simplexml_load_file($unzip_site.'/mets.xml') : null);
+                        $theme_options_model->read_site_xml($xml);
+                        //var_dump($xml);
+                    } else {
+                        return false;
+                    }
+                    //community
+                    //collection
+                    //item
+                } else {
+                    return false;
+                }
+                break;
+            case "delete_aip_file":
+                $result = $theme_options_model->delete_aip_file($data['file']);
+                return $result;
+                break;
+            case "upload_aip_zip":
+                //var_dump($data, $_FILES);
+                $file = (isset($_FILES['aip_pkg']) ? $_FILES['aip_pkg'] : null);
+                $result = $theme_options_model->upload_aip_file($file, $data);
+                return $result;
+                break;
             case "export_full":
                 return $this->render(dirname(__FILE__) . '../../../views/theme_options/export_full.php', $data);
                 break;
@@ -125,7 +165,7 @@ class ThemeOptionsController extends Controller {
                 if (!empty($files)) {
                     foreach ($files as $file) {
                         $file["md5_inicial"] = get_post_meta($file["ID"], 'md5_inicial', true);
-                        if(!$file["md5_inicial"] || $file["md5_inicial"] == ''){
+                        if (!$file["md5_inicial"] || $file["md5_inicial"] == '') {
                             $md5_inicial = ($theme_options_model->is_url_exist($file["guid"]) ? md5_file($file["guid"]) : 'Not Found!');
                             update_post_meta($file["ID"], 'md5_inicial', $md5_inicial);
                             $file["md5_inicial"] = $md5_inicial;

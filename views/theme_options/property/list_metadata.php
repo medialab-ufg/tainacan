@@ -7,7 +7,22 @@ $view_helper = new ViewHelper();
 ?>
 
 <?php $view_helper->render_header_config_steps('metadata') ?>
-
+<style>
+            #properties_tabs ul.metadata-container li{
+                border: 1px solid #e3e3e3 !important;
+            }
+            .gallery li {
+                padding: 0.4em;
+                margin: 0;
+            }
+            .list-compounded{
+                margin-left: 15px;
+                margin-top: 15px;
+            }
+            .list-compounded li{
+                cursor: pointer;
+            }
+</style>
 <input type="hidden" name="property_category_id" id="property_category_id" value="<?php echo $category->term_id; ?>"/>
 <div class="categories_menu col-md-12 no-padding"  id="properties_tabs">
 
@@ -47,7 +62,10 @@ $view_helper = new ViewHelper();
                     <li>
                        <!--a  data-toggle="modal" data-target="#meta-<?php echo $type ?>"-->
                        <a onclick="$('#meta-<?php echo $type ?>').modal('show')" > 
-                            <img src="<?php $view_helper->get_metadata_icon($type); ?>" alt="<?php echo $type ?>" title="<?php echo $type ?>">
+                            <img src="<?php $view_helper->get_metadata_icon($type); ?>" 
+                                 <?php if($type=='metadata_compound'): echo 'height="15" width="15"'; endif;?>
+                                 alt="<?php echo $type ?>" 
+                                 title="<?php echo $type ?>">
                             <?php echo $label ?>
                         </a>
                     </li>
@@ -60,7 +78,7 @@ $view_helper = new ViewHelper();
 
         <?php $selected_menu_style_id = get_post_meta( $collection_id, 'socialdb_collection_facet_' . $f_id . '_menu_style', true); ?>
 
-        <div class="ui-widget ui-helper-clearfix col-md-12" style="background: white">
+        <div id="tab-content-metadata" class="tab-content ui-widget ui-helper-clearfix col-md-12" style="background: white">
             <ul id="metadata-container" class="gallery ui-helper-reset ui-helper-clearfix connectedSortable  metadata-container">
                 <?php
                 foreach($view_helper->get_default_metadata() as $meta_id => $metadata):

@@ -389,8 +389,9 @@ $filesOther= [];
                             <?php
                           }
                          ?> 
-                    </div>              
-                </div>              
+                    </div>             
+                   <div id="append_properties_categories_<?php echo $property['id']; ?>"></div>
+                </div>
              <?php  } ?>
         <?php endif; ?>
             <!-- TAINACAN: a licencas do item -->

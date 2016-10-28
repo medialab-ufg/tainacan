@@ -135,8 +135,7 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
             <div class="col-md-12" style="padding-bottom: 20px;">
                 <div class="content-wrapper" <?php if (has_action('home_item_content_div')) do_action('home_item_content_div') ?> style="padding: 0; margin-top: 10px;">
                     <div>
-                        <?php
-                        if ($metas['socialdb_object_dc_type'][0] == 'text') {
+                        <?php if ($metas['socialdb_object_dc_type'][0] == 'text') {
                             echo $metas['socialdb_object_content'][0];
                         } else {
                             if ($metas['socialdb_object_from'][0] == 'internal') {
@@ -146,17 +145,11 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                                         $content = '<audio controls><source src="' . $url . '">' . __('Your browser does not support the audio element.', 'tainacan') . '</audio>';
                                         break;
                                     case 'image':
-                                        //echo '<div id="watermark_div" style="background:url('.$url_watermark.') no-repeat; z-index:99;"></div>';
                                         if (get_the_post_thumbnail($object->ID, 'thumbnail')) {
-                                            $url_image = wp_get_attachment_url(get_post_thumbnail_id($object->ID));
-                                            //$content = '<center><a href="#" onclick="$.prettyPhoto.open([\'' . $url_image . '\'], [\'\'], [\'\']);return false">
-                                            //            <img style="max-width:480px;" src="' . $url_image . '" class="img-responsive" />
-                                            //        </a></center>';
+                                            $url_image = get_the_post_thumbnail($object->ID, 'large', [ 'class'=> 'img-responsive' ] );
                                             $style_watermark = ($has_watermark ? 'style="background:url(' . $url_watermark . ') no-repeat center; background-size: contain;"' : '');
                                             $opacity_watermark = ($has_watermark ? 'opacity: 0.80;' : '');
-                                            $content = '<center ' . $style_watermark . '>'
-                                                    . '<img style="max-width:480px; ' . $opacity_watermark . '" src="' . $url_image . '" class="img-responsive" />'
-                                                    . '</center>';
+                                            $content = '<center ' . $style_watermark . '>' . $url_image . '</center>';
                                         }
                                         break;
                                     case 'video':
@@ -441,8 +434,7 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                             <input type="text" style="width:50%;" class="form-control col-md-6" id="event_tag_field"  placeholder="<?php _e('Type the tag name', 'tainacan') ?>">
                         </div>
                         <script>
-                            $('#single_show_classificiations_<?php echo $object->ID ?>').hide();
-                            $('#single_show_classificiations_<?php echo $object->ID ?>').trigger('click');
+                            $('#single_show_classificiations_<?php echo $object->ID ?>').hide().trigger('click');
                         </script>
                     </div>
                 </div>

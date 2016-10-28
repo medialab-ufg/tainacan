@@ -36,17 +36,17 @@ class CategoryModel extends Model {
         if (!$is_new) {
             if ($data['category_parent_id'] == '0' ||
                     $data['category_parent_id'] == 'public_categories' || $data['category_parent_id'] == 'shared_categories'||$data['category_parent_id'] == 'socialdb_category') {// se nao o usuario nao setou o parent
-                $new_category = wp_insert_term($data['category_name'], 'socialdb_category_type', array('parent' => $this->get_category_root(),
+                $new_category = wp_insert_term($data['category_name'], 'socialdb_category_type', array('parent' => $this->get_category_taxonomy_root(),
                     'slug' => $this->generate_slug($data['category_name'], $data['collection_id']), 'description' => $this->set_description($data)));
             } else {
-                $data['category_parent_id'] = ($data['category_parent_id'] == 'user_categories' ? $this->get_category_root() : $data['category_parent_id']);
+                $data['category_parent_id'] = ($data['category_parent_id'] == 'user_categories' ? $this->get_category_taxonomy_root() : $data['category_parent_id']);
                 $new_category = create_register($data['category_name'], 'socialdb_category_type', array('parent' => $data['category_parent_id'],
                     'slug' => $this->generate_slug($data['category_name'], $data['collection_id']), 'description' => $this->set_description($data)));
             }
         }
         //apos a insercao
         if (!is_wp_error($new_category) && $new_category['term_id']) {// se a categoria foi inserida com sucesso
-            instantiate_metas($new_category['term_id'], 'socialdb_category', 'socialdb_category_type', true);
+            instantiate_metas($new_category['term_id'], 'socialdb_taxonomy', 'socialdb_category_type', true);
             insert_meta_default_values($new_category['term_id']);
             $this->update_metas($new_category['term_id'], $data);
             $data['success'] = 'true';
@@ -115,10 +115,10 @@ class CategoryModel extends Model {
      */
     public function update($data) {
         $data['category_parent_id'] = ($data['category_parent_id'] == 'user_categories' ? '0' : $data['category_parent_id']);
-        if (($data['category_parent_id'] == '0' || $data['category_parent_id'] == $this->get_category_root()) && trim($data['category_name'])) {
+        if (($data['category_parent_id'] == '0' || $data['category_parent_id'] == $this->get_category_taxonomy_root()) && trim($data['category_name'])) {
             $update_category = wp_update_term($data['category_id'], 'socialdb_category_type', array(
                 'name' => $data['category_name'],
-                'parent' => $this->get_category_root()
+                'parent' => $this->get_category_taxonomy_root()
                 , 'description' => $this->set_description($data)
             ));
         } elseif (trim($data['category_name'])!='') {
@@ -288,7 +288,8 @@ class CategoryModel extends Model {
 
     public function initCategoriesDynatree($data) {
         $dynatree = [];
-        $dynatree = $this->generate_user_categories_dynatree($data, $dynatree, true);
+        $dynatree = $this->generate_user_categories_dynatree($data, $dynatree, true, tre);
+        $dynatree = $this->generate_collection_categories_dynatree($data, $dynatree, true, false);
         $dynatree = $this->generate_shared_categories_dynatree($data, $dynatree, true);
         $dynatree = $this->generate_public_categories_dynatree($data, $dynatree, true);
         return json_encode($dynatree);
@@ -307,6 +308,7 @@ class CategoryModel extends Model {
             $hide_checkbox = false;
         }
         $dynatree = $this->generate_user_categories_dynatree($data, $dynatree, $hide_checkbox, false);
+        $dynatree = $this->generate_collection_categories_dynatree($data, $dynatree, $hide_checkbox, false);
         $dynatree = $this->generate_shared_categories_dynatree($data, $dynatree, $hide_checkbox, false);
         $dynatree = $this->generate_public_categories_dynatree($data, $dynatree, $hide_checkbox, false);
         return json_encode($dynatree);
@@ -319,12 +321,42 @@ class CategoryModel extends Model {
       /* Retorna os filhos para as categorias no dynatree */
     /* @author Eduardo */
 
+    public function generate_collection_categories_dynatree($data, $dynatree, $hide_checkbox = false,$show_select = true) {
+        $classCss = 'category_property_img';
+        $dynatree[] = array('title' => __('Collection Categories', 'tainacan'), 'isLazy' => false,
+            'key' => $this->get_category_root(), 'activate' => false, 'expand' => true,
+            'hideCheckbox' => true, 'children' => array(), 'addClass' => $classCss);
+        $facets_id = $this->get_categories_by_owner(get_current_user_id(), $this->get_category_root());
+        foreach ($facets_id as &$facet_id) {
+            $facet = get_term_by('id', $facet_id->term_id, 'socialdb_category_type');
+            //pegando os indices do array
+            $dynatree_index_parent = end(array_keys($dynatree)); //pega o index do parent maior, no caso seria o noh (User categories)
+            // inserir os dados no dynatree
+            if ($facet) {
+                if (in_array($facet_id->term_id, CollectionModel::get_facets($data['collection_id']))) { // verifico se e uma faceta
+                    $dynatree[$dynatree_index_parent]['children'][] = array('title' => ucfirst($facet->name), 'key' => $facet->term_id, 'isLazy' => true, 'data' => $url,
+                        'expand' => true, 'hideCheckbox' => $hide_checkbox, 'addClass' => $classCss, 'select' => $show_select, 'activate' => false, 'expand' => false);
+                } else {
+                    $dynatree[$dynatree_index_parent]['children'][] = array('title' => ucfirst($facet->name), 'key' => $facet->term_id, 'isLazy' => true, 'data' => $url, 'expand' => true,
+                        'hideCheckbox' => $hide_checkbox, 'addClass' => $classCss, 'activate' => false, 'expand' => false);
+                }
+            }
+        }
+        return $dynatree;
+    }
+    /* function getChildrenDynatree() */
+    /* @param array $data Os dados vindo do formulario
+      /* @param array $dynatree O dynatree a ser populado
+      /* @return array O dynatree com os categorias do usuario
+      /* Retorna os filhos para as categorias no dynatree */
+    /* @author Eduardo */
+
     public function generate_user_categories_dynatree($data, $dynatree, $hide_checkbox = false,$show_select = true) {
         $classCss = 'user_img';
         $dynatree[] = array('title' => __('User Categories', 'tainacan'), 'isLazy' => false,
             'key' => 'user_categories', 'activate' => false, 'expand' => true,
             'hideCheckbox' => true, 'children' => array(), 'addClass' => $classCss);
-        $facets_id = $this->get_categories_by_owner(get_current_user_id(), $this->get_category_root());
+        $facets_id = $this->get_categories_by_owner(get_current_user_id(), $this->get_category_taxonomy_root());
         foreach ($facets_id as &$facet_id) {
             $facet = get_term_by('id', $facet_id->term_id, 'socialdb_category_type');
             //pegando os indices do array
@@ -669,7 +701,7 @@ class CategoryModel extends Model {
      */
     public function get_category_array($data) {
         $array = [];
-        if ($data->name == 'socialdb_category') {
+        if ($data->name == 'socialdb_category' || $data->name == 'socialdb_taxonomy') {
             return $array;
         } else {
             $array['term_id'] = $data->term_id;

@@ -3,7 +3,7 @@
         z-index: 1049;
     }
 </style>
-<div id="meta-compounds" class="modal fade" role="dialog" aria-labelledby="Compounds" style="z-index: 1041;">
+<div id="meta-metadata_compound" class="modal fade" role="dialog" aria-labelledby="Compounds" style="z-index: 1041;">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">

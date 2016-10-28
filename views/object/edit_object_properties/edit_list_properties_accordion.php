@@ -80,7 +80,7 @@ if (isset($property_object)):
                 }
                 ?>
             </h2>
-            <div class="form-group" >
+            <div>
             <?php 
                 // botao que leva a colecao relacionada
                     if (isset($property['metas']['collection_data'][0]->post_title)):  ?>
@@ -211,7 +211,7 @@ if (isset($property_object)):
                 ?>
             </h2>
             <?php $cardinality = $view_helper->render_cardinality_property($property);   ?>
-            <div class="form-group">
+            <div>
                  <?php for($i = 0; $i<$cardinality;$i++):   ?>
                     <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
                          style="padding-bottom: 10px;<?php echo ($i===0||(is_array($property['metas']['value'])&&$i<count($property['metas']['value']))) ? 'display:block': 'display:none'; ?>">
@@ -345,7 +345,7 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
                  endif; 
                  ?>
             </h2>    
-            <div class="form-group">
+            <div>
                 <?php
                 if ($property['type'] == 'radio') {
                     $properties_terms_radio[] = $property['id'];
@@ -418,7 +418,8 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
                 }
                 ?> 
         </div>   
-    </div>              
+        <div id="append_properties_categories_<?php echo $property['id']; ?>"></div>    
+    </div>      
     <?php } ?>
 <?php endif;
 ?>
@@ -435,7 +436,6 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
     <input type="hidden" id="property_origin" name="property_origin" value="<?php echo $all_ids; ?>">
     <input type="hidden" id="property_added" name="property_added" value="">
     <input type="hidden" id="selected_categories" name="selected_categories" value="">
-    <div id="append_properties_categories" class="hide"></div>
 <?php endif; ?>
 
 

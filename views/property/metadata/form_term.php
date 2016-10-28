@@ -157,13 +157,14 @@
                                         <?php echo $view_helper->render_tree_colors(); ?>
 
                                     </div>
-
-                                    <div class="form-group" id="select_menu_style" style="display: none">
-                                        <label for="select_menu_style"> <?php _e('Select Menu Style', 'tainacan') ?> </label>
+                                    
+                                    <div class="form-group" id="select_menu_style_container" style="display: none">
                                         <select class="form-control select2-menu" id="select_menu_style" name="select_menu_style">
                                             <optgroup label="<?php _e('Select the style for your facet', 'tainacan') ?>">
                                                 <?php foreach ( $menu_style_ids as $menu_id): ?>
-                                                    <option value="menu_style_<?php echo $menu_id?>" id="menu_style_<?php echo $menu_id?>"> </option>
+                                                    <option value="menu_style_<?php echo $menu_id?>" id="menu_style_<?php echo $menu_id?>">
+                                                        <img src="<?php echo get_menu_thumb_path($menu_id); ?>">
+                                                    </option>
                                                 <?php endforeach; ?>
                                             </optgroup>
                                         </select>

@@ -331,7 +331,7 @@ hr.single-item-divider {
 }
 
 /*
- * from multiple-items/create.php and multiple_social_network/create.php  >>
+ * from multiple-items/create.php >>
  */
 #selectable .ui-selecting
 {
@@ -348,7 +348,7 @@ hr.single-item-divider {
   margin-top: 15px;
   padding-top: 5px;
 }
-
+/* */
 .item-default{
   background: white;
   margin-bottom: 15px;
@@ -375,7 +375,7 @@ hr.single-item-divider {
   padding-bottom: 15px;
 }
 /*
- * << from multiple-items/create.php and multiple_social_network/create.php
+ * << from multiple-items/create.php
  */
 
 #form_properties_items.menu_left_files {
@@ -423,18 +423,63 @@ hr.single-item-divider {
 form.exif_extraction {
   margin-right: 10px;
 }
+/*
+#respond{
+  margin:0 0 30px 0;
+  clear:both;
+  form {
+    label {
+      float:left;
+      clear:left;
+      width:60px;
+      text-align:right;
+      margin-right:10px;
+    }
+    input {
+      float:left;
+      width:250px;
+      margin-bottom:10px;
 
-#properties_tabs ul.metadata-container li{
-  border: 1px solid #e3e3e3 !important;
-}
-.gallery li {
-  padding: 0.4em;
-  margin: 0;
-}
-.list-compounded{
-  margin-left: 15px;
-  margin-top: 15px;
-}
-.list-compounded li{
-  cursor: pointer;
+      &.commentsubmit {
+        float:left;
+        margin-left:70px;
+      }
+    }
+    textarea {
+      float:left;
+      width:400px;
+      height:100px;
+      margin-bottom:10px;
+    }
+  } // form
+} // #respond
+*/
+/*
+#comments {
+  width: 630px;
+  float: left;
+  border-top:1px solid #bebebe;
+
+  h3{
+    font-size:14px;
+    margin:20px 0;
+  }
+} // #comments
+
+ol.commentlist {
+  list-style:none;
+  ul{
+    margin: 0;
+    li {
+      margin:20px 20px 20px 40px;
+    }
+  }
+  li {
+    margin-bottom:30px;
+  }
+} */
+
+#items_not_found {
+  margin-top: 20px;
+  text-align: center;
 }
