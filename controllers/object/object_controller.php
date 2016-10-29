@@ -309,13 +309,14 @@ class ObjectController extends Controller {
             case "list_single_object":
                 $user_model = new UserModel();
                 $object_id = $data['object_id'];
+                $col_id = $data['collection_id'];
                 $data['object'] = get_post($object_id);
                 $data["username"] = $user_model->get_user($data['object']->post_author)['name'];
                 $data['metas'] = get_post_meta($object_id);
-                $data['collection_metas'] = get_post_meta($data['collection_id'], 'socialdb_collection_download_control', true);
+                $data['collection_metas'] = get_post_meta($col_id, 'socialdb_collection_download_control', true);
                 $data['collection_metas'] = ($data['collection_metas'] ? $data['collection_metas'] : 'allowed');
-                $data['has_watermark'] = get_post_meta($data['collection_id'], 'socialdb_collection_add_watermark', true);
-                $watermark_id = get_post_meta($data['collection_id'], 'socialdb_collection_watermark_id', true);
+                $data['has_watermark'] = get_post_meta($col_id, 'socialdb_collection_add_watermark', true);
+                $watermark_id = get_post_meta($col_id, 'socialdb_collection_watermark_id', true);
                 if ($watermark_id) {
                     $data['url_watermark'] = wp_get_attachment_url($watermark_id);
                 } else {
@@ -324,7 +325,10 @@ class ObjectController extends Controller {
                 //se existir a acao para alterar a home do item
                 if(has_action('alter_page_item')){
                     return apply_filters('alter_page_item',$data);
-                }else{
+                } else {
+                    $logData = ['collection_id' => $col_id, 'item_id' => $object_id,
+                      'user_id' => get_current_user_id(), 'event_type' => 'user', 'event' => 'view_item'];
+                    Log::addLog($logData);
                     return $this->render(dirname(__FILE__) . '../../../views/object/list_single_object.php', $data);
                 }
                 break;
@@ -471,6 +475,9 @@ class ObjectController extends Controller {
                 break;
             case 'insertUserDownload':
                 if (is_user_logged_in()) {
+                    $logData = ['collection_id' => $data['collection_id'], 'item_id' => $data['item_id'],
+                      'user_id' => get_current_user_id(), 'event_type' => 'user', 'event' => 'download_item'];
+                    Log::addLog($logData);
                     add_post_meta($data['thumb_id'], 'socialdb_user_download_' . time(), get_current_user_id());
                 }
                 return true;
