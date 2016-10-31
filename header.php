@@ -242,11 +242,7 @@ $viewHelper = new ViewHelper();
                     
                     <?php $col_controller = get_template_directory_uri() . "/controllers/collection/collection_controller.php"; ?>
                     <form onsubmit="$('#myModal').modal('hide'); show_modal_main();" action="<?php echo $col_controller ?>" method="POST">
-                        
-                        <input type="hidden" name="operation" value="simple_add">
-                        
                         <?php echo $viewHelper->render_modal_header('remove-sign', __('Create Collection', 'tainacan')); ?>
-                        
                         <div id="form_new_collection">
                             <div class="modal-body" style="padding: 0 15px 0 15px;">
 
@@ -255,6 +251,7 @@ $viewHelper = new ViewHelper();
                                     <input type="text" required="required" class="form-control" name="collection_name" id="collection_name" placeholder="<?php _e('Type the name of your collection', 'tainacan'); ?>">
                                 </div>
 
+                                <input type="hidden" name="operation" value="simple_add">
                                 <input type="hidden" name="template" id='template_collection' value="none">
                                 <input type="hidden" name="collection_object" id='collection_object' value="<?php _e('Item'); ?>">
                             </div>

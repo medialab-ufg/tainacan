@@ -253,6 +253,9 @@ require_once(dirname(__FILE__).'../../../models/ranking/ranking_model.php');
                      //collection_delete
                     case 'add_event_collection_delete':  
                         $event_collection_delete_model = new EventCollectionDeleteModel();
+                        $logData = ['collection_id' => $data['socialdb_event_delete_collection_id'],
+                            'user_id' => $data['socialdb_event_user_id'], 'event_type' => 'user_collection', 'event' => 'delete' ];
+                        Log::addLog($logData);
                         return $event_collection_delete_model->create_event($data);
                     case 'socialdb_event_collection_delete';
                         $event_collection_delete_model = new EventCollectionDeleteModel();

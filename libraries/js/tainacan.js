@@ -531,9 +531,6 @@ function add_collection_template(col, template_name) {
     $.ajax({
         url: path, type: "POST",
         data: {operation: 'simple_add', collection_object: 'Item', collection_name: col, template: template_name}
-    }).done(function (r) {
-        cl(col + " ==> " + template_name);
-        cl(r);
     });
 }
 

@@ -30,7 +30,7 @@ class ObjectMultipleModel extends Model {
     if($items_id&&is_array($items_id)){
       foreach ($items_id as $item_id) {
         $post_id = $this->insert_post($data,trim($item_id));
-        if($post_id){
+        if($post_id) {
           $this->vinculate_collection($data, $post_id);
           $this->item_resource($data, $item_id, $post_id);
           $this->item_attachments($data, $item_id, $post_id);
@@ -48,76 +48,83 @@ class ObjectMultipleModel extends Model {
           }
 
           $logData = ['collection_id' => $col_id, 'item_id' => $item_id,
-            'user_id' => $user_id, 'event_type' => 'user_items', 'event' => 'add_item' ];
+            'user_id' => $user_id, 'event_type' => 'user_items', 'event' => 'add' ];
           Log::addLog($logData);
 
           if( isset($data['do_extract']) && $data['do_extract'] === "true" ):
             $_file_path_ = get_attached_file($item_id);
-            if(isset($_file_path_)) {
-              $_exif_data = exif_read_data($_file_path_, 0, true);
-              unset($_exif_data['FILE']);
-              unset($_exif_data['COMPUTED']);
+              $_file_type = wp_check_filetype($_file_path_);
+              $_allowed_exif_exts = ['jpg', 'jpeg', 'JPG', 'JPEG', 'TIFF', 'tiff'];
+            if(isset($_file_path_) && in_array($_file_type['ext'], $_allowed_exif_exts) ) {
 
-              if($_exif_data && !empty($_exif_data)):
-
-                $property_model = new PropertyModel();
-                $_DATASET = [
-                  'collection_id' => $col_id,
-                  'category_id' => $this->get_category_root_of($col_id),
-                  'property_category_id' => $this->get_category_root_of($col_id)
-                ];
-                $_col_metas = json_decode($property_model->list_property_data($_DATASET))->property_data;
-
-                $_props_slugs = [];
-                $_props_ids = [];
-                foreach($_col_metas as $_prop_data) {
-                  $_formtd = explode("_", $_prop_data->slug);
-                  array_push($_props_slugs, $_formtd[0] );
-                  array_push($_props_ids, $_prop_data->id);
+                try {
+                    $_exif_data = exif_read_data($_file_path_, 0, true);
+                } catch (Exception $ex) {
+                    $_exif_data = false;
                 }
 
-                foreach($_exif_data as $exif_tag):
-                  if(is_array($exif_tag)):
-                    foreach($exif_tag as $exif_key => $exif_val):
-                      $_meta_exif_data_name = "Exif_" . $exif_key;
+                if($_exif_data && !empty($_exif_data) ) {
+                    unset($_exif_data['FILE']);
+                    unset($_exif_data['COMPUTED']);
 
-                      if( strpos($exif_key, "UndefinedTag") === false ):
-                          $image_exif = [
-                            'collection_id' =>  $col_id,
-                            'property_category_id' => $this->get_category_root_of($col_id),
-                            'property_data_name' => $_meta_exif_data_name,
-                            'property_metadata_type' => 'text',
-                            'socialdb_property_required' => false,
-                            'socialdb_property_data_cardinality' => '1',
-                            'is_repository_property' => 'false'
-                          ];
+                    $property_model = new PropertyModel();
+                    $_DATASET = [
+                            'collection_id' => $col_id,
+                            'category_id' => $this->get_category_root_of($col_id),
+                            'property_category_id' => $this->get_category_root_of($col_id)
+                        ];
+                    $_col_metas = json_decode($property_model->list_property_data($_DATASET))->property_data;
 
-                          $_exif_slug = strtolower( sanitize_file_name( str_replace("_", "-", $_meta_exif_data_name) ));
-                          if( in_array($_exif_slug, $_props_slugs )) {
-                            $prop_index = array_search($_exif_slug, $_props_slugs);
-                            if($prop_index && $prop_index != false) {
-                              $prop_id = $_props_ids[$prop_index];
-                              if($prop_id) {
-                                $_meta_field = "socialdb_property_" . (string) $prop_id;
-                                update_post_meta($post_id, $_meta_field, $exif_val);
-                              }
-                            }
-                          } else {
-                            $inserted_data = $property_model->add_property_data($image_exif);
-                            $new_prop_id = json_decode($inserted_data)->new_property_id;
-                            if ($new_prop_id && is_int($new_prop_id)) {
-                              update_term_meta($new_prop_id, 'socialdb_property_is_fixed', 'true');
-                              update_term_meta($new_prop_id, 'socialdb_property_visibility', 'show');
-                              $_meta_field = "socialdb_property_" . (string)$new_prop_id;
-                              update_post_meta($post_id, $_meta_field, $exif_val);
-                            }
-                          }
-                      endif;
+                    $_props_slugs = [];
+                    $_props_ids = [];
+                    foreach($_col_metas as $_prop_data) {
+                        $_formtd = explode("_", $_prop_data->slug);
+                        array_push($_props_slugs, $_formtd[0] );
+                        array_push($_props_ids, $_prop_data->id);
+                    }
+
+                    foreach($_exif_data as $exif_tag):
+                        if(is_array($exif_tag)):
+                            foreach($exif_tag as $exif_key => $exif_val):
+                                $_meta_exif_data_name = "Exif_" . $exif_key;
+
+                                if( strpos($exif_key, "UndefinedTag") === false ):
+                                    $image_exif = [
+                                        'collection_id' =>  $col_id,
+                                        'property_category_id' => $this->get_category_root_of($col_id),
+                                        'property_data_name' => $_meta_exif_data_name,
+                                        'property_metadata_type' => 'text',
+                                        'socialdb_property_required' => false,
+                                        'socialdb_property_data_cardinality' => '1',
+                                        'is_repository_property' => 'false'
+                                    ];
+
+                                    $_exif_slug = strtolower( sanitize_file_name( str_replace("_", "-", $_meta_exif_data_name) ));
+                                    if( in_array($_exif_slug, $_props_slugs )) {
+                                        $prop_index = array_search($_exif_slug, $_props_slugs);
+                                        if($prop_index && $prop_index != false) {
+                                            $prop_id = $_props_ids[$prop_index];
+                                            if($prop_id) {
+                                                $_meta_field = "socialdb_property_" . (string) $prop_id;
+                                                update_post_meta($post_id, $_meta_field, $exif_val);
+                                            }
+                                        }
+                                    } else {
+                                        $inserted_data = $property_model->add_property_data($image_exif);
+                                        $new_prop_id = json_decode($inserted_data)->new_property_id;
+                                        if ($new_prop_id && is_int($new_prop_id)) {
+                                            update_term_meta($new_prop_id, 'socialdb_property_is_fixed', 'true');
+                                            update_term_meta($new_prop_id, 'socialdb_property_visibility', 'show');
+                                            $_meta_field = "socialdb_property_" . (string)$new_prop_id;
+                                            update_post_meta($post_id, $_meta_field, $exif_val);
+                                        }
+                                    }
+                                endif;
+                            endforeach;
+                        endif;
                     endforeach;
-                  endif;
-                endforeach;
-              endif;
-            }
+                }
+            } // if file exists and is an image
           endif;
         }
       }
