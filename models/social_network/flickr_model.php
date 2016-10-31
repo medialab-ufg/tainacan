@@ -363,7 +363,7 @@ class FlickrModel extends Model {
 
                 $user_id = current_user_id_or_anon();
                 $logData = ['collection_id' => $collection_id, 'item_id' => $object_id,
-                  'user_id' => $user_id, 'event_type' => 'user', 'event' => 'add_item' ];
+                  'user_id' => $user_id, 'event_type' => 'user_items', 'event' => 'add_item' ];
                 Log::addLog($logData);
 
                 return $object_id;

@@ -48,7 +48,7 @@ class ObjectMultipleModel extends Model {
           }
 
           $logData = ['collection_id' => $col_id, 'item_id' => $item_id,
-            'user_id' => $user_id, 'event_type' => 'user', 'event' => 'add_item' ];
+            'user_id' => $user_id, 'event_type' => 'user_items', 'event' => 'add_item' ];
           Log::addLog($logData);
 
           if( isset($data['do_extract']) && $data['do_extract'] === "true" ):

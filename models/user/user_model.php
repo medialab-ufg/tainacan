@@ -83,10 +83,7 @@ class UserModel extends Model {
      * @param type $data
      * @return \mix */
     public function register_user($data) {
-        global $wpdb;
-//        $login = remove_accent($data['user_login']);
-//        $login = str_replace(' ', '-', $login);
-//        $login = str_replace(array('--', '---', '----'), '-', $login);
+        // global $wpdb;
         $login = strip_tags(trim($data['user_login']));
         $login = str_replace(' ', '-', $login);
         $login = str_replace(array('-----', '----', '---', '--'), '-', $login);
@@ -129,8 +126,12 @@ class UserModel extends Model {
             $resultRegister['title'] = __('Success', 'tainacan');
             $resultRegister['msg'] = __('User registered successfully! Your login is: ', 'tainacan') . $get_login->user_login;
             $resultRegister['url'] = get_the_permalink(get_option('collection_root_id')) . '?open_login=true';
-            
-            Log::addLog(['user_id' => $user_id, 'event_type' => 'user', 'event' => 'register']);
+
+            $user_info = get_userdata($user_id);
+            $user_role = implode(', ', $user_info->roles);
+
+            Log::addLog(['user_id' => $user_id, 'event_type' => 'user_profile', 'event' => $user_role]);
+            Log::addLog(['user_id' => $user_id, 'event_type' => 'user_status', 'event' => 'register']);
             
             $this->send_welcome_email($data, $get_login->user_login);
         } else {

@@ -2910,7 +2910,7 @@ add_action('init', 'register_ibram_menu');
 
 add_action('delete_user', 'tainacan_log_deleted_user');
 function tainacan_log_deleted_user($user_id) {
-    return Log::addLog( [ 'user_id' => $user_id, 'event_type' => 'user', 'event' => current_filter()] );
+    return Log::addLog( [ 'user_id' => $user_id, 'event_type' => 'user_status', 'event' => current_filter()] );
 }
 
 function current_user_id_or_anon() {

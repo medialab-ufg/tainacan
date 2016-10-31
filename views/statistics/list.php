@@ -6,7 +6,7 @@ include_once('js/list_js.php');
 $view_helper = new ViewHelper();
 ?>
 <div class="col-md-12 statistics-container">
-
+    
     <?php $view_helper->render_statistic_menu('config') ?>
 
     <div id="statistics-config" class="col-md-3 ui-widget-header no-padding">
