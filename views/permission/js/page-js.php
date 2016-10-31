@@ -1,6 +1,6 @@
 <script>
     $(function(){
-        $("#text_accordion").accordion({
+       $("#list-profiles").accordion({
             active: false,
             collapsible: true,
             header: "h2",
