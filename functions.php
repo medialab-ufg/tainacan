@@ -1532,7 +1532,7 @@ if (!function_exists("theme_js")) {
         /* JIT Excanvas JS */
         wp_register_script('JitExcanvasJs', get_template_directory_uri() . '/libraries/js/jit/extras/excanvas.js');
 
-        wp_register_script('my-script', get_template_directory_uri() . '/libraries/js/my-script.js', array('jquery'), '1.11');
+        wp_register_script('tainacan', get_template_directory_uri() . '/libraries/js/tainacan.js', array('jquery'), '1.11');
         /* Dynatree JS */
         wp_register_script('DynatreeJs', get_template_directory_uri() . '/libraries/js/dynatree/jquery.dynatree.full.js');
         /* Ckeditor JS */
@@ -1585,7 +1585,7 @@ if (!function_exists("theme_js")) {
         /* jsPDF Auto Table */
         wp_register_script("jsPDF_auto_table", get_template_directory_uri() . '/libraries/js/jspdf/jspdf.plugin.autotable.js', array('jquery'));
 
-        $js_files = ['jqueryUi', 'bootstrap.min', 'JitJs', 'JitExcanvasJs', 'my-script', 'DynatreeJs', 'ckeditorjs',
+        $js_files = ['jqueryUi', 'bootstrap.min', 'JitJs', 'JitExcanvasJs', 'tainacan', 'DynatreeJs', 'ckeditorjs',
             'contextMenu', 'ColorPicker', 'SweetAlert', 'SweetAlertJS', 'jquerydataTablesmin', 'data_table', 'raty',
             'jqpagination', 'dropzone', 'croppic', 'bootstrap-combobox', 'FacebookJS', 'row-sorter', 'maskedInput',
             'montage', 'prettyphoto', 'select2', 'slick','timepicker', 'jqcloud', 'toastrjs', 'jsPDF', 'jsPDF_auto_table'
