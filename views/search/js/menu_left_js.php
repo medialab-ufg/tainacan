@@ -177,13 +177,14 @@
         var root = $("#dynatree").dynatree("getRoot");
         root.visit(function (node, unused) {
             $("#ui-dynatree-id-" + node.data.key).hover(function () {
-                $("#ui-dynatree-id-" + node.data.key).trigger({
-                        type: 'mousedown',
-                        which: 3
-                    });
-                $(this).data('hover-dynatree', window.setTimeout(function ()
-                {
-                     console.log($("#ui-dynatree-id-" + node.data.key));
+                
+                $(this).data('hover-dynatree', window.setTimeout(function (){
+                     console.log($("#ui-dynatree-id-" + node.data.key),node.span.offsetLeft);
+                     $("#ui-dynatree-id-" + node.data.key).trigger("mousedown", {
+                                    pageX: 50,
+                                    pageY: 50,
+                                    button: 3
+                                });        
                     
                 }, 2000));
             },

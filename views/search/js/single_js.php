@@ -372,7 +372,7 @@
         } else {
             menu = 'myMenuSingle';
         }
-        $(span).contextMenu({menu: menu}, function (action, el, pos) {
+        $(span).contextMenu({menu: menu,trigger: 'hover'}, function (action, el, pos) {
             // The event was bound to the <span> tag, but the node object
             // is stored in the parent <li> tag
             var node = $.ui.dynatree.getNode(el);
