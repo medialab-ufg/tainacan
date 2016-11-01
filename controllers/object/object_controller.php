@@ -165,6 +165,9 @@ class ObjectController extends Controller {
                 } else {
                     $return['empty_collection'] = false;
                 }
+                $logData = ['collection_id' => $collection_id, 'user_id' => get_current_user_id(),
+                  'event_type' => 'user_collection', 'event' => 'view'];
+                Log::addLog($logData);
                 if (mb_detect_encoding($return['page'], 'auto') == 'UTF-8') {
                     $return['page'] = iconv('ISO-8859-1', 'UTF-8', utf8_decode($return['page']));
                 }
@@ -400,7 +403,7 @@ class ObjectController extends Controller {
                     return json_encode($array_json);
                 }
                 break;
-            case 'list_search' :
+            case 'list_search':
                 if ($data['collection_id'] == get_option('collection_root_id')) {
                     $array['is_json'] = false;
                     //
@@ -410,6 +413,9 @@ class ObjectController extends Controller {
                     $data['loop'] = $object_model->list_collection($data);
                     $data['listed_by'] = $object_model->get_ordered_name($data['collection_id'], $data['ordenation_id']);
                     $array['html'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
+                    $logData = ['collection_id' => $data['collection_id'], 'user_id' => get_current_user_id(),
+                      'event_type' => 'user_collection', 'event' => 'view'];
+                    Log::addLog($logData);
                     return json_encode($array);
                 } else {
                     $array['is_json'] = TRUE;
