@@ -386,7 +386,7 @@ $options = get_option('socialdb_theme_options');
     <ul id="myMenuSingle" class="contextMenu" style="display:none;">
             <li class="see">
                 <a href="#see" style="background-position: 6px 40%;padding:1px 5px 1px 28px;background-repeat:no-repeat;background-image:url('<?php echo get_template_directory_uri() ?>/libraries/css/images/see.png')">
-                    <?php _e('See', 'tainacan'); ?>
+                    <?php _e('View', 'tainacan'); ?>
                 </a>
             </li>
         <?php if (verify_allowed_action(get_the_ID(), 'socialdb_collection_permission_create_category')): ?>
