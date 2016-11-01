@@ -63,6 +63,7 @@ function setup_statisticsLog() {
     collection_id BIGINT(20) UNSIGNED NOT NULL,
     user_id BIGINT(20) UNSIGNED NOT NULL,
     item_id BIGINT(20) UNSIGNED NOT NULL,
+    resource_id BIGINT(20) UNSIGNED NOT NULL,
     ip VARCHAR(39) DEFAULT NULL,
     event_type VARCHAR(20) NOT NULL,
     event VARCHAR(20) NOT NULL,

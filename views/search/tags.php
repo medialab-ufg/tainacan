@@ -33,16 +33,14 @@ global $config;
 
     </div>
     <div class="col-md-6">
-        <form  id="submit_form_tag">
+        <form id="submit_form_tag">
             <div class="create_form-group">
                 <label for="tag_name"><?php _e('Tag name', 'tainacan'); ?></label>
                 <input maxlength="50" type="text" class="form-control" id="tag_name" name="tag_name" required="required" placeholder="<?php _e('Tag name', 'tainacan'); ?>">
             </div>
             <div class="form-group">
                 <label for="socialdb_event_term_description"><?php _e('Tag description', 'tainacan'); ?>&nbsp;<span style="font-size: 10px;">(<?php _e('Optional', 'tainacan'); ?>)</span></label>
-                <textarea class="form-control" 
-                          id="tag_description" 
-                          placeholder="<?php _e('Describe your tag', 'tainacan'); ?>" 
+                <textarea class="form-control" id="tag_description" placeholder="<?php _e('Describe your tag', 'tainacan'); ?>" 
                           name="socialdb_event_term_description" ></textarea>    
             </div>
             <br><br>
@@ -65,9 +63,7 @@ global $config;
 <div class="modal fade" id="modalExcluirTagUnique" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form  id="submit_delete_tag">   
-                <input type="hidden" id="tag_single_delete_id" name="socialdb_event_tag_id" value="">
-                <input type="hidden" id="operation_tag_delete" name="operation" value="add_event_tag_delete">
+            <form id="submit_delete_tag">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-trash"></span>&nbsp;<?php echo __('Remove Tag', 'tainacan'); ?></h4>
@@ -75,6 +71,8 @@ global $config;
                 <div class="modal-body">
                     <?php echo __('Confirm the exclusion of ', 'tainacan'); ?> <span id="delete_tag_name"></span>?
                 </div>
+                <input type="hidden" id="tag_single_delete_id" name="socialdb_event_tag_id" value="">
+                <input type="hidden" id="operation_tag_delete" name="operation" value="add_event_tag_delete">
                 <input type="hidden" id="tag_single_delete_collection_id" name="socialdb_event_collection_id" value="<?php echo get_the_ID(); ?>">
                 <input type="hidden" id="tag_single_delete_time" name="socialdb_event_create_date" value="<?php echo mktime(); ?>">
                 <input type="hidden" id="tag_single_delete_user_id" name="socialdb_event_user_id" value="<?php echo get_current_user_id(); ?>">

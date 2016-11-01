@@ -112,7 +112,7 @@ class ObjectModel extends Model {
         $data = $this->insert_object_event($data['ID'], $data);
 
         $logData = ['collection_id' => $col_id, 'item_id' => $data['ID'],
-          'user_id' => $user_id, 'event_type' => 'user_items', 'event' => 'add_item' ];
+          'user_id' => $user_id, 'event_type' => 'user_items', 'event' => 'add' ];
         Log::addLog($logData);
 
         return $data;
@@ -733,7 +733,7 @@ class ObjectModel extends Model {
         $this->insert_properties_terms($data, $data['ID']);
 
         $_log_data = [ 'collection_id' => $data['collection_id'], 'user_id' => get_current_user_id(),
-          'event_type' => 'user_items', 'item_id' => $data['ID'], 'event' => 'edit_item'];
+          'event_type' => 'user_items', 'item_id' => $data['ID'], 'event' => 'edit'];
         Log::addLog($_log_data);
 
         //msg

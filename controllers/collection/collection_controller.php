@@ -84,7 +84,6 @@ class CollectionController extends Controller {
                 } else {
                     $data['next_step'] = false;
                 }
-                
                 $data['update'] = $collection_model->update($data);
                 $data['is_moderator'] = CollectionModel::is_moderator($data['collection_id'], get_current_user_id());
                 return json_encode($data);

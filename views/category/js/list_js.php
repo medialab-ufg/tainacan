@@ -103,7 +103,7 @@
     });
     //FUNCAO QUE REALIZA A INSERCAO OU EDICAO DE UMA CATEGORIA
     function submit_form(formData){
-                $('#modalImportMain').modal('show');//mostra o modal de carregamento
+                $('#modalImportMain').modal('show'); // mostra o modal de carregamento
                 // primeira requisicao para verificar se existe uma categoria 
                 // com este nome com o mesmo pai ou apenas notificar que existe
                 // um no abaixo que possui esse mesmo pai

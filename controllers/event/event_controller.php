@@ -235,6 +235,9 @@ require_once(dirname(__FILE__).'../../../models/ranking/ranking_model.php');
      //create tag
       case 'add_event_tag_create':
           $event_tag_create_model = new EventTagCreate();
+          $logData = ['collection_id' => $data['socialdb_event_collection_id'],
+              'user_id' => $data['socialdb_event_user_id'], 'event_type' => 'tag', 'event' => 'add' ];
+          Log::addLog($logData);
           return $event_tag_create_model->create_event($data);
       case 'socialdb_event_tag_create';
           $event_tag_create_model = new EventTagCreate();
@@ -242,6 +245,9 @@ require_once(dirname(__FILE__).'../../../models/ranking/ranking_model.php');
       //edit tag
       case 'add_event_tag_edit':
           $event_tag_edit_model = new EventTagEdit();
+          $logData = ['collection_id' => $data['socialdb_event_collection_id'],
+              'user_id' => $data['socialdb_event_user_id'], 'event_type' => 'tag', 'event' => 'edit' ];
+          Log::addLog($logData);
           return $event_tag_edit_model->create_event($data);
       case 'socialdb_event_tag_edit';
           $event_tag_edit_model = new EventTagEdit();
@@ -249,6 +255,9 @@ require_once(dirname(__FILE__).'../../../models/ranking/ranking_model.php');
       //delete tag
       case 'add_event_tag_delete':
           $event_tag_delete_model = new EventTagDelete();
+          $logData = ['collection_id' => $data['socialdb_event_collection_id'],
+              'user_id' => $data['socialdb_event_user_id'], 'event_type' => 'tag', 'event' => 'delete' ];
+          Log::addLog($logData);
           return $event_tag_delete_model->create_event($data);
       case 'socialdb_event_tag_delete';
           $event_tag_delete_model = new EventTagDelete();

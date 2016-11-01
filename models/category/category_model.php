@@ -1167,12 +1167,14 @@ class CategoryModel extends Model {
             return json_encode($result);
         }
         $result = [];
-        // se  estiver editando alguma categoria, ou seja existir algum id 
+        // se estiver editando alguma categoria, ou seja existir algum id
         // para esta categoria
         if ($data['category_id'] != '') {
             $term = get_term_by('id', $data['category_id'], 'socialdb_category_type');
             if ($term->name == $data['suggested_name'] && $term->parent == $data['parent_id']) {
                 $is_new = false;
+                $log_data = [ 'user_id' => get_current_user_id(), 'event_type' => 'user_category', 'event' => 'edit' ];
+                Log::addLog($log_data);
                 $result['type'] = 'success';
                 return json_encode($result);
             } else {
@@ -1181,6 +1183,8 @@ class CategoryModel extends Model {
         }
         //se eh uma nova categoria
         else {
+            $log_data = [ 'user_id' => get_current_user_id(), 'event_type' => 'user_category', 'event' => 'add' ];
+            Log::addLog($log_data);
             $is_new = $this->verify_category(['category_id' => $data['category_id'], 'category_parent_id' => $data['parent_id'], 'category_name' => $data['suggested_name']]);
         }
 

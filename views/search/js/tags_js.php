@@ -89,48 +89,19 @@
                 $("#tags_dynatree").dynatree("getTree").reload();
                 elem = jQuery.parseJSON(result);
                 showAlertGeneral(elem.title, elem.msg, elem.type);
-
             });
             e.preventDefault();
         });
-
-        //delete tag
-        /* $('#submit_delete_tag_single').submit(function (e) {
-         $('#modalExcluirTag').modal('hide');
-         $('#modalImportMain').modal('show');//mostro o modal de carregamento
-         $.ajax({
-         url: $('#src').val() + '/controllers/event/event_controller.php',
-         type: 'POST',
-         data: new FormData(this),
-         processData: false,
-         contentType: false
-         }).done(function (result) {
-         $('#modalImportMain').modal('hide');//esconde o modal de carregamento
-         elem = jQuery.parseJSON(result);
-         $("#dynatree").dynatree("getTree").reload();
-         reinit_synonyms_tree();
-         reinit_tag_tree();
-         showHeaderCollection($('#src').val());
-         wpquery_clean();
-         showAlertGeneral(elem.title, elem.msg, elem.type);
-         $('.nav-tabs').tab();
-         });
-         e.preventDefault();
-         });*/
-
-<?php // Autocomplete dos usuarios moderadores de categoria            ?>
+        
+<?php // Autocomplete dos usuarios moderadores de categoria ?>
         $(".chosen-selected").keyup(function (event) {
             $("#chosen-selected-user").autocomplete({
                 source: src + '/controllers/user/user_controller.php?operation=list_user',
-                messages: {
-                    noResults: '',
-                    results: function () {
-                    }
-                },
+                messages: { noResults: '', results: function () { } },
                 minLength: 2,
                 select: function (event, ui) {
-                    console.log(event);
-                    var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
+                    // console.log(event);
+                    // var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
                     var temp = $("#chosen-selected2-user [value='" + ui.item.value + "']").val();
                     if (typeof temp == "undefined") {
                         $("#chosen-selected2-user").append("<option class='selected' value='" + ui.item.value + "' selected='selected' >" + ui.item.label + "</option>");
@@ -149,7 +120,7 @@
     });
 
 
-<?php //category properties             ?>
+<?php // category properties  ?>
     function list_category_property() {
         $.ajax({
             url: $('#src').val() + '/controllers/property/property_controller.php',
