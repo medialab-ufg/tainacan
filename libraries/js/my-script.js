@@ -1615,6 +1615,7 @@ function showPageCategories(slug_category, src) {
         type: 'POST',
         data: {operation: 'page', slug_category: slug_category, collection_id: $("#collection_id").val()}
     }).done(function (result) {
+        hide_modal_main();
         json = JSON.parse(result);
         if (json.html) {
             // console.log('show the page of '+slug_category);
@@ -1698,6 +1699,7 @@ function showPageTags(slug_tag, src) {
         type: 'POST',
         data: {operation: 'page', slug_tag: slug_tag, collection_id: $("#collection_id").val()}
     }).done(function (result) {
+        hide_modal_main();
         json = JSON.parse(result);
         if (json.html) {
             $("#loader_objects").hide();
