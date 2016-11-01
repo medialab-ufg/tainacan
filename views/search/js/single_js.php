@@ -66,8 +66,10 @@
                 elem_first = jQuery.parseJSON(result);
                 showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
                 list_comments_general();
+                /*
                 $('.dropdown-toggle').dropdown();
                 $('.nav-tabs').tab();
+                */
             });
         }
     }
@@ -168,18 +170,15 @@
                 $.ajax({
                     type: "POST",
                     url: $('#src').val() + "/controllers/event/event_controller.php",
-                    data: {
-                        operation: 'add_event_comment_delete',
-                        socialdb_event_create_date: time,
-                        socialdb_event_user_id: $('#current_user_id').val(),
-                        socialdb_event_comment_delete_id: comment_id,
-                        socialdb_event_collection_id: $('#collection_id').val()}
+                    data: { operation: 'add_event_comment_delete', socialdb_event_create_date: time,
+                        socialdb_event_user_id: $('#current_user_id').val(), socialdb_event_comment_delete_id: comment_id,
+                        socialdb_event_comment_delete_object_id: $("#single_object_id").val(),
+                        socialdb_event_collection_id: $('#collection_id').val() }
                 }).done(function (result) {
                     hide_modal_main();
                     list_comments_general();
                     elem_first = jQuery.parseJSON(result);
                     showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
-
                 });
             }
         });
@@ -218,14 +217,11 @@
             $.ajax({
                 type: "POST",
                 url: $('#src').val() + "/controllers/event/event_controller.php",
-                data: {
-                    operation: 'add_event_comment_edit',
-                    socialdb_event_create_date: '<?php echo mktime() ?>',
-                    socialdb_event_user_id: $('#current_user_id').val(),
-                    socialdb_event_comment_edit_id: comment_id,
+                data: { operation: 'add_event_comment_edit', socialdb_event_create_date: '<?php echo mktime() ?>',
+                    socialdb_event_user_id: $('#current_user_id').val(), socialdb_event_comment_edit_id: comment_id,
+                    socialdb_event_comment_edit_object_id: $("#single_object_id").val(),
                     socialdb_event_comment_edit_content: $('#edit_field_value_' + comment_id).val(),
-                    socialdb_event_collection_id: $('#collection_id').val()
-                }
+                    socialdb_event_collection_id: $('#collection_id').val() }
             }).done(function (result) {
                 list_comments_general();
                 hide_modal_main();
