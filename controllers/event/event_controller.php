@@ -284,9 +284,6 @@ require_once(dirname(__FILE__).'../../../models/ranking/ranking_model.php');
       //create comment
       case 'add_event_comment_create':
           $event_comment_create_model = new EventCommentCreate();
-          $logData = ['collection_id' => $data['socialdb_event_collection_id'], 'item_id' => $data['socialdb_event_comment_create_object_id'],
-              'user_id' => $data['socialdb_event_user_id'], 'event_type' => 'comment', 'event' => 'add' ];
-          Log::addLog($logData);
           return $event_comment_create_model->create_event($data);
       case 'socialdb_event_comment_create';
           $event_comment_create_model = new EventCommentCreate();
@@ -294,8 +291,12 @@ require_once(dirname(__FILE__).'../../../models/ranking/ranking_model.php');
       //edit comment
       case 'add_event_comment_edit':
           $event_comment_edit_model = new EventCommentEdit();
-          $logData = ['collection_id' => $data['socialdb_event_collection_id'], 'item_id' => $data['socialdb_event_comment_edit_object_id'],
-              'user_id' => $data['socialdb_event_user_id'], 'event_type' => 'comment', 'event' => 'edit' ];
+          $logData = [
+              'collection_id' => $data['socialdb_event_collection_id'],
+              'item_id' => $data['socialdb_event_comment_edit_object_id'],
+              'resource_id' => $data['socialdb_event_comment_edit_id'],
+              'user_id' => $data['socialdb_event_user_id'],
+              'event_type' => 'comment', 'event' => 'edit' ];
           Log::addLog($logData);
           return $event_comment_edit_model->create_event($data);
       case 'socialdb_event_comment_edit';
@@ -304,8 +305,12 @@ require_once(dirname(__FILE__).'../../../models/ranking/ranking_model.php');
       //delete comment
       case 'add_event_comment_delete':
           $event_comment_delete_model = new EventCommentDelete();
-          $logData = ['collection_id' => $data['socialdb_event_collection_id'], 'item_id' => $data['socialdb_event_comment_delete_object_id'],
-              'user_id' => $data['socialdb_event_user_id'], 'event_type' => 'comment', 'event' => 'delete' ];
+          $logData = [
+              'collection_id' => $data['socialdb_event_collection_id'],
+              'resource_id' => $data['socialdb_event_comment_delete_id'],
+              'item_id' => $data['socialdb_event_comment_delete_object_id'],
+              'user_id' => $data['socialdb_event_user_id'],
+              'event_type' => 'comment', 'event' => 'delete' ];
           Log::addLog($logData);
           return $event_comment_delete_model->create_event($data);
       case 'socialdb_event_comment_delete';

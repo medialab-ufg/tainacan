@@ -60,7 +60,7 @@
                     socialdb_event_comment_author_website: $('#url').val(),
                     socialdb_event_comment_term_id: $('#socialdb_event_comment_term_id').val(),
                     socialdb_event_comment_parent: 0,
-                    socialdb_event_collection_id: $('#collection_id').val()}
+                    socialdb_event_collection_id: $('#collection_id').val() }
             }).done(function (result) {
                 hide_modal_main();
                 elem_first = jQuery.parseJSON(result);
