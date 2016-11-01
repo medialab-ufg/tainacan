@@ -327,7 +327,7 @@ class ObjectController extends Controller {
                     return apply_filters('alter_page_item',$data);
                 } else {
                     $logData = ['collection_id' => $col_id, 'item_id' => $object_id,
-                      'user_id' => get_current_user_id(), 'event_type' => 'user', 'event' => 'view_item'];
+                      'user_id' => get_current_user_id(), 'event_type' => 'user_items', 'event' => 'view'];
                     Log::addLog($logData);
                     return $this->render(dirname(__FILE__) . '../../../views/object/list_single_object.php', $data);
                 }
@@ -476,7 +476,7 @@ class ObjectController extends Controller {
             case 'insertUserDownload':
                 if (is_user_logged_in()) {
                     $logData = ['collection_id' => $data['collection_id'], 'item_id' => $data['item_id'],
-                      'user_id' => get_current_user_id(), 'event_type' => 'user', 'event' => 'download_item'];
+                      'user_id' => get_current_user_id(), 'event_type' => 'user_items', 'event' => 'download'];
                     Log::addLog($logData);
                     add_post_meta($data['thumb_id'], 'socialdb_user_download_' . time(), get_current_user_id());
                 }
