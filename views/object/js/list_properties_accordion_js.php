@@ -215,7 +215,7 @@
                         //  if (property.id == selected) {
                         //     $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
                         //  } else {
-                        $('#field_property_term_' + radio).append('<input  ' + required + ' type="radio" name="socialdb_propertyterm_' + radio + '" value="' + children.term_id + '">&nbsp;' + children.name + '<br>');
+                        $('#field_property_term_' + radio).append('<input class="auto-save" ' + required + ' type="radio" name="socialdb_propertyterm_' + radio + '" value="' + children.term_id + '">&nbsp;' + children.name + '<br>');
                         //  }
                     });
                 });
@@ -239,7 +239,7 @@
                         if(is_selected_category(children.term_id,'#object_classifications')){
                             checked  += ' checked="checked" '
                         }
-                        $('#field_property_term_' + checkbox).append('<input type="checkbox" '+checked+' onchange="validate_checkbox(' + checkbox + ')" name="socialdb_propertyterm_' + checkbox + '[]" value="' + children.term_id + '">&nbsp;' + children.name + '<br>');
+                        $('#field_property_term_' + checkbox).append('<input class="auto-save"  type="checkbox" '+checked+' onchange="validate_checkbox(' + checkbox + ')" name="socialdb_propertyterm_' + checkbox + '[]" value="' + children.term_id + '">&nbsp;' + children.name + '<br>');
                     });
                     var required = '';
                     if (elem.metas.socialdb_property_required === 'true') {
@@ -395,6 +395,7 @@
                          }else{
                             $('#core_validation_'+treecheckbox).val('true');
                             set_field_valid(treecheckbox,'core_validation_'+treecheckbox); 
+                             $('form .auto-save').trigger('change');
                          }
                     }
                 });
@@ -454,6 +455,7 @@
                             append_category_properties(node.data.key,$("#socialdb_propertyterm_" + tree).val(),tree);
                             $("#socialdb_propertyterm_" + tree).val(node.data.key);
                             $('#core_validation_'+tree).val('true');
+                             $('form .auto-save').trigger('change');
                              set_field_valid(tree,'core_validation_'+tree);
                         }
                     }

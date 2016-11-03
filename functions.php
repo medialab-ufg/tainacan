@@ -560,6 +560,18 @@ function socialdb_validate_settings($input) {
 //************************************************************************************************************/
 //************************************************************************************************************/
 
+function betatext_post_status(){
+	register_post_status( 'betatext', array(
+		'label'                     => __( 'Beta', 'post' ),
+		'public'                    => true,
+		'exclude_from_search'       => false,
+		'show_in_admin_all_list'    => true,
+		'show_in_admin_status_list' => true,
+		'label_count'               => _n_noop( 'Beta Text <span class="count">(%s)</span>', 'Beta <span class="count">(%s)</span>' ),
+	) );
+}
+add_action( 'init', 'betatext_post_status' );
+
 /* function register_post_types() */
 /* Recebe () */
 /* Registra todos os post type utilizados pelo SocialDB */

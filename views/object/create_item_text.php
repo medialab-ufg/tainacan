@@ -1,6 +1,7 @@
 <?php
     include_once ('js/tabs_item_js.php');
     include_once ('js/create_item_text_js.php');
+    include_once ('js/create_draft_js.php');
     include_once ('js/validation_fixed_fields.php');
     include_once(dirname(__FILE__).'/../../helpers/view_helper.php');
     include_once(dirname(__FILE__).'/../../helpers/object/object_helper.php');
@@ -48,6 +49,8 @@
                     <button type="button" onclick="back_main_list();"class="btn btn-default pull-right">
                         <b><?php _e('Back','tainacan') ?></b>
                     </button>
+                    <br>
+                    <small id="draft-text"></small>
                 </h4>
                 <hr>
                 <!--------------------------- ABAS----------------------------->
@@ -85,7 +88,7 @@
                     ?>
                 </h2>
                  <div>
-                    <input class="form-control"   
+                    <input class="form-control auto-save"   
                            type="text"  
                            id="object_name" 
                            name="object_name" 
@@ -109,7 +112,7 @@
                     ?>
                 </h2>
                  <div >
-                    <textarea class="form-control" id="object_editor" name="object_editor" placeholder="<?php _e('Object Content','tainacan'); ?>"></textarea>
+                    <textarea class="form-control auto-save" id="object_editor" name="object_editor" placeholder="<?php _e('Object Content','tainacan'); ?>"></textarea>
                 </div>     
             </div>
             <!-- TAINACAN: UPLOAD DE ANEXOS DOS ITEMS -->
@@ -172,7 +175,7 @@
                                id="object_thumbnail"
                                
                                name="object_thumbnail"
-                               class="form-control">  
+                               class="form-control auto-save">  
                 </div>
             </div>    
             <!-- TAINACAN: a fonte do item -->
@@ -196,7 +199,7 @@
                     <input
                            type="text"
                            id="object_source"
-                           class="form-control"
+                           class="form-control auto-save"
                            name="object_source"
                            placeholder="<?php _e('What\'s the item source','tainacan'); ?>"
                            value="" >
@@ -220,7 +223,7 @@
                     ?>
                 </h2>
                 <div >
-                    <textarea class="form-control" 
+                    <textarea class="form-control auto-save" 
                               rows="8"
                               id="object_description_example" 
                               placeholder="<?php _e('Describe your item','tainacan'); ?>"
@@ -246,7 +249,7 @@
                 </h2>
                 <div  >
                     <input type="text" 
-                           class="form-control" 
+                           class="form-control auto-save" 
                            id="object_tags" 
                            name="object_tags"  
                            placeholder="<?php _e('The set of tags may be inserted by comma','tainacan') ?>">
@@ -289,8 +292,8 @@
                                  value='<?php echo sprintf(__('The field license is required','tainacan'),$property['name']); ?>'>
                 </h2>
                 <div id="show_form_licenses"></div>
-                <input type="hidden" id="property_license_id" value="<?php echo $view_helper->terms_fixed['license']->term_id ?>">
-             </div>   
+                <input type="hidden" class="auto-save" id="property_license_id" value="<?php echo $view_helper->terms_fixed['license']->term_id ?>">
+             </div>  
              <!-- TAINACAN: votacoes do item -->
              <div id="create_list_ranking_<?php echo $object_id ?>"></div>
             </div>
@@ -330,7 +333,7 @@
                     <label for="object_name">
                         <?php echo ($view_helper->terms_fixed['title']) ? $view_helper->terms_fixed['title']->name :  _e('Title','tainacan') ?> 
                     </label>
-                    <input class="form-control" 
+                    <input class="form-control auto-save" 
                         <?php echo ($view_helper->get_visibility($view_helper->terms_fixed['title'])=='')?'required="required"':'' ?>  
                            type="text"  
                            id="object_name" 
@@ -373,7 +376,7 @@
                     <label for="object_editor">
                         <?php echo ($view_helper->terms_fixed['content']) ? $view_helper->terms_fixed['content']->name :  _e('Content','tainacan') ?> 
                     </label>
-                    <textarea class="form-control" id="object_editor" name="object_editor" placeholder="<?php _e('Object Content','tainacan'); ?>">
+                    <textarea class="form-control auto-save" id="object_editor" name="object_editor" placeholder="<?php _e('Object Content','tainacan'); ?>">
                     </textarea>
                 </div>
                 <!-- TAINACAN: UPLOAD DE ANEXOS DOS ITEMS -->
@@ -411,7 +414,7 @@
                         onclick="back_main_list();" 
                         style="margin-bottom: 20px;color" 
                         class="btn btn-default btn-lg pull-left">
-                            <?php _e('Cancel','tainacan'); ?>
+                            <?php _e('Discard','tainacan'); ?>
                 </button>
                 <div id="submit_container">
                     <button type="submit" 
