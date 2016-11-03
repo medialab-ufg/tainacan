@@ -106,14 +106,39 @@ class ThemeOptionsController extends Controller {
                     //site
                     if (file_exists($unzip_path . '/sitewide-aip.zip')) {
                         $unzip_site = $theme_options_model->unzip_aip_general($unzip_path . '/', 'sitewide-aip.zip');
-                        $xml = (file_exists($unzip_site.'/mets.xml') ? simplexml_load_file($unzip_site.'/mets.xml') : null);
-                        $theme_options_model->read_site_xml($xml);
+                        $xml = (file_exists($unzip_site . '/mets.xml') ? simplexml_load_file($unzip_site . '/mets.xml') : null);
+                        if ($xml != null) {
+                            $theme_options_model->read_site_xml($xml);
+                            $theme_options_model->recursiveRemoveDirectory($unzip_site);
+                        }
                         //var_dump($xml);
                     } else {
                         return false;
                     }
                     //community
+                    $community_files = scandir($unzip_path);
+                    foreach ($community_files as $community_file) {
+                        if (strpos($community_file, 'COMMUNITY') !== false) {
+                            $unzip_com = $theme_options_model->unzip_aip_general($unzip_path . '/', $community_file);
+                            $xml = (file_exists($unzip_com . '/mets.xml') ? simplexml_load_file($unzip_com . '/mets.xml') : null);
+                            if ($xml != null) {
+                                $theme_options_model->read_community_xml($xml);
+                                $theme_options_model->recursiveRemoveDirectory($unzip_com);
+                            }
+                        }
+                    }
                     //collection
+                    $collection_files = scandir($unzip_path);
+                    foreach ($collection_files as $collection_file) {
+                        if (strpos($collection_file, 'COLLECTION') !== false) {
+                            $unzip_col = $theme_options_model->unzip_aip_general($unzip_path . '/', $collection_file);
+                            $xml = (file_exists($unzip_col . '/mets.xml') ? simplexml_load_file($unzip_col . '/mets.xml') : null);
+                            if ($xml != null) {
+                                $theme_options_model->read_collection_xml($xml);
+                                //$theme_options_model->recursiveRemoveDirectory($unzip_col);
+                            }
+                        }
+                    }
                     //item
                 } else {
                     return false;
