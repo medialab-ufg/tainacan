@@ -27,6 +27,12 @@ $view_helper = new ViewHelper();
         </div>
         <div class="form-group">
 
+        <style type="text/css">
+            #report_type_stat .dynatree-icon {
+                display: none;
+            }
+        </style>
+
             <label for="object_tags" class="title-pipe"> <?php i18n_str('Report type',true); ?> </label>
 
             <div id="report_type_stat"></div>

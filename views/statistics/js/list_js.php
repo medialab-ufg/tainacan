@@ -67,12 +67,14 @@
             alert("You activated " + node.data.title);
         },
         checkbox: true,
+        icon: false,
+        nodeIcon: false,
         children: [ // Pass an array of nodes.
-            {title: "<h4>Item 1</h4><p>oi</p>"},
-            {title: "Folder 2", isFolder: true,
+            {title: "<div>Status</div><p> logins / registros / banidos / excluídos</p>"},
+            {title: "Itens",
                 children: [
-                    {title: "Sub-item 2.1"},
-                    {title: "Sub-item 2.2"}
+                    {title: "<div>Usuário</div><p> view / comentado / votado</p>"},
+                    {title:  "<div>Status</div><p> criados / editados / excluídos / view / favoritos / baixados</p>"}
                 ]
             },
             {title: "Item 3"}
