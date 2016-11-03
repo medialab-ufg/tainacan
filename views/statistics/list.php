@@ -9,7 +9,9 @@ $view_helper = new ViewHelper();
     
     <?php $view_helper->render_statistic_menu('config') ?>
 
-    <div id="statistics-config" class="col-md-3 ui-widget-header no-padding">
+    <div id="statistics-config" class="col-md-3 ui-widget-header no-padding"
+         style="background-color: white; border: 3px solid #E8E8E8; margin-left: -15px;">
+
         <div class="form-group period-config">
             <label for="object_tags" class="title-pipe"> <?php i18n_str('Period',true); ?> </label>
             <div class="date-range-filter">
@@ -24,7 +26,11 @@ $view_helper = new ViewHelper();
             </div>
         </div>
         <div class="form-group">
+
             <label for="object_tags" class="title-pipe"> <?php i18n_str('Report type',true); ?> </label>
+
+            <div id="report_type_stat"></div>
+
             <div>
                 <ul style="padding-left: 0">
                     <span class="caret"></span> Usuários
@@ -77,7 +83,7 @@ $view_helper = new ViewHelper();
 
     <div class="col-md-9">
 
-        <div class="chart-header btn-group col-md-12">
+        <div class="chart-header btn-group col-md-12" style="background-color: white; border: 3px solid #E8E8E8">
             <?php $view_helper->render_config_title(__('Repository Statistics', 'tainacan')); ?>
             <div class="user-config-control col-md-12 no-padding">
                 <div class="col-md-4 pull-left">
@@ -85,9 +91,9 @@ $view_helper = new ViewHelper();
                     <span class="current-chart"><?php i18n_str('User Stats',true); ?></span>
                 </div>
 
-                <span class="config-title"><?php i18n_str('Orientation',true); ?></span>
-                <span class="config-title"><?php i18n_str('Mode',true); ?></span>
-                <button class="btn btn-default"> <?php i18n_str('Download',true); ?> </button>
+                <span class="config-title"><?php i18n_str('Orientation:',true); ?></span>
+                <span class="config-title"><?php i18n_str('Mode:',true); ?></span>
+                <button class="btn btn-default"> <?php i18n_str('Download',true); ?> <span class="caret"></span></button>
             </div>
         </div>
 

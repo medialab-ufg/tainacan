@@ -59,4 +59,58 @@
         heightStyle: "content",
         icons: true
     });
+
+    $("#report_type_stat").dynatree({
+        onActivate: function(node) {
+            // A DynaTreeNode object is passed to the activation handler
+            // Note: we also get this event, if persistence is on, and the page is reloaded.
+            alert("You activated " + node.data.title);
+        },
+        checkbox: true,
+        children: [ // Pass an array of nodes.
+            {title: "<h4>Item 1</h4><p>oi</p>"},
+            {title: "Folder 2", isFolder: true,
+                children: [
+                    {title: "Sub-item 2.1"},
+                    {title: "Sub-item 2.2"}
+                ]
+            },
+            {title: "Item 3"}
+        ],
+        classNames: { checkbox: 'dynatree-radio'}
+    });
+    /*
+    $("#report_type_stat").dynatree({
+        // selectionVisible: true, // Make sure, selected nodes are visible (expanded).
+        // checkbox: true,
+        persist: true,
+        children: [ // Pass an array of nodes.
+            {title: "Item 1"},
+            {title: "Folder 2", isFolder: true,
+                children: [
+                    {title: "Sub-item 2.1"},
+                    {title: "Sub-item 2.2"}
+                ]
+            },
+            {title: "Item 3"}
+        ],
+
+        initAjax: {
+            url: src + '/controllers/collection/collection_controller.php',
+            data: {
+                collection_id: $("#collection_id").val(),
+                operation: 'initDynatree'
+            },
+            addActiveKey: true
+        },
+
+        onClick: function(node, event) {
+            cl(node);
+            cl(event);
+        },
+        onActivate: function (dtnode) {
+            alert("You activated " + dtnode.data.title);
+        }
+    });
+    */
 </script>
