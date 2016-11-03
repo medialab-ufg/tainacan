@@ -38,14 +38,14 @@
         $('#submit_form_tag').submit(function (e) {
             e.preventDefault();
             if ($('#operation_tag_form').val() == 'add') {
-                var data = {socialdb_event_tag_suggested_name: $('#tag_name').val(),
+                var data = { socialdb_event_tag_suggested_name: $('#tag_name').val(),
                     socialdb_event_tag_description: $('#tag_description').val(),
                     socialdb_event_collection_id: $('#tag_single_collection_id').val(),
                     socialdb_event_create_date: $('#tag_single_create_time').val(),
                     socialdb_event_user_id: $('#tag_single_user_id').val(),
                     operation: 'add_event_tag_create'};
             } else {
-                var data = {socialdb_event_tag_id: $('#tag_id').val(),
+                var data = { socialdb_event_tag_id: $('#tag_id').val(),
                     socialdb_event_tag_suggested_name: $('#tag_name').val(),
                     socialdb_event_tag_description: $('#tag_description').val(),
                     socialdb_event_collection_id: $('#tag_single_collection_id').val(),
