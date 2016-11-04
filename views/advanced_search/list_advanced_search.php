@@ -11,8 +11,8 @@ include_once ('../../../../../wp-load.php');
 include_once ('../../../../../wp-includes/wp-db.php');
 include_once ('js/list_advanced_search_js.php');
 include_once(dirname(__FILE__).'/../../helpers/view_helper.php');
-
-$view_helper = new ViewHelper();
+include_once(dirname(__FILE__).'/../../helpers/object/object_helper.php');
+$viewHelper = new ViewHelper();
 $number_elements = [10,20,50,100];
 ?>  
 <h3>
@@ -61,6 +61,7 @@ $number_elements = [10,20,50,100];
             <?php
             while ($loop_collections->have_posts()) : $loop_collections->the_post();
                 $countLine++;
+                include_once(dirname(__FILE__)."/../../views/object/list_modes/modals.php");
                 ?>  
                 <li style="padding: 0px;" class="col-md-6" id="object_<?php echo get_the_ID() ?>">
                         <input type="hidden" id="add_classification_allowed_<?php echo get_the_ID() ?>" name="add_classification_allowed" value="<?php echo (string)verify_allowed_action($collection_id,'socialdb_collection_permission_add_classification',get_the_ID()); ?>" />
@@ -98,14 +99,10 @@ $number_elements = [10,20,50,100];
                                             <ul class="item-funcs col-md-5 right">
                                                 <!-- TAINACAN: hidden com id do item -->
                                                 <input type="hidden" class="post_id" name="post_id" value="<?= get_the_ID() ?>">
-
-                                                <li>
-                                                    <div class="item-redesocial">
-                                                        <a id="popover_network<?php echo get_the_ID(); ?>_search" rel="popover" data-placement="left"
-                                                           onclick="showPopoverSearch(<?php echo get_the_ID(); ?>)">
-                                                            <div style="cursor:pointer;" data-icon="&#xe00b;"></div>
-                                                        </a>
-                                                    </div>
+                                                <li class="item-redesocial">
+                                                    <a id="modal_network<?php echo get_the_ID(); ?>" onclick="showModalShareNetwork(<?php echo get_the_ID(); ?>)">
+                                                        <div style="cursor:pointer;" data-icon="&#xe00b;"></div>
+                                                    </a>
                                                 </li>
 
                                                     <!--li><a href=""><span class="glyphicon glyphicon-comment"></span></a></li-->
@@ -193,8 +190,9 @@ endif;
             <?php
             while ($loop_objects->have_posts()) : $loop_objects->the_post();
                 $countLine++;
+               include(dirname(__FILE__)."/modals_adv.php");
                 ?>  
-                <?php $link =  get_the_permalink($view_helper->helper_get_collection_by_object(get_the_ID())[0]->ID).'?item='.basename(get_permalink()); ?>
+                <?php $link =  get_the_permalink($viewHelper->helper_get_collection_by_object(get_the_ID())[0]->ID).'?item='.basename(get_permalink()); ?>
                  <li style="padding: 0px;" class="col-md-6" id="object_<?php echo get_the_ID() ?>">
                         <input type="hidden" id="add_classification_allowed_<?php echo get_the_ID() ?>" name="add_classification_allowed" value="<?php echo (string)verify_allowed_action($collection_id,'socialdb_collection_permission_add_classification',get_the_ID()); ?>" />
                     <!-- TAINACAN: coloca a class row DO ITEM, sao cinco colunas possiveis todas elas podendo ser escondidas pelo o usuario, mas seu tamanho eh fixo col-md-2  -->
@@ -222,23 +220,14 @@ endif;
                                             <!-- TAINACAN: container(AJAX) que mostra o html com os rankings do objeto-->
                                             <div id="rankings_<?php echo get_the_ID() ?>" class="rankings-container"></div>
 
-                                            <div id="popover_content_wrapper<?php echo get_the_ID(); ?>_search" class="hide flex-box">
-                                                <a target="_blank" href="https://twitter.com/intent/tweet?url=<?php echo get_the_permalink($collection_id) . '?item=' . get_post(get_the_ID())->post_name; ?>&amp;text=<?php echo htmlentities(get_the_title()); ?>&amp;via=socialdb"><div data-icon="&#xe005;"></div></a>
-                                                <a onclick="redirect_facebook('<?php echo get_the_ID() ?>');" href="#"><div data-icon="&#xe021;"></div></a>
-                                                <a target="_blank" href="https://plus.google.com/share?url=<?php echo get_the_permalink($collection_id) . '?item=' . get_post(get_the_ID())->post_name; ?>"><div data-icon="&#xe01b;"></div></a>
-                                            </div>
-
                                             <ul class="item-funcs col-md-5 right">
                                                 <!-- TAINACAN: hidden com id do item -->
                                                 <input type="hidden" class="post_id" name="post_id" value="<?= get_the_ID() ?>">
 
-                                                <li>
-                                                    <div class="item-redesocial">
-                                                        <a id="popover_network<?php echo get_the_ID(); ?>_search" rel="popover" data-placement="left"
-                                                           onclick="showPopoverSearch(<?php echo get_the_ID(); ?>)">
-                                                            <div style="cursor:pointer;" data-icon="&#xe00b;"></div>
-                                                        </a>
-                                                    </div>
+                                                <li class="item-redesocial">
+                                                    <a id="modal_network<?php echo get_the_ID(); ?>" onclick="showModalShareNetwork(<?php echo get_the_ID(); ?>)">
+                                                        <div style="cursor:pointer;" data-icon="&#xe00b;"></div>
+                                                    </a>
                                                 </li>
 
                                                     <!--li><a href=""><span class="glyphicon glyphicon-comment"></span></a></li-->

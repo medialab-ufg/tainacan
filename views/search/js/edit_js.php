@@ -95,39 +95,11 @@
     });
 
     function renumber_all() {
-        // renumber_table_horizontal('#table_search_data_id');
         renumber_table_left('#table_search_data_left_column_id');
-        // renumber_table_right('#table_search_data_right_column_id');
     }
-
-    //Renumber table rows horizontal
-    /*
-    function renumber_table_horizontal(tableID) {
-        var src = $('#src').val();
-        var arrFacets = [];
-        $(tableID + " tr").each(function () {
-            count = $(this).parent().children().index($(this)) + 1;
-            var input_id = $(this).find("input[class='find_facet']").attr('id') + '';
-            if (input_id != 'undefined') {
-                var facet_id = input_id.split('_')[1];
-                arrFacets.push([facet_id, count]);
-                var html_insert = count + "<input class='find_facet' type='hidden' id='position_" + facet_id + "' value='" + facet_id + "_" + count + "' />";
-                $(this).find('.priority-horizontal').html(html_insert);
-            }
-        });
-
-        $.ajax({
-            url: src + '/controllers/search/search_controller.php',
-            type: 'POST',
-            data: {arrFacets: arrFacets, operation: 'save_new_priority', collection_id: $('#collection_id').val()}
-        }).done(function (result) {
-            $('.dropdown-toggle').dropdown();
-        });
-    }
-    */
+    
 
     //Renumber table rows left
-
     function renumber_table_left(tableID) {
         var src = $('#src').val();
         var arrFacets = [];
@@ -150,33 +122,7 @@
             $('.dropdown-toggle').dropdown();
         });
     }
-
-    //Renumber table rows right
-    /*
-    function renumber_table_right(tableID) {
-        var src = $('#src').val();
-        var arrFacets = [];
-        $(tableID + " tr").each(function () {
-            count = $(this).parent().children().index($(this)) + 1;
-            var input_id = $(this).find("input[class='find_facet']").attr('id') + '';
-            if (input_id != 'undefined') {
-                var facet_id = input_id.split('_')[1];
-                arrFacets.push([facet_id, count]);
-                var html_insert = count + "<input class='find_facet' type='hidden' id='position_" + facet_id + "' value='" + facet_id + "_" + count + "' />";
-                $(this).find('.priority-right').html(html_insert);
-            }
-        });
-
-        $.ajax({
-            url: src + '/controllers/search/search_controller.php',
-            type: 'POST',
-            data: {arrFacets: arrFacets, operation: 'save_new_priority', collection_id: $('#collection_id').val()}
-        }).done(function (result) {
-            $('.dropdown-toggle').dropdown();
-        });
-
-    }
-    */
+    
 
     function list_ordenation() {
         $.ajax({

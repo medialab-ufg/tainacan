@@ -125,5 +125,21 @@ class ItemModel extends Model {
             }
         }
     }
+    
+    /**
+     * 
+     * @param array $data
+     * @return type
+     */
+    public function update_argument($data) {
+          $post = array(
+            'ID' => $data['argument_id'],
+            'post_title' => $data['argument'],
+            'post_type' => 'socialdb_object'
+        );
+        $data['ID'] = wp_update_post($post);
+        update_post_meta($data['ID'], 'socialdb_object_contest_position', $data['argument-type']);  
+        return $data;
+    }
 
 }

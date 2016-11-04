@@ -21,10 +21,12 @@
 
         });
     });
+    
     function cancel_import() {
         $('#maping_container').hide();
         $('#validate_url_container').show('slow');
     }
+    
     function editAppendMapping() {
         var count = $('#counter_oai_dc_edit').val();
         $('#counter_oai_dc_edit').val(parseInt(count) + 1);
@@ -51,6 +53,9 @@
             var jsonObject = jQuery.parseJSON(result);
             if (jsonObject && jsonObject != null) {
                 $.each(jsonObject.mapping, function (id, object) {
+                    if(object.tag=='contributor'){
+                        object.tag = 'contributors';
+                    }
                     $('[name=mapping_dublin_core_' + (id + 1) + ']').val(object.tag);
                     $('[name=mapping_socialdb_' + (id + 1) + ']').val(object.socialdb_entity)
                     if (object.attribute_value) {
@@ -72,7 +77,7 @@
 
 
     function update_mapping(url) {
-         var validation = validation_form(parseInt($('#counter_oai_dc_edit').val()));
+         var validation = validation_form_edit(parseInt($('#counter_oai_dc_edit').val()));
         if(validation===1){
              showAlertGeneral('<?php echo __('Attention','tainacan') ?>', '<?php echo __('There is duplicate mappings','tainacan') ?>', 'error');
         }else if(validation===2){

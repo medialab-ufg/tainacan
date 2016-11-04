@@ -160,9 +160,9 @@ legend.scheduler-border {
 }
 
 .menuFixo {
-    //position: fixed;
-    //top: 0;
-    //z-index: 99;  
+    /*position: fixed;
+    top: 0;
+    z-index: 99;  */
 }
 
 .form-signin {
@@ -463,7 +463,7 @@ table.sorting-table tbody tr:not(.sorting-row) td {opacity: 0.2;}
     -ms-filter: grayscale(100%); 
     -o-filter: grayscale(100%); 
     filter: grayscale(100%); 
-    //filter: url(grayscale.svg); /* Firefox 4+ */ 
+    /*filter: url(grayscale.svg); /* Firefox 4+ */ 
     filter: gray; /* IE 6-9 */ 
 }
 /****** CLASSES PARA O MENU ESQUERDO DO ADICIONAR ITEM **********/
@@ -579,3 +579,22 @@ table.sorting-table tbody tr:not(.sorting-row) td {opacity: 0.2;}
 /*************** WATERMARK SYLES *************************/
 .ui-autocomplete-loading { background:url('../images/ajaxLoader.gif')  no-repeat right center;background-size: 25px 25px; }
 /*************** WATERMARK SYLES *************************/
+/*************** MODAL MAX HEIGHT *************************/
+.modal-content{
+    max-height: 600px;
+    overflow-y: scroll;
+}
+/************* Taxonomy zone **************/
+.style-input{
+    padding: 5px;border: 1px solid #ccc;border-radius: 4px; 
+}
+.margin-buttons{
+    margin-left: 15px;
+    margin-top: 15px;
+}
+.label-button{
+    color: #0c698b;
+}
+#taxonomy_create_zone ul{
+    list-style: square;
+}

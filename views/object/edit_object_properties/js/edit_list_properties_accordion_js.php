@@ -1,15 +1,14 @@
 <script>
     $(function () {
         var src = $('#src').val();
-        var properties_autocomplete = edit_get_val($("#edit_properties_autocomplete").val());
-        autocomplete_edit_item_property_data(properties_autocomplete); 
         //# 3 - esconde, se necessario os campos de ranking e licencas
+        if($('.hide_rankings')&&$('.hide_rankings').val()==='true'){
+            $('#list_ranking_items').hide();
+        }
+        
         if($('.hide_license')&&$('.hide_license').val()==='true'){
             $('#list_licenses_items').hide();    
             $('#core_validation_license').val('true');
-        }
-        if($('.hide_rankings')&&$('.hide_rankings').val()==='true'){
-            $('#list_ranking_items').hide();
         }else{
             if($("input[type='radio'][name='object_license']")){
                 $("input[type='radio'][name='object_license']").change(function(){
@@ -39,9 +38,15 @@
             $('.cloud_label').click();
             $(this).find("div.action-text").text('<?php _e('Collapse all', 'tainacan') ?>');
         });
-        $('.expand-all-item').trigger('click');
+        if($('#tabs_properties').length==0){
+            $('.expand-all-item').trigger('click');
+        }
         // # - inicializa o campos das propriedades de termo  
         edit_list_properties_term_insert_objects();
+        if($('#properties_autocomplete')&&$('#properties_autocomplete').val()){
+            var values = $('#properties_autocomplete').val().split(',');
+            autocomplete_edit_item_property_data(values);
+        }
     });
 
    
@@ -113,7 +118,7 @@
 
                             set_field_valid(property_id,'core_validation_'+property_id);
                         });
-                        if($(".form_autocomplete_value_" + property_id)){
+                        if($(".form_autocomplete_value_" + property_id).length>0){
                             $(".form_autocomplete_value_" + property_id).change(function(){
                                 var cont = 0;
                                 $(".form_autocomplete_value_" + property_id).each(function(index,value){
@@ -131,25 +136,24 @@
                             });
                         }
                         // end validate
-                        console.log($(".form_edit_autocomplete_value_" + property_id));
-                        if(typeof($(".form_edit_autocomplete_value_" + property_id))!= "undefined"){
-//                            $(".form_edit_autocomplete_value_" + property_id).autocomplete({
-//                                source: $('#src').val() + '/controllers/collection/collection_controller.php?operation=list_items_search_autocomplete&property_id=' + property_id,
-//                                messages: {
-//                                    noResults: '',
-//                                    results: function () {
-//                                    }
-//                                },
-//                                minLength: 2,
-//                                select: function (event, ui) {
-//                                    $("#form_edit_autocomplete_value_" + property_id).val('');
-//                                    //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
-//                                    var temp = $("#form_edit_autocomplete_value_" + property_id).val();
-//                                    if (typeof temp == "undefined") {
-//                                        $("#form_edit_autocomplete_value_" + property_id).val(ui.item.value);
-//                                    }
-//                                }
-//                            });
+                        if($(".form_autocomplete_value_" + property_id).length>0){
+                            $(".form_autocomplete_value_" + property_id).autocomplete({
+                                source: $('#src').val() + '/controllers/collection/collection_controller.php?operation=list_items_search_autocomplete&property_id=' + property_id,
+                                messages: {
+                                    noResults: '',
+                                    results: function () {
+                                    }
+                                },
+                                minLength: 2,
+                                select: function (event, ui) {
+                                    $(".form_autocomplete_value_" + property_id).val('');
+                                    //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
+                                    var temp = $(".form_edit_autocomplete_value_" + property_id).val();
+                                    if (typeof temp == "undefined") {
+                                        $(".form_autocomplete_value_" + property_id).val(ui.item.value);
+                                    }
+                                }
+                            });
                         }
                     });
                 }
@@ -208,14 +212,15 @@
                     $.each(elem.children, function (idx, children) {
                         var required = '';
                         var checked = '';
-                        if(elem.metas.socialdb_property_required==='true'){
+                        //if(elem.metas.socialdb_property_required==='true'){
                             required = ' onchange="validate_radio(' + radio + ')"';
-                        }
+                        //}
                         //  if (property.id == selected) {
                         //     $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
                         //  } else {
                         if(categories.indexOf(children.term_id)>-1){
                             checked = 'checked="checked"';
+                            //append_category_properties(children.term_id, 0,radio);
                         }
                          delete_value(children.term_id);//retiro
                         $('#field_property_term_' + radio).append('<input '+checked+' '+required+' type="radio" name="socialdb_propertyterm_'+radio+'" value="' + children.term_id + '">&nbsp;' + children.name + '<br>');
@@ -260,16 +265,6 @@
     function edit_list_selectboxes(selectboxes,categories) {
         if (selectboxes) {
             $.each(selectboxes, function (idx, selectbox) {
-                //validation
-                $('#field_property_term_' + selectbox).select(function(){
-                    if( $("#field_property_term_" + selectbox).val()===''){
-                        $('#core_validation_'+selectbox).val('false');
-                    }else{
-                         $('#core_validation_'+selectbox).val('true');
-                    }
-                    set_field_valid(property_id,'core_validation_'+selectbox);
-                });
-                //
                 $.ajax({
                     url: $('#src').val() + '/controllers/property/property_controller.php',
                     type: 'POST',
@@ -283,8 +278,13 @@
                          delete_value(children.term_id);
                         if(categories.indexOf(children.term_id)>-1){
                             checked = 'selected="selected"';
+                            $('#core_validation_'+selectbox).val('true');
+                            set_field_valid(selectbox,'core_validation_'+selectbox);
                         }
                         $('#field_property_term_' + selectbox).append('<option '+checked+' value="' + children.term_id + '">' + children.name + '</option>');
+                        if(checked!==''){
+                           $('#field_property_term_' + selectbox).trigger('change');
+                        }
                         //  }
                     });
                 });
@@ -365,7 +365,7 @@
                     onCreate: function (node, span) {
                         $("#field_property_term_"+treecheckbox).dynatree("getRoot").visit(function(node){
                             delete_value(node.data.key);
-                           if(categories.indexOf(node.data.key)>-1){
+                           if(categories&&categories.indexOf(node.data.key)>-1){
                                 node.select();
                             }
                         });
@@ -380,9 +380,9 @@
                             return node.data.key;
                         });
                         if(categories.length>0&&categories.indexOf(node.data.key)>=0){
-                            append_category_properties(node.data.key);
+                            append_category_properties(node.data.key,node.data.key,treecheckbox);
                         }else{
-                            append_category_properties(0,node.data.key);
+                            append_category_properties(0,node.data.key,treecheckbox);
                         }
                         
                         
@@ -441,22 +441,26 @@
                         });
                     },
                     onCreate: function (node, span) {
-                         $("#field_property_term_"+tree).dynatree("getRoot").visit(function(node){
-                           delete_value(node.data.key); 
-                           if(categories.indexOf(node.data.key)>-1){
-                                node.select();
-                            }
+                        var selKeys = $.map($("#field_property_term_"+tree).dynatree("getSelectedNodes"), function(node) {
+                            return node.data.key;
                         });
+                        // $("#field_property_term_"+tree).dynatree("getRoot").visit(function(node){
+                        delete_value(node.data.key); 
+                        if(categories&&categories.indexOf(node.data.key)>-1&&selKeys.length==0){
+                             node.select();
+                             return true;
+                         }
+                        //});
                         bindContextMenuSingle(span,'field_property_term_' + tree);
                     },
                     onSelect: function (flag, node) {
                         if ($("#socialdb_propertyterm_" + tree).val() === node.data.key) {
-                            append_category_properties(0,node.data.key);
+                            append_category_properties(0,node.data.key, tree);
                             $("#socialdb_propertyterm_" + tree).val("");
                              $('#core_validation_'+tree).val('false');
                              set_field_valid(tree,'core_validation_'+tree);
                         } else {
-                            append_category_properties(node.data.key,$("#socialdb_propertyterm_" + tree).val());
+                            append_category_properties(node.data.key,$("#socialdb_propertyterm_" + tree).val(),tree);
                             $("#socialdb_propertyterm_" + tree).val(node.data.key);
                             $('#core_validation_'+tree).val('true');
                              set_field_valid(tree,'core_validation_'+tree);
@@ -481,6 +485,9 @@
     }
     
     function delete_value(category_id){
+        if(!$("#object_classifications_edit")||!$("#object_classifications_edit").val()){
+            return false;
+        }
        var classifications =   $("#object_classifications_edit").val().split(',');
        if(classifications.length>0&&category_id){
            var index = classifications.indexOf(category_id);
@@ -515,8 +522,11 @@
         }
     }    
 //################################ adicao de propriedades de categorias #################################//    
-    function append_category_properties(id,remove_id){
+    function append_category_properties(id,remove_id,property_id){
         //buscando as categorias selecionadas nos metadados de termo
+        if($('#selected_categories').length == 0){
+            return false;
+        }
         var selected_categories = $('#selected_categories').val();
         if(selected_categories===''){
              selected_categories= [];
@@ -538,6 +548,7 @@
 
 
         }
+        
         //busco os metadados da categoria selecionada    
         if(id&&selected_categories.indexOf(id)>=0){
             //var index = selected_categories.indexOf(id);
@@ -546,26 +557,29 @@
         }else if(id!==0){
             selected_categories.push(id);
             //adicionando metadados
-            show_modal_main();
+            //show_modal_main();
             $.ajax({
                 url: $('#src').val() + '/controllers/object/object_controller.php',
                 type: 'POST',
-                data: { operation: 'list_properties_categories_accordeon',properties_to_avoid:$('#properties_id').val(),categories: id, object_id:$('#object_id_add').val()}
+                data: { operation: 'list_properties_categories_accordeon',properties_to_avoid:$('#properties_id').val(),categories: id, object_id:$('#object_id_edit').val()}
             }).done(function (result) {
-                hide_modal_main();
+                //hide_modal_main();
                 //list_all_objects(selKeys.join(", "), $("#collection_id").val());
-                $('#append_properties_categories').html(result);
-                insert_html_property_category(id);
+               $('#append_properties_categories_'+property_id).html(result);
+               insert_html_property_category(id,property_id);
 
             });
             $('#selected_categories').val(selected_categories.join(','));
         }
     }
-    function insert_html_property_category(category_id){
+    function insert_html_property_category(category_id,property_id){
         var flag = false;
         $ul = $("#text_accordion");
         $items = $("#text_accordion").children();
-        $properties_append = $("#append_properties_categories").children();
+        $('#append_properties_categories_'+property_id).css('margin-top','15px');
+        $properties_append = $('#append_properties_categories_'+property_id).children().children();
+        $properties_append.animate({borderWidth : '1px',borderColor: 'red',borderStyle: 'dotted'}, 'slow', 'linear');
+        setTimeout(removeBorderCat(property_id),8000);
         for (var i = 0; i <$properties_append.length; i++) {
               // index is zero-based to you have to remove one from the values in your array
                 for(var j = 0; j<$items.length;j++){
@@ -576,21 +590,30 @@
                         }
                     }
                 }
-                if(!flag){
-                   $( $properties_append.get(i) ).appendTo( $ul);
-                   var id =  $( $properties_append.get(i) ).attr('property');
-                   add_property_general(id);
+                 if(!flag){
+                    // $( $properties_append.get(i) ).appendTo( $ul);
+                    var id =  $( $properties_append.get(i) ).attr('property');
+                    if(id){
+                        add_property_general(id);
+                    }
                 }
                flag = false;
          }
-         $("#text_accordion").accordion("destroy");  
-         $("#text_accordion").accordion({
-                    active: false,
-                    collapsible: true,
-                    header: "h2",
-                    heightStyle: "content"
-                });
+         if($(".multiple-items-accordion")){
+            $(".multiple-items-accordion").accordion("destroy");  
+            $(".multiple-items-accordion").accordion({
+                       active: false,
+                       collapsible: true,
+                       header: "h2",
+                       heightStyle: "content"
+                   });
+        }
          $('[data-toggle="tooltip"]').tooltip();
+    }
+    //retira as bordas
+    function removeBorderCat(property_id){
+        $properties_append = $('#append_properties_categories_'+property_id).children().children();
+        $properties_append.animate({borderWidth : '1px',borderColor: '#d3d3d3',borderStyle:"solid"}, 'slow', 'linear');
     }
     //adicionando as propriedades das categorias no array de propriedades gerais
     function add_property_general(id){
@@ -624,7 +647,7 @@
             $(selected[0]).removeAttr('checked');
         }
         if (selected.length > 0) {
-            append_category_properties(selected.val(), $('#socialdb_propertyterm_'+property_id+'_value').val());
+            append_category_properties(selected.val(), $('#socialdb_propertyterm_'+property_id+'_value').val(),property_id);
             $('#socialdb_propertyterm_'+property_id+'_value').val(selected.val()); 
             $('#core_validation_'+property_id).val('true');
             set_field_valid(property_id,'core_validation_'+property_id);
@@ -649,9 +672,9 @@
         //verificando se existe propriedades para serem  adicionadas
         $.each($("input[type='checkbox'][name='socialdb_propertyterm_"+property_id+"[]']"),function(index,value){
             if($(this).is(':checked')){
-                append_category_properties($(this).val());
+                append_category_properties($(this).val(),$(this).val(),property_id);
             }else{
-                append_category_properties(0,$(this).val());
+                append_category_properties(0,$(this).val(),property_id);
             }
         });
     }
@@ -660,12 +683,12 @@
      * @param {type} seletor
      * @param {type} property_id
      * @returns {undefined}     */
-    function validate_selectbox(seletor,property_id){
+    function edit_validate_selectbox(seletor,property_id){
         if($(seletor).val()===''){
             $('#core_validation_'+property_id).val('false');
             set_field_valid(property_id,'core_validation_'+property_id);
         }else{
-            append_category_properties($(seletor).val(), $('#socialdb_propertyterm_'+property_id+'_value').val());
+            append_category_properties($(seletor).val(), $('#socialdb_propertyterm_'+property_id+'_value').val(), property_id);
            $('#socialdb_propertyterm_'+property_id+'_value').val($(seletor).val()); 
             $('#core_validation_'+property_id).val('true');
             set_field_valid(property_id,'core_validation_'+property_id);
@@ -685,9 +708,9 @@
             //verificando se existe propriedades para serem  adicionadas
             $.each($("#field_property_term_"+property_id+" option"),function(index,value){
                 if($(this).is(':selected')){
-                    append_category_properties($(this).val());
+                    append_category_properties($(this).val(),$(this).val(),property_id);
                 }else{
-                    append_category_properties(0,$(this).val());
+                    append_category_properties(0,$(this).val(),property_id);
                 }
             });
         }else{

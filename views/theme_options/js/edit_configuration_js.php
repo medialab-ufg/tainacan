@@ -1,6 +1,7 @@
 <script>
     $(function () {
         var src = $('#src').val();
+        change_breadcrumbs_title('<?php _e('Repository Configuration','tainacan') ?>');
         showCKEditor();
         list_templates();
         autocomplete_collection_templates();
@@ -15,6 +16,9 @@
                 contentType: false
             }).done(function (result) {
                 elem = jQuery.parseJSON(result);
+                if(elem.reload&&elem.reload===true){
+                    window.location = '<?php echo site_url(); ?>'
+                }
                 showAlertGeneral(elem.title, elem.msg, elem.type);
                 showRepositoryConfiguration(src);
                 get_collections_template($('#src').val());  
@@ -105,8 +109,8 @@
             });       
     
     }
-    
-    function list_templates(){
+    /*
+    function list_templates() {
          $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/collection/collection_controller.php",
@@ -127,6 +131,7 @@
             }
         });
     }
+    */
     // desabilita as colecaoes vazia no repositorio
 //    function disable_empty_collection(selector){
 //        selector = $(selector);

@@ -4,21 +4,34 @@
  */
 include_once ('js/edit_list_properties_accordion_js.php');
 include_once(dirname(__FILE__).'/../../../helpers/view_helper.php');
+include_once(dirname(__FILE__).'/../../../helpers/object/object_properties_widgets_helper.php');
 
 $view_helper = new ViewHelper();
+$object_properties_widgets_helper = new ObjectWidgetsHelper();
 $ids = [];
+$properties_autocomplete = [];
 $properties_terms_radio = [];
 $properties_terms_tree = [];
 $properties_terms_selectbox = [];
 $properties_terms_checkbox = [];
 $properties_terms_multipleselect = [];
 $properties_terms_treecheckbox = [];
+//referencias
+$references = [
+    'properties_autocomplete' => &$properties_autocomplete,
+    'properties_terms_radio' => &$properties_terms_radio,
+    'properties_terms_checkbox' => &$properties_terms_checkbox,
+    'properties_terms_tree' => &$properties_terms_tree,
+    'properties_terms_selectbox' => &$properties_terms_selectbox,
+    'properties_terms_multipleselect' => &$properties_terms_multipleselect,
+    'properties_terms_treecheckbox' => &$properties_terms_treecheckbox   
+];
 if (isset($property_object)):
     foreach ($property_object as $property) {
         $ids[] = $property['id']; ?>
         <div id="meta-item-<?php echo $property['id']; ?>"
             property="<?php echo $property['id']; ?>"
-            class="category-<?php echo $property['metas']['socialdb_property_created_category'] ?>">
+            class="category-<?php echo $property['metas']['socialdb_property_created_category'] ?> form-group">
             <h2>
                 <?php echo $property['name']; ?>
                 <?php
@@ -42,12 +55,12 @@ if (isset($property_object)):
                 }
                 if ($property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] == 'true') {
                         ?>
-                        <a id='required_field_<?php echo $property['id']; ?>' style="padding: 3px;margin-left: -30px;" >
-                                <span class="glyphicon glyphicon glyphicon-star" title="<?php echo __('This metadata is required!','tainacan')?>" 
-                               data-toggle="tooltip" data-placement="top" ></span>
+                        <a id='required_field_<?php echo $property['id']; ?>' style="padding: 3px;" >
+                                <span  title="<?php echo __('This metadata is required!','tainacan')?>" 
+                               data-toggle="tooltip" data-placement="top" >*</span>
                         </a>
                         <a id='ok_field_<?php echo $property['id']; ?>'  style="display: none;padding: 3px;margin-left: -30px;" >
-                                <span class="glyphicon  glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>" 
+                                 &nbsp;<span class="glyphicon  glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>" 
                                data-toggle="tooltip" data-placement="top" ></span>
                         </a>
                         <input type="hidden" 
@@ -67,7 +80,7 @@ if (isset($property_object)):
                 }
                 ?>
             </h2>
-            <div class="form-group" >
+            <div>
             <?php 
                 // botao que leva a colecao relacionada
                     if (isset($property['metas']['collection_data'][0]->post_title)):  ?>
@@ -148,10 +161,13 @@ if (isset($property_object)):
 
 <?php if (isset($property_data)): 
     foreach ($property_data as $property) { 
+        if($property['id']=='license'):
+            continue;
+        endif;
         $properties_autocomplete[] = $property['id']; ?>
         <div id="meta-item-<?php echo $property['id']; ?>" 
              property="<?php echo $property['id']; ?>"
-             class="category-<?php echo $property['metas']['socialdb_property_created_category'] ?>">
+             class="category-<?php echo $property['metas']['socialdb_property_created_category'] ?> form-group">
             <h2>
                 <?php echo $property['name']; ?>
                 <?php 
@@ -171,12 +187,12 @@ if (isset($property_object)):
                 }
                 if ($property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] == 'true') {
                     ?>
-                     <a id='required_field_<?php echo $property['id']; ?>' style="padding: 3px;margin-left: -30px;" >
-                                <span class="glyphicon glyphicon glyphicon-star" title="<?php echo __('This metadata is required!','tainacan')?>" 
-                               data-toggle="tooltip" data-placement="top" ></span>
+                      <a id='required_field_<?php echo $property['id']; ?>' style="padding: 3px;" >
+                                <span  title="<?php echo __('This metadata is required!','tainacan')?>" 
+                               data-toggle="tooltip" data-placement="top" >*</span>
                         </a>
-                        <a  id='ok_field_<?php echo $property['id']; ?>'  style="display: none;padding: 3px;margin-left: -30px;" >
-                                <span class="glyphicon  glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>" 
+                        <a id='ok_field_<?php echo $property['id']; ?>'  style="display: none;padding: 3px;margin-left: -30px;" >
+                                 &nbsp;<span class="glyphicon  glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>" 
                                data-toggle="tooltip" data-placement="top" ></span>
                         </a>
                         <input type="hidden" 
@@ -195,7 +211,7 @@ if (isset($property_object)):
                 ?>
             </h2>
             <?php $cardinality = $view_helper->render_cardinality_property($property);   ?>
-            <div class="form-group">
+            <div>
                  <?php for($i = 0; $i<$cardinality;$i++):   ?>
                     <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
                          style="padding-bottom: 10px;<?php echo ($i===0||(is_array($property['metas']['value'])&&$i<count($property['metas']['value']))) ? 'display:block': 'display:none'; ?>">
@@ -211,7 +227,7 @@ if (isset($property_object)):
                                       id="form_edit_autocomplete_value_<?php echo $property['id']; ?>" 
                                       name="socialdb_property_<?php echo $property['id']; ?>[]" ><?php if ($property['metas']['value']) echo (isset($property['metas']['value'][$i])?$property['metas']['value'][$i]:''); ?></textarea>
                     <?php }elseif ($property['type'] == 'numeric') { ?>   
-                            <input type="number" 
+                            <input type="text" 
                                    class="form-control form_autocomplete_value_<?php echo $property['id']; ?>"
                                    onkeypress='return onlyNumbers(event)'
                                    id="form_edit_autocomplete_value_<?php echo $property['id']; ?>" 
@@ -287,7 +303,7 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
         ?>
         <div id="meta-item-<?php echo $property['id']; ?>" <?php do_action('item_property_term_attributes') ?> 
              property="<?php echo $property['id']; ?>"
-             class="category-<?php echo $property['metas']['socialdb_property_created_category'] ?>">
+             class="category-<?php echo $property['metas']['socialdb_property_created_category'] ?> form-group">
             <h2>
                 <?php echo $property['name']; ?>
                 <?php 
@@ -308,14 +324,14 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
                         }
                         if ($property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] == 'true') {
                             ?>
-                             <a id='required_field_<?php echo $property['id']; ?>' style="padding: 3px;margin-left: -30px;" >
-                                    <span class="glyphicon glyphicon glyphicon-star" title="<?php echo __('This metadata is required!','tainacan')?>" 
-                                   data-toggle="tooltip" data-placement="top" ></span>
-                            </a>
-                            <a id='ok_field_<?php echo $property['id']; ?>'  style="display: none;padding: 3px;margin-left: -30px;" >
-                                    <span class="glyphicon  glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>" 
-                                   data-toggle="tooltip" data-placement="top" ></span>
-                            </a>
+                            <a id='required_field_<?php echo $property['id']; ?>' style="padding: 3px;" >
+                                <span  title="<?php echo __('This metadata is required!','tainacan')?>" 
+                               data-toggle="tooltip" data-placement="top" >*</span>
+                        </a>
+                        <a id='ok_field_<?php echo $property['id']; ?>'  style="display: none;padding: 3px;margin-left: -30px;" >
+                                 &nbsp;<span class="glyphicon  glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>" 
+                               data-toggle="tooltip" data-placement="top" ></span>
+                        </a>
                             <input type="hidden" 
                                      id='core_validation_<?php echo $property['id']; ?>' 
                                      class='core_validation' 
@@ -329,7 +345,7 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
                  endif; 
                  ?>
             </h2>    
-            <div class="form-group">
+            <div>
                 <?php
                 if ($property['type'] == 'radio') {
                     $properties_terms_radio[] = $property['id'];
@@ -360,6 +376,7 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
                     ?>
                     <select class="form-control" 
                             name="socialdb_propertyterm_<?php echo $property['id']; ?>" 
+                            onchange="edit_validate_selectbox(this,'<?php echo $property['id']; ?>')"
                             id='field_property_term_<?php echo $property['id']; ?>' >
                     </select>
                     <?php
@@ -401,24 +418,24 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
                 }
                 ?> 
         </div>   
-    </div>              
+        <div id="append_properties_categories_<?php echo $property['id']; ?>"></div>    
+    </div>      
     <?php } ?>
 <?php endif;
 ?>
- <input type="hidden" name="properties_autocomplete" id='edit_properties_autocomplete' value="<?php echo implode(',', $properties_autocomplete); ?>">
+<?php $object_properties_widgets_helper->list_properties_compounds($property_compounds, $object_id,$references)  ?>  
+<input type="hidden" name="properties_autocomplete" id='properties_autocomplete' value="<?php echo (is_array($properties_autocomplete))? implode(',', array_unique($properties_autocomplete)):''; ?>">
 <input type="hidden" name="categories_id" id='edit_object_categories_id' value="<?php echo implode(',', $categories_id); ?>">   
-<input type="hidden" name="properties_terms_radio" id='properties_terms_radio' value="<?php echo implode(',', $properties_terms_radio); ?>">
-<input type="hidden" name="properties_terms_tree" id='properties_terms_tree' value="<?php echo implode(',', $properties_terms_tree); ?>">
-<input type="hidden" name="properties_terms_selectbox" id='properties_terms_selectbox' value="<?php echo implode(',', $properties_terms_selectbox); ?>">
-<input type="hidden" name="properties_terms_checkbox" id='properties_terms_checkbox' value="<?php echo implode(',', $properties_terms_checkbox); ?>">
-<input type="hidden" name="properties_terms_multipleselect" id='properties_terms_multipleselect' value="<?php echo implode(',', $properties_terms_multipleselect); ?>">
-<input type="hidden" name="properties_terms_treecheckbox" id='properties_terms_treecheckbox' value="<?php echo implode(',', $properties_terms_treecheckbox); ?>">
-<?php if (isset($all_ids)): ?>
+<input type="hidden" name="properties_terms_radio" id='properties_terms_radio' value="<?php echo implode(',', array_unique($properties_terms_radio)); ?>">
+<input type="hidden" name="properties_terms_tree" id='properties_terms_tree' value="<?php echo implode(',', array_unique($properties_terms_tree)); ?>">
+<input type="hidden" name="properties_terms_selectbox" id='properties_terms_selectbox' value="<?php echo implode(',', array_unique($properties_terms_selectbox)); ?>">
+<input type="hidden" name="properties_terms_checkbox" id='properties_terms_checkbox' value="<?php echo implode(',', array_unique($properties_terms_checkbox)); ?>">
+<input type="hidden" name="properties_terms_multipleselect" id='properties_terms_multipleselect' value="<?php echo implode(',', array_unique($properties_terms_multipleselect)); ?>">
+<input type="hidden" name="properties_terms_treecheckbox" id='properties_terms_treecheckbox' value="<?php echo implode(',', array_unique($properties_terms_treecheckbox)); ?>"><?php if (isset($all_ids)): ?>
     <input type="hidden" id="properties_id" name="properties_id" value="<?php echo $all_ids; ?>">
     <input type="hidden" id="property_origin" name="property_origin" value="<?php echo $all_ids; ?>">
     <input type="hidden" id="property_added" name="property_added" value="">
     <input type="hidden" id="selected_categories" name="selected_categories" value="">
-    <div id="append_properties_categories" class="hide"></div>
 <?php endif; ?>
 
 

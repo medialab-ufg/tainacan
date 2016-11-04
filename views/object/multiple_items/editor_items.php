@@ -1,11 +1,15 @@
 <?php
+/*
 include_once ('../../../../../wp-config.php');
 include_once ('../../../../../wp-load.php');
 include_once ('../../../../../wp-includes/wp-db.php');
+*/
 include_once ('js/editor_items_js.php');
 include_once(dirname(__FILE__).'/../../../helpers/view_helper.php');
+include_once(dirname(__FILE__).'/../../../helpers/object/object_properties_widgets_helper.php');
 
 $view_helper = new ViewHelper();
+$object_properties_widgets_helper = new ObjectWidgetsHelper();
 
 $properties_terms_radio = [];
 $properties_terms_tree = [];
@@ -23,20 +27,21 @@ $filesVideo= [];
 $filesAudio= [];
 $filesPdf= [];
 $filesOther= [];
+//referencias
+$references = [
+    'properties_autocomplete' => &$properties_autocomplete,
+    'properties_terms_radio' => &$properties_terms_radio,
+    'properties_terms_checkbox' => &$properties_terms_checkbox,
+    'properties_terms_tree' => &$properties_terms_tree,
+    'properties_terms_selectbox' => &$properties_terms_selectbox,
+    'properties_terms_multipleselect' => &$properties_terms_multipleselect,
+    'properties_terms_treecheckbox' => &$properties_terms_treecheckbox   
+];
 ?>
 
 <div class="row" style="padding-right: 0px;padding-left: 0px;">
       <!-------------- METADADOS - BLOCO ESQUERDO (COL-MD-3) --------------------->
-    <div style="
-         display:none;
-         background: white;
-         border: 3px solid #E8E8E8;
-         font: 11px Arial;
-         max-height: 655px;
-         overflow-y: scroll;
-         min-height: 449px;" 
-             id='form_properties_items' 
-             class="col-md-3 menu_left_files menu-left-size">
+    <div id='form_properties_items' class="col-md-3 menu_left_files menu-left-size">
             <h3 style="display:none;" id='labels_items_selected' ><?php _e('Editting ','tainacan') ?>
                 <span id='number_of_items_selected'></span>
                 <?php _e(' item/items ','tainacan') ?>
@@ -236,7 +241,8 @@ $filesOther= [];
                              <?php }elseif($property['type']=='numeric') { ?>   
                                   <input onblur="setPropertyData(this,'<?php echo $property['id']  ?>')"
                                          onchange="setPropertyData(this,'<?php echo $property['id']  ?>')"
-                                         type="number" 
+                                         type="text" 
+                                         onkeypress='return onlyNumbers(event)' 
                                          id='multiple_socialdb_property_<?php echo $property['id']; ?>'
                                          value="<?php if($property['metas']['socialdb_property_default_value']): echo $property['metas']['socialdb_property_default_value']; endif; ?>" 
                                          class="form-control multiple_socialdb_property_<?php echo $property['id']; ?>"
@@ -248,7 +254,8 @@ $filesOther= [];
                                          disabled="disabled"  
                                          onkeypress='return onlyNumbers(event)'
                                          id='multiple_socialdb_property_<?php echo $property['id']; ?>'
-                                         type="number" 
+                                         type="text" 
+                                         onkeypress='return onlyNumbers(event)'
                                          class="form-control multiple_socialdb_property_<?php echo $property['id']; ?>" 
                                          name="only_showed_<?php echo $property['id']; ?>" value="<?php if(is_numeric($property['metas']['socialdb_property_data_value_increment'])): echo $property['metas']['socialdb_property_data_value_increment']+1; endif; ?>">
                                   <!--input type="hidden"  name="socialdb_property_<?php echo $property['id']; ?>" value="<?php if($property['metas']['socialdb_property_data_value_increment']): echo $property['metas']['socialdb_property_data_value_increment']+1; endif; ?>" -->
@@ -270,7 +277,6 @@ $filesOther= [];
         <?php endif; 
         //lista as propriedades de dados
          if((isset($properties['property_term']))): ?>
-            <!--h4><?php _e('Term properties','tainacan'); ?></h4-->
             <?php foreach ( $properties['property_term'] as $property ) { 
 //                if(!isset($property['has_children'])||empty($property['has_children'])){
 //                    continue;
@@ -350,9 +356,11 @@ $filesOther= [];
                           }
                          ?> 
                     </div>  
+                    <div id="append_properties_categories_<?php echo $property['id']; ?>"></div>
                 </div>
              <?php  } ?>
         <?php endif; ?>
+        <?php $object_properties_widgets_helper->list_properties_compounds($properties['property_compounds'], 0,$references)  ?>
         <!-- TAINACAN: a licencas do item -->
         <div id="list_licenses_items"
              <?php echo $view_helper->get_visibility($view_helper->terms_fixed['license']) ?>  
@@ -371,29 +379,23 @@ $filesOther= [];
         <?php endif; ?>
 
     </div> 
-    <div id='no_properties_items' style="height: 655px;background: white;border: 3px solid #E8E8E8;font: 11px Arial;"  
-         class="col-md-3 menu-left-size">
+    <div id='no_properties_items' class="col-md-3 menu-left-size">
          <h3> <?php _e('Select items to edit...','tainacan') ?> </h3>
     </div>
-    <div id='selectingAttachment'
-         style="height: 655px;display:none;background: white;border: 3px solid #E8E8E8;font: 11px Arial;"  
-         class="col-md-3 menu-left-size">
-         <h3 ><?php _e('Select attachments to ','tainacan') ?>
-             <span id="nameItemAttachment"></span>
+    <div id='selectingAttachment' class="col-md-3 menu-left-size">
+         <h3> <?php _e('Select attachments to ','tainacan') ?> <span id="nameItemAttachment"></span>
          </h3>
     </div>
 <!------------------------------- LISTA ITEMS UPADOS - BLOCO CENTRO DIREITO (COL-MD-9) -------------------------------------------------------------->
     <form id='sumbit_multiple_items'>
         <div class='col-md-9' id="no_item_uploaded" style='display:none;'>
-            <h3 style="text-align: center;"><?php _e('No items uploaded','tainacan') ?></h3>
+            <h3 style="text-align: center;"> <?php _e('No items uploaded','tainacan') ?> </h3>
         </div>
-        <div class='col-md-9 pull-right' 
-             style="background-color: white;border: 3px solid #E8E8E8;margin-left: 15px;">
+        <div class='col-md-9 pull-right' style="background-color: white;border: 3px solid #E8E8E8;margin-left: 15px;">
             <h3>
                 <?php _e('Add new item - Send local file','tainacan') ?>
-                <button type="button" onclick="back_main_list();"
-                        class="btn btn-default pull-right"> 
-                            <?php _e('Cancel','tainacan') ?>
+                <button type="button" onclick="back_main_list();" class="btn btn-default pull-right">
+                    <?php _e('Cancel','tainacan') ?>
                 </button>
             </h3>
             <hr>
@@ -892,18 +894,17 @@ $filesOther= [];
                         class="btn btn-lg btn-default pull-left"> 
                             <?php _e('Cancel','tainacan') ?>
                 </button>
-                 <button type="submit" 
-                          
-                         id="submit_button" 
-                         class="btn btn-lg btn-success pull-right">
-                             <?php _e('Submit','tainacan'); ?>
+                 <button type="submit" id="submit_button" class="btn btn-lg btn-success pull-right">
+                     <?php _e('Submit','tainacan'); ?>
                  </button>
              </div>
               
-        </div>    
+        </div>
+        
         <div class="col-md-12">
-        <input type="hidden" name="collection_id" value="<?php echo $collection_id; ?>">
-        <input type="hidden" name="operation" value="add_multiples">
+            <input type="hidden" name="collection_id" value="<?php echo $collection_id; ?>">
+            <input type="hidden" name="do_extract" value="<?php echo $extract_exif; ?>">
+            <input type="hidden" name="operation" value="add_multiples">
         <input type="hidden" name="multiple_properties_terms_radio" id='multiple_properties_terms_radio' value="<?php echo implode(',',$properties_terms_radio); ?>">
         <input type="hidden" name="multiple_properties_terms_tree" id='multiple_properties_terms_tree' value="<?php echo implode(',',$properties_terms_tree); ?>">
         <input type="hidden" name="multiple_properties_terms_selectbox" id='multiple_properties_terms_selectbox' value="<?php echo implode(',',$properties_terms_selectbox); ?>">

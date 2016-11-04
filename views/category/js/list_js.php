@@ -6,7 +6,7 @@
         //// setando o valor da colecao no formulario
         $('#collection_id_hierarchy_import').val($('#collection_id').val());
         showCategoryDynatree(src);//mostra o dynatree
-<?php // Submissao do form de importacao   ?>
+        // Submissao do form de importacao   
         $('#import_taxonomy_submit').submit(function (e) {
             e.preventDefault();
             $("#modal_import_taxonomy").modal('hide');
@@ -103,7 +103,7 @@
     });
     //FUNCAO QUE REALIZA A INSERCAO OU EDICAO DE UMA CATEGORIA
     function submit_form(formData){
-                $('#modalImportMain').modal('show');//mostra o modal de carregamento
+                $('#modalImportMain').modal('show'); // mostra o modal de carregamento
                 // primeira requisicao para verificar se existe uma categoria 
                 // com este nome com o mesmo pai ou apenas notificar que existe
                 // um no abaixo que possui esse mesmo pai
@@ -173,7 +173,7 @@
                                     $("#category_description").val('');
 
                                 });
-                                e.preventDefault();
+                               //e.preventDefault();
                             }
                             // se nao ele quiser criar a categoria sera mostrado
                             // para edicao a categoria para edicao
@@ -254,7 +254,7 @@
                             $('#category_name').val('');
 
                         });
-                        e.preventDefault();
+                       // e.preventDefault();
                     }
                 });
     }
@@ -273,10 +273,16 @@
         $.ajax({
             url: $('#src').val() + '/controllers/property/property_controller.php',
             type: 'POST',
-            data: {operation: 'list', category_id: $("#category_id").val(), collection_id: $("#collection_id").val()}
+            data: {
+                operation: 'list_metadata_category', 
+                hide_wizard: 'true', 
+                category_id: $('#category_id').val(), 
+                collection_id: $("#collection_id").val()}
         }).done(function (result) {
             $('#category_property').html(result);
             $('#modal_category_property').modal('show');
+            $('#btn_back_collection').hide();
+            $('#btn_back_collection_hide_modal').show();
         });
     }
     function clear_buttons() {
@@ -467,7 +473,7 @@
                     $('.dropdown-toggle').dropdown();
                     break;
                 default:
-                    alert("Todo: appply action '" + action + "' to node " + node);
+                    // alert("Todo: appply action '" + action + "' to node " + node);
             }
         });
     }

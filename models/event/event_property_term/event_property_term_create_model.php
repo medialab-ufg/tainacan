@@ -72,7 +72,12 @@ class EventPropertyTermCreate extends EventModel {
         $data['property_term_required'] = get_post_meta($event_id, 'socialdb_event_property_term_create_required',true) ;
         $data['socialdb_property_term_root'] = get_post_meta($event_id, 'socialdb_event_property_term_create_root',true) ;
         $data['socialdb_property_help'] = get_post_meta($event_id, 'socialdb_event_property_term_create_help',true) ;   
+        $data['socialdb_property_vinculate_category'] = get_post_meta($event_id, 'socialdb_event_property_term_create_vinculate_category',true) ;   
+        $data['socialdb_property_new_category'] = get_post_meta($event_id, 'socialdb_event_property_term_create_new_category',true) ;   
+        $data['socialdb_property_new_taxonomy'] = get_post_meta($event_id, 'socialdb_event_property_term_create_new_taxonomy',true) ;   
         $data['property_id'] = get_post_meta($event_id, 'socialdb_event_property_term_create_id',true) ;
+        $data['property_tab'] = get_post_meta($event_id, 'socialdb_event_property_tab',true) ;
+        $data['property_visualization'] = get_post_meta($event_id, 'socialdb_event_property_visualization',true) ;
         //inserindo o metadado
         $property_category_id = get_post_meta($event_id, 'socialdb_event_property_term_create_category_root_id',true) ;
         if($property_category_id&&$property_category_id!=$this->get_category_root_of($data['collection_id'])){
@@ -83,6 +88,7 @@ class EventPropertyTermCreate extends EventModel {
             $result = json_decode($propertyModel->add_property_term($data));
             if(isset($result->property_id)){
                 do_action('after_event_add_property_term',$result->property_id,$event_id);
+                $propertyModel->update_tab_organization($data['collection_id'],$data['property_tab'], $result->property_id);
             }
         }else{
             add_term_meta($property_category_id, 'socialdb_category_property_id', $data['property_id']);
@@ -98,7 +104,7 @@ class EventPropertyTermCreate extends EventModel {
 
         //$data['results'] = $result;
         $data['new_property_id'] = $result->property_id;
-
+        $data['socialdb_property_term_root'] = $result->socialdb_property_term_root;
         // verifying if is everything all right
         if ($result->success!=='false') {
             $this->set_approval_metas($data['event_id'], $data['socialdb_event_observation'], $automatically_verified);

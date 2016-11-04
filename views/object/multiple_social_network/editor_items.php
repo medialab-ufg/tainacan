@@ -5,7 +5,7 @@ include_once ('../../../../../wp-includes/wp-db.php');
 include_once ('js/editor_items_js.php');
 include_once(dirname(__FILE__).'/../../../helpers/view_helper.php');
 
-$view_helper = new ViewHelper();
+$view_helper = new ViewHelper($collection_id);
 
 $properties_terms_radio = [];
 $properties_terms_tree = [];
@@ -281,7 +281,7 @@ $filesOther= [];
                          <?php }elseif($property['type']=='numeric') { ?>   
                               <input onblur="setPropertyData(this,'<?php echo $property['id']  ?>')"
                                       onchange="setPropertyData(this,'<?php echo $property['id']  ?>')"
-                                     type="number" 
+                                     type="text" 
                                      onkeypress='return onlyNumbers(event)'
                                      id='multiple_socialdb_property_<?php echo $property['id']; ?>'
                                      value="<?php if($property['metas']['socialdb_property_default_value']): echo $property['metas']['socialdb_property_default_value']; endif; ?>" 
@@ -389,8 +389,9 @@ $filesOther= [];
                             <?php
                           }
                          ?> 
-                    </div>              
-                </div>              
+                    </div>             
+                   <div id="append_properties_categories_<?php echo $property['id']; ?>"></div>
+                </div>
              <?php  } ?>
         <?php endif; ?>
             <!-- TAINACAN: a licencas do item -->

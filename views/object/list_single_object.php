@@ -1,8 +1,6 @@
 <?php
 /*
- *
  * View responsavel em mostrar um objeto especifico
- *
  *
  */
 include_once('./../../helpers/view_helper.php');
@@ -27,7 +25,7 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
     <li> <a href="#" onclick="backToMainPageSingleItem()"> <?php echo get_post($collection_id)->post_title; ?> </a> </li>
     <li class="active"> <?php echo $object->post_title; ?> </li>
 
-    <button data-title="<?php printf( __("URL of %s", "tainacan"), $object->post_title ); ?>" id="iframebuttonObject" data-container="body"
+    <button data-title="<?php printf(__("URL of %s", "tainacan"), $object->post_title); ?>" id="iframebuttonObject" data-container="body"
             class="btn bt-default content-back pull-right" data-toggle="popoverObject" data-placement="left" data-content="">
         <span class="glyphicon glyphicon-link"></span>
     </button>
@@ -48,8 +46,8 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                             <span class="glyphicon glyphicon-arrow-left" ></span>
                         </button>
                         <button type="button" onclick="edit_title()" id="edit_title" class="btn btn-default btn-xs">
-                            <!--  <span class="glyphicon glyphicon-edit"></span>-->
-                            <?php viewHelper::render_icon("edit_object"); ?>
+                            <span class="glyphicon glyphicon-edit"></span>
+                            <?php // viewHelper::render_icon("edit_object"); ?>
                         </button>
                         <button type="button" onclick="save_title('<?php echo $object->ID ?>')" id="save_title" class="btn btn-default btn-xs" style="display: none;"><span class="glyphicon glyphicon-floppy-disk"></span></button>
                     <?php endif; ?>
@@ -57,7 +55,7 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
 
             </div>
 
-            <div class="col-md-2 right">
+            <div class="col-md-2 right no-padding">
                 <ul class="item-funcs">
                     <?php
                     if ($collection_metas == 'allowed' || ($collection_metas == 'moderate' && is_user_logged_in()) || ($collection_metas == 'controlled' && ($is_moderator || $object->post_author == get_current_user_id()))) {
@@ -66,7 +64,9 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                             $thumbail_id = get_post_thumbnail_id($object->ID, 'full');
                             ?>
                             <li>
-                                <a class="btn btn-default btn-primary" href="<?php echo $url_image; ?>" download="<?php echo $object->post_title; ?>.jpg" onclick="downloadItem('<?php echo $thumbail_id; ?>');"><?php _e('Download', 'tainacan') ?></a>
+                                <a href="<?php echo $url_image; ?>" download="<?php echo $object->post_title; ?>.jpg" onclick="downloadItem('<?php echo $thumbail_id; ?>');">
+                                    <span class="glyphicon glyphicon-download"></span>
+                                </a>
                             </li>
                             <?php
                         }
@@ -75,14 +75,14 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                     <?php if ($is_moderator || $object->post_author == get_current_user_id()): ?>
                         <li>
                             <a onclick="single_delete_object('<?= __('Delete Object', 'tainacan') ?>', '<?= __('Are you sure to remove the object: ', 'tainacan') . $object->post_title ?>', '<?php echo $object->ID ?>', '<?= mktime() ?>')" href="#" class="remove">
-                                <!-- <span class="glyphicon glyphicon-trash"></span>-->
-                                <?php viewHelper::render_icon("remove"); ?>
+                                <span class="glyphicon glyphicon-trash"></span>
+                                <?php // echo viewHelper::render_icon("remove"); ?>
                             </a>
                         </li>
                         <li>
                             <a href="#" onclick="show_edit_object('<?php echo $object->ID ?>')" class="edit">
-                                <!-- <span class="glyphicon glyphicon-edit"></span>-->
-                                <?php viewHelper::render_icon("edit_type"); ?>
+                                <span class="glyphicon glyphicon-edit"></span>
+                                <?php // echo viewHelper::render_icon("edit_type"); ?>
                             </a>
                         </li>
                         <?php
@@ -117,6 +117,11 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                             </div>
                         </div>
                     <?php endif; ?>
+                    <li>
+                        <a onclick="single_show_item_versions('<?php echo $object->ID ?>')" href="#">
+                            <span class="glyphicon glyphicon-folder-open"></span>
+                        </a>
+                    </li>
                 </ul>
             </div>
 
@@ -130,8 +135,7 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
             <div class="col-md-12" style="padding-bottom: 20px;">
                 <div class="content-wrapper" <?php if (has_action('home_item_content_div')) do_action('home_item_content_div') ?> style="padding: 0; margin-top: 10px;">
                     <div>
-                        <?php
-                        if ($metas['socialdb_object_dc_type'][0] == 'text') {
+                        <?php if ($metas['socialdb_object_dc_type'][0] == 'text') {
                             echo $metas['socialdb_object_content'][0];
                         } else {
                             if ($metas['socialdb_object_from'][0] == 'internal') {
@@ -141,17 +145,11 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                                         $content = '<audio controls><source src="' . $url . '">' . __('Your browser does not support the audio element.', 'tainacan') . '</audio>';
                                         break;
                                     case 'image':
-                                        //echo '<div id="watermark_div" style="background:url('.$url_watermark.') no-repeat; z-index:99;"></div>';
                                         if (get_the_post_thumbnail($object->ID, 'thumbnail')) {
-                                            $url_image = wp_get_attachment_url(get_post_thumbnail_id($object->ID));
-                                            //$content = '<center><a href="#" onclick="$.prettyPhoto.open([\'' . $url_image . '\'], [\'\'], [\'\']);return false">
-                                            //            <img style="max-width:480px;" src="' . $url_image . '" class="img-responsive" />
-                                            //        </a></center>';
+                                            $url_image = get_the_post_thumbnail($object->ID, 'large', [ 'class'=> 'img-responsive' ] );
                                             $style_watermark = ($has_watermark ? 'style="background:url(' . $url_watermark . ') no-repeat center; background-size: contain;"' : '');
                                             $opacity_watermark = ($has_watermark ? 'opacity: 0.80;' : '');
-                                            $content = '<center ' . $style_watermark . '>'
-                                                    . '<img style="max-width:480px; ' . $opacity_watermark . '" src="' . $url_image . '" class="img-responsive" />'
-                                                    . '</center>';
+                                            $content = '<center ' . $style_watermark . '>' . $url_image . '</center>';
                                         }
                                         break;
                                     case 'video':
@@ -298,9 +296,9 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                                 if (get_the_post_thumbnail($object->ID, 'thumbnail')) {
                                     $url_image = wp_get_attachment_url(get_post_thumbnail_id($object->ID));
                                     ?>
-                                                <!--a href="#" onclick="$.prettyPhoto.open(['<?php echo $url_image; ?>'], [''], ['']);
-                                                            return false">
-                                                    <!-- <img src="< ?php echo $url_image; ?>" class="img-responsive" /> -->
+                                                                <!--a href="#" onclick="$.prettyPhoto.open(['<?php echo $url_image; ?>'], [''], ['']);
+                                                                            return false">
+                                                                    <!-- <img src="< ?php echo $url_image; ?>" class="img-responsive" /> -->
                                     <?php echo get_the_post_thumbnail($object->ID, 'thumbnail'); ?>
                                     <!--/a-->
                                 <?php } else { ?>
@@ -373,9 +371,12 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                         </small>
                     <?php endif; ?>
                 </div>
-                <div id="text_description"><p><?php echo $object->post_content; ?></p></div>
-                <div id="event_description" style="display:none; min-height: 80px;">
-                    <textarea class="col-md-12 form-control" id="description_field"><?php echo $object->post_content; ?></textarea>
+
+                <div id="text_description">
+                    <div style="white-space: pre-wrap;"><?php echo $object->post_content; ?></div>
+                </div>
+                <div id="event_description" style="display:none; min-height: 150px;">
+                    <textarea class="col-md-12 form-control" id="description_field" style="width:100%; min-height: 150px;"><?php echo $object->post_content; ?></textarea>
                 </div>
             </div>
 
@@ -414,7 +415,7 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                     <h4 class="title-pipe single-title"> <?php _e('Tags', 'tainacan'); ?></h4>
                     <div class="edit-field-btn">
                         <?php
-// verifico se o metadado pode ser alterado
+                        // verifico se o metadado pode ser alterado
                         if (verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_tag', $object->ID)):
                             ?>
                             <button type="button" onclick="cancel_tag()" id="cancel_tag" class="btn btn-default btn-xs" style="display: none;" ><span class="glyphicon glyphicon-arrow-left" ></span></button>
@@ -433,8 +434,7 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                             <input type="text" style="width:50%;" class="form-control col-md-6" id="event_tag_field"  placeholder="<?php _e('Type the tag name', 'tainacan') ?>">
                         </div>
                         <script>
-                            $('#single_show_classificiations_<?php echo $object->ID ?>').hide();
-                            $('#single_show_classificiations_<?php echo $object->ID ?>').trigger('click');
+                            $('#single_show_classificiations_<?php echo $object->ID ?>').hide().trigger('click');
                         </script>
                     </div>
                 </div>
@@ -445,7 +445,7 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                 <div>
                     <div class="meta-header" style="padding: 10px 20px 10px 20px">
                         <h4 class="title-pipe single-title"> <?php _e('Properties', 'tainacan') ?></h4>
-                        <div class="btn-group edit-field-btn">
+                        <div <?php do_action('home_item_add_property') ?> class="btn-group edit-field-btn">
                             <?php if ($create_perm_object || $create_perm_data): ?>
                                 <button data-toggle="dropdown" class="btn btn-default dropdown-toggle" type="button" id="btnGroupVerticalDrop1" style="font-size:11px;">
                                     <span class="glyphicon glyphicon-plus grayleft" ></span> <span class="caret"></span>
@@ -460,7 +460,7 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                                 </ul>
                             <?php endif; ?>
                         </div>
-                        <div class="btn-group edit-field-btn">
+                        <div <?php do_action('home_item_delete_property') ?> class="btn-group edit-field-btn">
                             <?php if ($edit_perm_object || $delete_perm_object || $edit_perm_data || $delete_perm_data): ?>
                                 <button onclick="list_properties_edit_remove_single($('#single_object_id').val())"  data-toggle="dropdown" class="btn btn-default dropdown-toggle" type="button" id="btnGroupVerticalDrop2" style="font-size:11px;">
                                     <span class="glyphicon glyphicon-pencil grayleft"></span>

@@ -34,12 +34,18 @@ class SearchController extends Controller {
                 $object_model = new ObjectModel();
                 $data = $object_model->show_object_properties($data);
                 $data['default_widget_tree'] = get_post_meta($collection_id, 'socialdb_collection_facet_widget_tree', true);
+                $data['collection_table_metas'] = unserialize( get_post_meta($collection_id, "socialdb_collection_table_metas", true) );
                 $data['default_widget_tree_orientation'] = get_post_meta($collection_id, 'socialdb_collection_facet_widget_tree_orientation', true);
                 $data['collection_id'] = $collection_id;
                 $data['category_root_id'] = $object_model->get_category_root_of($collection_id);
                 $data['category_root_name'] = get_term_by('id', $data['category_root_id'], 'socialdb_category_type')->name;
                 $data['ordenation'] = $object_model->get_collection_data($collection_id);
                 return $this->render(dirname(__FILE__) . '../../../views/search/layout.php', $data );
+                break;
+            case "edit_tags":
+                $object_model = new ObjectModel();
+                $data['tags'] = wp_get_object_terms($data['collection_id'], 'socialdb_tag_type');
+                return $this->render(dirname(__FILE__) . '../../../views/search/tags.php', $data );
                 break;
             case "get_menu_ids":
                 return json_encode( $data['menu_style_ids'] = $this->get_menu_styles_ids());
@@ -93,6 +99,8 @@ class SearchController extends Controller {
                 $data = $search_model->get_events_data($data);
                 return $this->render(dirname(__FILE__) . '../../../views/search/feed_events.php', $data);
               break;
+            case 'get_slideshow_time':
+                return json_encode($search_model->get_slideshow_time($data));
         }
     }
 

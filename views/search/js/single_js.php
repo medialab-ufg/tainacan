@@ -3,14 +3,9 @@
     $(function () {
         set_containers_class($('#collection_id').val());
         // *************** Iframe Popover Collection ****************
-        //$('#iframebutton').attr('data-content', 'Teste').data('bs.popover').setContent();
         $('[data-toggle="popover"]').popover();
-        $('[data-toggle="tooltip"]').tooltip(); 
-        // var myPopover = $('#iframebutton').data('popover');
-        // $('#iframebutton').popover('hide');
-        // myPopover.options.html = true;
-        //<iframe width="560" height="315" src="https://www.youtube.com/embed/CGyEd0aKWZE" frameborder="0" allowfullscreen></iframe>
-        // myPopover.options.content = '<form><input type="text" style="width:200px;" value="<iframe width=\'800\' height=\'600\' src=\'' + $("#socialdb_permalink_collection").val() + '\' frameborder=\'0\'></iframe>" /></form>';
+        $('[data-toggle="tooltip"]').tooltip();
+
         if ($('#is_filter').val() == '1') {
             $('#form').hide();
             $('#list').hide();
@@ -34,19 +29,19 @@
             });
         }
     });
-/**************************** Comentarios **************************************************/
-function list_comments_general(){
-    if($('#socialdb_event_comment_term_id').val()=='collection'){
-       list_comments_term('comments_term','collection'); 
-    }else if($('#socialdb_event_comment_term_id').val()==''){
-         list_comments($('#single_object_id').val());
-    }else{
-       list_comments_term('comments_term',$('#socialdb_event_comment_term_id').val()); 
+    /**************************** Comentarios **************************************************/
+    function list_comments_general() {
+        if ($('#socialdb_event_comment_term_id').val() == 'collection') {
+            list_comments_term('comments_term', 'collection');
+        } else if ($('#socialdb_event_comment_term_id').val() == '') {
+            list_comments($('#single_object_id').val());
+        } else {
+            list_comments_term('comments_term', $('#socialdb_event_comment_term_id').val());
+        }
     }
-}
 
 
-function submit_comment(object_id) {
+    function submit_comment(object_id) {
         if ($('#comment').val().trim() === '') {
             showAlertGeneral('<?php _e('Attention!', 'tainacan') ?>', '<?php _e('Fill your comment', 'tainacan') ?>', 'info');
         } else {
@@ -65,14 +60,16 @@ function submit_comment(object_id) {
                     socialdb_event_comment_author_website: $('#url').val(),
                     socialdb_event_comment_term_id: $('#socialdb_event_comment_term_id').val(),
                     socialdb_event_comment_parent: 0,
-                    socialdb_event_collection_id: $('#collection_id').val()}
+                    socialdb_event_collection_id: $('#collection_id').val() }
             }).done(function (result) {
                 hide_modal_main();
                 elem_first = jQuery.parseJSON(result);
                 showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
                 list_comments_general();
+                /*
                 $('.dropdown-toggle').dropdown();
                 $('.nav-tabs').tab();
+                */
             });
         }
     }
@@ -169,22 +166,19 @@ function submit_comment(object_id) {
         },
         function (isConfirm) {
             if (isConfirm) {
-                  show_modal_main();
+                show_modal_main();
                 $.ajax({
                     type: "POST",
                     url: $('#src').val() + "/controllers/event/event_controller.php",
-                    data: {
-                        operation: 'add_event_comment_delete',
-                        socialdb_event_create_date: time,
-                        socialdb_event_user_id: $('#current_user_id').val(),
-                        socialdb_event_comment_delete_id: comment_id,
-                        socialdb_event_collection_id: $('#collection_id').val()}
+                    data: { operation: 'add_event_comment_delete', socialdb_event_create_date: time,
+                        socialdb_event_user_id: $('#current_user_id').val(), socialdb_event_comment_delete_id: comment_id,
+                        socialdb_event_comment_delete_object_id: $("#single_object_id").val(),
+                        socialdb_event_collection_id: $('#collection_id').val() }
                 }).done(function (result) {
                     hide_modal_main();
                     list_comments_general();
                     elem_first = jQuery.parseJSON(result);
                     showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
-
                 });
             }
         });
@@ -207,8 +201,8 @@ function submit_comment(object_id) {
                     socialdb_event_comment_delete_id: $('#comment_id_report').val(),
                     socialdb_event_collection_id: $('#collection_id').val()}
             }).done(function (result) {
-            hide_modal_main();
-                 list_comments_general();
+                hide_modal_main();
+                list_comments_general();
                 elem_first = jQuery.parseJSON(result);
                 showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
             });
@@ -223,16 +217,13 @@ function submit_comment(object_id) {
             $.ajax({
                 type: "POST",
                 url: $('#src').val() + "/controllers/event/event_controller.php",
-                data: {
-                    operation: 'add_event_comment_edit',
-                    socialdb_event_create_date: '<?php echo mktime() ?>',
-                    socialdb_event_user_id: $('#current_user_id').val(),
-                    socialdb_event_comment_edit_id: comment_id,
+                data: { operation: 'add_event_comment_edit', socialdb_event_create_date: '<?php echo mktime() ?>',
+                    socialdb_event_user_id: $('#current_user_id').val(), socialdb_event_comment_edit_id: comment_id,
+                    socialdb_event_comment_edit_object_id: $("#single_object_id").val(),
                     socialdb_event_comment_edit_content: $('#edit_field_value_' + comment_id).val(),
-                    socialdb_event_collection_id: $('#collection_id').val()
-                }
+                    socialdb_event_collection_id: $('#collection_id').val() }
             }).done(function (result) {
-                 list_comments_general();
+                list_comments_general();
                 hide_modal_main();
                 $('.dropdown-toggle').dropdown();
                 $('.nav-tabs').tab();
@@ -245,7 +236,7 @@ function submit_comment(object_id) {
         }
     }
 
-/******************************************************************************/
+    /******************************************************************************/
 
     function set_popover_content(content) {
         $('[data-toggle="popover"]').popover();
@@ -274,17 +265,17 @@ function submit_comment(object_id) {
                 $('#div_left').show();
                 load_menu_left(collection_id);
             } else {
-                <?php if(!has_filter('category_root_as_facet')||apply_filters('category_root_as_facet', true)): ?>
-                $('#div_left').hide();
-                $('#div_central').removeClass('col-md-9');
-                $('#div_central').removeClass('col-md-10');
-                $('#div_central').removeClass('col-md-12');
-                $('#div_central').addClass('col-md-12');
-                $('#div_central').show();
-                $('#div_left').html('');
-                <?php else: ?>
-                 load_menu_left(collection_id);   
-                <?php endif; ?>
+<?php if (!has_filter('category_root_as_facet') || apply_filters('category_root_as_facet', true)): ?>
+                    $('#div_left').hide();
+                    $('#div_central').removeClass('col-md-9');
+                    $('#div_central').removeClass('col-md-10');
+                    $('#div_central').removeClass('col-md-12');
+                    $('#div_central').addClass('col-md-12');
+                    $('#div_central').show();
+                    $('#div_left').html('');
+<?php else: ?>
+                    load_menu_left(collection_id);
+<?php endif; ?>
                 // load_menu_top(collection_id);
             }
         });
@@ -310,12 +301,16 @@ function submit_comment(object_id) {
         $.ajax({
             url: $('#src').val() + '/controllers/property/property_controller.php',
             type: 'POST',
-            data: {operation: 'list', hide_wizard: 'true', category_id: category_id, collection_id: $("#collection_id").val()}
+            data: {
+                operation: 'list_metadata_category', 
+                hide_wizard: 'true', 
+                category_id: category_id, 
+                collection_id: $("#collection_id").val()}
         }).done(function (result) {
             $("#menu_object").hide();
             $("#container_socialdb").hide('slow');
             $("#list").hide('slow');
-            $("#loader_objects").hide();            
+            $("#loader_objects").hide();
             $("#form").html(result);
             $('#form').show('slow');
             //$('#single_category_property').html(result);
@@ -365,13 +360,13 @@ function submit_comment(object_id) {
     }
 
 
-    function bindContextMenuSingle(span,dynatree_id) {
+    function bindContextMenuSingle(span, dynatree_id) {
         // Add context menu to this node:
         var menu;
-        if(dynatree_id){
-            menu = 'myMenuNoList'; 
-        }else{
-            menu = 'myMenuSingle'; 
+        if (dynatree_id) {
+            menu = 'myMenuNoList';
+        } else {
+            menu = 'myMenuSingle';
         }
         $(span).contextMenu({menu: menu}, function (action, el, pos) {
             // The event was bound to the <span> tag, but the node object
@@ -391,7 +386,7 @@ function submit_comment(object_id) {
                             $('#modalAddCategoria').modal('show');
                             $('.dropdown-toggle').dropdown();
                             //ativando para um dynatree especifico
-                            if(dynatree_id){
+                            if (dynatree_id) {
                                 $("#category_single_add_dynatree_id").val(dynatree_id);
                             }
                         }
@@ -404,7 +399,7 @@ function submit_comment(object_id) {
                         if (!json.isAllowed) {
                             showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('This action was configured as "NOT ALLOWED" by moderators!', 'tainacan') ?>', 'info');
                         } else {
-                             
+
                             //$("#category_single_parent_name_edit").val(node.data.title);
                             //$("#category_single_parent_id_edit").val(node.data.key);
                             $("#category_single_edit_name").val(node.data.title);
@@ -412,7 +407,7 @@ function submit_comment(object_id) {
                             $("#category_edit_description").val('');
                             $("#category_single_edit_id").val(node.data.key);
                             //ativando para um dynatree especifico
-                            if(dynatree_id){
+                            if (dynatree_id) {
                                 $("#category_single_edit_dynatree_id").val(dynatree_id);
                             }
                             $('#modalEditCategoria').modal('show');
@@ -448,16 +443,16 @@ function submit_comment(object_id) {
                                 }
                                 //sinonimos
                                 clear_synonyms_tree();
-                                if(elem.socialdb_term_synonyms&&elem.socialdb_term_synonyms.length>0){
+                                if (elem.socialdb_term_synonyms && elem.socialdb_term_synonyms.length > 0) {
                                     $('#category_synonyms').val(elem.socialdb_term_synonyms.join(','));
-                                    $("#dynatree_synonyms").dynatree("getRoot").visit(function(node){
+                                    $("#dynatree_synonyms").dynatree("getRoot").visit(function (node) {
                                         var str = node.data.key.replace("_tag", "");
-                                        if(elem.socialdb_term_synonyms.indexOf(str)>=0){
-                                           node.select(true);
+                                        if (elem.socialdb_term_synonyms.indexOf(str) >= 0) {
+                                            node.select(true);
                                         }
                                     });
                                 }
-                                <?php do_action('javascript_metas_category') ?>
+<?php do_action('javascript_metas_category') ?>
                                 //if (elem.socialdb_category_permission) {
                                 //  $("#category_permission").val(elem.socialdb_category_permission);
                                 //}
@@ -485,7 +480,7 @@ function submit_comment(object_id) {
                             $("#category_single_delete_id").val(node.data.key);
                             $("#delete_category_single_name").text(node.data.title);
                             //ativando para um dynatree especifico
-                            if(dynatree_id){
+                            if (dynatree_id) {
                                 $("#category_single_delete_dynatree_id").val(dynatree_id);
                             }
                             $('#modalExcluirCategoria').modal('show');
@@ -551,13 +546,13 @@ function submit_comment(object_id) {
                                 }
                                 //sinonimos
                                 clear_synonyms_tree();
-                                if(elem.socialdb_term_synonyms&&elem.socialdb_term_synonyms.length>0){
+                                if (elem.socialdb_term_synonyms && elem.socialdb_term_synonyms.length > 0) {
                                     $('#tag_synonyms').val(elem.socialdb_term_synonyms.join(','));
-                                    $("#dynatree_synonyms_tag").dynatree("getRoot").visit(function(node){
+                                    $("#dynatree_synonyms_tag").dynatree("getRoot").visit(function (node) {
                                         var str = node.data.key.replace("_tag", "");
-                                        console.log(str,elem.socialdb_term_synonyms.indexOf(str)>=0);
-                                        if(elem.socialdb_term_synonyms.indexOf(str)>=0){
-                                           node.select(true);
+                                        console.log(str, elem.socialdb_term_synonyms.indexOf(str) >= 0);
+                                        if (elem.socialdb_term_synonyms.indexOf(str) >= 0) {
+                                            node.select(true);
                                         }
                                     });
                                 }
@@ -829,7 +824,7 @@ function submit_comment(object_id) {
                 $('#items_not_found').hide();
             }
 
-            if(temp_list_mode) {
+            if (temp_list_mode) {
                 changeViewMode(temp_list_mode);
             }
 
@@ -854,10 +849,10 @@ function submit_comment(object_id) {
                 $('#items_not_found').hide();
             }
 
-            if(temp_list_mode) {
+            if (temp_list_mode) {
                 changeViewMode(temp_list_mode);
             }
-
+            
             setMenuContainerHeight();
         });
     }
@@ -886,7 +881,7 @@ function submit_comment(object_id) {
         });
     }
 
-    function wpquery_page(value) {
+    function wpquery_page(value, collection_viewMode) {
         $('#list').hide();
         $('#loader_objects').show();
         $.ajax({
@@ -903,6 +898,10 @@ function submit_comment(object_id) {
                 $('#collection_empty').show();
                 $('#items_not_found').hide();
             }
+            if(collection_viewMode) {
+                changeViewMode(collection_viewMode);
+            }
+            
             setMenuContainerHeight();
         });
     }
@@ -998,27 +997,21 @@ function submit_comment(object_id) {
     }
 
     // funcao que captura a action on change no selectbox na pagina single.php
-    function change_ordenation( order ) {
+    function change_ordenation(order) {
         var curr_viewMode = $("#collection_single_ordenation").attr('data-viewMode');
         wpquery_orderBy(order, curr_viewMode);
     }
 
     function search_objects(e) {
-        // $("button#clear").show();
         var search_for = $(e).val();
         wpquery_keyword(search_for);
-        // list_all_objects(selKeys.join(", "), $("#collection_id").val(), $('#collection_single_ordenation').val(), '', search_for);
     }
 
     function backToMainPage(reload_container) {
-        // wpquery_filter();
-        // var showing_breadcrumbs = $("#tainacan-breadcrumbs").attr('style');
-        if ( $('#tainacan-breadcrumbs').is(':visible') ) {
-            $("#tainacan-breadcrumbs").hide();
-        }
-        
+        change_breadcrumbs_title('', ' ');
         wpquery_clean();
         list_main_ordenation_filter();
+        $('.modal-backdrop').hide();
         $("#category_page").val('');
         $("#property_page").val('');
         $('#display_view_main_page').show();
@@ -1031,13 +1024,14 @@ function submit_comment(object_id) {
         $("#container_socialdb").show('fast');
         $('#main_part').show('slow');
         reinit_synonyms_tree();
-        if(!reload_container){
-             set_containers_class($('#collection_id').val());
+        if (!reload_container) {
+            set_containers_class($('#collection_id').val());
         }
     }
 
     //apenas para a pagina de demonstracao do item
     function backToMainPageSingleItem() {
+        change_breadcrumbs_title('', ' ');
         wpquery_filter();
         set_containers_class($('#collection_id').val());
         list_main_ordenation_filter();
@@ -1052,7 +1046,7 @@ function submit_comment(object_id) {
 
     // volta a listagem e limpa as url
     function back_and_clean_url() {
-         $("#category_page").val('');
+        $("#category_page").val('');
         $("#property_page").val('');
         $('#form').hide();
         $('#create_button').show();
@@ -1074,7 +1068,7 @@ function submit_comment(object_id) {
             }
         }).done(function (result) {
             $('#filters_collection').html(result);
-            $('.remove-link-filters').show();
+            $('.remove-link-filters').show();            
             var result_set = $('.search-resultset').find('a').length;
             if (result_set > 0) {
                 $("button#clear").fadeIn();
@@ -1282,28 +1276,28 @@ function submit_comment(object_id) {
             var youtube_url = validateYouTubeUrl();
             if (youtube_url) {
                 // É uma URL de um vídeo do youtube. Executar a importação do vídeo.
-                console.log(youtube_url);
+                // console.log(youtube_url);
                 import_youtube_video_url();
             } else {
                 var youtube_channel_url = validateYouTubeChannelUrl();
                 if (youtube_channel_url) {
                     // É uma URL de um canal do youtube. Executar a importação dos vídeos de canal.
                     var res = inputImportAll.split(youtube_channel_url[4]);
-                    console.log(res[1]);
+                    // console.log(res[1]);
                     import_youtube_channel(res[1]);
                 }
                 else {
                     var youtube_playlist_url = validateYouTubePlaylistUrl();
                     if (youtube_playlist_url) {
                         // É uma URL de uma playlist do youtube. Executar a importação dos vídeos da playlist.
-                        console.log(youtube_playlist_url);
+                        // console.log(youtube_playlist_url);
                         import_youtube_playlist(youtube_playlist_url);
                     }
                     else {
                         var instagram_url = validateInstagramUrl();
                         if (instagram_url) {
                             // É uma URL do instagram. Executar a importação dos imagens e vídeos do usuario.
-                            console.log(instagram_url);
+                            // console.log(instagram_url);
                             import_instagram(instagram_url);
                         } else {
                             var vimeo_url = validateVimeoUrl();
@@ -1311,10 +1305,10 @@ function submit_comment(object_id) {
                                 // É uma URL do vimeo. Executar a importação dos vídeos.
                                 vimeo_url = vimeo_url.split("/");
                                 if (vimeo_url[3].localeCompare('channels') === 0) {
-                                    console.log('Canal: ' + vimeo_url[4]);
+                                    // console.log('Canal: ' + vimeo_url[4]);
                                     import_vimeo('channels', vimeo_url[4]);
                                 } else {
-                                    console.log('Usuario: ' + vimeo_url[3]);
+                                    // console.log('Usuario: ' + vimeo_url[3]);
                                     import_vimeo('users', vimeo_url[3]);
                                 }
                             }
@@ -1322,14 +1316,14 @@ function submit_comment(object_id) {
                                 var flickr_url = validateFlickrUrl();
                                 if (flickr_url) {
                                     // É uma URL do Flickr. Executar a importação dos itens do usuário.
-                                    console.log(flickr_url);
+                                    // console.log(flickr_url);
                                     import_flickr(flickr_url);
                                 }
                                 else {
                                     var facebook_url = validateFacebookUrl();
                                     if (facebook_url) {
                                         // É uma URL do Facebook. Executar a importação dos itens do usuário.
-                                        console.log(facebook_url);
+                                        // console.log(facebook_url);
                                     }
                                     else {
                                         var any_file_type = validateAnyFile();
@@ -1344,14 +1338,26 @@ function submit_comment(object_id) {
                                         } else {
                                             var any_url = validateAnyUrl();
                                             if (any_url) {
-                                                // É uma URL regular. Executar a importação através do Embed.ly.
-                                                show_modal_main();
-                                               // showFormCreateURL($('#item_url_import_all').val());
-                                                import_text($('#item_url_import_all').val());
-                                                $('#item_url_import_all').val('');
-                                                $("#sites_import_icon").addClass("grayscale");
-                                                $('#modalshowModalImportAll').modal('hide');
-                                                console.log('URL Regular. Enviar pro Embed.ly.');
+                                                var split_url = $('#item_url_import_all').val().replace('http://','').replace('https://','').split('/');
+                                                var index = split_url.indexOf('handle');
+                                                var article = split_url.indexOf('article');
+                                                var view = split_url.indexOf('view');
+                                                if($('#extract_metadata').is(':checked')&&index>=0){
+                                                    extract_metadata($('#item_url_import_all').val());
+                                                }else if($('#extract_metadata').is(':checked')&&article>=0&&view>=0){
+                                                    extract_metadata($('#item_url_import_all').val());
+                                                }else if($('#extract_metadata').is(':checked')){
+                                                    extract_metatags($('#item_url_import_all').val());
+                                                }else{
+                                                    // É uma URL regular. Executar a importação através do Embed.ly.
+                                                    show_modal_main();
+                                                    // showFormCreateURL($('#item_url_import_all').val());
+                                                    import_text($('#item_url_import_all').val());
+                                                    $('#item_url_import_all').val('');
+                                                    $("#sites_import_icon").addClass("grayscale");
+                                                    $('#modalshowModalImportAll').modal('hide');
+                                                    // console.log('URL Regular. Enviar pro Embed.ly.');
+                                                }
                                             } else {
                                                 showAlertGeneral("<?php _e('Alert', 'tainacan'); ?>", "<?php _e('Please, insert a valid URL', 'tainacan'); ?>", "error");
                                             }
@@ -1469,7 +1475,15 @@ function submit_comment(object_id) {
             var match = url.match(regExp);
             if (match) {
                 var result = url.split('/');
-                return result[4];
+                if (typeof result[6] != 'undefined' && result[6] != '' && (result[5] == 'albums' || result[5] == 'sets')) {
+                    //console.log(result[6]);
+                    return 'albums/'+result[4]+'/'+result[6];
+                } else if (typeof result[5] != 'undefined' && result[5] != '') {
+                    //console.log(result[5]);
+                    return 'singleitem/'+result[4]+'/'+result[5];
+                } else {
+                    return 'all/'+result[4];
+                }
             }
             else {
                 // Do anything for not being valid
@@ -1519,7 +1533,7 @@ function submit_comment(object_id) {
                             var match_audio = url.match(regExp_audio);
                             if (match_audio) {
                                 return 'audio';
-                            }else{
+                            } else {
                                 return 'other';
                             }
                         }
@@ -1726,14 +1740,14 @@ function submit_comment(object_id) {
                     }
                 }
             });
-           
+
         } else {
             showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Necessary to inform Youtube video url', 'tainacan'); ?>', 'error');
         }
     }
     // faz a importacao do tipo texto e joga para a tela de multiplos
-    function import_text(url){
-       var key = $('#socialdb_embed_api_id').val();
+    function import_text(url) {
+        var key = $('#socialdb_embed_api_id').val();
         var ajaxurl = 'http://api.embed.ly/1/oembed?key=:' + key + '&url=' + url;
         //div loader
         $.getJSON(ajaxurl, {}, function (json) {
@@ -1743,7 +1757,7 @@ function submit_comment(object_id) {
                 title = json.title;
             }
             else {
-                 hide_modal_main();
+                hide_modal_main();
                 showAlertGeneral('Atenção', 'Esta URL não possui items disponíveis para importação', 'error');
                 return;
             }
@@ -1763,7 +1777,7 @@ function submit_comment(object_id) {
             //pegando a imagem
             var img = '';
             if (json.thumbnail_url !== undefined && json.thumbnail_url != null && json.thumbnail_url != false) {
-                 img = json.thumbnail_url;
+                img = json.thumbnail_url;
             }
             // verifico se existe imagem para ser importada
             $.ajax({
@@ -1793,43 +1807,43 @@ function submit_comment(object_id) {
             showAlertGeneral('Atenção', 'URL inexistente ou indisponível', 'error');
         });
     }
- 
-    function import_files_url(url,type){
-            var title = '';
-            if(type=='image'){
-                title = '<?php _e('Image','tainacan') ?>';
-            }else if(type=='video'){
-                title = '<?php _e('Video','tainacan') ?>';
-            }else if(type=='audio'){
-                title = '<?php _e('Audio','tainacan') ?>';
-            }else if(type=='other'){
-                title = '<?php _e('Other','tainacan') ?>';
-            }else if(type=='pdf'){
-                title = '<?php _e('PDF','tainacan') ?>';
+
+    function import_files_url(url, type) {
+        var title = '';
+        if (type == 'image') {
+            title = '<?php _e('Image', 'tainacan') ?>';
+        } else if (type == 'video') {
+            title = '<?php _e('Video', 'tainacan') ?>';
+        } else if (type == 'audio') {
+            title = '<?php _e('Audio', 'tainacan') ?>';
+        } else if (type == 'other') {
+            title = '<?php _e('Other', 'tainacan') ?>';
+        } else if (type == 'pdf') {
+            title = '<?php _e('PDF', 'tainacan') ?>';
+        }
+        $.ajax({
+            url: $('#src').val() + '/controllers/object/object_controller.php',
+            type: 'POST',
+            data: {
+                operation: 'add_item_not_published',
+                collection_id: $("#collection_id").val(),
+                content: url,
+                description: '',
+                type: type,
+                url: url,
+                title: title}
+        }).done(function (result) {
+            var json = JSON.parse(result);
+            if (json.length > 0) {
+                showViewMultipleItemsSocialNetwork(json);
             }
-            $.ajax({
-                url: $('#src').val() + '/controllers/object/object_controller.php',
-                type: 'POST',
-                data: {
-                    operation: 'add_item_not_published',
-                    collection_id: $("#collection_id").val(),
-                    content: url,
-                    description:'',
-                    type: type,
-                    url: url,
-                    title: title}
-            }).done(function (result) {
-                var json = JSON.parse(result);
-                if (json.length > 0) {
-                    showViewMultipleItemsSocialNetwork(json);
-                }
-                else {
-                    hide_modal_main();
-                    showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Invalid Channel/Playlist or no videos to be imported', 'tainacan'); ?>', 'error');
-                }
-            });
+            else {
+                hide_modal_main();
+                showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Invalid Channel/Playlist or no videos to be imported', 'tainacan'); ?>', 'error');
+            }
+        });
     }
-   
+
 
     function import_youtube_channel(inputIdentifierYoutube) {
         var collectionId = $('#collection_id').val();
@@ -2006,48 +2020,76 @@ function submit_comment(object_id) {
     }
     //*****************************************  END IMPORT ALL  *********************************************//
     /**
-    * funcao que concatena um array em um input, separado por virgulas
-    * @param {int} o ID do item que sera inserido no array
-    * @param {string} O id do input que esta sendo concatenado
-    * @returns {void}     */
-    function concatenate_in_array(key,seletor){
-    var ids = [];
-    if($(seletor).val()!==''){
-        ids = $(seletor).val().split(',');
-        index = ids.indexOf(key);
-        if(index>=0){
-            ids.splice(index, 1);
-        }else{
+     * funcao que concatena um array em um input, separado por virgulas
+     * @param {int} o ID do item que sera inserido no array
+     * @param {string} O id do input que esta sendo concatenado
+     * @returns {void}     */
+    function concatenate_in_array(key, seletor) {
+        var ids = [];
+        var result;
+        if ($(seletor).val() !== '') {
+            ids = $(seletor).val().split(',');
+            index = ids.indexOf(key);
+            if (index >= 0) {
+                ids.splice(index, 1);
+                result = false;
+            } else {
+                ids.push(key);
+                result = true;
+            }
+            $(seletor).val(ids.join(','));
+        } else {
             ids.push(key);
+            $(seletor).val(ids.join(','));
+             result = true;
         }
-        $(seletor).val(ids.join(','));
-    }else{
-        ids.push(key);
-        $(seletor).val(ids.join(','));
+        return result;
     }
-}
-/**
-* 
-
- * @param {type} url
- * @returns {String} */
-function get_type_url(url){
-    var fileExtension = url.replace(/^.*\./, '');     // USING JAVASCRIPT REGULAR EXPRESSIONS.
-    switch (fileExtension) {
-        case 'png': case 'jpeg': case 'jpg':case 'gif':
-            return 'image';
-            break;
-        case 'mp4': case 'wmv': case 'ogv':case 'mpg':
-             return 'video';
-        case 'pdf':
-            return 'pdf';
-            break;
-        case 'mp3': case 'wav': case 'm4a':case 'ogg':
-             return 'audio';    
-        default:
-            return 'other';
-    }
-}
-    /************************************************ HELPERS **********************************************************/
     
+    function add_label_box(id,name,seletor){
+        $(seletor).append('<span id="label-box-'+id+'" class="label label-primary">'
+                +name+' <a style="color:white;cursor:pointer;" onclick="remove_label_box('+id+')">x</a></span>&nbsp;');
+    }
+    
+    function remove_label_box(id){
+        $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
+            if(node.data.key==id){
+                node.select(false);
+                $('#label-box-'+id).remove();
+            }
+        });
+    }
+    /**
+     * 
+     
+     * @param {type} url
+     * @returns {String} */
+    function get_type_url(url) {
+        var fileExtension = url.replace(/^.*\./, '');     // USING JAVASCRIPT REGULAR EXPRESSIONS.
+        switch (fileExtension) {
+            case 'png':
+            case 'jpeg':
+            case 'jpg':
+            case 'gif':
+                return 'image';
+                break;
+            case 'mp4':
+            case 'wmv':
+            case 'ogv':
+            case 'mpg':
+                return 'video';
+            case 'pdf':
+                return 'pdf';
+                break;
+            case 'mp3':
+            case 'wav':
+            case 'm4a':
+            case 'ogg':
+                return 'audio';
+            default:
+                return 'other';
+        }
+    }
+    /************************************************ HELPERS **********************************************************/
+
 </script>

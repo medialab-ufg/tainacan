@@ -5,7 +5,9 @@
     var $current_meta_form = "#submit_form_property_data_" + current_meta_type;
     var $form_ranking = $("#meta-voting #submit_form_ranking");
     var ranking_types = ["binary", "stars", "like"];
-
+     //inicia o dynatree de propriedades
+     var types_compounds = []; // array que mostra o tipo das propriedades compostas
+    initDynatreeFilterProperties(src);
     $("#tainacan-breadcrumbs").show();
     $("#tainacan-breadcrumbs .current-config").text('<?php _e('Repository Metadata','tainacan') ?>');
     
@@ -110,7 +112,7 @@
     ************************* FACETS FUNCTIONS *********************************
     ****************************************************************************
     **/
-    $( "#filters-accordion, #metadata-container" ).sortable({
+    $( "#filters-accordion, #metadata-container-" ).sortable({
         cursor: "n-resize",
         connectWith: ".connectedSortable",
         revert: 250,
@@ -449,7 +451,7 @@
                 }
 
                 $(current_modal).modal('hide');
-
+                $("#dynatree_properties_filter").dynatree("getTree").reload();
                 list_collection_metadata();
                 getRequestFeedback(elem.type, elem.msg);
             });
@@ -643,9 +645,15 @@
 
             if (elem.no_properties !== true) {
                 $.each(elem.property_data, function (idx, property) {
+                    //visibilidade do metadado
+                    var isCompounded = is_compounded(property.metas.socialdb_property_is_compounds);
+                    types_compounds[property.id] = 1;
+                    if(isCompounded){
+                        return true;
+                    }
                     var current_id = property.id;
                     var current_search_widget = property.search_widget;
-                    
+                    console.log(property);
                     
                     if ( property.metas.socialdb_property_is_fixed && property.metas.socialdb_property_is_fixed === 'true' ) {
                         if(property.metas.socialdb_property_visibility&&property.metas.socialdb_property_visibility==='show'){
@@ -848,7 +856,7 @@
                     
                 }
             }
-
+            $("#dynatree_properties_filter").dynatree("getTree").reload();
             list_collection_metadata();
             getRequestFeedback(elem.type, elem.msg);
         });
@@ -871,6 +879,13 @@
                 $('#no_properties_object').hide();
                 $('#table_property_object').html('');
                 $.each(elem.property_object, function (idx, property) {
+                    //visibilidade do metadado
+                    var isCompounded = is_compounded(property.metas.socialdb_property_is_compounds);
+                    types_compounds[property.id] = 2;
+                    if(isCompounded){
+                        return true;
+                    }
+                    // o id
                     var current_id = property.id;
                     if (property.metas.socialdb_property_is_fixed && property.metas.socialdb_property_is_fixed === 'true' ) {
                         $('ul#metadata-container').append(
@@ -961,6 +976,7 @@
                        $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
                                node.select(false);
                        });
+                        $('#selected_categories_relationship').html('');
                        $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
                                if(elem.metas.socialdb_property_object_category_id.indexOf(node.data.key)>-1){
                                     node.select(true);
@@ -979,6 +995,7 @@
                        $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
                                node.select(false);
                        });
+                        $('#selected_categories_relationship').html('');
                        $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
                                if(elem.metas.socialdb_property_object_category_id===node.data.key){
                                     node.select(true);
@@ -1040,7 +1057,7 @@
         }).done(function (result) {
             elem = jQuery.parseJSON(result);
             $('#modalImportMain').modal('hide');
-
+            $("#dynatree_properties_filter").dynatree("getTree").reload();
             var item_was_dragged = $("#meta-category .term-widget").hasClass('select-meta-filter');
             var current_operation = elem.operation;
             var menu_style_id = elem.select_menu_style;
@@ -1077,7 +1094,12 @@
 
             if (elem && elem.no_properties !== true) {
                 $.each(elem.property_terms, function (idx, property) {
-
+                    //visibilidade do metadado
+                    var isCompounded = is_compounded(property.metas.socialdb_property_is_compounds);
+                    types_compounds[property.id] = 3;
+                    if(isCompounded){  
+                        return true;
+                    }
                     var current_id = property.id;
 
                     var repository_property = property.metas.is_repository_property;
@@ -1117,7 +1139,7 @@
         
         return xhr;
     }
-
+    
     function get_menu_property(property) {
         var url = '<?php echo get_template_directory_uri() ?>' + "/controllers/search/search_controller.php";
         $.ajax({
@@ -1506,6 +1528,7 @@
             list_property_data(), 
             list_property_terms(),
             list_property_object(),
+            list_property_compounds(),
             list_ranking()
         ).done(function ( v1, v2 ) {
              $.ajax({
@@ -1514,8 +1537,9 @@
                 data: { operation: 'get_ordenation_properties',collection_id:$('#collection_id').val() }
             }).done(function(result) {
                 var json = $.parseJSON(result);
-                if(json&&json.ordenation&&json.ordenation!==''){
-                    reorder_properties(json.ordenation.split(','));
+                console.log(json.ordenation);
+                if(json&&json.ordenation&&json.ordenation.default){
+                    reorder_properties(json.ordenation.default.split(','));
                 }
                 $('#loader_metadados_page').hide();
                 $('#metadata-container').show();
@@ -1831,6 +1855,7 @@
     function clear_relation() {
         $("#property_object_category_id").val('');
         $("#property_object_category_name").val('');
+        $('#selected_categories_relationship').html('');
     }
 
     function hide_alert() { $(".alert").hide(); }
@@ -1858,7 +1883,7 @@
 
         $('#default_field').show();
         $('#required_field').show();
-
+        $('#selected_categories_relationship').html('');
         $("#operation_property_data").val('add_property_data');
         $("#operation_property_object").val('add_property_object');
         $("#operation_property_term").val('add_property_term');
@@ -1896,7 +1921,11 @@
 
             },
             onSelect: function (flag, node) {
-                concatenate_in_array(node.data.key,'#property_object_category_id');
+                if(concatenate_in_array(node.data.key,'#property_object_category_id')){
+                    add_label_box(node.data.key,node.data.title,'#selected_categories_relationship');
+                }else{
+                    remove_label_box(node.data.key);
+                }
                 <?php if(has_action('javascript_onselect_relationship_dynatree_property_object')): ?>
                     <?php do_action('javascript_onselect_relationship_dynatree_property_object') ?>
                 <?php endif; ?>

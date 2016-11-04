@@ -34,6 +34,7 @@
 .metadata-actions {
   background: $collections-bg-color;
   padding-bottom: 20px;
+  padding-right: 0;
 }
 
 #properties_tabs {
@@ -44,7 +45,7 @@
     margin-top: -20px;
 
     span {
-      color: black;
+      color: $brand-light-blue;
 
       &:hover {
         opacity: 0.7;
@@ -90,7 +91,7 @@
     }
   }
 
-  ul#metadata-container {
+  ul.metadata-container {
     // border: none;
     width: 100%;
 
@@ -192,6 +193,7 @@
 
     span {
       font-size: 10px;
+      color: $brand-light-blue;
 
       &.sort-filter {
         float: right;

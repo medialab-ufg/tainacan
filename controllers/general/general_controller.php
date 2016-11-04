@@ -1,4 +1,7 @@
 <?php
+include_once (dirname(__FILE__) . '/../../../../../wp-config.php');
+include_once (dirname(__FILE__) . '/../../../../../wp-load.php');
+include_once (dirname(__FILE__) . '/../../../../../wp-includes/wp-db.php');
 
  class Controller {
     public function render($file, $variables = array()) {
@@ -111,7 +114,7 @@
         $wp_posts = $wpdb->prefix . "posts";
         $query = "
                         SELECT p.* FROM $wp_posts p
-                        WHERE p.post_type like 'socialdb_collection' and p.post_title LIKE '%{$data['term']}%'
+                        WHERE p.post_type like 'socialdb_collection' and p.post_status like 'publish' and p.post_title LIKE '%{$data['term']}%'
                 ";
         $result = $wpdb->get_results($query);
         if ($result) {
@@ -121,4 +124,15 @@
         }
         return json_encode($json);
     }
+    
+    
+    public function has_cache($collection_id,$operation){
+        $collection = get_post($collection_id);
+        if(is_file(dirname(__FILE__).'../../../cache/'.$collection->post_name.'/'.$operation.'.html')){
+            return file_get_contents(dirname(__FILE__).'../../../cache/'.$collection->post_name.'/'.$operation.'.html');
+        }else{
+            return false;
+        }
+    }
+    
 }

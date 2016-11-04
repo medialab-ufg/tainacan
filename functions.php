@@ -10,6 +10,8 @@ add_action('init', 'register_taxonomies');
 //load_theme_textdomain("tainacan", dirname(__FILE__) . "/languages");
 include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 include_once( dirname(__FILE__) . "/config/config.php" );
+require_once('wp_bootstrap_navwalker.php');
+include_once("models/log/log_model.php");
 
 /**
  * Criando tabela taxonomymeta
@@ -43,6 +45,33 @@ function setup_taxonomymeta() {
 				KEY term_id (term_id),
 				KEY meta_key (meta_key)
 			) $charset_collate;");
+}
+
+function setup_statisticsLog() {
+    global $wpdb;
+    $charset_collate = '';
+    if (!empty($wpdb->charset))
+        $charset_collate = "DEFAULT CHARACTER SET $wpdb->charset";
+    if (!empty($wpdb->collate))
+        $charset_collate .= " COLLATE $wpdb->collate";
+
+    $_log_table_name = Log::_table();
+
+    $stats_table_sql = "
+    CREATE TABLE IF NOT EXISTS {$_log_table_name} (
+    id INT UNSIGNED NOT NULL auto_increment,
+    collection_id BIGINT(20) UNSIGNED NOT NULL,
+    user_id BIGINT(20) UNSIGNED NOT NULL,
+    item_id BIGINT(20) UNSIGNED NOT NULL,
+    resource_id BIGINT(20) UNSIGNED NOT NULL,
+    ip VARCHAR(39) DEFAULT NULL,
+    event_type VARCHAR(20) NOT NULL,
+    event VARCHAR(20) NOT NULL,
+    event_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
+    ) $charset_collate";
+
+    $wpdb->query($stats_table_sql);
 }
 
 /*
@@ -254,6 +283,17 @@ add_action('init', 'custom_rewrite_basic', 10, 0);
  * * */
 if (!current_user_can('manage_options')) {
     show_admin_bar(false);
+}
+/**
+ * Função responsavel por permitir zip
+ * * */
+add_filter('upload_mimes', 'custom_upload_mimes');
+function custom_upload_mimes ( $existing_mimes=array() ) {
+    // add your extension to the mimes array as below
+    $existing_mimes['zip'] = 'application/zip';
+    $existing_mimes['csv'] = 'application/octet-stream';
+    $existing_mimes['gz'] = 'application/x-gzip';
+    return $existing_mimes;
 }
 
 /**
@@ -989,6 +1029,13 @@ function create_property_terms() {
     create_metas($property_term_term['term_id'], 'socialdb_property_term_metas', 'socialdb_property_term_root', 'socialdb_property_term_root');
     create_metas($property_term_term['term_id'], 'socialdb_property_term_metas', 'socialdb_property_term_widget', 'socialdb_property_term_widget');
     create_metas($property_root_term['term_id'], 'socialdb_property_term_metas', 'socialdb_property_term_cardinality', 'socialdb_property_term_cardinality');    
+    create_metas($property_root_term['term_id'], 'socialdb_property_term_metas', 'socialdb_property_term_vinculate_category', 'socialdb_property_term_vinculate_category');    
+    create_metas($property_root_term['term_id'], 'socialdb_property_term_metas', 'socialdb_property_term_new_category', 'socialdb_property_term_new_category');    
+    create_metas($property_root_term['term_id'], 'socialdb_property_term_metas', 'socialdb_property_term_new_taxonomy', 'socialdb_property_term_new_taxonomy');    
+    
+    $property_compounds_term = create_register('socialdb_property_compounds', 'socialdb_property_type', array('parent' => $property_root_term['term_id']));
+    create_metas($property_compounds_term['term_id'], 'socialdb_property_compounds_metas', 'socialdb_property_compounds_properties_id', 'socialdb_property_compounds_properties_id');
+    create_metas($property_compounds_term['term_id'], 'socialdb_property_compounds_metas', 'socialdb_property_compounds_cardinality', 'socialdb_property_compounds_cardinality');    
     
     $property_ranking_term = create_register('socialdb_property_ranking', 'socialdb_property_type', array('parent' => $property_root_term['term_id']));
     create_metas($property_ranking_term['term_id'], 'socialdb_property_ranking_metas', 'socialdb_property_ranking_vote', 'socialdb_property_ranking_vote');
@@ -1017,6 +1064,7 @@ function create_channel_terms() {
     $channel_mapping_term = create_register('socialdb_channel_csv', 'socialdb_channel_type', array('parent' => $channel_root_term['term_id']));
     create_metas($channel_mapping_term['term_id'], 'socialdb_channel_csv_metas', 'socialdb_channel_csv_delimiter', 'socialdb_channel_csv_delimiter');
     create_metas($channel_mapping_term['term_id'], 'socialdb_channel_csv_metas', 'socialdb_channel_csv_has_header', 'socialdb_channel_csv_has_header');
+    $channel_mapping_term = create_register('socialdb_channel_metatag', 'socialdb_channel_type', array('parent' => $channel_root_term['term_id']));
 }
 
 /**
@@ -1057,6 +1105,14 @@ function create_category_terms() {
         }
     }
     add_fixed_properties($category_root_term);
+    //categoria 
+    $category_root_term = create_register('socialdb_taxonomy', 'socialdb_category_type');
+    create_metas($category_root_term['term_id'], 'socialdb_category_metas', 'socialdb_category_owner', 'socialdb_category_owner');
+    create_metas($category_root_term['term_id'], 'socialdb_category_metas', 'socialdb_category_moderators', 'socialdb_category_moderators');
+    create_metas($category_root_term['term_id'], 'socialdb_category_metas', 'socialdb_category_date', 'socialdb_category_date');
+    create_metas($category_root_term['term_id'], 'socialdb_category_metas', 'socialdb_term_synonyms', 'socialdb_term_synonyms');
+    create_metas($category_root_term['term_id'], 'socialdb_category_metas', 'socialdb_category_permission', 'socialdb_category_permission');
+    create_metas($category_root_term['term_id'], 'socialdb_category_metas', 'socialdb_category_property_id', 'socialdb_category_property_id');
 }
 
 /**
@@ -1110,6 +1166,8 @@ function create_event_terms() {
     /*     * property data* */
     $event_property_data_term = create_register('socialdb_event_property_data', 'socialdb_event_type', array('parent' => $event_root_term['term_id']));
     create_metas($event_property_data_term['term_id'], 'socialdb_event_property_data_metas', 'socialdb_event_property_used_by_categories', 'socialdb_event_property_used_by_categories');
+    create_metas($event_property_data_term['term_id'], 'socialdb_event_property_data_metas', 'socialdb_event_property_tab', 'socialdb_event_property_tab');
+    create_metas($event_property_data_term['term_id'], 'socialdb_event_property_data_metas', 'socialdb_event_property_visualization', 'socialdb_event_property_visualization');
     ####### action para adicao de metadados no eventos de propriedade de dados ######
     do_action('add_new_metas_event_property_data', $event_property_data_term, 'socialdb_event_property_data_metas');
     ############################################################################
@@ -1141,7 +1199,9 @@ function create_event_terms() {
     create_metas($event_edit_property_data_value['term_id'], 'socialdb_event_property_data_edit_value_metas', 'socialdb_event_property_data_edit_value_attribute_value', 'socialdb_event_property_data_edit_value_attribute_value');
     /*     * property object* */
     $event_property_object_term = create_register('socialdb_event_property_object', 'socialdb_event_type', array('parent' => $event_root_term['term_id']));
-     create_metas($event_property_object_term['term_id'], 'socialdb_event_property_object_metas', 'socialdb_event_property_used_by_categories', 'socialdb_event_property_used_by_categories');
+    create_metas($event_property_object_term['term_id'], 'socialdb_event_property_object_metas', 'socialdb_event_property_used_by_categories', 'socialdb_event_property_used_by_categories');
+    create_metas($event_property_object_term['term_id'], 'socialdb_event_property_object_metas', 'socialdb_event_property_tab', 'socialdb_event_property_tab');
+    create_metas($event_property_object_term['term_id'], 'socialdb_event_property_object_metas', 'socialdb_event_property_visualization', 'socialdb_event_property_visualization');
     ####### action para adicao de metadados no eventos de propriedade de object ######
     do_action('add_new_metas_event_property_object', $event_property_object_term, 'socialdb_event_property_object_metas');
     ############################################################################
@@ -1174,6 +1234,8 @@ function create_event_terms() {
     /* Property Term* */
     $event_property_term_term = create_register('socialdb_event_property_term', 'socialdb_event_type', array('parent' => $event_root_term['term_id']));
      create_metas($event_property_term_term['term_id'], 'socialdb_event_property_term_metas', 'socialdb_event_property_used_by_categories', 'socialdb_event_property_used_by_categories');
+     create_metas($event_property_term_term['term_id'], 'socialdb_event_property_term_metas', 'socialdb_event_property_tab', 'socialdb_event_property_tab');
+     create_metas($event_property_term_term['term_id'], 'socialdb_event_property_term_metas', 'socialdb_event_property_visualization', 'socialdb_event_property_visualization');
     $event_create_property_term = create_register('socialdb_event_property_term_create', 'socialdb_event_type', array('parent' => $event_property_term_term['term_id']));
     create_metas($event_create_property_term['term_id'], 'socialdb_event_property_term_create_metas', 'socialdb_event_property_term_create_id', 'socialdb_event_property_term_create_id');
     create_metas($event_create_property_term['term_id'], 'socialdb_event_property_term_create_metas', 'socialdb_event_property_term_create_name', 'socialdb_event_property_term_create_name');
@@ -1181,6 +1243,9 @@ function create_event_terms() {
     create_metas($event_create_property_term['term_id'], 'socialdb_event_property_term_create_metas', 'socialdb_event_property_term_create_widget', 'socialdb_event_property_term_create_widget');
     create_metas($event_create_property_term['term_id'], 'socialdb_event_property_term_create_metas', 'socialdb_event_property_term_create_required', 'socialdb_event_property_term_create_required');
     create_metas($event_create_property_term['term_id'], 'socialdb_event_property_term_create_metas', 'socialdb_event_property_term_create_root', 'socialdb_event_property_term_create_root');
+    create_metas($event_create_property_term['term_id'], 'socialdb_event_property_term_create_metas', 'socialdb_event_property_term_create_vinculate_category', 'socialdb_event_property_term_create_vinculate_category');
+    create_metas($event_create_property_term['term_id'], 'socialdb_event_property_term_create_metas', 'socialdb_event_property_term_create_new_taxonomy', 'socialdb_event_property_term_create_new_taxonomy');
+    create_metas($event_create_property_term['term_id'], 'socialdb_event_property_term_create_metas', 'socialdb_event_property_term_create_new_category', 'socialdb_event_property_term_create_new_category');
     create_metas($event_create_property_term['term_id'], 'socialdb_event_property_term_create_metas', 'socialdb_event_property_term_create_help', 'socialdb_event_property_term_create_help');
     create_metas($event_create_property_term['term_id'], 'socialdb_event_property_term_create_metas', 'socialdb_event_property_term_create_category_root_id', 'socialdb_event_property_term_create_category_root_id');
     $event_edit_property_term = create_register('socialdb_event_property_term_edit', 'socialdb_event_type', array('parent' => $event_property_term_term['term_id']));
@@ -1190,11 +1255,54 @@ function create_event_terms() {
     create_metas($event_edit_property_term['term_id'], 'socialdb_event_property_term_edit_metas', 'socialdb_event_property_term_edit_cardinality', 'socialdb_event_property_term_edit_cardinality');
     create_metas($event_edit_property_term['term_id'], 'socialdb_event_property_term_edit_metas', 'socialdb_event_property_term_edit_required', 'socialdb_event_property_term_edit_required');
     create_metas($event_edit_property_term['term_id'], 'socialdb_event_property_term_edit_metas', 'socialdb_event_property_term_edit_root', 'socialdb_event_property_term_edit_root');
+    create_metas($event_edit_property_term['term_id'], 'socialdb_event_property_term_edit_metas', 'socialdb_event_property_term_edit_vinculate_category', 'socialdb_event_property_term_edit_vinculate_category');
+    create_metas($event_edit_property_term['term_id'], 'socialdb_event_property_term_edit_metas', 'socialdb_event_property_term_edit_new_taxonomy', 'socialdb_event_property_term_edit_new_taxonomy');
+    create_metas($event_edit_property_term['term_id'], 'socialdb_event_property_term_edit_metas', 'socialdb_event_property_term_edit_new_category', 'socialdb_event_property_term_edit_new_category');
     create_metas($event_edit_property_term['term_id'], 'socialdb_event_property_term_edit_metas', 'socialdb_event_property_term_edit_help', 'socialdb_event_property_term_edit_help');
     $event_delete_property_term = create_register('socialdb_event_property_term_delete', 'socialdb_event_type', array('parent' => $event_property_term_term['term_id']));
     create_metas($event_delete_property_term['term_id'], 'socialdb_event_property_term_delete_metas', 'socialdb_event_property_term_delete_id', 'socialdb_event_property_term_delete_id');
     create_metas($event_delete_property_term['term_id'], 'socialdb_event_property_term_delete_metas', 'socialdb_event_property_term_delete_category_root_id', 'socialdb_event_property_term_delete_category_root_id');
-
+    
+    /* Property Compounds */
+    $event_property_compounds_term = create_register('socialdb_event_property_compounds', 'socialdb_event_type', array('parent' => $event_root_term['term_id']));
+    create_metas($event_property_compounds_term['term_id'], 'socialdb_event_property_compounds_metas', 'socialdb_event_property_used_by_categories', 'socialdb_event_property_used_by_categories');
+    create_metas($event_property_compounds_term['term_id'], 'socialdb_event_property_compounds_metas', 'socialdb_event_property_tab', 'socialdb_event_property_tab');
+    create_metas($event_property_compounds_term['term_id'], 'socialdb_event_property_compounds_metas', 'socialdb_event_property_visualization', 'socialdb_event_property_visualization');
+    $event_create_property_compounds = create_register('socialdb_event_property_compounds_create', 'socialdb_event_type', array('parent' => $event_property_compounds_term['term_id']));
+    create_metas($event_create_property_compounds['term_id'], 'socialdb_event_property_compounds_create_metas', 'socialdb_event_property_compounds_create_id', 'socialdb_event_property_compounds_create_id');
+    create_metas($event_create_property_compounds['term_id'], 'socialdb_event_property_compounds_create_metas', 'socialdb_event_property_compounds_create_name', 'socialdb_event_property_compounds_create_name');
+    create_metas($event_create_property_compounds['term_id'], 'socialdb_event_property_compounds_create_metas', 'socialdb_event_property_compounds_create_cardinality', 'socialdb_event_property_compounds_create_cardinality');
+    create_metas($event_create_property_compounds['term_id'], 'socialdb_event_property_compounds_create_metas', 'socialdb_event_property_compounds_create_required', 'socialdb_event_property_compounds_create_required');
+    create_metas($event_create_property_compounds['term_id'], 'socialdb_event_property_compounds_create_metas', 'socialdb_event_property_compounds_create_properties_id', 'socialdb_event_property_compounds_create_properties_id');
+    create_metas($event_create_property_compounds['term_id'], 'socialdb_event_property_compounds_create_metas', 'socialdb_event_property_compounds_create_help', 'socialdb_event_property_compounds_create_help');
+    create_metas($event_create_property_compounds['term_id'], 'socialdb_event_property_compounds_create_metas', 'socialdb_event_property_compounds_create_category_root_id', 'socialdb_event_property_compounds_create_category_root_id');
+    $event_edit_property_compounds = create_register('socialdb_event_property_compounds_edit', 'socialdb_event_type', array('parent' => $event_property_compounds_term['term_id']));
+    create_metas($event_edit_property_compounds['term_id'], 'socialdb_event_property_compounds_edit_metas', 'socialdb_event_property_used_by_categories', 'socialdb_event_property_used_by_categories');
+    create_metas($event_edit_property_compounds['term_id'], 'socialdb_event_property_compounds_edit_metas', 'socialdb_event_property_tab', 'socialdb_event_property_tab');
+    create_metas($event_edit_property_compounds['term_id'], 'socialdb_event_property_compounds_edit_metas', 'socialdb_event_property_visualization', 'socialdb_event_property_visualization');
+    create_metas($event_edit_property_compounds['term_id'], 'socialdb_event_property_compounds_edit_metas', 'socialdb_event_property_compounds_edit_id', 'socialdb_event_property_compounds_edit_id');
+    create_metas($event_edit_property_compounds['term_id'], 'socialdb_event_property_compounds_edit_metas', 'socialdb_event_property_compounds_edit_name', 'socialdb_event_property_compounds_edit_name');
+    create_metas($event_edit_property_compounds['term_id'], 'socialdb_event_property_compounds_edit_metas', 'socialdb_event_property_compounds_edit_cardinality', 'socialdb_event_property_compounds_edit_cardinality');
+    create_metas($event_edit_property_compounds['term_id'], 'socialdb_event_property_compounds_edit_metas', 'socialdb_event_property_compounds_edit_required', 'socialdb_event_property_compounds_edit_required');
+    create_metas($event_edit_property_compounds['term_id'], 'socialdb_event_property_compounds_edit_metas', 'socialdb_event_property_compounds_edit_properties_id', 'socialdb_event_property_compounds_edit_properties_id');
+    create_metas($event_edit_property_compounds['term_id'], 'socialdb_event_property_compounds_edit_metas', 'socialdb_event_property_compounds_edit_help', 'socialdb_event_property_compounds_edit_help');
+    create_metas($event_edit_property_compounds['term_id'], 'socialdb_event_property_compounds_edit_metas', 'socialdb_event_property_compounds_edit_category_root_id', 'socialdb_event_property_compounds_edit_category_root_id');
+    $event_delete_property_compounds = create_register('socialdb_event_property_compounds_delete', 'socialdb_event_type', array('parent' => $event_property_compounds_term['term_id']));
+    create_metas($event_delete_property_compounds['term_id'], 'socialdb_event_property_compounds_delete_metas', 'socialdb_event_property_used_by_categories', 'socialdb_event_property_used_by_categories');
+    create_metas($event_delete_property_compounds['term_id'], 'socialdb_event_property_compounds_delete_metas', 'socialdb_event_property_tab', 'socialdb_event_property_tab');
+    create_metas($event_delete_property_compounds['term_id'], 'socialdb_event_property_compounds_delete_metas', 'socialdb_event_property_visualization', 'socialdb_event_property_visualization');
+    create_metas($event_delete_property_compounds['term_id'], 'socialdb_event_property_compounds_delete_metas', 'socialdb_event_property_compounds_delete_id', 'socialdb_event_property_compounds_delete_id');
+    create_metas($event_delete_property_compounds['term_id'], 'socialdb_event_property_compounds_delete_metas', 'socialdb_event_property_compounds_delete_category_root_id', 'socialdb_event_property_compounds_delete_category_root_id');
+    $event_edit_property_compounds_value = create_register('socialdb_event_property_compounds_edit_value', 'socialdb_event_type', array('parent' => $event_property_compounds_term['term_id']));
+    create_metas($event_edit_property_compounds_value['term_id'], 'socialdb_event_property_compounds_metas', 'socialdb_event_property_used_by_categories', 'socialdb_event_property_used_by_categories');
+    create_metas($event_edit_property_compounds_value['term_id'], 'socialdb_event_property_compounds_edit_value_metas', 'socialdb_event_property_tab', 'socialdb_event_property_tab');
+    create_metas($event_edit_property_compounds_value['term_id'], 'socialdb_event_property_compounds_edit_value_metas', 'socialdb_event_property_visualization', 'socialdb_event_property_visualization');
+    create_metas($event_edit_property_compounds_value['term_id'], 'socialdb_event_property_compounds_edit_value_metas', 'socialdb_event_property_compounds_edit_value_object_id', 'socialdb_event_property_compounds_edit_value_object_id');
+    create_metas($event_edit_property_compounds_value['term_id'], 'socialdb_event_property_compounds_edit_value_metas', 'socialdb_event_property_compounds_edit_value_property_id', 'socialdb_event_property_compounds_edit_value_property_id');
+    create_metas($event_edit_property_compounds_value['term_id'], 'socialdb_event_property_compounds_edit_value_metas', 'socialdb_event_property_compounds_edit_value_row', 'socialdb_event_property_compounds_edit_value_row');
+    create_metas($event_edit_property_compounds_value['term_id'], 'socialdb_event_property_compounds_edit_value_metas', 'socialdb_event_property_compounds_edit_value_attribute_value', 'socialdb_event_property_compounds_edit_value_attribute_value');
+    
+    
     /** tag* */
     $event_tag_tag = create_register('socialdb_event_tag', 'socialdb_event_type', array('parent' => $event_root_term['term_id']));
     $event_create_tag = create_register('socialdb_event_tag_create', 'socialdb_event_type', array('parent' => $event_tag_tag['term_id']));
@@ -1341,6 +1449,7 @@ if (!function_exists("theme_styles")) {
         if (is_front_page()):
             $home_css = [
                 'bootstrap' => '/libraries/css/bootstrap.css',
+                'DynatreeCss' => '/libraries/css/dynatree/skin-vista/ui.dynatree.css',
                 'slick' => '/libraries/css/slick/slick.css',
                 'slick-theme' => '/libraries/css/slick/slick-theme.css',
                 'socialdbSweetAlert' => '/libraries/css/SweetAlert/sweet-alert.css',
@@ -1375,6 +1484,15 @@ if (!function_exists("theme_styles")) {
                 'croppic' => '/libraries/css/croppic/croppic.css',
                 'tainacan' => '/libraries/css/tainacan.css'
             ];
+            $column = get_post_meta(get_the_ID(), 'socialdb_collection_submission_visualization',true);
+            if($column&&$column=='one'){
+                $registered_css['item-page'] = '/libraries/css/item-page.css';
+            }else{
+                if(wp_style_is( 'item-page' )){
+                    wp_deregister_style( 'item-page' ) ;
+                }
+            }
+            
             foreach ($registered_css as $css_file => $css_path) {
                 add_tainacan_css($css_file, $css_path);
             }
@@ -1415,9 +1533,9 @@ if (!function_exists("theme_js")) {
         /* JIT Excanvas JS */
         wp_register_script('JitExcanvasJs', get_template_directory_uri() . '/libraries/js/jit/extras/excanvas.js');
 
-        wp_register_script('my-script', get_template_directory_uri() . '/libraries/js/my-script.js', array('jquery'), '1.11');
+        wp_register_script('tainacan', get_template_directory_uri() . '/libraries/js/tainacan.js', array('jquery'), '1.11');
         /* Dynatree JS */
-        wp_register_script('DynatreeJs', get_template_directory_uri() . '/libraries/js/dynatree/jquery.dynatree.js');
+        wp_register_script('DynatreeJs', get_template_directory_uri() . '/libraries/js/dynatree/jquery.dynatree.full.js');
         /* Ckeditor JS */
         wp_register_script('ckeditorjs', get_template_directory_uri() . '/libraries/js/ckeditor/ckeditor.js');
         /* Context Menu (Dynatree) JS */
@@ -1468,7 +1586,7 @@ if (!function_exists("theme_js")) {
         /* jsPDF Auto Table */
         wp_register_script("jsPDF_auto_table", get_template_directory_uri() . '/libraries/js/jspdf/jspdf.plugin.autotable.js', array('jquery'));
 
-        $js_files = ['jqueryUi', 'bootstrap.min', 'JitJs', 'JitExcanvasJs', 'my-script', 'DynatreeJs', 'ckeditorjs',
+        $js_files = ['jqueryUi', 'bootstrap.min', 'JitJs', 'JitExcanvasJs', 'tainacan', 'DynatreeJs', 'ckeditorjs',
             'contextMenu', 'ColorPicker', 'SweetAlert', 'SweetAlertJS', 'jquerydataTablesmin', 'data_table', 'raty',
             'jqpagination', 'dropzone', 'croppic', 'bootstrap-combobox', 'FacebookJS', 'row-sorter', 'maskedInput',
             'montage', 'prettyphoto', 'select2', 'slick','timepicker', 'jqcloud', 'toastrjs', 'jsPDF', 'jsPDF_auto_table'
@@ -1549,9 +1667,9 @@ function include_core_wp() {
         include_once (WORDPRESS_PATH . '/wp-load.php');
         include_once (WORDPRESS_PATH . '/wp-includes/wp-db.php');
     } else {
-        include_once ('../../../../../wp-config.php');
-        include_once ('../../../../../wp-load.php');
-        include_once ('../../../../../wp-includes/wp-db.php');
+       // include_once (dirname(__FILE__).'../../../../../wp-config.php');
+        //include_once (dirname(__FILE__).'../../../../../wp-load.php');
+        //include_once (dirname(__FILE__).'../../../../../wp-includes/wp-db.php');
     }
 }
 
@@ -1907,8 +2025,11 @@ function socialdb_insert_term($name, $taxonomy, $parent, $slug, $description = '
  */
 function socialdb_term_exists_by_slug($term, $taxonomy, $parent = null) {
     global $wpdb;
+    if(!$term){
+        return false;
+    }
     if (!isset($parent)) {
-        $sql = "select t.term_id, tt.term_taxonomy_id from {$wpdb->term_taxonomy} tt inner join {$wpdb->terms} t t on t.term_id = tt.term_id where t.slug LIKE '$term%' and tt.taxonomy LIKE '$taxonomy' ";
+        $sql = "select t.term_id, tt.term_taxonomy_id from {$wpdb->term_taxonomy} tt inner join {$wpdb->terms} t on t.term_id = tt.term_id where t.slug LIKE '$term%' and tt.taxonomy LIKE '$taxonomy' ";
     } else {
         $parent = str_replace('_facet_category', '', $parent);
         $sql = "select t.term_id, tt.term_taxonomy_id from {$wpdb->term_taxonomy} tt inner join {$wpdb->terms} t on t.term_id = tt.term_id where t.slug LIKE '{$term}_%' and tt.taxonomy LIKE '$taxonomy' and tt.parent = $parent ";
@@ -2036,19 +2157,18 @@ function download_page($path) {
  * @return void.
  */
 function socialdb_insert_object($post_title, $post_date = null) {
-    if (!isset($post_date)) {
-        $post_date = array(date('Y-m-d H:i:s'));
-    }
     $status = 'publish';
     $post_author = 1;
     $post = array(
         'post_author' => $post_author,
-        'post_title' => $post_title[0],
-        'post_date' => str_replace("Z", "", str_replace("T", " ", $post_date[0])),
+        'post_title' => (is_array($post_title)) ? $post_title[0]  : $post_title,
         'post_content' => "",
         'post_status' => $status,
         'post_type' => 'socialdb_object'
     );
+    if($post_date):
+       // $post['post_date'] = str_replace("Z", "", str_replace("T", " ", $post_date[0]));
+    endif;
     $post_id = wp_insert_post($post);
     return $post_id;
 }
@@ -2067,6 +2187,28 @@ function socialdb_insert_object_socialnetwork($post_title, $post_status = 'publi
     $post = array(
         'post_author' => $post_author,
         'post_title' => $post_title[0],
+        'post_content' => $post_content,
+        'post_status' => $post_status,
+        'post_type' => 'socialdb_object'
+    );
+    $post_id = wp_insert_post($post);
+    return $post_id;
+}
+
+/**
+ *
+ * Funcao que insere um objeto
+ *
+ * @param string $object_id O id do objeto.
+ * @param array $terms O array de IDs dos termos que serao vinculados ao objeto.
+ * @param string $taxonomy A taxonomia dos termos que serao vinculados.
+ * @return void.
+ */
+function socialdb_insert_object_socialnetwork_flickr($post_title, $post_status = 'publish',$post_content = '') {
+    $post_author = get_current_user_id();
+    $post = array(
+        'post_author' => $post_author,
+        'post_title' => $post_title,
         'post_content' => $post_content,
         'post_status' => $post_status,
         'post_type' => 'socialdb_object'
@@ -2196,9 +2338,119 @@ function proccessEvents() {
 }
 
 /* * *****************************************************************************
+ *               METATAGS                                                   *        
+ * ***************************************************************************** */
+function getUrlData($url, $raw=false) // $raw - enable for raw display
+{
+    $result = false;
+   
+    $contents = getUrlContents($url);
+
+    if (isset($contents) && is_string($contents))
+    {
+        $title = null;
+        $metaTags = null;
+        $metaProperties = null;
+       
+        preg_match('/<title>([^>]*)<\/title>/si', $contents, $match );
+
+        if (isset($match) && is_array($match) && count($match) > 0)
+        {
+            $title = strip_tags($match[1]);
+        }
+       
+        preg_match_all('/<[\s]*meta[\s]*(name|property|itemprop)="?' . '([^>"]*)"?[\s]*' . 'content="?([^>"]*)"?[\s]*[\/]?[\s]*>/si', $contents, $match);
+       
+        if (isset($match) && is_array($match) && count($match) == 4)
+        {
+            $originals = $match[0];
+            $names = $match[2];
+            $values = $match[3];
+           
+            if (count($originals) == count($names) && count($names) == count($values))
+            {
+                $metaTags = array();
+                $metaProperties = $metaTags;
+                if ($raw) {
+                    if (version_compare(PHP_VERSION, '5.4.0') == -1)
+                         $flags = ENT_COMPAT;
+                    else
+                         $flags = ENT_COMPAT | ENT_HTML401;
+                }
+               
+                for ($i=0, $limiti=count($names); $i < $limiti; $i++)
+                {
+                    if ($match[1][$i] == 'name')
+                         $meta_type = 'metaTags';
+                    else
+                         $meta_type = 'metaProperties';
+                    if ($raw)
+                        ${$meta_type}[$names[$i]] = array (
+                            'html' => htmlentities($originals[$i], $flags, 'UTF-8'),
+                            'value' => $values[$i]
+                        );
+                    else
+                        ${$meta_type}[$names[$i]] = array (
+                            'html' => $originals[$i],
+                            'value' => $values[$i]
+                        );
+                }
+            }
+        }
+       
+        $result = array (
+            'title' => $title,
+            'metaTags' => $metaTags,
+            'metaProperties' => $metaProperties,
+        );
+    }
+   
+    return $result;
+}
+
+function getUrlContents($url, $maximumRedirections = null, $currentRedirection = 0)
+{
+    $result = false;
+   
+    $contents = @file_get_contents($url);
+   
+    // Check if we need to go somewhere else
+   
+    if (isset($contents) && is_string($contents))
+    {
+        preg_match_all('/<[\s]*meta[\s]*http-equiv="?REFRESH"?' . '[\s]*content="?[0-9]*;[\s]*URL[\s]*=[\s]*([^>"]*)"?' . '[\s]*[\/]?[\s]*>/si', $contents, $match);
+       
+        if (isset($match) && is_array($match) && count($match) == 2 && count($match[1]) == 1)
+        {
+            if (!isset($maximumRedirections) || $currentRedirection < $maximumRedirections)
+            {
+                return getUrlContents($match[1][0], $maximumRedirections, ++$currentRedirection);
+            }
+           
+            $result = false;
+        }
+        else
+        {
+            $result = $contents;
+        }
+    }
+   
+    return $contents;
+}
+
+/* * *****************************************************************************
  *               HARVESTING                                                    *        
  * ***************************************************************************** */
-
+/**
+ * 
+ */
+function tainacan_time(){
+    $timezone = get_option('timezone_string');
+    date_default_timezone_set($timezone);
+    $offset = (int)date('O')/100;
+    $time = time() + ( $offset * HOUR_IN_SECONDS );
+    return $time;
+}
 /**
  *
  * Funcao que atualiza o content de um post
@@ -2222,7 +2474,7 @@ function harvesting() {
     if ($harvesting_mappings && !empty($harvesting_mappings)) {
         foreach ($harvesting_mappings as $harvesting_mapping) {
             $data['collection_id'] = $harvesting_mapping['collection_id'];
-            $data['until'] = date("Y-m-d\TH:i:s\Z", time());
+            $data['until'] = date("Y-m-d\TH:i:s\Z", tainacan_time());
             foreach ($harvesting_mapping['mappings'] as $mapping_id) {
                 if (!in_array($mapping_id, $already_harvested)) {
                     $data['from'] = date("Y-m-d\TH:i:s\Z", get_post_meta($mapping_id, 'socialdb_channel_oaipmhdc_last_update', true));
@@ -2234,7 +2486,7 @@ function harvesting() {
                     $data['url'] = get_post($mapping_id)->post_title;
                     $harvesting_oaipmh_model->execute($data);
                     $already_harvested[] = $mapping_id;
-                    update_post_meta($mapping_id, 'socialdb_channel_oaipmhdc_last_update', time());
+                    update_post_meta($mapping_id, 'socialdb_channel_oaipmhdc_last_update', tainacan_time());
                 }
             }
         }
@@ -2535,10 +2787,18 @@ function get_item_click_event($collection_id, $item_id) {
 }
 
 function get_item_thumb_image($item_id, $size="thumbnail") {
-    if (get_the_post_thumbnail($item_id, $size)) {
-        return wp_get_attachment_image(get_post_thumbnail_id($item_id), $size, false, array('class' => 'img-responsive'));
+    $_post_thumb_id = get_the_post_thumbnail($item_id, $size);
+    if (empty($_post_thumb_id)) {
+        $_post_img_id = get_post_meta($item_id, "_thumbnail_id");
+        if( count($_post_img_id) > 0 ) {
+            $_img_id = (int) $_post_img_id[0];
+            $_img_url = get_post($_img_id)->guid;
+            return '<img src="'. $_img_url .'" alt="" class="img-responsive" style="max-width: 100%" />';
+        } else {
+            return '<img src="' . get_item_thumbnail_default($item_id) . '" class="img-responsive" style="max-width: 100%">';
+        }
     } else {
-        return '<img src="' . get_item_thumbnail_default($item_id) . '" class="img-responsive">';
+        return wp_get_attachment_image(get_post_thumbnail_id($item_id), $size, false, array('class' => 'img-responsive'));
     }
 }
 
@@ -2547,6 +2807,13 @@ function is_root_category($collection_id) {
 
     return $root_id == $collection_id;
 }
+
+if ( ! function_exists('get_menu_thumb_path') ) {
+    function get_menu_thumb_path($menu_id) {
+        return get_template_directory_uri() . '/extras/cssmenumaker/menus/' . $menu_id . '/thumbnail/css_menu_thumb.png';
+    }
+}
+
 
 /**
  * 
@@ -2602,6 +2869,13 @@ function get_view($controller, $args = [], $method = 'POST') {
     }
 }
 
+
+if ( !function_exists('i18n_str')) {
+    function i18n_str($str, $echo = false) {
+        return ($echo) ? _e( $str , 'tainacan' ) : __( $str, 'tainacan' );
+    }
+}
+
 /* * **************************** INSTANCIANDO MODULOS ************************* */
 /*
  * funcao para inclusao dos modulos cadastrados
@@ -2616,6 +2890,12 @@ function instantiate_modules() {
         }
     }
     if ($config['mode'] !== 0 && is_array($config['active_modules'])) {
+        session_write_close();
+        ini_set('max_execution_time', '0');    
+        register_post_types();
+        register_taxonomies();
+        wpdbfix();
+        setup_taxonomymeta();
         foreach ($config['active_modules'] as $module) {
             include_once 'modules/' . $module . '/' . $module . '.php';
         }
@@ -2624,12 +2904,23 @@ function instantiate_modules() {
     }
 }
 
-require_once('wp_bootstrap_navwalker.php');
 function register_ibram_menu() {
     register_nav_menu('menu-ibram', __('Enable reduced menu', 'tainacan') );
 }
-
 add_action('init', 'register_ibram_menu');
+
+add_action('delete_user', 'tainacan_log_deleted_user');
+function tainacan_log_deleted_user($user_id) {
+    return Log::addLog( [ 'user_id' => $user_id, 'event_type' => 'user_status', 'event' => current_filter()] );
+}
+
+function current_user_id_or_anon() {
+    $user_id = get_current_user_id();
+    if ($user_id == 0) {
+        $user_id = get_option('anonimous_user');
+    }
+    return $user_id;
+}
 
 ################# INSTANCIA OS MODULOS SE ESTIVEREM ATIVADOS#################
 instantiate_modules();
@@ -2637,11 +2928,13 @@ instantiate_modules();
 
 /* Quando o tema for ativado */
 if (isset($_GET['activated']) && is_admin()) {
-
+    session_write_close();
+    ini_set('max_execution_time', '0');    
     register_post_types();
     register_taxonomies();
     wpdbfix();
     setup_taxonomymeta();
+    setup_statisticsLog();
     create_collection_terms();
     create_property_terms();
     create_channel_terms();
@@ -2658,5 +2951,5 @@ if (isset($_GET['activated']) && is_admin()) {
 }
 
 if ( ! defined("MANUAL_TAINACAN_URL") ) {
-    define("MANUAL_TAINACAN_URL","https://github.com/l3pufg/tainacan/blob/master/extras/Tainacan%20-Manual%20do%20Usu%C3%A1rio%20V1.1.pdf?raw=true" );
+    define("MANUAL_TAINACAN_URL","https://github.com/l3pufg/tainacan/blob/dev/extras/manual/manual_usuario_tainacan_v1.pdf?raw=true" );
 }

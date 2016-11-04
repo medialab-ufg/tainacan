@@ -20,16 +20,31 @@ class CsvController extends Controller {
                 break;
             
             case "validate_csv":
-                $data = $csv_model->validate_csv($data['file']['csv_file'], $data);
-                
-                if($data['error'] > 0)
-                {
-                    return json_encode($data);
-                }
-                else
-                {
-                    unset($data['file']);
-                    return $this->render(dirname(__FILE__) . '../../../views/import/csv/maping_attributes.php', $data);
+                if(isset($data['file']['csv_file']['name'])){
+                    $type = pathinfo($data['file']['csv_file']['name']);
+                    if($type['extension']=='zip'){
+                        $data = $csv_model->validate_zip($data['file']['csv_file'], $data);
+                        if($data['error'] > 0){
+                            return json_encode($data);
+                        }
+                        else{
+                            unset($data['file']);
+                            return $this->render(dirname(__FILE__) . '../../../views/import/csv/maping_attributes.php', $data);
+                        }
+                    }else if($type['extension']=='csv'){
+                        $data = $csv_model->validate_csv($data['file']['csv_file'], $data);
+                        if($data['error'] > 0){
+                            return json_encode($data);
+                        }
+                        else{
+                            unset($data['file']);
+                            return $this->render(dirname(__FILE__) . '../../../views/import/csv/maping_attributes.php', $data);
+                        }
+                    }
+                }else{
+                     $data['msg'] = "Envie algum arquivo para importar!";
+                     $data['error'] = 1;
+                     return json_encode($data);
                 }
                 break;
             case "do_import_csv":
@@ -40,6 +55,11 @@ class CsvController extends Controller {
                // return json_encode($oaipmh_model->saving_data($data));
             case 'import_list_set':
                 $oaipmh_model->import_list_set($data['url'], $data['collection_id']);
+                return true;
+            case 'import_full_csv':
+                $dir = $csv_model->unzip_csv_package($data);
+                $csv_files = array_values(array_diff(scandir($dir), array('..', '.')));
+                $csv_model->import_csv_full($csv_files, $dir);
                 return true;
         }
     }

@@ -12,7 +12,7 @@ include_once (dirname(__FILE__).'../../user/user_model.php');
 
 class TagModel extends Model{
         var $parent;
-        public function TagModel(){
+        public function __construct(){
             $this->parent = get_term_by('name','socialdb_tag','socialdb_tag_type');
         }
 	/**
@@ -25,14 +25,13 @@ class TagModel extends Model{
 	public function add($tag_name,$collection_id,$description = ''){
             $is_new = $this->verify_tag($tag_name,$collection_id);
             if (!$is_new) {
-                $new_tag =wp_insert_term( trim($tag_name),
-                           'socialdb_tag_type',
-                                 array('parent'=>  $this->parent->term_id,
-                                     'description'=>$description,
-                                   'slug'=>  sanitize_title(remove_accent($tag_name)).'_'.$collection_id));
+                $new_tag = wp_insert_term( trim($tag_name), 'socialdb_tag_type',
+                    array('parent' =>  $this->parent->term_id, 'description'=>$description,
+                        'slug' =>  sanitize_title(remove_accent($tag_name)).'_'.$collection_id) );
+            }else {
+               $new_tag = socialdb_term_exists_by_slug(sanitize_title(remove_accent($tag_name)).'_'.$collection_id, 'socialdb_tag_type');
             }
             //apos a insercao
-            
            if(!is_wp_error($new_tag)&&$new_tag['term_id']){// se a tag foi inserida com sucesso
                 wp_set_object_terms($collection_id, array((int)$new_tag['term_id']), 'socialdb_tag_type',true);
                 $data['success'] = 'true';

@@ -70,10 +70,13 @@ class EventPropertyTermEdit extends EventModel {
         $data['collection_id'] = get_post_meta($event_id, 'socialdb_event_collection_id',true) ;
         $data['socialdb_property_term_cardinality'] = get_post_meta($event_id, 'socialdb_event_property_term_edit_cardinality',true) ;
         $data['socialdb_property_term_widget'] = get_post_meta($event_id, 'socialdb_event_property_term_edit_widget',true) ;
+        $data['socialdb_property_vinculate_category'] = get_post_meta($event_id, 'socialdb_event_property_term_edit_vinculate_category',true) ;   
+        $data['socialdb_property_new_category'] = get_post_meta($event_id, 'socialdb_event_property_term_edit_new_category',true) ;   
+        $data['socialdb_property_new_taxonomy'] = get_post_meta($event_id, 'socialdb_event_property_term_edit_new_taxonomy',true) ; 
         $data['property_term_required'] = get_post_meta($event_id, 'socialdb_event_property_term_edit_required',true) ;
         $data['socialdb_property_term_root'] = get_post_meta($event_id, 'socialdb_event_property_term_edit_root',true) ;
         $data['socialdb_property_help'] = get_post_meta($event_id, 'socialdb_event_property_term_edit_help',true) ;   
-        
+        $data['property_visualization'] = get_post_meta($event_id, 'socialdb_event_property_visualization',true) ;
         $data['property_category_id'] = get_term_meta($data['property_term_id'], 'socialdb_property_created_category',true) ;
         // chamo a funcao do model de propriedade para fazer a insercao
          $result = json_decode($propertyModel->update_property_term($data));

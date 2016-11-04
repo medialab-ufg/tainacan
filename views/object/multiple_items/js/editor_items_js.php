@@ -32,11 +32,12 @@
         var properties_autocomplete = multiple_get_val($("#multiple_properties_data_id").val());
         multiple_autocomplete_property_data(properties_autocomplete);  
         show_license_item('multiple');// lista as licencas de um item
+
         // envia o formulario para o controllador
         $('#sumbit_multiple_items').submit(function (e) {
             e.preventDefault();
             $('#modalImportMain').modal('show');
-             var is_empty = false;;
+             var is_empty = false;
             $.each($("input:checkbox[name='selected_items']"), function () {
                 if($('#title_' + $(this).val()).val().trim()==''){
                     is_empty = true;
@@ -52,6 +53,9 @@
                 }).done(function (result) {
                     $('#modalImportMain').modal('hide');
                     elem_first = jQuery.parseJSON(result);
+
+                    cl(elem_first);
+
                     if (elem_first.type && elem_first.type == 'success') {
                         $('#form').hide();
                         $("#tainacan-breadcrumbs").hide();
@@ -96,8 +100,14 @@
                 data: { operation: 'get_ordenation_properties',collection_id:$('#collection_id').val() }
             }).done(function(result) {
                 var json = $.parseJSON(result);
+                console.log(json.ordenation,' assim');
                 if(json&&json.ordenation&&json.ordenation!==''){
-                    reorder_properties_multiple_item(json.ordenation.split(','));
+                    if(json.ordenation.default){
+                         reorder_properties_multiple_item(json.ordenation.default.split(','));
+                    }else{
+                         reorder_properties_multiple_item(json.ordenation.split(','));
+                    }
+                   
                 }
             });
             //inicializo o accordeon
@@ -1255,9 +1265,9 @@
                             return node.data.key;
                         });
                         if(categories.length>0&&categories.indexOf(node.data.key)>=0){
-                            append_category_properties(node.data.key);
+                            append_category_properties(node.data.key, node.data.key,treecheckbox);
                         }else{
-                            append_category_properties(0,node.data.key);
+                            append_category_properties(0,node.data.key,treecheckbox);
                         }
                     },
                     dnd: {
@@ -1321,10 +1331,10 @@
                     onSelect: function (flag, node) {
                         setCategoriesTree(tree, node.data.key);
                         if ($("#socialdb_propertyterm_" + tree).val() === node.data.key) {
-                            append_category_properties(0,node.data.key);
+                            append_category_properties(0,node.data.key,tree);
                             $("#socialdb_propertyterm_" + tree).val("");
                         } else {
-                            append_category_properties(node.data.key,$("#socialdb_propertyterm_" + tree).val());
+                            append_category_properties(node.data.key,$("#socialdb_propertyterm_" + tree).val(),tree);
                             $("#socialdb_propertyterm_" + tree).val(node.data.key);
                         }
                     },
@@ -1348,6 +1358,16 @@
     // get value of the property
     function multiple_get_val(value) {
         if (value === '') {
+            return false;
+        } else if (value.split(',')[0] === '' && value !== '') {
+            return [value];
+        } else {
+            return value.split(',');
+        }
+    }
+    // get value of the property
+    function get_val(value) {
+        if (value === ''||value===undefined) {
             return false;
         } else if (value.split(',')[0] === '' && value !== '') {
             return [value];
@@ -1457,7 +1477,7 @@
         $('#container_field_'+property_id+'_'+(id+1)).show();         
     } 
     //################################ adicao de propriedades de categorias #################################//    
-    function append_category_properties(id,remove_id){
+    function append_category_properties(id,remove_id,property_id){
         //buscando as categorias selecionadas nos metadados de termo
         var selected_categories = $('#selected_categories').val();
         if(selected_categories===''){
@@ -1478,7 +1498,7 @@
                 });
                 $('.category-'+remove_id).remove();
             }
-
+            
 
         }
         //busco os metadados da categoria selecionada    
@@ -1493,22 +1513,25 @@
             $.ajax({
                 url: $('#src').val() + '/controllers/object/object_controller.php',
                 type: 'POST',
-                data: { operation: 'list_properties_categories_accordeon_multiple',properties_to_avoid:$('#properties_id').val(),categories: id, object_id:$('#object_id_add').val()}
+               data: { operation: 'list_properties_categories_accordeon_multiple',properties_to_avoid:$('#properties_id').val(),categories: id, object_id:$('#object_id_add').val()}
             }).done(function (result) {
                 hide_modal_main();
                 //list_all_objects(selKeys.join(", "), $("#collection_id").val());
-                $('#append_properties_categories').html(result);
-                insert_html_property_category(id);
+                 $('#append_properties_categories_'+property_id).html(result);
+                insert_html_property_category(id,property_id);
 
             });
             $('#selected_categories').val(selected_categories.join(','));
         }
     }
-    function insert_html_property_category(category_id){
+    function insert_html_property_category(category_id,property_id){
         var flag = false;
-        $ul = $("#multiple_accordion");
-        $items = $("#multiple_accordion").children();
-        $properties_append = $("#append_properties_categories").children();
+        $ul = $("#text_accordion");
+        $items = $("#text_accordion").children();
+        $('#append_properties_categories_'+property_id).css('margin-top','15px');
+        $properties_append = $('#append_properties_categories_'+property_id).children().children();
+        $properties_append.animate({borderWidth : '1px',borderColor: 'red',borderStyle: 'dotted'}, 'slow', 'linear');
+        setTimeout(removeBorderCat(property_id),8000);
         for (var i = 0; i <$properties_append.length; i++) {
               // index is zero-based to you have to remove one from the values in your array
                 for(var j = 0; j<$items.length;j++){
@@ -1519,29 +1542,40 @@
                         }
                     }
                 }
-                if(!flag){
-                   $( $properties_append.get(i) ).appendTo( $ul);
-                   var id =  $( $properties_append.get(i) ).attr('property');
-                   var type =  $( $properties_append.get(i) ).attr('type');
-                   add_property_general(id,type);
+                 if(!flag){
+                    // $( $properties_append.get(i) ).appendTo( $ul);
+                    var id =  $( $properties_append.get(i) ).attr('property');
+                    if(id){
+                        add_property_general(id);
+                    }
                 }
                flag = false;
          }
-         $("#multiple_accordion").accordion("destroy");  
-         $("#multiple_accordion").accordion({
-                    active: false,
-                    collapsible: true,
-                    header: "h2",
-                    heightStyle: "content"
-                });
+         if($("#multiple_accordion")){
+            $("#multiple_accordion").accordion("destroy");  
+            $("#multiple_accordion").accordion({
+                       active: false,
+                       collapsible: true,
+                       header: "h2",
+                       heightStyle: "content"
+                   });
+        }
          $('[data-toggle="tooltip"]').tooltip();
+    }
+    //retira as bordas
+    function removeBorderCat(property_id){
+        $properties_append = $('#append_properties_categories_'+property_id).children().children();
+        $properties_append.animate({borderWidth : '1px',borderColor: '#d3d3d3',borderStyle:"solid"}, 'slow', 'linear');
     }
     //adicionando as propriedades das categorias no array de propriedades gerais
     function add_property_general(id,type){
         if(type=='hidden'){
             return false;
         }
-        var ids = $('#multiple_properties_'+type+'_id').val().split(','); 
+        if(type)
+            var ids = $('#multiple_properties_'+type+'_id').val().split(','); 
+        else
+            var ids = []
         var flag = false;
         if(ids){
            ids.push(id);
@@ -1584,7 +1618,7 @@
             $(selected[0]).removeAttr('checked');
         }
         if (selected.length > 0) {
-            append_category_properties(selected.val(), $('#socialdb_propertyterm_'+property_id+'_value').val());
+            append_category_properties(selected.val(), $('#socialdb_propertyterm_'+property_id+'_value').val(), property_id);
             $('#socialdb_propertyterm_'+property_id+'_value').val(selected.val()); 
         }
     }
@@ -1596,9 +1630,9 @@
         //verificando se existe propriedades para serem  adicionadas
         $.each($("input[type='checkbox'][name='socialdb_propertyterm_"+property_id+"[]']"),function(index,value){
             if($(this).is(':checked')){
-                append_category_properties($(this).val());
+                append_category_properties($(this).val(),$(this).val(),property_id);
             }else{
-                append_category_properties(0,$(this).val());
+                append_category_properties(0,$(this).val(),property_id);
             }
         });
     }
@@ -1612,7 +1646,7 @@
             $('#core_validation_'+property_id).val('false');
             set_field_valid(property_id,'core_validation_'+property_id);
         }else{
-            append_category_properties($(seletor).val(), $('#socialdb_propertyterm_'+property_id+'_value').val());
+            append_category_properties($(seletor).val(), $('#socialdb_propertyterm_'+property_id+'_value').val(),property_id);
            $('#socialdb_propertyterm_'+property_id+'_value').val($(seletor).val()); 
         }
         
@@ -1628,11 +1662,40 @@
             //verificando se existe propriedades para serem  adicionadas
             $.each($("#multiple_field_property_term_"+property_id+" option"),function(index,value){
                 if($(this).is(':selected')){
-                    append_category_properties($(this).val());
+                    append_category_properties($(this).val(),$(this).val(),property_id);
                 }else{
-                    append_category_properties(0,$(this).val());
+                    append_category_properties(0,$(this).val(),property_id);
                 }
             });
         }
-    }       
+    }  
+    
+    function set_field_valid(id,seletor){
+        if($('#'+seletor).val()==='false'){
+            $('#core_validation_'+id).val('false');
+            $('#ok_field_'+id).hide();
+            $('#required_field_'+id).show();
+        }else{
+            $('#core_validation_'+id).val('true');
+            $('#ok_field_'+id).show();
+            $('#required_field_'+id).hide();
+        }
+        validate_all_fields();
+    }
+    
+    function validate_all_fields(){
+        var cont = 0;
+        $( ".core_validation").each(function( index ) {
+            if($( this ).val()==='false'){
+                cont++;
+            }
+        });
+        if(cont===0){
+            $('#submit_container').show();
+            $('#submit_container_message').hide();
+        }else{
+            $('#submit_container').hide();
+            $('#submit_container_message').show();
+        }
+    }
 </script>

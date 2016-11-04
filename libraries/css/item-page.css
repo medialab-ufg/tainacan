@@ -1,0 +1,58 @@
+#tab-content-metadata .multiple-items-accordion h2.ui-accordion-header {
+    border: 0px solid #d3d3d3;
+    text-align: left;
+    font-size: 12px;
+    text-indent: 2%;
+    font-weight: bold;
+    background: white;
+    width: 100%;
+    border-radius: 2px;
+    padding: 15px 0 15px 0;
+    margin: 0px 0px 0 0 !important;
+}
+
+#tab-content-metadata .multiple-items-accordion{
+    width: 100%;
+}
+
+#tab-content-metadata .multiple-items-accordion .form-group{
+    margin: 0px;
+    padding-left: 25px;
+    border: 1px solid #d3d3d3;
+}
+#tab-content-metadata .multiple-items-accordion .form-group:first-child{
+    margin-top: 15px;
+    /*border-top: 0px solid #d3d3d3;*/
+}
+
+#text_accordion{
+    width: 100%;
+}
+
+#accordeon-default{
+     margin-top: 15px;
+}
+
+.property-category-list h2.ui-accordion-header {
+    border: 0px solid #d3d3d3;
+    text-align: left;
+    font-size: 12px;
+    text-indent: 2%;
+    font-weight: bold;
+    background: white;
+    width: 100%;
+    border-radius: 2px;
+    padding: 15px 0 15px 0;
+    margin: 0px 0px 0 0 !important;
+}
+
+.property-category-list{
+    width: 100%;
+    margin-top: -15px;
+}
+
+.property-category-list .form-group{
+    margin: 0px;
+     padding-left: 25px;
+    border: 1px solid #d3d3d3;
+}

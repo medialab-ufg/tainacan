@@ -1,15 +1,13 @@
 <?php
-include_once ('../../../../../wp-config.php');
-include_once ('../../../../../wp-load.php');
-include_once ('../../../../../wp-includes/wp-db.php');
 include_once ('js/header_js.php');
 //$post = get_post($collection_id);
 global $config;
 $options = get_option('socialdb_theme_options');
 $current_collection_id = $collection_post->ID;
-
+$collection_thumb = get_post_meta($current_collection_id, "_thumbnail_id", true);
 $collection_img_id = get_post_meta( $current_collection_id, 'socialdb_collection_cover_id', true);
 
+$thumb_url = $collection_thumb ? wp_get_attachment_url($collection_thumb) : get_template_directory_uri() . "/libraries/images/colecao_thumb.svg";
 ?>
 <!-- TAINACAN: panel da colecao, background-color definido pelo o usuario -->
 <!--div class="panel-heading" style="max-width: 100%;border-color: <?= $collection_metas['socialdb_collection_board_border_color'] ?>;color:<?= $collection_metas['socialdb_collection_board_font_color'] ?>;background-color: <?= $collection_metas['socialdb_collection_board_background_color'] ?>;"-->
@@ -29,10 +27,7 @@ $collection_img_id = get_post_meta( $current_collection_id, 'socialdb_collection
                                 </div>
                             <?php endif; ?>
                             <a href="<?php echo get_the_permalink($current_collection_id); ?>" class="collection-thumb">
-                                <?php $url_image = get_the_post_thumbnail($current_collection_id, 'thumbnail');
-                                if ( $url_image) { echo $url_image; } else { ?>
-                                    <img src="<?php echo get_template_directory_uri() ?>/libraries/images/colecao_thumb.svg" class="attachment-thumbnail wp-post-image img-responsive">
-                                <?php } ?>
+                                <img src="<?php echo $thumb_url ?>" class="attachment-thumbnail wp-post-image img-responsive" />
                             </a>
                         </div>
                     </div>
@@ -40,6 +35,8 @@ $collection_img_id = get_post_meta( $current_collection_id, 'socialdb_collection
                     <div class="col-md-12 titulo-colecao">
                         <?php if (isset($mycollections) && $mycollections == 'true') { ?>
                             <span class="bottom"><b class="white"><?php _e('My Collections', 'tainacan'); ?></b><br></span>
+                        <?php } else if (isset($sharedcollections) && $sharedcollections == 'true') { ?>
+                            <h3 class="white title"><?php _e('Shared Collections', 'tainacan'); ?></h3>
                         <?php } else { ?>
                             <h3 class="white title"> <a href="<?php echo get_the_permalink($current_collection_id); ?>"> <?php echo $collection_post->post_title; ?> </a> </h3>
                             <div class="collection-description">
@@ -192,13 +189,6 @@ $collection_img_id = get_post_meta( $current_collection_id, 'socialdb_collection
     </div>
 </div>
 
-<div id="tainacan-breadcrumbs" style="display: none;" class="config-steps">
-    <a href="<?php echo esc_url( home_url('/')  ) ?>"> Home </a> >
-    <a href="<?= get_the_permalink(get_option('collection_root_id')) . '?mycollections=true' ?>"><?php _e('My collections','tainacan'); ?></a> >
-    <a href="javascript:void(0)" onclick="backToMainPage();"> <span class="collection-title"></span></a> >
-    <div class="current-config" style="display: inline-block;"> <?php _e('Metadata','tainacan') ?> </div>
-</div>
-
 <?php
 $root_category_cover_id = get_option('socialdb_logo');
 $cover_url = wp_get_attachment_url( get_post_meta( $root_category_cover_id , 'socialdb_respository_cover_id', true));
@@ -220,3 +210,10 @@ if ( has_nav_menu('menu-ibram') ) { ?>
         'menu_class' => 'navbar navbar-inverse menu-ibram', 'walker'    => new wp_bootstrap_navwalker() ] );
 }
 ?>
+
+<div id="tainacan-breadcrumbs" class="config-steps">
+    <a href="<?php echo esc_url( home_url('/')  ) ?>"> Home </a> >
+    <a href="<?= get_the_permalink(get_option('collection_root_id')) . '?mycollections=true' ?>"><?php _e('My collections','tainacan'); ?></a> >
+    <a href="javascript:void(0)" onclick="backToMainPage();"> <span class="collection-title"></span></a> <span class="last-arrow"> </span>
+    <div class="current-config" style="display: inline-block;"> </div>
+</div>

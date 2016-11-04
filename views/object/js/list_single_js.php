@@ -1,7 +1,7 @@
 <script>
     $(function () {
 
-        change_breadcrumbs_title('<?php _e('Import','tainacan') ?>');
+        change_breadcrumbs_title('<?php _e('Import', 'tainacan') ?>');
 
         $('img').bind('contextmenu', function (e) {
             return false;
@@ -14,7 +14,7 @@
         }
 
         //botao voltar do browser
-        if (window.history && window.history.pushState) {
+        /*if (window.history && window.history.pushState) {
 
             $(window).on('popstate', function () {
                 var hashLocation = location.hash;
@@ -29,7 +29,7 @@
                 }
             });
             window.history.pushState('forward', null, './#forward');
-        }
+        }*/
         var stateObj = {foo: "bar"};
         $('#form').html('');
         $('#object_page').val($('#single_name').val());
@@ -362,11 +362,32 @@
         });
     }
 
+    function single_show_item_versions(object_id) {
+        show_modal_main();
+        $.ajax({
+            type: "POST",
+            url: $('#src').val() + "/controllers/object/object_controller.php",
+            data: {
+                collection_id: $('#collection_id').val(),
+                operation: 'show_item_versions',
+                object_id: object_id
+            }
+        }).done(function (result) {
+            hide_modal_main();
+            $('#main_part').hide();
+            $('#display_view_main_page').hide();
+            $('#loader_collections').hide();
+            $('#collection_post').hide();
+            $('#configuration').html(result).show();
+        });
+    }
+
     function downloadItem(thumb_id) {
         $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/object/object_controller.php",
             data: {
+                item_id: $("#single_object_id").val(),
                 collection_id: $('#collection_id').val(),
                 operation: 'insertUserDownload',
                 thumb_id: thumb_id
@@ -572,6 +593,7 @@
     //TAG
     // edit tag
     function edit_tag() {
+        $('button.edit-tag').hide();
         $('#edit_tag').hide();
         $('#cancel_tag').show();
         $('#save_tag').show();
@@ -579,6 +601,7 @@
     }
 // back Description(
     function cancel_tag() {
+        $('button.edit-tag').show();
         $('#cancel_tag').hide();
         $('#save_tag').hide();
         $('#event_tag').hide();

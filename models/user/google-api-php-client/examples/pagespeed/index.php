@@ -51,6 +51,6 @@ if (isset($_GET['url'])) {
       <div>Number of Static Resources: <?php print $result['pageStats']['numberStaticResources']; ?></div>
       <pre><?php var_dump($result); ?></pre>
     </div>
-  <? endif ?>
+  <?php endif ?>
 </div>
 </body></html>

@@ -1,6 +1,7 @@
 <?php
 require_once(dirname(__FILE__) . '../../../models/user/user_model.php');
 require_once(dirname(__FILE__) . '../../general/general_controller.php');
+include_once (dirname(__FILE__) . '../../../models/event/event_object/event_object_create_model.php');
 //require_once(dirname(__FILE__) . '../../../models/user/facebook.php');
 //require_once(dirname(__FILE__) . '../../../models/user/FacebookSocialDB.class.php');
 require_once(dirname(__FILE__) . '../../../models/social_network/Facebook/autoload.php');
@@ -34,6 +35,7 @@ class UserController extends Controller {
                 $data['facebook_option'] = ['api_id' => $options['socialdb_fb_api_id'], 'api_secret' => $options['socialdb_fb_api_secret']];
                 $data['gplus_option'] = ['client_id' => $options['socialdb_google_client_id'], 'secret_key' => $options['socialdb_google_secret_key'], 'api_key' => $options['socialdb_google_api_key']];
 
+                /*
                 if (!in_array('', $data['gplus_option'])):
                     try{
                         $data['gplus_client'] = new apiClient();
@@ -51,9 +53,10 @@ class UserController extends Controller {
 
                         $data['authUrl'] = $data['gplus_client']->createAuthUrl();
                     }catch(Exception $e){
-                        
+                        $data['error'] = $e->getMessage();
                     }
                 endif;
+                */
 
                 return $this->render(dirname(__FILE__) . '../../../views/user/login.php', $data);
                 break;
@@ -156,6 +159,10 @@ class UserController extends Controller {
                 if ($user) {
                     $data['login'] = 1;
                     $data['url'] = get_the_permalink($data['collection_id']);
+
+                    $_log_data = [ 'collection_id' => $data['collection_id'], 'user_id' => $user->ID,
+                        'event_type' => 'user_status', 'event' => 'login'];
+                    Log::addLog($_log_data);
                 } else {
                     $data['login'] = 0;
                     $data['title'] = __('Failed to Login','tainacan');
@@ -173,6 +180,36 @@ class UserController extends Controller {
             case "change_password":
                 return json_encode($user_model->reset_password($data));
                 break;
+            case "register_user":
+                return $this->render(dirname(__FILE__) . '../../../views/user/register.php');
+                break;
+            case "share_item_email_or_collection":
+                $data['email'] = (!filter_var($data['email'], FILTER_VALIDATE_EMAIL) === false ? $data['email'] : null);
+                if(!empty($data['email'])){
+                    //envia email ao usuario
+                    $result = $user_model->send_share_email($data);
+                }
+                if(!empty($data['new_collection'])){
+                    //relaciona o item a outra coleção
+                    $eventAddObject = new EventObjectCreateModel();
+                    $data['socialdb_event_object_item_id'] = $data['object_id'];
+                    $data['socialdb_event_collection_id'] = trim($data['new_collection']);
+                    $data['socialdb_event_user_id'] = get_current_user_id();
+                    $data['socialdb_event_create_date'] = time();
+                    return  $eventAddObject->create_event($data);
+                }
+                return json_encode($result);
+                break;
+            case 'search-colaborators':
+                $colaborators = [];
+                $result = $user_model->search_participatory_authors($data['collection_id'], $data['search']);
+                if(is_array($result)){
+                    foreach ($result as $value) {
+                        $value->avatar = get_avatar($value,64);
+                        $colaborators[] = $value;
+                    }
+                }
+                return json_encode($colaborators);
         }
     }
 

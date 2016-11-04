@@ -3,9 +3,6 @@
 /**
  * Author: Eduardo Humberto
  */
-include_once (dirname(__FILE__) . '/../../../../../wp-config.php');
-include_once (dirname(__FILE__) . '/../../../../../wp-load.php');
-include_once (dirname(__FILE__) . '/../../../../../wp-includes/wp-db.php');
 require_once(dirname(__FILE__) . '../../general/general_model.php');
 require_once(dirname(__FILE__) . '../../property/property_model.php');
 require_once(dirname(__FILE__) . '../../category/category_model.php');
@@ -53,6 +50,11 @@ class MappingModel extends Model {
             wp_delete_attachment($csv_file[0]->ID);
         }
         $post_meta = delete_post_meta($collection_id, 'socialdb_collection_channel', $mapping_id);
+        $active_import = get_post_meta($collection_id, 'socialdb_collection_mapping_import_active', true);
+        if ($active_import && $active_import == $mapping_id) {
+            delete_post_meta($collection_id, 'socialdb_collection_mapping_import_active');
+        }
+
         $delete_post = wp_delete_post($mapping_id);
         if ($post_meta && $delete_post) {
             $return['title'] = __('Success', 'tainacan');
@@ -141,6 +143,62 @@ class MappingModel extends Model {
         }
         if (!empty($dataInfo)):
             add_post_meta($object_id, 'socialdb_channel_oaipmhdc_mapping', serialize($dataInfo));
+        endif;
+    }
+
+    /**
+     * @signature - updating_mapping_metatags($data)
+     * @param array $data Os dados vindos do formulario
+     * @description - atualiza o metadados de um mapeamento
+     * @author: Eduardo 
+     */
+    public function save_mapping_metatags($data) {
+        $dataInfo = array();
+        parse_str($data['form'], $form); // parseio o formulario de mapeiamento de entidades
+        //insiro o mapeamento
+        $has_mapping = $this->get_mapping_metatags($form['url'], $data['collection_id']);
+        if (!$has_mapping) {
+            $url_parsed = parse_url($form['url']);
+            $this->parent = get_term_by('name', 'socialdb_channel_metatag', 'socialdb_channel_type');
+            $object_id = $this->create_mapping($url_parsed['host'], $data['collection_id']);
+            $data['result'] = 1;
+        } else {
+            $url_parsed = parse_url($form['url']);
+            $object_id = $has_mapping;
+            $data['result'] = $url_parsed['host'];
+        }
+        //inserindo os valores do mapeamento
+        $counter_oia_dc = $form['counter_oai_dc'];
+        for ($i = 0; $i < $counter_oia_dc; $i++) {
+            if ($form['mapping_metatags_' . $i] !== '' && $form['mapping_socialdb_' . $i] !== '') {
+                $dataInfo[] = array('tag' => $form['mapping_metatags_' . $i], 'socialdb_entity' => $form['mapping_socialdb_' . $i]);
+            }
+        }
+        if (!empty($dataInfo)):
+            update_post_meta($object_id, 'socialdb_channel_oaipmhdc_mapping', serialize($dataInfo));
+        endif;
+        return $data;
+    }
+
+    /**
+     * @signature - updating_mapping_metatags($data)
+     * @param array $data Os dados vindos do formulario
+     * @description - atualiza o metadados de um mapeamento
+     * @author: Eduardo 
+     */
+    public function updating_mapping_metatags($data) {
+        $dataInfo = array();
+        $object_id = $data['mapping_id'];
+        parse_str($data['form'], $form); // parseio o formulario de mapeiamento de entidades
+        //inserindo os valores do mapeamento
+        $counter_oia_dc = $form['counter_oai_dc'];
+        for ($i = 1; $i <= $counter_oia_dc; $i++) {
+            if ($form['mapping_metatags_' . $i] !== '' && $form['mapping_socialdb_' . $i] !== '') {
+                $dataInfo[] = array('tag' => $form['mapping_metatags_' . $i], 'socialdb_entity' => $form['mapping_socialdb_' . $i]);
+            }
+        }
+        if (!empty($dataInfo)):
+            update_post_meta($object_id, 'socialdb_channel_oaipmhdc_mapping', serialize($dataInfo));
         endif;
     }
 
@@ -332,6 +390,37 @@ class MappingModel extends Model {
     }
 
     /**
+     * @signature - list_mapping_dublin_core($collection_id)
+     * @param int $collection_id Os dados vindos do formulario
+     * @return array com os dados que serao utilizados para inserir a colecao via OAIPMH
+     * @description - funcao que retorna todos os metadatas para realizar o mapeiamento das propriedades do repositorio escolhido
+     * @author: Eduardo 
+     */
+    public function list_mapping_metatag($collection_id) {
+        //array de configuração dos parâmetros de get_posts()
+        $channels = get_post_meta($collection_id, 'socialdb_collection_channel');
+
+        if (is_array($channels)) {
+            $json = [];
+            foreach ($channels as $ch) {
+                $ch = get_post($ch);
+                $oai_pmhdc = wp_get_object_terms($ch->ID, 'socialdb_channel_type');
+                if (!empty($ch) && !empty($oai_pmhdc) && isset($oai_pmhdc[0]->name) && $oai_pmhdc[0]->name == 'socialdb_channel_metatag') {
+                    //$token = get_post_meta($ch->ID, 'socialdb_channel_oaipmhdc_first_token', true);
+                    //$size = get_post_meta($ch->ID, 'socialdb_channel_oaipmhdc_initial_size', true);
+                    //$sets = get_post_meta($ch->ID, 'socialdb_channel_oaipmhdc_sets', true);
+                    $array = array('name' => $ch->post_title,
+                        'id' => $ch->ID);
+                    $json['identifier'][] = $array;
+                }
+            }
+            return $json;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * @signature - get_mapping_dublin_core($data)
      * @param array $mapping_id Os dados vindos do formulario
      * @return array com os dados que serao utilizados para inserir a colecao via OAIPMH
@@ -357,9 +446,127 @@ class MappingModel extends Model {
         return $data;
     }
 
-    public function save_delimiter_csv($mapping_id, $delimiter, $has_header = 0) {
+    public function save_delimiter_csv($mapping_id, $delimiter, $multi_values, $hierarchy, $import_zip_csv, $has_header = 0) {
         update_post_meta($mapping_id, 'socialdb_channel_csv_delimiter', $delimiter);
+        update_post_meta($mapping_id, 'socialdb_channel_csv_multi_values', $multi_values);
+        update_post_meta($mapping_id, 'socialdb_channel_csv_hierarchy', $hierarchy);
+        update_post_meta($mapping_id, 'socialdb_channel_csv_import_zip', $import_zip_csv);
         update_post_meta($mapping_id, 'socialdb_channel_csv_has_header', $has_header);
+    }
+
+    public function validate_zip(array $File, array $data, $Name = null) {
+        $result = array();
+        if ($File["error"] == 4) {
+            $result['msg'] = "Envie algum arquivo para importar!";
+            $result['error'] = 1;
+        } else {
+            $Name = ((string) $Name ? $Name : substr($File['name'], 0, strrpos($File['name'], '.')));
+            $FileType = substr($File['name'], strrpos($File['name'], '.'));
+
+            $FileAccept = [
+                'application/zip',
+                'application/x-zip-compressed',
+                'multipart/x-zip',
+                'application/x-compressed'
+            ];
+
+            $FileAcceptType = [
+                '.zip'
+            ];
+
+            $FileTypeUnd = [
+                'application/download',
+                'application/octet-stream'
+            ];
+
+            if (!in_array($File['type'], $FileAccept)):
+                if (in_array($File['type'], $FileTypeUnd)):
+                    if (!in_array($FileType, $FileAcceptType)):
+                        $result['msg'] = "Tipo de arquivo não suportado. Envie .ZIP!";
+                        $result['error'] = 1;
+                    else:
+                        $result['error'] = 0;
+                        $result['path'] = $this->unzip($File, $data);
+                    endif;
+                else:
+                    $result['msg'] = "Tipo de arquivo não suportado. Envie .ZIP!";
+                    $result['error'] = 1;
+                endif;
+            else:
+                $result['error'] = 0;
+                $result['path'] = $this->unzip($File, $data);
+            endif;
+        }
+
+        return $result;
+    }
+
+    public function unzip($file, $data) {
+        //if ($_FILES["collection_file"]["name"]) {
+        //$file = $_FILES["collection_file"];
+        $filename = $file["name"];
+        $tmp_name = $file["tmp_name"];
+        $type = $file["type"];
+
+        $name = explode(".", $filename);
+
+        /* here it is really happening */
+        $ran = $name[0] . "-" . time() . "-" . rand(1, time());
+        $targetdir = dirname(__FILE__) . "/" . $ran;
+        $targetzip = dirname(__FILE__) . "/" . $ran . ".zip";
+
+        if (move_uploaded_file($tmp_name, $targetzip)) { //Uploading the Zip File
+
+            /* Extracting Zip File */
+            //var_dump($targetzip, $targetdir);
+            $zip = new ZipArchive();
+            $x = $zip->open($targetzip);  // open the zip file to extract
+            if ($x === true) {
+                $zip->extractTo($targetdir); // place in the directory with same name  
+                $zip->close();
+                unlink($targetzip); //Deleting the Zipped file
+            }
+        }
+        //}
+        
+        $targetdir = str_replace("\\", "/", $targetdir);
+        
+        return $targetdir;
+    }
+    
+    /**
+     * extrao o zip e retorna o csv da colecao
+     * @param type $path
+     * @param type $delimiter
+     */
+    public function get_csv_in_zip_file($path,$delimiter) {
+         /* here it is really happening */
+        $time = time();
+        $targetdir = dirname(__FILE__) . "/" .$time;
+        $targetzip = dirname(__FILE__)."/" . $time . ".zip";
+        mkdir($targetdir);
+        /* Extracting Zip File */
+        $zip = new ZipArchive();
+        if (copy($path, $targetzip)) { //Uploading the Zip File
+            $x = $zip->open($targetzip);  // open the zip file to extract
+            $zip->extractTo($targetdir);
+            if ($x === true) {
+                $zip->extractTo($targetdir); // place in the directory with same name  
+                if(is_file($targetdir.'/csv-package/administrative-settings.csv')){
+                    $objeto = fopen($targetdir.'/csv-package/administrative-settings.csv', 'r');
+                    $csv_data = fgetcsv($objeto, 0, $delimiter);
+                    fclose($objeto);
+                    $zip->close();
+                    unlink($targetzip); //Deleting the Zipped file
+                    $this->recursiveRemoveDirectory($targetdir);
+                    return array_filter($csv_data);
+                }    
+                $zip->close();
+                unlink($targetzip); //Deleting the Zipped file
+                $this->recursiveRemoveDirectory($targetdir);
+            }
+        }
+        return [];
     }
 
     public function show_files_csv($mapping_id) {
@@ -468,6 +675,137 @@ class MappingModel extends Model {
         $data['type'] = 'success';
         $data['result'] = '1';
         return $data;
+    }
+
+    /*     * ************************************************************************
+     *                         SALVANDO MAPEAMENTOS METATAGS ITEM
+     * ************************************************************************ */
+
+    /**
+     * 
+     * @param type $url
+     * @param type $collection_id
+     */
+    public function get_mapping_metatags($url, $collection_id) {
+        $parse = parse_url($url);
+        $mappings = $this->list_mapping_metatag($collection_id);
+        if ($mappings && isset($mappings['identifier'])) {
+            foreach ($mappings['identifier'] as $mapp) {
+                if ($mapp['name'] == $parse['host']) {
+                    return $mapp['id'];
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 
+     * @param type $param
+     */
+    public function saving_mapping_metatags($data) {
+        $identifier = '';
+        if ($data['mapped_generic_properties'] == '') {
+            return false;
+        }
+        //insiro o mapeamento
+        $has_mapping = $this->get_mapping_metatags($data['url'], $data['collection_id']);
+        if (!$has_mapping) {
+            $url_parsed = parse_url($data['url']);
+            $this->parent = get_term_by('name', 'socialdb_channel_metatag', 'socialdb_channel_type');
+            $object_id = $this->create_mapping($url_parsed['host'], $data['collection_id']);
+        } else {
+            $object_id = $has_mapping;
+        }
+        // mapeamento 
+        $array_generic_mapped = explode(',', $data['mapped_generic_properties']);
+        $array_tainacan_mapped = explode(',', $data['mapped_tainacan_properties']);
+        foreach ($array_generic_mapped as $key => $generic) {
+            if (strpos($array_tainacan_mapped[$key], 'new_') !== false) {
+                $id = str_replace('new_', '', $array_tainacan_mapped[$key]);
+                if ($data['create_property_' . $id]) {
+                    $identifier = 'dataproperty_' . $this->add_property_data($data['name_property_' . $id], $data['widget_property_' . $id], $data['collection_id']);
+                    $dataInfo[] = array('tag' => $array_generic_mapped[$key], 'socialdb_entity' => $identifier);
+                }
+            } else {
+                $identifier = $array_tainacan_mapped[$key];
+                $dataInfo[] = array('tag' => $array_generic_mapped[$key], 'socialdb_entity' => $identifier);
+            }
+        }
+        update_post_meta($object_id, 'socialdb_channel_oaipmhdc_initial_size', '1');
+        update_post_meta($object_id, 'socialdb_channel_oaipmhdc_mapping', serialize($dataInfo));
+        return $object_id;
+    }
+
+    /*     * ************************************************************************
+     *                         SALVANDO MAPEAMENTOS OAI-PMH ITEM
+     * ************************************************************************ */
+
+    /**
+     * 
+     * @param type $param
+     */
+    public function saving_mapping_handle($data) {
+        $identifier = '';
+        if ($data['mapped_generic_properties'] == '') {
+            return false;
+        }
+        //insiro o mapeamento
+        $has_mapping = get_post_meta($data['collection_id'], 'socialdb_collection_mapping_import_active', true);
+        if (!is_numeric($has_mapping)) {
+            $object_id = $this->create_mapping(__('Mapping Default', 'tainacan'), $data['collection_id']);
+            update_post_meta($data['collection_id'], 'socialdb_collection_mapping_import_active', $object_id);
+        } else {
+            $object_id = $has_mapping;
+        }
+        // mapeamento 
+        $array_generic_mapped = explode(',', $data['mapped_generic_properties']);
+        $array_tainacan_mapped = explode(',', $data['mapped_tainacan_properties']);
+        foreach ($array_generic_mapped as $key => $generic) {
+            if (strpos($array_tainacan_mapped[$key], 'new_') !== false) {
+                $id = str_replace('new_', '', $array_tainacan_mapped[$key]);
+                if ($data['create_property_' . $id]) {
+                    $identifier = 'dataproperty_' . $this->add_property_data($data['name_property_' . $id], $data['widget_property_' . $id], $data['collection_id']);
+                    $dataInfo[] = array('tag' => $array_generic_mapped[$key], 'socialdb_entity' => $identifier);
+                }
+            } else {
+                $identifier = $array_tainacan_mapped[$key];
+                $dataInfo[] = array('tag' => $array_generic_mapped[$key], 'socialdb_entity' => $identifier);
+            }
+        }
+        update_post_meta($object_id, 'socialdb_channel_oaipmhdc_initial_size', '1');
+        update_post_meta($object_id, 'socialdb_channel_oaipmhdc_mapping', serialize($dataInfo));
+        return $object_id;
+    }
+
+    /**
+     * function add_property_data($property)
+     * @param object $property
+     * @return int O id da da propriedade criada.
+     * @author: Eduardo Humberto 
+     */
+    public function add_property_data($name, $widget, $collection_id) {
+        $category_root_id = $this->get_category_root_of($collection_id);
+        $new_property = wp_insert_term($name, 'socialdb_property_type', array('parent' => $this->get_property_type_id('socialdb_property_data'),
+            'slug' => $this->generate_slug((string) $name, $collection_id)));
+        update_term_meta($new_property['term_id'], 'socialdb_property_required', 'false');
+        update_term_meta($new_property['term_id'], 'socialdb_property_data_widget', $widget);
+        update_term_meta($new_property['term_id'], 'socialdb_property_data_column_ordenation', '');
+        update_term_meta($new_property['term_id'], 'socialdb_property_default_value', '');
+        update_term_meta($new_property['term_id'], 'socialdb_property_created_category', $category_root_id);
+        add_term_meta($category_root_id, 'socialdb_category_property_id', $new_property['term_id']);
+        return $new_property['term_id'];
+    }
+
+    /**
+     * function get_property_type_id($property_parent_name)
+     * @param string $property_parent_name
+     * @return int O id da categoria que determinara o tipo da propriedade.
+     * @author: Eduardo Humberto 
+     */
+    public function get_property_type_id($property_parent_name) {
+        $property_root = get_term_by('name', $property_parent_name, 'socialdb_property_type');
+        return $property_root->term_id;
     }
 
 }

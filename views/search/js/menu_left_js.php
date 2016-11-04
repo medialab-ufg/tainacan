@@ -128,6 +128,10 @@
                     var node_values = selKeys.join(", ");
                     wpquery_filter_by_facet( node_values, "", "wpquery_dynatree");
                 }
+                // lanco um hook para ser usada ao selecionar um item no dynatree
+                if (Hook.is_register('tainacan_onselect_dynatree')) {
+                    Hook.call('tainacan_onselect_dynatree', [selKeys]);
+                }
                 
                 //list_all_objects(selKeys.join(", "), $("#collection_id").val(), $('#collection_single_ordenation').val(), '', $("#value_search").val())
             },

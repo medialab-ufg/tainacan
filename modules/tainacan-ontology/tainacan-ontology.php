@@ -157,17 +157,62 @@ function ontology_before_facets(array $facets,$collection_id) {
 }
 
 ################################################################################
-######################### #4 BOTAO DE ADICAO DE ITENS/DE FACETAS ###########################
+######################### #4 BOTAO DE ADICAO/EDICAO DE ITENS/DE FACETAS ###########################
 /**
- * Filtro que mostra o botao personalizado de adicao de individuo
+ * Acao que mostra o botao personalizado de adicao de individuo
  */
 function alter_button_add_item_ontology($string) {
-    $string .= '<button id="create_button" type="button" class="btn btn-primary" >';
-    $string .= __('Add Individual','tainacan');
-    $string .= '</button>';
-    return $string;
+    ?>
+    <button style="display: none;" 
+            onclick="show_form_add_item_ontology()"
+            type="button" 
+            class="btn btn-primary has-selected-class" >
+    <?php _e('Add Individual','tainacan') ?>
+    </button>
+    <a  style="cursor: pointer;color: white;"
+        id="add_item_popover"
+        class="btn btn-primary popover_item none-selected-class" 
+         >
+           <?php _e('Add Individual','tainacan') ?>
+     </a>
+    <script>
+        $('html').on('click', function(e) {
+            if (typeof $(e.target).data('original-title') == 'undefined') {
+              $('#add_item_popover').popover('hide');
+            }
+        });
+        $('#add_item_popover').popover({ 
+           html : true,
+           placement: 'left',
+           title: '<?php echo _e('Add item in the collection','tainacan') ?>',
+           content: function() {
+             return $("#popover_content_add_item").html();
+           }
+        });
+    </script>
+    <div id="popover_content_add_item" class="hide">
+        <form class="form-inline"  style="font-size: 12px;width: 300px;">
+            <center>
+             <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<?php _e('Select at the tree an individue class ','tainacan') ?>
+             <br>
+             <button type="button" 
+                     onclick="show_form_add_item_ontology()"
+                    class="btn btn-primary btn-xs">
+                        <?php _e('Or create a class instance of owl:thing','tainacan') ?></button>
+            </center>
+        </form>
+    </div> 
+    
+    <?php
 }
-add_filter( 'show_custom_add_item_button', 'alter_button_add_item_ontology', 10, 3 );
+add_action( 'show_custom_add_item_button', 'alter_button_add_item_ontology', 10, 3 );
+/**
+ * Filtro que mostra a view de edicao default
+ */
+function show_edit_default_ontology($collection_id) {
+    return true;
+}
+add_filter( 'show_edit_default', 'show_edit_default_ontology', 10, 3 );
 /**
  * Insere o botao para ser adicionado as facetas
  */
@@ -1329,6 +1374,9 @@ function ontology_modificate_values_get_all_property($data) {
     global $wpdb;
     $config = [];
     $wp_taxonomymeta = $wpdb->prefix . "termmeta";
+    if(!$data['id']){
+        return $data;
+    }
     //dados principais da propriedade
     $roots_parents = [
         get_term_by('name','socialdb_property_data','socialdb_property_type')->term_id,
@@ -1407,6 +1455,8 @@ add_action('form_required_property_object', 'hide_field');
 add_action('collection_create_name_object', 'hide_field');
 /******************************************************************************/
 /** ESCONDER NA HOME DO ITEM */
+add_action('home_item_add_property', 'hide_field');
+add_action('home_item_delete_property', 'hide_field');
 add_action('home_item_source_div', 'hide_field');
 add_action('home_item_type_div', 'hide_field');
 add_action('home_item_license_div', 'hide_field');

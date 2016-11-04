@@ -10,6 +10,9 @@ include_once ('../../../../../wp-config.php');
 include_once ('../../../../../wp-load.php');
 include_once ('../../../../../wp-includes/wp-db.php');
 include_once ('js/list_items_search_js.php');
+include_once(dirname(__FILE__).'/../../../helpers/view_helper.php');
+include_once(dirname(__FILE__).'/../../../helpers/object/object_helper.php');
+$view_helper = new ViewHelper();
 $number_elements = [10,20,50,100];
 ?>  
     

@@ -14,6 +14,8 @@
                 back_button_single($('#single_event_add_property_data_object_id').val());// o id do objeto
                 list_properties_single($('#single_event_add_property_data_object_id').val());// o id do objeto
                 showAlertGeneral(elem.title, elem.msg, elem.type);
+                //limpando caches
+                delete_all_cache_collection();
             });
             e.preventDefault();
         });

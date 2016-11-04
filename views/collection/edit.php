@@ -2,6 +2,9 @@
 include_once ('js/edit_js.php');
 include_once(dirname(__FILE__).'/../../helpers/view_helper.php');
 $view_helper = new ViewHelper();
+$collection_thumb_id = get_post_meta($collection_post->ID, '_thumbnail_id', true);
+$thumb_url = wp_get_attachment_url($collection_thumb_id);
+$image_cover_url = wp_get_attachment_url(get_post_meta($collection_post->ID, 'socialdb_collection_cover_id', true));
 ?>
 <div class="col-md-12 config-temp-box">
 
@@ -19,23 +22,33 @@ $view_helper = new ViewHelper();
                 <label for="collection_name"><?php _e('Collection name', 'tainacan'); ?></label>
                 <input type="text" class="form-control" id="collection_name" name="collection_name" required="required" value="<?php echo $collection_post->post_title; ?>">
             </div>
-            <div id="thumb-idea-form">
-                <label for="collection_thumbnail"><?php _e('Collection thumbnail', 'tainacan'); ?></label>
-                <br>
-                <?php has_post_thumbnail($collection_post->ID) ? print_r(get_the_post_thumbnail($collection_post->ID, 'thumbnail')) : ''; ?>
-                <br><br>
-                <label for="remove_thumbnail"><?php _e('Remove Thumbnail', 'tainacan'); ?></label>
-                <input type="checkbox"  id="remove_thumbnail" name="remove_thumbnail" value="true">
+
+            <div id="thumb-idea-form" class="form-group">
+                <div class="">
+                    <label for="collection_thumbnail" style="display: block;"><?php _e('Collection thumbnail', 'tainacan'); ?></label>
+                    <?php if($collection_thumb_id): ?>
+                        <img src="<?php echo $thumb_url ?>" alt="" style="display: block; margin-bottom: 5px;" />
+                        <label for="remove_thumbnail"><?php _e('Remove Thumbnail', 'tainacan'); ?></label> &nbsp;
+                        <input type="checkbox"  id="remove_thumbnail" name="remove_thumbnail" value="true">
+                        <?php /* <input type="button" class="btn btn-default edit-collection-tumb" value='<?php _e("Edit thumb","tainacan"); ?>' style="display: block"/> */?>
+                    <?php endif; ?>
+                </div>
+                <div style="margin-top: 20px;">
+                    <div id="collection_crop_thumb"></div>
+                </div>
+
+
+                <?php /*
                <!--<button onclick="remove_thumbnail('<?php echo $collection_post->ID; ?>')" class="btn btn-default" ><?php _e('Remove thumbnail') ?></button>-->
                 <br><br>
                 <label for="remove_thumbnail"><?php _e("Change collection's thumbnail", "tainacan"); ?></label>
                 <input type="file" size="50" id="collection_thumbnail" name="collection_thumbnail" class="btn btn-default btn-sm">
-                <br />
+                 */ ?>
+
             </div>
 
-            <div id="socialdb_cover">
+            <div id="socialdb_cover" class="form-group">
                 <?php
-                $image_cover_url = wp_get_attachment_url(get_post_meta($collection_post->ID, 'socialdb_collection_cover_id', true));
                 if ($image_cover_url) { ?>
                     <label for="socialdb_collection_cover"><?php _e('Cover', 'tainacan'); ?></label> <br />
                     <img src="<?= $image_cover_url ?>" style='max-height:190px;' />
@@ -51,9 +64,11 @@ $view_helper = new ViewHelper();
                         <strong> <?php _e('After positioning the image cover as wished, click the green button to crop it.', 'tainacan'); ?> </strong>
                         <i>(<?php _e('Minimum width recommended: 1920px', 'tainacan') ?>)</i>
                     </div>
+
                     <div id="collection_cover_image"></div>
                     <input type="hidden" id="collection_cover_img_id" name="collection_cover_img_id" value=""/>
                 </div>
+
             </div>
 
             <!------------------- Descricao-------------------------->
@@ -69,6 +84,9 @@ $view_helper = new ViewHelper();
 
             <!------------------- DIV ADVANCED -------------------------->
             <div id="advanced_config" style="display: none;">
+                <?php
+                   do_action('insert_form_edit_collection',$collection_post,$collection_metas);
+                ?>
                 <!------------------- Endereco da colecao -------------------------->
                 <div class="form-group">
                     <label for="collection_description"><?php _e('Collection Address', 'tainacan'); ?></label>
@@ -1422,8 +1440,13 @@ $view_helper = new ViewHelper();
             <input type="hidden" id="collection_id" name="collection_id" value="<?php echo $collection_post->ID; ?>">
             <input type="hidden" id="operation" name="operation" value="update">
             <input type="hidden" id="save_and_next" name="save_and_next" value="false">
-            <button type="submit" id="submit_configuration" class="btn btn-success" style="float: right"><?php _e('Save', 'tainacan'); ?></button>
+            
+            <button type="button" class="btn btn-default pull-left btn-lg" onclick="backToMainPage()"><?php _e('Cancel', 'tainacan'); ?></button>
+            
+            <button type="submit" id="button_save_and_next" class="btn btn-success pull-right btn-lg"> <?php _e('Continue', 'tainacan'); ?> </button>
+            <?php /*
             <button type="submit" id="button_save_and_next"  class="btn btn-primary" style="float: right;" ><?php _e('Save & Next', 'tainacan'); ?></button>
+             * */ ?>             
         </form>
     </div>
 </div>

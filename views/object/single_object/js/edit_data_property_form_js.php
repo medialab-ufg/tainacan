@@ -14,6 +14,8 @@
                 back_button_single($('#single_event_edit_property_data_object_id').val());// o id do objeto
                 list_properties_single($('#single_event_edit_property_data_object_id').val());// o id do objeto
                 showAlertGeneral(elem.title, elem.msg, elem.type);
+                //limpando caches
+                delete_all_cache_collection();
             });
             e.preventDefault();
         });
@@ -49,6 +51,8 @@
                 property_data_value: $("#single_property_value_" + property_id + "_" + object_id).val()}
         }).done(function (result) {
             elem = jQuery.parseJSON(result);
+            //limpando caches
+            delete_all_cache_collection();
             if (elem.pre_approved) {
                 $("#single_property_" + property_id + "_" + object_id + "_value_before").val($("#single_property_value_" + property_id + "_" + object_id).val());
             } else {

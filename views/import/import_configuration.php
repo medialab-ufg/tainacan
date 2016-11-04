@@ -1,9 +1,7 @@
 <?php
-/**
- * Author: Marco Túlio Bueno Veira
- */
-include_once ('js/import_configuration_js.php');
 include_once ('../../helpers/view_helper.php');
+include_once ('../../helpers/import/import_helper.php');
+include_once ('js/import_configuration_js.php');
 ?>
 <div class="col-md-12">
     <div id="import_settings" class="col-md-12 config_default_style">
@@ -14,6 +12,7 @@ include_once ('../../helpers/view_helper.php');
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active"><a id="click_oaipmhtab" href="#oaipmhtab" aria-controls="oaipmhtab" role="tab" data-toggle="tab"><?php _e('OAI-PMH','tainacan') ?></a></li>
                     <li role="presentation"><a id="click_csvtab" href="#csvtab" aria-controls="csvtab" role="tab" data-toggle="tab"><?php _e('CSV','tainacan') ?></a></li>
+                    <li role="presentation"><a id="click_metatag_tab" href="#metatag_tab" aria-controls="metatag_tab" role="tab" data-toggle="tab"><?php _e('Metatags','tainacan') ?></a></li>
                 </ul>
 
                 <!-- Tab panes -->
@@ -23,10 +22,8 @@ include_once ('../../helpers/view_helper.php');
                             <div id="list_oaipmh_dc">
                                 <table  class="table table-bordered">
                                     <th><?php _e('Identifier','tainacan'); ?></th>
-                                    <th><?php _e('Edit','tainacan'); ?></th>
-                                    <th><?php _e('Delete','tainacan'); ?></th>
-                                    <th><?php _e('Import','tainacan'); ?></th>
                                     <th><?php _e('Harvesting','tainacan'); ?></th>
+                                    <th> </th>
                                     <tbody id="table_oaipmh_dc" >
                                     </tbody>
                                 </table>
@@ -75,9 +72,7 @@ include_once ('../../helpers/view_helper.php');
                             <div id="list_csv_dc">
                                 <table  class="table table-bordered">
                                     <th><?php _e('Identifier','tainacan'); ?></th>
-                                    <th><?php _e('Edit','tainacan'); ?></th>
-                                    <th><?php _e('Delete','tainacan'); ?></th>
-                                    <th><?php _e('Import','tainacan'); ?></th>
+                                    <th></th>
                                     <tbody id="table_csv" >
                                     </tbody>
                                 </table>
@@ -85,7 +80,7 @@ include_once ('../../helpers/view_helper.php');
                             <br>
                             <form id="formCsv" name="formCsv" enctype="multipart/form-data" method="post">
                                 <div class="form-group">
-                                    <input type="file" accept=".csv" id="csv_file" name="csv_file" placeholder="<?php _e('Insert the CSV file','tainacan'); ?>">
+                                    <input type="file" accept=".csv,.zip" id="csv_file" name="csv_file" placeholder="<?php _e('Insert the CSV file','tainacan'); ?>">
                                 </div>
                                 <input type="hidden" id="collection_import_csv_id" name="collection_id" value="">
                                 <input type="hidden" id="operation_csv" name="operation" value="validate_csv">
@@ -95,6 +90,50 @@ include_once ('../../helpers/view_helper.php');
                         <div id="maping_container_csv">
                         </div>
                     </div>
+                    <!-- Painel para metatags -->
+                    <div role="tabpanel" class="tab-pane" id="metatag_tab">
+                        <div id="validate_metatag_tab">
+                            <div id="list_oaipmh_dc">
+                                <table  class="table table-bordered">
+                                    <th><?php _e('Identifier','tainacan'); ?></th>
+                                    <th><?php _e('Edit/Remove','tainacan'); ?></th>
+                                    <tbody id="table_metatag_tab" >
+                                    </tbody>
+                                </table>
+                            </div>
+                            <br>
+                            
+                            <div id="url_container_metatags" class="form-group col-md-12 no-padding">
+                                <div class="col-md-12"><label><?php _e('URL','tainacan'); ?></label></div>
+                                <div class="col-md-10">
+                                    <input type="text" 
+                                        id="url_metatag" 
+                                        class="form-control" 
+                                        placeholder="<?php _e('Insert the URL to extract metatags','tainacan'); ?>">
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="button" 
+                                            onclick="validate_url_metatag()" 
+                                            id="submit_metatag" 
+                                            class="btn btn-primary tainacan-blue-btn-bg pull-left">
+                                                <?php _e('Validate','tainacan'); ?>
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="loader_validacao_metatags" style="display:none">
+                                <center>
+                                    <img src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>">
+                                    <h3><?php _e('Validating URL...','tainacan') ?></h3>
+                                </center>
+                            </div>
+                            <div style="display: none;" id="maping_container_metatags">
+                            </div>
+                            <input type="hidden" id="collection_import_id" name="collection_id" value="">
+                            <input type="hidden" id="operation" name="operation" value="validate_metatag">
+                            
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

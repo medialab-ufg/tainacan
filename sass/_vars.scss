@@ -116,3 +116,45 @@ $default-margin: 20px 0 20px 0;
   padding: 20px;
 }
 
+@mixin action_buttons_style() {
+  a {
+    &:last-child {
+      margin-left: 10px;
+    }
+    img {
+      height: 15px;
+      &:hover {
+        opacity: 0.6;
+      }
+    } // img
+  } // a
+}
+
+@mixin table_common_spacing() {
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+  .table > tbody + tbody {
+    border-top: 0;
+  }
+
+  table {
+    margin-bottom: 0;
+    th {
+      color: $brand-medium-blue;
+      border-bottom: 1px solid $brand-medium-blue;
+      padding-left: 15px;
+    }
+    td {
+      padding: 10px 0 10px 15px;
+      border-bottom: 1px solid $bs-button-gray-border;
+      border-right: 0;
+    }
+  }
+}
+
+@mixin mode_view_highlight($padding: 3px 2px 5px 5px) {
+    padding: $padding;
+    border: 2px solid $item-border;
+    border-radius: 2px;
+}

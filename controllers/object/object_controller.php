@@ -18,10 +18,18 @@ class ObjectController extends Controller {
         switch ($operation) {
             // #1 ADICIONAR ITEMS TIPO TEXTO
             case "create_item_text":
-                $data['object_name'] = get_post_meta($data['collection_id'], 'socialdb_collection_object_name', true);
-                $data['socialdb_collection_attachment'] = get_post_meta($data['collection_id'], 'socialdb_collection_attachment', true);
-                $data['object_id'] = $object_model->create();
-                return $this->render(dirname(__FILE__) . '../../../views/object/create_item_text.php', $data);
+                $has_cache = $this->has_cache($data['collection_id'], 'create-item-text');
+                if($has_cache){
+                    $has_cache = htmlspecialchars_decode(stripslashes($has_cache)) . 
+                             '<input type="hidden" id="temporary_id_item" value="'.$object_model->create().'">' .
+                            file_get_contents(dirname(__FILE__) . '../../../views/object/js/create_item_text_cache_js.php');
+                     return $has_cache;
+                }else{
+                    $data['object_name'] = get_post_meta($data['collection_id'], 'socialdb_collection_object_name', true);
+                    $data['socialdb_collection_attachment'] = get_post_meta($data['collection_id'], 'socialdb_collection_attachment', true);
+                    $data['object_id'] = $object_model->create();
+                    return $this->render(dirname(__FILE__) . '../../../views/object/create_item_text.php', $data);
+                }
                 break;
             // FIM : ADICIONAR ITEMS TIPO TEXTO
             // #1 ADICIONAR ITEMS TIPO URL
@@ -98,8 +106,10 @@ class ObjectController extends Controller {
             case "edit":
                 $object_name = get_post_meta($data['collection_id'], 'socialdb_collection_object_name', true);
                 $socialdb_collection_attachment = get_post_meta($data['collection_id'], 'socialdb_collection_attachment', true);
+                $collection_id = $data['collection_id'];
                 $data = $object_model->edit($data['object_id'], $data['collection_id']);
                 $data['object_name'] = $object_name;
+                $data['collection_id'] = $collection_id;
                 $data['socialdb_collection_attachment'] = $socialdb_collection_attachment;
                 $data['socialdb_object_from'] = get_post_meta($data['object']->ID, 'socialdb_object_from', true);
                 $data['socialdb_object_dc_source'] = get_post_meta($data['object']->ID, 'socialdb_object_dc_source', true);
@@ -125,6 +135,15 @@ class ObjectController extends Controller {
                 $args = $object_model->list_all($data);
                 $data['loop'] = new WP_Query($args);
                 $data['collection_data'] = $collection_model->get_collection_data($collection_id);
+                $data["show_string"] = is_root_category($collection_id) ? __('Showing collections:', 'tainacan') : __('Showing Items:', 'tainacan');
+
+                // View modes' vars                
+                $data['_slideshow_time'] = get_post_meta($collection_id, 'socialdb_collection_slideshow_time', true);
+                $data["geo_coordinates"]["lat"] = get_post_meta($collection_id, "socialdb_collection_latitude_meta", true);
+                $data["geo_coordinates"]["long"] = get_post_meta($collection_id, "socialdb_collection_longitude_meta", true);
+                $data['use_approx_mode'] = get_post_meta($collection_id, "socialdb_collection_use_prox_mode", true);
+                $data["geo_loc"] = get_post_meta($collection_id, "socialdb_collection_location_meta", true);
+                $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($collection_id, "socialdb_collection_table_metas", true)));
 
                 $view_count = get_post_meta($collection_id, 'collection_view_count', true);
                 if (empty($view_count)):
@@ -146,10 +165,70 @@ class ObjectController extends Controller {
                 } else {
                     $return['empty_collection'] = false;
                 }
+                $logData = ['collection_id' => $collection_id, 'user_id' => get_current_user_id(),
+                  'event_type' => 'user_collection', 'event' => 'view'];
+                Log::addLog($logData);
                 if (mb_detect_encoding($return['page'], 'auto') == 'UTF-8') {
                     $return['page'] = iconv('ISO-8859-1', 'UTF-8', utf8_decode($return['page']));
                 }
                 return json_encode($return);
+                break;
+            case "list_trash": // A listagem dos objetos na lixeira
+                $return = array();
+                $collection_model = new CollectionModel;
+                $collection_id = $data['collection_id'];
+                $recover_wpquery = $object_model->get_args($data);
+                //$post_status = ($collection_id == get_option('collection_root_id') ? 'draft' : 'trash');
+                $post_status = 'draft';
+                $args = $object_model->list_all($data, $post_status);
+                $data['loop'] = new WP_Query($args);
+                $data['collection_data'] = $collection_model->get_collection_data($collection_id);
+
+                $view_count = get_post_meta($collection_id, 'collection_view_count', true);
+                if (empty($view_count)):
+                    add_post_meta($collection_id, 'collection_view_count', 1, true);
+                else:
+                    $updated = $view_count + 1;
+                    update_post_meta($collection_id, 'collection_view_count', $updated, $view_count);
+                endif;
+
+                if (!$data['sorted_by']) {
+                    $data['sorted_by'] = 'desc';
+                }
+                $data['listed_by'] = $object_model->get_ordered_name($data['collection_id'], $data['ordenation_id'], $data['order_by']);
+                $data['is_moderator'] = CollectionModel::is_moderator($data['collection_id'], get_current_user_id());
+                $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list_trash.php', $data);
+                $return['args'] = serialize($recover_wpquery);
+                if (empty($object_model->get_collection_posts($data['collection_id']))) {
+                    $return['empty_collection'] = true;
+                } else {
+                    $return['empty_collection'] = false;
+                }
+                if (mb_detect_encoding($return['page'], 'auto') == 'UTF-8') {
+                    $return['page'] = iconv('ISO-8859-1', 'UTF-8', utf8_decode($return['page']));
+                }
+                return json_encode($return);
+                break;
+            case 'restore_object':
+                if ($data['collection_id'] != get_option('collection_root_id')) {
+                    //restore item
+                    $result = $object_model->restoreItem($data['object_id']);
+                } else {
+                    //restore collection
+                    $result = $object_model->restoreItem($data['object_id']);
+                }
+                return $result;
+                break;
+            case 'delete_permanently_object':
+                if ($data['collection_id'] != get_option('collection_root_id')) {
+                    //delete item
+                    $result = $object_model->delete_permanently_item($data['object_id']);
+                } else {
+                    //delete collection
+                    //$result = $object_model->delete_permanently_collection($data['object_id']);
+                    $result = $object_model->delete_permanently_item($data['object_id']);
+                }
+                return $result;
                 break;
             case 'filter': // a listagem com filtros
                 $collection_model = new CollectionModel;
@@ -233,6 +312,32 @@ class ObjectController extends Controller {
             case "list_single_object":
                 $user_model = new UserModel();
                 $object_id = $data['object_id'];
+                $col_id = $data['collection_id'];
+                $data['object'] = get_post($object_id);
+                $data["username"] = $user_model->get_user($data['object']->post_author)['name'];
+                $data['metas'] = get_post_meta($object_id);
+                $data['collection_metas'] = get_post_meta($col_id, 'socialdb_collection_download_control', true);
+                $data['collection_metas'] = ($data['collection_metas'] ? $data['collection_metas'] : 'allowed');
+                $data['has_watermark'] = get_post_meta($col_id, 'socialdb_collection_add_watermark', true);
+                $watermark_id = get_post_meta($col_id, 'socialdb_collection_watermark_id', true);
+                if ($watermark_id) {
+                    $data['url_watermark'] = wp_get_attachment_url($watermark_id);
+                } else {
+                    $data['url_watermark'] = get_template_directory_uri() . '/libraries/images/icone.png';
+                }
+                //se existir a acao para alterar a home do item
+                if(has_action('alter_page_item')){
+                    return apply_filters('alter_page_item',$data);
+                } else {
+                    $logData = ['collection_id' => $col_id, 'item_id' => $object_id,
+                      'user_id' => get_current_user_id(), 'event_type' => 'user_items', 'event' => 'view'];
+                    Log::addLog($logData);
+                    return $this->render(dirname(__FILE__) . '../../../views/object/list_single_object.php', $data);
+                }
+                break;
+            case "list_single_object_version":
+                $user_model = new UserModel();
+                $object_id = $data['object_id'];
                 $data['object'] = get_post($object_id);
                 $data["username"] = $user_model->get_user($data['object']->post_author)['name'];
                 $data['metas'] = get_post_meta($object_id);
@@ -245,7 +350,13 @@ class ObjectController extends Controller {
                 } else {
                     $data['url_watermark'] = get_template_directory_uri() . '/libraries/images/icone.png';
                 }
-                return $this->render(dirname(__FILE__) . '../../../views/object/list_single_object.php', $data);
+                
+                if(has_action('alter_page_item')){
+                    $array_json['html'] = apply_filters('alter_page_item',$data);
+                    return json_encode($array_json);
+                }else{
+                    return $this->render(dirname(__FILE__) . '../../../views/object/list_single_object_version.php', $data);
+                }
                 break;
             case "list_single_object_by_name":
                 $user_model = new UserModel();
@@ -279,14 +390,20 @@ class ObjectController extends Controller {
                     } else {
                         $data['url_watermark'] = get_template_directory_uri() . '/libraries/images/icone.png';
                     }
-                    $array_json['html'] = $this->render(dirname(__FILE__) . '../../../views/object/list_single_object.php', $data);
-                    return json_encode($array_json);
+                    
+                    if(has_filter('alter_page_item')){
+                        $array_json['html'] = apply_filters('alter_page_item',$data);
+                        return json_encode($array_json);
+                    }else{
+                        $array_json['html'] = $this->render(dirname(__FILE__) . '../../../views/object/list_single_object.php', $data);
+                        return json_encode($array_json);
+                    }
                 } else {
                     $array_json['redirect'] = get_the_permalink($data['collection_id']);
                     return json_encode($array_json);
                 }
                 break;
-            case 'list_search' :
+            case 'list_search':
                 if ($data['collection_id'] == get_option('collection_root_id')) {
                     $array['is_json'] = false;
                     //
@@ -296,6 +413,9 @@ class ObjectController extends Controller {
                     $data['loop'] = $object_model->list_collection($data);
                     $data['listed_by'] = $object_model->get_ordered_name($data['collection_id'], $data['ordenation_id']);
                     $array['html'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
+                    $logData = ['collection_id' => $data['collection_id'], 'user_id' => get_current_user_id(),
+                      'event_type' => 'user_collection', 'event' => 'view'];
+                    Log::addLog($logData);
                     return json_encode($array);
                 } else {
                     $array['is_json'] = TRUE;
@@ -338,6 +458,9 @@ class ObjectController extends Controller {
                 $data = $object_model->help_choosing_license($data);
                 return json_encode($data);
                 break;
+            case 'move_items_to_trash':
+                $data = $object_model->move_to_trash($data['objects_ids'], $data['collection_id']);
+                return json_encode($data);
             // limpando uma colecao
             case 'clean_collection_itens':
                 $data = $object_model->clean_collection($data);
@@ -358,8 +481,132 @@ class ObjectController extends Controller {
                 break;
             case 'insertUserDownload':
                 if (is_user_logged_in()) {
+                    $logData = ['collection_id' => $data['collection_id'], 'item_id' => $data['item_id'],
+                      'user_id' => get_current_user_id(), 'event_type' => 'user_items', 'event' => 'download'];
+                    Log::addLog($logData);
                     add_post_meta($data['thumb_id'], 'socialdb_user_download_' . time(), get_current_user_id());
                 }
+                return true;
+                break;
+            case 'edit_multiple_items':
+                $set = [];
+                foreach($data['items_data'] as $_previous) {
+                    array_push( $set, [ 'ID' => $_previous['id'], 'title' => $_previous['title'], 'desc' => $_previous['desc'] ] );
+                }
+                return $this->render( dirname(__FILE__) . '../../../views/object/temp/edit_multiple.php', [ 'edit_data' => $set ] );
+            break;
+            case 'duplicate_item_same_collection':
+                $item = get_post($data['object_id']);
+                $newItem = $object_model->copyItem($item, $data['collection_id']);
+                $metas = get_post_meta($item->ID);
+                $object_model->copyItemMetas($newItem, $metas);
+                $object_model->copyItemCategories($newItem, $data['object_id']);
+                $object_model->copyItemTags($newItem, $data['object_id']);
+
+                $object_name = get_post_meta($data['collection_id'], 'socialdb_collection_object_name', true);
+                $socialdb_collection_attachment = get_post_meta($data['collection_id'], 'socialdb_collection_attachment', true);
+                $data = $object_model->edit($newItem, $data['collection_id']);
+                $data['object_name'] = $object_name;
+                $data['socialdb_collection_attachment'] = $socialdb_collection_attachment;
+                $data['socialdb_object_from'] = get_post_meta($data['object']->ID, 'socialdb_object_from', true);
+                $data['socialdb_object_dc_source'] = get_post_meta($data['object']->ID, 'socialdb_object_dc_source', true);
+                $data['socialdb_object_content'] = get_post_meta($data['object']->ID, 'socialdb_object_content', true);
+                $data['socialdb_object_dc_type'] = get_post_meta($data['object']->ID, 'socialdb_object_dc_type', true);
+                return $this->render(dirname(__FILE__) . '../../../views/object/edit_item_text.php', $data);
+                break;
+            case 'duplicate_item_other_collection':
+
+                $item = get_post($data['object_id']);
+                $category_root_id = $object_model->get_category_root_of($data['collection_id']);
+                $newItem = $object_model->copyItem($item, $data['new_collection_id']);
+                $metas = get_post_meta($item->ID);
+                $object_model->copyItemMetas($newItem, $metas, false);
+                //$object_model->copyItemCategories($newItem, $data['object_id'], $category_root_id);
+                $object_model->copyItemCategoriesOtherCol($newItem, $data['object_id'], $category_root_id);
+                //$object_model->copyItemTags($newItem, $data['object_id']);
+                $data['new_collection_url'] = $data['new_collection_url'] . '?open_edit_item=' . $newItem;
+                return json_encode($data);
+                break;
+            case 'versioning':
+                //var_dump($data);
+                //exit();
+                $item = get_post($data['object_id']);
+                $metas = get_post_meta($item->ID);
+                $version = $object_model->checkVersionNumber($item);
+                $original = $object_model->checkOriginalItem($item->ID);
+                $version_numbers = $object_model->checkVersions($original);
+                //$version = $object_model->checkVersions($original);
+                $new_version = count($version_numbers) + 2;
+                //var_dump($version_numbers, $new_version);
+                //exit();
+                $newItem = $object_model->createVersionItem($item, $data['collection_id']);
+                if ($newItem) {
+                    $object_model->copyItemMetas($newItem, $metas);
+                    $object_model->copyItemCategories($newItem, $data['object_id']);
+                    $object_model->copyItemTags($newItem, $data['object_id']);
+                    $object_model->createMetasVersion($newItem, $original, $new_version, $data['motive']);
+                    return true;
+                } else {
+                    return false;
+                }
+                //var_dump($version_numbers, $new_version);
+                /* $item = get_post($data['object_id']);
+                  $newItem = $object_model->createVersionItem($item, $data['collection_id']); //inherit - revision
+                  $metas = get_post_meta($item->ID);
+                  $object_model->copyItemMetas($newItem, $metas);
+                  $object_model->copyItemCategories($newItem, $data['object_id']);
+                  $object_model->copyItemTags($newItem, $data['object_id']); */
+                break;
+            case 'show_item_versions':
+                //var_dump($data); //collection_id, object_id
+                $user_model = new UserModel();
+                $object_id = $data['object_id'];
+                $data['object'] = get_post($object_id);
+                $data["username"] = $user_model->get_user($data['object']->post_author)['name'];
+                $data['metas'] = get_post_meta($object_id);
+
+                $data['version_active'] = $object_model->checkVersionNumber($data['object']);
+                $data['original'] = $object_model->checkOriginalItem($data['object']->ID);
+                $data['id_active'] = $object_model->checkVersionActive($data['original']);
+                $data['version_numbers'] = $object_model->checkVersions($data['original']);
+
+                $all_versions = $object_model->get_all_versions($data['original']);
+
+                $arrFirst['ID'] = get_post($data['original'])->ID;
+                $arrFirst['title'] = get_post($data['original'])->post_title;
+                $arrFirst['version'] = 1;
+                $arrFirst['data'] = get_post($data['original'])->post_date;
+                $arrFirst['note'] = get_post_meta($data['original'], 'socialdb_version_comment', true);
+
+                $data['versions'][] = $arrFirst;
+
+                foreach ($all_versions as $each_version) {
+                    $arrV['ID'] = $each_version->ID;
+                    $arrV['title'] = $each_version->post_title;
+                    $arrV['version'] = get_post_meta($each_version->ID, 'socialdb_version_number', true);
+                    $arrV['data'] = get_post_meta($each_version->ID, 'socialdb_version_date', true);
+                    $arrV['note'] = get_post_meta($each_version->ID, 'socialdb_version_comment', true);
+                    $data['versions'][] = $arrV;
+                }
+
+                return $this->render(dirname(__FILE__) . '../../../views/object/list_versions.php', $data);
+                break;
+            case 'delete_version':
+                //var_dump($data);
+                $original = get_post_meta($data['version_id'], 'socialdb_version_postid', true);
+                if($original){
+                    //E uma versao
+                    $result = $object_model->send_version_to_trash($data['version_id']);
+                }else{
+                    //E o item original
+                    
+                }
+                break;
+            case 'restore_version':
+                //var_dump($data);
+                $item = get_post($data['active_id']);
+                $newItem = $data['version_id'];
+                $object_model->revertItem($item, $newItem);
                 return true;
                 break;
         }

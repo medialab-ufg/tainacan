@@ -3,14 +3,15 @@
     $not_showed = false;
 ?>
 
-<div class="expand-all btn white tainacan-default-tags prime-color-bg">
+<div class="expand-all btn white tainacan-default-tags prime-color-bg" style="background-color: #79a6ce">
     <div class="action-text" style="display: inline-block"><?php _e('Collapse all', 'tainacan') ?></div>
     &nbsp;&nbsp;<span class="glyphicon-triangle-bottom white glyphicon"></span>
 </div>
 
 <div id="accordion">
-<?php do_action('before_facets',$facets,$collection_id); ?>
 <?php
+do_action('before_facets',$facets,$collection_id);
+
 // TAINACAN: widgets do menu esquerdo
 foreach ($facets as $facet):
     if ($facet['widget'] == 'tree' && !$not_showed): $not_showed = true ?>
@@ -21,12 +22,12 @@ foreach ($facets as $facet):
                 <?php _e('Categories','tainacan'); ?>
             </label>
             <div>
-                <!--ul class="dropdown-menu pull-right" role="menu" aria-labelledby="btnGroupVerticalDrop1">
+                <?php /* <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="btnGroupVerticalDrop1">
                     <!-- TAINACAN: abre modal para adicao de categorias  -
                     <li></li>
                     <!-- TAINACAN: abre modal para adicao de tags  --
                     <li><a onclick="showModalFilters('add_tag');" href="#submit_filters_add_tag"><span class="glyphicon glyphicon-tag"></span>&nbsp;<?php _e('Add Tag','tainacan'); ?></a></li>
-                </ul-->
+                </ul> */ ?>
                 <!-- TAINACAN: os filtros do dynatree eram mostrados neste local -- desativado -->
                 <div id="dynatree_filters"></div>
 
@@ -110,7 +111,7 @@ foreach ($facets as $facet):
             <label for="object_tags" class="title-pipe"><?php echo $facet['name']; ?></label>
             <div>
                 <select class="form-control" onchange="wpquery_select(this, '<?php echo $facet['id']; ?>');" id="facet_<?php echo $facet['id']; ?>" name="facet_<?php echo $facet['id']; ?>">
-                    <option value="">  <?php echo __('Select...','tainacan'); ?></option>
+                    <option value=""> <?php _e('Select...','tainacan'); ?> </option>
                 <?php foreach ($facet['categories'] as $category): ?>
                     <option value="<?php echo $category->term_id; ?>" >  <?php echo $category->name; ?></option>
                 <?php endforeach; ?>
@@ -190,14 +191,12 @@ foreach ($facets as $facet):
     elseif ($facet['widget'] == 'stars'):  ?>
          <div id="stars_widget_<?php echo $facet['id']; ?>" class="form-group">
             <label class="title-pipe"> <?php echo $facet['name']; ?> </label>
-             <div>
-                <center>
-                    <a onclick="wpquery_range('<?php echo $facet['id'] ?>', '<?php echo $facet['type'] ?>', 4.1, 5)" style="cursor: pointer;"><img src="<?php echo get_template_directory_uri() . '/libraries/images/star5.png' ?>"></a><br>
-                    <a onclick="wpquery_range('<?php echo $facet['id'] ?>', '<?php echo $facet['type'] ?>', 3.1, 4)" style="cursor: pointer;"><img src="<?php echo get_template_directory_uri() . '/libraries/images/star4.png' ?>"></a><br>
-                    <a onclick="wpquery_range('<?php echo $facet['id'] ?>', '<?php echo $facet['type'] ?>', 2.1, 3)" style="cursor: pointer;"><img src="<?php echo get_template_directory_uri() . '/libraries/images/star3.png' ?>"></a><br>
-                    <a onclick="wpquery_range('<?php echo $facet['id'] ?>', '<?php echo $facet['type'] ?>', 1.1, 2)" style="cursor: pointer;"><img src="<?php echo get_template_directory_uri() . '/libraries/images/star2.png' ?>"></a><br>
-                    <a onclick="wpquery_range('<?php echo $facet['id'] ?>', '<?php echo $facet['type'] ?>', 0, 1)" style="cursor: pointer;"><img src="<?php echo get_template_directory_uri() . '/libraries/images/star1.png' ?>"></a><br>
-                </center>
+             <div style="padding-left: 30px;">
+                 <a onclick="wpquery_range('<?php echo $facet['id'] ?>', '<?php echo $facet['type'] ?>', 4.1, 5)" style="cursor: pointer;"><img src="<?php echo get_template_directory_uri() . '/libraries/images/star5.png' ?>"></a><br>
+                 <a onclick="wpquery_range('<?php echo $facet['id'] ?>', '<?php echo $facet['type'] ?>', 3.1, 4)" style="cursor: pointer;"><img src="<?php echo get_template_directory_uri() . '/libraries/images/star4.png' ?>"></a><br>
+                 <a onclick="wpquery_range('<?php echo $facet['id'] ?>', '<?php echo $facet['type'] ?>', 2.1, 3)" style="cursor: pointer;"><img src="<?php echo get_template_directory_uri() . '/libraries/images/star3.png' ?>"></a><br>
+                 <a onclick="wpquery_range('<?php echo $facet['id'] ?>', '<?php echo $facet['type'] ?>', 1.1, 2)" style="cursor: pointer;"><img src="<?php echo get_template_directory_uri() . '/libraries/images/star2.png' ?>"></a><br>
+                 <a onclick="wpquery_range('<?php echo $facet['id'] ?>', '<?php echo $facet['type'] ?>', 0, 1)" style="cursor: pointer;"><img src="<?php echo get_template_directory_uri() . '/libraries/images/star1.png' ?>"></a><br>
              </div>
         </div>
         

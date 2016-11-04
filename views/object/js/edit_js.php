@@ -199,6 +199,8 @@
         $('#menu_object').show();
         $("#container_socialdb").show('slow');
         $("#container_three_columns").removeClass('white-background');
+        var stateObj = {foo: "bar"};
+        history.replaceState(stateObj, "page 2", '?');
        // wpquery_clean();
        // set_containers_class($('#collection_id').val());
 //        $("#dynatree").dynatree("getRoot").visit(function (node) {

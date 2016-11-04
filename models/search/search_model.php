@@ -29,6 +29,7 @@ public function add($data) {
         $collection_id = $data['collection_id'];
         add_post_meta($collection_id, 'socialdb_collection_facets', $data['search_add_facet']);
         update_post_meta($collection_id, 'socialdb_collection_facet_' . $data['search_add_facet'] . '_widget', $data['search_data_widget']);
+        update_post_meta($collection_id, 'socialdb_collection_facet_' . $data['search_add_facet'] . '_ordenation', $data['ordenation']);
         $orientation = ($orientation == '' ? 'left-column' : $orientation);
 
         if ($data['search_data_widget'] == 'tree') {
@@ -43,7 +44,6 @@ public function add($data) {
             } else if ( $data['counter_data_range'] ){
                 $max_range = $data['counter_data_range'];
             }
-
             for ($i = 0; $i <= $max_range; $i++):
                 if ((isset($data['range_' . $i . '_1']) && $data['range_' . $i . '_1']!='') && (isset($data['range_' . $i . '_2']) && $data['range_' . $i . '_1']!='')) {
                     $options_range[] = array('value_1' => $data['range_' . $i . '_1'], 'value_2' => $data['range_' . $i . '_2']);
@@ -110,6 +110,7 @@ public function add($data) {
             }
             
             update_post_meta($collection_id, 'socialdb_collection_facet_' . $data['property_id'] . '_widget', $data['search_data_widget']);
+            update_post_meta($collection_id, 'socialdb_collection_facet_' . $data['property_id'] . '_ordenation', $data['ordenation']);
 
             delete_post_meta($collection_id, 'socialdb_collection_facet_' . $data['property_id'] . '_color');
             delete_post_meta($collection_id, 'socialdb_collection_facet_' . $data['property_id'] . '_range_options');
@@ -378,10 +379,23 @@ public function add($data) {
 
     function update_ordenation($data) {
         $post_id = $data['collection_id'];
+        update_post_meta($post_id, 'socialdb_collection_table_metas', base64_encode(serialize($data['table_meta'])) );
         update_post_meta($post_id, 'socialdb_collection_list_mode', $data['collection_list_mode']);
+        update_post_meta($post_id, 'socialdb_collection_slideshow_time', $data['slideshow_time']);
         update_post_meta($post_id, 'socialdb_collection_ordenation_form', $data['socialdb_collection_ordenation_form']);
-        update_post_meta($post_id, 'socialdb_collection_default_ordering', $data['collection_order']);
 
+        if (isset($data['prox_mode'])) {
+            update_post_meta($post_id, 'socialdb_collection_use_prox_mode', $data['prox_mode']);
+            update_post_meta($post_id, 'socialdb_collection_location_meta', $data['location']);
+        } else {
+            update_post_meta($post_id, 'socialdb_collection_use_prox_mode', 'false');
+        }
+
+        update_post_meta($post_id, 'socialdb_collection_latitude_meta', $data['latitude']);
+        update_post_meta($post_id, 'socialdb_collection_longitude_meta', $data['longitude']);
+        update_post_meta($post_id, 'socialdb_collection_default_ordering', $data['collection_order']);
+        update_post_meta($post_id, 'socialdb_collection_submission_visualization', $data['socialdb_collection_submission_visualization']);
+        
         $result['title'] = __('Success','tainacan');
         $result['msg'] = __('Ordenation changed successfully','tainacan');
         $result['type'] = 'success';
@@ -471,6 +485,10 @@ public function add($data) {
             }
         }
         return $data;
+    }
+    
+    public function get_slideshow_time($data) {
+        return get_post_meta($data['collection_id'], 'socialdb_collection_slideshow_time', true);        
     }
 
 }

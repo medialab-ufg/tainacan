@@ -35,51 +35,57 @@ function show_edit_object_property_form(object_id,property_id){
 }    
 
 
-function show_confirmation_delete_property_object_event(object_id,property_id,property_name){
+function show_confirmation_delete_property_object_event(object_id,property_id,property_name,root_id){
     swal({
         title: '<?php _e('Are you sure','tainacan') ?>',
         text: '<?php _e('Delete the object property ','tainacan') ?>'+'('+property_name+')',
         type: "warning",
         showCancelButton: true,
         confirmButtonClass: 'btn-danger',
-        closeOnConfirm: false,
+        closeOnConfirm: true,
         closeOnCancel: true
     },
     function (isConfirm) {
         if (isConfirm) {
+            show_modal_main();
             $.ajax({
                 type: "POST",
                 url: $('#src').val() + "/controllers/event/event_controller.php",
                 data: {
                     operation: 'add_event_property_object_delete',
-                    socialdb_event_create_date: <?php echo mktime(); ?>,
+                    socialdb_event_create_date: '<?php echo mktime(); ?>',
                     socialdb_event_user_id: $('#current_user_id').val(),
                     socialdb_event_property_object_delete_id: property_id,
+                     socialdb_event_property_object_delete_category_root_id: root_id,
                     socialdb_event_collection_id: $('#collection_id').val()}
             }).done(function (result) {
+                hide_modal_main();
                 elem_first = jQuery.parseJSON(result);
                 back_button(object_id);
                 $("#dynatree").dynatree("getTree").reload();
                 list_properties_single(object_id);
                 list_properties_edit_remove_single(object_id);
                 showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
+                //limpando caches
+                delete_all_cache_collection();
             });
         }
     });
 }
 
-function show_confirmation_delete_property_data_event(object_id,property_id,property_name){
+function show_confirmation_delete_property_data_event(object_id,property_id,property_name,root_id){
     swal({
         title: '<?php _e('Are you sure','tainacan') ?>',
         text: '<?php _e('Delete the data property ','tainacan') ?>'+'('+property_name+')',
         type: "warning",
         showCancelButton: true,
         confirmButtonClass: 'btn-danger',
-        closeOnConfirm: false,
+        closeOnConfirm: true,
         closeOnCancel: true
     },
     function (isConfirm) {
         if (isConfirm) {
+            show_modal_main();
             $.ajax({
                 type: "POST",
                 url: $('#src').val() + "/controllers/event/event_controller.php",
@@ -88,13 +94,17 @@ function show_confirmation_delete_property_data_event(object_id,property_id,prop
                     socialdb_event_create_date: <?php echo mktime(); ?>,
                     socialdb_event_user_id: $('#current_user_id').val(),
                     socialdb_event_property_data_delete_id: property_id,
+                    socialdb_event_property_data_delete_category_root_id: root_id,
                     socialdb_event_collection_id: $('#collection_id').val()}
             }).done(function (result) {
+                hide_modal_main();
                 elem_first = jQuery.parseJSON(result);
                 back_button_single(object_id);
                 list_properties_single(object_id);
                 list_properties_edit_remove_single(object_id);
                 showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
+                //limpando caches
+                delete_all_cache_collection();
             });
         }
     });

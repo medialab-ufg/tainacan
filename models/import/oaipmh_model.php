@@ -1,8 +1,5 @@
 <?php
 
-/**
- * Author: Marco Túlio Bueno Vieira
- */
 include_once ('../../../../../wp-config.php');
 include_once ('../../../../../wp-load.php');
 include_once ('../../../../../wp-includes/wp-db.php');
@@ -32,7 +29,7 @@ class OAIPMHModel extends Model {
         }else{
            $url = $data['url'] . "?verb=ListRecords&metadataPrefix=oai_dc"; // pego os 100 primeiros
          }
-        $response_xml_data =  download_page($url); // pego os 100 primeiros
+        $response_xml_data =  file_get_contents($url); // pego os 100 primeiros
         try {
             $xml = new SimpleXMLElement($response_xml_data);
             $data['number_of_objects'] = $this->count_items($xml, $data);
@@ -61,7 +58,6 @@ class OAIPMHModel extends Model {
                             $data['metadatas'][] = $array;
                         }
                     }
-                    
                 break;
                 }
                 $data['whole_metadatas'] = implode(",", $whole_metadatas);
@@ -140,7 +136,7 @@ class OAIPMHModel extends Model {
     public function generate_selects($data) {
         $html = '';
         $propertyModel = new PropertyModel;
-        $facets_id = CollectionModel::get_facets($data['collection_id']);
+        //$facets_id = CollectionModel::get_facets($data['collection_id']);
         $html .= "<option value=''>" . __('Select...','tainacan') . "</option>";
         $html .= "<option value='post_title'>" . __('Item Title','tainacan') . "</option>";
         $html .= "<option value='post_content'>" . __('Item Description','tainacan') . "</option>";
@@ -176,6 +172,7 @@ class OAIPMHModel extends Model {
             }
         }
         $html .= "<option value='tag'>" . __('Tag','tainacan') . "</option>";
+        $html .= "<option value='attach'>" . __('Attachments','tainacan') . "</option>";
         return $html;
     }
 
@@ -296,7 +293,12 @@ class OAIPMHModel extends Model {
         $array_categories = [];
         $category_model = new CategoryModel;
         foreach ($object_specs as $object_spec) {
-            $category_spec = $category_model->get_term_by_slug((string) $object_spec . '_' . $collection_id);
+            if($collection_id == get_option('collection_root_id')){
+                $category_spec = $category_model->get_term_by_slug((string) $object_spec);
+            }else{
+               $category_spec = $category_model->get_term_by_slug((string) $object_spec . '_' . $collection_id);  
+            }
+           
             if ($category_spec) {
                 $array_categories[] = $category_spec[0]->term_id;
             }
@@ -337,43 +339,46 @@ class OAIPMHModel extends Model {
                 $response_xml_data = download_page($url); // pego o xml 
             }
         }
-
-        $xml = new SimpleXMLElement($response_xml_data);
-        if (isset($xml->error) && (string) $xml->error == 'The requested resumptionToken is invalid or has expired' && $data['lastpage'] <= 1) {
-            $response_xml_data = download_page($data['url'] . '?verb=ListRecords&metadataPrefix=oai_dc'); // pego o xml 
+        try{
             $xml = new SimpleXMLElement($response_xml_data);
-        }
-        $json_response['token'] = (string) $xml->ListRecords->resumptionToken; // pego o token da proxima list records
-        $tam = count($xml->ListRecords->record); // verifico o tamanho dos list record para o for
-        for ($j = 0; $j < $tam; $j++) {
-            $record = $record = $xml->ListRecords->record[$j];
-            $dc = $record->metadata->children("http://www.openarchives.org/OAI/2.0/oai_dc/");
-            if ($record->metadata->Count() > 0 ) {
-                if(!$record->header->setSpec && isset($data['sets']) && !empty($data['sets'])){
-                     $json_response['token'] = '';
-                    continue;
-                }
-                $metadata = $dc->children('http://purl.org/dc/elements/1.1/');
-                $record_response['identifier'] = (string)$record->header->identifier;
-                $record_response['datestamp'] = (string)$record->header->datestamp;
-                $record_response['list_sets'] = $this->get_set_specs($record->header->setSpec, $data['collection_id']);
-                $record_response['title'] = $metadata->title;
-                $record_response['date'] = $record->header->datestamp;
-                $tam_metadata = count($metadata);
-                for ($i = 0; $i < $tam_metadata; $i++) {
-                    $value = (string) $metadata[$i];
-                    $identifier = $this->get_identifier($metadata[$i]);
-                    $record_response['metadata'][$identifier][] = $value;
-                }
-                if($record->files){
-                    foreach ($record->files->url as $url):
-                         $record_response['files'][] = (string)$url;
-                    endforeach;
-                }
-                $json_response['records'][] = $record_response;
+            if (isset($xml->error) && (string) $xml->error == 'The requested resumptionToken is invalid or has expired' && $data['lastpage'] <= 1) {
+                $response_xml_data = download_page($data['url'] . '?verb=ListRecords&metadataPrefix=oai_dc'); // pego o xml 
+                $xml = new SimpleXMLElement($response_xml_data);
             }
-            $record_response['files'] = [];
-            $record_response = [];
+            $json_response['token'] = (string) $xml->ListRecords->resumptionToken; // pego o token da proxima list records
+            $tam = count($xml->ListRecords->record); // verifico o tamanho dos list record para o for
+            for ($j = 0; $j < $tam; $j++) {
+                $record = $record = $xml->ListRecords->record[$j];
+                $dc = $record->metadata->children("http://www.openarchives.org/OAI/2.0/oai_dc/");
+                if ($record->metadata->Count() > 0 ) {
+                    if(!$record->header->setSpec && isset($data['sets']) && !empty($data['sets'])){
+                         $json_response['token'] = '';
+                        continue;
+                    }
+                    $metadata = $dc->children('http://purl.org/dc/elements/1.1/');
+                    $record_response['identifier'] = (string)$record->header->identifier;
+                    $record_response['datestamp'] = (string)$record->header->datestamp;
+                    $record_response['list_sets'] = $this->get_set_specs($record->header->setSpec, $data['collection_id']);
+                    $record_response['title'] = $metadata->title;
+                    $record_response['date'] = $record->header->datestamp;
+                    $tam_metadata = count($metadata);
+                    for ($i = 0; $i < $tam_metadata; $i++) {
+                        $value = (string) $metadata[$i];
+                        $identifier = $this->get_identifier($metadata[$i]);
+                        $record_response['metadata'][$identifier][] = $value;
+                    }
+                    if($record->files){
+                        foreach ($record->files->url as $url):
+                             $record_response['files'][] = (string)$url;
+                        endforeach;
+                    }
+                    $json_response['records'][] = $record_response;
+                }
+                $record_response['files'] = [];
+                $record_response = [];
+            }
+        }  catch (Exception $e){
+            //VAR_DUMP($response_xml_data,$data['url'] . '?verb=ListRecords&resumptionToken=' . $data['token']);
         }
         return $json_response;
     }
@@ -472,25 +477,35 @@ class OAIPMHModel extends Model {
                         }
                     endif;
                 }
+                if($form['import_object']=='true'&&$identifier=='identifier'){
+                     foreach ($metadata as $meta) {
+                         if(filter_var($meta, FILTER_VALIDATE_URL)&&  strpos($meta, 'handle')!==false){
+                            $tags = $this->extract_metatags($meta);
+                            if(is_array($tags)){
+                                for($i = 0;$i < count($tags); $i++ ){
+                                    if($tags[$i]['name_field'] === 'citation_pdf_url'){
+                                      $has_uploaded = true;
+                                       $attachment_id = $this->add_file_url($tags[$i]['value'], $object_id);
+                                       update_post_meta($object_id, 'socialdb_object_content', $attachment_id);
+                                       update_post_meta($object_id, 'socialdb_object_dc_type', 'pdf');
+                                       update_post_meta($object_id, 'socialdb_object_from', 'internal');
+                                    }
+                                }
+                            }
+                        }
+                     }
+                }
             }
             $metadata = '';
             //files
-            if ($form['import_object']=='true'&&isset($record['files'])):
-                foreach ($record['files'] as $file) {
-                   $this->add_file_url($file, $object_id);
-                }
-            elseif($form['import_object']=='false'&&isset($record['files'])):  
-                foreach ($record['files'] as $file) {
-                   add_post_meta($object_id, 'socialdb_files_url',$file);
-                }
-            endif;
             if($record['identifier']){
-                 add_post_meta($object_id, 'socialdb_object_identifier',$record['identifier']);
+                add_post_meta($object_id, 'socialdb_object_identifier',$record['identifier']);  
             }
             if($record['datestamp']){
                  add_post_meta($object_id, 'socialdb_object_datestamp',$record['datestamp']);
             }
-            update_post_meta($object_id, 'socialdb_object_from', 'external');
+            if(!isset($has_uploaded))
+                update_post_meta($object_id, 'socialdb_object_from', 'external');
             $this->set_common_field_values($object_id, 'object_from', 'external');
             add_post_meta($object_id, 'socialdb_object_original_collection',$collection_id);
             update_post_content($object_id, $content);

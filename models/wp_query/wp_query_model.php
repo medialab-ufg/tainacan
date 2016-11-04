@@ -505,6 +505,9 @@ class WPQueryModel extends Model {
             }
             // inserindo as categorias e as tags na query
             $tax_query = $this->get_tax_query($recover_data);
+            if(has_filter('update_tax_query')){
+                $tax_query = apply_filters('update_tax_query',$tax_query,$recover_data['collection_id'],TRUE);
+            }
             //a forma de ordenacao
             $order = $this->set_type_order($recover_data);
             // se vai listar as colecoes ou objetos

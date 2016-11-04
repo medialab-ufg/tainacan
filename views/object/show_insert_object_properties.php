@@ -109,13 +109,13 @@ if (isset($property_object)):
                                  endif; ?>
                 </textarea>
         <?php }elseif ($property['type'] == 'numeric') { ?>   
-                <input type="number" 
+                <input  type="text" 
+                                         onkeypress='return onlyNumbers(event)' 
                        id="form_autocomplete_value_<?php echo $property['id']; ?>" 
                        value="<?php  if ($property['metas']['socialdb_property_default_value']):
                                         echo $property['metas']['socialdb_property_default_value'];
                                     endif;  ?>" 
                        class="form-control" 
-                       onkeypress='return onlyNumbers(event)'
                        name="socialdb_property_<?php echo $property['id']; ?>" <?php
                        if ($property['metas']['socialdb_property_required'] == 'true'): echo 'required="required"';
                        endif;

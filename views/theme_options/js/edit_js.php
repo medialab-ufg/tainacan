@@ -1,5 +1,9 @@
 <script>
 
+    $(function () {
+        change_breadcrumbs_title('<?php _e('API Keys Configuration','tainacan') ?>');
+    })
+
     $('#formYoutubeApi').submit(function (e) {
         var verify =  $( this ).serializeArray();
         if(verify[1].value.trim() === ''){

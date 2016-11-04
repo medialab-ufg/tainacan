@@ -6,6 +6,7 @@ class ViewHelper {
     public $default_metadata;
     public $special_metadata;
     public $hide_main_container = false;
+    public $collection_id;
     public static $fixed_slugs = [
         'socialdb_property_fixed_title',
         'socialdb_property_fixed_description',
@@ -13,13 +14,21 @@ class ViewHelper {
         'socialdb_property_fixed_source',
         'socialdb_property_fixed_license',
         'socialdb_property_fixed_thumbnail',
-        'socialdb_property_fixed_attachments',
+        'socialdb_property_fixed_attachments', 
         'socialdb_property_fixed_tags',
         'socialdb_property_fixed_type'
         ];
    public $terms_fixed;
     
-    function __construct() {
+   public static $default_color_schemes = [
+        'blue'   => ['#7AA7CF', '#0C698B'],
+        'brown'  => ['#874A1D', '#4D311F'],
+        'green'  => ['#3D8B55', '#242D11'],
+        'violet' => ['#7852B2', '#31185C'],
+        'grey'   => ['#58595B', '#231F20'],
+    ];
+    
+    function __construct($collection_id = 0) {
         $this->terms_fixed = [
         'title'=> get_term_by('slug', 'socialdb_property_fixed_title','socialdb_property_type'),
         'description'=> get_term_by('slug', 'socialdb_property_fixed_description','socialdb_property_type'),
@@ -31,11 +40,16 @@ class ViewHelper {
         'tags'=> get_term_by('slug', 'socialdb_property_fixed_tags','socialdb_property_type'),
         'type'=> get_term_by('slug', 'socialdb_property_fixed_type','socialdb_property_type')
         ];
-        
-        if($this->get_visibility($this->terms_fixed['attachments'])!==''
-                &&$this->get_visibility($this->terms_fixed['title'])!==''
-                &&$this->get_visibility($this->terms_fixed['type'])!==''
-                &&$this->get_visibility($this->terms_fixed['content'])!==''
+        $this->collection_id = $collection_id;
+        //verifico se existe labels da colecao
+        if($this->collection_id):
+           $this->get_labels_fixed_properties($this->collection_id); 
+        endif;
+        //visibilidade dos metadados
+        if($this->get_visibility($this->terms_fixed['attachments'], $this->collection_id)!==''
+                &&$this->get_visibility($this->terms_fixed['title'], $this->collection_id)!==''
+                &&$this->get_visibility($this->terms_fixed['type'], $this->collection_id)!==''
+                &&$this->get_visibility($this->terms_fixed['content'], $this->collection_id)!==''
                 ){
              $this->hide_main_container = true;
         }
@@ -50,7 +64,8 @@ class ViewHelper {
             'autoincrement' => __('Auto-Increment', 'tainacan'),
             'relationship' => __('Relationship', 'tainacan'),
             'category' => __('Category', 'tainacan'),
-            'voting' => __('Rankings', 'tainacan')
+            'voting' => __('Rankings', 'tainacan'),
+            'metadata_compound' => __('Compounds', 'tainacan'),
         ];
     }
 
@@ -79,15 +94,39 @@ class ViewHelper {
             $visibility = get_term_meta($property->term_id, 'socialdb_property_visibility',true);
             if($visibility=='hide'){
                 return 'style="display:none"';
+            }elseif($this->collection_id!=0){
+                $meta = get_post_meta($this->collection_id, 'socialdb_collection_fixed_properties_visibility', true);
+                $array = explode(',', $meta) ;
+                if(is_array($array) &&  ($key = array_search($property->term_id, $array)) !== false):
+                    return 'style="display:none"';
+                endif;
             }else{
               return '';   
             } 
         }
         return '';
     }
+    
+    public function get_labels_fixed_properties($collection_id){
+        $labels_collection = ($collection_id!='') ? get_post_meta($collection_id, 'socialdb_collection_fixed_properties_labels', true) : false;
+        foreach ($this->terms_fixed as $slug => $value) {
+            if($labels_collection):
+                $array = unserialize($labels_collection);
+                if(!isset($this->terms_fixed[$slug]->name))
+                    continue;
+                    
+                $this->terms_fixed[$slug]->name 
+                        = (isset($array[$this->terms_fixed[$slug]->term_id]))?$array[$this->terms_fixed[$slug]->term_id]:$this->terms_fixed[$slug]->name;
+            else:
+                $this->terms_fixed[$slug]->name = $this->terms_fixed[$slug]->name;
+            endif;
+        }
+        
+    }
+    
 
     public function get_special_metadata() {
-        return $this->special_metadata = ['relationship', 'category', 'voting'];
+        return $this->special_metadata = ['relationship', 'category', 'voting','compounds','metadata_compound'];
     }
 
     public function get_metadata_icon($metadata_type) {
@@ -131,12 +170,26 @@ class ViewHelper {
                     <span class="glyphicon glyphicon-plus"></span><?php _e('Add field', 'tainacan') ?>
                 </button>
             <?php
+        elseif ($property['metas']['socialdb_property_compounds_cardinality'] && $property['metas']['socialdb_property_compounds_cardinality'] == 'n'):
+            ?>
+               <button type="button" 
+                       id="button_property_<?php echo $property['id']; ?>_<?php echo $i; ?>"
+                       onclick="show_fields_metadata_cardinality_compounds(<?php echo $property['id'] ?>,<?php echo $i ?>)" 
+                       style="margin-top: 5px;<?php echo (is_array($property['metas']['value'])&&($i+1)<count($property['metas']['value']))? 'display:none':'' ?>" 
+                       class="btn btn-primary btn-lg btn-xs btn-block">
+                    <span class="glyphicon glyphicon-plus"></span><?php _e('Add field', 'tainacan') ?>
+                </button>
+            <?php
         endif;
     }
     
      public function render_cardinality_property($property,$is_data = 'false') {
         if ($property['metas']['socialdb_property_data_cardinality'] && $property['metas']['socialdb_property_data_cardinality'] == 'n'):
-            return 50;
+            return 25;
+        elseif($property['metas']['socialdb_property_object_cardinality'] && $property['metas']['socialdb_property_object_cardinality'] == 'n'):
+             return 25;
+        elseif($property['metas']['socialdb_property_compounds_cardinality'] && $property['metas']['socialdb_property_compounds_cardinality'] == 'n'):
+             return 25;
         else:
             return 1;
         endif;
@@ -165,7 +218,12 @@ class ViewHelper {
             }
         }
     }
-    
+    /**
+     * 
+     */
+    public function get_id_list_properties($id,$source) {
+        return ($this->terms_fixed[$id]) ? 'meta-item-'.$this->terms_fixed[$id]->term_id :  $source ;
+    }
     /**
      * function get_collection_by_category_root($user_id)
      * @param int a categoria raiz de uma colecao
@@ -213,20 +271,25 @@ class ViewHelper {
                         <h4> 1. <?php _e('Configurations', 'tainacan')?> </h4>
                     </a>
                 </li>
-                <li class="col-md-2 <?php $this->is_current($current_step,'metadata'); ?> metadata">
+                <li class="col-md-2 <?php $this->is_current($current_step,'categories'); ?> categories">
+                    <a onclick="showTaxonomyZone('<?php echo $path ?>');">
+                        <h4> 2. <?php _e('Categories', 'tainacan')?> </h4>
+                    </a>
+                </li>
+                <li class="col-md-3 <?php $this->is_current($current_step,'metadata'); ?> metadata">
                     <a onclick="showPropertiesAndFilters('<?php echo $path ?>');" class="config-section-header">
-                        <h4> 2. <?php _e('Metadata and Filters', 'tainacan')?> </h4>
+                        <h4> 3. <?php _e('Metadata and Filters', 'tainacan')?> </h4>
                     </a>
                 </li>
                 <li class="col-md-2 <?php $this->is_current($current_step,'layout'); ?> layout">
                     <a onclick="showLayout('<?php echo $path ?>');">
-                        <h4> 3. <?php _e('Layout', 'tainacan')?> </h4>
+                        <h4> 4. <?php _e('Layout', 'tainacan')?> </h4>
                     </a>
                 </li>
             </ul>
 
-            <button type="submit" id="button_save_and_next" class="btn btn-primary">
-                <?php _e('Save & Next', 'tainacan'); ?>
+            <button type="submit" id="conclude_config" class="btn btn-default btn-lg pull-right">
+                <?php _e('Conclude', 'tainacan'); ?>
             </button>
         </div>
 
@@ -234,7 +297,64 @@ class ViewHelper {
 
     public static function render_config_title($title) {
         echo "<h3 class='topo'> $title <button onclick='backToMainPage();' class='btn btn-default pull-right'>";
-        echo  __('Back to collection','tainacan') . "</button></h3> <hr>";
+        echo  __('Back','tainacan') . "</button></h3> <hr>";
+    }
+
+    public function render_modal_header($span, $title, $extra_html="") {
+        $_modal_header = "<div class='modal-header'>";
+        $_modal_header .= "<button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true' class='glyphicon glyphicon-$span'></span></button>";
+        $_modal_header .= "<h4 class='modal-title' id='modal-$span'>" . $title . $extra_html  . "</h4>";
+        $_modal_header .= "</div>";
+        
+        return $_modal_header;
+    }
+
+    public function render_modal_footer($button_action="", $title) {
+        $close_string = __('Close', 'tainacan');
+        $_modal_footer = "<div class='modal-footer'>";
+        $_modal_footer .= "<button type='button' class='btn btn-default pull-left' data-dismiss='modal'> $close_string </button>";
+        $_modal_footer .= "<button type='button' class='btn btn-primary' onclick='$button_action'>$title</button>";
+        $_modal_footer .= "</div>";
+
+        return $_modal_footer;
+    }
+    
+    public static function render_default_submit_button() {
+        return "<input type='submit' class='btn btn-primary pull-right' value='". __('Save', 'tainacan') ."'/>";
+    }
+
+    public static function collection_view_modes() {
+        return [
+          'cards'   => __('Cards', 'tainacan'),
+          'list'    => __('List', 'tainacan'),
+          'gallery' => __('Gallery', 'tainacan'),
+          'slideshow' => __('Slideshow', 'tainacan'),
+        ];
+    }
+    
+    public function render_statistic_menu() {
+        $current_step = 'sa';
+        $path = get_template_directory_uri();
+        ?>
+        <div class="col-md-12 no-padding" id="collection-steps">
+            <ul class="col-md-10">
+                <li class="col-md-2 <?php $this->is_current($current_step,'config'); ?> config">
+                    <a onclick="showCollectionConfiguration('<?php echo $path ?>');">
+                        <h4> <?php _e('Dashboard', 'tainacan')?> </h4>
+                    </a>
+                </li>
+                <li style="border-top: 3px solid #d2a96D; width: 11%" class="col-md-2 <?php $this->is_current($current_step,'categories'); ?> categories">
+                    <a onclick="showTaxonomyZone('<?php echo $path ?>');">
+                        <h4 style="font-weight: bolder"> <?php _e('Statistics', 'tainacan')?> </h4>
+                    </a>
+                </li>
+            </ul>
+
+            <button type="submit" id="conclude_config" class="btn btn-default btn-lg pull-right">
+                <?php _e('Conclude', 'tainacan'); ?>
+            </button>
+        </div>
+        <?php
     }
 
 } // ViewHelper

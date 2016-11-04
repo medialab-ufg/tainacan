@@ -27,11 +27,14 @@
            console.log('No dynatree found!');
         }
         //inicializando os containers da pagina
-        $.when( 
+        initiate_tabs().done(function (result) {
+            $.when( 
                 list_ranking_update($("#object_id_edit").val()),//busca os rankings do item
                 show_object_properties_edit(),//mostra as propriedades do item, com os formularios e seus widgets
                 show_collection_licenses()//mostra as licencas disponiveis
             ).done(function ( v1, v2 ) {
+                append_property_in_tabs();
+                list_tabs();
                 $.ajax({
                     type: "POST",
                     url: $('#src').val() + "/controllers/collection/collection_controller.php",
@@ -39,8 +42,20 @@
                 }).done(function(result) {
                     var json = $.parseJSON(result);
                     if(json&&json.ordenation&&json.ordenation!==''){
-                        reorder_properties_edit_item(json.ordenation.split(','));
+                        for (var $property in json.ordenation) {
+                            if (json.ordenation.hasOwnProperty($property)) {
+                                reorder_properties_edit_item($property,json.ordenation[$property].split(','));
+                                if($property==='default')
+                                    reorder_properties_edit_item($property,json.ordenation[$property].split(','),"#text_accordion");
+                            }
+                        }
                     }
+                    //autocomplete na edicao
+                    var properties_autocomplete = edit_get_val($("#edit_properties_autocomplete").val());
+                    autocomplete_edit_item_property_data(properties_autocomplete); 
+                    //ckeditor
+                    showCKEditor('objectedit_editor');
+                    set_content_valid();
                     $("#text_accordion").accordion({
                         active: false,
                         collapsible: true,
@@ -52,9 +67,7 @@
                     $('.menu_left').show();
                 });
             });
-        //caminho dos controller
-        //ckeditor
-        showCKEditor('objectedit_editor');
+        });     
         //submit do editar
         $('#submit_form_edit_object').submit(function (e) {
             e.preventDefault();
@@ -135,16 +148,20 @@
 
         var myDropzone = new Dropzone("div#dropzone_edit", {
             accept: function(file, done) {
-                     if (file.type === ".exe") {
-                         done("Error! Files of this type are not accepted");
-                     }
-                     else { done(); }
+                    if (file.type === ".exe") {
+                        done("Error! Files of this type are not accepted");
+                    }
+                    else { 
+                        done(); 
+                        set_attachments_valid(myDropzone.getAcceptedFiles().length);
+                    }
                },
             init: function () {
                 thisDropzone = this;
                 this.on("removedfile", function (file) {
                     //    if (!file.serverId) { return; } // The file hasn't been uploaded
                     $.get($('#src').val() + '/controllers/object/object_controller.php?operation=delete_file&object_id=' + $("#object_id_edit").val() + '&file_name=' + file.name, function (data) {
+                        set_attachments_valid(thisDropzone.getAcceptedFiles().length);
                         if (data.trim() === 'false') {
                             showAlertGeneral('<?php _e("Atention!", 'tainacan') ?>', '<?php _e("An error ocurred, File already removed or corrupted!", 'tainacan') ?>', 'error');
                         } else {
@@ -157,12 +174,15 @@
                 });
                 $.get($('#src').val() + '/controllers/object/object_controller.php?operation=list_files&object_id=' + $("#object_id_edit").val(), function (data) {
                     try {
+                        var count = 0
                         $.each(data, function (key, value) {
                             if (value.name !== undefined && value.name !== 0) {
                                 var mockFile = {name: value.name, size: value.size};
                                 thisDropzone.options.addedfile.call(thisDropzone, mockFile);
+                                count++;
                             }
                         });
+                        set_attachments_valid(count);
                     }
                     catch (e) {
                     }  // handle error
@@ -192,9 +212,12 @@
         });
     });
     // verifica se exite uma ordencao pre definida
-    function reorder_properties_edit_item(array_ids){
-        var $ul = $("#text_accordion"),
-        $items = $("#text_accordion").children();
+    function reorder_properties_edit_item(tab_id,array_ids,seletor){
+        if(!seletor){
+            seletor = "#accordeon-"+tab_id;
+        }
+        var $ul = $(seletor),
+        $items = $(seletor).children();
         $properties = $("#show_form_properties_edit").children();
         $rankings = $("#update_list_ranking_<?php echo $object->ID ?>").children();
       //  $("#text_accordion").html('');
@@ -218,7 +241,13 @@
                      $( $rankings.get(j) ).appendTo( $ul);
                  }
              }
-      }
+        }
+        $($ul).accordion({
+            active: false,
+            collapsible: true,
+            header: "h2",
+            heightStyle: "content"
+        });
       $('[data-toggle="tooltip"]').tooltip();
     }
     
@@ -239,7 +268,8 @@
         var selKeys = $.map($("#dynatree").dynatree("getSelectedNodes"), function (node) {
             return node.data.key;
         });
-        var selectedCategories = selKeys.join(",");
+        //var selectedCategories = selKeys.join(",");
+        var selectedCategories = '';
         var promisse;
         promisse = $.ajax({
             url: $('#src').val() + '/controllers/object/object_controller.php',

@@ -7,10 +7,12 @@
     function edit_term_property(property_id, object_id) {
         $("#single_cancel_" + property_id + "_" + object_id).show();
         $("#single_edit_" + property_id + "_" + object_id).hide();
+        $(".single_edit_" + property_id + "_" + object_id).hide();
         $("#labels_" + property_id + "_" + object_id).hide();
         $("#widget_" + property_id + "_" + object_id).fadeIn();
     }
     function cancel_term_property(property_id, object_id) {
+        $(".single_edit_" + property_id + "_" + object_id).show();
         $("#single_edit_" + property_id + "_" + object_id).show();
         $("#single_cancel_" + property_id + "_" + object_id).hide();
         $("#widget_" + property_id + "_" + object_id).hide();
@@ -115,6 +117,8 @@
                 $("#labels_" + property_id + "_" + object_id).fadeIn();
                 list_properties_single(object_id);
                 showAlertGeneral(elem.title, elem.msg, elem.type);
+                //limpando caches
+                delete_all_cache_collection();
             });
         }
     }
@@ -122,6 +126,7 @@
     function edit_object_property(property_id, object_id) {
         $("#single_cancel_" + property_id + "_" + object_id).show();
         $("#single_edit_" + property_id + "_" + object_id).hide();
+        $(".single_edit_" + property_id + "_" + object_id).hide();
         $("#single_save_" + property_id + "_" + object_id).show();
         $("#labels_" + property_id + "_" + object_id).hide();
         $("#widget_" + property_id + "_" + object_id).fadeIn();
@@ -159,6 +164,7 @@
                 });
                 $("#single_cancel_" + property_id + "_" + object_id).hide();
                 $("#single_edit_" + property_id + "_" + object_id).show();
+                $(".single_edit_" + property_id + "_" + object_id).show();
                 $("#single_save_" + property_id + "_" + object_id).hide();
                 $("#widget_" + property_id + "_" + object_id).hide();
                 $("#labels_" + property_id + "_" + object_id).fadeIn();
@@ -198,11 +204,8 @@
             elem = jQuery.parseJSON(result);
             list_properties_single(object_id);
             showAlertGeneral(elem.title, elem.msg, elem.type);
-            // if (elem.pre_approved) {
-            // //    $("#property_" + property_id + "_" + object_id + "_value_before").val($("#property_value_" + property_id + "_" + object_id).val());
-            // } else {
-            //    cancel_data_property(property_id, object_id)
-            //}
+            //limpando caches
+            delete_all_cache_collection();
         });
         return;
 
@@ -316,25 +319,27 @@
                     $('#field_event_single_property_term_' + checkbox).html('');
                     
                     $("#labels_" + checkbox + "_<?php echo $object_id; ?>").html('');
-                    $.each(elem.children, function (idx, children) {
-                        var required = '';
-                        var checked = '';
-                        // event_single_delete_value(children.term_id);
-                        if (elem.metas.socialdb_property_required === 'true') {
-                            required = 'required="required"';
-                        }
-                        if (categories.indexOf(children.term_id) > -1) {
-                            checked = 'checked="checked"';
-                            //$("#labels_" + checkbox + "_<?php echo $object_id; ?>").html('');//zero o html do container que recebera os
-                            // insiro o html do link do valor atribuido
-                            $("#labels_" + checkbox + "_<?php echo $object_id; ?>").append('<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' + children.term_id + ',' + checkbox + ')">' + children.name + '</a></b><br>');//inserindo os termos escolhidos
-                        }
-                        //  if (property.id == selected) {
-                        //     $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
-                        //  } else {
-                        $('#field_event_single_property_term_' + checkbox + '_<?php echo $object_id; ?>').append('<input onchange="get_event_single_checkbox(this,<?php echo $object_id; ?>)" ' + checked + ' ' + required + ' type="checkbox" name="socialdb_propertyterm_' + checkbox + '[]" value="' + children.term_id + '">&nbsp;' + children.name + '<br>');
-                        //  }
-                    });
+                    if(elem.children){
+                        $.each(elem.children, function (idx, children) {
+                            var required = '';
+                            var checked = '';
+                            // event_single_delete_value(children.term_id);
+                            if (elem.metas.socialdb_property_required === 'true') {
+                                required = 'required="required"';
+                            }
+                            if (categories.indexOf(children.term_id) > -1) {
+                                checked = 'checked="checked"';
+                                //$("#labels_" + checkbox + "_<?php echo $object_id; ?>").html('');//zero o html do container que recebera os
+                                // insiro o html do link do valor atribuido
+                                $("#labels_" + checkbox + "_<?php echo $object_id; ?>").append('<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' + children.term_id + ',' + checkbox + ')">' + children.name + '</a></b><br>');//inserindo os termos escolhidos
+                            }
+                            //  if (property.id == selected) {
+                            //     $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
+                            //  } else {
+                            $('#field_event_single_property_term_' + checkbox + '_<?php echo $object_id; ?>').append('<input onchange="get_event_single_checkbox(this,<?php echo $object_id; ?>)" ' + checked + ' ' + required + ' type="checkbox" name="socialdb_propertyterm_' + checkbox + '[]" value="' + children.term_id + '">&nbsp;' + children.name + '<br>');
+                            //  }
+                        });
+                    }
                 });
             });
         }
@@ -356,8 +361,8 @@
                         //delete_value(children.term_id);
                         if (categories.indexOf(children.term_id) > -1) {
                             checked = 'selected="selected"';
-                            $("#labels_" + radio + "_<?php echo $object_id; ?>").html('');
-                            $("#labels_" + radio + "_<?php echo $object_id; ?>").append('<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' + children.term_id + ',' + radio + ')">' + children.name + '</a></b><br>');//inserindo os termos escolhidos
+                            $("#labels_" + selectbox + "_<?php echo $object_id; ?>").html('');
+                            $("#labels_" + selectbox + "_<?php echo $object_id; ?>").append('<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' + children.term_id + ',' + selectbox + ')">' + children.name + '</a></b><br>');//inserindo os termos escolhidos
                             $('#value_single_select_' + selectbox + '_<?php echo $object_id; ?>').val(children.term_id);
                         }
                         $('#field_event_single_property_term_' + selectbox + '_<?php echo $object_id; ?>').append('<option ' + checked + ' value="' + children.term_id + '">' + children.name + '</option>');
@@ -588,7 +593,8 @@
                     show_classifications_single(object_id);
                     list_properties_single(object_id);
                     showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
-
+                    //limpando caches
+                    delete_all_cache_collection();
                 });
             } else {
                 list_properties_single(object_id);
@@ -626,7 +632,8 @@
                     show_classifications_single(object_id);
                     list_properties_single(object_id);
                     showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
-
+                    //limpando caches
+                    delete_all_cache_collection();
                 });
             } else {
                 list_properties_single(object_id);
@@ -698,7 +705,8 @@
                     show_classifications(object_id);
                     list_properties_single(object_id);
                     showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
-
+                    //limpando caches
+                    delete_all_cache_collection();
                 });
                 //retira a anterior
                 $.ajax({
@@ -755,7 +763,8 @@
                         show_classifications(object_id);
                         list_properties_single(object_id);
                         showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
-
+                        //limpando caches
+                        delete_all_cache_collection();
                     });
                     //retira a anterior
                     $.ajax({
@@ -810,7 +819,8 @@
                     show_classifications(object_id);
                     list_properties_single(object_id);
                     showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
-
+                    //limpando caches
+                    delete_all_cache_collection();
                 });
                 //retira a anterior
                 $.ajax({

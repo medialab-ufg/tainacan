@@ -26,26 +26,26 @@ class ExportModel extends Model {
         $propertyModel = new PropertyModel;
         $facets_id = CollectionModel::get_facets($data['collection_id']);
         $field['socialdb_entity'] = 'post_title';
-        $field['name_socialdb_entity'] = __('Item Title','tainacan');
+        $field['name_socialdb_entity'] = __('Item Title', 'tainacan');
         $data['fields'][] = $field;
         $field['socialdb_entity'] = 'post_content';
-        $field['name_socialdb_entity'] = __('Item Description','tainacan');
+        $field['name_socialdb_entity'] = __('Item Description', 'tainacan');
         $data['fields'][] = $field;
         $field['socialdb_entity'] = 'post_permalink';
-        $field['name_socialdb_entity'] = __('Item URL','tainacan');
+        $field['name_socialdb_entity'] = __('Item URL', 'tainacan');
         $data['fields'][] = $field;
         // new fields
         $field['socialdb_entity'] = 'socialdb_object_from';
-        $field['name_socialdb_entity'] = __('Item Format','tainacan');
+        $field['name_socialdb_entity'] = __('Item Format', 'tainacan');
         $data['fields'][] = $field;
         $field['socialdb_entity'] = 'socialdb_object_dc_source';
-        $field['name_socialdb_entity'] = __('Item Source','tainacan');
+        $field['name_socialdb_entity'] = __('Item Source', 'tainacan');
         $data['fields'][] = $field;
         $field['socialdb_entity'] = 'socialdb_object_content';
-        $field['name_socialdb_entity'] = __('Item Content','tainacan');
+        $field['name_socialdb_entity'] = __('Item Content', 'tainacan');
         $data['fields'][] = $field;
         $field['socialdb_entity'] = 'socialdb_object_dc_type';
-        $field['name_socialdb_entity'] = __('Item Type','tainacan');
+        $field['name_socialdb_entity'] = __('Item Type', 'tainacan');
         $data['fields'][] = $field;
         //if ($facets_id) {
         // foreach ($facets_id as $facet_id) {
@@ -57,31 +57,31 @@ class ExportModel extends Model {
         //}
         $root_category = $this->get_category_root_of($data['collection_id']);
         //$all_properties_id = get_term_meta($root_category, 'socialdb_category_property_id');
-        $all_properties_id = array_unique($this->get_parent_properties($root_category, [], $root_category)); 
+        $all_properties_id = array_unique($this->get_parent_properties($root_category, [], $root_category));
         if ($all_properties_id) {
             foreach ($all_properties_id as $property_id) {
                 $property = get_term_by("id", $property_id, "socialdb_property_type");
-                if(in_array($property->slug, $this->fixed_slugs) ):
+                if (in_array($property->slug, $this->fixed_slugs)):
                     continue;
                 endif;
                 $type = $propertyModel->get_property_type($property_id); // pego o tipo da propriedade
                 if ($type == 'socialdb_property_object') {
                     $field['socialdb_entity'] = 'objectproperty_' . $property_id;
-                    $field['name_socialdb_entity'] = $property->name . ' (' . __('Object Property','tainacan') . ')';
+                    $field['name_socialdb_entity'] = $property->name . ' (' . __('Object Property', 'tainacan') . ')';
                     $data['fields'][] = $field;
                 } elseif ($type == 'socialdb_property_data') {
                     $field['socialdb_entity'] = 'dataproperty_' . $property_id;
-                    $field['name_socialdb_entity'] = $property->name . ' (' . __('Data Property','tainacan') . ')';
+                    $field['name_socialdb_entity'] = $property->name . ' (' . __('Data Property', 'tainacan') . ')';
                     $data['fields'][] = $field;
                 } elseif ($type == 'socialdb_property_term') {
                     $field['socialdb_entity'] = 'termproperty_' . $property_id;
-                    $field['name_socialdb_entity'] = $property->name . ' (' . __('Term Property','tainacan') . ')';
+                    $field['name_socialdb_entity'] = $property->name . ' (' . __('Term Property', 'tainacan') . ')';
                     $data['fields'][] = $field;
                 }
             }
         }
         $field['socialdb_entity'] = 'tag';
-        $field['name_socialdb_entity'] = __('Tags','tainacan');
+        $field['name_socialdb_entity'] = __('Tags', 'tainacan');
         $data['fields'][] = $field;
         return $data;
     }
@@ -112,7 +112,7 @@ class ExportModel extends Model {
      * @author: Eduardo 
      */
     public function generate_selects($data) {
-        $html = '<option value="">' . __('Select','tainacan') . '</option>';
+        $html = '<option value="">' . __('Select', 'tainacan') . '</option>';
         $tags_dc = array('title',
             'language',
             'source',
@@ -475,6 +475,12 @@ class ExportModel extends Model {
             if ($object->ID == $data['collection_id']) {
                 continue;
             }
+            
+            /** ID * */
+            if ($object->ID != "") {
+                $csv_data['ID'] = $object->ID;
+            }
+            
             /** Title * */
             if ($object->post_title != "") {
                 $csv_data['title'] = utf8_decode($object->post_title);
@@ -488,28 +494,28 @@ class ExportModel extends Model {
             } else {
                 $csv_data['description'] = '';
             }
-            
+
             /** Content * */
             if (get_post_meta($object->ID, 'socialdb_object_content', true) != "") {
                 $csv_data['content'] = utf8_decode(get_post_meta($object->ID, 'socialdb_object_content', true));
-                if($csv_data['content']!=''&&  is_numeric($csv_data['content'])){
+                if ($csv_data['content'] != '' && is_numeric($csv_data['content'])) {
                     $csv_data['content'] = wp_get_attachment_url($csv_data['content']);
                 }
             } else {
                 $csv_data['content'] = '';
             }
-            
-            /** Origin  **/ 
+
+            /** Origin  * */
             if (get_post_meta($object->ID, 'socialdb_object_from')) {
                 $csv_data['item_from'] = get_post_meta($object->ID, 'socialdb_object_from', true);
-            } 
-            
-             /** Type  **/
+            }
+
+            /** Type  * */
             if (get_post_meta($object->ID, 'socialdb_object_dc_type')) {
                 $csv_data['item_type'] = get_post_meta($object->ID, 'socialdb_object_dc_type', true);
-            } 
-            
-               /** Source  **/
+            }
+
+            /** Source  * */
             if (get_post_meta($object->ID, 'socialdb_object_dc_source')) {
                 $csv_data['item_source'] = utf8_decode(get_post_meta($object->ID, 'socialdb_object_dc_source', true));
             }
@@ -560,11 +566,11 @@ class ExportModel extends Model {
             /** Propriedades de Atributos * */
             $root_category = $this->get_category_root_of($data['collection_id']);
             //$all_properties_id = get_term_meta($root_category, 'socialdb_category_property_id');
-           $all_properties_id = array_unique($this->get_parent_properties($root_category, [], $root_category)); 
+            $all_properties_id = array_unique($this->get_parent_properties($root_category, [], $root_category));
             if ($all_properties_id) {
                 foreach ($all_properties_id as $property_id) {
                     $property = get_term_by("id", $property_id, "socialdb_property_type");
-                    if(in_array($property->slug, $this->fixed_slugs) ):
+                    if (in_array($property->slug, $this->fixed_slugs)):
                         continue;
                     endif;
                     $type = $propertyModel->get_property_type($property_id); // pego o tipo da propriedade
@@ -617,7 +623,7 @@ class ExportModel extends Model {
                 $csv_data['title'] = '';
             }
 
-             /** Description * */
+            /** Description * */
             if (get_the_content() != "") {
                 $description = utf8_decode(get_the_content());
 //                if(mb_detect_encoding($description, 'auto')=='UTF-8'){
@@ -627,7 +633,7 @@ class ExportModel extends Model {
             } else {
                 $csv_data['description'] = '';
             }
-            
+
             /** Content * */
             if (get_post_meta(get_the_ID(), 'socialdb_object_content', true) != "") {
                 $content = get_post_meta(get_the_ID(), 'socialdb_object_content', true);
@@ -635,24 +641,24 @@ class ExportModel extends Model {
 //                    $content = iconv('ISO-8859-1', 'UTF-8', $content);
 //                }
                 $csv_data['content'] = utf8_decode($content);
-                if($csv_data['content']!=''&&  is_numeric($csv_data['content'])){
+                if ($csv_data['content'] != '' && is_numeric($csv_data['content'])) {
                     $csv_data['content'] = wp_get_attachment_url($csv_data['content']);
                 }
             } else {
                 $csv_data['content'] = '';
             }
-            
-            /** Origin  **/ 
+
+            /** Origin  * */
             if (get_post_meta($object->ID, 'socialdb_object_from')) {
                 $csv_data['item_from'] = get_post_meta($object->ID, 'socialdb_object_from', true);
-            } 
-            
-             /** Type  **/
+            }
+
+            /** Type  * */
             if (get_post_meta($object->ID, 'socialdb_object_dc_type')) {
                 $csv_data['item_type'] = get_post_meta($object->ID, 'socialdb_object_dc_type', true);
-            } 
-            
-               /** Source  **/
+            }
+
+            /** Source  * */
             if (get_post_meta($object->ID, 'socialdb_object_dc_source')) {
                 $csv_data['item_source'] = utf8_decode(get_post_meta($object->ID, 'socialdb_object_dc_source', true));
             }
@@ -677,37 +683,37 @@ class ExportModel extends Model {
             $category_model = new CategoryModel;
             $categories = wp_get_object_terms(get_the_ID(), 'socialdb_category_type');
             $facets = CollectionModel::get_facets($data['collection_id']);
-          /*  if (is_array($categories)):
-                foreach ($categories as $category) {
-                    $facet_id = $category_model->get_category_facet_parent($category->term_id, $data['collection_id']);
-                    if (!isset($facet_id) || $facet_id == $category->term_id) {
-                        continue;
-                    }
-                    $categories_of_facet[$facet_id][] = $this->get_hierarchy_names($category->term_id, $facet_id);
-                }
-            endif;
+            /*  if (is_array($categories)):
+              foreach ($categories as $category) {
+              $facet_id = $category_model->get_category_facet_parent($category->term_id, $data['collection_id']);
+              if (!isset($facet_id) || $facet_id == $category->term_id) {
+              continue;
+              }
+              $categories_of_facet[$facet_id][] = $this->get_hierarchy_names($category->term_id, $facet_id);
+              }
+              endif;
 
-            if ($facets) {
-                foreach ($facets as $facet) {
-                    $term = get_term_by('id', $facet, 'socialdb_category_type');
-                    if (is_array($categories_of_facet[$facet])):
-                        $csv_data[$term->name] = implode(', ', $categories_of_facet[$facet]);
-                    else:
-                        $csv_data[$term->name] = '';
-                    endif;
-                }
-            } */
+              if ($facets) {
+              foreach ($facets as $facet) {
+              $term = get_term_by('id', $facet, 'socialdb_category_type');
+              if (is_array($categories_of_facet[$facet])):
+              $csv_data[$term->name] = implode(', ', $categories_of_facet[$facet]);
+              else:
+              $csv_data[$term->name] = '';
+              endif;
+              }
+              } */
 
             $categories_of_facet = '';
 
             /** Propriedades de Atributos * */
             $root_category = $this->get_category_root_of($data['collection_id']);
             //$all_properties_id = get_term_meta($root_category, 'socialdb_category_property_id');
-            $all_properties_id = array_unique($this->get_parent_properties($root_category, [], $root_category)); 
+            $all_properties_id = array_unique($this->get_parent_properties($root_category, [], $root_category));
             if ($all_properties_id) {
                 foreach ($all_properties_id as $property_id) {
                     $property = get_term_by("id", $property_id, "socialdb_property_type");
-                    if(in_array($property->slug, $this->fixed_slugs) ):
+                    if (in_array($property->slug, $this->fixed_slugs)):
                         continue;
                     endif;
                     $type = $propertyModel->get_property_type($property_id); // pego o tipo da propriedade
@@ -738,11 +744,11 @@ class ExportModel extends Model {
                 $array_property_name = '';
             }
             //property terms
-            if ($categories_of_facet!==''&&  is_array($categories_of_facet)) {
+            if ($categories_of_facet !== '' && is_array($categories_of_facet)) {
                 foreach ($categories_of_facet as $property_id => $values) {
-                    $term = get_term_by('id', $property_id, 'socialdb_property_type'); 
-                    if(!$term){
-                       $term = get_term_by('id', $property_id, 'socialdb_category_type'); 
+                    $term = get_term_by('id', $property_id, 'socialdb_property_type');
+                    if (!$term) {
+                        $term = get_term_by('id', $property_id, 'socialdb_category_type');
                     }
                     if (is_array($categories_of_facet[$property_id])):
                         $csv_data[utf8_decode($term->name)] = utf8_decode(implode(', ', array_unique($categories_of_facet[$property_id])));
@@ -761,8 +767,7 @@ class ExportModel extends Model {
             }
 
             /**             * ************************** */
-            
-                    //var_dump($csv_data);exit();
+            //var_dump($csv_data);exit();
             $csv[] = $csv_data;
         }
         return $csv;
@@ -904,6 +909,48 @@ class ExportModel extends Model {
         // disposition / encoding on response body
         header("Content-Disposition: attachment;filename={$filename}");
         header("Content-Transfer-Encoding: binary");
+    }
+
+    public function array2csv_full(array &$array, $filename, $delimiter = ';') {
+        if (count($array) == 0) {
+            return null;
+        }
+        if (!is_dir(dirname(__FILE__) . '/collections/')) {
+            mkdir(dirname(__FILE__) . '/collections');
+        }
+        //$filename = $this->get_name_file();
+        //$filename = 'socialdb_csv';
+        $df = fopen(dirname(__FILE__) . '/collections/' . utf8_decode($filename) . '.csv', 'w');
+        fputcsv($df, array_keys(reset($array)), $delimiter);
+        foreach ($array as $row) {
+            fputcsv($df, $row, $delimiter);
+        }
+        fclose($df);
+    }
+
+    public function force_zip_download() {
+        $file = dirname(__FILE__) . '/tainacan_full_csv.zip';
+        if (headers_sent()) {
+            echo 'HTTP header already sent';
+        } else {
+            if (!is_file($file)) {
+                header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
+                echo 'File not found';
+            } else if (!is_readable($file)) {
+                header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden');
+                echo 'File not readable';
+            } else {
+                header($_SERVER['SERVER_PROTOCOL'] . ' 200 OK');
+                header("Content-Type: application/zip");
+                header("Content-Transfer-Encoding: Binary");
+                header("Content-Length: " . filesize($file));
+                header("Content-Disposition: attachment; filename=\"" . basename($file) . "\"");
+                readfile($file);
+                unlink($file);
+                $this->recursiveRemoveDirectory(dirname(__FILE__) . '/collections');
+                exit;
+            }
+        }
     }
 
 }

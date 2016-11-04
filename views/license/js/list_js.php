@@ -4,7 +4,9 @@
     $(function () {
         var src = $('#src').val();
         listStandartLicenses();
-        change_breadcrumbs_title('<?php _e('Licenses','tainacan') ?>');
+        change_breadcrumbs_title('<?php _e('Collection Licenses','tainacan') ?>');
+
+        // $("#licenses_display").DataTable();
 
         $('#formAddLicense').submit(function (e) {
             e.preventDefault();
@@ -44,8 +46,8 @@
                             $("#list_licenses_content").append("<tr><td>" + object.nome + "</td>" +
                                     "<td><input type='radio' name='standartLicense' id='radio" + object.id + "' value=" + object.id + " onclick='changeStandartLicense(this," + object.id + ");'/></td>" +
                                     "<td><input type='checkbox' name='enabledLicense[]' id='checkbox" + object.id + "' value=" + object.id + " onclick='changeEnabledLicense(this," + object.id + ");'/></td>" +
-                                    "<td><a href='#' style='opacity:0.4'><span class='glyphicon glyphicon-pencil'></span></a></td>" +
-                                    "<td><a href='#' style='opacity:0.4'><span class='glyphicon glyphicon-trash'></span></a></td>" +
+                                    "<td><a href='#'><span style='opacity:0.4' class='glyphicon glyphicon-trash'></span></a>" +
+                                    " <a href='#'><span style='opacity:0.4' class='glyphicon glyphicon-edit'></span></a></td>" +
                                     "</tr>");
 
                         });
@@ -56,6 +58,13 @@
             }
         });// fim da inclusão
     }
+
+    function get_icon(icon) {
+        var path = '<?php echo get_template_directory_uri() ?>';
+        return path + "/libraries/images/icons/icon-" + icon;
+    }
+    var edit_icon = get_icon("edit.png");
+    var delete_icon = get_icon("delete_collection_redirect.png");
 
     function listCustomLicenses() {
         var src = $('#src').val();
@@ -73,8 +82,8 @@
                                 $("#list_licenses_content").append("<tr><td>" + object.nome + "</td>" +
                                         "<td><input type='radio' name='standartLicense' id='radio" + object.id + "' value=" + object.id + " onclick='changeStandartLicense(this," + object.id + ");'/></td>" +
                                         "<td><input type='checkbox' name='enabledLicense[]' id='checkbox" + object.id + "' value=" + object.id + " onclick='changeEnabledLicense(this," + object.id + ");'/></td>" +
-                                        "<td><a onclick='editCustomLicense(" + object.id + ")' href='#formAddLicense'><span class='glyphicon glyphicon-pencil'></span></a></td>" +
-                                        "<td><a onclick='deleteCustomLicense(" + object.id + ")' href='#formAddLicense'><span class='glyphicon glyphicon-trash'></span></a></td>" +
+                                        "<td><a onclick='deleteCustomLicense("+ object.id +")' href='#formAddLicense'><span class='glyphicon glyphicon-trash'></span></a>" +
+                                        " <a onclick='editCustomLicense("+ object.id +")' href='#formAddLicense'><span class='glyphicon glyphicon-edit'></span></a></td>"+
                                         "</tr>");
                             });
                         }
@@ -117,6 +126,7 @@
     }
 
     function editCustomLicense(id) {
+        $('.edit-license').click().text('<?php _e("Edit license", "tainacan") ?>');
         $.ajax({
             url: src + '/controllers/license/license_controller.php',
             type: 'POST',
@@ -159,6 +169,7 @@
                     elem = jQuery.parseJSON(result);
                     showAlertGeneral(elem.title, elem.msg, elem.type);
                     listStandartLicenses();
+                    $("#formAddLicense")[0].reset();
                 });
             }
         });

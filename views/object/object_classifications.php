@@ -30,7 +30,7 @@
         </div>   
           <!-- TAINACAN: mostra apenas as propriedades se existir, estilo copiado do dynatree  -->
         <div id="properties_classifications_<?php echo $object_id; ?>">
-            <?php if(isset($properties)): ?>    
+            <?php if(isset($properties)): ?>   
                 <?php foreach ($properties as $property) { ?>
                     <span class="dynatree-node dynatree-expanded dynatree-has-children <?= $property['class']; ?> dynatree-exp-e dynatree-ico-e ">
                         <span class="dynatree-icon"></span>

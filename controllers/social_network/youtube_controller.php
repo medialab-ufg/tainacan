@@ -14,7 +14,7 @@ class YoutubeController extends Controller {
                 $config = get_option('socialdb_theme_options');
                 $urlVideoYoutube = explode('/', $data['video_url']);
                 $videoID = explode('=', $urlVideoYoutube[3]);
-                if ($videoID[1]) {
+                if ($videoID[1]&&$config) {
                     $youtube = new youtubeModel($videoID[1], $config, false, true);
                     $object_model = new ObjectModel();
                     $id = $youtube->insertVideoItem($data, $object_model,'draft');

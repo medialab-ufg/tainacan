@@ -134,7 +134,7 @@ class CollectionImportModel extends CollectionModel {
      */
    public function import_xml_taxonomies($dir) {
        //$categories_id = [];
-       foreach (new DirectoryIterator($dir) as $fileInfo) {
+        foreach (new DirectoryIterator($dir) as $fileInfo) {
                 if($fileInfo->isDot()) 
                     continue;
                 $xml = simplexml_load_file($fileInfo->getPath().'/'.$fileInfo->getFilename());
@@ -143,6 +143,48 @@ class CollectionImportModel extends CollectionModel {
         }
         //return $categories_id;
    }
+   
+   /** function add_hierarchy_importing_collection($xml,$collection_id,$parent = 0) 
+     * @param 
+     * @param array 
+     * @return array 
+     * @author: Eduardo */
+    public function add_hierarchy_importing_collection($xml, $collection_id, $parent = 0, &$all_ids = []) {
+        if ($xml) {
+            $attributes = $xml->attributes();
+            if (isset($attributes['label']) && !empty($attributes['label'])) {
+                $array = wp_insert_term(trim($attributes['label']), 'socialdb_category_type', array('parent' => $parent,
+                    'slug' => $this->generate_slug(trim($attributes['label']), 0)));
+                add_term_meta($array['term_id'], 'socialdb_imported_id', (string) $attributes['id']);
+                add_term_meta($array['term_id'], 'socialdb_category_owner', get_current_user_id());
+                $this->insert_properties($xml, $array['term_id'], false);
+                //if($parent == $this->get_category_root()){
+                //$this->add_facet($array['term_id'], $collection_id);
+                //}
+                $parent = $array['term_id'];
+                //if(!in_array($array['term_id'], $all_ids)){
+                //  $all_ids[] = $array['term_id'];
+                //}
+            }
+            $has_children = $xml->count();
+            if ($xml->isComposedBy->node) {
+                foreach ($xml->isComposedBy->node as $value) {
+                    $this->add_hierarchy_importing_collection($value, $collection_id, $parent, $all_ids);
+                }
+            }
+            $data['title'] = __('Success', 'tainacan');
+            $data['msg'] = __('All categories imported successfully', 'tainacan');
+            $data['type'] = 'success';
+            $data['ids'] = $all_ids;
+        } else {
+            $data = array();
+            $data['title'] = __('Error', 'tainacan');
+            $data['msg'] = __('Xml incompatible', 'tainacan');
+            $data['type'] = 'error';
+            $data['ids'] = $all_ids;
+        }
+        return $data;
+    }
    ############################### IMPORTAR DADOS ADMINISTRATIVOS DA COLECAO #####################
    /*
      * @signature import_xml_taxonomies($data)
@@ -184,6 +226,7 @@ class CollectionImportModel extends CollectionModel {
        update_post_meta($collection_id, 'socialdb_collection_hide_rankings', (string) $xml->socialdb_collection_hide_rankings);
        update_post_meta($collection_id, 'socialdb_collection_columns', (string) $xml->socialdb_collection_columns);
        update_post_meta($collection_id, 'socialdb_collection_size_thumbnail', (string) $xml->socialdb_collection_size_thumbnail);
+       update_post_meta($collection_id, 'socialdb_collection_submission_visualization', (string) $xml->socialdb_collection_submission_visualization);
        //permissions
        update_post_meta($collection_id, 'socialdb_collection_permission_create_category', (string) $xml->permissions->socialdb_collection_permission_create_category);
        update_post_meta($collection_id, 'socialdb_collection_permission_edit_category', (string) $xml->permissions->socialdb_collection_permission_edit_category);
@@ -209,8 +252,16 @@ class CollectionImportModel extends CollectionModel {
        update_post_meta($collection_id, 'socialdb_collection_permission_create_property_term', (string) $xml->permissions->socialdb_collection_permission_create_property_term);
        update_post_meta($collection_id, 'socialdb_collection_permission_edit_property_term', (string) $xml->permissions->socialdb_collection_permission_edit_property_term);
        update_post_meta($collection_id, 'socialdb_collection_permission_delete_property_term', (string) $xml->permissions->socialdb_collection_permission_delete_property_term);
+       //tab defaullt
+       if($xml->socialdb_collection_default_tab)
+            update_post_meta($collection_id, 'socialdb_collection_default_tab', (string) $xml->socialdb_collection_default_tab);
+       if($xml->socialdb_collection_update_tab_organization)
+            update_post_meta($collection_id, 'socialdb_collection_update_tab_organization', (string) $xml->socialdb_collection_update_tab_organization);
        // properties
-       $properties = $this->insert_properties($xml, $socialdb_collection_object_type);
+       $properties = $this->insert_properties($xml, $socialdb_collection_object_type, $collection_id);
+       // tabs
+       $tabs = $this->insertTabs($xml, $collection_id);
+       $this->updateTabOrganization($collection_id,$tabs);
        //facets
        $this->add_facets($xml, $collection_id);
        //channels
@@ -236,7 +287,13 @@ class CollectionImportModel extends CollectionModel {
        return $collection_id;
    }
    
-   public function insert_properties($xml,$category_root_id){
+   /**
+    * 
+    * @param type $xml O xml completo
+    * @param type $category_root_id O id da categoria raiz
+    * @return array Os ids das propriedades 
+    */
+   public function insert_properties($xml,$category_root_id,$collection_id = 0){
        $properties_id = [];
        if(isset($xml->properties->property)){
            foreach ($xml->properties->property as $property) {
@@ -257,11 +314,24 @@ class CollectionImportModel extends CollectionModel {
                    add_term_meta($category_root_id, 'socialdb_category_property_id',$property_id);
                    $properties_id[] = $property_id;
                }
+               
+               if($collection_id && $property->id)
+                    $this->updatePropertiesTabId($collection_id,(string) $property->id,$property_id);
            }
+           foreach ($xml->properties->property as $property) {
+               if(isset($property->socialdb_property_compounds_properties_id)){
+                   $property_id = $this->add_property_compounds($property,$property->socialdb_property_created_category,$category_root_id);
+                    add_term_meta($category_root_id, 'socialdb_category_property_id',$property_id);
+                    $properties_id[] = $property_id;
+               }
+               if($collection_id && $property->id)
+                    $this->updatePropertiesTabId($collection_id,(string) $property->id,$property_id);
+           }
+           
        }
        return $properties_id;
    }
-      /**
+   /**
      * function get_property_type_id($property_parent_name)
      * @param string $property_parent_name
      * @return int O id da categoria que determinara o tipo da propriedade.
@@ -330,6 +400,37 @@ class CollectionImportModel extends CollectionModel {
      * @return int O id da da propriedade criada.
      * @author: Eduardo Humberto 
      */
+   public function add_property_compounds($property,$socialdb_collection_object_type,$category_root_id) {
+        $new_property = wp_insert_term((string)$property->name, 'socialdb_property_type', array('parent' => $this->get_property_type_id('socialdb_property_compounds'),
+                'slug' => $this->generate_slug((string)$property->name, 0)));
+        update_term_meta($new_property['term_id'], 'socialdb_property_required', (string)$property->socialdb_property_required);
+        $old_ids = explode(',', (string)$property->socialdb_property_compounds_properties_id);
+        if($old_ids){
+            $new_ids = [];
+            foreach ($old_ids as $old_id) {
+                $meta = array();
+                if(is_numeric($old_id)){
+                   $new_id = $this->get_term_imported_id($old_id);
+                   $new_ids[] = $new_id;
+                   $meta[$new_property['term_id']] = 'true';
+                   update_term_meta($new_id, 'socialdb_property_is_compounds', serialize($meta));
+                }
+            }
+            update_term_meta($new_property['term_id'], 'socialdb_property_compounds_properties_id',  implode(',', $new_ids));
+        }
+        update_term_meta($new_property['term_id'], 'socialdb_property_compounds_cardinality',  (string)$property->socialdb_property_compounds_cardinality);
+        update_term_meta($new_property['term_id'], 'socialdb_property_help',  (string)$property->socialdb_property_help);
+       // update_term_meta($new_property['term_id'], 'socialdb_property_created_category',(string)$socialdb_collection_object_type);
+        update_term_meta($new_property['term_id'], 'socialdb_property_created_category',$category_root_id);
+        update_term_meta($new_property['term_id'], 'socialdb_imported_id',(string)$property->id);
+        return $new_property['term_id'];
+   }
+   /**
+     * function add_property_objec($property)
+     * @param object $property
+     * @return int O id da da propriedade criada.
+     * @author: Eduardo Humberto 
+     */
    public function add_property_ranking($property,$socialdb_collection_object_type,$category_root_id) {
         $new_property = wp_insert_term((string)$property->name, 'socialdb_property_type', array('parent' => $this->get_property_type_id((string)$property->ranking_type),
                 'slug' => $this->generate_slug((string)$property->name, 0)));
@@ -338,6 +439,72 @@ class CollectionImportModel extends CollectionModel {
         update_term_meta($new_property['term_id'], 'socialdb_imported_id',(string)$property->id);
         return $new_property['term_id'];
    }
+   
+   /**
+    * 
+    * 
+    * @param xml $xml
+    * @param int $collection_id O id colecao
+    * 
+    */
+   public function insertTabs($xml,$collection_id) {
+        $tabs = [];
+        if(isset($xml->tabs->tab)){
+            foreach ($xml->tabs->tab as $tab) {
+                $new_id = $this->sdb_add_post_meta($collection_id, 'socialdb_collection_tab',(string)$tab->name);
+                $tabs[$new_id] = $tab;
+            }
+        }
+        return $tabs;
+   }
+   
+   /**
+    * metodo responsavel em atualizar a organizacao das abas importadas
+    *
+    * @param type $collection_id
+    * @param type $properties_id
+    * @param type $tabs
+    * @return void
+    */
+   public function updateTabOrganization($collection_id,$tabs) {
+        if(empty($tabs))
+            return true;
+        
+        $array = unserialize(get_post_meta($collection_id, 'socialdb_collection_update_tab_organization',true));
+        if($array && is_array($array[0])):
+            foreach ($tabs as $tab_new_id => $tab) {
+                foreach ($array[0] as $property_key => $tab_value) {
+                    if($tab_value==(string)$tab->id){
+                        $array[0][$property_key] = $tab_new_id;
+                    }
+                }
+            }
+        endif;
+        update_post_meta($collection_id, 'socialdb_collection_update_tab_organization',  serialize($array));
+   }
+   
+   /**
+    * metodo responsavel em atualizar a organizacao das abas importadas
+    *
+    * @param type $collection_id
+    * @param type $properties_id
+    * @param type $tabs
+    * @return void
+    */
+   public function updatePropertiesTabId($collection_id,$old_id,$new_id) {
+        $array = unserialize(get_post_meta($collection_id, 'socialdb_collection_update_tab_organization',true));
+        if($array && is_array($array[0])):
+            foreach ($array[0] as $property_key => $tab_value) {
+                if($old_id == $property_key){
+                    $array[0][$new_id] = $tab_value;
+                    unset($array[0][$property_key]);
+                }
+            }
+        endif;
+        update_post_meta($collection_id, 'socialdb_collection_update_tab_organization',  serialize($array));
+   }
+   
+   
    
    /**
      * function add_facets($xml,$collection_id)
@@ -554,9 +721,31 @@ class CollectionImportModel extends CollectionModel {
        $properties = $xml->properties->property; 
        if($properties){
            foreach ($properties as $property) {
-               $id = $this->get_term_imported_id((string)$property->id);
-               update_post_meta($object_id, 'socialdb_property_'.$id, (string)$property->value);
-               $this->set_common_field_values($object_id, "socialdb_property_$id",(string)$property->value);
+               if(!isset($property->count)){
+                    $id = $this->get_term_imported_id((string)$property->id);
+                    update_post_meta($object_id, 'socialdb_property_'.$id, (string)$property->value);
+                    $this->set_common_field_values($object_id, "socialdb_property_$id",(string)$property->value);
+               }else if(isset($property->count)){
+                    $id = $this->get_term_imported_id((string)$property->id);
+                    $counter = (string) $property->count;
+                    $compounds = $property->compound;
+                    $ids = [];
+                    if($compounds){
+                        foreach ($compounds as $compound) {
+                            if(isset($compound->cat)){
+                                $cat_id = (int)$this->get_term_imported_id((string)$compound->cat);
+                                $ids[] = $cat_id.'_cat';
+                                wp_set_object_terms( $object_id,(int)$cat_id,'socialdb_category_type',true);
+                            }else{
+                                $property_id = $this->get_term_imported_id((string)$compound->property_id);
+                                $ids[] = $this->sdb_add_post_meta($object_id, 'socialdb_property_'.$property_id, (string)$compound->value);
+                                $this->set_common_field_values($object_id, "socialdb_property_$property_id",(string)$property->value);
+                            }
+                        }
+                        update_post_meta($object_id, 'socialdb_property_'.$id.'_'.$counter, implode(',', $ids));
+                    }
+               }
+               
            }
        }
     }
@@ -620,10 +809,13 @@ class CollectionImportModel extends CollectionModel {
      */
     public function importCollectionTemplate($data) {
         $template = $data['template'];
-        //VERIFICO SE O NOME DA COLECAO PODE SER USADO
-        if ($this->verify_collection($data['collection_name'])) {
+        // VERIFICO SE O NOME DA COLECAO PODE SER USADO
+        /*
+        if ( $this->verify_collection($data['collection_name']) ) {
             return false;
         }
+        */
+                
         $dir_created = dirname(__FILE__) . "/../../data/templates/".$template;
         if(is_dir($dir_created.'/package/taxonomies' )){
            $this->import_xml_taxonomies($dir_created.'/package/taxonomies' );
@@ -636,8 +828,12 @@ class CollectionImportModel extends CollectionModel {
             //capa da colecao
             $this->add_cover_collection($dir_created,$collection_id);
             $this->update_collection_data($collection_id, $data);
+            
+            return $collection_id;
+        } else {
+            return false;
         }
-        return $collection_id;
+        
     }
     /**
      * Metodo que atualiza o titulo e a categoria raiz de uma colecao  definidos pelo

@@ -5,7 +5,6 @@
   border: 3px solid $item-border;
   margin-left: -3px;
   min-height: 380px;
-  border-top: none;
   border-bottom: 0;
 
   #accordion {
@@ -24,7 +23,7 @@
   }
 
   .expand-all {
-    background: $brand-light-blue;
+    //background: $brand-light-blue;
     text-align: right;
     margin: 0 0 8.5% 0;
     padding-right: 10%;

@@ -1,21 +1,23 @@
 <script> 
+    var myDropzone;
 $(function(){
     // #1 - breadcrumbs para localizacao da pagina
     $("#tainacan-breadcrumbs").show();
     $("#tainacan-breadcrumbs .current-config").text('<?php _e('Create new item - Write text','tainacan') ?>');
     //#3  -  ativo os tootips
      $('[data-toggle="tooltip"]').tooltip();
-    //#4 - ckeditor para o conteudo do item
-    showCKEditor('object_editor');
     //#5 - funcao que busca os rankings de um item
     //#6 - seto o id da colecao  no form do item     
     $('#create_object_collection_id').val($('#collection_id').val());
     //inicializando os containers da pagina
+    initiate_tabs().done(function (result) {
     $.when( 
             list_ranking_create($("#object_id_add").val()),
             show_object_properties(),
             show_collection_licenses()
         ).done(function ( v1, v2 ) {
+            append_property_in_tabs();
+            list_tabs();
             $.ajax({
                 type: "POST",
                 url: $('#src').val() + "/controllers/collection/collection_controller.php",
@@ -23,8 +25,17 @@ $(function(){
             }).done(function(result) {
                 var json = $.parseJSON(result);
                 if(json&&json.ordenation&&json.ordenation!==''){
-                    reorder_properties_add_item(json.ordenation.split(','));
+                     for (var $property in json.ordenation) {
+                        if (json.ordenation.hasOwnProperty($property)) {
+                            reorder_properties_add_item($property,json.ordenation[$property].split(','));
+                            if($property==='default')
+                                reorder_properties_add_item($property,json.ordenation[$property].split(','),"#text_accordion");
+                        }
+                    }
                 }
+                //#4 - ckeditor para o conteudo do item
+                showCKEditor('object_editor'); 
+                set_content_valid();
                 $("#text_accordion").accordion({
                     active: false,
                     collapsible: true,
@@ -34,29 +45,32 @@ $(function(){
                 // esconde o carregamento do menu lateral
                 $('.menu_left_loader').hide();
                 $('.menu_left').show();
+                //salvo o cache
+                save_cache($('#configuration').html(),'create-item-text',$('#collection_id').val());
+                $('.nav-tabs').tab();
             });
         });
+     });    
     //caminho dos controller
     var src = $('#src').val();
     $( '#submit_form' ).submit( function( e ) {
-       var verify =  $( this ).serializeArray();
+        var verify =  $( this ).serializeArray();
         //hook para validacao do formulario
         if(Hook.is_register( 'tainacan_validate_create_item_form')){
             Hook.call( 'tainacan_validate_create_item_form', [ $( this ).serializeArray() ] );
-            console.log(Hook.result.is_validated);
             if(!Hook.result.is_validated){
                 $('#modalImportMain').modal('hide');//mostro o modal de carregamento
                 showAlertGeneral('<?php _e('Attention','tainacan') ?>', Hook.result.message, 'info');
                 return false;
             }
         }
-       $("#object_content").val(CKEDITOR.instances.object_editor.getData()); 
-       var selKeys = $.map($("#dynatree").dynatree("getSelectedNodes"), function(node) {
+        $("#object_content").val(CKEDITOR.instances.object_editor.getData()); 
+        var selKeys = $.map($("#dynatree").dynatree("getSelectedNodes"), function(node) {
                     return node.data.key;
-       });
-       $('#object_classifications').val(selKeys.join(", ")); 
-       $('#modalImportMain').modal('show');//mostro o modal de carregamento
-       $.ajax( {
+        });
+        $('#object_classifications').val(selKeys.join(", ")); 
+        $('#modalImportMain').modal('show');//mostro o modal de carregamento
+        $.ajax( {
               url: src+'/controllers/object/object_controller.php',
               type: 'POST',
               data: new FormData( this ),
@@ -68,7 +82,7 @@ $(function(){
                     if(!elem_first){
                          showAlertGeneral('<?php _e('Attention!','tainacan') ?>', '<?php _e('Invalid submission, file is too big!','tainacan') ?>', 'error');
                     }
-                    if(elem_first.validation_error){
+                    else if(elem_first.validation_error){
                         showAlertGeneral(elem_first.title, elem_first.msg, 'error');
                     }else{
                          $("#tainacan-breadcrumbs").hide();
@@ -93,18 +107,22 @@ $(function(){
     });
     
     
-    var myDropzone = new Dropzone("div#dropzone_new", {
+    myDropzone = new Dropzone("div#dropzone_new", {
                 accept: function(file, done) {
-                      if (file.type === ".exe") {
-                          done("Error! Files of this type are not accepted");
-                      }
-                      else { done(); }
+                    if (file.type === ".exe") {
+                        done("Error! Files of this type are not accepted");
+                    }
+                    else { 
+                        done(); 
+                        set_attachments_valid(myDropzone.getAcceptedFiles().length);
+                    }
                 },
                 init: function () {
                     thisDropzone = this;
                     this.on("removedfile", function (file) {
                         //    if (!file.serverId) { return; } // The file hasn't been uploaded
                         $.get($('#src').val() + '/controllers/object/object_controller.php?operation=delete_file&object_id=' + $("#object_id_add").val() + '&file_name=' + file.name, function (data) {
+                            set_attachments_valid(thisDropzone.getAcceptedFiles().length);
                             if (data.trim() === 'false') {
                                 showAlertGeneral('<?php _e("Atention!", 'tainacan') ?>', '<?php _e("An error ocurred, File already removed or corrupted!", 'tainacan') ?>', 'error');
                             } else {
@@ -121,6 +139,7 @@ $(function(){
                                     thisDropzone.options.addedfile.call(thisDropzone, mockFile);
                                 }
                             });
+                            set_attachments_valid(thisDropzone.getAcceptedFiles().length);
                         }
                         catch (e)
                         {
@@ -166,15 +185,18 @@ $(function(){
 	
 });
 
-function reorder_properties_add_item(array_ids){
-        var $ul = $("#text_accordion"),
-        $items = $("#text_accordion").children();
+function reorder_properties_add_item(tab_id,array_ids,seletor){
+        if(!seletor){
+            seletor = "#accordeon-"+tab_id;
+        }
+        var $ul = $(seletor),
+        $items = $(seletor).children();
         $properties = $("#show_form_properties").children();
         $rankings = $("#create_list_ranking_<?php echo $object_id ?>").children();
       //  $("#text_accordion").html('');
-       for (var i = 0; i< array_ids.length; i++) {
+        for (var i = 0; i< array_ids.length; i++) {
            // index is zero-based to you have to remove one from the values in your array
-             for(var j = 0; j<$items.length;j++){
+            for(var j = 0; j<$items.length;j++){
                  if($($items.get(j)).attr('id')&&$($items.get(j)).attr('id')===array_ids[i]){
                      $( $items.get(j) ).appendTo( $ul);
                  }
@@ -182,17 +204,27 @@ function reorder_properties_add_item(array_ids){
                       $( $items.get(j) ).appendTo( $ul);
                  }
              }
-             for(var j = 0; j<$properties.length;j++){
-                 if($($properties.get(j)).attr('id')===array_ids[i]){
-                      $( $properties.get(j) ).appendTo( $ul);
-                 }
-             }
-             for(var j = 0; j<$items.length;j++){
-                 if($($rankings.get(j)).attr('id')===array_ids[i]){
-                     $( $rankings.get(j) ).appendTo( $ul);
-                 }
-             }
-      }
+            if($properties){
+                for(var j = 0; j<$properties.length;j++){
+                    if($($properties.get(j)).attr('id')===array_ids[i]){
+                         $( $properties.get(j) ).appendTo( $ul);
+                    }
+                }
+            }
+            if($rankings){
+                for(var j = 0; j<$items.length;j++){
+                    if($($rankings.get(j)).attr('id')===array_ids[i]){
+                        $( $rankings.get(j) ).appendTo( $ul);
+                    }
+                }
+            }
+        }
+        $($ul).accordion({
+            active: false,
+            collapsible: true,
+            header: "h2",
+            heightStyle: "content"
+        });
       $('[data-toggle="tooltip"]').tooltip();
     }
 

@@ -1235,3 +1235,41 @@ Hook.register(
   function ( args ) {
       //args[0].expand();
   });
+// ao selecionar uma categoria
+Hook.register(
+  'tainacan_onselect_dynatree',
+  function ( args ) {
+    if (typeof show_object_properties == 'function'){
+        show_object_properties(); 
+    }
+    if (typeof show_object_properties_edit == 'function'){
+        show_object_properties_edit(); 
+    }
+    if(args[0].length>0){
+        $('.has-selected-class').show();
+        $('.none-selected-class').hide();
+    }else{
+        $('.has-selected-class').hide();
+        $('.none-selected-class').show();
+    }
+  });
+  //funcao que mostra o form de adicao
+    function show_form_add_item_ontology(){
+        var src = $('#src').val();
+        $("#menu_object").hide();
+        $("#container_socialdb").hide('slow');
+        $("#form").hide('slow');
+        $("#list").hide('slow');
+        show_modal_main();
+        $.ajax({
+            url: src + '/controllers/object/object_controller.php',
+            type: 'POST',
+            data: {operation: 'create', collection_id: $("#collection_id").val()}
+        }).done(function (result) {
+            hide_modal_main();
+            $("#form").html(result);
+            $('#form').show('slow');
+            $('#create_button').hide();
+        });
+    }
+/******************************************************************************/
