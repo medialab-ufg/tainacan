@@ -62,43 +62,65 @@
 
     $("#report_type_stat").dynatree({
         onActivate: function(node) {
-            // A DynaTreeNode object is passed to the activation handler
-            // Note: we also get this event, if persistence is on, and the page is reloaded.
-            alert("You activated " + node.data.title);
+            cl("You activated " + node.data.key);
         },
-        title: "Boris the Great",
         minExpandLevel: 1,
         selectionVisible: true,
         checkbox:  true,
-        // icon: false,
         clickFolderMode: 1,
-        //activeVisible: true,
+        activeVisible: true,
         nodeIcon: false,
         selectMode: 1,
         fx: { height: "toggle", duration: 300 },
         autoCollapse: true,
+        autoFocus: true,
         children: [
             {title: "Usuários",
+                noLink: true,
+                expand: true,
+                unselectable: true,
+                hideCheckbox: true,
                 children: [
-                    {title: "<div>Status </div><p> logins / registros / banidos / excluídos </p>"},
-                    {title:  "<div>Itens </div><p> criaram / editaram / apagaram / visualizaram /<br/>  baixaram</p>"},
-                    {title:  "<div>Perfil </div><p> Pessoas que aderiram a um perfil </p>"},
-                    {title:  "<div>Categorias </div><p> criaram / editaram / apagaram / visualizaram <br/> / baixaram </p>"},
-                    {title:  "<div>Coleção </div><p> criaram / editaram / apagaram / visualizaram </p>"}
+                    {title: "<div> Status </div><p> logins / registros / banidos / excluídos </p>"},
+                    {title: "<div> Itens </div><p> criaram / editaram / apagaram / visualizaram /<br/>  baixaram</p>"},
+                    {title: "<div> Perfil </div><p> Pessoas que aderiram a um perfil </p>"},
+                    {title: "<div> Categorias </div><p> criaram / editaram / apagaram / visualizaram <br/> / baixaram </p>"},
+                    {title: "<div> Coleção </div><p> criaram / editaram / apagaram / visualizaram </p>"}
                 ]
             },
             {title: "Itens",
+                noLink: true,
+                hideCheckbox: true,
                 children: [
-                    {title: "<div>Usuário </div><p> view / comentado / votado </p>"},
-                    {title:  "<div>Status </div><p> criados / editados / excluídos / view / favoritos / baixados</p>"},
-                    {title:  "<div>Coleção </div><p> número de itens por coleção </p>"}
+                    {title: "<div> Usuário </div><p> view / comentado / votado </p>"},
+                    {title: "<div> Status </div><p> criados / editados / excluídos / view / favoritos / baixados</p>"},
+                    {title: "<div> Coleção </div><p> número de itens por coleção </p>"}
                 ]
-            }
+            },
+            {title: "Coleções", noLink: true, hideCheckbox: true},
+            {title: "Comentários", noLink: true, hideCheckbox: true},
+            {title: "Categorias", noLink: true, hideCheckbox: true},
+            {title: "Tags", noLink: true, hideCheckbox: true},
+            {title: "Importar / Exportar", noLink: true, hideCheckbox: true},
+            {title: "Administração", noLink: true, hideCheckbox: true},
         ],
         onClick: function(node, event) {
-            cl(node.data.title);
-            $('.chart-header .current-chart').text('Status do usuário');
-            // cl(event);
+            /*
+            if(node.childList.length > 0) {
+                // cl("Aí sim! Achei um papito!!!");
+                cl(node.data.title);
+                // cl(node);
+                $('.chart-header .current-chart').text('Status do usuário');
+            } else {
+                cl("cliquei no filhão!");
+            }
+            */
+            cl('ok  11111111111111');
+            var key = node.data.key;
+            cl(node);
+            cl(node);
+            cl("ACIMAAAAAAAAAAAAAAAAAAAAA" + key);
+
         },
         classNames: { checkbox: 'dynatree-radio'},
 
