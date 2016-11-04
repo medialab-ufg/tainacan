@@ -66,53 +66,42 @@
             // Note: we also get this event, if persistence is on, and the page is reloaded.
             alert("You activated " + node.data.title);
         },
-        checkbox: true,
-        icon: false,
+        title: "Boris the Great",
+        minExpandLevel: 1,
+        selectionVisible: true,
+        checkbox:  true,
+        // icon: false,
+        clickFolderMode: 1,
+        //activeVisible: true,
         nodeIcon: false,
-        children: [ // Pass an array of nodes.
-            {title: "<div>Status</div><p> logins / registros / banidos / excluídos</p>"},
+        selectMode: 1,
+        fx: { height: "toggle", duration: 300 },
+        autoCollapse: true,
+        children: [
+            {title: "Usuários",
+                children: [
+                    {title: "<div>Status </div><p> logins / registros / banidos / excluídos </p>"},
+                    {title:  "<div>Itens </div><p> criaram / editaram / apagaram / visualizaram /<br/>  baixaram</p>"},
+                    {title:  "<div>Perfil </div><p> Pessoas que aderiram a um perfil </p>"},
+                    {title:  "<div>Categorias </div><p> criaram / editaram / apagaram / visualizaram <br/> / baixaram </p>"},
+                    {title:  "<div>Coleção </div><p> criaram / editaram / apagaram / visualizaram </p>"}
+                ]
+            },
             {title: "Itens",
                 children: [
-                    {title: "<div>Usuário</div><p> view / comentado / votado</p>"},
-                    {title:  "<div>Status</div><p> criados / editados / excluídos / view / favoritos / baixados</p>"}
+                    {title: "<div>Usuário </div><p> view / comentado / votado </p>"},
+                    {title:  "<div>Status </div><p> criados / editados / excluídos / view / favoritos / baixados</p>"},
+                    {title:  "<div>Coleção </div><p> número de itens por coleção </p>"}
                 ]
-            },
-            {title: "Item 3"}
+            }
         ],
-        classNames: { checkbox: 'dynatree-radio'}
-    });
-    /*
-    $("#report_type_stat").dynatree({
-        // selectionVisible: true, // Make sure, selected nodes are visible (expanded).
-        // checkbox: true,
-        persist: true,
-        children: [ // Pass an array of nodes.
-            {title: "Item 1"},
-            {title: "Folder 2", isFolder: true,
-                children: [
-                    {title: "Sub-item 2.1"},
-                    {title: "Sub-item 2.2"}
-                ]
-            },
-            {title: "Item 3"}
-        ],
-
-        initAjax: {
-            url: src + '/controllers/collection/collection_controller.php',
-            data: {
-                collection_id: $("#collection_id").val(),
-                operation: 'initDynatree'
-            },
-            addActiveKey: true
-        },
-
         onClick: function(node, event) {
-            cl(node);
-            cl(event);
+            cl(node.data.title);
+            $('.chart-header .current-chart').text('Status do usuário');
+            // cl(event);
         },
-        onActivate: function (dtnode) {
-            alert("You activated " + dtnode.data.title);
-        }
+        classNames: { checkbox: 'dynatree-radio'},
+
     });
-    */
+
 </script>

@@ -28,8 +28,20 @@ $view_helper = new ViewHelper();
         <div class="form-group">
 
         <style type="text/css">
+            #report_type_stat {
+                padding: 0;
+            }
             #report_type_stat .dynatree-icon {
                 display: none;
+            }
+
+            #report_type_stat .dynatree-container {
+                border: none;
+                font-size: 12px;
+            }
+
+            #report_type_stat .dynatree-container p {
+                font-size: 10px;
             }
         </style>
 
@@ -37,6 +49,7 @@ $view_helper = new ViewHelper();
 
             <div id="report_type_stat"></div>
 
+            <?php /*  ?>
             <div>
                 <ul style="padding-left: 0">
                     <span class="caret"></span> Usuários
@@ -84,6 +97,7 @@ $view_helper = new ViewHelper();
                 <span class="caret"></span> Administração <br />
                 <span class="caret"></span> Eventos <br />
             </div>
+            <?php */ ?>
         </div>
     </div>
 
