@@ -42,7 +42,6 @@
             total_del,
             total_logins,
             total_registers,
-            ['Banidos', 3, 'silver'],            // English color name
         ]);
         var options = { colors: ['#0c698b'] }; // // width: 900
 
@@ -81,9 +80,9 @@
                 unselectable: true,
                 hideCheckbox: true,
                 children: [
-                    {title: "<div> Status </div><p> logins / registros / banidos / excluídos </p>"},
-                    {title: "<div> Itens </div><p> criaram / editaram / apagaram / visualizaram /<br/>  baixaram</p>"},
-                    {title: "<div> Perfil </div><p> Pessoas que aderiram a um perfil </p>"},
+                    {title: "<div> Status </div><p> logins / registros / banidos / excluídos </p>", href: "status"},
+                    {title: "<div> Itens </div><p> criaram / editaram / apagaram / visualizaram /<br/>  baixaram</p>", href: "items"},
+                    {title: "<div> Perfil </div><p> Pessoas que aderiram a um perfil </p>", href: "profile"},
                     {title: "<div> Categorias </div><p> criaram / editaram / apagaram / visualizaram <br/> / baixaram </p>"},
                     {title: "<div> Coleção </div><p> criaram / editaram / apagaram / visualizaram </p>"}
                 ]
@@ -107,19 +106,27 @@
         onClick: function(node, event) {
             /*
             if(node.childList.length > 0) {
-                // cl("Aí sim! Achei um papito!!!");
                 cl(node.data.title);
                 // cl(node);
                 $('.chart-header .current-chart').text('Status do usuário');
             } else {
-                cl("cliquei no filhão!");
             }
             */
-            cl('ok  11111111111111');
             var key = node.data.key;
-            cl(node);
-            cl(node);
-            cl("ACIMAAAAAAAAAAAAAAAAAAAAA" + key);
+            var parent = node.parent.data.title;
+            var node_action = node.data.href;
+            // cl("Pai: " + parent);
+            if(parent == "Usuários") {
+                if(node_action) {
+                    cl("TO DO:" + node_action);
+                } else {
+                    cl("Set your href please");
+                }
+            }
+            // cl(node.span);
+            // cl(node.tree);
+            // cl(node.data);
+            cl("A chave é:" + key);
 
         },
         classNames: { checkbox: 'dynatree-radio'},
