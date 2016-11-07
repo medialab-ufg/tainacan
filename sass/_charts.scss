@@ -2,16 +2,18 @@
 
   /* Left side */
   #statistics-config {
-    font-size: 12px;
     /*
-     >>> Overides 'accordion' styles
-    */
+     * >>> Overides 'accordion' styles
+    **/
     background: white;
     border: none;
     margin-left: -15px;
     /*
-     <<< Overides 'accordion' styles
-    */
+     * <<< Overides 'accordion' styles
+    **/
+    font-size: 12px;
+    border: 3px solid $item-border;
+    margin-left: -15px;
 
     .period-config {
       p {
@@ -25,12 +27,17 @@
       }
 
     } // .period-config
-  }
+    label.title-pipe {
+      border-left: 3px solid $brand-light-blue;
+    }
+  } // #statistics-config
 
 
   /* Right side */
   .chart-header {
     @include single_item_container_style();
+    background-color: white;
+    border: 3px solid $item-border;
 
     .user-config-control {
       span.config-title {
@@ -51,6 +58,11 @@
   }
 } // statistics-container
 
+#charts-resume {
+  @include single_item_container_style();
+  margin-top: 20px;
+}
+
 .right-caret {
   border-bottom: 4px solid transparent;
   border-top: 4px solid transparent;
@@ -61,3 +73,17 @@
   vertical-align: top;
   width: 0;
 }
+
+#report_type_stat {
+  padding: 0;
+  .dynatree-icon {
+    display: none;
+  }
+  .dynatree-container {
+    border: none;
+    font-size: 12px;
+    p {
+      font-size: 10px;
+    }
+  }
+} // report_type_stat -> dynatree

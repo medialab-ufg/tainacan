@@ -4,9 +4,9 @@
     google.charts.setOnLoadCallback(drawChart);
 
     function drawChart() {
-        var login_qry = '<?php print_r( Log::getUserEvents('login')); ?>';
-        var register_qry = '<?php print_r( Log::getUserEvents('register')); ?>';
-        var delete_qry = '<?php print_r( Log::getUserEvents('delete_user')); ?>';
+        var login_qry = '<?php print_r( Log::getUserEvents('user_status', 'login')); ?>';
+        var register_qry = '<?php print_r( Log::getUserEvents('user_status', 'register')); ?>';
+        var delete_qry = '<?php print_r( Log::getUserEvents('user_status', 'delete_user')); ?>';
         var parsd_login = $.parseJSON(login_qry);
         cl(parsd_login);
 
@@ -33,15 +33,15 @@
             }
         });
 
-        var total_logins = ['Login', logins, 'color: #0c698b' ]; // CSS-style declaration
-        var total_registers = ['Registros', registers, 'color: #b87333' ]; //RGB value
-        var total_del = ['Excluídos', deletes, 'silver' ]; // English color name
+        var total_logins = ['Login', logins, 'color: #0c698b' ];
+        var total_registers = ['Registros', registers, 'color: #b87333' ];
+        var total_del = ['Excluídos', deletes, 'silver' ];
 
         var data = google.visualization.arrayToDataTable([
             ['Status de usuários', 'qtd ', { role: 'style' }],
             total_del,
             total_logins,
-            total_registers,
+            total_registers
         ]);
         var options = { colors: ['#0c698b'] }; // // width: 900
 
@@ -59,10 +59,7 @@
         icons: true
     });
 
-    $("#report_type_stat").dynatree({
-        onActivate: function(node) {
-            cl("You activated " + node.data.key);
-        },
+    var stats_dynatree_opts = {
         minExpandLevel: 1,
         selectionVisible: true,
         checkbox:  true,
@@ -73,8 +70,21 @@
         fx: { height: "toggle", duration: 300 },
         autoCollapse: true,
         autoFocus: true,
-        children: [
-            {title: "Usuários",
+        classNames: { checkbox: 'dynatree-radio'},
+        children: getStatsTree(),
+        onActivate: function(node) {
+            cl("Nó ativado: " + node.data.key);
+        },
+        onClick: function(node, event) {
+            var parent = node.parent.data.title;
+            var node_action = node.data.href;
+            getStatData(parent, node_action);
+        }
+    };
+
+    function getStatsTree() {
+        return [
+            { title: "Usuários",
                 noLink: true,
                 expand: true,
                 unselectable: true,
@@ -87,7 +97,7 @@
                     {title: "<div> Coleção </div><p> criaram / editaram / apagaram / visualizaram </p>"}
                 ]
             },
-            {title: "Itens",
+            { title: "Itens",
                 noLink: true,
                 hideCheckbox: true,
                 children: [
@@ -96,41 +106,36 @@
                     {title: "<div> Coleção </div><p> número de itens por coleção </p>"}
                 ]
             },
-            {title: "Coleções", noLink: true, hideCheckbox: true},
-            {title: "Comentários", noLink: true, hideCheckbox: true},
-            {title: "Categorias", noLink: true, hideCheckbox: true},
-            {title: "Tags", noLink: true, hideCheckbox: true},
-            {title: "Importar / Exportar", noLink: true, hideCheckbox: true},
-            {title: "Administração", noLink: true, hideCheckbox: true},
-        ],
-        onClick: function(node, event) {
-            /*
-            if(node.childList.length > 0) {
-                cl(node.data.title);
-                // cl(node);
-                $('.chart-header .current-chart').text('Status do usuário');
-            } else {
-            }
-            */
-            var key = node.data.key;
-            var parent = node.parent.data.title;
-            var node_action = node.data.href;
-            // cl("Pai: " + parent);
-            if(parent == "Usuários") {
-                if(node_action) {
-                    cl("TO DO:" + node_action);
-                } else {
-                    cl("Set your href please");
-                }
-            }
-            // cl(node.span);
-            // cl(node.tree);
-            // cl(node.data);
-            cl("A chave é:" + key);
+            { title: "Coleções", noLink: true, hideCheckbox: true},
+            { title: "Comentários", noLink: true, hideCheckbox: true},
+            { title: "Categorias", noLink: true, hideCheckbox: true},
+            { title: "Tags", noLink: true, hideCheckbox: true},
+            { title: "Importar / Exportar", noLink: true, hideCheckbox: true},
+            { title: "Administração", noLink: true, hideCheckbox: true},
+        ]
+    }
 
-        },
-        classNames: { checkbox: 'dynatree-radio'},
+    function getStatData(parent_name, node_action) {
+        if(node_action) {
+            switch (parent_name) {
+                case "Usuários":
+                    cl(node_action);
+                    fetchData(node_action);
+                    break;
+                case "Itens":
+                    cl("getting itens data!");
+                    break;
+                default:
+                    cl("Not defined yet!");
+            } // switch
+        } // if
 
-    });
+    }
+
+    function fetchData(action) {
+
+    }
+
+    $("#report_type_stat").dynatree(stats_dynatree_opts);
 
 </script>

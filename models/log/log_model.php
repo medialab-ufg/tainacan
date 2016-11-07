@@ -21,14 +21,16 @@ class Log extends Model {
         return ['ip' => $_SERVER['REMOTE_ADDR'], 'event_date' => date('Y-m-d H:i:s')];
     }
 
-    public static function getUserEvents($event) {
+    public static function getUserEvents($event_type, $event) {
         global $wpdb;
-        $sql = sprintf("SELECT COUNT(id) as total_login FROM %s WHERE event_type = 'user_status' AND event = '$event'", self::_table() );
+        $sql = sprintf("SELECT COUNT(id) as total_login FROM %s WHERE event_type = '$event_type' AND event = '$event'", self::_table() );
         return json_encode( $wpdb->get_results($sql) );
     }
 
-    public static function getStatEvents() {
-        
+    public static function getUserStatus($event) {
+        global $wpdb;
+        $sql = sprintf("SELECT COUNT(id) as total_status FROM %s WHERE event_type = 'user_collection' AND event = '$event'", self::_table() );
+        return json_encode( $wpdb->get_results($sql) );
     }
 
     /*
