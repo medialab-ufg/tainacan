@@ -576,31 +576,96 @@ class ThemeOptionsModel extends Model {
         }
     }
 
-    public function read_collection_xml($xml) {
+    public function read_collection_xml($xml, $dir) {
+        $collection_model = new CollectionModel;
+        $objid = (string) $xml->attributes()->OBJID;
+        $id = explode(':', $objid)[1];
         $struct = $xml->structMap;
-        foreach($struct as $parent){
-            if($parent->attributes()->LABEL == 'Parent' && $parent->attributes()->TYPE == 'LOGICAL'){
+        $logo = (isset($xml->fileSec->fileGrp->file->FLocat) ? (string) $xml->fileSec->fileGrp->file->FLocat->attributes('http://www.w3.org/1999/xlink')->href : null);
+        $dim = $xml->dmdSec[1]->mdWrap->xmlData->children('http://www.dspace.org/xmlns/dspace/dim')->dim->field;
+        $description = (string) $dim[0];
+        $abstract = (string) $dim[1];
+        $tableofcontents = (string) $dim[2];
+        $uri = (string) $dim[3];
+        $provenance = (string) $dim[4];
+        $rights = (string) $dim[5];
+        $license = (string) $dim[6];
+        $title = (string) $dim[7];
+        //var_dump($dim, $logo, $title);
+        foreach ($struct as $parent) {
+            if ($parent->attributes()->LABEL == 'Parent' && $parent->attributes()->TYPE == 'LOGICAL') {
                 $parent_id = $parent->div->mptr->attributes('http://www.w3.org/1999/xlink')->href;
             }
         }
-        $parent_collection_id = $this->checkForAipID($parent_id);
-        if(!empty($parent_id) && $parent_collection_id){
-            //eh uma subcoleção
-            
-        }else{
-            //é uma coleção
+
+        if (!$this->checkForAipID($id)) {
+            $data_collection['collection_name'] = $title;
+            $collection_id = $collection_model->simple_add($data_collection, 'publish');
+            //create_root_collection_category($collection_id, $data_collection['collection_object']);
+            $category_root_id = get_post_meta($collection_id, 'socialdb_collection_object_type', true);
+
+            $collection = array(
+                'ID' => $collection_id,
+                'post_content' => $description
+            );
+            wp_update_post($collection);
+
+            update_post_meta($collection_id, 'socialdb_dspace_aip_import_id', $id);
+
+            if ($logo) {
+                $logo_id = $this->insert_attachment_file($dir . $logo, $collection_id);
+                set_post_thumbnail($collection_id, $logo_id);
+            }
+
+            $parent_collection_id = $this->checkForAipID($parent_id);
+            if (!empty($parent_id) && $parent_collection_id) {
+                //eh uma subcoleção
+                $category_root_id_parent = $this->get_category_root_of($parent_collection_id);
+                $move_to = get_term_by('id', $category_root_id_parent, 'socialdb_category_type');
+                if ($move_to && !is_wp_error($move_to)) {
+                    $update_category = wp_update_term($category_root_id, 'socialdb_category_type', array(
+                        'parent' => $move_to->term_id
+                    ));
+                    update_post_meta($collection_id, 'socialdb_collection_parent', $category_root_id_parent);
+                }
+                //var_dump($category_root_id);
+            }
+        }
+        //else {
+        //é uma coleção
+        //}
+        //var_dump($xml);
+        //exit();
+        /* $category_root_id = $this->get_category_root_of($data['collection_id']);
+          $move_to = get_term_by('id', $data['socialdb_collection_parent'], 'socialdb_category_type');
+          if ($move_to && !is_wp_error($move_to)) {
+          $update_category = wp_update_term($category_root_id, 'socialdb_category_type', array(
+          'parent' => $move_to->term_id
+          ));
+          update_post_meta($post_id, 'socialdb_collection_parent', $data['socialdb_collection_parent']);
+          } */
+    }
+
+    function read_item_xml($xml, $dir) {
+        $objid = (string) $xml->attributes()->OBJID;
+        $id = explode(':', $objid)[1];
+        $struct = $xml->structMap;
+        
+        foreach ($struct as $parent) {
+            if ($parent->attributes()->LABEL == 'Parent' && $parent->attributes()->TYPE == 'LOGICAL') {
+                $col_id = $parent->div->mptr->attributes('http://www.w3.org/1999/xlink')->href;
+            }
+        }
+        
+        $parent_collection_id = $this->checkForAipID($col_id);
+        
+        if($parent_collection_id){
+            //Realiza a importacao
             
         }
-        var_dump($parent_id);
+        
+        var_dump($parent_collection_id, $col_id);
         exit();
-        /*$category_root_id = $this->get_category_root_of($data['collection_id']);
-        $move_to = get_term_by('id', $data['socialdb_collection_parent'], 'socialdb_category_type');
-        if ($move_to && !is_wp_error($move_to)) {
-            $update_category = wp_update_term($category_root_id, 'socialdb_category_type', array(
-                'parent' => $move_to->term_id
-            ));
-            update_post_meta($post_id, 'socialdb_collection_parent', $data['socialdb_collection_parent']);
-        }*/
     }
 
 }

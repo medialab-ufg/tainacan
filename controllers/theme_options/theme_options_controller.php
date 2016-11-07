@@ -134,12 +134,23 @@ class ThemeOptionsController extends Controller {
                             $unzip_col = $theme_options_model->unzip_aip_general($unzip_path . '/', $collection_file);
                             $xml = (file_exists($unzip_col . '/mets.xml') ? simplexml_load_file($unzip_col . '/mets.xml') : null);
                             if ($xml != null) {
-                                $theme_options_model->read_collection_xml($xml);
-                                //$theme_options_model->recursiveRemoveDirectory($unzip_col);
+                                $theme_options_model->read_collection_xml($xml, $unzip_col . '/');
+                                $theme_options_model->recursiveRemoveDirectory($unzip_col);
                             }
                         }
                     }
                     //item
+                    $item_files = scandir($unzip_path);
+                    foreach ($item_files as $item_file) {
+                        if (strpos($item_file, 'ITEM') !== false) {
+                            $unzip_item = $theme_options_model->unzip_aip_general($unzip_path . '/', $item_file);
+                            $xml = (file_exists($unzip_item . '/mets.xml') ? simplexml_load_file($unzip_item . '/mets.xml') : null);
+                            if ($xml != null) {
+                                $theme_options_model->read_item_xml($xml, $unzip_item . '/');
+                                //$theme_options_model->recursiveRemoveDirectory($unzip_item);
+                            }
+                        }
+                    }
                 } else {
                     return false;
                 }
