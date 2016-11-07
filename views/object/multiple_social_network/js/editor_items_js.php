@@ -463,6 +463,7 @@
             //buscando os valores para o formulario
             $("#multiple_object_name").val($("#title_" + item_id).val());// seta o titulo do item
             $("#multiple_object_description").val($("#description_" + item_id).val());// descricao do item
+            $("#multiple_object_source").val($("#source_" + item_id).val());// descricao do item
             var tags = $("#tags_" + item_id).val().split(',');//quebro as tags em um array
             tags = tags.filter(function (v) {
                 return v !== ''
@@ -813,6 +814,7 @@
     // coloca a fonte para todos os items selecionados
     function setSource(source) {
         var counter = 0;
+        console.log(source);
         if ($(source).val() != '') {
             $.each($("input:checkbox[name='selected_items']:checked"), function () {
                 counter++;
@@ -891,6 +893,7 @@
             $("#socialdb_property_" + property_id + "_" + $(this).val()).val(array.join(','));
         });
         validate_checkbox(property_id);
+        $('#sumbit_multiple_items .auto-save').trigger('change');
         if (value_id !== 'not') {
             toastr.success(counter + '<?php _e(' items/item updated successfully!', 'tainacan') ?>', '<?php _e('Success', 'tainacan') ?>', set_toastr_class());
         }
@@ -903,6 +906,7 @@
             $("#socialdb_property_" + property_id + "_" + $(this).val()).val(value_id);
         });
         validate_radio(property_id);
+        $('#sumbit_multiple_items .auto-save').trigger('change');
         toastr.success(counter + '<?php _e(' items/item updated successfully!', 'tainacan') ?>', '<?php _e('Success', 'tainacan') ?>', set_toastr_class());
     }
     //select box
@@ -928,6 +932,7 @@
                 $("#socialdb_property_" + property_id + "_" + $(this).val()).val('');
             }
         });
+        $('#sumbit_multiple_items .auto-save').trigger('change');
         toastr.success(counter + '<?php _e(' items/item updated successfully!', 'tainacan') ?>', '<?php _e('Success', 'tainacan') ?>', set_toastr_class());
     }
     //select box multipple

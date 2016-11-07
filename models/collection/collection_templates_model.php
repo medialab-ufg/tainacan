@@ -15,7 +15,7 @@ class CollectionTemplatesModel extends CollectionModel {
      */
     public function get_collections_templates() {
         $data = [];
-        $dir = dirname(__FILE__) . "/../../data/templates";
+        $dir = TAINACAN_UPLOAD_FOLDER . "/data/templates";
         foreach (new DirectoryIterator($dir) as $fileInfo) {
             if ($fileInfo->isDot())
                 continue;
@@ -27,13 +27,13 @@ class CollectionTemplatesModel extends CollectionModel {
                 
                $xml = simplexml_load_file($dir.'/'.$fileInfo->getFilename().'/package/metadata/administrative_settings.xml'); 
                if(is_file($dir.'/'.$fileInfo->getFilename().'/package/metadata/thumbnail.png')){
-                    $thumbnail_id = get_template_directory_uri().'/data/templates'.'/'.$fileInfo->getFilename().'/package/metadata/thumbnail.png';
+                    $thumbnail_id = get_template_directory_uri().'/../../uploads/tainacan/data/templates'.'/'.$fileInfo->getFilename().'/package/metadata/thumbnail.png';
                 }elseif(is_file($dir.'/'.$fileInfo->getFilename().'/package/metadata/thumbnail.jpg')){
-                    $thumbnail_id =  get_template_directory_uri().'/data/templates'.'/'.$fileInfo->getFilename().'/package/metadata/thumbnail.jpg';
+                    $thumbnail_id =  get_template_directory_uri().'/../../uploads/tainacan/data/templates'.'/'.$fileInfo->getFilename().'/package/metadata/thumbnail.jpg';
                 }elseif(is_file($dir.'/'.$fileInfo->getFilename().'/package/metadata/thumbnail.gif')){
-                    $thumbnail_id =  get_template_directory_uri().'data/templates'.'/'.$fileInfo->getFilename().'/package/metadata/thumbnail.gif';
+                    $thumbnail_id =  get_template_directory_uri().'/../../uploads/tainacan/data/templates'.'/'.$fileInfo->getFilename().'/package/metadata/thumbnail.gif';
                 }elseif(is_file($dir.'/'.$fileInfo->getFilename().'/package/metadata/thumbnail.jpeg')){
-                    $thumbnail_id =  get_template_directory_uri().'/data/templates'.'/'.$fileInfo->getFilename().'/package/metadata/thumbnail.jpeg';
+                    $thumbnail_id =  get_template_directory_uri().'/../../uploads/tainacan/data/templates'.'/'.$fileInfo->getFilename().'/package/metadata/thumbnail.jpeg';
                 }else{
                     $thumbnail_id = '';
                 }
@@ -58,7 +58,7 @@ class CollectionTemplatesModel extends CollectionModel {
      */
     public function add_collection_template($data) {
         $collection = get_post($data['collection_id']);
-        $dir = dirname(__FILE__) . "/../../data/templates";
+        $dir = TAINACAN_UPLOAD_FOLDER . "/data/templates";
         if(!is_dir($dir.'/'.$collection->post_name)){
              
             $r['d'] = mkdir($dir.'/'.$collection->post_name);
@@ -78,7 +78,7 @@ class CollectionTemplatesModel extends CollectionModel {
      * @return uma strin json caso o template seja criado corretamente
      */
     public function delete_collection_template($data) {
-        $dir = dirname(__FILE__) . "/../../data/templates";
+        $dir = TAINACAN_UPLOAD_FOLDER . "/data/templates";
         if(is_dir($dir.'/'.$data['collection_id'])){
              $zipModel = new ZipModel;
              if($zipModel->remove_template($dir.'/'.$data['collection_id'])){

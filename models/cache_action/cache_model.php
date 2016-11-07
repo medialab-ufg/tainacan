@@ -1,7 +1,12 @@
 <?php
 
 require_once(dirname(__FILE__) . '../../general/general_model.php');
-
+/**
+ * 
+ * o metodo <i>has_cache</i> esta disponibilizado no general_controller para acesso 
+ * dos demais controladores
+ * 
+ */
 class CacheModel extends Model {
 
     /**
@@ -13,11 +18,11 @@ class CacheModel extends Model {
     public function save_cache($html,$operation,$collection_id) {
         error_reporting(E_ALL);
         $collection = get_post($collection_id);
-        if(!is_file(dirname(__FILE__).'../../../cache/'.$collection->post_name.'/'.$operation.'.html')){
-            if(!is_dir(dirname(__FILE__).'../../../cache/'.$collection->post_name))
-                 mkdir(dirname(__FILE__).'../../../cache/'.$collection->post_name);
+        if(!is_file(TAINACAN_UPLOAD_FOLDER.'/cache/'.$collection->post_name.'/'.$operation.'.html')){
+            if(!is_dir(TAINACAN_UPLOAD_FOLDER.'/cache/'.$collection->post_name))
+                 mkdir(TAINACAN_UPLOAD_FOLDER.'/cache/'.$collection->post_name);
             ob_clean();
-            $df = fopen(dirname(__FILE__).'../../../cache/'.$collection->post_name.'/'.$operation.'.html', 'w');
+            $df = fopen(TAINACAN_UPLOAD_FOLDER.'/cache/'.$collection->post_name.'/'.$operation.'.html', 'w');
             var_dump($html);
             fwrite($df, $html);
             fclose($df);
@@ -31,8 +36,8 @@ class CacheModel extends Model {
      */
     public function delete_cache($operation,$collection_id) {
         $collection = get_post($collection_id);
-        if(is_file(dirname(__FILE__).'../../../cache/'.$collection->post_name.'/'.$operation.'.html')){
-            unlink(dirname(__FILE__).'../../../cache/'.$collection->post_name.'/'.$operation.'.html');
+        if(is_file(TAINACAN_UPLOAD_FOLDER.'/cache/'.$collection->post_name.'/'.$operation.'.html')){
+            unlink(TAINACAN_UPLOAD_FOLDER.'/cache/'.$collection->post_name.'/'.$operation.'.html');
         }
     }
 }

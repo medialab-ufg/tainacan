@@ -421,10 +421,10 @@
                             id="submit" 
                             style="margin-bottom: 20px;" 
                             class="btn btn-success btn-lg pull-right send-button">
-                                <?php _e('Submit','tainacan'); ?></button>
+                                <?php _e('Save','tainacan'); ?></button>
                 </div>  
                 <div id="submit_container_message" style="display: none;">
-                     <button type="button" onclick="show_message()" style="margin-bottom: 20px;" class="btn btn-success btn-lg pull-right send-button"><?php _e('Submit','tainacan'); ?></button>
+                     <button type="button" onclick="show_message()" style="margin-bottom: 20px;" class="btn btn-success btn-lg pull-right send-button"><?php _e('Save','tainacan'); ?></button>
                 </div>     
         </div>
     </div> 

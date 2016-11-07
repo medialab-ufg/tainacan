@@ -992,6 +992,28 @@ class Model {
             return false;
         }
     }
+    /**
+     * function delete_item_meta($property_id)
+     * @param int $item_id
+     * @return boolean .
+     * 
+     * metodo responsavel em deletar os metadados de um i tem
+     * @autor: Eduardo Humberto 
+     */
+    public function delete_item_meta($item_id) {
+        global $wpdb;
+        $wp_meta = $wpdb->prefix . "postmeta";
+        $query = "
+			DELETE FROM $wp_meta 
+				WHERE post_id = {$item_id}
+		";
+        $wpdb->query($query);
+        if ($item_id) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     /* function get_categories_by_owner() */
     /* @param int $owner_id o dono das categorias

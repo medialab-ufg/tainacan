@@ -64,6 +64,8 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                         <button type="button" onclick="back_main_list_discard(<?php echo $object->ID ?>);"class="btn btn-default pull-right">
                             <b><?php _e('Discard','tainacan') ?></b>
                         </button>
+                        <br>
+                        <small id="draft-text"></small>
                     <?php else: ?>
                          <button type="button" onclick="back_main_list();"class="btn btn-default pull-right">
                             <b><?php _e('Back','tainacan') ?></b>
@@ -328,8 +330,11 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
             <?php if($view_helper->hide_main_container): ?>
                 <br><br>
                  <!--button onclick="back_main_list();" style="margin-bottom: 20px;"  class="btn btn-default btn-lg pull-left"><b><?php _e('Back','tainacan') ?></b></button-->
-                <button type="button" onclick="back_main_list();" 
-                        style="margin-bottom: 20px;color" class="btn btn-default btn-lg pull-left"><?php _e('Cancel','tainacan'); ?></button>
+                 <?php if($is_beta_text): ?>
+                    <button type="button" onclick="back_main_list_discard(<?php echo $object->ID ?>);" style="margin-bottom: 20px;color" class="btn btn-default btn-lg pull-left"><?php _e('Discard','tainacan'); ?></button>
+                <?php else: ?>
+                    <button type="button" onclick="back_main_list();" style="margin-bottom: 20px;color" class="btn btn-default btn-lg pull-left"><?php _e('Cancel','tainacan'); ?></button>
+                <?php endif; ?>
                 <div id="submit_container">
                     <button type="submit" id="submit" style="margin-bottom: 20px;" class="btn btn-success btn-lg pull-right send-button"><?php _e('Submit','tainacan'); ?></button>
                 </div>  
@@ -581,12 +586,16 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                 <input type="hidden" id="object_content_edit" name="object_content" value="<?= strip_tags(get_post_meta($object->ID, 'socialdb_object_content', true)) ?>">
                 <input type="hidden" id="edit_object_collection_id" name="collection_id" value="<?= $collection_id ?>">
                 <input type="hidden" id="operation_edit" name="operation" value="update">
+                <?php if($is_beta_text): ?>
+                <button type="button" onclick="back_main_list_discard(<?php echo $object->ID ?>);" style="margin-bottom: 20px;color" class="btn btn-default btn-lg pull-left"><?php _e('Discard','tainacan'); ?></button>
+                <?php else: ?>
                 <button type="button" onclick="back_main_list();" style="margin-bottom: 20px;color" class="btn btn-default btn-lg pull-left"><?php _e('Cancel','tainacan'); ?></button>
+                <?php endif; ?>
                 <div id="submit_container">
                     <button type="submit" id="submit_edit" class="btn btn-success btn-lg pull-right send-button"><?php _e('Submit','tainacan'); ?></button>
                 </div>  
                 <div id="submit_container_message" style="display: none;">
-                     <button type="button" onclick="show_message()" style="margin-bottom: 20px;" class="btn btn-success btn-lg pull-right send-button"><?php _e('Submit','tainacan'); ?></button>
+                     <button type="button" onclick="show_message()" style="margin-bottom: 20px;" class="btn btn-success btn-lg pull-right send-button"><?php _e('Save','tainacan'); ?></button>
                 </div>
         </div>
 <!----------------- FIM: CONTAINER MAIOR - NOME,CONTEUDO E ANEXOS  ----------------->

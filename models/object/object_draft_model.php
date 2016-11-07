@@ -8,10 +8,6 @@ require_once(dirname(__FILE__) . '/object_model.php');
 class ObjectDraftModel extends ObjectModel {
      
     public function addItemDraft($data) {
-        $data = $this->validate_form($data);
-        if (isset($data['validation_error'])) {
-            return json_encode($data);
-        }
         $category_root_id = $this->collection_model->get_category_root_of($data['collection_id']);
         $user_id = get_current_user_id();
         if ($user_id == 0) {
