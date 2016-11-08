@@ -322,6 +322,7 @@
                 <button type="button" onclick="back_main_list();"class="btn btn-default pull-right">
                     <b><?php _e('Back','tainacan') ?></b>
                 </button>
+                <small id="draft-text"></small>
             </h3>
             <hr>
             <?php 

@@ -348,14 +348,24 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
         <div style="<?php echo ($view_helper->hide_main_container)?'display:none;':'' ?>background: white;border: 3px solid #E8E8E8;margin-left: 15px;width: 74%;" 
              class="col-md-9">
             <h3>
-                <?php if(has_action('label_edit_item')): ?>
-                       <?php do_action('label_edit_item',$object_name) ?>
+                <?php if(has_action('label_add_item')): ?>
+                           <?php do_action('label_add_item',$object_name) ?>
+                    <?php elseif($is_beta_text): ?>
+                        <?php _e('Continue inserting','tainacan') ?>
+                    <?php else: ?>
+                          <?php _e('Edit','tainacan') ?>
+                    <?php endif; ?>
+                <?php if($is_beta_text): ?>
+                    <button type="button" onclick="back_main_list_discard(<?php echo $object->ID ?>);"class="btn btn-default pull-right">
+                        <b><?php _e('Discard','tainacan') ?></b>
+                    </button>
+                    <br>
+                    <small id="draft-text"></small>
                 <?php else: ?>
-                       <?php _e('Edit item','tainacan'); ?>
+                     <button type="button" onclick="back_main_list();"class="btn btn-default pull-right">
+                        <b><?php _e('Back','tainacan') ?></b>
+                    </button>
                 <?php endif; ?>
-                <button type="button" onclick="back_main_list();"class="btn btn-default pull-right">
-                    <b><?php _e('Back','tainacan') ?></b>
-                </button>
             </h3>
             <hr>
             <?php 

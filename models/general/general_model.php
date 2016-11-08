@@ -1704,7 +1704,7 @@ class Model {
         fclose($df);
     }
     
-    public function create_zip_by_folder($folder, $from = '/package/', $name = 'package') {
+    public function create_zip_by_folder($folder, $from = 'package/', $name = 'package') {
         $rootPath = realpath($folder);
         // Initialize archive object
         $zip = new ZipArchive();
