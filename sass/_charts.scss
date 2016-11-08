@@ -28,10 +28,10 @@
 
     } // .period-config
     label.title-pipe {
-      border-left: 3px solid $brand-light-blue;
+      // border-left: 3px solid $brand-light-blue;
+      @include accordion_label_style();
     }
   } // #statistics-config
-
 
   /* Right side */
   .chart-header {

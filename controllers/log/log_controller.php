@@ -6,9 +6,11 @@ class LogController extends Controller {
         switch($op):
             case "show_statistics":
                 return $this->render(dirname(__FILE__) . '../../../views/statistics/list.php', $data);
-            case "get_user_status":
+            case "user_events":
                 $log = new Log();
-                return json_encode($log->getUserStatus());
+                $_evt = "user_" . $data['event'];
+                // return json_encode($log->user_events($_evt));
+                return $log->user_events($_evt);
         endswitch;
     }
 }

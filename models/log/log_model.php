@@ -21,10 +21,26 @@ class Log extends Model {
         return ['ip' => $_SERVER['REMOTE_ADDR'], 'event_date' => date('Y-m-d H:i:s')];
     }
 
-    public static function getUserEvents($event_type, $event) {
+    public static function getUserEvents($event_type, $event, $encoded = true) {
         global $wpdb;
         $sql = sprintf("SELECT COUNT(id) as total_login FROM %s WHERE event_type = '$event_type' AND event = '$event'", self::_table() );
-        return json_encode( $wpdb->get_results($sql) );
+        
+        if( $encoded ) {
+            return json_encode( $wpdb->get_results($sql) );
+        } else {
+            return $wpdb->get_results($sql);
+        }
+    }
+
+    public static function user_events($event_type) {
+        $log = [
+            "stat_title" => 'Status de Usuários',
+            "user_status" => self::getUserEvents($event_type, 'login', false),
+            "user_register" => self::getUserEvents($event_type, 'register', false),
+            "user_delete" => self::getUserEvents($event_type, 'delete_user', false),
+        ];
+
+        return json_encode( $log );
     }
 
     public static function getUserStatus($event) {
@@ -32,17 +48,5 @@ class Log extends Model {
         $sql = sprintf("SELECT COUNT(id) as total_status FROM %s WHERE event_type = 'user_collection' AND event = '$event'", self::_table() );
         return json_encode( $wpdb->get_results($sql) );
     }
-
-    /*
-    public static function _fetch_sql($value) {
-        global $wpdb;
-        $sql = sprintf("SELECT * FROM %s WHERE %s = %%s", self::_table(), static::$primary_key);
-        return $wpdb->prepare($sql, $value);
-    }
-
-    public static function get( $value ) {
-        global $wpdb;
-        return $wpdb->get_row( self::_fetch_sql( $value ) );
-    }
-    */
+    
 }
