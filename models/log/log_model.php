@@ -34,10 +34,12 @@ class Log extends Model {
 
     public static function user_events($event_type) {
         $log = [
-            "stat_title" => 'Status de Usuários',
-            "user_status" => self::getUserEvents($event_type, 'login', false),
-            "user_register" => self::getUserEvents($event_type, 'register', false),
-            "user_delete" => self::getUserEvents($event_type, 'delete_user', false),
+            "stat_title" => [ 'Status de Usuários', 'qtd', ],
+            "stat_object" => [
+                "user_status" => self::getUserEvents($event_type, 'login', false),
+                "user_register" => self::getUserEvents($event_type, 'register', false),
+                "user_delete" => self::getUserEvents($event_type, 'delete_user', false),
+            ]
         ];
 
         return json_encode( $log );
@@ -48,5 +50,5 @@ class Log extends Model {
         $sql = sprintf("SELECT COUNT(id) as total_status FROM %s WHERE event_type = 'user_collection' AND event = '$event'", self::_table() );
         return json_encode( $wpdb->get_results($sql) );
     }
-    
+
 }

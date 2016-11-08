@@ -4,50 +4,25 @@
     // google.charts.setOnLoadCallback(drawChart);
 
     function drawChart(data_obj) {
-        var login_qry = '<?php print_r( Log::getUserEvents('user_status', 'login') ); ?>';
-        var register_qry = '<?php print_r( Log::getUserEvents('user_status', 'register')); ?>';
-        var delete_qry = '<?php print_r( Log::getUserEvents('user_status', 'delete_user')); ?>';
-        var parsd_login = $.parseJSON(login_qry);
-        // cl(parsd_login);
+        if(data_obj.stat_object) {
+            var chart_data = [];
+            var basis = ['Status de usuários', 'qtd ', {role: 'style'}];
+            chart_data.push(basis);
+            chart_data.push(data_obj.stat_object);
 
-        var parsd_reg = $.parseJSON(register_qry);
-        // cl(parsd_reg);
+            cl(chart_data);
 
-        var parsd_del = $.parseJSON(delete_qry);
-        // cl(parsd_del);
+            var data = google.visualization.arrayToDataTable( chart_data );
+            var options = { colors: ['#0c698b'] };
 
-        var logins, registers, deletes;
-        $(parsd_login).each(function (idx, val) {
-            if(idx == 0) {
-                logins = val.total_login;
-            }
-        });
-        $(parsd_reg).each(function (idx, val) {
-            if(idx == 0) {
-                registers = val.total_login;
-            }
-        });
-        $(parsd_del).each(function (idx, val) {
-            if(idx == 0) {
-                deletes = val.total_login;
-            }
-        });
-
+            var chart = new google.charts.Bar(document.getElementById('chart_div'));
+            chart.draw(data, options);
+        }
+        /*
         var total_logins = ['Login', logins, 'color: #0c698b' ];
         var total_registers = ['Registros', registers, 'color: #b87333' ];
         var total_del = ['Excluídos', deletes, 'silver' ];
-
-        var chart_data = [
-            ['Status de usuários', 'qtd ', { role: 'style' }],
-            total_del,
-            total_logins,
-            total_registers
-        ];
-        var data = google.visualization.arrayToDataTable( chart_data );
-        var options = { colors: ['#0c698b'] };
-
-        var chart = new google.charts.Bar(document.getElementById('chart_div'));
-        chart.draw(data, options);
+        */
     }
 
     $("#statistics-config").accordion({
@@ -140,11 +115,9 @@
                 event: action
             }
         }).done(function(r){
-            cl("resposta normal");
-            cl(r);
             var res_json = $.parseJSON(r);
             cl(res_json);
-            drawChart();
+            // drawChart(res_json);
         })
     }
 
