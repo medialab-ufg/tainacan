@@ -23,7 +23,8 @@ class Log extends Model {
 
     public static function getUserEvents($event_type, $event, $encoded = true) {
         global $wpdb;
-        $sql = sprintf("SELECT COUNT(id) as total_login FROM %s WHERE event_type = '$event_type' AND event = '$event'", self::_table() );
+        $_alias = "total_" . $event;
+        $sql = sprintf("SELECT COUNT(id) as '$_alias' FROM %s WHERE event_type = '$event_type' AND event = '$event'", self::_table() );
         
         if( $encoded ) {
             return json_encode( $wpdb->get_results($sql) );
@@ -32,13 +33,21 @@ class Log extends Model {
         }
     }
 
-    public static function user_events($event_type) {
+    private function get_event_type($spec) {
+        switch($spec) {
+            case 'collection':
+                return 'view';
+        }
+    }
+
+    public static function user_events($event_type, $spec) {
+
+        $_evt_type = self::get_event_type($spec);
+
         $log = [
-            "stat_title" => [ 'Status de Usuários', 'qtd', ],
+            "stat_title" => [ 'Status de Usuários', 'qtd' ],
             "stat_object" => [
-                "user_status" => self::getUserEvents($event_type, 'login', false),
-                "user_register" => self::getUserEvents($event_type, 'register', false),
-                "user_delete" => self::getUserEvents($event_type, 'delete_user', false),
+              $event_type => self::getUserEvents($event_type, $_evt_type, false)
             ]
         ];
 

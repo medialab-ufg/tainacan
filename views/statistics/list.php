@@ -6,6 +6,15 @@ include_once('js/list_js.php');
 $view_helper = new ViewHelper();
 ?>
 <div class="col-md-12 statistics-container">
+
+    <style type="text/css">
+        #report_type_stat span.bbb a {
+            color: blue !important;
+        }
+        #report_type_stat span.bbb p {
+            color: red;
+        }
+    </style>
     
     <?php $view_helper->render_statistic_menu('config') ?>
 
@@ -16,11 +25,11 @@ $view_helper = new ViewHelper();
             <div class="date-range-filter">
                 <p>
                     <span> <?php _e('From','tainacan') ?> </span>
-                    <input size="7" type="text" class="input_date form-control" value="" placeholder="dd/mm/aaaa" id="facet_1" name="facet_1">    
+                    <input size="7" type="text" class="input_date form-control" value="" placeholder="dd/mm/aaaa" id="from_period" name="from_period">
                 </p>
                 <p>
                     <span> <?php _e('until','tainacan') ?> </span>
-                    <input type="text" class="input_date form-control" size="7" value="" placeholder="dd/mm/aaaa" id="facet_2" name="facet_2"> <br />    
+                    <input type="text" class="input_date form-control" size="7" value="" placeholder="dd/mm/aaaa" id="to_period" name="to_period"> <br />
                 </p>
             </div>
         </div>
