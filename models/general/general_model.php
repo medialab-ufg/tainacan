@@ -1347,7 +1347,7 @@ class Model {
                         SELECT p.* FROM $wp_posts p
                         INNER JOIN $term_relationships t ON p.ID = t.object_id    
                         WHERE $where p.post_type like 'socialdb_object' AND p.post_status like 'publish' and ( p.post_title LIKE '%{$data['term']}%' OR p.post_content LIKE '%{$data['term']}%')
-                ";
+                ";               
         $result = $wpdb->get_results($query);
         if ($result) {
             foreach ($result as $object) {

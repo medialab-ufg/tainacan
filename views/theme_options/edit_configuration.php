@@ -70,6 +70,7 @@ $post_thumb = get_the_post_thumbnail($socialdb_logo, 'thumbnail');
                         <input type="text"  id="collection_template" placeholder="<?php _e('Type the collection name', 'tainacan'); ?>"  class="chosen-selected form-control" />
                         <select onclick="clear_collection_template(this)" class="chosen-selected2 form-control" style="height: auto;" multiple name="category_moderators[]" id="collection_templates"  >
                         </select>
+                        <div id="dynatree-collection-templates"></div>
                     </div>
                     <div class="form-group row"  id="show_collection_empty" style="display: none;">
                         <input type="checkbox" value="disabled" name="disable_empty_collection"

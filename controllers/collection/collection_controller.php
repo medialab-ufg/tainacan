@@ -226,7 +226,8 @@ class CollectionController extends Controller {
             /*************************** TEMPLATES **********************/
             case 'list-collection-templates':
                 $colectionTemplateModel = new CollectionTemplatesModel;
-                $data['collectionTemplates'] = $colectionTemplateModel->get_collections_templates();
+                //$data['collectionTemplates'] = $colectionTemplateModel->get_collections_templates();
+                $data['collectionTemplates'] = $colectionTemplateModel->list_habilitate_collection_template();
                 if(!isset($data['is_json'])){
                      return $this->render(dirname(__FILE__) . '../../../views/collection/list-collection-templates.php', $data);
                 }else{
@@ -239,6 +240,26 @@ class CollectionController extends Controller {
             case 'delete_collection_template' :
                 $colectionTemplateModel = new CollectionTemplatesModel;
                 return $colectionTemplateModel->delete_collection_template($data);
+            case 'initDynatreeCollectionTemplates':  
+                $colectionTemplateModel = new CollectionTemplatesModel;
+                return $colectionTemplateModel->dynatreeCollectionTemplate($data);
+            case 'habilitate-collection-templates':
+                if($data['type']=='user'):
+                    $metas = get_option('socialdb_user_templates');
+                    if($metas && is_array($metas) && in_array($data['key'], $metas)){
+                        delete_option('socialdb_user_templates', $data['key']);
+                    }else{
+                        add_option('socialdb_user_templates', $data['key']);
+                    }
+                else:  
+                    $metas = get_option( 'socialdb_tainacan_templates');
+                    if($metas && is_array($metas) && in_array($data['key'], $metas)){
+                        delete_option('socialdb_tainacan_templates', $data['key']);
+                    }else{
+                        add_option('socialdb_tainacan_templates', $data['key']);
+                    }
+                endif;
+                break;
             /************************* Tabs ***********************************/
             case 'alter_tab_name':
                  if($data['id']!='default'){

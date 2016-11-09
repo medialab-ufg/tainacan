@@ -907,11 +907,21 @@ class WPQueryModel extends Model {
         if (isset($recover_data['properties_multipleselect'])) {
             //$meta_query = array('relation' => 'AND');
             foreach ($recover_data['properties_multipleselect'] as $property_id => $value_id) {
-                $meta_query[] = array(
-                    'key' => 'socialdb_property_' . $property_id,
-                    'value' => (is_array($value_id)? array_map("trim", $value_id):trim($value_id)),
-                    'compare' => 'IN'
-                );
+                $property = get_term_by('id', $property_id, 'socialdb_property_type');
+                if($property && $property->slug == 'socialdb_property_fixed_title'):
+                    $meta_query[] = array(
+                            'key' => 'socialdb_object_commom_values',
+                            'value' => $value_id,
+                            'compare' => 'IN'
+                        );
+                else:    
+                    $meta_query[] = array(
+                        'key' => 'socialdb_property_' . $property_id,
+                        'value' => (is_array($value_id)? array_map("trim", $value_id):trim($value_id)),
+                        'compare' => 'IN'
+                    );
+                endif;
+                
             }
         }
         if (isset($recover_data['properties_data_fromto_numeric'])) {
