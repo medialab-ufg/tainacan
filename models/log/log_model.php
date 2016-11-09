@@ -29,7 +29,7 @@ class Log extends Model {
         if( $encoded ) {
             return json_encode( $wpdb->get_results($sql) );
         } else {
-            return $wpdb->get_results($sql);
+            return $wpdb->get_results($sql, ARRAY_N);
         }
     }
 
@@ -41,17 +41,20 @@ class Log extends Model {
     }
 
     public static function user_events($event_type, $spec) {
-
         $_evt_type = self::get_event_type($spec);
 
-        $log = [
-            "stat_title" => [ 'Status de Usuários', 'qtd' ],
-            "stat_object" => [
-              $event_type => self::getUserEvents($event_type, $_evt_type, false)
-            ]
-        ];
+        $_collection_events = ['add', 'view', 'edit', 'delete'];
+        $_stats = [];
+        foreach ($_collection_events as $ev) {
+            $evt_count_ = self::getUserEvents($event_type, $ev, false);
+            $l_data = array_pop($evt_count_);
+            $_stats[] = $l_data[0];
+        }
 
-        return json_encode( $log );
+        $c = array_combine( $_collection_events, $_stats);
+        $stat_data = [ "stat_title" => [ 'Coleções do Usuário', 'qtd' ], "stat_object" => $c ];
+
+        return json_encode($stat_data);
     }
 
     public static function getUserStatus($event) {

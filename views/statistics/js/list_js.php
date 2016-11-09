@@ -1,5 +1,6 @@
 <script type="text/javascript">
-
+    google.charts.load('current', {'packages':['bar','corechart'], 'language':'pt_BR'});
+    // google.charts.setOnLoadCallback(drawChart);
     $(function() {
         $(".period-config .input_date").datepicker({
             // dateFormat: 'dd/mm/yy',
@@ -20,31 +21,6 @@
             }
         });
     });
-
-    google.charts.load('current', {'packages':['bar','corechart'], 'language':'pt_BR'});
-    // google.charts.setOnLoadCallback(drawChart);
-
-    function drawChart(title, data_obj) {
-        if(data_obj.stat_object) {
-            var chart_data = [];
-            var basis = [ title, 'qtd ', {role: 'style'} ];
-            chart_data.push(basis);
-            chart_data.push(data_obj.stat_object);
-
-            cl(chart_data);
-
-            var data = google.visualization.arrayToDataTable( chart_data );
-            var options = { colors: ['#0c698b'] };
-
-            var chart = new google.charts.Bar(document.getElementById('chart_div'));
-            chart.draw(data, options);
-        }
-        /*
-        var total_logins = ['Login', logins, 'color: #0c698b' ];
-        var total_registers = ['Registros', registers, 'color: #b87333' ];
-        var total_del = ['Excluídos', deletes, 'silver' ];
-        */
-    }
 
     $("#statistics-config").accordion({
         collapsible: true,
@@ -74,14 +50,9 @@
         onClick: function(node, event) {
             var parent = node.parent.data.title;
             var node_action = node.data.href;
-            var title_s = node.data.title;
-            var split_title = title_s.split(" ");
-
-            cl( split_title[2] );
-            cl( split_title[4] );
-            cl( split_title[6] );
-            cl( split_title[8] );
-            cl( split_title[10] );
+            var chart_text = node.data.title;
+            var chain = $('.temp-set').html(chart_text).text().replace(/\//gi, "");
+            var split_title = chain.split(" ");
 
             getStatData(parent, node_action);
         }
@@ -132,7 +103,6 @@
         if(node_action) {
             switch (parent_name) {
                 case "<?php i18n_str('Users', true); ?>":
-                    cl("Query: " + "user_" + node_action);
                     fetchData(node_action);
                     break;
                 case "Itens":
@@ -145,30 +115,38 @@
     }
     
     function fetchData(action) {
-
+        var base_path = $("#src").val();
         var from = $("#from_period").val();
         var to = $("#to_period").val();
 
         if(from && to) {
-            cl("Between " + from + " and " + to);
-        } else {
-            // cl("Data has not been set. Fetching everything!");
-        }
+            cl("Fetch between " + from + " and " + to);
+        } else { }
 
-        return false;
-
-        var base_path = $("#src").val();
         $.ajax({
             url: base_path + '/controllers/log/log_controller.php',
-            data: {
-                operation: 'user_events',
-                event: action
-            }
+            data: { operation: 'user_events', event: action }
         }).done(function(r){
             var res_json = $.parseJSON(r);
             cl(res_json);
             drawChart(action, res_json);
         })
+    }
+    function drawChart(title, data_obj) {
+        if(data_obj.stat_object) {
+            var basis = [ title, 'qtd ', {role: 'style'} ];
+            var chart_data = [basis];
+            for( i in data_obj.stat_object ) {
+                obj_total = parseInt(data_obj.stat_object[i]);
+                chart_data.push( [i, obj_total, 'red'] );
+            }
+
+            var data = google.visualization.arrayToDataTable( chart_data );
+            var options = { colors: ['#0c698b'] };
+            var chart = new google.charts.Bar(document.getElementById('chart_div'));
+
+            chart.draw(data, options);
+        }
     }
 
     $("#report_type_stat").dynatree(stats_dynatree_opts);

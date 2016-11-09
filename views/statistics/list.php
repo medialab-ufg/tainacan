@@ -16,6 +16,8 @@ $view_helper = new ViewHelper();
         }
     </style>
     
+    <div class="temp-set"></div>
+    
     <?php $view_helper->render_statistic_menu('config') ?>
 
     <div id="statistics-config" class="col-md-3 ui-widget-header no-padding">
