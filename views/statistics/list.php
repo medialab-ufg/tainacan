@@ -5,25 +5,14 @@ include_once('js/list_js.php');
  
 $view_helper = new ViewHelper();
 ?>
-<div class="col-md-12 statistics-container">
+<div class="col-md-12 statistics-container no-padding">
 
-    <style type="text/css">
-        #report_type_stat span.bbb a {
-            color: blue !important;
-        }
-        #report_type_stat span.bbb p {
-            color: red;
-        }
-    </style>
-    
-    <div class="temp-set"></div>
-    
     <?php $view_helper->render_statistic_menu('config') ?>
 
     <div id="statistics-config" class="col-md-3 ui-widget-header no-padding">
 
         <div class="form-group period-config">
-            <label for="object_tags" class="title-pipe"> <?php i18n_str('Period',true); ?> </label>
+            <label class="title-pipe"> <?php i18n_str('Period',true); ?> </label>
             <div class="date-range-filter">
                 <p>
                     <span> <?php _e('From','tainacan') ?> </span>
@@ -41,8 +30,7 @@ $view_helper = new ViewHelper();
         </div>
     </div>
 
-    <div class="col-md-9">
-
+    <div id="charts-display" class="col-md-9">
         <div class="chart-header btn-group col-md-12">
             <?php $view_helper->render_config_title(__('Repository Statistics', 'tainacan')); ?>
             <div class="user-config-control col-md-12 no-padding">
@@ -64,7 +52,8 @@ $view_helper = new ViewHelper();
         <div id="charts-resume" class="col-md-12">
             Status
         </div>
-
     </div>
+
+    <div class="temp-set" style="display: none"></div>
 
 </div>

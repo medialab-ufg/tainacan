@@ -1,19 +1,23 @@
 .statistics-container {
 
+  #collection-steps {
+    margin-bottom: 0;
+    #conclude_config {
+      display: none;
+    }
+  }
+
+  #charts-display {
+    margin-top: 20px;
+  }
+
   /* Left side */
   #statistics-config {
-    /*
-     * >>> Overides 'accordion' styles
-    **/
     background: white;
     border: none;
-    margin-left: -15px;
-    /*
-     * <<< Overides 'accordion' styles
-    **/
     font-size: 12px;
-    border: 3px solid $item-border;
-    margin-left: -15px;
+    //border-top: 1px solid $item-border;
+    padding-top: 20px;
 
     .period-config {
       p {
@@ -28,8 +32,13 @@
 
     } // .period-config
     label.title-pipe {
-      // border-left: 3px solid $brand-light-blue;
-      @include accordion_label_style();
+      @include accordion_label_style($padding: 4px 0 4px 0);
+      padding-left: 5px;
+      font-weight: bolder;
+
+      span {
+        color: red !important;
+      }
     }
   } // #statistics-config
 
@@ -76,14 +85,29 @@
 
 #report_type_stat {
   padding: 0;
+    
+    span.hllog {
+        a {
+            // color: $item-light-gray !important;
+        }
+        p {
+            // color: $brand-light-blue;
+        }
+    } // highlight chart
+    
   .dynatree-icon {
     display: none;
   }
   .dynatree-container {
     border: none;
     font-size: 12px;
+    padding: 5px 0 0 20px;
+
     p {
       font-size: 10px;
+    }
+    ul {
+      padding-left: 0;
     }
   }
 } // report_type_stat -> dynatree
