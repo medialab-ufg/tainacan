@@ -32,7 +32,7 @@ class Log extends Model {
             return $wpdb->get_results($sql, ARRAY_N);
         }
     }
-
+    
     private function get_event_type($spec) {
         switch($spec) {
             case 'items':
@@ -43,7 +43,7 @@ class Log extends Model {
             case 'status':
                 return ['login', 'register', 'delete_user'];
             case 'profile':
-                return ['subscriber', 'administrator', 'editor', 'author'];
+                return ['subscriber', 'administrator', 'editor', 'author', 'contributor'];
         }
     }
 

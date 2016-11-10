@@ -127,10 +127,10 @@ class UserModel extends Model {
             $resultRegister['msg'] = __('User registered successfully! Your login is: ', 'tainacan') . $get_login->user_login;
             $resultRegister['url'] = get_the_permalink(get_option('collection_root_id')) . '?open_login=true';
 
-            $user_info = get_userdata($user_id);
+            /* $user_info = get_userdata($user_id);
             $user_role = implode(', ', $user_info->roles);
-
             Log::addLog(['user_id' => $user_id, 'event_type' => 'user_profile', 'event' => $user_role]);
+            */
             Log::addLog(['user_id' => $user_id, 'event_type' => 'user_status', 'event' => 'register']);
             
             $this->send_welcome_email($data, $get_login->user_login);

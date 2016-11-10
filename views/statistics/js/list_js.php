@@ -158,7 +158,7 @@
             }
 
             var data = google.visualization.arrayToDataTable( chart_data );
-            var options = { colors: ['#0c698b'] };
+            var options = { colors: ['#79a6ce'] };
             var chart = new google.charts.Bar(document.getElementById('chart_div'));
 
             chart.draw(data, options);

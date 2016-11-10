@@ -2914,6 +2914,13 @@ function tainacan_log_deleted_user($user_id) {
     return Log::addLog( [ 'user_id' => $user_id, 'event_type' => 'user_status', 'event' => current_filter()] );
 }
 
+add_action('user_register', 'tainacan_log_add_user');
+function tainacan_log_add_user($user_id) {
+    $user_info = get_userdata($user_id);
+    $user_role = implode(', ', $user_info->roles);
+    return Log::addLog(['user_id' => $user_id, 'event_type' => 'user_profile', 'event' => $user_role]);
+}
+
 function current_user_id_or_anon() {
     $user_id = get_current_user_id();
     if ($user_id == 0) {

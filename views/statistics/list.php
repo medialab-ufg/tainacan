@@ -7,7 +7,7 @@ $view_helper = new ViewHelper();
 ?>
 <div class="col-md-12 statistics-container no-padding">
 
-    <?php $view_helper->render_statistic_menu('config') ?>
+    <?php $view_helper->render_statistic_menu() ?>
 
     <div id="statistics-config" class="col-md-3 ui-widget-header no-padding">
 
@@ -34,14 +34,15 @@ $view_helper = new ViewHelper();
         <div class="chart-header btn-group col-md-12">
             <?php $view_helper->render_config_title(__('Repository Statistics', 'tainacan')); ?>
             <div class="user-config-control col-md-12 no-padding">
-                <div class="col-md-4 pull-left">
+                <div class="col-md-4 pull-left no-padding">
                     <span class="config-title"><?php i18n_str('Filters:',true); ?></span>
                     <span class="current-chart"><?php i18n_str('User Stats',true); ?></span>
                 </div>
-
+                <?php /*
                 <span class="config-title"><?php i18n_str('Orientation:',true); ?></span>
                 <span class="config-title"><?php i18n_str('Mode:',true); ?></span>
                 <button class="btn btn-default"> <?php i18n_str('Download',true); ?> <span class="caret"></span></button>
+                */ ?>
             </div>
         </div>
 

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: socialdb\n"
 "POT-Creation-Date: 2016-11-10 14:52-0200\n"
-"PO-Revision-Date: 2016-11-10 14:54-0200\n"
+"PO-Revision-Date: 2016-11-10 15:47-0200\n"
 "Last-Translator: Rodrigo de Oliveira <webmaster@rodrigodeoliveira.net>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -7830,7 +7830,7 @@ msgstr "Filtros:"
 
 #: views/statistics/list.php:42
 msgid "User Stats"
-msgstr ""
+msgstr "Status do Usuário"
 
 #: views/statistics/list.php:45
 msgid "Orientation:"
