@@ -35,12 +35,15 @@ class Log extends Model {
 
     private function get_event_type($spec) {
         switch($spec) {
+            case 'items':
+                return ['add', 'view', 'edit', 'delete', 'download'];
             case 'collection':
+            case 'category':
                 return ['add', 'view', 'edit', 'delete'];
             case 'status':
                 return ['login', 'register', 'delete_user'];
             case 'profile':
-                return ['subscriber'];
+                return ['subscriber', 'administrator', 'editor', 'author'];
         }
     }
 

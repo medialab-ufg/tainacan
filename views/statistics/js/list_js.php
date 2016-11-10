@@ -53,49 +53,65 @@
             var chart_text = node.data.title;
             var chain = $('.temp-set').html(chart_text).text().replace(/\//gi, "");
             var split_title = chain.split(" ");
+            $(".current-chart").text( parent + " >> " + split_title[0] );
 
             getStatData(parent, node_action);
         }
     };
 
-    function usersStatusChildren() {
+    function statusChildren() {
         return [
-            { title: "Status <p> logins / registros / banidos / excluídos </p>", href: "status", addClass: 'bbb' },
+            { title: "Status <p> logins / registros / banidos / excluídos </p>", href: "status", addClass: 'hllog' },
             { title: "Itens <p> criaram / editaram / apagaram / <br/> visualizaram / baixaram</p>", href: "items" },
             { title: "Perfil <p> Pessoas que aderiram a um perfil </p>", href: "profile" },
-            { title: "Categorias <p> criaram / editaram / apagaram / <br/> visualizaram / baixaram </p>" },
+            { title: "Categorias <p> criaram / editaram / apagaram / visualizaram </p>",href: "category" },
             { title: "Coleção <p> criaram / editaram / apagaram / visualizaram </p>", href: "collection" }
         ];
     }
 
-    function usersItensChildren() {
+    function itensChildren() {
         return [
             { title: "Usuário <p> view / comentado / votado </p>"},
             { title: "Status <p> criados / editados / excluídos / view / favoritos / baixados</p>"},
             { title: "Coleção <p> número de itens por coleção </p>"}
         ];
     }
+    
+    function collectionsChildren() {
+        return [
+            { title: "Status <p> criadas / editadas / excluídas / visualizadas / baixadas</p>"},
+            { title: "Buscas Frequentes <p> ranking das buscas mais realizadas </p>"}
+        ];
+    }
+
+    function commentsChildren() {
+        return [{ title: "Status <p> adicionados / editados / excluídos / visualizados </p>" }];
+    }
+
+    function categoryChildren() {
+        return [{ title: "Status <p> criados / editados / excluídos </p>" }];
+    }
+
+    function tagsChildren() {
+        return [{ title: "Status <p> adicionados / editados / excluídos / visualizados </p>" }];
+    }
+
+    function importsChildren() {
+        return [{ title: "<p> Acessos OAI-PHM <br/> Haversting OAI-PHM <br/> Backups <br/>" +
+        "Restore <br/> Importação <br/> Exportação CSV <br/> Importação <br/> Exportaçào formato Tainacan </p>" }];
+    }
 
     function getStatsTree() {
         return [
-            { title: "<?php i18n_str('Users', true); ?>",
-                noLink: true,
-                expand: true,
-                unselectable: true,
-                hideCheckbox: true,
-                children: usersStatusChildren()
-            },
-            { title: "Itens",
-                noLink: true,
-                hideCheckbox: true,
-                children: usersItensChildren()
-            },
-            { title: "Coleções", noLink: true, hideCheckbox: true},
-            { title: "Comentários", noLink: true, hideCheckbox: true},
-            { title: "Categorias", noLink: true, hideCheckbox: true},
-            { title: "Tags", noLink: true, hideCheckbox: true},
-            { title: "Importar / Exportar", noLink: true, hideCheckbox: true},
-            { title: "Administração", noLink: true, hideCheckbox: true},
+            { title: "<?php i18n_str('Users',true); ?>", noLink: true, expand: true, unselectable: true,
+                hideCheckbox: true, children: statusChildren() },
+            { title: "<?php i18n_str('Items',true); ?>", noLink: true, hideCheckbox: true, children: itensChildren() },
+            { title: "<?php i18n_str('Collections',true); ?>", noLink: true, hideCheckbox: true, children: collectionsChildren() },
+            { title: "<?php i18n_str('Comments',true); ?>", noLink: true, hideCheckbox: true, children: commentsChildren() },
+            { title: "<?php i18n_str('Categories',true); ?>", noLink: true, hideCheckbox: true, children: categoryChildren() },
+            { title: "<?php i18n_str('Tags',true); ?>", noLink: true, hideCheckbox: true, children: tagsChildren()},
+            { title: "<?php i18n_str('Import / Export',true); ?>", noLink: true, hideCheckbox: true, children: importsChildren() },
+            { title: "<?php i18n_str('Administration',true); ?>", noLink: true, hideCheckbox: true},
         ]
     }
 
