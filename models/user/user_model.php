@@ -155,15 +155,10 @@ class UserModel extends Model {
 
         add_filter('wp_mail_content_type', 'set_html_content_type');
 
-        //$site_url = get_site_url();
-        //$headers = 'From: No-Reply <noreply@example.com>' . "\r\n";
-        //$status = wp_mail($to, $subject, $content, $headers);
         $status = wp_mail($to, $subject, $content);
 
         // Reset content-type to avoid conflicts
         remove_filter('wp_mail_content_type', 'set_html_content_type');
-
-        //return $status;
     }
 
     /**

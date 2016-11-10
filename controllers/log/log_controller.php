@@ -9,7 +9,6 @@ class LogController extends Controller {
             case "user_events":
                 $log = new Log();
                 $_evt = "user_" . $data['event'];
-                // return json_encode($log->user_events($_evt));
                 return $log->user_events($_evt, $data['event']);
         endswitch;
     }
