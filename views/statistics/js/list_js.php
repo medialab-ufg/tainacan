@@ -148,13 +148,18 @@
             drawChart(action, res_json);
         })
     }
+    mappd_titles = { add: 'Adicionados', edit: 'Editados', view: 'Visualizados', download: 'Baixados', delete: 'Deletados',
+        login: 'Login', register: 'Registros', delete_user: 'Excluídos',
+        administrator: 'Administrador', author: 'Autor', editor: 'Editor', subscriber: 'Assinante', contributor: 'Colaborador' };
+
     function drawChart(title, data_obj) {
         if(data_obj.stat_object) {
             var basis = [ title, 'qtd ', {role: 'style'} ];
             var chart_data = [basis];
-            for( i in data_obj.stat_object ) {
-                obj_total = parseInt(data_obj.stat_object[i]);
-                chart_data.push( [i, obj_total, 'red'] );
+            for( event in data_obj.stat_object ) {
+                obj_total = parseInt(data_obj.stat_object[event]);
+                cl(event);
+                chart_data.push( [ mappd_titles[event], obj_total, 'red'] );
             }
 
             var data = google.visualization.arrayToDataTable( chart_data );

@@ -57,8 +57,8 @@ class Log extends Model {
             $_stats[] = $l_data[0];
         }
 
-        $c = array_combine( $_events_, $_stats);
-        $stat_data = [ "stat_title" => [ 'Coleções do Usuário', 'qtd' ], "stat_object" => $c ];
+        $prepared_struct = array_combine( $_events_, $_stats);
+        $stat_data = [ "stat_title" => [ 'Coleções do Usuário', 'qtd' ], "stat_object" => $prepared_struct ];
 
         return json_encode($stat_data);
     }
