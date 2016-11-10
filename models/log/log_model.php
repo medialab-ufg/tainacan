@@ -36,22 +36,25 @@ class Log extends Model {
     private function get_event_type($spec) {
         switch($spec) {
             case 'collection':
-                return 'view';
+                return ['add', 'view', 'edit', 'delete'];
+            case 'status':
+                return ['login', 'register', 'delete_user'];
+            case 'profile':
+                return ['subscriber'];
         }
     }
 
     public static function user_events($event_type, $spec) {
-        $_evt_type = self::get_event_type($spec);
+        $_events_ = self::get_event_type($spec);
 
-        $_collection_events = ['add', 'view', 'edit', 'delete'];
         $_stats = [];
-        foreach ($_collection_events as $ev) {
+        foreach ($_events_ as $ev) {
             $evt_count_ = self::getUserEvents($event_type, $ev, false);
             $l_data = array_pop($evt_count_);
             $_stats[] = $l_data[0];
         }
 
-        $c = array_combine( $_collection_events, $_stats);
+        $c = array_combine( $_events_, $_stats);
         $stat_data = [ "stat_title" => [ 'Coleções do Usuário', 'qtd' ], "stat_object" => $c ];
 
         return json_encode($stat_data);

@@ -64,7 +64,7 @@
             { title: "Itens <p> criaram / editaram / apagaram / <br/> visualizaram / baixaram</p>", href: "items" },
             { title: "Perfil <p> Pessoas que aderiram a um perfil </p>", href: "profile" },
             { title: "Categorias <p> criaram / editaram / apagaram / <br/> visualizaram / baixaram </p>" },
-            { title: "Coleção <p> criaram / editaram / apagaram / visualizaram </p>", href: "collection " }
+            { title: "Coleção <p> criaram / editaram / apagaram / visualizaram </p>", href: "collection" }
         ];
     }
 
