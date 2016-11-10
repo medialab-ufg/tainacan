@@ -15,7 +15,7 @@ class CollectionTemplatesModel extends CollectionModel {
      */
     public function list_habilitate_collection_template(){
         $data = [];
-        $user_template = get_option('socialdb_user_templates');
+        $user_template = unserialize(get_option('socialdb_user_templates'));
         if($user_template && is_array($user_template)){
             $all_user_template = $this->get_collections_templates();
             if(is_array($all_user_template) ){
@@ -26,12 +26,12 @@ class CollectionTemplatesModel extends CollectionModel {
             }
         }
         //templates do repositorio
-        $tainacan_template = get_option('socialdb_tainacan_templates');
+        $tainacan_template = unserialize(get_option('socialdb_tainacan_templates'));
         if($tainacan_template && is_array($tainacan_template)){
             $all_tainacan_template = $this->get_tainacan_templates();
             if(is_array($all_tainacan_template) ){
                 foreach ($all_tainacan_template as $template) {
-                    if(in_array($template['directory'], $user_template))
+                    if(in_array($template['directory'], $tainacan_template))
                             $data['tainacan_templates'][] = $template;
                 }
             }
@@ -100,13 +100,13 @@ class CollectionTemplatesModel extends CollectionModel {
                 
                $xml = simplexml_load_file($dir.'/'.$fileInfo->getFilename().'/package/metadata/administrative_settings.xml'); 
                if(is_file($dir.'/'.$fileInfo->getFilename().'/package/metadata/thumbnail.png')){
-                    $thumbnail_id = get_template_directory_uri().'/../../uploads/tainacan/data/templates'.'/'.$fileInfo->getFilename().'/package/metadata/thumbnail.png';
+                    $thumbnail_id = get_template_directory_uri().'/data/templates'.'/'.$fileInfo->getFilename().'/package/metadata/thumbnail.png';
                 }elseif(is_file($dir.'/'.$fileInfo->getFilename().'/package/metadata/thumbnail.jpg')){
-                    $thumbnail_id =  get_template_directory_uri().'/../../uploads/tainacan/data/templates'.'/'.$fileInfo->getFilename().'/package/metadata/thumbnail.jpg';
+                    $thumbnail_id =  get_template_directory_uri().'/data/templates'.'/'.$fileInfo->getFilename().'/package/metadata/thumbnail.jpg';
                 }elseif(is_file($dir.'/'.$fileInfo->getFilename().'/package/metadata/thumbnail.gif')){
-                    $thumbnail_id =  get_template_directory_uri().'/../../uploads/tainacan/data/templates'.'/'.$fileInfo->getFilename().'/package/metadata/thumbnail.gif';
+                    $thumbnail_id =  get_template_directory_uri().'/data/templates'.'/'.$fileInfo->getFilename().'/package/metadata/thumbnail.gif';
                 }elseif(is_file($dir.'/'.$fileInfo->getFilename().'/package/metadata/thumbnail.jpeg')){
-                    $thumbnail_id =  get_template_directory_uri().'/../../uploads/tainacan/data/templates'.'/'.$fileInfo->getFilename().'/package/metadata/thumbnail.jpeg';
+                    $thumbnail_id =  get_template_directory_uri().'/data/templates'.'/'.$fileInfo->getFilename().'/package/metadata/thumbnail.jpeg';
                 }else{
                     $thumbnail_id = '';
                 }
@@ -203,11 +203,13 @@ class CollectionTemplatesModel extends CollectionModel {
             'addClass' => 'color1');
         $user_templates = $this->get_collections_templates();
         if($user_templates && is_array($user_templates)){
+            $metas = unserialize(get_option('socialdb_user_templates'));
             foreach ($user_templates as $user_template) {
                  $dynatree['children'][]  = array(
                     'title' => $user_template['title'], 
                     'key' => $user_template['directory'], 
-                    'type' => 'user', 
+                    'type' => 'user',
+                    'select' => (is_array($metas) && in_array($user_template['directory'], $metas)) ? true : false,
                     'expand' => true, 
                     'addClass' => 'color1');
             }
@@ -225,6 +227,19 @@ class CollectionTemplatesModel extends CollectionModel {
             'key' => 'false', 
             'expand' => true, 
             'addClass' => 'color1');
+        $tainacan_templates = $this->get_tainacan_templates();
+        if($tainacan_templates && is_array($tainacan_templates)){
+            $metas = unserialize(get_option('socialdb_tainacan_templates'));
+            foreach ($tainacan_templates as $tainacan_template) {
+                 $dynatree['children'][]  = array(
+                    'title' => $tainacan_template['title'], 
+                    'key' => $tainacan_template['directory'], 
+                    'type' => 'tainacan',
+                    'select' => (is_array($metas) && in_array($tainacan_template['directory'], $metas)) ? true : false,
+                    'expand' => true, 
+                    'addClass' => 'color1');
+            }
+        }
         return $dynatree;
     }
 

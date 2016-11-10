@@ -3,7 +3,7 @@
         var src = $('#src').val();
         change_breadcrumbs_title('<?php _e('Repository Configuration','tainacan') ?>');
         showCKEditor();
-        list_templates();
+        //list_templates();
         autocomplete_collection_templates();
         init_dynatree_collection_template();
         $('#submit_form_edit_repository_configuration').submit(function (e) {
@@ -62,7 +62,7 @@
                         }).done(function (result) {
                             $('#modalImportMain').modal('hide');//escondo o modal de carregamento
                             elem_first = jQuery.parseJSON(result);
-                            if(elem_first.result){
+                            if(elem_first.d){
                                 //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
                                 get_collections_template($('#src').val()); 
                                 list_templates();

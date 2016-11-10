@@ -532,6 +532,9 @@ function add_collection_template(col, template_name) {
         url: path, type: "POST",
         data: {operation: 'simple_add', collection_object: 'Item', collection_name: col, template: template_name}
     }).done(function (r) {
+        elem = JSON.parse(r);
+        window.location = elem.url_collection_redirect;
+        console.log(elem.url_collection_redirect);
         cl(col + " ==> " + template_name);
         cl(r);
     });
@@ -572,29 +575,44 @@ function list_templates($_element) {
         data: {operation: 'list-collection-templates', is_json: true}
     }).done(function (result) {
         el = jQuery.parseJSON(result);
-
         if($_element) {
-            if( el.length > 0 ) {
-                $($_element).append("<li class='divider'></li>");
-                $.each(el, function (idx, value) {
-                    var li_item = "<li class='tmpl'><a href='#' class='added' data-tplt='" + value.directory + "'>" + value.title + "</a></li>";
-                    $($_element).append(li_item);
-                });
-            }
+            add_li_collection_template(el,$_element);
         } else {
-            $('#collection_templates').html('');
-            if (el && el.length > 0) {
-                $.each(el, function (index, value) {
-                    $('#collection_templates').append('<option selected="selected" value="' + value.directory + '">' + value.title + '</option>');
-                });
+            var cont = 0;
+            $("#dynatree-collection-templates").dynatree("getTree").reload();
+            add_li_collection_template(el,"#collections-menu ul.templates");
+//            $('#collection_templates').html('');
+           if (cont > 0) {
+//                $.each(el, function (index, value) {
+//                    $('#collection_templates').append('<option selected="selected" value="' + value.directory + '">' + value.title + '</option>');
+//                });
                 $('#show_collection_empty').show();
-                var curr_height = $('.collection-templates').height();
-                $('.collection-templates').height(curr_height + 55);
-            }else{
-                $('#show_collection_empty').hide();
-            }
+//                var curr_height = $('.collection-templates').height();
+//                $('.collection-templates').height(curr_height + 55);
+           }else{
+               $('#show_collection_empty').hide();
+           }
         }
    });
+}
+
+function add_li_collection_template(el,$_element){
+    $($_element).html('<li class="click_new_collection"><a href="#" id="click_new_collection" onclick="showModalCreateCollection()">Geral</a></li>');
+    $($_element).append("<li class='divider'></li>");
+    if(el.user_templates){
+        $.each(el.user_templates, function (idx, value) {
+            var li_item = "<li class='tmpl'><a href='#' class='added' data-tplt='" + value.directory + "'>" + value.title + "</a></li>";
+            $($_element).append(li_item);
+        });
+    }
+    console.log(el);
+    $($_element).append("<li class='divider'></li>");
+    if(el.tainacan_templates){
+        $.each(el.tainacan_templates, function (idx, value) {
+            var li_item = "<li class='tmpl'><a href='#' class='added' data-tplt='" + value.directory + "'>" + value.title + "</a></li>";
+            $($_element).append(li_item);
+        });
+    }
 }
 
 /*************  FIM : funcoes para templates de colecoes **********************/
