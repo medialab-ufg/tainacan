@@ -102,8 +102,29 @@
 
 #charts-resume {
   @include single_item_container_style();
+  padding: 20px;
   margin-top: 20px;
-}
+
+  table {
+    text-align: center;
+
+    tr {
+      border-top: 1.5px solid $brand-medium-blue;
+      th, td {
+        padding: 5px 10px;
+      }
+      &:first-child {
+        font-weight: bolder;
+        color: $brand-medium-blue;
+      }
+      &:nth-child(2) {
+        td:first-child {
+          font-weight: bolder;
+        }
+      }
+    }
+  } // table
+} // #charts-resume
 
 .right-caret {
   border-bottom: 4px solid transparent;

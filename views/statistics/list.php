@@ -51,7 +51,13 @@ $view_helper = new ViewHelper();
         </div>
         
         <div id="charts-resume" class="col-md-12">
-            Status
+            <table>
+                <tbody>
+                <tr class="headers"> <th class="curr-parent"> Status: </th> </tr>
+                <tr class="content"> <td class="curr-filter"> Usuários </td> </tr>
+                </tbody>
+            </table>
+
         </div>
     </div>
 

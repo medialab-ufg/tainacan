@@ -156,10 +156,12 @@
         if(data_obj.stat_object) {
             var basis = [ title, 'qtd ', {role: 'style'} ];
             var chart_data = [basis];
+
             for( event in data_obj.stat_object ) {
                 obj_total = parseInt(data_obj.stat_object[event]);
                 cl(event);
                 chart_data.push( [ mappd_titles[event], obj_total, 'red'] );
+                displayBaseAppend(mappd_titles[event], obj_total);
             }
 
             var data = google.visualization.arrayToDataTable( chart_data );
@@ -168,6 +170,11 @@
 
             chart.draw(data, options);
         }
+    }
+
+    function displayBaseAppend(title, value) {
+        $("#charts-resume table tr.headers").append("<th>"+ title +"</th>");
+        $("#charts-resume table tr.content").append("<td>"+ value +"</td>");
     }
 
     $("#report_type_stat").dynatree(stats_dynatree_opts);
