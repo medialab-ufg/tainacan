@@ -478,6 +478,31 @@ function initDynatrees(src){
             }
     }).done(function (result) {
         var json_propriedades = jQuery.parseJSON(result);
+        //dynatree_restriction_1 
+        $("#dynatree_data_restriction_1").empty();
+        $("#dynatree_data_restriction_1").dynatree({
+            selectionVisible: true, // Make sure, selected nodes are visible (expanded).  
+            checkbox: true,
+            children: json_propriedades,
+            onSelect: function (flag, node) {
+                     //equivalent properties
+                if($('#select_restriction_1').val()=='equivalentproperty'){
+                    set_values_restrictions(node.data.key,'#data_equivalentproperty_ids');
+                }
+                
+            }
+        });
+    });
+    $.ajax({
+        type: "POST",
+        url: src + '/controllers/filters/filters_controller.php',
+        data: {
+                collection_id: $("#collection_id").val(),
+                order: 'name',
+                operation: 'parentDataDynatreeProperties'
+            }
+    }).done(function (result) {
+        var json_propriedades = jQuery.parseJSON(result);
         //parent
         $("#dynatree_property_data_parent").empty();
         $("#dynatree_property_data_parent").dynatree({
@@ -491,20 +516,6 @@ function initDynatrees(src){
                 //equivalent properties
                 console.log(node);
                     $('#data_socialdb_property_parent').val(node.data.key);
-            }
-        });
-        //dynatree_restriction_1 
-        $("#dynatree_data_restriction_1").empty();
-        $("#dynatree_data_restriction_1").dynatree({
-            selectionVisible: true, // Make sure, selected nodes are visible (expanded).  
-            checkbox: true,
-            children: json_propriedades,
-            onSelect: function (flag, node) {
-                     //equivalent properties
-                if($('#select_restriction_1').val()=='equivalentproperty'){
-                    set_values_restrictions(node.data.key,'#data_equivalentproperty_ids');
-                }
-                
             }
         });
     });
@@ -645,6 +656,30 @@ function initDynatreesObject(src){
             }
     }).done(function (result) {
         var json_propriedades = jQuery.parseJSON(result);
+        //dynatree_restriction_1 
+        $("#dynatree_object_restriction_1").empty();
+        $("#dynatree_object_restriction_1").dynatree({
+            selectionVisible: true, // Make sure, selected nodes are visible (expanded).  
+            checkbox: true,
+            children: json_propriedades,
+            onSelect: function (flag, node) {
+                     //equivalent properties
+                if($('#select_restriction_1_object').val()=='equivalentproperty'){
+                    set_values_restrictions(node.data.key,'#object_equivalentproperty_ids');
+                } 
+            }
+        });
+    });
+    $.ajax({
+        type: "POST",
+        url: src + '/controllers/filters/filters_controller.php',
+        data: {
+                collection_id: $("#collection_id").val(),
+                order: 'name',
+                operation: 'parentObjectDynatreeProperties'
+            }
+    }).done(function (result) {
+        var json_propriedades = jQuery.parseJSON(result);
         //parent
         $("#dynatree_property_object_parent").empty();
         $("#dynatree_property_object_parent").dynatree({
@@ -658,21 +693,6 @@ function initDynatreesObject(src){
                 //equivalent properties
                 console.log(node);
                     $('#object_socialdb_property_parent').val(node.data.key);
-            }
-        });
-        
-        
-        //dynatree_restriction_1 
-        $("#dynatree_object_restriction_1").empty();
-        $("#dynatree_object_restriction_1").dynatree({
-            selectionVisible: true, // Make sure, selected nodes are visible (expanded).  
-            checkbox: true,
-            children: json_propriedades,
-            onSelect: function (flag, node) {
-                     //equivalent properties
-                if($('#select_restriction_1_object').val()=='equivalentproperty'){
-                    set_values_restrictions(node.data.key,'#object_equivalentproperty_ids');
-                } 
             }
         });
     });

@@ -301,12 +301,13 @@
         if (!category_id) {
             category_id = $("#category_single_edit_id").val();
         }
+        var operation = '<?php echo (has_filter('tainacan_operation_metadata_category')) ? apply_filters('tainacan_operation_metadata_category','') : 'list_metadata_category'  ?>';
         $('#modalEditCategoria').modal('hide');
         $.ajax({
             url: $('#src').val() + '/controllers/property/property_controller.php',
             type: 'POST',
             data: {
-                operation: 'list_metadata_category', 
+                operation: operation, 
                 hide_wizard: 'true', 
                 category_id: category_id, 
                 collection_id: $("#collection_id").val()}
