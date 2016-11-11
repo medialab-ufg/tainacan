@@ -157,13 +157,15 @@
             var basis = [ title, 'qtd ', {role: 'style'} ];
             var chart_data = [basis];
 
+            displayFixedBase();
+            var color = data_obj.color || '#79a6ce';
+
             for( event in data_obj.stat_object ) {
                 obj_total = parseInt(data_obj.stat_object[event]);
-                cl(event);
-                chart_data.push( [ mappd_titles[event], obj_total, 'red'] );
+                chart_data.push( [ mappd_titles[event], obj_total, color ] );
                 displayBaseAppend(mappd_titles[event], obj_total);
             }
-            var color = data_obj.color || '#79a6ce';
+
 
             var data = google.visualization.arrayToDataTable( chart_data );
             var options = { colors: [color] };
@@ -171,6 +173,11 @@
 
             chart.draw(data, options);
         }
+    }
+
+    function displayFixedBase() {
+        $("#charts-resume table tr.headers").html("<th class='curr-parent'> Status: </th>");
+        $("#charts-resume table tr.content").html("<td class='curr-filter'> Usuários </td>");
     }
 
     function displayBaseAppend(title, value) {

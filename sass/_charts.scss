@@ -106,10 +106,11 @@
   margin-top: 20px;
 
   table {
-    text-align: center;
-
+    // text-align: center;
+    width: 100%;
+    
     tr {
-      border-top: 1.5px solid $brand-medium-blue;
+      border-top: 1px solid $brand-medium-blue;
       th, td {
         padding: 5px 10px;
       }
@@ -118,9 +119,12 @@
         color: $brand-medium-blue;
       }
       &:nth-child(2) {
-        td:first-child {
-          font-weight: bolder;
-        }
+        td {
+          padding: 5px 10px;
+          &:first-child {
+            font-weight: bolder;
+          }
+        } // td
       }
     }
   } // table
