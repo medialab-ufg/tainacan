@@ -36,14 +36,14 @@ class Log extends Model {
     private function get_event_type($spec) {
         switch($spec) {
             case 'items':
-                return ['add', 'view', 'edit', 'delete', 'download'];
+                return ['color' => '#0EEAFF', 'events' => ['add', 'view', 'edit', 'delete', 'download'] ];
             case 'collection':
             case 'category':
-                return ['add', 'view', 'edit', 'delete'];
+                return ['color' => '#149271', 'events' => ['add', 'view', 'edit', 'delete'] ];
             case 'status':
-                return ['login', 'register', 'delete_user'];
+                return ['color' => '#79a6ce', 'events' => ['login', 'register', 'delete_user'] ];
             case 'profile':
-                return ['subscriber', 'administrator', 'editor', 'author', 'contributor'];
+                return ['color' => '#F09302', 'events' => ['subscriber', 'administrator', 'editor', 'author', 'contributor'] ];
         }
     }
 
@@ -51,14 +51,14 @@ class Log extends Model {
         $_events_ = self::get_event_type($spec);
 
         $_stats = [];
-        foreach ($_events_ as $ev) {
+        foreach ($_events_['events'] as $ev) {
             $evt_count_ = self::getUserEvents($event_type, $ev, false);
             $l_data = array_pop($evt_count_);
             $_stats[] = $l_data[0];
         }
 
-        $prepared_struct = array_combine( $_events_, $_stats);
-        $stat_data = [ "stat_title" => [ 'Coleções do Usuário', 'qtd' ], "stat_object" => $prepared_struct ];
+        $prepared_struct = array_combine($_events_['events'], $_stats);
+        $stat_data = [ "stat_title" => [ 'Coleções do Usuário', 'qtd' ], "stat_object" => $prepared_struct, "color" => $_events_['color']  ];
 
         return json_encode($stat_data);
     }

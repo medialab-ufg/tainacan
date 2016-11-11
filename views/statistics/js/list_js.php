@@ -163,9 +163,10 @@
                 chart_data.push( [ mappd_titles[event], obj_total, 'red'] );
                 displayBaseAppend(mappd_titles[event], obj_total);
             }
+            var color = data_obj.color || '#79a6ce';
 
             var data = google.visualization.arrayToDataTable( chart_data );
-            var options = { colors: ['#79a6ce'] };
+            var options = { colors: [color] };
             var chart = new google.charts.Bar(document.getElementById('chart_div'));
 
             chart.draw(data, options);
