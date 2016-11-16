@@ -11,6 +11,19 @@ include_once('js/page-js.php');
 
     .label-profile{
         margin-left: 30px;
+        width: 14.6%;
+    }
+    
+    .label-item{
+        width: 7%;
+    }
+    
+    .label-category{
+        width: 9%;
+    }
+    
+    .label-tag{
+        width: 7%;
     }
 
     #list-profiles h2.ui-accordion-header {
@@ -76,10 +89,10 @@ include_once('js/page-js.php');
         <div id="tab_profile">
             <div class="header-profile row">
                 <span class="col-md-2 label-profile"><?php echo _e('Profile', 'tainacan') ?></span>
-                <span class="col-md-1"><?php echo _e('Item', 'tainacan') ?></span>
+                <span class="col-md-1 label-item"><?php echo _e('Item', 'tainacan') ?></span>
                 <span class="col-md-1"><?php echo _e('Metadata', 'tainacan') ?></span>
-                <span class="col-md-1"><?php echo _e('Category', 'tainacan') ?></span>
-                <span class="col-md-1"><?php echo _e('Tag', 'tainacan') ?></span>
+                <span class="col-md-1 label-category"><?php echo _e('Category', 'tainacan') ?></span>
+                <span class="col-md-1 label-tag"><?php echo _e('Tag', 'tainacan') ?></span>
                 <span class="col-md-1"><?php echo _e('Comment', 'tainacan') ?></span>
                 <span class="col-md-1"><?php echo _e('Descritor', 'tainacan') ?></span>
                 <span class="col-md-3"><center><?php echo _e('Manage', 'tainacan') ?></center></span>
@@ -112,11 +125,11 @@ include_once('js/page-js.php');
                         <br>
                         <div class="row">
                             <div class="col-md-2">
-                                <span><?php _e('Create/Edit/Delete', 'tainacan') ?></span><br>
-                                <span><?php _e('Sugest', 'tainacan') ?></span><br>
-                                <span><?php _e('Review', 'tainacan') ?></span><br>
-                                <span><?php _e('Download', 'tainacan') ?></span><br>
-                                <span><?php _e('See', 'tainacan') ?></span>
+                                <span style="line-height: 90%;"><?php _e('Create/Edit/Delete', 'tainacan') ?></span><br>
+                                <span style="line-height: 90%;"><?php _e('Sugest', 'tainacan') ?></span><br>
+                                <span style="line-height: 90%;"><?php _e('Review', 'tainacan') ?></span><br>
+                                <span style="line-height: 90%;"><?php _e('Download', 'tainacan') ?></span><br>
+                                <span style="line-height: 90%;"><?php _e('See', 'tainacan') ?></span>
                             </div>
                             <div class="col-md-1">
                                 <span class="icons-margin">
@@ -131,6 +144,24 @@ include_once('js/page-js.php');
                                 <span class="icons-margin">
                                     <input type="checkbox" value="None" class="icons-margin roundedOne" name="check" /><br>
                                 </span>     
+                                <span class="icons-margin">
+                                    &nbsp;&nbsp;&nbsp;
+                                </span> 
+                                <span class="icons-margin">
+                                    <input type="checkbox" value="None" class="icons-margin roundedOne" name="check" /><br>
+                                </span>
+                                <span class="icons-margin">
+                                    &nbsp;&nbsp;&nbsp;
+                                </span> 
+                                <span class="icons-margin">
+                                    <input type="checkbox" value="None" class="icons-margin roundedOne" name="check" /><br>
+                                </span>     
+                                <span class="icons-margin">
+                                    &nbsp;&nbsp;&nbsp;
+                                </span> 
+                                <span class="icons-margin">
+                                    <input type="checkbox" value="None" class="icons-margin roundedOne" name="check" /><br>
+                                </span>      
                             </div>
                             <div class="col-md-1">
                             </div>
