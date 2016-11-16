@@ -1,12 +1,20 @@
 <?php
 include_once ('../../helpers/view_helper.php');
+include_once ('../../helpers/user-permission/user_permission_helper.php');
 include_once('js/page-js.php');
+$helper = new UserPermissionHelper;
 ?>
 <style>
     .header-profile{
         font-size: 1.5em;
         color: #647B92;
         text-indent: 2%;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        margin-right: 0px;
+        margin-left: 0px;
+        border-right: 1px solid #d3d3d3;
+        border-left: 1px solid #d3d3d3;
     }
 
     .label-profile{
@@ -103,73 +111,7 @@ include_once('js/page-js.php');
                         <?php _e('Administrator', 'tainacan') ?> 
                     </h2>
                     <div>
-                        <div class="row">
-                            <div class="col-md-2"></div>
-                            <div class="col-md-1">
-                                <span  class="icons-margin glyphicon glyphicon-user"></span>
-                                <span  class="icons-margin glyphicon glyphicon-user"></span>
-                            </div>
-                            <div class="col-md-1">
-                                <span class="icons-margin glyphicon glyphicon-user"></span>
-                                <span class="icons-margin glyphicon glyphicon-user"></span>
-                            </div>
-                            <div class="col-md-1">
-                                <span class="icons-margin glyphicon glyphicon-user"></span>
-                                <span class="icons-margin glyphicon glyphicon-user"></span>
-                            </div>
-                            <div class="col-md-1">
-                                <span class="icons-margin glyphicon glyphicon-user"></span>
-                                <span class="icons-margin glyphicon glyphicon-user"></span>
-                            </div>
-                        </div>  
-                        <br>
-                        <div class="row">
-                            <div class="col-md-2">
-                                <span style="line-height: 90%;"><?php _e('Create/Edit/Delete', 'tainacan') ?></span><br>
-                                <span style="line-height: 90%;"><?php _e('Sugest', 'tainacan') ?></span><br>
-                                <span style="line-height: 90%;"><?php _e('Review', 'tainacan') ?></span><br>
-                                <span style="line-height: 90%;"><?php _e('Download', 'tainacan') ?></span><br>
-                                <span style="line-height: 90%;"><?php _e('See', 'tainacan') ?></span>
-                            </div>
-                            <div class="col-md-1">
-                                <span class="icons-margin">
-                                    <input type="checkbox" value="None" name="check" />
-                                </span> 
-                                <span class="icons-margin">
-                                    <input type="checkbox" value="None" class="icons-margin roundedOne" name="check" /><br>
-                                </span>
-                                <span class="icons-margin">
-                                    <input type="checkbox" value="None" name="check" />
-                                </span> 
-                                <span class="icons-margin">
-                                    <input type="checkbox" value="None" class="icons-margin roundedOne" name="check" /><br>
-                                </span>     
-                                <span class="icons-margin">
-                                    &nbsp;&nbsp;&nbsp;
-                                </span> 
-                                <span class="icons-margin">
-                                    <input type="checkbox" value="None" class="icons-margin roundedOne" name="check" /><br>
-                                </span>
-                                <span class="icons-margin">
-                                    &nbsp;&nbsp;&nbsp;
-                                </span> 
-                                <span class="icons-margin">
-                                    <input type="checkbox" value="None" class="icons-margin roundedOne" name="check" /><br>
-                                </span>     
-                                <span class="icons-margin">
-                                    &nbsp;&nbsp;&nbsp;
-                                </span> 
-                                <span class="icons-margin">
-                                    <input type="checkbox" value="None" class="icons-margin roundedOne" name="check" /><br>
-                                </span>      
-                            </div>
-                            <div class="col-md-1">
-                            </div>
-                            <div class="col-md-1">
-                            </div>
-                            <div class="col-md-1">
-                            </div>
-                        </div> 
+                        <?php $helper->generate_content_permission_view(['id'=>'admin', 'is-fixed'=>true ], true) ;?>
                     </div>   
                 </div>
                 <div id="profile-registered" class="form-group">
@@ -177,7 +119,7 @@ include_once('js/page-js.php');
                         <?php _e('Registered', 'tainacan') ?> 
                     </h2>
                     <div>
-
+                        <?php $helper->generate_content_permission_view(['id'=>'registered', 'is-fixed'=>true ]) ;?>
                     </div>     
                 </div>
                 <div id="profile-anonimous" class="form-group">
@@ -185,7 +127,7 @@ include_once('js/page-js.php');
                         <?php _e('Anonimous', 'tainacan') ?> 
                     </h2>
                     <div>
-
+                        <?php $helper->generate_content_permission_view(['id'=>'anonimous', 'is-fixed'=>true ]) ;?>
                     </div>     
                 </div>
             </div>

@@ -7,4 +7,12 @@
             heightStyle: "content"
         });
     });
+    
+    function back_main_list() {
+        $('#form').hide();
+        $("#tainacan-breadcrumbs").hide();
+        $('#configuration').hide();
+        $('#main_part').show();
+        $('#display_view_main_page').show();
+    }
 </script>    
