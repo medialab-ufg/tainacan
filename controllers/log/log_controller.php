@@ -8,9 +8,21 @@ class LogController extends Controller {
                 return $this->render(dirname(__FILE__) . '../../../views/statistics/list.php', $data);
             case "user_events":
                 $log = new Log();
-                $_evt = "user_" . $data['event'];
-                return $log->user_events($_evt, $data['event']);
+                $_evt = $this->getEventType($data['parent'], $data['event']);
+                return $log->user_events($_evt, $data['event'], $data['from'], $data['to']);
         endswitch;
+    }
+
+    private function getEventType($parent_name, $_event_suffix) {
+        switch ($parent_name) {
+            case i18n_str('Users'):
+            case i18n_str('Collections'):
+                return "user_" . $_event_suffix;
+            case i18n_str('Comments'):
+                return "comment";
+            case i18n_str('Items'):
+                return "user_";
+        }
     }
 }
 

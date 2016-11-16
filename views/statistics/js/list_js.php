@@ -16,8 +16,8 @@
             showButtonPanel: false,
             showAnim: 'clip',
             onSelect: function(dateText, obj) {
-                var input = $(obj).attr('id');
-                cl("Got date: " + dateText + " from " + input);
+                // var input = $(obj).attr('id');
+                // cl("Got date: " + dateText + " from " + input);
             }
         });
     });
@@ -44,9 +44,6 @@
         autoFocus: true,
         classNames: { checkbox: 'dynatree-radio'},
         children: getStatsTree(),
-        onActivate: function(node) {
-            cl("Clicado: " + node.data.key);
-        },
         onClick: function(node, event) {
             var parent = node.parent.data.title;
             var node_action = node.data.href;
@@ -54,8 +51,9 @@
             var chain = $('.temp-set').html(chart_text).text().replace(/\//gi, "");
             var split_title = chain.split(" ");
             $(".current-chart").text( split_title[0] + " do " + parent );
-
-            getStatData(parent, node_action);
+            if(node_action) {
+                fetchData(parent, node_action);
+            }
         },
         onPostInit: function(isReloading, isError) {
             $('.dynatree-radio').first().click();
@@ -75,20 +73,20 @@
     function itensChildren() {
         return [
             { title: "Usuário <p> view / comentado / votado </p>"},
-            { title: "Status <p> criados / editados / excluídos / view / favoritos / baixados</p>"},
+            { title: "Status <p> ativos / rascunhos / lixeira / excluídos </p>"},
             { title: "Coleção <p> número de itens por coleção </p>"}
         ];
     }
     
     function collectionsChildren() {
         return [
-            { title: "Status <p> criadas / editadas / excluídas / visualizadas / baixadas</p>"},
+            { title: "Status <p> criadas / editadas / excluídas / visualizadas / baixadas</p>", href: "collection"},
             { title: "Buscas Frequentes <p> ranking das buscas mais realizadas </p>"}
         ];
     }
 
     function commentsChildren() {
-        return [{ title: "Status <p> adicionados / editados / excluídos / visualizados </p>" }];
+        return [{ title: "Status <p> adicionados / editados / excluídos / visualizados </p>", href: "comments" }];
     }
 
     function categoryChildren() {
@@ -108,7 +106,7 @@
         return [
             { title: "<?php i18n_str('Users',true); ?>", noLink: true, expand: true, unselectable: true,
                 hideCheckbox: true, children: statusChildren() },
-            { title: "<?php i18n_str('Items',true); ?>", noLink: true, hideCheckbox: true, children: itensChildren() },
+            { title: "<?php i18n_str('Items',true); ?>", noLink: true, unselectable: true, hideCheckbox: true, children: itensChildren() },
             { title: "<?php i18n_str('Collections',true); ?>", noLink: true, hideCheckbox: true, children: collectionsChildren() },
             { title: "<?php i18n_str('Comments',true); ?>", noLink: true, hideCheckbox: true, children: commentsChildren() },
             { title: "<?php i18n_str('Categories',true); ?>", noLink: true, hideCheckbox: true, children: categoryChildren() },
@@ -118,39 +116,20 @@
         ];
     }
 
-    function getStatData(parent_name, node_action) {
-        if(node_action) {
-            switch (parent_name) {
-                case "<?php i18n_str('Users', true); ?>":
-                    fetchData(node_action);
-                    break;
-                case "Itens":
-                    cl("getting itens data!");
-                    break;
-                default:
-                    cl("Not defined yet!");
-            } // switch
-        } // if
-    }
-    
-    function fetchData(action) {
-        var base_path = $("#src").val();
+    function fetchData(parent, action) {
         var from = $("#from_period").val();
         var to = $("#to_period").val();
-
-        if(from && to) {
-            cl("Fetch between " + from + " and " + to);
-        } else { }
+        cl('Sending .. ' + parent);
 
         $.ajax({
-            url: base_path + '/controllers/log/log_controller.php',
-            data: { operation: 'user_events', event: action }
+            url: $("#src").val() + '/controllers/log/log_controller.php',
+            data: { operation: 'user_events', parent: parent, event: action, from: from, to: to }
         }).done(function(r){
             var res_json = $.parseJSON(r);
-            cl(res_json);
             drawChart(action, res_json);
         })
     }
+
     mappd_titles = { add: 'Adicionados', edit: 'Editados', view: 'Visualizados', download: 'Baixados', delete: 'Deletados',
         login: 'Login', register: 'Registros', delete_user: 'Excluídos',
         administrator: 'Administrador', author: 'Autor', editor: 'Editor', subscriber: 'Assinante', contributor: 'Colaborador' };

@@ -21,10 +21,15 @@ class Log extends Model {
         return ['ip' => $_SERVER['REMOTE_ADDR'], 'event_date' => date('Y-m-d H:i:s')];
     }
 
-    public static function getUserEvents($event_type, $event, $encoded = true) {
+    public static function getUserEvents($event_type, $event, $encoded = true, $from = '', $to = '' ) {
         global $wpdb;
         $_alias = "total_" . $event;
-        $sql = sprintf("SELECT COUNT(id) as '$_alias' FROM %s WHERE event_type = '$event_type' AND event = '$event'", self::_table() );
+
+        /*
+        if(empty($to)) { $to = date("Y-m-d"); }
+        if( empty($from) ) { $from = "2016-01-01";}
+        */
+        $sql = sprintf( "SELECT COUNT(id) as '$_alias' FROM %s WHERE event_type = '$event_type' AND event = '$event'", self::_table() );
         
         if( $encoded ) {
             return json_encode( $wpdb->get_results($sql) );
@@ -37,8 +42,9 @@ class Log extends Model {
         switch($spec) {
             case 'items':
                 return ['color' => '#0EEAFF', 'events' => ['add', 'view', 'edit', 'delete', 'download'] ];
-            case 'collection':
             case 'category':
+            case 'collection':
+            case 'comments':
                 return ['color' => '#149271', 'events' => ['add', 'view', 'edit', 'delete'] ];
             case 'status':
                 return ['color' => '#79a6ce', 'events' => ['login', 'register', 'delete_user'] ];
@@ -47,18 +53,18 @@ class Log extends Model {
         }
     }
 
-    public static function user_events($event_type, $spec) {
+    public static function user_events($event_type, $spec, $from, $to) {
         $_events_ = self::get_event_type($spec);
 
         $_stats = [];
         foreach ($_events_['events'] as $ev) {
-            $evt_count_ = self::getUserEvents($event_type, $ev, false);
+            $evt_count_ = self::getUserEvents($event_type, $ev, false, $from, $to);
             $l_data = array_pop($evt_count_);
             $_stats[] = $l_data[0];
         }
 
         $prepared_struct = array_combine($_events_['events'], $_stats);
-        $stat_data = [ "stat_title" => [ 'Coleções do Usuário', 'qtd' ], "stat_object" => $prepared_struct, "color" => $_events_['color']  ];
+        $stat_data = [ "stat_title" => [ 'Coleções do Usuário', 'Qtd' ], "stat_object" => $prepared_struct, "color" => $_events_['color']  ];
 
         return json_encode($stat_data);
     }
