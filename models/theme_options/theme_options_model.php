@@ -650,22 +650,189 @@ class ThemeOptionsModel extends Model {
         $objid = (string) $xml->attributes()->OBJID;
         $id = explode(':', $objid)[1];
         $struct = $xml->structMap;
-        
+
         foreach ($struct as $parent) {
             if ($parent->attributes()->LABEL == 'Parent' && $parent->attributes()->TYPE == 'LOGICAL') {
                 $col_id = $parent->div->mptr->attributes('http://www.w3.org/1999/xlink')->href;
             }
         }
-        
+
         $parent_collection_id = $this->checkForAipID($col_id);
-        
-        if($parent_collection_id){
+
+        if ($parent_collection_id && !$this->checkForAipID($id)) {
             //Realiza a importacao
-            
+            $mods = $xml->dmdSec[0]->mdWrap->xmlData->children('http://www.loc.gov/mods/v3')->mods;
+            $dim = $xml->dmdSec[1]->mdWrap->xmlData->children('http://www.dspace.org/xmlns/dspace/dim')->dim->field;
+
+            $meta_dim = array();
+            for ($i = 0; $i < count($dim); $i++) {
+                $dim_attr = $xml->dmdSec[1]->mdWrap->xmlData->children('http://www.dspace.org/xmlns/dspace/dim')->dim->field[$i]->attributes();
+                //var_dump($dim_attr->element);
+                $qualifier = (isset($dim_attr->qualifier) && !empty($dim_attr->qualifier) ? (string) $dim_attr->qualifier : null);
+                if ($qualifier) {
+                    $meta_dim[(string) $dim_attr->element][$qualifier][] = (string) $dim[$i];
+                } else {
+                    $meta_dim[(string) $dim_attr->element][] = (string) $dim[$i];
+                }
+            }
+
+            $metadados = array();
+            $contributor = $this->arrange_meta_array($meta_dim['contributor']);
+            $metadados['contributor'] = ['id' => null, 'value' => implode('; ', $contributor)];
+            $metadados['creator'] = ['id' => null, 'value' => $meta_dim['creator'][0]];
+            $date_accessioned = $this->arrange_meta_array($meta_dim['date']['accessioned'], false);
+            $metadados['date_accessioned'] = ['id' => null, 'value' => implode('; ', $date_accessioned)];
+            $metadados['date_available'] = ['id' => null, 'value' => $meta_dim['date']['available'][0]];
+            $metadados['date_issued'] = ['id' => null, 'value' => $meta_dim['date']['issued'][0]];
+            $metadados['identifier_citation'] = ['id' => null, 'value' => $meta_dim['identifier']['citation'][0]];
+            $identifier_uri = $this->arrange_meta_array($meta_dim['identifier']['uri'], false);
+            $metadados['identifier_uri'] = ['id' => null, 'value' => implode('; ', $identifier_uri)];
+            $metadados['abstract'] = ['id' => null, 'value' => $meta_dim['description']['abstract'][0]];
+            $metadados['provenance'] = ['id' => null, 'value' => implode('; ', $meta_dim['description']['provenance'])];
+            $metadados['description'] = ['id' => null, 'value' => $meta_dim['description']['resumo'][0]];
+            $metadados['format'] = ['id' => null, 'value' => $meta_dim['format'][0]];
+            $metadados['language'] = ['id' => null, 'value' => $meta_dim['language'][0]];
+            $metadados['publisher'] = ['id' => null, 'value' => $meta_dim['publisher'][0]];
+            $metadados['publisher_country'] = ['id' => null, 'value' => $meta_dim['publisher']['country'][0]];
+            $metadados['publisher_initials'] = ['id' => null, 'value' => $meta_dim['publisher']['initials'][0]];
+            $metadados['publisher_program'] = ['id' => null, 'value' => $meta_dim['publisher']['program'][0]];
+            $metadados['publisher_department'] = ['id' => null, 'value' => $meta_dim['publisher']['department'][0]];
+            $metadados['rights'] = ['id' => null, 'value' => $meta_dim['rights'][0]];
+            $metadados['rights_uri'] = ['id' => null, 'value' => $meta_dim['rights']['uri'][0]];
+            $metadados['subject_cnpq'] = ['id' => null, 'value' => $meta_dim['subject']['cnpq'][0]];
+            unset($meta_dim['subject']['cnpq']);
+            $metadados['subject'] = ['id' => null, 'value' => implode('; ', $meta_dim['subject'])];
+            $metadados['title'] = ['id' => null, 'value' => $meta_dim['title'][0]];
+            $metadados['title_alternative'] = ['id' => null, 'value' => $meta_dim['title']['alternative'][0]];
+            $metadados['dspace_type'] = ['id' => null, 'value' => $meta_dim['type'][0]];
+            $metadados['thumbnail'] = ['id' => null, 'value' => $meta_dim['thumbnail']['url'][0]];
+
+            $fileSec = (isset($xml->fileSec) ? $xml->fileSec->fileGrp : null);
+
+            if ($metadados['title']['value'] != null) {
+                //Insere o Item
+                $inserted_item_id = $this->create_simple_item($metadados['title']['value'], $id, $parent_collection_id);
+                if ($inserted_item_id) {
+                    //Insere Metadados
+                    foreach ($metadados as $key => $value) {
+                        if ($value['value'] != null) {
+                            $term = $this->checkIfMetadataExists($key, $parent_collection_id);
+                            if ($term) {
+                                //insere o valor no metadado encontrado
+                            } else {
+                                //cria o metadado e insere o valor
+                                $category_root_id = $this->collection_model->get_category_root_of($parent_collection_id);
+                                $meta_id = $this->add_property_data($key, $parent_collection_id, $category_root_id);
+                            }
+                        }
+                    }
+
+                    //Insere Files
+                    foreach ($fileSec as $file) {
+                        //var_dump($file);
+                    }
+                }
+            }
+
+
+            /* $metadados['name'] = ['id' => null, 'value' => (string) $mods->name->namePart];
+              $metadados['dateAccessioned'] = ['id' => null, 'value' => (string) $mods->extension[0]->dateAccessioned];
+              $metadados['dateAvailable'] = ['id' => null, 'value' => (string) $mods->extension[2]->dateAvailable];
+              $metadados['dateIssued'] = ['id' => null, 'value' => (string) $mods->originInfo[0]->dateIssued];
+              $metadados['publisher'] = ['id' => null, 'value' => (string) $mods->originInfo[1]->publisher];
+              $metadados['relatedItem'] = ['id' => null, 'value' => (string) $mods->relatedItem->part->text];
+
+              $identifier = array();
+              foreach ($mods->identifier as $row) {
+              $identifier[] = (string) $row;
+              }
+
+              $metadados['identifier'] = ['id' => null, 'value' => serialize($identifier)];
+              $metadados['abstract'] = ['id' => null, 'value' => (string) $mods->abstract];
+              $metadados['physicalDescription'] = ['id' => null, 'value' => (string) $mods->physicalDescription->form];
+              $metadados['language'] = ['id' => null, 'value' => (string) $mods->language->languageTerm];
+              $metadados['accessCondition'] = ['id' => null, 'value' => (string) $mods->accessCondition[0]];
+              $metadados['license'] = ['id' => null, 'value' => (string) $mods->accessCondition[1]];
+
+              $subject = array();
+              foreach ($mods->subject as $sub) {
+              $subject[] = (string) $sub->topic;
+              }
+
+              $metadados['subject'] = ['id' => null, 'value' => serialize($subject)];
+              $metadados['title'] = ['id' => null, 'value' => (string) $mods->titleInfo[0]->title];
+              $metadados['genre'] = ['id' => null, 'value' => (string) $mods->genre];
+              $metadados['note'] = ['id' => null, 'value' => (string) $mods->note]; */
+
+            var_dump($metadados);
+            exit();
         }
-        
-        var_dump($parent_collection_id, $col_id);
-        exit();
+
+        //var_dump($parent_collection_id, $col_id);
+    }
+
+    public function create_simple_item($title, $id, $collection_id) {
+        $user_id = get_current_user_id();
+        if ($user_id == 0 || is_wp_error($user_id)) {
+            $user_id = get_option('anonimous_user');
+        }
+        $post = array(
+            'post_title' => $title,
+            'post_status' => 'publish',
+            'post_author' => $user_id,
+            'post_type' => 'socialdb_object'
+        );
+        $object_id = wp_insert_post($post);
+        if ($object_id) {
+            update_post_meta($object_id, 'socialdb_dspace_aip_import_id', $id);
+
+            $category_root_id = $this->collection_model->get_category_root_of($collection_id);
+            wp_set_object_terms($object_id, array((int) $category_root_id), 'socialdb_category_type');
+
+            return $object_id;
+        } else {
+            return false;
+        }
+    }
+
+    function checkIfMetadataExists($metadado, $collection_id) {
+        $term = get_term_by('slug', $metadado . '_' . $collection_id, 'socialdb_property_type');
+        if ($term) {
+            return $term;
+        } else {
+            return false;
+        }
+    }
+
+    function arrange_meta_array(array $arr, $sub_level = true) {
+        $result = array();
+        foreach ($arr as $row) {
+            if ($sub_level) {
+                foreach ($row as $value) {
+                    $result[] = $value;
+                }
+            } else {
+                $result[] = $row;
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * function add_property_data($property)
+     * @param object $property
+     * @return int O id da da propriedade criada.
+     * @author: Eduardo Humberto 
+     */
+    public function add_property_data($name, $collection_id, $category_root_id) {
+        $new_property = wp_insert_term((string) $name, 'socialdb_property_type', array('parent' => $this->get_property_type_id('socialdb_property_data'),
+            'slug' => $name.'_'.$collection_id));
+        update_term_meta($new_property['term_id'], 'socialdb_property_required', false);
+        update_term_meta($new_property['term_id'], 'socialdb_property_data_widget', 'text');
+        update_term_meta($new_property['term_id'], 'socialdb_property_default_value', '');
+        update_term_meta($new_property['term_id'], 'socialdb_property_created_category', $category_root_id);
+        add_term_meta($category_root_id, 'socialdb_category_property_id', $new_property['term_id']);
+        return $new_property['term_id'];
     }
 
 }
