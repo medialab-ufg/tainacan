@@ -605,6 +605,13 @@ function create_folder_tainacan_upload(){
             mkdir(dirname(__FILE__).'/../../uploads/tainacan/data/templates',0755);
             define('TAINACAN_UPLOAD_FOLDER', dirname(__FILE__).'/../../uploads/tainacan');
         }
+    }else{
+        mkdir(dirname(__FILE__).'/../../uploads',0755);
+        mkdir(dirname(__FILE__).'/../../uploads/tainacan',0755);
+        mkdir(dirname(__FILE__).'/../../uploads/tainacan/data',0755);
+        mkdir(dirname(__FILE__).'/../../uploads/tainacan/cache',0755);
+        mkdir(dirname(__FILE__).'/../../uploads/tainacan/data/templates',0755);
+        define('TAINACAN_UPLOAD_FOLDER', dirname(__FILE__).'/../../uploads/tainacan');
     }
 }
 add_action( 'init', 'create_folder_tainacan_upload' );
