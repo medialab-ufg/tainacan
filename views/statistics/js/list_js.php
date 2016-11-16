@@ -45,7 +45,7 @@
         classNames: { checkbox: 'dynatree-radio'},
         children: getStatsTree(),
         onActivate: function(node) {
-            cl("Nó ativado: " + node.data.key);
+            cl("Clicado: " + node.data.key);
         },
         onClick: function(node, event) {
             var parent = node.parent.data.title;
@@ -53,9 +53,12 @@
             var chart_text = node.data.title;
             var chain = $('.temp-set').html(chart_text).text().replace(/\//gi, "");
             var split_title = chain.split(" ");
-            $(".current-chart").text( parent + " >> " + split_title[0] );
+            $(".current-chart").text( split_title[0] + " do " + parent );
 
             getStatData(parent, node_action);
+        },
+        onPostInit: function(isReloading, isError) {
+            $('.dynatree-radio').first().click();
         }
     };
 
@@ -112,7 +115,7 @@
             { title: "<?php i18n_str('Tags',true); ?>", noLink: true, hideCheckbox: true, children: tagsChildren()},
             { title: "<?php i18n_str('Import / Export',true); ?>", noLink: true, hideCheckbox: true, children: importsChildren() },
             { title: "<?php i18n_str('Administration',true); ?>", noLink: true, hideCheckbox: true},
-        ]
+        ];
     }
 
     function getStatData(parent_name, node_action) {
