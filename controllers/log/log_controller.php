@@ -6,10 +6,23 @@ class LogController extends Controller {
         switch($op):
             case "show_statistics":
                 return $this->render(dirname(__FILE__) . '../../../views/statistics/list.php', $data);
-            case "get_user_status":
+            case "user_events":
                 $log = new Log();
-                return json_encode($log->getUserStatus());
+                $_evt = $this->getEventType($data['parent'], $data['event']);
+                return $log->user_events($_evt, $data['event'], $data['from'], $data['to']);
         endswitch;
+    }
+
+    private function getEventType($parent_name, $_event_suffix) {
+        switch ($parent_name) {
+            case i18n_str('Users'):
+            case i18n_str('Collections'):
+                return "user_" . $_event_suffix;
+            case i18n_str('Comments'):
+                return "comment";
+            case i18n_str('Items'):
+                return "user_";
+        }
     }
 }
 

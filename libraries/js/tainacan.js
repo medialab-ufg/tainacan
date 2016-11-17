@@ -577,6 +577,11 @@ function list_templates($_element) {
                     var li_item = "<li class='tmpl'><a href='#' class='added' data-tplt='" + value.directory + "'>" + value.title + "</a></li>";
                     $($_element).append(li_item);
                 });
+            } else {
+                $('ul.templates').remove();
+                $('a.create-collection').text('Geral').css('cursor', 'pointer').click(function() {
+                    $('#myModal').modal('show');
+                });
             }
         } else {
             $('#collection_templates').html('');

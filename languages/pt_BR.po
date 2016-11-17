@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: socialdb\n"
-"POT-Creation-Date: 2016-11-03 14:34-0200\n"
-"PO-Revision-Date: 2016-11-03 14:37-0200\n"
+"POT-Creation-Date: 2016-11-10 14:52-0200\n"
+"PO-Revision-Date: 2016-11-10 15:47-0200\n"
 "Last-Translator: Rodrigo de Oliveira <webmaster@rodrigodeoliveira.net>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -398,9 +398,9 @@ msgstr "Por favor, preencha o delimitador corretamente!"
 #: models/object/object_multiple_model.php:138
 #: models/object/object_multiple_model.php:514
 #: models/search/search_model.php:144 models/user/user_model.php:139
-#: models/user/user_model.php:359 models/user/user_model.php:375
-#: models/user/user_model.php:384 models/user/user_model.php:400
-#: models/user/user_model.php:451 views/category/js/list_js.php:28
+#: models/user/user_model.php:354 models/user/user_model.php:370
+#: models/user/user_model.php:379 models/user/user_model.php:395
+#: models/user/user_model.php:446 views/category/js/list_js.php:28
 #: views/category/js/list_js.php:463 views/category/js/taxonomy_zone_js.php:70
 #: views/mapping/js/container_mapping_js.php:38 views/object/js/list_js.php:600
 #: views/object/js/list_trash_js.php:90 views/object/js/list_trash_js.php:118
@@ -633,6 +633,7 @@ msgstr "Área responsável pelo uso da API do Embed Ly. (http://embed.ly/)"
 
 #: functions.php:614 header.php:188
 #: views/advanced_search/list_advanced_search.php:37
+#: views/statistics/js/list_js.php:109
 msgid "Collections"
 msgstr "Coleções"
 
@@ -860,6 +861,7 @@ msgstr "Anexos"
 #: views/object/multiple_social_network/editor_items.php:151
 #: views/object/temp/edit_multiple.php:108 views/property/js/list_js.php:654
 #: views/search/edit.php:235 views/search/tags.php:11
+#: views/statistics/js/list_js.php:112
 #: views/theme_options/property/js/list_js.php:496
 msgid "Tags"
 msgstr "Tags"
@@ -920,7 +922,7 @@ msgstr "Categorias da coleção"
 #: views/design/edit.php:134
 #: views/property/js/list_category_metadata_js.php:2128
 #: views/property/js/list_metadata_js.php:2201 views/search/menu_left.php:22
-#: views/theme_options/property/list.php:12
+#: views/statistics/js/list_js.php:111 views/theme_options/property/list.php:12
 msgid "Categories"
 msgstr "Categorias"
 
@@ -1008,7 +1010,8 @@ msgstr "Configuração"
 msgid "Metadata"
 msgstr "Metadados"
 
-#: header.php:138
+#: header.php:138 views/statistics/js/list_js.php:106
+#: views/statistics/js/list_js.php:121
 msgid "Users"
 msgstr "Usuários"
 
@@ -1619,8 +1622,8 @@ msgstr "Arquivo corrompido"
 #: models/theme_options/theme_options_model.php:35
 #: models/theme_options/theme_options_model.php:53
 #: models/theme_options/theme_options_model.php:128
-#: models/user/user_model.php:126 models/user/user_model.php:371
-#: models/user/user_model.php:396 models/user/user_model.php:447
+#: models/user/user_model.php:126 models/user/user_model.php:366
+#: models/user/user_model.php:391 models/user/user_model.php:442
 #: views/category/js/taxonomy_zone_js.php:38 views/collection/js/edit_js.php:56
 #: views/event/js/list_js.php:51
 #: views/import/csv/js/edit_maping_attributes_js.php:51
@@ -1793,6 +1796,7 @@ msgstr "Metadados de objeto "
 
 #: models/collection/collection_model.php:761
 #: views/advanced_search/list_advanced_search.php:46
+#: views/statistics/js/list_js.php:108
 msgid "Items"
 msgstr "Itens "
 
@@ -1872,7 +1876,7 @@ msgstr "Outro"
 #: views/object/js/list_js.php:6 views/object/js/list_js.php:7
 #: views/search/menu_left.php:46 views/search/menu_left.php:61
 #: views/search/menu_left.php:68 views/search/menu_left.php:70
-#: views/statistics/list.php:22
+#: views/statistics/list.php:24
 msgid "until"
 msgstr "até"
 
@@ -3141,87 +3145,87 @@ msgstr "Bem Vindo ao Repositório Tainacan"
 msgid "Welcome - "
 msgstr "Bem-Vindo(a) - "
 
-#: models/user/user_model.php:360
+#: models/user/user_model.php:355
 msgid "Your email was not found in our database!"
 msgstr "Seu email não foi encontrado em nossa base de dados!"
 
-#: models/user/user_model.php:372 models/user/user_model.php:397
+#: models/user/user_model.php:367 models/user/user_model.php:392
 msgid "Your new password was sent to your email!"
 msgstr "Sua nova senha foi enviada para seu email"
 
-#: models/user/user_model.php:376 models/user/user_model.php:401
+#: models/user/user_model.php:371 models/user/user_model.php:396
 msgid "Something went wrong. Error sending email."
 msgstr "Algo aconteceu inesperadamente. Erro ao enviar email."
 
-#: models/user/user_model.php:385
+#: models/user/user_model.php:380
 msgid "Your username was not found in our database!"
 msgstr "Nome de usuário não encontrado em nossa base de dados"
 
-#: models/user/user_model.php:415
+#: models/user/user_model.php:410
 msgid "You requested a new "
 msgstr "Você requisitou a nova"
 
-#: models/user/user_model.php:415
+#: models/user/user_model.php:410
 msgid " password"
 msgstr "senha "
 
-#: models/user/user_model.php:416 models/user/user_model.php:465
+#: models/user/user_model.php:411 models/user/user_model.php:460
 msgid "Hi"
 msgstr "Olá"
 
-#: models/user/user_model.php:417
+#: models/user/user_model.php:412
 msgid " You recently asked to reset your "
 msgstr "Você requisitou recentemente a alteração de sua "
 
-#: models/user/user_model.php:418
+#: models/user/user_model.php:413
 msgid "password"
 msgstr "senha "
 
-#: models/user/user_model.php:419
+#: models/user/user_model.php:414
 msgid "Click here to change your password"
 msgstr "Clique aqui para alterar sua senha"
 
-#: models/user/user_model.php:421
+#: models/user/user_model.php:416
 msgid "Your new password is:"
 msgstr "Sua nova senha é: "
 
-#: models/user/user_model.php:423
+#: models/user/user_model.php:418
 msgid "Didn't request this change?"
 msgstr "Não requisitou essa alteração?"
 
-#: models/user/user_model.php:424
+#: models/user/user_model.php:419
 msgid "If you didn't request a new password, let us know immediately"
 msgstr "Se não, deixe-nos saber imediatamente!"
 
-#: models/user/user_model.php:426
+#: models/user/user_model.php:421
 msgid "This message was sent to"
 msgstr "Esta mensagem foi enviada para "
 
-#: models/user/user_model.php:426
+#: models/user/user_model.php:421
 msgid "at your request"
 msgstr "como requisitado"
 
-#: models/user/user_model.php:448
+#: models/user/user_model.php:443
 msgid "Password changed successfully! Redirecting to login page..."
 msgstr "Senha alterada com sucesso! Redirecionando para a página de login..."
 
-#: models/user/user_model.php:452
+#: models/user/user_model.php:447
 msgid "Your old password do not match!"
 msgstr "Senha anterior não correspondente"
 
-#: models/user/user_model.php:464
+#: models/user/user_model.php:459
 msgid "An item has been shared with you! - "
 msgstr "Um item foi compartilhado com você! - "
 
-#: models/user/user_model.php:466
+#: models/user/user_model.php:461
 msgid " Someone shared an item with you in the "
 msgstr "Alguém compartilhou um item com você na"
 
-#: models/user/user_model.php:467
+#: models/user/user_model.php:462
 msgid "website."
 msgstr "site."
 
-#: models/user/user_model.php:468
+#: models/user/user_model.php:463
 msgid "Click here to see"
 msgstr "Clique aqui para visualizar "
 
@@ -4088,7 +4092,7 @@ msgstr "Visual"
 #: views/category/list.php:222 views/design/edit.php:18
 #: views/object/js/list_js.php:14 views/property/list.php:19
 #: views/ranking/list.php:18 views/search/edit.php:19
-#: views/theme_options/property/list.php:19
+#: views/statistics/js/list_js.php:15 views/theme_options/property/list.php:19
 msgid "Previous"
 msgstr "Anterior"
 
@@ -4164,6 +4168,7 @@ msgstr "Enviar Arquivo"
 
 #: views/collection/comments.php:25 views/collection/edit.php:542
 #: views/object/ranking/list_value_ordenation.php:38
+#: views/statistics/js/list_js.php:110
 msgid "Comments"
 msgstr "Comentários"
 
@@ -5886,7 +5891,7 @@ msgstr "Pesquisar: "
 msgid "First"
 msgstr "Primeiro"
 
-#: views/object/js/list_js.php:15
+#: views/object/js/list_js.php:15 views/statistics/js/list_js.php:14
 msgid "Next "
 msgstr "Próximo"
 
@@ -7702,7 +7707,7 @@ msgstr "1 coluna"
 msgid "2 columns"
 msgstr "2 colunas"
 
-#: views/search/menu_left.php:58 views/statistics/list.php:18
+#: views/search/menu_left.php:58 views/statistics/list.php:20
 msgid "From"
 msgstr "De"
 
@@ -7799,35 +7804,43 @@ msgstr "Editar Mapeamento do Instagram "
 msgid "Edit Vimeo Mapping"
 msgstr "Editar Mapeamento do Vimeo"
 
-#: views/statistics/list.php:15
+#: views/statistics/js/list_js.php:113
+msgid "Import / Export"
+msgstr "Importar / Exportar"
+
+#: views/statistics/js/list_js.php:114
+msgid "Administration"
+msgstr "Administração"
+
+#: views/statistics/list.php:17
 msgid "Period"
 msgstr "Período"
 
-#: views/statistics/list.php:28
+#: views/statistics/list.php:30
 msgid "Report type"
 msgstr "Tipo de relatório"
 
-#: views/statistics/list.php:83
+#: views/statistics/list.php:38
 msgid "Repository Statistics"
 msgstr "Estatísticas do Repositório"
 
-#: views/statistics/list.php:86
+#: views/statistics/list.php:41
 msgid "Filters:"
 msgstr "Filtros:"
 
-#: views/statistics/list.php:87
+#: views/statistics/list.php:42
 msgid "User Stats"
-msgstr ""
+msgstr "Status do Usuário"
 
-#: views/statistics/list.php:90
+#: views/statistics/list.php:45
 msgid "Orientation:"
 msgstr "Orientação:"
 
-#: views/statistics/list.php:91
+#: views/statistics/list.php:46
 msgid "Mode:"
 msgstr "Modo:"
 
-#: views/statistics/list.php:92
+#: views/statistics/list.php:47
 msgid "Download"
 msgstr "Download"
 

@@ -127,10 +127,10 @@ class UserModel extends Model {
             $resultRegister['msg'] = __('User registered successfully! Your login is: ', 'tainacan') . $get_login->user_login;
             $resultRegister['url'] = get_the_permalink(get_option('collection_root_id')) . '?open_login=true';
 
-            $user_info = get_userdata($user_id);
+            /* $user_info = get_userdata($user_id);
             $user_role = implode(', ', $user_info->roles);
-
             Log::addLog(['user_id' => $user_id, 'event_type' => 'user_profile', 'event' => $user_role]);
+            */
             Log::addLog(['user_id' => $user_id, 'event_type' => 'user_status', 'event' => 'register']);
             
             $this->send_welcome_email($data, $get_login->user_login);
@@ -155,15 +155,10 @@ class UserModel extends Model {
 
         add_filter('wp_mail_content_type', 'set_html_content_type');
 
-        //$site_url = get_site_url();
-        //$headers = 'From: No-Reply <noreply@example.com>' . "\r\n";
-        //$status = wp_mail($to, $subject, $content, $headers);
         $status = wp_mail($to, $subject, $content);
 
         // Reset content-type to avoid conflicts
         remove_filter('wp_mail_content_type', 'set_html_content_type');
-
-        //return $status;
     }
 
     /**
