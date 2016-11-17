@@ -1,5 +1,5 @@
 <?php
-
+ini_set('max_input_vars', '10000');
 require_once(dirname(__FILE__) . '../../../models/theme_options/theme_options_model.php');
 require_once(dirname(__FILE__) . '../../../models/theme_options/populate_model.php');
 require_once(dirname(__FILE__) . '../../../models/collection/collection_templates_model.php');
@@ -99,6 +99,7 @@ class ThemeOptionsController extends Controller {
                 }
                 break;
             case "import_dspace_aip":
+                ini_set('max_execution_time', '0');
                 $file = $data['file'];
                 $verify = $theme_options_model->verify_aip_file($file);
                 if ($verify) {
@@ -147,10 +148,12 @@ class ThemeOptionsController extends Controller {
                             $xml = (file_exists($unzip_item . '/mets.xml') ? simplexml_load_file($unzip_item . '/mets.xml') : null);
                             if ($xml != null) {
                                 $theme_options_model->read_item_xml($xml, $unzip_item . '/');
-                                //$theme_options_model->recursiveRemoveDirectory($unzip_item);
+                                $theme_options_model->recursiveRemoveDirectory($unzip_item);
                             }
                         }
                     }
+                    $theme_options_model->recursiveRemoveDirectory($unzip_path);
+                    return true;
                 } else {
                     return false;
                 }
