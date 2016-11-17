@@ -60,14 +60,16 @@
                     socialdb_event_comment_author_website: $('#url').val(),
                     socialdb_event_comment_term_id: $('#socialdb_event_comment_term_id').val(),
                     socialdb_event_comment_parent: 0,
-                    socialdb_event_collection_id: $('#collection_id').val()}
+                    socialdb_event_collection_id: $('#collection_id').val() }
             }).done(function (result) {
                 hide_modal_main();
                 elem_first = jQuery.parseJSON(result);
                 showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
                 list_comments_general();
+                /*
                 $('.dropdown-toggle').dropdown();
                 $('.nav-tabs').tab();
+                */
             });
         }
     }
@@ -168,18 +170,15 @@
                 $.ajax({
                     type: "POST",
                     url: $('#src').val() + "/controllers/event/event_controller.php",
-                    data: {
-                        operation: 'add_event_comment_delete',
-                        socialdb_event_create_date: time,
-                        socialdb_event_user_id: $('#current_user_id').val(),
-                        socialdb_event_comment_delete_id: comment_id,
-                        socialdb_event_collection_id: $('#collection_id').val()}
+                    data: { operation: 'add_event_comment_delete', socialdb_event_create_date: time,
+                        socialdb_event_user_id: $('#current_user_id').val(), socialdb_event_comment_delete_id: comment_id,
+                        socialdb_event_comment_delete_object_id: $("#single_object_id").val(),
+                        socialdb_event_collection_id: $('#collection_id').val() }
                 }).done(function (result) {
                     hide_modal_main();
                     list_comments_general();
                     elem_first = jQuery.parseJSON(result);
                     showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
-
                 });
             }
         });
@@ -218,14 +217,11 @@
             $.ajax({
                 type: "POST",
                 url: $('#src').val() + "/controllers/event/event_controller.php",
-                data: {
-                    operation: 'add_event_comment_edit',
-                    socialdb_event_create_date: '<?php echo mktime() ?>',
-                    socialdb_event_user_id: $('#current_user_id').val(),
-                    socialdb_event_comment_edit_id: comment_id,
+                data: { operation: 'add_event_comment_edit', socialdb_event_create_date: '<?php echo mktime() ?>',
+                    socialdb_event_user_id: $('#current_user_id').val(), socialdb_event_comment_edit_id: comment_id,
+                    socialdb_event_comment_edit_object_id: $("#single_object_id").val(),
                     socialdb_event_comment_edit_content: $('#edit_field_value_' + comment_id).val(),
-                    socialdb_event_collection_id: $('#collection_id').val()
-                }
+                    socialdb_event_collection_id: $('#collection_id').val() }
             }).done(function (result) {
                 list_comments_general();
                 hide_modal_main();
@@ -1317,28 +1313,28 @@
             var youtube_url = validateYouTubeUrl();
             if (youtube_url) {
                 // É uma URL de um vídeo do youtube. Executar a importação do vídeo.
-                console.log(youtube_url);
+                // console.log(youtube_url);
                 import_youtube_video_url();
             } else {
                 var youtube_channel_url = validateYouTubeChannelUrl();
                 if (youtube_channel_url) {
                     // É uma URL de um canal do youtube. Executar a importação dos vídeos de canal.
                     var res = inputImportAll.split(youtube_channel_url[4]);
-                    console.log(res[1]);
+                    // console.log(res[1]);
                     import_youtube_channel(res[1]);
                 }
                 else {
                     var youtube_playlist_url = validateYouTubePlaylistUrl();
                     if (youtube_playlist_url) {
                         // É uma URL de uma playlist do youtube. Executar a importação dos vídeos da playlist.
-                        console.log(youtube_playlist_url);
+                        // console.log(youtube_playlist_url);
                         import_youtube_playlist(youtube_playlist_url);
                     }
                     else {
                         var instagram_url = validateInstagramUrl();
                         if (instagram_url) {
                             // É uma URL do instagram. Executar a importação dos imagens e vídeos do usuario.
-                            console.log(instagram_url);
+                            // console.log(instagram_url);
                             import_instagram(instagram_url);
                         } else {
                             var vimeo_url = validateVimeoUrl();
@@ -1346,10 +1342,10 @@
                                 // É uma URL do vimeo. Executar a importação dos vídeos.
                                 vimeo_url = vimeo_url.split("/");
                                 if (vimeo_url[3].localeCompare('channels') === 0) {
-                                    console.log('Canal: ' + vimeo_url[4]);
+                                    // console.log('Canal: ' + vimeo_url[4]);
                                     import_vimeo('channels', vimeo_url[4]);
                                 } else {
-                                    console.log('Usuario: ' + vimeo_url[3]);
+                                    // console.log('Usuario: ' + vimeo_url[3]);
                                     import_vimeo('users', vimeo_url[3]);
                                 }
                             }
@@ -1357,14 +1353,14 @@
                                 var flickr_url = validateFlickrUrl();
                                 if (flickr_url) {
                                     // É uma URL do Flickr. Executar a importação dos itens do usuário.
-                                    console.log(flickr_url);
+                                    // console.log(flickr_url);
                                     import_flickr(flickr_url);
                                 }
                                 else {
                                     var facebook_url = validateFacebookUrl();
                                     if (facebook_url) {
                                         // É uma URL do Facebook. Executar a importação dos itens do usuário.
-                                        console.log(facebook_url);
+                                        // console.log(facebook_url);
                                     }
                                     else {
                                         var any_file_type = validateAnyFile();
@@ -1397,7 +1393,7 @@
                                                     $('#item_url_import_all').val('');
                                                     $("#sites_import_icon").addClass("grayscale");
                                                     $('#modalshowModalImportAll').modal('hide');
-                                                    console.log('URL Regular. Enviar pro Embed.ly.');
+                                                    // console.log('URL Regular. Enviar pro Embed.ly.');
                                                 }
                                             } else {
                                                 showAlertGeneral("<?php _e('Alert', 'tainacan'); ?>", "<?php _e('Please, insert a valid URL', 'tainacan'); ?>", "error");

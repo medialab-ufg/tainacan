@@ -65,7 +65,7 @@ $default-margin: 20px 0 20px 0;
   box-shadow:         $spread $distance $blur 0 rgba($r, $g, $b, $opacity);
 }
 
-@mixin accordion_label_style() {
+@mixin accordion_label_style($padding: 8px 0 8px 0) {
   border-left: 4px solid $brand-light-blue;
   text-align: left;
   font-size: 12px;
@@ -74,10 +74,8 @@ $default-margin: 20px 0 20px 0;
   background: white;
   width: 100%;
   overflow: hidden;
-  // border-top-right-radius: 2px;
-  // border-bottom-right-radius: 2px;
   border-radius: 0 2px 2px 0;
-  padding: 8px 0 8px 0;
+  padding: $padding;
   span {
     font-size: 10px;
     text-indent: 0;

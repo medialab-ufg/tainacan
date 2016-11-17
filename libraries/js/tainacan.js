@@ -531,12 +531,15 @@ function add_collection_template(col, template_name) {
     $.ajax({
         url: path, type: "POST",
         data: {operation: 'simple_add', collection_object: 'Item', collection_name: col, template: template_name}
+<<<<<<< HEAD:libraries/js/my-script.js
     }).done(function (r) {
         elem = JSON.parse(r);
         window.location = elem.url_collection_redirect;
         console.log(elem.url_collection_redirect);
         cl(col + " ==> " + template_name);
         cl(r);
+=======
+>>>>>>> feature/statistics:libraries/js/tainacan.js
     });
 }
 
@@ -576,7 +579,22 @@ function list_templates($_element) {
     }).done(function (result) {
         el = jQuery.parseJSON(result);
         if($_element) {
+<<<<<<< HEAD:libraries/js/my-script.js
             add_li_collection_template(el,$_element);
+=======
+            if( el.length > 0 ) {
+                $($_element).append("<li class='divider'></li>");
+                $.each(el, function (idx, value) {
+                    var li_item = "<li class='tmpl'><a href='#' class='added' data-tplt='" + value.directory + "'>" + value.title + "</a></li>";
+                    $($_element).append(li_item);
+                });
+            } else {
+                $('ul.templates').remove();
+                $('a.create-collection').text('Geral').css('cursor', 'pointer').click(function() {
+                    $('#myModal').modal('show');
+                });
+            }
+>>>>>>> feature/statistics:libraries/js/tainacan.js
         } else {
             var cont = 0;
             $("#dynatree-collection-templates").dynatree("getTree").reload();
@@ -1779,6 +1797,18 @@ $(function () {
         if (evt && col_name) {
             add_collection_template(col_name, evt);
         }
+    });
+    
+    $('.repository-statistics').on('click', function() {
+        var src = $('#src').val();
+        $.ajax({
+            url: src + '/controllers/log/log_controller.php',
+            type: 'POST',
+            data: { operation: 'show_statistics' }
+        }).done(function(res) {
+            $('#main_part').hide();
+            $('#configuration').html(res).show();
+        });
     });
 
 });

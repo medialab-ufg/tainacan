@@ -387,6 +387,7 @@
             type: "POST",
             url: $('#src').val() + "/controllers/object/object_controller.php",
             data: {
+                item_id: $("#single_object_id").val(),
                 collection_id: $('#collection_id').val(),
                 operation: 'insertUserDownload',
                 thumb_id: thumb_id

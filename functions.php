@@ -10,6 +10,8 @@ add_action('init', 'register_taxonomies');
 //load_theme_textdomain("tainacan", dirname(__FILE__) . "/languages");
 include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 include_once( dirname(__FILE__) . "/config/config.php" );
+require_once('wp_bootstrap_navwalker.php');
+include_once("models/log/log_model.php");
 
 /**
  * Criando tabela taxonomymeta
@@ -43,6 +45,33 @@ function setup_taxonomymeta() {
 				KEY term_id (term_id),
 				KEY meta_key (meta_key)
 			) $charset_collate;");
+}
+
+function setup_statisticsLog() {
+    global $wpdb;
+    $charset_collate = '';
+    if (!empty($wpdb->charset))
+        $charset_collate = "DEFAULT CHARACTER SET $wpdb->charset";
+    if (!empty($wpdb->collate))
+        $charset_collate .= " COLLATE $wpdb->collate";
+
+    $_log_table_name = Log::_table();
+
+    $stats_table_sql = "
+    CREATE TABLE IF NOT EXISTS {$_log_table_name} (
+    id INT UNSIGNED NOT NULL auto_increment,
+    collection_id BIGINT(20) UNSIGNED NOT NULL,
+    user_id BIGINT(20) UNSIGNED NOT NULL,
+    item_id BIGINT(20) UNSIGNED NOT NULL,
+    resource_id BIGINT(20) UNSIGNED NOT NULL,
+    ip VARCHAR(39) DEFAULT NULL,
+    event_type VARCHAR(20) NOT NULL,
+    event VARCHAR(20) NOT NULL,
+    event_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
+    ) $charset_collate";
+
+    $wpdb->query($stats_table_sql);
 }
 
 /*
@@ -1560,7 +1589,7 @@ if (!function_exists("theme_js")) {
         /* JIT Excanvas JS */
         wp_register_script('JitExcanvasJs', get_template_directory_uri() . '/libraries/js/jit/extras/excanvas.js');
 
-        wp_register_script('my-script', get_template_directory_uri() . '/libraries/js/my-script.js', array('jquery'), '1.11');
+        wp_register_script('tainacan', get_template_directory_uri() . '/libraries/js/tainacan.js', array('jquery'), '1.11');
         /* Dynatree JS */
         wp_register_script('DynatreeJs', get_template_directory_uri() . '/libraries/js/dynatree/jquery.dynatree.full.js');
         /* Ckeditor JS */
@@ -1613,7 +1642,7 @@ if (!function_exists("theme_js")) {
         /* jsPDF Auto Table */
         wp_register_script("jsPDF_auto_table", get_template_directory_uri() . '/libraries/js/jspdf/jspdf.plugin.autotable.js', array('jquery'));
 
-        $js_files = ['jqueryUi', 'bootstrap.min', 'JitJs', 'JitExcanvasJs', 'my-script', 'DynatreeJs', 'ckeditorjs',
+        $js_files = ['jqueryUi', 'bootstrap.min', 'JitJs', 'JitExcanvasJs', 'tainacan', 'DynatreeJs', 'ckeditorjs',
             'contextMenu', 'ColorPicker', 'SweetAlert', 'SweetAlertJS', 'jquerydataTablesmin', 'data_table', 'raty',
             'jqpagination', 'dropzone', 'croppic', 'bootstrap-combobox', 'FacebookJS', 'row-sorter', 'maskedInput',
             'montage', 'prettyphoto', 'select2', 'slick','timepicker', 'jqcloud', 'toastrjs', 'jsPDF', 'jsPDF_auto_table'
@@ -2896,6 +2925,13 @@ function get_view($controller, $args = [], $method = 'POST') {
     }
 }
 
+
+if ( !function_exists('i18n_str')) {
+    function i18n_str($str, $echo = false) {
+        return ($echo) ? _e( $str , 'tainacan' ) : __( $str, 'tainacan' );
+    }
+}
+
 /* * **************************** INSTANCIANDO MODULOS ************************* */
 /*
  * funcao para inclusao dos modulos cadastrados
@@ -2924,12 +2960,30 @@ function instantiate_modules() {
     }
 }
 
-require_once('wp_bootstrap_navwalker.php');
 function register_ibram_menu() {
     register_nav_menu('menu-ibram', __('Enable reduced menu', 'tainacan') );
 }
-
 add_action('init', 'register_ibram_menu');
+
+add_action('delete_user', 'tainacan_log_deleted_user');
+function tainacan_log_deleted_user($user_id) {
+    return Log::addLog( [ 'user_id' => $user_id, 'event_type' => 'user_status', 'event' => current_filter()] );
+}
+
+add_action('user_register', 'tainacan_log_add_user');
+function tainacan_log_add_user($user_id) {
+    $user_info = get_userdata($user_id);
+    $user_role = implode(', ', $user_info->roles);
+    return Log::addLog(['user_id' => $user_id, 'event_type' => 'user_profile', 'event' => $user_role]);
+}
+
+function current_user_id_or_anon() {
+    $user_id = get_current_user_id();
+    if ($user_id == 0) {
+        $user_id = get_option('anonimous_user');
+    }
+    return $user_id;
+}
 
 ################# INSTANCIA OS MODULOS SE ESTIVEREM ATIVADOS#################
 instantiate_modules();
@@ -2943,6 +2997,7 @@ if (isset($_GET['activated']) && is_admin()) {
     register_taxonomies();
     wpdbfix();
     setup_taxonomymeta();
+    setup_statisticsLog();
     create_collection_terms();
     create_property_terms();
     create_channel_terms();

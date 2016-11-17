@@ -42,7 +42,8 @@ class CollectionModel extends Model {
 
     /**
      * function simple_add($data)
-     * @param mix $data  O id do colecao
+     * @param mix $data O id do colecao
+     * @param string $status O status inicial da coleção em questão
      * @return wp_post  
      * Funcao que insere a colecao apenas com o nome e o tipo de objeto
      * Autor: Eduardo Humberto 
@@ -242,6 +243,8 @@ class CollectionModel extends Model {
         if ($data['remove_thumbnail']) {
             delete_post_thumbnail($post_id);
         }
+
+        Log::addLog(['collection_id' => $data['collection_id'], 'user_id' => get_current_user_id(), 'event_type' => 'user_collection', 'event' => 'edit' ]);
         
         if ($_FILES) {
             $this->add_thumbnail($post_id);

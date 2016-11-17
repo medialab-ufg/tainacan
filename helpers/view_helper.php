@@ -332,24 +332,26 @@ class ViewHelper {
         ];
     }
     
-    public function add_styles_property() {
+    public function render_statistic_menu() {
+        $current_step = 'sa';
+        $path = get_template_directory_uri();
         ?>
-        <style>
-            #properties_tabs ul.metadata-container li{
-                border: 1px solid #e3e3e3 !important;
-            }
-            .gallery li {
-                padding: 0.4em;
-                margin: 0;
-            }
-            .list-compounded{
-                margin-left: 15px;
-                margin-top: 15px;
-            }
-            .list-compounded li{
-                cursor: pointer;
-            }
-        </style>    
+        <div class="col-md-12 no-padding" id="collection-steps">
+            <ul class="col-md-10">
+                <li id="dashboard" class="col-md-2 <?php $this->is_current($current_step,'config'); ?>">
+                    <a onclick="showCollectionConfiguration('<?php echo $path ?>');">
+                        <h4> <?php _e('Dashboard', 'tainacan')?> </h4>
+                    </a>
+                </li>
+                <li id="stats" class="col-md-2 <?php $this->is_current($current_step,'categories'); ?> categories">
+                    <a> <h4> <?php _e('Statistics', 'tainacan')?> </h4> </a>
+                </li>
+            </ul>
+
+            <button type="submit" id="conclude_config" class="btn btn-default btn-lg pull-right">
+                <?php _e('Conclude', 'tainacan'); ?>
+            </button>
+        </div>
         <?php
     }
 

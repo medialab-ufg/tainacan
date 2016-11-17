@@ -1,9 +1,4 @@
 <?php
-/*
-include_once ('../../../../../wp-config.php');
-include_once ('../../../../../wp-load.php');
-include_once ('../../../../../wp-includes/wp-db.php');
-*/
 include_once ('js/create_js.php');
 /**
  * View responsavel em inicializar o envio de arquivos locais

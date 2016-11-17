@@ -25,11 +25,9 @@ class TagModel extends Model{
 	public function add($tag_name,$collection_id,$description = ''){
             $is_new = $this->verify_tag($tag_name,$collection_id);
             if (!$is_new) {
-                $new_tag =wp_insert_term( trim($tag_name),
-                           'socialdb_tag_type',
-                                 array('parent'=>  $this->parent->term_id,
-                                     'description'=>$description,
-                                   'slug'=>  sanitize_title(remove_accent($tag_name)).'_'.$collection_id));
+                $new_tag = wp_insert_term( trim($tag_name), 'socialdb_tag_type',
+                    array('parent' =>  $this->parent->term_id, 'description'=>$description,
+                        'slug' =>  sanitize_title(remove_accent($tag_name)).'_'.$collection_id) );
             }else {
                $new_tag = socialdb_term_exists_by_slug(sanitize_title(remove_accent($tag_name)).'_'.$collection_id, 'socialdb_tag_type');
             }

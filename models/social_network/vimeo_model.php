@@ -27,20 +27,13 @@ class VimeoModel extends Model {
         // scope is an array of permissions your token needs to access. You can read more at https://developer.vimeo.com/api/authentication#scopes
         $token = $lib->clientCredentials('public');
 
-        // usable access token
-        //var_dump($token['body']['access_token']);
-        // accepted scopes
-        //var_dump($token['body']['scope']);
         // use the token
         $lib->setToken($token['body']['access_token']);
 
-        //$response = $lib->request('/channels/' . $data['identifier'] . '/videos/', array('per_page' => 50), 'GET');
         $response = $lib->request('/' . $data['import_type'] . '/' . $data['identifier'] . '/videos/', array('per_page' => 50), 'GET');
-        //var_dump($response);
 
         if ($response["body"]["total"] > 0) {
             $json = $this->getMediaInfo($response['body']['data']);
-            //var_dump($json);
 
             $param['collection_id'] = $data['collectionId'];
             $this->numInsertedItems = 0;
@@ -125,7 +118,6 @@ class VimeoModel extends Model {
         $mapping_id = $this->get_post_by_title('socialdb_channel_vimeo', $collection_id, 'vimeo');
 
         $getCurrentIds = unserialize(get_post_meta($mapping_id, 'socialdb_channel_vimeo_inserted_ids', true));
-
         $getCurrentIds = (is_array($getCurrentIds) ? $getCurrentIds : array());
 
         if (!in_array($this->arrItem['id'], $getCurrentIds)) {
@@ -153,7 +145,8 @@ class VimeoModel extends Model {
                             if (mb_detect_encoding($metadata, 'auto') == 'UTF-8'):
                                 $metadata = utf8_decode(iconv('ISO-8859-1', 'UTF-8', $metadata));
                             endif;
-                            $content .= $metadata;
+                            // $content .= $metadata;
+                            $content = $metadata;
                         elseif ($form[$identifier] == 'post_permalink'):
                             update_post_meta($object_id, 'socialdb_object_dc_source', $metadata);
                         elseif ($form[$identifier] == 'socialdb_object_content'):
@@ -182,6 +175,11 @@ class VimeoModel extends Model {
 
                 $getCurrentIds[$object_id] = $this->arrItem['id'];
                 update_post_meta($mapping_id, 'socialdb_channel_vimeo_inserted_ids', serialize($getCurrentIds));
+
+                $user_id = current_user_id_or_anon();
+                $logData = ['collection_id' => $collection_id, 'item_id' => $object_id,
+                  'user_id' => $user_id, 'event_type' => 'user_items', 'event' => 'add' ];
+                Log::addLog($logData);
 
                 return $object_id;
             }

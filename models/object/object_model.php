@@ -44,10 +44,12 @@ class ObjectModel extends Model {
 
     public function add($data) {
         $data = $this->validate_form($data);
+        $col_id = $data['collection_id'];
+
         if (isset($data['validation_error'])) {
             return json_encode($data);
         }
-        $category_root_id = $this->collection_model->get_category_root_of($data['collection_id']);
+        $category_root_id = $this->collection_model->get_category_root_of($col_id);
         $user_id = get_current_user_id();
         if ($user_id == 0) {
             $user_id = get_option('anonimous_user');
@@ -77,7 +79,7 @@ class ObjectModel extends Model {
         //inserindo as classificacoes
         $this->insert_classifications($data['object_classifications'], $data['ID']);
         //inserindo tags
-        $this->insert_tags($data['object_tags'], $data['collection_id'], $data['ID']);
+        $this->insert_tags($data['object_tags'], $col_id, $data['ID']);
         //inserindo os valores das propriedades
         $this->insert_properties_values($data, $data['ID']);
         //verificando se existe aquivos para ser incluidos
@@ -96,8 +98,8 @@ class ObjectModel extends Model {
             update_post_meta($data['ID'], 'socialdb_uri_imported', $data['object_url']);
         }
         //verificando se existe mapeamento ativo
-        if (get_post_meta($data['collection_id'], 'socialdb_collection_mapping_exportation_active')) {
-            add_post_meta($data['ID'], 'socialdb_channel_id', get_post_meta($data['collection_id'], 'socialdb_collection_mapping_exportation_active', true));
+        if (get_post_meta($col_id, 'socialdb_collection_mapping_exportation_active')) {
+            add_post_meta($data['ID'], 'socialdb_channel_id', get_post_meta($col_id, 'socialdb_collection_mapping_exportation_active', true));
         }
         // propriedade de termos
         $this->insert_properties_terms($data, $data['ID']);
@@ -110,6 +112,10 @@ class ObjectModel extends Model {
         $this->insert_compounds($data, $data['ID']);
         // inserindo o evento
         $data = $this->insert_object_event($data['ID'], $data);
+
+        $logData = ['collection_id' => $col_id, 'item_id' => $data['ID'],
+          'user_id' => $user_id, 'event_type' => 'user_items', 'event' => 'add' ];
+        Log::addLog($logData);
 
         return $data;
     }
@@ -732,6 +738,10 @@ class ObjectModel extends Model {
         }
         // propriedade de termos
         $this->insert_properties_terms($data, $data['ID']);
+
+        $_log_data = [ 'collection_id' => $data['collection_id'], 'user_id' => get_current_user_id(),
+          'event_type' => 'user_items', 'item_id' => $data['ID'], 'event' => 'edit'];
+        Log::addLog($_log_data);
 
         //msg
         $data['msg'] = __('The event was successful', 'tainacan');
