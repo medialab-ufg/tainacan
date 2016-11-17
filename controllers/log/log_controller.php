@@ -22,6 +22,8 @@ class LogController extends Controller {
                 return "comment";
             case i18n_str('Items'):
                 return "user_";
+            case i18n_str('Tags'):
+                return "tags";
         }
     }
 }

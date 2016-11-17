@@ -94,7 +94,7 @@
     }
 
     function tagsChildren() {
-        return [{ title: "Status <p> adicionados / editados / excluídos / visualizados </p>" }];
+        return [{ title: "Status <p> adicionados / editados / excluídos </p>", href: 'tags' }];
     }
 
     function importsChildren() {
@@ -126,6 +126,7 @@
             data: { operation: 'user_events', parent: parent, event: action, from: from, to: to }
         }).done(function(r){
             var res_json = $.parseJSON(r);
+            cl(res_json);
             drawChart(action, res_json);
         })
     }
