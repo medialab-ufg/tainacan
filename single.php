@@ -384,6 +384,11 @@ $options = get_option('socialdb_theme_options');
     <?php do_action('insert_new_contextmenu_dynatree') ?>
 
     <ul id="myMenuSingle" class="contextMenu" style="display:none;">
+            <li class="see">
+                <a href="#see" style="background-position: 6px 40%;padding:1px 5px 1px 28px;background-repeat:no-repeat;background-image:url('<?php echo get_template_directory_uri() ?>/libraries/css/images/see.png')">
+                    <?php _e('View', 'tainacan'); ?>
+                </a>
+            </li>
         <?php if (verify_allowed_action(get_the_ID(), 'socialdb_collection_permission_create_category')): ?>
             <li class="add">
                 <a href="#add" style="background-position: 6px 50%;padding:1px 5px 1px 28px;background-repeat:no-repeat;background-image:url('<?php echo get_template_directory_uri() ?>/libraries/css/images/1462491942_page_white_add.png')">
@@ -410,6 +415,11 @@ $options = get_option('socialdb_theme_options');
         <?php // endif;   ?>
     </ul>
     <ul id="myMenuNoList" class="contextMenu" style="display:none;">
+        <li class="see">
+                <a href="#see" style="background-position: 6px 40%;padding:1px 5px 1px 28px;background-repeat:no-repeat;background-image:url('<?php echo get_template_directory_uri() ?>/libraries/css/images/see.png')">
+                    <?php _e('See', 'tainacan'); ?>
+                </a>
+            </li>
         <?php if (verify_allowed_action(get_the_ID(), 'socialdb_collection_permission_create_category')): ?>
             <li class="add">
                 <a href="#add" style="background-position: 6px 50%;padding:1px 5px 1px 28px;background-repeat:no-repeat;background-image:url('<?php echo get_template_directory_uri() ?>/libraries/css/images/1462491942_page_white_add.png')">
@@ -432,6 +442,11 @@ $options = get_option('socialdb_theme_options');
     </ul>
     <!-- TAINACAN: esta div eh mostrada quando eh clicado com o botao direito sobre categorias e tags no dynatree  -->
     <ul id="myMenuSingleTag" class="contextMenu" style="display:none;">
+        <li class="see">
+                <a href="#see" style="background-position: 6px 40%;padding:1px 5px 1px 28px;background-repeat:no-repeat;background-image:url('<?php echo get_template_directory_uri() ?>/libraries/css/images/see.png')">
+                    <?php _e('See', 'tainacan'); ?>
+                </a>
+            </li>
         <?php if (verify_allowed_action(get_the_ID(), 'socialdb_collection_permission_create_tags')): ?>
             <li class="add">
                 <a href="#add"><?php echo __('Add', 'tainacan'); ?></a>

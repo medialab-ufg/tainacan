@@ -126,10 +126,17 @@ include_once (dirname(__FILE__) . '/../../../../../wp-includes/wp-db.php');
     }
     
     
+    /**
+     * metodo que busca se a pagina ja possui o cache e retorna seu html
+     * 
+     * @param int $collection_id
+     * @param string $operation A operacao que se deseja buscar no cache
+     * @return boolean
+     */
     public function has_cache($collection_id,$operation){
         $collection = get_post($collection_id);
-        if(is_file(dirname(__FILE__).'../../../cache/'.$collection->post_name.'/'.$operation.'.html')){
-            return file_get_contents(dirname(__FILE__).'../../../cache/'.$collection->post_name.'/'.$operation.'.html');
+        if(is_file(TAINACAN_UPLOAD_FOLDER.'/cache/'.$collection->post_name.'/'.$operation.'.html')){
+            return file_get_contents(TAINACAN_UPLOAD_FOLDER.'/cache/'.$collection->post_name.'/'.$operation.'.html');
         }else{
             return false;
         }

@@ -381,6 +381,13 @@
                 }
             });
     }
+
+
+    function cancelEdit() {
+        var link = $(".titulo-colecao a").attr('href');
+        window.location.href = link;
+    }
+
     /***************************** MARCA/DESMARCA items de um determinado tipo *********************************************/
     function clear_selected(array, id) {
         if (array.length > 0) {

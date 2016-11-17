@@ -49,6 +49,7 @@ class CollectionModel extends Model {
      * Autor: Eduardo Humberto 
      */
     public function simple_add($data, $status = 'draft') {
+        error_reporting(0);
         if ($this->verify_collection($data['collection_name'])) {
             return false;
         }

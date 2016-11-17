@@ -60,6 +60,7 @@
                });
            },onSelect: function (flag, node) {
                 $( "#compounds_properties_ordenation" ).html('');
+                $( "#compounds_properties_ordenation" ).css('height','auto');
                 //busco os nos selecionados
                 var selKeys = $.map($("#dynatree_properties_filter").dynatree("getSelectedNodes"), function (node) {
                     return node;
@@ -68,7 +69,7 @@
                     return node.data.key;
                 });
                 //limitacao da quantidade de propriedades selecionados
-                if(selKeys.length>0&&selKeys.length<=6){
+                if(selKeys.length>0&&selKeys.length<=11){
                     $.each(selKeys,function(index,node){
                         var type = types_compounds[node.data.key];
                         var string = '';
@@ -87,7 +88,7 @@
                                 '<a><span style="margin-right:5px;color: #88A6CC;" class="glyphicon glyphicon-sort sort-filter pull-right"></span></a>&nbsp;'+ add_filter_button(node.data.key) + node.data.title+'</li>')
                     })
                     $('#compounds_id').val(keys.join(','));
-                }else if(selKeys.length>6){
+                }else if(selKeys.length>11){
                     node.select(false);
                 }
                 accordeon_ordenation_properties();

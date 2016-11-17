@@ -297,12 +297,13 @@
         if (!category_id) {
             category_id = $("#category_single_edit_id").val();
         }
+        var operation = '<?php echo (has_filter('tainacan_operation_metadata_category')) ? apply_filters('tainacan_operation_metadata_category','') : 'list_metadata_category'  ?>';
         $('#modalEditCategoria').modal('hide');
         $.ajax({
             url: $('#src').val() + '/controllers/property/property_controller.php',
             type: 'POST',
             data: {
-                operation: 'list_metadata_category', 
+                operation: operation, 
                 hide_wizard: 'true', 
                 category_id: category_id, 
                 collection_id: $("#collection_id").val()}
@@ -368,12 +369,29 @@
         } else {
             menu = 'myMenuSingle';
         }
-        $(span).contextMenu({menu: menu}, function (action, el, pos) {
+        $(span).contextMenu({menu: menu,trigger: 'hover'}, function (action, el, pos) {
             // The event was bound to the <span> tag, but the node object
             // is stored in the parent <li> tag
             var node = $.ui.dynatree.getNode(el);
-            console.log(node.data.key);
             switch (action) {
+                case "see":
+                    var src = $('#src').val();
+                     // Close menu on click
+                    show_modal_main();
+                    // Close menu on click
+                    var promisse = get_url_category(node.data.key);
+                    promisse.done(function (result) {
+                        elem = jQuery.parseJSON(result);
+                        var n = node.data.key.toString().indexOf("_");
+                        if(node.data.key.indexOf('_tag')>=0){
+                            showPageTags(elem.slug, src);
+                            node.deactivate();
+                        }else if(n<0||node.data.key.indexOf('_facet_category')>=0){
+                            showPageCategories(elem.slug, src);
+                            node.deactivate();
+                        }
+                    });
+                    break;
                 case "add":
                     var promisse = verifyAction($('#collection_id').val(), 'socialdb_collection_permission_create_category', 0);
                     promisse.done(function (result) {
@@ -511,6 +529,25 @@
             var node = $.ui.dynatree.getNode(el);
             console.log(node.data.key);
             switch (action) {
+                case "see":
+                    var src = $('#src').val();
+                     // Close menu on click
+                    show_modal_main();
+                    // Close menu on click
+                    var promisse = get_url_category(node.data.key);
+                    promisse.done(function (result) {
+                        elem = jQuery.parseJSON(result);                    
+                        hide_modal_main();
+                        var n = node.data.key.toString().indexOf("_");
+                        if(node.data.key.indexOf('_tag')>=0){
+                            showPageTags(elem.slug, src);
+                            node.deactivate();
+                        }else if(n<0||node.data.key.indexOf('_facet_category')>=0){
+                            showPageCategories(elem.slug, src);
+                            node.deactivate();
+                        }
+                    });
+                    break;
                 case "add":
                     var promisse = verifyAction($('#collection_id').val(), 'socialdb_collection_permission_create_tags', 0);
                     promisse.done(function (result) {

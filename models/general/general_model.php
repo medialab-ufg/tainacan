@@ -992,6 +992,28 @@ class Model {
             return false;
         }
     }
+    /**
+     * function delete_item_meta($property_id)
+     * @param int $item_id
+     * @return boolean .
+     * 
+     * metodo responsavel em deletar os metadados de um i tem
+     * @autor: Eduardo Humberto 
+     */
+    public function delete_item_meta($item_id) {
+        global $wpdb;
+        $wp_meta = $wpdb->prefix . "postmeta";
+        $query = "
+			DELETE FROM $wp_meta 
+				WHERE post_id = {$item_id}
+		";
+        $wpdb->query($query);
+        if ($item_id) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     /* function get_categories_by_owner() */
     /* @param int $owner_id o dono das categorias
@@ -1325,7 +1347,7 @@ class Model {
                         SELECT p.* FROM $wp_posts p
                         INNER JOIN $term_relationships t ON p.ID = t.object_id    
                         WHERE $where p.post_type like 'socialdb_object' AND p.post_status like 'publish' and ( p.post_title LIKE '%{$data['term']}%' OR p.post_content LIKE '%{$data['term']}%')
-                ";
+                ";               
         $result = $wpdb->get_results($query);
         if ($result) {
             foreach ($result as $object) {
@@ -1682,7 +1704,7 @@ class Model {
         fclose($df);
     }
     
-    public function create_zip_by_folder($folder, $from = '/package/', $name = 'package') {
+    public function create_zip_by_folder($folder, $from = 'package/', $name = 'package') {
         $rootPath = realpath($folder);
         // Initialize archive object
         $zip = new ZipArchive();

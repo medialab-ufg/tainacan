@@ -18,11 +18,20 @@ class ObjectController extends Controller {
         switch ($operation) {
             // #1 ADICIONAR ITEMS TIPO TEXTO
             case "create_item_text":
+                //verifico se existe rascunho para se mostrado
+                $beta_id = get_user_meta(get_current_user_id(), 'socialdb_collection_'.$data['collection_id'].'_betatext', true);
+                if($beta_id&& is_numeric($beta_id)){
+                    $data['object_id'] = $beta_id;
+                    $data['is_beta_text'] = true;
+                    return $this->operation('edit', $data);
+                }
+                //se nao ele busca o cache da pagina de adiconar item
                 $has_cache = $this->has_cache($data['collection_id'], 'create-item-text');
                 if($has_cache){
                     $has_cache = htmlspecialchars_decode(stripslashes($has_cache)) . 
                              '<input type="hidden" id="temporary_id_item" value="'.$object_model->create().'">' .
-                            file_get_contents(dirname(__FILE__) . '../../../views/object/js/create_item_text_cache_js.php');
+                            file_get_contents(dirname(__FILE__) . '../../../views/object/js/create_item_text_cache_js.php').
+                            file_get_contents(dirname(__FILE__) . '../../../views/object/js/create_draft_js.php');
                      return $has_cache;
                 }else{
                     $data['object_name'] = get_post_meta($data['collection_id'], 'socialdb_collection_object_name', true);
@@ -57,8 +66,13 @@ class ObjectController extends Controller {
                 break;
             //#4 EDITOR DE ITEMS MULTIPLOS
             case "showViewMultipleItems":
-                $data['object_id'] = $object_model->create();
-                return $this->render(dirname(__FILE__) . '../../../views/object/multiple_items/create.php', $data);
+                $items = get_user_meta(get_current_user_id(), 'socialdb_collection_'.$data['collection_id'].'_betafile');
+                if(!$items||empty($items)):
+                    $data['object_id'] = $object_model->create();
+                    return $this->render(dirname(__FILE__) . '../../../views/object/multiple_items/create.php', $data);
+                else:
+                    return $this->operation('betafile', $data);
+                endif;
                 break;
             case "editor_items":
                 $data['properties'] = $object_model->show_object_properties($data);
@@ -84,6 +98,19 @@ class ObjectController extends Controller {
                 }
                 break;
             //END: EDITOR DE ITENS PARA REDES SOCIAIS
+            //BEGIN: FILES AND SOCIAL MEDIA betafile
+            case 'betafile':
+                $data['properties'] = $object_model->show_object_properties($data);
+                $data['is_beta_file'] = true;
+                $data['items_id'] = get_user_meta(get_current_user_id(), 'socialdb_collection_'.$data['collection_id'].'_betafile');
+                $data['items'] = $objectfile_model->get_inserted_items_social_network($data);
+                if ($data['items'] && empty(!$data['items'])) {
+                    return $this->render(dirname(__FILE__) . '../../../views/object/multiple_social_network/editor_items.php', $data);
+                } else {
+                    return 0;
+                }
+                break;
+            //END    
             case 'insert_fast':// apenas com o titulo
                 return $object_model->fast_insert($data);
                 break;
@@ -107,6 +134,7 @@ class ObjectController extends Controller {
                 $object_name = get_post_meta($data['collection_id'], 'socialdb_collection_object_name', true);
                 $socialdb_collection_attachment = get_post_meta($data['collection_id'], 'socialdb_collection_attachment', true);
                 $collection_id = $data['collection_id'];
+                $beta_text = (isset($data['is_beta_text'])) ? $data['is_beta_text'] : false;
                 $data = $object_model->edit($data['object_id'], $data['collection_id']);
                 $data['object_name'] = $object_name;
                 $data['collection_id'] = $collection_id;
@@ -115,6 +143,8 @@ class ObjectController extends Controller {
                 $data['socialdb_object_dc_source'] = get_post_meta($data['object']->ID, 'socialdb_object_dc_source', true);
                 $data['socialdb_object_content'] = get_post_meta($data['object']->ID, 'socialdb_object_content', true);
                 $data['socialdb_object_dc_type'] = get_post_meta($data['object']->ID, 'socialdb_object_dc_type', true);
+                if($beta_text)
+                    $data['is_beta_text'] = true;
                 return $this->render(dirname(__FILE__) . '../../../views/object/edit_item_text.php', $data);
                 break;
             case "update":
@@ -425,7 +455,20 @@ class ObjectController extends Controller {
                 break;
             //temp file
             case 'delete_temporary_object':
-                return $object_model->delete($data);
+                if(isset($data['delete_draft']))
+                    delete_user_meta(get_current_user_id(), 'socialdb_collection_'.$data['collection_id'].'_betatext');
+                if($data['ID']&&get_post($data['ID'])->post_status==='betatext'):
+                    $post = array(
+                        'ID' => $data['ID'],
+                        'post_status' => 'draft'
+                    );
+                    wp_update_post($post);
+                    //deleto o rascunho assim que adiciono
+                    return json_encode($data);
+                    break;
+                else:
+                    return $object_model->delete($data);
+                endif;
             //ACTION FILES
             case 'list_files':
                 return $objectfile_model->list_files($data);

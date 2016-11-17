@@ -8,6 +8,7 @@
     });
 
     function showDynatreeLeft(src) {
+        var select;
         $("#dynatree").dynatree({
             selectionVisible: true, // Make sure, selected nodes are visible (expanded).  
             checkbox: true,
@@ -34,6 +35,19 @@
                 // Close menu on click
                 if ($(".contextMenu:visible").length > 0) {
                     $(".contextMenu").hide();
+                }
+                //seleciono ou DESSELCIONO
+                 var selKeys = $.map(node.tree.getSelectedNodes(), function (tnode) {
+                    return tnode.data.key;
+                });
+                //get_categories_properties_ordenation();
+                console.log(selKeys,selKeys.indexOf(node.data.key)<0);
+                if(selKeys.indexOf(node.data.key)<0){
+                     select = true;
+                      node.select(true);
+                }else{
+                    select = false;
+                     node.select(false);
                 }
             },
             onKeydown: function (node, event) {
@@ -80,6 +94,7 @@
             },
             onCreate: function (node, span) {
                 var key = node.data.key;
+                $(span).attr('id',"ui-dynatree-id-" + node.data.key)
                 var n = key.toString().indexOf("_");
                 if (n > 0) {// se for propriedade de objeto
                     values = key.split("_");
@@ -98,41 +113,31 @@
                 //$('#parentCat').val("Nenhum");
                 $('#parentId').val("");
                 $("ul.dynatree-container").css('border', "none");
+                addHoverToNodes();
                 //$( "#btnExpandAll" ).trigger( "click" );
             },
             onActivate: function (node, event) {
-                // Close menu on click
-                $('#modalImportMain').modal('show');
-                // Close menu on click
-                var promisse = get_url_category(node.data.key);
-                promisse.done(function (result) {
-                    elem = jQuery.parseJSON(result);                    
-                    $('#modalImportMain').modal('hide');
-                    var n = node.data.key.toString().indexOf("_");
-                    if(node.data.key.indexOf('_tag')>=0){
-                        showPageTags(elem.slug, src);
-                        node.deactivate();
-                    }else if(n<0||node.data.key.indexOf('_facet_category')>=0){
-                        showPageCategories(elem.slug, src);
-                        node.deactivate();
-                    }
-                });
             },
             onSelect: function (flag, node) {
-                var selKeys = $.map(node.tree.getSelectedNodes(), function (node) {
-                    return node.data.key;
-                });
-                //get_categories_properties_ordenation();
-                console.log($('#flag_dynatree_ajax').val());
-                if($('#flag_dynatree_ajax').val()==='true') {
-                    var node_values = selKeys.join(", ");
-                    wpquery_filter_by_facet( node_values, "", "wpquery_dynatree");
-                }
-                // lanco um hook para ser usada ao selecionar um item no dynatree
-                if (Hook.is_register('tainacan_onselect_dynatree')) {
-                    Hook.call('tainacan_onselect_dynatree', [selKeys]);
-                }
-                
+                console.log(select);
+                    if(select===true){
+                        node.select(true);
+                    }else if(select===false){
+                        node.select(false);
+                    }
+                    var selKeys = $.map(node.tree.getSelectedNodes(), function (node) {
+                        return node.data.key;
+                    });
+                    //get_categories_properties_ordenation();
+                    //console.log($('#flag_dynatree_ajax').val());
+                    if($('#flag_dynatree_ajax').val()==='true') {
+                        var node_values = selKeys.join(", ");
+                        wpquery_filter_by_facet( node_values, "", "wpquery_dynatree");
+                    }
+                    // lanco um hook para ser usada ao selecionar um item no dynatree
+                    if (Hook.is_register('tainacan_onselect_dynatree')) {
+                        Hook.call('tainacan_onselect_dynatree', [selKeys]);
+                    }
                 //list_all_objects(selKeys.join(", "), $("#collection_id").val(), $('#collection_single_ordenation').val(), '', $("#value_search").val())
             },
             dnd: {
@@ -162,10 +167,37 @@
             }
         });
     }
+    
+    /**
+     * funcao que gera o context menu para o dynatree apos cinco segundos
+     * @param {type} property_id
+     * @returns {undefined}
+     */
+    function addHoverToNodes() {
+        var root = $("#dynatree").dynatree("getRoot");
+        root.visit(function (node, unused) {
+            $("#ui-dynatree-id-" + node.data.key).hover(function () {
+                
+                $(this).data('hover-dynatree', window.setTimeout(function (){
+                     console.log($("#ui-dynatree-id-" + node.data.key),node.span.offsetLeft);
+                     $("#ui-dynatree-id-" + node.data.key).trigger("mousedown", {
+                                    pageX: 50,
+                                    pageY: 50,
+                                    button: 3
+                                });        
+                    
+                }, 2000));
+            },
+            function ()
+            {
+                clearTimeout($(this).data('hover-dynatree'));
+            });
+        }, 0, false);
+     }
  
     function autocomplete_menu_left(property_id) {
         $("#autocomplete_multipleselect_" + property_id).autocomplete({
-            source: $('#src').val() + '/controllers/collection/collection_controller.php?operation=list_items_search_autocomplete&property_id=' + property_id,
+            source: $('#src').val() + '/controllers/collection/collection_controller.php?operation=list_items_search_autocomplete&property_id=' + property_id + '&collection_id='+$('#collection_id').val(),
             messages: {
                 noResults: '',
                 results: function () { }
