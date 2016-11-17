@@ -19,7 +19,7 @@ $helper = new UserPermissionHelper;
 
     .label-profile{
         margin-left: 30px;
-        width: 14.6%;
+        width: 13.6%;
     }
     
     .label-item{
@@ -95,42 +95,66 @@ $helper = new UserPermissionHelper;
     </div>    
     <div id="tab-content" class="tab-content" style="background: white">
         <div id="tab_profile">
-            <div class="header-profile row">
-                <span class="col-md-2 label-profile"><?php echo _e('Profile', 'tainacan') ?></span>
-                <span class="col-md-1 label-item"><?php echo _e('Item', 'tainacan') ?></span>
-                <span class="col-md-1"><?php echo _e('Metadata', 'tainacan') ?></span>
-                <span class="col-md-1 label-category"><?php echo _e('Category', 'tainacan') ?></span>
-                <span class="col-md-1 label-tag"><?php echo _e('Tag', 'tainacan') ?></span>
-                <span class="col-md-1"><?php echo _e('Comment', 'tainacan') ?></span>
-                <span class="col-md-1"><?php echo _e('Descritor', 'tainacan') ?></span>
-                <span class="col-md-3"><center><?php echo _e('Manage', 'tainacan') ?></center></span>
-            </div>
-            <div id="list-profiles" class="multiple-items-accordion">
-                <div id="profile-administrator" class="form-group">
-                    <h2> 
-                        <?php _e('Administrator', 'tainacan') ?> 
-                    </h2>
-                    <div>
-                        <?php $helper->generate_content_permission_view(['id'=>'admin', 'is-fixed'=>true ], true) ;?>
-                    </div>   
+            <form id="form-permission">
+                <input type="hidden" name="operation" value="save-permission">
+                <div class="header-profile row">
+                    <span class="col-md-2 label-profile"><?php echo _e('Profile', 'tainacan') ?></span>
+                    <span class="col-md-1 label-item"><?php echo _e('Item', 'tainacan') ?></span>
+                    <span class="col-md-1"><?php echo _e('Metadata', 'tainacan') ?></span>
+                    <span class="col-md-1 label-category"><?php echo _e('Category', 'tainacan') ?></span>
+                    <span class="col-md-1 label-tag"><?php echo _e('Tag', 'tainacan') ?></span>
+                    <span class="col-md-1"><?php echo _e('Comment', 'tainacan') ?></span>
+                    <span class="col-md-1"><?php echo _e('Descritor', 'tainacan') ?></span>
+                    <span class="col-md-3"><center><?php echo _e('Manage', 'tainacan') ?></center></span>
                 </div>
-                <div id="profile-registered" class="form-group">
-                    <h2> 
-                        <?php _e('Registered', 'tainacan') ?> 
-                    </h2>
-                    <div>
-                        <?php $helper->generate_content_permission_view(['id'=>'registered', 'is-fixed'=>true ]) ;?>
-                    </div>     
+                <div id="list-profiles" class="multiple-items-accordion">
+                    <div id="profile-administrator" class="form-group">
+                        <h2> 
+                            <?php _e('Administrator', 'tainacan') ?> 
+                        </h2>
+                        <div>
+                            <?php $helper->generate_content_permission_view(['id'=>'admin', 'is-fixed'=>true ], true) ;?>
+                        </div>   
+                    </div>
+                    <div id="profile-registered" class="form-group">
+                        <h2> 
+                            <?php _e('Registered', 'tainacan') ?> 
+                        </h2>
+                        <div>
+                            <?php $helper->generate_content_permission_view(['id'=>'registered', 'is-fixed'=>true ]) ;?>
+                        </div>     
+                    </div>
+                    <div id="profile-anonimous" class="form-group">
+                        <h2> 
+                            <?php _e('Anonimous', 'tainacan') ?> 
+                        </h2>
+                        <div>
+                            <?php $helper->generate_content_permission_view(['id'=>'anonimous', 'is-fixed'=>true ]) ;?>
+                        </div>     
+                    </div>
+                    <div id="new-profile" class="form-group">
+                        <h2>
+                            <button class="btn btn-primary"><?php _e('Add new profile', 'tainacan') ?></button>
+                        </h2>
+                        <div>
+                            <input type="text" 
+                                   placeholder="<?php _e('Type the name of the new profile','tainacan') ?>"
+                                   class="form-control" 
+                                   name="name_new_profile">
+                            <br>
+                            <?php $helper->generate_content_permission_view(['id'=>'anonimous', 'is-fixed'=>true ]) ;?>
+                        </div> 
+                    </div>
                 </div>
-                <div id="profile-anonimous" class="form-group">
-                    <h2> 
-                        <?php _e('Anonimous', 'tainacan') ?> 
-                    </h2>
-                    <div>
-                        <?php $helper->generate_content_permission_view(['id'=>'anonimous', 'is-fixed'=>true ]) ;?>
-                    </div>     
-                </div>
-            </div>
+                <br>
+                <button
+                    type="button"
+                    onclick="back_main_list()"
+                    class="btn btn-default"><?php _e('Cancel','tainacan') ?></button>
+                <button 
+                    type="submit" 
+                    class="btn btn-success pull-right"><?php _e('Save','tainacan') ?></button>
+            </form>    
         </div>
     </div>
 </div>    

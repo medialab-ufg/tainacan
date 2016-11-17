@@ -731,6 +731,7 @@ function register_taxonomies() {
     register_taxonomy('socialdb_collection_type', array('socialdb_collection'));
     register_taxonomy('socialdb_property_type', array('socialdb_vote'));
     register_taxonomy('socialdb_event_type', array('socialdb_event'));
+    register_taxonomy('socialdb_role_type', array('socialdb_vote'));
 }
 
 function create_oai_post() {

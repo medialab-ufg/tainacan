@@ -1,15 +1,19 @@
 <?php
 ini_set('max_input_vars', '10000');
 
+require_once(dirname(__FILE__) . '../../../models/permission/permission_model.php');
 require_once(dirname(__FILE__) . '../../general/general_controller.php');
 
 class PermissionController extends Controller {
-
+            
     public function operation($operation, $data) {
+        $model = new PermissionModel;
         switch ($operation) {
             case "show-page":
                 return $this->render(dirname(__FILE__) . '../../../views/permission/page.php');
                 break;
+            case "save-permission":
+                return $model->save_permission_collection($data);
         }
     }
 
