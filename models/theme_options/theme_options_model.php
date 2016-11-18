@@ -1,5 +1,5 @@
 <?php
-
+ini_set('max_input_vars', '10000');
 include_once ('../../../../../wp-config.php');
 include_once ('../../../../../wp-load.php');
 include_once ('../../../../../wp-includes/wp-db.php');
@@ -647,6 +647,7 @@ class ThemeOptionsModel extends Model {
     }
 
     function read_item_xml($xml, $dir) {
+        ini_set('max_execution_time', '0');
         $objid = (string) $xml->attributes()->OBJID;
         $id = explode(':', $objid)[1];
         $struct = $xml->structMap;
@@ -719,17 +720,35 @@ class ThemeOptionsModel extends Model {
                             $term = $this->checkIfMetadataExists($key, $parent_collection_id);
                             if ($term) {
                                 //insere o valor no metadado encontrado
+                                $meta_id = $term->term_id;
                             } else {
                                 //cria o metadado e insere o valor
-                                $category_root_id = $this->collection_model->get_category_root_of($parent_collection_id);
+                                $category_root_id = $this->get_category_root_of($parent_collection_id);
                                 $meta_id = $this->add_property_data($key, $parent_collection_id, $category_root_id);
                             }
+                            add_post_meta($inserted_item_id, 'socialdb_property_' . $meta_id, $value['value']);
                         }
                     }
 
                     //Insere Files
-                    foreach ($fileSec as $file) {
-                        //var_dump($file);
+                    if ($fileSec != null) {
+                        foreach ($fileSec as $file) {
+                            $file_use = $file->attributes()->USE;
+                            $file = $file->file->FLocat->attributes('http://www.w3.org/1999/xlink')->href;
+                            if ($file_use != 'THUMBNAIL') {
+                                //Insere como anexo do item
+                                if (is_file($dir . $file)) {
+                                    $logo_id = $this->insert_attachment_file($dir . $file, $inserted_item_id);
+                                    add_post_meta($inserted_item_id, '_file_id', $logo_id);
+                                }
+                            } else {
+                                //E a Thumb do item
+                                if (is_file($dir . $file)) {
+                                    $logo_id = $this->insert_attachment_file($dir . $file, $inserted_item_id);
+                                    set_post_thumbnail($inserted_item_id, $logo_id);
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -764,8 +783,8 @@ class ThemeOptionsModel extends Model {
               $metadados['genre'] = ['id' => null, 'value' => (string) $mods->genre];
               $metadados['note'] = ['id' => null, 'value' => (string) $mods->note]; */
 
-            var_dump($metadados);
-            exit();
+            //var_dump($metadados);
+            //exit();
         }
 
         //var_dump($parent_collection_id, $col_id);
@@ -786,7 +805,7 @@ class ThemeOptionsModel extends Model {
         if ($object_id) {
             update_post_meta($object_id, 'socialdb_dspace_aip_import_id', $id);
 
-            $category_root_id = $this->collection_model->get_category_root_of($collection_id);
+            $category_root_id = $this->get_category_root_of($collection_id);
             wp_set_object_terms($object_id, array((int) $category_root_id), 'socialdb_category_type');
 
             return $object_id;
@@ -826,13 +845,24 @@ class ThemeOptionsModel extends Model {
      */
     public function add_property_data($name, $collection_id, $category_root_id) {
         $new_property = wp_insert_term((string) $name, 'socialdb_property_type', array('parent' => $this->get_property_type_id('socialdb_property_data'),
-            'slug' => $name.'_'.$collection_id));
+            'slug' => $name . '_' . $collection_id));
         update_term_meta($new_property['term_id'], 'socialdb_property_required', false);
         update_term_meta($new_property['term_id'], 'socialdb_property_data_widget', 'text');
         update_term_meta($new_property['term_id'], 'socialdb_property_default_value', '');
         update_term_meta($new_property['term_id'], 'socialdb_property_created_category', $category_root_id);
         add_term_meta($category_root_id, 'socialdb_category_property_id', $new_property['term_id']);
         return $new_property['term_id'];
+    }
+
+    /**
+     * function get_property_type_id($property_parent_name)
+     * @param string $property_parent_name
+     * @return int O id da categoria que determinara o tipo da propriedade.
+     * @author: Eduardo Humberto 
+     */
+    public function get_property_type_id($property_parent_name) {
+        $property_root = get_term_by('name', $property_parent_name, 'socialdb_property_type');
+        return $property_root->term_id;
     }
 
 }
