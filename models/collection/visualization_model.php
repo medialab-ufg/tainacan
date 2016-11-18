@@ -9,9 +9,15 @@ require_once(dirname(__FILE__) . '../../category/category_model.php');
 require_once(dirname(__FILE__) . '../../collection/collection_model.php');
 
 class VisualizationModel extends CollectionModel {
+    
+    public $dynatree_number_items;
 
-    public function VisualizationModel() {
-        //  $this->propertymodel = new PropertyModel();
+    public function __construct(){
+        if(has_filter('alter_dynatree_number_of_items')){
+            $this->dynatree_number_items = apply_filters('alter_dynatree_number_of_items', '');
+        }else{
+            $this->dynatree_number_items = 9;
+        }
     }
 
     /* function initJit() */
@@ -479,7 +485,7 @@ class VisualizationModel extends CollectionModel {
                 //$dynatree['children'][] = array('title' => $meta_value . ' (' . $this->count_metadata_by_value('socialdb_property_' . $properties['id'], $meta_value) . ')', 'key' => $meta_id . "_" . $properties['id'] . '_datatext', 'addClass' => $classCss);
                 $dynatree['children'][] = array('title' => $meta_value , 'key' => $meta_id . "_" . $properties['id'] . '_datatext', 'addClass' => $classCss);
                 $counter++;
-                if ($counter > 9) {
+                if ($counter > $this->dynatree_number_items) {
                     $dynatree['children'][] = array('title' => __('See more', 'tainacan'), 'hideCheckbox' => true, 'key' => $properties['id'] . '_moreoptionsdataproperty' . $properties['id'], 'isLazy' => true, 'addClass' => 'more');
                     break;
                 }
@@ -502,7 +508,7 @@ class VisualizationModel extends CollectionModel {
                 $dynatree['children'][] = array('title' => $tag->name, 'key' => $tag->term_id . "_tag", 'addClass' => $classCss);
                 //$dynatree['children'][] = array('title' => $tag->name.' ('. $this->count_items_related($tag->term_id).')', 'key' => $tag->term_id . "_tag", 'addClass' => $classCss);
                 $counter++;
-                if ($counter > 9) {
+                if ($counter > $this->dynatree_number_items) {
                     $dynatree['children'][] = array('title' => __('See more', 'tainacan'), 'hideCheckbox' => true, 'key' => '_moreoptionstag', 'isLazy' => true, 'addClass' => 'more');
                     break;
                 }
@@ -632,7 +638,7 @@ class VisualizationModel extends CollectionModel {
                     //$dynatree['children'][] = array('title' => $child->name.' ('. $this->count_items_related($child->term_id).')', 'key' => $child->term_id, 'addClass' => $classCss);
                 }
                 $counter++;
-                if ($counter == 9) {
+                if ($counter == $this->dynatree_number_items) {
                     $dynatree['children'][] = array('title' => __('See more', 'tainacan'), 'hideCheckbox' => true, 'key' => $facet_id . '_moreoptions', 'isLazy' => true, 'addClass' => 'more');
                     break;
                 }

@@ -103,6 +103,7 @@ class CollectionImportModel extends CollectionModel {
             set_post_thumbnail($collection_id, $thumbnail_id);
         }
     }
+    
     /**
      * @signature add_cover_collection($dir_created,$collection_id)
      * @param string $dir_created

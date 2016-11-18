@@ -31,6 +31,12 @@ define('MODULE_ONTOLOGY', 'tainacan-ontology');
 define('ONTOLOGY_CONTROLLERS', get_template_directory_uri() . '/modules/' . MODULE_ONTOLOGY );
 load_theme_textdomain("tainacan", dirname(__FILE__) . "/languages");
 
+################ #0 Alterando valores do total de nos ##########################
+
+function ontology_alter_dynatree_number_of_items($name) {
+    return 50;
+}
+add_filter( 'alter_dynatree_number_of_items', 'ontology_alter_dynatree_number_of_items', 10, 3 );
 
 ################ #1 ADICIONANDO OS SCRIPTS DESTE MODULO ###########################
 add_action('wp_enqueue_scripts', 'tainacan_ontology_js');
