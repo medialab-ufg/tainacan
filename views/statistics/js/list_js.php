@@ -65,7 +65,7 @@
             { title: "Status <p> logins / registros / banidos / excluídos </p>", href: "status", addClass: 'hllog' },
             { title: "Itens <p> criaram / editaram / apagaram / <br/> visualizaram / baixaram</p>", href: "items" },
             { title: "Perfil <p> Pessoas que aderiram a um perfil </p>", href: "profile" },
-            { title: "Categorias <p> criaram / editaram / apagaram / visualizaram </p>",href: "category" },
+            { title: "Categorias <p> criaram / editaram / apagaram / visualizaram </p>", href: "category" },
             { title: "Coleção <p> criaram / editaram / apagaram / visualizaram </p>", href: "collection" }
         ];
     }
@@ -90,7 +90,7 @@
     }
 
     function categoryChildren() {
-        return [{ title: "Status <p> criados / editados / excluídos </p>" }];
+        return [{ title: "Status <p> criados / editados / excluídos </p>", href: "category"  }];
     }
 
     function tagsChildren() {
@@ -137,7 +137,7 @@
 
     function drawChart(title, data_obj) {
         if(data_obj.stat_object) {
-            var basis = [ title, 'qtd ', {role: 'style'} ];
+            var basis = [ title, ' Qtd ', {role: 'style'} ];
             var chart_data = [basis];
 
             displayFixedBase();
