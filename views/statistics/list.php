@@ -38,9 +38,26 @@ $view_helper = new ViewHelper();
                     <span class="config-title"><?php i18n_str('Filters:',true); ?></span>
                     <span class="current-chart"><?php i18n_str('User Stats',true); ?></span>
                 </div>
+                <div class="col-md-4 pull-right no-padding">
+                    <span class="config-title"><?php i18n_str('Mode:',true); ?></span>
+                    <a href="javascript:void(0)" class="change-mode">
+                        <img src="https://google-developers.appspot.com/chart/interactive/images/chart_pie.png" alt="">
+                    </a>
+                    <?php
+                        $_line_img = '<img src="https://google-developers.appspot.com/chart/interactive/images/chart_line.png" alt="">';
+                        $_column_img = '<img src="https://google-developers.appspot.com/chart/interactive/images/chart_column.png" alt="">';
+                        $_pie_img = '<img src="https://google-developers.appspot.com/chart/interactive/images/chart_pie.png" alt="">';
+                    ?>
+                    <select class="selectpicker" name="select-chart-mode" id="">
+                        ye
+                        <option data-content="<?php echo $_line_img; ?>" value=""> do </option>
+                        <option data-content="<?php echo $_column_img; ?>" value=""> doee </option>
+                        <option data-content="<?php echo $_pie_img; ?>" value=""> dsasao </option>
+                    </select>
+
+                </div>
                 <?php /*
                 <span class="config-title"><?php i18n_str('Orientation:',true); ?></span>
-                <span class="config-title"><?php i18n_str('Mode:',true); ?></span>
                 <button class="btn btn-default"> <?php i18n_str('Download',true); ?> <span class="caret"></span></button>
                 */ ?>
             </div>
@@ -48,13 +65,15 @@ $view_helper = new ViewHelper();
 
         <div id="charts-container" class="col-md-12">
             <div id="chart_div"></div> <!--Div that will hold the pie chart-->
+            <div id="piechart_div" style="display: none"></div>
+            <div id="barchart_div"></div>
         </div>
         
         <div id="charts-resume" class="col-md-12">
             <table>
                 <tbody>
-                <tr class="headers"> <th class="curr-parent"> Status: </th> </tr>
-                <tr class="content"> <td class="curr-filter"> Usuários </td> </tr>
+                <tr class="headers"> <th class="curr-parent"> <?php i18n_str('Status:',true); ?> </th> </tr>
+                <tr class="content"> <td class="curr-filter"> <?php i18n_str('Users:',true); ?> </td> </tr>
                 </tbody>
             </table>
 

@@ -22,6 +22,10 @@
         });
     });
 
+    $(document).ready(function() {
+        $('.selectpicker').selectpicker();
+    });
+
     $("#statistics-config").accordion({
         collapsible: true,
         active: 1,
@@ -135,23 +139,44 @@
         login: 'Login', register: 'Registros', delete_user: 'Excluídos',
         administrator: 'Administrador', author: 'Autor', editor: 'Editor', subscriber: 'Assinante', contributor: 'Colaborador' };
 
+
+    $('a.change-mode').on('click', function() {
+        cl('trying to set basis');
+        //$('.selectpicker').selectpicker();
+        $(["#chart_div", "#piechart_div"]).each(function(id, el) {
+            $(el).toggle();
+        });
+    });
+
     function drawChart(title, data_obj) {
         if(data_obj.stat_object) {
             var basis = [ title, ' Qtd ', {role: 'style'} ];
             var chart_data = [basis];
+            var dt = new google.visualization.DataTable();
+            dt.addColumn('string', 'Topping');
+            dt.addColumn('number', 'Slices');
 
             displayFixedBase();
             var color = data_obj.color || '#79a6ce';
 
             for( event in data_obj.stat_object ) {
                 obj_total = parseInt(data_obj.stat_object[event]);
-                chart_data.push( [ mappd_titles[event], obj_total, color ] );
+                chart_data.push([ mappd_titles[event], obj_total, color ]);
+                dt.addRow([ mappd_titles[event], obj_total ]);
                 displayBaseAppend(mappd_titles[event], obj_total);
             }
 
+            var piechart_options = {title:'Qtd usuários por status', width: 800};
+            var piechart = new google.visualization.PieChart(document.getElementById('piechart_div'));
+
+            piechart.draw(dt, piechart_options);
+
+            var barchart_options = {title:'Barchart stats', width: 800, height:300, legend: 'none'};
+            var barchart = new google.visualization.BarChart(document.getElementById('barchart_div'));
+            barchart.draw(dt, barchart_options);
 
             var data = google.visualization.arrayToDataTable( chart_data );
-            var options = { colors: [color] };
+            var options = { colors: [color], legend: 'none' };
             var chart = new google.charts.Bar(document.getElementById('chart_div'));
 
             chart.draw(data, options);
