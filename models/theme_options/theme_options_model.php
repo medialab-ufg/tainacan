@@ -1,4 +1,5 @@
 <?php
+
 ini_set('max_input_vars', '10000');
 include_once ('../../../../../wp-config.php');
 include_once ('../../../../../wp-load.php');
@@ -823,18 +824,22 @@ class ThemeOptionsModel extends Model {
         }
     }
 
-    function arrange_meta_array(array $arr, $sub_level = true) {
-        $result = array();
-        foreach ($arr as $row) {
-            if ($sub_level) {
-                foreach ($row as $value) {
-                    $result[] = $value;
+    function arrange_meta_array($arr, $sub_level = true) {
+        if (is_array($arr)) {
+            $result = array();
+            foreach ($arr as $row) {
+                if ($sub_level) {
+                    foreach ($row as $value) {
+                        $result[] = $value;
+                    }
+                } else {
+                    $result[] = $row;
                 }
-            } else {
-                $result[] = $row;
             }
+            return $result;
+        } else {
+            return array();
         }
-        return $result;
     }
 
     /**
