@@ -158,7 +158,17 @@ class ObjectMultipleModel extends Model {
               'post_author' => get_current_user_id(),
               'post_type' => 'socialdb_object'
           );
-          $object_id = wp_insert_post($post);
+          if(!get_post_meta($item_id, 'socialdb_item_id')){
+            $object_id = wp_insert_post($post);
+            add_post_meta($item_id, 'socialdb_item_id', $object_id);
+          }else{
+              $post['ID'] = get_post_meta($item_id, 'socialdb_item_id',TRUE);
+              wp_update_post($post);
+              $object_id = $post['ID'];
+              $this->delete_item_meta($post['ID']);
+              wp_delete_object_term_relationships( $object_id, 'socialdb_category_type' );
+          }
+          delete_user_meta(get_current_user_id(), 'socialdb_collection_'.$data['collection_id'].'_betafile', $object_id);
           $this->set_common_field_values($object_id, 'title', $post['post_title']);
           $this->set_common_field_values($object_id, 'description', $post['post_content']);
           return $object_id;
@@ -451,6 +461,7 @@ class ObjectMultipleModel extends Model {
                         'post_status' => 'inherit',
                         'post_content' => $data['description_'.$item_id]
                     );
+                    delete_user_meta(get_current_user_id(), 'socialdb_collection_'.$data['collection_id'].'_betafile', $post_id);
                     wp_update_post($object);
                     $this->insert_object_event($post_id, ['collection_id' => $data['collection_id'] ]);
                     $this->set_common_field_values($post_id, 'title', $object['post_title']);

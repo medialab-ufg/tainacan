@@ -46,6 +46,8 @@ class Log extends Model {
             case 'collection':
             case 'comments':
                 return ['color' => '#149271', 'events' => ['add', 'view', 'edit', 'delete'] ];
+            case 'tags':
+                return ['color' => 'orange', 'events' => ['add', 'view', 'edit', 'delete'] ];
             case 'status':
                 return ['color' => '#79a6ce', 'events' => ['login', 'register', 'delete_user'] ];
             case 'profile':

@@ -218,12 +218,12 @@
                         //  if (property.id == selected) {
                         //     $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
                         //  } else {
-                        if(categories.indexOf(children.term_id)>-1){
+                        if(categories&&categories.indexOf(children.term_id)>-1){
                             checked = 'checked="checked"';
                             //append_category_properties(children.term_id, 0,radio);
                         }
                          delete_value(children.term_id);//retiro
-                        $('#field_property_term_' + radio).append('<input '+checked+' '+required+' type="radio" name="socialdb_propertyterm_'+radio+'" value="' + children.term_id + '">&nbsp;' + children.name + '<br>');
+                        $('#field_property_term_' + radio).append('<input class="auto-save" '+checked+' '+required+' type="radio" name="socialdb_propertyterm_'+radio+'" value="' + children.term_id + '">&nbsp;' + children.name + '<br>');
                         //  }
                     });
                 });
@@ -254,7 +254,7 @@
                         //  if (property.id == selected) {
                         //     $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
                         //  } else {
-                        $('#field_property_term_' + checkbox).append('<input '+checked+' '+required+'  type="checkbox" name="socialdb_propertyterm_'+checkbox+'[]" value="' + children.term_id + '">&nbsp;' + children.name + '<br>');
+                        $('#field_property_term_' + checkbox).append('<input class="auto-save" '+checked+' '+required+'  type="checkbox" name="socialdb_propertyterm_'+checkbox+'[]" value="' + children.term_id + '">&nbsp;' + children.name + '<br>');
                         //  }
                     });
                 });
@@ -396,6 +396,7 @@
                             set_field_valid(treecheckbox,'core_validation_'+treecheckbox);
                          }else{
                             $('#core_validation_'+treecheckbox).val('true');
+                             $('form .auto-save').trigger('change');
                             set_field_valid(treecheckbox,'core_validation_'+treecheckbox); 
                          }
                     }
@@ -463,6 +464,7 @@
                             append_category_properties(node.data.key,$("#socialdb_propertyterm_" + tree).val(),tree);
                             $("#socialdb_propertyterm_" + tree).val(node.data.key);
                             $('#core_validation_'+tree).val('true');
+                             $('form .auto-save').trigger('change');
                              set_field_valid(tree,'core_validation_'+tree);
                         }
                     }

@@ -10,6 +10,10 @@ include_once(dirname(__FILE__).'/../../../../controllers/general/general_control
                         return $model->initDynatreePropertiesFilter($data['collection_id']);
                     case 'restrictionsDynatreeProperties':
                         return $model->initDynatreePropertiesFilter($data['collection_id'],false); 
+                    case 'parentDataDynatreeProperties':
+                        return $model->initDynatreeTypePropertiesFilter($data['collection_id'],false); 
+                    case 'parentObjectDynatreeProperties':
+                        return $model->initDynatreeTypePropertiesFilter($data['collection_id'],false,'socialdb_property_object'); 
                     case 'restrictionsDynatreeIndividues':
                         return $model->initDynatreeIndividues($data['collection_id']); 
                         

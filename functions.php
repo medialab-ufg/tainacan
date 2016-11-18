@@ -586,8 +586,64 @@ function socialdb_validate_settings($input) {
     return $newinput;
 }
 
-//************************************************************************************************************/
-//************************************************************************************************************/
+//*****************************************************************************/
+//**************************************** POST STATUS ************************/
+
+/**
+ * funcao que cria os post status do tipo texto para rascunho
+ */
+function betatext_post_status(){
+	register_post_status( 'betatext', array(
+		'label'                     => __( 'Beta', 'post' ),
+		'public'                    => true,
+		'exclude_from_search'       => false,
+		'show_in_admin_all_list'    => true,
+		'show_in_admin_status_list' => true,
+		'label_count'               => _n_noop( 'Beta Text <span class="count">(%s)</span>', 'Beta <span class="count">(%s)</span>' ),
+	) );
+}
+add_action( 'init', 'betatext_post_status' );
+/**
+ * funcao que cria os post status do tipo arquivo para arquivos
+ */
+function betafile_post_status(){
+	register_post_status( 'betafile', array(
+		'label'                     => __( 'Beta File', 'post' ),
+		'public'                    => true,
+		'exclude_from_search'       => false,
+		'show_in_admin_all_list'    => true,
+		'show_in_admin_status_list' => true,
+		'label_count'               => _n_noop( 'Beta File <span class="count">(%s)</span>', 'Beta Files<span class="count">(%s)</span>' ),
+	) );
+}
+add_action( 'init', 'betafile_post_status' );
+
+//*****************************************************************************/
+//****************************  CREATE FOLDER UPLOADS ************************/
+/**
+ * funcao que cria os post status do tipo arquivo para arquivos
+ */
+function create_folder_tainacan_upload(){
+    if(is_dir(dirname(__FILE__).'/../../uploads')){
+        if(is_dir(dirname(__FILE__).'/../../uploads/tainacan')){
+            define('TAINACAN_UPLOAD_FOLDER', dirname(__FILE__).'/../../uploads/tainacan');
+        }else{
+            mkdir(dirname(__FILE__).'/../../uploads/tainacan',0755);
+            mkdir(dirname(__FILE__).'/../../uploads/tainacan/data',0755);
+            mkdir(dirname(__FILE__).'/../../uploads/tainacan/cache',0755);
+            mkdir(dirname(__FILE__).'/../../uploads/tainacan/data/templates',0755);
+            define('TAINACAN_UPLOAD_FOLDER', dirname(__FILE__).'/../../uploads/tainacan');
+        }
+    }else{
+        mkdir(dirname(__FILE__).'/../../uploads',0755);
+        mkdir(dirname(__FILE__).'/../../uploads/tainacan',0755);
+        mkdir(dirname(__FILE__).'/../../uploads/tainacan/data',0755);
+        mkdir(dirname(__FILE__).'/../../uploads/tainacan/cache',0755);
+        mkdir(dirname(__FILE__).'/../../uploads/tainacan/data/templates',0755);
+        define('TAINACAN_UPLOAD_FOLDER', dirname(__FILE__).'/../../uploads/tainacan');
+    }
+}
+add_action( 'init', 'create_folder_tainacan_upload' );
 
 /* function register_post_types() */
 /* Recebe () */

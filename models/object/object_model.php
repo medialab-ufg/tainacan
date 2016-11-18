@@ -63,6 +63,8 @@ class ObjectModel extends Model {
             'post_type' => 'socialdb_object'
         );
         $data['ID'] = wp_update_post($post);
+        //deleto o rascunho assim que adiciono
+        delete_user_meta(get_current_user_id(), 'socialdb_collection_'.$data['collection_id'].'_betatext');
         $this->insert_rankings_value($data['ID'],$data['collection_id']);
         $slug = wp_unique_post_slug(sanitize_title_with_dashes($data['object_name']), $data['ID'], 'inherit', 'socialdb_object', 0);
         $post = array(
@@ -697,7 +699,12 @@ class ObjectModel extends Model {
             'post_content' => $data['object_description'],
             'post_type' => 'socialdb_object'
         );
+        if($data['post_status']){
+            $post['post_status'] = $data['post_status'];
+        }
         $data['ID'] = wp_update_post($post);
+        //deleto o rascunho assim que adiciono
+        delete_user_meta(get_current_user_id(), 'socialdb_collection_'.$data['collection_id'].'_betatext');
         if ($data['remove_thumbnail_object']) {
             delete_post_thumbnail($data['ID']);
         }

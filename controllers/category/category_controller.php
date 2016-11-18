@@ -124,10 +124,14 @@ require_once(dirname(__FILE__) . '../../../models/user/user_model.php');
                     case 'get_url_category':
                         $category = get_term_by('id', $data['term_id'], 'socialdb_category_type');
                         if($category){
+                            $log_data = ['resource_id' => $category->term_id, 'user_id' => get_current_user_id(), 'event_type' => 'user_category', 'event' => 'view' ];
+                            Log::addLog($log_data);
                             return json_encode(['slug'=>$category->slug]);
                         }else{
                             $id = ($data['term_id']=='tag_facet_tag')? get_term_by('slug','socialdb_tag','socialdb_tag_type')->term_id:$data['term_id'];
                             $tag = get_term_by('id', $id, 'socialdb_tag_type');
+                            $log_data = ['resource_id' => $tag->term_id, 'user_id' => get_current_user_id(), 'event_type' => 'tags', 'event' => 'view' ];
+                            Log::addLog($log_data);
                             return json_encode(['slug'=>$tag->slug]);
                         }
                         

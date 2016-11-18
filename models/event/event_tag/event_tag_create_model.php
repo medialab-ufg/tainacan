@@ -73,7 +73,7 @@ class EventTagCreate extends EventModel {
             $this->update_event_state('confirmed', $data['event_id']);
 
             $logData = ['collection_id' => $data['socialdb_event_collection_id'], 'resource_id' => $result['term_id'],
-                'user_id' => $data['socialdb_event_user_id'], 'event_type' => 'tag', 'event' => 'add' ];
+                'user_id' => $data['socialdb_event_user_id'], 'event_type' => 'tags', 'event' => 'add' ];
             Log::addLog($logData);
             
             $data['msg'] = __('The event was successful','tainacan');

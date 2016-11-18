@@ -331,6 +331,8 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                                 <!-- <div style="font-size:1em; cursor:pointer; color: black; display: inline-block;" data-icon="&#xe00b;"></div> -->
                                 <img src="<?php echo get_template_directory_uri() . '/libraries/images/icons/icon-share.png'; ?>" />
                             </a>
+                            <a target="_blank" href="<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>.rdf"  ><span class="glyphicon glyphicon-upload"></span> <?php _e('RDF', 'tainacan'); ?>&nbsp;
+                                    </a>
                             <ul style=" z-index: 9999;" class="dropdown-menu" role="menu">
                                 <li>
                                     <a target="_blank" href="<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>.rdf"  ><span class="glyphicon glyphicon-upload"></span> <?php _e('RDF', 'tainacan'); ?>&nbsp;

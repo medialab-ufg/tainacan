@@ -17,11 +17,14 @@ class LogController extends Controller {
         switch ($parent_name) {
             case i18n_str('Users'):
             case i18n_str('Collections'):
+            case i18n_str('Categories'):
                 return "user_" . $_event_suffix;
             case i18n_str('Comments'):
                 return "comment";
             case i18n_str('Items'):
                 return "user_";
+            case i18n_str('Tags'):
+                return "tags";
         }
     }
 }

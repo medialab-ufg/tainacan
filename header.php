@@ -97,10 +97,6 @@ $viewHelper = new ViewHelper();
 
                     <!-- TAINACAN: mostra acoes do usuario, cadastro, login, edital perfil suas colecoes -->
                     <ul class="nav navbar-nav navbar-right admin-configs">
-                        <li> <a class="repository-statistics" href="#" onmouseover="">
-                                <span class="glyphicon glyphicon-globe"></span> <?php _e('Statistics', 'tainacan'); ?>
-                            </a>
-                        </li>
                         <?php if (is_user_logged_in()): ?>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">

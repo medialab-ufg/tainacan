@@ -21,6 +21,7 @@
  * #16 - ADICIONA O BOTAO DE EDITAR PROPRIEDADE NA PAGINA DA PROPRIEDADE
  * #17 - ADICIONA NO MENU DA COLECAO A OPCAO DE FILTROS
  * #18 - ALTERA O THUMBNAIL DOS ITEMS/COLECAO
+ * #19 - OPERACAO DE METADADOS DE CATEGORIA
  * 
  * @author: EDUARDO HUMBERTO
  */
@@ -1999,7 +2000,7 @@ function add_filter_ontology_menu() {
 }
 #### FIM -  ADICIONA NO MENU DA COLECAO A OPCAO DE FILTROS #####################
 
-############ #18 - ALTERA O THUMBNAIL DOS ITEMS/COLEÇÕES ################################
+############ #18 - ALTERA O THUMBNAIL DOS ITEMS/COLEÇÕES #######################
 function ontology_alter_thumbnail_items($type) {
      $link =  get_template_directory_uri() . '/modules/' . MODULE_ONTOLOGY . "/libraries/images/thumbnail.png"; 
     return $link;
@@ -2012,3 +2013,10 @@ function ontology_alter_thumbnail_collection($type) {
 }
 add_filter( 'alter_thumbnail_collections', 'ontology_alter_thumbnail_collection', 10, 3 );
 ################################################################################
+
+############ #19 - OPERCAO DE METADADOS DE CATEGORIA ###########################
+function ontology_tainacan_operation_metadata_category() {
+    return 'list';
+}
+add_filter( 'tainacan_operation_metadata_category', 'ontology_tainacan_operation_metadata_category');
+

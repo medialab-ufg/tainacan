@@ -879,6 +879,7 @@
         if (value_id !== 'not') {
             toastr.success(counter + '<?php _e(' items/item updated successfully!', 'tainacan') ?>', '<?php _e('Success', 'tainacan') ?>', set_toastr_class());
         }
+        $('#sumbit_multiple_items .auto-save').trigger('change');
     }
     // radio button
     function setCategoriesRadio(property_id, value_id) {
@@ -888,6 +889,7 @@
             $("#socialdb_property_" + property_id + "_" + $(this).val()).val(value_id);
         });
         validate_radio(property_id);
+        $('#sumbit_multiple_items .auto-save').trigger('change');
         toastr.success(counter + '<?php _e(' items/item updated successfully!', 'tainacan') ?>', '<?php _e('Success', 'tainacan') ?>', set_toastr_class());
     }
     //select box
@@ -913,6 +915,7 @@
                 $("#socialdb_property_" + property_id + "_" + $(this).val()).val('');
             }
         });
+        $('#sumbit_multiple_items .auto-save').trigger('change');
         toastr.success(counter + '<?php _e(' items/item updated successfully!', 'tainacan') ?>', '<?php _e('Success', 'tainacan') ?>', set_toastr_class());
     }
     //select box multipple

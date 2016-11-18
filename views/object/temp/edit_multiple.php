@@ -1,9 +1,4 @@
 <?php
-/*
-include_once ('../../../../../wp-config.php');
-include_once ('../../../../../wp-load.php');
-include_once ('../../../../../wp-includes/wp-db.php');
-*/
 include_once ('js/edit_multiple_js.php');
 include_once(dirname(__FILE__).'/../../../helpers/view_helper.php');
 include_once(dirname(__FILE__).'/../../../helpers/object/object_properties_widgets_helper.php');
@@ -388,9 +383,7 @@ $references = [
         </div>
         <div class='col-md-12 pull-right' style="background-color: white;border: 3px solid #E8E8E8;">
             <h3> <?php _e('Edit multiple items','tainacan') ?>
-                <button type="button" onclick="back_main_list();" class="btn btn-default pull-right">
-                            <?php _e('Cancel','tainacan') ?>
-                </button>
+                <button type="button" onclick="cancelEdit();" class="btn btn-default pull-right"> <?php _e('Cancel','tainacan') ?> </button>
             </h3>
             <hr>
             <!--------------- BOTOES PARA MANIPULACAO DOS ITENS ---------------->
@@ -871,15 +864,11 @@ $references = [
                 */ ?>
 
               <div class="col-md-12" style="padding: 15px;">
-                 <button type="button" onclick="back_main_list();"
-                        class="btn btn-lg btn-default pull-left">
-                            <?php _e('Cancel','tainacan') ?>
+                 <button type="button" onclick="cancelEdit();" class="btn btn-lg btn-default pull-left">
+                     <?php _e('Cancel','tainacan') ?>
                 </button>
-                 <button type="submit"
-
-                         id="submit_button"
-                         class="btn btn-lg btn-success pull-right">
-                             <?php _e('Submit','tainacan'); ?>
+                 <button type="submit" id="submit_button" class="btn btn-lg btn-success pull-right">
+                     <?php _e('Submit','tainacan'); ?>
                  </button>
              </div>
 
