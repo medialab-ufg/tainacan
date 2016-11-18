@@ -528,13 +528,18 @@ $(document).ready(function () {
 
 function add_collection_template(col, template_name) {
     var path = $("#src").val() + "/controllers/collection/collection_controller.php";
+    show_modal_main();
     $.ajax({
         url: path, type: "POST",
         data: {operation: 'simple_add', collection_object: 'Item', collection_name: col, template: template_name}
     }).done(function (r) {
         elem = JSON.parse(r);
-        window.location = elem.url_collection_redirect;
-        console.log(elem.url_collection_redirect);
+        if(elem.type=='info'){
+            hide_modal_main();
+            showAlertGeneral(elem.title, elem.msg, elem.type);
+        }else{
+            window.location = elem.url_collection_redirect;
+        }
     });
 }
 
