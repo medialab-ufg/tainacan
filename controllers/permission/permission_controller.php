@@ -10,7 +10,9 @@ class PermissionController extends Controller {
         $model = new PermissionModel;
         switch ($operation) {
             case "show-page":
-                return $this->render(dirname(__FILE__) . '../../../views/permission/page.php');
+                insert_default_roles($data['collection_id']);
+                $data['values'] = $model->get_collection_profile_data($data['collection_id']);
+                return $this->render(dirname(__FILE__) . '../../../views/permission/page.php',$data);
                 break;
             case "save-permission":
                 return $model->save_permission_collection($data);
@@ -32,4 +34,3 @@ if ($_POST['operation']) {
 
 $import_controller = new PermissionController();
 echo $import_controller->operation($operation, $data);
-?>

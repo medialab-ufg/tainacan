@@ -1,4 +1,9 @@
 <?php
+/*
+ * # 1 - Collection profiles methods
+ * # 2 - Repository profiles methods
+ */
+
 
 require_once(dirname(__FILE__) . '../../general/general_model.php');
 /**
@@ -8,50 +13,69 @@ require_once(dirname(__FILE__) . '../../general/general_model.php');
  */
 class PermissionModel extends Model {
 
+    
+################## 1 - Collection profiles methods #############################
     /**
      * 
      * @param type $data
      */
     public function save_permission_collection($data) {
         var_dump($data);
-        $this->add_new_profile_collection($data);
+        add_new_profile_collection($data);
     }
     
     /**
-     * function add($data)
-     * @param mix $data  O id do colecao
-     * @return json  
      * 
-     * Autor: Eduardo Humberto 
+     * @param type $id O id do termo criado para o perfil
+     * @param type $key A chave que o utilizada para montagem do index do array 
+     * @param type $data os dados vindo do formulario
+     * 
      */
-    public function add_new_profile_collection($data) {
-        $name = $data['name_new_profile'];
-        if(trim($name)==''){
-            return false;
-        }
-        $is_new = get_term_by($field, sanitize_title(remove_accent($name)) . "_" . $data['collection_id'], 'socialdb_role_type');
-        if (!$is_new) {
-            $name = $name.'-1';
-        }
-        $new_role = wp_insert_term($name, 'socialdb_role_type', array(
-                'slug' => sanitize_title(remove_accent($name)) . "_" . $data['collection_id']));
-        //apos a insercao
-        if (!is_wp_error($new_role) && $new_role['term_id']) {// se a categoria foi inserida com sucesso
-            add_post_meta($data['collection_id'], 'socialdb_collection_roles', $new_role['term_id']);
-            return $new_role['term_id'];
-        } else {
-            return false;
-        }
-    }
-    
     public function update_role_permission($id,$key,$data) {
         $array_entities = ['item','metadata','category','tag','comment','descritor'];
         foreach ($array_entities as $entity) {
-            if($data['socialdb_permission_suggest_user_'. $entity .'_'. $key]){
-                update_term_meta($id, $entity, $array_entities);
-            }else{
-                
+            $indexes = $this->get_keys_permission($entity, $key);
+            foreach ($indexes as $index) {
+                if(isset($data[$index])){
+                    update_term_meta($id, $index, $data[$index]);
+                }else{
+                    update_term_meta($id, $index, 'no');
+                }
             }
         }
     }
+    
+    /**
+     * 
+     * @param type $entity
+     * @param type $key
+     */
+    public function get_keys_permission($entity,$key){
+        return [
+            'socialdb_permission_crud_user_'. $entity .'_'. $key,
+            'socialdb_permission_crud_other_'. $entity .'_'. $key,
+            'socialdb_permission_suggest_user_'. $entity .'_'. $key,
+            'socialdb_permission_suggest_other_'. $entity .'_'. $key,
+            'socialdb_permission_review_other_'. $entity .'_'. $key,
+            'socialdb_permission_download_other_'. $entity .'_'. $key,
+            'socialdb_permission_view_other_'. $entity .'_'. $key,
+        ];
+    }
+    
+    
+    /**
+     * 
+     * @param type $param
+     */
+    public function get_collection_profile_data($collection_id) {
+        $values = [];
+        $profiles = get_post_meta($collection_id, 'socialdb_collection_roles');
+        if($profiles){
+            foreach ($profiles as $profile) {
+                $values[$profile] = $this->get_property_meta_data($profile);
+            }
+        }
+        return $values;
+    }
+################################################################################
 }

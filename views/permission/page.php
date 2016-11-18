@@ -3,6 +3,7 @@ include_once ('../../helpers/view_helper.php');
 include_once ('../../helpers/user-permission/user_permission_helper.php');
 include_once('js/page-js.php');
 $helper = new UserPermissionHelper;
+var_dump($values);
 ?>
 <style>
     .header-profile{

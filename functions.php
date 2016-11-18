@@ -1457,7 +1457,186 @@ function add_fixed_properties($category_root_term) {
     }
 }
 
+######################## Collection profile ####################################
+/**
+ * 
+ * funcao para insercao de 
+ * 
+ * @param string $name
+ * @param type $collection_id
+ * @return boolean/int
+ */
+function add_new_profile_collection($name, $collection_id) {
+    if (trim($name) == '') {
+        return false;
+    }
+    $is_new = get_term_by($field, sanitize_title(remove_accent($name)) . "_" . $collection_id, 'socialdb_role_type');
+    if ($is_new) {
+        $name = $name . '-1';
+    }
+    $new_role = wp_insert_term($name, 'socialdb_role_type', array(
+        'slug' => sanitize_title(remove_accent($name)) . "_" . $collection_id));
+    if (!is_wp_error($new_role) && $new_role['term_id']) {// se a categoria foi inserida com sucesso
+        add_post_meta($data['collection_id'], 'socialdb_collection_roles', $new_role['term_id']);
+        return $new_role['term_id'];
+    } else {
+        return false;
+    }
+}
 
+/**
+ * 
+ * @param type $collection_id
+ * @return type
+ */
+function insert_default_roles($collection_id){
+    $values = [];
+    $values['registered_profile_id'] = get_post_meta($collection_id, 'socialdb_collection_profile_registered_id',true);
+    if(!$values['registered_profile_id'] ){
+        $registered_profile_id =  add_new_profile_collection('registered', $collection_id);
+        update_post_meta($collection_id, 'socialdb_collection_profile_registered_id', $registered_profile_id);
+        $values['registered_profile_id'] = $registered_profile_id;
+        add_roles_metas_registered($registered_profile_id);
+    }
+    $values['anonimous_profile_id'] = get_post_meta($collection_id, 'socialdb_collection_profile_anonimous_id',true);
+    if(!$values['anonimous_profile_id']){
+        $anonimous_profile_id =  add_new_profile_collection('anonimous', $collection_id);
+        update_post_meta($collection_id, 'socialdb_collection_profile_anonimous_id', $anonimous_profile_id);
+        $values['anonimous_profile_id'] = $anonimous_profile_id;
+        add_roles_metas_anonimous($anonimous_profile_id);
+    }
+    return $values;
+}
+
+/**
+ * 
+ * @param type $id
+ * @return type
+ */
+function add_roles_metas_registered($id){
+    $key = 'registered';
+    return [
+        'socialdb_permission_crud_user_item_'. $key => 'yes',
+        'socialdb_permission_crud_other_item_'. $key => 'no',
+        'socialdb_permission_suggest_user_item_'. $key => 'no',
+        'socialdb_permission_suggest_other_item_'. $key => 'no',
+        'socialdb_permission_review_other_item_'. $key => 'no',
+        'socialdb_permission_download_other_item_'. $key => 'yes',
+        'socialdb_permission_view_other_item_'. $key => 'yes',
+        'socialdb_permission_crud_user_metadata_'. $key => 'yes',
+        'socialdb_permission_crud_other_metadata_'. $key => 'no',
+        'socialdb_permission_suggest_user_metadata_'. $key => 'no',
+        'socialdb_permission_suggest_other_metadata_'. $key => 'no',
+        'socialdb_permission_review_other_metadata_'. $key => 'no',
+        'socialdb_permission_download_other_metadata_'. $key => 'no',
+        'socialdb_permission_view_other_metadata_'. $key => 'no',
+        'socialdb_permission_crud_user_category_'. $key => 'yes',
+        'socialdb_permission_crud_other_category_'. $key => 'no',
+        'socialdb_permission_suggest_user_category_'. $key => 'no',
+        'socialdb_permission_suggest_other_category_'. $key => 'no',
+        'socialdb_permission_review_other_category_'. $key => 'no',
+        'socialdb_permission_download_other_category_'. $key => 'no',
+        'socialdb_permission_view_other_category_'. $key => 'yes',
+        'socialdb_permission_crud_user_tag_'. $key => 'yes',
+        'socialdb_permission_crud_other_tag_'. $key => 'no',
+        'socialdb_permission_suggest_user_tag_'. $key => 'no',
+        'socialdb_permission_suggest_other_tag_'. $key => 'no',
+        'socialdb_permission_review_other_tag_'. $key => 'no',
+        'socialdb_permission_download_other_tag_'. $key => 'no',
+        'socialdb_permission_view_other_tag_'. $key => 'no',
+        'socialdb_permission_crud_user_comment_'. $key => 'yes',
+        'socialdb_permission_crud_other_comment_'. $key => 'no',
+        'socialdb_permission_suggest_user_comment_'. $key => 'no',
+        'socialdb_permission_suggest_other_comment_'. $key => 'no',
+        'socialdb_permission_review_other_comment_'. $key => 'no',
+        'socialdb_permission_download_other_comment_'. $key => 'no',
+        'socialdb_permission_view_other_comment_'. $key => 'no',
+        'socialdb_permission_crud_user_descritor_'. $key => 'yes',
+        'socialdb_permission_crud_other_descritor_'. $key => 'no',
+        'socialdb_permission_suggest_user_descritor_'. $key => 'no',
+        'socialdb_permission_suggest_other_descritor_'. $key => 'no',
+        'socialdb_permission_review_other_descritor_'. $key => 'no',
+        'socialdb_permission_download_other_descritor_'. $key => 'no',
+        'socialdb_permission_view_other_descritor_'. $key => 'no',
+        'allow_view_configuration_'.$key => 'no',
+        'allow_view_metadata_'.$key => 'no',
+        'allow_view_layout_'.$key => 'no',
+        'allow_view_import_'.$key => 'no',
+        'allow_view_social_'.$key => 'no',
+        'allow_view_tag_'.$key => 'no',
+        'allow_view_license_'.$key => 'no',
+        'allow_view_statistic_'.$key => 'no',
+        'allow_view_permission_'.$key => 'no',
+        'allow_view_users_'.$key => 'no',
+        'allow_view_export_'.$key => 'no'
+    ];
+}
+
+/**
+ * 
+ * @param type $id
+ * @return type
+ */
+function add_roles_metas_anonimous($id){
+    $key = 'anonimous';
+    return [
+        'socialdb_permission_crud_user_item_'. $key => 'no',
+        'socialdb_permission_crud_other_item_'. $key => 'no',
+        'socialdb_permission_suggest_user_item_'. $key => 'no',
+        'socialdb_permission_suggest_other_item_'. $key => 'no',
+        'socialdb_permission_review_other_item_'. $key => 'no',
+        'socialdb_permission_download_other_item_'. $key => 'no',
+        'socialdb_permission_view_other_item_'. $key => 'yes',
+        'socialdb_permission_crud_user_metadata_'. $key => 'no',
+        'socialdb_permission_crud_other_metadata_'. $key => 'no',
+        'socialdb_permission_suggest_user_metadata_'. $key => 'no',
+        'socialdb_permission_suggest_other_metadata_'. $key => 'no',
+        'socialdb_permission_review_other_metadata_'. $key => 'no',
+        'socialdb_permission_download_other_metadata_'. $key => 'no',
+        'socialdb_permission_view_other_metadata_'. $key => 'no',
+        'socialdb_permission_crud_user_category_'. $key => 'no',
+        'socialdb_permission_crud_other_category_'. $key => 'no',
+        'socialdb_permission_suggest_user_category_'. $key => 'no',
+        'socialdb_permission_suggest_other_category_'. $key => 'no',
+        'socialdb_permission_review_other_category_'. $key => 'no',
+        'socialdb_permission_download_other_category_'. $key => 'no',
+        'socialdb_permission_view_other_category_'. $key => 'no',
+        'socialdb_permission_crud_user_tag_'. $key => 'no',
+        'socialdb_permission_crud_other_tag_'. $key => 'no',
+        'socialdb_permission_suggest_user_tag_'. $key => 'no',
+        'socialdb_permission_suggest_other_tag_'. $key => 'no',
+        'socialdb_permission_review_other_tag_'. $key => 'no',
+        'socialdb_permission_download_other_tag_'. $key => 'no',
+        'socialdb_permission_view_other_tag_'. $key => 'no',
+        'socialdb_permission_crud_user_comment_'. $key => 'no',
+        'socialdb_permission_crud_other_comment_'. $key => 'no',
+        'socialdb_permission_suggest_user_comment_'. $key => 'no',
+        'socialdb_permission_suggest_other_comment_'. $key => 'no',
+        'socialdb_permission_review_other_comment_'. $key => 'no',
+        'socialdb_permission_download_other_comment_'. $key => 'no',
+        'socialdb_permission_view_other_comment_'. $key => 'no',
+        'socialdb_permission_crud_user_descritor_'. $key => 'no',
+        'socialdb_permission_crud_other_descritor_'. $key => 'no',
+        'socialdb_permission_suggest_user_descritor_'. $key => 'no',
+        'socialdb_permission_suggest_other_descritor_'. $key => 'no',
+        'socialdb_permission_review_other_descritor_'. $key => 'no',
+        'socialdb_permission_download_other_descritor_'. $key => 'no',
+        'socialdb_permission_view_other_descritor_'. $key => 'no',
+        'allow_view_configuration_'.$key => 'no',
+        'allow_view_metadata_'.$key => 'no',
+        'allow_view_layout_'.$key => 'no',
+        'allow_view_import_'.$key => 'no',
+        'allow_view_social_'.$key => 'no',
+        'allow_view_tag_'.$key => 'no',
+        'allow_view_license_'.$key => 'no',
+        'allow_view_statistic_'.$key => 'no',
+        'allow_view_permission_'.$key => 'no',
+        'allow_view_users_'.$key => 'no',
+        'allow_view_export_'.$key => 'no'
+    ];
+}
+
+################################################################################
 /**
  * function theme_styles()
  * Funcao para registrar os estilos usados
@@ -1874,6 +2053,7 @@ function create_root_collection_category($collection_id, $category_name) {
     // }
     //}
     create_initial_property($category_root->term_id, $collection_id);
+    insert_default_roles($collection_id);
     if(has_action('insert_default_properties_collection')){
         do_action('insert_default_properties_collection', $category_root->term_id,$collection_id);
     }
