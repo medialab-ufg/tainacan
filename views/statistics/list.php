@@ -30,6 +30,8 @@ $view_helper = new ViewHelper();
         </div>
     </div>
 
+
+
     <div id="charts-display" class="col-md-9">
         <div class="chart-header btn-group col-md-12">
             <?php $view_helper->render_config_title(__('Repository Statistics', 'tainacan')); ?>
@@ -38,24 +40,33 @@ $view_helper = new ViewHelper();
                     <span class="config-title"><?php i18n_str('Filters:',true); ?></span>
                     <span class="current-chart"><?php i18n_str('User Stats',true); ?></span>
                 </div>
-                <div class="col-md-4 pull-right no-padding">
+
+                <div class="col-md-2 pull-right no-padding">
                     <span class="config-title"><?php i18n_str('Mode:',true); ?></span>
-                    <a href="javascript:void(0)" class="change-mode">
-                        <img src="https://google-developers.appspot.com/chart/interactive/images/chart_pie.png" alt="">
-                    </a>
+                    <!--                    <a href="javascript:void(0)" class="change-mode">-->
+                    <!--                        <img src="https://google-developers.appspot.com/chart/interactive/images/chart_pie.png" alt="">-->
+                    <!--                    </a>-->
+
                     <?php
-                        $_line_img = '<img src="https://google-developers.appspot.com/chart/interactive/images/chart_line.png" alt="">';
-                        $_column_img = '<img src="https://google-developers.appspot.com/chart/interactive/images/chart_column.png" alt="">';
-                        $_pie_img = '<img src="https://google-developers.appspot.com/chart/interactive/images/chart_pie.png" alt="">';
+                    $_line_img = '<img src="https://google-developers.appspot.com/chart/interactive/images/chart_line.png" alt="">';
+                    $_column_img = '<img src="https://google-developers.appspot.com/chart/interactive/images/chart_column.png" alt="">';
+                    $_pie_img = '<img src="https://google-developers.appspot.com/chart/interactive/images/chart_pie.png" alt="">';
                     ?>
-                    <select class="selectpicker" name="select-chart-mode" id="">
-                        ye
-                        <option data-content="<?php echo $_line_img; ?>" value=""> do </option>
-                        <option data-content="<?php echo $_column_img; ?>" value=""> doee </option>
-                        <option data-content="<?php echo $_pie_img; ?>" value=""> dsasao </option>
-                    </select>
+
+                    <button data-toggle="dropdown" class="btn btn-default" id="statChartType" type="button">
+                        <?php echo $_column_img ?>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="statChartType" class="statChartType">
+                        <li class="change-mode">
+                            <a href="javascript:void(0)" data-chart="piechart_div"> <?php echo $_pie_img ?> </a>
+                        </li>
+                        <li class="change-mode">
+                            <a href="javascript:void(0)" data-chart="barchart_div"> <?php echo $_line_img ?> </a>
+                        </li>
+                    </ul>
 
                 </div>
+
                 <?php /*
                 <span class="config-title"><?php i18n_str('Orientation:',true); ?></span>
                 <button class="btn btn-default"> <?php i18n_str('Download',true); ?> <span class="caret"></span></button>
@@ -66,7 +77,7 @@ $view_helper = new ViewHelper();
         <div id="charts-container" class="col-md-12">
             <div id="chart_div"></div> <!--Div that will hold the pie chart-->
             <div id="piechart_div" style="display: none"></div>
-            <div id="barchart_div"></div>
+            <div id="barchart_div" style="display: none"></div>
         </div>
         
         <div id="charts-resume" class="col-md-12">

@@ -76,14 +76,14 @@
     h3.topo {
       color: $brand-medium-blue;
       margin: 0;
+
+      button { display: none }
     }
 
     hr {
       margin-top: 10px;
       margin-bottom: 10px;
     }
-
-    button { display: none }
 
     .user-config-control {
       span.config-title {

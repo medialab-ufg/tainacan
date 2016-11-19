@@ -2,8 +2,8 @@
 // Report all PHP errors
 /** Acoes iniciais ** */
 //define('ALTERNATE_WP_CRON', true);
-wp_register_script('jquery.min', get_template_directory_uri() . '/libraries/js/jquery.min.js', array('jquery'), '1.7');
-wp_enqueue_script('jquery.min');
+// wp_register_script('jquery.min', get_template_directory_uri() . '/libraries/js/jquery.min.js', array('jquery'), '1.7');
+// wp_enqueue_script('jquery.min');
 add_action('init', 'wpdbfix');
 add_action('init', 'register_post_types');
 add_action('init', 'register_taxonomies');
@@ -1581,6 +1581,7 @@ function add_tainacan_css($file_name, $file_path) {
 if (!function_exists("theme_js")) {
 
     function theme_js() {
+        wp_register_script('jquery_min', get_template_directory_uri() . '/libraries/js/jquery.min.js', array('jquery'), '1.7.88');
         /* jquery UI */
         wp_register_script('jqueryUi', get_template_directory_uri() . '/libraries/js/jquery_ui/jquery-ui.min.js', array('jquery'), '1.2');
         wp_register_script('bootstrap.min', get_template_directory_uri() . '/libraries/js/bootstrap.min.js', array('jquery'), '1.11');
@@ -1637,18 +1638,16 @@ if (!function_exists("theme_js")) {
         wp_register_script("timepicker", get_template_directory_uri() .'/libraries/js/timepicker/timepicker.js', array('jquery'));
         /* Croppic */
         wp_register_script("croppic", get_template_directory_uri() . '/libraries/js/croppic/croppic.js', array('jquery'));
+
         /* jsPDF */
         wp_register_script("jsPDF", get_template_directory_uri() . '/libraries/js/jspdf/jspdf.min.js', array('jquery'));
         /* jsPDF Auto Table */
         wp_register_script("jsPDF_auto_table", get_template_directory_uri() . '/libraries/js/jspdf/jspdf.plugin.autotable.js', array('jquery'));
 
-        $js_files = ['jqueryUi', 'bootstrap.min', 'JitJs', 'JitExcanvasJs', 'tainacan', 'DynatreeJs', 'ckeditorjs',
+        $js_files = ['jquery_min', 'jqueryUi', 'bootstrap.min', 'JitJs', 'JitExcanvasJs', 'tainacan', 'DynatreeJs', 'ckeditorjs',
             'contextMenu', 'ColorPicker', 'SweetAlert', 'SweetAlertJS', 'jquerydataTablesmin', 'data_table', 'raty',
             'jqpagination', 'dropzone', 'croppic', 'bootstrap-combobox', 'FacebookJS', 'row-sorter', 'maskedInput',
-            'montage', 'prettyphoto', 'select2', 'slick','timepicker', 'jqcloud', 'toastrjs', 'jsPDF', 'jsPDF_auto_table'
-        ];
-
-        // $home_js = ['jqueryUi','bootstrap.min', 'my-script', 'FacebookJS', 'maskedInput', 'prettyphoto', 'slick'];
+            'montage', 'prettyphoto', 'select2', 'slick','timepicker', 'jqcloud', 'toastrjs', 'jsPDF', 'jsPDF_auto_table' ];
 
         foreach ($js_files as $js_file):
             wp_enqueue_script($js_file);

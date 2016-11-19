@@ -20,10 +20,21 @@
                 // cl("Got date: " + dateText + " from " + input);
             }
         });
-    });
 
-    $(document).ready(function() {
-        $('.selectpicker').selectpicker();
+        $('li.change-mode a').on('click', function() {
+            var selected_chart = $(this).attr('data-chart');
+            $("#charts-container div").each(function(id, el) {
+                var curr_id = $(el).attr("id");
+                cl("Selectionado: " + selected_chart);
+                cl("Id corrent: " + curr_id);
+                cl( selected_chart == curr_id );
+                if( curr_id == selected_chart ) {
+                    $(el).show();
+                } else {
+                    $(el).hide();
+                }
+             });
+        });
     });
 
     $("#statistics-config").accordion({
@@ -138,15 +149,6 @@
     mappd_titles = { add: 'Adicionados', edit: 'Editados', view: 'Visualizados', download: 'Baixados', delete: 'Deletados',
         login: 'Login', register: 'Registros', delete_user: 'Excluídos',
         administrator: 'Administrador', author: 'Autor', editor: 'Editor', subscriber: 'Assinante', contributor: 'Colaborador' };
-
-
-    $('a.change-mode').on('click', function() {
-        cl('trying to set basis');
-        //$('.selectpicker').selectpicker();
-        $(["#chart_div", "#piechart_div"]).each(function(id, el) {
-            $(el).toggle();
-        });
-    });
 
     function drawChart(title, data_obj) {
         if(data_obj.stat_object) {
