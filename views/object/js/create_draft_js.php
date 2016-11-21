@@ -25,7 +25,7 @@
 
         $('#submit_form_edit_object .auto-save').change(function () {
             var verify = $('#submit_form_edit_object').serialize();
-            $("#object_content_edit").val(CKEDITOR.instances.object_editor.getData());
+            $("#object_content_edit").val(CKEDITOR.instances.objectedit_editor.getData());
             var selKeys = $.map($("#dynatree").dynatree("getSelectedNodes"), function (node) {
                 return node.data.key;
             });
@@ -44,7 +44,7 @@
     }
     setTimeout(function () {
         createDraft();
-    }, 8000);
+    }, 3000);
 
 
     function back_main_list_discard(id) {

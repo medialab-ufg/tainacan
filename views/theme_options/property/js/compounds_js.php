@@ -10,7 +10,7 @@
     function accordeon_ordenation_properties(){
         $( "#compounds_properties_ordenation" ).sortable({
             cursor: "n-resize",
-            containment: $('#meta-compounds'),
+            //containment: $('#meta-compounds'),
             revert: 250,
             receive: function(event, ui) {
             },

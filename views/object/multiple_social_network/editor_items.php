@@ -25,50 +25,6 @@ $filesAudio= [];
 $filesPdf= [];
 $filesOther= [];
 ?>
-<style>
-  #selectable .ui-selecting 
-  { 
-      /* border: 3px solid rgb(122,167,207) ;*/ 
-  }
-  #container_images,
-  #container_text,
-  #container_pdfs,
-  #container_videos,
-  #container_audios, 
-  #container_others {
-      background-color: #c1d0dd;
-      padding-right: 0px;
-      padding-left: 15px;
-      margin-top: 15px;
-      padding-top: 5px;
-  }
-  
-  .item-default{
-      background: white;  
-      margin-bottom: 15px;
-      padding-bottom: 15px;
-      padding-right: 15px;
-      border: 3px solid #E8E8E8; 
-      margin-right: 10px;
-      width:19%;
-  }
-  .selected-border{
-      border: 3px solid rgb(122,167,207); 
-  }
-  .input_title{
-        text-align: center;
-        width: 150px;
-        padding:5px;
-        border: none;
-        background-color: rgb(209,211,212);
-        font: 13px Arial;
-        border-radius: 5px;
-    }  
-    .menu-left-size{
-        width: 23%;
-        padding-bottom: 15px;
-    }
-</style>
 <div class="row" style="padding-right: 0px;padding-left: 0px;">
        
         <!-------------- METADADOS - BLOCO ESQUERDO (COL-MD-3) --------------------->
@@ -444,6 +400,8 @@ $filesOther= [];
                         class="btn btn-default pull-right"> 
                             <?php _e('Cancel','tainacan') ?>
                 </button>
+                <br>
+                <small id="draft-text"></small>
             </h3>
             <?php endif ?>
             <hr>

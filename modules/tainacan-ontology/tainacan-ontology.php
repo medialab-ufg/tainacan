@@ -2,7 +2,7 @@
 /**
  * Modulo de Ontologia do Tainacan
  * 
- * 
+ * #0 - Alterando valores do total de nos e o nome da categoria root do repositorio
  * #1 - ADICIONANDO OS SCRIPTS DESTE MODULO 
  * #2 - ALTERACOES HOME DO ITEM  
  * #3 - ALTERACOES CRIACAO DA COLECAO
@@ -31,12 +31,17 @@ define('MODULE_ONTOLOGY', 'tainacan-ontology');
 define('ONTOLOGY_CONTROLLERS', get_template_directory_uri() . '/modules/' . MODULE_ONTOLOGY );
 load_theme_textdomain("tainacan", dirname(__FILE__) . "/languages");
 
-################ #0 Alterando valores do total de nos ##########################
+################ #0 Alterando valores do total de nos e o nome da categoria root do repositorio ##########################
 
 function ontology_alter_dynatree_number_of_items($name) {
     return 50;
 }
 add_filter( 'alter_dynatree_number_of_items', 'ontology_alter_dynatree_number_of_items', 10, 3 );
+
+function ontology_alter_category_root_repository_name($name) {
+    return 'socialdb_taxonomy';
+}
+add_filter( 'alter_category_root_repository_name', 'ontology_alter_category_root_repository_name', 10, 3 );
 
 ################ #1 ADICIONANDO OS SCRIPTS DESTE MODULO ###########################
 add_action('wp_enqueue_scripts', 'tainacan_ontology_js');
@@ -1437,8 +1442,8 @@ add_action('menu_collection_property_and_filters_configuration', 'hide_field');
 add_action('menu_collection_property_configuration', 'hide_field');
 add_action('menu_collection_social_configuration', 'hide_field');
 add_action('menu_collection_license', 'hide_field');
-add_action('menu_collection_import', 'hide_field');
-add_action('menu_collection_export', 'hide_field');
+//add_action('menu_collection_import', 'hide_field');
+//add_action('menu_collection_export', 'hide_field');
 /******************************************************************************/
 /**************** ESCONDER CAMPOS DO MENU DO REPOSITORIO ***********/
 add_action('menu_repository_social_api', 'hide_field');

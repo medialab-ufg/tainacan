@@ -208,7 +208,7 @@ class ObjectMultipleModel extends Model {
         $this->set_common_field_values($post_id, 'object_source', $data['source_'.$item_id]);
         $this->set_common_field_values($post_id, 'object_type', $data['object_type']);
         $this->set_common_field_values($post_id, 'object_content', $data['type_'.$item_id]);
-        if($data['type_'.$item_id]=='image'){
+        if($data['type_'.$item_id]=='image' && get_post($item_id) && get_post($item_id)->post_type=='attachment'){
             set_post_thumbnail($post_id, $item_id);
         }
     }
