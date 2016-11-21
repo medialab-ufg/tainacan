@@ -1,13 +1,14 @@
 <?php
 include_once(dirname(__FILE__).'/../../helpers/view_helper.php');
+include_once(dirname(__FILE__).'/../../helpers/log/log_helper.php');
 include_once(dirname(__FILE__).'/../../models/log/log_model.php');
 include_once('js/list_js.php');
  
-$view_helper = new ViewHelper();
+$_log_helper = new LogHelper();
 ?>
 <div class="col-md-12 statistics-container no-padding">
 
-    <?php $view_helper->render_statistic_menu() ?>
+    <?php $_log_helper->render_statistic_menu() ?>
 
     <div id="statistics-config" class="col-md-3 ui-widget-header no-padding">
 
@@ -34,7 +35,7 @@ $view_helper = new ViewHelper();
 
     <div id="charts-display" class="col-md-9">
         <div class="chart-header btn-group col-md-12">
-            <?php $view_helper->render_config_title(__('Repository Statistics', 'tainacan')); ?>
+            <?php $_log_helper->render_config_title(__('Repository Statistics', 'tainacan')); ?>
             <div class="user-config-control col-md-12 no-padding">
                 <div class="col-md-4 pull-left no-padding">
                     <span class="config-title"><?php i18n_str('Filters:',true); ?></span>
@@ -43,26 +44,19 @@ $view_helper = new ViewHelper();
 
                 <div class="col-md-2 pull-right no-padding">
                     <span class="config-title"><?php i18n_str('Mode:',true); ?></span>
-                    <!--                    <a href="javascript:void(0)" class="change-mode">-->
-                    <!--                        <img src="https://google-developers.appspot.com/chart/interactive/images/chart_pie.png" alt="">-->
-                    <!--                    </a>-->
-
-                    <?php
-                    $_line_img = '<img src="https://google-developers.appspot.com/chart/interactive/images/chart_line.png" alt="">';
-                    $_column_img = '<img src="https://google-developers.appspot.com/chart/interactive/images/chart_column.png" alt="">';
-                    $_pie_img = '<img src="https://google-developers.appspot.com/chart/interactive/images/chart_pie.png" alt="">';
-                    ?>
 
                     <button data-toggle="dropdown" class="btn btn-default" id="statChartType" type="button">
-                        <?php echo $_column_img ?>
+                        <img src="<?php echo $_log_helper->getChartsType()[0]['img']; ?>" alt="<?php echo $_log_helper->getChartsType()[0]['className']; ?>">
                     </button>
+
                     <ul class="dropdown-menu" aria-labelledby="statChartType" class="statChartType">
-                        <li class="change-mode">
-                            <a href="javascript:void(0)" data-chart="piechart_div"> <?php echo $_pie_img ?> </a>
-                        </li>
-                        <li class="change-mode">
-                            <a href="javascript:void(0)" data-chart="barchart_div"> <?php echo $_line_img ?> </a>
-                        </li>
+                        <?php foreach ($_log_helper->getChartsType() as $chart): ?>
+                            <li>
+                                <a href="javascript:void(0)" class="change-mode" data-chart="<?php echo $chart['className'] ?>">
+                                    <img src="<?php echo $chart['img'] ?>" />
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
                     </ul>
 
                 </div>
@@ -76,8 +70,8 @@ $view_helper = new ViewHelper();
 
         <div id="charts-container" class="col-md-12">
             <div id="chart_div"></div> <!--Div that will hold the pie chart-->
-            <div id="piechart_div" style="display: none"></div>
-            <div id="barchart_div" style="display: none"></div>
+            <div id="piechart_div" class="hide"></div>
+            <div id="barchart_div" class="hide"></div>
         </div>
         
         <div id="charts-resume" class="col-md-12">

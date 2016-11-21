@@ -610,7 +610,8 @@ function add_li_collection_template(el,$_element){
 
     if( (!el.tainacan_templates) && (!el.user_templates) ) {
         $('ul.templates').remove();
-        $('a.create-collection').text('Geral').css('cursor', 'pointer').click(function() {
+        var text = $('.create-collection').text();
+        $('a.create-collection').text(text).css('cursor', 'pointer').click(function() {
             $('#myModal').modal('show');
         });
     }

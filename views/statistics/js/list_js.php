@@ -14,26 +14,16 @@
             nextText: '<?php i18n_str('Next ', true); ?>',
             prevText: '<?php i18n_str('Previous', true); ?>',
             showButtonPanel: false,
-            showAnim: 'clip',
-            onSelect: function(dateText, obj) {
-                // var input = $(obj).attr('id');
-                // cl("Got date: " + dateText + " from " + input);
-            }
+            showAnim: 'clip'
         });
 
-        $('li.change-mode a').on('click', function() {
+        $('a.change-mode').on('click', function() {
             var selected_chart = $(this).attr('data-chart');
-            $("#charts-container div").each(function(id, el) {
-                var curr_id = $(el).attr("id");
-                cl("Selectionado: " + selected_chart);
-                cl("Id corrent: " + curr_id);
-                cl( selected_chart == curr_id );
-                if( curr_id == selected_chart ) {
-                    $(el).show();
-                } else {
-                    $(el).hide();
-                }
-             });
+            $("#charts-container div").addClass('hide');
+            $("div#" + selected_chart).removeClass('hide');
+            $('.dynatree-selected').click();
+            var curr_img = $(this).html();
+            $("#statChartType").html(curr_img);
         });
     });
 
@@ -65,7 +55,7 @@
             var chart_text = node.data.title;
             var chain = $('.temp-set').html(chart_text).text().replace(/\//gi, "");
             var split_title = chain.split(" ");
-            $(".current-chart").text( split_title[0] + " do " + parent );
+            $(".current-chart").text( split_title[0] + " / " + parent );
             if(node_action) {
                 fetchData(parent, node_action);
             }
@@ -168,19 +158,17 @@
                 displayBaseAppend(mappd_titles[event], obj_total);
             }
 
-            var piechart_options = {title:'Qtd usuários por status', width: 800};
+            var piechart_options = {title:'Qtd usuários por status', width: 800, is3D: true };
             var piechart = new google.visualization.PieChart(document.getElementById('piechart_div'));
-
             piechart.draw(dt, piechart_options);
 
-            var barchart_options = {title:'Barchart stats', width: 800, height:300, legend: 'none'};
+            var barchart_options = {title:'Barchart stats', width: 800, height:300, legend: 'none', color: '#01a0f'};
             var barchart = new google.visualization.BarChart(document.getElementById('barchart_div'));
             barchart.draw(dt, barchart_options);
 
             var data = google.visualization.arrayToDataTable( chart_data );
             var options = { colors: [color], legend: 'none' };
             var chart = new google.charts.Bar(document.getElementById('chart_div'));
-
             chart.draw(data, options);
         }
     }
