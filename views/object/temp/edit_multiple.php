@@ -414,12 +414,10 @@ $references = [
             </div>
             <!--------------- FIM: BOTOES PARA MANIPULACAO DOS ITENS ---------------->
             <!--------------- container todos os itens  ----------------------------->
+
             <div <?php /* style="max-height: 500px;overflow-y: scroll" */ ?> >
                 <div id="selectable">
-                    <?php
-                    // images
-                    // if(is_array($items['image'])){
-                    ?>
+                    <?php // images // if(is_array($items['image'])) { ?>
                     <div id="container_images"  class='col-md-12'>
                         <h4>
                             <input class="class_selected_items" type='checkbox' id='selectAllImages' onclick="selectImages()" value='#'>
@@ -433,8 +431,7 @@ $references = [
                             $filesImage[] = $file['ID'];
                             ?>
                             <div onclick="focus_item('<?php echo $file['ID'] ?>')" >
-                                <div id="wrapper_<?php echo $file['ID'] ?>" class="col-md-3 item-default"
-                                     style="cursor: pointer;">
+                                <div id="wrapper_<?php echo $file['ID'] ?>" class="bulk-item-wrapper col-md-3 item-default">
                                     <center style="padding-top: 10px; padding-bottom: 10px;"><!-- container do item -->
                                         <div style="padding-bottom: 10px;" class="item" id="panel_<?php echo $file['ID'] ?>" >
                                             <input style="display:none" class="class_selected_items"
@@ -450,11 +447,13 @@ $references = [
                                             ?>
                                         </div>
                                         <input required="required" type="text" class='input_title form-control'
-                                               placeholder="<?php _e('Add a title','tainacan') ?>" id='title_<?php echo $file['ID'] ?>' style="width: 78%"
+                                               placeholder="<?php _e('Add a title','tainacan') ?>" id='title_<?php echo $file['ID'] ?>' style="width: 100%"
                                                name='title_<?php echo $file['ID'] ?>' value='<?php echo $file['title'] ?>'>
 
+                                        <?php /*
                                         <textarea id='description_<?php echo $file['ID'] ?>' style="width: 78%; margin-top: 10px;"
                                                   class="form-control item-desc" name="description_<?php echo $file['ID'] ?>"><?php echo $file['desc'] ?></textarea>
+                                        */ ?>
 
                                         <!-- Hidden para as categorias, tags e attachments  -->
                                         <input type="hidden" id="source_<?php echo $file['ID'] ?>" name="source_<?php echo $file['ID'] ?>" value=''>
@@ -500,9 +499,8 @@ $references = [
                                     </center>
                                     </div>
                                 </div>
-                              <?php
-                            }
-                        ?>
+                            <?php
+                        } ?>
                         </div>
                         <?php
                    // }

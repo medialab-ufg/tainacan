@@ -12,14 +12,12 @@
      <?php if ($collection_list_mode != "gallery"): ?> style="display: none" <?php endif ?> >
     
     <input type="hidden" id="add_classification_allowed_<?php echo get_the_ID() ?>" name="add_classification_allowed" value="<?php echo (string) verify_allowed_action($collection_id, 'socialdb_collection_permission_add_classification', get_the_ID()); ?>" />
-    <div class="gallery-wrapper droppableClassifications">
-        <div class="">
-            <div class="item-thumb">
-                <a href="<?php echo get_collection_item_href($collection_id); ?>"
-                   onclick="<?php get_item_click_event($collection_id, $curr_id )?>">
-                    <?php echo get_item_thumb_image($curr_id); ?>
-                </a>
-            </div>
+    <div class="gallery-wrapper droppableClassifications toggleSelect">
+        <div class="item-thumb">
+            <a href="<?php echo get_collection_item_href($collection_id); ?>"
+               onclick="<?php get_item_click_event($collection_id, $curr_id )?>">
+                <?php echo get_item_thumb_image($curr_id); ?>
+            </a>
         </div>
 
         <div class=" title-container">

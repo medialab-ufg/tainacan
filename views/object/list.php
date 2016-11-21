@@ -37,7 +37,7 @@ if( !$collection_list_mode ) {
                 $latitude = get_post_meta($curr_id, "socialdb_property_" . $geo_coordinates["lat"]);
                 $longitude = get_post_meta($curr_id, "socialdb_property_" . $geo_coordinates["long"]);
                 $location = get_post_meta($curr_id, "socialdb_property_" . $geo_loc);     
-                $_object_description = get_the_content();
+                $_object_description = get_the_content();                
                 
                 include "list_modes/modals.php";
                 include "list_modes/cards.php";
