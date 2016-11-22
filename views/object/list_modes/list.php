@@ -1,4 +1,4 @@
-<div class="droppableClassifications col-md-12 no-padding list-view-container top-div" 
+<div class="droppableClassifications col-md-12 no-padding list-view-container top-div toggleSelect" 
     data-order="<?php echo $countLine; ?>"
     <?php if ($collection_list_mode != "list"): ?> style="display: none" <?php endif ?> >
     

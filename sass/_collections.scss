@@ -670,3 +670,14 @@ button.collection-trash, button#hideTrash {
     }
   }
 } // .table-view-container
+
+.item-default.bulk-item-wrapper {
+  padding: 20px;
+  cursor: pointer;
+  img {
+    max-width: 50% !important;
+  }
+  input.input_title {
+    height: 25px !important;
+  }
+}
