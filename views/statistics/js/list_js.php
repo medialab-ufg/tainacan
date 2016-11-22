@@ -19,11 +19,22 @@
 
         $('a.change-mode').on('click', function() {
             var selected_chart = $(this).attr('data-chart');
+            var curr_img = $(this).html();
+
+            $(".statChartType li").each(function(idx, elem){
+               if( $(elem).attr('class') == selected_chart ) {
+                   $(elem).addClass('hide');
+               } else {
+                   $(elem).removeClass('hide');
+               }
+            });
+
             $("#charts-container div").addClass('hide');
             $("div#" + selected_chart).removeClass('hide');
-            $('.dynatree-selected').click();
-            var curr_img = $(this).html();
+
             $("#statChartType").html(curr_img);
+             // Click again at current selected node to trigger chart drawing
+            $('.dynatree-selected').click();
         });
     });
 
@@ -103,8 +114,8 @@
     }
 
     function importsChildren() {
-        return [{ title: "<p> Acessos OAI-PHM <br/> Haversting OAI-PHM <br/> Backups <br/>" +
-        "Restore <br/> Importação <br/> Exportação CSV <br/> Importação <br/> Exportaçào formato Tainacan </p>" }];
+        return [{ title: "<p> Acessos OAI-PHM <br/> Importação / Exportação CSV <br/> Importação <br/>" +
+        "Exportaçào formato Tainacan </p>", href: 'imports' }];
     }
 
     function getStatsTree() {
@@ -124,14 +135,13 @@
     function fetchData(parent, action) {
         var from = $("#from_period").val();
         var to = $("#to_period").val();
-        cl('Sending .. ' + parent);
 
         $.ajax({
             url: $("#src").val() + '/controllers/log/log_controller.php',
             data: { operation: 'user_events', parent: parent, event: action, from: from, to: to }
         }).done(function(r){
             var res_json = $.parseJSON(r);
-            cl(res_json);
+            // cl(res_json);
             drawChart(action, res_json);
         })
     }

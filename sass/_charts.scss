@@ -169,3 +169,14 @@
     }
   }
 } // report_type_stat -> dynatree
+
+// Ul that changes current chart
+ul.statChartType {
+  min-width: 20% !important;
+  right: 72px !important;
+  li {
+    a {
+      padding: 3px 12px !important;
+    }
+  }
+} // .statChartType

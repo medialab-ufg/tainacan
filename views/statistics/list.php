@@ -31,8 +31,6 @@ $_log_helper = new LogHelper();
         </div>
     </div>
 
-
-
     <div id="charts-display" class="col-md-9">
         <div class="chart-header btn-group col-md-12">
             <?php $_log_helper->render_config_title(__('Repository Statistics', 'tainacan')); ?>
@@ -49,9 +47,9 @@ $_log_helper = new LogHelper();
                         <img src="<?php echo $_log_helper->getChartsType()[0]['img']; ?>" alt="<?php echo $_log_helper->getChartsType()[0]['className']; ?>">
                     </button>
 
-                    <ul class="dropdown-menu" aria-labelledby="statChartType" class="statChartType">
+                    <ul class="dropdown-menu statChartType" aria-labelledby="statChartType">
                         <?php foreach ($_log_helper->getChartsType() as $chart): ?>
-                            <li>
+                            <li class="<?php echo $chart['className']; ?>">
                                 <a href="javascript:void(0)" class="change-mode" data-chart="<?php echo $chart['className'] ?>">
                                     <img src="<?php echo $chart['img'] ?>" />
                                 </a>
@@ -60,11 +58,7 @@ $_log_helper = new LogHelper();
                     </ul>
 
                 </div>
-
-                <?php /*
-                <span class="config-title"><?php i18n_str('Orientation:',true); ?></span>
-                <button class="btn btn-default"> <?php i18n_str('Download',true); ?> <span class="caret"></span></button>
-                */ ?>
+                <?php /* <button class="btn btn-default"> <?php i18n_str('Download',true); ?> <span class="caret"></span></button> */ ?>
             </div>
         </div>
 

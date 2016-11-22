@@ -25,6 +25,8 @@ class LogController extends Controller {
                 return "user_";
             case i18n_str('Tags'):
                 return "tags";
+            case i18n_str('Import / Export'):
+                return "imports";
         }
     }
 }
