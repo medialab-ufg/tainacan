@@ -339,8 +339,8 @@ class ThemeOptionsModel extends Model {
     }
 
     public function getAipFiles() {
-        if (is_dir(dirname(__FILE__) . '../../../data/aip')) {
-            $dir = dirname(__FILE__) . '../../../data/aip';
+        if (is_dir(TAINACAN_UPLOAD_FOLDER . '/data/aip')) {
+            $dir = TAINACAN_UPLOAD_FOLDER . '/data/aip';
             $files = scandir($dir);
             $result = array();
 
@@ -364,8 +364,8 @@ class ThemeOptionsModel extends Model {
     }
 
     public function delete_aip_file($file) {
-        if (is_file(dirname(__FILE__) . '../../../data/aip/' . $file)) {
-            unlink(dirname(__FILE__) . '../../../data/aip/' . $file);
+        if (is_file(TAINACAN_UPLOAD_FOLDER . '/data/aip/' . $file)) {
+            unlink(TAINACAN_UPLOAD_FOLDER . '/data/aip/' . $file);
             return true;
         } else {
             return false;
@@ -396,7 +396,7 @@ class ThemeOptionsModel extends Model {
                 $error = __("File not supported. Send .ZIP!", 'tainacan');
             else:
                 $name = time() . '_' . $file['name'];
-                if (move_uploaded_file($file['tmp_name'], dirname(__FILE__) . '/../../data/aip/' . $name)):
+                if (move_uploaded_file($file['tmp_name'], TAINACAN_UPLOAD_FOLDER . '/data/aip/' . $name)):
                     $result = true;
                     $error = __("Arquivo enviado com sucesso!", 'tainacan');
                 else:
@@ -414,15 +414,15 @@ class ThemeOptionsModel extends Model {
     }
 
     public function verify_aip_file($file) {
-        $filepath = dirname(__FILE__) . '/../../data/aip/' . $file;
+        $filepath = TAINACAN_UPLOAD_FOLDER . '/data/aip/' . $file;
         return (is_file($filepath) && file_exists($filepath) ? true : false);
     }
 
     public function unzip_aip_file($file) {
         /* here it is really happening */
         $filename = str_replace('.zip', '', $file);
-        $targetdir = dirname(__FILE__) . '/../../data/aip/' . $filename;
-        $targetzip = dirname(__FILE__) . '/../../data/aip/' . $file;
+        $targetdir = TAINACAN_UPLOAD_FOLDER . '/data/aip/' . $filename;
+        $targetzip = TAINACAN_UPLOAD_FOLDER . '/data/aip/' . $file;
 
         //Se a pasta ja existir, ela é deletada
         if (is_dir($targetdir)) {

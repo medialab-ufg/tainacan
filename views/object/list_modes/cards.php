@@ -4,7 +4,7 @@
 
     <input type="hidden" id="add_classification_allowed_<?php echo $curr_id ?>" name="add_classification_allowed" value="<?php echo (string) verify_allowed_action($collection_id, 'socialdb_collection_permission_add_classification', $curr_id); ?>" />
     <!-- TAINACAN: coloca a class row DO ITEM, sao cinco colunas possiveis todas elas podendo ser escondidas pelo o usuario, mas seu tamanho eh fixo col-md-2  -->
-    <div class="item-colecao" <?php if (($countLine % 2) == 0) { echo "style='margin-right: 0'"; } ?>>
+    <div class="item-colecao toggleSelect" <?php if (($countLine % 2) == 0) { echo "style='margin-right: 0'"; } ?>>
         <input type="hidden" class="latitude"  value="<?php echo $latitude[0]; ?>" />
         <input type="hidden" class="longitude" value="<?php echo $longitude[0]; ?>" />
         <input type="hidden" class="location" value="<?php echo $location[0]; ?>" />

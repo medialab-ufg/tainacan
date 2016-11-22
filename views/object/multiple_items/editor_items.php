@@ -39,7 +39,6 @@ $references = [
     'properties_terms_treecheckbox' => &$properties_terms_treecheckbox   
 ];
 ?>
-
 <div class="row" style="padding-right: 0px;padding-left: 0px;">
       <!-------------- METADADOS - BLOCO ESQUERDO (COL-MD-3) --------------------->
     <div id='form_properties_items' class="col-md-3 menu_left_files menu-left-size">
@@ -399,6 +398,8 @@ $references = [
                 <button type="button" onclick="back_main_list();" class="btn btn-default pull-right">
                     <?php _e('Cancel','tainacan') ?>
                 </button>
+                <br>
+                <small id="draft-text"></small>
             </h3>
             <hr>
             <!--------------- BOTOES PARA MANIPULACAO DOS ITENS ---------------->
@@ -562,7 +563,7 @@ $references = [
                                <div style="padding-top: 20px;padding-bottom: 20px;cursor: pointer;" class="item" id="panel_<?php echo $file['ID'] ?>"   ><!-- container do item -->      
                                <input style="display:none" class="class_selected_items" id="item_option_<?php echo $file['ID'] ?>" onchange="selectedItems()" type="checkbox" name="selected_items" value="<?php echo $file['ID'] ?>" >
                                <input id="attachment_option_<?php echo $file['ID'] ?>" onchange="manipulateAttachaments('<?php echo $file['ID'] ?>')" class="class_checkboxAttachments" style="display:none" type="checkbox" name="checkboxAttachments"  value="<?php echo $file['ID'] ?>">
-                               <?php echo wp_get_attachment_image( $file['ID'],'thumbnail',1,['alt'   =>'' ] ); ?>  
+                               <?php echo wp_get_attachment_image( $file['ID'],'thumbnail',1,['alt'=>'' ] ); ?>
                                </div>     
                                <input required="required" 
                                       class='input_title'

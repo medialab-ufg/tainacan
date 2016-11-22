@@ -90,7 +90,6 @@
                 data: { operation: 'get_ordenation_properties',collection_id:$('#collection_id').val() }
             }).done(function(result) {
                 var json = $.parseJSON(result);
-                console.log(json.ordenation,' assim');
                 if(json&&json.ordenation&&json.ordenation!==''){
                     if(json.ordenation.default){
                         reorder_properties_multiple_item(json.ordenation.default.split(','));
@@ -254,7 +253,9 @@
     }
     /******************************** Manipulação das cores ao selecionar itens setando se eh anexo o u nao******************************************/
     function focus_item(id) {
-        $('#wrapper_' + id + ' center').toggleClass('multiple-edit-select');
+        cl("Alterando : " + id);
+        // $('#wrapper_' + id).toggleClass('multiple-edit-select');
+        $('#wrapper_' + id).toggleClass('selected-border');
 
         if ($('#buttonBackItems').is(':visible')) { // eh pq esta selecionando anexos
             var selected_id = getOnlyItemID();
@@ -285,7 +286,7 @@
     }
     /***************************** Seleciona todos os items *********************************************/
     function select_all_edit() {
-        $('.item-default center').addClass('multiple-edit-select');
+        $('.item-default').addClass('multiple-edit-select');
         $.each($("input:checkbox[name='selected_items']"), function () {
             if ($("#parent_" + $(this).val()).val() === '') {
                 set_item_selected_colour($(this).val());
@@ -296,7 +297,7 @@
     }
     /***************************** DESmarca todos os items *********************************************/
     function unselect_all_edit() {
-        $('.item-default center').removeClass('multiple-edit-select');
+        $('.item-default').removeClass('multiple-edit-select');
         $.each($("input:checkbox[name='selected_items']"), function () {
             $(this).removeAttr('checked');
             if ($("#parent_" + $(this).val()).val() === '') { // se nao for anexo
@@ -770,7 +771,6 @@
     // coloca a descricao para todos os items selecionados
     function setDescription(description) {
         var counter = 0;
-        console.log($(description).val());
         if ($(description).val() != '') {
             $.each($("input:checkbox[name='selected_items']:checked"), function () {
                 counter++;
@@ -1435,8 +1435,9 @@
         stop: function () {
             $(".ui-selected", this).each(function () {
                 var id = this.id;
-                console.log(id.replace('panel_', ''));
-                focusItem(id.replace('panel_', ''));
+                cl("ID: => " + id);
+                console.log("VEJA AGORA! " + id.replace('panel_', ''));
+                focus_item(id.replace('panel_', ''));
             });
         }
     });

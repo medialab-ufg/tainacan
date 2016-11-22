@@ -286,7 +286,7 @@
             $('.selectable-actions').fadeIn();
         });
 
-        $('.item-colecao').click(function() {
+        $('.toggleSelect').click(function() {
             if( $(this).hasClass('selecting-item') ) {
                 $(this).toggleClass('selected-item');
             }
@@ -299,22 +299,22 @@
     }
 
      function select_some() {
-         if( ! $('.item-colecao').hasClass('selecting-item') ) {
+         if( ! $('.toggleSelect').hasClass('selecting-item') ) {
              toastr.info('<?php _e('Select items below to edit or exclude!', 'tainacan') ?>', '', set_toastr_class());
          }
 
          $('.object_id').each(function(idx, el) {
             var item = $("#object_" + $(el).val() );
-            $(item).find('.item-colecao').addClass('selecting-item');
+            $(item).find('.toggleSelect').addClass('selecting-item');
          });
     }
 
     function select_all() {
-        $(".item-colecao").removeClass('selected-item');
+        $(".toggleSelect").removeClass('selected-item');
         toastr.info('<?php _e('All items have been selected!', 'tainacan') ?>', '', set_toastr_class());
         $('.object_id').each(function(idx, el) {
             var item = $("#object_" + $(el).val() );
-            $(item).find(".item-colecao").toggleClass('selected-item');
+            $(item).find(".toggleSelect").toggleClass('selected-item');
         });
     }
 

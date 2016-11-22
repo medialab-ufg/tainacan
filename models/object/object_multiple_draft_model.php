@@ -31,7 +31,11 @@ class ObjectMultipleDraftModel extends ObjectMultipleModel {
               $post['ID'] = (!$is_multiple_editting) ? get_post_meta($item_id, 'socialdb_item_id',TRUE) : $item_id;
               wp_update_post($post);
               $object_id = $post['ID'];
+              $thumbnail_id = get_post_thumbnail_id( $post['ID'] );
               $this->delete_item_meta($post['ID']);
+              if((boolean)$thumbnail_id){
+                  set_post_thumbnail($post['ID'], $thumbnail_id);
+              }
               wp_delete_object_term_relationships( $object_id, 'socialdb_category_type' );
           }
           $this->set_common_field_values($object_id, 'title', $post['post_title']);
@@ -149,6 +153,9 @@ class ObjectMultipleDraftModel extends ObjectMultipleModel {
       $result['title'] = __('No items inserted successfully!','tainacan');
       $result['type'] = 'error';
     }
+    //hora e data que ocorreu este evento
+    $result['date'] = date('d/m/y');
+    $result['hour'] = date('H:i:s');
     return json_encode($result);
   }
 }
