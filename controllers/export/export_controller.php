@@ -1,5 +1,4 @@
 <?php
-
 ini_set('max_input_vars', '10000');
 
 require_once(dirname(__FILE__) . '../../../models/export/export_model.php');
@@ -50,8 +49,9 @@ class ExportController extends Controller {
                         $data['collection_id'] = $collection->ID;
                         $filename = htmlentities($collection->post_title);
                         $csv_data = $export_model->generate_csv_data($data);
-                        $export_model->array2csv_full($csv_data, $filename, $data['socialdb_delimiter_csv']);
-                        //var_dump($collection);
+                        if( is_array($csv_data) ) {
+                            $export_model->array2csv_full($csv_data, $filename, $data['socialdb_delimiter_csv']);
+                        }
                     }
                 }
                 $export_model->create_zip_by_folder(dirname(__FILE__) . '../../../models/export', '/collections/', 'tainacan_full_csv');
@@ -59,7 +59,7 @@ class ExportController extends Controller {
                 //$csv_data = $export_model->generate_csv_data($data);
                 //$export_model->download_send_headers("socialdb_csv.csv');
                 //echo $export_model->array2csv($csv_data, $data['socialdb_delimiter_csv']);
-
+                Log::addLog(['collection_id' => $data['collection_id'],'user_id' => get_current_user_id(),'event_type' => 'imports', 'event' => 'export_csv']);
                 break;
             case "export_selected_objects":
                 $data['loop'] = $export_model->get_selected_objects($data);

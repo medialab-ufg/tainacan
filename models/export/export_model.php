@@ -921,11 +921,13 @@ class ExportModel extends Model {
         //$filename = $this->get_name_file();
         //$filename = 'socialdb_csv';
         $df = fopen(dirname(__FILE__) . '/collections/' . utf8_decode($filename) . '.csv', 'w');
-        fputcsv($df, array_keys(reset($array)), $delimiter);
-        foreach ($array as $row) {
-            fputcsv($df, $row, $delimiter);
+        if ($df) {
+            fputcsv($df, array_keys(reset($array)), $delimiter);
+            foreach ($array as $row) {
+                fputcsv($df, $row, $delimiter);
+            }
+            fclose($df);
         }
-        fclose($df);
     }
 
     public function force_zip_download() {

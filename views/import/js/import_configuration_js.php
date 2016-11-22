@@ -26,22 +26,6 @@
             e.preventDefault();
             $(this).tab('show');
         });
-        
-        var src = $('#src').val();
-        var col_id = $("#collection_id").val();
-
-        $.ajax({
-            url: src + '/controllers/import/import_controller.php',
-            type: 'POST',
-            data: {operation: 'map_exif', collection_id: col_id}
-        }).done(function (result) {
-            var elem = $.parseJSON(result);
-
-            $(elem.fields).each(function (idx, el) {
-                render_exif_map(el.socialdb_entity, el.name_socialdb_entity, exif_keys);
-            });
-        });
-
     });
 
     function validate_url() {

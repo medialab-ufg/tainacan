@@ -114,8 +114,8 @@
     }
 
     function importsChildren() {
-        return [{ title: "<p> Acessos OAI-PHM <br/> Importação / Exportação CSV <br/> Importação <br/>" +
-        "Exportaçào formato Tainacan </p>", href: 'imports' }];
+        return [{ title: "<p> Acessos OAI-PMH <br/> Importação / Exportação CSV <br/> Importação <br/>" +
+        "Exportaçào formato Tainacan </p>", href: 'imports'}];
     }
 
     function getStatsTree() {
@@ -128,7 +128,7 @@
             { title: "<?php i18n_str('Categories',true); ?>", noLink: true, hideCheckbox: true, children: categoryChildren() },
             { title: "<?php i18n_str('Tags',true); ?>", noLink: true, hideCheckbox: true, children: tagsChildren()},
             { title: "<?php i18n_str('Import / Export',true); ?>", noLink: true, hideCheckbox: true, children: importsChildren() },
-            { title: "<?php i18n_str('Administration',true); ?>", noLink: true, hideCheckbox: true},
+            { title: "<?php i18n_str('Administration',true); ?>", noLink: true, hideCheckbox: true}
         ];
     }
 
@@ -148,7 +148,9 @@
 
     mappd_titles = { add: 'Adicionados', edit: 'Editados', view: 'Visualizados', download: 'Baixados', delete: 'Deletados',
         login: 'Login', register: 'Registros', delete_user: 'Excluídos',
-        administrator: 'Administrador', author: 'Autor', editor: 'Editor', subscriber: 'Assinante', contributor: 'Colaborador' };
+        administrator: 'Administrador', author: 'Autor', editor: 'Editor', subscriber: 'Assinante', contributor: 'Colaborador',
+        access_oai_pmh: 'Acessos OAI-PMH', import_csv: 'Importação CSV', export_csv: 'Exportação CSV', import_tainacan: 'Importação Tainacan', export_tainacan: 'Exportação Tainacan'
+    };
 
     function drawChart(title, data_obj) {
         if(data_obj.stat_object) {

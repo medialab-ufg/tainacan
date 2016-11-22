@@ -55,7 +55,7 @@ class Log extends Model {
             case 'profile':
                 return ['color' => '#F09302', 'events' => ['subscriber', 'administrator', 'editor', 'author', 'contributor'] ];
             case 'imports':
-                return ['color' => '#43F7B1', 'events' => ['access_oai', 'import_csv', 'export_csv', 'import_tainacan', 'export_tainacan'] ];
+                return ['color' => '#43F7B1', 'events' => ['access_oai_pmh', 'import_csv', 'export_csv', 'import_tainacan', 'export_tainacan'] ];
         }
     }
 
