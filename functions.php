@@ -3016,3 +3016,6 @@ if (isset($_GET['activated']) && is_admin()) {
 if ( ! defined("MANUAL_TAINACAN_URL") ) {
     define("MANUAL_TAINACAN_URL","https://github.com/l3pufg/tainacan/blob/dev/extras/manual/manual_usuario_tainacan_v1.pdf?raw=true" );
 }
+
+/************* Remove o post type das colecoes ********************/
+//include_once 'extras/remove-slug-post/remove-slug-custom-post-type.php';
