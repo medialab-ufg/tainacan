@@ -111,10 +111,9 @@ class ObjectModel extends Model {
         //propriedades compostas
         $this->insert_compounds($data, $data['ID']);
         // inserindo o evento
-        $data = $this->insert_object_event($data['ID'], $data);
-
         $logData = ['collection_id' => $col_id, 'item_id' => $data['ID'],
           'user_id' => $user_id, 'event_type' => 'user_items', 'event' => 'add' ];
+        $data = $this->insert_object_event($data['ID'], $data);
         Log::addLog($logData);
 
         return $data;
