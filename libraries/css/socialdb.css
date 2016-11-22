@@ -639,5 +639,6 @@ table.sorting-table tbody tr:not(.sorting-row) td {opacity: 0.2;}
     }  
     .menu-left-size{
         width: 23%;
+        height: auto;
         padding-bottom: 15px;
     }

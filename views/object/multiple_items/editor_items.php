@@ -39,17 +39,6 @@ $references = [
     'properties_terms_treecheckbox' => &$properties_terms_treecheckbox   
 ];
 ?>
-<style>
-  .input_title{
-        text-align: center;
-        width: 100%;
-        padding:5px;
-        border: none;
-        background-color: rgb(209,211,212);
-        font: 13px Arial;
-        border-radius: 5px;
-    }  
-</style>
 <div class="row" style="padding-right: 0px;padding-left: 0px;">
       <!-------------- METADADOS - BLOCO ESQUERDO (COL-MD-3) --------------------->
     <div id='form_properties_items' class="col-md-3 menu_left_files menu-left-size">
