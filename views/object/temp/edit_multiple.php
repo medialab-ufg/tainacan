@@ -66,50 +66,35 @@ $references = [
         </div>
         */ ?>
        <div id="multiple_accordion" class="multiple-items-accordion">
-            <div id="item_name"
-                 <?php echo $view_helper->get_visibility($view_helper->terms_fixed['title']) ?>
-                 >
+            <div id="item_name"<?php echo $view_helper->get_visibility($view_helper->terms_fixed['title']) ?> >
                 <h2>
                     <?php echo ($view_helper->terms_fixed['title']) ? $view_helper->terms_fixed['title']->name :  _e('Title','tainacan') ?>
                 </h2>
                 <div class="form-group">
-                    <input class="form-control"
-                           type="text"
-                           class="form-control"
-                           id="multiple_object_name"
-                           name="object_name"
-                           required="required"
-                           onkeyup="setTitle(this)"
-                           placeholder="<?php _e('Item name','tainacan'); ?>">
+                    <input class="form-control" type="text" id="multiple_object_name" name="object_name"
+                           required="required" onkeyup="setTitle(this)" placeholder="<?php _e('Item name','tainacan'); ?>">
                 </div>
             </div>
             <!-- TAINACAN: a descricao do item -->
-            <div id="post_content"
-                 <?php echo $view_helper->get_visibility($view_helper->terms_fixed['description']) ?>
-                 >
+            <div id="post_content"<?php echo $view_helper->get_visibility($view_helper->terms_fixed['description']) ?>>
                 <h2>
-                    <?php echo ($view_helper->terms_fixed['description']) ? $view_helper->terms_fixed['description']->name :  __('Description','tainacan') ?>
+                    <?php echo ($view_helper->terms_fixed['description']) ? $view_helper->terms_fixed['description']->name : __('Description','tainacan') ?>
                 </h2>
                 <div id="object_description" class="form-group">
-                    <textarea class="form-control"
-                              id="multiple_object_description"
-                              onblur="setDescription(this)"
-                               name="multiple_object_description" ></textarea>
+                    <textarea class="form-control" id="multiple_object_description" onblur="setDescription(this)"
+                              name="multiple_object_description" ></textarea>
                 </div>
             </div>
-            <div id="tag"
-                <?php echo $view_helper->get_visibility($view_helper->terms_fixed['tags']) ?>>
+            <div id="tag"<?php echo $view_helper->get_visibility($view_helper->terms_fixed['tags']) ?>>
                 <h2>
-                    <?php echo ($view_helper->terms_fixed['tags']) ? $view_helper->terms_fixed['tags']->name :  _e('Tags','tainacan') ?>
+                    <?php echo ($view_helper->terms_fixed['tags']) ? $view_helper->terms_fixed['tags']->name : _e('Tags','tainacan') ?>
                 </h2>
                 <div class="form-group">
                     <input onblur="setTags(this)" type="text" class="form-control" id="multiple_object_tags" name="object_tags"  >
                     <span style="font-size: 8px;" class="label label-default">*<?php _e('The set of tags may be inserted by commas','tainacan') ?></span>
                 </div>
             </div>
-            <div id="socialdb_object_dc_source"
-                <?php echo $view_helper->get_visibility($view_helper->terms_fixed['source']) ?>
-                 >
+            <div id="socialdb_object_dc_source"<?php echo $view_helper->get_visibility($view_helper->terms_fixed['source']) ?>>
                 <h2>
                     <?php echo ($view_helper->terms_fixed['source']) ? $view_helper->terms_fixed['source']->name :  _e('Source','tainacan') ?>
                 </h2>
@@ -324,10 +309,9 @@ $references = [
                             $properties_terms_checkbox[] = $property['id'];
                              ?>
                             <div id='multiple_field_property_term_<?php echo $property['id']; ?>'></div>
-                            <?php
-                          }elseif($property['type']=='multipleselect') {
+                            <?php } elseif($property['type']=='multipleselect') {
                             $properties_terms_multipleselect[] = $property['id'];
-                             ?>
+                            ?>
                              <select onchange="setCategoriesSelectMultiple('<?php echo $property['id']; ?>',this)"
                                      multiple class="form-control"
                                      name="multiple_socialdb_propertyterm_<?php echo $property['id']; ?>"
@@ -415,7 +399,7 @@ $references = [
             <!--------------- FIM: BOTOES PARA MANIPULACAO DOS ITENS ---------------->
             <!--------------- container todos os itens  ----------------------------->
 
-            <div <?php /* style="max-height: 500px;overflow-y: scroll" */ ?> >
+            <div> <?php /* style="max-height: 500px;overflow-y: scroll" */ ?>
                 <div id="selectable">
                     <?php // images // if(is_array($items['image'])) { ?>
                     <div id="container_images"  class='col-md-12'>
