@@ -1,4 +1,39 @@
 <script type="text/javascript">
+    var TainacanChart = function() { };
+
+    TainacanChart.prototype.getMappedTitles = function() {
+        return {
+            add: 'Adicionados',
+            edit: 'Editados',
+            view: 'Visualizados',
+            download: 'Baixados',
+            delete: 'Deletados',
+            login: 'Login',
+            register: 'Registros',
+            delete_user: 'Excluídos',
+            administrator: 'Administrador',
+            author: 'Autor',
+            editor: 'Editor',
+            subscriber: 'Assinante',
+            contributor: 'Colaborador',
+            access_oai_pmh: 'Acessos OAI-PMH',
+            import_csv: 'Importação CSV',
+            export_csv: 'Exportação CSV',
+            import_tainacan: 'Importação Tainacan',
+            export_tainacan: 'Exportação Tainacan'
+        };
+    };
+
+    TainacanChart.prototype.displayFixedBase = function() {
+        $("#charts-resume table tr.headers").html("<th class='curr-parent'> Status: </th>");
+        $("#charts-resume table tr.content").html("<td class='curr-filter'> Usuários </td>");
+    };
+
+    TainacanChart.prototype.displayBaseAppend = function(title, value) {
+        $("#charts-resume table tr.headers").append("<th>"+ title +"</th>");
+        $("#charts-resume table tr.content").append("<td>"+ value +"</td>");
+    };
+
     google.charts.load('current', {'packages':['bar','corechart'], 'language':'pt_BR'});
     // google.charts.setOnLoadCallback(drawChart);
     $(function() {
@@ -106,7 +141,7 @@
     }
 
     function categoryChildren() {
-        return [{ title: "Status <p> criados / editados / excluídos </p>", href: "category"  }];
+        return [{ title: "Status <p> criados / editados / excluídos </p>", href: "category" }];
     }
 
     function tagsChildren() {
@@ -137,20 +172,13 @@
         var to = $("#to_period").val();
 
         $.ajax({
-            url: $("#src").val() + '/controllers/log/log_controller.php',
+            url: $("#src").val() + '/controllers/log/log_controller.php', type: 'POST',
             data: { operation: 'user_events', parent: parent, event: action, from: from, to: to }
         }).done(function(r){
             var res_json = $.parseJSON(r);
-            // cl(res_json);
             drawChart(action, res_json);
         })
     }
-
-    mappd_titles = { add: 'Adicionados', edit: 'Editados', view: 'Visualizados', download: 'Baixados', delete: 'Deletados',
-        login: 'Login', register: 'Registros', delete_user: 'Excluídos',
-        administrator: 'Administrador', author: 'Autor', editor: 'Editor', subscriber: 'Assinante', contributor: 'Colaborador',
-        access_oai_pmh: 'Acessos OAI-PMH', import_csv: 'Importação CSV', export_csv: 'Exportação CSV', import_tainacan: 'Importação Tainacan', export_tainacan: 'Exportação Tainacan'
-    };
 
     function drawChart(title, data_obj) {
         if(data_obj.stat_object) {
@@ -160,17 +188,20 @@
             dt.addColumn('string', 'Topping');
             dt.addColumn('number', 'Slices');
 
-            displayFixedBase();
             var color = data_obj.color || '#79a6ce';
+            var chart = new TainacanChart();
+
+            chart.displayFixedBase();
 
             for( event in data_obj.stat_object ) {
                 obj_total = parseInt(data_obj.stat_object[event]);
-                chart_data.push([ mappd_titles[event], obj_total, color ]);
-                dt.addRow([ mappd_titles[event], obj_total ]);
-                displayBaseAppend(mappd_titles[event], obj_total);
+                var curr_evt_title = chart.getMappedTitles()[event];
+                chart_data.push([ curr_evt_title, obj_total, color ]);
+                dt.addRow([ curr_evt_title, obj_total ]);
+                chart.displayBaseAppend( curr_evt_title, obj_total);
             }
 
-            var piechart_options = {title:'Qtd usuários por status', width: 800, is3D: true };
+            var piechart_options = {title:'Qtd ' + title, width: 800, is3D: true };
             var piechart = new google.visualization.PieChart(document.getElementById('piechart_div'));
             piechart.draw(dt, piechart_options);
 
@@ -183,16 +214,6 @@
             var chart = new google.charts.Bar(document.getElementById('chart_div'));
             chart.draw(data, options);
         }
-    }
-
-    function displayFixedBase() {
-        $("#charts-resume table tr.headers").html("<th class='curr-parent'> Status: </th>");
-        $("#charts-resume table tr.content").html("<td class='curr-filter'> Usuários </td>");
-    }
-
-    function displayBaseAppend(title, value) {
-        $("#charts-resume table tr.headers").append("<th>"+ title +"</th>");
-        $("#charts-resume table tr.content").append("<td>"+ value +"</td>");
     }
 
     $("#report_type_stat").dynatree(stats_dynatree_opts);
