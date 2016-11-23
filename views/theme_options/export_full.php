@@ -17,7 +17,7 @@ include_once ('../../helpers/view_helper.php');
                 <div class="tab-content">
                     <!-- Tab panes -->
                     <div role="tabpanel" class="tab-pane active" id="zip">
-                        <form id="form_export_zip" method="post" action="<?php echo get_template_directory_uri() ?>/controllers/export/zip_controller.php">
+                        <form id="form_export_zip" method="post" action="<?php echo get_template_directory_uri() ?>/controllers/theme_options/theme_options_controller.php">
                             <div class="export-container">
                                 <input type="hidden" id="operation_import_aip" name="operation" value="export_full_aip" />
                                 <select disabled="disabled" class="form-control">

@@ -1476,6 +1476,9 @@ add_action('home_item_tag_div', 'hide_field');
 add_action('home_item_attachments_div', 'hide_field');
 add_action('home_item_content_div', 'hide_field');
 /******************************************************************************/
+/****************************** Category edit *********************************/
+add_action('synonyms_category_view', 'hide_field');
+/******************************************************************************/
 function hide_field() {
     echo 'style="display:none;"';                          
 }

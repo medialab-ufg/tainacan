@@ -564,7 +564,7 @@ $options = get_option('socialdb_theme_options');
                             <button type="button" onclick="list_category_property_single()" id="show_category_property_single" class="btn btn-primary"><?php _e('Category Properties', 'tainacan'); ?></button>
                             <!-- Sinonimos -->
                             <br><br>
-                            <a onclick="toggle_container_synonyms('#synonyms_container')" style="cursor: pointer;">
+                            <a onclick="toggle_container_synonyms('#synonyms_container')" <?php do_action('synonyms_category_view') ?> style="cursor: pointer;">
                                 <?php _e('Synonyms', 'tainacan') ?>
                                 <span class="glyphicon glyphicon-triangle-bottom"></span>
                             </a>

@@ -3,6 +3,7 @@ ini_set('max_input_vars', '10000');
 require_once(dirname(__FILE__) . '../../../models/theme_options/theme_options_model.php');
 require_once(dirname(__FILE__) . '../../../models/theme_options/populate_model.php');
 require_once(dirname(__FILE__) . '../../../models/collection/collection_templates_model.php');
+require_once(dirname(__FILE__) . '../../../models/theme_options/export_aip_model.php');
 require_once(dirname(__FILE__) . '../../general/general_controller.php');
 
 class ThemeOptionsController extends Controller {
@@ -222,6 +223,11 @@ class ThemeOptionsController extends Controller {
                     }
                 }
                 return json_encode($result);
+            /********************** Exportacao AIP ****************************/    
+            case 'export_full_aip':
+                $export_model = new ExportAIP;
+                $export_model->export_aip_zip();
+                break;
         }
     }
 

@@ -236,6 +236,15 @@ class VisualizationModel extends CollectionModel {
         ksort($facets);
         foreach ($facets as &$facet_id) {
             $facet = get_term_by('id', $facet_id, 'socialdb_category_type');
+            $ancestors = get_ancestors($facet->term_id,'socialdb_category_type');
+            $skip = false;
+            foreach ($ancestors as $value) {
+               if(in_array($value, $facets)){
+                   $skip = true;
+               } 
+            }
+            if($skip)
+                continue;
             $ordenation = $this->get_ordenation_facet($data['collection_id'],$facet_id);
             if($facet){
                 $classCss = get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $facet_id . '_color', true);
@@ -428,6 +437,15 @@ class VisualizationModel extends CollectionModel {
         }
         foreach ($facets_id as &$facet_id) {
             $facet = get_term_by('id', $facet_id, 'socialdb_category_type');
+            $ancestors = get_ancestors($facet->term_id,'socialdb_category_type');
+            $skip = false;
+            foreach ($ancestors as $value) {
+               if(in_array($value, $facets_id)){
+                   $skip = true;
+               } 
+            }
+            if($skip)
+                continue;
             $classCss = get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $facet_id . '_color', true);
             $classCss = ($classCss)?$classCss:'color4';
             if ($facet) {

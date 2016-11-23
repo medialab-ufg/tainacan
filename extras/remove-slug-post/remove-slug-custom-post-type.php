@@ -14,13 +14,13 @@ class UWT_RemoveSlugCustomPostType{
 	private $htaccess_tag = 'REMOVE SLUG CUSTOM POST TYPE RULES';
 	
 	public function __construct() {
-		//$this->rewrite_rules();
+		$this->rewrite_rules();
 		
-		//add_action('admin_menu', array(&$this, 'menu'));
-		//add_action('wp_insert_post', array(&$this, 'post_save'));
+		add_action('admin_menu', array(&$this, 'menu'));
+		add_action('wp_insert_post', array(&$this, 'post_save'));
 
 		add_filter('post_type_link', array(&$this, 'remove_slug'), 10, 3);
-		//add_filter('redirect_canonical', array(&$this, 'cancel_redirect_canonical'));
+		add_filter('redirect_canonical', array(&$this, 'cancel_redirect_canonical'));
 		//add_filter('posts_request', array(&$this, 'request'));
 		
 	}
@@ -117,18 +117,22 @@ class UWT_RemoveSlugCustomPostType{
 	public function remove_slug($permalink, $post, $leavename) {
 		global $wp_post_types;
 		$suffix = get_option('uwt_permalink_customtype_suffix');
-                ECHO '<pre>';
-                var_dump($permalink, $post, $leavename);
+//                ECHO '<pre>';
+//                var_dump($permalink, $post, $leavename);
 		foreach ($wp_post_types as $type=>$custom_post) {
 			if ($custom_post->_builtin == false && $type == $post->post_type) {
 				$custom_post->rewrite['slug'] = trim($custom_post->rewrite['slug'], '/');
-				$permalink = str_replace(get_bloginfo('url') . '/' . $custom_post->rewrite['slug'] . '/', get_bloginfo('url') . "/", $permalink);
+                                if($type=='socialdb_collection' && strpos($permalink, 'post_type=socialdb_collection')!==false){
+                                   $permalink = get_bloginfo('url') . '/' .$post->post_name;
+                                }else{
+                                    $permalink = str_replace(get_bloginfo('url') . '/' . $custom_post->rewrite['slug'] . '/', get_bloginfo('url') . "/", $permalink);
+                                }
 				if (!empty($suffix))
 					$permalink = substr($permalink, 0, -1) . ".{$suffix}";
 			}
 		}
                // var_dump($permalink);
-                exit();
+                //exit();
 		return $permalink;
 	}
 	
@@ -137,16 +141,17 @@ class UWT_RemoveSlugCustomPostType{
 		$suffix = get_option('uwt_permalink_customtype_suffix');
 		foreach ($wp_post_types as $type=>$custom_post) {
 			if ($custom_post->_builtin == false) {
+                            if($type=='socialdb_collection'){
 				$querystr = "SELECT {$wpdb->posts}.post_name 
 								FROM {$wpdb->posts} 
-								WHERE {$wpdb->posts}.post_status = 'publish' 
-    									AND {$wpdb->posts}.post_type = '{$type}'
+								WHERE {$wpdb->posts}.post_type = '{$type}'
     									AND {$wpdb->posts}.post_date < NOW()";
 				$posts = $wpdb->get_results($querystr, OBJECT);
 				foreach ($posts as $post) {
 					$regex = (!empty($suffix)) ? "{$post->post_name}\\.{$suffix}\$" : "{$post->post_name}\$";
 					add_rewrite_rule($regex, "index.php?{$custom_post->query_var}={$post->post_name}", 'top');			
 				}
+                            }
 			}
 		}
 		if ($flash == true)
@@ -162,11 +167,13 @@ class UWT_RemoveSlugCustomPostType{
 			$htaccess = fopen($htaccess_filename, 'r');
 			$content = fread($htaccess, filesize($htaccess_filename));
 			foreach ($wp_post_types as $type=>$custom_post) {
+                            if($type=='socialdb_collection'){
 				$rewrite_rule = (!empty($suffix))
 							? "RewriteRule ^{$custom_post->query_var}/(.+)/\$ /\$1\.{$suffix} [R=301,l]"
 							: "RewriteRule ^{$custom_post->query_var}/(.+)/\$ /\$1 [R=301,L]";
 				if (strpos($content, $rewrite_rule) == false && $custom_post->_builtin == false)
 					$write[] = $rewrite_rule;
+                            }    
 			}
 			fclose($htaccess);
 		}
@@ -207,5 +214,5 @@ class UWT_RemoveSlugCustomPostType{
 }
 
 add_action('init', array('UWT_RemoveSlugCustomPostType', 'init'), 99);
-//register_activation_hook( __FILE__, array('UWT_RemoveSlugCustomPostType', 'flush_rewrite_rules') );
-//register_deactivation_hook( __FILE__, array('UWT_RemoveSlugCustomPostType', 'flush_rewrite_rules') );
+register_activation_hook( __FILE__, array('UWT_RemoveSlugCustomPostType', 'flush_rewrite_rules') );
+register_deactivation_hook( __FILE__, array('UWT_RemoveSlugCustomPostType', 'flush_rewrite_rules') );

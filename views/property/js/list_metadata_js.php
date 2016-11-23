@@ -1856,6 +1856,7 @@
             if ( meta_type == 'numeric' || meta_type == 'date' ) {
                 $(open_modal + " #color_field_property_search").hide();
                 $($search_data_widget)
+                    .append('<option value="tree"> ' + '<?php _e('Tree', 'tainacan') ?>' + ' </option>')
                     .append('<option value="from_to">' + '<?php _e('From/To', 'tainacan') ?>' + '</option>')
                     .append('<option value="range"> ' + '<?php _e('Range', 'tainacan') ?>' + ' </option>');
             } else if(meta_type == 'socialdb_property_object') {
