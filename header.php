@@ -77,22 +77,9 @@ $viewHelper = new ViewHelper();
                 </button>
 
                 <div class="navbar-header logo-container">
-                    <!-- TAINACAN: neste local eh mostrado a logo juntamente com o titulo do repositorio  -->
-                    <?php if ($socialdb_logo != '' && get_the_post_thumbnail($socialdb_logo, 'thumbnail')): ?>
-                        <a class="navbar-brand repository-logo" href="<?php echo site_url(); ?>">
-                            <?php if (get_the_post_thumbnail($socialdb_logo, 'thumbnail')) { ?>
-                                <img src="<?php echo wp_get_attachment_url(get_post_thumbnail_id($socialdb_logo)); ?>" style="max-width: 150px;" />
-                                <?php
-                            } elseif ($socialdb_title != '') { echo $socialdb_title; } else { _e('Tainacan', 'tainacan'); }
-                            ?>
-                        </a>
-                    <?php else: ?>
-                        <a class="navbar-brand logo-tainacan" href="<?php echo site_url(); ?>">
-                            <img src="<?php echo get_template_directory_uri() . '/libraries/images/Tainacan_pb.svg' ?>" width="150px"/>
-                        </a>
-                    <?php endif; ?>
-
+                    <?php echo $viewHelper->renderRepositoryLogo($socialdb_logo, $socialdb_title); ?>
                 </div>
+
                 <!-- TAINACAN: container responsavel em listar os links para as acoes no repositorio -->
                 <div class="user-actions collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
