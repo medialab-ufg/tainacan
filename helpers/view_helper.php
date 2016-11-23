@@ -71,7 +71,7 @@ class ViewHelper {
         $ret = '<img src="'. get_template_directory_uri() . '/libraries/images/Tainacan_pb.svg'.'" width="150px"/>';
       }
 
-      echo "<a class='navbar-brand $extraClass' href='" . site_url() . "'>" . $ret . "</a>";
+      return "<a class='navbar-brand $extraClass' href='" . site_url() . "'>" . $ret . "</a>";
     }
 
     

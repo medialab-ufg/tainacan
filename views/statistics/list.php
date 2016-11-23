@@ -32,12 +32,26 @@ $_log_helper = new LogHelper();
     </div>
 
     <div id="charts-display" class="col-md-9">
+
+        <?php include_once "inc/pdf.php"; ?>
+
         <div class="chart-header btn-group col-md-12">
             <?php $_log_helper->render_config_title(__('Repository Statistics', 'tainacan')); ?>
             <div class="user-config-control col-md-12 no-padding">
                 <div class="col-md-4 pull-left no-padding">
                     <span class="config-title"><?php i18n_str('Filters:',true); ?></span>
                     <span class="current-chart"><?php i18n_str('User Stats',true); ?></span>
+                </div>
+
+                <div class="col-md-2 pull-right no-padding">
+                    <button class="btn btn-default" data-toggle="dropdown" type="button" id="downloadStat">
+                        <?php i18n_str('Download',true); ?> <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="downloadStat">
+                        <li> <a href="javascript:void(0)" class="dl-pdf"> <?php i18n_str('PDF',true); ?> </a> </li>
+                        <li> <a href="" class="dl-csv"> <?php i18n_str('CSV',true); ?> </a> </li>
+                        <li> <a href="" class="dl-xls"> <?php i18n_str('XLS',true); ?> </a> </li>
+                    </ul>
                 </div>
 
                 <div class="col-md-2 pull-right no-padding">
@@ -56,16 +70,8 @@ $_log_helper = new LogHelper();
                             </li>
                         <?php endforeach; ?>
                     </ul>
-
                 </div>
-                <button class="btn btn-default" data-toggle="dropdown" type="button" id="downloadStat">
-                    <?php i18n_str('Download',true); ?> <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="downloadStat">
-                    <li> <a href="" class="dl-pdf"> <?php i18n_str('PDF',true); ?> </a> </li>
-                    <li> <?php i18n_str('CSV',true); ?> </li>
-                    <li> <?php i18n_str('XLS',true); ?> </li>
-                </ul>
+
             </div>
         </div>
 
