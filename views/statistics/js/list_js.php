@@ -34,6 +34,10 @@
         $("#charts-resume table tr.content").append("<td>"+ value +"</td>");
     };
 
+    TainacanChart.prototype.getStatDesc = function(title, desc) {
+        return title + "<p>"+ desc +"</p>";
+    };
+
     google.charts.load('current', {'packages':['bar','corechart'], 'language':'pt_BR'});
     // google.charts.setOnLoadCallback(drawChart);
     $(function() {
@@ -82,6 +86,7 @@
         icons: true
     });
 
+    var tChart = new TainacanChart();
     var stats_dynatree_opts = {
         minExpandLevel: 1,
         selectionVisible: true,
@@ -113,7 +118,7 @@
 
     function statusChildren() {
         return [
-            { title: "Status <p> logins / registros / banidos / excluídos </p>", href: "status", addClass: 'hllog' },
+            { title: tChart.getStatDesc("Status", "logins / registros / banidos / excluídos"), href: "status", addClass: 'hllog' },
             { title: "Itens <p> criaram / editaram / apagaram / <br/> visualizaram / baixaram</p>", href: "items" },
             { title: "Perfil <p> Pessoas que aderiram a um perfil </p>", href: "profile" },
             { title: "Categorias <p> criaram / editaram / apagaram / visualizaram </p>", href: "category" },
@@ -188,9 +193,8 @@
             dt.addColumn('string', 'Topping');
             dt.addColumn('number', 'Slices');
 
-            var color = data_obj.color || '#79a6ce';
             var chart = new TainacanChart();
-
+            var color = data_obj.color || '#79a6ce';
             chart.displayFixedBase();
 
             for( event in data_obj.stat_object ) {
