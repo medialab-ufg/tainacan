@@ -58,7 +58,14 @@ $_log_helper = new LogHelper();
                     </ul>
 
                 </div>
-                <?php /* <button class="btn btn-default"> <?php i18n_str('Download',true); ?> <span class="caret"></span></button> */ ?>
+                <button class="btn btn-default" data-toggle="dropdown" type="button" id="downloadStat">
+                    <?php i18n_str('Download',true); ?> <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="downloadStat">
+                    <li> <a href="" class="dl-pdf"> <?php i18n_str('PDF',true); ?> </a> </li>
+                    <li> <?php i18n_str('CSV',true); ?> </li>
+                    <li> <?php i18n_str('XLS',true); ?> </li>
+                </ul>
             </div>
         </div>
 
