@@ -56,7 +56,7 @@
       * @author: Rodrigo de Oliveira
       */
      protected function get_menu_style_json($menu_id) {
-         return get_template_directory_uri() . "/extras/cssmenumaker/menus/" . $menu_id  ."/menu.json";
+         return "../../extras/cssmenumaker/menus/" . $menu_id  ."/menu.json";
      }
 
      /**
