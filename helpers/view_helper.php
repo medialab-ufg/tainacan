@@ -54,6 +54,26 @@ class ViewHelper {
              $this->hide_main_container = true;
         }
     }
+
+    public function renderRepositoryLogo($_logo_id, $fallback_title) {
+
+      if( isset($_logo_id) && get_the_post_thumbnail($_logo_id, 'thumbnail')) {
+        $extraClass = "repository-logo";
+
+        if (get_the_post_thumbnail($_logo_id, 'thumbnail')) {
+          $_img_url = wp_get_attachment_url(get_post_thumbnail_id($_logo_id));
+          $ret = '<img src="' . $_img_url . '" style="max-width: 150px;" />';
+        } else {
+          $ret = empty($fallback_title) ? __('Tainacan', 'tainacan') : $fallback_title;
+        }
+      } else {
+        $extraClass = "logo-tainacan";
+        $ret = '<img src="'. get_template_directory_uri() . '/libraries/images/Tainacan_pb.svg'.'" width="150px"/>';
+      }
+
+      return "<a class='navbar-brand $extraClass' href='" . site_url() . "'>" . $ret . "</a>";
+    }
+
     
     public function get_metadata_types() {
         return $this->metadata_types = [

@@ -41,18 +41,27 @@ class Log extends Model {
     private function get_event_type($spec) {
         switch($spec) {
             case 'items':
-                return ['color' => '#0EEAFF', 'events' => ['add', 'view', 'edit', 'delete', 'download'] ];
+                return ['color' => '#0EEAFF', 'events' => self::getDefaultFields('download')];
             case 'category':
+                return ['color' => '#D6DF22', 'events' => self::getDefaultFields()];
             case 'collection':
+                return ['color' => '#149271', 'events' => self::getDefaultFields()];
             case 'comments':
-                return ['color' => '#149271', 'events' => ['add', 'view', 'edit', 'delete'] ];
+                return ['color' => '#8DC53E', 'events' => self::getDefaultFields()];
             case 'tags':
-                return ['color' => 'orange', 'events' => ['add', 'view', 'edit', 'delete'] ];
+                return ['color' => 'orange', 'events' => self::getDefaultFields()];
             case 'status':
-                return ['color' => '#79a6ce', 'events' => ['login', 'register', 'delete_user'] ];
+                return ['color' => '#79A7CF', 'events' => ['login', 'register', 'delete_user'] ];
             case 'profile':
                 return ['color' => '#F09302', 'events' => ['subscriber', 'administrator', 'editor', 'author', 'contributor'] ];
+            case 'imports':
+                return ['color' => '#43F7B1', 'events' => ['access_oai_pmh', 'import_csv', 'export_csv', 'import_tainacan', 'export_tainacan'] ];
         }
+    }
+
+    private function getDefaultFields($extra_fields = "") {
+        $base_defaults = ['add', 'view', 'edit', 'delete'];
+        return ( is_array($extra_fields) && !empty($extra_fields) ) ? array_merge($base_defaults, $extra_fields) : $base_defaults;
     }
 
     public static function user_events($event_type, $spec, $from, $to) {
