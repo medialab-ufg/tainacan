@@ -10,13 +10,13 @@ class LogHelper extends ViewHelper {
     
     public function getReportTypes() {
         return [ 'users' => i18n_str('Users'),
-                 'items' => i18n_str('Items'),
-                 'collections' => i18n_str('Collections'),
-                 'comments' => i18n_str('Comments'),
-                 'categories' => i18n_str('Categories'),
-                 'tags' => i18n_str('Tags'),
-                 'imports' => i18n_str('Import / Export'),
-                 'admin' => i18n_str('Administration') ];
+            'items' => i18n_str('Items'),
+            'collections' => i18n_str('Collections'),
+            'comments' => i18n_str('Comments'),
+            'categories' => i18n_str('Categories'),
+            'tags' => i18n_str('Tags'),
+            'imports' => i18n_str('Import / Export'),
+            'admin' => i18n_str('Administration') ];
     }
 
     private function getChartImg($fileName) {

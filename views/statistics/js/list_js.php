@@ -168,7 +168,7 @@ function getStatsTree() {
         { title: $('.stats-categories').text(), noLink: true, hideCheckbox: true, children: categoryChildren() },
         { title: $('.stats-tags').text(), noLink: true, hideCheckbox: true, children: tagsChildren()},
         { title: $('.stats-imports').text(), noLink: true, hideCheckbox: true, children: importsChildren() },
-        { title: $('.stats-admin').text(), noLink: true, hideCheckbox: true}
+        // { title: $('.stats-admin').text(), noLink: true, hideCheckbox: true}
     ];
 }
 
