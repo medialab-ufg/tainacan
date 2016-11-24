@@ -28,7 +28,6 @@ class ExportAIP extends ThemeOptionsModel {
              mkdir($this->model->dir.'/'.$this->model->name_folder);
         }
         $this->repository_model->create_repository();
-        $this->create_zip_by_folder(dirname(__FILE__).'/');
         $this->create_zip_by_folder($this->model->dir.'/', $this->model->$name_folder.'/', $this->model->$name_folder);
         $this->download_send_headers($this->model->dir.'/'.$this->model->name_folder.'.zip');
     }

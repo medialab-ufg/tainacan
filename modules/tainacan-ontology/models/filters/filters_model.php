@@ -44,19 +44,21 @@ class FiltersModel extends Model {
                  //insiro a propriedade da classe no dynatree
                  $children = $this->getChildren($propertyObject->term_id);
                  if (count($children) > 0) {
+                     $class= $this->get_class_property_type($this->get_property_type($propertyObject->term_id));
                     $dynatree[] = array(
                             'title' => Words($propertyObject->name, 30), 
                             'key' => $propertyObject->term_id,  
                             'expand' => true, 
                             'hideCheckbox' => $hide_checkbox, 
-                            'children' => $this->childrenDynatreePropertiesFilter($propertyObject->term_id, 'color_property4'),
-                            'addClass' => 'color_property4');      
+                            'children' => $this->childrenDynatreePropertiesFilter($propertyObject->term_id, $class),
+                            'addClass' => $class);      
                  }else{
+                     $class= $this->get_class_property_type($this->get_property_type($propertyObject->term_id));
                      $dynatree[] = array(
                             'title' => Words($propertyObject->name, 30), 
                             'key' => $propertyObject->term_id,  
                             'hideCheckbox' => $hide_checkbox, 
-                            'addClass' => 'color_property4'); 
+                            'addClass' => $class);   
                  }
             }
         }
@@ -103,13 +105,13 @@ class FiltersModel extends Model {
                             'expand' => true, 
                             'hideCheckbox' => $hide_checkbox, 
                             'children' => $this->childrenDynatreePropertiesFilter($propertyObject->term_id, 'color_property4'),
-                            'addClass' => 'color_property4');      
+                            'addClass' => $this->get_class_property_type($type));      
                  }else{
                      $dynatree[] = array(
                             'title' => Words($propertyObject->name, 30), 
                             'key' => $propertyObject->term_id,  
                             'hideCheckbox' => $hide_checkbox, 
-                            'addClass' => 'color_property4'); 
+                            'addClass' => $this->get_class_property_type($type)); 
                  }
             }
         }
@@ -178,6 +180,17 @@ class FiltersModel extends Model {
         }                
     }
     
+    /**
+     * 
+     * @param type $param
+     */
+    public function get_class_property_type($type) {
+        if($type=='socialdb_property_data'){
+            return 'attribute';
+        }else{
+             return 'relation';
+        }
+    }
     
     
     

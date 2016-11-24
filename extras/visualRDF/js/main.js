@@ -244,6 +244,7 @@ function init(json){
 
 
 function restart(myUrl){
+        console.log(encodeURIComponent(myUrl));
 	d3.json('rdf2json.php?url='+encodeURIComponent(myUrl), function(json){
 		d3.select("#waiting").style("display", "none");
 		init(json);

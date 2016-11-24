@@ -76,10 +76,11 @@ class RDFOntologyCategoryModel extends OntologyRDFCollectionModel {
             else    
               $xml .= "<rdfs:label>".utf8_decode($category->name)."</rdfs:label>";
         endif;
-        if(isset($category->description)&&!empty($category->description)&&mb_detect_encoding($category->name)=='UTF-8'):
+        if(isset($category->description)&&!empty($category->description)
+                &&(mb_detect_encoding($category->name)=='UTF-8')||mb_detect_encoding($category->name)=='ASCII'):
             $xml .= "<rdfs:comment>".htmlspecialchars($category->description)."</rdfs:comment>";
         elseif(isset($category->description)&&!empty($category->description)):
-            $xml .= "<rdfs:comment>".utf8_decode (htmlspecialchars($category->description))."</rdfs:comment>";
+            $xml .= "<rdfs:comment>".utf8_encode(htmlspecialchars($category->description))."</rdfs:comment>";
         endif;
          $xml .= $this->get_restrictions_rdf($category->term_id);
          $xml .= $this->others_restrictions_classes($category->term_id);

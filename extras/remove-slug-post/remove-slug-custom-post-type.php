@@ -117,13 +117,11 @@ class UWT_RemoveSlugCustomPostType{
 	public function remove_slug($permalink, $post, $leavename) {
 		global $wp_post_types;
 		$suffix = get_option('uwt_permalink_customtype_suffix');
-//                ECHO '<pre>';
-//                var_dump($permalink, $post, $leavename);
 		foreach ($wp_post_types as $type=>$custom_post) {
 			if ($custom_post->_builtin == false && $type == $post->post_type) {
 				$custom_post->rewrite['slug'] = trim($custom_post->rewrite['slug'], '/');
                                 if($type=='socialdb_collection' && strpos($permalink, 'post_type=socialdb_collection')!==false){
-                                   $permalink = get_bloginfo('url') . '/' .$post->post_name;
+                                   $permalink = get_bloginfo('url') . '/collection/' .sanitize_title($post->post_title);
                                 }else{
                                     $permalink = str_replace(get_bloginfo('url') . '/' . $custom_post->rewrite['slug'] . '/', get_bloginfo('url') . "/", $permalink);
                                 }
@@ -131,28 +129,19 @@ class UWT_RemoveSlugCustomPostType{
 					$permalink = substr($permalink, 0, -1) . ".{$suffix}";
 			}
 		}
-               // var_dump($permalink);
-                //exit();
 		return $permalink;
 	}
 	
 	public function rewrite_rules($flash = false) {
 		global $wp_post_types, $wpdb;
 		$suffix = get_option('uwt_permalink_customtype_suffix');
-		foreach ($wp_post_types as $type=>$custom_post) {
-			if ($custom_post->_builtin == false) {
-                            if($type=='socialdb_collection'){
-				$querystr = "SELECT {$wpdb->posts}.post_name 
-								FROM {$wpdb->posts} 
-								WHERE {$wpdb->posts}.post_type = '{$type}'
-    									AND {$wpdb->posts}.post_date < NOW()";
-				$posts = $wpdb->get_results($querystr, OBJECT);
-				foreach ($posts as $post) {
-					$regex = (!empty($suffix)) ? "{$post->post_name}\\.{$suffix}\$" : "{$post->post_name}\$";
-					add_rewrite_rule($regex, "index.php?{$custom_post->query_var}={$post->post_name}", 'top');			
-				}
-                            }
-			}
+		$querystr = "SELECT {$wpdb->posts}.post_name 
+                                                FROM {$wpdb->posts} 
+                                                WHERE {$wpdb->posts}.post_type = 'socialdb_collection'";
+                $posts = $wpdb->get_results($querystr, OBJECT);
+                foreach ($posts as $post) {
+                        $regex = (!empty($suffix)) ? "{$post->post_name}\\.{$suffix}\$" : "{$post->post_name}\$";
+                        add_rewrite_rule($regex, "index.php?collection={$post->post_name}", 'top');			
 		}
 		if ($flash == true)
 			flush_rewrite_rules(false);
@@ -169,8 +158,8 @@ class UWT_RemoveSlugCustomPostType{
 			foreach ($wp_post_types as $type=>$custom_post) {
                             if($type=='socialdb_collection'){
 				$rewrite_rule = (!empty($suffix))
-							? "RewriteRule ^{$custom_post->query_var}/(.+)/\$ /\$1\.{$suffix} [R=301,l]"
-							: "RewriteRule ^{$custom_post->query_var}/(.+)/\$ /\$1 [R=301,L]";
+							? "RewriteRule ^{$type}/(.+)/\$ /\$1\.{$suffix} [R=301,l]"
+							: "RewriteRule ^{$type}/(.+)/\$ /\$1 [R=301,L]";
 				if (strpos($content, $rewrite_rule) == false && $custom_post->_builtin == false)
 					$write[] = $rewrite_rule;
                             }    
