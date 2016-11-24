@@ -14,7 +14,7 @@ include_once('js/list_js.php');
     <div id="statistics-config" class="col-md-3 ui-widget-header no-padding">
 
         <div class="form-group period-config">
-            <label class="title-pipe"> <?php i18n_str('Period',true); ?> </label>
+            <label class="title-pipe"> <?php _t('Period',true); ?> </label>
             <div class="date-range-filter">
                 <p>
                     <span> <?php _e('From','tainacan') ?> </span>
@@ -27,7 +27,7 @@ include_once('js/list_js.php');
             </div>
         </div>
         <div class="form-group">
-            <label for="object_tags" class="title-pipe"> <?php i18n_str('Report type',true); ?> </label>
+            <label for="object_tags" class="title-pipe"> <?php _t('Report type',true); ?> </label>
             <div id="report_type_stat"></div>
         </div>
     </div>
@@ -37,26 +37,26 @@ include_once('js/list_js.php');
         <?php // include_once "inc/pdf.php"; ?>
 
         <div class="chart-header btn-group col-md-12">
-            <?php $_log_helper->render_config_title(__('Repository Statistics', 'tainacan')); ?>
+            <?php $_log_helper->render_config_title(_t('Repository Statistics')); ?>
             <div class="user-config-control col-md-12 no-padding">
                 <div class="col-md-4 pull-left no-padding">
-                    <span class="config-title"><?php i18n_str('Filters:',true); ?></span>
-                    <span class="current-chart"><?php i18n_str('User Stats',true); ?></span>
+                    <span class="config-title"><?php _t('Filters:',1); ?></span>
+                    <span class="current-chart"><?php _t('User Stats',1); ?></span>
                 </div>
 
                 <div class="col-md-2 pull-right no-padding">
                     <button class="btn btn-default" data-toggle="dropdown" type="button" id="downloadStat">
-                        <?php i18n_str('Download',true); ?> <span class="caret"></span>
+                        <?php _t('Download: ',true); ?> <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="downloadStat">
-                        <li> <a href="javascript:void(0)" class="dl-pdf"> <?php i18n_str('PDF',true); ?> </a> </li>
-                        <li> <a href="" class="dl-csv"> <?php i18n_str('CSV',true); ?> </a> </li>
-                        <li> <a href="" class="dl-xls"> <?php i18n_str('XLS',true); ?> </a> </li>
+                        <li> <a href="javascript:void(0)" class="dl-pdf"> <?php _t('PDF',1); ?> </a> </li>
+                        <li> <a href="" class="dl-csv"> <?php _t('CSV',1); ?> </a> </li>
+                        <li> <a href="" class="dl-xls"> <?php _t('XLS',0); ?> </a> </li>
                     </ul>
                 </div>
 
                 <div class="col-md-2 pull-right no-padding">
-                    <span class="config-title"><?php i18n_str('Mode:',true); ?></span>
+                    <span class="config-title"><?php _t('Mode:',1); ?></span>
 
                     <button data-toggle="dropdown" class="btn btn-default" id="statChartType" type="button">
                         <img src="<?php echo $_log_helper->getChartsType()[0]['img']; ?>" alt="<?php echo $_log_helper->getChartsType()[0]['className']; ?>">
@@ -85,8 +85,8 @@ include_once('js/list_js.php');
         <div id="charts-resume" class="col-md-12">
             <table>
                 <tbody>
-                <tr class="headers"> <th class="curr-parent"> <?php i18n_str('Status:',true); ?> </th> </tr>
-                <tr class="content"> <td class="curr-filter"> <?php i18n_str('Users:',true); ?> </td> </tr>
+                <tr class="headers"> <th class="curr-parent"> <?php _t('Status:',1); ?> </th> </tr>
+                <tr class="content"> <td class="curr-filter"> <?php _t('Users:',1); ?> </td> </tr>
                 </tbody>
             </table>
 

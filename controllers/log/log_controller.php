@@ -15,17 +15,17 @@ class LogController extends Controller {
 
     private function getEventType($parent_name, $_event_suffix) {
         switch ($parent_name) {
-            case i18n_str('Users'):
-            case i18n_str('Collections'):
-            case i18n_str('Categories'):
+            case _t('Users'):
+            case _t('Collections'):
+            case _t('Categories'):
                 return "user_" . $_event_suffix;
-            case i18n_str('Comments'):
+            case _t('Comments'):
                 return "comment";
-            case i18n_str('Items'):
+            case _t('Items'):
                 return "user_";
-            case i18n_str('Tags'):
+            case _t('Tags'):
                 return "tags";
-            case i18n_str('Import / Export'):
+            case _t('Import / Export'):
                 return "imports";
         }
     }
