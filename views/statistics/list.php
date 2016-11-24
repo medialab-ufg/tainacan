@@ -2,13 +2,14 @@
 include_once(dirname(__FILE__).'/../../helpers/view_helper.php');
 include_once(dirname(__FILE__).'/../../helpers/log/log_helper.php');
 include_once(dirname(__FILE__).'/../../models/log/log_model.php');
-include_once('js/list_js.php');
- 
 $_log_helper = new LogHelper();
+
+include_once('inc/i18n_strs.php'); 
+include_once('js/list_js.php');
 ?>
 <div class="col-md-12 statistics-container no-padding">
 
-    <?php $_log_helper->render_statistic_menu() ?>
+    <?php $_log_helper->render_statistic_menu(); ?>
 
     <div id="statistics-config" class="col-md-3 ui-widget-header no-padding">
 
@@ -33,7 +34,7 @@ $_log_helper = new LogHelper();
 
     <div id="charts-display" class="col-md-9">
 
-        <?php include_once "inc/pdf.php"; ?>
+        <?php // include_once "inc/pdf.php"; ?>
 
         <div class="chart-header btn-group col-md-12">
             <?php $_log_helper->render_config_title(__('Repository Statistics', 'tainacan')); ?>

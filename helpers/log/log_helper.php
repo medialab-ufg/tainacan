@@ -7,6 +7,17 @@ class LogHelper extends ViewHelper {
             [ 'className' => 'piechart_div', 'img' => $this->getChartImg("chart_pie") ],
             [ 'className' => 'barchart_div', 'img' => $this->getChartImg("chart_line") ] ];
     }
+    
+    public function getReportTypes() {
+        return [ 'users' => i18n_str('Users'),
+                 'items' => i18n_str('Items'),
+                 'collections' => i18n_str('Collections'),
+                 'comments' => i18n_str('Comments'),
+                 'categories' => i18n_str('Categories'),
+                 'tags' => i18n_str('Tags'),
+                 'imports' => i18n_str('Import / Export'),
+                 'admin' => i18n_str('Administration') ];
+    }
 
     private function getChartImg($fileName) {
         return get_stylesheet_directory_uri() . '/libraries/images/chart/' . $fileName . '.png';
@@ -15,7 +26,7 @@ class LogHelper extends ViewHelper {
     public function renderPDFHeader() {
         $logo_id = get_option('socialdb_logo');
         ?>
-      <div class="col-md-12">
+      <div class="col-md-12 pdf-footer">
           <div class="topo row">
               <div class="col-md-6">
                   <?php echo $this->renderRepositoryLogo($logo_id, 'Tainacan'); ?>
