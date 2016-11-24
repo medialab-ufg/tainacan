@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: socialdb\n"
+"Project-Id-Version: socialdb\n"ß
 "POT-Creation-Date: 2016-11-24 15:56-0200\n"
 "PO-Revision-Date: 2016-11-24 15:56-0200\n"
 "Last-Translator: Rodrigo de Oliveira <webmaster@rodrigodeoliveira.net>\n"

@@ -17,7 +17,7 @@ class ExportAIPRepositoryModel extends ExportAIPModel {
         }
         $this->generate_xml();
         $this->create_xml_file($dir_repo.'/mets.xml', $this->XML);
-        $this->create_zip_by_folder($this->dir.'/'.$this->name_folder, $this->name_folder_repository.'/', $this->name_folder_repository);
+        $this->create_zip_by_folder($this->dir.'/'.$this->name_folder.'/', $this->name_folder_repository.'/', $this->name_folder_repository,true);
         $this->recursiveRemoveDirectory($dir_repo);
     }
     
@@ -30,14 +30,14 @@ class ExportAIPRepositoryModel extends ExportAIPModel {
                 . 'xmlns:xlink="http://www.w3.org/1999/xlink" '
                 . 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
                 . 'xsi:schemaLocation="http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd">';
-        $this->XML .= '<metsHdr>
+        $this->XML .= trim('<metsHdr>
                             <agent ROLE="CUSTODIAN" TYPE="OTHER" OTHERTYPE="DSpace Archive">
                                 <name>ri/0</name>
                             </agent>
                             <agent ROLE="CREATOR" TYPE="OTHER" OTHERTYPE="DSpace Software">
                                 <name>DSpace 5.5</name>
                             </agent>
-                       </metsHdr>';
+                       </metsHdr>');
         $this->XML .= '<dmdSec ID="dmdSec_1">
                         <mdWrap MDTYPE="MODS">
                          <xmlData xmlns:mods="http://www.loc.gov/mods/v3" 
@@ -66,6 +66,7 @@ class ExportAIPRepositoryModel extends ExportAIPModel {
                         </dmdSec>
                       ';
         $this->generate_xml_groups_and_users();
+        $this->generate_community_xml();
         $this->XML .= '</mets>';
     }
     
@@ -81,8 +82,8 @@ class ExportAIPRepositoryModel extends ExportAIPModel {
                   <DSpaceRoles>
                     <Groups>'; 
         $this->XML .= '<Group ID="0" Name="Anonymous" />';
-        $this->XML .= '<Group ID="1" Name="Administrator">'.$this->get_users_by_group('admin').'<Group>';
-        $this->XML .= '<Group ID="2" Name="Members">'.$this->get_users_by_group('members').'<Group>';
+        $this->XML .= '<Group ID="1" Name="Administrator">'.$this->get_users_by_group('admin').'</Group>';
+        $this->XML .= '<Group ID="2" Name="Members">'.$this->get_users_by_group('members').'</Group>';
         $this->XML .= '</Groups>';
         $this->generate_xml_users();
         $this->XML .= '
@@ -106,18 +107,20 @@ class ExportAIPRepositoryModel extends ExportAIPModel {
      * busca no banco os usuario para cada role
      */
     public function get_users_by_group($group) {
+        $valor = '';
         if($group=='admin'){
             $blogusers = get_users( 'role=administrator' );
         }else if($group=='members'){
             $blogusers = get_users( 'role=subscriber' );
         }
         if($blogusers){
-            $this->XML .= '<Members>';
+            $valor .= '<Members>';
             foreach ( $blogusers as $user ) {
-                    $this->XML .= '<Member ID="'.$user->ID.'" Name="' . esc_html( $user->user_email ) . '" >';
+                    $this->XML .= '<Member ID="'.$user->ID.'" Name="' . esc_html( $user->user_email ) . '" />';
             }
-            $this->XML .= '</Members>';
+            $valor .= '</Members>';
         }
+        return $valor;
     }
     
     /**
@@ -127,11 +130,11 @@ class ExportAIPRepositoryModel extends ExportAIPModel {
         $users = get_users();
          if($users){
             $this->XML .= '<People>';
-            foreach ( $blogusers as $user ) {
+            foreach ( $users as $user ) {
                     $this->XML .= '<Person ID="'.$user->ID.'" >';
-                    $this->XML .= '<Email>' . esc_html( $user->user_email ) . '"</Email>';
-                    $this->XML .= '<FirstName>' . esc_html( $user->user_firstname ) . '"</FirstName>';
-                    $this->XML .= '<LastName>' . esc_html( $user->user_lasttname ) . '"</LastName>';
+                    $this->XML .= '<Email>' . esc_html( $user->user_email ) . '</Email>';
+                    $this->XML .= '<FirstName>' . esc_html( $user->user_firstname ) . '</FirstName>';
+                    $this->XML .= '<LastName>' . esc_html( $user->user_lasttname ) . '</LastName>';
                     $this->XML .= '<Language>' . get_locale() . '"</Language>';
                     $this->XML .= '<CanLogin /><SelfRegistered />';
                     $this->XML .= '</Person>';
@@ -139,4 +142,19 @@ class ExportAIPRepositoryModel extends ExportAIPModel {
             $this->XML .= '</People>';
         }
     }
+    
+    /**
+     * metodo que cria a estrutura das comunidades
+     */
+    public function generate_community_xml() {
+        $this->XML .= '<structMap ID="struct_11" LABEL="DSpace Object" TYPE="LOGICAL">';
+        $this->XML .= '<div ID="div_12" DMDID="dmdSec_2 dmdSec_1" ADMID="amd_3" TYPE="DSpace Object Contents">';
+        $this->XML .= '<div ID="div_13" TYPE="DSpace COMMUNITY">';
+        $this->XML .= '<mptr ID="mptr_14" LOCTYPE="HANDLE" xlink:type="simple" xlink:href="'.$this->prefix.'/'. get_option('collection_root_id').'"/>';
+        $this->XML .= '<mptr ID="mptr_15" LOCTYPE="URL" xlink:type="simple" xlink:href="COMMUNITY@'.$this->prefix.'-'. get_option('collection_root_id').'.zip"/>';
+        $this->XML .= '</div>';
+        $this->XML .= '</div>';
+        $this->XML .= '</structMap>';
+    }
+    
 }
