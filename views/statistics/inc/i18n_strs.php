@@ -6,7 +6,7 @@
     <div class="report-types">
         <?php        
         foreach( $_log_helper->getReportTypes() as $type => $title ) { ?>
-            <span class="stats-<?= $type ?>"> <?= $title ?> </span>
+            <span class="stats-<?= $type ?>"><?= $title ?></span>
         <?php }
         ?>
     </div>

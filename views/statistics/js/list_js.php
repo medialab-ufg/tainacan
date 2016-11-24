@@ -180,7 +180,7 @@ function fetchData(parent, action) {
         url: $("#src").val() + '/controllers/log/log_controller.php', type: 'POST',
         data: { operation: 'user_events', parent: parent, event: action, from: from, to: to }
     }).done(function(r){
-        var res_json = $.parseJSON(r);
+        var res_json = $.parseJSON(r);       
         drawChart(action, res_json);
     });
 }
