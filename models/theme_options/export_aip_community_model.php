@@ -2,7 +2,7 @@
 /**
  * Model que realiza a exportacao do zip AIP do tainacan
  */
-class ExportAIPRepositoryModel extends ExportAIPModel {
+class ExportAIPCommunityModel extends ExportAIPModel {
     
     public $XML;
     public $name_folder_community;
@@ -11,16 +11,22 @@ class ExportAIPRepositoryModel extends ExportAIPModel {
      * metodo que executa os demais para criacao do mets e do zip do repositorio
      */
     public function create_communities() {
-        $this->name_folder_community = 'COMMUNITY@'.$this->prefix.'-'. get_option('collection_root_id');
-        $dir_community = $this->dir.'/'.$this->name_folder.'/'.$this->name_folder_repository;
-        $this->recursiveRemoveDirectory($dir_community);
-        if(!is_dir($dir_community.'/')){
-             mkdir($dir_community);
+        $communities = $this->get_extendable_collections();
+        $communities[] = get_post(get_option('collection_root_id'));
+        foreach ($communities as $community_raw) {
+            $community = get_post($community_raw->ID);
+            $this->name_folder_community = 'COMMUNITY@'.$this->prefix.'-'. $community->ID;
+            $dir_community = $this->dir.'/'.$this->name_folder.'/'.$this->name_folder_community;
+            $this->recursiveRemoveDirectory($dir_community);
+            if(!is_dir($dir_community.'/')){
+                 mkdir($dir_community);
+            }
+            $this->generate_xml($community);
+            $this->create_xml_file($dir_community.'/mets.xml', $this->XML);
+            $this->create_zip_by_folder($this->dir.'/'.$this->name_folder.'/', $this->name_folder_community.'/', $this->name_folder_community,true);
+            $this->recursiveRemoveDirectory($dir_community);
         }
-        $this->generate_xml();
-        $this->create_xml_file($dir_community.'/mets.xml', $this->XML);
-        $this->create_zip_by_folder($this->dir.'/'.$this->name_folder.'/', $this->name_folder_community.'/', $this->name_folder_community,true);
-        $this->recursiveRemoveDirectory($dir_community);
+        
     }
     
     
@@ -74,8 +80,9 @@ class ExportAIPRepositoryModel extends ExportAIPModel {
                             </mdWrap>
                         </dmdSec>
                       ';
-        $this->generate_xml_groups_and_users();
-        $this->generate_community_xml();
+        $this->generate_xml_groups($commnutiy);
+        $this->getFileThumbnail($commnutiy->ID);
+        $this->generate_collections_xml();
         $this->XML .= '</mets>';
     }
     
@@ -91,9 +98,9 @@ class ExportAIPRepositoryModel extends ExportAIPModel {
                     <DSpaceRoles>
                          <Groups>
                              <Group ID="'.$this->get_moderators_collection_id($commnutiy->ID).'" Name="administrator_'.$commnutiy->ID.'">'.
-                                        $this->get_users_moderators('admin')
+                                        $this->get_users_moderators($commnutiy)
                             .'</Group>
-                         </Group>'; 
+                         </Groups>'; 
         $this->XML .= '</DSpaceRoles>
                    </xmlData>
                 </mdWrap>
@@ -133,7 +140,7 @@ class ExportAIPRepositoryModel extends ExportAIPModel {
             $valor .= '<Members>';
             foreach ( $blogusers as $user ) {
                     $user = get_user_by('id', $user);
-                    $this->XML .= '<Member ID="'.$user->ID.'" Name="' . esc_html( $user->user_email ) . '" />';
+                    $valor .= '<Member ID="'.$user->ID.'" Name="' . esc_html( $user->user_email ) . '" />';
             }
             $valor .= '</Members>';
         }
@@ -144,19 +151,44 @@ class ExportAIPRepositoryModel extends ExportAIPModel {
      * 
      * @param type $param
      */
-    public function getFileThumbnail($param) {
-        
+    public function getFileThumbnail($collection_id) {
+        $thumbnail_id = get_post_thumbnail_id($collection_id);
+        $dir_community = $this->dir.'/'.$this->name_folder.'/'.$this->name_folder_repository;
+        if($thumbnail_id){
+          $fullsize_path = get_attached_file( $thumbnail_id ); // Full path
+          $md5_inicial = get_post_meta($thumbnail_id, 'md5_inicial', true);
+          $size = filesize(get_attached_file($thumbnail_id));
+          $ext = pathinfo($fullsize_path, PATHINFO_EXTENSION);
+          copy($fullsize_path, $dir_community.'/thumbnail_'.$collection_id.'.'.$ext);
+          $this->XML .= '<fileSec>
+                        <fileGrp USE="LOGO">
+                         <file ID="logo_25" MIMETYPE="image/'.$ext.'" SIZE="'.$size.'" CHECKSUM="'.$md5_inicial.'" CHECKSUMTYPE="MD5">
+                          <FLocat LOCTYPE="URL" xlink:type="simple" xlink:href="thumbnail_'.$collection_id.'"/>
+                         </file>
+                        </fileGrp>
+                       </fileSec>'; 
+        }
     }
     /**
      * metodo que cria a estrutura das comunidades
      */
-    public function generate_community_xml() {
+    public function generate_collections_xml($community_id) {
+        $collections = $this->get_children_collections($community_id);
         $this->XML .= '<structMap ID="struct_11" LABEL="DSpace Object" TYPE="LOGICAL">';
         $this->XML .= '<div ID="div_12" DMDID="dmdSec_2 dmdSec_1" ADMID="amd_3" TYPE="DSpace Object Contents">';
-        $this->XML .= '<div ID="div_13" TYPE="DSpace COMMUNITY">';
-        $this->XML .= '<mptr ID="mptr_14" LOCTYPE="HANDLE" xlink:type="simple" xlink:href="'.$this->prefix.'/'. get_option('collection_root_id').'"/>';
-        $this->XML .= '<mptr ID="mptr_15" LOCTYPE="URL" xlink:type="simple" xlink:href="COMMUNITY@'.$this->prefix.'-'. get_option('collection_root_id').'.zip"/>';
+        $this->XML .= '<fptr FILEID="logo_25"/>';
+        $index = 13;
+        foreach ($collections as $collection):
+        $this->XML .= '<div ID="div_'.$index++.'" TYPE="DSpace COLLECTION">';
+        $this->XML .= '<mptr ID="mptr_'.$index++.'" LOCTYPE="HANDLE" xlink:type="simple" xlink:href="'.$this->prefix.'/'. $collection->ID.'"/>';
+        $this->XML .= '<mptr ID="mptr_'.$index++.'" LOCTYPE="URL" xlink:type="simple" xlink:href="COMMUNITY@'.$this->prefix.'-'. $collection->ID.'.zip"/>';
         $this->XML .= '</div>';
+        endforeach;
+        $this->XML .= '</div>';
+        $this->XML .= '</structMap>';
+        $this->XML .= '<structMap ID="struct_'.$index++.'" LABEL="Parent" TYPE="LOGICAL">';
+        $this->XML .= '<div ID="div_'.$index++.'" LABEL="Parent of this DSpace Object" TYPE="AIP Parent Link">';
+        $this->XML .= '<mptr ID="mptr_'.$index++.'" LOCTYPE="HANDLE" xlink:type="simple" xlink:href="ri/0"/>';
         $this->XML .= '</div>';
         $this->XML .= '</structMap>';
     }

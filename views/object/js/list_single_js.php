@@ -400,10 +400,12 @@
 //mostrar modal de denuncia
     function show_edit_object(object_id) {
         backToMainPage();
-        edit_object(object_id);
+        edit_object_item(object_id);
     }
 // editando objeto
-    function edit_object(object_id) {
+    function edit_object_item(object_id) {
+        var stateObj = {foo: "bar"};
+        history.replaceState(stateObj, "page 2", '?');
         $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/object/object_controller.php",

@@ -259,7 +259,12 @@ class CollectionController extends Controller {
                     update_option('socialdb_user_templates', serialize($metas));
                 else:  
                     if($data['key']== 'collection_default'){
-                        
+                        $collection_default = get_option('disable_empty_collection');
+                        if($collection_default && $collection_default==='false'){
+                            update_option('disable_empty_collection', 'true');
+                        }else{
+                             update_option('disable_empty_collection', 'false');
+                        }
                     }else{
                         $metas = unserialize(get_option('socialdb_tainacan_templates'));
                         if($metas && is_array($metas) && in_array($data['key'], $metas)){

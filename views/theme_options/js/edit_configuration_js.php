@@ -151,7 +151,7 @@
                 type:type
                }
         }).done(function (result) {
-            
+            list_templates();
         });
     }
     /*

@@ -64,4 +64,8 @@ $('.carousel-home-ajax').slick( getSlickSettings() );
           });
       });
   });
+  
+  function showModalCreateCollection() {
+        $('#myModal').modal('show');
+    }
 </script>

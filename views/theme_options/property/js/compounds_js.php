@@ -189,16 +189,16 @@
             $("#compound_id").val(elem.id);
             $("#operation_property_compounds").val('update_property_compounds');
             // abrir o modal
-            $("#meta-compounds").modal('show');
-            $("#meta-compounds .modal-title .compounds-action").text('<?php _e('Edit','tainacan') ?>');
-            $("#meta-compounds #compounds_name").val( elem.name );
-            $("#meta-compounds #socialdb_property_help").val( elem.metas.socialdb_property_help );
-            $("#meta-compounds .socialdb_event_property_tab option[value='" + get_tab_property_id(elem.id) +"']").attr('selected','selected');
+            $("#meta-metadata_compound").modal('show');
+            $("#meta-metadata_compound .modal-title .compounds-action").text('<?php _e('Edit','tainacan') ?>');
+            $("#meta-metadata_compound #compounds_name").val( elem.name );
+            $("#meta-metadata_compound #socialdb_property_help").val( elem.metas.socialdb_property_help );
+            $("#meta-metadata_compound .socialdb_event_property_tab option[value='" + get_tab_property_id(elem.id) +"']").attr('selected','selected');
             //cardinalidade
             if (elem.metas.socialdb_property_compounds_cardinality === '1') {
-                $('#meta-compounds #socialdb_property_compounds_cardinality_1').prop('checked', true);
+                $('#meta-metadata_compound #socialdb_property_compounds_cardinality_1').prop('checked', true);
             } else {
-                $("#meta-compounds #socialdb_property_compounds_cardinality_n").prop('checked', true);
+                $("#meta-metadata_compound #socialdb_property_compounds_cardinality_n").prop('checked', true);
             }
             // se for obrigatorio
             if (elem.metas.socialdb_property_required === 'true') {

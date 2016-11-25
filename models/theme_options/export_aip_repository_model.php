@@ -147,12 +147,20 @@ class ExportAIPRepositoryModel extends ExportAIPModel {
      * metodo que cria a estrutura das comunidades
      */
     public function generate_community_xml() {
+        $communities = $this->get_extendable_collections();
         $this->XML .= '<structMap ID="struct_11" LABEL="DSpace Object" TYPE="LOGICAL">';
         $this->XML .= '<div ID="div_12" DMDID="dmdSec_2 dmdSec_1" ADMID="amd_3" TYPE="DSpace Object Contents">';
         $this->XML .= '<div ID="div_13" TYPE="DSpace COMMUNITY">';
         $this->XML .= '<mptr ID="mptr_14" LOCTYPE="HANDLE" xlink:type="simple" xlink:href="'.$this->prefix.'/'. get_option('collection_root_id').'"/>';
         $this->XML .= '<mptr ID="mptr_15" LOCTYPE="URL" xlink:type="simple" xlink:href="COMMUNITY@'.$this->prefix.'-'. get_option('collection_root_id').'.zip"/>';
         $this->XML .= '</div>';
+        $index = 16;
+        foreach ($communities as $community) {
+            $this->XML .= '<div ID="div_'.$index++.'" TYPE="DSpace COMMUNITY">';
+            $this->XML .= '<mptr ID="mptr_'.$index++.'" LOCTYPE="HANDLE" xlink:type="simple" xlink:href="'.$this->prefix.'/'. $community->ID.'"/>';
+            $this->XML .= '<mptr ID="mptr_'.$index++.'" LOCTYPE="URL" xlink:type="simple" xlink:href="COMMUNITY@'.$this->prefix.'-'. $community->ID.'.zip"/>';
+            $this->XML .= '</div>';
+        }
         $this->XML .= '</div>';
         $this->XML .= '</structMap>';
     }

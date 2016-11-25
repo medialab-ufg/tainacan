@@ -23,6 +23,7 @@ get_header();
 global $config;
 session_start();
 $options = get_option('socialdb_theme_options');
+$collection_default = get_option('disable_empty_collection');
 ?>
 
 <?php while (have_posts()) : the_post(); ?>
@@ -32,6 +33,7 @@ $options = get_option('socialdb_theme_options');
     <div class="panel panel-default collection_header" id="collection_post" style="margin-top: -20px;margin-bottom: 0px;">
     </div>
     <!-- TAINACAN - BEGIN: ITENS NECESSARIOS PARA EXECUCAO DE VARIAS PARTES DO SOCIALDB -->
+    <input type="hidden" id="show_collection_default" name="show_collection_default" value="<?php echo (!$collection_default || $collection_default === 'false') ? 'show' : 'hide'; ?>">
     <input type="hidden" id="socialdb_fb_api_id" name="socialdb_fb_api_id" value="<?php echo $options['socialdb_fb_api_id']; ?>">
     <input type="hidden" id="socialdb_embed_api_id" name="socialdb_embed_api_id" value="<?php echo $options['socialdb_embed_api_id']; ?>">
     <input type="hidden" id="current_user_id" name="current_user_id" value="<?php echo get_current_user_id(); ?>">

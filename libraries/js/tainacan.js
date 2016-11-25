@@ -591,7 +591,11 @@ function list_templates($_element) {
 }
 
 function add_li_collection_template(el,$_element){
-    $($_element).html('<li class="click_new_collection"><a href="#" id="click_new_collection" onclick="showModalCreateCollection()">Geral</a></li>');
+    if($('#show_collection_default').val()==='show'){
+        $($_element).html('<li class="click_new_collection"><a href="#" id="click_new_collection" onclick="showModalCreateCollection()">Geral</a></li>');
+    }else{
+         $($_element).html('');
+    }
     $($_element).append("<li class='divider'></li>");
     if(el.user_templates) {
         $.each(el.user_templates, function (idx, value) {

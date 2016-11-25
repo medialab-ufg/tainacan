@@ -1860,6 +1860,19 @@
 
     function hide_alert() { $(".alert").hide(); }
 
+    //limpando os formularios ao abrir o modal
+    function clear_form(type){
+        console.log(type);
+        if(type=='metadata_compound'){
+            initDynatreeFilterProperties(src);
+            $('#compound_id').val('');
+             $("#meta-metadata_compound #compounds_name").val('');
+            $('.compounds-action').html('<?php _e('Add','tainacan') ?>');
+            $('#operation_property_compounds').val('add_property_compounds');
+            $('#compounds_properties_ordenation').html('<center><h4><?php _e('Select a property','tainacan') ?>&nbsp;<span class="glyphicon glyphicon-arrow-right"></span></h4></center>');
+        }
+    }
+
     function clear_buttons() {
         $('#show_reverse_properties').hide();
         $("#property_data_title").text('<?php _e('Add new property','tainacan') ?>');

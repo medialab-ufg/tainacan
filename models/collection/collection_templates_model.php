@@ -235,7 +235,7 @@ class CollectionTemplatesModel extends CollectionModel {
                     'title' => _t('Collection default'), 
                     'key' => 'collection_default', 
                     'type' => 'tainacan',
-                    'select' => ($collection_default && $collection_default=='false') ? false : true,
+                    'select' => ($collection_default && $collection_default==='true') ? false : true,
                     'expand' => true, 
                     'addClass' => 'color1');
             foreach ($tainacan_templates as $tainacan_template) {

@@ -73,11 +73,11 @@ $post_thumb = get_the_post_thumbnail($socialdb_logo, 'thumbnail');
                           <h5 style="font-weight: bolder"> <?php _e('Habilitate Collection template', 'tainacan'); ?></h5>
                         <div id="dynatree-collection-templates"></div>
                     </div>
-                    <div class="form-group row"  id="show_collection_empty" style="display: none;">
+                    <!--div class="form-group row"  id="show_collection_empty" style="display: none;">
                         <input type="checkbox" value="disabled" name="disable_empty_collection"
                             <?php echo (get_option('disable_empty_collection')=='true')?'checked="checked"':''; ?> />
                         &nbsp<?php _e('Disable Empty Collection', 'tainacan'); ?>
-                    </div>
+                    </div -->
                 </div>
             </div>
             <!---------------- Cache --------------------------------->

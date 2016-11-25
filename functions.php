@@ -3017,4 +3017,4 @@ if ( ! defined("MANUAL_TAINACAN_URL") ) {
 }
 
 /************* Remove o post type das colecoes ********************/
-include_once 'extras/remove-slug-post/remove-slug-custom-post-type.php';
+//include_once 'extras/remove-slug-post/remove-slug-custom-post-type.php';
