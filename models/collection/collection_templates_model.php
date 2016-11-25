@@ -230,6 +230,14 @@ class CollectionTemplatesModel extends CollectionModel {
         $tainacan_templates = $this->get_tainacan_templates();
         if($tainacan_templates && is_array($tainacan_templates)){
             $metas = unserialize(get_option('socialdb_tainacan_templates'));
+            $collection_default = get_option('disable_empty_collection');
+            $dynatree['children'][]  = array(
+                    'title' => _t('Collection default'), 
+                    'key' => 'collection_default', 
+                    'type' => 'tainacan',
+                    'select' => ($collection_default && $collection_default=='false') ? false : true,
+                    'expand' => true, 
+                    'addClass' => 'color1');
             foreach ($tainacan_templates as $tainacan_template) {
                  $dynatree['children'][]  = array(
                     'title' => $tainacan_template['title'], 

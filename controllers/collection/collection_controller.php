@@ -258,17 +258,21 @@ class CollectionController extends Controller {
                     }
                     update_option('socialdb_user_templates', serialize($metas));
                 else:  
-                    $metas = unserialize(get_option('socialdb_tainacan_templates'));
-                    if($metas && is_array($metas) && in_array($data['key'], $metas)){
-                        $key = array_search($data['key'], $metas);
-                        unset($metas[$key]);
-                    }else{
-                        if(!is_array($metas))
-                            $metas = [];
+                    if($data['key']== 'collection_default'){
                         
-                        $metas[] = $data['key'];
+                    }else{
+                        $metas = unserialize(get_option('socialdb_tainacan_templates'));
+                        if($metas && is_array($metas) && in_array($data['key'], $metas)){
+                            $key = array_search($data['key'], $metas);
+                            unset($metas[$key]);
+                        }else{
+                            if(!is_array($metas))
+                                $metas = [];
+
+                            $metas[] = $data['key'];
+                        }
+                        update_option('socialdb_tainacan_templates', serialize($metas));
                     }
-                    update_option('socialdb_tainacan_templates', serialize($metas));
                 endif;
                 break;
             /************************* Tabs ***********************************/
