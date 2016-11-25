@@ -1704,7 +1704,7 @@ class Model {
         fclose($df);
     }
     
-    public function create_zip_by_folder($folder, $from = 'package/', $name = 'package') {
+    public function create_zip_by_folder($folder, $from = 'package/', $name = 'package',$only_file = false) {
         $rootPath = realpath($folder);
         // Initialize archive object
         $zip = new ZipArchive();
@@ -1719,7 +1719,7 @@ class Model {
             if (!$file->isDir()) {
                 // Get real and relative path for current file
                 $filePath = $file->getRealPath();
-                $relativePath = substr($filePath, strlen($rootPath) + 1);
+                $relativePath = (!$only_file) ? substr($filePath, strlen($rootPath) + 1) : basename($filePath);
 
                 // Add current file to archive
                     $zip->addFile($filePath, $relativePath);
