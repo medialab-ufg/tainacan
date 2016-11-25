@@ -52,7 +52,6 @@ class LogHelper extends ViewHelper {
             echo "<strong> Name: </strong>" . $user_data->data->user_nicename . "<br />";
             echo "<strong> User: </strong>" . $user_data->data->display_name . "<br />";
             echo "<strong> e-mail: </strong>" . $user_data->data->user_email . "<br />";
-
         }
     }
 }

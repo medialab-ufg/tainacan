@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: socialdb\n"ß
-"POT-Creation-Date: 2016-11-24 15:56-0200\n"
-"PO-Revision-Date: 2016-11-24 15:56-0200\n"
+"Project-Id-Version: socialdb\n"
+"POT-Creation-Date: 2016-11-24 16:54-0200\n"
+"PO-Revision-Date: 2016-11-24 16:55-0200\n"
 "Last-Translator: Rodrigo de Oliveira <webmaster@rodrigodeoliveira.net>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -489,7 +489,7 @@ msgstr "Comentários"
 msgid "Items"
 msgstr "Itens "
 
-#: controllers/log/log_controller.php:26 functions.php:1472
+#: controllers/log/log_controller.php:29 functions.php:1472
 #: helpers/log/log_helper.php:17 models/collection/collection_model.php:782
 #: models/collection/visualization_model.php:181
 #: models/collection/visualization_model.php:267
@@ -510,7 +510,7 @@ msgstr "Itens "
 msgid "Tags"
 msgstr "Tags"
 
-#: controllers/log/log_controller.php:28 helpers/log/log_helper.php:18
+#: controllers/log/log_controller.php:31 helpers/log/log_helper.php:18
 msgid "Import / Export"
 msgstr "Importar / Exportar"
 
@@ -6346,7 +6346,7 @@ msgstr "Histórico de versão"
 msgid "Version"
 msgstr "Versão"
 
-#: views/object/list_versions.php:36
+#: views/object/list_versions.php:36 views/statistics/js/list_js.php:18
 msgid "Editor"
 msgstr "Editor"
 
@@ -7935,6 +7935,38 @@ msgstr "Editar Mapeamento do Instagram "
 #: views/social_network/list.php:155
 msgid "Edit Vimeo Mapping"
 msgstr "Editar Mapeamento do Vimeo"
+
+#: views/statistics/js/list_js.php:6
+msgid "Added"
+msgstr "Adicionados"
+
+#: views/statistics/js/list_js.php:7
+msgid "Edited"
+msgstr "Editados"
+
+#: views/statistics/js/list_js.php:8
+msgid "Viewed"
+msgstr "Visualizados"
+
+#: views/statistics/js/list_js.php:9
+msgid "Downloaded"
+msgstr "Baixados"
+
+#: views/statistics/js/list_js.php:10
+msgid "Deleted"
+msgstr "Deletados"
+
+#: views/statistics/js/list_js.php:11
+msgid "Commented"
+msgstr "Comentados"
+
+#: views/statistics/js/list_js.php:12
+msgid "Voted"
+msgstr "Votados"
+
+#: views/statistics/js/list_js.php:17
+msgid "Author"
+msgstr "Autor"
 
 #: views/statistics/list.php:17
 msgid "Period"

@@ -50,6 +50,8 @@ class Log extends Model {
                 return ['color' => '#8DC53E', 'events' => self::getDefaultFields()];
             case 'tags':
                 return ['color' => 'orange', 'events' => self::getDefaultFields()];
+            case 'user':
+                return ['color' => '#E63333', 'events' => ['view', 'comment', 'vote'] ];
             case 'status':
                 return ['color' => '#79A7CF', 'events' => ['login', 'register', 'delete_user'] ];
             case 'profile':
