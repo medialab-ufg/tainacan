@@ -43,7 +43,11 @@ class ExportAIPModel extends ThemeOptionsModel {
      */
     public function get_moderators_collection_id($collection_id) {
         $meta = $this->sdb_get_post_meta_by_value($collection_id, 'socialdb_collection_moderator');
-        return $meta[0]->meta_id;
+        if($meta){
+            return (is_array($meta)) ? $meta[0]->meta_id : $meta->meta_id;
+        }else{
+            return $collection_id;
+        }
     }
     
     /**
@@ -90,7 +94,7 @@ class ExportAIPModel extends ThemeOptionsModel {
         $collection_parents = [];
         $wp_posts = $wpdb->prefix . "posts";
         $wp_postmeta = $wpdb->prefix . "postmeta";
-        if($collection_id!= get_option('collection_root_id')){
+        if($collection_id != get_option('collection_root_id')){
             $query = "
                         SELECT p.*,pm.meta_value FROM $wp_posts p
                         INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id    

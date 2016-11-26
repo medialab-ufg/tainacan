@@ -82,7 +82,7 @@ class ExportAIPCommunityModel extends ExportAIPModel {
                       ';
         $this->generate_xml_groups($commnutiy);
         $this->getFileThumbnail($commnutiy->ID);
-        $this->generate_collections_xml();
+        $this->generate_collections_xml($commnutiy->ID);
         $this->XML .= '</mets>';
     }
     
@@ -135,6 +135,7 @@ class ExportAIPCommunityModel extends ExportAIPModel {
      * busca no banco os usuario para cada role
      */
     public function get_users_moderators(WP_Post $community) {
+        $valor = '';
         $blogusers = $this->get_moderators($community->ID);
         if($blogusers){
             $valor .= '<Members>';
@@ -181,7 +182,7 @@ class ExportAIPCommunityModel extends ExportAIPModel {
         foreach ($collections as $collection):
         $this->XML .= '<div ID="div_'.$index++.'" TYPE="DSpace COLLECTION">';
         $this->XML .= '<mptr ID="mptr_'.$index++.'" LOCTYPE="HANDLE" xlink:type="simple" xlink:href="'.$this->prefix.'/'. $collection->ID.'"/>';
-        $this->XML .= '<mptr ID="mptr_'.$index++.'" LOCTYPE="URL" xlink:type="simple" xlink:href="COMMUNITY@'.$this->prefix.'-'. $collection->ID.'.zip"/>';
+        $this->XML .= '<mptr ID="mptr_'.$index++.'" LOCTYPE="URL" xlink:type="simple" xlink:href="COLLECTION@'.$this->prefix.'-'. $collection->ID.'.zip"/>';
         $this->XML .= '</div>';
         endforeach;
         $this->XML .= '</div>';
