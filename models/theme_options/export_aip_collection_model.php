@@ -2,37 +2,38 @@
 /**
  * Model que realiza a exportacao do zip AIP do tainacan
  */
-class ExportAIPCommunityModel extends ExportAIPModel {
+class ExportAIPCollectionModel extends ExportAIPModel {
     
     public $XML;
-    public $name_folder_community;
+    public $name_folder_collection;
     
     /**
      * metodo que executa os demais para criacao do mets e do zip do repositorio
      */
-    public function create_communities() {
-        $communities = $this->get_extendable_collections();
-        $communities[] = get_post(get_option('collection_root_id'));
-        foreach ($communities as $community_raw) {
-            $community = get_post($community_raw->ID);
-            $this->name_folder_community = 'COMMUNITY@'.$this->prefix.'-'. $community->ID;
-            $dir_community = $this->dir.'/'.$this->name_folder.'/'.$this->name_folder_community;
-            $this->recursiveRemoveDirectory($dir_community);
-            if(!is_dir($dir_community.'/')){
-                 mkdir($dir_community);
+    public function create_collections() {
+        $collections = $this->get_all_collections();
+        foreach ($collections as $collection) {
+            if($collection  && $collection->ID && $collection->ID == get_option('collection_root_id')){
+                continue;
             }
-            $this->generate_xml($community);
-            $this->create_xml_file($dir_community.'/mets.xml', $this->XML);
-            $this->create_zip_by_folder($this->dir.'/'.$this->name_folder.'/', $this->name_folder_community.'/', $this->name_folder_community,true);
-            $this->recursiveRemoveDirectory($dir_community);
+            $this->name_folder_collection = 'COLLECTION@'.$this->prefix.'-'. $community->ID;
+            $dir_collection = $this->dir.'/'.$this->name_folder.'/'.$this->name_folder_collection;
+            $this->recursiveRemoveDirectory($dir_collection);
+            if(!is_dir($dir_collection.'/')){
+                 mkdir($dir_collection);
+            }
+            $this->generate_xml(get_post($collection->ID));
+            $this->create_xml_file($dir_collection.'/mets.xml', $this->XML);
+            $this->create_zip_by_folder($this->dir.'/'.$this->name_folder.'/', $this->name_folder_collection.'/', $this->name_folder_collection,true);
+            $this->recursiveRemoveDirectory($dir_collection);
         }
         
     }
     
     
-    public function generate_xml(WP_Post $commnutiy){
+    public function generate_xml(WP_Post $collection){
         $this->XML = '<?xml version="1.0" encoding="utf-8" standalone="no"?>';
-        $this->XML .= '<mets ID="DSpace_COMMUNITY_'.$this->prefix.'-'.$commnutiy->ID.'" OBJID="hdl:'.$this->prefix.'/'.$commnutiy->ID.'" TYPE="DSpace COMMUNITY" '
+        $this->XML .= '<mets ID="DSpace_COLLECTION_'.$this->prefix.'-'.$collection->ID.'" OBJID="hdl:'.$this->prefix.'/'.$collection->ID.'" TYPE="DSpace COLLECTION" '
                 . 'PROFILE="http://www.dspace.org/schema/aip/mets_aip_1_0.xsd" '
                 . 'xmlns="http://www.loc.gov/METS/" '
                 . 'xmlns:xlink="http://www.w3.org/1999/xlink" '
@@ -54,13 +55,13 @@ class ExportAIPCommunityModel extends ExportAIPModel {
                          <mods:mods xmlns:mods="http://www.loc.gov/mods/v3" 
                          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
                          xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-1.xsd">
-                         <mods:note>'.$commnutiy->post_content.'</mods:note>
+                         <mods:note>'.$collection->post_content.'</mods:note>
                         <mods:abstract />
                         <mods:tableOfContents />
-                        <mods:identifier type="uri">'. get_the_permalink($commnutiy->ID).'</mods:identifier>
+                        <mods:identifier type="uri">'. get_the_permalink($collection->ID).'</mods:identifier>
                         <mods:accessCondition type="useAndReproduction" />
                         <mods:titleInfo>
-                          <mods:title>'.$commnutiy->post_title.'</mods:title>
+                          <mods:title>'.$collection->post_title.'</mods:title>
                         </mods:titleInfo>
                       </mods:mods></xmlData>
                         </mdWrap>
@@ -68,13 +69,13 @@ class ExportAIPCommunityModel extends ExportAIPModel {
                       ';
         $this->XML .= '<dmdSec ID="dmdSec_2">
                             <mdWrap MDTYPE="OTHER" OTHERMDTYPE="DIM">
-                             <xmlData xmlns:dim="http://www.dspace.org/xmlns/dspace/dim"><dim:dim xmlns:dim="http://www.dspace.org/xmlns/dspace/dim" dspaceType="Community">
-                                <dim:field mdschema="dc" element="description" >'.$commnutiy->post_content.'</dim:field>
+                             <xmlData xmlns:dim="http://www.dspace.org/xmlns/dspace/dim"><dim:dim xmlns:dim="http://www.dspace.org/xmlns/dspace/dim" dspaceType="COLLECTION">
+                                <dim:field mdschema="dc" element="description" >'.$collection->post_content.'</dim:field>
                                 <dim:field mdschema="dc" element="description" qualifier="abstract" />
                                 <dim:field mdschema="dc" element="description" qualifier="tableofcontents" />
-                                <dim:field mdschema="dc" element="identifier" qualifier="uri">hdl:'.$this->prefix.'/'.$commnutiy->ID.'</dim:field>
+                                <dim:field mdschema="dc" element="identifier" qualifier="uri">hdl:'.$this->prefix.'/'.$collection->ID.'</dim:field>
                                 <dim:field mdschema="dc" element="rights" />
-                                <dim:field mdschema="dc" element="title">'.$commnutiy->post_title.'</dim:field>
+                                <dim:field mdschema="dc" element="title">'.$collection->post_title.'</dim:field>
                                 </dim:dim>
                               </xmlData>
                             </mdWrap>
@@ -89,7 +90,7 @@ class ExportAIPCommunityModel extends ExportAIPModel {
     /**
      *  gera o xml dos grupos do tainacan
      */
-    public function generate_xml_groups(WP_Post $commnutiy){
+    public function generate_xml_groups(WP_Post $collection){
         $this->XML .= '
             <amdSec ID="amd_3">
                 <techMD ID="techMD_5">
@@ -97,8 +98,8 @@ class ExportAIPCommunityModel extends ExportAIPModel {
                   <xmlData xmlns:dsroles="http://www.dspace.org/xmlns/dspace/dspace-roles">
                     <DSpaceRoles>
                          <Groups>
-                             <Group ID="'.$this->get_moderators_collection_id($commnutiy->ID).'" Name="administrator_'.$commnutiy->ID.'">'.
-                                        $this->get_users_moderators($commnutiy)
+                             <Group ID="'.$this->get_moderators_collection_id($collection->ID).'" TYPE="SUBMIT" Name="administrator_'.$collection->ID.'">'.
+                                        $this->get_users_moderators($collection)
                             .'</Group>
                          </Groups>'; 
         $this->XML .= '</DSpaceRoles>
@@ -107,12 +108,19 @@ class ExportAIPCommunityModel extends ExportAIPModel {
               </techMD>
               <rightsMD ID="rightsMD_9">
                     <mdWrap MDTYPE="OTHER" OTHERMDTYPE="METSRIGHTS">
-                        <xmlData xmlns:rights="http://cosimo.stanford.edu/sdr/metsrights/" xsi:schemaLocation="http://cosimo.stanford.edu/sdr/metsrights/ http://cosimo.stanford.edu/sdr/metsrights.xsd"><rights:RightsDeclarationMD xmlns:rights="http://cosimo.stanford.edu/sdr/metsrights/" RIGHTSCATEGORY="LICENSED">
+                        <xmlData xmlns:rights="http://cosimo.stanford.edu/sdr/metsrights/" xsi:schemaLocation="http://cosimo.stanford.edu/sdr/metsrights/ http://cosimo.stanford.edu/sdr/metsrights.xsd">
+                        <rights:RightsDeclarationMD xmlns:rights="http://cosimo.stanford.edu/sdr/metsrights/" RIGHTSCATEGORY="LICENSED">
                             <rights:Context in-effect="true" CONTEXTCLASS="GENERAL PUBLIC">
                               <rights:Permissions DISCOVER="true" DISPLAY="true" MODIFY="false" DELETE="false" />
                             </rights:Context>
+                            <rights:Context CONTEXTCLASS="GENERAL PUBLIC" in-effect="true">
+                                <rights:Permissions DELETE="false" MODIFY="false" DISPLAY="true" DISCOVER="true" OTHERPERMITTYPE="READ ITEM CONTENTS" OTHER="true"/>
+                            </rights:Context>
+                            <rights:Context CONTEXTCLASS="GENERAL PUBLIC" in-effect="true">
+                                <rights:Permissions DELETE="false" MODIFY="false" DISPLAY="true" DISCOVER="true" OTHERPERMITTYPE="READ FILE CONTENTS" OTHER="true"/>
+                            </rights:Context>
                             <rights:Context in-effect="true" CONTEXTCLASS="MANAGED GRP">
-                              <rights:UserName USERTYPE="GROUP">administrator_'.$commnutiy->ID.'</rights:UserName>
+                              <rights:UserName USERTYPE="GROUP">administrator_'.$collection->ID.'</rights:UserName>
                               <rights:Permissions DISCOVER="true" DISPLAY="true" COPY="true" DUPLICATE="true" MODIFY="true" DELETE="true" PRINT="true" OTHER="true" OTHERPERMITTYPE="ADMIN" />
                             </rights:Context>
                           </rights:RightsDeclarationMD>
@@ -122,8 +130,8 @@ class ExportAIPCommunityModel extends ExportAIPModel {
                 <sourceMD ID="sourceMD_10">
                  <mdWrap MDTYPE="OTHER" OTHERMDTYPE="AIP-TECHMD">
                     <xmlData xmlns:dim="http://www.dspace.org/xmlns/dspace/dim"><dim:dim xmlns:dim="http://www.dspace.org/xmlns/dspace/dim" dspaceType="COMMUNITY">
-                        <dim:field mdschema="dc" element="identifier" qualifier="uri">hdl:'.$this->prefix.'/'.$commnutiy->ID.'</dim:field>
-                        <dim:field mdschema="dc" element="relation" qualifier="isPartOf">hdl:'.$this->prefix.'/0</dim:field>
+                        <dim:field mdschema="dc" element="identifier" qualifier="uri">hdl:'.$this->prefix.'/'.$collection->ID.'</dim:field>
+                        <dim:field mdschema="dc" element="relation" qualifier="isPartOf">'.$this->is_children_collection($collection->ID).'</dim:field>
                       </dim:dim>
                     </xmlData>
                  </mdWrap>
@@ -146,6 +154,18 @@ class ExportAIPCommunityModel extends ExportAIPModel {
             $valor .= '</Members>';
         }
         return $valor;
+    }
+    
+    
+    public function is_children_collection($collection_id) {
+        $meta = get_post_meta($collection_id, 'socialdb_collection_parent' , true);
+        if((!$meta || $meta=='' || !is_numeric($meta))   ){
+            return 'hdl:'.$this->prefix.'/'.get_option('collection_root_id');
+        }else{
+            $collection = $this->get_collection_by_category_root($meta);
+            $collection = (is_array($collection)) ? $collection[0] : $collection;
+            return 'hdl:'.$this->prefix.'/'.$collection->ID;
+        }
     }
     
     /**
