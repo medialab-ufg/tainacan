@@ -1,8 +1,10 @@
 <?php
 get_header();
 $options = get_option('socialdb_theme_options');
+$collection_default = get_option('disable_empty_collection');
 ?>
 <!-- TAINACAN: hiddeNs responsaveis em realizar acoes do repositorio -->
+<input type="hidden" id="show_collection_default" name="show_collection_default" value="<?php echo (!$collection_default || $collection_default === 'false') ? 'show' : 'hide'; ?>">
 <input type="hidden" id="src" name="src" value="<?php echo get_template_directory_uri() ?>">
 <input type="hidden" id="repository_main_page" name="repository_main_page" value="true">
 <input type="hidden" id="info_messages" name="info_messages" value="<?php

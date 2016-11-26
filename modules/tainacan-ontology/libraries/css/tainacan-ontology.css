@@ -104,6 +104,12 @@
 .default span.dynatree-icon{
     background-image: url("../images/individue.png");
 }
+.attribute span.dynatree-icon{
+     background-image: url("../images/attribute.png");
+}
+.relation span.dynatree-icon{
+     background-image: url("../images/relation.png");
+}
 
 
 #form{

@@ -2,7 +2,7 @@
 /**
  * Modulo de Ontologia do Tainacan
  * 
- * 
+ * #0 - Alterando valores do total de nos e o nome da categoria root do repositorio
  * #1 - ADICIONANDO OS SCRIPTS DESTE MODULO 
  * #2 - ALTERACOES HOME DO ITEM  
  * #3 - ALTERACOES CRIACAO DA COLECAO
@@ -21,6 +21,7 @@
  * #16 - ADICIONA O BOTAO DE EDITAR PROPRIEDADE NA PAGINA DA PROPRIEDADE
  * #17 - ADICIONA NO MENU DA COLECAO A OPCAO DE FILTROS
  * #18 - ALTERA O THUMBNAIL DOS ITEMS/COLECAO
+ * #19 - OPERACAO DE METADADOS DE CATEGORIA
  * 
  * @author: EDUARDO HUMBERTO
  */
@@ -30,6 +31,17 @@ define('MODULE_ONTOLOGY', 'tainacan-ontology');
 define('ONTOLOGY_CONTROLLERS', get_template_directory_uri() . '/modules/' . MODULE_ONTOLOGY );
 load_theme_textdomain("tainacan", dirname(__FILE__) . "/languages");
 
+################ #0 Alterando valores do total de nos e o nome da categoria root do repositorio ##########################
+
+function ontology_alter_dynatree_number_of_items($name) {
+    return 50;
+}
+add_filter( 'alter_dynatree_number_of_items', 'ontology_alter_dynatree_number_of_items', 10, 3 );
+
+function ontology_alter_category_root_repository_name($name) {
+    return 'socialdb_taxonomy';
+}
+add_filter( 'alter_category_root_repository_name', 'ontology_alter_category_root_repository_name', 10, 3 );
 
 ################ #1 ADICIONANDO OS SCRIPTS DESTE MODULO ###########################
 add_action('wp_enqueue_scripts', 'tainacan_ontology_js');
@@ -1430,8 +1442,8 @@ add_action('menu_collection_property_and_filters_configuration', 'hide_field');
 add_action('menu_collection_property_configuration', 'hide_field');
 add_action('menu_collection_social_configuration', 'hide_field');
 add_action('menu_collection_license', 'hide_field');
-add_action('menu_collection_import', 'hide_field');
-add_action('menu_collection_export', 'hide_field');
+//add_action('menu_collection_import', 'hide_field');
+//add_action('menu_collection_export', 'hide_field');
 /******************************************************************************/
 /**************** ESCONDER CAMPOS DO MENU DO REPOSITORIO ***********/
 add_action('menu_repository_social_api', 'hide_field');
@@ -1463,6 +1475,9 @@ add_action('home_item_license_div', 'hide_field');
 add_action('home_item_tag_div', 'hide_field');
 add_action('home_item_attachments_div', 'hide_field');
 add_action('home_item_content_div', 'hide_field');
+/******************************************************************************/
+/****************************** Category edit *********************************/
+add_action('synonyms_category_view', 'hide_field');
 /******************************************************************************/
 function hide_field() {
     echo 'style="display:none;"';                          
@@ -1999,7 +2014,7 @@ function add_filter_ontology_menu() {
 }
 #### FIM -  ADICIONA NO MENU DA COLECAO A OPCAO DE FILTROS #####################
 
-############ #18 - ALTERA O THUMBNAIL DOS ITEMS/COLEÇÕES ################################
+############ #18 - ALTERA O THUMBNAIL DOS ITEMS/COLEÇÕES #######################
 function ontology_alter_thumbnail_items($type) {
      $link =  get_template_directory_uri() . '/modules/' . MODULE_ONTOLOGY . "/libraries/images/thumbnail.png"; 
     return $link;
@@ -2012,3 +2027,10 @@ function ontology_alter_thumbnail_collection($type) {
 }
 add_filter( 'alter_thumbnail_collections', 'ontology_alter_thumbnail_collection', 10, 3 );
 ################################################################################
+
+############ #19 - OPERCAO DE METADADOS DE CATEGORIA ###########################
+function ontology_tainacan_operation_metadata_category() {
+    return 'list';
+}
+add_filter( 'tainacan_operation_metadata_category', 'ontology_tainacan_operation_metadata_category');
+

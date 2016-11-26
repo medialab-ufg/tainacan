@@ -258,7 +258,12 @@ class ObjectFileModel extends Model {
                     }
                     $obj['tags'] = implode(',', $tags_name);
                 }
+                $properties = $this->get_properties_object($item->ID); 
+                if($properties && is_array($properties)){
+                    $obj['properties'] = $properties;
+                }
                 $type = get_post_meta($item_id,'socialdb_object_dc_type',true);
+                $obj['source'] = get_post_meta($item_id,'socialdb_object_dc_source',true);;
                 if($type=='video'){
                     $result['videos'][] = $obj;   
                 }elseif($type=='image'){

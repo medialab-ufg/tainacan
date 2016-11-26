@@ -25,11 +25,9 @@ class TagModel extends Model{
 	public function add($tag_name,$collection_id,$description = ''){
             $is_new = $this->verify_tag($tag_name,$collection_id);
             if (!$is_new) {
-                $new_tag =wp_insert_term( trim($tag_name),
-                           'socialdb_tag_type',
-                                 array('parent'=>  $this->parent->term_id,
-                                     'description'=>$description,
-                                   'slug'=>  sanitize_title(remove_accent($tag_name)).'_'.$collection_id));
+                $new_tag = wp_insert_term( trim($tag_name), 'socialdb_tag_type',
+                    array('parent' =>  $this->parent->term_id, 'description'=>$description,
+                        'slug' =>  sanitize_title(remove_accent($tag_name)).'_'.$collection_id) );
             }else {
                $new_tag = socialdb_term_exists_by_slug(sanitize_title(remove_accent($tag_name)).'_'.$collection_id, 'socialdb_tag_type');
             }
@@ -66,21 +64,23 @@ class TagModel extends Model{
             return true;
         }
     }
-        /**
-        * function add($data)
-        * @param mix $data  O id do colecao
-        * @return json  
-        * 
-        * Autor: Eduardo Humberto 
-        */
-	public function add_tag_object($tag_id,$collection_id){
-            $result = wp_set_object_terms($collection_id, array((int)$tag_id), 'socialdb_tag_type',true);
-            if($result){    
-                $data['success'] = 'true';
-            }else{
-                $data['success'] = 'false';
-            }
-            return $data;
+
+    /**
+    * function add($data)
+    * @param mix $data  O id do colecao
+    * @return json
+    *
+    * Autor: Eduardo Humberto
+    */
+	public function add_tag_object($tag_id,$collection_id) {
+        $result = wp_set_object_terms($collection_id, array((int)$tag_id), 'socialdb_tag_type',true);
+        if($result){
+            $data['success'] = 'true';
+            // Log::addLog( ['user_id' => get_current_user_id(), 'event_type' => 'tags', 'event' => 'add', 'resource_id' => $tag_id] );
+        } else {
+            $data['success'] = 'false';
+        }
+        return $data;
 	}
 	/**
         * function update($data)
@@ -89,35 +89,31 @@ class TagModel extends Model{
         * metodo que atualiza os dados da colecao
         * Autor: Eduardo Humberto 
         */
-	public function update($tag_id,$tag_name,$description = ''){
-            if(strpos($tag_id, '_tag') !== false){
-                $tag_id = str_replace('_tag', '', $tag_id);
-            }
-            $update_tag = wp_update_term($tag_id, 'socialdb_tag_type', array(
-                'description'=>$description,
-                'name' => $tag_name
-                    
-            ));
-            if(!is_wp_error($update_tag)&&$update_tag['term_id']){// se a tag foi atualizada com sucesso
-                $data['success'] = 'true';
-                $data['term_id'] = $update_tag['term_id'];
-            }else{
-                 $data['success'] = 'false';
-            }
-           return json_encode($data);
+	public function update($tag_id,$tag_name,$description = '') {
+        if(strpos($tag_id, '_tag') !== false) { $tag_id = str_replace('_tag', '', $tag_id); }
+        $update_tag = wp_update_term($tag_id, 'socialdb_tag_type', array('description'=>$description, 'name'=>$tag_name));
+        if(!is_wp_error($update_tag)&&$update_tag['term_id']){// se a tag foi atualizada com sucesso
+            $data['success'] = 'true';
+            $data['term_id'] = $update_tag['term_id'];
+            // Log::addLog( ['user_id' => get_current_user_id(), 'event_type' => 'tags', 'event' => 'edit', 'resource_id' => $update_tag['term_id']] );
+        } else {
+            $data['success'] = 'false';
+        }
+        return json_encode($data);
 	}
-        /* function delete() */
+
 	/* @param array $data
-        /* @return json com os dados da tag excluida.
+    /* @return json com os dados da tag excluida.
 	/* exclui a tag */
 	/* @author Eduardo */
 	public function delete($data){;
-            if(wp_delete_term( $data['tag_delete_id'], 'socialdb_tag_type' )){
-                    $data['success'] = 'true';
-            }else{
-                    $data['success'] = 'false';
-            }
-            return json_encode($data);
+        if(wp_delete_term( $data['tag_delete_id'], 'socialdb_tag_type')){
+            $data['success'] = 'true';
+            // Log::addLog( ['user_id' => get_current_user_id(), 'event_type' => 'tags', 'event' => 'delete', 'resource_id' => $data['tag_delete_id']] );
+        }else{
+            $data['success'] = 'false';
+        }
+        return json_encode($data);
 	}
 	
         

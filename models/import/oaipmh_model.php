@@ -377,9 +377,8 @@ class OAIPMHModel extends Model {
                 $record_response['files'] = [];
                 $record_response = [];
             }
-        }  catch (Exception $e){
-            //VAR_DUMP($response_xml_data,$data['url'] . '?verb=ListRecords&resumptionToken=' . $data['token']);
-        }
+            Log::addLog(['collection_id' => $data['collection_id'],'user_id' => get_current_user_id(),'event_type' => 'import', 'event' => 'access_oai_pmh']);
+        }  catch (Exception $e){ }
         return $json_response;
     }
     

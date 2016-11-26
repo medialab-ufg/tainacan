@@ -33,7 +33,7 @@ global $config;
 
     </div>
     <div class="col-md-6">
-        <form  id="submit_form_category">
+        <form id="submit_form_category">
             <div class="create_form-group">
                 <label for="category_name"><?php _e('Category name', 'tainacan'); ?></label>
                 <input maxlength="50" type="text" class="form-control" id="category_name" name="category_name" required="required" placeholder="<?php _e('Category name', 'tainacan'); ?>">
@@ -45,9 +45,7 @@ global $config;
             </div>
             <div class="form-group">
                  <label for="category_parent_name"><?php _e('Category description', 'tainacan'); ?>&nbsp;<span style="font-size: 10px;">(<?php _e('Optional', 'tainacan'); ?>)</span></label>
-                <textarea class="form-control" 
-                          id="category_description" 
-                          placeholder="<?php _e('Describe your category', 'tainacan'); ?>" 
+                <textarea class="form-control" id="category_description" placeholder="<?php _e('Describe your category', 'tainacan'); ?>"
                           name="socialdb_event_term_description" ></textarea>    
             </div>
             <div class="form-group">
@@ -67,23 +65,23 @@ global $config;
             <?php if (isset($config['mode']) && $config['mode'] == 1) { ?>
                 <!------------ Modo GESTAO ARQUIVISTICA ----------------->
                 <div class="form-inline form-group">
-                    <label  for="current_phase"><?php _e('Current Phase', 'tainacan'); ?></label><br>
-                    <input onchange="handleChange(this);" type="number" class="form-control input-sm"  id="current_phase_year" placeholder="<?php _e('Year(s)', 'tainacan'); ?>" name="current_phase_year" >
-                    <input  onchange="handleChange(this);" type="number" class="form-control input-sm" id="current_phase_month" placeholder="<?php _e('Month(s)', 'tainacan'); ?>" name="current_phase_month" >
+                    <label for="current_phase"><?php _e('Current Phase', 'tainacan'); ?></label><br>
+                    <input onchange="handleChange(this);" type="number" class="form-control input-sm" id="current_phase_year" placeholder="<?php _e('Year(s)', 'tainacan'); ?>" name="current_phase_year" >
+                    <input onchange="handleChange(this);" type="number" class="form-control input-sm" id="current_phase_month" placeholder="<?php _e('Month(s)', 'tainacan'); ?>" name="current_phase_month" >
                 </div>
                 <div class="form-inline form-group">
                     <label for="intermediate_phase"><?php _e('Intermediate Phase', 'tainacan'); ?></label><br>
-                    <input  onchange="handleChange(this);" class="form-control input-sm" type="number"  id="intermediate_phase_year" placeholder="<?php _e('Year(s)', 'tainacan'); ?>" name="intermediate_phase_year" >
-                    <input  onchange="handleChange(this);" class="form-control input-sm" type="number"  id="intermediate_phase_month" placeholder="<?php _e('Month(s)', 'tainacan'); ?>" name="intermediate_phase_month" >
+                    <input onchange="handleChange(this);" class="form-control input-sm" type="number" id="intermediate_phase_year" placeholder="<?php _e('Year(s)', 'tainacan'); ?>" name="intermediate_phase_year" >
+                    <input onchange="handleChange(this);" class="form-control input-sm" type="number" id="intermediate_phase_month" placeholder="<?php _e('Month(s)', 'tainacan'); ?>" name="intermediate_phase_month" >
                 </div>
                 <div class="form-inline form-group">
                     <label for="destination"><?php _e('Destination', 'tainacan'); ?></label><br>
-                    <input class="form-control" type="radio"  id="destination_permanent_guard" value="permanent_guard"  name="destination" ><?php _e('Permanent guard', 'tainacan') ?>
-                    <input class="form-control" type="radio"  id="destination_elimination" value="elimination" name="destination" ><?php _e('Elimination', 'tainacan') ?>
+                    <input class="form-control" type="radio" id="destination_permanent_guard" value="permanent_guard" name="destination" ><?php _e('Permanent guard', 'tainacan') ?>
+                    <input class="form-control" type="radio" id="destination_elimination" value="elimination" name="destination" ><?php _e('Elimination', 'tainacan') ?>
                 </div>
                 <div class="form-group">
                     <label for="classification_code"><?php _e('Classification Code', 'tainacan'); ?></label>
-                    <input  type="text" class="form-control" id="classification_code" placeholder="<?php _e('Type here the category classification code', 'tainacan'); ?>" name="classification_code" >
+                    <input type="text" class="form-control" id="classification_code" placeholder="<?php _e('Type here the category classification code', 'tainacan'); ?>" name="classification_code" >
                 </div>
                 <div class="form-group">
                     <label for="classification_code"><?php _e('Observation', 'tainacan'); ?></label>

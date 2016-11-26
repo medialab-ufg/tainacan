@@ -1,8 +1,9 @@
 <?php
-
+ini_set('max_input_vars', '10000');
 require_once(dirname(__FILE__) . '../../../models/theme_options/theme_options_model.php');
 require_once(dirname(__FILE__) . '../../../models/theme_options/populate_model.php');
 require_once(dirname(__FILE__) . '../../../models/collection/collection_templates_model.php');
+require_once(dirname(__FILE__) . '../../../models/theme_options/export_aip_model.php');
 require_once(dirname(__FILE__) . '../../general/general_controller.php');
 
 class ThemeOptionsController extends Controller {
@@ -99,6 +100,7 @@ class ThemeOptionsController extends Controller {
                 }
                 break;
             case "import_dspace_aip":
+                ini_set('max_execution_time', '0');
                 $file = $data['file'];
                 $verify = $theme_options_model->verify_aip_file($file);
                 if ($verify) {
@@ -106,15 +108,53 @@ class ThemeOptionsController extends Controller {
                     //site
                     if (file_exists($unzip_path . '/sitewide-aip.zip')) {
                         $unzip_site = $theme_options_model->unzip_aip_general($unzip_path . '/', 'sitewide-aip.zip');
-                        $xml = (file_exists($unzip_site.'/mets.xml') ? simplexml_load_file($unzip_site.'/mets.xml') : null);
-                        $theme_options_model->read_site_xml($xml);
+                        $xml = (file_exists($unzip_site . '/mets.xml') ? simplexml_load_file($unzip_site . '/mets.xml') : null);
+                        if ($xml != null) {
+                            $theme_options_model->read_site_xml($xml);
+                            $theme_options_model->recursiveRemoveDirectory($unzip_site);
+                        }
                         //var_dump($xml);
                     } else {
                         return false;
                     }
                     //community
+                    $community_files = scandir($unzip_path);
+                    foreach ($community_files as $community_file) {
+                        if (strpos($community_file, 'COMMUNITY') !== false) {
+                            $unzip_com = $theme_options_model->unzip_aip_general($unzip_path . '/', $community_file);
+                            $xml = (file_exists($unzip_com . '/mets.xml') ? simplexml_load_file($unzip_com . '/mets.xml') : null);
+                            if ($xml != null) {
+                                $theme_options_model->read_community_xml($xml);
+                                $theme_options_model->recursiveRemoveDirectory($unzip_com);
+                            }
+                        }
+                    }
                     //collection
+                    $collection_files = scandir($unzip_path);
+                    foreach ($collection_files as $collection_file) {
+                        if (strpos($collection_file, 'COLLECTION') !== false) {
+                            $unzip_col = $theme_options_model->unzip_aip_general($unzip_path . '/', $collection_file);
+                            $xml = (file_exists($unzip_col . '/mets.xml') ? simplexml_load_file($unzip_col . '/mets.xml') : null);
+                            if ($xml != null) {
+                                $theme_options_model->read_collection_xml($xml, $unzip_col . '/');
+                                $theme_options_model->recursiveRemoveDirectory($unzip_col);
+                            }
+                        }
+                    }
                     //item
+                    $item_files = scandir($unzip_path);
+                    foreach ($item_files as $item_file) {
+                        if (strpos($item_file, 'ITEM') !== false) {
+                            $unzip_item = $theme_options_model->unzip_aip_general($unzip_path . '/', $item_file);
+                            $xml = (file_exists($unzip_item . '/mets.xml') ? simplexml_load_file($unzip_item . '/mets.xml') : null);
+                            if ($xml != null) {
+                                $theme_options_model->read_item_xml($xml, $unzip_item . '/');
+                                $theme_options_model->recursiveRemoveDirectory($unzip_item);
+                            }
+                        }
+                    }
+                    $theme_options_model->recursiveRemoveDirectory($unzip_path);
+                    return true;
                 } else {
                     return false;
                 }
@@ -183,6 +223,11 @@ class ThemeOptionsController extends Controller {
                     }
                 }
                 return json_encode($result);
+            /********************** Exportacao AIP ****************************/    
+            case 'export_full_aip':
+                $export_model = new ExportAIP;
+                $export_model->export_aip_zip();
+                break;
         }
     }
 

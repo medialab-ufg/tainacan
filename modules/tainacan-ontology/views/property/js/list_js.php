@@ -226,12 +226,14 @@
             $.ajax({
                 url: $('#src').val() + '/controllers/property/property_controller.php',
                 type: 'POST',
-                data: {collection_id: $("#collection_id").val(), category_id: $("#property_object_category_id").val(), operation: 'show_reverses', property_id: $('#property_category_id').val()}
+                data: {collection_id: $("#collection_id").val(), category_id: $("#property_object_category_id").val(), operation: 'show_reverses', property_id: $('#property_object_domain_category_id').val()}
             }).done(function (result) {
                 elem = jQuery.parseJSON(result);
                 $('#property_object_reverse').html('');
                 if (elem.no_properties === false) {
                     $('#property_object_reverse').html('<option value=""><?php _e('None','tainacan') ?></option>');
+                    console.log('british');
+        
                     $.each(elem.property_object, function (idx, property) {
                         //console.log(property.id,selected);
                         if (property.id == selected) {

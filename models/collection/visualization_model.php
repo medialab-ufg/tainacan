@@ -9,9 +9,15 @@ require_once(dirname(__FILE__) . '../../category/category_model.php');
 require_once(dirname(__FILE__) . '../../collection/collection_model.php');
 
 class VisualizationModel extends CollectionModel {
+    
+    public $dynatree_number_items;
 
-    public function VisualizationModel() {
-        //  $this->propertymodel = new PropertyModel();
+    public function __construct(){
+        if(has_filter('alter_dynatree_number_of_items')){
+            $this->dynatree_number_items = apply_filters('alter_dynatree_number_of_items', '');
+        }else{
+            $this->dynatree_number_items = 9;
+        }
     }
 
     /* function initJit() */
@@ -230,6 +236,15 @@ class VisualizationModel extends CollectionModel {
         ksort($facets);
         foreach ($facets as &$facet_id) {
             $facet = get_term_by('id', $facet_id, 'socialdb_category_type');
+            $ancestors = get_ancestors($facet->term_id,'socialdb_category_type');
+            $skip = false;
+            foreach ($ancestors as $value) {
+               if(in_array($value, $facets)){
+                   $skip = true;
+               } 
+            }
+            if($skip)
+                continue;
             $ordenation = $this->get_ordenation_facet($data['collection_id'],$facet_id);
             if($facet){
                 $classCss = get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $facet_id . '_color', true);
@@ -254,13 +269,14 @@ class VisualizationModel extends CollectionModel {
                 }
             }elseif(get_term_by('id', $facet_id, 'socialdb_property_type')){   
                 $facet = get_term_by('id', $facet_id, 'socialdb_property_type');
+                $widget = get_post_meta($data['collection_id'], 'socialdb_collection_facet_'.$facet_id.'_widget', true);
                 $type = $propertyModel->get_property_type($facet_id); // pego o tipo da propriedade;
                 //METADADOS FIXOS
                 if ('socialdb_property_fixed_type'==$facet->slug) {
                     $classCss = get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $facet_id . '_color', true);
                     $dynatree[] = array('title' => $facet->name, 'key' => 'socialdb_object_dc_type_facet', 'isLazy' => true, 'data' => $url, 'expand' => true, 'hideCheckbox' => true, 'addClass' => $classCss);
                     $dynatree[end(array_keys($dynatree))] = $this->getTypeDynatree($data['collection_id'], $dynatree[end(array_keys($dynatree))], $classCss);
-                }elseif ('socialdb_property_fixed_title'==$facet->slug) {
+                }elseif ('socialdb_property_fixed_title'==$facet->slug&&$widget=='tree') {
                    $classCss = get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $facet_id . '_color', true);
                     $dynatree[] = array('title' =>$facet->name, 'key' => 'socialdb_object_dc_type_facet', 'isLazy' => true, 'data' => $url, 'expand' => true, 'hideCheckbox' => true, 'addClass' => $classCss);
                     $property['metas']['socialdb_property_object_category_id'] = $this->get_category_root_of($data['collection_id']);
@@ -421,6 +437,15 @@ class VisualizationModel extends CollectionModel {
         }
         foreach ($facets_id as &$facet_id) {
             $facet = get_term_by('id', $facet_id, 'socialdb_category_type');
+            $ancestors = get_ancestors($facet->term_id,'socialdb_category_type');
+            $skip = false;
+            foreach ($ancestors as $value) {
+               if(in_array($value, $facets_id)){
+                   $skip = true;
+               } 
+            }
+            if($skip)
+                continue;
             $classCss = get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $facet_id . '_color', true);
             $classCss = ($classCss)?$classCss:'color4';
             if ($facet) {
@@ -478,7 +503,7 @@ class VisualizationModel extends CollectionModel {
                 //$dynatree['children'][] = array('title' => $meta_value . ' (' . $this->count_metadata_by_value('socialdb_property_' . $properties['id'], $meta_value) . ')', 'key' => $meta_id . "_" . $properties['id'] . '_datatext', 'addClass' => $classCss);
                 $dynatree['children'][] = array('title' => $meta_value , 'key' => $meta_id . "_" . $properties['id'] . '_datatext', 'addClass' => $classCss);
                 $counter++;
-                if ($counter > 9) {
+                if ($counter > $this->dynatree_number_items) {
                     $dynatree['children'][] = array('title' => __('See more', 'tainacan'), 'hideCheckbox' => true, 'key' => $properties['id'] . '_moreoptionsdataproperty' . $properties['id'], 'isLazy' => true, 'addClass' => 'more');
                     break;
                 }
@@ -501,7 +526,7 @@ class VisualizationModel extends CollectionModel {
                 $dynatree['children'][] = array('title' => $tag->name, 'key' => $tag->term_id . "_tag", 'addClass' => $classCss);
                 //$dynatree['children'][] = array('title' => $tag->name.' ('. $this->count_items_related($tag->term_id).')', 'key' => $tag->term_id . "_tag", 'addClass' => $classCss);
                 $counter++;
-                if ($counter > 9) {
+                if ($counter > $this->dynatree_number_items) {
                     $dynatree['children'][] = array('title' => __('See more', 'tainacan'), 'hideCheckbox' => true, 'key' => '_moreoptionstag', 'isLazy' => true, 'addClass' => 'more');
                     break;
                 }
@@ -631,7 +656,7 @@ class VisualizationModel extends CollectionModel {
                     //$dynatree['children'][] = array('title' => $child->name.' ('. $this->count_items_related($child->term_id).')', 'key' => $child->term_id, 'addClass' => $classCss);
                 }
                 $counter++;
-                if ($counter == 9) {
+                if ($counter == $this->dynatree_number_items) {
                     $dynatree['children'][] = array('title' => __('See more', 'tainacan'), 'hideCheckbox' => true, 'key' => $facet_id . '_moreoptions', 'isLazy' => true, 'addClass' => 'more');
                     break;
                 }

@@ -34,6 +34,8 @@ $viewHelper = new ViewHelper();
             <link rel="alternate" type="application/rdf+xml" href="<?php echo get_the_permalink(); ?>?.rdf">
             <?php $_GOOGLE_API_KEY = "AIzaSyBZXPZcDMGeT-CDugrsYWn6D0PQSnq_odg"; ?>
             <script src="http://maps.googleapis.com/maps/api/js?key=<?php echo $_GOOGLE_API_KEY; ?>"></script>
+
+            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
             
             <?php if (is_restful_active()) { ?>
                 <link rel="alternate" type="application/json" href="<?php echo site_url() . '/wp-json/posts/' . get_the_ID() . '/?type=socialdb_collection' ?>">
@@ -41,6 +43,7 @@ $viewHelper = new ViewHelper();
         <?php } ?>
 
         <?php echo set_config_return_button(is_front_page()); ?>
+
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <?php wp_head(); ?>
     </head>
@@ -74,26 +77,9 @@ $viewHelper = new ViewHelper();
                 </button>
 
                 <div class="navbar-header logo-container">
-                    <!-- TAINACAN: neste local eh mostrado a logo juntamente com o titulo do repositorio  -->
-                    <?php if ($socialdb_logo != '' && get_the_post_thumbnail($socialdb_logo, 'thumbnail')): ?>
-                        <a class="navbar-brand repository-logo" href="<?php echo site_url(); ?>">
-                            <?php if (get_the_post_thumbnail($socialdb_logo, 'thumbnail')) { ?>
-                                <img src="<?php echo wp_get_attachment_url(get_post_thumbnail_id($socialdb_logo)); ?>" style="max-width: 150px;" />
-                                <?php
-                            } elseif ($socialdb_title != '') {
-                                echo $socialdb_title;
-                            } else {
-                                _e('Tainacan', 'tainacan');
-                            }
-                            ?>
-                        </a>
-                    <?php else: ?>
-                        <a class="navbar-brand logo-tainacan" href="<?php echo site_url(); ?>">
-                            <img src="<?php echo get_template_directory_uri() . '/libraries/images/Tainacan_pb.svg' ?>" width="150px"/>
-                        </a>
-                    <?php endif; ?>
-
+                    <?php echo $viewHelper->renderRepositoryLogo($socialdb_logo, $socialdb_title); ?>
                 </div>
+
                 <!-- TAINACAN: container responsavel em listar os links para as acoes no repositorio -->
                 <div class="user-actions collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
@@ -141,6 +127,10 @@ $viewHelper = new ViewHelper();
                                                 <li><a onclick="showTools('<?php echo get_template_directory_uri() ?>');" onmouseover="" href="#"><span  class="glyphicon glyphicon-tasks"></span> <?php _e('Tools', 'tainacan'); ?></a></li>
                                                 <li><a onclick="showImportFull('<?php echo get_template_directory_uri() ?>');" onmouseover="" href="#"><span  class="glyphicon glyphicon-import"></span> <?php _e('Import', 'tainacan'); ?></a></li>
                                                 <li><a onclick="showExportFull('<?php echo get_template_directory_uri() ?>');" onmouseover="" href="#"><span  class="glyphicon glyphicon-export"></span> <?php _e('Export', 'tainacan'); ?></a></li>
+                                                <li> <a class="repository-statistics" href="#" onmouseover=""> 
+                                                        <span class="glyphicon glyphicon-globe"></span> <?php _e('Statistics', 'tainacan'); ?>
+                                                    </a>
+                                                </li>
                                             </ul>
                                         </li>
                                     <?php endif; ?>
@@ -191,7 +181,7 @@ $viewHelper = new ViewHelper();
                                     </li>
                                     <?php if( is_user_logged_in() ): ?>
                                         <li class="divider"></li>
-                                        <li> <a href="#">
+                                        <li> <a href="#" class="create-collection">
                                                 <?php _e('Create collection','tainacan') ?>
                                                 <span class="glyphicon glyphicon-chevron-right"></span>
                                             </a>
@@ -236,11 +226,7 @@ $viewHelper = new ViewHelper();
                     
                     <?php $col_controller = get_template_directory_uri() . "/controllers/collection/collection_controller.php"; ?>
                     <form onsubmit="$('#myModal').modal('hide'); show_modal_main();" action="<?php echo $col_controller ?>" method="POST">
-                        
-                        <input type="hidden" name="operation" value="simple_add">
-                        
                         <?php echo $viewHelper->render_modal_header('remove-sign', __('Create Collection', 'tainacan')); ?>
-                        
                         <div id="form_new_collection">
                             <div class="modal-body" style="padding: 0 15px 0 15px;">
 
@@ -249,6 +235,7 @@ $viewHelper = new ViewHelper();
                                     <input type="text" required="required" class="form-control" name="collection_name" id="collection_name" placeholder="<?php _e('Type the name of your collection', 'tainacan'); ?>">
                                 </div>
 
+                                <input type="hidden" name="operation" value="simple_add">
                                 <input type="hidden" name="template" id='template_collection' value="none">
                                 <input type="hidden" name="collection_object" id='collection_object' value="<?php _e('Item'); ?>">
                             </div>

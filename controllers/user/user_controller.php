@@ -159,6 +159,10 @@ class UserController extends Controller {
                 if ($user) {
                     $data['login'] = 1;
                     $data['url'] = get_the_permalink($data['collection_id']);
+
+                    $_log_data = [ 'collection_id' => $data['collection_id'], 'user_id' => $user->ID,
+                        'event_type' => 'user_status', 'event' => 'login'];
+                    Log::addLog($_log_data);
                 } else {
                     $data['login'] = 0;
                     $data['title'] = __('Failed to Login','tainacan');

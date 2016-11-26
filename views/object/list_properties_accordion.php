@@ -123,7 +123,7 @@ if (isset($property_object)):
                        />  
                 <select onclick="clear_select_object_property(this,<?php echo $property['id']; ?>,<?php echo $object_id; ?>);" 
                         id="property_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>_add" 
-                        multiple class="chosen-selected2 form-control" 
+                        multiple class="chosen-selected2 form-control auto-save" 
                         style="height: auto;" 
                         name="socialdb_property_<?php echo $property['id']; ?>[]" 
                         >
@@ -197,7 +197,7 @@ if (isset($property_object)):
                         <?php if ($property['type'] == 'text') { ?>     
                             <input type="text" 
                                    id="form_autocomplete_value_<?php echo $property['id']; ?>_origin" 
-                                   class="form-control form_autocomplete_value_<?php echo $property['id']; ?>" 
+                                   class="form-control auto-save form_autocomplete_value_<?php echo $property['id']; ?>" 
                                    value="<?php
                                                 if ($property['metas']['socialdb_property_default_value']): 
                                                     echo $property['metas']['socialdb_property_default_value'];
@@ -205,7 +205,7 @@ if (isset($property_object)):
                                    name="socialdb_property_<?php echo $property['id']; ?>[]" 
                                    >
                         <?php }elseif ($property['type'] == 'textarea') { ?>   
-                            <textarea class="form-control form_autocomplete_value_<?php echo $property['id']; ?>" 
+                            <textarea class="form-control auto-save form_autocomplete_value_<?php echo $property['id']; ?>" 
                                       id="form_autocomplete_value_<?php echo $property['id']; ?>_origin" 
                                       rows='9'
                                       name="socialdb_property_<?php echo $property['id']; ?>[]"
@@ -218,7 +218,7 @@ if (isset($property_object)):
                                    value="<?php  if ($property['metas']['socialdb_property_default_value']):
                                                     echo $property['metas']['socialdb_property_default_value'];
                                                 endif;  ?>" 
-                                   class="form-control form_autocomplete_value_<?php echo $property['id']; ?>" 
+                                   class="form-control auto-save form_autocomplete_value_<?php echo $property['id']; ?>" 
                                    onkeypress='return onlyNumbers(event)'
                                    name="socialdb_property_<?php echo $property['id']; ?>[]" <?php
                                    if ($property['metas']['socialdb_property_required'] == 'true'): echo 'required="required"';
@@ -247,7 +247,7 @@ if (isset($property_object)):
                             <input 
                                 style="margin-right: 5px;" 
                                 size="13" 
-                                class="input_date form_autocomplete_value_<?php echo $property['id']; ?>" 
+                                class="input_date auto-save form_autocomplete_value_<?php echo $property['id']; ?>" 
                                 type="text" value="<?php
                                 if ($property['metas']['socialdb_property_default_value']): echo $property['metas']['socialdb_property_default_value'];endif;?>" 
                                 id="form_autocomplete_value_<?php echo $property['id']; ?>_<?php echo $i ?>" 
@@ -264,7 +264,7 @@ if (isset($property_object)):
                                             if ($property['metas']['socialdb_property_default_value']): 
                                                 echo $property['metas']['socialdb_property_default_value'];
                                             endif; ?>" 
-                                 class="form-control form_autocomplete_value_<?php echo $property['id']; ?>"
+                                 class="form-control auto-save form_autocomplete_value_<?php echo $property['id']; ?>"
                                  name="socialdb_property_<?php echo $property['id']; ?>[]" >
                                <?php } ?>
                         
@@ -359,7 +359,7 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
             }elseif ($property['type'] == 'selectbox') {
                 $properties_terms_selectbox[] = $property['id'];
                 ?>
-                <select class="form-control" 
+                <select class="form-control auto-save" 
                         name="socialdb_propertyterm_<?php echo $property['id']; ?>" 
                         onchange="list_validate_selectbox(this,'<?php echo $property['id']; ?>')" 
                         id='field_property_term_<?php echo $property['id']; ?>'>
@@ -381,7 +381,7 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
                 <select size='1' 
                         multiple 
                         onclick="validate_multipleselectbox(this,'<?php echo $property['id']; ?>')"
-                        class="form-control" 
+                        class="form-control auto-save" 
                         name="socialdb_propertyterm_<?php echo $property['id']; ?>[]" 
                         id='field_property_term_<?php echo $property['id']; ?>' <?php
                 if ($property['metas']['socialdb_property_required'] == 'true'): echo 'required="required"';

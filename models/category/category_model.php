@@ -51,6 +51,8 @@ class CategoryModel extends Model {
             $this->update_metas($new_category['term_id'], $data);
             $data['success'] = 'true';
             $data['term_id'] = $new_category['term_id'];
+            $log_data = ['user_id' => get_current_user_id(),'resource_id' => $data['term_id'], 'event_type' => 'user_category', 'event' => 'add' ];
+            Log::addLog($log_data);
         } else {
             $data['success'] = 'false';
             if ($is_new) {
@@ -117,10 +119,8 @@ class CategoryModel extends Model {
         $data['category_parent_id'] = ($data['category_parent_id'] == 'user_categories' ? '0' : $data['category_parent_id']);
         if (($data['category_parent_id'] == '0' || $data['category_parent_id'] == $this->get_category_taxonomy_root()) && trim($data['category_name'])) {
             $update_category = wp_update_term($data['category_id'], 'socialdb_category_type', array(
-                'name' => $data['category_name'],
-                'parent' => $this->get_category_taxonomy_root()
-                , 'description' => $this->set_description($data)
-            ));
+                'name' => $data['category_name'], 'parent' => $this->get_category_taxonomy_root(),
+                'description' => $this->set_description($data) ));
         } elseif (trim($data['category_name'])!='') {
             $update_category = wp_update_term($data['category_id'], 'socialdb_category_type', array(
                 'name' => $data['category_name'],
@@ -132,6 +132,8 @@ class CategoryModel extends Model {
         if ($update_category && !is_wp_error($update_category) && $update_category['term_id']) {// se a categoria foi atualizada com sucesso
             $this->update_metas($update_category['term_id'], $data);
             $this->insert_synonyms($update_category['term_id'], $data);
+            $log_data = [ 'resource_id' => $update_category['term_id'], 'user_id' => get_current_user_id(), 'event_type' => 'user_category', 'event' => 'edit' ];
+            Log::addLog($log_data);
             $data['success'] = 'true';
         } else {
             $data['success'] = 'false';
@@ -228,12 +230,14 @@ class CategoryModel extends Model {
         if (!$this->verify_collection_category_root($data['category_delete_id'])) {
             if (wp_delete_term($data['category_delete_id'], 'socialdb_category_type')) {
                 $data['success'] = 'true';
+                $log_data = [ 'resource_id' => $data['category_delete_id'], 'user_id' => get_current_user_id(), 'event_type' => 'user_category', 'event' => 'delete' ];
+                Log::addLog($log_data);
             } else {
                 $data['success'] = 'false';
             }
         } else {
             $data['success'] = 'false';
-            $data['message'] = 'Collection root category cannot be deleted';
+            $data['message'] = __('Collection root category cannot be deleted', 'tainacan');
         }
         return json_encode($data);
     }
@@ -1167,7 +1171,7 @@ class CategoryModel extends Model {
             return json_encode($result);
         }
         $result = [];
-        // se  estiver editando alguma categoria, ou seja existir algum id 
+        // se estiver editando alguma categoria, ou seja existir algum id
         // para esta categoria
         if ($data['category_id'] != '') {
             $term = get_term_by('id', $data['category_id'], 'socialdb_category_type');

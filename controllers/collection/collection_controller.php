@@ -48,11 +48,11 @@ class CollectionController extends Controller {
                         }
                     else:    
                         $import_model = new CollectionImportModel;
-                        $new_collection_id = $import_model->importCollectionTemplate($data);                       
+                        $new_collection_id = $import_model->importCollectionTemplate($data);
                         
                         if($new_collection_id) {
                             // $result = json_decode($this->insert_collection_event($new_collection_id, $data));
-                            return ( json_decode($this->insert_collection_event($new_collection_id, $data)) );                           
+                            return ( $this->insert_collection_event($new_collection_id, $data));                           
                             
                             if ($result->type == 'success') {
                                 header("location:" . get_permalink($new_collection_id) . '?open_wizard=true');
@@ -226,7 +226,8 @@ class CollectionController extends Controller {
             /*************************** TEMPLATES **********************/
             case 'list-collection-templates':
                 $colectionTemplateModel = new CollectionTemplatesModel;
-                $data['collectionTemplates'] = $colectionTemplateModel->get_collections_templates();
+                //$data['collectionTemplates'] = $colectionTemplateModel->get_collections_templates();
+                $data['collectionTemplates'] = $colectionTemplateModel->list_habilitate_collection_template();
                 if(!isset($data['is_json'])){
                      return $this->render(dirname(__FILE__) . '../../../views/collection/list-collection-templates.php', $data);
                 }else{
@@ -239,6 +240,46 @@ class CollectionController extends Controller {
             case 'delete_collection_template' :
                 $colectionTemplateModel = new CollectionTemplatesModel;
                 return $colectionTemplateModel->delete_collection_template($data);
+            case 'initDynatreeCollectionTemplates':  
+                $colectionTemplateModel = new CollectionTemplatesModel;
+                return $colectionTemplateModel->dynatreeCollectionTemplate($data);
+            case 'habilitate-collection-templates':
+                if($data['type']=='user'):
+                    $metas = unserialize(get_option('socialdb_user_templates'));
+                    if($metas && is_array($metas) && in_array($data['key'], $metas)){
+                        $key = array_search($data['key'], $metas);
+                        unset($metas[$key]);
+                        
+                    }else{
+                        if(!is_array($metas))
+                            $metas = [];
+                        
+                        $metas[] = $data['key'];
+                    }
+                    update_option('socialdb_user_templates', serialize($metas));
+                else:  
+                    if($data['key']== 'collection_default'){
+                        $collection_default = get_option('disable_empty_collection');
+                        if($collection_default && $collection_default==='false'){
+                            update_option('disable_empty_collection', 'true');
+                        }else{
+                             update_option('disable_empty_collection', 'false');
+                        }
+                    }else{
+                        $metas = unserialize(get_option('socialdb_tainacan_templates'));
+                        if($metas && is_array($metas) && in_array($data['key'], $metas)){
+                            $key = array_search($data['key'], $metas);
+                            unset($metas[$key]);
+                        }else{
+                            if(!is_array($metas))
+                                $metas = [];
+
+                            $metas[] = $data['key'];
+                        }
+                        update_option('socialdb_tainacan_templates', serialize($metas));
+                    }
+                endif;
+                break;
             /************************* Tabs ***********************************/
             case 'alter_tab_name':
                  if($data['id']!='default'){
@@ -318,6 +359,7 @@ class CollectionController extends Controller {
         $data['socialdb_event_collection_id'] = get_option('collection_root_id');
         $data['socialdb_event_user_id'] = get_current_user_id();
         $data['socialdb_event_create_date'] = mktime();
+        $data['url_collection_redirect'] = get_permalink($collection_id);
         return $eventAddCollection->create_event($data);
     }
 

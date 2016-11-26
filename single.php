@@ -23,6 +23,7 @@ get_header();
 global $config;
 session_start();
 $options = get_option('socialdb_theme_options');
+$collection_default = get_option('disable_empty_collection');
 ?>
 
 <?php while (have_posts()) : the_post(); ?>
@@ -32,6 +33,7 @@ $options = get_option('socialdb_theme_options');
     <div class="panel panel-default collection_header" id="collection_post" style="margin-top: -20px;margin-bottom: 0px;">
     </div>
     <!-- TAINACAN - BEGIN: ITENS NECESSARIOS PARA EXECUCAO DE VARIAS PARTES DO SOCIALDB -->
+    <input type="hidden" id="show_collection_default" name="show_collection_default" value="<?php echo (!$collection_default || $collection_default === 'false') ? 'show' : 'hide'; ?>">
     <input type="hidden" id="socialdb_fb_api_id" name="socialdb_fb_api_id" value="<?php echo $options['socialdb_fb_api_id']; ?>">
     <input type="hidden" id="socialdb_embed_api_id" name="socialdb_embed_api_id" value="<?php echo $options['socialdb_embed_api_id']; ?>">
     <input type="hidden" id="current_user_id" name="current_user_id" value="<?php echo get_current_user_id(); ?>">
@@ -384,6 +386,11 @@ $options = get_option('socialdb_theme_options');
     <?php do_action('insert_new_contextmenu_dynatree') ?>
 
     <ul id="myMenuSingle" class="contextMenu" style="display:none;">
+            <li class="see">
+                <a href="#see" style="background-position: 6px 40%;padding:1px 5px 1px 28px;background-repeat:no-repeat;background-image:url('<?php echo get_template_directory_uri() ?>/libraries/css/images/see.png')">
+                    <?php _e('View', 'tainacan'); ?>
+                </a>
+            </li>
         <?php if (verify_allowed_action(get_the_ID(), 'socialdb_collection_permission_create_category')): ?>
             <li class="add">
                 <a href="#add" style="background-position: 6px 50%;padding:1px 5px 1px 28px;background-repeat:no-repeat;background-image:url('<?php echo get_template_directory_uri() ?>/libraries/css/images/1462491942_page_white_add.png')">
@@ -410,6 +417,11 @@ $options = get_option('socialdb_theme_options');
         <?php // endif;   ?>
     </ul>
     <ul id="myMenuNoList" class="contextMenu" style="display:none;">
+        <li class="see">
+                <a href="#see" style="background-position: 6px 40%;padding:1px 5px 1px 28px;background-repeat:no-repeat;background-image:url('<?php echo get_template_directory_uri() ?>/libraries/css/images/see.png')">
+                    <?php _e('See', 'tainacan'); ?>
+                </a>
+            </li>
         <?php if (verify_allowed_action(get_the_ID(), 'socialdb_collection_permission_create_category')): ?>
             <li class="add">
                 <a href="#add" style="background-position: 6px 50%;padding:1px 5px 1px 28px;background-repeat:no-repeat;background-image:url('<?php echo get_template_directory_uri() ?>/libraries/css/images/1462491942_page_white_add.png')">
@@ -432,6 +444,11 @@ $options = get_option('socialdb_theme_options');
     </ul>
     <!-- TAINACAN: esta div eh mostrada quando eh clicado com o botao direito sobre categorias e tags no dynatree  -->
     <ul id="myMenuSingleTag" class="contextMenu" style="display:none;">
+        <li class="see">
+                <a href="#see" style="background-position: 6px 40%;padding:1px 5px 1px 28px;background-repeat:no-repeat;background-image:url('<?php echo get_template_directory_uri() ?>/libraries/css/images/see.png')">
+                    <?php _e('See', 'tainacan'); ?>
+                </a>
+            </li>
         <?php if (verify_allowed_action(get_the_ID(), 'socialdb_collection_permission_create_tags')): ?>
             <li class="add">
                 <a href="#add"><?php echo __('Add', 'tainacan'); ?></a>
@@ -549,7 +566,7 @@ $options = get_option('socialdb_theme_options');
                             <button type="button" onclick="list_category_property_single()" id="show_category_property_single" class="btn btn-primary"><?php _e('Category Properties', 'tainacan'); ?></button>
                             <!-- Sinonimos -->
                             <br><br>
-                            <a onclick="toggle_container_synonyms('#synonyms_container')" style="cursor: pointer;">
+                            <a onclick="toggle_container_synonyms('#synonyms_container')" <?php do_action('synonyms_category_view') ?> style="cursor: pointer;">
                                 <?php _e('Synonyms', 'tainacan') ?>
                                 <span class="glyphicon glyphicon-triangle-bottom"></span>
                             </a>

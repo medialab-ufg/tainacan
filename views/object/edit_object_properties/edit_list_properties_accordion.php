@@ -130,7 +130,7 @@ if (isset($property_object)):
             
             <select onclick="clear_select_object_property(this,'<?php echo $property['id']; ?>', '<?php echo $object_id; ?>');" 
                     id="property_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>_edit" 
-                    multiple class="chosen-selected2 form-control" 
+                    multiple class="chosen-selected2 form-control auto-save" 
                     style="height: auto;" 
                     name="socialdb_property_<?php echo $property['id']; ?>[]"
                     <?php 
@@ -218,17 +218,17 @@ if (isset($property_object)):
                     <?php if ($property['type'] == 'text') { ?>     
                             <input type="text" 
                                    id="form_edit_autocomplete_value_<?php echo $property['id']; ?>" 
-                                   class="form-control form_autocomplete_value_<?php echo $property['id']; ?>" 
+                                   class="form-control auto-save form_autocomplete_value_<?php echo $property['id']; ?>" 
                                    value="<?php if ($property['metas']['value']) echo (isset($property['metas']['value'][$i])?$property['metas']['value'][$i]:''); ?>"
                                    name="socialdb_property_<?php echo $property['id']; ?>[]">
                     <?php }elseif ($property['type'] == 'textarea') { ?>   
-                            <textarea class="form-control form_autocomplete_value_<?php echo $property['id']; ?>"
+                            <textarea class="form-control auto-save form_autocomplete_value_<?php echo $property['id']; ?>"
                                       rows="10"
                                       id="form_edit_autocomplete_value_<?php echo $property['id']; ?>" 
                                       name="socialdb_property_<?php echo $property['id']; ?>[]" ><?php if ($property['metas']['value']) echo (isset($property['metas']['value'][$i])?$property['metas']['value'][$i]:''); ?></textarea>
                     <?php }elseif ($property['type'] == 'numeric') { ?>   
                             <input type="text" 
-                                   class="form-control form_autocomplete_value_<?php echo $property['id']; ?>"
+                                   class="form-control auto-save form_autocomplete_value_<?php echo $property['id']; ?>"
                                    onkeypress='return onlyNumbers(event)'
                                    id="form_edit_autocomplete_value_<?php echo $property['id']; ?>" 
                                    name="socialdb_property_<?php echo $property['id']; ?>[]" 
@@ -270,7 +270,7 @@ if (isset($property_object)):
                                 <input 
                                     style="margin-right: 5px;" 
                                     size="13" 
-                                    class="input_date form_autocomplete_value_<?php echo $property['id']; ?>" 
+                                    class="input_date auto-save form_autocomplete_value_<?php echo $property['id']; ?>" 
                                     value="<?php if ($property['metas']['value']) echo (isset($property['metas']['value'][$i])?$property['metas']['value'][$i]:''); ?>"
                                     type="text" 
                                     id="socialdb_property_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
@@ -283,7 +283,7 @@ if (isset($property_object)):
                         }else{ ?>
                             <input type="text"  
                                    value="<?php if ($property['metas']['value']) echo (isset($property['metas']['value'][$i])?$property['metas']['value'][$i]:''); ?>" 
-                                   class="form-control form_autocomplete_value_<?php echo $property['id']; ?>" 
+                                   class="form-control auto-save form_autocomplete_value_<?php echo $property['id']; ?>" 
                                    name="socialdb_property_<?php echo $property['id']; ?>[]" >
                         <?php } ?> 
                  <?php echo $view_helper->render_button_cardinality($property,$i) ?>    
@@ -374,7 +374,7 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
                 }elseif ($property['type'] == 'selectbox') {
                     $properties_terms_selectbox[] = $property['id'];
                     ?>
-                    <select class="form-control" 
+                    <select class="form-control auto-save" 
                             name="socialdb_propertyterm_<?php echo $property['id']; ?>" 
                             onchange="edit_validate_selectbox(this,'<?php echo $property['id']; ?>')"
                             id='field_property_term_<?php echo $property['id']; ?>' >
@@ -390,7 +390,7 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
                      <select size='1' 
                         multiple 
                         onclick="validate_multipleselectbox(this,'<?php echo $property['id']; ?>')"
-                        class="form-control" 
+                        class="form-control auto-save" 
                         name="socialdb_propertyterm_<?php echo $property['id']; ?>[]" 
                         id='field_property_term_<?php echo $property['id']; ?>' 
                         <?php 

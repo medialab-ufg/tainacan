@@ -3,8 +3,9 @@
         var src = $('#src').val();
         change_breadcrumbs_title('<?php _e('Repository Configuration','tainacan') ?>');
         showCKEditor();
-        list_templates();
+        //list_templates();
         autocomplete_collection_templates();
+        init_dynatree_collection_template();
         $('#submit_form_edit_repository_configuration').submit(function (e) {
             $("#repository_content").val(CKEDITOR.instances.editor.getData());
             e.preventDefault();
@@ -61,7 +62,7 @@
                         }).done(function (result) {
                             $('#modalImportMain').modal('hide');//escondo o modal de carregamento
                             elem_first = jQuery.parseJSON(result);
-                            if(elem_first.result){
+                            if(elem_first.d){
                                 //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
                                 get_collections_template($('#src').val()); 
                                 list_templates();
@@ -108,6 +109,50 @@
                 }
             });       
     
+    }
+    
+    function init_dynatree_collection_template(){
+         $("#dynatree-collection-templates").dynatree({
+            selectionVisible: true, // Make sure, selected nodes are visible (expanded).  
+            checkbox: true,
+            initAjax: {
+                url: $('#src').val() + '/controllers/collection/collection_controller.php',
+                data: {
+                    collection_id: $("#collection_id").val(),
+                    operation: 'initDynatreeCollectionTemplates'
+                },
+                addActiveKey: true
+            },
+            onSelect: function (flag, node) {
+                console.log(node)
+                if(node.bSelected&&node.childList){
+                    $.each(node.childList,function(index,node){
+                        node.select(true);
+                    });
+                }else if(node.childList){
+                    $.each(node.childList,function(index,node){
+                        node.select(false);
+                    });
+                }
+                if(node.data.key!=='false'){
+                    toggleHabilitateTemplate(node.data.key,node.data.type);
+                }
+            }
+        });
+    }
+    
+    function toggleHabilitateTemplate(key,type){
+        $.ajax({
+            type: "POST",
+            url: $('#src').val() + "/controllers/collection/collection_controller.php",
+            data: {
+                operation: 'habilitate-collection-templates',
+                key:key,
+                type:type
+               }
+        }).done(function (result) {
+            list_templates();
+        });
     }
     /*
     function list_templates() {

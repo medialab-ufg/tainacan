@@ -592,7 +592,8 @@ class CsvModel extends Model {
 //var_dump($lines);
             }
         }
-    }
+        Log::addLog(['collection_id' => $collection_id,'user_id' => get_current_user_id(),'event_type' => 'imports', 'event' => 'import_csv']);
+    } // import_csv_full
 
     /**
      * function add_property_data($property)

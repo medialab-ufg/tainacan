@@ -23,8 +23,8 @@
                     <div class="form-group col-md-12 no-padding">
                         <label class="col-md-6 no-padding" for="socialdb_property_help"><?php _e('Ordenation','tainacan'); ?></label>
                         <label class="col-md-6 " for="socialdb_property_help"><?php _e('Select the metadata below','tainacan'); ?></label>
-                        <div  class="col-md-6 no-padding">
-                             <ul id="compounds_properties_ordenation" class="metadata-container no-padding" style="min-height: 50px;"></ul>
+                        <div  class="col-md-6 no-padding" style="height: auto;">
+                             <ul id="compounds_properties_ordenation" class="metadata-container no-padding" ></ul>
                          </div>
                         <div class="col-md-6 no-padding">
                             <div style='height: 242px;' id="dynatree_properties_filter"></div>

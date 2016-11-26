@@ -103,6 +103,7 @@ class CollectionImportModel extends CollectionModel {
             set_post_thumbnail($collection_id, $thumbnail_id);
         }
     }
+    
     /**
      * @signature add_cover_collection($dir_created,$collection_id)
      * @param string $dir_created
@@ -138,7 +139,8 @@ class CollectionImportModel extends CollectionModel {
                 if($fileInfo->isDot()) 
                     continue;
                 $xml = simplexml_load_file($fileInfo->getPath().'/'.$fileInfo->getFilename());
-                $data = $this->add_hierarchy_importing_collection($xml, 0, $this->get_category_root_id());
+                $name = (has_filter('alter_category_root_repository_name')) ? apply_filters('alter_category_root_repository_name','') : 'socialdb_category';
+                $data = $this->add_hierarchy_importing_collection($xml, 0, get_term_by('name', $name, 'socialdb_category_type')->term_id);
                //$categories_id[] = $data['ids'];
         }
         //return $categories_id;
@@ -815,8 +817,10 @@ class CollectionImportModel extends CollectionModel {
             return false;
         }
         */
-                
-        $dir_created = dirname(__FILE__) . "/../../data/templates/".$template;
+        $dir_created = TAINACAN_UPLOAD_FOLDER . "/data/templates/".$template; 
+        if(!is_dir($dir_created))
+            $dir_created = dirname(__FILE__) . "/../../data/templates/".$template; 
+            
         if(is_dir($dir_created.'/package/taxonomies' )){
            $this->import_xml_taxonomies($dir_created.'/package/taxonomies' );
         }

@@ -889,9 +889,11 @@
     }
     //limpando os formularios ao abrir o modal
     function clear_form(type){
-        if(type=='compounds'){
+        console.log(type);
+        if(type=='metadata_compound'){
             initDynatreeFilterProperties(src);
             $('#compound_id').val('');
+             $("#meta-metadata_compound #compounds_name").val('');
             $('.compounds-action').html('<?php _e('Add','tainacan') ?>');
             $('#operation_property_compounds').val('add_property_compounds');
             $('#compounds_properties_ordenation').html('<center><h4><?php _e('Select a property','tainacan') ?>&nbsp;<span class="glyphicon glyphicon-arrow-right"></span></h4></center>');
@@ -1856,6 +1858,7 @@
             if ( meta_type == 'numeric' || meta_type == 'date' ) {
                 $(open_modal + " #color_field_property_search").hide();
                 $($search_data_widget)
+                    .append('<option value="tree"> ' + '<?php _e('Tree', 'tainacan') ?>' + ' </option>')
                     .append('<option value="from_to">' + '<?php _e('From/To', 'tainacan') ?>' + '</option>')
                     .append('<option value="range"> ' + '<?php _e('Range', 'tainacan') ?>' + ' </option>');
             } else if(meta_type == 'socialdb_property_object') {

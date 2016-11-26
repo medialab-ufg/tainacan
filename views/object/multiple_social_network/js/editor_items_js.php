@@ -463,6 +463,7 @@
             //buscando os valores para o formulario
             $("#multiple_object_name").val($("#title_" + item_id).val());// seta o titulo do item
             $("#multiple_object_description").val($("#description_" + item_id).val());// descricao do item
+            $("#multiple_object_source").val($("#source_" + item_id).val());// descricao do item
             var tags = $("#tags_" + item_id).val().split(',');//quebro as tags em um array
             tags = tags.filter(function (v) {
                 return v !== ''
@@ -616,22 +617,48 @@
             $("#multiple_object_name").val(''); //limpo o campo do tiulo
             $("#multiple_object_name").attr("placeholder", "<?php _e('Replace ', 'tainacan') ?>" + selected_items.length + " <?php _e(' titles', 'tainacan') ?>");
             $("#multiple_object_description").attr("value", "");//limpo o campo de descricao
-            //pego as tags comuns aos itens selecionados
-            var all_tags = [];
-            var tags = [];
-            $.each($("input:checkbox[name='selected_items']:checked"), function () {
-                tags = $("#tags_" + $(this).val()).val().split(',');
-                tags = tags.filter(function (v) {
-                    return v !== ''
+            clear_fields_multiple();
+        } else {
+            $("#buttonSelectedAttachments").hide();// mostra o botao de anexos
+            $("#no_properties_items").show(); // mostra a mensagem que solicita a selecao de itens
+            $("#form_properties_items").hide(); // esconde o formulario para edicao
+            //limpo o formulario
+            $("#multiple_object_name").val('');
+            $("#multiple_object_description").attr("value", "");
+            $("#multiple_object_tags").val('');
+            //limpo VALORES das propriedades de objeto
+            var objectProperties = $("#multiple_properties_object_id").val().split(',').filter(Boolean);
+            for (var i = 0; i < objectProperties.length; i++) {
+                $("#multiple_property_value_" + objectProperties[i] + "_<?php echo $object_id ?>_add option:selected").each(function () {
+                    $(this).remove(); //or whatever else
                 });
-                for (var i = 0; i < tags.length; i++) {
-                    all_tags.push(tags[i]);
-                }
-            });
-            if (all_tags.length > 0) {// se existir tags em qualquer um dos itens
-                all_tags = remove_duplicates_safe(all_tags);
-                $("#multiple_object_tags").val(all_tags.join(','));
+
             }
+            clear_fields_multiple();
+        }
+    }
+    
+    /**
+    *  funcao que limpa todos os campos do menu esquerdo
+    */
+    function clear_fields_multiple(){
+          //pego as tags comuns aos itens selecionados
+          $("#multiple_object_tags").val('');
+//            var all_tags = [];
+//            var tags = [];
+//            $.each($("input:checkbox[name='selected_items']:checked"), function () {
+//                tags = $("#tags_" + $(this).val()).val().split(',');
+//                tags = tags.filter(function (v) {
+//                    return v !== ''
+//                });
+//                for (var i = 0; i < tags.length; i++) {
+//                    all_tags.push(tags[i]);
+//                }
+//            });
+//            if (all_tags.length > 0) {// se existir tags em qualquer um dos itens
+//                all_tags = remove_duplicates_safe(all_tags);
+//                $("#multiple_object_tags").val(all_tags.join(','));
+//            }
             //BUSCANDO VALORES das **propriedades de objeto** para cada item selecionado
             var objectProperties = $("#multiple_properties_object_id").val().split(',').filter(function (v) {
                 return v !== ''
@@ -673,17 +700,17 @@
                 $.each($("input:checkbox[name='multiple_socialdb_propertyterm_" + checkboxes[i] + "']:checked"), function () {
                     $(this).removeAttr('checked');
                 });
-                $.each($("input:checkbox[name='selected_items']:checked"), function () {  // varro todos os objetos     
-                    var categories = $("#socialdb_property_" + checkboxes[i] + "_" + $(this).val()).val().split(',').filter(function (v) {
-                        return v !== ''
-                    });
-                    $.each($("input:checkbox[name='multiple_socialdb_propertyterm_" + checkboxes[i] + "']"), function () {
-                        if (categories.length > 0 && categories.indexOf($(this).val()) >= 0) {
-                            $(this).attr('checked', 'checked');
-                        }
-                    });
-                });
-                setCategoriesCheckbox(checkboxes[i], 'not');
+//                $.each($("input:checkbox[name='selected_items']:checked"), function () {  // varro todos os objetos     
+//                    var categories = $("#socialdb_property_" + checkboxes[i] + "_" + $(this).val()).val().split(',').filter(function (v) {
+//                        return v !== ''
+//                    });
+//                    $.each($("input:checkbox[name='multiple_socialdb_propertyterm_" + checkboxes[i] + "']"), function () {
+//                        if (categories.length > 0 && categories.indexOf($(this).val()) >= 0) {
+//                            $(this).attr('checked', 'checked');
+//                        }
+//                    });
+//                });
+//                setCategoriesCheckbox(checkboxes[i], 'not');
             }
             //multipleSelect
             var multipleSelects = $("#multiple_properties_terms_multipleselect").val().split(',').filter(function (v) {
@@ -691,36 +718,37 @@
             });
             for (var i = 0; i < multipleSelects.length; i++) {
                 $("select[name='multiple_socialdb_propertyterm_" + multipleSelects[i] + "']").val([]);
-                $.each($("input:checkbox[name='selected_items']:checked"), function () {  // varro todos os objetos     
-                    var categories = $("#socialdb_property_" + multipleSelects[i] + "_" + $(this).val()).val().split(',').filter(function (v) {
-                        return v !== ''
-                    });
-                    $.each($("select[name='multiple_socialdb_propertyterm_" + multipleSelects[i] + "'] option"), function () {
-                        if (categories.length > 0 && categories.indexOf($(this).val()) >= 0) {
-                            $(this).attr('selected', 'selected');
-                        }
-                    });
-                });
-                setCategoriesSelectMultiple(multipleSelects[i], "select[name='multiple_socialdb_propertyterm_" + multipleSelects[i] + "']");
+//                $.each($("input:checkbox[name='selected_items']:checked"), function () {  // varro todos os objetos     
+//                    var categories = $("#socialdb_property_" + multipleSelects[i] + "_" + $(this).val()).val().split(',').filter(function (v) {
+//                        return v !== ''
+//                    });
+//                    $.each($("select[name='multiple_socialdb_propertyterm_" + multipleSelects[i] + "'] option"), function () {
+//                        if (categories.length > 0 && categories.indexOf($(this).val()) >= 0) {
+//                            $(this).attr('selected', 'selected');
+//                        }
+//                    });
+//                });
+//                setCategoriesSelectMultiple(multipleSelects[i], "select[name='multiple_socialdb_propertyterm_" + multipleSelects[i] + "']");
             }
             //treecheckbox
             var multiple_properties_terms_treecheckbox = $("#multiple_properties_terms_treecheckbox").val().split(',').filter(function (v) {
                 return v !== ''
             });
             for (var i = 0; i < multiple_properties_terms_treecheckbox.length; i++) {
+                $("#multiple_field_property_term_" + multiple_properties_terms_treecheckbox[i]).dynatree("getTree").reload();
                 //$("#multiple_field_property_term_"+multiple_properties_terms_treecheckbox[i]).dynatree("getRoot").visit(function(node){
                 //   node.select(false);
                 // });
-                $.each($("input:checkbox[name='selected_items']:checked"), function () {  // varro todos os objetos     
-                    var categories = $("#socialdb_property_" + multiple_properties_terms_treecheckbox[i] + "_" + $(this).val()).val().split(',').filter(function (v) {
-                        return v !== ''
-                    });
-                    $("#multiple_field_property_term_" + multiple_properties_terms_treecheckbox[i]).dynatree("getRoot").visit(function (node) {
-                        if (categories.length > 0 && categories.indexOf(node.data.key) >= 0) {
-                            node.select(true);
-                        }
-                    });
-                });
+//                $.each($("input:checkbox[name='selected_items']:checked"), function () {  // varro todos os objetos     
+//                    var categories = $("#socialdb_property_" + multiple_properties_terms_treecheckbox[i] + "_" + $(this).val()).val().split(',').filter(function (v) {
+//                        return v !== ''
+//                    });
+//                    $("#multiple_field_property_term_" + multiple_properties_terms_treecheckbox[i]).dynatree("getRoot").visit(function (node) {
+//                        if (categories.length > 0 && categories.indexOf(node.data.key) >= 0) {
+//                            node.select(true);
+//                        }
+//                    });
+//                });
             }
             //radio
             var radios = $("#multiple_properties_terms_radio").val().split(',').filter(function (v) {
@@ -745,34 +773,18 @@
                 return v !== ''
             });
             for (var i = 0; i < multiple_properties_terms_tree.length; i++) {
+                $("#multiple_field_property_term_" + multiple_properties_terms_tree[i]).dynatree("getTree").reload();
 //                if($("#socialdb_property_" + multiple_properties_terms_tree[i] + "_" + item_id)){
 //                    var categories = $("#socialdb_property_" + multiple_properties_terms_tree[i] + "_" + item_id).val().split(',').filter(function (v) {
 //                        return v !== ''
 //                    });
 //                }
-                $("#multiple_field_property_term_" + multiple_properties_terms_tree[i]).dynatree("getRoot").visit(function (node) {
-                    node.select(false);
-                });
+//                $("#multiple_field_property_term_" + multiple_properties_terms_tree[i]).dynatree("getRoot").visit(function (node) {
+//                    node.select(false);
+//                });
             }
             //esconde anexos
             destroy_dropzone();
-        } else {
-            $("#buttonSelectedAttachments").hide();// mostra o botao de anexos
-            $("#no_properties_items").show(); // mostra a mensagem que solicita a selecao de itens
-            $("#form_properties_items").hide(); // esconde o formulario para edicao
-            //limpo o formulario
-            $("#multiple_object_name").val('');
-            $("#multiple_object_description").attr("value", "");
-            $("#multiple_object_tags").val('');
-            //limpo VALORES das propriedades de objeto
-            var objectProperties = $("#multiple_properties_object_id").val().split(',').filter(Boolean);
-            for (var i = 0; i < objectProperties.length; i++) {
-                $("#multiple_property_value_" + objectProperties[i] + "_<?php echo $object_id ?>_add option:selected").each(function () {
-                    $(this).remove(); //or whatever else
-                });
-
-            }
-        }
     }
     // FIM: AO SELECIONAR ITEMS
     // coloca o titulo para todos os items selecionados
@@ -813,6 +825,7 @@
     // coloca a fonte para todos os items selecionados
     function setSource(source) {
         var counter = 0;
+        console.log(source);
         if ($(source).val() != '') {
             $.each($("input:checkbox[name='selected_items']:checked"), function () {
                 counter++;
@@ -891,6 +904,7 @@
             $("#socialdb_property_" + property_id + "_" + $(this).val()).val(array.join(','));
         });
         validate_checkbox(property_id);
+        $('#sumbit_multiple_items .auto-save').trigger('change');
         if (value_id !== 'not') {
             toastr.success(counter + '<?php _e(' items/item updated successfully!', 'tainacan') ?>', '<?php _e('Success', 'tainacan') ?>', set_toastr_class());
         }
@@ -903,6 +917,7 @@
             $("#socialdb_property_" + property_id + "_" + $(this).val()).val(value_id);
         });
         validate_radio(property_id);
+        $('#sumbit_multiple_items .auto-save').trigger('change');
         toastr.success(counter + '<?php _e(' items/item updated successfully!', 'tainacan') ?>', '<?php _e('Success', 'tainacan') ?>', set_toastr_class());
     }
     //select box
@@ -928,6 +943,7 @@
                 $("#socialdb_property_" + property_id + "_" + $(this).val()).val('');
             }
         });
+        $('#sumbit_multiple_items .auto-save').trigger('change');
         toastr.success(counter + '<?php _e(' items/item updated successfully!', 'tainacan') ?>', '<?php _e('Success', 'tainacan') ?>', set_toastr_class());
     }
     //select box multipple
