@@ -16,12 +16,10 @@ include_once('js/list_js.php');
         <div class="form-group period-config">
             <label class="title-pipe"> <?php _t('Period',true); ?> </label>
             <div class="date-range-filter">
-                <p>
-                    <span> <?php _e('From','tainacan') ?> </span>
+                <p> <span> <?php _t('From',1) ?> </span>
                     <input size="7" type="text" class="input_date form-control" value="" placeholder="dd/mm/aaaa" id="from_period" name="from_period">
                 </p>
-                <p>
-                    <span> <?php _e('until','tainacan') ?> </span>
+                <p> <span> <?php _t('until',1) ?> </span>
                     <input type="text" class="input_date form-control" size="7" value="" placeholder="dd/mm/aaaa" id="to_period" name="to_period"> <br />
                 </p>
             </div>
@@ -37,7 +35,9 @@ include_once('js/list_js.php');
         <?php // include_once "inc/pdf.php"; ?>
 
         <div class="chart-header btn-group col-md-12">
+            
             <?php $_log_helper->render_config_title(_t('Repository Statistics')); ?>
+            
             <div class="user-config-control col-md-12 no-padding">
                 <div class="col-md-4 pull-left no-padding">
                     <span class="config-title"><?php _t('Filters:',1); ?></span>
@@ -49,9 +49,7 @@ include_once('js/list_js.php');
                         <?php _t('Download: ',true); ?> <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="downloadStat">
-                        <li> <a href="javascript:void(0)" class="dl-pdf"> <?php _t('PDF',1); ?> </a> </li>
-                        <li> <a href="" class="dl-csv"> <?php _t('CSV',1); ?> </a> </li>
-                        <li> <a href="" class="dl-xls"> <?php _t('XLS',0); ?> </a> </li>
+                        <?php $_log_helper->getDownloadTypes(); ?>
                     </ul>
                 </div>
 
@@ -63,13 +61,7 @@ include_once('js/list_js.php');
                     </button>
 
                     <ul class="dropdown-menu statChartType" aria-labelledby="statChartType">
-                        <?php foreach ($_log_helper->getChartsType() as $chart): ?>
-                            <li class="<?php echo $chart['className']; ?>">
-                                <a href="javascript:void(0)" class="change-mode" data-chart="<?php echo $chart['className'] ?>">
-                                    <img src="<?php echo $chart['img'] ?>" />
-                                </a>
-                            </li>
-                        <?php endforeach; ?>
+                        <?php $_log_helper->renderChartsDropdown(); ?>
                     </ul>
                 </div>
 
@@ -77,9 +69,14 @@ include_once('js/list_js.php');
         </div>
 
         <div id="charts-container" class="col-md-12">
-            <div id="chart_div"></div> <!--Div that will hold the pie chart-->
+            <div id="defaultchart_div"></div> <!--Div that will hold the pie chart-->
             <div id="piechart_div" class="hide"></div>
             <div id="barchart_div" class="hide"></div>
+
+            <input type="hidden" value="default" class="selected_chart_type" />
+            <?php /*
+            <img src="https://developers.google.com/chart/interactive/images/chart_printable.png" alt="" class="dynamic-chart-img" />
+            */ ?>
         </div>
         
         <div id="charts-resume" class="col-md-12">

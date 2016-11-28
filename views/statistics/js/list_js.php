@@ -74,6 +74,9 @@
         $('a.change-mode').on('click', function() {
             var selected_chart = $(this).attr('data-chart');
             var curr_img = $(this).html();
+            var chart_type = selected_chart.replace('chart_div', '');
+            
+            $('.selected_chart_type').val(chart_type);
 
             $(".statChartType li").each(function(idx, elem){
                if( $(elem).attr('class') == selected_chart ) {
@@ -196,48 +199,65 @@
             data: { operation: 'user_events', parent: parent, event: action, from: from, to: to }
         }).done(function(r){
             var res_json = $.parseJSON(r);
-            drawChart(action, res_json);
+            var chart = $('.selected_chart_type').val();
+            drawChart(chart, action, res_json);
         });
     }
 
-    function drawChart(title, data_obj) {
+    function drawChart(chart_type, title, data_obj) {
         if(data_obj.stat_object) {
+            // all variables used along the function
             var basis = [ title, ' Qtd ', {role: 'style'} ];
             var chart_data = [basis];
-            var dt = new google.visualization.DataTable();
-            dt.addColumn('string', 'Topping');
-            dt.addColumn('number', 'Slices');
+            var commom_data = new google.visualization.DataTable();
+            commom_data.addColumn('string', title);
+            commom_data.addColumn('number', 'Qtd');
 
             var chart = new TainacanChart();
             var color = data_obj.color || '#79a6ce';
             var csvData = [];
-            chart.displayFixedBase();
 
+            chart.displayFixedBase();
             for( event in data_obj.stat_object ) {
                 var obj_total = parseInt(data_obj.stat_object[event]);
                 var curr_evt_title = chart.getMappedTitles()[event];
                 var curr_tupple = [ curr_evt_title, obj_total ];
                 chart_data.push([ curr_tupple[0], curr_tupple[1], color ]);
-                dt.addRow(curr_tupple);
+                commom_data.addRow(curr_tupple);
                 csvData.push( curr_tupple );
                 chart.displayBaseAppend(curr_tupple[0], curr_tupple[1]);
             }
 
+            // Generate CSV file for current chart
             chart.createCsvFile(csvData);
 
-            var piechart_options = {title:'Qtd ' + title, width: 800, is3D: true };
-            var piechart = new google.visualization.PieChart(document.getElementById('piechart_div'));
-            piechart.draw(dt, piechart_options);
+            // Google Charts objects
+            if( chart_type == 'pie' ) {
+                var piechart = new google.visualization.PieChart(document.getElementById('piechart_div'));
+                current = piechart;
+                var piechart_options = {title:'Qtd ' + title, width: 800, is3D: true };
 
-            var barchart_options = {title:'Barchart stats', width: 800, height:300, legend: 'none', color: '#01a0f'};
-            var barchart = new google.visualization.BarChart(document.getElementById('barchart_div'));
-            barchart.draw(dt, barchart_options);
+                piechart.draw(commom_data, piechart_options);
+            } else if ( chart_type == 'bar' ) {
+                var barchart = new google.visualization.BarChart(document.getElementById('barchart_div'));
+                current = barchart;
+                var barchart_options = {title:'Barchart stats', width: 800, height:300, legend: 'none', color: '#01a0f'};
 
-            var data = google.visualization.arrayToDataTable( chart_data );
-            var options = { colors: [color], legend: 'none' };
-            var default_chart = new google.charts.Bar(document.getElementById('chart_div'));
+                barchart.draw(commom_data, barchart_options);
+            } else if( chart_type == 'default' ) {
+                var default_chart = new google.charts.Bar(document.getElementById('defaultchart_div'));
+                var data = google.visualization.arrayToDataTable( chart_data );
+                
+                var default_options = { colors: [color], legend: 'none' };
+                current = data;
 
-            default_chart.draw(data, options);
+                default_chart.draw(data, default_options);
+            }
+
+            google.visualization.events.addListener(current, 'ready', function(){
+                var chart_png = current.getImageURI();
+                $('.dynamic-chart-img').attr('src', chart_png );
+            });
         }
     }
 
@@ -262,12 +282,7 @@
                 return true
             }
         };
-        margins = {
-            top: 80,
-            bottom: 60,
-            left: 40,
-            width: 800
-        };
+        var margins = { top: 80, bottom: 60, left: 40, width: 800 };
         // all coords and widths are in jsPDF instance's declared units
         // 'inches' in this case
         pdf.fromHTML(
