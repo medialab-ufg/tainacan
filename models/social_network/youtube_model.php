@@ -214,7 +214,9 @@ class YoutubeModel extends Model {
 
     private function getInfoFromVideo($urlBase, $identifier) {
         $url = sprintf($urlBase, $identifier);
-        $resposta = file_get_contents($url);
+        session_write_close();
+        ini_set('max_execution_time', '0');
+        $resposta = download_page($url);
 
         $json = &json_decode($resposta, true);
         if (is_array($json)) {

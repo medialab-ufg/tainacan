@@ -262,6 +262,9 @@
             $('#modalImportMain').modal('hide');
             elem = jQuery.parseJSON(result);
             $.each(elem.compounds,function(index,property){
+                if(!property.name){
+                    return true;
+                }
                 var current_id = property.id;
                 var current_search_widget = property.type;
                 var type = types_compounds[current_id];

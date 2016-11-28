@@ -203,6 +203,8 @@ class CollectionImportModel extends CollectionModel {
             'post_author' => get_current_user_id(),
         );
        $collection_id = wp_insert_post($collection);
+       //
+       $this->createSocialMappingDefault($collection_id);
        //categoria raiz da colecao
        $socialdb_collection_object_type = $this->get_term_imported_id((string) $xml->socialdb_collection_object_type);//init
       //privacidade

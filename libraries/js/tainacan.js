@@ -596,16 +596,16 @@ function add_li_collection_template(el,$_element){
     }else{
          $($_element).html('');
     }
-    $($_element).append("<li class='divider'></li>");
     if(el.user_templates) {
+        $($_element).append("<li class='divider'></li>");
         $.each(el.user_templates, function (idx, value) {
             var li_item = "<li class='tmpl'><a href='#' class='added' data-tplt='" + value.directory + "'>" + value.title + "</a></li>";
             $($_element).append(li_item);
         });
     }
-    console.log(el);
-    $($_element).append("<li class='divider'></li>");
+    
     if(el.tainacan_templates){
+        $($_element).append("<li class='divider'></li>");
         $.each(el.tainacan_templates, function (idx, value) {
             var li_item = "<li class='tmpl'><a href='#' class='added' data-tplt='" + value.directory + "'>" + value.title + "</a></li>";
             $($_element).append(li_item);
