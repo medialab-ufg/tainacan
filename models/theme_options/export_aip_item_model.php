@@ -2,38 +2,42 @@
 /**
  * Model que realiza a exportacao do zip AIP do tainacan
  */
-class ExportAIPCollectionModel extends ExportAIPModel {
+class ExportAIPItemModel extends ExportAIPModel {
     
     public $XML;
-    public $name_folder_collection;
+    public $name_folder_item;
     
     /**
      * metodo que executa os demais para criacao do mets e do zip do repositorio
      */
-    public function create_collections() {
+    public function create_items() {
         $collections = $this->get_all_collections();
         foreach ($collections as $collection) {
             if($collection  && $collection->ID && $collection->ID == get_option('collection_root_id')){
                 continue;
             }
-            $this->name_folder_collection = 'COLLECTION@'.$this->prefix.'-'. $collection->ID;
-            $dir_collection = $this->dir.'/'.$this->name_folder.'/'.$this->name_folder_collection;
-            $this->recursiveRemoveDirectory($dir_collection);
-            if(!is_dir($dir_collection.'/')){
-                 mkdir($dir_collection);
+            $items = $this->get_collection_posts($collection->ID);
+            foreach ($items as $item) {
+                $this->name_folder_item = 'ITEM@'.$this->prefix.'-'. $item->ID;
+                $dir_item = $this->dir.'/'.$this->name_folder.'/'.$this->name_folder_item;
+                $this->recursiveRemoveDirectory($dir_item);
+                if(!is_dir($dir_item.'/')){
+                     mkdir($dir_item);
+                }
+                $this->generate_xml(get_post($item->ID),$collection->ID);
+                $this->create_xml_file($dir_item.'/mets.xml', $this->XML);
+                $this->create_zip_by_folder($this->dir.'/'.$this->name_folder.'/', $this->name_folder_item.'/', $this->name_folder_item);
+                $this->recursiveRemoveDirectory($dir_collection);
             }
-            $this->generate_xml(get_post($collection->ID));
-            $this->create_xml_file($dir_collection.'/mets.xml', $this->XML);
-            $this->create_zip_by_folder($this->dir.'/'.$this->name_folder.'/', $this->name_folder_collection.'/', $this->name_folder_collection,true);
-            $this->recursiveRemoveDirectory($dir_collection);
+            
         }
         
     }
     
     
-    public function generate_xml(WP_Post $collection){
+    public function generate_xml(WP_Post $item,$collection_id){
         $this->XML = '<?xml version="1.0" encoding="utf-8" standalone="no"?>';
-        $this->XML .= '<mets ID="DSpace_COLLECTION_'.$this->prefix.'-'.$collection->ID.'" OBJID="hdl:'.$this->prefix.'/'.$collection->ID.'" TYPE="DSpace COLLECTION" '
+        $this->XML .= '<mets ID="DSpace_ITEM_'.$this->prefix.'-'.$item->ID.'" OBJID="hdl:'.$this->prefix.'/'.$item->ID.'" TYPE="DSpace ITEM" '
                 . 'PROFILE="http://www.dspace.org/schema/aip/mets_aip_1_0.xsd" '
                 . 'xmlns="http://www.loc.gov/METS/" '
                 . 'xmlns:xlink="http://www.w3.org/1999/xlink" '
@@ -81,7 +85,7 @@ class ExportAIPCollectionModel extends ExportAIPModel {
                             </mdWrap>
                         </dmdSec>
                       ';
-        $this->generate_xml_groups($collection);
+        $this->generate_xml_item($item,$collection_id);
         $this->getFileThumbnail($collection->ID);
         $this->generate_items_xml($collection->ID);
         $this->XML .= '</mets>';
@@ -90,38 +94,15 @@ class ExportAIPCollectionModel extends ExportAIPModel {
     /**
      *  gera o xml dos grupos do tainacan
      */
-    public function generate_xml_groups(WP_Post $collection){
+    public function generate_xml_item(WP_Post $item,$collection_id){
         $this->XML .= '
             <amdSec ID="amd_3">
-                <techMD ID="techMD_5">
-                 <mdWrap MDTYPE="OTHER" OTHERMDTYPE="DSPACE-ROLES">
-                  <xmlData xmlns:dsroles="http://www.dspace.org/xmlns/dspace/dspace-roles">
-                    <DSpaceRoles>
-                         <Groups>
-                             <Group ID="'.$this->get_moderators_collection_id($collection->ID).'" TYPE="SUBMIT" Name="administrator_'.$collection->ID.'">'.
-                                        $this->get_users_moderators($collection)
-                            .'</Group>
-                         </Groups>'; 
-        $this->XML .= '</DSpaceRoles>
-                   </xmlData>
-                </mdWrap>
-              </techMD>
-              <rightsMD ID="rightsMD_9">
+                <rightsMD ID="rightsMD_9">
                     <mdWrap MDTYPE="OTHER" OTHERMDTYPE="METSRIGHTS">
                         <xmlData xmlns:rights="http://cosimo.stanford.edu/sdr/metsrights/" xsi:schemaLocation="http://cosimo.stanford.edu/sdr/metsrights/ http://cosimo.stanford.edu/sdr/metsrights.xsd">
                         <rights:RightsDeclarationMD xmlns:rights="http://cosimo.stanford.edu/sdr/metsrights/" RIGHTSCATEGORY="LICENSED">
                             <rights:Context in-effect="true" CONTEXTCLASS="GENERAL PUBLIC">
                               <rights:Permissions DISCOVER="true" DISPLAY="true" MODIFY="false" DELETE="false" />
-                            </rights:Context>
-                            <rights:Context CONTEXTCLASS="GENERAL PUBLIC" in-effect="true">
-                                <rights:Permissions DELETE="false" MODIFY="false" DISPLAY="true" DISCOVER="true" OTHERPERMITTYPE="READ ITEM CONTENTS" OTHER="true"/>
-                            </rights:Context>
-                            <rights:Context CONTEXTCLASS="GENERAL PUBLIC" in-effect="true">
-                                <rights:Permissions DELETE="false" MODIFY="false" DISPLAY="true" DISCOVER="true" OTHERPERMITTYPE="READ FILE CONTENTS" OTHER="true"/>
-                            </rights:Context>
-                            <rights:Context in-effect="true" CONTEXTCLASS="MANAGED GRP">
-                              <rights:UserName USERTYPE="GROUP">administrator_'.$collection->ID.'</rights:UserName>
-                              <rights:Permissions DISCOVER="true" DISPLAY="true" COPY="true" DUPLICATE="true" MODIFY="true" DELETE="true" PRINT="true" OTHER="true" OTHERPERMITTYPE="ADMIN" />
                             </rights:Context>
                           </rights:RightsDeclarationMD>
                     </xmlData>
@@ -129,31 +110,121 @@ class ExportAIPCollectionModel extends ExportAIPModel {
                </rightsMD>
                 <sourceMD ID="sourceMD_10">
                  <mdWrap MDTYPE="OTHER" OTHERMDTYPE="AIP-TECHMD">
-                    <xmlData xmlns:dim="http://www.dspace.org/xmlns/dspace/dim"><dim:dim xmlns:dim="http://www.dspace.org/xmlns/dspace/dim" dspaceType="COLLECTION">
-                        <dim:field mdschema="dc" element="identifier" qualifier="uri">hdl:'.$this->prefix.'/'.$collection->ID.'</dim:field>
-                        <dim:field mdschema="dc" element="relation" qualifier="isPartOf">'.$this->is_children_collection($collection->ID).'</dim:field>
+                    <xmlData xmlns:dim="http://www.dspace.org/xmlns/dspace/dim"><dim:dim xmlns:dim="http://www.dspace.org/xmlns/dspace/dim" dspaceType="ITEM">
+                        <dim:field mdschema="dc" element="creator">'. get_user_by('id', $item->post_author)->user_email.'</dim:field>
+                        <dim:field mdschema="dc" element="identifier" qualifier="uri">hdl:'.$this->prefix.'/'.$ITEM->ID.'</dim:field>
+                        <dim:field mdschema="dc" element="relation" qualifier="isPartOf">hdl:'.$this->prefix.'/'.$collection_id.'</dim:field>
                       </dim:dim>
                     </xmlData>
                  </mdWrap>
                 </sourceMD>
             </amdSec>'; 
+        $this->XML .= '<amdSec ID="amd_13">
+                        <rightsMD ID="rightsMD_19">
+                         <mdWrap MDTYPE="OTHER" OTHERMDTYPE="METSRIGHTS">
+                          <xmlData xmlns:rights="http://cosimo.stanford.edu/sdr/metsrights/" xsi:schemaLocation="http://cosimo.stanford.edu/sdr/metsrights/ http://cosimo.stanford.edu/sdr/metsrights.xsd"><rights:RightsDeclarationMD xmlns:rights="http://cosimo.stanford.edu/sdr/metsrights/" RIGHTSCATEGORY="LICENSED">
+                        <rights:Context in-effect="true" CONTEXTCLASS="GENERAL PUBLIC">
+                          <rights:Permissions DISCOVER="true" DISPLAY="true" MODIFY="false" DELETE="false" />
+                        </rights:Context>
+                      </rights:RightsDeclarationMD></xmlData>
+                         </mdWrap>
+                        </rightsMD>
+                       </amdSec>';
+                
+    }
+    
+    /**
+     * 
+     */
+    public function get_all_files($item_id) {
+        $args = array(
+            'post_type' => 'attachment',
+            'numberposts' => -1,
+            'post_status' => null,
+            'post_parent' => $item_id
+        );
+        return get_posts($args);
     }
     
     /**
      * busca no banco os usuario para cada role
      */
-    public function get_users_moderators(WP_Post $community) {
-        $valor = '';
-        $blogusers = $this->get_moderators($community->ID);
-        if($blogusers){
-            $valor .= '<Members>';
-            foreach ( $blogusers as $user ) {
-                    $user = get_user_by('id', $user);
-                    $valor .= '<Member ID="'.$user->ID.'" Name="' . esc_html( $user->user_email ) . '" />';
+    public function get_premis_files(WP_Post $item) {
+        $index = 22;
+        $files = $this->get_all_files($item->ID);
+        if($files){
+            foreach ($files as $file) {
+                $url_image = wp_get_attachment_url($file->ID);
+                $size = filesize(get_attached_file($file->ID));
+                $name = $file->post_title;
+                $md5_inicial = get_post_meta($file->ID, 'md5_inicial', true);
+                 $this->XML .= '<amdSec ID="amd_'.$index++.'">';
+                 $this->XML .= '<techMD ID="techMD_'.$index++.'">';
+                 $this->XML .= '<mdWrap MDTYPE="PREMIS">';
+                 $this->XML .= '<xmlData xmlns:premis="http://www.loc.gov/standards/premis" xsi:schemaLocation="http://www.loc.gov/standards/premis http://www.loc.gov/standards/premis/PREMIS-v1-0.xsd">'
+                                . '<premis:premis xmlns:premis="http://www.loc.gov/standards/premis">';
+                 $this->XML .= '<premis:object>
+                                    <premis:objectIdentifier>
+                                      <premis:objectIdentifierType>URL</premis:objectIdentifierType>
+                                      <premis:objectIdentifierValue>'.$url_image.'</premis:objectIdentifierValue>
+                                    </premis:objectIdentifier>
+                                    <premis:objectCategory>File</premis:objectCategory>
+                                    <premis:objectCharacteristics>
+                                      <premis:fixity>
+                                        <premis:messageDigestAlgorithm>MD5</premis:messageDigestAlgorithm>
+                                        <premis:messageDigest>'.$md5_inicial.'</premis:messageDigest>
+                                      </premis:fixity>
+                                      <premis:size>'.$size.'</premis:size>
+                                      <premis:format>
+                                        <premis:formatDesignation>
+                                          <premis:formatName>'. get_post_mime_type($file->ID).'</premis:formatName>
+                                        </premis:formatDesignation>
+                                      </premis:format>
+                                    </premis:objectCharacteristics>
+                                    <premis:originalName>'.$name.'</premis:originalName>
+                                </premis:object>';
+                 $this->XML .=  '</premis:premis>'
+                             . '</xmlData>';
+                 $this->XML .= '</mdWrap>';
+                 $this->XML .= '</techMD>';
+                 $this->XML .= '<rightsMD ID="rightsMD_'.$index++.'">';
+                 $this->XML .= '<mdWrap MDTYPE="OTHER" OTHERMDTYPE="METSRIGHTS">
+                                    <xmlData xmlns:rights="http://cosimo.stanford.edu/sdr/metsrights/" xsi:schemaLocation="http://cosimo.stanford.edu/sdr/metsrights/ http://cosimo.stanford.edu/sdr/metsrights.xsd">
+                                    <rights:RightsDeclarationMD xmlns:rights="http://cosimo.stanford.edu/sdr/metsrights/" RIGHTSCATEGORY="LICENSED">
+                                  <rights:Context in-effect="true" CONTEXTCLASS="GENERAL PUBLIC">
+                                    <rights:Permissions DISCOVER="true" DISPLAY="true" MODIFY="false" DELETE="false" />
+                                  </rights:Context>
+                                </rights:RightsDeclarationMD>
+                                </xmlData>
+                               </mdWrap>
+                            ';
+                 $this->XML .= '</rightsMD>';
+                 $this->XML .= '<sourceMD ID="sourceMD_29">
+                                    <mdWrap MDTYPE="OTHER" OTHERMDTYPE="AIP-TECHMD">
+                                     <xmlData xmlns:dim="http://www.dspace.org/xmlns/dspace/dim">
+                                     <dim:dim xmlns:dim="http://www.dspace.org/xmlns/dspace/dim" dspaceType="BITSTREAM">
+                                   <dim:field mdschema="dc" element="title">v11n3a36.pdf</dim:field>
+                                   <dim:field mdschema="dc" element="title" qualifier="alternative">'.$url_image.'</dim:field>
+                                   <dim:field mdschema="dc" element="format" qualifier="mimetype">'. get_post_mime_type($file->ID).'</dim:field>
+                                   <dim:field mdschema="dc" element="format" qualifier="supportlevel">KNOWN</dim:field>
+                                   <dim:field mdschema="dc" element="format" qualifier="internal">false</dim:field>
+                                 </dim:dim></xmlData>
+                                    </mdWrap>
+                                   </sourceMD>';
+                 $this->XML .= '</amdSec>';
+                 $this->XML .= '<amdSec ID="amd_'.$index++.'">
+                        <rightsMD ID="rightsMD_'.$index++.'">
+                         <mdWrap MDTYPE="OTHER" OTHERMDTYPE="METSRIGHTS">
+                          <xmlData xmlns:rights="http://cosimo.stanford.edu/sdr/metsrights/" xsi:schemaLocation="http://cosimo.stanford.edu/sdr/metsrights/ http://cosimo.stanford.edu/sdr/metsrights.xsd"><rights:RightsDeclarationMD xmlns:rights="http://cosimo.stanford.edu/sdr/metsrights/" RIGHTSCATEGORY="LICENSED">
+                        <rights:Context in-effect="true" CONTEXTCLASS="GENERAL PUBLIC">
+                          <rights:Permissions DISCOVER="true" DISPLAY="true" MODIFY="false" DELETE="false" />
+                        </rights:Context>
+                      </rights:RightsDeclarationMD></xmlData>
+                         </mdWrap>
+                        </rightsMD>
+                       </amdSec>';
             }
-            $valor .= '</Members>';
         }
-        return $valor;
     }
     
     /**
@@ -186,8 +257,8 @@ class ExportAIPCollectionModel extends ExportAIPModel {
           $ext = pathinfo($fullsize_path, PATHINFO_EXTENSION);
           copy($fullsize_path, $dir_community.'/thumbnail_'.$collection_id.'.'.$ext);
           $this->XML .= '<fileSec>
-                        <fileGrp USE="LOGO">
-                         <file ID="logo_25" MIMETYPE="image/'.$ext.'" SIZE="'.$size.'" CHECKSUM="'.$md5_inicial.'" CHECKSUMTYPE="MD5">
+                        <fileGrp ADMID="amd_94" USE="THUMBNAIL">
+                         <file ID="bitstream_1" MIMETYPE="image/'.$ext.'" SIZE="'.$size.'" CHECKSUM="'.$md5_inicial.'" CHECKSUMTYPE="MD5">
                           <FLocat LOCTYPE="URL" xlink:type="simple" xlink:href="thumbnail_'.$collection_id.'"/>
                          </file>
                         </fileGrp>

@@ -1,6 +1,7 @@
 <?php
 include_once dirname(__FILE__).'/export_aip_repository_model.php';
 include_once dirname(__FILE__).'/export_aip_community_model.php';
+include_once dirname(__FILE__).'/export_aip_collection_model.php';
 /**
  * Model que realiza a exportacao do zip AIP do tainacan
  */
@@ -141,10 +142,12 @@ class ExportAIP extends ThemeOptionsModel {
     public $model;
     public $repository_model;
     public $community_model;
+    public $collection_model;
     public function __construct() {
         $this->model = new ExportAIPModel();
         $this->repository_model = new ExportAIPRepositoryModel();
         $this->community_model = new ExportAIPCommunityModel();
+        $this->collection_model = new ExportAIPCollectionModel();
     }
     /**
      * @signature - export_aip_zip($collection_id)
@@ -156,6 +159,7 @@ class ExportAIP extends ThemeOptionsModel {
         }
         $this->repository_model->create_repository();
         $this->community_model->create_communities();
+        $this->collection_model->create_collections();
         $this->create_zip_by_folder($this->model->dir.'/', $this->model->name_folder.'/', $this->model->name_folder);
         $this->recursiveRemoveDirectory($this->model->dir.'/'.$this->model->name_folder);
         $this->model->download_send_headers($this->model->dir.'/'.$this->model->name_folder.'.zip');
