@@ -40,6 +40,19 @@
         return title + "<p>"+ desc +"</p>";
     };
 
+    TainacanChart.prototype.createCsvFile = function(csvData) {
+        var csvContent = "data:text/csv;charset=utf-8,";
+        csvContent += "Evento, Qtd\n";
+        csvData.forEach(function(infoArray, index) {
+            var dataString = infoArray.join(",");
+            csvContent += index < csvData.length ? dataString + "\n" : dataString;
+        });
+        var encodedURI = encodeURI(csvContent);
+
+        $('a.dl-csv').attr('href', encodedURI);
+        $('a.dl-csv').attr('download', 'exported-chart.csv');
+    };
+
     google.charts.load('current', {'packages':['bar','corechart'], 'language':'pt_BR'});
     // google.charts.setOnLoadCallback(drawChart);
     $(function() {
@@ -206,18 +219,11 @@
                 var curr_tupple = [ curr_evt_title, obj_total ];
                 chart_data.push([ curr_tupple[0], curr_tupple[1], color ]);
                 dt.addRow(curr_tupple);
-                csvData.push(curr_tupple);
+                csvData.push( curr_tupple );
                 chart.displayBaseAppend(curr_tupple[0], curr_tupple[1]);
             }
 
-            var csvContent = "data:text/csv;charset=utf-8,";
-            csvData.forEach(function(infoArray, index){
-                dataString = infoArray.join(",");
-                csvContent += index < csvData.length ? dataString+ "\n" : dataString;
-            });
-            var encodedURI = encodeURI(csvContent);
-            $('a.dl-csv').attr('href', encodedURI);
-            $('a.dl-csv').attr('download', 'exported-chars.csv');
+            chart.createCsvFile(csvData);
 
             var piechart_options = {title:'Qtd ' + title, width: 800, is3D: true };
             var piechart = new google.visualization.PieChart(document.getElementById('piechart_div'));
