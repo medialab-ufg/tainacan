@@ -18,6 +18,21 @@ class LogHelper extends ViewHelper {
             'imports' => _t('Import / Export'),
             'admin' => _t('Administration') ];
     }
+    
+    public function getDownloadTypes() {
+        $_downloads = [ 'pdf' => _t('PDF'), 'csv' => _t('CSV'), 'xls' => _t('XLS') ];
+        foreach ($_downloads as $_mime => $_type) {
+            echo '<li><a href="javascript:void(0)" class="dl-'.$_mime.'">'. $_type .'</a><li>';
+        }
+    }
+    
+    public function renderChartsDropdown() {
+        foreach( $this->getChartsType() as $chart) {
+            echo '<li class="'. $chart['className'] . '">';
+            echo '<a href="javascript:void(0)" class="change-mode" data-chart="'. $chart['className'] .'">';
+            echo '<img src="'. $chart['img'] . '" /> </a></li>';
+        }
+    }
 
     private function getChartImg($fileName) {
         return get_stylesheet_directory_uri() . '/libraries/images/chart/' . $fileName . '.png';
