@@ -94,5 +94,28 @@
             return true;
         }
     }
+/*******************  Mostra o contador de item,colecoes e comunidades criadas ***********************************************************/    
+function start_loader_aip(){
+    $('#modalExportAIP').modal('show');
+    $.ajax({
+            type: "POST",
+            url: $('#src').val() + "/controllers/theme_options/theme_options_controller.php",
+            data: {
+                collection_id: $('#collection_id').val(),
+                operation: 'get_info_export_aip'
+            }
+        }).done(function (result) {
+            var json = JSON.parse(result);
+            $('#total-community').html(json.total_community);
+            $('#found-community').html(json.found_community);
+            $('#total-collection').html(json.total_collection);
+            $('#found-collection').html(json.found_collection);
+            $('#total-item').html(json.total_item);
+            $('#found-item').html(json.founf_item);
+            $('#progressbar').val(json.percent);
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('All objects imported succesfully!', 'tainacan') ?>', 'success');
+        });
+}
 
 </script>

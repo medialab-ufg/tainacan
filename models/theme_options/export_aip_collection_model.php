@@ -7,6 +7,17 @@ class ExportAIPCollectionModel extends ExportAIPModel {
     public $XML;
     public $name_folder_collection;
     
+    public function get_count_collections() {
+        $index = 0;
+        $collections = $this->get_all_collections();
+        foreach ($collections as $collection) {
+            if($collection  && $collection->ID && $collection->ID == get_option('collection_root_id')){
+                continue;
+            }
+            $index++;
+        }
+        return $index;
+    }
     /**
      * metodo que executa os demais para criacao do mets e do zip do repositorio
      */

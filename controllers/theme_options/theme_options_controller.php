@@ -228,6 +228,10 @@ class ThemeOptionsController extends Controller {
                 $export_model = new ExportAIP;
                 $export_model->export_aip_zip();
                 break;
+            case 'get_info_export_aip':
+                $export_model = new ExportAIP;
+                return $export_model->get_info_export_aip();
+                break;
         }
     }
 

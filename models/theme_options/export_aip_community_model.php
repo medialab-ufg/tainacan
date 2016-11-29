@@ -7,6 +7,11 @@ class ExportAIPCommunityModel extends ExportAIPModel {
     public $XML;
     public $name_folder_community;
     
+    public function get_count_communities() {
+        $communities = $this->get_extendable_collections();
+        $communities[] = get_post(get_option('collection_root_id'));
+        return count($communities);
+    }
     /**
      * metodo que executa os demais para criacao do mets e do zip do repositorio
      */

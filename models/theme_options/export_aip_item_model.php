@@ -7,6 +7,20 @@ class ExportAIPItemModel extends ExportAIPModel {
     public $XML;
     public $name_folder_item;
     
+    public function get_count_items() {
+        $index = 0;
+        $collections = $this->get_all_collections();
+        foreach ($collections as $collection) {
+            if($collection  && $collection->ID && $collection->ID == get_option('collection_root_id')){
+                continue;
+            }
+            $items = $this->get_collection_posts($collection->ID);
+            foreach ($items as $item) {
+                $index++;
+            }
+        }
+        return $index;
+    }
     /**
      * metodo que executa os demais para criacao do mets e do zip do repositorio
      */
@@ -27,7 +41,7 @@ class ExportAIPItemModel extends ExportAIPModel {
                 $this->generate_xml(get_post($item->ID),$collection->ID);
                 $this->create_xml_file($dir_item.'/mets.xml', $this->XML);
                 $this->create_zip_by_folder($this->dir.'/'.$this->name_folder.'/', $this->name_folder_item.'/', $this->name_folder_item);
-                $this->recursiveRemoveDirectory($dir_collection);
+                $this->recursiveRemoveDirectory($dir_item);
             }
             
         }
@@ -59,35 +73,38 @@ class ExportAIPItemModel extends ExportAIPModel {
                          <mods:mods xmlns:mods="http://www.loc.gov/mods/v3" 
                          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
                          xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-1.xsd">
-                         <mods:note>'.$collection->post_content.'</mods:note>
-                        <mods:abstract />
-                        <mods:tableOfContents />
-                        <mods:identifier type="uri">'. get_the_permalink($collection->ID).'</mods:identifier>
-                        <mods:accessCondition type="useAndReproduction" />
+                        <mods:note></mods:note>
+                        <mods:abstract >'.$item->post_content.'</mods:abstract>
+                        <mods:language>
+                            <mods:languageTerm authority="rfc3066">' . get_locale() . '</mods:languageTerm>
+                       </mods:language>
+                        <mods:identifier type="uri">'. get_the_permalink($item->ID).'</mods:identifier>
+                        <mods:accessCondition type="useAndReproduction">Open Access</mods:accessCondition>
                         <mods:titleInfo>
-                          <mods:title>'.$collection->post_title.'</mods:title>
+                          <mods:title>'.$item->post_title.'</mods:title>
                         </mods:titleInfo>
+                        
                       </mods:mods></xmlData>
                         </mdWrap>
                        </dmdSec>
                       ';
         $this->XML .= '<dmdSec ID="dmdSec_2">
                             <mdWrap MDTYPE="OTHER" OTHERMDTYPE="DIM">
-                             <xmlData xmlns:dim="http://www.dspace.org/xmlns/dspace/dim"><dim:dim xmlns:dim="http://www.dspace.org/xmlns/dspace/dim" dspaceType="COLLECTION">
-                                <dim:field mdschema="dc" element="description" >'.$collection->post_content.'</dim:field>
-                                <dim:field mdschema="dc" element="description" qualifier="abstract" />
-                                <dim:field mdschema="dc" element="description" qualifier="tableofcontents" />
-                                <dim:field mdschema="dc" element="identifier" qualifier="uri">hdl:'.$this->prefix.'/'.$collection->ID.'</dim:field>
-                                <dim:field mdschema="dc" element="rights" />
-                                <dim:field mdschema="dc" element="title">'.$collection->post_title.'</dim:field>
+                             <xmlData xmlns:dim="http://www.dspace.org/xmlns/dspace/dim"><dim:dim xmlns:dim="http://www.dspace.org/xmlns/dspace/dim" dspaceType="ITEM">
+                                <dim:field mdschema="dc" element="description" qualifier="abstract" >'.$item->post_content.'</dim:field>
+                                <dim:field mdschema="dc" element="identifier" qualifier="uri">'. get_the_permalink($item->ID).'</dim:field>
+                                 <dim:field mdschema="dc" element="rights" lang="en">Open Access</dim:field>
+                                <dim:field mdschema="dc" element="language" qualifier="iso" lang="en">' . get_locale() . '</dim:field>
+                                <dim:field mdschema="dc" element="title">'.$item->post_title.'</dim:field>
                                 </dim:dim>
                               </xmlData>
                             </mdWrap>
                         </dmdSec>
                       ';
         $this->generate_xml_item($item,$collection_id);
-        $this->getFileThumbnail($collection->ID);
-        $this->generate_items_xml($collection->ID);
+        $this->get_premis_files($item);
+        $this->getFileSec($item->ID,$collection_id);
+        $this->generate_struct_xml($item->ID,$collection_id);
         $this->XML .= '</mets>';
     }
     
@@ -112,7 +129,7 @@ class ExportAIPItemModel extends ExportAIPModel {
                  <mdWrap MDTYPE="OTHER" OTHERMDTYPE="AIP-TECHMD">
                     <xmlData xmlns:dim="http://www.dspace.org/xmlns/dspace/dim"><dim:dim xmlns:dim="http://www.dspace.org/xmlns/dspace/dim" dspaceType="ITEM">
                         <dim:field mdschema="dc" element="creator">'. get_user_by('id', $item->post_author)->user_email.'</dim:field>
-                        <dim:field mdschema="dc" element="identifier" qualifier="uri">hdl:'.$this->prefix.'/'.$ITEM->ID.'</dim:field>
+                        <dim:field mdschema="dc" element="identifier" qualifier="uri">hdl:'.$this->prefix.'/'.$item->ID.'</dim:field>
                         <dim:field mdschema="dc" element="relation" qualifier="isPartOf">hdl:'.$this->prefix.'/'.$collection_id.'</dim:field>
                       </dim:dim>
                     </xmlData>
@@ -247,62 +264,80 @@ class ExportAIPItemModel extends ExportAIPModel {
      * 
      * @param type $param
      */
-    public function getFileThumbnail($collection_id) {
-        $thumbnail_id = get_post_thumbnail_id($collection_id);
-        $dir_community = $this->dir.'/'.$this->name_folder.'/'.$this->name_folder_repository;
+    public function getFileSec($item_id,$collection_id) {
+        $all_files = $this->get_all_files($item_id);
+        $thumbnail_id = get_post_thumbnail_id($item_id);
+        $object_content = get_post_meta($item_id,'socialdb_object_content',true);
+        $dir_community = $this->dir.'/'.$this->name_folder.'/'.$this->name_folder_item ;
+        if($thumbnail_id||$object_content||$all_files)
+            $this->XML .= '<fileSec>';
+        //thumnbnail
         if($thumbnail_id){
           $fullsize_path = get_attached_file( $thumbnail_id ); // Full path
           $md5_inicial = get_post_meta($thumbnail_id, 'md5_inicial', true);
           $size = filesize(get_attached_file($thumbnail_id));
           $ext = pathinfo($fullsize_path, PATHINFO_EXTENSION);
           copy($fullsize_path, $dir_community.'/thumbnail_'.$collection_id.'.'.$ext);
-          $this->XML .= '<fileSec>
-                        <fileGrp ADMID="amd_94" USE="THUMBNAIL">
+          $this->XML .= '<fileGrp ADMID="amd_94" USE="THUMBNAIL">
                          <file ID="bitstream_1" MIMETYPE="image/'.$ext.'" SIZE="'.$size.'" CHECKSUM="'.$md5_inicial.'" CHECKSUMTYPE="MD5">
                           <FLocat LOCTYPE="URL" xlink:type="simple" xlink:href="thumbnail_'.$collection_id.'"/>
                          </file>
-                        </fileGrp>
-                       </fileSec>'; 
+                        </fileGrp>'; 
         }
+        //conteudo
+        if($object_content){
+            $fullsize_path = get_attached_file( $object_content ); // Full path
+            $md5_inicial = get_post_meta($object_content, 'md5_inicial', true);
+            $size = filesize(get_attached_file($object_content));
+            $ext = pathinfo($fullsize_path, PATHINFO_EXTENSION);
+            copy($fullsize_path, $dir_community.'/content_'.$collection_id.'.'.$ext);
+            $this->XML .= '<fileGrp ADMID="amd_13" USE="ORIGINAL">
+                            <file ID="bitstream_0" MIMETYPE="'. get_post_mime_type($object_content).'" SIZE="'.$size.'" CHECKSUM="'.$md5_inicial.'" CHECKSUMTYPE="MD5">
+                          <FLocat LOCTYPE="URL" xlink:type="simple" xlink:href="content_'.$collection_id.'"/>
+                         </file>
+                        </fileGrp>'; 
+        }
+        //demais anexos
+        if($all_files){
+            $index = 14;
+            foreach ($all_files as $file) {
+                if($file->ID==$thumbnail_id || $file->ID==$object_content)
+                    continue;
+                    
+                $fullsize_path = get_attached_file( $file->ID ); // Full path
+                $md5_inicial = get_post_meta($file->ID, 'md5_inicial', true);
+                $size = filesize(get_attached_file($file->ID));
+                $ext = pathinfo($fullsize_path, PATHINFO_EXTENSION);
+                copy($fullsize_path, $dir_community.'/attachment_'.$file->ID.'.'.$ext);
+                $this->XML .= '<fileGrp ADMID="amd_'.$index++.'" USE="ORIGINAL">
+                                <file ID="bitstream_'.$file->ID.'" MIMETYPE="'. get_post_mime_type($file->ID).'" SIZE="'.$size.'" CHECKSUM="'.$md5_inicial.'" CHECKSUMTYPE="MD5">
+                              <FLocat LOCTYPE="URL" xlink:type="simple" xlink:href="attachment_'.$file->ID.'"/>
+                             </file>
+                            </fileGrp>'; 
+            } 
+        }
+        
+         if($thumbnail_id||$object_content||$all_files)
+            $this->XML .= '</fileSec>';
     }
     /**
      * metodo que cria a estrutura das comunidades
      */
-    public function generate_items_xml($community_id) {
-        $items = $this->get_collection_posts($community_id);
-        $thumbnail_id = get_post_thumbnail_id($community_id);
-        $this->XML .= '<structMap ID="struct_11" LABEL="DSpace Object" TYPE="LOGICAL">';
-        $this->XML .= '<div ID="div_12" DMDID="dmdSec_2 dmdSec_1" ADMID="amd_3" TYPE="DSpace Object Contents">';
-        $this->XML .=  ($thumbnail_id) ? '<fptr FILEID="logo_25"/>' : '';
-        $index = 13;
-        foreach ($items as $item):
-        $this->XML .= '<div ID="div_'.$index++.'" TYPE="DSpace ITEM">';
-        $this->XML .= '<mptr ID="mptr_'.$index++.'" LOCTYPE="HANDLE" xlink:type="simple" xlink:href="'.$this->prefix.'/'. $item->ID.'"/>';
-        $this->XML .= '<mptr ID="mptr_'.$index++.'" LOCTYPE="URL" xlink:type="simple" xlink:href="ITEM@'.$this->prefix.'-'. $item->ID.'.zip"/>';
-        $this->XML .= '</div>';
-        endforeach;
-        $this->XML .= '</div>';
-        $this->XML .= '</structMap>';
+    public function generate_struct_xml($item_id,$collection_id) {
+        $object_content = get_post_meta($item_id,'socialdb_object_content',true);
+        if($object_content):
+            $this->XML .= '<structMap ID="struct_11" LABEL="DSpace Object" TYPE="LOGICAL">';
+            $this->XML .= '<div ID="div_12" DMDID="dmdSec_2 dmdSec_1" ADMID="amd_3" TYPE="DSpace Object Contents"><div ID="div_21" TYPE="DSpace BITSTREAM">';
+            $this->XML .=  '<fptr FILEID="bitstream_0"/>';
+            $this->XML .= '</div></div>';
+            $this->XML .= '</structMap>';
+        endif;
+        $index = 12;
         $this->XML .= '<structMap ID="struct_'.$index++.'" LABEL="Parent" TYPE="LOGICAL">';
         $this->XML .= '<div ID="div_'.$index++.'" LABEL="Parent of this DSpace Object" TYPE="AIP Parent Link">';
-        $this->XML .= '<mptr ID="mptr_'.$index++.'" LOCTYPE="HANDLE" xlink:type="simple" xlink:href="'.$this->is_children_collection($community_id, true).'"/>';
+        $this->XML .= '<mptr ID="mptr_'.$index++.'" LOCTYPE="HANDLE" xlink:type="simple" xlink:href="'.$this->prefix.'/'.$collection_id.'"/>';
         $this->XML .= '</div>';
         $this->XML .= '</structMap>';
-    }
-    
-    /**
-     * metodo que busca os meradores de uma colecao
-     * @param int $id
-     */
-    public function get_moderators($id) {
-        $moderators_array = [];
-        $owner = get_post($id)->post_author;
-        $moderators = get_post_meta($id, 'socialdb_collection_moderator');
-        if(is_array($moderators)){
-            $moderators_array = array_unique(array_filter($moderators));
-        }
-        $moderators_array[] = $owner;
-        return $moderators_array;
     }
     
 }

@@ -140,11 +140,13 @@ class ExportAIP extends ThemeOptionsModel {
     public $repository_model;
     public $community_model;
     public $collection_model;
+    public $item_model;
     public function __construct() {
         $this->model = new ExportAIPModel();
         $this->repository_model = new ExportAIPRepositoryModel();
         $this->community_model = new ExportAIPCommunityModel();
         $this->collection_model = new ExportAIPCollectionModel();
+        $this->item_model = new ExportAIPItemModel();
     }
     /**
      * @signature - export_aip_zip($collection_id)
@@ -157,12 +159,49 @@ class ExportAIP extends ThemeOptionsModel {
         $this->repository_model->create_repository();
         $this->community_model->create_communities();
         $this->collection_model->create_collections();
+        $this->item_model->create_items();
         $this->create_zip_by_folder($this->model->dir.'/', $this->model->name_folder.'/', $this->model->name_folder);
         $this->recursiveRemoveDirectory($this->model->dir.'/'.$this->model->name_folder);
         $this->model->download_send_headers($this->model->dir.'/'.$this->model->name_folder.'.zip');
+    }
+    
+    /**
+     * 
+     * @return type
+     */
+    public function get_info_export_aip() {
+        $return['total_community'] = $this->community_model->get_count_communities(); 
+        $return['total_collection'] = $this->collection_model->get_count_collections(); 
+        $return['total_item'] = $this->item_model->get_count_items(); 
+        $return['total'] = $return['total_community'] + $return['total_collection'] + $return['total_item'];
+        $return['found_community'] = $this->search_files_name('COMMUNITY@');
+        $return['found_collection'] = $this->search_files_name('COLLECTION@');
+        $return['found_item'] = $this->search_files_name('ITEM@');
+        $return['exported'] = $return['found_community'] + $return['found_collection'] + $return['found_item'];
+        $return['percent'] = ($return['exported'] / $return['total']) * 100;
+        return json_encode($return);
+    }
+    
+    /**
+     * 
+     * @param type $name
+     * @return int
+     */
+    public function search_files_name($name) {
+        $index = 0;
+        $dir = TAINACAN_UPLOAD_FOLDER.'/tainacan-aip';
+        if (is_dir($dir)) {
+            foreach (glob("{$dir}/*.zip") as $file) {
+                if(strpos($file, $name)!==false){
+                    $index++;
+                }
+            }
+        }
+        return $index;
     }
 }
 
 include_once dirname(__FILE__).'/export_aip_repository_model.php';
 include_once dirname(__FILE__).'/export_aip_community_model.php';
 include_once dirname(__FILE__).'/export_aip_collection_model.php';
+include_once dirname(__FILE__).'/export_aip_item_model.php';
