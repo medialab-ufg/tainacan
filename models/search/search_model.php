@@ -383,6 +383,7 @@ public function add($data) {
         update_post_meta($post_id, 'socialdb_collection_list_mode', $data['collection_list_mode']);
         update_post_meta($post_id, 'socialdb_collection_slideshow_time', $data['slideshow_time']);
         update_post_meta($post_id, 'socialdb_collection_ordenation_form', $data['socialdb_collection_ordenation_form']);
+        update_post_meta($post_id, 'socialdb_collection_visualization_page_category', $data['socialdb_collection_visualization_page_category']);
 
         if (isset($data['prox_mode'])) {
             update_post_meta($post_id, 'socialdb_collection_use_prox_mode', $data['prox_mode']);

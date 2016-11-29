@@ -19,6 +19,7 @@ $view_helper = new ViewHelper();
         $cores = ['blue','brown','green','violet','grey'];
         $collection_ordenation = $ordenation['collection_metas']['socialdb_collection_ordenation_form'];
         $submission_visualization = $ordenation['collection_metas']['socialdb_collection_submission_visualization'];
+        $visualization_page_category = $ordenation['collection_metas']['socialdb_collection_visualization_page_category'];
         ?>
         <div id="layout-accordion" style="margin-top: 20px; padding-right: 0; font-size: 12px;">
             <h3 class="title"> <?php _e('Colors','tainacan'); ?> </h3>
@@ -138,6 +139,19 @@ $view_helper = new ViewHelper();
                             </option>
                             <option value="two" <?php if ($submission_visualization == 'two'|| empty($submission_visualization)) { echo 'selected = "selected"'; } ?> >
                                 <?php _e('2 columns','tainacan'); ?>
+                            </option>
+                        </select>
+                    </div>
+                    
+                    <!------------------- Forma de visualizacao formulario da pagina de categoria -------------------------->
+                    <div class="form-group">
+                        <label for="socialdb_collection_visualization_page_category"><?php _e('Select the mode to open category page','tainacan'); ?></label>
+                        <select name="socialdb_collection_visualization_page_category" class="form-control">
+                            <option value="click" <?php ( $visualization_page_category == 'click' ) ? "selected = 'selected'" : ''; ?> >
+                                <?php _e('Click at the category','tainacan'); ?>
+                            </option>
+                            <option value="right_button" <?php if ($visualization_page_category == 'right_button'|| empty($visualization_page_category)) { echo 'selected = "selected"'; } ?> >
+                                <?php _e('Right button at the category','tainacan'); ?>
                             </option>
                         </select>
                     </div>

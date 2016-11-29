@@ -1,7 +1,4 @@
 <?php
-include_once dirname(__FILE__).'/export_aip_repository_model.php';
-include_once dirname(__FILE__).'/export_aip_community_model.php';
-include_once dirname(__FILE__).'/export_aip_collection_model.php';
 /**
  * Model que realiza a exportacao do zip AIP do tainacan
  */
@@ -165,3 +162,7 @@ class ExportAIP extends ThemeOptionsModel {
         $this->model->download_send_headers($this->model->dir.'/'.$this->model->name_folder.'.zip');
     }
 }
+
+include_once dirname(__FILE__).'/export_aip_repository_model.php';
+include_once dirname(__FILE__).'/export_aip_community_model.php';
+include_once dirname(__FILE__).'/export_aip_collection_model.php';

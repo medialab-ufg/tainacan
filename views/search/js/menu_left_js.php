@@ -36,18 +36,23 @@
                 if ($(".contextMenu:visible").length > 0) {
                     $(".contextMenu").hide();
                 }
-                //seleciono ou DESSELCIONO
-                 var selKeys = $.map(node.tree.getSelectedNodes(), function (tnode) {
-                    return tnode.data.key;
-                });
-                //get_categories_properties_ordenation();
-                console.log(selKeys,selKeys.indexOf(node.data.key)<0);
-                if(selKeys.indexOf(node.data.key)<0){
-                     select = true;
-                      node.select(true);
-                }else{
-                    select = false;
-                     node.select(false);
+                if($('#visualization_page_category').val()!=='click'){
+                    if(node.data.key.indexOf("_facet_")>=0||node.data.key.indexOf("_moreoptions")>=0){
+                        return false;
+                    }
+                    //seleciono ou unselect
+                     var selKeys = $.map(node.tree.getSelectedNodes(), function (tnode) {
+                        return tnode.data.key;
+                    });
+                    //get_categories_properties_ordenation();
+                    console.log(selKeys,selKeys.indexOf(node.data.key)<0,node.data.key);
+                    if(selKeys.indexOf(node.data.key)<0){
+                         select = true;
+                          node.select(true);
+                    }else{
+                        select = false;
+                         node.select(false);
+                    }
                 }
             },
             onKeydown: function (node, event) {
@@ -117,17 +122,45 @@
                 //$( "#btnExpandAll" ).trigger( "click" );
             },
             onActivate: function (node, event) {
+                if($('#visualization_page_category').val()==='click'){
+                    // Close menu on click
+                    $('#modalImportMain').modal('show');
+                    // Close menu on click
+                    var promisse = get_url_category(node.data.key);
+                    promisse.done(function (result) {
+                        elem = jQuery.parseJSON(result);                    
+                        $('#modalImportMain').modal('hide');
+                        var n = node.data.key.toString().indexOf("_");
+                        if(node.data.key.indexOf('_tag')>=0){
+                            showPageTags(elem.slug, src);
+                            node.deactivate();
+                        }else if(n<0||node.data.key.indexOf('_facet_category')>=0){
+                            showPageCategories(elem.slug, src);
+                            node.deactivate();
+                        }
+                    });
+                }
             },
             onSelect: function (flag, node) {
-                console.log(select);
-                    if(select===true){
-                        node.select(true);
-                    }else if(select===false){
-                        node.select(false);
+                    if($('#visualization_page_category').val()!=='click'){
+                       if(select===true){
+                           node.select(true);
+                       }else if(select===false){
+                           node.select(false);
+                       }
                     }
                     var selKeys = $.map(node.tree.getSelectedNodes(), function (node) {
                         return node.data.key;
                     });
+                    if(node.bSelected&&node.childList){
+                        $.each(node.childList,function(index,node){
+                            node.select(true);
+                        });
+                    }else if(node.childList){
+                        $.each(node.childList,function(index,node){
+                            node.select(false);
+                        });
+                    }
                     //get_categories_properties_ordenation();
                     //console.log($('#flag_dynatree_ajax').val());
                     if($('#flag_dynatree_ajax').val()==='true') {

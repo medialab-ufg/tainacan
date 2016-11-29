@@ -24,13 +24,7 @@ $fixed_slugs = [
 
 ?>
     <style>
-        .right_column{
-            background: white;
-            border: 3px solid #E8E8E8;
-            min-height: 260px;
-            padding: 15px;
-            border-top: none;
-        }
+      
     </style>
     <div class='right_column' >
         <h3>
@@ -136,6 +130,6 @@ $fixed_slugs = [
         </p>
         <hr>
         <div class="row">
-               <div id="comments_term"></div>
+            <div id="comments_term" class="item-comments no-padding"></div>
          </div>
     </div>

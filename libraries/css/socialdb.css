@@ -642,3 +642,52 @@ table.sorting-table tbody tr:not(.sorting-row) td {opacity: 0.2;}
         height: auto;
         padding-bottom: 15px;
     }
+/********** PAGINA DOS ITEMS **************/   
+.right_column{
+    background: white;
+    border: 3px solid #E8E8E8;
+    min-height: 260px;
+    padding: 15px;
+    border-top: none;
+}
+.right_column .item-comments {
+    background: white;
+    border-radius: 2px;
+    margin: 0 0 0 0;
+    padding-top: 0.7%;
+    padding-left: 15px;
+    padding-left: 0;
+        font-size: 14px;
+    line-height: 1.42857143;
+    color: #333;
+}
+
+.right_column .item-comments textarea.leave-comment {
+    width: 80%;
+    margin-left: 15px;
+    display: inline-block;
+    height: 65px;
+}
+
+.right_column  .item-comments .comment-box-container {
+    margin-bottom: 20px;
+}
+
+.right_column .item-comments ul.commentlist>li:last-child {
+    border-bottom: none;
+}
+
+.right_column .item-comments ul.commentlist>li:first-child {
+    margin-top: 0;
+}
+
+.right_column .item-comments ul.commentlist>li {
+    border-bottom: 3px solid #E8E8E8;
+    float: left;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.right_column .item-comments ul.commentlist {
+    padding-left: 0;
+}
