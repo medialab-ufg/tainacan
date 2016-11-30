@@ -1,6 +1,8 @@
-    <script type="text/javascript">
+<script type="text/javascript">     
+    google.charts.load('current', {'packages':['bar','corechart'], 'language':'pt_BR'});
+    // google.charts.setOnLoadCallback(drawChart);
+    
     var TainacanChart = function() { };
-
     TainacanChart.prototype.getMappedTitles = function() {
         return {
             add: '<?php _t("Added",1); ?>',
@@ -10,13 +12,13 @@
             delete: '<?php _t("Deleted",1); ?>',
             comment: '<?php _t("Commented",1); ?>',
             vote: '<?php _t("Voted",1); ?>',
-            login: 'Login',
-            register: 'Registros',
-            delete_user: 'Excluídos',
-            administrator: 'Administrador',
+            login: '<?php _t("Login",1); ?>',
+            register: '<?php _t("Registers",1); ?>',
+            delete_user: '<?php _t("Excluded",1); ?>',
+            administrator: '<?php _t("Administrator",1); ?>',
             author: '<?php _t("Author",1); ?>',
             editor: '<?php _t("Editor",1); ?>',
-            subscriber: 'Assinante',
+            subscriber: '<?php _t("Subscriber",1); ?>',
             contributor: 'Colaborador',
             access_oai_pmh: 'Acessos OAI-PMH',
             import_csv: 'Importação CSV',
@@ -52,13 +54,10 @@
         $('a.dl-csv').attr('href', encodedURI);
         $('a.dl-csv').attr('download', 'exported-chart.csv');
     };
-
-    google.charts.load('current', {'packages':['bar','corechart'], 'language':'pt_BR'});
-    // google.charts.setOnLoadCallback(drawChart);
+    
     $(function() {
         $(".period-config .input_date").datepicker({
-            // dateFormat: 'dd/mm/yy',
-            altFormat: 'dd/mm/yy',
+            //altFormat: 'dd/mm/yy',
             dateFormat: 'yy-mm-dd',
             dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
             dayNamesMin: ['D','S','T','Q','Q','S','S','D'],
@@ -68,7 +67,14 @@
             nextText: $(".stats-i18n .next-text").text(),
             prevText: $(".stats-i18n .prev-text").text(),
             showButtonPanel: false,
-            showAnim: 'clip'
+            showAnim: 'clip',
+            onSelect: function(dateText, obj) {
+                cl("You chose " + dateText);
+                // cl(obj);
+                var which = obj.id.toString().replace("_period", "");
+                cl(which);
+                $("#pdf-chart .period ." + which).text(dateText);
+            }
         });
 
         $('a.change-mode').on('click', function() {
@@ -77,6 +83,7 @@
             var chart_type = selected_chart.replace('chart_div', '');
             
             $('.selected_chart_type').val(chart_type);
+            cl("Atualizado para: > " + $('.selected_chart_type').val() );
 
             $(".statChartType li").each(function(idx, elem){
                if( $(elem).attr('class') == selected_chart ) {
@@ -234,69 +241,66 @@
             // Google Charts objects
             if( chart_type == 'pie' ) {
                 var piechart = new google.visualization.PieChart(document.getElementById('piechart_div'));
-                current = piechart;
-                var piechart_options = {title:'Qtd ' + title, width: 800, is3D: true };
+                var piechart_options = { title:'Qtd ' + title,
+                    colors: ['#F09B35','#8DA9BF','#F2C38D','#E6AC03', '#D94308', '#013453'] }; // '#0F4F8D','#2B85C1' tons de azul
+
+                google.visualization.events.addListener(piechart, 'ready', function() {
+                    var chart_png = piechart.getImageURI();
+                    $('.dynamic-chart-img').removeClass('hide').attr('src', chart_png );
+                });
 
                 piechart.draw(commom_data, piechart_options);
             } else if ( chart_type == 'bar' ) {
                 var barchart = new google.visualization.BarChart(document.getElementById('barchart_div'));
-                current = barchart;
-                var barchart_options = {title:'Barchart stats', width: 800, height:300, legend: 'none', color: '#01a0f'};
+                var barchart_options = {title:'Barchart stats', width: 800, height:300, legend: 'none', color: 'red'};
+
+                google.visualization.events.addListener(barchart, 'ready', function() {
+                    var chart_png = barchart.getImageURI();
+                    $('.dynamic-chart-img').removeClass('hide').attr('src', chart_png );
+                });
 
                 barchart.draw(commom_data, barchart_options);
             } else if( chart_type == 'default' ) {
                 var default_chart = new google.charts.Bar(document.getElementById('defaultchart_div'));
                 var data = google.visualization.arrayToDataTable( chart_data );
+
+                google.visualization.events.addListener(data, 'ready', function() {
+                    var chart_png = data.getImageURI();
+                    $('.dynamic-chart-img').removeClass('hide').attr('src', chart_png );
+                });
                 
                 var default_options = { colors: [color], legend: 'none' };
-                current = data;
-
                 default_chart.draw(data, default_options);
             }
-
-            google.visualization.events.addListener(current, 'ready', function(){
-                var chart_png = current.getImageURI();
-                $('.dynamic-chart-img').attr('src', chart_png );
-            });
         }
     }
 
     $('a.dl-pdf').click(function() {
-        getPDFStats();
+        getStatPDF();
     });
 
-    function getPDFStats() {
+    function getStatPDF() {
+        var curr_type = $('.selected_chart_type').val();
+
         var curr_chart = $("#charts-container").clone();
         $("#pdf-chart .resume-content").html(curr_chart);
 
         var curr_res = $("#charts-resume").clone();
         $("#pdf-chart .resume-content").html(curr_res);
 
-        var pdf = new jsPDF('p', 'pt', 'a4');
-        var source = $('#pdf-chart')[0];
+        var pdf = new jsPDF('l', 'mm', 'a4');
+        var chart_img = $('.chart-img img.dynamic-chart-img').attr('src');
+        var margins = { top: 30, bottom: 60, left: 10, width: 180 };
 
-        specialElementHandlers = {
-            // element with id of "bypass" - jQuery style selector
-            '#bypassme': function (element, renderer) {
-                // true = "handled elsewhere, bypass text extraction"
-                return true
-            }
-        };
-        var margins = { top: 80, bottom: 60, left: 40, width: 800 };
-        // all coords and widths are in jsPDF instance's declared units
-        // 'inches' in this case
-        pdf.fromHTML(
-          source, // HTML string or DOM elem ref.
-          margins.left, // x coord
-          margins.top, { // y coord
-              'width': margins.width, // max width of content on PDF
-              'elementHandlers': specialElementHandlers
-          },
-          function (dispose) {
-              // dispose: object with X, Y of the last line add to the PDF
-              //          this allow the insertion of new lines after html
-              pdf.save('chart.pdf');
-          }, margins);
+        pdf.addImage(chart_img, 'PNG',  margins.left, margins.top, margins.width, 40);
+        pdf.text('Pesquisa: Coleções / Criadas', 10, 10);
+        pdf.text('Período consultado: de 15 a 21/09/2016', 10, 50);
+        pdf.text('Name: admin User: admin e-mail: webmaster@rodrigodeoliveira.net', 10, 150);
+        var timeStamp = new Date().toDateString();
+        var chart_name = curr_type + '_chart_' + timeStamp + '.pdf';
+        
+        pdf.save( chart_name );
     }
+
     $("#report_type_stat").dynatree(stats_dynatree_opts);
 </script>

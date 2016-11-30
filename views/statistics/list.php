@@ -32,7 +32,7 @@ include_once('js/list_js.php');
 
     <div id="charts-display" class="col-md-9">
 
-        <?php // include_once "inc/pdf.php"; ?>
+        <?php include_once "inc/pdf.php"; ?>
 
         <div class="chart-header btn-group col-md-12">
             

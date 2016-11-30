@@ -1,27 +1,14 @@
-<style type="text/css">
-    #pdf-chart .resume-content {
-        color: red;
-    }
-    
-    .pdf-footer {
-        float: right;
-    }
-    
-    .eba {
-        float: right;
-        color: goldenrod;
-    }
-</style>
 <div id="pdf-chart">
-  <?php $_log_helper->renderPDFHeader(); ?>
-    
-    <div class="eba">
-        de 09 a 12 de dezembro de 2016
+  <?php // $_log_helper->renderPDFHeader(); ?>
+
+   <?php /* ?> <div class="period"> <div class="from"> - </div> <?php _t('to',1); ?> <div class="to"> - </div> </div> */ ?>
+
+    <div class="chart-img">
+        <img src="https://developers.google.com/chart/interactive/images/chart_printable.png" alt="" class="hide dynamic-chart-img" />
     </div>
 
-    <div class="resume-content"> 
-        
-    </div>
+    <div class="resume-content"> </div>
 
-  <?php $_log_helper->renderPDFFooter(); ?>
+  <?php // $_log_helper->renderPDFFooter(); ?>
+
 </div>

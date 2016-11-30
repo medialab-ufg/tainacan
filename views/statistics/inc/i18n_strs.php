@@ -10,4 +10,6 @@
         <?php }
         ?>
     </div>
+
+    <div class="charts-subtitles"></div>
 </div>
