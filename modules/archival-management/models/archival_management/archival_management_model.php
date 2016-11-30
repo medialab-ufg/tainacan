@@ -68,7 +68,19 @@ class ArchivalManagementModel extends Model {
         //busco os filhos
         $children = $this->get_category_children($category_id);
         // monto a linha do arquivo
-        $string .= utf8_decode($code.' - '.$term->name.';'.$current_phase.';'.$intermediate_phase.';'.$destination.';'.$observation. PHP_EOL);
+        $name = '';
+        if((mb_detect_encoding($term->name)=='UTF-8')||mb_detect_encoding($term->name)=='ASCII'):
+            $name = $term->name;
+        elseif($term->name):
+            $name =  utf8_encode($term->name);
+        endif;
+        //verifico a co
+        if((mb_detect_encoding($observation)=='UTF-8')||mb_detect_encoding($observation)=='ASCII'):
+            $observation = $observation;
+        elseif($term->name):
+            $observation =  utf8_encode($observation);
+        endif;
+        $string .= $code.' - '.$name.';'.$current_phase.';'.$intermediate_phase.';'.$destination.';'.$observation. PHP_EOL;
         if(!empty($children)){
             foreach ($children as $child) {
                 $this->generate_table_of_temporality($child, $string);
