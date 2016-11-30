@@ -183,7 +183,7 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
 
                             <div class="col-md-12 no-padding">
                                 <div class="row search-top-container">
-                                
+
                                     <div class="col-md-10 box-left">
                                         <div class="search-colecao">
                                             <div class="input-group">
@@ -204,7 +204,7 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
                                             <?php _e('Advanced Search', 'tainacan'); ?>
                                         </button>
                                     </div>
-                                    
+
                                 </div>
                             </div>
 
@@ -280,7 +280,7 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
                                     <button id="collectionViewMode" data-toggle="dropdown" type="button" class="btn btn-default">
                                         <?php _e("Show:", "tainacan"); ?>
                                     </button>
-                                    
+
                                     <ul class="dropdown-menu" aria-labelledby="collectionViewMode">
                                         <?php foreach ( ViewHelper::collection_view_modes() as $mode => $title): ?>
                                             <li class="<?php echo $mode ?>">

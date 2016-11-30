@@ -32,8 +32,6 @@ include_once('js/list_js.php');
 
     <div id="charts-display" class="col-md-9">
 
-        <?php include_once "inc/pdf.php"; ?>
-
         <div class="chart-header btn-group col-md-12">
             
             <?php $_log_helper->render_config_title(_t('Repository Statistics')); ?>
@@ -74,9 +72,6 @@ include_once('js/list_js.php');
             <div id="barchart_div" class="hide"></div>
 
             <input type="hidden" value="default" class="selected_chart_type" />
-            <?php /*
-            <img src="https://developers.google.com/chart/interactive/images/chart_printable.png" alt="" class="dynamic-chart-img" />
-            */ ?>
         </div>
         
         <div id="charts-resume" class="col-md-12">
@@ -88,6 +83,16 @@ include_once('js/list_js.php');
             </table>
 
         </div>
+
+        <div class="col-md-12 no-padding" style="background: #e3e3c7; margin-top: 10px; text-align: center">
+            <?php include_once "inc/pdf.php"; ?>
+
+            <?php
+
+                
+            ?>
+        </div>
+
     </div>
 
     <div class="temp-set" style="display: none"></div>

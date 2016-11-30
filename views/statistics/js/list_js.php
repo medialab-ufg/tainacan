@@ -83,7 +83,7 @@
             var chart_type = selected_chart.replace('chart_div', '');
             
             $('.selected_chart_type').val(chart_type);
-            cl("Atualizado para: > " + $('.selected_chart_type').val() );
+            // cl("Atualizado para: > " + $('.selected_chart_type').val() );
 
             $(".statChartType li").each(function(idx, elem){
                if( $(elem).attr('class') == selected_chart ) {
@@ -241,7 +241,7 @@
             // Google Charts objects
             if( chart_type == 'pie' ) {
                 var piechart = new google.visualization.PieChart(document.getElementById('piechart_div'));
-                var piechart_options = { title:'Qtd ' + title,
+                var piechart_options = { title:'Qtd ' + title, is3D: true,
                     colors: ['#F09B35','#8DA9BF','#F2C38D','#E6AC03', '#D94308', '#013453'] }; // '#0F4F8D','#2B85C1' tons de azul
 
                 google.visualization.events.addListener(piechart, 'ready', function() {
@@ -263,11 +263,6 @@
             } else if( chart_type == 'default' ) {
                 var default_chart = new google.charts.Bar(document.getElementById('defaultchart_div'));
                 var data = google.visualization.arrayToDataTable( chart_data );
-
-                google.visualization.events.addListener(data, 'ready', function() {
-                    var chart_png = data.getImageURI();
-                    $('.dynamic-chart-img').removeClass('hide').attr('src', chart_png );
-                });
                 
                 var default_options = { colors: [color], legend: 'none' };
                 default_chart.draw(data, default_options);
@@ -282,23 +277,35 @@
     function getStatPDF() {
         var curr_type = $('.selected_chart_type').val();
 
-        var curr_chart = $("#charts-container").clone();
-        $("#pdf-chart .resume-content").html(curr_chart);
-
         var curr_res = $("#charts-resume").clone();
-        $("#pdf-chart .resume-content").html(curr_res);
+        $(".pdf_footer").append(curr_res);
 
-        var pdf = new jsPDF('l', 'mm', 'a4');
-        var chart_img = $('.chart-img img.dynamic-chart-img').attr('src');
-        var margins = { top: 30, bottom: 60, left: 10, width: 180 };
+        //var pdf = new jsPDF('l', 'mm', 'a4');
+        var pdf = new jsPDF();
+        pdf.setFont("helvetica");
+        // var chart_img = $('.chart-img img.dynamic-chart-img').attr('src');
+        var logo = $('img.tainacan-logo-cor').attr('src');
+        // cl('a URL da logo' + logo);
 
-        pdf.addImage(chart_img, 'PNG',  margins.left, margins.top, margins.width, 40);
-        pdf.text('Pesquisa: Coleções / Criadas', 10, 10);
-        pdf.text('Período consultado: de 15 a 21/09/2016', 10, 50);
-        pdf.text('Name: admin User: admin e-mail: webmaster@rodrigodeoliveira.net', 10, 150);
-        var timeStamp = new Date().toDateString();
-        var chart_name = curr_type + '_chart_' + timeStamp + '.pdf';
+        var margins = { top: 30, bottom: 60, left: 0, width: 180 };
+        var image = { width: 180, height: 40 };
+        pdf.setFontSize(12);
+        // pdf.addImage(chart_img, 'PNG', margins.left, margins.top, image.width, image.height);
+        var line_dims = { startX: 10, startY: 20, length: 188, thickness: 0.5 };
+
+        pdf.rect(line_dims.startX, line_dims.startY, line_dims.length, line_dims.thickness, 'F');
+        pdf.fromHTML('<h2>Estatísticas do Repositório</h2>',125,5);
+        // pdf.addImage(logo, 'PNG', 5, 5, 200, 55);
+        pdf.fromHTML($('.rep-stats')[0], 10, 5 );
+        pdf.fromHTML('<strong>Pesquisa: </strong> Coleções / Criadas', 10, 20);
+        pdf.fromHTML('<strong>Período Consultado: </strong> de 15 a 21/09/2016', 125, 20);
+        pdf.rect(line_dims.startX, line_dims.startY + 10, line_dims.length, line_dims.thickness, 'F');
         
+        pdf.fromHTML( $('.pdf_footer').get(0), 5, 120, { 'width': 120 });
+        pdf.fromHTML( $('#user_details').get(0), 5, 180, { 'width': 160 });
+        
+        var timeStamp = new Date().getMilliseconds();
+        var chart_name = curr_type + '_chart_' + timeStamp + '.pdf';
         pdf.save( chart_name );
     }
 
