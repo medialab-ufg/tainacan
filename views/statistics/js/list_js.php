@@ -271,10 +271,10 @@
     }
 
     $('a.dl-pdf').click(function() {
-        getStatPDF();
+        drawStatPDF();
     });
 
-    function getStatPDF() {
+    function drawStatPDF() {
         var curr_type = $('.selected_chart_type').val();
 
         var curr_res = $("#charts-resume").clone();
@@ -282,21 +282,25 @@
 
         //var pdf = new jsPDF('l', 'mm', 'a4');
         var pdf = new jsPDF();
-        pdf.setFont("helvetica");
-        // var chart_img = $('.chart-img img.dynamic-chart-img').attr('src');
+        // pdf.setFont("helvetica");
+        //var chart_img = $('.chart-img img.dynamic-chart-img').attr('src');
         var logo = $('img.tainacan-logo-cor').attr('src');
-        // cl('a URL da logo' + logo);
 
-        var margins = { top: 30, bottom: 60, left: 0, width: 180 };
+        var chartImg = new Image();
+        chartImg.src = logo;
+        chartImg.onload = function () {
+            pdf.addImage(chartImg, 'PNG', 10, 10, 30, 8);
+        };
+
+        var margins = { top: 40, bottom: 60, left: 0, width: 180 };
         var image = { width: 180, height: 40 };
         pdf.setFontSize(12);
-        // pdf.addImage(chart_img, 'PNG', margins.left, margins.top, image.width, image.height);
+        //pdf.addImage(chart_img, 'PNG', margins.left, margins.top, image.width, image.height);
         var line_dims = { startX: 10, startY: 20, length: 188, thickness: 0.5 };
 
         pdf.rect(line_dims.startX, line_dims.startY, line_dims.length, line_dims.thickness, 'F');
         pdf.fromHTML('<h2>Estatísticas do Repositório</h2>',125,5);
-        // pdf.addImage(logo, 'PNG', 5, 5, 200, 55);
-        pdf.fromHTML($('.rep-stats')[0], 10, 5 );
+
         pdf.fromHTML('<strong>Pesquisa: </strong> Coleções / Criadas', 10, 20);
         pdf.fromHTML('<strong>Período Consultado: </strong> de 15 a 21/09/2016', 125, 20);
         pdf.rect(line_dims.startX, line_dims.startY + 10, line_dims.length, line_dims.thickness, 'F');

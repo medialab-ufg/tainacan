@@ -11,9 +11,7 @@
     </div>
     
     <div class="pdf_footer">  </div>
-    <div class="rep-stats">
-       <h4> <?php _t('Tainacan',1); ?> </h4>
-    </div>
+    
     <img src="<?php echo get_template_directory_uri().'/libraries/images/logo/tainacan-cor.png' ?>" alt="" class="tainacan-logo-cor">
 </div>
 
