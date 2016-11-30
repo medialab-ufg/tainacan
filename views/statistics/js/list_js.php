@@ -252,7 +252,7 @@
                 piechart.draw(commom_data, piechart_options);
             } else if ( chart_type == 'bar' ) {
                 var barchart = new google.visualization.BarChart(document.getElementById('barchart_div'));
-                var barchart_options = {title:'Barchart stats', width: 800, height:300, legend: 'none', color: 'red'};
+                var barchart_options = {title:'Barchart stats', width: 800, height:300, legend: 'none', colors: ['#013453', 'orange']};
 
                 google.visualization.events.addListener(barchart, 'ready', function() {
                     var chart_png = barchart.getImageURI();
@@ -276,41 +276,58 @@
 
     function drawStatPDF() {
         var curr_type = $('.selected_chart_type').val();
+        var d = new Date();
 
         var curr_res = $("#charts-resume").clone();
-        $(".pdf_footer").append(curr_res);
+        $(".pdf_footer").html(curr_res);
 
         //var pdf = new jsPDF('l', 'mm', 'a4');
         var pdf = new jsPDF();
         // pdf.setFont("helvetica");
-        //var chart_img = $('.chart-img img.dynamic-chart-img').attr('src');
-        var logo = $('img.tainacan-logo-cor').attr('src');
-
+        var chart_png = $('.chart-img img.dynamic-chart-img').attr('src');
         var chartImg = new Image();
-        chartImg.src = logo;
+        chartImg.src = chart_png;
         chartImg.onload = function () {
-            pdf.addImage(chartImg, 'PNG', 10, 10, 30, 8);
+            pdf.addImage(chartImg, 'PNG', margins.left, margins.top, image.width, image.height);
+        };
+
+        var logo = $('img.tainacan-logo-cor').attr('src');
+        var projectLogo = new Image();
+        projectLogo.src = logo;
+        projectLogo.onload = function () {
+            pdf.addImage(projectLogo, 'PNG', 10, 10, 30, 8);
         };
 
         var margins = { top: 40, bottom: 60, left: 0, width: 180 };
         var image = { width: 180, height: 40 };
-        pdf.setFontSize(12);
-        //pdf.addImage(chart_img, 'PNG', margins.left, margins.top, image.width, image.height);
+
         var line_dims = { startX: 10, startY: 20, length: 188, thickness: 0.5 };
+        var week_day = " (" + (getWeekDay()[d.getDay()]).toString().toLowerCase() + ")";
+        var formated_date = d.getDate() + '/' + d.getMonth() + '/' + d.getYear() + week_day;
 
         pdf.rect(line_dims.startX, line_dims.startY, line_dims.length, line_dims.thickness, 'F');
-        pdf.fromHTML('<h2>Estatísticas do Repositório</h2>',125,5);
 
+        var consultDate = "Consultado em: " + formated_date;
+        pdf.setFontSize(18);
+        pdf.text('Estatísticas do Repositório' , 125, 12);
+
+        pdf.setFontSize(9);
+        pdf.setTextColor(100);
+        pdf.text(consultDate, 140, 18);
         pdf.fromHTML('<strong>Pesquisa: </strong> Coleções / Criadas', 10, 20);
         pdf.fromHTML('<strong>Período Consultado: </strong> de 15 a 21/09/2016', 125, 20);
         pdf.rect(line_dims.startX, line_dims.startY + 10, line_dims.length, line_dims.thickness, 'F');
         
-        pdf.fromHTML( $('.pdf_footer').get(0), 5, 120, { 'width': 120 });
-        pdf.fromHTML( $('#user_details').get(0), 5, 180, { 'width': 160 });
-        
-        var timeStamp = new Date().getMilliseconds();
+        pdf.fromHTML( $('.pdf_footer').get(0), line_dims.startX, 80);
+        pdf.fromHTML( $('#user_details').get(0), line_dims.startX, 120);
+
+        var timeStamp = d.getMilliseconds();
         var chart_name = curr_type + '_chart_' + timeStamp + '.pdf';
         pdf.save( chart_name );
+    }
+
+    function getWeekDay() {
+        return ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado']
     }
 
     $("#report_type_stat").dynatree(stats_dynatree_opts);
