@@ -169,16 +169,19 @@ class ExportAIP extends ThemeOptionsModel {
      * 
      * @return type
      */
-    public function get_info_export_aip() {
-        $return['total_community'] = $this->community_model->get_count_communities(); 
-        $return['total_collection'] = $this->collection_model->get_count_collections(); 
-        $return['total_item'] = $this->item_model->get_count_items(); 
+    public function get_info_export_aip($data) {
+        $return['total_community'] = (!isset($data['total_community'])) ? $this->community_model->get_count_communities() : $data['total_community']; 
+        $return['total_collection'] =  (!isset($data['total_collection'])) ? $this->collection_model->get_count_collections() : $data['total_collection']; 
+        $return['total_item'] =  (!isset($data['total_item'])) ? $this->item_model->get_count_items() : $data['total_item']; 
         $return['total'] = $return['total_community'] + $return['total_collection'] + $return['total_item'];
         $return['found_community'] = $this->search_files_name('COMMUNITY@');
         $return['found_collection'] = $this->search_files_name('COLLECTION@');
         $return['found_item'] = $this->search_files_name('ITEM@');
         $return['exported'] = $return['found_community'] + $return['found_collection'] + $return['found_item'];
         $return['percent'] = ($return['exported'] / $return['total']) * 100;
+        if($return['exported'] >= $return['total'] ){
+            $return['close'] = true;
+        }
         return json_encode($return);
     }
     

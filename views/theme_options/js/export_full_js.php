@@ -113,6 +113,38 @@ function start_loader_aip(){
             $('#total-item').html(json.total_item);
             $('#found-item').html(json.founf_item);
             $('#progressbar').val(json.percent);
+            callback_loader_aip(json);
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('All objects imported succesfully!', 'tainacan') ?>', 'success');
+        });
+}
+
+function callback_loader_aip(json){
+    $.ajax({
+            type: "POST",
+            url: $('#src').val() + "/controllers/theme_options/theme_options_controller.php",
+            data: {
+                total_community: json.total_community,
+                total_collection: json.total_collection,
+                total_item: json.total_item,
+                collection_id: $('#collection_id').val(),
+                operation: 'get_info_export_aip'
+            }
+        }).done(function (result) {
+            var json = JSON.parse(result);
+            if(!json.close){
+                $('#total-community').html(json.total_community);
+                $('#found-community').html(json.found_community);
+                $('#total-collection').html(json.total_collection);
+                $('#found-collection').html(json.found_collection);
+                $('#total-item').html(json.total_item);
+                $('#found-item').html(json.found_item);
+                $('#progressbar').val(json.percent);
+                callback_loader_aip(json);
+            }else{
+                $('#modalExportAIP').modal('hide');
+                showAlertGeneral('<?php _e('Compress Done!', 'tainacan') ?>', '<?php _e('Creating zip file, in few seconds the download will start', 'tainacan') ?>', 'success');
+            }
         }).fail(function (jqXHR, textStatus, errorThrown) {
             showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('All objects imported succesfully!', 'tainacan') ?>', 'success');
         });

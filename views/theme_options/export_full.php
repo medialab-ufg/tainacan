@@ -25,15 +25,15 @@ include_once ('../../helpers/view_helper.php');
                                 </select>
                             </div>
                             
-                            <button type="submit" id="export_zip" class="btn btn-primary tainacan-blue-btn-bg"><?php _e('Export AIP', 'tainacan'); ?></button>
+                            <button type="submit" onclick="start_loader_aip()" id="export_zip" class="btn btn-primary tainacan-blue-btn-bg"><?php _e('Export AIP', 'tainacan'); ?></button>
                             
-                            <button type="button" onclick="start_loader_aip()" id="export_csv" class="btn btn-primary tainacan-blue-btn-bg"><?php _e('TESTE', 'tainacan'); ?></button>
+                            <!--button type="button" onclick="start_loader_aip()" id="export_csv" class="btn btn-primary tainacan-blue-btn-bg"><?php _e('TESTE', 'tainacan'); ?></button-->
                         </form>
                          <div class="modal fade" id="modalExportAIP" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-body">
-                                        <h4><?php _t('Downloading will start after the compression', true) ?></h4>
+                                        <h4><?php _t('Download will start after the compression', true) ?></h4>
                                         <p><?php _t('Communities compressed', true) ?> : <span id="found-community"></span>/<span id="total-community">0</span></p>
                                         <p><?php _t('Collections compressed', true) ?> : <span id="found-collection"></span>/<span id="total-collection">0</span></p>
                                         <p><?php _t('Items compressed', true) ?> : <span id="found-item"></span>/<span id="total-item">0</span></p>
