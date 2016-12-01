@@ -277,11 +277,11 @@
     function drawStatPDF() {
         var curr_type = $('.selected_chart_type').val();
         var d = new Date();
-        var line_dims = { startX: 20, startY: 40, length: 376, thickness: 0.5 };
+        var line_dims = { startX: 20, startY: 40, length: 550, thickness: 0.5 };
         var week_day = " (" + (getWeekDay()[d.getDay()]).toString().toLowerCase() + ")";
         var formated_date = d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear() + week_day;
 
-        var margins = { top: 40, bottom: 60, left: 25, width: 180 };
+        var margins = { top: 80, bottom: 60, left: 25, width: 180 };
         var image = { width: 180, height: 40 },
              logo = { width: 180, height: 40 }; // 30 & 8 or 40 & 10.92
 
@@ -315,25 +315,25 @@
         var consultDate = "Consultado em: " + formated_date;
         pdf.setFontSize(14);
         pdf.setFontType('bold');
-        pdf.text('Estatísticas do Repositório', 300, (line_dims.startX) );
+        pdf.text('Estatísticas do Repositório', 390, (line_dims.startX) );
 
         pdf.setFontSize(9);
         pdf.setTextColor(100);
         pdf.setFontType('normal');
-        pdf.text(consultDate, 320, line_dims.startX + 5);
+        pdf.text(consultDate, 410, line_dims.startX + 12);
 
         pdf.setTextColor(100);
          // content, xPos, yPos
-        pdf.fromHTML('<strong>Pesquisa: </strong> Coleções / Criadas', line_dims.startX, line_dims.startY);
-        pdf.fromHTML('<strong>Período Consultado: </strong> de 15 a 21/09/2016', 125, line_dims.startY);
-        pdf.rect(line_dims.startX, line_dims.startY + 10, line_dims.length, line_dims.thickness, 'F');
+        pdf.fromHTML('<strong>Pesquisa: </strong> Coleções / Criadas', line_dims.startX, (line_dims.startY - 3) );
+        pdf.fromHTML('<strong>Período Consultado: </strong> de 15 a 21/09/2016', 360, (line_dims.startY - 3) );
+        pdf.rect(line_dims.startX, line_dims.startY + 20, line_dims.length, line_dims.thickness, 'F');
 
         var resume_data = pdf.autoTableHtmlToJson( $('#charts-resume table').get(0) );
         cl(resume_data);
-        var p = 200;
-
+        
+        var p = 300;
         var autoTable_opts = {
-            margin: { top: p }, startY: p,
+            theme: 'plain', margin: { top: p }, startY: p,
         };
 
         pdf.autoTable( resume_data.columns, resume_data.data, autoTable_opts);
