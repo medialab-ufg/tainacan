@@ -454,6 +454,8 @@
                 $("#dynatree_properties_filter").dynatree("getTree").reload();
                 list_collection_metadata();
                 getRequestFeedback(elem.type, elem.msg);
+                //limpando caches
+                delete_all_cache_collection();
             });
         })
     });
@@ -731,6 +733,8 @@
 
         $("#meta-filter").modal('hide');
         //list_collection_facets();
+        //limpando caches
+        delete_all_cache_collection();
     });
 
     function edit_tag(item) {
@@ -761,7 +765,8 @@
         } else {
             removeFacet(id_correto);
         }
-
+        //limpando caches
+                delete_all_cache_collection();
         //list_collection_facets();
     });
 
@@ -859,6 +864,8 @@
             $("#dynatree_properties_filter").dynatree("getTree").reload();
             list_collection_metadata();
             getRequestFeedback(elem.type, elem.msg);
+            //limpando caches
+                delete_all_cache_collection();
         });
     });
 
@@ -1079,6 +1086,8 @@
             $("#meta-category").modal('hide');
             list_collection_metadata();
             getRequestFeedback(elem.type, elem.msg);
+            //limpando caches
+            delete_all_cache_collection();
         });
     });
 
@@ -1305,7 +1314,8 @@
             $('#meta-voting').modal('hide');
             getRequestFeedback(elem.success, elem.msg);
             list_collection_metadata();
-
+            //limpando caches
+            delete_all_cache_collection();
         });
     });
 
@@ -1325,6 +1335,8 @@
 
             getRequestFeedback(elem.success, elem.msg);
             list_collection_metadata();
+            //limpando caches
+           delete_all_cache_collection();
         });
 
     });
@@ -1513,7 +1525,9 @@
             if ( elem != null ) {
                 list_collection_metadata();
                 getRequestFeedback(elem.type, elem.msg);
-            }            
+            } 
+            //limpando caches
+            delete_all_cache_collection();
         });
     });
 
