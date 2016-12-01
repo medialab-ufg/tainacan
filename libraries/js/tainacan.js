@@ -1410,7 +1410,7 @@ function showFormCreateURL(url) {
 }
 
 function goToCollectionHome() {
-    window.location = location.origin + location.pathname;
+    window.location = $('#site_url').val()+'/?p='+$('#collection_id').val();
 }
 
 function showFormCreateURLFile(url, type) {

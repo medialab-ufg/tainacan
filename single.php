@@ -42,6 +42,7 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
     <input type="hidden" id="src" name="src" value="<?php echo get_template_directory_uri() ?>">
     <input type="hidden" id="collection_id" name="collection_id" value="<?php echo get_the_ID() ?>">
     <input type="hidden" id="mode" name="mode" value="<?php echo $mode ?>">
+    <input type="hidden" id="site_url" value="<?php echo site_url(); ?>" >
     <input type="hidden" id="socialdb_permalink_collection" name="socialdb_permalink_collection" value="<?php echo get_the_permalink(get_the_ID()); ?>" />
     <input type="hidden" id="search_collection_field" name="search_collection_field" value="<?php
     if ($_GET['search']) {
