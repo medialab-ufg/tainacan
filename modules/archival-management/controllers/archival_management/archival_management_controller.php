@@ -21,8 +21,8 @@ include_once(dirname(__FILE__).'/../../../../controllers/general/general_control
                         ob_end_clean(); 
                         $string = 'Assunto;Fase Corrente;Fase Intermediária;Destinação Final;Observação'. PHP_EOL;
                         $string = $archival_management_model->generate_table_of_temporality($data['category_id'],$string);
-                        header('Content-disposition: attachment; filename=Tabela de Temporariedade - '.get_term_by('id',$data['category_id'],'socialdb_category_type')->name.'.txt');
-                        header('Content-type: text/plain');
+                        header('Content-disposition: attachment; filename=Tabela de Temporariedade - '.get_term_by('id',$data['category_id'],'socialdb_category_type')->name.'.csv');
+                        header('Content-type: text/csv');
                         echo $string;
                         break;
                     case 'list_items_to_export':

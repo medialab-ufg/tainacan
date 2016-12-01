@@ -72,7 +72,7 @@ class ExportAIPModel extends ThemeOptionsModel {
                 if($category_root && get_term_by('id', $category_root->parent,'socialdb_category_type')->name=='socialdb_category'){
                     $collection = $this->get_collection_by_category_root($category_root->term_id);
                     if (isset($collection[0]->post_title)) {
-                        $collection_parents[] = $collection[0];
+                        $collection_parents[$collection[0]->ID] = $collection[0];
                     }
                 }
             }

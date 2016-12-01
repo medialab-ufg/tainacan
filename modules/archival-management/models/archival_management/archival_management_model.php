@@ -33,7 +33,7 @@ class ArchivalManagementModel extends Model {
      * @param int $category_id O id da categoria que sera gerado o texto para o arquivo
      * @return string O conteudo do aquivo
      */
-    public function generate_table_of_temporality($category_id,&$string = '') {
+    public function generate_table_of_temporality($category_id,&$string = '',$space='') {
         $term = get_term_by('id', $category_id, 'socialdb_category_type');
         $code = get_term_meta($category_id, 'socialdb_category_classification_code',true);
         // destinacao
@@ -80,10 +80,11 @@ class ArchivalManagementModel extends Model {
         elseif($term->name):
             $observation =  utf8_encode($observation);
         endif;
-        $string .= $code.' - '.$name.';'.$current_phase.';'.$intermediate_phase.';'.$destination.';'.$observation. PHP_EOL;
+        $string .= $space.$code.' - '.$name.';'.$current_phase.';'.$intermediate_phase.';'.$destination.';'.$observation. PHP_EOL;
         if(!empty($children)){
+            $space .= '  ';
             foreach ($children as $child) {
-                $this->generate_table_of_temporality($child, $string);
+                $this->generate_table_of_temporality($child, $string,$space);
             }
         }
         return $string;
