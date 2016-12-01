@@ -412,12 +412,17 @@
                         data: {category_id: node.data.key, operation: 'get_parent'}
                     }).done(function (result) {
                         elem = jQuery.parseJSON(result);
-                        if (elem.name) {
+                        if (elem.name && elem.name!=='socialdb_taxonomy' && elem.name!=='socialdb_category') {
                             $("#category_parent_name").val(elem.name);
                             $("#category_parent_id").val(elem.term_id);
                         } else {
                             $("#category_parent_name").val('<?php _e('Category root', 'tainacan'); ?>');
-                            $("#category_parent_id").val('0');
+                            if(elem.term_id){
+                                $("#category_parent_id").val(elem.term_id);
+                            }else{
+                                $("#category_parent_id").val('0');
+                            }
+                            
                         }
                         $("#show_category_property").show();
                         $('.dropdown-toggle').dropdown();

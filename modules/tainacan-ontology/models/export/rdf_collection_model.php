@@ -393,7 +393,7 @@ class OntologyRDFCollectionModel extends OntologyRDFModel {
             $xml .= "<rdfs:label>{$term->name}</rdfs:label>";
             $xml .= $this->get_restrictions_rdf($term->term_id);
             $xml .= $this->others_restrictions_classes($term->term_id);
-            if($parent->slug!=='socialdb_category')
+            if($parent->slug!=='socialdb_category' && $parent->slug!=='socialdb_taxonomy')
                 $xml .= '<rdfs:subClassOf rdf:resource="'.get_permalink($this->collection->ID).'?category='.$parent->slug.'" />';
             $xml .= '</owl:Class>';
         }

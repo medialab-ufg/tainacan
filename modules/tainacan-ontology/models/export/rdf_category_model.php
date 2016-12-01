@@ -84,7 +84,7 @@ class RDFOntologyCategoryModel extends OntologyRDFCollectionModel {
         endif;
          $xml .= $this->get_restrictions_rdf($category->term_id);
          $xml .= $this->others_restrictions_classes($category->term_id);
-        if($category->slug!='socialdb_category'){
+        if($category->slug!='socialdb_category'&&$category->slug!='socialdb_taxonomy'){
              $xml .= '<rdfs:subClassOf rdf:resource="'.$url.'?category='.$parent->slug.'" />';
         }else{
             $xml .= '<rdfs:subClassOf rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>';

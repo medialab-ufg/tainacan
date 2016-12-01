@@ -35,11 +35,12 @@ class CategoryModel extends Model {
         $is_new = $this->verify_category($data);
         if (!$is_new) {
             if ($data['category_parent_id'] == '0' ||
-                    $data['category_parent_id'] == 'public_categories' || $data['category_parent_id'] == 'shared_categories'||$data['category_parent_id'] == 'socialdb_category') {// se nao o usuario nao setou o parent
+                    $data['category_parent_id'] == 'public_categories' || 
+                    $data['category_parent_id'] == 'shared_categories'||$data['category_parent_id'] == 'socialdb_category'||$data['category_parent_id'] == 'socialdb_taxonomy') {// se nao o usuario nao setou o parent
                 $new_category = wp_insert_term($data['category_name'], 'socialdb_category_type', array('parent' => $this->get_category_taxonomy_root(),
                     'slug' => $this->generate_slug($data['category_name'], $data['collection_id']), 'description' => $this->set_description($data)));
             } else {
-                $data['category_parent_id'] = ($data['category_parent_id'] == 'user_categories' ? $this->get_category_taxonomy_root() : $data['category_parent_id']);
+                $data['category_parent_id'] = (($data['category_parent_id'] == 'user_categories' || $data['category_parent_id'] == 'socialdb_taxonomy' ) ? $this->get_category_taxonomy_root() : $data['category_parent_id']);
                 $new_category = create_register($data['category_name'], 'socialdb_category_type', array('parent' => $data['category_parent_id'],
                     'slug' => $this->generate_slug($data['category_name'], $data['collection_id']), 'description' => $this->set_description($data)));
             }
@@ -326,6 +327,9 @@ class CategoryModel extends Model {
     /* @author Eduardo */
 
     public function generate_collection_categories_dynatree($data, $dynatree, $hide_checkbox = false,$show_select = true) {
+        if(has_filter('remove_collection_categories') && apply_filters('remove_collection_categories', '')){
+            return $dynatree;
+        }
         $classCss = 'category_property_img';
         $dynatree[] = array('title' => __('Collection Categories', 'tainacan'), 'isLazy' => false,
             'key' => $this->get_category_root(), 'activate' => false, 'expand' => true,
@@ -706,6 +710,9 @@ class CategoryModel extends Model {
     public function get_category_array($data) {
         $array = [];
         if ($data->name == 'socialdb_category' || $data->name == 'socialdb_taxonomy') {
+            $array['term_id'] = $data->term_id;
+            $array['name'] = $data->name;
+            $array['parent'] = $data->parent;
             return $array;
         } else {
             $array['term_id'] = $data->term_id;

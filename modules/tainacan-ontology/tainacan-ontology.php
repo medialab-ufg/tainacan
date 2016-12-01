@@ -2,6 +2,7 @@
 /**
  * Modulo de Ontologia do Tainacan
  * 
+ * #-1 - REMOVENDO O COLLECTION CATEGORIES DO DYNATREE DAS CATEGORIAS
  * #0 - Alterando valores do total de nos e o nome da categoria root do repositorio
  * #1 - ADICIONANDO OS SCRIPTS DESTE MODULO 
  * #2 - ALTERACOES HOME DO ITEM  
@@ -30,6 +31,13 @@
 define('MODULE_ONTOLOGY', 'tainacan-ontology');
 define('ONTOLOGY_CONTROLLERS', get_template_directory_uri() . '/modules/' . MODULE_ONTOLOGY );
 load_theme_textdomain("tainacan", dirname(__FILE__) . "/languages");
+
+###### #-1 REMOVENDO O COLLECTION CATEGORIES DO DYNATREE DAS CATEGORIAS ########
+
+function ontology_remove_collection_categories($name) {
+    return true;
+}
+add_filter( 'remove_collection_categories', 'ontology_remove_collection_categories', 10, 3 );
 
 ################ #0 Alterando valores do total de nos e o nome da categoria root do repositorio ##########################
 
