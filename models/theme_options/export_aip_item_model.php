@@ -78,7 +78,7 @@ class ExportAIPItemModel extends ExportAIPModel {
                         <mods:language>
                             <mods:languageTerm authority="rfc3066">' . get_locale() . '</mods:languageTerm>
                        </mods:language>
-                        <mods:identifier type="uri">'. get_the_permalink($item->ID).'</mods:identifier>
+                        <mods:identifier type="uri">'.  get_the_permalink($collection_id).'?item='.$item->post_name.'</mods:identifier>
                         <mods:accessCondition type="useAndReproduction">Open Access</mods:accessCondition>
                         <mods:titleInfo>
                           <mods:title>'.$item->post_title.'</mods:title>
@@ -92,10 +92,11 @@ class ExportAIPItemModel extends ExportAIPModel {
                             <mdWrap MDTYPE="OTHER" OTHERMDTYPE="DIM">
                              <xmlData xmlns:dim="http://www.dspace.org/xmlns/dspace/dim"><dim:dim xmlns:dim="http://www.dspace.org/xmlns/dspace/dim" dspaceType="ITEM">
                                 <dim:field mdschema="dc" element="description" qualifier="abstract" >'.$item->post_content.'</dim:field>
-                                <dim:field mdschema="dc" element="identifier" qualifier="uri">'. get_the_permalink($item->ID).'</dim:field>
+                                <dim:field mdschema="dc" element="identifier" qualifier="uri">'. get_the_permalink($collection_id).'?item='.$item->post_name.'</dim:field>
                                  <dim:field mdschema="dc" element="rights" lang="en">Open Access</dim:field>
                                 <dim:field mdschema="dc" element="language" qualifier="iso" lang="en">' . get_locale() . '</dim:field>
                                 <dim:field mdschema="dc" element="title">'.$item->post_title.'</dim:field>
+                                 '.$this->get_properties_tainacan($item->ID).'   
                                 </dim:dim>
                               </xmlData>
                             </mdWrap>
@@ -175,7 +176,7 @@ class ExportAIPItemModel extends ExportAIPModel {
                 $size = filesize(get_attached_file($file->ID));
                 $name = $file->post_title;
                 $md5_inicial = get_post_meta($file->ID, 'md5_inicial', true);
-                 $this->XML .= '<amdSec ID="amd_'.$index++.'">';
+                 $this->XML .= '<amdSec ID="amd_'.$file->ID.'">';
                  $this->XML .= '<techMD ID="techMD_'.$index++.'">';
                  $this->XML .= '<mdWrap MDTYPE="PREMIS">';
                  $this->XML .= '<xmlData xmlns:premis="http://www.loc.gov/standards/premis" xsi:schemaLocation="http://www.loc.gov/standards/premis http://www.loc.gov/standards/premis/PREMIS-v1-0.xsd">'
@@ -220,7 +221,6 @@ class ExportAIPItemModel extends ExportAIPModel {
                                     <mdWrap MDTYPE="OTHER" OTHERMDTYPE="AIP-TECHMD">
                                      <xmlData xmlns:dim="http://www.dspace.org/xmlns/dspace/dim">
                                      <dim:dim xmlns:dim="http://www.dspace.org/xmlns/dspace/dim" dspaceType="BITSTREAM">
-                                   <dim:field mdschema="dc" element="title">v11n3a36.pdf</dim:field>
                                    <dim:field mdschema="dc" element="title" qualifier="alternative">'.$url_image.'</dim:field>
                                    <dim:field mdschema="dc" element="format" qualifier="mimetype">'. get_post_mime_type($file->ID).'</dim:field>
                                    <dim:field mdschema="dc" element="format" qualifier="supportlevel">KNOWN</dim:field>
@@ -309,7 +309,7 @@ class ExportAIPItemModel extends ExportAIPModel {
                 $size = filesize(get_attached_file($file->ID));
                 $ext = pathinfo($fullsize_path, PATHINFO_EXTENSION);
                 copy($fullsize_path, $dir_community.'/attachment_'.$file->ID.'.'.$ext);
-                $this->XML .= '<fileGrp ADMID="amd_'.$index++.'" USE="ORIGINAL">
+                $this->XML .= '<fileGrp ADMID="amd_13" USE="ORIGINAL">
                                 <file ID="bitstream_'.$file->ID.'" MIMETYPE="'. get_post_mime_type($file->ID).'" SIZE="'.$size.'" CHECKSUM="'.$md5_inicial.'" CHECKSUMTYPE="MD5">
                               <FLocat LOCTYPE="URL" xlink:type="simple" xlink:href="attachment_'.$file->ID.'"/>
                              </file>
@@ -338,6 +338,22 @@ class ExportAIPItemModel extends ExportAIPModel {
         $this->XML .= '<mptr ID="mptr_'.$index++.'" LOCTYPE="HANDLE" xlink:type="simple" xlink:href="'.$this->prefix.'/'.$collection_id.'"/>';
         $this->XML .= '</div>';
         $this->XML .= '</structMap>';
+    }
+    
+    public function get_properties_tainacan($item_id) {
+        $xml = '';
+        $properties = $this->get_properties_object($item_id);
+        if($properties && is_array($properties)){
+            foreach ($properties as $property_id => $values) {
+                $data = $this->get_all_property($property_id, true);
+                if($values && is_array($values)){
+                    foreach ($values as $value) {
+                        $xml .= '<dim:field mdschema="tainacan" element="'.sanitize_title($data['name']).'">'.$value.'</dim:field>';
+                    }
+                }
+            }
+        }
+        return $xml;
     }
     
 }
