@@ -295,7 +295,7 @@
         var projectLogo = new Image();
         projectLogo.src = logo;
         projectLogo.onload = function () {
-            pdf.addImage(projectLogo, 'PNG', 10, 10, 30, 8);
+            pdf.addImage(projectLogo, 'PNG', 10, 7, 40, 10.92); // 30, 8 -> 3% original size
         };
 
         var margins = { top: 40, bottom: 60, left: 0, width: 180 };
@@ -308,12 +308,14 @@
         pdf.rect(line_dims.startX, line_dims.startY, line_dims.length, line_dims.thickness, 'F');
 
         var consultDate = "Consultado em: " + formated_date;
-        pdf.setFontSize(18);
-        pdf.text('Estatísticas do Repositório' , 125, 12);
+        pdf.setFontSize(14);
+        pdf.setFontType('bold');
+        pdf.text('Estatísticas do Repositório' , 133, 13);
 
         pdf.setFontSize(9);
         pdf.setTextColor(100);
-        pdf.text(consultDate, 140, 18);
+        pdf.setFontType('normal');
+        pdf.text(consultDate, 142, 18);
         pdf.fromHTML('<strong>Pesquisa: </strong> Coleções / Criadas', 10, 20);
         pdf.fromHTML('<strong>Período Consultado: </strong> de 15 a 21/09/2016', 125, 20);
         pdf.rect(line_dims.startX, line_dims.startY + 10, line_dims.length, line_dims.thickness, 'F');
