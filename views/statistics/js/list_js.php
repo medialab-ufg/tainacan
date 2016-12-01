@@ -278,12 +278,12 @@
         var curr_type = $('.selected_chart_type').val();
         var d = new Date();
 
-        var curr_res = $("#charts-resume").clone();
-        $(".pdf_footer").html(curr_res);
+        // var curr_res = $("#charts-resume").clone();
+        // $(".pdf_footer").html(curr_res);
 
         //var pdf = new jsPDF('l', 'mm', 'a4');
         var pdf = new jsPDF();
-        // pdf.setFont("helvetica");
+        
         var chart_png = $('.chart-img img.dynamic-chart-img').attr('src');
         var chartImg = new Image();
         chartImg.src = chart_png;
@@ -303,7 +303,7 @@
 
         var line_dims = { startX: 10, startY: 20, length: 188, thickness: 0.5 };
         var week_day = " (" + (getWeekDay()[d.getDay()]).toString().toLowerCase() + ")";
-        var formated_date = d.getDate() + '/' + d.getMonth() + '/' + d.getYear() + week_day;
+        var formated_date = d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear() + week_day;
 
         pdf.rect(line_dims.startX, line_dims.startY, line_dims.length, line_dims.thickness, 'F');
 
@@ -316,12 +316,46 @@
         pdf.setTextColor(100);
         pdf.setFontType('normal');
         pdf.text(consultDate, 142, 18);
+
+        pdf.setTextColor(100);
+         // content, xPos, yPos
         pdf.fromHTML('<strong>Pesquisa: </strong> Coleções / Criadas', 10, 20);
         pdf.fromHTML('<strong>Período Consultado: </strong> de 15 a 21/09/2016', 125, 20);
         pdf.rect(line_dims.startX, line_dims.startY + 10, line_dims.length, line_dims.thickness, 'F');
         
-        pdf.fromHTML( $('.pdf_footer').get(0), line_dims.startX, 80);
-        pdf.fromHTML( $('#user_details').get(0), line_dims.startX, 120);
+        // pdf.fromHTML( $('.pdf_footer').get(0), line_dims.startX, 80);
+        
+        // pdf.fromHTML( $('#charts-resume').get(0), line_dims.startX, 80);
+
+        var columns = [
+            {title: "ID", dataKey: "id"},
+            {title: "Title", dataKey: "title"},
+            {title: "MD5 Initial", dataKey: "md5_initial"},
+            {title: "MD5 Final", dataKey: "md5_final"},
+            {title: "Result", dataKey: "resultado"}
+
+        ];
+
+        var rows = [
+            {id: "23", title: "hey you!", md5_initial: 'ad', md5_final: 'sxd', resultado: 'olaolaaa'}, 
+            {id: "23", title: "hey sss!", md5_initial: 'ad', md5_final: 'sxd', resultado: 'olaolaaasasa'}, 
+            {id: "23", title: "asd23lijd you!", md5_initial: 'ad', md5_final: 'sxd', resultado: 'oladusiusdhdaishudasolaaa'}, 
+            {id: "23", title: "hey you :d!", md5_initial: 'ad', md5_final: 'sxd', resultado: 'olaolaaa!!'}, 
+        ];
+
+        pdf.autoTable(columns, rows, {
+            theme: 'striped', styles: {}, columnStyles: {}, margin: {top: 90}, tableWidth: 200,
+            beforePageContent: function (data) {
+                cl('');
+            }
+        });
+
+        // var res = pdf.autoTableHtmlToJson( $('#charts-resume').get(0) );
+
+        cl("FOUND!");
+        // cl(res);
+
+        pdf.fromHTML( $('#user_details').get(0), line_dims.startX, 150);
 
         var timeStamp = d.getMilliseconds();
         var chart_name = curr_type + '_chart_' + timeStamp + '.pdf';
@@ -329,7 +363,7 @@
     }
 
     function getWeekDay() {
-        return ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado']
+        return ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'];
     }
 
     $("#report_type_stat").dynatree(stats_dynatree_opts);
