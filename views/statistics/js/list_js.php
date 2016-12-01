@@ -298,7 +298,7 @@
             pdf.addImage(projectLogo, 'PNG', 10, 7, 40, 10.92); // 30, 8 -> 3% original size
         };
 
-        var margins = { top: 40, bottom: 60, left: 0, width: 180 };
+        var margins = { top: 40, bottom: 60, left: 30, width: 180 };
         var image = { width: 180, height: 40 };
 
         var line_dims = { startX: 10, startY: 20, length: 188, thickness: 0.5 };
