@@ -504,11 +504,11 @@
         $("#property_category_dynatree").dynatree({
             selectionVisible: true, // Make sure, selected nodes are visible (expanded).  
             checkbox: true,
-            initAjax: {
-                  url: src + '/controllers/category/category_controller.php',
+           initAjax: {
+                 url: src + '/controllers/collection/collection_controller.php',
                 data: {
                     collection_id: $("#collection_id").val(),
-                    operation: 'initDynatreeTerms',
+                    operation: 'initDynatreeSingleEdit',
                     hideCheckbox: 'false'
                 }
                 , addActiveKey: true

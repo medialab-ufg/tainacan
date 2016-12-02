@@ -1208,11 +1208,13 @@ function showPropertiesAndFilters(src) {
 }
 
 function showLayout(src) {
+    show_modal_main();
     $.ajax({
         url: src + '/controllers/search/search_controller.php',
         type: 'POST',
         data: {operation: 'edit_layout', collection_id: $("#collection_id").val()}
     }).done(function (result) {
+        hide_modal_main();
         $('#main_part').hide();
         $('#configuration').html(result).show();
     });

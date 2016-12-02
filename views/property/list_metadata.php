@@ -100,7 +100,7 @@ $array_visibility = ($meta&&$meta!=='') ? $meta : '';
                         <span class="glyphicon glyphicon-plus"></span>
                     </a>
                 </li>
-         </ul>
+         </ul>  
         </div>    
         <div id="tab-content-metadata" class="tab-content" style="background: white">
             <div id="tab_default" class="ui-widget ui-helper-clearfix col-md-12 tab-pane fade in active" style="background: white">
@@ -127,6 +127,9 @@ $array_visibility = ($meta&&$meta!=='') ? $meta : '';
                 </div>
             </div>
         </div>
+        <button id="next_property_wizard" onclick="showLayout($('#src').val());" class="btn btn-success pull-right btn-lg" style="display:none;margin-top: 15px;margin-right: 15px;">
+            <?php _e('Save & Next', 'tainacan'); ?>
+        </button>  
         <?php include_once "metadata_forms.php"; ?>
 
         <input type="hidden" id="collection_list_ranking_id" name="collection_id" value="">

@@ -293,9 +293,9 @@ public function add($data) {
             $facet_property = get_term_by('id', $facet['id'], 'socialdb_property_type');
 
             $facet['prop'] = $prop->get_property_type( $facet_property->term_id );
-
             //buscando os dados de cada tipo
-            if ($facet['id'] == 'tag') {
+            if ($facet['id'] == 'tag' || ($facet_property->slug && $facet_property->slug == 'socialdb_property_fixed_tags') ) {
+                $facet['id'] = 'tag';
                 $facet['nome'] = 'Tag';
                 //$facet['widget'] = 'tree';
                 $facet['orientation'] = $default_tree_orientation;

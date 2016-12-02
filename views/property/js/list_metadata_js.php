@@ -119,10 +119,12 @@
             $('#btn_back_collection').hide();
             $('#submit_configuration').hide();
             $('.back-to-collection').hide();
+            $('#next_property_wizard').show()
         } else {
             $('#properties_create_opt').hide();
             $('#collection-steps').hide();
             $('.back-to-collection').show();
+            $('#next_property_wizard').hide();
         }
         $('#collection_list_ranking_id').val(current_collection_id);
         $('#collection_ranking_type_id').val(current_collection_id);
@@ -334,6 +336,7 @@
                             if ( el.nome == null && el.id != "tree" ) {
                                 removeFacet(el.id);
                             } else {
+                                console.log(el);
                                 var current_prop = getPropertyType(el.prop);
                                 //console.log(el,(el.prop == null) , !isNaN(el.id) , $('.term-root-'+el.id).attr('id'));
                                 var item_html = '<li id="'+ el.id +'" data-widget="'+el.widget+'" class="form-group metadata-facet filter-'+el.id+'">' +
