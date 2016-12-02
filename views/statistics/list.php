@@ -77,7 +77,7 @@ include_once('js/list_js.php');
         <div id="charts-resume" class="col-md-12">
             <table>
                 <tbody>
-                <tr class="headers"> <th class="curr-parent"> <?php _t('Status:',1); ?> </th> </tr>
+                <tr class="headers"> <th class="curr-parent"> <?php _t('Status',1); ?> </th> </tr>
                 <tr class="content"> <td class="curr-filter"> <?php _t('Users:',1); ?> </td> </tr>
                 </tbody>
             </table>
@@ -86,11 +86,6 @@ include_once('js/list_js.php');
 
         <div class="col-md-12 no-padding" style="background: #e3e3c7; margin-top: 10px; text-align: center">
             <?php include_once "inc/pdf.php"; ?>
-
-            <?php
-
-                
-            ?>
         </div>
 
     </div>

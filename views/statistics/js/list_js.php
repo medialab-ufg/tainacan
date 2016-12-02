@@ -19,12 +19,12 @@
             author: '<?php _t("Author",1); ?>',
             editor: '<?php _t("Editor",1); ?>',
             subscriber: '<?php _t("Subscriber",1); ?>',
-            contributor: 'Colaborador',
-            access_oai_pmh: 'Acessos OAI-PMH',
-            import_csv: 'Importação CSV',
-            export_csv: 'Exportação CSV',
-            import_tainacan: 'Importação Tainacan',
-            export_tainacan: 'Exportação Tainacan'
+            contributor: '<?php _t("Colaborator",1); ?>',
+            access_oai_pmh: '<?php _t("OAI-PMH Accesses",1); ?>',
+            import_csv: '<?php _t("CSV Importation",1); ?>',
+            export_csv: '<?php _t("CSV Exportation",1); ?>',
+            import_tainacan: '<?php _t("Tainacan Importation",1); ?>',
+            export_tainacan: '<?php _t("Tainacan Exportation",1); ?>'
         };
     };
 
@@ -277,75 +277,77 @@
     function drawStatPDF() {
         var curr_type = $('.selected_chart_type').val();
         var d = new Date();
-        var line_dims = { startX: 20, startY: 40, length: 550, thickness: 0.5 };
+        var line_dims = { startX: 28, startY: 75, length: 540, thickness: 1 };
+        var margins = { top: 100, bottom: 60, left: 25, width: 180 };
+
         var week_day = " (" + (getWeekDay()[d.getDay()]).toString().toLowerCase() + ")";
         var formated_date = d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear() + week_day;
 
-        var margins = { top: 80, bottom: 60, left: 25, width: 180 };
-        var image = { width: 180, height: 40 },
-             logo = { width: 180, height: 40 }; // 30 & 8 or 40 & 10.92
-
         var pdf = new jsPDF('p', 'pt');
-        // pdf.internal.scaleFactor = 1.33;
-        
-        var chart_png = $('.chart-img img.dynamic-chart-img').attr('src');
 
+        var logo = $('img.tainacan-logo-cor').attr('src');
+        var projectLogo = new Image();
+        projectLogo.src = logo;
+
+        projectLogo.onload = function () {
+            var logo_settings = {
+                width: (projectLogo.naturalWidth * 0.48),
+                height: projectLogo.naturalHeight * 0.48
+            };
+            pdf.addImage(projectLogo, 'PNG', (line_dims.startX), (line_dims.startX), logo_settings.width, logo_settings.height);
+        };
+
+        var chart_png = $('.chart-img img.dynamic-chart-img').attr('src');
         var chartImg = new Image();
+        chartImg.setAttribute('crossOrigin', 'anonymous');
         chartImg.src = chart_png;
         chartImg.onload = function () {
             var chart_settings = { 
-                width: (chartImg.naturalWidth * 0.7), 
+                width: (chartImg.naturalWidth * 0.7),
                 height: (chartImg.naturalHeight * 0.7)
             };
             pdf.addImage(chartImg, 'PNG', margins.left, margins.top, chart_settings.width, chart_settings.height);
         };
 
-        var logo = $('img.tainacan-logo-cor').attr('src');
-        var projectLogo = new Image();
-        projectLogo.src = logo;
-        projectLogo.onload = function () {
-            var logo_settings = { 
-                width: (projectLogo.naturalWidth * 0.1), 
-                height: (projectLogo.naturalHeight * 0.1)
-            };
-            pdf.addImage(projectLogo, 'PNG', line_dims.startX, (line_dims.startX - 11), logo_settings.width, logo_settings.height); 
-        };
-        
         pdf.rect(line_dims.startX, line_dims.startY, line_dims.length, line_dims.thickness, 'F');
 
         var consultDate = "Consultado em: " + formated_date;
+        var same_x_dist = 370;
         pdf.setFontSize(14);
         pdf.setFontType('bold');
-        pdf.text('Estatísticas do Repositório', 390, (line_dims.startX) );
+        pdf.text('Estatísticas do Repositório', same_x_dist, (line_dims.startY - 17) );
 
-        pdf.setFontSize(9);
+        pdf.setFontSize(8.5);
         pdf.setTextColor(100);
         pdf.setFontType('normal');
-        pdf.text(consultDate, 410, line_dims.startX + 12);
+        pdf.text(consultDate, 403, line_dims.startY - 5);
 
-        pdf.setTextColor(100);
-         // content, xPos, yPos
-        pdf.fromHTML('<strong>Pesquisa: </strong> Coleções / Criadas', line_dims.startX, (line_dims.startY - 3) );
-        pdf.fromHTML('<strong>Período Consultado: </strong> de 15 a 21/09/2016', 360, (line_dims.startY - 3) );
-        pdf.rect(line_dims.startX, line_dims.startY + 20, line_dims.length, line_dims.thickness, 'F');
+        pdf.setTextColor(0);
+        pdf.setFontSize(10);
+        // content, xPos, yPos
+        var dist_from_top = line_dims.startY + 20;
+        pdf.text('Pesquisa: Coleções / Criadas', (line_dims.startX + 15), dist_from_top );
+        pdf.text('Período Consultado: de 15 a 21/09/2016', same_x_dist, dist_from_top );
+        pdf.rect(line_dims.startX, line_dims.startY + 30, line_dims.length, line_dims.thickness, 'F');
 
         var resume_data = pdf.autoTableHtmlToJson( $('#charts-resume table').get(0) );
-        cl(resume_data);
         
         var p = 300;
-        var autoTable_opts = {
-            theme: 'plain', margin: { top: p }, startY: p,
-        };
-
+        /* headerStyles: { textColor: [12,105,139], lineColor: [0,0,0], fillColor: 255 } */
+        var autoTable_opts = { theme: 'striped', startY: p, headerStyles: { fillColor: [44, 62, 80] } };
         pdf.autoTable( resume_data.columns, resume_data.data, autoTable_opts);
 
         var footer_set = {
-            startX: pdf.autoTableEndPosY() + 160,
-            startY: pdf.autoTableEndPosY() + 430
-        }
+            startX: (pdf.autoTableEndPosY() + 160),
+            startY: (pdf.autoTableEndPosY() + 430)
+        };
 
+        pdf.rect(line_dims.startX, footer_set.startY, line_dims.length, line_dims.thickness, 'F');
         pdf.fromHTML( $('#user_details').get(0), line_dims.startX, footer_set.startY );
-        pdf.text(footer_set.startX, (footer_set.startY + 50), 'Página 1 de 1');
+
+        var right_footer_text = '<?php _t("Page ",1); ?>' + 1 + '<?php _t(" of ",1); ?>' + pdf.internal.getNumberOfPages();
+        pdf.text(right_footer_text, footer_set.startX + 5, pdf.internal.pageSize.height - 20);
+        // cl(pdf.internal);
 
         var timeStamp = d.getMilliseconds();
         var chart_name = curr_type + '_chart_' + timeStamp + '.pdf';
