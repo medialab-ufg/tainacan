@@ -9,7 +9,7 @@
             </div>
             <div class="modal-body">
                 <form id="submit_form_tag" name="submit_form_tag">
-                    <input type="hidden" name="property_data_widget" value="<?php echo get_term_by('slug', 'socialdb_property_fixed_tags', 'socialdb_property_type')->term_id ?>">
+                    <input type="hidden" id="tag_id" value="<?php echo get_term_by('slug', 'socialdb_property_fixed_tags', 'socialdb_property_type')->term_id ?>">
                     <div class="form-group">
                         <label for="use-filter"><?php _e('Use as a filter','tainacan'); ?></label>
                         <input type="checkbox" value="true" name="property_data_use_filter" class="property_data_use_filter" />

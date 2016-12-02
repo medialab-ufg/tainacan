@@ -861,14 +861,15 @@
 
     $("#submit_form_tag").submit(function(e) {
         e.preventDefault();
-        var id_correto = $("#meta-tag #search_add_facet").val();
+        var id_correto = $("#meta-tag #tag_id").val();
         var data_widget = $("#meta-tag #search_data_widget").val();
 
         $("#meta-tag").modal('hide');
         var use_filter = $("#meta-tag .property_data_use_filter").prop('checked');
         var ordenation = $('#meta-tag input[name=filter_ordenation]:checked').val()
+        console.log( "add", id_correto, data_widget,ordenation);
         if (use_filter) {
-            setCollectionFacet( "add", id_correto, data_widget,ordenation);
+            setCollectionFacet( "update", id_correto, data_widget,ordenation);
         } else {
             removeFacet(id_correto);
         }

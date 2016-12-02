@@ -504,7 +504,7 @@
         $("#property_category_dynatree").dynatree({
             selectionVisible: true, // Make sure, selected nodes are visible (expanded).  
             checkbox: true,
-           initAjax: {
+            initAjax: {
                  url: src + '/controllers/collection/collection_controller.php',
                 data: {
                     collection_id: $("#collection_id").val(),
@@ -684,10 +684,11 @@
             selectMode: 1,
             selectionVisible: true, // Make sure, selected nodes are visible (expanded). 
             initAjax: {
-                url: src + '/controllers/category/category_controller.php',
+                url: src + '/controllers/collection/collection_controller.php',
                 data: {
                     collection_id: $("#collection_id").val(),
-                    operation: 'initDynatreeTerms'
+                    operation: 'initDynatreeSingleEdit',
+                    hideCheckbox: 'false'
                 }
                 , addActiveKey: true
             },

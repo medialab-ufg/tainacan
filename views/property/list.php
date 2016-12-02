@@ -84,7 +84,7 @@ include_once ('js/list_js.php');
             <ul class="nav nav-tabs" role="tablist">
                 <li role="presentation" class="active"><a id="click_property_data_tab" href="#property_data_tab" aria-controls="property_data_tab" role="tab" data-toggle="tab"><?php _e('Property data','tainacan') ?></a></li>
                 <li role="presentation"><a id="click_property_object_tab" href="#property_object_tab" aria-controls="property_object_tab" role="tab" data-toggle="tab"><?php _e('Property object','tainacan') ?></a></li>
-                <!--li role="presentation"><a id="click_property_term_tab" href="#property_term_tab" aria-controls="property_term_tab" role="tab" data-toggle="tab"><?php _e('Property term','tainacan') ?></a></li-->
+                <li role="presentation"><a id="click_property_term_tab" href="#property_term_tab" aria-controls="property_term_tab" role="tab" data-toggle="tab"><?php _e('Property term','tainacan') ?></a></li>
             </ul>
 
             <!-- Tab panes -->
