@@ -538,6 +538,18 @@ class ObjectController extends Controller {
                 }
                 return $this->render( dirname(__FILE__) . '../../../views/object/temp/edit_multiple.php', [ 'edit_data' => $set ] );
             break;
+            ################# PARSE URL ####################################
+            case 'parse_url_alternative':
+                $return = [];
+                $extracted = $object_model->extract_metatags($data['url']);
+                if($extracted && is_array($extracted)){
+                    foreach ($extracted as $array) {
+                        $return[$array['name_field']] = $array['value'];
+                    }
+                }
+                return json_encode($return);
+                break;
+            ################# VERSIONAMENTO ####################################
             case 'duplicate_item_same_collection':
                 $item = get_post($data['object_id']);
                 $newItem = $object_model->copyItem($item, $data['collection_id']);

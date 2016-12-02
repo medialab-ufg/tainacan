@@ -821,6 +821,7 @@
             data: {collection_id: $("#collection_id").val(), operation: 'alter_visibility', property_id: property_id}
         }).done(function (result) {
             elem = jQuery.parseJSON(result);
+            delete_all_cache_collection();
         });
     }
 

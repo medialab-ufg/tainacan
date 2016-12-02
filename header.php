@@ -31,6 +31,8 @@ $viewHelper = new ViewHelper();
                 <link rel="alternate" type="application/json" href="<?php echo site_url() . '/wp-json/posts/' . get_post_by_name($_GET[get_page_tainacan()], OBJECT, 'socialdb_object')->ID . '/?type=socialdb_object' ?>">
             <?php } ?>
         <?php } else if (is_single()) { ?>
+            <meta name="thumbnail_url" content="<?php echo get_the_post_thumbnail_url(get_the_ID() ) ?>"  />
+            <meta name="description" content="<?php echo get_the_content() ?>"  />
             <link rel="alternate" type="application/rdf+xml" href="<?php echo get_the_permalink(); ?>?.rdf">
             <?php $_GOOGLE_API_KEY = "AIzaSyBZXPZcDMGeT-CDugrsYWn6D0PQSnq_odg"; ?>
             <script src="http://maps.googleapis.com/maps/api/js?key=<?php echo $_GOOGLE_API_KEY; ?>"></script>

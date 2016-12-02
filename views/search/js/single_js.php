@@ -1787,6 +1787,9 @@
         var key = $('#socialdb_embed_api_id').val();
         var ajaxurl = 'http://api.embed.ly/1/oembed?key=:' + key + '&url=' + url;
         //div loader
+        if(key==''){
+            import_text_alternative(url);
+        }else{
         $.getJSON(ajaxurl, {}, function (json) {
             console.log(json);
             var description = '', title = '';
@@ -1842,6 +1845,63 @@
             // console.log('error', result, url);
             hide_modal_main();
             showAlertGeneral('Atenção', 'URL inexistente ou indisponível', 'error');
+        });
+        }
+    }
+    
+    function import_text_alternative(url){
+        var ajaxurl = $('#src').val() + '/controllers/object/object_controller.php?operation=parse_url_alternative&url=' + url;
+        $.getJSON(ajaxurl, {}, function (json) {
+            console.log(json);
+            var description = '', title = '';
+            if (json.title !== undefined && json.title != null && json.title != false) {
+                title = json.title;
+            }
+            else {
+                hide_modal_main();
+                showAlertGeneral('Atenção', 'Esta URL não possui items disponíveis para importação', 'error');
+                return;
+            }
+            // se nao tiver descricao ele coloca o titulo na descricao
+            if (json.description !== undefined && json.description != null && json.description != false) {
+                description += json.description;
+            }
+            else {
+                description = title;
+            }
+            //concatena o html na descricao
+            if (json.html !== undefined && json.html != null && json.html != false) {
+                json.html = json.html.replace('width="854"', 'width="200"');
+                json.html = json.html.replace('height="480"', 'height="200"');
+                description = json.html + description;
+            }
+            //pegando a imagem
+            var img = '';
+            if (json.thumbnail_url !== undefined && json.thumbnail_url != null && json.thumbnail_url != false) {
+                img = json.thumbnail_url;
+            }
+            // verifico se existe imagem para ser importada
+            $.ajax({
+                url: $('#src').val() + '/controllers/object/object_controller.php',
+                type: 'POST',
+                data: {
+                    operation: 'add_item_not_published',
+                    collection_id: $("#collection_id").val(),
+                    description: description,
+                    thumbnail_url: img,
+                    type: 'text',
+                    url: url,
+                    title: title}
+            }).done(function (result) {
+                var json = JSON.parse(result);
+                if (json.length > 0) {
+                    showViewMultipleItemsSocialNetwork(json);
+                }
+                else {
+                    hide_modal_main();
+                    showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Invalid Channel/Playlist or no videos to be imported', 'tainacan'); ?>', 'error');
+                }
+            });
         });
     }
 

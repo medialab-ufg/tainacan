@@ -2211,8 +2211,7 @@ function download_page($path) {
  * @param string $taxonomy A taxonomia dos termos que serao vinculados.
  * @return void.
  */
-function socialdb_insert_object($post_title, $post_date = null) {
-    $status = 'publish';
+function socialdb_insert_object($post_title, $post_date = null,$status = 'publish') {
     $post_author = 1;
     $post = array(
         'post_author' => $post_author,
@@ -2225,6 +2224,7 @@ function socialdb_insert_object($post_title, $post_date = null) {
        // $post['post_date'] = str_replace("Z", "", str_replace("T", " ", $post_date[0]));
     endif;
     $post_id = wp_insert_post($post);
+    add_post_meta($post_id, 'socialdb_object_dc_type', 'text');
     return $post_id;
 }
 
@@ -2467,7 +2467,7 @@ function getUrlContents($url, $maximumRedirections = null, $currentRedirection =
 {
     $result = false;
    
-    $contents = @file_get_contents($url);
+    $contents = download_page($url);
    
     // Check if we need to go somewhere else
    

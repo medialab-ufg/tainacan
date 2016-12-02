@@ -771,7 +771,7 @@ class Model {
             }
         }
 
-        if ($config['socialdb_property_object_category_id'] && is_array($config['socialdb_property_object_category_id']) && count($config['socialdb_property_object_category_id']) == 1) {
+        if (isset($config['socialdb_property_object_category_id']) && is_array($config['socialdb_property_object_category_id']) && count($config['socialdb_property_object_category_id']) == 1) {
             $config['socialdb_property_object_category_id'] = $config['socialdb_property_object_category_id'][0];
         }
         return $config;
