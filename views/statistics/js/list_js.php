@@ -286,6 +286,7 @@
              logo = { width: 180, height: 40 }; // 30 & 8 or 40 & 10.92
 
         var pdf = new jsPDF('p', 'pt');
+        // pdf.internal.scaleFactor = 1.33;
         
         var chart_png = $('.chart-img img.dynamic-chart-img').attr('src');
 
