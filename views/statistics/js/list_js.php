@@ -339,7 +339,13 @@
 
         pdf.autoTable( resume_data.columns, resume_data.data, autoTable_opts);
 
-        pdf.fromHTML( $('#user_details').get(0), line_dims.startX, pdf.autoTableEndPosY() ); // 150
+        var footer_set = {
+            startX: pdf.autoTableEndPosY() + 160,
+            startY: pdf.autoTableEndPosY() + 430
+        }
+
+        pdf.fromHTML( $('#user_details').get(0), line_dims.startX, footer_set.startY );
+        pdf.text(footer_set.startX, (footer_set.startY + 50), 'Página 1 de 1');
 
         var timeStamp = d.getMilliseconds();
         var chart_name = curr_type + '_chart_' + timeStamp + '.pdf';
