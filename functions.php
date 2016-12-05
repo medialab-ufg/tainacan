@@ -1905,8 +1905,9 @@ function create_root_collection_category($collection_id, $category_name) {
     $op = get_option('tainacan_module_activate');
     if((!$op || $op == '') && get_option('collection_root_id') != $collection_id){
         $parent_taxonomy_category_id = get_register_id('socialdb_taxonomy', 'socialdb_category_type');
-        $category_subject_root_id = create_register(_t('Subject'), 'socialdb_category_type', array('parent' => $parent_taxonomy_category_id, 'slug' => 'subject_category_collection_'.$collection_id));
+        $category_subject_root_id = create_register(__('Subject', 'tainacan').' '.get_post($collection_id)->post_title, 'socialdb_category_type', array('parent' => $parent_taxonomy_category_id, 'slug' => 'subject_category_collection_'.$collection_id));
         $category_subject_root_id = get_term_by('id', $category_subject_root_id['term_id'], 'socialdb_category_type');
+        add_term_meta($category_subject_root_id->term_id, 'socialdb_category_owner', get_current_user_id());
         //adiciono a categoria root como faceta da colecao
         if ($category_root_as_facet):
             update_post_meta($collection_id, 'socialdb_collection_facets', $category_subject_root_id->term_id);
@@ -1914,7 +1915,7 @@ function create_root_collection_category($collection_id, $category_name) {
             update_post_meta($collection_id, 'socialdb_collection_facet_' . $category_subject_root_id->term_id . '_widget', 'tree');
             update_post_meta($collection_id, 'socialdb_collection_facet_' . $category_subject_root_id->term_id . '_priority', '1');
         endif;
-        create_initial_property($category_subject_root_id->term_id, $collection_id);
+        create_initial_property($category_subject_root_id->term_id, $collection_id,$category_root);
     }
     if(has_action('insert_default_properties_collection')){
         do_action('insert_default_properties_collection', $category_root->term_id,$collection_id);
@@ -1927,10 +1928,10 @@ function create_root_collection_category($collection_id, $category_name) {
  * Funcao que cra a categoria inicial da colecao
  * Autor: Eduardo Humberto 
  */
-function create_initial_property($category_id, $collection_id) {
+function create_initial_property($category_id, $collection_id, $category_root) {
     $slug = "subject_collection" . $collection_id;
     if (!get_term_by('slug', $slug, 'socialdb_property_type')) {
-        $new_property = wp_insert_term(__('Subject of', 'tainacan').' '.get_post($collection_id)->post_title, 'socialdb_property_type', array('parent' => get_term_by('name', 'socialdb_property_term', 'socialdb_property_type')->term_id,
+        $new_property = wp_insert_term(__('Subject', 'tainacan'), 'socialdb_property_type', array('parent' => get_term_by('name', 'socialdb_property_term', 'socialdb_property_type')->term_id,
             'slug' => $slug));
         $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_required', 'false');
         $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_term_cardinality', 'n');
@@ -1938,8 +1939,9 @@ function create_initial_property($category_id, $collection_id) {
         $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_term_root', $category_id);
         add_post_meta($collection_id, 'socialdb_collection_subject_category', $category_id);
         add_post_meta($collection_id, 'socialdb_collection_subject_property', $new_property['term_id']);
-        update_term_meta($new_property['term_id'], 'socialdb_property_created_category', $category_id); // adiciono a categoria de onde partiu esta propriedade
-        add_term_meta($category_id, 'socialdb_category_property_id', $new_property['term_id']);
+        update_term_meta($new_property['term_id'], 'socialdb_property_created_category', $category_root->term_id); // adiciono a categoria de onde partiu esta propriedade
+        add_term_meta($category_root->term_id, 'socialdb_category_property_id', $new_property['term_id']);
+        add_term_meta($category_id, 'socialdb_category_property_change_label', $new_property['term_id']);
     }    
 }
 

@@ -195,6 +195,7 @@ class ExportAIPCollectionModel extends ExportAIPModel {
           $md5_inicial = get_post_meta($thumbnail_id, 'md5_inicial', true);
           $size = filesize(get_attached_file($thumbnail_id));
           $ext = pathinfo($fullsize_path, PATHINFO_EXTENSION);
+          if($fullsize_path){
           copy($fullsize_path, $dir_community.'/thumbnail_'.$collection_id.'.'.$ext);
           $this->XML .= '<fileSec>
                         <fileGrp USE="LOGO">
@@ -203,6 +204,7 @@ class ExportAIPCollectionModel extends ExportAIPModel {
                          </file>
                         </fileGrp>
                        </fileSec>'; 
+          }
         }
     }
     /**

@@ -77,7 +77,7 @@ class CollectionModel extends Model {
             $name = (isset( $data['collection_object'])&&!empty($data['collection_object'])?$data['collection_object']:$data['collection_name']);
             $object_name = apply_filters('collection_object', $name);
         } else {
-            $object_name = __('Categories of ', 'tainacan') . $data['collection_name'];
+            $object_name =  $data['collection_name'];
         }
         create_root_collection_category($post->ID, $object_name); //(Criada em: functions.php) cria a categoria inicial que identifica os objetos da colecao
         return $post->ID;

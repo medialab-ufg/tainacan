@@ -131,6 +131,11 @@ class CategoryModel extends Model {
             ));
         }
         if ($update_category && !is_wp_error($update_category) && $update_category['term_id']) {// se a categoria foi atualizada com sucesso
+            $has_property = get_term_meta($update_category['term_id'], 'socialdb_category_property_change_label', true);
+            if($has_property && is_numeric($has_property)){
+                 $update_category = wp_update_term($has_property, 'socialdb_property_type', array(
+                'name' => $data['category_name']));
+            }
             $this->update_metas($update_category['term_id'], $data);
             $this->insert_synonyms($update_category['term_id'], $data);
             $log_data = [ 'resource_id' => $update_category['term_id'], 'user_id' => get_current_user_id(), 'event_type' => 'user_category', 'event' => 'edit' ];
@@ -1257,6 +1262,11 @@ class CategoryModel extends Model {
             wp_update_term($category_root_id, 'socialdb_category_type', array(
                 'name' => $data['category_root_name']
             ));
+            $has_property = get_term_meta($category_root_id, 'socialdb_category_property_change_label', true);
+            if($has_property && is_numeric($has_property)){
+                 $update_category = wp_update_term($has_property, 'socialdb_property_type', array(
+                'name' => $data['category_name']));
+            }
         }
         //cria a taxonomia
         if($data['socialdb_property_term_new_taxonomy']&&trim($data['socialdb_property_term_new_taxonomy'])!=''){
