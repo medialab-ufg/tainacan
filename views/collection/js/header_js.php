@@ -98,9 +98,6 @@
         $("#search_objects").val('');
         $("#search_collections").val('');
         $("#search_collection_field").val('');
-        $("#dynatree").dynatree("getRoot").visit(function (node) {
-            node.select(false);
-        });
 
         list_main_ordenation();
         wpquery_clean();

@@ -1872,6 +1872,7 @@ function get_register_id($name, $taxonomy) {
  * Autor: Eduardo Humberto 
  */
 function create_root_collection_category($collection_id, $category_name) {
+    global $config;
     $parent_category_id = get_register_id('socialdb_category', 'socialdb_category_type');
     /* Criando a categoria raiz e adicionando seus metas */
     $category_root_id = create_register($category_name, 'socialdb_category_type', array('parent' => $parent_category_id, 'slug' => sanitize_title(remove_accent($category_name)) . "_" . mktime()));
@@ -1888,13 +1889,6 @@ function create_root_collection_category($collection_id, $category_name) {
         }else{
            $category_root_as_facet = true;
         }
-        //adiciono a categoria root como faceta da colecao
-        if (get_option('collection_root_id') != $collection_id&&$category_root_as_facet):
-            update_post_meta($collection_id, 'socialdb_collection_facets', $category_root->term_id);
-            update_post_meta($collection_id, 'socialdb_collection_facet_' . $category_root->term_id . '_color', 'color1');
-            update_post_meta($collection_id, 'socialdb_collection_facet_' . $category_root->term_id . '_widget', 'tree');
-            update_post_meta($collection_id, 'socialdb_collection_facet_' . $category_root->term_id . '_priority', '1');
-        endif;
     }
     //$properties = instantiate_properties($category_root->term_id);
     //if (is_array($properties)) {
@@ -1907,7 +1901,21 @@ function create_root_collection_category($collection_id, $category_name) {
     //    }
     // }
     //}
-    create_initial_property($category_root->term_id, $collection_id);
+    //adicionando a categoria assuntos 
+    $op = get_option('tainacan_module_activate');
+    if((!$op || $op == '') && get_option('collection_root_id') != $collection_id){
+        $parent_taxonomy_category_id = get_register_id('socialdb_taxonomy', 'socialdb_category_type');
+        $category_subject_root_id = create_register(_t('Subject'), 'socialdb_category_type', array('parent' => $parent_taxonomy_category_id, 'slug' => 'subject_category_collection_'.$collection_id));
+        $category_subject_root_id = get_term_by('id', $category_subject_root_id['term_id'], 'socialdb_category_type');
+        //adiciono a categoria root como faceta da colecao
+        if ($category_root_as_facet):
+            update_post_meta($collection_id, 'socialdb_collection_facets', $category_subject_root_id->term_id);
+            update_post_meta($collection_id, 'socialdb_collection_facet_' . $category_subject_root_id->term_id . '_color', 'color1');
+            update_post_meta($collection_id, 'socialdb_collection_facet_' . $category_subject_root_id->term_id . '_widget', 'tree');
+            update_post_meta($collection_id, 'socialdb_collection_facet_' . $category_subject_root_id->term_id . '_priority', '1');
+        endif;
+        create_initial_property($category_subject_root_id->term_id, $collection_id);
+    }
     if(has_action('insert_default_properties_collection')){
         do_action('insert_default_properties_collection', $category_root->term_id,$collection_id);
     }
@@ -1920,15 +1928,16 @@ function create_root_collection_category($collection_id, $category_name) {
  * Autor: Eduardo Humberto 
  */
 function create_initial_property($category_id, $collection_id) {
-    $slug = sanitize_title(remove_accent(__('Categories', 'tainacan'))) . "_collection" . $collection_id;
-    $slug_tag = sanitize_title(remove_accent(__('Tag', 'tainacan'))) . "_collection" . $collection_id;
+    $slug = "subject_collection" . $collection_id;
     if (!get_term_by('slug', $slug, 'socialdb_property_type')) {
-        $new_property = wp_insert_term(__('Categories', 'tainacan'), 'socialdb_property_type', array('parent' => get_term_by('name', 'socialdb_property_term', 'socialdb_property_type')->term_id,
-            'slug' => sanitize_title(remove_accent(__('Categories', 'tainacan'))) . "_collection" . $collection_id));
+        $new_property = wp_insert_term(__('Subject of', 'tainacan').' '.get_post($collection_id)->post_title, 'socialdb_property_type', array('parent' => get_term_by('name', 'socialdb_property_term', 'socialdb_property_type')->term_id,
+            'slug' => $slug));
         $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_required', 'false');
         $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_term_cardinality', 'n');
         $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_term_widget', 'tree');
         $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_term_root', $category_id);
+        add_post_meta($collection_id, 'socialdb_collection_subject_category', $category_id);
+        add_post_meta($collection_id, 'socialdb_collection_subject_property', $new_property['term_id']);
         update_term_meta($new_property['term_id'], 'socialdb_property_created_category', $category_id); // adiciono a categoria de onde partiu esta propriedade
         add_term_meta($category_id, 'socialdb_category_property_id', $new_property['term_id']);
     }    

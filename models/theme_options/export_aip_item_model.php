@@ -290,12 +290,14 @@ class ExportAIPItemModel extends ExportAIPModel {
             $md5_inicial = get_post_meta($object_content, 'md5_inicial', true);
             $size = filesize(get_attached_file($object_content));
             $ext = pathinfo($fullsize_path, PATHINFO_EXTENSION);
+            if($fullsize_path){
             copy($fullsize_path, $dir_community.'/content_'.$collection_id.'.'.$ext);
             $this->XML .= '<fileGrp ADMID="amd_13" USE="ORIGINAL">
                             <file ID="bitstream_0" MIMETYPE="'. get_post_mime_type($object_content).'" SIZE="'.$size.'" CHECKSUM="'.$md5_inicial.'" CHECKSUMTYPE="MD5">
                           <FLocat LOCTYPE="URL" xlink:type="simple" xlink:href="content_'.$collection_id.'"/>
                          </file>
                         </fileGrp>'; 
+            }
         }
         //demais anexos
         if($all_files){

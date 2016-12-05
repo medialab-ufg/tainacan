@@ -987,6 +987,9 @@
                 $('#items_not_found').hide();
             }
             $('#list').show();
+            $("#dynatree").dynatree("getRoot").visit(function (node) {
+                node.select(false);
+            });
             setMenuContainerHeight();
         });
     }

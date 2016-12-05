@@ -294,7 +294,7 @@ class CategoryModel extends Model {
     public function initCategoriesDynatree($data) {
         $dynatree = [];
         $dynatree = $this->generate_user_categories_dynatree($data, $dynatree, true, tre);
-        $dynatree = $this->generate_collection_categories_dynatree($data, $dynatree, true, false);
+       // $dynatree = $this->generate_collection_categories_dynatree($data, $dynatree, true, false);
         $dynatree = $this->generate_shared_categories_dynatree($data, $dynatree, true);
         $dynatree = $this->generate_public_categories_dynatree($data, $dynatree, true);
         return json_encode($dynatree);
@@ -1245,7 +1245,13 @@ class CategoryModel extends Model {
         if(!function_exists('str_get_html')){
             include_once (dirname(__FILE__) . '../../../extras/SimpleHTMLDomParser/simple_html_dom.php');        
         }
-        $category_root_id = $this->get_category_root_of($data['collection_id']);
+        //$category_root_id = $this->get_category_root_of($data['collection_id']);
+        $category_meta = get_post_meta($data['collection_id'], 'socialdb_collection_subject_category', true);
+        if($category_meta){
+           $category_root_id = get_term_by('id', $category_meta,'socialdb_category_type')->term_id;
+        }else{
+            $category_root_id = $this->get_category_root_of($data['collection_id']);
+        }
         //alterar o nome da categoria raiz
         if($data['category_root_name']&&trim($data['category_root_name'])!=''){
             wp_update_term($category_root_id, 'socialdb_category_type', array(

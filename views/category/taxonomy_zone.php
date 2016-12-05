@@ -3,6 +3,12 @@ include_once ('js/taxonomy_zone_js.php');
 include_once(dirname(__FILE__) . '/../../helpers/view_helper.php');
 include_once(dirname(__FILE__) . '/../../helpers/category/category_helper.php');
 $view_helper = new CategoryHelper;
+$category_meta = get_post_meta($collection_id, 'socialdb_collection_subject_category', true);
+if($category_meta){
+   $name = get_term_by('id', $category_meta,'socialdb_category_type')->name;
+}else{
+    $name = $view_helper->get_category_root_name($collection_id);
+}
 ?>
 <div class="col-md-12 config-temp-box">
 
@@ -17,7 +23,7 @@ $view_helper = new CategoryHelper;
                        id="category_root_name" 
                        name="category_root_name" 
                        required="required" 
-                       value="<?php echo $view_helper->get_category_root_name($collection_id) ?>">
+                       value="<?php echo $name ?>">
                 <div  class="col-md-4" >
                     <center>
                         <button type="button" onclick="add_field_category()" class="btn btn-primary">
