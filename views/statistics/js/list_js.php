@@ -285,27 +285,20 @@
 
         var pdf = new jsPDF('p', 'pt');
 
-        var logo = $('img.tainacan-logo-cor').attr('src');
         var projectLogo = new Image();
-        projectLogo.src = logo;
+        projectLogo.src = $('img.tainacan-logo-cor').attr('src');
 
         projectLogo.onload = function () {
-            var logo_settings = {
-                width: (projectLogo.naturalWidth * 0.48),
-                height: projectLogo.naturalHeight * 0.48
-            };
-            pdf.addImage(projectLogo, 'PNG', (line_dims.startX), (line_dims.startX), logo_settings.width, logo_settings.height);
+            var logo_settings = { width: (projectLogo.naturalWidth * 0.48), height: (projectLogo.naturalHeight * 0.48) };
+            pdf.addImage(projectLogo, 'PNG', line_dims.startX, line_dims.startY, logo_settings.width, logo_settings.height);
+
         };
 
-        var chart_png = $('.chart-img img.dynamic-chart-img').attr('src');
         var chartImg = new Image();
-        chartImg.setAttribute('crossOrigin', 'anonymous');
-        chartImg.src = chart_png;
+        chartImg.setAttribute('crossOrigin', 'Anonymous');
+        chartImg.src = $('.chart-img img.dynamic-chart-img').attr('src');
         chartImg.onload = function () {
-            var chart_settings = { 
-                width: (chartImg.naturalWidth * 0.7),
-                height: (chartImg.naturalHeight * 0.7)
-            };
+            var chart_settings = { width: (chartImg.naturalWidth * 0.7), height: (chartImg.naturalHeight * 0.7) };
             pdf.addImage(chartImg, 'PNG', margins.left, margins.top, chart_settings.width, chart_settings.height);
         };
 
@@ -320,7 +313,7 @@
         pdf.setFontSize(8.5);
         pdf.setTextColor(100);
         pdf.setFontType('normal');
-        pdf.text(consultDate, 403, line_dims.startY - 5);
+        pdf.text(consultDate, 390, line_dims.startY - 5);
 
         pdf.setTextColor(0);
         pdf.setFontSize(10);
@@ -337,10 +330,7 @@
         var autoTable_opts = { theme: 'striped', startY: p, headerStyles: { fillColor: [44, 62, 80] } };
         pdf.autoTable( resume_data.columns, resume_data.data, autoTable_opts);
 
-        var footer_set = {
-            startX: (pdf.autoTableEndPosY() + 160),
-            startY: (pdf.autoTableEndPosY() + 430)
-        };
+        var footer_set = { startX: (pdf.autoTableEndPosY() + 160), startY: (pdf.autoTableEndPosY() + 430) };
 
         pdf.rect(line_dims.startX, footer_set.startY, line_dims.length, line_dims.thickness, 'F');
         pdf.fromHTML( $('#user_details').get(0), line_dims.startX, footer_set.startY );
