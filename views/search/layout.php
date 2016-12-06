@@ -31,6 +31,16 @@ $view_helper = new ViewHelper();
                     </div>
                     <?php $i++; } ?>
 
+                <div id="collection-colorset" class="layout-colorpicker">
+                    <label for="primary-custom-color"> <?php _e('More options', 'tainacan'); ?> </label>
+                    <div class="input">
+                        <input type="text" id="primary-custom-color" value="#7AA7CF" name="color_scheme[0][primary_color]">
+                        <input type="text" id="second-custom-color" value="#0C698B" name="color_scheme[0][secondary_color]">
+                    </div>
+
+                    <input type="button" value="<?php _e('Add','tainacan'); ?>" class="btn btn-primary" onclick="appendColorScheme();">
+                </div>
+
                 <form name="custom_colors" class="custom_color_schemes" style="display: none">
                     <label class="title-pipe" for="custom_options"><?php _e('Your colors', 'tainacan'); ?></label>
                     <div class="here"></div>
@@ -43,15 +53,6 @@ $view_helper = new ViewHelper();
                     <button type="submit" class="btn btn-primary btn-sm"><?php _e('Save', 'tainacan'); ?></button>
                 </form>
 
-                <div id="collection-colorset" class="layout-colorpicker">
-                    <label for="primary-custom-color"> <?php _e('More options', 'tainacan'); ?> </label>
-                    <div class="input">
-                        <input type="text" id="primary-custom-color" value="#7AA7CF" name="color_scheme[0][primary_color]">
-                        <input type="text" id="second-custom-color" value="#0C698B" name="color_scheme[0][secondary_color]">
-                    </div>
-
-                    <input type="button" value="<?php _e('Add','tainacan'); ?>" class="btn btn-primary" onclick="appendColorScheme();">
-                </div>
             </div>
             <h3 class="title"> <?php _e('Layout','tainacan'); ?></h3>
             <div style="padding-left: 15px">

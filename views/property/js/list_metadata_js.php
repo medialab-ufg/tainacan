@@ -736,6 +736,7 @@
             list_collection_facets();
 
             if (elem.no_properties !== true) {
+
                 $.each(elem.property_data, function (idx, property) {
                     var current_id = property.id;
                     var current_search_widget = property.search_widget;
@@ -754,11 +755,11 @@
                     var created_cat = property.metas.socialdb_property_created_category;
                     var prop_slug = property.slug;
                     var prop_cat_id = $('#property_category_id').val();
+                    var button = ''; var style = ''; var class_var = '';
+                    var sort_filter_html = '<a class="edit-filter"><span class="glyphicon glyphicon-sort sort-filter"></span></a>&nbsp;';
 
                     //se for propriedade do repositorio
-                    if ( repo_prop && repo_prop === true || ( created_cat && prop_cat_id !== created_cat )
-                        || ( prop_slug && prop_slug.indexOf("exif-") >= 0 ) ) {
-                        var button = ''; var style = ''; var class_var = '';
+                    if ( repo_prop && repo_prop === true || (created_cat && prop_cat_id !== created_cat ) ) {
                         var fixed_meta = property.metas.socialdb_property_is_fixed;
                         var current_email = '<?php echo (isset(wp_get_current_user()->user_email))? wp_get_current_user()->user_email:'' ?>';
                         var admin_email = '<?php echo get_option('admin_email')  ?>';
@@ -766,24 +767,32 @@
                             class_var = 'fixed-property';
                             if(visibility_properties.length===0||(visibility_properties.indexOf(current_id.toString())<0)){
                                 button = '<a vis="show" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-open"></span></a>';
-                            }else{
+                            } else {
                                 style = 'style="opacity:0.33;"';
                                 button = '<a vis="hide" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-close"></span></a>';
                             }
-                        }else{
+                        } else {
                             button = '<span class="glyphicon glyphicon-trash no-edit"></span>';
                         }
                         //adiciona na listagem
                         generate_html_fixed_property(current_id,property,tab_property_id,class_var,style,button);
+                    } else if( prop_slug && prop_slug.indexOf("exif-") >= 0 ) {
+
+                        $(get_property_tab_seletor(tab_property_id)).append(
+                          '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="root_category ui-widget-content ui-corner-tr">' +
+                          '<label '+style+' class="title-pipe">'+ add_filter_button(current_id) + property.name + add_text_type(property.type) +'</label>' +
+                          '<div class="action-icons">'+ sort_filter_html +
+                          '<span class="glyphicon glyphicon-edit no-edit"></span>' +
+                          '<a style="cursor:pointer;" class="delete_property" onclick="delete_property('+ current_id + ',' + 1 +')" ><span class="glyphicon glyphicon-trash"></span></a> ' +
+                        button + '</div></li>');
+
                     } else {
-                    // cl("Este não entrou: " + property.name + " => " + property.metas.is_repository_property + " e " + property.metas.socialdb_property_created_category);
                         if ( $.inArray(property.type, ranking_types) == -1 ) {
                             $(get_property_tab_seletor(tab_property_id)).append(
                                 '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '" data-widget="' + current_search_widget + '" class="' + property.type + ' ui-widget-content ui-corner-tr">' +
                                 '<label class="title-pipe">'+ add_filter_button(current_id) + property.name + add_text_type(property.type) + '</label><div class="action-icons">' +
-                                '<a class="edit-filter"><span class="glyphicon glyphicon-sort sort-filter"></span></a>&nbsp;'+
-                                '<a onclick="edit_metadata(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
-                                '<span class="glyphicon glyphicon-edit"><span></a> ' +
+                                + sort_filter_html+ '<a onclick="edit_metadata(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
+                                '<span class="glyphicon glyphicon-edit"></span></a> ' +
                                 '<input type="hidden" class="property_id" value="' + property.id + '">' +
                                 '<input type="hidden" class="property_name" value="' + property.name + '">' +
                                 '<input type="hidden" id="property_type_' + property.id + '" value="1">' +
@@ -2337,12 +2346,12 @@
         });
     }
     // funcao que bloqueia as facetas que nao sao permitidas
-    function is_allowed_facet(slug){
-        var not_allowed = ['socialdb_property_fixed_thumbnail','socialdb_property_fixed_attachments','socialdb_property_fixed_content','socialdb_property_fixed_description']
+    function is_allowed_facet(slug) {
+        var not_allowed = ['socialdb_property_fixed_thumbnail','socialdb_property_fixed_attachments','socialdb_property_fixed_content','socialdb_property_fixed_description'];
         if(not_allowed.indexOf(slug)>=0)
             return ' block-facet';
         else
-            return ''
+            return '';
     }
     
     function generate_html_fixed_property(current_id,property,tab_property_id,class_var,style,button){

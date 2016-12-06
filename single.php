@@ -294,7 +294,7 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
                                                 </a>
                                             </li>
                                         <?php endforeach; ?>
-                                        <li class="geolocation">
+                                        <li class="geolocation hide">
                                             <a href="#" onclick="changeViewMode('geolocation')">
                                                 <div class="pull-left"> <?php _e('Map', 'tainacan'); ?> </div>
                                                 <div class="pull-right"> <span class="glyphicon glyphicon-map-marker"></span> </div>

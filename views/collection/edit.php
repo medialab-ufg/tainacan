@@ -48,17 +48,19 @@ $image_cover_url = wp_get_attachment_url(get_post_meta($collection_post->ID, 'so
             </div>
 
             <div id="socialdb_cover" class="form-group">
-                <?php
-                if ($image_cover_url) { ?>
-                    <label for="socialdb_collection_cover"><?php _e('Cover', 'tainacan'); ?></label> <br />
+                <?php if ($image_cover_url) { ?>
+                    <hr />
+                    <label for="socialdb_collection_cover"><?php _e('Collection cover', 'tainacan'); ?></label> <br />
                     <img src="<?= $image_cover_url ?>" style='max-height:190px;' />
                     <br /><br />
                     <label for="remove_cover"><?php _e('Remove Cover', 'tainacan'); ?></label>
                     <input type="checkbox"  id="remove_cover" name="remove_cover" value="true">
+                    &nbsp;&nbsp;&nbsp;
                     <a href="javascript:void(0)" onclick="show_edit_cover()" class="btn btn-default"> <?php _e('Edit Cover', 'tainacan'); ?>  </a>
                     <br /><br />
                 <?php } ?>
-                <div id="edit_cover_container" style="display: <?php print_r(($image_cover_url) ? 'none' : 'block') ?>">
+
+                <div id="edit_cover_container" <?php echo ($image_cover_url) ? 'class="hideCropBox"' : ''; ?>>
                     <label for="collection_cover_img_id"> <?php _e('Select Collection Cover', 'tainacan'); ?> </label> <br />
                     <div class="alert alert-info" role="alert">
                         <strong> <?php _e('After positioning the image cover as wished, click the green button to crop it.', 'tainacan'); ?> </strong>

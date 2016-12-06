@@ -109,7 +109,10 @@ body.error404 {
   width: 150px;
   height: 150px;
 }
-
+.hideCropBox {
+  visibility: hidden;
+  height: 5px;
+}
 .cropControls{
   left: -1px !important;
 }

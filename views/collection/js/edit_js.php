@@ -264,13 +264,8 @@
     var croppicThumb = new Croppic('collection_crop_thumb', crop_thumb_options);
 
     function show_edit_cover() {
-        $("#edit_cover_container").show();
+        $("#edit_cover_container").removeClass('hideCropBox');
+        $("#edit_cover_container").height(280);
     }
-
-    /*
-    $('.edit-collection-tumb').click(function(){
-       $("#collection_crop_thumb").fadeIn(); 
-    });
-    */
 
 </script>
