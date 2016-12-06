@@ -125,11 +125,9 @@
                     </div>
 
                     <?php if (get_option('collection_root_id') != $collection_id): ?>
-                    
                         <button id="show_rankings_<?php echo $curr_id ?>" class="cards-ranking"> </button>
 
                         <div class="editing-item">
-                            
                             <!-- TAINACAN: container(AJAX) que mostra o html com os rankings do objeto-->
                             <div id="rankings_<?php echo $curr_id ?>" class="rankings-container"></div>
 
