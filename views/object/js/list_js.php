@@ -115,8 +115,18 @@
         });
 
         var default_viewMode = $("#default-viewMode").val();
-        setCollectionViewIcon(default_viewMode);
+        var lat = $("#set-lat").val();
+        var long = $("#set-long").val();
+        var approx = $("#approx_mode").val();
+        var approx_loc = $("#approx_location").val();
 
+        if( default_viewMode === "geolocation" ) {
+            if( lat || long || approx || approx_loc ) {
+                $('.viewMode-control li.geolocation').removeClass('hide');
+            }
+        }
+
+        setCollectionViewIcon(default_viewMode);
         if (default_viewMode === "slideshow") {
             // getSlideshowTime();
             getCollectionSlideshow();
