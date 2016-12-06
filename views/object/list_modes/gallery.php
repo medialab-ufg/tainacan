@@ -35,7 +35,7 @@
                         <?php if(has_action('container_rankings_gallery')): ?>
                             <?php do_action('container_rankings_gallery',$curr_id) ?>
                         <?php else: ?>
-                                <div id="r_gallery_<?php echo $curr_id ?>"  class="rankings-container"></div>
+                            <div id="r_gallery_<?php echo $curr_id ?>" class="rankings-container"></div>
                         <?php endif; ?>                    
                     <?php endif; ?>
                 </div>

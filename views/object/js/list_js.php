@@ -671,18 +671,15 @@
         }).done(function (result) {
             $(this).hide();
             $("#rankings_" + object_id).html(result).show();
-            var $_cards_ranking = $("#rankings_" + object_id).html();
-            var $_other_rankings = [$("#r_list_" + object_id), $("#r_gallery_" + object_id), $("#r_slideshow_" + object_id)];
-
+            var $_other_rankings = [ $("#r_list_" + object_id), $("#r_gallery_" + object_id), $("#r_slideshow_" + object_id) ];
             $($_other_rankings).each(function (idx, el) {
-                $($_cards_ranking).appendTo(el);
+                $("#rankings_" + object_id).clone(true).appendTo(el);
             });
         });
     });
     $('button.cards-ranking').each(function (idx, el) {
         $(this).hide().click();
     });
-
 
     function check_privacity_info(id) {
         $.ajax({

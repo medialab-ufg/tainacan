@@ -10,15 +10,14 @@
                     half: true,
                     starType: 'i',
                     click: function (score, evt) {
-                        save_vote_stars(score, elem, object_id)
+                        save_vote_stars(score, elem, object_id);
                         return false;
                     }
                 });
             });
         }
-
-
     });
+    
     function save_vote_stars(score, property_id, object_id) {
         $.ajax({
             url: $('#src').val() + '/controllers/ranking/ranking_controller.php',
@@ -106,7 +105,7 @@
             }
         });
     }
-        function save_vote_binary_down(property_id, object_id) {
+    function save_vote_binary_down(property_id, object_id) {
         $.ajax({
             url: $('#src').val() + '/controllers/ranking/ranking_controller.php',
             type: 'POST',

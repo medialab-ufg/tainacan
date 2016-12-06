@@ -41,7 +41,6 @@
                     half: true,
                     starType: 'i',
                     click: function (score, evt) {
-                        console.log('sddsdf');
                         create_save_vote_stars(score, property_id, object_id)
                         return false;
                     }
