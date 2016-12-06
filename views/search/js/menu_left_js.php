@@ -152,15 +152,7 @@
                     var selKeys = $.map(node.tree.getSelectedNodes(), function (node) {
                         return node.data.key;
                     });
-                    if(node.bSelected&&node.childList){
-                        $.each(node.childList,function(index,node){
-                            node.select(true);
-                        });
-                    }else if(node.childList){
-                        $.each(node.childList,function(index,node){
-                            node.select(false);
-                        });
-                    }
+                   //
                     //get_categories_properties_ordenation();
                     //console.log($('#flag_dynatree_ajax').val());
                     if($('#flag_dynatree_ajax').val()==='true') {

@@ -102,6 +102,23 @@ include_once ('../../helpers/view_helper.php');
                                         </tbody>
                                     </table>
                                 </div>
+                                <div class="modal fade" id="modalImportAIP" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            <h4><?php _t('Importing data', true) ?></h4>
+                                            <p><?php _t('Communities imported', true) ?> : <span id="found-community"></span>/<span id="total-community">0</span></p>
+                                            <p><?php _t('Collections imported', true) ?> : <span id="found-collection"></span>/<span id="total-collection">0</span></p>
+                                            <p><?php _t('Items imported', true) ?> : <span id="found-item"></span>/<span id="total-item">0</span></p>
+                                            <progress id="progressbar" value="0" max="100" style="width: 100%;"></progress><br>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo __('Close', 'tainacan'); ?></button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
                                 <br><br>
                                 <!--input type="text" class="form-control" id="aip_pkg_input_auto" name="aip_pkg_input_auto" /><br><br-->
                             </div>

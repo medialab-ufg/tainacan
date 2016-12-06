@@ -533,10 +533,19 @@ class ObjectController extends Controller {
                 break;
             case 'edit_multiple_items':
                 $set = [];
-                foreach($data['items_data'] as $_previous) {
-                    array_push( $set, [ 'ID' => $_previous['id'], 'title' => $_previous['title'], 'desc' => $_previous['desc'] ] );
+                if(!$data['items_data']){
+                   exit(); 
                 }
-                return $this->render( dirname(__FILE__) . '../../../views/object/temp/edit_multiple.php', [ 'edit_data' => $set ] );
+                foreach($data['items_data'] as $_previous) {
+                    $data['items_id'] [] =  $_previous['id'];
+                    //array_push( $set, [ 'ID' => $_previous['id'], 'title' => $_previous['title'], 'desc' => $_previous['desc'] ] );
+                }
+                $data['items'] = $objectfile_model->get_inserted_items_social_network($data);
+                 $data['edit_multiple'] = true;
+                if ($data['items'] && empty(!$data['items'])) {
+                    return $this->render(dirname(__FILE__) . '../../../views/object/multiple_social_network/editor_items.php', $data);
+                }
+                //return $this->render( dirname(__FILE__) . '../../../views/object/temp/edit_multiple.php', [ 'edit_data' => $set ] );
             break;
             ################# PARSE URL ####################################
             case 'parse_url_alternative':

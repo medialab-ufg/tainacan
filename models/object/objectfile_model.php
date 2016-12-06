@@ -276,6 +276,8 @@ class ObjectFileModel extends Model {
                      $result['text'][] = $obj;   
                 }elseif($type=='audio'){
                      $result['text'][] = $obj;   
+                }else{
+                    $result['text'][] = $obj;  
                 }
                 $result['items'][] = $obj;
             }

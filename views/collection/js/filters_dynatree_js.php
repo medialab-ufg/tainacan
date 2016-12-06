@@ -12,14 +12,14 @@
         //list_all_objects(selKeys.join(", "), $("#collection_id").val(), $('#collection_single_ordenation').val());
     }
     function remove_filter_category(facet,key) {
+        var nod;
         $('.remove-link-filters').hide(); 
          //wpquery_remove('facets',facet,key);
         $("#dynatree").dynatree("getRoot").visit(function (node) {
             if(node.data.key===key.trim()){
               $('#flag_dynatree_ajax').val('false'); 
-              node.bSelected = false;
-             node.select(false);
-               console.log(node);
+              node.select(false);
+              $(node.span).removeClass('dynatree-selected');
             }
         });
         var selKeys = $.map($("#dynatree").dynatree("getSelectedNodes"), function (node) {

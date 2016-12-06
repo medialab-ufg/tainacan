@@ -161,7 +161,7 @@ class ExportAIP extends ThemeOptionsModel {
         $this->community_model->create_communities();
         $this->collection_model->create_collections();
         $this->item_model->create_items();
-        $this->create_zip_by_folder($this->model->dir.'/', $this->model->name_folder.'/', $this->model->name_folder);
+        $this->create_zip_by_folder($this->model->dir.'/', $this->model->name_folder.'/', $this->model->name_folder,true);
         $this->recursiveRemoveDirectory($this->model->dir.'/'.$this->model->name_folder);
         $this->model->download_send_headers($this->model->dir.'/'.$this->model->name_folder.'.zip');
     }

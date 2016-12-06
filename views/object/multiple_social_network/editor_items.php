@@ -983,6 +983,9 @@ $filesOther= [];
         <input type="hidden" id="property_origin" name="property_origin" value="<?php echo $all_ids; ?>">
         <input type="hidden" id="property_added" name="property_added" value="">
         <input type="hidden" id="selected_categories" name="selected_categories" value="">
+        <?php if(isset($edit_multiple)): ?>
+         <input type="hidden" id="edit_multiple" name="edit_multiple" value="true">
+        <?php endif; ?>
         <div id="append_properties_categories" class="hide"></div>
         </div>
     </form>    

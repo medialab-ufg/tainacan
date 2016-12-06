@@ -96,15 +96,17 @@ class ThemeOptionsController extends Controller {
                 if (is_array($files)) {
                     return json_encode($files);
                 } else {
-                    return false;
+                     return json_encode([]);
                 }
                 break;
             case "import_dspace_aip":
                 ini_set('max_execution_time', '0');
+                error_reporting(E_ALL);
                 $file = $data['file'];
                 $verify = $theme_options_model->verify_aip_file($file);
                 if ($verify) {
                     $unzip_path = $theme_options_model->unzip_aip_file($file);
+                    $this->save_total_import_aip($unzip_path);
                     //site
                     if (file_exists($unzip_path . '/sitewide-aip.zip')) {
                         $unzip_site = $theme_options_model->unzip_aip_general($unzip_path . '/', 'sitewide-aip.zip');
@@ -113,9 +115,8 @@ class ThemeOptionsController extends Controller {
                             $theme_options_model->read_site_xml($xml);
                             $theme_options_model->recursiveRemoveDirectory($unzip_site);
                         }
-                        //var_dump($xml);
                     } else {
-                        return false;
+                        return json_encode([]);
                     }
                     //community
                     $community_files = scandir($unzip_path);
@@ -232,7 +233,34 @@ class ThemeOptionsController extends Controller {
                 $export_model = new ExportAIP;
                 return $export_model->get_info_export_aip($data);
                 break;
+            case 'get_info_import_aip':
+                return $theme_options_model->get_info_import_aip($data);
+                break;
         }
+    }
+    
+    public function save_total_import_aip($unzip_path){
+        $array['folder'] = $unzip_path;
+        $array['count_communities'] = 0;
+        $array['count_collections'] = 0;
+        $array['count_items'] = 0;
+        $community_files = scandir($unzip_path);
+        foreach ($community_files as $community_file) {
+            if (strpos($community_file, 'COMMUNITY') !== false) {
+                $array['count_communities']++;
+            }
+        }
+        foreach ($community_files as $community_file) {
+            if (strpos($community_file, 'COLLECTION') !== false) {
+                $array['count_collections']++;
+            }
+        }
+        foreach ($community_files as $community_file) {
+            if (strpos($community_file, 'ITEM') !== false) {
+                $array['count_items'] ++;
+            }
+        }
+        update_option('socialdb_aip_importation', serialize($array));
     }
 
 }

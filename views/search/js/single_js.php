@@ -987,7 +987,9 @@
                 $('#items_not_found').hide();
             }
             $('#list').show();
-            $("#dynatree").dynatree("getTree").reload();
+            if( $("#dynatree")){
+                $("#dynatree").dynatree("getTree").reload();
+            }
             setMenuContainerHeight();
         });
     }

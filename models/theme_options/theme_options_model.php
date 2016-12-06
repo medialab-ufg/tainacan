@@ -396,6 +396,9 @@ class ThemeOptionsModel extends Model {
                 $error = __("File not supported. Send .ZIP!", 'tainacan');
             else:
                 $name = time() . '_' . $file['name'];
+                if(!is_dir(TAINACAN_UPLOAD_FOLDER . '/data/aip')){
+                    mkdir(TAINACAN_UPLOAD_FOLDER . '/data/aip');
+                }
                 if (move_uploaded_file($file['tmp_name'], TAINACAN_UPLOAD_FOLDER . '/data/aip/' . $name)):
                     $result = true;
                     $error = __("Arquivo enviado com sucesso!", 'tainacan');
@@ -543,10 +546,11 @@ class ThemeOptionsModel extends Model {
         $uri = (string) $dim[3];
         $rights = (string) $dim[4];
         $title = (string) $dim[5];
+        var_dump($id);
 
         if (!$this->checkForAipID($id)) {
             $data_collection['collection_name'] = $title;
-            $collection_id = $collection_model->simple_add($data_collection, 'publish');
+            $collection_id = $collection_model->simple_add($data_collection, 'published');
             //create_root_collection_category($collection_id, $data_collection['collection_object']);
             $category_root_id = get_post_meta($collection_id, 'socialdb_collection_object_type', true);
 
@@ -868,6 +872,45 @@ class ThemeOptionsModel extends Model {
     public function get_property_type_id($property_parent_name) {
         $property_root = get_term_by('name', $property_parent_name, 'socialdb_property_type');
         return $property_root->term_id;
+    }
+    
+    /**
+     * 
+     * @return type
+     */
+    public function get_info_import_aip($data) {
+        $save_data = unserialize(get_option('socialdb_aip_importation'));
+        $return['total_community'] = (!isset($data['total_community'])) ? $save_data['count_communities'] : $data['total_community']; 
+        $return['total_collection'] =  (!isset($data['total_collection'])) ? $save_data['count_collections'] : $data['total_collection']; 
+        $return['total_item'] =  (!isset($data['total_item'])) ? $save_data['count_items'] : $data['total_item']; 
+        $return['total'] = $return['total_community'] + $return['total_collection'] + $return['total_item'];
+        $return['found_community'] =  $return['total_community'] - ($this->search_files_name_import('COMMUNITY@',$save_data['folder']));
+        $return['found_collection'] = $return['total_collection'] - ($this->search_files_name_import('COLLECTION@',$save_data['folder']));
+        $return['found_item'] = $return['total_item'] - ($this->search_files_name_import('ITEM@',$save_data['folder']));
+        $return['exported'] = $return['found_community'] + $return['found_collection'] + $return['found_item'];
+        $return['percent'] = ($return['total']>0) ? ($return['exported'] / $return['total']) * 100 : 0;
+        if($return['exported'] >= $return['total'] && $return['exported'] !=0 && $return['total'] != 0){
+            $return['close'] = true;
+        }
+        return json_encode($return);
+    }
+    
+    /**
+     * 
+     * @param type $name
+     * @return int
+     */
+    public function search_files_name_import($name,$folder) {
+        $index = 0;
+        $dir = $folder;
+        if (is_dir($dir)) {
+            foreach (glob("{$dir}/*.zip") as $file) {
+                if(strpos($file, $name)!==false){
+                    $index++;
+                }
+            }
+        }
+        return $index;
     }
 
 }

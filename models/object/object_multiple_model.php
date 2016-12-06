@@ -458,16 +458,20 @@ class ObjectMultipleModel extends Model {
                      $object = array(
                         'ID' => $post_id,
                         'post_title' => $data['title_'.$item_id],
-                        'post_status' => 'inherit',
+                        'post_status' => (isset($data['edit_multiple'])) ? 'published' :'inherit',
                         'post_content' => $data['description_'.$item_id]
                     );
                     delete_user_meta(get_current_user_id(), 'socialdb_collection_'.$data['collection_id'].'_betafile', $post_id);
-                    wp_update_post($object);
-                    $this->insert_object_event($post_id, ['collection_id' => $data['collection_id'] ]);
+                    //wp_update_post($object);
+                    if(!isset($data['edit_multiple'])){
+                        $this->insert_object_event($post_id, ['collection_id' => $data['collection_id'] ]);
+                    }
                     $this->set_common_field_values($post_id, 'title', $object['post_title']);
                     $this->set_common_field_values($post_id, 'description', $object['post_content']);
                     if($post_id){
-                        $this->vinculate_collection($data, $post_id);
+                        if(!isset($data['edit_multiple'])){
+                            $this->vinculate_collection($data, $post_id);
+                        }
                         //$this->item_resource($data, $item_id, $post_id);
                         //$this->item_attachments($data, $item_id, $post_id);
                         $this->item_tags($data, $item_id, $post_id);
