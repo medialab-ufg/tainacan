@@ -17,7 +17,9 @@
         $("#dynatree").dynatree("getRoot").visit(function (node) {
             if(node.data.key===key.trim()){
               $('#flag_dynatree_ajax').val('false'); 
-               node.select(false);
+              node.bSelected = false;
+             node.select(false);
+               console.log(node);
             }
         });
         var selKeys = $.map($("#dynatree").dynatree("getSelectedNodes"), function (node) {

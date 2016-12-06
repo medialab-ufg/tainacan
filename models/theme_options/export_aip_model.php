@@ -153,6 +153,7 @@ class ExportAIP extends ThemeOptionsModel {
      * @description - funcao que exporta o repositorio para o formato AIP
      */
     public function export_aip_zip(){
+        error_reporting(0);
         if(!is_dir($this->model->dir.'/'.$this->model->name_folder.'/')){
              mkdir($this->model->dir.'/'.$this->model->name_folder);
         }
