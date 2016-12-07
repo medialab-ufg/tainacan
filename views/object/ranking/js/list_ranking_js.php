@@ -38,9 +38,9 @@
                  half: true,
                  starType: 'i',
                  click: function (score, evt) {
-                        single_save_vote_stars(score, property_id, object_id);
-                        return false;
-                    }
+                     single_save_vote_stars(score, property_id, object_id);
+                     return false;
+                 }
                 });   
             $('#single_counter_' + object_id + '_' + property_id).text(elem_first.results.count);
             if(elem_first.is_user_logged_in){

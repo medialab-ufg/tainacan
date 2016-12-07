@@ -674,10 +674,23 @@
             var $_other_rankings = [ $("#r_list_" + object_id), $("#r_gallery_" + object_id), $("#r_slideshow_" + object_id) ];
             $($_other_rankings).each(function (idx, el) {
                 $("#rankings_" + object_id).clone(true).appendTo(el);
+
+                var r = $(el).find('.single_stars i');
+                $(r).each(function(i, star) {
+                    var hover_vote = $(this).attr("class");
+                    $(star).hover(function() {
+                        // cl(hover_vote);
+                        if(i > 0) {
+                            // cl("Meu index: " + i);
+                            // cl(  $(this).attr("data-alt") + " =>> " + $(this).attr("class"));
+                            $(r).slice(0, i).attr("class", 'star-on-png');
+                        }
+                    });
+                });
             });
         });
     });
-    $('button.cards-ranking').each(function (idx, el) {
+    $('button.cards-ranking').each(function(){
         $(this).hide().click();
     });
 
