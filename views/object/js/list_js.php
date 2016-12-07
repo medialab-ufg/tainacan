@@ -674,18 +674,31 @@
             var $_other_rankings = [ $("#r_list_" + object_id), $("#r_gallery_" + object_id), $("#r_slideshow_" + object_id) ];
             $($_other_rankings).each(function (idx, el) {
                 $("#rankings_" + object_id).clone(true).appendTo(el);
+                var curr_raty = $("#rankings_" + object_id + " .single_stars div").get(0);
 
                 var r = $(el).find('.single_stars i');
-                $(r).each(function(i, star) {
-                    var hover_vote = $(this).attr("class");
-                    $(star).hover(function() {
-                        // cl(hover_vote);
-                        if(i > 0) {
-                            // cl("Meu index: " + i);
-                            // cl(  $(this).attr("data-alt") + " =>> " + $(this).attr("class"));
-                            $(r).slice(0, i).attr("class", 'star-on-png');
-                        }
-                    });
+                $(r).on('mouseover', function() {
+                    var curr_idx = $(this).attr("data-alt");
+                    if( curr_idx == "1" ) {
+                        $(r).removeAttr('class').addClass('star-off-png');
+                    } else if ( curr_idx == "5" ) {
+                        $(r).removeAttr('class').addClass('star-on-png');
+                    } else {
+                        $(this).prevAll().removeAttr('class').addClass('star-on-png');
+                        $(this).nextAll().removeAttr('class').addClass('star-off-png');
+                    }
+                });
+
+                $(r).on('mouseleave', function() {
+                    var original_score = $(curr_raty).raty('score');
+                    if( original_score == "1" ) {
+                        $(r).removeAttr('class').addClass('star-off-png');
+                    } else if ( original_score == "5" ) {
+                        $(r).removeAttr('class').addClass('star-on-png');
+                    } else {
+                        $(this).prevAll().removeAttr('class').addClass('star-on-png');
+                        $(this).nextAll().removeAttr('class').addClass('star-off-png');
+                    }
                 });
             });
         });
