@@ -626,6 +626,24 @@
      * funcao que valida os campos radios, e realiza a insercao das propriedades de categorias
      * @param {type} property_id
      * @returns {undefined}     */
+    function validate_status(property_id){
+        var selected = $("input[type='radio'][name='socialdb_property_"+property_id+"']:checked");
+        if($(selected[0]).val()===$('#socialdb_property_'+property_id+'_value').val()){
+            $(selected[0]).removeAttr('checked');
+        }
+        if (selected.length > 0) {
+            $('#socialdb_propertyterm_'+property_id+'_value').val(selected.val()); 
+            $('#core_validation_'+property_id).val('true');
+            set_field_valid(property_id,'core_validation_'+property_id);
+        }else{
+            $('#core_validation_'+property_id).val('false');
+            set_field_valid(property_id,'core_validation_'+property_id);
+        }
+    }
+    /**
+     * funcao que valida os campos radios, e realiza a insercao das propriedades de categorias
+     * @param {type} property_id
+     * @returns {undefined}     */
     function validate_radio(property_id){
         var selected = $("input[type='radio'][name='socialdb_propertyterm_"+property_id+"']:checked");
         if($(selected[0]).val()===$('#socialdb_propertyterm_'+property_id+'_value').val()){

@@ -235,9 +235,9 @@ if (isset($property_object)):
                             ?>" -->
                         <?php }elseif ($property['type'] == 'radio' && $property['name'] == 'Status') { ?>   
                             <br>
-                            <input   type="radio" checked="checked" name="socialdb_property_<?php echo $property['id']; ?>" value="current"><?php _e('Current', 'tainacan') ?><br>
-                            <input   type="radio"  name="socialdb_property_<?php echo $property['id']; ?>" value="intermediate"><?php _e('Intermediate', 'tainacan') ?><br>
-                            <input   type="radio"  name="socialdb_property_<?php echo $property['id']; ?>" value="permanently"><?php _e('Permanently', 'tainacan') ?><br>
+                            <input   type="radio" onchange="validate_status(<?php echo $property['id']; ?>)" checked="checked" name="socialdb_property_<?php echo $property['id']; ?>" value="current">&nbsp;<?php _e('Current', 'tainacan') ?><br>
+                            <input   type="radio" onchange="validate_status(<?php echo $property['id']; ?>)" name="socialdb_property_<?php echo $property['id']; ?>" value="intermediate">&nbsp;<?php _e('Intermediate', 'tainacan') ?><br>
+                            <input   type="radio" onchange="validate_status(<?php echo $property['id']; ?>)" name="socialdb_property_<?php echo $property['id']; ?>" value="permanently">&nbsp;<?php _e('Permanently', 'tainacan') ?><br>
                         <?php } else if($property['type'] == 'date'&&!has_action('modificate_insert_item_properties_data')) { ?>
                             <script>
                                 $(function() {
