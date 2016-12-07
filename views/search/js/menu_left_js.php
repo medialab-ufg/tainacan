@@ -37,7 +37,7 @@
                     $(".contextMenu").hide();
                 }
                 if($('#visualization_page_category').val()!=='click'){
-                    if(node.data.key.indexOf("_facet_")>=0||node.data.key.indexOf("_moreoptions")>=0){
+                    if(node.data.key.indexOf("_facet_")>=0){
                         return false;
                     }
                     //seleciono ou unselect
@@ -45,13 +45,15 @@
                         return tnode.data.key;
                     });
                     //get_categories_properties_ordenation();
-                    console.log(selKeys,selKeys.indexOf(node.data.key)<0,node.data.key);
-                    if(selKeys.indexOf(node.data.key)<0){
+                    console.log(selKeys,selKeys.indexOf(node.data.key)<0,node);
+                    if(selKeys.indexOf(node.data.key)<0 ||
+                            ( (node.data.key.indexOf("_moreoptions")>=0 || node.data.key.indexOf("alphabet")>=0) ) && node.bExpanded == false ){
                          select = true;
                           node.select(true);
                     }else{
                         select = false;
                          node.select(false);
+                         node.expand(false);
                     }
                 }
             },
@@ -150,14 +152,20 @@
                        }
                     }
                     var selKeys = $.map(node.tree.getSelectedNodes(), function (node) {
-                        return node.data.key;
+                        if(node.data.key.indexOf("_facet_")>=0||node.data.key.indexOf("_moreoptions")>=0||node.data.key.indexOf("alphabet")>=0){
+                            //continue
+                        }else{
+                            return node.data.key;
+                        }
                     });
                    //
-                    //get_categories_properties_ordenation();
-                    //console.log($('#flag_dynatree_ajax').val());
-                    if($('#flag_dynatree_ajax').val()==='true') {
+                    //get_categories_properties_ordenation();s
+                    if($('#flag_dynatree_ajax').val()==='true'
+                            &&node.data.key.indexOf("_moreoptions")<0&&node.data.key.indexOf("alphabet")<0) {
                         var node_values = selKeys.join(", ");
                         wpquery_filter_by_facet( node_values, "", "wpquery_dynatree");
+                    }else if(node.data.key.indexOf("_moreoptions")>=0 || node.data.key.indexOf("alphabet")>=0){
+                        node.expand(true);
                     }
                     // lanco um hook para ser usada ao selecionar um item no dynatree
                     if (Hook.is_register('tainacan_onselect_dynatree')) {
