@@ -667,7 +667,7 @@
 
         $.ajax({
             type: "POST", url: $('#src').val() + "/controllers/ranking/ranking_controller.php",
-            data: {collection_id: col_id, ordenation_id: order_id, operation: 'list_value_ordenation', object_id: object_id}
+            data: { collection_id: col_id, ordenation_id: order_id, operation: 'list_value_ordenation', object_id: object_id}
         }).done(function (result) {
             $(this).hide();
             $("#rankings_" + object_id).html(result).show();
@@ -677,32 +677,38 @@
                 var curr_raty = $("#rankings_" + object_id + " .single_stars div").get(0);
 
                 var r = $(el).find('.single_stars i');
-                $(r).on('mouseover', function() {
-                    var curr_idx = $(this).attr("data-alt");
-                    if( curr_idx == "1" ) {
-                        $(r).removeAttr('class').addClass('star-off-png');
-                    } else if ( curr_idx == "5" ) {
-                        $(r).removeAttr('class').addClass('star-on-png');
-                    } else {
-                        $(this).prevAll().removeAttr('class').addClass('star-on-png');
-                        $(this).nextAll().removeAttr('class').addClass('star-off-png');
+                $(r).hover( function() { // when user enters raty star
+                        var curr_idx = $(this).attr("data-alt");
+                        if( curr_idx == "1" ) {
+                            setRankingClass(r,"off");
+                        } else if ( curr_idx == "5" ) {
+                            setRankingClass(r,"on");
+                        } else {
+                            $(this).prevAll().removeAttr('class').addClass('star-on-png');
+                            $(this).nextAll().removeAttr('class').addClass('star-off-png');
+                        }
+                    }, function() { // when user leaves raty star
+                        var original_score = parseInt( $(curr_raty).raty('score') );
+                        $(r).each(function(ind, element){
+                            var id = parseInt($(element).attr("data-alt"));
+                            if(original_score) {
+                                if ( original_score >= id) {
+                                    setRankingClass(element,"on");
+                                } else {
+                                    setRankingClass(element,"off");
+                                }
+                            } else { setRankingClass(r,"off"); }
+                        });
                     }
-                });
-
-                $(r).on('mouseleave', function() {
-                    var original_score = $(curr_raty).raty('score');
-                    if( original_score == "1" ) {
-                        $(r).removeAttr('class').addClass('star-off-png');
-                    } else if ( original_score == "5" ) {
-                        $(r).removeAttr('class').addClass('star-on-png');
-                    } else {
-                        $(this).prevAll().removeAttr('class').addClass('star-on-png');
-                        $(this).nextAll().removeAttr('class').addClass('star-off-png');
-                    }
-                });
+                );
             });
         });
     });
+
+    function setRankingClass(js_elem, ob_class) {
+        $(js_elem).removeAttr("class").addClass("star-"+ ob_class + "-png");
+    }
+
     $('button.cards-ranking').each(function(){
         $(this).hide().click();
     });
