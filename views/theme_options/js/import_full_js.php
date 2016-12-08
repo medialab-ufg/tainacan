@@ -594,19 +594,20 @@ function start_loader_aip(){
             }
         }).done(function (result) {
             var json = JSON.parse(result);
-            
-            $('#total-community').html(json.total_community);
-            $('#found-community').html(json.found_community);
-            $('#total-collection').html(json.total_collection);
-            $('#found-collection').html(json.found_collection);
-            $('#total-item').html(json.total_item);
-            $('#found-item').html(json.founf_item);
-            if(json.total_community ===0 || json.total_community==='0' ){
+            if(json && (json.total_community ===0 || json.total_community==='0') ){
                 $('#total-community').html('<?php _t('Calculating...',true) ?>');
                 $('#total-collection').html('<?php _t('Calculating...',true) ?>');
                 $('#total-item').html('<?php _t('Calculating...',true) ?>');
+            }else{
+                $('#total-community').html(json.total_community);
+                $('#found-community').html(json.found_community);
+                $('#total-collection').html(json.total_collection);
+                $('#found-collection').html(json.found_collection);
+                $('#total-item').html(json.total_item);
+                $('#found-item').html(json.founf_item);
+
+                $('#progressbar').val(json.percent);
             }
-            $('#progressbar').val(json.percent);
             callback_loader_aip(json);
         }).fail(function (jqXHR, textStatus, errorThrown) {
             showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('All objects imported succesfully!', 'tainacan') ?>', 'success');
@@ -627,18 +628,22 @@ function callback_loader_aip(json){
         }).done(function (result) {
             var json = JSON.parse(result);
             if(!json.close){
-                $('#total-community').html(json.total_community);
-                $('#found-community').html(json.found_community);
-                $('#total-collection').html(json.total_collection);
-                $('#found-collection').html(json.found_collection);
-                $('#total-item').html(json.total_item);
-                $('#found-item').html(json.found_item);
-                if(json.total_community ===0 || json.total_community==='0' ){
+                if(json && (json.total_community ===0 || json.total_community==='0') ){
                     $('#total-community').html('<?php _t('Calculating...',true) ?>');
                     $('#total-collection').html('<?php _t('Calculating...',true) ?>');
                     $('#total-item').html('<?php _t('Calculating...',true) ?>');
+                    $('#found-community').html('<?php _t('Calculating...',true) ?>');
+                    $('#found-collection').html('<?php _t('Calculating...',true) ?>');
+                    $('#found-item').html('<?php _t('Calculating...',true) ?>');
+                }else{
+                    $('#total-community').html(json.total_community);
+                    $('#found-community').html(json.found_community);
+                    $('#total-collection').html(json.total_collection);
+                    $('#found-collection').html(json.found_collection);
+                    $('#total-item').html(json.total_item);
+                    $('#found-item').html(json.found_item);
+                    $('#progressbar').val(json.percent);
                 }
-                $('#progressbar').val(json.percent);
                 callback_loader_aip(json);
             }else{
                 $('#modalImportAIP').modal('hide');

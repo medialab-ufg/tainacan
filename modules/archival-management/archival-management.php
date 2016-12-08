@@ -223,4 +223,18 @@ function ontology_javascript_metas_category() {
     'clear_archival_fields_category();'
     . 'set_fields_modal_categories(elem);';
 }
-/******************************************************************************
+/******************************************************************************/
+############################# #2 CRIANDO UMA COLECAO ###########################
+function archival_category_root($collection_id, WP_Term $category_root) {
+        $parent_taxonomy_category_id = get_register_id('socialdb_taxonomy', 'socialdb_category_type');
+        $category_subject_root_id = create_register(__('Classification plan of', 'tainacan').' '.get_post($collection_id)->post_title, 'socialdb_category_type', array('parent' => $parent_taxonomy_category_id, 'slug' => 'subject_category_collection_'.$collection_id));
+        $category_subject_root_id = get_term_by('id', $category_subject_root_id['term_id'], 'socialdb_category_type');
+        add_term_meta($category_subject_root_id->term_id, 'socialdb_category_owner', get_current_user_id());
+        //adiciono a categoria root como faceta da colecao
+        update_post_meta($collection_id, 'socialdb_collection_facets', $category_subject_root_id->term_id);
+        update_post_meta($collection_id, 'socialdb_collection_facet_' . $category_subject_root_id->term_id . '_color', 'color1');
+        update_post_meta($collection_id, 'socialdb_collection_facet_' . $category_subject_root_id->term_id . '_widget', 'tree');
+        update_post_meta($collection_id, 'socialdb_collection_facet_' . $category_subject_root_id->term_id . '_priority', '1');
+        create_initial_property($category_subject_root_id->term_id, $collection_id,$category_root);
+}
+add_filter( 'create_root_category', 'archival_category_root', 10, 3 );

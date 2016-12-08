@@ -1916,6 +1916,8 @@ function create_root_collection_category($collection_id, $category_name) {
             update_post_meta($collection_id, 'socialdb_collection_facet_' . $category_subject_root_id->term_id . '_priority', '1');
         endif;
         create_initial_property($category_subject_root_id->term_id, $collection_id,$category_root);
+    }else if(has_action('create_root_category')){
+        do_action('create_root_category',$collection_id,$category_root);
     }
     if(has_action('insert_default_properties_collection')){
         do_action('insert_default_properties_collection', $category_root->term_id,$collection_id);

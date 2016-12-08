@@ -2,6 +2,7 @@
 include_once ('js/import_full_js.php');
 include_once ('js/import_oaipmh_js.php');
 include_once ('../../helpers/view_helper.php');
+delete_option('socialdb_aip_importation');
 ?>
 <div class="col-md-12">
 
