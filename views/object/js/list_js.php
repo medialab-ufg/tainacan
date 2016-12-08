@@ -147,13 +147,15 @@
                 if (color_scheme) {
                     $('#accordion .title-pipe').css('border-left-color', color_scheme.secondary);
                     $('.item-funcs li a').css('color', color_scheme.primary);
-
                     $('.prime-color-bg').css('background', color_scheme.primary);
                     $('.prime-color').css('color', color_scheme.secondary);
                     $('.sec-color-bg').css('background', color_scheme.secondary);
                     $('.sec-color').css('color', color_scheme.secondary);
                 } else {
-                    $('#div_left .expand-all').css('background', '#79a6ce');
+                    // default tainacan light blue color
+                    $(['#div_left .expand-all','#filters_collection .search-resultset']).each(function(id, e){
+                       $(e).css('background', '#79a6ce');
+                    });
                 }
             });
         }

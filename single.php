@@ -165,6 +165,11 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
     <input type="hidden" id="flag_dynatree_ajax" name="flag_dynatree_ajax" value="true"> <!-- utilizado na busca -->
     <!-- TAINACAN - END: ITENS NECESSARIOS PARA EXECUCAO DE VARIAS PARTES DO SOCIALDB -->
 
+    <?php
+    $_color_scheme = ViewHelper::getCollectionColors(get_the_ID());
+    $search_color = ($_color_scheme) ? $_color_scheme["primary"] : "#79a6ce";
+    ?>
+
     <!-- TAINACAN: esta div central que agrupa todos os locais para widgets e a listagem de objeto -->
     <div id="main_part">
         <!-- TAINACAN: este container agrupa a coluna da esquerda dos widgets, a listagem de itens e coluna da direita dos widgets -->
@@ -211,18 +216,15 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
 
                             <div class="col-md-12 no-padding">
                                 <div class="col-md-10 no-padding">
-                                    <div id="filters_collection"></div>
+                                    <div id="filters_collection" style="background-color: <?php echo $search_color; ?>"></div>
                                 </div>
                                 <div class="col-md-2 no-padding">
                                     <div class="text-left clear-top-search">
                                         <button onclick="clear_list()" id="clear" class="prime-color-bg"><?php _e('Clear search', 'tainacan') ?></button>
                                     </div>
                                 </div>
-
                             </div>
-
                         </div>
-
 
                         <!-- TAINACAN: esta div estao localizados o campo para o titulo e botao com o icone para o adicionar rapido, colado ao input - col-md-6 (bootstrap) -->
                         <!--div class="col-md-6">

@@ -1108,7 +1108,7 @@
             }
         }).done(function (result) {
             $('#filters_collection').html(result);
-            $('.remove-link-filters').show();            
+            $('.remove-link-filters').show();
             var result_set = $('.search-resultset').find('a').length;
             if (result_set > 0) {
                 $("button#clear").fadeIn();

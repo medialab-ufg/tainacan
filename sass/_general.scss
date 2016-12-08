@@ -144,14 +144,12 @@ body.error404 {
   }
 
   #filters_collection {
-    padding-top: 10px;
     color: white;
     font-size: 12px;
 
     .search-resultset {
-      background: $brand-light-blue;
+      margin-top: 10px;
       border-radius: 4px 0 0 4px;
-
       a {
         padding: 5px 7px 5px 7px;
         display: inline-block;

@@ -1,12 +1,10 @@
-<div class="search-resultset prime-color-bg">
+<div class="search-resultset">
     <?php
     include_once ('js/filters_dynatree_js.php');
 
     //keyword
     if (isset($keyword) && $keyword != '') { ?>
-         <a onclick="remove_search_word()"
-            href="#"><span class="glyphicon glyphicon-remove white"></span>
-         </a>
+         <a onclick="remove_search_word()" href="#"> <span class="glyphicon glyphicon-remove white"></span> </a>
         <?php
         echo $keyword;
     }

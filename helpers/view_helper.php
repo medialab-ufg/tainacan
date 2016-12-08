@@ -352,6 +352,10 @@ class ViewHelper {
         ];
     }
     
+    public static function getCollectionColors($col_id) {
+       return unserialize(get_post_meta($col_id,'socialdb_default_color_scheme', true) );
+    }
+    
     public function render_statistic_menu() {
         $current_step = 'sa';
         $path = get_template_directory_uri();
