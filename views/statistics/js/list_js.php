@@ -307,10 +307,10 @@
         pdf.setFontType('bold');
         pdf.text('Estatísticas do Repositório', same_x_dist, (line_dims.startY - 17) );
 
-        pdf.setFontSize(8.5);
+        pdf.setFontSize(8);
         pdf.setTextColor(100);
         pdf.setFontType('normal');
-        pdf.text(consultDate, 390, line_dims.startY - 5);
+        pdf.text(consultDate, 410, line_dims.startY - 5);
 
         pdf.setTextColor(0);
         pdf.setFontSize(10);
@@ -336,8 +336,8 @@
         pdf.text(right_footer_text, footer_set.startX + 5, pdf.internal.pageSize.height - 20);
         // cl(pdf.internal);
 
-        var timeStamp = d.getMilliseconds();
-        var chart_name = curr_type + '_chart_' + timeStamp + '.pdf';
+        var timeStamp = d.getFullYear() + d.getDay() + d.getMilliseconds();
+        var chart_name = 'tainacan_' + curr_type + '_report_' + timeStamp + '.pdf';
         pdf.save( chart_name );
     }
 
