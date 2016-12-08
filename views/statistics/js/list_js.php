@@ -81,10 +81,8 @@
             var selected_chart = $(this).attr('data-chart');
             var curr_img = $(this).html();
             var chart_type = selected_chart.replace('chart_div', '');
-            
-            $('.selected_chart_type').val(chart_type);
-            // cl("Atualizado para: > " + $('.selected_chart_type').val() );
 
+            $('.selected_chart_type').val(chart_type);
             $(".statChartType li").each(function(idx, elem){
                if( $(elem).attr('class') == selected_chart ) {
                    $(elem).addClass('hide');
@@ -261,10 +259,15 @@
 
                 barchart.draw(commom_data, barchart_options);
             } else if( chart_type == 'default' ) {
-                var default_chart = new google.charts.Bar(document.getElementById('defaultchart_div'));
-                var data = google.visualization.arrayToDataTable( chart_data );
-                
+                var default_chart = new google.visualization.ColumnChart(document.getElementById('defaultchart_div'));
+                var data = new google.visualization.arrayToDataTable( chart_data );
                 var default_options = { colors: [color], legend: 'none' };
+
+                google.visualization.events.addListener(default_chart, 'ready', function(){
+                   var chart_png = default_chart.getImageURI();
+                    $('.dynamic-chart-img').removeClass('hide').attr('src', chart_png );
+                });
+
                 default_chart.draw(data, default_options);
             }
         }
@@ -278,29 +281,23 @@
         var curr_type = $('.selected_chart_type').val();
         var d = new Date();
         var line_dims = { startX: 28, startY: 75, length: 540, thickness: 1 };
-        var margins = { top: 100, bottom: 60, left: 25, width: 180 };
+        var margins = { top: 135, bottom: 60, left: 25, width: 180 };
 
         var week_day = " (" + (getWeekDay()[d.getDay()]).toString().toLowerCase() + ")";
         var formated_date = d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear() + week_day;
 
         var pdf = new jsPDF('p', 'pt');
 
+        var logo = $('img.tainacan-logo-cor').get(0);
         var projectLogo = new Image();
-        projectLogo.src = $('img.tainacan-logo-cor').attr('src');
-
-        projectLogo.onload = function () {
-            var logo_settings = { width: (projectLogo.naturalWidth * 0.48), height: (projectLogo.naturalHeight * 0.48) };
-            pdf.addImage(projectLogo, 'PNG', line_dims.startX, line_dims.startY, logo_settings.width, logo_settings.height);
-
-        };
+        projectLogo.src = $(logo).attr("src");
+        var logo_settings = { width: (projectLogo.naturalWidth * 0.48), height: (projectLogo.naturalHeight * 0.48) };
+        pdf.addImage(projectLogo, 'PNG', line_dims.startX + 15, line_dims.startY - 45, logo_settings.width, logo_settings.height);
 
         var chartImg = new Image();
-        chartImg.setAttribute('crossOrigin', 'Anonymous');
         chartImg.src = $('.chart-img img.dynamic-chart-img').attr('src');
-        chartImg.onload = function () {
-            var chart_settings = { width: (chartImg.naturalWidth * 0.7), height: (chartImg.naturalHeight * 0.7) };
-            pdf.addImage(chartImg, 'PNG', margins.left, margins.top, chart_settings.width, chart_settings.height);
-        };
+        var chart_settings = { width: (chartImg.naturalWidth * 0.6), height: (chartImg.naturalHeight * 0.6) };
+        pdf.addImage(chartImg, 'PNG', margins.left, margins.top, chart_settings.width, chart_settings.height);
 
         pdf.rect(line_dims.startX, line_dims.startY, line_dims.length, line_dims.thickness, 'F');
 

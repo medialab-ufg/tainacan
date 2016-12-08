@@ -3,7 +3,7 @@
 class LogHelper extends ViewHelper {
     
     public function getChartsType() {
-        return [ [ 'className' => 'chart_div', 'img' => $this->getChartImg("chart_column") ],
+        return [ [ 'className' => 'defaultchart_div', 'img' => $this->getChartImg("chart_column") ],
             [ 'className' => 'piechart_div', 'img' => $this->getChartImg("chart_pie") ],
             [ 'className' => 'barchart_div', 'img' => $this->getChartImg("chart_line") ] ];
     }
