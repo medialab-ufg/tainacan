@@ -221,8 +221,15 @@ class CollectionController extends Controller {
                 break;
             /********************* IMPORTACAO DE COLECAO **********************/
             case 'importCollection':
-                $collectionImportation = new CollectionImportModel;
-                return json_encode($collectionImportation->import($data));
+                if($data['file_type'] == 'rdf/owl')
+                {
+                    return json_encode(parse_owl1());
+                }
+                else if($data['file_type'] == 'tainacan-zip')
+                {
+                    $collectionImportation = new CollectionImportModel;
+                    return json_encode($collectionImportation->import($data));
+                }
             /*************************** TEMPLATES **********************/
             case 'list-collection-templates':
                 $colectionTemplateModel = new CollectionTemplatesModel;

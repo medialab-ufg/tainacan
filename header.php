@@ -257,10 +257,17 @@ $viewHelper = new ViewHelper();
                 <div class="modal-content">
                     <form id="importCollection">
                         <input type="hidden" name="operation" value="importCollection">
-                        
+
                         <?php echo $viewHelper->render_modal_header('remove-sign', __('Import Collection', 'tainacan')); ?>
-                                               
+
                         <div class="modal-body">
+                            <!---Adição SELECT BOX-->
+                            <?php
+                                if(has_action('add_select_box'))
+                                {
+                                    do_action("add_select_box");
+                                }
+                            ?>
                             <div class="form-group">
                                 <label for="collection_file"><?php _e('Select the file', 'tainacan'); ?></label>
                                 <input type="file" required="required" class="form-control" name="collection_file" id="collection_file" >

@@ -34,6 +34,7 @@ class CollectionImportModel extends CollectionModel {
         $this->recursiveRemoveDirectory($dir_created);
         return $return;
     }
+
     /*
      * @signature unzip_package()
      * @return string $targetdir o diretorio para onde foi descompactado o arquivo
@@ -103,7 +104,7 @@ class CollectionImportModel extends CollectionModel {
             set_post_thumbnail($collection_id, $thumbnail_id);
         }
     }
-    
+
     /**
      * @signature add_cover_collection($dir_created,$collection_id)
      * @param string $dir_created
@@ -372,6 +373,7 @@ class CollectionImportModel extends CollectionModel {
    public function add_property_data($property,$socialdb_collection_object_type,$category_root_id) {
         $new_property = wp_insert_term((string)$property->name, 'socialdb_property_type', array('parent' => $this->get_property_type_id('socialdb_property_data'),
                 'slug' => $this->generate_slug((string)$property->name, 0)));
+        //Functional
         update_term_meta($new_property['term_id'], 'socialdb_property_required', (string)$property->property_term_required);
         update_term_meta($new_property['term_id'], 'socialdb_property_data_widget', (string) $property->socialdb_property_data_widget);
         update_term_meta($new_property['term_id'], 'socialdb_property_data_column_ordenation',  (string)$property->socialdb_property_data_column_ordenation);
@@ -389,6 +391,7 @@ class CollectionImportModel extends CollectionModel {
    public function add_property_object($property,$socialdb_collection_object_type,$category_root_id) {
         $new_property = wp_insert_term((string)$property->name, 'socialdb_property_type', array('parent' => $this->get_property_type_id('socialdb_property_object'),
                 'slug' => $this->generate_slug((string)$property->name, 0)));
+        //Functional
         update_term_meta($new_property['term_id'], 'socialdb_property_required', (string)$property->property_term_required);
         update_term_meta($new_property['term_id'], 'socialdb_property_object_category_id', $this->get_term_imported_id((string) $property->socialdb_property_object_category_id));
         update_term_meta($new_property['term_id'], 'socialdb_property_object_is_reverse',  (string)$property->socialdb_property_object_is_reverse);

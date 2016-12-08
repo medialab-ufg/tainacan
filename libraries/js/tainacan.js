@@ -286,10 +286,15 @@ $(window).load(function () {
                 window.location = elem.url;
             } else {
                 $('#modalImportMain').modal('hide');
-                showAlertGeneral('Erro', 'Houve um erro na importação desde arquivo', 'error');
+                var message = elem.message;
+                if(!message)
+                {
+                    message = 'Houve um erro na importação deste arquivo';
+                }
+                showAlertGeneral('Erro', message, 'error');
             }
         }).error(function (error) {
-            showAlertGeneral('Erro', 'Houve um erro na importação desde arquivo', 'error');
+            showAlertGeneral('Erro', 'Houve um erro na importação deste arquivo', 'error');
         });
         e.preventDefault();
 
