@@ -43,7 +43,7 @@ global $config;
                 <input disabled="disabled" type="text" class="form-control" id="category_parent_name" placeholder="<?php _e('Right click on the tree and select the category as parent', 'tainacan'); ?>" name="category_parent_name" >
                 <input type="hidden"  id="category_parent_id"  name="category_parent_id" value="0" >
             </div>
-            <div class="form-group">
+            <div class="form-group" <?php do_action('description_category_view') ?>>
                  <label for="category_parent_name"><?php _e('Category description', 'tainacan'); ?>&nbsp;<span style="font-size: 10px;">(<?php _e('Optional', 'tainacan'); ?>)</span></label>
                 <textarea class="form-control" id="category_description" placeholder="<?php _e('Describe your category', 'tainacan'); ?>"
                           name="socialdb_event_term_description" ></textarea>    
@@ -64,11 +64,21 @@ global $config;
             </div>
             <?php if (isset($config['mode']) && $config['mode'] == 1) { ?>
                 <!------------ Modo GESTAO ARQUIVISTICA ----------------->
-                <div class="form-inline form-group">
+                <div id="current_phase_number" class="form-inline form-group">
                     <label for="current_phase"><?php _e('Current Phase', 'tainacan'); ?></label><br>
                     <input onchange="handleChange(this);" type="number" class="form-control input-sm" id="current_phase_year" placeholder="<?php _e('Year(s)', 'tainacan'); ?>" name="current_phase_year" >
                     <input onchange="handleChange(this);" type="number" class="form-control input-sm" id="current_phase_month" placeholder="<?php _e('Month(s)', 'tainacan'); ?>" name="current_phase_month" >
                 </div>
+                <div id="current_phase_text" class="form-inline form-group" style="display: none;">
+                    <label for="current_phase"><?php _e('Current Phase', 'tainacan'); ?></label><br>
+                    <input type="text" class="form-control" id="current_phase_string" name="current_phase_string" >
+                </div>
+                <?php _t('Explicate note',true) ?>
+                <input type="checkbox" 
+                       id="current_phase_checkbox" 
+                       value="true" 
+                       onchange="if($(this).is(':checked')){ toggleSlide('current_phase_text','current_phase_number');$('.form-control .input-sm').val('');}else{ toggleSlide('current_phase_number','current_phase_text'); $('#current_phase_string').val('');} ">
+                <br><br>
                 <div class="form-inline form-group">
                     <label for="intermediate_phase"><?php _e('Intermediate Phase', 'tainacan'); ?></label><br>
                     <input onchange="handleChange(this);" class="form-control input-sm" type="number" id="intermediate_phase_year" placeholder="<?php _e('Year(s)', 'tainacan'); ?>" name="intermediate_phase_year" >
@@ -76,8 +86,8 @@ global $config;
                 </div>
                 <div class="form-inline form-group">
                     <label for="destination"><?php _e('Destination', 'tainacan'); ?></label><br>
-                    <input class="form-control" type="radio" id="destination_permanent_guard" value="permanent_guard" name="destination" ><?php _e('Permanent guard', 'tainacan') ?>
-                    <input class="form-control" type="radio" id="destination_elimination" value="elimination" name="destination" ><?php _e('Elimination', 'tainacan') ?>
+                    <input class="form-control" type="radio" id="destination_permanent_guard" value="permanent_guard" name="destination" >&nbsp;<?php _e('Permanent guard', 'tainacan') ?>
+                    <input class="form-control" type="radio" id="destination_elimination" value="elimination" name="destination" >&nbsp;<?php _e('Elimination', 'tainacan') ?>
                 </div>
                 <div class="form-group">
                     <label for="classification_code"><?php _e('Classification Code', 'tainacan'); ?></label>

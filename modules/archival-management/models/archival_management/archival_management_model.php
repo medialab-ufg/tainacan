@@ -48,12 +48,16 @@ class ArchivalManagementModel extends Model {
         //calculo o tempo da fase corrente
         $current_phase = '#';
         $current_months = get_term_meta($category_id, 'socialdb_category_current_phase',true);
-        if($current_months){
-             $current_phase = floor($current_months/12).' anos';
-        }
-        if($current_months%12>0){
-            $months = $current_months%12;
-            $current_phase .= ' e '.$months.' meses';
+        if(is_numeric($current_months)){
+            if($current_months){
+                 $current_phase = floor($current_months/12).' anos';
+            }
+            if($current_months%12>0){
+                $months = $current_months%12;
+                $current_phase .= ' e '.$months.' meses';
+            }
+        }else{
+            $current_phase = $current_months;
         }
         //calculo o tempo da fase intermediaria
         $intermediate_phase = '#';
@@ -110,31 +114,32 @@ class ArchivalManagementModel extends Model {
                     $status_repository_property = get_term_by('slug', 'status_repository_property', 'socialdb_property_type');
                     $status = get_post_meta($post->ID,'socialdb_property_'.$status_repository_property->term_id,true);
                     $current_phase_time = get_term_meta($category_archive_id, "socialdb_category_current_phase",true);
-                    $normalize = floor($current_phase_time/12).' anos';
-                    if($current_phase_time%12>0){
-                        $normalize.= ' e '.($current_phase_time%12).' meses';
+                    if(is_numeric($current_phase_time)){
+                        $normalize = floor($current_phase_time/12).' anos';
+                        if($current_phase_time%12>0){
+                            $normalize.= ' e '.($current_phase_time%12).' meses';
+                        }
+                        $array['current_phase_time'] = $normalize;
+                        // verificando o tempo
+                        $d1 = new DateTime(date('Y-m-d', strtotime(str_replace('/', '-', $array['date']))));
+                        $d2 = new DateTime();
+                        $object_time = $d2->diff($d1);
+                        $months = 0;
+                        // a quantidade de anos que ja se passaram desde a data de criacao ate agora
+                        if($object_time->y>0){
+                            $months = $object_time->y * 12;
+                        }
+                        // os meses
+                        if($object_time->m>0){
+                            $months += $object_time->m;
+                        }
+                        //expiration
+                        if($months>$current_phase_time&&$status=='current'){
+                            $array['expiration'] = $months-$current_phase_time;
+                            $array['id'] = $post->ID;
+                            $items[] = $array;
+                        }
                     }
-                    $array['current_phase_time'] = $normalize;
-                    // verificando o tempo
-                    $d1 = new DateTime(date('Y-m-d', strtotime(str_replace('/', '-', $array['date']))));
-                    $d2 = new DateTime();
-                    $object_time = $d2->diff($d1);
-                    $months = 0;
-                    // a quantidade de anos que ja se passaram desde a data de criacao ate agora
-                    if($object_time->y>0){
-                        $months = $object_time->y * 12;
-                    }
-                    // os meses
-                    if($object_time->m>0){
-                        $months += $object_time->m;
-                    }
-                    //expiration
-                    if($months>$current_phase_time&&$status=='current'){
-                        $array['expiration'] = $months-$current_phase_time;
-                        $array['id'] = $post->ID;
-                        $items[] = $array;
-                    }
-                    
                 }
             }
         }
@@ -186,7 +191,8 @@ class ArchivalManagementModel extends Model {
                     }
                     // aumentando  o tempo corrente
                      $current_phase_time = get_term_meta($category_archive_id, "socialdb_category_current_phase",true);
-                     $intermediate_phase_time +=$current_phase_time;
+                     if(is_numeric($current_phase_time)) 
+                        $intermediate_phase_time +=$current_phase_time;
                     //expiration
                     if($months>$intermediate_phase_time&&$status=='intermediate'){
                         $array['expiration'] = $months-$intermediate_phase_time;

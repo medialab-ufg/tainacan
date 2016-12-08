@@ -295,6 +295,7 @@
         $("#category_description").val('');
         $("#category_id").val('');
         $("#operation_category_form").val('add');
+        $('#submit_form_category .form-control').val('');
     }
     function showCategoryDynatree(src) {
         $("#categories_dynatree").dynatree({
@@ -548,10 +549,17 @@
      * @returns void
      */
     function set_fields_archive_mode(object) {
-        if (object.socialdb_category_current_phase && object.socialdb_category_current_phase.trim() !== '') {
-            var months = parseInt(object.socialdb_category_current_phase.trim());
-            $("#current_phase_year").val(Math.floor(months / 12));
-            $("#current_phase_month").val(months % 12);
+        if(object.socialdb_category_current_phase){
+            if($.isNumeric( object.socialdb_category_current_phase )){
+                 var months = parseInt(object.socialdb_category_current_phase.trim());
+                 $("#current_phase_year").val(Math.floor(months / 12));
+                 $("#current_phase_month").val(months % 12);
+            }else{
+                $('#current_phase_checkbox').attr('checked','checked');
+                $('#current_phase_number').hide();
+                $('#current_phase_text').show();
+                $("#current_phase_string").val(object.socialdb_category_current_phase);
+            }
         }
         if (object.socialdb_category_intermediate_phase && object.socialdb_category_intermediate_phase.trim() !== '') {
             var months = parseInt(object.socialdb_category_intermediate_phase.trim());

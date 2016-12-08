@@ -565,7 +565,7 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
                                     <input type="hidden"  id="category_single_parent_id_edit"  name="socialdb_event_term_suggested_parent" value="0" >
                                     <input type="hidden"  id="socialdb_event_previous_parent"  name="socialdb_event_term_previous_parent" value="0" >
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" <?php do_action('description_category_view') ?>>
                                     <label for="category_parent_name"><?php _e('Category description', 'tainacan'); ?>&nbsp;<span style="font-size: 10px;">(<?php _e('Optional', 'tainacan'); ?>)</span></label>
                                     <textarea class="form-control"
                                               id="category_edit_description"

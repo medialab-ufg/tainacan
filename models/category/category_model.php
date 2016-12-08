@@ -207,11 +207,16 @@ class CategoryModel extends Model {
         if (isset($config['mode']) && $config['mode'] == 1) {
             $current_phase = 0;
             $intermediate_phase = 0;
-            if ($data['current_phase_year']) {
-                $current_phase = intval(trim($data['current_phase_year'])) * 12;
-            }
-            if ($data['current_phase_month']) {
-                $current_phase += intval(trim($data['current_phase_month']));
+            $current_phase_string = $data['current_phase_string'];
+            if($current_phase_string){
+                $current_phase = $current_phase_string;
+            }else{
+                    if ($data['current_phase_year']) {
+                        $current_phase = intval(trim($data['current_phase_year'])) * 12;
+                    }
+                    if ($data['current_phase_month']) {
+                        $current_phase += intval(trim($data['current_phase_month']));
+                    }
             }
             update_term_meta($category_id, "socialdb_category_current_phase", $current_phase);
             if ($data['intermediate_phase_year']) {
