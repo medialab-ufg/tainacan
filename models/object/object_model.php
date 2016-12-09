@@ -55,12 +55,13 @@ class ObjectModel extends Model {
             $user_id = get_option('anonimous_user');
         }
         $post = array(
-            'ID' => $data['object_id'],
-            'post_title' => ($data['object_name']) ? $data['object_name'] : time(),
-            'post_content' => $data['object_description'],
-            'post_status' => 'inherit',
-            'post_author' => $user_id,
-            'post_type' => 'socialdb_object'
+          'ID' => $data['object_id'],
+          'post_title' => ($data['object_name']) ? $data['object_name'] : time(),
+          'post_content' => $data['object_description'],
+          'post_status' => 'inherit',
+          'post_author' => $user_id,
+          'post_type' => 'socialdb_object',
+          'post_parent' => $col_id
         );
         $data['ID'] = wp_update_post($post);
         //deleto o rascunho assim que adiciono
@@ -273,11 +274,12 @@ class ObjectModel extends Model {
         }
         $category_root_id = $this->collection_model->get_category_root_of($data['collection_id']);
         $post = array(
-            'post_title' => $data['title'],
-            'post_content' => $data['description'],
-            'post_status' => 'draft',
-            'post_author' => $user_id,
-            'post_type' => 'socialdb_object'
+          'post_title' => $data['title'],
+          'post_content' => $data['description'],
+          'post_status' => 'draft',
+          'post_author' => $user_id,
+          'post_type' => 'socialdb_object',
+          'post_parent' => $data['collection_id']
         );
         $data['ID'] = wp_insert_post($post);
         //categoria raiz da colecao
@@ -318,11 +320,12 @@ class ObjectModel extends Model {
             $user_id = get_option('anonimous_user');
         }
         $post = array(
-            'post_title' => $data['title'],
-            'post_content' => '',
-            'post_status' => 'draft',
-            'post_author' => $user_id,
-            'post_type' => 'socialdb_object'
+          'post_title' => $data['title'],
+          'post_content' => '',
+          'post_status' => 'draft',
+          'post_author' => $user_id,
+          'post_type' => 'socialdb_object',
+          'post_parent' => $data['collection_id']
         );
         $data['ID'] = wp_insert_post($post);
         $post['ID'] = $data['ID'];
@@ -604,11 +607,12 @@ class ObjectModel extends Model {
             $user_id = get_option('anonimous_user');
         }
         $post = array(
-            'post_title' => $name,
-            'post_content' => $content,
-            'post_status' => 'publish',
-            'post_author' => $user_id,
-            'post_type' => 'socialdb_object'
+          'post_title' => $name,
+          'post_content' => $content,
+          'post_status' => 'publish',
+          'post_author' => $user_id,
+          'post_type' => 'socialdb_object',
+          'post_parent' => $collection_id
         );
         $data['ID'] = wp_insert_post($post);
         //categoria raiz da colecao
@@ -634,11 +638,12 @@ class ObjectModel extends Model {
             $user_id = get_option('anonimous_user');
         }
         $post = array(
-            'post_title' => $name,
-            'post_content' => '',
-            'post_status' => 'publish',
-            'post_author' => $user_id,
-            'post_type' => 'socialdb_object'
+          'post_title' => $name,
+          'post_content' => '',
+          'post_status' => 'publish',
+          'post_author' => $user_id,
+          'post_type' => 'socialdb_object',
+          'post_parent' => $collection_id
         );
         $data['ID'] = wp_insert_post($post);
         update_post_meta($data['ID'], 'socialdb_object_from', 'external');
@@ -1921,7 +1926,7 @@ class ObjectModel extends Model {
             'post_parent' => $item->post_parent,
             //'guid' =>  $item->guid,
             //'menu_order' =>  $item->menu_order,
-            'post_type' => $item->post_type
+            'post_type' => $item->post_type,
                 //'post_mime_type' =>  $item->post_mime_type,
                 //'comment_count' =>  $item->comment_count,
                 //'filter' =>  $item->filter,

@@ -153,7 +153,7 @@
         return [
             { title: "Usuário <p> view / comentado / votado </p>", href: "user" },
             { title: "Status <p> ativos / rascunhos / lixeira / excluídos </p>", href: "status" },
-            { title: "Coleção <p> número de itens por coleção </p>", href: "collection" }
+            { title: "Coleção <p> número de itens por coleção </p>", href: "top_collections" }
         ];
     }
 

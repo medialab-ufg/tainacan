@@ -24,8 +24,10 @@ class LogController extends Controller {
             case _t('Items'):
                 if($_event_suffix == "user") {
                     return "user_items";
+                } else {
+                    return "top_collections";
                 }
-                return "item";
+                // return "item";
             case _t('Tags'):
                 return "tags";
             case _t('Import / Export'):

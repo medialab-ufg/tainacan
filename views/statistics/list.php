@@ -68,7 +68,7 @@ include_once('js/list_js.php');
 
         <div id="charts-container" class="col-md-12">
             <div id="defaultchart_div"></div> <!--Div that will hold the pie chart-->
-            <div id="piechart_div" class="hide"></div>
+            <div id="piechart_div " class="hide"></div>
             <div id="barchart_div" class="hide"></div>
 
             <input type="hidden" value="default" class="selected_chart_type" />

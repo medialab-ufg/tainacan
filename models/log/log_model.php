@@ -25,11 +25,14 @@ class Log extends Model {
         global $wpdb;
         $_alias = "total_" . $event;
 
-        /*
-        if(empty($to)) { $to = date("Y-m-d"); }
-        if( empty($from) ) { $from = "2016-01-01";}
-        */
-        $sql = sprintf( "SELECT COUNT(id) as '$_alias' FROM %s WHERE event_type = '$event_type' AND event = '$event'", self::_table() );
+        if(empty($from)) {
+            $from = "2016-01-01";
+        }
+        if(empty($to)) {
+            $to = date("Y-m-d");
+        }
+
+        $sql = sprintf("SELECT COUNT(id) as '$_alias' FROM %s WHERE event_type = '$event_type' AND event = '$event' AND event_date BETWEEN '$from' AND '$to' ", self::_table() );
         
         if( $encoded ) {
             return json_encode( $wpdb->get_results($sql) );
@@ -69,17 +72,32 @@ class Log extends Model {
     public static function user_events($event_type, $spec, $from, $to) {
         $_events_ = self::get_event_type($spec);
 
-        $_stats = [];
-        foreach ($_events_['events'] as $ev) {
-            $evt_count_ = self::getUserEvents($event_type, $ev, false, $from, $to);
-            $l_data = array_pop($evt_count_);
-            $_stats[] = $l_data[0];
+
+        if( "top_collections" == $event_type ) {
+            return self::getTopCollections();
+        } else {
+            $_stats = [];
+            foreach ($_events_['events'] as $ev) {
+                $evt_count_ = self::getUserEvents($event_type, $ev, false, $from, $to);
+                $l_data = array_pop($evt_count_);
+                $_stats[] = $l_data[0];
+            }
+
+            $prepared_struct = array_combine($_events_['events'], $_stats);
+            $stat_data = [ "stat_title" => [ 'Coleções do Usuário', 'Qtd' ], "stat_object" => $prepared_struct, "color" => $_events_['color']  ];
+
+            return json_encode($stat_data);
         }
 
-        $prepared_struct = array_combine($_events_['events'], $_stats);
-        $stat_data = [ "stat_title" => [ 'Coleções do Usuário', 'Qtd' ], "stat_object" => $prepared_struct, "color" => $_events_['color']  ];
+    }
 
-        return json_encode($stat_data);
+
+
+    public function getTopCollections() {
+        global $wpdb;
+        $sql = sprintf("SELECT (ID, post_title, post_parent) FROM wp_posts WHERE post_type='socialdb_object' AND post_parent > 0 ", self::_table());
+
+        return json_encode( $wpdb->get_results($sql) );
     }
 
     public static function getUserStatus($event) {
@@ -89,3 +107,5 @@ class Log extends Model {
     }
 
 }
+
+wp_count_posts();
