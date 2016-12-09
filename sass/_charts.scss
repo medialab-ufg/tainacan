@@ -90,6 +90,12 @@
         color: $brand-medium-blue;
         font-weight: bolder;
       }
+      div {
+        text-align: right;
+        &:first-child {
+          text-align: left;
+        }
+      }
     }
   } // .chart-header
 
