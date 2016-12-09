@@ -95,7 +95,7 @@ class Log extends Model {
 
     public function getTopCollections() {
         global $wpdb;
-        $sql = sprintf("SELECT (ID, post_title, post_parent) FROM wp_posts WHERE post_type='socialdb_object' AND post_parent > 0 ", self::_table());
+        $sql = sprintf("SELECT ID, post_title, post_parent FROM wp_posts WHERE post_type='socialdb_object' AND post_parent > 0 ", self::_table());
 
         return json_encode( $wpdb->get_results($sql) );
     }
