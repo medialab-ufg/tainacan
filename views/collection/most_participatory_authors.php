@@ -37,7 +37,7 @@ include_once ('js/most_participatory_authors_js.php');
             <?php
                 foreach ($authors as $autor) {
                     ?>
-                    <li class="list-group-item" style="padding: 2px;line-height: 1.2em;text-indent: 0px;" >
+            <li class="list-group-item" style="padding: 2px;line-height: 1.2em;text-indent: 0px;cursor: pointer;" onclick="wpquery_author(<?php echo $autor->ID; ?>);" >
                             <div class="col-sm-3">
                                <?php echo get_avatar($autor->ID,50); ?>
                             </div>

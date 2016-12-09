@@ -40,7 +40,11 @@ class ImportController extends Controller {
            // case 'saving_data':
                // return json_encode($oaipmh_model->saving_data($data));
             case 'import_list_set':
-                $oaipmh_model->import_list_set($data['url'], $data['collection_id']);
+                $sets = false;
+                if(isset($data['sets'])){
+                    $sets = $data['sets'];
+                }
+                $oaipmh_model->import_list_set($data['url'], $data['collection_id'],$sets);
                 return true;
             case 'import_list_set_repository':
                 $oaipmh_model_repository = new OAIPMHRepositoryModel();

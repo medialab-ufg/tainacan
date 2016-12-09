@@ -461,6 +461,7 @@ class Model {
 //        }
 
         $roots_parents = [
+            get_term_by('name', 'socialdb_property_ranking', 'socialdb_property_type')->term_id,
             get_term_by('name', 'socialdb_property_data', 'socialdb_property_type')->term_id,
             get_term_by('name', 'socialdb_property_object', 'socialdb_property_type')->term_id,
             get_term_by('name', 'socialdb_property_term', 'socialdb_property_type')->term_id];
@@ -736,7 +737,9 @@ class Model {
         if ($result && is_array($result) && count($result) > 0) {
             foreach ($result as $property) {
                 $id = str_replace('socialdb_property_', '', trim($property->meta_key));
-                $properties[$id][] = $property->meta_value;
+                if($id && !empty($id)){
+                    $properties[$id][] = $property->meta_value;
+                }
             }
         }
         return $properties;

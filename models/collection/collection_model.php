@@ -960,6 +960,10 @@ class CollectionModel extends Model {
 
     public function get_filters($data) {
         $recover_data = unserialize(stripslashes($data['filters']));
+        //author
+        if(isset($recover_data['author'])){
+            $data['author'] = get_user_by('id', $recover_data['author'])->nickname;
+        }
         //keyword
         if (isset($recover_data['keyword'])) {
             $data['keyword'] = $recover_data['keyword'];

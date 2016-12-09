@@ -2225,9 +2225,9 @@ function download_page($path) {
  * @return void.
  */
 function socialdb_insert_object($post_title, $post_date = null,$status = 'publish') {
-    $post_author = 1;
+    //$post_author = 1;
     $post = array(
-        'post_author' => $post_author,
+        'post_author' => get_current_user_id(),
         'post_title' => (is_array($post_title)) ? $post_title[0]  : $post_title,
         'post_content' => "",
         'post_status' => $status,

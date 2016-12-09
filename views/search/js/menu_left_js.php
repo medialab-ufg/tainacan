@@ -48,12 +48,12 @@
                     console.log(selKeys,selKeys.indexOf(node.data.key)<0,node);
                     if(selKeys.indexOf(node.data.key)<0 ||
                             ( (node.data.key.indexOf("_moreoptions")>=0 || node.data.key.indexOf("alphabet")>=0) ) && node.bExpanded == false ){
-                         select = true;
-                          node.select(true);
+                        select = true;
+                        node.select(true);
                     }else{
                         select = false;
-                         node.select(false);
-                         node.expand(false);
+                        node.select(false);
+                        node.expand(false);
                     }
                 }
             },
@@ -167,6 +167,12 @@
                     }else if(node.data.key.indexOf("_moreoptions")>=0 || node.data.key.indexOf("alphabet")>=0){
                         node.expand(true);
                     }
+                    //REMOVENDO AS SELECOES ABAIXO DO PAI
+//                    if(node.childList){
+//                        $.each(node.childList,function(index,node2){
+//                            node2.select(false);
+//                        });
+//                    }
                     // lanco um hook para ser usada ao selecionar um item no dynatree
                     if (Hook.is_register('tainacan_onselect_dynatree')) {
                         Hook.call('tainacan_onselect_dynatree', [selKeys]);

@@ -151,17 +151,13 @@ class OntologyRDFModel extends Model {
                      continue;
                  }
                  if($type=='socialdb_property_data'){
-                     $xml .= $this->add_lines_property_data($all_data, $values);
+                    $xml .= $this->add_lines_property_data($all_data, $values);
                  }elseif($type=='socialdb_property_object'){
                      $xml .= $this->add_lines_property_object($all_data, $values);
                  }elseif($type=='socialdb_property_term'){
                     $xml .= $this->add_lines_property_term($all_data, $categories);
-                 }elseif($type=='socialdb_property_ranking_stars'){
+                 }elseif($type=='socialdb_property_ranking'){
                     $xml .= $this->add_lines_property_ranking($all_data, $values);
-                 }elseif($type=='socialdb_property_ranking_like'){
-                     $xml .= $this->add_lines_property_ranking($all_data, $values);
-                 }elseif($type=='socialdb_property_ranking_binary'){
-                     $xml .= $this->add_lines_property_ranking($all_data, $values);
                  }
              }
          }
@@ -225,8 +221,9 @@ class OntologyRDFModel extends Model {
              foreach ($categories as $category) {
                  $term = get_term_by('id', $category,'socialdb_category_type');
                   $ancestors = get_ancestors($term->term_id,'socialdb_category_type');
-                  if(in_array($data["metas"]["socialdb_property_term_root"], $ancestors)){
-                     $xml .= '<'.$this->namespace.''.$data['slug'].' rdf:about="'.get_permalink($this->collection->ID).'?category='.$term->slug.'" />';
+                  $collection = $this->get_collection_by_category_root($data["metas"]["socialdb_property_term_root"]);
+                  if(isset($collection[0])){
+                      $xml .= '<'.$this->namespace.''.$data['slug'].' rdf:about="'.get_permalink($collection[0]->ID).'?category='.$term->slug.'" />';
                   }
              }
          }

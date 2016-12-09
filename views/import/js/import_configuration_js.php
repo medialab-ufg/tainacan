@@ -358,13 +358,14 @@
      * 
      * @author: EDUARDO
      **/
-    function import_list_set(url_base) {
+    function import_list_set(url_base,sets) {
         if (url_base !== '') {
             $.ajax({
                 type: "POST",
                 url: $('#src').val() + "/controllers/import/import_controller.php",
                 data: {
                     url: url_base,
+                    sets:sets,
                     collection_id: $('#collection_id').val(),
                     operation: 'import_list_set'
                 }
@@ -388,7 +389,7 @@
     function do_import(mapping_id, url_base, token, imported, size, sets) {
         var first;
         if (isNaN(imported)) {
-            import_list_set(url_base);
+            import_list_set(url_base,sets);
             tempo();
             $("#validate_url_container").hide('slow');
             $("#cronometer").show('slow');

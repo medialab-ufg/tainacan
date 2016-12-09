@@ -261,9 +261,9 @@ $references = [
                                          name="only_showed_<?php echo $property['id']; ?>" value="<?php if(is_numeric($property['metas']['socialdb_property_data_value_increment'])): echo $property['metas']['socialdb_property_data_value_increment']+1; endif; ?>">
                                   <!--input type="hidden"  name="socialdb_property_<?php echo $property['id']; ?>" value="<?php if($property['metas']['socialdb_property_data_value_increment']): echo $property['metas']['socialdb_property_data_value_increment']+1; endif; ?>" -->
                            <?php }else if($property['type'] == 'radio' && $property['name'] == 'Status'){ ?>
-                                  <input   type="radio" onchange="validate_status(<?php echo $property['id']; ?>)" checked="checked" name="socialdb_property_<?php echo $property['id']; ?>" value="current">&nbsp;<?php _e('Current', 'tainacan') ?><br>
-                                  <input   type="radio" onchange="validate_status(<?php echo $property['id']; ?>)" name="socialdb_property_<?php echo $property['id']; ?>" value="intermediate">&nbsp;<?php _e('Intermediate', 'tainacan') ?><br>
-                                  <input   type="radio" onchange="validate_status(<?php echo $property['id']; ?>)" name="socialdb_property_<?php echo $property['id']; ?>" value="permanently">&nbsp;<?php _e('Permanently', 'tainacan') ?><br>
+                                  <input   type="radio" onchange="setCategoriesRadio(<?php echo $property['id']; ?>,'current')" checked="checked" name="socialdb_property_<?php echo $property['id']; ?>" value="current">&nbsp;<?php _e('Current', 'tainacan') ?><br>
+                                  <input   type="radio" onchange="setCategoriesRadio(<?php echo $property['id']; ?>,'intermediate')" name="socialdb_property_<?php echo $property['id']; ?>" value="intermediate">&nbsp;<?php _e('Intermediate', 'tainacan') ?><br>
+                                  <input   type="radio" onchange="setCategoriesRadio(<?php echo $property['id']; ?>,'permanently')" name="socialdb_property_<?php echo $property['id']; ?>" value="permanently">&nbsp;<?php _e('Permanently', 'tainacan') ?><br>
                            <?php }else{ ?>
                                   <input onblur="setPropertyData(this,'<?php echo $property['id']  ?>')"
                                          onchange="setPropertyData(this,'<?php echo $property['id']  ?>')"

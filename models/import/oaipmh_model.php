@@ -269,13 +269,21 @@ class OAIPMHModel extends Model {
      * @param int $collection_id O id da colecao a qual sera vinculada
      * @return void
      */
-    public function import_list_set($url_base, $collection_id) {
+    public function import_list_set($url_base, $collection_id,$sets) {
         session_write_close();
         ini_set('max_execution_time', '0');
         if ($this->get_category_root_of($collection_id)) {
             $xml_list_set = $this->read_list_set($url_base);
             if ($xml_list_set) {
                 $array_list_set = $this->parse_xml_set_to_array($xml_list_set);
+                if(is_string($sets)&&trim($sets)!=''){
+                    $sets_selected = explode(',',$sets);
+                    foreach ($array_list_set as $index => $value) {
+                        if(!in_array($index, $sets_selected)){
+                            unset($array_list_set[$index]);
+                        }
+                    }
+                }
                 $this->save_list_set($array_list_set, $collection_id);
             }
         }

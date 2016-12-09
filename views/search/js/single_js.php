@@ -942,6 +942,37 @@
             setMenuContainerHeight();
         });
     }
+    /**
+    * filtra os itens pelo autor
+
+     * @param {type} value
+     * @param {type} collection_viewMode
+     * @returns {undefined}     */
+    function wpquery_author(value, collection_viewMode) {
+        $('#list').hide();
+        $('#loader_objects').show();
+        $.ajax({
+            type: "POST",
+            url: $('#src').val() + "/controllers/wp_query/wp_query_controller.php",
+            data: {operation: 'wpquery_author', wp_query_args: $('#wp_query_args').val(), value: value, collection_id: $('#collection_id').val()}
+        }).done(function (result) {
+            elem = jQuery.parseJSON(result);
+            show_filters($('#collection_id').val(), elem.args);
+            $('#loader_objects').hide();
+            $('#list').html(elem.page);
+            $('#wp_query_args').val(elem.args);
+            $('#list').show();
+            if (elem.empty_collection) {
+                $('#collection_empty').show();
+                $('#items_not_found').hide();
+            }
+            if(collection_viewMode) {
+                changeViewMode(collection_viewMode);
+            }
+            
+            setMenuContainerHeight();
+        });
+    }
 
     function wpquery_filter() {
         $('#list').hide();

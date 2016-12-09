@@ -1,7 +1,14 @@
 <div class="search-resultset">
     <?php
     include_once ('js/filters_dynatree_js.php');
-
+    
+    
+    //author
+    if (isset($author) && $author != '') { ?>
+         <a onclick="remove_search_author()" href="#"> <span class="glyphicon glyphicon-remove white"></span> </a>
+        <?php
+        echo $author;
+    }
     //keyword
     if (isset($keyword) && $keyword != '') { ?>
          <a onclick="remove_search_word()" href="#"> <span class="glyphicon glyphicon-remove white"></span> </a>

@@ -297,6 +297,21 @@ class WPQueryModel extends Model {
      * function checkbox_filter()
      * @param array Array com os dados da colecao
      * @return void 
+     * Metodo reponsavel em determinar de qual autpr se esta buscando os itens
+     * Autor: Eduardo Humberto 
+     */
+    public function author_filter($data) {
+        $recover_data = unserialize(stripslashes($data['wp_query_args']));
+        $author = $data['value'];
+        if (!empty($author)) {
+            $recover_data['author'] = $author;
+        } 
+        return $recover_data;
+    }
+    /**
+     * function checkbox_filter()
+     * @param array Array com os dados da colecao
+     * @return void 
      * Metodo reponsavel em determinar se deve listar as colecoes ou objetos
      * Autor: Eduardo Humberto 
      */
@@ -538,6 +553,9 @@ class WPQueryModel extends Model {
             }
             if (isset($recover_data['keyword']) && $recover_data['keyword'] != '') {
                 //$args['s'] = $recover_data['keyword'];
+            }
+            if(isset($recover_data['author']) && $recover_data['author'] != ''){
+                $args['author'] = $recover_data['author'];
             }
             return $args;
         }

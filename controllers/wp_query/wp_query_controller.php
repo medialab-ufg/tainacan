@@ -119,7 +119,7 @@ class WPQueryController extends Controller {
                     $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
                 }
                 return json_encode($return);
-             case "wpquery_fromto":
+            case "wpquery_fromto":
                 $return = array();
                 if(empty($wpquery_model->get_collection_posts($data['collection_id']))){
                     $return['empty_collection'] = true;
@@ -161,7 +161,7 @@ class WPQueryController extends Controller {
                      $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
                 }
                 return json_encode($return);
-             case "wpquery_cloud":
+            case "wpquery_cloud":
                 $return = array();
                 if(empty($wpquery_model->get_collection_posts($data['collection_id']))){
                     $return['empty_collection'] = true;
@@ -240,7 +240,7 @@ class WPQueryController extends Controller {
                 }
                 $return['args'] = serialize($args);
                 return json_encode($return);
-             case "wpquery_orderby":
+            case "wpquery_orderby":
                 $return = array();
                 if(empty($wpquery_model->get_collection_posts($data['collection_id']))){
                     $return['empty_collection'] = true;
@@ -271,6 +271,28 @@ class WPQueryController extends Controller {
                 $collection_model = new CollectionModel;
                 $args = $wpquery_model->page_filter($data);
                 $data['pagid'] = $data['value'];
+                $paramters = $wpquery_model->do_filter($args);
+                $data['loop'] =  new WP_Query($paramters);
+                $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
+                $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);
+                $data['is_moderator'] = CollectionModel::is_moderator($args['collection_id'], get_current_user_id());
+                $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($args['collection_id'], "socialdb_collection_table_metas", true)));
+                $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
+                $return['args'] = serialize($args);
+                if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
+                    $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
+                }
+                return json_encode($return);
+            case "wpquery_author":
+                $return = array();
+                if(empty($wpquery_model->get_collection_posts($data['collection_id']))){
+                    $return['empty_collection'] = true;
+                }else{
+                    $return['empty_collection'] = false;
+                }
+                $collection_model = new CollectionModel;
+                $args = $wpquery_model->author_filter($data);
+                $data['author'] = $data['value'];
                 $paramters = $wpquery_model->do_filter($args);
                 $data['loop'] =  new WP_Query($paramters);
                 $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);

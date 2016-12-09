@@ -144,6 +144,13 @@ $thumb_url = $collection_thumb ? wp_get_attachment_url($collection_thumb) : get_
                                      <span class="glyphicon glyphicon-upload"></span> <?php _e('Graph', 'tainacan'); ?>&nbsp;
                                  </a>
                              </li>
+                             <?php if(get_post_meta($collection_post->ID, 'socialdb_collection_mapping_exportation_active', true)): ?>
+                             <li>
+                                 <a href="<?php echo site_url() ?>/oai/socialdb-oai/?verb=ListRecords&metadataPrefix=oai_dc&set=<?php echo $collection_post->ID  ?>"  style="cursor: pointer;"   >
+                                     <span class="glyphicon glyphicon-upload"></span> <?php _e('OAI-PMH', 'tainacan'); ?>&nbsp;
+                                 </a>
+                             </li>
+                             <?php endif; ?>
                      </ul>
                      <!-- ******************** TAINACAN: Comentarios ******************** -->
                      <a style="cursor: pointer;" onclick="showPageCollectionPage()" >

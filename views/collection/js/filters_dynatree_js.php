@@ -11,6 +11,15 @@
         wpquery_remove('keyword','_','_');
         //list_all_objects(selKeys.join(", "), $("#collection_id").val(), $('#collection_single_ordenation').val());
     }
+    function remove_search_author() {
+        $("#value_search").val('');
+        $("#search_objects").val('');
+        $("#search_collections").val('');
+        $("#search_collection_field").val('');
+       // list_main_ordenation();
+        wpquery_remove('author','_','_');
+        //list_all_objects(selKeys.join(", "), $("#collection_id").val(), $('#collection_single_ordenation').val());
+    }
     function remove_filter_category(facet,key) {
         var nod;
         $('.remove-link-filters').hide(); 
