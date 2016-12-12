@@ -87,7 +87,6 @@ include_once('js/list_js.php');
         <div class="col-md-12 no-padding" style="background: #e3e3c7; margin-top: 10px; text-align: center">
             <?php include_once "inc/pdf.php"; ?>
         </div>
-
     </div>
 
     <div class="temp-set" style="display: none"></div>

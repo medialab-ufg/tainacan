@@ -277,6 +277,11 @@
         drawStatPDF();
     });
 
+    $('a.dl-xls').click(function() {
+        var tables = $("#charts-resume table").tableExport({formats: ["xls"]});
+        cl(tables);
+    });
+
     function drawStatPDF() {
         var curr_type = $('.selected_chart_type').val();
         var d = new Date();
