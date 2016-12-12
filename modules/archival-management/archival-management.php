@@ -139,7 +139,7 @@ function archival_insert_fields_edit_modal_category() {
                         <input type="text" class="form-control" id="current_phase_string" name="socialdb_event_term_current_phase_string" >
                     </div>
                     <br>
-                    <?php _t('Explicate note',true) ?>
+                    <?php _e('Explicate note','tainacan') ?>
                     <input type="checkbox" 
                            id="current_phase_checkbox" 
                            value="true" 

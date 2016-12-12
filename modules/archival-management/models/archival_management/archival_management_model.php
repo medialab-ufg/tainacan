@@ -26,7 +26,7 @@ class ArchivalManagementModel extends Model {
                 $this->generate_classification_plan($child, $string, $space);
             }
         }
-        return $string;
+         return utf8_decode($string);
     }
     /**
      * @signature generate_classification_plan($category_id)
@@ -91,7 +91,7 @@ class ArchivalManagementModel extends Model {
                 $this->generate_table_of_temporality($child, $string,$space);
             }
         }
-        return $string;
+        return utf8_decode($string);
     }
     /**
      * @signature get_items_to_transfer($data)

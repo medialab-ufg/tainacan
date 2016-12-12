@@ -31,7 +31,7 @@ class ExportController extends Controller {
                     if($data['export_zip_csv']=='only_csv'){
                         $csv_data = $export_model->generate_csv_data($data);
                         $export_model->download_send_headers('socialdb_csv.csv');
-                        echo $export_model->array2csv($csv_data, $data['socialdb_delimiter_csv']);  
+                        echo utf8_decode($export_model->array2csv($csv_data, $data['socialdb_delimiter_csv']));  
                     }elseif($data['export_zip_csv']=='csv_plus_zip'){
                         $csv_model = new CSVExportModel;
                         $csv_model->generate_zip($data['collection_id'],$data);
