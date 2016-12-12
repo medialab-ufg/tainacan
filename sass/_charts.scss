@@ -97,6 +97,14 @@
         }
       }
     }
+
+    ul.downloadStat {
+      min-width: 46% !important;
+      /* li {
+        text-align: right;
+      } */
+    }
+
   } // .chart-header
 
   #charts-container {
@@ -179,7 +187,7 @@
 // Ul that changes current chart
 ul.statChartType {
   min-width: 20% !important;
-  right: 72px !important;
+  // right: 72px !important;
   li {
     a {
       padding: 3px 12px !important;

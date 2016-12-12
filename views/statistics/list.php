@@ -46,7 +46,7 @@ include_once('js/list_js.php');
                     <button class="btn btn-default" data-toggle="dropdown" type="button" id="downloadStat">
                         <?php _t('Download: ',true); ?> <span class="caret"></span>
                     </button>
-                    <ul class="dropdown-menu" aria-labelledby="downloadStat">
+                    <ul class="dropdown-menu downloadStat" aria-labelledby="downloadStat">
                         <?php $_log_helper->getDownloadTypes(); ?>
                     </ul>
                 </div>
@@ -62,7 +62,6 @@ include_once('js/list_js.php');
                         <?php $_log_helper->renderChartsDropdown(); ?>
                     </ul>
                 </div>
-
             </div>
         </div>
 
