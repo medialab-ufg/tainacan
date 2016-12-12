@@ -69,10 +69,7 @@
             showButtonPanel: false,
             showAnim: 'clip',
             onSelect: function(dateText, obj) {
-                cl("You chose " + dateText);
-                // cl(obj);
                 var which = obj.id.toString().replace("_period", "");
-                cl(which);
                 $("#pdf-chart .period ." + which).text(dateText);
             }
         });
@@ -288,8 +285,24 @@
         var line_dims = { startX: 28, startY: 75, length: 540, thickness: 1 };
         var margins = { top: 135, bottom: 60, left: 25, width: 180 };
 
+        var from = $(".period-config #from_period").val();
+        var to = $(".period-config #to_period").val();
+
+        if(from) {
+            var text_from = "De " + formatChartDate( new Date(from) );
+        } else {
+            var text_from = "01/01/" + new Date().getFullYear();
+        }
+        if (to) {
+            var text_to = " a " + formatChartDate( new Date(to) );
+        } else {
+            var text_to = " a " + formatChartDate( new Date() );
+        }
+
+        var period_consult = $(".stats-i18n .consult-period").text() + text_from  + text_to;
+
         var week_day = " (" + (getWeekDay()[d.getDay()]).toString().toLowerCase() + ")";
-        var formated_date = d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear() + week_day;
+        var formatted_date = d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear() + week_day;
 
         var pdf = new jsPDF('p', 'pt');
 
@@ -306,11 +319,11 @@
 
         pdf.rect(line_dims.startX, line_dims.startY, line_dims.length, line_dims.thickness, 'F');
 
-        var consultDate = "Consultado em: " + formated_date;
-        var same_x_dist = 370;
+        var consultDate = $(".stats-i18n .consult-date").text() + formatted_date;
+        var same_x_dist = 365;
         pdf.setFontSize(14);
         pdf.setFontType('bold');
-        pdf.text('Estatísticas do Repositório', same_x_dist, (line_dims.startY - 17) );
+        pdf.text($(".stats-i18n .repo-stats").text(), (same_x_dist+20), (line_dims.startY - 17) );
 
         pdf.setFontSize(8);
         pdf.setTextColor(100);
@@ -318,11 +331,14 @@
         pdf.text(consultDate, 410, line_dims.startY - 5);
 
         pdf.setTextColor(0);
-        pdf.setFontSize(10);
+        pdf.setFontSize(9.5);
+        pdf.setFontType('bold');
         // content, xPos, yPos
         var dist_from_top = line_dims.startY + 20;
-        pdf.text('Pesquisa: Coleções / Criadas', (line_dims.startX + 15), dist_from_top );
-        pdf.text('Período Consultado: de 15 a 21/09/2016', same_x_dist, dist_from_top );
+        pdf.text( $(".stats-i18n .search").text(), (line_dims.startX + 15), dist_from_top );
+        pdf.setFontType('normal');
+        pdf.text('Coleções / Criadas', (line_dims.startX + 64), dist_from_top );
+        pdf.text(period_consult, same_x_dist, dist_from_top );
         pdf.rect(line_dims.startX, line_dims.startY + 30, line_dims.length, line_dims.thickness, 'F');
 
         var resume_data = pdf.autoTableHtmlToJson( $('#charts-resume table').get(0) );
@@ -348,6 +364,12 @@
 
     function getWeekDay() {
         return ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'];
+    }
+
+    function formatChartDate(dateToFormat) {
+        if( dateToFormat instanceof Date) {
+            return dateToFormat.getDate() + '/' + (dateToFormat.getMonth() + 1) + '/' + dateToFormat.getFullYear();
+        }
     }
 
     $("#report_type_stat").dynatree(stats_dynatree_opts);

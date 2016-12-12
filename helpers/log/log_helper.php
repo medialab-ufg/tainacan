@@ -64,9 +64,9 @@ class LogHelper extends ViewHelper {
 
         $user_data = get_userdata(get_current_user_id());
         if ( is_object( $user_data->data ) ) {
-            echo "<strong> Name: </strong>" . $user_data->data->user_nicename . "<br />";
-            echo "<strong> User: </strong>" . $user_data->data->display_name . "<br />";
-            echo "<strong> e-mail: </strong>" . $user_data->data->user_email . "<br />";
+            echo "<strong>" . _t("Name:"). "</strong> " . $user_data->data->user_nicename . "<br />";
+            echo "<strong>" . _t("User:"). "</strong> " . $user_data->data->display_name . "<br />";
+            echo "<strong>" . _t("email:"). "</strong> " . $user_data->data->user_email . "<br />";
         }
     }
 }
