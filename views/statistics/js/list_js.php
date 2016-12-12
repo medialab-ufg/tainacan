@@ -1,5 +1,5 @@
 <script type="text/javascript">     
-    google.charts.load('current', {'packages':['bar','corechart'], 'language':'pt_BR'});
+    google.charts.load('current', {'packages':['bar','corechart']});
     // google.charts.setOnLoadCallback(drawChart);
     
     var TainacanChart = function() { };
@@ -278,7 +278,7 @@
     });
 
     $('a.dl-xls').click(function() {
-        var tables = $("#charts-resume table").tableExport({formats: ["xls"]});
+        var tables = $("#charts-resume table").tableExport({formats: ["xls", "csv"]});
         cl(tables);
     });
 
