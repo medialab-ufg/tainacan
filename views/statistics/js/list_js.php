@@ -284,7 +284,7 @@
         var curr_type = $('.selected_chart_type').val();
         var d = new Date();
         var line_dims = { startX: 28, startY: 75, length: 540, thickness: 1 };
-        var margins = { top: 135, bottom: 60, left: 25, width: 180 };
+        var chart_margins = { top: 135, bottom: 60, left: 25, width: 180 };
 
         var from = $(".period-config #from_period").val();
         var to = $(".period-config #to_period").val();
@@ -315,7 +315,10 @@
         var chartImg = new Image();
         chartImg.src = $('.chart-img img.dynamic-chart-img').attr('src');
         var chart_settings = { width: (chartImg.naturalWidth * 0.6), height: (chartImg.naturalHeight * 0.6) };
-        pdf.addImage(chartImg, 'PNG', margins.left, margins.top, chart_settings.width, chart_settings.height);
+        var pdfWidth = pdf.internal.pageSize.width;
+        var horizontal_chart_center = (pdfWidth / 2)  - (chartImg.naturalWidth * 0.6 / 2);
+
+        pdf.addImage(chartImg, 'PNG', horizontal_chart_center, chart_margins.top, chart_settings.width, chart_settings.height);
 
         pdf.rect(line_dims.startX, line_dims.startY, line_dims.length, line_dims.thickness, 'F');
 
