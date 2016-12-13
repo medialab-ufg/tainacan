@@ -32,7 +32,6 @@
                 });
             },
             onClick: function (node, event) {
-                console.log('click',select,event.srcElement.className);
                 // Close menu on click
                 if ($(".contextMenu:visible").length > 0) {
                     $(".contextMenu").hide();
@@ -95,10 +94,18 @@
                     if (values[1] === 'tag' || (values[1] === 'facet' && values[2] === 'tag')) {
                         bindContextMenuSingleTag(span);
                     } else if (values[1] === 'facet' && values[2] === 'category') {
+                        // $(span).attr('onmouseout',"hideContextMenu('#context_menu_"+node.data.key+"')");
+                       // $(span).attr('onmouseover',"showContextMenu('#context_menu_"+node.data.key+"')");
+                       // $(span).append('<a id="context_menu_'+node.data.key+'" onclick="triggerContextMenu('+"'#ui-dynatree-id-"+node.data.key+"'"+
+                            //    ',event)" style="display:none;cursor:pointer;"><span class="glyphicon glyphicon-chevron-down"></span></a>');
                         bindContextMenuSingle(span);
                     }
                 } else {
                     bindContextMenuSingle(span);
+                  //   $(span).attr('onmouseout',"hideContextMenu('#context_menu_"+node.data.key+"')");
+                     //   $(span).attr('onmouseover',"showContextMenu('#context_menu_"+node.data.key+"')");
+                       // $(span).append('<a id="context_menu_'+node.data.key+'" onclick="triggerContextMenu('+"'#ui-dynatree-id-"+node.data.key+"'"+
+                        //        ',event)" style="display:none;cursor:pointer;"><span class="glyphicon glyphicon-chevron-down"></span></a>');
                 }
                 Hook.call('tainacan_oncreate_main_dynatree',[node]);
                 $('.dropdown-toggle').dropdown();
@@ -129,7 +136,7 @@
                             node.deactivate();
                         }
                     });
-                }else if($('#visualization_page_category').val()!=='click'){
+                }else if($('#visualization_page_category').val()!=='click' && event.srcElement.className==='dynatree-title' ){
                     if(node.data.key.indexOf("_facet_")>=0){
                         return false;
                     }
@@ -221,6 +228,40 @@
         });
     }
     
+    /**
+     * 
+     * @returns {undefined}     */
+    function showContextMenu(object){
+         $(object).show();
+    }
+    /**
+     * 
+     * @returns {undefined}     */
+    function hideContextMenu(object){
+         $(object).hide();
+    }
+    
+    function triggerContextMenu(span,event){
+//        console.log(event);
+//        $('#myMenuSingle').show();
+//        $(span).trigger({
+//            type: 'click',
+//            pageX: event.x,
+//            pageY: event.y,
+//            which: 3
+//        });
+        $(span).trigger({
+            type: 'mousedown',
+             pageX: event.x,
+           pageY: event.y,
+            button: 2
+        }).trigger({
+            type: 'mouseup',
+            pageX: event.x,
+           pageY: event.y,
+            button: 2
+        });
+    }
     /**
      * funcao que gera o context menu para o dynatree apos cinco segundos
      * @param {type} property_id

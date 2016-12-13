@@ -26,7 +26,7 @@ class ArchivalManagementModel extends Model {
                 $this->generate_classification_plan($child, $string, $space);
             }
         }
-         return utf8_decode($string);
+         return $string;
     }
     /**
      * @signature generate_classification_plan($category_id)
