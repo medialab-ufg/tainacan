@@ -324,7 +324,7 @@
         pdf.rect(line_dims.startX, line_dims.startY, line_dims.length, line_dims.thickness, 'F');
 
         var consultDate = $(".stats-i18n .consult-date").text() + formatted_date;
-        var same_x_dist = 365;
+        var same_x_dist = 350;
         pdf.setFontSize(14);
         pdf.setFontType('bold');
         pdf.text($(".stats-i18n .repo-stats").text(), (same_x_dist+20), (line_dims.startY - 17) );
