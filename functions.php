@@ -47,7 +47,24 @@ function setup_taxonomymeta() {
 			) $charset_collate;");
 }
 
+
+function createRepoStatPage() {
+    $_page_id = wp_insert_post([
+        'post_title' => __('Statistics', 'tainacan'),
+        'post_status' => 'publish',
+        'post_content' => __('Repository Statistics', 'tainacan'),
+        'post_type' => 'page',
+        'comment_status' => 'closed',
+    ]);
+
+    if($_page_id && $_page_id != 0) {
+        update_post_meta($_page_id, '_wp_page_template', 'page-statistics.php');
+    }
+}
+
 function setup_statisticsLog() {
+    createRepoStatPage();
+
     global $wpdb;
     $charset_collate = '';
     if (!empty($wpdb->charset))
@@ -77,11 +94,6 @@ function setup_statisticsLog() {
 /*
  * Quick touchup to wpdb
  */
-
-/*
- * Quick touchup to wpdb
- */
-
 function wpdbfix() {
     global $wpdb;
     if (!isset($wpdb->termmeta)) {
@@ -284,6 +296,12 @@ add_action('init', 'custom_rewrite_basic', 10, 0);
 if (!current_user_can('manage_options')) {
     show_admin_bar(false);
 }
+
+
+if( current_user_can('manage_options') ) {
+
+}
+
 /**
  * Função responsavel por permitir zip
  * * */
@@ -1654,10 +1672,13 @@ if (!function_exists("theme_js")) {
         /* Croppic */
         wp_register_script("croppic", get_template_directory_uri() . '/libraries/js/croppic/croppic.js', array('jquery'));
 
+        /* Google Charts Loader */
+        wp_register_script("gloader", get_template_directory_uri() . '/libraries/js/gchart/gloader.js');
+
         $js_files = ['jquery_min', 'jqueryUi', 'bootstrap.min', 'JitJs', 'JitExcanvasJs', 'tainacan', 'DynatreeJs', 'ckeditorjs',
             'contextMenu', 'ColorPicker', 'SweetAlert', 'SweetAlertJS','js-xls', 'FileSaver', 'jsPDF', 'jsPDF_auto_table', 'tableExport', 'jquerydataTablesmin', 'data_table', 'raty',
             'jqpagination', 'dropzone', 'croppic', 'bootstrap-combobox', 'FacebookJS', 'row-sorter', 'maskedInput',
-            'montage', 'prettyphoto', 'select2', 'slick','timepicker', 'jqcloud', 'toastrjs' ];
+            'montage', 'prettyphoto', 'select2', 'slick','timepicker', 'jqcloud', 'toastrjs', 'gloader' ];
 
         foreach ($js_files as $js_file):
             wp_enqueue_script($js_file);

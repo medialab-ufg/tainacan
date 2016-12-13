@@ -1793,22 +1793,7 @@ $(function () {
             add_collection_template(col_name, evt);
         }
     });
-    
-    $('.repository-statistics').on('click', function() {
-        var src = $('#src').val();
-        $.ajax({
-            url: src + '/controllers/log/log_controller.php',
-            type: 'POST',
-            data: { operation: 'show_statistics' }
-        }).done(function(res) {
-            $('#main_part').hide();
-            $('#configuration').html(res).show();
-        });
-    });
-
 });
-
-
 
 function showLoginScreen(src) {
     $.ajax({

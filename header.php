@@ -12,6 +12,7 @@ global $current_user;
 get_currentuserinfo();
 $socialdb_logo = get_option('socialdb_logo');
 $socialdb_title = get_option('blogname');
+$stat_page = get_page_by_title(__('Statistics', 'tainacan'))->ID;
 $viewHelper = new ViewHelper();
 ?>
 <html <?php language_attributes(); ?> xmlns:fb="http://www.facebook.com/2008/fbml" class="no-js"><!--<![endif]-->
@@ -36,8 +37,6 @@ $viewHelper = new ViewHelper();
             <link rel="alternate" type="application/rdf+xml" href="<?php echo get_the_permalink(); ?>?.rdf">
             <?php $_GOOGLE_API_KEY = "AIzaSyBZXPZcDMGeT-CDugrsYWn6D0PQSnq_odg"; ?>
             <script src="http://maps.googleapis.com/maps/api/js?key=<?php echo $_GOOGLE_API_KEY; ?>"></script>
-
-            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
             
             <?php if (is_restful_active()) { ?>
                 <link rel="alternate" type="application/json" href="<?php echo site_url() . '/wp-json/posts/' . get_the_ID() . '/?type=socialdb_collection' ?>">
@@ -125,11 +124,11 @@ $viewHelper = new ViewHelper();
                                                 <li <?php do_action('menu_repository_social_api') ?>><a onclick="showAPIConfiguration('<?php echo get_template_directory_uri() ?>');" href="#"><span class="glyphicon glyphicon-globe"></span>  <?php _e('Social / API Keys', 'tainacan'); ?></a></li>
                                                 <li <?php do_action('menu_repository_license') ?>><a onclick="showLicensesRepository('<?php echo get_template_directory_uri() ?>');" href="#"><span class="glyphicon glyphicon-duplicate"></span> <?php _e('Licenses', 'tainacan'); ?></a></li>
                                                 <li><a onclick="showEventsRepository('<?php echo get_template_directory_uri() ?>', '<?php echo get_option('collection_root_id') ?>');"  href="#"> <span class="glyphicon glyphicon-flash"></span>&nbsp;<?php _e('Events', 'tainacan'); ?>&nbsp;&nbsp;<span id="notification_events_repository" style="background-color:red;color:white;font-size:13px;"></span></a></li>
-                                                <li><a onclick="showWelcomeEmail('<?php echo get_template_directory_uri() ?>');"  href="#"><span  class="glyphicon glyphicon-envelope"></span> <?php _e('Welcome Email', 'tainacan'); ?></a></li>
-                                                <li><a onclick="showTools('<?php echo get_template_directory_uri() ?>');" onmouseover="" href="#"><span  class="glyphicon glyphicon-tasks"></span> <?php _e('Tools', 'tainacan'); ?></a></li>
-                                                <li><a onclick="showImportFull('<?php echo get_template_directory_uri() ?>');" onmouseover="" href="#"><span  class="glyphicon glyphicon-import"></span> <?php _e('Import', 'tainacan'); ?></a></li>
-                                                <li><a onclick="showExportFull('<?php echo get_template_directory_uri() ?>');" onmouseover="" href="#"><span  class="glyphicon glyphicon-export"></span> <?php _e('Export', 'tainacan'); ?></a></li>
-                                                <li> <a class="repository-statistics" href="#" onmouseover=""> 
+                                                <li><a onclick="showWelcomeEmail('<?php echo get_template_directory_uri() ?>');" href="#"><span  class="glyphicon glyphicon-envelope"></span> <?php _e('Welcome Email', 'tainacan'); ?></a></li>
+                                                <li><a onclick="showTools('<?php echo get_template_directory_uri() ?>');" href="#"><span  class="glyphicon glyphicon-tasks"></span> <?php _e('Tools', 'tainacan'); ?></a></li>
+                                                <li><a onclick="showImportFull('<?php echo get_template_directory_uri() ?>');" href="#"><span class="glyphicon glyphicon-import"></span> <?php _e('Import', 'tainacan'); ?></a></li>
+                                                <li><a onclick="showExportFull('<?php echo get_template_directory_uri() ?>');" href="#"><span class="glyphicon glyphicon-export"></span> <?php _e('Export', 'tainacan'); ?></a></li>
+                                                <li> <a class="repository-statistics" href="<?php echo get_the_permalink($stat_page); ?>">
                                                         <span class="glyphicon glyphicon-globe"></span> <?php _e('Statistics', 'tainacan'); ?>
                                                     </a>
                                                 </li>

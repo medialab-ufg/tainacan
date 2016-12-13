@@ -10,7 +10,7 @@
         <?php echo $_log_helper->renderPDFFooter(); ?>
     </div>
     
-    <div class="pdf_footer">  </div>
+    <div class="pdf_footer"> </div>
     
     <img src="<?php echo get_template_directory_uri().'/libraries/images/logo/tainacan-repo-logotipo2.png' ?>" alt="" class="tainacan-logo-cor">
 </div>

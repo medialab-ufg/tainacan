@@ -196,9 +196,10 @@
     function fetchData(parent, action) {
         var from = $("#from_period").val();
         var to = $("#to_period").val();
+        var stat_path = $('.stat_path').val();
 
         $.ajax({
-            url: $("#src").val() + '/controllers/log/log_controller.php', type: 'POST',
+            url: stat_path + '/controllers/log/log_controller.php', type: 'POST',
             data: { operation: 'user_events', parent: parent, event: action, from: from, to: to }
         }).done(function(r){
             var res_json = $.parseJSON(r);
