@@ -119,12 +119,21 @@ $(window).load(function () {
         $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/object/object_controller.php",
-            data: {collection_id: $('#collection_id').val(), operation: 'edit_default', object_id: $('#open_edit_item').val()}
+            data: {collection_id: $('#collection_id').val(), operation: 'edit', object_id: $('#open_edit_item').val()}
         }).done(function (result) {
-            $('#modalImportMain').modal('hide');//escondo o modal de carregamento
+            /*$('#modalImportMain').modal('hide');//escondo o modal de carregamento
             $("#container_socialdb").hide('slow');
             $("#form").hide().html(result).show('slow');
             $('#create_button').hide();
+            $('.dropdown-toggle').dropdown();
+            $('.nav-tabs').tab();*/
+            
+            hide_modal_main();
+            $("#form").html('');
+            $('#main_part').hide();
+            $('#display_view_main_page').hide();
+            $('#loader_collections').hide();
+            $('#configuration').html(result).show();
             $('.dropdown-toggle').dropdown();
             $('.nav-tabs').tab();
         });

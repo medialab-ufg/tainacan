@@ -46,7 +46,7 @@ class FiltersModel extends Model {
                  if (count($children) > 0) {
                      $class= $this->get_class_property_type($this->get_property_type($propertyObject->term_id));
                     $dynatree[] = array(
-                            'title' => Words($propertyObject->name, 30), 
+                            'title' => Words(utf8_encode(utf8_decode($propertyObject->name)), 30),
                             'key' => $propertyObject->term_id,  
                             'expand' => true, 
                             'hideCheckbox' => $hide_checkbox, 
@@ -55,7 +55,7 @@ class FiltersModel extends Model {
                  }else{
                      $class= $this->get_class_property_type($this->get_property_type($propertyObject->term_id));
                      $dynatree[] = array(
-                            'title' => Words($propertyObject->name, 30), 
+                            'title' => Words(utf8_encode(utf8_decode($propertyObject->name)), 30),
                             'key' => $propertyObject->term_id,  
                             'hideCheckbox' => $hide_checkbox, 
                             'addClass' => $class);   
