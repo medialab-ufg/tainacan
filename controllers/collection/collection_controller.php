@@ -231,6 +231,7 @@ class CollectionController extends Controller {
                     $collectionImportation = new CollectionImportModel;
                     return json_encode($collectionImportation->import($data));
                 }
+                break;
             /*************************** TEMPLATES **********************/
             case 'list-collection-templates':
                 $colectionTemplateModel = new CollectionTemplatesModel;

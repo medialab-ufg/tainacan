@@ -2084,13 +2084,15 @@ function parse_owl1()
 
             //Elementos do documento
             $owl_ontology = $owl_tags->Ontology;
-            $count_ontology = 0;
             $owl_classes = $owl_tags->Class;
             $owl_object_properties = $owl_tags->ObjectProperty;
             $owl_data_type_properties = $owl_tags->DatatypeProperty;
             $owl_functional_properties = $owl_tags->FunctionalProperty;
             $owl_transitive_properties = $owl_tags->TransitiveProperty;
             $owl_symmetric_properties = $owl_tags->SymmetricProperty;
+
+            //Individuos
+            $description_ind = $received_file->children($namespace['rdf'])->Description;
 
 
             try
@@ -2241,9 +2243,6 @@ function create_class(&$class_tags, &$created_classes, &$classe, &$collection_id
         if($aboutClassSubClassOf || $resourceSubClassOf)
         {
             $not_created_class = class_search($root_name, $class_tags, $namespace);
-
-            //$not_created_class = $created_classes[$data['idAbout']]['item'];
-            //print_r($created_classes);
             /*
              * Caso uma classe seja subClasse de uma classe não declarada no documento da importação
              * então ela é criada como classe raiz
@@ -2251,12 +2250,15 @@ function create_class(&$class_tags, &$created_classes, &$classe, &$collection_id
             if(gettype($not_created_class) == "object")
             {
                 create_class($class_tags, $created_classes, $not_created_class, $collection_id, $namespace);//Chamada recursiva para criar pai
-                record_class($created_classes, $root_name, $category_model, $data, $collection_id, false);
             }
             else
             {
-                record_class($created_classes, $root_name, $category_model, $data, $collection_id, true);
+                $new_data = $data;
+                $new_data['category_name'] = $root_name;
+                record_class($created_classes, $root_name, $category_model, $new_data, $collection_id, true);
             }
+
+            record_class($created_classes, $root_name, $category_model, $data, $collection_id, false);
         }
         else/*Criação de classe raiz*/
         {
@@ -2446,22 +2448,18 @@ function create_object_properties(&$object_property_tags, &$created_object_prope
         {
             $object_property_to_create = class_search($data['hasFatherResource'], $object_property_tags, $namespace);
 
-            /*if(gettype($object_property_to_create) != "object")
-            {
-
-                add_object_property($created_object_property, $object_property, $class_tags, $created_classes, $data, $namespace, true);
-            }else
+            if(gettype($object_property_to_create) == "object")
             {
                 create_object_properties($object_property_tags, $created_object_property, $object_property_to_create, $class_tags, $created_classes, $functional_property_tags, $namespace);
-            }*/
-
-            if(gettype($object_property_to_create) != "object")
-            {
-                add_object_property($created_object_property, $object_property, $class_tags, $created_classes, $data, $namespace, true);
-            }else {
-                create_object_properties($object_property_tags, $created_object_property, $object_property_to_create, $class_tags, $created_classes, $functional_property_tags, $namespace);
-                add_object_property($created_object_property, $object_property, $class_tags, $created_classes, $data, $namespace, false);
             }
+            else
+            {
+                $new_data = $data;
+                $new_data['name'] = $data['hasFatherResource'];
+                add_object_property($created_object_property, $object_property, $class_tags, $created_classes, $new_data, $namespace, true);
+            }
+
+            add_object_property($created_object_property, $object_property, $class_tags, $created_classes, $data, $namespace, false);
 
         }
         else if($created_object_property[$data['idAbout']]['created'] == true)
@@ -2652,15 +2650,17 @@ function create_data_type_properties(&$data_type_propety_tags, &$created_dataTyp
         {
             $datatype_property_to_create = class_search($data['hasFatherResource'], $data_type_propety_tags, $namespace);
 
-            if(gettype($datatype_property_to_create) != "object")
-            {
-                add_data_type_property($created_dataType_property, $datatype_property, $class_tags, $created_classes, $data, $namespace, true);
-            }else
+            if(gettype($datatype_property_to_create) == "object")
             {
                 create_data_type_properties($data_type_propety_tags, $created_dataType_property, $class_tags, $created_classes, $functional_property_tags,$datatype_property_to_create, $namespace);
-                add_data_type_property($created_dataType_property, $datatype_property, $class_tags, $created_classes, $data, $namespace, false);
-            }
 
+            }else
+            {
+                $new_data = $data;
+                $new_data['name'] = $data['hasFatherResource'];
+                add_data_type_property($created_dataType_property, $datatype_property, $class_tags, $created_classes, $new_data, $namespace, true);
+            }
+            add_data_type_property($created_dataType_property, $datatype_property, $class_tags, $created_classes, $data, $namespace, false);
 
         }
         else if($created_dataType_property[$data['idAbout']]['created'] == true)//Criando filho de pai ja criado
@@ -3080,7 +3080,10 @@ function treats_symmetric_properties(&$symmetric_properties, &$created_object_pr
 /*
  * Trata individuos
  */
-function treats_individuals()
+function treats_individuals(&$description_ind)
 {
-    
+    foreach($description_ind as $description)
+    {
+
+    }
 }
