@@ -42,7 +42,7 @@ include_once('js/list_js.php');
                     <span class="current-chart"><?php _t('User Stats',1); ?></span>
                 </div>
 
-                <div class="col-md-2 pull-right no-padding">
+                <div class="col-md-1 pull-right no-padding">
                     <button class="btn btn-default" data-toggle="dropdown" type="button" id="downloadStat">
                         <?php _t('Download: ',true); ?> <span class="caret"></span>
                     </button>
@@ -51,7 +51,7 @@ include_once('js/list_js.php');
                     </ul>
                 </div>
 
-                <div class="col-md-2 pull-right no-padding">
+                <div class="col-md-4 pull-right no-padding">
                     <span class="config-title"><?php _t('Mode:',1); ?></span>
 
                     <button data-toggle="dropdown" class="btn btn-default" id="statChartType" type="button">

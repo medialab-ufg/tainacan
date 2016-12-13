@@ -126,7 +126,8 @@
             var chart_text = node.data.title;
             var chain = $('.temp-set').html(chart_text).text().replace(/\//gi, "");
             var split_title = chain.split(" ");
-            $(".current-chart").text( split_title[0] + " / " + parent );
+            // $(".current-chart").html( parent + "<span class='glyphicon glyphicon-triangle-right'></span>" + split_title[0] );
+            $(".current-chart").html( parent + "<span> / </span>" + split_title[0] );
             if(node_action) {
                 fetchData(parent, node_action);
             }
@@ -289,7 +290,7 @@
         var to = $(".period-config #to_period").val();
 
         if(from) {
-            var text_from = "De " + formatChartDate( new Date(from) );
+            var text_from = formatChartDate( new Date(from) );
         } else {
             var text_from = "01/01/" + new Date().getFullYear();
         }
@@ -299,8 +300,7 @@
             var text_to = " a " + formatChartDate( new Date() );
         }
 
-        var period_consult = $(".stats-i18n .consult-period").text() + text_from  + text_to;
-
+        var period_consult = $(".stats-i18n .consult-period").text();
         var week_day = " (" + (getWeekDay()[d.getDay()]).toString().toLowerCase() + ")";
         var formatted_date = d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear() + week_day;
 
@@ -337,8 +337,14 @@
         var dist_from_top = line_dims.startY + 20;
         pdf.text( $(".stats-i18n .search").text(), (line_dims.startX + 15), dist_from_top );
         pdf.setFontType('normal');
-        pdf.text('Coleções / Criadas', (line_dims.startX + 64), dist_from_top );
+        var current_chart = $('.current-chart').text();
+        pdf.text(current_chart, (line_dims.startX + 64), dist_from_top );
+
+        pdf.setFontType('bold');
         pdf.text(period_consult, same_x_dist, dist_from_top );
+
+        pdf.setFontType('normal');
+        pdf.text(text_from  + text_to, same_x_dist + 95, dist_from_top );
         pdf.rect(line_dims.startX, line_dims.startY + 30, line_dims.length, line_dims.thickness, 'F');
 
         var resume_data = pdf.autoTableHtmlToJson( $('#charts-resume table').get(0) );

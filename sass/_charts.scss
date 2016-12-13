@@ -90,10 +90,19 @@
         color: $brand-medium-blue;
         font-weight: bolder;
       }
+
+      .current-chart span {
+        font-size: 11px;
+        font-weight: bolder;
+      }
+
       div {
         text-align: right;
         &:first-child {
           text-align: left;
+        }
+        &.col-md-1 {
+          margin-left: 10px;
         }
       }
     }
