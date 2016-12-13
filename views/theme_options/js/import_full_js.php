@@ -37,7 +37,12 @@
             contentType: false
         }).done(function (result) {
             hide_modal_main();
-            showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('All objects imported succesfully!', 'tainacan') ?>', 'success');
+            var json = JSON.parse(result);
+            if (json.result == false) {
+                showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('The file you are trying to upload is not a .zip file. Please try again!', 'tainacan') ?>', 'error');
+            } else {
+                showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('All objects imported succesfully!', 'tainacan') ?>', 'success');
+            }
             /*try {
              elem = jQuery.parseJSON(result);
              if (elem.error) {
@@ -94,8 +99,8 @@
                                     "<a href='#' onclick=\"delete_aip_zip('" + file + "')\"><span class='glyphicon glyphicon-trash'></span></a></td>");
                         });
                         $("#table_aip").show();
-                    }else{
-                     $("#table_aip").hide();
+                    } else {
+                        $("#table_aip").hide();
                     }
                 } else {
                     $("#table_aip").html('');
@@ -107,8 +112,8 @@
             }
         });// fim
     }
-    
-    function do_import_aip_zip(file){
+
+    function do_import_aip_zip(file) {
         swal({
             title: '<?php _e('Attention', 'tainacan') ?>',
             text: '<?php _e('Are you sure about this procedure?', 'tainacan') ?>',
@@ -128,9 +133,9 @@
                     type: 'POST',
                     data: {operation: 'import_dspace_aip', file: file},
                     success: function (data) {
-                       // hide_modal_main();
+                        // hide_modal_main();
                         if (data) {
-                          //  showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Import Successfully.', 'tainacan') ?>', 'success');
+                            //  showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Import Successfully.', 'tainacan') ?>', 'success');
                             //listTableAIP();
                         } else {
                             //showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('Some error ocurred, please click in REFRESH and try again!', 'tainacan') ?>', 'error');
@@ -581,11 +586,11 @@
         });
         e.preventDefault();
     }
-    
-/*******************  Mostra o contador de item,colecoes e comunidades criadas ***********************************************************/    
-function start_loader_aip(){
-    $('#modalImportAIP').modal('show');
-    $.ajax({
+
+    /*******************  Mostra o contador de item,colecoes e comunidades criadas ***********************************************************/
+    function start_loader_aip() {
+        $('#modalImportAIP').modal('show');
+        $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/theme_options/theme_options_controller.php",
             data: {
@@ -594,11 +599,11 @@ function start_loader_aip(){
             }
         }).done(function (result) {
             var json = JSON.parse(result);
-            if(json && (json.total_community ===0 || json.total_community==='0') ){
-                $('#total-community').html('<?php _t('Calculating...',true) ?>');
-                $('#total-collection').html('<?php _t('Calculating...',true) ?>');
-                $('#total-item').html('<?php _t('Calculating...',true) ?>');
-            }else{
+            if (json && (json.total_community === 0 || json.total_community === '0')) {
+                $('#total-community').html('<?php _t('Calculating...', true) ?>');
+                $('#total-collection').html('<?php _t('Calculating...', true) ?>');
+                $('#total-item').html('<?php _t('Calculating...', true) ?>');
+            } else {
                 $('#total-community').html(json.total_community);
                 $('#found-community').html(json.found_community);
                 $('#total-collection').html(json.total_collection);
@@ -612,10 +617,10 @@ function start_loader_aip(){
         }).fail(function (jqXHR, textStatus, errorThrown) {
             showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('All objects imported succesfully!', 'tainacan') ?>', 'success');
         });
-}
+    }
 
-function callback_loader_aip(json){
-    $.ajax({
+    function callback_loader_aip(json) {
+        $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/theme_options/theme_options_controller.php",
             data: {
@@ -627,15 +632,15 @@ function callback_loader_aip(json){
             }
         }).done(function (result) {
             var json = JSON.parse(result);
-            if(!json.close){
-                if(json && (json.total_community ===0 || json.total_community==='0') ){
-                    $('#total-community').html('<?php _t('Calculating...',true) ?>');
-                    $('#total-collection').html('<?php _t('Calculating...',true) ?>');
-                    $('#total-item').html('<?php _t('Calculating...',true) ?>');
-                    $('#found-community').html('<?php _t('Calculating...',true) ?>');
-                    $('#found-collection').html('<?php _t('Calculating...',true) ?>');
-                    $('#found-item').html('<?php _t('Calculating...',true) ?>');
-                }else{
+            if (!json.close) {
+                if (json && (json.total_community === 0 || json.total_community === '0')) {
+                    $('#total-community').html('<?php _t('Calculating...', true) ?>');
+                    $('#total-collection').html('<?php _t('Calculating...', true) ?>');
+                    $('#total-item').html('<?php _t('Calculating...', true) ?>');
+                    $('#found-community').html('<?php _t('Calculating...', true) ?>');
+                    $('#found-collection').html('<?php _t('Calculating...', true) ?>');
+                    $('#found-item').html('<?php _t('Calculating...', true) ?>');
+                } else {
                     $('#total-community').html(json.total_community);
                     $('#found-community').html(json.found_community);
                     $('#total-collection').html(json.total_collection);
@@ -645,14 +650,14 @@ function callback_loader_aip(json){
                     $('#progressbar').val(json.percent);
                 }
                 callback_loader_aip(json);
-            }else{
+            } else {
                 $('#modalImportAIP').modal('hide');
-               showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('All objects imported succesfully!', 'tainacan') ?>', 'success');
+                showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('All objects imported succesfully!', 'tainacan') ?>', 'success');
             }
         }).fail(function (jqXHR, textStatus, errorThrown) {
             showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('All objects imported succesfully!', 'tainacan') ?>', 'success');
         });
-}
+    }
 
 
 </script>
