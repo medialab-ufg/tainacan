@@ -1,4 +1,5 @@
 <?php
+
 ini_set('max_input_vars', '10000');
 
 require_once(dirname(__FILE__) . '../../../models/export/export_model.php');
@@ -28,14 +29,18 @@ class ExportController extends Controller {
                 $data['encode_csv_export'] = trim($data['encode_csv_export']);
                 $data['export_zip_csv'] = trim($data['export_zip_csv']);
                 if ($data['socialdb_delimiter_csv'] != '') {
-                    if($data['export_zip_csv']=='only_csv'){
-                        $csv_data = $export_model->generate_csv_data($data);
-                        $export_model->download_send_headers('socialdb_csv.csv');
-                        echo utf8_decode($export_model->array2csv($csv_data, $data['socialdb_delimiter_csv']));  
-                    }elseif($data['export_zip_csv']=='csv_plus_zip'){
-                        $csv_model = new CSVExportModel;
-                        $csv_model->generate_zip($data['collection_id'],$data);
-                        break;
+                    if (!empty($export_model->get_collection_posts($data['collection_id']))) {
+                        if ($data['export_zip_csv'] == 'only_csv') {
+                            $csv_data = $export_model->generate_csv_data($data);
+                            $export_model->download_send_headers('socialdb_csv.csv');
+                            echo utf8_decode($export_model->array2csv($csv_data, $data['socialdb_delimiter_csv']));
+                        } elseif ($data['export_zip_csv'] == 'csv_plus_zip') {
+                            $csv_model = new CSVExportModel;
+                            $csv_model->generate_zip($data['collection_id'], $data);
+                            break;
+                        }
+                    } else {
+                        wp_redirect(get_the_permalink($data['collection_id']) . '?info_title=Attention&info_messages=' . urlencode(__('This collection has no items to export!', 'tainacan')));
                     }
                 } else {
                     wp_redirect(get_the_permalink($data['collection_id']) . '?info_title=Attention&info_messages=' . urlencode(__('Please, fill the delimiter correctly!', 'tainacan')));
@@ -49,7 +54,7 @@ class ExportController extends Controller {
                         $data['collection_id'] = $collection->ID;
                         $filename = htmlentities($collection->post_title);
                         $csv_data = $export_model->generate_csv_data($data);
-                        if( is_array($csv_data) ) {
+                        if (is_array($csv_data)) {
                             $export_model->array2csv_full($csv_data, $filename, $data['socialdb_delimiter_csv']);
                         }
                     }
@@ -59,7 +64,7 @@ class ExportController extends Controller {
                 //$csv_data = $export_model->generate_csv_data($data);
                 //$export_model->download_send_headers("socialdb_csv.csv');
                 //echo $export_model->array2csv($csv_data, $data['socialdb_delimiter_csv']);
-                Log::addLog(['collection_id' => $data['collection_id'],'user_id' => get_current_user_id(),'event_type' => 'imports', 'event' => 'export_csv']);
+                Log::addLog(['collection_id' => $data['collection_id'], 'user_id' => get_current_user_id(), 'event_type' => 'imports', 'event' => 'export_csv']);
                 break;
             case "export_selected_objects":
                 $data['loop'] = $export_model->get_selected_objects($data);
