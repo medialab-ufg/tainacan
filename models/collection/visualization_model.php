@@ -255,8 +255,13 @@ class VisualizationModel extends CollectionModel {
                     }else{
                           $key = $facet->term_id ;
                     }
-                    $dynatree[] = array('title' => ucfirst(Words($facet->name, 30)), 'key' => $key, 'isLazy' => true, 'data' => $url, 'expand' => true, 'hideCheckbox' => $hide_checkbox, 'addClass' => $classCss);
-                    
+
+                    if(mb_detect_encoding($facet->name)=='UTF-8'||mb_detect_encoding($facet->name)=='ASCII'){
+                        $dynatree[] = array('title' => ucfirst(Words($facet->name, 30)), 'key' => $key, 'isLazy' => true, 'data' => '', 'expand' => true, 'hideCheckbox' => $hide_checkbox, 'addClass' => $classCss);
+                    }else{
+                        $dynatree[] = array('title' => ucfirst(Words(utf8_decode(utf8_encode($facet->name)), 30)), 'key' => $key, 'isLazy' => true, 'data' => '', 'expand' => true, 'hideCheckbox' => $hide_checkbox, 'addClass' => $classCss);
+                    }
+
                     $ordenation = ($ordenation =='alphabetic') ? 't.name ASC' : 'tt.count DESC,t.name ASC';
                     $dynatree[end(array_keys($dynatree))] = $this->getChildrenDynatree($facet->term_id, $dynatree[end(array_keys($dynatree))], $classCss,$ordenation);
                 }
@@ -350,7 +355,9 @@ class VisualizationModel extends CollectionModel {
             
             
         }
-        return json_encode($dynatree);
+        //json_encode($dynatree,JSON_UNESCAPED_UNICODE);
+        //var_dump(json_last_error());
+        return json_encode($dynatree,JSON_UNESCAPED_UNICODE);
     }
     /**
      * 

@@ -16,6 +16,7 @@ class CollectionController extends Controller {
         $visualization_model = new VisualizationModel();
         switch ($operation) {
             case "initDynatree":
+                error_reporting(0);
                 return $visualization_model->initDynatree($data);
             case "initDynatreeSynonyms":
                 return $visualization_model->initDynatreeSynonyms($data);
