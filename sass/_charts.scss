@@ -33,7 +33,7 @@
 
   #charts-display {
     background-color: $collections-bg-color;
-    margin-top: 20px;
+    padding-top: 20px;
   }
 
   /* Left side */
@@ -42,6 +42,7 @@
     border: none;
     font-size: 12px;
     //border-top: 1px solid $item-border;
+    border-right: 3px solid $item-border;
     padding-top: 20px;
 
     .period-config {
@@ -204,3 +205,21 @@ ul.statChartType {
     }
   }
 } // .statChartType
+
+#stats-cover {
+  height: 130px;
+  h1,h3 {
+    color: white;
+    text-shadow: -2px 1px 4px #27272d;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 400%;
+    margin-bottom: 0;
+  }
+  h3 {
+    font-size: 150%;
+    margin-top: 0;
+  }
+} // #stats-cover

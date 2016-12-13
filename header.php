@@ -51,24 +51,17 @@ $viewHelper = new ViewHelper();
     <!-- TAINACAN: tag body adaptado para o gplus -->
     <body <?php body_class(); ?> itemscope>
         <?php
-        if (is_front_page()) {
+        if (is_front_page() || is_page($stat_page)) {
             echo home_header_bg($socialdb_logo);
         }
-
-        // require (dirname(__FILE__) . "/models/user/facebook.php");
+        
         global $wp_query;
         $collection_id = $wp_query->post->ID;
         $collection_owner = $wp_query->post->post_author;
         $user_owner = get_user_by('id', $collection_owner)->display_name;
-
-//        $facebook = new Facebook(array(
-//            'appId' => "1003980369621510",
-//            'secret' => "3c89421b29a2862d3ea8089e84d64147",
-//            'cookie' => true,
-//        ));
         ?>
         <!-- TAINACAN: tag nav, utilizando classes do bootstrap nao modificadas, onde estao localizados os links que chamam paginas da administracao do repositorio -->
-        <nav <?php echo set_navbar_bg_color('black'); ?> class="navbar navbar-default header-navbar">
+        <nav <?php echo set_navbar_bg_color('black', $stat_page); ?> class="navbar navbar-default header-navbar">
             <?php //wp_nav_menu( array( 'theme_location' => 'header-menu' ) ); ?>
             
             <div class="container-fluid">

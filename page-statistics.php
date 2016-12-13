@@ -17,6 +17,11 @@ if ( current_user_can('manage_options') ):
         });
     </script>
 
+    <div id="stats-cover">
+        <h1> <?php bloginfo('name') ?> </h1>
+        <h3> <?php bloginfo('description') ?> </h3>
+    </div>
+
     <input type="hidden" class="stat_path" value="<?php echo get_template_directory_uri() ?>">
     <div id='tainacan-stats' class='col-md-12 no-padding'>
         <center>
