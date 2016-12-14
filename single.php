@@ -189,14 +189,17 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
 
                             <div class="col-md-12 no-padding">
                                 <div class="row search-top-container">
-
-                                    <div class="col-md-10 box-left">
+                                    <!--div class="col-md-12 box-left"-->
+                                    <div class="col-md-12">
                                         <div class="search-colecao">
-                                            <div class="input-group">
-                                                <input style="font-size: 13px;" class="form-control input-medium placeholder ui-autocomplete-input" id="search_objects"
-                                                       onkeyup="set_value(this)" onkeydown="if (event.keyCode === 13)
+                                            <div class="input-group" style="z-index: 1;">
+                                                <input  style="font-size: 13px;z-index: 1;" class="form-control input-medium placeholder ui-autocomplete-input" id="search_objects"
+                                                        onkeyup="set_value(this)" 
+                                                        onkeydown="if (event.keyCode === 13)
                                                                        document.getElementById('search_main').click();"
-                                                       type="text" placeholder="<?php _e('Find', 'tainacan') ?>" autocomplete="off">
+                                                        onmouseover="$('#search_main').css('border-left','solid #AAA');"                
+                                                        onmouseout="$('#search_main').css('border-left','none');"                
+                                                        type="text" placeholder="<?php _e('Find', 'tainacan') ?>" autocomplete="off">
                                                 <span class="input-group-btn">
                                                     <button id="search_main" type="button" onclick="search_objects('#search_objects')" class="btn btn-default">
                                                         <span class="glyphicon glyphicon-search"></span>
@@ -205,12 +208,12 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-2 box-right">
-                                        <button class="btn btn-default" onclick="showAdvancedSearch('<?php echo get_template_directory_uri() ?>');">
-                                            <?php _e('Advanced Search', 'tainacan'); ?>
-                                        </button>
-                                    </div>
 
+                                </div>
+                                <div class="col-md-12 no-padding">
+                                    <button style="margin-top:5px;" class="btn btn-default btn-xs pull-right" onclick="showAdvancedSearch('<?php echo get_template_directory_uri() ?>');">
+                                        <?php _e('Advanced Search', 'tainacan'); ?>
+                                    </button>
                                 </div>
                             </div>
 

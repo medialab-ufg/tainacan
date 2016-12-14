@@ -109,6 +109,7 @@ class ObjectModel extends Model {
         if ($data['object_license']) {
             update_post_meta($data['ID'], 'socialdb_license_id', $data['object_license']);
         }
+        update_user_meta(get_current_user_id(), 'socialdb_collection_'.$data['collection_id'].'_betatext', '');
         //propriedades compostas
         $this->insert_compounds($data, $data['ID']);
         // inserindo o evento

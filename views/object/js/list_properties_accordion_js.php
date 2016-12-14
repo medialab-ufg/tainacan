@@ -362,12 +362,12 @@
                         $("#property_object_category_name").val(node.data.title);
 
                     },
+                    onPostInit: function (isReloading, isError) {
+                        select_items("#field_property_term_" + treecheckbox);
+                    },
                     onCreate: function (node, span) {
                          bindContextMenuSingle(span,'field_property_term_' + treecheckbox);
                         $('.dropdown-toggle').dropdown();
-                        if(is_selected_category(node.data.key,'#object_classifications')){
-                            node.select(true);
-                        }
                     },
                     onSelect: function (flag, node) {
                         var cont = 0;
@@ -401,6 +401,14 @@
                 });
             });
         }
+    }
+    
+    function select_items(dynatree){
+        $(dynatree).dynatree("getRoot").visit(function(node){
+            if(is_selected_category(node.data.key,'#object_classifications')){
+                node.select(true);
+            }
+        });
     }
 
     // tree
@@ -438,12 +446,12 @@
                             }
                         });
                     },
+                    onPostInit: function (isReloading, isError) {
+                        select_items("#field_property_term_" + treecheckbox);
+                    },
                     onCreate: function (node, span) {
                         bindContextMenuSingle(span,'field_property_term_' + tree);
                         $('.dropdown-toggle').dropdown();
-                        if(is_selected_category(node.data.key,'#object_classifications')){
-                            node.select(true);
-                        }
                     },
                     onSelect: function (flag, node) {
                         if ($("#socialdb_propertyterm_" + tree).val() === node.data.key) {
@@ -529,7 +537,7 @@
         }else if(id!==0){
             selected_categories.push(id);
             //adicionando metadados
-            show_modal_main();
+            //show_modal_main();
             $.ajax({
                 url: $('#src').val() + '/controllers/object/object_controller.php',
                 type: 'POST',

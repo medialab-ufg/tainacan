@@ -291,7 +291,7 @@ function back_main_list() {
         $.ajax( {
             url: $('#src').val()+'/controllers/object/object_controller.php',
             type: 'POST',
-            data: {operation: 'delete_temporary_object',ID:$("#object_id_add").val()}
+            data: {operation: 'delete_temporary_object',ID:$("#object_id_add").val(),collection_id:$("#collection_id").val()}
         } ).done(function( result ) {
             // $('html, body').animate({
              //   scrollTop: parseInt($("#wpadminbar").offset().top)

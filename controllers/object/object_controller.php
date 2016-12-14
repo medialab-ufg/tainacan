@@ -27,7 +27,8 @@ class ObjectController extends Controller {
                 }
                 //se nao ele busca o cache da pagina de adiconar item
                 $has_cache = $this->has_cache($data['collection_id'], 'create-item-text');
-                if($has_cache){
+                $option = get_option('tainacan_cache');
+                if($has_cache && $option!='false' && $data['classifications'] == ''){
                     $has_cache = htmlspecialchars_decode(stripslashes($has_cache)) . 
                              '<input type="hidden" id="temporary_id_item" value="'.$object_model->create().'">' .
                             file_get_contents(dirname(__FILE__) . '../../../views/object/js/create_item_text_cache_js.php').
@@ -467,6 +468,7 @@ class ObjectController extends Controller {
                     return json_encode($data);
                     break;
                 else:
+                    delete_user_meta(get_current_user_id(), 'socialdb_collection_'.$data['collection_id'].'_betatext');
                     return $object_model->delete($data);
                 endif;
             //ACTION FILES

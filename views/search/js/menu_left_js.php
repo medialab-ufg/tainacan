@@ -37,10 +37,49 @@
                     $(".contextMenu").hide();
                 }
                 //verifico aonde esta clicando
-                if(event.srcElement.className==='dynatree-title' && $('#visualization_page_category').val()!=='click'){
-                   if(select===true){
-                       node.deactivate();
-                   }
+                if($('#visualization_page_category').val()==='click' && event.srcElement.className==='dynatree-title'){
+                    // Close menu on click
+                    $('#modalImportMain').modal('show');
+                    // Close menu on click
+                    var promisse = get_url_category(node.data.key);
+                    promisse.done(function (result) {
+                        elem = jQuery.parseJSON(result);                    
+                        $('#modalImportMain').modal('hide');
+                        var n = node.data.key.toString().indexOf("_");
+                        if(node.data.key.indexOf('_tag')>=0){
+                            showPageTags(elem.slug, src);
+                            node.deactivate();
+                        }else if(n<0||node.data.key.indexOf('_facet_category')>=0){
+                            showPageCategories(elem.slug, src);
+                            node.deactivate();
+                        }
+                    });
+                }else if($('#visualization_page_category').val()!=='click' && event.srcElement.className==='dynatree-title' ){
+                    if(node.data.key.indexOf("_facet_")>=0){
+                        return false;
+                    }
+                    //seleciono ou unselect
+                     var selKeys = $.map(node.tree.getSelectedNodes(), function (tnode) {
+                        return tnode.data.key;
+                    });
+                    //get_categories_properties_ordenation();s
+                    if(selKeys.indexOf(node.data.key)<0 ||
+                            ( (node.data.key.indexOf("_moreoptions")>=0 || node.data.key.indexOf("alphabet")>=0) ) && (select === false || select === 0 ) ){
+                        select = true;
+                        node.select(true);
+                        console.log('activate true');
+                        if((node.data.key.indexOf("_moreoptions")>=0 || node.data.key.indexOf("alphabet")>=0)){
+                            node.expand(true);
+                        }
+                    }else{
+                        select = false;
+                        node.select(false);
+                        node.deactivate();
+                        console.log('activate false');
+                        if((node.data.key.indexOf("_moreoptions")>=0 || node.data.key.indexOf("alphabet")>=0)){
+                            node.expand(false);
+                        }
+                    }
                 }
             },
             onKeydown: function (node, event) {
@@ -92,20 +131,24 @@
                 if (n > 0) {// se for propriedade de objeto
                     values = key.split("_");
                     if (values[1] === 'tag' || (values[1] === 'facet' && values[2] === 'tag')) {
+                         $(span).attr('onmouseout',"hideContextMenu('#context_menu_"+node.data.key+"')");
+                        $(span).attr('onmouseover',"showContextMenu('#context_menu_"+node.data.key+"')");
+                        $(span).append('<a id="context_menu_'+node.data.key+'" onclick="triggerContextMenu('+"'#ui-dynatree-id-"+node.data.key+"'"+
+                               ',event,'+"'myMenuSingleTag'"+')" style="display:none;cursor:pointer;"><span class="glyphicon glyphicon-chevron-down"></span></a>');
                         bindContextMenuSingleTag(span);
                     } else if (values[1] === 'facet' && values[2] === 'category') {
-                        // $(span).attr('onmouseout',"hideContextMenu('#context_menu_"+node.data.key+"')");
-                       // $(span).attr('onmouseover',"showContextMenu('#context_menu_"+node.data.key+"')");
-                       // $(span).append('<a id="context_menu_'+node.data.key+'" onclick="triggerContextMenu('+"'#ui-dynatree-id-"+node.data.key+"'"+
-                            //    ',event)" style="display:none;cursor:pointer;"><span class="glyphicon glyphicon-chevron-down"></span></a>');
+                        $(span).attr('onmouseout',"hideContextMenu('#context_menu_"+node.data.key+"')");
+                        $(span).attr('onmouseover',"showContextMenu('#context_menu_"+node.data.key+"')");
+                        $(span).append('<a id="context_menu_'+node.data.key+'" onclick="triggerContextMenu('+"'#ui-dynatree-id-"+node.data.key+"'"+
+                               ',event,'+"'myMenuSingle'"+')" style="display:none;cursor:pointer;"><span class="glyphicon glyphicon-chevron-down"></span></a>');
                         bindContextMenuSingle(span);
                     }
                 } else {
                     bindContextMenuSingle(span);
-                  //   $(span).attr('onmouseout',"hideContextMenu('#context_menu_"+node.data.key+"')");
-                     //   $(span).attr('onmouseover',"showContextMenu('#context_menu_"+node.data.key+"')");
-                       // $(span).append('<a id="context_menu_'+node.data.key+'" onclick="triggerContextMenu('+"'#ui-dynatree-id-"+node.data.key+"'"+
-                        //        ',event)" style="display:none;cursor:pointer;"><span class="glyphicon glyphicon-chevron-down"></span></a>');
+                    $(span).attr('onmouseout',"hideContextMenu('#context_menu_"+node.data.key+"')");
+                    $(span).attr('onmouseover',"showContextMenu('#context_menu_"+node.data.key+"')");
+                    $(span).append('<a id="context_menu_'+node.data.key+'" onclick="triggerContextMenu('+"'#ui-dynatree-id-"+node.data.key+"'"+
+                          ',event,'+"'myMenuSingle'"+')" style="display:none;cursor:pointer;"><span class="glyphicon glyphicon-chevron-down"></span></a>');
                 }
                 Hook.call('tainacan_oncreate_main_dynatree',[node]);
                 $('.dropdown-toggle').dropdown();
@@ -114,55 +157,10 @@
                 //$('#parentCat').val("Nenhum");
                 $('#parentId').val("");
                 $("ul.dynatree-container").css('border', "none");
-                addHoverToNodes();
                 //$( "#btnExpandAll" ).trigger( "click" );
             },
             onActivate: function (node, event) {
-                console.log('activate');
-                if($('#visualization_page_category').val()==='click'){
-                    // Close menu on click
-                    $('#modalImportMain').modal('show');
-                    // Close menu on click
-                    var promisse = get_url_category(node.data.key);
-                    promisse.done(function (result) {
-                        elem = jQuery.parseJSON(result);                    
-                        $('#modalImportMain').modal('hide');
-                        var n = node.data.key.toString().indexOf("_");
-                        if(node.data.key.indexOf('_tag')>=0){
-                            showPageTags(elem.slug, src);
-                            node.deactivate();
-                        }else if(n<0||node.data.key.indexOf('_facet_category')>=0){
-                            showPageCategories(elem.slug, src);
-                            node.deactivate();
-                        }
-                    });
-                }else if($('#visualization_page_category').val()!=='click' && event.srcElement.className==='dynatree-title' ){
-                    if(node.data.key.indexOf("_facet_")>=0){
-                        return false;
-                    }
-                    //seleciono ou unselect
-                     var selKeys = $.map(node.tree.getSelectedNodes(), function (tnode) {
-                        return tnode.data.key;
-                    });
-                    //get_categories_properties_ordenation();s
-                    if(selKeys.indexOf(node.data.key)<0 ||
-                            ( (node.data.key.indexOf("_moreoptions")>=0 || node.data.key.indexOf("alphabet")>=0) ) && (select === false || select === 0 ) ){
-                        select = true;
-                        node.select(true);
-                        console.log('activate true');
-                        if((node.data.key.indexOf("_moreoptions")>=0 || node.data.key.indexOf("alphabet")>=0)){
-                            node.expand(true);
-                        }
-                    }else{
-                        select = false;
-                        node.select(false);
-                        node.deactivate();
-                        console.log('activate false');
-                        if((node.data.key.indexOf("_moreoptions")>=0 || node.data.key.indexOf("alphabet")>=0)){
-                            node.expand(false);
-                        }
-                    }
-                }
+             
             },
             onSelect: function (flag, node) {
 //                    if($('#visualization_page_category').val()!=='click'){
@@ -240,26 +238,155 @@
     function hideContextMenu(object){
          $(object).hide();
     }
-    
-    function triggerContextMenu(span,event){
-//        console.log(event);
-//        $('#myMenuSingle').show();
-//        $(span).trigger({
-//            type: 'click',
-//            pageX: event.x,
-//            pageY: event.y,
-//            which: 3
-//        });
-        $(span).trigger({
-            type: 'mousedown',
-             pageX: event.x,
-           pageY: event.y,
-            button: 2
-        }).trigger({
-            type: 'mouseup',
-            pageX: event.x,
-           pageY: event.y,
-            button: 2
+    /**
+    * 
+     * @param {type} span
+     * @param {type} event
+     * @returns {undefined}     */
+    function triggerContextMenu(span,event,menu){
+         $(span).triggerContextMenu(event,span,menu,function (action, el, pos) {
+            // The event was bound to the <span> tag, but the node object
+            // is stored in the parent <li> tag
+            var node = $.ui.dynatree.getNode(el);
+            switch (action) {
+                case "see":
+                    var src = $('#src').val();
+                     // Close menu on click
+                    show_modal_main();
+                    // Close menu on click
+                    var promisse = get_url_category(node.data.key);
+                    promisse.done(function (result) {
+                        elem = jQuery.parseJSON(result);
+                        var n = node.data.key.toString().indexOf("_");
+                        if(node.data.key.indexOf('_tag')>=0){
+                            showPageTags(elem.slug, src);
+                            node.deactivate();
+                        }else if(n<0||node.data.key.indexOf('_facet_category')>=0){
+                            showPageCategories(elem.slug, src);
+                            node.deactivate();
+                        }
+                    });
+                    break;
+                case "add":
+                    var promisse = verifyAction($('#collection_id').val(), 'socialdb_collection_permission_create_category', 0);
+                    promisse.done(function (result) {
+                        json = JSON.parse(result);
+                        if (!json.isAllowed) {
+                            showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('This action was configured as "NOT ALLOWED" by moderators!', 'tainacan') ?>', 'info');
+                        } else {
+                            $("#category_single_parent_name").val(node.data.title);
+                            $("#category_single_parent_id").val(node.data.key);
+                            $('#modalAddCategoria').modal('show');
+                            $('.dropdown-toggle').dropdown();
+                            //ativando para um dynatree especifico
+                            if (dynatree_id) {
+                                $("#category_single_add_dynatree_id").val(dynatree_id);
+                            }
+                        }
+                    });
+                    break;
+                case "edit":
+                    var promisse = verifyAction($('#collection_id').val(), 'socialdb_collection_permission_edit_category', 0);
+                    promisse.done(function (result) {
+                        json = JSON.parse(result);
+                        if (!json.isAllowed) {
+                            showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('This action was configured as "NOT ALLOWED" by moderators!', 'tainacan') ?>', 'info');
+                        } else {
+
+                            //$("#category_single_parent_name_edit").val(node.data.title);
+                            //$("#category_single_parent_id_edit").val(node.data.key);
+                            $("#category_single_edit_name").val(node.data.title);
+                            $("#socialdb_event_previous_name").val(node.data.title);
+                            $("#category_edit_description").val('');
+                            $("#category_single_edit_id").val(node.data.key);
+                            //ativando para um dynatree especifico
+                            if (menu) {
+                                $("#category_single_edit_dynatree_id").val(menu);
+                            }
+                            $('#modalEditCategoria').modal('show');
+                            //                $("#operation").val('update');
+                            $('.dropdown-toggle').dropdown();
+                            $.ajax({
+                                type: "POST",
+                                url: $('#src').val() + "/controllers/category/category_controller.php",
+                                data: {category_id: node.data.key, operation: 'get_parent'}
+                            }).done(function (result) {
+                                elem = jQuery.parseJSON(result);
+                                $("#category_single_edit_name").val(elem.child_name);
+                                if (elem.name) {
+                                    $("#category_single_parent_name_edit").val(elem.name);
+                                    $("#category_single_parent_id_edit").val(elem.term_id);
+                                    $("#socialdb_event_previous_parent").val(elem.term_id);
+                                } else {
+                                    $("#category_single_parent_name_edit").val('Categoria raiz');
+                                }
+                                //$("#show_category_property").show();
+                                $('.dropdown-toggle').dropdown();
+                            });
+                            // metas
+                            $.ajax({
+                                type: "POST",
+                                url: $('#src').val() + "/controllers/category/category_controller.php",
+                                data: {category_id: node.data.key, operation: 'get_metas'}
+                            }).done(function (result) {
+                                elem = jQuery.parseJSON(result);
+                                $('#category_synonyms').val('');
+                                if (elem.term.description) {
+                                    $("#category_edit_description").val(elem.term.description);
+                                }
+                                //sinonimos
+                                clear_synonyms_tree();
+                                if (elem.socialdb_term_synonyms && elem.socialdb_term_synonyms.length > 0) {
+                                    $('#category_synonyms').val(elem.socialdb_term_synonyms.join(','));
+                                    $("#dynatree_synonyms").dynatree("getRoot").visit(function (node) {
+                                        var str = node.data.key.replace("_tag", "");
+                                        if (elem.socialdb_term_synonyms.indexOf(str) >= 0) {
+                                            node.select(true);
+                                        }
+                                    });
+                                }
+<?php do_action('javascript_metas_category') ?>
+                                //if (elem.socialdb_category_permission) {
+                                //  $("#category_permission").val(elem.socialdb_category_permission);
+                                //}
+//                                if (elem.socialdb_category_moderators) {
+//                                    $("#chosen-selected2-user").html('');
+//                                    $.each(elem.socialdb_category_moderators, function (idx, user) {
+//                                        if (user && user !== false) {
+//                                            $("#chosen-selected2-user").append("<option class='selected' value='" + user.id + "' selected='selected' >" + user.name + "</option>");
+//                                        }
+//                                    });
+//                                }
+                                //set_fields_archive_mode(elem);
+                                $('.dropdown-toggle').dropdown();
+                            });
+                        }
+                    });
+                    break;
+                case "delete":
+                    var promisse = verifyAction($('#collection_id').val(), 'socialdb_collection_permission_delete_category', 0);
+                    promisse.done(function (result) {
+                        json = JSON.parse(result);
+                        if (!json.isAllowed) {
+                            showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('This action was configured as "NOT ALLOWED" by moderators!', 'tainacan') ?>', 'info');
+                        } else {
+                            $("#category_single_delete_id").val(node.data.key);
+                            $("#delete_category_single_name").text(node.data.title);
+                            //ativando para um dynatree especifico
+                            if (dynatree_id) {
+                                $("#category_single_delete_dynatree_id").val(dynatree_id);
+                            }
+                            $('#modalExcluirCategoria').modal('show');
+                            $('.dropdown-toggle').dropdown();
+                        }
+                    });
+                    break;
+                case 'metadata':
+                    list_category_property_single(node.data.key);
+                    break;
+                default:
+                    alert("Todo: appply action '" + action + "' to node " + node);
+            }
         });
     }
     /**
