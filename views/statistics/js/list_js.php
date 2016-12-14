@@ -209,66 +209,99 @@
     }
 
     function drawChart(chart_type, title, data_obj) {
-        if(data_obj.stat_object) {
-            // all variables used along the function
-            var basis = [ title, ' Qtd ', {role: 'style'} ];
-            var chart_data = [basis];
-            var commom_data = new google.visualization.DataTable();
-            commom_data.addColumn('string', title);
-            commom_data.addColumn('number', 'Qtd');
 
+        if(data_obj) {
             var chart = new TainacanChart();
+            var basis = [ title, ' #Itens ', {role: 'style'} ]; // 'Qtd'
             var color = data_obj.color || '#79a6ce';
             var csvData = [];
 
-            chart.displayFixedBase();
+            if(chart_type == "default") {
+                var chart_data = [basis];
+            } else {
+                var chart_data = new google.visualization.DataTable();
+                chart_data.addColumn('string', title);
+                chart_data.addColumn('number', 'Qtd');
+            }
+        }
+
+        chart.displayFixedBase();
+        if(data_obj.stat_object) {
             for( event in data_obj.stat_object ) {
                 var obj_total = parseInt(data_obj.stat_object[event]);
                 var curr_evt_title = chart.getMappedTitles()[event];
                 var curr_tupple = [ curr_evt_title, obj_total ];
-                chart_data.push([ curr_tupple[0], curr_tupple[1], color ]);
-                commom_data.addRow(curr_tupple);
+
+                if( chart_data instanceof google.visualization.DataTable ) {
+                    chart_data.addRow(curr_tupple);
+                } else {
+                    chart_data.push([ curr_tupple[0], curr_tupple[1], color ]);
+                }
+
                 csvData.push( curr_tupple );
                 chart.displayBaseAppend(curr_tupple[0], curr_tupple[1]);
+            } // for
+        } else if(data_obj.quality_stat) {
+
+            for( colecao in data_obj.quality_stat ) {
+                for( c in data_obj.quality_stat[colecao]) {
+                    var obj_total = parseInt(data_obj.quality_stat[colecao][c]);
+                    var curr_tupple = [c,obj_total];
+                    if( chart_data instanceof google.visualization.DataTable ) {
+                        chart_data.addRow(curr_tupple);
+                    } else {
+                        // chart_data.push([ curr_tupple[0], curr_tupple[1], color ]);
+                        chart_data.push([c,obj_total, '#2D882D']);
+                    }
+                    csvData.push( curr_tupple );
+                } // for
             }
+        }
 
-            // Generate CSV file for current chart
-            chart.createCsvFile(csvData);
+        // Generate CSV file for current chart
+        chart.createCsvFile(csvData);
+        renderChart(title, chart_type, chart_data, color);
 
-            // Google Charts objects
-            if( chart_type == 'pie' ) {
-                var piechart = new google.visualization.PieChart(document.getElementById('piechart_div'));
-                var piechart_options = { title:'Qtd ' + title, is3D: true,
-                    colors: ['#F09B35','#8DA9BF','#F2C38D','#E6AC03', '#D94308', '#013453'] }; // '#0F4F8D','#2B85C1' tons de azul
+    } // drawChart()
 
-                google.visualization.events.addListener(piechart, 'ready', function() {
-                    var chart_png = piechart.getImageURI();
-                    $('.dynamic-chart-img').removeClass('hide').attr('src', chart_png );
-                });
+    function renderChart(current_title, type, stat_data) {
+        var color = color || '#79a6ce';
+        // Google Charts objects
+        if( type == 'pie' ) {
+            var piechart = new google.visualization.PieChart(document.getElementById('piechart_div'));
+            var piechart_options = { title:'Qtd ' + current_title, is3D: true,
+                colors: ['#F09B35','#8DA9BF','#F2C38D','#E6AC03', '#D94308', '#013453'] }; // '#0F4F8D','#2B85C1' tons de azul
 
-                piechart.draw(commom_data, piechart_options);
-            } else if ( chart_type == 'bar' ) {
-                var barchart = new google.visualization.BarChart(document.getElementById('barchart_div'));
-                var barchart_options = {title:'Barchart stats', width: 800, height:300, legend: 'none', colors: ['#013453', 'orange']};
+            google.visualization.events.addListener(piechart, 'ready', function() {
+                var chart_png = piechart.getImageURI();
+                $('.dynamic-chart-img').removeClass('hide').attr('src', chart_png );
+            });
 
-                google.visualization.events.addListener(barchart, 'ready', function() {
-                    var chart_png = barchart.getImageURI();
-                    $('.dynamic-chart-img').removeClass('hide').attr('src', chart_png );
-                });
+            // piechart.draw(commom_data, piechart_options);
+            piechart.draw(stat_data, piechart_options);
+        } else if ( type == 'bar' ) {
+            var barchart = new google.visualization.BarChart(document.getElementById('barchart_div'));
+            var barchart_options = {title:'Barchart stats', width: 800, height:300, legend: 'none', colors: ['#013453', 'orange']};
 
-                barchart.draw(commom_data, barchart_options);
-            } else if( chart_type == 'default' ) {
-                var default_chart = new google.visualization.ColumnChart(document.getElementById('defaultchart_div'));
-                var data = new google.visualization.arrayToDataTable( chart_data );
-                var default_options = { colors: [color], legend: 'none' };
+            google.visualization.events.addListener(barchart, 'ready', function() {
+                var chart_png = barchart.getImageURI();
+                $('.dynamic-chart-img').removeClass('hide').attr('src', chart_png );
+            });
 
-                google.visualization.events.addListener(default_chart, 'ready', function(){
-                   var chart_png = default_chart.getImageURI();
-                    $('.dynamic-chart-img').removeClass('hide').attr('src', chart_png );
-                });
+            // barchart.draw(commom_data, barchart_options);
+            barchart.draw(stat_data, barchart_options);
+        } else if( type == 'default' ) {
+            var default_chart = new google.visualization.ColumnChart(document.getElementById('defaultchart_div'));
+            // var data = new google.visualization.arrayToDataTable( chart_data );
+            var data = new google.visualization.arrayToDataTable( stat_data );
+            var default_options = { colors: [color], legend: 'none' };
 
-                default_chart.draw(data, default_options);
-            }
+            google.visualization.events.addListener(default_chart, 'ready', function(){
+                var chart_png = default_chart.getImageURI();
+                $('.dynamic-chart-img').removeClass('hide').attr('src', chart_png );
+            });
+
+            default_chart.draw(data, default_options);
         }
     }
 

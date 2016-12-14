@@ -14,7 +14,7 @@ class Log extends Model {
     public static function addLog($logData) {
         global $wpdb;
         $final_data = array_merge($logData, self::getCommonFields() );
-        return $wpdb->insert( self::_table(), $final_data);
+        return $wpdb->insert(self::_table(), $final_data);
     }
     
     private function getCommonFields() {
@@ -72,7 +72,6 @@ class Log extends Model {
     public static function user_events($event_type, $spec, $from, $to) {
         $_events_ = self::get_event_type($spec);
 
-
         if( "top_collections" == $event_type ) {
             return self::getTopCollections();
         } else {
@@ -88,16 +87,19 @@ class Log extends Model {
 
             return json_encode($stat_data);
         }
-
     }
-
-
 
     public function getTopCollections() {
         global $wpdb;
-        $sql = sprintf("SELECT ID, post_title, post_parent FROM wp_posts WHERE post_type='socialdb_object' AND post_parent > 0 ", self::_table());
-
-        return json_encode( $wpdb->get_results($sql) );
+        $sql = sprintf("SELECT post_parent, COUNT(id) as total_collection FROM wp_posts WHERE post_type='socialdb_object' AND post_parent > 0 GROUP BY post_parent ORDER BY COUNT(*) DESC;", self::_table());
+        $top_collections = $wpdb->get_results($sql);
+        $cols_array = [];
+        foreach ($top_collections as $col) {
+            $_title = get_post($col->post_parent)->post_title;
+            array_push($cols_array, [$_title => $col->total_collection ]);
+        }
+        $stat_data = [ "stat_title" => [ 'Coleções do Usuário', 'Qtd' ], "quality_stat" => $cols_array, "color" => '#73880a'];
+        return json_encode( $stat_data );
     }
 
     public static function getUserStatus($event) {
@@ -105,7 +107,4 @@ class Log extends Model {
         $sql = sprintf("SELECT COUNT(id) as total_status FROM %s WHERE event_type = 'user_collection' AND event = '$event'", self::_table() );
         return json_encode( $wpdb->get_results($sql) );
     }
-
 }
-
-wp_count_posts();

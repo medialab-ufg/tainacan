@@ -23,6 +23,7 @@ if ( current_user_can('manage_options') ):
     </div>
 
     <input type="hidden" class="stat_path" value="<?php echo get_template_directory_uri() ?>">
+<!--    <input type="hidden" class="src" id="src" value="--><?php //echo get_template_directory_uri() ?><!--">-->
     <div id='tainacan-stats' class='col-md-12 no-padding'>
         <center>
             <img src="<?php echo get_template_directory_uri() . '/libraries/images/ajaxLoader.gif' ?>" width="64px" height="64px" />
