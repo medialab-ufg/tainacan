@@ -113,7 +113,8 @@ $(window).load(function () {
     }
 
     //verifico se foi duplicado um item em outra colecao e abro o editar deste item
-    if ($('#open_edit_item').val() !== '') {
+    if ($('#open_edit_item') && $('#open_edit_item').val() !== '' && typeof $('#open_edit_item').val() != 'undefined') {
+        //console.log('TYPEOF AQUI EH ' + typeof $('#open_edit_item').val());
         //console.log($('#open_edit_item').val());
         //edit_object($('#open_edit_item').val());
         $.ajax({
@@ -122,12 +123,12 @@ $(window).load(function () {
             data: {collection_id: $('#collection_id').val(), operation: 'edit', object_id: $('#open_edit_item').val()}
         }).done(function (result) {
             /*$('#modalImportMain').modal('hide');//escondo o modal de carregamento
-            $("#container_socialdb").hide('slow');
-            $("#form").hide().html(result).show('slow');
-            $('#create_button').hide();
-            $('.dropdown-toggle').dropdown();
-            $('.nav-tabs').tab();*/
-            
+             $("#container_socialdb").hide('slow');
+             $("#form").hide().html(result).show('slow');
+             $('#create_button').hide();
+             $('.dropdown-toggle').dropdown();
+             $('.nav-tabs').tab();*/
+
             hide_modal_main();
             $("#form").html('');
             $('#main_part').hide();
@@ -296,7 +297,7 @@ $(window).load(function () {
             } else {
                 $('#modalImportMain').modal('hide');
                 var message = elem.message;
-                if(!message)
+                if (!message)
                 {
                     message = 'Houve um erro na importação deste arquivo';
                 }
@@ -532,9 +533,9 @@ $(document).ready(function () {
         e.stopPropagation();
     });
 
-    $("#collections-menu li").hover(function(){
-       $(this).find('ul:first').css('display', 'block');
-      }, function() {
+    $("#collections-menu li").hover(function () {
+        $(this).find('ul:first').css('display', 'block');
+    }, function () {
         $(this).find('ul:first').css('display', 'none');
     });
 
@@ -548,10 +549,10 @@ function add_collection_template(col, template_name) {
         data: {operation: 'simple_add', collection_object: 'Item', collection_name: col, template: template_name}
     }).done(function (r) {
         elem = JSON.parse(r);
-        if(elem.type=='info'){
+        if (elem.type == 'info') {
             hide_modal_main();
             showAlertGeneral(elem.title, elem.msg, elem.type);
-        }else{
+        } else {
             window.location = elem.url_collection_redirect;
         }
     });
@@ -592,33 +593,37 @@ function list_templates($_element) {
         data: {operation: 'list-collection-templates', is_json: true}
     }).done(function (result) {
         el = jQuery.parseJSON(result);
-        if($_element) {
-            add_li_collection_template(el,$_element);
+        if ($_element) {
+            add_li_collection_template(el, $_element);
         } else {
             var cont = 0;
             $("#dynatree-collection-templates").dynatree("getTree").reload();
-            add_li_collection_template(el,"#collections-menu ul.templates");
-           if (cont > 0) { $('#show_collection_empty').show(); }
-           else { $('#show_collection_empty').hide(); }
+            add_li_collection_template(el, "#collections-menu ul.templates");
+            if (cont > 0) {
+                $('#show_collection_empty').show();
+            }
+            else {
+                $('#show_collection_empty').hide();
+            }
         }
-   });
+    });
 }
 
-function add_li_collection_template(el,$_element){
-    if($('#show_collection_default').val()==='show'){
+function add_li_collection_template(el, $_element) {
+    if ($('#show_collection_default').val() === 'show') {
         $($_element).html('<li class="click_new_collection"><a href="#" id="click_new_collection" onclick="showModalCreateCollection()">Geral</a></li>');
-    }else{
-         $($_element).html('');
+    } else {
+        $($_element).html('');
     }
-    if(el.user_templates) {
+    if (el.user_templates) {
         $($_element).append("<li class='divider'></li>");
         $.each(el.user_templates, function (idx, value) {
             var li_item = "<li class='tmpl'><a href='#' class='added' data-tplt='" + value.directory + "'>" + value.title + "</a></li>";
             $($_element).append(li_item);
         });
     }
-    
-    if(el.tainacan_templates){
+
+    if (el.tainacan_templates) {
         $($_element).append("<li class='divider'></li>");
         $.each(el.tainacan_templates, function (idx, value) {
             var li_item = "<li class='tmpl'><a href='#' class='added' data-tplt='" + value.directory + "'>" + value.title + "</a></li>";
@@ -626,10 +631,10 @@ function add_li_collection_template(el,$_element){
         });
     }
 
-    if( (!el.tainacan_templates) && (!el.user_templates) ) {
+    if ((!el.tainacan_templates) && (!el.user_templates)) {
         $('ul.templates').remove();
         var text = $('.create-collection').text();
-        $('a.create-collection').text(text).css('cursor', 'pointer').click(function() {
+        $('a.create-collection').text(text).css('cursor', 'pointer').click(function () {
             $('#myModal').modal('show');
         });
     }
@@ -800,7 +805,7 @@ function populateList(src) {
 
 }
 // mostra a listagem inicial
-function showList(src) {    
+function showList(src) {
     $('.selectors a').removeClass('highlight');
     $('#list').hide();
     $('#loader_objects').show();
@@ -1186,7 +1191,7 @@ function showTaxonomyZone(src) {
     });
 }
 
-function showPagePermission(src,collection_id) {
+function showPagePermission(src, collection_id) {
     $.ajax({
         url: src + '/controllers/permission/permission_controller.php',
         type: 'POST',
@@ -1305,7 +1310,7 @@ function list_main_ordenation(has_category_properties) {
         } else {
             $("#collection_single_ordenation").val(default_ordenation);
         }
-        if ($('#is_filter').val() != '1') {            
+        if ($('#is_filter').val() != '1') {
             showList($('#src').val());
         }
         $('.dropdown-toggle').dropdown();
@@ -1426,7 +1431,7 @@ function showFormCreateURL(url) {
 }
 
 function goToCollectionHome() {
-    window.location = $('#site_url').val()+'/?p='+$('#collection_id').val();
+    window.location = $('#site_url').val() + '/?p=' + $('#collection_id').val();
 }
 
 function showFormCreateURLFile(url, type) {
@@ -2521,21 +2526,21 @@ function changeViewMode(viewMode) {
         $('.viewMode-control li.' + viewMode).addClass('selected-viewMode');
 
         setCollectionViewIcon('selected-viewMode');
-        
+
         $('.list-mode-set').attr('id', viewMode + '-viewMode');
         $('.top-div').hide();
-        $('.'+viewMode+'-view-container').show();
+        $('.' + viewMode + '-view-container').show();
     }
 
-    if(viewMode != "geolocation") {
+    if (viewMode != "geolocation") {
         $('.geolocation-view-container').hide();
     }
 }
 
 function setCollectionViewIcon(item_class) {
-    var current_img = $( '.' + item_class + " a img").first().clone();
-    if ( current_img.length < 1 ) {
-        current_img = $( '.' + item_class + " a span").first().clone();
+    var current_img = $('.' + item_class + " a img").first().clone();
+    if (current_img.length < 1) {
+        current_img = $('.' + item_class + " a span").first().clone();
     }
 
     $("#collectionViewMode").html(current_img);
@@ -2580,7 +2585,7 @@ $(".list-group .list-group").each(function () {
     $(this).children('.list-group-item').darken(10);
 });
 //************************  CACHE  *******************************//
-function save_cache(html,operation,collection_id) {
+function save_cache(html, operation, collection_id) {
     var src = $('#src').val();
     $.ajax({
         url: src + '/controllers/cache_action/cache_controller.php',
@@ -2594,7 +2599,7 @@ function save_cache(html,operation,collection_id) {
     }).done(function (result) {
     });
 }
-function delete_cache(operation,collection_id) {
+function delete_cache(operation, collection_id) {
     var src = $('#src').val();
     $.ajax({
         url: src + '/controllers/cache_action/cache_controller.php',
@@ -2608,6 +2613,6 @@ function delete_cache(operation,collection_id) {
     });
 }
 
-function delete_all_cache_collection(){
-    delete_cache('create-item-text',$('#collection_id').val());
+function delete_all_cache_collection() {
+    delete_cache('create-item-text', $('#collection_id').val());
 }
