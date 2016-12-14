@@ -137,6 +137,7 @@ class MappingController extends Controller {
                 }
                 $data['mapping_id'] = $mapping_id;
                 unset($data['file']);
+                //var_dump($data);
                 if(isset($data['socialdb_csv_is_editting']))
                     return $this->render(dirname(__FILE__) . '../../../views/import/csv/edit_mapping.php', $data);
                 else
