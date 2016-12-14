@@ -1,8 +1,8 @@
-<script type="text/javascript">     
+<script type="text/javascript">
     google.charts.load('current', {'packages':['bar','corechart']});
     // google.charts.setOnLoadCallback(drawChart);
     
-    var TainacanChart = function() { };
+    var TainacanChart = function(){};
     TainacanChart.prototype.getMappedTitles = function() {
         return {
             add: '<?php _t("Added",1); ?>',
@@ -37,6 +37,15 @@
         $("#charts-resume table tr.headers").append("<th>"+ title +"</th>");
         $("#charts-resume table tr.content").append("<td>"+ value +"</td>");
     };
+
+    TainacanChart.prototype.appendQualityBase = function() {
+        $("#charts-resume table tr.headers").html("<td>Coleção</td><td>Nº de itens</td>");
+        $("#charts-resume table tr.content").remove();
+    };
+
+    TainacanChart.prototype.appendQualityData = function(title, qtd) {
+        $("#charts-resume table tbody").append("<tr><td>"+ title +"</td><td>"+qtd+"</td></tr>");
+    }
 
     TainacanChart.prototype.getStatDesc = function(title, desc) {
         return title + "<p>"+ desc +"</p>";
@@ -73,7 +82,6 @@
                 $("#pdf-chart .period ." + which).text(dateText);
             }
         });
-
         $('a.change-mode').on('click', function() {
             var selected_chart = $(this).attr('data-chart');
             var curr_img = $(this).html();
@@ -209,9 +217,9 @@
     }
 
     function drawChart(chart_type, title, data_obj) {
-
+        // if has stats data
         if(data_obj) {
-            var chart = new TainacanChart();
+            var tai_chart = new TainacanChart();
             var basis = [ title, ' #Itens ', {role: 'style'} ]; // 'Qtd'
             var color = data_obj.color || '#79a6ce';
             var csvData = [];
@@ -223,49 +231,53 @@
                 chart_data.addColumn('string', title);
                 chart_data.addColumn('number', 'Qtd');
             }
-        }
 
-        chart.displayFixedBase();
-        if(data_obj.stat_object) {
-            for( event in data_obj.stat_object ) {
-                var obj_total = parseInt(data_obj.stat_object[event]);
-                var curr_evt_title = chart.getMappedTitles()[event];
-                var curr_tupple = [ curr_evt_title, obj_total ];
+            if(data_obj.stat_object) {
+                // Dynamic header's chart data
+                tai_chart.displayFixedBase();
+                for( event in data_obj.stat_object ) {
+                    var obj_total = parseInt(data_obj.stat_object[event]);
+                    var curr_evt_title = tai_chart.getMappedTitles()[event];
+                    var curr_tupple = [ curr_evt_title, obj_total ];
 
-                if( chart_data instanceof google.visualization.DataTable ) {
-                    chart_data.addRow(curr_tupple);
-                } else {
-                    chart_data.push([ curr_tupple[0], curr_tupple[1], color ]);
-                }
-
-                csvData.push( curr_tupple );
-                chart.displayBaseAppend(curr_tupple[0], curr_tupple[1]);
-            } // for
-        } else if(data_obj.quality_stat) {
-
-            for( colecao in data_obj.quality_stat ) {
-                for( c in data_obj.quality_stat[colecao]) {
-                    var obj_total = parseInt(data_obj.quality_stat[colecao][c]);
-                    var curr_tupple = [c,obj_total];
                     if( chart_data instanceof google.visualization.DataTable ) {
                         chart_data.addRow(curr_tupple);
                     } else {
-                        // chart_data.push([ curr_tupple[0], curr_tupple[1], color ]);
-                        chart_data.push([c,obj_total, '#2D882D']);
+                        chart_data.push([ curr_tupple[0], curr_tupple[1], color ]);
                     }
+
                     csvData.push( curr_tupple );
+                    tai_chart.displayBaseAppend(curr_tupple[0], curr_tupple[1]);
                 } // for
+            } else if(data_obj.quality_stat) {
+                tai_chart.appendQualityBase();
+                for( colecao in data_obj.quality_stat ) {
+                    for( c in data_obj.quality_stat[colecao]) {
+                        var obj_total = parseInt(data_obj.quality_stat[colecao][c]);
+                        var curr_tupple = [c,obj_total];
+                        if( chart_data instanceof google.visualization.DataTable ) {
+                            chart_data.addRow(curr_tupple);
+                        } else {
+                            chart_data.push([c,obj_total, '#2D882D']);
+                        }
+                        csvData.push( curr_tupple );
+                        tai_chart.appendQualityData(curr_tupple[0], curr_tupple[1]);
+                    } // for
+                }
             }
+
+            // Generate CSV file for current chart
+            tai_chart.createCsvFile(csvData);
+
+            // draw chart based at generated json data
+            renderChart(title, chart_type, chart_data, color);
+        } else {
+            cl('No chart data available!');
         }
-
-        // Generate CSV file for current chart
-        chart.createCsvFile(csvData);
-        renderChart(title, chart_type, chart_data, color);
-
     } // drawChart()
 
-    function renderChart(current_title, type, stat_data) {
-        var color = color || '#79a6ce';
+    function renderChart(current_title, type, stat_data, chart_color) {
+        var color = chart_color || '#79a6ce';
         // Google Charts objects
         if( type == 'pie' ) {
             var piechart = new google.visualization.PieChart(document.getElementById('piechart_div'));
@@ -277,7 +289,6 @@
                 $('.dynamic-chart-img').removeClass('hide').attr('src', chart_png );
             });
 
-            // piechart.draw(commom_data, piechart_options);
             piechart.draw(stat_data, piechart_options);
         } else if ( type == 'bar' ) {
             var barchart = new google.visualization.BarChart(document.getElementById('barchart_div'));
@@ -288,11 +299,9 @@
                 $('.dynamic-chart-img').removeClass('hide').attr('src', chart_png );
             });
 
-            // barchart.draw(commom_data, barchart_options);
             barchart.draw(stat_data, barchart_options);
         } else if( type == 'default' ) {
             var default_chart = new google.visualization.ColumnChart(document.getElementById('defaultchart_div'));
-            // var data = new google.visualization.arrayToDataTable( chart_data );
             var data = new google.visualization.arrayToDataTable( stat_data );
             var default_options = { colors: [color], legend: 'none' };
 
