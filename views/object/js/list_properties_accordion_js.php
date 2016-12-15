@@ -447,7 +447,7 @@
                         });
                     },
                     onPostInit: function (isReloading, isError) {
-                        select_items("#field_property_term_" + treecheckbox);
+                        select_items("#field_property_term_" + tree);
                     },
                     onCreate: function (node, span) {
                         bindContextMenuSingle(span,'field_property_term_' + tree);

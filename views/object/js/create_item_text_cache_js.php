@@ -735,6 +735,9 @@ function back_main_list() {
                             }
                         });
                     },
+                    onPostInit: function (isReloading, isError) {
+                        select_items("#field_property_term_" + tree);
+                    },
                     onClick: function (node, event) {
                         // Close menu on click
                         $("#property_object_category_id").val(node.data.key);
@@ -744,9 +747,6 @@ function back_main_list() {
                     onCreate: function (node, span) {
                          bindContextMenuSingle(span,'field_property_term_' + treecheckbox);
                         $('.dropdown-toggle').dropdown();
-                        if(is_selected_category(node.data.key,'#object_classifications')){
-                            node.select(true);
-                        }
                     },
                     onSelect: function (flag, node) {
                         var cont = 0;
@@ -781,6 +781,14 @@ function back_main_list() {
         }
     }
 
+
+    function select_items(dynatree){
+        $(dynatree).dynatree("getRoot").visit(function(node){
+            if(is_selected_category(node.data.key,'#object_classifications')){
+                node.select(true);
+            }
+        });
+    }
     // tree
     function list_tree(trees) {
         if (trees) {

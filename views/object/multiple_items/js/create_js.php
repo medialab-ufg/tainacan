@@ -16,7 +16,7 @@
                 thisDropzone = this;
                 this.on("removedfile", function (file) {
                     //    if (!file.serverId) { return; } // The file hasn't been uploaded
-                    $.get($('#src').val() + '/controllers/object/object_controller.php?operation=delete_file&object_id=' + $("#object_id_add").val() + '&file_name=' + file.name, function (data) {
+                    $.get($('#src').val() + '/controllers/object/object_controller.php?operation=delete_file&object_id=<?php echo $object_id ?>&file_name=' + file.name, function (data) {
                         if (data.trim() === 'false') {
                            // showAlertGeneral('<?php _e("Atention!", 'tainacan') ?>', '<?php _e("An error ocurred, File already removed or corrupted!", 'tainacan') ?>', 'error');
                         } else {

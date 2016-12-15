@@ -167,7 +167,7 @@ $viewHelper = new ViewHelper();
                                         <span class="caret" style="font-size: 14px"></span>    
                                     </div>                                
                                 </a>
-                                <ul style="display:none; margin-top: 0px" class="sub-menu">
+                                <ul style="display:none; margin-top: 0px;" class="sub-menu">
                                     <li>
                                         <a href="<?php echo get_permalink(get_option('collection_root_id')); ?>">
                                             <?php _e('Show collections', 'tainacan'); ?>

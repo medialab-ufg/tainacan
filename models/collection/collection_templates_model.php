@@ -230,7 +230,7 @@ class CollectionTemplatesModel extends CollectionModel {
         $tainacan_templates = $this->get_tainacan_templates();
         $collection_default = get_option('disable_empty_collection');
         $dynatree['children'][]  = array(
-                'title' => _t('Collection default'), 
+                'title' => __('Collection default','tainacan'), 
                 'key' => 'collection_default', 
                 'type' => 'tainacan',
                 'select' => ($collection_default && $collection_default==='true') ? false : true,

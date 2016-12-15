@@ -1,9 +1,9 @@
-<div class="col-md-2" style="padding:10px 0;text-align:right; z-index: 99999">
+<div class="col-md-2" style="padding:10px 0;text-align:right;">
     <?php if ((verify_collection_moderators($current_collection_id, get_current_user_id()) || current_user_can('manage_options')) && get_post_type($current_collection_id) == 'socialdb_collection'): ?>
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" >
             <div class="fab"><img src="<?php echo get_template_directory_uri() ?>/libraries/images/configuracao.svg" alt="" class="img-responsive"></div>
         </a>
-        <ul style="z-index: 999999999;" class="dropdown-menu pull-right" role="menu">
+        <ul  class="dropdown-menu pull-right" role="menu">
             <li><a style="cursor: pointer;" onclick="showCollectionConfiguration('<?php echo get_template_directory_uri() ?>');" ><span class="glyphicon glyphicon-wrench"></span>&nbsp;<?php _e('Configuration', 'tainacan'); ?></a></li>
 
             <li <?php do_action('menu_collection_property_and_filters_configuration') ?>>

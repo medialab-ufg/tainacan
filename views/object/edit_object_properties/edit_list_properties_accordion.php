@@ -237,15 +237,23 @@ if (isset($property_object)):
                              <input disabled="disabled"  type="number" class="form-control" name="hidded_<?php echo $property['id']; ?>" value="<?php if ($property['metas']['value']) echo (isset($property['metas']['value'][$i])?$property['metas']['value'][$i]:''); ?>">
                     <?php }elseif ($property['type'] == 'radio' && $property['name'] == 'Status') { ?>   
                                 <br>
-                                <input   type="radio" <?php
-                                if ($property['metas']['value'] && $property['metas']['value'][0] == 'current'): echo 'checked="checked"';
-                                endif;
-                                ?>  name="socialdb_property_<?php echo $property['id']; ?>" value="current"><?php _e('Current', 'tainacan') ?><br>
-                                <input   type="radio" <?php
+                                <input   
+                                    type="radio"
+                                    onchange="validate_status(<?php echo $property['id']; ?>)"
+                                    <?php
+                                    if ($property['metas']['value'] && $property['metas']['value'][0] == 'current'): echo 'checked="checked"';
+                                    endif;
+                                    ?>  
+                                    name="socialdb_property_<?php echo $property['id']; ?>" value="current"><?php _e('Current', 'tainacan') ?><br>
+                                <input   
+                                    onchange="validate_status(<?php echo $property['id']; ?>)"
+                                    type="radio" <?php
                                 if ($property['metas']['value'] && $property['metas']['value'][0] == 'intermediate'): echo 'checked="checked"';
                                 endif;
                                 ?>  name="socialdb_property_<?php echo $property['id']; ?>" value="intermediate"><?php _e('Intermediate', 'tainacan') ?><br>
-                                <input   type="radio" <?php
+                                <input   
+                                    onchange="validate_status(<?php echo $property['id']; ?>)"
+                                    type="radio" <?php
                                 if ($property['metas']['value'] && $property['metas']['value'][0] == 'permanently'): echo 'checked="checked"';
                                 endif;
                                 ?> name="socialdb_property_<?php echo $property['id']; ?>" value="permanently"><?php _e('Permanently', 'tainacan') ?><br>
