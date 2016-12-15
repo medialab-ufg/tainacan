@@ -24,7 +24,11 @@
             import_csv: '<?php _t("CSV Importation",1); ?>',
             export_csv: '<?php _t("CSV Exportation",1); ?>',
             import_tainacan: '<?php _t("Tainacan Importation",1); ?>',
-            export_tainacan: '<?php _t("Tainacan Exportation",1); ?>'
+            export_tainacan: '<?php _t("Tainacan Exportation",1); ?>',
+            total_active: '<?php _t("Active",1); ?>',
+            total_draft: '<?php _t("Draft",1); ?>',
+            total_trash: '<?php _t("Trash",1); ?>',
+            total_delete: '<?php _t("Deleted",1); ?>'
         };
     };
 
@@ -251,11 +255,12 @@
                     for( index_i in data_obj.stat_object ){
                         for( t in data_obj.stat_object[index_i] ){
                             var obj_total = parseInt(data_obj.stat_object[index_i][t]);
-                            var curr_tupple = [t,obj_total];
+                            var curr_evt_title = tai_chart.getMappedTitles()[t];
+                            var curr_tupple = [ curr_evt_title, obj_total ];
                             if( chart_data instanceof google.visualization.DataTable ) {
                                 chart_data.addRow(curr_tupple);
                             } else {
-                                chart_data.push([t,obj_total, '#EF4C28']);
+                                chart_data.push([curr_evt_title,obj_total, '#EF4C28']);
                             }
                             csvData.push( curr_tupple );
                             tai_chart.displayBaseAppend(curr_tupple[0], curr_tupple[1]);
