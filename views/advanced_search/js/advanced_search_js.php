@@ -40,7 +40,6 @@
                     $('#resultados_advanced_search').show();
                     $('#container_resultados_advanced_search').html(elem.page); 
                     $('.modal').modal('hide');
-                    console.log('Essa eh a busca avancada! Parabens, sucesso!');
                 }
                
 //                $('html, body').animate({
@@ -52,7 +51,7 @@
                if(elem.args_item){
                     $('#advanced_search_wp_query_args_item').val(elem.args_item);
                }
-
+               $('.modal').modal('hide');
             });
             e.preventDefault();
         });
