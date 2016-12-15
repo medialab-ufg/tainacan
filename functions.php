@@ -2866,9 +2866,12 @@ function set_config_return_button($is_home) {
 }
 
 function repository_page_title() {
-    if (wp_title('&raquo;', false)) {
-        return wp_title('&raquo;');
-    } else {
+    //if (wp_title('&raquo;', false)) {
+      //  return wp_title('&raquo;');
+    //} else {
+    if(get_option('blogname')){
+        return get_option('blogname');
+    }else{
         return __('Tainacan', 'tainacan');
     }
 }

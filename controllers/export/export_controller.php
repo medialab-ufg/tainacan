@@ -67,10 +67,14 @@ class ExportController extends Controller {
                 Log::addLog(['collection_id' => $data['collection_id'], 'user_id' => get_current_user_id(), 'event_type' => 'imports', 'event' => 'export_csv']);
                 break;
             case "export_selected_objects":
-                $data['loop'] = $export_model->get_selected_objects($data);
-                $csv_data = $export_model->generate_csv_data_selected($data);
-                $export_model->download_send_headers('socialdb_csv.csv');
-                echo $export_model->array2csv($csv_data);
+                if (!empty($export_model->get_collection_posts($data['collection_id']))) {
+                    $data['loop'] = $export_model->get_selected_objects($data);
+                    $csv_data = $export_model->generate_csv_data_selected($data);
+                    $export_model->download_send_headers('socialdb_csv.csv');
+                    echo $export_model->array2csv($csv_data);
+                }else{
+                     wp_redirect(get_the_permalink($data['collection_id']) . '?info_title=Attention&info_messages=' . urlencode(__('This collection has no items to export!', 'tainacan')));
+                }
                 break;
         }
     }
