@@ -36,10 +36,10 @@
                             closeOnCancel: true
                         });
                 }else{
-                    $('.modal').modal('hide');
                     $('#container_filtros').hide();
                     $('#resultados_advanced_search').show();
                     $('#container_resultados_advanced_search').html(elem.page); 
+                    $('.modal').modal('hide');
                 }
                
 //                $('html, body').animate({
