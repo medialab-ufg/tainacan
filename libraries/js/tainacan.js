@@ -2550,10 +2550,8 @@ function change_breadcrumbs_title(title, arrow_text) {
 
 function toggleElements(elems_array, hide) {
     if(hide) {
-        cl('escondendo umas paradas');
         $(elems_array).each(function(idx, el){ $(el).addClass('hide') });
     } else {
-        cl('aparece ae doidão')
         $(elems_array).each(function(idx, el){ $(el).removeClass('hide') });
     }
 }

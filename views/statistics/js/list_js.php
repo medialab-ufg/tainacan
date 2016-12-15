@@ -160,7 +160,7 @@
     function itensChildren() {
         return [
             { title: "Usuário <p> view / comentado / votado </p>", href: "user" },
-            { title: "Status <p> ativos / rascunhos / lixeira / excluídos </p>", href: "status" },
+            { title: "Status <p> ativos / rascunhos / lixeira / excluídos </p>", href: "general_status" },
             { title: "Coleção <p> número de itens por coleção </p>", href: "top_collections" }
         ];
     }
@@ -215,7 +215,9 @@
             var res_json = $.parseJSON(r);
             var chart = $('.selected_chart_type').val();
 
-            if(res_json.length == 0) {
+            cl(res_json);
+            
+            if( (res_json == null) || res_json.length == 0) {
                 toggleElements(["#charts-container div", "#charts-resume"], true);
                 toggleElements(["#charts-container #no_chart_data"]);
             } else {
@@ -245,20 +247,37 @@
             if(data_obj.stat_object) {
                 // Dynamic header's chart data
                 tai_chart.displayFixedBase();
-                for( event in data_obj.stat_object ) {
-                    var obj_total = parseInt(data_obj.stat_object[event]);
-                    var curr_evt_title = tai_chart.getMappedTitles()[event];
-                    var curr_tupple = [ curr_evt_title, obj_total ];
-
-                    if( (typeof chart_data === 'object') && (chart_data instanceof google.visualization.DataTable) ) {
-                        chart_data.addRow(curr_tupple);
-                    } else {
-                        chart_data.push([ curr_tupple[0], curr_tupple[1], color ]);
+                if(data_obj.item_status) {
+                    for( index_i in data_obj.stat_object ){
+                        for( t in data_obj.stat_object[index_i] ){
+                            var obj_total = parseInt(data_obj.stat_object[index_i][t]);
+                            var curr_tupple = [t,obj_total];
+                            if( chart_data instanceof google.visualization.DataTable ) {
+                                chart_data.addRow(curr_tupple);
+                            } else {
+                                chart_data.push([t,obj_total, '#EF4C28']);
+                            }
+                            csvData.push( curr_tupple );
+                            tai_chart.displayBaseAppend(curr_tupple[0], curr_tupple[1]);
+                        }
                     }
+                } else {
+                    for( event in data_obj.stat_object ) {
+                        var obj_total = parseInt(data_obj.stat_object[event]);
+                        var curr_evt_title = tai_chart.getMappedTitles()[event];
+                        var curr_tupple = [ curr_evt_title, obj_total ];
 
-                    csvData.push( curr_tupple );
-                    tai_chart.displayBaseAppend(curr_tupple[0], curr_tupple[1]);
-                } // for
+                        if( (typeof chart_data === 'object') && (chart_data instanceof google.visualization.DataTable) ) {
+                            chart_data.addRow(curr_tupple);
+                        } else {
+                            chart_data.push([ curr_tupple[0], curr_tupple[1], color ]);
+                        }
+
+                        csvData.push( curr_tupple );
+                        tai_chart.displayBaseAppend(curr_tupple[0], curr_tupple[1]);
+                    } // for
+                }
+
             } else if(data_obj.quality_stat) {
                 tai_chart.appendQualityBase();
                 for( colecao in data_obj.quality_stat ) {
