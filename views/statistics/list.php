@@ -70,6 +70,10 @@ include_once('js/list_js.php');
             <div id="piechart_div" class="hide" style="width: 650px; height: 300px;"></div>
             <div id="barchart_div" class="hide"></div>
 
+            <div id="no_chart_data" class="hide">
+                <h3> <?php _t('There is no data yet for this report!', 1); ?> </h3>
+            </div>
+
             <input type="hidden" value="default" class="selected_chart_type" />
         </div>
         
@@ -80,7 +84,6 @@ include_once('js/list_js.php');
                 <tr class="content"> <td class="curr-filter"> <?php _t('Users:',1); ?> </td> </tr>
                 </tbody>
             </table>
-
         </div>
 
         <div class="col-md-12 no-padding" style="background: #e3e3c7; margin-top: 10px; text-align: center">

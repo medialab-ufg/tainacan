@@ -75,15 +75,18 @@ class Log extends Model {
         if( "top_collections" == $event_type ) {
             return self::getTopCollections();
         } else {
-            $_stats = [];
-            foreach ($_events_['events'] as $ev) {
-                $evt_count_ = self::getUserEvents($event_type, $ev, false, $from, $to);
-                $l_data = array_pop($evt_count_);
-                $_stats[] = $l_data[0];
+            if($_events_) {
+                $_stats = [];
+                foreach ($_events_['events'] as $ev) {
+                    $evt_count_ = self::getUserEvents($event_type, $ev, false, $from, $to);
+                    $l_data = array_pop($evt_count_);
+                    $_stats[] = $l_data[0];
+                }
+                $prepared_struct = array_combine($_events_['events'], $_stats);
+                $stat_data = [ "stat_title" => [ 'Coleções do Usuário', 'Qtd' ], "stat_object" => $prepared_struct, "color" => $_events_['color']  ];
+            } else {
+                $stat_data = [];
             }
-
-            $prepared_struct = array_combine($_events_['events'], $_stats);
-            $stat_data = [ "stat_title" => [ 'Coleções do Usuário', 'Qtd' ], "stat_object" => $prepared_struct, "color" => $_events_['color']  ];
 
             return json_encode($stat_data);
         }

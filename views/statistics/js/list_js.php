@@ -40,7 +40,7 @@
 
     TainacanChart.prototype.appendQualityBase = function() {
         $("#charts-resume table tr.headers").html("<td>Coleção</td><td>Nº de itens</td>");
-        $("#charts-resume table tr.content").remove();
+        $("#charts-resume table tr.content").html("");
     };
 
     TainacanChart.prototype.appendQualityData = function(title, qtd) {
@@ -166,7 +166,7 @@
     function collectionsChildren() {
         return [
             { title: "Status <p> criadas / editadas / excluídas / visualizadas / baixadas</p>", href: "collection"},
-            { title: "Buscas Frequentes <p> ranking das buscas mais realizadas </p>"}
+            { title: "Buscas Frequentes <p> ranking das buscas mais realizadas </p>", href: "searches"}
         ];
     }
 
@@ -212,7 +212,15 @@
         }).done(function(r){
             var res_json = $.parseJSON(r);
             var chart = $('.selected_chart_type').val();
-            drawChart(chart, action, res_json);
+
+            if(res_json.length == 0) {
+                $("#charts-container div").addClass('hide');
+                $("#charts-container #no_chart_data").removeClass('hide');
+            } else {
+                $("#charts-container #no_chart_data").addClass('hide');
+                $("#"+chart+"chart_div").removeClass('hide');
+                drawChart(chart, action, res_json);
+            }
         });
     }
 
@@ -240,7 +248,7 @@
                     var curr_evt_title = tai_chart.getMappedTitles()[event];
                     var curr_tupple = [ curr_evt_title, obj_total ];
 
-                    if( chart_data instanceof google.visualization.DataTable ) {
+                    if( (typeof chart_data === 'object') && (chart_data instanceof google.visualization.DataTable) ) {
                         chart_data.addRow(curr_tupple);
                     } else {
                         chart_data.push([ curr_tupple[0], curr_tupple[1], color ]);
@@ -271,8 +279,6 @@
 
             // draw chart based at generated json data
             renderChart(title, chart_type, chart_data, color);
-        } else {
-            cl('No chart data available!');
         }
     } // drawChart()
 
