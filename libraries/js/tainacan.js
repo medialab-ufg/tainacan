@@ -1924,9 +1924,6 @@ function showAddItemURL() {
 }
 // FIM CODIGO MARCUS
 
-
-
-// CODIGO MARCO
 function showAdvancedSearch(src, search_term) {
     var search_term = search_term || "";
     show_modal_main();
@@ -1980,7 +1977,6 @@ function showImport(src) {
     });
 
 }
-// FIM CODIGO MARCO
 
 function cl(string) {
     console.log(string);
@@ -2191,7 +2187,6 @@ function insert_object_url(url, classifications) {
     });
 }
 
-
 function show_form_item() {
     var src = $('#src').val();
     $("#menu_object").hide();
@@ -2326,7 +2321,6 @@ function resetHomeStyleSettings() {
     $('body.home').css('background', 'white');
 }
 
-//
 function bytesToSize(bytes) {
     var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
     if (bytes == 0)
@@ -2379,8 +2373,6 @@ function toggleSlide(target, reverse) {
         }
     }
 }
-
-
 
 function show_field_properties(property_id, show_id) {
     $('#field_property_' + property_id + '_' + show_id).show().css('margin-bottom', '15px');
@@ -2554,6 +2546,16 @@ function change_breadcrumbs_title(title, arrow_text) {
     var arrow = arrow_text || '>';
     $("#tainacan-breadcrumbs").show().find('.current-config').text(title);
     $("#tainacan-breadcrumbs .last-arrow").text(arrow);
+}
+
+function toggleElements(elems_array, hide) {
+    if(hide) {
+        cl('escondendo umas paradas');
+        $(elems_array).each(function(idx, el){ $(el).addClass('hide') });
+    } else {
+        cl('aparece ae doidão')
+        $(elems_array).each(function(idx, el){ $(el).removeClass('hide') });
+    }
 }
 
 //********************************** FUNCIONALIDADE ACORDEON *********************/

@@ -35,17 +35,19 @@
 
     TainacanChart.prototype.displayBaseAppend = function(title, value) {
         $("#charts-resume table tr.headers").append("<th>"+ title +"</th>");
+        $("#charts-resume table tr.quality-content").remove();
         $("#charts-resume table tr.content").append("<td>"+ value +"</td>");
     };
 
     TainacanChart.prototype.appendQualityBase = function() {
         $("#charts-resume table tr.headers").html("<td>Coleção</td><td>Nº de itens</td>");
         $("#charts-resume table tr.content").html("");
+        $("#charts-resume table tr.quality-content").remove();
     };
 
     TainacanChart.prototype.appendQualityData = function(title, qtd) {
-        $("#charts-resume table tbody").append("<tr><td>"+ title +"</td><td>"+qtd+"</td></tr>");
-    }
+        $("#charts-resume table tbody").append("<tr class='quality-content'><td>"+ title +"</td><td>"+qtd+"</td></tr>");
+    };
 
     TainacanChart.prototype.getStatDesc = function(title, desc) {
         return title + "<p>"+ desc +"</p>";
@@ -214,11 +216,11 @@
             var chart = $('.selected_chart_type').val();
 
             if(res_json.length == 0) {
-                $("#charts-container div").addClass('hide');
-                $("#charts-container #no_chart_data").removeClass('hide');
+                toggleElements(["#charts-container div", "#charts-resume"], true);
+                toggleElements(["#charts-container #no_chart_data"]);
             } else {
-                $("#charts-container #no_chart_data").addClass('hide');
-                $("#"+chart+"chart_div").removeClass('hide');
+                toggleElements(["#"+chart+"chart_div", "#charts-resume"]);
+                toggleElements(["#charts-container #no_chart_data"], true);
                 drawChart(chart, action, res_json);
             }
         });
