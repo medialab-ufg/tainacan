@@ -47,6 +47,7 @@ class ExportController extends Controller {
                 }
                 break;
             case "export_csv_file_full":
+                error_reporting(0);
                 $all_collections = $export_model->get_all_collections();
                 $data['socialdb_delimiter_csv'] = ';';
                 foreach ($all_collections as $collection) {
