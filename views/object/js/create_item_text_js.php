@@ -146,6 +146,9 @@ $(function(){
                             // handle error 
                         }
                     });
+                    this.on("success", function (file, message) {
+                            file.id = message.trim();
+                   });
                 },
                 url: $('#src').val() + '/controllers/object/object_controller.php?operation=save_file&object_id=' + $("#object_id_add").val(),
                 addRemoveLinks: true

@@ -16,7 +16,7 @@
                 thisDropzone = this;
                 this.on("removedfile", function (file) {
                     //    if (!file.serverId) { return; } // The file hasn't been uploaded
-                    $.get($('#src').val() + '/controllers/object/object_controller.php?operation=delete_file&object_id=<?php echo $object_id ?>&file_name=' + file.name, function (data) {
+                    $.get($('#src').val() + '/controllers/object/object_controller.php?operation=delete_file&object_id=<?php echo $object_id ?>&file_name=' + file.id, function (data) {
                         if (data.trim() === 'false') {
                            // showAlertGeneral('<?php _e("Atention!", 'tainacan') ?>', '<?php _e("An error ocurred, File already removed or corrupted!", 'tainacan') ?>', 'error');
                         } else {
@@ -49,7 +49,7 @@
                         //var jsonObject = JSON.parse(data);
                         $.each(data, function (key, value) {
                             if (value.name !== undefined && value.name !== 0) {
-                                var mockFile = {name: value.name, size: value.size};
+                                var mockFile = {name: value.name, size: value.size,id:value.ID};
                                 thisDropzone.options.addedfile.call(thisDropzone, mockFile);
                             }
                         });
@@ -60,13 +60,7 @@
                     }
                 });
                 this.on("success", function (file, message) {
-//                        elem = JSON.parse(message);
-//                        
-//                        $('#click_editor_items_button').show();
-//                        $('#click_editor_items_button').focus();
-//                        if(elem.errors.upload_error[0]){
-//                            showAlertGeneral('<?php _e("Atention!", 'tainacan') ?>', '<?php _e("Sorry, this file type is not permitted for security reasons or too big for this server", 'tainacan') ?>', 'error');
-//                        }
+                          file.id = message.trim();
                 });
             },
             url: $('#src').val() + '/controllers/object/object_controller.php?operation=save_file&object_id=' +<?php echo $object_id ?>,
