@@ -40,6 +40,7 @@
                     $('#resultados_advanced_search').show();
                     $('#container_resultados_advanced_search').html(elem.page); 
                     $('.modal').modal('hide');
+                    console.log('Essa eh a busca avancada! Parabens, sucesso!');
                 }
                
 //                $('html, body').animate({
