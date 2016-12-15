@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: socialdb\n"
-"POT-Creation-Date: 2016-12-15 11:18-0200\n"
-"PO-Revision-Date: 2016-12-15 12:03-0200\n"
+"POT-Creation-Date: 2016-12-15 18:04-0200\n"
+"PO-Revision-Date: 2016-12-15 18:04-0200\n"
 "Last-Translator: Rodrigo de Oliveira <webmaster@rodrigodeoliveira.net>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -76,8 +76,8 @@ msgstr "Comentar"
 #: views/object/multiple_items/create.php:21
 #: views/object/multiple_items/editor_items.php:403
 #: views/object/multiple_items/editor_items.php:902
-#: views/object/multiple_items/js/create_js.php:84
-#: views/object/multiple_items/js/create_js.php:137
+#: views/object/multiple_items/js/create_js.php:78
+#: views/object/multiple_items/js/create_js.php:131
 #: views/object/multiple_social_network/create.php:29
 #: views/object/multiple_social_network/editor_items.php:393
 #: views/object/multiple_social_network/editor_items.php:401
@@ -175,8 +175,8 @@ msgstr "Nos conte porque este conteúdo é abusivo"
 #: views/event/js/list_js.php:255 views/license/js/list_js.php:150
 #: views/object/edit_object_properties/js/edit_list_properties_accordion_js.php:505
 #: views/object/js/create_item_text_js.php:83
-#: views/object/js/create_item_text_js.php:164
-#: views/object/js/create_item_text_js.php:232
+#: views/object/js/create_item_text_js.php:167
+#: views/object/js/create_item_text_js.php:235
 #: views/object/js/create_item_url_js.php:46
 #: views/object/js/create_item_url_js.php:116 views/object/js/create_js.php:48
 #: views/object/js/create_js.php:113 views/object/js/edit_item_text_js.php:207
@@ -184,9 +184,9 @@ msgstr "Nos conte porque este conteúdo é abusivo"
 #: views/object/js/list_properties_accordion_js.php:487
 #: views/object/js/show_list_event_properties_js.php:18
 #: views/object/js/show_list_event_properties_js.php:76
-#: views/object/multiple_items/js/create_js.php:80
-#: views/object/multiple_items/js/create_js.php:127
-#: views/object/multiple_items/js/create_js.php:134
+#: views/object/multiple_items/js/create_js.php:74
+#: views/object/multiple_items/js/create_js.php:121
+#: views/object/multiple_items/js/create_js.php:128
 #: views/object/multiple_items/js/editor_items_js.php:1466
 #: views/object/multiple_social_network/js/create_js.php:41
 #: views/object/multiple_social_network/js/create_js.php:48
@@ -265,7 +265,7 @@ msgstr "Nome da coleção inválido ou nome do item inválido"
 #: views/import/oaipmh/js/maping_attributes_js.php:54
 #: views/import/oaipmh/js/maping_attributes_js.php:56
 #: views/object/js/create_item_text_js.php:63
-#: views/object/js/create_item_text_js.php:332
+#: views/object/js/create_item_text_js.php:335
 #: views/object/js/create_item_url_js.php:26
 #: views/object/js/create_item_url_js.php:228 views/object/js/create_js.php:19
 #: views/object/js/create_js.php:28 views/object/js/create_js.php:227
@@ -385,6 +385,7 @@ msgid "Default"
 msgstr "Padrão"
 
 #: controllers/export/export_controller.php:43
+#: controllers/export/export_controller.php:77
 msgid "This collection has no items to export!"
 msgstr "Esta coleção não possui itens para exportar!"
 
@@ -502,7 +503,7 @@ msgstr "Comentários"
 msgid "Items"
 msgstr "Itens "
 
-#: controllers/log/log_controller.php:31 functions.php:1490
+#: controllers/log/log_controller.php:26 functions.php:1490
 #: helpers/log/log_helper.php:17 models/collection/collection_model.php:782
 #: models/collection/visualization_model.php:181
 #: models/collection/visualization_model.php:272
@@ -523,7 +524,7 @@ msgstr "Itens "
 msgid "Tags"
 msgstr "Tags"
 
-#: controllers/log/log_controller.php:33 helpers/log/log_helper.php:18
+#: controllers/log/log_controller.php:28 helpers/log/log_helper.php:18
 msgid "Import / Export"
 msgstr "Importar / Exportar"
 
@@ -1012,11 +1013,11 @@ msgstr "Áudios"
 msgid "Visit original page"
 msgstr "Visitar página original"
 
-#: functions.php:2872 helpers/view_helper.php:67
+#: functions.php:2875 helpers/view_helper.php:67
 msgid "Tainacan"
 msgstr "Tainacan"
 
-#: functions.php:3007
+#: functions.php:3010
 msgid "Enable reduced menu"
 msgstr "Habilitar Menu Reduzido"
 
@@ -1352,7 +1353,7 @@ msgstr "Expandir todos"
 #: views/object/edit_item_text.php:312
 #: views/object/edit_object_properties/edit_list_properties_accordion.php:59
 #: views/object/edit_object_properties/edit_list_properties_accordion.php:191
-#: views/object/edit_object_properties/edit_list_properties_accordion.php:328
+#: views/object/edit_object_properties/edit_list_properties_accordion.php:336
 #: views/object/list_properties_accordion.php:57
 #: views/object/list_properties_accordion.php:170
 #: views/object/list_properties_accordion.php:306
@@ -1369,7 +1370,7 @@ msgstr "Este metadado é obrigatório!"
 #: views/object/edit_item_text.php:316
 #: views/object/edit_object_properties/edit_list_properties_accordion.php:63
 #: views/object/edit_object_properties/edit_list_properties_accordion.php:195
-#: views/object/edit_object_properties/edit_list_properties_accordion.php:332
+#: views/object/edit_object_properties/edit_list_properties_accordion.php:340
 #: views/object/list_properties_accordion.php:61
 #: views/object/list_properties_accordion.php:174
 #: views/object/list_properties_accordion.php:310
@@ -1388,7 +1389,7 @@ msgstr "O campo licença é obrigatório"
 #: views/object/append_properties_categories/properties_categories_accordion.php:350
 #: views/object/edit_object_properties/edit_list_properties_accordion.php:72
 #: views/object/edit_object_properties/edit_list_properties_accordion.php:204
-#: views/object/edit_object_properties/edit_list_properties_accordion.php:341
+#: views/object/edit_object_properties/edit_list_properties_accordion.php:349
 #: views/object/list_properties_accordion.php:70
 #: views/object/list_properties_accordion.php:183
 #: views/object/list_properties_accordion.php:319
@@ -1434,8 +1435,8 @@ msgstr "Nenhum item foi adicionado a esta coleção"
 #: views/object/append_properties_categories/multiple_properties_categories_accordion.php:251
 #: views/object/append_properties_categories/properties_categories_accordion.php:369
 #: views/object/append_properties_categories/properties_categories_accordion.php:408
-#: views/object/edit_object_properties/edit_list_properties_accordion.php:360
-#: views/object/edit_object_properties/edit_list_properties_accordion.php:407
+#: views/object/edit_object_properties/edit_list_properties_accordion.php:368
+#: views/object/edit_object_properties/edit_list_properties_accordion.php:415
 #: views/object/list_properties_accordion.php:344
 #: views/object/list_properties_accordion.php:397
 #: views/object/multiple_items/editor_items.php:313
@@ -1858,7 +1859,7 @@ msgstr "XML incompatível"
 #: views/advanced_search/loops_page/list_collection_search.php:124
 #: views/advanced_search/loops_page/list_items_search.php:127
 #: views/object/list.php:122 views/object/list_trash.php:93
-#: views/property/list.php:38 views/statistics/js/list_js.php:410
+#: views/property/list.php:38 views/statistics/js/list_js.php:440
 msgid " of "
 msgstr " de "
 
@@ -3411,7 +3412,7 @@ msgstr "Selecionar alguns itens"
 msgid "Select all items"
 msgstr "Selecionar todos os itens"
 
-#: single.php:344 single.php:351
+#: single.php:344 single.php:351 views/statistics/js/list_js.php:30
 msgid "Trash"
 msgstr "Lixeira"
 
@@ -3822,11 +3823,11 @@ msgstr "para"
 msgid "No results found!"
 msgstr "Nenhum resultado encontrado!"
 
-#: views/advanced_search/js/advanced_search_js.php:115
+#: views/advanced_search/js/advanced_search_js.php:116
 msgid "Loading Collections"
 msgstr "Carregando coleções"
 
-#: views/advanced_search/js/advanced_search_js.php:130
+#: views/advanced_search/js/advanced_search_js.php:131
 msgid "All Colections"
 msgstr "Todas as coleções"
 
@@ -4365,10 +4366,8 @@ msgstr "Endereço da Coleção"
 #: views/collection/edit.php:95
 msgid ""
 "The address must not contain spaces or special characters. If it contains "
-"will be removed by the system."
+"will be removed by the system. Limit of 200 characters."
 msgstr ""
-"O endereço não deve conter espaços nem caracteres especiais. Se tiver, será "
-"removido pelo sistema."
 
 #: views/collection/edit.php:100
 msgid "Valid name!"
@@ -5509,7 +5508,7 @@ msgid "Type the title"
 msgstr "Digite o nome"
 
 #: views/object/append_properties_categories/properties_categories_accordion.php:253
-#: views/object/edit_object_properties/edit_list_properties_accordion.php:243
+#: views/object/edit_object_properties/edit_list_properties_accordion.php:247
 #: views/object/edit_object_properties/list_properties.php:123
 #: views/object/list_properties_accordion.php:238
 #: views/object/multiple_items/editor_items.php:264
@@ -5518,7 +5517,7 @@ msgid "Current"
 msgstr "Corrente"
 
 #: views/object/append_properties_categories/properties_categories_accordion.php:257
-#: views/object/edit_object_properties/edit_list_properties_accordion.php:247
+#: views/object/edit_object_properties/edit_list_properties_accordion.php:253
 #: views/object/edit_object_properties/list_properties.php:127
 #: views/object/list_properties_accordion.php:239
 #: views/object/multiple_items/editor_items.php:265
@@ -5527,7 +5526,7 @@ msgid "Intermediate"
 msgstr "Intermediário"
 
 #: views/object/append_properties_categories/properties_categories_accordion.php:261
-#: views/object/edit_object_properties/edit_list_properties_accordion.php:251
+#: views/object/edit_object_properties/edit_list_properties_accordion.php:259
 #: views/object/edit_object_properties/list_properties.php:131
 #: views/object/list_properties_accordion.php:240
 #: views/object/multiple_items/editor_items.php:266
@@ -5536,7 +5535,7 @@ msgid "Permanently"
 msgstr "Permanente"
 
 #: views/object/append_properties_categories/properties_categories_accordion.php:322
-#: views/object/edit_object_properties/edit_list_properties_accordion.php:313
+#: views/object/edit_object_properties/edit_list_properties_accordion.php:321
 #: views/object/list_properties_accordion.php:291
 #: views/object/show_insert_object_properties.php:216
 msgid "Select one option"
@@ -5934,7 +5933,6 @@ msgstr "Envio inválido, arquivo é muito grande!"
 #: views/object/js/edit_item_text_js.php:166 views/object/js/edit_js.php:111
 #: views/object/multiple_items/js/create_js.php:21
 #: views/object/multiple_items/js/create_js.php:38
-#: views/object/multiple_items/js/create_js.php:68
 #: views/object/multiple_items/js/editor_items_js.php:200
 #: views/object/multiple_social_network/js/editor_items_js.php:196
 #: views/object/temp/js/edit_multiple_js.php:189
@@ -5961,18 +5959,18 @@ msgstr "Ocorreu um erro, arquivo já foi removido ou está corrompido!"
 msgid "File removed!"
 msgstr "Arquivo removido!"
 
-#: views/object/js/create_item_text_js.php:164
+#: views/object/js/create_item_text_js.php:167
 #: views/object/js/create_item_url_js.php:116 views/object/js/create_js.php:113
 #: views/object/js/edit_item_text_js.php:207 views/object/js/edit_js.php:149
 msgid "This file is too big, the file limit size of this server is "
 msgstr "O arquivo é muito grande, o tamanho máximo de arquivo neste servidor é"
 
-#: views/object/js/create_item_text_js.php:232
+#: views/object/js/create_item_text_js.php:235
 #: views/object/js/edit_item_text_js.php:255
 msgid "There are required fields not filled!"
 msgstr "Há campos obrigatórios não preenchidos!"
 
-#: views/object/js/create_item_text_js.php:332
+#: views/object/js/create_item_text_js.php:335
 #: views/object/js/create_item_url_js.php:228 views/object/js/create_js.php:227
 #: views/object/js/edit_item_text_js.php:333 views/object/js/edit_js.php:233
 msgid "This URL not contains availables items for importation"
@@ -6429,7 +6427,7 @@ msgstr "Você deseja restaurar este item?"
 msgid "Not active"
 msgstr "Não ativo"
 
-#: views/object/list_versions.php:88
+#: views/object/list_versions.php:88 views/statistics/js/list_js.php:28
 msgid "Active"
 msgstr "Ativo"
 
@@ -6448,7 +6446,7 @@ msgstr "Texto (doc, docx, otf, etc.);"
 #: views/object/multiple_items/create.php:19
 #: views/object/multiple_items/editor_items.php:401
 #: views/object/multiple_items/js/create_js.php:5
-#: views/object/multiple_items/js/create_js.php:148
+#: views/object/multiple_items/js/create_js.php:142
 #: views/object/multiple_social_network/js/create_js.php:61
 msgid "Add new item - Send local file"
 msgstr "Adicionar novo item - Enviar arquivo local"
@@ -6598,7 +6596,7 @@ msgid "Others Files"
 msgstr "Outros formatos de Arquivo"
 
 #: views/object/multiple_items/js/create_js.php:38
-#: views/object/multiple_items/js/create_js.php:127
+#: views/object/multiple_items/js/create_js.php:121
 #: views/object/multiple_social_network/js/create_js.php:41
 msgid ""
 "File is too big or Uploaded, however, not supported by wordpress, please "
@@ -6607,16 +6605,8 @@ msgstr ""
 "Arquivo muito grande ou carregado, porém não suportado pelo Wordpress, por "
 "favor selecione arquivos válidos! "
 
-#: views/object/multiple_items/js/create_js.php:68
-msgid ""
-"Sorry, this file type is not permitted for security reasons or too big for "
-"this server"
-msgstr ""
-"Desculpe, este tipo de arquivo não é permitido por razões de segurança ou "
-"este arquivo não é suportado por este servidor!"
-
-#: views/object/multiple_items/js/create_js.php:81
-#: views/object/multiple_items/js/create_js.php:135
+#: views/object/multiple_items/js/create_js.php:75
+#: views/object/multiple_items/js/create_js.php:129
 #: views/object/multiple_social_network/js/create_js.php:49
 #: views/object/multiple_social_network/js/editor_items_js.php:1444
 msgid "You did not finish your action. Are you sure to leave this page?"
@@ -8035,7 +8025,7 @@ msgstr "Visualizados"
 msgid "Downloaded"
 msgstr "Baixados"
 
-#: views/statistics/js/list_js.php:12
+#: views/statistics/js/list_js.php:12 views/statistics/js/list_js.php:31
 msgid "Deleted"
 msgstr "Deletados"
 
@@ -8087,7 +8077,11 @@ msgstr "Importação Tainacan "
 msgid "Tainacan Exportation"
 msgstr "Exportação Tainacan "
 
-#: views/statistics/js/list_js.php:410
+#: views/statistics/js/list_js.php:29
+msgid "Draft"
+msgstr "Rascunho"
+
+#: views/statistics/js/list_js.php:440
 msgid "Page "
 msgstr "Página "
 
@@ -8660,6 +8654,20 @@ msgstr "Local de trabalho atual"
 #: views/user/register.php:102
 msgid "Professional Resume"
 msgstr "Resumo profissional"
+
+#~ msgid ""
+#~ "The address must not contain spaces or special characters. If it contains "
+#~ "will be removed by the system."
+#~ msgstr ""
+#~ "O endereço não deve conter espaços nem caracteres especiais. Se tiver, "
+#~ "será removido pelo sistema."
+
+#~ msgid ""
+#~ "Sorry, this file type is not permitted for security reasons or too big "
+#~ "for this server"
+#~ msgstr ""
+#~ "Desculpe, este tipo de arquivo não é permitido por razões de segurança ou "
+#~ "este arquivo não é suportado por este servidor!"
 
 #~ msgid "Consulted period "
 #~ msgstr "Período consultado "
