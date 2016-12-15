@@ -92,7 +92,7 @@ $image_cover_url = wp_get_attachment_url(get_post_meta($collection_post->ID, 'so
                 <!------------------- Endereco da colecao -------------------------->
                 <div class="form-group">
                     <label for="collection_description"><?php _e('Collection Address', 'tainacan'); ?></label>
-                    <a href="#" data-toggle="tooltip" title="<?php _e('The address must not contain spaces or special characters. If it contains will be removed by the system.', 'tainacan'); ?>">
+                    <a href="#" data-toggle="tooltip" title="<?php _e('The address must not contain spaces or special characters. If it contains will be removed by the system. Limit of 200 characters.', 'tainacan'); ?>">
                         <span class="glyphicon glyphicon-question-sign"></span>
                     </a>
                 </div>
@@ -100,7 +100,7 @@ $image_cover_url = wp_get_attachment_url(get_post_meta($collection_post->ID, 'so
                     <div class="alert alert-success" style="display: none;width: 30%;" id="collection_name_success"><span class="glyphicon glyphicon-ok" ></span>&nbsp;&nbsp;<?php _e('Valid name!', 'tainacan') ?></div>
                     <div class="alert alert-danger" style="display: none;width: 30%;" id="collection_name_error"><span class="glyphicon glyphicon-warning-sign" >&nbsp;&nbsp;</span><?php _e('Invalid name!', 'tainacan') ?></div>
                     <label class="control-label" ><?php echo site_url() . '/collection/'; ?></label>
-                    <input onkeyup="verify_name_collection();" id="suggested_collection_name" required="required" type="text" class="form-control" name="socialdb_collection_address"  value="<?php echo $collection_post->post_name; ?>" >
+                    <input onkeyup="verify_name_collection();" id="suggested_collection_name" required="required" type="text" class="form-control" name="socialdb_collection_address"  value="<?php echo $collection_post->post_name; ?>" maxlength="200" >
                     <input type="hidden" id="initial_address"  name="initial_address"  value="<?php echo $collection_post->post_name; ?>" >
                 </div>
                 <!----------------------- Objeto da colecao ----------------->
