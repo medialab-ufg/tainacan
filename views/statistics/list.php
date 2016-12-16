@@ -75,6 +75,7 @@ include_once('js/list_js.php');
             </div>
 
             <input type="hidden" value="default" class="selected_chart_type" />
+            <input type="hidden" class="current_parent_report" value="" />
         </div>
         
         <div id="charts-resume" class="col-md-12">
