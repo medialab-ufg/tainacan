@@ -111,6 +111,11 @@ class CsvModel extends Model {
         $content = '';
         $categories[] = $this->get_category_root_of($data['collection_id']);
         $mapping_model = new MappingModel('socialdb_channel_csv');
+        $csv_add_columns= get_post_meta($data['mapping_id'], 'socialdb_channel_csv_add_columns', true);
+        if($csv_add_columns){
+            $this->insert_csv_with_columns($data['mapping_id'],$data['collection_id']);
+            return true;
+        }
         $bd_csv_data = unserialize(get_post_meta($data['mapping_id'], 'socialdb_channel_csv_mapping', true));
         $verify_mapping = $this->verify_mapping($bd_csv_data);
         if ($verify_mapping) {
@@ -301,7 +306,73 @@ class CsvModel extends Model {
             return false;
         }
     }
-
+ ######################### begin: INSERINDO VALORES SEM MAPEAMENTO ############# 
+    /**
+     * 
+     * @param type $mapping_id
+     * @param type $collection_id
+     */
+    public function insert_csv_with_columns($mapping_id,$collection_id){
+        $mapping_model = new MappingModel('socialdb_channel_csv');
+        $files = $mapping_model->show_files_csv($mapping_id);
+        foreach ($files as $file) {
+            $name_file = wp_get_attachment_url($file->ID);
+            $delimiter = get_post_meta($mapping_id, 'socialdb_channel_csv_delimiter', true);
+            $csv_has_header = get_post_meta($mapping_id, 'socialdb_channel_csv_has_header', true);
+            $lines = $this->read_csv_file($name_file, $delimiter, 0);
+            for ($i = 0; $i < count($lines); $i++):
+                if($i == 0){
+                    if(!is_array($lines[$i]) || empty(array_filter($lines[$i]))){
+                        $i++;
+                    }
+                    $order = $this->add_properties_columns($lines[$i], $collection_id);
+                }else if(isset($order) && count($order) > 0){
+                    $this->add_value_column($order, $lines[$i], $collection_id);
+                }
+            endfor;
+            break;
+        }
+    }
+    
+    /**
+     * 
+     * @param type $header
+     * @param type $collection_id
+     * @return type
+     */
+    public function add_properties_columns($header,$collection_id){
+        $order = [];
+        $category_root_id = $this->get_category_root_of($collection_id);
+        if($header && is_array($header)){
+            foreach ($header as $column) {
+                $new_property = wp_insert_term((string)$column, 'socialdb_property_type', array('parent' => $this->get_property_type_id('socialdb_property_data'),
+                        'slug' => $this->generate_slug((string)$column, 0)));
+                update_term_meta($new_property['term_id'], 'socialdb_property_required', 'false');
+                update_term_meta($new_property['term_id'], 'socialdb_property_data_widget', 'text');
+                update_term_meta($new_property['term_id'], 'socialdb_property_created_category',$category_root_id);
+                add_term_meta($category_root_id, 'socialdb_category_property_id', $new_property['term_id']);
+                $order[] = $new_property['term_id'];
+   
+            }
+        }
+        return $order;
+    }
+    
+    /**
+     * 
+     * @param type $param
+     */
+    public function add_value_column($properties,$values,$collection_id) {
+        $object_id = socialdb_insert_object_csv([time()]);
+        foreach ($properties as $key => $property) {
+            add_post_meta($object_id,'socialdb_property_'.$property , $values[$key]);
+        }
+        $categories[] = $this->get_category_root_of($collection_id);
+        update_post_meta($object_id, 'socialdb_object_from', 'external');
+        update_post_meta($object_id, 'socialdb_object_dc_type', 'other');
+        socialdb_add_tax_terms($object_id, $categories, 'socialdb_category_type'); 
+    }
+ ######################### end: INSERINDO VALORES SEM MAPEAMENTO ############# 
     /**
      * 
      * @param type $file_name

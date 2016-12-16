@@ -138,6 +138,10 @@ class MappingController extends Controller {
                 $data['mapping_id'] = $mapping_id;
                 unset($data['file']);
                 //var_dump($data);
+                if($data['create_metadata_column_name']&&$data['create_metadata_column_name']=='true'&&$type['extension']=='csv'&&$csv_has_header=='1'){
+                    update_post_meta($mapping_id, 'socialdb_channel_csv_add_columns', 'true');
+                    return "false";
+                }
                 if(isset($data['socialdb_csv_is_editting']))
                     return $this->render(dirname(__FILE__) . '../../../views/import/csv/edit_mapping.php', $data);
                 else

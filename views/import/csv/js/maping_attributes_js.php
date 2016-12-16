@@ -32,8 +32,15 @@
                      form: $("#form_import_csv_delimit").serialize(),
                      operation: 'saving_delimiter_header_csv'}*/
         }).done(function (result) {
-            $('#importForm_csv').hide();
-            $('#add_mapping_csv').html(result);
+            if(result.trim()==='false'){
+                listTableCSV();
+                $('#maping_container_csv').hide();
+                $('#validate_url_csv_container').show('slow');
+            }else{
+                $('#importForm_csv').hide();
+                $('#add_mapping_csv').html(result);
+            }
+            
         });
         e.preventDefault();
     });
