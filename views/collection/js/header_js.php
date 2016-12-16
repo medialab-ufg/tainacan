@@ -140,23 +140,6 @@
                 '&ordenation_id=' + $('#collection_single_ordenation').val() +
                 '&order_by=' +
                 '&keyword=' + search_for;
-//        $('#loader_objects').show();
-//        $.ajax({
-//            url: $('#src').val() + '/controllers/export/export_controller.php',
-//            type: 'POST',
-//            data: {
-//                operation: 'export_selected_objects',
-//                collection_id: $("#collection_id").val(),
-//                classifications: selKeys.join(", "),
-//                ordenation_id: $('#collection_single_ordenation').val(),
-//                order_by: '',
-//                keyword: search_for
-//            }
-//        }).done(function (result) {
-//            $('#loader_objects').hide();
-//            $('#list').html(result);
-//            $('#list').show();
-//        });
     }
     /**
      * 
