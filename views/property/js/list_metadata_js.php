@@ -790,7 +790,7 @@
                         if ( $.inArray(property.type, ranking_types) == -1 ) {
                             $(get_property_tab_seletor(tab_property_id)).append(
                                 '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '" data-widget="' + current_search_widget + '" class="' + property.type + ' ui-widget-content ui-corner-tr">' +
-                                '<label class="title-pipe">'+ add_filter_button(current_id) + property.name + add_text_type(property.type) + '</label><div class="action-icons">' +
+                                '<label class="title-pipe">'+ add_filter_button(current_id) + property.name + add_text_type(property.type) + '</label><div class="action-icons">' 
                                 + sort_filter_html+ '<a onclick="edit_metadata(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
                                 '<span class="glyphicon glyphicon-edit"></span></a> ' +
                                 '<input type="hidden" class="property_id" value="' + property.id + '">' +
@@ -902,11 +902,12 @@
     }
     //limpando os formularios ao abrir o modal
     function clear_form(type){
-        console.log(type);
+        
         if(type=='metadata_compound'){
             initDynatreeFilterProperties(src);
             $('#compound_id').val('');
-             $("#meta-metadata_compound #compounds_name").val('');
+            $("#meta-metadata_compound #compounds_name").val('');
+            $("#meta-metadata_compound input").val('');
             $('.compounds-action').html('<?php _e('Add','tainacan') ?>');
             $('#operation_property_compounds').val('add_property_compounds');
             $('#compounds_properties_ordenation').html('<center><h4><?php _e('Select a property','tainacan') ?>&nbsp;<span class="glyphicon glyphicon-arrow-right"></span></h4></center>');

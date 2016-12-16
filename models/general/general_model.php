@@ -2213,6 +2213,7 @@ class Model {
                 }
             }
         }
+        $properties = array_unique($properties);
         if($properties && is_array($properties)){
             foreach ($properties as $property) {
                  // busco o objeto da propriedade

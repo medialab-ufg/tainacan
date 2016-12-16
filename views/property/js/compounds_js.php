@@ -35,65 +35,70 @@
      *  funcao que abre o dynatree para as propriedades de uma colecao
      */
     function initDynatreeFilterProperties(src) {
-       $("#dynatree_properties_filter").dynatree({
-           selectionVisible: true, // Make sure, selected nodes are visible (expanded).  
-           checkbox: true,
-             initAjax: {
-               url: src + '/controllers/property/property_controller.php',
-               data: {
-                   collection_id: $("#collection_id").val(),
-                   order: 'name',
-                   operation: 'initDynatreePropertiesFilter'
-               }
-               , addActiveKey: true
-           },
-           onLazyRead: function (node) {
-               node.appendAjax({
-                   url: src + '/controllers/filters/filters_controller.php',
-                   data: {
-                       collection: $("#collection_id").val(),
-                       key: node.data.key,
-                       hide_checkbox: 'true',
-                       //operation: 'findDynatreeChild'
-                       operation: 'childrenDynatreePropertiesFilter'
-                   }
-               });
-           },onSelect: function (flag, node) {
-                $( "#compounds_properties_ordenation" ).html('');
-                $( "#compounds_properties_ordenation" ).css('height','auto');
-                //busco os nos selecionados
-                var selKeys = $.map($("#dynatree_properties_filter").dynatree("getSelectedNodes"), function (node) {
-                    return node;
-                });
-                var keys = $.map($("#dynatree_properties_filter").dynatree("getSelectedNodes"), function (node) {
-                    return node.data.key;
-                });
-                //limitacao da quantidade de propriedades selecionados
-                if(selKeys.length>0&&selKeys.length<=11){
-                    $.each(selKeys,function(index,node){
-                        var type = types_compounds[node.data.key];
-                        var string = '';
-                        if(type=='1'){
-                            string = 'edit_metadata';
-                        }else if(type=='2'){
-                            string = 'edit_object';
-                        }else if(type=='3'){
-                            string = 'edit_term';
+       if($("#dynatree_properties_filter").has('li').length>0){
+           $("#dynatree_properties_filter").dynatree("getTree").reload(); 
+       }else{
+            $("#dynatree_properties_filter").dynatree({
+                selectionVisible: true, // Make sure, selected nodes are visible (expanded).  
+                checkbox: true,
+                  initAjax: {
+                    url: src + '/controllers/property/property_controller.php',
+                    data: {
+                        collection_id: $("#collection_id").val(),
+                        order: 'name',
+                        operation: 'initDynatreePropertiesFilter'
+                    }
+                    , addActiveKey: true
+                },
+                onLazyRead: function (node) {
+                    node.appendAjax({
+                        url: src + '/controllers/filters/filters_controller.php',
+                        data: {
+                            collection: $("#collection_id").val(),
+                            key: node.data.key,
+                            hide_checkbox: 'true',
+                            //operation: 'findDynatreeChild'
+                            operation: 'childrenDynatreePropertiesFilter'
                         }
-                        $( "#compounds_properties_ordenation" ).append('<li id="compounds-'+node.data.key+'">'+
-                                '<a onclick="'+string+'(' + node.data.key + ')" class="edit_property_data" href="javascript:void(0)">' +
-                                '<span style="margin-right:5px;color: #88A6CC;" class="glyphicon glyphicon-edit pull-right"><span></a> ' +
-                                '<a onclick="delete_property(' + node.data.key + ','+type+')" class="delete_property" href="#">' +
-                                '<span style="margin-right:5px;color: #88A6CC;" class="glyphicon glyphicon-trash pull-right"><span></a>' +
-                                '<a><span style="margin-right:5px;color: #88A6CC;" class="glyphicon glyphicon-sort sort-filter pull-right"></span></a>&nbsp;'+ add_filter_button(node.data.key) + node.data.title+'</li>')
-                    })
-                    $('#compounds_id').val(keys.join(','));
-                }else if(selKeys.length>11){
-                    node.select(false);
-                }
-                accordeon_ordenation_properties();
-            }
-       });
+                    });
+                },onSelect: function (flag, node) {
+                     $( "#compounds_properties_ordenation" ).html('');
+                     $( "#compounds_properties_ordenation" ).css('height','auto');
+                     //busco os nos selecionados
+                     var selKeys = $.map($("#dynatree_properties_filter").dynatree("getSelectedNodes"), function (node) {
+                         return node;
+                     });
+                     var keys = $.map($("#dynatree_properties_filter").dynatree("getSelectedNodes"), function (node) {
+                         return node.data.key;
+                     });
+                     //limitacao da quantidade de propriedades selecionados
+                     if(selKeys.length>0&&selKeys.length<=11){
+                         console.log(selKeys);
+                         $.each(selKeys,function(index,node){
+                             var type = types_compounds[node.data.key];
+                             var string = '';
+                             if(type=='1'){
+                                 string = 'edit_metadata';
+                             }else if(type=='2'){
+                                 string = 'edit_object';
+                             }else if(type=='3'){
+                                 string = 'edit_term';
+                             }
+                             $( "#compounds_properties_ordenation" ).append('<li id="compounds-'+node.data.key+'">'+
+                                     '<a onclick="'+string+'(' + node.data.key + ')" class="edit_property_data" href="javascript:void(0)">' +
+                                     '<span style="margin-right:5px;color: #88A6CC;" class="glyphicon glyphicon-edit pull-right"><span></a> ' +
+                                     '<a onclick="delete_property(' + node.data.key + ','+type+')" class="delete_property" href="#">' +
+                                     '<span style="margin-right:5px;color: #88A6CC;" class="glyphicon glyphicon-trash pull-right"><span></a>' +
+                                     '<a><span style="margin-right:5px;color: #88A6CC;" class="glyphicon glyphicon-sort sort-filter pull-right"></span></a>&nbsp;'+ add_filter_button(node.data.key) + node.data.title+'</li>')
+                         })
+                         $('#compounds_id').val(keys.join(','));
+                     }else if(selKeys.length>11){
+                         node.select(false);
+                     }
+                     accordeon_ordenation_properties();
+                 }
+            });
+       }
     }
     //SUBMISSAO DO METADADO COMPOSTO
     $('#submit_form_compounds').submit(function (e) {
