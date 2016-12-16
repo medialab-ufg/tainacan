@@ -581,7 +581,7 @@ table.sorting-table tbody tr:not(.sorting-row) td {opacity: 0.2;}
 /*************** WATERMARK SYLES *************************/
 /*************** MODAL MAX HEIGHT *************************/
 .modal-content{
-    max-height: 600px;
+    max-height: 500px;
     overflow-y: scroll;
 }
 /************* Taxonomy zone **************/
