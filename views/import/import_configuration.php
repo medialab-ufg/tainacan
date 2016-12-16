@@ -13,6 +13,12 @@ include_once ('js/import_configuration_js.php');
                     <li role="presentation" class="active"><a id="click_oaipmhtab" href="#oaipmhtab" aria-controls="oaipmhtab" role="tab" data-toggle="tab"><?php _e('OAI-PMH','tainacan') ?></a></li>
                     <li role="presentation"><a id="click_csvtab" href="#csvtab" aria-controls="csvtab" role="tab" data-toggle="tab"><?php _e('CSV','tainacan') ?></a></li>
                     <li role="presentation"><a id="click_metatag_tab" href="#metatag_tab" aria-controls="metatag_tab" role="tab" data-toggle="tab"><?php _e('Metatags','tainacan') ?></a></li>
+                    <?php
+                    if(has_action('add_tab_mapas_culturais'))
+                    {
+                        do_action("add_tab_mapas_culturais");
+                    }
+                    ?>
                 </ul>
 
                 <!-- Tab panes -->
@@ -133,6 +139,13 @@ include_once ('js/import_configuration_js.php');
                             
                         </div>
                     </div>
+
+                    <?php
+                    if(has_action('add_options_mapas_culturais'))
+                    {
+                        do_action("add_options_mapas_culturais");
+                    }
+                    ?>
 
                 </div>
             </div>

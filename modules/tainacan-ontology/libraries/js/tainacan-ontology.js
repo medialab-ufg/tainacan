@@ -1293,3 +1293,206 @@ Hook.register(
         });
     }
 /******************************************************************************/
+function import_mapa_cultural(url_base)
+{
+    if(url_base !== "")
+    {
+        $('#modalImportMain').modal('show');
+        var url_send = $('#src').val() + '/controllers/collection/collection_controller.php?operation=mapa_cultural_form&collection_id='+$('#collection_id').val()+'&type=';
+        //Agentes
+        $.getJSON(
+            url_base + "/api/agent/find",
+            {
+                '@select': 'name, shortDescription, isVerified, nomeCompleto, dataDeNascimento, emailPublico, telefonePublico, endereco, site, facebook',
+                'emailPublico': 'like(*.com*)',
+                '@limit': 100
+            },
+            function (result)
+            {
+                $.ajax({
+                    url: url_send+"agent",
+                    type: 'POST',
+                    data: {result: result}
+                }).success(function (result) {
+                    elem = jQuery.parseJSON(result);
+                    if (elem.result) {
+                        //Espaços
+                        $.getJSON(
+                            url_base + "/api/space/find",
+                            {
+                                '@select': 'name, location, public, shortDescription, longDescription, endereco, site, facebook, telefonePublico, telefone1, telefone2',
+                                '@limit': 100
+                            },
+                            function (result)
+                            {
+                                $.ajax({
+                                    url: url_send+"space",
+                                    type: 'POST',
+                                    data: {result: result}
+                                }).success(function (result) {
+                                    elem = jQuery.parseJSON(result);
+                                    if (elem.result) {
+                                        //Eventos
+                                        $.getJSON(
+                                            url_base + "/api/event/find",
+                                            {
+                                                '@select': 'name, shortDescription, longDescription, rules, subtitle, preco, site, facebook',
+                                                '@limit': 100
+                                            },
+                                            function (result)
+                                            {
+                                                $.ajax({
+                                                    url: url_send+"event",
+                                                    type: 'POST',
+                                                    data: {result: result}
+                                                }).success(function (result) {
+                                                    elem = jQuery.parseJSON(result);
+                                                    if (elem.result) {
+                                                        //Projetos
+                                                        $.getJSON(
+                                                            url_base + "/api/project/find",
+                                                            {
+                                                                '@select': 'name, shortDescription, longDescription, isVerified, site, facebook',
+                                                                '@limit': 100
+                                                            },
+                                                            function (result)
+                                                            {
+                                                                $.ajax({
+                                                                    url: url_send+"project",
+                                                                    type: 'POST',
+                                                                    data: {result: result}
+                                                                }).success(function (result) {
+                                                                    elem = jQuery.parseJSON(result);
+                                                                    if (elem.result) {
+                                                                        //Todas as requisições foram realizadas com sucesso
+                                                                        window.location = elem.url;
+                                                                    } else {
+                                                                        $('#modalImportMain').modal('hide');
+                                                                        var message = elem.message;
+                                                                        if(!message)
+                                                                        {
+                                                                            message = 'Houve um erro na importação';
+                                                                        }
+                                                                        showAlertGeneral('Erro', message, 'error');
+                                                                    }
+                                                                }).error(function (error) {
+                                                                    showAlertGeneral('Erro', 'Houve um erro na importação', 'error');
+                                                                });
+                                                            }
+                                                        );
+                                                    } else {
+                                                        $('#modalImportMain').modal('hide');
+                                                        var message = elem.message;
+                                                        if(!message)
+                                                        {
+                                                            message = 'Houve um erro na importação';
+                                                        }
+                                                        showAlertGeneral('Erro', message, 'error');
+                                                    }
+                                                }).error(function (error) {
+                                                    showAlertGeneral('Erro', 'Houve um erro na importação', 'error');
+                                                });
+                                            }
+                                        );
+                                    } else {
+                                        $('#modalImportMain').modal('hide');
+                                        var message = elem.message;
+                                        if(!message)
+                                        {
+                                            message = 'Houve um erro na importação';
+                                        }
+                                        showAlertGeneral('Erro', message, 'error');
+                                    }
+                                }).error(function (error) {
+                                    showAlertGeneral('Erro', 'Houve um erro na importação', 'error');
+                                });
+                            }
+                        );
+                    } else {
+                        $('#modalImportMain').modal('hide');
+                        var message = elem.message;
+                        if(!message)
+                        {
+                            message = 'Houve um erro na importação';
+                        }
+                        showAlertGeneral('Erro', message, 'error');
+                    }
+                }).error(function (error) {
+                    showAlertGeneral('Erro', 'Houve um erro na importação', 'error');
+                });
+            }
+        );
+    }
+    else
+    {
+        showAlertGeneral('Erro', 'URL inválida', 'error');
+    }
+}
+
+function do_ajax(type, url_base) {
+
+    var select_query, url, parameters, restriction;
+
+    switch (type)
+    {
+        case "project":
+            select_query = 'name, shortDescription, isVerified, site, facebook';
+            url = url_base + "/api/project/find";
+            break;
+        case "event":
+            select_query = 'name, shortDescription, rules, subtitle, preco, site, facebook';
+            url = url_base + "/api/event/find";
+            break;
+        case "agent":
+            select_query = 'name, shortDescription, isVerified, nomeCompleto, dataDeNascimento, emailPublico, telefonePublico, endereco, site, facebook';
+            restriction = 'like(*.com*)';
+            url = url_base + "/api/agent/find";
+            break;
+        case "space":
+            select_query = 'name, location, public, shortDescription, site, facebook, telefonePublico, telefone1';
+            url = url_base + "/api/space/find";
+            break;
+    }
+
+    if(type != "agent")
+    {
+        parameters = {
+            '@select': select_query
+        }
+    }else
+    {
+        parameters = {
+            '@select': select_query,
+            'emailPublico': restriction
+        }
+    }
+
+    $.getJSON(
+        url,
+        parameters,
+        function (result)
+        {
+            $.ajax({
+                url: $('#src').val() + '/controllers/collection/collection_controller.php?operation=mapa_cultural_form&collection_id='+$('#collection_id').val()+'&type='+type,
+                type: 'POST',
+                async: false,
+                data: {result: result}
+            }).success(function (result) {
+                elem = jQuery.parseJSON(result);
+                if (elem.result) {
+                    return {"result": true, "url": elem.url};
+                } else {
+                    $('#modalImportMain').modal('hide');
+                    var message = elem.message;
+                    if(!message)
+                    {
+                        message = 'Houve um erro na importação';
+                    }
+                    showAlertGeneral('Erro', message, 'error');
+                }
+            }).error(function (error) {
+                showAlertGeneral('Erro', 'Houve um erro na importação', 'error');
+            });
+        }
+    );
+}

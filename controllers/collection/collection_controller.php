@@ -232,6 +232,9 @@ class CollectionController extends Controller {
                     return json_encode($collectionImportation->import($data));
                 }
                 break;
+            case 'mapa_cultural_form':
+                return json_encode(mapa_cultural());
+                break;
             /*************************** TEMPLATES **********************/
             case 'list-collection-templates':
                 $colectionTemplateModel = new CollectionTemplatesModel;
@@ -377,7 +380,6 @@ class CollectionController extends Controller {
 /*
  * Controller execution
  */
-
 if ($_POST['operation']) {
     $operation = $_POST['operation'];
     $data = $_POST;

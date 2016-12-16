@@ -309,6 +309,7 @@ $(window).load(function () {
         e.preventDefault();
 
     });
+
     // submits dos eventos das categorias e tags
     //add
     $('#submit_adicionar_category_single').submit(function (e) {

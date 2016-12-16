@@ -23,8 +23,8 @@
  * #17 - ADICIONA NO MENU DA COLECAO A OPCAO DE FILTROS
  * #18 - ALTERA O THUMBNAIL DOS ITEMS/COLECAO
  * #19 - OPERACAO DE METADADOS DE CATEGORIA
- * #20 - ALTERACAO DA CAIXA MODAL
- * #21 - IMPORTADOR OWL e FUNÇÕES AUXILIARES
+ * #20 - IMPORTADOR OWL e FUNÇÕES AUXILIARES
+ * #21 - IMPORTAÇÃO MAPAS CULTURAIS
  * @author: EDUARDO HUMBERTO
  */
 
@@ -2044,7 +2044,8 @@ function ontology_tainacan_operation_metadata_category() {
 add_filter( 'tainacan_operation_metadata_category', 'ontology_tainacan_operation_metadata_category');
 
 ###############################################################################
-################ #20 ALTERACAO DA CAIXA MODAL #################################
+############### #20 Importador OWL e FUNÇÕES AUXILIARES #######################
+
 add_action('add_select_box', 'add_select_box_import_ontology');
 function add_select_box_import_ontology()
 {
@@ -2057,8 +2058,6 @@ function add_select_box_import_ontology()
     <?php
 }
 
-###############################################################################
-############### #21 Importador OWL e FUNÇÕES AUXILIARES #######################
 function parse_owl1()
 {
 
@@ -2274,8 +2273,11 @@ function create_class(&$class_tags, &$created_classes, &$classe, &$collection_id
 function record_class(&$created_classes, &$root_name, &$category_model, &$data, &$collection_id, $is_root)
 {
     //Define o pai da classe a ser criada
-    if($is_root) $parent = $category_model->get_category_taxonomy_root();
-    else $parent = $created_classes[$root_name]['creation_id'];
+    if($created_classes != null)
+    {
+        if($is_root) $parent = $category_model->get_category_taxonomy_root();
+        else $parent = $created_classes[$root_name]['creation_id'];
+    }
 
     $new_class = wp_insert_term($data['category_name'], 'socialdb_category_type', array('parent' => $parent,
         'slug' => $category_model->generate_slug($data['category_name'], $collection_id), 'description' => $category_model->set_description($data['category_description'])));
@@ -2293,11 +2295,17 @@ function record_class(&$created_classes, &$root_name, &$category_model, &$data, 
     }
 
     //Marcar classe como criada
-    $created_classes[$data['idAbout']]['created'] = true;
-    $created_classes[$data['idAbout']]['creation_id'] = $new_class['term_id'];
+    if($created_classes != null)
+    {
+        $created_classes[$data['idAbout']]['created'] = true;
+        $created_classes[$data['idAbout']]['creation_id'] = $new_class['term_id'];
+    }
 
     //Define ligação entre ontologia e a classe raiz, ligação criada apenas para classes raiz
-    if($is_root) $category_model->add_facet($new_class['term_id'], $collection_id);
+    if($is_root)
+        $category_model->add_facet($new_class['term_id'], $collection_id);
+
+    return $new_class['term_id'];
 }
 
 function class_search(&$class_to_search, &$class_tags, &$namespace)
@@ -2335,6 +2343,7 @@ function simple_add(&$data) {
     // metadado para o nome do objeto da colecao
     update_post_meta($collection_id, 'socialdb_collection_object_name', $data['collection_object']);
     //filtro para o nome da colecao
+    $data['collection_object'] = $data['collection_name'];
     if (has_filter('collection_object')) {
         $name = (isset( $data['collection_object'])&&!empty($data['collection_object'])?$data['collection_object']:$data['collection_name']);
         $object_name = apply_filters('collection_object', $name);
@@ -2674,32 +2683,37 @@ function create_data_type_properties(&$data_type_propety_tags, &$created_dataTyp
     }
 }
 
-function add_data_type_property(&$created_dataType_property, &$datatype_property, &$class_tags, &$created_classes, &$data, &$namespace, $is_root)
+function add_data_type_property(&$created_data_type_property, &$datatype_property, &$class_tags, &$created_classes, &$data, &$namespace, $is_root)
 {
-    $range = end(explode("#", $datatype_property->children($namespace['rdfs'])->range->attributes($namespace['rdf'])['resource']));//Tipo de dado
-    $domain = str_replace("#", "", $datatype_property->children($namespace['rdfs'])->domain->attributes($namespace['rdf'])['resource']);
-
-    /*if(strcasecmp($range, "integer"))
-        $range = "int";*/
-
-    $domain_class = class_search($domain,$class_tags,$namespace);
-
-    //ID da classe de dominio
-    if(gettype($domain_class) == "object")
+    if(gettype($datatype_property) == "object")
     {
-        if(($name = $domain_class->attributes($namespace['rdf'])['ID']))
-            $domain_class_name = strval($name);
-        else
-            $domain_class_name = $domain_class->attributes($namespace['rdf'])['about'];
+        $range = end(explode("#", $datatype_property->children($namespace['rdfs'])->range->attributes($namespace['rdf'])['resource']));//Tipo de dado
+        $domain = str_replace("#", "", $datatype_property->children($namespace['rdfs'])->domain->attributes($namespace['rdf'])['resource']);
 
-        $data['id_domain_class'] = $created_classes[strval($domain_class_name)]['creation_id'];
+        $domain_class = class_search($domain,$class_tags,$namespace);
+
+        //ID da classe de dominio
+        if(gettype($domain_class) == "object")
+        {
+            if(($name = $domain_class->attributes($namespace['rdf'])['ID']))
+                $domain_class_name = strval($name);
+            else
+                $domain_class_name = $domain_class->attributes($namespace['rdf'])['about'];
+
+            $data['id_domain_class'] = $created_classes[strval($domain_class_name)]['creation_id'];
+        }
+    }
+    else
+    {
+        $range = $datatype_property['data_type'];//Seleciona tipo de dado
+        $data['id_domain_class'] = $datatype_property['id_domain_class'];
     }
 
     if($is_root)
         $new_property = wp_insert_term($data['name'], 'socialdb_property_type', array('parent' => get_property_type_id('socialdb_property_data'),
             'slug' => generate_slug($data['name'], 0)));
     else
-        $new_property = wp_insert_term($data['name'], 'socialdb_property_type', array('parent' => $created_dataType_property[$data['hasFatherResource']]['creation_id'],
+        $new_property = wp_insert_term($data['name'], 'socialdb_property_type', array('parent' => $created_data_type_property[$data['hasFatherResource']]['creation_id'],
             'slug' => generate_slug($data['name'], 0)));
 
     if($data['functional'] == true)
@@ -2711,9 +2725,12 @@ function add_data_type_property(&$created_dataType_property, &$datatype_property
     update_term_meta($new_property['term_id'], 'socialdb_property_data_widget', (string) $range);
     update_term_meta($new_property['term_id'], 'socialdb_property_created_category',$data['id_domain_class']);
     add_term_meta($data['id_domain_class'],'socialdb_category_property_id',$new_property['term_id']);
+    if($created_data_type_property != null)
+    {
+        $created_data_type_property[$data['idAbout']]['creation_id'] = $new_property['term_id'];
+        $created_data_type_property[$data['idAbout']]['created'] = true;
+    }
 
-    $created_dataType_property[$data['idAbout']]['creation_id'] = $new_property['term_id'];
-    $created_dataType_property[$data['idAbout']]['created'] = true;
 
     return $new_property['term_id'];
 }
@@ -3086,4 +3103,150 @@ function treats_individuals(&$description_ind)
     {
 
     }
+}
+
+###############################################################################
+#################### #20 Importador MAPAS CULTURAIS ###########################
+add_action("add_tab_mapas_culturais", "add_tab_mapas_culturais_ontology");
+function add_tab_mapas_culturais_ontology()
+{
+    ?>
+    <li role="presentation"><a id="click_mapas_culturais_tab" href="#mapas_culturais_tab" aria-controls="mapas_culturais_tab" role="tab" data-toggle="tab"><?php _e('Mapas culturais','tainacan') ?></a></li>
+    <?php
+}
+
+add_action("add_options_mapas_culturais", "add_options_mapas_culturais_ontology");
+function add_options_mapas_culturais_ontology()
+{
+    ?>
+    <div role="tabpanel" class="tab-pane" id="mapas_culturais_tab">
+        <div id="validate_metatag_tab">
+            <div id="list_oaipmh_dc">
+                <table  class="table table-bordered">
+                    <th><?php _e('Identifier','tainacan'); ?></th>
+                    <th><?php _e('Edit/Remove','tainacan'); ?></th>
+                    <tbody id="table_metatag_tab" >
+                    </tbody>
+                </table>
+            </div>
+            <br>
+
+            <form id="mapa_cultural_form" class="form-group col-md-12 no-padding">
+                <div class="col-md-12"><label><?php _e('URL','tainacan'); ?></label></div>
+                <div class="col-md-10">
+                    <input type="text"
+                           id="url_mapa_cultural"
+                           class="form-control"
+                           placeholder="<?php _e('Insert the URL to extract metatags','tainacan'); ?>">
+                </div>
+                <div class="col-md-2">
+                    <button type="button"
+                            onclick="import_mapa_cultural($('#url_mapa_cultural').val().trim())"
+                            id="submit_mapa_cultural_url"
+                            class="btn btn-primary tainacan-blue-btn-bg pull-left">
+                        <?php _e('Validate','tainacan'); ?>
+                    </button>
+                </div>
+            </form>
+            <div id="loader_validacao_metatags" style="display:none">
+                <div class="text-center">
+                    <img src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>">
+                    <h3><?php _e('Validating URL...','tainacan') ?></h3>
+                </div>
+            </div>
+            <div style="display: none;" id="maping_container_metatags">
+            </div>
+            <!--<input type="hidden" id="collection_import_id" name="collection_id" value="">
+            <input type="hidden" id="operation" name="operation" value="validate_metatag">-->
+
+        </div>
+    </div>
+    <?php
+}
+
+function mapa_cultural()
+{
+    $category_model = new CategoryModel();
+    $collection_id = $_GET['collection_id'];
+    $type = $_GET['type'];
+
+    $created_data_type_property = [];
+    $result = $_POST['result'];
+    $null = null;
+    $data['functional'] = false;
+
+    if ($type == 'space')
+        $name = "Espaços";
+    elseif ($type == 'event')
+        $name = "Eventos";
+    elseif ($type == 'agent')
+        $name = "Agentes";
+    else
+        $name = "Projetos";
+
+    $data['category_name'] = $name;
+    //Cria Classe
+    $creation_id = record_class($null, $name, $category_model, $data, $collection_id, true);
+
+    treats_object_properties_unknown($result, $created_data_type_property, $data, $collection_id, $creation_id);
+
+    $return['result'] = true;
+    $return['url'] = get_the_permalink($collection_id);
+
+    return $return;
+}
+
+function treats_object_properties_unknown(&$result, &$created_data_type_property, &$data, &$collection_id, &$creation_id)
+{
+    $null = null;
+    foreach ($result as $array){
+        foreach ($array as $index => $value){
+            if($created_data_type_property[$index]['created'] != true && $index != 'name')
+            {
+                //Cria data type property
+                $data_type_property = array('data_type' => 'string', 'id_domain_class' => $creation_id);
+                $data['name'] = $index;
+                add_data_type_property($null, $data_type_property, $null, $null, $data, $null, true);
+
+                $created_data_type_property[$index]['created'] = true;
+            }
+        }
+        $data['object_name'] = $array['name'];
+        $data['class_id'] = $creation_id;
+
+        add_individual($data, $collection_id, $array);
+    }
+}
+
+function add_individual(&$data, &$collection_id, &$properties_list)
+{
+    //$object_model = new ObjectModel();
+    $user_id = get_current_user_id();
+    $post = array(
+        'post_title' => ($data['object_name']) ? $data['object_name'] : time(),
+        'post_content' => $data['object_description'] ? $data['object_description'] : '',
+        'post_status' => 'publish',
+        'post_author' => $user_id,
+        'post_type' => 'socialdb_object'
+    );
+
+    $data['ID'] = wp_insert_post($post);
+
+    $category_root_id = get_post_meta($collection_id, 'socialdb_collection_object_type', true);
+    wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type');
+    wp_set_object_terms($data['ID'], array((int) $data['class_id']), 'socialdb_category_type',true);
+
+    $properties = get_term_meta($data['class_id'],'socialdb_category_property_id');
+    if($properties && is_array($properties)){
+        foreach ($properties as $property){
+            $property_name = get_term_by('id',$property,'socialdb_property_type')->name;
+
+            if($property_name != "name")
+            {
+                $value = $properties_list[$property_name];
+                add_post_meta( $data['ID'],'socialdb_property_'.$property, $value);
+            }
+        }
+    }
+   // $object_model->insert_item_resource($data);
 }
