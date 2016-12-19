@@ -276,6 +276,9 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
                     $data['compounds'][] = $property_model->get_all_property($compound_id,true, $data['collection_id']);
                 }
                 return json_encode($data);
+            case 'get_properties_categories_dynatree':
+                return $property_model->initDynatreePropertiesFilter($data['collection_id']);
+                
                 
         }
     }
@@ -304,7 +307,7 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
          */
         if(has_filter('modificate_values_event_property_compounds_add')):
             $data = apply_filters( 'modificate_values_event_property_compounds_add', $data); 
-        endif;    
+        endif;  
         return $eventProperty->create_event($data);
     }
     /**

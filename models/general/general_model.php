@@ -2227,6 +2227,7 @@ class Model {
                     $dynatree[] = array(
                             'title' =>$name, 
                             'key' => $propertyObject->term_id,  
+                            'type' => $this->get_property_type($propertyObject->term_id),
                             'expand' => true, 
                             'hideCheckbox' => $hide_checkbox, 
                             'children' => $this->childrenDynatreePropertiesFilter($propertyObject->term_id, 'color_property4'),
@@ -2235,6 +2236,7 @@ class Model {
                      $dynatree[] = array(
                             'title' =>$name, 
                             'key' => $propertyObject->term_id,  
+                            'type' => $this->get_property_type($propertyObject->term_id),
                             'hideCheckbox' => $hide_checkbox, 
                             'addClass' => 'color_property4'); 
                  }
