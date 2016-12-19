@@ -78,6 +78,10 @@
         $('#primary-custom-color').wpColorPicker(layoutOptions);
         $('#second-custom-color').wpColorPicker(layoutOptions);
 
+        $("#conclude_config").click(function() {
+            goToCollectionHome();
+        });  
+
         if( window.location.search.indexOf('open_wizard') > -1 ) {
             $("#collection-steps").show();
             var stateObj = {clear: "ok"};
