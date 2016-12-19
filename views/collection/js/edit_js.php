@@ -38,8 +38,7 @@
             if (verify[0].value.trim() === '') {
                 showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('Please set a valid name', 'tainacan') ?>', 'info');
                 return false;
-            }
-            else if ($("#verify_collection_name").val() !== 'block') {
+            } else if ($("#verify_collection_name").val() !== 'block') {
                 // $("#collection_content").val(CKEDITOR.instances.editor.getData());
                 e.preventDefault();
                 $.ajax({
@@ -235,8 +234,8 @@
 
     var collection_id = $("#collection_id").val();
     var common_config_options = {
-        uploadUrl: '<?php echo get_stylesheet_directory_uri() ?>' + '/views/collection/upload_file.php',
-        cropUrl: '<?php echo get_stylesheet_directory_uri() ?>' + '/views/collection/crop_file.php',
+        uploadUrl: get_tainacan_base_url() + '/views/collection/upload_file.php',
+        cropUrl: get_tainacan_base_url() + '/views/collection/crop_file.php',
         imgEyecandy: true,
         imgEyecandyOpacity: 0.1,
         modal: true,
@@ -245,23 +244,20 @@
 
     var cover_img_options = common_config_options;
     cover_img_options.onAfterImgCrop = function() {
-        var cropped = $('img.croppedImg').attr('src');
-        $.ajax({
-            url: $('#src').val() + '/controllers/collection/collection_controller.php',
-            data: {operation: 'set_collection_cover_img', img_url: cropped, collection_id: collection_id}
-        });
+        var img_height = this.objH;
+        var data = { operation: 'set_collection_cover', collection_id: collection_id, img_height: img_height};
+        if(img_height == 148) {
+            var cropped = $('img.croppedImg').get(0);
+            data.thumb_url = $(cropped).attr('src');
+        } else {
+            var cropped = $('img.croppedImg').get(1);
+            data.img_url = $(cropped).attr('src');
+        }
+        $.ajax({ url: $('#src').val() + '/controllers/collection/collection_controller.php', type: 'POST', data: data });
     };
-    var croppicContainer = new Croppic('collection_cover_image', cover_img_options);
 
-    var crop_thumb_options = common_config_options;
-    crop_thumb_options.onAfterImgCrop = function () {
-        var cropped = $('img.croppedImg').attr('src');
-        $.ajax({
-            url: $('#src').val() + '/controllers/collection/collection_controller.php',
-            data: {operation: 'update_collection_thumbnail', img_url: cropped, collection_id: collection_id}
-        });
-    };
-    var croppicThumb = new Croppic('collection_crop_thumb', crop_thumb_options);
+    var croppicThumb = new Croppic('collection_crop_thumb', cover_img_options);
+    var croppicContainer = new Croppic('collection_cover_image', cover_img_options);
 
     function show_edit_cover() {
         $("#edit_cover_container").removeClass('hideCropBox');

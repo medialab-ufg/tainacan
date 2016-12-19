@@ -37,7 +37,6 @@ $image_cover_url = wp_get_attachment_url(get_post_meta($collection_post->ID, 'so
                     <div id="collection_crop_thumb"></div>
                 </div>
 
-
                 <?php /*
                <!--<button onclick="remove_thumbnail('<?php echo $collection_post->ID; ?>')" class="btn btn-default" ><?php _e('Remove thumbnail') ?></button>-->
                 <br><br>

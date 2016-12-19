@@ -163,26 +163,24 @@ class CollectionController extends Controller {
                  }
                  return $this->render(dirname(__FILE__) . '../../../views/search/menu_left.php', $data);
                  break;
-            case 'set_collection_cover_img':
-                $file_extension = wp_check_filetype($data['img_url']);
-                $attachment = [
-                    'guid' => $data['img_url'],
-                    'post_mime_type' => 'image/' . $file_extension['ext'],
-                    'post_title' => '', 'post_content' => '',
+            case 'set_collection_cover':
+                // if it has been set to collection thumb
+                if( $data['img_height'] == 148 ) {
+                    $_crop_path_ = $data['thumb_url'];
+                } else {
+                    $_crop_path_ = $data['img_url'];
+                }
+                $file_ext = wp_check_filetype($_crop_path_);
+                $attachment = [ 'guid' => $_crop_path_, 'post_mime_type' => 'image/' . $file_ext['ext'],
+                    'post_title' => '', 'post_content' => ''
                 ];
                 $img_id = wp_insert_attachment($attachment);
 
-                return update_post_meta($data['collection_id'],'socialdb_collection_cover_id', $img_id );
-                break;
-            case 'update_collection_thumbnail':
-                $file_extension = wp_check_filetype($data['img_url']);
-                $file = [ 'guid' => $data['img_url'],
-                    'post_mime_type' => 'image/' . $file_extension['ext'],
-                    'post_title' => '', 'post_content' => '',
-                ];
-                $img_id = wp_insert_attachment($file);
-                $retorno['updated_thumb_id'] = update_post_meta($data['collection_id'], '_thumbnail_id', $img_id);
-                
+                if( $data['img_height'] == 148) {
+                    $retorno['updated_thumb_id'] = update_post_meta($data['collection_id'], '_thumbnail_id', $img_id);
+                } else {
+                    $retorno['collection_cover_img'] = update_post_meta($data['collection_id'], 'socialdb_collection_cover_id', $img_id );
+                }
                 return json_encode( $retorno );
             case 'list_items_search_autocomplete':
                 $property_model = new PropertyModel;
