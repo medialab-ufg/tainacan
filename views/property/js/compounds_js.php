@@ -192,7 +192,7 @@
                                 '<input type="hidden" class="property_name" value="' + property.name + '">' +
                                 '<input type="hidden" id="property_type_' + property.id + '" value="4">' +
                                 '<a onclick="delete_property(' + current_id + ',' + 4 + ')" class="delete_property" href="#">' +
-                                '<span class="glyphicon glyphicon-trash"><span></a></div><ul class="list-compounded" id="list-compounded-' + property.id + '"></ul></li>');
+                                '<span class="glyphicon glyphicon-trash"><span></a></div><ul class="list-compounded" id="list-compounded-' + property.id + '" style="margin-top:8px;"></ul></li>');
                         }
                     }
                     get_children_compounds(current_id,property.metas.socialdb_property_compounds_properties_id);
@@ -284,7 +284,7 @@
                     string = 'edit_term';
                     cat_id = '<input type="hidden" class="coumpound_id_'+property.metas.socialdb_property_term_root+'" id="'+ current_id +'">';
                 }
-                $( "#list-compounded-"+property_id ).append('<li id="compounds-'+current_id+'" class="'+class_string+'">'+
+                $( "#list-compounded-"+property_id ).append('<li id="compounds-'+current_id+'" class="'+class_string+'" style="width:102%;">'+
                                 cat_id +
                                 '<a onclick="delete_property(' + current_id + ','+type+')" class="delete_property" href="#">' +
                                 '<span style="margin-right:5px;color: #88A6CC;" class="glyphicon glyphicon-trash pull-right"><span></a>' + 

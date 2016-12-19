@@ -1731,6 +1731,7 @@
 //                        }
 //                    }
 //                });
+                  $("input[name='property_data_use_filter']").parent().hide()
             });
         //});
     }

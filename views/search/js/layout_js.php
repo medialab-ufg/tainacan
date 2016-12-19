@@ -266,43 +266,79 @@
             if (elem.property_data) {
                 $("#collection_order").append("<optgroup label='<?php _e('Data properties','tainacan') ?>'>");
                 var iOrder = 0;
-                $.ajax({
-                    type: "POST",
-                    url: $('#src').val() + "/controllers/property/property_controller.php",
-                    data: {collection_id: $('#collection_id').val(), operation: 'get_properties_categories_dynatree'}
-                }).done(function (result) {
-                    elem = JSON.parse(result);
-                    $.each(elem, function (idx, data) {
+                <?php 
+                if(has_action('all_properties_to_alter_geolocation_select')):
+                ?>
+                    $.ajax({
+                        type: "POST",
+                        url: $('#src').val() + "/controllers/property/property_controller.php",
+                        data: {collection_id: $('#collection_id').val(), operation: 'get_properties_categories_dynatree'}
+                    }).done(function (result) {
+                        elem = JSON.parse(result);
+                        $.each(elem, function (idx, data) {
+                            if (data && data !== false) {
+                                var numeric_id = data.key;
+                                var string_id = numeric_id.toString();
+                                $("#collection_order").append("<option value='" + data.key + "' selected='selected' >" + data.title + " - ( <?php _e('Type','tainacan') ?>:"+data.type+" ) </option>");                        
+
+                                var curr_meta_index = table_meta_ids.indexOf(string_id);
+                                if( curr_meta_index > -1 ) {
+                                    var ck = "checked";                                   
+                                }
+
+                                var item_info = JSON.stringify({ 'id': data.key, 'order': iOrder, 'tipo': 'property_data'});
+                                var sort_meta = default_span_html + "<input type='checkbox' id='table_meta' " + ck + " name='table_meta[]' value='" + item_info + "'> " + data.title + "<br /></li>";
+
+                                if(ck && ck === "checked") {
+                                    correct_order[curr_meta_index] = sort_meta;
+                                } else {
+                                   default_order[iOrder] = sort_meta;
+                                }                                               
+
+                                if(data.type === "socialdb_property_data") {
+                                    var coords = ["select[name='latitude']","select[name='longitude']","select[name='location']"];
+                                    $(coords).each(function(index, e){
+                                       $(e).append("<option value='"+ data.key +"'>"+ data.title +"</option>");
+                                    });
+                                }
+                            }
+                            iOrder++;
+                        });
+                    });            
+                <?php                
+                else:
+                ?>
+                    $.each(elem.property_data, function (idx, data) {
                         if (data && data !== false) {
-                            var numeric_id = data.key;
+                            var numeric_id = data.id;
                             var string_id = numeric_id.toString();
-                            $("#collection_order").append("<option value='" + data.key + "' selected='selected' >" + data.title + " - ( <?php _e('Type','tainacan') ?>:"+data.type+" ) </option>");                        
+                            $("#collection_order").append("<option value='" + data.id + "' selected='selected' >" + data.name + " - ( <?php _e('Type','tainacan') ?>:"+data.type+" ) </option>");                        
 
                             var curr_meta_index = table_meta_ids.indexOf(string_id);
                             if( curr_meta_index > -1 ) {
-                                var ck = "checked";                                   
-                            }
-
-                            var item_info = JSON.stringify({ 'id': data.key, 'order': iOrder, 'tipo': 'property_data'});
-                            var sort_meta = default_span_html + "<input type='checkbox' id='table_meta' " + ck + " name='table_meta[]' value='" + item_info + "'> " + data.title + "<br /></li>";
+                                var ck = "checked";   
+                            }    
+                            var item_info = JSON.stringify({ 'id': data.id, 'order': iOrder, 'tipo': 'property_data'});
+                            var sort_meta = default_span_html + "<input type='checkbox' id='table_meta' " + ck + " name='table_meta[]' value='" + item_info + "'> " + data.name + "<br /></li>";
 
                             if(ck && ck === "checked") {
                                 correct_order[curr_meta_index] = sort_meta;
                             } else {
                                default_order[iOrder] = sort_meta;
-                            }                                               
-
-                            if(data.type === "socialdb_property_data") {
+                            }    
+                            if(data.type === "text") {
                                 var coords = ["select[name='latitude']","select[name='longitude']","select[name='location']"];
                                 $(coords).each(function(index, e){
-                                   $(e).append("<option value='"+ data.key +"'>"+ data.title +"</option>");
+                                   $(e).append("<option value='"+ data.id +"'>"+ data.name +"</option>");
                                 });
                             }
                         }
                         iOrder++;
                     });
-                
-                });
+                <?php                
+                endif;
+                ?>
+               
             }
             if (elem.property_object) {
                 $.each(elem.property_object, function (idx, data) {

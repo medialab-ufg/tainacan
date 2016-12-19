@@ -40,7 +40,7 @@ function ontology_remove_collection_categories($name) {
 }
 add_filter( 'remove_collection_categories', 'ontology_remove_collection_categories', 10, 3 );
 
-################ #0 Alterando valores do total de nos e o nome da categoria root do repositorio ##########################
+################ #0 Alterando valores do total de nos ,  nome da categoria root do repositorio, liberando todas as propriedades para a geolocalizacao ##########################
 
 function ontology_alter_dynatree_number_of_items($name) {
     return 50;
@@ -52,6 +52,10 @@ function ontology_alter_category_root_repository_name($name) {
 }
 add_filter( 'alter_category_root_repository_name', 'ontology_alter_category_root_repository_name', 10, 3 );
 
+add_action('all_properties_to_alter_geolocation_select', 'ontology_all_properties_to_alter_geolocation_select');
+function ontology_all_properties_to_alter_geolocation_select() {
+    return true;
+}
 ################ #1 ADICIONANDO OS SCRIPTS DESTE MODULO ###########################
 add_action('wp_enqueue_scripts', 'tainacan_ontology_js');
 function tainacan_ontology_js() {

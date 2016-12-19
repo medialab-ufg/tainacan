@@ -245,7 +245,18 @@
         if (myPopover) {
             myPopover.options.html = true;
             //<iframe width="560" height="315" src="https://www.youtube.com/embed/CGyEd0aKWZE" frameborder="0" allowfullscreen></iframe>
-            myPopover.options.content = '<form><input type="text" style="width:200px;" value="<iframe width=\'800\' height=\'600\' src=\'' + content + '\' frameborder=\'0\'></iframe>" /></form>';
+            myPopover.options.content = '<form><input type="text" style="width:200px;" value="<iframe style=\'width:100%\' height=\'1000\' src=\'' + content + '\' frameborder=\'0\'></iframe>" /></form>';
+        }
+    }
+    
+    function set_popover_content_link(content) {
+        $('[data-toggle="popover"]').popover();
+        var myPopover = $('#linkbutton').data('popover');
+        $('#linkbutton').popover('hide');
+        if (myPopover) {
+            myPopover.options.html = true;
+            //<iframe width="560" height="315" src="https://www.youtube.com/embed/CGyEd0aKWZE" frameborder="0" allowfullscreen></iframe>
+            myPopover.options.content = '<form><input type="text" style="width:200px;" value="'+ content +'" /></form>';
         }
     }
 

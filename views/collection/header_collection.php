@@ -5,13 +5,13 @@ global $config;
 $options = get_option('socialdb_theme_options');
 $current_collection_id = $collection_post->ID;
 $collection_thumb = get_post_meta($current_collection_id, "_thumbnail_id", true);
-$collection_img_id = get_post_meta( $current_collection_id, 'socialdb_collection_cover_id', true);
+$collection_img_id = get_post_meta($current_collection_id, 'socialdb_collection_cover_id', true);
 
 $thumb_url = $collection_thumb ? wp_get_attachment_url($collection_thumb) : get_template_directory_uri() . "/libraries/images/colecao_thumb.svg";
 ?>
 <!-- TAINACAN: panel da colecao, background-color definido pelo o usuario -->
 <!--div class="panel-heading" style="max-width: 100%;border-color: <?= $collection_metas['socialdb_collection_board_border_color'] ?>;color:<?= $collection_metas['socialdb_collection_board_font_color'] ?>;background-color: <?= $collection_metas['socialdb_collection_board_background_color'] ?>;"-->
-<?php $url_image = wp_get_attachment_url(get_post_meta( $current_collection_id, 'socialdb_collection_cover_id', true)); ?>
+<?php $url_image = wp_get_attachment_url(get_post_meta($current_collection_id, 'socialdb_collection_cover_id', true)); ?>
 <div class="panel-heading collection_header container-fluid collection_header_img" style=" <?php if ($url_image) { ?> background-image: url(<?php echo $url_image; ?>); <?php } ?>">
     <div class="row">
         <!-- TAINACAN: container com o menu da colecao, link para eventos e a busca de items -->
@@ -45,8 +45,8 @@ $thumb_url = $collection_thumb ? wp_get_attachment_url($collection_thumb) : get_
 
                             <div class="collection-author">
                                 <?php
-                                if ( ! is_root_category($current_collection_id) ) {
-                                    echo '<strong>' . __('Administrator: ', 'tainacan') . '</strong><i>' . get_the_author_meta( "display_name", $collection_post->post_author ) .'</i>';
+                                if (!is_root_category($current_collection_id)) {
+                                    echo '<strong>' . __('Administrator: ', 'tainacan') . '</strong><i>' . get_the_author_meta("display_name", $collection_post->post_author) . '</i>';
                                 }
                                 ?>
                             </div>
@@ -96,66 +96,89 @@ $thumb_url = $collection_thumb ? wp_get_attachment_url($collection_thumb) : get_
                             <div class="fab"><small><h6><b>csv</b></h6></small></div>
                         </a-->
                     <?php } ?>
-                    <!-- ******************** TAINACAN: IFRAME URL ******************** -->
-                    <button id="iframebutton" data-container="body" data-toggle="popover" data-placement="left" data-title="URL Iframe" data-content="" data-original-title="" title="Emded URL">
+
+                    <!--button id="iframebutton" data-container="body" data-toggle="popover" data-placement="left" data-title="URL Iframe" data-content="" data-original-title="" title="Emded URL">
                       <div class="fab"><small><h6><b><></b></h6></small></div>
-                    </button>
+                    </button-->
 
                     <script>
                         set_popover_content($("#socialdb_permalink_collection").val() + '?' + elem.url + '&is_filter=1');
+                        set_popover_content_link($("#socialdb_permalink_collection").val() + '?' + elem.url + '&is_filter=1');
                     </script>
 
                     <!--button style="float:right;margin-left:5px;" id="iframebutton" type="button" class="btn btn-default btn-sm" data-container="body" data-toggle="popover" data-placement="left" data-title="URL Iframe" data-content="">
                         <span class="glyphicon glyphicon-link"></span>
                     </button-->
                     <!-- ******************** TAINACAN: se o plugin de restful estiver ativo ***-->
-                    <?php if(is_restful_active()): ?>
-                        <!--a target="_blank" href="<?php echo site_url() . '/wp-json/posts/' . $collection_post->ID.'/?type=socialdb_collection' ?>">
-                           <div class="fab"><small><h6><b>json</b></h6></small></div>
-                        </a>
+                    <?php if (is_restful_active()): ?>
+                            <!--a target="_blank" href="<?php echo site_url() . '/wp-json/posts/' . $collection_post->ID . '/?type=socialdb_collection' ?>">
+                               <div class="fab"><small><h6><b>json</b></h6></small></div>
+                            </a>
                         <!--a style="cursor: pointer;" onclick="export_selected_objects_json()">
                             <div class="fab"><small><h6><b>items</b></h6></small></div>
                         </a-->
                     <?php endif; ?>
+                    <div> 
                         <a href="#" id="resources_collection_button" class="dropdown-toggle"  data-toggle="dropdown" role="button" aria-expanded="false" >
-                          <div class="fab">
-                              <div style="font-size:1em; cursor:pointer;" data-icon="&#xe00b;"></div>
-                          </div>
+                            <div class="fab">
+                                <div style="font-size:1em; cursor:pointer;" data-icon="&#xe00b;"></div>
+                            </div>
                         </a>
                         <ul id="resources_collection_dropdown" class="dropdown-menu" role="menu">
-                             <li>
-                                 <a target="_blank" href="<?php echo get_the_permalink($collection_post->ID) ?>?all.rdf"  ><span class="glyphicon glyphicon-upload"></span> <?php _e('RDF', 'tainacan'); ?>&nbsp;
-                                 </a>
-                             </li>
-                             <?php if(is_restful_active()): ?>
-                             <li>
-                                 <a href="<?php echo site_url() . '/wp-json/posts/' . $collection_post->ID.'/?type=socialdb_collection' ?>"  ><span class="glyphicon glyphicon-upload"></span> <?php _e('JSON', 'tainacan'); ?>&nbsp;
-                                 </a>
-                             </li>
-                             <?php endif; ?>
-                             <?php if (get_option('collection_root_id') != $collection_post->ID) { ?>
-                             <li>
-                                     <a style="cursor: pointer;" onclick="export_selected_objects()"  ><span class="glyphicon glyphicon-upload"></span> <?php _e('CSV', 'tainacan'); ?>&nbsp;
-                                     </a>
+                            <li>
+                                <a target="_blank" href="<?php echo get_the_permalink($collection_post->ID) ?>?all.rdf"  ><span class="glyphicon glyphicon-upload"></span> <?php _e('RDF', 'tainacan'); ?>&nbsp;
+                                </a>
                             </li>
+                            <?php if (is_restful_active()): ?>
+                                <li>
+                                    <a href="<?php echo site_url() . '/wp-json/posts/' . $collection_post->ID . '/?type=socialdb_collection' ?>"  ><span class="glyphicon glyphicon-upload"></span> <?php _e('JSON', 'tainacan'); ?>&nbsp;
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+                            <?php if (get_option('collection_root_id') != $collection_post->ID) { ?>
+                                <li>
+                                    <a style="cursor: pointer;" onclick="export_selected_objects()"  ><span class="glyphicon glyphicon-upload"></span> <?php _e('CSV', 'tainacan'); ?>&nbsp;
+                                    </a>
+                                </li>
                             <?php } ?>
-                             <li>
-                                 <a onclick="showGraph('<?php echo get_the_permalink($collection_post->ID) ?>?all.rdf')"  style="cursor: pointer;"   >
-                                     <span class="glyphicon glyphicon-upload"></span> <?php _e('Graph', 'tainacan'); ?>&nbsp;
-                                 </a>
-                             </li>
-                             <?php if(get_post_meta($collection_post->ID, 'socialdb_collection_mapping_exportation_active', true)): ?>
-                             <li>
-                                 <a href="<?php echo site_url() ?>/oai/socialdb-oai/?verb=ListRecords&metadataPrefix=oai_dc&set=<?php echo $collection_post->ID  ?>"  style="cursor: pointer;"   >
-                                     <span class="glyphicon glyphicon-upload"></span> <?php _e('OAI-PMH', 'tainacan'); ?>&nbsp;
-                                 </a>
-                             </li>
-                             <?php endif; ?>
-                     </ul>
-                     <!-- ******************** TAINACAN: Comentarios ******************** -->
-                     <a style="cursor: pointer;" onclick="showPageCollectionPage()" >
+                            <li>
+                                <a onclick="showGraph('<?php echo get_the_permalink($collection_post->ID) ?>?all.rdf')"  style="cursor: pointer;"   >
+                                    <span class="glyphicon glyphicon-upload"></span> <?php _e('Graph', 'tainacan'); ?>&nbsp;
+                                </a>
+                            </li>
+                            <?php if (get_post_meta($collection_post->ID, 'socialdb_collection_mapping_exportation_active', true)): ?>
+                                <li>
+                                    <a href="<?php echo site_url() ?>/oai/socialdb-oai/?verb=ListRecords&metadataPrefix=oai_dc&set=<?php echo $collection_post->ID ?>"  style="cursor: pointer;"   >
+                                        <span class="glyphicon glyphicon-upload"></span> <?php _e('OAI-PMH', 'tainacan'); ?>&nbsp;
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+                        </ul>
+                    </div>      
+                    <!-- ******************** TAINACAN: Comentarios ******************** -->
+                    <a style="cursor: pointer;" onclick="showPageCollectionPage()" >
                         <div class="fab"><span style="font-size: medium;" class="glyphicon glyphicon-comment"></span></div>
                     </a>
+                    <!-- ******************** TAINACAN: IFRAME URL ******************** -->
+                    <div>
+                        <a href="#" id="embed_collection_button"  class="dropdown-toggle"  data-toggle="dropdown" role="button" aria-expanded="false" >
+                            <div class="fab">
+                                <small><h6><b><></b></h6></small>
+                            </div>
+                        </a>
+                        <ul id="embed_collection_dropdown" style="margin-left: 20%;" class="dropdown-menu" role="menu">
+                            <li>
+                                <a style="cursor: pointer;" id="linkbutton" data-dismiss="focus" data-container="body" data-toggle="popover" data-placement="left" data-title="Search Link" data-content="" data-original-title="" title="Search Link">
+                                    <?php _e('Searck link', 'tainacan') ?>
+                                </a>
+                            </li>
+                            <li>
+                                <a style="cursor: pointer;" id="iframebutton" data-dismiss="focus" data-container="body" data-toggle="popover" data-placement="left" data-title="URL Iframe" data-content="" data-original-title="" title="Iframe">
+                                    <?php _e('Incorporate page', 'tainacan') ?>
+                                </a>
+                            </li>
+                        </ul>   
+                    </div>     
                 </div>
             </div>
         </div>
@@ -183,7 +206,7 @@ $thumb_url = $collection_thumb ? wp_get_attachment_url($collection_thumb) : get_
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-trash"></span>&nbsp;<?php _e('Report Abuse', 'tainacan'); ?></h4>
                     </div>
-                    <div class="modal-body"><?php echo __('Describe why the collection: ','tainacan') . $collection_post->post_title . __(' is abusive: ', 'tainacan'); ?>
+                    <div class="modal-body"><?php echo __('Describe why the collection: ', 'tainacan') . $collection_post->post_title . __(' is abusive: ', 'tainacan'); ?>
                         <textarea id="observation_delete_collection<?php echo $collection_post->ID ?>" class="form-control"></textarea>
                     </div>
                     <div class="modal-footer">
@@ -198,29 +221,30 @@ $thumb_url = $collection_thumb ? wp_get_attachment_url($collection_thumb) : get_
 
 <?php
 $root_category_cover_id = get_option('socialdb_logo');
-$cover_url = wp_get_attachment_url( get_post_meta( $root_category_cover_id , 'socialdb_respository_cover_id', true));
+$cover_url = wp_get_attachment_url(get_post_meta($root_category_cover_id, 'socialdb_respository_cover_id', true));
 
-if ( has_nav_menu('menu-ibram') ) { ?>
-    <div class="ibram-header" <?php if($root_category_cover_id != "") { ?> style="background-image: url(<?php echo $cover_url ?>)" <?php } ?> >
+if (has_nav_menu('menu-ibram')) {
+    ?>
+    <div class="ibram-header" <?php if ($root_category_cover_id != "") { ?> style="background-image: url(<?php echo $cover_url ?>)" <?php } ?> >
         <div class="col-md-12 no-padding">
             <div class="col-md-10 no-padding">
                 <h3> <?php echo bloginfo('name'); ?> </h3>
                 <h5> <?php echo bloginfo('description'); ?> </h5>
             </div>
-            <?php include("config_menu.php"); ?>
+    <?php include("config_menu.php"); ?>
         </div>
 
     </div>
 
     <?php
-    wp_nav_menu( ['theme_location' => 'menu-ibram', 'container_class' => 'containewr', 'container' => false,
-        'menu_class' => 'navbar navbar-inverse menu-ibram', 'walker'    => new wp_bootstrap_navwalker() ] );
+    wp_nav_menu(['theme_location' => 'menu-ibram', 'container_class' => 'containewr', 'container' => false,
+        'menu_class' => 'navbar navbar-inverse menu-ibram', 'walker' => new wp_bootstrap_navwalker()]);
 }
 ?>
 
 <div id="tainacan-breadcrumbs" class="config-steps">
-    <a href="<?php echo esc_url( home_url('/')  ) ?>"> Home </a> >
-    <a href="<?= get_the_permalink(get_option('collection_root_id')) . '?mycollections=true' ?>"><?php _e('My collections','tainacan'); ?></a> >
+    <a href="<?php echo esc_url(home_url('/')) ?>"> Home </a> >
+    <a href="<?= get_the_permalink(get_option('collection_root_id')) . '?mycollections=true' ?>"><?php _e('My collections', 'tainacan'); ?></a> >
     <a href="javascript:void(0)" onclick="backToMainPage();"> <span class="collection-title"></span></a> <span class="last-arrow"> </span>
     <div class="current-config" style="display: inline-block;"> </div>
 </div>

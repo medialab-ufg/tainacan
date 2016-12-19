@@ -48,7 +48,7 @@
         $(changeable_selects).each(function (idx, el) {
             $(el).html('')
                 .append('<option value="tree"><?php _e('Tree','tainacan') ?></option>')
-                .append('<option value="menu"><?php _e('Menu','tainacan') ?></option>')
+              //  .append('<option value="menu"><?php _e('Menu','tainacan') ?></option>')
                 .append('<option value="radio"><?php _e('Radio','tainacan') ?></option>')
                 .append('<option value="selectbox"><?php _e('Selectbox','tainacan') ?></option>');
         });
@@ -907,7 +907,7 @@
             initDynatreeFilterProperties(src);
             $('#compound_id').val('');
             $("#meta-metadata_compound #compounds_name").val('');
-            $("#meta-metadata_compound input").val('');
+            $("#meta-metadata_compound input[type='text']").val('');
             $('.compounds-action').html('<?php _e('Add','tainacan') ?>');
             $('#operation_property_compounds').val('add_property_compounds');
             $('#compounds_properties_ordenation').html('<center><h4><?php _e('Select a property','tainacan') ?>&nbsp;<span class="glyphicon glyphicon-arrow-right"></span></h4></center>');
@@ -1671,7 +1671,10 @@
                 $("#submit_form_ranking .property_data_use_filter").prop('checked', true);
                 $("#submit_form_ranking .use-voting-filter").show();
 
-                define_voting_widget(item_type);
+               // define_voting_widget(item_type);
+            }else{
+                 console.log(item_type);
+                 define_voting_widget(item_type);
             }
 
             $("#submit_form_ranking #range_submit").show();
@@ -1867,6 +1870,9 @@
         if ( open_modal.indexOf("#meta-") != -1 ) {
             var meta_type = $(this).attr("data-type");
             var $search_data_widget = $( open_modal + ' #search_data_widget');
+            if($('#meta-voting').is(':visible')) {
+                return true;
+            }
             $($search_data_widget).html('');
 
             if ( meta_type == 'numeric' || meta_type == 'date' ) {
@@ -2270,6 +2276,7 @@
             } else {
                 if ( item_search_widget === "null" || item_search_widget == "undefined" ) {      
                     $("#"+item_id + " .edit_property_data").click();
+                    $("#"+item_id + " .edit_ranking").click();
                     $(".property_data_use_filter").click();
                     $(".property_data_use_filter").attr('checked','checked');
                     $('.data-widget').addClass('select-meta-filter').show();
