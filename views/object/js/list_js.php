@@ -675,34 +675,19 @@
             $("#rankings_" + object_id).html(result).show();
             var $_other_rankings = [ $("#r_list_" + object_id), $("#r_gallery_" + object_id), $("#r_slideshow_" + object_id) ];
             $($_other_rankings).each(function (idx, el) {
-                $("#rankings_" + object_id).clone(true).appendTo(el);
                 var curr_raty = $("#rankings_" + object_id + " .single_stars div").get(0);
 
-                var r = $(el).find('.single_stars i');
-                $(r).hover( function() { // when user enters raty star
-                        var curr_idx = $(this).attr("data-alt");
-                        if( curr_idx == "1" ) {
-                            setRankingClass(r,"off");
-                        } else if ( curr_idx == "5" ) {
-                            setRankingClass(r,"on");
-                        } else {
-                            $(this).prevAll().removeAttr('class').addClass('star-on-png');
-                            $(this).nextAll().removeAttr('class').addClass('star-off-png');
-                        }
-                    }, function() { // when user leaves raty star
-                        var original_score = parseInt( $(curr_raty).raty('score') );
-                        $(r).each(function(ind, element){
-                            var id = parseInt($(element).attr("data-alt"));
-                            if(original_score) {
-                                if ( original_score >= id) {
-                                    setRankingClass(element,"on");
-                                } else {
-                                    setRankingClass(element,"off");
-                                }
-                            } else { setRankingClass(r,"off"); }
-                        });
+                var r_score = $("#rankings_" + object_id + " .single_stars div input[name='score']").val();
+                var prop_id = $('#single_stars_' + object_id + ' input[name="prop_star"]').val();
+                $(el).raty({
+                    score: r_score,
+                    half: true,
+                    starType: 'i',
+                    click: function(score, evt) {
+                        single_save_vote_stars(score, prop_id, object_id);
+                        return false;
                     }
-                );
+                });
             });
         });
     });

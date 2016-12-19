@@ -31,17 +31,22 @@
                 collection_id: $("#collection_id").val()
             }
         }).done(function (result) {
-             elem_first =jQuery.parseJSON(result); 
-             // console.log(elem_first);
+             elem_first =jQuery.parseJSON(result);
+            var original_scr = Math.ceil((elem_first.results.final_score*2))/2;
              $('#single_rating_' + object_id + '_' + property_id).raty({
-                 score: Math.ceil((elem_first.results.final_score*2))/2,
+                 score: original_scr,
                  half: true,
                  starType: 'i',
                  click: function (score, evt) {
                      single_save_vote_stars(score, property_id, object_id);
                      return false;
                  }
-                });   
+             });
+            var $_other_rankings = [ $("#r_list_" + object_id), $("#r_gallery_" + object_id), $("#r_slideshow_" + object_id) ];
+            $($_other_rankings).each(function (idx, el) {
+                $(el).raty('score', original_scr);
+            });
+
             $('#single_counter_' + object_id + '_' + property_id).text(elem_first.results.count);
             if(elem_first.is_user_logged_in){
                 score = Math.ceil((score*2))/2;

@@ -46,8 +46,9 @@ include_once ('js/list_ranking_js.php');
     <?php else: ?>
          <!-- TAINACAN: mostra os rankings do tipo estrela -->
         <div id="single_stars_<?php echo $object_id; ?>" class="single_stars">
-            <?php if (isset($stars)): ?>    
+            <?php if (isset($stars)): ?>
                 <?php foreach ($stars as $star) { ?>
+                    <input type="hidden" name='prop_star' value="<?php echo $star['id']; ?>" />
                     <input type="hidden" id="single_star_<?php echo $object_id; ?>_<?php echo $star['id']; ?>" value="<?php echo $star['value']; ?>">
                     <!--span><!--b><?php echo $star['name']; ?></b></span>&nbsp;(<?php echo __('Votes: ') ?>
                     <span id="single_counter_<?php echo $object_id; ?>_<?php echo $star['id']; ?>"><?php echo $star['count'] ?></span>)

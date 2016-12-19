@@ -28,9 +28,7 @@
         </div>
 
         <div class="col-md-2 no-padding">
-            <?php if (get_option('collection_root_id') != $collection_id): ?>            
-                <!-- TAINACAN: container(AJAX) que mostra o html com os rankings do objeto-->
-               
+            <?php if (get_option('collection_root_id') != $collection_id): ?>
                 <!-- TAINACAN: container(AJAX) que mostra o html com os rankings do objeto-->
                 <?php if(has_action('container_rankings_list')): ?>
                     <?php do_action('container_rankings_list',$curr_id) ?>
