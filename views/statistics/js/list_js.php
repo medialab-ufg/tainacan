@@ -352,8 +352,12 @@
     });
 
     $('a.dl-xls').click(function() {
-        var tables = $("#charts-resume table").tableExport({formats: ["xls", "csv"]});
-        cl(tables);
+        var tables = $("#charts-resume table").tableExport({
+            formats: ["xls"], // 'csv'
+            fileName: 'tainacan_report'
+        });
+        var xls_btn = $("#charts-resume .bottom button").get(0);
+        $(xls_btn).click().addClass('hide');
     });
 
     function drawStatPDF() {
@@ -402,12 +406,12 @@
         var same_x_dist = 350;
         pdf.setFontSize(14);
         pdf.setFontType('bold');
-        pdf.text($(".stats-i18n .repo-stats").text(), (same_x_dist+20), (line_dims.startY - 17) );
+        pdf.text($(".stats-i18n .repo-stats").text(), (same_x_dist+20), (line_dims.startY - 17) ); // Estatísticas ...
 
         pdf.setFontSize(8);
         pdf.setTextColor(100);
         pdf.setFontType('normal');
-        pdf.text(consultDate, 410, line_dims.startY - 5);
+        pdf.text(consultDate, same_x_dist + 50, line_dims.startY - 5); // Consultado em
 
         pdf.setTextColor(0);
         pdf.setFontSize(9.5);
@@ -420,7 +424,7 @@
         pdf.text(current_chart, (line_dims.startX + 64), dist_from_top );
 
         pdf.setFontType('bold');
-        pdf.text(period_consult, same_x_dist, dist_from_top );
+        pdf.text(period_consult, same_x_dist, dist_from_top ); // Período consultado
 
         pdf.setFontType('normal');
         pdf.text(text_from  + text_to, same_x_dist + 95, dist_from_top );
