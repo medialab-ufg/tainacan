@@ -47,7 +47,7 @@ class CollectionController extends Controller {
                         } else {
                             header("location:" . get_permalink(get_option('collection_root_id')) . '?info_messages=' . __('Collection already exists','tainacan') . '&info_title=' . __('Attention','tainacan'));
                         }
-                    else:    
+                    else:  
                         $import_model = new CollectionImportModel;
                         $new_collection_id = $import_model->importCollectionTemplate($data);
                         
@@ -226,7 +226,7 @@ class CollectionController extends Controller {
                 {
                     return json_encode(parse_owl1());
                 }
-                else if($data['file_type'] == 'tainacan-zip')
+                else if($data['file_type'] == 'tainacan-zip' || !isset($data['file_type']))
                 {
                     $collectionImportation = new CollectionImportModel;
                     return json_encode($collectionImportation->import($data));
