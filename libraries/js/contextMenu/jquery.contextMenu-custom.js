@@ -161,13 +161,13 @@ if (jQuery)
                 var offset = $(span).offset();
                  $(span).trigger({
                     type: 'mousedown',
-                    pageX: event.x,
-                    pageY: event.y,
+                    pageX: e.x,
+                    pageY: e.y,
                     button: 2
                 }).trigger({
                     type: 'mouseup',
-                    pageX: event.x,
-                    pageY: event.y,
+                    pageX: e.x,
+                    pageY: e.y,
                     button: 2
                 });
                 e.preventDefault();

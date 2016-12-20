@@ -1172,6 +1172,7 @@
                        });
                        $('#selected_categories_relationship').html('');
                        $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
+                                console.log(elem.metas.socialdb_property_object_category_id,node.data.key);
                                if(elem.metas.socialdb_property_object_category_id===node.data.key){
                                     node.select(true);
                                     ids = $('#property_object_category_id').val().split(',');
@@ -1186,7 +1187,7 @@
             }    
 
 
-            $("#property_object_title").text('<?php _e('Edit property','tainacan') ?>');
+            $("#meta-relationship .modal-title").text('<?php _e('Edit property','tainacan') ?>');
             $("#property_object_id").val(elem.id);
             $("#property_object_name").val(elem.name);
 
