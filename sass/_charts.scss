@@ -61,6 +61,7 @@
       @include accordion_label_style($padding: 4px 0 4px 0);
       padding-left: 5px;
       font-weight: bolder;
+      width: 90% !important;
 
       span {
         color: red !important;

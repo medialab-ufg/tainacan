@@ -27,6 +27,7 @@ class ThemeOptionsController extends Controller {
                 break;
             case "edit_welcome_email":
                 $data['socialdb_welcome_email'] = get_option('socialdb_welcome_email');
+                Log::addLog(['user_id' => get_current_user_id(), 'event_type' => 'admin', 'event' => 'welcome_mail']);
                 return $this->render(dirname(__FILE__) . '../../../views/theme_options/edit_email.php', $data);
                 break;
             case "update_options":
@@ -40,7 +41,7 @@ class ThemeOptionsController extends Controller {
                 break;
             case "edit_licenses":
                 $data = $theme_options_model->get_theme_general_options_data();
-                $data = $theme_options_model->get_theme_general_options_data();
+                Log::addLog(['user_id' => get_current_user_id(), 'event_type' => 'admin', 'event' => 'licenses']);
                 return $this->render(dirname(__FILE__) . '../../../views/theme_options/licenses/edit.php', $data);
                 break;
             case "listStandartLicenses":
@@ -86,6 +87,7 @@ class ThemeOptionsController extends Controller {
                 break;
             /*             * ************************* POPULAR COLECOES********************** */
             case "edit_tools":
+                Log::addLog(['user_id' => get_current_user_id(), 'event_type' => 'admin', 'event' => 'tools']);
                 return $this->render(dirname(__FILE__) . '../../../views/theme_options/edit_tools.php', $data);
                 break;
             case "import_full":

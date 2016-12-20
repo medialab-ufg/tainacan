@@ -28,7 +28,12 @@
             total_active: '<?php _t("Active",1); ?>',
             total_draft: '<?php _t("Draft",1); ?>',
             total_trash: '<?php _t("Trash",1); ?>',
-            total_delete: '<?php _t("Deleted",1); ?>'
+            total_delete: '<?php _t("Deleted",1); ?>',
+            config: '<?php _t("Configurations",1); ?>',
+            welcome_mail: '<?php _t("Welcome Mail",1); ?>',
+            keys: '<?php _t("Keys",1); ?>',
+            tools: '<?php _t("Tools",1); ?>',
+            metadata: '<?php _t("Metadata",1); ?>'
         };
     };
 
@@ -118,7 +123,7 @@
         header: "label",
         animate: 200,
         heightStyle: "content",
-        icons: true
+        icons: false
     });
 
     var tChart = new TainacanChart();
@@ -195,6 +200,10 @@
         "Exportação formato Tainacan </p>", href: 'imports'}];
     }
 
+    function adminChildren() {
+        return [{ title: "Páginas Administrativas <p> configurações /metadados / chaves / <br /> e-mail boas vindas / ferramentas </p>", href: 'admin' }];
+    }
+
     function getStatsTree() {
         return [
             { title: $('.stats-users').text(), noLink: true, expand: true, unselectable: true,
@@ -205,7 +214,7 @@
             { title: $('.stats-categories').text(), noLink: true, hideCheckbox: true, children: categoryChildren() },
             { title: $('.stats-tags').text(), noLink: true, hideCheckbox: true, children: tagsChildren()},
             { title: $('.stats-imports').text(), noLink: true, hideCheckbox: true, children: importsChildren() },
-            // { title: $('.stats-admin').text(), noLink: true, hideCheckbox: true}
+            { title: $('.stats-admin').text(), noLink: true, hideCheckbox: true, children: adminChildren() }
         ];
     }
 

@@ -14,7 +14,10 @@ include_once('js/list_js.php');
     <div id="statistics-config" class="col-md-3 ui-widget-header no-padding">
 
         <div class="form-group period-config">
-            <label class="title-pipe"> <?php _t('Period',true); ?> </label>
+            <label class="title-pipe">
+                <span class="prepend-filter-label glyphicon-chevron-down blue glyphicon sec-color" style="color: #79a6ce !important;"></span>
+                <?php _t('Period',true); ?>
+            </label>
             <div class="date-range-filter">
                 <p> <span> <?php _t('From',1) ?> </span>
                     <input size="7" type="text" class="input_date form-control" value="" placeholder="dd/mm/aaaa" id="from_period" name="from_period">
@@ -25,7 +28,10 @@ include_once('js/list_js.php');
             </div>
         </div>
         <div class="form-group">
-            <label for="object_tags" class="title-pipe"> <?php _t('Report type',true); ?> </label>
+            <label for="object_tags" class="title-pipe">
+                <span class="prepend-filter-label glyphicon-chevron-down blue glyphicon sec-color" style="color: #79a6ce !important;"></span>
+                <?php _t('Report type',true); ?>
+            </label>
             <div id="report_type_stat"></div>
         </div>
     </div>

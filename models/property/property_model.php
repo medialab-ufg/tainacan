@@ -623,6 +623,8 @@ class PropertyModel extends Model {
                 }
             }
         }
+
+        Log::addLog(['user_id' => get_current_user_id(), 'event_type' => 'admin', 'event' => 'metadata']);
         return $data;
     }
 

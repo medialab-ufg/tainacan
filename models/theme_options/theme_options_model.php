@@ -136,6 +136,7 @@ class ThemeOptionsModel extends Model {
 
     public function get_theme_options_data() {
         $socialdb_theme_options = get_option('socialdb_theme_options');
+        Log::addLog(['user_id' => get_current_user_id(), 'event_type' => 'admin', 'event' => 'keys']);
         return $socialdb_theme_options;
     }
 
@@ -144,6 +145,8 @@ class ThemeOptionsModel extends Model {
         $data['blog_description'] = get_option('blogdescription');
         $data['socialdb_logo'] = get_option('socialdb_logo');
         $data['socialdb_repository_permissions'] = get_option('socialdb_repository_permissions');
+        Log::addLog(['user_id' => get_current_user_id(), 'event_type' => 'admin', 'event' => 'config']);
+        
         return $data;
     }
 

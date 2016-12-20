@@ -27,6 +27,8 @@ class LogController extends Controller {
                 return "tags";
             case _t('Import / Export'):
                 return "imports";
+            case _t('Administration'):
+                return "admin";
         }
     }
 }

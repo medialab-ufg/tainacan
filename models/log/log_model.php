@@ -22,7 +22,7 @@ class Log extends Model {
         return $wpdb->insert(self::_table(), $final_data);
     }
     
-    private function getCommonFields() {
+    private static function getCommonFields() {
         return ['ip' => $_SERVER['REMOTE_ADDR'], 'event_date' => date('Y-m-d H:i:s')];
     }
 
@@ -45,23 +45,6 @@ class Log extends Model {
             return $wpdb->get_results($sql, ARRAY_N);
         }
     }
-/*
-    public static function totalItemsStatus($event, $encoded = true, $from = '', $to = '') {
-        global $wpdb;
-        $_alias = "total_" . $event;
-
-        if(empty($from)) { $from = "2016-01-01"; }
-        if(empty($to)) { $to = date("Y-m-d"); }
-
-        $sql = sprintf("SELECT COUNT(id) as '$_alias' FROM %s WHERE post_type='socialdb_object' AND  post_status='$event' AND event_date BETWEEN '$from' AND '$to' ", self::_posts_table() );
-
-        if( $encoded ) {
-            return json_encode( $wpdb->get_results($sql) );
-        } else {
-            return $wpdb->get_results($sql, ARRAY_N);
-        }
-    }
-*/
     
     private function get_event_type($spec) {
         switch($spec) {
@@ -85,6 +68,8 @@ class Log extends Model {
                 return ['color' => '#F09302', 'events' => ['subscriber', 'administrator', 'editor', 'author', 'contributor'] ];
             case 'imports':
                 return ['color' => '#43F7B1', 'events' => ['access_oai_pmh', 'import_csv', 'export_csv', 'import_tainacan', 'export_tainacan'] ];
+            case 'admin':
+                return ['color' => '#D6DF22', 'events' => ['config', 'metadata', 'keys', 'welcome_mail', 'tools'] ];
         }
     }
 
