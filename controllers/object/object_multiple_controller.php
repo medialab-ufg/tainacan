@@ -37,4 +37,3 @@ if ($_POST['operation']) {
 
 $object_controller = new ObjectMultipleController();
 echo $object_controller->operation($operation, $data);
-?>

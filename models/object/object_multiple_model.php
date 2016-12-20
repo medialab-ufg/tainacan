@@ -156,7 +156,8 @@ class ObjectMultipleModel extends Model {
               'post_content' => $data['description_'.$item_id],
               'post_status' => 'publish',
               'post_author' => get_current_user_id(),
-              'post_type' => 'socialdb_object'
+              'post_type' => 'socialdb_object',
+              'post_parent' => $data['collection_id']
           );
           if(!get_post_meta($item_id, 'socialdb_item_id')){
             $object_id = wp_insert_post($post);
@@ -452,19 +453,21 @@ class ObjectMultipleModel extends Model {
         $items_id = explode(',', $data['items_id']); // id de todos os itens
         $selected_items_id = explode(',', $data['selected_items_id']); // id de todos os itens selecionados
         if($items_id&&is_array($items_id)){
+            $col_id = $data['collection_id'];
             foreach ($items_id as $item_id) {
                 //if((empty($selected_items_id)||!$selected_items_id||!is_array($selected_items_id)||empty($selected_items_id[0]))||  in_array($item_id, $selected_items_id)){
                     $post_id = absint($item_id);
                      $object = array(
-                        'ID' => $post_id,
-                        'post_title' => $data['title_'.$item_id],
-                        'post_status' => (isset($data['edit_multiple'])) ? 'published' :'inherit',
-                        'post_content' => $data['description_'.$item_id]
+                         'ID' => $post_id,
+                         'post_title' => $data['title_'.$item_id],
+                         'post_status' => (isset($data['edit_multiple'])) ? 'published' :'inherit',
+                         'post_content' => $data['description_'.$item_id],
+                         'post_parent' => $col_id
                     );
-                    delete_user_meta(get_current_user_id(), 'socialdb_collection_'.$data['collection_id'].'_betafile', $post_id);
+                    delete_user_meta(get_current_user_id(), 'socialdb_collection_'.$col_id.'_betafile', $post_id);
                     //wp_update_post($object);
                     if(!isset($data['edit_multiple'])){
-                        $this->insert_object_event($post_id, ['collection_id' => $data['collection_id'] ]);
+                        $this->insert_object_event($post_id, ['collection_id' => $col_id ]);
                     }
                     $this->set_common_field_values($post_id, 'title', $object['post_title']);
                     $this->set_common_field_values($post_id, 'description', $object['post_content']);
