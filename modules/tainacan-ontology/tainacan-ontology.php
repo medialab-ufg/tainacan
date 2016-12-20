@@ -2,6 +2,7 @@
 /**
  * Modulo de Ontologia do Tainacan
  * 
+ * #-2 - LINK PARA O MANUAL
  * #-1 - REMOVENDO O COLLECTION CATEGORIES DO DYNATREE DAS CATEGORIAS
  * #0 - Alterando valores do total de nos e o nome da categoria root do repositorio
  * #1 - ADICIONANDO OS SCRIPTS DESTE MODULO 
@@ -32,6 +33,12 @@
 define('MODULE_ONTOLOGY', 'tainacan-ontology');
 define('ONTOLOGY_CONTROLLERS', get_template_directory_uri() . '/modules/' . MODULE_ONTOLOGY );
 load_theme_textdomain("tainacan", dirname(__FILE__) . "/languages");
+
+###### #-2 Link Para o manual ########
+function ontology_alter_link_manual($name) {
+    return  get_template_directory_uri() . '/modules/' . MODULE_ONTOLOGY . '/extras/manual/Manual_Tainancan_Ontology.pdf';
+}
+add_filter( 'alter_link_manual', 'ontology_alter_link_manual', 10, 3 );
 
 ###### #-1 REMOVENDO O COLLECTION CATEGORIES DO DYNATREE DAS CATEGORIAS ########
 

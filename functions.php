@@ -3060,7 +3060,11 @@ if (isset($_GET['activated']) && is_admin()) {
 }
 
 if ( ! defined("MANUAL_TAINACAN_URL") ) {
-    define("MANUAL_TAINACAN_URL","https://github.com/l3pufg/tainacan/blob/dev/extras/manual/manual_usuario_tainacan_v1.pdf?raw=true" );
+    if(has_filter('alter_link_manual')){
+        define("MANUAL_TAINACAN_URL", apply_filters('alter_link_manual', '') );
+    }else{
+       define("MANUAL_TAINACAN_URL","https://github.com/l3pufg/tainacan/blob/dev/extras/manual/manual_usuario_tainacan_v1.pdf?raw=true" ); 
+    }
 }
 
 /************* Remove o post type das colecoes ********************/
