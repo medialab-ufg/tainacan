@@ -1297,10 +1297,10 @@ function import_mapa_cultural(url_base)
 {
     if(url_base !== "")
     {
-        $('#modalImportMain').modal('show');
+        //$('#modalImportMain').modal('show');
         var url_send = $('#src').val() + '/controllers/collection/collection_controller.php?operation=mapa_cultural_form&collection_id='+$('#collection_id').val()+'&type=';
         //Agentes
-        $.getJSON(
+        /*$.getJSON(
             url_base + "/api/agent/find",
             {
                 '@select': 'name, shortDescription, isVerified, nomeCompleto, dataDeNascimento, emailPublico, telefonePublico, endereco, site, facebook',
@@ -1421,7 +1421,78 @@ function import_mapa_cultural(url_base)
                     showAlertGeneral('Erro', 'Houve um erro na importação', 'error');
                 });
             }
+        );*/
+        var qtd = 100;
+        $.getJSON(
+            //Agentes
+            url_base + "/api/agent/find",
+            {
+                '@select': 'name, shortDescription, isVerified, nomeCompleto, dataDeNascimento, emailPublico, telefonePublico, endereco, site, facebook',
+                'emailPublico': 'like(*.com*)',
+                '@limit': qtd
+            },
+            function (agents)
+            {
+                $.getJSON(
+                    //Espaços
+                    url_base + "/api/space/find",
+                    {
+                        '@select': 'name, location, public, shortDescription, longDescription, endereco, site, facebook, telefonePublico, telefone1, telefone2',
+                        '@limit': qtd
+                    },
+                    function (spaces)
+                    {
+                        //Eventos
+                        $.getJSON(
+                            url_base + "/api/event/find",
+                            {
+                                '@select': 'name, shortDescription, longDescription, rules, subtitle, preco, site, facebook',
+                                '@limit': qtd
+                            },
+                            function (events)
+                            {
+                                //Projetos
+                                $.getJSON(
+                                    url_base + "/api/project/find",
+                                    {
+                                        '@select': 'name, shortDescription, longDescription, isVerified, site, facebook',
+                                        '@limit': qtd
+                                    },
+                                    function (projects)
+                                    {
+                                        var data = [{"agents":agents, "projects":projects, "spaces":spaces, "events": events}];
+                                        //var data_json = JSON.parse(data);
+
+                                        $.ajax({
+                                            url: url_send,
+                                            type: 'POST',
+                                            data: {result: data}
+                                        }).success(function (result) {
+                                            elem = jQuery.parseJSON(result);
+                                            if (elem.result) {
+                                                //Todas as requisições foram realizadas com sucesso
+                                                window.location = elem.url;
+                                            } else {
+                                                $('#modalImportMain').modal('hide');
+                                                var message = elem.message;
+                                                if(!message)
+                                                {
+                                                    message = 'Houve um erro na importação';
+                                                }
+                                                showAlertGeneral('Erro', message, 'error');
+                                            }
+                                        }).error(function (error) {
+                                            showAlertGeneral('Erro', 'Houve um erro na importação', 'error');
+                                        });
+                                    }
+                                );
+                            }
+                        );
+                    }
+                );
+            }
         );
+
     }
     else
     {

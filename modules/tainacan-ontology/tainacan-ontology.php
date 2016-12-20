@@ -2735,7 +2735,6 @@ function add_data_type_property(&$created_data_type_property, &$datatype_propert
         $created_data_type_property[$data['idAbout']]['created'] = true;
     }
 
-
     return $new_property['term_id'];
 }
 
@@ -3172,53 +3171,98 @@ function mapa_cultural()
 {
     $category_model = new CategoryModel();
     $collection_id = $_GET['collection_id'];
-    $type = $_GET['type'];
+    //$type = $_GET['type'];
 
     $created_data_type_property = [];
-    $result = $_POST['result'];
+    $result = $_POST['result'][0];
+
+    $return['result'] = true;
+
     $null = null;
     $data['functional'] = false;
 
-    if ($type == 'space')
+    /*if ($type == 'space')
         $name = "Espaços";
     elseif ($type == 'event')
         $name = "Eventos";
     elseif ($type == 'agent')
         $name = "Agentes";
     else
-        $name = "Projetos";
+        $name = "Projetos";*/
 
-    $data['category_name'] = $name;
-    //Cria Classe
-    $creation_id = record_class($null, $name, $category_model, $data, $collection_id, true);
+    //$data['category_name'] = $name;
 
-    treats_object_properties_unknown($result, $created_data_type_property, $data, $collection_id, $creation_id);
+    $data['category_name'] = "Espaços";
+    $created_classes['spaces'] = record_class($null, $name, $category_model, $data, $collection_id, true);
 
-    $return['result'] = true;
+    $data['category_name'] = "Agentes";
+    $created_classes['agents'] = record_class($null, $name, $category_model, $data, $collection_id, true);
+
+    $data['category_name'] = "Projetos";
+    $created_classes['projects'] = record_class($null, $name, $category_model, $data, $collection_id, true);
+
+    $data['category_name'] = "Eventos";
+    $created_classes['events'] = record_class($null, $name, $category_model, $data, $collection_id, true);
+
+    try
+    {
+        treats_object_properties_unknown($result, $created_data_type_property, $data, $collection_id, $created_classes);
+    }
+    catch(Exception $e)
+    {
+        $return['result'] = false;
+    }
+
     $return['url'] = get_the_permalink($collection_id);
 
     return $return;
 }
 
-function treats_object_properties_unknown(&$result, &$created_data_type_property, &$data, &$collection_id, &$creation_id)
+function treats_object_properties_unknown(&$result, &$created_data_type_property, &$data, &$collection_id, &$created_classes)
 {
     $null = null;
-    foreach ($result as $array){
-        foreach ($array as $index => $value){
-            if($created_data_type_property[$index]['created'] != true && $index != 'name')
-            {
-                //Cria data type property
-                $data_type_property = array('data_type' => 'string', 'id_domain_class' => $creation_id);
-                $data['name'] = $index;
-                add_data_type_property($null, $data_type_property, $null, $null, $data, $null, true);
 
-                $created_data_type_property[$index]['created'] = true;
+
+    $i = 0;
+    foreach ($result as $index_class => $class_itens) {
+        foreach ($class_itens as $attributes_list) {
+            foreach ($attributes_list as $datatype_name => $value) {
+                $created_data_type_property[$datatype_name]['associated_classes'] = [];
             }
         }
-        $data['object_name'] = $array['name'];
-        $data['class_id'] = $creation_id;
+    }
 
-        add_individual($data, $collection_id, $array);
+
+    foreach ($result as $index_class => $class_itens)
+    {
+        foreach ($class_itens as $attributes_list){
+
+            foreach ($attributes_list as $datatype_name => $value){
+
+               if($created_data_type_property[$datatype_name]['created'] != null)
+               {
+                   if(!in_array($created_classes[$index_class], $created_data_type_property[$datatype_name]['associated_classes']))
+                   {
+                       add_term_meta($created_classes[$index_class],'socialdb_category_property_id',$created_data_type_property[$datatype_name]['creation_id']);
+                       array_push($created_data_type_property[$datatype_name]['associated_classes'], $created_classes[$index_class]);
+                   }
+               }
+               else if($datatype_name != 'name')
+               {
+                   //Cria data type property
+                   $data_type_property = array('data_type' => 'string', 'id_domain_class' => $created_classes[$index_class]);
+                   $data['name'] = $datatype_name;
+                   $created_data_type_property[$datatype_name]['creation_id'] = add_data_type_property($null, $data_type_property, $null, $null, $data, $null, true);
+                   $created_data_type_property[$datatype_name]['created'] = true;
+
+                   array_push($created_data_type_property[$datatype_name]['associated_classes'], $created_classes[$index_class]);
+               }
+            }
+
+            $data['object_name'] = end(explode("#", $attributes_list['name']));
+            $data['class_id'] = $created_classes[$index_class];
+            add_individual($data, $collection_id, $attributes_list);
+        }
     }
 }
 
