@@ -145,7 +145,6 @@ class ThemeOptionsModel extends Model {
         $data['blog_description'] = get_option('blogdescription');
         $data['socialdb_logo'] = get_option('socialdb_logo');
         $data['socialdb_repository_permissions'] = get_option('socialdb_repository_permissions');
-        Log::addLog(['user_id' => get_current_user_id(), 'event_type' => 'admin', 'event' => 'config']);
         
         return $data;
     }

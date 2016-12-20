@@ -23,6 +23,7 @@ class ThemeOptionsController extends Controller {
                 $collectioModelTemplates = new CollectionTemplatesModel;
                 $data = $theme_options_model->get_theme_general_options_data();
                 $data['templates'] = $collectioModelTemplates->get_collections_templates();
+                Log::addLog(['user_id' => get_current_user_id(), 'event_type' => 'admin', 'event' => 'config']);
                 return $this->render(dirname(__FILE__) . '../../../views/theme_options/edit_configuration.php', $data);
                 break;
             case "edit_welcome_email":

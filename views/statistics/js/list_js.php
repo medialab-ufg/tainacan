@@ -31,6 +31,7 @@
             total_delete: '<?php _t("Deleted",1); ?>',
             config: '<?php _t("Configurations",1); ?>',
             welcome_mail: '<?php _t("Welcome Mail",1); ?>',
+            licenses: '<?php _t("Licenses",1); ?>',
             keys: '<?php _t("Keys",1); ?>',
             tools: '<?php _t("Tools",1); ?>',
             metadata: '<?php _t("Metadata",1); ?>'
@@ -201,7 +202,7 @@
     }
 
     function adminChildren() {
-        return [{ title: "Páginas Administrativas <p> configurações /metadados / chaves / <br /> e-mail boas vindas / ferramentas </p>", href: 'admin' }];
+        return [{ title: "Páginas Administrativas <p> configurações /metadados / chaves / licenças /<br /> e-mail boas vindas / ferramentas </p>", href: 'admin' }];
     }
 
     function getStatsTree() {
