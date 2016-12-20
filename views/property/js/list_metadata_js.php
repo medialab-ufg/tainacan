@@ -911,6 +911,8 @@
             $('.compounds-action').html('<?php _e('Add','tainacan') ?>');
             $('#operation_property_compounds').val('add_property_compounds');
             $('#compounds_properties_ordenation').html('<center><h4><?php _e('Select a property','tainacan') ?>&nbsp;<span class="glyphicon glyphicon-arrow-right"></span></h4></center>');
+        }else{
+            resetAllForms();
         }
     }
 
@@ -1626,7 +1628,8 @@
                         }
                         //visibilidade do metadado
                         $(get_property_tab_seletor(tab_property_id)).append(
-                            '<li tab="'+tab_property_id+'" id="meta-item-'+current_id+'" data-widget="' + ranking.search_widget + '" class="ui-widget-content ui-corner-tr"><label class="title-pipe">'+ add_filter_button(current_id) + current_title +
+                            '<li tab="'+tab_property_id+'" id="meta-item-'+current_id+'" data-widget="' + ranking.search_widget + '" class="ui-widget-content ui-corner-tr"><label class="title-pipe">'
+                            + add_filter_button(current_id) + current_title + add_text_type(ranking.type) +
                             '</label><div class="action-icons"> <input type="hidden" class="property_data_id" value="'+ current_id +'">' +
                             '<a class="edit-filter"><span class="glyphicon glyphicon-sort sort-filter"></span></a>&nbsp;'+
                             '<a onclick="edit_ranking('+ current_id + ')" class="edit_ranking" href="javascript:void(0)">' +
@@ -1666,7 +1669,8 @@
 
             var item_type = elem.ranking.type;
             $("#submit_form_ranking .ranking-type").focus().val(item_type);
-
+            
+            $("#submit_form_ranking #range_submit").hide();
             if ( is_metadata_filter(elem.ranking_id) ) {
                 var use_filter = "use_filter";
                 $("#submit_form_ranking .property_data_use_filter").prop('checked', true);
@@ -1678,7 +1682,6 @@
                  define_voting_widget(item_type);
             }
 
-            $("#submit_form_ranking #range_submit").show();
 
             $("#meta-voting").modal('show');
 
@@ -1742,6 +1745,7 @@
             document.getElementById(el).reset();
             var cur = "#" + el;
             $(cur + " .data-widget").hide();
+            $(cur + " input[name='operation']").val('add');
         });
         $('#socialdb_property_term_cardinality_1').trigger('click');
         $("#submit_form_property_term #socialdb_property_term_root").html('');
@@ -2077,11 +2081,12 @@
         var $widget_select = $("#meta-voting #search_data_widget");
 
         $("#meta-voting #search_data_widget option").remove();
+        console.log(item);
         if ( ranking_type === 'stars' ) {
             $widget_select.append('<option value="stars"><?php _e('Stars','tainacan'); ?></option>');
-            $("#submit_form_ranking #range_submit").hide();
+            $("#meta-voting #range_submit").hide();
         } else {
-            $("#submit_form_ranking #range_submit").show();
+            $("#meta-voting #range_submit").show();
             $widget_select.append('<option value="range"><?php _e('Range','tainacan'); ?></option><option value="from_to"><?php _e('From/To','tainacan'); ?></option>');
         }
     }
@@ -2237,6 +2242,8 @@
              string += '(<?php echo (__('Numeric','tainacan')) ?>)';
        }else if(type==='radio'){
              string += '(<?php echo (__('Radio','tainacan')) ?>)';
+       }else if(['like','binary','stars'].indexOf(type)>=0){
+           string += '(<?php echo (__('Ranking','tainacan')) ?>)';
        }
        string +='</span>';
        return string.toLowerCase();
