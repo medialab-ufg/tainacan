@@ -3222,8 +3222,6 @@ function treats_object_properties_unknown(&$result, &$created_data_type_property
 {
     $null = null;
 
-
-    $i = 0;
     foreach ($result as $index_class => $class_itens) {
         foreach ($class_itens as $attributes_list) {
             foreach ($attributes_list as $datatype_name => $value) {
@@ -3231,7 +3229,6 @@ function treats_object_properties_unknown(&$result, &$created_data_type_property
             }
         }
     }
-
 
     foreach ($result as $index_class => $class_itens)
     {

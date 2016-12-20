@@ -1297,7 +1297,7 @@ function import_mapa_cultural(url_base)
 {
     if(url_base !== "")
     {
-        //$('#modalImportMain').modal('show');
+        $('#modalImportMain').modal('show');
         var url_send = $('#src').val() + '/controllers/collection/collection_controller.php?operation=mapa_cultural_form&collection_id='+$('#collection_id').val()+'&type=';
         //Agentes
         /*$.getJSON(
