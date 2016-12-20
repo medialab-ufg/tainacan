@@ -2185,7 +2185,7 @@ class Model {
      * @param int $collection_id O id da colecao que sera gerado o json
      * @return json O conteudo do dynatree
      */
-   public function initDynatreePropertiesFilter($collection_id,$hide_checkbox = true) {
+   public function initDynatreePropertiesFilter($collection_id,$hide_checkbox = true,$is_layout = false) {
        try{
         $dynatree = [];
         $roots_parents = [
@@ -2194,15 +2194,18 @@ class Model {
         get_term_by('name','socialdb_property_term','socialdb_property_type')->term_id ];
         $facets_id = array_filter(array_unique((get_post_meta($collection_id, 'socialdb_collection_facets'))?get_post_meta($collection_id, 'socialdb_collection_facets'):[]));
         $properties = [];
-        if($collection_id=='collection_root_id'){
-            $term = get_term_by('slug', 'socialdb_category','socialdb_category_type');
-            $properties = $this->get_parent_properties( $term->term_id, [], $term->term_id);
+        if($is_layout){
+            $this->get_collection_properties($properties,0,$facets_id);
         }else{
-            $root_id = $this->get_category_root_of($collection_id);
-            $properties = $this->get_parent_properties( $root_id, [], $root_id);
-            //$this->get_collection_properties($properties,0,$facets_id);
+            if($collection_id=='collection_root_id'){
+                $term = get_term_by('slug', 'socialdb_category','socialdb_category_type');
+                $properties = $this->get_parent_properties( $term->term_id, [], $term->term_id);
+            }else{
+                $root_id = $this->get_category_root_of($collection_id);
+                $properties = $this->get_parent_properties( $root_id, [], $root_id);
+                //$this->get_collection_properties($properties,0,$facets_id);
+            }
         }
-        
         $properties = array_unique($properties);
         //busco as propriedades sem domain
         $properties_with_no_domain = $this->list_properties_by_collection($collection_id);

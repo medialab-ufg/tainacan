@@ -277,7 +277,7 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
                 }
                 return json_encode($data);
             case 'get_properties_categories_dynatree':
-                return $property_model->initDynatreePropertiesFilter($data['collection_id']);
+                return $property_model->initDynatreePropertiesFilter($data['collection_id'],false,true);
                 
                 
         }
