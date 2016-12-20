@@ -3295,6 +3295,7 @@ function add_individual(&$data, &$collection_id, &$properties_list)
 
             if($property_name != "name")
             {
+
                 $value = $properties_list[$property_name];
                 add_post_meta( $data['ID'],'socialdb_property_'.$property, $value);
             }
