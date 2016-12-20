@@ -245,7 +245,7 @@
         if (myPopover) {
             myPopover.options.html = true;
             //<iframe width="560" height="315" src="https://www.youtube.com/embed/CGyEd0aKWZE" frameborder="0" allowfullscreen></iframe>
-            myPopover.options.content = '<form><input type="text" style="width:200px;" value="<iframe style=\'width:100%\' height=\'1000\' src=\'' + content + '\' frameborder=\'0\'></iframe>" /></form>';
+            myPopover.options.content = '<form>Search URL:&nbsp<input type="text" style="width:165px;" value="' + content + '" /><br><br>Iframe:&nbsp<input type="text" style="width:200px;" value="<iframe style=\'width:100%\' height=\'1000\' src=\'' + content + '\' frameborder=\'0\'></iframe>" /></form>';
         }
     }
     

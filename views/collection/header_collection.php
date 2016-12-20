@@ -97,13 +97,12 @@ $thumb_url = $collection_thumb ? wp_get_attachment_url($collection_thumb) : get_
                         </a-->
                     <?php } ?>
 
-                    <!--button id="iframebutton" data-container="body" data-toggle="popover" data-placement="left" data-title="URL Iframe" data-content="" data-original-title="" title="Emded URL">
+                    <button id="iframebutton" data-container="body" data-toggle="popover" data-placement="left" data-title="URL Iframe" data-content="" data-original-title="" title="Embed URL">
                       <div class="fab"><small><h6><b><></b></h6></small></div>
-                    </button-->
+                    </button>
 
                     <script>
                         set_popover_content($("#socialdb_permalink_collection").val() + '?' + elem.url + '&is_filter=1');
-                        set_popover_content_link($("#socialdb_permalink_collection").val() + '?' + elem.url + '&is_filter=1');
                     </script>
 
                     <!--button style="float:right;margin-left:5px;" id="iframebutton" type="button" class="btn btn-default btn-sm" data-container="body" data-toggle="popover" data-placement="left" data-title="URL Iframe" data-content="">
@@ -118,8 +117,7 @@ $thumb_url = $collection_thumb ? wp_get_attachment_url($collection_thumb) : get_
                             <div class="fab"><small><h6><b>items</b></h6></small></div>
                         </a-->
                     <?php endif; ?>
-                    <div> 
-                        <a href="#" id="resources_collection_button" class="dropdown-toggle"  data-toggle="dropdown" role="button" aria-expanded="false" >
+                       <a href="#" id="resources_collection_button" class="dropdown-toggle"  data-toggle="dropdown" role="button" aria-expanded="false" >
                             <div class="fab">
                                 <div style="font-size:1em; cursor:pointer;" data-icon="&#xe00b;"></div>
                             </div>
@@ -153,32 +151,11 @@ $thumb_url = $collection_thumb ? wp_get_attachment_url($collection_thumb) : get_
                                     </a>
                                 </li>
                             <?php endif; ?>
-                        </ul>
-                    </div>      
+                        </ul>     
                     <!-- ******************** TAINACAN: Comentarios ******************** -->
                     <a style="cursor: pointer;" onclick="showPageCollectionPage()" >
                         <div class="fab"><span style="font-size: medium;" class="glyphicon glyphicon-comment"></span></div>
-                    </a>
-                    <!-- ******************** TAINACAN: IFRAME URL ******************** -->
-                    <div>
-                        <a href="#" id="embed_collection_button"  class="dropdown-toggle"  data-toggle="dropdown" role="button" aria-expanded="false" >
-                            <div class="fab">
-                                <small><h6><b><></b></h6></small>
-                            </div>
-                        </a>
-                        <ul id="embed_collection_dropdown" style="margin-left: 20%;" class="dropdown-menu" role="menu">
-                            <li>
-                                <a style="cursor: pointer;" id="linkbutton" data-dismiss="focus" data-container="body" data-toggle="popover" data-placement="left" data-title="Search Link" data-content="" data-original-title="" title="Search Link">
-                                    <?php _e('Searck link', 'tainacan') ?>
-                                </a>
-                            </li>
-                            <li>
-                                <a style="cursor: pointer;" id="iframebutton" data-dismiss="focus" data-container="body" data-toggle="popover" data-placement="left" data-title="URL Iframe" data-content="" data-original-title="" title="Iframe">
-                                    <?php _e('Incorporate page', 'tainacan') ?>
-                                </a>
-                            </li>
-                        </ul>   
-                    </div>     
+                    </a>  
                 </div>
             </div>
         </div>
