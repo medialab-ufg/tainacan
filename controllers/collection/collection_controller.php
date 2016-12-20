@@ -1,4 +1,5 @@
 <?php
+
 require_once(dirname(__FILE__) . '../../../models/collection/collection_model.php');
 require_once(dirname(__FILE__) . '../../../models/collection/collection_parent_model.php');
 require_once(dirname(__FILE__) . '../../../models/collection/collection_import_model.php');
@@ -31,42 +32,57 @@ class CollectionController extends Controller {
             case 'simple_add':
                 $data['collection_name'] = trim($data['collection_name']);
                 $data['collection_object'] = trim($data['collection_object']);
-                
-                if(empty($data['collection_name'])||empty($data['collection_object'])):
-                    header("location:" . get_permalink(get_option('collection_root_id')) . '?info_messages=' . __('Invalid collection name or object name!','tainacan') . '&info_title=' . __('Attention','tainacan'));
-                elseif (is_user_logged_in()):
-                    if($data['template']=='none'):
-                        $new_collection_id = $collection_model->simple_add($data);
-                        if ($new_collection_id) {
-                            $result = json_decode($this->insert_collection_event($new_collection_id, $data));
-                            if ($result->type == 'success') {
-                                header("location:" . get_permalink($new_collection_id) . '?open_wizard=true');
+
+                $name_lower = strtolower($data['collection_name']);
+
+                $NotAllowed = array(
+                    'OAI-PMH',
+                    'oai-pmh',
+                    'WP-JSON',
+                    'wp-json',
+                    'feed_collection',
+                    'feed'
+                );
+
+                if (in_array($name_lower, $NotAllowed)) {
+                    header("location:" . get_permalink(get_option('collection_root_id')) . '?info_messages=' . __('This collection name is not allowed!', 'tainacan') . '&info_title=' . __('Attention', 'tainacan'));
+                } else {
+                    if (empty($data['collection_name']) || empty($data['collection_object'])):
+                        header("location:" . get_permalink(get_option('collection_root_id')) . '?info_messages=' . __('Invalid collection name or object name!', 'tainacan') . '&info_title=' . __('Attention', 'tainacan'));
+                    elseif (is_user_logged_in()):
+                        if ($data['template'] == 'none'):
+                            $new_collection_id = $collection_model->simple_add($data);
+                            if ($new_collection_id) {
+                                $result = json_decode($this->insert_collection_event($new_collection_id, $data));
+                                if ($result->type == 'success') {
+                                    header("location:" . get_permalink($new_collection_id) . '?open_wizard=true');
+                                } else {
+                                    header("location:" . get_permalink(get_option('collection_root_id')) . '?info_messages=' . __('Collection sent for approval', 'tainacan') . '&info_title=' . __('Attention', 'tainacan'));
+                                }
                             } else {
-                                header("location:" . get_permalink(get_option('collection_root_id')) . '?info_messages=' . __('Collection sent for approval','tainacan') . '&info_title=' . __('Attention','tainacan'));
+                                header("location:" . get_permalink(get_option('collection_root_id')) . '?info_messages=' . __('Collection already exists', 'tainacan') . '&info_title=' . __('Attention', 'tainacan'));
                             }
-                        } else {
-                            header("location:" . get_permalink(get_option('collection_root_id')) . '?info_messages=' . __('Collection already exists','tainacan') . '&info_title=' . __('Attention','tainacan'));
-                        }
-                    else:  
-                        $import_model = new CollectionImportModel;
-                        $new_collection_id = $import_model->importCollectionTemplate($data);
-                        
-                        if($new_collection_id) {
-                            // $result = json_decode($this->insert_collection_event($new_collection_id, $data));
-                            return ( $this->insert_collection_event($new_collection_id, $data));                           
-                            
-                            if ($result->type == 'success') {
-                                header("location:" . get_permalink($new_collection_id) . '?open_wizard=true');
+                        else:
+                            $import_model = new CollectionImportModel;
+                            $new_collection_id = $import_model->importCollectionTemplate($data);
+
+                            if ($new_collection_id) {
+                                // $result = json_decode($this->insert_collection_event($new_collection_id, $data));
+                                return ( $this->insert_collection_event($new_collection_id, $data));
+
+                                if ($result->type == 'success') {
+                                    header("location:" . get_permalink($new_collection_id) . '?open_wizard=true');
+                                } else {
+                                    header("location:" . get_permalink(get_option('collection_root_id')) . '?info_messages=' . __('Collection sent for approval', 'tainacan') . '&info_title=' . __('Attention', 'tainacan'));
+                                }
                             } else {
-                                header("location:" . get_permalink(get_option('collection_root_id')) . '?info_messages=' . __('Collection sent for approval','tainacan') . '&info_title=' . __('Attention','tainacan'));
+                                return ['error' => __('Error creating template collection', 'tainacan')];
                             }
-                        } else {
-                            return ['error' => __('Error creating template collection', 'tainacan') ];
-                        }
+                        endif;
+                    else:
+                        header("location:" . get_permalink(get_option('collection_root_id')) . '?info_messages=' . __('You must be logged in to create collecions', 'tainacan') . '&info_title=' . __('Attention', 'tainacan'));
                     endif;
-                else:
-                    header("location:" . get_permalink(get_option('collection_root_id')) . '?info_messages=' . __('You must be logged in to create collecions','tainacan') . '&info_title=' . __('Attention','tainacan'));
-                endif;
+                }
                 break;
             case "add":
                 return $collection_model->add($data);
@@ -78,7 +94,7 @@ class CollectionController extends Controller {
                 } else {
                     $data['next_step'] = false;
                 }
-                
+
                 $data['update'] = $collection_model->update($data);
                 $data['is_moderator'] = CollectionModel::is_moderator($data['collection_id'], get_current_user_id());
                 return json_encode($data);
@@ -94,7 +110,7 @@ class CollectionController extends Controller {
                 $data['sharedcollections'] = $sharedcollections;
                 $data['json_autocomplete'] = $collection_model->create_main_json_autocomplete($data['collection_post']->ID);
                 return $this->render(dirname(__FILE__) . '../../../views/collection/header_collection.php', $data);
-                // break;
+            // break;
             case "edit_configuration":
                 if (is_user_logged_in()) {
                     $data = $collection_model->get_collection_data($data['collection_id']);
@@ -106,9 +122,9 @@ class CollectionController extends Controller {
             case "list_ordenation":
                 $data = $collection_model->list_ordenation($data, $data['get_all_meta']);
 
-                $data['names']['general_ordenation'] = __('General Ordenation','tainacan');
-                $data['names']['data_property'] = __('Property Data','tainacan');
-                $data['names']['ranking'] = __('Rankings','tainacan');
+                $data['names']['general_ordenation'] = __('General Ordenation', 'tainacan');
+                $data['names']['data_property'] = __('Property Data', 'tainacan');
+                $data['names']['ranking'] = __('Rankings', 'tainacan');
                 return json_encode($data);
             case "show_form_data_property":
                 return $collection_model->list_ordenation($data);
@@ -119,7 +135,7 @@ class CollectionController extends Controller {
             case "initTreemapJit":
                 return $visualization_model->initTreemapJit($data);
             case "get_collections_json":// pega todos as colecoes e coloca em um array json
-                return $this->get_collections_json($data);                
+                return $this->get_collections_json($data);
             case 'get_most_participatory_authors':
                 $collection_id = $data['collection_id'];
                 $data = $collection_model->get_collection_data($collection_id);
@@ -153,19 +169,19 @@ class CollectionController extends Controller {
             case "set_container_classes":
                 return json_encode($visualization_model->set_container_classes($data));
                 break;
-             case 'load_menu_left':
-                 $data['selected_menu_style_id'] = $this->get_selected_menu_style( $data['collection_id'] );
-                 $data['selected_menu_style_json'] = $this->get_menu_style_json( $data['selected_menu_style_id'] );
-                 $data['facets'] = $visualization_model->get_facets_visualization($data['collection_id']);
-                 $data['has_tree'] = $visualization_model->has_tree($data['collection_id'],'left-column');
-                 if($data['has_tree']){
-                     $data['tree'] = $visualization_model->get_data_tree($data['collection_id']);
-                 }
-                 return $this->render(dirname(__FILE__) . '../../../views/search/menu_left.php', $data);
-                 break;
+            case 'load_menu_left':
+                $data['selected_menu_style_id'] = $this->get_selected_menu_style($data['collection_id']);
+                $data['selected_menu_style_json'] = $this->get_menu_style_json($data['selected_menu_style_id']);
+                $data['facets'] = $visualization_model->get_facets_visualization($data['collection_id']);
+                $data['has_tree'] = $visualization_model->has_tree($data['collection_id'], 'left-column');
+                if ($data['has_tree']) {
+                    $data['tree'] = $visualization_model->get_data_tree($data['collection_id']);
+                }
+                return $this->render(dirname(__FILE__) . '../../../views/search/menu_left.php', $data);
+                break;
             case 'set_collection_cover':
                 // if it has been set to collection thumb
-                if( $data['img_height'] == 148 ) {
+                if ($data['img_height'] == 148) {
                     $_crop_path_ = $data['thumb_url'];
                 } else {
                     $_crop_path_ = $data['img_url'];
@@ -176,56 +192,53 @@ class CollectionController extends Controller {
                 ];
                 $img_id = wp_insert_attachment($attachment);
 
-                if( $data['img_height'] == 148) {
+                if ($data['img_height'] == 148) {
                     $retorno['updated_thumb_id'] = update_post_meta($data['collection_id'], '_thumbnail_id', $img_id);
                 } else {
-                    $retorno['collection_cover_img'] = update_post_meta($data['collection_id'], 'socialdb_collection_cover_id', $img_id );
+                    $retorno['collection_cover_img'] = update_post_meta($data['collection_id'], 'socialdb_collection_cover_id', $img_id);
                 }
-                return json_encode( $retorno );
+                return json_encode($retorno);
             case 'list_items_search_autocomplete':
                 $property_model = new PropertyModel;
                 $property = get_term_by('id', $data['property_id'], 'socialdb_property_type');
                 if ($property) {
-                    if(in_array($property->slug, $property_model->fixed_slugs)){
-                        if($property->slug==='socialdb_property_fixed_title'):
+                    if (in_array($property->slug, $property_model->fixed_slugs)) {
+                        if ($property->slug === 'socialdb_property_fixed_title'):
                             return $visualization_model->get_objects_by_property_json_advanced_search($data);
-                        elseif($property->slug==='socialdb_property_fixed_source'):
-                           return  $visualization_model->get_data_by_property_json($data,'socialdb_object_dc_source');
+                        elseif ($property->slug === 'socialdb_property_fixed_source'):
+                            return $visualization_model->get_data_by_property_json($data, 'socialdb_object_dc_source');
                         endif;
-                    }else if($property_model->get_property_type($property->term_id)=='socialdb_property_object'){
-                        return  $visualization_model->get_objects_by_property_json($data);
-                    }else{
-                        return  $visualization_model->get_data_by_property_json($data);
+                    }else if ($property_model->get_property_type($property->term_id) == 'socialdb_property_object') {
+                        return $visualization_model->get_objects_by_property_json($data);
+                    } else {
+                        return $visualization_model->get_data_by_property_json($data);
                     }
-                }else{
-                    return  $visualization_model->get_terms_by_property_json($data);
+                } else {
+                    return $visualization_model->get_terms_by_property_json($data);
                 }
             case 'list_items_search_autocomplete_advanced_search':
                 return $visualization_model->get_objects_by_property_json_advanced_search($data);
-            /********************* Visibilidade **********************/  
+            /*             * ******************* Visibilidade ********************* */
             case 'alter_visibility':
                 $meta = get_post_meta($data['collection_id'], 'socialdb_collection_fixed_properties_visibility', true);
-                if($meta&&$meta!=''):
+                if ($meta && $meta != ''):
                     $array = explode(',', $meta);
-                    if(is_array($array)&& count($array)>0 &&  ($key = array_search($data['property_id'], $array)) !== false):
+                    if (is_array($array) && count($array) > 0 && ($key = array_search($data['property_id'], $array)) !== false):
                         unset($array[$key]);
-                    elseif(is_array($array)):  
+                    elseif (is_array($array)):
                         $array[] = $data['property_id'];
                     endif;
                 else:
-                   $array = [];
-                   $array[] = $data['property_id']; 
+                    $array = [];
+                    $array[] = $data['property_id'];
                 endif;
                 update_post_meta($data['collection_id'], 'socialdb_collection_fixed_properties_visibility', implode(',', $array));
                 break;
-            /********************* IMPORTACAO DE COLECAO **********************/
+            /*             * ******************* IMPORTACAO DE COLECAO ********************* */
             case 'importCollection':
-                if($data['file_type'] == 'rdf/owl')
-                {
+                if ($data['file_type'] == 'rdf/owl') {
                     return json_encode(parse_owl1());
-                }
-                else if($data['file_type'] == 'tainacan-zip' || !isset($data['file_type']))
-                {
+                } else if ($data['file_type'] == 'tainacan-zip' || !isset($data['file_type'])) {
                     $collectionImportation = new CollectionImportModel;
                     return json_encode($collectionImportation->import($data));
                 }
@@ -233,15 +246,15 @@ class CollectionController extends Controller {
             case 'mapa_cultural_form':
                 return json_encode(mapa_cultural());
                 break;
-            /*************************** TEMPLATES **********************/
+            /*             * ************************* TEMPLATES ********************* */
             case 'list-collection-templates':
                 $colectionTemplateModel = new CollectionTemplatesModel;
                 //$data['collectionTemplates'] = $colectionTemplateModel->get_collections_templates();
                 $data['collectionTemplates'] = $colectionTemplateModel->list_habilitate_collection_template();
-                if(!isset($data['is_json'])){
-                     return $this->render(dirname(__FILE__) . '../../../views/collection/list-collection-templates.php', $data);
-                }else{
-                    return json_encode( $data['collectionTemplates']);
+                if (!isset($data['is_json'])) {
+                    return $this->render(dirname(__FILE__) . '../../../views/collection/list-collection-templates.php', $data);
+                } else {
+                    return json_encode($data['collectionTemplates']);
                 }
                 break;
             case 'add_collection_template' :
@@ -250,38 +263,37 @@ class CollectionController extends Controller {
             case 'delete_collection_template' :
                 $colectionTemplateModel = new CollectionTemplatesModel;
                 return $colectionTemplateModel->delete_collection_template($data);
-            case 'initDynatreeCollectionTemplates':  
+            case 'initDynatreeCollectionTemplates':
                 $colectionTemplateModel = new CollectionTemplatesModel;
                 return $colectionTemplateModel->dynatreeCollectionTemplate($data);
             case 'habilitate-collection-templates':
-                if($data['type']=='user'):
+                if ($data['type'] == 'user'):
                     $metas = unserialize(get_option('socialdb_user_templates'));
-                    if($metas && is_array($metas) && in_array($data['key'], $metas)){
+                    if ($metas && is_array($metas) && in_array($data['key'], $metas)) {
                         $key = array_search($data['key'], $metas);
                         unset($metas[$key]);
-                        
-                    }else{
-                        if(!is_array($metas))
+                    } else {
+                        if (!is_array($metas))
                             $metas = [];
-                        
+
                         $metas[] = $data['key'];
                     }
                     update_option('socialdb_user_templates', serialize($metas));
-                else:  
-                    if($data['key']== 'collection_default'){
+                else:
+                    if ($data['key'] == 'collection_default') {
                         $collection_default = get_option('disable_empty_collection');
-                        if($collection_default && $collection_default==='false'){
+                        if ($collection_default && $collection_default === 'false') {
                             update_option('disable_empty_collection', 'true');
-                        }else{
-                             update_option('disable_empty_collection', 'false');
+                        } else {
+                            update_option('disable_empty_collection', 'false');
                         }
-                    }else{
+                    } else {
                         $metas = unserialize(get_option('socialdb_tainacan_templates'));
-                        if($metas && is_array($metas) && in_array($data['key'], $metas)){
+                        if ($metas && is_array($metas) && in_array($data['key'], $metas)) {
                             $key = array_search($data['key'], $metas);
                             unset($metas[$key]);
-                        }else{
-                            if(!is_array($metas))
+                        } else {
+                            if (!is_array($metas))
                                 $metas = [];
 
                             $metas[] = $data['key'];
@@ -290,22 +302,22 @@ class CollectionController extends Controller {
                     }
                 endif;
                 break;
-            /************************* Tabs ***********************************/
+            /*             * *********************** Tabs ********************************** */
             case 'alter_tab_name':
-                 if($data['id']!='default'){
-                     $collection_model->sdb_update_post_meta($data['id'], $data['name']);
-                 }else{
-                     update_post_meta($data['collection_id'], 'socialdb_collection_default_tab', $data['name']);
-                 }
+                if ($data['id'] != 'default') {
+                    $collection_model->sdb_update_post_meta($data['id'], $data['name']);
+                } else {
+                    update_post_meta($data['collection_id'], 'socialdb_collection_default_tab', $data['name']);
+                }
                 break;
             case 'get_tabs':
                 $default_tab = get_post_meta($data['collection_id'], 'socialdb_collection_default_tab', true);
-                $tabs['default'] = (!$default_tab) ? __('Default', 'tainacan') : $default_tab ;
+                $tabs['default'] = (!$default_tab) ? __('Default', 'tainacan') : $default_tab;
                 $tabs['array'] = $collection_model->sdb_get_post_meta_by_value($data['collection_id'], 'socialdb_collection_tab');
-                if($tabs &&  is_array($tabs)){
+                if ($tabs && is_array($tabs)) {
                     return json_encode($tabs);
-                }else{
-                   return  json_encode([]);
+                } else {
+                    return json_encode([]);
                 }
             case 'insert_tab':
                 $data['id'] = $collection_model->sdb_add_post_meta($data['collection_id'], 'socialdb_collection_tab', $data['tab_name']);
@@ -314,42 +326,42 @@ class CollectionController extends Controller {
                 $collection_model->realocate_tabs_collection($data['id'], $data['collection_id']);
                 $collection_model->sdb_delete_post_meta($data['id']);
                 return json_encode($data);
-            /********************** ordenacao dos metadados *******************/
+            /*             * ******************** ordenacao dos metadados ****************** */
             case 'update_ordenation_properties':
                 $meta = unserialize(get_post_meta($data['collection_id'], 'socialdb_collection_properties_ordenation', true));
-                if(isset($data['tab'])){
-                     $index = ($data['tab']=='false')? 'default' : $data['tab'];
-                     $array = (is_array($meta)) ? $meta : [];
-                     $array[$index] = $data['ordenation'];
-                     update_post_meta($data['collection_id'], 'socialdb_collection_properties_ordenation', serialize($array));
+                if (isset($data['tab'])) {
+                    $index = ($data['tab'] == 'false') ? 'default' : $data['tab'];
+                    $array = (is_array($meta)) ? $meta : [];
+                    $array[$index] = $data['ordenation'];
+                    update_post_meta($data['collection_id'], 'socialdb_collection_properties_ordenation', serialize($array));
                 }
                 break;
             case 'get_ordenation_properties':
                 $meta = unserialize(get_post_meta($data['collection_id'], 'socialdb_collection_properties_ordenation', true));
-                if(!$meta||$meta==''||$data['tab']){
-                     $data['ordenation'] = '';
-                     return json_encode($data);
+                if (!$meta || $meta == '' || $data['tab']) {
+                    $data['ordenation'] = '';
+                    return json_encode($data);
                 }
                 foreach ($meta as $tab_id => $string) {
-                    $ids = explode(',',$string);
+                    $ids = explode(',', $string);
                     $new_ids = [];
                     foreach ($ids as $id) {
-                       if(is_numeric($id)){
-                           $new_ids[] = 'meta-item-'.$id;
-                       }else{
-                            $new_ids[] =$id;
-                       }
+                        if (is_numeric($id)) {
+                            $new_ids[] = 'meta-item-' . $id;
+                        } else {
+                            $new_ids[] = $id;
+                        }
                     }
                     $data['ordenation'][$tab_id] = implode(',', $new_ids);
                 }
                 return json_encode($data);
-            /************************ Pagina de comentarios *******************/
+            /*             * ********************** Pagina de comentarios ****************** */
             case 'comments':
-                return json_encode(['html'=> $this->render(dirname(__FILE__) . '../../../views/collection/comments.php', $data)]);
+                return json_encode(['html' => $this->render(dirname(__FILE__) . '../../../views/collection/comments.php', $data)]);
             case 'update_color_schemes':
-                return json_encode( $visualization_model->update_color_schemes($data) );
+                return json_encode($visualization_model->update_color_schemes($data));
             case 'get_color_schemes':
-                return json_encode( $visualization_model->get_color_schemes($data['collection_id']) );
+                return json_encode($visualization_model->get_color_schemes($data['collection_id']));
             case 'get_default_color_scheme':
                 return json_encode($visualization_model->get_default_color_scheme($data['collection_id']));
         }
