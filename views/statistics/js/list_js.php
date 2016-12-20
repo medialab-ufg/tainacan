@@ -282,10 +282,14 @@
                         var curr_evt_title = tai_chart.getMappedTitles()[event];
                         var curr_tupple = [ curr_evt_title, obj_total ];
 
-                        if( (typeof chart_data === 'object') && (chart_data instanceof google.visualization.DataTable) ) {
-                            chart_data.addRow(curr_tupple);
+                        if( typeof chart_data === 'object' ) {
+                            if(chart_data instanceof google.visualization.DataTable) {
+                                chart_data.addRow(curr_tupple);
+                            } else {
+                                chart_data.push([ curr_tupple[0], curr_tupple[1], color ]);
+                            }
                         } else {
-                            chart_data.push([ curr_tupple[0], curr_tupple[1], color ]);
+
                         }
 
                         csvData.push( curr_tupple );
@@ -408,7 +412,6 @@
         var horizontal_chart_center = (pdfWidth / 2)  - (chartImg.naturalWidth * 0.6 / 2);
 
         pdf.addImage(chartImg, 'PNG', horizontal_chart_center, chart_margins.top, chart_settings.width, chart_settings.height);
-
         pdf.rect(line_dims.startX, line_dims.startY, line_dims.length, line_dims.thickness, 'F');
 
         var consultDate = $(".stats-i18n .consult-date").text() + formatted_date;
@@ -442,18 +445,17 @@
         var resume_data = pdf.autoTableHtmlToJson( $('#charts-resume table').get(0) );
         
         var p = 300;
-        /* headerStyles: { textColor: [12,105,139], lineColor: [0,0,0], fillColor: 255 } */
+        // headerStyles: { textColor: [12,105,139], lineColor: [0,0,0], fillColor: 255 }
         var autoTable_opts = { theme: 'striped', startY: p, headerStyles: { fillColor: [44, 62, 80] } };
         pdf.autoTable( resume_data.columns, resume_data.data, autoTable_opts);
 
-        var footer_set = { startX: (pdf.autoTableEndPosY() + 160), startY: (pdf.autoTableEndPosY() + 430) };
+        var footer_set = {startX: 160, startY: pdf.internal.pageSize.height - 68};
 
         pdf.rect(line_dims.startX, footer_set.startY, line_dims.length, line_dims.thickness, 'F');
         pdf.fromHTML( $('#user_details').get(0), line_dims.startX, footer_set.startY );
 
         var right_footer_text = '<?php _t("Page ",1); ?>' + 1 + '<?php _t(" of ",1); ?>' + pdf.internal.getNumberOfPages();
-        pdf.text(right_footer_text, footer_set.startX + 5, pdf.internal.pageSize.height - 20);
-        // cl(pdf.internal);
+        pdf.text(right_footer_text, footer_set.startX + 350, pdf.internal.pageSize.height - 20);
 
         var timeStamp = d.getFullYear() + d.getDay() + d.getMilliseconds();
         var chart_name = 'tainacan_' + curr_type + '_report_' + timeStamp + '.pdf';
@@ -465,7 +467,7 @@
     }
 
     function formatChartDate(dateToFormat) {
-        if( dateToFormat instanceof Date) {
+        if(dateToFormat instanceof Date) {
             return dateToFormat.getDate() + '/' + (dateToFormat.getMonth() + 1) + '/' + dateToFormat.getFullYear();
         }
     }
