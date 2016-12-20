@@ -32,12 +32,12 @@ $viewHelper = new ViewHelper();
                 <link rel="alternate" type="application/json" href="<?php echo site_url() . '/wp-json/posts/' . get_post_by_name($_GET[get_page_tainacan()], OBJECT, 'socialdb_object')->ID . '/?type=socialdb_object' ?>">
             <?php } ?>
         <?php } else if (is_single()) { ?>
-            <meta name="thumbnail_url" content="<?php echo get_the_post_thumbnail_url(get_the_ID() ) ?>"  />
+            <meta name="thumbnail_url" content="<?php echo get_the_post_thumbnail_url(get_the_ID()) ?>"  />
             <meta name="description" content="<?php echo get_the_content() ?>"  />
             <link rel="alternate" type="application/rdf+xml" href="<?php echo get_the_permalink(); ?>?.rdf">
             <?php $_GOOGLE_API_KEY = "AIzaSyBZXPZcDMGeT-CDugrsYWn6D0PQSnq_odg"; ?>
             <script src="http://maps.googleapis.com/maps/api/js?key=<?php echo $_GOOGLE_API_KEY; ?>"></script>
-            
+
             <?php if (is_restful_active()) { ?>
                 <link rel="alternate" type="application/json" href="<?php echo site_url() . '/wp-json/posts/' . get_the_ID() . '/?type=socialdb_collection' ?>">
             <?php } ?>
@@ -54,7 +54,7 @@ $viewHelper = new ViewHelper();
         if (is_front_page() || is_page($stat_page)) {
             echo home_header_bg($socialdb_logo);
         }
-        
+
         global $wp_query;
         $collection_id = $wp_query->post->ID;
         $collection_owner = $wp_query->post->post_author;
@@ -63,7 +63,7 @@ $viewHelper = new ViewHelper();
         <!-- TAINACAN: tag nav, utilizando classes do bootstrap nao modificadas, onde estao localizados os links que chamam paginas da administracao do repositorio -->
         <nav <?php echo set_navbar_bg_color('black', $stat_page); ?> class="navbar navbar-default header-navbar">
             <?php //wp_nav_menu( array( 'theme_location' => 'header-menu' ) ); ?>
-            
+
             <div class="container-fluid">
 
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -85,8 +85,8 @@ $viewHelper = new ViewHelper();
                                     <?php echo ViewHelper::render_icon('user', 'png'); ?>                                    
                                     <?php echo $current_user->display_name; ?> <span class="caret"></span>
                                 </a>
-                                
-                                <ul class="dropdown-menu" role="menu" id="tainacan-menu">
+
+                                <ul class="dropdown-menu dropdown-show" role="menu" id="tainacan-menu">
                                     <li>
                                         <a href="#" onclick="showProfileScreen('<?php echo get_template_directory_uri() ?>');"> <?php _e('Profile', 'tainacan'); ?></a>
                                     </li>
@@ -148,16 +148,16 @@ $viewHelper = new ViewHelper();
                             </li>
                         <?php endif; ?>
                     </ul>                                       
-                    
+
                     <ul <?php echo (has_nav_menu('menu-ibram')) ? 'style="display:none"' : '' ?> class="nav navbar-nav navbar-right repository-settings">
                         <!-- TAINACAN: mostra a busca avancada dentro da tag <div id="configuration"> localizado no arquivo single.php -->
                         <!--li><a onclick="showAdvancedSearch('<?php echo get_template_directory_uri() ?>');" href="#"><span class="glyphicon glyphicon-search"></span>&nbsp;<?php _e('Advanced Search', 'tainacan'); ?></a></li -->
                             <!--button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-chevron-down"></span></button>
                             <!--a class="dropdown-toggle" href="#" data-toggle="dropdown">Sign In <strong class="caret"></strong></a-->            
                     </ul>
-                    
+
                     <div class="nav navbar-nav navbar-right repository-settings clk">                        
-                                               
+
                         <ul id="collections-menu">
                             <li class="collections">
                                 <a href="<?php echo get_permalink(get_option('collection_root_id')); ?>" style="color: white; padding-top: 17px;">
@@ -173,10 +173,10 @@ $viewHelper = new ViewHelper();
                                             <?php _e('Show collections', 'tainacan'); ?>
                                         </a>
                                     </li>
-                                    <?php if( is_user_logged_in() ): ?>
+                                    <?php if (is_user_logged_in()): ?>
                                         <li class="divider"></li>
                                         <li> <a href="#" class="create-collection">
-                                                <?php _e('Create collection','tainacan') ?>
+                                                <?php _e('Create collection', 'tainacan') ?>
                                                 <span class="glyphicon glyphicon-chevron-right"></span>
                                             </a>
                                             <ul class="sub-menu templates">
@@ -198,7 +198,7 @@ $viewHelper = new ViewHelper();
                             </li>
                         </ul>
                     </div>
-                
+
                     <?php if (!is_front_page()): ?>
                         <form id="formSearchCollections" class="navbar-form navbar-right search-tainacan-collection" role="search">
                             <div class="input-group search-collection search-home">
@@ -217,10 +217,11 @@ $viewHelper = new ViewHelper();
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content new-collection">
-                    
+
                     <?php $col_controller = get_template_directory_uri() . "/controllers/collection/collection_controller.php"; ?>
-                    <form onsubmit="$('#myModal').modal('hide'); show_modal_main();" action="<?php echo $col_controller ?>" method="POST">
-                        <?php echo $viewHelper->render_modal_header('remove-sign', __('Create Collection', 'tainacan')); ?>
+                    <form onsubmit="$('#myModal').modal('hide');
+                            show_modal_main();" action="<?php echo $col_controller ?>" method="POST">
+                              <?php echo $viewHelper->render_modal_header('remove-sign', __('Create Collection', 'tainacan')); ?>
                         <div id="form_new_collection">
                             <div class="modal-body" style="padding: 0 15px 0 15px;">
 
@@ -233,7 +234,7 @@ $viewHelper = new ViewHelper();
                                 <input type="hidden" name="template" id='template_collection' value="none">
                                 <input type="hidden" name="collection_object" id='collection_object' value="<?php _e('Item'); ?>">
                             </div>
-                            
+
                             <div class="modal-footer" style="border-top: 0">
                                 <button type="button" data-dismiss="modal" class="btn btn-default pull-left"> <?php _e('Cancel', 'tainacan'); ?> </button>
                                 <button type="submit" class="btn btn-success"><?php _e('Continue', 'tainacan'); ?></button>
@@ -255,10 +256,9 @@ $viewHelper = new ViewHelper();
                         <div class="modal-body">
                             <!---Adição SELECT BOX-->
                             <?php
-                                if(has_action('add_select_box'))
-                                {
-                                    do_action("add_select_box");
-                                }
+                            if (has_action('add_select_box')) {
+                                do_action("add_select_box");
+                            }
                             ?>
                             <div class="form-group">
                                 <label for="collection_file"><?php _e('Select the file', 'tainacan'); ?></label>
