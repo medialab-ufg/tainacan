@@ -52,6 +52,8 @@
                     $('#advanced_search_wp_query_args_item').val(elem.args_item);
                }
                $('.modal').modal('hide');
+               $('.modal-backdrop').modal('hide');
+               $('.modal-backdrop').hide();
             });
             e.preventDefault();
         });
