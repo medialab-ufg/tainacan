@@ -56,7 +56,7 @@
                     $('.modal').modal('hide');
                     $('.modal-backdrop').modal('hide');
                     $('.modal-backdrop').hide();
-                }, 3000);
+                }, 2000);
 
             });
             e.preventDefault();
