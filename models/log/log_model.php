@@ -85,6 +85,8 @@ class Log extends Model {
             return self::getTopCollections();
         } else if("general_status_items" === $event_type) {
             return self::getItemsStatus($spec);
+        } else if("user_searches" == $event_type) {
+            return self::getFrequentSearches();
         } else {
             if($_events_) {
                 $_stats = [];
@@ -116,6 +118,19 @@ class Log extends Model {
         return json_encode( $stat_data );
     }
 
+    public function getFrequentSearches() {
+        global $wpdb;
+        $sql = sprintf("SELECT event as term, COUNT(*) as t_count FROM %s WHERE event_type='advanced_search' GROUP BY event ORDER BY COUNT(*) DESC", self::_table());
+        $_searches = $wpdb->get_results($sql);
+        $_s_arr = [];
+        foreach($_searches as $_s) {
+            array_push( $_s_arr, [ $_s->term => $_s->t_count]);
+        }
+
+        $stat_data = [ "stat_title" => [ 'Buscas Frequentes', 'Qtd' ], "quality_stat" => $_s_arr, "color" => 'NO_CHART'];
+        return json_encode( $stat_data );
+    }
+
     public function getItemsStatus($spec) {
         global $wpdb;
         $status['active'] = sprintf("SELECT COUNT(id) as total_active from wp_posts WHERE post_type='socialdb_object' AND post_status='publish'", self::_posts_table());
@@ -129,7 +144,7 @@ class Log extends Model {
             $_obj = array_pop($wpdb->get_results($s));
             array_push( $_res, $_obj );
         }
-        $stat_data = [ "stat_title" => [ 'Status dos Itens', '#' ], "stat_object" => $_res, "color" => $_stat_obj['color'], "item_status" => true ];
+        $stat_data = [ "stat_title" => ['Status dos Itens', '#'], "stat_object" => $_res, "color" => $_stat_obj['color'], "item_status" => true ];
         return json_encode($stat_data);
     }
 

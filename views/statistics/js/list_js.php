@@ -318,8 +318,20 @@
             // Generate CSV file for current chart
             tai_chart.createCsvFile(csvData);
 
-            // draw chart based at generated json data
-            renderChart(title, chart_type, chart_data, color);
+            var div_chart = $("#charts-container").get(0);
+            if("NO_CHART" == data_obj.color) {
+                $(div_chart).addClass('hide');
+                var frst_td = $("#charts-resume table tr.headers td").get(0);
+                $(frst_td).text("Buscas Frequentes");
+                var sec_td = $("#charts-resume table tr.headers td").get(1);
+                $(sec_td).text("Nº de itens");
+                return;
+            } else {
+                $(div_chart).removeClass('hide');
+                // draw chart based at generated json data
+                renderChart(title, chart_type, chart_data, color);
+            }
+
         }
     } // drawChart()
 
