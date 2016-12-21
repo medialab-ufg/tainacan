@@ -1,7 +1,7 @@
 <?php ?>
 <script>
     $(function () {
-       
+
         //#1 backgorund
         var is_col_header_visible = $(".collection_header").is(":visible");
         if (!is_col_header_visible) {
@@ -24,42 +24,46 @@
             }).done(function (result) {
                 elem = jQuery.parseJSON(result);
                 hide_modal_main();
-                if(elem.not_found){
-                   swal({
-                            title: '<?php _e("Attention!", 'tainacan') ?>',
-                            text: '<?php _e("No results found!", 'tainacan') ?>',
-                            type: "warning",
-                            cancelButtonText: '<?php _e("Cancel", 'tainacan') ?>',
-                            showCancelButton: true,
-                            confirmButtonClass: 'btn-success',
-                            closeOnConfirm: true,
-                            closeOnCancel: true
-                        });
-                }else{
+                if (elem.not_found) {
+                    swal({
+                        title: '<?php _e("Attention!", 'tainacan') ?>',
+                        text: '<?php _e("No results found!", 'tainacan') ?>',
+                        type: "warning",
+                        cancelButtonText: '<?php _e("Cancel", 'tainacan') ?>',
+                        showCancelButton: true,
+                        confirmButtonClass: 'btn-success',
+                        closeOnConfirm: true,
+                        closeOnCancel: true
+                    });
+                } else {
                     $('#container_filtros').hide();
                     $('#resultados_advanced_search').show();
-                    $('#container_resultados_advanced_search').html(elem.page); 
+                    $('#container_resultados_advanced_search').html(elem.page);
                     $('.modal').modal('hide');
                 }
-               
+
 //                $('html, body').animate({
 //                    scrollTop: parseInt($("#show-results-advanced-search").offset().top)
 //                }, 1000);
-               if(elem.args_collection){
-                  $('#advanced_search_wp_query_args_collection').val(elem.args_collection);
-               }
-               if(elem.args_item){
+                if (elem.args_collection) {
+                    $('#advanced_search_wp_query_args_collection').val(elem.args_collection);
+                }
+                if (elem.args_item) {
                     $('#advanced_search_wp_query_args_item').val(elem.args_item);
-               }
-               $('.modal').modal('hide');
-               $('.modal-backdrop').modal('hide');
-               $('.modal-backdrop').hide();
+                }
+
+                setTimeout(function () {
+                    $('.modal').modal('hide');
+                    $('.modal-backdrop').modal('hide');
+                    $('.modal-backdrop').hide();
+                }, 3000);
+
             });
             e.preventDefault();
         });
 
 
-       
+
     });
 
 
@@ -113,19 +117,19 @@
 
     // monta o select com todas as colecoes do repositorio
     function select_collection() {
-         $("#advanced_search_collection").attr('disabled','disabled');
-         $("#advanced_search_collection").addClass('ui-autocomplete-loading');
-         $("#advanced_search_collection").html("<option  value='' ><?php _e('Loading Collections','tainacan') ?>");
+        $("#advanced_search_collection").attr('disabled', 'disabled');
+        $("#advanced_search_collection").addClass('ui-autocomplete-loading');
+        $("#advanced_search_collection").html("<option  value='' ><?php _e('Loading Collections', 'tainacan') ?>");
         $.ajax({
             url: $('#src').val() + '/controllers/advanced_search/advanced_search_controller.php',
             type: 'POST',
             data: {operation: 'select_collection'}
         }).done(function (result) {
             elem = JSON.parse(result);
-            <?php if (!empty($home_search_term)) { ?>
-                    $('#advanced_search_collection').val('<?php echo get_option('collection_root_id'); ?>');
-                    $('#advanced_search_submit').trigger('submit');
-            <?php } ?>
+<?php if (!empty($home_search_term)) { ?>
+                $('#advanced_search_collection').val('<?php echo get_option('collection_root_id'); ?>');
+                $('#advanced_search_submit').trigger('submit');
+<?php } ?>
             $("#advanced_search_collection").removeAttr('disabled');
             $("#advanced_search_collection").removeClass('ui-autocomplete-loading');
             $("#advanced_search_collection").html('');
@@ -143,14 +147,14 @@
     function reboot_form() {
         showAdvancedSearch($('#src').val());
     }
-    
-    function slide_down_metadata_form(){
+
+    function slide_down_metadata_form() {
         $('#propertiesAdvancedSearch').removeClass('hide');
         $('#slide_up_button').hide();
         $('#slide_down_button').show();
-        
+
     }
-    function slide_up_metadata_form(){
+    function slide_up_metadata_form() {
         $('#propertiesAdvancedSearch').addClass('hide');
         $('#slide_down_button').hide();
         $('#slide_up_button').show();
