@@ -143,6 +143,23 @@ class OntologyRDFModel extends Model {
          $xml = '';
          $categories = $this->get_categories_item($item_id);
          $properties = $this->get_properties_object($item_id);
+         if(is_array($categories)){
+             foreach ($categories as $category) {
+                 if($this->get_category_root_of($this->collection->ID) == $category){
+                     continue;
+                 }
+                $metas = get_term_meta($category, 'socialdb_category_property_id');
+                if($metas && is_array($metas)){
+                    foreach ($metas as $meta) {
+                        if(!in_array($meta, $properties)){
+                            $properties[$meta] = $category;
+                        }
+                    }
+                }
+             }
+         }
+         
+         
          if(!empty($properties)){
              foreach ($properties as $id => $values) {
                  $type = $this->get_property_type($id); // pego o tipo da propriedade
@@ -154,7 +171,7 @@ class OntologyRDFModel extends Model {
                     $xml .= $this->add_lines_property_data($all_data, $values);
                  }elseif($type=='socialdb_property_object'){
                      $xml .= $this->add_lines_property_object($all_data, $values);
-                 }elseif($type=='socialdb_property_term'){
+                 }elseif($type=='socialdb_property_term' || (isset ($all_data['metas']["socialdb_property_term_root"]) && $all_data['metas']["socialdb_property_term_root"] != '' )){
                     $xml .= $this->add_lines_property_term($all_data, $categories);
                  }elseif($type=='socialdb_property_ranking'){
                     $xml .= $this->add_lines_property_ranking($all_data, $values);
@@ -200,9 +217,13 @@ class OntologyRDFModel extends Model {
          if(is_array($values)){
             foreach ($values as $value) {
                 $value = absint($value);
-                 if($value&&get_permalink($value)){
-                     $link = get_the_permalink($value);
-                     $xml .= '<'.$this->namespace.''.$data['slug'].' rdf:resource="'.htmlspecialchars($link).'" />';
+                 if($value){
+                    $term = get_term_by('id', $value,'socialdb_category_type');
+                    //$xml .= '<'.$this->namespace.''.$data['slug'].' rdf:resource="'.htmlspecialchars($link).'" />';
+                    $collection = $this->get_collection_by_category_root($data["metas"]["socialdb_property_object_category_id"]);
+                    if(isset($collection[0])){
+                        $xml .= '<'.$this->namespace.''.$data['slug'].' rdf:about="'.get_permalink($collection[0]->ID).'?category='.$term->slug.'" />';
+                    }
                     // var_dump('<'.$this->namespace.''.$data['slug'].' rdf:about="'.get_permalink($value).'" />');
                 }
             }
@@ -219,11 +240,11 @@ class OntologyRDFModel extends Model {
          $xml = '';
          if(is_array($categories)){
              foreach ($categories as $category) {
-                 $term = get_term_by('id', $category,'socialdb_category_type');
+                 
+                  $term = get_term_by('id', $category,'socialdb_category_type');
                   $ancestors = get_ancestors($term->term_id,'socialdb_category_type');
-                  $collection = $this->get_collection_by_category_root($data["metas"]["socialdb_property_term_root"]);
-                  if(isset($collection[0])){
-                      $xml .= '<'.$this->namespace.''.$data['slug'].' rdf:about="'.get_permalink($collection[0]->ID).'?category='.$term->slug.'" />';
+                  if(in_array($data["metas"]["socialdb_property_term_root"], $ancestors)){
+                      $xml .= '<'.$this->namespace.''.$data['slug'].' rdf:about="'.get_permalink($this->collection->ID).'?category='.$term->slug.'" />';
                   }
              }
          }

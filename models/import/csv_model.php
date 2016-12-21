@@ -153,8 +153,8 @@ class CsvModel extends Model {
                             if ($metadata['socialdb_entity'] == 'post_title'):
                                 if (mb_detect_encoding($field_value, 'auto') == 'UTF-8')
                                     $field_value = iconv('ISO-8859-1', 'UTF-8', $field_value);
-                                $this->update_title($object_id, $field_value);
-                                $this->set_common_field_values($object_id, 'title', $field_value);
+                                $this->update_title($object_id, utf8_decode($field_value));
+                                $this->set_common_field_values($object_id, 'title', utf8_decode($field_value));
                             elseif ($metadata['socialdb_entity'] == 'post_content'):
                                 $content .= $field_value . ",";
                             /* if (!isset($information)):
@@ -168,7 +168,7 @@ class CsvModel extends Model {
                               endif; */
                             elseif ($metadata['socialdb_entity'] == 'attach'):
                                 //attachment (Files)
-                                $files = explode(', ', $field_value);
+                                $files = explode(', ', utf8_decode($field_value));
                                 if (is_array($files)) {
                                     foreach ($files as $file) {
 
@@ -211,7 +211,7 @@ class CsvModel extends Model {
                                     if (mb_detect_encoding($field_value, 'auto') == 'UTF-8') {
                                         $field_value = iconv('ISO-8859-1', 'UTF-8', $field_value);
                                     }
-                                    update_post_meta($object_id, 'socialdb_object_content', $field_value);
+                                    update_post_meta($object_id, 'socialdb_object_content', utf8_decode($field_value));
                                     $this->set_common_field_values($object_id, 'object_content', $field_value);
                                 endif;
                             /* if (mb_detect_encoding($field_value, 'auto') == 'UTF-8') {
@@ -223,7 +223,7 @@ class CsvModel extends Model {
                                 $this->set_common_field_values($object_id, 'object_type', $field_value);
                             elseif ($metadata['socialdb_entity'] == 'tag' && $field_value != ''):
                                 //$fields_value = explode('||', $field_value);
-                                $fields_value = explode($multi_values, $field_value);
+                                $fields_value = explode($multi_values, utf8_decode($field_value));
                                 foreach ($fields_value as $field_value):
                                     //$fields[] = explode('::', $field_value);
                                     $fields[] = explode($hierarchy, $field_value);
@@ -241,7 +241,7 @@ class CsvModel extends Model {
                                         continue;
                                     }
                                 } else {
-                                    $fields_value = $field_value;
+                                    $fields_value = utf8_decode($field_value);
                                 }
                                 if (!empty($fields_value)):
 //if (strpos($fields_value, '||') !== false) {
@@ -265,11 +265,11 @@ class CsvModel extends Model {
                             elseif (strpos($metadata['socialdb_entity'], "objectproperty_") !== false):
                                 $trans = array("objectproperty_" => "");
                                 $id = strtr($metadata['socialdb_entity'], $trans);
-                                add_post_meta($object_id, 'socialdb_property_' . $id . '', $field_value);
+                                add_post_meta($object_id, 'socialdb_property_' . $id . '', utf8_decode($field_value));
                             elseif (strpos($metadata['socialdb_entity'], "dataproperty_") !== false):
                                 $trans = array("dataproperty_" => "");
                                 $id = strtr($metadata['socialdb_entity'], $trans);
-                                $has_inserted = add_post_meta($object_id, 'socialdb_property_' . $id, $field_value);
+                                $has_inserted = add_post_meta($object_id, 'socialdb_property_' . $id, utf8_decode($field_value));
                                 if (!$has_inserted) {
                                     $final_test = add_post_meta($object_id, 'socialdb_property_' . $id, utf8_encode($field_value));
                                 }
@@ -282,7 +282,7 @@ class CsvModel extends Model {
                     }
                     update_post_meta($object_id, 'socialdb_object_from', 'external');
                     $this->set_common_field_values($object_id, 'object_from', 'external');
-                    update_post_content($object_id, $content);
+                    update_post_content($object_id, utf8_decode($content));
                     $this->set_common_field_values($object_id, 'description', $content);
                     socialdb_add_tax_terms($object_id, $categories, 'socialdb_category_type');
                     //se estiver importando de um zip devera buscar os itens em suas pastas

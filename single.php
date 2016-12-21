@@ -345,8 +345,9 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
                                             <?php
                                         } else {
                                             $admin_email = get_option('admin_email');
+                                            $blog_email = get_bloginfo('admin_email');
                                             $user_data = get_user_by('ID', get_current_user_id())->user_email;
-                                            if ($admin_email == $user_data) {
+                                            if ($admin_email == $user_data || $blog_email == $user_data) {
                                                 ?>
                                             <button onclick="showTrash('<?php echo get_template_directory_uri(); ?>');" class="btn btn-default pull-left"><?php _e('Trash', 'tainacan'); ?></button>
                                                 <?php
