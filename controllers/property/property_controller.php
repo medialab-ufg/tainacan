@@ -254,6 +254,18 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
                     return $property_model->initDynatreePropertiesFilter($data['collection_id'],false);   
             //colocando a obrigatoriadade nas propriedades fixas
             case 'alter_fixed_property_collection':
+                $labels_collection = ($data['collection_id']!='') ? get_post_meta($data['collection_id'], 'socialdb_collection_fixed_properties_labels', true) : false;
+                if($labels_collection):
+                    $array = unserialize($labels_collection);
+                    if($data['property_fixed_name']&&trim($data['property_fixed_name'])!=''):
+                        $array[ $data['property_id'] ] = $data['property_fixed_name'];
+                    elseif($array[  $data['property_id'] ]):    
+                        unset($array[ $data['property_id'] ]);
+                    endif;
+                    update_post_meta($data['collection_id'], 'socialdb_collection_fixed_properties_labels',  serialize($array));
+                elseif($data['property_fixed_name']&&trim($data['property_fixed_name'])!=''):
+                    update_post_meta($data['collection_id'], 'socialdb_collection_fixed_properties_labels',  serialize([ $data['property_id']=>$data['property_fixed_name']]));
+                endif;
                 $property_model->update_tab_organization($data['collection_id'], $data["tab"], $data['property_id']);
                 update_post_meta($data['collection_id'], 'socialdb_collection_property_'.$data['property_id'].'_required', $data['required']);
                 return json_encode($data);

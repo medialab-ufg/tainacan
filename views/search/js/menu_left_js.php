@@ -186,11 +186,7 @@
                     }
                     //REMOVENDO AS SELECOES ABAIXO DO PAI
                     if(selKeys.indexOf(node.data.key)>=0){
-                        if(node.childList){
-                            $.each(node.childList,function(index,node2){
-                                node2.select(false);
-                            });
-                        }
+                        unselect_children(node);
                     }
                     // lanco um hook para ser usada ao selecionar um item no dynatree
                     if (Hook.is_register('tainacan_onselect_dynatree')) {
@@ -515,5 +511,13 @@
     $('label.title-pipe').each(function(idx, el) {
        $(el).prepend(icon_html);
     });
-
+//####################### DEMARCANDO RECURSIVAMENTE ############################
+function unselect_children(node){
+    if(node.childList){
+        $.each(node.childList,function(index,node2){
+            node2.select(false);
+            unselect_children(node2);
+        });
+    }
+}
 </script>

@@ -192,7 +192,7 @@ endforeach;
             <div class="modal-body">
                     <div class="metadata-common-fields">
                         <input type="hidden" id="property_fixed_id">
-                        <!--div class="create_form-group">
+                        <div class="create_form-group">
                             <label for="property_fixed_name">
                                 <?php _e('Property name','tainacan'); ?>
                             </label>
@@ -201,9 +201,7 @@ endforeach;
                                    id="property_fixed_name" 
                                    name="property_fixed_name" 
                                    placeholder="<?php _e('Property name','tainacan'); ?>">
-                            <input type="hidden"
-                                   id="property_fixed_id">
-                        </div --> 
+                        </div> 
                          <!-- Selecao de aba -->
                         <div class="form-group">
                                 <label for="socialdb_event_property_tab"><?php _e('Select the tab','tainacan'); ?></label>

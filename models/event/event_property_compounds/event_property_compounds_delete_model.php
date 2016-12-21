@@ -65,6 +65,7 @@ class EventPropertyCompoundsDelete extends EventModel {
         $data['collection_id'] = get_post_meta($event_id, 'socialdb_event_collection_id',true) ;
         $data['property_delete_id'] = get_post_meta($event_id, 'socialdb_event_property_compounds_delete_id',true) ;
         $data['property_category_id'] = get_post_meta($event_id, 'socialdb_event_property_compounds_delete_category_root_id',true) ;
+        $data['delete_subproperties'] = get_post_meta($event_id, 'socialdb_event_property_compounds_delete_all_properties',true) ;
         $categories_used = get_term_meta($data['property_delete_id'], 'socialdb_property_used_by_categories') ;
         // seto como falso as propriedades que compõe a composta
         $properties_olds = get_term_meta($data['property_delete_id'], 'socialdb_property_compounds_properties_id', TRUE);
@@ -76,7 +77,19 @@ class EventPropertyCompoundsDelete extends EventModel {
                     (is_array($categories_used)&&!in_array($data['property_category_id'], $categories_used))
                 ){
             $propertyModel->delete($data);
+            //deleto as subpropriedades
             if(isset($verify->term_id)){
+                //deletando subpropriedades
+                if(isset($data['delete_subproperties']) &&  $data['delete_subproperties'] === 'true'){
+                    $ids = explode(',', $properties_olds);
+                    if (is_array($ids)) {
+                        foreach ($ids as $id) {
+                            $data['property_delete_id'] = $id;
+                            $propertyModel->delete($data);        
+                        }
+                    }
+                    $data['property_delete_id'] = $verify->term_id;
+                }
                 do_action('after_event_delete_property_term',$verify,$event_id);
             }
         }else{

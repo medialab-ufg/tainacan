@@ -763,7 +763,8 @@
                         var fixed_meta = property.metas.socialdb_property_is_fixed;
                         var current_email = '<?php echo (isset(wp_get_current_user()->user_email))? wp_get_current_user()->user_email:'' ?>';
                         var admin_email = '<?php echo get_option('admin_email')  ?>';
-                        if( fixed_meta && fixed_meta == 'true' && current_email == admin_email ){
+                        var blog_email = '<?php echo get_bloginfo('admin_email')  ?>';
+                        if( fixed_meta && fixed_meta == 'true' && (current_email == admin_email || current_email == blog_email) ){
                             class_var = 'fixed-property';
                             if(visibility_properties.length===0||(visibility_properties.indexOf(current_id.toString())<0)){
                                 button = '<a vis="show" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-open"></span></a>';
@@ -1317,9 +1318,11 @@
                         var button = '';
                         var style = '';
                         var class_var = '';
+                        var blog_email = '<?php echo get_bloginfo('admin_email')  ?>';
                         if(property.metas.socialdb_property_is_fixed
                                 && property.metas.socialdb_property_is_fixed=='true'
-                                && '<?php echo (isset(wp_get_current_user()->user_email))? wp_get_current_user()->user_email:'' ?>'=='<?php echo get_option('admin_email')  ?>'){
+                                && ('<?php echo (isset(wp_get_current_user()->user_email))? wp_get_current_user()->user_email:'' ?>'==blog_email
+                                || '<?php echo (isset(wp_get_current_user()->user_email))? wp_get_current_user()->user_email:'' ?>'=='<?php echo get_option('admin_email')  ?>')){
                             class_var = 'fixed-property';
                             if(visibility_properties.length===0||(visibility_properties.indexOf(current_id.toString())<0)){
                                 button = '<a vis="show" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-open"></span></a>';
@@ -2323,10 +2326,10 @@
      ****************************************************************************
      **/ 
     // mostra o modal da propriedade fixa
-    function edit_fixed_property(id){
+    function edit_fixed_property(id,name){
         $('#property_fixed_id').val(id);
         get_fixed_property_data(id);
-        //$('#property_fixed_name').val(name);
+        $('#modal_edit_fixed_property #property_fixed_name').val(name);
         $('#modal_edit_fixed_property').modal('show');
     }
     //funcao que altera o rotulo de um metadado fixo em uma colecao
@@ -2339,12 +2342,14 @@
                 operation: 'alter_fixed_property_collection', 
                 property_id:  $('#property_fixed_id').val(), 
                 tab:  $('#socialdb_event_property_tab_fixed').val(), 
+                property_fixed_name:  $('#modal_edit_fixed_property #property_fixed_name').val(), 
                 required: $('#property_fixed_required').is(':checked')}
         }).done(function (result) {
             $('#modal_edit_fixed_property').modal('hide');
             elem = jQuery.parseJSON(result);
             list_collection_metadata();
-            getRequestFeedback('success', '<?php _e('Operation successfully!','tainacan') ?>');          
+            getRequestFeedback('success', '<?php _e('Operation successfully!','tainacan') ?>');   
+            delete_all_cache_collection();
         });
     }
     // funcao que busca se o metadado obrigatorio
@@ -2381,7 +2386,7 @@
             '<label '+style+'   class="title-pipe">'+ add_filter_button(current_id) + property.name + add_text_type(property.type) +'</label>' +
             '<div class="action-icons">'+
             '<a class="edit-filter"><span class="glyphicon glyphicon-sort sort-filter"></span></a>&nbsp;'+
-            '<a style="cursor:pointer;" onclick="edit_fixed_property(' + current_id + ')" ><span class="glyphicon glyphicon-edit"></span></a> ' +
+            '<a style="cursor:pointer;" onclick="edit_fixed_property(' + current_id + ','+"'"+property.name+"'"+')" ><span class="glyphicon glyphicon-edit"></span></a> ' +
             button + '</div></li>');
     }
      /**
