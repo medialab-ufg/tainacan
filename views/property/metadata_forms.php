@@ -167,6 +167,10 @@ endforeach;
                 <div class="modal-body">
                     <?php _e('Confirm the exclusion of ','tainacan'); ?> <span id="deleted_property_name"></span> ?
                 </div>
+                
+                <div id="compound_remove_all_properties" style="display:none;padding-left: 15px;">
+                    <input type="checkbox" name="remove_subproperties" value="true">&nbsp;<?php _e('Remove all sub-properties','tainacan') ?>
+                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal"><?php _e('Close','tainacan'); ?></button>
                     <button type="submit" class="btn btn-primary"><?php _e('Salve','tainacan'); ?></button>

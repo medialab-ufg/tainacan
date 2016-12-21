@@ -1367,6 +1367,7 @@ function create_event_terms() {
     create_metas($event_delete_property_compounds['term_id'], 'socialdb_event_property_compounds_delete_metas', 'socialdb_event_property_visualization', 'socialdb_event_property_visualization');
     create_metas($event_delete_property_compounds['term_id'], 'socialdb_event_property_compounds_delete_metas', 'socialdb_event_property_compounds_delete_id', 'socialdb_event_property_compounds_delete_id');
     create_metas($event_delete_property_compounds['term_id'], 'socialdb_event_property_compounds_delete_metas', 'socialdb_event_property_compounds_delete_category_root_id', 'socialdb_event_property_compounds_delete_category_root_id');
+    create_metas($event_delete_property_compounds['term_id'], 'socialdb_event_property_compounds_delete_metas', 'socialdb_event_property_compounds_delete_all_properties', 'socialdb_event_property_compounds_delete_all_properties');
     $event_edit_property_compounds_value = create_register('socialdb_event_property_compounds_edit_value', 'socialdb_event_type', array('parent' => $event_property_compounds_term['term_id']));
     create_metas($event_edit_property_compounds_value['term_id'], 'socialdb_event_property_compounds_metas', 'socialdb_event_property_used_by_categories', 'socialdb_event_property_used_by_categories');
     create_metas($event_edit_property_compounds_value['term_id'], 'socialdb_event_property_compounds_edit_value_metas', 'socialdb_event_property_tab', 'socialdb_event_property_tab');

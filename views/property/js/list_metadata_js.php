@@ -897,6 +897,11 @@
         $("#type").val(type);
 
         $("#deleted_property_name").text(name_html);
+        if(type==4){
+            $('#compound_remove_all_properties').show();
+        }else{
+            $('#compound_remove_all_properties').hide();
+        }
         $('.modal').modal('hide');
         $("#modal_remove_property").modal('show');
     }

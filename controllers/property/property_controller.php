@@ -573,6 +573,7 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
         $eventProperty = new EventPropertyCompoundsDelete();
         $data['socialdb_event_property_compounds_delete_id'] = $data['property_delete_id'];
         $data['socialdb_event_property_compounds_delete_category_root_id'] = $data['property_category_id'];
+        $data['socialdb_event_property_compounds_delete_all_properties'] = (isset($data['remove_subproperties'])&&$data['remove_subproperties']=='true') ? 'true': 'false';
         $data['socialdb_event_collection_id'] = $data['collection_id'];
         $data['socialdb_event_user_id'] = get_current_user_id();
         $data['socialdb_event_create_date'] = mktime();
