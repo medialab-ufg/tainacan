@@ -1646,6 +1646,36 @@
                             '<input type="hidden" class="ranking_name" value="' + current_title + '">' +
                             '<a onclick="delete_ranking(' + current_id + ')" class="delete_ranking" href="#">' +
                             '<span class="glyphicon glyphicon-trash"><span></a></div></li>');
+                    }else{
+                        var current_id = ranking.id;
+                        var current_title = ranking.name;
+
+                        if (ranking.range_options !== false ) {
+                            $.each(ranking.range_options, function (key, value) {
+                                increase_range();
+                                $('#submit_form_ranking #range_' + $('#counter_range').val() + '_1').val(value.value_1);
+                                $('#submit_form_ranking #range_' + $('#counter_range').val() + '_2').val(value.value_2);
+                            });
+                        }
+                        //buscando a aba da propriedade
+                        var tab_property_id = false;
+                        var json = jQuery.parseJSON($('#tabs_properties').val());
+                        if(json.length>0){
+                            $.each(json,function(index,object){
+                                if(object[current_id]){
+                                    tab_property_id = object[current_id];
+                                }
+                            });
+                        }
+                        $(get_property_tab_seletor(tab_property_id)).append(
+                                '<li tab="'+tab_property_id+'" id="meta-item-'+current_id+'" data-widget="' + ranking.search_widget + '" class="root_category ui-widget-content ui-corner-tr">' +
+                                '<label class="title-pipe">'+ add_filter_button(current_id) + ranking.name + add_text_type(ranking.type) +'</label>' +
+                                '<a onclick="edit_object('+ current_id +')" class="edit_property_data" href="javascript:void(0)">' +
+                                '<div class="action-icons">'+
+                                '<a class="edit-filter"><span class="glyphicon glyphicon-sort sort-filter"></span></a>&nbsp;'+
+                                '<span class="glyphicon glyphicon-edit"></span></a> ' +
+                                ' <span class="glyphicon glyphicon-trash no-edit"><span> </div></li>' );
+                        
                     }
                 });
             }

@@ -1291,10 +1291,10 @@ class ObjectModel extends Model {
         // as propriedades das categorias, por isso eh necessario o id das categorias
         // o qual foi classificado
         $all_properties = $category_model->get_properties($data['collection_id'], $all_categories);
-        $data['all_ids'] = implode(',', $all_properties);
+        $data['all_ids'] = implode(',', array_unique($all_properties));
         // este metodo no retorno tem como objetivo  pegar os valores das propriedades
         // do item para ser mostrado na view
-        $result = $this->set_data_object_properties($all_properties, $data);
+        $result = $this->set_data_object_properties( array_unique($all_properties), $data);
         return $result;
     }
 

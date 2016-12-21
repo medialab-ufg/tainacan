@@ -172,6 +172,7 @@ class RankingModel extends Model {
         //$all_properties_id = get_term_meta($category_root, 'socialdb_category_property_id');
         $all_properties_id = $this->get_parent_properties($category_root, [], $category_root_id);
         $data['category_root'] = $category_root; // coloco no array que sera utilizado na view
+        $all_properties_id = array_unique($all_properties_id);
         foreach ($all_properties_id as $property_id) {// varro todas propriedades
             $type = $this->property_model->get_property_type($property_id); // pego o tipo da propriedade
             $all_data = $this->property_model->get_all_property($property_id,true); // pego todos os dados possiveis da propriedade
