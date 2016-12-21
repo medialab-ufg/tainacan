@@ -251,12 +251,14 @@
             var color = data_obj.color || '#79a6ce';
             var csvData = [];
 
-            if(chart_type == "default") {
-                var chart_data = [basis];
-            } else {
-                var chart_data = new google.visualization.DataTable();
-                chart_data.addColumn('string', title);
-                chart_data.addColumn('number', 'Qtd');
+            if( color && color != "NO_CHART") {
+                if(chart_type == "default") {
+                    var chart_data = [basis];
+                } else {
+                    var chart_data = new google.visualization.DataTable();
+                    chart_data.addColumn('string', title);
+                    chart_data.addColumn('number', 'Qtd');
+                }
             }
 
             if(data_obj.stat_object) {
@@ -319,7 +321,7 @@
             tai_chart.createCsvFile(csvData);
 
             var div_chart = $("#charts-container").get(0);
-            if("NO_CHART" == data_obj.color) {
+            if("NO_CHART" == color) {
                 $(div_chart).addClass('hide');
                 var frst_td = $("#charts-resume table tr.headers td").get(0);
                 $(frst_td).text("Buscas Frequentes");
