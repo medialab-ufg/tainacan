@@ -262,18 +262,17 @@ $(window).load(function () {
 //                $('#list').show();
 //            }
 //        });
-
         e.preventDefault();
         showAdvancedSearch($("#src").val(), search_for);
     });
 
     // When user types enter at main search box, it opens the advanced search form with the searched term
-    $("#search_collections").keyup(function (e) {
+    /* $("#search_collections").keyup(function (e) {
         if (e.which == 13) {
             e.preventDefault();
             showAdvancedSearch($("#src").val(), $(this).val());
         }
-    });
+    }); */
 
     //submit do importar colecao
     $('#importCollection').submit(function (e) {
@@ -1927,6 +1926,7 @@ function showAddItemURL() {
 
 function showAdvancedSearch(src, search_term) {
     var search_term = search_term || "";
+
     show_modal_main();
     $.ajax({
         url: src + '/controllers/advanced_search/advanced_search_controller.php',

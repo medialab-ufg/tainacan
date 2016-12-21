@@ -199,7 +199,7 @@ $viewHelper = new ViewHelper();
                         </ul>
                     </div>
 
-                    <?php if (!is_front_page()): ?>
+                    <?php if (!is_front_page()): // !is_page($stat_page) ?>
                         <form id="formSearchCollections" class="navbar-form navbar-right search-tainacan-collection" role="search">
                             <div class="input-group search-collection search-home">
                                 <input style="display: none" type="text" class="form-control" name="search_collections" id="search_collections" placeholder="<?php _e('Find', 'tainacan') ?>"/>

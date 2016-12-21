@@ -13,7 +13,11 @@ class AdvancedSearchController extends Controller {
         $collection_model = new CollectionModel();
         $advanced_search_model = new AdvancedSearchModel();
         switch ($operation) {
-            case "open_page"://
+            case "open_page":
+                if(!empty($data['home_search_term'])) {
+                    $logData = ['collection_id' => $data['collection_id'], 'user_id' => get_current_user_id(), 'event_type' => 'advanced_search', 'event' => $data['home_search_term'] ];
+                    Log::addLog($logData);
+                }
                 return $this->render(dirname(__FILE__) . '../../../views/advanced_search/advanced_search.php',$data);
                 break;
 
@@ -37,8 +41,9 @@ class AdvancedSearchController extends Controller {
             case 'do_advanced_search':
                 $wpquery_model = new WPQueryModel();
                 $return = array();
-                if($data['advanced_search_collection']==get_option('collection_root_id')){//se estiver buscando em todas as colecoes
-                    if($data['advanced_search_general']!==''){//se utilizar a busca generalizada
+                // Se estiver buscando em todas as colecoes
+                if($data['advanced_search_collection']==get_option('collection_root_id')) {
+                    if($data['advanced_search_general']!==''){ //se utilizar a busca generalizada
                         $args_object = $wpquery_model->keyword_filter(['value'=>$data['advanced_search_general']]);
                         $args_object['collection_id'] = 'all_items';
                         $args_object['category_root_id'] = 'all_items';
@@ -49,7 +54,7 @@ class AdvancedSearchController extends Controller {
                         $loop_objects = new WP_Query($paramters_object);
                         $loop_collections = new WP_Query($paramters_collection);
                        // var_dump($loop_collections);
-                    }else{
+                    } else {
                         $args_object = $wpquery_model->advanced_searched_filter($data);
                         $paramters_object = $wpquery_model->do_filter($args_object);
                         $args_collection = $wpquery_model->advanced_searched_filter($data);
@@ -58,8 +63,8 @@ class AdvancedSearchController extends Controller {
                         $loop_objects = new WP_Query($paramters_object);
                         $loop_collections = new WP_Query($paramters_collection);
                     }
-                }else{
-                    if($data['advanced_search_general']!==''){//se utilizar a busca generalizada
+                } else{
+                    if($data['advanced_search_general']!==''){ //se utilizar a busca generalizada
                         $args_object = $wpquery_model->keyword_filter(['value'=>$data['advanced_search_general']]);
                         $args_object['collection_id'] = $data['advanced_search_collection'];
                         $args_object['category_root_id'] = $wpquery_model->get_category_root_of($data['advanced_search_collection']);
@@ -80,9 +85,12 @@ class AdvancedSearchController extends Controller {
                     $data['loop_collections'] = $loop_collections;
                     $return['args_collection'] =  serialize($args_collection);
                 endif;
-                if(!isset($data['loop_objects'])&&!isset($data['loop_collections'])){
+                if(!isset($data['loop_objects'])&&!isset($data['loop_collections'])) {
                     $return['not_found'] = true;
                 }
+
+                $logData = ['collection_id' => $data['collection_id'], 'user_id' => get_current_user_id(), 'event_type' => 'advanced_search', 'event' => $data['advanced_search_general'] ];
+                Log::addLog($logData);
                 
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/advanced_search/list_advanced_search.php', $data);
                 $return['data'] =  $data['data'];

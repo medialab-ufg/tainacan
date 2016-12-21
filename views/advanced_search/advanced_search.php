@@ -1,39 +1,11 @@
-<?php
-include_once ('../../../../../wp-config.php');
-include_once ('../../../../../wp-load.php');
-include_once ('../../../../../wp-includes/wp-db.php');
-include_once ('js/advanced_search_js.php');
-?>  
-<style>
-    .quadrante{
-        background-color: white;
-        padding-left: 50px;
-        padding-right: 50px;
-        padding-top: 10px;
-        padding-bottom: 20px;
-        margin-bottom: 5px;
-        border: 3px solid #E8E8E8;
-       overflow:auto;
-    }
-    .padding-left-space{
-        padding-left: 15px;
-    }
-    .center_pagination {
-    width: 100%;
-    margin: 20px auto 10px auto;
-    background: white;
-    border: 3px solid #E8E8E8;
-    padding: 5px 0 5px 0;
-    color: #929497;
-}
-</style>    
-<form id="advanced_search_submit" style="margin-left: 15px;margin-right: 15px;min-height: 500px;">
+<?php include_once ('js/advanced_search_js.php'); ?>
+<form id="advanced_search_submit">
     <input type="hidden" id="advanced_search_operation" name="operation" value="do_advanced_search">   
     <input type="hidden" id="advanced_search_wp_query_args_collection" name="advanced_search_wp_query_args_collection" value="">
     <input type="hidden" id="advanced_search_wp_query_args_item" name="advanced_search_wp_query_args_collection" value="">
     <input type="hidden" id="advanced_search_collection_id" name="collection_id" value="<?php echo $collection_id; ?>">
-    <div id="container_filtros" style="margin-left: 5px;margin-right: 5px;" class="row">
-        <ol class="breadcrumb" style="margin-top: -15px; padding-left: 0; background: #f2f2f2;">
+    <div id="container_filtros" class="row">
+        <ol class="breadcrumb">
             <li><a href="<?php echo get_permalink(get_option('collection_root_id')); ?>"> <?php _e('Repository', 'tainacan') ?> </a></li>
             <li><a href="#" onclick="backToMainPageSingleItem()"><?php echo get_post($collection_id)->post_title; ?></a></li>
             <li class="active"><?php echo __('Advanced Search','tainacan'); ?></li>
@@ -44,34 +16,22 @@ include_once ('js/advanced_search_js.php');
                 </h3>
                 <hr>
                 <?php //if ($collection_id != get_option('collection_root_id')): ?>
-                <div >
-                    <h5>
-                       <b><?php _e('Select the Collection', 'tainacan'); ?></b>
-                    </h5>
+                <div>
+                    <h5> <b> <?php _e('Select the Collection', 'tainacan'); ?> </b> </h5>
                     <select onchange="show_collection_properties($(this).val())" 
-                            class="form-control" 
-                            id="advanced_search_collection" 
-                            name="advanced_search_collection">
-
+                            class="form-control" id="advanced_search_collection" name="advanced_search_collection">
                     </select>
                 </div>   
                 <?php //endif; ?>
         </div>
         <div class="quadrante">
-            <h5>
-                <b>
-                <?php _e('General Search', 'tainacan'); ?>
-                </b>
-            </h5>
+            <h5> <b> <?php _e('General Search', 'tainacan'); ?> </b> </h5>
             <div class="row">
                 <div class="col-md-10">
-                    <input type="text" 
-                            class="form-control" 
-                             value="<?php print_r(empty($home_search_term) ? "" : $home_search_term ); ?>" 
-                            name="advanced_search_general" 
-                            id="advanced_search_general" 
-                            placeholder="<?php _e('Search in all metadata', 'tainacan'); ?>">
-                </div>  
+                    <input type="text" class="form-control" name="advanced_search_general" id="advanced_search_general"
+                           value="<?php print_r(empty($home_search_term) ? "" : $home_search_term ); ?>"
+                           placeholder="<?php _e('Search in all metadata', 'tainacan'); ?>">
+                </div>
                 <button type="submit" class="col-md-2 btn btn-success pull-right">
                     <?php _e('Find', 'tainacan') ?>
                 </button>
@@ -107,21 +67,14 @@ include_once ('js/advanced_search_js.php');
 
 <!--label for="search_for"><?php _e('for', 'tainacan'); ?></label>
 <input type="text" class="form-control" id="search_for" name="search_for" required="required" value="" -->
-                    
-            
-        
-       
-        
-            
     </div> 
-    <div id="resultados_advanced_search" style="display: none;min-height: 500px;margin-left: 5px;margin-right: 5px;">
+    <div id="resultados_advanced_search" style="display: none;">
         <ol class="breadcrumb" style="margin-top: -15px; padding-left: 0; background: #f2f2f2;">
             <li><a href="<?php echo get_permalink(get_option('collection_root_id')); ?>"> <?php _e('Repository', 'tainacan') ?> </a></li>
             <li><a href="#" onclick="backToMainPageSingleItem()"><?php echo get_post($collection_id)->post_title; ?></a></li>
             <li class="active"><?php echo __('Advanced Search','tainacan'); ?></li>
         </ol>
         <div id="container_resultados_advanced_search" class="quadrante"></div>
-            
     </div>
 </form>
 <div class="row">
