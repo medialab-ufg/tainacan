@@ -16,7 +16,7 @@ class FiltersModel extends Model {
      * @param int $collection_id O id da colecao que sera gerado o json
      * @return json O conteudo do dynatree
      */
-   public function initDynatreePropertiesFilter($collection_id,$hide_checkbox = true) {
+   public function initDynatreePropertiesFilter($collection_id,$hide_checkbox = true,$is_layout = false) {
         $dynatree = [];
         $roots_parents = [
         get_term_by('name','socialdb_property_data','socialdb_property_type')->term_id,

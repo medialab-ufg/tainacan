@@ -3225,14 +3225,17 @@ function mapa_cultural()
     return $return;
 }
 
-function treats_object_properties_unknown(&$result, &$created_data_type_property, &$data, &$collection_id, &$created_classes)
+function treats_object_properties_unknown(&$result, &$created_data_type_properties, &$data, &$collection_id, &$created_classes)
 {
-    $null = null;
-
     foreach ($result as $index_class => $class_itens) {
         foreach ($class_itens as $attributes_list) {
             foreach ($attributes_list as $datatype_name => $value) {
-                $created_data_type_property[$datatype_name]['associated_classes'] = [];
+                if($datatype_name =  'location')
+                {
+                    $created_data_type_properties['latitude']['associated_classes'] = [];
+                    $created_data_type_properties['longitude']['associated_classes'] = [];
+                }else
+                    $created_data_type_properties[$datatype_name]['associated_classes'] = [];
             }
         }
     }
@@ -3241,26 +3244,25 @@ function treats_object_properties_unknown(&$result, &$created_data_type_property
     {
         foreach ($class_itens as $attributes_list){
 
-            foreach ($attributes_list as $datatype_name => $value){
+            foreach ($attributes_list as $datatype_name => $value)
+            {
+                if($datatype_name == 'location')
+                {
+                    $datatype_name = 'latitude';
+                    create_property($created_data_type_properties, $datatype_name, $created_classes, $index_class);
 
-               if($created_data_type_property[$datatype_name]['created'] != null)
-               {
-                   if(!in_array($created_classes[$index_class], $created_data_type_property[$datatype_name]['associated_classes']))
-                   {
-                       add_term_meta($created_classes[$index_class],'socialdb_category_property_id',$created_data_type_property[$datatype_name]['creation_id']);
-                       array_push($created_data_type_property[$datatype_name]['associated_classes'], $created_classes[$index_class]);
-                   }
-               }
-               else if($datatype_name != 'name')
-               {
-                   //Cria data type property
-                   $data_type_property = array('data_type' => 'string', 'id_domain_class' => $created_classes[$index_class]);
-                   $data['name'] = $datatype_name;
-                   $created_data_type_property[$datatype_name]['creation_id'] = add_data_type_property($null, $data_type_property, $null, $null, $data, $null, true);
-                   $created_data_type_property[$datatype_name]['created'] = true;
+                    $datatype_name = 'longitude';
+                    create_property($created_data_type_properties, $datatype_name, $created_classes, $index_class);
 
-                   array_push($created_data_type_property[$datatype_name]['associated_classes'], $created_classes[$index_class]);
-               }
+                    update_post_meta($collection_id, 'socialdb_collection_list_mode', 'geolocation');
+                    update_post_meta($collection_id, 'socialdb_collection_latitude_meta', $created_data_type_properties['latitude']['creation_id']);
+                    update_post_meta($collection_id, 'socialdb_collection_longitude_meta', $created_data_type_properties['longitude']['creation_id']);
+                }
+                else
+                {
+                    create_property($created_data_type_properties, $datatype_name, $created_classes, $index_class);
+                }
+
             }
 
             $data['object_name'] = end(explode("#", $attributes_list['name']));
@@ -3269,10 +3271,31 @@ function treats_object_properties_unknown(&$result, &$created_data_type_property
         }
     }
 }
+function create_property(&$created_data_type_properties, &$datatype_name, &$created_classes, &$index_class)
+{
+    $null = null;
+    if($created_data_type_properties[$datatype_name]['created'] != null)
+    {
+        if(!in_array($created_classes[$index_class], $created_data_type_properties[$datatype_name]['associated_classes']))
+        {
+            add_term_meta($created_classes[$index_class],'socialdb_category_property_id',$created_data_type_properties[$datatype_name]['creation_id']);
+            array_push($created_data_type_properties[$datatype_name]['associated_classes'], $created_classes[$index_class]);
+        }
+    }
+    else if($datatype_name != 'name')
+    {
+        //Cria data type property
+        $data_type_property = array('data_type' => 'string', 'id_domain_class' => $created_classes[$index_class]);
+        $data['name'] = $datatype_name;
+        $created_data_type_properties[$datatype_name]['creation_id'] = add_data_type_property($null, $data_type_property, $null, $null, $data, $null, true);
+        $created_data_type_properties[$datatype_name]['created'] = true;
+
+        array_push($created_data_type_properties[$datatype_name]['associated_classes'], $created_classes[$index_class]);
+    }
+}
 
 function add_individual(&$data, &$collection_id, &$properties_list)
 {
-    //$object_model = new ObjectModel();
     $user_id = get_current_user_id();
     $post = array(
         'post_title' => ($data['object_name']) ? $data['object_name'] : time(),
@@ -3295,11 +3318,25 @@ function add_individual(&$data, &$collection_id, &$properties_list)
 
             if($property_name != "name")
             {
+                //print $property_name."<br>";
 
-                $value = $properties_list[$property_name];
-                add_post_meta( $data['ID'],'socialdb_property_'.$property, $value);
+                if($property_name == 'latitude')
+                {
+                    $value = $properties_list['location'][$property_name];
+                    add_post_meta($data['ID'], 'socialdb_property_' . $property, $value);
+                }
+                else if($property_name == 'longitude')
+                {
+                    $value = $properties_list['location'][$property_name];
+                    add_post_meta( $data['ID'],'socialdb_property_'.$property, $value);
+                }
+                else
+                {
+                    $value = $properties_list[$property_name];
+                    add_post_meta( $data['ID'],'socialdb_property_'.$property, $value);
+                }
+
             }
         }
     }
-   // $object_model->insert_item_resource($data);
 }
