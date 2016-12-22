@@ -355,6 +355,10 @@ class CollectionImportModel extends CollectionModel {
    public function add_property_term($property,$socialdb_collection_object_type,$category_root_id) {
         $new_property = wp_insert_term((string)$property->name, 'socialdb_property_type', array('parent' => $this->get_property_type_id('socialdb_property_term'),
                 'slug' => $this->generate_slug((string)$property->name, 0)));
+        if(is_wp_error($new_property)){
+            $new_property = wp_insert_term(__('Imported Property','tainacan'), 'socialdb_property_type', array('parent' => $this->get_property_type_id('socialdb_property_term'),
+                'slug' => $this->generate_slug(__('Imported Property','tainacan'), 0)));
+        }
         update_term_meta($new_property['term_id'], 'socialdb_property_required', (string)$property->property_term_required);
         update_term_meta($new_property['term_id'], 'socialdb_property_term_cardinality', (string) $property->socialdb_property_term_cardinality);
         update_term_meta($new_property['term_id'], 'socialdb_property_term_widget',  (string)$property->socialdb_property_term_widget);
@@ -374,6 +378,10 @@ class CollectionImportModel extends CollectionModel {
         $new_property = wp_insert_term((string)$property->name, 'socialdb_property_type', array('parent' => $this->get_property_type_id('socialdb_property_data'),
                 'slug' => $this->generate_slug((string)$property->name, 0)));
         //Functional
+        if(is_wp_error($new_property)){
+            $new_property = wp_insert_term(__('Imported Property','tainacan'), 'socialdb_property_type', array('parent' => $this->get_property_type_id('socialdb_property_data'),
+                'slug' => $this->generate_slug(__('Imported Property','tainacan'), 0)));
+        }
         update_term_meta($new_property['term_id'], 'socialdb_property_required', (string)$property->property_term_required);
         update_term_meta($new_property['term_id'], 'socialdb_property_data_widget', (string) $property->socialdb_property_data_widget);
         update_term_meta($new_property['term_id'], 'socialdb_property_data_column_ordenation',  (string)$property->socialdb_property_data_column_ordenation);
@@ -391,6 +399,10 @@ class CollectionImportModel extends CollectionModel {
    public function add_property_object($property,$socialdb_collection_object_type,$category_root_id) {
         $new_property = wp_insert_term((string)$property->name, 'socialdb_property_type', array('parent' => $this->get_property_type_id('socialdb_property_object'),
                 'slug' => $this->generate_slug((string)$property->name, 0)));
+        if(is_wp_error($new_property)){
+            $new_property = wp_insert_term(__('Imported Property','tainacan'), 'socialdb_property_type', array('parent' => $this->get_property_type_id('socialdb_property_object'),
+                'slug' => $this->generate_slug(__('Imported Property','tainacan'), 0)));
+        }
         //Functional
         update_term_meta($new_property['term_id'], 'socialdb_property_required', (string)$property->property_term_required);
         update_term_meta($new_property['term_id'], 'socialdb_property_object_category_id', $this->get_term_imported_id((string) $property->socialdb_property_object_category_id));

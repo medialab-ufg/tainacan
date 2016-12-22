@@ -541,6 +541,24 @@ $(document).ready(function () {
 
 });
 
+ /**
+     * funcao que gera o arquivo csv
+     * @returns {.csv}
+     */
+    function export_selected_objects() {
+        var search_for = $("#search_objects").val();
+        var selKeys = $.map($("#dynatree").dynatree("getSelectedNodes"), function (node) {
+            return node.data.key;
+        });
+
+        window.location = $('#src').val() + '/controllers/export/export_controller.php?operation=export_selected_objects' +
+                '&collection_id=' + $("#collection_id").val() +
+                '&classifications=' + selKeys.join(", ") +
+                '&ordenation_id=' + $('#collection_single_ordenation').val() +
+                '&order_by=' +
+                '&keyword=' + search_for;
+    }
+
 function add_collection_template(col, template_name) {
     var path = $("#src").val() + "/controllers/collection/collection_controller.php";
     show_modal_main();
