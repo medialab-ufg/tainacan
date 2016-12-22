@@ -537,7 +537,7 @@ class Model {
      * @author Eduardo Humberto 
      */
     public function generate_slug($string, $collection_id) {
-        return sanitize_title(remove_accent($string)) . "_" . mktime() . rand(0, 100);
+        return sanitize_title(remove_accent($string)) . "_" . time() . rand(0, 100);
     }
 
     /**
