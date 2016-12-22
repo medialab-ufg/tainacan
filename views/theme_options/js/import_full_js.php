@@ -39,7 +39,7 @@
             hide_modal_main();
             var json = JSON.parse(result);
             if (json.result == false) {
-                showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('The file you are trying to upload is not a .zip file. Please try again!', 'tainacan') ?>', 'error');
+                showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('The file you are trying to upload is not a .zip file or is not Tainacan standart. Please try again!', 'tainacan') ?>', 'error');
             } else {
                 showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('All objects imported succesfully!', 'tainacan') ?>', 'success');
             }

@@ -1737,7 +1737,9 @@ class Model {
      */
     public function recursiveRemoveDirectory($directory) {
         if (is_dir($directory)) {
-            foreach (glob("{$directory}/*") as $file) {
+            //foreach (glob("{$directory}/{,.}*", GLOB_BRACE) as $file) {
+            //foreach (glob("{$directory}/*") as $file) {
+            foreach (glob("{$directory}/{,.}[!.,!..]*",GLOB_MARK|GLOB_BRACE) as $file) {
                 if (is_dir($file)) {
                     $this->recursiveRemoveDirectory($file);
                 } else {

@@ -56,11 +56,18 @@ class CsvController extends Controller {
                 $oaipmh_model->import_list_set($data['url'], $data['collection_id']);
                 return true;
             case 'import_full_csv':
-                $dir = $csv_model->unzip_csv_package($data);
-                if ($dir) {
-                    $csv_files = array_values(array_diff(scandir($dir), array('..', '.')));
-                    $csv_model->import_csv_full($csv_files, $dir);
-                    $arr['result'] = true;
+                $targetdir = $csv_model->unzip_csv_package($data);
+                if ($targetdir) {
+                    if (is_dir($targetdir . DIRECTORY_SEPARATOR . 'collections')) {
+                        $dir = $targetdir . DIRECTORY_SEPARATOR . 'collections';
+                        $csv_files = array_values(array_diff(scandir($dir), array('..', '.')));
+                        $csv_model->import_csv_full($csv_files, $dir);
+                        $csv_model->recursiveRemoveDirectory($targetdir);
+                        $arr['result'] = true;
+                    } else {
+                        $csv_model->recursiveRemoveDirectory($targetdir);
+                        $arr['result'] = false;
+                    }
                 } else {
                     $arr['result'] = false;
                 }
