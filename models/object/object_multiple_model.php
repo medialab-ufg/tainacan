@@ -25,9 +25,11 @@ class ObjectMultipleModel extends Model {
      * @author: Eduardo 
      */
   public function add($data) {
-    $result = [];
-    $items_id = explode(',', $data['items_id']); // id de todos os itens
-    if($items_id&&is_array($items_id)){
+      $result = [];
+      $items_id = explode(',', $data['items_id']); // id de todos os itens
+
+      if($items_id&&is_array($items_id)) {
+          $_exif_compounds_array = [];
       foreach ($items_id as $item_id) {
         $post_id = $this->insert_post($data,trim($item_id));
         if($post_id) {
@@ -52,10 +54,11 @@ class ObjectMultipleModel extends Model {
           Log::addLog($logData);
 
           if( isset($data['do_extract']) && $data['do_extract'] === "true" ):
-            $_file_path_ = get_attached_file($item_id);
+              $_file_path_ = get_attached_file($item_id);
               $_file_type = wp_check_filetype($_file_path_);
               $_allowed_exif_exts = ['jpg', 'jpeg', 'JPG', 'JPEG', 'TIFF', 'tiff'];
-            if(isset($_file_path_) && in_array($_file_type['ext'], $_allowed_exif_exts) ) {
+
+              if(isset($_file_path_) && in_array($_file_type['ext'], $_allowed_exif_exts) ) {
 
                 try {
                     $_exif_data = exif_read_data($_file_path_, 0, true);
@@ -100,6 +103,7 @@ class ObjectMultipleModel extends Model {
                                     ];
 
                                     $_exif_slug = strtolower( sanitize_file_name( str_replace("_", "-", $_meta_exif_data_name) ));
+                                    // If exif metadata already exists
                                     if( in_array($_exif_slug, $_props_slugs )) {
                                         $prop_index = array_search($_exif_slug, $_props_slugs);
                                         if($prop_index && $prop_index != false) {
@@ -107,6 +111,7 @@ class ObjectMultipleModel extends Model {
                                             if($prop_id) {
                                                 $_meta_field = "socialdb_property_" . (string) $prop_id;
                                                 update_post_meta($post_id, $_meta_field, $exif_val);
+                                                array_push($_exif_compounds_array, $prop_id);
                                             }
                                         }
                                     } else {
@@ -117,6 +122,8 @@ class ObjectMultipleModel extends Model {
                                             update_term_meta($new_prop_id, 'socialdb_property_visibility', 'show');
                                             $_meta_field = "socialdb_property_" . (string)$new_prop_id;
                                             update_post_meta($post_id, $_meta_field, $exif_val);
+
+                                            array_push($_exif_compounds_array, $new_prop_id);
                                         }
                                     }
                                 endif;
@@ -128,6 +135,8 @@ class ObjectMultipleModel extends Model {
           endif;
         }
       }
+          $uniq_exifs = implode(",", array_unique($_exif_compounds_array));
+          $property_model->add_property_compounds("Imagem EXIF", $data['collection_id'], $_DATASET['category_id'], $uniq_exifs, "1");
     }
 
     if(count($result['ids'])>0){
@@ -178,6 +187,17 @@ class ObjectMultipleModel extends Model {
       }
 
   }
+
+    public function collectionHasItems($_col_id_) {
+        $children = get_posts(['post_parent' => $_col_id_, 'post_type'=>'socialdb_object']);
+
+        if( empty($children) ) {
+            return 0;
+        } else {
+            return $children;
+        }
+    }
+
     /**
      * @signature - vinculate_collection($data)
      * @param array $data Os dados vindos do formulario
