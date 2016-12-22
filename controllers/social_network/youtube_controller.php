@@ -25,6 +25,12 @@ class YoutubeController extends Controller {
                     }
                     $id = socialdb_insert_object($title,'','draft');
                     if($id):
+                        update_post_meta($id, 'socialdb_object_content', $data['video_url']);
+                        if (strpos($data['video_url'], 'youtube.com') !== false) {
+                            parse_str(parse_url($data['video_url'], PHP_URL_QUERY), $vars);
+                            $object_model->add_thumbnail_url('https://i.ytimg.com/vi/' . $vars['v'] . '/0.jpg', $id);
+                            update_post_meta($id, 'socialdb_object_dc_type', 'video');
+                        }
                         return json_encode([$id]);
                     else:
                         return false;

@@ -1937,7 +1937,7 @@ function create_root_collection_category($collection_id, $category_name) {
     $op = get_option('tainacan_module_activate');
     if((!$op || $op == '') && get_option('collection_root_id') != $collection_id){
         $parent_taxonomy_category_id = get_register_id('socialdb_taxonomy', 'socialdb_category_type');
-        $category_subject_root_id = create_register(__('Subject', 'tainacan').' '.get_post($collection_id)->post_title, 'socialdb_category_type', array('parent' => $parent_taxonomy_category_id, 'slug' => 'subject_category_collection_'.$collection_id));
+        $category_subject_root_id = create_register(__('Subject', 'tainacan').' '.__('of', 'tainacan').' '.get_post($collection_id)->post_title, 'socialdb_category_type', array('parent' => $parent_taxonomy_category_id, 'slug' => 'subject_category_collection_'.$collection_id));
         $category_subject_root_id = get_term_by('id', $category_subject_root_id['term_id'], 'socialdb_category_type');
         add_term_meta($category_subject_root_id->term_id, 'socialdb_category_owner', get_current_user_id());
         //adiciono a categoria root como faceta da colecao

@@ -36,6 +36,14 @@ $(function(){
                  $("#category_id_archival_management").val(node.data.key);
             }
         });
+        
+        setTimeout(function(){
+            $("#dynatree_export_plan").dynatree("getRoot").visit(function(node){
+                if(node.data.key === $("#category_id_archival_management").val() ){
+                    node.select(true);
+                }
+            }); 
+         }, 3000);
 });
 /**
  * funcao que redireciona para forcar o downlload do plano de classificacao de uma hierarquia
