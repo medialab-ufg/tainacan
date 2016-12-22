@@ -2114,23 +2114,23 @@ function parse_owl1()
                 $created_classes = treats_classes($owl_classes, $collection_id, $namespace);
 
                 //Tratando ObjectProperty
-                $created_object_properties = treats_object_properties($owl_object_properties, $namespace, $owl_classes, $created_classes, $owl_functional_properties);
+                $created_object_properties = treats_object_properties($owl_object_properties, $namespace, $owl_classes, $created_classes, $owl_functional_properties, $collection_id);
 
                 //Tratando DatatypeProperty
-                $created_data_type_properties = treats_data_type_properties($owl_data_type_properties, $owl_classes, $created_classes, $owl_functional_properties, $namespace);
-
+                $created_data_type_properties = treats_data_type_properties($owl_data_type_properties, $owl_classes, $created_classes, $owl_functional_properties, $namespace, $collection_id);
+                print "DataType Property criada<br>";
                 //Tratando FunctionalProperty
-                treats_functional_property($owl_functional_properties, $created_data_type_properties, $created_object_properties, $owl_classes, $created_classes, $namespace);
-
+                treats_functional_property($owl_functional_properties, $created_data_type_properties, $created_object_properties, $owl_classes, $created_classes, $namespace, $collection_id);
+                print "Functional Property criada<br>";
                 //Tratando Class Restrictions
                 treats_class_restriction($owl_classes, $created_classes, $created_object_properties, $created_data_type_properties, $namespace);
-
+                print "Restriction Class criada<br>";
                 //Tratando transitive properties
-                treats_transitive_properties($owl_transitive_properties, $created_object_properties, $owl_classes, $created_classes, $namespace);
-
+                treats_transitive_properties($owl_transitive_properties, $created_object_properties, $owl_classes, $created_classes, $namespace, $collection_id);
+                print "Transitive Property criada<br>";
                 //Tratando symmetric properties
-                treats_symmetric_properties($owl_symmetric_properties,$created_object_properties, $owl_classes, $created_classes, $namespace);
-
+                treats_symmetric_properties($owl_symmetric_properties,$created_object_properties, $owl_classes, $created_classes, $namespace, $collection_id);
+                print "Symmetric property criada<br>";
             }catch (Exception $e)
             {
                 $return['message'] = $e->getMessage();
@@ -2153,7 +2153,8 @@ function treats_ontology(&$ontology_tags, &$namespace)
     $data['collection_name'] = $ontology_tags->children($namespace['rdfs'])->label;
     if(!$data['collection_name'])
     {
-        $data['collection_name'] = $ontology_tags->attributes($namespace['rdf'])['about'];
+        $data['collection_name'] = end(explode("/", $ontology_tags->attributes($namespace['rdf'])['about']));
+
         if(!$data['collection_name'])
         {
             throw new Exception("Não foi possivel capturar o nome da coleção");
@@ -2161,18 +2162,7 @@ function treats_ontology(&$ontology_tags, &$namespace)
     }
 
     $retorno = simple_add($data);
-    //!Tratamento Ontologia
 
-    /*
-    //Tratando imports
-    if($ontology_tags->imports->count() > 0)
-    {
-        foreach($ontology_tags->imports->attributes($namespace['rdf']) as $name => $value)
-        {
-            //Realiza operações necessarias no Tainacan
-            //simple_add();
-        }
-    }*/
     if($retorno != false)
     {
         return $retorno['collection_id'];
@@ -2188,10 +2178,8 @@ function treats_ontology(&$ontology_tags, &$namespace)
  */
 function treats_classes(&$class_tags, &$collection_id, &$namespace)
 {
-    /*Criação de classes e subClasses*/
     //Tratamento para não criar classes repetidas
     $created_classes = create_associative_table($class_tags, $namespace);
-
 
     $count = count($class_tags);
     for($i = 0; $i < $count; $i++)
@@ -2253,10 +2241,12 @@ function create_class(&$class_tags, &$created_classes, &$classe, &$collection_id
         if($aboutClassSubClassOf || $resourceSubClassOf)
         {
             $not_created_class = class_search($root_name, $class_tags, $namespace);
+
             /*
-             * Caso uma classe seja subClasse de uma classe não declarada no documento da importação
+             *  Caso uma classe seja subClasse de uma classe não declarada no documento da importação
              * então ela é criada como classe raiz
              */
+
             if(gettype($not_created_class) == "object")
             {
                 create_class($class_tags, $created_classes, $not_created_class, $collection_id, $namespace);//Chamada recursiva para criar pai
@@ -2284,7 +2274,7 @@ function create_class(&$class_tags, &$created_classes, &$classe, &$collection_id
 function record_class(&$created_classes, &$root_name, &$category_model, &$data, &$collection_id, $is_root)
 {
     //Define o pai da classe a ser criada
-    if($created_classes != null)
+    if($data['dont_create'] != true)
     {
         if($is_root) $parent = $category_model->get_category_taxonomy_root();
         else $parent = $created_classes[$root_name]['creation_id'];
@@ -2306,7 +2296,7 @@ function record_class(&$created_classes, &$root_name, &$category_model, &$data, 
     }
 
     //Marcar classe como criada
-    if($created_classes != null)
+    if($data['dont_create'] != true)
     {
         $created_classes[$data['idAbout']]['created'] = true;
         $created_classes[$data['idAbout']]['creation_id'] = $new_class['term_id'];
@@ -2369,62 +2359,34 @@ function simple_add(&$data) {
 /*
  * Trata objectProperty
  */
-function treats_object_properties(&$object_property_transitive_property_tags, &$namespace, &$class_tags, &$created_classes, &$functional_property_tags)
+function treats_object_properties(&$object_property_transitive_property_tags, &$namespace, &$class_tags, &$created_classes, &$functional_property_tags, &$collection_id)
 {
     //Tratamento para não criar objectPropertys repetidas
     $created_object_transitive_property = create_associative_table($object_property_transitive_property_tags, $namespace);
 
     $count = count($object_property_transitive_property_tags);
+
     for($i = 0; $i < $count; $i++)
     {
-        create_object_properties($object_property_transitive_property_tags, $created_object_transitive_property, $object_property_transitive_property_tags[$i], $class_tags, $created_classes, $functional_property_tags, $namespace);
+        create_object_properties($object_property_transitive_property_tags, $created_object_transitive_property, $object_property_transitive_property_tags[$i], $class_tags, $created_classes, $functional_property_tags, $namespace, $collection_id);
     }
-
-    /*
-        //Tratamento InverseOf
-        foreach($objectProperty->inverseOf as $inverseOf)
-        {
-            if($inverseOf->ObjectProperty)
-            {
-
-            }
-            else
-            {
-                //print $inverseOf->attributes($namespace['rdf'])['resource'];
-            }
-        }
-        //!Tratamento InverseOf
-
-        //Tratamento subPropertyOf
-        foreach($objectProperty->children($namespace['rdfs'])->subPropertyOf as $subPropertyOf)
-        {
-            if($subPropertyOf->children($namespace['owl'])->ObjectProperty)
-            {
-
-            }
-        }
-        //!Tratamento subPropertyOf
-
-        //Tratamento Type
-        foreach($objectProperty->children($namespace['rdf'])->type as $type)
-        {
-            //print $type->attributes($namespace['rdf'])['resource'];
-        }
-        //!Tratamento Type
-        */
 
     return $created_object_transitive_property;
 }
 
 //Adiciona um Object Property
 
-function create_object_properties(&$object_property_tags, &$created_object_property, &$object_property, &$class_tags, &$created_classes, &$functional_property_tags, &$namespace)
+function create_object_properties(&$object_property_tags, &$created_object_property, &$object_property, &$class_tags, &$created_classes, &$functional_property_tags, &$namespace, &$collection_id)
 {
     //Caso no nome da propriedade seja guardada em uma label e o que referencia a classe seja o about
     if(($about = $object_property->attributes($namespace['rdf'])['about']))
     {
         $data['idAbout'] = strval($about);
         $data['name'] = strval($object_property->children($namespace['rdfs'])->label);
+        if($data['name'] == null)
+        {
+            $data['name'] = $data['idAbout'];
+        }
     }
     else//Caso o nome da propriedade seja guardada em ID e sirva tanto para nomea-la quanto para identifica-la
     {
@@ -2470,37 +2432,36 @@ function create_object_properties(&$object_property_tags, &$created_object_prope
 
             if(gettype($object_property_to_create) == "object")
             {
-                create_object_properties($object_property_tags, $created_object_property, $object_property_to_create, $class_tags, $created_classes, $functional_property_tags, $namespace);
+                create_object_properties($object_property_tags, $created_object_property, $object_property_to_create, $class_tags, $created_classes, $functional_property_tags, $namespace, $collection_id);
             }
             else
             {
                 $new_data = $data;
                 $new_data['name'] = $data['hasFatherResource'];
-                add_object_property($created_object_property, $object_property, $class_tags, $created_classes, $new_data, $namespace, true);
+                add_object_property($created_object_property, $object_property, $class_tags, $created_classes, $new_data, $namespace, true, $collection_id);
             }
 
-            add_object_property($created_object_property, $object_property, $class_tags, $created_classes, $data, $namespace, false);
+            add_object_property($created_object_property, $object_property, $class_tags, $created_classes, $data, $namespace, false, $collection_id);
 
         }
         else if($created_object_property[$data['idAbout']]['created'] == true)
         {
-            add_object_property($created_object_property, $object_property, $class_tags, $created_classes, $data, $namespace, false);
+            add_object_property($created_object_property, $object_property, $class_tags, $created_classes, $data, $namespace, false, $collection_id);
         }
     }
     else if($created_object_property[$data['idAbout']]['creation_id'] != true)
     {
-        add_object_property($created_object_property, $object_property, $class_tags, $created_classes, $data, $namespace, true);
+        add_object_property($created_object_property, $object_property, $class_tags, $created_classes, $data, $namespace, true, $collection_id);
     }
 }
 
-function add_object_property(&$created_objectProperty, &$object_property, &$class_tags, &$created_classes, &$data, &$namespace, $is_root) {
-
+function add_object_property(&$created_objectProperty, &$object_property, &$class_tags, &$created_classes, &$data, &$namespace, $is_root, &$collection_id)
+{
     $range_resource = $object_property->children($namespace['rdfs'])->range->attributes($namespace['rdf'])['resource'];
     $domain_resource = $object_property->children($namespace['rdfs'])->domain->attributes($namespace['rdf'])['resource'];
 
     $range_class = class_search($range_resource, $class_tags, $namespace);
     $domain_class = class_search($domain_resource, $class_tags, $namespace);
-
 
 
     //Recupera o ID da classe referenciada em DOMAIN
@@ -2514,9 +2475,11 @@ function add_object_property(&$created_objectProperty, &$object_property, &$clas
         $data['id_domain_class'] = $created_classes[strval($domain_class_name)]['creation_id'];
     }
 
-    if($is_root)
+    if($is_root) {
+
         $new_property = wp_insert_term($data['name'], 'socialdb_property_type', array('parent' => get_property_type_id('socialdb_property_object'),
             'slug' => generate_slug($data['name'], 0)));
+    }
     else {
         $new_property = wp_insert_term($data['name'], 'socialdb_property_type', array('parent' => $created_objectProperty[$data['hasFatherResource']]['creation_id'],
             'slug' => generate_slug($data['name'], 0)));
@@ -2560,6 +2523,7 @@ function add_object_property(&$created_objectProperty, &$object_property, &$clas
     // update_term_meta($new_property['term_id'], 'socialdb_property_created_category',(string)$socialdb_collection_object_type);
     update_term_meta($new_property['term_id'], 'socialdb_property_created_category',$data['id_domain_class']);
     add_term_meta($data['id_domain_class'],'socialdb_category_property_id',$new_property['term_id']);
+    update_term_meta($new_property['term_id'], 'socialdb_property_collection_id', $collection_id);
 
     $created_objectProperty[$data['idAbout']]['creation_id'] = $new_property['term_id'];
     $created_objectProperty[$data['idAbout']]['created'] = true;
@@ -2597,51 +2561,29 @@ function generate_slug($string, $collection_id) {
 /*
  * Trata DataType Property
  */
-function treats_data_type_properties(&$datatypePropety_tags, &$class_tags, &$created_classes, &$functional_property_tags, &$namespace)
+function treats_data_type_properties(&$data_type_propety_tags, &$class_tags, &$created_classes, &$functional_property_tags, &$namespace, &$collection_id)
 {
-    $created_dataType_property = create_associative_table($datatypePropety_tags, $namespace);
+    $created_dataType_property = create_associative_table($data_type_propety_tags, $namespace);
 
-    $count = count($datatypePropety_tags);
+    $count = count($data_type_propety_tags);
     for($i = 0; $i < $count; $i++)
     {
-        create_data_type_properties($datatypePropety_tags, $created_dataType_property, $class_tags, $created_classes, $functional_property_tags, $datatypePropety_tags[$i], $namespace);
+        create_data_type_properties($data_type_propety_tags, $created_dataType_property, $class_tags, $created_classes, $functional_property_tags, $data_type_propety_tags[$i], $namespace, $collection_id);
     }
-
-    /*foreach($datatypePropety_tags as $datatypePropety)
-    {
-        //Tratamento Range
-        //$range_resource = $datatypePropety->children($namespace['rdfs'])->range->attributes($namespace['rdf'])['resource'];
-        //!Tratamento Range
-
-        //Tratamento Domain
-        $domain = $datatypePropety->children($namespace['rdfs'])->domain;
-        if($domain->children($namespace['owl'])->Class)
-        {
-            foreach($domain->children($namespace['owl'])->Class->unionOf->Class as $class)
-            {
-                //print $class->attributes($namespace['rdf'])['about'];
-            }
-        }
-        else
-        {
-            //print $domain->attributes($namespace['rdf'])['resource'];
-        }
-        //!Tratamento Domain
-
-        //Tratamento Type
-        $type_resource = $datatypePropety->attributes($namespace['rdf'])['resource'];
-        //!Tratamento Type
-    }*/
 
     return $created_dataType_property;
 }
 
-function create_data_type_properties(&$data_type_propety_tags, &$created_dataType_property, &$class_tags, &$created_classes, &$functional_property_tags, &$datatype_property, &$namespace)
+function create_data_type_properties(&$data_type_propety_tags, &$created_dataType_property, &$class_tags, &$created_classes, &$functional_property_tags, &$datatype_property, &$namespace, &$collection_id)
 {
     if(($about = $datatype_property->attributes($namespace['rdf'])['about']))
     {
         $data['idAbout'] = strval($about);
         $data['name'] = strval($datatype_property->children($namespace['rdfs'])->label);
+        if(!$data['name'])
+        {
+            $data['name'] = $data['idAbout'];
+        }
     }
     else//Caso o nome da propriedade seja guardada em ID e sirva tanto para nomea-la quanto para identifica-la
     {
@@ -2672,36 +2614,46 @@ function create_data_type_properties(&$data_type_propety_tags, &$created_dataTyp
 
             if(gettype($datatype_property_to_create) == "object")
             {
-                create_data_type_properties($data_type_propety_tags, $created_dataType_property, $class_tags, $created_classes, $functional_property_tags,$datatype_property_to_create, $namespace);
+                create_data_type_properties($data_type_propety_tags, $created_dataType_property, $class_tags, $created_classes, $functional_property_tags,$datatype_property_to_create, $namespace, $collection_id);
 
             }else
             {
                 $new_data = $data;
                 $new_data['name'] = $data['hasFatherResource'];
-                add_data_type_property($created_dataType_property, $datatype_property, $class_tags, $created_classes, $new_data, $namespace, true);
+                add_data_type_property($created_dataType_property, $datatype_property, $class_tags, $created_classes, $new_data, $namespace, true, $collection_id);
             }
-            add_data_type_property($created_dataType_property, $datatype_property, $class_tags, $created_classes, $data, $namespace, false);
+            add_data_type_property($created_dataType_property, $datatype_property, $class_tags, $created_classes, $data, $namespace, false, $collection_id);
 
         }
         else if($created_dataType_property[$data['idAbout']]['created'] == true)//Criando filho de pai ja criado
         {
-            add_data_type_property($created_dataType_property, $datatype_property, $class_tags, $created_classes, $data, $namespace, false);
+            add_data_type_property($created_dataType_property, $datatype_property, $class_tags, $created_classes, $data, $namespace, false, $collection_id);
         }
     }
     else if($created_dataType_property[$data['idAbout']]['creation_id'] != true)
     {
-        add_data_type_property($created_dataType_property, $datatype_property, $class_tags, $created_classes, $data, $namespace, true);
+        add_data_type_property($created_dataType_property, $datatype_property, $class_tags, $created_classes, $data, $namespace, true, $collection_id);
     }
 }
 
-function add_data_type_property(&$created_data_type_property, &$datatype_property, &$class_tags, &$created_classes, &$data, &$namespace, $is_root)
+function add_data_type_property(&$created_data_type_property, &$datatype_property, &$class_tags, &$created_classes, &$data, &$namespace, $is_root, $collection_id)
 {
     if(gettype($datatype_property) == "object")
     {
-        $range = end(explode("#", $datatype_property->children($namespace['rdfs'])->range->attributes($namespace['rdf'])['resource']));//Tipo de dado
-        $domain = str_replace("#", "", $datatype_property->children($namespace['rdfs'])->domain->attributes($namespace['rdf'])['resource']);
+        $range = strval(end(explode("#", $datatype_property->children($namespace['rdfs'])->range->attributes($namespace['rdf'])['resource'])));//Tipo de dado
+        if(!$range)
+        {
+            $range = 'string';
+        }
 
+        $domain = strval($datatype_property->children($namespace['rdfs'])->domain->attributes($namespace['rdf'])['resource']);
         $domain_class = class_search($domain,$class_tags,$namespace);
+
+        if(gettype($domain_class) != "object")
+        {
+            $domain = str_replace("#", "", $domain);
+            $domain_class = class_search($domain, $class_tags, $namespace);
+        }
 
         //ID da classe de dominio
         if(gettype($domain_class) == "object")
@@ -2709,9 +2661,12 @@ function add_data_type_property(&$created_data_type_property, &$datatype_propert
             if(($name = $domain_class->attributes($namespace['rdf'])['ID']))
                 $domain_class_name = strval($name);
             else
-                $domain_class_name = $domain_class->attributes($namespace['rdf'])['about'];
+                $domain_class_name = strval($domain_class->attributes($namespace['rdf'])['about']);
 
             $data['id_domain_class'] = $created_classes[strval($domain_class_name)]['creation_id'];
+        }else
+        {
+            throw new Exception("Classe referenciada não foi encontrada: ".$domain);
         }
     }
     else
@@ -2736,6 +2691,8 @@ function add_data_type_property(&$created_data_type_property, &$datatype_propert
     update_term_meta($new_property['term_id'], 'socialdb_property_data_widget', (string) $range);
     update_term_meta($new_property['term_id'], 'socialdb_property_created_category',$data['id_domain_class']);
     add_term_meta($data['id_domain_class'],'socialdb_category_property_id',$new_property['term_id']);
+    update_term_meta($new_property['term_id'], 'socialdb_property_collection_id', $collection_id);
+
     if($created_data_type_property != null)
     {
         $created_data_type_property[$data['idAbout']]['creation_id'] = $new_property['term_id'];
@@ -2747,15 +2704,16 @@ function add_data_type_property(&$created_data_type_property, &$datatype_propert
 
 function create_associative_table(&$tags, &$namespace)
 {
-    foreach($tags as $tag)
-    {
+    $table = [];
+    foreach($tags as $tag) {
         $idAbout = $tag->attributes($namespace['rdf'])['about'];
-        if($idAbout == null)
+        if ($idAbout == null)
             $idAbout = $tag->attributes($namespace['rdf'])['ID'];
 
         $table[$idAbout] = array('created' => false, 'creation_id' => null);
     }
 
+    //print "count ".count($table)."<br>";
     return $table;
 }
 
@@ -2771,27 +2729,9 @@ function treats_functional_property(&$functionalProperty_tags, &$created_dataTyp
     {
         create_functional_property($functionalProperty_tags, $created_functional_property, $created_dataType_property, $created_objectProperty, $functionalProperty_tags[$i], $class_tags, $created_classes, $namespace);
     }
-    /*foreach($functionalProperty_tags as $functionalProperty)
-    {
-        //Tratamento Range
-        $range_resource = $functionalProperty->children($namespace['rdfs'])->range->attributes($namespace['rdf'])['resource'];
-        //!Tratamento Range
-
-        //Tratamento Domain
-        $domain = $functionalProperty->children($namespace['rdfs'])->domain;
-        foreach($domain->children($namespace['owl'])->Class->unionOf->Class as $class)
-        {
-            //print $class->attributes($namespace['rdf'])['about']."<br>";
-        }
-        //!Tratamento Domain
-
-        //Tratamento Type
-        $type_resource = $functionalProperty->children($namespace['rdf'])->type->attributes($namespace['rdf'])['resource'];
-        //!Tratamento Type
-    }*/
 }
 
-function create_functional_property(&$functional_property_tags, &$created_functional_property, &$created_dataType_property, &$created_objectProperty, &$functional_property, &$class_tags, &$created_classes, &$namespace)
+function create_functional_property(&$functional_property_tags, &$created_functional_property, &$created_dataType_property, &$created_objectProperty, &$functional_property, &$class_tags, &$created_classes, &$namespace, &$collection_id)
 {
     if(($about = $functional_property->attributes($namespace['rdf'])['about']))
     {
@@ -2818,11 +2758,11 @@ function create_functional_property(&$functional_property_tags, &$created_functi
         )
         {
             $functional_property_to_create = class_search($data['hasFatherResource'], $functional_property_tags, $namespace);
-            create_functional_property($functional_property_tags, $created_functional_property, $created_dataType_property, $created_objectProperty, $functional_property_to_create, $class_tags, $created_classes, $namespace);
+            create_functional_property($functional_property_tags, $created_functional_property, $created_dataType_property, $created_objectProperty, $functional_property_to_create, $class_tags, $created_classes, $namespace, $collection_id);
             if(strcmp($type, "DatatypeProperty") == 0)
-                $id = add_data_type_property($created_dataType_property, $functional_property, $class_tags, $created_classes, $data, $namespace, false);
+                $id = add_data_type_property($created_dataType_property, $functional_property, $class_tags, $created_classes, $data, $namespace, false, $collection_id);
             else if(strcmp($type, "ObjectProperty") == 0)
-                $id = add_object_property($created_objectProperty, $functional_property, $class_tags, $created_classes, $data, $namespace, false);
+                $id = add_object_property($created_objectProperty, $functional_property, $class_tags, $created_classes, $data, $namespace, false, $collection_id);
 
             $created_functional_property[$data['idAbout']]['creation_id'] = $id;
             $created_functional_property[$data['idAbout']]['created'] = true;
@@ -2830,9 +2770,9 @@ function create_functional_property(&$functional_property_tags, &$created_functi
         else //if($created_functional_property[$data['idAbout']]['created'] == true)//Criando filho de pai ja criado
         {
             if(strcmp($type, "DatatypeProperty") == 0)
-                $id = add_data_type_property($created_dataType_property, $functional_property, $class_tags, $created_classes, $data, $namespace, false);
+                $id = add_data_type_property($created_dataType_property, $functional_property, $class_tags, $created_classes, $data, $namespace, false, $collection_id);
             else if(strcmp($type, "ObjectProperty") == 0)
-                $id = add_object_property($created_objectProperty, $functional_property, $class_tags, $created_classes, $data, $namespace, false);
+                $id = add_object_property($created_objectProperty, $functional_property, $class_tags, $created_classes, $data, $namespace, false, $collection_id);
 
             $created_functional_property[$data['idAbout']]['creation_id'] = $id;
             $created_functional_property[$data['idAbout']]['created'] = true;
@@ -2843,9 +2783,9 @@ function create_functional_property(&$functional_property_tags, &$created_functi
         //Condição about é para que não crie um determinado tipo de functional property pois este já é tratado nas funções
         //Que tratam DataTypePropertys e ObjectPropertys
         if(strcmp($type, "DatatypeProperty") == 0)
-            $id = add_data_type_property($created_dataType_property, $functional_property, $class_tags, $created_classes, $data, $namespace, true);
+            $id = add_data_type_property($created_dataType_property, $functional_property, $class_tags, $created_classes, $data, $namespace, true, $collection_id);
         else if(strcmp($type, "ObjectProperty") == 0)
-            $id = add_object_property($created_objectProperty, $functional_property, $class_tags, $created_classes, $data, $namespace, true);
+            $id = add_object_property($created_objectProperty, $functional_property, $class_tags, $created_classes, $data, $namespace, true, $collection_id);
 
         $created_functional_property[$data['idAbout']]['creation_id'] = $id;
         $created_functional_property[$data['idAbout']]['created'] = true;
@@ -3025,7 +2965,7 @@ function treats_transitive_properties(&$transitive_properties, &$created_object_
     }
 }
 
-function create_transitive_property(&$transitive_properties_tags, &$created_transitive_properties, &$created_object_property, &$class_tags, &$created_classes, &$transitive_property, &$namespace)
+function create_transitive_property(&$transitive_properties_tags, &$created_transitive_properties, &$created_object_property, &$class_tags, &$created_classes, &$transitive_property, &$namespace, &$collection_id)
 {
     if(($about = $transitive_property->attributes($namespace['rdf'])['about']))
     {
@@ -3060,15 +3000,15 @@ function create_transitive_property(&$transitive_properties_tags, &$created_tran
         if($created_transitive_properties[($data['hasFatherResource'] = str_replace('#', '', $data['hasFatherResource']))]['created'] != true)
         {
             $transitive_property_to_create = class_search($data['hasFatherResource'], $transitive_properties_tags, $namespace);
-            create_transitive_property($transitive_properties_tags, $created_transitive_properties, $created_object_property, $class_tags, $created_classes,$transitive_property_to_create, $namespace);
-            $id = add_object_property($created_object_property, $transitive_property, $class_tags, $created_classes, $data, $namespace, false);
+            create_transitive_property($transitive_properties_tags, $created_transitive_properties, $created_object_property, $class_tags, $created_classes,$transitive_property_to_create, $namespace, $collection_id);
+            $id = add_object_property($created_object_property, $transitive_property, $class_tags, $created_classes, $data, $namespace, false, $collection_id);
 
             $created_transitive_properties[$data['idAbout']]['creation_id'] = $id;
             $created_transitive_properties[$data['idAbout']]['created'] = true;
         }
         else if($created_transitive_properties[$data['idAbout']]['created'] == true)
         {
-            $id = add_object_property($created_object_property, $transitive_property, $class_tags, $created_classes, $data, $namespace, false);
+            $id = add_object_property($created_object_property, $transitive_property, $class_tags, $created_classes, $data, $namespace, false, $collection_id);
 
             $created_transitive_properties[$data['idAbout']]['creation_id'] = $id;
             $created_transitive_properties[$data['idAbout']]['created'] = true;
@@ -3076,14 +3016,14 @@ function create_transitive_property(&$transitive_properties_tags, &$created_tran
     }
     else if($created_transitive_properties[$data['idAbout']]['creation_id'] != true)
     {
-        $id = add_object_property($created_object_property, $transitive_property, $class_tags, $created_classes, $data, $namespace, true);
+        $id = add_object_property($created_object_property, $transitive_property, $class_tags, $created_classes, $data, $namespace, true, $collection_id);
 
         $created_transitive_properties[$data['idAbout']]['creation_id'] = $id;
         $created_transitive_properties[$data['idAbout']]['created'] = true;
     }
 }
 
-function treats_symmetric_properties(&$symmetric_properties, &$created_object_property, &$class_tags, &$created_classes, &$namespace)
+function treats_symmetric_properties(&$symmetric_properties, &$created_object_property, &$class_tags, &$created_classes, &$namespace, &$collection_id)
 {
     foreach($symmetric_properties as $symmetric_property)
     {
@@ -3100,7 +3040,7 @@ function treats_symmetric_properties(&$symmetric_properties, &$created_object_pr
 
         $data['symmetric'] = true;
 
-        add_object_property($created_object_property, $symmetric_property, $class_tags, $created_classes, $data, $namespace, true);
+        add_object_property($created_object_property, $symmetric_property, $class_tags, $created_classes, $data, $namespace, true, $collection_id);
     }
 }
 
@@ -3166,9 +3106,6 @@ function add_options_mapas_culturais_ontology()
             </div>
             <div style="display: none;" id="maping_container_metatags">
             </div>
-            <!--<input type="hidden" id="collection_import_id" name="collection_id" value="">
-            <input type="hidden" id="operation" name="operation" value="validate_metatag">-->
-
         </div>
     </div>
     <?php
@@ -3199,6 +3136,7 @@ function mapa_cultural()
 
     //$data['category_name'] = $name;
 
+    $data['dont_create'] = true;
     $data['category_name'] = "Espaços";
     $created_classes['spaces'] = record_class($null, $name, $category_model, $data, $collection_id, true);
 
@@ -3249,10 +3187,10 @@ function treats_object_properties_unknown(&$result, &$created_data_type_properti
                 if($datatype_name == 'location')
                 {
                     $datatype_name = 'latitude';
-                    create_property($created_data_type_properties, $datatype_name, $created_classes, $index_class);
+                    create_property($created_data_type_properties, $datatype_name, $created_classes, $index_class, $collection_id);
 
                     $datatype_name = 'longitude';
-                    create_property($created_data_type_properties, $datatype_name, $created_classes, $index_class);
+                    create_property($created_data_type_properties, $datatype_name, $created_classes, $index_class, $collection_id);
 
                     update_post_meta($collection_id, 'socialdb_collection_list_mode', 'geolocation');
                     update_post_meta($collection_id, 'socialdb_collection_latitude_meta', $created_data_type_properties['latitude']['creation_id']);
@@ -3260,7 +3198,7 @@ function treats_object_properties_unknown(&$result, &$created_data_type_properti
                 }
                 else
                 {
-                    create_property($created_data_type_properties, $datatype_name, $created_classes, $index_class);
+                    create_property($created_data_type_properties, $datatype_name, $created_classes, $index_class, $collection_id);
                 }
 
             }
@@ -3271,7 +3209,7 @@ function treats_object_properties_unknown(&$result, &$created_data_type_properti
         }
     }
 }
-function create_property(&$created_data_type_properties, &$datatype_name, &$created_classes, &$index_class)
+function create_property(&$created_data_type_properties, &$datatype_name, &$created_classes, &$index_class, &$collection_id)
 {
     $null = null;
     if($created_data_type_properties[$datatype_name]['created'] != null)
@@ -3287,7 +3225,7 @@ function create_property(&$created_data_type_properties, &$datatype_name, &$crea
         //Cria data type property
         $data_type_property = array('data_type' => 'string', 'id_domain_class' => $created_classes[$index_class]);
         $data['name'] = $datatype_name;
-        $created_data_type_properties[$datatype_name]['creation_id'] = add_data_type_property($null, $data_type_property, $null, $null, $data, $null, true);
+        $created_data_type_properties[$datatype_name]['creation_id'] = add_data_type_property($null, $data_type_property, $null, $null, $data, $null, true, $collection_id);
         $created_data_type_properties[$datatype_name]['created'] = true;
 
         array_push($created_data_type_properties[$datatype_name]['associated_classes'], $created_classes[$index_class]);
@@ -3318,8 +3256,6 @@ function add_individual(&$data, &$collection_id, &$properties_list)
 
             if($property_name != "name")
             {
-                //print $property_name."<br>";
-
                 if($property_name == 'latitude')
                 {
                     $value = $properties_list['location'][$property_name];
