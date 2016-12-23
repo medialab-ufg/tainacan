@@ -71,11 +71,8 @@ class ObjectMultipleModel extends Model {
                     unset($_exif_data['COMPUTED']);
 
                     $property_model = new PropertyModel();
-                    $_DATASET = [
-                            'collection_id' => $col_id,
-                            'category_id' => $this->get_category_root_of($col_id),
-                            'property_category_id' => $this->get_category_root_of($col_id)
-                        ];
+                    $rootId = $this->get_category_root_of($col_id);
+                    $_DATASET = ['collection_id' => $col_id, 'category_id' => $rootId, 'property_category_id' => $rootId];
                     $_col_metas = json_decode($property_model->list_property_data($_DATASET))->property_data;
 
                     $_props_slugs = [];
