@@ -30,6 +30,8 @@ class ObjectMultipleModel extends Model {
 
       if($items_id&&is_array($items_id)) {
           $_exif_compounds_array = [];
+          $_exif_compound_parent = ['title' => 'Imagem EXIF', 'id' => -1];
+
       foreach ($items_id as $item_id) {
         $post_id = $this->insert_post($data,trim($item_id));
         if($post_id) {
@@ -81,6 +83,10 @@ class ObjectMultipleModel extends Model {
                         $_formtd = explode("_", $_prop_data->slug);
                         array_push($_props_slugs, $_formtd[0] );
                         array_push($_props_ids, $_prop_data->id);
+
+                        if( ("imagem-exif" == $_formtd[0]) && ($_exif_compound_parent['title'] == $_prop_data->name) ) {
+                            $_exif_compound_parent['id'] = $_prop_data->id;
+                        }
                     }
 
                     foreach($_exif_data as $exif_tag):
@@ -133,7 +139,12 @@ class ObjectMultipleModel extends Model {
         }
       }
           $uniq_exifs = implode(",", array_unique($_exif_compounds_array));
-          $property_model->add_property_compounds("Imagem EXIF", $data['collection_id'], $_DATASET['category_id'], $uniq_exifs, "1");
+          // if it has been set already
+          if($_exif_compound_parent['id'] > 0) {
+              $property_model->update_property_compounds($_exif_compound_parent['id'], $_exif_compound_parent['title'], $data['collection_id'], $_DATASET['category_id'], $uniq_exifs, "1");
+          } else {
+              $property_model->add_property_compounds($_exif_compound_parent['title'], $data['collection_id'], $_DATASET['category_id'], $uniq_exifs, "1");
+          }
     }
 
     if(count($result['ids'])>0){
