@@ -1421,8 +1421,17 @@ function showExport(src) {
         data: {operation: 'index_export', collection_id: $("#collection_id").val()}
     }).done(function (result) {
         $('#main_part').hide();
-        $('#configuration').html(result);
-        $('#configuration').show();
+        $('#configuration').html(result).show();
+    });
+}
+
+function showStatistics(src) {
+    $.ajax({
+        url: src + '/controllers/log/log_controller.php', type: 'POST',
+        data: { operation: 'show_statistics' }
+    }).done(function(r){
+        $('#main_part').hide();
+        $('#configuration').html(r).show();
     });
 }
 

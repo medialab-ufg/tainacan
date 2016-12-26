@@ -222,7 +222,7 @@
     function fetchData(parent, action) {
         var from = $("#from_period").val();
         var to = $("#to_period").val();
-        var stat_path = $('.stat_path').val();
+        var stat_path = $('.stat_path').val() || $('#src').val();
 
         $.ajax({
             url: stat_path + '/controllers/log/log_controller.php', type: 'POST',

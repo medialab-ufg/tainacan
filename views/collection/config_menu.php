@@ -57,6 +57,11 @@
                         <span class="glyphicon glyphicon-save"></span> &nbsp;<?php _e('Export', 'tainacan'); ?>
                     </a>
                 </li>
+                <li <?php do_action('menu_collection_export') ?>>
+                    <a style="cursor: pointer;" onclick="showStatistics('<?php echo get_template_directory_uri() ?>');" >
+                        <span class="glyphicon glyphicon-stats"></span> &nbsp;<?php _e('Statistics', 'tainacan'); ?>
+                    </a>
+                </li>
 
                 <li class="divider"></li>
 
