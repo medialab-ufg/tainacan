@@ -78,6 +78,9 @@
     };
     
     $(function() {
+        // Specific functions to repository or collections stat page
+        normalizeStatPage();
+
         $(".period-config .input_date").datepicker({
             //altFormat: 'dd/mm/yy',
             dateFormat: 'yy-mm-dd',
@@ -126,6 +129,19 @@
         heightStyle: "content",
         icons: false
     });
+
+    function normalizeStatPage() {
+        var stats_title = [
+            $('.stats-i18n .repo-stats').text(),
+            $('.stats-i18n .collection-stats').text()
+        ];
+        // Repository Statistics
+        if( $('body').hasClass('page-template-page-statistics') ) {
+            $('.chart-header h3.topo').text(stats_title[0]);
+        } else if( $('body').hasClass('single-socialdb_collection') ) { // Collection's Statistics
+            $('.chart-header h3.topo').text(stats_title[1]);
+        }
+    }
 
     var tChart = new TainacanChart();
     var stats_dynatree_opts = {
