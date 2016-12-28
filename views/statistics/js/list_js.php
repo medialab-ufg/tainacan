@@ -241,10 +241,6 @@
         var stat_path = $('.stat_path').val() || $('#src').val();
         var c_id = $('.get_collection_stats').val() || null;
 
-        cl("Olha o que eu to enviando pra lá: " + c_id + " <<!");
-        cl("Parente: " + parent + ". E ação: " + action);
-        cl('DAta inicial e final ...' + from + ' --- ' + to);
-
         $.ajax({
             url: stat_path + '/controllers/log/log_controller.php', type: 'POST',
             data: { operation: 'user_events', parent: parent, event: action, from: from, to: to, collec_id: c_id }
@@ -253,9 +249,6 @@
             var chart = $('.selected_chart_type').val();
             $(".current_parent_report").val(parent);
 
-            cl('E aqui vai o resultado ...');
-            cl(res_json);
-            
             if( (res_json == null) || res_json.length == 0) {
                 toggleElements(["#charts-container div", "#charts-resume"], true);
                 toggleElements(["#charts-container #no_chart_data"]);

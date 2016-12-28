@@ -52,7 +52,8 @@ class CategoryModel extends Model {
             $this->update_metas($new_category['term_id'], $data);
             $data['success'] = 'true';
             $data['term_id'] = $new_category['term_id'];
-            $log_data = ['user_id' => get_current_user_id(),'resource_id' => $data['term_id'], 'event_type' => 'user_category', 'event' => 'add' ];
+            $log_data = ['collection_id' => $data['collection_id'], 'user_id' => get_current_user_id(),
+                'resource_id' => $data['term_id'], 'event_type' => 'user_category', 'event' => 'add' ];
             Log::addLog($log_data);
         } else {
             $data['success'] = 'false';
@@ -138,7 +139,8 @@ class CategoryModel extends Model {
             }
             $this->update_metas($update_category['term_id'], $data);
             $this->insert_synonyms($update_category['term_id'], $data);
-            $log_data = [ 'resource_id' => $update_category['term_id'], 'user_id' => get_current_user_id(), 'event_type' => 'user_category', 'event' => 'edit' ];
+            $log_data = ['collection_id' => $data['collection_id'], 'resource_id' => $update_category['term_id'],
+                'user_id' => get_current_user_id(), 'event_type' => 'user_category', 'event' => 'edit' ];
             Log::addLog($log_data);
             $data['success'] = 'true';
         } else {
@@ -241,7 +243,7 @@ class CategoryModel extends Model {
         if (!$this->verify_collection_category_root($data['category_delete_id'])) {
             if (wp_delete_term($data['category_delete_id'], 'socialdb_category_type')) {
                 $data['success'] = 'true';
-                $log_data = [ 'resource_id' => $data['category_delete_id'], 'user_id' => get_current_user_id(), 'event_type' => 'user_category', 'event' => 'delete' ];
+                $log_data = ['collection_id' => $data['collection_id'], 'resource_id' => $data['category_delete_id'], 'user_id' => get_current_user_id(), 'event_type' => 'user_category', 'event' => 'delete' ];
                 Log::addLog($log_data);
             } else {
                 $data['success'] = 'false';

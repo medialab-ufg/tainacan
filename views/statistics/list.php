@@ -6,8 +6,6 @@ $_log_helper = new LogHelper();
 
 include_once('inc/i18n_strs.php'); 
 include_once('js/list_js.php');
-
-var_dump( $collec_id );
 ?>
 <div class="col-md-12 statistics-container no-padding">
 
