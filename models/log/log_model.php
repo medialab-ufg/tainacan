@@ -37,7 +37,7 @@ class Log extends Model {
             $to = date("Y-m-d", strtotime("tomorrow"));
         }
 
-        if( is_null($collection_id) ) {
+        if( $collection_id == 'null' || is_null($collection_id) ) {
             $sql = sprintf("SELECT COUNT(id) as '$_alias' FROM %s WHERE event_type = '$event_type' AND event = '$event' AND event_date BETWEEN '$from' AND '$to'", self::_table() );
         } else {
             $sql = sprintf("SELECT COUNT(id) as '$_alias' FROM %s WHERE event_type = '$event_type' AND event = '$event' 
