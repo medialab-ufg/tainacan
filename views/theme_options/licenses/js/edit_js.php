@@ -5,7 +5,11 @@
         listStandartLicenses();
         change_breadcrumbs_title('<?php _e('Repository Licenses','tainacan') ?>');
 
-        $('#formAddLicense').submit(function (e) {
+        $('#formAddLicense').submit(function (e) {{
+            if($('#add_license_name').val().trim()===''){
+                showAlertGeneral('<?php _e('Attention','tainacan') ?>', '<?php _e('Name is empty','tainacan') ?>', 'info');
+                return false;
+            }
             e.preventDefault();
             $.ajax({
                 url: $("#src").val() + '/controllers/theme_options/theme_options_controller.php',

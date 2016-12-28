@@ -16,6 +16,7 @@ include_once('js/edit_js.php');
                 <li role="presentation"><a href="#aba-vimeo-repository" aria-controls="property_object_tab" role="tab" data-toggle="tab"><?php _e('Vimeo', 'tainacan') ?></a></li>
                 <li role="presentation"><a href="#aba-embed-ly-repository" aria-controls="property_object_tab" role="tab" data-toggle="tab"><?php _e('Embed.ly', 'tainacan') ?></a></li>
                 <li role="presentation"><a href="#aba-google-repository" aria-controls="property_object_tab" role="tab" data-toggle="tab"><?php _e('Google / Google +', 'tainacan') ?></a></li>
+                <li role="presentation"><a href="#aba-europeana" aria-controls="property_object_tab" role="tab" data-toggle="tab"><?php _e('Europeana', 'tainacan') ?></a></li>
             </ul>
             <div class="tab-content" style="padding: 15px;">
                 <!-- Aba do youtube-->
@@ -124,6 +125,23 @@ include_once('js/edit_js.php');
                         <label for="socialdb_google_api_key"><?php _e('API Key', 'tainacan'); ?></label>
                         <input type="text"  name="socialdb_google_api_key" id="socialdb_google_api_key"  placeholder="<?php _e("Type here", 'tainacan'); ?>" class="form-control" value="<?php echo $socialdb_google_api_key; ?>"/></br>
                         
+                        <?php echo ViewHelper::render_default_submit_button(); ?>
+                    </form>
+
+                </div>
+                <!-- Aba do facebook-->
+                <div id="aba-europeana" class="tab-pane fade">
+                    <?php $socialdb_eur_api_key = (isset($socialdb_eur_api_key) ? $socialdb_eur_api_key : ''); ?>
+                    <?php $socialdb_eur_private_key = (isset($socialdb_eur_private_key) ? $socialdb_eur_private_key : ''); ?>
+
+                    <form name="formEuropeanaApi" id="formEuropeanaApi" method="post">
+                        <input type="hidden" id="operation_Europeana" name="operation" value="update_options" />
+                        <label for="socialdb_eur_api_key"><?php _e('API KEY', 'tainacan'); ?></label>
+                        <input type="text"  name="socialdb_eur_api_key" id="socialdb_eur_api_key" placeholder="<?php _e("Type here", 'tainacan'); ?>" class="form-control" value="<?php echo $socialdb_eur_api_key; ?>"/></br>
+
+                        <label for="socialdb_eur_private_key"><?php _e('Private Key', 'tainacan'); ?></label>
+                        <input type="text"  name="socialdb_eur_private_key" id="socialdb_eur_private_key" placeholder="<?php _e("Type here", 'tainacan'); ?>" class="form-control" value="<?php echo $socialdb_eur_private_key; ?>"/></br>
+
                         <?php echo ViewHelper::render_default_submit_button(); ?>
                     </form>
 

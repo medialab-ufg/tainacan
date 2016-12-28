@@ -1,7 +1,7 @@
  <?php
 /*
  * Template Name: Index
- * Description: Paginca inicial da colecao
+ * Description: Pagina inicial da colecao
  */
 require_once(dirname(__FILE__) . '/models/social_network/Facebook/autoload.php');
 require_once(dirname(__FILE__) . '/controllers/helpers/helpers_controller.php');

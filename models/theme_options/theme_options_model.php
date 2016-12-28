@@ -170,7 +170,9 @@ class ThemeOptionsModel extends Model {
             'socialdb_google_client_id',
             'socialdb_google_secret_key',
             //'socialdb_google_redirect_uri',
-            'socialdb_google_api_key'
+            'socialdb_google_api_key',
+            'socialdb_eur_api_key',
+            'socialdb_eur_private_key'
         ];
         $options = get_option('socialdb_theme_options');
 
