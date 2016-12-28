@@ -171,17 +171,25 @@
         },
         onPostInit: function(isReloading, isError) {
             $('.dynatree-radio').first().click();
+            if( $('body').hasClass('single-socialdb_collection') ) { // Collection's Statistics
+                $('.repoOnly').hide();
+            }
+        },
+        onQueryExpand: function() {
+            if( $('body').hasClass('single-socialdb_collection') ) { // Collection's Statistics
+                $('.repoOnly').hide('fast');
+            }
         }
     };
 
     function statusChildren() {
         return [
             // { title: tChart.getStatDesc("Status", "logins / registros / banidos / excluídos"), href: "status", addClass: 'hllog' },
-            { title: "Status <p> logins / registros / banidos / excluídos </p>", href: "status", addClass: 'hllog' },
+            { title: "Status <p> logins / registros / banidos / excluídos </p>", href: "status", addClass: 'repoOnly' },
             { title: "Itens <p> criaram / editaram / apagaram / <br/> visualizaram / baixaram</p>", href: "items" },
             { title: "Perfil <p> Pessoas que aderiram a um perfil </p>", href: "profile" },
             { title: "Categorias <p> criaram / editaram / apagaram / visualizaram </p>", href: "category" },
-            { title: "Coleção <p> criaram / editaram / apagaram / visualizaram </p>", href: "collection" }
+            { title: "Coleção <p> criaram / editaram / apagaram / visualizaram </p>", href: "collection", addClass: 'repoOnly' }
         ];
     }
 
@@ -189,13 +197,13 @@
         return [
             { title: "Usuário <p> view / comentado / votado </p>", href: "user" },
             { title: "Status <p> ativos / rascunhos / lixeira / excluídos </p>", href: "general_status" },
-            { title: "Coleção <p> número de itens por coleção </p>", href: "top_collections" }
+            { title: "Coleção <p> número de itens por coleção </p>", href: "top_collections", addClass: 'repoOnly' }
         ];
     }
 
     function collectionsChildren() {
         return [
-            { title: "Status <p> criadas / editadas / excluídas / visualizadas / baixadas</p>", href: "collection"},
+            { title: "Status <p> criadas / editadas / excluídas / visualizadas / baixadas</p>", href: "collection", addClass: 'repoOnly'},
             { title: "Buscas Frequentes <p> ranking das buscas mais realizadas </p>", href: "searches"}
         ];
     }
