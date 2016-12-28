@@ -154,7 +154,7 @@ include_once ('js/import_configuration_js.php');
                             <br>
                             <hr>
                             <div>
-                                <h4>Importar</h4>
+                                <h4><?php _e('Import from Europeana', 'tainacan'); ?></h4>
                                 <form id="formEur" name="formEur" enctype="multipart/form-data" method="post">
                                     <div class="form-group">
                                         <input type="radio" name="metadados" value="standart" checked="checked"/> Standart<br>
@@ -168,7 +168,7 @@ include_once ('js/import_configuration_js.php');
                             </div>
                             <hr>
                             <div>
-                                <h4>Buscar</h4>
+                                <h4><?php _e('Search in Europeana', 'tainacan'); ?></h4>
                                 <form id="formEurSearch" name="formEurSearch" enctype="multipart/form-data" method="post">
                                     <div class="form-group">
                                         <input type="text" class="form-control" name="search" placeholder="Pesquisar por:"/>
