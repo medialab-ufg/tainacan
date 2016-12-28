@@ -157,11 +157,11 @@ include_once ('js/import_configuration_js.php');
                                 <h4><?php _e('Import from Europeana', 'tainacan'); ?></h4>
                                 <form id="formEur" name="formEur" enctype="multipart/form-data" method="post">
                                     <div class="form-group">
-                                        <input type="radio" name="metadados" value="standart" checked="checked"/> Standart<br>
-                                        <input type="radio" name="metadados" value="full"/> Full<br><br>
-                                        <input type="text" class="form-control" name="search" placeholder="Pesquisar por:"/>
+                                        <input type="radio" name="metadados" value="standart" checked="checked"/> <?php _e('Standart', 'tainacan'); ?><br>
+                                        <input type="radio" name="metadados" value="full"/> <?php _e('Full', 'tainacan'); ?><br><br>
+                                        <input type="text" class="form-control" name="search" id="search_import_eur" placeholder="Pesquisar por:"/>
                                     </div>
-                                    <input type="hidden" id="collection_import_csv_id" name="collection_id" value="">
+                                    <input type="hidden" id="collection_import_eur_id" name="collection_id" value="">
                                     <input type="hidden" id="operation_csv" name="operation" value="import_eur">
                                     <button type="submit" id="submit_eur" class="btn btn-primary tainacan-blue-btn-bg"><?php _e('Import', 'tainacan'); ?></button>
                                 </form>
@@ -171,9 +171,8 @@ include_once ('js/import_configuration_js.php');
                                 <h4><?php _e('Search in Europeana', 'tainacan'); ?></h4>
                                 <form id="formEurSearch" name="formEurSearch" enctype="multipart/form-data" method="post">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" name="search" placeholder="Pesquisar por:"/>
+                                        <input type="text" class="form-control" name="search" id="search_only_eur" placeholder="Pesquisar por:"/>
                                     </div>
-                                    <input type="hidden" id="collection_import_csv_id" name="collection_id" value="">
                                     <input type="hidden" id="operation_csv" name="operation" value="search_eur">
                                     <button type="submit" id="submit_eur_search" class="btn btn-primary tainacan-blue-btn-bg"><?php _e('Search', 'tainacan'); ?></button>
                                 </form>
