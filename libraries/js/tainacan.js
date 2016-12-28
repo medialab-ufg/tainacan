@@ -1426,9 +1426,10 @@ function showExport(src) {
 }
 
 function showStatistics(src) {
+    var c_id = $('#collection_id').val();
     $.ajax({
         url: src + '/controllers/log/log_controller.php', type: 'POST',
-        data: { operation: 'show_statistics' }
+        data: { operation: 'show_statistics', collec_id: c_id }
     }).done(function(r){
         $('#main_part').hide();
         $('#configuration').html(r).show();

@@ -26,7 +26,7 @@ class Log extends Model {
         return ['ip' => $_SERVER['REMOTE_ADDR'], 'event_date' => date('Y-m-d H:i:s')];
     }
 
-    public static function getUserEvents($event_type, $event, $encoded = true, $from = '', $to = '') {
+    public static function getUserEvents($event_type, $event, $encoded = true, $from = '', $to = '', $collection_id = NULL) {
         global $wpdb;
         $_alias = "total_" . $event;
 
@@ -34,10 +34,15 @@ class Log extends Model {
             $from = "2016-01-01";
         }
         if(empty($to)) {
-            $to = date("Y-m-d");
+            $to = date("Y-m-d", strtotime("tomorrow"));
         }
 
-        $sql = sprintf("SELECT COUNT(id) as '$_alias' FROM %s WHERE event_type = '$event_type' AND event = '$event' AND event_date BETWEEN '$from' AND '$to' ", self::_table() );
+        if( is_null($collection_id) ) {
+            $sql = sprintf("SELECT COUNT(id) as '$_alias' FROM %s WHERE event_type = '$event_type' AND event = '$event' AND event_date BETWEEN '$from' AND '$to'", self::_table() );
+        } else {
+            $sql = sprintf("SELECT COUNT(id) as '$_alias' FROM %s WHERE event_type = '$event_type' AND event = '$event' 
+                   AND collection_id = '$collection_id' AND event_date BETWEEN '$from' AND '$to'", self::_table() );
+        }
         
         if( $encoded ) {
             return json_encode( $wpdb->get_results($sql) );
@@ -78,7 +83,7 @@ class Log extends Model {
         return ( is_array($extra_fields) && !empty($extra_fields) ) ? array_merge($base_defaults, $extra_fields) : $base_defaults;
     }
 
-    public static function user_events($event_type, $spec, $from, $to) {
+    public static function user_events($event_type, $spec, $from, $to, $collection_id = NULL) {
         $_events_ = self::get_event_type($spec);
 
         if( "top_collections_items" == $event_type ) {
@@ -91,7 +96,7 @@ class Log extends Model {
             if($_events_) {
                 $_stats = [];
                 foreach ($_events_['events'] as $ev) {
-                    $evt_count_ = self::getUserEvents($event_type, $ev, false, $from, $to);
+                    $evt_count_ = self::getUserEvents($event_type, $ev, false, $from, $to, $collection_id);
                     $l_data = array_pop($evt_count_);
                     $_stats[] = $l_data[0];
                 }

@@ -9,7 +9,7 @@ class LogController extends Controller {
             case "user_events":
                 $log = new Log();
                 $_evt = $this->getEventType($data['parent'], $data['event']);
-                return $log->user_events($_evt, $data['event'], $data['from'], $data['to']);
+                return $log->user_events($_evt, $data['event'], $data['from'], $data['to'], $data['collec_id']);
         endswitch;
     }
 

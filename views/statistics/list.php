@@ -6,6 +6,8 @@ $_log_helper = new LogHelper();
 
 include_once('inc/i18n_strs.php'); 
 include_once('js/list_js.php');
+
+var_dump( $collec_id );
 ?>
 <div class="col-md-12 statistics-container no-padding">
 
@@ -82,6 +84,7 @@ include_once('js/list_js.php');
 
             <input type="hidden" value="default" class="selected_chart_type" />
             <input type="hidden" class="current_parent_report" value="" />
+            <input type="hidden" class="get_collection_stats" value="<?php echo $collec_id; ?>" />
         </div>
         
         <div id="charts-resume" class="col-md-12">
