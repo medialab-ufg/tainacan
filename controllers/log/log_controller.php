@@ -5,6 +5,7 @@ class LogController extends Controller {
     public function operation($op, $data) {
         switch($op):
             case "show_statistics":
+                
                 return $this->render(dirname(__FILE__) . '../../../views/statistics/list.php', $data);
             case "user_events":
                 $log = new Log();

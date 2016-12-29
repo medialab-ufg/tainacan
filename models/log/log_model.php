@@ -89,7 +89,7 @@ class Log extends Model {
         if( "top_collections_items" == $event_type ) {
             return self::getTopCollections();
         } else if("general_status_items" === $event_type) {
-            return self::getItemsStatus($spec);
+            return self::getItemsStatus($spec, $collection_id);
         } else if("user_searches" == $event_type) {
             return self::getFrequentSearches();
         } else {
@@ -136,12 +136,20 @@ class Log extends Model {
         return json_encode( $stat_data );
     }
 
-    public function getItemsStatus($spec) {
+    public function getItemsStatus($spec, $collection_id = NULL) {
         global $wpdb;
-        $status['active'] = sprintf("SELECT COUNT(id) as total_active from wp_posts WHERE post_type='socialdb_object' AND post_status='publish'", self::_posts_table());
-        $status['draft'] = sprintf("SELECT COUNT(id) as total_draft from wp_posts WHERE post_type='socialdb_object' AND post_status='draft'", self::_posts_table());
-        $status['trash'] = sprintf("SELECT COUNT(id) as total_trash from wp_posts WHERE post_type='socialdb_object' AND post_status='trash'", self::_posts_table());
-        $status['deleted'] = sprintf("SELECT count(id) as total_delete from wp_statistics WHERE event_type='user_items' AND event='delete'",self::_table());
+
+        if( $collection_id == 'null' || is_null($collection_id) ) {
+            $status['active'] = sprintf("SELECT COUNT(id) as total_active from wp_posts WHERE post_type='socialdb_object' AND post_status='publish'", self::_posts_table());
+            $status['draft'] = sprintf("SELECT COUNT(id) as total_draft from wp_posts WHERE post_type='socialdb_object' AND post_status='draft'", self::_posts_table());
+            $status['trash'] = sprintf("SELECT COUNT(id) as total_trash from wp_posts WHERE post_type='socialdb_object' AND post_status='trash'", self::_posts_table());
+            $status['deleted'] = sprintf("SELECT count(id) as total_delete from wp_statistics WHERE event_type='user_items' AND event='delete'",self::_table());
+        } else {
+            $status['active'] = sprintf("SELECT COUNT(id) as total_active from wp_posts WHERE post_type='socialdb_object' AND post_status='publish' AND post_parent='$collection_id'", self::_posts_table());
+            $status['draft'] = sprintf("SELECT COUNT(id) as total_draft from wp_posts WHERE post_type='socialdb_object' AND post_status='draft'  AND post_parent='$collection_id'", self::_posts_table());
+            $status['trash'] = sprintf("SELECT COUNT(id) as total_trash from wp_posts WHERE post_type='socialdb_object' AND post_status='trash' AND post_parent='$collection_id'", self::_posts_table());
+            $status['deleted'] = sprintf("SELECT count(id) as total_delete from wp_statistics WHERE event_type='user_items' AND event='delete' AND collection_id='$collection_id'",self::_table());
+        }
 
         $_res = [];
         $_stat_obj = self::get_event_type($spec);
@@ -149,7 +157,7 @@ class Log extends Model {
             $_obj = array_pop($wpdb->get_results($s));
             array_push( $_res, $_obj );
         }
-        $stat_data = [ "stat_title" => ['Status dos Itens', '#'], "stat_object" => $_res, "color" => $_stat_obj['color'], "item_status" => true ];
+        $stat_data = ["stat_title" => ['Status dos Itens', '#'], "stat_object" => $_res, "color" => $_stat_obj['color'], "item_status" => true];
         return json_encode($stat_data);
     }
 
