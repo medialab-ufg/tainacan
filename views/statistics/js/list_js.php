@@ -170,9 +170,12 @@
             }
         },
         onPostInit: function(isReloading, isError) {
-            $('.dynatree-radio').first().click();
             if( $('body').hasClass('single-socialdb_collection') ) { // Collection's Statistics
                 $('.repoOnly').hide();
+                var fst_col_dyna = $('.dynatree-radio').get(1);
+                $(fst_col_dyna).click();
+            } else {
+                $('.dynatree-radio').first().click();
             }
         },
         onQueryExpand: function() {
@@ -456,9 +459,19 @@
 
         var consultDate = $(".stats-i18n .consult-date").text() + formatted_date;
         var same_x_dist = 350;
+
+        var current_pdf_chart = $(".chart-header h3.topo").text();
+        var repository_chart_title = $(".stats-i18n .repo-stats").text();
+        var colleciton_chart_title = $(".stats-i18n .collection-stats").text();
+        if( current_pdf_chart == repository_chart_title ) {
+            var current_pdf_title_xDist = (same_x_dist+20);
+        } else if(current_pdf_chart == colleciton_chart_title) {
+            var current_pdf_title_xDist = (same_x_dist+45);
+        }
+
         pdf.setFontSize(14);
         pdf.setFontType('bold');
-        pdf.text($(".stats-i18n .repo-stats").text(), (same_x_dist+20), (line_dims.startY - 17) ); // Estatísticas ...
+        pdf.text(current_pdf_chart, current_pdf_title_xDist,(line_dims.startY - 17) ); // Estatísticas ...
 
         pdf.setFontSize(8);
         pdf.setTextColor(100);
