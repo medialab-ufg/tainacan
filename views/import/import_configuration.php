@@ -142,7 +142,7 @@ include_once ('js/import_configuration_js.php');
                     <!-- Tab panes -->
                     <div role="tabpanel" class="tab-pane" id="eurtab">
                         <div id="validate_url_csv_container" >
-                            <div id="list_oaipmh_dc">
+                            <!--div id="list_oaipmh_dc">
                                 <table  class="table table-bordered">
                                     <th><?php _e('Searched', 'tainacan'); ?></th>
                                     <th></th>
@@ -152,7 +152,7 @@ include_once ('js/import_configuration_js.php');
                                 </table>
                             </div>
                             <br>
-                            <hr>
+                            <hr-->
                             <div>
                                 <h4><?php _e('Import from Europeana', 'tainacan'); ?></h4>
                                 <form id="formEur" name="formEur" enctype="multipart/form-data" method="post">
@@ -176,6 +176,7 @@ include_once ('js/import_configuration_js.php');
                                     <input type="hidden" id="operation_csv" name="operation" value="search_eur">
                                     <button type="submit" id="submit_eur_search" class="btn btn-primary tainacan-blue-btn-bg"><?php _e('Search', 'tainacan'); ?></button>
                                 </form>
+                                <br><br>
                                 <div id="searched_eur"></div>
                             </div>
                         </div>

@@ -642,6 +642,7 @@
         var search_import_eur = $('#search_import_eur').val().trim();
         e.preventDefault();
         if (search_import_eur) {
+            show_modal_main();
             $.ajax({
                 url: $('#src').val() + '/controllers/import/eur_controller.php',
                 type: 'POST',
@@ -649,9 +650,12 @@
                 processData: false,
                 contentType: false
             }).done(function (result) {
+                hide_modal_main();
                 elem = jQuery.parseJSON(result);
                 if (elem.error) {
                     showAlertGeneral('<?php _e('Error!', 'tainacan'); ?>', elem.msg, 'error');
+                }else{
+                    showAlertGeneral('Sucesso!', elem.success, 'success');
                 }
             });
             e.preventDefault();
@@ -664,6 +668,7 @@
         var search_only_eur = $('#search_only_eur').val().trim();
         e.preventDefault();
         if (search_only_eur) {
+            show_modal_main();
             $.ajax({
                 url: $('#src').val() + '/controllers/import/eur_controller.php',
                 type: 'POST',
@@ -671,9 +676,13 @@
                 processData: false,
                 contentType: false
             }).done(function (result) {
+                hide_modal_main();
                 elem = jQuery.parseJSON(result);
                 if (elem.error) {
                     showAlertGeneral('<?php _e('Error!', 'tainacan'); ?>', elem.msg, 'error');
+                }else{
+                    showAlertGeneral('<?php _e('Success','tainacan') ?>', elem.success, 'success');
+                    $('#searched_eur').html(elem.totalresult+'<pre>'+JSON.stringify(elem.result, null, 4)+'</pre>');;
                 }
             });
             e.preventDefault();
