@@ -1143,8 +1143,7 @@ function showCollectionConfiguration(src) {
         data: {operation: 'edit_configuration', collection_id: $("#collection_id").val()}
     }).done(function (result) {
         $('#main_part').hide();
-        $('#configuration').html(result);
-        $('#configuration').show();
+        $('#configuration').html(result).show();
     });
 }
 
@@ -1161,9 +1160,6 @@ function showCollectionConfiguration_editImages(src, field) {
     });
 }
 
-
-
-//CODIGO SAYMON
 function showSocialConfiguration(src) {
     $.ajax({
         url: src + '/controllers/social_network/youtube_controller.php',
@@ -1171,12 +1167,10 @@ function showSocialConfiguration(src) {
         data: {operation: 'list', collection_id: $("#collection_id").val()}
     }).done(function (result) {
         $('#main_part').hide();
-        $('#configuration').html(result);
-        $('#configuration').show();
+        $('#configuration').html(result).show();
     });
 }
-// FIM CODIGO SAYMON
-//CODIGO EDUARDO
+
 // mostra a view inicial das categorias
 function showCategoriesConfiguration(src, is_front) {
     $.ajax({

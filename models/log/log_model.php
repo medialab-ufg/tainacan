@@ -18,6 +18,11 @@ class Log extends Model {
 
     public static function addLog($logData) {
         global $wpdb;
+
+        if( !array_key_exists('user_id', $logData) ) {
+            $logData['user_id'] = get_current_user_id();
+        }
+
         $final_data = array_merge($logData, self::getCommonFields() );
         return $wpdb->insert(self::_table(), $final_data);
     }
@@ -127,6 +132,7 @@ class Log extends Model {
         global $wpdb;
         $sql = sprintf("SELECT event as term, COUNT(*) as t_count FROM %s WHERE event_type='advanced_search' GROUP BY event ORDER BY COUNT(*) DESC", self::_table());
         $_searches = $wpdb->get_results($sql);
+
         $_s_arr = [];
         foreach($_searches as $_s) {
             array_push( $_s_arr, [ $_s->term => $_s->t_count]);

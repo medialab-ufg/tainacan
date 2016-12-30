@@ -13,6 +13,7 @@ class ExportController extends Controller {
 
         switch ($operation) {
             case "index_export":
+                Log::addLog(['collection_id' => $data['collection_id'], 'event_type' => 'collection_admin', 'event' => 'export']);
                 return $this->render(dirname(__FILE__) . '../../../views/export/index_export.php');
                 break;
             case 'create_new_mapping':

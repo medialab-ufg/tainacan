@@ -113,6 +113,7 @@ class CollectionController extends Controller {
             // break;
             case "edit_configuration":
                 if (is_user_logged_in()) {
+                    Log::addLog(['collection_id' => $data['collection_id'], 'event_type' => 'collection_admin', 'event' => 'config']);
                     $data = $collection_model->get_collection_data($data['collection_id']);
                     return $this->render(dirname(__FILE__) . '../../../views/collection/edit.php', $data);
                 } else {

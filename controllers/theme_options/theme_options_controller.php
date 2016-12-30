@@ -42,7 +42,7 @@ class ThemeOptionsController extends Controller {
                 break;
             case "edit_licenses":
                 $data = $theme_options_model->get_theme_general_options_data();
-                Log::addLog(['user_id' => get_current_user_id(), 'event_type' => 'admin', 'event' => 'licenses']);
+                Log::addLog(['event_type' => 'admin', 'event' => 'licenses']);
                 return $this->render(dirname(__FILE__) . '../../../views/theme_options/licenses/edit.php', $data);
                 break;
             case "listStandartLicenses":

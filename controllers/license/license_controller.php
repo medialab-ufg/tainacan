@@ -23,6 +23,7 @@ class LicenseController extends Controller {
         $license_model = new LicenseModel();
         switch ($operation) {
             case "list_licenses":
+                Log::addLog(['collection_id' => $data['collection_id'], 'event_type' => 'collection_admin', 'event' => 'licenses']);
                 return $this->render(dirname(__FILE__) . '../../../views/license/list.php', $data);
                 break;
             case "listStandartLicenses":

@@ -15,6 +15,7 @@ class ImportController extends Controller {
 
         switch ($operation) {
             case "show_import_configuration":
+                Log::addLog(['collection_id' => $data['collection_id'], 'event_type' => 'collection_admin', 'event' => 'import']);
                 return $this->render(dirname(__FILE__) . '../../../views/import/import_configuration.php');
                 break;
             

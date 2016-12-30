@@ -125,9 +125,6 @@ class YoutubeController extends Controller {
                 $object_model = new ObjectModel();
                 $data['playlist'] = ($data['playlist'] == __('Get all videos, no playlist specified.', 'tainacan') ? '' : $data['playlist']);
                 return $youtube->getAllVideos($data, $object_model);
-
-                break;
-
             case "updateVideosYoutube":
                 // recupera a chave da api cadastrada
                 $config = get_option('socialdb_theme_options');
@@ -159,31 +156,19 @@ class YoutubeController extends Controller {
                 $object_model = new ObjectModel();
                 $data['playlist'] = ($data['playlist'] == __('Get all videos, no playlist specified.', 'tainacan') ? '' : $data['playlist']);
                 return $youtube->updateVideosChannel($data, $object_model);
-                //return $youtube->getAllVideosUploaded($data, $object_model);
-
-                break;
-
             case "listIdentifiersYoutube":
                 return YoutubeModel::list_channels($data['collectionId']);
                 break;
 
             case "deleteIdentifierYoutube":
-
                 return YoutubeModel::delete_channel($data['identifier'], $data['collection_id']);
-                break;
-
             case "editIdentifierYoutube":
-
                 return YoutubeModel::edit_channel($data['identifier'], $data['new_identifier'], $data['new_playlist']);
-                break;
-
             case "InsertIdentifierYoutube":
                 return YoutubeModel::insert_channel($data['identifier'], $data['playlist'], $data['collectionId']);
-                break;
-
             case "list":
+                Log::addLog(['collection_id' => $data['collection_id'], 'event_type' => 'collection_admin', 'event' => 'social_media']);
                 return $this->render(dirname(__FILE__) . '../../../views/social_network/list.php', $data);
-                break;
         }
     }
 

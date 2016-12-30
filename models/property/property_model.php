@@ -608,12 +608,11 @@ class PropertyModel extends Model {
     /* @param array $data
       /* @return array com os dados das propriedades da colecao(categoria root) ou de suas subcategorias./
       /* @author Eduardo */
-
     public function list_data($data) {
         $category_property = $this->set_category($data); // seto a categoria de onde vira as propriedades a partir dos dados vindos da view
         $data['is_root'] = $this->is_category_root($data); // verifico se ela e a root da colecao
         $data['category'] = $category_property; // coloco no array que sera utilizado na view
-        if ($data['is_root']||isset($data['is_configuration_repository'])) {// se for buscar as propriedades da categoria raiz
+        if ($data['is_root']||isset($data['is_configuration_repository'])) { // se for buscar as propriedades da categoria raiz
             $collections_user = $this->collectionModel->get_collection_by_user(get_current_user_id()); // busco todas as colecoes
             foreach ($collections_user as $collection_user) {// varro todas colecoes
                 $collection_name = $collection_user->post_title; // pego o nome
@@ -624,7 +623,13 @@ class PropertyModel extends Model {
             }
         }
 
-        Log::addLog(['user_id' => get_current_user_id(), 'event_type' => 'admin', 'event' => 'metadata']);
+        // Is repository metadata?
+        if( is_null($data['collection_id']) ) {
+            Log::addLog(['event_type' => 'admin', 'event' => 'metadata']);
+        } else {
+            Log::addLog(['collection_id' => $data['collection_id'], 'event_type' => 'collection_admin', 'event' => 'metadata']);
+        }
+
         return $data;
     }
 

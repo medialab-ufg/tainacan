@@ -136,7 +136,7 @@ class ThemeOptionsModel extends Model {
 
     public function get_theme_options_data() {
         $socialdb_theme_options = get_option('socialdb_theme_options');
-        Log::addLog(['user_id' => get_current_user_id(), 'event_type' => 'admin', 'event' => 'keys']);
+        Log::addLog(['event_type' => 'admin', 'event' => 'keys']);
         return $socialdb_theme_options;
     }
 
