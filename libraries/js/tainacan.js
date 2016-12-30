@@ -1521,10 +1521,6 @@ function list_comments_term(seletor, term_id) {
 }
 /***********************************************************/
 
-// FIM CODIGO EDUARDO
-
-
-// CODIGO MARCUS
 function showDesignConfiguration(src) {
     $.ajax({
         url: src + '/controllers/design/design_controller.php',
@@ -1944,7 +1940,6 @@ function showAddItemURL() {
         $('#configuration').html(result).show();
     });
 }
-// FIM CODIGO MARCUS
 
 function showAdvancedSearch(src, search_term) {
     var search_term = search_term || "";

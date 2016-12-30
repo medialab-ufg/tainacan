@@ -163,8 +163,12 @@
             var chart_text = node.data.title;
             var chain = $('.temp-set').html(chart_text).text().replace(/\//gi, "");
             var split_title = chain.split(" ");
-            // $(".current-chart").html( parent + "<span class='glyphicon glyphicon-triangle-right'></span>" + split_title[0] );
-            $(".current-chart").html( parent + "<span> / </span>" + split_title[0] );
+
+            if(parent) {
+                // $(".current-chart").html( parent + "<span class='glyphicon glyphicon-triangle-right'></span>" + split_title[0] );
+                $(".current-chart").html( parent + "<span> / </span>" + split_title[0] );
+            }
+
             if(node_action) {
                 fetchData(parent, node_action);
             }
@@ -181,6 +185,8 @@
         onQueryExpand: function() {
             if( $('body').hasClass('single-socialdb_collection') ) { // Collection's Statistics
                 $('.repoOnly').hide('fast');
+            } else if ( $('body').hasClass('page-template-page-statistics') ) {
+                $('.collectOnly').hide('fast');
             }
         }
     };
@@ -229,7 +235,10 @@
     }
 
     function adminChildren() {
-        return [{ title: "Páginas Administrativas <p> configurações /metadados / chaves / licenças /<br /> e-mail boas vindas / ferramentas </p>", href: 'admin' }];
+        return [
+            { title: "Páginas Administrativas <p> configurações /metadados / chaves / licenças /<br /> e-mail boas vindas / ferramentas </p>", href: 'admin', addClass: 'repoOnly' },
+            { title: "<p> Configurações <br /> Metadados <br /> Chaves <br /> Importação <br /> Exportação </p>", href: 'collection_admin', addClass: 'collecOnly' }
+        ];
     }
 
     function getStatsTree() {
@@ -259,6 +268,8 @@
             var res_json = $.parseJSON(r);
             var chart = $('.selected_chart_type').val();
             $(".current_parent_report").val(parent);
+
+            cl(res_json);
 
             if( (res_json == null) || res_json.length == 0) {
                 toggleElements(["#charts-container div", "#charts-resume"], true);
@@ -313,14 +324,15 @@
                         var curr_evt_title = tai_chart.getMappedTitles()[event];
                         var curr_tupple = [ curr_evt_title, obj_total ];
 
-                        if( typeof chart_data === 'object' ) {
+                        if( typeof chart_data === 'object' && typeof chart_data != "undefined") {
                             if(chart_data instanceof google.visualization.DataTable) {
                                 chart_data.addRow(curr_tupple);
                             } else {
                                 chart_data.push([ curr_tupple[0], curr_tupple[1], color ]);
                             }
                         } else {
-
+                            cl('NO data available!');
+                            cl(data_obj.stat_object);
                         }
 
                         csvData.push( curr_tupple );
