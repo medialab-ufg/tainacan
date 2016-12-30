@@ -23,6 +23,8 @@
             access_oai_pmh: '<?php _t("OAI-PMH Accesses",1); ?>',
             import_csv: '<?php _t("CSV Importation",1); ?>',
             export_csv: '<?php _t("CSV Exportation",1); ?>',
+            import: '<?php _t("Importation",1); ?>',
+            export: '<?php _t("Exportation",1); ?>',
             import_tainacan: '<?php _t("Tainacan Importation",1); ?>',
             export_tainacan: '<?php _t("Tainacan Exportation",1); ?>',
             total_active: '<?php _t("Active",1); ?>',
@@ -34,7 +36,9 @@
             licenses: '<?php _t("Licenses",1); ?>',
             keys: '<?php _t("Keys",1); ?>',
             tools: '<?php _t("Tools",1); ?>',
-            metadata: '<?php _t("Metadata",1); ?>'
+            metadata: '<?php _t("Metadata",1); ?>',
+            layout: '<?php _t("Layout",1); ?>',
+            social_media: '<?php _t("Social Media",1); ?>'
         };
     };
 
@@ -186,14 +190,13 @@
             if( $('body').hasClass('single-socialdb_collection') ) { // Collection's Statistics
                 $('.repoOnly').hide('fast');
             } else if ( $('body').hasClass('page-template-page-statistics') ) {
-                $('.collectOnly').hide('fast');
+                $('.collecOnly').hide('fast');
             }
         }
     };
 
     function statusChildren() {
         return [
-            // { title: tChart.getStatDesc("Status", "logins / registros / banidos / excluídos"), href: "status", addClass: 'hllog' },
             { title: "Status <p> logins / registros / banidos / excluídos </p>", href: "status", addClass: 'repoOnly' },
             { title: "Itens <p> criaram / editaram / apagaram / <br/> visualizaram / baixaram</p>", href: "items" },
             { title: "Perfil <p> Pessoas que aderiram a um perfil </p>", href: "profile" },
@@ -236,8 +239,8 @@
 
     function adminChildren() {
         return [
-            { title: "Páginas Administrativas <p> configurações /metadados / chaves / licenças /<br /> e-mail boas vindas / ferramentas </p>", href: 'admin', addClass: 'repoOnly' },
-            { title: "<p> Configurações <br /> Metadados <br /> Chaves <br /> Importação <br /> Exportação </p>", href: 'collection_admin', addClass: 'collecOnly' }
+            { title: "Páginas Administrativas <p> configurações /metadados / chaves / licenças /<br /> e-mail boas vindas / ferramentas </p>", href: 'admin', addClass: 'repoOnly'},
+            { title: "<p> Configurações <br /> Metadados <br /> Layout <br /> Redes Sociais <br /> Licenças <br /> Importação <br /> Exportação </p>", href: 'collection_admin', addClass: 'collecOnly' }
         ];
     }
 

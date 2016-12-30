@@ -80,6 +80,8 @@ class Log extends Model {
                 return ['color' => '#43F7B1', 'events' => ['access_oai_pmh', 'import_csv', 'export_csv', 'import_tainacan', 'export_tainacan'] ];
             case 'admin':
                 return ['color' => '#027758', 'events' => ['config', 'metadata', 'keys', 'licenses', 'welcome_mail', 'tools'] ];
+            case 'collection_admin':
+                return ['color' => 'goldenrod', 'events' => ['config', 'metadata', 'layout', 'social_media', 'licenses', 'import', 'export'] ];
         }
     }
 

@@ -29,7 +29,7 @@ class LogController extends Controller {
             case _t('Import / Export'):
                 return "imports";
             case _t('Administration'):
-                return "admin";
+                return $_event_suffix;
         }
     }
 }
