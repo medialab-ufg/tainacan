@@ -27,7 +27,6 @@ class LogController extends Controller {
             case _t('Tags'):
                 return "tags";
             case _t('Import / Export'):
-                return "imports";
             case _t('Administration'):
                 return $_event_suffix;
         }

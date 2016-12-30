@@ -385,7 +385,7 @@ class OAIPMHModel extends Model {
                 $record_response['files'] = [];
                 $record_response = [];
             }
-            Log::addLog(['collection_id' => $data['collection_id'],'user_id' => get_current_user_id(),'event_type' => 'import', 'event' => 'access_oai_pmh']);
+            Log::addLog(['collection_id' => $data['collection_id'],'event_type' => 'import', 'event' => 'access_oai_pmh']);
         }  catch (Exception $e){ }
         return $json_response;
     }

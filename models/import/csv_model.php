@@ -301,6 +301,8 @@ class CsvModel extends Model {
                 unlink($targetzip); //Deleting the Zipped file
                 $this->recursiveRemoveDirectory($targetdir);
             }
+
+            Log::addLog(['collection_id' => $data['collection_id'], 'event_type' => 'collection_imports', 'event' => 'import_csv']);
             return true;
         } else {
             return false;

@@ -21,6 +21,7 @@
             subscriber: '<?php _t("Subscriber",1); ?>',
             contributor: '<?php _t("Colaborator",1); ?>',
             access_oai_pmh: '<?php _t("OAI-PMH Accesses",1); ?>',
+            harvest_oai_pmh: '<?php _t("Harvesting OAI-PMH",1); ?>',
             import_csv: '<?php _t("CSV Importation",1); ?>',
             export_csv: '<?php _t("CSV Exportation",1); ?>',
             import: '<?php _t("Importation",1); ?>',
@@ -170,7 +171,13 @@
 
             if(parent) {
                 // $(".current-chart").html( parent + "<span class='glyphicon glyphicon-triangle-right'></span>" + split_title[0] );
-                $(".current-chart").html( parent + "<span> / </span>" + split_title[0] );
+                if(split_title[0]) {
+                    var updated_text =  parent + "<span> / </span>" + split_title[0];
+                } else {
+                    var updated_text = parent;
+                }
+
+                $(".current-chart").html( updated_text );
             }
 
             if(node_action) {
@@ -197,9 +204,9 @@
 
     function statusChildren() {
         return [
-            { title: "Status <p> logins / registros / banidos / excluídos </p>", href: "status", addClass: 'repoOnly' },
+            { title: "Status <p> logins / registros / banidos / excluídos </p>", href: "status", addClass: 'repoOnly'},
             { title: "Itens <p> criaram / editaram / apagaram / <br/> visualizaram / baixaram</p>", href: "items" },
-            { title: "Perfil <p> Pessoas que aderiram a um perfil </p>", href: "profile" },
+            { title: "Perfil <p> Pessoas que aderiram a um perfil </p>", href: "profile", addClass: 'repoOnly'},
             { title: "Categorias <p> criaram / editaram / apagaram / visualizaram </p>", href: "category" },
             { title: "Coleção <p> criaram / editaram / apagaram / visualizaram </p>", href: "collection", addClass: 'repoOnly' }
         ];
@@ -233,8 +240,10 @@
     }
 
     function importsChildren() {
-        return [{ title: "<p> Acessos OAI-PMH <br/> Importação / Exportação CSV <br/> Importação formato Tainacan <br/>" +
-        "Exportação formato Tainacan </p>", href: 'imports'}];
+        return [
+            { title: "<p> Acessos OAI-PMH <br/> Importação / Exportação CSV <br/> Importação formato Tainacan <br/> Exportação formato Tainacan </p>", href: 'imports', addClass: 'repoOnly'},
+            { title: "<p> Acessos OAI-PMH <br/> Harvesting OAI-PMH <br/> Importação CSV <br/> Exportação CSV</p>", href: 'collection_imports', addClass: 'collecOnly'}
+        ];
     }
 
     function adminChildren() {
