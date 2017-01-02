@@ -83,7 +83,7 @@ function setup_statisticsLog() {
     resource_id BIGINT(20) UNSIGNED NOT NULL,
     ip VARCHAR(39) DEFAULT NULL,
     event_type VARCHAR(20) NOT NULL,
-    event VARCHAR(20) NOT NULL,
+    event VARCHAR(50) NOT NULL,
     event_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id)
     ) $charset_collate";

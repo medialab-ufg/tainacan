@@ -10,6 +10,7 @@ if ( current_user_can('manage_options') ):
     get_header(); ?>
     <script type="text/javascript">
         $(function() {
+            $("#expand-top-search").hide();
             $.ajax({
                 url: $('.stat_path').val() + '/controllers/log/log_controller.php',
                 type: 'POST',
@@ -80,12 +81,15 @@ if ( current_user_can('manage_options') ):
     </div>
 
     <input type="hidden" class="stat_path" value="<?php echo get_template_directory_uri() ?>">
-<!--    <input type="hidden" class="src" id="src" value="--><?php //echo get_template_directory_uri() ?><!--">-->
+
+    <?php /* ?><input type="hidden" id="src" class="src" value="<?php echo get_template_directory_uri() ?>"> */ ?>
+
+    <div id="configuration" class="col-md-12"> </div>
+
     <div id='tainacan-stats' class='col-md-12 no-padding'>
         <center style="margin: 40px 0 40px 0">
             <img src="<?php echo get_template_directory_uri() . '/libraries/images/ajaxLoader.gif' ?>" width="64px" height="64px" />
-            <br>
-            <br>
+            <br> <br>
             <?php _t('Loading Statistics ...', 1); ?>
         </center>
     </div>
