@@ -2088,6 +2088,7 @@ class ObjectModel extends Model {
             add_post_meta($object->ID, 'socialdb_version_number', 1);
             add_post_meta($object->ID, 'socialdb_version_comment', __('Original Item', 'tainacan'));
             add_post_meta($object->ID, 'socialdb_version_date', $object->post_date);
+            add_post_meta($object->ID, 'socialdb_version_user', $object->post_author);
         }
 
         $return = ($version ? $version : 1);
@@ -2143,6 +2144,7 @@ class ObjectModel extends Model {
         update_post_meta($post_id, 'socialdb_version_number', $new_version);
         update_post_meta($post_id, 'socialdb_version_comment', $motive);
         update_post_meta($post_id, 'socialdb_version_date', date('Y-m-d H:i:s'));
+        //update_post_meta($post_id, 'socialdb_version_user', );
     }
 
     public function get_all_versions($original) {
