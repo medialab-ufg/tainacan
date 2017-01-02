@@ -244,7 +244,7 @@ class CollectionModel extends Model {
             delete_post_thumbnail($post_id);
         }
 
-        Log::addLog(['collection_id' => $data['collection_id'], 'user_id' => get_current_user_id(), 'event_type' => 'user_collection', 'event' => 'edit' ]);
+        Log::addLog(['collection_id' => $data['collection_id'], 'event_type' => 'user_collection', 'event' => 'edit' ]);
         
         if ($_FILES) {
             $this->add_thumbnail($post_id);

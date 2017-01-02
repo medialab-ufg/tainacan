@@ -159,7 +159,7 @@
                     var current_id = property.id;
                     var current_search_widget = property.search_widget;
                     //buscando a aba da propriedade
-                    var tab_property_id = get_tab_property_id(current_id)
+                    var tab_property_id = get_tab_property_id(current_id);
                     //visibilidade do metadado
                     if(property.metas.socialdb_property_visibility&&property.metas.socialdb_property_visibility==='hide'){
                         return true;
@@ -181,7 +181,7 @@
                             '<span class="glyphicon glyphicon-edit"></span></a> ' +
                             button + '</div></li>');
                     } else {
-                        if ( $.inArray(property.type, ranking_types) == -1 ) {;
+                        if ( $.inArray(property.type, ranking_types) == -1 ) {
                             $(get_property_tab_seletor(tab_property_id)).append(
                                 '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '" data-widget="' + current_search_widget + '" class="' + property.type + ' ui-widget-content ui-corner-tr">' +
                                 '<label class="title-pipe">'+ add_compounds_button() + property.name + add_text_type('compound') + '</label><div class="action-icons">' +
