@@ -336,6 +336,10 @@ class RankingModel extends Model {
      */
     public function save_vote($data, $update_value = true,$is_binary = false) {
 
+        $logData = ['collection_id' => $data['collection_id'], 'item_id' => $data['object_id'],
+            'resource_id' => $data['property_id'], 'event_type' => 'user_items', 'event' => 'vote'];
+        Log::addLog($logData);
+        
         $property = get_term_by('id', $data['property_id'], 'socialdb_property_type');
         $is_voted = $this->is_already_voted(get_current_user_id(), $property->term_taxonomy_id, $data['object_id']);
         if (!$is_voted) {

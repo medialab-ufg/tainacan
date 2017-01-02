@@ -59,7 +59,7 @@ class Log extends Model {
     private function get_event_type($spec) {
         switch($spec) {
             case 'items':
-                return ['color' => '#0EEAFF', 'events' => self::getDefaultFields('download')];
+                return ['color' => '#0EEAFF', 'events' => self::getDefaultFields(['download', 'vote'])];
             case 'category':
                 return ['color' => '#D6DF22', 'events' => self::getDefaultFields()];
             case 'collection':

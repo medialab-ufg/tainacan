@@ -15,7 +15,7 @@ class AdvancedSearchController extends Controller {
         switch ($operation) {
             case "open_page":
                 if(!empty($data['home_search_term'])) {
-                    $logData = ['collection_id' => $data['collection_id'], 'user_id' => get_current_user_id(), 'event_type' => 'advanced_search', 'event' => $data['home_search_term'] ];
+                    $logData = ['collection_id' => $data['collection_id'], 'event_type' => 'advanced_search', 'event' => $data['home_search_term'] ];
                     Log::addLog($logData);
                 }
                 return $this->render(dirname(__FILE__) . '../../../views/advanced_search/advanced_search.php',$data);
@@ -89,7 +89,7 @@ class AdvancedSearchController extends Controller {
                     $return['not_found'] = true;
                 }
 
-                $logData = ['collection_id' => $data['collection_id'], 'user_id' => get_current_user_id(), 'event_type' => 'advanced_search', 'event' => $data['advanced_search_general'] ];
+                $logData = ['collection_id' => $data['collection_id'], 'event_type' => 'advanced_search', 'event' => $data['advanced_search_general'] ];
                 Log::addLog($logData);
                 
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/advanced_search/list_advanced_search.php', $data);
