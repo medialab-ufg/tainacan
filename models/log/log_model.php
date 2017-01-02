@@ -99,8 +99,8 @@ class Log extends Model {
             return self::getTopCollections();
         } else if("general_status_items" === $event_type) {
             return self::getItemsStatus($spec, $collection_id);
-        } else if("user_searches" == $event_type) {
-            return self::getFrequentSearches();
+        } else if("repo_searches" == $event_type || $event_type == "collection_searches") {
+            return self::getFrequentSearches($collection_id);
         } else {
             if($_events_) {
                 $_stats = [];
@@ -132,9 +132,15 @@ class Log extends Model {
         return json_encode( $stat_data );
     }
 
-    public function getFrequentSearches() {
+    public function getFrequentSearches( $collection_id = NULL) {
         global $wpdb;
-        $sql = sprintf("SELECT event as term, COUNT(*) as t_count FROM %s WHERE event_type='advanced_search' GROUP BY event ORDER BY COUNT(*) DESC", self::_table());
+
+        if($collection_id == 'null' || is_null($collection_id) ) {
+            $sql = sprintf("SELECT event as term, COUNT(*) as t_count FROM %s WHERE event_type='advanced_search' GROUP BY event ORDER BY COUNT(*) DESC", self::_table());
+        } else {
+            $sql = sprintf("SELECT event as term, COUNT(*) as t_count FROM %s WHERE event_type='collection_search' AND collection_id='$collection_id' GROUP BY event ORDER BY COUNT(*) DESC", self::_table());
+        }
+
         $_searches = $wpdb->get_results($sql);
 
         $_s_arr = [];

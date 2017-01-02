@@ -223,7 +223,8 @@
     function collectionsChildren() {
         return [
             { title: "Status <p> criadas / editadas / excluídas / visualizadas / baixadas</p>", href: "collection", addClass: 'repoOnly'},
-            { title: "Buscas Frequentes <p> ranking das buscas mais realizadas </p>", href: "searches"}
+            { title: "Buscas Frequentes <p> ranking das buscas mais realizadas </p>", href: "repo_searches", addClass: 'repoOnly'},
+            { title: "Buscas <p> termos mais pesquisados </p>", href: "collection_searches", addClass: 'collecOnly'}
         ];
     }
 
@@ -281,8 +282,6 @@
             var chart = $('.selected_chart_type').val();
             $(".current_parent_report").val(parent);
 
-            cl(res_json);
-
             if( (res_json == null) || res_json.length == 0) {
                 toggleElements(["#charts-container div", "#charts-resume"], true);
                 toggleElements(["#charts-container #no_chart_data"]);
@@ -302,7 +301,7 @@
             var color = data_obj.color || '#79a6ce';
             var csvData = [];
 
-            if( color && color != "NO_CHART") {
+            if(color) {
                 if(chart_type == "default") {
                     var chart_data = [basis];
                 } else {
@@ -344,7 +343,6 @@
                             }
                         } else {
                             cl('NO data available!');
-                            cl(data_obj.stat_object);
                         }
 
                         csvData.push( curr_tupple );
@@ -472,13 +470,20 @@
         var logo_settings = { width: (projectLogo.naturalWidth * 0.48), height: (projectLogo.naturalHeight * 0.48) };
         pdf.addImage(projectLogo, 'PNG', line_dims.startX + 15, line_dims.startY - 45, logo_settings.width, logo_settings.height);
 
-        var chartImg = new Image();
-        chartImg.src = $('.chart-img img.dynamic-chart-img').attr('src');
-        var chart_settings = { width: (chartImg.naturalWidth * 0.6), height: (chartImg.naturalHeight * 0.6) };
-        var pdfWidth = pdf.internal.pageSize.width;
-        var horizontal_chart_center = (pdfWidth / 2)  - (chartImg.naturalWidth * 0.6 / 2);
+        // wether stat has chart or not
+        var no_chart_stat = $('tr.headers td').length;
+        if( no_chart_stat == 2 ) {
+            var chart_table_YDist = 120;
+        } else if ( no_chart_stat == 0 ) {
+            var chart_table_YDist = 300;
+            var chartImg = new Image();
+            chartImg.src = $('.chart-img img.dynamic-chart-img').attr('src');
+            var chart_settings = { width: (chartImg.naturalWidth * 0.6), height: (chartImg.naturalHeight * 0.6) };
+            var pdfWidth = pdf.internal.pageSize.width;
+            var horizontal_chart_center = (pdfWidth / 2)  - (chartImg.naturalWidth * 0.6 / 2);
+            pdf.addImage(chartImg, 'PNG', horizontal_chart_center, chart_margins.top, chart_settings.width, chart_settings.height);
+        }
 
-        pdf.addImage(chartImg, 'PNG', horizontal_chart_center, chart_margins.top, chart_settings.width, chart_settings.height);
         pdf.rect(line_dims.startX, line_dims.startY, line_dims.length, line_dims.thickness, 'F');
 
         var consultDate = $(".stats-i18n .consult-date").text() + formatted_date;
@@ -520,10 +525,9 @@
         pdf.rect(line_dims.startX, line_dims.startY + 30, line_dims.length, line_dims.thickness, 'F');
 
         var resume_data = pdf.autoTableHtmlToJson( $('#charts-resume table').get(0) );
-        
-        var p = 300;
+
         // headerStyles: { textColor: [12,105,139], lineColor: [0,0,0], fillColor: 255 }
-        var autoTable_opts = { theme: 'striped', startY: p, headerStyles: { fillColor: [44, 62, 80] } };
+        var autoTable_opts = { theme: 'striped', startY: chart_table_YDist, headerStyles: { fillColor: [44, 62, 80] } };
         pdf.autoTable( resume_data.columns, resume_data.data, autoTable_opts);
 
         var footer_set = {startX: 160, startY: pdf.internal.pageSize.height - 68};

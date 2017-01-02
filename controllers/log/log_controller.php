@@ -20,7 +20,6 @@ class LogController extends Controller {
     private function getEventType($parent_name, $_event_suffix) {
         switch ($parent_name) {
             case _t('Users'):
-            case _t('Collections'):
             case _t('Categories'):
                 return "user_" . $_event_suffix;
             case _t('Comments'):
@@ -29,6 +28,7 @@ class LogController extends Controller {
                 return $_event_suffix . "_items";
             case _t('Tags'):
                 return "tags";
+            case _t('Collections'):
             case _t('Import / Export'):
             case _t('Administration'):
                 return $_event_suffix;
