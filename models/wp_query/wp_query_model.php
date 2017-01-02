@@ -557,6 +557,7 @@ class WPQueryModel extends Model {
             if(isset($recover_data['author']) && $recover_data['author'] != ''){
                 $args['author'] = $recover_data['author'];
             }
+            
             return $args;
         }
     }

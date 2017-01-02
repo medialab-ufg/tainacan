@@ -326,6 +326,8 @@ class WPQueryController extends Controller {
                 if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
                     $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
                 }
+                Log::addLog(['collection_id' => $data['collection_id'], 'event_type' => 'collection_search', 'event' => $data['value'] ]);
+
                 return json_encode($return);
             case "filter":
                 $return = array();

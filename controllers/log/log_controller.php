@@ -5,12 +5,15 @@ class LogController extends Controller {
     public function operation($op, $data) {
         switch($op):
             case "show_statistics":
-                
                 return $this->render(dirname(__FILE__) . '../../../views/statistics/list.php', $data);
             case "user_events":
                 $log = new Log();
                 $_evt = $this->getEventType($data['parent'], $data['event']);
                 return $log->user_events($_evt, $data['event'], $data['from'], $data['to'], $data['collec_id']);
+            case "add_log":
+                Log::addLog(['collection_id' => $data['collection_id'], 'event_type' => 'collection_search',
+                    'event' => $data['event'], 'resource_id' => $data['resource_id'] ]);
+                break;
         endswitch;
     }
 

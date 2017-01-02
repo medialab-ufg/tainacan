@@ -2633,3 +2633,13 @@ function delete_cache(operation, collection_id) {
 function delete_all_cache_collection() {
     delete_cache('create-item-text', $('#collection_id').val());
 }
+
+function logColAction(search_val, item_id){
+    var c_id = $('#collection_id').val();
+    if(search_val && item_id) {
+        $.ajax({
+            url: $('#src').val() + '/controllers/log/log_controller.php', type: 'POST',
+            data: { operation: 'add_log', collection_id: c_id, event: search_val, resource_id: item_id }
+        });    
+    }
+}

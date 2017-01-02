@@ -32,6 +32,10 @@
                 });
             },
             onClick: function (node, event) {
+                var item_title = node.data.title;
+                var item_id = parseInt(node.data.key);
+                logColAction(item_title, item_id);
+                
                 // Close menu on click
                 if ($(".contextMenu:visible").length > 0) {
                     $(".contextMenu").hide();
