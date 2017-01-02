@@ -2118,19 +2118,19 @@ function parse_owl1()
 
                 //Tratando DatatypeProperty
                 $created_data_type_properties = treats_data_type_properties($owl_data_type_properties, $owl_classes, $created_classes, $owl_functional_properties, $namespace, $collection_id);
-                print "DataType Property criada<br>";
+                
                 //Tratando FunctionalProperty
                 treats_functional_property($owl_functional_properties, $created_data_type_properties, $created_object_properties, $owl_classes, $created_classes, $namespace, $collection_id);
-                print "Functional Property criada<br>";
+                
                 //Tratando Class Restrictions
                 treats_class_restriction($owl_classes, $created_classes, $created_object_properties, $created_data_type_properties, $namespace);
-                print "Restriction Class criada<br>";
+                
                 //Tratando transitive properties
                 treats_transitive_properties($owl_transitive_properties, $created_object_properties, $owl_classes, $created_classes, $namespace, $collection_id);
-                print "Transitive Property criada<br>";
+                
                 //Tratando symmetric properties
                 treats_symmetric_properties($owl_symmetric_properties,$created_object_properties, $owl_classes, $created_classes, $namespace, $collection_id);
-                print "Symmetric property criada<br>";
+                
             }catch (Exception $e)
             {
                 $return['message'] = $e->getMessage();
@@ -2186,7 +2186,7 @@ function treats_classes(&$class_tags, &$collection_id, &$namespace)
     {
         create_class($class_tags, $created_classes, $class_tags[$i], $collection_id, $namespace);
     }
-
+    
     return $created_classes;
 }
 
@@ -2207,7 +2207,7 @@ function create_class(&$class_tags, &$created_classes, &$classe, &$collection_id
                 throw new Exception("Impossivel criar classe, nome não encontrado");
         }
     }
-
+    
     //Descrição da classe
     $data['category_description'] = strval($classe->children($namespace['rdfs'])->comment);
 
@@ -2217,23 +2217,29 @@ function create_class(&$class_tags, &$created_classes, &$classe, &$collection_id
         if($subClasse->children($namespace['owl'])->Class->attributes($namespace['rdf'])['about'])
             $aboutClassSubClassOf = $subClasse->children($namespace['owl'])->Class->attributes($namespace['rdf'])['about'];
     }
-
-    $resourceSubClassOf = $classe->children($namespace['rdfs'])->subClassOf->attributes($namespace['rdf'])['resource'];
-
+    
     //Define o da classe pai, caso a classe seja raiz então $root_name receberá o nome da propria classe
+    $resourceSubClassOf = $classe->children($namespace['rdfs'])->subClassOf->attributes($namespace['rdf'])['resource'];
     if($aboutClassSubClassOf != null)
         $root_name = str_replace("#", '',$aboutClassSubClassOf);
     else if($resourceSubClassOf != null)
+    {
         $root_name = str_replace("#", '',$resourceSubClassOf);
+    }
     else
         $root_name = $data['category_name'];
-
+    
+    if(end(explode ("/", strval($resourceSubClassOf))) == "?category=socialdb_taxonomy")
+    {
+        $resourceSubClassOf = null;
+    }
+    
     $id_about = strval($classe->attributes($namespace['rdf'])['ID']);
     if($id_about == null)
         $id_about = strval($classe->attributes($namespace['rdf'])['about']);
-
+    
     $data['idAbout'] = $id_about;
-
+    
     //Caso a classe ainda não tenha sido criada
     if($created_classes[$root_name]['created'] !== true)
     {
@@ -2282,7 +2288,7 @@ function record_class(&$created_classes, &$root_name, &$category_model, &$data, 
 
     $new_class = wp_insert_term($data['category_name'], 'socialdb_category_type', array('parent' => $parent,
         'slug' => $category_model->generate_slug($data['category_name'], $collection_id), 'description' => $category_model->set_description($data['category_description'])));
-
+    
     if (!is_wp_error($new_class) && $new_class['term_id']) {// se a classe foi inserida com sucesso
         instantiate_metas($new_class['term_id'], 'socialdb_taxonomy', 'socialdb_category_type', true);
         insert_meta_default_values($new_class['term_id']);
@@ -2313,8 +2319,8 @@ function class_search(&$class_to_search, &$class_tags, &$namespace)
 {
     foreach($class_tags as $class)
     {
-        if(strcmp($class_to_search, $class->attributes($namespace['rdf'])['about']) == 0 || strcmp($class_to_search, $class->attributes($namespace['rdf'])['ID']) == 0)
-        {
+        if(strcmp($class_to_search, $class->attributes($namespace['rdf'])['about']) == 0 || strcmp($class_to_search, $class->attributes($namespace['rdf'])['ID']) == 0 || strcmp($class_to_search, strval($class->children($namespace['rdfs'])->label)) == 0)
+        { 
             return $class;
         }
     }
@@ -2712,8 +2718,7 @@ function create_associative_table(&$tags, &$namespace)
 
         $table[$idAbout] = array('created' => false, 'creation_id' => null);
     }
-
-    //print "count ".count($table)."<br>";
+    
     return $table;
 }
 
