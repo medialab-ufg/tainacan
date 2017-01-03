@@ -132,8 +132,7 @@
                 contentType: false
             }).done(function (result) {
                 elem = jQuery.parseJSON(result);
-                showAlertGeneral(elem.title, elem.msg, elem.type);
-                showAlertGeneral(elem.title, '<?php _e('The page will be loaded to show the new design!') ?>', 'info');
+                showAlertGeneral(elem.title, '<?php _t('The page will be loaded to show the new design!', 1); ?>', 'info');
                 location.reload();
             });
         });
