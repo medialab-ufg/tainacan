@@ -2569,15 +2569,15 @@ function generate_slug($string, $collection_id) {
  */
 function treats_data_type_properties(&$data_type_propety_tags, &$class_tags, &$created_classes, &$functional_property_tags, &$namespace, &$collection_id)
 {
-    $created_dataType_property = create_associative_table($data_type_propety_tags, $namespace);
-
+    //$created_data_type_properties = create_associative_table($data_type_propety_tags, $namespace);
+    $created_data_type_properties = [];
     $count = count($data_type_propety_tags);
     for($i = 0; $i < $count; $i++)
     {
-        create_data_type_properties($data_type_propety_tags, $created_dataType_property, $class_tags, $created_classes, $functional_property_tags, $data_type_propety_tags[$i], $namespace, $collection_id);
+        create_data_type_properties($data_type_propety_tags, $created_data_type_properties, $class_tags, $created_classes, $functional_property_tags, $data_type_propety_tags[$i], $namespace, $collection_id);
     }
 
-    return $created_dataType_property;
+    return $created_data_type_properties;
 }
 
 function create_data_type_properties(&$data_type_propety_tags, &$created_dataType_property, &$class_tags, &$created_classes, &$functional_property_tags, &$datatype_property, &$namespace, &$collection_id)
@@ -2620,16 +2620,16 @@ function create_data_type_properties(&$data_type_propety_tags, &$created_dataTyp
 
             if(gettype($datatype_property_to_create) == "object")
             {
+                print "Chamada para criar PAI<br><br>";
                 create_data_type_properties($data_type_propety_tags, $created_dataType_property, $class_tags, $created_classes, $functional_property_tags,$datatype_property_to_create, $namespace, $collection_id);
-
             }else
             {
                 $new_data = $data;
                 $new_data['name'] = $data['hasFatherResource'];
                 add_data_type_property($created_dataType_property, $datatype_property, $class_tags, $created_classes, $new_data, $namespace, true, $collection_id);
             }
-            add_data_type_property($created_dataType_property, $datatype_property, $class_tags, $created_classes, $data, $namespace, false, $collection_id);
 
+            add_data_type_property($created_dataType_property, $datatype_property, $class_tags, $created_classes, $data, $namespace, false, $collection_id);
         }
         else if($created_dataType_property[$data['idAbout']]['created'] == true)//Criando filho de pai ja criado
         {
@@ -2699,11 +2699,9 @@ function add_data_type_property(&$created_data_type_property, &$datatype_propert
     add_term_meta($data['id_domain_class'],'socialdb_category_property_id',$new_property['term_id']);
     update_term_meta($new_property['term_id'], 'socialdb_property_collection_id', $collection_id);
 
-    if($created_data_type_property != null)
-    {
-        $created_data_type_property[$data['idAbout']]['creation_id'] = $new_property['term_id'];
-        $created_data_type_property[$data['idAbout']]['created'] = true;
-    }
+
+    $created_data_type_property[$data['idAbout']]['creation_id'] = $new_property['term_id'];
+    $created_data_type_property[$data['idAbout']]['created'] = true;
 
     return $new_property['term_id'];
 }
