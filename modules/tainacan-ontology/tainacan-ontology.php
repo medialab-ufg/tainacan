@@ -2620,7 +2620,6 @@ function create_data_type_properties(&$data_type_propety_tags, &$created_dataTyp
 
             if(gettype($datatype_property_to_create) == "object")
             {
-                print "Chamada para criar PAI<br><br>";
                 create_data_type_properties($data_type_propety_tags, $created_dataType_property, $class_tags, $created_classes, $functional_property_tags,$datatype_property_to_create, $namespace, $collection_id);
             }else
             {
