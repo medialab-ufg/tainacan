@@ -1,3 +1,4 @@
+<?php include 'js/edit_btns_js.php'; ?>
 <?php if (get_option('collection_root_id') != $collection_id): ?>
     <!--------------------------- DELETE AND EDIT OBJECT------------------------------------------------>
     <?php if ($is_moderator || get_post($curr_id)->post_author == get_current_user_id()): ?>
@@ -5,14 +6,15 @@
             <?php
             if (has_filter('show_edit_default') && apply_filters('show_edit_default', $data['collection_id'])) {
                 ?>
-                <a style="cursor: pointer;" onclick="edit_object('<?php echo $curr_id ?>')">
+               <a style="cursor: pointer;"   onclick="edit_object('<?php echo $curr_id ?>')">
                     <?php
                 } else {
                     ?>
-                    <a style="cursor: pointer;" onclick="edit_object_item('<?php echo $curr_id ?>')">
+                    <a style="cursor: pointer;" onmouseover="triggerPopoverEdit(this)" data-trigger="focus" onclick="edit_object_item('<?php echo $curr_id ?>')">
                     <?php } ?>
                     <span class="glyphicon glyphicon-edit"></span>
                 </a>
+                    
         </li>
         <li>
             <a onclick="delete_object('<?= __('Delete Object', 'tainacan') ?>', '<?= __('Are you sure to remove the object: ', 'tainacan') . get_the_title() ?>', '<?php echo $curr_id ?>', '<?= mktime() ?>')" style="cursor: pointer;" class="remove">
