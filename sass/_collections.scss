@@ -570,43 +570,43 @@ button.collection-trash, button#hideTrash {
             }
     }
     } // #collection-slideShow
-    #slideshow-viewMode {
-    // margin-top: 15px;
-    // padding-left: 50px;
+#slideshow-viewMode {
+  // margin-top: 15px;
+  // padding-left: 50px;
 
     .slick-slide {
-            outline: none;
-            img {
-                    display: inline-block !important;
-            }
+      outline: none;
+      img {
+        display: inline-block !important;
+      }
     }
 
-
     .main-slide {
-            button.slick-arrow {
-                    height: 105px; // 138px
-                    width: 58px; // 77px
+      button.slick-arrow {
+        height: 105px; // 138px
+        width: 58px; // 77px
 
-                    &.slick-prev, &.slick-next {
-                            &:before {
-                                    content: '';
-                            }
-                    }
+        &.slick-prev, &.slick-next {
+          z-index: 99;
+          &:before {
+            content: '';
+          }
+        }
 
-                    &.slick-prev {
-                            left: 0;
-                            background: url(../images/ss-backward.png) no-repeat;
-                    }
+        &.slick-prev {
+          left: 0;
+          background: url(../images/ss-backward.png) no-repeat;
+        }
 
-                    &.slick-next {
-                            right: 0;
-                            background: url(../images/ss-forward.png) no-repeat;
-                    }
-            } // slicks arrows
-            .meta-configs {
-                    padding-right: 50px;
-                    padding-left: 50px;
-            }
+        &.slick-next {
+          right: 0;
+          background: url(../images/ss-forward.png) no-repeat;
+        }
+      } // slicks arrows
+      .meta-configs {
+        padding-right: 50px;
+        padding-left: 50px;
+      }
     } // .main-slide
     .collection-slides {
             .slick-slide  {

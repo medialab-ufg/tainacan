@@ -13,7 +13,7 @@
 
     <div class="general">
         <div class="search"> <?php _t('Search:', 1); ?> </div>
-        <div class="repo-stats"> <?php _t('Repository Statistics', 1); ?> </div>
+        <div class="repo-stats"> <?php _t('Repository statistics', 1); ?> </div>
         <div class="collection-stats"> <?php _t('Collection Statistics', 1); ?> </div>
         <div class="consult-date"> <?php _t('Consulted ', 1); ?> </div>
         <div class="consult-period"> <?php _t('Consulted period: ', 1); ?> </div>

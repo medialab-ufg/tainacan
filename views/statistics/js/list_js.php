@@ -249,8 +249,8 @@
 
     function adminChildren() {
         return [
-            { title: "Páginas Administrativas <p> configurações /metadados / chaves / licenças /<br /> e-mail boas vindas / ferramentas </p>", href: 'admin', addClass: 'repoOnly'},
-            { title: "<p> Configurações <br /> Metadados <br /> Layout <br /> Redes Sociais <br /> Licenças <br /> Importação <br /> Exportação </p>", href: 'collection_admin', addClass: 'collecOnly' }
+            { title: "Páginas Administrativas <p> Configurações / metadados / chaves / licenças /<br /> e-mail boas vindas / ferramentas </p>", href: 'admin', addClass: 'repoOnly'},
+            { title: "<p> Configurações / metadados / layout / redes sociais <br /> licenças / importação / exportação </p>", href: 'collection_admin', addClass: 'collecOnly' }
         ];
     }
 

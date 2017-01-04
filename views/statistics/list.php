@@ -40,7 +40,7 @@ include_once('js/list_js.php');
 
         <div class="chart-header btn-group col-md-12">
             
-            <?php $_log_helper->render_config_title(_t('Repository Statistics')); ?>
+            <?php $_log_helper->render_config_title(_t('Repository statistics')); ?>
             
             <div class="user-config-control col-md-12 no-padding">
                 <div class="col-md-4 pull-left no-padding">

@@ -74,7 +74,6 @@ class ViewHelper {
       return "<a class='navbar-brand $extraClass' href='" . site_url() . "'>" . $ret . "</a>";
     }
 
-    
     public function get_metadata_types() {
         return $this->metadata_types = [
             'text' => __('Text', 'tainacan'),
@@ -143,7 +142,6 @@ class ViewHelper {
         }
         
     }
-    
 
     public function get_special_metadata() {
         return $this->special_metadata = ['relationship', 'category', 'voting','compounds','metadata_compound'];
@@ -377,6 +375,42 @@ class ViewHelper {
             </button>
         </div>
         <?php
+    }
+
+    private function prepareYouTubeVideo($URL) {
+        $_fst = explode("v=", $URL);
+        $_sec = explode("&", $_fst[1]);
+        $_video_id = $_sec[0];
+
+        return "http://www.youtube.com/embed/" . $_video_id . "?html5=1";
+    }
+
+    public function videoSlideItemHtml($_item_id) {
+        $_item_type = get_post_meta($_item_id, "socialdb_object_dc_type")[0];
+        
+        if($_item_type === "video") {
+            $_vd = get_post_meta($_item_id, 'socialdb_object_content')[0];
+            if (strpos($_vd, 'youtube') !== false) {
+                $videoURL = $this->prepareYouTubeVideo($_vd);
+            } elseif (strpos($_vd, 'vimeo') !== false) {
+                $step1 = explode('/', rtrim($_vd, '/'));
+                $video_id = end($step1);
+                $videoURL = "https://player.vimeo.com/video/" . $video_id;
+            } else {
+                $_check_val = intval($_vd);
+
+                if($_check_val > 0 && is_int($_check_val)) {
+                    $_vd = get_post_meta($_item_id, 'socialdb_object_dc_source')[0];
+                    $videoURL = $this->prepareYouTubeVideo($_vd);
+                } else {
+                    echo get_item_thumb_image($_item_id, "large");
+                    return;
+                }
+            }
+            echo "<div class='embed-responsive embed-responsive-16by9'><iframe class='embed-responsive-item' src='$videoURL' frameborder='0'></iframe></div>";
+        } else {
+            echo get_item_thumb_image($_item_id, "large");
+        }
     }
 
 } // ViewHelper

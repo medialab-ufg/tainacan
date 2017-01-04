@@ -10,7 +10,6 @@ $title_prefix = __("Collection", "tainacan");
 <div class="modal fade slideShow-modal" tabindex="-1" id="collection-slideShow" role="dialog" aria-labelledby="Slideshow" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-
             <?php echo $viewHelper->render_modal_header('remove-sign', $title_prefix, "<span class='sS-collection-name'> </span>"); ?>
 
             <div class="modal-body" style="border: none">
@@ -18,7 +17,7 @@ $title_prefix = __("Collection", "tainacan");
                     <div class="container col-md-12 center">
                         <div class="collection-slides">
                             <?php while ( $loop->have_posts() ) : $loop->the_post(); $countLine++; ?>
-                                <div> <?php echo get_item_thumb_image(get_the_ID()); ?> </div>
+                                <div>  <?php echo get_item_thumb_image(get_the_ID()); ?> </div>
                             <?php endwhile; ?>
                         </div>
                         <div class="main-slide col-md-12 center">
@@ -26,7 +25,7 @@ $title_prefix = __("Collection", "tainacan");
                                 <div class="" style="text-align: center">
                                     <a href="<?php echo get_collection_item_href($collection_id); ?>"
                                        onclick="<?php get_item_click_event($collection_id, $curr_id )?>">
-                                        <?php echo get_item_thumb_image($curr_id, "large"); ?>
+                                    <div class="col-md-12"> <?php  $viewHelper->videoSlideItemHtml($curr_id); ?> </div>
                                     </a>
 
                                     <div class="col-md-12 meta-configs">
@@ -38,7 +37,6 @@ $title_prefix = __("Collection", "tainacan");
                                             <!-- TAINACAN: container(AJAX) que mostra o html com os rankings do objeto-->
                                             <div id="r_slideshow_<?php echo $curr_id ?>" class="rankings-container"></div>
                                         </div>
-
 
                                         <ul class="item-funcs col-md-6 right">
                                             <input type="hidden" class="post_id" name="post_id" value="<?= $curr_id ?>">
