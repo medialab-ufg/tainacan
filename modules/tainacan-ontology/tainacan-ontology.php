@@ -2100,10 +2100,36 @@ function parse_owl1()
             $owl_functional_properties = $owl_tags->FunctionalProperty;
             $owl_transitive_properties = $owl_tags->TransitiveProperty;
             $owl_symmetric_properties = $owl_tags->SymmetricProperty;
+            $owl_individuals = $owl_tags->NamedIndividual;
+            $owl_declarations = $owl_tags->Declaration;
+            $owl_subclassOf = $owl_tags->SubClassOf;
+            $owl_class_assertions = $owl_tags->ClassAssertion;
+            $owl_data_properties_domain_tags = $owl_tags->DataPropertyDomain;
+            $owl_data_properties_range_tags = $owl_tags->DataPropertyRange;
+
+            //Preparando outros elementos
+            if(count($owl_declarations) > 0)
+            {
+                //Declarações
+                $ret_class_tags = []; $ret_named_individuals_tags = []; $ret_data_properties_tags = []; $ret_subclass_structure = [];
+                $ret_data_properties_domain_tags = []; $ret_data_properties_range_tags = [];
+
+                $true = prepare_elements($owl_declarations, $ret_class_tags, $ret_named_individuals_tags, $ret_data_properties_tags, $owl_subclassOf, $ret_subclass_structure,
+                    $owl_data_properties_domain_tags, $ret_data_properties_domain_tags,
+                    $owl_data_properties_range_tags, $ret_data_properties_range_tags
+                );
+                if($true)
+                {
+                    $owl_classes = $ret_class_tags;
+                }
+                else
+                {
+                    throw new Exception("Houve um erro durante a importação");
+                }
+            }
 
             //Individuos
             $description_ind = $received_file->children($namespace['rdf'])->Description;
-
 
             try
             {
@@ -2111,14 +2137,14 @@ function parse_owl1()
                 $collection_id = treats_ontology($owl_ontology, $namespace);
 
                 //Tratando Classes
-                $created_classes = treats_classes($owl_classes, $collection_id, $namespace);
+                $created_classes = treats_classes($owl_classes, $collection_id, $namespace, $ret_subclass_structure);
 
                 //Tratando ObjectProperty
                 $created_object_properties = treats_object_properties($owl_object_properties, $namespace, $owl_classes, $created_classes, $owl_functional_properties, $collection_id);
 
                 //Tratando DatatypeProperty
                 $created_data_type_properties = treats_data_type_properties($owl_data_type_properties, $owl_classes, $created_classes, $owl_functional_properties, $namespace, $collection_id);
-                
+                exit();
                 //Tratando FunctionalProperty
                 treats_functional_property($owl_functional_properties, $created_data_type_properties, $created_object_properties, $owl_classes, $created_classes, $namespace, $collection_id);
                 
@@ -2130,6 +2156,10 @@ function parse_owl1()
                 
                 //Tratando symmetric properties
                 treats_symmetric_properties($owl_symmetric_properties,$created_object_properties, $owl_classes, $created_classes, $namespace, $collection_id);
+
+                //Trata individuos
+                treats_individual($owl_individuals, $namespace, $collection_id, $created_classes);
+
                 
             }catch (Exception $e)
             {
@@ -2157,7 +2187,7 @@ function treats_ontology(&$ontology_tags, &$namespace)
 
         if(!$data['collection_name'])
         {
-            throw new Exception("Não foi possivel capturar o nome da coleção");
+            $data['collection_name'] = strval(time());
         }
     }
 
@@ -2176,21 +2206,22 @@ function treats_ontology(&$ontology_tags, &$namespace)
 /*
  * Trata Classes
  */
-function treats_classes(&$class_tags, &$collection_id, &$namespace)
+function treats_classes(&$class_tags, &$collection_id, &$namespace, &$owl_subclassOf)
 {
     //Tratamento para não criar classes repetidas
-    $created_classes = create_associative_table($class_tags, $namespace);
+    $created_classes = [];
 
     $count = count($class_tags);
+
     for($i = 0; $i < $count; $i++)
     {
-        create_class($class_tags, $created_classes, $class_tags[$i], $collection_id, $namespace);
+        create_class($class_tags, $created_classes, $class_tags[$i], $collection_id, $namespace, $owl_subclassOf);
     }
     
     return $created_classes;
 }
 
-function create_class(&$class_tags, &$created_classes, &$classe, &$collection_id , &$namespace)
+function create_class(&$class_tags, &$created_classes, &$classe, &$collection_id , &$namespace, &$subclassOf_tags)
 {
     $category_model = new CategoryModel();
 
@@ -2204,41 +2235,63 @@ function create_class(&$class_tags, &$created_classes, &$classe, &$collection_id
         {
             $data['category_name'] = end(explode("/", strval($classe->attributes($namespace['rdf'])['about'])));
             if(!$data['category_name'])
-                throw new Exception("Impossivel criar classe, nome não encontrado");
+            {
+                $data['category_name'] = str_replace("#", "", $classe->attributes()['IRI']);
+                if(!$data['category_name'])
+                {
+                    throw new Exception("Impossivel criar classe, nome não encontrado");
+                }
+                else $with_declarations = true;
+            }
+
         }
     }
-    
-    //Descrição da classe
-    $data['category_description'] = strval($classe->children($namespace['rdfs'])->comment);
 
-    //Variaveis que guardam o nome da Classe Pai
-    foreach($classe->children($namespace['rdfs'])->subClassOf as $subClasse)
+    if($with_declarations != true)
     {
-        if($subClasse->children($namespace['owl'])->Class->attributes($namespace['rdf'])['about'])
-            $aboutClassSubClassOf = $subClasse->children($namespace['owl'])->Class->attributes($namespace['rdf'])['about'];
-    }
-    
-    //Define o da classe pai, caso a classe seja raiz então $root_name receberá o nome da propria classe
-    $resourceSubClassOf = $classe->children($namespace['rdfs'])->subClassOf->attributes($namespace['rdf'])['resource'];
-    if($aboutClassSubClassOf != null)
-        $root_name = str_replace("#", '',$aboutClassSubClassOf);
-    else if($resourceSubClassOf != null)
-    {
-        $root_name = str_replace("#", '',$resourceSubClassOf);
+        //Descrição da classe
+        $data['category_description'] = strval($classe->children($namespace['rdfs'])->comment);
+
+        //Variaveis que guardam o nome da Classe Pai
+        foreach($classe->children($namespace['rdfs'])->subClassOf as $subClasse)
+        {
+            if($subClasse->children($namespace['owl'])->Class->attributes($namespace['rdf'])['about'])
+                $aboutClassSubClassOf = $subClasse->children($namespace['owl'])->Class->attributes($namespace['rdf'])['about'];
+        }
+
+        //Define o da classe pai, caso a classe seja raiz então $root_name receberá o nome da propria classe
+        $resourceSubClassOf = $classe->children($namespace['rdfs'])->subClassOf->attributes($namespace['rdf'])['resource'];
+        if($aboutClassSubClassOf != null)
+            $root_name = str_replace("#", '',$aboutClassSubClassOf);
+        else if($resourceSubClassOf != null)
+        {
+            $root_name = str_replace("#", '',$resourceSubClassOf);
+        }
+        else
+            $root_name = $data['category_name'];
+
+        if(end(explode ("/", strval($resourceSubClassOf))) == "?category=socialdb_taxonomy")
+        {
+            $resourceSubClassOf = null;
+        }
+
+        $id_about = strval($classe->attributes($namespace['rdf'])['ID']);
+        if($id_about == null)
+            $id_about = strval($classe->attributes($namespace['rdf'])['about']);
+
+        $data['idAbout'] = $id_about;
     }
     else
-        $root_name = $data['category_name'];
-    
-    if(end(explode ("/", strval($resourceSubClassOf))) == "?category=socialdb_taxonomy")
     {
-        $resourceSubClassOf = null;
+        $aboutClassSubClassOf = $subclassOf_tags[$data['category_name']];
+        if(!$aboutClassSubClassOf)
+            $root_name = $data['category_name'];
+        else $root_name = $aboutClassSubClassOf;
+
+        $data['idAbout'] = str_replace("#", "", $classe->attributes()['IRI']);
     }
-    
-    $id_about = strval($classe->attributes($namespace['rdf'])['ID']);
-    if($id_about == null)
-        $id_about = strval($classe->attributes($namespace['rdf'])['about']);
-    
-    $data['idAbout'] = $id_about;
+
+
     
     //Caso a classe ainda não tenha sido criada
     if($created_classes[$root_name]['created'] !== true)
@@ -2255,7 +2308,7 @@ function create_class(&$class_tags, &$created_classes, &$classe, &$collection_id
 
             if(gettype($not_created_class) == "object")
             {
-                create_class($class_tags, $created_classes, $not_created_class, $collection_id, $namespace);//Chamada recursiva para criar pai
+                create_class($class_tags, $created_classes, $not_created_class, $collection_id, $namespace, $subclassOf_tags);//Chamada recursiva para criar pai
             }
             else
             {
@@ -2263,7 +2316,6 @@ function create_class(&$class_tags, &$created_classes, &$classe, &$collection_id
                 $new_data['category_name'] = $root_name;
                 record_class($created_classes, $root_name, $category_model, $new_data, $collection_id, true);
             }
-
             record_class($created_classes, $root_name, $category_model, $data, $collection_id, false);
         }
         else/*Criação de classe raiz*/
@@ -2319,8 +2371,12 @@ function class_search(&$class_to_search, &$class_tags, &$namespace)
 {
     foreach($class_tags as $class)
     {
-        if(strcmp($class_to_search, $class->attributes($namespace['rdf'])['about']) == 0 || strcmp($class_to_search, $class->attributes($namespace['rdf'])['ID']) == 0 || strcmp($class_to_search, strval($class->children($namespace['rdfs'])->label)) == 0)
-        { 
+        if(strcmp($class_to_search, $class->attributes($namespace['rdf'])['about']) == 0 ||
+            strcmp($class_to_search, $class->attributes($namespace['rdf'])['ID']) == 0 ||
+            strcmp($class_to_search, strval($class->children($namespace['rdfs'])->label)) == 0 ||
+            strcmp($class_to_search, strval($class->attributes()['IRI'])) == 0
+        )
+        {
             return $class;
         }
     }
@@ -2368,7 +2424,7 @@ function simple_add(&$data) {
 function treats_object_properties(&$object_property_transitive_property_tags, &$namespace, &$class_tags, &$created_classes, &$functional_property_tags, &$collection_id)
 {
     //Tratamento para não criar objectPropertys repetidas
-    $created_object_transitive_property = create_associative_table($object_property_transitive_property_tags, $namespace);
+    $created_object_transitive_property = [];//create_associative_table($object_property_transitive_property_tags, $namespace);
 
     $count = count($object_property_transitive_property_tags);
 
@@ -2724,7 +2780,7 @@ function create_associative_table(&$tags, &$namespace)
  */
 function treats_functional_property(&$functionalProperty_tags, &$created_dataType_property, &$created_objectProperty, &$class_tags, &$created_classes , &$namespace)
 {
-    $created_functional_property = create_associative_table($functionalProperty_tags, $namespace);
+    $created_functional_property = [];//create_associative_table($functionalProperty_tags, $namespace);
 
     $count = count($functionalProperty_tags);
     for($i = 0; $i < $count; $i++)
@@ -2958,7 +3014,7 @@ function treats_class_restriction(&$class_tags, &$created_classes, &$created_obj
 
 function treats_transitive_properties(&$transitive_properties, &$created_object_property, &$class_tags, &$created_classes, &$namespace)
 {
-    $created_transitive_properties = create_associative_table($transitive_properties, $namespace);
+    $created_transitive_properties = [];//create_associative_table($transitive_properties, $namespace);
 
     $count = count($transitive_properties);
     for($i = 0; $i < $count; $i++)
@@ -3183,10 +3239,14 @@ function treats_object_properties_unknown(&$result, &$created_data_type_properti
     foreach ($result as $index_class => $class_itens)
     {
         foreach ($class_itens as $attributes_list){
-
+            //Criação de todas a propriedades relacionada a um determinado individuo
             foreach ($attributes_list as $datatype_name => $value)
             {
-                if($datatype_name == 'location')
+                if($datatype_name != 'location')
+                {
+                    create_property($created_data_type_properties, $datatype_name, $created_classes, $index_class, $collection_id);
+                }
+                else if($datatype_name == 'location')
                 {
                     $datatype_name = 'latitude';
                     create_property($created_data_type_properties, $datatype_name, $created_classes, $index_class, $collection_id);
@@ -3198,13 +3258,9 @@ function treats_object_properties_unknown(&$result, &$created_data_type_properti
                     update_post_meta($collection_id, 'socialdb_collection_latitude_meta', $created_data_type_properties['latitude']['creation_id']);
                     update_post_meta($collection_id, 'socialdb_collection_longitude_meta', $created_data_type_properties['longitude']['creation_id']);
                 }
-                else
-                {
-                    create_property($created_data_type_properties, $datatype_name, $created_classes, $index_class, $collection_id);
-                }
-
             }
 
+            //Criação do individuo
             $data['object_name'] = end(explode("#", $attributes_list['name']));
             $data['class_id'] = $created_classes[$index_class];
             add_individual($data, $collection_id, $attributes_list);
@@ -3251,8 +3307,11 @@ function add_individual(&$data, &$collection_id, &$properties_list)
     wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type');
     wp_set_object_terms($data['ID'], array((int) $data['class_id']), 'socialdb_category_type',true);
 
+    //Propriedades relacionadas a aquele individuo
     $properties = get_term_meta($data['class_id'],'socialdb_category_property_id');
+    $properties = array_unique($properties);
     if($properties && is_array($properties)){
+
         foreach ($properties as $property){
             $property_name = get_term_by('id',$property,'socialdb_property_type')->name;
 
@@ -3276,5 +3335,77 @@ function add_individual(&$data, &$collection_id, &$properties_list)
 
             }
         }
+    }
+}
+
+function treats_individual(&$individuals_tags, &$namespace, &$collection_id, &$created_classes)
+{
+    $null = null;
+    foreach($individuals_tags as $individual)
+    {
+        $data['object_name'] = strval($individual->attributes($namespace['rdf'])['about']);
+        $resource = strval($individual->children($namespace['rdf'])->type->attributes($namespace['rdf'])['resource']);
+        $data['class_id'] = $created_classes[$resource]['creation_id'];
+
+        add_individual($data, $collection_id, $null);
+    }
+}
+
+function prepare_elements(&$owl_declarations, &$ret_class_tags, &$ret_named_individuals_tags, &$ret_data_properties_tags,
+                          &$owl_subclassof, &$ret_subclass_structure,
+                          &$data_properties_domain_tags, &$ret_data_properties_domain_tags,
+                          &$data_properties_range_tags, &$ret_data_properties_range_tags)
+{
+    if(count($owl_declarations))
+    {
+        for($i = 0, $class_pos = 0, $named_individuals_pos = 0, $data_properties_pos = 0; $i < count($owl_declarations); $i++)
+        {
+            if($owl_declarations[$i]->Class)
+            {
+                $ret_class_tags[$class_pos] = $owl_declarations[$i]->Class;
+                $ret_class_tags[$class_pos]->attributes()['IRI'] = str_replace("#", "", $ret_class_tags[$class_pos]->attributes()['IRI']);
+                $class_pos++;
+            }
+
+            if($owl_declarations[$i]->NamedIndividual)
+            {
+                $ret_named_individuals_tags[$named_individuals_pos] = $owl_declarations[$i]->NamedIndividual;
+                $named_individuals_pos++;
+            }
+
+            if($owl_declarations[$i]->DataProperty)
+            {
+                $ret_data_properties_tags[$data_properties_pos] = $owl_declarations[$i]->DataProperty;
+                $data_properties_pos++;
+            }
+        }
+
+
+        for($i = 0; $i < count($owl_subclassof); $i++)
+        {
+            $index = str_replace("#", "", $owl_subclassof[$i]->children()->Class[0]->attributes()['IRI']);
+            $father_class = str_replace("#", "", $owl_subclassof[$i]->children()->Class[1]->attributes()['IRI']);
+
+            $ret_subclass_structure[$index] = $father_class;
+        }
+
+        for($i = 0; $i < count($data_properties_domain_tags); $i++)
+        {
+            $index = str_replace("#", "", $data_properties_domain_tags[$i]->children()->DataProperty->attributes()['IRI']);
+            $father_class =str_replace("#", "", $data_properties_domain_tags[$i]->children()->Class->attributes()['IRI']);
+
+            $ret_data_properties_domain_tags[$index] = $father_class;
+
+        }
+
+        for($i = 0; $i < count($data_properties_range_tags); $i++)
+        {
+            $index = str_replace("#", "", $data_properties_range_tags[$i]->children()->DataProperty->attributes()['IRI']);
+            $data_type =str_replace("xsd:", "", $data_properties_range_tags[$i]->children()->Datatype->attributes()['abbreviatedIRI']);
+
+            $ret_data_properties_range_tags[$index] = $data_type;
+        }
+
+        return true;
     }
 }

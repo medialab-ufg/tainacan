@@ -1297,8 +1297,11 @@ function import_mapa_cultural(url_base)
 {
     if(url_base !== "")
     {
-        //$('#modalImportMain').modal('show');
-        var url_send = $('#src').val() + '/controllers/collection/collection_controller.php?operation=mapa_cultural_form&collection_id='+$('#collection_id').val()+'&type=';
+        //http://mapasculturais.local/api/space/find
+        url_base = url_base.split('/api')[0];
+
+        $('#modalImportMain').modal('show');
+        var url_send = $('#src').val() + '/controllers/collection/collection_controller.php?operation=mapa_cultural_form&collection_id='+$('#collection_id').val();
         //Agentes
         /*$.getJSON(
             url_base + "/api/agent/find",
@@ -1422,7 +1425,7 @@ function import_mapa_cultural(url_base)
                 });
             }
         );*/
-        var qtd = 3;
+        var qtd = 200;
         $.getJSON(
             //Agentes
             url_base + "/api/agent/find",
