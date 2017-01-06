@@ -9,8 +9,11 @@
                <a style="cursor: pointer;"   onclick="edit_object('<?php echo $curr_id ?>')">
                     <?php
                 } else {
+                    $has_checked_in = get_post_meta( $curr_id ,'socialdb_object_checkout', true);
                     ?>
-                    <a style="cursor: pointer;" onmouseover="triggerPopoverEdit(this)" data-trigger="focus" onclick="edit_object_item('<?php echo $curr_id ?>')">
+                   <a style="cursor: pointer;" onmouseover="triggerPopoverEdit(this,'<?php echo (is_numeric($has_checked_in)) ? 'true' : 'false' ?>','<?php echo $curr_id ?>')" 
+                       data-trigger="focus" 
+                       onclick="edit_object_item('<?php echo $curr_id ?>')">
                     <?php } ?>
                     <span class="glyphicon glyphicon-edit"></span>
                 </a>

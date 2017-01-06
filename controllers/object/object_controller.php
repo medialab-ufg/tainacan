@@ -131,6 +131,12 @@ class ObjectController extends Controller {
                 break;
             // # - PAGINA DE EDICAO PARA TEXTOS
             case "edit":
+                $checkout = get_post_meta($data['object_id'], 'socialdb_object_checkout', true);
+                if(is_numeric($checkout)){
+                    $user = get_user_by('id', $checkout)->display_name;
+                    $time = get_post_meta($data['object_id'], 'socialdb_object_checkout_time', true);
+                    return 'checkout@'.$user.'@'.date('d/m/Y',$time);
+                }
                 $object_name = get_post_meta($data['collection_id'], 'socialdb_collection_object_name', true);
                 $socialdb_collection_attachment = get_post_meta($data['collection_id'], 'socialdb_collection_attachment', true);
                 $collection_id = $data['collection_id'];
@@ -673,6 +679,10 @@ class ObjectController extends Controller {
                 $object_model->revertItem($item, $newItem);
                 return true;
                 break;
+            case 'check-out':
+                update_post_meta($data['object_id'],'socialdb_object_checkout', (isset($data['value'])) ? '' : get_current_user_id());
+                update_post_meta($data['object_id'], 'socialdb_object_checkout_time', time());
+                return true;
         }
     }
 

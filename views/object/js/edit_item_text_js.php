@@ -309,6 +309,12 @@
         $('#display_view_main_page').show();
         $("#container_three_columns").removeClass('white-background');
         $('#menu_object').show();
+        //remove o checkout in
+        $.ajax({
+            url: $('#src').val() + '/controllers/object/object_controller.php',
+            type: 'POST',
+            data: {operation: 'check-in', value: '', object_id: id}
+        })
     }
     function import_object_edit() {
         var url = $('#url_object_edit').val();

@@ -412,13 +412,18 @@
             data: {collection_id: $('#collection_id').val(), operation: 'edit', object_id: object_id}
         }).done(function (result) {
             hide_modal_main();
-            $("#form").html('');
-            $('#main_part').hide();
-            $('#display_view_main_page').hide();
-            $('#loader_collections').hide();
-            $('#configuration').html(result).slideDown();
-            $('.dropdown-toggle').dropdown();
-            $('.nav-tabs').tab();
+            if(result.trim().indexOf('checkout@')>=0){
+                var arrayN = result.trim().split('@');
+                showAlertGeneral('<?php _e('Attention!','tainacan') ?>','<?php _e('Item blocked by user ','tainacan') ?>','info');
+            }else{
+                $("#form").html('');
+                $('#main_part').hide();
+                $('#display_view_main_page').hide();
+                $('#loader_collections').hide();
+                $('#configuration').html(result).slideDown();
+                $('.dropdown-toggle').dropdown();
+                $('.nav-tabs').tab();
+            }
         });
     }
 //################  FUNCOES PARA OS COMENTARIOS ################################# 
