@@ -2,7 +2,7 @@
 <?php if (get_option('collection_root_id') != $collection_id): ?>
     <!--------------------------- DELETE AND EDIT OBJECT------------------------------------------------>
     <?php if ($is_moderator || get_post($curr_id)->post_author == get_current_user_id()): ?>
-        <li>
+        <li >
             <?php
             if (has_filter('show_edit_default') && apply_filters('show_edit_default', $data['collection_id'])) {
                 ?>
@@ -11,8 +11,8 @@
                 } else {
                     $has_checked_in = get_post_meta( $curr_id ,'socialdb_object_checkout', true);
                     ?>
-                   <a style="cursor: pointer;" onmouseover="triggerPopoverEdit(this,'<?php echo (is_numeric($has_checked_in)) ? 'true' : 'false' ?>','<?php echo $curr_id ?>')" 
-                       data-trigger="focus" 
+                   <a id="edit_button_<?php echo $curr_id ?>" style="cursor: pointer;" onmouseover="triggerPopoverEdit(this,'<?php echo (is_numeric($has_checked_in)) ? 'true' : 'false' ?>','<?php echo $curr_id ?>')" 
+                      data-trigger="focus" 
                        onclick="edit_object_item('<?php echo $curr_id ?>')">
                     <?php } ?>
                     <span class="glyphicon glyphicon-edit"></span>

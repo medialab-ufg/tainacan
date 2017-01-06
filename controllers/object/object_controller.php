@@ -132,7 +132,7 @@ class ObjectController extends Controller {
             // # - PAGINA DE EDICAO PARA TEXTOS
             case "edit":
                 $checkout = get_post_meta($data['object_id'], 'socialdb_object_checkout', true);
-                if(is_numeric($checkout)){
+                if(is_numeric($checkout)&&!isset($data['motive'])){
                     $user = get_user_by('id', $checkout)->display_name;
                     $time = get_post_meta($data['object_id'], 'socialdb_object_checkout_time', true);
                     return 'checkout@'.$user.'@'.date('d/m/Y',$time);
@@ -683,6 +683,27 @@ class ObjectController extends Controller {
                 update_post_meta($data['object_id'],'socialdb_object_checkout', (isset($data['value'])) ? '' : get_current_user_id());
                 update_post_meta($data['object_id'], 'socialdb_object_checkout_time', time());
                 return true;
+            case 'check-in':
+                $item = get_post($data['object_id']);
+                $metas = get_post_meta($item->ID);
+                $version = $object_model->checkVersionNumber($item);
+                $original = $object_model->checkOriginalItem($item->ID);
+                $version_numbers = $object_model->checkVersions($original);
+                //$version = $object_model->checkVersions($original);
+                $new_version = count($version_numbers) + 2;
+                //var_dump($version_numbers, $new_version);
+                //exit();
+                $newItem = $object_model->createVersionItem($item, $data['collection_id']);
+                if ($newItem) {
+                    $object_model->copyItemMetas($newItem, $metas);
+                    $object_model->copyItemCategories($newItem, $data['object_id']);
+                    $object_model->copyItemTags($newItem, $data['object_id']);
+                    $object_model->createMetasVersion($newItem, $original, $new_version, $data['motive']);
+                    $data['object_id'] = $newItem;
+                    return $this->operation('edit', $data);
+                } else {
+                    return false;
+                }
         }
     }
 
