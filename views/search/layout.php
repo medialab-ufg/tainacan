@@ -98,12 +98,12 @@ $view_helper = new ViewHelper();
                     
                     <div class="form-group geo-lat coordinate" style='display: none'>
                         <label for="latitude"> <?php _e('Latitude', 'tainacan'); ?> </label>
-                        <select name="latitude" class="form-control"></select>
+                        <select name="latitude" id="latitude_select" class="form-control"></select>
                     </div>
                     
                     <div class="form-group geo-long coordinate" style='display: none'>
                         <label for="longitude"> <?php _e('Longitude', 'tainacan'); ?> </label>
-                        <select name="longitude" class="form-control"></select>
+                        <select name="longitude" id="longitude_select" class="form-control"></select>
                     </div>
 
                     <div class="form-group table-meta-config" style="display: none">

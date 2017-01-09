@@ -1462,6 +1462,7 @@ add_action('menu_collection_property_and_filters_configuration', 'hide_field');
 add_action('menu_collection_property_configuration', 'hide_field');
 add_action('menu_collection_social_configuration', 'hide_field');
 add_action('menu_collection_license', 'hide_field');
+add_action('menu_collection_tags', 'hide_field');
 //add_action('menu_collection_import', 'hide_field');
 //add_action('menu_collection_export', 'hide_field');
 /******************************************************************************/
@@ -2017,13 +2018,13 @@ function ontology_add_button_edit_property($property_id){
 add_action('add_configuration_menu_tainacan', 'add_filter_ontology_menu');
 function add_filter_ontology_menu() {
     $link = "'" . get_template_directory_uri(). "'";
-    echo '<li>
-                           <a style="cursor: pointer;" 
-                              onclick="showSearchConfiguration(' . $link . ');" >
-                               <span class="glyphicon glyphicon-folder-open"></span>&nbsp;
-                                   ' . __('Filters', 'tainacan')
-    . '</a>'
-    . '</li>';
+    //echo '<li>
+    //                       <a style="cursor: pointer;" 
+    //                          onclick="showSearchConfiguration(' . $link . ');" >
+     //                          <span class="glyphicon glyphicon-folder-open"></span>&nbsp;
+     //                              ' . __('Filters', 'tainacan')
+    //. '</a>'
+    //. '</li>';
     echo '<li>
                            <a style="cursor: pointer;" 
                               onclick="showRankingConfiguration(' . $link . ');" >

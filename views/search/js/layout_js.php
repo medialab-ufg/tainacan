@@ -303,6 +303,13 @@
                             }
                             iOrder++;
                         });
+                        var set_lat  = $("#set-lat").val();
+                        var set_long = $("#set-long").val();
+                        var location = $("#approx_location").val();
+                        if(set_lat && set_long) {
+                            $('#latitude_select option[value="'+set_lat+'"]').attr('selected','selected');
+                            $('#longitude_select option[value="'+set_long+'"]').attr('selected','selected');
+                        }
                     });            
                 <?php                
                 else:
@@ -334,6 +341,13 @@
                         }
                         iOrder++;
                     });
+                    var set_lat  = $("#set-lat").val();
+                    var set_long = $("#set-long").val();
+                    var location = $("#approx_location").val();
+                    if(set_lat && set_long) {
+                        $('#latitude_select option[value="'+set_lat+'"]').attr('selected','selected');
+                        $('#longitude_select option[value="'+set_long+'"]').attr('selected','selected');
+                    }
                 <?php                
                 endif;
                 ?>
@@ -410,13 +424,15 @@
 
             $(".table-meta-config #sort-metas").sortable();
 
-            var set_lat  = $("#set-lat").val();
-            var set_long = $("#set-long").val();
-            var location = $("#approx_location").val();
-            if(set_lat && set_long) {
-                $(".geo-lat select[name='latitude']").val(set_lat);
-                $(".geo-long select[name='longitude']").val(set_long);
-            }
+//            var set_lat  = $("#set-lat").val();
+//            var set_long = $("#set-long").val();
+//            var location = $("#approx_location").val();
+//            if(set_lat && set_long) {
+//                $('#latitude_select option[value="'+set_lat+'"]').attr('selected','selected');
+//                $('#longitude_select option[value="'+set_long+'"]').attr('selected','selected');
+//            }
+            
+            console.log('#latitude_select option[value="'+set_lat+'"]', $('#latitude_select option[value="'+set_lat+'"]'));
             if (location) {
                 $(".location select[name='location']").val(location);
             }

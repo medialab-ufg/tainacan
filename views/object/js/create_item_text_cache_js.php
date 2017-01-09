@@ -883,7 +883,7 @@ function back_main_list() {
         }
     }
 //################################ adicao de propriedades de categorias #################################//    
-    function append_category_properties(id,remove_id){
+    function append_category_properties(id,remove_id,property_id ){
         //buscando as categorias selecionadas nos metadados de termo
         var selected_categories = $('#selected_categories').val();
         if(selected_categories===''){

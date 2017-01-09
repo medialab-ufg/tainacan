@@ -565,6 +565,7 @@
                 type: 'POST',
                 data: { operation: 'list_properties_categories_accordeon',properties_to_avoid:$('#properties_id').val(),categories: id, object_id:$('#object_id_edit').val()}
             }).done(function (result) {
+                console.log('568');
                 //hide_modal_main();
                 //list_all_objects(selKeys.join(", "), $("#collection_id").val());
                $('#append_properties_categories_'+property_id).html(result);
@@ -609,6 +610,7 @@
                        header: "h2",
                        heightStyle: "content"
                    });
+                    console.log($('#meta-item-'+property_id+' h2'),'#meta-item-'+property_id+' h2')
         }
          $('[data-toggle="tooltip"]').tooltip();
     }

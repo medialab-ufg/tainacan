@@ -624,9 +624,9 @@
             //verificando se existe propriedades para serem  adicionadas
             $.each($("#field_property_term_"+compound_id+"_"+property_id+"_"+i+" option"),function(index,value){
                 if($(this).is(':selected')){
-                    append_category_properties($(this).val());
+                    append_category_properties($(this).val(),0,compound_id);
                 }else{
-                    append_category_properties(0,$(this).val());
+                    append_category_properties(0,$(this).val(),compound_id);
                 }
             });
         }else{
