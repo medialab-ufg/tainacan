@@ -382,7 +382,7 @@ class ViewHelper {
         $_sec = explode("&", $_fst[1]);
         $_video_id = $_sec[0];
 
-        return "http://www.youtube.com/embed/" . $_video_id . "?html5=1?autoplay=1";
+        return "http://www.youtube.com/embed/" . $_video_id . "?html5=1";
     }
 
     public function videoSlideItemHtml($_item_id) {
@@ -408,8 +408,11 @@ class ViewHelper {
                 }
             }
             echo "<div class='embed-responsive embed-responsive-16by9'><iframe class='embed-responsive-item' src='$videoURL'></iframe></div>";
-        } else {
-            echo get_item_thumb_image($_item_id, "large");
+        } else { ?>           
+            <div class="col-md-12">               
+                <?php echo get_item_thumb_image($_item_id, "large"); ?>
+            </div>
+            <?php 
         }
     }
 
