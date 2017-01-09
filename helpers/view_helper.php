@@ -407,7 +407,7 @@ class ViewHelper {
                     return;
                 }
             }
-            echo "<div class='embed-responsive embed-responsive-16by9'><iframe class='embed-responsive-item' src='$videoURL'></iframe></div>";
+            echo "<div class='embed-responsive embed-responsive-16by9 $_item_type'><iframe class='embed-responsive-item' src='$videoURL'></iframe></div>";
         } else { ?>           
             <div class="col-md-12">               
                 <?php echo get_item_thumb_image($_item_id, "large"); ?>

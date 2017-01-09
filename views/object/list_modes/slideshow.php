@@ -35,7 +35,7 @@ $title_prefix = __("Collection", "tainacan");
                                         <h3 style="color: whitesmoke; font-weight: bolder"> <?php the_title(); ?> </h3>
                                     </a>
 
-                                    <div class="col-md-11 center center-block" style="float: none; margin: 10px auto !important;">
+                                    <div class="col-md-11 center center-block main-current-container" style="float: none; margin: 10px auto !important;">
                                         <?php $viewHelper->videoSlideItemHtml($curr_id); ?>
                                     </div>
 

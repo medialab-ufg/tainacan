@@ -734,13 +734,29 @@
         default_slideshow_time = 4000;
     }
 
+    $(".main-slide").on("afterChange", function(slick, currentSlide) {
+        var c_slide = $('.slick-current .main-current-container div');
+
+        if( $(c_slide).hasClass('video') ) {
+            $('.main-slide').slick('slickPause');
+            $('.collection-slides').slick('slickPause');
+        } else {
+            $('.main-slide').slick('slickPlay');
+            $('.collection-slides').slick('slickPlay');
+        }
+
+    });
+
     var main_slick_settings = {
         slidesToShow: 1,
         slidesToScroll: 1,
         arrows: true,
         fade: true,
         asNavFor: '.collection-slides',
-        adaptiveHeight: true
+        adaptiveHeight: true,
+        //variableWidth: true,
+        centerMode: true,
+        centerPadding: '0px'
     };
     var collection_slick_settings = {
         slidesToShow: 5,
