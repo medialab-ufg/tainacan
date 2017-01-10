@@ -150,7 +150,7 @@ class EurController extends Controller {
                 $result_itens = $eur_model->getResult();
                 $result_totalitens = $eur_model->getTotalResults();
                 if (!empty($result_itens)) {
-                    $jSon['success'] = "Busca e Inserções realizadas com sucesso!";
+                    $jSon['success'] = "Busca realizada com sucesso!";
                     $jSon['result'] = $result_itens[0];
                     $jSon['totalresult'] = "<b>Itens encontrados</b> (aprox.): {$result_totalitens}<br><br>";
                 } else {
