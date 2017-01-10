@@ -848,7 +848,6 @@
         $("#type").val(type);
 
         $("#deleted_property_name").text(name_html);
-        $('.modal').modal('hide');
         $("#modal_remove_property").modal('show');
     }
     //limpando os formularios ao abrir o modal

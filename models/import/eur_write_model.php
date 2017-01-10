@@ -80,6 +80,7 @@ class EurWriteModel extends Model {
             'post_author' => $this->User
         );
        $object_id = wp_insert_post($object);
+       update_post_meta($data['ID'], 'socialdb_object_content', (isset($item["edmPreview"]) && is_array($item["edmPreview"]) ? implode(', ', $item["edmPreview"]) : ''));
        $this->set_common_field_values($object_id, 'title', (isset($item["title"]) && is_array($item["title"]) ? $item["title"][0] : $item["title"]));
        $this->set_common_field_values($object_id, 'description', (isset($item["dcDescriptionLangAware"]['def']) && is_array($item["dcDescriptionLangAware"]['def']) ? implode(', ', $item["dcDescriptionLangAware"]['def']) : ''));
        //categoria raiz da colecao
