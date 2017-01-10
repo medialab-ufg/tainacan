@@ -1,4 +1,4 @@
- <?php
+<?php
 /*
  * Template Name: Index
  * Description: Pagina inicial da colecao
@@ -66,7 +66,6 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
     if (isset($_GET['mycollections'])) {
         echo 'true';
     }
-
     ?>">
     <!-- Colecoes compartilhadas -->
     <input type="hidden" id="sharedcollections" name="sharedcollections" value="<?php
@@ -196,9 +195,9 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
                                                 <input  style="font-size: 13px;z-index: 1;" class="form-control input-medium placeholder ui-autocomplete-input" id="search_objects"
                                                         onkeyup="set_value(this)" 
                                                         onkeydown="if (event.keyCode === 13)
-                                                                       document.getElementById('search_main').click();"
-                                                        onmouseover="$('#search_main').css('border-left','solid #AAA');"                
-                                                        onmouseout="$('#search_main').css('border-left','none');"                
+                                                                    document.getElementById('search_main').click();"
+                                                        onmouseover="$('#search_main').css('border-left', 'solid #AAA');"                
+                                                        onmouseout="$('#search_main').css('border-left', 'none');"                
                                                         type="text" placeholder="<?php _e('Find', 'tainacan') ?>" autocomplete="off">
                                                 <span class="input-group-btn">
                                                     <button id="search_main" type="button" onclick="search_objects('#search_objects')" class="btn btn-default">
@@ -257,13 +256,14 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
                                                         <?php _e('Add', 'tainacan') ?> <span class="caret"></span>
                                                     </button>
                                                     <ul class="dropdown-menu">
-                                                        <!--li><a  id="create_button" style="cursor: pointer;"><?php echo (get_post_meta(get_the_ID(), 'socialdb_collection_object_name', true)) ? get_post_meta(get_the_ID(), 'socialdb_collection_object_name', true) : _e('Item', 'tainacan') //_e('Item', 'tainacan')                    ?></a></li>
+                                                        <!--li><a  id="create_button" style="cursor: pointer;"><?php echo (get_post_meta(get_the_ID(), 'socialdb_collection_object_name', true)) ? get_post_meta(get_the_ID(), 'socialdb_collection_object_name', true) : _e('Item', 'tainacan') //_e('Item', 'tainacan')                         ?></a></li>
                                                         <li><a onclick="showViewMultipleItems()" style="cursor: pointer;" ><?php _e('Multiple Files', 'tainacan') ?></a></li>
                                                         <!--li><a style="cursor: pointer;" onclick="showModalImportSocialNetwork();" ><?php _e('Social Media', 'tainacan') ?></a></li>
                                                         <li><a style="cursor: pointer;" onclick="showModalImportAll();" ><?php _e('Web Resource URL', 'tainacan') ?></a></li>
                                                         <li class="divider" -->
                                                         <li><a onclick="showAddItemText()"  style="cursor: pointer;"><?php _e('Write text', 'tainacan') ?> </a></li>
                                                         <li><a onclick="showViewMultipleItems()" style="cursor: pointer;" ><?php _e('Send file(s)', 'tainacan') ?>  </a></li>
+                                                        <li><a onclick="showSendFilesZip()" style="cursor: pointer;" ><?php _e('Send file(s) via zip', 'tainacan') ?>  </a></li>
                                                         <li><a onclick="showAddItemURL();" style="cursor: pointer;" ><?php _e('Insert URL', 'tainacan') ?>  </a></li>
                                                     </ul>
                                                 </div>
@@ -288,7 +288,7 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
                                     </button>
 
                                     <ul class="dropdown-menu" aria-labelledby="collectionViewMode">
-                                        <?php foreach ( ViewHelper::collection_view_modes() as $mode => $title): ?>
+                                        <?php foreach (ViewHelper::collection_view_modes() as $mode => $title): ?>
                                             <li class="<?php echo $mode ?>">
                                                 <a href="javascript:void(0)" onclick="changeViewMode('<?php echo $mode ?>')">
                                                     <div class="pull-left"> <?php echo $title; ?> </div>
@@ -315,14 +315,16 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
                                 </div>
 
                                 <div class="col-md-2 selectable-items">
-                                    <?php if ( is_user_logged_in() && get_the_ID() != get_option('collection_root_id') &&
-                                               verify_collection_moderators(get_the_ID(), get_current_user_id()) ):  ?>
+                                    <?php
+                                    if (is_user_logged_in() && get_the_ID() != get_option('collection_root_id') &&
+                                            verify_collection_moderators(get_the_ID(), get_current_user_id())):
+                                        ?>
                                         <div class="selectors">
                                             <a onclick="select_some()" class="select_some">
-                                                <?php echo ViewHelper::render_icon("selection", "png", __("Select some items", "tainacan") ); ?>
+                                                <?php echo ViewHelper::render_icon("selection", "png", __("Select some items", "tainacan")); ?>
                                             </a>
                                             <a onclick="select_all()" class="select_all">
-                                                <?php echo ViewHelper::render_icon("select-all", "png", __("Select all items", "tainacan") ); ?>
+                                                <?php echo ViewHelper::render_icon("select-all", "png", __("Select all items", "tainacan")); ?>
                                             </a>
                                             <input type="hidden" value="" class="bulk_action" name="bulk_action">
                                         </div>
@@ -331,14 +333,15 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
                                                 <span class="glyphicon glyphicon-trash"></span>
                                             </a>
                                             <a class="move_edition">
-                                              <span class="glyphicon glyphicon-edit"></span>
+                                                <span class="glyphicon glyphicon-edit"></span>
                                             </a>
                                         </div>
                                     <?php endif; ?>
                                 </div>
 
                                 <div class="col-md-2">
-                                    <?php if (is_user_logged_in()) {
+                                    <?php
+                                    if (is_user_logged_in()) {
                                         if (get_the_ID() != get_option('collection_root_id') && verify_collection_moderators(get_the_ID(), get_current_user_id())) {
                                             ?>
                                             <button onclick="showTrash('<?php echo get_template_directory_uri(); ?>');" class="btn btn-default pull-left collection-trash"><?php _e('Trash', 'tainacan'); ?></button>
@@ -349,7 +352,7 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
                                             $user_data = get_user_by('ID', get_current_user_id())->user_email;
                                             if ($admin_email == $user_data || $blog_email == $user_data) {
                                                 ?>
-                                            <button onclick="showTrash('<?php echo get_template_directory_uri(); ?>');" class="btn btn-default pull-left"><?php _e('Trash', 'tainacan'); ?></button>
+                                                <button onclick="showTrash('<?php echo get_template_directory_uri(); ?>');" class="btn btn-default pull-left"><?php _e('Trash', 'tainacan'); ?></button>
                                                 <?php
                                             }
                                         }
@@ -383,9 +386,9 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
                 </div>
 
                 <?php /*
-                <!-- TAINACAN: esta div (AJAX) mostra os widgets para pesquisa que estao setadas na direita  -->
-                <div id="div_right"></div>
-                */ ?>
+                  <!-- TAINACAN: esta div (AJAX) mostra os widgets para pesquisa que estao setadas na direita  -->
+                  <div id="div_right"></div>
+                 */ ?>
 
             </div>
         </div>
@@ -419,17 +422,17 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
                 <a href="#delete"><?php _e('Remove', 'tainacan'); ?></a>
             </li>
         <?php endif; ?>
-        <?php //if (verify_collection_moderators(get_the_ID(), get_current_user_id())):   ?>
+        <?php //if (verify_collection_moderators(get_the_ID(), get_current_user_id())):     ?>
         <li class="list" id="list_meta_single">
             <a href="#metadata" style="background-position: 6px 50%;padding:1px 5px 1px 28px;background-repeat:no-repeat;background-image:url('<?php echo get_template_directory_uri() ?>/libraries/css/images/properties.png')">
                 <?php _e('Metadata', 'tainacan'); ?>
             </a>
         </li>
-        <?php // endif;   ?>
+        <?php // endif;     ?>
     </ul>
     <ul id="myMenuNoList" class="contextMenu" style="display:none;">
         <?php if (!$visualization_page_category || $visualization_page_category === 'right_button'): ?>   
-        <li class="see">
+            <li class="see">
                 <a href="#see" style="background-position: 6px 40%;padding:1px 5px 1px 28px;background-repeat:no-repeat;background-image:url('<?php echo get_template_directory_uri() ?>/libraries/css/images/see.png')">
                     <?php _e('See', 'tainacan'); ?>
                 </a>
@@ -453,12 +456,12 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
             </li>
         <?php endif; ?>
         <?php //if (verify_collection_moderators(get_the_ID(), get_current_user_id())): ?>
-        <?php // endif;   ?>
+        <?php // endif;     ?>
     </ul>
     <!-- TAINACAN: esta div eh mostrada quando eh clicado com o botao direito sobre categorias e tags no dynatree  -->
     <ul id="myMenuSingleTag" class="contextMenu" style="display:none;">
         <li class="see">
-        <?php if (!$visualization_page_category || $visualization_page_category === 'right_button'): ?>    
+            <?php if (!$visualization_page_category || $visualization_page_category === 'right_button'): ?>    
                 <a href="#see" style="background-position: 6px 40%;padding:1px 5px 1px 28px;background-repeat:no-repeat;background-image:url('<?php echo get_template_directory_uri() ?>/libraries/css/images/see.png')">
                     <?php _e('See', 'tainacan'); ?>
                 </a>
@@ -637,6 +640,51 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo __('Close', 'tainacan'); ?></button>
                         <button type="submit" class="btn btn-primary"><?php echo __('Delete', 'tainacan'); ?></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modal_send_files_items_zip" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form  id="submit_files_item_zip">
+                    <input type="hidden" id="operation" name="operation" value="send_files_item_zip">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-plus"></span>&nbsp;<?php echo __('Import files from zip', 'tainacan'); ?></h4>
+                    </div>
+                    <div class="modal-body">
+                        <input type="radio" onchange="changeFormZip(this.value)" id="sendFileItemZip" name="sendfile_zip" value="file" checked="checked"/> <?php echo __('Send File', 'tainacan'); ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" onchange="changeFormZip(this.value)" id="sendUrlItemZip" name="sendfile_zip" value="url"/> <?php echo __('In Server', 'tainacan'); ?>
+                        <br>
+                        <div id="div_send_file_zip">
+                            <input type="file" accept=".zip" name="file_zip">
+                        </div>
+                        <div id="div_in_server_zip" style="display:none;">
+                            <input type="text" name="file_path" placeholder="<?php echo __('Insert file path in this server', 'tainacan'); ?>" class="form-control">
+                        </div>
+                        <br><br>
+                        <div>
+                            <input type="checkbox" onclick="changeMetadataZipDiv()" id="zip_folder_hierarchy" name="zip_folder_hierarchy" value="1">&nbsp;<?php echo __('Import Folder Hierarchy', 'tainacan'); ?>
+                        </div>
+                        <div id="metadata_zip_div" style="display:none;">
+                            <input type="radio" onchange="changeFormZipMetadata(this.value)" id="createMetaItemZip" name="meta_zip" value="create" checked="checked"/> <?php echo __('Create Metadata', 'tainacan'); ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <input type="radio" onchange="changeFormZipMetadata(this.value)" id="chooseMetaItemZip" name="meta_zip" value="choose"/> <?php echo __('Choose Metadata', 'tainacan'); ?>
+                            <br>
+                            <div id="div_create_metadata_zip">
+                                <input type="text" name="meta_name" placeholder="<?php echo __('Insert value', 'tainacan'); ?>" class="form-control">
+                            </div>
+                            <div id="div_choose_metadata_zip" style="display:none;">
+                                <select id="chosen_meta" name="chosen_meta" class="form-control">
+                                    <option>[<?php echo __('Select', 'tainacan'); ?>]</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo __('Close', 'tainacan'); ?></button>
+                        <button type="submit" class="btn btn-primary"><?php echo __('Import', 'tainacan'); ?></button>
                     </div>
                 </form>
             </div>
@@ -840,7 +888,7 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal"><?php _e('Close', 'tainacan'); ?></button>
                         <button type="submit" class="btn btn-primary" onclick="check_passwords();
-                                    return false;"><?php _e('Submit', 'tainacan'); ?></button>
+                                return false;"><?php _e('Submit', 'tainacan'); ?></button>
                     </div>
                 </form>
             </div>
@@ -955,7 +1003,7 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
                                     $collection_id = get_the_ID();
                                     $loginUrl = $helper->getLoginUrl(get_bloginfo(template_directory) . '/controllers/social_network/facebook_controller.php?collection_id=' . $collection_id . '&operation=getAccessToken', $permissions);
                                 } catch (Exception $e) {
-
+                                    
                                 }
 
                                 //echo '<a href="' . $loginUrl . '">Log in with Facebook!</a>';
@@ -1049,7 +1097,7 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
                             $collection_id = get_the_ID();
                             $loginUrl = $helper->getLoginUrl(get_bloginfo(template_directory) . '/controllers/social_network/facebook_controller.php?collection_id=' . $collection_id . '&operation=getAccessToken', $permissions);
                         } catch (Exception $e) {
-
+                            
                         }
 
                         //echo '<a href="' . $loginUrl . '">Log in with Facebook!</a>';

@@ -2470,6 +2470,40 @@ function is_selected_category(id, seletor) {
     }
 
 }
+
+//************************ ENVIAR ARQUIVO ZIP PARA CRIAÇAO DE ITEM *******************************//
+function showSendFilesZip() {
+    $('#modal_send_files_items_zip').modal('show');
+}
+
+function changeFormZip(opt){
+    if(opt == 'url'){
+        $('#div_send_file_zip').hide('slow');
+        $('#div_in_server_zip').show('slow');
+    }else{
+        $('#div_in_server_zip').hide('slow');
+        $('#div_send_file_zip').show('slow');
+    }
+}
+
+function changeFormZipMetadata(opt){
+    if(opt == 'create'){
+        $('#div_choose_metadata_zip').hide('slow');
+        $('#div_create_metadata_zip').show('slow');
+    }else{
+        $('#div_create_metadata_zip').hide('slow');
+        $('#div_choose_metadata_zip').show('slow');
+    }
+}
+
+function changeMetadataZipDiv(){
+    if($('#zip_folder_hierarchy').is(':checked')){
+        $('#metadata_zip_div').show('slow');
+    }else{
+        $('#metadata_zip_div').hide('slow');
+    }
+}
+
 //--------------------------- TELA DE IMPORTACAO DE MULTIPLO ARQUIVOS --------------------------//
 // lista os autores mais participativos
 function showViewMultipleItems() {
