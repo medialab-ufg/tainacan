@@ -306,3 +306,30 @@ a:hover{text-decoration:underline}
 .new-collection .modal-header {
     border-bottom: 0;
 }
+
+.collec_menu_opnr {
+  padding: 10px 0;
+  text-align:right;
+
+  a.dropdown-toggle {
+    padding-bottom: 10px;
+    height: 50px;
+    margin: 0;
+    &:hover, &:active, &:visited {
+      background: transparent !important;
+    }
+  }
+
+  ul.dropdown-menu {
+    margin-top: -5px !important;
+    margin-right: 10px !important;
+  }
+} // .collec_menu_opnr
+
+.nav .open.collec_menu_opnr > a {
+  background-color: transparent !important;
+}
+
+#tainacan-menu {
+  border-radius: 4px;
+}

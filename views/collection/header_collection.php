@@ -40,7 +40,7 @@ $thumb_url = $collection_thumb ? wp_get_attachment_url($collection_thumb) : get_
                         <?php } else { ?>
                             <h3 class="white title"> <a href="<?php echo get_the_permalink($current_collection_id); ?>"> <?php echo $collection_post->post_title; ?> </a> </h3>
                             <div class="collection-description">
-                                <?php echo Words(strip_tags($collection_post->post_content), 450, '... <a onclick="showFullDescription()" style="cursor:pointer;"> Ver mais! </a>'); ?>
+                                <?php echo Words(strip_tags($collection_post->post_content), 450, '... <a onclick="showFullDescription()" style="cursor:pointer;">' . _t('View more') .'</a>'); ?>
                             </div>
 
                             <div class="collection-author">

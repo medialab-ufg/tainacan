@@ -1,10 +1,13 @@
-<div class="col-md-2" style="padding:10px 0;text-align:right;">
+<ul class="nav navbar-bar navbar-right">
+    <li class="dropdown collec_menu_opnr">
     <?php if ((verify_collection_moderators($current_collection_id, get_current_user_id()) || current_user_can('manage_options')) && get_post_type($current_collection_id) == 'socialdb_collection'): ?>
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" >
-            <div class="fab"> <img src="<?php echo get_template_directory_uri() ?>/libraries/images/configuracao.svg" alt="<?php _t('Configuration', 1); ?>" class="img-responsive"> </div>
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+            <div class="fab">
+                <img src="<?php echo get_template_directory_uri() ?>/libraries/images/configuracao.svg" alt="<?php _t('Configuration', 1); ?>" class="img-responsive">
+            </div>
         </a>
 
-        <ul class="dropdown-menu pull-right" role="menu">
+        <ul class="dropdown-menu pull-right dropdown-show" role="menu">
             <li><a style="cursor: pointer;" onclick="showCollectionConfiguration('<?php echo get_template_directory_uri() ?>');" ><span class="glyphicon glyphicon-wrench"></span>&nbsp;<?php _t('Configuration', 1); ?></a></li>
             <li <?php do_action('menu_collection_property_and_filters_configuration') ?>>
                 <a style="cursor: pointer;" onclick="showPropertiesAndFilters('<?php echo get_template_directory_uri() ?>');" >
@@ -118,4 +121,6 @@
             <?php endif; ?>
         </ul>
     <?php endif; ?>
-</div>
+</li>
+
+</ul>
