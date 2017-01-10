@@ -114,7 +114,7 @@
                 <img src="<?php echo get_template_directory_uri() ?>/libraries/images/configuracao.svg" alt="" class="img-responsive">
             </div>
         </a>
-        <ul class="dropdown-menu pull-right" role="menu">
+        <ul class="dropdown-menu dropdown-show" role="menu">
             <li><a onclick="showEvents('<?php echo get_template_directory_uri() ?>');" style="color:<?php echo $collection_metas['socialdb_collection_board_link_color']; ?>" href="#"><span class="glyphicon glyphicon-flash"></span> <?php _e('Events', 'tainacan'); ?>&nbsp;<span id="notification_events" style="background-color:red;color:white;font-size:13px;"></span></a></li>
             <?php if (!verify_collection_moderators($collection_post->ID, get_current_user_id()) && !current_user_can('manage_options')): ?>
                 <li><a onclick="show_report_abuse_collection('<?php echo $collection_post->ID; ?>');"  style="cursor: pointer;"><span class="glyphicon glyphicon-warning-sign"></span> <?php _e('Report Abuse', 'tainacan'); ?>&nbsp;</a></li>
