@@ -19,7 +19,11 @@ class ObjectMultipleController extends Controller {
                 return $data;
             case 'edit_multiple_items':
                 return $objectmultiple_model->edit_multiple($data);
-                break;             
+                break;     
+            case 'send_files_item_zip':
+                return $objectmultiple_model->insert_items_zip($data);
+                break;
+                
         }
     }
 }
@@ -30,6 +34,7 @@ class ObjectMultipleController extends Controller {
 if ($_POST['operation']) {
     $operation = $_POST['operation'];
     $data = $_POST;
+    $data['files'] = $_FILES;
 } else {
     $operation = $_GET['operation'];
     $data = $_GET;

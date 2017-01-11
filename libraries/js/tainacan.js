@@ -308,6 +308,38 @@ $(window).load(function () {
         e.preventDefault();
 
     });
+    
+    //submit do importar zip para colecoes
+    $('#submit_files_item_zip').submit(function (e) {
+        $('.nav-tabs').tab();
+        $('.dropdown-toggle').dropdown();
+        $.ajax({
+            url: $('#src').val() + '/controllers/object/object_multiple_controller.php',
+            type: 'POST',
+            data: new FormData(this),
+            processData: false,
+            contentType: false
+        }).success(function (result) {
+            $('#sendFileItemZip').val('');
+            $('.nav-tabs').tab();
+            $('.dropdown-toggle').dropdown();
+            elem = jQuery.parseJSON(result);
+            if (elem) {
+            } else {
+                $('#modalImportMain').modal('hide');
+                var message = elem.message;
+                if (!message)
+                {
+                    message = 'Houve um erro na importação deste arquivo';
+                }
+                showAlertGeneral('Erro', message, 'error');
+            }
+        }).error(function (error) {
+            showAlertGeneral('Erro', 'Houve um erro na importação deste arquivo', 'error');
+        });
+        e.preventDefault();
+
+    });
 
     // submits dos eventos das categorias e tags
     //add

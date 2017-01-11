@@ -580,4 +580,74 @@ class ObjectMultipleModel extends Model {
         $data['socialdb_event_create_date'] = time();
         return $eventAddObject->create_event($data);
     }
+################################################################################    
+######################### importando multiplos arquivos ########################  
+################################################################################     
+    /**
+     * 
+     */
+    public function insert_items_zip($data){
+        if($data['files'] && !empty($data['files'])){
+            $dir = $this->unzip_items($data['files']);
+             foreach (new DirectoryIterator($dir) as $fileInfo) {
+                    if($fileInfo->isDot()) 
+                        continue;
+                    
+                   if(is_file($fileInfo->getPath(). '/' .$fileInfo->getFilename())) 
+                       var_dump('sou arquivo',$fileInfo);
+                   if(is_dir($fileInfo->getPath(). '/' .$fileInfo->getFilename())) 
+                       var_dump('sou diretorio',$fileInfo);
+                   
+                   //$categories_id[] = $data['ids'];
+            }
+        }
+    }
+    /*
+     * @signature unzip_package()
+     * @return string $targetdir o diretorio para onde foi descompactado o arquivo
+     */
+    public function unzip_items($files){
+        if ($files["file_zip"]["name"]) {
+            $file = $files["file_zip"];
+            $filename = $file["name"];
+            $tmp_name = $file["tmp_name"];
+            $type = $file["type"];
+
+            $name = explode(".", $filename);
+            $accepted_types = array('application/zip', 'application/x-zip-compressed', 'multipart/x-zip', 'application/x-compressed');
+
+            if (in_array($type, $accepted_types)) { //If it is Zipped/compressed File
+                $okay = true;
+            }
+
+            $continue = strtolower($name[1]) == 'zip' ? true : false; //Checking the file Extension
+
+            if (!$continue) {
+                $message = "The file you are trying to upload is not a .zip file. Please try again.";
+            }
+
+
+            /* here it is really happening */
+            $ran = $name[0] . "-" . time() . "-" . rand(1, time());
+            if(!is_dir(TAINACAN_UPLOAD_FOLDER . "/data/zip-items")){
+                mkdir(TAINACAN_UPLOAD_FOLDER . "/data/zip-items");
+            }
+            $targetdir = TAINACAN_UPLOAD_FOLDER . "/data/zip-items/" . $ran;
+            $targetzip = TAINACAN_UPLOAD_FOLDER . "/data/zip-items/" . $ran . ".zip";
+
+            if (move_uploaded_file($tmp_name, $targetzip)) { //Uploading the Zip File
+
+                /* Extracting Zip File */
+
+                $zip = new ZipArchive();
+                $x = $zip->open($targetzip);  // open the zip file to extract
+                if ($x === true) {
+                    $zip->extractTo($targetdir); // place in the directory with same name  
+                    $zip->close();
+                    unlink($targetzip); //Deleting the Zipped file
+                }
+            } 
+        }
+        return $targetdir;
+    }
 }
