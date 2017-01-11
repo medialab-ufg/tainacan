@@ -2193,8 +2193,10 @@
                 +name+' <a style="color:white;cursor:pointer;" onclick="remove_label_box('+id+')">x</a></span>&nbsp;');
     }
     
-    function remove_label_box(id){
-        $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
+    function remove_label_box(id,dynatree){
+        if(!dynatree)
+            dynatree = "#property_category_dynatree";
+        $(dynatree).dynatree("getRoot").visit(function (node) {
             if(node.data.key==id){
                 node.select(false);
                 $('#label-box-'+id).remove();

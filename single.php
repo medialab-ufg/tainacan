@@ -162,6 +162,7 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
     <input type="hidden" id="change_collection_images" name="change_collection_images" value="">
     <input type="hidden" id="value_search" name="value_search" value=""> <!-- utilizado na busca -->
     <input type="hidden" id="flag_dynatree_ajax" name="flag_dynatree_ajax" value="true"> <!-- utilizado na busca -->
+    <input type="hidden" id="global_tag_id" name="global_tag_id" value="<?php echo (get_term_by('slug', 'socialdb_property_fixed_tags', 'socialdb_property_type')->term_id) ? get_term_by('slug', 'socialdb_property_fixed_tags', 'socialdb_property_type')->term_id : 'tag' ?>"> <!-- utilizado na busca -->
     <!-- TAINACAN - END: ITENS NECESSARIOS PARA EXECUCAO DE VARIAS PARTES DO SOCIALDB -->
 
     <?php

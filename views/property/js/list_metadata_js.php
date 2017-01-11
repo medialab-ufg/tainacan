@@ -337,9 +337,13 @@
                                 removeFacet(el.id);
                             } else {
                                 console.log(el);
+                                var id = el.id;
+                                if(id === 'tag'){
+                                   id = $('#global_tag_id').val();
+                               }
                                 var current_prop = getPropertyType(el.prop);
                                 //console.log(el,(el.prop == null) , !isNaN(el.id) , $('.term-root-'+el.id).attr('id'));
-                                var item_html = '<li id="'+ el.id +'" data-widget="'+el.widget+'" class="form-group metadata-facet filter-'+el.id+'">' +
+                                var item_html = '<li id="'+ id +'" data-widget="'+el.widget+'" class="form-group metadata-facet filter-'+el.id+'">' +
                                     '<label class="title-pipe">&nbsp;&nbsp;&nbsp;&nbsp;' + el.nome + '<div class="pull-right"><a class="edit-filter"><span class="glyphicon glyphicon-sort sort-filter"></span></a>';
 
                                 if ( current_prop == "data" ) {
@@ -356,10 +360,10 @@
                                      var item_term_id = $('.coumpound_id_'+el.id).attr('id');
                                     item_html += '<a onclick="edit_term('+ item_term_id +')" class="edit-filter">';
                                 }else if( el.id == "tag" ) {
-                                    item_html += '<a onclick="edit_tag(this)" class="'+ el.id +'" data-filter="true" data-title="'+el.nome+'" class="edit-filter">';
+                                    item_html += '<a onclick="edit_tag(this)" class="edit-filter '+ el.id +'" data-filter="true" data-title="'+el.nome+'" class="edit-filter">';
                                 } else {
                                     if ( (el.id).indexOf("socialdb_") == 0 ) {
-                                        item_html += '<a onclick="edit_filter(this)" class="'+ el.id +'" data-filter="true" data-title="'+el.nome+'" class="edit-filter">';
+                                        item_html += '<a onclick="edit_filter(this)" class="edit-filter '+ el.id +'" data-filter="true" data-title="'+el.nome+'" class="edit-filter">';
                                     }else{
                                         item_html += '<a class="edit-filter" >';
                                     }
@@ -1488,16 +1492,10 @@
     }
 
     function get_category_root_name(id) {
-//        $.ajax({
-//            type: "POST",
-//            url: $('#src').val() + "/controllers/category/category_controller.php",
-//            data: {operation: 'get_category_root_name', category_id: id}
-//        }).done(function (result) {
-//            elem_first = jQuery.parseJSON(result);
-//            var item_title = elem_first.title;
-//            $("#socialdb_property_term_root").html('').append('<option selected="selected" value="' + elem_first.key + '">' + item_title + '</option>');
-//            $("#meta-category .dynatree-container .dynatree-title:contains('" + item_title +  "')").siblings(".dynatree-radio").click();
-//        });
+        $("#terms_dynatree").dynatree("getRoot").visit(function (node) {
+                node.select(false);
+        });
+        $('#selected_categories_term').html('');
         $("#terms_dynatree").dynatree("getRoot").visit(function(node){
             if(node.data.key==id){
                 node.select(true);
@@ -2061,21 +2059,15 @@
                 }
             },
             onSelect: function (flag, node) {
-//                $.ajax({
-//                    type: "POST",
-//                    url: $('#src').val() + "/controllers/category/category_controller.php",
-//                    data: {collection_id: $('#collection_id').val(), operation: 'verify_has_children', category_id: node.data.key}
-//                }).done(function (result) {
-////                    console.log($("#socialdb_property_term_root").val());
-//                    $('.dropdown-toggle').dropdown();
-//                    elem_first = jQuery.parseJSON(result);
-//                    if (elem_first.type === 'error') {
-//                        showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
-//                        node.select(false);
-//                    } else if($("#socialdb_property_term_root").val()=='null'||$("#socialdb_property_term_root").val()!=node.data.key) {
-                       $("#socialdb_property_term_root").val(node.data.key );
-                   // }
-                //});
+                if( $("#socialdb_property_term_root").val() !== node.data.key){
+                    if($("#socialdb_property_term_root").val() != '')
+                          remove_label_box($("#socialdb_property_term_root").val(),"#terms_dynatree");
+                    $("#socialdb_property_term_root").val(node.data.key );
+                    add_label_box(node.data.key,node.data.title,'#selected_categories_term');
+                }else{
+                    $("#socialdb_property_term_root").val('');
+                    remove_label_box(node.data.key,"#terms_dynatree");
+                }
             },
             dnd: {
                 preventVoidMoves: true, // Prevent dropping nodes 'before self', etc.

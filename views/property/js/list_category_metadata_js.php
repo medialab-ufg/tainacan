@@ -1374,16 +1374,20 @@
     }
 
     function get_category_root_name(id) {
-//        $.ajax({
-//            type: "POST",
-//            url: $('#src').val() + "/controllers/category/category_controller.php",
-//            data: {operation: 'get_category_root_name', category_id: id}
-//        }).done(function (result) {
-//            elem_first = jQuery.parseJSON(result);
-//            var item_title = elem_first.title;
-//            $("#socialdb_property_term_root").html('').append('<option selected="selected" value="' + elem_first.key + '">' + item_title + '</option>');
-//            $("#meta-category .dynatree-container .dynatree-title:contains('" + item_title +  "')").siblings(".dynatree-radio").click();
-//        });
+        $("#terms_dynatree").dynatree("getRoot").visit(function (node) {
+                node.select(false);
+        });
+        $('#selected_categories_term').html('');
+        $.ajax({
+            type: "POST",
+            url: $('#src').val() + "/controllers/category/category_controller.php",
+            data: {operation: 'get_category_root_name', category_id: id}
+        }).done(function (result) {
+            elem_first = jQuery.parseJSON(result);
+            var item_title = elem_first.title;
+            $("#socialdb_property_term_root").val(id );
+            add_label_box(id,item_title,'#selected_categories_term');
+        });
         $("#terms_dynatree").dynatree("getRoot").visit(function(node){
             if(node.data.key==id){
                 node.select(true);
@@ -1936,21 +1940,15 @@
                 }
             },
             onSelect: function (flag, node) {
-//                $.ajax({
-//                    type: "POST",
-//                    url: $('#src').val() + "/controllers/category/category_controller.php",
-//                    data: {collection_id: $('#collection_id').val(), operation: 'verify_has_children', category_id: node.data.key}
-//                }).done(function (result) {
-////                    console.log($("#socialdb_property_term_root").val());
-//                    $('.dropdown-toggle').dropdown();
-//                    elem_first = jQuery.parseJSON(result);
-//                    if (elem_first.type === 'error') {
-//                        showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
-//                        node.select(false);
-//                    } else if($("#socialdb_property_term_root").val()=='null'||$("#socialdb_property_term_root").val()!=node.data.key) {
-                       $("#socialdb_property_term_root").val(node.data.key );
-                   // }
-                //});
+                if( $("#socialdb_property_term_root").val() !== node.data.key){
+                    if($("#socialdb_property_term_root").val() != '')
+                          remove_label_box($("#socialdb_property_term_root").val(),"#terms_dynatree");
+                    $("#socialdb_property_term_root").val(node.data.key );
+                    add_label_box(node.data.key,node.data.title,'#selected_categories_term');
+                }else{
+                    $("#socialdb_property_term_root").val('');
+                    remove_label_box(node.data.key,"#terms_dynatree");
+                }
             },
             dnd: {
                 preventVoidMoves: true, // Prevent dropping nodes 'before self', etc.

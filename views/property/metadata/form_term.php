@@ -51,6 +51,9 @@
                                                id="socialdb_property_vinculate_category_exist" 
                                                checked="checked"  value="exist">&nbsp;<?php _e('Use existing: choose','tainacan') ?>
                                     <div style='height: 242px;margin-left: 15px;' id="terms_dynatree"></div>
+                                    <br>
+                                    <p><?php _e('Selected term','tainacan') ?></p>
+                                    <div id="selected_categories_term"></div>
                                     <input type="hidden" 
                                            id="socialdb_property_term_root" 
                                            class="form-control" name='socialdb_property_term_root'>
