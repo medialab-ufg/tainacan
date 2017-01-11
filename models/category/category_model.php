@@ -306,9 +306,9 @@ class CategoryModel extends Model {
     public function initCategoriesDynatree($data) {
         $dynatree = [];
         $dynatree = $this->generate_user_categories_dynatree($data, $dynatree, true, true);
-        if(has_nav_menu('menu-ibram')){
+        //if(has_nav_menu('menu-ibram')){
             $dynatree = $this->generate_collection_categories_dynatree($data, $dynatree, true, false);  
-        }
+        //}
         $dynatree = $this->generate_shared_categories_dynatree($data, $dynatree, true);
         $dynatree = $this->generate_public_categories_dynatree($data, $dynatree, true);
         return json_encode($dynatree);

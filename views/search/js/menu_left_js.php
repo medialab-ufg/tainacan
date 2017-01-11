@@ -279,9 +279,7 @@
                             $('#modalAddCategoria').modal('show');
                             $('.dropdown-toggle').dropdown();
                             //ativando para um dynatree especifico
-                            if (dynatree_id) {
-                                $("#category_single_add_dynatree_id").val(dynatree_id);
-                            }
+                            //$("#category_single_add_dynatree_id").val(dynatree_id);
                         }
                     });
                     break;
@@ -373,9 +371,7 @@
                             $("#category_single_delete_id").val(node.data.key);
                             $("#delete_category_single_name").text(node.data.title);
                             //ativando para um dynatree especifico
-                            if (dynatree_id) {
-                                $("#category_single_delete_dynatree_id").val(dynatree_id);
-                            }
+                            //$("#category_single_delete_dynatree_id").val(dynatree_id);
                             $('#modalExcluirCategoria').modal('show');
                             $('.dropdown-toggle').dropdown();
                         }
