@@ -137,11 +137,15 @@
     
     //************************* properties terms ******************************************//
     function pc_list_properties_term_insert_objects() {
+       // var categories = edit_get_val($("#pc_categories").val());
         var categories = edit_get_val($("#pc_categories").val());
+        if($("#edit_object_categories_id").length>0){
+            var categories = edit_get_val($("#edit_object_categories_id").val());
+        }
         var radios = edit_get_val($("#pc_properties_terms_radio").val());
         var selectboxes = edit_get_val($("#pc_properties_terms_selectbox").val());
         var trees = edit_get_val($("#pc_properties_terms_tree").val());
-        var checkboxes = edit_get_val($("pc_#properties_terms_checkbox").val());
+        var checkboxes = edit_get_val($("#pc_properties_terms_checkbox").val());
         var multipleSelects = edit_get_val($("#pc_properties_terms_multipleselect").val());
         var treecheckboxes = edit_get_val($("#pc_properties_terms_treecheckbox").val());
         pc_list_radios(radios,categories);
@@ -184,6 +188,7 @@
     }
     // checkboxes
     function pc_list_checkboxes(checkboxes,categories) {
+        console.log('pc loading checkboxes',checkboxes);
         if (checkboxes) {
             $.each(checkboxes, function (idx, checkbox) {
                 $.ajax({

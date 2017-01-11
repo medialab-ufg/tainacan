@@ -285,21 +285,24 @@ function show_collection_licenses(){
     return promisse;
 }
 
-function back_main_list() {
+function back_main_list(discard) {
         $('#form').hide();
         $("#tainacan-breadcrumbs").hide();
         $('#configuration').hide();
         $('#main_part').show();
         $('#display_view_main_page').show();
+        if(discard){
+            $.ajax({
+                url: $('#src').val() + '/controllers/object/object_draft_controller.php',
+                type: 'POST',
+                data: {operation: 'clear_betatext', collection_id: $('#collection_id').val()}
+            });
+        }
         $.ajax( {
             url: $('#src').val()+'/controllers/object/object_controller.php',
             type: 'POST',
             data: {operation: 'delete_temporary_object',ID:$("#object_id_add").val(),collection_id:$("#collection_id").val()}
-        } ).done(function( result ) {
-            // $('html, body').animate({
-             //   scrollTop: parseInt($("#wpadminbar").offset().top)
-           // }, 900);  
-        });
+        } );
     }
  
  function import_object(){

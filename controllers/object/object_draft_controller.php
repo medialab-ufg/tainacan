@@ -18,6 +18,9 @@ class ObjectDraftController extends Controller {
         $objectfile_model = new ObjectFileModel;
         $objectmultiple_model = new ObjectMultipleDraftModel;
         switch ($operation) {
+            case "clear_betatext":
+                delete_user_meta(get_current_user_id(), 'socialdb_collection_'.$data['collection_id'].'_betatext');
+                break;
             case "clear_betafiles":
                 delete_user_meta(get_current_user_id(), 'socialdb_collection_'.$data['collection_id'].'_betafile');
                 break;

@@ -197,7 +197,8 @@
         //upload file limit
         $("#object_file").on("change", function (e) {
             //check whether browser fully supports all File API
-            if (window.File && window.FileReader && window.FileList && window.Blob)
+            console.log($('#object_file')[0].files);
+            if (window.File && window.FileReader && window.FileList && window.Blob && $('#object_file')[0].files.length>0)
             {
                 //get the file size and file type from file input field
                 var fsize = $('#object_file')[0].files[0].size;

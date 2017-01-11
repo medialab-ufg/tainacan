@@ -28,7 +28,7 @@
     <input type="hidden" id="object_type" name="object_type" value="text">
     <div class="row" style="background-color: #f1f2f2">
         <div style="<?php echo ($view_helper->hide_main_container)?'margin-left:1%;padding-left:15px;':'' ?>"
-            class="<?php echo ($view_helper->hide_main_container)?'col-md-12':'col-md-3' ?> menu_left_loader">
+            class="<?php echo ($view_helper->hide_main_container)?'col-md-12':'col-md-2' ?> menu_left_loader">
              <center>
                     <img src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>">
                     <h4><?php _e('Loading metadata...', 'tainacan') ?></h4>
@@ -412,7 +412,7 @@
                 <input type="hidden" id="operation" name="operation" value="add">
                 <!--button onclick="back_main_list();" style="margin-bottom: 20px;"  class="btn btn-default btn-lg pull-left"><b><?php _e('Back','tainacan') ?></b></button-->
                 <button type="button" 
-                        onclick="back_main_list();" 
+                        onclick="back_main_list(<?php echo $object_id ?>);" 
                         style="margin-bottom: 20px;color" 
                         class="btn btn-default btn-lg pull-left">
                             <?php _e('Discard','tainacan'); ?>

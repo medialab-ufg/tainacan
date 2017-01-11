@@ -1116,7 +1116,7 @@
             }    
 
 
-            $("#property_object_title").text('<?php _e('Edit property','tainacan') ?>');
+            $("#meta-relationship .modal-title").text('<?php _e('Edit property','tainacan') ?>');
             $("#property_object_id").val(elem.id);
             $("#property_object_name").val(elem.name);
 
@@ -1139,8 +1139,6 @@
                 $("#property_object_required_true").prop('checked', true);
             }
             $("#operation_property_object").val('update_property_object');
-
-            getRequestFeedback(elem.type, elem.msg);
         });
     }
 

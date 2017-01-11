@@ -38,7 +38,7 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
     <?php endif; ?>
     <input type="hidden" id="object_id_edit" name="object_id" value="<?= $object->ID ?>">
     <div style="<?php echo ($view_helper->hide_main_container)?'margin-left:1%;padding-left:15px;':'' ?>"
-            class="<?php echo ($view_helper->hide_main_container)?'col-md-12':'col-md-3' ?> menu_left_loader">
+            class="<?php echo ($view_helper->hide_main_container)?'col-md-12':'col-md-2' ?> menu_left_loader">
              <center>
                     <img src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>">
                     <h4><?php _e('Loading metadata...', 'tainacan') ?></h4>
