@@ -268,11 +268,11 @@ $(window).load(function () {
 
     // When user types enter at main search box, it opens the advanced search form with the searched term
     /* $("#search_collections").keyup(function (e) {
-        if (e.which == 13) {
-            e.preventDefault();
-            showAdvancedSearch($("#src").val(), $(this).val());
-        }
-    }); */
+     if (e.which == 13) {
+     e.preventDefault();
+     showAdvancedSearch($("#src").val(), $(this).val());
+     }
+     }); */
 
     //submit do importar colecao
     $('#importCollection').submit(function (e) {
@@ -541,23 +541,23 @@ $(document).ready(function () {
 
 });
 
- /**
-     * funcao que gera o arquivo csv
-     * @returns {.csv}
-     */
-    function export_selected_objects() {
-        var search_for = $("#search_objects").val();
-        var selKeys = $.map($("#dynatree").dynatree("getSelectedNodes"), function (node) {
-            return node.data.key;
-        });
+/**
+ * funcao que gera o arquivo csv
+ * @returns {.csv}
+ */
+function export_selected_objects() {
+    var search_for = $("#search_objects").val();
+    var selKeys = $.map($("#dynatree").dynatree("getSelectedNodes"), function (node) {
+        return node.data.key;
+    });
 
-        window.location = $('#src').val() + '/controllers/export/export_controller.php?operation=export_selected_objects' +
-                '&collection_id=' + $("#collection_id").val() +
-                '&classifications=' + selKeys.join(", ") +
-                '&ordenation_id=' + $('#collection_single_ordenation').val() +
-                '&order_by=' +
-                '&keyword=' + search_for;
-    }
+    window.location = $('#src').val() + '/controllers/export/export_controller.php?operation=export_selected_objects' +
+            '&collection_id=' + $("#collection_id").val() +
+            '&classifications=' + selKeys.join(", ") +
+            '&ordenation_id=' + $('#collection_single_ordenation').val() +
+            '&order_by=' +
+            '&keyword=' + search_for;
+}
 
 function add_collection_template(col, template_name) {
     var path = $("#src").val() + "/controllers/collection/collection_controller.php";
@@ -1423,8 +1423,8 @@ function showStatistics(src) {
     var c_id = $('#collection_id').val();
     $.ajax({
         url: src + '/controllers/log/log_controller.php', type: 'POST',
-        data: { operation: 'show_statistics', collec_id: c_id }
-    }).done(function(r){
+        data: {operation: 'show_statistics', collec_id: c_id}
+    }).done(function (r) {
         $('#main_part').hide();
         $('#configuration').html(r).show();
     });
@@ -2473,33 +2473,49 @@ function is_selected_category(id, seletor) {
 
 //************************ ENVIAR ARQUIVO ZIP PARA CRIAÇAO DE ITEM *******************************//
 function showSendFilesZip() {
+    var src = $('#src').val();
     $('#modal_send_files_items_zip').modal('show');
+    //ajax para o preenchimento das categorias existentes no select #chosen_meta
+    $.ajax({
+        url: src + '/controllers/object/object_controller.php',
+        type: 'POST',
+        data: {
+            operation: 'get_categories_for_import_items_zip',
+            collection_id: $("#collection_id").val()
+        }
+    }).done(function (result) {
+        $('#chosen_meta').html('');
+        elem = jQuery.parseJSON(result);
+        $.each(elem, function (idx, elem) {
+            $('#chosen_meta').append('<option value="' + elem.id + '">' + elem.name + '</option>');
+        });
+    });
 }
 
-function changeFormZip(opt){
-    if(opt == 'url'){
+function changeFormZip(opt) {
+    if (opt == 'url') {
         $('#div_send_file_zip').hide('slow');
         $('#div_in_server_zip').show('slow');
-    }else{
+    } else {
         $('#div_in_server_zip').hide('slow');
         $('#div_send_file_zip').show('slow');
     }
 }
 
-function changeFormZipMetadata(opt){
-    if(opt == 'create'){
+function changeFormZipMetadata(opt) {
+    if (opt == 'create') {
         $('#div_choose_metadata_zip').hide('slow');
         $('#div_create_metadata_zip').show('slow');
-    }else{
+    } else {
         $('#div_create_metadata_zip').hide('slow');
         $('#div_choose_metadata_zip').show('slow');
     }
 }
 
-function changeMetadataZipDiv(){
-    if($('#zip_folder_hierarchy').is(':checked')){
+function changeMetadataZipDiv() {
+    if ($('#zip_folder_hierarchy').is(':checked')) {
         $('#metadata_zip_div').show('slow');
-    }else{
+    } else {
         $('#metadata_zip_div').hide('slow');
     }
 }
@@ -2600,10 +2616,14 @@ function change_breadcrumbs_title(title, arrow_text) {
 }
 
 function toggleElements(elems_array, hide) {
-    if(hide) {
-        $(elems_array).each(function(idx, el){ $(el).addClass('hide') });
+    if (hide) {
+        $(elems_array).each(function (idx, el) {
+            $(el).addClass('hide')
+        });
     } else {
-        $(elems_array).each(function(idx, el){ $(el).removeClass('hide') });
+        $(elems_array).each(function (idx, el) {
+            $(el).removeClass('hide')
+        });
     }
 }
 
@@ -2668,12 +2688,12 @@ function delete_all_cache_collection() {
     delete_cache('create-item-text', $('#collection_id').val());
 }
 
-function logColAction(search_val, item_id){
+function logColAction(search_val, item_id) {
     var c_id = $('#collection_id').val();
-    if(search_val && item_id) {
+    if (search_val && item_id) {
         $.ajax({
             url: $('#src').val() + '/controllers/log/log_controller.php', type: 'POST',
-            data: { operation: 'add_log', collection_id: c_id, event: search_val, resource_id: item_id }
+            data: {operation: 'add_log', collection_id: c_id, event: search_val, resource_id: item_id}
         });
     }
 }

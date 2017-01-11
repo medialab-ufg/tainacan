@@ -1,4 +1,5 @@
 <?php
+
 /**
  * #1 - ADICIONAR ITEMS TIPO TEXTO
  * #2 - ADICIONAR ITEMS DEFAULT
@@ -18,8 +19,8 @@ class ObjectController extends Controller {
             // #1 ADICIONAR ITEMS TIPO TEXTO
             case "create_item_text":
                 //verifico se existe rascunho para se mostrado
-                $beta_id = get_user_meta(get_current_user_id(), 'socialdb_collection_'.$data['collection_id'].'_betatext', true);
-                if($beta_id&& is_numeric($beta_id)){
+                $beta_id = get_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext', true);
+                if ($beta_id && is_numeric($beta_id)) {
                     $data['object_id'] = $beta_id;
                     $data['is_beta_text'] = true;
                     return $this->operation('edit', $data);
@@ -27,13 +28,13 @@ class ObjectController extends Controller {
                 //se nao ele busca o cache da pagina de adiconar item
                 $has_cache = $this->has_cache($data['collection_id'], 'create-item-text');
                 $option = get_option('tainacan_cache');
-                if($has_cache && $option!='false' && $data['classifications'] == ''){
-                    $has_cache = htmlspecialchars_decode(stripslashes($has_cache)) . 
-                             '<input type="hidden" id="temporary_id_item" value="'.$object_model->create().'">' .
-                            file_get_contents(dirname(__FILE__) . '../../../views/object/js/create_item_text_cache_js.php').
+                if ($has_cache && $option != 'false' && $data['classifications'] == '') {
+                    $has_cache = htmlspecialchars_decode(stripslashes($has_cache)) .
+                            '<input type="hidden" id="temporary_id_item" value="' . $object_model->create() . '">' .
+                            file_get_contents(dirname(__FILE__) . '../../../views/object/js/create_item_text_cache_js.php') .
                             file_get_contents(dirname(__FILE__) . '../../../views/object/js/create_draft_js.php');
-                     return $has_cache;
-                }else{
+                    return $has_cache;
+                } else {
                     $data['object_name'] = get_post_meta($data['collection_id'], 'socialdb_collection_object_name', true);
                     $data['socialdb_collection_attachment'] = get_post_meta($data['collection_id'], 'socialdb_collection_attachment', true);
                     $data['object_id'] = $object_model->create();
@@ -66,8 +67,8 @@ class ObjectController extends Controller {
                 break;
             //#4 EDITOR DE ITEMS MULTIPLOS
             case "showViewMultipleItems":
-                $items = get_user_meta(get_current_user_id(), 'socialdb_collection_'.$data['collection_id'].'_betafile');
-                if(!$items||empty($items)):
+                $items = get_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betafile');
+                if (!$items || empty($items)):
                     $data['object_id'] = $object_model->create();
                     return $this->render(dirname(__FILE__) . '../../../views/object/multiple_items/create.php', $data);
                 else:
@@ -102,7 +103,7 @@ class ObjectController extends Controller {
             case 'betafile':
                 $data['properties'] = $object_model->show_object_properties($data);
                 $data['is_beta_file'] = true;
-                $data['items_id'] = get_user_meta(get_current_user_id(), 'socialdb_collection_'.$data['collection_id'].'_betafile');
+                $data['items_id'] = get_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betafile');
                 $data['items'] = $objectfile_model->get_inserted_items_social_network($data);
                 if ($data['items'] && empty(!$data['items'])) {
                     return $this->render(dirname(__FILE__) . '../../../views/object/multiple_social_network/editor_items.php', $data);
@@ -132,10 +133,10 @@ class ObjectController extends Controller {
             // # - PAGINA DE EDICAO PARA TEXTOS
             case "edit":
                 $checkout = get_post_meta($data['object_id'], 'socialdb_object_checkout', true);
-                if(is_numeric($checkout)&&!isset($data['motive'])){
+                if (is_numeric($checkout) && !isset($data['motive'])) {
                     $user = get_user_by('id', $checkout)->display_name;
                     $time = get_post_meta($data['object_id'], 'socialdb_object_checkout_time', true);
-                    return 'checkout@'.$user.'@'.date('d/m/Y',$time);
+                    return 'checkout@' . $user . '@' . date('d/m/Y', $time);
                 }
                 $object_name = get_post_meta($data['collection_id'], 'socialdb_collection_object_name', true);
                 $socialdb_collection_attachment = get_post_meta($data['collection_id'], 'socialdb_collection_attachment', true);
@@ -149,7 +150,7 @@ class ObjectController extends Controller {
                 $data['socialdb_object_dc_source'] = get_post_meta($data['object']->ID, 'socialdb_object_dc_source', true);
                 $data['socialdb_object_content'] = get_post_meta($data['object']->ID, 'socialdb_object_content', true);
                 $data['socialdb_object_dc_type'] = get_post_meta($data['object']->ID, 'socialdb_object_dc_type', true);
-                if($beta_text)
+                if ($beta_text)
                     $data['is_beta_text'] = true;
                 return $this->render(dirname(__FILE__) . '../../../views/object/edit_item_text.php', $data);
                 break;
@@ -361,8 +362,8 @@ class ObjectController extends Controller {
                     $data['url_watermark'] = get_template_directory_uri() . '/libraries/images/icone.png';
                 }
                 //se existir a acao para alterar a home do item
-                if(has_action('alter_page_item')){
-                    return apply_filters('alter_page_item',$data);
+                if (has_action('alter_page_item')) {
+                    return apply_filters('alter_page_item', $data);
                 } else {
                     $logData = ['collection_id' => $col_id, 'item_id' => $object_id,
                         'event_type' => 'user_items', 'event' => 'view'];
@@ -385,11 +386,11 @@ class ObjectController extends Controller {
                 } else {
                     $data['url_watermark'] = get_template_directory_uri() . '/libraries/images/icone.png';
                 }
-                
-                if(has_action('alter_page_item')){
-                    $array_json['html'] = apply_filters('alter_page_item',$data);
+
+                if (has_action('alter_page_item')) {
+                    $array_json['html'] = apply_filters('alter_page_item', $data);
                     return json_encode($array_json);
-                }else{
+                } else {
                     return $this->render(dirname(__FILE__) . '../../../views/object/list_single_object_version.php', $data);
                 }
                 break;
@@ -425,11 +426,11 @@ class ObjectController extends Controller {
                     } else {
                         $data['url_watermark'] = get_template_directory_uri() . '/libraries/images/icone.png';
                     }
-                    
-                    if(has_filter('alter_page_item')){
-                        $array_json['html'] = apply_filters('alter_page_item',$data);
+
+                    if (has_filter('alter_page_item')) {
+                        $array_json['html'] = apply_filters('alter_page_item', $data);
                         return json_encode($array_json);
-                    }else{
+                    } else {
                         $array_json['html'] = $this->render(dirname(__FILE__) . '../../../views/object/list_single_object.php', $data);
                         return json_encode($array_json);
                     }
@@ -449,7 +450,7 @@ class ObjectController extends Controller {
                     $data['listed_by'] = $object_model->get_ordered_name($data['collection_id'], $data['ordenation_id']);
                     $array['html'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                     $logData = ['collection_id' => $data['collection_id'], 'user_id' => get_current_user_id(),
-                      'event_type' => 'user_collection', 'event' => 'view'];
+                        'event_type' => 'user_collection', 'event' => 'view'];
                     Log::addLog($logData);
                     return json_encode($array);
                 } else {
@@ -460,9 +461,9 @@ class ObjectController extends Controller {
                 break;
             //temp file
             case 'delete_temporary_object':
-                if(isset($data['delete_draft']))
-                    delete_user_meta(get_current_user_id(), 'socialdb_collection_'.$data['collection_id'].'_betatext');
-                if($data['ID']&&get_post($data['ID'])->post_status==='betatext'):
+                if (isset($data['delete_draft']))
+                    delete_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext');
+                if ($data['ID'] && get_post($data['ID'])->post_status === 'betatext'):
                     $post = array(
                         'ID' => $data['ID'],
                         'post_status' => 'draft'
@@ -472,9 +473,9 @@ class ObjectController extends Controller {
                     return json_encode($data);
                     break;
                 else:
-                    delete_user_meta(get_current_user_id(), 'socialdb_collection_'.$data['collection_id'].'_betatext');
+                    delete_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext');
                     return $object_model->delete($data);
-                endif;
+            endif;
             //ACTION FILES
             case 'list_files':
                 return $objectfile_model->list_files($data);
@@ -539,25 +540,25 @@ class ObjectController extends Controller {
                 break;
             case 'edit_multiple_items':
                 $set = [];
-                if(!$data['items_data']){
-                   exit(); 
+                if (!$data['items_data']) {
+                    exit();
                 }
-                foreach($data['items_data'] as $_previous) {
-                    $data['items_id'] [] =  $_previous['id'];
+                foreach ($data['items_data'] as $_previous) {
+                    $data['items_id'] [] = $_previous['id'];
                     //array_push( $set, [ 'ID' => $_previous['id'], 'title' => $_previous['title'], 'desc' => $_previous['desc'] ] );
                 }
                 $data['items'] = $objectfile_model->get_inserted_items_social_network($data);
-                 $data['edit_multiple'] = true;
+                $data['edit_multiple'] = true;
                 if ($data['items'] && empty(!$data['items'])) {
                     return $this->render(dirname(__FILE__) . '../../../views/object/multiple_social_network/editor_items.php', $data);
                 }
                 //return $this->render( dirname(__FILE__) . '../../../views/object/temp/edit_multiple.php', [ 'edit_data' => $set ] );
-            break;
+                break;
             ################# PARSE URL ####################################
             case 'parse_url_alternative':
                 $return = [];
                 $extracted = $object_model->extract_metatags($data['url']);
-                if($extracted && is_array($extracted)){
+                if ($extracted && is_array($extracted)) {
                     foreach ($extracted as $array) {
                         $return[$array['name_field']] = $array['value'];
                     }
@@ -664,12 +665,11 @@ class ObjectController extends Controller {
             case 'delete_version':
                 //var_dump($data);
                 $original = get_post_meta($data['version_id'], 'socialdb_version_postid', true);
-                if($original){
+                if ($original) {
                     //E uma versao
                     $result = $object_model->send_version_to_trash($data['version_id']);
-                }else{
+                } else {
                     //E o item original
-                    
                 }
                 break;
             case 'restore_version':
@@ -680,7 +680,7 @@ class ObjectController extends Controller {
                 return true;
                 break;
             case 'check-out':
-                update_post_meta($data['object_id'],'socialdb_object_checkout', (isset($data['value'])) ? '' : get_current_user_id());
+                update_post_meta($data['object_id'], 'socialdb_object_checkout', (isset($data['value'])) ? '' : get_current_user_id());
                 update_post_meta($data['object_id'], 'socialdb_object_checkout_time', time());
                 return true;
             case 'check-in':
@@ -704,6 +704,27 @@ class ObjectController extends Controller {
                 } else {
                     return false;
                 }
+
+            case 'get_categories_for_import_items_zip':
+                $categories = $object_model->get_facet_category_for_select($data['collection_id']);
+                if (empty($categories)) {
+                    $result = array(
+                        array(
+                            'id' => null,
+                            'name' => __('No Metadata Found', 'tainacan')
+                        )
+                    );
+                } else {
+                    $result = array();
+                    foreach ($categories as $category) {
+                        $result[] = array(
+                            'id' => $category->term_id,
+                            'name' => $category->name
+                        );
+                    }
+                }
+                return json_encode($result);
+                break;
         }
     }
 

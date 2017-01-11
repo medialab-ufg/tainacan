@@ -55,18 +55,18 @@ class ObjectModel extends Model {
             $user_id = get_option('anonimous_user');
         }
         $post = array(
-          'ID' => $data['object_id'],
-          'post_title' => ($data['object_name']) ? $data['object_name'] : time(),
-          'post_content' => $data['object_description'],
-          'post_status' => 'inherit',
-          'post_author' => $user_id,
-          'post_type' => 'socialdb_object',
-          'post_parent' => $col_id
+            'ID' => $data['object_id'],
+            'post_title' => ($data['object_name']) ? $data['object_name'] : time(),
+            'post_content' => $data['object_description'],
+            'post_status' => 'inherit',
+            'post_author' => $user_id,
+            'post_type' => 'socialdb_object',
+            'post_parent' => $col_id
         );
         $data['ID'] = wp_update_post($post);
         //deleto o rascunho assim que adiciono
-        delete_user_meta(get_current_user_id(), 'socialdb_collection_'.$data['collection_id'].'_betatext');
-        $this->insert_rankings_value($data['ID'],$data['collection_id']);
+        delete_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext');
+        $this->insert_rankings_value($data['ID'], $data['collection_id']);
         $slug = wp_unique_post_slug(sanitize_title_with_dashes($data['object_name']), $data['ID'], 'inherit', 'socialdb_object', 0);
         $post = array(
             'ID' => $data['object_id'],
@@ -109,12 +109,12 @@ class ObjectModel extends Model {
         if ($data['object_license']) {
             update_post_meta($data['ID'], 'socialdb_license_id', $data['object_license']);
         }
-        update_user_meta(get_current_user_id(), 'socialdb_collection_'.$data['collection_id'].'_betatext', '');
+        update_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext', '');
         //propriedades compostas
         $this->insert_compounds($data, $data['ID']);
         // inserindo o evento
         $logData = ['collection_id' => $col_id, 'item_id' => $data['ID'],
-          'user_id' => $user_id, 'event_type' => 'user_items', 'event' => 'add' ];
+            'user_id' => $user_id, 'event_type' => 'user_items', 'event' => 'add'];
         $data = $this->insert_object_event($data['ID'], $data);
         Log::addLog($logData);
 
@@ -275,12 +275,12 @@ class ObjectModel extends Model {
         }
         $category_root_id = $this->collection_model->get_category_root_of($data['collection_id']);
         $post = array(
-          'post_title' => $data['title'],
-          'post_content' => $data['description'],
-          'post_status' => 'draft',
-          'post_author' => $user_id,
-          'post_type' => 'socialdb_object',
-          'post_parent' => $data['collection_id']
+            'post_title' => $data['title'],
+            'post_content' => $data['description'],
+            'post_status' => 'draft',
+            'post_author' => $user_id,
+            'post_type' => 'socialdb_object',
+            'post_parent' => $data['collection_id']
         );
         $data['ID'] = wp_insert_post($post);
         //categoria raiz da colecao
@@ -321,12 +321,12 @@ class ObjectModel extends Model {
             $user_id = get_option('anonimous_user');
         }
         $post = array(
-          'post_title' => $data['title'],
-          'post_content' => '',
-          'post_status' => 'draft',
-          'post_author' => $user_id,
-          'post_type' => 'socialdb_object',
-          'post_parent' => $data['collection_id']
+            'post_title' => $data['title'],
+            'post_content' => '',
+            'post_status' => 'draft',
+            'post_author' => $user_id,
+            'post_type' => 'socialdb_object',
+            'post_parent' => $data['collection_id']
         );
         $data['ID'] = wp_insert_post($post);
         $post['ID'] = $data['ID'];
@@ -608,12 +608,12 @@ class ObjectModel extends Model {
             $user_id = get_option('anonimous_user');
         }
         $post = array(
-          'post_title' => $name,
-          'post_content' => $content,
-          'post_status' => 'publish',
-          'post_author' => $user_id,
-          'post_type' => 'socialdb_object',
-          'post_parent' => $collection_id
+            'post_title' => $name,
+            'post_content' => $content,
+            'post_status' => 'publish',
+            'post_author' => $user_id,
+            'post_type' => 'socialdb_object',
+            'post_parent' => $collection_id
         );
         $data['ID'] = wp_insert_post($post);
         //categoria raiz da colecao
@@ -639,12 +639,12 @@ class ObjectModel extends Model {
             $user_id = get_option('anonimous_user');
         }
         $post = array(
-          'post_title' => $name,
-          'post_content' => '',
-          'post_status' => 'publish',
-          'post_author' => $user_id,
-          'post_type' => 'socialdb_object',
-          'post_parent' => $collection_id
+            'post_title' => $name,
+            'post_content' => '',
+            'post_status' => 'publish',
+            'post_author' => $user_id,
+            'post_type' => 'socialdb_object',
+            'post_parent' => $collection_id
         );
         $data['ID'] = wp_insert_post($post);
         update_post_meta($data['ID'], 'socialdb_object_from', 'external');
@@ -704,12 +704,12 @@ class ObjectModel extends Model {
             'post_content' => $data['object_description'],
             'post_type' => 'socialdb_object'
         );
-        if($data['post_status']){
+        if ($data['post_status']) {
             $post['post_status'] = $data['post_status'];
         }
         $data['ID'] = wp_update_post($post);
         //deleto o rascunho assim que adiciono
-        delete_user_meta(get_current_user_id(), 'socialdb_collection_'.$data['collection_id'].'_betatext');
+        delete_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext');
         if ($data['remove_thumbnail_object']) {
             delete_post_thumbnail($data['ID']);
         }
@@ -745,7 +745,7 @@ class ObjectModel extends Model {
         $this->insert_properties_terms($data, $data['ID']);
 
         $_log_data = [ 'collection_id' => $data['collection_id'], 'user_id' => get_current_user_id(),
-          'event_type' => 'user_items', 'item_id' => $data['ID'], 'event' => 'edit'];
+            'event_type' => 'user_items', 'item_id' => $data['ID'], 'event' => 'edit'];
         Log::addLog($_log_data);
 
         //msg
@@ -866,8 +866,8 @@ class ObjectModel extends Model {
             'terms' => array($this->collection_model->get_category_root_of($args['collection_id'])),
             'operator' => 'IN'
         );
-        if(has_filter('update_tax_query')){
-            $tax_query = apply_filters('update_tax_query',$tax_query,$args['collection_id']);
+        if (has_filter('update_tax_query')) {
+            $tax_query = apply_filters('update_tax_query', $tax_query, $args['collection_id']);
         }
         //tipo de ordenacao
         $orderby = $this->set_order_by($args);
@@ -1294,7 +1294,7 @@ class ObjectModel extends Model {
         $data['all_ids'] = implode(',', array_unique($all_properties));
         // este metodo no retorno tem como objetivo  pegar os valores das propriedades
         // do item para ser mostrado na view
-        $result = $this->set_data_object_properties( array_unique($all_properties), $data);
+        $result = $this->set_data_object_properties(array_unique($all_properties), $data);
         return $result;
     }
 
@@ -1831,9 +1831,9 @@ class ObjectModel extends Model {
         if ($data['properties_compounds'] !== '') {
             $compounds = explode(',', $data['properties_compounds']);
             // propriedade de categorias
-            if(isset($data['pc_properties_compounds'])&&trim($data['pc_properties_compounds'])!=''){
-              $pc_compounds =   explode(',', $data['pc_properties_compounds']);
-              $compounds = array_merge($compounds, $pc_compounds);
+            if (isset($data['pc_properties_compounds']) && trim($data['pc_properties_compounds']) != '') {
+                $pc_compounds = explode(',', $data['pc_properties_compounds']);
+                $compounds = array_merge($compounds, $pc_compounds);
             }
             foreach ($compounds as $compound) {
                 $properties_coumpounded = array_values(array_filter(explode(',', $data['compounds_' . $compound])));
@@ -1887,9 +1887,8 @@ class ObjectModel extends Model {
             return str_replace('_cat', '', $value) . '_cat';
         }
     }
-    
-    
-    public function insert_rankings_value($item_id,$collection_id) {
+
+    public function insert_rankings_value($item_id, $collection_id) {
         $property_model = new PropertyModel;
         $category_root = $this->get_category_root_of($collection_id);
         $category_root_id = $this->get_category_root_id();
@@ -1899,7 +1898,7 @@ class ObjectModel extends Model {
         foreach ($all_properties_id as $property_id) {// varro todas propriedades
             $type = $property_model->get_property_type($property_id); // pego o tipo da propriedade
             if (($type == 'socialdb_property_ranking_like') || ($type == 'socialdb_property_ranking_binary') || ($type == 'socialdb_property_ranking_stars')) {// pego o tipo
-                add_post_meta($item_id, 'socialdb_property_'.$property_id, '');
+                add_post_meta($item_id, 'socialdb_property_' . $property_id, '');
             }
         }
     }
@@ -2054,7 +2053,7 @@ class ObjectModel extends Model {
         // Update the post into the database
         wp_update_post($new_post);
     }
-    
+
     public function revertItem($item, $newItem) {
         $newItem = get_post($newItem);
 
@@ -2165,7 +2164,7 @@ class ObjectModel extends Model {
             return array();
         }
     }
-    
+
     public function send_version_to_trash($object_id) {
         $my_post = array(
             'ID' => $object_id,
@@ -2179,6 +2178,20 @@ class ObjectModel extends Model {
         } else {
             return true;
         }
+    }
+
+    public function get_facet_category_for_select($collection_id) {
+        $post_meta = get_post_meta($collection_id, 'socialdb_collection_facets');
+        $result = array();
+        if ($post_meta) {
+            foreach ($post_meta as $pmeta) {
+                $term = get_term_by('id', $pmeta, 'socialdb_category_type');
+                if ($term) {
+                    $result[] = $term;
+                }
+            }
+        }
+        return $result;
     }
 
 }
