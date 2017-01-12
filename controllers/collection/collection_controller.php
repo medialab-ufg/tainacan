@@ -1,5 +1,5 @@
 <?php
-
+ini_set('max_input_vars', '2000000');
 require_once(dirname(__FILE__) . '../../../models/collection/collection_model.php');
 require_once(dirname(__FILE__) . '../../../models/collection/collection_parent_model.php');
 require_once(dirname(__FILE__) . '../../../models/collection/collection_import_model.php');

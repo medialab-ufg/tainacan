@@ -848,6 +848,21 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
             </div>
         </div>
     </div>
+
+    <!-- TAINACAN: modal padrao bootstrap para exibição do loading de importação   -->
+    <div class="modal fade" id="modalImportLoading" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <center>
+                    <img src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>">
+                    <h3><?php _e('Please wait...', 'tainacan') ?></h3>
+                    <div id="divprogress">
+                        <progress id='progressbarmapas' value='0' max='100' style='width: 100%;'></progress><br>
+                    </div>
+                </center>
+            </div>
+        </div>
+    </div>
     <!-- TAINACAN: modal padrao bootstrap para demonstracao de execucao de processos, utilizado em varias partes do socialdb   -->
     <div class="modal fade" id="modalImportSocialnetworkClean" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">

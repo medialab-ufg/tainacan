@@ -1300,7 +1300,11 @@ function import_mapa_cultural(url_base)
         //http://mapasculturais.local/api/space/find
         url_base = url_base.split('/api')[0];
 
-        $('#modalImportMain').modal('show');
+        $('#modalImportLoading').modal('show');
+        $('#modalImportLoading h3').text('Recuperando dados, essa operção pode demorar...');
+        $('#divprogress').css('padding', 20);
+        $('#progressbarmapas').css('padding', 3);
+
         var url_send = $('#src').val() + '/controllers/collection/collection_controller.php?operation=mapa_cultural_form&collection_id='+$('#collection_id').val();
         //Agentes
         /*$.getJSON(
@@ -1425,68 +1429,59 @@ function import_mapa_cultural(url_base)
                 });
             }
         );*/
-        var qtd = 200;
+        var limite = 10;
         $.getJSON(
             //Agentes
             url_base + "/api/agent/find",
             {
                 '@select': 'name, shortDescription, isVerified, nomeCompleto, dataDeNascimento, emailPublico, telefonePublico, endereco, site, facebook',
-                'emailPublico': 'like(*.com*)',
-                '@limit': qtd
+                'emailPublico': 'like(*.com*)'
             },
             function (agents)
             {
+                $('#progressbarmapas').val(30);
                 $.getJSON(
                     //Espaços
                     url_base + "/api/space/find",
                     {
-                        '@select': 'name, location, public, shortDescription, longDescription, endereco, site, facebook, telefonePublico, telefone1, telefone2',
-                        '@limit': qtd
+                        '@select': 'name, location, public, shortDescription, longDescription, endereco, site, facebook, telefonePublico, telefone1, telefone2'
                     },
                     function (spaces)
                     {
+                        $('#progressbarmapas').val(50);
                         //Eventos
                         $.getJSON(
                             url_base + "/api/event/find",
                             {
-                                '@select': 'name, shortDescription, longDescription, rules, subtitle, preco, site, facebook',
-                                '@limit': qtd
+                                '@select': 'name, shortDescription, longDescription, rules, subtitle, preco, site, facebook'
                             },
                             function (events)
                             {
+                                $('#progressbarmapas').val(90);
                                 //Projetos
                                 $.getJSON(
                                     url_base + "/api/project/find",
                                     {
-                                        '@select': 'name, shortDescription, longDescription, isVerified, site, facebook',
-                                        '@limit': qtd
+                                        '@select': 'name, shortDescription, longDescription, isVerified, site, facebook'
                                     },
                                     function (projects)
                                     {
-                                        var data = [{"agents":agents, "projects":projects, "spaces":spaces, "events": events}];
-                                        //var data_json = JSON.parse(data);
+                                        $('#modalImportLoading h3').text('Recuperação concluída! Cadastrando dados...');
+                                        $('#progressbarmapas').val(0);
 
-                                        $.ajax({
-                                            url: url_send,
-                                            type: 'POST',
-                                            data: {result: data}
-                                        }).success(function (result) {
-                                            elem = jQuery.parseJSON(result);
-                                            if (elem.result) {
-                                                //Todas as requisições foram realizadas com sucesso
-                                                window.location = elem.url;
-                                            } else {
-                                                $('#modalImportMain').modal('hide');
-                                                var message = elem.message;
-                                                if(!message)
-                                                {
-                                                    message = 'Houve um erro na importação';
-                                                }
-                                                showAlertGeneral('Erro', message, 'error');
-                                            }
-                                        }).error(function (error) {
-                                            showAlertGeneral('Erro', 'Houve um erro na importação', 'error');
-                                        });
+                                        var agents_count, projects_count, spaces_count, events_count, url;
+
+                                        agents_count = parseInt(Object.keys(agents).length); parseInt(projects_count = Object.keys(projects).length);
+                                        spaces_count = parseInt(Object.keys(spaces).length); parseInt(events_count = Object.keys(events).length);
+
+                                        do_ajax(url_send, projects, events, agents, spaces,
+                                        agents_count+spaces_count+projects_count+events_count);
+
+                                        //Novaparte
+                                        {
+                                            var data = [{"agents":agents, "projects":projects, "spaces":spaces, "events": events}];
+                                        }
+
                                     }
                                 );
                             }
@@ -1503,70 +1498,45 @@ function import_mapa_cultural(url_base)
     }
 }
 
-function do_ajax(type, url_base) {
+function do_ajax(url_send, projects, events, agents, spaces, count_elem)
+{
+    var agents_spliced, spaces_spliced, projects_spliced, events_spliced, qtd = 400;
 
-    var select_query, url, parameters, restriction;
+    agents_spliced = agents.splice(0, qtd);
+    spaces_spliced = spaces.splice(0, qtd);
+    projects_spliced = projects.splice(0, qtd);
+    events_spliced = events.splice(0, qtd);
 
-    switch (type)
-    {
-        case "project":
-            select_query = 'name, shortDescription, isVerified, site, facebook';
-            url = url_base + "/api/project/find";
-            break;
-        case "event":
-            select_query = 'name, shortDescription, rules, subtitle, preco, site, facebook';
-            url = url_base + "/api/event/find";
-            break;
-        case "agent":
-            select_query = 'name, shortDescription, isVerified, nomeCompleto, dataDeNascimento, emailPublico, telefonePublico, endereco, site, facebook';
-            restriction = 'like(*.com*)';
-            url = url_base + "/api/agent/find";
-            break;
-        case "space":
-            select_query = 'name, location, public, shortDescription, site, facebook, telefonePublico, telefone1';
-            url = url_base + "/api/space/find";
-            break;
-    }
+    var data = [{"agents":agents_spliced, "projects":projects_spliced, "spaces":spaces_spliced, "events": events_spliced}];
+    $.when($.ajax({
+            url: url_send,
+            type: 'POST',
+            data: {result: data}
+        })
+    ).then(function (data, textStatus, jqXHR) {
+        var agents_length = parseInt(Object.keys(agents).length);
+        var projects_length = parseInt(Object.keys(projects).length);
+        var events_length = parseInt(Object.keys(events).length);
+        var spaces_length = parseInt(Object.keys(spaces).length);
 
-    if(type != "agent")
-    {
-        parameters = {
-            '@select': select_query
-        }
-    }else
-    {
-        parameters = {
-            '@select': select_query,
-            'emailPublico': restriction
-        }
-    }
+        var elem = jQuery.parseJSON(data);
 
-    $.getJSON(
-        url,
-        parameters,
-        function (result)
+        if(elem.result)
         {
-            $.ajax({
-                url: $('#src').val() + '/controllers/collection/collection_controller.php?operation=mapa_cultural_form&collection_id='+$('#collection_id').val()+'&type='+type,
-                type: 'POST',
-                async: false,
-                data: {result: result}
-            }).success(function (result) {
-                elem = jQuery.parseJSON(result);
-                if (elem.result) {
-                    return {"result": true, "url": elem.url};
-                } else {
-                    $('#modalImportMain').modal('hide');
-                    var message = elem.message;
-                    if(!message)
-                    {
-                        message = 'Houve um erro na importação';
-                    }
-                    showAlertGeneral('Erro', message, 'error');
-                }
-            }).error(function (error) {
-                showAlertGeneral('Erro', 'Houve um erro na importação', 'error');
-            });
+            if(agents_length+projects_length+events_length+spaces_length > 0)
+            {
+                var count_recorded = count_elem - (agents_length+projects_length+events_length+spaces_length);
+                var progress = count_recorded / count_elem * 100;
+
+                $('#progressbarmapas').val(progress);
+                do_ajax(url_send, projects, events, agents, spaces, count_elem);
+            }
+            else
+            {
+                $('#progressbarmapas').val(100);
+                window.location = elem.url;
+            }
         }
-    );
+
+    });
 }

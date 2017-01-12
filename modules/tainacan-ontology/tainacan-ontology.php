@@ -28,7 +28,7 @@
  * #21 - IMPORTAÇÃO MAPAS CULTURAIS
  * @author: EDUARDO HUMBERTO
  */
-
+ini_set('max_input_vars', '99999999');
 
 define('MODULE_ONTOLOGY', 'tainacan-ontology');
 define('ONTOLOGY_CONTROLLERS', get_template_directory_uri() . '/modules/' . MODULE_ONTOLOGY );
@@ -2162,6 +2162,7 @@ function parse_owl1()
                     $ret_data_properties_domain_tags, $ret_data_properties_range_tags, $ret_subdata_property_of,
                     $ret_functional_data_property
                     );
+                
                 $return['result'] = true;
                 $return['url'] = get_the_permalink($collection_id);
                 return $return;
@@ -3247,7 +3248,6 @@ function mapa_cultural()
 {
     $category_model = new CategoryModel();
     $collection_id = $_GET['collection_id'];
-    //$type = $_GET['type'];
 
     $created_data_type_property = [];
     $result = $_POST['result'][0];
@@ -3257,29 +3257,41 @@ function mapa_cultural()
     $null = null;
     $data['functional'] = false;
 
-    /*if ($type == 'space')
-        $name = "Espaços";
-    elseif ($type == 'event')
-        $name = "Eventos";
-    elseif ($type == 'agent')
-        $name = "Agentes";
-    else
-        $name = "Projetos";*/
-
-    //$data['category_name'] = $name;
-
     $data['dont_create'] = true;
-    $data['category_name'] = "Espaços";
-    $created_classes['spaces'] = record_class($null, $name, $category_model, $data, $collection_id, true);
 
-    $data['category_name'] = "Agentes";
-    $created_classes['agents'] = record_class($null, $name, $category_model, $data, $collection_id, true);
+    $collection_classes = [];
+    $array_of_classes = get_post_meta($collection_id,'socialdb_collection_facets');
+    foreach ($array_of_classes as $class_id)
+    {
+        if(is_numeric($class_id))
+            $collection_classes[get_term_by('id',$class_id,'socialdb_category_type')->name] = $class_id;
+    }
 
-    $data['category_name'] = "Projetos";
-    $created_classes['projects'] = record_class($null, $name, $category_model, $data, $collection_id, true);
+    if(!is_numeric($collection_classes["Espaços"]))
+    {
+        $data['category_name'] = "Espaços";
+        $created_classes['spaces'] = record_class($null, $name, $category_model, $data, $collection_id, true);
+    }else $created_classes['spaces'] = $collection_classes['Espaços'];
 
-    $data['category_name'] = "Eventos";
-    $created_classes['events'] = record_class($null, $name, $category_model, $data, $collection_id, true);
+    if(!is_numeric($collection_classes["Agentes"]))
+    {
+        $data['category_name'] = "Agentes";
+        $created_classes['agents'] = record_class($null, $name, $category_model, $data, $collection_id, true);
+    }else $created_classes['agents'] = $collection_classes['Agentes'];
+
+    if(!is_numeric($collection_classes["Projetos"]))
+    {
+        $data['category_name'] = "Projetos";
+        $created_classes['projects'] = record_class($null, $name, $category_model, $data, $collection_id, true);    
+    }else $created_classes['projects'] = $collection_classes['Projetos'];
+    
+
+    if(!is_numeric($collection_classes["Eventos"]))
+    {
+        $data['category_name'] = "Eventos";
+        $created_classes['events'] = record_class($null, $name, $category_model, $data, $collection_id, true);
+    }else $created_classes['events'] = $collection_classes['Eventos'];
+    
 
     try
     {
@@ -3312,37 +3324,55 @@ function treats_object_properties_unknown(&$result, &$created_data_type_properti
 
     foreach ($result as $index_class => $class_itens)
     {
+        //Salva o nome de todas as propriedades já criadas para aquela classe
+        $data['class_id'] = $created_classes[$index_class];
+        $properties = get_term_meta($data['class_id'],'socialdb_category_property_id');
+        $properties_name = [];
+        foreach($properties as $property)
+        {
+            $properties_name[get_term_by('id',$property,'socialdb_property_type')->name] = true;
+        }
+
         foreach ($class_itens as $attributes_list){
             //Criação de todas a propriedades relacionada a um determinado individuo
+            $data['class_id'] = $created_classes[$index_class];
+            
+            //Criação das propriedades
             foreach ($attributes_list as $datatype_name => $value)
             {
-                if($datatype_name != 'location')
+                if($properties_name[$datatype_name] != true)
                 {
-                    create_property($created_data_type_properties, $datatype_name, $created_classes, $index_class, $collection_id);
-                }
-                else if($datatype_name == 'location')
-                {
-                    $datatype_name = 'latitude';
-                    create_property($created_data_type_properties, $datatype_name, $created_classes, $index_class, $collection_id);
+                    if($datatype_name != 'location')
+                    {
+                        create_property($created_data_type_properties, $datatype_name, $created_classes, $index_class, $collection_id);
+                    }
+                    else if($datatype_name == 'location')
+                    {
+                        if($properties_name['latitude'] != true && $properties_name['longitude'] != true)
+                        {
+                            $datatype_name = 'latitude';
+                            create_property($created_data_type_properties, $datatype_name, $created_classes, $index_class, $collection_id);
 
-                    $datatype_name = 'longitude';
-                    create_property($created_data_type_properties, $datatype_name, $created_classes, $index_class, $collection_id);
+                            $datatype_name = 'longitude';
+                            create_property($created_data_type_properties, $datatype_name, $created_classes, $index_class, $collection_id);
 
-                    update_post_meta($collection_id, 'socialdb_collection_list_mode', 'geolocation');
-                    update_post_meta($collection_id, 'socialdb_collection_latitude_meta', $created_data_type_properties['latitude']['creation_id']);
-                    update_post_meta($collection_id, 'socialdb_collection_longitude_meta', $created_data_type_properties['longitude']['creation_id']);
+                            update_post_meta($collection_id, 'socialdb_collection_list_mode', 'geolocation');
+                            update_post_meta($collection_id, 'socialdb_collection_latitude_meta', $created_data_type_properties['latitude']['creation_id']);
+                            update_post_meta($collection_id, 'socialdb_collection_longitude_meta', $created_data_type_properties['longitude']['creation_id']);
+                        }
+                    }    
                 }
             }
 
             //Criação do individuo
             $data['object_name'] = end(explode("#", $attributes_list['name']));
-            $data['class_id'] = $created_classes[$index_class];
             add_individual($data, $collection_id, $attributes_list);
         }
     }
 }
 function create_property(&$created_data_type_properties, &$datatype_name, &$created_classes, &$index_class, &$collection_id)
 {
+    error_reporting(0);
     $null = null;
     if($created_data_type_properties[$datatype_name]['created'] != null)
     {
@@ -3368,6 +3398,7 @@ function create_property(&$created_data_type_properties, &$datatype_name, &$crea
 
 function add_individual(&$data, &$collection_id, &$properties_list)
 {
+    error_reporting(0);
     $user_id = get_current_user_id();
     $post = array(
         'post_title' => ($data['object_name']) ? $data['object_name'] : time(),
@@ -3416,6 +3447,7 @@ function add_individual(&$data, &$collection_id, &$properties_list)
 
 function treats_individual(&$individuals_tags, &$namespace, &$collection_id, &$created_classes)
 {
+    error_reporting(0);
     $null = null;
     foreach($individuals_tags as $individual)
     {
