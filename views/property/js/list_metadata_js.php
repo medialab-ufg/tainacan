@@ -2061,12 +2061,12 @@
             onSelect: function (flag, node) {
                 if( $("#socialdb_property_term_root").val() !== node.data.key){
                     if($("#socialdb_property_term_root").val() != '')
-                          remove_label_box($("#socialdb_property_term_root").val(),"#terms_dynatree");
+                          remove_label_box_term($("#socialdb_property_term_root").val(),"#terms_dynatree");
                     $("#socialdb_property_term_root").val(node.data.key );
-                    add_label_box(node.data.key,node.data.title,'#selected_categories_term');
+                    add_label_box_term(node.data.key,node.data.title,'#selected_categories_term');
                 }else{
                     $("#socialdb_property_term_root").val('');
-                    remove_label_box(node.data.key,"#terms_dynatree");
+                    remove_label_box_term(node.data.key,"#terms_dynatree");
                 }
             },
             dnd: {
@@ -2092,6 +2092,20 @@
                 onDrop: function (node, sourceNode, hitMode, ui, draggable) {
                     sourceNode.move(node, hitMode);
                 }
+            }
+        });
+    }
+    
+    function add_label_box_term(id,name,seletor){
+        $(seletor).append('<span id="label-box-'+id+'" class="label label-primary">'
+                +name+' <a style="color:white;cursor:pointer;" onclick="remove_label_box_term('+id+')">x</a></span>&nbsp;');
+    }
+    
+    function remove_label_box_term(id,dynatree){
+        $('#terms_dynatree').dynatree("getRoot").visit(function (node) {
+            if(node.data.key==id){
+                node.select(false);
+                $('#label-box-'+id).remove();
             }
         });
     }
