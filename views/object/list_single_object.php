@@ -79,11 +79,30 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                                 <?php // echo viewHelper::render_icon("remove"); ?>
                             </a>
                         </li>
-                        <li>
-                            <a href="#" onclick="show_edit_object('<?php echo $object->ID ?>')" class="edit">
+                        <li class="dropdown">
+                            <!--a href="#" onclick="show_edit_object('<?php echo $object->ID ?>')" class="edit">
                                 <span class="glyphicon glyphicon-edit"></span>
                                 <?php // echo viewHelper::render_icon("edit_type"); ?>
-                            </a>
+                            </a-->
+                               <?php
+                                 $curr_id = $object->ID ;
+                                 $has_checked_in = get_post_meta( $curr_id ,'socialdb_object_checkout', true);
+                                ?>
+                               <a  style="cursor: pointer;" class="edit"
+                                  data-toggle="dropdown" role="button" aria-expanded="false"
+                                   onclick="show_edit_object('<?php echo $curr_id ?>')">
+                                <span class="glyphicon glyphicon-edit"></span>
+                               </a>
+                               <?php if(is_numeric($has_checked_in)): ?>
+                            <ul class="dropdown-menu dropdown-hover-show" style="top:2%;"  role="menu" >
+                                         <li><button style="position: relative;right: 10%;" onclick="single_discard_checkout('<?php echo $curr_id ?>')" class="btn btn-primary">Discard Checkout</button></li>
+                                         <li><button style="position: relative;right: 50%;  margin-top: 3%;" onclick="single_do_checkin('<?php echo $curr_id ?>')" class="btn btn-primary">Checkin</button></li>
+                                </ul>
+                               <?php else: ?>
+                                <ul class="dropdown-menu dropdown-hover-show"  role="menu" >
+                                         <li ><button style="position: relative;right: 40%;" onclick="single_do_checkout('<?php echo $curr_id ?>')" class="btn btn-primary pull-left">Checkout</button></li>
+                                </ul>
+                               <?php endif; ?>
                         </li>
                         <?php
                     else:

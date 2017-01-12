@@ -689,4 +689,46 @@
         });
     }
 
+
+     function single_do_checkout(id){
+        $.ajax({
+            url: $('#src').val() + '/controllers/object/object_controller.php',
+            type: 'POST',
+            data: {operation: 'check-out', collection_id: $('#collection_id').val(), object_id: id}
+        }).done(function (result) {
+            showAlertGeneral('<?php _e('Success!','tainacan') ?>','<?php _e('Checkout enabled!') ?>','success');
+            location.reload();
+        });
+    }
+    
+    function single_discard_checkout(id){
+        $.ajax({
+            url: $('#src').val() + '/controllers/object/object_controller.php',
+            type: 'POST',
+            data: {operation: 'check-out', collection_id: $('#collection_id').val(), object_id: id,value:''}
+        }).done(function (result) {
+            showAlertGeneral('<?php _e('Success!','tainacan') ?>','<?php _e('Checkout disabled!') ?>','success');
+           location.reload();
+        });
+    }
+    
+    function single_do_checkin(id){
+        show_modal_main();
+        $.ajax({
+            url: $('#src').val() + '/controllers/object/object_controller.php',
+            type: 'POST',
+            data: {operation: 'check-in', collection_id: $('#collection_id').val(), object_id: id,motive:'check-in'}
+        }).done(function (result) {
+             location.reload();
+             hide_modal_main();
+            showAlertGeneral('<?php _e('Success!','tainacan') ?>','<?php _e('Checkin done!') ?>','success');
+            $("#form").html('');
+            $('#main_part').hide();
+            $('#display_view_main_page').hide();
+            $('#loader_collections').hide();
+            $('#configuration').html(result).show();
+            $('.dropdown-toggle').dropdown();
+            $('.nav-tabs').tab();
+        });
+    }   
 </script>
