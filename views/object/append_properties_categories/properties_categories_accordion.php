@@ -20,6 +20,7 @@ $properties_terms_multipleselect = [];
 $properties_terms_treecheckbox = [];
 //referencias
 $references = [
+    'categories' => &$categories,
     'properties_autocomplete' => &$properties_autocomplete,
     'properties_terms_radio' => &$properties_terms_radio,
     'properties_terms_checkbox' => &$properties_terms_checkbox,
@@ -428,14 +429,14 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
 <input type="hidden" name="pc_properties" id='pc_properties' value="<?php echo implode(',', $ids); ?>">
 <input type="hidden" name="categories" id='pc_categories' value="">
 <input type="hidden" name="properties_autocomplete" 
-       id='pc_properties_autocomplete' 
-       value="<?php echo  (isset($properties_autocomplete)&&is_array($properties_autocomplete))?implode(',', $properties_autocomplete):''; ?>">
-<input type="hidden" name="properties_terms_radio" id='pc_properties_terms_radio' value="<?php echo implode(',', $properties_terms_radio); ?>">
-<input type="hidden" name="properties_terms_tree" id='pc_properties_terms_tree' value="<?php echo implode(',', $properties_terms_tree); ?>">
-<input type="hidden" name="properties_terms_selectbox" id='pc_properties_terms_selectbox' value="<?php echo implode(',', $properties_terms_selectbox); ?>">
-<input type="hidden" name="properties_terms_checkbox" id='pc_properties_terms_checkbox' value="<?php echo implode(',', $properties_terms_checkbox); ?>">
-<input type="hidden" name="properties_terms_multipleselect" id='pc_properties_terms_multipleselect' value="<?php echo implode(',', $properties_terms_multipleselect); ?>">
-<input type="hidden" name="properties_terms_treecheckbox" id='pc_properties_terms_treecheckbox' value="<?php echo implode(',', $properties_terms_treecheckbox); ?>">
+       id='pc_properties_autocomplete_<?php echo $categories ?>' 
+       value="<?php echo  (isset($properties_autocomplete)&&is_array($properties_autocomplete))?implode(',', array_unique($properties_autocomplete)):''; ?>">
+<input type="hidden" name="properties_terms_radio" id='pc_properties_terms_radio_<?php echo $categories ?>' value="<?php echo implode(',', array_unique($properties_terms_radio)); ?>">
+<input type="hidden" name="properties_terms_tree" id='pc_properties_terms_tree_<?php echo $categories ?>' value="<?php echo implode(',', array_unique($properties_terms_tree)); ?>">
+<input type="hidden" name="properties_terms_selectbox" id='pc_properties_terms_selectbox_<?php echo $categories ?>' value="<?php echo implode(',', array_unique($properties_terms_selectbox)); ?>">
+<input type="hidden" name="properties_terms_checkbox" id='pc_properties_terms_checkbox_<?php echo $categories ?>' value="<?php echo implode(',', array_unique($properties_terms_checkbox)); ?>">
+<input type="hidden" name="properties_terms_multipleselect" id='pc_properties_terms_multipleselect_<?php echo $categories ?>' value="<?php echo implode(',', array_unique($properties_terms_multipleselect)); ?>">
+<input type="hidden" name="properties_terms_treecheckbox" id='pc_properties_terms_treecheckbox_<?php echo $categories ?>' value="<?php echo implode(',', array_unique($properties_terms_treecheckbox)); ?>">
 
 
 

@@ -216,6 +216,7 @@ class ObjectController extends Controller {
                 $recover_wpquery = $object_model->get_args($data);
                 //$post_status = ($collection_id == get_option('collection_root_id') ? 'draft' : 'trash');
                 $post_status = 'draft';
+                $data['mycollections'] = 'true';
                 $args = $object_model->list_all($data, $post_status);
                 $data['loop'] = new WP_Query($args);
                 $data['collection_data'] = $collection_model->get_collection_data($collection_id);

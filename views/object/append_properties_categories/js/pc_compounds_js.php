@@ -2,8 +2,8 @@
     var dynatree_object_index = [];
     $(function () {
         // # - autocomplete para as propriedades de dados
-        var properties_autocomplete = compounds_get_val($("#properties_autocomplete").val());
-        var compounds = compounds_get_val($("#pc_properties_compounds").val()); 
+        var properties_autocomplete = compounds_get_val($("#properties_autocomplete_<?php echo $references['categories'] ?>").val());
+        var compounds = compounds_get_val($("#pc_properties_compounds_<?php echo $references['categories'] ?>").val());
         if(compounds&&compounds.length!=0){
              $.each(compounds, function (idx, compound) {
                  autocomplete_property_data_compounds(properties_autocomplete,compound)
@@ -153,14 +153,14 @@
     }
     //************************* properties terms ******************************************//
     function compounds_list_properties_term_insert_objects() {
-        var radio_cats = ($('#pc_properties_terms_radio').length>0) ? $("#pc_properties_terms_radio").val() : $("#multiple_properties_terms_radio").val();
-        var check_cats = ($('#pc_properties_terms_checkbox').length>0) ? $("#pc_properties_terms_checkbox").val() : $("#multiple_properties_terms_checkbox").val();
-        var select_cats = ($('#pc_properties_terms_selectbox').length>0) ? $("#pc_properties_terms_selectbox").val() : $("#multiple_properties_terms_selectbox").val();
-        var tree_cats = ($('#pc_properties_terms_tree').length>0) ? $("#pc_properties_terms_tree").val() : $("#multiple_properties_terms_tree").val();
-        var treecheck_cats = ($('#pc_properties_terms_treecheckbox').length>0) ? $("#pc_properties_terms_treecheckbox").val() : $("#multiple_properties_terms_treecheckbox").val();
-        var multiple_cats = ($('#pc_properties_terms_multipleselect').length>0) ? $("#pc_properties_terms_multipleselect").val() : $("#multiple_properties_terms_multipleselect").val();
+        var radio_cats = ($('#pc_properties_terms_radio_<?php echo $references['categories'] ?>').length>0) ? $("#pc_properties_terms_radio_<?php echo $references['categories'] ?>").val() : $("#multiple_properties_terms_radio").val();
+        var check_cats = ($('#pc_properties_terms_checkbox_<?php echo $references['categories'] ?>').length>0) ? $("#pc_properties_terms_checkbox_<?php echo $references['categories'] ?>").val() : $("#multiple_properties_terms_checkbox").val();
+        var select_cats = ($('#pc_properties_terms_selectbox_<?php echo $references['categories'] ?>').length>0) ? $("#pc_properties_terms_selectbox_<?php echo $references['categories'] ?>").val() : $("#multiple_properties_terms_selectbox").val();
+        var tree_cats = ($('#pc_properties_terms_tree_<?php echo $references['categories'] ?>').length>0) ? $("#pc_properties_terms_tree_<?php echo $references['categories'] ?>").val() : $("#multiple_properties_terms_tree").val();
+        var treecheck_cats = ($('#pc_properties_terms_treecheckbox_<?php echo $references['categories'] ?>').length>0) ? $("#pc_properties_terms_treecheckbox_<?php echo $references['categories'] ?>").val() : $("#multiple_properties_terms_treecheckbox").val();
+        var multiple_cats = ($('#pc_properties_terms_multipleselect_<?php echo $references['categories'] ?>').length>0) ? $("#pc_properties_terms_multipleselect_<?php echo $references['categories'] ?>").val() : $("#multiple_properties_terms_multipleselect").val();
         //
-        var all_compounds_id = $('#pc_properties_compounds').val().split(',');
+        var all_compounds_id = $('#pc_properties_compounds_<?php echo $references['categories'] ?>').val().split(',');
         var categories = compounds_get_val($("#edit_object_categories_id").val());
         var radios = compounds_get_val(radio_cats);
         var selectboxes = compounds_get_val(select_cats);

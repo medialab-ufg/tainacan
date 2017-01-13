@@ -1032,7 +1032,7 @@ class PropertyModel extends Model {
      * @author: Eduardo Humberto 
      */
      public function get_children_property_terms($data){
-         $all_data = $this->get_all_property($data['property_id'],true); // pego todos os dados possiveis da propriedade       
+         $all_data = $this->get_all_property($data['property_id'],true); // pego todos os dados possiveis da propriedade  
          if($all_data['metas']['socialdb_property_term_root']){
             $ordenation = get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $all_data['metas']['socialdb_property_term_root'] . '_ordenation', true);
             if($ordenation && $ordenation=='alphabetic'){
