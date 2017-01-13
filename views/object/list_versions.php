@@ -20,7 +20,7 @@ include_once ('js/list_versions_js.php');
     <div class="item-main-data row" style="padding-right: 0; padding-left: 0;">
         <div class="col-md-12 content-title single-item-title tainacan-header-info" style="padding-bottom: 35px;">
             <div class="col-md-12">
-                <h3 id="text_title"><?php echo $id_active . $object->post_title . ' - ' . __('Version History', 'tainacan'); ?></h3>
+                <h3 id="text_title"><?php echo $object->post_title . ' - ' . __('Version History', 'tainacan'); ?></h3>
                 <hr>
             </div>
 
@@ -47,7 +47,6 @@ include_once ('js/list_versions_js.php');
                                             <?php } ?>
                                             <?php echo $version['title']; ?>
                                         </a>
-                                    <!--a><?php echo $version['title']; ?></a-->
                                 </td>
                                 <td>
                                     <?php echo $version['version']; ?>
