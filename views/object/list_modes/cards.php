@@ -123,7 +123,6 @@
                             <div class="item-creation"><?php echo $curr_date; ?></div>
                         </div>
                     </div>
-
                     <?php if (get_option('collection_root_id') != $collection_id): ?>
                         <button id="show_rankings_<?php echo $curr_id ?>" class="cards-ranking"> </button>
 

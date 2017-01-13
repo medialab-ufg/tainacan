@@ -689,4 +689,63 @@
         });
     }
 
+
+     function single_do_checkout(id){
+        $.ajax({
+            url: $('#src').val() + '/controllers/object/object_controller.php',
+            type: 'POST',
+            data: {operation: 'check-out', collection_id: $('#collection_id').val(), object_id: id}
+        }).done(function (result) {
+            showAlertGeneral('<?php _e('Success!','tainacan') ?>','<?php _e('Checkout enabled!') ?>','success');
+            location.reload();
+        });
+    }
+    
+    function single_discard_checkout(id){
+        $.ajax({
+            url: $('#src').val() + '/controllers/object/object_controller.php',
+            type: 'POST',
+            data: {operation: 'check-out', collection_id: $('#collection_id').val(), object_id: id,value:''}
+        }).done(function (result) {
+            showAlertGeneral('<?php _e('Success!','tainacan') ?>','<?php _e('Checkout disabled!') ?>','success');
+           location.reload();
+        });
+    }
+    
+    function single_do_checkin(id){
+         $('.dropdown-menu .dropdown-hover-show').trigger('mouseout');
+        swal({
+            title: "<?php _e('Checkin') ?>",
+            text: "<?php _e('Checkin motive:') ?>",
+            type: "input",
+            showCancelButton: true,
+            closeOnConfirm: true,
+            inputPlaceholder: "<?php _e('Type check in motive') ?>"
+        },
+        function(inputValue){
+          if (inputValue === false) return false;
+
+          if (inputValue === "") {
+            swal.showInputError("<?php _e('You need to write something!') ?>");
+            return false
+          }
+          show_modal_main();
+            $.ajax({
+                url: $('#src').val() + '/controllers/object/object_controller.php',
+                type: 'POST',
+                data: {operation: 'check-in', collection_id: $('#collection_id').val(), object_id: id,motive:inputValue}
+            }).done(function (result) {
+                 wpquery_filter();
+                 hide_modal_main();
+                showAlertGeneral('<?php _e('Success!','tainacan') ?>','<?php _e('Checkin done!') ?>','success');
+                $("#form").html('');
+                $('#main_part').hide();
+                $('#display_view_main_page').hide();
+                $('#loader_collections').hide();
+                $('#configuration').html(result).show();
+                $('.dropdown-toggle').dropdown();
+                $('.nav-tabs').tab();
+            });
+        });
+    }   
 </script>

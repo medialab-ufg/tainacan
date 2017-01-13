@@ -147,7 +147,7 @@ global $config;
 <div class="modal fade bs-example-modal-lg" id="modal_category_property"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog modal-lg">
         <div class="modal-content"> 
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button style="margin-right: 15px;" type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">×</span>
             </button>
             <div id="category_property">

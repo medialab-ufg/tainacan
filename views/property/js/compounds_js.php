@@ -273,6 +273,11 @@
                 var current_id = property.id;
                 var current_search_widget = property.type;
                 var type = types_compounds[current_id];
+                if(!type){
+                    if(property.metas.socialdb_property_term_cardinality){
+                        type = '3';
+                    }
+                }
                 var string = '';
                 var class_string = '';
                 var cat_id = ''

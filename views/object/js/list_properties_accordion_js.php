@@ -537,7 +537,7 @@
         }else if(id!==0){
             selected_categories.push(id);
             //adicionando metadados
-            //show_modal_main();
+            show_modal_main();
             $.ajax({
                 url: $('#src').val() + '/controllers/object/object_controller.php',
                 type: 'POST',

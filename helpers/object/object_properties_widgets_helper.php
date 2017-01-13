@@ -548,7 +548,7 @@ class ObjectWidgetsHelper extends ViewHelper {
         ?>
         <input type="hidden" 
             name="pc_properties_compounds" 
-            id="pc_properties_compounds"
+            id="pc_properties_compounds_<?php echo $references['categories'] ?>"
             value="<?php echo implode(',', $result['ids']); ?>"> 
         <?php
         endif;    

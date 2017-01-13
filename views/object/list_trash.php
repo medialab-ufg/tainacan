@@ -36,9 +36,9 @@ if( !$collection_list_mode ) {
         <div id='<?php echo $collection_list_mode; ?>-viewMode' class='col-md-12 no-padding list-mode-set'>
             <?php while ( $loop->have_posts() ) : $loop->the_post(); $countLine++;
                 $curr_id = get_the_ID();
-                
+                      
                 include "list_modes/modals.php";
-                include "list_modes/cards.php";
+                //include "list_modes/cards.php";
                 include "list_modes/cards_trash.php";
                 include "list_modes/list.php";
                 include "list_modes/gallery.php";

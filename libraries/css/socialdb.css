@@ -696,3 +696,10 @@ table.sorting-table tbody tr:not(.sorting-row) td {opacity: 0.2;}
     display: block;
     margin-top: 0; // remove the gap so it doesn't close
  }
+ 
+ .dropdown:hover .dropdown-menu.dropdown-hover-show {
+    display: block;
+    z-index: 9999999999;
+ }
+ 
+ 

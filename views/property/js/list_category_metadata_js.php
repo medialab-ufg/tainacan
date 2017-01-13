@@ -44,7 +44,7 @@
         $(changeable_selects).each(function (idx, el) {
             $(el).html('')
                 .append('<option value="tree"><?php _e('Tree','tainacan') ?></option>')
-                .append('<option value="menu"><?php _e('Menu','tainacan') ?></option>')
+               // .append('<option value="menu"><?php _e('Menu','tainacan') ?></option>')
                 .append('<option value="radio"><?php _e('Radio','tainacan') ?></option>')
                 .append('<option value="selectbox"><?php _e('Selectbox','tainacan') ?></option>');
         });
@@ -1386,7 +1386,7 @@
             elem_first = jQuery.parseJSON(result);
             var item_title = elem_first.title;
             $("#socialdb_property_term_root").val(id );
-            add_label_box(id,item_title,'#selected_categories_term');
+            add_label_box_term(id,item_title,'#selected_categories_term');
         });
         $("#terms_dynatree").dynatree("getRoot").visit(function(node){
             if(node.data.key==id){
@@ -1940,14 +1940,15 @@
                 }
             },
             onSelect: function (flag, node) {
+                $('#selected_categories_term').html('');
                 if( $("#socialdb_property_term_root").val() !== node.data.key){
                     if($("#socialdb_property_term_root").val() != '')
                           remove_label_box($("#socialdb_property_term_root").val(),"#terms_dynatree");
                     $("#socialdb_property_term_root").val(node.data.key );
-                    add_label_box(node.data.key,node.data.title,'#selected_categories_term');
+                    add_label_box_term(node.data.key,node.data.title,'#selected_categories_term');
                 }else{
                     $("#socialdb_property_term_root").val('');
-                    remove_label_box(node.data.key,"#terms_dynatree");
+                    remove_label_box_term(node.data.key,"#terms_dynatree");
                 }
             },
             dnd: {
@@ -1973,6 +1974,21 @@
                 onDrop: function (node, sourceNode, hitMode, ui, draggable) {
                     sourceNode.move(node, hitMode);
                 }
+            }
+        });
+    }
+    
+    function add_label_box_term(id,name,seletor){
+        $(seletor).html('');
+        $(seletor).append('<span id="label-box-'+id+'" class="label label-primary">'
+                +name+' <a style="color:white;cursor:pointer;" onclick="remove_label_box_term('+id+')">x</a></span>&nbsp;');
+    }
+    
+    function remove_label_box_term(id,dynatree){
+        $('#terms_dynatree').dynatree("getRoot").visit(function (node) {
+            if(node.data.key==id){
+                node.select(false);
+                $('#label-box-'+id).remove();
             }
         });
     }

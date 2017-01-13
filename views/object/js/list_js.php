@@ -593,7 +593,7 @@
             });
         } else if ($('input[name=duplicate_item]:checked', '#formDuplicateItem' + object_id).val() == 'versioning') {
             //Versioning
-            $('#modalImportMain').modal('show');//mostro o modal de carregamento
+            $('.modal').modal('hide');//mostro o modal de carregamento
             $.ajax({
                 type: "POST",
                 url: $('#src').val() + "/controllers/object/object_controller.php",
@@ -606,8 +606,9 @@
                 $('#modalImportMain').modal('hide');
                 $('#modal_duplicate_object' + object_id).modal('hide');
                 if (result) {
-                    wpquery_clean();
-                    showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Successfully created version.', 'tainacan') ?>', 'success');
+                   // wpquery_clean();
+                    //showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Successfully created version.', 'tainacan') ?>', 'success');
+                    edit_object_item(object_id)
                 } else {
                     showAlertGeneral('<?php _e('Error', 'tainacan') ?>', '<?php _e('Please try again.', 'tainacan') ?>', 'error');
                 }
@@ -633,7 +634,7 @@
     }
 
     function edit_object_item(object_id) {
-        $('#modalImportMain').modal('show');//mostro o modal de carregamento
+       show_modal_main();
         $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/object/object_controller.php",
@@ -641,6 +642,7 @@
         }).done(function (result) {
             hide_modal_main();
             if(result.trim().indexOf('checkout@')>=0){
+                $('.modal').modal('hide');//mostro o modal de carregamento
                 var arrayN = result.trim().split('@');
                 showAlertGeneral('<?php _e('Attention!','tainacan') ?>','<?php _e('Item blocked by user ') ?>'+arrayN[1]+' <?php _e('at','tainacan') ?> '+arrayN[2],'info');
             }else{

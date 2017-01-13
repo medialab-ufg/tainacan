@@ -896,6 +896,9 @@
     function delete_property(id, type) {
         $("#property_delete_collection_id").val( $("#collection_id").val() );
         var name_html = $("#meta-item-" + id + " .title-pipe").text().trim();
+        if(name_html==='' && $('#compounds-'+ id).length>0){
+            name_html = $("#compounds-" + id + "").text().split('(')[0].trim();
+        }
         $("#property_delete_id").val( id );
         $("#modal_remove_property #property_category_id").val( $("#property_category_id").val() );
 

@@ -1,7 +1,7 @@
 <script>
     $(function () {
         var src = $('#src').val();
-        var properties_autocomplete = edit_get_val($("#pc_properties_autocomplete").val());
+        var properties_autocomplete = edit_get_val($("#pc_properties_autocomplete_<?php echo $categories ?>").val());
        // autocomplete_edit_item_property_data(properties_autocomplete); 
         $('[data-toggle="tooltip"]').tooltip();
         pc_list_properties_term_insert_objects();
@@ -66,7 +66,6 @@
                                     cont++;
                                 }
                             });
-
                             if( cont===0){
                                 $('#core_validation_'+property_id).val('false');
                             }else{
@@ -142,12 +141,12 @@
         if($("#edit_object_categories_id").length>0){
             var categories = edit_get_val($("#edit_object_categories_id").val());
         }
-        var radios = edit_get_val($("#pc_properties_terms_radio").val());
-        var selectboxes = edit_get_val($("#pc_properties_terms_selectbox").val());
-        var trees = edit_get_val($("#pc_properties_terms_tree").val());
-        var checkboxes = edit_get_val($("#pc_properties_terms_checkbox").val());
-        var multipleSelects = edit_get_val($("#pc_properties_terms_multipleselect").val());
-        var treecheckboxes = edit_get_val($("#pc_properties_terms_treecheckbox").val());
+        var radios = edit_get_val($("#pc_properties_terms_radio_<?php echo $categories ?>").val());
+        var selectboxes = edit_get_val($("#pc_properties_terms_selectbox_<?php echo $categories ?>").val());
+        var trees = edit_get_val($("#pc_properties_terms_tree_<?php echo $categories ?>").val());
+        var checkboxes = edit_get_val($("#pc_properties_terms_checkbox_<?php echo $categories ?>").val());
+        var multipleSelects = edit_get_val($("#pc_properties_terms_multipleselect_<?php echo $categories ?>").val());
+        var treecheckboxes = edit_get_val($("#pc_properties_terms_treecheckbox_<?php echo $categories ?>").val());
         pc_list_radios(radios,categories);
         pc_list_tree(trees,categories);
         pc_list_selectboxes(selectboxes,categories);
@@ -240,15 +239,17 @@
                     elem = jQuery.parseJSON(result);
                     $('#field_property_term_' + selectbox).html('');
                     $('#field_property_term_' + selectbox).append('<option value=""><?php _e('Select','tainacan') ?>...</option>');
-                    $.each(elem.children, function (idx, children) {
-                        var checked = '';
-                       //  delete_value(children.term_id);
-                        if(categories&&categories.indexOf(children.term_id)>-1){
-                            checked = 'selected="selected"';
-                        }
-                        $('#field_property_term_' + selectbox).append('<option '+checked+' value="' + children.term_id + '">' + children.name + '</option>');
-                        //  }
-                    });
+                    if(elem.children){
+                        $.each(elem.children, function (idx, children) {
+                            var checked = '';
+                           //  delete_value(children.term_id);
+                            if(categories&&categories.indexOf(children.term_id)>-1){
+                                checked = 'selected="selected"';
+                            }
+                            $('#field_property_term_' + selectbox).append('<option '+checked+' value="' + children.term_id + '">' + children.name + '</option>');
+                            //  }
+                        });
+                    }
                 });
             });
         }

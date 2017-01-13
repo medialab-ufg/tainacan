@@ -216,6 +216,7 @@ class ObjectController extends Controller {
                 $recover_wpquery = $object_model->get_args($data);
                 //$post_status = ($collection_id == get_option('collection_root_id') ? 'draft' : 'trash');
                 $post_status = 'draft';
+                $data['mycollections'] = 'true';
                 $args = $object_model->list_all($data, $post_status);
                 $data['loop'] = new WP_Query($args);
                 $data['collection_data'] = $collection_model->get_collection_data($collection_id);
@@ -647,15 +648,18 @@ class ObjectController extends Controller {
                 $arrFirst['title'] = get_post($data['original'])->post_title;
                 $arrFirst['version'] = 1;
                 $arrFirst['data'] = get_post($data['original'])->post_date;
+                $arrFirst['user'] = get_post_meta($data['original'], 'socialdb_version_user', true);
                 $arrFirst['note'] = get_post_meta($data['original'], 'socialdb_version_comment', true);
 
                 $data['versions'][] = $arrFirst;
 
                 foreach ($all_versions as $each_version) {
+                    $user = get_user_by('ID', get_post_meta($each_version->ID, 'socialdb_version_user', true));
                     $arrV['ID'] = $each_version->ID;
                     $arrV['title'] = $each_version->post_title;
                     $arrV['version'] = get_post_meta($each_version->ID, 'socialdb_version_number', true);
                     $arrV['data'] = get_post_meta($each_version->ID, 'socialdb_version_date', true);
+                    $arrV['user'] = $user->display_name;
                     $arrV['note'] = get_post_meta($each_version->ID, 'socialdb_version_comment', true);
                     $data['versions'][] = $arrV;
                 }

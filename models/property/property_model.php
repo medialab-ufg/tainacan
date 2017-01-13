@@ -548,9 +548,12 @@ class PropertyModel extends Model {
         $socialdb_property_term_root = get_term_meta($data['property_delete_id'], 'socialdb_property_term_root', true);
         //se esta categoria nao pertence a essa colecao ela pode ser excluida
         if($category_created&&$category_created!=$data['property_category_id']){ 
-             $data['success'] = 'false';
-             $data['msg'] = __('This property does not belong to this collection!','tainacan');
-             return json_encode($data);
+            delete_term_meta($data['property_category_id'], 'socialdb_category_property_id', $data['property_delete_id']);
+            $this->delete_property_meta_data($data['property_delete_id']);
+            wp_delete_term($data['property_delete_id'], 'socialdb_property_type');
+            $data['success'] = 'false';
+            $data['msg'] = __('This property does not belong to this collection!','tainacan');
+            return json_encode($data);
         }
         // busco o objeto da propriedade
         $property = get_term_by('id', $data['property_delete_id'], 'socialdb_property_type');
@@ -1029,7 +1032,7 @@ class PropertyModel extends Model {
      * @author: Eduardo Humberto 
      */
      public function get_children_property_terms($data){
-         $all_data = $this->get_all_property($data['property_id'],true); // pego todos os dados possiveis da propriedade       
+         $all_data = $this->get_all_property($data['property_id'],true); // pego todos os dados possiveis da propriedade  
          if($all_data['metas']['socialdb_property_term_root']){
             $ordenation = get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $all_data['metas']['socialdb_property_term_root'] . '_ordenation', true);
             if($ordenation && $ordenation=='alphabetic'){
