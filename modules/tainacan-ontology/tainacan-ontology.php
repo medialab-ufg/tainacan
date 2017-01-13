@@ -2163,9 +2163,9 @@ function parse_owl1()
                     $ret_functional_data_property
                     );
                 
-                $return['result'] = true;
+                /*$return['result'] = true;
                 $return['url'] = get_the_permalink($collection_id);
-                return $return;
+                return $return;*/
                 //Tratando FunctionalProperty
                 treats_functional_property($owl_functional_properties, $created_data_type_properties, $created_object_properties,
                     $owl_classes, $created_classes, $namespace, $collection_id);
@@ -3214,7 +3214,7 @@ function add_options_mapas_culturais_ontology()
             </div>
             <br>
 
-            <form id="mapa_cultural_form" class="form-group col-md-12 no-padding">
+            <form id="mapa_cultural_validate" class="form-group col-md-12 no-padding">
                 <div class="col-md-12"><label><?php _e('URL','tainacan'); ?></label></div>
                 <div class="col-md-10">
                     <input type="text"
@@ -3224,7 +3224,7 @@ function add_options_mapas_culturais_ontology()
                 </div>
                 <div class="col-md-2">
                     <button type="button"
-                            onclick="import_mapa_cultural($('#url_mapa_cultural').val().trim())"
+                            onclick="validate_mapa_cultural($('#url_mapa_cultural').val().trim())"
                             id="submit_mapa_cultural_url"
                             class="btn btn-primary tainacan-blue-btn-bg pull-left">
                         <?php _e('Validate','tainacan'); ?>
@@ -3365,7 +3365,9 @@ function treats_object_properties_unknown(&$result, &$created_data_type_properti
             }
 
             //Criação do individuo
+            //print  mb_detect_encoding(end(explode("#", $attributes_list['name']))).": ".mb_detect_encoding($attributes_list['name'])."<br>";
             $data['object_name'] = end(explode("#", $attributes_list['name']));
+            //print $data['object_name']."<br>";
             add_individual($data, $collection_id, $attributes_list);
         }
     }
@@ -3427,18 +3429,18 @@ function add_individual(&$data, &$collection_id, &$properties_list)
                 if($property_name == 'latitude')
                 {
                     $value = $properties_list['location'][$property_name];
-                    add_post_meta($data['ID'], 'socialdb_property_' . $property, $value);
                 }
                 else if($property_name == 'longitude')
                 {
                     $value = $properties_list['location'][$property_name];
-                    add_post_meta( $data['ID'],'socialdb_property_'.$property, $value);
                 }
                 else
                 {
                     $value = $properties_list[$property_name];
-                    add_post_meta( $data['ID'],'socialdb_property_'.$property, $value);
                 }
+
+                if($value != 'null')
+                    add_post_meta( $data['ID'],'socialdb_property_'.$property, $value);
 
             }
         }

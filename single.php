@@ -838,7 +838,7 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
         </div>
     </div>
     <!-- TAINACAN: modal padrao bootstrap para demonstracao de execucao de processos, utilizado em varias partes do socialdb   -->
-    <div class="modal fade" id="modalImportMain" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modalImportMain" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
                 <center>
@@ -850,7 +850,7 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
     </div>
 
     <!-- TAINACAN: modal padrao bootstrap para exibição do loading de importação   -->
-    <div class="modal fade" id="modalImportLoading" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modalImportLoading" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
                 <center>
@@ -863,6 +863,57 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
             </div>
         </div>
     </div>
+
+
+    <div class="modal fade" id="modalImportConfirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content"> <!--Conteúdo da janela modal-->
+
+                <div class="modal-header"><!--Cabeçalho-->
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only"><?php _e('Do you really want to close?', 'tainacan') ?></span>
+                    </button>
+
+                    <h4 class="modal-title text-center"><?php _e('Count of elements', 'tainacan') ?></h4>
+                </div><!--Fim cabeçalho-->
+
+                <div class="modal-body"><!--Conteúdo-->
+                    <div class="text-center">
+                        <dl class="dl-horizontal">
+                            <dt><?php _e('Agents', 'tainacan') ?>: </dt>
+                            <dd id="agents">00</dd>
+
+                            <dt><?php _e('Projects', 'tainacan') ?>: </dt>
+                            <dd id="projects">00</dd>
+
+                            <dt><?php _e('Events', 'tainacan') ?>: </dt>
+                            <dd id="events">00</dd>
+
+                            <dt><?php _e('Spaces', 'tainacan') ?></dt>
+                            <dd id="spaces">00</dd>
+                        </dl>
+                    </div>
+                </div><!--Fim conteúdo-->
+
+                <div class="modal-footer"><!--Rodapé-->
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">
+                        <?php _e('Cancel','tainacan'); ?>
+                    </button>
+
+                    <button type="button" class="btn btn-primary"
+                        onclick="import_mapas_culturais()"
+                        id="submit_mapa_cultural_url"
+                        class="btn btn-primary tainacan-blue-btn-bg pull-right">
+                        <?php _e('Import','tainacan'); ?>
+                    </button>
+
+                </div><!--Fim rodapé-->
+
+            </div>
+        </div>
+    </div>
+
     <!-- TAINACAN: modal padrao bootstrap para demonstracao de execucao de processos, utilizado em varias partes do socialdb   -->
     <div class="modal fade" id="modalImportSocialnetworkClean" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">

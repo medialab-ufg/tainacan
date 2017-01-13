@@ -1293,7 +1293,7 @@ Hook.register(
         });
     }
 /******************************************************************************/
-function import_mapa_cultural(url_base)
+function validate_mapa_cultural(url_base)
 {
     if(url_base !== "")
     {
@@ -1301,11 +1301,11 @@ function import_mapa_cultural(url_base)
         url_base = url_base.split('/api')[0];
 
         $('#modalImportLoading').modal('show');
-        $('#modalImportLoading h3').text('Recuperando dados, essa operção pode demorar...');
+        $('#modalImportLoading h3').text('Recuperando dados, essa operação pode demorar...');
         $('#divprogress').css('padding', 20);
         $('#progressbarmapas').css('padding', 3);
+        $('#progressbarmapas').val(0);
 
-        var url_send = $('#src').val() + '/controllers/collection/collection_controller.php?operation=mapa_cultural_form&collection_id='+$('#collection_id').val();
         //Agentes
         /*$.getJSON(
             url_base + "/api/agent/find",
@@ -1466,22 +1466,60 @@ function import_mapa_cultural(url_base)
                                     },
                                     function (projects)
                                     {
-                                        $('#modalImportLoading h3').text('Recuperação concluída! Cadastrando dados...');
-                                        $('#progressbarmapas').val(0);
+                                        $('#modalImportLoading h3').text('Recuperação concluída!');
+                                        $('#progressbarmapas').val(100);
 
                                         var agents_count, projects_count, spaces_count, events_count, url;
 
                                         agents_count = parseInt(Object.keys(agents).length); parseInt(projects_count = Object.keys(projects).length);
                                         spaces_count = parseInt(Object.keys(spaces).length); parseInt(events_count = Object.keys(events).length);
 
-                                        do_ajax(url_send, projects, events, agents, spaces,
-                                        agents_count+spaces_count+projects_count+events_count);
+                                        /*var data = [{"agents":agents, "projects":projects, "spaces":spaces, "events": events}];
+                                        console.log(data);
+                                        return;*/
 
-                                        //Novaparte
-                                        {
-                                            var data = [{"agents":agents, "projects":projects, "spaces":spaces, "events": events}];
-                                        }
+                                        $('#modalImportLoading').modal('hide');
+                                        $('#modalImportConfirm').modal('show');
+                                        
+                                        $('#agents').text(agents_count);
+                                        $('#projects').text(projects_count);
+                                        $('#spaces').text(spaces_count);
+                                        $('#events').text(events_count);
 
+                                        /*{
+                                            //Nome do banco
+                                            const db_name = "Tainacan", data_warehouse_name = "JSONs";
+                                            //Criar banco com nome de dbName
+                                            var request = indexedDB.open(db_name, 1);
+
+                                            request.onerror = function(event) {
+                                                // Tratar erros.
+                                            };
+
+                                            request.onupgradeneeded = function(event) {
+                                                var db = event.target.result;
+
+                                                // Cria um objectStore para conter a informação sobre nossos clientes. Nós vamos
+                                                // usar "ssn" como key path porque sabemos que é único;
+                                                var objectStore = db.createObjectStore(data_warehouse_name, { keyPath: "name" });
+
+                                                // Usando transação oncomplete para afirmar que a criação do objectStore
+                                                // é terminada antes de adicionar algum dado nele.
+                                                objectStore.transaction.oncomplete = function(event) {
+                                                    // Armazenando valores no novo objectStore.
+                                                    var jsonObjectStore = db.transaction(db_name, "readwrite").objectStore(data_warehouse_name);
+                                                    jsonObjectStore.add()
+                                                }
+                                            };
+                                        }*/
+
+
+                                        window.sessionStorage.setItem('agents', JSON.stringify(agents));
+                                        window.sessionStorage.setItem('projects', JSON.stringify(projects));
+                                        window.sessionStorage.setItem('spaces', JSON.stringify(spaces));
+                                        window.sessionStorage.setItem('events', JSON.stringify(events));
+
+                                        window.sessionStorage.setItem('count', agents_count+spaces_count+projects_count+events_count);
                                     }
                                 );
                             }
@@ -1496,6 +1534,26 @@ function import_mapa_cultural(url_base)
     {
         showAlertGeneral('Erro', 'URL inválida', 'error');
     }
+}
+
+function import_mapas_culturais()
+{
+    $('#modalImportConfirm').modal('hide');
+    $('#modalImportLoading').modal('show');
+    $('#modalImportLoading h3').text('Cadastrando...');
+    $('#progressbarmapas').val(0);
+    var url_send = $('#src').val() + '/controllers/collection/collection_controller.php?operation=mapa_cultural_import&collection_id='+$('#collection_id').val();
+
+    var count = window.sessionStorage.getItem('count');
+    var projects, events, agents, spaces;
+
+    projects = JSON.parse(window.sessionStorage.getItem('projects'));
+    agents = JSON.parse(window.sessionStorage.getItem('agents'));
+    events = JSON.parse(window.sessionStorage.getItem('events'));
+    spaces = JSON.parse(window.sessionStorage.getItem('spaces'));
+
+    do_ajax(url_send, projects, events, agents, spaces, count);
+
 }
 
 function do_ajax(url_send, projects, events, agents, spaces, count_elem)

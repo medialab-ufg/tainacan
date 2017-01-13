@@ -244,7 +244,7 @@ class CollectionController extends Controller {
                     return json_encode($collectionImportation->import($data));
                 }
                 break;
-            case 'mapa_cultural_form':
+            case 'mapa_cultural_import':
                 return json_encode(mapa_cultural());
                 break;
             /*             * ************************* TEMPLATES ********************* */
