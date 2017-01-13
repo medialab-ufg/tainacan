@@ -48,7 +48,7 @@ class Log extends Model {
             $sql = sprintf("SELECT COUNT(id) as '$_alias' FROM %s WHERE event_type = '$event_type' AND event = '$event' 
                    AND collection_id = '$collection_id' AND event_date BETWEEN '$from' AND '$to'", self::_table() );
         }
-        
+
         if( $encoded ) {
             return json_encode( $wpdb->get_results($sql) );
         } else {
