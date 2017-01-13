@@ -1512,6 +1512,7 @@ function validate_mapa_cultural(url_base)
                                                 }
                                             };
                                         }*/
+                                        
 
 
                                         window.sessionStorage.setItem('agents', JSON.stringify(agents));
