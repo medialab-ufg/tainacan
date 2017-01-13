@@ -18,7 +18,7 @@
                     <span class="glyphicon glyphicon-edit"></span>
                    </a>
                    <?php if(is_numeric($has_checked_in)): ?>
-                    <ul class="dropdown-menu dropdown-hover-show" style="position: absolute;top:-140%;width:50%;left:-1050%;" role="menu" >
+                    <ul class="dropdown-menu dropdown-hover-show" style="position: absolute;top:-140%;width:50%;left:-1030%;" role="menu" >
                              <li><button style="position: relative;right: 10%;" onclick="discard_checkout('<?php echo $curr_id ?>')" class="btn btn-primary">Discard Checkout</button></li>
                              <li><button style="position: relative;right: 50%;  margin-top: 3%;" onclick="do_checkin('<?php echo $curr_id ?>')" class="btn btn-primary">Checkin</button></li>
                     </ul>
