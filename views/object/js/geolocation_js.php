@@ -64,12 +64,16 @@
     }      
   });
     
-    var sorted_lats = lats.sort(function(a,b) { return a - b; } );
-    var sorted_longs = longs.sort(function(a,b) { return a - b; } );
-    var half_length = parseInt( marker_item.length / 2 );
+  var sorted_lats = lats.sort(function(a,b) { return a - b; } );
+  var sorted_longs = longs.sort(function(a,b) { return a - b; } );
+  var half_length = parseInt( marker_item.length / 2 );
 
-  cl('Vamos usar| ' + half_length + ' | de zoom!');
-  cl('Temos um total de ' + marker_item.length +  ' items no mapa!');
+  if ( half_length > 18 ) {
+      half_length = 4;
+  }
+
+  cl('Using | ' + half_length + ' | of zoom!');
+  cl('Total' + marker_item.length +  ' items drawn on mapa!');
   var ctr = new google.maps.LatLng( sorted_lats[half_length] ,sorted_longs[half_length]);
 
   /*
@@ -90,9 +94,9 @@
           var infowindow = new google.maps.InfoWindow();
           var marker, i;
 
-          for (i = 0; i < marker_item.length; i++) {if(marker_item[i]) {
-              cl("Data from position: " + i);
-                marker = new google.maps.Marker({
+          for (i = 0; i < marker_item.length; i++) {
+              if(marker_item[i]) {
+                  marker = new google.maps.Marker({
                   position: new google.maps.LatLng(marker_item[i][1], marker_item[i][2]),
                   map: map
                 });
@@ -111,6 +115,7 @@
     }
     
     if ( use_approx_mode && use_approx_mode !== "use_approx_mode" ) {
+        cl(use_approx_mode);
         initMap();
     }
 </script>   
