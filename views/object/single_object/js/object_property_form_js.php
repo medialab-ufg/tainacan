@@ -44,7 +44,7 @@
         $.ajax({
             url: $('#src').val() + '/controllers/property/property_controller.php',
             type: 'POST',
-            data: {collection_id: $("#collection_id").val(), category_id: $("#single_event_add_property_object_category_id").val(), operation: 'show_reverses', property_id: $('#single_event_add_property_category_id').val()}
+            data: {collection_id: $("#collection_id").val(), category_id: selected, operation: 'show_reverses', property_id: $('#single_event_add_property_object_id').val()}
         }).done(function (result) {
             elem = jQuery.parseJSON(result);
             $('#single_event_add_property_object_reverse').html('');
@@ -94,6 +94,8 @@
 
             },
             onSelect: function (flag, node) {
+                single_list_reverses_event(node.data.key);
+                $('#property_object_category_id').val(node.data.key);
                 concatenate_in_array(node.data.key,'#property_object_category_id');
                 <?php if(has_action('javascript_onselect_relationship_dynatree_property_object')): ?>
                     <?php do_action('javascript_onselect_relationship_dynatree_property_object') ?>

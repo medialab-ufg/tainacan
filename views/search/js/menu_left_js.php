@@ -35,13 +35,15 @@
                 var item_title = node.data.title;
                 var item_id = parseInt(node.data.key);
                 logColAction(item_title, item_id);
-                
                 // Close menu on click
                 if ($(".contextMenu:visible").length > 0) {
                     $(".contextMenu").hide();
                 }
+                
+                    console.log(event);
                 //verifico aonde esta clicando
-                if($('#visualization_page_category').val()==='click' && event.srcElement.className==='dynatree-title'){
+                if($('#visualization_page_category').val()==='click' && 
+                        ((event.srcElement && event.srcElement.className==='dynatree-title') || (event.target && event.target.className==='dynatree-title'))){
                     // Close menu on click
                     $('#modalImportMain').modal('show');
                     // Close menu on click
@@ -58,7 +60,8 @@
                             node.deactivate();
                         }
                     });
-                }else if($('#visualization_page_category').val()!=='click' && event.srcElement.className==='dynatree-title' ){
+                }else if($('#visualization_page_category').val()!=='click' && 
+                        ((event.srcElement && event.srcElement.className==='dynatree-title') || (event.target && event.target.className==='dynatree-title'))){
                     if(node.data.key.indexOf("_facet_")>=0){
                         return false;
                     }

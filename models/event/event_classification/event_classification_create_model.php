@@ -28,8 +28,12 @@ class EventClassificationCreateModel extends EventModel {
             $value = get_post($data['socialdb_event_classification_term_id']);
             $title = __('Add the classification : ','tainacan') . $value->post_title . _(' of the object property ') .' '. $property->name;
         } else {
-            $category = get_term_by('id', $data['socialdb_event_classification_term_id'], 'socialdb_tag_type');
-            $title = __('Add the tag : ','tainacan') .' '. $category->name;
+            $tags = explode(',', $data['socialdb_event_classification_term_id']);
+            $category = [];
+            foreach ($tags as $tag) {
+                  $category[] = get_term_by('id', $tag, 'socialdb_tag_type')->name;
+            }
+            $title = __('Add the tag : ','tainacan') .' '. implode(',', $category);
         }
         $object = get_post($data['socialdb_event_classification_object_id']);
         $title.= __(' in the object ','tainacan') .' '.$object->post_title;
@@ -109,20 +113,23 @@ class EventClassificationCreateModel extends EventModel {
      */
     public function insert_event_tag($object_id,$data,$automatically_verified = false){
         //pego a tag
-        $tag = get_term_by('id',  get_post_meta($data['event_id'], 'socialdb_event_classification_term_id',true),'socialdb_tag_type');
-        if($tag&&$object_id){// se a categoria ou objeto forem validos
-            wp_set_object_terms( $object_id, $tag->term_id,'socialdb_tag_type',true);
-            $this->concatenate_commom_field_value( $object_id, "socialdb_propertyterm_tag", $tag->term_id);
-            $this->set_approval_metas($data['event_id'], $data['socialdb_event_observation'], $automatically_verified);
-            $this->update_event_state('confirmed', $data['event_id']);
-            $data['msg'] = __('The event was successful','tainacan');
-            $data['type'] = 'success';
-            $data['title'] = 'Success';
-        }else{ // se caso qualquer um dos itens for invalido
-            $data['msg'] = __('Object or tag invalid','tainacan');
-            $data['type'] = 'error';
-            $data['title'] = 'Error';
-            $this->update_event_state('invalid', $data['event_id']); // seto a o evento como invalido
+        $tags = explode(',', get_post_meta($data['event_id'], 'socialdb_event_classification_term_id',true));
+        foreach ($tags as $tag) {
+            $tag = get_term_by('id', $tag,'socialdb_tag_type');
+            if($tag&&$object_id){// se a categoria ou objeto forem validos
+                wp_set_object_terms( $object_id, $tag->term_id,'socialdb_tag_type',true);
+                $this->concatenate_commom_field_value( $object_id, "socialdb_propertyterm_tag", $tag->term_id);
+                $this->set_approval_metas($data['event_id'], $data['socialdb_event_observation'], $automatically_verified);
+                $this->update_event_state('confirmed', $data['event_id']);
+                $data['msg'] = __('The event was successful','tainacan');
+                $data['type'] = 'success';
+                $data['title'] = 'Success';
+            }else{ // se caso qualquer um dos itens for invalido
+                $data['msg'] = __('Object or tag invalid','tainacan');
+                $data['type'] = 'error';
+                $data['title'] = 'Error';
+                $this->update_event_state('invalid', $data['event_id']); // seto a o evento como invalido
+            }
         }
         return $data;
     }

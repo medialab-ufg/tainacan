@@ -12,22 +12,11 @@ include_once ('js/edit_object_property_form_js.php');
         <input type="text" class="form-control" id="single_event_edit_property_object_name" name="socialdb_event_property_object_edit_name" value="<?php echo $value->name; ?>" required="required" placeholder="<?php _e('Property Object name','tainacan'); ?>">
     </div>
     <div class="form-group">
-        <?php if (isset($is_root) && $is_root): ?>
-            <label for="event_edit_property_object_category_id"><?php _e('Property object relationship','tainacan'); ?></label>
-            <select class="form-control" id="single_event_edit_property_object_category_id" name="socialdb_event_property_object_category_id">
-                  <?php if($property_object&& count($property_object)>0): ?>
-                    <?php foreach ($property_object as $object) { ?>
-                         <option <?php if($value->metas->socialdb_property_object_category_id==$object['category_id']) echo 'selected="selected";' ?> value="<?php echo $object['category_id'] ?>"><?php echo $object['collection_name'] ?></option>   
-                    <?php } ?>
-                <?php else: ?>  
-                        <option value="<?php echo $category->term_id; ?>"><?php  echo get_post($collection_id)->post_title; ?> </option>   
-                <?php endif; ?>    
-             </select>
-        <?php else: ?>  
-            <label for="event_edit_property_object_category_id"><?php _e('Property object relationship','tainacan'); ?></label>
-            <input disabled="disabled" type="text" class="form-control" id="single_event_edit_property_object_category_name" value="" placeholder="<?php _e('Click on the category in the tree','tainacan'); ?>" name="property_object_category_name" >
-            <input type="hidden"  id="single_event_edit_property_object_category_id"  name="property_object_category_id" value="<?php echo $category->term_id; ?>" >
-        <?php endif; ?>    
+         <div class="form-group"> 
+            <label for="event_add_property_object_category_id"><?php _e('Property object relationship','tainacan'); ?></label>
+            <div id="property_category_dynatree" style="height: 300px;overflow-y: scroll;" >
+                                    </div>
+             <input required="required" type="hidden"  id="property_object_category_id"  name="property_object_category_id" value="<?php echo $category->term_id; ?>" >
     </div>
     <!--div class="form-group">
         <label for="event_edit_property_object_required"><?php _e('Property object facet','tainacan'); ?></label>

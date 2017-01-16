@@ -634,7 +634,7 @@
             $('#edit_tag').show();
             $('#event_tag_field').val('');
             elem = jQuery.parseJSON(result);
-            if (elem.term_id) {
+            if (elem.term_id.length> 0) {
                 add_tag_item(object_id, elem.term_id);
             } else {
                 $('#modalImportMain').modal('hide');//mostro o modal de carregamento
@@ -655,7 +655,7 @@
                 socialdb_event_create_date: '<?php echo mktime(); ?>',
                 socialdb_event_user_id: $('#current_user_id').val(),
                 socialdb_event_classification_object_id: object_id,
-                socialdb_event_classification_term_id: value_id,
+                socialdb_event_classification_term_id: value_id.join(','),
                 socialdb_event_classification_type: 'tag',
                 socialdb_event_collection_id: $('#collection_id').val()}
         }).done(function (result) {
