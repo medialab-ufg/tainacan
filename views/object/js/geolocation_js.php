@@ -66,9 +66,12 @@
     
   var sorted_lats = lats.sort(function(a,b) { return a - b; } );
   var sorted_longs = longs.sort(function(a,b) { return a - b; } );
-  var half_length = parseInt( marker_item.length / 2 );
+  var total_map_markers = marker_item.length;
+  var half_length = parseInt( total_map_markers / 2 );
 
-  if ( half_length > 18 ) {
+  if( 0 < total_map_markers && total_map_markers < 8 ) {
+      half_length = 8;
+  } else if ( half_length > 18 ) {
       half_length = 4;
   }
 
@@ -83,6 +86,17 @@
   cl(ctr); */
 
   function initMap() {
+
+
+      if( total_map_markers > 0 ) {
+
+      } else {
+          if(tot < 1) {
+              $('.geolocation-view-container #map').hide();
+              $('.geolocation-view-container .not-configured').show();
+          }
+      }
+
       try {
           var map = new google.maps.Map(document.getElementById('map'), {
               zoom: half_length,
@@ -94,7 +108,7 @@
           var infowindow = new google.maps.InfoWindow();
           var marker, i;
 
-          for (i = 0; i < marker_item.length; i++) {
+          for (i = 0; i < total_map_markers; i++) {
               if(marker_item[i]) {
                   marker = new google.maps.Marker({
                   position: new google.maps.LatLng(marker_item[i][1], marker_item[i][2]),
@@ -115,7 +129,6 @@
     }
     
     if ( use_approx_mode && use_approx_mode !== "use_approx_mode" ) {
-        cl(use_approx_mode);
         initMap();
     }
 </script>   
