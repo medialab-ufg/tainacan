@@ -1540,6 +1540,7 @@ if (!function_exists("theme_styles")) {
                 'slick' => '/libraries/css/slick/slick.css',
                 'slick-theme' => '/libraries/css/slick/slick-theme.css',
                 'socialdbSweetAlert' => '/libraries/css/SweetAlert/sweet-alert.css',
+                'socialdbcss' => '/libraries/css/socialdb.css',
                 'tainacan' => '/libraries/css/tainacan.css'
             ];
             foreach ($home_css as $css_file => $css_path) {
