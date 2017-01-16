@@ -93,7 +93,7 @@
       } else {
           if(tot < 1) {
               $('.geolocation-view-container #map').hide();
-              $('.geolocation-view-container .not-configured').show();
+              $('.geolocation-view-container .error-map').show();
           }
       }
 
