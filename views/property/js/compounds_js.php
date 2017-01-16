@@ -241,6 +241,9 @@
             }
             //seleciono as propriedades
             var properties = elem.metas.socialdb_property_compounds_properties_id.split(',');
+             $("#dynatree_properties_filter").dynatree("getRoot").visit(function(node){
+                node.select(false);
+            });
             $("#dynatree_properties_filter").dynatree("getRoot").visit(function(node){
                 if(properties.length>0&&properties.indexOf(node.data.key)>=0){
                      node.select(true);
