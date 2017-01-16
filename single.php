@@ -902,7 +902,7 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
                     </button>
 
                     <button type="button" class="btn btn-primary"
-                        onclick="import_mapas_culturais()"
+                        onclick="import_mapas_culturais($('#url_mapa_cultural').val().trim())"
                         id="submit_mapa_cultural_url"
                         class="btn btn-primary tainacan-blue-btn-bg pull-right">
                         <?php _e('Import','tainacan'); ?>

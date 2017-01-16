@@ -1429,7 +1429,7 @@ function validate_mapa_cultural(url_base)
                 });
             }
         );*/
-        var limite = 10;
+        var limite = 1;
         $.getJSON(
             //Agentes
             url_base + "/api/agent/find",
@@ -1485,41 +1485,26 @@ function validate_mapa_cultural(url_base)
                                         $('#projects').text(projects_count);
                                         $('#spaces').text(spaces_count);
                                         $('#events').text(events_count);
+                                        //Nome do banco
+                                        const db_name = url_base, data_warehouse_name = "JSONs", db_version = 1;
+                                        //Criar banco com nome de dbName
+                                        var request_open = indexedDB.open(db_name, db_version);
 
-                                        /*{
-                                            //Nome do banco
-                                            const db_name = "Tainacan", data_warehouse_name = "JSONs";
-                                            //Criar banco com nome de dbName
-                                            var request = indexedDB.open(db_name, 1);
-
-                                            request.onerror = function(event) {
-                                                // Tratar erros.
-                                            };
-
-                                            request.onupgradeneeded = function(event) {
-                                                var db = event.target.result;
-
-                                                // Cria um objectStore para conter a informação sobre nossos clientes. Nós vamos
-                                                // usar "ssn" como key path porque sabemos que é único;
-                                                var objectStore = db.createObjectStore(data_warehouse_name, { keyPath: "name" });
-
-                                                // Usando transação oncomplete para afirmar que a criação do objectStore
-                                                // é terminada antes de adicionar algum dado nele.
-                                                objectStore.transaction.oncomplete = function(event) {
-                                                    // Armazenando valores no novo objectStore.
-                                                    var jsonObjectStore = db.transaction(db_name, "readwrite").objectStore(data_warehouse_name);
-                                                    jsonObjectStore.add()
-                                                }
-                                            };
-                                        }*/
+                                        request_open.onerror = function(event) {
+                                            console.log("Ocorreu um erro!");
+                                        };
                                         
 
+                                        request_open.onupgradeneeded = function(event) {
+                                            var db = event.target.result,
+                                                store = db.createObjectStore(data_warehouse_name, {keypath: "name"});
 
-                                        window.sessionStorage.setItem('agents', JSON.stringify(agents));
-                                        window.sessionStorage.setItem('projects', JSON.stringify(projects));
-                                        window.sessionStorage.setItem('spaces', JSON.stringify(spaces));
-                                        window.sessionStorage.setItem('events', JSON.stringify(events));
-
+                                            store.put(JSON.stringify(agents), "agents");
+                                            store.put(JSON.stringify(projects), "projects");
+                                            store.put(JSON.stringify(spaces), "spaces");
+                                            store.put(JSON.stringify(events), "events");
+                                        };
+                                        
                                         window.sessionStorage.setItem('count', agents_count+spaces_count+projects_count+events_count);
                                     }
                                 );
@@ -1537,8 +1522,10 @@ function validate_mapa_cultural(url_base)
     }
 }
 
-function import_mapas_culturais()
+function import_mapas_culturais(url_base)
 {
+    url_base = url_base.split('/api')[0];
+
     $('#modalImportConfirm').modal('hide');
     $('#modalImportLoading').modal('show');
     $('#modalImportLoading h3').text('Cadastrando...');
@@ -1548,13 +1535,40 @@ function import_mapas_culturais()
     var count = window.sessionStorage.getItem('count');
     var projects, events, agents, spaces;
 
-    projects = JSON.parse(window.sessionStorage.getItem('projects'));
-    agents = JSON.parse(window.sessionStorage.getItem('agents'));
-    events = JSON.parse(window.sessionStorage.getItem('events'));
-    spaces = JSON.parse(window.sessionStorage.getItem('spaces'));
+    const db_name = url_base, data_warehouse_name = "JSONs", db_version = 1;
 
-    do_ajax(url_send, projects, events, agents, spaces, count);
+    //Criar banco com nome de dbName
+    var request_open = indexedDB.open(db_name, db_version);
 
+    request_open.onsuccess = function (event) {
+        var db = event.target.result,
+            trans = db.transaction(data_warehouse_name, "readonly"),
+            store = trans.objectStore(data_warehouse_name),
+            request_agents = store.get("agents");
+
+        //Agents
+        request_agents.onsuccess = function () {
+            agents = JSON.parse(request_agents.result);
+            //Spaces
+            var request_spaces = store.get("spaces");
+
+            request_spaces.onsuccess = function () {
+                spaces = JSON.parse(request_spaces.result);
+                //Events
+                var request_events = store.get("events");
+                request_events.onsuccess = function () {
+                    events = JSON.parse(request_events.result);
+                    var request_projects = store.get("projects");
+
+                    request_projects.onsuccess = function () {
+                        projects = JSON.parse(request_projects.result);
+
+                        do_ajax(url_send, projects, events, agents, spaces, count);
+                    }
+                }
+            }
+        }
+    }
 }
 
 function do_ajax(url_send, projects, events, agents, spaces, count_elem)
