@@ -63,32 +63,44 @@ function createRepoStatPage() {
 }
 
 function setup_statisticsLog() {
-    createRepoStatPage();
-
     global $wpdb;
+    createRepoStatPage();
     $charset_collate = '';
     if (!empty($wpdb->charset))
         $charset_collate = "DEFAULT CHARACTER SET $wpdb->charset";
     if (!empty($wpdb->collate))
         $charset_collate .= " COLLATE $wpdb->collate";
 
-    $_log_table_name = Log::_table();
+    if( is_multisite() ) {
+        $_sites_ids = $wpdb->get_col("SELECT blog_id FROM $wpdb->blogs");
+        foreach( $_sites_ids as $siteID ) {
+            switch_to_blog($siteID);
+            $_log_table_name = Log::_table();
+            $stats_table_sql = prepareRepoStatSQL($_log_table_name, $charset_collate);
+            $wpdb->query($stats_table_sql);
+            restore_current_blog();
+        }
+    } else {
+        $_log_table_name = Log::_table();
+        $stats_table_sql = prepareRepoStatSQL($_log_table_name, $charset_collate);
+        $wpdb->query($stats_table_sql);
+    }
+}
 
-    $stats_table_sql = "
-    CREATE TABLE IF NOT EXISTS {$_log_table_name} (
-    id INT UNSIGNED NOT NULL auto_increment,
-    collection_id BIGINT(20) UNSIGNED NOT NULL,
-    user_id BIGINT(20) UNSIGNED NOT NULL,
-    item_id BIGINT(20) UNSIGNED NOT NULL,
-    resource_id BIGINT(20) UNSIGNED NOT NULL,
-    ip VARCHAR(39) DEFAULT NULL,
-    event_type VARCHAR(20) NOT NULL,
-    event VARCHAR(50) NOT NULL,
-    event_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id)
-    ) $charset_collate";
+function prepareRepoStatSQL($_TABLE_NAME_, $_CHARSET_COLLATE_) {
+    $_SQL_string = "CREATE TABLE IF NOT EXISTS {$_TABLE_NAME_} (
+        id INT UNSIGNED NOT NULL auto_increment,
+        collection_id BIGINT(20) UNSIGNED NOT NULL,
+        user_id BIGINT(20) UNSIGNED NOT NULL,
+        item_id BIGINT(20) UNSIGNED NOT NULL,
+        resource_id BIGINT(20) UNSIGNED NOT NULL,
+        ip VARCHAR(39) DEFAULT NULL,
+        event_type VARCHAR(20) NOT NULL,
+        event VARCHAR(50) NOT NULL,
+        event_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (id) ) $_CHARSET_COLLATE_";
 
-    $wpdb->query($stats_table_sql);
+    return $_SQL_string;
 }
 
 /*
@@ -1528,6 +1540,7 @@ if (!function_exists("theme_styles")) {
                 'slick' => '/libraries/css/slick/slick.css',
                 'slick-theme' => '/libraries/css/slick/slick-theme.css',
                 'socialdbSweetAlert' => '/libraries/css/SweetAlert/sweet-alert.css',
+                'socialdbcss' => '/libraries/css/socialdb.css',
                 'tainacan' => '/libraries/css/tainacan.css'
             ];
             foreach ($home_css as $css_file => $css_path) {
