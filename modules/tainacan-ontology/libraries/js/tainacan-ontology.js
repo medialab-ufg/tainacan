@@ -1485,6 +1485,8 @@ function validate_mapa_cultural(url_base)
                                         $('#projects').text(projects_count);
                                         $('#spaces').text(spaces_count);
                                         $('#events').text(events_count);
+
+
                                         //Nome do banco
                                         const db_name = url_base, data_warehouse_name = "JSONs", db_version = 1;
                                         //Criar banco com nome de dbName
@@ -1504,7 +1506,7 @@ function validate_mapa_cultural(url_base)
                                             store.put(JSON.stringify(spaces), "spaces");
                                             store.put(JSON.stringify(events), "events");
                                         };
-                                        
+
                                         window.sessionStorage.setItem('count', agents_count+spaces_count+projects_count+events_count);
                                     }
                                 );

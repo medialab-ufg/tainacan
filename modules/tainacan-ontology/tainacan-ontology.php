@@ -3401,6 +3401,7 @@ function create_property(&$created_data_type_properties, &$datatype_name, &$crea
 function add_individual(&$data, &$collection_id, &$properties_list)
 {
     error_reporting(0);
+    $collection_import_model = new CollectionImportModel();
     $user_id = get_current_user_id();
     $post = array(
         'post_title' => ($data['object_name']) ? $data['object_name'] : time(),
@@ -3415,6 +3416,8 @@ function add_individual(&$data, &$collection_id, &$properties_list)
     $category_root_id = get_post_meta($collection_id, 'socialdb_collection_object_type', true);
     wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type');
     wp_set_object_terms($data['ID'], array((int) $data['class_id']), 'socialdb_category_type',true);
+    $collection_import_model->set_common_field_values($data['ID'], 'title',$data['object_name']);
+    $collection_import_model->set_common_field_values($data['ID'], 'description', $data['object_description']);
 
     //Propriedades relacionadas a aquele individuo
     $properties = get_term_meta($data['class_id'],'socialdb_category_property_id');
@@ -3440,8 +3443,10 @@ function add_individual(&$data, &$collection_id, &$properties_list)
                 }
 
                 if($value != 'null')
+                {
                     add_post_meta( $data['ID'],'socialdb_property_'.$property, $value);
-
+                    $collection_import_model->set_common_field_values( $data['ID'], "socialdb_property_$property",$value);
+                }
             }
         }
     }
