@@ -8,7 +8,8 @@
   var marker_item = [];
   var tot = 0;
   var loaded = 0;
-  
+
+  var lat_long_count = 0;
   $(objs).each(function(idx, el) {
       var current_id = $(el).val();
       var current_content   = "<div class='col-md-12'>"+ $.trim( $("#object_" + current_id ).html() )+ "</div>";      
@@ -49,9 +50,16 @@
         var current_longitude = $("#object_" + current_id + " .longitude").val();
       
         if(current_latitude && current_longitude) {
+            /*
             marker_item[idx] = [ current_content, current_latitude, current_longitude ];
             lats[idx] = parseFloat(current_latitude);
             longs[idx] = parseFloat(current_longitude);
+            */
+            marker_item[lat_long_count] = [ current_content, current_latitude, current_longitude ];
+            lats[lat_long_count] = parseFloat(current_latitude);
+            longs[lat_long_count] = parseFloat(current_longitude);
+
+            lat_long_count++;
         }        
     }      
   });
@@ -60,18 +68,30 @@
     var sorted_longs = longs.sort(function(a,b) { return a - b; } );
     var half_length = parseInt( marker_item.length / 2 );
 
-    function initMap() {     
-        try{
-            var map = new google.maps.Map(document.getElementById('map'), {
-              zoom: half_length, center: new google.maps.LatLng( sorted_lats[half_length] ,sorted_longs[half_length]),
+  cl('Vamos usar| ' + half_length + ' | de zoom!');
+  cl('Temos um total de ' + marker_item.length +  ' items no mapa!');
+  var ctr = new google.maps.LatLng( sorted_lats[half_length] ,sorted_longs[half_length]);
+
+  /*
+  cl('Objeto puro para renderizar o mapa:');
+  cl(marker_item);
+  cl('Centro: ');
+  cl(ctr); */
+
+  function initMap() {
+      try {
+          var map = new google.maps.Map(document.getElementById('map'), {
+              zoom: half_length,
+              // center: new google.maps.LatLng( sorted_lats[half_length] ,sorted_longs[half_length]),
+              center: ctr,
               mapTypeId: google.maps.MapTypeId.ROADMAP
-            });
+          });
 
-            var infowindow = new google.maps.InfoWindow();
-            var marker, i;
+          var infowindow = new google.maps.InfoWindow();
+          var marker, i;
 
-            for (i = 0; i < marker_item.length; i++) {
-              if(marker_item[i]) {
+          for (i = 0; i < marker_item.length; i++) {if(marker_item[i]) {
+              cl("Data from position: " + i);
                 marker = new google.maps.Marker({
                   position: new google.maps.LatLng(marker_item[i][1], marker_item[i][2]),
                   map: map
