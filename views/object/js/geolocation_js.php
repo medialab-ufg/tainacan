@@ -84,13 +84,6 @@
       return total_sum / size;
   }
 
-  cl('Using zoom ' + half_length + ' with ' + marker_item.length + ' total items');
-  /*
-  var medium_coords = {
-      lat: Math.round( (sorted_lats.length - 1) /2 ),
-      long: Math.round( (sorted_longs.length - 1) /2 )
-  }; */
-
   var medium_coords = {
       lat: getAverageCoord(sorted_lats, sorted_lats.length),
       long: getAverageCoord(sorted_longs, sorted_longs.length)
@@ -131,6 +124,8 @@
               // Better auto zoom and auto center
               map.fitBounds(bounds);
               map.panToBounds(bounds);
+
+              $("#center_pagination").hide();
 
           } catch(err) {
               console.log(err);
