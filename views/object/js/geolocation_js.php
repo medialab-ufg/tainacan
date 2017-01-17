@@ -75,15 +75,29 @@
       half_length = 4;
   }
 
-  cl('Using | ' + half_length + ' | of zoom!');
-  cl('Total of ' + marker_item.length +  ' items drawn on mapa!');
-
+  cl('Using zoom ' + half_length + ' with ' + marker_item.length + ' total items');
+  /*
   var medium_coords = {
       lat: Math.round( (sorted_lats.length - 1) /2 ),
       long: Math.round( (sorted_longs.length - 1) /2 )
+  }; */
+
+  var medium_coords = {
+      lat: getAverageCoord(sorted_lats, sorted_lats.length),
+      long: getAverageCoord(sorted_longs, sorted_longs.length)
   };
 
-  var ctr = new google.maps.LatLng( sorted_lats[medium_coords.lat], sorted_longs[medium_coords.long]);
+  function getAverageCoord(coord_arr, size) {
+      var total_sum = 0.0;
+      for(var i = 0; i < size; i++) {
+          total_sum += parseFloat(coord_arr[i]);
+      }
+
+      return total_sum / size;
+  }
+
+  //var ctr = new google.maps.LatLng( sorted_lats[medium_coords.lat], sorted_longs[medium_coords.long]);
+  var ctr = new google.maps.LatLng( medium_coords.lat, medium_coords.long);
 
   function initMap() {
       if( total_map_markers > 0 ) {
