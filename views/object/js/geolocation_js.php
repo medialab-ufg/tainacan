@@ -70,26 +70,48 @@
   var half_length = parseInt( total_map_markers / 2 );
 
   if( 0 < total_map_markers && total_map_markers < 8 ) {
-      half_length = 8;
+      half_length = total_map_markers+1;
   } else if ( half_length > 18 ) {
       half_length = 4;
   }
 
   cl('Using | ' + half_length + ' | of zoom!');
-  cl('Total' + marker_item.length +  ' items drawn on mapa!');
-  var ctr = new google.maps.LatLng( sorted_lats[half_length] ,sorted_longs[half_length]);
+  cl('Total of ' + marker_item.length +  ' items drawn on mapa!');
 
-  /*
-  cl('Objeto puro para renderizar o mapa:');
-  cl(marker_item);
-  cl('Centro: ');
-  cl(ctr); */
+  var medium_coords = {
+      lat: Math.round( (sorted_lats.length - 1) /2 ),
+      long: Math.round( (sorted_longs.length - 1) /2 )
+  };
+
+  var ctr = new google.maps.LatLng( sorted_lats[medium_coords.lat], sorted_longs[medium_coords.long]);
 
   function initMap() {
-
-
       if( total_map_markers > 0 ) {
+          try {
+              var map = new google.maps.Map(document.getElementById('map'), {
+                  zoom: half_length, center: ctr, mapTypeId: google.maps.MapTypeId.ROADMAP
+              });
 
+              var infowindow = new google.maps.InfoWindow();
+              var marker, i;
+              for (i = 0; i < total_map_markers; i++) {
+                  if(marker_item[i]) {
+                      marker = new google.maps.Marker({
+                          position: new google.maps.LatLng(marker_item[i][1], marker_item[i][2]),
+                          map: map
+                      });
+
+                      google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                          return function () {
+                              infowindow.setContent(marker_item[i][0]);
+                              infowindow.open(map, marker);
+                          };
+                      })(marker, i));
+                  }
+              } // for
+          } catch(err) {
+              console.log(err);
+          }
       } else {
           if(tot < 1) {
               $('.geolocation-view-container #map').hide();
@@ -97,35 +119,6 @@
           }
       }
 
-      try {
-          var map = new google.maps.Map(document.getElementById('map'), {
-              zoom: half_length,
-              // center: new google.maps.LatLng( sorted_lats[half_length] ,sorted_longs[half_length]),
-              center: ctr,
-              mapTypeId: google.maps.MapTypeId.ROADMAP
-          });
-
-          var infowindow = new google.maps.InfoWindow();
-          var marker, i;
-
-          for (i = 0; i < total_map_markers; i++) {
-              if(marker_item[i]) {
-                  marker = new google.maps.Marker({
-                  position: new google.maps.LatLng(marker_item[i][1], marker_item[i][2]),
-                  map: map
-                });
-
-                google.maps.event.addListener(marker, 'click', (function (marker, i) {
-                  return function () {
-                    infowindow.setContent(marker_item[i][0]);
-                    infowindow.open(map, marker);
-                  };
-                })(marker, i));   
-              }
-            } // for
-        }catch(err){
-            console.log(err);
-        }
     }
     
     if ( use_approx_mode && use_approx_mode !== "use_approx_mode" ) {
