@@ -1300,102 +1300,74 @@ function validate_mapa_cultural(url_base)
         url_base = url_base.split('/api')[0];
 
         $('#modalImportLoading').modal('show');
-        $('#modalImportLoading h3').text('Recuperando dados, essa operação pode demorar...');
+        $('#modalImportLoading h3').text('Validando...');
         $('#divprogress').css('padding', 20);
         $('#progressbarmapas').css('padding', 3);
         $('#progressbarmapas').val(0);
 
-        var limite = 10000;
-        try {
+        var agents, projects, spaces, events;
+        $.when(
             $.getJSON(
                 //Agentes
                 url_base + "/api/agent/find",
                 {
-                    '@select': 'name, shortDescription, isVerified, nomeCompleto, dataDeNascimento, emailPublico, telefonePublico, endereco, site, facebook'
-                },
-                function (agents)
-                {
-                    $('#progressbarmapas').val(25);
-                    $.getJSON(
-                        //Espaços
-                        url_base + "/api/space/find",
-                        {
-                            '@select': 'name, location, public, shortDescription, longDescription, endereco, site, facebook, telefonePublico, telefone1, telefone2'
-                        },
-                        function (spaces)
-                        {
-                            $('#progressbarmapas').val(50);
-                            //Eventos
-                            $.getJSON(
-                                url_base + "/api/event/find",
-                                {
-                                    '@select': 'name, shortDescription, longDescription, rules, subtitle, preco, site, facebook'
-                                },
-                                function (events)
-                                {
-                                    $('#progressbarmapas').val(75);
-                                    //Projetos
-                                    $.getJSON(
-                                        url_base + "/api/project/find",
-                                        {
-                                            '@select': 'name, shortDescription, longDescription, isVerified, site, facebook'
-                                        },
-                                        function (projects)
-                                        {
-                                            $('#modalImportLoading h3').text('Recuperação concluída!');
-                                            $('#progressbarmapas').val(100);
-
-                                            var agents_count, projects_count, spaces_count, events_count, url;
-
-                                            agents_count = parseInt(Object.keys(agents).length); parseInt(projects_count = Object.keys(projects).length);
-                                            spaces_count = parseInt(Object.keys(spaces).length); parseInt(events_count = Object.keys(events).length);
-
-
-                                            $('#agents').text(agents_count);
-                                            $('#projects').text(projects_count);
-                                            $('#spaces').text(spaces_count);
-                                            $('#events').text(events_count);
-
-
-                                            //Nome do banco
-                                            const db_name = url_base, data_warehouse_name = "JSONs", db_version = 1;
-                                            //Criar banco com nome de dbName
-                                            var request_open = indexedDB.open(db_name, db_version);
-
-                                            request_open.onerror = function(event) {
-                                                showAlertGeneral('Erro', 'Erro ao salvar dados', 'error');
-                                            };
-
-                                            request_open.onsuccess = function()
-                                            {
-                                                $('#modalImportLoading').modal('hide');
-                                                $('#modalImportConfirm').modal('show');
-                                            }
-
-
-                                            request_open.onupgradeneeded = function(event) {
-                                                var db = event.target.result,
-                                                    store = db.createObjectStore(data_warehouse_name, {keypath: "name"});
-
-                                                store.put(JSON.stringify(agents), "agents");
-                                                store.put(JSON.stringify(projects), "projects");
-                                                store.put(JSON.stringify(spaces), "spaces");
-                                                store.put(JSON.stringify(events), "events");
-                                            };
-
-                                            window.sessionStorage.setItem('count', agents_count+spaces_count+projects_count+events_count);
-                                        }
-                                    );
-                                }
-                            );
-                        }
-                    );
+                    '@select': 'id',
+                    '@count': 1
+                },function (returned_agents) {
+                    agents = returned_agents;
+                    $('#progressbarmapas').val($('#progressbarmapas').val() + 25);
                 }
-            );
-        }
-        catch (e) {
-            showAlertGeneral('Erro', 'Impossível recuperar dados', 'error');
-        }
+            ),
+            $.getJSON(
+                //Espaços
+                url_base + "/api/space/find",
+                {
+                    '@select': 'id',
+                    '@count': 1
+                },function (returned_spaces) {
+                    spaces = returned_spaces;
+                    $('#progressbarmapas').val($('#progressbarmapas').val() + 25);
+                }
+            ),
+            $.getJSON(
+                //Projects
+                url_base + "/api/project/find",
+                {
+                    '@select': 'id',
+                    '@count': 1
+                },function (returned_projects) {
+                    projects = returned_projects;
+                    $('#progressbarmapas').val($('#progressbarmapas').val() + 25);
+                }
+            ),
+            $.getJSON(
+                //Events
+                url_base + "/api/event/find",
+                {
+                    '@select': 'id',
+                    '@count': 1
+                },function (returned_events) {
+                    events = returned_events;
+                    $('#progressbarmapas').val($('#progressbarmapas').val() + 25);
+                }
+            )
+        ).then(function () {
+            $('#modalImportLoading h3').text('Validação concluída!');
+            $('#modalImportLoading').modal('hide');
+
+            $('#modalImportConfirm').modal('show');
+
+            $('#agents').text(agents);
+            $('#projects').text(projects);
+            $('#spaces').text(spaces);
+            $('#events').text(events);
+
+            window.sessionStorage.setItem('count_all', agents+spaces+projects+events);
+            window.sessionStorage.setItem('count_agents', agents);
+            window.sessionStorage.setItem('count_spaces', spaces);
+            window.sessionStorage.setItem('count_projects', projects);
+            window.sessionStorage.setItem('count_events', events);
+        });
     }
     else
     {
@@ -1409,50 +1381,73 @@ function import_mapas_culturais(url_base)
 
     $('#modalImportConfirm').modal('hide');
     $('#modalImportLoading').modal('show');
-    $('#modalImportLoading h3').text('Cadastrando...');
+    $('#modalImportLoading h3').text('Recuperando dados, isso pode demorar...');
     $('#progressbarmapas').val(0);
     var url_send = $('#src').val() + '/controllers/collection/collection_controller.php?operation=mapa_cultural_import&collection_id='+$('#collection_id').val();
 
-    var count = window.sessionStorage.getItem('count');
+    var count = window.sessionStorage.getItem('count_all');
     var projects, events, agents, spaces;
 
-    const db_name = url_base, data_warehouse_name = "JSONs", db_version = 1;
+    var limite = 7800;
 
-    //Criar banco com nome de dbName
-    var request_open = indexedDB.open(db_name, db_version);
-
-    request_open.onsuccess = function (event) {
-        var db = event.target.result,
-            trans = db.transaction(data_warehouse_name, "readonly"),
-            store = trans.objectStore(data_warehouse_name),
-            request_agents = store.get("agents");
-
-        //Agents
-        request_agents.onsuccess = function () {
-            agents = JSON.parse(request_agents.result);
-            //Spaces
-            var request_spaces = store.get("spaces");
-
-            request_spaces.onsuccess = function () {
-                spaces = JSON.parse(request_spaces.result);
-                //Events
-                var request_events = store.get("events");
-                request_events.onsuccess = function () {
-                    events = JSON.parse(request_events.result);
-                    var request_projects = store.get("projects");
-
-                    request_projects.onsuccess = function () {
-                        projects = JSON.parse(request_projects.result);
-
-                        do_ajax(url_send, projects, events, agents, spaces, count, db_name);
-                    }
-                }
+    $.when(
+        $.getJSON(
+            //Agentes
+            url_base + "/api/agent/find",
+            {
+                '@select': 'name, shortDescription, isVerified, nomeCompleto, dataDeNascimento, emailPublico, telefonePublico, endereco, site, facebook',
+                '@limit': limite
+            },
+            function (returned_agents)
+            {
+                agents = returned_agents;
+                $('#progressbarmapas').val($('#progressbarmapas').val() + 25);
             }
-        }
-    }
+        ),
+        $.getJSON(
+            //Espaços
+            url_base + "/api/space/find",
+            {
+                '@select': 'name, location, public, shortDescription, longDescription, endereco, site, facebook, telefonePublico, telefone1, telefone2'
+            },
+            function (returned_spaces)
+            {
+                spaces = returned_spaces;
+                $('#progressbarmapas').val($('#progressbarmapas').val() + 25);
+            }
+        ),
+        $.getJSON(
+            //Projetos
+            url_base + "/api/project/find",
+            {
+                '@select': 'name, shortDescription, longDescription, isVerified, site, facebook'
+            },
+            function (returned_projects)
+            {
+                projects = returned_projects;
+                $('#progressbarmapas').val($('#progressbarmapas').val() + 25);
+            }
+        ),
+        $.getJSON(
+            url_base + "/api/event/find",
+            {
+                '@select': 'name, shortDescription, longDescription, rules, subtitle, preco, site, facebook'
+            },
+            function (returned_events)
+            {
+                events = returned_events;
+                $('#progressbarmapas').val($('#progressbarmapas').val() + 25);
+            }
+        )
+    ).then(function () {
+        $('#modalImportLoading h3').text('Recuperação concluída!');
+        $('#modalImportLoading h3').text('Cadastrando dados...');
+        $('#progressbarmapas').val(0);
+        do_ajax(url_send, projects, events, agents, spaces, count);
+    });
 }
 
-function do_ajax(url_send, projects, events, agents, spaces, count_elem, db_name)
+function do_ajax(url_send, projects, events, agents, spaces, count_elem)
 {
     var agents_spliced, spaces_spliced, projects_spliced, events_spliced, qtd = 400;
 
@@ -1488,7 +1483,6 @@ function do_ajax(url_send, projects, events, agents, spaces, count_elem, db_name
             else
             {
                 $('#progressbarmapas').val(100);
-                indexedDB.deleteDatabase(db_name);
                 window.location = elem.url;
             }
         }
