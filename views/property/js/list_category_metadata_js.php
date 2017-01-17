@@ -697,6 +697,10 @@
 
             if (elem.no_properties !== true) {
                 $.each(elem.property_data, function (idx, property) {
+                    if(property.name.trim()===''){
+                        return false;
+                    }
+                    //continua execucao
                     var current_id = property.id;
                     var current_search_widget = property.search_widget;
                     //buscando a aba da propriedade
@@ -975,6 +979,10 @@
                 $('#no_properties_object').hide();
                 $('#table_property_object').html('');
                 $.each(elem.property_object, function (idx, property) {
+                    if(property.name.trim()===''){
+                        return false;
+                    }
+                    //continua execucao
                     var current_id = property.id;
                     //buscando a aba da propriedade
                     var tab_property_id = get_tab_property_id(current_id)
@@ -1207,6 +1215,9 @@
             }
             if (elem && elem.no_properties !== true) {
                 $.each(elem.property_terms, function (idx, property) {
+                    if(property.name.trim()===''){
+                        return false;
+                    }
                     //visibilidade do metadado
                     var isCompounded = is_compounded(property.metas.socialdb_property_is_compounds);
                     if(isCompounded||(property.metas.socialdb_property_visibility&&property.metas.socialdb_property_visibility==='hide')){

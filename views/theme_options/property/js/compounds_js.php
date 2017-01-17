@@ -154,6 +154,10 @@
             }
             if (elem.no_properties !== true) {
                 $.each(elem.property_compounds, function (idx, property) {
+                    if(property.name.trim()===''){
+                        return false;
+                    }
+                    //continua execucao
                     var current_id = property.id;
                     var current_search_widget = property.search_widget;
                     //buscando a aba da propriedade

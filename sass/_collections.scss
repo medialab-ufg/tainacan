@@ -634,7 +634,7 @@ button.collection-trash, button#hideTrash {
     .show-item-metadata {
         display: none;
     }
-    .not-configured {
+    .not-configured, .error-map {
         border: 3px solid $item-border;
         background: white;
         text-align: center;

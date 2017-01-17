@@ -2342,7 +2342,7 @@ function socialdb_insert_object_socialnetwork_flickr($post_title, $post_status =
 function socialdb_insert_object_csv($post_title) {
     $post_author = 1;
     $post = array(
-        'post_author' => $post_author,
+        'post_author' => get_current_user_id(),
         'post_title' => $post_title[0],
         'post_content' => "",
         'post_status' => 'publish',

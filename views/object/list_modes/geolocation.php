@@ -5,6 +5,11 @@
         <?php _e('This collection is not configured to use geolocation mode.', 'tainacan'); ?>    
       </h5>      
   </div>
+    <div class="error-map" style="display: none">
+        <h5>
+            <?php _e('Error loading map. Try again later!', 'tainacan'); ?>
+        </h5>
+    </div>
 </div>
 
 <div id="approximated"></div>

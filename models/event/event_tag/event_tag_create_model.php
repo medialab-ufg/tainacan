@@ -67,34 +67,38 @@ class EventTagCreate extends EventModel {
         $tag_name = get_post_meta($event_id,'socialdb_event_tag_suggested_name', true);
         $tag_description = get_post_meta($event_id, 'socialdb_event_tag_description',true) ;
         $collection_id = get_post_meta($event_id,'socialdb_event_collection_id',true);
-        $result = $tagModel->add($tag_name, $collection_id,$tag_description);
-        if (isset($result['term_id'])) {
-            $this->set_approval_metas($data['event_id'], $data['socialdb_event_observation'], $automatically_verified);
-            $this->update_event_state('confirmed', $data['event_id']);
+        $tags = explode(',', $tag_name);
+        foreach ($tags as $tag_name) {
+            $result = $tagModel->add($tag_name, $collection_id,$tag_description);
+            if (isset($result['term_id'])) {
+                $this->set_approval_metas($data['event_id'], $data['socialdb_event_observation'], $automatically_verified);
+                $this->update_event_state('confirmed', $data['event_id']);
 
-            $logData = ['collection_id' => $data['socialdb_event_collection_id'], 'resource_id' => $result['term_id'],
-                'user_id' => $data['socialdb_event_user_id'], 'event_type' => 'tags', 'event' => 'add' ];
-            Log::addLog($logData);
-            
-            $data['msg'] = __('The event was successful','tainacan');
-            $data['type'] = 'success';
-            $data['title'] = __('Success','tainacan');
-            $data['term_id'] = $result['term_id'];
-        }elseif(trim($tag_name)==''){
-            $this->update_event_state('invalid', $data['event_id']); // seto a o evento como invalido
-            $data['type'] = 'error';
-            $data['title'] = 'Erro';
-            $data['msg'] = __('Tag name invalid','tainacan');
-        }else {
-            $this->update_event_state('invalid', $data['event_id']); // seto a o evento como invalido
-            if(isset($result['msg'])){
-               $data['msg'] = $result['msg'];
-            }else{
-               $data['msg'] = __('Tag name invalid does not exist anymore','tainacan');
+                $logData = ['collection_id' => $data['socialdb_event_collection_id'], 'resource_id' => $result['term_id'],
+                    'user_id' => $data['socialdb_event_user_id'], 'event_type' => 'tags', 'event' => 'add' ];
+                Log::addLog($logData);
+
+                $data['msg'] = __('The event was successful','tainacan');
+                $data['type'] = 'success';
+                $data['title'] = __('Success','tainacan');
+                $data['term_id'][] = $result['term_id'];
+            }elseif(trim($tag_name)==''){
+                $this->update_event_state('invalid', $data['event_id']); // seto a o evento como invalido
+                $data['type'] = 'error';
+                $data['title'] = 'Erro';
+                $data['msg'] = __('Tag name invalid','tainacan');
+            }else {
+                $this->update_event_state('invalid', $data['event_id']); // seto a o evento como invalido
+                if(isset($result['msg'])){
+                   $data['msg'] = $result['msg'];
+                }else{
+                   $data['msg'] = __('Tag name invalid does not exist anymore','tainacan');
+                }
+                $data['type'] = 'error';
+                $data['title'] = 'Erro';
             }
-            $data['type'] = 'error';
-            $data['title'] = 'Erro';
-        }
+            
+        }    
        // $this->notificate_user_email($collection_id,  get_current_user_id(), $event_id);
         return $data;
     }

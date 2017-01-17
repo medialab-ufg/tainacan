@@ -38,13 +38,13 @@ if( !$collection_list_mode ) {
                 $curr_id = get_the_ID();
                       
                 include "list_modes/modals.php";
-                //include "list_modes/cards.php";
                 include "list_modes/cards_trash.php";
-                include "list_modes/list.php";
-                include "list_modes/gallery.php";
+                include "list_modes/list_trash.php";
+                include "list_modes/gallery_trash.php";
             endwhile;
 
-            include_once "list_modes/slideshow.php";
+            include_once "list_modes/slideshow_trash.php";
+            //include_once "list_modes/table_trash.php";
 
             ?>
         </div>

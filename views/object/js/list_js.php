@@ -55,7 +55,7 @@
             var c_id = $(this).val();
             var see_more = '<?php _e( "View Object","tainacan"); ?>';
             var item_order = parseInt( $("#object_" + c_id).attr('data-order') );
-            var actions = $("#object_" + c_id + " .item-funcs").html();
+            var actions = $("#object_" + c_id + " .item-funcs-table").html();
 
             var _table_html = "<tr>";
             if(meta_table_set) {

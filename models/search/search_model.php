@@ -414,6 +414,9 @@ public function add($data) {
     function save_new_priority($data) {
         if(isset($data['arrFacets'])) {
             foreach ($data['arrFacets'] as $facet) {
+                if($facet[0] == get_term_by('slug', 'socialdb_property_fixed_tags', 'socialdb_property_type')->term_id){
+                    $facet[0] = 'tag';
+                }
                 update_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $facet[0] . '_priority', $facet[1]);
             }
         }

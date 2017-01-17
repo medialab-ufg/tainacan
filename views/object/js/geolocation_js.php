@@ -8,7 +8,8 @@
   var marker_item = [];
   var tot = 0;
   var loaded = 0;
-  
+
+  var lat_long_count = 0;
   $(objs).each(function(idx, el) {
       var current_id = $(el).val();
       var current_content   = "<div class='col-md-12'>"+ $.trim( $("#object_" + current_id ).html() )+ "</div>";      
@@ -49,45 +50,75 @@
         var current_longitude = $("#object_" + current_id + " .longitude").val();
       
         if(current_latitude && current_longitude) {
+            /*
             marker_item[idx] = [ current_content, current_latitude, current_longitude ];
             lats[idx] = parseFloat(current_latitude);
             longs[idx] = parseFloat(current_longitude);
+            */
+            marker_item[lat_long_count] = [ current_content, current_latitude, current_longitude ];
+            lats[lat_long_count] = parseFloat(current_latitude);
+            longs[lat_long_count] = parseFloat(current_longitude);
+
+            lat_long_count++;
         }        
     }      
   });
     
-    var sorted_lats = lats.sort(function(a,b) { return a - b; } );
-    var sorted_longs = longs.sort(function(a,b) { return a - b; } );
-    var half_length = parseInt( marker_item.length / 2 );
+  var sorted_lats = lats.sort(function(a,b) { return a - b; } );
+  var sorted_longs = longs.sort(function(a,b) { return a - b; } );
+  var total_map_markers = marker_item.length;
+  var half_length = parseInt( total_map_markers / 2 );
 
-    function initMap() {     
-        try{
-            var map = new google.maps.Map(document.getElementById('map'), {
-              zoom: half_length, center: new google.maps.LatLng( sorted_lats[half_length] ,sorted_longs[half_length]),
-              mapTypeId: google.maps.MapTypeId.ROADMAP
-            });
+  if( 0 < total_map_markers && total_map_markers < 8 ) {
+      half_length = total_map_markers+1;
+  } else if ( half_length > 18 ) {
+      half_length = 4;
+  }
 
-            var infowindow = new google.maps.InfoWindow();
-            var marker, i;
+  cl('Using | ' + half_length + ' | of zoom!');
+  cl('Total of ' + marker_item.length +  ' items drawn on mapa!');
 
-            for (i = 0; i < marker_item.length; i++) {
-              if(marker_item[i]) {
-                marker = new google.maps.Marker({
-                  position: new google.maps.LatLng(marker_item[i][1], marker_item[i][2]),
-                  map: map
-                });
+  var medium_coords = {
+      lat: Math.round( (sorted_lats.length - 1) /2 ),
+      long: Math.round( (sorted_longs.length - 1) /2 )
+  };
 
-                google.maps.event.addListener(marker, 'click', (function (marker, i) {
-                  return function () {
-                    infowindow.setContent(marker_item[i][0]);
-                    infowindow.open(map, marker);
-                  };
-                })(marker, i));   
-              }
-            } // for
-        }catch(err){
-            console.log(err);
-        }
+  var ctr = new google.maps.LatLng( sorted_lats[medium_coords.lat], sorted_longs[medium_coords.long]);
+
+  function initMap() {
+      if( total_map_markers > 0 ) {
+          try {
+              var map = new google.maps.Map(document.getElementById('map'), {
+                  zoom: half_length, center: ctr, mapTypeId: google.maps.MapTypeId.ROADMAP
+              });
+
+              var infowindow = new google.maps.InfoWindow();
+              var marker, i;
+              for (i = 0; i < total_map_markers; i++) {
+                  if(marker_item[i]) {
+                      marker = new google.maps.Marker({
+                          position: new google.maps.LatLng(marker_item[i][1], marker_item[i][2]),
+                          map: map
+                      });
+
+                      google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                          return function () {
+                              infowindow.setContent(marker_item[i][0]);
+                              infowindow.open(map, marker);
+                          };
+                      })(marker, i));
+                  }
+              } // for
+          } catch(err) {
+              console.log(err);
+          }
+      } else {
+          if(tot < 1) {
+              $('.geolocation-view-container #map').hide();
+              $('.geolocation-view-container .error-map').show();
+          }
+      }
+
     }
     
     if ( use_approx_mode && use_approx_mode !== "use_approx_mode" ) {

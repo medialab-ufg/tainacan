@@ -2582,6 +2582,9 @@ class Model {
         $all_metas_values = get_post_meta($item_id, 'socialdb_object_commom_values');
         if (!$all_metas_values || (is_array($all_metas_values) && !in_array($item->name, $all_metas_values))) {
             $position = $this->sdb_add_post_meta($item_id, 'socialdb_object_commom_values', $item->name);
+            if(!is_array($indexes)){
+                $indexes = [];
+            }
             $indexes[$index][] = $position;
             update_post_meta($item_id, 'socialdb_object_commom_index', serialize($indexes));
         }
