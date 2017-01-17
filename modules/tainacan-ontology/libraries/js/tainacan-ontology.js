@@ -1295,8 +1295,7 @@ Hook.register(
 /******************************************************************************/
 function validate_mapa_cultural(url_base)
 {
-    if(url_base !== "")
-    {
+    if(url_base !== "") {
         //http://mapasculturais.local/api/space/find
         url_base = url_base.split('/api')[0];
 
@@ -1306,217 +1305,97 @@ function validate_mapa_cultural(url_base)
         $('#progressbarmapas').css('padding', 3);
         $('#progressbarmapas').val(0);
 
-        //Agentes
-        /*$.getJSON(
-            url_base + "/api/agent/find",
-            {
-                '@select': 'name, shortDescription, isVerified, nomeCompleto, dataDeNascimento, emailPublico, telefonePublico, endereco, site, facebook',
-                'emailPublico': 'like(*.com*)',
-                '@limit': 100
-            },
-            function (result)
-            {
-                $.ajax({
-                    url: url_send+"agent",
-                    type: 'POST',
-                    data: {result: result}
-                }).success(function (result) {
-                    elem = jQuery.parseJSON(result);
-                    if (elem.result) {
+        var limite = 10000;
+        try {
+            $.getJSON(
+                //Agentes
+                url_base + "/api/agent/find",
+                {
+                    '@select': 'name, shortDescription, isVerified, nomeCompleto, dataDeNascimento, emailPublico, telefonePublico, endereco, site, facebook'
+                },
+                function (agents)
+                {
+                    $('#progressbarmapas').val(25);
+                    $.getJSON(
                         //Espaços
-                        $.getJSON(
-                            url_base + "/api/space/find",
-                            {
-                                '@select': 'name, location, public, shortDescription, longDescription, endereco, site, facebook, telefonePublico, telefone1, telefone2',
-                                '@limit': 100
-                            },
-                            function (result)
-                            {
-                                $.ajax({
-                                    url: url_send+"space",
-                                    type: 'POST',
-                                    data: {result: result}
-                                }).success(function (result) {
-                                    elem = jQuery.parseJSON(result);
-                                    if (elem.result) {
-                                        //Eventos
-                                        $.getJSON(
-                                            url_base + "/api/event/find",
-                                            {
-                                                '@select': 'name, shortDescription, longDescription, rules, subtitle, preco, site, facebook',
-                                                '@limit': 100
-                                            },
-                                            function (result)
-                                            {
-                                                $.ajax({
-                                                    url: url_send+"event",
-                                                    type: 'POST',
-                                                    data: {result: result}
-                                                }).success(function (result) {
-                                                    elem = jQuery.parseJSON(result);
-                                                    if (elem.result) {
-                                                        //Projetos
-                                                        $.getJSON(
-                                                            url_base + "/api/project/find",
-                                                            {
-                                                                '@select': 'name, shortDescription, longDescription, isVerified, site, facebook',
-                                                                '@limit': 100
-                                                            },
-                                                            function (result)
-                                                            {
-                                                                $.ajax({
-                                                                    url: url_send+"project",
-                                                                    type: 'POST',
-                                                                    data: {result: result}
-                                                                }).success(function (result) {
-                                                                    elem = jQuery.parseJSON(result);
-                                                                    if (elem.result) {
-                                                                        //Todas as requisições foram realizadas com sucesso
-                                                                        window.location = elem.url;
-                                                                    } else {
-                                                                        $('#modalImportMain').modal('hide');
-                                                                        var message = elem.message;
-                                                                        if(!message)
-                                                                        {
-                                                                            message = 'Houve um erro na importação';
-                                                                        }
-                                                                        showAlertGeneral('Erro', message, 'error');
-                                                                    }
-                                                                }).error(function (error) {
-                                                                    showAlertGeneral('Erro', 'Houve um erro na importação', 'error');
-                                                                });
-                                                            }
-                                                        );
-                                                    } else {
-                                                        $('#modalImportMain').modal('hide');
-                                                        var message = elem.message;
-                                                        if(!message)
-                                                        {
-                                                            message = 'Houve um erro na importação';
-                                                        }
-                                                        showAlertGeneral('Erro', message, 'error');
-                                                    }
-                                                }).error(function (error) {
-                                                    showAlertGeneral('Erro', 'Houve um erro na importação', 'error');
-                                                });
-                                            }
-                                        );
-                                    } else {
-                                        $('#modalImportMain').modal('hide');
-                                        var message = elem.message;
-                                        if(!message)
-                                        {
-                                            message = 'Houve um erro na importação';
-                                        }
-                                        showAlertGeneral('Erro', message, 'error');
-                                    }
-                                }).error(function (error) {
-                                    showAlertGeneral('Erro', 'Houve um erro na importação', 'error');
-                                });
-                            }
-                        );
-                    } else {
-                        $('#modalImportMain').modal('hide');
-                        var message = elem.message;
-                        if(!message)
+                        url_base + "/api/space/find",
                         {
-                            message = 'Houve um erro na importação';
+                            '@select': 'name, location, public, shortDescription, longDescription, endereco, site, facebook, telefonePublico, telefone1, telefone2'
+                        },
+                        function (spaces)
+                        {
+                            $('#progressbarmapas').val(50);
+                            //Eventos
+                            $.getJSON(
+                                url_base + "/api/event/find",
+                                {
+                                    '@select': 'name, shortDescription, longDescription, rules, subtitle, preco, site, facebook'
+                                },
+                                function (events)
+                                {
+                                    $('#progressbarmapas').val(75);
+                                    //Projetos
+                                    $.getJSON(
+                                        url_base + "/api/project/find",
+                                        {
+                                            '@select': 'name, shortDescription, longDescription, isVerified, site, facebook'
+                                        },
+                                        function (projects)
+                                        {
+                                            $('#modalImportLoading h3').text('Recuperação concluída!');
+                                            $('#progressbarmapas').val(100);
+
+                                            var agents_count, projects_count, spaces_count, events_count, url;
+
+                                            agents_count = parseInt(Object.keys(agents).length); parseInt(projects_count = Object.keys(projects).length);
+                                            spaces_count = parseInt(Object.keys(spaces).length); parseInt(events_count = Object.keys(events).length);
+
+
+                                            $('#agents').text(agents_count);
+                                            $('#projects').text(projects_count);
+                                            $('#spaces').text(spaces_count);
+                                            $('#events').text(events_count);
+
+
+                                            //Nome do banco
+                                            const db_name = url_base, data_warehouse_name = "JSONs", db_version = 1;
+                                            //Criar banco com nome de dbName
+                                            var request_open = indexedDB.open(db_name, db_version);
+
+                                            request_open.onerror = function(event) {
+                                                showAlertGeneral('Erro', 'Erro ao salvar dados', 'error');
+                                            };
+
+                                            request_open.onsuccess = function()
+                                            {
+                                                $('#modalImportLoading').modal('hide');
+                                                $('#modalImportConfirm').modal('show');
+                                            }
+
+
+                                            request_open.onupgradeneeded = function(event) {
+                                                var db = event.target.result,
+                                                    store = db.createObjectStore(data_warehouse_name, {keypath: "name"});
+
+                                                store.put(JSON.stringify(agents), "agents");
+                                                store.put(JSON.stringify(projects), "projects");
+                                                store.put(JSON.stringify(spaces), "spaces");
+                                                store.put(JSON.stringify(events), "events");
+                                            };
+
+                                            window.sessionStorage.setItem('count', agents_count+spaces_count+projects_count+events_count);
+                                        }
+                                    );
+                                }
+                            );
                         }
-                        showAlertGeneral('Erro', message, 'error');
-                    }
-                }).error(function (error) {
-                    showAlertGeneral('Erro', 'Houve um erro na importação', 'error');
-                });
-            }
-        );*/
-        var limite = 1;
-        $.getJSON(
-            //Agentes
-            url_base + "/api/agent/find",
-            {
-                '@select': 'name, shortDescription, isVerified, nomeCompleto, dataDeNascimento, emailPublico, telefonePublico, endereco, site, facebook',
-                'emailPublico': 'like(*.com*)'
-            },
-            function (agents)
-            {
-                $('#progressbarmapas').val(30);
-                $.getJSON(
-                    //Espaços
-                    url_base + "/api/space/find",
-                    {
-                        '@select': 'name, location, public, shortDescription, longDescription, endereco, site, facebook, telefonePublico, telefone1, telefone2'
-                    },
-                    function (spaces)
-                    {
-                        $('#progressbarmapas').val(50);
-                        //Eventos
-                        $.getJSON(
-                            url_base + "/api/event/find",
-                            {
-                                '@select': 'name, shortDescription, longDescription, rules, subtitle, preco, site, facebook'
-                            },
-                            function (events)
-                            {
-                                $('#progressbarmapas').val(90);
-                                //Projetos
-                                $.getJSON(
-                                    url_base + "/api/project/find",
-                                    {
-                                        '@select': 'name, shortDescription, longDescription, isVerified, site, facebook'
-                                    },
-                                    function (projects)
-                                    {
-                                        $('#modalImportLoading h3').text('Recuperação concluída!');
-                                        $('#progressbarmapas').val(100);
-
-                                        var agents_count, projects_count, spaces_count, events_count, url;
-
-                                        agents_count = parseInt(Object.keys(agents).length); parseInt(projects_count = Object.keys(projects).length);
-                                        spaces_count = parseInt(Object.keys(spaces).length); parseInt(events_count = Object.keys(events).length);
-
-                                        /*var data = [{"agents":agents, "projects":projects, "spaces":spaces, "events": events}];
-                                        console.log(data);
-                                        return;*/
-
-                                        $('#modalImportLoading').modal('hide');
-                                        $('#modalImportConfirm').modal('show');
-                                        
-                                        $('#agents').text(agents_count);
-                                        $('#projects').text(projects_count);
-                                        $('#spaces').text(spaces_count);
-                                        $('#events').text(events_count);
-
-
-                                        //Nome do banco
-                                        const db_name = url_base, data_warehouse_name = "JSONs", db_version = 1;
-                                        //Criar banco com nome de dbName
-                                        var request_open = indexedDB.open(db_name, db_version);
-
-                                        request_open.onerror = function(event) {
-                                            console.log("Ocorreu um erro!");
-                                        };
-                                        
-
-                                        request_open.onupgradeneeded = function(event) {
-                                            var db = event.target.result,
-                                                store = db.createObjectStore(data_warehouse_name, {keypath: "name"});
-
-                                            store.put(JSON.stringify(agents), "agents");
-                                            store.put(JSON.stringify(projects), "projects");
-                                            store.put(JSON.stringify(spaces), "spaces");
-                                            store.put(JSON.stringify(events), "events");
-                                        };
-
-                                        window.sessionStorage.setItem('count', agents_count+spaces_count+projects_count+events_count);
-                                    }
-                                );
-                            }
-                        );
-                    }
-                );
-            }
-        );
-
+                    );
+                }
+            );
+        }
+        catch (e) {
+            showAlertGeneral('Erro', 'Impossível recuperar dados', 'error');
+        }
     }
     else
     {
@@ -1565,7 +1444,7 @@ function import_mapas_culturais(url_base)
                     request_projects.onsuccess = function () {
                         projects = JSON.parse(request_projects.result);
 
-                        do_ajax(url_send, projects, events, agents, spaces, count);
+                        do_ajax(url_send, projects, events, agents, spaces, count, db_name);
                     }
                 }
             }
@@ -1573,7 +1452,7 @@ function import_mapas_culturais(url_base)
     }
 }
 
-function do_ajax(url_send, projects, events, agents, spaces, count_elem)
+function do_ajax(url_send, projects, events, agents, spaces, count_elem, db_name)
 {
     var agents_spliced, spaces_spliced, projects_spliced, events_spliced, qtd = 400;
 
@@ -1609,6 +1488,7 @@ function do_ajax(url_send, projects, events, agents, spaces, count_elem)
             else
             {
                 $('#progressbarmapas').val(100);
+                indexedDB.deleteDatabase(db_name);
                 window.location = elem.url;
             }
         }

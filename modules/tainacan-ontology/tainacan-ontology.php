@@ -2078,12 +2078,14 @@ function parse_owl1()
     ini_set('max_execution_time', '0');
     $return['result'] = false;
     if($_FILES['collection_file']['name']) {
+
         $file = $_FILES["collection_file"];
         $file_name = $file["name"];
         $tmp_name = $file["tmp_name"];
         $file_type = strtolower(end(explode('.', $file_name)));
 
         $name = explode(".", $file_name);
+
 
         if (($file_type == 'rdf' || $file_type == 'owl') && ($received_file = simplexml_load_file($tmp_name)) !== false) {
 
@@ -2147,7 +2149,11 @@ function parse_owl1()
             try
             {
                 //Tratando ontologias
-                $collection_id = treats_ontology($owl_ontology, $namespace);
+                $imported_url = [];
+                $collection_id = treats_ontology($owl_ontology, $namespace, $imported_url);
+
+                //Tratando importações
+                treats_imports($imported_url);
 
                 //Tratando Classes
                 $created_classes = treats_classes($owl_classes, $collection_id, $namespace, $ret_subclass_structure);
@@ -2202,7 +2208,7 @@ function parse_owl1()
 /*
  * Trata Ontologia
  */
-function treats_ontology(&$ontology_tags, &$namespace)
+function treats_ontology(&$ontology_tags, &$namespace, &$imported_url)
 {
     //Tratamento Ontologia
     $data['collection_name'] = $ontology_tags->children($namespace['rdfs'])->label;
@@ -2216,6 +2222,13 @@ function treats_ontology(&$ontology_tags, &$namespace)
         }
     }
 
+    $imports = $ontology_tags->children($namespace['owl'])->imports;
+    $i = 0;
+    foreach ($imports as $import)
+    {
+        $imported_url[$i++] = strval($import->attributes($namespace['rdf'])['resource']);
+    }
+
     $retorno = simple_add($data);
 
     if($retorno != false)
@@ -2225,6 +2238,26 @@ function treats_ontology(&$ontology_tags, &$namespace)
     else
     {
         throw new Exception("Ontologia com esse nome já foi criada");
+    }
+}
+/*
+ * Treats Imports
+ */
+function treats_imports(&$imported_url)
+{
+    $imported_url_content = [];
+    foreach($imported_url as $url)
+        $imported_url_content[strval($url)] = file_get_contents($url);
+
+    foreach ($imported_url as $url)
+    {
+        $owl_tags = simplexml_load_string($imported_url_content[$url]);
+
+        if($owl_tags)
+        {
+
+        }
+        else throw new Exception('Fail on load imported content');
     }
 }
 
