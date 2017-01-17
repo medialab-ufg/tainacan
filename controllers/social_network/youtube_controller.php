@@ -54,7 +54,32 @@ class YoutubeController extends Controller {
             case "import_video_channel":
                 // recupera a chave da api cadastrada
                 $config = get_option('socialdb_theme_options');
-
+                if(!$config['socialdb_youtube_api_id']|| trim($config['socialdb_youtube_api_id'])=='' || trim($config['socialdb_youtube_api_id'])=='0'){
+                    $object_model = new ObjectModel();
+                    $extracted = $object_model->extract_metatags($data['url']);
+                    $image = '';
+                    if($extracted && is_array($extracted)){
+                        foreach ($extracted as $array) {
+                            if($array['name_field']=='title'){
+                                $title = $array['value'];
+                            }
+                            else if($array['name_field']=='og:image'){
+                                $image = (strpos($array['value'], 'http')===false) ? 'http:'.$array['value'] : $array['value'];
+                            }
+                        }
+                    }
+                    $id = socialdb_insert_object($title,'','draft');
+                    if($id):
+                        update_post_meta($id, 'socialdb_object_content', $data['url']);
+                        if(!empty($image))
+                            $object_model->add_thumbnail_url($image, $id);
+                        update_post_meta($id, 'socialdb_object_dc_type', 'other');
+                        return json_encode([$id]);
+                    else:
+                        return false;
+                    endif;
+                }
+                
                 if ($data['playlist'] == '') {
                     //verifica se o identificador do canal passado é uma URL
                     $urlBaseYoutube = explode('/', $data['identifier']);

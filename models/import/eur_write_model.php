@@ -110,6 +110,7 @@ class EurWriteModel extends Model {
                         $meta_value = $item[$meta['metadado']];
                     }
                     add_post_meta($object_id, 'socialdb_property_' . $meta['metadata_id'], (string) $meta_value);
+                    $this->set_common_field_values($object_id,'socialdb_property_' . $meta['metadata_id'], (string) $meta_value);
                 }
             }
         }

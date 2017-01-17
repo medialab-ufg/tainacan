@@ -20,6 +20,10 @@ class OAIPMHModel extends Model {
         session_write_close();
         ini_set('max_execution_time', '0');
         $whole_metadatas = array();
+        if(strpos($data['url'],'http://')===false && strpos($data['url'],'https://')===false){
+            $data['url'] = 'http://'.$data['url'];
+        }
+        //sets
         if(isset($data['sets'])&&!empty($data['sets'])){
             $sets = explode(',',$data['sets']);
             $url = $data['url'] . "?verb=ListRecords&metadataPrefix=oai_dc";
@@ -430,6 +434,8 @@ class OAIPMHModel extends Model {
         $object_id = socialdb_insert_object($record['title'], $record['date']);
         //mapping
         add_post_meta($object_id, 'socialdb_channel_id',$mapping_id);
+        update_post_meta($object_id, 'socialdb_object_dc_type', 'other');  
+        $this->set_common_field_values($object_id, 'object_type', 'other');
         //
         if ($object_id != 0) {
             foreach ($record['metadata'] as $identifier => $metadata) {
@@ -446,7 +452,10 @@ class OAIPMHModel extends Model {
                         update_post_meta($object_id, 'socialdb_object_content', implode(',', $metadata));
                         $this->set_common_field_values($object_id, 'object_content', implode(',', $metadata));
                    elseif ($form[$identifier] == 'socialdb_object_dc_type'):
-                        update_post_meta($object_id, 'socialdb_object_dc_type', implode(',', $metadata));                       
+                        $metadata = implode(',', $metadata);
+                        if(in_array($metadata, ['pdf','text','video','image','audio'])){
+                            update_post_meta($object_id, 'socialdb_object_dc_type', $metadata);  
+                        }
                         $this->set_common_field_values($object_id, 'object_type', implode(',', $metadata));
                     elseif ($form[$identifier] == 'tag'):
                         foreach ($metadata as $meta) {

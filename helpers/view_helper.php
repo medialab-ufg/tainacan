@@ -179,7 +179,14 @@ class ViewHelper {
 
     public function render_button_cardinality($property,$i) {
         if ($property['metas']['socialdb_property_data_cardinality'] && $property['metas']['socialdb_property_data_cardinality'] == 'n'):
-            ?>
+            ?>  
+                <?php if($i>0): ?>
+                <div class="col-md-1">
+                    <a style="cursor: pointer;" onclick="remove_container(<?php echo $property['id'] ?>,<?php echo $i ?>)" class="pull-right">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </a>
+                </div>    
+                <?php endif; ?>
                <button type="button" 
                        id="button_property_<?php echo $property['id']; ?>_<?php echo $i; ?>"
                        onclick="show_fields_metadata_cardinality(<?php echo $property['id'] ?>,<?php echo $i ?>)" 
