@@ -2000,7 +2000,7 @@
                 type: 'POST',
                 data: {operation: 'import_video_channel',
                     identifier: inputIdentifierYoutube,
-                    //playlist: inputPlaylistYoutube,
+                    url: $('#item_url_import_all').val(),
                     playlist: '',
                     collectionId: collectionId},
                 success: function (response) {
@@ -2040,6 +2040,7 @@
                 data: {operation: 'import_video_channel',
                     //identifier: inputIdentifierYoutube,
                     //playlist: inputPlaylistYoutube,
+                    url: $('#item_url_import_all').val(),
                     playlist: inputIdentifierYoutube,
                     collectionId: collectionId},
                 success: function (response) {

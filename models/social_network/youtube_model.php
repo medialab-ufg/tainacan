@@ -283,7 +283,9 @@ class YoutubeModel extends Model {
     //trabalhando com playlistis: pega videos de uma playlist específica
     public function getInfoFromVideoPlaylist($idPlaylist = '', $pageToken = '', $numVideos = 50) {
         $arrayIds = array();
-
+        set_time_limit(0);
+        session_write_close();
+        ini_set('max_execution_time', '0');
         $urlBase = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=%s&pageToken=%s&playlistId=%s&fields=items/snippet,nextPageToken,pageInfo&key=' . $this->apiKey;
         $idChannelUploads = &$this->idUploads;
         $url = sprintf($urlBase, $numVideos, $pageToken, $idPlaylist);
@@ -313,7 +315,9 @@ class YoutubeModel extends Model {
 
     public function getInfoPlaylist($idPlaylist = '', $pageToken = '', $numVideos = 50) {
         $arrayIds = array();
-
+           set_time_limit(0);
+        session_write_close();
+        ini_set('max_execution_time', '0');
         $urlBase = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=%s&pageToken=%s&playlistId=%s&fields=items/snippet,nextPageToken,pageInfo&key=' . $this->apiKey;
         $url = sprintf($urlBase, $numVideos, $pageToken, $idPlaylist);
 

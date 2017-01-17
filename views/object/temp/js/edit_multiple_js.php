@@ -1473,9 +1473,30 @@
         }
     }
     //################################ Cardinalidade #################################//
-    function show_fields_metadata_cardinality(property_id,id){
+        function show_fields_metadata_cardinality(property_id,id){
         $('#button_property_'+property_id+'_'+id).hide();
-        $('#container_field_'+property_id+'_'+(id+1)).show();
+        $('#container_field_'+property_id+'_'+(id+1)).show();         
+    }
+    
+    
+    function remove_container(property_id,id){
+        var show_button = false;
+        $('#container_field_'+property_id+'_'+(id)).hide();
+        $('#core_validation_'+property_id).val('true');
+        $('input[name="socialdb_property_'+property_id+'[]"]').val('');
+        validate_all_fields();
+        //se o proximo container
+        if(!$('#container_field_'+property_id+'_'+(id+1)).is(':visible')){
+            show_button = true;
+        }
+        //busco o container que esta sendo mostrado
+        while(!$('#container_field_'+property_id+'_'+(id)).is(':visible')){
+            id--;
+        }
+        //se 
+        if(show_button)
+            $('#button_property_'+property_id+'_'+id).show();
+        
     }
     //################################ adicao de propriedades de categorias #################################//
     function append_category_properties(id,remove_id){

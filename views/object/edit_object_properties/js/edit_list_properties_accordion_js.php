@@ -638,7 +638,20 @@
 //################################ Cardinalidade #################################//    
     function show_fields_metadata_cardinality(property_id,id){
         $('#button_property_'+property_id+'_'+id).hide();
-        $('#container_field_'+property_id+'_'+(id+1)).show();         
+        $('#button_cancel_property_'+property_id+'_'+id).hide();
+        $('#container_field_'+property_id+'_'+(id+1)).show();     
+        $('#button_property_'+property_id+'_'+(id+1)).show();
+        $('#button_cancel_property_'+property_id+'_'+(id+1)).show();
+    }
+     function hide_fields_metadata_cardinality(property_id,id){
+        if(id>0){
+             $('#button_property_'+property_id+'_'+(id-1)).show();
+             $('#button_cancel_property_'+property_id+'_'+(id-1)).show();
+            $('#button_property_'+property_id+'_'+id).hide();
+            $('#button_cancel_property_'+property_id+'_'+id).hide();  
+            $('#container_field_'+property_id+'_'+(id-1)).show();     
+            $('#container_field_'+property_id+'_'+(id)).hide();     
+        }
     }
 //################################ VALIDACOES##############################################//
     function validate_status(property_id){

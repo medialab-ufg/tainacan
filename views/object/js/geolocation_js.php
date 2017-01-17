@@ -75,15 +75,21 @@
       half_length = 4;
   }
 
-  cl('Using | ' + half_length + ' | of zoom!');
-  cl('Total of ' + marker_item.length +  ' items drawn on mapa!');
+  function getAverageCoord(coord_arr, size) {
+      var total_sum = 0.0;
+      for(var i = 0; i < size; i++) {
+          total_sum += parseFloat(coord_arr[i]);
+      }
+
+      return total_sum / size;
+  }
 
   var medium_coords = {
-      lat: Math.round( (sorted_lats.length - 1) /2 ),
-      long: Math.round( (sorted_longs.length - 1) /2 )
+      lat: getAverageCoord(sorted_lats, sorted_lats.length),
+      long: getAverageCoord(sorted_longs, sorted_longs.length)
   };
 
-  var ctr = new google.maps.LatLng( sorted_lats[medium_coords.lat], sorted_longs[medium_coords.long]);
+  var ctr = new google.maps.LatLng( medium_coords.lat, medium_coords.long);
 
   function initMap() {
       if( total_map_markers > 0 ) {
@@ -94,12 +100,17 @@
 
               var infowindow = new google.maps.InfoWindow();
               var marker, i;
+              var bounds = new google.maps.LatLngBounds();
+
               for (i = 0; i < total_map_markers; i++) {
                   if(marker_item[i]) {
                       marker = new google.maps.Marker({
                           position: new google.maps.LatLng(marker_item[i][1], marker_item[i][2]),
                           map: map
                       });
+
+                      var loc = new google.maps.LatLng(marker.position.lat(), marker.position.lng());
+                      bounds.extend(loc);
 
                       google.maps.event.addListener(marker, 'click', (function (marker, i) {
                           return function () {
@@ -109,6 +120,13 @@
                       })(marker, i));
                   }
               } // for
+
+              // Better auto zoom and auto center
+              map.fitBounds(bounds);
+              map.panToBounds(bounds);
+
+              $("#center_pagination").hide();
+
           } catch(err) {
               console.log(err);
           }

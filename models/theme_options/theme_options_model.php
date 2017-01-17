@@ -724,7 +724,9 @@ class ThemeOptionsModel extends Model {
                 if ($inserted_item_id) {
                     //Insere Metadados
                     foreach ($metadados as $key => $value) {
-                        if ($value['value'] != null) {
+                        if($key=='subject'){
+                            
+                        }else if ($value['value'] != null) {
                             $term = $this->checkIfMetadataExists($key, $parent_collection_id);
                             if ($term) {
                                 //insere o valor no metadado encontrado
@@ -735,6 +737,7 @@ class ThemeOptionsModel extends Model {
                                 $meta_id = $this->add_property_data($key, $parent_collection_id, $category_root_id);
                             }
                             add_post_meta($inserted_item_id, 'socialdb_property_' . $meta_id, $value['value']);
+                            $this->set_common_field_values($inserted_item_id, "socialdb_property_$meta_id", $value['value']);
                         }
                     }
 
@@ -810,6 +813,7 @@ class ThemeOptionsModel extends Model {
             'post_type' => 'socialdb_object'
         );
         $object_id = wp_insert_post($post);
+        $this->set_common_field_values($object_id, 'title', $title);
         if ($object_id) {
             update_post_meta($object_id, 'socialdb_dspace_aip_import_id', $id);
 
@@ -865,6 +869,37 @@ class ThemeOptionsModel extends Model {
         add_term_meta($category_root_id, 'socialdb_category_property_id', $new_property['term_id']);
         return $new_property['term_id'];
     }
+    
+     /**
+     * function add_property_term($property)
+     * @param object $property
+     * @return int O id da da propriedade criada.
+     * @author: Eduardo Humberto 
+     */
+   public function add_property_term($property,$collection_id,$category_root_id) {
+        $subject_root = get_term_by('slug', 'subject_' . $collection_id, 'socialdb_category_type');
+        if(!$subject_root){
+            $array = wp_insert_term(__('Subject'), 'socialdb_category_type', array('parent' => $this->get_category_root_id(),
+                        'slug' => 'subject_' . $collection_id));
+            add_term_meta($array['term_id'], 'socialdb_category_owner', get_current_user_id());
+        }
+       
+       
+        $new_property = wp_insert_term((string)$property->name, 'socialdb_property_type', array('parent' => $this->get_property_type_id('socialdb_property_term'),
+                'slug' => $this->generate_slug((string)$property->name, 0)));
+        if(is_wp_error($new_property)){
+            $new_property = wp_insert_term(__('Imported Property','tainacan'), 'socialdb_property_type', array('parent' => $this->get_property_type_id('socialdb_property_term'),
+                'slug' => $this->generate_slug(__('Imported Property','tainacan'), 0)));
+        }
+        
+        update_term_meta($new_property['term_id'], 'socialdb_property_term_cardinality', (string) $property->socialdb_property_term_cardinality);
+        update_term_meta($new_property['term_id'], 'socialdb_property_term_widget',  (string)$property->socialdb_property_term_widget);
+        update_term_meta($new_property['term_id'], 'socialdb_property_help',  (string)$property->socialdb_property_help);
+        update_term_meta($new_property['term_id'], 'socialdb_property_term_root',$this->get_term_imported_id((string) $property->socialdb_property_term_root));  
+        update_term_meta($new_property['term_id'], 'socialdb_property_created_category',$category_root_id);
+        add_term_meta($category_root_id, 'socialdb_category_property_id', $new_property['term_id']);
+        return $new_property['term_id'];
+   }
 
     /**
      * function get_property_type_id($property_parent_name)
