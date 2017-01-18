@@ -298,7 +298,7 @@ $(window).load(function () {
                 var message = elem.message;
                 if (!message)
                 {
-                    message = 'Houve um erro na importação deste arquivo';
+                    message = 'Houve um erro na importação deste arquivo ou arquivo não compatível com o Tainacan';
                 }
                 showAlertGeneral('Erro', message, 'error');
             }

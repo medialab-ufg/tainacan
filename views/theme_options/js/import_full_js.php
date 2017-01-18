@@ -133,16 +133,16 @@
                     type: 'POST',
                     data: {operation: 'import_dspace_aip', file: file},
                     success: function (data) {
-                        // hide_modal_main();
-                        if (data) {
-                            //  showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Import Successfully.', 'tainacan') ?>', 'success');
+                        var json = JSON.parse(data);
+                        if (json.result) {
+                           start_loader_aip();
                             //listTableAIP();
                         } else {
-                            //showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('Some error ocurred, please click in REFRESH and try again!', 'tainacan') ?>', 'error');
+                             showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('Zip not compatible!', 'tainacan') ?>', 'error');
                         }
                     }
                 });// fim
-                start_loader_aip();
+                
             }
         });
     }

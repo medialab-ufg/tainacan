@@ -98,7 +98,7 @@ $image_cover_url = wp_get_attachment_url(get_post_meta($collection_post->ID, 'so
                 <div class="form-inline form-group">
                     <div class="alert alert-success" style="display: none;width: 30%;" id="collection_name_success"><span class="glyphicon glyphicon-ok" ></span>&nbsp;&nbsp;<?php _e('Valid name!', 'tainacan') ?></div>
                     <div class="alert alert-danger" style="display: none;width: 30%;" id="collection_name_error"><span class="glyphicon glyphicon-warning-sign" >&nbsp;&nbsp;</span><?php _e('Invalid name!', 'tainacan') ?></div>
-                    <label class="control-label" ><?php echo site_url() . '/collection/'; ?></label>
+                    <label class="control-label" ><?php echo site_url() . '/'; ?></label>
                     <input onkeyup="verify_name_collection();" id="suggested_collection_name" required="required" type="text" class="form-control" name="socialdb_collection_address"  value="<?php echo $collection_post->post_name; ?>" maxlength="200" >
                     <input type="hidden" id="initial_address"  name="initial_address"  value="<?php echo $collection_post->post_name; ?>" >
                 </div>

@@ -119,7 +119,7 @@ class ThemeOptionsController extends Controller {
                             $theme_options_model->recursiveRemoveDirectory($unzip_site);
                         }
                     } else {
-                        return json_encode([]);
+                        return json_encode([ 'result'=>false ]);;
                     }
                     //community
                     $community_files = scandir($unzip_path);
@@ -158,9 +158,9 @@ class ThemeOptionsController extends Controller {
                         }
                     }
                     $theme_options_model->recursiveRemoveDirectory($unzip_path);
-                    return true;
+                    return json_encode([ 'result'=>true ]);
                 } else {
-                    return false;
+                    return json_encode([ 'result'=>false ]);;
                 }
                 break;
             case "delete_aip_file":
