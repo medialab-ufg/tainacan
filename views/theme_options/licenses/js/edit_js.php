@@ -5,12 +5,13 @@
         listStandartLicenses();
         change_breadcrumbs_title('<?php _e('Repository Licenses','tainacan') ?>');
 
-        $('#formAddLicense').submit(function (e) {{
+        $('#formAddLicense').submit(function (e) {
             if($('#add_license_name').val().trim()===''){
                 showAlertGeneral('<?php _e('Attention','tainacan') ?>', '<?php _e('Name is empty','tainacan') ?>', 'info');
                 return false;
             }
             e.preventDefault();
+            show_modal_main();
             $.ajax({
                 url: $("#src").val() + '/controllers/theme_options/theme_options_controller.php',
                 type: 'POST',
@@ -18,6 +19,7 @@
                 processData: false,
                 contentType: false
             }).done(function (result) {
+                hide_modal_main();
                 elem = jQuery.parseJSON(result);
                 showAlertGeneral(elem.title, elem.msg, elem.type);
                 listStandartLicenses();
