@@ -43,7 +43,8 @@
                 $("#table-view").css("display", "block");
             }
         } else {
-            $('tr.dynamic-table-metas').append('<th>' + '<?php _e("Title", "tainacan"); ?>'  + '</th>');
+            var fxd_ttle = $("#repo_fixed_title").val();
+            $('tr.dynamic-table-metas').append('<th>' + fxd_ttle  + '</th>');
             meta_table_set = false;
         }
 

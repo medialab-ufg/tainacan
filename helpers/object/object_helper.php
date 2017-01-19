@@ -5,12 +5,6 @@
 
 class ObjectHelper extends ViewHelper {
 
-    public $foo;
-
-    public function getFoo() {
-        return $this->foo = "bingo";
-    }
-
     public function add_tabs() {
         $tabs = unserialize(get_post_meta($this->collection_id, 'socialdb_collection_update_tab_organization', true));
         $default_tab = get_post_meta($this->collection_id, 'socialdb_collection_default_tab', true);

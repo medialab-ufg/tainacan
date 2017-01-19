@@ -5,7 +5,6 @@ include_once ('js/list_js.php');
 include_once ('js/geolocation_js.php');
 
 $viewHelper = new ViewHelper();
-
 $countLine = 0;
 $collection_list_mode = $collection_data['collection_metas']['socialdb_collection_list_mode'];
 
@@ -19,6 +18,7 @@ if( "geolocation" === $collection_list_mode && is_null($geo_coordinates) && $is_
 
     echo '<input type="hidden" id="filtered_collection" value="true" />';
 }
+$_fxd_title = $viewHelper->terms_fixed['title']->name;
 ?>
 
 <!-- TAINACAN: hidden utilizados para execucao de processos desta view (list.php)  -->
@@ -31,6 +31,7 @@ if( "geolocation" === $collection_list_mode && is_null($geo_coordinates) && $is_
 <input type="hidden" id="set-long" value="<?php echo $geo_coordinates["long"]; ?>">
 <input type="hidden" id="approx_mode" value="<?php echo $use_approx_mode; ?>">
 <input type="hidden" id="approx_location" value="<?php echo $geo_loc; ?>">
+<input type="hidden" id="repo_fixed_title" value="<?php echo $_fxd_title; ?>">
     <input type="hidden" id="original_post_count" value="<?php echo $loop->post_count; ?>" />
 
 <?php if ( $loop->have_posts() ): ?>
