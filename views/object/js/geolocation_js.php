@@ -8,13 +8,15 @@
   var marker_item = [];
   var tot = 0;
   var loaded = 0;
+  var filtrd_collec = $("#filtered_collection").val();
 
   var lat_long_count = 0;
   $(objs).each(function(idx, el) {
       var current_id = $(el).val();
-      var current_content   = "<div class='col-md-12'>"+ $.trim( $("#object_" + current_id ).html() )+ "</div>";      
+      var current_content   = "<div class='col-md-12'>"+ $.trim( $("#object_" + current_id ).html() )+ "</div>";
+      var marker_uniq_id = "_item_" + current_id;
 
-    if ( use_approx_mode && use_approx_mode === "use_approx_mode" ) {
+      if ( use_approx_mode && use_approx_mode === "use_approx_mode" ) {
         var current_location  = $("#object_" + current_id + " .location").val();
 
         if(current_location) {
@@ -32,7 +34,7 @@
                         
                         loaded++;
                         if(loaded === tot) {
-                            initMap(); 
+                            initMap('map');
                         }                        
                     }
               });
@@ -48,22 +50,16 @@
     } else {
         var current_latitude  = $("#object_" + current_id + " .latitude").val();
         var current_longitude = $("#object_" + current_id + " .longitude").val();
-      
         if(current_latitude && current_longitude) {
-            /*
-            marker_item[idx] = [ current_content, current_latitude, current_longitude ];
-            lats[idx] = parseFloat(current_latitude);
-            longs[idx] = parseFloat(current_longitude);
-            */
-            marker_item[lat_long_count] = [ current_content, current_latitude, current_longitude ];
+            marker_item[lat_long_count] = [ current_content, current_latitude, current_longitude, marker_uniq_id];
             lats[lat_long_count] = parseFloat(current_latitude);
             longs[lat_long_count] = parseFloat(current_longitude);
 
             lat_long_count++;
-        }        
+        }
     }      
   });
-    
+
   var sorted_lats = lats.sort(function(a,b) { return a - b; } );
   var sorted_longs = longs.sort(function(a,b) { return a - b; } );
   var total_map_markers = marker_item.length;
@@ -89,15 +85,16 @@
       long: getAverageCoord(sorted_longs, sorted_longs.length)
   };
 
-  var ctr = new google.maps.LatLng( medium_coords.lat, medium_coords.long);
 
-  function initMap() {
+  function initMap(map_div) {
       if( total_map_markers > 0 ) {
           try {
-              var map = new google.maps.Map(document.getElementById('map'), {
-                  zoom: half_length, center: ctr, mapTypeId: google.maps.MapTypeId.ROADMAP
-              });
-
+              var ctr = new google.maps.LatLng( medium_coords.lat, medium_coords.long);
+              var mapOpts = {
+                  zoom: half_length,
+                  center: ctr, mapTypeId: google.maps.MapTypeId.ROADMAP
+              };
+              var map = new google.maps.Map(document.getElementById(map_div), mapOpts);
               var infowindow = new google.maps.InfoWindow();
               var marker, i;
               var bounds = new google.maps.LatLngBounds();
@@ -111,7 +108,6 @@
 
                       var loc = new google.maps.LatLng(marker.position.lat(), marker.position.lng());
                       bounds.extend(loc);
-
                       google.maps.event.addListener(marker, 'click', (function (marker, i) {
                           return function () {
                               infowindow.setContent(marker_item[i][0]);
@@ -124,12 +120,13 @@
               // Better auto zoom and auto center
               map.fitBounds(bounds);
               map.panToBounds(bounds);
-
               $("#center_pagination").hide();
 
           } catch(err) {
               console.log(err);
           }
+
+          total_map_markers = 1;
       } else {
           if(tot < 1) {
               $('.geolocation-view-container #map').hide();
@@ -137,9 +134,19 @@
           }
       }
 
-    }
+  }
     
-    if ( use_approx_mode && use_approx_mode !== "use_approx_mode" ) {
-        initMap();
-    }
+  if ( use_approx_mode && use_approx_mode !== "use_approx_mode" ) {
+      initMap('map');
+  }
+
+  if( filtrd_collec ) {
+      $("#map").hide();
+      $("#map_filtered").show();
+
+      setTimeout( function() {
+          initMap('map_filtered')
+      }, 500);
+  }
+
 </script>   

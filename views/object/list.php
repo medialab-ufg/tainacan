@@ -12,6 +12,13 @@ $collection_list_mode = $collection_data['collection_metas']['socialdb_collectio
 if( !$collection_list_mode ) {
     $collection_list_mode = "cards";
 }
+
+if( "geolocation" === $collection_list_mode && is_null($geo_coordinates) && $is_filtered_page ) {
+    $geo_coordinates["lat"] = get_post_meta($col_id, "socialdb_collection_latitude_meta", true);
+    $geo_coordinates["long"] = get_post_meta($col_id, "socialdb_collection_longitude_meta", true);
+
+    echo '<input type="hidden" id="filtered_collection" value="true" />';
+}
 ?>
 
 <!-- TAINACAN: hidden utilizados para execucao de processos desta view (list.php)  -->
@@ -24,6 +31,7 @@ if( !$collection_list_mode ) {
 <input type="hidden" id="set-long" value="<?php echo $geo_coordinates["long"]; ?>">
 <input type="hidden" id="approx_mode" value="<?php echo $use_approx_mode; ?>">
 <input type="hidden" id="approx_location" value="<?php echo $geo_loc; ?>">
+    <input type="hidden" id="original_post_count" value="<?php echo $loop->post_count; ?>" />
 
 <?php if ( $loop->have_posts() ): ?>
 
@@ -32,12 +40,11 @@ if( !$collection_list_mode ) {
             <?php
             while ( $loop->have_posts() ) : $loop->the_post(); $countLine++;
                 $curr_id = get_the_ID();
-
-                $curr_date = "<strong>" . __('Created at: ', 'tainacan') . "</strong>" . get_the_date('d/m/Y');
                 $latitude = get_post_meta($curr_id, "socialdb_property_" . $geo_coordinates["lat"]);
                 $longitude = get_post_meta($curr_id, "socialdb_property_" . $geo_coordinates["long"]);
-                $location = get_post_meta($curr_id, "socialdb_property_" . $geo_loc);     
-                $_object_description = get_the_content();                
+                $location = get_post_meta($curr_id, "socialdb_property_" . $geo_loc);
+                $curr_date = "<strong>" . __('Created at: ', 'tainacan') . "</strong>" . get_the_date('d/m/Y');
+                $_object_description = get_the_content();
                 
                 include "list_modes/modals.php";
                 include "list_modes/cards.php";
