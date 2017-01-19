@@ -29,6 +29,8 @@ class CollectionImportModel extends CollectionModel {
             $this->add_cover_collection($dir_created,$collection_id);
             $return['result'] = true;
             $return['url'] = get_the_permalink($collection_id);
+        }else{
+             $return['result'] = false;
         }
         
         $this->recursiveRemoveDirectory($dir_created);
