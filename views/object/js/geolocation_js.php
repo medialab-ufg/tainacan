@@ -44,6 +44,7 @@
         
         if(tot < 1) {
             $('.geolocation-view-container #map').hide();
+            $('.geolocation-view-container #map_filtered').hide();
             $('.geolocation-view-container .not-configured').show();
         }
         
@@ -130,6 +131,7 @@
       } else {
           if(tot < 1) {
               $('.geolocation-view-container #map').hide();
+              $('.geolocation-view-container #map_filtered').hide();
               $('.geolocation-view-container .error-map').show();
           }
       }
