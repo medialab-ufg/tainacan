@@ -40,7 +40,33 @@ $(function(){
                     active: false,
                     collapsible: true,
                     header: "h2",
-                    heightStyle: "content"
+                    heightStyle: "content",
+                    beforeActivate: function(event, ui) {
+                            // The accordion believes a panel is being opened
+                           if (ui.newHeader[0]) {
+                               var currHeader  = ui.newHeader;
+                               var currContent = currHeader.next('.ui-accordion-content');
+                            // The accordion believes a panel is being closed
+                           } else {
+                               var currHeader  = ui.oldHeader;
+                               var currContent = currHeader.next('.ui-accordion-content');
+                           }
+                            // Since we've changed the default behavior, this detects the actual status
+                           var isPanelSelected = currHeader.attr('aria-selected') == 'true';
+
+                            // Toggle the panel's header
+                           currHeader.toggleClass('ui-corner-all',isPanelSelected).toggleClass('accordion-header-active ui-state-active ui-corner-top',!isPanelSelected).attr('aria-selected',((!isPanelSelected).toString()));
+
+                           // Toggle the panel's icon
+                           currHeader.children('.ui-icon').toggleClass('ui-icon-triangle-1-e',isPanelSelected).toggleClass('ui-icon-triangle-1-s',!isPanelSelected);
+
+                            // Toggle the panel's content
+                           currContent.toggleClass('accordion-content-active',!isPanelSelected)    
+                           if (isPanelSelected) { currContent.slideUp(); }  else { currContent.slideDown(); }
+
+                           return false; // Cancels the default action
+                       }
+                    
                 });
                 // esconde o carregamento do menu lateral
                 $('.menu_left_loader').hide();
@@ -226,7 +252,32 @@ function reorder_properties_add_item(tab_id,array_ids,seletor){
             active: false,
             collapsible: true,
             header: "h2",
-            heightStyle: "content"
+            heightStyle: "content",
+            beforeActivate: function(event, ui) {
+                // The accordion believes a panel is being opened
+               if (ui.newHeader[0]) {
+                   var currHeader  = ui.newHeader;
+                   var currContent = currHeader.next('.ui-accordion-content');
+                // The accordion believes a panel is being closed
+               } else {
+                   var currHeader  = ui.oldHeader;
+                   var currContent = currHeader.next('.ui-accordion-content');
+               }
+                // Since we've changed the default behavior, this detects the actual status
+               var isPanelSelected = currHeader.attr('aria-selected') == 'true';
+
+                // Toggle the panel's header
+               currHeader.toggleClass('ui-corner-all',isPanelSelected).toggleClass('accordion-header-active ui-state-active ui-corner-top',!isPanelSelected).attr('aria-selected',((!isPanelSelected).toString()));
+
+               // Toggle the panel's icon
+               currHeader.children('.ui-icon').toggleClass('ui-icon-triangle-1-e',isPanelSelected).toggleClass('ui-icon-triangle-1-s',!isPanelSelected);
+
+                // Toggle the panel's content
+               currContent.toggleClass('accordion-content-active',!isPanelSelected)    
+               if (isPanelSelected) { currContent.slideUp(); }  else { currContent.slideDown(); }
+
+               return false; // Cancels the default action
+           }
         });
       $('[data-toggle="tooltip"]').tooltip();
     }
