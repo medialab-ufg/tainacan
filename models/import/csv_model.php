@@ -1,5 +1,5 @@
 <?php
-
+ini_set('auto_detect_line_endings', true);
 include_once ('../../../../../wp-config.php');
 include_once ('../../../../../wp-load.php');
 include_once ('../../../../../wp-includes/wp-db.php');
@@ -318,6 +318,7 @@ class CsvModel extends Model {
 
     public function insert_csv_with_columns($mapping_id, $collection_id) {
         $mapping_model = new MappingModel('socialdb_channel_csv');
+        $already = false;
         $files = $mapping_model->show_files_csv($mapping_id);
         foreach ($files as $file) {
             $name_file = wp_get_attachment_url($file->ID);
@@ -325,12 +326,13 @@ class CsvModel extends Model {
             $csv_has_header = get_post_meta($mapping_id, 'socialdb_channel_csv_has_header', true);
             $lines = $this->read_csv_file($name_file, $delimiter, 0);
             for ($i = 0; $i < count($lines); $i++):
-                if ($i == 0) {
+                if ($i == 0 && !$already) {
                     if (!is_array($lines[$i]) || empty(array_filter($lines[$i]))) {
                         $i++;
                     }
                     $order = $this->add_properties_columns($lines[$i], $collection_id);
-                } else if (isset($order) && count($order) > 0) {
+                    $already = true;
+                } else if (isset($order) && count($order) > 0 ) {
                     $this->add_value_column($order, $lines[$i], $collection_id);
                 }
             endfor;
@@ -349,6 +351,9 @@ class CsvModel extends Model {
         $category_root_id = $this->get_category_root_of($collection_id);
         if ($header && is_array($header)) {
             foreach ($header as $column) {
+                if(empty($column))
+                    continue;
+                
                 $new_property = wp_insert_term((string) $column, 'socialdb_property_type', array('parent' => $this->get_property_type_id('socialdb_property_data'),
                     'slug' => $this->generate_slug((string) $column, 0)));
                 update_term_meta($new_property['term_id'], 'socialdb_property_required', 'false');
