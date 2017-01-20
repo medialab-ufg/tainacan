@@ -310,6 +310,8 @@
     }
 <?php // edicao das propriedades de objeto     ?>
     function edit_object(id) {
+        showDynatreesDomains(src);
+        showPropertyCategoryDynatree(src);
         $.ajax({
             url: $('#src').val() + '/controllers/property/property_controller.php',
             type: 'POST',
@@ -347,8 +349,8 @@
                 }
             }
            //relacionamento da propriedade de objeto
-           // console.log(elem.metas.socialdb_property_object_category_id.constructor ===Array);
-            if(elem.metas.socialdb_property_object_category_id.constructor === Array){
+            console.log(elem.metas.socialdb_property_object_category_id);
+            if(elem.metas.socialdb_property_object_category_id && elem.metas.socialdb_property_object_category_id.constructor === Array){
                //  console.log('first');
                 if($("#property_category_dynatree")){
                        $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {

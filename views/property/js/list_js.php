@@ -325,8 +325,8 @@
             $("#property_object_id").val(elem.id);
             $("#property_object_name").val(elem.name);
             //relacionamento da propriedade de objeto
-           // console.log(elem.metas.socialdb_property_object_category_id.constructor ===Array);
-            if(elem.metas.socialdb_property_object_category_id.constructor === Array){
+            //console.log(elem.metas.socialdb_property_object_category_id.constructor ===Array);
+            if(elem.metas.socialdb_property_object_category_id && elem.metas.socialdb_property_object_category_id.constructor === Array){
                //  console.log('first');
                 if($("#property_category_dynatree")){
                        $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
@@ -505,7 +505,7 @@
             selectionVisible: true, // Make sure, selected nodes are visible (expanded).  
             checkbox: true,
             initAjax: {
-                 url: src + '/controllers/collection/collection_controller.php',
+                 url: $('#src').val() + '/controllers/collection/collection_controller.php',
                 data: {
                     collection_id: $("#collection_id").val(),
                     operation: 'initDynatreeSingleEdit',
@@ -684,7 +684,7 @@
             selectMode: 1,
             selectionVisible: true, // Make sure, selected nodes are visible (expanded). 
             initAjax: {
-                url: src + '/controllers/collection/collection_controller.php',
+                url:  $('#src').val() + '/controllers/collection/collection_controller.php',
                 data: {
                     collection_id: $("#collection_id").val(),
                     operation: 'initDynatreeSingleEdit',

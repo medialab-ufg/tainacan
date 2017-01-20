@@ -279,7 +279,7 @@ function reInitDynatree() {
         selectionVisible: true, // Make sure, selected nodes are visible (expanded).  
         checkbox: true,
         initAjax: {
-            url: src + '/controllers/collection/collection_controller.php',
+            url: $('#src').val() + '/controllers/collection/collection_controller.php',
             data: {
                 collection_id: $("#collection_id").val(),
                 operation: 'initDynatreeSingleEdit',
