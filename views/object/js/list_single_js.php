@@ -32,8 +32,8 @@
         }*/
         var stateObj = {foo: "bar"};
         $('#form').html('');
-        $('#object_page').val($('#single_name').val());
-        history.replaceState(stateObj, "page 2", $('#socialdb_permalink_object').val());
+//        $('#object_page').val($('#single_name').val());
+//        history.replaceState(stateObj, "page 2", $('#socialdb_permalink_object').val());
         verifyPublishedItem($('#single_object_id').val());
         list_files_single($('#single_object_id').val());
         list_ranking_single($('#single_object_id').val());

@@ -30,11 +30,87 @@ $references = [
     'properties_terms_treecheckbox' => &$properties_terms_treecheckbox,   
     'properties_to_avoid' => &$properties_to_avoid,   
 ];
+$properties_concatenated = [];
+if (isset($property_object)):
+    $ids = [];
+    foreach ($property_object as $property) {
+        if(in_array($property['id'], $properties_to_avoid)){
+            continue;
+        }
+        $ids[] = $property['id'];
+        $property['tipo'] = 'object';
+        $properties_concatenated[$property['id']] = $property;
+    }
+    ?>
+    <input type="hidden" name="properties_object_ids" id='properties_object_ids' value="<?php echo implode(',', $ids); ?>">
+    <?php
+endif;   
+
+
+if (isset($property_data)): 
+    $ids = [];
+    foreach ($property_data as $property) { 
+        if(in_array($property['id'], $properties_to_avoid)){
+            continue;
+        }
+        $ids[] = $property['id'];
+        $properties_autocomplete[] = $property['id']; 
+        $property['tipo'] = 'data';
+        $properties_concatenated[$property['id']] = $property;
+    }    
+endif;   
+
+if ((isset($property_term) && count($property_term) > 1) || (count($property_term) == 1 )):
+    $ids = [];
+    foreach ($property_term as $property) { 
+        if(in_array($property['id'], $properties_to_avoid)){
+            continue;
+        }
+        $ids[] = $property['id'];
+        $property['tipo'] = 'term';
+        $properties_concatenated[$property['id']] = $property;
+    }
+endif;    
+
+if (isset($property_compounds)):
+    foreach ($property_compounds as $property) { 
+        if(is_array($references['properties_to_avoid'])&&in_array($property['id'], $references['properties_to_avoid'])){
+            continue;
+        }
+        $result['ids'][] = $property['id']; 
+        $references['compound_id'] = $property['id']; 
+        $property['tipo'] = 'compound';
+        $properties_concatenated[$property['id']] = $property;
+        ?>
+        <input type="hidden" 
+            name="pc_properties_compounds" 
+            id="pc_properties_compounds_<?php echo $references['categories'] ?>"
+            value="<?php echo implode(',', $result['ids']); ?>"> 
+        <?php
+    }
+endif;
+// ORDENACAO
+$original_properties = [];
+$ordenation = get_term_meta($categories, 'socialdb_category_properties_ordenation', true);
+if($ordenation && $ordenation != ''){
+    $explode = explode(',', $ordenation);
+    foreach ($explode as $property_id) {
+        $original_properties[] = $properties_concatenated[$property_id];
+        unset($properties_concatenated[$property_id]);
+    }
+    if(count($properties_concatenated)>0){
+       foreach ($properties_concatenated as $property) {
+            $original_properties[] = $property;
+        } 
+    }
+}else{
+    $original_properties = $properties_concatenated;
+}
 ?>
 <div class="property-category-list" style="margin-bottom: 15px;">
-<?php
-if (isset($property_object)):
-    foreach ($property_object as $property) {
+<?php 
+foreach($original_properties as $property): 
+    if ($property['tipo'] == 'object'):
         if(in_array($property['id'], $properties_to_avoid)){
             continue;
         }
@@ -166,12 +242,7 @@ if (isset($property_object)):
             </select>
         </div>  
     </div>     
-    <?php } ?>
-<input type="hidden" name="properties_object_ids" id='properties_object_ids' value="<?php echo implode(',', $ids); ?>">
-<?php endif; ?>
-
-<?php if (isset($property_data)): 
-    foreach ($property_data as $property) { 
+    <?php elseif($property['tipo'] == 'data'): 
         if(in_array($property['id'], $properties_to_avoid)){
             continue;
         }
@@ -301,13 +372,9 @@ if (isset($property_object)):
                      </div>         
                 <?php endfor;  ?>                    
             </div>              
-        </div>              
-    <?php } ?>
+        </div>     
     <?php
-endif;
-
-if ((isset($property_term) && count($property_term) > 1) || (count($property_term) == 1 )):
-    foreach ($property_term as $property) { 
+    elseif ($property['tipo'] == 'term'):
         if(in_array($property['id'], $properties_to_avoid)){
             continue;
         }
@@ -420,11 +487,11 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
                 }
                 ?> 
         </div>   
-    </div>              
-    <?php } ?>
-<?php endif;
-?>
-<?php $object_properties_widgets_helper->list_properties_categories_compounds($property_compounds, $object_id,$references)  ?> 
+    </div>       
+    <?php elseif($property['tipo'] == 'compound'): ?>
+        <?php $object_properties_widgets_helper->list_properties_categories_compounds($property, $object_id,$references);  ?> 
+    <?php endif; ?>   
+  <?php endforeach; ?>  
 </div>
 <input type="hidden" name="pc_properties" id='pc_properties' value="<?php echo implode(',', $ids); ?>">
 <input type="hidden" name="categories" id='pc_categories' value="">

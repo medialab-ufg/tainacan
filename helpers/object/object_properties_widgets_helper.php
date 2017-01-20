@@ -427,11 +427,10 @@ class ObjectWidgetsHelper extends ViewHelper {
         include_once ( dirname(__FILE__).'/../../views/object/append_properties_categories/js/pc_compounds_js.php');
         $result = [];
         $coumpounds_id = [];
-        if (isset($properties_compounds)):
-            foreach ($properties_compounds as $property) { 
-               if(is_array($references['properties_to_avoid'])&&in_array($property['id'], $references['properties_to_avoid'])){
-                    continue;
-                }
+        $property = $properties_compounds;
+        if(is_array($references['properties_to_avoid'])&&in_array($property['id'], $references['properties_to_avoid'])){
+             return '';
+         }
                $result['ids'][] = $property['id']; 
                $references['compound_id'] = $property['id']; 
                ?>
@@ -543,14 +542,6 @@ class ObjectWidgetsHelper extends ViewHelper {
                         <?php $coumpounds_id = []; ?>
                     </div>     
                 </div>   
-               <?php
-            }
-        ?>
-        <input type="hidden" 
-            name="pc_properties_compounds" 
-            id="pc_properties_compounds_<?php echo $references['categories'] ?>"
-            value="<?php echo implode(',', $result['ids']); ?>"> 
-        <?php
-        endif;    
+               <?php  
     }
 }

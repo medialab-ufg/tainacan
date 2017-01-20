@@ -25,7 +25,12 @@ var Hook = {
 
 $(window).load(function () {
     var src = $('#src').val();
-
+//    $.router.add('/wordpress/bibliotecamodelo/:item', 'foo', function(data) {
+//        console.log('sdsd');
+//         showSingleObjectByName(data.item, src);
+//    });
+//    $.router.go('/wordpress/bibliotecamodelo/robalo', 'My cool item');
+    
     if (navigator.onLine) {
         try {
             FB.init({
@@ -554,7 +559,7 @@ $(window).load(function () {
         });
 
     });
-
+    
 });
 
 $(document).ready(function () {
@@ -935,7 +940,7 @@ function showDynatreeSingleEdit(src) {
         selectionVisible: true, // Make sure, selected nodes are visible (expanded).
         checkbox: true,
         initAjax: {
-            url: src + '/controllers/collection/collection_controller.php',
+            url: $('#src').val() + '/controllers/collection/collection_controller.php',
             data: {
                 collection_id: $("#collection_id").val(),
                 operation: 'initDynatreeSingleEdit',
@@ -946,7 +951,7 @@ function showDynatreeSingleEdit(src) {
         },
         onLazyRead: function (node) {
             node.appendAjax({
-                url: src + '/controllers/category/category_controller.php',
+                url: $('#src').val()  + '/controllers/category/category_controller.php',
                 data: {
                     category_id: node.data.key,
                     collection_id: $("#collection_id").val(),

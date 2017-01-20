@@ -2118,13 +2118,18 @@ function parse_owl1()
             $owl_object_property_range = $owl_tags->ObjectPropertyRange;
             $owl_functional_object_property_tags = $owl_tags->FunctionalObjectProperty;
             $owl_transitive_object_property_tags = $owl_tags->TransitiveObjectProperty;
+            $owl_data_property_assertions = $owl_tags->DataPropertyAssertion;
+            $owl_equivalent_classes = $owl_tags->EquivalentClasses;
+            $owl_inverse_object_properties = $owl_tags->InverseObjectProperties;
+            $owl_equivalent_data_properties = $owl_tags->EquivalentDataProperties;
 
             //Declarações de retorno
             $ret_class_tags = []; $ret_named_individuals_tags = []; $ret_data_properties_tags = []; $ret_subclass_structure = [];
             $ret_data_properties_domain_tags = []; $ret_data_properties_range_tags = []; $ret_subdata_property_of = [];
             $ret_functional_data_property = []; $ret_object_property = []; $ret_class_assertions = []; $ret_sub_object_property_of = [];
             $ret_object_property_domain = []; $ret_object_property_range = []; $ret_functional_object_property_tags = [];
-            $ret_transitive_object_property_tags = [];
+            $ret_transitive_object_property_tags = []; $ret_data_property_assertions = []; $ret_equivalent_classes = [];
+            $ret_inverse_object_properties = []; $ret_equivalent_data_properties = [];
 
             //Preparando outros elementos
             if(count($owl_declarations) > 0)
@@ -2141,8 +2146,13 @@ function parse_owl1()
                     $owl_object_property_domain, $ret_object_property_domain,
                     $owl_object_property_range, $ret_object_property_range,
                     $owl_functional_object_property_tags, $ret_functional_object_property_tags,
-                    $owl_transitive_object_property_tags, $ret_transitive_object_property_tags
+                    $owl_transitive_object_property_tags, $ret_transitive_object_property_tags,
+                    $owl_data_property_assertions, $ret_data_property_assertions,
+                    $owl_equivalent_classes, $ret_equivalent_classes,
+                    $owl_inverse_object_properties, $ret_inverse_object_properties,
+                    $owl_equivalent_data_properties, $ret_equivalent_data_properties
                 );
+
 
                 if($true)
                 {
@@ -2183,11 +2193,7 @@ function parse_owl1()
                     $ret_data_properties_domain_tags, $ret_data_properties_range_tags, $ret_subdata_property_of,
                     $ret_functional_data_property
                     );
-                
-                /*$return['result'] = true;
-                $return['url'] = get_the_permalink($collection_id);
-                return $return;*/
-                //Tratando FunctionalProperty
+
                 treats_functional_property($owl_functional_properties, $created_data_type_properties, $created_object_properties,
                     $owl_classes, $created_classes, $namespace, $collection_id, $ret_object_property_range,
                     $ret_object_property_domain);
@@ -2205,9 +2211,18 @@ function parse_owl1()
                     $namespace, $collection_id);
 
                 //Trata individuos
-                treats_individual($owl_individuals, $namespace, $collection_id, $created_classes, $ret_class_assertions);
+                treats_individual($owl_individuals, $namespace, $collection_id, $created_classes, $ret_class_assertions,
+                    $ret_data_property_assertions);
 
-                
+                //Trata classes equivalentes
+                treats_equivalent_classes($ret_equivalent_classes, $created_classes);
+
+                //Trata inverse object property
+                treats_inverse_object_properties($ret_inverse_object_properties, $created_object_properties);
+
+                //Trata equivalent data property
+                treats_equivalent_data_properties($ret_equivalent_data_properties, $created_data_type_properties);
+
             }catch (Exception $e)
             {
                 $return['message'] = $e->getMessage();
@@ -3301,14 +3316,328 @@ function treats_symmetric_properties(&$symmetric_properties, &$created_object_pr
     }
 }
 
-/*
- * Trata individuos
- */
-function treats_individuals(&$description_ind)
-{
-    foreach($description_ind as $description)
-    {
 
+function create_property(&$created_data_type_properties, &$datatype_name, &$created_classes, &$index_class, &$collection_id)
+{
+    $null = null;
+    if($created_data_type_properties[$datatype_name]['created'] != null)
+    {
+        if(!in_array($created_classes[$index_class], $created_data_type_properties[$datatype_name]['associated_classes']))
+        {
+            add_term_meta($created_classes[$index_class],'socialdb_category_property_id',$created_data_type_properties[$datatype_name]['creation_id']);
+            array_push($created_data_type_properties[$datatype_name]['associated_classes'], $created_classes[$index_class]);
+        }
+    }
+    else if($datatype_name != 'name')
+    {
+        //Cria data type property
+        $data_type_property = array('data_type' => 'string', 'id_domain_class' => $created_classes[$index_class]);
+        $data['name'] = $datatype_name;
+        $created_data_type_properties[$datatype_name]['creation_id'] =
+            add_data_type_property($null, $data_type_property, $null, $null, $data, $null, true, $collection_id, $null, $null);
+
+        $created_data_type_properties[$datatype_name]['created'] = true;
+
+        array_push($created_data_type_properties[$datatype_name]['associated_classes'], $created_classes[$index_class]);
+    }
+}
+
+function add_individual(&$data, &$collection_id, &$properties_list)
+{
+    $collection_import_model = new CollectionImportModel();
+    $user_id = get_current_user_id();
+    $post = array(
+        'post_title' => ($data['object_name']) ? $data['object_name'] : time(),
+        'post_content' => $data['object_description'] ? $data['object_description'] : '',
+        'post_status' => 'publish',
+        'post_author' => $user_id,
+        'post_type' => 'socialdb_object'
+    );
+
+    $data['ID'] = wp_insert_post($post);
+
+    $category_root_id = get_post_meta($collection_id, 'socialdb_collection_object_type', true);
+    wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type');
+    wp_set_object_terms($data['ID'], array((int) $data['class_id']), 'socialdb_category_type',true);
+    $collection_import_model->set_common_field_values($data['ID'], 'title',$data['object_name']);
+    $collection_import_model->set_common_field_values($data['ID'], 'description', $data['object_description']);
+
+    //Propriedades relacionadas a aquele individuo
+    $properties = get_term_meta($data['class_id'],'socialdb_category_property_id');
+    $properties = array_unique($properties);
+    if($properties && is_array($properties)){
+
+        foreach ($properties as $property){
+            $property_name = get_term_by('id',$property,'socialdb_property_type')->name;
+
+            if($property_name != "name")
+            {
+                if($property_name == 'latitude')
+                {
+                    $value = $properties_list['location'][$property_name];
+                }
+                else if($property_name == 'longitude')
+                {
+                    $value = $properties_list['location'][$property_name];
+                }
+                else
+                {
+                    $value = $properties_list[$property_name];
+                }
+
+                if($value != 'null')
+                {
+                    add_post_meta( $data['ID'],'socialdb_property_'.$property, $value);
+                    $collection_import_model->set_common_field_values( $data['ID'], "socialdb_property_$property",$value);
+                }
+            }
+        }
+    }
+}
+
+function treats_individual(&$individuals_tags, &$namespace, &$collection_id, &$created_classes, &$class_assertions,
+                           &$data_property_assertions)
+{
+    $null = null;
+    foreach($individuals_tags as $individual)
+    {
+        $data['object_name'] = strval($individual->attributes($namespace['rdf'])['about']);
+        if(!$data['object_name'])
+        {
+            $data['object_name'] = str_replace("#", "", $individual->attributes()['IRI']);
+        }
+
+        $resource = strval($individual->children($namespace['rdf'])->type->attributes($namespace['rdf'])['resource']);
+        if(!$resource)
+        {
+            $resource = $class_assertions[$data['object_name']];
+        }
+
+        $data['class_id'] = $created_classes[$resource]['creation_id'];
+
+        add_individual($data, $collection_id, $data_property_assertions[$data['object_name']]);
+    }
+}
+
+function treats_equivalent_classes(&$equivalent_classes, &$created_classes)
+{
+    foreach ($equivalent_classes as $classe_1 => $classe_2)
+    {
+        add_term_meta($created_classes[$classe_1]['creation_id'], 'socialdb_category_equivalentclass',
+            $created_classes[$classe_2]['creation_id']);
+
+        add_term_meta($created_classes[$classe_2]['creation_id'], 'socialdb_category_equivalentclass',
+            $created_classes[$classe_1]['creation_id']);
+    }
+}
+
+function treats_equivalent_data_properties($equivalent_data_properties, $created_data_properties)
+{
+    foreach ($equivalent_data_properties as $prop_1 => $prop_2)
+    {
+        add_term_meta($created_data_properties[$prop_1]['creation_id'], 'socialdb_property_equivalent',
+            $created_data_properties[$prop_2]['creation_id']);
+
+        add_term_meta($created_data_properties[$prop_2]['creation_id'], 'socialdb_property_equivalent',
+            $created_data_properties[$prop_1]['creation_id']);
+    }
+}
+
+function treats_inverse_object_properties(&$inverse_object_properties, &$created_object_properties)
+{
+    foreach ($inverse_object_properties as $obj_1 => $obj_2)
+    {
+        update_term_meta($created_object_properties[$obj_1]['creation_id'], 'socialdb_property_object_reverse',
+            $created_object_properties[$obj_2]['creation_id']);
+
+        update_term_meta($created_object_properties[$obj_2]['creation_id'], 'socialdb_property_object_reverse',
+            $created_object_properties[$obj_1]['creation_id']);
+
+        update_term_meta($created_object_properties[$obj_1]['creation_id'], 'socialdb_property_object_is_reverse', 'true');
+        update_term_meta($created_object_properties[$obj_2]['creation_id'], 'socialdb_property_object_is_reverse', 'true');
+    }
+}
+
+function prepare_elements(&$owl_declarations,
+                          &$ret_class_tags, &$ret_named_individuals_tags, &$ret_data_properties_tags,
+                          &$ret_object_properties,
+                          &$owl_subclassof, &$ret_subclass_structure,
+                          &$data_properties_domain_tags, &$ret_data_properties_domain_tags,
+                          &$data_properties_range_tags, &$ret_data_properties_range_tags,
+                          &$subdata_property_of, &$ret_subdata_property_of,
+                          &$functional_data_property_tags, &$ret_functional_data_property_tags,
+                          &$class_assertions, &$ret_class_assertions,
+                          &$sub_object_property_of, &$ret_sub_object_property_of,
+                          &$owl_object_property_domain, &$ret_object_property_domain,
+                          &$owl_object_property_range, &$ret_object_property_range,
+                          &$owl_functional_object_property_tags, &$ret_functional_object_property_tags,
+                          &$owl_transitive_object_property_tags, &$ret_transitive_object_property_tags,
+                          &$data_property_assertions, &$ret_data_property_assertions,
+                          &$equivalent_classes, &$ret_equivalent_classes,
+                          &$inverse_object_property, &$ret_inverse_object_property,
+                          &$equivalent_data_property, &$ret_equivalent_data_property
+)
+{
+    if(count($owl_declarations))
+    {
+        for($i = 0, $class_pos = 0, $named_individuals_pos = 0, $data_properties_pos = 0, $object_properties_pos = 0;
+            $i < count($owl_declarations); $i++)
+        {
+            if($owl_declarations[$i]->Class)
+            {
+                $ret_class_tags[$class_pos] = $owl_declarations[$i]->Class;
+
+                $ret_class_tags[$class_pos]->attributes()['IRI'] =
+                    str_replace("#", "", $ret_class_tags[$class_pos]->attributes()['IRI']);
+
+                $class_pos++;
+            }
+            else if($owl_declarations[$i]->NamedIndividual)
+            {
+                $ret_named_individuals_tags[$named_individuals_pos] = $owl_declarations[$i]->NamedIndividual;
+
+                $ret_named_individuals_tags[$named_individuals_pos]->attributes()['IRI'] =
+                    str_replace("#", "", $ret_named_individuals_tags[$named_individuals_pos]->attributes()['IRI']);
+
+                $named_individuals_pos++;
+            }
+            else if($owl_declarations[$i]->DataProperty)
+            {
+                $ret_data_properties_tags[$data_properties_pos] = $owl_declarations[$i]->DataProperty;
+
+                $ret_data_properties_tags[$data_properties_pos]->attributes()['IRI'] =
+                    str_replace("#", "", $ret_data_properties_tags[$data_properties_pos]->attributes()['IRI']);
+
+                $data_properties_pos++;
+            }
+            else if($owl_declarations[$i]->ObjectProperty)
+            {
+                $ret_object_properties[$object_properties_pos] = $owl_declarations[$i]->ObjectProperty;
+
+                $ret_object_properties[$object_properties_pos]->attributes()['IRI'] =
+                    str_replace("#", "", $ret_object_properties[$object_properties_pos]->attributes()['IRI']);
+
+                $object_properties_pos++;
+            }
+        }
+
+        for($i = 0; $i < count($equivalent_data_property); $i++)
+        {
+            $prop_0 = str_replace("#", "", $equivalent_data_property[$i]->children()->DataProperty[0]->attributes()['IRI']);
+            $prop_1 = str_replace("#", "", $equivalent_data_property[$i]->children()->DataProperty[1]->attributes()['IRI']);
+
+            $ret_equivalent_data_property[$prop_0] = $prop_1;
+        }
+
+        for($i = 0; $i < count($inverse_object_property); $i++)
+        {
+            $prop_0 = str_replace("#", "", $inverse_object_property[$i]->children()->ObjectProperty[0]->attributes()['IRI']);
+            $prop_1 = str_replace("#", "", $inverse_object_property[$i]->children()->ObjectProperty[1]->attributes()['IRI']);
+
+            $ret_inverse_object_property[$prop_0] = $prop_1;
+        }
+
+        for($i = 0; $i < count($equivalent_classes); $i++)
+        {
+            $class_0 = str_replace("#", "", $equivalent_classes[$i]->children()->Class[0]->attributes()['IRI']);
+            $class_1 = str_replace("#", "", $equivalent_classes[$i]->children()->Class[1]->attributes()['IRI']);
+
+            $ret_equivalent_classes[$class_0] = $class_1;
+        }
+
+        for($i = 0; $i < count($data_property_assertions); $i++)
+        {
+            $individual_name = str_replace("#", "", $data_property_assertions[$i]->children()->NamedIndividual->attributes()['IRI']);
+            $property_name = str_replace("#", "", $data_property_assertions[$i]->children()->DataProperty->attributes()['IRI']);
+            $value = $data_property_assertions[$i]->children()->Literal;
+
+            $ret_data_property_assertions[$individual_name][$property_name] = (string) $value;
+        }
+
+        for($i = 0; $i < count($owl_object_property_domain); $i++)
+        {
+            $index = str_replace("#", "", $owl_object_property_domain[$i]->children()->ObjectProperty->attributes()['IRI']);
+            $father_class = str_replace("#", "", $owl_object_property_domain[$i]->children()->Class->attributes()['IRI']);
+
+            $ret_object_property_domain[$index] = $father_class;
+        }
+
+        for($i = 0; $i < count($owl_object_property_range); $i++)
+        {
+            $index = str_replace("#", "", $owl_object_property_range[$i]->children()->ObjectProperty->attributes()['IRI']);
+            $father_class = str_replace("#", "", $owl_object_property_range[$i]->children()->Class->attributes()['IRI']);
+
+            $ret_object_property_range[$index] = $father_class;
+        }
+
+        for($i = 0; $i < count($class_assertions); $i++)
+        {
+            $index = str_replace("#", "", $class_assertions[$i]->children()->NamedIndividual->attributes()['IRI']);
+            $father_class = str_replace("#", "", $class_assertions[$i]->children()->Class->attributes()['IRI']);
+
+            $ret_class_assertions[$index] = $father_class;
+        }
+
+        for($i = 0; $i < count($owl_subclassof); $i++)
+        {
+            $index = str_replace("#", "", $owl_subclassof[$i]->children()->Class[0]->attributes()['IRI']);
+            $father_class = str_replace("#", "", $owl_subclassof[$i]->children()->Class[1]->attributes()['IRI']);
+
+            $ret_subclass_structure[$index] = $father_class;
+        }
+
+        for($i = 0; $i < count($data_properties_domain_tags); $i++)
+        {
+            $index = str_replace("#", "", $data_properties_domain_tags[$i]->children()->DataProperty->attributes()['IRI']);
+            $father_class =str_replace("#", "", $data_properties_domain_tags[$i]->children()->Class->attributes()['IRI']);
+
+            $ret_data_properties_domain_tags[$index] = $father_class;
+
+        }
+
+        for($i = 0; $i < count($data_properties_range_tags); $i++)
+        {
+            $index = str_replace("#", "", $data_properties_range_tags[$i]->children()->DataProperty->attributes()['IRI']);
+            $data_type =str_replace("xsd:", "", $data_properties_range_tags[$i]->children()->Datatype->attributes()['abbreviatedIRI']);
+
+            $ret_data_properties_range_tags[$index] = $data_type;
+        }
+
+        for($i = 0; $i < count($subdata_property_of); $i++)
+        {
+            $index = str_replace("#", "", $subdata_property_of[$i]->children()->DataProperty[0]->attributes()['IRI']);
+            $father_class = str_replace("#", "", $subdata_property_of[$i]->children()->DataProperty[1]->attributes()['IRI']);
+
+            $ret_subdata_property_of[$index] = $father_class;
+        }
+
+        for($i = 0; $i < count($sub_object_property_of); $i++)
+        {
+            $index = str_replace("#", "", $sub_object_property_of[$i]->children()->ObjectProperty[0]->attributes()['IRI']);
+            $father_class = str_replace("#", "", $sub_object_property_of[$i]->children()->ObjectProperty[1]->attributes()['IRI']);
+
+            $ret_sub_object_property_of[$index] = $father_class;
+        }
+
+        for($i = 0; $i < count($functional_data_property_tags); $i++)
+        {
+            $index = str_replace("#", "", $functional_data_property_tags[$i]->children()->DataProperty->attributes()['IRI']);
+            $ret_functional_data_property_tags[$index] = true;
+        }
+
+        for($i = 0; $i < count($owl_functional_object_property_tags); $i++)
+        {
+            $index = str_replace("#", "", $owl_functional_object_property_tags[$i]->children()->ObjectProperty->attributes()['IRI']);
+            $ret_functional_object_property_tags[$index] = true;
+        }
+
+        for($i = 0; $i < count($owl_transitive_object_property_tags); $i++)
+        {
+            $index = str_replace("#", "", $owl_transitive_object_property_tags[$i]->children()->ObjectProperty->attributes()['IRI']);
+            $ret_transitive_object_property_tags[$index] = true;
+        }
+
+        return true;
     }
 }
 
@@ -3492,252 +3821,5 @@ function treats_object_properties_unknown(&$result, &$created_data_type_properti
             $data['object_name'] = end(explode("#", $attributes_list['name']));
             add_individual($data, $collection_id, $attributes_list);
         }
-    }
-}
-function create_property(&$created_data_type_properties, &$datatype_name, &$created_classes, &$index_class, &$collection_id)
-{
-    error_reporting(0);
-    $null = null;
-    if($created_data_type_properties[$datatype_name]['created'] != null)
-    {
-        if(!in_array($created_classes[$index_class], $created_data_type_properties[$datatype_name]['associated_classes']))
-        {
-            add_term_meta($created_classes[$index_class],'socialdb_category_property_id',$created_data_type_properties[$datatype_name]['creation_id']);
-            array_push($created_data_type_properties[$datatype_name]['associated_classes'], $created_classes[$index_class]);
-        }
-    }
-    else if($datatype_name != 'name')
-    {
-        //Cria data type property
-        $data_type_property = array('data_type' => 'string', 'id_domain_class' => $created_classes[$index_class]);
-        $data['name'] = $datatype_name;
-        $created_data_type_properties[$datatype_name]['creation_id'] =
-            add_data_type_property($null, $data_type_property, $null, $null, $data, $null, true, $collection_id, $null, $null);
-
-        $created_data_type_properties[$datatype_name]['created'] = true;
-
-        array_push($created_data_type_properties[$datatype_name]['associated_classes'], $created_classes[$index_class]);
-    }
-}
-
-function add_individual(&$data, &$collection_id, &$properties_list)
-{
-    $collection_import_model = new CollectionImportModel();
-    $user_id = get_current_user_id();
-    $post = array(
-        'post_title' => ($data['object_name']) ? $data['object_name'] : time(),
-        'post_content' => $data['object_description'] ? $data['object_description'] : '',
-        'post_status' => 'publish',
-        'post_author' => $user_id,
-        'post_type' => 'socialdb_object'
-    );
-
-    $data['ID'] = wp_insert_post($post);
-
-    $category_root_id = get_post_meta($collection_id, 'socialdb_collection_object_type', true);
-    wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type');
-    wp_set_object_terms($data['ID'], array((int) $data['class_id']), 'socialdb_category_type',true);
-    $collection_import_model->set_common_field_values($data['ID'], 'title',$data['object_name']);
-    $collection_import_model->set_common_field_values($data['ID'], 'description', $data['object_description']);
-
-    //Propriedades relacionadas a aquele individuo
-    $properties = get_term_meta($data['class_id'],'socialdb_category_property_id');
-    $properties = array_unique($properties);
-    if($properties && is_array($properties)){
-
-        foreach ($properties as $property){
-            $property_name = get_term_by('id',$property,'socialdb_property_type')->name;
-
-            if($property_name != "name")
-            {
-                if($property_name == 'latitude')
-                {
-                    $value = $properties_list['location'][$property_name];
-                }
-                else if($property_name == 'longitude')
-                {
-                    $value = $properties_list['location'][$property_name];
-                }
-                else
-                {
-                    $value = $properties_list[$property_name];
-                }
-
-                if($value != 'null')
-                {
-                    add_post_meta( $data['ID'],'socialdb_property_'.$property, $value);
-                    $collection_import_model->set_common_field_values( $data['ID'], "socialdb_property_$property",$value);
-                }
-            }
-        }
-    }
-}
-
-function treats_individual(&$individuals_tags, &$namespace, &$collection_id, &$created_classes, &$class_assertions)
-{
-    $null = null;
-    foreach($individuals_tags as $individual)
-    {
-        $data['object_name'] = strval($individual->attributes($namespace['rdf'])['about']);
-        if(!$data['object_name'])
-        {
-            !$data['object_name'] = str_replace("#", "", $individual->attributes()['IRI']);
-        }
-
-        $resource = strval($individual->children($namespace['rdf'])->type->attributes($namespace['rdf'])['resource']);
-        if(!$resource)
-        {
-            $resource = $class_assertions[$data['object_name']];
-        }
-
-        $data['class_id'] = $created_classes[$resource]['creation_id'];
-
-        add_individual($data, $collection_id, $null);
-    }
-}
-
-function prepare_elements(&$owl_declarations,
-                          &$ret_class_tags, &$ret_named_individuals_tags, &$ret_data_properties_tags,
-                          &$ret_object_properties,
-                          &$owl_subclassof, &$ret_subclass_structure,
-                          &$data_properties_domain_tags, &$ret_data_properties_domain_tags,
-                          &$data_properties_range_tags, &$ret_data_properties_range_tags,
-                          &$subdata_property_of, &$ret_subdata_property_of,
-                          &$functional_data_property_tags, &$ret_functional_data_property_tags,
-                          &$class_assertions, &$ret_class_assertions,
-                          &$sub_object_property_of, &$ret_sub_object_property_of,
-                          &$owl_object_property_domain, &$ret_object_property_domain,
-                          &$owl_object_property_range, &$ret_object_property_range,
-                          &$owl_functional_object_property_tags, &$ret_functional_object_property_tags,
-                          &$owl_transitive_object_property_tags, &$ret_transitive_object_property_tags
-                        )
-{
-    if(count($owl_declarations))
-    {
-        for($i = 0, $class_pos = 0, $named_individuals_pos = 0, $data_properties_pos = 0, $object_properties_pos = 0;
-            $i < count($owl_declarations); $i++)
-        {
-            if($owl_declarations[$i]->Class)
-            {
-                $ret_class_tags[$class_pos] = $owl_declarations[$i]->Class;
-
-                $ret_class_tags[$class_pos]->attributes()['IRI'] =
-                    str_replace("#", "", $ret_class_tags[$class_pos]->attributes()['IRI']);
-
-                $class_pos++;
-            }
-            else if($owl_declarations[$i]->NamedIndividual)
-            {
-                $ret_named_individuals_tags[$named_individuals_pos] = $owl_declarations[$i]->NamedIndividual;
-
-                $ret_named_individuals_tags[$named_individuals_pos]->attributes()['IRI'] =
-                    str_replace("#", "", $ret_named_individuals_tags[$named_individuals_pos]->attributes()['IRI']);
-
-                $named_individuals_pos++;
-            }
-            else if($owl_declarations[$i]->DataProperty)
-            {
-                $ret_data_properties_tags[$data_properties_pos] = $owl_declarations[$i]->DataProperty;
-
-                $ret_data_properties_tags[$data_properties_pos]->attributes()['IRI'] =
-                    str_replace("#", "", $ret_data_properties_tags[$data_properties_pos]->attributes()['IRI']);
-
-                $data_properties_pos++;
-            }
-            else if($owl_declarations[$i]->ObjectProperty)
-            {
-                $ret_object_properties[$object_properties_pos] = $owl_declarations[$i]->ObjectProperty;
-
-                $ret_object_properties[$object_properties_pos]->attributes()['IRI'] =
-                    str_replace("#", "", $ret_object_properties[$object_properties_pos]->attributes()['IRI']);
-
-                $object_properties_pos++;
-            }
-        }
-
-        for($i = 0; $i < count($owl_object_property_domain); $i++)
-        {
-            $index = str_replace("#", "", $owl_object_property_domain[$i]->children()->ObjectProperty->attributes()['IRI']);
-            $father_class = str_replace("#", "", $owl_object_property_domain[$i]->children()->Class->attributes()['IRI']);
-
-            $ret_object_property_domain[$index] = $father_class;
-        }
-
-        for($i = 0; $i < count($owl_object_property_range); $i++)
-        {
-            $index = str_replace("#", "", $owl_object_property_range[$i]->children()->ObjectProperty->attributes()['IRI']);
-            $father_class = str_replace("#", "", $owl_object_property_range[$i]->children()->Class->attributes()['IRI']);
-
-            $ret_object_property_range[$index] = $father_class;
-        }
-
-        for($i = 0; $i < count($class_assertions); $i++)
-        {
-            $index = str_replace("#", "", $class_assertions[$i]->children()->NamedIndividual->attributes()['IRI']);
-            $father_class = str_replace("#", "", $class_assertions[$i]->children()->Class->attributes()['IRI']);
-
-            $ret_class_assertions[$index] = $father_class;
-        }
-
-        for($i = 0; $i < count($owl_subclassof); $i++)
-        {
-            $index = str_replace("#", "", $owl_subclassof[$i]->children()->Class[0]->attributes()['IRI']);
-            $father_class = str_replace("#", "", $owl_subclassof[$i]->children()->Class[1]->attributes()['IRI']);
-
-            $ret_subclass_structure[$index] = $father_class;
-        }
-
-        for($i = 0; $i < count($data_properties_domain_tags); $i++)
-        {
-            $index = str_replace("#", "", $data_properties_domain_tags[$i]->children()->DataProperty->attributes()['IRI']);
-            $father_class =str_replace("#", "", $data_properties_domain_tags[$i]->children()->Class->attributes()['IRI']);
-
-            $ret_data_properties_domain_tags[$index] = $father_class;
-
-        }
-
-        for($i = 0; $i < count($data_properties_range_tags); $i++)
-        {
-            $index = str_replace("#", "", $data_properties_range_tags[$i]->children()->DataProperty->attributes()['IRI']);
-            $data_type =str_replace("xsd:", "", $data_properties_range_tags[$i]->children()->Datatype->attributes()['abbreviatedIRI']);
-
-            $ret_data_properties_range_tags[$index] = $data_type;
-        }
-
-        for($i = 0; $i < count($subdata_property_of); $i++)
-        {
-            $index = str_replace("#", "", $subdata_property_of[$i]->children()->DataProperty[0]->attributes()['IRI']);
-            $father_class = str_replace("#", "", $subdata_property_of[$i]->children()->DataProperty[1]->attributes()['IRI']);
-
-            $ret_subdata_property_of[$index] = $father_class;
-        }
-
-        for($i = 0; $i < count($sub_object_property_of); $i++)
-        {
-            $index = str_replace("#", "", $sub_object_property_of[$i]->children()->ObjectProperty[0]->attributes()['IRI']);
-            $father_class = str_replace("#", "", $sub_object_property_of[$i]->children()->ObjectProperty[1]->attributes()['IRI']);
-
-            $ret_sub_object_property_of[$index] = $father_class;
-        }
-
-        for($i = 0; $i < count($functional_data_property_tags); $i++)
-        {
-            $index = str_replace("#", "", $functional_data_property_tags[$i]->children()->DataProperty->attributes()['IRI']);
-            $ret_functional_data_property_tags[$index] = true;
-        }
-
-        for($i = 0; $i < count($owl_functional_object_property_tags); $i++)
-        {
-            $index = str_replace("#", "", $owl_functional_object_property_tags[$i]->children()->ObjectProperty->attributes()['IRI']);
-            $ret_functional_object_property_tags[$index] = true;
-        }
-
-        for($i = 0; $i < count($owl_transitive_object_property_tags); $i++)
-        {
-            $index = str_replace("#", "", $owl_transitive_object_property_tags[$i]->children()->ObjectProperty->attributes()['IRI']);
-            $ret_transitive_object_property_tags[$index] = true;
-        }
-
-        return true;
     }
 }
