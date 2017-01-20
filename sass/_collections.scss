@@ -7,6 +7,10 @@ button.collection-trash, button#hideTrash {
     color: $brand-medium-blue !important;
 }
 
+button.collection-trash {
+  margin-left: 10px;
+}
+
 .tainacan-steps {
     margin: 10px -30px 20px -30px;
     background: white;
@@ -21,12 +25,13 @@ button.collection-trash, button#hideTrash {
 .selectable-items {
   padding-top: 3px;
   padding-left: 0;
+  padding-right: 0;
+  width: 18% !important;
 
   .selectable-actions, .selectors {
     display: inline-block;
   }
   .selectable-actions {
-    // border: 1px solid red;
     a {
       cursor: pointer !important;
       color: black;
@@ -34,26 +39,33 @@ button.collection-trash, button#hideTrash {
         cursor: pointer !important;
       }
     }
-    width: 50%;
+    // width: 50%;
     span {
       margin-left: 4px;
     }
   }
   .selectors {
-    width: 45%;
+    width: 35%;
     // border: 1px solid;
     a {
-      padding: 2px 2px 7px 5px;
+      padding: 2px 2px 3px 5px;
       margin-left: 5px;
+
+      &:last-child {
+        margin-left: 0 !important;
+        padding-left: 2px !important;
+      }
+
       img {
-        width: 25%;
+        margin-top: -3px !important;
+        width: 23%;
       }
       &:hover {
         cursor: pointer;
       }
       
       &.highlight {
-        @include mode_view_highlight( 2px 2px 7px 5px);
+        @include mode_view_highlight( 2px 2px 3px 5px);
       }
 
     } // a
@@ -74,73 +86,104 @@ button.collection-trash, button#hideTrash {
       padding-left: 2%;
       padding-right: 0;
 
-            #menu_object {
-                    padding-top: 1.5%;
-                    background: white;
-                    border: 3px solid $item-border;
+      #menu_object {
+        padding-top: 1.5%;
+        background: white;
+        border: 3px solid $item-border;
 
-                    .header-colecao {
-                            margin-top: 10px;
-                            padding: 10px 0 10px 0;
+        .header-colecao {
+          margin-top: 10px;
+          padding-bottom: 10px;
+          padding-top: 10px;
 
-                            .tainacan-add-item {
-                                    border-radius: 4px;
+          label {
+            color: $brand-medium-blue;
+            font-weight: normal;
+            padding-top: 5px;
 
-                                    .btn-group { display: block; }
-                                    .tainacan-add-wrapper { border-radius: 4px; }
-                                    button { color: white; }
-                            }
+            &.order-by-label {
+              width: 140px;
+              // background-color: #0A246A;
+            }
+          } // label
 
-                            optgroup, option, select, button {
-                                    color: black;
-                            }
-                    } // .header-colecao
+          #collection_single_ordenation {
+            width: 90%;
+            margin-right: 15px;
+          }
 
-                    .search-top-container {
-                            .box-left {
-                                    padding-right: 0;
-                                    width: 82.5%;
-                            }
-                            .box-right {
-                                    padding-right: 6px;
-                                    padding-left: 5px;
+          .tainacan-add-item {
+            float: left;
+            width: 11%;
+            margin-right: 15px;
 
-                                    button {
-                                            color: $brand-medium-blue;
-                                            width: 100%;
-                                            overflow: hidden;
-                                    }
-                            }
-                    } // .search-top-container
+            .btn-group { display: block; }
+            .tainacan-add-wrapper { border-radius: 4px; }
+            button { color: white; }
+          }
 
-            } // #menu_object
+          optgroup, option, select, button {
+            color: black;
+          }
 
-            #center_pagination {
-                    width: 100%;
-                    margin: 20px auto 10px auto;
-                    background: white;
-                    border: 3px solid $item-border;
-                    padding: 5px 0 5px 0;
-                    color: $item-light-gray;
+          .trash-div {
+            width: 14%;
 
-                    .pagination_items {
-                            a.btn {
-                                    span {
-                                            font-size: 10px;
-                                    }
-                            }
-                    }
+            button {
+              font-size: 12px !important;
+            }
+          }
 
-                    .center {
-                            padding-top: 5px;
-                    }
+          button#sort_list:last-child {
+            margin-left: 5px;
+          }
 
-                    .pull-right {
-                            margin-top: -20px;
-                    }
+        } // .header-colecao
 
-            } //#center_pagination
+        .search-top-container {
+          .box-left {
+            padding-right: 0;
+            width: 82.5%;
+          }
+          .box-right {
+            padding-right: 6px;
+            padding-left: 5px;
 
+            button {
+              color: $brand-medium-blue;
+              width: 100%;
+              overflow: hidden;
+            }
+          }
+        } // .search-top-container
+
+      } // #menu_object
+
+      #center_pagination {
+        width: 100%;
+        margin: 20px auto 10px auto;
+        background: white;
+        border: 3px solid $item-border;
+        padding: 5px 0 5px 0;
+        color: $item-light-gray;
+
+        .pagination_items {
+          a.btn {
+            span {
+              font-size: 10px;
+            }
+          }
+        }
+
+        .center {
+          padding-top: 5px;
+        }
+
+        .pull-right {
+          margin-top: -20px;
+        }
+
+      } //#center_pagination
     } // #div_central
 } // .container_three_columns
  .col-md-6:nth-child(even) {
@@ -177,7 +220,10 @@ button.collection-trash, button#hideTrash {
 */
 
 .viewMode-control {
-  padding-right: 0;
+  //padding-right: 0;
+  float: left;
+  margin: 0 15px 0 15px;
+  width: 10% !important;
 
   img {
     width: 15px;

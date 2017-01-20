@@ -243,7 +243,7 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
                         <div class="col-md-12 header-colecao">
                             <div class="row">
                                 <?php if (get_option('collection_root_id') != get_the_ID() && (is_user_logged_in() && verify_allowed_action(get_the_ID(), 'socialdb_collection_permission_create_object'))): ?>
-                                    <div class="col-md-2 tainacan-add-item">
+                                    <div class="tainacan-add-item">
                                         <?php if (has_filter('show_custom_add_item_button')): ?>
                                             <?php echo apply_filters('show_custom_add_item_button', ''); ?>
                                         <?php elseif (has_nav_menu('menu-ibram')): ?>
@@ -272,18 +272,19 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
                                         <?php endif; ?>
                                     </div>
                                 <?php endif; ?>
-                                <div class="col-md-4 flex-box">
+                                <div class="col-md-5 flex-box no-padding">
+                                    <label for="collection_single_ordenation" class="order-by-label"><?php _t('Order by: ',1); ?></label>
                                     <select onchange="getOrder(this)" class="form-control white"
                                             name="collection_single_ordenation" id="collection_single_ordenation">
                                         <option value=""><?php _e('Sorted by', 'tainacan') ?></option>
                                     </select>
-                                    &nbsp;
+
                                     <button onclick="change_ordenation('asc')" type="button" id="sort_list" class="btn btn-default pull-right"><span class="glyphicon glyphicon-sort-by-attributes"></span></button>
                                     <button onclick="change_ordenation('desc')" type="button" id="sort_list" class="btn btn-default pull-right"><span class="glyphicon glyphicon-sort-by-attributes-alt"></span></button>
                                 </div>
 
-                                <div class="col-md-2 viewMode-control">
-                                    <div class="sec-color"> <?php _e('Show:', 'tainacan') ?> </div>
+                                <div class="col-md-2 no-padding viewMode-control">
+                                    <label class="sec-color"> <?php _e('Show:', 'tainacan') ?> </label>
                                     <button id="collectionViewMode" data-toggle="dropdown" type="button" class="btn btn-default">
                                         <?php _e("Show:", "tainacan"); ?>
                                     </button>
@@ -316,10 +317,10 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
                                 </div>
 
                                 <div class="col-md-2 selectable-items">
-                                    <?php
-                                    if (is_user_logged_in() && get_the_ID() != get_option('collection_root_id') &&
+                                    <?php if (is_user_logged_in() && get_the_ID() != get_option('collection_root_id') &&
                                             verify_collection_moderators(get_the_ID(), get_current_user_id())):
                                         ?>
+                                        <label for="collection_single_ordenation"><?php _t('Select: ',1); ?></label>
                                         <div class="selectors">
                                             <a onclick="select_some()" class="select_some">
                                                 <?php echo ViewHelper::render_icon("selection", "png", __("Select some items", "tainacan")); ?>
@@ -329,7 +330,7 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
                                             </a>
                                             <input type="hidden" value="" class="bulk_action" name="bulk_action">
                                         </div>
-                                        <div class="selectable-actions pull-right" style="display: none;">
+                                        <div class="selectable-actions" style="display: none;">
                                             <a class="move_trash">
                                                 <span class="glyphicon glyphicon-trash"></span>
                                             </a>
@@ -340,12 +341,14 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
                                     <?php endif; ?>
                                 </div>
 
-                                <div class="col-md-2">
+                                <div class="col-md-1 no-padding trash-div pull-right">
                                     <?php
                                     if (is_user_logged_in()) {
                                         if (get_the_ID() != get_option('collection_root_id') && verify_collection_moderators(get_the_ID(), get_current_user_id())) {
                                             ?>
-                                            <button onclick="showTrash('<?php echo get_template_directory_uri(); ?>');" class="btn btn-default pull-left collection-trash"><?php _e('Trash', 'tainacan'); ?></button>
+                                            <button onclick="showTrash('<?php echo get_template_directory_uri(); ?>');" class="btn btn-default pull-right collection-trash">
+                                                <?php _e('Trash', 'tainacan'); ?>
+                                            </button>
                                             <?php
                                         } else {
                                             $admin_email = get_option('admin_email');
@@ -353,7 +356,9 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
                                             $user_data = get_user_by('ID', get_current_user_id())->user_email;
                                             //if ($admin_email == $user_data || $blog_email == $user_data) {
                                                 ?>
-                                                <button onclick="showTrash('<?php echo get_template_directory_uri(); ?>');" class="btn btn-default pull-left"><?php _e('Trash', 'tainacan'); ?></button>
+                                                <button onclick="showTrash('<?php echo get_template_directory_uri(); ?>');" class="btn btn-default pull-right">
+                                                    <?php _e('Trash', 'tainacan'); ?>
+                                                </button>
                                                 <?php
                                             //}
                                         }
