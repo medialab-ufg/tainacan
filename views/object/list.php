@@ -5,6 +5,8 @@ include_once ('js/list_js.php');
 include_once ('js/geolocation_js.php');
 
 $viewHelper = new ViewHelper();
+$objHelper = new ObjectHelper();
+
 $countLine = 0;
 $collection_list_mode = $collection_data['collection_metas']['socialdb_collection_list_mode'];
 
@@ -19,6 +21,8 @@ if( "geolocation" === $collection_list_mode && is_null($geo_coordinates) && $is_
     echo '<input type="hidden" id="filtered_collection" value="true" />';
 }
 $_fxd_title = $viewHelper->terms_fixed['title']->name;
+$numberItems = ceil($loop->found_posts / 10);
+
 ?>
 
 <!-- TAINACAN: hidden utilizados para execucao de processos desta view (list.php)  -->
@@ -34,8 +38,10 @@ $_fxd_title = $viewHelper->terms_fixed['title']->name;
 <input type="hidden" id="repo_fixed_title" value="<?php echo $_fxd_title; ?>">
     <input type="hidden" id="original_post_count" value="<?php echo $loop->post_count; ?>" />
 
-<?php if ( $loop->have_posts() ): ?>
+<?php
+$objHelper->renderCollectionPagination($loop->found_posts, $numberItems, $pagid, $show_string, 'top_pag');
 
+if ( $loop->have_posts() ): ?>
     <div id="collection-view-mode">
         <div id='<?php echo $collection_list_mode; ?>-viewMode' class='col-md-12 no-padding list-mode-set'>
             <?php
@@ -106,45 +112,5 @@ $_fxd_title = $viewHelper->terms_fixed['title']->name;
 <?php
 endif;
 
-$numberItems = ceil($loop->found_posts / 10);
-if ($loop->found_posts > 10):
-    ?>
-    <!-- TAINACAN: div com a paginacao da listagem -->
-    <div class="">
-        <div id="center_pagination" class="col-md-12">
-
-            <input type="hidden" id="number_pages" name="number_pages" value="<?= $numberItems; ?>">
-            <div class="pagination_items col-md-4 pull-left">
-                <a href="#" class="btn btn-default btn-sm first" data-action="first"><span class="glyphicon glyphicon-backward"></span><!--&laquo;--></a>
-                <a href="#" class="btn btn-default btn-sm previous" data-action="previous"><span class="glyphicon glyphicon-step-backward"></span><!--&lsaquo;--></a>
-                <input type="text"  style="width: 90px;" readonly="readonly" data-current-page="<?php if (isset($pagid)) echo $pagid; ?>" data-max-page="0" />
-                <a href="#" class="btn btn-default btn-sm next" data-action="next"><span class="glyphicon glyphicon-step-forward"></span><!--&rsaquo;--></a>
-                <a href="#" class="btn btn-default btn-sm last" data-action="last"><span class="glyphicon glyphicon-forward"></span><!--   &raquo; --></a>
-            </div>
-
-            <div class="col-md-3 center">                
-                <?php
-                // $_per_page = $loop->query['posts_per_page'];
-                $_per_page = 10;
-                
-                echo $show_string . " 1 - <span class='per-page'> $_per_page </span>" . __(' of ', 'tainacan') . $loop->found_posts;
-                ?>
-            </div>
-
-            <div class="col-md-3 pull-right">
-                <?php _e('Items per page:', 'tainacan') ?>
-                <select name="items-per-page" id="items-per-page">
-                    <option>5</option>
-                    <option>8</option>
-                    <option value="<?php echo $_per_page; ?>" selected> <?php echo $_per_page; ?> </option>
-                    <option>15</option>
-                    <option>25</option>
-                    <option>50</option>
-                </select>
-            </div>
-
-        </div>
-    </div>
-<?php endif; ?>
-
-
+$objHelper->renderCollectionPagination($loop->found_posts, $numberItems, $pagid, $show_string, 'bottom_pag');
+?>
