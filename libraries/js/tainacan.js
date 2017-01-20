@@ -25,7 +25,12 @@ var Hook = {
 
 $(window).load(function () {
     var src = $('#src').val();
-
+//    $.router.add('/wordpress/bibliotecamodelo/:item', 'foo', function(data) {
+//        console.log('sdsd');
+//         showSingleObjectByName(data.item, src);
+//    });
+//    $.router.go('/wordpress/bibliotecamodelo/robalo', 'My cool item');
+    
     if (navigator.onLine) {
         try {
             FB.init({
@@ -554,7 +559,7 @@ $(window).load(function () {
         });
 
     });
-
+    
 });
 
 $(document).ready(function () {

@@ -232,6 +232,7 @@
                      type: "POST",
                      url: $('#src').val() + "/controllers/collection/collection_controller.php",
                      data: {
+                         category_id: $('#property_category_id').val(),
                          collection_id: $('#collection_id').val(), 
                          operation: 'update_ordenation_properties', 
                          tab : tab, 
