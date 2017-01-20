@@ -725,7 +725,10 @@ class ThemeOptionsModel extends Model {
                     //Insere Metadados
                     foreach ($metadados as $key => $value) {
                         if($key=='subject'){
-                            
+                            $subjects = explode('; ', $value);
+                            foreach($subjects as $sub){
+                                
+                            }
                         }else if ($value['value'] != null) {
                             $term = $this->checkIfMetadataExists($key, $parent_collection_id);
                             if ($term) {
