@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: socialdb\n"
 "POT-Creation-Date: 2017-01-20 10:27-0200\n"
-"PO-Revision-Date: 2017-01-20 10:27-0200\n"
+"PO-Revision-Date: 2017-01-23 17:00-0200\n"
 "Last-Translator: Rodrigo de Oliveira <webmaster@rodrigodeoliveira.net>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -4989,7 +4989,7 @@ msgstr "Escola um estilo para cabeçalho da sua coleção"
 
 #: views/design/edit.php:96 views/theme_options/edit_configuration.php:28
 msgid "Cover"
-msgstr "Capa"
+msgstr "Imagem de Cabeçalho"
 
 #: views/design/edit.php:99
 msgid "Hide details of your collection"
@@ -8439,7 +8439,7 @@ msgstr "Título do repositório"
 
 #: views/theme_options/edit_configuration.php:18
 msgid "Logo"
-msgstr "Logo do Repositório"
+msgstr "Marca do Repositório"
 
 #: views/theme_options/edit_configuration.php:44
 msgid "Repository description"
