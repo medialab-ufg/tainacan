@@ -1122,7 +1122,7 @@
         $('#configuration').hide().html('');
         $('#main_part').show('slow');
         var stateObj = {foo: "bar"};
-        history.replaceState(stateObj, "page 2", '?');
+        backRoute($('#slug_collection').val());
         //set_containers_class($('#collection_id').val());
     }
 

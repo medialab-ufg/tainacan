@@ -459,12 +459,14 @@
         $(el).submit(function(e) {
             e.preventDefault();
             var current_data = $(el).serialize();
+            //console.log(current_data);
             var path = src + '/controllers/property/property_controller.php';
             $('.modal').modal('hide');		
             $('#modalImportMain').modal('show');		
 
             $.ajax({
                 url: path,
+                type: 'POST',
                 data: current_data,
                 processData: false
             }).done(function(result) {
@@ -1784,7 +1786,14 @@
             document.getElementById(el).reset();
             var cur = "#" + el;
             $(cur + " .data-widget").hide();
-            $(cur + " input[name='operation']").val('add');
+            if(el=='submit_form_property_term' ){
+                $(cur + " input[name='operation']").val('add_property_term');
+            }else if(el=='submit_form_ranking'){
+                $(cur + " input[name='operation']").val('add');
+            }else{
+                $(cur + " input[name='operation']").val('add_property_data');
+            }
+            
         });
         $('#socialdb_property_term_cardinality_1').trigger('click');
         $("#submit_form_property_term #socialdb_property_term_root").html('');
@@ -2407,7 +2416,13 @@
                 $('#property_fixed_required').attr('checked','checked');
             }else{
                 $('#property_fixed_required').removeAttr('checked');
-            }           
+            }       
+            if(!get_tab_property_id(id)){
+                 $("#socialdb_event_property_tab_fixed option[value='default']").attr('selected','selected');
+            }else{
+                $("#socialdb_event_property_tab_fixed option[value='" + get_tab_property_id(id) +"']").attr('selected','selected');
+            }
+            
         });
     }
     // funcao que bloqueia as facetas que nao sao permitidas

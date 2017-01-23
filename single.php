@@ -43,6 +43,8 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
     <input type="hidden" id="mode" name="mode" value="<?php echo $mode ?>">
     <input type="hidden" id="site_url" value="<?php echo site_url(); ?>" >
     <input type="hidden" id="socialdb_permalink_collection" name="socialdb_permalink_collection" value="<?php echo get_the_permalink(get_the_ID()); ?>" />
+    <input type="hidden" id="route_blog" name="route_blog" value="<?php echo str_replace($_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['SERVER_NAME'], '', get_bloginfo('url')) ?>/"> <!-- utilizado na busca -->
+    <input type="hidden" id="slug_collection" name="slug_collection" value="<?php echo get_post(get_the_ID())->post_name; ?>"> <!-- utilizado na busca -->
     <input type="hidden" id="search_collection_field" name="search_collection_field" value="<?php
     if ($_GET['search']) {
         echo $_GET['search'];
@@ -74,8 +76,8 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
     ?>">
     <!-- PAGINA DO ITEM -->
     <input type="hidden" id="object_page" name="object_page" value="<?php
-    if (isset($_GET['item'])) {
-        echo trim($_GET['item']);
+    if (get_query_var('item')) {
+        echo trim(get_query_var('item'));
     }
     ?>">
     <!-- PAGINA DA CATEGORIA -->
@@ -1253,7 +1255,7 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
     </div>
 
     <?php require_once (dirname(__FILE__) . '/views/search/js/single_js.php'); ?>
-
+    <?php require_once (dirname(__FILE__) . '/extras/routes/routes.php'); ?>
 
     <?php
 endwhile; // end of the loop.

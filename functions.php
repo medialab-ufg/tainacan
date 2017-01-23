@@ -286,12 +286,14 @@ add_filter('query_vars', 'my_queryvars');
 function my_queryvars($qvars) {
     $qvars[] = 'collection_name';
     $qvars[] = 'oaipmh';
+    $qvars[] = 'item';
     return $qvars;
 }
 
 function custom_rewrite_tag() {
     add_rewrite_tag('%collection_name%', '([^&]+)');
     add_rewrite_tag('%oaipmh%', '([^&]+)');
+    add_rewrite_tag('%item%', '([^&]+)');
 }
 
 add_action('init', 'custom_rewrite_tag', 10, 0);
@@ -299,6 +301,8 @@ add_action('init', 'custom_rewrite_tag', 10, 0);
 function custom_rewrite_basic() {
     add_rewrite_rule('^feed_collection/([^/]*)', 'index.php?collection_name=$matches[1]', 'top');
     add_rewrite_rule('^oai', 'index.php?oaipmh=true', 'top');
+    add_rewrite_rule('^([^/]*)/([^/]*)', 'index.php?collection=$matches[1]&item=$matches[2]', 'top');
+    add_rewrite_rule('^([^/]*)', 'index.php?collection=$matches[1]', 'top');
     flush_rewrite_rules();
 }
 
