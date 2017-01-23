@@ -423,7 +423,7 @@ header{
 /*------------------main------------------*/
 #main_part.home{
     // padding: 15% 0 5% 0;
-    padding: 0 0 5% 0;
+    padding: 3% 0 5% 0;
     overflow: hidden;
 }
 center.container{
@@ -442,9 +442,10 @@ center.container{
 .titulo-blocos{
     text-align: left;
 }
-.collection_header{
+.collection_header {
     padding: 0;
     margin: 0;
+    // margin-top: 49px;
     border: none;
     border-radius: 0;
     background-image: url(../images/capa-colecao.png);
@@ -735,3 +736,13 @@ button.tainacan-filter-range {
 } // .multiple-items-accordion
 
 #accordion .ui-accordion-content { padding: 10px; }
+
+body.page-template-page-statistics {
+
+    .header-navbar {
+        position: relative !important;
+    }
+    .user-actions.collapse {
+        border-bottom: 0 !important;
+    }
+}

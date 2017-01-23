@@ -3,6 +3,10 @@
 body.home {
  background: black;
 
+  .user-actions.collapse {
+    border-bottom: 0 !important;
+  }
+
   .menu-ibram {
     padding-left: 25px !important;
   }
@@ -115,6 +119,7 @@ body.home {
   .container-fluid {
     a.logo-tainacan {
       margin: 0 !important;
+      margin-top: -10px !important;
     }
   }
 

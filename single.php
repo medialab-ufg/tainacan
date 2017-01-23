@@ -31,8 +31,7 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
     <!-- TAINACAN: div necessaria para procedimentos do facebook  -->
     <div id="fb-root"></div>
     <!-- TAINACAN: esta div (AJAX) mostra o painel da colecao e suas acoes, estilos inline para descer a div apenas pois estava sob o header  -->
-    <div class="panel panel-default collection_header" id="collection_post" style="margin-top: -20px;margin-bottom: 0px;">
-    </div>
+    <div id="collection_post" style="margin-top: 50px;"> </div>
     <!-- TAINACAN - BEGIN: ITENS NECESSARIOS PARA EXECUCAO DE VARIAS PARTES DO SOCIALDB -->
     <input type="hidden" id="visualization_page_category" name="visualization_page_category" value="<?php echo (!$visualization_page_category || $visualization_page_category === 'right_button') ? 'right_button' : 'click'; ?>">
     <input type="hidden" id="show_collection_default" name="show_collection_default" value="<?php echo (!$collection_default || $collection_default === 'false') ? 'show' : 'hide'; ?>">
@@ -492,7 +491,7 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
     <!-- TAINACAN: esta div (AJAX) mostra as configuracoes da colecao  -->
     <div id='container-fluid-configuration' class="container-fluid no-padding" style="background-color: #f1f2f2">
 
-        <div id="configuration" class="col-md-12 no-padding"></div>
+        <div id="configuration" class="col-md-12 no-padding" style="margin-top: 50px;"></div>
 
     </div>
     <!-- TAINACAN: scripts utilizados para criacao e monagem dos widgets de pesquisa  -->

@@ -58,6 +58,9 @@ ul.repository-settings, .admin-configs {
     }
 
     &.wp-admin {
+      a {
+        padding-right: 7px !important;
+      }
       span {
         color: #9e9a9a;
       }
@@ -68,7 +71,11 @@ ul.repository-settings, .admin-configs {
 
 .header-navbar {
   padding: 5px 0 5px 0;
-  // height: 50px;
+  height: 50px;
+  position: fixed;
+  width: 100%;
+  z-index: 99;
+  top: 0;
 
   a.logo-tainacan {
     padding: 0;
@@ -128,7 +135,9 @@ ul.repository-settings, .admin-configs {
   }
 } // .header-navbar
 
-.user-actions {
+.user-actions.collapse {
+  border-bottom: 2px solid white !important;
+  height: 45px !important;
 
   ul {
     span.glyphicon {
@@ -139,6 +148,11 @@ ul.repository-settings, .admin-configs {
 
   button {
     padding: 5px;
+  }
+
+  .right-menu-container {
+    float: right;
+    margin-top: -7px
   }
 
 } // .user-actions
