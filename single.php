@@ -917,6 +917,50 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modalImportFinished" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content"> <!--Conteúdo da janela modal-->
+                <div class="modal-header"><!--Cabeçalho-->
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only"><?php _e('Do you really want to close?', 'tainacan') ?></span>
+                    </button>
+
+                    <h4 class="modal-title text-center"><?php _e('Imported elements', 'tainacan') ?></h4>
+                </div><!--Fim cabeçalho-->
+
+                <div class="modal-body"><!--Conteúdo-->
+                    <div class="text-center">
+                        <h4 id="ontology_name"></h4>
+                        <dl class="dl-horizontal">
+                            <dt><?php _e('Classes', 'tainacan') ?>: </dt>
+                            <dd id="classes">00</dd>
+
+                            <dt><?php _e('Datatype', 'tainacan') ?>: </dt>
+                            <dd id="datatype">00</dd>
+
+                            <dt><?php _e('Object Property', 'tainacan') ?>: </dt>
+                            <dd id="object_property">00</dd>
+
+                            <dt><?php _e('Individuals', 'tainacan') ?></dt>
+                            <dd id="individuals">00</dd>
+                        </dl>
+                    </div>
+                </div><!--Fim conteúdo-->
+
+                <div class="modal-footer"><!--Rodapé-->
+                    <button type="button" class="btn btn-primary"
+                            onclick="go_to_ontology()"
+                            id="go_to_ontology"
+                            class="btn btn-primary tainacan-blue-btn-bg pull-right">
+                        <?php _e('Go to ontology','tainacan'); ?>
+                    </button>
+
+                </div><!--Fim rodapé-->
+
+            </div>
+        </div>
+    </div>
 
     <!-- TAINACAN: modal padrao bootstrap para demonstracao de execucao de processos, utilizado em varias partes do socialdb   -->
     <div class="modal fade" id="modalImportSocialnetworkClean" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
