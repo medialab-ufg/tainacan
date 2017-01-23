@@ -725,9 +725,29 @@ class ThemeOptionsModel extends Model {
                     //Insere Metadados
                     foreach ($metadados as $key => $value) {
                         if($key=='subject'){
-                            $subjects = explode('; ', $value);
+                            $subjects = explode(';', $value);
+                            $term = $this->checkIfMetadataExists($key, $parent_collection_id);
+                            if ($term) {
+                                //insere o valor no metadado encontrado
+                                $meta_id = $term->term_id;
+                                $parent_id = get_term_meta($meta_id, 'socialdb_property_term_root', true);
+                            } else {
+                                //cria o metadado e insere o valor
+                                $category_root_id = $this->get_category_root_of($parent_collection_id);
+                                $parent_id = $this->add_property_term( $parent_collection_id, $category_root_id);
+                            }
+                            
                             foreach($subjects as $sub){
-                                
+                                $nick = str_replace(' ', '', $sub);
+                                $subject_root = get_term_by('slug', strtolower($nick).'_category_' . $collection_id, 'socialdb_category_type');
+                                if(!$subject_root){
+                                    $array = wp_insert_term($sub, 'socialdb_category_type', array('parent' => $parent_id,
+                                                'slug' => strtolower($nick).'_category_' . $collection_id));
+                                    add_term_meta($array['term_id'], 'socialdb_category_owner', get_current_user_id());
+                                }else{
+                                    $array['term_id'] = $subject_root->term_id;
+                                }
+                                 wp_set_object_terms($inserted_item_id, array((int)  $array['term_id']), 'socialdb_category_type',true);
                             }
                         }else if ($value['value'] != null) {
                             $term = $this->checkIfMetadataExists($key, $parent_collection_id);
@@ -879,29 +899,24 @@ class ThemeOptionsModel extends Model {
      * @return int O id da da propriedade criada.
      * @author: Eduardo Humberto 
      */
-   public function add_property_term($property,$collection_id,$category_root_id) {
-        $subject_root = get_term_by('slug', 'subject_' . $collection_id, 'socialdb_category_type');
+   public function add_property_term($collection_id,$category_root_id) {
+        $subject_root = get_term_by('slug', 'subject_category_' . $collection_id, 'socialdb_category_type');
         if(!$subject_root){
-            $array = wp_insert_term(__('Subject'), 'socialdb_category_type', array('parent' => $this->get_category_root_id(),
-                        'slug' => 'subject_' . $collection_id));
+            $array = wp_insert_term(__('Subject','tainacan'), 'socialdb_category_type', array('parent' => $this->get_category_root_id(),
+                        'slug' => 'subject_category_' . $collection_id));
             add_term_meta($array['term_id'], 'socialdb_category_owner', get_current_user_id());
+        }else{
+            $array['term_id'] = $subject_root->term_id;
         }
-       
-       
-        $new_property = wp_insert_term((string)$property->name, 'socialdb_property_type', array('parent' => $this->get_property_type_id('socialdb_property_term'),
-                'slug' => $this->generate_slug((string)$property->name, 0)));
-        if(is_wp_error($new_property)){
-            $new_property = wp_insert_term(__('Imported Property','tainacan'), 'socialdb_property_type', array('parent' => $this->get_property_type_id('socialdb_property_term'),
-                'slug' => $this->generate_slug(__('Imported Property','tainacan'), 0)));
-        }
+        $new_property = wp_insert_term(__('Subject','tainacan'), 'socialdb_property_type', array('parent' => $this->get_property_type_id('socialdb_property_term'),
+                'slug' =>'subject_' . $collection_id));
         
-        update_term_meta($new_property['term_id'], 'socialdb_property_term_cardinality', (string) $property->socialdb_property_term_cardinality);
-        update_term_meta($new_property['term_id'], 'socialdb_property_term_widget',  (string)$property->socialdb_property_term_widget);
-        update_term_meta($new_property['term_id'], 'socialdb_property_help',  (string)$property->socialdb_property_help);
-        update_term_meta($new_property['term_id'], 'socialdb_property_term_root',$this->get_term_imported_id((string) $property->socialdb_property_term_root));  
+        update_term_meta($new_property['term_id'], 'socialdb_property_term_cardinality', '1');
+        update_term_meta($new_property['term_id'], 'socialdb_property_term_widget',  'tree');
+        update_term_meta($new_property['term_id'], 'socialdb_property_term_root',$array['term_id']);  
         update_term_meta($new_property['term_id'], 'socialdb_property_created_category',$category_root_id);
         add_term_meta($category_root_id, 'socialdb_category_property_id', $new_property['term_id']);
-        return $new_property['term_id'];
+        return $array['term_id'];
    }
 
     /**
