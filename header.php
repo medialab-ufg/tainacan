@@ -135,6 +135,11 @@ $viewHelper = new ViewHelper();
                                     <?php echo ViewHelper::render_icon("help", "png", __('Click to download the manual', 'tainacan')); ?>
                                 </a>
                             </li>
+                            <li class="wp-admin">
+                                <a href="<?php echo get_admin_url(); ?>">
+                                    <span class="dashicons dashicons-wordpress"></span>
+                                </a>
+                            </li>
                         <?php else: ?>
                             <li>
                                 <button class="btn btn-default pull-right" onclick="showLoginScreen('<?php echo get_template_directory_uri(); ?>');" href="#">

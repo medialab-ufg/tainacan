@@ -1,3 +1,8 @@
+/*
+#wpadminbar {
+  display: none !important;
+}
+*/
 #tainacan-breadcrumbs {
   padding: 10px 0 10px 15px;
   background: $collections-bg-color;
@@ -32,7 +37,11 @@ ul.repository-settings, .admin-configs {
     img {
       height: 12px;
       margin: -2px 2px 0 0;
-    }
+
+      &.icon-wordpress {
+        height: 20px;
+      }
+    } // img
 
     &.manual {
       a {
@@ -48,12 +57,18 @@ ul.repository-settings, .admin-configs {
       }
     }
 
+    &.wp-admin {
+      span {
+        color: #9e9a9a;
+      }
+    }
+
   } // li
 }
 
 .header-navbar {
   padding: 5px 0 5px 0;
-  // height: 61px;
+  // height: 50px;
 
   a.logo-tainacan {
     padding: 0;
@@ -103,6 +118,7 @@ ul.repository-settings, .admin-configs {
       img {
         height: 12px;
       }
+
       &.showing-input {
         border-left: none !important;
         border-radius: 0 4px 4px 0;
@@ -333,3 +349,4 @@ a:hover{text-decoration:underline}
 #tainacan-menu {
   border-radius: 4px;
 }
+

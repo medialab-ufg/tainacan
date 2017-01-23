@@ -224,7 +224,7 @@ class ViewHelper {
         if ($alt == "") { $alt = __( ucfirst( $icon ), 'tainacan'); }
         $img_path = get_template_directory_uri() . '/libraries/images/icons/icon-'.$icon.'.'.$ext;
 
-        return "<img alt='$alt' title='$alt' src='$img_path' />";
+        return "<img alt='$alt' title='$alt' src='$img_path' class='icon-$icon'/>";
     }
     
      /**

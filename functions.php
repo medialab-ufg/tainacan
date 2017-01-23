@@ -13,6 +13,8 @@ include_once( dirname(__FILE__) . "/config/config.php" );
 require_once('wp_bootstrap_navwalker.php');
 include_once("models/log/log_model.php");
 
+show_admin_bar(false);
+
 /**
  * Criando tabela taxonomymeta
  *
@@ -1706,6 +1708,11 @@ if (!function_exists("theme_js")) {
     }
 
     add_action('wp_enqueue_scripts', 'theme_js');
+}
+
+add_action( 'wp_enqueue_scripts', 'load_dashicons_front_end' );
+function load_dashicons_front_end() {
+    wp_enqueue_style( 'dashicons' );
 }
 
 function colpick_scripts() {
