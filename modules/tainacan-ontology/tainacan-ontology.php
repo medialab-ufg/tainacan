@@ -2130,6 +2130,9 @@ function parse_owl1()
             $ret_object_property_domain = []; $ret_object_property_range = []; $ret_functional_object_property_tags = [];
             $ret_transitive_object_property_tags = []; $ret_data_property_assertions = []; $ret_equivalent_classes = [];
             $ret_inverse_object_properties = []; $ret_equivalent_data_properties = [];
+            $ret_data_min_cardinality = []; $ret_data_max_cardinality = []; $ret_data_exact_cardinality = [];
+            $ret_some_values_from_data_property = []; $ret_all_values_from_data_property = [];
+            $ret_object_min_cardinality = []; $ret_object_max_cardinality = []; $ret_object_exact_cardinality = [];
 
             //Preparando outros elementos
             if(count($owl_declarations) > 0)
@@ -2150,7 +2153,10 @@ function parse_owl1()
                     $owl_data_property_assertions, $ret_data_property_assertions,
                     $owl_equivalent_classes, $ret_equivalent_classes,
                     $owl_inverse_object_properties, $ret_inverse_object_properties,
-                    $owl_equivalent_data_properties, $ret_equivalent_data_properties
+                    $owl_equivalent_data_properties, $ret_equivalent_data_properties,
+                    $ret_data_min_cardinality, $ret_data_max_cardinality, $ret_data_exact_cardinality,
+                    $ret_all_values_from_data_property, $ret_some_values_from_data_property,
+                    $ret_object_min_cardinality, $ret_object_max_cardinality, $ret_object_exact_cardinality
                 );
 
 
@@ -2223,6 +2229,12 @@ function parse_owl1()
                 //Trata equivalent data property
                 treats_equivalent_data_properties($ret_equivalent_data_properties, $created_data_type_properties);
 
+                //Treats Protege Cardinality
+                treats_protege_restriction($ret_data_min_cardinality, $ret_data_max_cardinality, $ret_data_exact_cardinality,
+                    $created_data_type_properties, $ret_all_values_from_data_property, $ret_some_values_from_data_property,
+                    $created_classes, $ret_object_min_cardinality, $ret_object_max_cardinality, $ret_object_exact_cardinality,
+                    $created_object_properties);
+
             }catch (Exception $e)
             {
                 $return['message'] = $e->getMessage();
@@ -2249,7 +2261,7 @@ function treats_ontology(&$ontology_tags, &$namespace, &$imported_url)
 
         if(!$data['collection_name'])
         {
-            $data['collection_name'] = strval(time());
+            $data['collection_name'] = "Untitled Ontology - ".time();
         }
     }
 
@@ -3139,6 +3151,7 @@ function treats_class_restriction(&$class_tags, &$created_classes, &$created_obj
                     }
 
                     $resource = str_replace("#", "", $resource);
+
                     add_term_meta($on_property_id, "socialdb_property_somevaluesfrom", $created_classes[strval($resource)]['creation_id']);
                 }else
                 //!Some values from
@@ -3458,6 +3471,57 @@ function treats_inverse_object_properties(&$inverse_object_properties, &$created
     }
 }
 
+function treats_protege_restriction(&$min_card_data_property, &$max_card_data_property, &$exact_card_data_property,
+                                    &$created_data_property, &$all_values_from_object_property,
+                                    &$some_values_from_object_property, &$created_classes,
+                                    &$min_card_object_property, &$max_card_object_property, &$exact_card_object_property,
+                                    &$created_object_property)
+{
+    /*Object Property*/
+    //Min Cardinality Object Property
+    foreach ($min_card_object_property as $prop_name => $min)
+    {
+        $prop_id = $created_object_property[$prop_name]['creation_id'];
+        add_term_meta($prop_id, "socialdb_property_mincardinalidality", (int) $min);
+    }
+
+    //Max Cardinality Object Property
+    foreach ($max_card_object_property as $prop_name => $max)
+    {
+        $prop_id = $created_object_property[$prop_name]['creation_id'];
+        add_term_meta($prop_id, "socialdb_property_maxcardinalidality", (int) $max);
+    }
+
+    //Exact Cardinality Object Property
+    foreach ($exact_card_object_property as $prop_name => $exact)
+    {
+        $prop_id = $created_object_property[$prop_name]['creation_id'];
+        add_term_meta($prop_id, "socialdb_property_cardinalidality", (int) $exact);
+    }
+
+    /*Data Property*/
+    //Min Cardinality Data Property
+    foreach ($min_card_data_property as $prop_name => $min)
+    {
+        $prop_id = $created_data_property[$prop_name]['creation_id'];
+        add_term_meta($prop_id, "socialdb_property_mincardinalidality", (int) $min);
+    }
+
+    //Max Cardinality Data Property
+    foreach ($max_card_data_property as $prop_name => $max)
+    {
+        $prop_id = $created_data_property[$prop_name]['creation_id'];
+        add_term_meta($prop_id, "socialdb_property_maxcardinalidality", (int) $max);
+    }
+
+    //Exact Cardinality Data Property
+    foreach ($exact_card_data_property as $prop_name => $exact)
+    {
+        $prop_id = $created_data_property[$prop_name]['creation_id'];
+        add_term_meta($prop_id, "socialdb_property_cardinalidality", (int) $exact);
+    }
+}
+
 function prepare_elements(&$owl_declarations,
                           &$ret_class_tags, &$ret_named_individuals_tags, &$ret_data_properties_tags,
                           &$ret_object_properties,
@@ -3475,7 +3539,10 @@ function prepare_elements(&$owl_declarations,
                           &$data_property_assertions, &$ret_data_property_assertions,
                           &$equivalent_classes, &$ret_equivalent_classes,
                           &$inverse_object_property, &$ret_inverse_object_property,
-                          &$equivalent_data_property, &$ret_equivalent_data_property
+                          &$equivalent_data_property, &$ret_equivalent_data_property,
+                          &$ret_data_min_cardinality, &$ret_data_max_cardinality, &$ret_data_exact_cardinality,
+                          &$ret_all_values_from_data_property, &$ret_some_values_from_data_property,
+                          &$ret_object_min_cardinality, &$ret_object_max_cardinality, &$ret_object_exact_cardinality
 )
 {
     if(count($owl_declarations))
@@ -3521,6 +3588,62 @@ function prepare_elements(&$owl_declarations,
             }
         }
 
+
+        //ObjectProperty Domain tags
+        for($i = 0; $i < count($owl_object_property_domain); $i++)
+        {
+            $index = str_replace("#", "", $owl_object_property_domain[$i]->children()->ObjectProperty->attributes()['IRI']);
+
+            if(($father_class = str_replace("#", "", $owl_object_property_domain[$i]->children()->Class->attributes()['IRI'])))
+            {
+                $ret_object_property_domain[$index] = $father_class;
+            }else
+
+            if(($cardinality = $owl_object_property_domain[$i]->children()->DataMinCardinality->attributes()['cardinality']))
+            {
+                $ret_object_min_cardinality[$index] = $cardinality;
+            }else
+
+            if(($cardinality = $owl_object_property_domain[$i]->children()->DataMaxCardinality->attributes()['cardinality']))
+            {
+                $ret_object_max_cardinality[$index] = $cardinality;
+            }else
+
+            if(($cardinality = $owl_object_property_domain[$i]->children()->DataExactCardinality->attributes()['cardinality']))
+            {
+                $ret_object_exact_cardinality[$index] = $cardinality;
+            }
+        }
+
+        //DataProperty Domain tags
+        for($i = 0; $i < count($data_properties_domain_tags); $i++)
+        {
+            $index = str_replace("#", "", $data_properties_domain_tags[$i]->children()->DataProperty->attributes()['IRI']);
+            //Define de qual classe é uma dataProperty
+            if(($father_class = str_replace("#", "", $data_properties_domain_tags[$i]->children()->Class->attributes()['IRI'])))
+            {
+                $ret_data_properties_domain_tags[$index] = $father_class;
+            }else
+
+            //Define a CARDINALIDADE MINIMA de uma dataProperty
+            if(($cardinality = $data_properties_domain_tags[$i]->children()->DataMinCardinality->attributes()['cardinality']))
+            {
+                $ret_data_min_cardinality[$index] = $cardinality;
+            }else
+
+            //Define a CARDINALIDADE MAXIMA de uma dataProperty
+            if(($cardinality = $data_properties_domain_tags[$i]->children()->DataMaxCardinality->attributes()['cardinality']))
+            {
+                $ret_data_max_cardinality[$index] = $cardinality;
+            }else
+
+            //Define a CARDINALIDADE EXATA de uma dataProperty
+            if(($cardinality = $data_properties_domain_tags[$i]->children()->DataExactCardinality->attributes()['cardinality']))
+            {
+                $ret_data_exact_cardinality[$index] = $cardinality;
+            }
+        }
+
         for($i = 0; $i < count($equivalent_data_property); $i++)
         {
             $prop_0 = str_replace("#", "", $equivalent_data_property[$i]->children()->DataProperty[0]->attributes()['IRI']);
@@ -3554,14 +3677,6 @@ function prepare_elements(&$owl_declarations,
             $ret_data_property_assertions[$individual_name][$property_name] = (string) $value;
         }
 
-        for($i = 0; $i < count($owl_object_property_domain); $i++)
-        {
-            $index = str_replace("#", "", $owl_object_property_domain[$i]->children()->ObjectProperty->attributes()['IRI']);
-            $father_class = str_replace("#", "", $owl_object_property_domain[$i]->children()->Class->attributes()['IRI']);
-
-            $ret_object_property_domain[$index] = $father_class;
-        }
-
         for($i = 0; $i < count($owl_object_property_range); $i++)
         {
             $index = str_replace("#", "", $owl_object_property_range[$i]->children()->ObjectProperty->attributes()['IRI']);
@@ -3584,15 +3699,6 @@ function prepare_elements(&$owl_declarations,
             $father_class = str_replace("#", "", $owl_subclassof[$i]->children()->Class[1]->attributes()['IRI']);
 
             $ret_subclass_structure[$index] = $father_class;
-        }
-
-        for($i = 0; $i < count($data_properties_domain_tags); $i++)
-        {
-            $index = str_replace("#", "", $data_properties_domain_tags[$i]->children()->DataProperty->attributes()['IRI']);
-            $father_class =str_replace("#", "", $data_properties_domain_tags[$i]->children()->Class->attributes()['IRI']);
-
-            $ret_data_properties_domain_tags[$index] = $father_class;
-
         }
 
         for($i = 0; $i < count($data_properties_range_tags); $i++)
