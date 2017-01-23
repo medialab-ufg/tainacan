@@ -14,7 +14,7 @@
         }
 
         //botao voltar do browser
-        /*if (window.history && window.history.pushState) {
+        if (window.history && window.history.pushState) {
 
             $(window).on('popstate', function () {
                 var hashLocation = location.hash;
@@ -28,8 +28,11 @@
                     }
                 }
             });
-            window.history.pushState('forward', null, './#forward');
-        }*/
+            if(window.location.pathname.indexOf($('#single_name').val())<0){
+                window.history.pushState('forward', null, './'+$('#single_name').val());
+            }
+            //
+        }
         var stateObj = {foo: "bar"};
         $('#form').html('');
 //        $('#object_page').val($('#single_name').val());

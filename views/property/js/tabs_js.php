@@ -254,6 +254,11 @@
                 }
             });
         }
-        return tab_property_id;
+        if(!tab_property_id){
+            return 'default';
+        }else{
+            return tab_property_id;
+        }
+        
     }
 </script>
