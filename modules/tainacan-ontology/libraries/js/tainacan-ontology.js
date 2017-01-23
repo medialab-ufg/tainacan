@@ -1489,3 +1489,8 @@ function do_ajax(url_send, projects, events, agents, spaces, count_elem)
 
     });
 }
+
+function go_to_ontology()
+{
+    window.location = window.sessionStorage.getItem("url_to_go");
+}

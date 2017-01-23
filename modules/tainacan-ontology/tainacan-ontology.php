@@ -2180,7 +2180,7 @@ function parse_owl1()
             {
                 //Tratando ontologias
                 $imported_url = [];
-                $collection_id = treats_ontology($owl_ontology, $namespace, $imported_url);
+                $collection_id = treats_ontology($owl_ontology, $namespace, $imported_url, $return);
 
                 //Tratando importações
                 treats_imports($imported_url);
@@ -2243,6 +2243,13 @@ function parse_owl1()
 
             $return['result'] = true;
             $return['url'] = get_the_permalink($collection_id);
+
+
+            $return['show_box'] = true;
+            $return['count_class'] = count($created_classes);
+            $return['count_datatype'] = count($created_classes);
+            $return['count_object_property'] = count($created_object_properties);
+            $return['count_individual'] = count($owl_individuals);
         }
     }
     return $return;
@@ -2251,7 +2258,7 @@ function parse_owl1()
 /*
  * Trata Ontologia
  */
-function treats_ontology(&$ontology_tags, &$namespace, &$imported_url)
+function treats_ontology(&$ontology_tags, &$namespace, &$imported_url, &$return)
 {
     //Tratamento Ontologia
     $data['collection_name'] = $ontology_tags->children($namespace['rdfs'])->label;
@@ -2262,6 +2269,7 @@ function treats_ontology(&$ontology_tags, &$namespace, &$imported_url)
         if(!$data['collection_name'])
         {
             $data['collection_name'] = "Untitled Ontology - ".time();
+            $return['ontology_name'] = $data['collection_name'];
         }
     }
 

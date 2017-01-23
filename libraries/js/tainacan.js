@@ -297,7 +297,19 @@ $(window).load(function () {
             $('.dropdown-toggle').dropdown();
             elem = jQuery.parseJSON(result);
             if (elem.result) {
-                window.location = elem.url;
+                if(elem.show_box)
+                {
+                    $('#modalImportMain').modal('hide');
+                    $("#modalImportFinished").modal('show');
+                    $("#modalImportFinished #ontology_name").text(elem.ontology_name);
+                    $("#modalImportFinished #classes").text(elem.count_class);
+                    $("#modalImportFinished #datatype").text(elem.count_datatype);
+                    $("#modalImportFinished #object_property").text(elem.count_object_property);
+                    $("#modalImportFinished #individuals").text(elem.count_individual);
+
+                    window.sessionStorage.setItem("url_to_go", elem.url);
+                }else
+                    window.location = elem.url;
             } else {
                 $('#modalImportMain').modal('hide');
                 var message = elem.message;
@@ -313,7 +325,11 @@ $(window).load(function () {
         e.preventDefault();
 
     });
-    
+
+    function show_result()
+    {
+        $('#modalImportConfirm').modal('show');
+    }
     //submit do importar zip para colecoes
     $('#submit_files_item_zip').submit(function (e) {
         $('.nav-tabs').tab();
