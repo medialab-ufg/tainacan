@@ -493,7 +493,7 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
     <!-- TAINACAN: esta div (AJAX) mostra as configuracoes da colecao  -->
     <div id='container-fluid-configuration' class="container-fluid no-padding" style="background-color: #f1f2f2">
 
-        <div id="configuration" class="col-md-12 no-padding" style="margin-top: 50px;"></div>
+        <div id="configuration" class="col-md-12 no-padding" style="margin-top: 0px;"></div>
 
     </div>
     <!-- TAINACAN: scripts utilizados para criacao e monagem dos widgets de pesquisa  -->

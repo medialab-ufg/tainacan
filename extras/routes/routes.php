@@ -23,7 +23,7 @@
         console.log(collection,previousRoute,window.location.pathname);
         if( previousRoute == window.location.pathname || !previousRoute){
             if(collection)
-               $.router.go($('#route_blog').val()+collection, 'My cool item');
+               $.router.go($('#route_blog').val()+collection+'/', 'My cool item');
            else
                window.redirect = window.location.pathname
         }else{
