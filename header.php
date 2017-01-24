@@ -142,10 +142,21 @@ $viewHelper = new ViewHelper();
                                     </a>
                                 </li>
                             <?php else: ?>
+                            <?php /*
                                 <li>
                                     <button class="btn btn-default pull-right" onclick="showLoginScreen('<?php echo get_template_directory_uri(); ?>');" href="#">
                                         &nbsp;<?php _e('Login', 'tainacan') ?>
                                     </button>
+                                </li> */ ?>
+                                <li>
+                                    <div id="login-box" class="login-dropdown">
+                                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            &nbsp;<?php _e('Login', 'tainacan') ?>
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">                                        
+                                            <?php include_once "views/user/login.php"; ?>
+                                        </div>
+                                    </div>
                                 </li>
                                 <li>
                                     <button class="btn btn-default pull-right" onclick="registerUser('<?php echo get_template_directory_uri(); ?>');" href="#">

@@ -67,6 +67,25 @@ ul.repository-settings, .admin-configs {
     }
 
   } // li
+  /*
+  .login-dropdown {
+    border: 1px solid whitesmoke;
+    &:hover {
+      .dropdown-menu {
+        display: block;
+        margin-top: 0; // remove the gap so it doesn't close
+      }
+    }
+  } */
+.login-dropdown button {
+  border: 1px solid whitesmoke;
+}
+
+} // .admin-configs
+
+.login-dropdown:hover .dropdown-menu {
+    display: block;
+    margin-top: 0; // remove the gap so it doesn't close
 }
 
 .header-navbar {
@@ -364,3 +383,31 @@ a:hover{text-decoration:underline}
   border-radius: 4px;
 }
 
+.login-inner-container {
+  background: white; 
+  margin-bottom: 100px; 
+  border: 2px solid #d8d6d6; 
+  padding: 25px;
+  margin-top: 50px;
+}
+
+.login-outer-container {
+    background: #E8E8E8;
+    padding-top: 50px;
+    margin-top: -20px;
+    padding-bottom: 50px;
+}
+
+#login-box {
+  .dropdown-menu {
+    width: 300px;
+  }
+
+  button.send-login {
+    background: $brand-medium-blue;
+    width: 100%;
+    &:hover {
+      background: $bs-button-gray-border;
+    }
+  }
+}

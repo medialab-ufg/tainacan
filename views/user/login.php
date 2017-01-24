@@ -1,94 +1,84 @@
 <?php
-
-//var_dump($authUrl);
-
 include_once ('js/login_js.php');
 require_once(dirname(__FILE__) . '../../../models/social_network/Facebook/autoload.php');
+
 session_start();
-?>
 
-<?php
-/*
-$loginUrl = $facebook->getLoginUrl(
-        array(
-            'scope' => 'email,user_birthday',
-            'redirect_uri' => get_bloginfo(template_directory) . '/controllers/user/user_controller.php?collection_id=' . $collection_id . '&operation=return_login_fb'
-        )
-);
+$_redir_url = get_bloginfo(template_directory) . '/controllers/user/user_controller.php?collection_id=' . $collection_id . '&operation=return_login_fb';
 
-$logoutUrl = $facebook->getLogoutUrl();
+/*    
+    $loginUrl = $facebook->getLoginUrl( array( 'scope' => 'email,user_birthday','redirect_uri' =>  $_redir_url ));
+    $logoutUrl = $facebook->getLogoutUrl();
 */
-?>
-<?php
-    $config = get_option('socialdb_theme_options');
-    $app['app_id'] = $config['socialdb_fb_api_id'];
-    $app['app_secret'] = $config['socialdb_fb_api_secret'];
 
-    if (!empty($app['app_id']) && !empty($app['app_secret'])) {
-        $fb = new Facebook\Facebook([
-            'app_id' => $app['app_id'],
-            'app_secret' => $app['app_secret'],
-            'default_graph_version' => 'v2.3',
-        ]);
+$config = get_option('socialdb_theme_options');
+$app['app_id'] = $config['socialdb_fb_api_id'];
+$app['app_secret'] = $config['socialdb_fb_api_secret'];
 
-        $helper = $fb->getRedirectLoginHelper();
-        $permissions = ['email', 'user_birthday']; // optional
-        $loginUrl = $helper->getLoginUrl(get_bloginfo(template_directory) . '/controllers/user/user_controller.php?collection_id=' . $collection_id . '&operation=return_login_fb', $permissions);
+if (!empty($app['app_id']) && !empty($app['app_secret'])) {
+    $fb = new Facebook\Facebook([
+        'app_id' => $app['app_id'],
+        'app_secret' => $app['app_secret'],
+        'default_graph_version' => 'v2.3',
+    ]);
 
-    }
-    // echo '<a href="' . $loginUrl . '">Log in with Facebook!</a>';
+    $helper = $fb->getRedirectLoginHelper();
+    $permissions = ['email', 'user_birthday']; // optional
+    $loginUrl = $helper->getLoginUrl( $_redir_url, $permissions);
+
+}
 ?>
 <input type="hidden" id="src_login" name="src" value="<?php echo get_template_directory_uri() ?>">
 
-<div class="col-md-12" style="background: #E8E8E8; padding-top: 50px; margin-top: -20px; padding-bottom: 50px;">
-<div class="col-md-5 center container" style="background: white; margin-bottom: 100px; border: 2px solid #d8d6d6; padding: 25px;margin-top: 50px;">
+<div id="login-out" class="col-md-12 login-outer-container">
+    <div id="login-in" class="col-md-5 center container login-inner-container">
     
-    <h4 style="font-weight: bolder; margin: 0;"><?php _e('Login', 'tainacan'); ?></h4>
-    <hr style="margin-top: 5px;">
+        <h4 style="font-weight: bolder; margin: 10px 0;"><?php _e('Login', 'tainacan'); ?></h4>
+        <hr style="margin-top: 5px;">
 
-    <div class="col-md-12 no-padding" style="margin: 0px 0 20px 0;">
-        <div class="col-md-6" style="padding-left: 0;">
-            <?php if ($facebook_option['api_id'] && $facebook_option['api_secret']) { ?>
-                <a href="<?php echo $loginUrl;?>" class="btn btn-primary" style="width: 100%;">
-                    <?php _e('Login with Facebook', 'tainacan'); ?>
-                </a>
-            <?php } ?>
-        </div>
-        <div class="col-md-6" style="padding-right: 0;">
-            <?php if (isset($authUrl)) { ?>
-                <a href="<?php echo $authUrl; ?>"><img src="<?php echo get_template_directory_uri(); ?>/libraries/images/plus_login.png" style="max-width: 150px;" /></a>
-                <a href="#" class="btn btn-danger" style="width: 100%;">
-                    <?php _e('Login with Google Plus', 'tainacan'); ?>
-                </a>
-            <?php } ?>
-        </div>
-    </div>
-
-    <?php if($loginUrl || $authUrl): ?>
-        <div class="col-md-12">
-            <div class="col-md-5" style="border-bottom: 1px solid #e8e8e8"></div>
-            <div class="col-md-2 cnter" style="text-align: center">
-                <?php _e('or', 'tainacan'); ?>
+        <div class="col-md-12 no-padding" style="margin: 0px 0 20px 0;">
+            <div class="col-md-6" style="padding-left: 0;">
+                <?php if ($facebook_option['api_id'] && $facebook_option['api_secret']) { ?>
+                    <a href="<?php echo $loginUrl;?>" class="btn btn-primary" style="width: 100%;">
+                        <?php _e('Login with Facebook', 'tainacan'); ?>
+                    </a>
+                <?php } ?>
             </div>
-            <div class="col-md-5" style="border-bottom: 1px solid #e8e8e8"></div>
+            <div class="col-md-6" style="padding-right: 0;">
+                <?php if (isset($authUrl)) { ?>
+                    <a href="<?php echo $authUrl; ?>"><img src="<?php echo get_template_directory_uri(); ?>/libraries/images/plus_login.png" style="max-width: 150px;" /></a>
+                    <a href="#" class="btn btn-danger" style="width: 100%;">
+                        <?php _e('Login with Google Plus', 'tainacan'); ?>
+                    </a>
+                <?php } ?>
+            </div>
         </div>
-    <?php endif; ?>
 
-    <form action="" id="LoginForm" name="LoginForm" class="form-signin">
-        <input type="hidden" id="operation_log" name="operation" value="login_regular">
-        <input type="hidden" id="collection_id_login" name="collection_id" value="<?php echo $collection_id; ?>">
+        <?php if($loginUrl || $authUrl): ?>
+            <div class="col-md-12">
+                <div class="col-md-5" style="border-bottom: 1px solid #e8e8e8"></div>
+                <div class="col-md-2 cnter" style="text-align: center">
+                    <?php _e('or', 'tainacan'); ?>
+                </div>
+                <div class="col-md-5" style="border-bottom: 1px solid #e8e8e8"></div>
+            </div>
+        <?php endif; ?>
 
-        <label for="inputEmail" class="sr-only-no"><?php _e("Username",'tainacan'); ?> </label>
-        <input type="text" id="inputUsername" name="username" class="form-control" placeholder="<?php _e('Username','tainacan') ?>" required="" autofocus="">
-        <br />
-        <label for="inputPassword" class="sr-only-no"><?php _e("Password",'tainacan'); ?></label>
-        <input type="password" id="inputPassword" name="password" class="form-control" placeholder="<?php _e('Password','tainacan') ?>" required="">
+        <form action="" id="LoginForm" name="LoginForm" class="form-signin">
+            <input type="hidden" id="operation_log" name="operation" value="login_regular">
+            <input type="hidden" id="collection_id_login" name="collection_id" value="<?php echo $collection_id; ?>">
 
-        <br><label><a href="#" id="open_myModalForgotPassword"><?php _e("Forgot password?",'tainacan'); ?></a></label>
-        <button class="btn btn-lg btn-primary pull-right" type="submit"><?php _e("Login",'tainacan'); ?></button>
-    </form>
+            <label for="inputEmail" class="sr-only-no"><?php _e("Username",'tainacan'); ?> </label>
+            <input type="text" id="inputUsername" name="username" class="form-control" placeholder="<?php _e('Username','tainacan') ?>" required="" autofocus="">
+            <br />
+            <label for="inputPassword" class="sr-only-no"><?php _e("Password",'tainacan'); ?></label>
+            <input type="password" id="inputPassword" name="password" class="form-control" placeholder="<?php _e('Password','tainacan') ?>" required="">
 
-</div>
+            <br><label><a href="#" id="open_myModalForgotPassword"><?php _e("Forgot password?",'tainacan'); ?></a></label>
+            <button class="btn btn-lg btn-primary pull-right send-login" type="submit"><?php _e("Login",'tainacan'); ?></button>
+        </form>
+
+    </div>
 </div>
 
 <div class="modal fade" id="myModalForgotPassword" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
