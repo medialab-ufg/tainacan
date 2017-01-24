@@ -774,12 +774,20 @@ class ThemeOptionsModel extends Model {
                                 if (is_file($dir . $file)) {
                                     $logo_id = $this->insert_attachment_file($dir . $file, $inserted_item_id);
                                     add_post_meta($inserted_item_id, '_file_id', $logo_id);
+                                    update_post_meta($inserted_item_id, 'socialdb_object_dc_type', 'other');
+                                    update_post_meta($inserted_item_id, 'socialdb_object_content', get_attachment_link($id));
+                                    $this->set_common_field_values($object_id, 'object_type','other');
                                 }
-                            } else {
+                            } else if($file_use == 'THUMBNAIL'){
                                 //E a Thumb do item
                                 if (is_file($dir . $file)) {
                                     $logo_id = $this->insert_attachment_file($dir . $file, $inserted_item_id);
                                     set_post_thumbnail($inserted_item_id, $logo_id);
+                                    update_post_meta($inserted_item_id, 'socialdb_object_dc_type', 'image');
+                                    update_post_meta($inserted_item_id, 'socialdb_object_content', $logo_id);
+                                    update_post_meta($object_id, 'socialdb_object_from','internal');
+                                    $this->set_common_field_values($object_id, 'object_from','internal');
+                                    $this->set_common_field_values($object_id, 'object_type','other');
                                 }
                             }
                         }

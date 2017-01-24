@@ -67,8 +67,10 @@ class CSVExportModel extends ExportModel {
         if($dir==''){
            $dir =  dirname(__FILE__);
         }
+        ob_end_clean();
         $csv_data = $this->generate_csv_data($data);
         $df = fopen($dir.'/csv-package/administrative-settings.csv', 'w');
+        fputcsv($df, [], $data['socialdb_delimiter_csv']);
         fputcsv($df, array_keys(reset($csv_data)), $data['socialdb_delimiter_csv']);
         foreach ($csv_data as $row) {
             fputcsv($df, $row, $data['socialdb_delimiter_csv']);

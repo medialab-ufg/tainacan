@@ -483,14 +483,22 @@ class ExportModel extends Model {
             
             /** Title * */
             if ($object->post_title != "") {
-                $csv_data['title'] = utf8_decode($object->post_title);
+                $value = $object->post_title;
+                if(mb_detect_encoding($value)==='UTF-8'){
+                    $value = utf8_decode($value);
+                }
+                $csv_data['title'] = $value;
             } else {
                 $csv_data['title'] = '';
             }
 
             /** Description * */
             if ($object->post_content != "") {
-                $csv_data['description'] = utf8_decode($object->post_content);
+                $value = $object->post_content;
+                if(mb_detect_encoding($value)==='UTF-8'){
+                    $value = utf8_decode($value);
+                }
+                $csv_data['description'] = $value;
             } else {
                 $csv_data['description'] = '';
             }
@@ -517,7 +525,11 @@ class ExportModel extends Model {
 
             /** Source  * */
             if (get_post_meta($object->ID, 'socialdb_object_dc_source')) {
-                $csv_data['item_source'] = utf8_decode(get_post_meta($object->ID, 'socialdb_object_dc_source', true));
+                $value = get_post_meta($object->ID, 'socialdb_object_dc_source', true);
+                if(mb_detect_encoding($value)==='UTF-8'){
+                    $value = utf8_decode($value);
+                }
+                $csv_data['item_source'] = $value;
             }
 
             /** URL * */
