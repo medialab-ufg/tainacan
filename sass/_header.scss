@@ -288,11 +288,17 @@ a:hover{text-decoration:underline}
         }
         a {
             
-            img {
-                width: 12%;
-                margin-top: -3px;    
-            }
-        }                
+          img {
+             width: 12%;
+             margin-top: -3px;    
+           }
+
+          &.collecs {
+              color: white;
+              padding-top: 17px;
+              height: 55px;
+          }
+        } // a              
     } // li.collections
         
     .sub-menu {

@@ -177,7 +177,7 @@ $viewHelper = new ViewHelper();
 
                             <ul id="collections-menu">
                                 <li class="collections">
-                                    <a href="<?php echo get_permalink(get_option('collection_root_id')); ?>" style="color: white; padding-top: 17px;">
+                                    <a href="<?php echo get_permalink(get_option('collection_root_id')); ?>" class='collecs'>
                                         <?php echo ViewHelper::render_icon('collection', 'png'); ?>
                                         <div style="display:inline-block; margin-left: 5px;">
                                             <?php _e('Collections', 'tainacan'); ?>

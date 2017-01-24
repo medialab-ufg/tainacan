@@ -44,11 +44,8 @@ $(function() {
 
 
 $("#login-box").hover(function() {
-    cl('Finally !!.');
-    // $('.col-md-12.login-outer-container').removeClass('login-outer-container');
     $('#login-out').removeClass('login-outer-container');
-    $('#login-in').removeClass();
-    // $('.col-md-12.login-outer-container div').removeClass('col-md-5');
+    $('#login-in' ).removeClass();
 });
 
 </script>
