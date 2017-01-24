@@ -70,10 +70,6 @@ $(window).load(function () {
 
     /************************* VERIFICACAO DE PAGINAS **************************/
     //verifico se esta querendo visualizar um objeto especifico
-    if ($('#object_page').val() !== '') {
-        collection = $('#slug_collection').val();
-        routerGo(collection+'/'+$('#object_page').val())
-    }
     if ($('#category_page').val() !== '') {
         showPageCategories($('#category_page').val(), src);
     }

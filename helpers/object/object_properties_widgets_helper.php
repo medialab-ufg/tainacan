@@ -220,7 +220,7 @@ class ObjectWidgetsHelper extends ViewHelper {
     public function widget_property_object($property,$i,$references,$value = false) {
         ?>
         <input type="hidden" 
-                        id="cardinality_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"  
+                        id="cardinality_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>"  
                         value="<?php echo $this->render_cardinality_property($property);   ?>">            
         <input type="text" 
                onkeyup="autocomplete_object_property_compound('<?php echo $references['compound_id']; ?>','<?php echo $property['id']; ?>', '<?php echo $i; ?>');" 
