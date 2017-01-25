@@ -80,6 +80,8 @@ class CollectionModel extends Model {
             $object_name =  $data['collection_name'];
         }
         create_root_collection_category($post->ID, $object_name); //(Criada em: functions.php) cria a categoria inicial que identifica os objetos da colecao
+
+        Log::addLog(['collection_id' => $collection_id, 'event_type' => 'user_collection', 'event' => 'add' ]);
         return $post->ID;
     }
 
