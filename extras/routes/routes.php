@@ -1,17 +1,21 @@
+<?php var_dump(get_query_var('collection') , get_query_var('metadata')); ?>
+
 <input type="hidden" id="route_blog" name="route_blog" value="<?php echo str_replace($_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['SERVER_NAME'], '', get_bloginfo('url')) ?>/"> <!-- utilizado na busca -->
 <input type="hidden" id="goToLogin" name="goToLogin" value="<?php
     if (get_query_var('log-in')) {
         echo trim(get_query_var('log-in'));
     }
     ?>">
+<input type="hidden" id="goToCollectionMetadata" name="goToCollectionMetadata" value="<?php
+    if (get_query_var('collection') && get_query_var('metadata')) {
+        echo trim(get_query_var('metadata'));
+    }
+    ?>">
 <script>
     var previousRoute;
     /** executa a funcao que verifica se existe a necessidade de executar
         alguma rota **/
-    execute_route();
-    /***************** adicionando as rotas do tainacan ***********************/
-    
-    //pagina central da colecao
+     //pagina central da colecao
     $.router.add( $('#route_blog').val()+':collection', function(data) {
     });
     //pagina do item
@@ -22,6 +26,10 @@
     $.router.add( $('#route_blog').val()+':login/', function(data) {
         showLoginScreen($('#src').val());
     });
+    
+    $(function(){
+         execute_route();
+    });
     /**************************************************************************/
     
     /**
@@ -29,12 +37,15 @@
      * @returns {undefined}
      */
     function execute_route(){
-        
+         $.router.reset();
         if ($('#object_page').val() !== '') {
             collection = $('#slug_collection').val();
             routerGo(collection+'/'+$('#object_page').val())
         }else if($('#goToLogin').val()!==''){
             showLoginScreen($('#src').val());
+        }else if($('#goToCollectionMetadata').val()!==''){
+            console.log('redirect');
+            showPropertiesAndFilters($('#src').val());
         }
     }
     
@@ -45,7 +56,6 @@
      */
     function routerGo(page){
          saveRoute();
-         console.log($('#route_blog').val()+page);
          $.router.go($('#route_blog').val()+page, 'My cool item');
     }
     

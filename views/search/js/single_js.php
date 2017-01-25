@@ -2195,14 +2195,24 @@
     }
     
     function remove_label_box(id,dynatree){
+        var cont = 0;
         if(!dynatree)
             dynatree = "#property_category_dynatree";
         $(dynatree).dynatree("getRoot").visit(function (node) {
             if(node.data.key==id){
+                cont++;
                 node.select(false);
-                $('#label-box-'+id).remove();
             }
         });
+        if(cont===0){
+            var ids = $('#property_object_category_id').val().split(',');
+            var index = ids.indexOf(id);
+            if(index>=0){
+                ids.splice(index, 1);
+               $('#property_object_category_id').val(ids.join(','));
+            }
+        }
+        $('#label-box-'+id).remove();
     }
     /**
      * 
