@@ -113,6 +113,7 @@ class CsvModel extends Model {
         $mapping_model = new MappingModel('socialdb_channel_csv');
         $csv_add_columns = get_post_meta($data['mapping_id'], 'socialdb_channel_csv_add_columns', true);
         if ($csv_add_columns) {
+             update_post_meta($data['mapping_id'], 'socialdb_channel_csv_last_update', mktime());
             $this->insert_csv_with_columns($data['mapping_id'], $data['collection_id']);
             return true;
         }
