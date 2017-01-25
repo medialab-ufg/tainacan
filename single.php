@@ -6,6 +6,11 @@
 require_once(dirname(__FILE__) . '/models/social_network/Facebook/autoload.php');
 require_once(dirname(__FILE__) . '/controllers/helpers/helpers_controller.php');
 require_once(dirname(__FILE__) . '/helpers/view_helper.php');
+ while (have_posts()) : the_post(); 
+        if(get_post(get_the_ID())->post_status != 'publish'){
+            wp_redirect( site_url() ); 
+        }
+endwhile;
 ///****************************** EXECUTANDO SCRIPTS  AVULSOS*********************/
 if (isset($_GET['execute-script'])):
     error_reporting(E_ALL);
@@ -27,7 +32,11 @@ $collection_default = get_option('disable_empty_collection');
 $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_visualization_page_category', true);
 ?>
 
-<?php while (have_posts()) : the_post(); ?>
+<?php while (have_posts()) : the_post(); 
+    if(get_post(get_the_ID())->post_status != 'publish'){
+        wp_redirect( site_url() ); 
+    }
+    ?>
     <!-- TAINACAN: div necessaria para procedimentos do facebook  -->
     <div id="fb-root"></div>
     <!-- TAINACAN: esta div (AJAX) mostra o painel da colecao e suas acoes, estilos inline para descer a div apenas pois estava sob o header  -->

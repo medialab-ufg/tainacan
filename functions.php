@@ -330,6 +330,7 @@ function custom_upload_mimes ( $existing_mimes=array() ) {
     // add your extension to the mimes array as below
     $existing_mimes['zip'] = 'application/zip';
     $existing_mimes['csv'] = 'application/octet-stream';
+    $existing_mimes['csv2'] = 'application/vnd.ms-excel';
     $existing_mimes['gz'] = 'application/x-gzip';
     return $existing_mimes;
 }
