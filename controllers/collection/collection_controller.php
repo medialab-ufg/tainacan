@@ -41,7 +41,11 @@ class CollectionController extends Controller {
                     'WP-JSON',
                     'wp-json',
                     'feed_collection',
-                    'feed'
+                    'feed',
+                    'admin',
+                    'log-in',
+                    __('signin','tainacan'),
+                    __('signup','tainacan')
                 );
 
                 if (in_array($name_lower, $NotAllowed)) {

@@ -1,5 +1,3 @@
-<?php var_dump(get_query_var('collection') , get_query_var('metadata')); ?>
-
 <input type="hidden" id="route_blog" name="route_blog" value="<?php echo str_replace($_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['SERVER_NAME'], '', get_bloginfo('url')) ?>/"> <!-- utilizado na busca -->
 <input type="hidden" id="goToLogin" name="goToLogin" value="<?php
     if (get_query_var('log-in')) {
@@ -7,7 +5,12 @@
     }
     ?>">
 <input type="hidden" id="goToCollectionMetadata" name="goToCollectionMetadata" value="<?php
-    if (get_query_var('collection') && get_query_var('metadata')) {
+    if ((get_query_var('collection') && get_query_var('collection') !== 'tainacan-collections' ) && get_query_var('metadata')) {
+        echo trim(get_query_var('metadata'));
+    }
+    ?>">
+<input type="hidden" id="goToRepositoryMetadata" name="goToRepositoryMetadata" value="<?php
+    if ((get_query_var('collection') && get_query_var('collection') === 'tainacan-collections' ) && get_query_var('metadata')) {
         echo trim(get_query_var('metadata'));
     }
     ?>">
@@ -17,14 +20,26 @@
         alguma rota **/
      //pagina central da colecao
     $.router.add( $('#route_blog').val()+':collection', function(data) {
+        console.log('rota only collection');
+        backToMainPage(); 
     });
     //pagina do item
     $.router.add( $('#route_blog').val()+':collection/:item', function(data) {
-        showSingleObjectByName(data.item, $('#src').val())
-    });
-    //pagina de login
-    $.router.add( $('#route_blog').val()+':login/', function(data) {
-        showLoginScreen($('#src').val());
+        console.log('rota item',data);
+        if(data.collection == 'admin'){
+            if(data.item=='<?php echo __('metadata','tainacan') ?>'){
+                
+            }
+        }else{
+             console.log(previousRoute ,window.location.pathname);
+            if(previousRoute === window.location.pathname){
+                $.router.go($('#route_blog').val()+$('#slug_collection').val());
+            }else{
+                showSingleObjectByName(data.item, $('#src').val())
+            }
+            
+        }
+        
     });
     
     $(function(){
@@ -40,12 +55,14 @@
          $.router.reset();
         if ($('#object_page').val() !== '') {
             collection = $('#slug_collection').val();
-            routerGo(collection+'/'+$('#object_page').val())
+            showSingleObjectByName($('#object_page').val() , $('#src').val())
         }else if($('#goToLogin').val()!==''){
             showLoginScreen($('#src').val());
         }else if($('#goToCollectionMetadata').val()!==''){
             console.log('redirect');
             showPropertiesAndFilters($('#src').val());
+        }else if($('#goToRepositoryMetadata').val()!==''){
+            showPropertiesRepository($('#src').val());
         }
     }
     

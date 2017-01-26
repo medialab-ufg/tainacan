@@ -307,7 +307,11 @@ function custom_rewrite_basic() {
     add_rewrite_rule('^oai', 'index.php?oaipmh=true', 'top');
     add_rewrite_rule('^([^/]*)/([^/]*)', 'index.php?collection=$matches[1]&item=$matches[2]', 'bottom');
     add_rewrite_rule('^([^/]*)/admin/'.__('metadata','tainacan'), 'index.php?collection=$matches[1]&metadata=true', 'top');
+    add_rewrite_rule('^admin/'.__('metadata','tainacan'), 'index.php?collection=tainacan-collections&metadata=true', 'top');
+    //login
     add_rewrite_rule('^log-in', 'index.php?log-in=true', 'top');
+    add_rewrite_rule('^'.__('signin','tainacan'), 'index.php?log-in=true', 'top');
+    add_rewrite_rule('^'.__('signin','tainacan'), 'index.php?log-in=true', 'top');
     flush_rewrite_rules();
 }
 

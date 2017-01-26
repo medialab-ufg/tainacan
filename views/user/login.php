@@ -30,7 +30,7 @@ if (!empty($app['app_id']) && !empty($app['app_secret'])) {
 ?>
 <input type="hidden" id="src_login" name="src" value="<?php echo get_template_directory_uri() ?>">
 
-<div id="login-out" class="col-md-12 login-outer-container">
+<div id="login-out" class="col-md-12 login-outer-container" style="margin-top: 50px;">
     <div id="login-in" class="col-md-5 center container login-inner-container">
     
         <h4 style="font-weight: bolder; margin: 10px 0;"><?php _e('Login', 'tainacan'); ?></h4>

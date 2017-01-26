@@ -15,22 +15,8 @@
 
         //botao voltar do browser
         if (window.history && window.history.pushState) {
-
-            $(window).on('popstate', function () {
-                var hashLocation = location.hash;
-                var hashSplit = hashLocation.split("#!/");
-                var hashName = hashSplit[1];
-
-                if (hashName !== '') {
-                    var hash = window.location.hash;
-                    if (hash === '') {
-                        backToMainPageSingleItem();
-                    }
-                }
-            });
-            if(window.location.pathname.indexOf($('#single_name').val())<0){
-                window.history.pushState('forward', null, './'+$('#single_name').val());
-            }
+            previousRoute = window.location.pathname;
+            window.history.pushState('forward', null, $('#route_blog').val()+$('#slug_collection').val()+'/'+$('#single_name').val());
             //
         }
         var stateObj = {foo: "bar"};
