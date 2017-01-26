@@ -97,11 +97,12 @@
             }
         });
 
-        $("#items-per-page").on('change', function() {
+        $(".col-items-per-page").on('change', function() {
            var limit = parseInt(this.value);
            var viewMode = $("#temp-viewMode").val();
            var container = $('.' + viewMode +'-view-container');
            $('span.per-page').text(limit);
+           $(".col-items-per-page").val(limit);
 
            $(container).each(function(idx, el) {
               var item_num = parseInt( $(el).attr('data-order') );

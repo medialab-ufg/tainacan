@@ -39,7 +39,7 @@ $numberItems = ceil($loop->found_posts / 10);
     <input type="hidden" id="original_post_count" value="<?php echo $loop->post_count; ?>" />
 
 <?php
-$objHelper->renderCollectionPagination($loop->found_posts, $numberItems, $pagid, $show_string, 'top_pag');
+$objHelper->renderCollectionPagination($loop->found_posts, $loop->post_count, $pagid, $show_string, 'top_pag');
 
 if ( $loop->have_posts() ): ?>
     <div id="collection-view-mode">
@@ -112,5 +112,5 @@ if ( $loop->have_posts() ): ?>
 <?php
 endif;
 
-$objHelper->renderCollectionPagination($loop->found_posts, $numberItems, $pagid, $show_string, 'bottom_pag');
+$objHelper->renderCollectionPagination($loop->found_posts, $loop->post_count, $pagid, $show_string, 'bottom_pag');
 ?>

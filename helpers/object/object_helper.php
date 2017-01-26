@@ -88,7 +88,8 @@ class ObjectHelper extends ViewHelper {
                 <div class="col-md-4 center">
                     <?php
                     // $_per_page = $loop->query['posts_per_page'];
-                    $_per_page = 10;
+                    // $_per_page = 10;
+                    $_per_page = $items_per_page;
 
                     echo $proper_str . " 1 - <span class='per-page'> $_per_page </span>" . __(' of ', 'tainacan') . $_total_items_;
                     ?>
@@ -96,7 +97,7 @@ class ObjectHelper extends ViewHelper {
 
                 <div class="col-md-3 pull-right per_page">
                     <?php _e('Items per page:', 'tainacan') ?>
-                    <select name="items-per-page" id="items-per-page">
+                    <select name="items-per-page" class="col-items-per-page">
                         <option>5</option>
                         <option>8</option>
                         <option value="<?php echo $_per_page; ?>" selected> <?php echo $_per_page; ?> </option>

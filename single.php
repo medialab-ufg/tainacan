@@ -294,9 +294,7 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
 
                                 <div class="col-md-2 no-padding viewMode-control">
                                     <label class="sec-color"> <?php _e('Show:', 'tainacan') ?> </label>
-                                    <button id="collectionViewMode" data-toggle="dropdown" type="button" class="btn btn-default">
-                                        <?php _e("Show:", "tainacan"); ?>
-                                    </button>
+                                    <button id="collectionViewMode" data-toggle="dropdown" type="button" class="btn btn-default"></button>
 
                                     <ul class="dropdown-menu" aria-labelledby="collectionViewMode">
                                         <?php foreach (ViewHelper::collection_view_modes() as $mode => $title): ?>

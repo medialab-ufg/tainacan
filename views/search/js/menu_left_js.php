@@ -5,6 +5,7 @@
         if($('#filters_has_event_notification').val()=='true'){
             list_events_filters();
         }
+
     });
 
     function showDynatreeLeft(src) {
@@ -523,4 +524,5 @@ function unselect_children(node){
         });
     }
 }
+
 </script>
