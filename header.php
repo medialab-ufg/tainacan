@@ -192,20 +192,20 @@ $viewHelper = new ViewHelper();
                                         </li>
                                         <?php if (is_user_logged_in()): ?>
                                             <li class="divider"></li>
-                                            <li> <a href="#" class="create-collection">
+                                            <li> <a class="create-collection">
                                                     <?php _e('Create collection', 'tainacan') ?>
                                                     <span class="glyphicon glyphicon-chevron-right"></span>
                                                 </a>
                                                 <ul class="sub-menu templates">
                                                     <li class="click_new_collection">
-                                                        <a href="#" id="click_new_collection" onclick="showModalCreateCollection()">
+                                                        <a  id="click_new_collection" onclick="showModalCreateCollection()">
                                                             <?php _e('General', 'tainacan'); ?>
                                                         </a>
                                                     </li>
                                                 </ul>
                                             </li>
                                             <li>
-                                                <a onclick="showModalImportCollection();" href="#">
+                                                <a onclick="showModalImportCollection();" href="javascript:void(0)">
                                                     <?php _e('Import collection', 'tainacan') ?>
                                                 </a>
                                             </li>

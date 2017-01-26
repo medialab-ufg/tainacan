@@ -589,7 +589,7 @@ class ObjectMultipleModel extends Model {
     public function insert_items_zip($data){
         if($data['files'] && !empty($data['files'])){
             $dir = $this->unzip_items($data['files']);
-             foreach (new DirectoryIterator($dir) as $fileInfo) {
+            foreach (new DirectoryIterator($dir) as $fileInfo) {
                     if($fileInfo->isDot()) 
                         continue;
                     
@@ -649,5 +649,15 @@ class ObjectMultipleModel extends Model {
             } 
         }
         return $targetdir;
+    }
+    
+    public function insertFileItem($fileInfo) {
+        $object = array(
+            'post_type' => 'socialdb_object',
+            'post_title' => $fileInfo->getFilename(),
+            'post_status' => 'publish',
+            'post_author' => get_current_user_id(),
+        );
+       $object_id = wp_insert_post($object);
     }
 }

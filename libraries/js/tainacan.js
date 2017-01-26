@@ -679,14 +679,14 @@ function list_templates($_element) {
 
 function add_li_collection_template(el, $_element) {
     if ($('#show_collection_default').val() === 'show') {
-        $($_element).html('<li class="click_new_collection"><a href="#" id="click_new_collection" onclick="showModalCreateCollection()">Geral</a></li>');
+        $($_element).html('<li class="click_new_collection"><a href="javascript:void(0)" id="click_new_collection" onclick="showModalCreateCollection()">Geral</a></li>');
     } else {
         $($_element).html('');
     }
     if (el.user_templates) {
         $($_element).append("<li class='divider'></li>");
         $.each(el.user_templates, function (idx, value) {
-            var li_item = "<li class='tmpl'><a href='#' class='added' data-tplt='" + value.directory + "'>" + value.title + "</a></li>";
+            var li_item = "<li class='tmpl'><a href='javascript:void(0)' class='added' data-tplt='" + value.directory + "'>" + value.title + "</a></li>";
             $($_element).append(li_item);
         });
     }
@@ -694,7 +694,7 @@ function add_li_collection_template(el, $_element) {
     if (el.tainacan_templates) {
         $($_element).append("<li class='divider'></li>");
         $.each(el.tainacan_templates, function (idx, value) {
-            var li_item = "<li class='tmpl'><a href='#' class='added' data-tplt='" + value.directory + "'>" + value.title + "</a></li>";
+            var li_item = "<li class='tmpl'><a href='javascript:void(0)' class='added' data-tplt='" + value.directory + "'>" + value.title + "</a></li>";
             $($_element).append(li_item);
         });
     }
