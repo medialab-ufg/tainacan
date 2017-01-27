@@ -10,7 +10,7 @@
   </div>
     <div class="error-map" style="display: none">
         <h5>
-            <?php _e('Error loading map. Try again later!', 'tainacan'); ?>
+            <?php _e('No items have geographic location data in this listing.', 'tainacan'); ?>
         </h5>
     </div>
 </div>
