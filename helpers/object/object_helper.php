@@ -56,7 +56,7 @@ class ObjectHelper extends ViewHelper {
         $required = get_post_meta($collection_id, 'socialdb_collection_property_'.$id.'_required', true);
         if($required&&$required=='true'):
         ?>
-        <a id='required_field_<?php echo $slug ?>' style="padding: 3px;"  >
+        <a id='required_field_<?php echo $slug ?>' style="padding: 3px;">
             <span title="<?php echo __('This metadata is required!', 'tainacan') ?>" 
                          data-toggle="tooltip" data-placement="top" >*</span>
         </a>
@@ -89,32 +89,32 @@ class ObjectHelper extends ViewHelper {
                 </div>
 
                 <div class="col-md-4 center">
-                    <?php
-                    // $_per_page = $loop->query['posts_per_page';]
-                    // $_per_page = 10;
-                    $_per_page = $items_per_page;
-
-                    echo $proper_str . " 1 - <span class='per-page'> $_per_page </span>" . __(' of ', 'tainacan') . $_total_items_;
-                    ?>
+                    <?php echo $proper_str; ?> <span class="base-page-init"> 1 </span> -        
+                    <span class='per-page'> <?php echo $items_per_page ?> </span>
+                    <?php echo __(' of ', 'tainacan') . $_total_items_; ?>
                 </div>
 
                 <div class="col-md-3 pull-right per_page">
-                    <?php _e('Items per page:', 'tainacan') ?>
+                    <?php _e('Items per page:', 'tainacan'); ?>
                     <select name="items-per-page" class="col-items-per-page">
-                        <option>5</option>
-                        <option>8</option>
-                        <?php /*
-                        <option value="<?php echo $_per_page; ?>" selected> <?php echo $_per_page; ?> </option>
-                         * 
-                         */ ?>
-                        <option value="10" selected> 10 </option>
-                        <option>15</option>
-                        <option>25</option>
-                        <option>50</option>
+                       <?php $this->getItemsPerPage(); ?>
                     </select>
                 </div>
 
             </div>
         <?php }
+    }
+    
+    private function getItemsPerPage() {
+        // By default, let 10 items selected
+        $_show_values = [5,8,10,15,25,50];
+        foreach ($_show_values as $k => $vl) {
+            if($k == 2) {
+                $select = 'selected';
+            } else {
+                $select = "";
+            }
+            echo "<option value='$vl' $select> $vl </option>";
+        }
     }
 }

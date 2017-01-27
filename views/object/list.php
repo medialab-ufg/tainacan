@@ -36,6 +36,7 @@ $numberItems = ceil($loop->found_posts / 10);
 <input type="hidden" id="approx_location" value="<?php echo $geo_loc; ?>">
 <input type="hidden" id="repo_fixed_title" value="<?php echo $_fxd_title; ?>">
 <input type="hidden" id="original_post_count" value="<?php echo $loop->post_count; ?>" />
+<input type="hidden" id="pagination_current_page" value="<?php echo $pagid; ?>" />
 
 <?php
 $objHelper->renderCollectionPagination($loop->found_posts, $loop->post_count, $pagid, $show_string, 'top_pag');

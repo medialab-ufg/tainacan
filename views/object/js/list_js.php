@@ -86,7 +86,7 @@
             var i_id = $(this).attr("data-id");
             showSingleObject(i_id, src);
         });
-
+        
         $('.pagination_items').jqPagination({
             link_string: '/?page={page_number}',
             max_page: $('#number_pages').val(),
@@ -97,11 +97,23 @@
             }
         });
 
-        $(".col-items-per-page").on('change', function() {
-           var limit = parseInt(this.value);
+        $(".col-items-per-page").on('change', function() {            
+            var pag_status_qtd = $("#pagination_current_page").val();
+            var base_calculus = 0;
+            var init = 1;
+            var limit = parseInt(this.value);
+            if(pag_status_qtd != "" && pag_status_qtd > 1) {                
+                base_calculus = parseInt(pag_status_qtd) - 1;
+                init = (base_calculus * 50) + 1;
+                var limit = parseInt(this.value);
+                $('span.per-page').text( init + limit);
+            } else {
+                $('span.per-page').text(limit);
+            }
+            
            var viewMode = $("#temp-viewMode").val();
            var container = $('.' + viewMode +'-view-container');
-           $('span.per-page').text(limit);
+           $('span.base-page-init').text( init );
            $(".col-items-per-page").val(limit);
 
            $(container).each(function(idx, el) {
@@ -115,6 +127,8 @@
               }
            });
         });
+        
+        $(".col-items-per-page").val(10).trigger('change');
 
         var default_viewMode = $("#default-viewMode").val();
         var lat = $("#set-lat").val();

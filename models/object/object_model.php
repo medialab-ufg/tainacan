@@ -885,7 +885,7 @@ class ObjectModel extends Model {
         //a forma de ordenacao
         $order = $this->set_type_order($args);
         $args = array(
-            'posts_per_page' => 10, // -1 to fetchs all items
+            'posts_per_page' => 50, // -1 to fetchs all items
             'post_type' => 'socialdb_object',
             'post_status' => array($post_status),
             'paged' => 1,
@@ -1120,6 +1120,7 @@ class ObjectModel extends Model {
         global $wp_query;
         $page = $this->set_page($data);
         $args = array(
+            'posts_per_page' => 50,
             'post_type' => 'socialdb_collection',
             'post_status' => array($post_status),
             'post__not_in' => array(get_option('collection_root_id')),
