@@ -72,11 +72,13 @@ class ObjectHelper extends ViewHelper {
     }
 
     public function renderCollectionPagination($_total_items_, $items_per_page, $page_id, $proper_str, $extra_class) {
-        if( $_total_items_> 10 ) { ?>
+        if( $_total_items_> 10 ) {
+            $_num_pages_ = ceil($_total_items_ / 10);
+            ?>
             <!-- TAINACAN: div com a paginacao da listagem -->
             <div class="col-md-12 center_pagination <?php echo $extra_class; ?>">
                                
-                <input type="hidden" id="number_pages" name="number_pages" value="10">
+                <input type="hidden" id="number_pages" name="number_pages" value="<?php echo $_num_pages_; ?>">
                 <div class="pagination_items col-md-4 pull-left">
                     <a href="#" class="btn btn-default btn-sm first" data-action="first"><span class="glyphicon glyphicon-backward"></span><!--&laquo;--></a>
                     <a href="#" class="btn btn-default btn-sm previous" data-action="previous"><span class="glyphicon glyphicon-step-backward"></span><!--&lsaquo;--></a>

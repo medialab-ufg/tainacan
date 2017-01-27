@@ -65,7 +65,7 @@ if ( $loop->have_posts() ): ?>
         </div>
         
     </div>
-
+    <br />
 <?php else: ?>
 
     <!-- TAINACAN: se a pesquisa nao encontrou nenhum item -->
@@ -112,4 +112,3 @@ if ( $loop->have_posts() ): ?>
 endif;
 
 $objHelper->renderCollectionPagination($loop->found_posts, $loop->post_count, $pagid, $show_string, 'bottom_pag');
-?>
