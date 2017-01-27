@@ -124,7 +124,7 @@
 
         if( default_viewMode === "geolocation" ) {
             if( lat || long || approx || approx_loc ) {
-                $('.viewMode-control li.geolocation').removeClass('hide');
+                $('.viewMode-control li.geolocation').removeClass('hide');                
             }
         }
 
@@ -133,7 +133,7 @@
             // getSlideshowTime();
             getCollectionSlideshow();
         } else if(default_viewMode === "table") {
-            $("#center_pagination").hide();
+            $(".center_pagination").hide();
         }
         $('.viewMode-control li').removeClass('selected-viewMode');
         $('.viewMode-control li.' + default_viewMode).addClass('selected-viewMode');

@@ -75,19 +75,20 @@ class ObjectHelper extends ViewHelper {
         if( $_total_items_> 10 ) { ?>
             <!-- TAINACAN: div com a paginacao da listagem -->
             <div class="col-md-12 center_pagination <?php echo $extra_class; ?>">
-
-                <input type="hidden" id="number_pages" name="number_pages" value="<?= $items_per_page; ?>">
+                               
+                <input type="hidden" id="number_pages" name="number_pages" value="10">
                 <div class="pagination_items col-md-4 pull-left">
                     <a href="#" class="btn btn-default btn-sm first" data-action="first"><span class="glyphicon glyphicon-backward"></span><!--&laquo;--></a>
                     <a href="#" class="btn btn-default btn-sm previous" data-action="previous"><span class="glyphicon glyphicon-step-backward"></span><!--&lsaquo;--></a>
-                    <input type="text" style="width: 90px;" readonly="readonly" data-current-page="<?php if (isset($page_id)) echo $page_id; ?>" data-max-page="0" />
+                    <input type="text" style="width: 90px;" readonly="readonly" data-max-page="0" 
+                           data-current-page="<?php if (isset($page_id)) echo $page_id; ?>" />
                     <a href="#" class="btn btn-default btn-sm next" data-action="next"><span class="glyphicon glyphicon-step-forward"></span><!--&rsaquo;--></a>
                     <a href="#" class="btn btn-default btn-sm last" data-action="last"><span class="glyphicon glyphicon-forward"></span><!--   &raquo; --></a>
                 </div>
 
                 <div class="col-md-4 center">
                     <?php
-                    // $_per_page = $loop->query['posts_per_page'];
+                    // $_per_page = $loop->query['posts_per_page';]
                     // $_per_page = 10;
                     $_per_page = $items_per_page;
 
@@ -100,7 +101,11 @@ class ObjectHelper extends ViewHelper {
                     <select name="items-per-page" class="col-items-per-page">
                         <option>5</option>
                         <option>8</option>
+                        <?php /*
                         <option value="<?php echo $_per_page; ?>" selected> <?php echo $_per_page; ?> </option>
+                         * 
+                         */ ?>
+                        <option value="10" selected> 10 </option>
                         <option>15</option>
                         <option>25</option>
                         <option>50</option>

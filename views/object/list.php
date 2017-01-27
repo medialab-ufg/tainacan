@@ -14,7 +14,7 @@ if( !$collection_list_mode ) {
     $collection_list_mode = "cards";
 }
 
-if( "geolocation" === $collection_list_mode && is_null($geo_coordinates) && $is_filtered_page ) {
+if("geolocation" === $collection_list_mode && is_null($geo_coordinates) && ($is_filtered_page || $pagid) ) {
     $geo_coordinates["lat"] = get_post_meta($col_id, "socialdb_collection_latitude_meta", true);
     $geo_coordinates["long"] = get_post_meta($col_id, "socialdb_collection_longitude_meta", true);
 
@@ -22,7 +22,6 @@ if( "geolocation" === $collection_list_mode && is_null($geo_coordinates) && $is_
 }
 $_fxd_title = $viewHelper->terms_fixed['title']->name;
 $numberItems = ceil($loop->found_posts / 10);
-
 ?>
 
 <!-- TAINACAN: hidden utilizados para execucao de processos desta view (list.php)  -->
@@ -36,7 +35,7 @@ $numberItems = ceil($loop->found_posts / 10);
 <input type="hidden" id="approx_mode" value="<?php echo $use_approx_mode; ?>">
 <input type="hidden" id="approx_location" value="<?php echo $geo_loc; ?>">
 <input type="hidden" id="repo_fixed_title" value="<?php echo $_fxd_title; ?>">
-    <input type="hidden" id="original_post_count" value="<?php echo $loop->post_count; ?>" />
+<input type="hidden" id="original_post_count" value="<?php echo $loop->post_count; ?>" />
 
 <?php
 $objHelper->renderCollectionPagination($loop->found_posts, $loop->post_count, $pagid, $show_string, 'top_pag');
