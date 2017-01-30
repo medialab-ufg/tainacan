@@ -2,9 +2,11 @@
     <li class="dropdown collec_menu_opnr">
     <?php if ((verify_collection_moderators($current_collection_id, get_current_user_id()) || current_user_can('manage_options')) && get_post_type($current_collection_id) == 'socialdb_collection'): ?>
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+            <span class="notification_events"></span>
             <div class="fab">
                 <img src="<?php echo get_template_directory_uri() ?>/libraries/images/configuracao.svg" alt="<?php _t('Configuration', 1); ?>" class="img-responsive">
             </div>
+
         </a>
 
         <ul class="dropdown-menu pull-right dropdown-show" role="menu">
@@ -74,10 +76,10 @@
                 <li class="divider"></li>
 
                 <li>
-                    <a onclick="showEvents('<?php echo get_template_directory_uri() ?>');" style="color:<?php echo $collection_metas['socialdb_collection_board_link_color']; ?>" href="#">
+                    <a class="events-link" onclick="showEvents('<?php echo get_template_directory_uri() ?>');" style="color:<?php echo $collection_metas['socialdb_collection_board_link_color']; ?>" href="#">
                         <span class="glyphicon glyphicon-flash"></span> <?php _e('Events', 'tainacan'); ?> &nbsp;
-                        <span id="notification_events" style="background-color:red;color:white;font-size:13px;"></span>
                     </a>
+                    <span class="notification_events"></span>
                 </li>
 
                 <?php if (!verify_collection_moderators($current_collection_id, get_current_user_id()) && !current_user_can('manage_options')): ?>

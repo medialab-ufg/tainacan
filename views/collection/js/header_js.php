@@ -35,7 +35,6 @@
     $("#tainacan-breadcrumbs span.collection-title").text(collection_data.name);
 
     $(function () {
-
         if ( $(".ibram-header").is(":visible") ) {
             $(".collection_header_img").hide();
         }
@@ -48,16 +47,6 @@
             select: function (event, ui) {
                 var str = '' + ui.item.id+'';
                 $("#search_objects").val('');
-                //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
-//                $("#dynatree").dynatree("getRoot").visit(function (node) {
-//                    //console.log(node.data.key, ui.item.id, '' + node.data.key + '' === '' + ui.item.id + '');
-//                    if ('' + node.data.key + '' === '' + ui.item.id + '') {
-//                        match = node;
-//                        node.toggleExpand();
-//                        node.select(node);
-//                        return true; // stop traversal (if we are only interested in first match)
-//                    }
-//                });
                 if (str.indexOf("_keyword") >= 0) {
                     wpquery_keyword("'" + str.replace('_keyword', '')+ "'");
                 }else{
@@ -78,18 +67,6 @@
         });
 
         notification_events();
-
-        //popover
-        //$('[data-toggle="popover"]').popover();
-
-//        // *************** Iframe Popover Collection ****************
-//        //$('#iframebutton').attr('data-content', 'Teste').data('bs.popover').setContent();
-//        var myPopover = $('#iframebutton').data('popover');
-//        $('#iframebutton').popover('hide');
-//        myPopover.options.html = true;
-//        //<iframe width="560" height="315" src="https://www.youtube.com/embed/CGyEd0aKWZE" frameborder="0" allowfullscreen></iframe>
-//        myPopover.options.content = '<form><input type="text" style="width:200px;" value="<iframe width=\'800\' height=\'600\' src=\'' + $("#socialdb_permalink_collection").val() + '\' frameborder=\'0\'></iframe>" /></form>';
-
     });
 
 
@@ -115,13 +92,14 @@
      */
     function notification_events() {
         $.ajax({
-            type: "POST",
-            url: $('#src').val() + "/controllers/event/event_controller.php",
+            type: "POST", url: $('#src').val() + "/controllers/event/event_controller.php",
             data: {collection_id: $('#collection_id').val(), operation: 'notification_events'}
         }).done(function (result) {
-            $('#notification_events').html(result);
-            $('.dropdown-toggle').dropdown();
-            $('.nav-tabs').tab();
+            if(result.length > 6 && result != undefined) {
+                $('.notification_events').html(result);
+            } else {
+                $('.notification_events').hide();
+            }
         });
     }
    

@@ -749,3 +749,27 @@ button.collection-trash {
     height: 25px !important;
   }
 }
+
+a.events-link {
+  display: inline-block !important;
+  padding-right: 0 !important;
+}
+.notification_events {
+  background-color: $notification-red !important;
+  color:white;
+  font-size:13px;
+  border-radius: 2px;
+  padding: 0 4px 2px 1px;
+}
+
+.collec_menu_opnr {
+  a.dropdown-toggle {
+    .notification_events {
+      float: right;
+      margin-left: -10px;
+      margin-top: -5px;
+      z-index: 3;
+      position: relative;
+    }
+  }
+}
