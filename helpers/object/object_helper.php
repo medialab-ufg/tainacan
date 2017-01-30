@@ -82,14 +82,14 @@ class ObjectHelper extends ViewHelper {
                 <div class="pagination_items col-md-4 pull-left">
                     <a href="#" class="btn btn-default btn-sm first" data-action="first"><span class="glyphicon glyphicon-backward"></span><!--&laquo;--></a>
                     <a href="#" class="btn btn-default btn-sm previous" data-action="previous"><span class="glyphicon glyphicon-step-backward"></span><!--&lsaquo;--></a>
-                    <input type="text" style="width: 90px;" readonly="readonly" data-max-page="0" 
+                    <input type="text" readonly="readonly" data-max-page="0" class="pagination-count"
                            data-current-page="<?php if (isset($page_id)) echo $page_id; ?>" />
                     <a href="#" class="btn btn-default btn-sm next" data-action="next"><span class="glyphicon glyphicon-step-forward"></span><!--&rsaquo;--></a>
                     <a href="#" class="btn btn-default btn-sm last" data-action="last"><span class="glyphicon glyphicon-forward"></span><!--   &raquo; --></a>
                 </div>
 
                 <div class="col-md-4 center">
-                    <?php echo $proper_str; ?> <span class="base-page-init"> 1 </span> -        
+                    <?php echo $proper_str; ?> <span class="base-page-init"> 1 </span> -
                     <span class='per-page'> <?php echo $items_per_page ?> </span>
                     <?php echo __(' of ', 'tainacan') . $_total_items_; ?>
                 </div>

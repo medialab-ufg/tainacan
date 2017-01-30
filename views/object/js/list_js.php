@@ -89,6 +89,7 @@
         
         $('.pagination_items').jqPagination({
             link_string: '/?page={page_number}',
+            page_string: '<?php _t("Page ",1); ?>' + '{current_page}' + '<?php _t(" of ",1); ?>' + ' {max_page}',
             max_page: $('#number_pages').val(),
             paged: function (page) {
                 $('html,body').animate({scrollTop: 0}, 'slow');

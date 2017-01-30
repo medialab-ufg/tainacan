@@ -166,6 +166,10 @@ button.collection-trash {
         padding: 5px 0 5px 0;
         color: $item-light-gray;
 
+        .pagination-count {
+          text-align: center;
+        }
+
         &.top_pag {
           margin: 15px auto 0 auto;
         }
