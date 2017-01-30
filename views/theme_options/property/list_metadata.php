@@ -72,7 +72,8 @@ $view_helper = new ViewHelper();
                 <?php endforeach; ?>
             </ul>
             <div class="col-md-2 right back-to-collection" style="padding: 0 2% 0 0;">
-                <button onclick="backToMainPage();" id="btn_back_collection" class="btn btn-default pull-right white"><?php _e('Back to collection','tainacan') ?></button>
+                <!--button onclick="backToMainPage();" id="btn_back_collection" class="btn btn-default pull-right white"><?php _e('Back to collection','tainacan') ?></button-->
+                  <button onclick="routerGo($('#slug_collection').val());" id="btn_back_collection" class="btn btn-default pull-right white"><?php _e('Back to collection','tainacan') ?></button>
             </div>
         </div>
 
