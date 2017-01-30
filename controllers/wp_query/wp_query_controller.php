@@ -277,6 +277,7 @@ class WPQueryController extends Controller {
                 $paramters = $wpquery_model->do_filter($args);
                 $data['loop'] =  new WP_Query($paramters);
                 $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
+                $data["show_string"] = is_root_category($data['col_id']) ? _t('Showing collections:') : _t('Showing Items:');
                 $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);
                 $data['is_moderator'] = CollectionModel::is_moderator($args['collection_id'], get_current_user_id());
                 $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($args['collection_id'], "socialdb_collection_table_metas", true)));
