@@ -2649,10 +2649,10 @@ function changeViewMode(viewMode) {
 
 function setCollectionViewIcon(item_class) {
     var current_img = $('.' + item_class + " a img").first().clone();
-    if (current_img.length < 1) {
+    if (current_img.length < 1 || "table" == item_class) {
         current_img = $('.' + item_class + " a span").first().clone();
     }
-
+    
     $("#collectionViewMode").html(current_img);
 }
 
