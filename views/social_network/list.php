@@ -5,6 +5,7 @@ include_once('js/edit_js.php');
 include_once('js/delete_js.php');
 include_once('js/insert_js.php');
 include_once('js/list_js.php');
+include_once(dirname(__FILE__).'/../../helpers/view_helper.php');
 require_once(dirname(__FILE__) . '../../../models/social_network/Facebook/autoload.php');
 session_start();
 ?>
@@ -15,7 +16,7 @@ session_start();
             <div id="loader_videos" style="margin-left: 35%;margin-top:3%; display: none;"><img src="<?php echo get_template_directory_uri(), '/libraries/images/ajaxLoader.gif'; ?>" /></div>
             <h3 class="topo">
                 <?php _e("Social Networks Conected to the Colection", 'tainacan'); ?>
-                <button onclick="backToMainPage();" class="btn btn-default pull-right"><?php _e('Back to collection', 'tainacan'); ?></button>
+                <?php ViewHelper::buttonVoltar() ?>
             </h3>
             <hr>
             <ul class="nav nav-tabs">

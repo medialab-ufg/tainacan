@@ -10,19 +10,19 @@
         </a>
 
         <ul class="dropdown-menu pull-right dropdown-show" role="menu">
-            <li><a style="cursor: pointer;" onclick="showCollectionConfiguration('<?php echo get_template_directory_uri() ?>');" ><span class="glyphicon glyphicon-wrench"></span>&nbsp;<?php _t('Configuration', 1); ?></a></li>
+            <li><a style="cursor: pointer;" onclick="showCollectionConfiguration('<?php echo get_template_directory_uri() ?>');updateStateCollection('configuration');" ><span class="glyphicon glyphicon-wrench"></span>&nbsp;<?php _t('Configuration', 1); ?></a></li>
             <li <?php do_action('menu_collection_property_and_filters_configuration') ?>>
-                <a style="cursor: pointer;" onclick="showPropertiesAndFilters('<?php echo get_template_directory_uri() ?>');" >
+                <a style="cursor: pointer;" onclick="showPropertiesAndFilters('<?php echo get_template_directory_uri() ?>');updateStateCollection('metadata');" >
                     <span class="glyphicon glyphicon-list-alt"></span> &nbsp; <?php _e('Metadata and Filters', 'tainacan'); ?>
                 </a>
             </li>
             <li>
-                <a style="cursor: pointer;" onclick="showLayout('<?php echo get_template_directory_uri() ?>');" >
+                <a style="cursor: pointer;" onclick="showLayout('<?php echo get_template_directory_uri() ?>');updateStateCollection('layout');" >
                     <span class="glyphicon glyphicon-tint"></span> &nbsp; <?php _e('Layout', 'tainacan'); ?>
                 </a>
             </li>
             <li <?php do_action('menu_collection_tags') ?>>
-                <a style="cursor: pointer;" onclick="showCollectionTags('<?php echo get_template_directory_uri() ?>');" >
+                <a style="cursor: pointer;" onclick="showCollectionTags('<?php echo get_template_directory_uri() ?>');updateStateCollection('tags');" >
                     <span class="glyphicon glyphicon-tag"></span> &nbsp; <?php _e('Tags', 'tainacan'); ?>
                 </a>
             </li>
@@ -43,27 +43,27 @@
                 <li class="divider"></li>
 
                 <li <?php do_action('menu_collection_social_configuration') ?>>
-                    <a style="cursor: pointer;" onclick=" showSocialConfiguration('<?php echo get_template_directory_uri() ?>');" >
+                    <a style="cursor: pointer;" onclick=" showSocialConfiguration('<?php echo get_template_directory_uri() ?>');updateStateCollection('social');" >
                         <span class="glyphicon glyphicon-globe"></span> &nbsp;<?php _e('Social', 'tainacan'); ?>
                     </a>
                 </li>
                 <li  <?php do_action('menu_collection_license') ?>>
-                    <a style="cursor: pointer;" onclick="showLicensesConfiguration('<?php echo get_template_directory_uri() ?>');" >
+                    <a style="cursor: pointer;" onclick="showLicensesConfiguration('<?php echo get_template_directory_uri() ?>');updateStateCollection('licenses');" >
                         <span class="glyphicon glyphicon-duplicate"></span> &nbsp;<?php _e('Licenses', 'tainacan'); ?>
                     </a>
                 </li>
                 <li  <?php do_action('menu_collection_import') ?>>
-                    <a style="cursor: pointer;" onclick="showImport('<?php echo get_template_directory_uri() ?>');" >
+                    <a style="cursor: pointer;" onclick="showImport('<?php echo get_template_directory_uri() ?>');updateStateCollection('import');" >
                         <span class="glyphicon glyphicon-open"></span> &nbsp;<?php _e('Import', 'tainacan'); ?>
                     </a>
                 </li>
                 <li <?php do_action('menu_collection_export') ?>>
-                    <a style="cursor: pointer;" onclick="showExport('<?php echo get_template_directory_uri() ?>');" >
+                    <a style="cursor: pointer;" onclick="showExport('<?php echo get_template_directory_uri() ?>');updateStateCollection('export');" >
                         <span class="glyphicon glyphicon-save"></span> &nbsp;<?php _e('Export', 'tainacan'); ?>
                     </a>
                 </li>
                 <li <?php do_action('menu_collection_export') ?>>
-                    <a style="cursor: pointer;" onclick="showStatistics('<?php echo get_template_directory_uri() ?>');" >
+                    <a style="cursor: pointer;" onclick="showStatistics('<?php echo get_template_directory_uri() ?>');updateStateCollection('statistics');" >
                         <span class="glyphicon glyphicon-stats"></span> &nbsp;<?php _e('Statistics', 'tainacan'); ?>
                     </a>
                 </li>
@@ -76,7 +76,7 @@
                 <li class="divider"></li>
 
                 <li>
-                    <a class="events-link" onclick="showEvents('<?php echo get_template_directory_uri() ?>');" style="color:<?php echo $collection_metas['socialdb_collection_board_link_color']; ?>" href="#">
+                    <a class="events-link" onclick="showEvents('<?php echo get_template_directory_uri() ?>');updateStateCollection('events');" style="cursor:pointer;color:<?php echo $collection_metas['socialdb_collection_board_link_color']; ?>" >
                         <span class="glyphicon glyphicon-flash"></span> <?php _e('Events', 'tainacan'); ?> &nbsp;
                     </a>
                     <span class="notification_events"></span>

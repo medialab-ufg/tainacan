@@ -132,25 +132,6 @@
         $('#property_term_collection_id').val(current_collection_id);
         $('#property_data_collection_id').val(current_collection_id); // setando o valor da colecao no formulario
         $('#property_object_collection_id').val(current_collection_id); // setando o valor da colecao no formulario
-        //url amigavel
-        if (window.history && window.history.pushState) {
-
-            $(window).on('popstate', function () {
-                var hashLocation = location.hash;
-                var hashSplit = hashLocation.split("#!/");
-                var hashName = hashSplit[1];
-
-                if (hashName !== '') {
-                    var hash = window.location.hash;
-                    if (hash === '') {
-                        backToMainPage();
-                    }
-                }
-            });
-            window.history.pushState('forward', null, $('#route_blog').val()+$('#slug_collection').val()+'/admin/<?php _e('metadata','tainacan') ?>');
-            //
-        }
-
         showPropertyCategoryDynatree(src);
         showTermsDynatree(src); //mostra o dynatree
         list_collection_metadata();              

@@ -2,7 +2,10 @@
 include_once ('js/login_js.php');
 require_once(dirname(__FILE__) . '../../../models/social_network/Facebook/autoload.php');
 
-session_start();
+if(!isset($_SESSION)){
+   //session_start(); 
+}
+
 
 $_redir_url = get_bloginfo(template_directory) . '/controllers/user/user_controller.php?collection_id=' . $collection_id . '&operation=return_login_fb';
 

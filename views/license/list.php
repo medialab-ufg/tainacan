@@ -1,5 +1,5 @@
 <?php
-include_once ('../../helpers/view_helper.php');
+include_once(dirname(__FILE__).'/../../helpers/view_helper.php');
 include_once('js/list_js.php');
 ?>
 <div class="col-md-12">

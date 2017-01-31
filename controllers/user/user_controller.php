@@ -158,8 +158,11 @@ class UserController extends Controller {
                 $user = $user_model->do_login($data['username'], $data['password']);
                 if ($user) {
                     $data['login'] = 1;
-                    $data['url'] = get_the_permalink($data['collection_id']);
-
+                    if($data['collection_id'] && $data['collection_id'] !='0' && get_post($data['collection_id'])->post_type == 'socialdb_collection'){
+                        $data['url'] = get_the_permalink($data['collection_id']);
+                    }else{
+                         $data['url'] = site_url();
+                    }
                     $_log_data = [ 'collection_id' => $data['collection_id'], 'user_id' => $user->ID,
                         'event_type' => 'user_status', 'event' => 'login'];
                     Log::addLog($_log_data);

@@ -321,8 +321,11 @@ class ViewHelper {
     <?php }
 
     public static function render_config_title($title) {
-        echo "<h3 class='topo'> $title <button onclick='backToMainPage();' class='btn btn-default pull-right'>";
-        echo  __('Back','tainacan') . "</button></h3> <hr>";
+        $onclick = 'backToMainPage();';
+        $onclick = "backRoute($('#slug_collection').val());";
+        echo "<h3 class='topo'> $title ";
+        self::buttonVoltar();
+        echo  "</h3><hr>";
     }
 
     public function render_modal_header($span, $title, $extra_html="") {
@@ -421,6 +424,13 @@ class ViewHelper {
             </div>
             <?php 
         }
+    }
+    
+    public static function buttonVoltar(){
+        ?>
+        <!--button onclick="backToMainPage();" class="btn btn-default pull-right"><?php _e('Back to collection', 'tainacan') ?></button-->
+        <button onclick="backRoute($('#slug_collection').val());" id="btn_back_collection" class="btn btn-default pull-right"><?php _e('Back to collection','tainacan') ?></button>
+        <?php
     }
 
 } // ViewHelper

@@ -13,7 +13,8 @@ $image_cover_url = wp_get_attachment_url(get_post_meta($collection_post->ID, 'so
     <div class="col-md-12 tainacan-config-container">
         <h3>
             <?php _e('Collection Configuration', 'tainacan'); ?>
-            <button onclick="backToMainPage();" id="btn_back_collection" class="btn btn-default pull-right"><?php _e('Back to collection', 'tainacan') ?></button>
+            <!--button onclick="backToMainPage();" id="btn_back_collection" class="btn btn-default pull-right"><?php _e('Back to collection', 'tainacan') ?></button-->
+            <?php ViewHelper::buttonVoltar() ?>
         </h3>
         <hr>
 

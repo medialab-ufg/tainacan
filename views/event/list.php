@@ -73,9 +73,9 @@ include_once ('js/list_js.php');
                                             </td>
                                             <td>
                                                 <?php if ((current_user_can('manage_options') || verify_collection_moderators($collection_id, get_current_user_id()))): ?>
-                                                    <a href="#configuration" onclick="show_verify_event_not_confirmed('<?= $event['id'] ?>', '<?= $collection_id ?>')"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;<?php echo $event['name']; ?></a>
+                                                    <a style="cursor:pointer;" onclick="show_verify_event_not_confirmed('<?= $event['id'] ?>', '<?= $collection_id ?>')"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;<?php echo $event['name']; ?></a>
                                                 <?php else: ?>
-                                                    <a href="#configuration" onclick="show_unconfirmed_users_events('<?= $event['id'] ?>', '<?= $collection_id ?>')"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;<?php echo $event['name']; ?></a>
+                                                    <a style="cursor:pointer;" onclick="show_unconfirmed_users_events('<?= $event['id'] ?>', '<?= $collection_id ?>')"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;<?php echo $event['name']; ?></a>
                                                 <?php endif; ?>
                                             </td>
                                             <?php if ($moderation_type == 'moderador' || !isset($moderation_type) || empty($moderation_type)) { ?>
@@ -167,7 +167,7 @@ include_once ('js/list_js.php');
                                             </td>
                                             <?php if ($moderation_type == 'moderador' || !isset($moderation_type) || empty($moderation_type)) { ?>
                                                 <td>
-                                                    <a href="#configuration" onclick="show_verify_event_confirmed('<?= $event['id'] ?>', '<?= $collection_id ?>')"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;
+                                                    <a style="cursor:pointer;" onclick="show_verify_event_confirmed('<?= $event['id'] ?>', '<?= $collection_id ?>')"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;
                                                         <?php
                                                         if ($event['state'] == 'confirmed'): _e('Confirmed', 'tainacan');
                                                         elseif ($event['state'] == 'not_confirmed'): _e('Not Confirmed', 'tainacan');

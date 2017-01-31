@@ -3,13 +3,14 @@ include_once ('../../../../../wp-config.php');
 include_once ('../../../../../wp-load.php');
 include_once ('../../../../../wp-includes/wp-db.php');
 include_once ('js/tags_js.php');
+include_once(dirname(__FILE__).'/../../helpers/view_helper.php');
 global $config;
 ?>  
 
 <div id="categories_title" class="row"> 
     <div class="col-md-12 tainacan-topo-categoria">
         <h3><?php _e('Tags', 'tainacan') ?><small>&nbsp;&nbsp;&nbsp;</small>
-            <button onclick="backToMainPage();" class="btn btn-default pull-right"><?php _e('Back to collection', 'tainacan') ?></button>
+            <?php ViewHelper::buttonVoltar() ?>
         </h3> 
         <hr>
         <div id="alert_success_categories" class="alert alert-success" style="display: none;">

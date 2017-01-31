@@ -4,20 +4,111 @@
         echo trim(get_query_var('log-in'));
     }
     ?>">
+<!-- Paginas da colecao -->
 <input type="hidden" id="goToCollectionMetadata" name="goToCollectionMetadata" value="<?php
     if ((get_query_var('collection') && get_query_var('collection') !== 'tainacan-collections' ) && get_query_var('metadata')) {
         echo trim(get_query_var('metadata'));
     }
     ?>">
+<input type="hidden" id="goToCollectionConfiguration" name="goToCollectionConfiguration" value="<?php
+    if ((get_query_var('collection') && get_query_var('collection') !== 'tainacan-collections' ) && get_query_var('configuration')) {
+        echo trim(get_query_var('configuration'));
+    }
+    ?>">
+<input type="hidden" id="goToCollectionLayout" name="goToCollectionLayout" value="<?php
+    if ((get_query_var('collection') && get_query_var('collection') !== 'tainacan-collections' ) && get_query_var('layout')) {
+        echo trim(get_query_var('layout'));
+    }
+    ?>">
+<input type="hidden" id="goToCollectionEvents" name="goToCollectionEvents" value="<?php
+    if ((get_query_var('collection') && get_query_var('collection') !== 'tainacan-collections' ) && get_query_var('events')) {
+        echo trim(get_query_var('events'));
+    }
+    ?>">
+<input type="hidden" id="goToCollectionTags" name="goToCollectionTags" value="<?php
+    if ((get_query_var('collection') && get_query_var('collection') !== 'tainacan-collections' ) && get_query_var('tags')) {
+        echo trim(get_query_var('tags'));
+    }
+    ?>">
+<input type="hidden" id="goToCollectionSocial" name="goToCollectionSocial" value="<?php
+    if ((get_query_var('collection') && get_query_var('collection') !== 'tainacan-collections' ) && get_query_var('social')) {
+        echo trim(get_query_var('social'));
+    }
+    ?>">
+<input type="hidden" id="goToCollectionImport" name="goToCollectionImport" value="<?php
+    if ((get_query_var('collection') && get_query_var('collection') !== 'tainacan-collections' ) && get_query_var('import')) {
+        echo trim(get_query_var('import'));
+    }
+    ?>">
+<input type="hidden" id="goToCollectionLicenses" name="goToCollectionLicenses" value="<?php
+    if ((get_query_var('collection') && get_query_var('collection') !== 'tainacan-collections' ) && get_query_var('licenses')) {
+        echo trim(get_query_var('licenses'));
+    }
+    ?>">
+<input type="hidden" id="goToCollectionExport" name="goToCollectionExport" value="<?php
+    if ((get_query_var('collection') && get_query_var('collection') !== 'tainacan-collections' ) && get_query_var('export')) {
+        echo trim(get_query_var('export'));
+    }
+    ?>">
+<input type="hidden" id="goToCollectionStatistics" name="goToCollectionStatistics" value="<?php
+    if ((get_query_var('collection') && get_query_var('collection') !== 'tainacan-collections' ) && get_query_var('statistics')) {
+        echo trim(get_query_var('statistics'));
+    }
+    ?>">
+<!------------------------ Paginas do repositorio ------------------------------>
 <input type="hidden" id="goToRepositoryMetadata" name="goToRepositoryMetadata" value="<?php
     if ((get_query_var('collection') && get_query_var('collection') === 'tainacan-collections' ) && get_query_var('metadata')) {
         echo trim(get_query_var('metadata'));
     }
     ?>">
+<input type="hidden" id="goToRepositoryConfiguration" name="goToRepositoryConfiguration" value="<?php
+    if ((get_query_var('collection') && get_query_var('collection') === 'tainacan-collections' ) && get_query_var('configuration')) {
+        echo trim(get_query_var('configuration'));
+    }
+    ?>">
+<input type="hidden" id="goToRepositoryCategories" name="goToRepositoryCategories" value="<?php
+    if ((get_query_var('collection') && get_query_var('collection') === 'tainacan-collections' ) && get_query_var('categories')) {
+        echo trim(get_query_var('categories'));
+    }
+    ?>">
+<input type="hidden" id="goToRepositoryEvents" name="goToRepositoryEvents" value="<?php
+    if ((get_query_var('collection') && get_query_var('collection') === 'tainacan-collections' ) && get_query_var('events')) {
+        echo trim(get_query_var('events'));
+    }
+    ?>">
+<input type="hidden" id="goToRepositoryTool" name="goToRepositoryTool" value="<?php
+    if ((get_query_var('collection') && get_query_var('collection') === 'tainacan-collections' ) && get_query_var('tools')) {
+        echo trim(get_query_var('tools'));
+    }
+    ?>">
+<input type="hidden" id="goToRepositorySocial" name="goToRepositorySocial" value="<?php
+    if ((get_query_var('collection') && get_query_var('collection') === 'tainacan-collections' ) && get_query_var('social')) {
+        echo trim(get_query_var('social'));
+    }
+    ?>">
+<input type="hidden" id="goToRepositoryImport" name="goToRepositoryImport" value="<?php
+    if ((get_query_var('collection') && get_query_var('collection') === 'tainacan-collections' ) && get_query_var('import')) {
+        echo trim(get_query_var('import'));
+    }
+    ?>">
+<input type="hidden" id="goToRepositoryLicenses" name="goToRepositoryLicenses" value="<?php
+    if ((get_query_var('collection') && get_query_var('collection') === 'tainacan-collections' ) && get_query_var('licenses')) {
+        echo trim(get_query_var('licenses'));
+    }
+    ?>">
+<input type="hidden" id="goToRepositoryExport" name="goToRepositoryExport" value="<?php
+    if ((get_query_var('collection') && get_query_var('collection') === 'tainacan-collections' ) && get_query_var('export')) {
+        echo trim(get_query_var('export'));
+    }
+    ?>">
+<input type="hidden" id="goToRepositoryEmail" name="goToRepositoryEmail" value="<?php
+    if ((get_query_var('collection') && get_query_var('collection') === 'tainacan-collections' ) && get_query_var('email')) {
+        echo trim(get_query_var('email'));
+    }
+    ?>">
 <script>
     var previousRoute;
-    /** executa a funcao que verifica se existe a necessidade de executar
-        alguma rota **/
+    /********** cadastro de rotas ********/
      //pagina central da colecao
     $.router.add( $('#route_blog').val()+':collection', function(data) {
         console.log('rota only collection');
@@ -27,9 +118,27 @@
     $.router.add( $('#route_blog').val()+':collection/:item', function(data) {
         console.log('rota item',data);
         if(data.collection == 'admin'){
-            if(data.item=='<?php echo __('metadata','tainacan') ?>'){
-                
-            }
+                if(data.item=='<?php echo __('metadata','tainacan') ?>'){
+                    showPropertiesRepository($('#src').val());
+                }else if(data.item=='<?php echo __('configuration','tainacan') ?>'){
+                    showCollectionConfiguration($('#src').val());
+                }else if(data.item=='<?php echo __('email','tainacan') ?>'){
+                    showWelcomeEmail($('#src').val());
+                }else if(data.item=='<?php echo __('categories','tainacan') ?>'){
+                    showCategoriesConfiguration($('#src').val());
+                }else if(data.item=='<?php echo __('social','tainacan') ?>'){
+                     showAPIConfiguration($('#src').val());
+                }else if(data.item=='<?php echo __('licenses','tainacan') ?>'){
+                    showLicensesRepository($('#src').val());
+                }else if(data.item=='<?php echo __('import','tainacan') ?>'){
+                    showImportFull($('#src').val());
+                }else if(data.item=='<?php echo __('export','tainacan') ?>'){
+                    showExportFull($('#src').val());
+                }else if(data.item=='<?php echo __('tools','tainacan') ?>'){
+                    showTools($('#src').val());
+                }else if(data.item=='<?php echo __('events','tainacan') ?>'){
+                    showEventsRepository($('#src').val());
+                }
         }else{
              console.log(previousRoute ,window.location.pathname);
             if(previousRoute === window.location.pathname){
@@ -40,6 +149,33 @@
             
         }
         
+    });
+    
+     //pagina do item
+    $.router.add( $('#route_blog').val()+':collection/:item/:operation', function(data) {
+          if(data.item == 'admin'){
+                if(data.operation=='<?php echo __('metadata','tainacan') ?>'){
+                    showPropertiesAndFilters($('#src').val());
+                }else if(data.operation=='<?php echo __('configuration','tainacan') ?>'){
+                    showRepositoryConfiguration($('#src').val());
+                }else if(data.operation=='<?php echo __('layout','tainacan') ?>'){
+                    showLayout($('#src').val());
+                }else if(data.operation=='<?php echo __('tags','tainacan') ?>'){
+                    showCollectionTags($('#src').val());
+                }else if(data.operation=='<?php echo __('social','tainacan') ?>'){
+                    showSocialConfiguration($('#src').val());
+                }else if(data.operation=='<?php echo __('licenses','tainacan') ?>'){
+                    showLicensesConfiguration($('#src').val());
+                }else if(data.operation=='<?php echo __('import','tainacan') ?>'){
+                    showImport($('#src').val());
+                }else if(data.operation=='<?php echo __('export','tainacan') ?>'){
+                    showExport($('#src').val());
+                }else if(data.operation=='<?php echo __('statistics','tainacan') ?>'){
+                    showStatistics($('#src').val());
+                }else if(data.operation=='<?php echo __('events','tainacan') ?>'){
+                    showEvents($('#src').val());
+                }
+            }
     });
     
     $(function(){
@@ -61,11 +197,149 @@
         }else if($('#goToCollectionMetadata').val()!==''){
             console.log('redirect');
             showPropertiesAndFilters($('#src').val());
-        }else if($('#goToRepositoryMetadata').val()!==''){
+        }
+        // REPOSITORIO ROTAS
+        else if($('#goToRepositoryMetadata').val()!==''){
             showPropertiesRepository($('#src').val());
+        }else if($('#goToRepositoryConfiguration').val()!==''){
+            showRepositoryConfiguration($('#src').val());
+        }else if($('#goToRepositoryCategories').val()!==''){
+            showCategoriesConfiguration($('#src').val());
+        }else if($('#goToRepositoryEvents').val()!==''){
+            showEventsRepository($('#src').val());
+        }else if($('#goToRepositoryTool').val()!==''){
+            showTools($('#src').val());
+        }else if($('#goToRepositorySocial').val()!==''){
+            showAPIConfiguration($('#src').val());
+        }else if($('#goToRepositoryImport').val()!==''){
+            showImportFull($('#src').val());
+        }else if($('#goToRepositoryLicenses').val()!==''){
+            showLicensesRepository($('#src').val());
+        }else if($('#goToRepositoryExport').val()!==''){
+            showExportFull($('#src').val());
+        }else if($('#goToRepositoryEmail').val()!==''){
+            showWelcomeEmail($('#src').val());
+        }
+        //COLECAO ROTAS
+        else if($('#goToCollectionConfiguration').val()!==''){
+            showCollectionConfiguration($('#src').val());
+        }else if($('#goToCollectionLayout').val()!==''){
+            showLayout($('#src').val());
+        }else if($('#goToCollectionEvents').val()!==''){
+            showEvents($('#src').val());
+        }else if($('#goToCollectionTags').val()!==''){
+            showCollectionTags($('#src').val());
+        }else if($('#goToCollectionSocial').val()!==''){
+            showSocialConfiguration($('#src').val());
+        }else if($('#goToCollectionLicenses').val()!==''){
+            showLicensesConfiguration($('#src').val());
+        }else if($('#goToCollectionImport').val()!==''){
+            showImport($('#src').val());
+        }else if($('#goToCollectionExport').val()!==''){
+            showExport($('#src').val());
+        }else if($('#goToCollectionStatistics').val()!==''){
+            showStatistics($('#src').val());
         }
     }
     
+    /**
+     * atualiza a url do admin da colecao
+     * @param {type} state
+     * @returns {undefined}     */
+    function updateStateCollection(state){
+        if(state=='configuration'){
+            state = '<?php _e('configuration','tainacan') ?>';
+        }else if(state=='layout'){
+            state = '<?php _e('layout','tainacan') ?>';
+        }else if(state=='tags'){
+            state = '<?php _e('tags','tainacan') ?>';
+        }else if(state=='events'){
+            state = '<?php _e('events','tainacan') ?>';
+        }else if(state=='social'){
+            state = '<?php _e('social','tainacan') ?>';
+        }else if(state=='licenses'){
+            state = '<?php _e('licenses','tainacan') ?>';
+        }else if(state=='import'){
+            state = '<?php _e('import','tainacan') ?>';
+        }else if(state=='export'){
+            state = '<?php _e('export','tainacan') ?>';
+        }else if(state=='statistics'){
+            state = '<?php _e('statistics','tainacan') ?>';
+        }else if(state=='metadata'){
+            state = '<?php _e('metadata','tainacan') ?>';
+        }
+        
+        
+        //url amigavel
+        if (window.history && window.history.pushState) {
+
+            $(window).on('popstate', function () {
+                var hashLocation = location.hash;
+                var hashSplit = hashLocation.split("#!/");
+                var hashName = hashSplit[1];
+
+                if (hashName !== '') {
+                    var hash = window.location.hash;
+                    if (hash === '') {
+                       // backRoute();
+                    }
+                }
+            });
+            window.history.pushState('forward', null, $('#route_blog').val()+$('#slug_collection').val()+'/admin/'+state);
+            //
+        }
+    }
+    
+    /**
+     * atualiza a url do admin do repositorio
+     * @param {type} state
+     * @returns {undefined}     */
+    function updateStateRepositorio(state){
+        if(state=='configuration'){
+            state = '<?php _e('configuration','tainacan') ?>';
+        }else if(state=='tools'){
+            state = '<?php _e('tools','tainacan') ?>';
+        }else if(state=='categories'){
+            state = '<?php _e('categories','tainacan') ?>';
+        }else if(state=='events'){
+            state = '<?php _e('events','tainacan') ?>';
+        }else if(state=='social'){
+            state = '<?php _e('social','tainacan') ?>';
+        }else if(state=='licenses'){
+            state = '<?php _e('licenses','tainacan') ?>';
+        }else if(state=='import'){
+            state = '<?php _e('import','tainacan') ?>';
+        }else if(state=='export'){
+            state = '<?php _e('export','tainacan') ?>';
+        }else if(state=='statistics'){
+            state = '<?php _e('statistics','tainacan') ?>';
+        }else if(state=='metadata'){
+            state = '<?php _e('metadata','tainacan') ?>';
+        }
+        
+        
+        //url amigavel
+        if (window.history && window.history.pushState) {
+
+            $(window).on('popstate', function () {
+                var hashLocation = location.hash;
+                var hashSplit = hashLocation.split("#!/");
+                var hashName = hashSplit[1];
+
+                if (hashName !== '') {
+                    var hash = window.location.hash;
+                    if (hash === '') {
+                       // backRoute();
+                    }
+                    if($('#route_blog').val()===window.location.pathname){
+                        window.location = $('#route_blog').val();
+                    }
+                }
+            });
+            window.history.pushState('forward', null, $('#route_blog').val()+'admin/'+state);
+            //
+        }
+    }
     /**
      * funcao que redireciona para a pagina
      * @param {type} page
@@ -90,14 +364,10 @@
      */
     function backRoute(collection){
         console.log(collection,previousRoute,window.location.pathname);
-        if( previousRoute == window.location.pathname || !previousRoute){
-            if(collection){
-                previousRoute = $('#route_blog').val()+collection+'/';
-               $.router.go($('#route_blog').val()+collection+'/', 'My cool item');
-            }else
-               window.redirect = window.location.pathname
-        }else{
-            $.router.go(previousRoute, 'My cool item');
-        }
+        if(collection){
+            previousRoute = $('#route_blog').val()+collection+'/';
+           $.router.go($('#route_blog').val()+collection+'/', 'My cool item');
+        }else
+           window.redirect = window.location.pathname
     }
 </script>    
