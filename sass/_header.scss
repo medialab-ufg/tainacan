@@ -409,6 +409,14 @@ a:hover{text-decoration:underline}
     width: 300px;
   }
 
+  hr {
+    margin-bottom: 0;
+  }
+
+  #login-out {
+    margin-top: 0 !important;
+  }
+
   button.send-login {
     background: $brand-medium-blue;
     width: 100%;

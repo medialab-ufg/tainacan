@@ -2652,7 +2652,7 @@ function setCollectionViewIcon(item_class) {
     if (current_img.length < 1 || "table" == item_class) {
         current_img = $('.' + item_class + " a span").first().clone();
     }
-    
+
     $("#collectionViewMode").html(current_img);
 }
 

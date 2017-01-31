@@ -30,29 +30,31 @@ if (!empty($app['app_id']) && !empty($app['app_secret'])) {
 ?>
 <input type="hidden" id="src_login" name="src" value="<?php echo get_template_directory_uri() ?>">
 
-<div id="login-out" class="col-md-12 login-outer-container" style="margin-top: 50px;">
+<div id="login-out" class="col-md-12 login-outer-container">
     <div id="login-in" class="col-md-5 center container login-inner-container">
     
         <h4 style="font-weight: bolder; margin: 10px 0;"><?php _e('Login', 'tainacan'); ?></h4>
-        <hr style="margin-top: 5px;">
+        <hr>
 
-        <div class="col-md-12 no-padding" style="margin: 0px 0 20px 0;">
-            <div class="col-md-6" style="padding-left: 0;">
-                <?php if ($facebook_option['api_id'] && $facebook_option['api_secret']) { ?>
-                    <a href="<?php echo $loginUrl;?>" class="btn btn-primary" style="width: 100%;">
-                        <?php _e('Login with Facebook', 'tainacan'); ?>
-                    </a>
-                <?php } ?>
+        <?php if($loginUrl || $authUrl): ?>
+            <div class="col-md-12 no-padding" style="margin: 0px 0 20px 0;">
+                <div class="col-md-6" style="padding-left: 0;">
+                    <?php if ($facebook_option['api_id'] && $facebook_option['api_secret']) { ?>
+                        <a href="<?php echo $loginUrl;?>" class="btn btn-primary" style="width: 100%;">
+                            <?php _e('Login with Facebook', 'tainacan'); ?>
+                        </a>
+                    <?php } ?>
+                </div>
+                <div class="col-md-6" style="padding-right: 0;">
+                    <?php if (isset($authUrl)) { ?>
+                        <a href="<?php echo $authUrl; ?>"><img src="<?php echo get_template_directory_uri(); ?>/libraries/images/plus_login.png" style="max-width: 150px;" /></a>
+                        <a href="#" class="btn btn-danger" style="width: 100%;">
+                            <?php _e('Login with Google Plus', 'tainacan'); ?>
+                        </a>
+                    <?php } ?>
+                </div>
             </div>
-            <div class="col-md-6" style="padding-right: 0;">
-                <?php if (isset($authUrl)) { ?>
-                    <a href="<?php echo $authUrl; ?>"><img src="<?php echo get_template_directory_uri(); ?>/libraries/images/plus_login.png" style="max-width: 150px;" /></a>
-                    <a href="#" class="btn btn-danger" style="width: 100%;">
-                        <?php _e('Login with Google Plus', 'tainacan'); ?>
-                    </a>
-                <?php } ?>
-            </div>
-        </div>
+        <?php endif; ?>
 
         <?php if($loginUrl || $authUrl): ?>
             <div class="col-md-12">
