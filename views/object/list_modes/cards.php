@@ -26,7 +26,8 @@
 
                     if( is_array($table_meta_array) && count($table_meta_array) > 0):
                         $_DEFAULT_EMPTY_VALUE = "--";
-                        $_trim_desc = wp_trim_words($_object_description, 16);
+                        //$_trim_desc = wp_trim_words($_object_description, 16);
+                        $_trim_desc = $_object_description;
                         foreach ($table_meta_array as $item_meta_info):
                             $fmt = str_replace("\\","", $item_meta_info);
                             if(is_string($fmt)):

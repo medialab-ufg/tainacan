@@ -23,7 +23,8 @@
         if( per_page && !isNaN(parseInt(per_page) ) ) {
             var items_per_page = parseInt( per_page );
         }
-        
+
+        var image_brand = -1;
         $('input[name="meta_id_table"]').each(function(idx, el) {
             var valor = $(el).val();
             var meta_type = $(el).attr('data-mtype');
@@ -33,13 +34,17 @@
             } else if( (meta_type == 'property_term') || (meta_type == 'property_object') ) {
                 nome = $("#tableV-meta-"+valor).attr("data-parent");
             }
+            if("Thumbnail" == nome) {
+                image_brand = idx;
+            }
+
             $('tr.dynamic-table-metas').append('<th>' + nome + '</th>');
         });
 
         var qtd_table_metas = $('input[type="hidden"][name="meta_id_table"]').length;
         if ( qtd_table_metas > 0 ) {
             var meta_table_set = true;
-            if(qtd_table_metas > 7 ) {
+            if(qtd_table_metas > 7) {
                 $("#table-view").css("display", "block");
             }
         } else {
@@ -50,8 +55,8 @@
 
         var action_label = '<?php _e("Actions", "tainacan"); ?>';
         $('tr.dynamic-table-metas').append('<th>' + action_label + '</th>');
-
         var total_objs = $('.object_id').length;
+
         $('.object_id').each(function(idx, el) {
             var c_id = $(this).val();
             var see_more = '<?php _e( "View Object","tainacan"); ?>';
@@ -61,9 +66,19 @@
             var _table_html = "<tr>";
             if(meta_table_set) {
                 var item_table_metas = $('#object_' + c_id + ' input[type="hidden"][name="item_table_meta"]');
-                $( item_table_metas ).each(function(n, meta) {
-                    var meta_val = $(meta).val() || "--";
-                    _table_html += "<td> <a class='tview-title' data-id='"+c_id+"' title='"+see_more+"'>" + meta_val + "</a></td>";
+                $(item_table_metas).each(function(n, meta) {
+                    _table_html += "<td> <a class='tview-title' data-id='"+c_id+"' title='"+see_more+"'>";
+
+                    if(image_brand == n) {
+                        var item_img = $("#object_" + c_id + " .item-info img").get(0);
+                        meta_val = $(item_img).attr('src');
+                        _table_html += "<img src="+meta_val+" class='img-responsie' width='120'>";
+                    } else {
+                        var meta_val = $(meta).val() || "--";
+                        _table_html += meta_val;
+                    }
+
+                    _table_html += "</a></td>";
                 });
             } else {
                 var title = $.trim($("#object_" + c_id + " .item-display-title a").text());
