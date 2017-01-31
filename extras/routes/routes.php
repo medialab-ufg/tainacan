@@ -91,9 +91,10 @@
     function backRoute(collection){
         console.log(collection,previousRoute,window.location.pathname);
         if( previousRoute == window.location.pathname || !previousRoute){
-            if(collection)
+            if(collection){
+                previousRoute = $('#route_blog').val()+collection+'/';
                $.router.go($('#route_blog').val()+collection+'/', 'My cool item');
-           else
+            }else
                window.redirect = window.location.pathname
         }else{
             $.router.go(previousRoute, 'My cool item');

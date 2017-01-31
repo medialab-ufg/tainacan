@@ -663,6 +663,7 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
             <div class="modal-content">
                 <form  id="submit_files_item_zip">
                     <input type="hidden" id="operation" name="operation" value="send_files_item_zip">
+                    <input type="hidden" name="collection_id" value="<?php echo get_the_ID() ?>">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-plus"></span>&nbsp;<?php echo __('Import files from zip', 'tainacan'); ?></h4>

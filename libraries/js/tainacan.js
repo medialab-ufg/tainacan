@@ -343,6 +343,7 @@ $(window).load(function () {
             $('.dropdown-toggle').dropdown();
             elem = jQuery.parseJSON(result);
             if (elem) {
+                window.location = elem.url;
             } else {
                 $('#modalImportMain').modal('hide');
                 var message = elem.message;

@@ -339,6 +339,8 @@ function custom_upload_mimes ( $existing_mimes=array() ) {
     $existing_mimes['csv'] = 'application/octet-stream';
     $existing_mimes['csv2'] = 'application/vnd.ms-excel';
     $existing_mimes['gz'] = 'application/x-gzip';
+    $existing_mimes['xml'] = 'application/xml';
+    $existing_mimes['xml2'] = 'text/xml';
     return $existing_mimes;
 }
 

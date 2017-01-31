@@ -587,22 +587,98 @@ class ObjectMultipleModel extends Model {
      * 
      */
     public function insert_items_zip($data){
-        if($data['files'] && !empty($data['files'])){
+        if($data['files'] && !empty($data['files']) && $data['sendfile_zip'] !== 'url'){
+            if($data['meta_zip'] == 'choose' && $data['chosen_meta'] ){
+                $category_id = $data['chosen_meta'];
+            }elseif($data['meta_name']){
+                $array = wp_insert_term(trim($data['meta_name']), 'socialdb_category_type', 
+                        array('parent' =>$this->get_category_root_id(),'slug' => $this->generate_slug(trim($data['meta_name']), 0)));
+                add_term_meta($array['term_id'], 'socialdb_category_owner', get_current_user_id());
+                $category_id = $array['term_id'];
+                add_post_meta($data['collection_id'], 'socialdb_collection_facets', $category_id);
+                update_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $category_id . '_widget', 'tree');
+                update_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $category_id . '_color', 'color1');
+                $this->add_property_term($this->get_category_root_of($data['collection_id']), $data['meta_name'], $category_id);
+            }
+            
             $dir = $this->unzip_items($data['files']);
             foreach (new DirectoryIterator($dir) as $fileInfo) {
                     if($fileInfo->isDot()) 
                         continue;
                     
-                   if(is_file($fileInfo->getPath(). '/' .$fileInfo->getFilename())) 
-                       var_dump('sou arquivo',$fileInfo);
-                   if(is_dir($fileInfo->getPath(). '/' .$fileInfo->getFilename())) 
-                       var_dump('sou diretorio',$fileInfo);
-                   
-                   //$categories_id[] = $data['ids'];
+                   $this->recursiveFolder($fileInfo,$data['collection_id'],$category_id, ($data['zip_folder_hierarchy'] == '1') ? true : false);
+            }
+        }else if($data['file_path'] && !empty($data['file_path'])){
+             if($data['meta_zip'] == 'choose' && $data['chosen_meta'] ){
+                $category_id = $data['chosen_meta'];
+            }elseif($data['meta_name']){
+                $array = wp_insert_term(trim($data['meta_name']), 'socialdb_category_type', 
+                        array('parent' =>$this->get_category_root_id(),'slug' => $this->generate_slug(trim($data['meta_name']), 0)));
+                add_term_meta($array['term_id'], 'socialdb_category_owner', get_current_user_id());
+                $category_id = $array['term_id'];
+                add_post_meta($data['collection_id'], 'socialdb_collection_facets', $category_id);
+                update_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $category_id . '_widget', 'tree');
+                update_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $category_id . '_color', 'color1');
+                $this->add_property_term($this->get_category_root_of($data['collection_id']), $data['meta_name'], $category_id);
+            }
+            
+            $dir = $this->unzip_items_by_name($data['file_path']);
+            if($dir){
+                foreach (new DirectoryIterator($dir) as $fileInfo) {
+                        if($fileInfo->isDot()) 
+                            continue;
+
+                       $this->recursiveFolder($fileInfo,$data['collection_id'],$category_id, ($data['zip_folder_hierarchy'] == '1') ? true : false);
+                }
+            }else{
+                return false;
             }
         }
+        return json_encode(['url'=> get_the_permalink($data['collection_id'])]);
     }
     /*
+     * @signature unzip_package()
+     * @return string $targetdir o diretorio para onde foi descompactado o arquivo
+     */
+    public function unzip_items_by_name($path){
+        if ($path) {
+            $filename = basename($path);
+            $tmp_name = $path;
+
+            $name = explode(".", $filename);
+            $continue = strtolower($name[1]) == 'zip' ? true : false; //Checking the file Extension
+
+            if (!$continue) {
+                $message = "The file you are trying to upload is not a .zip file. Please try again.";
+            }
+
+
+            /* here it is really happening */
+            $ran = $name[0] . "-" . time() . "-" . rand(1, time());
+            if(!is_dir(TAINACAN_UPLOAD_FOLDER . "/data/zip-items")){
+                mkdir(TAINACAN_UPLOAD_FOLDER . "/data/zip-items");
+            }
+            $targetdir = TAINACAN_UPLOAD_FOLDER . "/data/zip-items/" . $ran;
+            mkdir($targetdir);
+            $targetzip = TAINACAN_UPLOAD_FOLDER . "/data/zip-items/" . $ran . ".zip";
+
+            if (file_put_contents($targetzip,file_get_contents($tmp_name))) { //Uploading the Zip File
+
+                /* Extracting Zip File */
+
+                $zip = new ZipArchive();
+                $x = $zip->open($targetzip);  // open the zip file to extract
+                if ($x === true) {
+                    $zip->extractTo($targetdir); // place in the directory with same name  
+                    $zip->close();
+                    unlink($targetzip); //Deleting the Zipped file
+                }
+            } 
+        }
+        return $targetdir;
+    }
+    
+     /*
      * @signature unzip_package()
      * @return string $targetdir o diretorio para onde foi descompactado o arquivo
      */
@@ -651,13 +727,82 @@ class ObjectMultipleModel extends Model {
         return $targetdir;
     }
     
-    public function insertFileItem($fileInfo) {
+    public function recursiveFolder($fileInfo,$collection_id,$parent,$is_hierarchy = false) {
+        if(is_file($fileInfo->getPath(). '/' .$fileInfo->getFilename())){ 
+            $this->insertFileItem($fileInfo, $collection_id, $parent);
+        }elseif(is_dir($fileInfo->getPath(). '/' .$fileInfo->getFilename())){
+            if($is_hierarchy && $fileInfo->getFilename() !== '__MACOSX'):
+                $array = wp_insert_term(trim($fileInfo->getFilename()), 'socialdb_category_type', array('parent' => ($parent!=0) ? $parent : $this->get_category_root_id() ,
+                'slug' => $this->generate_slug(trim($fileInfo->getFilename()), 0)));
+                add_term_meta($array['term_id'], 'socialdb_category_owner', get_current_user_id());
+            else:
+                $array['term_id'] = 0;
+            endif;
+            foreach (new DirectoryIterator($fileInfo->getPath(). '/' .$fileInfo->getFilename()) as $fileInfoRecursive) {
+                    if($fileInfoRecursive->isDot()) 
+                        continue;
+                    
+                     if ($fileInfoRecursive->getFilename()[0] === '.') {
+                        continue;
+                     }
+                    
+                    $this->recursiveFolder($fileInfoRecursive,$collection_id,$array['term_id'],$is_hierarchy);
+            }
+        }  
+    }
+    
+    /**
+     * 
+     * @param type $fileInfo
+     * @param type $collection_id
+     */
+    public function insertFileItem($fileInfo,$collection_id,$parent = 0) {
         $object = array(
             'post_type' => 'socialdb_object',
             'post_title' => $fileInfo->getFilename(),
             'post_status' => 'publish',
             'post_author' => get_current_user_id(),
         );
-       $object_id = wp_insert_post($object);
+        $object_id = wp_insert_post($object);
+        $content_id = $this->insert_attachment_file($fileInfo->getPath(). '/' .$fileInfo->getFilename(), $object_id);
+        add_post_meta($object_id, '_file_id', $content_id);
+        update_post_meta($object_id, 'socialdb_object_content', $content_id);
+         update_post_meta($object_id, 'socialdb_object_from', 'internal');
+        $ext = strtolower(pathinfo($fileInfo->getPath(). '/' .$fileInfo->getFilename(), PATHINFO_EXTENSION));
+        if (in_array($ext, ['mp4', 'm4v', 'wmv', 'avi', 'mpg', 'ogv', '3gp', '3g2'])) {
+             update_post_meta($object_id, 'socialdb_object_dc_type',  'video');
+        } elseif (in_array($ext, ['jpg', 'jpeg', 'png', 'gif'])) {
+            update_post_meta($object_id, 'socialdb_object_dc_type',  'image');
+        } elseif (in_array($ext, ['mp3', 'm4a', 'ogg', 'wav', 'wma'])) {
+             update_post_meta($object_id, 'socialdb_object_dc_type', 'audio');
+        } elseif (in_array($ext, ['pdf'])) {
+             update_post_meta($object_id, 'socialdb_object_dc_type',  'pdf');
+        }else{
+             update_post_meta($object_id, 'socialdb_object_dc_type', 'other');
+        }
+        $category_root_id = $this->get_category_root_of($collection_id);
+        //categoria raiz da colecao
+        wp_set_object_terms($object_id, array((int) $category_root_id), 'socialdb_category_type');
+        if($parent != 0){
+            wp_set_object_terms($object_id, array((int) $parent), 'socialdb_category_type',true);
+        }
+        
     }
+    
+      /**
+     * function add_property_term($property)
+     * @param object $property
+     * @return int O id da da propriedade criada.
+     * @author: Eduardo Humberto 
+     */
+   public function add_property_term($category_root_id,$name,$term_root) {
+        $new_property = wp_insert_term($name, 'socialdb_property_type', array('parent' => $this->get_property_type_id('socialdb_property_term'),
+                'slug' => $this->generate_slug($name, 0)));
+        update_term_meta($new_property['term_id'], 'socialdb_property_term_cardinality', '1');
+        update_term_meta($new_property['term_id'], 'socialdb_property_term_widget', 'tree');
+        update_term_meta($new_property['term_id'], 'socialdb_property_term_root',$term_root);  
+        update_term_meta($new_property['term_id'], 'socialdb_property_created_category',$category_root_id);
+        add_term_meta($category_root_id, 'socialdb_category_property_id', $new_property['term_id']);
+        return $new_property['term_id'];
+   }
 }

@@ -316,7 +316,17 @@ class Model {
             return false;
         }
     }
-
+    
+    /**
+     * function get_property_type_id($property_parent_name)
+     * @param string $property_parent_name
+     * @return int O id da categoria que determinara o tipo da propriedade.
+     * @author: Eduardo Humberto 
+     */
+    public function get_property_type_id($property_parent_name) {
+        $property_root = get_term_by('name', $property_parent_name, 'socialdb_property_type');
+        return $property_root->term_id;
+    }
     /* function getChildren() */
     /* receive ((int,string) parent) */
     /* Return the children of the especif parent */
