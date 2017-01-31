@@ -309,13 +309,13 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
                                             </li>
                                         <?php endforeach; ?>
                                         <li class="geolocation hide">
-                                            <a href="#" onclick="changeViewMode('geolocation')">
+                                            <a href="javascript:void(0)" onclick="changeViewMode('geolocation')">
                                                 <div class="pull-left"> <?php _e('Map', 'tainacan'); ?> </div>
                                                 <div class="pull-right"> <span class="glyphicon glyphicon-map-marker"></span> </div>
                                             </a>
                                         </li>
                                         <li class="table">
-                                            <a href="#" onclick="changeViewMode('table')">
+                                            <a href="javascript:void(0)" onclick="changeViewMode('table')">
                                                 <div class="pull-left"> <?php _e('Table', 'tainacan'); ?> </div>
                                                 <div class="pull-right"> <span class="glyphicon glyphicon-align-justify"></span> </div>
                                             </a>

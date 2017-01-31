@@ -168,6 +168,11 @@ button.collection-trash {
 
         .pagination-count {
           text-align: center;
+          border: 1px solid $item-border;
+          height: 30px;
+          border-radius: 2px;
+          padding-bottom: 4px;
+          width: 45%;
         }
 
         &.top_pag {
@@ -183,6 +188,7 @@ button.collection-trash {
         }
 
         .pagination_items {
+          padding-right: 0;
           a.btn {
             span {
               font-size: 10px;
@@ -298,87 +304,86 @@ button.collection-trash {
     .ui-autocomplete { z-index:1051; }
     #cards-viewMode, #cards_trash-viewMode{
     .item-colecao {
-            border: 3px solid $item-border;
-            background: white;
-            border-radius: 2px;
-            margin: 1.5% 1.5% 0.2% 0;
-            height: 190px;
-            padding: 10px;
+      border: 3px solid $item-border;
+      background: white;
+      border-radius: 2px;
+      margin: 1.5% 1.5% 0.2% 0;
+      height: 190px;
+      padding: 10px;
 
-            .item-info {
-                    .colFoto {
-                            min-height: 160px;
-                            img {
-                                    height: 160px;
-                            }
-                    }
+      .item-info {
+        .colFoto {
+          min-height: 160px;
+          img {
+            height: 160px;
+          }
+        }
 
-                    .item-meta {
-                            color: $item-light-gray;
-                            font-size: 12px;
-                    }
+        .item-meta {
+          color: $item-light-gray;
+          font-size: 12px;
+        }
 
-                    .item-meta-box {
-                            padding-left: 0;
-                            margin-left: 0;
-                            position: relative;
-                            height: 160px;
+        .item-meta-box {
+          //padding-left: 0;
+          //margin-left: 0;
+          position: relative;
+          height: 160px;
 
-                            a {
-                                    font-weight: bolder;
-                            }
-                            h4 {
-                                    margin: 0 0 3px 0;
-                                    height: 40px;
-                                    overflow: hidden;
-                                    a {
-                                        color: black;
-                                    }
-                            }
-                            .item-description {
-                                    overflow: hidden;
-                                    max-height: 35px;
-                                    height: 35px;
-                            }
-                            .item-creation {
-                                    text-align: right;
-                            }
-                            .author-created {
-                                    margin-top: 5px;
-                                    margin-bottom: 5px;
-                                    font-size: 11px;
-
-                                    .author {
-                                            padding-right: 0;
-                                    }
-                            }
-                            .show-item-metadata {
-                                    position: absolute;
-                                    bottom: 0;
-                                    width: 95%;
-                            }
-                    } // .item-meta-box
+          a {
+            font-weight: bolder;
+          }
+          h4 {
+            margin: 0 0 3px 0;
+            height: 40px;
+            overflow: hidden;
+            a {
+              color: black;
             }
+          }
+          .item-description {
+            overflow: hidden;
+            max-height: 35px;
+            height: 35px;
+          }
+          .item-creation {
+            text-align: right;
+          }
+          .author-created {
+            margin-top: 5px;
+            margin-bottom: 5px;
+            font-size: 11px;
+            .author {
+              padding-right: 0;
+            }
+          }
+          .show-item-metadata {
+            position: absolute;
+            bottom: 0;
+            width: 95%;
+          }
+        } // .item-meta-box
+      }
 
-            .editing-item {
-                    width: 100%;
+      .editing-item {
+        width: 100%;
 
-                    .rankings-container {
-                            float: left;
-                            .single-binaries {
-                                    margin-top: -5px;
-                            }
-                    }
+        .rankings-container {
+          float: left;
+          .single-binaries {
+            margin-top: -5px;
+          }
+        }
 
-                    .item-redesocial {
-                            position: relative;
-                            float: right;
-                            margin-top: -5px;
-                            margin-left: 5px !important;
+        .item-redesocial {
+          position: relative;
+          float: right;
+          margin-top: -5px;
+          margin-left: 5px !important;
 
-                            div {
-                                    font-size: 1.2em;
-                                    //text-indent: 5px;
+          div {
+            font-size: 1.2em;
+            //text-indent: 5px;
                             }
 
                             @include edit-item-button-colors();

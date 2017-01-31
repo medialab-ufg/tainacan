@@ -5,9 +5,6 @@ include_once ('js/list_js.php');
 include_once ('js/geolocation_js.php');
 include_once ('helper/loader.php');
 
-$viewHelper = new ViewHelper();
-$objHelper = new ObjectHelper();
-
 $objHelper->renderCollectionPagination($loop->found_posts, $loop->post_count, $pagid, $show_string, 'top_pag');
 
 if ( $loop->have_posts() ): ?>
