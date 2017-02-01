@@ -141,8 +141,10 @@ class ObjectMultipleModel extends Model {
           $uniq_exifs = implode(",", array_unique($_exif_compounds_array));
           // if it has been set already
           if($_exif_compound_parent['id'] > 0) {
+              $property_model = new PropertyModel;
               $property_model->update_property_compounds($_exif_compound_parent['id'], $_exif_compound_parent['title'], $data['collection_id'], $_DATASET['category_id'], $uniq_exifs, "1");
           } else {
+              $property_model = new PropertyModel;
               $property_model->add_property_compounds($_exif_compound_parent['title'], $data['collection_id'], $_DATASET['category_id'], $uniq_exifs, "1");
           }
     }
