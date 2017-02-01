@@ -764,7 +764,7 @@ a.events-link {
   display: inline-block !important;
   padding-right: 0 !important;
 }
-.notification_events {
+.notification_events, .notification_events_repository {
   background-color: $notification-red !important;
   color:white;
   font-size:13px;

@@ -117,7 +117,12 @@ $viewHelper = new ViewHelper();
                                                     <li><a href="<?php echo get_bloginfo('url') ?>/wp-admin/users.php"> <span class="glyphicon glyphicon-user"></span> <?php _e('Users', 'tainacan'); ?> </a></li>
                                                     <li <?php do_action('menu_repository_social_api') ?>><a onclick="showAPIConfiguration('<?php echo get_template_directory_uri() ?>');updateStateRepositorio('social');" style="cursor: pointer;"><span class="glyphicon glyphicon-globe"></span>  <?php _e('Social / API Keys', 'tainacan'); ?></a></li>
                                                     <li <?php do_action('menu_repository_license') ?>><a onclick="showLicensesRepository('<?php echo get_template_directory_uri() ?>');updateStateRepositorio('licenses');" style="cursor: pointer;"><span class="glyphicon glyphicon-duplicate"></span> <?php _e('Licenses', 'tainacan'); ?></a></li>
-                                                    <li><a onclick="showEventsRepository('<?php echo get_template_directory_uri() ?>', '<?php echo get_option('collection_root_id') ?>');updateStateRepositorio('events');" style="cursor: pointer;"> <span class="glyphicon glyphicon-flash"></span>&nbsp;<?php _e('Events', 'tainacan'); ?>&nbsp;&nbsp;<span id="notification_events_repository" style="background-color:red;color:white;font-size:13px;"></span></a></li>
+                                                    <li>
+                                                        <a onclick="showEventsRepository('<?php echo get_template_directory_uri() ?>', '<?php echo get_option('collection_root_id') ?>');
+                                                            updateStateRepositorio('events');" style="cursor: pointer;">
+                                                            <span class="glyphicon glyphicon-flash"></span>&nbsp;<?php _e('Events', 'tainacan'); ?>&nbsp;&nbsp;
+                                                            <span class="notification_events_repository"></span></a>
+                                                    </li>
                                                     <li><a onclick="showWelcomeEmail('<?php echo get_template_directory_uri() ?>');updateStateRepositorio('email');" style="cursor: pointer;"><span  class="glyphicon glyphicon-envelope"></span> <?php _e('Welcome Email', 'tainacan'); ?></a></li>
                                                     <li><a onclick="showTools('<?php echo get_template_directory_uri() ?>');updateStateRepositorio('tools');" style="cursor: pointer;"><span  class="glyphicon glyphicon-tasks"></span> <?php _e('Tools', 'tainacan'); ?></a></li>
                                                     <li><a onclick="showImportFull('<?php echo get_template_directory_uri() ?>');updateStateRepositorio('import');" style="cursor: pointer;"><span class="glyphicon glyphicon-import"></span> <?php _e('Import', 'tainacan'); ?></a></li>
@@ -130,6 +135,12 @@ $viewHelper = new ViewHelper();
                                             </li>
                                         <?php endif; ?>
                                     </ul>
+                                </li>
+                                <li class="root-notifications">
+                                    <a href="<?php echo get_admin_url(); ?>">
+                                        <span class="dashicons dashicons-filter"></span>
+                                        <span class="notification_events_repository"></span>
+                                    </a>
                                 </li>
                                 <li class="manual">
                                     <a href="<?php echo MANUAL_TAINACAN_URL ?>">

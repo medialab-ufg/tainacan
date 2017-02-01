@@ -2266,8 +2266,7 @@ function show_form_item() {
     }).done(function (result) {
         $("#form").hide('slow');
         $("#list").hide('slow');
-        $("#form").html(result);
-        $('#form').show('slow');
+        $("#form").html(result).show('slow');
         $('#create_button').hide();
     });
 }
@@ -2279,9 +2278,8 @@ function notification_events_repository() {
         url: $('#src').val() + "/controllers/event/event_controller.php",
         data: {operation: 'notification_events_repository'}
     }).done(function (result) {
-        $('#notification_events_repository').html(result);
-        $('.dropdown-toggle').dropdown();
-        $('.nav-tabs').tab();
+        $('.notification_events_repository').html(result);
+        /* $('.dropdown-toggle').dropdown(); $('.nav-tabs').tab(); */
     });
 }
 //properties

@@ -67,6 +67,10 @@
         });
 
         notification_events();
+        $('.root-notifications a').mouseenter(function() {
+            get_user_notifications();
+        });
+
     });
 
 
@@ -102,7 +106,23 @@
             }
         });
     }
-   
+
+    function get_user_notifications() {
+        $.ajax({
+            type: "POST",
+            url: $('#src').val() + "/controllers/event/event_controller.php",
+            data: { collection_id: $('#collection_id').val(), operation: 'user_notification' }
+        }).done(function(r) {
+            var _ev_ = $.parseJSON(r);
+            cl(_ev_.events_not_observed);
+            if(_ev_.events_not_observed.length > 0) {
+                $(_ev_.events_not_observed).each(function(id, el) {
+                   cl('Evento: ' + el.name + ' (ID ' + el.id + ')');
+                });
+            }
+        });
+    }
+
     /**
      * 
      * @param {type} collection_id
