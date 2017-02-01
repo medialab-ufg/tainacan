@@ -673,11 +673,16 @@
 
      * @type Arguments     */
     function set_field_valid_compounds(id,seletor,compound_id){
-//        if($('#'+seletor).val()==='false'){
-//            $('#'+seletor).val('false');
-//        }else{
-//            $('#'+seletor).val('true');
-//        }
+        console.log(id,seletor,compound_id,$('#'+seletor).val());
+        if($('#'+seletor).val()==='false'){
+            var slug = seletor.replace('core_validation_','');
+            $('#ok_field_'+slug).hide();
+            $('#required_field_'+slug).show();
+        }else{
+            var slug = seletor.replace('core_validation_','');
+            $('#ok_field_'+slug).show();
+            $('#required_field_'+slug).hide();
+        }
         validate_all_fields_compounds(compound_id);
     }
     
@@ -688,6 +693,7 @@
                 cont++;
             }
         });
+        console.log(cont);
         if(cont===0){
             $('#core_validation_'+compound_id).val('true');
             set_field_valid(compound_id,'core_validation_'+compound_id);

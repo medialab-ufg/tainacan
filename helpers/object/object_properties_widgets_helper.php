@@ -86,9 +86,33 @@ class ObjectWidgetsHelper extends ViewHelper {
                                     <input  type="hidden" 
                                             id='core_validation_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>' 
                                             class='core_validation_compounds_<?php echo $property['id']; ?>' 
+                                        <?php if(!$property_compounded['metas']['socialdb_property_required'] || $property_compounded['metas']['socialdb_property_required'] == 'false'):  ?>
+                                            value='true'>
+                                        <?php else: ?>
                                             value='<?php echo (!$value) ? 'false' : 'true' ; ?>'>
+                                        <?php endif; ?>
                                     <div style="padding-bottom: 15px; " class="col-md-12">
-                                        <p style="color: black;"><?php echo $property_compounded['name']; ?></p>
+                                        <p style="color: black;"><?php echo $property_compounded['name']; ?>
+                                            <?php
+                                               if ((!$property['metas']['socialdb_property_required'] || $property['metas']['socialdb_property_required'] == 'false') && $property_compounded['metas']['socialdb_property_required']&&$property_compounded['metas']['socialdb_property_required'] == 'true') {
+                                            ?>
+                                                <a id='required_field_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>' style="padding: 3px;"  >
+                                                        <span  title="<?php echo __('This metadata is required!','tainacan')?>" 
+                                                       data-toggle="tooltip" data-placement="top" >*</span>
+                                                </a>
+                                                <a id='ok_field_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>'  style="display: none;padding: 0px;"  >
+                                                        <span class="glyphicon  glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>" 
+                                                       data-toggle="tooltip" data-placement="top" ></span>
+                                                </a>
+                                                <input  type="hidden" 
+                                                        id='core_validation_<?php echo $property['id']; ?>' 
+                                                        class='core_validation' 
+                                                        value='false'>
+                                                <input type="hidden" 
+                                                         id='core_validation_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>_message'  
+                                                         value='<?php echo sprintf(__('The field %s is required','tainacan'),$property['name']); ?>'>
+                                            <?php  }  ?>
+                                        </p>
                                         <input type="hidden" 
                                                     name="cardinality_compound_<?php echo $property['id']; ?>_<?php echo $property_compounded['id']; ?>" 
                                                     id="cardinality_compound_<?php echo $property['id']; ?>_<?php echo $property_compounded['id']; ?>"

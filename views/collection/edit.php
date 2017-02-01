@@ -80,8 +80,8 @@ $image_cover_url = wp_get_attachment_url(get_post_meta($collection_post->ID, 'so
 
             </div>
             <div class="form-group">
-                <a href="#advanced_config" id="show_adv_config_link" onclick="showAdvancedConfig();"><?php _e('Advanced Configuration', 'tainacan'); ?></a>
-                <a href="#advanced_config" id="hide_adv_config_link" onclick="hideAdvancedConfig();" style="display: none;"><?php _e('Hide Advanced Configuration', 'tainacan'); ?></a>
+                <a  id="show_adv_config_link" onclick="showAdvancedConfig();" style="cursor:pointer;"><?php _e('Advanced Configuration', 'tainacan'); ?></a>
+                <a  id="hide_adv_config_link" onclick="hideAdvancedConfig();" style="display: none;cursor:pointer;"><?php _e('Hide Advanced Configuration', 'tainacan'); ?></a>
             </div>
 
             <!------------------- DIV ADVANCED -------------------------->
