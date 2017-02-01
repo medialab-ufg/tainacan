@@ -19,16 +19,20 @@ $app['app_id'] = $config['socialdb_fb_api_id'];
 $app['app_secret'] = $config['socialdb_fb_api_secret'];
 
 if (!empty($app['app_id']) && !empty($app['app_secret'])) {
-    $fb = new Facebook\Facebook([
-        'app_id' => $app['app_id'],
-        'app_secret' => $app['app_secret'],
-        'default_graph_version' => 'v2.3',
-    ]);
+    try{
+        $fb = new Facebook\Facebook([
+            'app_id' => $app['app_id'],
+            'app_secret' => $app['app_secret'],
+            'default_graph_version' => 'v2.3',
+        ]);
 
-    $helper = $fb->getRedirectLoginHelper();
-    $permissions = ['email', 'user_birthday']; // optional
-    $loginUrl = $helper->getLoginUrl( $_redir_url, $permissions);
+        $helper = $fb->getRedirectLoginHelper();
+        $permissions = ['email', 'user_birthday']; // optional
+        $loginUrl = $helper->getLoginUrl( $_redir_url, $permissions);
 
+    }catch(Exception $e){
+        $loginUrl = false;
+    }
 }
 ?>
 <input type="hidden" id="src_login" name="src" value="<?php echo get_template_directory_uri() ?>">
