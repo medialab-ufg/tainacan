@@ -1843,7 +1843,7 @@ class ObjectModel extends Model {
                     $ids_metas = [];
                     foreach ($properties_coumpounded as $index => $property_coumpounded) {
                         $id = 0;
-                        if (isset($data['socialdb_property_' . $compound . '_' . $property_coumpounded . '_' . $i][0]) && trim($data['socialdb_property_' . $compound . '_' . $property_coumpounded . '_' . $i][0]) != '') {
+                        if (isset($data['socialdb_property_' . $compound . '_' . $property_coumpounded . '_' . $i][0])) {
                             $id = $this->add_value_compound($object_id, $compound, $property_coumpounded, $index, $i, $data['socialdb_property_' . $compound . '_' . $property_coumpounded . '_' . $i][0]);
                         }
                         if ($id != 0) {

@@ -79,9 +79,6 @@ $(window).load(function () {
     if ($('#tag_page').val() !== '') {
         showPageTags($('#tag_page').val(), src);
     }
-    if ($('#tax_page').val() !== '') {
-        showPageTaxonomies($('#tax_page').val(), src);
-    }
     /************************* FIM VERIFICACAO DE PAGINAS **********************/
     //verifico se esta mandando alguma mensagem
     if ($('#info_messages').val() !== '' && $('#info_title').val() !== '') {

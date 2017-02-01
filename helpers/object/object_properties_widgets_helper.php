@@ -111,6 +111,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                                                 <input type="hidden" 
                                                          id='core_validation_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>_message'  
                                                          value='<?php echo sprintf(__('The field %s is required','tainacan'),$property['name']); ?>'>
+                                                  <script> set_field_valid_compounds(<?php echo $property['id']; ?>,'core_validation_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>',<?php echo $property_compounded['id']; ?>)</script> 
                                             <?php  }  ?>
                                         </p>
                                         <input type="hidden" 

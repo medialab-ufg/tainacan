@@ -118,6 +118,7 @@
     $.router.add( $('#route_blog').val()+':collection/:item', function(data) {
         console.log('rota item',data);
         if(data.collection == 'admin'){
+            <?php if (current_user_can('manage_options')): ?>
                 if(data.item=='<?php echo __('metadata','tainacan') ?>'){
                     showPropertiesRepository($('#src').val());
                 }else if(data.item=='<?php echo __('configuration','tainacan') ?>'){
@@ -139,6 +140,7 @@
                 }else if(data.item=='<?php echo __('events','tainacan') ?>'){
                     showEventsRepository($('#src').val());
                 }
+            <?php endif; ?>    
         }else{
              console.log(previousRoute ,window.location.pathname);
             if(previousRoute === window.location.pathname){
@@ -153,7 +155,8 @@
     
      //pagina do item
     $.router.add( $('#route_blog').val()+':collection/:item/:operation', function(data) {
-          if(data.item == 'admin'){
+        <?php if ((verify_collection_moderators(get_the_ID(), get_current_user_id()) || current_user_can('manage_options')) && get_post_type(get_the_ID()) == 'socialdb_collection'): ?>
+        if(data.item == 'admin'){
                 if(data.operation=='<?php echo __('metadata','tainacan') ?>'){
                     showPropertiesAndFilters($('#src').val());
                 }else if(data.operation=='<?php echo __('configuration','tainacan') ?>'){
@@ -175,7 +178,8 @@
                 }else if(data.operation=='<?php echo __('events','tainacan') ?>'){
                     showEvents($('#src').val());
                 }
-            }
+        }
+        <?php endif; ?>
     });
     
     $(function(){
@@ -194,34 +198,37 @@
             showSingleObjectByName($('#object_page').val() , $('#src').val())
         }else if($('#goToLogin').val()!==''){
             showLoginScreen($('#src').val());
-        }else if($('#goToCollectionMetadata').val()!==''){
-            console.log('redirect');
-            showPropertiesAndFilters($('#src').val());
         }
         // REPOSITORIO ROTAS
-        else if($('#goToRepositoryMetadata').val()!==''){
-            showPropertiesRepository($('#src').val());
-        }else if($('#goToRepositoryConfiguration').val()!==''){
-            showRepositoryConfiguration($('#src').val());
-        }else if($('#goToRepositoryCategories').val()!==''){
-            showCategoriesConfiguration($('#src').val());
-        }else if($('#goToRepositoryEvents').val()!==''){
-            showEventsRepository($('#src').val());
-        }else if($('#goToRepositoryTool').val()!==''){
-            showTools($('#src').val());
-        }else if($('#goToRepositorySocial').val()!==''){
-            showAPIConfiguration($('#src').val());
-        }else if($('#goToRepositoryImport').val()!==''){
-            showImportFull($('#src').val());
-        }else if($('#goToRepositoryLicenses').val()!==''){
-            showLicensesRepository($('#src').val());
-        }else if($('#goToRepositoryExport').val()!==''){
-            showExportFull($('#src').val());
-        }else if($('#goToRepositoryEmail').val()!==''){
-            showWelcomeEmail($('#src').val());
-        }
+        <?php if (current_user_can('manage_options')): ?>
+            else if($('#goToRepositoryMetadata').val()!==''){
+                showPropertiesRepository($('#src').val());
+            }else if($('#goToRepositoryConfiguration').val()!==''){
+                showRepositoryConfiguration($('#src').val());
+            }else if($('#goToRepositoryCategories').val()!==''){
+                showCategoriesConfiguration($('#src').val());
+            }else if($('#goToRepositoryEvents').val()!==''){
+                showEventsRepository($('#src').val());
+            }else if($('#goToRepositoryTool').val()!==''){
+                showTools($('#src').val());
+            }else if($('#goToRepositorySocial').val()!==''){
+                showAPIConfiguration($('#src').val());
+            }else if($('#goToRepositoryImport').val()!==''){
+                showImportFull($('#src').val());
+            }else if($('#goToRepositoryLicenses').val()!==''){
+                showLicensesRepository($('#src').val());
+            }else if($('#goToRepositoryExport').val()!==''){
+                showExportFull($('#src').val());
+            }else if($('#goToRepositoryEmail').val()!==''){
+                showWelcomeEmail($('#src').val());
+            }
+        <?php endif; ?>
         //COLECAO ROTAS
-        else if($('#goToCollectionConfiguration').val()!==''){
+        <?php if ((verify_collection_moderators(get_the_ID(), get_current_user_id()) || current_user_can('manage_options')) && get_post_type(get_the_ID()) == 'socialdb_collection'): ?>
+        else if($('#goToCollectionMetadata').val()!==''){
+            console.log('redirect');
+            showPropertiesAndFilters($('#src').val());
+        }else if($('#goToCollectionConfiguration').val()!==''){
             showCollectionConfiguration($('#src').val());
         }else if($('#goToCollectionLayout').val()!==''){
             showLayout($('#src').val());
@@ -240,6 +247,7 @@
         }else if($('#goToCollectionStatistics').val()!==''){
             showStatistics($('#src').val());
         }
+        <?php endif; ?>
     }
     
     /**
@@ -347,7 +355,12 @@
      */
     function routerGo(page){
          saveRoute();
-         $.router.go($('#route_blog').val()+page, 'My cool item');
+         if(page){
+             $.router.go($('#route_blog').val()+page, 'My cool item');
+         }else{
+             window.location = $('#route_blog').val();
+         }
+         
     }
     
     /**
@@ -368,6 +381,6 @@
             previousRoute = $('#route_blog').val()+collection+'/';
            $.router.go($('#route_blog').val()+collection+'/', 'My cool item');
         }else
-           window.redirect = window.location.pathname
+           window.location = $('#route_blog').val();
     }
 </script>    

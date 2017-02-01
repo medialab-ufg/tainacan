@@ -673,7 +673,7 @@
 
      * @type Arguments     */
     function set_field_valid_compounds(id,seletor,compound_id){
-        console.log(id,seletor,compound_id,$('#'+seletor).val());
+        console.log('set_field_valid_compounds',id,seletor,compound_id,$('#'+seletor).val());
         if($('#'+seletor).val()==='false'){
             var slug = seletor.replace('core_validation_','');
             $('#ok_field_'+slug).hide();
