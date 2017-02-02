@@ -16,7 +16,7 @@ include_once('js/edit_js.php');
                     <thead>
                     <tr>
                         <th><?php _e('Title','tainacan'); ?></th>
-                        <th><?php _e('Pattern','tainacan'); ?></th>
+                        <!--th><?php _e('Pattern','tainacan'); ?></th-->
                         <th> </th>
                     </tr>
                     </thead>
