@@ -45,6 +45,7 @@ abstract class EventModel extends Model {
                 $info['date'] = get_post_meta($event->ID, 'socialdb_event_create_date', true);
                 $info['type'] = EventModel::get_type($event);
                 $info['id'] = $event->ID;
+                $info['dump'] = $collectionModel->get_collection_by_user(get_current_user_id());
                 if ($data['moderation_type'] == 'democratico') {
                     $info['democratic_vote_id'] = get_post_meta($event->ID, 'socialdb_event_democratic_vote_id', true);
                     $count = $ranking_model->count_votes_binary($info['democratic_vote_id'], $event->ID);
@@ -60,6 +61,24 @@ abstract class EventModel extends Model {
         }
 
         return $data;
+    }
+
+    public static function get_user_notifications() {
+        $collectionModel = new CollectionModel();
+        $_sum = 0;
+        foreach($collectionModel->get_collection_by_user(get_current_user_id()) as $col) {
+            $d['collection_id'] = $col->ID;
+            $info['colecao'] = $col->post_title;
+            $info['counting'] = count(EventModel::list_events($d)['events_not_observed']);
+            $info['path'] = $col->post_name;
+            if($info['counting'] > 0) {
+                $_sum += $info['counting'];
+                $_collections_evts['evts'][] = $info;
+            }
+        }
+        $_collections_evts['total_evts'] = $_sum;
+
+        return $_collections_evts;
     }
 
     /**

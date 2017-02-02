@@ -2275,7 +2275,8 @@ function notification_events_repository() {
         url: $('#src').val() + "/controllers/event/event_controller.php",
         data: {operation: 'notification_events_repository'}
     }).done(function (result) {
-        $('.notification_events_repository').html(result);
+        // $('.notification_events_repository').html(result);
+        $('#notification_events_repository').html(result);
         /* $('.dropdown-toggle').dropdown(); $('.nav-tabs').tab(); */
     });
 }

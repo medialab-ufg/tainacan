@@ -121,7 +121,7 @@ $viewHelper = new ViewHelper();
                                                         <a onclick="showEventsRepository('<?php echo get_template_directory_uri() ?>', '<?php echo get_option('collection_root_id') ?>');
                                                             updateStateRepositorio('events');" style="cursor: pointer;">
                                                             <span class="glyphicon glyphicon-flash"></span>&nbsp;<?php _e('Events', 'tainacan'); ?>&nbsp;&nbsp;
-                                                            <span class="notification_events_repository"></span></a>
+                                                            <span id="notification_events_repository"></span></a>
                                                     </li>
                                                     <li><a onclick="showWelcomeEmail('<?php echo get_template_directory_uri() ?>');updateStateRepositorio('email');" style="cursor: pointer;"><span  class="glyphicon glyphicon-envelope"></span> <?php _e('Welcome Email', 'tainacan'); ?></a></li>
                                                     <li><a onclick="showTools('<?php echo get_template_directory_uri() ?>');updateStateRepositorio('tools');" style="cursor: pointer;"><span  class="glyphicon glyphicon-tasks"></span> <?php _e('Tools', 'tainacan'); ?></a></li>
@@ -137,10 +137,11 @@ $viewHelper = new ViewHelper();
                                     </ul>
                                 </li>
                                 <li class="root-notifications">
-                                    <a href="<?php echo get_admin_url(); ?>">
-                                        <span class="dashicons dashicons-filter"></span>
-                                        <span class="notification_events_repository"></span>
+                                    <a href="javascript:void(0)" class="dropdown-toggle" id="collectionEvents" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <?php echo ViewHelper::render_icon("sino", "png", _t('Collection Events')); ?>
+                                        <span class="notification_events_repository" style="display: none"></span>
                                     </a>
+                                    <ul class="dropdown-menu" style="min-width: 250px; text-align: center" aria-labelledby="collectionEvents"></ul>
                                 </li>
                                 <li class="manual">
                                     <a href="<?php echo MANUAL_TAINACAN_URL ?>">
@@ -153,12 +154,6 @@ $viewHelper = new ViewHelper();
                                     </a>
                                 </li>
                             <?php else: ?>
-                            <?php /*
-                                <li>
-                                    <button class="btn btn-default pull-right" onclick="showLoginScreen('<?php echo get_template_directory_uri(); ?>');" href="#">
-                                        &nbsp;<?php _e('Login', 'tainacan') ?>
-                                    </button>
-                                </li> */ ?>
                                 <li>
                                     <div id="login-box" class="login-dropdown">
                                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

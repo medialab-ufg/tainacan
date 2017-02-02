@@ -59,7 +59,7 @@ require_once(dirname(__FILE__).'../../../models/ranking/ranking_model.php');
         $data = EventModel::list_events($data);
         return $this->render(dirname(__FILE__).'../../../views/event/list.php', $data);
             case 'user_notification':
-                return json_encode( EventModel::list_events($data) );
+                return json_encode( EventModel::get_user_notifications() );
       // APROVACAO DE EVENTOS DEMOCRATICOS
       case 'process_events_selected':
         $this->process_events_selected($data);

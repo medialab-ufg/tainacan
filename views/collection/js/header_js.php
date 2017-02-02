@@ -67,9 +67,12 @@
         });
 
         notification_events();
+        get_user_notifications();
+        /*
         $('.root-notifications a').mouseenter(function() {
             get_user_notifications();
         });
+        */
 
     });
 
@@ -114,12 +117,20 @@
             data: { collection_id: $('#collection_id').val(), operation: 'user_notification' }
         }).done(function(r) {
             var _ev_ = $.parseJSON(r);
-            cl(_ev_.events_not_observed);
-            if(_ev_.events_not_observed.length > 0) {
-                $(_ev_.events_not_observed).each(function(id, el) {
-                   cl('Evento: ' + el.name + ' (ID ' + el.id + ')');
+            cl(_ev_);
+            if(_ev_ && _ev_.total_evts > 0) {
+                $(_ev_.evts).each(function(id, el) {
+                    var URL = $("#site_url").val() + '/' + el.path + '/admin/events/';
+                    var content = el.colecao + " <span class='evts_cnt'> " + el.counting + "</span>";
+                    var item_html = "<li class='col-md-12'><a href="+URL+"> " + content + " </a></li>";
+                    $('li.root-notifications ul').append(item_html);
+
+                    cl(item_html);
                 });
             }
+
+            $('li.root-notifications .notification_events_repository').show().text(_ev_.total_evts);
+
         });
     }
 
