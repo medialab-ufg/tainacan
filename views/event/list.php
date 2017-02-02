@@ -80,7 +80,7 @@ include_once ('js/list_js.php');
                                             </td>
                                             <?php if ($moderation_type == 'moderador' || !isset($moderation_type) || empty($moderation_type)) { ?>
                                                 <td>
-                                                    <a href="#configuration" onclick="show_verify_event_not_confirmed('<?= $event['id'] ?>', '<?= $collection_id ?>')"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;<?php _e('Not verified', 'tainacan') ?></a>
+                                                    <a style="cursor:pointer;" onclick="show_verify_event_not_confirmed('<?= $event['id'] ?>', '<?= $collection_id ?>')"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;<?php _e('Not verified', 'tainacan') ?></a>
                                                 </td>
                                             <?php } else { ?>
                                                 <td>

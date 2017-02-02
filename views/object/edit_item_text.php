@@ -134,7 +134,76 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                     ?>
                 </h2>
                  <div >
-                    <textarea class="form-control auto-save" id="objectedit_editor" name="object_editor" placeholder="<?php _e('Object Content','tainacan'); ?>"><?php echo get_post_meta($object->ID, 'socialdb_object_content', true); ?></textarea>
+                      <div id="thumb-idea-form" <?php do_action('item_from_attributes') ?>>
+                            <br>
+                            <input type="radio" 
+                                   name="object_from" 
+                                   class="auto-save"
+                                   id="external_option"
+                                   onchange="edit_toggle_from(this)" 
+                                   <?php if($socialdb_object_from=='external'): echo 'checked="checked"'; endif;  ?>
+                                   value="external" required>&nbsp;<?php _e('Web Address','tainacan'); ?>
+                             <!-- TAINACAN: seleciona se o objeto eh interno -->
+                            <input type="radio"
+                                   id="internal_option"
+                                   class="auto-save"
+                                   onchange="edit_toggle_from(this)" 
+                                   <?php if($socialdb_object_from=='internal'): echo 'checked="checked"'; endif;  ?>
+                                   name="object_from" 
+                                   value="internal"  required>&nbsp;<?php _e('Local','tainacan'); ?>
+
+
+                                <!--  TAINACAN: Campo para importacao de noticias ou outros item VIA URL do tipo texto -->
+                                <div style="display:<?php if($socialdb_object_from=='external'&&$socialdb_object_dc_type=='text'): echo 'block';else: echo 'none'; endif;  ?>;
+                                    padding-top: 10px;" 
+                                    id="object_url_text" 
+                                    class="input-group">
+                                    <!-- Tainacan: input para url do tipo texto para importacao de noicias e outros sites -->
+                                    <input onkeyup="edit_set_source(this)" 
+                                           type="text" 
+                                           id="url_object_edit" 
+                                           value="<?php echo $socialdb_object_content;  ?>"
+                                           class="form-control input-medium placeholder auto-save"  
+                                           placeholder="<?php _e('Type/paste the URL and click in the button import','tainacan'); ?>" 
+                                           name="object_url"  >
+                                    <!-- Tainacan: botao para realizar a importacao -->
+                                    <span class="input-group-btn">
+                                        <button onclick="import_object_edit()" class="btn btn-primary" type="button"><?php _e('Import','tainacan'); ?></button>
+                                    </span>
+                                </div> 
+                                <!-- TAINACAN: Campo para importacao de outros arquivos via url -->
+                                <div id="object_url_others" style="display: <?php if($socialdb_object_from=='external'&&$socialdb_object_dc_type!='text'): echo 'block';else: echo 'none'; endif;  ?>;padding-top: 10px;" >
+                                    <input type="text" 
+                                           onkeyup="edit_set_source(this)"
+                                           id="object_url_others_input" 
+                                           placeholder="<?php _e('Type/paste the URL','tainacan'); ?>"
+                                           class="form-control auto-save"
+                                           name="object_url" 
+                                           value="<?php echo $socialdb_object_content;  ?>" >  
+                                </div>
+
+                              <!-- TAINACAN: input file para fazer o upload de arquivo --> 
+                             <input style="display: <?php if($socialdb_object_from=='internal'&&$socialdb_object_dc_type!='text'): echo 'block';else: echo 'none'; endif;  ?>;padding-top: 10px;" 
+                                    type="file" size="50" 
+                                    id="object_file" 
+                                    name="object_file" 
+                                    class="btn btn-default btn-sm auto-save">
+                              <?php 
+                              // mostra o link para o content atual do item
+                              if($socialdb_object_dc_type!='text'&&$socialdb_object_from=='internal'):
+                                  echo '<h4>'.__('Actual Item Content','tainacan').'</h4>';
+                                  echo get_post($socialdb_object_content)->post_title."<br>";
+                                  echo wp_get_attachment_link($socialdb_object_content, 'thumbnail', false, true);
+                              endif;   
+                               ?>
+                            <br>
+                            <br>
+                        </div>   
+                        <div id="object_content_text_edit" style="display:<?php if($socialdb_object_dc_type=='text'): echo 'block';else: echo 'none'; endif;  ?>;" class="form-group">
+                                <textarea class="form-control auto-save" id="objectedit_editor" name="objectedit_editor" placeholder="<?php _e('Object Content','tainacan'); ?>">
+                                <?php echo get_post_meta($object->ID, 'socialdb_object_content', true); ?>
+                                </textarea>     
+                        </div>   
                 </div>     
             </div>
             <!-- TAINACAN: UPLOAD DE ANEXOS DOS ITEMS -->

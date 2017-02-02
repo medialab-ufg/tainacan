@@ -214,8 +214,8 @@ endforeach;
                                     <input type="checkbox" name="property_fixed_required" id="property_fixed_required"  value="true">&nbsp;<?php _e('Yes','tainacan'); ?>
                             </div>
                         </div> 
+                        </div>  
                     </div>
-            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><?php _e('Close','tainacan'); ?></button>
                 <button onclick="alter_fixed_properties_label()" type="button" class="btn btn-primary"><?php _e('Salve','tainacan'); ?></button>

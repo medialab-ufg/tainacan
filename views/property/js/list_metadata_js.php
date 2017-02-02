@@ -778,6 +778,7 @@
                                 button = '<a vis="hide" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-close"></span></a>';
                             }
                         } else {
+                            class_var = 'fixed-property';
                             button = '<span class="glyphicon glyphicon-trash no-edit"></span>';
                         }
                         //adiciona na listagem
@@ -2390,7 +2391,9 @@
             showAlertGeneral('<?php _e('Attention!','tainacan') ?>','<?php _e('Metadata already inserted or not allowed as filter','tainacan') ?>','info');
             return false;
         }else{
+            console.log(is_fixed_meta);
             if ( is_fixed_meta ) {
+                console.log('add fixed meta');
                 setCollectionFacet("add", item_id, "tree",'alphabetic');
                 showAlertGeneral('<?php _e('Success','tainacan') ?>','<?php _e('Metadata inserted as filter successfully','tainacan') ?>','success');
                 $('.data-widget').addClass('select-meta-filter').show();
