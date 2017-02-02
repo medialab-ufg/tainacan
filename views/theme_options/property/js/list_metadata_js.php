@@ -101,11 +101,6 @@
         $('#property_data_collection_id').val(current_collection_id); // setando o valor da colecao no formulario
         $('#property_object_collection_id').val(current_collection_id); // setando o valor da colecao no formulario
         //url amigavel
-        if (window.history && window.history.pushState) {
-            window.history.pushState('forward', null, $('#route_blog').val()+'admin/<?php _e('metadata','tainacan') ?>');
-             $('#collection_post').show();
-            previousRoute = window.location.pathname;
-        }
         showPropertyCategoryDynatree(src);
         showTermsDynatree(src); //mostra o dynatree
         list_collection_metadata();

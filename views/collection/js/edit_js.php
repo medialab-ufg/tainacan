@@ -271,8 +271,12 @@
             data.thumb_url = $(cropped).attr('src');
         } else {
             var cropped = $('img.croppedImg').get(1);
+            if(!cropped){
+                cropped = $('img.croppedImg').get(0);
+            }
             data.img_url = $(cropped).attr('src');
         }
+        console.log(data);
         $.ajax({ url: $('#src').val() + '/controllers/collection/collection_controller.php', type: 'POST', data: data });
     };
 

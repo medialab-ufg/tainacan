@@ -3,7 +3,8 @@
  * View responsavel em mostrar um objeto especifico
  *
  */
-include_once('./../../helpers/view_helper.php');
+include_once(dirname(__FILE__).'/../../helpers/view_helper.php');
+include_once(dirname(__FILE__).'/../../helpers/object/object_helper.php');
 include_once ('js/list_single_js.php');
 
 $create_perm_object = verify_allowed_action($collection_id, 'socialdb_collection_permission_create_property_object');
@@ -15,6 +16,7 @@ $delete_perm_data = verify_allowed_action($collection_id, 'socialdb_collection_p
 
 $meta_type = ucwords($metas['socialdb_object_dc_type'][0]);
 $meta_source = $metas['socialdb_object_dc_source'][0];
+$view_helper = new ObjectHelper($collection_id);
 ?>
 <input type="hidden" name="single_object_id" id="single_object_id" value="<?php echo $object->ID; ?>" >
 <input type="hidden" id="single_name" name="item_single_name" value="<?php echo $object->post_name; ?>" />
@@ -35,7 +37,7 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
     <div class="col-md-9 item-main-data row" style="padding-right: 0;">
 
         <div class="col-md-12 content-title single-item-title tainacan-header-info">
-            <div class="col-md-10">
+            <div class="col-md-10" <?php echo $view_helper->get_visibility($view_helper->terms_fixed['title']) ?>>
                 <h3 id="text_title"><?php echo $object->post_title; ?></h3>
                 <span id="event_title" style="display:none;">
                     <input type="text" value="<?php echo $object->post_title; ?>" id="title_field" class="form-control">
@@ -157,7 +159,7 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                         <?php if ($metas['socialdb_object_dc_type'][0] == 'text') {
                             echo $metas['socialdb_object_content'][0];
                         } else {
-                            if ($metas['socialdb_object_from'][0] == 'internal') {
+                            if ($metas['socialdb_object_from'][0] == 'internal' && wp_get_attachment_url($metas['socialdb_object_content'][0])) {
                                 $url = wp_get_attachment_url($metas['socialdb_object_content'][0]);
                                 switch ($metas['socialdb_object_dc_type'][0]) {
                                     case 'audio':
@@ -234,7 +236,7 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
 
             <div class="col-md-12 item-fixed-data no-padding">
                 <div class="col-md-6 left-container no-padding">
-                    <div class="item-source box-item-paddings" style="border-top:none">
+                    <div class="item-source box-item-paddings" <?php echo $view_helper->get_visibility($view_helper->terms_fixed['source']) ?> style="border-top:none" >
                         <div class="row" <?php if (has_action('home_item_source_div')) do_action('home_item_source_div') ?> style="padding-left: 30px;">
                             <div class="col-md-12 no-padding">
                                 <h4 class="title-pipe single-title"> <?php _e('Source', 'tainacan'); ?></h4>
@@ -260,7 +262,7 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                             </div>
                         </div>
                     </div>
-                    <div class="item-type box-item-paddings" style="border-top: none">
+                    <div class="item-type box-item-paddings" <?php echo $view_helper->get_visibility($view_helper->terms_fixed['type']) ?> style="border-top: none" >
                         <div class="row" <?php if (has_action('home_item_type_div')) do_action('home_item_type_div') ?> style="padding-left: 30px;">
                             <div class="col-md-12 no-padding">
                                 <h4 class="title-pipe single-title"> <?php _e('Type', 'tainacan'); ?></h4>
@@ -296,7 +298,7 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                             </div>
                         </div>
                     </div>
-                    <div class="item-thumb box-item-paddings" style="border-top: none; border-bottom: none">
+                    <div class="item-thumb box-item-paddings" <?php echo $view_helper->get_visibility($view_helper->terms_fixed['thumbnail']) ?> style="border-top: none; border-bottom: none" >
                         <div class="content-thumb" style="padding-left: 15px; ">
                             <h4 class="title-pipe single-title"> <?php _e('Thumbnail', 'tainacan'); ?></h4>
                             <div class="edit-field-btn">
@@ -377,8 +379,8 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
         </div>
 
         <div class="col-md-12 item-metadata no-padding">
-
-            <div class="item-description box-item-paddings">
+            
+            <div class="item-description box-item-paddings" <?php echo $view_helper->get_visibility($view_helper->terms_fixed['description']) ?>>
                 <h4 class="title-pipe single-title"> <?php _e('Description', 'tainacan'); ?></h4>
                 <div class="edit-field-btn">
                     <?php
@@ -401,9 +403,9 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                 </div>
             </div>
 
-            <div class="col-md-6 left-container" style="border-right: 3px solid #e8e8e8">
+            <div class="col-md-6 left-container" <?php echo $view_helper->get_visibility($view_helper->terms_fixed['license']) ?> style="border-right: 3px solid #e8e8e8">
                 <!-- Licencas do item -->
-                <div class="box-item-paddings item-license" <?php if (has_action('home_item_license_div')) do_action('home_item_license_div') ?> style="border: none;">
+                <div class="box-item-paddings item-license" <?php if (has_action('home_item_license_div')) do_action('home_item_license_div') ?> style="border: none;" >
                     <h4 class="title-pipe single-title"> <?php _e('License', 'tainacan'); ?></h4>
                     <div class="edit-field-btn">
                         <?php
@@ -432,7 +434,7 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
 
             <div class="col-md-6 right-container no-padding">
                 <!-- Tags -->
-                <div class="box-item-paddings item-tags" style="" <?php if (has_action('home_item_tag_div')) do_action('home_item_tag_div') ?>>
+                <div class="box-item-paddings item-tags" <?php echo $view_helper->get_visibility($view_helper->terms_fixed['tags']) ?> <?php if (has_action('home_item_tag_div')) do_action('home_item_tag_div') ?>>
                     <h4 class="title-pipe single-title"> <?php _e('Tags', 'tainacan'); ?></h4>
                     <div class="edit-field-btn">
                         <?php
