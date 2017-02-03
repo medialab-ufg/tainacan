@@ -74,6 +74,7 @@ $(function(){
                 //salvo o cache
                 save_cache($('#configuration').html(),'create-item-text',$('#collection_id').val());
                 $('.nav-tabs').tab();
+                createDraft();
             });
         });
      });    

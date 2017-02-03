@@ -13,11 +13,12 @@ class ObjectDraftModel extends ObjectModel {
         if ($user_id == 0) {
             $user_id = get_option('anonimous_user');
         }
+        $status = get_post($data['object_id']);
         $post = array(
             'ID' => $data['object_id'],
             'post_title' => ($data['object_name']) ? $data['object_name'] : time(),
             'post_content' => $data['object_description'],
-            'post_status' => 'betatext',
+            'post_status' => ($status->post_status==='publish') ? 'publish'  : 'betatext',
             'post_author' => $user_id,
             'post_type' => 'socialdb_object'
         );
@@ -70,7 +71,8 @@ class ObjectDraftModel extends ObjectModel {
         // timezone e salvo o id do rascunho
         date_default_timezone_set('America/Sao_Paulo');
         $result = ['date'=> date('d/m/y'),'hour'=> date('H:i:s')];
-        update_user_meta(get_current_user_id(), 'socialdb_collection_'.$data['collection_id'].'_betatext', $data['ID']);
+        if($status->post_status != 'publish')
+            update_user_meta(get_current_user_id(), 'socialdb_collection_'.$data['collection_id'].'_betatext', $data['ID']);
         return json_encode($result);
     }
    

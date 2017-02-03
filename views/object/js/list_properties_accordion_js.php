@@ -798,7 +798,7 @@
         $( ".core_validation").each(function( index ) {
             if($( this ).val()==='false'){
                 cont++;
-                console.log($( this ));
+                console.log('not-validate',$( this ));
             }
         });
         if(cont===0){
