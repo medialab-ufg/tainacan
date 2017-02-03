@@ -121,17 +121,16 @@
             if(_ev_ && _ev_.total_evts > 0) {
                 var _item_html = "";
                 $(_ev_.evts).each(function(id, el) {
-                    var URL = $("#site_url").val() + '/' + el.path + '/admin/events/';
-                    var content = el.colecao + " <span class='evts_cnt'> " + el.counting + "</span>";
-                    _item_html += "<li class='col-md-12'> <a href=" + URL + "> " + content;
+                    var events_path = '<?php _e("events", "tainacan")?>';
+                    var URL = $("#site_url").val() + '/' + el.path + '/admin/'+ events_path +'/';
+                    var content = el.colecao + " <span class='evts_cnt'>" + el.counting + "</span>";
+                    _item_html += "<li class='col-md-12 no-padding'> <a class='evt-"+ id +"' href='" + URL + "'> ";
+                    _item_html += content;
                     _item_html += "</a></li>";                                    
                 });
-                cl(_item_html);
-                $('li.root-notifications ul').append(_item_html);
+                $(_item_html).appendTo('li.root-notifications ul');
+                $('li.root-notifications .notification_events_repository').show().text(_ev_.total_evts);
             }
-
-            $('li.root-notifications .notification_events_repository').show().text(_ev_.total_evts);
-
         });
     }
 

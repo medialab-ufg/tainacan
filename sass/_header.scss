@@ -67,23 +67,13 @@ ul.repository-settings, .admin-configs {
     }
 
   } // li
-  /*
-  .login-dropdown {
-    border: 1px solid whitesmoke;
-    &:hover {
-      .dropdown-menu {
-        display: block;
-        margin-top: 0; // remove the gap so it doesn't close
-      }
-    }
-  } */
 .login-dropdown button {
   border: 1px solid whitesmoke;
 }
 
 } // .admin-configs
 
-.login-dropdown:hover .dropdown-menu {
+.login-dropdown:hover .dropdown-menu, .root-notifications:hover .dropdown-menu {
     display: block;
     margin-top: 0; // remove the gap so it doesn't close
 }
@@ -424,4 +414,11 @@ a:hover{text-decoration:underline}
       background: $bs-button-gray-border;
     }
   }
+}
+
+.root-notifications {
+    ul.dropdown-menu {
+        // min-width: 250px; 
+        // text-align: center
+    }
 }

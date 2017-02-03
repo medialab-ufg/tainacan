@@ -2,7 +2,6 @@
     <?php
     include_once ('js/filters_dynatree_js.php');
     
-    
     //author
     if (isset($author) && $author != '') { ?>
          <a onclick="remove_search_author()" href="#"> <span class="glyphicon glyphicon-remove white"></span> </a>

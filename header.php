@@ -141,7 +141,7 @@ $viewHelper = new ViewHelper();
                                         <?php echo ViewHelper::render_icon("sino", "png", _t('Collection Events')); ?>
                                         <span class="notification_events_repository" style="display: none"></span>
                                     </a>
-                                    <ul class="dropdown-menu" style="min-width: 250px; text-align: center" aria-labelledby="collectionEvents"></ul>
+                                    <ul class="dropdown-menu" aria-labelledby="collectionEvents"></ul>
                                 </li>
                                 <li class="manual">
                                     <a href="<?php echo MANUAL_TAINACAN_URL ?>">
