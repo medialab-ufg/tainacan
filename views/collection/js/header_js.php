@@ -119,14 +119,15 @@
             var _ev_ = $.parseJSON(r);
             cl(_ev_);
             if(_ev_ && _ev_.total_evts > 0) {
+                var _item_html = "";
                 $(_ev_.evts).each(function(id, el) {
                     var URL = $("#site_url").val() + '/' + el.path + '/admin/events/';
                     var content = el.colecao + " <span class='evts_cnt'> " + el.counting + "</span>";
-                    var item_html = "<li class='col-md-12'><a href="+URL+"> " + content + " </a></li>";
-                    $('li.root-notifications ul').append(item_html);
-
-                    cl(item_html);
+                    _item_html += "<li class='col-md-12'> <a href=" + URL + "> " + content;
+                    _item_html += "</a></li>";                                    
                 });
+                cl(_item_html);
+                $('li.root-notifications ul').append(_item_html);
             }
 
             $('li.root-notifications .notification_events_repository').show().text(_ev_.total_evts);
