@@ -774,6 +774,7 @@ class ObjectMultipleModel extends Model {
         if (in_array($ext, ['mp4', 'm4v', 'wmv', 'avi', 'mpg', 'ogv', '3gp', '3g2'])) {
              update_post_meta($object_id, 'socialdb_object_dc_type',  'video');
         } elseif (in_array($ext, ['jpg', 'jpeg', 'png', 'gif'])) {
+            set_post_thumbnail($object_id, $content_id);
             update_post_meta($object_id, 'socialdb_object_dc_type',  'image');
         } elseif (in_array($ext, ['mp3', 'm4a', 'ogg', 'wav', 'wma'])) {
              update_post_meta($object_id, 'socialdb_object_dc_type', 'audio');
