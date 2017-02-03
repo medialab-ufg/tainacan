@@ -65,6 +65,7 @@
                     // esconde o carregamento do menu lateral
                     $('.menu_left_loader').hide();
                     $('.menu_left').show();
+                    createDraft();
                 });
             });
         });     

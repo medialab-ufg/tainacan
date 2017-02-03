@@ -20,11 +20,11 @@ class ObjectController extends Controller {
             case "create_item_text":
                 //verifico se existe rascunho para se mostrado
                 $beta_id = get_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext', true);
-                //if ($beta_id && is_numeric($beta_id)) {
-                 //   $data['object_id'] = $beta_id;
-                 //   $data['is_beta_text'] = true;
-                  //  return $this->operation('edit', $data);
-                //}
+                if ($beta_id && is_numeric($beta_id)) {
+                    $data['object_id'] = $beta_id;
+                    $data['is_beta_text'] = true;
+                    return $this->operation('edit', $data);
+                }
                 //se nao ele busca o cache da pagina de adiconar item
                 $has_cache = $this->has_cache($data['collection_id'], 'create-item-text');
                 $option = get_option('tainacan_cache');

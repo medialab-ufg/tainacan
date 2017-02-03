@@ -70,6 +70,8 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                          <button type="button" onclick="back_main_list();"class="btn btn-default pull-right">
                             <b><?php _e('Back','tainacan') ?></b>
                         </button>
+                        <br>
+                        <small id="draft-text"></small>
                     <?php endif; ?>
                     
                 </h3>

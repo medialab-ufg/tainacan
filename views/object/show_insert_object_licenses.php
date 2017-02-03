@@ -20,7 +20,7 @@ if(isset($licenses) && !empty($licenses)): ?>
                                   echo "checked='checked'"; 
                               } 
                               ?> 
-                              required="required"><?php echo $license['nome']; ?></label>
+                              ><?php echo $license['nome']; ?></label>
             </div>
     <?php  } ?>
 <?php else: ?>    

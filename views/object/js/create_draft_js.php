@@ -4,6 +4,7 @@
      * @returns {undefined}
      */
     function createDraft() {
+        console.log('create-draft',$('.auto-save'));
         $('#submit_form .auto-save').change(function () {
             var verify = $('#submit_form').serialize();
             $("#object_content").val(CKEDITOR.instances.object_editor.getData());
@@ -42,9 +43,9 @@
             });
         });
     }
-    setTimeout(function () {
-        createDraft();
-    }, 3000);
+    //setTimeout(function () {
+        //createDraft();
+    //}, 16000);
 
 
     function back_main_list_discard(id) {
