@@ -1,3 +1,7 @@
+<?php
+$collection_route = get_post(get_option('collection_root_id'));
+?>
+
 <input type="hidden" id="route_blog" name="route_blog" value="<?php echo str_replace($_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['SERVER_NAME'], '', get_bloginfo('url')) ?>/"> <!-- utilizado na busca -->
 <input type="hidden" id="goToLogin" name="goToLogin" value="<?php
     if (get_query_var('log-in')) {
@@ -6,103 +10,103 @@
     ?>">
 <!-- Paginas da colecao -->
 <input type="hidden" id="goToCollectionMetadata" name="goToCollectionMetadata" value="<?php
-    if ((get_query_var('collection') && get_query_var('collection') !== 'tainacan-collections' ) && get_query_var('metadata')) {
+    if ((get_query_var('collection') && get_query_var('collection') !== $collection_route->post_name ) && get_query_var('metadata')) {
         echo trim(get_query_var('metadata'));
     }
     ?>">
 <input type="hidden" id="goToCollectionConfiguration" name="goToCollectionConfiguration" value="<?php
-    if ((get_query_var('collection') && get_query_var('collection') !== 'tainacan-collections' ) && get_query_var('configuration')) {
+    if ((get_query_var('collection') && get_query_var('collection') !==$collection_route->post_name ) && get_query_var('configuration')) {
         echo trim(get_query_var('configuration'));
     }
     ?>">
 <input type="hidden" id="goToCollectionLayout" name="goToCollectionLayout" value="<?php
-    if ((get_query_var('collection') && get_query_var('collection') !== 'tainacan-collections' ) && get_query_var('layout')) {
+    if ((get_query_var('collection') && get_query_var('collection') !== $collection_route->post_name ) && get_query_var('layout')) {
         echo trim(get_query_var('layout'));
     }
     ?>">
 <input type="hidden" id="goToCollectionEvents" name="goToCollectionEvents" value="<?php
-    if ((get_query_var('collection') && get_query_var('collection') !== 'tainacan-collections' ) && get_query_var('events')) {
+    if ((get_query_var('collection') && get_query_var('collection') !== $collection_route->post_name ) && get_query_var('events')) {
         echo trim(get_query_var('events'));
     }
     ?>">
 <input type="hidden" id="goToCollectionTags" name="goToCollectionTags" value="<?php
-    if ((get_query_var('collection') && get_query_var('collection') !== 'tainacan-collections' ) && get_query_var('tags')) {
+    if ((get_query_var('collection') && get_query_var('collection') !== $collection_route->post_name ) && get_query_var('tags')) {
         echo trim(get_query_var('tags'));
     }
     ?>">
 <input type="hidden" id="goToCollectionSocial" name="goToCollectionSocial" value="<?php
-    if ((get_query_var('collection') && get_query_var('collection') !== 'tainacan-collections' ) && get_query_var('social')) {
+    if ((get_query_var('collection') && get_query_var('collection') !== $collection_route->post_name ) && get_query_var('social')) {
         echo trim(get_query_var('social'));
     }
     ?>">
 <input type="hidden" id="goToCollectionImport" name="goToCollectionImport" value="<?php
-    if ((get_query_var('collection') && get_query_var('collection') !== 'tainacan-collections' ) && get_query_var('import')) {
+    if ((get_query_var('collection') && get_query_var('collection') !== $collection_route->post_name ) && get_query_var('import')) {
         echo trim(get_query_var('import'));
     }
     ?>">
 <input type="hidden" id="goToCollectionLicenses" name="goToCollectionLicenses" value="<?php
-    if ((get_query_var('collection') && get_query_var('collection') !== 'tainacan-collections' ) && get_query_var('licenses')) {
+    if ((get_query_var('collection') && get_query_var('collection') !== $collection_route->post_name ) && get_query_var('licenses')) {
         echo trim(get_query_var('licenses'));
     }
     ?>">
 <input type="hidden" id="goToCollectionExport" name="goToCollectionExport" value="<?php
-    if ((get_query_var('collection') && get_query_var('collection') !== 'tainacan-collections' ) && get_query_var('export')) {
+    if ((get_query_var('collection') && get_query_var('collection') !==$collection_route->post_name ) && get_query_var('export')) {
         echo trim(get_query_var('export'));
     }
     ?>">
 <input type="hidden" id="goToCollectionStatistics" name="goToCollectionStatistics" value="<?php
-    if ((get_query_var('collection') && get_query_var('collection') !== 'tainacan-collections' ) && get_query_var('statistics')) {
+    if ((get_query_var('collection') && get_query_var('collection') !== $collection_route->post_name ) && get_query_var('statistics')) {
         echo trim(get_query_var('statistics'));
     }
     ?>">
 <!------------------------ Paginas do repositorio ------------------------------>
 <input type="hidden" id="goToRepositoryMetadata" name="goToRepositoryMetadata" value="<?php
-    if ((get_query_var('collection') && get_query_var('collection') === 'tainacan-collections' ) && get_query_var('metadata')) {
+    if ((get_query_var('collection') && get_query_var('collection') === $collection_route->post_name ) && get_query_var('metadata')) {
         echo trim(get_query_var('metadata'));
     }
     ?>">
 <input type="hidden" id="goToRepositoryConfiguration" name="goToRepositoryConfiguration" value="<?php
-    if ((get_query_var('collection') && get_query_var('collection') === 'tainacan-collections' ) && get_query_var('configuration')) {
+    if ((get_query_var('collection') && get_query_var('collection') === $collection_route->post_name ) && get_query_var('configuration')) {
         echo trim(get_query_var('configuration'));
     }
     ?>">
 <input type="hidden" id="goToRepositoryCategories" name="goToRepositoryCategories" value="<?php
-    if ((get_query_var('collection') && get_query_var('collection') === 'tainacan-collections' ) && get_query_var('categories')) {
+    if ((get_query_var('collection') && get_query_var('collection') === $collection_route->post_name ) && get_query_var('categories')) {
         echo trim(get_query_var('categories'));
     }
     ?>">
 <input type="hidden" id="goToRepositoryEvents" name="goToRepositoryEvents" value="<?php
-    if ((get_query_var('collection') && get_query_var('collection') === 'tainacan-collections' ) && get_query_var('events')) {
+    if ((get_query_var('collection') && get_query_var('collection') === $collection_route->post_name ) && get_query_var('events')) {
         echo trim(get_query_var('events'));
     }
     ?>">
 <input type="hidden" id="goToRepositoryTool" name="goToRepositoryTool" value="<?php
-    if ((get_query_var('collection') && get_query_var('collection') === 'tainacan-collections' ) && get_query_var('tools')) {
+    if ((get_query_var('collection') && get_query_var('collection') === $collection_route->post_name ) && get_query_var('tools')) {
         echo trim(get_query_var('tools'));
     }
     ?>">
 <input type="hidden" id="goToRepositorySocial" name="goToRepositorySocial" value="<?php
-    if ((get_query_var('collection') && get_query_var('collection') === 'tainacan-collections' ) && get_query_var('social')) {
+    if ((get_query_var('collection') && get_query_var('collection') === $collection_route->post_name ) && get_query_var('social')) {
         echo trim(get_query_var('social'));
     }
     ?>">
 <input type="hidden" id="goToRepositoryImport" name="goToRepositoryImport" value="<?php
-    if ((get_query_var('collection') && get_query_var('collection') === 'tainacan-collections' ) && get_query_var('import')) {
+    if ((get_query_var('collection') && get_query_var('collection') === $collection_route->post_name ) && get_query_var('import')) {
         echo trim(get_query_var('import'));
     }
     ?>">
 <input type="hidden" id="goToRepositoryLicenses" name="goToRepositoryLicenses" value="<?php
-    if ((get_query_var('collection') && get_query_var('collection') === 'tainacan-collections' ) && get_query_var('licenses')) {
+    if ((get_query_var('collection') && get_query_var('collection') === $collection_route->post_name ) && get_query_var('licenses')) {
         echo trim(get_query_var('licenses'));
     }
     ?>">
 <input type="hidden" id="goToRepositoryExport" name="goToRepositoryExport" value="<?php
-    if ((get_query_var('collection') && get_query_var('collection') === 'tainacan-collections' ) && get_query_var('export')) {
+    if ((get_query_var('collection') && get_query_var('collection') === $collection_route->post_name ) && get_query_var('export')) {
         echo trim(get_query_var('export'));
     }
     ?>">
 <input type="hidden" id="goToRepositoryEmail" name="goToRepositoryEmail" value="<?php
-    if ((get_query_var('collection') && get_query_var('collection') === 'tainacan-collections' ) && get_query_var('email')) {
+    if ((get_query_var('collection') && get_query_var('collection') === $collection_route->post_name ) && get_query_var('email')) {
         echo trim(get_query_var('email'));
     }
     ?>">
