@@ -462,8 +462,10 @@ class ObjectController extends Controller {
                 break;
             //temp file
             case 'delete_temporary_object':
-                if (isset($data['delete_draft']))
+                if (isset($data['delete_draft'])){
                     delete_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext');
+                    delete_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betafile');
+                }
                 if ($data['ID'] && get_post($data['ID'])->post_status === 'betatext'):
                     $post = array(
                         'ID' => $data['ID'],
@@ -475,6 +477,7 @@ class ObjectController extends Controller {
                     break;
                 else:
                     delete_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext');
+                    delete_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betafile');
                     return $object_model->delete($data);
             endif;
             //ACTION FILES

@@ -315,6 +315,8 @@ function custom_rewrite_tag() {
 add_action('init', 'custom_rewrite_tag', 10, 0);
 
 function custom_rewrite_basic() {
+    $collection = get_post(get_option('collection_root_id'));
+    
     add_rewrite_rule('^feed_collection/([^/]*)', 'index.php?collection_name=$matches[1]', 'top');
     add_rewrite_rule('^oai', 'index.php?oaipmh=true', 'top');
     add_rewrite_rule('^([^/]*)/([^/]*)', 'index.php?collection=$matches[1]&item=$matches[2]', 'bottom');
@@ -331,17 +333,17 @@ function custom_rewrite_basic() {
     add_rewrite_rule('^([^/]*)/admin/'.__('statistics','tainacan'), 'index.php?collection=$matches[1]&statistics=true', 'top');
     
     //paginas do repositorio
-    add_rewrite_rule('^admin/'.__('metadata','tainacan'), 'index.php?collection=tainacan-collections&metadata=true', 'top');
-    add_rewrite_rule('^admin/'.__('events','tainacan'), 'index.php?collection=tainacan-collections&events=true', 'top');
-    add_rewrite_rule('^admin/'.__('configuration','tainacan'), 'index.php?collection=tainacan-collections&configuration=true', 'top');
-    add_rewrite_rule('^admin/'.__('social','tainacan'), 'index.php?collection=tainacan-collections&social=true', 'top');
-    add_rewrite_rule('^admin/'.__('tools','tainacan'), 'index.php?collection=tainacan-collections&tools=true', 'top');
-    add_rewrite_rule('^admin/'.__('licenses','tainacan'), 'index.php?collection=tainacan-collections&licenses=true', 'top');
-    add_rewrite_rule('^admin/'.__('welcome-email','tainacan'), 'index.php?collection=tainacan-collections&email=true', 'top');
-    add_rewrite_rule('^admin/'.__('import','tainacan'), 'index.php?collection=tainacan-collections&import=true', 'top');
-    add_rewrite_rule('^admin/'.__('export','tainacan'), 'index.php?collection=tainacan-collections&export=true', 'top');
-    add_rewrite_rule('^admin/'.__('statistics','tainacan'), 'index.php?collection=tainacan-collections&statistics=true', 'top');
-    add_rewrite_rule('^admin/'.__('categories','tainacan'), 'index.php?collection=tainacan-collections&categoriess=true', 'top');
+    add_rewrite_rule('^admin/'.__('metadata','tainacan'), 'index.php?collection='.$collection->post_name.'&metadata=true', 'top');
+    add_rewrite_rule('^admin/'.__('events','tainacan'), 'index.php?collection='.$collection->post_name.'&events=true', 'top');
+    add_rewrite_rule('^admin/'.__('configuration','tainacan'), 'index.php?collection='.$collection->post_name.'&configuration=true', 'top');
+    add_rewrite_rule('^admin/'.__('social','tainacan'), 'index.php?collection='.$collection->post_name.'&social=true', 'top');
+    add_rewrite_rule('^admin/'.__('tools','tainacan'), 'index.php?collection='.$collection->post_name.'&tools=true', 'top');
+    add_rewrite_rule('^admin/'.__('licenses','tainacan'), 'index.php?collection='.$collection->post_name.'&licenses=true', 'top');
+    add_rewrite_rule('^admin/'.__('welcome-email','tainacan'), 'index.php?collection='.$collection->post_name.'&email=true', 'top');
+    add_rewrite_rule('^admin/'.__('import','tainacan'), 'index.php?collection='.$collection->post_name.'&import=true', 'top');
+    add_rewrite_rule('^admin/'.__('export','tainacan'), 'index.php?collection='.$collection->post_name.'&export=true', 'top');
+    add_rewrite_rule('^admin/'.__('statistics','tainacan'), 'index.php?collection='.$collection->post_name.'&statistics=true', 'top');
+    add_rewrite_rule('^admin/'.__('categories','tainacan'), 'index.php?collection='.$collection->post_name.'&categoriess=true', 'top');
     //login
     add_rewrite_rule('^log-in', 'index.php?log-in=true', 'top');
     add_rewrite_rule('^'.__('signin','tainacan'), 'index.php?log-in=true', 'top');

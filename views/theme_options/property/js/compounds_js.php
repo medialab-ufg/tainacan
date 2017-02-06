@@ -78,7 +78,7 @@
                          if(type=='1'){
                              string = 'edit_metadata';
                          }else if(type=='2'){
-                             string = 'edit_object';
+                             string = 'edit_property_object';
                          }else if(type=='3'){
                              string = 'edit_term';
                          }

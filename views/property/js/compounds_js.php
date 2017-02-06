@@ -80,7 +80,7 @@
                              if(type=='1'){
                                  string = 'edit_metadata';
                              }else if(type=='2'){
-                                 string = 'edit_object';
+                                 string = 'edit_property_object';
                              }else if(type=='3'){
                                  string = 'edit_term';
                              }
@@ -287,7 +287,7 @@
                 if(type=='1'){
                     string = 'edit_metadata';
                 }else if(type=='2'){
-                    string = 'edit_object';
+                    string = 'edit_property_object';
                 }else if(type=='3'){
                     string = 'edit_term';
                     cat_id = '<input type="hidden" class="coumpound_id_'+property.metas.socialdb_property_term_root+'" id="'+ current_id +'">';
