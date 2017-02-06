@@ -3,12 +3,16 @@
 body.home {
  background: black;
 
+  .repository-sharings {
+    display: none;
+  }
+
   .user-actions.collapse {
     border-bottom: 0 !important;
   }
 
   .config_default_style{
-    margin-top: 70px !important;
+    margin-top: 20px !important;
   }
 
   .metadata-actions {

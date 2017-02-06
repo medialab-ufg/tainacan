@@ -2306,6 +2306,41 @@ function showAPIConfiguration(src) {
     });
 }
 
+function repoConfig(src, op, ctrl, col_id) {
+    if ( ctrl == 'property' || ctrl == 'event' ) {
+        var send_ctrl = ctrl + '/' + ctrl + '_controller.php'; 
+    } else {
+        var send_ctrl = 'theme_options/theme_options_controller.php';
+    }
+    var send_url = src + '/controllers/' + send_ctrl;
+    var send_data = { operation: op };
+    if(col_id) {
+        send_data.collection_id = col_id;
+    }
+    
+    $.ajax({ type: 'POST', url: send_url, data: send_data })
+        .done(function(res){
+            resetHomeStyleSettings();
+            $('#configuration').html(res).show();
+    })
+}
+
+function resetHomeStyleSettings() {
+    $('ul.menu-ibram').hide();
+    $('.ibram-home-container').hide();
+
+    var $_main = '#main_part';
+    if( $($_main).hasClass('home') ) {
+        $($_main).show().css('padding-bottom', '0%');
+        $('#display_view_main_page').hide();
+        $('body.home').css('background', 'white');
+        $("#searchBoxIndex").hide();
+        $('.repository-sharings').css('display', 'block');
+    } else {
+        $($_main).hide();
+    }
+}
+
 function showRepositoryConfiguration(src) {
     $.ajax({
         url: src + '/controllers/theme_options/theme_options_controller.php',
@@ -2376,13 +2411,6 @@ function showExportFull(src) {
         $('#main_part').hide();
         $('#configuration').html(result).show();
     });
-}
-
-function resetHomeStyleSettings() {
-    $('#display_view_main_page').hide();
-    $('ul.menu-ibram').hide();
-    $('.ibram-home-container').hide();
-    $('body.home').css('background', 'white');
 }
 
 function bytesToSize(bytes) {

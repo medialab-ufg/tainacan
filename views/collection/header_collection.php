@@ -57,6 +57,7 @@ $thumb_url = $collection_thumb ? wp_get_attachment_url($collection_thumb) : get_
             <?php include ("config_menu.php"); ?>
         </div>
     </div>
+    
     <div class="row">
         <div class="col-md-12">
             <div class="row">

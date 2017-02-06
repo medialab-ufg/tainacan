@@ -12,14 +12,17 @@ global $current_user;
 get_currentuserinfo();
 $socialdb_logo = get_option('socialdb_logo');
 $socialdb_title = get_option('blogname');
+$col_root_id = get_option('collection_root_id');
+
 $stat_page = get_page_by_title(__('Statistics', 'tainacan'))->ID;
 $viewHelper = new ViewHelper();
+$_src_ = get_template_directory_uri();
 ?>
 <html <?php language_attributes(); ?> xmlns:fb="http://www.facebook.com/2008/fbml" class="no-js"><!--<![endif]-->
     <head>
         <meta charset="<?php bloginfo('charset'); ?>"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="google-site-verification" content="29Uww0bx9McdeJom1CDiXyGUZwK5mtoSuF5tA_i59F4" />
-        <link rel="icon" type="image/png" href="<?php echo get_template_directory_uri() . '/libraries/images/icone.png' ?>">
+        <link rel="icon" type="image/png" href="<?php echo $_src_ . '/libraries/images/icone.png' ?>">
         <title> <?php echo repository_page_title() ?> </title>
         <?php if (is_front_page()) { ?>
             <link rel="alternate" type="application/rdf+xml" href="<?php echo site_url(); ?>/?.rdf">
@@ -32,8 +35,8 @@ $viewHelper = new ViewHelper();
                 <link rel="alternate" type="application/json" href="<?php echo site_url() . '/wp-json/posts/' . get_post_by_name($_GET[get_page_tainacan()], OBJECT, 'socialdb_object')->ID . '/?type=socialdb_object' ?>">
             <?php } ?>
         <?php } else if (is_single()) { ?>
-            <meta name="thumbnail_url" content="<?php echo get_the_post_thumbnail_url(get_the_ID()) ?>"  />
-            <meta name="description" content="<?php echo get_the_content() ?>"  />
+            <meta name="thumbnail_url" content="<?php echo get_the_post_thumbnail_url(get_the_ID()) ?>" />
+            <meta name="description" content="<?php echo get_the_content() ?>" />
             <link rel="alternate" type="application/rdf+xml" href="<?php echo get_the_permalink(); ?>?.rdf">
             <?php $_GOOGLE_API_KEY = "AIzaSyBZXPZcDMGeT-CDugrsYWn6D0PQSnq_odg"; ?>
             <script src="http://maps.googleapis.com/maps/api/js?key=<?php echo $_GOOGLE_API_KEY; ?>"></script>
@@ -89,16 +92,16 @@ $viewHelper = new ViewHelper();
 
                                     <ul class="dropdown-menu dropdown-show" role="menu" id="tainacan-menu">
                                         <li>
-                                            <a href="#" onclick="showProfileScreen('<?php echo get_template_directory_uri() ?>');"> <?php _e('Profile', 'tainacan'); ?></a>
+                                            <a href="#" onclick="showProfileScreen('<?php echo $_src_ ?>');"> <?php _e('Profile', 'tainacan'); ?></a>
                                         </li>
                                         <li>
-                                            <a href="<?= get_the_permalink(get_option('collection_root_id')) . '?mycollections=true' ?>"><?php _e('My collections', 'tainacan'); ?></a>
+                                            <a href="<?= get_the_permalink($col_root_id) . '?mycollections=true' ?>"><?php _e('My collections', 'tainacan'); ?></a>
                                         </li>
                                         <li>
-                                            <a href="<?= get_the_permalink(get_option('collection_root_id')) . '?sharedcollections=true' ?>"><?php _e('Shared Collections', 'tainacan'); ?></a>
+                                            <a href="<?= get_the_permalink($col_root_id) . '?sharedcollections=true' ?>"><?php _e('Shared Collections', 'tainacan'); ?></a>
                                         </li>
                                         <li>
-                                            <a style="cursor: pointer;" onclick="showCategoriesConfiguration('<?php echo get_template_directory_uri(); ?>', '<?php echo is_front_page(); ?>');updateStateRepositorio('categories');" >
+                                            <a style="cursor: pointer;" onclick="showCategoriesConfiguration('<?php echo $_src_; ?>', '<?php echo is_front_page(); ?>');updateStateRepositorio('categories');" >
                                                 <?php _e('My Categories', 'tainacan'); ?>
                                             </a>
                                         </li>
@@ -112,21 +115,33 @@ $viewHelper = new ViewHelper();
                                             <li class="admin-config-menu">
                                                 <a class="config" href="javascript:void(0)"> <?php _e('Repository Configurations', 'tainacan'); ?> <span class="caret"></span> </a>
                                                 <ul class="admin-config-submenu" aria-expanded="false">
-                                                    <li><a onclick="showRepositoryConfiguration('<?php echo get_template_directory_uri() ?>');updateStateRepositorio('configuration');" style="cursor: pointer;" ><span class="glyphicon glyphicon-wrench"></span> <?php _e('Configuration', 'tainacan'); ?></a></li>
-                                                    <li><a onclick="showPropertiesRepository('<?php echo get_template_directory_uri() ?>');updateStateRepositorio('metadata');" style="cursor: pointer;" ><span class="glyphicon glyphicon-list-alt"></span> <?php _e('Metadata', 'tainacan'); ?></a></li>
+                                                    <?php
+                                                    /* <li><a onclick="showRepositoryConfiguration('<?php echo get_template_directory_uri() ?>');updateStateRepositorio('configuration');" style="cursor: pointer;" ><span class="glyphicon glyphicon-wrench"></span> <?php _e('Configuration', 'tainacan'); ?></a></li>
+                                                        <li><a onclick="showPropertiesRepository('<?php echo get_template_directory_uri() ?>');updateStateRepositorio('metadata');" style="cursor: pointer;" ><span class="glyphicon glyphicon-list-alt"></span> <?php _e('Metadata', 'tainacan'); ?></a></li>
+                                                    */ ?>
+                                                    <li><a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_general_configuration');updateStateRepositorio('configuration');" style="cursor: pointer;" ><span class="glyphicon glyphicon-wrench"></span> <?php _e('Configuration', 'tainacan'); ?></a></li>
+                                                    <li><a onclick="repoConfig('<?php echo $_src_ ?>', 'list_repository', 'property');updateStateRepositorio('metadata');" style="cursor: pointer;" ><span class="glyphicon glyphicon-list-alt"></span> <?php _e('Metadata', 'tainacan'); ?></a></li>
                                                     <li><a href="<?php echo get_bloginfo('url') ?>/wp-admin/users.php"> <span class="glyphicon glyphicon-user"></span> <?php _e('Users', 'tainacan'); ?> </a></li>
-                                                    <li <?php do_action('menu_repository_social_api') ?>><a onclick="showAPIConfiguration('<?php echo get_template_directory_uri() ?>');updateStateRepositorio('social');" style="cursor: pointer;"><span class="glyphicon glyphicon-globe"></span>  <?php _e('Social / API Keys', 'tainacan'); ?></a></li>
-                                                    <li <?php do_action('menu_repository_license') ?>><a onclick="showLicensesRepository('<?php echo get_template_directory_uri() ?>');updateStateRepositorio('licenses');" style="cursor: pointer;"><span class="glyphicon glyphicon-duplicate"></span> <?php _e('Licenses', 'tainacan'); ?></a></li>
-                                                    <li>
-                                                        <a onclick="showEventsRepository('<?php echo get_template_directory_uri() ?>', '<?php echo get_option('collection_root_id') ?>');
+                                                    <?php /*
+                                                        <li <?php do_action('menu_repository_social_api') ?>><a onclick="showAPIConfiguration('<?php echo get_template_directory_uri() ?>');updateStateRepositorio('social');" style="cursor: pointer;"><span class="glyphicon glyphicon-globe"></span>  <?php _e('Social / API Keys', 'tainacan'); ?></a></li>
+                                                        <li <?php do_action('menu_repository_license') ?>><a onclick="showLicensesRepository('<?php echo get_template_directory_uri() ?>');updateStateRepositorio('licenses');" style="cursor: pointer;"><span class="glyphicon glyphicon-duplicate"></span> <?php _e('Licenses', 'tainacan'); ?></a></li>
+                                                    */ ?>
+                                                    <li <?php do_action('menu_repository_social_api') ?>><a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_configuration');updateStateRepositorio('social');" style="cursor: pointer;"><span class="glyphicon glyphicon-globe"></span>  <?php _e('Social / API Keys', 'tainacan'); ?></a></li>
+                                                    <li <?php do_action('menu_repository_license') ?>><a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_licenses');updateStateRepositorio('licenses');" style="cursor: pointer;"><span class="glyphicon glyphicon-duplicate"></span> <?php _e('Licenses', 'tainacan'); ?></a></li>
+                                                    <li> <a onclick="repoConfig('<?php echo $_src_ ?>', 'list_events_repository', 'event', '<?php echo $col_root_id ?>');
                                                             updateStateRepositorio('events');" style="cursor: pointer;">
-                                                            <span class="glyphicon glyphicon-flash"></span>&nbsp;<?php _e('Events', 'tainacan'); ?>&nbsp;&nbsp;
-                                                            <span id="notification_events_repository"></span></a>
-                                                    </li>
+                                                            <span class="glyphicon glyphicon-flash"></span> <?php _e('Events', 'tainacan'); ?>&nbsp;&nbsp;
+                                                            <span id="notification_events_repository"></span></a> </li>
+                                                    <?php /*
                                                     <li><a onclick="showWelcomeEmail('<?php echo get_template_directory_uri() ?>');updateStateRepositorio('email');" style="cursor: pointer;"><span  class="glyphicon glyphicon-envelope"></span> <?php _e('Welcome Email', 'tainacan'); ?></a></li>
                                                     <li><a onclick="showTools('<?php echo get_template_directory_uri() ?>');updateStateRepositorio('tools');" style="cursor: pointer;"><span  class="glyphicon glyphicon-tasks"></span> <?php _e('Tools', 'tainacan'); ?></a></li>
                                                     <li><a onclick="showImportFull('<?php echo get_template_directory_uri() ?>');updateStateRepositorio('import');" style="cursor: pointer;"><span class="glyphicon glyphicon-import"></span> <?php _e('Import', 'tainacan'); ?></a></li>
                                                     <li><a onclick="showExportFull('<?php echo get_template_directory_uri() ?>');updateStateRepositorio('export');" style="cursor: pointer;"><span class="glyphicon glyphicon-export"></span> <?php _e('Export', 'tainacan'); ?></a></li>
+                                                    */ ?>
+                                                    <li><a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_welcome_email'); updateStateRepositorio('email');" style="cursor: pointer;"><span  class="glyphicon glyphicon-envelope"></span> <?php _e('Welcome Email', 'tainacan'); ?></a></li>
+                                                    <li><a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_tools'); updateStateRepositorio('tools');" style="cursor: pointer;"><span  class="glyphicon glyphicon-tasks"></span> <?php _e('Tools', 'tainacan'); ?></a></li>
+                                                    <li><a onclick="repoConfig('<?php echo $_src_ ?>', 'import_full'); updateStateRepositorio('import');" style="cursor: pointer;"><span class="glyphicon glyphicon-import"></span> <?php _e('Import', 'tainacan'); ?></a></li>
+                                                    <li><a onclick="repoConfig('<?php echo $_src_ ?>', 'export_full'); updateStateRepositorio('export');" style="cursor: pointer;"><span class="glyphicon glyphicon-export"></span> <?php _e('Export', 'tainacan'); ?></a></li>
                                                     <li> <a class="repository-statistics" href="<?php echo get_the_permalink($stat_page); ?>">
                                                             <span class="glyphicon glyphicon-globe"></span> <?php _e('Statistics', 'tainacan'); ?>
                                                         </a>
@@ -159,13 +174,13 @@ $viewHelper = new ViewHelper();
                                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             &nbsp;<?php _e('Login', 'tainacan') ?>
                                         </button>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">                                        
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                             <?php include_once "views/user/login.php"; ?>
                                         </div>
                                     </div>
                                 </li>
                                 <li>
-                                    <button class="btn btn-default pull-right" onclick="registerUser('<?php echo get_template_directory_uri(); ?>');" href="#">
+                                    <button class="btn btn-default pull-right" onclick="registerUser('<?php echo $_src_; ?>');" href="javascript:void(0)">
                                         &nbsp;<?php _e('Register', 'tainacan') ?>
                                     </button>
                                 </li>
@@ -183,16 +198,16 @@ $viewHelper = new ViewHelper();
 
                             <ul id="collections-menu">
                                 <li class="collections">
-                                    <a href="<?php echo get_permalink(get_option('collection_root_id')); ?>" class='collecs'>
+                                    <a href="<?php echo get_permalink($col_root_id); ?>" class='collecs'>
                                         <?php echo ViewHelper::render_icon('collection', 'png'); ?>
                                         <div style="display:inline-block; margin-left: 5px;">
                                             <?php _e('Collections', 'tainacan'); ?>
                                             <span class="caret" style="font-size: 14px"></span>
                                         </div>
                                     </a>
-                                    <ul style="display:none; margin-top: 0px;" class="sub-menu">
+                                    <ul style="display:none; margin-top: 0;" class="sub-menu">
                                         <li>
-                                            <a href="<?php echo get_permalink(get_option('collection_root_id')); ?>">
+                                            <a href="<?php echo get_permalink($col_root_id); ?>">
                                                 <?php _e('Show collections', 'tainacan'); ?>
                                             </a>
                                         </li>
@@ -243,9 +258,8 @@ $viewHelper = new ViewHelper();
             <div class="modal-dialog">
                 <div class="modal-content new-collection">
 
-                    <?php $col_controller = get_template_directory_uri() . "/controllers/collection/collection_controller.php"; ?>
-                    <form onsubmit="$('#myModal').modal('hide');
-                            show_modal_main();" action="<?php echo $col_controller ?>" method="POST">
+                    <?php $col_controller = $_src_ . "/controllers/collection/collection_controller.php"; ?>
+                    <form onsubmit="$('#myModal').modal('hide'); show_modal_main();" action="<?php echo $col_controller ?>" method="POST">
                               <?php echo $viewHelper->render_modal_header('remove-sign', __('Create Collection', 'tainacan')); ?>
                         <div id="form_new_collection">
                             <div class="modal-body" style="padding: 0 15px 0 15px;">
@@ -264,7 +278,7 @@ $viewHelper = new ViewHelper();
                                 <button type="button" data-dismiss="modal" class="btn btn-default pull-left"> <?php _e('Cancel', 'tainacan'); ?> </button>
                                 <button type="submit" class="btn btn-success"><?php _e('Continue', 'tainacan'); ?></button>
                             </div>
-                        </div>                        
+                        </div>
                     </form>
                 </div>
             </div>
