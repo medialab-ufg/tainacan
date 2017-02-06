@@ -67,6 +67,36 @@
     function show_zip_input() {
         $("#zip_csv_file").show();
     }
+    
+    function getHeaderNames(){
+        if($('#create_metadata_column_name').is(':checked')){
+            $.ajax({
+                type: "POST",
+                url: $('#src').val() + "/controllers/import/csv_controller.php",
+                data: {
+                    mapping_id: $('#socialdb_csv_mapping_id').val(),
+                    delimiter: $("#socialdb_delimiter_csv").val(),
+                    operation: 'getHeaderCSV'}
+            }).done(function (result) {
+                var json = JSON.parse(result);
+                if(json.length>0){
+                    $('#select-title-box').show();
+                    $('#map_title_metadata').html('');
+                    $('#map_title_metadata').append('<option value=""><?php _e('Select','tainacan') ?></option>');
+                    $.each(json,function(index,value){
+                        if(value && value !== '')
+                            $('#map_title_metadata').append('<option value="'+index+'">'+value+'</option>');
+                    });
+                }else{
+                    $('#select-title-box').hide();
+                    $('#map_title_metadata').html('');
+                    showAlertGeneral('<?php _e('Attention!','tainacan') ?>','<?php _e('CSV not formatted or delimiter not matching !','tainacan') ?>','error');
+                }
+            });
+        }else{
+            $('#select-title-box').hide();
+        }
+    }
 
     // function saving_data(collection_id,data){
     //   $.ajax({

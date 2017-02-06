@@ -140,6 +140,7 @@ class MappingController extends Controller {
                 //var_dump($data);
                 if($data['create_metadata_column_name']&&$data['create_metadata_column_name']=='true'&&$type['extension']=='csv'&&$csv_has_header=='1'){
                     update_post_meta($mapping_id, 'socialdb_channel_csv_add_columns', 'true');
+                    update_post_meta($mapping_id, 'socialdb_channel_csv_column_title', ($data['map_title_metadata']!='') ? $data['map_title_metadata']: '');
                     return "false";
                 }
                 if(isset($data['socialdb_csv_is_editting']))

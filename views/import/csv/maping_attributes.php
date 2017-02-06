@@ -28,7 +28,13 @@ include_once ('js/maping_attributes_js.php');
             </div>
             <div class="form-group">
                 <input type="checkbox" name="import_url_external" value="url_externa" checked="checked" onchange="hide_zip_input()"> <?php _e('Import external URL file (must map the content)', 'tainacan'); ?><br>
-                <input type="checkbox" name="create_metadata_column_name" value="true" > <?php _e('Create metadata with column names', 'tainacan'); ?><br>
+                <input type="checkbox" id="create_metadata_column_name" name="create_metadata_column_name" value="true" onchange="getHeaderNames()" > <?php _e('Create metadata with column names', 'tainacan'); ?><br>
+                <br>
+                <div id="select-title-box" style="display: none;" class="row">
+                    <span class="col-md-6"><b><?php _e('Title','tainacan') ?></b></span>
+                    <select  class="col-md-6 input-medium" id="map_title_metadata" name="map_title_metadata">
+                    </select>    
+                </div>
             </div>
             <h5><strong><?php _e('CSV Header','tainacan'); ?></strong></h5>
             <div class="form-group">

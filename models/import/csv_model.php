@@ -325,16 +325,17 @@ class CsvModel extends Model {
             $name_file = wp_get_attachment_url($file->ID);
             $delimiter = get_post_meta($mapping_id, 'socialdb_channel_csv_delimiter', true);
             $csv_has_header = get_post_meta($mapping_id, 'socialdb_channel_csv_has_header', true);
+            $title = get_post_meta($mapping_id, 'socialdb_channel_csv_column_title', true);
             $lines = $this->read_csv_file($name_file, $delimiter, 0);
             for ($i = 0; $i < count($lines); $i++):
                 if ($i == 0 && !$already) {
                     if (!is_array($lines[$i]) || empty(array_filter($lines[$i]))) {
                         $i++;
                     }
-                    $order = $this->add_properties_columns($lines[$i], $collection_id);
+                    $order = $this->add_properties_columns($lines[$i], $collection_id,$title);
                     $already = true;
                 } else if (isset($order) && count($order) > 0 ) {
-                    $this->add_value_column($order, $lines[$i], $collection_id);
+                    $this->add_value_column($order, $lines[$i], $collection_id,$title);
                 }
             endfor;
             break;
@@ -347,12 +348,12 @@ class CsvModel extends Model {
      * @param type $collection_id
      * @return type
      */
-    public function add_properties_columns($header, $collection_id) {
+    public function add_properties_columns($header, $collection_id,$title) {
         $order = [];
         $category_root_id = $this->get_category_root_of($collection_id);
         if ($header && is_array($header)) {
-            foreach ($header as $column) {
-                if(empty($column))
+            foreach ($header as $index => $column) {
+                if(empty($column) && $index!=$title) //se o titulo ja foi mapeado
                     continue;
                 
                 $new_property = wp_insert_term((string) $column, 'socialdb_property_type', array('parent' => $this->get_property_type_id('socialdb_property_data'),
@@ -371,8 +372,8 @@ class CsvModel extends Model {
      * 
      * @param type $param
      */
-    public function add_value_column($properties, $values, $collection_id) {
-        $object_id = socialdb_insert_object_csv([time()]);
+    public function add_value_column($properties, $values, $collection_id,$title_index) {
+        $object_id = socialdb_insert_object_csv([ ($title_index==='')?time():$values[$title_index]]);
         foreach ($properties as $key => $property) {
             add_post_meta($object_id, 'socialdb_property_' . $property, $values[$key]);
         }
