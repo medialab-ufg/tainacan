@@ -45,16 +45,17 @@
                             <input type="radio" name="property_object_required" id="property_object_required_true" value="true">&nbsp;<?php _e('Yes','tainacan'); ?>
                             <input type="radio" name="property_object_required" id="property_object_required_false" checked="checked" value="false">&nbsp;<?php _e('No','tainacan'); ?>
                         </div>
-                        <div class="form-group">
+                        <!--div class="form-group">
                             <label for="property_object_is_reverse"><?php _e('Property object reverse','tainacan'); ?></label>
                             <input type="radio" name="property_object_is_reverse" id="property_object_is_reverse_true" value="true">&nbsp;<?php _e('Yes','tainacan'); ?>
                             <input type="radio" name="property_object_is_reverse" id="property_object_is_reverse_false" checked="checked" value="false">&nbsp;<?php _e('No','tainacan'); ?>
-                        </div>
-                        <div id="show_reverse_properties" class="form-group" style="display: none;">
+                        </div-->
+                        <div class="form-group"  >
                             <label for="property_object_reverse"><?php _e('Select the reverse property','tainacan'); ?></label>
-                            <select class="form-control" id="property_object_reverse" name="property_object_reverse">
+                            <select class="form-control" id="property_object_reverse" name="property_object_reverse" onchange="setValueReverse(this)">
                             </select>
                         </div>
+                        <input type="hidden" value="false" id="property_object_is_reverse" name="property_object_is_reverse">
 
                         <?php /*
                         <div class="form-group">

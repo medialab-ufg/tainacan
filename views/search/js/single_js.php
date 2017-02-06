@@ -2246,5 +2246,16 @@
         }
     }
     /************************************************ HELPERS **********************************************************/
+    
+    
+    
+    function setValueReverse(seletor){
+        console.log($(seletor).val());
+       if($(seletor).val()!=='false'){
+            $('#property_object_is_reverse').val('true');
+       }else{
+            $('#property_object_is_reverse').val('false');
+       }
+    }
 
 </script>

@@ -299,7 +299,7 @@
                                 if ( current_prop == "data" ) {
                                     item_html += '<a onclick="edit_metadata('+ el.id +')" class="edit-filter">';
                                 } else if(current_prop == "object") {
-                                    item_html += '<a onclick="edit_object('+ el.id +')" class="edit-filter">';
+                                    item_html += '<a onclick="edit_property_object('+ el.id +')" class="edit-filter">';
                                 }
                                 else if ( current_prop == "ranking_stars" || current_prop == "ranking_binary" || current_prop == "ranking_like" ) {
                                     item_html += '<a onclick="edit_ranking('+ el.id + ')" class="edit-filter">';
@@ -336,7 +336,7 @@
         if ( property == 1 ) {
             return edit_metadata(propId);
         } else if ( property == 2 ) {
-            return edit_object(propId);
+            return edit_property_object(propId);
         } else if ( property == undefined ) {
             return "fazer mais um check aqui";
         }
@@ -790,16 +790,16 @@
         }).done(function (result) {
             elem = jQuery.parseJSON(result);
             $('#property_object_reverse').html('');
+            $('#property_object_reverse').append('<option value="false"><?php _e('None','tainacan'); ?></option>');
             if (elem.no_properties === false) {
                 $.each(elem.property_object, function (idx, property) {
                     if (property.id == selected) {
+                        $('#property_object_is_reverse').val('true');
                         $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
                     } else {
                         $('#property_object_reverse').append('<option value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
                     }
                 });
-            } else {
-                $('#property_object_reverse').append('<option value="false"><?php _e('No properties added','tainacan'); ?></option>');
             }
         });
     }
@@ -899,7 +899,7 @@
                         $('ul#metadata-container').append(
                             '<li id="meta-item-'+current_id+'" data-widget="' + property.search_widget + '" class="root_category ui-widget-content ui-corner-tr">' +
                             '<label class="title-pipe">' + property.name + '</label>' +
-                            '<a onclick="edit_object('+ current_id +')" class="edit_property_data" href="javascript:void(0)">' +
+                            '<a onclick="edit_property_object('+ current_id +')" class="edit_property_data" href="javascript:void(0)">' +
                             '<div class="action-icons default-metadata"><span class="glyphicon glyphicon-edit"><span></a> ' +
                             ' <span class="glyphicon glyphicon-trash no-edit"><span> </div></li>' );
                     } else {
@@ -907,7 +907,7 @@
                             $('ul#metadata-container').append(
                                 '<li id="meta-item-'+current_id+'" data-widget="' + property.search_widget + '" class="ui-widget-content ui-corner-tr"><label class="title-pipe">' + property.name +
                                 '</label><div class="action-icons">' +
-                                '<a onclick="edit_object('+ current_id +')" class="edit_property_data" href="javascript:void(0)">' +
+                                '<a onclick="edit_property_object('+ current_id +')" class="edit_property_data" href="javascript:void(0)">' +
                                 '<span class="glyphicon glyphicon-edit"><span></a> ' +
                                 '<input type="hidden" class="property_object_id" value="' + current_id + '">' +
                                 '<input type="hidden" class="property_name" value="' + property.name + '">' +
@@ -950,7 +950,7 @@
         return $("#filters-accordion li#" + formatted_id).attr("data-widget");
     }
 
-    function edit_object(id) {
+    function edit_property_object(id) {
         $.ajax({
             url: $('#src').val() + '/controllers/property/property_controller.php',
             type: 'POST',
@@ -1028,13 +1028,12 @@
             } else {
                 $("#property_object_facet_true").prop('checked', true);
             }
-            if (elem.metas.socialdb_property_object_is_reverse === 'false') {
-                $("#property_object_is_reverse_false").prop('checked', true);
-                $('#show_reverse_properties').hide();
+             if (elem.metas.socialdb_property_object_is_reverse === 'false') {
+                $("#property_object_is_reverse").val('false');
+                $("#property_object_reverse option[value='false']").attr('selected','selected');
             } else {
-                $("#property_object_is_reverse_true").prop('checked', true);
+                $("#property_object_is_reverse").val('true');
                 list_reverses(elem.metas.socialdb_property_object_reverse);
-                $('#show_reverse_properties').show();
             }
             if (elem.metas.socialdb_property_required === 'false') {
                 $("#property_object_required_false").prop('checked', true);
@@ -1889,7 +1888,8 @@
     }
 
     function clear_buttons() {
-        $('#show_reverse_properties').hide();
+        $('#property_object_reverse').html('');
+        $('#property_object_reverse').append('<option value="false"><?php _e('None','tainacan'); ?></option>');
         $("#property_data_title").text('<?php _e('Add new property','tainacan') ?>');
         $("#property_data_id").val('');
         $("#property_data_name").val('');
@@ -1957,6 +1957,7 @@
                 <?php if(has_action('javascript_onselect_relationship_dynatree_property_object')): ?>
                     <?php do_action('javascript_onselect_relationship_dynatree_property_object') ?>
                 <?php endif; ?>
+                list_reverses();
             }
         });
     }
