@@ -134,7 +134,7 @@ $view_helper = new ViewHelper();
                     <!------------------- Forma de visualizacao formulario de submissao -------------------------->
                     <div class="form-group">
                         <label for="collection_ordenation_form"><?php _e('Select the form layout to create a new text item','tainacan'); ?></label>
-                        <select name="socialdb_collection_submission_visualization" class="form-control">
+                        <select name="socialdb_collection_submission_visualization" id="socialdb_collection_submission_visualization" onchange="showHabilitateMedia(this)" class="form-control">
                             <option value="one" <?php ( $submission_visualization == 'one' ) ? "selected = 'selected'" : ''; ?> >
                                 <?php _e('1 column','tainacan'); ?>
                             </option>
@@ -142,6 +142,10 @@ $view_helper = new ViewHelper();
                                 <?php _e('2 columns','tainacan'); ?>
                             </option>
                         </select>
+                        <div id="habilitateMedia" style="display:none;">
+                            <input type="checkbox" name="habilitateMedia" value="true">
+                            <?php _e('Habilitate media','tainacan') ?>
+                        </div>
                     </div>
                     
                     <!------------------- Forma de visualizacao formulario da pagina de categoria -------------------------->

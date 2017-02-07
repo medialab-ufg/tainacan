@@ -141,6 +141,7 @@
     $( function() {
         $( "#sortable" ).sortable();
         $( "#sortable" ).disableSelection();
+        showHabilitateMedia('#socialdb_collection_submission_visualization');
     } );
 
     $("#layout-accordion").accordion({
@@ -515,5 +516,17 @@
                 $('.select2-menu').change();
             }
         });
+    }
+    
+    /**
+    * 
+    */
+    function showHabilitateMedia(seletor){
+        console.log($(seletor).val());
+        if($(seletor).val()=='one'){
+            //$('#habilitateMedia').show();
+        }else{
+           // $('#habilitateMedia').hide();
+        }
     }
 </script>

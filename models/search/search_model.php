@@ -398,6 +398,12 @@ public function add($data) {
         } else {
             update_post_meta($post_id, 'socialdb_collection_use_prox_mode', 'false');
         }
+        if(isset($data['habilitateMedia']) && $data['habilitateMedia'] == 'true'){
+             update_post_meta($post_id, 'socialdb_collection_habilitate_media', 'true');
+        }else{
+             update_post_meta($post_id, 'socialdb_collection_habilitate_media', 'false');
+        }
+        
 
         update_post_meta($post_id, 'socialdb_collection_latitude_meta', $data['latitude']);
         update_post_meta($post_id, 'socialdb_collection_longitude_meta', $data['longitude']);

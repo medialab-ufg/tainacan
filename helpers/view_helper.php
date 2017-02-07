@@ -6,6 +6,7 @@ class ViewHelper {
     public $default_metadata;
     public $special_metadata;
     public $hide_main_container = false;
+    public $mediaHabilitate = false;
     public $collection_id;
     public static $fixed_slugs = [
         'socialdb_property_fixed_title',

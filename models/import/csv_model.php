@@ -333,6 +333,7 @@ class CsvModel extends Model {
                         $i++;
                     }
                     $order = $this->add_properties_columns($lines[$i], $collection_id,$title);
+                    $this->insertModeTable($order,$collection_id,$title);
                     $already = true;
                 } else if (isset($order) && count($order) > 0 ) {
                     $this->add_value_column($order, $lines[$i], $collection_id,$title);
@@ -353,7 +354,7 @@ class CsvModel extends Model {
         $category_root_id = $this->get_category_root_of($collection_id);
         if ($header && is_array($header)) {
             foreach ($header as $index => $column) {
-                if(empty($column) && $index!=$title) //se o titulo ja foi mapeado
+                if(empty($column)) //se o titulo ja foi mapeado
                     continue;
                 
                 $new_property = wp_insert_term((string) $column, 'socialdb_property_type', array('parent' => $this->get_property_type_id('socialdb_property_data'),
@@ -381,6 +382,25 @@ class CsvModel extends Model {
         update_post_meta($object_id, 'socialdb_object_from', 'external');
         update_post_meta($object_id, 'socialdb_object_dc_type', 'other');
         socialdb_add_tax_terms($object_id, $categories, 'socialdb_category_type');
+    }
+    
+    /**
+     * 
+     * @param type $properties as propriedades criadas
+     * @param type $collection_id o id da colecao atual
+     * @param type $title_index o index em que esta localizada a propriedade
+     */
+    public function insertModeTable($properties,$collection_id,$title_index){
+        $data = [];
+        foreach ($properties as $key => $property) {
+            if($title_index == $key){
+                $data[] = '{"id":'.get_term_by('slug', 'socialdb_property_fixed_title', 'socialdb_property_type')->term_id.',"order":'.$key.',"tipo":"property_data"}';
+            }else{
+                $data[] = '{"id":'.$property.',"order":'.$key.',"tipo":"property_data"}'; 
+            }
+        } 
+        update_post_meta($collection_id, 'socialdb_collection_table_metas', base64_encode(serialize($data)) );
+        update_post_meta($collection_id, 'socialdb_collection_list_mode', 'table');
     }
 
     ######################### end: INSERINDO VALORES SEM MAPEAMENTO ############# 

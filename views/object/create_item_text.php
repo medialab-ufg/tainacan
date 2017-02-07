@@ -8,8 +8,12 @@
 
     $view_helper = new ObjectHelper($collection_id);
     $val = get_post_meta($collection_id, 'socialdb_collection_submission_visualization', true);
+    $habilitateMedia = get_post_meta($collection_id, 'socialdb_collection_habilitate_media', true);
+    $css = '';
     if($val&&$val=='one'){
         $view_helper->hide_main_container = true;
+        $view_helper->mediaHabilitate = ($habilitateMedia =='true') ? true:false;
+        $css = ($view_helper->mediaHabilitate) ? 'width: 72%; margin-left: 15px;margin-right: 10px;padding-left: 15px;' : 'margin-left:1%;width: 98%;padding-left:15px;';
         $mode = true;
     }else{
         $mode = false;
@@ -34,8 +38,8 @@
                     <h4><?php _e('Loading metadata...', 'tainacan') ?></h4>
              </center>
         </div>
-        <div style="display: none; background: white;border: 3px solid #E8E8E8;font: 11px Arial;<?php echo ($view_helper->hide_main_container)?'margin-left:1%;width: 98%;padding-left:15px;':'' ?>" 
-             class="<?php echo ($view_helper->hide_main_container)?'col-md-12':'col-md-3' ?> menu_left">
+        <div style="display: none; background: white;border: 3px solid #E8E8E8;font: 11px Arial;<?php echo $css?>" 
+             class="<?php echo ($view_helper->hide_main_container)? ($view_helper->mediaHabilitate)? 'col-md-9' : 'col-md-12':'col-md-3' ?> menu_left">
             <?php 
                 //se estiver apenas mostrando as propriedades 
                 if($view_helper->hide_main_container):
@@ -116,40 +120,43 @@
                 </div>     
             </div>
             <!-- TAINACAN: UPLOAD DE ANEXOS DOS ITEMS -->
-            <div id="<?php echo $view_helper->get_id_list_properties('attachments','attachments'); ?>" 
-                <?php echo $view_helper->get_visibility($view_helper->terms_fixed['attachments']) ?> 
-                class="form-group" <?php do_action('item_attachments_attributes') ?> >
-                <h2> 
-                   <?php echo ($view_helper->terms_fixed['attachments']) ? $view_helper->terms_fixed['attachments']->name :  _e('Attachments','tainacan') ?> 
-                    <a class="pull-right" 
-                       style="margin-right: 20px;" 
-                        >
-                        <span title="<?php _e('Upload attachments for your item','tainacan'); ?>" 
-                       data-toggle="tooltip" data-placement="bottom" class="glyphicon glyphicon-question-sign"></span>
-                    </a>
-                    <?php 
-                        echo $view_helper->setValidation($collection_id, $view_helper->terms_fixed['attachments']->term_id, 'attachments');
-                    ?>
-                </h2>
-                <div >
-                    <div id="dropzone_new" <?php ($socialdb_collection_attachment=='no') ? print_r('style="display:none"') : '' ?> 
-                        class="dropzone"
-                        style="margin-bottom: 15px;min-height: 150px;padding-top: 0px;">
-                            <div class="dz-message" data-dz-message>
-                             <span style="text-align: center;vertical-align: middle;">
-                                 <h3>
-                                     <span class="glyphicon glyphicon-upload"></span>
-                                     <b><?php _e('Drop Files','tainacan')  ?></b> 
-                                         <?php _e('to upload','tainacan')  ?>
-                                 </h3>
-                                 <h4>(<?php _e('or click','tainacan')  ?>)</h4>
-                             </span>
-                         </div>
-                    </div>
-                </div>    
-            </div>    
+               <?php if(!$view_helper->mediaHabilitate): ?> 
+                    <div id="<?php echo $view_helper->get_id_list_properties('attachments','attachments'); ?>" 
+                        <?php echo $view_helper->get_visibility($view_helper->terms_fixed['attachments']) ?> 
+                        class="form-group" <?php do_action('item_attachments_attributes') ?> >
+                        <h2> 
+                           <?php echo ($view_helper->terms_fixed['attachments']) ? $view_helper->terms_fixed['attachments']->name :  _e('Attachments','tainacan') ?> 
+                            <a class="pull-right" 
+                               style="margin-right: 20px;" 
+                                >
+                                <span title="<?php _e('Upload attachments for your item','tainacan'); ?>" 
+                               data-toggle="tooltip" data-placement="bottom" class="glyphicon glyphicon-question-sign"></span>
+                            </a>
+                            <?php 
+                                echo $view_helper->setValidation($collection_id, $view_helper->terms_fixed['attachments']->term_id, 'attachments');
+                            ?>
+                        </h2>
+                        <div >
+                            <div id="dropzone_new" <?php ($socialdb_collection_attachment=='no') ? print_r('style="display:none"') : '' ?> 
+                                class="dropzone"
+                                style="margin-bottom: 15px;min-height: 150px;padding-top: 0px;">
+                                    <div class="dz-message" data-dz-message>
+                                     <span style="text-align: center;vertical-align: middle;">
+                                         <h3>
+                                             <span class="glyphicon glyphicon-upload"></span>
+                                             <b><?php _e('Drop Files','tainacan')  ?></b> 
+                                                 <?php _e('to upload','tainacan')  ?>
+                                         </h3>
+                                         <h4>(<?php _e('or click','tainacan')  ?>)</h4>
+                                     </span>
+                                 </div>
+                            </div>
+                        </div>    
+                    </div>    
+                 <?php endif; ?>   
             <?php endif; ?>
             <!-- TAINACAN: thumbnail do item -->
+            <?php if(!$view_helper->mediaHabilitate): ?>
             <div id="<?php echo $view_helper->get_id_list_properties('thumbnail','thumbnail_id'); ?>" 
                  class="form-group"
                 <?php echo $view_helper->get_visibility($view_helper->terms_fixed['thumbnail']) ?>  
@@ -178,6 +185,7 @@
                                class="form-control auto-save">  
                 </div>
             </div>    
+            <?php endif; ?>
             <!-- TAINACAN: a fonte do item -->
             <div id="<?php echo $view_helper->get_id_list_properties('source','socialdb_object_dc_source'); ?>"  
                  class="form-group"
@@ -310,7 +318,41 @@
                      <button type="button" onclick="show_message()" style="margin-bottom: 20px;" class="btn btn-success btn-lg pull-right send-button"><?php _e('Submit','tainacan'); ?></button>
                 </div> 
             <?php endif; ?>
-        </div>
+        </div>    
+        <?php if($view_helper->mediaHabilitate): ?>
+            <!-- Thumbnail e anexos -->
+            <div class="col-md-3" id="mediaHabilitateContainer" style="display: none; background: white;border: 3px solid #E8E8E8;font: 11px Arial;">
+                <div id="thumnbail_place" >
+                        <input type="hidden" name="thumbnail_url" id="thumbnail_url" value="">
+                        <div id="image_side_create_object">
+                        </div>
+                        <input type="file"
+                               id="object_thumbnail"
+                               name="object_thumbnail"
+                               class="form-control auto-save">  
+                </div>
+                <hr>
+                 <h3> 
+                    <?php echo ($view_helper->terms_fixed['attachments']) ? $view_helper->terms_fixed['attachments']->name :  _e('Attachments','tainacan') ?> 
+                 </h23
+                 <div >
+                     <div id="dropzone_new" <?php ($socialdb_collection_attachment=='no') ? print_r('style="display:none"') : '' ?> 
+                         class="dropzone"
+                         style="margin-bottom: 15px;min-height: 150px;padding-top: 0px;">
+                             <div class="dz-message" data-dz-message>
+                              <span style="text-align: center;vertical-align: middle;">
+                                  <h3>
+                                      <span class="glyphicon glyphicon-upload"></span>
+                                      <b><?php _e('Drop Files','tainacan')  ?></b> 
+                                          <?php _e('to upload','tainacan')  ?>
+                                  </h3>
+                                  <h4>(<?php _e('or click','tainacan')  ?>)</h4>
+                              </span>
+                          </div>
+                     </div>
+                 </div>
+            </div>
+        <?php endif; ?>
         <div style="<?php echo ($view_helper->hide_main_container)?'display:none;':'' ?>background: white;border: 3px solid #E8E8E8;margin-left: 15px;width: 74%;" 
              class="col-md-9">
             <h3>
