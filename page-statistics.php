@@ -73,14 +73,12 @@ if ( current_user_can('manage_options') ):
                 </li>
             </ul>
 
-            <script>
-                set_popover_content($("#socialdb_permalink_collection").val() + '?' + elem.url + '&is_filter=1');
-            </script>
         </div>
 
     </div>
 
     <input type="hidden" class="stat_path" value="<?php echo get_template_directory_uri() ?>">
+    <input type="hidden" id="src" value="<?php echo get_template_directory_uri() ?>">
 
     <?php /* ?><input type="hidden" id="src" class="src" value="<?php echo get_template_directory_uri() ?>"> */ ?>
 
@@ -94,6 +92,7 @@ if ( current_user_can('manage_options') ):
         </center>
     </div>
     <?php
+    //require_once (dirname(__FILE__) . '/extras/routes/routes.php');
     get_footer();
 else:
     $home = home_url("/");

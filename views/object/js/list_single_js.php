@@ -27,13 +27,17 @@
         $('#form').html('');
 //        $('#object_page').val($('#single_name').val());
 //        history.replaceState(stateObj, "page 2", $('#socialdb_permalink_object').val());
-        verifyPublishedItem($('#single_object_id').val());
-        list_files_single($('#single_object_id').val());
-        list_ranking_single($('#single_object_id').val());
-        list_properties_single($('#single_object_id').val());
-        list_properties_edit_remove_single($('#single_object_id').val());
-        list_comments($('#single_object_id').val());
-        $('[data-toggle="popoverObject"]').popover();
+
+        if( ! $('body').hasClass('page-template-page-statistics') ) {
+            verifyPublishedItem($('#single_object_id').val());
+            list_files_single($('#single_object_id').val());
+            list_ranking_single($('#single_object_id').val());
+            list_properties_single($('#single_object_id').val());
+            list_properties_edit_remove_single($('#single_object_id').val());
+            list_comments($('#single_object_id').val());
+            $('[data-toggle="popoverObject"]').popover();
+        }
+
 
         var myPopoverObject = $('#iframebuttonObject').data('popover');
         $('#iframebuttonObject').popover('hide');

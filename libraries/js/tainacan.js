@@ -39,8 +39,7 @@ $(window).load(function () {
                 cookie: true, // enable cookies to allow the server to access the session
                 xfbml: true  // parse XFBML
             });
-        } catch (e) {
-        }
+        } catch (e) { }
     }
 
     if (typeof $('#instagramInsertedIds').val() !== 'undefined' && $('#instagramInsertedIds').val() !== 'false') {
@@ -54,7 +53,6 @@ $(window).load(function () {
         }
     }
 
-
     if (typeof $('#facebookInsertedIds').val() !== 'undefined' && $('#facebookInsertedIds').val() !== 'false') {
         if ($('#facebookInsertedIds').val() !== 'facebook_error') {
             var imported_ids = JSON.parse($('#facebookInsertedIds').val());
@@ -66,20 +64,36 @@ $(window).load(function () {
         }
     }
 
-    $("area[rel^='prettyPhoto']").prettyPhoto();
 
-    /************************* VERIFICACAO DE PAGINAS **************************/
-    //verifico se esta querendo visualizar um objeto especifico
-    if ($('#category_page').val() !== '') {
-        showPageCategories($('#category_page').val(), src);
+
+
+    // Do NOT load this actions at statistics page
+    if( ! $('body').hasClass('page-template-page-statistics') ) {
+        $("area[rel^='prettyPhoto']").prettyPhoto();
+
+        /************************* VERIFICACAO DE PAGINAS **************************/
+        //verifico se esta querendo visualizar um objeto especifico
+        if ($('#category_page').val() !== '') {
+            showPageCategories($('#category_page').val(), src);
+        }
+        if ($('#property_page').val() !== '') {
+            showPageProperties($('#property_page').val(), src);
+        }
+        if ($('#tag_page').val() !== '') {
+            showPageTags($('#tag_page').val(), src);
+        }
+        /************************* FIM VERIFICACAO DE PAGINAS **********************/
+
+        get_collections_template(src);
+        check_privacity(src);
+        list_main_ordenation();
+        showDynatreeSingleEdit(src);
+        showHeaderCollection(src);
+        show_most_participatory_authors(src);
+        //get_categories_properties_ordenation();
+        notification_events_repository();
     }
-    if ($('#property_page').val() !== '') {
-        showPageProperties($('#property_page').val(), src);
-    }
-    if ($('#tag_page').val() !== '') {
-        showPageTags($('#tag_page').val(), src);
-    }
-    /************************* FIM VERIFICACAO DE PAGINAS **********************/
+
     //verifico se esta mandando alguma mensagem
     if ($('#info_messages').val() !== '' && $('#info_title').val() !== '') {
         showAlertGeneral($('#info_title').val(), $('#info_messages').val(), 'info');
@@ -139,21 +153,7 @@ $(window).load(function () {
         });
     }
 
-    /*
-     $('#openmyModalRegister').click(function (e) {
-     $('#myModalRegister').modal('show');
-     });
-     */
-
     // end
-    get_collections_template(src);
-    check_privacity(src);
-    list_main_ordenation();
-    showDynatreeSingleEdit(src);
-    showHeaderCollection(src);
-    show_most_participatory_authors(src);
-    //get_categories_properties_ordenation();
-    notification_events_repository();
     $('#home_button').click(function (e) {
         $('#remove').hide();
         $('#form').hide();
@@ -1863,7 +1863,12 @@ $(function () {
         }
     });
 
-    list_templates("#collections-menu ul.templates");
+
+    // Do NOT load this actions at statistics page
+    if( ! $('body').hasClass('page-template-page-statistics') ) {
+        list_templates("#collections-menu ul.templates");
+    }
+
 
     $(document).on("click", ".added", function (e) {
         e.preventDefault();
@@ -2329,16 +2334,22 @@ function resetHomeStyleSettings() {
     $('ul.menu-ibram').hide();
     $('.ibram-home-container').hide();
 
-    var $_main = '#main_part';
-    if( $($_main).hasClass('home') ) {
-        $($_main).show().css('padding-bottom', '0%');
-        $('#display_view_main_page').hide();
-        $('body.home').css('background', 'white');
-        $("#searchBoxIndex").hide();
-        $('.repository-sharings').css('display', 'block');
+    if( $('body').hasClass('page-template-page-statistics') ) {
+        $("#tainacan-stats").hide();
+        $("#configuration").css('margin-top', '30px');
     } else {
-        $($_main).hide();
+        var $_main = '#main_part';
+        if( $($_main).hasClass('home') ) {
+            $($_main).show().css('padding-bottom', '0%');
+            $('#display_view_main_page').hide();
+            $('body.home').css('background', 'white');
+            $("#searchBoxIndex").hide();
+            $('.repository-sharings').css('display', 'block');
+        } else if( $()){
+            $($_main).hide();
+        }
     }
+
 }
 
 function showRepositoryConfiguration(src) {
