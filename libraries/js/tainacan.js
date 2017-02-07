@@ -2349,7 +2349,6 @@ function resetHomeStyleSettings() {
             $($_main).hide();
         }
     }
-
 }
 
 function showRepositoryConfiguration(src) {

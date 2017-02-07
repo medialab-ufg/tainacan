@@ -397,12 +397,7 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
                     <!--a id="home_button" href="#" class="btn btn-default"><span class="glyphicon glyphicon-th-list"></span></a-->
 
                 </div>
-
-                <?php /*
-                  <!-- TAINACAN: esta div (AJAX) mostra os widgets para pesquisa que estao setadas na direita  -->
-                  <div id="div_right"></div>
-                 */ ?>
-
+                
             </div>
         </div>
     </div>
@@ -705,8 +700,6 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
         </div>
     </div>
 
-
-
     <!-- TAINACAN: modal padrao bootstrap para adicao de items sem url    -->
     <!-- modal Adicionar Rapido -->
     <div class="modal fade" id="modal_import_objet_url" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -876,7 +869,6 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
             </div>
         </div>
     </div>
-
 
     <div class="modal fade" id="modalImportConfirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog">

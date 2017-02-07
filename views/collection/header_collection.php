@@ -57,7 +57,7 @@ $thumb_url = $collection_thumb ? wp_get_attachment_url($collection_thumb) : get_
             <?php include ("config_menu.php"); ?>
         </div>
     </div>
-    
+
     <div class="row">
         <div class="col-md-12">
             <div class="row">
@@ -152,29 +152,16 @@ $thumb_url = $collection_thumb ? wp_get_attachment_url($collection_thumb) : get_
                                     </a>
                                 </li>
                             <?php endif; ?>
-                        </ul>     
+                        </ul>
                     <!-- ******************** TAINACAN: Comentarios ******************** -->
                     <a style="cursor: pointer;" onclick="showPageCollectionPage()" >
                         <div class="fab"><span style="font-size: medium;" class="glyphicon glyphicon-comment"></span></div>
-                    </a>  
+                    </a>
                 </div>
             </div>
         </div>
     </div>
-    <!-- TAINACAN: div com o input para pesquisa de items na colecao -->
-    <!--div class="col-md-10">
-        <div class="input-group">
-            <div class="input-group-btn">
-                <button onclick="clear_list()"id="clear" class="btn-xs btn-primary btn" style="margin-right:10px;margin-bottom:5px"><?php _e('Clear', 'tainacan') ?></button>
-            </div>
-            <input onkeyup="set_value(this)" onkeydown="if (event.keyCode === 13)
-                        document.getElementById('search_main').click();
-                   " type="text" style="font-size: 13px; " class="form-control input-medium placeholder" id="search_objects" placeholder="<?php _e('Search Objects', 'tainacan') ?>">
-            <span class="input-group-btn">
-                <button id="search_main" type="button" onclick="search_objects('#search_objects')"  class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
-            </span>
-        </div>
-    </div-->
+
     <!-- modal exluir -->
     <div class="modal fade" id="modal_delete_collection<?php echo $collection_post->ID; ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -219,6 +206,23 @@ if (has_nav_menu('menu-ibram')) {
         'menu_class' => 'navbar navbar-inverse menu-ibram', 'walker' => new wp_bootstrap_navwalker()]);
 }
 ?>
+
+<div id="main_part" class="collection">
+    <div class="row container-fluid">
+        <div class="project-info">
+            <center>
+                <h1> <?php bloginfo('name') ?> </h1>
+                <h3> <?php bloginfo('description') ?> </h3>
+            </center>
+        </div>
+    </div>
+
+    <?php var_dump(get_option('collection_root_id')); ?>
+    <?php get_collection_bg(get_option('collection_root_id')); ?>
+
+    <?php include "views/collection/collec_share.php"; ?>
+
+</div>
 
 <div id="tainacan-breadcrumbs" class="config-steps">
     <a href="<?php echo esc_url(home_url('/')) ?>"> Home </a> >

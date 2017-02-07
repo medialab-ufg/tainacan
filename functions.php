@@ -2934,6 +2934,13 @@ function home_header_bg($bg_id) {
     return '<header style="background-image: url(' . $image_url . ')">';
 }
 
+function get_collection_bg($col_id) {
+    $cover_id = get_post_meta($col_id, 'socialdb_repository_cover_id', true);
+    $image_url = ( $cover_id ) ? wp_get_attachment_url($cover_id) : get_template_directory_uri() . '/libraries/images/bg-home' . rand(1, 5) . '.jpg';
+    
+    return $image_url;
+}
+
 function set_config_return_button($is_home) {
     $div_name = ($is_home) ? 'back-settings' : 'home-back-settings';
 
