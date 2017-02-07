@@ -381,7 +381,8 @@ $collection_route = get_post(get_option('collection_root_id'));
      */
     function backRoute(collection){
         console.log(collection,previousRoute,window.location.pathname);
-        if(collection){
+        if(collection) {
+            restoreHeader();
             previousRoute = $('#route_blog').val()+collection+'/';
            $.router.go($('#route_blog').val()+collection+'/', 'My cool item');
         }else

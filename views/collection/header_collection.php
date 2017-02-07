@@ -204,22 +204,7 @@ if (has_nav_menu('menu-ibram')) {
     wp_nav_menu(['theme_location' => 'menu-ibram', 'container_class' => 'containewr', 'container' => false,
         'menu_class' => 'navbar navbar-inverse menu-ibram', 'walker' => new wp_bootstrap_navwalker()]);
 }
-/*
-$_r_bg = repository_bg(get_option('collection_root_id'));
 ?>
-
-<div id="main_part_collection" class="collection_repo_config" style="background: url(<?php echo $_r_bg; ?>); display: none">
-    <div class="row container-fluid">
-        <div class="project-info">
-            <center>
-                <h1> <?php bloginfo('name') ?> </h1>
-                <h3> <?php bloginfo('description') ?> </h3>
-            </center>
-        </div>
-        <?php include_once "collec_share.php"; ?>
-    </div>
-</div>
- */ ?>
 
 <div id="tainacan-breadcrumbs" class="config-steps">
     <a href="<?php echo esc_url(home_url('/')) ?>"> Home </a> >

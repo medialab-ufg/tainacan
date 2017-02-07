@@ -2331,6 +2331,15 @@ function repoConfig(src, op, ctrl, col_id) {
     })
 }
 
+function restoreHeader() {
+    var $_admin_header = $('#main_part_collection');
+    if( $($_admin_header).is(":visible") ) {
+        $($_admin_header).hide();
+        $('.collection_header').show();
+        $('#collection_post').show().css('margin-top', '50px');
+    }
+}
+
 function resetHomeStyleSettings() {
     $('ul.menu-ibram').hide();
     $('.ibram-home-container').hide();
