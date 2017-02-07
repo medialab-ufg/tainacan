@@ -199,8 +199,10 @@ $collection_route = get_post(get_option('collection_root_id'));
          $.router.reset();
         if ($('#object_page').val() !== '') {
             collection = $('#slug_collection').val();
-            showSingleObjectByName($('#object_page').val() , $('#src').val())
-        }else if($('#goToLogin').val()!==''){
+            if(collection) {
+                showSingleObjectByName($('#object_page').val() , $('#src').val())
+            }
+        } else if($('#goToLogin').val()!==''){
             showLoginScreen($('#src').val());
         }
         // REPOSITORIO ROTAS

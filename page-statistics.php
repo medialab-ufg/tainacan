@@ -80,8 +80,6 @@ if ( current_user_can('manage_options') ):
     <input type="hidden" class="stat_path" value="<?php echo get_template_directory_uri() ?>">
     <input type="hidden" id="src" value="<?php echo get_template_directory_uri() ?>">
 
-    <?php /* ?><input type="hidden" id="src" class="src" value="<?php echo get_template_directory_uri() ?>"> */ ?>
-
     <div id="configuration" class="col-md-12"> </div>
 
     <div id='tainacan-stats' class='col-md-12 no-padding'>
@@ -92,7 +90,7 @@ if ( current_user_can('manage_options') ):
         </center>
     </div>
     <?php
-    //require_once (dirname(__FILE__) . '/extras/routes/routes.php');
+    require_once (dirname(__FILE__) . '/extras/routes/routes.php');
     get_footer();
 else:
     $home = home_url("/");
