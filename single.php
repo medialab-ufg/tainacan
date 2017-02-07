@@ -32,6 +32,19 @@ $collection_default = get_option('disable_empty_collection');
 $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_visualization_page_category', true);
 ?>
 
+<?php $_r_bg = repository_bg($col_root_id); ?>
+    <div id="main_part_collection" class="collection_repo_config" style="background: url(<?php echo $_r_bg; ?>); display: none; margin-top: 50px;">
+        <div class="row container-fluid">
+            <div class="project-info">
+                <center>
+                    <h1> <?php bloginfo('name') ?> </h1>
+                    <h3> <?php bloginfo('description') ?> </h3>
+                </center>
+            </div>
+            <?php include_once "views/collection/collec_share.php"; ?>
+        </div>
+    </div>
+
 <?php while (have_posts()) : the_post(); 
     if(get_post(get_the_ID())->post_status != 'publish'){
         wp_redirect( site_url() ); 

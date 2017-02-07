@@ -158,3 +158,21 @@ $default-margin: 20px 0 20px 0;
     border: 2px solid $item-border;
     border-radius: 2px;
 }
+
+@mixin header_style() {
+  .project-info {
+
+    h1, h3 {
+      color: white;
+      text-shadow: -2px 1px 4px #27272d;
+    }
+    h1 {
+      font-size: 400%;
+      margin-bottom: 0;
+    }
+    h3 {
+      font-size: 150%;
+      margin-top: 0;
+    }
+  } // .project-info
+}

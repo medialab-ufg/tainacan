@@ -422,3 +422,8 @@ a:hover{text-decoration:underline}
         // text-align: center
     }
 }
+
+.collection_repo_config {
+  @include header_style();
+  background-size: cover !important;
+}

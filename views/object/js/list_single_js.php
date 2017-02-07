@@ -1,5 +1,6 @@
 <script>
     $(function () {
+        $("#main_part_collection").hide();
         var is_item_home = $("#configuration .item-breadcrumbs").siblings().first().is("#single_object_id");
         if( is_item_home ) {
             $("#configuration").css('margin-top', 50);

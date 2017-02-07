@@ -2326,6 +2326,7 @@ function repoConfig(src, op, ctrl, col_id) {
     $.ajax({ type: 'POST', url: send_url, data: send_data })
         .done(function(res){
             resetHomeStyleSettings();
+            $('#tainacan-breadcrumbs').hide();
             $('#configuration').html(res).show();
     })
 }
@@ -2345,7 +2346,11 @@ function resetHomeStyleSettings() {
             $('body.home').css('background', 'white');
             $("#searchBoxIndex").hide();
             $('.repository-sharings').css('display', 'block');
-        } else if( $()){
+
+        } else {
+            $("#collection_post").css('margin-top', '0').hide();
+            $("#main_part_collection").show();
+            $('.collection_header').hide();
             $($_main).hide();
         }
     }

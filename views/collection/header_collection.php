@@ -196,18 +196,19 @@ if (has_nav_menu('menu-ibram')) {
                 <h3> <?php echo bloginfo('name'); ?> </h3>
                 <h5> <?php echo bloginfo('description'); ?> </h5>
             </div>
-    <?php include("config_menu.php"); ?>
+            <?php include("config_menu.php"); ?>
         </div>
-
     </div>
 
     <?php
     wp_nav_menu(['theme_location' => 'menu-ibram', 'container_class' => 'containewr', 'container' => false,
         'menu_class' => 'navbar navbar-inverse menu-ibram', 'walker' => new wp_bootstrap_navwalker()]);
 }
+/*
+$_r_bg = repository_bg(get_option('collection_root_id'));
 ?>
 
-<div id="main_part" class="collection">
+<div id="main_part_collection" class="collection_repo_config" style="background: url(<?php echo $_r_bg; ?>); display: none">
     <div class="row container-fluid">
         <div class="project-info">
             <center>
@@ -215,14 +216,10 @@ if (has_nav_menu('menu-ibram')) {
                 <h3> <?php bloginfo('description') ?> </h3>
             </center>
         </div>
+        <?php include_once "collec_share.php"; ?>
     </div>
-
-    <?php var_dump(get_option('collection_root_id')); ?>
-    <?php get_collection_bg(get_option('collection_root_id')); ?>
-
-    <?php include "views/collection/collec_share.php"; ?>
-
 </div>
+ */ ?>
 
 <div id="tainacan-breadcrumbs" class="config-steps">
     <a href="<?php echo esc_url(home_url('/')) ?>"> Home </a> >

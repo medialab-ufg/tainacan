@@ -110,7 +110,7 @@ $collection_route = get_post(get_option('collection_root_id'));
         echo trim(get_query_var('email'));
     }
     ?>">
-<script>
+<script type="text/javascript">
     var previousRoute;
     /********** cadastro de rotas ********/
      //pagina central da colecao
@@ -195,7 +195,7 @@ $collection_route = get_post(get_option('collection_root_id'));
      * verifica se existe alguma rota a ser executada
      * @returns {undefined}
      */
-    function execute_route(){
+    function execute_route() {
          $.router.reset();
         if ($('#object_page').val() !== '') {
             collection = $('#slug_collection').val();
