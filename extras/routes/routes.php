@@ -146,7 +146,7 @@ $collection_route = get_post(get_option('collection_root_id'));
                 }
             <?php endif; ?>    
         }else{
-             console.log(previousRoute ,window.location.pathname);
+            //console.log(previousRoute ,window.location.pathname);
             if(previousRoute === window.location.pathname){
                 $.router.go($('#route_blog').val()+$('#slug_collection').val());
             }else{
