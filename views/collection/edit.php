@@ -5,6 +5,8 @@ $view_helper = new ViewHelper();
 $collection_thumb_id = get_post_meta($collection_post->ID, '_thumbnail_id', true);
 $thumb_url = wp_get_attachment_url($collection_thumb_id);
 $image_cover_url = wp_get_attachment_url(get_post_meta($collection_post->ID, 'socialdb_collection_cover_id', true));
+$_en_header = get_post_meta($collection_post->ID, 'socialdb_collection_show_header', 1);
+$_showH = ("disabled" === $_en_header) ? false : true ;
 ?>
 <div class="col-md-12 config-temp-box">
 
@@ -35,11 +37,12 @@ $image_cover_url = wp_get_attachment_url(get_post_meta($collection_post->ID, 'so
             <div class="form-group" style="margin-bottom: 40px">
                 <label for="enable_header"> <?php _t('Collection header',1); ?> </label>
                 <div class="col-md-12">
-                    <input type="checkbox" id="enable_header" name="enable_header" checked
-                        <?php /* if($collection_metas['socialdb_collection_enable_header']){ echo 'checked="checked"';} */ ?> >
+                    <input type="checkbox" id="enable_header" name="enable_header"
+                        <?php echo ($_showH) ? 'checked="checked"' : '' ?> >
                     <?php _t('Enable',1); ?>
 
-                    <div id="thumb-idea-form" class="form-group enablelize" style="margin-top: 10px;">
+                    <div id="thumb-idea-form" class="form-group enablelize"
+                         style="margin-top: 10px; <?php echo ($_showH) ? '' : 'display:none'; ?>">
                         <div class="">
                             <label for="collection_thumbnail" style="display: block;"><?php _e('Collection thumbnail', 'tainacan'); ?></label>
                             <?php if($collection_thumb_id): ?>
@@ -57,7 +60,7 @@ $image_cover_url = wp_get_attachment_url(get_post_meta($collection_post->ID, 'so
                             <label for="remove_thumbnail"><?php _e("Change collection's thumbnail", "tainacan"); ?></label><input type="file" size="50" id="collection_thumbnail" name="collection_thumbnail" class="btn btn-default btn-sm"> */ ?>
                     </div>
 
-                    <div id="socialdb_cover" class="form-group enablelize">
+                    <div id="socialdb_cover" class="form-group enablelize" style="<?php echo ($_showH) ? '':'display:none'?>">
                         <?php if ($image_cover_url) { ?>
                             <hr />
                             <label for="socialdb_collection_cover"><?php _e('Collection cover', 'tainacan'); ?></label> <br />

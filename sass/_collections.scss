@@ -150,12 +150,11 @@ button.collection-trash {
             hr {
               margin: 10px 0 20px 0;
             }
-
-          }
+          } // .titulo-colecao
 
           .navbar-right {
             position: absolute;
-            top: -30px;
+            top: -35px;
             right: 15px;
 
             .collec_menu_opnr ul.dropdown-menu {
@@ -163,9 +162,11 @@ button.collection-trash {
             }
             
             .fab {
-              width: 25px;
+              /* width: 25px;
               height: 25px;
               background: $brand-medium-blue;
+              */
+              background: white;
             }
           }
 

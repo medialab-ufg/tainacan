@@ -211,13 +211,12 @@ $search_color = ($_color_scheme) ? $_color_scheme["primary"] : "#79a6ce";
 
                                     <div class="col-md-12">
                                         <div class="titulo-colecao">
-                                            <?php if($_enable_header_ === "disabled") { ?>
+                                            <?php if($_enable_header_ === "disabled") {
+                                                include("views/collection/config_menu.php");
+                                                ?>
                                                 <h3 class="title"> <?php echo get_the_title(); ?> </h3>
                                                 <hr>
-                                            <?php }
-
-                                            include("views/collection/config_menu.php");
-                                            ?>
+                                            <?php } ?>
                                         </div>
 
                                         <div class="search-colecao">

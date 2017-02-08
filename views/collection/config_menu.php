@@ -4,9 +4,12 @@
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
             <span class="notification_events"></span>
             <div class="fab">
-                <img src="<?php echo get_template_directory_uri() ?>/libraries/images/configuracao.svg" alt="<?php _t('Configuration', 1); ?>" class="img-responsive">
+                <?php if("disabled" == $_enable_header_):
+                    echo ViewHelper::render_icon("config-azul", "png");
+                else: ?>
+                    <img src="<?php echo get_template_directory_uri() ?>/libraries/images/configuracao.svg" alt="<?php _t('Configuration', 1); ?>" class="img-responsive">
+                <?php endif; ?>
             </div>
-
         </a>
 
         <ul class="dropdown-menu pull-right dropdown-show" role="menu">
