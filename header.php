@@ -137,10 +137,10 @@ $_src_ = get_template_directory_uri();
                                         <?php endif; ?>
                                     </ul>
                                 </li>
-                                <li class="root-notifications">
+                                <li class="root-notifications hide">
                                     <a href="javascript:void(0)" class="dropdown-toggle" id="collectionEvents" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <?php echo ViewHelper::render_icon("sino", "png", _t('Collection Events')); ?>
-                                        <span class="notification_events_repository" style="display: none"></span>
+                                        <span class="notification_events_repository"></span>
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="collectionEvents"></ul>
                                 </li>
@@ -150,7 +150,7 @@ $_src_ = get_template_directory_uri();
                                     </a>
                                 </li>
                                 <li class="wp-admin">
-                                    <a href="<?php echo get_admin_url(); ?>">
+                                    <a href="<?php echo get_admin_url(); ?>" target="_blank">
                                         <span class="dashicons dashicons-wordpress"></span>
                                     </a>
                                 </li>

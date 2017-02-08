@@ -129,7 +129,8 @@
                     _item_html += "</a></li>";                                    
                 });
                 $(_item_html).appendTo('li.root-notifications ul');
-                $('li.root-notifications .notification_events_repository').show().text(_ev_.total_evts);
+                $('li.root-notifications').removeClass('hide');
+                $('li.root-notifications .notification_events_repository').text(_ev_.total_evts);
             }
         });
     }
