@@ -78,6 +78,16 @@
         });
         list_ordenation();
         list_collections_parent();
+
+
+        $("#enable_header").on('change', function() {
+            var v = $(this).attr('checked');
+            if(v) {
+               $('.enablelize').show();
+            } else {
+                $('.enablelize').hide();
+            }
+        });
     });
 
     function showModerationDays() {

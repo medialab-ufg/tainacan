@@ -246,6 +246,12 @@ class CollectionModel extends Model {
             delete_post_thumbnail($post_id);
         }
 
+        if($data['enable_header']) {
+            update_post_meta($post_id, 'socialdb_collection_show_header', 'enabled');
+        } else {
+            update_post_meta($post_id, 'socialdb_collection_show_header', 'disabled');
+        }
+
         Log::addLog(['collection_id' => $data['collection_id'], 'event_type' => 'user_collection', 'event' => 'edit' ]);
         
         if ($_FILES) {

@@ -141,6 +141,34 @@ button.collection-trash {
         } // .header-colecao
 
         .search-top-container {
+          .titulo-colecao {
+            text-shadow: none;
+            h3 {
+              margin: 0;
+            }
+
+            hr {
+              margin: 10px 0 20px 0;
+            }
+
+          }
+
+          .navbar-right {
+            position: absolute;
+            top: -30px;
+            right: 15px;
+
+            .collec_menu_opnr ul.dropdown-menu {
+              margin-top: -15px !important;
+            }
+            
+            .fab {
+              width: 25px;
+              height: 25px;
+              background: $brand-medium-blue;
+            }
+          }
+
           .box-left {
             padding-right: 0;
             width: 82.5%;

@@ -31,7 +31,8 @@
         }
     });
 
-    var collection_data = { name: $('.titulo-colecao h3 a').text(), url: $('.titulo-colecao h3 a').attr('href') };
+    var curr_col_title = $('.titulo-colecao h3 a').text() || $('.titulo-colecao h3').text();
+    var collection_data = { name: curr_col_title, url: $('.titulo-colecao h3 a').attr('href') };
     $("#tainacan-breadcrumbs span.collection-title").text(collection_data.name);
 
     $(function () {

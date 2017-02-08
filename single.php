@@ -11,7 +11,7 @@ require_once(dirname(__FILE__) . '/helpers/view_helper.php');
             wp_redirect( site_url() ); 
         }
 endwhile;
-///****************************** EXECUTANDO SCRIPTS  AVULSOS*********************/
+///****************************** EXECUTANDO SCRIPTS AVULSOS *********************/
 if (isset($_GET['execute-script'])):
     error_reporting(E_ALL);
     if ($_GET['execute-script'] == '0002') {
@@ -28,8 +28,12 @@ get_header();
 global $config;
 session_start();
 $options = get_option('socialdb_theme_options');
+$_currentID_ = get_the_ID();
 $collection_default = get_option('disable_empty_collection');
-$visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_visualization_page_category', true);
+$visualization_page_category = get_post_meta($_currentID_, 'socialdb_collection_visualization_page_category', true);
+$_enable_header_ = get_post_meta($_currentID_, 'socialdb_collection_show_header', true);
+$_color_scheme = ViewHelper::getCollectionColors($_currentID_);
+$search_color = ($_color_scheme) ? $_color_scheme["primary"] : "#79a6ce";
 ?>
 
 <?php $_r_bg = repository_bg($col_root_id); ?>
@@ -187,23 +191,16 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
     <input type="hidden" id="global_tag_id" name="global_tag_id" value="<?php echo (get_term_by('slug', 'socialdb_property_fixed_tags', 'socialdb_property_type')->term_id) ? get_term_by('slug', 'socialdb_property_fixed_tags', 'socialdb_property_type')->term_id : 'tag' ?>"> <!-- utilizado na busca -->
     <!-- TAINACAN - END: ITENS NECESSARIOS PARA EXECUCAO DE VARIAS PARTES DO SOCIALDB -->
 
-    <?php
-    $_color_scheme = ViewHelper::getCollectionColors(get_the_ID());
-    $search_color = ($_color_scheme) ? $_color_scheme["primary"] : "#79a6ce";
-    ?>
-
     <!-- TAINACAN: esta div central que agrupa todos os locais para widgets e a listagem de objeto -->
     <div id="main_part">
         <!-- TAINACAN: este container agrupa a coluna da esquerda dos widgets, a listagem de itens e coluna da direita dos widgets -->
         <div id="container_three_columns" class="container-fluid">
-
             <div class="row">
-
                 <!-- TAINACAN: esta div (AJAX) mostra os widgets para pesquisa que estao setadas na esquerda  -->
-                <div  id="div_left" class="col-md-3" style="height: 1300px;min-height: 500px;overflow-y:  auto;"></div>
+                <div id="div_left" class="col-md-3"></div>
 
                 <!-- TAINACAN: esta div agrupa a listagem de itens ,submissao de novos itens e ordencao -->
-                <div  id="div_central" class="col-md-9">
+                <div id="div_central" class="col-md-9">
 
                     <!-- TAINACAN: esta div agrupa a submissao de novos itens e a ordenacao (estilo inline usado para afastar do painel da colecao) -->
                     <div id="menu_object" class="row col-md-12">
@@ -211,8 +208,18 @@ $visualization_page_category = get_post_meta(get_the_ID(), 'socialdb_collection_
 
                             <div class="col-md-12 no-padding">
                                 <div class="row search-top-container">
-                                    <!--div class="col-md-12 box-left"-->
+
                                     <div class="col-md-12">
+                                        <div class="titulo-colecao">
+                                            <?php if($_enable_header_ === "disabled") { ?>
+                                                <h3 class="title"> <?php echo get_the_title(); ?> </h3>
+                                                <hr>
+                                            <?php }
+
+                                            include("views/collection/config_menu.php");
+                                            ?>
+                                        </div>
+
                                         <div class="search-colecao">
                                             <div class="input-group" style="z-index: 1;">
                                                 <input  style="font-size: 13px;z-index: 1;" class="form-control input-medium placeholder ui-autocomplete-input" id="search_objects"

@@ -24,75 +24,84 @@ $image_cover_url = wp_get_attachment_url(get_post_meta($collection_post->ID, 'so
                 <input type="text" class="form-control" id="collection_name" name="collection_name" required="required" value="<?php echo $collection_post->post_title; ?>">
             </div>
 
-            <div id="thumb-idea-form" class="form-group">
-                <div class="">
-                    <label for="collection_thumbnail" style="display: block;"><?php _e('Collection thumbnail', 'tainacan'); ?></label>
-                    <?php if($collection_thumb_id): ?>
-                        <img src="<?php echo $thumb_url ?>" alt="" style="display: block; margin-bottom: 5px;" />
-                        <label for="remove_thumbnail"><?php _e('Remove Thumbnail', 'tainacan'); ?></label> &nbsp;
-                        <input type="checkbox"  id="remove_thumbnail" name="remove_thumbnail" value="true">
-                        <?php /* <input type="button" class="btn btn-default edit-collection-tumb" value='<?php _e("Edit thumb","tainacan"); ?>' style="display: block"/> */?>
-                    <?php endif; ?>
-                </div>
-                <div style="margin-top: 20px;">
-                    <div id="collection_crop_thumb"></div>
-                </div>
-
-                <?php /*
-               <!--<button onclick="remove_thumbnail('<?php echo $collection_post->ID; ?>')" class="btn btn-default" ><?php _e('Remove thumbnail') ?></button>-->
-                <br><br>
-                <label for="remove_thumbnail"><?php _e("Change collection's thumbnail", "tainacan"); ?></label>
-                <input type="file" size="50" id="collection_thumbnail" name="collection_thumbnail" class="btn btn-default btn-sm">
-                 */ ?>
-
-            </div>
-
-            <div id="socialdb_cover" class="form-group">
-                <?php if ($image_cover_url) { ?>
-                    <hr />
-                    <label for="socialdb_collection_cover"><?php _e('Collection cover', 'tainacan'); ?></label> <br />
-                    <img src="<?= $image_cover_url ?>" style='max-height:190px;' />
-                    <br /><br />
-                    <label for="remove_cover"><?php _e('Remove Cover', 'tainacan'); ?></label>
-                    <input type="checkbox"  id="remove_cover" name="remove_cover" value="true">
-                    &nbsp;&nbsp;&nbsp;
-                    <a href="javascript:void(0)" onclick="show_edit_cover()" class="btn btn-default"> <?php _e('Edit Cover', 'tainacan'); ?>  </a>
-                    <br /><br />
-                <?php } ?>
-
-                <div id="edit_cover_container" <?php echo ($image_cover_url) ? 'class="hideCropBox"' : ''; ?>>
-                    <label for="collection_cover_img_id"> <?php _e('Select Collection Cover', 'tainacan'); ?> </label> <br />
-                    <div class="alert alert-info" role="alert">
-                        <strong> <?php _e('After positioning the image cover as wished, click the green button to crop it.', 'tainacan'); ?> </strong>
-                        <i>(<?php _e('Minimum width recommended: 1920px', 'tainacan') ?>)</i>
-                    </div>
-
-                    <div id="collection_cover_image"></div>
-                    <input type="hidden" id="collection_cover_img_id" name="collection_cover_img_id" value=""/>
-                </div>
-
-            </div>
-
             <!------------------- Descricao-------------------------->
             <div class="form-group">
-                <label for="collection_description"><?php _e('Collection description', 'tainacan'); ?></label>           
-                <textarea class="form-control" rows="4" id="collection_content" name="collection_content" placeholder='<?= __("Describe your collection in few words", 'tainacan'); ?>'><?php echo $collection_post->post_content; ?></textarea>
-
+                <label for="collection_description"> <?php _t('Collection description', 1); ?> </label>
+                <textarea class="form-control" rows="4" id="collection_content" name="collection_content" placeholder='<?php _t("Describe your collection in few words", 1); ?>'><?php echo $collection_post->post_content; ?></textarea>
             </div>
+
+            <hr class='tainacanRow' />
+
+            <div class="form-group" style="margin-bottom: 40px">
+                <label for="enable_header"> <?php _t('Collection header',1); ?> </label>
+                <div class="col-md-12">
+                    <input type="checkbox" id="enable_header" name="enable_header" checked
+                        <?php /* if($collection_metas['socialdb_collection_enable_header']){ echo 'checked="checked"';} */ ?> >
+                    <?php _t('Enable',1); ?>
+
+                    <div id="thumb-idea-form" class="form-group enablelize" style="margin-top: 10px;">
+                        <div class="">
+                            <label for="collection_thumbnail" style="display: block;"><?php _e('Collection thumbnail', 'tainacan'); ?></label>
+                            <?php if($collection_thumb_id): ?>
+                                <img src="<?php echo $thumb_url ?>" alt="" style="display: block; margin-bottom: 5px;" />
+                                <label for="remove_thumbnail"><?php _e('Remove Thumbnail', 'tainacan'); ?></label> &nbsp;
+                                <input type="checkbox"  id="remove_thumbnail" name="remove_thumbnail" value="true">
+                                <?php /* <input type="button" class="btn btn-default edit-collection-tumb" value='<?php _e("Edit thumb","tainacan"); ?>' style="display: block"/> */?>
+                            <?php endif; ?>
+                        </div>
+                        <div style="margin-top: 10px;">
+                            <div id="collection_crop_thumb"></div>
+                        </div>
+
+                        <?php /* <!--<button onclick="remove_thumbnail('<?php echo $collection_post->ID; ?>')" class="btn btn-default" ><?php _e('Remove thumbnail') ?></button>--><br><br>
+                            <label for="remove_thumbnail"><?php _e("Change collection's thumbnail", "tainacan"); ?></label><input type="file" size="50" id="collection_thumbnail" name="collection_thumbnail" class="btn btn-default btn-sm"> */ ?>
+                    </div>
+
+                    <div id="socialdb_cover" class="form-group enablelize">
+                        <?php if ($image_cover_url) { ?>
+                            <hr />
+                            <label for="socialdb_collection_cover"><?php _e('Collection cover', 'tainacan'); ?></label> <br />
+                            <img src="<?= $image_cover_url ?>" style='max-height:190px;' />
+                            <br /><br />
+                            <label for="remove_cover"><?php _e('Remove Cover', 'tainacan'); ?></label>
+                            <input type="checkbox"  id="remove_cover" name="remove_cover" value="true">
+                            &nbsp;&nbsp;&nbsp;
+                            <a href="javascript:void(0)" onclick="show_edit_cover()" class="btn btn-default"> <?php _e('Edit Cover', 'tainacan'); ?>  </a>
+                            <br /><br />
+                        <?php } ?>
+
+                        <div id="edit_cover_container" <?php echo ($image_cover_url) ? 'class="hideCropBox"' : ''; ?>>
+                            <label for="collection_cover_img_id"> <?php _e('Select Collection Cover', 'tainacan'); ?> </label>
+                            <a href="javascript:void(0)" data-toggle="tooltip" title="<?php _e('After positioning the image cover as wished, click the green button to crop it.', 'tainacan'); ?>
+                        (<?php _t('Minimum width recommended: 1920px',1) ?>)">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </a>
+                            <div id="collection_cover_image"></div>
+                            <input type="hidden" id="collection_cover_img_id" name="collection_cover_img_id" value=""/>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <hr class='tainacanRow' />
+
             <div class="form-group">
-                <a  id="show_adv_config_link" onclick="showAdvancedConfig();" style="cursor:pointer;"><?php _e('Advanced Configuration', 'tainacan'); ?></a>
-                <a  id="hide_adv_config_link" onclick="hideAdvancedConfig();" style="display: none;cursor:pointer;"><?php _e('Hide Advanced Configuration', 'tainacan'); ?></a>
+                <a id="show_adv_config_link" onclick="showAdvancedConfig();" style="cursor:pointer;">
+                    <span class="caret"></span>&nbsp;<?php _e('Advanced Configuration', 'tainacan'); ?>                    
+                </a>
+                <a id="hide_adv_config_link" onclick="hideAdvancedConfig();" style="display: none;cursor:pointer;">
+                    <span class="caret-right"></span>&nbsp; <?php _e('Hide Advanced Configuration', 'tainacan'); ?></a>
             </div>
 
             <!------------------- DIV ADVANCED -------------------------->
             <div id="advanced_config" style="display: none;">
-                <?php
-                   do_action('insert_form_edit_collection',$collection_post,$collection_metas);
-                ?>
+                <?php do_action('insert_form_edit_collection',$collection_post,$collection_metas); ?>
                 <!------------------- Endereco da colecao -------------------------->
                 <div class="form-group">
                     <label for="collection_description"><?php _e('Collection Address', 'tainacan'); ?></label>
-                    <a href="#" data-toggle="tooltip" title="<?php _e('The address must not contain spaces or special characters. If it contains will be removed by the system. Limit of 200 characters.', 'tainacan'); ?>">
+                    <a href="javascript:void(0)" data-toggle="tooltip" title="<?php _e('The address must not contain spaces or special characters. If it contains will be removed by the system. Limit of 200 characters.', 'tainacan'); ?>">
                         <span class="glyphicon glyphicon-question-sign"></span>
                     </a>
                 </div>
@@ -143,7 +152,7 @@ $image_cover_url = wp_get_attachment_url(get_post_meta($collection_post->ID, 'so
                             echo 'selected = "selected"';
                         }
                         ?>>
-                                    <?php _e('Public', 'tainacan'); ?>
+                            <?php _e('Public', 'tainacan'); ?>
                         </option>
                         <option value="private" <?php
                         if ($collection_metas['sociadb_collection_privacity'][0]->name == 'socialdb_collection_private') {

@@ -21,6 +21,13 @@ body {
     */
     
     .tainacan-config-container {
+
+      hr.tainacanRow {
+        margin-left: -40px;
+        margin-right: -40px;
+        border: 2px solid $item-border;
+      }
+
       border: 4px solid $item-border;
       background: white;
       padding: 10px 40px 30px 40px;
@@ -103,7 +110,7 @@ body.error404 {
   width:100%;
   height: 190px;
   position: relative;
-  border:1px solid #ccc;
+  border: 1px solid $item-border;
 }
 #collection_crop_thumb {
   width: 150px;
@@ -113,8 +120,9 @@ body.error404 {
   visibility: hidden;
   height: 5px;
 }
-.cropControls{
+.cropControls {
   left: -1px !important;
+  background-color: rgba(0,0,0,0.10);
 }
 
 .collection_header_img {
@@ -529,3 +537,14 @@ form#advanced_search_submit {
     margin-right: 5px;
   }
 } // #advanced_search_submit
+
+.caret-right {
+    border-bottom: 4px solid transparent;
+    border-top: 4px solid transparent;
+    border-left: 4px solid;
+    display: inline-block;
+    height: 0;
+    // opacity: 0.3;
+    // vertical-align: top;
+    width: 0;
+}

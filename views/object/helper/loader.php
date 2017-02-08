@@ -7,6 +7,9 @@ $objHelper = new ObjectHelper();
 
 $countLine = 0;
 $collection_list_mode = $collection_data['collection_metas']['socialdb_collection_list_mode'];
+$_slideshow_time = $collection_data['collection_metas']['socialdb_collection_slideshow_time'];
+$use_approx_mode = $collection_data['collection_metas']['socialdb_collection_use_prox_mode'];
+$geo_loc = $collection_data['collection_metas']['socialdb_collection_location_meta'];
 
 if( !$collection_list_mode ) {
     $collection_list_mode = "cards";

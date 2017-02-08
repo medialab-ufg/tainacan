@@ -27,18 +27,10 @@
                 </a>
             </li>
 
-            <?php /*
-                <li> <a style="cursor: pointer;" onclick="showPagePermission('<?php echo get_template_directory_uri() ?>','<?php echo $current_collection_id ?>');" ><span class="glyphicon glyphicon-user"></span> &nbsp;<?php _e('User permission', 'tainacan'); ?></a> </li>
-                <li <?php do_action('menu_collection_search_configuration') ?>><a style="cursor: pointer;" onclick="showSearchConfiguration('<?php echo get_template_directory_uri() ?>');" ><span class="glyphicon glyphicon-list-alt"></span>&nbsp;<?php _e('Search', 'tainacan'); ?></a></li>
-                <li> <a style="cursor: pointer;" onclick="showRankingConfiguration('<?php echo get_template_directory_uri() ?>');" ><span class="glyphicon glyphicon-star"></span>&nbsp;<?php _e('Rankings', 'tainacan'); ?></a></li>
-                <li> <a style="cursor: pointer;" onclick="showDesignConfiguration('<?php echo get_template_directory_uri() ?>');" ><span class="glyphicon glyphicon-picture"></span>&nbsp;<?php _e('Design', 'tainacan'); ?></a></li>
-                <li> <a onclick="showUsersConfiguration('<?php echo get_template_directory_uri() ?>');" href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;<?php _e('Users', 'tainacan'); ?></a></li>
-                <li> <a style="cursor: pointer;" onclick="showCategoriesConfiguration('<?php echo get_template_directory_uri() ?>');" ><span class="glyphicon glyphicon-filter"></span>&nbsp;<?php _e('Categories', 'tainacan'); ?></a></li>
-            */
-
+            <?php
             // esta acao permite a insercao de itens neste menu
-            do_action('add_configuration_menu_tainacan'); ?>
-            <?php if (get_option('collection_root_id') != $current_collection_id) { ?>
+            do_action('add_configuration_menu_tainacan');
+            if (get_option('collection_root_id') != $current_collection_id) { ?>
 
                 <li class="divider"></li>
 

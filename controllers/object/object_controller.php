@@ -173,13 +173,10 @@ class ObjectController extends Controller {
                 $data['loop'] = new WP_Query($args);
                 $data['collection_data'] = $collection_model->get_collection_data($collection_id);
                 $data["show_string"] = is_root_category($collection_id) ? __('Showing collections:', 'tainacan') : __('Showing Items:', 'tainacan');
-
-                // View modes' vars                
-                $data['_slideshow_time'] = get_post_meta($collection_id, 'socialdb_collection_slideshow_time', true);
+                
+                // View mode's vars
                 $data["geo_coordinates"]["lat"] = get_post_meta($collection_id, "socialdb_collection_latitude_meta", true);
                 $data["geo_coordinates"]["long"] = get_post_meta($collection_id, "socialdb_collection_longitude_meta", true);
-                $data['use_approx_mode'] = get_post_meta($collection_id, "socialdb_collection_use_prox_mode", true);
-                $data["geo_loc"] = get_post_meta($collection_id, "socialdb_collection_location_meta", true);
                 $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($collection_id, "socialdb_collection_table_metas", true)));
 
                 $view_count = get_post_meta($collection_id, 'collection_view_count', true);
