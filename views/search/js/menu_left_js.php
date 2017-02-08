@@ -29,6 +29,46 @@
                         collection: $("#collection_id").val(),
                         classCss: node.data.addClass,
                         operation: 'expand_dynatree'
+                    },
+                    success: function(node) {
+                        $("#dynatree a").hover(function(){
+                            var node = $.ui.dynatree.getNode(this);
+                            var key = node.data.key;
+                            $(node.span).attr('id',"ui-dynatree-id-" + node.data.key)
+                            var n = key.toString().indexOf("_");
+                            if($('#context_menu_'+node.data.key).length==0){
+                                if (n > 0) {// se for propriedade de objeto
+                                    values = key.split("_");
+                                    if (values[1] === 'tag' || (values[1] === 'facet' && values[2] === 'tag')) {
+                                        $(node.span).append('<a id="context_menu_'+node.data.key+'" onclick="triggerContextMenu('+"'#ui-dynatree-id-"+node.data.key+"'"+
+                                               ',event,'+"'myMenuSingleTag'"+')" style="display:none;cursor:pointer;"><span class="glyphicon glyphicon-chevron-down"></span></a>');
+                                    } else if (values[1] === 'facet' && values[2] === 'category') {
+                                        $(node.span).append('<a id="context_menu_'+node.data.key+'" onclick="triggerContextMenu('+"'#ui-dynatree-id-"+node.data.key+"'"+
+                                               ',event,'+"'myMenuSingle'"+')" style="display:none;cursor:pointer;"><span class="glyphicon glyphicon-chevron-down"></span></a>');
+                                    }
+                                } else {
+                                    $(node.span).append('<a id="context_menu_'+node.data.key+'" onclick="triggerContextMenu('+"'#ui-dynatree-id-"+node.data.key+"'"+
+                                          ',event,'+"'myMenuSingle'"+')" style="display:none;cursor:pointer;"><span class="glyphicon glyphicon-chevron-down"></span></a>');
+                                }
+                            }   
+                        }, function(){
+                            var node = $.ui.dynatree.getNode(this);
+                            if($('#context_menu_'+node.data.key).length==0){
+                                if (n > 0) {// se for propriedade de objeto
+                                    values = key.split("_");
+                                    if (values[1] === 'tag' || (values[1] === 'facet' && values[2] === 'tag')) {
+                                        $(node.span).append('<a id="context_menu_'+node.data.key+'" onclick="triggerContextMenu('+"'#ui-dynatree-id-"+node.data.key+"'"+
+                                               ',event,'+"'myMenuSingleTag'"+')" style="display:none;cursor:pointer;"><span class="glyphicon glyphicon-chevron-down"></span></a>');
+                                    } else if (values[1] === 'facet' && values[2] === 'category') {
+                                        $(node.span).append('<a id="context_menu_'+node.data.key+'" onclick="triggerContextMenu('+"'#ui-dynatree-id-"+node.data.key+"'"+
+                                               ',event,'+"'myMenuSingle'"+')" style="display:none;cursor:pointer;"><span class="glyphicon glyphicon-chevron-down"></span></a>');
+                                    }
+                                } else {
+                                    $(node.span).append('<a id="context_menu_'+node.data.key+'" onclick="triggerContextMenu('+"'#ui-dynatree-id-"+node.data.key+"'"+
+                                          ',event,'+"'myMenuSingle'"+')" style="display:none;cursor:pointer;"><span class="glyphicon glyphicon-chevron-down"></span></a>');
+                                }
+                            }
+                        });
                     }
                 });
             },
@@ -40,8 +80,7 @@
                 if ($(".contextMenu:visible").length > 0) {
                     $(".contextMenu").hide();
                 }
-                
-                    console.log(event);
+                //console.log(event);
                 //verifico aonde esta clicando
                 if($('#visualization_page_category').val()==='click' && 
                         ((event.srcElement && event.srcElement.className==='dynatree-title') || (event.target && event.target.className==='dynatree-title'))){
@@ -167,8 +206,25 @@
                 $("ul.dynatree-container").css('border', "none");
                 //$( "#btnExpandAll" ).trigger( "click" );
             },
-            onActivate: function (node, event) {
-             
+            onExpand: function (flag, node) {
+                var key = node.data.key;
+                $(node.span).attr('id',"ui-dynatree-id-" + node.data.key)
+                var n = key.toString().indexOf("_");
+                if($('#context_menu_'+node.data.key).length==0){
+                    if (n > 0) {// se for propriedade de objeto
+                        values = key.split("_");
+                        if (values[1] === 'tag' || (values[1] === 'facet' && values[2] === 'tag')) {
+                            $(node.span).append('<a id="context_menu_'+node.data.key+'" onclick="triggerContextMenu('+"'#ui-dynatree-id-"+node.data.key+"'"+
+                                   ',event,'+"'myMenuSingleTag'"+')" style="display:none;cursor:pointer;"><span class="glyphicon glyphicon-chevron-down"></span></a>');
+                        } else if (values[1] === 'facet' && values[2] === 'category') {
+                            $(node.span).append('<a id="context_menu_'+node.data.key+'" onclick="triggerContextMenu('+"'#ui-dynatree-id-"+node.data.key+"'"+
+                                   ',event,'+"'myMenuSingle'"+')" style="display:none;cursor:pointer;"><span class="glyphicon glyphicon-chevron-down"></span></a>');
+                        }
+                    } else {
+                        $(node.span).append('<a id="context_menu_'+node.data.key+'" onclick="triggerContextMenu('+"'#ui-dynatree-id-"+node.data.key+"'"+
+                              ',event,'+"'myMenuSingle'"+')" style="display:none;cursor:pointer;"><span class="glyphicon glyphicon-chevron-down"></span></a>');
+                    }
+                }    
             },
             onSelect: function (flag, node) {
 //                    if($('#visualization_page_category').val()!=='click'){

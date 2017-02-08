@@ -161,7 +161,7 @@ $_src_ = get_template_directory_uri();
                                             &nbsp;<?php _e('Login', 'tainacan') ?>
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <?php include_once "views/user/login.php"; ?>
+                                            <?php include_once "views/user/login_header.php"; ?>
                                         </div>
                                     </div>
                                 </li>

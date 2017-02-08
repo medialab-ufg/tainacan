@@ -10,8 +10,12 @@ include_once(dirname(__FILE__).'/../../helpers/object/object_helper.php');
 
 $view_helper = new ObjectHelper($collection_id);
 $val = get_post_meta($collection_id, 'socialdb_collection_submission_visualization', true);
+$habilitateMedia = get_post_meta($collection_id, 'socialdb_collection_habilitate_media', true);
+$css = '';
 if($val&&$val=='one'){
     $view_helper->hide_main_container = true;
+    $view_helper->mediaHabilitate = ($habilitateMedia =='true') ? true:false;
+    $css = ($view_helper->mediaHabilitate) ? 'width: 72%; margin-left: 15px;margin-right: 10px;padding-left: 15px;' : 'margin-left:1%;width: 98%;padding-left:15px;';
     $mode = true;
 }else{
     $mode = false;
@@ -45,8 +49,8 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
              </center>
         </div>
 <!----------------- MENU ESQUERDO  ----------------->        
-        <div style="display: none; background: white;border: 3px solid #E8E8E8;font: 11px Arial;<?php echo ($view_helper->hide_main_container)?'margin-left:1%;width: 98%;padding-left:15px;':'' ?>" 
-             class="<?php echo ($view_helper->hide_main_container)?'col-md-12':'col-md-3' ?> menu_left">
+        <div style="display: none; background: white;border: 3px solid #E8E8E8;font: 11px Arial;<?php echo $css?>" 
+             class="<?php echo ($view_helper->hide_main_container)? ($view_helper->mediaHabilitate)? 'col-md-9' : 'col-md-12':'col-md-3' ?> menu_left">
                 <?php 
                 //se estiver apenas mostrando as propriedades 
                 if($view_helper->hide_main_container):
@@ -209,41 +213,44 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                 </div>     
             </div>
             <!-- TAINACAN: UPLOAD DE ANEXOS DOS ITEMS -->
-            <div id="<?php echo $view_helper->get_id_list_properties('attachments','attachments'); ?>" 
-                <?php echo $view_helper->get_visibility($view_helper->terms_fixed['attachments']) ?> 
-                class="form-group" <?php do_action('item_attachments_attributes') ?> >
-                <h2> 
-                   <?php echo ($view_helper->terms_fixed['attachments']) ? $view_helper->terms_fixed['attachments']->name :  _e('Attachments','tainacan') ?> 
-                    <a class="pull-right" 
-                       style="margin-right: 20px;" 
-                        >
-                        <span title="<?php _e('Upload attachments for your item','tainacan'); ?>" 
-                       data-toggle="tooltip" data-placement="bottom" class="glyphicon glyphicon-question-sign"></span>
-                    </a>
-                    <?php 
-                        echo $view_helper->setValidation($collection_id, $view_helper->terms_fixed['attachments']->term_id, 'attachments');
-                    ?>
-                </h2>
-                <div>
-                     <div id="dropzone_edit"  
-                        <?php do_action('item_attachments_attributes') ?> <?php if($socialdb_collection_attachment=='no') echo 'style="display:none"' ?> 
-                         class="dropzone"
-                         style="margin-bottom: 15px;min-height: 150px;padding-top: 0px;">
-                            <div class="dz-message" data-dz-message>
-                             <span style="text-align: center;vertical-align: middle;">
-                                 <h3>
-                                     <span class="glyphicon glyphicon-upload"></span>
-                                     <b><?php _e('Drop Files','tainacan')  ?></b> 
-                                         <?php _e('to upload','tainacan')  ?>
-                                 </h3>
-                                 <h4>(<?php _e('or click','tainacan')  ?>)</h4>
-                             </span>
-                         </div>
-                    </div>
-                </div>    
-            </div>    
+                <?php if(!$view_helper->mediaHabilitate): ?>
+                    <div id="<?php echo $view_helper->get_id_list_properties('attachments','attachments'); ?>" 
+                        <?php echo $view_helper->get_visibility($view_helper->terms_fixed['attachments']) ?> 
+                        class="form-group" <?php do_action('item_attachments_attributes') ?> >
+                        <h2> 
+                           <?php echo ($view_helper->terms_fixed['attachments']) ? $view_helper->terms_fixed['attachments']->name :  _e('Attachments','tainacan') ?> 
+                            <a class="pull-right" 
+                               style="margin-right: 20px;" 
+                                >
+                                <span title="<?php _e('Upload attachments for your item','tainacan'); ?>" 
+                               data-toggle="tooltip" data-placement="bottom" class="glyphicon glyphicon-question-sign"></span>
+                            </a>
+                            <?php 
+                                echo $view_helper->setValidation($collection_id, $view_helper->terms_fixed['attachments']->term_id, 'attachments');
+                            ?>
+                        </h2>
+                        <div>
+                             <div id="dropzone_edit"  
+                                <?php do_action('item_attachments_attributes') ?> <?php if($socialdb_collection_attachment=='no') echo 'style="display:none"' ?> 
+                                 class="dropzone"
+                                 style="margin-bottom: 15px;min-height: 150px;padding-top: 0px;">
+                                    <div class="dz-message" data-dz-message>
+                                     <span style="text-align: center;vertical-align: middle;">
+                                         <h3>
+                                             <span class="glyphicon glyphicon-upload"></span>
+                                             <b><?php _e('Drop Files','tainacan')  ?></b> 
+                                                 <?php _e('to upload','tainacan')  ?>
+                                         </h3>
+                                         <h4>(<?php _e('or click','tainacan')  ?>)</h4>
+                                     </span>
+                                 </div>
+                            </div>
+                        </div>    
+                    </div>  
+                <?php endif; ?>
             <?php endif; ?>
             <!-- TAINACAN: thumbnail do item -->
+            <?php if(!$view_helper->mediaHabilitate): ?>
              <div id="<?php echo $view_helper->get_id_list_properties('thumbnail','thumbnail_id'); ?>" 
                   class="form-group"
                 <?php echo $view_helper->get_visibility($view_helper->terms_fixed['thumbnail']) ?>  
@@ -283,6 +290,7 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                     <input type="file" size="50" id="object_thumbnail_edit" name="object_thumbnail" class="btn btn-default btn-sm auto-save">  
                 </div>
             </div>    
+            <?php endif; ?>
             <!-- TAINACAN: a fonte do item -->
             <div id="<?php echo $view_helper->get_id_list_properties('source','socialdb_object_dc_source'); ?>"  
                 class="form-group" 
@@ -415,6 +423,53 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
             <?php endif; ?>
         </div>
 <!-----------------  FIM - MENU ESQUERDO -------------------------------------->
+<?php if($view_helper->mediaHabilitate): ?>
+            <!-- Thumbnail e anexos -->
+            <div class="col-md-3" id="mediaHabilitateContainer" style="display: none; background: white;border: 3px solid #E8E8E8;font: 11px Arial;">
+                <div id="thumnbail_place" >
+                         <div id="existent_thumbnail">
+                                <?php
+                                if (get_the_post_thumbnail($object->ID, 'thumbnail')) {
+                                    echo get_the_post_thumbnail($object->ID, 'thumbnail');
+                                    ?>
+                                    <br><br>
+                                    <label for="remove_thumbnail"><?php _e('Remove Thumbnail', 'tainacan'); ?></label>
+                                    <input type="hidden" name="object_has_thumbnail" value="true">
+                                    <input type="checkbox"  id="remove_thumbnail_object" name="remove_thumbnail_object" value="true">
+                                    <br><br>
+                                    <?php } else {
+                                    ?> 
+                                    <input type="hidden" name="object_has_thumbnail" value="false">
+                                    <img height="150" src="<?php echo get_item_thumbnail_default($object->ID); ?>"><br><br>
+                                <?php } ?>
+                            </div>     
+                            <div id="image_side_edit_object">
+                            </div>
+                            <input type="file" size="50" id="object_thumbnail_edit" name="object_thumbnail" class="btn btn-default btn-sm auto-save">  
+                </div>
+                <hr>
+                 <h3> 
+                    <?php echo ($view_helper->terms_fixed['attachments']) ? $view_helper->terms_fixed['attachments']->name :  _e('Attachments','tainacan') ?> 
+                 </h3>
+                 <div >
+                     <div id="dropzone_edit"  
+                            <?php do_action('item_attachments_attributes') ?> <?php if($socialdb_collection_attachment=='no') echo 'style="display:none"' ?> 
+                             class="dropzone"
+                             style="margin-bottom: 15px;min-height: 150px;padding-top: 0px;">
+                                <div class="dz-message" data-dz-message>
+                                 <span style="text-align: center;vertical-align: middle;">
+                                     <h3>
+                                         <span class="glyphicon glyphicon-upload"></span>
+                                         <b><?php _e('Drop Files','tainacan')  ?></b> 
+                                             <?php _e('to upload','tainacan')  ?>
+                                     </h3>
+                                     <h4>(<?php _e('or click','tainacan')  ?>)</h4>
+                                 </span>
+                             </div>
+                    </div>
+                 </div>
+            </div>
+        <?php endif; ?>
 <!----------------- CONTAINER MAIOR - NOME,CONTEUDO E ANEXOS  ----------------->
         <div style="<?php echo ($view_helper->hide_main_container)?'display:none;':'' ?>background: white;border: 3px solid #E8E8E8;margin-left: 15px;width: 74%;" 
              class="col-md-9">

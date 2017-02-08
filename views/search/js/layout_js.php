@@ -152,7 +152,7 @@
         // icons: false
     });
 
-    $('#layout-accordion .ui-accordion-content').show();
+    $('#layout-accordion .ui-accordion-content').first().show();
 
     function appendColorScheme(color1, color2) {
         var c1 = color1 || $("#primary-custom-color").val();

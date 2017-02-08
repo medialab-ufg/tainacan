@@ -19,10 +19,12 @@ $view_helper = new ViewHelper();
         $cores = ['blue','brown','green','violet','grey'];
         $collection_ordenation = $ordenation['collection_metas']['socialdb_collection_ordenation_form'];
         $submission_visualization = $ordenation['collection_metas']['socialdb_collection_submission_visualization'];
+        $item_visualization = (isset($ordenation['collection_metas']['socialdb_collection_item_visualization'])) ? $ordenation['collection_metas']['socialdb_collection_item_visualization']:'';
         $visualization_page_category = $ordenation['collection_metas']['socialdb_collection_visualization_page_category'];
         ?>
-        <div id="layout-accordion" style="margin-top: 20px; padding-right: 0; font-size: 12px;">
-            <h3 class="title"> <?php _e('Colors','tainacan'); ?> </h3>
+        <form method="POST" name="form_ordenation_search" style="padding-left: 15px;margin-top: 10px" id="form_ordenation_search">
+        <div id="layout-accordion" class="menu_left" style="margin-top: 20px; padding-right: 0; font-size: 12px;border: none;">
+            <h3 class="title-pipe">&nbsp;<?php _e('Collection style','tainacan'); ?> </h3>
             <div class="l-a-container">
                 <?php $i=0; foreach(ViewHelper::$default_color_schemes as $color_scheme) { ?>
                     <div class="<?php echo $cores[$i] ?> color-container project-color-schemes" onclick="colorize('<?php echo $cores[$i] ?>')">
@@ -41,24 +43,19 @@ $view_helper = new ViewHelper();
                     <input type="button" value="<?php _e('Add','tainacan'); ?>" class="btn btn-primary" onclick="appendColorScheme();">
                 </div>
 
-                <form name="custom_colors" class="custom_color_schemes" style="display: none">
-                    <label class="title-pipe" for="custom_options"><?php _e('Your colors', 'tainacan'); ?></label>
-                    <div class="here"></div>
+                <div class="custom_color_schemes" style="display: none">
+                    <label for="custom_options"><?php _e('Your colors', 'tainacan'); ?></label>
+                    <div class="custom_color_schemes here"></div>
                     <div class="defaults">
                         <input type="hidden" class="default-c1" name="default_color[primary]" value="">
                         <input type="hidden" class="default-c2" name="default_color[secondary]" value="">
                     </div>
                     <input type="hidden" name="collection_id" value="<?php echo $collection_id; ?>">
                     <input type="hidden" name="operation" value="update_color_schemes">
-                    <button type="submit" class="btn btn-primary btn-sm"><?php _e('Save', 'tainacan'); ?></button>
-                </form>
-
-            </div>
-            <h3 class="title"> <?php _e('Layout','tainacan'); ?></h3>
-            <div style="padding-left: 15px">
-                <form method="POST" name="form_ordenation_search" id="form_ordenation_search">
-                    <input type="hidden" name="property_category_id"  value="<?php echo $category_root_id; ?>">
-                    <input type="hidden" name="selected_view_mode" class="selected_view_mode" value="<?php echo $selected_view_mode ?>"/>
+                    <!--button type="submit" class="btn btn-primary btn-sm"><?php _e('Save', 'tainacan'); ?></button-->
+                </div>
+                <input type="hidden" name="property_category_id"  value="<?php echo $category_root_id; ?>">
+                <input type="hidden" name="selected_view_mode" class="selected_view_mode" value="<?php echo $selected_view_mode ?>"/>
 
                     <!------------------- Modo de exibição dos itens -------------------------->
                     <div class="form-group">
@@ -130,23 +127,6 @@ $view_helper = new ViewHelper();
                             </option>
                         </select>
                     </div>
-
-                    <!------------------- Forma de visualizacao formulario de submissao -------------------------->
-                    <div class="form-group">
-                        <label for="collection_ordenation_form"><?php _e('Select the form layout to create a new text item','tainacan'); ?></label>
-                        <select name="socialdb_collection_submission_visualization" id="socialdb_collection_submission_visualization" onchange="showHabilitateMedia(this)" class="form-control">
-                            <option value="one" <?php ( $submission_visualization == 'one' ) ? "selected = 'selected'" : ''; ?> >
-                                <?php _e('1 column','tainacan'); ?>
-                            </option>
-                            <option value="two" <?php if ($submission_visualization == 'two'|| empty($submission_visualization)) { echo 'selected = "selected"'; } ?> >
-                                <?php _e('2 columns','tainacan'); ?>
-                            </option>
-                        </select>
-                        <div id="habilitateMedia" style="display:none;">
-                            <input type="checkbox" name="habilitateMedia" value="true">
-                            <?php _e('Habilitate media','tainacan') ?>
-                        </div>
-                    </div>
                     
                     <!------------------- Forma de visualizacao formulario da pagina de categoria -------------------------->
                     <div class="form-group">
@@ -160,13 +140,63 @@ $view_helper = new ViewHelper();
                             </option>
                         </select>
                     </div>
-                    <input type="hidden" id="collection_id_order_form" name="collection_id" value="<?php echo $collection_id; ?>">
-                    <input type="hidden" id="operation" name="operation" value="update_ordenation">
-                    <button type="submit" id="submit_ordenation_form" class="btn btn-primary btn-lg"><?php _e('Save','tainacan') ?></button>
-                </form>
             </div>
+            <h3 class="title-pipe">&nbsp;<?php _e('Item view style','tainacan'); ?> </h3>
+            <div style="padding-left: 15px">
+                <!------------------- Forma de visualizacao do item -------------------------->
+                <div class="form-group">
+                    <label for="collection_ordenation_form"><?php _e('Select the layout for the item visualization','tainacan'); ?></label>
+                    <input type="radio" 
+                           <?php echo ( $item_visualization == 'two' || empty($item_visualization)) ? "checked = 'checked'" : ''; ?>
+                           name="socialdb_collection_item_visualization" 
+                           value="two">&nbsp;<?php _e('Focus in media','tainacan'); ?><br>
+                    <input type="radio" 
+                           name="socialdb_collection_item_visualization" 
+                           onchange="showHabilitateItemMedia(this)" 
+                           <?php echo ( $item_visualization == 'one' ) ? "checked = 'checked'" : ''; ?>
+                           value="one">&nbsp;<?php _e('Focus in metadata','tainacan'); ?><br>
+                    <div id="habilitateItemMedia" style="display:none;">
+                        <input type="checkbox" name="habilitateItemMedia" value="true">
+                        <?php _e('Habilitate visualization of image and attachments','tainacan') ?>
+                    </div>
+                </div>
+            </div>
+             <h3 class="title-pipe" >&nbsp;<?php _e('Item insert style','tainacan'); ?> </h3>
+              <div style="padding-left: 15px">
+                <!------------------- Forma de visualizacao formulario de submissao -------------------------->
+                <div class="form-group">
+                    <label for="collection_ordenation_form"><?php _e('Select the form layout to create a new text item','tainacan'); ?></label>
+                    <input type="radio" 
+                           <?php echo ( $submission_visualization == 'two' || empty($submission_visualization) ) ? "checked = 'checked'" : ''; ?>
+                           name="socialdb_collection_submission_visualization" 
+                           value="two">&nbsp;<?php _e('Focus in media','tainacan'); ?><br>
+                    <input type="radio" 
+                           name="socialdb_collection_submission_visualization" 
+                           onchange="showHabilitateMedia(this)" 
+                           <?php echo ( $submission_visualization == 'one' ) ? "checked = 'checked'" : ''; ?>
+                           value="one">&nbsp;<?php _e('Focus in metadata','tainacan'); ?><br>
+                    
+                            <!--select name="socialdb_collection_submission_visualization" id="socialdb_collection_submission_visualization" onchange="showHabilitateMedia(this)" class="form-control">
+                                <option value="one" <?php ( $submission_visualization == 'one' ) ? "selected = 'selected'" : ''; ?> >
+                                    <?php _e('1 column','tainacan'); ?>
+                                </option>
+                                <option value="two" <?php if ($submission_visualization == 'two'|| empty($submission_visualization)) { echo 'selected = "selected"'; } ?> >
+                                    <?php _e('2 columns','tainacan'); ?>
+                                </option>
+                            </select-->
+                    <div id="habilitateMedia" style="display:none;">
+                        <input type="checkbox" name="habilitateMedia" value="true">
+                        <?php _e('Habilitate visualization of image and attachments','tainacan') ?>
+                    </div>
+                </div>
+              </div>
         </div>
-
+            <input type="hidden" id="collection_id_order_form" name="collection_id" value="<?php echo $collection_id; ?>">
+            <input type="hidden" id="operation" name="operation" value="update_ordenation">
+            
+            <button type="submit" style="margin-top:15px;"id="submit_ordenation_form" class="btn btn-success pull-right"><?php _e('Save','tainacan') ?></button>
+            <button type="button" style="margin-top:15px;margin-right: 5px;" onclick="history.back()" class="btn btn-default pull-right"><?php _e('Cancel','tainacan') ?></button>
+        </form>
     </div>
 
     <div class="col-md-9 preset-filters no-padding" style="background: #414042; padding-bottom: 20px;">

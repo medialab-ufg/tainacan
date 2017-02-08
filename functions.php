@@ -2889,6 +2889,9 @@ function display_img_items_collection($collection_id, $max_itens, $is_popular = 
  * */
 
 function set_navbar_bg_color($color, $special_page) {
+    if(get_query_var('log-in')){
+           return "style='background-color: balck'";
+    }
     return ( is_front_page() || is_page($special_page) ) ? '' : "style='background-color: ${color}'";
 }
 

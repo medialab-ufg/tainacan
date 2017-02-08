@@ -1,5 +1,5 @@
 <?php
-include_once ('js/login_js.php');
+include_once ('js/login_header_js.php');
 require_once(dirname(__FILE__) . '../../../models/social_network/Facebook/autoload.php');
 
 if(!isset($_SESSION)){
@@ -73,7 +73,7 @@ if (!empty($app['app_id']) && !empty($app['app_secret'])) {
             </div>
         <?php endif; ?>
 
-        <form action="" id="LoginFormPage" name="LoginForm" class="form-signin">
+        <form action="" id="LoginForm" name="LoginForm" class="form-signin">
             <input type="hidden" id="operation_log" name="operation" value="login_regular">
             <input type="hidden" id="collection_id_login" name="collection_id" value="<?php echo $collection_id; ?>">
 
@@ -83,17 +83,17 @@ if (!empty($app['app_id']) && !empty($app['app_secret'])) {
             <label for="inputPassword" class="sr-only-no"><?php _e("Password",'tainacan'); ?></label>
             <input type="password" id="inputPassword" name="password" class="form-control" placeholder="<?php _e('Password','tainacan') ?>" required="">
 
-            <br><label><a href="#" id="open_myModalForgotPassword"><?php _e("Forgot password?",'tainacan'); ?></a></label>
+            <br><label><a style="cursor: pointer;" id="open_myModalForgotPasswordHeader"><?php _e("Forgot password?",'tainacan'); ?></a></label>
             <button class="btn btn-lg btn-primary pull-right send-login" type="submit"><?php _e("Login",'tainacan'); ?></button>
         </form>
 
     </div>
 </div>
 
-<div class="modal fade" id="myModalForgotPassword" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="myModalForgotPasswordHeader" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form  id="formUserForgotPassword" name="formUserForgotPassword" >  
+            <form  id="formUserForgotPasswordHeader" name="formUserForgotPassword" >  
                 <input type="hidden" name="operation" value="forgot_password">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>

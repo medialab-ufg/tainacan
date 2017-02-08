@@ -1887,6 +1887,7 @@ function showLoginScreen(src) {
         data: {operation: 'show_login_screen', collection_id: $("#collection_id").val()}
     }).done(function (result) {
         resetHomeStyleSettings();
+        $('.header-navbar').css('background-color','black');
         $('#main_part').hide();
         $('#loader_collections').hide();
         $('#collection_post').hide();
