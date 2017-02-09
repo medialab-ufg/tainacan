@@ -2341,6 +2341,14 @@ function restoreHeader() {
     }
 }
 
+function setAdminHeader(root_id, col_id) {
+    if(root_id == col_id) {
+        $('#main_part_collection').show();
+        $('.collection_header').hide();
+        $('#collection_post').css('margin-top', '0');
+    }
+}
+
 function resetHomeStyleSettings() {
     $('ul.menu-ibram').hide();
     $('.ibram-home-container').hide();

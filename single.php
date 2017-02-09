@@ -49,7 +49,7 @@ $search_color = ($_color_scheme) ? $_color_scheme["primary"] : "#79a6ce";
         </div>
     </div>
 
-<?php while (have_posts()) : the_post(); 
+<?php while (have_posts()) : the_post();
     if(get_post(get_the_ID())->post_status != 'publish'){
         wp_redirect( site_url() ); 
     }
@@ -68,6 +68,7 @@ $search_color = ($_color_scheme) ? $_color_scheme["primary"] : "#79a6ce";
     <input type="hidden" id="collection_id" name="collection_id" value="<?php echo get_the_ID() ?>">
     <input type="hidden" id="mode" name="mode" value="<?php echo $mode ?>">
     <input type="hidden" id="site_url" value="<?php echo site_url(); ?>" >
+    <input type="hidden" id="collection_root_id" value="<?php echo get_option('collection_root_id'); ?>">
     <input type="hidden" id="socialdb_permalink_collection" name="socialdb_permalink_collection" value="<?php echo get_the_permalink(get_the_ID()); ?>" />
     <input type="hidden" id="slug_collection" name="slug_collection" value="<?php echo get_post(get_the_ID())->post_name; ?>"> <!-- utilizado na busca -->
     <input type="hidden" id="search_collection_field" name="search_collection_field" value="<?php

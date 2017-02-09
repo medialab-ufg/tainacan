@@ -31,6 +31,13 @@
         }
     });
 
+    cl(  );
+    cl(  );
+
+    var _col_id_ = $("#collection_id").val();
+    var _root_repo_id_ = $("#collection_root_id").val();
+    setAdminHeader(_root_repo_id_, _col_id_);
+
     var curr_col_title = $('.titulo-colecao h3 a').text() || $('.titulo-colecao h3').text();
     var collection_data = { name: curr_col_title, url: $('.titulo-colecao h3 a').attr('href') };
     $("#tainacan-breadcrumbs span.collection-title").text(collection_data.name);
@@ -76,7 +83,6 @@
         */
 
     });
-
 
     function clear_list() {
         $("#value_search").val('');
