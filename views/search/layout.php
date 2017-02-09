@@ -20,6 +20,8 @@ $view_helper = new ViewHelper();
         $collection_ordenation = $ordenation['collection_metas']['socialdb_collection_ordenation_form'];
         $submission_visualization = $ordenation['collection_metas']['socialdb_collection_submission_visualization'];
         $item_visualization = (isset($ordenation['collection_metas']['socialdb_collection_item_visualization'])) ? $ordenation['collection_metas']['socialdb_collection_item_visualization']:'';
+        $habilitate_media = (isset($ordenation['collection_metas']['socialdb_collection_habilitate_media'])) ? $ordenation['collection_metas']['socialdb_collection_habilitate_media']:'';
+        $habilitate_item_media = (isset($ordenation['collection_metas']['socialdb_collection_item_habilitate_media'])) ? $ordenation['collection_metas']['socialdb_collection_item_habilitate_media']:'';
         $visualization_page_category = $ordenation['collection_metas']['socialdb_collection_visualization_page_category'];
         ?>
         <form method="POST" name="form_ordenation_search" style="padding-left: 15px;margin-top: 10px" id="form_ordenation_search">
@@ -149,14 +151,15 @@ $view_helper = new ViewHelper();
                     <input type="radio" 
                            <?php echo ( $item_visualization == 'two' || empty($item_visualization)) ? "checked = 'checked'" : ''; ?>
                            name="socialdb_collection_item_visualization" 
+                            onchange="showHabilitateItemMedia(this,false)" 
                            value="two">&nbsp;<?php _e('Focus in media','tainacan'); ?><br>
                     <input type="radio" 
                            name="socialdb_collection_item_visualization" 
-                           onchange="showHabilitateItemMedia(this)" 
+                           onchange="showHabilitateItemMedia(this,true)" 
                            <?php echo ( $item_visualization == 'one' ) ? "checked = 'checked'" : ''; ?>
                            value="one">&nbsp;<?php _e('Focus in metadata','tainacan'); ?><br>
                     <div id="habilitateItemMedia" style="display:none;">
-                        <input type="checkbox" name="habilitateItemMedia" value="true">
+                        &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="habilitateItemMedia" value="true" <?php echo ( $habilitate_item_media == 'true' ) ? "checked = 'checked'" : ''; ?>>
                         <?php _e('Habilitate visualization of image and attachments','tainacan') ?>
                     </div>
                 </div>
@@ -169,10 +172,11 @@ $view_helper = new ViewHelper();
                     <input type="radio" 
                            <?php echo ( $submission_visualization == 'two' || empty($submission_visualization) ) ? "checked = 'checked'" : ''; ?>
                            name="socialdb_collection_submission_visualization" 
+                           onchange="showHabilitateMedia(this,false)" 
                            value="two">&nbsp;<?php _e('Focus in media','tainacan'); ?><br>
                     <input type="radio" 
                            name="socialdb_collection_submission_visualization" 
-                           onchange="showHabilitateMedia(this)" 
+                           onchange="showHabilitateMedia(this,true)" 
                            <?php echo ( $submission_visualization == 'one' ) ? "checked = 'checked'" : ''; ?>
                            value="one">&nbsp;<?php _e('Focus in metadata','tainacan'); ?><br>
                     
@@ -185,7 +189,7 @@ $view_helper = new ViewHelper();
                                 </option>
                             </select-->
                     <div id="habilitateMedia" style="display:none;">
-                        <input type="checkbox" name="habilitateMedia" value="true">
+                        &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="habilitateMedia" value="true"    <?php echo ( $habilitate_media == 'true' ) ? "checked = 'checked'" : ''; ?>>
                         <?php _e('Habilitate visualization of image and attachments','tainacan') ?>
                     </div>
                 </div>
@@ -194,8 +198,8 @@ $view_helper = new ViewHelper();
             <input type="hidden" id="collection_id_order_form" name="collection_id" value="<?php echo $collection_id; ?>">
             <input type="hidden" id="operation" name="operation" value="update_ordenation">
             
-            <button type="submit" style="margin-top:15px;"id="submit_ordenation_form" class="btn btn-success pull-right"><?php _e('Save','tainacan') ?></button>
-            <button type="button" style="margin-top:15px;margin-right: 5px;" onclick="history.back()" class="btn btn-default pull-right"><?php _e('Cancel','tainacan') ?></button>
+            <button type="submit" style="margin-top:15px;margin-bottom: 15px;"id="submit_ordenation_form" class="btn btn-success pull-right"><?php _e('Save','tainacan') ?></button>
+            <button type="button" style="margin-top:15px;margin-right: 5px;margin-bottom: 15px;" onclick="history.back()" class="btn btn-default pull-right"><?php _e('Cancel','tainacan') ?></button>
         </form>
     </div>
 

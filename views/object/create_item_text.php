@@ -31,7 +31,7 @@
     <input type="hidden" id="object_from" name="object_from" value="internal">
     <input type="hidden" id="object_type" name="object_type" value="text">
     <div class="row" style="background-color: #f1f2f2">
-        <div style="<?php echo ($view_helper->hide_main_container)?'margin-left:1%;padding-left:15px;':'' ?>"
+        <div style="<?php echo ($view_helper->hide_main_container)?'margin-left:1%;padding-left:15px;min-height:500px;padding-top:80px;':'' ?>"
             class="<?php echo ($view_helper->hide_main_container)?'col-md-12':'col-md-2' ?> menu_left_loader">
              <center>
                     <img src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>">
@@ -322,7 +322,11 @@
         <?php if($view_helper->mediaHabilitate): ?>
             <!-- Thumbnail e anexos -->
             <div class="col-md-3" id="mediaHabilitateContainer" style="display: none; background: white;border: 3px solid #E8E8E8;font: 11px Arial;">
-                <div id="thumnbail_place" >
+                <h4> 
+                   <?php echo ($view_helper->terms_fixed['thumbnail']) ? $view_helper->terms_fixed['thumbnail']->name :  _e('Thumbnail','tainacan') ?>
+               </h4>
+                <hr style="margin-top:-5px;">
+                <div id="thumnbail_place"  style="margin-top:15px;">
                         <input type="hidden" name="thumbnail_url" id="thumbnail_url" value="">
                         <div id="image_side_create_object">
                         </div>
@@ -331,25 +335,27 @@
                                name="object_thumbnail"
                                class="form-control auto-save">  
                 </div>
-                <hr>
-                 <h3> 
-                    <?php echo ($view_helper->terms_fixed['attachments']) ? $view_helper->terms_fixed['attachments']->name :  _e('Attachments','tainacan') ?> 
-                 </h23
+                <h4> 
+                   <?php echo ($view_helper->terms_fixed['attachments']) ? $view_helper->terms_fixed['attachments']->name :  _e('Attachments','tainacan') ?>
+               </h4>
+                <hr style="margin-top:-5px;">
                  <div >
+                     <center>
                      <div id="dropzone_new" <?php ($socialdb_collection_attachment=='no') ? print_r('style="display:none"') : '' ?> 
                          class="dropzone"
                          style="margin-bottom: 15px;min-height: 150px;padding-top: 0px;">
-                             <div class="dz-message" data-dz-message>
-                              <span style="text-align: center;vertical-align: middle;">
-                                  <h3>
-                                      <span class="glyphicon glyphicon-upload"></span>
-                                      <b><?php _e('Drop Files','tainacan')  ?></b> 
-                                          <?php _e('to upload','tainacan')  ?>
-                                  </h3>
-                                  <h4>(<?php _e('or click','tainacan')  ?>)</h4>
-                              </span>
-                          </div>
+                                <div class="dz-message" data-dz-message>
+                                    <span style="text-align: center;vertical-align: middle;">
+                                        <h3>
+                                            <span class="glyphicon glyphicon-upload"></span>
+                                            <b><?php _e('Drop Files','tainacan')  ?></b> 
+                                                <?php _e('to upload','tainacan')  ?>
+                                        </h3>
+                                        <h4>(<?php _e('or click','tainacan')  ?>)</h4>
+                                    </span>
+                                </div>
                      </div>
+                     </center>   
                  </div>
             </div>
         <?php endif; ?>

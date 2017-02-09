@@ -141,7 +141,8 @@
     $( function() {
         $( "#sortable" ).sortable();
         $( "#sortable" ).disableSelection();
-        showHabilitateMedia('#socialdb_collection_submission_visualization');
+        showHabilitateMedia('input[name="socialdb_collection_submission_visualization"]:checked');
+        showHabilitateItemMedia('input[name="socialdb_collection_item_visualization"]:checked');
     } );
 
     $("#layout-accordion").accordion({
@@ -521,12 +522,22 @@
     /**
     * 
     */
-    function showHabilitateMedia(seletor){
+    function showHabilitateMedia(seletor,value){
         console.log($(seletor).val());
-        if($(seletor).val()=='one'){
-            //$('#habilitateMedia').show();
+        if($(seletor).is(':checked') && value){
+            $('#habilitateMedia').show();
         }else{
-           // $('#habilitateMedia').hide();
+           $('#habilitateMedia').hide();
+        }
+    }
+    /**
+    * 
+    */
+    function showHabilitateItemMedia(seletor,value){
+        if($(seletor).is(':checked') && value){
+            $('#habilitateItemMedia').show();
+        }else{
+           $('#habilitateItemMedia').hide();
         }
     }
 </script>

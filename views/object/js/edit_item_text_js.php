@@ -2,7 +2,7 @@
     $(function () {
         // #1 - breadcrumbs para localizacao da pagina
         $("#tainacan-breadcrumbs").show();
-        $("#tainacan-breadcrumbs .current-config").text('<?php _e('Edit item','tainacan') ?>');
+        $("#tainacan-breadcrumbs .current-config").text('> <?php  echo ($is_beta_text) ?  __('Continue inserting','tainacan')  : __('Edit item','tainacan') ?>');
         //#2  -  ativo os tootips
          $('[data-toggle="tooltip"]').tooltip();
         changeContainerBgColor();
@@ -62,6 +62,9 @@
                         header: "h2",
                         heightStyle: "content"
                     });
+                    if($('#mediaHabilitateContainer').length>0){
+                        $('#mediaHabilitateContainer').show();
+                    }
                     // esconde o carregamento do menu lateral
                     $('.menu_left_loader').hide();
                     $('.menu_left').show();

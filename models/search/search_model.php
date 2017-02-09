@@ -398,10 +398,17 @@ public function add($data) {
         } else {
             update_post_meta($post_id, 'socialdb_collection_use_prox_mode', 'false');
         }
+        //habilitate
         if(isset($data['habilitateMedia']) && $data['habilitateMedia'] == 'true'){
              update_post_meta($post_id, 'socialdb_collection_habilitate_media', 'true');
         }else{
              update_post_meta($post_id, 'socialdb_collection_habilitate_media', 'false');
+        }
+        //habilitateItem
+        if(isset($data['habilitateItemMedia']) && $data['habilitateItemMedia'] == 'true'){
+             update_post_meta($post_id, 'socialdb_collection_item_habilitate_media', 'true');
+        }else{
+             update_post_meta($post_id, 'socialdb_collection_item_habilitate_media', 'false');
         }
         
 

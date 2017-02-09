@@ -18,7 +18,7 @@
 #tab-content-metadata .multiple-items-accordion .form-group{
     margin: 0px;
     padding-left: 25px;
-    border: 1px solid #d3d3d3;
+    border-bottom: 1px solid #d3d3d3;
 }
 #tab-content-metadata .multiple-items-accordion .form-group:first-child{
     margin-top: 15px;

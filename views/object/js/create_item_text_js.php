@@ -3,7 +3,7 @@
 $(function(){
     // #1 - breadcrumbs para localizacao da pagina
     $("#tainacan-breadcrumbs").show();
-    $("#tainacan-breadcrumbs .current-config").text('<?php _e('Create new item - Write text','tainacan') ?>');
+    $("#tainacan-breadcrumbs .current-config").text('> <?php _e('Create new item - Write text','tainacan') ?>');
     //#3  -  ativo os tootips
      $('[data-toggle="tooltip"]').tooltip();
     //#5 - funcao que busca os rankings de um item

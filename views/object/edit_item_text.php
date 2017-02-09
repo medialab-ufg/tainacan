@@ -41,7 +41,7 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
     <input type="hidden" name="post_status" value="publish">
     <?php endif; ?>
     <input type="hidden" id="object_id_edit" name="object_id" value="<?= $object->ID ?>">
-    <div style="<?php echo ($view_helper->hide_main_container)?'margin-left:1%;padding-left:15px;':'' ?>"
+    <div style="<?php echo ($view_helper->hide_main_container)?'margin-left:1%;padding-left:15px;min-height:500px;padding-top:80px;':'' ?>"
             class="<?php echo ($view_helper->hide_main_container)?'col-md-12':'col-md-2' ?> menu_left_loader">
              <center>
                     <img src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>">
@@ -426,7 +426,12 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
 <?php if($view_helper->mediaHabilitate): ?>
             <!-- Thumbnail e anexos -->
             <div class="col-md-3" id="mediaHabilitateContainer" style="display: none; background: white;border: 3px solid #E8E8E8;font: 11px Arial;">
+                <h4> 
+                   <?php echo ($view_helper->terms_fixed['thumbnail']) ? $view_helper->terms_fixed['thumbnail']->name :  _e('Thumbnail','tainacan') ?>
+               </h4>
+                <hr style="margin-top:-5px;">
                 <div id="thumnbail_place" >
+                    <center>
                          <div id="existent_thumbnail">
                                 <?php
                                 if (get_the_post_thumbnail($object->ID, 'thumbnail')) {
@@ -446,27 +451,30 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                             <div id="image_side_edit_object">
                             </div>
                             <input type="file" size="50" id="object_thumbnail_edit" name="object_thumbnail" class="btn btn-default btn-sm auto-save">  
+                    </center>        
                 </div>
-                <hr>
-                 <h3> 
-                    <?php echo ($view_helper->terms_fixed['attachments']) ? $view_helper->terms_fixed['attachments']->name :  _e('Attachments','tainacan') ?> 
-                 </h3>
+                <h4> 
+                   <?php echo ($view_helper->terms_fixed['attachments']) ? $view_helper->terms_fixed['attachments']->name :  _e('Attachments','tainacan') ?>
+               </h4>
+                <hr style="margin-top:-5px;">
                  <div >
+                      <center>
                      <div id="dropzone_edit"  
                             <?php do_action('item_attachments_attributes') ?> <?php if($socialdb_collection_attachment=='no') echo 'style="display:none"' ?> 
                              class="dropzone"
-                             style="margin-bottom: 15px;min-height: 150px;padding-top: 0px;">
+                             style="margin-bottom: 5px;min-height: 150px;padding-top: 0px;">
                                 <div class="dz-message" data-dz-message>
-                                 <span style="text-align: center;vertical-align: middle;">
-                                     <h3>
-                                         <span class="glyphicon glyphicon-upload"></span>
-                                         <b><?php _e('Drop Files','tainacan')  ?></b> 
-                                             <?php _e('to upload','tainacan')  ?>
-                                     </h3>
-                                     <h4>(<?php _e('or click','tainacan')  ?>)</h4>
-                                 </span>
-                             </div>
+                                    <span style="text-align: center;vertical-align: middle;">
+                                        <h3>
+                                            <span class="glyphicon glyphicon-upload"></span>
+                                            <b><?php _e('Drop Files','tainacan')  ?></b> 
+                                                <?php _e('to upload','tainacan')  ?>
+                                        </h3>
+                                        <h4>(<?php _e('or click','tainacan')  ?>)</h4>
+                                    </span>
+                                </div>
                     </div>
+                      </center>      
                  </div>
             </div>
         <?php endif; ?>
