@@ -30,6 +30,10 @@ $references = [
     'properties_terms_treecheckbox' => &$properties_terms_treecheckbox,   
     'properties_to_avoid' => &$properties_to_avoid,   
 ];
+if($is_view_mode){
+    $references['is_view_mode'] = true;
+}
+
 $properties_concatenated = [];
 if (isset($property_object)):
     $ids = [];
@@ -168,7 +172,23 @@ foreach($original_properties as $property):
                 ?>
             </h2>
             <div>
-            <?php 
+                  <?php if($is_view_mode): ?>
+                     <div id="labels_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">
+                        <?php if (!empty($property['metas']['objects']) && !empty($property['metas']['value'])) { ?>
+                            <?php foreach ($property['metas']['objects'] as $object) { // percoro todos os objetos  ?>
+                                <?php
+                                if (isset($property['metas']['value']) && !empty($property['metas']['value']) && in_array($object->ID, $property['metas']['value'])): // verifico se ele esta na lista de objetos da colecao
+                                    echo '<b><a  href="' . get_the_permalink($property['metas']['collection_data'][0]->ID) . '?item=' . $object->post_name . '" >' . $object->post_title . '</a></b><br>';
+                                endif;
+                                ?>
+                            <?php } ?>
+                            <?php
+                        }else {
+                            echo '<p>' . __('empty field', 'tainacan') . '</p>';
+                        }
+                        ?>
+                    </div>
+                <?php else: 
                 // botao que leva a colecao relacionada
                     if (isset($property['metas']['collection_data'][0]->post_title)):  ?>
                         <a style="cursor: pointer;color: white;"
@@ -203,43 +223,44 @@ foreach($original_properties as $property):
                             </form>
                         </div> 
                         <br><br>
-            <?php 
-             endif; 
-            ?>
-            <input type="hidden" 
-                        id="cardinality_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"  
-                        value="<?php echo $view_helper->render_cardinality_property($property);   ?>">            
-            <input type="text" 
-                   onkeyup="autocomplete_object_property_edit('<?php echo $property['id']; ?>', '<?php echo $object_id; ?>');" 
-                   id="autocomplete_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>" 
-                   placeholder="<?php _e('Type the three first letters of the object of this collection ', 'tainacan'); ?>"  
-                   class="chosen-selected form-control"  />    
-            
-            <select onclick="clear_select_object_property(this,'<?php echo $property['id']; ?>', '<?php echo $object_id; ?>');" 
-                    id="property_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>_edit" 
-                    multiple class="chosen-selected2 form-control" 
-                    style="height: auto;" 
-                    name="socialdb_property_<?php echo $property['id']; ?>[]"
                     <?php 
-                        if ($property['metas']['socialdb_property_required'] == 'true'): 
-                            echo 'required="required"';
-                        endif;
-                    ?> >
-                    <?php 
-                        if (!empty($property['metas']['objects'])) { ?>     
-                            <?php foreach ($property['metas']['objects'] as $object) { ?>
-                                <?php if (isset($property['metas']['value']) && !empty($property['metas']['value']) && in_array($object->ID, $property['metas']['value'])): // verifico se ele esta na lista de objetos da colecao   ?>    
-                                     <option selected='selected' value="<?php echo $object->ID ?>"><?php echo $object->post_title ?></span>
-                            <?php endif; ?>
-                        <?php } ?> 
-                    <?php 
-                        }else { 
-                    ?>   
-                        <option value=""><?php _e('No objects added in this collection', 'tainacan'); ?></option>
-                    <?php 
-                        } 
-                    ?>       
-            </select>
+                     endif; 
+                    ?>
+                    <input type="hidden" 
+                                id="cardinality_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"  
+                                value="<?php echo $view_helper->render_cardinality_property($property);   ?>">            
+                    <input type="text" 
+                           onkeyup="autocomplete_object_property_edit('<?php echo $property['id']; ?>', '<?php echo $object_id; ?>');" 
+                           id="autocomplete_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>" 
+                           placeholder="<?php _e('Type the three first letters of the object of this collection ', 'tainacan'); ?>"  
+                           class="chosen-selected form-control"  />    
+
+                    <select onclick="clear_select_object_property(this,'<?php echo $property['id']; ?>', '<?php echo $object_id; ?>');" 
+                            id="property_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>_edit" 
+                            multiple class="chosen-selected2 form-control" 
+                            style="height: auto;" 
+                            name="socialdb_property_<?php echo $property['id']; ?>[]"
+                            <?php 
+                                if ($property['metas']['socialdb_property_required'] == 'true'): 
+                                    echo 'required="required"';
+                                endif;
+                            ?> >
+                            <?php 
+                                if (!empty($property['metas']['objects'])) { ?>     
+                                    <?php foreach ($property['metas']['objects'] as $object) { ?>
+                                        <?php if (isset($property['metas']['value']) && !empty($property['metas']['value']) && in_array($object->ID, $property['metas']['value'])): // verifico se ele esta na lista de objetos da colecao   ?>    
+                                             <option selected='selected' value="<?php echo $object->ID ?>"><?php echo $object->post_title ?></span>
+                                    <?php endif; ?>
+                                <?php } ?> 
+                            <?php 
+                                }else { 
+                            ?>   
+                                <option value=""><?php _e('No objects added in this collection', 'tainacan'); ?></option>
+                            <?php 
+                                } 
+                            ?>       
+                    </select>
+                <?php endif ?>    
         </div>  
     </div>     
     <?php elseif($property['tipo'] == 'data'): 
@@ -292,86 +313,96 @@ foreach($original_properties as $property):
                 }
                 ?>
             </h2>
-            <?php $cardinality = $view_helper->render_cardinality_property($property);   ?>
-            <div >
-                 <?php for($i = 0; $i<$cardinality;$i++):   ?>
-                    <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
-                         style="padding-bottom: 10px;<?php echo ($i===0||(is_array($property['metas']['value'])&&$i<count($property['metas']['value']))) ? 'display:block': 'display:none'; ?>">
-                    <?php if ($property['type'] == 'text') { ?>     
-                            <input type="text" 
-                                   id="form_edit_autocomplete_value_<?php echo $property['id']; ?>" 
-                                   class="form-control form_autocomplete_value_<?php echo $property['id']; ?>" 
-                                   value="<?php if ($property['metas']['value']) echo (isset($property['metas']['value'][$i])?$property['metas']['value'][$i]:''); ?>"
-                                   name="socialdb_property_<?php echo $property['id']; ?>[]">
-                    <?php }elseif ($property['type'] == 'textarea') { ?>   
-                            <textarea class="form-control form_autocomplete_value_<?php echo $property['id']; ?>"
-                                      rows="10"
-                                      id="form_edit_autocomplete_value_<?php echo $property['id']; ?>" 
-                                      name="socialdb_property_<?php echo $property['id']; ?>[]" ><?php if ($property['metas']['value']) echo (isset($property['metas']['value'][$i])?$property['metas']['value'][$i]:''); ?></textarea>
-                    <?php }elseif ($property['type'] == 'numeric') { ?>   
-                            <input type="text" 
-                                   class="form-control form_autocomplete_value_<?php echo $property['id']; ?>"
-                                   onkeypress='return onlyNumbers(event)'
-                                   id="form_edit_autocomplete_value_<?php echo $property['id']; ?>" 
-                                   name="socialdb_property_<?php echo $property['id']; ?>[]" 
-                                   value="<?php if ($property['metas']['value']) echo $property['metas']['value'][0]; ?>">
-                               <?php }elseif ($property['type'] == 'autoincrement') { ?>   
-                             <input disabled="disabled"  type="number" class="form-control" name="hidded_<?php echo $property['id']; ?>" value="<?php if ($property['metas']['value']) echo (isset($property['metas']['value'][$i])?$property['metas']['value'][$i]:''); ?>">
-                    <?php }elseif ($property['type'] == 'radio' && $property['name'] == 'Status') { ?>   
-                                <br>
-                                <input   type="radio" <?php
-                                if ($property['metas']['value'] && $property['metas']['value'][0] == 'current'): echo 'checked="checked"';
-                                endif;
-                                ?>  name="socialdb_property_<?php echo $property['id']; ?>" value="current"><?php _e('Current', 'tainacan') ?><br>
-                                <input   type="radio" <?php
-                                if ($property['metas']['value'] && $property['metas']['value'][0] == 'intermediate'): echo 'checked="checked"';
-                                endif;
-                                ?>  name="socialdb_property_<?php echo $property['id']; ?>" value="intermediate"><?php _e('Intermediate', 'tainacan') ?><br>
-                                <input   type="radio" <?php
-                                if ($property['metas']['value'] && $property['metas']['value'][0] == 'permanently'): echo 'checked="checked"';
-                                endif;
-                                ?> name="socialdb_property_<?php echo $property['id']; ?>" value="permanently"><?php _e('Permanently', 'tainacan') ?><br>
-                        <?php } else if($property['type'] == 'date'&&!has_action('modificate_edit_item_properties_data')) { ?>
-                                 <script>
-                                    $(function() {
-                                        $( "#socialdb_property_<?php echo $property['id']; ?>_<?php echo $i; ?>" ).datepicker({
-                                            dateFormat: 'dd/mm/yy',
-                                            dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
-                                            dayNamesMin: ['D','S','T','Q','Q','S','S','D'],
-                                            dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],
-                                            monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
-                                            monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
-                                            nextText: 'Próximo',
-                                            prevText: 'Anterior',
-                                            showOn: "button",
-                                            buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif",
-                                            buttonImageOnly: true
+            <?php if($is_view_mode): ?>
+                <div>
+                    <?php if(isset($property['metas']['value'][0])): ?>
+                        <p><?php  echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $property['metas']['value'][0] . "'" . ',' . $property['id'] . ')">' . $property['metas']['value'][0] . '</a>';  ?></p>
+                    <?php else: ?>
+                        <p><?php  _e('empty field', 'tainacan') ?></p>
+                    <?php endif ?>
+                </div> 
+            <?php else: ?> 
+                <?php $cardinality = $view_helper->render_cardinality_property($property);   ?>
+                <div >
+                     <?php for($i = 0; $i<$cardinality;$i++):   ?>
+                        <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
+                             style="padding-bottom: 10px;<?php echo ($i===0||(is_array($property['metas']['value'])&&$i<count($property['metas']['value']))) ? 'display:block': 'display:none'; ?>">
+                        <?php if ($property['type'] == 'text') { ?>     
+                                <input type="text" 
+                                       id="form_edit_autocomplete_value_<?php echo $property['id']; ?>" 
+                                       class="form-control form_autocomplete_value_<?php echo $property['id']; ?>" 
+                                       value="<?php if ($property['metas']['value']) echo (isset($property['metas']['value'][$i])?$property['metas']['value'][$i]:''); ?>"
+                                       name="socialdb_property_<?php echo $property['id']; ?>[]">
+                        <?php }elseif ($property['type'] == 'textarea') { ?>   
+                                <textarea class="form-control form_autocomplete_value_<?php echo $property['id']; ?>"
+                                          rows="10"
+                                          id="form_edit_autocomplete_value_<?php echo $property['id']; ?>" 
+                                          name="socialdb_property_<?php echo $property['id']; ?>[]" ><?php if ($property['metas']['value']) echo (isset($property['metas']['value'][$i])?$property['metas']['value'][$i]:''); ?></textarea>
+                        <?php }elseif ($property['type'] == 'numeric') { ?>   
+                                <input type="text" 
+                                       class="form-control form_autocomplete_value_<?php echo $property['id']; ?>"
+                                       onkeypress='return onlyNumbers(event)'
+                                       id="form_edit_autocomplete_value_<?php echo $property['id']; ?>" 
+                                       name="socialdb_property_<?php echo $property['id']; ?>[]" 
+                                       value="<?php if ($property['metas']['value']) echo $property['metas']['value'][0]; ?>">
+                                   <?php }elseif ($property['type'] == 'autoincrement') { ?>   
+                                 <input disabled="disabled"  type="number" class="form-control" name="hidded_<?php echo $property['id']; ?>" value="<?php if ($property['metas']['value']) echo (isset($property['metas']['value'][$i])?$property['metas']['value'][$i]:''); ?>">
+                        <?php }elseif ($property['type'] == 'radio' && $property['name'] == 'Status') { ?>   
+                                    <br>
+                                    <input   type="radio" <?php
+                                    if ($property['metas']['value'] && $property['metas']['value'][0] == 'current'): echo 'checked="checked"';
+                                    endif;
+                                    ?>  name="socialdb_property_<?php echo $property['id']; ?>" value="current"><?php _e('Current', 'tainacan') ?><br>
+                                    <input   type="radio" <?php
+                                    if ($property['metas']['value'] && $property['metas']['value'][0] == 'intermediate'): echo 'checked="checked"';
+                                    endif;
+                                    ?>  name="socialdb_property_<?php echo $property['id']; ?>" value="intermediate"><?php _e('Intermediate', 'tainacan') ?><br>
+                                    <input   type="radio" <?php
+                                    if ($property['metas']['value'] && $property['metas']['value'][0] == 'permanently'): echo 'checked="checked"';
+                                    endif;
+                                    ?> name="socialdb_property_<?php echo $property['id']; ?>" value="permanently"><?php _e('Permanently', 'tainacan') ?><br>
+                            <?php } else if($property['type'] == 'date'&&!has_action('modificate_edit_item_properties_data')) { ?>
+                                     <script>
+                                        $(function() {
+                                            $( "#socialdb_property_<?php echo $property['id']; ?>_<?php echo $i; ?>" ).datepicker({
+                                                dateFormat: 'dd/mm/yy',
+                                                dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
+                                                dayNamesMin: ['D','S','T','Q','Q','S','S','D'],
+                                                dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],
+                                                monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+                                                monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+                                                nextText: 'Próximo',
+                                                prevText: 'Anterior',
+                                                showOn: "button",
+                                                buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif",
+                                                buttonImageOnly: true
+                                            });
                                         });
-                                    });
-                                </script>    
-                                <input 
-                                    style="margin-right: 5px;" 
-                                    size="13" 
-                                    class="input_date form_autocomplete_value_<?php echo $property['id']; ?>" 
-                                    value="<?php if ($property['metas']['value']) echo (isset($property['metas']['value'][$i])?$property['metas']['value'][$i]:''); ?>"
-                                    type="text" 
-                                    id="socialdb_property_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
-                                    name="socialdb_property_<?php echo $property['id']; ?>[]">   
-                        <?php }
-                         // gancho para tipos de metadados de dados diferentes
-                        else if(has_action('modificate_edit_item_properties_data')){
-                            do_action('modificate_edit_item_properties_data',$property);
-                            continue;
-                        }else{ ?>
-                            <input type="text"  
-                                   value="<?php if ($property['metas']['value']) echo (isset($property['metas']['value'][$i])?$property['metas']['value'][$i]:''); ?>" 
-                                   class="form-control form_autocomplete_value_<?php echo $property['id']; ?>" 
-                                   name="socialdb_property_<?php echo $property['id']; ?>[]" >
-                        <?php } ?> 
-                 <?php echo $view_helper->render_button_cardinality($property,$i) ?>    
-                     </div>         
-                <?php endfor;  ?>                    
-            </div>              
+                                    </script>    
+                                    <input 
+                                        style="margin-right: 5px;" 
+                                        size="13" 
+                                        class="input_date form_autocomplete_value_<?php echo $property['id']; ?>" 
+                                        value="<?php if ($property['metas']['value']) echo (isset($property['metas']['value'][$i])?$property['metas']['value'][$i]:''); ?>"
+                                        type="text" 
+                                        id="socialdb_property_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
+                                        name="socialdb_property_<?php echo $property['id']; ?>[]">   
+                            <?php }
+                             // gancho para tipos de metadados de dados diferentes
+                            else if(has_action('modificate_edit_item_properties_data')){
+                                do_action('modificate_edit_item_properties_data',$property);
+                                continue;
+                            }else{ ?>
+                                <input type="text"  
+                                       value="<?php if ($property['metas']['value']) echo (isset($property['metas']['value'][$i])?$property['metas']['value'][$i]:''); ?>" 
+                                       class="form-control form_autocomplete_value_<?php echo $property['id']; ?>" 
+                                       name="socialdb_property_<?php echo $property['id']; ?>[]" >
+                            <?php } ?> 
+                     <?php echo $view_helper->render_button_cardinality($property,$i) ?>    
+                         </div>         
+                    <?php endfor;  ?>                    
+                </div>   
+            <?php endif; ?>
         </div>     
     <?php
     elseif ($property['tipo'] == 'term'):
@@ -423,6 +454,34 @@ foreach($original_properties as $property):
                  ?>
             </h2>    
             <div class="form-group">
+               <?php
+                if($is_view_mode):
+                    switch ($property['type']){
+                        case 'radio';
+                            $properties_terms_radio[] = $property['id'];
+                            break;
+                        case 'tree';
+                            $properties_terms_tree[] = $property['id'];
+                            break;
+                        case 'checkbox';
+                            $properties_terms_checkbox[] = $property['id'];
+                            break;
+                        case 'multipleselect';
+                            $properties_terms_multipleselect[] = $property['id'];
+                            break;
+                        case 'selectbox';
+                            $properties_terms_selectbox[] = $property['id'];
+                            break;
+                        case 'tree_checkbox';
+                            $properties_terms_treecheckbox[] = $property['id'];
+                            break;
+                    }
+
+              ?>
+                  <div id='labels_<?php echo $property['id']; ?>_<?php echo $object_id; ?>'> <p><?php  _e('empty field', 'tainacan') ?></p></div>  
+              <?php
+                else:
+              ?>
                 <?php
                 if ($property['type'] == 'radio') {
                     $properties_terms_radio[] = $property['id'];
@@ -486,6 +545,7 @@ foreach($original_properties as $property):
                     <?php
                 }
                 ?> 
+            <?php endif; ?>        
         </div>   
     </div>       
     <?php elseif($property['tipo'] == 'compound'): ?>

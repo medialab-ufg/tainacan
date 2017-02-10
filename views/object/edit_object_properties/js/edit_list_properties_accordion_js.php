@@ -563,7 +563,7 @@
             $.ajax({
                 url: $('#src').val() + '/controllers/object/object_controller.php',
                 type: 'POST',
-                data: { operation: 'list_properties_categories_accordeon',properties_to_avoid:$('#properties_id').val(),categories: id, object_id:$('#object_id_edit').val()}
+                data: { <?php echo ($is_view_mode) ? 'is_view_mode:true,' : '' ?>operation: 'list_properties_categories_accordeon',properties_to_avoid:$('#properties_id').val(),categories: id, object_id:$('#object_id_edit').val()}
             }).done(function (result) {
                 console.log('568');
                 //hide_modal_main();
@@ -813,3 +813,7 @@
         }
     }
 </script>
+<?php 
+if($is_view_mode): 
+    include_once 'single_item_terms_properties_js.php';
+ endif; 

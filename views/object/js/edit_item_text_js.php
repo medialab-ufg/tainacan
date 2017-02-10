@@ -54,8 +54,6 @@
                     var properties_autocomplete = edit_get_val($("#edit_properties_autocomplete").val());
                     autocomplete_edit_item_property_data(properties_autocomplete); 
                     //ckeditor
-                    showCKEditor('objectedit_editor');
-                    set_content_valid();
                     $("#text_accordion").accordion({
                         active: false,
                         collapsible: true,
@@ -68,7 +66,11 @@
                     // esconde o carregamento do menu lateral
                     $('.menu_left_loader').hide();
                     $('.menu_left').show();
+                    <?php if(!isset($is_view_mode)): ?>
+                    showCKEditor('objectedit_editor');
                     createDraft();
+                    set_content_valid();
+                    <?php endif; ?>
                 });
             });
         });     
@@ -149,7 +151,7 @@
 
             e.preventDefault();
         });
-
+         <?php if(!isset($is_view_mode)): ?>
         var myDropzone = new Dropzone("div#dropzone_edit", {
             accept: function(file, done) {
                     if (file.type === ".exe") {
@@ -196,7 +198,7 @@
             addRemoveLinks: true
 
         });
-
+        <?php endif; ?>
 
         //upload file limit
         $("#object_file").on("change", function (e) {
@@ -304,7 +306,7 @@
         promisse = $.ajax({
             url: $('#src').val() + '/controllers/object/object_controller.php',
             type: 'POST',
-            data: {operation: 'list_properties_edit_accordeon', object_id: $("#object_id_edit").val(), collection_id: $("#collection_id").val(), categories: selectedCategories}
+            data: {<?php echo ($is_view_mode)?'is_view_mode:true,':'' ?>operation: 'list_properties_edit_accordeon', object_id: $("#object_id_edit").val(), collection_id: $("#collection_id").val(), categories: selectedCategories}
         });
         promisse.done(function (result) {
             // $('html, body').animate({
@@ -320,7 +322,7 @@
         promisse = $.ajax({
             url: $('#src').val() + '/controllers/object/object_controller.php',
             type: 'POST',
-            data: {operation: 'show_collection_licenses', object_id: $("#object_id_edit").val(), collection_id: $("#collection_id").val()}
+            data: {<?php echo ($is_view_mode)?'is_view_mode:true,':'' ?>operation: 'show_collection_licenses', object_id: $("#object_id_edit").val(), collection_id: $("#collection_id").val()}
         });
         promisse.done(function (result) {
             // $('html, body').animate({
@@ -340,6 +342,9 @@
         $("#container_three_columns").removeClass('white-background');
         $('#menu_object').show();
         //remove o checkout in
+        if(!id){
+            id = '';
+        }
         $.ajax({
             url: $('#src').val() + '/controllers/object/object_controller.php',
             type: 'POST',
@@ -406,10 +411,10 @@
 //funcoes que mostram a visualizacao do item
     function edit_show_other_type_field(field) {
         if ($(field).val() === 'other') {
-            $('#object_type_other').attr('required', 'required');
+            //$('#object_type_other').attr('required', 'required');
             $('#object_type_other').show('slow');
         } else {
-            $('#object_type_other').removeAttr("required");
+           // $('#object_type_other').removeAttr("required");
             $('#object_type_other').hide('slow');
         }
         if ($(field).val() !== 'text') {
@@ -420,20 +425,20 @@
             $('#object_url_text').hide();// esconde o campo de url para textos
             $('#url_object').removeAttr("required");//retiro o campo de requirido deste input para urls que sejam do item do tipo texto
             $('#object_url_others').show('slow');// o campo para colocar a url do item sem ser texto
-            $('#object_url_others').attr('required', 'required');
+            //$('#object_url_others').attr('required', 'required');
             $('#object_file').hide();// esconde a submissao de items tipo arquivo
-            $('#object_file').removeAttr("required");// retiro o campo de requirido do arquivo
+           // $('#object_file').removeAttr("required");// retiro o campo de requirido do arquivo
         } else {
             CKEDITOR.instances.objectedit_editor.setData('');
             $('#object_url_others_input').val('');
             $('#url_object_edit').val('');
             $('#object_file').hide();// esconde a submissao de items tipo arquivo
-            $('#object_file').removeAttr("required");// retiro o campo de requirido do arquivo
+            //$('#object_file').removeAttr("required");// retiro o campo de requirido do arquivo
             $('#internal_option').attr('checked', 'checked');
             $('#object_url_text').hide();// escondo o campo de colocar url para textos
-            $('#url_object').removeAttr("required");//retiro o campo de requirido deste input para urls que sejam do item do tipo texto
+            //$('#url_object').removeAttr("required");//retiro o campo de requirido deste input para urls que sejam do item do tipo texto
             $('#object_url_others').hide();// escondo o campo de colocar a url para tipos de arquivo que nao seja texto
-            $('#object_url_others').removeAttr("required");//retiro o campo de requirido deste input para urls que nao seja do item do tipo texto
+           // $('#object_url_others').removeAttr("required");//retiro o campo de requirido deste input para urls que nao seja do item do tipo texto
             $('#object_content_text_edit').show();
         }
         //retirando o thumbnail

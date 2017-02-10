@@ -359,10 +359,24 @@ class ObjectController extends Controller {
                 } else {
                     $data['url_watermark'] = get_template_directory_uri() . '/libraries/images/icone.png';
                 }
+                //busco a forma de visualizacao do item
+                $mode = get_post_meta($col_id, 'socialdb_collection_item_visualization', true);
+                $mode = '';
                 //se existir a acao para alterar a home do item
                 if (has_action('alter_page_item')) {
                     return apply_filters('alter_page_item', $data);
-                } else {
+                }else if($mode=='one'){
+                    //$data = $object_model->edit($data['object_id'], $data['collection_id']);
+                    $data['collection_id'] = $col_id;
+                    $data['object_name'] = $object_name;
+                    $data['is_view_mode'] = true;
+                    $data['socialdb_collection_attachment'] = $socialdb_collection_attachment;
+                    $data['socialdb_object_from'] = get_post_meta($object_id, 'socialdb_object_from', true);
+                    $data['socialdb_object_dc_source'] = get_post_meta($object_id, 'socialdb_object_dc_source', true);
+                    $data['socialdb_object_content'] = get_post_meta($object_id, 'socialdb_object_content', true);
+                    $data['socialdb_object_dc_type'] = get_post_meta($object_id, 'socialdb_object_dc_type', true);
+                    return $this->render(dirname(__FILE__) . '../../../views/object/edit_item_text.php', $data);
+                }else {
                     $logData = ['collection_id' => $col_id, 'item_id' => $object_id,
                         'event_type' => 'user_items', 'event' => 'view'];
                     Log::addLog($logData);
@@ -424,9 +438,24 @@ class ObjectController extends Controller {
                     } else {
                         $data['url_watermark'] = get_template_directory_uri() . '/libraries/images/icone.png';
                     }
-
+                    //busco a forma de visualizacao do item
+                    $mode = get_post_meta($data['collection_id'], 'socialdb_collection_item_visualization', true);
+                    $mode = '';
+                    //se existir a acao para alterar a home do item
                     if (has_filter('alter_page_item')) {
                         $array_json['html'] = apply_filters('alter_page_item', $data);
+                        return json_encode($array_json);
+                    }else if($mode=='one'){
+                        //$data = $object_model->edit($data['object_id'], $data['collection_id']);
+                        $data['collection_id'] = $data['collection_id'];
+                        $data['object_name'] = $object_name;
+                        $data['is_view_mode'] = true;
+                        $data['socialdb_collection_attachment'] = $socialdb_collection_attachment;
+                        $data['socialdb_object_from'] = get_post_meta($object_id, 'socialdb_object_from', true);
+                        $data['socialdb_object_dc_source'] = get_post_meta($object_id, 'socialdb_object_dc_source', true);
+                        $data['socialdb_object_content'] = get_post_meta($object_id, 'socialdb_object_content', true);
+                        $data['socialdb_object_dc_type'] = get_post_meta($object_id, 'socialdb_object_dc_type', true);
+                        $array_json['html'] = $this->render(dirname(__FILE__) . '../../../views/object/edit_item_text.php', $data);
                         return json_encode($array_json);
                     } else {
                         $array_json['html'] = $this->render(dirname(__FILE__) . '../../../views/object/list_single_object.php', $data);

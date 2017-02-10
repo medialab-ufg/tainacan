@@ -206,6 +206,8 @@
                                     //  } else {
                                     if(value!=''&&value==children.term_id){
                                         checked = 'checked="checked"';
+                                        if($('#label_'+compound_id+'_' + radio + '_' + i).length>0)
+                                            $('#label_'+compound_id+'_' + radio + '_' + i).append('<p><a style="cursor:pointer;" onclick="wpquery_term_filter(' + children.term_id + ',' + tree + ')">' + children.name + '</a></p>')
                                     }
                                     if (typeof delete_value === "function") {
                                         delete_value(children.term_id);
@@ -245,6 +247,8 @@
                                 required = ' onchange="compounds_validate_checkbox(' + checkbox + ','+ i +','+ compound_id +')"';
                                 if(value&&value==children.term_id){
                                     checked = 'checked="checked"';
+                                    if($('#label_'+compound_id+'_' + checkbox + '_' + i).length>0)
+                                            $('#label_'+compound_id+'_' + checkbox + '_' + i).append('<p><a style="cursor:pointer;" onclick="wpquery_term_filter(' + children.term_id + ',' + tree + ')">' + children.name + '</a></p>')
                                 }
                                 //  if (property.id == selected) {
                                 //     $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
@@ -301,6 +305,9 @@
                                     checked = 'selected="selected"';
                                     $('#core_validation_'+selectbox).val('true');
                                     set_field_valid(selectbox,'core_validation_'+selectbox);
+                                    if($('#label_'+compound_id+'_' + selectbox + '_' + i).length>0)
+                                            $('#label_'+compound_id+'_' + selectbox + '_' + i).append('<p><a style="cursor:pointer;" onclick="wpquery_term_filter(' + children.term_id + ',' + selectbox + ')">' + children.name + '</a></p>')
+
                                 }
                                 $('#field_property_term_'+compound_id+'_' + selectbox + '_' + i).append('<option '+checked+' value="' + children.term_id + '">' + children.name + '</option>');
                                 if(checked!==''){
@@ -374,79 +381,87 @@
                     var cardinality = $('#cardinality_compound_'+compound_id+'_'+treecheckbox).val();
                     for(var i = 0;i<cardinality;i++){
                         var value = $('#actual_value_'+compound_id+'_' + treecheckbox + '_' + i).val();
-                        dynatree_object_index["field_property_term_"+compound_id+"_"+ treecheckbox  + '_' + i] = i;
-                        $("#field_property_term_"+compound_id+"_"+ treecheckbox  + '_' + i ).dynatree({
-                            selectionVisible: true, // Make sure, selected nodes are visible (expanded).  
-                            checkbox: true,
-                            initAjax: {
-                                url: $('#src').val() + '/controllers/category/category_controller.php',
-                                data: {
-                                    collection_id: $("#collection_id").val(),
-                                    property_id: treecheckbox,
-                                    order: 'name',
-                                    operation: 'initDynatreeDynamic'
-                                }
-                                , addActiveKey: true
-                            },
-                            onLazyRead: function (node) {
-                                node.appendAjax({
-                                     url: $('#src').val() + '/controllers/collection/collection_controller.php',
+                        if($('#label_'+compound_id+'_' + tree + '_' + i).length>0){
+                            var promisse =  get_metas(value);
+                            promisse.done(function (result) {
+                                elem = jQuery.parseJSON(result);
+                                $('#label_'+compound_id+'_' + treecheckbox + '_' + i).append('<p><a style="cursor:pointer;" onclick="wpquery_term_filter(' + elem.term.term_id + ',' + treecheckbox + ')">' + elem.term.name + '</a></p>');
+                            });    
+                        }else{
+                            dynatree_object_index["field_property_term_"+compound_id+"_"+ treecheckbox  + '_' + i] = i;
+                            $("#field_property_term_"+compound_id+"_"+ treecheckbox  + '_' + i ).dynatree({
+                                selectionVisible: true, // Make sure, selected nodes are visible (expanded).  
+                                checkbox: true,
+                                initAjax: {
+                                    url: $('#src').val() + '/controllers/category/category_controller.php',
                                     data: {
-                                        collection: $("#collection_id").val(),
-                                        key: node.data.key,
-                                        classCss: node.data.addClass,
+                                        collection_id: $("#collection_id").val(),
+                                        property_id: treecheckbox,
                                         order: 'name',
-                                        //operation: 'findDynatreeChild'
-                                        operation: 'expand_dynatree'
+                                        operation: 'initDynatreeDynamic'
                                     }
-                                });
-                            },
-                            onClick: function (node, event) {
-                                // Close menu on clickdelete_value
-//                                if (typeof delete_value === "function") {
-//                                        delete_value(node.data.key);
-//                                }
-                                
-                            },
-                            onCreate: function (node, span) {
-//                                $("#field_property_term_"+treecheckbox  + '_' + i).dynatree("getRoot").visit(function(node){
-//                                    if (typeof delete_value === "function") {
-//                                        delete_value(node.data.key);
-//                                    }
-                                if(value&&value==node.data.key){
-                                    node.select();
+                                    , addActiveKey: true
+                                },
+                                onLazyRead: function (node) {
+                                    node.appendAjax({
+                                         url: $('#src').val() + '/controllers/collection/collection_controller.php',
+                                        data: {
+                                            collection: $("#collection_id").val(),
+                                            key: node.data.key,
+                                            classCss: node.data.addClass,
+                                            order: 'name',
+                                            //operation: 'findDynatreeChild'
+                                            operation: 'expand_dynatree'
+                                        }
+                                    });
+                                },
+                                onClick: function (node, event) {
+                                    // Close menu on clickdelete_value
+    //                                if (typeof delete_value === "function") {
+    //                                        delete_value(node.data.key);
+    //                                }
+
+                                },
+                                onCreate: function (node, span) {
+    //                                $("#field_property_term_"+treecheckbox  + '_' + i).dynatree("getRoot").visit(function(node){
+    //                                    if (typeof delete_value === "function") {
+    //                                        delete_value(node.data.key);
+    //                                    }
+                                    if(value&&value==node.data.key){
+                                        node.select();
+                                    }
+    //                                });
+                                    bindContextMenuSingle(span,'field_property_term_'+compound_id+'_' + treecheckbox  + '_' + i);
+                                },
+                                onSelect: function (flag, node) {
+                                    var cont = 0;
+                                    var i = dynatree_object_index[this.$tree[0].id];
+                                    var selKeys = $.map(node.tree.getSelectedNodes(), function (node) {
+                                        return node;
+                                    });
+                                    var categories = $.map(node.tree.getSelectedNodes(), function (node) {
+                                        return node.data.key;
+                                    });
+                                    if(categories.length>0&&categories.indexOf(node.data.key)>=0){
+                                        //append_category_properties(node.data.key);
+                                    }else{
+                                        //append_category_properties(0,node.data.key);
+                                    }
+                                    $("#socialdb_propertyterm_"+compound_id+"_" + treecheckbox + '_' + i).html('');
+                                    $.each(selKeys, function (index, key) {
+                                        cont++;
+                                        $("#socialdb_propertyterm_"+compound_id+"_" + treecheckbox + '_' + i).append('<input type="hidden" name="socialdb_property_'+treecheckbox+'_' + i + '[]" value="' + key.data.key + '" >');
+                                    });
+                                    if(cont===0){
+                                        $('#core_validation_'+compound_id+'_'+treecheckbox+ '_' + i).val('false');
+                                        set_field_valid_compounds(treecheckbox,'core_validation_'+compound_id+'_'+treecheckbox+ '_' + i,compound_id);
+                                     }else{
+                                        $('#core_validation_'+compound_id+'_'+treecheckbox+ '_' + i).val('true');
+                                        set_field_valid_compounds(treecheckbox,'core_validation_'+compound_id+'_'+treecheckbox+ '_' + i,compound_id); 
+                                     }
                                 }
-//                                });
-                                bindContextMenuSingle(span,'field_property_term_'+compound_id+'_' + treecheckbox  + '_' + i);
-                            },
-                            onSelect: function (flag, node) {
-                                var cont = 0;
-                                var i = dynatree_object_index[this.$tree[0].id];
-                                var selKeys = $.map(node.tree.getSelectedNodes(), function (node) {
-                                    return node;
-                                });
-                                var categories = $.map(node.tree.getSelectedNodes(), function (node) {
-                                    return node.data.key;
-                                });
-                                if(categories.length>0&&categories.indexOf(node.data.key)>=0){
-                                    //append_category_properties(node.data.key);
-                                }else{
-                                    //append_category_properties(0,node.data.key);
-                                }
-                                $("#socialdb_propertyterm_"+compound_id+"_" + treecheckbox + '_' + i).html('');
-                                $.each(selKeys, function (index, key) {
-                                    cont++;
-                                    $("#socialdb_propertyterm_"+compound_id+"_" + treecheckbox + '_' + i).append('<input type="hidden" name="socialdb_property_'+treecheckbox+'_' + i + '[]" value="' + key.data.key + '" >');
-                                });
-                                if(cont===0){
-                                    $('#core_validation_'+compound_id+'_'+treecheckbox+ '_' + i).val('false');
-                                    set_field_valid_compounds(treecheckbox,'core_validation_'+compound_id+'_'+treecheckbox+ '_' + i,compound_id);
-                                 }else{
-                                    $('#core_validation_'+compound_id+'_'+treecheckbox+ '_' + i).val('true');
-                                    set_field_valid_compounds(treecheckbox,'core_validation_'+compound_id+'_'+treecheckbox+ '_' + i,compound_id); 
-                                 }
-                            }
-                        });
+                            });
+                        }
                     }
                 }    
             });
@@ -463,65 +478,73 @@
                     var cardinality = $('#cardinality_compound_'+compound_id+'_'+tree).val();
                     for(var i = 0;i<cardinality;i++){
                         var value = $('#actual_value_'+compound_id+'_' + tree + '_' + i).val();
-                        dynatree_object_index["field_property_term_"+compound_id+"_"+ tree  + '_' + i] = i;
-                        $("#field_property_term_"+compound_id+"_" + tree + '_' + i).dynatree({
-                                checkbox: true,
-                                // Override class name for checkbox icon:
-                                classNames: {checkbox: "dynatree-radio"},
-                                selectMode: 1,
-                                selectionVisible: true, // Make sure, selected nodes are visible (expanded). 
-                                checkbox: true,
-                                  initAjax: {
-                                    url: $('#src').val() + '/controllers/category/category_controller.php',
-                                    data: {
-                                        collection_id: $("#collection_id").val(),
-                                        property_id: tree,
-                                       // hide_checkbox: 'true',
-                                        order: 'name',
-                                        operation: 'initDynatreeDynamic'
-                                    }
-                                    , addActiveKey: true
-                                },
-                                onLazyRead: function (node) {
-                                    node.appendAjax({
-                                        url: $('#src').val() + '/controllers/collection/collection_controller.php',
+                        if($('#label_'+compound_id+'_' + tree + '_' + i).length>0){
+                            var promisse =  get_metas(value);
+                            promisse.done(function (result) {
+                                elem = jQuery.parseJSON(result);
+                                $('#label_'+compound_id+'_' + tree + '_' + i).append('<p><a style="cursor:pointer;" onclick="wpquery_term_filter(' + elem.term.term_id + ',' + tree + ')">' + elem.term.name + '</a></p>');
+                            });    
+                        }else{
+                            dynatree_object_index["field_property_term_"+compound_id+"_"+ tree  + '_' + i] = i;
+                            $("#field_property_term_"+compound_id+"_" + tree + '_' + i).dynatree({
+                                    checkbox: true,
+                                    // Override class name for checkbox icon:
+                                    classNames: {checkbox: "dynatree-radio"},
+                                    selectMode: 1,
+                                    selectionVisible: true, // Make sure, selected nodes are visible (expanded). 
+                                    checkbox: true,
+                                      initAjax: {
+                                        url: $('#src').val() + '/controllers/category/category_controller.php',
                                         data: {
-                                            collection: $("#collection_id").val(),
-                                            key: node.data.key,
-                                            //hide_checkbox: 'true',
-                                            classCss: node.data.addClass,
-                                             order: 'name',
-                                            //operation: 'findDynatreeChild'
-                                            operation: 'expand_dynatree'
+                                            collection_id: $("#collection_id").val(),
+                                            property_id: tree,
+                                           // hide_checkbox: 'true',
+                                            order: 'name',
+                                            operation: 'initDynatreeDynamic'
                                         }
-                                    });
-                                },
-                                onCreate: function (node, span) {
-//                                    $("#field_property_term_"+tree + '_' + i).dynatree("getRoot").visit(function(node){
-//                                        if (typeof delete_value === "function") {
-//                                              delete_value(node.data.key);
-//                                        }
-                                    if(value&&value==node.data.key){
-                                        node.select();
+                                        , addActiveKey: true
+                                    },
+                                    onLazyRead: function (node) {
+                                        node.appendAjax({
+                                            url: $('#src').val() + '/controllers/collection/collection_controller.php',
+                                            data: {
+                                                collection: $("#collection_id").val(),
+                                                key: node.data.key,
+                                                //hide_checkbox: 'true',
+                                                classCss: node.data.addClass,
+                                                 order: 'name',
+                                                //operation: 'findDynatreeChild'
+                                                operation: 'expand_dynatree'
+                                            }
+                                        });
+                                    },
+                                    onCreate: function (node, span) {
+    //                                    $("#field_property_term_"+tree + '_' + i).dynatree("getRoot").visit(function(node){
+    //                                        if (typeof delete_value === "function") {
+    //                                              delete_value(node.data.key);
+    //                                        }
+                                        if(value&&value==node.data.key){
+                                            node.select();
+                                        }
+    //                                    });
+                                        bindContextMenuSingle(span,'field_property_term_' + tree + '_');
+                                    },
+                                    onSelect: function (flag, node) {
+                                        var i = dynatree_object_index[this.$tree[0].id];
+                                        if ($("#field_property_term_"+compound_id+"_" + tree + '_' + i).val() === node.data.key) {
+                                           // append_category_properties(0,node.data.key);
+                                            $("#field_property_term_"+compound_id+"_" + tree + '_' + i).val("");
+                                             $('#core_validation_'+compound_id+'_' + tree + '_' + i).val('false');
+                                             set_field_valid_compounds(tree,'core_validation_'+compound_id+'_' + tree + '_' + i,compound_id);
+                                        } else {
+                                           // append_category_properties(node.data.key,$("#field_property_term_"+compound_id+"_" + tree).val());
+                                            $("#field_property_term_"+compound_id+"_" + tree + '_' + i).val(node.data.key);
+                                            $('#core_validation_'+compound_id+'_'+ tree + '_' + i).val('true');
+                                            set_field_valid_compounds(tree,'core_validation_'+compound_id+'_' + tree + '_' + i,compound_id);
+                                        }
                                     }
-//                                    });
-                                    bindContextMenuSingle(span,'field_property_term_' + tree + '_');
-                                },
-                                onSelect: function (flag, node) {
-                                    var i = dynatree_object_index[this.$tree[0].id];
-                                    if ($("#field_property_term_"+compound_id+"_" + tree + '_' + i).val() === node.data.key) {
-                                       // append_category_properties(0,node.data.key);
-                                        $("#field_property_term_"+compound_id+"_" + tree + '_' + i).val("");
-                                         $('#core_validation_'+compound_id+'_' + tree + '_' + i).val('false');
-                                         set_field_valid_compounds(tree,'core_validation_'+compound_id+'_' + tree + '_' + i,compound_id);
-                                    } else {
-                                       // append_category_properties(node.data.key,$("#field_property_term_"+compound_id+"_" + tree).val());
-                                        $("#field_property_term_"+compound_id+"_" + tree + '_' + i).val(node.data.key);
-                                        $('#core_validation_'+compound_id+'_'+ tree + '_' + i).val('true');
-                                        set_field_valid_compounds(tree,'core_validation_'+compound_id+'_' + tree + '_' + i,compound_id);
-                                    }
-                                }
-                            });
+                                });
+                        }
                     }
                 }    
             });
@@ -692,6 +715,16 @@
             $('#core_validation_'+compound_id).val('false');
             set_field_valid(compound_id,'core_validation_'+compound_id);
         }
+    }
+    
+    
+    
+    function get_metas(id){
+        return $.ajax({
+            type: "POST",
+            url: $('#src').val() + "/controllers/category/category_controller.php",
+            data: {category_id: id, operation: 'get_metas'}
+        });
     }
 
 </script>

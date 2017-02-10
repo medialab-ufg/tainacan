@@ -171,6 +171,16 @@ class ObjectWidgetsHelper extends ViewHelper {
      */
     public function widget_property_data($property,$i,$references,$value = false) {
         $references['properties_autocomplete'][] = $property['id'];
+        if($references['is_view_mode']){
+            if(isset($value) && !empty($value)): ?>
+                <p><?php  echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $value . "'" . ',' . $property['id'] . ')">' . $value . '</a>';  ?></p>
+            <?php else: ?>
+                <p><?php  _e('empty field', 'tainacan') ?></p>
+            <?php endif;
+            
+            return;
+        }
+        // inputs
         if ($property['type'] == 'text') { ?>     
             <input type="text" 
                    id="compounds_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
@@ -243,6 +253,28 @@ class ObjectWidgetsHelper extends ViewHelper {
      * @param int $i O indice do for da cardinalidade
      */
     public function widget_property_object($property,$i,$references,$value = false) {
+        if($references['is_view_mode']){
+            if(isset($value)): ?>
+             <div id="labels_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">
+                <?php if (!empty($property['metas']['objects']) && !empty($value)) { ?>
+                    <?php foreach ($property['metas']['objects'] as $object) { // percoro todos os objetos  ?>
+                        <?php
+                        if (isset($value) && !empty($value) && in_array($object->ID, $value)): // verifico se ele esta na lista de objetos da colecao
+                            echo '<b><a  href="' . get_the_permalink($property['metas']['collection_data'][0]->ID) . '?item=' . $object->post_name . '" >' . $object->post_title . '</a></b><br>';
+                        endif;
+                        ?>
+                    <?php } ?>
+                    <?php
+                }else {
+                    echo '<p>' . __('empty field', 'tainacan') . '</p>';
+                }
+                ?>
+            </div>
+            <?php endif;
+            
+            return;
+        }
+        // inputs
         ?>
         <input type="hidden" 
                         id="cardinality_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>"  
@@ -293,6 +325,12 @@ class ObjectWidgetsHelper extends ViewHelper {
             id='actual_value_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>'
             value="<?php if ($value) echo $value; ?>">
         <?php
+        if($references['is_view_mode']){
+            ?>
+            <div id='label_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>'><p><?php  _e('empty field', 'tainacan') ?></p></div>  
+            <?php
+            return;
+        }
         if ($property['type'] == 'radio') {
             $references['properties_terms_radio'][] = $property['id'];
             ?>
@@ -449,7 +487,7 @@ class ObjectWidgetsHelper extends ViewHelper {
      * @param type $references
      */
     public function list_properties_categories_compounds($properties_compounds,$object_id,$references) {
-        include_once ( dirname(__FILE__).'/../../views/object/append_properties_categories/js/pc_compounds_js.php');
+        include_once( dirname(__FILE__).'/../../views/object/append_properties_categories/js/pc_compounds_js.php');
         $result = [];
         $coumpounds_id = [];
         $property = $properties_compounds;

@@ -1,7 +1,10 @@
 <?php
 include_once ('js/tabs_item_js.php');
 include_once ('js/edit_item_text_js.php');
-if($is_beta_text){
+if($is_view_mode){
+  include_once ('single_object/single_object_metadata.php');  
+  include_once ('single_object/js/single_object_metadata_js.php');  
+}else{
     include_once ('js/create_draft_js.php');
 }
 include_once ('js/validation_fixed_fields.php');
@@ -41,8 +44,8 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
     <input type="hidden" name="post_status" value="publish">
     <?php endif; ?>
     <input type="hidden" id="object_id_edit" name="object_id" value="<?= $object->ID ?>">
-    <div style="<?php echo ($view_helper->hide_main_container)?'margin-left:1%;padding-left:15px;min-height:500px;padding-top:80px;':'' ?>"
-            class="<?php echo ($view_helper->hide_main_container)?'col-md-12':'col-md-2' ?> menu_left_loader">
+    <div style="<?php echo (isset($is_view_mode) ||$view_helper->hide_main_container)?'margin-left:1%;padding-left:15px;min-height:500px;padding-top:80px;':'' ?>"
+            class="<?php echo (isset($is_view_mode) ||$view_helper->hide_main_container)?'col-md-12':'col-md-2' ?> menu_left_loader">
              <center>
                     <img src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>">
                     <h4><?php _e('Loading metadata...', 'tainacan') ?></h4>
@@ -50,16 +53,18 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
         </div>
 <!----------------- MENU ESQUERDO  ----------------->        
         <div style="display: none; background: white;border: 3px solid #E8E8E8;font: 11px Arial;<?php echo $css?>" 
-             class="<?php echo ($view_helper->hide_main_container)? ($view_helper->mediaHabilitate)? 'col-md-9' : 'col-md-12':'col-md-3' ?> menu_left">
+             class="<?php echo (isset($is_view_mode) || $view_helper->hide_main_container)? ($view_helper->mediaHabilitate)? 'col-md-9' : 'col-md-12':'col-md-3' ?> menu_left">
                 <?php 
                 //se estiver apenas mostrando as propriedades 
-                if($view_helper->hide_main_container):
+                if(isset($is_view_mode) ||  $view_helper->hide_main_container):
                 ?>
                  <h3>
                     <?php if(has_action('label_add_item')): ?>
                            <?php do_action('label_add_item',$object_name) ?>
                     <?php elseif($is_beta_text): ?>
                         <?php _e('Continue inserting','tainacan') ?>
+                    <?php elseif($is_view_mode): ?>
+                        <?php echo $object->post_title ?>
                     <?php else: ?>
                           <?php _e('Edit','tainacan') ?>
                     <?php endif; ?>
@@ -70,6 +75,10 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                         </button>
                         <br>
                         <small id="draft-text"></small>
+                    <?php elseif($is_view_mode): ?>    
+                        <button type="button" onclick="history.back()"class="btn btn-default pull-right">
+                            <b><?php _e('Back','tainacan') ?></b>
+                        </button>
                     <?php else: ?>
                          <button type="button" onclick="back_main_list();"class="btn btn-default pull-right">
                             <b><?php _e('Back','tainacan') ?></b>
@@ -81,9 +90,9 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                 </h3>
                 <hr>
                 <!--------------------------- ABAS----------------------------->
-                <?php $view_helper->add_tabs() ?>
+                <?php $view_helper->add_tabs($collection_id) ?>
             <?php else: ?>   
-                <div    style="<?php echo ($view_helper->hide_main_container)?'margin-bottom:0%':'' ?>" 
+                <div    style="<?php echo (isset($is_view_mode) ||  $view_helper->hide_main_container)?'margin-bottom:0%':'' ?>" 
                     class="expand-all-item btn white tainacan-default-tags">
                 <div class="action-text" 
                      style="display: inline-block;">
@@ -114,12 +123,16 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                     ?>
                 </h2>
                  <div class="form-group" >
-                    <input class="form-control auto-save"   
-                           type="text"  
-                           value="<?= $object->post_title ?>"
-                           id="object_name" 
-                           name="object_name" 
-                           placeholder="<?php _e('Item name','tainacan'); ?>">
+                     <?php if($is_view_mode): ?>
+                        <a style="cursor:pointer;" onclick="wpquery_link_filter('<?php echo $object->post_title ?>','<?php echo $view_helper->terms_fixed['title']->term_id ?>')"><?php echo $object->post_title ?></a>
+                     <?php else: ?>
+                        <input class="form-control auto-save"   
+                              type="text"  
+                              value="<?= $object->post_title ?>"
+                              id="object_name" 
+                              name="object_name" 
+                              placeholder="<?php _e('Item name','tainacan'); ?>">
+                     <?php endif; ?>
                   </div>   
             </div>    
             <!-- TAINACAN: Campo com o ckeditor para items do tipo texto -->
@@ -140,6 +153,17 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                     ?>
                 </h2>
                  <div >
+                     <?php if($is_view_mode): 
+                              if($socialdb_object_dc_type!='text'&&$socialdb_object_from=='internal'):
+                                  echo '<h4>'.__('Actual Item Content','tainacan').'</h4>';
+                                  echo get_post($socialdb_object_content)->post_title."<br>";
+                                  echo wp_get_attachment_link($socialdb_object_content, 'thumbnail', false, true);
+                              elseif($socialdb_object_dc_type=='text'): ?>
+                                  <a style="cursor:pointer;" 
+                                      onclick="wpquery_link_filter('<?php echo $socialdb_object_content ?>','<?php echo $view_helper->terms_fixed['content']->term_id ?>')"><?php echo $socialdb_object_content ?></a>  
+                              <?php
+                              endif;
+                      else: ?>
                       <div id="thumb-idea-form" <?php do_action('item_from_attributes') ?>>
                             <br>
                             <input type="radio" 
@@ -148,7 +172,7 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                                    id="external_option"
                                    onchange="edit_toggle_from(this)" 
                                    <?php if($socialdb_object_from=='external'): echo 'checked="checked"'; endif;  ?>
-                                   value="external" required>&nbsp;<?php _e('Web Address','tainacan'); ?>
+                                   value="external" >&nbsp;<?php _e('Web Address','tainacan'); ?>
                              <!-- TAINACAN: seleciona se o objeto eh interno -->
                             <input type="radio"
                                    id="internal_option"
@@ -156,7 +180,7 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                                    onchange="edit_toggle_from(this)" 
                                    <?php if($socialdb_object_from=='internal'): echo 'checked="checked"'; endif;  ?>
                                    name="object_from" 
-                                   value="internal"  required>&nbsp;<?php _e('Local','tainacan'); ?>
+                                   value="internal"  >&nbsp;<?php _e('Local','tainacan'); ?>
 
 
                                 <!--  TAINACAN: Campo para importacao de noticias ou outros item VIA URL do tipo texto -->
@@ -210,6 +234,7 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                                 <?php echo get_post_meta($object->ID, 'socialdb_object_content', true); ?>
                                 </textarea>     
                         </div>   
+                    <?php endif; ?>    
                 </div>     
             </div>
             <!-- TAINACAN: UPLOAD DE ANEXOS DOS ITEMS -->
@@ -230,7 +255,10 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                             ?>
                         </h2>
                         <div>
-                             <div id="dropzone_edit"  
+                            <?php if($is_view_mode): ?>
+                            
+                            <?php else: ?>
+                            <div id="dropzone_edit"  
                                 <?php do_action('item_attachments_attributes') ?> <?php if($socialdb_collection_attachment=='no') echo 'style="display:none"' ?> 
                                  class="dropzone"
                                  style="margin-bottom: 15px;min-height: 150px;padding-top: 0px;">
@@ -245,6 +273,7 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                                      </span>
                                  </div>
                             </div>
+                            <?php endif; ?>
                         </div>    
                     </div>  
                 <?php endif; ?>
@@ -269,25 +298,32 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                     ?>
                 </h2>
                 <div>
-                    <div id="existent_thumbnail">
-                        <?php
-                        if (get_the_post_thumbnail($object->ID, 'thumbnail')) {
-                            echo get_the_post_thumbnail($object->ID, 'thumbnail');
-                            ?>
-                            <br><br>
-                            <label for="remove_thumbnail"><?php _e('Remove Thumbnail', 'tainacan'); ?></label>
-                            <input type="hidden" name="object_has_thumbnail" value="true">
-                            <input type="checkbox"  id="remove_thumbnail_object" name="remove_thumbnail_object" value="true">
-                            <br><br>
-                            <?php } else {
-                            ?> 
-                            <input type="hidden" name="object_has_thumbnail" value="false">
-                            <img height="150" src="<?php echo get_item_thumbnail_default($object->ID); ?>"><br><br>
-                        <?php } ?>
-                    </div>     
-                    <div id="image_side_edit_object">
-                    </div>
-                    <input type="file" size="50" id="object_thumbnail_edit" name="object_thumbnail" class="btn btn-default btn-sm auto-save">  
+                    <?php 
+                    if($is_view_mode): 
+                        if (get_the_post_thumbnail($object->ID, 'thumbnail')):
+                                echo get_the_post_thumbnail($object->ID, 'thumbnail');
+                        endif;
+                     else: ?>
+                        <div id="existent_thumbnail">
+                            <?php
+                            if (get_the_post_thumbnail($object->ID, 'thumbnail')) {
+                                echo get_the_post_thumbnail($object->ID, 'thumbnail');
+                                ?>
+                                <br><br>
+                                <label for="remove_thumbnail"><?php _e('Remove Thumbnail', 'tainacan'); ?></label>
+                                <input type="hidden" name="object_has_thumbnail" value="true">
+                                <input type="checkbox"  id="remove_thumbnail_object" name="remove_thumbnail_object" value="true">
+                                <br><br>
+                                <?php } else {
+                                ?> 
+                                <input type="hidden" name="object_has_thumbnail" value="false">
+                                <img height="150" src="<?php echo get_item_thumbnail_default($object->ID); ?>"><br><br>
+                            <?php } ?>
+                        </div>     
+                        <div id="image_side_edit_object">
+                        </div>
+                        <input type="file" size="50" id="object_thumbnail_edit" name="object_thumbnail" class="btn btn-default btn-sm auto-save">  
+                    <?php endif; ?>    
                 </div>
             </div>    
             <?php endif; ?>
@@ -309,13 +345,19 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                     ?>
                 </h2>
                  <div>
-                      <input  
-                           type="text" 
-                           id="object_source" 
-                           class="form-control auto-save"
-                           name="object_source" 
-                           placeholder="<?php _e('Where your object come from','tainacan'); ?>"
-                           value="<?php echo $socialdb_object_dc_source;  ?>" >  
+                    <?php if($is_view_mode): ?>
+                          <a style="cursor:pointer;" 
+                             onclick="wpquery_link_filter('<?php echo $socialdb_object_dc_source ?>','<?php echo $view_helper->terms_fixed['source']->term_id ?>')">
+                                 <?php echo $socialdb_object_dc_source ?></a>    
+                    <?php else: ?>
+                        <input  
+                             type="text" 
+                             id="object_source" 
+                             class="form-control auto-save"
+                             name="object_source" 
+                             placeholder="<?php _e('Where your object come from','tainacan'); ?>"
+                             value="<?php echo $socialdb_object_dc_source;  ?>" >  
+                    <?php endif; ?>  
                   </div>   
             </div>
             <!-- TAINACAN: a descricao do item -->
@@ -336,9 +378,15 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                     ?>
                 </h2>
                 <div>
+                    <?php if($is_view_mode): ?>
+                          <a style="cursor:pointer;" 
+                             onclick="wpquery_link_filter('<?php echo $object->post_content ?>','<?php echo $view_helper->terms_fixed['description']->term_id ?>')">
+                                 <?php echo $object->post_content ?></a>    
+                    <?php else: ?>
                      <textarea class="form-control auto-save" 
                                id="object_description_example" 
                                name="object_description" ><?php echo $object->post_content; ?></textarea>
+                    <?php endif; ?>
                 </div>
             </div>
             <!-- TAINACAN: tags do item -->
@@ -359,12 +407,21 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                     ?>
                 </h2>
                 <div>
-                   <input type="text" 
-                          class="form-control auto-save"
-                          id="object_tags" 
-                          name="object_tags"  
-                          value="<?= implode(',', $tags_name) ?>" 
-                          placeholder="<?php _e('The set of tags may be inserted by comma','tainacan') ?>">
+                    <?php if($is_view_mode): ?>
+                        <?php $tags = implode(',', $tags_name) ?>
+                        <?php foreach($tags as $tag): ?>
+                             <a style="cursor:pointer;" 
+                                onclick="wpquery_link_filter('<?php echo $tag ?>','<?php echo $view_helper->terms_fixed['tags']->term_id ?>')">
+                                    <?php echo $tag ?></a>    
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <input type="text" 
+                               class="form-control auto-save"
+                               id="object_tags" 
+                               name="object_tags"  
+                               value="<?= implode(',', $tags_name) ?>" 
+                               placeholder="<?php _e('The set of tags may be inserted by comma','tainacan') ?>">
+                    <?php endif; ?>
                  </div>
             </div>
             <!-- TAINACAN: a propriedades do item -->  
@@ -406,7 +463,7 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
              <!-- TAINACAN: votacoes do item -->
              <div id="update_list_ranking_<?php echo $object->ID ?>"></div>
             </div>
-            <?php if($view_helper->hide_main_container): ?>
+            <?php if(!isset($is_view_mode)&&$view_helper->hide_main_container): ?>
                 <br><br>
                  <!--button onclick="back_main_list();" style="margin-bottom: 20px;"  class="btn btn-default btn-lg pull-left"><b><?php _e('Back','tainacan') ?></b></button-->
                  <?php if($is_beta_text): ?>
@@ -479,7 +536,7 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
             </div>
         <?php endif; ?>
 <!----------------- CONTAINER MAIOR - NOME,CONTEUDO E ANEXOS  ----------------->
-        <div style="<?php echo ($view_helper->hide_main_container)?'display:none;':'' ?>background: white;border: 3px solid #E8E8E8;margin-left: 15px;width: 74%;" 
+        <div style="<?php echo ($view_helper->hide_main_container || isset($is_view_mode))?'display:none;':'' ?>background: white;border: 3px solid #E8E8E8;margin-left: 15px;width: 74%;" 
              class="col-md-9">
             <h3>
                 <?php if(has_action('label_add_item')): ?>
@@ -526,38 +583,38 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                            name="object_type" 
                            <?php if($socialdb_object_dc_type=='text'): echo 'checked="checked"'; endif;  ?>
                            value="text" 
-                           required>&nbsp;<?php _e('Text','tainacan'); ?>
+                           >&nbsp;<?php _e('Text','tainacan'); ?>
                     <input type="radio" 
                            class="auto-save"
                            name="object_type"
                            <?php if($socialdb_object_dc_type=='video'): echo 'checked="checked"'; endif;  ?>
                            id="video_type"
                            onchange="edit_show_other_type_field(this)" 
-                           value="video" required>&nbsp;<?php _e('Video','tainacan'); ?>
+                           value="video" >&nbsp;<?php _e('Video','tainacan'); ?>
                     <input type="radio" 
                            class="auto-save"
                            onchange="edit_show_other_type_field(this)" 
                            name="object_type" 
                            <?php if($socialdb_object_dc_type=='image'): echo 'checked="checked"'; endif;  ?>
-                           value="image" required>&nbsp;<?php _e('Image','tainacan'); ?>
+                           value="image" >&nbsp;<?php _e('Image','tainacan'); ?>
                     <input type="radio" 
                            class="auto-save"
                            onchange="edit_show_other_type_field(this)" 
                            name="object_type" 
                             <?php if($socialdb_object_dc_type=='pdf'): echo 'checked="checked"'; endif;  ?>
-                           value="pdf" required>&nbsp;<?php _e('PDF','tainacan'); ?>
+                           value="pdf" >&nbsp;<?php _e('PDF','tainacan'); ?>
                     <input type="radio" 
                            class="auto-save"
                            name="object_type" 
                            <?php if($socialdb_object_dc_type=='audio'): echo 'checked="checked"'; endif;  ?>
                            onchange="edit_show_other_type_field(this)" 
-                           value="audio" required>&nbsp;<?php _e('Audio','tainacan'); ?>
+                           value="audio" >&nbsp;<?php _e('Audio','tainacan'); ?>
                     <input type="radio"
                            class="auto-save"
                            onchange="edit_show_other_type_field(this)" 
                            <?php if(!in_array($socialdb_object_dc_type, $fields)): echo 'checked="checked"'; endif;  ?>
                            name="object_type" 
-                           value="other"  required>&nbsp;<?php _e('Other','tainacan'); ?>
+                           value="other"  >&nbsp;<?php _e('Other','tainacan'); ?>
                     <!--  TAINACAN:  Field extra para outro formato -->
                     <input <?php if(!in_array($socialdb_object_dc_type, $fields)): echo 'style="display:block"';else:echo 'style="display:none"'; endif;  ?>
                            type="text" 
@@ -577,7 +634,7 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                            id="external_option"
                            onchange="edit_toggle_from(this)" 
                            <?php if($socialdb_object_from=='external'): echo 'checked="checked"'; endif;  ?>
-                           value="external" required>&nbsp;<?php _e('Web Address','tainacan'); ?>
+                           value="external" >&nbsp;<?php _e('Web Address','tainacan'); ?>
                      <!-- TAINACAN: seleciona se o objeto eh interno -->
                     <input type="radio"
                            id="internal_option"
@@ -585,7 +642,7 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                            onchange="edit_toggle_from(this)" 
                            <?php if($socialdb_object_from=='internal'): echo 'checked="checked"'; endif;  ?>
                            name="object_from" 
-                           value="internal"  required>&nbsp;<?php _e('Local','tainacan'); ?>
+                           value="internal"  >&nbsp;<?php _e('Local','tainacan'); ?>
                     
                     
                         <!--  TAINACAN: Campo para importacao de noticias ou outros item VIA URL do tipo texto -->
