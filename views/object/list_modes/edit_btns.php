@@ -68,7 +68,7 @@ endif;
 ?>
 <li>
     <!-- TAINACAN: mostra o modal para reportar abusao em um item, gerando assim um evento -->
-    <a onclick="show_duplicate_item('<?php echo $curr_id ?>')" href="#" class="duplicate_item">
+    <a onclick="show_duplicate_item('<?php echo $curr_id ?>')" href="javascript:void(0)" class="duplicate_item">
         <span class="glyphicon glyphicon-copy"></span>
     </a>
 </li>
