@@ -26,8 +26,8 @@ $itemDelete = [
                 </li>
             <?php endif; ?>
 
-            <li> <a class="ac-duplicateTC-item"> <?php _t('Duplicate in this collection',1); ?> </a> </li>
-            <li> <a class="ac-duplicateOC-item"> <?php _t('Duplicate in other collection',1); ?> </a> </li>
+            <li> <a class="ac-duplicate-item" data-op="same"> <?php _t('Duplicate in this collection',1); ?> </a> </li>
+            <li> <a class="ac-duplicate-item" data-op="other"> <?php _t('Duplicate in other collection',1); ?> </a> </li>
             <li> <a class="ac-checkin"> <?php _t('Check-in',1); ?> </a> </li>            
             <li> <a class="ac-checkout"> <?php _t('Discard Check-out',1); ?> </a> </li>            
             <li> <a class="ac-create-version"> <?php _t('Create new version',1); ?> </a> </li>            

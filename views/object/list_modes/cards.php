@@ -1,3 +1,6 @@
+<?php
+$itemURL = $_SERVER['HTTP_REFERER'] . basename(get_permalink());
+?>
 <li class="col-md-6 cards-view-container top-div"
     id="object_<?php echo $curr_id ?>" data-order="<?php echo $countLine; ?>"
     <?php if ($collection_list_mode != "cards"): ?> style="display: none;" <?php endif ?> >
@@ -108,8 +111,7 @@
                     ?>
                     
                     <h4 class="item-display-title">
-                        <a href="<?php echo get_collection_item_href($collection_id); ?>"
-                           onclick="<?php get_item_click_event($collection_id,$curr_id) ?>">
+                        <a href="<?php echo $itemURL; ?>">
                             <?php echo wp_trim_words( $_item_title_, 13 ); ?>
                         </a>
                     </h4>
@@ -142,9 +144,8 @@
                                 <?php include "edit_btns.php"; ?>
                             </ul>
                             
-                            <?php // include_once "actions/item_actions.php"; ?>
-                            
-                            
+                            <?php // include "actions/item_actions.php"; ?>
+
                             <ul class="item-funcs-table col-md-5 right" style="display:none;">
                                 <input type="hidden" class="post_id" name="post_id" value="<?= $curr_id ?>">
                                 <li class="item-redesocial">
