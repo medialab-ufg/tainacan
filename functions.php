@@ -320,7 +320,6 @@ function custom_rewrite_basic() {
     
     add_rewrite_rule('^feed_collection/([^/]*)', 'index.php?collection_name=$matches[1]', 'top');
     add_rewrite_rule('^oai', 'index.php?oaipmh=true', 'top');
-    add_rewrite_rule('^([^/]*)/([^/]*)', 'index.php?collection=$matches[1]&item=$matches[2]', 'bottom');
     add_rewrite_rule('^'.__('advanced-search','tainacan'), 'index.php?collection='.$collection->post_name.'&advancedSearch=true', 'top');
     //paginas de admin da colecao
     add_rewrite_rule('^([^/]*)/admin/'.__('metadata','tainacan'), 'index.php?collection=$matches[1]&metadata=true', 'top');
@@ -350,6 +349,8 @@ function custom_rewrite_basic() {
     add_rewrite_rule('^log-in', 'index.php?log-in=true', 'top');
     add_rewrite_rule('^'.__('signin','tainacan'), 'index.php?log-in=true', 'top');
     add_rewrite_rule('^'.__('signin','tainacan'), 'index.php?log-in=true', 'top');
+    
+    add_rewrite_rule('^([^/]*)/([^/]*)', 'index.php?collection=$matches[1]&item=$matches[2]', 'top');
     flush_rewrite_rules();
 }
 
