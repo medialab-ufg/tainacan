@@ -124,12 +124,6 @@ $search_color = ($_color_scheme) ? $_color_scheme["primary"] : "#79a6ce";
         echo trim($_GET['tag']);
     }
     ?>">
-    <!-- PAGINA DA TAXONOMIA -->
-    <input type="hidden" id="tax_page" name="object_page" value="<?php
-    if (isset($_GET['tax'])) {
-        echo trim($_GET['tax']);
-    }
-    ?>">
     <input type="hidden" id="info_messages" name="info_messages" value="<?php
     if (isset($_GET['info_messages'])) {
         echo $_GET['info_messages'];
