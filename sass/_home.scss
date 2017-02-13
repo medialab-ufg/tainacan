@@ -4,7 +4,7 @@ body.home {
  background: black;
 
   .repository-sharings {
-    display: none;
+    display: none !important;
   }
 
   .user-actions.collapse {

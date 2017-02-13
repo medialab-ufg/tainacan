@@ -23,11 +23,11 @@
                 <div class="item-meta col-md-12 no-padding">
                     <?php
                     $_item_title_ = get_the_title();
+                    $_trim_desc = $_object_description;
 
                     if( is_array($table_meta_array) && count($table_meta_array) > 0):
                         $_DEFAULT_EMPTY_VALUE = "--";
                         //$_trim_desc = wp_trim_words($_object_description, 16);
-                        $_trim_desc = $_object_description;
                         foreach ($table_meta_array as $item_meta_info):
                             $fmt = str_replace("\\","", $item_meta_info);
                             if(is_string($fmt)):
@@ -113,8 +113,9 @@
                             <?php echo wp_trim_words( $_item_title_, 13 ); ?>
                         </a>
                     </h4>
+                                        
                     <div class="item-description"> <?php echo $_trim_desc; ?> </div>
-                    <div class='item-desc-hidden-full' style="display: none"><?php echo $_object_description; ?></div>                        
+                    <div class='item-desc-hidden-full' style="display: none"><?php echo $_object_description; ?></div>       
                     
                     <div class="row author-created">
                         <div class="col-md-6 author">
@@ -140,6 +141,9 @@
                                 </li>
                                 <?php include "edit_btns.php"; ?>
                             </ul>
+                            
+                            <?php // include_once "actions/item_actions.php"; ?>
+                            
                             
                             <ul class="item-funcs-table col-md-5 right" style="display:none;">
                                 <input type="hidden" class="post_id" name="post_id" value="<?= $curr_id ?>">

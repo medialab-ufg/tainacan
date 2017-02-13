@@ -379,9 +379,12 @@ button.collection-trash {
             text-align: right;
           }
           .author-created {
+            height: 18px;            
             margin-top: 5px;
             margin-bottom: 5px;
             font-size: 11px;
+            overflow: hidden;
+
             .author {
               padding-right: 0;
             }
@@ -391,6 +394,23 @@ button.collection-trash {
             bottom: 0;
             width: 95%;
           }
+
+          li.open_item_actions {
+            & > a {
+              padding: 0 15px 0 0;
+              margin-top: -3px;
+
+              &:hover {
+                background: transparent !important;  
+              }
+            }
+
+            a {
+              cursor: pointer;
+            }
+          }
+
+
         } // .item-meta-box
       }
 
