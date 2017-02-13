@@ -2,19 +2,14 @@
 <?php if (get_option('collection_root_id') != $collection_id): ?>
     <!--------------------------- DELETE AND EDIT OBJECT------------------------------------------------>
     <?php if ($is_moderator || get_post($curr_id)->post_author == get_current_user_id()): ?>
-    <li class="dropdown" >
-            <?php
-            if (has_filter('show_edit_default') && apply_filters('show_edit_default', $data['collection_id'])) {
-                ?>
-               <a style="cursor: pointer;"   onclick="edit_object('<?php echo $curr_id ?>')">
-                    <?php
-                } else {
-                    $has_checked_in = get_post_meta( $curr_id ,'socialdb_object_checkout', true);
-                    ?>
+        <li class="dropdown" >
+            <?php if (has_filter('show_edit_default') && apply_filters('show_edit_default', $data['collection_id'])) { ?>
+            <a style="cursor: pointer;" onclick="edit_object('<?php echo $curr_id ?>')">
+                <?php } else { $has_checked_in = get_post_meta( $curr_id ,'socialdb_object_checkout', true); ?>
                    <a id="edit_button_<?php echo $curr_id ?>" style="cursor: pointer;"
                       data-toggle="dropdown" role="button" aria-expanded="false"
                        onclick="edit_object_item('<?php echo $curr_id ?>')">
-                    <?php } ?>
+                       <?php } ?>
                     <span class="glyphicon glyphicon-edit"></span>
                    </a>
                    <?php if(is_numeric($has_checked_in)): ?>
