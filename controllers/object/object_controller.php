@@ -361,7 +361,6 @@ class ObjectController extends Controller {
                 }
                 //busco a forma de visualizacao do item
                 $mode = get_post_meta($col_id, 'socialdb_collection_item_visualization', true);
-                $mode = '';
                 //se existir a acao para alterar a home do item
                 if (has_action('alter_page_item')) {
                     return apply_filters('alter_page_item', $data);
@@ -440,7 +439,7 @@ class ObjectController extends Controller {
                     }
                     //busco a forma de visualizacao do item
                     $mode = get_post_meta($data['collection_id'], 'socialdb_collection_item_visualization', true);
-                    $mode = '';
+                    //$mode = '';
                     //se existir a acao para alterar a home do item
                     if (has_filter('alter_page_item')) {
                         $array_json['html'] = apply_filters('alter_page_item', $data);

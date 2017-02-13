@@ -95,9 +95,13 @@ $(function(){
             }
         }
         $("#object_content").val(CKEDITOR.instances.object_editor.getData()); 
-        var selKeys = $.map($("#dynatree").dynatree("getSelectedNodes"), function(node) {
-                    return node.data.key;
-        });
+        if( $("#dynatree").length>0){
+            var selKeys = $.map($("#dynatree").dynatree("getSelectedNodes"), function(node) {
+                        return node.data.key;
+            });
+        }else{
+            var selKeys = [];
+        }
         $('#object_classifications').val(selKeys.join(", ")); 
         $('#modalImportMain').modal('show');//mostro o modal de carregamento
         $.ajax( {

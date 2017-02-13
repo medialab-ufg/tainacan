@@ -9,6 +9,11 @@ $collection_route = get_post(get_option('collection_root_id'));
     }
     ?>">
 <!-- Paginas da colecao -->
+<input type="hidden" id="goToAdvancedSearch" name="goToAdvancedSearch" value="<?php
+    if ((get_query_var('advancedSearch') && get_query_var('collection') == $collection_route->post_name ) && get_query_var('advancedSearch')) {
+        echo trim(get_query_var('advancedSearch'));
+    }
+    ?>">
 <input type="hidden" id="goToCollectionMetadata" name="goToCollectionMetadata" value="<?php
     if ((get_query_var('collection') && get_query_var('collection') !== $collection_route->post_name ) && get_query_var('metadata')) {
         echo trim(get_query_var('metadata'));
@@ -116,7 +121,11 @@ $collection_route = get_post(get_option('collection_root_id'));
      //pagina central da colecao
     $.router.add( $('#route_blog').val()+':collection', function(data) {
         console.log('rota only collection');
-        backToMainPage(); 
+        if(data.collection == '<?php echo __('advanced-search','tainacan') ?>'){
+            showAdvancedSearch($('#src').val());
+        }else{
+            backToMainPage(); 
+        }
     });
     //pagina do item
     $.router.add( $('#route_blog').val()+':collection/:item', function(data) {
@@ -204,6 +213,8 @@ $collection_route = get_post(get_option('collection_root_id'));
             }
         } else if($('#goToLogin').val()!==''){
             showLoginScreen($('#src').val());
+        }else if($('#goToAdvancedSearch').val()!==''){
+             showAdvancedSearch($('#src').val());
         }
         // REPOSITORIO ROTAS
         <?php if (current_user_can('manage_options')): ?>
@@ -256,6 +267,27 @@ $collection_route = get_post(get_option('collection_root_id'));
         <?php endif; ?>
     }
     
+    
+    function updateStatePage(state){
+        //url amigavel
+        if (window.history && window.history.pushState) {
+
+            $(window).on('popstate', function () {
+                var hashLocation = location.hash;
+                var hashSplit = hashLocation.split("#!/");
+                var hashName = hashSplit[1];
+
+                if (hashName !== '') {
+                    var hash = window.location.hash;
+                    if (hash === '') {
+                       // backRoute();
+                    }
+                }
+            });
+            window.history.pushState('forward', null, $('#route_blog').val()+'/'+state);
+            //
+        }
+    }
     /**
      * atualiza a url do admin da colecao
      * @param {type} state

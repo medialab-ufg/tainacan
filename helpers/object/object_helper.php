@@ -10,7 +10,7 @@ class ObjectHelper extends ViewHelper {
             $collection_id = $this->collection_id;
         $tabs = unserialize(get_post_meta($collection_id, 'socialdb_collection_update_tab_organization', true));
         $default_tab = get_post_meta($collection_id, 'socialdb_collection_default_tab', true);
-        if ($showTabs || !$tabs || empty($tabs) && !$default_tab):
+        if ( !$tabs || empty($tabs) && !$default_tab):
             ?>
             <!--div    style="<?php echo ($this->hide_main_container) ? 'margin-bottom:0%' : '' ?>" 
                     class="expand-all-item btn white tainacan-default-tags">

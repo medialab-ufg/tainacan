@@ -13,7 +13,10 @@ include_once(dirname(__FILE__).'/../../helpers/object/object_helper.php');
 
 $view_helper = new ObjectHelper($collection_id);
 $val = get_post_meta($collection_id, 'socialdb_collection_submission_visualization', true);
-$habilitateMedia = get_post_meta($collection_id, 'socialdb_collection_habilitate_media', true);
+if($is_view_mode)
+    $habilitateMedia = get_post_meta($collection_id, 'socialdb_collection_item_habilitate_media', true);
+else
+    $habilitateMedia = get_post_meta($collection_id, 'socialdb_collection_habilitate_media', true);
 $css = '';
 if($val&&$val=='one'){
     $view_helper->hide_main_container = true;
@@ -154,14 +157,16 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                 </h2>
                  <div >
                      <?php if($is_view_mode): 
-                              if($socialdb_object_dc_type!='text'&&$socialdb_object_from=='internal'):
-                                  echo '<h4>'.__('Actual Item Content','tainacan').'</h4>';
+                              if($socialdb_object_dc_type!='text'&&$socialdb_object_from=='internal' && is_numeric($socialdb_object_content)):
+                                  echo '<p>'.__('Actual Item Content','tainacan').'</hp>';
                                   echo get_post($socialdb_object_content)->post_title."<br>";
-                                  echo wp_get_attachment_link($socialdb_object_content, 'thumbnail', false, true);
+                                  echo wp_get_attachment_link($socialdb_object_content, 'thumbnail', false, true);  
                               elseif($socialdb_object_dc_type=='text'): ?>
                                   <a style="cursor:pointer;" 
                                       onclick="wpquery_link_filter('<?php echo $socialdb_object_content ?>','<?php echo $view_helper->terms_fixed['content']->term_id ?>')"><?php echo $socialdb_object_content ?></a>  
                               <?php
+                              else:
+                                    echo '<p>' . __('empty field', 'tainacan') . '</p>';
                               endif;
                       else: ?>
                       <div id="thumb-idea-form" <?php do_action('item_from_attributes') ?>>
@@ -256,7 +261,9 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                         </h2>
                         <div>
                             <?php if($is_view_mode): ?>
-                            
+                                <div <?php if (has_action('home_item_attachments_div')) do_action('home_item_attachments_div') ?> >
+                                    <div id="single_list_files_<?php echo $object->ID ?>"></div>
+                                </div>
                             <?php else: ?>
                             <div id="dropzone_edit"  
                                 <?php do_action('item_attachments_attributes') ?> <?php if($socialdb_collection_attachment=='no') echo 'style="display:none"' ?> 
@@ -302,6 +309,8 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                     if($is_view_mode): 
                         if (get_the_post_thumbnail($object->ID, 'thumbnail')):
                                 echo get_the_post_thumbnail($object->ID, 'thumbnail');
+                        else:
+                            echo '<p>' . __('empty field', 'tainacan') . '</p>';
                         endif;
                      else: ?>
                         <div id="existent_thumbnail">
@@ -346,10 +355,15 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                 </h2>
                  <div>
                     <?php if($is_view_mode): ?>
-                          <a style="cursor:pointer;" 
-                             onclick="wpquery_link_filter('<?php echo $socialdb_object_dc_source ?>','<?php echo $view_helper->terms_fixed['source']->term_id ?>')">
-                                 <?php echo $socialdb_object_dc_source ?></a>    
-                    <?php else: ?>
+                            <?php if($socialdb_object_dc_source): ?>
+                                <a style="cursor:pointer;" 
+                                   onclick="wpquery_link_filter('<?php echo $socialdb_object_dc_source ?>','<?php echo $view_helper->terms_fixed['source']->term_id ?>')">
+                                       <?php echo $socialdb_object_dc_source ?></a>    
+                            <?php           
+                            else:
+                                echo '<p>' . __('empty field', 'tainacan') . '</p>';
+                            endif;     
+                    else: ?>
                         <input  
                              type="text" 
                              id="object_source" 
@@ -379,9 +393,14 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                 </h2>
                 <div>
                     <?php if($is_view_mode): ?>
+                        <?php if($socialdb_object_dc_source): ?>
                           <a style="cursor:pointer;" 
                              onclick="wpquery_link_filter('<?php echo $object->post_content ?>','<?php echo $view_helper->terms_fixed['description']->term_id ?>')">
-                                 <?php echo $object->post_content ?></a>    
+                                 <?php echo $object->post_content ?></a>  
+                        <?php           
+                           else:
+                               echo '<p>' . __('empty field', 'tainacan') . '</p>';
+                           endif;  ?>
                     <?php else: ?>
                      <textarea class="form-control auto-save" 
                                id="object_description_example" 
@@ -408,12 +427,17 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                 </h2>
                 <div>
                     <?php if($is_view_mode): ?>
-                        <?php $tags = implode(',', $tags_name) ?>
-                        <?php foreach($tags as $tag): ?>
-                             <a style="cursor:pointer;" 
-                                onclick="wpquery_link_filter('<?php echo $tag ?>','<?php echo $view_helper->terms_fixed['tags']->term_id ?>')">
-                                    <?php echo $tag ?></a>    
-                        <?php endforeach; ?>
+                            <?php if($tags_name): ?>
+                                <?php $tags = implode(',', $tags_name) ?>
+                                <?php foreach($tags as $tag): ?>
+                                     <a style="cursor:pointer;" 
+                                        onclick="wpquery_link_filter('<?php echo $tag ?>','<?php echo $view_helper->terms_fixed['tags']->term_id ?>')">
+                                            <?php echo $tag ?></a>                   
+                                <?php endforeach; ?>
+                            <?php 
+                                else:
+                                    echo '<p>' . __('empty field', 'tainacan') . '</p>';
+                                endif;  ?> 
                     <?php else: ?>
                         <input type="text" 
                                class="form-control auto-save"
@@ -483,9 +507,9 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
 <?php if($view_helper->mediaHabilitate): ?>
             <!-- Thumbnail e anexos -->
             <div class="col-md-3" id="mediaHabilitateContainer" style="display: none; background: white;border: 3px solid #E8E8E8;font: 11px Arial;">
-                <h4> 
+                <h3> 
                    <?php echo ($view_helper->terms_fixed['thumbnail']) ? $view_helper->terms_fixed['thumbnail']->name :  _e('Thumbnail','tainacan') ?>
-               </h4>
+               </h3>
                 <hr style="margin-top:-5px;">
                 <div id="thumnbail_place" >
                     <center>
@@ -495,9 +519,11 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                                     echo get_the_post_thumbnail($object->ID, 'thumbnail');
                                     ?>
                                     <br><br>
+                                    <?php   if(!$is_view_mode):  ?>
                                     <label for="remove_thumbnail"><?php _e('Remove Thumbnail', 'tainacan'); ?></label>
                                     <input type="hidden" name="object_has_thumbnail" value="true">
                                     <input type="checkbox"  id="remove_thumbnail_object" name="remove_thumbnail_object" value="true">
+                                    <?php endif ?>
                                     <br><br>
                                     <?php } else {
                                     ?> 
@@ -507,32 +533,40 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                             </div>     
                             <div id="image_side_edit_object">
                             </div>
+                            <?php   if(!$is_view_mode):  ?>
                             <input type="file" size="50" id="object_thumbnail_edit" name="object_thumbnail" class="btn btn-default btn-sm auto-save">  
+                             <?php endif ?>
                     </center>        
                 </div>
-                <h4> 
+                <?php   if(!$is_view_mode):  ?>
+                <h3> 
                    <?php echo ($view_helper->terms_fixed['attachments']) ? $view_helper->terms_fixed['attachments']->name :  _e('Attachments','tainacan') ?>
-               </h4>
+               </h3>
                 <hr style="margin-top:-5px;">
                  <div >
                       <center>
-                     <div id="dropzone_edit"  
-                            <?php do_action('item_attachments_attributes') ?> <?php if($socialdb_collection_attachment=='no') echo 'style="display:none"' ?> 
-                             class="dropzone"
-                             style="margin-bottom: 5px;min-height: 150px;padding-top: 0px;">
-                                <div class="dz-message" data-dz-message>
-                                    <span style="text-align: center;vertical-align: middle;">
-                                        <h3>
-                                            <span class="glyphicon glyphicon-upload"></span>
-                                            <b><?php _e('Drop Files','tainacan')  ?></b> 
-                                                <?php _e('to upload','tainacan')  ?>
-                                        </h3>
-                                        <h4>(<?php _e('or click','tainacan')  ?>)</h4>
-                                    </span>
-                                </div>
-                    </div>
-                      </center>      
+                            <div id="dropzone_edit"  
+                                   <?php do_action('item_attachments_attributes') ?> <?php if($socialdb_collection_attachment=='no') echo 'style="display:none"' ?> 
+                                    class="dropzone"
+                                    style="margin-bottom: 5px;min-height: 150px;padding-top: 0px;">
+                                       <div class="dz-message" data-dz-message>
+                                           <span style="text-align: center;vertical-align: middle;">
+                                               <h3>
+                                                   <span class="glyphicon glyphicon-upload"></span>
+                                                   <b><?php _e('Drop Files','tainacan')  ?></b> 
+                                                       <?php _e('to upload','tainacan')  ?>
+                                               </h3>
+                                               <h4>(<?php _e('or click','tainacan')  ?>)</h4>
+                                           </span>
+                                       </div>
+                           </div>
+                    </center> 
                  </div>
+                 <?php else: ?> 
+                    <div <?php if (has_action('home_item_attachments_div')) do_action('home_item_attachments_div') ?> >
+                        <div id="single_list_files_<?php echo $object->ID ?>"></div>
+                    </div>
+                <?php endif ?>
             </div>
         <?php endif; ?>
 <!----------------- CONTAINER MAIOR - NOME,CONTEUDO E ANEXOS  ----------------->

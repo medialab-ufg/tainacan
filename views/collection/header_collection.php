@@ -109,14 +109,12 @@ if( empty($_enable_header_) || $_enable_header_ == "enabled") {
                                 <div class="fab"><small><h6><b>csv</b></h6></small></div>
                             </a-->
                         <?php } ?>
-
-                        <button id="iframebutton" data-container="body" data-toggle="popover" data-placement="left"
+                        <!--button id="iframebutton" data-container="body" data-toggle="popover" data-placement="left"
                                 data-title="URL Iframe" data-content="" data-original-title="" title="Embed URL">
                             <div class="fab">
                                 <small><h6><b><></b></h6></small>
                             </div>
-                        </button>
-
+                        </button-->
                         <script>
                             set_popover_content($("#socialdb_permalink_collection").val() + '?' + elem.url + '&is_filter=1');
                         </script>
@@ -133,57 +131,69 @@ if( empty($_enable_header_) || $_enable_header_ == "enabled") {
                             <div class="fab"><small><h6><b>items</b></h6></small></div>
                         </a-->
                         <?php endif; ?>
-                        <a href="#" id="resources_collection_button" class="dropdown-toggle" data-toggle="dropdown"
-                           role="button" aria-expanded="false">
-                            <div class="fab">
-                                <div style="font-size:1em; cursor:pointer;" data-icon="&#xe00b;"></div>
-                            </div>
-                        </a>
-                        <ul id="resources_collection_dropdown" class="dropdown-menu" role="menu">
-                            <li>
-                                <a target="_blank" href="<?php echo get_the_permalink($collection_post->ID) ?>?all.rdf"><span
-                                        class="glyphicon glyphicon-upload"></span> <?php _e('RDF', 'tainacan'); ?>&nbsp;
-                                </a>
-                            </li>
-                            <?php if (is_restful_active()): ?>
+                        <div class="dropdown collec_menu_opnr " style="padding:0px;">
+                            <a href="#" id="resources_collection_button" class="dropdown-toggle" data-toggle="dropdown"
+                               role="button" aria-expanded="false">
+                                <div class="fab">
+                                    <div style="font-size:1em; cursor:pointer;" data-icon="&#xe00b;"></div>
+                                </div>
+                            </a>
+                            <ul id="resources_collection_dropdown" class="dropdown-menu pull-right dropdown-show" role="menu">
                                 <li>
-                                    <a href="<?php echo site_url() . '/wp-json/posts/' . $collection_post->ID . '/?type=socialdb_collection' ?>"><span
-                                            class="glyphicon glyphicon-upload"></span> <?php _e('JSON', 'tainacan'); ?>
-                                        &nbsp;
+                                    <a target="_blank" href="<?php echo get_the_permalink($collection_post->ID) ?>?all.rdf"><span
+                                            class="glyphicon glyphicon-upload"></span> <?php _e('RDF', 'tainacan'); ?>&nbsp;
                                     </a>
                                 </li>
-                            <?php endif; ?>
-                            <?php if (get_option('collection_root_id') != $collection_post->ID) { ?>
+                                <?php if (is_restful_active()): ?>
+                                    <li>
+                                        <a href="<?php echo site_url() . '/wp-json/posts/' . $collection_post->ID . '/?type=socialdb_collection' ?>"><span
+                                                class="glyphicon glyphicon-upload"></span> <?php _e('JSON', 'tainacan'); ?>
+                                            &nbsp;
+                                        </a>
+                                    </li>
+                                <?php endif; ?>
+                                <?php if (get_option('collection_root_id') != $collection_post->ID) { ?>
+                                    <li>
+                                        <a style="cursor: pointer;" onclick="export_selected_objects()"><span
+                                                class="glyphicon glyphicon-upload"></span> <?php _e('CSV', 'tainacan'); ?>
+                                            &nbsp;
+                                        </a>
+                                    </li>
+                                <?php } ?>
                                 <li>
-                                    <a style="cursor: pointer;" onclick="export_selected_objects()"><span
-                                            class="glyphicon glyphicon-upload"></span> <?php _e('CSV', 'tainacan'); ?>
-                                        &nbsp;
-                                    </a>
-                                </li>
-                            <?php } ?>
-                            <li>
-                                <a onclick="showGraph('<?php echo get_the_permalink($collection_post->ID) ?>?all.rdf')"
-                                   style="cursor: pointer;">
-                                    <span class="glyphicon glyphicon-upload"></span> <?php _e('Graph', 'tainacan'); ?>
-                                    &nbsp;
-                                </a>
-                            </li>
-                            <?php if (get_post_meta($collection_post->ID, 'socialdb_collection_mapping_exportation_active', true)): ?>
-                                <li>
-                                    <a href="<?php echo site_url() ?>/oai/socialdb-oai/?verb=ListRecords&metadataPrefix=oai_dc&set=<?php echo $collection_post->ID ?>"
+                                    <a onclick="showGraph('<?php echo get_the_permalink($collection_post->ID) ?>?all.rdf')"
                                        style="cursor: pointer;">
-                                        <span
-                                            class="glyphicon glyphicon-upload"></span> <?php _e('OAI-PMH', 'tainacan'); ?>
+                                        <span class="glyphicon glyphicon-upload"></span> <?php _e('Graph', 'tainacan'); ?>
                                         &nbsp;
                                     </a>
                                 </li>
-                            <?php endif; ?>
-                        </ul>
+                                <?php if (get_post_meta($collection_post->ID, 'socialdb_collection_mapping_exportation_active', true)): ?>
+                                    <li>
+                                        <a href="<?php echo site_url() ?>/oai/socialdb-oai/?verb=ListRecords&metadataPrefix=oai_dc&set=<?php echo $collection_post->ID ?>"
+                                           style="cursor: pointer;">
+                                            <span
+                                                class="glyphicon glyphicon-upload"></span> <?php _e('OAI-PMH', 'tainacan'); ?>
+                                            &nbsp;
+                                        </a>
+                                    </li>
+                                <?php endif; ?>
+                            </ul>
+                        </div>    
                         <!-- ******************** TAINACAN: Comentarios ******************** -->
                         <a style="cursor: pointer;" onclick="showPageCollectionPage()">
                             <div class="fab"><span style="font-size: medium;"
                                                    class="glyphicon glyphicon-comment"></span></div>
                         </a>
+                        <div class="dropdown collec_menu_opnr " style="padding:0px;">
+                            <a id="iframebutton" class="dropdown-toggle" data-toggle="dropdown"
+                               role="button" aria-expanded="false">
+                                <div class="fab">
+                                    <small><h6><b><></b></h6></small>
+                                </div>
+                            </a>
+                            <ul id="iframebutton_dropdown" class="dropdown-menu pull-right dropdown-show" role="menu">
+                            </ul>
+                        </div>    
                     </div>
                 </div>
             </div>

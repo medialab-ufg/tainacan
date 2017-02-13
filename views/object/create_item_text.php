@@ -58,7 +58,7 @@
                 </h4>
                 <hr>
                 <!--------------------------- ABAS----------------------------->
-                <?php $view_helper->add_tabs() ?>
+                <?php $view_helper->add_tabs($collection_id) ?>
             <?php else: ?>   
                 <div    style="<?php echo ($view_helper->hide_main_container)?'margin-bottom:0%':'' ?>" 
                     class="expand-all-item btn white tainacan-default-tags">

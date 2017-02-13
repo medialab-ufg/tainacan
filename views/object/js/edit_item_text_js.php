@@ -70,6 +70,9 @@
                     showCKEditor('objectedit_editor');
                     createDraft();
                     set_content_valid();
+                     <?php else: ?>
+                     $('#submit_form_edit_object h2 span').hide(); 
+                     list_files_single( $("#object_id_edit").val());
                     <?php endif; ?>
                 });
             });
@@ -89,11 +92,13 @@
             var selKeys = $.map($("#dynatree").dynatree("getSelectedNodes"), function (node) {
                 return node.data.key;
             });
-            $("#dynatree").dynatree("getRoot").visit(function (node) {
-                if (nodes_selected.indexOf(node.data.key) > -1 && selKeys.indexOf(node.data.key) < 0) {
-                    removed.push(node.data.key);
-                }
-            });
+            if( $("#dynatree").length>0){
+                $("#dynatree").dynatree("getRoot").visit(function (node) {
+                    if (nodes_selected.indexOf(node.data.key) > -1 && selKeys.indexOf(node.data.key) < 0) {
+                        removed.push(node.data.key);
+                    }
+                });
+            }
             
             $.each(nodes_selected, function (key, value) {
                 if (removed.indexOf(value.trim()) < 0 && selKeys.indexOf(value.trim()) < 0) {

@@ -27,6 +27,8 @@
                     $('#items_not_found').hide();
                 }
             });
+        }else{
+            set_popover_content($("#socialdb_permalink_collection").val());
         }
     });
     /**************************** Comentarios **************************************************/
@@ -239,13 +241,11 @@
     /******************************************************************************/
 
     function set_popover_content(content) {
-        $('[data-toggle="popover"]').popover();
-        var myPopover = $('#iframebutton').data('popover');
-        $('#iframebutton').popover('hide');
-        if (myPopover) {
-            myPopover.options.html = true;
-            //<iframe width="560" height="315" src="https://www.youtube.com/embed/CGyEd0aKWZE" frameborder="0" allowfullscreen></iframe>
-            myPopover.options.content = '<form>Search URL:&nbsp<input type="text" style="width:165px;" value="' + content + '" /><br><br>Iframe:&nbsp<input type="text" style="width:200px;" value="<iframe style=\'width:100%\' height=\'1000\' src=\'' + content + '\' frameborder=\'0\'></iframe>" /></form>';
+        //$('[data-toggle="popover"]').popover();
+        //var myPopover = $('#iframebutton').data('popover');
+        //$('#iframebutton').popover('hide');
+        if ($('#iframebutton_dropdown').length>0) {
+            $('#iframebutton_dropdown').html('<form style="margin:5px;">Search URL:&nbsp<input type="text" style="width:165px;" value="' + content + '" /><br><br>Iframe:&nbsp<input type="text" style="width:200px;" value="<iframe style=\'width:100%\' height=\'1000\' src=\'' + content + '\' frameborder=\'0\'></iframe>" /></form>'); 
         }
     }
     
