@@ -5,12 +5,12 @@ $itemDelete = [
     'text' => _t('Are you sure to remove the object: ') . get_the_title()
 ];
 ?>
-<ul class="nav navbar-bar navbar-right" style="z-index: 99">
+<ul class="nav navbar-bar navbar-right item-menu-container">
     <li class="dropdown open_item_actions" id="action-<?php echo $curr_id; ?>">
         <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
             <?php echo ViewHelper::render_icon("config", "png", _t('Item options')); ?>
         </a>
-        <ul class="dropdown-menu pull-right dropdown-show" role="menu">
+        <ul class="dropdown-menu pull-right dropdown-show new-item-menu" role="menu" id="item-menu-options">
             <li> <a class="ac-view-item" href="<?php echo $itemURL; ?>"> <?php _t('View Item',1); ?> </a> </li>
             <?php /* <li> <a class="ac-open-file"> <?php _t('Open item file',1); ?> </a> </li> */ ?>
 
@@ -40,7 +40,7 @@ $itemDelete = [
                 <li> <a class="ac-item-versions"> <?php _t('Item versions',1); ?> </a> </li>
             <?php endif; ?>
             
-            <li> <a class="ac-item-rdf"> <?php _t('Export RDF',1); ?> </a> </li>            
+            <li> <a class="ac-item-rdf" href="<?php echo $itemURL; ?>.rdf" target="_blank"> <?php _t('Export RDF',1); ?> </a> </li>
             <li> <a class="ac-item-graph"> <?php _t('See graph',1); ?> </a> </li>            
             <li> <a class="ac-comment-item"> <?php _t('Comment item',1); ?> </a> </li>
 

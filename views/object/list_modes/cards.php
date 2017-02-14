@@ -1,5 +1,12 @@
 <?php
-$itemURL = $_SERVER['HTTP_REFERER'] . basename(get_permalink());
+$_current_collection = $_SERVER['HTTP_REFERER'];
+$_last_char = $_current_collection[strlen($_current_collection) - 1];
+
+if( $_last_char != "/" ) {
+    $_current_collection .= '/';
+}
+
+$itemURL = $_current_collection . basename(get_permalink());
 ?>
 <li class="col-md-6 cards-view-container top-div"
     id="object_<?php echo $curr_id ?>" data-order="<?php echo $countLine; ?>"

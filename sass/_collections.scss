@@ -397,7 +397,7 @@ button.collection-trash {
 
           li.open_item_actions {
             & > a {
-              padding: 0 15px 0 0;
+              padding: 0 15px 0 20px;
               margin-top: -3px;
 
               &:hover {
@@ -834,5 +834,15 @@ a.events-link {
       z-index: 3;
       position: relative;
     }
+  }
+}
+
+ul.item-menu-container {
+  z-index: 99;
+  #item-menu-options {
+    margin-top: -60px !important;
+  }
+  ul.new-item-menu {
+    margin-right: 35px;
   }
 }
