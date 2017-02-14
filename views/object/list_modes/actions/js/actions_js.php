@@ -56,5 +56,17 @@
             });
         });
 
+        $('a.ac-comment-item').on('click', function() {
+            var item_id = $(this).parents().find('.open_item_actions').first().attr('id').replace('action-', '');
+            $.ajax({
+                type: 'POST', url: path,
+                data: {collection_id: $('#collection_id').val(), operation: 'list_comments', object_id: item_id}
+            }).done(function(r){
+                $("#comment_item"+item_id + ' .modal-body').html(r);
+                $("#comment_item"+item_id).modal('show');
+            });
+
+        });
+
     });
 </script>

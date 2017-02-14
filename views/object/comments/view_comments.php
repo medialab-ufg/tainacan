@@ -16,7 +16,6 @@
            //  comment_form('', $object->ID ); 
             comments_template('/comments.php'); // Get wp-comments.php template 
         endwhile;
-    }else
-    {
+    } else {
         echo '<p>'.__('NO POSTS!','tainacan').'</p>';
     }

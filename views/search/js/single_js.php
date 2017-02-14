@@ -68,10 +68,7 @@
                 elem_first = jQuery.parseJSON(result);
                 showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
                 list_comments_general();
-                /*
-                $('.dropdown-toggle').dropdown();
-                $('.nav-tabs').tab();
-                */
+                $("#comment_item"+object_id).modal('hide');
             });
         }
     }

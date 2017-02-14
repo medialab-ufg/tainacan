@@ -1,5 +1,6 @@
 <?php
 $curr_id = get_the_ID();
+$curr_title = get_the_title();
 $curr_time = mktime();
 $root_id = get_option('collection_root_id');
 /*
@@ -7,7 +8,7 @@ $root_id = get_option('collection_root_id');
  *
  */
 ?>
-<div class="modal fade modal-share-network" id="modal_share_network<?php echo get_the_ID() ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade modal-share-network" id="modal_share_network<?php echo $curr_id ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
 
@@ -56,9 +57,9 @@ if (get_option('collection_root_id') != $collection_id):
      * TAINACAN: modal padrao bootstrap para duplicar item
      */
     ?>
-    <div class="modal fade" id="modal_duplicate_object<?php echo get_the_ID() ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modal_duplicate_object<?php echo $curr_id ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <form method="post" id="formDuplicateItem<?php echo get_the_ID() ?>">
+            <form method="post" id="formDuplicateItem<?php echo $curr_id ?>">
                 <div class="modal-content">
 
                     <?php echo $viewHelper->render_modal_header('remove-sign', '<span class="glyphicon glyphicon-share"></span> ', __('Duplicate Item', 'tainacan')); ?>
@@ -85,26 +86,41 @@ if (get_option('collection_root_id') != $collection_id):
             </form>
         </div>
     </div>
+    
+    <div class="modal fade" role="dialog" aria-hidden="true" tabindex="-1" id="comment_item<?php echo $curr_id?>">
+        <div class="modal-dialog">
+            <div class="modal-content dynamic-item-comment">
 
-    <?php if (!$is_moderator || get_post(get_the_ID())->post_author != get_current_user_id()): ?>
+                <?php
+                $_comment_str = _t('Comment ') . $curr_title;
+                echo $viewHelper->render_modal_header('remove-sign', '<span class="glyphicon glyphicon-comment"></span> ', $_comment_str); ?>
+
+                <div class="modal-body"> </div>
+
+                <?php echo $viewHelper->render_modal_footer("submit_comment(\"$curr_id\")", __('Send', 'tainacan')); ?>
+            </div>
+        </div>
+    </div>
+
+    <?php if (!$is_moderator || get_post($curr_id)->post_author != get_current_user_id()): ?>
 
         <?php
         /*
          * TAINACAN: modal padrao bootstrap para reportar abuso
          */
         $abuse_title = __('Report Abuse', 'tainacan');
-        $abuse_text = __('Are you sure to remove the object: ', 'tainacan') . get_the_title();
-        $curr_time = mktime();
+        $abuse_text = __('Are you sure to remove the object: ', 'tainacan') . $curr_title;
+        // $curr_time = mktime();
         ?>
-        <div class="modal fade" id="modal_delete_object<?php echo get_the_ID() ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal fade" id="modal_delete_object<?php echo $curr_id ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
 
                     <?php echo $viewHelper->render_modal_header('remove-sign', '<span class="glyphicon glyphicon-trash"></span> ', $abuse_title); ?>
 
                     <div class="modal-body">
-                        <?php echo __('Describe why the object: ', 'tainacan') . get_the_title() . __(' is abusive: ', 'tainacan'); ?>
-                        <textarea id="observation_delete_object<?php echo get_the_ID() ?>" class="form-control"></textarea>
+                        <?php echo __('Describe why the object: ', 'tainacan') . $curr_title . __(' is abusive: ', 'tainacan'); ?>
+                        <textarea id="observation_delete_object<?php echo $curr_id ?>" class="form-control"></textarea>
                     </div>
 
                     <?php echo $viewHelper->render_modal_footer("report_abuse_object(\"$abuse_title\", \"$abuse_text\", \"$curr_id\", \"$curr_time\")", __('Delete', 'tainacan')); ?>

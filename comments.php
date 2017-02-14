@@ -27,7 +27,7 @@ if ($global_data_permissions['create'] == 'anonymous') {
 
     <?php if (comments_open() && $verify_permission&&verify_allowed_action($global_collection_id,'socialdb_collection_permission_create_comment')): ?>
         <div id="respond">
-            <h3 style="margin-bottom: 10px;">
+            <h3 class="respond-title" style="margin-top: 10px;">
                 <?php _e( 'Leave your comment', 'tainacan'); ?>
                 <?php if($user_ID): ?>
                     <span style="margin-left: 15px; font-size: 12px">
@@ -39,11 +39,11 @@ if ($global_data_permissions['create'] == 'anonymous') {
             <fieldset>
                 <?php if( !$user_ID ) : ?>
                     <div class="col-md-12 tainacan-comment-fields no-padding">
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <label for="author"><?php _e('Name:', 'tainacan'); ?></label>
                             <input type="text" class="form-control" name="author" id="author" value="<?php echo $comment_author; ?>" />
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <label for="email"><?php _e('Email:', 'tainacan'); ?></label>
                             <input type="text" class="form-control" name="email" id="email" value="<?php echo $comment_author_email; ?>" />
                         </div>
@@ -57,11 +57,11 @@ if ($global_data_permissions['create'] == 'anonymous') {
 
                 <div class="col-md-12 tainacan-comment-msg">
                     <div class="">
-                        <div style="float: left;">
+                        <div style="float: left;" class="user-avatar">
                             <?php echo get_avatar($user_ID, 64); ?>
                         </div>
                         <textarea style="float: left" name="comment" id="comment" class="form-control leave-comment"></textarea>
-                        <div style="float: left; margin-left: 10px;">
+                        <div style="float: left; margin-left: 10px;" class="submit-comment-container">
                             <input type="button" onclick="submit_comment(<?php echo $post->ID ?>)" class="commentsubmit btn btn-primary" value="<?php _e('Comment', 'tainacan'); ?>" />
                         </div>
                     </div>

@@ -846,3 +846,17 @@ ul.item-menu-container {
     margin-right: 35px;
   }
 }
+
+.dynamic-item-comment {
+    .commentlist {
+        display: none;
+    }
+  #comments {
+
+    h3.respond-title, .user-avatar, .submit-comment-container {
+      display: none;
+    }
+
+  } // #comments
+} // .dynamic-item-comment
+

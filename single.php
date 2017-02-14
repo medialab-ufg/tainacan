@@ -507,9 +507,7 @@ $search_color = ($_color_scheme) ? $_color_scheme["primary"] : "#79a6ce";
     </ul>
     <!-- TAINACAN: esta div (AJAX) mostra as configuracoes da colecao  -->
     <div id='container-fluid-configuration' class="container-fluid no-padding" style="background-color: #f1f2f2">
-
-        <div id="configuration" class="col-md-12 no-padding" style="margin-top: 0px;"></div>
-
+        <div id="configuration" class="col-md-12 no-padding" style="margin-top: 0;"></div>
     </div>
     <!-- TAINACAN: scripts utilizados para criacao e monagem dos widgets de pesquisa  -->
 
@@ -989,8 +987,7 @@ $search_color = ($_color_scheme) ? $_color_scheme["primary"] : "#79a6ce";
         </div>
     </div>
 
-    <!-- TAINACAN: modal padrao bootstrap para redefinicaode senha   -->
-    <!-- Modal redefinir senha -->
+    <!-- TAINACAN: modal padrao bootstrap para redefinicao de senha -->
     <div class="modal fade" id="myModalPasswordReset" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
