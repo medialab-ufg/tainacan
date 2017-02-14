@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: socialdb\n"
-"POT-Creation-Date: 2017-02-13 17:57-0200\n"
-"PO-Revision-Date: 2017-02-13 17:58-0200\n"
+"POT-Creation-Date: 2017-02-14 10:06-0200\n"
+"PO-Revision-Date: 2017-02-14 10:10-0200\n"
 "Last-Translator: Rodrigo de Oliveira <webmaster@rodrigodeoliveira.net>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -146,7 +146,7 @@ msgid "Close"
 msgstr "Fechar"
 
 #: comments.php:133 comments.php:164 views/advanced_search/modals_adv.php:48
-#: views/object/list_modes/modals.php:47 views/object/list_modes/modals.php:83
+#: views/object/list_modes/modals.php:47 views/object/list_modes/modals.php:82
 #: views/user/login.php:111 views/user/login_header.php:111
 msgid "Send"
 msgstr "Enviar"
@@ -156,7 +156,7 @@ msgstr "Enviar"
 #: views/collection/config_menu.php:117
 #: views/collection/header_collection.php:211
 #: views/object/list_data_table.php:63 views/object/list_data_table.php:71
-#: views/object/list_modes/modals.php:96
+#: views/object/list_modes/modals.php:95
 #: views/object/list_single_object.php:126
 #: views/object/list_single_object_version.php:103
 msgid "Report Abuse"
@@ -777,8 +777,8 @@ msgstr "Deletar este comentário?"
 #: views/collection/config_menu.php:97 views/collection/edit.php:366
 #: views/collection/edit.php:1002 views/collection/header_collection.php:224
 #: views/object/list_data_table.php:56 views/object/list_data_table.php:79
-#: views/object/list_modes/modals.php:111
-#: views/object/list_modes/modals.php:140
+#: views/object/list_modes/modals.php:110
+#: views/object/list_modes/modals.php:139
 #: views/object/list_single_object.php:134
 #: views/object/list_single_object_version.php:111 views/property/list.php:98
 #: views/property/list.php:176 views/property/list.php:261
@@ -2539,7 +2539,7 @@ msgstr "Editar metadado de Termo"
 #: models/event/event_model.php:257 views/advanced_search/modals_adv.php:90
 #: views/collection/config_menu.php:68 views/collection/config_menu.php:97
 #: views/collection/header_collection.php:223
-#: views/object/list_modes/modals.php:126
+#: views/object/list_modes/modals.php:125
 #: views/theme_options/edit_configuration.php:106
 msgid "Delete Collection"
 msgstr "Excluir Coleção"
@@ -4162,7 +4162,7 @@ msgstr "Compartilhar em outra coleção:"
 #: views/object/list_modes/actions/item_actions.php:5
 #: views/object/list_modes/edit_btns.php:28
 #: views/object/list_modes/edit_btns_table.php:33
-#: views/object/list_modes/modals.php:97 views/object/list_single_object.php:79
+#: views/object/list_modes/modals.php:96 views/object/list_single_object.php:79
 #: views/object/list_single_object.php:134
 #: views/object/list_single_object_version.php:77
 #: views/object/list_single_object_version.php:111
@@ -4170,7 +4170,7 @@ msgid "Are you sure to remove the object: "
 msgstr "Tem certeza que deseja remover o item:"
 
 #: views/advanced_search/modals_adv.php:73 views/object/list_data_table.php:74
-#: views/object/list_modes/modals.php:107
+#: views/object/list_modes/modals.php:106
 #: views/object/list_single_object.php:129
 #: views/object/list_single_object_version.php:106
 msgid "Describe why the object: "
@@ -4179,8 +4179,8 @@ msgstr "Descreva o porquê do item "
 #: views/advanced_search/modals_adv.php:73
 #: views/advanced_search/modals_adv.php:100 views/collection/config_menu.php:92
 #: views/collection/header_collection.php:215
-#: views/object/list_data_table.php:74 views/object/list_modes/modals.php:107
-#: views/object/list_modes/modals.php:136
+#: views/object/list_data_table.php:74 views/object/list_modes/modals.php:106
+#: views/object/list_modes/modals.php:135
 #: views/object/list_single_object.php:129
 #: views/object/list_single_object_version.php:106
 msgid " is abusive: "
@@ -4191,13 +4191,13 @@ msgstr " é abusivo:"
 #: views/collection/header_collection.php:223
 #: views/object/list_modes/edit_btns.php:50
 #: views/object/list_modes/edit_btns_table.php:55
-#: views/object/list_modes/modals.php:127
+#: views/object/list_modes/modals.php:126
 msgid "Are you sure to remove the collection: "
 msgstr "Tem certeza que deseja remover a coleção:"
 
 #: views/advanced_search/modals_adv.php:100 views/collection/config_menu.php:92
 #: views/collection/header_collection.php:215
-#: views/object/list_modes/modals.php:136
+#: views/object/list_modes/modals.php:135
 msgid "Describe why the collection: "
 msgstr "Descre por que a coleção:"
 
@@ -4515,6 +4515,10 @@ msgstr "Importar Taxonomia"
 #: views/category/taxonomy_zone.php:79 views/property/list_metadata.php:131
 msgid "Save & Next"
 msgstr "Salvar e Continuar"
+
+#: views/collection/config_menu.php:8
+msgid "Collection configuration"
+msgstr "Configuração da coleção"
 
 #: views/collection/config_menu.php:69 views/object/js/list_js.php:277
 msgid "Clean Collection"
@@ -6628,6 +6632,10 @@ msgstr "Mais Informações"
 msgid "Less Info"
 msgstr "Menos Informações"
 
+#: views/object/list_modes/actions/item_actions.php:11
+msgid "Item options"
+msgstr "Opções do item"
+
 #: views/object/list_modes/actions/item_actions.php:14
 msgid "View Item"
 msgstr "Ver Item"
@@ -6686,10 +6694,18 @@ msgstr "Duplicar "
 msgid " at another collection"
 msgstr " em outra coleção"
 
-#: views/object/list_modes/actions/js/actions_js.php:21
-#: views/object/list_modes/modals.php:73
+#: views/object/list_modes/actions/js/actions_js.php:20
 msgid "Search collection"
 msgstr "Buscar coleção"
+
+#: views/object/list_modes/actions/js/actions_js.php:37
+msgid "Create new version of "
+msgstr "Criar novar versão de "
+
+#: views/object/list_modes/actions/js/actions_js.php:43
+#: views/object/list_modes/modals.php:78
+msgid "Versioning"
+msgstr "Versionamento"
 
 #: views/object/list_modes/edit_btns_trash.php:5
 msgid "Are you sure to remove the object permanently: "
@@ -6712,10 +6728,6 @@ msgid "Duplicate Item"
 msgstr "Duplicar item"
 
 #: views/object/list_modes/modals.php:79
-msgid "Versioning"
-msgstr "Versionamento"
-
-#: views/object/list_modes/modals.php:80
 msgid "Describe the motive..."
 msgstr "Descreva o motivo"
 

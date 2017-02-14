@@ -5,10 +5,10 @@ $itemDelete = [
     'text' => _t('Are you sure to remove the object: ') . get_the_title()
 ];
 ?>
-<ul class="nav navbar-bar navbar-right">
+<ul class="nav navbar-bar navbar-right" style="z-index: 99">
     <li class="dropdown open_item_actions" id="action-<?php echo $curr_id; ?>">
         <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-            <?php echo ViewHelper::render_icon("config-azul", "png"); ?>
+            <?php echo ViewHelper::render_icon("config", "png", _t('Item options')); ?>
         </a>
         <ul class="dropdown-menu pull-right dropdown-show" role="menu">
             <li> <a class="ac-view-item" href="<?php echo $itemURL; ?>"> <?php _t('View Item',1); ?> </a> </li>
