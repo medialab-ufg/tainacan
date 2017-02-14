@@ -69,14 +69,13 @@ if (get_option('collection_root_id') != $collection_id):
                         <br>
                         <input type="radio" name="duplicate_item" value="other_collection" onchange="showOtherCollectionField(<?php echo get_the_ID() ?>);">
                         <label for="duplicate_item" class="other_collection"> <?php _e('Duplicate in other collection', 'tainacan'); ?> </label> <br>
-                        <input type="text" class="form-control" name="other_collections" id="other_collections<?php echo get_the_ID() ?>"
-                               placeholder="<?php _t('Search collection',1)?>" style="display:none;">
+                        <input type="text" class="form-control" name="other_collections" id="other_collections<?php echo get_the_ID() ?>" style="display:none;">
 
                         <input type="hidden" class="form-control" name="other_collections_id" id="other_collections<?php echo get_the_ID() ?>_id">
                         <input type="hidden" class="form-control" name="other_collections_url" id="other_collections<?php echo get_the_ID() ?>_url">
 
                         <input type="radio" name="duplicate_item" value="versioning" onchange="showVersionMotiveField(<?php echo get_the_ID() ?>);">
-                        <label for="duplicate_item"> <?php _e('Versioning', 'tainacan'); ?> </label> <br>
+                        <label for="duplicate_item" class="version"> <?php _e('Versioning', 'tainacan'); ?> </label> <br>
                         <input type="text" class="form-control" name="version_motive" id="version_motive<?php echo get_the_ID() ?>" placeholder="<?php _e('Describe the motive...', 'tainacan'); ?>" style="display:none;">
                     </div>
 
