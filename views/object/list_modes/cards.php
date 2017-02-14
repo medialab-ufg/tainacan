@@ -111,7 +111,8 @@ $itemURL = $_SERVER['HTTP_REFERER'] . basename(get_permalink());
                     ?>
                     
                     <h4 class="item-display-title">
-                        <a href="<?php echo $itemURL; ?>">
+                        <a href="<?php echo get_collection_item_href($collection_id); ?>"
+                           onclick="<?php get_item_click_event($collection_id,$curr_id) ?>">
                             <?php echo wp_trim_words( $_item_title_, 13 ); ?>
                         </a>
                     </h4>
