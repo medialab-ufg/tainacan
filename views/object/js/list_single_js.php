@@ -376,7 +376,7 @@
             $('#display_view_main_page').hide();
             $('#loader_collections').hide();
             $('#collection_post').hide();
-            $('#configuration').html(result).show();
+            $('#configuration').html(result).show(); 
         });
     }
 
