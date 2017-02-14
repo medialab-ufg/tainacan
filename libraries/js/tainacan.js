@@ -2341,6 +2341,7 @@ function resetHomeStyleSettings() {
         $("#configuration").css('margin-top', '30px');
     } else {
         var $_main = '#main_part';
+        $("#configuration").css('margin-top', '0px');
         if( $($_main).hasClass('home') ) {
             $($_main).show().css('padding-bottom', '0%');
             $('#display_view_main_page').hide();

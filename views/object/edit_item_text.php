@@ -538,6 +538,7 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                              <?php endif ?>
                     </center>        
                 </div>
+                <br><br>
                 <?php   if(!$is_view_mode):  ?>
                 <h3> 
                    <?php echo ($view_helper->terms_fixed['attachments']) ? $view_helper->terms_fixed['attachments']->name :  _e('Attachments','tainacan') ?>
