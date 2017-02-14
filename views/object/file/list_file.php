@@ -12,7 +12,7 @@ include_once ('js/list_file_js.php');
     <h3 id="text_title">
         <?php _e('Attachments', 'tainacan'); ?>
         <br>
-    <hr class="single-item-divider">
+    <hr>
 
     <?php if (!$attachments['posts']): ?>
         <div id="no_file_<?php echo $object_id; ?>" class="text-center">

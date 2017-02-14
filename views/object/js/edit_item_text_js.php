@@ -61,6 +61,7 @@
                         heightStyle: "content"
                     });
                     if($('#mediaHabilitateContainer').length>0){
+                        $('#mediaHabilitateContainer').css('min-height','500px')
                         $('#mediaHabilitateContainer').show();
                     }
                     // esconde o carregamento do menu lateral

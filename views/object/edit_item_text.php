@@ -49,13 +49,13 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
     <input type="hidden" id="object_id_edit" name="object_id" value="<?= $object->ID ?>">
     <div style="<?php echo (isset($is_view_mode) ||$view_helper->hide_main_container)?'margin-left:1%;padding-left:15px;min-height:500px;padding-top:80px;':'' ?>"
             class="<?php echo (isset($is_view_mode) ||$view_helper->hide_main_container)?'col-md-12':'col-md-2' ?> menu_left_loader">
-             <center>
-                    <img src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>">
-                    <h4><?php _e('Loading metadata...', 'tainacan') ?></h4>
-             </center>
-        </div>
+        <center>
+               <img src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>">
+               <h4><?php _e('Loading metadata...', 'tainacan') ?></h4>
+        </center>
+   </div>
 <!----------------- MENU ESQUERDO  ----------------->        
-        <div style="display: none; background: white;border: 3px solid #E8E8E8;font: 11px Arial;<?php echo $css?>" 
+    <div style="display: none; background: white;border: 3px solid #E8E8E8;font: 11px Arial;<?php echo $css?>" 
              class="<?php echo (isset($is_view_mode) || $view_helper->hide_main_container)? ($view_helper->mediaHabilitate)? 'col-md-9' : 'col-md-12':'col-md-3' ?> menu_left">
                 <?php 
                 //se estiver apenas mostrando as propriedades 
@@ -506,11 +506,11 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
 <!-----------------  FIM - MENU ESQUERDO -------------------------------------->
 <?php if($view_helper->mediaHabilitate): ?>
             <!-- Thumbnail e anexos -->
-            <div class="col-md-3" id="mediaHabilitateContainer" style="display: none; background: white;border: 3px solid #E8E8E8;font: 11px Arial;">
+            <div class="col-md-3" id="mediaHabilitateContainer" style="display: none; background: white;border: 3px solid #E8E8E8;font: 11px Arial;padding: 1% 2% 0px 15px;margin-top: -2px">
                 <h3> 
                    <?php echo ($view_helper->terms_fixed['thumbnail']) ? $view_helper->terms_fixed['thumbnail']->name :  _e('Thumbnail','tainacan') ?>
                </h3>
-                <hr style="margin-top:-5px;">
+                <hr>
                 <div id="thumnbail_place" >
                     <center>
                          <div id="existent_thumbnail">
@@ -542,7 +542,7 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                 <h3> 
                    <?php echo ($view_helper->terms_fixed['attachments']) ? $view_helper->terms_fixed['attachments']->name :  _e('Attachments','tainacan') ?>
                </h3>
-                <hr style="margin-top:-5px;">
+                <hr>
                  <div >
                       <center>
                             <div id="dropzone_edit"  
