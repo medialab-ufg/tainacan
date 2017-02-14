@@ -24,7 +24,7 @@ $view_helper = new ObjectHelper($collection_id);
 
 <ol class="breadcrumb item-breadcrumbs">
     <li> <a href="<?php echo get_permalink(get_option('collection_root_id')); ?>"> <?php _e('Repository', 'tainacan') ?> </a> </li>
-    <li> <a href="#" onclick="backToMainPageSingleItem()"> <?php echo get_post($collection_id)->post_title; ?> </a> </li>
+    <li> <a href="javascript:void(0)" onclick="backToMainPageSingleItem()"> <?php echo get_post($collection_id)->post_title; ?> </a> </li>
     <li class="active"> <?php echo $object->post_title; ?> </li>
 
     <button data-title="<?php printf(__("URL of %s", "tainacan"), $object->post_title); ?>" id="iframebuttonObject" data-container="body"
@@ -139,7 +139,7 @@ $view_helper = new ObjectHelper($collection_id);
                         </div>
                     <?php endif; ?>
                     <li>
-                        <a onclick="single_show_item_versions('<?php echo $object->ID ?>')" href="#">
+                        <a onclick="single_show_item_versions('<?php echo $object->ID ?>')" href="javascript:void(0)">
                             <span class="glyphicon glyphicon-folder-open"></span>
                         </a>
                     </li>
