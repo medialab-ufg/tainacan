@@ -803,7 +803,7 @@
                                 '<input type="hidden" class="property_id" value="' + property.id + '">' +
                                 '<input type="hidden" class="property_name" value="' + property.name + '">' +
                                 '<input type="hidden" id="property_type_' + property.id + '" value="1">' +
-                                '<a onclick="delete_property(' + current_id + ',' + 1 + ')" class="delete_property" href="#">' +
+                                '<a onclick="delete_property(' + current_id + ',' + 1 + ')" class="delete_property" href="javascript:void(0)">' +
                                 '<span class="glyphicon glyphicon-trash"><span></a></div></li>');
                         }
                     }
@@ -1077,7 +1077,7 @@
                                 '<input type="hidden" class="property_object_id" value="' + current_id + '">' +
                                 '<input type="hidden" class="property_name" value="' + property.name + '">' +
                                 '<input type="hidden" id="property_type_' + property.id + '" value="2">' +
-                                '<a onclick="delete_property('+ current_id + ',' + 2 + ')" class="delete_property" href="#">' +
+                                '<a onclick="delete_property('+ current_id + ',' + 2 + ')" class="delete_property" href="javascript:void(0)">' +
                                 '<span class="glyphicon glyphicon-trash"><span></a></div></li>');
                         }
                     }
@@ -1392,7 +1392,7 @@
                                 '<a class="edit-filter"><span class="glyphicon glyphicon-sort sort-filter"></span></a>&nbsp;'+
                                 '<a onclick="edit_term(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
                                 '<span class="glyphicon glyphicon-edit"><span></a> ' +
-                                '<a onclick="delete_property(' + current_id + ',' + 3 + ')" class="delete_property" href="#">' +
+                                '<a onclick="delete_property(' + current_id + ',' + 3 + ')" class="delete_property" href="javascript:void(0)">' +
                                 '<span class="glyphicon glyphicon-trash"><span></a></div></li>');
                         }
                     }
@@ -1702,7 +1702,7 @@
                             '<span class="glyphicon glyphicon-edit"><span></a> ' +
                             '<input type="hidden" class="ranking_id" value="' + current_id + '">' +
                             '<input type="hidden" class="ranking_name" value="' + current_title + '">' +
-                            '<a onclick="delete_ranking(' + current_id + ')" class="delete_ranking" href="#">' +
+                            '<a onclick="delete_ranking(' + current_id + ')" class="delete_ranking" href="javascript:void(0)">' +
                             '<span class="glyphicon glyphicon-trash"><span></a></div></li>');
                     }else{
                         var current_id = ranking.id;

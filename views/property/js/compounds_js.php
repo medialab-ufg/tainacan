@@ -87,7 +87,7 @@
                              $( "#compounds_properties_ordenation" ).append('<li id="compounds-'+node.data.key+'">'+
                                      '<a onclick="'+string+'(' + node.data.key + ')" class="edit_property_data" href="javascript:void(0)">' +
                                      '<span style="margin-right:5px;color: #88A6CC;" class="glyphicon glyphicon-edit pull-right"><span></a> ' +
-                                     '<a onclick="delete_property(' + node.data.key + ','+type+')" class="delete_property" href="#">' +
+                                     '<a onclick="delete_property(' + node.data.key + ','+type+')" class="delete_property" href="javascript:void(0)">' +
                                      '<span style="margin-right:5px;color: #88A6CC;" class="glyphicon glyphicon-trash pull-right"><span></a>' +
                                      '<a><span style="margin-right:5px;color: #88A6CC;" class="glyphicon glyphicon-sort sort-filter pull-right"></span></a>&nbsp;'+ add_filter_button(node.data.key) + node.data.title+'</li>')
                          })
@@ -191,7 +191,7 @@
                                 '<input type="hidden" class="property_id" value="' + property.id + '">' +
                                 '<input type="hidden" class="property_name" value="' + property.name + '">' +
                                 '<input type="hidden" id="property_type_' + property.id + '" value="4">' +
-                                '<a onclick="delete_property(' + current_id + ',' + 4 + ')" class="delete_property" href="#">' +
+                                '<a onclick="delete_property(' + current_id + ',' + 4 + ')" class="delete_property" href="javascript:void(0)">' +
                                 '<span class="glyphicon glyphicon-trash"><span></a></div><ul class="list-compounded" id="list-compounded-' + property.id + '" style="margin-top:8px;"></ul></li>');
                         }
                     }
@@ -294,7 +294,7 @@
                 }
                 $( "#list-compounded-"+property_id ).append('<li id="compounds-'+current_id+'" class="'+class_string+'" style="width:102%;">'+
                                 cat_id +
-                                '<a onclick="delete_property(' + current_id + ','+type+')" class="delete_property" href="#">' +
+                                '<a onclick="delete_property(' + current_id + ','+type+')" class="delete_property" href="javascript:void(0)">' +
                                 '<span style="margin-right:5px;color: #88A6CC;" class="glyphicon glyphicon-trash pull-right"><span></a>' + 
                                 '<a onclick="'+string+'(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
                                 '<span style="margin-right:5px;color: #88A6CC;" class="glyphicon glyphicon-edit pull-right"><span></a> ' +
