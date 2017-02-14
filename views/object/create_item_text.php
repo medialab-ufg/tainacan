@@ -321,11 +321,11 @@
         </div>    
         <?php if($view_helper->mediaHabilitate): ?>
             <!-- Thumbnail e anexos -->
-            <div class="col-md-3" id="mediaHabilitateContainer" style="display: none; background: white;border: 3px solid #E8E8E8;font: 11px Arial;">
+            <div class="col-md-3" id="mediaHabilitateContainer" style="display: none; background: white;border: 3px solid #E8E8E8;font: 11px Arial;;padding: 1% 2% 0px 15px;margin-top: -2px">
                 <h4> 
                    <?php echo ($view_helper->terms_fixed['thumbnail']) ? $view_helper->terms_fixed['thumbnail']->name :  _e('Thumbnail','tainacan') ?>
                </h4>
-                <hr style="margin-top:-5px;">
+                <hr>
                 <div id="thumnbail_place"  style="margin-top:15px;">
                         <input type="hidden" name="thumbnail_url" id="thumbnail_url" value="">
                         <div id="image_side_create_object">
@@ -335,10 +335,11 @@
                                name="object_thumbnail"
                                class="form-control auto-save">  
                 </div>
+                <br><br>
                 <h4> 
                    <?php echo ($view_helper->terms_fixed['attachments']) ? $view_helper->terms_fixed['attachments']->name :  _e('Attachments','tainacan') ?>
                </h4>
-                <hr style="margin-top:-5px;">
+                <hr>
                  <div >
                      <center>
                      <div id="dropzone_new" <?php ($socialdb_collection_attachment=='no') ? print_r('style="display:none"') : '' ?> 

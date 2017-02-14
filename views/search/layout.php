@@ -158,7 +158,7 @@ $view_helper = new ViewHelper();
                            onchange="showHabilitateItemMedia(this,true)" 
                            <?php echo ( $item_visualization == 'one' ) ? "checked = 'checked'" : ''; ?>
                            value="one">&nbsp;<?php _e('Focus in metadata','tainacan'); ?><br>
-                    <div id="habilitateItemMedia" style="display:none;">
+                    <div id="habilitateItemMedia" <?php echo ($item_visualization == 'two' || empty($item_visualization))?'style="display:none;"' : '' ?>>
                         &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="habilitateItemMedia" value="true" <?php echo ( $habilitate_item_media == 'true' ) ? "checked = 'checked'" : ''; ?>>
                         <?php _e('Habilitate visualization of image and attachments','tainacan') ?>
                     </div>
@@ -188,7 +188,7 @@ $view_helper = new ViewHelper();
                                     <?php _e('2 columns','tainacan'); ?>
                                 </option>
                             </select-->
-                    <div id="habilitateMedia" style="display:none;">
+                    <div id="habilitateMedia" <?php echo ($submission_visualization == 'two' || empty($submission_visualization))?'style="display:none;"' : '' ?> >
                         &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="habilitateMedia" value="true"    <?php echo ( $habilitate_media == 'true' ) ? "checked = 'checked'" : ''; ?>>
                         <?php _e('Habilitate visualization of image and attachments','tainacan') ?>
                     </div>

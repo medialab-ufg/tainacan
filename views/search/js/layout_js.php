@@ -141,8 +141,8 @@
     $( function() {
         $( "#sortable" ).sortable();
         $( "#sortable" ).disableSelection();
-        showHabilitateMedia('input[name="socialdb_collection_submission_visualization"]:checked');
-        showHabilitateItemMedia('input[name="socialdb_collection_item_visualization"]:checked');
+       // showHabilitateMedia('input[name="socialdb_collection_submission_visualization"]:checked');
+      //  showHabilitateItemMedia('input[name="socialdb_collection_item_visualization"]:checked');
     } );
 
     $("#layout-accordion").accordion({

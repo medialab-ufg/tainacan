@@ -233,7 +233,9 @@ if (isset($property_object)):
             <?php if($is_view_mode): ?>
             <div>
                 <?php if(isset($property['metas']['value'][0])): ?>
-                    <p><?php  echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $property['metas']['value'][0] . "'" . ',' . $property['id'] . ')">' . $property['metas']['value'][0] . '</a>';  ?></p>
+                    <?php foreach ($property['metas']['value'] as $value): if(empty($value)) continue; ?>
+                        <p><?php  echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $value. "'" . ',' . $property['id'] . ')">' .$value . '</a>';  ?></p>
+                     <?php endforeach;;?>
                 <?php else: ?>
                     <p><?php  _e('empty field', 'tainacan') ?></p>
                 <?php endif ?>
