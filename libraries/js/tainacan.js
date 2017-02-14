@@ -25,12 +25,7 @@ var Hook = {
 
 $(window).load(function () {
     var src = $('#src').val();
-//    $.router.add('/wordpress/bibliotecamodelo/:item', 'foo', function(data) {
-//        console.log('sdsd');
-//         showSingleObjectByName(data.item, src);
-//    });
-//    $.router.go('/wordpress/bibliotecamodelo/robalo', 'My cool item');
-    
+
     if (navigator.onLine) {
         try {
             FB.init({
@@ -64,9 +59,6 @@ $(window).load(function () {
         }
     }
 
-
-
-
     // Do NOT load this actions at statistics page
     if( ! $('body').hasClass('page-template-page-statistics') ) {
         $("area[rel^='prettyPhoto']").prettyPhoto();
@@ -92,12 +84,13 @@ $(window).load(function () {
         show_most_participatory_authors(src);
         //get_categories_properties_ordenation();
         notification_events_repository();
+
+        //verifico se esta mandando alguma mensagem
+        if ($('#info_messages').val() !== '' && $('#info_title').val() !== '') {
+            showAlertGeneral($('#info_title').val(), $('#info_messages').val(), 'info');
+        }
     }
 
-    //verifico se esta mandando alguma mensagem
-    if ($('#info_messages').val() !== '' && $('#info_title').val() !== '') {
-        showAlertGeneral($('#info_title').val(), $('#info_messages').val(), 'info');
-    }
     //verifico se esta mandando alguma mensagem
     if ($('#repository_main_page').val() === 'true') {
         display_view_main_page();
@@ -127,21 +120,11 @@ $(window).load(function () {
 
     //verifico se foi duplicado um item em outra colecao e abro o editar deste item
     if ($('#open_edit_item') && $('#open_edit_item').val() !== '' && typeof $('#open_edit_item').val() != 'undefined') {
-        //console.log('TYPEOF AQUI EH ' + typeof $('#open_edit_item').val());
-        //console.log($('#open_edit_item').val());
-        //edit_object($('#open_edit_item').val());
         $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/object/object_controller.php",
             data: {collection_id: $('#collection_id').val(), operation: 'edit', object_id: $('#open_edit_item').val()}
         }).done(function (result) {
-            /*$('#modalImportMain').modal('hide');//escondo o modal de carregamento
-             $("#container_socialdb").hide('slow');
-             $("#form").hide().html(result).show('slow');
-             $('#create_button').hide();
-             $('.dropdown-toggle').dropdown();
-             $('.nav-tabs').tab();*/
-
             hide_modal_main();
             $("#form").html('');
             $('#main_part').hide();

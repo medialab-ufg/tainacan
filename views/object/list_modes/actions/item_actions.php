@@ -26,8 +26,18 @@ $itemDelete = [
                 </li>
                 <li> <a class="ac-duplicate-item" data-op="same"> <?php _t('Duplicate in this collection',1); ?> </a> </li>
                 <li> <a class="ac-duplicate-item" data-op="other"> <?php _t('Duplicate in other collection',1); ?> </a> </li>
-            <?php endif; ?>
-            
+            <?php
+            else:
+                if (verify_allowed_action($collection_id, 'socialdb_collection_permission_delete_object')): ?>
+                <li>
+                    <a onclick="show_report_abuse('<?php echo $curr_id ?>')" href="javascript:void(0)" class="report_abuse">
+                        <?php _t('Report Abuse',1); ?>
+                    </a>
+                </li>
+                <?php
+                endif;
+            endif; ?>
+
             <?php if ($is_moderator || get_post($curr_id)->post_author == get_current_user_id()):
                 $has_checked_in = get_post_meta($curr_id, 'socialdb_object_checkout', true);
                 if(is_numeric($has_checked_in)){ ?>
@@ -41,7 +51,7 @@ $itemDelete = [
             <?php endif; ?>
             
             <li> <a class="ac-item-rdf" href="<?php echo $itemURL; ?>.rdf" target="_blank"> <?php _t('Export RDF',1); ?> </a> </li>
-            <li> <a class="ac-item-graph"> <?php _t('See graph',1); ?> </a> </li>            
+            <?php /* <li> <a class="ac-item-graph"> <?php _t('See graph',1); ?> </a> </li> */?>
             <li> <a class="ac-comment-item"> <?php _t('Comment item',1); ?> </a> </li>
 
             <?php if ($is_moderator || get_post($curr_id)->post_author == get_current_user_id()): ?>
