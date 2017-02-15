@@ -239,7 +239,7 @@ $view_helper = new ObjectHelper($collection_id);
                     <div class="item-source box-item-paddings" <?php echo $view_helper->get_visibility($view_helper->terms_fixed['source']) ?> style="border-top:none" >
                         <div class="row" <?php if (has_action('home_item_source_div')) do_action('home_item_source_div') ?> style="padding-left: 30px;">
                             <div class="col-md-12 no-padding">
-                                <h4 class="title-pipe single-title"> <?php _e('Source', 'tainacan'); ?></h4>
+                                <h4 class="title-pipe single-title"> <?php echo ($view_helper->terms_fixed['source']) ? $view_helper->terms_fixed['source']->name :  _e('Source','tainacan') ?> </h4>
                                 <div class="edit-field-btn">
                                     <?php
                                     // verifico se o metadado pode ser alterado
@@ -300,7 +300,7 @@ $view_helper = new ObjectHelper($collection_id);
                     </div>
                     <div class="item-thumb box-item-paddings" <?php echo $view_helper->get_visibility($view_helper->terms_fixed['thumbnail']) ?> style="border-top: none; border-bottom: none" >
                         <div class="content-thumb" style="padding-left: 15px; ">
-                            <h4 class="title-pipe single-title"> <?php _e('Thumbnail', 'tainacan'); ?></h4>
+                            <h4 class="title-pipe single-title">  <?php echo ($view_helper->terms_fixed['thumbnail']) ? $view_helper->terms_fixed['thumbnail']->name :  _e('Thumbnail', 'tainacan'); ?></h4>
                             <div class="edit-field-btn">
                                 <?php
                                 // Evento para alteracao do thumbnail de um item
@@ -381,7 +381,7 @@ $view_helper = new ObjectHelper($collection_id);
         <div class="col-md-12 item-metadata no-padding">
             
             <div class="item-description box-item-paddings" <?php echo $view_helper->get_visibility($view_helper->terms_fixed['description']) ?>>
-                <h4 class="title-pipe single-title"> <?php _e('Description', 'tainacan'); ?></h4>
+                <h4 class="title-pipe single-title"><?php echo ($view_helper->terms_fixed['description']) ? $view_helper->terms_fixed['description']->name :  _e('Description', 'tainacan'); ?> </h4>
                 <div class="edit-field-btn">
                     <?php
                     // verifico se o metadado pode ser alterado

@@ -72,7 +72,7 @@
                          return node.data.key;
                      });
                      //limitacao da quantidade de propriedades selecionados
-                     if(selKeys.length>0&&selKeys.length<=11){
+                     if(selKeys.length>0&&selKeys.length<=50){
                          console.log(selKeys);
                          $.each(selKeys,function(index,node){
                              var type = types_compounds[node.data.key];

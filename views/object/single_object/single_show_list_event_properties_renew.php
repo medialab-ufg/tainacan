@@ -26,10 +26,9 @@ $references = [
 ];
 $ids = [];
 
-if (!isset($property_object) && !isset($property_data)):
-    _e('No Properties available', 'tainacan');
-endif;
-?>
+ if (!isset($property_object) && !isset($property_data)  && !isset($property_term)): ?>
+        <center><h4><?php _e('No Properties available', 'tainacan'); ?></h4></center>
+<?php endif; ?>
     <input type="hidden" name="properties_object_ids" id='properties_object_ids' value="<?php echo implode(',', $ids); ?>">
 <?php if (isset($property_object)):
     foreach ($property_object as $property) {
