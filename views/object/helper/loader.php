@@ -21,7 +21,10 @@ if("geolocation" === $collection_list_mode && is_null($geo_coordinates) && ($is_
 
     echo '<input type="hidden" id="filtered_collection" value="true" />';
 }
-$_fxd_title = $viewHelper->terms_fixed['title']->name;
+$_fxd_meta = [
+    'title' =>  $viewHelper->terms_fixed['title']->name, 
+    'thumb' => $viewHelper->terms_fixed['thumbnail']->name
+];
 $numberItems = ceil($loop->found_posts / 10);
 ?>
 
@@ -35,6 +38,7 @@ $numberItems = ceil($loop->found_posts / 10);
 <input type="hidden" id="set-long" value="<?php echo $geo_coordinates["long"]; ?>">
 <input type="hidden" id="approx_mode" value="<?php echo $use_approx_mode; ?>">
 <input type="hidden" id="approx_location" value="<?php echo $geo_loc; ?>">
-<input type="hidden" id="repo_fixed_title" value="<?php echo $_fxd_title; ?>">
+<input type="hidden" id="repo_fixed_title" value="<?php echo $_fxd_meta['title']; ?>">
+<input type="hidden" id="repo_fixed_thumb" value="<?php echo $_fxd_meta['thumb']; ?>">
 <input type="hidden" id="original_post_count" value="<?php echo $loop->post_count; ?>" />
 <input type="hidden" id="pagination_current_page" value="<?php echo $pagid; ?>" />

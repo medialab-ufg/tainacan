@@ -29,12 +29,15 @@
             var valor = $(el).val();
             var meta_type = $(el).attr('data-mtype');
             var nome = "--";
+            var fxd_thumb = $("#repo_fixed_thumb").val();
+
             if(meta_type == 'property_data') {
                 nome = $("#collection_single_ordenation option[value='"+valor+"'").text();
             } else if( (meta_type == 'property_term') || (meta_type == 'property_object') ) {
                 nome = $("#tableV-meta-"+valor).attr("data-parent");
             }
-            if("Thumbnail" == nome) {
+
+            if(fxd_thumb == nome) {
                 image_brand = idx;
             }
 
