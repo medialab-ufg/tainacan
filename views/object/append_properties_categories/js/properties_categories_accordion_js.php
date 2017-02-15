@@ -158,6 +158,7 @@
     function pc_list_radios(radios,categories) {
         if (radios) {
             $.each(radios, function (idx, radio) {
+                addLabelViewPage(radio,categories);
                 $.ajax({
                     url: $('#src').val() + '/controllers/property/property_controller.php',
                     type: 'POST',
@@ -189,6 +190,7 @@
     function pc_list_checkboxes(checkboxes,categories) {
         console.log('pc loading checkboxes',checkboxes);
         if (checkboxes) {
+            addLabelViewPage(checkboxes,categories);
             $.each(checkboxes, function (idx, checkbox) {
                 $.ajax({
                     url: $('#src').val() + '/controllers/property/property_controller.php',
@@ -221,6 +223,7 @@
     function pc_list_selectboxes(selectboxes,categories) {
         if (selectboxes) {
             $.each(selectboxes, function (idx, selectbox) {
+                addLabelViewPage(selectbox,categories);
                 //validation
                 $('#field_property_term_' + selectbox).change(function(){
                     if( $("#field_property_term_" + selectbox).val()===''){
@@ -258,6 +261,7 @@
     function pc_list_multipleselectboxes(multipleSelects,categories) {
         if (multipleSelects) {
             $.each(multipleSelects, function (idx, multipleSelect) {
+                addLabelViewPage(multipleSelect,categories);
                 //validation
                 $('#field_property_term_' + multipleSelect).select(function(){
                     if( $("#field_property_term_" + multipleSelects).val()===''){
@@ -292,6 +296,7 @@
     function pc_list_treecheckboxes(treecheckboxes,categories) {
         if (treecheckboxes) {
             $.each(treecheckboxes, function (idx, treecheckbox) {
+                addLabelViewPage(treecheckbox,categories);
                 $("#field_property_term_"+treecheckbox).dynatree({
                     selectionVisible: true, // Make sure, selected nodes are visible (expanded).  
                     checkbox: true,
@@ -361,6 +366,7 @@
     function pc_list_tree(trees,categories) {
         if (trees) {
             $.each(trees, function (idx, tree) {
+                addLabelViewPage(tree,categories);
                 $("#field_property_term_"+tree).dynatree({
                     checkbox: true,
                     // Override class name for checkbox icon:
@@ -444,5 +450,29 @@
                $(seletor).val(classifications.join());
            }
        }
+    }
+    
+   /**
+   * funcao que verifica se a categoria eh filha da categoria raiz da prorpriedade atual
+    */
+    function addLabelViewPage(property,categories){
+        if($("#labels_" + property + "_<?php echo $object_id; ?>") && $("#labels_" + property + "_<?php echo $object_id; ?>").length > 0) {
+            $.ajax({
+                url: $('#src').val() + '/controllers/property/property_controller.php',
+                type: 'POST',
+                data: {collection_id: $("#collection_id").val(), operation: 'is_part_of_property', property_id: property, categories: categories}
+            }).done(function (result) {
+                elem = jQuery.parseJSON(result);
+                if (elem.terms && elem.terms.length > 0) {
+                    $.each(elem.terms, function (index, term) {
+                        if (term.term_id) {
+                            $("#labels_" + property + "_<?php echo $object_id; ?>").append('<p><a style="cursor:pointer;" onclick="wpquery_term_filter(' + term.term_id + ',' + property + ')">' + term.name + '</a></p><br>');//zero o html do container que recebera os
+                        }
+                    });
+                }else{
+                    $("#labels_" + property + "_<?php echo $object_id; ?>").append('<p><?php  _e('empty field', 'tainacan') ?></p>');
+                }
+            });
+        }
     }
 </script>

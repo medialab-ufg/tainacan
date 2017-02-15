@@ -321,7 +321,7 @@
         </div>    
         <?php if($view_helper->mediaHabilitate): ?>
             <!-- Thumbnail e anexos -->
-            <div class="col-md-3" id="mediaHabilitateContainer" style="display: none; background: white;border: 3px solid #E8E8E8;font: 11px Arial;;padding: 1% 2% 0px 15px;margin-top: -2px">
+            <div class="col-md-3" id="mediaHabilitateContainer" style="display: none; background: white;border: 3px solid #E8E8E8;font: 11px Arial;;padding: 1% 2% 0px 15px;margin-top: 0px">
                 <h4> 
                    <?php echo ($view_helper->terms_fixed['thumbnail']) ? $view_helper->terms_fixed['thumbnail']->name :  _e('Thumbnail','tainacan') ?>
                </h4>

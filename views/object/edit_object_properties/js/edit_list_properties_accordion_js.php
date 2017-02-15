@@ -581,7 +581,7 @@
         $items = $("#text_accordion").children();
         $('#append_properties_categories_'+property_id).css('margin-top','15px');
         $properties_append = $('#append_properties_categories_'+property_id).children().children();
-        $properties_append.animate({borderWidth : '1px',borderColor: 'red',borderStyle: 'dotted'}, 'slow', 'linear');
+        //$properties_append.animate({borderWidth : '1px',borderColor: 'red',borderStyle: 'dotted'}, 'slow', 'linear');
         setTimeout(removeBorderCat(property_id),8000);
         for (var i = 0; i <$properties_append.length; i++) {
               // index is zero-based to you have to remove one from the values in your array

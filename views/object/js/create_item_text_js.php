@@ -72,6 +72,7 @@ $(function(){
                 $('.menu_left_loader').hide();
                 $('.menu_left').show();
                 if($('#mediaHabilitateContainer').length>0){
+                    $('#mediaHabilitateContainer').css('min-height','500px');
                     $('#mediaHabilitateContainer').show();
                 }
                 //salvo o cache

@@ -133,7 +133,7 @@ foreach($original_properties as $property):
                 if(has_action('modificate_edit_item_properties_object')): 
                          do_action('modificate_edit_item_properties_object',$property); 
                 endif;
-                if ($property['metas']['socialdb_property_help']&&!empty(trim($property['metas']['socialdb_property_help']))) {
+                if ($property['metas']['socialdb_property_help']&&!empty(trim($property['metas']['socialdb_property_help']))&&!$is_view_mode) {
                      ?>
                         <a class="pull-right" 
                             style="margin-right: 20px;" >
@@ -144,7 +144,7 @@ foreach($original_properties as $property):
                         </a>
                     <?php  
                 }
-                if ($property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] == 'true') {
+                if ($property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] == 'true'&&!$is_view_mode) {
                         ?>
                         <a id='required_field_<?php echo $property['id']; ?>' style="padding: 3px;" >
                                 <span  title="<?php echo __('This metadata is required!','tainacan')?>" 
@@ -277,7 +277,7 @@ foreach($original_properties as $property):
                 if(has_action('modificate_label_insert_item_properties')):
                     do_action('modificate_label_insert_item_properties', $property);
                 endif;
-                if ($property['metas']['socialdb_property_help']&&!empty(trim($property['metas']['socialdb_property_help']))) {
+                if ($property['metas']['socialdb_property_help']&&!empty(trim($property['metas']['socialdb_property_help'])) && !$is_view_mode) {
                     ?>
                     <a class="pull-right" 
                        style="margin-right: 20px;" >
@@ -288,7 +288,7 @@ foreach($original_properties as $property):
                     </a>
                     <?php  
                 }
-                if ($property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] == 'true') {
+                if ($property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] == 'true'  && !$is_view_mode) {
                     ?>
                      <a id='required_field_<?php echo $property['id']; ?>' style="padding: 3px;" >
                                 <span  title="<?php echo __('This metadata is required!','tainacan')?>" 
@@ -419,7 +419,7 @@ foreach($original_properties as $property):
                     do_action('modificate_label_insert_item_properties', $property);
                 else: // validacoes e labels
                         $property['metas']['socialdb_property_help'] = ($property['metas']['socialdb_property_help']==''&&$property['type'] == 'tree')? __('Select one option','tainacan') : '';
-                        if ($property['metas']['socialdb_property_help']&&!empty(trim($property['metas']['socialdb_property_help']))) {
+                        if ($property['metas']['socialdb_property_help']&&!empty(trim($property['metas']['socialdb_property_help']))  && !$is_view_mode) {
                                 ?>
                                 <a class="pull-right" 
                                     style="margin-right: 20px;" >
@@ -430,7 +430,7 @@ foreach($original_properties as $property):
                                 </a>
                                 <?php  
                         }
-                        if ($property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] == 'true') {
+                        if ($property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] == 'true'  && !$is_view_mode) {
                             ?>
                             <a id='required_field_<?php echo $property['id']; ?>' style="padding: 3px;" >
                                 <span  title="<?php echo __('This metadata is required!','tainacan')?>" 
@@ -478,7 +478,7 @@ foreach($original_properties as $property):
                     }
 
               ?>
-                  <div id='labels_<?php echo $property['id']; ?>_<?php echo $object_id; ?>'> <p><?php  _e('empty field', 'tainacan') ?></p></div>  
+                  <div id='labels_<?php echo $property['id']; ?>_<?php echo $object_id; ?>'></div>  
               <?php
                 else:
               ?>

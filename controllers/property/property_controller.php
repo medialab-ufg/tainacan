@@ -290,6 +290,19 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
                 return json_encode($data);
             case 'get_properties_categories_dynatree':
                 return $property_model->initDynatreePropertiesFilter($data['collection_id'],false,true);
+            case 'is_part_of_property':
+                $all_metas = $property_model->get_all_property($data['property_id'], true);
+                if(isset($all_metas['metas']['socialdb_property_term_root']) && !empty($all_metas['metas']['socialdb_property_term_root']) ){
+                    $parent_id = $all_metas['metas']['socialdb_property_term_root'];
+                    $categories = (isset($data['categories']) && is_array($data['categories'])) ? $data['categories'] : [] ;
+                    foreach ($categories as $category) {
+                        $ancestors = get_ancestors($category, 'socialdb_category_type');
+                        if(is_array($ancestors) && in_array($parent_id, $ancestors)){
+                            $data['terms'][] = get_term_by('id',$category,'socialdb_category_type');
+                        }
+                    }
+                }
+                return json_encode($data);
                 
                 
         }

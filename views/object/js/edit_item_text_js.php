@@ -61,7 +61,7 @@
                         heightStyle: "content"
                     });
                     if($('#mediaHabilitateContainer').length>0){
-                        $('#mediaHabilitateContainer').css('min-height','500px')
+                        $('#mediaHabilitateContainer').css('min-height','500px');
                         $('#mediaHabilitateContainer').show();
                     }
                     // esconde o carregamento do menu lateral
@@ -429,7 +429,7 @@
             $('#external_option').attr('checked', 'checked'); // se for externo o default e url
             $('#object_content_text_edit').hide();// ckeditor apenas para texto
             $('#object_url_text').hide();// esconde o campo de url para textos
-            $('#url_object').removeAttr("required");//retiro o campo de requirido deste input para urls que sejam do item do tipo texto
+           // $('#url_object').removeAttr("required");//retiro o campo de requirido deste input para urls que sejam do item do tipo texto
             $('#object_url_others').show('slow');// o campo para colocar a url do item sem ser texto
             //$('#object_url_others').attr('required', 'required');
             $('#object_file').hide();// esconde a submissao de items tipo arquivo
@@ -459,34 +459,34 @@
         if ($(field).val() === 'external') {
             if ($('input[name=object_type]:checked', '#submit_form_edit_object').val() === 'text') {
                 $('#object_url_others').hide();// o campo url para outros tipos 
-                $('#object_url_others').removeAttr("required");//retiro o campo de requirido deste input para urls que nao seja do item do tipo texto
+               // $('#object_url_others').removeAttr("required");//retiro o campo de requirido deste input para urls que nao seja do item do tipo texto
                 $('#object_url_text').show('slow');// o campo url para text
-                $('#url_object').attr('required', 'required');// coloco o campo de url para arquivos que nao seja texto como obrigatorio
+             //   $('#url_object').attr('required', 'required');// coloco o campo de url para arquivos que nao seja texto como obrigatorio
                 $('#object_file').hide('slow'); // escondo o campo para pegar arquivos internos
-                $('#object_file').removeAttr("required");// retiro o campo de requirido do arquivo
+               // $('#object_file').removeAttr("required");// retiro o campo de requirido do arquivo
             } else {
                 $('#object_file').hide();
-                $('#object_file').removeAttr("required");
+               // $('#object_file').removeAttr("required");
                 $('#object_url_text').hide('slow');// escondo o campo  de url para textos ja que o conteudo sera escrito dentro do ckeditor
                 $('#url_object').removeAttr("required");//retiro o campo de requirido deste input para urls que sejam do item do tipo texto
                 $('#object_url_others').show('slow');
-                $('#object_url_others').attr('required', 'required');// coloco o campo de url para arquivos que nao seja texto como obrigatorio
+               // $('#object_url_others').attr('required', 'required');// coloco o campo de url para arquivos que nao seja texto como obrigatorio
             }
         } else {
             if ($('input[name=object_type]:checked', '#submit_form_edit_object').val() === 'text') {
-                $('#object_file').hide(); // escondo o campo de upload de arquivos
-                $('#object_file').removeAttr("required");// retiro o campo de requirido do arquivo
+              //  $('#object_file').hide(); // escondo o campo de upload de arquivos
+              //  $('#object_file').removeAttr("required");// retiro o campo de requirido do arquivo
                 $('#object_url_others').hide();//escondo o input para urls para tipos que nao seja texto
                 $('#object_url_others').removeAttr("required");//retiro o campo de requirido deste input para urls que nao seja do item do tipo texto
                 $('#object_url_text').hide('slow');// escondo o campo  de url para textos ja que o conteudo sera escrito dentro do ckeditor
-                $('#url_object').removeAttr("required");//retiro o campo de requirido deste input para urls que sejam do item do tipo texto
+               // $('#url_object').removeAttr("required");//retiro o campo de requirido deste input para urls que sejam do item do tipo texto
             } else {
                 $('#object_url_text').hide();// escondo o campo de colocar url para textos
                 $('#object_url_text').removeAttr("required");//retiro o campo de requirido deste input para urls que sejam do item do tipo texto
                 $('#object_url_others').hide();// escondo o campo de colocar a url para tipos de arquivo que nao seja texto
                 $('#url_object').removeAttr("required");//retiro o campo de requirido deste input para urls que nao seja do item do tipo texto
-                $('#object_file').show('slow'); // mostra o campo de submissao de arquivo
-                $('#object_file').attr('required', 'required');// coloco o campo de upload de arquivo como obrigatorio
+                //$('#object_file').show('slow'); // mostra o campo de submissao de arquivo
+                //$('#object_file').attr('required', 'required');// coloco o campo de upload de arquivo como obrigatorio
             }
         }
     }
