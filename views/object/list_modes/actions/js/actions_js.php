@@ -68,5 +68,17 @@
 
         });
 
+        $('a.ac-open-file').on('click', function() {
+            var item_id = $(this).parents().find('.open_item_actions').first().attr('id').replace('action-', '');
+            cl('Imprimir como ficha catalográfico');
+            $.ajax({
+                url: path, type: 'POST',
+                data: { operation: 'press_item', object_id: item_id, collection_id: $('#collection_id').val() }
+            }).done(function(r){
+                var _el_ = $.parseJSON(r);
+                cl(_el_);
+            });
+        });
+
     });
 </script>

@@ -382,6 +382,28 @@ class ObjectController extends Controller {
                     return $this->render(dirname(__FILE__) . '../../../views/object/list_single_object.php', $data);
                 }
                 break;
+            case 'press_item':
+                $user_model = new UserModel();
+                $object_id = $data['object_id'];
+                $col_id = $data['collection_id'];
+                $data['object'] = get_post($object_id);
+                $data["username"] = $user_model->get_user($data['object']->post_author)['name'];
+                $_item_meta = get_post_meta($object_id);
+                foreach($_item_meta as $meta => $val) {
+                    if( is_string($meta)) {
+                        $pcs = explode("_", $meta);
+                        if( ($pcs[0] . $pcs[1]) == "socialdbproperty" ) {
+                            $col_meta = get_term($pcs[2]);
+                            if( !is_null($col_meta) && is_object($col_meta) ) {
+                                $data['inf'][] = $col_meta->name;
+                                $data['inf'][] = $val[0];
+                            }
+                        }
+                    }
+
+                }
+                return json_encode($data);
+                
             case "list_single_object_version":
                 $user_model = new UserModel();
                 $object_id = $data['object_id'];
