@@ -21,6 +21,22 @@ $title_prefix = __("Collection", "tainacan");
                                 <div class="sSitem-<?= $cntr; ?>">
                                     <?php echo get_item_thumb_image(get_the_ID()); ?>
                                 </div>
+                                <?php /*
+                                <div class="col-md-12">
+                                    <ul class="item-funcs" style="text-align: left">
+                                        <input type="hidden" class="post_id" name="post_id" value="<?= $curr_id ?>">
+
+                                        <li>
+                                            <a id="modal_network<?php echo $curr_id; ?>" onclick="showModalShareNetwork(<?php echo $curr_id; ?>)">
+                                                <div style="cursor:pointer;" data-icon="&#xe00b;"></div>
+                                            </a>
+                                        </li>
+
+                                        <?php // include "edit_btns.php"; ?>
+                                    </ul>
+                                    <?php include "actions/item_actions.php"; ?>
+                                </div>
+                                */ ?>
                             <?php
                                 $cntr++;
                             endwhile; ?>
@@ -39,26 +55,31 @@ $title_prefix = __("Collection", "tainacan");
                                         <?php $viewHelper->videoSlideItemHtml($curr_id); ?>
                                     </div>
 
-                                    <div class="col-md-12 meta-configs">
+                                    <div class="col-md-12 meta-configs" style="padding-top: 20px; min-height: 120px;">
                                         <?php if (get_option('collection_root_id') != $collection_id): ?>
-                                            
-                                        <div class="col-md-6 pull-left">
-                                            <!-- TAINACAN: container(AJAX) que mostra o html com os rankings do objeto-->
-                                            <div id="r_slideshow_<?php echo $curr_id ?>" class="rankings-container" style="text-align: right"></div>
-                                        </div>
+                                            <div class="col-md-6 pull-left">
+                                                <!-- TAINACAN: container(AJAX) que mostra o html com os rankings do objeto-->
+                                                <div id="r_slideshow_<?php echo $curr_id ?>" class="rankings-container" style="text-align: right; margin-right: 0"></div>
+                                            </div>
 
-                                        <ul class="item-funcs col-md-6 left pull-right" style="text-align: left">
-                                            <input type="hidden" class="post_id" name="post_id" value="<?= $curr_id ?>">
+                                            <div class="col-md-6 left pull-right">
+                                                <?php ?>
 
-                                            <li>
-                                                <a id="modal_network<?php echo $curr_id; ?>" onclick="showModalShareNetwork(<?php echo $curr_id; ?>)">
-                                                    <div style="cursor:pointer;" data-icon="&#xe00b;"></div>
-                                                </a>
-                                            </li>
+                                                <?php include "actions/item_actions.php";  ?>
 
-                                            <?php include "edit_btns.php"; ?>
-                                        </ul>
-                                     
+                                                <ul class="item-funcs" style="text-align: left">
+                                                    <input type="hidden" class="post_id" name="post_id" value="<?= $curr_id ?>">
+                                                    <li>
+                                                        <a id="modal_network<?php echo $curr_id; ?>" onclick="showModalShareNetwork(<?php echo $curr_id; ?>)">
+                                                            <div style="cursor:pointer;" data-icon="&#xe00b;"></div>
+                                                        </a>
+                                                    </li>
+
+                                                    <?php // include "edit_btns.php"; ?>
+                                                </ul>
+
+                                            </div>
+
                                     <?php endif; ?>
                                     </div>
 

@@ -149,19 +149,21 @@ $itemURL = $_current_collection . basename(get_permalink());
                                         <div style="cursor:pointer;" data-icon="&#xe00b;"></div>
                                     </a>
                                 </li>
-                                <?php include "edit_btns.php"; ?>
+                                <?php // include "edit_btns.php"; ?>
                             </ul>
                             
-                            <?php // include "actions/item_actions.php"; ?>
+                            <div class="new-item-actions">
+                                <?php include "actions/item_actions.php"; ?>    
+                            </div>
 
                             <ul class="item-funcs-table col-md-5 right" style="display:none;">
                                 <input type="hidden" class="post_id" name="post_id" value="<?= $curr_id ?>">
-                                <li class="item-redesocial">
+                                <li class="item-redesocial" style="float: right; margin-left: 10px">
                                     <a id="modal_network<?php echo $curr_id; ?>" onclick="showModalShareNetwork(<?php echo $curr_id; ?>)">
                                         <div style="cursor:pointer;" data-icon="&#xe00b;"></div>
                                     </a>
                                 </li>
-                                <?php include "edit_btns_table.php"; ?>
+                                <?php // include "edit_btns_table.php"; ?>
                             </ul>
 
                         </div> <!--.editing-item -->

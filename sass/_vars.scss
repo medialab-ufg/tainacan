@@ -176,3 +176,20 @@ $default-margin: 20px 0 20px 0;
     }
   } // .project-info
 }
+
+@mixin context-item-menu-style($margintop: -3px, $padding: 0 15px 0 20px) {
+  li.open_item_actions {
+    & > a {
+      padding: $padding;
+      margin-top: $margintop;
+
+      &:hover {
+        background: transparent !important;
+      }
+    }
+
+    a {
+      cursor: pointer;
+    }
+  }
+}

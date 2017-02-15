@@ -65,6 +65,7 @@
             var see_more = '<?php _e( "View Object","tainacan"); ?>';
             var item_order = parseInt( $("#object_" + c_id).attr('data-order') );
             var actions = $("#object_" + c_id + " .item-funcs-table").html();
+            actions += $("#object_" + c_id + " .new-item-actions").html();
 
             var _table_html = "<tr>";
             if(meta_table_set) {
@@ -87,7 +88,8 @@
                 var title = $.trim($("#object_" + c_id + " .item-display-title a").text());
                 _table_html += "<td> <a class='tview-title' data-id='"+c_id+"' href='javascript:void(0)'>"+title+" </a></td>";
             }
-            _table_html += "<td style='width: 10%'> <ul>" + actions + "</ul> </td> </tr>";
+            // _table_html += "<td style='width: 10%'> <ul>" + actions + "</ul> </td> </tr>";
+            _table_html += "<td style='width: 7%'> " + actions + " </td> </tr>";
             $( "#table-view-elements" ).append( _table_html );
 
             if( items_per_page && items_per_page >= 10 ) {
@@ -338,6 +340,8 @@
                 $(this).toggleClass('selected-item');
             }
         });
+
+        $('#collection-slideShow .item-menu-container').removeClass('navbar-right').addClass('navbar-left');
 
     });
 
@@ -781,7 +785,6 @@
             $('.main-slide').slick('slickPlay');
             $('.collection-slides').slick('slickPlay');
         }
-
     });
 
     var main_slick_settings = {
@@ -809,7 +812,9 @@
         focusOnSelect: true
     };
 
-    $('.main-slide').slick(main_slick_settings);
     $('.collection-slides').slick(collection_slick_settings);
+    $('.main-slide').slick(main_slick_settings);
+
+    // setTimeout( function() {}, 500);
 
 </script>

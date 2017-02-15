@@ -47,8 +47,10 @@
                         </a>
                     </li>
 
-                    <?php include "edit_btns.php"; ?>
+                    <?php // include "edit_btns.php"; ?>                    
                 </ul>
+                
+                <?php include "actions/item_actions.php"; ?>
 
             </div>         
         </div>
