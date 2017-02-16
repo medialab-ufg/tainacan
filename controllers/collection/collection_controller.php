@@ -184,6 +184,16 @@ class CollectionController extends Controller {
                 }
                 return $this->render(dirname(__FILE__) . '../../../views/search/menu_left.php', $data);
                 break;
+            case 'load_root_menu_left':
+                $data['selected_menu_style_id'] = $this->get_selected_menu_style($data['collection_id']);
+                $data['selected_menu_style_json'] = $this->get_menu_style_json($data['selected_menu_style_id']);
+                $data['facets'] = $visualization_model->get_facets_visualization($data['collection_id']);
+                $data['has_tree'] = $visualization_model->has_tree($data['collection_id'], 'left-column');
+                if ($data['has_tree']) {
+                    $data['tree'] = $visualization_model->get_data_tree($data['collection_id']);
+                }
+                return $this->render(dirname(__FILE__) . '../../../views/search/root_menu_left.php', $data);
+                break;
             case 'set_collection_cover':
                 // if it has been set to collection thumb
                 if ($data['img_height'] == 148) {

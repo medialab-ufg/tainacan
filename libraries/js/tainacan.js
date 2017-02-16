@@ -877,6 +877,56 @@ function showList(src) {
     });
 
 }
+
+// mostra a listagem inicial
+function showListMyCollections(src) {
+    $('.selectors a').removeClass('highlight');
+    $('#list').hide();
+    $('#loader_objects').show();
+    $.ajax({
+        url: src + '/controllers/object/object_controller.php',
+        type: 'POST',
+        data: {operation: 'list', mycollections: 'true', sharedcollections: $("#sharedcollections").val(), keyword: $("#search_collection_field").val(), collection_id: $("#collection_id").val(), ordenation_id: $('#collection_single_ordenation').val()}
+    }).done(function (result) {
+        $('#hideTrash').hide();
+        elem = jQuery.parseJSON(result);
+        //console.log(elem,result);
+        $('#loader_objects').hide();
+        $('#list').html(elem.page);
+        $('#wp_query_args').val(elem.args);
+        $('#list').show();
+        if (elem.empty_collection) {
+            $('#collection_empty').show();
+            $('#items_not_found').hide();
+        }
+    });
+
+}
+
+// mostra a listagem inicial
+function showListSharedCollections(src) {
+    $('.selectors a').removeClass('highlight');
+    $('#list').hide();
+    $('#loader_objects').show();
+    $.ajax({
+        url: src + '/controllers/object/object_controller.php',
+        type: 'POST',
+        data: {operation: 'list', mycollections: $("#mycollections").val(), sharedcollections: 'true', keyword: $("#search_collection_field").val(), collection_id: $("#collection_id").val(), ordenation_id: $('#collection_single_ordenation').val()}
+    }).done(function (result) {
+        $('#hideTrash').hide();
+        elem = jQuery.parseJSON(result);
+        //console.log(elem,result);
+        $('#loader_objects').hide();
+        $('#list').html(elem.page);
+        $('#wp_query_args').val(elem.args);
+        $('#list').show();
+        if (elem.empty_collection) {
+            $('#collection_empty').show();
+            $('#items_not_found').hide();
+        }
+    });
+
+}
 function showTrash(src) {
     show_modal_main();
     $.ajax({

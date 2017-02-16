@@ -6,10 +6,10 @@
 require_once(dirname(__FILE__) . '/models/social_network/Facebook/autoload.php');
 require_once(dirname(__FILE__) . '/controllers/helpers/helpers_controller.php');
 require_once(dirname(__FILE__) . '/helpers/view_helper.php');
- while (have_posts()) : the_post(); 
-        if(get_post(get_the_ID())->post_status != 'publish'){
-            wp_redirect( site_url() ); 
-        }
+while (have_posts()) : the_post();
+    if (get_post(get_the_ID())->post_status != 'publish') {
+        wp_redirect(site_url());
+    }
 endwhile;
 ///****************************** EXECUTANDO SCRIPTS AVULSOS *********************/
 if (isset($_GET['execute-script'])):
@@ -37,21 +37,22 @@ $search_color = ($_color_scheme) ? $_color_scheme["primary"] : "#79a6ce";
 ?>
 
 <?php $_r_bg = repository_bg($col_root_id); ?>
-    <div id="main_part_collection" class="collection_repo_config" style="background: url(<?php echo $_r_bg; ?>); display: none; margin-top: 50px;">
-        <div class="row container-fluid">
-            <div class="project-info">
-                <center>
-                    <h1> <?php bloginfo('name') ?> </h1>
-                    <h3> <?php bloginfo('description') ?> </h3>
-                </center>
-            </div>
-            <?php include_once "views/collection/collec_share.php"; ?>
+<div id="main_part_collection" class="collection_repo_config" style="background: url(<?php echo $_r_bg; ?>); display: none; margin-top: 50px;">
+    <div class="row container-fluid">
+        <div class="project-info">
+            <center>
+                <h1> <?php bloginfo('name') ?> </h1>
+                <h3> <?php bloginfo('description') ?> </h3>
+            </center>
         </div>
+        <?php include_once "views/collection/collec_share.php"; ?>
     </div>
+</div>
 
-<?php while (have_posts()) : the_post();
-    if(get_post(get_the_ID())->post_status != 'publish'){
-        wp_redirect( site_url() ); 
+<?php
+while (have_posts()) : the_post();
+    if (get_post(get_the_ID())->post_status != 'publish') {
+        wp_redirect(site_url());
     }
     ?>
     <!-- TAINACAN: div necessaria para procedimentos do facebook  -->
@@ -206,7 +207,8 @@ $search_color = ($_color_scheme) ? $_color_scheme["primary"] : "#79a6ce";
 
                                     <div class="col-md-12">
                                         <div class="titulo-colecao">
-                                            <?php if($_enable_header_ === "disabled") {
+                                            <?php
+                                            if ($_enable_header_ === "disabled") {
                                                 include("views/collection/config_menu.php");
                                                 ?>
                                                 <h3 class="title"> <?php echo get_the_title(); ?> </h3>
@@ -250,6 +252,13 @@ $search_color = ($_color_scheme) ? $_color_scheme["primary"] : "#79a6ce";
                                     </div>
                                 </div>
                             </div>
+
+                            <div style="margin-top: 10px;" class="" id="propertiesRootAdvancedSearch">
+                                <center>
+                                    <img src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>">
+                                    <h3><?php _e('Please wait...', 'tainacan') ?></h3>
+                                </center>
+                            </div>
                         </div>
 
                         <!-- TAINACAN: esta div estao localizados o campo para o titulo e botao com o icone para o adicionar rapido, colado ao input - col-md-6 (bootstrap) -->
@@ -280,7 +289,7 @@ $search_color = ($_color_scheme) ? $_color_scheme["primary"] : "#79a6ce";
                                                         <?php _e('Add', 'tainacan') ?> <span class="caret"></span>
                                                     </button>
                                                     <ul class="dropdown-menu">
-                                                        <!--li><a  id="create_button" style="cursor: pointer;"><?php echo (get_post_meta(get_the_ID(), 'socialdb_collection_object_name', true)) ? get_post_meta(get_the_ID(), 'socialdb_collection_object_name', true) : _e('Item', 'tainacan') //_e('Item', 'tainacan')                         ?></a></li>
+                                                        <!--li><a  id="create_button" style="cursor: pointer;"><?php echo (get_post_meta(get_the_ID(), 'socialdb_collection_object_name', true)) ? get_post_meta(get_the_ID(), 'socialdb_collection_object_name', true) : _e('Item', 'tainacan') //_e('Item', 'tainacan')                              ?></a></li>
                                                         <li><a onclick="showViewMultipleItems()" style="cursor: pointer;" ><?php _e('Multiple Files', 'tainacan') ?></a></li>
                                                         <!--li><a style="cursor: pointer;" onclick="showModalImportSocialNetwork();" ><?php _e('Social Media', 'tainacan') ?></a></li>
                                                         <li><a style="cursor: pointer;" onclick="showModalImportAll();" ><?php _e('Web Resource URL', 'tainacan') ?></a></li>
@@ -296,7 +305,7 @@ $search_color = ($_color_scheme) ? $_color_scheme["primary"] : "#79a6ce";
                                     </div>
                                 <?php endif; ?>
                                 <div class="col-md-5 flex-box no-padding">
-                                    <label for="collection_single_ordenation" class="order-by-label"><?php _t('Order by: ',1); ?></label>
+                                    <label for="collection_single_ordenation" class="order-by-label"><?php _t('Order by: ', 1); ?></label>
                                     <select onchange="getOrder(this)" class="form-control white"
                                             name="collection_single_ordenation" id="collection_single_ordenation">
                                         <option value=""><?php _e('Sorted by', 'tainacan') ?></option>
@@ -338,10 +347,11 @@ $search_color = ($_color_scheme) ? $_color_scheme["primary"] : "#79a6ce";
                                 </div>
 
                                 <div class="col-md-2 selectable-items">
-                                    <?php if (is_user_logged_in() && get_the_ID() != get_option('collection_root_id') &&
+                                    <?php
+                                    if (is_user_logged_in() && get_the_ID() != get_option('collection_root_id') &&
                                             verify_collection_moderators(get_the_ID(), get_current_user_id())):
                                         ?>
-                                        <label for="collection_single_ordenation"><?php _t('Select: ',1); ?></label>
+                                        <label for="collection_single_ordenation"><?php _t('Select: ', 1); ?></label>
                                         <div class="selectors">
                                             <a onclick="select_some()" class="select_some">
                                                 <?php echo ViewHelper::render_icon("selection", "png", __("Select some items", "tainacan")); ?>
@@ -376,11 +386,11 @@ $search_color = ($_color_scheme) ? $_color_scheme["primary"] : "#79a6ce";
                                             $blog_email = get_bloginfo('admin_email');
                                             $user_data = get_user_by('ID', get_current_user_id())->user_email;
                                             //if ($admin_email == $user_data || $blog_email == $user_data) {
-                                                ?>
-                                                <button onclick="showTrash('<?php echo get_template_directory_uri(); ?>');" class="btn btn-default pull-right">
-                                                    <?php _e('Trash', 'tainacan'); ?>
-                                                </button>
-                                                <?php
+                                            ?>
+                                            <button onclick="showTrash('<?php echo get_template_directory_uri(); ?>');" class="btn btn-default pull-right">
+                                                <?php _e('Trash', 'tainacan'); ?>
+                                            </button>
+                                            <?php
                                             //}
                                         }
                                         ?>
@@ -391,7 +401,36 @@ $search_color = ($_color_scheme) ? $_color_scheme["primary"] : "#79a6ce";
                                 </div>
                             </div>
                         </div>
+                        <?php
+                        if (get_option('collection_root_id') == get_the_ID()):
+                            ?>
+                            <div role="tabpanel">
+                                <!-- Nav tabs -->
+                                <ul class="nav nav-tabs" role="tablist" id="ul_menu_search">
+                                    <li class="active">
+                                        <a id="click_ad_search_collection"
+                                           href="#ad_search_collection" 
+                                           onclick="wpquery_filter('socialdb_collection')"
+                                           aria-controls="ad_search_collection" 
+                                           role="tab" 
+                                           data-toggle="tab">
+                                            <span style="font-size: 18px"><?php _e('Collections', 'tainacan') ?></span>
+                                        </a>
 
+                                    </li>
+                                    <li>
+                                        <a id="click_ad_search_items" 
+                                           href="#ad_search_items" 
+                                           onclick="wpquery_filter('socialdb_object')"
+                                           aria-controls="ad_search_items" role="tab" data-toggle="tab">
+                                            <span style="font-size: 18px"><?php _e('Items', 'tainacan') ?></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <?php
+                        endif;
+                        ?>
                     </div>
 
                     <!--div id="remove"> view removida </div> -->
@@ -411,7 +450,7 @@ $search_color = ($_color_scheme) ? $_color_scheme["primary"] : "#79a6ce";
                     <!--a id="home_button" href="#" class="btn btn-default"><span class="glyphicon glyphicon-th-list"></span></a-->
 
                 </div>
-                
+
             </div>
         </div>
     </div>
@@ -477,8 +516,8 @@ $search_color = ($_color_scheme) ? $_color_scheme["primary"] : "#79a6ce";
                 <a href="#delete"><?php _e('Remove', 'tainacan'); ?></a>
             </li>
         <?php endif; ?>
-        <?php //if (verify_collection_moderators(get_the_ID(), get_current_user_id())): ?>
-        <?php // endif;     ?>
+        <?php //if (verify_collection_moderators(get_the_ID(), get_current_user_id())):  ?>
+        <?php // endif;      ?>
     </ul>
     <!-- TAINACAN: esta div eh mostrada quando eh clicado com o botao direito sobre categorias e tags no dynatree  -->
     <ul id="myMenuSingleTag" class="contextMenu" style="display:none;">
@@ -915,14 +954,14 @@ $search_color = ($_color_scheme) ? $_color_scheme["primary"] : "#79a6ce";
 
                 <div class="modal-footer"><!--Rodapé-->
                     <button type="button" class="btn btn-danger" data-dismiss="modal">
-                        <?php _e('Cancel','tainacan'); ?>
+                        <?php _e('Cancel', 'tainacan'); ?>
                     </button>
 
                     <button type="button" class="btn btn-primary"
-                        onclick="import_mapas_culturais($('#url_mapa_cultural').val().trim())"
-                        id="submit_mapa_cultural_url"
-                        class="btn btn-primary tainacan-blue-btn-bg pull-right">
-                        <?php _e('Import','tainacan'); ?>
+                            onclick="import_mapas_culturais($('#url_mapa_cultural').val().trim())"
+                            id="submit_mapa_cultural_url"
+                            class="btn btn-primary tainacan-blue-btn-bg pull-right">
+                                <?php _e('Import', 'tainacan'); ?>
                     </button>
 
                 </div><!--Fim rodapé-->
@@ -966,7 +1005,7 @@ $search_color = ($_color_scheme) ? $_color_scheme["primary"] : "#79a6ce";
                             onclick="go_to_ontology()"
                             id="go_to_ontology"
                             class="btn btn-primary tainacan-blue-btn-bg pull-right">
-                        <?php _e('Go to ontology','tainacan'); ?>
+                                <?php _e('Go to ontology', 'tainacan'); ?>
                     </button>
 
                 </div><!--Fim rodapé-->
