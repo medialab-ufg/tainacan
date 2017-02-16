@@ -108,14 +108,7 @@
                 elem_first = jQuery.parseJSON(result);
                 showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
                 list_comments_general();
-<<<<<<< Updated upstream
                 $("#comment_item"+object_id).modal('hide');
-=======
-                /*
-                 $('.dropdown-toggle').dropdown();
-                 $('.nav-tabs').tab();
-                 */
->>>>>>> Stashed changes
             });
         }
     }
