@@ -75,7 +75,7 @@
                 data: { operation: 'press_item', object_id: item_id, collection_id: $('#collection_id').val() }
             }).done(function(r){
                 var itm = $.parseJSON(r);
-
+                // cl(itm);
                 if(itm) {
                     var pressPDF = new jsPDF('p','pt');
                     var baseX = 20;
@@ -86,7 +86,6 @@
                     pressPDF.setFont("helvetica");
                     pressPDF.setFontSize(10);
 
-                    /* First items to display */
                     var header_cols = [
                         {title: 'Título', dataKey: 'title'},
                         {title: 'Autor', dataKey: 'author'},
@@ -97,9 +96,29 @@
 
                     var paragraph = itm.desc;
                     var lines = pressPDF.splitTextToSize(paragraph, (pdfInMM-lMargin-rMargin));
-                    pressPDF.text(lMargin*2, 80, lines);
-                    
-                    pressPDF.save('press.pdf');
+                    var desc_yDist = 80;
+                    pressPDF.text(lMargin*2, desc_yDist, lines);
+
+                    // cl(pressPDF);
+                    var desc_height = Math.round( pressPDF.getTextDimensions(lines).h ) * 1.5;
+                    var base_count = desc_yDist + desc_height + baseX;
+                    for( idx in itm.inf ) {
+                        if(itm.inf[idx].value) {
+                            pressPDF.setFontStyle('bold');
+                            var p = base_count + 40;
+                            pressPDF.text( itm.inf[idx].meta, baseX*2, p);
+
+                            var f = p + 15;
+                            pressPDF.setFontStyle('normal');
+                            pressPDF.text( itm.inf[idx].value, baseX*2, f);
+                            // pressPDF.rect(baseX*2, f+5, 520, 0.2, 'F');
+
+                            base_count = p;
+                        }
+                    }
+
+
+                    pressPDF.save( itm.output + '.pdf');
                 }
 
             });

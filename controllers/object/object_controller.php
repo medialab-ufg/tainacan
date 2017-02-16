@@ -391,6 +391,7 @@ class ObjectController extends Controller {
                 $press["author"] = $user_model->get_user($_object->post_author)['name'];
                 $press["title"]  = $_object->post_title;
                 $press["desc"]   = $_object->post_content;
+                $press["output"] = wp_trim_words($_object->post_name, 15);
                 $press["data_c"] = explode(" ", $_object->post_date)[0];
 
                 $_item_meta = get_post_meta($object_id);
@@ -400,8 +401,8 @@ class ObjectController extends Controller {
                         if( ($pcs[0] . $pcs[1]) == "socialdbproperty" ) {
                             $col_meta = get_term($pcs[2]);
                             if( !is_null($col_meta) && is_object($col_meta) ) {
-                                $press['inf'][] = _t('Metadata: ') . $col_meta->name;
-                                $press['inf'][] = _t('Value: ') . $val[0];
+                                $_pair = ['meta' => $col_meta->name, 'value' => $val[0]];
+                                $press['inf'][] = $_pair;
                             }
                         }
                     }
