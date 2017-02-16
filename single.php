@@ -236,9 +236,12 @@ while (have_posts()) : the_post();
 
                                 </div>
                                 <div class="col-md-12 no-padding">
-                                    <button style="margin-top:5px;" class="btn btn-default btn-xs pull-right" onclick="showAdvancedSearch('<?php echo get_template_directory_uri() ?>');">
+                                    <!--button style="margin-top:5px;" class="btn btn-default btn-xs pull-right" onclick="showAdvancedSearch('<?php echo get_template_directory_uri() ?>');">
                                         <?php _e('Advanced Search', 'tainacan'); ?>
-                                    </button>
+                                    </button-->
+                                    <a style="margin-top:5px;cursor:pointer;" class="pull-right" onclick="slideFormAdvancedDown()">
+                                        <?php _e('Advanced Search', 'tainacan'); ?><span class="caret" style="font-size: 14px;"/>
+                                    </a>
                                 </div>
                             </div>
 
@@ -252,13 +255,17 @@ while (have_posts()) : the_post();
                                     </div>
                                 </div>
                             </div>
-
-                            <div style="margin-top: 10px;" class="" id="propertiesRootAdvancedSearch">
-                                <center>
-                                    <img src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>">
-                                    <h3><?php _e('Please wait...', 'tainacan') ?></h3>
-                                </center>
-                            </div>
+                            <form id="advanced_search_collection_form" style="" >
+                                <input type="hidden" id="advanced_search_operation_collection" name="operation" value="do_advanced_search_collection">
+                                <input type="hidden" id="advanced_search_collection" name="advanced_search_collection" value="<?php echo $_currentID_ ?>">
+                                <input type="hidden" id="advanced_search_collection_id" name="collection_id" value="<?php echo $_currentID_; ?>">
+                                <div style="margin-top: 10px;display:none;" class="" id="propertiesRootAdvancedSearch">
+                                    <center>
+                                        <img src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>">
+                                        <h3><?php _e('Please wait...', 'tainacan') ?></h3>
+                                    </center>
+                                </div>
+                            </form>    
                         </div>
 
                         <!-- TAINACAN: esta div estao localizados o campo para o titulo e botao com o icone para o adicionar rapido, colado ao input - col-md-6 (bootstrap) -->

@@ -124,6 +124,36 @@ class AdvancedSearchController extends Controller {
             case 'redirect_collection':
                 $data['url'] = get_permalink($data['collection_id']);
                 return json_encode($data);
+              case 'do_advanced_search_collection':
+                $wpquery_model = new WPQueryModel();
+                $return = array();
+                // Se estiver buscando em todas as colecoes
+                if($data['advanced_search_collection']==get_option('collection_root_id')) {
+                        $args_object = $wpquery_model->advanced_searched_filter($data);
+                        $paramters_object = $wpquery_model->do_filter($args_object);
+                        $args_collection = $wpquery_model->advanced_searched_filter($data);
+                        $args_collection['collection_id'] = $data['advanced_search_collection'];
+                        $paramters_collection = $wpquery_model->do_filter($args_collection);
+                        //$loop_objects = new WP_Query($paramters_object);
+                        //$loop_collections = new WP_Query($paramters_collection);
+                   
+                } else{
+                        $args_object = $wpquery_model->advanced_searched_filter($data);
+                        $paramters_object = $wpquery_model->do_filter($args_object);
+                        $loop_objects = new WP_Query($paramters_object);
+                }
+                
+                if ($paramters_object) : 
+                    $return['args_item'] = serialize($args_object);
+                endif;
+                if ($paramters_collection) : 
+                    $return['args_collection'] =  serialize($args_collection);
+                endif;
+                $logData = ['collection_id' => $data['collection_id'], 'event_type' => 'advanced_search', 'event' => $data['advanced_search_general'] ];
+                Log::addLog($logData);
+                //$return['page'] = $this->render(dirname(__FILE__) . '../../../views/advanced_search/list_advanced_search.php', $data);
+                $return['data'] =  $data['data'];
+                return json_encode($return);    
                 
         }
     }

@@ -549,15 +549,15 @@ class WPQueryModel extends Model {
                 'update_post_term_cache' => false, // grabs terms, remove if terms required (category, tag...)
                 'update_post_meta_cache' => false, // grabs post meta, remove if post meta required
             );
-            $meta_query = $this->get_meta_query($recover_data);
+            $meta_query = (!isset($recover_data['post_type']) || empty($recover_data['post_type']) || $recover_data['post_type'] =='socialdb_object') ? $this->get_meta_query($recover_data) : false;
             if ($meta_query) {
                 $args['meta_query'] = $meta_query;
             }
             if (isset($meta_key)&&!in_array($meta_key, ['title','comment_count','date'])) {
                 $args['meta_key'] = $meta_key;
             }
-            if (isset($recover_data['keyword']) && $recover_data['keyword'] != '') {
-                //$args['s'] = $recover_data['keyword'];
+            if (isset($recover_data['post_type']) && $recover_data['post_type']=='socialdb_collection') {
+                $args['s'] = $recover_data['keyword'];
             }
             if(isset($recover_data['author']) && $recover_data['author'] != ''){
                 $args['author'] = $recover_data['author'];

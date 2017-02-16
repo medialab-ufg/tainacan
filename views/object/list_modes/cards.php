@@ -23,7 +23,7 @@ $itemURL = $_current_collection . basename(get_permalink());
 
             <div class="item-info">
             <div class="col-md-4 colFoto no-padding">
-                <a href="<?php echo get_collection_item_href($collection_id); ?>"
+                <a href="<?php echo get_collection_item_href($collection_id,$curr_id); ?>"
                    onclick="<?php get_item_click_event($collection_id,$curr_id) ?>">
                     <?php echo get_item_thumb_image( $curr_id ); ?>
                 </a>
@@ -118,7 +118,7 @@ $itemURL = $_current_collection . basename(get_permalink());
                     ?>
                     
                     <h4 class="item-display-title">
-                        <a href="<?php echo get_collection_item_href($collection_id); ?>"
+                        <a href="<?php echo get_collection_item_href($collection_id,$curr_id); ?>"
                            onclick="<?php get_item_click_event($collection_id,$curr_id) ?>">
                             <?php echo wp_trim_words( $_item_title_, 13 ); ?>
                         </a>

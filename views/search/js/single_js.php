@@ -4,7 +4,7 @@
     var search_collections_query = $('#wp_query_args').val();
     $(function () {
         set_containers_class($('#collection_id').val());
-        show_collection_properties_root('<?= get_option('collection_root_id'); ?>');
+        show_collection_properties_root($('#collection_id').val());
         // *************** Iframe Popover Collection ****************
         $('[data-toggle="popover"]').popover();
         $('[data-toggle="tooltip"]').tooltip();
@@ -33,8 +33,59 @@
         }else{
             set_popover_content($("#socialdb_permalink_collection").val());
         }
+        //advanced search submit
+        $('#advanced_search_collection_form').submit(function (e) {
+            e.preventDefault();
+            show_modal_main();
+            $.ajax({
+                url: $('#src').val() + '/controllers/advanced_search/advanced_search_controller.php',
+                type: 'POST',
+                data: new FormData(this),
+                processData: false,
+                contentType: false
+            }).done(function (result) {
+                elem = jQuery.parseJSON(result);
+                console.log(elem);
+                hide_modal_main();
+                if (elem.args_collection) {
+                    search_collections_query = elem.args_collection;
+                    $('#wp_query_args').val(search_collections_query);
+                    if (elem.args_item) {
+                        search_items_query = elem.args_item;
+                    }
+                    $('#click_ad_search_collection').trigger('click');
+                }
+                else if (elem.args_item) {
+                    search_items_query = elem.args_item;
+                    $('#wp_query_args').val(search_items_query);
+                    if( $('#click_ad_search_item').length>0){
+                        $('#click_ad_search_item').trigger('click');
+                    }else{
+                        wpquery_filter();
+                    }
+                }else{
+                    wpquery_filter();
+                }
+            });
+            e.preventDefault();
+        });
     });
-
+    //slideUp
+    function slideFormAdvancedDown(){
+        if($('#propertiesRootAdvancedSearch').is(':visible')){
+            $('#propertiesRootAdvancedSearch').hide()
+        }else{
+           $('#propertiesRootAdvancedSearch').show();
+        }
+    }
+    //limpando do formulario de busca avancada
+    function reboot_form(){ 
+        if($('#propertiesRootAdvancedSearch').length>0){
+            $('#propertiesRootAdvancedSearch').html('<center><img src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>"><h3><?php _e('Please wait...', 'tainacan') ?></h3></center>');   
+            show_collection_properties_root($('#collection_id').val());
+            wpquery_clean(); 
+        }
+    }
     // atualiza o container com as propriedades da colecao que foi selecionada no selectbox
     function show_collection_properties_root(collection_id) {
         //$("#advanced_search_collection_id").val(collection_id);
@@ -44,7 +95,7 @@
             data: {operation: 'show_object_properties_auto_load', collection_id: collection_id}
         }).done(function (result) {
             $('#propertiesRootAdvancedSearch').html(result);
-            $('#propertiesRootAdvancedSearch').show();
+            //$('#propertiesRootAdvancedSearch').show();
             revalidate_adv_autocomplete(collection_id);
         });
     }
