@@ -194,6 +194,8 @@ if (isset($property_object)):
                 <?php for($i = 0; $i<$cardinality;$i++):   ?>
                 <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
                      style="padding-bottom: 10px;<?php echo ($i===0) ? 'display:block': 'display:none'; ?>">
+                    <input type="hidden" class="form_autocomplete_value_<?php echo $property['id']; ?>_mask" 
+                           value="<?php echo ($property['metas']['socialdb_property_data_mask'] ) ? $property['metas']['socialdb_property_data_mask'] : '' ?>">
                         <?php if ($property['type'] == 'text') { ?>     
                             <input type="text" 
                                    id="form_autocomplete_value_<?php echo $property['id']; ?>_origin" 
