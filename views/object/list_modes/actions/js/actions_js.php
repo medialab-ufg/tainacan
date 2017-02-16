@@ -74,21 +74,31 @@
                 url: path, type: 'POST',
                 data: { operation: 'press_item', object_id: item_id, collection_id: $('#collection_id').val() }
             }).done(function(r){
-                var press_data = $.parseJSON(r);
-                cl(press_data);
+                var itm = $.parseJSON(r);
 
-                if(press_data) {                    
+                if(itm) {
                     var pressPDF = new jsPDF('p','pt');
                     var baseX = 20;
-                    pressPDF.setFont("helvetica");
-                    // pressPDF.setFontType("bold");
-                    //pressPDF.text(press_data.title, baseX, (baseX*2) ); 
-                    pressPDF.fromHTML(press_data.teste, baseX, (baseX) );
-                    pressPDF.fromHTML(press_data.author, baseX, (baseX*2) );
+                    var lMargin = baseX; // 15 left margin in mm
+                    var rMargin = baseX; // 15 right margin in mm
+                    var pdfInMM = 550;
 
+                    pressPDF.setFont("helvetica");
                     pressPDF.setFontSize(10);
 
-                    pressPDF.fromHTML(press_data.desc, baseX, (baseX*6) ); 
+                    /* First items to display */
+                    var header_cols = [
+                        {title: 'Título', dataKey: 'title'},
+                        {title: 'Autor', dataKey: 'author'},
+                        {title: 'Criado em', dataKey: 'date'}
+                    ];
+                    var header_rows = [{title: itm.title, author: itm.author, date: itm.data_c}];
+                    pressPDF.autoTable(header_cols, header_rows, { theme: 'plain', styles: {cellPadding: 0}, columnStyles: {}, margin: {top: baseX} } );
+
+                    var paragraph = itm.desc;
+                    var lines = pressPDF.splitTextToSize(paragraph, (pdfInMM-lMargin-rMargin));
+                    pressPDF.text(lMargin*2, 80, lines);
+                    
                     pressPDF.save('press.pdf');
                 }
 
