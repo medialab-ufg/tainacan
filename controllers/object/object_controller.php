@@ -388,11 +388,10 @@ class ObjectController extends Controller {
                 $col_id = $data['collection_id'];
                 $press['object'] = get_post($object_id);
                 $_object = get_post($object_id);
-                $press["author"] = '<strong>' . _t('Author: ') . '</strong> ' . $user_model->get_user($_object->post_author)['name'];
-                $press["title"]  = _t('Title: ') . $_object->post_title;
-                // $press["desc"]   = _t('Description: ') . $_object->post_content;
-                $press["desc"] = '<div style="white-space: pre-wrap;">' . htmlentities( $_object->post_content ) . '</div>';
-                $press['teste'] = "<h1 style='font-family: Arial'>" . $_object->post_title ." <span style='color: red'>?!</span> </h1>";
+                $press["author"] = $user_model->get_user($_object->post_author)['name'];
+                $press["title"]  = $_object->post_title;
+                $press["desc"]   = $_object->post_content;
+                $press["data_c"] = explode(" ", $_object->post_date)[0];
 
                 $_item_meta = get_post_meta($object_id);
                 foreach($_item_meta as $meta => $val) {
