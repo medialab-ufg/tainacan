@@ -1419,7 +1419,7 @@ class Model {
         $result = $wpdb->get_results($query);
         if ($result) {
             foreach ($result as $object) {
-                $json[] = array('value' => $object->meta_value, 'label' => $object->meta_value);
+                $json[] = array('value' => $object->meta_value, 'label' => $object->meta_value,'item_id'=>$object->post_id);
             }
         }
         return json_encode($json);
