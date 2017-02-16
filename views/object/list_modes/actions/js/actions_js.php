@@ -70,13 +70,32 @@
 
         $('a.ac-open-file').on('click', function() {
             var item_id = $(this).parents().find('.open_item_actions').first().attr('id').replace('action-', '');
-            cl('Imprimir como ficha catalográfico');
             $.ajax({
                 url: path, type: 'POST',
                 data: { operation: 'press_item', object_id: item_id, collection_id: $('#collection_id').val() }
             }).done(function(r){
-                var _el_ = $.parseJSON(r);
-                cl(_el_);
+                var press_data = $.parseJSON(r);
+                cl(press_data);
+
+                if(press_data) {
+                    if(press_data.desc) {
+                        // cl(press_data.desc);
+                    }
+
+                    var pressPDF = new jsPDF('p','pt');
+                    var baseX = 20;
+                    pressPDF.setFont("helvetica");
+                    // pressPDF.setFontType("bold");
+                    pressPDF.text(press_data.title, baseX, (baseX*2) ); 
+                    pressPDF.fromHTML(press_data.author, baseX * 10, (baseX*2) );
+                    pressPDF.fromHTML(press_data.teste, baseX * 10, (baseX*4) );
+
+                    pressPDF.setFontSize(10);
+
+                    pressPDF.text(press_data.desc, baseX, (baseX*6) ); 
+                    pressPDF.save('press.pdf');
+                }
+
             });
         });
 
