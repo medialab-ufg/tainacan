@@ -391,8 +391,8 @@ class ObjectController extends Controller {
                 $press["author"] = '<strong>' . _t('Author: ') . '</strong> ' . $user_model->get_user($_object->post_author)['name'];
                 $press["title"]  = _t('Title: ') . $_object->post_title;
                 // $press["desc"]   = _t('Description: ') . $_object->post_content;
-                $press["desc"]   = htmlentities( $_object->post_content );
-                $press['teste'] = "<h1>Hello, buddy!!! Wie geht's <span style='color: red'>?!</span> </h1>";
+                $press["desc"] = '<div style="white-space: pre-wrap;">' . htmlentities( $_object->post_content ) . '</div>';
+                $press['teste'] = "<h1 style='font-family: Arial'>" . $_object->post_title ." <span style='color: red'>?!</span> </h1>";
 
                 $_item_meta = get_post_meta($object_id);
                 foreach($_item_meta as $meta => $val) {
