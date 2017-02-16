@@ -55,6 +55,14 @@ foreach( $view_helper->get_metadata_types() as $type => $label):
                                         <input type="text" class="form-control" id="socialdb_property_data_help" name="socialdb_property_data_help" />
                                     </div>
                                     <br>
+                                    <div class="create_form-group">
+                                        <label for="socialdb_property_help"><?php _e('Mask','tainacan'); ?></label>
+                                        <select name='socialdb_property_data_mask' id='socialdb_property_data_mask' class="form-control">
+                                            <option value=""><?php _e('Select...','tainacan') ?></option>
+                                            <option value="key">_<?php _e('key','tainacan') ?></option>
+                                        </select>
+                                    </div>
+                                    <br>
                                     <div class="form-group" style="display: inline-block;">
                                         <label for="property_term_required" style="margin-right: 10px;" ><?php _e('Elements Quantity','tainacan'); ?> : </label>
                                         &nbsp;<input type="radio" name="socialdb_property_data_cardinality" id="socialdb_property_data_cardinality_1" checked="checked"  value="1">&nbsp;<?php _e('Unic value','tainacan') ?>

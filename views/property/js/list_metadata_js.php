@@ -576,6 +576,12 @@
                     $( meta_modal + " #select-data-type").hide().removeClass('edit-metadata-type')
                 }
                 
+                
+                $('#socialdb_property_data_mask option').removeAttr("selected");
+                if(elem.metas.socialdb_property_data_mask){
+                    $('#socialdb_property_data_mask option[value="'+elem.metas.socialdb_property_data_mask+'"]').attr("selected", "selected");
+                }
+                
                 if( $("#meta-item-"+id).hasClass('root_category') ) {
                     $( meta_modal + " .metadata-common-fields").hide();
                 } else {

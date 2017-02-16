@@ -136,6 +136,7 @@ class PropertyModel extends Model {
             $this->add_property_position_ordenation($data['collection_id'], $new_property['term_id'],$data['property_tab']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_collection_id', $data['collection_id']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_required', $data['property_data_required']);
+            $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_data_mask', $data['property_data_mask']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_data_widget', $data['property_data_widget']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_data_cardinality', $data['socialdb_property_data_cardinality']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_visualization',$data['property_visualization']);
@@ -358,6 +359,7 @@ class PropertyModel extends Model {
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_collection_id', $data['collection_id']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_required', $data['property_data_required']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_data_widget', $data['property_data_widget']);
+            $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_data_mask', $data['property_data_mask']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_help', $data['property_data_help']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_data_column_ordenation', $data['property_data_column_ordenation']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_data_cardinality', $data['socialdb_property_data_cardinality']);

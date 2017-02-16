@@ -81,6 +81,7 @@ class EventPropertyDataCreate extends EventModel {
         $data['property_data_widget'] = get_post_meta($event_id, 'socialdb_event_property_data_create_widget',true) ;
         $data['property_data_required'] = get_post_meta($event_id, 'socialdb_event_property_data_create_required',true) ;
         $data['property_data_column_ordenation'] = get_post_meta($event_id, 'socialdb_event_property_data_create_ordenation_column',true) ;
+        $data['property_data_mask'] = get_post_meta($event_id, 'socialdb_event_property_data_create_mask',true) ;
         $data['property_data_help'] = get_post_meta($event_id, 'socialdb_event_property_data_create_help',true) ;
         $data['property_id'] = get_post_meta($event_id, 'socialdb_event_property_data_create_id',true) ;
         $data['property_tab'] = get_post_meta($event_id, 'socialdb_event_property_tab',true) ;
