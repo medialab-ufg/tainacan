@@ -386,8 +386,14 @@ class ObjectController extends Controller {
                 $user_model = new UserModel();
                 $object_id = $data['object_id'];
                 $col_id = $data['collection_id'];
-                $data['object'] = get_post($object_id);
-                $data["username"] = $user_model->get_user($data['object']->post_author)['name'];
+                $press['object'] = get_post($object_id);
+                $_object = get_post($object_id);
+                $press["author"] = '<strong>' . _t('Author: ') . '</strong> ' . $user_model->get_user($_object->post_author)['name'];
+                $press["title"]  = _t('Title: ') . $_object->post_title;
+                // $press["desc"]   = _t('Description: ') . $_object->post_content;
+                $press["desc"]   = htmlentities( $_object->post_content );
+                $press['teste'] = "<h1>Hello, buddy!!! Wie geht's <span style='color: red'>?!</span> </h1>";
+
                 $_item_meta = get_post_meta($object_id);
                 foreach($_item_meta as $meta => $val) {
                     if( is_string($meta)) {
@@ -395,14 +401,14 @@ class ObjectController extends Controller {
                         if( ($pcs[0] . $pcs[1]) == "socialdbproperty" ) {
                             $col_meta = get_term($pcs[2]);
                             if( !is_null($col_meta) && is_object($col_meta) ) {
-                                $data['inf'][] = $col_meta->name;
-                                $data['inf'][] = $val[0];
+                                $press['inf'][] = _t('Metadata: ') . $col_meta->name;
+                                $press['inf'][] = _t('Value: ') . $val[0];
                             }
                         }
                     }
 
                 }
-                return json_encode($data);
+                return json_encode($press);
                 
             case "list_single_object_version":
                 $user_model = new UserModel();

@@ -12,7 +12,8 @@ $itemDelete = [
         </a>
         <ul class="dropdown-menu pull-right dropdown-show new-item-menu" role="menu" id="item-menu-options">
             <li> <a class="ac-view-item" href="<?php echo $itemURL; ?>"> <?php _t('View Item',1); ?> </a> </li>
-            <?php /* <li> <a class="ac-open-file"> <?php _t('Open item file',1); ?> </a> </li> */ ?>
+            
+            <li> <a class="ac-open-file"> <?php _t('Open item file',1); ?> </a> </li>
 
             <?php if ($is_moderator || get_post($curr_id)->post_author == get_current_user_id()): ?>
                 <li>
