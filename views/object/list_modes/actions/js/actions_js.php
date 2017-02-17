@@ -86,22 +86,25 @@
                     pressPDF.setFont("helvetica");
                     pressPDF.setFontSize(10);
 
+                    var create_txt = $(".item-creation strong").first().text();
                     var header_cols = [
-                        {title: 'Título', dataKey: 'title'},
-                        {title: 'Autor', dataKey: 'author'},
-                        {title: 'Criado em', dataKey: 'date'}
+                        {title: $("#repo_fixed_title").val(), dataKey: 'title'},
+                        {title: $(".item-author strong").first().text().replace(':',''), dataKey: 'author'},
+                        {title: create_txt.replace(':',''), dataKey: 'date'}
                     ];
-                    var header_rows = [{title: itm.title, author: itm.author, date: itm.data_c}];
+                    var item_date = $("#object_" + item_id + " .item-creation").text().replace(create_txt, "");
+                    var header_rows = [{title: itm.title, author: itm.author, date: item_date}];
                     pressPDF.autoTable(header_cols, header_rows, { theme: 'plain', styles: {cellPadding: 0}, columnStyles: {}, margin: {top: baseX} } );
 
-                    var paragraph = itm.desc;
-                    var lines = pressPDF.splitTextToSize(paragraph, (pdfInMM-lMargin-rMargin));
+                    var item_desc = itm.desc;
+                    // Work around to break multiple lines description
+                    var lines = pressPDF.splitTextToSize(item_desc, (pdfInMM-lMargin-rMargin));
                     var desc_yDist = 80;
                     pressPDF.text(lMargin*2, desc_yDist, lines);
-
-                    // cl(pressPDF);
+                    
                     var desc_height = Math.round( pressPDF.getTextDimensions(lines).h ) * 1.5;
                     var base_count = desc_yDist + desc_height + baseX;
+
                     for( idx in itm.inf ) {
                         if(itm.inf[idx].value) {
                             pressPDF.setFontStyle('bold');
