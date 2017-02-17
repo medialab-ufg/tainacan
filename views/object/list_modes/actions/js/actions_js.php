@@ -75,35 +75,79 @@
                 data: { operation: 'press_item', object_id: item_id, collection_id: $('#collection_id').val() }
             }).done(function(r){
                 var itm = $.parseJSON(r);
-                // cl(itm);
                 if(itm) {
                     var pressPDF = new jsPDF('p','pt');
                     var baseX = 20;
                     var lMargin = baseX; // 15 left margin in mm
                     var rMargin = baseX; // 15 right margin in mm
-                    var pdfInMM = 550;
+                    var pdfInMM = 530;
+                    var line_dims = { startX: 28, startY: 75, length: 540, thickness: 1 };
 
                     pressPDF.setFont("helvetica");
-                    pressPDF.setFontSize(10);
+                    pressPDF.setFontSize(9.5);
 
-                    var create_txt = $(".item-creation strong").first().text();
+                    /*
+                    var logo = itm.repo_logo;
+                    var projectLogo = new Image();
+                    projectLogo.src = logo;
+                    var logo_settings = { width: (projectLogo.naturalWidth * 0.48), height: (projectLogo.naturalHeight * 0.48) };
+                    pressPDF.addImage(projectLogo, 'PNG', line_dims.startX + 15, line_dims.startY - 45, logo_settings.width, logo_settings.height);
+                    pressPDF.rect(line_dims.startX, line_dims.startY, line_dims.length, line_dims.thickness, 'F');
+                    pressPDF.rect(line_dims.startX, line_dims.startY + 40, line_dims.length, line_dims.thickness, 'F');
+                    */
+                    var logo = $('img.tainacan-logo-cor').get(0);
+                    var projectLogo = new Image();
+                    projectLogo.src = $(logo).attr("src");
+                    var logo_settings = { width: (projectLogo.naturalWidth * 0.48), height: (projectLogo.naturalHeight * 0.48) };
+                    pressPDF.addImage(projectLogo, 'PNG', line_dims.startX + 15, line_dims.startY - 45, logo_settings.width, logo_settings.height);
+                    pressPDF.rect(line_dims.startX, line_dims.startY, line_dims.length, line_dims.thickness, 'F');
+                    pressPDF.rect(line_dims.startX, line_dims.startY + 50, line_dims.length, line_dims.thickness, 'F');
+
+                    /*
                     var header_cols = [
                         {title: $("#repo_fixed_title").val(), dataKey: 'title'},
                         {title: $(".item-author strong").first().text().replace(':',''), dataKey: 'author'},
                         {title: create_txt.replace(':',''), dataKey: 'date'}
                     ];
+                    // var header_rows = [{title: itm.title, author: itm.author, date: item_date}];
+                    var header_rows = [{author: itm.author, date: item_datte}];
+                    pressPDF.autoTable(header_cols, header_rows, { theme: 'plain', styles: {cellPadding: 0}, columnStyles: {}, margin: {top: baseX, left: 200} } );
+                    */
+
                     var item_date = $("#object_" + item_id + " .item-creation").text().replace(create_txt, "");
-                    var header_rows = [{title: itm.title, author: itm.author, date: item_date}];
-                    pressPDF.autoTable(header_cols, header_rows, { theme: 'plain', styles: {cellPadding: 0}, columnStyles: {}, margin: {top: baseX} } );
+                    var create_txt = $(".item-creation strong").first().text();
+
+                    var dist_from_top = line_dims.startY + 20;
+                    pressPDF.setFontType('bold');
+                    pressPDF.setFontSize(12);
+                    pressPDF.text( itm.title, (line_dims.startX + 15), dist_from_top );
+                    pressPDF.setFontSize(9.5);
+                    pressPDF.text( $(".item-author strong").first().text(), (line_dims.startX + 15), dist_from_top + 20);
+                    pressPDF.setFontType('normal');
+                    pressPDF.text( itm.author, (line_dims.startX + 70), dist_from_top + 20);
 
                     var item_desc = itm.desc;
-                    // Work around to break multiple lines description
-                    var lines = pressPDF.splitTextToSize(item_desc, (pdfInMM-lMargin-rMargin));
-                    var desc_yDist = 80;
-                    pressPDF.text(lMargin*2, desc_yDist, lines);
-                    
-                    var desc_height = Math.round( pressPDF.getTextDimensions(lines).h ) * 1.5;
-                    var base_count = desc_yDist + desc_height + baseX;
+                    var descricao = pressPDF.splitTextToSize(item_desc, (pdfInMM-lMargin-rMargin));
+                    var desc_yDist = 130;
+                    if(itm.tmb) {
+                        lMargin = 80;
+                        pdfInMM = 490;
+                        var item_thumb = new Image();
+                        item_thumb.src = itm.tmb;
+                        // pressPDF.addImage(item_thumb, 'JPEG', 200, 50, item_thumb.naturalWidth, item_thumb.naturalHeight);
+                        pressPDF.addImage(item_thumb, 'JPEG', baseX*2, desc_yDist, 80, 80);
+                        pressPDF.text(lMargin + (3*baseX), desc_yDist+10, descricao);
+                    } else {
+                        pressPDF.text(lMargin + baseX, desc_yDist+10, descricao);
+                    }
+
+
+                    var desc_height = Math.round(Math.round(pressPDF.getTextDimensions(descricao).h) * 1.5);
+                    if(item_desc) {
+                        var base_count = desc_yDist + desc_height + (baseX*2);
+                    } else {
+                        var base_count = desc_yDist;
+                    }
 
                     for( idx in itm.inf ) {
                         if(itm.inf[idx].value) {
@@ -119,7 +163,6 @@
                             base_count = p;
                         }
                     }
-
 
                     pressPDF.save( itm.output + '.pdf');
                 }

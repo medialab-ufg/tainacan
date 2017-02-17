@@ -385,16 +385,25 @@ class ObjectController extends Controller {
             case 'press_item':
                 $user_model = new UserModel();
                 $object_id = $data['object_id'];
-                $col_id = $data['collection_id'];
-                $press['object'] = get_post($object_id);
                 $_object = get_post($object_id);
-                $press["author"] = $user_model->get_user($_object->post_author)['name'];
-                $press["title"]  = $_object->post_title;
-                $press["desc"]   = $_object->post_content;
-                $press["output"] = substr($_object->post_name, 0, 15) . mktime();
-                $press["data_c"] = explode(" ", $_object->post_date)[0];
+
+                $press = [
+                    "repo_logo" => get_template_directory_uri() . '/libraries/images/logo/tainacan-repo-logotipo2.png',
+                    "author" => $user_model->get_user($_object->post_author)['name'],
+                    "title"  => $_object->post_title,
+                    "desc" =>$_object->post_content,
+                    "output" => substr($_object->post_name, 0, 15) . mktime(),
+                    "data_c"  => explode(" ", $_object->post_date)[0],
+                    "object"  => get_post($object_id)
+                ];
 
                 $_item_meta = get_post_meta($object_id);
+                $press['dump'] = $_item_meta;
+
+                if($_item_meta['_thumbnail_id']) {
+                    $press['tmb'] = get_post($_item_meta['_thumbnail_id'][0])->guid;
+                }
+
                 foreach($_item_meta as $meta => $val) {
                     if( is_string($meta)) {
                         $pcs = explode("_", $meta);
