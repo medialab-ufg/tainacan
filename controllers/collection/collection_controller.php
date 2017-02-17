@@ -334,8 +334,8 @@ class CollectionController extends Controller {
             /*             * ******************** ordenacao dos metadados ****************** */
             case 'update_ordenation_properties':
                 $meta = unserialize(get_post_meta($data['collection_id'], 'socialdb_collection_properties_ordenation', true));
-                if (isset($data['tab']) && $collection_model->get_category_root_of($data['collection_id']) == $data['category_id']) {
-                    $index = ($data['tab'] == 'false') ? 'default' : $data['tab'];
+                if ($collection_model->get_category_root_of($data['collection_id']) == $data['category_id']) {
+                    $index = (!isset($data['tab']) || $data['tab'] == 'false') ? 'default' : $data['tab'];
                     $array = (is_array($meta)) ? $meta : [];
                     $array[$index] = $data['ordenation'];
                     update_post_meta($data['collection_id'], 'socialdb_collection_properties_ordenation', serialize($array));

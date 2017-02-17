@@ -24,6 +24,7 @@ $(function(){
                 data: { operation: 'get_ordenation_properties',collection_id:$('#collection_id').val() }
             }).done(function(result) {
                 var json = $.parseJSON(result);
+                console.log(json,'ordenation');
                 if(json&&json.ordenation&&json.ordenation!==''){
                      for (var $property in json.ordenation) {
                         if (json.ordenation.hasOwnProperty($property)) {
