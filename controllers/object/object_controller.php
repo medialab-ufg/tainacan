@@ -391,7 +391,7 @@ class ObjectController extends Controller {
                 $press["author"] = $user_model->get_user($_object->post_author)['name'];
                 $press["title"]  = $_object->post_title;
                 $press["desc"]   = $_object->post_content;
-                $press["output"] = wp_trim_words($_object->post_name, 15);
+                $press["output"] = substr($_object->post_name, 0, 15) . mktime();
                 $press["data_c"] = explode(" ", $_object->post_date)[0];
 
                 $_item_meta = get_post_meta($object_id);
