@@ -401,7 +401,8 @@ class ObjectController extends Controller {
                 $press['dump'] = $_item_meta;
 
                 if($_item_meta['_thumbnail_id']) {
-                    $press['tmb'] = get_post($_item_meta['_thumbnail_id'][0])->guid;
+                    $press['tmb']['url'] = get_post($_item_meta['_thumbnail_id'][0])->guid;
+                    $press['tmb']['type'] = wp_check_filetype($press['tmb']['url']);
                 }
 
                 foreach($_item_meta as $meta => $val) {
