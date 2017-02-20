@@ -154,8 +154,6 @@
 
                         desc_xDist = lMargin + (3*baseX);
                         desc_max_width = 410;
-                    } else {
-
                     }
 
                     var descricao = pressPDF.splitTextToSize(item_desc, desc_max_width);
@@ -165,7 +163,11 @@
                     if(item_desc) {
                         var base_count = desc_yDist + desc_height + (baseX*2);
                     } else {
-                        var base_count = desc_yDist;
+                        if(itm.tmb) {
+                            var base_count = desc_yDist + 80;
+                        } else {
+                            var base_count = desc_yDist;
+                        }
                     }
 
                     for( idx in itm.inf ) {
@@ -173,11 +175,9 @@
                             pressPDF.setFontStyle('bold');
                             var p = base_count + 40;
                             pressPDF.text( itm.inf[idx].meta, baseX*2, p);
-
                             var f = p + 15;
                             pressPDF.setFontStyle('normal');
                             pressPDF.text( itm.inf[idx].value, baseX*2, f);
-                            // pressPDF.rect(baseX*2, f+5, 520, 0.2, 'F');
 
                             base_count = p;
                         }
