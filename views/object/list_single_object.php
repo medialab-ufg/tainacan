@@ -146,6 +146,10 @@ $view_helper = new ObjectHelper($collection_id);
                 </ul>
             </div>
 
+            <div class="new-item-actions">
+                <?php include_once "list_modes/actions/item_actions.php"; ?>
+            </div>
+
             <div class="col-md-12">
                 <hr class="single-item-divider" />
             </div>
@@ -379,7 +383,7 @@ $view_helper = new ObjectHelper($collection_id);
         </div>
 
         <div class="col-md-12 item-metadata no-padding">
-            
+
             <div class="item-description box-item-paddings" <?php echo $view_helper->get_visibility($view_helper->terms_fixed['description']) ?>>
                 <h4 class="title-pipe single-title"><?php echo ($view_helper->terms_fixed['description']) ? $view_helper->terms_fixed['description']->name :  _e('Description', 'tainacan'); ?> </h4>
                 <div class="edit-field-btn">
