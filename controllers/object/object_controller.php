@@ -385,24 +385,40 @@ class ObjectController extends Controller {
             case 'press_item':
                 $user_model = new UserModel();
                 $object_id = $data['object_id'];
-                $col_id = $data['collection_id'];
-                $data['object'] = get_post($object_id);
-                $data["username"] = $user_model->get_user($data['object']->post_author)['name'];
+                $_object = get_post($object_id);
+
+                $press = [
+                    "repo_logo" => get_template_directory_uri() . '/libraries/images/logo/tainacan-repo-logotipo2.png',
+                    "author" => $user_model->get_user($_object->post_author)['name'],
+                    "title"  => $_object->post_title,
+                    "desc" =>$_object->post_content,
+                    "output" => substr($_object->post_name, 0, 15) . mktime(),
+                    "data_c"  => explode(" ", $_object->post_date)[0],
+                    "object"  => get_post($object_id)
+                ];
+
                 $_item_meta = get_post_meta($object_id);
+                $press['dump'] = $_item_meta;
+
+                if($_item_meta['_thumbnail_id']) {
+                    $press['tmb']['url'] = get_post($_item_meta['_thumbnail_id'][0])->guid;
+                    $press['tmb']['type'] = wp_check_filetype($press['tmb']['url']);
+                }
+
                 foreach($_item_meta as $meta => $val) {
                     if( is_string($meta)) {
                         $pcs = explode("_", $meta);
                         if( ($pcs[0] . $pcs[1]) == "socialdbproperty" ) {
                             $col_meta = get_term($pcs[2]);
                             if( !is_null($col_meta) && is_object($col_meta) ) {
-                                $data['inf'][] = $col_meta->name;
-                                $data['inf'][] = $val[0];
+                                $_pair = ['meta' => $col_meta->name, 'value' => $val[0]];
+                                $press['inf'][] = $_pair;
                             }
                         }
                     }
 
                 }
-                return json_encode($data);
+                return json_encode($press);
                 
             case "list_single_object_version":
                 $user_model = new UserModel();

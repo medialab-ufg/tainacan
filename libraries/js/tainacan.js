@@ -2780,6 +2780,18 @@ function delete_all_cache_collection() {
     delete_cache('create-item-text', $('#collection_id').val());
 }
 
+function getWeekDay() {
+    return ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'];
+}
+
+function getTodayFormatted() {
+    var d = new Date();
+    var week_day = " (" + (getWeekDay()[d.getDay()]).toString().toLowerCase() + ")";
+    var formatted_date = d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear() + week_day;
+
+    return formatted_date;
+}
+
 function logColAction(search_val, item_id) {
     var c_id = $('#collection_id').val();
     if (search_val && item_id) {

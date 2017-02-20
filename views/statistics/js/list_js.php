@@ -1,6 +1,6 @@
 <script type="text/javascript">
     google.charts.load('current', {'packages':['bar','corechart']});
-    // google.charts.setOnLoadCallback(drawChart);
+    //google.charts.setOnLoadCallback(drawChart);
     
     var TainacanChart = function(){};
     TainacanChart.prototype.getMappedTitles = function() {
@@ -277,7 +277,7 @@
         $.ajax({
             url: stat_path + '/controllers/log/log_controller.php', type: 'POST',
             data: { operation: 'user_events', parent: parent, event: action, from: from, to: to, collec_id: c_id }
-        }).done(function(r){
+        }).done(function(r) {
             var res_json = $.parseJSON(r);
             var chart = $('.selected_chart_type').val();
             $(".current_parent_report").val(parent);
@@ -288,7 +288,10 @@
             } else {
                 toggleElements(["#"+chart+"chart_div", "#charts-resume"]);
                 toggleElements(["#charts-container #no_chart_data"], true);
-                drawChart(chart, action, res_json);
+                setTimeout( function() {
+                    drawChart(chart, action, res_json)
+                }, 300);
+
             }
         });
     }
@@ -459,8 +462,7 @@
         }
 
         var period_consult = $(".stats-i18n .consult-period").text();
-        var week_day = " (" + (getWeekDay()[d.getDay()]).toString().toLowerCase() + ")";
-        var formatted_date = d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear() + week_day;
+        var formatted_date = getTodayFormatted();
 
         var pdf = new jsPDF('p', 'pt');
 
@@ -541,10 +543,6 @@
         var timeStamp = d.getFullYear() + d.getDay() + d.getMilliseconds();
         var chart_name = 'tainacan_' + curr_type + '_report_' + timeStamp + '.pdf';
         pdf.save( chart_name );
-    }
-
-    function getWeekDay() {
-        return ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'];
     }
 
     function formatChartDate(dateToFormat) {
