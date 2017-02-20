@@ -75,12 +75,13 @@
                 data: { operation: 'press_item', object_id: item_id, collection_id: $('#collection_id').val() }
             }).done(function(r){
                 var itm = $.parseJSON(r);
+                cl(itm);
                 if(itm) {
                     var pressPDF = new jsPDF('p','pt');
                     var baseX = 20;
                     var lMargin = baseX; // 15 left margin in mm
                     var rMargin = baseX; // 15 right margin in mm
-                    var pdfInMM = 530;
+                    var pdfInMM = 560;
                     var line_dims = { startX: 28, startY: 75, length: 540, thickness: 1 };
 
                     pressPDF.setFont("helvetica");
@@ -113,9 +114,12 @@
                     var header_rows = [{author: itm.author, date: item_datte}];
                     pressPDF.autoTable(header_cols, header_rows, { theme: 'plain', styles: {cellPadding: 0}, columnStyles: {}, margin: {top: baseX, left: 200} } );
                     */
+                    pressPDF.setFontSize(8);
+                    var formatted_date = "Consultado em " + getTodayFormatted();
+                    pressPDF.text(formatted_date, 400, line_dims.startY - 5); // Consultado em
 
-                    var item_date = $("#object_" + item_id + " .item-creation").text().replace(create_txt, "");
                     var create_txt = $(".item-creation strong").first().text();
+                    var item_date = $("#object_" + item_id + " .item-creation").text().replace(create_txt, "");
 
                     var dist_from_top = line_dims.startY + 20;
                     pressPDF.setFontType('bold');
@@ -126,21 +130,31 @@
                     pressPDF.setFontType('normal');
                     pressPDF.text( itm.author, (line_dims.startX + 70), dist_from_top + 20);
 
+                    var author_width = pressPDF.getTextDimensions(itm.author).w;
+                    cl(author_width);
+                    pressPDF.text(' em ' + item_date, (line_dims.startX + 70) + author_width, dist_from_top + 20);
+
                     var item_desc = itm.desc;
                     var descricao = pressPDF.splitTextToSize(item_desc, (pdfInMM-lMargin-rMargin));
-                    var desc_yDist = 130;
+                    var desc_yDist = 140;
                     if(itm.tmb) {
                         lMargin = 80;
                         pdfInMM = 490;
+                        var thumb_ext = itm.tmb.type.ext;
+
+                        if(thumb_ext == "jpg" || thumb_ext == "jpeg") {
+                            thumb_ext = "JPEG";
+                        } else {
+                            thumb_ext = "PNG";
+                        }
                         var item_thumb = new Image();
-                        item_thumb.src = itm.tmb;
+                        item_thumb.src = itm.tmb.url;
                         // pressPDF.addImage(item_thumb, 'JPEG', 200, 50, item_thumb.naturalWidth, item_thumb.naturalHeight);
                         pressPDF.addImage(item_thumb, 'JPEG', baseX*2, desc_yDist, 80, 80);
                         pressPDF.text(lMargin + (3*baseX), desc_yDist+10, descricao);
                     } else {
                         pressPDF.text(lMargin + baseX, desc_yDist+10, descricao);
                     }
-
 
                     var desc_height = Math.round(Math.round(pressPDF.getTextDimensions(descricao).h) * 1.5);
                     if(item_desc) {
