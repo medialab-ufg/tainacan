@@ -1414,7 +1414,7 @@ class Model {
         $query = "
                         SELECT pm.* FROM $wp_posts p
                         INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id    
-                        WHERE pm.meta_key like '$meta_key' and pm.meta_value LIKE '%{$data['term']}%'
+                        WHERE p.post_status LIKE 'publish' and pm.meta_key like '$meta_key' and pm.meta_value LIKE '%{$data['term']}%'
                 ";
         $result = $wpdb->get_results($query);
         if ($result) {

@@ -38,6 +38,11 @@ class ObjectHelper extends ViewHelper {
             </ul>
             <div id="tab-content-metadata" class="tab-content" style="background: white;">
                 <div id="tab-default"  class="tab-pane fade in active" style="background: white;margin-bottom: 15px;">
+                    <div class="expand-all-div"  onclick="open_accordeon('default')" >
+                        <a class="expand-all-link" href="javascript:void(0)">
+                             <?php _e('Expand all', 'tainacan') ?>&nbsp;&nbsp;<span class="caret"></span></a>
+                    </div>
+                    <hr>
                     <!--div    style="margin-bottom:0%" 
                             onclick="open_accordeon('default')"
                             class="expand-all-item btn white tainacan-default-tags">
@@ -46,8 +51,7 @@ class ObjectHelper extends ViewHelper {
             <?php _e('Expand all', 'tainacan') ?></div>
                         &nbsp;&nbsp;<span class="glyphicon-triangle-bottom white glyphicon"></span>
                     </div-->
-                    <div id="accordeon-default" class="multiple-items-accordion">
-                    </div>
+                    <div id="accordeon-default" class="multiple-items-accordion" style="margin-top:-20px;"></div>
                 </div>
             </div>    
         <?php

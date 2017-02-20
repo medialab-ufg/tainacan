@@ -56,3 +56,17 @@
      padding-left: 25px;
     border: 1px solid #d3d3d3;
 }
+
+.caret-right {
+    border-left: 4px solid;
+    border-bottom: 4px solid transparent;
+    border-top: 4px solid transparent;
+}
+.expand-all-div{
+    margin-top:15px;
+    margin-bottom:-5px;
+    margin-left:25px;
+    font-size: 12px;
+    text-indent: 2%;
+    font-weight: bold;
+}

@@ -413,7 +413,7 @@ function back_main_list() {
  //click toggle
     function open_accordeon(id){
         if( $('#tab-'+id+' .ui-accordion-content').is(':visible')){
-            $('#tab-'+id).find("div.action-text").text('Expandir tudo');
+            $('#tab-'+id).find("div.action-text").text('Expandir todos');
             $('#tab-'+id+' .ui-accordion-content').fadeOut();
             $('.cloud_label').click();
         }else{

@@ -78,6 +78,7 @@
                                 //$("#labels_" + checkbox + "_<?php echo $object_id; ?>").html('');//zero o html do container que recebera os
                                 // insiro o html do link do valor atribuido
                                 $("#labels_" + checkbox + "_<?php echo $object_id; ?>").append('<p><a style="cursor:pointer;" onclick="wpquery_term_filter(' + children.term_id + ',' + checkbox + ')">' + children.name + '</a></p><br>');//inserindo os termos escolhidos
+                                append_category_properties(children.term_id,0,checkbox); 
                             }
                             //  if (property.id == selected) {
                             //     $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
@@ -110,6 +111,7 @@
                             $("#labels_" + selectbox + "_<?php echo $object_id; ?>").html('');
                             $("#labels_" + selectbox + "_<?php echo $object_id; ?>").append('<p><a style="cursor:pointer;" onclick="wpquery_term_filter(' + children.term_id + ',' + selectbox + ')">' + children.name + '</a></p><br>');//inserindo os termos escolhidos
                             $('#value_single_select_' + selectbox + '_<?php echo $object_id; ?>').val(children.term_id);
+                            append_category_properties(children.term_id,0,selectbox); 
                         }
                         $('#field_event_single_property_term_' + selectbox + '_<?php echo $object_id; ?>').append('<option ' + checked + ' value="' + children.term_id + '">' + children.name + '</option>');
                         //  }
@@ -136,7 +138,7 @@
                         if (categories.indexOf(children.term_id) > -1) {
                             checked = 'selected="selected"';
                             $("#labels_" + multipleSelect + "_<?php echo $object_id; ?>").append('<p><a style="cursor:pointer;" onclick="wpquery_term_filter(' + children.term_id + ',' + multipleSelect + ')">' + children.name + '</a></p><br>');//inserindo os termos escolhidos
-                        
+                            append_category_properties(children.term_id,0,multipleSelect); 
                         }
                         //  }
                     });

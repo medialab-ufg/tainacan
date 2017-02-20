@@ -147,7 +147,7 @@ $view_helper = new ViewHelper();
             <div style="padding-left: 15px">
                 <!------------------- Forma de visualizacao do item -------------------------->
                 <div class="form-group">
-                    <label for="collection_ordenation_form"><?php _e('Select the layout for the item visualization','tainacan'); ?></label>
+                    <label for="collection_ordenation_form"><?php _e('Select the layout for the item visualization','tainacan'); ?></label><br>
                     <input type="radio" 
                            <?php echo ( $item_visualization == 'two' || empty($item_visualization)) ? "checked = 'checked'" : ''; ?>
                            name="socialdb_collection_item_visualization" 

@@ -140,6 +140,13 @@
                         results: function () {
                         }
                     },
+                    response: function( event, ui ) {
+                        if(ui.content && ui.content.length>0){
+                           $.each(ui.content,function(index,value){
+                               console.log( $(event.target).val(),value);
+                           }); 
+                        }
+                    },
                     minLength: 2,
                     select: function (event, ui) {
                         $("#form_autocomplete_value_" + property_id).val('');
@@ -537,7 +544,8 @@
         }else if(id!==0){
             selected_categories.push(id);
             //adicionando metadados
-            show_modal_main();
+            $('#append_properties_categories_'+property_id)
+                     .html('<center><img width="100" heigth="100" src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>"><?php _e('Loading metadata for this field','tainacan') ?></center>');
             $.ajax({
                 url: $('#src').val() + '/controllers/object/object_controller.php',
                 type: 'POST',

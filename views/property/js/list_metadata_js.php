@@ -772,10 +772,8 @@
                     //se for propriedade do repositorio
                     if ( repo_prop && repo_prop === true || (created_cat && prop_cat_id !== created_cat ) ) {
                         var fixed_meta = property.metas.socialdb_property_is_fixed;
-                        var current_email = '<?php echo (isset(wp_get_current_user()->user_email))? wp_get_current_user()->user_email:'' ?>';
-                        var admin_email = '<?php echo get_option('admin_email')  ?>';
-                        var blog_email = '<?php echo get_bloginfo('admin_email')  ?>';
-                        if( fixed_meta && fixed_meta == 'true' && (current_email == admin_email || current_email == blog_email) ){
+                        var blog_email = '<?php echo is_super_admin(get_current_user_id() );  ?>';
+                        if( fixed_meta && fixed_meta == 'true' && (blog_email==='true') ){
                             class_var = 'fixed-property';
                             if(visibility_properties.length===0||(visibility_properties.indexOf(current_id.toString())<0)){
                                 button = '<a vis="show" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-open"></span></a>';
@@ -1371,11 +1369,10 @@
                         var button = '';
                         var style = '';
                         var class_var = '';
-                        var blog_email = '<?php echo get_bloginfo('admin_email')  ?>';
+                        var blog_email = '<?php echo is_super_admin(get_current_user_id() );  ?>';
                         if(property.metas.socialdb_property_is_fixed
                                 && property.metas.socialdb_property_is_fixed=='true'
-                                && ('<?php echo (isset(wp_get_current_user()->user_email))? wp_get_current_user()->user_email:'' ?>'==blog_email
-                                || '<?php echo (isset(wp_get_current_user()->user_email))? wp_get_current_user()->user_email:'' ?>'=='<?php echo get_option('admin_email')  ?>')){
+                                && (blog_email==='true')){
                             class_var = 'fixed-property';
                             if(visibility_properties.length===0||(visibility_properties.indexOf(current_id.toString())<0)){
                                 button = '<a vis="show" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-open"></span></a>';

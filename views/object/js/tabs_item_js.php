@@ -46,16 +46,16 @@
         var html = get_expand_all_tab(id);
         return '<div style="background:white;margin-bottom: 15px;" id="tab-'+id+'" class="tab-pane fade">'+
                 html +
-                '<div id="accordeon-'+id+'" class="multiple-items-accordion"></div>'+
+                '<div id="accordeon-'+id+'" class="multiple-items-accordion" style="margin-top:-20px;"></div>'+
                 '</div>';
     }
     //funcao que gerar po expandir todos
     function get_expand_all_tab(id){
-        return '<!--div style="margin-bottom:0%"  onclick="open_accordeon('+id+')" class="expand-all-item btn white tainacan-default-tags">'+
-                    '<div class="action-text" style="display: inline-block;">'+
-                             '<?php _e('Expand all', 'tainacan') ?></div>'+
-                    '&nbsp;&nbsp;<span class="glyphicon-triangle-bottom white glyphicon"></span>'+
-                '</div -->';
+        return '<div class="expand-all-div" onclick="open_accordeon('+id+')" >'+
+                    '<a class="expand-all-link" href="javascript:void(0)">'+
+                             '<?php _e('Expand all', 'tainacan') ?>'+
+                    '&nbsp;&nbsp;<span class="caret"></a>'+
+                '</div><hr>';
     }
     //funcao responsavel em listar as abas nos selects
     function list_tabs(){
@@ -173,13 +173,15 @@
     //click toggle
     function open_accordeon(id){
         if( $('#tab-'+id+' .ui-accordion-content').is(':visible')){
-            $('#tab-'+id).find("div.action-text").text('<?php _e('Expand all', 'tainacan') ?>');
+            $('#tab-'+id).find(".expand-all-link").html('<?php _e('Expand all', 'tainacan') ?><span class="caret"></span>');
             $('#tab-'+id+' .ui-accordion-content').fadeOut();
+           // $('#tab-'+id+' h2').click();
             $('.cloud_label').click();
         }else{
+            //$('#tab-'+id+' h2').click();
             $('#tab-'+id+' .ui-accordion-content').fadeIn();
             $('.cloud_label').click();
-            $('#tab-'+id).find("div.action-text").text('<?php _e('Collapse all', 'tainacan') ?>');
+            $('#tab-'+id).find(".expand-all-link").html('<?php _e('Collapse all', 'tainacan') ?>&nbsp;<span class="caret-right"></span>');
         }
     }
 </script>
