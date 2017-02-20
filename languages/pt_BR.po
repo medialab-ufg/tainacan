@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: socialdb\n"
-"POT-Creation-Date: 2017-02-20 09:42-0300\n"
-"PO-Revision-Date: 2017-02-20 09:43-0300\n"
+"POT-Creation-Date: 2017-02-20 15:26-0300\n"
+"PO-Revision-Date: 2017-02-20 15:30-0300\n"
 "Last-Translator: Rodrigo de Oliveira <webmaster@rodrigodeoliveira.net>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -157,7 +157,7 @@ msgstr "Enviar"
 #: views/collection/config_menu.php:117
 #: views/collection/header_collection.php:211
 #: views/object/list_data_table.php:63 views/object/list_data_table.php:71
-#: views/object/list_modes/actions/item_actions.php:34
+#: views/object/list_modes/actions/item_actions.php:35
 #: views/object/list_modes/modals.php:111
 #: views/object/list_single_object.php:126
 #: views/object/list_single_object_version.php:103
@@ -579,7 +579,7 @@ msgstr "Exibindo coleções:"
 msgid "Showing Items:"
 msgstr "Exibindo itens:"
 
-#: controllers/object/object_controller.php:768
+#: controllers/object/object_controller.php:784
 msgid "No Metadata Found"
 msgstr "Nenhum metadado encontrado"
 
@@ -1504,7 +1504,7 @@ msgstr "O campo licença é obrigatório"
 #: views/advanced_search/loops_page/list_collection_search.php:124
 #: views/advanced_search/loops_page/list_items_search.php:127
 #: views/object/js/list_js.php:112 views/object/list_trash.php:94
-#: views/property/list.php:38 views/statistics/js/list_js.php:538
+#: views/property/list.php:38 views/statistics/js/list_js.php:540
 msgid " of "
 msgstr " de "
 
@@ -6311,8 +6311,8 @@ msgid "Please set a valid item name"
 msgstr "Por favor, insira um nome válido para o item"
 
 #: views/object/js/edit_item_text_js.php:5
-#: views/object/list_modes/actions/item_actions.php:20
-#: views/object/list_modes/actions/item_actions.php:23
+#: views/object/list_modes/actions/item_actions.php:21
+#: views/object/list_modes/actions/item_actions.php:24
 msgid "Edit item"
 msgstr "Editar item"
 
@@ -6366,7 +6366,7 @@ msgstr "Último"
 msgid "Actions"
 msgstr "Ações"
 
-#: views/object/js/list_js.php:112 views/statistics/js/list_js.php:538
+#: views/object/js/list_js.php:112 views/statistics/js/list_js.php:540
 msgid "Page "
 msgstr "Página "
 
@@ -6655,69 +6655,73 @@ msgstr "Menos Informações"
 
 #: views/object/list_modes/actions/item_actions.php:11
 msgid "Item options"
-msgstr ""
+msgstr "Opções do item"
 
 #: views/object/list_modes/actions/item_actions.php:14
 msgid "View Item"
 msgstr "Ver Item"
 
-#: views/object/list_modes/actions/item_actions.php:27
+#: views/object/list_modes/actions/item_actions.php:16
+msgid "Open item file"
+msgstr "Abrir arquivo do item"
+
+#: views/object/list_modes/actions/item_actions.php:28
 #: views/object/list_modes/modals.php:69
 msgid "Duplicate in this collection"
 msgstr "Duplicar nesta coleção"
 
-#: views/object/list_modes/actions/item_actions.php:28
+#: views/object/list_modes/actions/item_actions.php:29
 #: views/object/list_modes/modals.php:72
 msgid "Duplicate in other collection"
 msgstr "Duplicar em outra coleção"
 
-#: views/object/list_modes/actions/item_actions.php:44
-msgid "Check-in"
-msgstr ""
-
 #: views/object/list_modes/actions/item_actions.php:45
+msgid "Check-in"
+msgstr "Check-in"
+
+#: views/object/list_modes/actions/item_actions.php:46
 msgid "Discard Check-out"
-msgstr ""
+msgstr "Descartar check-out"
 
-#: views/object/list_modes/actions/item_actions.php:47
+#: views/object/list_modes/actions/item_actions.php:48
 msgid "Check-out"
-msgstr ""
-
-#: views/object/list_modes/actions/item_actions.php:49
-msgid "Create new version"
-msgstr ""
+msgstr "Check-out"
 
 #: views/object/list_modes/actions/item_actions.php:50
+msgid "Create new version"
+msgstr "Criar nova versão"
+
+#: views/object/list_modes/actions/item_actions.php:51
 msgid "Item versions"
-msgstr ""
+msgstr "Versões do item"
 
-#: views/object/list_modes/actions/item_actions.php:53
+#: views/object/list_modes/actions/item_actions.php:54
 msgid "Export RDF"
-msgstr ""
+msgstr "Exportar RDF"
 
-#: views/object/list_modes/actions/item_actions.php:55
+#: views/object/list_modes/actions/item_actions.php:56
 msgid "Comment item"
-msgstr ""
+msgstr "Comentar item"
 
-#: views/object/list_modes/actions/item_actions.php:61
+#: views/object/list_modes/actions/item_actions.php:62
 msgid "Exclude item"
-msgstr ""
+msgstr "Excluir item"
 
 #: views/object/list_modes/actions/js/actions_js.php:16
 msgid "Duplicate "
-msgstr ""
+msgstr "Duplicar "
 
 #: views/object/list_modes/actions/js/actions_js.php:16
 msgid " at another collection"
-msgstr ""
+msgstr " em outra coleção"
 
 #: views/object/list_modes/actions/js/actions_js.php:21
 msgid "Search collection"
-msgstr ""
+msgstr "Buscar coleção"
 
 #: views/object/list_modes/actions/js/actions_js.php:38
 msgid "Create new version of "
-msgstr ""
+msgstr "Criar nova versão de "
 
 #: views/object/list_modes/actions/js/actions_js.php:44
 #: views/object/list_modes/modals.php:79
@@ -6750,7 +6754,7 @@ msgstr "Descreva o motivo"
 
 #: views/object/list_modes/modals.php:95
 msgid "Comment "
-msgstr ""
+msgstr "Comentar "
 
 #: views/object/list_properties_accordion.php:121
 #: views/object/show_insert_object_properties.php:44
