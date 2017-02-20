@@ -135,8 +135,9 @@
                     pressPDF.text(' em ' + item_date, (line_dims.startX + 70) + author_width, dist_from_top + 20);
 
                     var item_desc = itm.desc;
-                    var descricao = pressPDF.splitTextToSize(item_desc, (pdfInMM-lMargin-rMargin));
                     var desc_yDist = 140;
+                    var desc_xDist = lMargin + baseX;
+                    var desc_max_width = (pdfInMM-lMargin-rMargin);
                     if(itm.tmb) {
                         lMargin = 80;
                         pdfInMM = 490;
@@ -149,12 +150,16 @@
                         }
                         var item_thumb = new Image();
                         item_thumb.src = itm.tmb.url;
-                        // pressPDF.addImage(item_thumb, 'JPEG', 200, 50, item_thumb.naturalWidth, item_thumb.naturalHeight);
-                        pressPDF.addImage(item_thumb, 'JPEG', baseX*2, desc_yDist, 80, 80);
-                        pressPDF.text(lMargin + (3*baseX), desc_yDist+10, descricao);
+                        pressPDF.addImage(item_thumb, thumb_ext, baseX*2, desc_yDist, 80, 80);
+
+                        desc_xDist = lMargin + (3*baseX);
+                        desc_max_width = 410;
                     } else {
-                        pressPDF.text(lMargin + baseX, desc_yDist+10, descricao);
+
                     }
+
+                    var descricao = pressPDF.splitTextToSize(item_desc, desc_max_width);
+                    pressPDF.text(desc_xDist, desc_yDist+10, descricao);
 
                     var desc_height = Math.round(Math.round(pressPDF.getTextDimensions(descricao).h) * 1.5);
                     if(item_desc) {
