@@ -86,7 +86,7 @@ if (get_option('collection_root_id') != $collection_id):
             </form>
         </div>
     </div>
-    
+
     <div class="modal fade" role="dialog" aria-hidden="true" tabindex="-1" id="comment_item<?php echo $curr_id?>">
         <div class="modal-dialog">
             <div class="modal-content dynamic-item-comment">

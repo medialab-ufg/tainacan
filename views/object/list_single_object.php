@@ -54,97 +54,98 @@ $view_helper = new ObjectHelper($collection_id);
                         <button type="button" onclick="save_title('<?php echo $object->ID ?>')" id="save_title" class="btn btn-default btn-xs" style="display: none;"><span class="glyphicon glyphicon-floppy-disk"></span></button>
                     <?php endif; ?>
                 </small>
-
             </div>
 
-            <div class="col-md-2 right no-padding">
-                <ul class="item-funcs">
-                    <?php
-                    if ($collection_metas == 'allowed' || ($collection_metas == 'moderate' && is_user_logged_in()) || ($collection_metas == 'controlled' && ($is_moderator || $object->post_author == get_current_user_id()))) {
-                        if ($metas['socialdb_object_dc_type'][0] == 'image') {
-                            $url_image = wp_get_attachment_url(get_post_thumbnail_id($object->ID, 'full'));
-                            $thumbail_id = get_post_thumbnail_id($object->ID, 'full');
-                            ?>
-                            <li>
-                                <a href="<?php echo $url_image; ?>" download="<?php echo $object->post_title; ?>.jpg" onclick="downloadItem('<?php echo $thumbail_id; ?>');">
-                                    <span class="glyphicon glyphicon-download"></span>
-                                </a>
-                            </li>
-                            <?php
-                        }
-                    }
-                    ?>
-                    <?php if ($is_moderator || $object->post_author == get_current_user_id()): ?>
-                        <li>
-                            <a onclick="single_delete_object('<?= __('Delete Object', 'tainacan') ?>', '<?= __('Are you sure to remove the object: ', 'tainacan') . $object->post_title ?>', '<?php echo $object->ID ?>', '<?= mktime() ?>')" href="#" class="remove">
-                                <span class="glyphicon glyphicon-trash"></span>
-                                <?php // echo viewHelper::render_icon("remove"); ?>
-                            </a>
-                        </li>
-                        <li class="dropdown">
-                            <!--a href="#" onclick="show_edit_object('<?php echo $object->ID ?>')" class="edit">
-                                <span class="glyphicon glyphicon-edit"></span>
-                                <?php // echo viewHelper::render_icon("edit_type"); ?>
-                            </a-->
-                               <?php
-                                 $curr_id = $object->ID ;
-                                 $has_checked_in = get_post_meta( $curr_id ,'socialdb_object_checkout', true);
-                                ?>
-                               <a  style="cursor: pointer;" class="edit"
-                                  data-toggle="dropdown" role="button" aria-expanded="false"
-                                   onclick="show_edit_object('<?php echo $curr_id ?>')">
-                                <span class="glyphicon glyphicon-edit"></span>
-                               </a>
-                               <?php if(is_numeric($has_checked_in)): ?>
-                            <ul class="dropdown-menu dropdown-hover-show" style="top:2%;"  role="menu" >
-                                         <li><button style="position: relative;right: 10%;" onclick="single_discard_checkout('<?php echo $curr_id ?>')" class="btn btn-primary">Discard Checkout</button></li>
-                                         <li><button style="position: relative;right: 50%;  margin-top: 3%;" onclick="single_do_checkin('<?php echo $curr_id ?>')" class="btn btn-primary">Checkin</button></li>
-                                </ul>
-                               <?php else: ?>
-                                <ul class="dropdown-menu dropdown-hover-show"  role="menu" >
-                                         <li ><button style="position: relative;right: 40%;" onclick="single_do_checkout('<?php echo $curr_id ?>')" class="btn btn-primary pull-left">Checkout</button></li>
-                                </ul>
-                               <?php endif; ?>
-                        </li>
-                        <?php
-                    else:
-                        // verifico se eh oferecido a possibilidade de remocao do objeto vindulado
-                        if (verify_allowed_action($collection_id, 'socialdb_collection_permission_delete_object')):
-                            ?>
-                            <li>
-                                <a onclick="single_show_report_abuse('<?php echo $object->ID ?>')" href="#" class="report_abuse">
-                                    <span class="glyphicon glyphicon-warning-sign"></span>
-                                </a>
-                            </li>
-                        <?php endif; ?>
-                        <!-- modal exluir -->
-                        <div class="modal fade" id="single_modal_delete_object<?php echo $object->ID ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-trash"></span>&nbsp;<?php _e('Report Abuse', 'tainacan'); ?></h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <?php echo __('Describe why the object: ', 'tainacan') . get_the_title() . __(' is abusive: ', 'tainacan'); ?>
-                                        <textarea id="observation_delete_object<?php echo $object->ID ?>" class="form-control"></textarea>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo __('Close', 'tainacan'); ?></button>
-                                        <button onclick="single_report_abuse_object('<?= __('Delete Object') ?>', '<?= __('Are you sure to remove the object: ', 'tainacan') . get_the_title() ?>', '<?php echo $object->ID ?>', '<?= mktime() ?>')" type="button" class="btn btn-primary"><?php echo __('Delete', 'tainacan'); ?></button>
-                                    </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    <?php endif; ?>
-                    <li>
-                        <a onclick="single_show_item_versions('<?php echo $object->ID ?>')" href="javascript:void(0)">
-                            <span class="glyphicon glyphicon-folder-open"></span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+            <?php /*
+              <div class="col-md-2 right no-padding">
+                  <ul class="item-funcs">
+                      <?php
+                      if ($collection_metas == 'allowed' || ($collection_metas == 'moderate' && is_user_logged_in()) || ($collection_metas == 'controlled' && ($is_moderator || $object->post_author == get_current_user_id()))) {
+                          if ($metas['socialdb_object_dc_type'][0] == 'image') {
+                              $url_image = wp_get_attachment_url(get_post_thumbnail_id($object->ID, 'full'));
+                              $thumbail_id = get_post_thumbnail_id($object->ID, 'full');
+                              ?>
+                              <li>
+                                  <a href="<?php echo $url_image; ?>" download="<?php echo $object->post_title; ?>.jpg" onclick="downloadItem('<?php echo $thumbail_id; ?>');">
+                                      <span class="glyphicon glyphicon-download"></span>
+                                  </a>
+                              </li>
+                              <?php
+                          }
+                      }
+                      ?>
+                      <?php if ($is_moderator || $object->post_author == get_current_user_id()): ?>
+                          <li>
+                              <a onclick="single_delete_object('<?= __('Delete Object', 'tainacan') ?>', '<?= __('Are you sure to remove the object: ', 'tainacan') . $object->post_title ?>', '<?php echo $object->ID ?>', '<?= mktime() ?>')" href="#" class="remove">
+                                  <span class="glyphicon glyphicon-trash"></span>
+                                  <?php // echo viewHelper::render_icon("remove"); ?>
+                              </a>
+                          </li>
+                          <li class="dropdown">
+                              <!--a href="#" onclick="show_edit_object('<?php echo $object->ID ?>')" class="edit">
+                                  <span class="glyphicon glyphicon-edit"></span>
+                                  <?php // echo viewHelper::render_icon("edit_type"); ?>
+                              </a-->
+                                 <?php
+                                   // $curr_id = $object->ID;
+                                   $has_checked_in = get_post_meta( $object->ID ,'socialdb_object_checkout', true);
+                                  ?>
+                                 <a  style="cursor: pointer;" class="edit"
+                                    data-toggle="dropdown" role="button" aria-expanded="false"
+                                     onclick="show_edit_object('<?php echo $object->ID ?>')">
+                                  <span class="glyphicon glyphicon-edit"></span>
+                                 </a>
+                                 <?php if(is_numeric($has_checked_in)): ?>
+                              <ul class="dropdown-menu dropdown-hover-show" style="top:2%;"  role="menu" >
+                                           <li><button style="position: relative;right: 10%;" onclick="single_discard_checkout('<?php echo $object->ID ?>')" class="btn btn-primary">Discard Checkout</button></li>
+                                           <li><button style="position: relative;right: 50%;  margin-top: 3%;" onclick="single_do_checkin('<?php echo $object->ID ?>')" class="btn btn-primary">Checkin</button></li>
+                                  </ul>
+                                 <?php else: ?>
+                                  <ul class="dropdown-menu dropdown-hover-show"  role="menu" >
+                                           <li ><button style="position: relative;right: 40%;" onclick="single_do_checkout('<?php echo $object->ID ?>')" class="btn btn-primary pull-left">Checkout</button></li>
+                                  </ul>
+                                 <?php endif; ?>
+                          </li>
+                          <?php
+                      else:
+                          // verifico se eh oferecido a possibilidade de remocao do objeto vindulado
+                          if (verify_allowed_action($collection_id, 'socialdb_collection_permission_delete_object')):
+                              ?>
+                              <li>
+                                  <a onclick="single_show_report_abuse('<?php echo $object->ID ?>')" href="#" class="report_abuse">
+                                      <span class="glyphicon glyphicon-warning-sign"></span>
+                                  </a>
+                              </li>
+                          <?php endif; ?>
+                          <!-- modal exluir -->
+                          <div class="modal fade" id="single_modal_delete_object<?php echo $object->ID ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                              <div class="modal-dialog">
+                                  <div class="modal-content">
+                                      <div class="modal-header">
+                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                          <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-trash"></span>&nbsp;<?php _e('Report Abuse', 'tainacan'); ?></h4>
+                                      </div>
+                                      <div class="modal-body">
+                                          <?php echo __('Describe why the object: ', 'tainacan') . get_the_title() . __(' is abusive: ', 'tainacan'); ?>
+                                          <textarea id="observation_delete_object<?php echo $object->ID ?>" class="form-control"></textarea>
+                                      </div>
+                                      <div class="modal-footer">
+                                          <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo __('Close', 'tainacan'); ?></button>
+                                          <button onclick="single_report_abuse_object('<?= __('Delete Object') ?>', '<?= __('Are you sure to remove the object: ', 'tainacan') . get_the_title() ?>', '<?php echo $object->ID ?>', '<?= mktime() ?>')" type="button" class="btn btn-primary"><?php echo __('Delete', 'tainacan'); ?></button>
+                                      </div>
+                                      </form>
+                                  </div>
+                              </div>
+                          </div>
+                      <?php endif; ?>
+                      <li>
+                          <a onclick="single_show_item_versions('<?php echo $object->ID ?>')" href="javascript:void(0)">
+                              <span class="glyphicon glyphicon-folder-open"></span>
+                          </a>
+                      </li>
+                  </ul>
+              </div>
+            */ ?>
 
             <div class="new-item-actions">
                 <?php include_once "list_modes/actions/item_actions.php"; ?>

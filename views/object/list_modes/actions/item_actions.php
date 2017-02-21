@@ -1,25 +1,36 @@
 <?php
 include_once("js/actions_js.php");
-$itemDelete = [
-    'id' => $curr_id, 'title' =>  _t('Delete Object'), 'time' => mktime(),
-    'text' => _t('Are you sure to remove the object: ') . get_the_title()
-];
 
-if(is_null($curr_id)) {
+if( is_null($curr_id) && is_null($itemURL) ) {
+  $is_single_page = true;
   $curr_id = $object->ID;
-}
-
-if(is_null($itemURL)) {
   $itemURL = get_the_permalink($collection_id) . '?item=' . $object->post_name;
 }
+
+$itemDelete = [ 'id' => $curr_id, 'title' =>  _t('Delete Object'), 'time' => mktime(),
+  'text' => _t('Are you sure to remove the object: ') . get_the_title() ];
 ?>
+
+<?php if($is_single_page): ?>
+    <ul class="item-funcs right">
+        <input type="hidden" class="post_id" name="post_id" value="<?= $curr_id ?>">
+        <li>
+            <a id="modal_network<?php echo $curr_id; ?>" onclick="showModalShareNetwork(<?php echo $curr_id; ?>)">
+                <div style="cursor:pointer;" data-icon="&#xe00b;"></div>
+            </a>
+        </li>
+    </ul>
+<?php endif; ?>
+
 <ul class="nav navbar-bar navbar-right item-menu-container">
     <li class="dropdown open_item_actions" id="action-<?php echo $curr_id; ?>">
         <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
             <?php echo ViewHelper::render_icon("config", "png", _t('Item options')); ?>
         </a>
         <ul class="dropdown-menu pull-right dropdown-show new-item-menu" role="menu" id="item-menu-options">
-            <li class="collec-only"> <a class="ac-view-item" href="<?php echo $itemURL; ?>"> <?php _t('View Item',1); ?> </a> </li>
+            <?php if(!$is_single_page): ?>
+                <li class="collec-only"> <a class="ac-view-item" href="<?php echo $itemURL; ?>"> <?php _t('View Item',1); ?> </a> </li>
+            <?php endif; ?>
 
             <li> <a class="ac-open-file"> <?php _t('Open item file',1); ?> </a> </li>
 
@@ -62,7 +73,10 @@ if(is_null($itemURL)) {
 
             <li> <a class="ac-item-rdf" href="<?php echo $itemURL; ?>.rdf" target="_blank"> <?php _t('Export RDF',1); ?> </a> </li>
             <?php /* <li> <a class="ac-item-graph"> <?php _t('See graph',1); ?> </a> </li> */?>
-            <li class="collec-only"> <a class="ac-comment-item"> <?php _t('Comment item',1); ?> </a> </li>
+
+            <?php if(!$is_single_page): ?>
+                <li class="collec-only"> <a class="ac-comment-item"> <?php _t('Comment item',1); ?> </a> </li>
+            <?php endif; ?>
 
             <?php if ($is_moderator || get_post($curr_id)->post_author == get_current_user_id()): ?>
                 <li>
