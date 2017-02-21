@@ -80,7 +80,7 @@ $_src_ = get_template_directory_uri();
 
                       if("disabled" == $_header_enabled) {
                     ?>
-                        <div class="col-md-12 left repository">
+                        <div class="col-md-8 left repository">
                           <h4> <?php echo bloginfo('name'); ?> </h3>
                           <h6> <?php echo bloginfo('description'); ?> </h6>
                         </div>
