@@ -141,15 +141,24 @@
                         }
                     },
                     response: function( event, ui ) {
-                        if(ui.content && ui.content.length>0){
+                        if(ui.content && ui.content.length>0 && $('.form_autocomplete_value_'+property_id+'_mask').val()!==''){
                            $.each(ui.content,function(index,value){
-                               console.log( $(event.target).val(),value);
+                               if($(event.target).val()==value.value || $(event.target).val().toLowerCase().trim()==value.value){
+                                    toastr.error($(event.target).val()+'<?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                                    $(event.target).val('');
+                               }
                            }); 
                         }
                     },
                     minLength: 2,
                     select: function (event, ui) {
                         $("#form_autocomplete_value_" + property_id).val('');
+                        if( $('.form_autocomplete_value_'+property_id+'_mask').val()!==''){
+                            $(event.target).html(''); 
+                            $(event.target).val('');
+                            toastr.error(ui.item.value+'<?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                            return false;
+                        }
                         //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
                         var temp = $("#property_value_" + property_id).val();
                         if (typeof temp == "undefined") {

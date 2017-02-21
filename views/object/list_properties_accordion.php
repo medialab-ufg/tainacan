@@ -191,12 +191,13 @@ if (isset($property_object)):
             </h2>
             <?php $cardinality = $view_helper->render_cardinality_property($property);   ?>
             <div>
-                <?php for($i = 0; $i<$cardinality;$i++):   ?>
-                <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
-                     style="padding-bottom: 10px;<?php echo ($i===0) ? 'display:block': 'display:none'; ?>">
-                    <input type="hidden" class="form_autocomplete_value_<?php echo $property['id']; ?>_mask" 
+                <input type="hidden" class="form_autocomplete_value_<?php echo $property['id']; ?>_mask" 
                            value="<?php echo ($property['metas']['socialdb_property_data_mask'] ) ? $property['metas']['socialdb_property_data_mask'] : '' ?>">
-                        <?php if ($property['type'] == 'text') { ?>     
+                <?php for($i = 0; $i<$cardinality;$i++):   ?>
+                <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>" class="row"
+                     style="padding-bottom: 10px;margin-bottom: 10px;<?php echo ($i===0) ? 'display:block': 'display:none'; ?>">
+                      <div class="col-md-11">
+                       <?php if ($property['type'] == 'text') { ?>     
                             <input type="text" 
                                    id="form_autocomplete_value_<?php echo $property['id']; ?>_origin" 
                                    class="form-control auto-save form_autocomplete_value_<?php echo $property['id']; ?>" 
@@ -269,7 +270,7 @@ if (isset($property_object)):
                                  class="form-control auto-save form_autocomplete_value_<?php echo $property['id']; ?>"
                                  name="socialdb_property_<?php echo $property['id']; ?>[]" >
                                <?php } ?>
-                        
+                        </div>
                         <?php echo $view_helper->render_button_cardinality($property,$i) ?>    
                      </div>         
                 <?php endfor;  ?>            

@@ -251,7 +251,9 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
                 }    
                 return json_encode(['slug'=>'']);
             case 'initDynatreePropertiesFilter':
-                    return $property_model->initDynatreePropertiesFilter($data['collection_id'],false);   
+                    return $property_model->initDynatreePropertiesFilter($data['collection_id'],false);  
+            case 'initDynatreePropertiesFilterCategory':
+                    return $property_model->categoryPropertiesDynatree($data['category_id'],false);       
             //colocando a obrigatoriadade nas propriedades fixas
             case 'alter_fixed_property_collection':
                 $labels_collection = ($data['collection_id']!='') ? get_post_meta($data['collection_id'], 'socialdb_collection_fixed_properties_labels', true) : false;
@@ -376,7 +378,7 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
         $eventAddProperty = new EventPropertyDataCreate();
         $data['socialdb_property_default_value'] = $data['socialdb_property_default_value'];
         $data['socialdb_event_property_data_create_help'] = $data['socialdb_property_data_help'];
-        $data['socialdb_event_property_data_create_mask'] = $data['socialdb_property_data_mask'];
+        $data['socialdb_event_property_data_create_mask'] = (isset($data['socialdb_property_data_mask']) && is_array($data['socialdb_property_data_mask'])) ? implode(',', $data['socialdb_property_data_mask']) : ((isset($data['socialdb_property_data_mask'])) ? $data['socialdb_property_data_mask'] : '');
         $data['socialdb_event_property_data_create_name'] = $data['property_data_name'];
         $data['socialdb_event_property_data_create_widget'] = $data['property_data_widget'];
         $data['socialdb_event_property_data_create_ordenation_column'] = $data['property_data_column_ordenation'];
@@ -407,7 +409,7 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
         $data['socialdb_event_property_data_edit_id'] = $data['property_data_id'];
         $data['socialdb_property_default_value'] = $data['socialdb_property_default_value'];
         $data['socialdb_event_property_data_edit_help'] = $data['socialdb_property_data_help'];
-        $data['socialdb_event_property_data_edit_mask'] = $data['socialdb_property_data_mask'];
+        $data['socialdb_event_property_data_edit_mask'] = (isset($data['socialdb_property_data_mask']) && is_array($data['socialdb_property_data_mask'])) ? implode(',', $data['socialdb_property_data_mask']) : ((isset($data['socialdb_property_data_mask'])) ? $data['socialdb_property_data_mask'] : '');
         $data['socialdb_event_property_data_edit_name'] = $data['property_data_name'];
         $data['socialdb_event_property_data_edit_widget'] = $data['property_data_widget'];
         $data['socialdb_event_property_data_edit_ordenation_column'] = $data['property_data_column_ordenation'];

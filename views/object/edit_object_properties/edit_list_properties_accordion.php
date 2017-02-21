@@ -84,6 +84,8 @@ if (isset($property_object)):
                 ?>
             </h2>
             <div>
+                <input type="hidden" class="form_autocomplete_value_<?php echo $property['id']; ?>_mask" 
+                           value="<?php echo ($property['metas']['socialdb_property_data_mask'] ) ? $property['metas']['socialdb_property_data_mask'] : '' ?>">
                 <?php if($is_view_mode): ?>
                      <div id="labels_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">
                         <?php if (!empty($property['metas']['objects']) && !empty($property['metas']['value'])) { ?>
@@ -245,7 +247,8 @@ if (isset($property_object)):
                 <div>
                      <?php for($i = 0; $i<$cardinality;$i++):   ?>
                         <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
-                             style="padding-bottom: 10px;<?php echo ($i===0||(is_array($property['metas']['value'])&&$i<count($property['metas']['value']))) ? 'display:block': 'display:none'; ?>">
+                             style="padding-bottom: 10px;margin-bottom: 30px;<?php echo ($i===0||(is_array($property['metas']['value'])&&$i<count($property['metas']['value']))) ? 'display:block': 'display:none'; ?>">
+                             <div class="col-md-11">
                         <?php if ($property['type'] == 'text') { ?>     
                                 <input type="text" 
                                        id="form_edit_autocomplete_value_<?php echo $property['id']; ?>" 
@@ -325,7 +328,8 @@ if (isset($property_object)):
                                        class="form-control auto-save form_autocomplete_value_<?php echo $property['id']; ?>" 
                                        name="socialdb_property_<?php echo $property['id']; ?>[]" >
                             <?php } ?> 
-                     <?php echo $view_helper->render_button_cardinality($property,$i) ?>    
+                             </div>      
+                         <?php echo $view_helper->render_button_cardinality($property,$i) ?>    
                          </div>         
                     <?php endfor;  ?>                    
                 </div>              
