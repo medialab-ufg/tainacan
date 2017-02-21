@@ -1,6 +1,6 @@
 <script>
     $(function () {
-        fillCollectionSelect();
+        //fillCollectionSelect();
         showDynatreeLeft($('#src').val());
         //se existir filtro para eventos
         if ($('#filters_has_event_notification').val() == 'true') {
@@ -9,12 +9,12 @@
 
     });
 
-    function select_between_collections(collection_id) {
+    /*function select_between_collections(collection_id) {
         window.location = '<?= site_url() ?>/?p=' + collection_id + '&post_type=socialdb_collection';
-    }
+    }*/
 
     // monta o select com todas as colecoes do repositorio
-    function fillCollectionSelect() {
+    /*function fillCollectionSelect() {
         $("#select_between_collections").attr('disabled', 'disabled');
         $("#select_between_collections").addClass('ui-autocomplete-loading');
         $("#select_between_collections").html("<option  value='' ><?php _e('Loading Collections', 'tainacan') ?>");
@@ -40,7 +40,7 @@
             });
             $("#select_between_collections").val($('#collection_id').val());
         });
-    }
+    }*/
 
     function showDynatreeLeft(src) {
         var select = 0;
