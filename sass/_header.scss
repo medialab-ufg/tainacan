@@ -30,7 +30,17 @@
   a.repository-logo {
     padding-top: 3px !important;
   }
-}
+
+  .repository {
+    h4, h6 {
+      color: white;
+      text-align: left;
+      margin: 2px 0 0 0;
+    }
+    h6 { margin-top: 3px !important; }
+  }
+
+} // .logo-container
 
 ul.repository-settings, .admin-configs {
   li {
@@ -264,23 +274,23 @@ a:hover{text-decoration:underline}
     position: relative;
     margin-top: -5px;
     cursor: pointer;
-    
+
     &:hover {
         cursor: pointer;
     }
-    
+
     .collections {
         text-align: center;
-        
+
         &:hover {
             background: #1d1d1d;
             cursor: pointer;
         }
         a {
-            
+
           img {
              width: 12%;
-             margin-top: -3px;    
+             margin-top: -3px;
            }
 
           &.collecs {
@@ -288,12 +298,12 @@ a:hover{text-decoration:underline}
               padding-top: 17px;
               height: 55px;
           }
-        } // a              
+        } // a
     } // li.collections
-        
+
     .sub-menu {
        background: #fff;
-       border:1px solid #ccc;    
+       border:1px solid #ccc;
        padding-left: 0px;
        width: 150px;
        border-radius: 4px;
@@ -301,35 +311,35 @@ a:hover{text-decoration:underline}
        z-index: 31;
        overflow: visible;
     }
-    
+
     li {
        position :relative;
        _float: left; /*Hack para o IE6*/
-        
+
         &.divider {
-            border-bottom: 1px solid $lightest-gray; 
+            border-bottom: 1px solid $lightest-gray;
         }
-        
-        a {            
+
+        a {
             display: block;
-            line-height: 25px;   
-            color: black;            
-                        
+            line-height: 25px;
+            color: black;
+
             &:hover {
                 // background:#e5e5e5;/*define a cor do fundo*/
                 // color:#333;/*define a cor da fonte*/
              }
         }
-        
+
         &:hover ul ul {
-            display: none; 
+            display: none;
             position: absolute;
             top: 0px;
             left: 135px;
             overflow: visible;
             z-index: 20;
-            
-            
+
+
             li.tmpl {
                 a {
                     padding: 4px;
@@ -338,7 +348,7 @@ a:hover{text-decoration:underline}
                         background: #f2f2f2;
                     }
                 }
-            }            
+            }
          }
     } // li
 } // #collections-menu
@@ -380,9 +390,9 @@ a:hover{text-decoration:underline}
 }
 
 .login-inner-container {
-  background: white; 
-  margin-bottom: 100px; 
-  border: 2px solid #d8d6d6; 
+  background: white;
+  margin-bottom: 100px;
+  border: 2px solid #d8d6d6;
   padding: 25px;
   margin-top: 50px;
 }
@@ -418,7 +428,7 @@ a:hover{text-decoration:underline}
 
 .root-notifications {
     ul.dropdown-menu {
-        // min-width: 250px; 
+        // min-width: 250px;
         // text-align: center
     }
 }

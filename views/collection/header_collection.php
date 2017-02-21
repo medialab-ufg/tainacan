@@ -178,7 +178,7 @@ if( empty($_enable_header_) || $_enable_header_ == "enabled") {
                                     </li>
                                 <?php endif; ?>
                             </ul>
-                        </div>    
+                        </div>
                         <!-- ******************** TAINACAN: Comentarios ******************** -->
                         <a style="cursor: pointer;" onclick="showPageCollectionPage()">
                             <div class="fab"><span style="font-size: medium;"
@@ -193,7 +193,7 @@ if( empty($_enable_header_) || $_enable_header_ == "enabled") {
                             </a>
                             <ul id="iframebutton_dropdown" class="dropdown-menu pull-right dropdown-show" role="menu">
                             </ul>
-                        </div>    
+                        </div>
                     </div>
                 </div>
             </div>
@@ -217,8 +217,9 @@ if( empty($_enable_header_) || $_enable_header_ == "enabled") {
                                       class="form-control"></textarea>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default"
-                                    data-dismiss="modal"><?php echo __('Close', 'tainacan'); ?></button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">
+                              <?php echo __('Close', 'tainacan'); ?>
+                            </button>
                             <button
                                 onclick="report_abuse_collection('<?php _e('Delete Collection', 'tainacan') ?>', '<?php _e('Are you sure to remove the collection: ', 'tainacan') . $collection_post->post_title ?>', '<?php echo $collection_post->ID ?>', '<?php echo mktime() ?>', '<?php echo get_option('collection_root_id') ?>')"
                                 type="button" class="btn btn-primary"><?php echo __('Delete', 'tainacan'); ?></button>
