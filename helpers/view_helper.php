@@ -188,10 +188,11 @@ class ViewHelper {
                     </a>
                 </div>    
                 <?php endif; ?>
+                <br>
                <button type="button" 
                        id="button_property_<?php echo $property['id']; ?>_<?php echo $i; ?>"
                        onclick="show_fields_metadata_cardinality(<?php echo $property['id'] ?>,<?php echo $i ?>)" 
-                       style="margin-top: 5px;<?php echo (is_array($property['metas']['value'])&&($i+1)<count($property['metas']['value']))? 'display:none':'' ?>" 
+                       style="margin-top: 50px;<?php echo (is_array($property['metas']['value'])&&($i+1)<count($property['metas']['value']))? 'display:none':'' ?>" 
                        class="btn btn-primary btn-lg btn-xs btn-block">
                     <span class="glyphicon glyphicon-plus"></span><?php _e('Add field', 'tainacan') ?>
                 </button>

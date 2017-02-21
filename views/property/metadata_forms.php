@@ -55,13 +55,23 @@ foreach( $view_helper->get_metadata_types() as $type => $label):
                                         <input type="text" class="form-control" id="socialdb_property_data_help" name="socialdb_property_data_help" />
                                     </div>
                                     <br>
+                                    <hr>
                                     <div class="create_form-group">
-                                        <label for="socialdb_property_help"><?php _e('Mask','tainacan'); ?></label>
-                                        <select name='socialdb_property_data_mask' id='socialdb_property_data_mask' class="form-control">
+                                        <a onclick="show_key_container()" href="javascript:void(0)"><?php _e('Mask','tainacan'); ?>&nbsp;&nbsp;<span class="mask_down glyphicon glyphicon-chevron-down"></span><span style="display:none;" class="mask_up glyphicon glyphicon-chevron-up"></span></a>
+                                        <!--select name='socialdb_property_data_mask' id='socialdb_property_data_mask' class="form-control">
                                             <option value=""><?php _e('Select...','tainacan') ?></option>
                                             <option value="key">_<?php _e('key','tainacan') ?></option>
-                                        </select>
+                                        </select-->
+                                        <div class="row mask_container" style="display:none;margin-top: 5px;">
+                                            <div class="col-md-6">
+                                                <input type="checkbox" name="socialdb_property_data_mask[]" value="key">&nbsp;_<?php _e('key','tainacan') ?>
+                                            </div>
+                                            <div class="col-md-6">
+                                                
+                                            </div>
+                                        </div>    
                                     </div>
+                                    <hr>
                                     <br>
                                     <div class="form-group" style="display: inline-block;">
                                         <label for="property_term_required" style="margin-right: 10px;" ><?php _e('Elements Quantity','tainacan'); ?> : </label>

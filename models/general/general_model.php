@@ -2267,6 +2267,50 @@ class Model {
        }
     }
     
+    public function categoryPropertiesDynatree($category_id,$hide_checkbox = true,$is_layout = false){
+         try{
+        $dynatree = [];
+        $roots_parents = [
+        get_term_by('name','socialdb_property_data','socialdb_property_type')->term_id,
+        get_term_by('name','socialdb_property_object','socialdb_property_type')->term_id,
+        get_term_by('name','socialdb_property_term','socialdb_property_type')->term_id ];
+        $properties = get_term_meta($category_id,'socialdb_category_property_id');
+        if($properties && is_array($properties)){
+            $properties = array_unique($properties);
+            foreach ($properties as $property) {
+                 // busco o objeto da propriedade
+                 $propertyObject = get_term_by('id', $property, 'socialdb_property_type');
+                 if(!$propertyObject||!in_array($propertyObject->parent, $roots_parents)||in_array($propertyObject->slug, $this->fixed_slugs))
+                     continue;
+                 //insiro a propriedade da classe no dynatree
+                 $children = $this->getChildren($propertyObject->term_id);
+                 $name = (mb_detect_encoding($propertyObject->name)=='UTF-8') ? $propertyObject->name : utf8_encode($propertyObject->name);
+                 if (count($children) > 0) {
+                    $dynatree[] = array(
+                            'title' =>$name, 
+                            'key' => $propertyObject->term_id,  
+                            'type' => $this->get_property_type($propertyObject->term_id),
+                            'expand' => true, 
+                            'hideCheckbox' => $hide_checkbox, 
+                            'children' => $this->childrenDynatreePropertiesFilter($propertyObject->term_id, 'color_property4'),
+                            'addClass' => 'color_property4');      
+                 }else{
+                     $dynatree[] = array(
+                            'title' =>$name, 
+                            'key' => $propertyObject->term_id,  
+                            'type' => $this->get_property_type($propertyObject->term_id),
+                            'hideCheckbox' => $hide_checkbox, 
+                            'addClass' => 'color_property4'); 
+                 }
+            }
+        }
+       $this->sortDynatree($dynatree);
+       return json_encode($dynatree);
+       }  catch (Exception $e){
+           var_dump($e);
+       }
+    }
+    
     /** function getChildrenDynatree() 
     * receive ((int,string) id,(array) dynatree) 
     * Return the children of the facets and insert in the array of the dynatree 

@@ -1711,7 +1711,7 @@
     function list_collection_metadata() {
         var fixed_meta = $("ul#metadata-container .fixed-meta");
         $('#loader_metadados_page').show();
-        $('#metadata-container').hide();
+        $("#metadata-container-default").hide();
         $("#tab-content-metadata .metadata-container").html('').append(fixed_meta);
         //apos o termino de$("ul#metadata-container").html('').append(fixed_meta);
         //apos o termino  todos os carregamentos
@@ -1726,22 +1726,22 @@
                  $('.root_category .glyphicon-eye-open').css('color','#ddd');
                  $('.root_category .glyphicon-edit').css('color','#ddd');
                  $('.root_category .glyphicon-sort').css('color','#ddd');
-                 $('#loader_metadados_page').hide();
-                 $('#metadata-container').show();
-//                 $.ajax({
-//                    type: "POST",
-//                    url: $('#src').val() + "/controllers/collection/collection_controller.php",
-//                    data: { operation: 'get_ordenation_properties',collection_id:$('#collection_id').val() }
-//                }).done(function(result) {
-//                    var json = $.parseJSON(result);
-//                    if(json&&json.ordenation&&json.ordenation!==''){
-//                        for (var $property in json.ordenation) {
-//                            if (json.ordenation.hasOwnProperty($property)) {
-//                                reorder_properties($property,json.ordenation[$property].split(','));
-//                            }
-//                        }
-//                    }
-//                });
+                 $.ajax({
+                    type: "POST",
+                    url: $('#src').val() + "/controllers/category/category_controller.php",
+                    data: { operation: 'get_ordenation_categories_properties',category_id:$('#property_category_id').val() }
+                }).done(function(result) {
+                    var json = $.parseJSON(result);
+                    if(json&&json.ordenation&&json.ordenation!==''){
+                        for (var $property in json.ordenation) {
+                            if (json.ordenation.hasOwnProperty($property)) {
+                                reorder_properties($property,json.ordenation[$property].split(','));
+                            }
+                        }
+                    }
+                    $('#loader_metadados_page').hide();
+                   $("#metadata-container-default").show();
+                });
                   $("input[name='property_data_use_filter']").parent().hide()
             });
         //});

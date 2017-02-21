@@ -44,9 +44,9 @@
                   initAjax: {
                     url: src + '/controllers/property/property_controller.php',
                     data: {
-                        collection_id: $("#collection_id").val(),
+                        category_id: $('#property_category_id').val(),
                         order: 'name',
-                        operation: 'initDynatreePropertiesFilter'
+                        operation: 'initDynatreePropertiesFilterCategory'
                     }
                     , addActiveKey: true
                 },
@@ -71,6 +71,8 @@
                      var keys = $.map($("#dynatree_properties_filter").dynatree("getSelectedNodes"), function (node) {
                          return node.data.key;
                      });
+                     keys = ordenateCompundedKeys(keys);
+                     selKeys = ordenateCompundedNodes(selKeys);
                      //limitacao da quantidade de propriedades selecionados
                      if(selKeys.length>0&&selKeys.length<=50){
                          console.log(selKeys);
@@ -120,6 +122,44 @@
             }
         });
     });
+    
+    function ordenateCompundedKeys(keys){
+        var selected = $('#compounds_id').val();
+        if(selected.trim()!=""){
+            var keys_ordenate = selected.split(',');
+            $.each(keys,function(index,value){
+                if(keys_ordenate.indexOf(value)<0){
+                    keys_ordenate.push(value);
+                }
+            });
+            return keys_ordenate;
+        }else{
+            return keys;
+        }
+    }
+    
+    function ordenateCompundedNodes(nodes){
+        var selected = $('#compounds_id').val();
+        var nodes_ordenated = [];
+        var last_added = ''
+        if(selected.trim()!=""){
+            var keys_ordenate = selected.split(',');
+             $.each(keys_ordenate,function(index,id){
+                $.each(nodes,function(index,value){
+                    if(id === value.data.key){
+                        nodes_ordenated.push(value);
+                    }else if(keys_ordenate.indexOf(value.data.key)<0){
+                        last_added = value;
+                    }
+                });
+            });    
+            if(last_added!='')
+                nodes_ordenated.push(last_added);
+            return nodes_ordenated;
+        }else{
+            return nodes;
+        }
+    }
     
     //verifica se faz parte de uma propriedade composta
     function is_compounded(item){
@@ -241,14 +281,19 @@
             }
             //seleciono as propriedades
             var properties = elem.metas.socialdb_property_compounds_properties_id.split(',');
+            
              $("#dynatree_properties_filter").dynatree("getRoot").visit(function(node){
                 node.select(false);
             });
-            $("#dynatree_properties_filter").dynatree("getRoot").visit(function(node){
-                if(properties.length>0&&properties.indexOf(node.data.key)>=0){
-                     node.select(true);
-                }
-            });
+            if(properties && properties.length > 0){
+                $.each(properties,function(index,value){
+                    $("#dynatree_properties_filter").dynatree("getRoot").visit(function(node){
+                        if(node.data.key===value){
+                             node.select(true);
+                        }
+                    });
+                });
+            }
             $('#compounds_id').val( elem.metas.socialdb_property_compounds_properties_id );
         });
     }

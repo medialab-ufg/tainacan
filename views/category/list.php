@@ -99,6 +99,9 @@ global $config;
                 </div>
             <?php } ?>
             <button type="button" onclick="list_category_property()" id="show_category_property" style="display: none;" class="btn btn-primary"><?php _e('Category Properties', 'tainacan'); ?></button>
+            <div class="form-group">
+                <div id="category_property" style="margin-left: -15px;margin-top: 15px;"></div>
+            </div>    
             <br><br>
             <input type="hidden" id="category_collection_id" name="collection_id" value="">
             <input type="hidden" id="category_id" name="category_id" value="">
@@ -150,8 +153,8 @@ global $config;
             <button style="margin-right: 15px;" type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">×</span>
             </button>
-            <div id="category_property">
-            </div>
+            <!--div id="category_property">
+            </div-->
             <div class="modal-footer">
             </div> 
         </div>

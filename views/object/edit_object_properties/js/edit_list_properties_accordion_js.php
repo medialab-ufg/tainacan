@@ -145,12 +145,28 @@
                                     }
                                 },
                                 minLength: 2,
+                                response: function( event, ui ) {
+                                        if(ui.content && ui.content.length>0 && $('.form_autocomplete_value_'+property_id+'_mask').val()!==''){
+                                           $.each(ui.content,function(index,value){
+                                               if($(event.target).val()==value.value || $(event.target).val().toLowerCase().trim()==value.value){
+                                                    toastr.error($(event.target).val()+'<?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                                                    $(event.target).val('');
+                                               }
+                                           }); 
+                                        }
+                                    },
                                 select: function (event, ui) {
-                                    $(".form_autocomplete_value_" + property_id).val('');
-                                    //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
-                                    var temp = $(".form_edit_autocomplete_value_" + property_id).val();
-                                    if (typeof temp == "undefined") {
-                                        $(".form_autocomplete_value_" + property_id).val(ui.item.value);
+                                    $("#form_autocomplete_value_" + property_id).val('');
+                                    if( $('.form_autocomplete_value_'+property_id+'_mask').val()!=='' && $(event.target).val().indexOf('key')){
+                                        $(event.target).html(''); 
+                                        $(event.target).val('');
+                                        toastr.error(ui.item.value+'<?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                                        return false;
+                                    }else{
+                                        var temp = $(".form_edit_autocomplete_value_" + property_id).val();
+                                        if (typeof temp == "undefined") {
+                                            $(".form_autocomplete_value_" + property_id).val(ui.item.value);
+                                        }
                                     }
                                 }
                             });
@@ -560,6 +576,7 @@
             selected_categories.push(id);
             //adicionando metadados
             //show_modal_main();
+            $('#append_properties_categories_'+property_id).html('');
              $('#append_properties_categories_'+property_id)
                      .html('<center><img width="100" heigth="100" src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>"><?php _e('Loading metadata for this field','tainacan') ?></center>');
             $.ajax({

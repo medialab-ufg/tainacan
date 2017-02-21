@@ -74,6 +74,8 @@ class EventObjectCreateModel extends EventModel {
             );
             // Update the post into the database
             $value = wp_update_post($object);
+            delete_user_meta(get_current_user_id(), 'socialdb_collection_' . $collection_id . '_betatext');
+            delete_user_meta(get_current_user_id(), 'socialdb_collection_' . $collection_id . '_betafile');
         }else{
             wp_set_object_terms($object_id, array((int) $this->get_category_root_of($collection_id)), 'socialdb_category_type',true);
             add_post_meta($collection_id, 'socialdb_collection_vinculated_object', $object_id);

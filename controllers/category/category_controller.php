@@ -141,8 +141,23 @@ require_once(dirname(__FILE__) . '../../../models/user/user_model.php');
                      Log::addLog($log_data);
                      return json_encode(['slug'=>$tag->slug]);
                  }
-		}
-	}
+                case 'get_ordenation_categories_properties':
+                   $ordenation = get_term_meta($data['category_id'], 'socialdb_category_properties_ordenation', true);
+                   if($ordenation && $ordenation !=''){
+                        $ids = explode(',', $ordenation);
+                        $new_ids = [];
+                        foreach ($ids as $id) {
+                            if (is_numeric($id)) {
+                                $new_ids[] = 'meta-item-' . $id;
+                            } else {
+                                $new_ids[] = $id;
+                            }
+                        }
+                        $data['ordenation']['default'] = implode(',', $new_ids);
+                   }
+                   return json_encode($data);
+            }
+    }
     /**
      * @signature - function insert_event_add($object_id, $data )
      * @param int $object_id O id do Objeto

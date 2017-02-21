@@ -39,6 +39,7 @@
             e.preventDefault();
             var formData = new FormData(this);
             verify_category_privacity(formData);// esta funcao chama a que insere o formularioo de fato
+            $('#category_property').html('');
         });// end submit
 <?php // Submissao do form de exclusao da categoria   ?>
         $('#submit_delete_category').submit(function (e) {
@@ -67,7 +68,7 @@
                         $("#message_category").text(elem.message);
                     }
                 }
-
+                $('#category_property').html('');
             });
             e.preventDefault();
         });
@@ -280,7 +281,7 @@
                 collection_id: $("#collection_id").val()}
         }).done(function (result) {
             $('#category_property').html(result);
-            $('#modal_category_property').modal('show');
+            //$('#modal_category_property').modal('show');
             $('#btn_back_collection').hide();
             $('#btn_back_collection_hide_modal').show();
         });
@@ -289,6 +290,7 @@
         clean_archive_mode();
         $("#show_category_property").hide();
         $("#chosen-selected2-user").html('');
+         $('#category_property').html('');
         $("#category_parent_name").val('');
         $("#category_parent_id").val('0');
         $("#category_name").val('');
@@ -401,12 +403,14 @@
                     }
                     $("#operation_category_form").val('add');
                     $("#category_id").val('');
+                     $('#category_property').html('');
                     clean_archive_mode();
                     break;
                 case "edit":
                     $("#category_name").val(node.data.title);
                     $("#category_id").val(node.data.key);
                     $("#operation_category_form").val('update');
+                     $('#category_property').html('');
                     $.ajax({
                         type: "POST",
                         url: $('#src').val() + "/controllers/category/category_controller.php",
@@ -455,7 +459,7 @@
                     });
                     break;
                 case "delete":
-                    // console.log(node.data);
+                     $('#category_property').html('');
                     $("#category_delete_id").val(node.data.key);
                     $("#delete_category_name").text(node.data.title);
                     $('#modalExcluirCategoriaUnique').modal('show');
