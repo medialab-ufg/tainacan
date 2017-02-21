@@ -2971,12 +2971,15 @@ function repository_page_title() {
     }
 }
 
-function get_collection_item_href($collection_id) {
+function get_collection_item_href($collection_id,$item_id = 0) {
+    if($item_id>0 && get_post($item_id)->post_type ==='socialdb_object'){
+        return  'javascript:void(0)';
+    }
     return ( get_option('collection_root_id') != $collection_id ) ? 'javascript:void(0)' : get_the_permalink();
 }
 
 function get_item_click_event($collection_id, $item_id) {
-    if (get_option('collection_root_id') != $collection_id) {
+    if (get_option('collection_root_id') != $collection_id && get_post($item_id)->post_type ==='socialdb_object') {
         echo "showSingleObject('" . $item_id . "', '" . get_template_directory_uri() . "')";
     } else {
         echo 'javascript:void(0)';

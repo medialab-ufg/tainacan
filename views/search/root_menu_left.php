@@ -22,19 +22,13 @@ $not_showed = false;
             </div>
         </div>
     <?php endif; ?>
-    <div class="form-group">
+    <!--div class="form-group">
         <div>
             <select id="select_between_collections" onchange="select_between_collections(this.value)" class="form-control">
                 <option value="">[<?php _e('Select Collection', 'tainacan'); ?>]</option>
             </select>
         </div>
-    </div>
-    <!--div style="margin-top: 10px;" class="" id="propertiesRootAdvancedSearch">
-                                <center>
-                                    <img src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>">
-                                    <h3><?php _e('Please wait...', 'tainacan') ?></h3>
-                                </center>
-                            </div-->
+    </div-->
     <?php
 // TAINACAN: widgets do menu esquerdo
     foreach ($facets as $facet):

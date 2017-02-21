@@ -442,6 +442,9 @@ class WPQueryModel extends Model {
      */
     public function filter($data) {
         $recover_data = unserialize(stripslashes($data['wp_query_args']));
+        if(isset($data['post_type']) && !empty($data['post_type'])){
+            $recover_data['post_type'] = $data['post_type'];
+        }
         return $recover_data;
     }
     
@@ -487,7 +490,7 @@ class WPQueryModel extends Model {
      */
     public function do_filter($recover_data) {
         //se estiver buscando colecoes
-        if($recover_data['collection_id']==  get_option('collection_root_id')){
+        if($recover_data['collection_id']==  get_option('collection_root_id') && (!isset($recover_data['post_type']) || empty($recover_data['post_type']) )){
                 $page = $this->set_page($recover_data);
                 $orderby = $this->set_order_by($recover_data);
                  $order = $this->set_type_order($recover_data);
@@ -526,7 +529,9 @@ class WPQueryModel extends Model {
             //a forma de ordenacao
             $order = $this->set_type_order($recover_data);
             // se vai listar as colecoes ou objetos
-            if(isset($recover_data['advanced_search'])){
+            if(isset($recover_data['post_type']) && !empty($recover_data['post_type']) ){
+                $post_type = $recover_data['post_type'];
+            }else if(isset($recover_data['advanced_search'])){
                 $post_type = 'socialdb_object';
             }else{
                 $post_type = $this->set_post_type($recover_data['collection_id'],$recover_data);
@@ -544,15 +549,15 @@ class WPQueryModel extends Model {
                 'update_post_term_cache' => false, // grabs terms, remove if terms required (category, tag...)
                 'update_post_meta_cache' => false, // grabs post meta, remove if post meta required
             );
-            $meta_query = $this->get_meta_query($recover_data);
+            $meta_query = (!isset($recover_data['post_type']) || empty($recover_data['post_type']) || $recover_data['post_type'] =='socialdb_object') ? $this->get_meta_query($recover_data) : false;
             if ($meta_query) {
                 $args['meta_query'] = $meta_query;
             }
             if (isset($meta_key)&&!in_array($meta_key, ['title','comment_count','date'])) {
                 $args['meta_key'] = $meta_key;
             }
-            if (isset($recover_data['keyword']) && $recover_data['keyword'] != '') {
-                //$args['s'] = $recover_data['keyword'];
+            if (isset($recover_data['post_type']) && $recover_data['post_type']=='socialdb_collection') {
+                $args['s'] = $recover_data['keyword'];
             }
             if(isset($recover_data['author']) && $recover_data['author'] != ''){
                 $args['author'] = $recover_data['author'];

@@ -1,7 +1,10 @@
 <?php ?>
 <script>
+    var search_items_query = $('#wp_query_args').val();
+    var search_collections_query = $('#wp_query_args').val();
     $(function () {
         set_containers_class($('#collection_id').val());
+        show_collection_properties_root($('#collection_id').val());
         // *************** Iframe Popover Collection ****************
         $('[data-toggle="popover"]').popover();
         $('[data-toggle="tooltip"]').tooltip();
@@ -30,7 +33,95 @@
         }else{
             set_popover_content($("#socialdb_permalink_collection").val());
         }
+        //advanced search submit
+        $('#advanced_search_collection_form').submit(function (e) {
+            e.preventDefault();
+            show_modal_main();
+            $.ajax({
+                url: $('#src').val() + '/controllers/advanced_search/advanced_search_controller.php',
+                type: 'POST',
+                data: new FormData(this),
+                processData: false,
+                contentType: false
+            }).done(function (result) {
+                elem = jQuery.parseJSON(result);
+                console.log(elem);
+                hide_modal_main();
+                if (elem.args_collection) {
+                    search_collections_query = elem.args_collection;
+                    $('#wp_query_args').val(search_collections_query);
+                    if (elem.args_item) {
+                        search_items_query = elem.args_item;
+                    }
+                    $('#click_ad_search_collection').trigger('click');
+                }
+                else if (elem.args_item) {
+                    search_items_query = elem.args_item;
+                    $('#wp_query_args').val(search_items_query);
+                    if( $('#click_ad_search_item').length>0){
+                        $('#click_ad_search_item').trigger('click');
+                    }else{
+                        wpquery_filter();
+                    }
+                }else{
+                    wpquery_filter();
+                }
+            });
+            e.preventDefault();
+        });
     });
+    //slideUp
+    function slideFormAdvancedDown(){
+        if($('#propertiesRootAdvancedSearch').is(':visible')){
+            $('#propertiesRootAdvancedSearch').hide()
+        }else{
+           $('#propertiesRootAdvancedSearch').show();
+        }
+    }
+    //limpando do formulario de busca avancada
+    function reboot_form(){ 
+        if($('#propertiesRootAdvancedSearch').length>0){
+            $('#propertiesRootAdvancedSearch').html('<center><img src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>"><h3><?php _e('Please wait...', 'tainacan') ?></h3></center>');   
+            show_collection_properties_root($('#collection_id').val());
+            wpquery_clean(); 
+        }
+    }
+    // atualiza o container com as propriedades da colecao que foi selecionada no selectbox
+    function show_collection_properties_root(collection_id) {
+        //$("#advanced_search_collection_id").val(collection_id);
+        $.ajax({
+            url: $('#src').val() + '/controllers/advanced_search/advanced_search_controller.php',
+            type: 'POST',
+            data: {operation: 'show_object_properties_auto_load', collection_id: collection_id}
+        }).done(function (result) {
+            $('#propertiesRootAdvancedSearch').html(result);
+            //$('#propertiesRootAdvancedSearch').show();
+            revalidate_adv_autocomplete(collection_id);
+        });
+    }
+
+    function revalidate_adv_autocomplete(collection_id) {
+        $("#advanced_search_title").autocomplete({
+            source: $('#src').val() + '/controllers/collection/collection_controller.php?operation=list_items_search_autocomplete_advanced_search&collection_id=' + collection_id,
+            messages: {
+                noResults: '',
+                results: function () {
+                }
+            },
+            minLength: 2,
+            select: function (event, ui) {
+                console.log(event);
+                $("#advanced_search_title").val('');
+                //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
+                var temp = $("#property_value_").val();
+                if (typeof temp == "undefined") {
+                    $("#advanced_search_title").val(ui.item.value);
+                }
+            }
+        });
+
+    }
+
     /**************************** Comentarios **************************************************/
     function list_comments_general() {
         if ($('#socialdb_event_comment_term_id').val() == 'collection') {
@@ -62,7 +153,7 @@
                     socialdb_event_comment_author_website: $('#url').val(),
                     socialdb_event_comment_term_id: $('#socialdb_event_comment_term_id').val(),
                     socialdb_event_comment_parent: 0,
-                    socialdb_event_collection_id: $('#collection_id').val() }
+                    socialdb_event_collection_id: $('#collection_id').val()}
             }).done(function (result) {
                 hide_modal_main();
                 elem_first = jQuery.parseJSON(result);
@@ -169,10 +260,10 @@
                 $.ajax({
                     type: "POST",
                     url: $('#src').val() + "/controllers/event/event_controller.php",
-                    data: { operation: 'add_event_comment_delete', socialdb_event_create_date: time,
+                    data: {operation: 'add_event_comment_delete', socialdb_event_create_date: time,
                         socialdb_event_user_id: $('#current_user_id').val(), socialdb_event_comment_delete_id: comment_id,
                         socialdb_event_comment_delete_object_id: $("#single_object_id").val(),
-                        socialdb_event_collection_id: $('#collection_id').val() }
+                        socialdb_event_collection_id: $('#collection_id').val()}
                 }).done(function (result) {
                     hide_modal_main();
                     list_comments_general();
@@ -216,11 +307,11 @@
             $.ajax({
                 type: "POST",
                 url: $('#src').val() + "/controllers/event/event_controller.php",
-                data: { operation: 'add_event_comment_edit', socialdb_event_create_date: '<?php echo mktime() ?>',
+                data: {operation: 'add_event_comment_edit', socialdb_event_create_date: '<?php echo mktime() ?>',
                     socialdb_event_user_id: $('#current_user_id').val(), socialdb_event_comment_edit_id: comment_id,
                     socialdb_event_comment_edit_object_id: $("#single_object_id").val(),
                     socialdb_event_comment_edit_content: $('#edit_field_value_' + comment_id).val(),
-                    socialdb_event_collection_id: $('#collection_id').val() }
+                    socialdb_event_collection_id: $('#collection_id').val()}
             }).done(function (result) {
                 list_comments_general();
                 hide_modal_main();
@@ -245,7 +336,7 @@
             $('#iframebutton_dropdown').html('<form style="margin:5px;">Search URL:&nbsp<input type="text" style="width:165px;" value="' + content + '" /><br><br>Iframe:&nbsp<input type="text" style="width:200px;" value="<iframe style=\'width:100%\' height=\'1000\' src=\'' + content + '\' frameborder=\'0\'></iframe>" /></form>'); 
         }
     }
-    
+
     function set_popover_content_link(content) {
         $('[data-toggle="popover"]').popover();
         var myPopover = $('#linkbutton').data('popover');
@@ -253,7 +344,7 @@
         if (myPopover) {
             myPopover.options.html = true;
             //<iframe width="560" height="315" src="https://www.youtube.com/embed/CGyEd0aKWZE" frameborder="0" allowfullscreen></iframe>
-            myPopover.options.content = '<form><input type="text" style="width:200px;" value="'+ content +'" /></form>';
+            myPopover.options.content = '<form><input type="text" style="width:200px;" value="' + content + '" /></form>';
         }
     }
 
@@ -266,7 +357,13 @@
         }).done(function (result) {
             $('.dropdown-toggle').dropdown();
             elem = jQuery.parseJSON(result);
-            if (elem.has_left && elem.has_left == 'true' && (!elem.has_right || elem.has_right !== 'true')) {
+            if ($('#collection_root_id').val() == elem.collection_id) {
+                $('#div_central').show();
+                $('#div_central').removeClass('col-md-12');
+                $('#div_central').addClass('col-md-9');
+                $('#div_left').show();
+                load_root_menu_left(collection_id);
+            } else if (elem.has_left && elem.has_left == 'true' && (!elem.has_right || elem.has_right !== 'true')) {
                 $('#div_central').show();
                 $('#div_central').removeClass('col-md-12');
                 $('#div_central').addClass('col-md-9');
@@ -301,19 +398,30 @@
         });
     }
 
+    function load_root_menu_left(collection_id) {
+        $.ajax({
+            type: "POST",
+            url: $('#src').val() + "/controllers/collection/collection_controller.php",
+            data: {operation: 'load_root_menu_left', collection_id: collection_id}
+        }).done(function (result) {
+            $('.dropdown-toggle').dropdown();
+            $('#div_left').html(result);
+        });
+    }
+
     function list_category_property_single(category_id) {
         if (!category_id) {
             category_id = $("#category_single_edit_id").val();
         }
-        var operation = '<?php echo (has_filter('tainacan_operation_metadata_category')) ? apply_filters('tainacan_operation_metadata_category','') : 'list_metadata_category'  ?>';
+        var operation = '<?php echo (has_filter('tainacan_operation_metadata_category')) ? apply_filters('tainacan_operation_metadata_category', '') : 'list_metadata_category' ?>';
         $('#modalEditCategoria').modal('hide');
         $.ajax({
             url: $('#src').val() + '/controllers/property/property_controller.php',
             type: 'POST',
             data: {
-                operation: operation, 
-                hide_wizard: 'true', 
-                category_id: category_id, 
+                operation: operation,
+                hide_wizard: 'true',
+                category_id: category_id,
                 collection_id: $("#collection_id").val()}
         }).done(function (result) {
             $("#menu_object").hide();
@@ -377,24 +485,24 @@
         } else {
             menu = 'myMenuSingle';
         }
-        $(span).contextMenu({menu: menu,trigger: 'hover'}, function (action, el, pos) {
+        $(span).contextMenu({menu: menu, trigger: 'hover'}, function (action, el, pos) {
             // The event was bound to the <span> tag, but the node object
             // is stored in the parent <li> tag
             var node = $.ui.dynatree.getNode(el);
             switch (action) {
                 case "see":
                     var src = $('#src').val();
-                     // Close menu on click
+                    // Close menu on click
                     show_modal_main();
                     // Close menu on click
                     var promisse = get_url_category(node.data.key);
                     promisse.done(function (result) {
                         elem = jQuery.parseJSON(result);
                         var n = node.data.key.toString().indexOf("_");
-                        if(node.data.key.indexOf('_tag')>=0){
+                        if (node.data.key.indexOf('_tag') >= 0) {
                             showPageTags(elem.slug, src);
                             node.deactivate();
-                        }else if(n<0||node.data.key.indexOf('_facet_category')>=0){
+                        } else if (n < 0 || node.data.key.indexOf('_facet_category') >= 0) {
                             showPageCategories(elem.slug, src);
                             node.deactivate();
                         }
@@ -539,18 +647,18 @@
             switch (action) {
                 case "see":
                     var src = $('#src').val();
-                     // Close menu on click
+                    // Close menu on click
                     show_modal_main();
                     // Close menu on click
                     var promisse = get_url_category(node.data.key);
                     promisse.done(function (result) {
-                        elem = jQuery.parseJSON(result);                    
+                        elem = jQuery.parseJSON(result);
                         hide_modal_main();
                         var n = node.data.key.toString().indexOf("_");
-                        if(node.data.key.indexOf('_tag')>=0){
+                        if (node.data.key.indexOf('_tag') >= 0) {
                             showPageTags(elem.slug, src);
                             node.deactivate();
-                        }else if(n<0||node.data.key.indexOf('_facet_category')>=0){
+                        } else if (n < 0 || node.data.key.indexOf('_facet_category') >= 0) {
                             showPageCategories(elem.slug, src);
                             node.deactivate();
                         }
@@ -897,7 +1005,7 @@
             if (temp_list_mode) {
                 changeViewMode(temp_list_mode);
             }
-            
+
             setMenuContainerHeight();
         });
     }
@@ -943,16 +1051,16 @@
                 $('#collection_empty').show();
                 $('#items_not_found').hide();
             }
-            if(collection_viewMode) {
+            if (collection_viewMode) {
                 changeViewMode(collection_viewMode);
             }
-            
+
             setMenuContainerHeight();
         });
     }
     /**
-    * filtra os itens pelo autor
-
+     * filtra os itens pelo autor
+     
      * @param {type} value
      * @param {type} collection_viewMode
      * @returns {undefined}     */
@@ -974,26 +1082,38 @@
                 $('#collection_empty').show();
                 $('#items_not_found').hide();
             }
-            if(collection_viewMode) {
+            if (collection_viewMode) {
                 changeViewMode(collection_viewMode);
             }
-            
+
             setMenuContainerHeight();
         });
     }
 
-    function wpquery_filter() {
+    function wpquery_filter(type) {
+        if (!type) {
+            type = '';
+        } else if (type == 'socialdb_collection') {
+            $('#wp_query_args').val(search_collections_query);
+        } else if (type == 'socialdb_object') {
+            $('#wp_query_args').val(search_items_query);
+        }
         $('#list').hide();
         $('#loader_objects').show();
         $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/wp_query/wp_query_controller.php",
-            data: {operation: 'filter', wp_query_args: $('#wp_query_args').val(), collection_id: $('#collection_id').val()}
+            data: {operation: 'filter', wp_query_args: $('#wp_query_args').val(), collection_id: $('#collection_id').val(), post_type: type}
         }).done(function (result) {
             elem = jQuery.parseJSON(result);
             $('#loader_objects').hide();
             $('#list').html(elem.page);
             $('#wp_query_args').val(elem.args);
+            if (type && type == 'socialdb_collection') {
+                search_collections_query = $('#wp_query_args').val();
+            } else if (type && type == 'socialdb_object') {
+                search_items_query = $('#wp_query_args').val();
+            }
             set_popover_content($("#socialdb_permalink_collection").val() + '?' + elem.url + '&is_filter=1');
             show_filters($('#collection_id').val(), elem.args);
             $('#list').show();
@@ -1026,7 +1146,7 @@
                 $('#items_not_found').hide();
             }
             $('#list').show();
-            if( $("#dynatree")){
+            if ($("#dynatree")) {
                 $("#dynatree").dynatree("getTree").reload();
             }
             setMenuContainerHeight();
@@ -1417,17 +1537,17 @@
                                         } else {
                                             var any_url = validateAnyUrl();
                                             if (any_url) {
-                                                var split_url = $('#item_url_import_all').val().replace('http://','').replace('https://','').split('/');
+                                                var split_url = $('#item_url_import_all').val().replace('http://', '').replace('https://', '').split('/');
                                                 var index = split_url.indexOf('handle');
                                                 var article = split_url.indexOf('article');
                                                 var view = split_url.indexOf('view');
-                                                if($('#extract_metadata').is(':checked')&&index>=0){
+                                                if ($('#extract_metadata').is(':checked') && index >= 0) {
                                                     extract_metadata($('#item_url_import_all').val());
-                                                }else if($('#extract_metadata').is(':checked')&&article>=0&&view>=0){
+                                                } else if ($('#extract_metadata').is(':checked') && article >= 0 && view >= 0) {
                                                     extract_metadata($('#item_url_import_all').val());
-                                                }else if($('#extract_metadata').is(':checked')){
+                                                } else if ($('#extract_metadata').is(':checked')) {
                                                     extract_metatags($('#item_url_import_all').val());
-                                                }else{
+                                                } else {
                                                     // É uma URL regular. Executar a importação através do Embed.ly.
                                                     show_modal_main();
                                                     // showFormCreateURL($('#item_url_import_all').val());
@@ -1556,12 +1676,12 @@
                 var result = url.split('/');
                 if (typeof result[6] != 'undefined' && result[6] != '' && (result[5] == 'albums' || result[5] == 'sets')) {
                     //console.log(result[6]);
-                    return 'albums/'+result[4]+'/'+result[6];
+                    return 'albums/' + result[4] + '/' + result[6];
                 } else if (typeof result[5] != 'undefined' && result[5] != '') {
                     //console.log(result[5]);
-                    return 'singleitem/'+result[4]+'/'+result[5];
+                    return 'singleitem/' + result[4] + '/' + result[5];
                 } else {
-                    return 'all/'+result[4];
+                    return 'all/' + result[4];
                 }
             }
             else {
@@ -1829,69 +1949,69 @@
         var key = $('#socialdb_embed_api_id').val();
         var ajaxurl = 'http://api.embed.ly/1/oembed?key=:' + key + '&url=' + url;
         //div loader
-        if(key==''){
+        if (key == '') {
             import_text_alternative(url);
-        }else{
-        $.getJSON(ajaxurl, {}, function (json) {
-            console.log(json);
-            var description = '', title = '';
-            if (json.title !== undefined && json.title != null && json.title != false) {
-                title = json.title;
-            }
-            else {
-                hide_modal_main();
-                showAlertGeneral('Atenção', 'Esta URL não possui items disponíveis para importação', 'error');
-                return;
-            }
-            // se nao tiver descricao ele coloca o titulo na descricao
-            if (json.description !== undefined && json.description != null && json.description != false) {
-                description += json.description;
-            }
-            else {
-                description = title;
-            }
-            //concatena o html na descricao
-            if (json.html !== undefined && json.html != null && json.html != false) {
-                json.html = json.html.replace('width="854"', 'width="200"');
-                json.html = json.html.replace('height="480"', 'height="200"');
-                description = json.html + description;
-            }
-            //pegando a imagem
-            var img = '';
-            if (json.thumbnail_url !== undefined && json.thumbnail_url != null && json.thumbnail_url != false) {
-                img = json.thumbnail_url;
-            }
-            // verifico se existe imagem para ser importada
-            $.ajax({
-                url: $('#src').val() + '/controllers/object/object_controller.php',
-                type: 'POST',
-                data: {
-                    operation: 'add_item_not_published',
-                    collection_id: $("#collection_id").val(),
-                    description: description,
-                    thumbnail_url: img,
-                    type: 'text',
-                    url: url,
-                    title: title}
-            }).done(function (result) {
-                var json = JSON.parse(result);
-                if (json.length > 0) {
-                    showViewMultipleItemsSocialNetwork(json);
+        } else {
+            $.getJSON(ajaxurl, {}, function (json) {
+                console.log(json);
+                var description = '', title = '';
+                if (json.title !== undefined && json.title != null && json.title != false) {
+                    title = json.title;
                 }
                 else {
                     hide_modal_main();
-                    showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Invalid Channel/Playlist or no videos to be imported', 'tainacan'); ?>', 'error');
+                    showAlertGeneral('Atenção', 'Esta URL não possui items disponíveis para importação', 'error');
+                    return;
                 }
+                // se nao tiver descricao ele coloca o titulo na descricao
+                if (json.description !== undefined && json.description != null && json.description != false) {
+                    description += json.description;
+                }
+                else {
+                    description = title;
+                }
+                //concatena o html na descricao
+                if (json.html !== undefined && json.html != null && json.html != false) {
+                    json.html = json.html.replace('width="854"', 'width="200"');
+                    json.html = json.html.replace('height="480"', 'height="200"');
+                    description = json.html + description;
+                }
+                //pegando a imagem
+                var img = '';
+                if (json.thumbnail_url !== undefined && json.thumbnail_url != null && json.thumbnail_url != false) {
+                    img = json.thumbnail_url;
+                }
+                // verifico se existe imagem para ser importada
+                $.ajax({
+                    url: $('#src').val() + '/controllers/object/object_controller.php',
+                    type: 'POST',
+                    data: {
+                        operation: 'add_item_not_published',
+                        collection_id: $("#collection_id").val(),
+                        description: description,
+                        thumbnail_url: img,
+                        type: 'text',
+                        url: url,
+                        title: title}
+                }).done(function (result) {
+                    var json = JSON.parse(result);
+                    if (json.length > 0) {
+                        showViewMultipleItemsSocialNetwork(json);
+                    }
+                    else {
+                        hide_modal_main();
+                        showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Invalid Channel/Playlist or no videos to be imported', 'tainacan'); ?>', 'error');
+                    }
+                });
+            }).fail(function (result) {
+                // console.log('error', result, url);
+                hide_modal_main();
+                showAlertGeneral('Atenção', 'URL inexistente ou indisponível', 'error');
             });
-        }).fail(function (result) {
-            // console.log('error', result, url);
-            hide_modal_main();
-            showAlertGeneral('Atenção', 'URL inexistente ou indisponível', 'error');
-        });
         }
     }
-    
-    function import_text_alternative(url){
+
+    function import_text_alternative(url) {
         var ajaxurl = $('#src').val() + '/controllers/object/object_controller.php?operation=parse_url_alternative&url=' + url;
         $.getJSON(ajaxurl, {}, function (json) {
             console.log(json);
@@ -2181,35 +2301,35 @@
         } else {
             ids.push(key);
             $(seletor).val(ids.join(','));
-             result = true;
+            result = true;
         }
         return result;
     }
-    
-    function add_label_box(id,name,seletor){
-        $(seletor).append('<span id="label-box-'+id+'" class="label label-primary">'
-                +name+' <a style="color:white;cursor:pointer;" onclick="remove_label_box('+id+')">x</a></span>&nbsp;');
+
+    function add_label_box(id, name, seletor) {
+        $(seletor).append('<span id="label-box-' + id + '" class="label label-primary">'
+                + name + ' <a style="color:white;cursor:pointer;" onclick="remove_label_box(' + id + ')">x</a></span>&nbsp;');
     }
-    
-    function remove_label_box(id,dynatree){
+
+    function remove_label_box(id, dynatree) {
         var cont = 0;
-        if(!dynatree)
+        if (!dynatree)
             dynatree = "#property_category_dynatree";
         $(dynatree).dynatree("getRoot").visit(function (node) {
-            if(node.data.key==id){
+            if (node.data.key == id) {
                 cont++;
                 node.select(false);
             }
         });
-        if(cont===0){
+        if (cont === 0) {
             var ids = $('#property_object_category_id').val().split(',');
             var index = ids.indexOf(id);
-            if(index>=0){
+            if (index >= 0) {
                 ids.splice(index, 1);
-               $('#property_object_category_id').val(ids.join(','));
+                $('#property_object_category_id').val(ids.join(','));
             }
         }
-        $('#label-box-'+id).remove();
+        $('#label-box-' + id).remove();
     }
     /**
      * 
@@ -2243,16 +2363,16 @@
         }
     }
     /************************************************ HELPERS **********************************************************/
-    
-    
-    
-    function setValueReverse(seletor){
+
+
+
+    function setValueReverse(seletor) {
         console.log($(seletor).val());
-       if($(seletor).val()!=='false'){
+        if ($(seletor).val() !== 'false') {
             $('#property_object_is_reverse').val('true');
-       }else{
+        } else {
             $('#property_object_is_reverse').val('false');
-       }
+        }
     }
 
 </script>
