@@ -75,7 +75,7 @@
                 data: { operation: 'press_item', object_id: item_id, collection_id: $('#collection_id').val() }
             }).done(function(r){
                 var itm = $.parseJSON(r);
-                cl(itm);
+                // cl(itm);
                 if(itm) {
                     var pressPDF = new jsPDF('p','pt');
                     var baseX = 20;
@@ -87,15 +87,6 @@
                     pressPDF.setFont("helvetica");
                     pressPDF.setFontSize(9.5);
 
-                    /*
-                    var logo = itm.repo_logo;
-                    var projectLogo = new Image();
-                    projectLogo.src = logo;
-                    var logo_settings = { width: (projectLogo.naturalWidth * 0.48), height: (projectLogo.naturalHeight * 0.48) };
-                    pressPDF.addImage(projectLogo, 'PNG', line_dims.startX + 15, line_dims.startY - 45, logo_settings.width, logo_settings.height);
-                    pressPDF.rect(line_dims.startX, line_dims.startY, line_dims.length, line_dims.thickness, 'F');
-                    pressPDF.rect(line_dims.startX, line_dims.startY + 40, line_dims.length, line_dims.thickness, 'F');
-                    */
                     var logo = $('img.tainacan-logo-cor').get(0);
                     var projectLogo = new Image();
                     projectLogo.src = $(logo).attr("src");
@@ -104,16 +95,6 @@
                     pressPDF.rect(line_dims.startX, line_dims.startY, line_dims.length, line_dims.thickness, 'F');
                     pressPDF.rect(line_dims.startX, line_dims.startY + 50, line_dims.length, line_dims.thickness, 'F');
 
-                    /*
-                    var header_cols = [
-                        {title: $("#repo_fixed_title").val(), dataKey: 'title'},
-                        {title: $(".item-author strong").first().text().replace(':',''), dataKey: 'author'},
-                        {title: create_txt.replace(':',''), dataKey: 'date'}
-                    ];
-                    // var header_rows = [{title: itm.title, author: itm.author, date: item_date}];
-                    var header_rows = [{author: itm.author, date: item_datte}];
-                    pressPDF.autoTable(header_cols, header_rows, { theme: 'plain', styles: {cellPadding: 0}, columnStyles: {}, margin: {top: baseX, left: 200} } );
-                    */
                     pressPDF.setFontSize(8);
                     var formatted_date = "Consultado em " + getTodayFormatted();
                     pressPDF.text(formatted_date, 400, line_dims.startY - 5); // Consultado em
@@ -124,14 +105,14 @@
                     var dist_from_top = line_dims.startY + 20;
                     pressPDF.setFontType('bold');
                     pressPDF.setFontSize(12);
-                    pressPDF.text( itm.title, (line_dims.startX + 15), dist_from_top );
+                    pressPDF.text( itm.title, (line_dims.startX + 15), dist_from_top ); // Item title
+
                     pressPDF.setFontSize(9.5);
-                    pressPDF.text( $(".item-author strong").first().text(), (line_dims.startX + 15), dist_from_top + 20);
+                    pressPDF.text( $(".item-author strong").first().text(), (line_dims.startX + 15), dist_from_top + 20); // Author
                     pressPDF.setFontType('normal');
                     pressPDF.text( itm.author, (line_dims.startX + 70), dist_from_top + 20);
 
                     var author_width = pressPDF.getTextDimensions(itm.author).w;
-                    cl(author_width);
                     pressPDF.text(' em ' + item_date, (line_dims.startX + 70) + author_width, dist_from_top + 20);
 
                     var item_desc = itm.desc;
@@ -172,14 +153,16 @@
 
                     for( idx in itm.inf ) {
                         if(itm.inf[idx].value) {
-                            pressPDF.setFontStyle('bold');
-                            var p = base_count + 40;
-                            pressPDF.text( itm.inf[idx].meta, baseX*2, p);
-                            var f = p + 15;
-                            pressPDF.setFontStyle('normal');
-                            pressPDF.text( itm.inf[idx].value, baseX*2, f);
+                            if(itm.inf[idx].meta) {
+                                pressPDF.setFontStyle('bold');
+                                var p = base_count + 40;
+                                pressPDF.text( itm.inf[idx].meta, baseX*2, p);
+                                var f = p + 15;
+                                pressPDF.setFontStyle('normal');
+                                pressPDF.text( itm.inf[idx].value, baseX*2, f);
 
-                            base_count = p;
+                                base_count = p;
+                            }
                         }
                     }
 
