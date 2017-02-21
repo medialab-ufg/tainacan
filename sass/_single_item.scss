@@ -1,4 +1,5 @@
 #single_item_tainacan {
+  @include context-item-menu-style();
 
   .single-title {
     font-weight: bolder;
@@ -307,6 +308,12 @@
     width: 105.8%;
     border-top: 3px solid $item-border;
     border-bottom: 3px solid $item-border;
+  }
+
+  ul.item-menu-container {
+    li.collec-only {
+      display: none;
+    }
   }
 
 } // #single_item_tainacan

@@ -140,9 +140,16 @@
                     var descricao = pressPDF.splitTextToSize(item_desc, desc_max_width);
                     pressPDF.text(desc_xDist, desc_yDist+10, descricao);
 
+                    var extra_yDist = 0;
+                    if(item_desc) {
+                      if(itm.breaks && itm.breaks > 0) {
+                        extra_yDist = itm.breaks * 20;
+                      }
+                    }
+
                     var desc_height = Math.round(Math.round(pressPDF.getTextDimensions(descricao).h) * 1.5);
                     if(item_desc) {
-                        var base_count = desc_yDist + desc_height + (baseX*2);
+                        var base_count = desc_yDist + desc_height + (baseX*2) + extra_yDist;
                     } else {
                         if(itm.tmb) {
                             var base_count = desc_yDist + 80;

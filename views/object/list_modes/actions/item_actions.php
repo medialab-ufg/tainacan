@@ -4,6 +4,14 @@ $itemDelete = [
     'id' => $curr_id, 'title' =>  _t('Delete Object'), 'time' => mktime(),
     'text' => _t('Are you sure to remove the object: ') . get_the_title()
 ];
+
+if(is_null($curr_id)) {
+  $curr_id = $object->ID;
+}
+
+if(is_null($itemURL)) {
+  $itemURL = get_the_permalink($collection_id) . '?item=' . $object->post_name;
+}
 ?>
 <ul class="nav navbar-bar navbar-right item-menu-container">
     <li class="dropdown open_item_actions" id="action-<?php echo $curr_id; ?>">
@@ -11,8 +19,8 @@ $itemDelete = [
             <?php echo ViewHelper::render_icon("config", "png", _t('Item options')); ?>
         </a>
         <ul class="dropdown-menu pull-right dropdown-show new-item-menu" role="menu" id="item-menu-options">
-            <li> <a class="ac-view-item" href="<?php echo $itemURL; ?>"> <?php _t('View Item',1); ?> </a> </li>
-            
+            <li class="collec-only"> <a class="ac-view-item" href="<?php echo $itemURL; ?>"> <?php _t('View Item',1); ?> </a> </li>
+
             <li> <a class="ac-open-file"> <?php _t('Open item file',1); ?> </a> </li>
 
             <?php if ($is_moderator || get_post($curr_id)->post_author == get_current_user_id()): ?>
@@ -48,12 +56,13 @@ $itemDelete = [
                     <li> <a class="ac-checkout" onclick="do_checkout('<?php echo $curr_id ?>')"> <?php _t('Check-out',1); ?> </a> </li>
                 <?php } ?>
                 <li> <a class="ac-create-version"> <?php _t('Create new version',1); ?> </a> </li>
-                <li> <a class="ac-item-versions"> <?php _t('Item versions',1); ?> </a> </li>
             <?php endif; ?>
-            
+
+            <li> <a class="ac-item-versions"> <?php _t('Item versions',1); ?> </a> </li>
+
             <li> <a class="ac-item-rdf" href="<?php echo $itemURL; ?>.rdf" target="_blank"> <?php _t('Export RDF',1); ?> </a> </li>
             <?php /* <li> <a class="ac-item-graph"> <?php _t('See graph',1); ?> </a> </li> */?>
-            <li> <a class="ac-comment-item"> <?php _t('Comment item',1); ?> </a> </li>
+            <li class="collec-only"> <a class="ac-comment-item"> <?php _t('Comment item',1); ?> </a> </li>
 
             <?php if ($is_moderator || get_post($curr_id)->post_author == get_current_user_id()): ?>
                 <li>

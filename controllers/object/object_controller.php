@@ -49,7 +49,7 @@ class ObjectController extends Controller {
                 $data['object_id'] = $object_model->create();
                 return $this->render(dirname(__FILE__) . '../../../views/object/create_item_url.php', $data);
                 break;
-            // FIM : ADICIONAR ITEMS TIPO TEXTO 
+            // FIM : ADICIONAR ITEMS TIPO TEXTO
             // #2 - ADICIONAR ITEMS DEFAULT
             case "create":
                 $data['object_name'] = get_post_meta($data['collection_id'], 'socialdb_collection_object_name', true);
@@ -111,7 +111,7 @@ class ObjectController extends Controller {
                     return 0;
                 }
                 break;
-            //END    
+            //END
             case 'insert_fast':// apenas com o titulo
                 return $object_model->fast_insert($data);
                 break;
@@ -173,7 +173,7 @@ class ObjectController extends Controller {
                 $data['loop'] = new WP_Query($args);
                 $data['collection_data'] = $collection_model->get_collection_data($collection_id);
                 $data["show_string"] = is_root_category($collection_id) ? __('Showing collections:', 'tainacan') : __('Showing Items:', 'tainacan');
-                
+
                 // View mode's vars
                 $data["geo_coordinates"]["lat"] = get_post_meta($collection_id, "socialdb_collection_latitude_meta", true);
                 $data["geo_coordinates"]["long"] = get_post_meta($collection_id, "socialdb_collection_longitude_meta", true);
@@ -388,18 +388,28 @@ class ObjectController extends Controller {
                 $_object = get_post($object_id);
 
                 $press = [
-                    "repo_logo" => get_template_directory_uri() . '/libraries/images/logo/tainacan-repo-logotipo2.png',
+                    // "repo_logo" => get_template_directory_uri() . '/libraries/images/logo/tainacan-repo-logotipo2.png',
                     "author" => $user_model->get_user($_object->post_author)['name'],
                     "title"  => $_object->post_title,
-                    "desc" =>$_object->post_content,
+                    "desc"   => $_object->post_content,
                     "output" => substr($_object->post_name, 0, 15) . mktime(),
-                    "data_c"  => explode(" ", $_object->post_date)[0],
-                    "object"  => get_post($object_id)
+                    "data_c" => explode(" ", $_object->post_date)[0],
+                    "object" => get_post($object_id)
                 ];
 
-                $_item_meta = get_post_meta($object_id);
-                $press['dump'] = $_item_meta;
+                // Pegar # de brs
+                if( strlen($press['desc']) > 0 ) {
+                    $line_breaks = 0;
+                    $_desc_pieces = explode("\n", $press['desc']);
+                    foreach($_desc_pieces as $line) {
+                      if( strlen($line) == 1) {
+                        $line_breaks++;
+                      }
+                    }
+                    $press['breaks'] = $line_breaks;
+                }
 
+                $_item_meta = get_post_meta($object_id);
                 if($_item_meta['_thumbnail_id']) {
                     $press['tmb']['url'] = get_post($_item_meta['_thumbnail_id'][0])->guid;
                     $press['tmb']['type'] = wp_check_filetype($press['tmb']['url']);
@@ -419,7 +429,7 @@ class ObjectController extends Controller {
 
                 }
                 return json_encode($press);
-                
+
             case "list_single_object_version":
                 $user_model = new UserModel();
                 $object_id = $data['object_id'];
@@ -582,7 +592,7 @@ class ObjectController extends Controller {
             case 'clean_collection_itens':
                 $data = $object_model->clean_collection($data);
                 return json_encode($data);
-            // limpando alguns itens da colecao 
+            // limpando alguns itens da colecao
             case 'delete_items_socialnetwork':
                 $data = $object_model->delete_items_socialnetwork($data);
                 return json_encode($data);
@@ -802,8 +812,8 @@ class ObjectController extends Controller {
      * function get_author_name($author_id)
      * @param int $author_id o id do author
      * @return string Retorna o nome do usuario
-     * 
-     * @author: Eduardo Humberto 
+     *
+     * @author: Eduardo Humberto
      */
     public function get_author_name($author_id) {
         $object_model = new ObjectModel();
