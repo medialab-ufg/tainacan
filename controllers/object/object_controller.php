@@ -364,7 +364,7 @@ class ObjectController extends Controller {
                 //se existir a acao para alterar a home do item
                 if (has_action('alter_page_item')) {
                     return apply_filters('alter_page_item', $data);
-                }else if($mode=='one'){
+                } else if ($mode == 'one') {
                     //$data = $object_model->edit($data['object_id'], $data['collection_id']);
                     $data['collection_id'] = $col_id;
                     $data['object_name'] = $object_name;
@@ -375,7 +375,7 @@ class ObjectController extends Controller {
                     $data['socialdb_object_content'] = get_post_meta($object_id, 'socialdb_object_content', true);
                     $data['socialdb_object_dc_type'] = get_post_meta($object_id, 'socialdb_object_dc_type', true);
                     return $this->render(dirname(__FILE__) . '../../../views/object/edit_item_text.php', $data);
-                }else {
+                } else {
                     $logData = ['collection_id' => $col_id, 'item_id' => $object_id,
                         'event_type' => 'user_items', 'event' => 'view'];
                     Log::addLog($logData);
@@ -390,43 +390,42 @@ class ObjectController extends Controller {
                 $press = [
                     // "repo_logo" => get_template_directory_uri() . '/libraries/images/logo/tainacan-repo-logotipo2.png',
                     "author" => $user_model->get_user($_object->post_author)['name'],
-                    "title"  => $_object->post_title,
-                    "desc"   => $_object->post_content,
+                    "title" => $_object->post_title,
+                    "desc" => $_object->post_content,
                     "output" => substr($_object->post_name, 0, 15) . mktime(),
                     "data_c" => explode(" ", $_object->post_date)[0],
                     "object" => get_post($object_id)
                 ];
 
                 // Pegar # de brs
-                if( strlen($press['desc']) > 0 ) {
+                if (strlen($press['desc']) > 0) {
                     $line_breaks = 0;
                     $_desc_pieces = explode("\n", $press['desc']);
-                    foreach($_desc_pieces as $line) {
-                      if( strlen($line) == 1) {
-                        $line_breaks++;
-                      }
+                    foreach ($_desc_pieces as $line) {
+                        if (strlen($line) == 1) {
+                            $line_breaks++;
+                        }
                     }
                     $press['breaks'] = $line_breaks;
                 }
 
                 $_item_meta = get_post_meta($object_id);
-                if($_item_meta['_thumbnail_id']) {
+                if ($_item_meta['_thumbnail_id']) {
                     $press['tmb']['url'] = get_post($_item_meta['_thumbnail_id'][0])->guid;
                     $press['tmb']['type'] = wp_check_filetype($press['tmb']['url']);
                 }
 
-                foreach($_item_meta as $meta => $val) {
-                    if( is_string($meta)) {
+                foreach ($_item_meta as $meta => $val) {
+                    if (is_string($meta)) {
                         $pcs = explode("_", $meta);
-                        if( ($pcs[0] . $pcs[1]) == "socialdbproperty" ) {
+                        if (($pcs[0] . $pcs[1]) == "socialdbproperty") {
                             $col_meta = get_term($pcs[2]);
-                            if( !is_null($col_meta) && is_object($col_meta) ) {
+                            if (!is_null($col_meta) && is_object($col_meta)) {
                                 $_pair = ['meta' => $col_meta->name, 'value' => $val[0]];
                                 $press['inf'][] = $_pair;
                             }
                         }
                     }
-
                 }
                 return json_encode($press);
 
@@ -492,7 +491,7 @@ class ObjectController extends Controller {
                     if (has_filter('alter_page_item')) {
                         $array_json['html'] = apply_filters('alter_page_item', $data);
                         return json_encode($array_json);
-                    }else if($mode=='one'){
+                    } else if ($mode == 'one') {
                         //$data = $object_model->edit($data['object_id'], $data['collection_id']);
                         $data['collection_id'] = $data['collection_id'];
                         $data['object_name'] = $object_name;
@@ -535,7 +534,7 @@ class ObjectController extends Controller {
                 break;
             //temp file
             case 'delete_temporary_object':
-                if (isset($data['delete_draft'])){
+                if (isset($data['delete_draft'])) {
                     delete_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext');
                     delete_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betafile');
                 }
@@ -652,9 +651,11 @@ class ObjectController extends Controller {
                 $object_model->copyItemTags($newItem, $data['object_id']);
 
                 $object_name = get_post_meta($data['collection_id'], 'socialdb_collection_object_name', true);
+                $collection_id = $data['collection_id'];
                 $socialdb_collection_attachment = get_post_meta($data['collection_id'], 'socialdb_collection_attachment', true);
                 $data = $object_model->edit($newItem, $data['collection_id']);
                 $data['object_name'] = $object_name;
+                $data['collection_id'] = $collection_id;
                 $data['socialdb_collection_attachment'] = $socialdb_collection_attachment;
                 $data['socialdb_object_from'] = get_post_meta($data['object']->ID, 'socialdb_object_from', true);
                 $data['socialdb_object_dc_source'] = get_post_meta($data['object']->ID, 'socialdb_object_dc_source', true);
@@ -663,7 +664,7 @@ class ObjectController extends Controller {
                 return $this->render(dirname(__FILE__) . '../../../views/object/edit_item_text.php', $data);
                 break;
             case 'duplicate_item_other_collection':
-
+                $collection_id = $data['collection_id'];
                 $item = get_post($data['object_id']);
                 $category_root_id = $object_model->get_category_root_of($data['collection_id']);
                 $newItem = $object_model->copyItem($item, $data['new_collection_id']);
@@ -672,6 +673,7 @@ class ObjectController extends Controller {
                 //$object_model->copyItemCategories($newItem, $data['object_id'], $category_root_id);
                 $object_model->copyItemCategoriesOtherCol($newItem, $data['object_id'], $category_root_id);
                 //$object_model->copyItemTags($newItem, $data['object_id']);
+                $data['collection_id'] = $collection_id;
                 $data['new_collection_url'] = $data['new_collection_url'] . '?open_edit_item=' . $newItem;
                 return json_encode($data);
                 break;
