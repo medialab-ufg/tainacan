@@ -85,13 +85,13 @@ if (isset($property_compounds)):
         $references['compound_id'] = $property['id']; 
         $property['tipo'] = 'compound';
         $properties_concatenated[$property['id']] = $property;
-        ?>
-        <input type="hidden" 
-            name="pc_properties_compounds" 
-            id="pc_properties_compounds_<?php echo $references['categories'] ?>"
-            value="<?php echo implode(',', $result['ids']); ?>"> 
-        <?php
     }
+    ?>
+    <input type="hidden" 
+        name="pc_properties_compounds" 
+        id="pc_properties_compounds_<?php echo $references['categories'] ?>"
+        value="<?php echo implode(',', $result['ids']); ?>"> 
+    <?php
 endif;
 // ORDENACAO
 $original_properties = [];

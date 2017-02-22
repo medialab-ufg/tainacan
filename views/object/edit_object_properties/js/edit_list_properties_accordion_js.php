@@ -589,7 +589,6 @@
                 //list_all_objects(selKeys.join(", "), $("#collection_id").val());
                $('#append_properties_categories_'+property_id).html(result);
                insert_html_property_category(id,property_id);
-
             });
             $('#selected_categories').val(selected_categories.join(','));
         }

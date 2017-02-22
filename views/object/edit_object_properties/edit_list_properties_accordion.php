@@ -328,8 +328,10 @@ if (isset($property_object)):
                                        class="form-control auto-save form_autocomplete_value_<?php echo $property['id']; ?>" 
                                        name="socialdb_property_<?php echo $property['id']; ?>[]" >
                             <?php } ?> 
-                             </div>      
-                         <?php echo $view_helper->render_button_cardinality($property,$i) ?>    
+                             </div>  
+                            <?php if(!isset($is_view_mode)): ?>
+                                <?php echo $view_helper->render_button_cardinality($property,$i) ?> 
+                             <?php endif; ?> 
                          </div>         
                     <?php endfor;  ?>                    
                 </div>              
@@ -475,6 +477,9 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
                 }elseif ($property['type'] == 'tree_checkbox') {
                     $properties_terms_treecheckbox[] = $property['id']; ?>
                     <button type="button"
+                        <?php
+                        echo (isset($is_view_mode)) ? 'style="display:none"': ''
+                        ?>
                         onclick="showModalFilters('add_category','<?php echo get_term_by('id', $property['metas']['socialdb_property_term_root'] , 'socialdb_category_type')->name ?>',<?php echo $property['metas']['socialdb_property_term_root'] ?>,'field_property_term_<?php echo $property['id']; ?>')" 
                         class="btn btn-primary btn-xs"><?php _e('Add Category','tainacan'); ?>
                     </button>

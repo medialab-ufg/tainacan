@@ -294,27 +294,29 @@
                                 }
                             });
                             $('#field_property_term_'+compound_id+'_' + selectbox + '_' + i).append('<option value=""><?php _e('Select','tainacan') ?>...</option>');
-                            $.each(elem.children, function (idx, children) {
-                                var checked = '';
-                                var value = $('#actual_value_'+compound_id+'_' + selectbox + '_' + i).val();
-                                if (typeof delete_value === "function") {
-                                    delete_value(children.term_id);
-                                }
-                                 
-                                if(value!=''&&value==children.term_id){
-                                    checked = 'selected="selected"';
-                                    $('#core_validation_'+selectbox).val('true');
-                                    set_field_valid(selectbox,'core_validation_'+selectbox);
-                                    if($('#label_'+compound_id+'_' + selectbox + '_' + i).length>0)
-                                            $('#label_'+compound_id+'_' + selectbox + '_' + i).append('<p><a style="cursor:pointer;" onclick="wpquery_term_filter(' + children.term_id + ',' + selectbox + ')">' + children.name + '</a></p>')
+                            if(elem.children){       
+                                $.each(elem.children, function (idx, children) {
+                                        var checked = '';
+                                        var value = $('#actual_value_'+compound_id+'_' + selectbox + '_' + i).val();
+                                        if (typeof delete_value === "function") {
+                                            delete_value(children.term_id);
+                                        }
 
-                                }
-                                $('#field_property_term_'+compound_id+'_' + selectbox + '_' + i).append('<option '+checked+' value="' + children.term_id + '">' + children.name + '</option>');
-                                if(checked!==''){
-                                   $('#field_property_term_'+compound_id+'_' + selectbox + '_' + i).trigger('change');
-                                }
-                                //  }
-                            });
+                                        if(value!=''&&value==children.term_id){
+                                            checked = 'selected="selected"';
+                                            $('#core_validation_'+selectbox).val('true');
+                                            set_field_valid(selectbox,'core_validation_'+selectbox);
+                                            if($('#label_'+compound_id+'_' + selectbox + '_' + i).length>0)
+                                                    $('#label_'+compound_id+'_' + selectbox + '_' + i).append('<p><a style="cursor:pointer;" onclick="wpquery_term_filter(' + children.term_id + ',' + selectbox + ')">' + children.name + '</a></p>')
+
+                                        }
+                                        $('#field_property_term_'+compound_id+'_' + selectbox + '_' + i).append('<option '+checked+' value="' + children.term_id + '">' + children.name + '</option>');
+                                        if(checked!==''){
+                                           $('#field_property_term_'+compound_id+'_' + selectbox + '_' + i).trigger('change');
+                                        }
+                                        //  }
+                                    });
+                            }
                         }    
                     });
                 }    
