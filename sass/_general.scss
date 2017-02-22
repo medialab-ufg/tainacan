@@ -548,3 +548,13 @@ form#advanced_search_submit {
     // vertical-align: top;
     width: 0;
 }
+
+/* max-width  */
+@media all and (max-width: 560px) {
+
+  .logo-container {
+    .repository {
+      display: none;
+    }
+  } // .logo-container
+}
