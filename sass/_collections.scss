@@ -813,9 +813,21 @@ a.events-link {
   border-radius: 2px;
   padding: 0 4px 2px 1px;
 }
-.evts_cnt {
-  padding: 4px !important;
-}
+
+a.evt_container {
+  float: left;
+  width: 100%;
+
+  .evt_col {
+    float: left;
+    width: 95%;
+    padding-right: 30px;
+  }
+  .evts_cnt {
+    float: right;
+    padding: 4px !important;
+  }
+} // .evt_container
 
 .collec_menu_opnr {
   a.dropdown-toggle {

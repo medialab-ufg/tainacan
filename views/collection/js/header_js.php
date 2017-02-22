@@ -124,14 +124,13 @@
             data: { collection_id: $('#collection_id').val(), operation: 'user_notification' }
         }).done(function(r) {
             var _ev_ = $.parseJSON(r);
-            cl(_ev_);
             if(_ev_ && _ev_.total_evts > 0) {
                 var _item_html = "";
                 $(_ev_.evts).each(function(id, el) {
                     var events_path = '<?php _e("events", "tainacan")?>';
                     var URL = $("#site_url").val() + '/' + el.path + '/admin/'+ events_path +'/';
-                    var content = el.colecao + " <span class='evts_cnt'>" + el.counting + "</span>";
-                    _item_html += "<li class='col-md-12 no-padding'> <a class='evt-"+ id +"' href='" + URL + "'> ";
+                    var content = "<span class='evt_col'> " + el.colecao + "</span> <span class='evts_cnt'>" + el.counting + "</span>";
+                    _item_html += "<li class='col-md-12 no-padding'> <a class='evt_container evt-"+ id +"' href='" + URL + "'> ";
                     _item_html += content;
                     _item_html += "</a></li>";                                    
                 });
