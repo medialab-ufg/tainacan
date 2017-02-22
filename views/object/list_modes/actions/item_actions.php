@@ -30,9 +30,26 @@ $itemDelete = [ 'id' => $curr_id, 'title' =>  _t('Delete Object'), 'time' => mkt
         <ul class="dropdown-menu pull-right dropdown-show new-item-menu" role="menu" id="item-menu-options">
             <?php if(!$is_single_page): ?>
                 <li class="collec-only"> <a class="ac-view-item" href="<?php echo $itemURL; ?>"> <?php _t('View Item',1); ?> </a> </li>
-            <?php endif; ?>
+            <?php
+            endif;
 
-            <li> <a class="ac-open-file"> <?php _t('Open item file',1); ?> </a> </li>
+            if($is_single_page) {
+                if ($collection_metas == 'allowed' || ($collection_metas == 'moderate' && is_user_logged_in()) || ($collection_metas == 'controlled' && ($is_moderator || $object->post_author == get_current_user_id()))) {
+                    if ($metas['socialdb_object_dc_type'][0] == 'image') {
+                        $url_image = wp_get_attachment_url(get_post_thumbnail_id($object->ID, 'full'));
+                        $thumbail_id = get_post_thumbnail_id($object->ID, 'full'); ?>
+                        <li>
+                            <a href="<?php echo $url_image; ?>" download="<?php echo $object->post_title; ?>.jpg" onclick="downloadItem('<?php echo $thumbail_id; ?>');">
+                                <?php _t('Download item file', 1); ?>
+                            </a>
+                        </li>
+                        <?php
+                    }
+                }
+            }
+            ?>
+
+            <li> <a class="ac-open-file"> <?php _t('Print item',1); ?> </a> </li>
 
             <?php if ($is_moderator || get_post($curr_id)->post_author == get_current_user_id()): ?>
                 <li>
