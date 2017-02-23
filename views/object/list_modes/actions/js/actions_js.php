@@ -75,7 +75,7 @@
                 data: { operation: 'press_item', object_id: item_id, collection_id: $('#collection_id').val() }
             }).done(function(r){
                 var itm = $.parseJSON(r);
-                // cl(itm);
+                cl(itm);
                 if(itm) {
                     var pressPDF = new jsPDF('p','pt');
                     var baseX = 20;
@@ -83,6 +83,9 @@
                     var rMargin = baseX; // 15 right margin in mm
                     var pdfInMM = 560;
                     var line_dims = { startX: 28, startY: 75, length: 540, thickness: 1 };
+                    var pdfHeight = pressPDF.internal.pageSize.height;
+                    var margin_bottom_page = 41.89;
+                    var maxHeightOffset = pdfHeight - margin_bottom_page;
 
                     pressPDF.setFont("helvetica");
                     pressPDF.setFontSize(9.5);
@@ -157,19 +160,29 @@
                             var base_count = desc_yDist;
                         }
                     }
-
+                
                     for( idx in itm.inf ) {
-                        if(itm.inf[idx].value) {
-                            if(itm.inf[idx].meta) {
-                                pressPDF.setFontStyle('bold');
-                                var p = base_count + 40;
-                                pressPDF.text( itm.inf[idx].meta, baseX*2, p);
-                                var f = p + 15;
-                                pressPDF.setFontStyle('normal');
-                                pressPDF.text( itm.inf[idx].value, baseX*2, f);
+                        if(itm.inf[idx].meta) {
 
-                                base_count = p;
+                            if(base_count >= maxHeightOffset) {
+                                pressPDF.addPage();
+                                base_count = baseX;
                             }
+
+                            pressPDF.setFontStyle('bold');
+                            var p = base_count + 40;
+                            pressPDF.text( itm.inf[idx].meta, baseX*2, p);
+
+                            var f = p + 15;
+                            var default_val = "--";
+                            pressPDF.setFontStyle('normal');
+                            
+                            if(itm.inf[idx].value) {                                
+                                default_val = itm.inf[idx].value;
+                            }
+
+                            pressPDF.text(default_val, baseX*2, f);
+                            base_count = p;
                         }
                     }
 

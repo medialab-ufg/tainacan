@@ -388,7 +388,6 @@ class ObjectController extends Controller {
                 $_object = get_post($object_id);
 
                 $press = [
-                    // "repo_logo" => get_template_directory_uri() . '/libraries/images/logo/tainacan-repo-logotipo2.png',
                     "author" => $user_model->get_user($_object->post_author)['name'],
                     "title" => $_object->post_title,
                     "desc" => $_object->post_content,
@@ -423,10 +422,15 @@ class ObjectController extends Controller {
                             if (!is_null($col_meta) && is_object($col_meta)) {
                                 $_pair = ['meta' => $col_meta->name, 'value' => $val[0]];
                                 $press['inf'][] = $_pair;
+                            } else {
+                                $press['set'][] = $col_meta;
                             }
+                        } else {
+                            $press['excluded'][] = $meta;
                         }
                     }
-                }
+                }                
+
                 return json_encode($press);
 
             case "list_single_object_version":
