@@ -34,22 +34,29 @@ $visualization_page_category = get_post_meta($_currentID_, 'socialdb_collection_
 $_enable_header_ = get_post_meta($_currentID_, 'socialdb_collection_show_header', true);
 $_color_scheme = ViewHelper::getCollectionColors($_currentID_);
 $search_color = ($_color_scheme) ? $_color_scheme["primary"] : "#79a6ce";
+
+if ( !has_nav_menu('menu-ibram') ):
+    $_r_bg = repository_bg($col_root_id);
 ?>
-
-<?php $_r_bg = repository_bg($col_root_id); ?>
-<div id="main_part_collection" class="collection_repo_config" style="background: url(<?php echo $_r_bg; ?>); display: none; margin-top: 50px;">
-    <div class="row container-fluid">
-        <div class="project-info">
-            <center>
-                <h1> <?php bloginfo('name') ?> </h1>
-                <h3> <?php bloginfo('description') ?> </h3>
-            </center>
+    <div id="main_part_collection" class="collection_repo_config" 
+            style="background: url(<?php echo $_r_bg; ?>); display: none; margin-top: 50px;">
+        <div class="row container-fluid">
+            <div class="project-info">
+                <center>
+                    <h1> <?php bloginfo('name') ?> </h1>
+                    <h3> <?php bloginfo('description') ?> </h3>
+                </center>
+            </div>
+            <?php include_once "views/collection/collec_share.php"; ?>
         </div>
-        <?php include_once "views/collection/collec_share.php"; ?>
     </div>
-</div>
-
+<?php else:
+    echo '<input type="hidden" name="ibram_menu" value="ibram_menu_activated" />';
+?>
+    <style type="text/css"> .ibram-header {  margin-top: 50px; } </style>
 <?php
+endif;
+
 while (have_posts()) : the_post();
     if (get_post(get_the_ID())->post_status != 'publish') {
         wp_redirect(site_url());
