@@ -240,7 +240,9 @@ while (have_posts()) : the_post();
                                         <?php _e('Advanced Search', 'tainacan'); ?>
                                     </button-->
                                     <a style="margin-top:5px;cursor:pointer;" class="pull-right" onclick="slideFormAdvancedDown()">
-                                        <?php _e('Advanced Search', 'tainacan'); ?><span class="caret" style="font-size: 14px;"/>
+                                        <?php _e('Advanced Search', 'tainacan'); ?>
+                                        <span id="icon-search-bottom" class="glyphicon glyphicon-triangle-bottom" style="font-size: 14px;"></span>
+                                        <span id="icon-search-top" class="glyphicon glyphicon-triangle-top" style="font-size: 14px;display:none"></span>
                                     </a>
                                 </div>
                             </div>

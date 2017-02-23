@@ -46,10 +46,12 @@
 
         $('a.ac-item-versions').on('click', function() {
             var item_id = $(this).parents().find('.open_item_actions').first().attr('id').replace('action-', '');
+            show_modal_main();
             $.ajax({
                 type: 'POST', url: path,
                 data: {operation: 'show_item_versions', object_id: item_id, collection_id: _col_id}
             }).done(function(r) {
+                hide_modal_main();
                 $('#main_part').hide();
                 $('#tainacan-breadcrumbs').hide();
                 $('#configuration').html(r).show();

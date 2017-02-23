@@ -105,12 +105,12 @@ $_src_ = get_template_directory_uri();
                               <li>
                                 <a href="#" onclick="showProfileScreen('<?php echo $_src_ ?>');"> <?php _e('Profile', 'tainacan'); ?></a>
                               </li>
-                              <li>
+                              <!--li>
                                 <a href="<?= get_the_permalink($col_root_id) . '?mycollections=true' ?>"><?php _e('My collections', 'tainacan'); ?></a>
                               </li>
                               <li>
                                 <a href="<?= get_the_permalink($col_root_id) . '?sharedcollections=true' ?>"><?php _e('Shared Collections', 'tainacan'); ?></a>
-                              </li>
+                              </li-->
                               <li>
                                 <a style="cursor: pointer;" onclick="showCategoriesConfiguration('<?php echo $_src_; ?>', '<?php echo is_front_page(); ?>');updateStateRepositorio('categories');" >
                                   <?php _e('My Categories', 'tainacan'); ?>
