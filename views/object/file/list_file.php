@@ -8,10 +8,10 @@ include_once ('js/list_file_js.php');
    é gerado automaticamente pelo wordpress, apenas o título que colocamos manualmente
 -->
 <div> 
-    <h4 id="text_title" style="margin-bottom: 20px;margin-top: -0.5%;">    </h4>
     <h3 id="text_title">
         <?php _e('Attachments', 'tainacan'); ?>
         <br>
+    </h3>    
     <hr>
 
     <?php if (!$attachments['posts']): ?>
