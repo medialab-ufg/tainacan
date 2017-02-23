@@ -290,7 +290,10 @@ class WPQueryModel extends Model {
         $ordenation = $data['value'];
         if (!empty($ordenation)) {
             $recover_data['pagid'] = $ordenation;
-        } 
+        }
+        if (!empty($data['posts_per_page'])) {
+            $recover_data['posts_per_page'] = $data['posts_per_page'];
+        }
         return $recover_data;
     }
     /**

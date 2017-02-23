@@ -1046,7 +1046,7 @@
         $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/wp_query/wp_query_controller.php",
-            data: {operation: 'wpquery_page', wp_query_args: $('#wp_query_args').val(), value: value, collection_id: $('#collection_id').val()}
+            data: {operation: 'wpquery_page', wp_query_args: $('#wp_query_args').val(),posts_per_page:$('.col-items-per-page').val(), value: value, collection_id: $('#collection_id').val()}
         }).done(function (result) {
             elem = jQuery.parseJSON(result);
             $('#loader_objects').hide();

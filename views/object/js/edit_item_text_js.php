@@ -474,7 +474,7 @@
             }
         } else {
             if ($('input[name=object_type]:checked', '#submit_form_edit_object').val() === 'text') {
-              //  $('#object_file').hide(); // escondo o campo de upload de arquivos
+                $('#object_file').hide(); // escondo o campo de upload de arquivos
               //  $('#object_file').removeAttr("required");// retiro o campo de requirido do arquivo
                 $('#object_url_others').hide();//escondo o input para urls para tipos que nao seja texto
                 $('#object_url_others').removeAttr("required");//retiro o campo de requirido deste input para urls que nao seja do item do tipo texto
@@ -485,7 +485,7 @@
                 $('#object_url_text').removeAttr("required");//retiro o campo de requirido deste input para urls que sejam do item do tipo texto
                 $('#object_url_others').hide();// escondo o campo de colocar a url para tipos de arquivo que nao seja texto
                 $('#url_object').removeAttr("required");//retiro o campo de requirido deste input para urls que nao seja do item do tipo texto
-                //$('#object_file').show('slow'); // mostra o campo de submissao de arquivo
+                $('#object_file').show('slow'); // mostra o campo de submissao de arquivo
                 //$('#object_file').attr('required', 'required');// coloco o campo de upload de arquivo como obrigatorio
             }
         }

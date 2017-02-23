@@ -37,8 +37,8 @@ $view_helper = new ObjectHelper($collection_id);
     <div class="col-md-9 item-main-data row" style="padding-right: 0;">
 
         <div class="col-md-12 content-title single-item-title tainacan-header-info">
-            <div class="col-md-10" <?php echo $view_helper->get_visibility($view_helper->terms_fixed['title']) ?>>
-                <h3 id="text_title"><?php echo $object->post_title; ?></h3>
+            <div class="col-md-10" style="margin-top:14px;" <?php echo $view_helper->get_visibility($view_helper->terms_fixed['title']) ?>>
+                <h3 id="text_title"><?php echo $object->post_title; ?>
                 <span id="event_title" style="display:none;">
                     <input type="text" value="<?php echo $object->post_title; ?>" id="title_field" class="form-control">
                 </span>
@@ -147,11 +147,10 @@ $view_helper = new ObjectHelper($collection_id);
               </div>
             */ ?>
 
-            <div class="new-item-actions">
+            <div class="new-item-actions" style="margin-top:15px;">
                 <?php include_once "list_modes/actions/item_actions.php"; ?>
             </div>
-
-            <div class="col-md-12">
+            <div class="col-md-12" style="margin-top:13.5px;">
                 <hr class="single-item-divider" />
             </div>
 
@@ -501,7 +500,7 @@ $view_helper = new ObjectHelper($collection_id);
                     </div>
 
                     <div>
-                        <div id="single_list_all_properties_<?php echo $object->ID ?>" class="single_list_properties"> </div>
+                        <div id="single_list_all_properties_<?php echo $object->ID ?>" class="single_list_properties"><center><img width="100" heigth="100" src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>"><?php _e('Loading metadata for this item','tainacan') ?></center></div>
                         <div id="single_data_property_form_<?php echo $object->ID ?>"></div>
                         <div id="single_object_property_form_<?php echo $object->ID ?>"></div>
                         <div id="single_edit_data_property_form_<?php echo $object->ID ?>"></div>

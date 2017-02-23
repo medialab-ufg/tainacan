@@ -416,7 +416,7 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
     public function is_set_container($item_id,$compound,$property,$i) {
         $compound_id = $compound['id'];
         $values = get_post_meta($item_id,'socialdb_property_'.$compound_id.'_'.$i,true);
-        if($values&&$values!=''){
+        if($values&&$values!='' && !$this->hasNoValues($values,$item_id,$compound,$property,$i)){
             if($this->has_next_compound($item_id, $compound,($i+1))){
                 return 1;
             }else{
@@ -451,6 +451,36 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
             return false;
         }else{
             return true;
+        }
+    }
+    
+    /**
+     * 
+     * @param type $values
+     * @param type $item_id
+     * @param type $compound
+     * @param type $property
+     * @param type $i
+     */
+    public function hasNoValues($values,$item_id,$compound,$property,$i) {
+        $values = explode(',', $values);
+        $emptyFields = 0;
+        $count = count($values);
+        foreach ($values as $value) {
+            if(strpos($value, '_cat')!==false){
+                if(!get_terrm_by('id',str_replace('_cat', '', $value),'socialdb_category_type'))
+                      $emptyFields++;  
+            }else {
+                $object = get_metadata_by_mid('post', $value);
+                if(!is_object($object) || $object->meta_value ==='')
+                    $emptyFields++;
+            }
+        }
+        
+        if($count==$emptyFields){
+            return true;
+        }else{
+            return false;
         }
     }
 }
