@@ -4,7 +4,7 @@ $not_showed = false;
 ?>
 
 <div class="expand-all btn white tainacan-default-tags prime-color-bg" style="background-color: #79a6ce">
-    <div class="action-text" style="display: inline-block"><?php _e('Visualization', 'tainacan') ?></div>
+    <div class="action-text" style="display: inline-block"><?php _e('Collections', 'tainacan') ?></div>
     &nbsp;&nbsp;<span class="glyphicon-triangle-bottom white glyphicon"></span>
 </div>
 
@@ -14,7 +14,7 @@ $not_showed = false;
     ?>
 
     <?php if (is_user_logged_in()): ?>
-        <div class="form-group">
+        <div style="margin-left: 15px;" class="form-group">
             <div>
                 <input type="radio" onchange="showList('<?php echo get_template_directory_uri() ?>')"  value="1" name="opt_search_root_page" checked="checked">&nbsp; <?php _e('All Collections', 'tainacan'); ?><br>
                 <input type="radio" onchange="showListMyCollections('<?php echo get_template_directory_uri() ?>')"  value="2" name="opt_search_root_page">&nbsp; <?php _e('My Collections', 'tainacan'); ?><br>

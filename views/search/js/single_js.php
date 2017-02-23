@@ -74,8 +74,14 @@
     function slideFormAdvancedDown(){
         if($('#propertiesRootAdvancedSearch').is(':visible')){
             $('#propertiesRootAdvancedSearch').hide()
+            $('#icon-search-bottom').show();
+            $('#icon-search-top').hide();
+            $('.search-colecao').show();
         }else{
-           $('#propertiesRootAdvancedSearch').show();
+            $('#icon-search-bottom').hide();
+            $('#icon-search-top').show();
+            $('#propertiesRootAdvancedSearch').show();
+            $('.search-colecao').hide();
         }
     }
     //limpando do formulario de busca avancada
