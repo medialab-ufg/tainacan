@@ -2,14 +2,28 @@
 include_once("js/actions_js.php");
 
 if( is_null($curr_id) && is_null($itemURL) ) {
-  $is_single_page = true;
-  $curr_id = $object->ID;
-  $itemURL = get_the_permalink($collection_id) . '?item=' . $object->post_name;
+    $is_single_page = true;
+    $curr_id = $object->ID;
+    $itemURL = get_the_permalink($collection_id) . '?item=' . $object->post_name;
 }
+
+$checkout = [
+    "out" => "do_checkout('". $curr_id ."')",
+    "in" => "do_checkin('". $curr_id ."')",
+    "discard" => "discard_checkout('". $curr_id ."')",
+];
 
 $rdfURL = $itemURL . '.rdf';
 $itemDelete = [ 'id' => $curr_id, 'title' =>  _t('Delete Object'), 'time' => mktime(),
   'text' => _t('Are you sure to remove the object: ') . get_the_title() ];
+
+if($is_single_page) {
+    function set_single($func) {
+        return "single_" . $func;
+    }
+
+    $checkout = array_map("set_single", $checkout);
+}
 ?>
 
 <?php if($is_single_page): ?>
@@ -78,12 +92,18 @@ $itemDelete = [ 'id' => $curr_id, 'title' =>  _t('Delete Object'), 'time' => mkt
 
             <?php if ($is_moderator || get_post($curr_id)->post_author == get_current_user_id()):
                 $has_checked_in = get_post_meta($curr_id, 'socialdb_object_checkout', true);
-                if(is_numeric($has_checked_in)){ ?>
-                    <li> <a class="ac-checkin" onclick="do_checkin('<?php echo $curr_id ?>')"> <?php _t('Check-in',1); ?> </a> </li>
-                    <li> <a class="ac-discard-checkout" onclick="discard_checkout('<?php echo $curr_id ?>')"> <?php _t('Discard Check-out',1); ?> </a> </li>
+                if(is_numeric($has_checked_in)) { ?>
+                    <?php /*
+                        <li> <a class="ac-checkin" onclick="do_checkin('<?php echo $curr_id ?>')"> <?php _t('Check-in',1); ?> </a> </li>
+                        <li> <a class="ac-discard-checkout" onclick="discard_checkout('<?php echo $curr_id ?>')"> <?php _t('Discard Check-out',1); ?> </a> </li>
+                    */ ?>
+                    <li> <a class="ac-checkin" onclick="<?php echo $checkout['in'] ?>"> <?php _t('Check-in',1); ?> </a> </li>
+                    <li> <a class="ac-discard-checkout" onclick="<?php echo $checkout['discard'] ?>"> <?php _t('Discard Check-out',1); ?> </a> </li>
                 <?php } else { ?>
-                    <li> <a class="ac-checkout" onclick="do_checkout('<?php echo $curr_id ?>')"> <?php _t('Check-out',1); ?> </a> </li>
+                    <li> <a class="ac-checkout" onclick="do_checkout(<?php echo $curr_id?>)"> <?php _t('Check-out old',1); ?> </a> </li>
+                    <li> <a class="ac-checkout" onclick="<?php echo $checkout['out'] ?>"> <?php _t('Check-out',1); ?> </a> </li>
                 <?php } ?>
+
                 <li> <a class="ac-create-version"> <?php _t('Create new version',1); ?> </a> </li>
             <?php endif; ?>
 

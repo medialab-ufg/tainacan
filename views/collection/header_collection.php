@@ -238,8 +238,7 @@ $cover_url = wp_get_attachment_url(get_post_meta($root_category_cover_id, 'socia
 if (has_nav_menu('menu-ibram')) {
     if( empty($_enable_header_) || $_enable_header_ == "enabled") {
         ?>
-        <div
-            class="ibram-header" <?php if ($root_category_cover_id != "") { ?> style="background-image: url(<?php echo $cover_url ?>)" <?php } ?> >
+        <div class="ibram-header" <?php if ($root_category_cover_id != "") { ?> style="background-image: url(<?php echo $cover_url ?>)" <?php } ?> >
             <div class="col-md-12 no-padding">
                 <div class="col-md-10 no-padding">
                     <h3> <?php echo bloginfo('name'); ?> </h3>

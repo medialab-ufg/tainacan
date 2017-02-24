@@ -41,15 +41,13 @@
             }
         }
     }
-    
-    
+
     function do_checkout(id){
         $.ajax({
             url: $('#src').val() + '/controllers/object/object_controller.php',
             type: 'POST',
             data: {operation: 'check-out', collection_id: $('#collection_id').val(), object_id: id}
         }).done(function (result) {
-            
             wpquery_filter();
             showAlertGeneral('<?php _e('Success!','tainacan') ?>','<?php _e('Checkout enabled!') ?>','success');
         });
