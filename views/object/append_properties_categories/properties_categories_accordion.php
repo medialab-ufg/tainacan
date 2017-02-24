@@ -136,7 +136,7 @@ foreach($original_properties as $property):
                 if ($property['metas']['socialdb_property_help']&&!empty(trim($property['metas']['socialdb_property_help']))&&!$is_view_mode) {
                      ?>
                         <a class="pull-right" 
-                            style="margin-right: 20px;" >
+                            style="margin-right: 15px;<?php  if ($property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] == 'true') echo 'margin-left: -25px;' ?>" >
                              <span title="<?php echo $property['metas']['socialdb_property_help'] ?>" 
                                    data-toggle="tooltip" 
                                    data-placement="bottom" 
@@ -146,14 +146,15 @@ foreach($original_properties as $property):
                 }
                 if ($property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] == 'true'&&!$is_view_mode) {
                         ?>
-                        <a id='required_field_<?php echo $property['id']; ?>' style="padding: 3px;" >
-                                <span  title="<?php echo __('This metadata is required!','tainacan')?>" 
-                               data-toggle="tooltip" data-placement="top" >*</span>
-                        </a>
-                        <a id='ok_field_<?php echo $property['id']; ?>'  style="display: none;padding: 3px;margin-left: -30px;" >
-                                 &nbsp;<span class="glyphicon  glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>" 
-                               data-toggle="tooltip" data-placement="top" ></span>
-                        </a>
+                        <a id='required_field_<?php echo $property['id']; ?>' class="pull-right" 
+                            style="margin-right: 15px;color:red;" >
+                                 <span class="glyphicon glyphicon-remove"  title="<?php echo __('This metadata is required!','tainacan')?>" 
+                                data-toggle="tooltip" data-placement="top" ></span>
+                         </a>
+                         <a id='ok_field_<?php echo $property['id']; ?>' class="pull-right" style="display: none;margin-right: 15px;color:green;"  >
+                                 <span class="glyphicon glyphicon-ok" title="<?php echo __('Field filled successfully!','tainacan')?>" 
+                                data-toggle="tooltip" data-placement="top" ></span>
+                         </a>
                         <input type="hidden" 
                                  id='core_validation_<?php echo $property['id']; ?>' 
                                  class='core_validation' 

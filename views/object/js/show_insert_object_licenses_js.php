@@ -20,11 +20,11 @@
             });
         });
         
-        console.log('license',$('.hide_license')&&$('.hide_license').val()==='true');
         if($('.hide_license')&&$('.hide_license').val()==='true'){
             var property_license_id = $('#property_license_id').val();
             $('#meta-item-'+property_license_id).hide();
-            $('#list_licenses_items').hide();
+            $('.list_licenses_items').hide();
+            console.log('license', $('#list_licenses_items'));
             $('#core_validation_license').val('true');
         }else{
             $('#core_validation_license').val('true');

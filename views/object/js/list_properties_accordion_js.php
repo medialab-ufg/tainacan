@@ -812,6 +812,7 @@
     
     function validate_all_fields(){
         var cont = 0;
+        console.log('teste');
         $( ".core_validation").each(function( index ) {
             if($( this ).val()==='false'){
                 cont++;

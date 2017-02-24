@@ -116,7 +116,7 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                 <h2> 
                     <?php echo ($view_helper->terms_fixed['title']) ? $view_helper->terms_fixed['title']->name :  _e('Title','tainacan') ?> 
                     <a class="pull-right" 
-                       style="margin-right: 20px;" 
+                       style="margin-right: 15px;" 
                         >
                         <span title="<?php _e('Type the item name','tainacan'); ?>" 
                        data-toggle="tooltip" data-placement="bottom" class="glyphicon glyphicon-question-sign"></span>
@@ -146,7 +146,7 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                 <h2> 
                     <?php echo ($view_helper->terms_fixed['content']) ? $view_helper->terms_fixed['content']->name :  _e('Content','tainacan') ?> 
                     <a class="pull-right" 
-                       style="margin-right: 20px;" 
+                       style="margin-right: 15px;" 
                         >
                         <span title="<?php _e('Type the content of the item','tainacan'); ?>" 
                        data-toggle="tooltip" data-placement="bottom" class="glyphicon glyphicon-question-sign"></span>
@@ -250,7 +250,7 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                         <h2> 
                            <?php echo ($view_helper->terms_fixed['attachments']) ? $view_helper->terms_fixed['attachments']->name :  _e('Attachments','tainacan') ?> 
                             <a class="pull-right" 
-                               style="margin-right: 20px;" 
+                               style="margin-right: 15px;" 
                                 >
                                 <span title="<?php _e('Upload attachments for your item','tainacan'); ?>" 
                                data-toggle="tooltip" data-placement="bottom" class="glyphicon glyphicon-question-sign"></span>
@@ -295,7 +295,7 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                     <?php echo ($view_helper->terms_fixed['thumbnail']) ? $view_helper->terms_fixed['thumbnail']->name :  _e('Thumbnail','tainacan') ?> 
                     <?php do_action('optional_message') ?>
                     <a class="pull-right" 
-                       style="margin-right: 20px;" 
+                       style="margin-right: 15px;" 
                        >
                         <span  title="<?php _e('Insert a thumbnail in your item!','tainacan'); ?>" 
                        data-toggle="tooltip" data-placement="bottom" class="glyphicon glyphicon-question-sign"></span>
@@ -344,7 +344,7 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                 <h2> 
                     <?php echo ($view_helper->terms_fixed['source']) ? $view_helper->terms_fixed['source']->name :  _e('Source','tainacan') ?> 
                     <a class="pull-right" 
-                       style="margin-right: 20px;" 
+                       style="margin-right: 15px;" 
                         >
                         <span title="<?php _e('What\'s the item source','tainacan'); ?>" 
                        data-toggle="tooltip" data-placement="bottom" class="glyphicon glyphicon-question-sign"></span>
@@ -382,7 +382,7 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                 <h2>
                     <?php echo ($view_helper->terms_fixed['description']) ? $view_helper->terms_fixed['description']->name :  __('Description','tainacan') ?> 
                     <a class="pull-right" 
-                       style="margin-right: 20px;" 
+                       style="margin-right: 15px;" 
                         >
                         <span title="<?php _e('Describe your item','tainacan'); ?>" 
                        data-toggle="tooltip" data-placement="bottom" class="glyphicon glyphicon-question-sign"></span>
@@ -416,7 +416,7 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                 <h2>
                     <?php echo ($view_helper->terms_fixed['tags']) ? $view_helper->terms_fixed['tags']->name :  _e('Tags','tainacan') ?> 
                     <a class="pull-right" 
-                       style="margin-right: 20px;" 
+                       style="margin-right: 15px;" 
                        >
                         <span  title="<?php _e('The set of tags may be inserted by comma','tainacan') ?>" 
                        data-toggle="tooltip" data-placement="bottom" class="glyphicon glyphicon-question-sign"></span>
@@ -457,13 +457,13 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
             </div>
             <!-- TAINACAN: a licencas do item -->
              <div id="list_licenses_items"
-                  class="form-group"
+                  class="form-group list_licenses_items"
                  <?php echo $view_helper->get_visibility($view_helper->terms_fixed['license']) ?>
                  >
                 <h2>
                     <?php echo ($view_helper->terms_fixed['license']) ? $view_helper->terms_fixed['license']->name :  __('Licenses','tainacan') ?> 
                     <a class="pull-right" 
-                       style="margin-right: 20px;" 
+                       style="margin-right: 15px;" 
                        >
                         <span  title="<?php _e('Licenses available for this item','tainacan') ?>" 
                        data-toggle="tooltip" data-placement="bottom" class="glyphicon glyphicon-question-sign"></span>
@@ -481,6 +481,7 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                     <input type="hidden" 
                            id='core_validation_license_message'  
                            value='<?php echo sprintf(__('The field license is required','tainacan'),$property['name']); ?>'>
+                     <input type="hidden" class="auto-save" id="property_license_id" value="<?php echo $view_helper->terms_fixed['license']->term_id ?>">
                 </h2>
                 <div id="show_form_licenses"></div>
              </div>   

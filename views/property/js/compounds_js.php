@@ -93,10 +93,10 @@
                                      '<span style="margin-right:5px;color: #88A6CC;" class="glyphicon glyphicon-trash pull-right"><span></a>' +
                                      '<a><span style="margin-right:5px;color: #88A6CC;" class="glyphicon glyphicon-sort sort-filter pull-right"></span></a>&nbsp;'+ add_filter_button(node.data.key) + node.data.title+'</li>')
                          })
-                         $('#compounds_id').val(keys.join(','));
                      }else if(selKeys.length>11){
                          node.select(false);
                      }
+                     $('#compounds_id').val(keys.join(','));
                      accordeon_ordenation_properties();
                  }
             });
@@ -125,8 +125,12 @@
     
     function ordenateCompundedKeys(keys){
         var selected = $('#compounds_id').val();
+        console.log(selected);
         if(selected.trim()!=""){
             var keys_ordenate = selected.split(',');
+            if(keys_ordenate.length>keys.length){
+                return keys;
+            } 
             $.each(keys,function(index,value){
                 if(keys_ordenate.indexOf(value)<0){
                     keys_ordenate.push(value);
@@ -141,9 +145,12 @@
     function ordenateCompundedNodes(nodes){
         var selected = $('#compounds_id').val();
         var nodes_ordenated = [];
-        var last_added = ''
+        var last_added = '';
         if(selected.trim()!=""){
             var keys_ordenate = selected.split(',');
+            if(keys_ordenate.length>nodes.length){
+                return nodes;
+            } 
              $.each(keys_ordenate,function(index,id){
                 $.each(nodes,function(index,value){
                     if(id === value.data.key){
@@ -251,6 +258,7 @@
             data: { collection_id: $("#collection_id").val(), operation: 'edit_property_compounds', property_id: id }
         }).done(function (result) {
             elem = $.parseJSON(result);
+             $('#compounds_id').val('');
             var visualization = elem.metas.socialdb_property_visualization;
             $("#compound_id").val(elem.id);
             $("#operation_property_compounds").val('update_property_compounds');

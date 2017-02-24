@@ -45,42 +45,7 @@ if (isset($property_object)):
                 if(has_action('modificate_edit_item_properties_object')): 
                          do_action('modificate_edit_item_properties_object',$property); 
                 endif;
-                if ($property['metas']['socialdb_property_help']&&!empty(trim($property['metas']['socialdb_property_help']))) {
-                     ?>
-                        <a class="pull-right" 
-                            style="margin-right: 20px;" >
-                             <span title="<?php echo $property['metas']['socialdb_property_help'] ?>" 
-                                   data-toggle="tooltip" 
-                                   data-placement="bottom" 
-                                   class="glyphicon glyphicon-question-sign"></span>
-                        </a>
-                    <?php  
-                }
-                if ($property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] == 'true') {
-                        ?>
-                        <a id='required_field_<?php echo $property['id']; ?>' style="padding: 3px;" >
-                                <span  title="<?php echo __('This metadata is required!','tainacan')?>" 
-                               data-toggle="tooltip" data-placement="top" >*</span>
-                        </a>
-                        <a id='ok_field_<?php echo $property['id']; ?>'  style="display: none;padding: 3px;margin-left: -30px;" >
-                                 &nbsp;<span class="glyphicon  glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>" 
-                               data-toggle="tooltip" data-placement="top" ></span>
-                        </a>
-                        <input type="hidden" 
-                                 id='core_validation_<?php echo $property['id']; ?>' 
-                                 class='core_validation' 
-                                 value='false'>
-                        <input type="hidden" 
-                                 id='core_validation_<?php echo $property['id']; ?>_message'  
-                                 value='<?php echo sprintf(__('The field %s is required','tainacan'),$property['name']); ?>'>
-                        <script> 
-                             <?php if(isset($property['metas']['value']) &&  is_array($property['metas']['value']) && !empty(array_filter($property['metas']['value']))): 
-                                 echo "$('#core_validation_".$property['id']."').val('true')";  
-                             endif; ?> 
-                            set_field_valid(<?php echo $property['id']; ?>,'core_validation_<?php echo $property['id']; ?>') 
-                        </script> 
-                        <?php  
-                }
+                $object_properties_widgets_helper->generateValidationIcons($property);
                 ?>
             </h2>
             <div>
@@ -196,40 +161,7 @@ if (isset($property_object)):
                 if(has_action('modificate_label_insert_item_properties')):
                     do_action('modificate_label_insert_item_properties', $property);
                 endif;
-                if ($property['metas']['socialdb_property_help']&&!empty(trim($property['metas']['socialdb_property_help']))) {
-                    ?>
-                    <a class="pull-right" 
-                       style="margin-right: 20px;" >
-                        <span title="<?php echo $property['metas']['socialdb_property_help'] ?>" 
-                              data-toggle="tooltip" 
-                              data-placement="bottom" 
-                              class="glyphicon glyphicon-question-sign"></span>
-                    </a>
-                    <?php  
-                }
-                if ($property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] == 'true') {
-                    ?>
-                      <a id='required_field_<?php echo $property['id']; ?>' style="padding: 3px;" >
-                                <span  title="<?php echo __('This metadata is required!','tainacan')?>" 
-                               data-toggle="tooltip" data-placement="top" >*</span>
-                        </a>
-                        <a id='ok_field_<?php echo $property['id']; ?>'  style="display: none;padding: 3px;margin-left: -30px;" >
-                                 &nbsp;<span class="glyphicon  glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>" 
-                               data-toggle="tooltip" data-placement="top" ></span>
-                        </a>
-                        <input type="hidden" 
-                                 id='core_validation_<?php echo $property['id']; ?>' 
-                                 class='core_validation' 
-                                 value='false'>
-                        <input type="hidden" 
-                                 id='core_validation_<?php echo $property['id']; ?>_message'  
-                                 value='<?php echo sprintf(__('The field %s is required','tainacan'),$property['name']); ?>'>
-                        <script> 
-                           <?php if(isset($property['metas']['value'][0])): echo "$('#core_validation_".$property['id']."').val('true')";  endif; ?> 
-                           set_field_valid(<?php echo $property['id']; ?>,'core_validation_<?php echo $property['id']; ?>') 
-                        </script> 
-                    <?php  
-                }
+                $object_properties_widgets_helper->generateValidationIcons($property);
                 ?>
             </h2>
             <?php if($is_view_mode): ?>
@@ -357,37 +289,7 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
                     do_action('modificate_label_insert_item_properties', $property);
                 else: // validacoes e labels
                         $property['metas']['socialdb_property_help'] = ($property['metas']['socialdb_property_help']==''&&$property['type'] == 'tree')? __('Select one option','tainacan') : '';
-                        if ($property['metas']['socialdb_property_help']&&!empty(trim($property['metas']['socialdb_property_help']))) {
-                                ?>
-                                <a class="pull-right" 
-                                    style="margin-right: 20px;" >
-                                     <span title="<?php echo $property['metas']['socialdb_property_help'] ?>" 
-                                           data-toggle="tooltip" 
-                                           data-placement="bottom" 
-                                           class="glyphicon glyphicon-question-sign"></span>
-                                </a>
-                                <?php  
-                        }
-                        if ($property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] == 'true') {
-                            ?>
-                            <a id='required_field_<?php echo $property['id']; ?>' style="padding: 3px;" >
-                                <span  title="<?php echo __('This metadata is required!','tainacan')?>" 
-                               data-toggle="tooltip" data-placement="top" >*</span>
-                        </a>
-                        <a id='ok_field_<?php echo $property['id']; ?>'  style="display: none;padding: 3px;margin-left: -30px;" >
-                                 &nbsp;<span class="glyphicon  glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>" 
-                               data-toggle="tooltip" data-placement="top" ></span>
-                        </a>
-                            <input type="hidden" 
-                                     id='core_validation_<?php echo $property['id']; ?>' 
-                                     class='core_validation' 
-                                     value='false'>
-                            <input type="hidden" 
-                                     id='core_validation_<?php echo $property['id']; ?>_message'  
-                                     value='<?php echo sprintf(__('The field %s is required','tainacan'),$property['name']); ?>'>
-                            <script> set_field_valid(<?php echo $property['id']; ?>,'core_validation_<?php echo $property['id']; ?>') </script> 
-                            <?php  
-                        }
+                        $object_properties_widgets_helper->generateValidationIcons($property);
                  endif; 
                  ?>
             </h2>    
