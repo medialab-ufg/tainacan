@@ -7,6 +7,7 @@ if( is_null($curr_id) && is_null($itemURL) ) {
   $itemURL = get_the_permalink($collection_id) . '?item=' . $object->post_name;
 }
 
+$rdfURL = $itemURL . '.rdf';
 $itemDelete = [ 'id' => $curr_id, 'title' =>  _t('Delete Object'), 'time' => mktime(),
   'text' => _t('Are you sure to remove the object: ') . get_the_title() ];
 ?>
@@ -88,8 +89,11 @@ $itemDelete = [ 'id' => $curr_id, 'title' =>  _t('Delete Object'), 'time' => mkt
 
             <li> <a class="ac-item-versions"> <?php _t('Item versions',1); ?> </a> </li>
 
-            <li> <a class="ac-item-rdf" href="<?php echo $itemURL; ?>.rdf" target="_blank"> <?php _t('Export RDF',1); ?> </a> </li>
-            <?php /* <li> <a class="ac-item-graph"> <?php _t('See graph',1); ?> </a> </li> */?>
+            <li> <a class="ac-item-rdf" href="<?php echo $rdfURL; ?>" target="_blank"> <?php _t('Export RDF',1); ?> </a> </li>
+
+            <?php if($is_single_page): ?>
+                <li> <a class="ac-item-graph" onclick="showGraph('<?php echo $rdfURL; ?>')"> <?php _t('See graph',1); ?> </a> </li>
+            <?php endif; ?>
 
             <?php if(!$is_single_page): ?>
                 <li class="collec-only"> <a class="ac-comment-item"> <?php _t('Comment item',1); ?> </a> </li>

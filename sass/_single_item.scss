@@ -1,5 +1,5 @@
 #single_item_tainacan {
-  @include context-item-menu-style(2px);
+  @include context-item-menu-style(2px, 0 15px 10px 20px);
 
   .single-title {
     font-weight: bolder;
