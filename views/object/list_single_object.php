@@ -36,7 +36,7 @@ $view_helper = new ObjectHelper($collection_id);
 <div id="single_item_tainacan" class="col-md-12">
     <div class="col-md-9 item-main-data row" style="padding-right: 0;">
 
-        <div class="col-md-12 content-title single-item-title tainacan-header-info">
+        <div class="col-md-12 content-title single-item-title tainacan-header-info no-padding">
             <div class="col-md-10" style="margin-top:14px;" <?php echo $view_helper->get_visibility($view_helper->terms_fixed['title']) ?>>
                 <h3 id="text_title"><?php echo $object->post_title; ?>
                 <span id="event_title" style="display:none;">
@@ -147,10 +147,10 @@ $view_helper = new ObjectHelper($collection_id);
               </div>
             */ ?>
 
-            <div class="new-item-actions" style="margin-top:15px;">
+            <div class="new-item-actions" style="margin-top:15px;margin-right: 5px;">
                 <?php include_once "list_modes/actions/item_actions.php"; ?>
             </div>
-            <div class="col-md-12" style="margin-top:13.5px;">
+            <div class="col-md-12 no-padding" style="margin-top:13.5px;padding-right: 15px;">
                 <hr class="single-item-divider" />
             </div>
 
