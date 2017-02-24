@@ -148,7 +148,11 @@
                     var extra_yDist = 0;
                     if(item_desc) {
                       if(itm.breaks && itm.breaks > 0) {
-                        extra_yDist = itm.breaks * 20;
+                          if(itm.tmb) {
+                              extra_yDist = itm.breaks * 30;
+                          } else {
+                              extra_yDist = itm.breaks * 20;
+                          }
                       }
                     }
 
