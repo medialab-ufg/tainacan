@@ -469,6 +469,10 @@ abstract class EventModel extends Model {
                         return false;
                     }
                 } else {
+                    $is_item = get_post_meta($event_id,'socialdb_event_object_item_id',true);
+                    if( get_post($is_item) && get_post($is_item)->post_author == get_current_user_id()){
+                        return true;
+                    }
                     return false;
                 }
             }

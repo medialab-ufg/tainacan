@@ -115,6 +115,7 @@
             contentType: false
         }).done(function (result) {
             $('#modalImportMain').modal('hide');
+            $('#compounds_id').val('');
             elem = jQuery.parseJSON(result);
             if ( elem != null ) {
                 list_collection_metadata();
