@@ -347,3 +347,18 @@
     color: $brand-medium-blue !important;
   }
 }
+
+.menu-hover-container {
+  display: inline;
+  padding-bottom: 30px;
+
+  &:hover > .submenu-hover-open {
+    display: block;
+  }
+
+  .submenu-hover-open {
+    left: 170px;
+    top: 190px;
+  }
+
+}

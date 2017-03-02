@@ -352,29 +352,32 @@ $view_helper = new ObjectHelper($collection_id);
                             <a class="gplus" target="_blank" href="https://plus.google.com/share?url=<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>">
                                 <img src="<?php echo get_template_directory_uri() . '/libraries/images/icons/icon-googleplus.png'; ?>" />
                             </a>
-                            <a href="#" class="data-share dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" >
-                                <!-- <div style="font-size:1em; cursor:pointer; color: black; display: inline-block;" data-icon="&#xe00b;"></div> -->
-                                <img src="<?php echo get_template_directory_uri() . '/libraries/images/icons/icon-share.png'; ?>" />
-                            </a>
-                            <a target="_blank" href="<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>.rdf"  ><span class="glyphicon glyphicon-upload"></span> <?php _e('RDF', 'tainacan'); ?>&nbsp;
-                                    </a>
-                            <ul style=" z-index: 9999;" class="dropdown-menu" role="menu">
-                                <li>
-                                    <a target="_blank" href="<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>.rdf"  ><span class="glyphicon glyphicon-upload"></span> <?php _e('RDF', 'tainacan'); ?>&nbsp;
-                                    </a>
-                                </li>
-                                <?php if (is_restful_active()): ?>
+
+                            <div class="menu-hover-container">
+
+                                <a href="javascript:void(0)" class="data-share dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" >
+                                    <!-- <div style="font-size:1em; cursor:pointer; color: black; display: inline-block;" data-icon="&#xe00b;"></div> -->
+                                    <img src="<?php echo get_template_directory_uri() . '/libraries/images/icons/icon-share.png'; ?>" />
+                                </a>
+                                <ul style=" z-index: 9999;" class="dropdown-menu submenu-hover-open" role="menu">
                                     <li>
-                                        <a href="<?php echo site_url() . '/wp-json/posts/' . $object->ID . '/?type=socialdb_object' ?>"  ><span class="glyphicon glyphicon-upload"></span> <?php _e('JSON', 'tainacan'); ?>&nbsp;
+                                        <a target="_blank" href="<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>.rdf"  ><span class="glyphicon glyphicon-upload"></span> <?php _e('RDF', 'tainacan'); ?>&nbsp;
                                         </a>
                                     </li>
-                                <?php endif; ?>
-                                <li>
-                                    <a onclick="showGraph('<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>.rdf')"  style="cursor: pointer;"   >
-                                        <span class="glyphicon glyphicon-upload"></span> <?php _e('Graph', 'tainacan'); ?>&nbsp;
-                                    </a>
-                                </li>
-                            </ul>
+                                    <?php if (is_restful_active()): ?>
+                                        <li>
+                                            <a href="<?php echo site_url() . '/wp-json/posts/' . $object->ID . '/?type=socialdb_object' ?>"  ><span class="glyphicon glyphicon-upload"></span> <?php _e('JSON', 'tainacan'); ?>&nbsp;
+                                            </a>
+                                        </li>
+                                    <?php endif; ?>
+                                    <li>
+                                        <a onclick="showGraph('<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>.rdf')"  style="cursor: pointer;"   >
+                                            <span class="glyphicon glyphicon-upload"></span> <?php _e('Graph', 'tainacan'); ?>&nbsp;
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
                         </div>
                     </div>
                 </div>
