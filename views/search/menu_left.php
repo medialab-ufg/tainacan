@@ -90,7 +90,8 @@ foreach ($facets as $facet):
             <label for="object_tags" class="title-pipe"> <?php echo $facet['name']; ?></label>
             <div>
                 <?php foreach ($facet['categories'] as $category): ?>
-                    <input type="radio" onchange="wpquery_filter_by_facet($(this).val(), '<?php echo $facet['id']; ?>', 'wpquery_radio');"  value="<?php echo $category->term_id; ?>" name="facet_<?php echo $facet['id']; ?>">&nbsp; <?php echo $category->name; ?><br>
+                    <input type="radio" onchange="wpquery_filter_by_facet($(this).val(), '<?php echo $facet['id']; ?>', 'wpquery_radio');"
+                           value="<?php echo $category->term_id; ?>" name="facet_<?php echo $facet['id']; ?>"> <?php echo $category->name; ?><br>
                 <?php endforeach; ?>
             </div>
         </div>
