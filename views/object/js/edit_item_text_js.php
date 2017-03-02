@@ -71,6 +71,7 @@
                     showCKEditor('objectedit_editor');
                     createDraft();
                     set_content_valid();
+                    validate_all_fields()
                      <?php else: ?>
                      $('#submit_form_edit_object h2 span').hide(); 
                      list_files_single( $("#object_id_edit").val());

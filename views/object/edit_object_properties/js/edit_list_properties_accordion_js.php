@@ -811,18 +811,45 @@
             $('#core_validation_'+id).val('true');
             $('#ok_field_'+id).show();
             $('#required_field_'+id).hide();
+            $('#meta-item-'+id+' h2').css('background-color','#fffff');
         }
         validate_all_fields();
     }
     
     function validate_all_fields(){
         var cont = 0;
+        var cont_pane = 0;
         $( ".core_validation").each(function( index ) {
             if($( this ).val()==='false'){
                 cont++;
+                <?php if(!$is_view_mode): ?>
+                var id = $( this ).attr('id').replace('core_validation_','');
+                $('#meta-item-'+id+' h2').css('background-color','#ffcccc');
+                $.each($( "#submit_form .tab-pane" ),function(index,seletor){
+                    if($(seletor).find('#meta-item-'+id).length > 0){
+                        var id_tab = $(seletor ).attr('id').replace('tab-','');
+                        $('#click-tab-'+id_tab).css('background-color','#ffcccc');
+                    }
+                });
+                <?php endif; ?>
             }
         });
+        <?php if(!$is_view_mode): ?>
+        $.each($( "#submit_form .tab-pane" ),function(index,seletor){
+                var id_tab = $(seletor ).attr('id').replace('tab-','');
+                $( seletor).find(".core_validation").each(function( index ) {
+                    if($( this ).val()==='false'){
+                        cont_pane++;
+                    }
+                });
+                if(cont_pane===0){
+                     $('#click-tab-'+id_tab).css('background-color','white');
+                }
+                cont_pane= 0;
+        });        
+        <?php endif; ?>
         if(cont===0){
+            $('#tabs_item li a').css('background-color','white');
             $('#submit_container').show();
             $('#submit_container_message').hide();
         }else{

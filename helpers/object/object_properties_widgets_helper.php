@@ -30,7 +30,7 @@ class ObjectWidgetsHelper extends ViewHelper {
             <input type="hidden" 
                      id='core_validation_<?php echo $property['id']; ?>' 
                      class='core_validation' 
-                     value='false'>
+                     value='<?php echo ($property['metas']['value']) ?  'true' : 'false'; ?>'>
             <input type="hidden" 
                      id='core_validation_<?php echo $property['id']; ?>_message'  
                      value='<?php echo sprintf(__('The field %s is required','tainacan'),$property['name']); ?>'>
