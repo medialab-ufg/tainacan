@@ -66,9 +66,14 @@ abstract class EventModel extends Model {
     public static function get_user_notifications() {
         $collectionModel = new CollectionModel();
         $_sum = 0;
+        $_root_id = get_option('collection_root_id');
         foreach($collectionModel->get_collection_by_user(get_current_user_id()) as $col) {
             $d['collection_id'] = $col->ID;
             $info['colecao'] = $col->post_title;
+            if($col->ID == $_root_id) {
+                $info['is_root'] = true;
+                $info['colecao'] = _t('Repository\'s events');
+            }
             $info['counting'] = count(EventModel::list_events($d)['events_not_observed']);
             $info['path'] = $col->post_name;
             if($info['counting'] > 0) {

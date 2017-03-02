@@ -125,9 +125,16 @@
                 var _item_html = "";
                 $(_ev_.evts).each(function(id, el) {
                     var events_path = '<?php _e("events", "tainacan")?>';
-                    var URL = $("#site_url").val() + '/' + el.path + '/admin/'+ events_path +'/';
+                    var extra_class = '';
+                    if(el.is_root && el.is_root == true) {
+                        var URL = $("#site_url").val() + '/admin/'+ events_path;
+                        extra_class = 'trigger-events';
+                    } else {
+                        var URL = $("#site_url").val() + '/' + el.path + '/admin/'+ events_path +'/';
+                    }
+
                     var content = "<span class='evt_col'> " + el.colecao + "</span> <span class='evts_cnt'>" + el.counting + "</span>";
-                    _item_html += "<li class='col-md-12 no-padding'> <a class='evt_container evt-"+ id +"' href='" + URL + "'> ";
+                    _item_html += "<li class='col-md-12 no-padding'> <a class='evt_container evt-"+ id + ' ' + extra_class + "' href='" + URL + "'> ";
                     _item_html += content;
                     _item_html += "</a></li>";                                    
                 });
