@@ -699,7 +699,7 @@ class ObjectController extends Controller {
                     $object_model->copyItemCategories($newItem, $data['object_id']);
                     $object_model->copyItemTags($newItem, $data['object_id']);
                     $object_model->createMetasVersion($newItem, $original, $new_version, $data['motive']);
-                    return true;
+                    return $newItem;
                 } else {
                     return false;
                 }

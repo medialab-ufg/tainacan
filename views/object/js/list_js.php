@@ -647,7 +647,7 @@
                 if (result) {
                    // wpquery_clean();
                     //showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Successfully created version.', 'tainacan') ?>', 'success');
-                    edit_object_item(object_id)
+                    edit_object_item(result);
                 } else {
                     showAlertGeneral('<?php _e('Error', 'tainacan') ?>', '<?php _e('Please try again.', 'tainacan') ?>', 'error');
                 }
