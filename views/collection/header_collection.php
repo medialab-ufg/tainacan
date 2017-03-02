@@ -10,10 +10,13 @@ $_enable_header_ = get_post_meta($current_collection_id, 'socialdb_collection_sh
 
 $thumb_url = $collection_thumb ? wp_get_attachment_url($collection_thumb) : get_template_directory_uri() . "/libraries/images/colecao_thumb.svg";
 
-if( empty($_enable_header_) || $_enable_header_ == "enabled") {
+?>
+<div class='headers_container'>
+    <?php
+    if( empty($_enable_header_) || $_enable_header_ == "enabled") {
     $url_image = wp_get_attachment_url(get_post_meta($current_collection_id, 'socialdb_collection_cover_id', true));
     ?>
-    <div class="panel-heading collection_header container-fluid collection_header_img"
+        <div class="panel-heading collection_header container-fluid collection_header_img"
          style="<?php if ($url_image) { ?> background-image: url(<?php echo $url_image; ?>); <?php } ?>">
         <div class="row">
             <!-- TAINACAN: container com o menu da colecao, link para eventos e a busca de items -->
@@ -229,31 +232,32 @@ if( empty($_enable_header_) || $_enable_header_ == "enabled") {
             </div>
         </div>
     </div>
-
-    <?php
-}
-$root_category_cover_id = get_option('socialdb_logo');
-$cover_url = wp_get_attachment_url(get_post_meta($root_category_cover_id, 'socialdb_respository_cover_id', true));
-
-if (has_nav_menu('menu-ibram')) {
-    if( empty($_enable_header_) || $_enable_header_ == "enabled") {
-        ?>
-        <div class="ibram-header" <?php if ($root_category_cover_id != "") { ?> style="background-image: url(<?php echo $cover_url ?>)" <?php } ?> >
-            <div class="col-md-12 no-padding">
-                <div class="col-md-10 no-padding">
-                    <h3> <?php echo bloginfo('name'); ?> </h3>
-                    <h5> <?php echo bloginfo('description'); ?> </h5>
-                </div>
-                <?php include("config_menu.php"); ?>
-            </div>
-        </div>
-
         <?php
     }
-    wp_nav_menu(['theme_location' => 'menu-ibram', 'container_class' => 'containewr', 'container' => false,
-        'menu_class' => 'navbar navbar-inverse menu-ibram', 'walker' => new wp_bootstrap_navwalker()]);
-}
-?>
+    $root_category_cover_id = get_option('socialdb_logo');
+    $cover_url = wp_get_attachment_url(get_post_meta($root_category_cover_id, 'socialdb_respository_cover_id', true));
+
+    if (has_nav_menu('menu-ibram')) {
+        echo "<input type='hidden' name='ibram_menu_active' class='ibram_menu_active' value='true'>";
+        if( empty($_enable_header_) || $_enable_header_ == "enabled") {
+            ?>
+            <div class="ibram-header" <?php if ($root_category_cover_id != "") { ?> style="background-image: url(<?php echo $cover_url ?>)" <?php } ?> >
+                <div class="col-md-12 no-padding">
+                    <div class="col-md-10 no-padding">
+                        <h3> <?php echo bloginfo('name'); ?> </h3>
+                        <h5> <?php echo bloginfo('description'); ?> </h5>
+                    </div>
+                    <?php include("config_menu.php"); ?>
+                </div>
+            </div>
+
+            <?php
+        }
+        wp_nav_menu(['theme_location' => 'menu-ibram', 'container_class' => 'containewr', 'container' => false,
+            'menu_class' => 'navbar navbar-inverse menu-ibram', 'walker' => new wp_bootstrap_navwalker()]);
+    }
+    ?>
+</div>
 
 <div id="tainacan-breadcrumbs" class="config-steps">
     <a href="<?php echo esc_url(home_url('/')) ?>"> Home </a> >
