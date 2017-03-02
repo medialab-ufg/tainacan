@@ -47,7 +47,14 @@ class LicenseModel {
     }
 
     public function change_pattern_license($id, $collection_id) {
-        update_post_meta($collection_id, 'socialdb_collection_license_pattern', $id);
+        $old_license = get_post_meta($collection_id, 'socialdb_collection_license_pattern', true);
+        if ($id == $old_license):
+            update_post_meta($collection_id, 'socialdb_collection_license_pattern', '');
+            $result['uncheck'] = true;
+        else:
+            update_post_meta($collection_id, 'socialdb_collection_license_pattern', $id);
+            $result['uncheck'] = false;
+        endif;
 
         $result['title'] = __('Success', 'tainacan');
         $result['msg'] = __('Change pattern successfully', 'tainacan');

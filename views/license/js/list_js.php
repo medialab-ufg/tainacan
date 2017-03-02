@@ -4,7 +4,7 @@
     $(function () {
         var src = $('#src').val();
         listStandartLicenses();
-        change_breadcrumbs_title('<?php _e('Collection Licenses','tainacan') ?>');
+        change_breadcrumbs_title('<?php _e('Collection Licenses', 'tainacan') ?>');
 
         // $("#licenses_display").DataTable();
 
@@ -82,8 +82,8 @@
                                 $("#list_licenses_content").append("<tr><td>" + object.nome + "</td>" +
                                         "<td><input type='radio' name='standartLicense' id='radio" + object.id + "' value=" + object.id + " onclick='changeStandartLicense(this," + object.id + ");'/></td>" +
                                         "<td><input type='checkbox' name='enabledLicense[]' id='checkbox" + object.id + "' value=" + object.id + " onclick='changeEnabledLicense(this," + object.id + ");'/></td>" +
-                                        "<td><a onclick='deleteCustomLicense("+ object.id +")' href='#formAddLicense'><span class='glyphicon glyphicon-trash'></span></a>" +
-                                        " <a onclick='editCustomLicense("+ object.id +")' href='#formAddLicense'><span class='glyphicon glyphicon-edit'></span></a></td>"+
+                                        "<td><a onclick='deleteCustomLicense(" + object.id + ")' href='#formAddLicense'><span class='glyphicon glyphicon-trash'></span></a>" +
+                                        " <a onclick='editCustomLicense(" + object.id + ")' href='#formAddLicense'><span class='glyphicon glyphicon-edit'></span></a></td>" +
                                         "</tr>");
                             });
                         }
@@ -105,6 +105,9 @@
             success: function (data) {
                 if (data) {
                     elem = jQuery.parseJSON(data);
+                    if (elem.uncheck) {
+                        $('#radio' + id).prop('checked', false);
+                    }
                     showAlertGeneral(elem.title, elem.msg, elem.type);
                 } // caso o controller retorne false
             }
@@ -155,23 +158,23 @@
             closeOnConfirm: false,
             closeOnCancel: true
         },
-        function (isConfirm) {
-            if (isConfirm) {
-                $.ajax({
-                    type: "POST",
-                    url: $('#src').val() + '/controllers/license/license_controller.php',
-                    data: {
-                        operation: 'delete_custom_license',
-                        license_id: id,
-                        collection_id: collection_id
+                function (isConfirm) {
+                    if (isConfirm) {
+                        $.ajax({
+                            type: "POST",
+                            url: $('#src').val() + '/controllers/license/license_controller.php',
+                            data: {
+                                operation: 'delete_custom_license',
+                                license_id: id,
+                                collection_id: collection_id
+                            }
+                        }).done(function (result) {
+                            elem = jQuery.parseJSON(result);
+                            showAlertGeneral(elem.title, elem.msg, elem.type);
+                            listStandartLicenses();
+                            $("#formAddLicense")[0].reset();
+                        });
                     }
-                }).done(function (result) {
-                    elem = jQuery.parseJSON(result);
-                    showAlertGeneral(elem.title, elem.msg, elem.type);
-                    listStandartLicenses();
-                    $("#formAddLicense")[0].reset();
                 });
-            }
-        });
     }
 </script>
