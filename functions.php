@@ -2319,6 +2319,10 @@ function is_restful_active() {
 function download_page($path) {
     session_write_close();
     ini_set('max_execution_time', '0');
+    if(file_get_contents($path)){
+        return file_get_contents($path);
+    }
+    
     try {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, trim($path));

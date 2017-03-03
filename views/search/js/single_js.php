@@ -91,12 +91,16 @@
     //slideUp
     function slideFormAdvancedDown(){
         if($('#propertiesRootAdvancedSearch').is(':visible')){
-            $('#propertiesRootAdvancedSearch').hide()
+            $('#propertiesRootAdvancedSearch').hide();
+            $('#filters_collection').show();
+            $('.text-left .clear-top-search').parent().show();
             $('#icon-search-bottom').show();
             $('#icon-search-top').hide();
             $('.search-colecao').show();
         }else{
             $('#icon-search-bottom').hide();
+            $('#filters_collection').hide();
+             $('.text-left .clear-top-search').parent().hide();
             $('#icon-search-top').show();
             $('#propertiesRootAdvancedSearch').show();
             $('.search-colecao').hide();
@@ -1157,6 +1161,8 @@
     function wpquery_clean() {
         $('#list').hide();
         $('#loader_objects').show();
+        search_collections_query = '';
+        search_items_query = '';
         $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/wp_query/wp_query_controller.php",

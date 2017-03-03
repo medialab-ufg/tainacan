@@ -115,6 +115,10 @@ class RankingModel extends Model {
             }
             $edit_ranking = wp_update_term($data['ranking_id'], 'socialdb_property_type', array('name' => $data['ranking_name']) );
             $data['edited'] = $edit_ranking;
+            if($edit_ranking){
+                $data['msg'] = __('Operation is successfully','tainacan');
+                $data['success'] = 'true';
+            }
 
             return json_encode($data);
 

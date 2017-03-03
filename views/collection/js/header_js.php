@@ -89,7 +89,7 @@
 
         list_main_ordenation();
         wpquery_clean();
-
+        reboot_form();
         $("button#clear").fadeOut();
     }
 

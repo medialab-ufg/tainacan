@@ -1587,7 +1587,7 @@
     }
     
     function getRequestFeedback(status, error_msg) {
-        if (status === 'success' || status === 'true' ) {
+        if (status === 'success' || status === 'true' || status === true ) {
             $("#alert_error_properties").hide();
             $("#alert_success_properties").show();
         } else {

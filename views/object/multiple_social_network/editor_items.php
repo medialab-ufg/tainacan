@@ -108,8 +108,8 @@ $filesOther= [];
                     <?php echo ($view_helper->terms_fixed['tags']) ? $view_helper->terms_fixed['tags']->name :  _e('Tags','tainacan') ?> 
                 </h2>
                 <div class="form-group">                
-                    <input onkeyup="setTags(this)" type="text" class="form-control auto-save" id="multiple_object_tags" name="object_tags" >
-                    <span style="font-size: 8px;" class="label label-default">*<?php _e('The set of tags may be inserted by commas','tainacan') ?></span>
+                    <input onkeyup="setTags(this)" type="text" class="form-control auto-save" id="multiple_object_tags" placeholder="" name="object_tags" >
+                    <span style="font-size: 7px;word-wrap: break-word;" class="label label-default">*<?php _e('The set of tags may be inserted by commas','tainacan') ?></span>
                </div> 
             </div>    
             <div id="socialdb_object_dc_source"
