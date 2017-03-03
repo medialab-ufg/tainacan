@@ -558,3 +558,12 @@ form#advanced_search_submit {
     }
   } // .logo-container
 }
+
+#submit_form {
+  .add-item-container {
+    background: white;
+    border: 3px solid $item-border;
+    margin-left: 1%;
+    width: 74%
+  }
+}

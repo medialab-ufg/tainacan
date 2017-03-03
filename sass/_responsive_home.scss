@@ -100,6 +100,19 @@
     // margin-right: 0 !important;
   }
 
+  #submit_form .add-item-container {
+    width: 98% !important;
+  }
+
+  #div_left, .menu_left {
+    padding: 1% 2% 0 1% !important;
+    min-height: none;
+    border-bottom: 3px solid $item-border !important;
+    //height: 1300px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+  }
+
   #div_central {
     .item-colecao {
       .col-md-4 {

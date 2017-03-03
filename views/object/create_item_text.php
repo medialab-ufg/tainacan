@@ -19,12 +19,12 @@
         $mode = false;
     }
     /**
-     * 
-     * View utilizado para criar um item do tipo texto, utiliza os containers 
+     *
+     * View utilizado para criar um item do tipo texto, utiliza os containers
      * list_properties-accordion, list_ranking_create e show_insert_object_licenses
-     * 
-     * 
-     */    
+     *
+     *
+     */
 ?>
 <form  id="submit_form" onkeypress="return (event.keyCode == 13) ? false : true ;" style="margin-left: 15px;">
     <input type="hidden" id="object_id_add" name="object_id" value="<?php echo $object_id ?>">
@@ -38,10 +38,10 @@
                     <h4><?php _e('Loading metadata...', 'tainacan') ?></h4>
              </center>
         </div>
-        <div style="display: none; background: white;border: 3px solid #E8E8E8;font: 11px Arial;<?php echo $css?>" 
+        <div style="display: none; <?php echo $css?>"
              class="<?php echo ($view_helper->hide_main_container)? ($view_helper->mediaHabilitate)? 'col-md-9' : 'col-md-12':'col-md-3' ?> menu_left">
-            <?php 
-                //se estiver apenas mostrando as propriedades 
+            <?php
+                //se estiver apenas mostrando as propriedades
                 if($view_helper->hide_main_container):
                 ?>
                  <h4>
@@ -59,10 +59,10 @@
                 <hr>
                 <!--------------------------- ABAS----------------------------->
                 <?php $view_helper->add_tabs($collection_id) ?>
-            <?php else: ?>   
-                <div    style="<?php echo ($view_helper->hide_main_container)?'margin-bottom:0%':'' ?>" 
+            <?php else: ?>
+                <div    style="<?php echo ($view_helper->hide_main_container)?'margin-bottom:0%':'' ?>"
                     class="expand-all-item btn white tainacan-default-tags">
-                <div class="action-text" 
+                <div class="action-text"
                      style="display: inline-block;">
                          <?php _e('Expand all', 'tainacan') ?></div>
                 &nbsp;&nbsp;<span class="glyphicon-triangle-bottom white glyphicon"></span>
@@ -70,107 +70,109 @@
             <?php endif; ?>
 <!-- TAINACAN: INICIO ACCORDEON -->
             <div id="text_accordion" class="multiple-items-accordion">
-            <?php 
+            <?php
             //se for no modo de apenas um container
-            if($mode): 
+            if($mode):
             ?>
             <!-- TAINACAN: titulo do item -->
-            <div id="<?php echo $view_helper->get_id_list_properties('title','title'); ?>"  
+            <div id="<?php echo $view_helper->get_id_list_properties('title','title'); ?>"
                  class="form-group"
-                <?php echo $view_helper->get_visibility($view_helper->terms_fixed['title']) ?>    
+                <?php echo $view_helper->get_visibility($view_helper->terms_fixed['title']) ?>
                 <?php do_action('item_title_attributes') ?>>
-                <h2> 
-                    <?php echo ($view_helper->terms_fixed['title']) ? $view_helper->terms_fixed['title']->name :  _e('Title','tainacan') ?> 
-                    <a class="pull-right" 
-                       style="margin-right: 15px;" 
+                <h2>
+                    <?php echo ($view_helper->terms_fixed['title']) ? $view_helper->terms_fixed['title']->name :  _e('Title','tainacan') ?>
+                    <a class="pull-right"
+                       style="margin-right: 15px;"
                         >
-                        <span title="<?php _e('Type the item name','tainacan'); ?>" 
+                        <span title="<?php _e('Type the item name','tainacan'); ?>"
                        data-toggle="tooltip" data-placement="bottom" class="glyphicon glyphicon-question-sign"></span>
                     </a>
-                    <?php 
+                    <?php
                         echo $view_helper->setValidation($collection_id, $view_helper->terms_fixed['title']->term_id, 'title');
                     ?>
                 </h2>
                  <div>
-                    <input class="form-control auto-save"   
-                           type="text"  
-                           id="object_name" 
-                           name="object_name" 
+
+
+                    <input class="form-control auto-save"
+                           type="text"
+                           id="object_name"
+                           name="object_name"
                            placeholder="<?php _e('Item name','tainacan'); ?>">
-                  </div>   
-            </div>    
+                  </div>
+            </div>
             <!-- TAINACAN: Campo com o ckeditor para items do tipo texto -->
-            <div id="<?php echo $view_helper->get_id_list_properties('content','object_content_text'); ?>" 
-                  <?php echo $view_helper->get_visibility($view_helper->terms_fixed['content']) ?> 
+            <div id="<?php echo $view_helper->get_id_list_properties('content','object_content_text'); ?>"
+                  <?php echo $view_helper->get_visibility($view_helper->terms_fixed['content']) ?>
                  class="form-group" <?php do_action('item_content_attributes') ?>>
-                <h2> 
-                    <?php echo ($view_helper->terms_fixed['content']) ? $view_helper->terms_fixed['content']->name :  _e('Content','tainacan') ?> 
-                    <a class="pull-right" 
-                       style="margin-right: 15px;" 
+                <h2>
+                    <?php echo ($view_helper->terms_fixed['content']) ? $view_helper->terms_fixed['content']->name :  _e('Content','tainacan') ?>
+                    <a class="pull-right"
+                       style="margin-right: 15px;"
                         >
-                        <span title="<?php _e('Type the content of the item','tainacan'); ?>" 
+                        <span title="<?php _e('Type the content of the item','tainacan'); ?>"
                        data-toggle="tooltip" data-placement="bottom" class="glyphicon glyphicon-question-sign"></span>
                     </a>
-                    <?php 
+                    <?php
                         echo $view_helper->setValidation($collection_id, $view_helper->terms_fixed['content']->term_id, 'content');
                     ?>
                 </h2>
                  <div >
                     <textarea class="form-control auto-save" id="object_editor" name="object_editor" placeholder="<?php _e('Object Content','tainacan'); ?>"></textarea>
-                </div>     
+                </div>
             </div>
             <!-- TAINACAN: UPLOAD DE ANEXOS DOS ITEMS -->
-               <?php if(!$view_helper->mediaHabilitate): ?> 
-                    <div id="<?php echo $view_helper->get_id_list_properties('attachments','attachments'); ?>" 
-                        <?php echo $view_helper->get_visibility($view_helper->terms_fixed['attachments']) ?> 
+               <?php if(!$view_helper->mediaHabilitate): ?>
+                    <div id="<?php echo $view_helper->get_id_list_properties('attachments','attachments'); ?>"
+                        <?php echo $view_helper->get_visibility($view_helper->terms_fixed['attachments']) ?>
                         class="form-group" <?php do_action('item_attachments_attributes') ?> >
-                        <h2> 
-                           <?php echo ($view_helper->terms_fixed['attachments']) ? $view_helper->terms_fixed['attachments']->name :  _e('Attachments','tainacan') ?> 
-                            <a class="pull-right" 
-                              style="margin-right: 15px;" 
+                        <h2>
+                           <?php echo ($view_helper->terms_fixed['attachments']) ? $view_helper->terms_fixed['attachments']->name :  _e('Attachments','tainacan') ?>
+                            <a class="pull-right"
+                              style="margin-right: 15px;"
                                 >
-                                <span title="<?php _e('Upload attachments for your item','tainacan'); ?>" 
+                                <span title="<?php _e('Upload attachments for your item','tainacan'); ?>"
                                data-toggle="tooltip" data-placement="bottom" class="glyphicon glyphicon-question-sign"></span>
                             </a>
-                            <?php 
+                            <?php
                                 echo $view_helper->setValidation($collection_id, $view_helper->terms_fixed['attachments']->term_id, 'attachments');
                             ?>
                         </h2>
                         <div >
-                            <div id="dropzone_new" <?php ($socialdb_collection_attachment=='no') ? print_r('style="display:none"') : '' ?> 
+                            <div id="dropzone_new" <?php ($socialdb_collection_attachment=='no') ? print_r('style="display:none"') : '' ?>
                                 class="dropzone"
                                 style="margin-bottom: 15px;min-height: 150px;padding-top: 0px;">
                                     <div class="dz-message" data-dz-message>
                                      <span style="text-align: center;vertical-align: middle;">
                                          <h3>
                                              <span class="glyphicon glyphicon-upload"></span>
-                                             <b><?php _e('Drop Files','tainacan')  ?></b> 
+                                             <b><?php _e('Drop Files','tainacan')  ?></b>
                                                  <?php _e('to upload','tainacan')  ?>
                                          </h3>
                                          <h4>(<?php _e('or click','tainacan')  ?>)</h4>
                                      </span>
                                  </div>
                             </div>
-                        </div>    
-                    </div>    
-                 <?php endif; ?>   
+                        </div>
+                    </div>
+                 <?php endif; ?>
             <?php endif; ?>
             <!-- TAINACAN: thumbnail do item -->
             <?php if(!$view_helper->mediaHabilitate): ?>
-            <div id="<?php echo $view_helper->get_id_list_properties('thumbnail','thumbnail_id'); ?>" 
+            <div id="<?php echo $view_helper->get_id_list_properties('thumbnail','thumbnail_id'); ?>"
                  class="form-group"
-                <?php echo $view_helper->get_visibility($view_helper->terms_fixed['thumbnail']) ?>  
+                <?php echo $view_helper->get_visibility($view_helper->terms_fixed['thumbnail']) ?>
                 <?php do_action('item_thumbnail_attributes') ?>>
-                <h2> 
-                    <?php echo ($view_helper->terms_fixed['thumbnail']) ? $view_helper->terms_fixed['thumbnail']->name :  _e('Thumbnail','tainacan') ?> 
+                <h2>
+                    <?php echo ($view_helper->terms_fixed['thumbnail']) ? $view_helper->terms_fixed['thumbnail']->name :  _e('Thumbnail','tainacan') ?>
                     <?php do_action('optional_message') ?>
-                    <a class="pull-right" 
-                       style="margin-right: 15px;" 
+                    <a class="pull-right"
+                       style="margin-right: 15px;"
                        >
-                        <span  title="<?php _e('Insert a thumbnail in your item!','tainacan'); ?>" 
+                        <span  title="<?php _e('Insert a thumbnail in your item!','tainacan'); ?>"
                        data-toggle="tooltip" data-placement="bottom" class="glyphicon glyphicon-question-sign"></span>
                     </a>
-                    <?php 
+                    <?php
                         echo $view_helper->setValidation($collection_id, $view_helper->terms_fixed['thumbnail']->term_id, 'thumbnail');
                     ?>
                 </h2>
@@ -180,26 +182,26 @@
                         </div>
                         <input type="file"
                                id="object_thumbnail"
-                               
+
                                name="object_thumbnail"
-                               class="form-control auto-save">  
+                               class="form-control auto-save">
                 </div>
-            </div>    
+            </div>
             <?php endif; ?>
             <!-- TAINACAN: a fonte do item -->
-            <div id="<?php echo $view_helper->get_id_list_properties('source','socialdb_object_dc_source'); ?>"  
+            <div id="<?php echo $view_helper->get_id_list_properties('source','socialdb_object_dc_source'); ?>"
                  class="form-group"
-                <?php echo $view_helper->get_visibility($view_helper->terms_fixed['source']) ?>    
+                <?php echo $view_helper->get_visibility($view_helper->terms_fixed['source']) ?>
                 <?php do_action('item_source_attributes') ?>>
-                <h2> 
-                    <?php echo ($view_helper->terms_fixed['source']) ? $view_helper->terms_fixed['source']->name :  _e('Source','tainacan') ?> 
-                    <a class="pull-right" 
-                       style="margin-right: 15px;" 
+                <h2>
+                    <?php echo ($view_helper->terms_fixed['source']) ? $view_helper->terms_fixed['source']->name :  _e('Source','tainacan') ?>
+                    <a class="pull-right"
+                       style="margin-right: 15px;"
                         >
-                        <span title="<?php _e('What\'s the item source','tainacan'); ?>" 
+                        <span title="<?php _e('What\'s the item source','tainacan'); ?>"
                        data-toggle="tooltip" data-placement="bottom" class="glyphicon glyphicon-question-sign"></span>
                     </a>
-                    <?php 
+                    <?php
                         echo $view_helper->setValidation($collection_id, $view_helper->terms_fixed['source']->term_id, 'source');
                     ?>
                 </h2>
@@ -211,55 +213,55 @@
                            name="object_source"
                            placeholder="<?php _e('What\'s the item source','tainacan'); ?>"
                            value="" >
-                  </div>   
+                  </div>
             </div>
             <!-- TAINACAN: a descricao do item -->
-            <div id="<?php echo $view_helper->get_id_list_properties('description','post_content'); ?>" 
+            <div id="<?php echo $view_helper->get_id_list_properties('description','post_content'); ?>"
                  class="form-group"
                  <?php echo $view_helper->get_visibility($view_helper->terms_fixed['description']) ?>
                  >
                 <h2>
-                     <?php echo ($view_helper->terms_fixed['description']) ? $view_helper->terms_fixed['description']->name :  _e('Description','tainacan') ?> 
-                    <a class="pull-right" 
-                       style="margin-right: 15px;" 
+                     <?php echo ($view_helper->terms_fixed['description']) ? $view_helper->terms_fixed['description']->name :  _e('Description','tainacan') ?>
+                    <a class="pull-right"
+                       style="margin-right: 15px;"
                         >
-                        <span title="<?php _e('Describe your item','tainacan'); ?>" 
+                        <span title="<?php _e('Describe your item','tainacan'); ?>"
                        data-toggle="tooltip" data-placement="bottom" class="glyphicon glyphicon-question-sign"></span>
                     </a>
-                    <?php 
+                    <?php
                         echo $view_helper->setValidation($collection_id, $view_helper->terms_fixed['description']->term_id, 'description');
                     ?>
                 </h2>
                 <div >
-                    <textarea class="form-control auto-save" 
+                    <textarea class="form-control auto-save"
                               rows="8"
-                              id="object_description_example" 
+                              id="object_description_example"
                               placeholder="<?php _e('Describe your item','tainacan'); ?>"
                               name="object_description" ></textarea>
                 </div>
             </div>
             <!-- TAINACAN: tags do item -->
-            <div id="<?php echo $view_helper->get_id_list_properties('tags','tag'); ?>" 
+            <div id="<?php echo $view_helper->get_id_list_properties('tags','tag'); ?>"
                  class="form-group"
-                <?php echo $view_helper->get_visibility($view_helper->terms_fixed['tags']) ?> 
+                <?php echo $view_helper->get_visibility($view_helper->terms_fixed['tags']) ?>
                 <?php do_action('item_tags_attributes') ?>>
                 <h2>
-                    <?php echo ($view_helper->terms_fixed['tags']) ? $view_helper->terms_fixed['tags']->name :  _e('Tags','tainacan') ?> 
-                    <a class="pull-right" 
-                       style="margin-right: 15px;" 
+                    <?php echo ($view_helper->terms_fixed['tags']) ? $view_helper->terms_fixed['tags']->name :  _e('Tags','tainacan') ?>
+                    <a class="pull-right"
+                       style="margin-right: 15px;"
                        >
-                        <span  title="<?php _e('The set of tags may be inserted by comma','tainacan') ?>" 
+                        <span  title="<?php _e('The set of tags may be inserted by comma','tainacan') ?>"
                        data-toggle="tooltip" data-placement="bottom" class="glyphicon glyphicon-question-sign"></span>
                     </a>
-                    <?php 
+                    <?php
                         echo $view_helper->setValidation($collection_id, $view_helper->terms_fixed['tags']->term_id, 'tags');
                     ?>
                 </h2>
                 <div  >
-                    <input type="text" 
-                           class="form-control auto-save" 
-                           id="object_tags" 
-                           name="object_tags"  
+                    <input type="text"
+                           class="form-control auto-save"
+                           id="object_tags"
+                           name="object_tags"
                            placeholder="<?php _e('The set of tags may be inserted by comma','tainacan') ?>">
                  </div>
             </div>
@@ -276,32 +278,32 @@
                  <?php echo $view_helper->get_visibility($view_helper->terms_fixed['license']) ?>
                  >
                 <h2>
-                    <?php echo ($view_helper->terms_fixed['license']) ? $view_helper->terms_fixed['license']->name :  _e('Licenses','tainacan') ?> 
-                    <a class="pull-right" 
-                       style="margin-right: 15px;" 
+                    <?php echo ($view_helper->terms_fixed['license']) ? $view_helper->terms_fixed['license']->name :  _e('Licenses','tainacan') ?>
+                    <a class="pull-right"
+                       style="margin-right: 15px;"
                        >
-                        <span  title="<?php _e('Licenses available for this item','tainacan') ?>" 
+                        <span  title="<?php _e('Licenses available for this item','tainacan') ?>"
                        data-toggle="tooltip" data-placement="bottom" class="glyphicon glyphicon-question-sign"></span>
                     </a>
                     <a id='required_field_license'  style="padding: 3px;" >
-                                &nbsp; <span  title="<?php echo __('This metadata is required!','tainacan')?>" 
+                                &nbsp; <span  title="<?php echo __('This metadata is required!','tainacan')?>"
                                data-toggle="tooltip" data-placement="top" >*</span>
                     </a>
                     <a id='ok_field_license'  style="display: none;padding: 3px;margin-left: -30px;" >
-                            &nbsp; <span class="glyphicon glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>" 
+                            &nbsp; <span class="glyphicon glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>"
                            data-toggle="tooltip" data-placement="top" ></span>
                     </a>
-                    <input type="hidden" 
-                                 id='core_validation_license' 
-                                 class='core_validation' 
+                    <input type="hidden"
+                                 id='core_validation_license'
+                                 class='core_validation'
                                  value='false'>
-                    <input type="hidden" 
-                                 id='core_validation_license_message'  
+                    <input type="hidden"
+                                 id='core_validation_license_message'
                                  value='<?php echo sprintf(__('The field license is required','tainacan'),$property['name']); ?>'>
                 </h2>
                 <div id="show_form_licenses"></div>
                 <input type="hidden" class="auto-save" id="property_license_id" value="<?php echo $view_helper->terms_fixed['license']->term_id ?>">
-             </div>  
+             </div>
              <!-- TAINACAN: votacoes do item -->
              <div id="create_list_ranking_<?php echo $object_id ?>"></div>
             </div>
@@ -309,20 +311,20 @@
             <?php if($view_helper->hide_main_container): ?>
                 <br><br>
                  <!--button onclick="back_main_list();" style="margin-bottom: 20px;"  class="btn btn-default btn-lg pull-left"><b><?php _e('Back','tainacan') ?></b></button-->
-                <button type="button" onclick="back_main_list();" 
+                <button type="button" onclick="back_main_list();"
                         style="margin-bottom: 20px;color" class="btn btn-default btn-lg pull-left"><?php _e('Cancel','tainacan'); ?></button>
                 <div id="submit_container">
                     <button type="submit" id="submit" style="margin-bottom: 20px;" class="btn btn-success btn-lg pull-right send-button"><?php _e('Submit','tainacan'); ?></button>
-                </div>  
+                </div>
                 <div id="submit_container_message" style="display: none;">
                      <button type="button" onclick="show_message()" style="margin-bottom: 20px;" class="btn btn-success btn-lg pull-right send-button"><?php _e('Submit','tainacan'); ?></button>
-                </div> 
+                </div>
             <?php endif; ?>
-        </div>    
+        </div>
         <?php if($view_helper->mediaHabilitate): ?>
             <!-- Thumbnail e anexos -->
             <div class="col-md-3" id="mediaHabilitateContainer" style="display: none; background: white;border: 3px solid #E8E8E8;font: 11px Arial;;padding: 1% 2% 0px 15px;margin-top: 0px">
-                <h4> 
+                <h4>
                    <?php echo ($view_helper->terms_fixed['thumbnail']) ? $view_helper->terms_fixed['thumbnail']->name :  _e('Thumbnail','tainacan') ?>
                </h4>
                 <hr>
@@ -333,35 +335,34 @@
                         <input type="file"
                                id="object_thumbnail"
                                name="object_thumbnail"
-                               class="form-control auto-save">  
+                               class="form-control auto-save">
                 </div>
                 <br><br>
-                <h4> 
+                <h4>
                    <?php echo ($view_helper->terms_fixed['attachments']) ? $view_helper->terms_fixed['attachments']->name :  _e('Attachments','tainacan') ?>
                </h4>
                 <hr>
                  <div >
                      <center>
-                     <div id="dropzone_new" <?php ($socialdb_collection_attachment=='no') ? print_r('style="display:none"') : '' ?> 
+                     <div id="dropzone_new" <?php ($socialdb_collection_attachment=='no') ? print_r('style="display:none"') : '' ?>
                          class="dropzone"
                          style="margin-bottom: 15px;min-height: 150px;padding-top: 0px;">
                                 <div class="dz-message" data-dz-message>
                                     <span style="text-align: center;vertical-align: middle;">
                                         <h3>
                                             <span class="glyphicon glyphicon-upload"></span>
-                                            <b><?php _e('Drop Files','tainacan')  ?></b> 
+                                            <b><?php _e('Drop Files','tainacan')  ?></b>
                                                 <?php _e('to upload','tainacan')  ?>
                                         </h3>
                                         <h4>(<?php _e('or click','tainacan')  ?>)</h4>
                                     </span>
                                 </div>
                      </div>
-                     </center>   
+                     </center>
                  </div>
             </div>
         <?php endif; ?>
-        <div style="<?php echo ($view_helper->hide_main_container)?'display:none;':'' ?>background: white;border: 3px solid #E8E8E8;margin-left: 15px;width: 74%;" 
-             class="col-md-9">
+        <div style="<?php echo ($view_helper->hide_main_container)?'display:none;':'' ?>" class="col-md-9 add-item-container">
             <h3>
                 <?php if(has_action('label_add_item')): ?>
                        <?php do_action('label_add_item',$object_name) ?>
@@ -374,44 +375,44 @@
                 <small id="draft-text"></small>
             </h3>
             <hr>
-            <?php 
+            <?php
             //se for no modo dois containeres
-            if(!$mode): 
-            ?>  
-                <div <?php echo $view_helper->get_visibility($view_helper->terms_fixed['title']) ?> 
+            if(!$mode):
+            ?>
+                <div <?php echo $view_helper->get_visibility($view_helper->terms_fixed['title']) ?>
                     class="form-group">
                     <label for="object_name">
-                        <?php echo ($view_helper->terms_fixed['title']) ? $view_helper->terms_fixed['title']->name :  _e('Title','tainacan') ?> 
+                        <?php echo ($view_helper->terms_fixed['title']) ? $view_helper->terms_fixed['title']->name :  _e('Title','tainacan') ?>
                     </label>
-                    <input class="form-control auto-save" 
-                        <?php echo ($view_helper->get_visibility($view_helper->terms_fixed['title'])=='')?'required="required"':'' ?>  
-                           type="text"  
-                           id="object_name" 
-                           name="object_name"  
+                    <input class="form-control auto-save"
+                        <?php echo ($view_helper->get_visibility($view_helper->terms_fixed['title'])=='')?'required="required"':'' ?>
+                           type="text"
+                           id="object_name"
+                           name="object_name"
                            placeholder="<?php _e('Item name','tainacan'); ?>">
                 </div>
                 <!-- Tainacan: type do objeto -->
-                <div class="form-group" 
+                <div class="form-group"
                     <?php echo $view_helper->get_visibility($view_helper->terms_fixed['type']) ?>
                     <?php do_action('item_from_attributes') ?>>
                     <label for="object_name">
-                        <?php echo ($view_helper->terms_fixed['type']) ? $view_helper->terms_fixed['type']->name :  _e('Type','tainacan') ?> 
+                        <?php echo ($view_helper->terms_fixed['type']) ? $view_helper->terms_fixed['type']->name :  _e('Type','tainacan') ?>
                     </label><br>
-                    <input type="radio" 
+                    <input type="radio"
                            disabled="disabled"
                            checked="checked"
-                           value="text" 
+                           value="text"
                            required>&nbsp;<?php _e('Text','tainacan'); ?>
-                    <input type="radio" 
+                    <input type="radio"
                            disabled="disabled"
                            value="video" >&nbsp;<?php _e('Video','tainacan'); ?>
-                    <input type="radio"  
+                    <input type="radio"
                            disabled="disabled"
                            value="image" required>&nbsp;<?php _e('Image','tainacan'); ?>
-                    <input type="radio" 
+                    <input type="radio"
                            disabled="disabled"
                            value="pdf" required>&nbsp;<?php _e('PDF','tainacan'); ?>
-                    <input type="radio" 
+                    <input type="radio"
                            disabled="disabled"
                            value="audio" required>&nbsp;<?php _e('Audio','tainacan'); ?>
                     <input type="radio"
@@ -420,63 +421,62 @@
                     <br>
                 </div>
                <!-- TAINACAN: Campo com o ckeditor para items do tipo texto -->
-               <div id="object_content_text" 
-                     <?php echo $view_helper->get_visibility($view_helper->terms_fixed['content']) ?> 
+               <div id="object_content_text"
+                     <?php echo $view_helper->get_visibility($view_helper->terms_fixed['content']) ?>
                     class="form-group" <?php do_action('item_content_attributes') ?>>
                     <label for="object_editor">
-                        <?php echo ($view_helper->terms_fixed['content']) ? $view_helper->terms_fixed['content']->name :  _e('Content','tainacan') ?> 
+                        <?php echo ($view_helper->terms_fixed['content']) ? $view_helper->terms_fixed['content']->name :  _e('Content','tainacan') ?>
                     </label>
                     <textarea class="form-control auto-save" id="object_editor" name="object_editor" placeholder="<?php _e('Object Content','tainacan'); ?>">
                     </textarea>
                 </div>
                 <!-- TAINACAN: UPLOAD DE ANEXOS DOS ITEMS -->
-                <div  <?php echo $view_helper->get_visibility($view_helper->terms_fixed['attachments']) ?> 
+                <div  <?php echo $view_helper->get_visibility($view_helper->terms_fixed['attachments']) ?>
                     class="form-group">
                     <label for="attachments">
-                        <?php echo ($view_helper->terms_fixed['attachments']) ? $view_helper->terms_fixed['attachments']->name :  _e('Attachments','tainacan') ?> 
+                        <?php echo ($view_helper->terms_fixed['attachments']) ? $view_helper->terms_fixed['attachments']->name :  _e('Attachments','tainacan') ?>
                     </label>
-                    <div <?php do_action('item_attachments_attributes') ?> 
-                        id="dropzone_new" <?php ($socialdb_collection_attachment=='no') ? print_r('style="display:none"') : '' ?> 
+                    <div <?php do_action('item_attachments_attributes') ?>
+                        id="dropzone_new" <?php ($socialdb_collection_attachment=='no') ? print_r('style="display:none"') : '' ?>
                         class="dropzone"
                         style="margin-bottom: 15px;min-height: 150px;padding-top: 0px;">
                             <div class="dz-message" data-dz-message>
                              <span style="text-align: center;vertical-align: middle;">
                                  <h2>
                                      <span class="glyphicon glyphicon-upload"></span>
-                                     <b><?php _e('Drop Files','tainacan')  ?></b> 
+                                     <b><?php _e('Drop Files','tainacan')  ?></b>
                                          <?php _e('to upload','tainacan')  ?>
                                  </h2>
                                  <h4>(<?php _e('or click','tainacan')  ?>)</h4>
                              </span>
                          </div>
                     </div>
-                </div>               
-            <?php endif; ?>    
-                <input type="hidden" 
-                       id="object_classifications" 
-                       name="object_classifications" 
+                </div>
+            <?php endif; ?>
+                <input type="hidden"
+                       id="object_classifications"
+                       name="object_classifications"
                        value="<?php echo (isset($classifications)&&$classifications)? $classifications: "" ?>">
                 <input type="hidden" id="object_content" name="object_content" value="">
                 <input type="hidden" id="create_object_collection_id" name="collection_id" value="">
                 <input type="hidden" id="operation" name="operation" value="add">
                 <!--button onclick="back_main_list();" style="margin-bottom: 20px;"  class="btn btn-default btn-lg pull-left"><b><?php _e('Back','tainacan') ?></b></button-->
-                <button type="button" 
-                        onclick="back_main_list(<?php echo $object_id ?>);" 
-                        style="margin-bottom: 20px;color" 
+                <button type="button"
+                        onclick="back_main_list(<?php echo $object_id ?>);"
+                        style="margin-bottom: 20px;color"
                         class="btn btn-default btn-lg pull-left">
                             <?php _e('Discard','tainacan'); ?>
                 </button>
                 <div id="submit_container">
-                    <button type="submit" 
-                            id="submit" 
-                            style="margin-bottom: 20px;" 
+                    <button type="submit"
+                            id="submit"
+                            style="margin-bottom: 20px;"
                             class="btn btn-success btn-lg pull-right send-button">
                                 <?php _e('Save','tainacan'); ?></button>
-                </div>  
+                </div>
                 <div id="submit_container_message" style="display: none;">
                      <button type="button" onclick="show_message()" style="margin-bottom: 20px;" class="btn btn-success btn-lg pull-right send-button"><?php _e('Save','tainacan'); ?></button>
-                </div>     
+                </div>
         </div>
-    </div> 
+    </div>
 </form>
-    
