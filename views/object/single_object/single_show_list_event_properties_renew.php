@@ -110,7 +110,7 @@ $ids = [];
 
         </div>
         </div>
-        <?php } ?>
+    <?php } ?>
 <?php
 endif;
 

@@ -121,6 +121,12 @@
             $('#single_list_all_properties_' + id).html(result);
             var main_height = $('#single_item_tainacan .item-main-data').height();
             $("#single_item_tainacan .item-attachments").height(main_height);
+
+            var meta_count = $('#single_list_all_properties_' + id + ' .col-md-6').length;
+            if( meta_count > 0 && (meta_count % 2 != 0) ) {
+                var last_meta = $('#single_list_all_properties_' + id + ' .col-md-6').last();
+                $(last_meta).removeClass('col-md-6').addClass('col-md-12').css('border-top', '3px solid #E8E8E8');
+            }
         });
     }
 // mostra a listagem apos clique no botao para edicao e exclusao

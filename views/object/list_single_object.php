@@ -503,7 +503,9 @@ $view_helper = new ObjectHelper($collection_id);
                     </div>
 
                     <div>
-                        <div id="single_list_all_properties_<?php echo $object->ID ?>" class="single_list_properties"><center><img width="100" heigth="100" src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>"><?php _e('Loading metadata for this item','tainacan') ?></center></div>
+                        <div id="single_list_all_properties_<?php echo $object->ID ?>" class="single_list_properties">
+                            <center><img width="100" heigth="100" src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>"><?php _e('Loading metadata for this item','tainacan') ?></center>
+                        </div>
                         <div id="single_data_property_form_<?php echo $object->ID ?>"></div>
                         <div id="single_object_property_form_<?php echo $object->ID ?>"></div>
                         <div id="single_edit_data_property_form_<?php echo $object->ID ?>"></div>
