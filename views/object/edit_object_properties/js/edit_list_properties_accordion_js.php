@@ -825,7 +825,7 @@
                 <?php if(!$is_view_mode): ?>
                 var id = $( this ).attr('id').replace('core_validation_','');
                 $('#meta-item-'+id+' h2').css('background-color','#ffcccc');
-                $.each($( "#submit_form .tab-pane" ),function(index,seletor){
+                $.each($( "#submit_form_edit_object .tab-pane" ),function(index,seletor){
                     if($(seletor).find('#meta-item-'+id).length > 0){
                         var id_tab = $(seletor ).attr('id').replace('tab-','');
                         $('#click-tab-'+id_tab).css('background-color','#ffcccc');
@@ -835,7 +835,7 @@
             }
         });
         <?php if(!$is_view_mode): ?>
-        $.each($( "#submit_form .tab-pane" ),function(index,seletor){
+        $.each($( "#submit_form_edit_object .tab-pane" ),function(index,seletor){
                 var id_tab = $(seletor ).attr('id').replace('tab-','');
                 $( seletor).find(".core_validation").each(function( index ) {
                     if($( this ).val()==='false'){

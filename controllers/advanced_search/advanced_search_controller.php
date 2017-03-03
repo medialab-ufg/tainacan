@@ -135,8 +135,8 @@ class AdvancedSearchController extends Controller {
                         $args_collection['collection_id'] = $data['advanced_search_collection'];
                         $paramters_collection = $wpquery_model->do_filter($args_collection);
                         //$loop_objects = new WP_Query($paramters_object);
-                        //$loop_collections = new WP_Query($paramters_collection);
-                   
+                        $loop_collections = new WP_Query($paramters_collection);
+                        $loop_objects = new WP_Query($paramters_object);
                 } else{
                         $args_object = $wpquery_model->advanced_searched_filter($data);
                         $paramters_object = $wpquery_model->do_filter($args_object);
@@ -145,9 +145,11 @@ class AdvancedSearchController extends Controller {
                 
                 if ($paramters_object) : 
                     $return['args_item'] = serialize($args_object);
+                    $return['has_item'] = $loop_objects->have_posts();
                 endif;
                 if ($paramters_collection) : 
                     $return['args_collection'] =  serialize($args_collection);
+                    $return['has_collection'] = $loop_collections->have_posts();
                 endif;
                 $logData = ['collection_id' => $data['collection_id'], 'event_type' => 'advanced_search', 'event' => $data['advanced_search_general'] ];
                 Log::addLog($logData);

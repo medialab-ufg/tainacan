@@ -53,13 +53,31 @@
                     if (elem.args_item) {
                         search_items_query = elem.args_item;
                     }
-                    $('#click_ad_search_collection').trigger('click');
+                    console.log(elem.has_collection , elem.has_item);
+                    if(elem.has_collection && elem.has_item){
+                        $('#click_ad_search_collection').parent().show();
+                        $('#click_ad_search_items').parent().show();
+                        $('#click_ad_search_collection').trigger('click');
+                    }else if(elem.has_collection && !elem.has_item){
+                        $('#click_ad_search_collection').trigger('click');
+                        $('#click_ad_search_collection').parent().show();
+                        $('#click_ad_search_items').parent().hide();
+                    }else if(!elem.has_collection && elem.has_item){
+                        $('#click_ad_search_items').trigger('click');
+                        $('#click_ad_search_collection').parent().hide();
+                        $('#click_ad_search_items').parent().show();
+                    }else if(!elem.has_collection && !elem.has_item){
+                         $('#click_ad_search_items').trigger('click');
+                        $('#click_ad_search_collection').parent().hide();
+                        $('#click_ad_search_items').parent().hide();
+                    }
+                    
                 }
                 else if (elem.args_item) {
                     search_items_query = elem.args_item;
                     $('#wp_query_args').val(search_items_query);
-                    if( $('#click_ad_search_item').length>0){
-                        $('#click_ad_search_item').trigger('click');
+                    if( $('#click_ad_search_items').length>0){
+                        $('#click_ad_search_items').trigger('click');
                     }else{
                         wpquery_filter();
                     }
@@ -89,7 +107,12 @@
         if($('#propertiesRootAdvancedSearch').length>0){
             $('#propertiesRootAdvancedSearch').html('<center><img src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>"><h3><?php _e('Please wait...', 'tainacan') ?></h3></center>');   
             show_collection_properties_root($('#collection_id').val());
-            wpquery_clean(); 
+            //wpquery_clean(); 
+            search_collections_query = '';
+            search_items_query = '';
+            $('#click_ad_search_collection').parent().show();
+            $('#click_ad_search_items').parent().show();
+            $('#click_ad_search_collection').trigger('click');
         }
     }
     // atualiza o container com as propriedades da colecao que foi selecionada no selectbox
