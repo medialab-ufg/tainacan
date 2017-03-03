@@ -1246,6 +1246,7 @@
         wpquery_clean();
         list_main_ordenation_filter();
         $('.modal-backdrop').hide();
+        $('#main_part_collection').hide();
         $("#category_page").val('');
         $("#property_page").val('');
         $('#display_view_main_page').show();
