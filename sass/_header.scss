@@ -438,3 +438,19 @@ a:hover{text-decoration:underline}
   @include header_style();
   background-size: cover !important;
 }
+
+.headers_container {
+  .collection_header {
+    padding: 0;
+    margin: 0;
+    border: none;
+    border-radius: 0;
+    background-image: url(../images/capa-colecao.png);
+  }
+  .sharings-container {
+    padding-bottom: 10px;
+    .share-link {
+      float: right;
+    }
+  }
+} // .headers_container
