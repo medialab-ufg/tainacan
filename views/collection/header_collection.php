@@ -253,8 +253,10 @@ $thumb_url = $collection_thumb ? wp_get_attachment_url($collection_thumb) : get_
 
             <?php
         }
-        wp_nav_menu(['theme_location' => 'menu-ibram', 'container_class' => 'containewr', 'container' => false,
-            'menu_class' => 'navbar navbar-inverse menu-ibram', 'walker' => new wp_bootstrap_navwalker()]);
+        wp_nav_menu([ 'theme_location' => 'menu-ibram', 'container_class' => 'container',
+            'container' => false, 'depth'=> 3,
+            'menu_class' => 'navbar navbar-inverse menu-ibram',
+            'walker' => new wp_bootstrap_navwalker() ]);
     }
     ?>
 </div>

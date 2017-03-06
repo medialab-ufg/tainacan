@@ -553,6 +553,8 @@ $(window).load(function () {
         });
 
     });
+
+
     
 });
 
@@ -568,6 +570,13 @@ $(document).ready(function () {
         $(this).find('ul:first').css('display', 'block');
     }, function () {
         $(this).find('ul:first').css('display', 'none');
+    });
+
+    $('#menu-ibram-menu ul.dropdown-menu [data-toggle=dropdown]').on('click', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        $(this).parent().siblings().removeClass('open');
+        $(this).parent().toggleClass('open');
     });
 
 });

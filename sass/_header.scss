@@ -214,9 +214,21 @@ button#iframebutton {
   min-height: 40px !important;
   padding-left: 15px;
 
+  .dropdown-submenu {
+    position:relative;
+    > .dropdown-menu {
+      /*
+      top:0;
+      left:100%;
+      margin-top:-60px;
+      margin-left:-1px;
+      */
+    }
+  }
+
   li {
     display: inline-table;
-    padding: 10px 20px 0 20px;
+    padding: 10px 20px 6px 20px;
 
     &:first-child {
       padding-left: 0 !important;
@@ -236,9 +248,14 @@ button#iframebutton {
           &:hover {
             background: transparent;
           }
-        }
+
+          span {
+            display: none;
+          }
+
+        } // a
       }
-    }
+    } // ul
 
     a {
       color: white !important;
