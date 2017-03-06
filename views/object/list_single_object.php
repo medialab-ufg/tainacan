@@ -44,12 +44,11 @@ $view_helper = new ObjectHelper($collection_id);
                 </span>
                 <small>
                     <?php if (verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_property_data_value', $object_id)): ?>
-                        <button type="button" alt="<?php _e('Cancel modification', 'tainacan') ?>" onclick="cancel_title()" id="cancel_title" class="btn btn-default btn-xs" style="display: none;" >
+                        <button type="button" title="<?php _e('Cancel modification', 'tainacan') ?>" onclick="cancel_title()" id="cancel_title" class="btn btn-default btn-xs" style="display: none;" >
                             <span class="glyphicon glyphicon-arrow-left" ></span>
                         </button>
                         <button type="button" onclick="edit_title()" id="edit_title" class="btn btn-default btn-xs">
-                            <span class="glyphicon glyphicon-edit"></span>
-                            <?php // viewHelper::render_icon("edit_object"); ?>
+                            <span class="glyphicon glyphicon-edit"></span> <?php // viewHelper::render_icon("edit_object"); ?>
                         </button>
                         <button type="button" onclick="save_title('<?php echo $object->ID ?>')" id="save_title" class="btn btn-default btn-xs" style="display: none;"><span class="glyphicon glyphicon-floppy-disk"></span></button>
                     <?php endif; ?>
@@ -309,33 +308,25 @@ $view_helper = new ObjectHelper($collection_id);
                                 <?php
                                 // Evento para alteracao do thumbnail de um item
                                 // verifico se o metadado pode ser alterado
-                                if (verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_property_data_value', $object_id)):
-                                    ?>
+                                if (verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_property_data_value', $object_id)): ?>
                                     <div style="margin-top: 5px;">
                                         <button type="button" onclick="edit_thumbnail()" id="edit_thumbnail" class="btn btn-default btn-xs" ><span class="glyphicon glyphicon-edit"></span></button>
                                     </div>
                                 <?php endif; ?>
                             </div>
                             <div>
-                                <?php
-                                if (get_the_post_thumbnail($object->ID, 'thumbnail')) {
+                                <?php if (get_the_post_thumbnail($object->ID, 'thumbnail')) {
                                     $url_image = wp_get_attachment_url(get_post_thumbnail_id($object->ID));
-                                    ?>
-                                                                <!--a href="#" onclick="$.prettyPhoto.open(['<?php echo $url_image; ?>'], [''], ['']);
-                                                                            return false">
-                                                                    <!-- <img src="< ?php echo $url_image; ?>" class="img-responsive" /> -->
-                                    <?php echo get_the_post_thumbnail($object->ID, 'thumbnail'); ?>
-                                    <!--/a-->
-                                <?php } else { ?>
+                                    echo get_the_post_thumbnail($object->ID, 'thumbnail');
+                                } else { ?>
                                     <img class="img-responsive" src="<?php echo get_item_thumbnail_default($object->ID); ?>" width="45%" />
                                 <?php } ?>
                             </div>
-
-
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 right-container" style="margin-left: 0px;">
+
+                <div class="col-md-6 right-container" style="margin-left: 0;">
                     <div class="item-ranking box-item-paddings box-item-right" style="border-top:none">
                         <h4 class="title-pipe single-title"> <?php _e('Ranking', 'tainacan'); ?></h4>
                         <div id="single_list_ranking_<?php echo $object->ID; ?>" class="row"></div>

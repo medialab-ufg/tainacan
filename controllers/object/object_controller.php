@@ -612,12 +612,11 @@ class ObjectController extends Controller {
             case 'insertUserDownload':
                 if (is_user_logged_in()) {
                     $logData = ['collection_id' => $data['collection_id'], 'item_id' => $data['item_id'],
-                        'event_type' => 'user_items', 'event' => 'download'];
+                        'event_type' => 'user_items', 'event' => 'download', 'resource_id' => $data['thumb_id']];
                     Log::addLog($logData);
                     add_post_meta($data['thumb_id'], 'socialdb_user_download_' . time(), get_current_user_id());
                 }
                 return true;
-                break;
             case 'edit_multiple_items':
                 $set = [];
                 if (!$data['items_data']) {

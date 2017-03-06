@@ -134,7 +134,7 @@ $thumb_url = $collection_thumb ? wp_get_attachment_url($collection_thumb) : get_
                             <div class="fab"><small><h6><b>items</b></h6></small></div>
                         </a-->
                         <?php endif; ?>
-                        <div class="dropdown collec_menu_opnr" style="padding:0px;">
+                        <div class="dropdown collec_menu_opnr" style="padding:0;">
                             <a href="javascript:void(0)" id="resources_collection_button" class="dropdown-toggle share-link" data-toggle="dropdown"
                                role="button" aria-expanded="false">
                                 <div class="fab">

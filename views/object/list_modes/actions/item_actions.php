@@ -52,15 +52,21 @@ if($is_single_page) {
 
             if($is_single_page) {
                 if ($collection_metas == 'allowed' || ($collection_metas == 'moderate' && is_user_logged_in()) || ($collection_metas == 'controlled' && ($is_moderator || $object->post_author == get_current_user_id()))) {
+                    $thumb_id = get_post_thumbnail_id($object->ID, 'full');
                     if ($metas['socialdb_object_dc_type'][0] == 'image') {
                         $url_image = wp_get_attachment_url(get_post_thumbnail_id($object->ID, 'full'));
-                        $thumbail_id = get_post_thumbnail_id($object->ID, 'full'); ?>
+                         ?>
                         <li>
-                            <a href="<?php echo $url_image; ?>" download="<?php echo $object->post_title; ?>.jpg" onclick="downloadItem('<?php echo $thumbail_id; ?>');">
+                            <a href="<?php echo $url_image; ?>" download="<?php echo $object->post_title; ?>.jpg" onclick="downloadItem('<?php echo $thumb_id; ?>');">
                                 <?php _t('Download item file', 1); ?>
                             </a>
                         </li>
                         <?php
+                    } else if($metas['socialdb_object_dc_type'][0] == 'pdf') {
+                        if ($metas['socialdb_object_from'][0] == 'internal' && wp_get_attachment_url($metas['socialdb_object_content'][0])) {
+                            $_file_url_ = wp_get_attachment_url($metas['socialdb_object_content'][0]); ?>
+                            <li><a href="<?php echo $_file_url_?>" download> <?php _t('Download item file', 1); ?> </a> </li>
+                        <?php }
                     }
                 }
             }
