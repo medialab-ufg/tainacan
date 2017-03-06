@@ -38,7 +38,7 @@ $view_helper = new ObjectHelper($collection_id);
 
         <div class="col-md-12 content-title single-item-title tainacan-header-info no-padding">
             <div class="col-md-10" style="margin-top:14px;" <?php echo $view_helper->get_visibility($view_helper->terms_fixed['title']) ?>>
-                <h3 id="text_title"><?php echo $object->post_title; ?>
+                <h3 id="text_title"><?php echo $object->post_title; ?></h3>
                 <span id="event_title" style="display:none;">
                     <input type="text" value="<?php echo $object->post_title; ?>" id="title_field" class="form-control">
                 </span>

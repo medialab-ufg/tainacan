@@ -5,7 +5,7 @@
 class ObjectWidgetsHelper extends ViewHelper {
     
     public function generateValidationIcons($property,$is_compound = false) {
-        if ($property['metas']['socialdb_property_help']&&!empty(trim($property['metas']['socialdb_property_help']))) {
+        if ($property['metas'] &&$property['metas']['socialdb_property_help']&&!empty(trim($property['metas']['socialdb_property_help']))) {
             ?>
             <a class="pull-right" 
                 style="margin-right: 15px;<?php  if ($property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] == 'true') echo 'margin-left: -25px;' ?>" >
@@ -16,7 +16,7 @@ class ObjectWidgetsHelper extends ViewHelper {
             </a>
             <?php  
         }
-        if ($property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] == 'true') {
+        if ($property['metas'] && $property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] == 'true') {
             ?>
             <a id='required_field_<?php echo $property['id']; ?>' class="pull-right" 
                style="margin-right: 15px;color:red;" >
@@ -56,7 +56,7 @@ class ObjectWidgetsHelper extends ViewHelper {
         $coumpounds_id = [];
         if (isset($properties_compounds)):
             foreach ($properties_compounds as $property) { 
-               if(is_array($references['properties_to_avoid'])&&in_array($property['id'], $references['properties_to_avoid'])){
+               if(isset($references['properties_to_avoid']) && is_array($references['properties_to_avoid'])&&in_array($property['id'], $references['properties_to_avoid'])){
                     continue;
                 }
                $result['ids'][] = $property['id']; 
@@ -466,7 +466,7 @@ class ObjectWidgetsHelper extends ViewHelper {
         $count = count($values);
         foreach ($values as $value) {
             if(strpos($value, '_cat')!==false){
-                if(!get_terrm_by('id',str_replace('_cat', '', $value),'socialdb_category_type'))
+                if(!get_term_by('id',str_replace('_cat', '', $value),'socialdb_category_type'))
                       $emptyFields++;  
             }else {
                 $object = get_metadata_by_mid('post', $value);
