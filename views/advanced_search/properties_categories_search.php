@@ -1,94 +1,6 @@
-    <h5 style="margin-bottom: 15px;margin-top: 15px;">
-        <b>
-        <?php _e('Properties','tainacan'); ?>
-        </b>
-    </h5>
-    <div id="fields">
-        <div class="form-group">
-            <label class="col-md-12 no-padding" for="advanced_search_title"><?php _e('Title or description', 'tainacan'); ?></label>
-            <div class="col-md-8 no-padding">
-                <input type="text" 
-                      
-                       class="form-control" 
-                       name="advanced_search_title" 
-                       id="advanced_search_title" 
-                       placeholder="<?php if ($collection_id != get_option('collection_root_id')) _e('Type the item title or its description', 'tainacan'); ?>">
-            </div>
-            <!--div class="col-md-4 no-padding padding-left-space">
-                    <select class="form-control" id="advanced_search_property_title_operation" name="advanced_search_property_title_operation">
-                        <option value="1"><?php _e('Equals','tainacan'); ?></option>
-                        <option value="2"><?php _e('Not equals','tainacan'); ?></option>
-                        <option value="3"><?php _e('Contains','tainacan'); ?></option>
-                        <option value="4"><?php _e('Does not Contain','tainacan'); ?></option>
-                    </select>
-             </div-->
-        </div>
-        <div class="form-group">
-            <label class="col-md-12 no-padding" for="advanced_search_type"><?php _e('Type', 'tainacan'); ?></label>
-            <div class="col-md-8 no-padding">
-               <select class="form-control" id="advanced_search_type" name="advanced_search_type">
-                        <option value=""><?php _e('Select...','tainacan'); ?></option>
-                        <option value="text"><?php _e('Text','tainacan'); ?></option>
-                        <option value="image"><?php _e('Image','tainacan'); ?></option>
-                        <option value="pdf"><?php _e('PDF','tainacan'); ?></option>
-                        <option value="video"><?php _e('Video','tainacan'); ?></option>
-                        <option value="audio"><?php _e('Audio','tainacan'); ?></option>
-                        <option value="other"><?php _e('Other','tainacan'); ?></option>
-                </select>
-            </div>
-             <div class="col-md-4 no-padding padding-left-space">
-                    <select class="form-control" id="socialdb_property_type_operation" name="socialdb_property_type_operation">
-                        <option value="1"><?php _e('Equals','tainacan'); ?></option>
-                        <option value="2"><?php _e('Not equals','tainacan'); ?></option>
-                        <option value="3"><?php _e('Contains','tainacan'); ?></option>
-                        <option value="4"><?php _e('Does not Contain','tainacan'); ?></option>
-                    </select>
-             </div>
-        </div>
-        <div class="form-group">
-            <label class="col-md-12 no-padding" for="advanced_search_source"><?php _e('Item Source', 'tainacan'); ?></label>
-            <div class="col-md-8 no-padding">
-               <input type="text" 
-                       value="" 
-                       class="form-control" 
-                       name="advanced_search_source" 
-                       id="advanced_search_source" 
-                       placeholder="<?php _e('Item source', 'tainacan'); ?>">
-            </div>
-             <div class="col-md-4 no-padding padding-left-space">
-                    <select class="form-control" id="socialdb_property_source_operation" name="socialdb_property_source_operation">
-                        <option value="1"><?php _e('Equals','tainacan'); ?></option>
-                        <option value="2"><?php _e('Not equals','tainacan'); ?></option>
-                        <option value="3"><?php _e('Contains','tainacan'); ?></option>
-                        <option value="4"><?php _e('Does not Contain','tainacan'); ?></option>
-                    </select>
-             </div>
-        </div>
-        <div class="form-group">
-            <label class="col-md-12 no-padding" for="advanced_search_tags"><?php _e('Tags', 'tainacan'); ?></label>
-            <div class="col-md-8 no-padding">
-                <input type="text" 
-                       class="form-control" 
-                       name="advanced_search_tags" 
-                       id="advanced_search_tags" 
-                       placeholder="<?php _e('A set of tags may be searched by comma ', 'tainacan'); ?>">
-            </div>
-            <div class="col-md-4 no-padding padding-left-space">
-                   <select class="form-control" id="socialdb_property_tag_operation" name="socialdb_property_tag_operation">
-                       <option value="1"><?php _e('Equals','tainacan'); ?></option>
-                       <option value="2"><?php _e('Not equals','tainacan'); ?></option>
-                       <option value="3"><?php _e('Contains','tainacan'); ?></option>
-                       <option value="4"><?php _e('Does not Contain','tainacan'); ?></option>
-                   </select>
-            </div>     
-        </div>
-    <?php if (isset($property_data)||isset($property_term)||isset($property_object)): ?>
-    
-    <?php
-    include_once ('../../../../../wp-config.php');
-    include_once ('../../../../../wp-load.php');
-    include_once ('../../../../../wp-includes/wp-db.php');
-    include_once ('js/show_insert_object_properties_js.php');
+  <?php 
+  if (isset($property_data)||isset($property_term)||isset($property_object)): 
+    include_once ('js/properties_categories_search_js.php');
     $properties_terms_radio = [];
     $properties_terms_tree = [];
     $properties_terms_selectbox = [];
@@ -211,10 +123,7 @@
                         } elseif ($property['type'] == 'selectbox') {
                             $properties_terms_selectbox[] = $property['id'];
                             ?>
-                            <select class="form-control"
-                                    onchange="onSelectValue(this,<?php echo $property['id']; ?>)"
-                                    name="socialdb_property_<?php echo $property['id']; ?>" 
-                                    id='search_field_property_term_<?php echo $property['id']; ?>' <?php
+                            <select class="form-control" name="socialdb_property_<?php echo $property['id']; ?>" id='search_field_property_term_<?php echo $property['id']; ?>' <?php
                             
                             ?>></select>
                                     <?php
@@ -226,7 +135,7 @@
                         } elseif ($property['type'] == 'multipleselect') {
                             $properties_terms_multipleselect[] = $property['id'];
                             ?>
-                             <select   onchange="onSelectValue(this,<?php echo $property['id']; ?>)" multiple class="form-control" name="socialdb_propertyterm_<?php echo $property['id']; ?>" id='search_field_property_term_<?php echo $property['id']; ?>' ></select>
+                             <select multiple class="form-control" name="socialdb_propertyterm_<?php echo $property['id']; ?>" id='search_field_property_term_<?php echo $property['id']; ?>' ></select>
                             <?php
                         } elseif ($property['type'] == 'tree_checkbox') {
                             $properties_terms_treecheckbox[] = $property['id']; 
@@ -244,8 +153,7 @@
                        <option value="in"><?php _e('Contains','tainacan'); ?></option>
                             <option value="not_in"><?php _e('Does not Contain','tainacan'); ?></option>
                     </select>
-               </div>  
-               <div class="col-md-12" id="append_properties_categories_<?php echo $property['id']; ?>_adv"></div> 
+               </div>              
            </div> 
             <?php } ?>
         <?php endif;
@@ -336,40 +244,15 @@
                  </div>                
             <?php } ?>
         <?php endif; ?>
-        <div id="list_licenses_items" class="form-group col-md-12 no-padding" >
-             <label class="col-md-12 no-padding" for="object_tags">
-                        <?php echo __('Licenses','tainacan'); ?>
-                        <a  
-                                       style="margin-right: 20px;" >
-                                        <span title="<?php echo __('Available Licenses','tainacan') ?>" 
-                                              data-toggle="tooltip" 
-                                              data-placement="bottom" 
-                                              class="glyphicon glyphicon-question-sign"></span>
-                        </a>
-            </label>
-            <div class="col-md-8 no-padding" id="show_form_licenses">
-                       
-            </div>
-            <div class="col-md-4 no-padding padding-left-space">
-                <select class="form-control" id="object_license_operation" name="object_license_operation">
-                    <option value="3"><?php _e('Contains','tainacan'); ?></option>
-                    <option value="4"><?php _e('Does not Contain','tainacan'); ?></option>
-                </select>
-           </div>   
-        </div>
-        <input type="hidden" name="search_properties_autocomplete" id='search_properties_autocomplete' value="<?php echo implode(',', $properties_autocomplete); ?>">
-        <input type="hidden" name="properties_terms_radio" id='search_properties_terms_radio' value="<?php echo implode(',', $properties_terms_radio); ?>">
-        <input type="hidden" name="properties_terms_tree" id='search_properties_terms_tree' value="<?php echo implode(',', $properties_terms_tree); ?>">
-        <input type="hidden" name="properties_terms_selectbox" id='search_properties_terms_selectbox' value="<?php echo implode(',', $properties_terms_selectbox); ?>">
-        <input type="hidden" name="properties_terms_checkbox" id='search_properties_terms_checkbox' value="<?php echo implode(',', $properties_terms_checkbox); ?>">
-        <input type="hidden" name="properties_terms_multipleselect" id='search_properties_terms_multipleselect' value="<?php echo implode(',', $properties_terms_multipleselect); ?>">
-        <input type="hidden" name="properties_terms_treecheckbox" id='search_properties_terms_treecheckbox' value="<?php echo implode(',', $properties_terms_treecheckbox); ?>">
+        <input type="hidden" name="search_properties_autocomplete" id='search_properties_autocomplete_<?php echo $property_searched_id ?>' value="<?php echo implode(',', $properties_autocomplete); ?>">
+        <input type="hidden" name="properties_terms_radio" id='search_properties_terms_radio_<?php echo $property_searched_id ?>' value="<?php echo implode(',', $properties_terms_radio); ?>">
+        <input type="hidden" name="properties_terms_tree" id='search_properties_terms_tree_<?php echo $property_searched_id ?>' value="<?php echo implode(',', $properties_terms_tree); ?>">
+        <input type="hidden" name="properties_terms_selectbox" id='search_properties_terms_selectbox_<?php echo $property_searched_id ?>' value="<?php echo implode(',', $properties_terms_selectbox); ?>">
+        <input type="hidden" name="properties_terms_checkbox" id='search_properties_terms_checkbox_<?php echo $property_searched_id ?>' value="<?php echo implode(',', $properties_terms_checkbox); ?>">
+        <input type="hidden" name="properties_terms_multipleselect" id='search_properties_terms_multipleselect_<?php echo $property_searched_id ?>' value="<?php echo implode(',', $properties_terms_multipleselect); ?>">
+        <input type="hidden" name="properties_terms_treecheckbox" id='search_properties_terms_treecheckbox_<?php echo $property_searched_id ?>' value="<?php echo implode(',', $properties_terms_treecheckbox); ?>">
         <?php if (isset($all_ids)): ?>
-            <input type="hidden" id="properties_id_avoid" name="properties_id" value="<?php echo $all_ids; ?>">
+            <input type="hidden" id="properties_id_avoid_<?php echo $property_searched_id ?>" name="properties_id" value="<?php echo $all_ids; ?>">
         <?php endif; ?>
 <?php endif; ?>
     </div>        
-<div class="col-md-12 no-padding" style="margin-top: 15px;">
-                <button type="button" onclick="reboot_form()" class="btn btn-lg btn-default pull-left"><?php _e('Clear search', 'tainacan') ?></button>
-                <button type="submit" onclick="clear_general_field()" class="btn btn-lg btn-success pull-right"><?php _e('Find', 'tainacan') ?></button>
-    </div>

@@ -156,6 +156,10 @@ class AdvancedSearchController extends Controller {
                 //$return['page'] = $this->render(dirname(__FILE__) . '../../../views/advanced_search/list_advanced_search.php', $data);
                 $return['data'] =  $data['data'];
                 return json_encode($return);    
+            case 'get_categories_properties':  
+                $return = $object_model->show_object_properties($data);
+                $return['property_searched_id'] = $data['property_searched_id'];
+                return $this->render(dirname(__FILE__) . '../../../views/advanced_search/properties_categories_search.php', $return);
                 
         }
     }
