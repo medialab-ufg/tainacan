@@ -721,7 +721,7 @@
             $("#rankings_" + object_id).html(result).show();
 
             var curr_ranking = $("#rankings_" + object_id + " .single_stars").html();
-            if (curr_ranking == null) {
+            if (curr_ranking == null || (curr_ranking.length < 50) ) {
                 return false;
             } else {
                 var $_other_rankings = [ $("#r_list_" + object_id), $("#r_gallery_" + object_id), $("#r_slideshow_" + object_id) ];
