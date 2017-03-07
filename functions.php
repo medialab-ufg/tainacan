@@ -3109,7 +3109,8 @@ function instantiate_modules() {
 }
 
 function register_ibram_menu() {
-    register_nav_menu('menu-ibram', __('Enable reduced menu', 'tainacan') );
+    register_nav_menu('menu-ibram', __('Menu for Administrators', 'tainacan') );
+    register_nav_menu('menu-ibram-visitor', __('Visitor Menu', 'tainacan') );
 }
 add_action('init', 'register_ibram_menu');
 

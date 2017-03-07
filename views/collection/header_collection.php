@@ -236,8 +236,15 @@ $thumb_url = $collection_thumb ? wp_get_attachment_url($collection_thumb) : get_
     }
     $root_category_cover_id = get_option('socialdb_logo');
     $cover_url = wp_get_attachment_url(get_post_meta($root_category_cover_id, 'socialdb_respository_cover_id', true));
+    $_curr_user_ = ['is_logged' => is_user_logged_in(), 'is_subscriber' =>  current_user_can('subscriber'), 'is_admin' => current_user_can('manage_options') ];
 
-    if (has_nav_menu('menu-ibram')) {
+    if( $_curr_user_['is_logged'] && $_curr_user_['is_admin'] ) {
+        $_current_menu = "menu-ibram";
+    } else if ( !$_curr_user_['is_logged'] || $_curr_user_['is_subscriber']) {
+        $_current_menu = "menu-ibram-visitor";
+    }
+
+    if (has_nav_menu($_current_menu)) {
         echo "<input type='hidden' name='ibram_menu_active' class='ibram_menu_active' value='true'>";
         if( empty($_enable_header_) || $_enable_header_ == "enabled") {
             ?>
@@ -253,10 +260,8 @@ $thumb_url = $collection_thumb ? wp_get_attachment_url($collection_thumb) : get_
 
             <?php
         }
-        wp_nav_menu([ 'theme_location' => 'menu-ibram', 'container_class' => 'container',
-            'container' => false, 'depth'=> 3,
-            'menu_class' => 'navbar navbar-inverse menu-ibram',
-            'walker' => new wp_bootstrap_navwalker() ]);
+        wp_nav_menu([ 'theme_location' => $_current_menu, 'container_class' => 'container', 'container' => false,
+            'depth'=> 3, 'menu_class' => 'navbar navbar-inverse menu-ibram', 'walker' => new wp_bootstrap_navwalker() ]);
     }
     ?>
 </div>
