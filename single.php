@@ -291,7 +291,7 @@ while (have_posts()) : the_post();
                         <div class="col-md-12 header-colecao">
                             <div class="row">
                                 <?php if (get_option('collection_root_id') != get_the_ID() && (is_user_logged_in() && verify_allowed_action(get_the_ID(), 'socialdb_collection_permission_create_object'))): ?>
-                                    <div class="tainacan-add-item">
+                                <div class="tainacan-add-item"  <?php if (has_filter('show_custom_add_item_button')): ?> style="margin-right:50px;"  <?php endif; ?> >
                                         <?php if (has_filter('show_custom_add_item_button')): ?>
                                             <?php echo apply_filters('show_custom_add_item_button', ''); ?>
                                         <?php elseif (has_nav_menu('menu-ibram')): ?>

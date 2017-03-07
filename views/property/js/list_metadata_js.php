@@ -91,26 +91,26 @@
     });
     
     
-    $('.edit').click(function (e) {
-        var id = $(this).closest('td').find('.post_id').val();
-        $.get(src + '/views/ranking/edit.php?id=' + id, function (data) {
-            $("#form").html(data).show();
-            $("#list").hide();
-            $('#create_button').hide();
-            e.preventDefault();
-        });
-        e.preventDefault();
-    });
-    $('.remove').click(function (e) {
-        var id = $(this).closest('td').find('.post_id').val();
-        $.get(src + '/views/ranking/delete.php?id=' + id, function (data) {
-            $("#remove").html(data).show();
-            $("#form").hide(data);
-            $("#list").hide();
-            $('#create_button').hide();
-        });
-        e.preventDefault();
-    });
+//    $('.edit').click(function (e) {
+//        var id = $(this).closest('td').find('.post_id').val();
+//        $.get(src + '/views/ranking/edit.php?id=' + id, function (data) {
+//            $("#form").html(data).show();
+//            $("#list").hide();
+//            $('#create_button').hide();
+//            e.preventDefault();
+//        });
+//        e.preventDefault();
+//    });
+//    $('.remove').click(function (e) {
+//        var id = $(this).closest('td').find('.post_id').val();
+//        $.get(src + '/views/ranking/delete.php?id=' + id, function (data) {
+//            $("#remove").html(data).show();
+//            $("#form").hide(data);
+//            $("#list").hide();
+//            $('#create_button').hide();
+//        });
+//        e.preventDefault();
+//    });
 
     /* Executed by script's start */
     $(function () {

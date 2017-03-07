@@ -52,6 +52,11 @@ class WPQueryModel extends Model {
         unset($recover_data['type_tree']);
         unset($recover_data['format_tree']);
         unset($recover_data['source_tree']);
+        if(isset($recover_data['tags']) && is_array($recover_data['tags'])){
+            foreach ($recover_data['tags'] as $tag) {
+                $result['tags'][] = $tag;
+            }    
+        }
         if (!empty($terms)) {
             if (is_array($terms)) {
                 foreach ($terms as $classification) {
@@ -60,7 +65,7 @@ class WPQueryModel extends Model {
                         $used_parents[] = $key;
                         $result[$key][] = $classification;
                     } elseif (strpos($classification, '_') !== false && strpos($classification, 'tag') !== false) {
-                        $result['tags'][] = explode('_', $classification)[0];
+                        $result['tags'][] = explode('_', $classification)[0];  
                     } elseif (strpos($classification, '_') !== false 
                             && strpos($classification, 'datatext') === false
                             && strpos($classification, 'title') === false
