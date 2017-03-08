@@ -294,10 +294,6 @@ while (have_posts()) : the_post();
                                 <div class="tainacan-add-item col-md-1 no-padding" <?php if (has_filter('show_custom_add_item_button')): ?> style="margin-right:50px;"  <?php endif; ?> >
                                         <?php if (has_filter('show_custom_add_item_button')): ?>
                                             <?php echo apply_filters('show_custom_add_item_button', ''); ?>
-                                        <?php elseif (has_nav_menu('menu-ibram')): ?>
-                                            <button type="button" class="btn btn-primary" onclick="showAddItemText()">
-                                                <?php _e('Add', 'tainacan') ?> <span class="glyphicon glyphicon-plus"></span>
-                                            </button>
                                         <?php else: ?>
 
                                             <?php
@@ -316,19 +312,25 @@ while (have_posts()) : the_post();
                                                         <?php _e('Add', 'tainacan') ?> <span class="caret"></span>
                                                     </button>
                                                     <ul class="dropdown-menu">
-                                                        <?php
-                                                        if(count($_add_opts) > 0) {
-                                                            foreach ($_add_modes as $_mode => $_item) {
-                                                                if( in_array($_mode, $_add_opts) ) { ?>
-                                                                    <li>
-                                                                        <a href="javascript:void(0)" onclick="<?php echo $_item['action']; ?>"
-                                                                            class="add_<?php echo $_mode ?>"> <?php echo $_item['label'] ?> </a>
-                                                                    </li>
-                                                                <?php
+                                                        <?php if(false === is_array($_add_opts)) { ?>
+                                                            <li><a onclick="showAddItemText()"> <?php _e('Write text', 'tainacan') ?> </a> </li>
+                                                            <li><a onclick="showViewMultipleItems()"> <?php _e('Send file(s)', 'tainacan') ?>  </a> </li>
+                                                            <li><a onclick="showSendFilesZip()"> <?php _e('Send file(s) via zip', 'tainacan') ?>  </a> </li>
+                                                            <li><a onclick="showAddItemURL();"> <?php _e('Insert URL', 'tainacan') ?> </a> </li>
+                                                        <?php } else if ( is_array($_add_opts) ) {
+                                                            if(count($_add_opts) > 0) {
+                                                                foreach ($_add_modes as $_mode => $_item) {
+                                                                    if( in_array($_mode, $_add_opts) ) { ?>
+                                                                        <li>
+                                                                            <a href="javascript:void(0)" onclick="<?php echo $_item['action']; ?>"
+                                                                               class="add_<?php echo $_mode ?>"> <?php echo $_item['label'] ?> </a>
+                                                                        </li>
+                                                                        <?php
+                                                                    }
                                                                 }
+                                                            } else {
+                                                                echo '<li><a onclick="showAddItemText()">' . _e('Write text', 'tainacan') . '</a></li>';
                                                             }
-                                                        } else {
-                                                            echo '<li><a onclick="showAddItemText()">' . _e('Write text', 'tainacan') . '</a></li>';
                                                         }
                                                         /*
                                                         ?>
