@@ -134,7 +134,8 @@ class CategoryModel extends Model {
         if ($update_category && !is_wp_error($update_category) && $update_category['term_id']) {// se a categoria foi atualizada com sucesso
             $has_property = get_term_meta($update_category['term_id'], 'socialdb_category_property_change_label', true);
             if($has_property && is_numeric($has_property)){
-                 $update_category = wp_update_term($has_property, 'socialdb_property_type', array(
+                // mudo o nome da propriedade que contem a categoria ruaz
+                 $update = wp_update_term($has_property, 'socialdb_property_type', array(
                 'name' => $data['category_name']));
             }
             $this->update_metas($update_category['term_id'], $data);

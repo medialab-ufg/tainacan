@@ -104,11 +104,14 @@ public function add($data) {
     public function update($data) {
         $collection_id = $data['collection_id'];
         if ($data['property_id'] != '') {
-            if($data['property_id']==get_term_by('slug', 'socialdb_property_fixed_tags', 'socialdb_property_type')->term_id){
+            $fixed_id = get_term_by('slug', 'socialdb_property_fixed_tags', 'socialdb_property_type')->term_id;
+            if($data['property_id']==$fixed_id){
                 $data['property_id'] = 'tag';
             }
             $facets = get_post_meta($collection_id, 'socialdb_collection_facets');
-            if($facets  &&  is_array($facets) && !in_array($data['property_id'], $facets)){
+            if($facets  &&  is_array($facets) && $data['property_id'] == 'tag' && (in_array($data['property_id'], $facets) || in_array($fixed_id, $facets)) ){
+                //continue;
+            }else if($facets  &&  is_array($facets) && !in_array($data['property_id'], $facets)){
                 add_post_meta($collection_id, 'socialdb_collection_facets', $data['property_id']);
             }
             
@@ -156,6 +159,7 @@ public function add($data) {
     public function delete($data) {
         if($data['facet_id']==='tag'){
             $data['facet_id'] = get_term_by('slug', 'socialdb_property_fixed_tags', 'socialdb_property_type')->term_id;
+            delete_post_meta($data['collection_id'], 'socialdb_collection_facets', 'tag');
         }
         if($data['facet_id'])
             delete_post_meta($data['collection_id'], 'socialdb_collection_facets', $data['facet_id']);

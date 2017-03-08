@@ -75,11 +75,21 @@ include_once ('js/page_js.php');
     </p>
     <p>
   <?php 
-                echo '<p>';           
-                $domain = get_term_by('id', $metadata['data']['metas']['socialdb_property_created_category'], 'socialdb_category_type');
-                echo "<a href='javascript:showPageCategories(\"".$domain->slug."\", \"".get_template_directory_uri()."\")'>";
-                echo $domain->name.'</a>';   
-                echo '</p>';  ?>
+                echo '<p>';     
+                if($metadata['data']['metas']['socialdb_property_created_category'] && $metadata['data']['metas']['socialdb_property_created_category'] !== '0' ){
+                    $domain = get_term_by('id', $metadata['data']['metas']['socialdb_property_created_category'], 'socialdb_category_type');
+                     echo "<a href='javascript:showPageCategories(\"".$domain->slug."\", \"".get_template_directory_uri()."\")'>";
+                    echo $domain->name.'</a>';   
+                    echo '</p>';  
+                }else if($metadata['data']['metas']['socialdb_property_used_by_categories'] && is_array($metadata['data']['metas']['socialdb_property_used_by_categories'])){
+                    foreach ($metadata['data']['metas']['socialdb_property_used_by_categories'] as $domain) {
+                        $domain = get_term_by('id', $domain, 'socialdb_category_type');
+                        echo "<a href='javascript:showPageCategories(\"".$domain->slug."\", \"".get_template_directory_uri()."\")'>";
+                        echo $domain->name.'</a>';   
+                        echo '</p>';  
+                    }
+                }
+   ?>            
     </p>   
     <br>
     <!-- Propriedades de destino -->

@@ -1,3 +1,9 @@
+<?php
+    if(!isset($collection_post)){
+        $collection_post = get_post();
+        $current_collection_id = $collection_post->ID;
+    } 
+?>
 <ul class="nav navbar-bar navbar-right">
     <li class="dropdown collec_menu_opnr">
     <?php if ((verify_collection_moderators($current_collection_id, get_current_user_id()) || current_user_can('manage_options')) && get_post_type($current_collection_id) == 'socialdb_collection'): ?>
@@ -65,8 +71,8 @@
 
                 <li class="divider"></li>
 
-                <li style="//background-color: #e4b9b9;"><a onclick="delete_collection_redirect('<?php _e('Delete Collection', 'tainacan') ?>', '<?php echo __('Are you sure to remove the collection: ', 'tainacan') . $collection_post->post_title ?>', '<?php echo $current_collection_id ?>', '<?= mktime() ?>', '<?php echo get_option('collection_root_id') ?>')" href="#"><span class="glyphicon glyphicon-trash"></span>&nbsp;<?php _e('Delete', 'tainacan'); ?></a></li>
-                <li style="//background-color: #e4b9b9;"><a onclick="clean_collection('<?php _e('Clean Collection', 'tainacan') ?>', '<?php echo __('Are you sure to remove all items', 'tainacan') ?>', '<?php echo $collection_post->ID ?>')" style="cursor: pointer;"><span class="glyphicon glyphicon-unchecked"></span>&nbsp;<?php _e('Clean Collection', 'tainacan'); ?></a></li>
+                <li style="cursor: pointer;"><a onclick="delete_collection_redirect('<?php _e('Delete Collection', 'tainacan') ?>', '<?php echo __('Are you sure to remove the collection: ', 'tainacan') . $collection_post->post_title ?>', '<?php echo $collection_post->ID ?>', '<?= mktime() ?>', '<?php echo get_option('collection_root_id') ?>')" href="javascript:void(0)"><span class="glyphicon glyphicon-trash"></span>&nbsp;<?php _e('Delete', 'tainacan'); ?></a></li>
+                <li style="cursor: pointer;"><a onclick="clean_collection('<?php _e('Clean Collection', 'tainacan') ?>', '<?php echo __('Are you sure to remove all items', 'tainacan') ?>', '<?php echo $collection_post->ID ?>')" style="cursor: pointer;"><span class="glyphicon glyphicon-unchecked"></span>&nbsp;<?php _e('Clean Collection', 'tainacan'); ?></a></li>
 
                 <li class="divider"></li>
 

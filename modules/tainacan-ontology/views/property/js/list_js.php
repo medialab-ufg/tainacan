@@ -310,8 +310,8 @@
     }
 <?php // edicao das propriedades de objeto     ?>
     function edit_object(id) {
-        showDynatreesDomains(src);
-        showPropertyCategoryDynatree(src);
+        showDynatreesDomains($('#src').val());
+        showPropertyCategoryDynatree($('#src').val());
         $.ajax({
             url: $('#src').val() + '/controllers/property/property_controller.php',
             type: 'POST',
