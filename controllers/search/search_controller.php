@@ -40,6 +40,7 @@ class SearchController extends Controller {
                 $data['category_root_id'] = $object_model->get_category_root_of($collection_id);
                 $data['category_root_name'] = get_term_by('id', $data['category_root_id'], 'socialdb_category_type')->name;
                 $data['ordenation'] = $object_model->get_collection_data($collection_id);
+                $data['collection_add_item'] = unserialize(get_post_meta($collection_id, 'socialdb_collection_add_item', true));
                 Log::addLog(['collection_id' => $data['collection_id'], 'event_type' => 'collection_admin', 'event' => 'layout']);
 
                 return $this->render(dirname(__FILE__) . '../../../views/search/layout.php', $data );

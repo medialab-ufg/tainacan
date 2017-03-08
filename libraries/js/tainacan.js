@@ -579,6 +579,14 @@ $(document).ready(function () {
         $(this).parent().toggleClass('open');
     });
 
+    $(".tainacan-add-wrapper").hover(
+        function() {
+            $(this).addClass( "open" );
+        }, function() {
+            $(this).removeClass( "open" );
+        }
+    );
+
 });
 
 /**
@@ -2603,6 +2611,8 @@ function graphStreamPublish(message, link, picture, name, description) {
     });
 }
 //************************ TELA DE ADICAO DE ITEM *******************************//
+
+
 function showAddItemText() {
     var src = $('#src').val();
     $("#form").html('');

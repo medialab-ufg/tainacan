@@ -414,19 +414,19 @@ public function add($data) {
         }else{
              update_post_meta($post_id, 'socialdb_collection_item_habilitate_media', 'false');
         }
-        
 
         update_post_meta($post_id, 'socialdb_collection_latitude_meta', $data['latitude']);
         update_post_meta($post_id, 'socialdb_collection_longitude_meta', $data['longitude']);
         update_post_meta($post_id, 'socialdb_collection_default_ordering', $data['collection_order']);
         update_post_meta($post_id, 'socialdb_collection_submission_visualization', $data['socialdb_collection_submission_visualization']);
         update_post_meta($post_id, 'socialdb_collection_item_visualization', $data['socialdb_collection_item_visualization']);
+        update_post_meta($post_id, 'socialdb_collection_add_item', serialize($data['col_add_item']));
+
         $colorScheme = $data['color_scheme'];
         $collection_id = $data['collection_id'];
         $data['cores'] = update_post_meta( $collection_id, 'socialdb_collection_color_scheme', serialize($colorScheme));
         $data['default_cs'] = update_post_meta($collection_id, 'socialdb_default_color_scheme', serialize($data['default_color']));
 
-        
         $result['title'] = __('Success','tainacan');
         $result['msg'] = __('Ordenation changed successfully','tainacan');
         $result['type'] = 'success';

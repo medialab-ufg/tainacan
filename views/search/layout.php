@@ -60,7 +60,7 @@ $view_helper = new ViewHelper();
                 <input type="hidden" name="selected_view_mode" class="selected_view_mode" value="<?php echo $selected_view_mode ?>"/>
 
                     <!------------------- Modo de exibição dos itens -------------------------->
-                    <div class="form-group">
+                    <div class="form-group" style="border-top: 1px solid #e8e8e8; margin-top: 10px; padding-top: 10px;">
                         <label for="collection_list_mode"><?php _e('Default list mode','tainacan'); ?></label>
                         <select name="collection_list_mode" id="collection_list_mode" class="form-control">
                             <option value="cards"><?php _e('Cards', 'tainacan'); ?></option>
@@ -142,6 +142,35 @@ $view_helper = new ViewHelper();
                             </option>
                         </select>
                     </div>
+
+
+                <?php
+                $_check_all = false;
+                if($collection_add_item === false) {
+                    $_check_all = true;
+                }
+                $_add_item_types = [ 'write_text' => _t('Enable Write text'), 'send_file' => _t('Enable Send file(s)'),
+                    'send_file_zip' => _t('Enable Send file(s) via zip'), 'insert_url' => _t('Enable Insert URL') ];
+                ?>
+                <div class="form-group">
+                    <label for="socialdb_collection_add_item"> <?php _t('Select the options to add a new item', 1); ?> </label> <br>
+                    <div class="add-item-checkboxes" style="padding: 10px;">
+                        <?php foreach($_add_item_types as $type => $txt):
+                            if($_check_all) {
+                                $val_ck = "checked";
+                            } else {
+                                if( in_array($type, $collection_add_item) ) {
+                                    $val_ck = "checked";
+                                } else {
+                                    $val_ck = "";
+                                }
+                            }
+                            ?>
+                            <input type="checkbox" <?php echo $val_ck; ?> name="col_add_item[]" id="" value="<?php echo $type; ?>" /> <?php echo $txt; ?> <br>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+
             </div>
             <h3 class="title-pipe">&nbsp;<?php _e('Item view style','tainacan'); ?> </h3>
             <div style="padding-left: 15px">

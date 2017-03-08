@@ -113,14 +113,34 @@ button.collection-trash {
           }
 
           .tainacan-add-item {
+            /*
             float: left;
+            */
             width: 11%;
             margin-right: 15px;
 
             .btn-group { display: block; }
             .tainacan-add-wrapper { border-radius: 4px; }
-            button { color: white; }
-          }
+            button {
+              color: white;
+            }
+
+            &:hover > ul {
+              display: block;
+            }
+
+            ul {
+              margin-top: 0 !important;
+              li {
+                a {
+                  cursor: pointer;
+                  &:hover {
+                    // background: beige;
+                  }
+                }
+              }
+            }
+          } // tainacan-add-item
 
           optgroup, option, select, button {
             color: black;
@@ -863,4 +883,3 @@ ul.item-menu-container {
 
   } // #comments
 } // .dynamic-item-comment
-

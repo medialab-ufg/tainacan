@@ -291,7 +291,7 @@ while (have_posts()) : the_post();
                         <div class="col-md-12 header-colecao">
                             <div class="row">
                                 <?php if (get_option('collection_root_id') != get_the_ID() && (is_user_logged_in() && verify_allowed_action(get_the_ID(), 'socialdb_collection_permission_create_object'))): ?>
-                                <div class="tainacan-add-item"  <?php if (has_filter('show_custom_add_item_button')): ?> style="margin-right:50px;"  <?php endif; ?> >
+                                <div class="tainacan-add-item col-md-1 no-padding" <?php if (has_filter('show_custom_add_item_button')): ?> style="margin-right:50px;"  <?php endif; ?> >
                                         <?php if (has_filter('show_custom_add_item_button')): ?>
                                             <?php echo apply_filters('show_custom_add_item_button', ''); ?>
                                         <?php elseif (has_nav_menu('menu-ibram')): ?>
@@ -299,21 +299,45 @@ while (have_posts()) : the_post();
                                                 <?php _e('Add', 'tainacan') ?> <span class="glyphicon glyphicon-plus"></span>
                                             </button>
                                         <?php else: ?>
+
+                                            <?php
+                                                $_add_opts = unserialize(get_post_meta($_currentID_, 'socialdb_collection_add_item', true));
+                                                $_add_modes = [
+                                                    'write_text' => ['label' => _t('Write text'), 'action' => "showAddItemText()"],
+                                                    'send_file' => ['label' => _t('Send file(s)'), 'action' => "showViewMultipleItems()"],
+                                                    'send_file_zip' => ['label' => _t('Send file(s) via zip'), 'action' => "showSendFilesZip()"],
+                                                    'insert_url' => ['label' => _t('Insert URL'), 'action' => "showAddItemURL()"]
+                                                ];
+                                            ?>
+
                                             <div class="btn-group" role="group" aria-label="...">
                                                 <div class="btn-group tainacan-add-wrapper">
                                                     <button type="button" class="btn btn-primary dropdown-toggle sec-color-bg" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         <?php _e('Add', 'tainacan') ?> <span class="caret"></span>
                                                     </button>
                                                     <ul class="dropdown-menu">
-                                                        <!--li><a  id="create_button" style="cursor: pointer;"><?php echo (get_post_meta(get_the_ID(), 'socialdb_collection_object_name', true)) ? get_post_meta(get_the_ID(), 'socialdb_collection_object_name', true) : _e('Item', 'tainacan') //_e('Item', 'tainacan')                              ?></a></li>
-                                                        <li><a onclick="showViewMultipleItems()" style="cursor: pointer;" ><?php _e('Multiple Files', 'tainacan') ?></a></li>
-                                                        <!--li><a style="cursor: pointer;" onclick="showModalImportSocialNetwork();" ><?php _e('Social Media', 'tainacan') ?></a></li>
-                                                        <li><a style="cursor: pointer;" onclick="showModalImportAll();" ><?php _e('Web Resource URL', 'tainacan') ?></a></li>
-                                                        <li class="divider" -->
+                                                        <?php
+                                                        if(count($_add_opts) > 0) {
+                                                            foreach ($_add_modes as $_mode => $_item) {
+                                                                if( in_array($_mode, $_add_opts) ) { ?>
+                                                                    <li>
+                                                                        <a href="javascript:void(0)" onclick="<?php echo $_item['action']; ?>"
+                                                                            class="add_<?php echo $_mode ?>"> <?php echo $_item['label'] ?> </a>
+                                                                    </li>
+                                                                <?php
+                                                                }
+                                                            }
+                                                        } else {
+                                                            echo '<li><a onclick="showAddItemText()">' . _e('Write text', 'tainacan') . '</a></li>';
+                                                        }
+                                                        /*
+                                                        ?>
                                                         <li><a onclick="showAddItemText()"  style="cursor: pointer;"><?php _e('Write text', 'tainacan') ?> </a></li>
                                                         <li><a onclick="showViewMultipleItems()" style="cursor: pointer;" ><?php _e('Send file(s)', 'tainacan') ?>  </a></li>
                                                         <li><a onclick="showSendFilesZip()" style="cursor: pointer;" ><?php _e('Send file(s) via zip', 'tainacan') ?>  </a></li>
-                                                        <li><a onclick="showAddItemURL();" style="cursor: pointer;" ><?php _e('Insert URL', 'tainacan') ?>  </a></li>
+                                                        <li><a onclick="showAddItemURL();" style="cursor: pointer;" ><?php _e('Insert URL', 'tainacan') ?> </a></li>
+                                                        */
+                                                        ?>
                                                     </ul>
                                                 </div>
                                             </div>

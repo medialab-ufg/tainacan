@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: socialdb\n"
-"POT-Creation-Date: 2017-03-07 10:34-0300\n"
-"PO-Revision-Date: 2017-03-07 10:35-0300\n"
+"POT-Creation-Date: 2017-03-08 14:53-0300\n"
+"PO-Revision-Date: 2017-03-08 14:54-0300\n"
 "Last-Translator: Rodrigo de Oliveira <webmaster@rodrigodeoliveira.net>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -58,7 +58,7 @@ msgid "Comment"
 msgstr "Comentar"
 
 #: comments.php:75 functions.php:448 header.php:276 header.php:306
-#: single.php:973 views/advanced_search/js/advanced_search_js.php:32
+#: single.php:997 views/advanced_search/js/advanced_search_js.php:32
 #: views/category/taxonomy_zone.php:71 views/collection/edit.php:1458
 #: views/collection/js/header_js.php:174
 #: views/export/oaipmh/edit_maping_attributes.php:33
@@ -92,7 +92,7 @@ msgstr "Comentar"
 #: views/property/metadata/form_tag.php:31
 #: views/property/metadata/form_term.php:195
 #: views/property/metadata/form_voting.php:60
-#: views/property/metadata_forms.php:157 views/search/layout.php:202
+#: views/property/metadata_forms.php:157 views/search/layout.php:229
 #: views/social_network/edit_maping_attributes.php:29
 #: views/theme_options/oaipmh/edit_maping_attributes.php:69
 #: views/theme_options/oaipmh/mapping_attributes.php:24
@@ -114,10 +114,10 @@ msgstr "Os comentários estão desabilitados"
 msgid "Reply Comment"
 msgstr "Responder Comentário"
 
-#: comments.php:132 comments.php:163 helpers/view_helper.php:343 single.php:608
-#: single.php:678 single.php:716 single.php:762 single.php:792 single.php:832
-#: single.php:880 single.php:906 single.php:1071 single.php:1093
-#: single.php:1243 single.php:1313 views/category/list.php:142
+#: comments.php:132 comments.php:163 helpers/view_helper.php:343 single.php:632
+#: single.php:702 single.php:740 single.php:786 single.php:816 single.php:856
+#: single.php:904 single.php:930 single.php:1095 single.php:1117
+#: single.php:1267 single.php:1337 views/category/list.php:142
 #: views/category/list.php:188 views/category/list.php:217
 #: views/category/taxonomy_zone.php:105 views/collection/config_menu.php:96
 #: views/collection/header_collection.php:224 views/event/list.php:283
@@ -521,7 +521,7 @@ msgid "Comments"
 msgstr "Comentários"
 
 #: controllers/log/log_controller.php:27 helpers/log/log_helper.php:13
-#: models/collection/collection_model.php:770 single.php:442
+#: models/collection/collection_model.php:770 single.php:466
 #: views/advanced_search/list_advanced_search.php:46
 msgid "Items"
 msgstr "Itens "
@@ -548,7 +548,7 @@ msgid "Tags"
 msgstr "Tags"
 
 #: controllers/log/log_controller.php:31 functions.php:757 header.php:202
-#: helpers/log/log_helper.php:14 single.php:433
+#: helpers/log/log_helper.php:14 single.php:457
 #: views/advanced_search/list_advanced_search.php:37
 #: views/search/root_menu_left.php:7
 msgid "Collections"
@@ -716,8 +716,8 @@ msgstr "%1$s em %2$s"
 msgid "(Painel Edit )"
 msgstr "(Painel de edição)"
 
-#: functions.php:449 helpers/view_helper.php:353 single.php:609 single.php:679
-#: single.php:793 single.php:833 single.php:1244 views/category/list.php:143
+#: functions.php:449 helpers/view_helper.php:353 single.php:633 single.php:703
+#: single.php:817 single.php:857 single.php:1268 views/category/list.php:143
 #: views/category/taxonomy_zone.php:76 views/design/edit.php:239
 #: views/event/list.php:284 views/event/list.php:319
 #: views/export/oaipmh/mapping_attributes.php:38
@@ -737,7 +737,7 @@ msgstr "(Painel de edição)"
 #: views/property/metadata/form_compounds.php:96
 #: views/property/metadata/form_voting.php:86 views/ranking/list.php:99
 #: views/search/edit.php:102 views/search/edit.php:315
-#: views/search/layout.php:57 views/search/layout.php:201
+#: views/search/layout.php:57 views/search/layout.php:228
 #: views/theme_options/licenses/edit.php:43
 #: views/theme_options/oaipmh/mapping_attributes.php:25
 #: views/theme_options/property/metadata/form_compounds.php:91
@@ -749,9 +749,9 @@ msgstr "Salvar"
 msgid "Reply"
 msgstr "Responder"
 
-#: functions.php:469 single.php:494 single.php:527 single.php:554
-#: single.php:881 single.php:1127 single.php:1155 single.php:1202
-#: single.php:1221 views/category/list.php:116 views/collection/edit.php:365
+#: functions.php:469 single.php:518 single.php:551 single.php:578
+#: single.php:905 single.php:1151 single.php:1179 single.php:1226
+#: single.php:1245 views/category/list.php:116 views/collection/edit.php:365
 #: views/collection/edit.php:1001 views/object/edit.php:19
 #: views/object/edit_item_text.php:72 views/object/edit_item_text.php:583
 #: views/object/list_data_table.php:59 views/property/js/compounds_js.php:268
@@ -778,8 +778,8 @@ msgstr "Editar"
 msgid "Delete this comment?"
 msgstr "Deletar este comentário?"
 
-#: functions.php:472 single.php:717 single.php:907 single.php:1128
-#: single.php:1156 single.php:1203 single.php:1222
+#: functions.php:472 single.php:741 single.php:931 single.php:1152
+#: single.php:1180 single.php:1227 single.php:1246
 #: views/advanced_search/modals_adv.php:77
 #: views/advanced_search/modals_adv.php:104 views/collection/config_menu.php:68
 #: views/collection/config_menu.php:97 views/collection/edit.php:366
@@ -911,7 +911,7 @@ msgstr "Nenhum item encontrado na lixeira"
 msgid "Category"
 msgstr "Categoria "
 
-#: functions.php:841 models/event/event_model.php:231 single.php:629
+#: functions.php:841 models/event/event_model.php:231 single.php:653
 #: views/collection/edit.php:1033
 msgid "Edit Category"
 msgstr "Editar Categoria"
@@ -945,7 +945,7 @@ msgid "Parent Category:"
 msgstr "Categoria pai:"
 
 #: functions.php:1159 models/object/object_model.php:1587
-#: models/wp_query/wp_query_model.php:1166
+#: models/wp_query/wp_query_model.php:1171
 msgid "Recents"
 msgstr "Recentes "
 
@@ -967,7 +967,7 @@ msgid "Title"
 msgstr "Título"
 
 #: functions.php:1503 models/mapping/extract_metadata_model.php:176
-#: single.php:1087 views/advanced_search/advanced_search.php:59
+#: single.php:1111 views/advanced_search/advanced_search.php:59
 #: views/category/page.php:69 views/design/edit.php:113
 #: views/object/create_item_text.php:224 views/object/edit_item_text.php:383
 #: views/object/list_single_object.php:382
@@ -1133,7 +1133,7 @@ msgstr "Menu para Visitantes"
 msgid "Profile"
 msgstr "Perfil"
 
-#: header.php:109 views/collection/header_collection.php:266
+#: header.php:109 views/collection/header_collection.php:271
 msgid "My collections"
 msgstr "Minhas Coleções"
 
@@ -1162,7 +1162,7 @@ msgstr "Configurações do Repositório"
 msgid "Configuration"
 msgstr "Configuração"
 
-#: header.php:130 single.php:505
+#: header.php:130 single.php:529
 #: views/advanced_search/list_advanced_search.php:132
 #: views/advanced_search/list_advanced_search.php:257
 #: views/advanced_search/loops_page/list_collection_search.php:95
@@ -1181,7 +1181,7 @@ msgid "Social / API Keys"
 msgstr "Chaves de APIs / Redes Sociais"
 
 #: header.php:133 models/collection/collection_model.php:564
-#: views/advanced_search/show_object_properties.php:337
+#: views/advanced_search/show_object_properties.php:341
 #: views/collection/config_menu.php:47 views/object/create_item_text.php:281
 #: views/object/create_item_url.php:119 views/object/edit_item_text.php:464
 #: views/object/multiple_items/editor_items.php:374
@@ -1202,10 +1202,10 @@ msgstr "Email de Boas Vindas"
 msgid "Tools"
 msgstr "Ferramentas"
 
-#: header.php:136 header.php:307 single.php:763 single.php:980 single.php:1129
-#: single.php:1138 single.php:1145 single.php:1157 single.php:1165
-#: single.php:1204 single.php:1212 single.php:1223 single.php:1237
-#: single.php:1314 single.php:1315 views/category/list.php:11
+#: header.php:136 header.php:307 single.php:787 single.php:1004 single.php:1153
+#: single.php:1162 single.php:1169 single.php:1181 single.php:1189
+#: single.php:1228 single.php:1236 single.php:1247 single.php:1261
+#: single.php:1338 single.php:1339 views/category/list.php:11
 #: views/collection/config_menu.php:52 views/import/import_configuration.php:8
 #: views/import/import_configuration.php:166
 #: views/import/js/import_configuration_js.php:4 views/object/create.php:84
@@ -1230,7 +1230,7 @@ msgstr "Importar"
 msgid "Export"
 msgstr "Exportação"
 
-#: header.php:143 models/event/event_model.php:654 single.php:962
+#: header.php:143 models/event/event_model.php:654 single.php:986
 #: views/collection/config_menu.php:75 views/collection/config_menu.php:115
 #: views/event/js/list_js.php:3 views/event/list.php:8
 msgid "Events"
@@ -1279,7 +1279,7 @@ msgstr "Importar coleção"
 
 #: header.php:241 index.php:60 single.php:234
 #: views/advanced_search/advanced_search.php:36
-#: views/advanced_search/show_object_properties.php:370
+#: views/advanced_search/show_object_properties.php:374
 msgid "Find"
 msgstr "Pesquisar"
 
@@ -1300,8 +1300,7 @@ msgstr "Nome da coleção"
 msgid "Type the name of your collection"
 msgstr "Digite o nome de sua coleção"
 
-#: header.php:272 single.php:308 views/collection/edit.php:502
-#: views/permission/page.php:79
+#: header.php:272 views/collection/edit.php:502 views/permission/page.php:79
 msgid "Item"
 msgstr "Item"
 
@@ -1559,7 +1558,8 @@ msgstr "Digite as três primeiras letras do item desta coleção"
 
 #: helpers/object/object_properties_widgets_helper.php:321
 #: helpers/object/single_properties_widgets_helper.php:287
-#: views/advanced_search/show_object_properties.php:274
+#: views/advanced_search/properties_categories_search.php:186
+#: views/advanced_search/show_object_properties.php:278
 #: views/object/append_properties_categories/multiple_properties_categories_accordion.php:92
 #: views/object/append_properties_categories/properties_categories_accordion.php:259
 #: views/object/edit_object_properties/edit_list_properties_accordion.php:137
@@ -1578,7 +1578,7 @@ msgstr "Nenhum item foi adicionado a esta coleção"
 #: helpers/object/object_properties_widgets_helper.php:365
 #: helpers/object/object_properties_widgets_helper.php:413
 #: helpers/object/single_properties_widgets_helper.php:321
-#: helpers/object/single_properties_widgets_helper.php:367 single.php:579
+#: helpers/object/single_properties_widgets_helper.php:367 single.php:603
 #: views/object/append_properties_categories/multiple_properties_categories_accordion.php:209
 #: views/object/append_properties_categories/multiple_properties_categories_accordion.php:251
 #: views/object/append_properties_categories/properties_categories_accordion.php:497
@@ -1745,7 +1745,7 @@ msgstr "Busca avançada"
 msgid "Loading Collections..."
 msgstr "Carregando Coleções..."
 
-#: index.php:101 single.php:274 single.php:919 single.php:931
+#: index.php:101 single.php:274 single.php:943 single.php:955
 #: views/advanced_search/advanced_search.php:45 views/property/list.php:106
 #: views/property/list.php:184 views/property/list.php:269
 #: views/search/js/single_js.php:112
@@ -2035,7 +2035,7 @@ msgid "Format"
 msgstr "Formato"
 
 #: models/collection/collection_model.php:749 models/export/export_model.php:70
-#: models/import/oaipmh_model.php:170 single.php:1010
+#: models/import/oaipmh_model.php:170 single.php:1034
 msgid "Object Property"
 msgstr "Metadados de objeto "
 
@@ -2099,7 +2099,8 @@ msgstr "Outro"
 #: models/collection/collection_model.php:1131
 #: models/collection/collection_model.php:1142
 #: models/collection/collection_model.php:1153
-#: views/advanced_search/show_object_properties.php:311
+#: views/advanced_search/properties_categories_search.php:223
+#: views/advanced_search/show_object_properties.php:315
 #: views/object/js/list_js.php:6 views/object/js/list_js.php:7
 #: views/search/menu_left.php:46 views/search/menu_left.php:61
 #: views/search/menu_left.php:68 views/search/menu_left.php:70
@@ -2490,7 +2491,7 @@ msgstr "Deletar Tag "
 msgid "Create Tag"
 msgstr "Criar Tag"
 
-#: models/event/event_model.php:237 single.php:849
+#: models/event/event_model.php:237 single.php:873
 msgid "Edit Tag"
 msgstr "Editar Tag"
 
@@ -2885,7 +2886,7 @@ msgid "Term Property"
 msgstr "Metadado de termo "
 
 #: models/export/export_model.php:115
-#: models/social_network/social_mapping_model.php:11 single.php:756
+#: models/social_network/social_mapping_model.php:11 single.php:780
 #: views/import/csv/js/maping_attributes_js.php:85
 #: views/object/append_properties_categories/js/pc_compounds_js.php:296
 #: views/object/append_properties_categories/js/properties_categories_accordion_js.php:244
@@ -2906,7 +2907,7 @@ msgid "Attachment"
 msgstr "Anexos "
 
 #: models/export/rdf_repository_model.php:96
-#: models/object/object_model.php:1584 models/wp_query/wp_query_model.php:1163
+#: models/object/object_model.php:1584 models/wp_query/wp_query_model.php:1168
 #: views/object/list_single_object.php:331
 #: views/object/list_single_object_version.php:320
 #: views/property/js/list_metadata_js.php:2384
@@ -2926,7 +2927,7 @@ msgid "Ranking Stars"
 msgstr "Votações Estrelas "
 
 #: models/export/rdf_repository_model.php:115
-#: models/import/oaipmh_model.php:178 single.php:817
+#: models/import/oaipmh_model.php:178 single.php:841
 #: views/permission/page.php:82
 msgid "Tag"
 msgstr "Tag"
@@ -3133,7 +3134,7 @@ msgstr "A licença sugerida é: "
 msgid "Something went wrong! Please try again!"
 msgstr "Algo deu errado! Por favor tente novamente!"
 
-#: models/object/object_model.php:1582 models/wp_query/wp_query_model.php:1161
+#: models/object/object_model.php:1582 models/wp_query/wp_query_model.php:1166
 msgid "Data property"
 msgstr "Metadados de dado"
 
@@ -3528,7 +3529,7 @@ msgstr "Grafo"
 msgid "Loading Statistics ..."
 msgstr "Carregando Estatísticas ..."
 
-#: single.php:263 views/advanced_search/show_object_properties.php:369
+#: single.php:263 views/advanced_search/show_object_properties.php:373
 msgid "Clear search"
 msgstr "Limpar busca"
 
@@ -3536,7 +3537,7 @@ msgstr "Limpar busca"
 msgid "Type the title or the URI to you object!"
 msgstr "Digite o título ou a URL para seu item"
 
-#: single.php:299 single.php:305 single.php:488 single.php:521 single.php:549
+#: single.php:299 single.php:316 single.php:512 single.php:545 single.php:573
 #: views/category/list.php:115 views/object/create.php:11
 #: views/property/js/list_category_metadata_js.php:862
 #: views/property/js/list_metadata_js.php:933
@@ -3552,135 +3553,123 @@ msgstr "Digite o título ou a URL para seu item"
 msgid "Add"
 msgstr "Adicionar"
 
-#: single.php:309
-msgid "Multiple Files"
-msgstr "Múltiplos arquivos"
-
-#: single.php:310 views/statistics/js/list_js.php:42
-msgid "Social Media"
-msgstr "Redes Sociais"
-
-#: single.php:311
-msgid "Web Resource URL"
-msgstr "Recurso Web URL"
-
-#: single.php:313
+#: single.php:306 single.php:331
 msgid "Write text"
 msgstr "Escrever Texto"
 
-#: single.php:314
+#: single.php:307
 msgid "Send file(s)"
 msgstr "Enviar arquivo(s)"
 
-#: single.php:315
+#: single.php:308
 msgid "Send file(s) via zip"
 msgstr "Enviar arquivos no formato zip"
 
-#: single.php:316
+#: single.php:309
 msgid "Insert URL"
 msgstr "Inserir URL"
 
-#: single.php:324
+#: single.php:348
 msgid "Order by: "
 msgstr "Ordenar por:"
 
-#: single.php:327
+#: single.php:351
 msgid "Sorted by"
 msgstr "Ordenado por"
 
-#: single.php:335
+#: single.php:359
 msgid "Show:"
 msgstr "Exibir:"
 
-#: single.php:352
+#: single.php:376
 msgid "Map"
 msgstr "Mapa"
 
-#: single.php:358 views/search/layout.php:71
+#: single.php:382 views/search/layout.php:71
 msgid "Table"
 msgstr "Tabela"
 
-#: single.php:370
+#: single.php:394
 msgid "Select: "
 msgstr "Selecionar: "
 
-#: single.php:373
+#: single.php:397
 msgid "Select some items"
 msgstr "Selecionar alguns itens"
 
-#: single.php:376
+#: single.php:400
 msgid "Select all items"
 msgstr "Selecionar todos os itens"
 
-#: single.php:397 single.php:407 views/statistics/js/list_js.php:33
+#: single.php:421 single.php:431 views/statistics/js/list_js.php:33
 msgid "Trash"
 msgstr "Lixeira"
 
-#: single.php:413
+#: single.php:437
 msgid "Exit"
 msgstr "Sair"
 
-#: single.php:464
+#: single.php:488
 msgid "Loading objects..."
 msgstr "Carregando itens..."
 
-#: single.php:481
+#: single.php:505
 msgid "View"
 msgstr "Visualizar"
 
-#: single.php:499 single.php:532 single.php:559 views/category/list.php:120
+#: single.php:523 single.php:556 single.php:583 views/category/list.php:120
 #: views/search/tags.php:61
 msgid "Remove"
 msgstr "Remover"
 
-#: single.php:514 single.php:543 views/permission/page.php:119
+#: single.php:538 single.php:567 views/permission/page.php:119
 msgid "See"
 msgstr "Ver"
 
-#: single.php:587 single.php:588 single.php:640 single.php:641
+#: single.php:611 single.php:612 single.php:664 single.php:665
 #: views/category/list.php:38 views/category/list.php:39
 #: views/property/metadata/form_term.php:71
 msgid "Category name"
 msgstr "Nome da categoria"
 
-#: single.php:591 single.php:645 views/category/list.php:42
+#: single.php:615 single.php:669 views/category/list.php:42
 msgid "Category parent"
 msgstr "Categoria pai"
 
-#: single.php:592 views/category/list.php:43
+#: single.php:616 views/category/list.php:43
 msgid "Right click on the tree and select the category as parent"
 msgstr "Clique com o botão direito na árvore e selecione a categoria pai"
 
-#: single.php:596 single.php:651 views/category/list.php:47
+#: single.php:620 single.php:675 views/category/list.php:47
 msgid "Category description"
 msgstr "Descrição da categoria"
 
-#: single.php:596 single.php:651 single.php:821 single.php:858
+#: single.php:620 single.php:675 single.php:845 single.php:882
 #: views/category/list.php:47 views/search/tags.php:43
 msgid "Optional"
 msgstr "Opcional"
 
-#: single.php:599 single.php:654 views/category/list.php:48
+#: single.php:623 single.php:678 views/category/list.php:48
 msgid "Describe your category"
 msgstr "Descreva sua categoria"
 
-#: single.php:646
+#: single.php:670
 msgid "Click on the tree and select the category as parent"
 msgstr "Clique na árvore e selecione a categoria pai"
 
-#: single.php:659 views/category/list.php:101
+#: single.php:683 views/category/list.php:101
 msgid "Category Properties"
 msgstr "Metadados da Categoria"
 
-#: single.php:663 single.php:866
+#: single.php:687 single.php:890
 msgid "Synonyms"
 msgstr "Sinônimos"
 
-#: single.php:705 views/category/list.php:136
+#: single.php:729 views/category/list.php:136
 msgid "Remove Category"
 msgstr "Apagar Categoria"
 
-#: single.php:708 single.php:899 views/category/list.php:139
+#: single.php:732 single.php:923 views/category/list.php:139
 #: views/property/list.php:352 views/property/metadata/form_compounds.php:92
 #: views/property/metadata/form_voting.php:82
 #: views/property/metadata_forms.php:186 views/ranking/list.php:95
@@ -3691,60 +3680,60 @@ msgstr "Apagar Categoria"
 msgid "Confirm the exclusion of "
 msgstr "Confirma a exclusão de"
 
-#: single.php:731
+#: single.php:755
 msgid "Import files from zip"
 msgstr "Importar arquivos de um arquivo comprimido"
 
-#: single.php:734 views/category/taxonomy_zone.php:104
+#: single.php:758 views/category/taxonomy_zone.php:104
 msgid "Send File"
 msgstr "Enviar Arquivo"
 
-#: single.php:735
+#: single.php:759
 msgid "In Server"
 msgstr "No servidor"
 
-#: single.php:741
+#: single.php:765
 msgid "Insert file path in this server"
 msgstr "Inserir caminho do arquivo neste servidor"
 
-#: single.php:745
+#: single.php:769
 msgid "Import Folder Hierarchy"
 msgstr "Importar hierarquia de pastas"
 
-#: single.php:748
+#: single.php:772
 msgid "Create Metadata"
 msgstr "Criar metadado"
 
-#: single.php:749
+#: single.php:773
 msgid "Choose Metadata"
 msgstr "Escolher metadado"
 
-#: single.php:752
+#: single.php:776
 msgid "Insert value"
 msgstr "Inserir valor"
 
-#: single.php:797
+#: single.php:821
 msgid "Importing Object..."
 msgstr "Importando itens..."
 
-#: single.php:812
+#: single.php:836
 msgid "Add Tag"
 msgstr "Adicionar Tag"
 
-#: single.php:818 single.php:854 single.php:855 views/search/tags.php:39
+#: single.php:842 single.php:878 single.php:879 views/search/tags.php:39
 #: views/search/tags.php:40
 msgid "Tag name"
 msgstr "Nome da tag"
 
-#: single.php:821 single.php:858 views/search/tags.php:43
+#: single.php:845 single.php:882 views/search/tags.php:43
 msgid "Tag description"
 msgstr "Descrição "
 
-#: single.php:824 single.php:861 views/search/tags.php:44
+#: single.php:848 single.php:885 views/search/tags.php:44
 msgid "Describe your tag"
 msgstr "Descreve sua Tag"
 
-#: single.php:896 views/import/metatags/edit_maping_attributes.php:27
+#: single.php:920 views/import/metatags/edit_maping_attributes.php:27
 #: views/import/metatags/mapping_attributes.php:31
 #: views/import/oaipmh/container_mapping_attributes.php:22
 #: views/import/oaipmh/edit_maping_attributes.php:42 views/search/tags.php:70
@@ -3753,79 +3742,79 @@ msgstr "Descreve sua Tag"
 msgid "Remove Tag"
 msgstr "Remover Tag"
 
-#: single.php:947 single.php:994
+#: single.php:971 single.php:1018
 msgid "Do you really want to close?"
 msgstr "Você realmente deseja fechar?"
 
-#: single.php:950
+#: single.php:974
 msgid "Count of elements"
 msgstr "Total de elementos"
 
-#: single.php:956
+#: single.php:980
 msgid "Agents"
 msgstr ""
 
-#: single.php:959
+#: single.php:983
 msgid "Projects"
 msgstr ""
 
-#: single.php:965
+#: single.php:989
 msgid "Spaces"
 msgstr ""
 
-#: single.php:997
+#: single.php:1021
 msgid "Imported elements"
 msgstr ""
 
-#: single.php:1004
+#: single.php:1028
 msgid "Classes"
 msgstr ""
 
-#: single.php:1007
+#: single.php:1031
 msgid "Datatype"
 msgstr ""
 
-#: single.php:1013 views/category/page.php:127 views/tag/page.php:76
+#: single.php:1037 views/category/page.php:127 views/tag/page.php:76
 msgid "Individuals"
 msgstr "Indivíduos"
 
-#: single.php:1024
+#: single.php:1048
 msgid "Go to ontology"
 msgstr ""
 
-#: single.php:1039
+#: single.php:1063
 msgid "Undoing actions..."
 msgstr "Desfazendo ações..."
 
-#: single.php:1054 views/user/profile.php:86
+#: single.php:1078 views/user/profile.php:86
 msgid "Change Password!"
 msgstr "Alterar Senha!"
 
-#: single.php:1058 views/user/profile.php:90
+#: single.php:1082 views/user/profile.php:90
 msgid "Old Password"
 msgstr "Senha Antiga"
 
-#: single.php:1059 views/user/profile.php:91
+#: single.php:1083 views/user/profile.php:91
 msgid "Type here the old password"
 msgstr "Digite aqui sua senha antiga"
 
-#: single.php:1062 views/user/profile.php:94
+#: single.php:1086 views/user/profile.php:94
 msgid "New Password"
 msgstr "Nova Senha"
 
-#: single.php:1063 views/user/profile.php:95
+#: single.php:1087 views/user/profile.php:95
 msgid "Type here the new password"
 msgstr "Digite aqui sua nova senha"
 
-#: single.php:1066 views/user/profile.php:98
+#: single.php:1090 views/user/profile.php:98
 msgid "Confirm new password"
 msgstr "Confirme a nova senha"
 
-#: single.php:1067 views/user/profile.php:99
+#: single.php:1091 views/user/profile.php:99
 msgid "Type here your new password again"
 msgstr "Digite aqui sua nova senha novamente"
 
-#: single.php:1073 views/category/list.php:109 views/object/create.php:173
+#: single.php:1097 views/category/list.php:109 views/object/create.php:173
 #: views/object/create_item_text.php:317 views/object/create_item_text.php:320
 #: views/object/create_item_url.php:282 views/object/data_property_form.php:37
 #: views/object/delete.php:12 views/object/edit.php:262
@@ -3851,40 +3840,40 @@ msgstr "Digite aqui sua nova senha novamente"
 msgid "Submit"
 msgstr "Enviar"
 
-#: single.php:1108
+#: single.php:1132
 msgid "Import Social Media"
 msgstr "Importar de Redes Sociais"
 
-#: single.php:1112 views/social_network/list.php:23
+#: single.php:1136 views/social_network/list.php:23
 #: views/theme_options/edit.php:12
 msgid "Youtube"
 msgstr "Youtube"
 
-#: single.php:1113 views/social_network/list.php:24
+#: single.php:1137 views/social_network/list.php:24
 #: views/theme_options/edit.php:13
 msgid "Flickr"
 msgstr "Flickr"
 
-#: single.php:1114 views/social_network/list.php:25
+#: single.php:1138 views/social_network/list.php:25
 #: views/theme_options/edit.php:14
 msgid "Facebook"
 msgstr "Facebook"
 
-#: single.php:1115 views/social_network/list.php:26
+#: single.php:1139 views/social_network/list.php:26
 #: views/theme_options/edit.php:15
 msgid "Instagram"
 msgstr "Instagram"
 
-#: single.php:1116 views/social_network/list.php:27
+#: single.php:1140 views/social_network/list.php:27
 #: views/theme_options/edit.php:16
 msgid "Vimeo"
 msgstr "Vimeo"
 
-#: single.php:1122 views/social_network/list.php:34
+#: single.php:1146 views/social_network/list.php:34
 msgid "Youtube Channels"
 msgstr "Canais do Youtube"
 
-#: single.php:1125 views/export/index_export.php:27
+#: single.php:1149 views/export/index_export.php:27
 #: views/import/import_configuration.php:30
 #: views/import/import_configuration.php:80
 #: views/import/import_configuration.php:104 views/social_network/list.php:37
@@ -3893,11 +3882,11 @@ msgstr "Canais do Youtube"
 msgid "Identifier"
 msgstr "Identificador"
 
-#: single.php:1126 views/social_network/list.php:38
+#: single.php:1150 views/social_network/list.php:38
 msgid "Playlist"
 msgstr "Lista de reprodução"
 
-#: single.php:1130 single.php:1158 single.php:1205 single.php:1224
+#: single.php:1154 single.php:1182 single.php:1229 single.php:1248
 #: views/export/oaipmh/edit_maping_attributes.php:34
 #: views/import/metatags/edit_maping_attributes.php:35
 #: views/import/oaipmh/edit_maping_attributes.php:70
@@ -3908,12 +3897,12 @@ msgstr "Lista de reprodução"
 msgid "Update"
 msgstr "Atualizar"
 
-#: single.php:1136
+#: single.php:1160
 msgid "Entry youtube video url"
 msgstr "Digite a url do vídeo do youtube"
 
-#: single.php:1137 single.php:1141 single.php:1143 single.php:1211
-#: single.php:1230 single.php:1288 views/license/list.php:41
+#: single.php:1161 single.php:1165 single.php:1167 single.php:1235
+#: single.php:1254 single.php:1312 views/license/list.php:41
 #: views/license/list.php:44 views/object/multiple_social_network/create.php:39
 #: views/social_network/list.php:52 views/theme_options/edit.php:29
 #: views/theme_options/edit.php:41 views/theme_options/edit.php:54
@@ -3930,15 +3919,15 @@ msgstr "Digite a url do vídeo do youtube"
 msgid "Type here"
 msgstr "Digite aqui"
 
-#: single.php:1140 views/social_network/list.php:51
+#: single.php:1164 views/social_network/list.php:51
 msgid "Entry channel youtube identifeir"
 msgstr "Digite o identificador do canal do youtube"
 
-#: single.php:1142 views/social_network/list.php:53
+#: single.php:1166 views/social_network/list.php:53
 msgid "Entry playlist youtube identifeir"
 msgstr "Digite o identificador do playlist do youtube"
 
-#: single.php:1144 views/object/edit_object_properties/list_properties.php:86
+#: single.php:1168 views/object/edit_object_properties/list_properties.php:86
 #: views/object/show_insert_object_properties.php:83
 #: views/object/show_list_event_properties.php:61
 #: views/object/single_object/single_show_list_event_properties.php:93
@@ -3946,89 +3935,89 @@ msgstr "Digite o identificador do playlist do youtube"
 msgid "Help: "
 msgstr "Ajuda: "
 
-#: single.php:1144 views/social_network/list.php:54
+#: single.php:1168 views/social_network/list.php:54
 msgid "Type here to get a specific playlist or leave blank to get all"
 msgstr ""
 "Digite aqui para especificar uma lista de reprodução ou deixe em branco para "
 "todos os vídeos"
 
-#: single.php:1151 views/social_network/list.php:64
+#: single.php:1175 views/social_network/list.php:64
 msgid "Flickr Profiles"
 msgstr "Perfis do Flickr "
 
-#: single.php:1154 single.php:1201 single.php:1220
+#: single.php:1178 single.php:1225 single.php:1244
 #: views/social_network/list.php:67 views/social_network/list.php:120
 #: views/social_network/list.php:145
 msgid "User Name"
 msgstr "Nome do usuário"
 
-#: single.php:1163 views/social_network/list.php:79
+#: single.php:1187 views/social_network/list.php:79
 msgid "Entry an user name from a flickr profile"
 msgstr "Entre com o nome do usuário de perfil do flickr "
 
-#: single.php:1171 views/social_network/list.php:89
+#: single.php:1195 views/social_network/list.php:89
 msgid "Facebook Profiles"
 msgstr "Perfis do Facebook"
 
-#: single.php:1193 views/social_network/list.php:107
+#: single.php:1217 views/social_network/list.php:107
 msgid "Import Facebook Photos"
 msgstr "Importar Fotos do Facebook"
 
-#: single.php:1198 views/social_network/list.php:117
+#: single.php:1222 views/social_network/list.php:117
 msgid "Instagram Profiles"
 msgstr "Perfis do Instagram"
 
-#: single.php:1210 views/social_network/list.php:132
+#: single.php:1234 views/social_network/list.php:132
 #: views/social_network/list.php:157
 msgid "Entry an user name from a instagram profile"
 msgstr "Entre com o nome do usuário de perfil do Instagram "
 
-#: single.php:1217 views/social_network/list.php:142
+#: single.php:1241 views/social_network/list.php:142
 msgid "Vimeo Profiles"
 msgstr "Perfis do Vimeo"
 
-#: single.php:1229
+#: single.php:1253
 msgid "Entry an user name from a vimeo profile"
 msgstr "Entre com um usuário de perfil do Vimeo"
 
-#: single.php:1232
+#: single.php:1256
 msgid "Channel"
 msgstr "Canal"
 
-#: single.php:1235 views/object/list_versions.php:34
+#: single.php:1259 views/object/list_versions.php:34
 #: views/permission/page.php:70
 msgid "User"
 msgstr "Usuário"
 
-#: single.php:1259
+#: single.php:1283
 msgid "Web Resource"
 msgstr "Recurso E"
 
-#: single.php:1287
+#: single.php:1311
 msgid "Add item through URL"
 msgstr "Adicionar item através de URL"
 
-#: single.php:1301 views/object/multiple_social_network/create.php:15
+#: single.php:1325 views/object/multiple_social_network/create.php:15
 msgid "Through this feature you can enter:"
 msgstr "Através deste recurso é possível inserir: "
 
-#: single.php:1304 views/object/multiple_social_network/create.php:18
+#: single.php:1328 views/object/multiple_social_network/create.php:18
 msgid "Files (ex. pdf, jpg, png, etc)"
 msgstr "Arquivos (Ex. pdf,jpg,png, etc)"
 
-#: single.php:1305 views/object/multiple_social_network/create.php:19
+#: single.php:1329 views/object/multiple_social_network/create.php:19
 msgid "Sites"
 msgstr "Sites "
 
-#: single.php:1306 views/object/multiple_social_network/create.php:20
+#: single.php:1330 views/object/multiple_social_network/create.php:20
 msgid "Video from Youtube or Vimeo"
 msgstr "Vídeos do Youtube ou do Vimeo"
 
-#: single.php:1307 views/object/multiple_social_network/create.php:21
+#: single.php:1331 views/object/multiple_social_network/create.php:21
 msgid "Multiple videos from a Youtube Channel or Vimeo Channel"
 msgstr "Múltiplos vídeos de um canal do Youtube ou de um canal do Vimeo"
 
-#: single.php:1308 views/object/multiple_social_network/create.php:22
+#: single.php:1332 views/object/multiple_social_network/create.php:22
 msgid "Images from Flickr, Facebook or Instagram"
 msgstr "Imagens do Flick,Facebook ou Instagram"
 
@@ -4107,6 +4096,12 @@ msgstr "Carregando coleções"
 #: views/search/js/root_menu_left_js.php:35
 msgid "All Colections"
 msgstr "Todas as coleções"
+
+#: views/advanced_search/js/show_insert_object_properties_js.php:322
+#: views/object/edit_object_properties/js/edit_list_properties_accordion_js.php:581
+#: views/object/js/list_properties_accordion_js.php:557
+msgid "Loading metadata for this field"
+msgstr "Carregando metadados deste campo…"
 
 #: views/advanced_search/list_advanced_search.php:19
 msgid "Search Results"
@@ -4206,14 +4201,10 @@ msgstr "Tem certeza que deseja remover a coleção:"
 msgid "Describe why the collection: "
 msgstr "Descre por que a coleção:"
 
-#: views/advanced_search/show_object_properties.php:3
-#: views/category/list.php:229 views/category/page.php:84
-#: views/object/list_data_table.php:104 views/object/list_single_object.php:468
-#: views/object/list_single_object_version.php:453 views/property/list.php:33
-#: views/property/list.php:38 views/theme_options/property/list.php:13
-msgid "Properties"
-msgstr "Metadados"
-
+#: views/advanced_search/properties_categories_search.php:39
+#: views/advanced_search/properties_categories_search.php:51
+#: views/advanced_search/properties_categories_search.php:63
+#: views/advanced_search/properties_categories_search.php:75
 #: views/advanced_search/show_object_properties.php:19
 #: views/advanced_search/show_object_properties.php:41
 #: views/advanced_search/show_object_properties.php:60
@@ -4225,6 +4216,10 @@ msgstr "Metadados"
 msgid "Equals"
 msgstr "Igual"
 
+#: views/advanced_search/properties_categories_search.php:40
+#: views/advanced_search/properties_categories_search.php:52
+#: views/advanced_search/properties_categories_search.php:64
+#: views/advanced_search/properties_categories_search.php:76
 #: views/advanced_search/show_object_properties.php:20
 #: views/advanced_search/show_object_properties.php:42
 #: views/advanced_search/show_object_properties.php:61
@@ -4236,63 +4231,86 @@ msgstr "Igual"
 msgid "Not equals"
 msgstr "Diferente"
 
+#: views/advanced_search/properties_categories_search.php:41
+#: views/advanced_search/properties_categories_search.php:53
+#: views/advanced_search/properties_categories_search.php:153
+#: views/advanced_search/properties_categories_search.php:192
 #: views/advanced_search/show_object_properties.php:21
 #: views/advanced_search/show_object_properties.php:43
 #: views/advanced_search/show_object_properties.php:62
 #: views/advanced_search/show_object_properties.php:80
 #: views/advanced_search/show_object_properties.php:129
 #: views/advanced_search/show_object_properties.php:141
-#: views/advanced_search/show_object_properties.php:241
-#: views/advanced_search/show_object_properties.php:280
-#: views/advanced_search/show_object_properties.php:351
+#: views/advanced_search/show_object_properties.php:244
+#: views/advanced_search/show_object_properties.php:284
+#: views/advanced_search/show_object_properties.php:355
 msgid "Contains"
 msgstr "Contém"
 
+#: views/advanced_search/properties_categories_search.php:42
+#: views/advanced_search/properties_categories_search.php:54
+#: views/advanced_search/properties_categories_search.php:154
+#: views/advanced_search/properties_categories_search.php:193
 #: views/advanced_search/show_object_properties.php:22
 #: views/advanced_search/show_object_properties.php:44
 #: views/advanced_search/show_object_properties.php:63
 #: views/advanced_search/show_object_properties.php:81
 #: views/advanced_search/show_object_properties.php:130
 #: views/advanced_search/show_object_properties.php:142
-#: views/advanced_search/show_object_properties.php:242
-#: views/advanced_search/show_object_properties.php:281
-#: views/advanced_search/show_object_properties.php:352
+#: views/advanced_search/show_object_properties.php:245
+#: views/advanced_search/show_object_properties.php:285
+#: views/advanced_search/show_object_properties.php:356
 msgid "Does not Contain"
 msgstr "Não contém"
+
+#: views/advanced_search/properties_categories_search.php:65
+#: views/advanced_search/show_object_properties.php:153
+msgid "Higher"
+msgstr "Maior"
+
+#: views/advanced_search/properties_categories_search.php:66
+#: views/advanced_search/show_object_properties.php:154
+msgid "Lower"
+msgstr "Menor"
+
+#: views/advanced_search/properties_categories_search.php:77
+#: views/advanced_search/show_object_properties.php:165
+msgid "After"
+msgstr "Depois"
+
+#: views/advanced_search/properties_categories_search.php:78
+#: views/advanced_search/show_object_properties.php:166
+msgid "Before"
+msgstr "Antes"
+
+#: views/advanced_search/properties_categories_search.php:181
+#: views/advanced_search/show_object_properties.php:273
+msgid "Type the three first letters of the item of this collection "
+msgstr "Digite as três primeiras letras do item desta coleção"
+
+#: views/advanced_search/properties_categories_search.php:240
+#: views/advanced_search/show_object_properties.php:332
+msgid "Between"
+msgstr "Entre"
+
+#: views/advanced_search/properties_categories_search.php:241
+#: views/advanced_search/show_object_properties.php:333
+msgid "Not Between"
+msgstr "Diferente"
+
+#: views/advanced_search/show_object_properties.php:3
+#: views/category/list.php:229 views/category/page.php:84
+#: views/object/list_data_table.php:104 views/object/list_single_object.php:468
+#: views/object/list_single_object_version.php:453 views/property/list.php:33
+#: views/property/list.php:38 views/theme_options/property/list.php:13
+msgid "Properties"
+msgstr "Metadados"
 
 #: views/advanced_search/show_object_properties.php:56
 msgid "Item source"
 msgstr "Fonte do item"
 
-#: views/advanced_search/show_object_properties.php:153
-msgid "Higher"
-msgstr "Maior"
-
-#: views/advanced_search/show_object_properties.php:154
-msgid "Lower"
-msgstr "Menor"
-
-#: views/advanced_search/show_object_properties.php:165
-msgid "After"
-msgstr "Depois"
-
-#: views/advanced_search/show_object_properties.php:166
-msgid "Before"
-msgstr "Antes"
-
-#: views/advanced_search/show_object_properties.php:269
-msgid "Type the three first letters of the item of this collection "
-msgstr "Digite as três primeiras letras do item desta coleção"
-
-#: views/advanced_search/show_object_properties.php:328
-msgid "Between"
-msgstr "Entre"
-
-#: views/advanced_search/show_object_properties.php:329
-msgid "Not Between"
-msgstr "Diferente"
-
-#: views/advanced_search/show_object_properties.php:340
+#: views/advanced_search/show_object_properties.php:344
 msgid "Available Licenses"
 msgstr "Licenças disponíveis"
 
@@ -4784,7 +4802,7 @@ msgstr "Aprovação por moderador"
 
 #: views/collection/edit.php:305
 msgid "Democratic approval (majority election)"
-msgstr "Aprovação dmocrática (eleição por maioria)"
+msgstr "Aprovação democrática (eleição por maioria)"
 
 #: views/collection/edit.php:310
 msgid "Time to vote (days):"
@@ -6159,11 +6177,6 @@ msgstr "já está inserido!"
 msgid "Item title is empty!"
 msgstr "O título do item está vazio!"
 
-#: views/object/edit_object_properties/js/edit_list_properties_accordion_js.php:581
-#: views/object/js/list_properties_accordion_js.php:557
-msgid "Loading metadata for this field"
-msgstr "Carregando metadados deste campo…"
-
 #: views/object/edit_object_properties/list_properties.php:159
 #: views/object/multiple_social_network/editor_items.php:275
 #: views/object/show_insert_object_properties.php:184
@@ -6848,7 +6861,7 @@ msgstr "Digite o nome da Tag"
 
 #: views/object/list_single_object.php:498
 msgid "Loading metadata for this item"
-msgstr ""
+msgstr "Carregando metadados para este item"
 
 #: views/object/list_single_object.php:559
 #: views/object/list_single_object_version.php:542
@@ -8371,39 +8384,59 @@ msgstr "Clique na categoria"
 msgid "Right button at the category"
 msgstr "Botão direito na categoria"
 
-#: views/search/layout.php:146
+#: views/search/layout.php:152
+msgid "Enable Write text"
+msgstr "Habilitar Escrever Texto"
+
+#: views/search/layout.php:152
+msgid "Enable Send file(s)"
+msgstr "Habilitar Enviar arquivo(s)"
+
+#: views/search/layout.php:153
+msgid "Enable Send file(s) via zip"
+msgstr "Habilitar Enviar arquivos no formato zip"
+
+#: views/search/layout.php:153
+msgid "Enable Insert URL"
+msgstr "Habilitar Inserir URL"
+
+#: views/search/layout.php:156
+msgid "Select the options to add a new item"
+msgstr "Selecione as opções para submissão de um novo item"
+
+#: views/search/layout.php:173
 msgid "Item view style"
 msgstr "Estilo da visualização do item"
 
-#: views/search/layout.php:150
+#: views/search/layout.php:177
 msgid "Select the layout for the item visualization"
 msgstr "Selecione o layout para a visualização do item"
 
-#: views/search/layout.php:155 views/search/layout.php:176
+#: views/search/layout.php:182 views/search/layout.php:203
 msgid "Focus in media"
 msgstr "Ênfase na mídia"
 
-#: views/search/layout.php:160 views/search/layout.php:181
+#: views/search/layout.php:187 views/search/layout.php:208
 msgid "Focus in metadata"
 msgstr "Ênfase no metadado"
 
-#: views/search/layout.php:163 views/search/layout.php:193
+#: views/search/layout.php:190 views/search/layout.php:220
 msgid "Habilitate visualization of image and attachments"
 msgstr "Habilitar visualização de imagem e anexo"
 
-#: views/search/layout.php:167
+#: views/search/layout.php:194
 msgid "Item insert style"
 msgstr "Estilo da submissão do item"
 
-#: views/search/layout.php:171
+#: views/search/layout.php:198
 msgid "Select the form layout to create a new text item"
 msgstr "Selecione o layout do formulário para criar um novo item de texto"
 
-#: views/search/layout.php:185
+#: views/search/layout.php:212
 msgid "1 column"
 msgstr "1 coluna"
 
-#: views/search/layout.php:188
+#: views/search/layout.php:215
 msgid "2 columns"
 msgstr "2 colunas"
 
@@ -8620,6 +8653,10 @@ msgstr "E-mail de Boas Vindas"
 #: views/statistics/js/list_js.php:38
 msgid "Keys"
 msgstr "Chaves"
+
+#: views/statistics/js/list_js.php:42
+msgid "Social Media"
+msgstr "Redes Sociais"
 
 #: views/statistics/list.php:19
 msgid "Period"
@@ -9213,6 +9250,12 @@ msgstr "Local de trabalho atual"
 #: views/user/register.php:102
 msgid "Professional Resume"
 msgstr "Resumo profissional"
+
+#~ msgid "Multiple Files"
+#~ msgstr "Múltiplos arquivos"
+
+#~ msgid "Web Resource URL"
+#~ msgstr "Recurso Web URL"
 
 #~ msgid "Enable reduced menu"
 #~ msgstr "Habilitar Menu Reduzido"
