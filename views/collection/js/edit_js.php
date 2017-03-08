@@ -58,6 +58,7 @@
                         change_breadcrumbs_title('<?php _e('Categories', 'tainacan') ?>');
                         //showPropertiesAndFilters('< ? php echo get_template_directory_uri() ?>');
                     } else {
+                        window.location = $('#socialdb_permalink_collection').val();
                         if (elem.is_moderator) {
                             showCollectionConfiguration(src);
                         } else {
