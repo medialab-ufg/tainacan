@@ -294,6 +294,8 @@ while (have_posts()) : the_post();
                                 <div class="tainacan-add-item col-md-1 no-padding" <?php if (has_filter('show_custom_add_item_button')): ?> style="margin-right:50px;"  <?php endif; ?> >
                                         <?php if (has_filter('show_custom_add_item_button')): ?>
                                             <?php echo apply_filters('show_custom_add_item_button', ''); ?>
+                                        <?php elseif (has_action('addLibraryMenu')): ?>
+                                            <?php do_action('addLibraryMenu') ?>
                                         <?php else: ?>
 
                                             <?php
@@ -1345,6 +1347,12 @@ while (have_posts()) : the_post();
         </div>
     </div>
 
+    <?php
+        if(has_action('add_new_modals'))
+        {
+            do_action('add_new_modals', '');
+        }
+    ?>
     <?php require_once (dirname(__FILE__) . '/views/search/js/single_js.php'); ?>
     <?php require_once (dirname(__FILE__) . '/extras/routes/routes.php'); ?>
 
