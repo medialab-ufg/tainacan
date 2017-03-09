@@ -564,14 +564,15 @@ class ObjectWidgetsHelper extends ViewHelper {
                             }
                             if ($property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] == 'true') {
                                 ?>
-                                <a id='required_field_<?php echo $property['id']; ?>' style="padding: 3px;" class="pull-right" >
-                                        <span  title="<?php echo __('This metadata is required!','tainacan')?>" 
-                                       data-toggle="tooltip" data-placement="top" >*</span>
-                                </a>
-                                <a id='ok_field_<?php echo $property['id']; ?>'  style="display: none;padding: 0px;" class="pull-right" >
-                                        <span class="glyphicon  glyphicon-ok-circle" title="<?php echo __('Field filled successfully!','tainacan')?>" 
-                                       data-toggle="tooltip" data-placement="top" ></span>
-                                </a>
+                                <a id='required_field_<?php echo $property['id']; ?>' class="pull-right" 
+                                    style="margin-right: 15px;color:red;" >
+                                         <span class="glyphicon glyphicon-remove"  title="<?php echo __('This metadata is required!','tainacan')?>" 
+                                        data-toggle="tooltip" data-placement="top" ></span>
+                                 </a>
+                                 <a id='ok_field_<?php echo $property['id']; ?>' class="pull-right" style="display: none;margin-right: 15px;color:green;"  >
+                                         <span class="glyphicon glyphicon-ok" title="<?php echo __('Field filled successfully!','tainacan')?>" 
+                                        data-toggle="tooltip" data-placement="top" ></span>
+                                 </a>
                                 <input type="hidden" 
                                          id='core_validation_<?php echo $property['id']; ?>' 
                                          class='core_validation' 

@@ -2,9 +2,11 @@
 /**
  * Loads variables used along different collection's visualization's modes
  */
-$viewHelper = new ViewHelper();
+$viewHelper = new ViewHelper($collection_id);
 $objHelper = new ObjectHelper();
-
+if(!isset($col_id)){
+    $col_id = $collection_id;
+}
 $countLine = 0;
 $collection_list_mode = $collection_data['collection_metas']['socialdb_collection_list_mode'];
 $_slideshow_time = $collection_data['collection_metas']['socialdb_collection_slideshow_time'];

@@ -568,6 +568,14 @@ class CollectionModel extends Model {
                 $property_object = get_term_by('id', $property_id, 'socialdb_property_type');
                 $parent_name = PropertyModel::get_property_type($property_id);
                 $all_data = $this->get_all_property($property_id, true);
+                if(in_array($property_object->slug, $this->fixed_slugs)){
+                        $labels_collection = ($data['collection_id']!='') ? get_post_meta($data['collection_id'], 'socialdb_collection_fixed_properties_labels', true) : false;
+                        if($labels_collection):
+                            $array = unserialize($labels_collection);
+                            $property_object->name
+                                    = (isset($array[$property_object->term_id]))? $array[$property_object->term_id] : $property_object->name;
+                        endif;
+                }
                 $array = array('id' => $property_object->term_id, 'name' => $property_object->name, 'type' => $all_data['type']);
                 if ($parent_name == 'socialdb_property_data') {
                     // $is_ordenation = get_term_meta($property_object->term_id, 'socialdb_property_data_column_ordenation')[0];

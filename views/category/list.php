@@ -6,7 +6,7 @@ include_once ('js/list_js.php');
 global $config;
 ?>  
 
-<div id="categories_title" class="row"> 
+<div id="categories_title" class="row" style="margin-top: 30px;"> 
     <div class="col-md-12 tainacan-topo-categoria">
         <h3><?php _e('Categories', 'tainacan') ?><small>&nbsp;&nbsp;&nbsp;<!--a href="#MyWizard" onclick="show_modal_import_taxonomy()"><?php _e('Import', 'tainacan') ?></a--></small>
             <button onclick="backToMainPage();" class="btn btn-default pull-right"><?php _e('Back to collection', 'tainacan') ?></button>
@@ -111,7 +111,7 @@ global $config;
         </form>
     </div>    
 </div> 
-<ul id="myMenu" class="contextMenu" style="display:none;margin-top: -20%;">
+<ul id="myMenu" class="contextMenu" style="display:none;">
     <li class="add"><a href="#add"><?php echo __('Add', 'tainacan'); ?></a></li>  
     <li class="edit"><a href="#edit"><?php echo __('Edit', 'tainacan'); ?></a></li>
     <!--   <li class="cut separator"><a href="#cut">Cut</a></li>

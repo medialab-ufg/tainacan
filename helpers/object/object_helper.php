@@ -62,17 +62,28 @@ class ObjectHelper extends ViewHelper {
         $required = get_post_meta($collection_id, 'socialdb_collection_property_'.$id.'_required', true);
         if($required&&$required=='true'):
         ?>
-        <a id='required_field_<?php echo $slug ?>' style="padding: 3px;">
+        <!--a id='required_field_<?php echo $slug ?>' style="padding: 3px;">
             <span title="<?php echo __('This metadata is required!', 'tainacan') ?>" 
                          data-toggle="tooltip" data-placement="top" >*</span>
         </a>
         <a id='ok_field_<?php echo $slug ?>'  style="display: none;padding: 0px;margin-left: -30px;"  >
             &nbsp; <span class="glyphicon glyphicon-ok-circle" title="<?php echo __('Field filled successfully!', 'tainacan') ?>" 
                          data-toggle="tooltip" data-placement="top" ></span>
-        </a>
+        </a-->
+         <a id='required_field_<?php echo $slug; ?>' class="pull-right" 
+            style="margin-right: 15px;color:red;" >
+                 <span class="glyphicon glyphicon-remove"  title="<?php echo __('This metadata is required!','tainacan')?>" 
+                data-toggle="tooltip" data-placement="top" ></span>
+         </a>
+         <a id='ok_field_<?php echo $slug; ?>' class="pull-right" style="display: none;margin-right: 15px;color:green;"  >
+                 <span class="glyphicon glyphicon-ok" title="<?php echo __('Field filled successfully!','tainacan')?>" 
+                data-toggle="tooltip" data-placement="top" ></span>
+         </a>    
         <input type="hidden" id='core_validation_<?php echo $slug ?>' class='core_validation' value='false'>
         <input type="hidden" id='core_validation_<?php echo $slug ?>_message'
                value='<?php echo sprintf(__('The field license is required', 'tainacan'), $slug); ?>'>
+         <input type="hidden" id='fixed_id_<?php echo $slug ?>'
+               value='<?php echo $id; ?>'>
         <?php
         endif;
     }

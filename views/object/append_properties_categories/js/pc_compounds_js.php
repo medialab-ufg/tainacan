@@ -2,7 +2,7 @@
     var dynatree_object_index = [];
     $(function () {
         // # - autocomplete para as propriedades de dados
-        var properties_autocomplete = compounds_get_val($("#properties_autocomplete_<?php echo $references['categories'] ?>").val());
+        var properties_autocomplete = compounds_get_val($("#pc_properties_autocomplete_<?php echo $references['categories'] ?>").val());
         var compounds = compounds_get_val($("#pc_properties_compounds_<?php echo $references['categories'] ?>").val());
         if(compounds&&compounds.length!=0){
              $.each(compounds, function (idx, compound) {

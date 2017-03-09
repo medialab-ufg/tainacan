@@ -806,6 +806,9 @@
             $('#core_validation_'+id).val('true');
             $('#ok_field_'+id).show();
             $('#required_field_'+id).hide();
+            if(!$.isNumeric(id) && $('#fixed_id_'+id).length > 0){
+                var id =  $('#fixed_id_'+id).val();
+            }
             $('#meta-item-'+id+' h2').css('background-color','#fffff');
         }
         validate_all_fields();
@@ -818,6 +821,9 @@
             if($( this ).val()==='false'){
                 cont++;
                 var id = $( this ).attr('id').replace('core_validation_','');
+                if(!$.isNumeric(id) && $('#fixed_id_'+id).length > 0){
+                     var id =  $('#fixed_id_'+id).val();
+                }
                 $('#meta-item-'+id+' h2').css('background-color','#ffcccc');
                 $.each($( "#submit_form .tab-pane" ),function(index,seletor){
                     if($(seletor).find('#meta-item-'+id).length > 0){
