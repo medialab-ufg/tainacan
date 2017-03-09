@@ -468,7 +468,7 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
         $count = count($values);
         foreach ($values as $value) {
             if(strpos($value, '_cat')!==false){
-                if(!get_terrm_by('id',str_replace('_cat', '', $value),'socialdb_category_type'))
+                if(!get_term_by('id',str_replace('_cat', '', $value),'socialdb_category_type'))
                       $emptyFields++;  
             }else {
                 $object = get_metadata_by_mid('post', $value);

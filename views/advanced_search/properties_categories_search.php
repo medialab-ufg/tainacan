@@ -1,6 +1,11 @@
   <?php 
   if (isset($property_data)||isset($property_term)||isset($property_object)): 
     include_once ('js/properties_categories_search_js.php');
+  
+    include_once(dirname(__FILE__).'/../../helpers/view_helper.php');
+    include_once(dirname(__FILE__).'/../../helpers/advanced_search/advanced_search_helper.php');
+    include_once ('js/show_insert_object_properties_js.php');
+    $advanced_search_helper = new AdvancedSearchHelper();
     $properties_terms_radio = [];
     $properties_terms_tree = [];
     $properties_terms_selectbox = [];
@@ -196,7 +201,7 @@
                  </div>                
             <?php } ?>
         <?php endif; ?>
-         <?php if (isset($rankings)): ?>
+        <?php if (isset($rankings)): ?>
             <?php foreach ($rankings as $property) { ?>
                 <div class="form-group col-md-12 no-padding">
                     <label class="col-md-12 no-padding" for="object_tags">
@@ -243,6 +248,9 @@
                    </div>   
                  </div>                
             <?php } ?>
+        <?php endif; ?>
+        <?php if(isset($property_compounds)): ?>
+            <?php $advanced_search_helper->list_properties_compounds_search($property_compounds) ?>
         <?php endif; ?>
         <input type="hidden" name="search_properties_autocomplete" id='search_properties_autocomplete_<?php echo $property_searched_id ?>' value="<?php echo implode(',', $properties_autocomplete); ?>">
         <input type="hidden" name="properties_terms_radio" id='search_properties_terms_radio_<?php echo $property_searched_id ?>' value="<?php echo implode(',', $properties_terms_radio); ?>">

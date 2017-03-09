@@ -88,7 +88,10 @@
     include_once ('../../../../../wp-config.php');
     include_once ('../../../../../wp-load.php');
     include_once ('../../../../../wp-includes/wp-db.php');
+    include_once(dirname(__FILE__).'/../../helpers/view_helper.php');
+    include_once(dirname(__FILE__).'/../../helpers/advanced_search/advanced_search_helper.php');
     include_once ('js/show_insert_object_properties_js.php');
+    $advanced_search_helper = new AdvancedSearchHelper();
     $properties_terms_radio = [];
     $properties_terms_tree = [];
     $properties_terms_selectbox = [];
@@ -335,6 +338,9 @@
                    </div>   
                  </div>                
             <?php } ?>
+        <?php endif; ?>
+        <?php if(isset($property_compounds)): ?>
+            <?php $advanced_search_helper->list_properties_compounds_search($property_compounds) ?>
         <?php endif; ?>
         <div id="list_licenses_items" class="form-group col-md-12 no-padding" >
              <label class="col-md-12 no-padding" for="object_tags">

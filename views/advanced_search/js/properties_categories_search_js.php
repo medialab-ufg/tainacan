@@ -1,13 +1,12 @@
 <script>
     $(function () {
-        var src = $('#src').val();
-        search_list_properties_term_insert_objects();
+        search_list_properties_term_insert_objects_adv();
         var search_properties_autocomplete = search_get_val($("#search_properties_autocomplete_<?php echo $property_searched_id ?>").val());
         autocomplete_object_property_add(search_properties_autocomplete);
     });
     
 //************************* properties terms ******************************************//
-    function search_list_properties_term_insert_objects() {
+    function search_list_properties_term_insert_objects_adv() {
         var radios = search_get_val($("#search_properties_terms_radio_<?php echo $property_searched_id ?>").val());
         var selectboxes = search_get_val($("#search_properties_terms_selectbox_<?php echo $property_searched_id ?>").val());
         var trees = search_get_val($("#search_properties_terms_tree_<?php echo $property_searched_id ?>").val());
