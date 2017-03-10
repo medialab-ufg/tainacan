@@ -103,7 +103,7 @@
                     $('#core_validation_'+compound_id+'_'+property_id+'_'+object_id).val('true');
                     set_field_valid_compounds(property_id,'core_validation_'+compound_id+'_'+property_id+'_'+object_id,compound_id);
                     //fim validacao do campo
-                    $("#property_value_"+compound_id+"__" + property_id + "_" + object_id+"_edit option").each(function(){
+                    $("#property_value_"+compound_id+"_" + property_id + "_" + object_id+"_edit option").each(function(){
                         if($(this).val()==ui.item.value){
                             already_selected = true;
                         }
