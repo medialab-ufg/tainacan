@@ -77,6 +77,7 @@ while (have_posts()) : the_post();
     <input type="hidden" id="mode" name="mode" value="<?php echo $mode ?>">
     <input type="hidden" id="site_url" value="<?php echo site_url(); ?>" >
     <input type="hidden" id="collection_root_id" value="<?php echo get_option('collection_root_id'); ?>">
+    <input type="hidden" id="collection_root_url" value="<?php echo get_the_permalink(get_option('collection_root_id')) ?>">
     <input type="hidden" id="socialdb_permalink_collection" name="socialdb_permalink_collection" value="<?php echo get_the_permalink(get_the_ID()); ?>" />
     <input type="hidden" id="slug_collection" name="slug_collection" value="<?php echo get_post(get_the_ID())->post_name; ?>"> <!-- utilizado na busca -->
     <input type="hidden" id="search_collection_field" name="search_collection_field" value="<?php
@@ -192,6 +193,7 @@ while (have_posts()) : the_post();
     <input type="hidden" id="value_search" name="value_search" value=""> <!-- utilizado na busca -->
     <input type="hidden" id="flag_dynatree_ajax" name="flag_dynatree_ajax" value="true"> <!-- utilizado na busca -->
     <input type="hidden" id="global_tag_id" name="global_tag_id" value="<?php echo (get_term_by('slug', 'socialdb_property_fixed_tags', 'socialdb_property_type')->term_id) ? get_term_by('slug', 'socialdb_property_fixed_tags', 'socialdb_property_type')->term_id : 'tag' ?>"> <!-- utilizado na busca -->
+    <input type="hidden" id="search-advanced-text" value="<?php echo (isset($_GET['search-advanced-text']) && !empty($_GET['search-advanced-text'])) ?  $_GET['search-advanced-text'] : '' ?>">
     <!-- TAINACAN - END: ITENS NECESSARIOS PARA EXECUCAO DE VARIAS PARTES DO SOCIALDB -->
 
     <!-- TAINACAN: esta div central que agrupa todos os locais para widgets e a listagem de objeto -->

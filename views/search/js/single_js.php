@@ -1,4 +1,3 @@
-<?php ?>
 <script>
     var search_items_query = $('#wp_query_args').val();
     var search_collections_query = $('#wp_query_args').val();
@@ -63,9 +62,9 @@
                         $('#click_ad_search_collection').parent().show();
                         $('#click_ad_search_items').parent().hide();
                     }else if(!elem.has_collection && elem.has_item){
-                        $('#click_ad_search_items').trigger('click');
                         $('#click_ad_search_collection').parent().hide();
                         $('#click_ad_search_items').parent().show();
+                        $('#click_ad_search_items').trigger('click');
                     }else if(!elem.has_collection && !elem.has_item){
                          $('#click_ad_search_items').trigger('click');
                         $('#click_ad_search_collection').parent().hide();
@@ -121,7 +120,11 @@
     }
     // atualiza o container com as propriedades da colecao que foi selecionada no selectbox
     function show_collection_properties_root(collection_id) {
-        //$("#advanced_search_collection_id").val(collection_id);
+        //mostro o loader para carregar os metadados
+        if($('#collection_id').val()===$('#collection_root_id').val() && $('#search-advanced-text').val() != ''){
+            show_modal_main();
+        }
+        //ajax properties
         $.ajax({
             url: $('#src').val() + '/controllers/advanced_search/advanced_search_controller.php',
             type: 'POST',
@@ -130,6 +133,14 @@
             $('#propertiesRootAdvancedSearch').html(result);
             //$('#propertiesRootAdvancedSearch').show();
             revalidate_adv_autocomplete(collection_id);
+            //se estiver buscando algo nos campos de busca externos e que esteja na home de colecoes
+            if($('#collection_id').val()===$('#collection_root_id').val() && $('#search-advanced-text').val() != ''){
+                if($('#search-advanced-text').val()!=='@')
+                    $('#advanced_search_title').val($('#search-advanced-text').val());
+                slideFormAdvancedDown();
+                $('#advanced_search_collection_form').trigger('submit');
+                $('#search-advanced-text').val('');
+            }
         });
     }
 
@@ -1305,7 +1316,7 @@
             $('#filters_collection').html(result);
             $('.remove-link-filters').show();
             var result_set = $('.search-resultset').find('a').length;
-            if (result_set > 0) {
+            if (result_set > 0 && !$('#propertiesRootAdvancedSearch').is(':visible')) {
                 $("button#clear").fadeIn();
             } else {
                 $("button#clear").fadeOut('fast');
@@ -2399,16 +2410,12 @@
         }
     }
     /************************************************ HELPERS **********************************************************/
-
-
-
     function setValueReverse(seletor) {
-        console.log($(seletor).val());
         if ($(seletor).val() !== 'false') {
             $('#property_object_is_reverse').val('true');
         } else {
             $('#property_object_is_reverse').val('false');
         }
     }
-
+    
 </script>

@@ -225,27 +225,9 @@ $(window).load(function () {
 
 
     $('#formSearchCollections').submit(function (e) {
-//        e.preventDefault();
-//        $('#list').hide();
-//        $('#loader_objects').show();
-        var search_for = $("#search_collections").val();
-//        $.ajax({
-//            url: $("#src").val() + '/controllers/object/object_controller.php',
-//            type: 'POST',
-//            data: {operation: 'list_search', keyword: search_for, collection_id: $("#collection_id").val(), ordenation_id: $('#collection_single_ordenation').val()}
-//        }).done(function (result) {
-//            elem = jQuery.parseJSON(result);
-//            console.log(elem);
-//            if (elem.is_json) {
-//                window.location = elem.link;
-//            } else {
-//                $('#loader_objects').hide();
-//                $('#list').html(elem.html);
-//                $('#list').show();
-//            }
-//        });
         e.preventDefault();
-        showAdvancedSearch($("#src").val(), search_for);
+        redirectAdvancedSearch('#search_collections');
+       // showAdvancedSearch($("#src").val(), search_for);
     });
 
     // When user types enter at main search box, it opens the advanced search form with the searched term
@@ -793,10 +775,24 @@ function showTopSearch() {
     $('#search_collections').fadeTo(300, 1, function () {
         $("#expand-top-search").css('border', '1px solid whitesmoke');
         $('#search_collections').focus();
+        $('#expand-top-search').attr('onclick','redirectAdvancedSearch("#search_collections")');
         $("#expand-top-search").addClass('showing-input');
     });
-
 }
+
+
+    
+/**
+ * funcao que redireciona para a home da colecao para a busca avancada
+* @type o campo que sera buscado 
+*/    
+function redirectAdvancedSearch(field){
+    if(field===false)
+         window.location = $('#collection_root_url').val()+'?search-advanced-text=@'
+    else if($(field).val()!=='')
+        window.location = $('#collection_root_url').val()+'?search-advanced-text='+$(field).val()
+}
+
 
 $("#expand-top-search").hover(function () {
     $("#expand-top-search").css('border', '1px solid whitesmoke');
@@ -872,27 +868,28 @@ function populateList(src) {
 }
 // mostra a listagem inicial
 function showList(src) {
-    $('.selectors a').removeClass('highlight');
-    $('#list').hide();
-    $('#loader_objects').show();
-    $.ajax({
-        url: src + '/controllers/object/object_controller.php',
-        type: 'POST',
-        data: {operation: 'list', mycollections: $("#mycollections").val(), sharedcollections: $("#sharedcollections").val(), keyword: $("#search_collection_field").val(), collection_id: $("#collection_id").val(), ordenation_id: $('#collection_single_ordenation').val()}
-    }).done(function (result) {
-        $('#hideTrash').hide();
-        elem = jQuery.parseJSON(result);
-        //console.log(elem,result);
-        $('#loader_objects').hide();
-        $('#list').html(elem.page);
-        $('#wp_query_args').val(elem.args);
-        $('#list').show();
-        if (elem.empty_collection) {
-            $('#collection_empty').show();
-            $('#items_not_found').hide();
-        }
-    });
-
+    if($('#search-advanced-text').val() == ''){
+        $('.selectors a').removeClass('highlight');
+        $('#list').hide();
+        $('#loader_objects').show();
+        $.ajax({
+            url: src + '/controllers/object/object_controller.php',
+            type: 'POST',
+            data: {operation: 'list', mycollections: $("#mycollections").val(), sharedcollections: $("#sharedcollections").val(), keyword: $("#search_collection_field").val(), collection_id: $("#collection_id").val(), ordenation_id: $('#collection_single_ordenation').val()}
+        }).done(function (result) {
+            $('#hideTrash').hide();
+            elem = jQuery.parseJSON(result);
+            //console.log(elem,result);
+            $('#loader_objects').hide();
+            $('#list').html(elem.page);
+            $('#wp_query_args').val(elem.args);
+            $('#list').show();
+            if (elem.empty_collection) {
+                $('#collection_empty').show();
+                $('#items_not_found').hide();
+            }
+        });
+    }
 }
 
 // mostra a listagem inicial
