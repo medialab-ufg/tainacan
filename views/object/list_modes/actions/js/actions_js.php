@@ -77,7 +77,6 @@
                 data: { operation: 'press_item', object_id: item_id, collection_id: $('#collection_id').val() }
             }).done(function(r){
                 var itm = $.parseJSON(r);
-                cl(itm);
                 if(itm) {
                     var pressPDF = new jsPDF('p','pt');
                     var baseX = 20;

@@ -59,14 +59,14 @@ if (isset($property_object)):
                             $('#add_item_popover_<?php echo $property['id']; ?>_<?php echo $object_id; ?>').popover({ 
                                html : true,
                                placement: 'right',
-                               title: '<?php echo _e('Add item in the collection','tainacan').' '.$property['metas']['collection_data'][0]->post_title; ?>',
+                               title: '<?php echo _e('Add item in the collection','tainacan').' '.esc_html($property['metas']['collection_data'][0]->post_title); ?>',
                                content: function() {
                                  return $("#popover_content_<?php echo $property['id']; ?>_<?php echo $object_id; ?>").html();
                                }
                             });
                         </script>
-                        <div id="popover_content_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"   class="hide ">
-                            <form class="form-inline"  style="font-size: 12px;width: 300px;">
+                        <div id="popover_content_<?php echo $property['id']; ?>_<?php echo $object_id; ?>" class="hide">
+                            <form class="form-inline" style="font-size: 12px;width: 300px;">
                                 <div class="form-group">
                                   <input type="text" 
                                          placeholder="<?php _e('Type the title','tainacan') ?>"

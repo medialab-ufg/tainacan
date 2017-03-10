@@ -421,6 +421,14 @@ class ObjectController extends Controller {
                             $col_meta = get_term($pcs[2]);
                             if (!is_null($col_meta) && is_object($col_meta)) {
                                 $_pair = ['meta' => $col_meta->name, 'value' => $val[0]];
+                                if(is_numeric($val[0])) {
+                                    $_check_text = get_post($val[0]);
+                                    if( !is_null($_check_text)) {
+                                        if( in_array($_check_text->post_title, $_item_meta['socialdb_object_commom_values']) ) {
+                                            $_pair['value'] = $_check_text->post_title;
+                                        }
+                                    }
+                                }
                                 $press['inf'][] = $_pair;
                             } else {
                                 $press['set'][] = $col_meta;
