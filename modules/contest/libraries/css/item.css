@@ -7,8 +7,14 @@ and open the template in the editor.
     Created on : 26/09/2016, 12:35:12
     Author     : eduardo
 */
+.breadcrumbs-debate{
+    background-color: #e4e4e4 !important;
+}
+
+
+
 .chatTitleContainer {
-    text-align: left;
+    text-align: left; 
     font-size: 14pt;
     vertical-align: middle;
     display: table-cell;
@@ -20,7 +26,7 @@ and open the template in the editor.
 }
 
 .chatContainer {
-    margin-top: -20px;
+    margin-top: 20px;
     height: auto;
     width: 100%;
     background-color: #e4e4e4;
@@ -29,7 +35,8 @@ and open the template in the editor.
 }
 
 .chatHistoryContainer {
-
+    background-color: white;
+    margin-top: -15px;
     padding: 20px;
     height: auto;
     width: 100%;

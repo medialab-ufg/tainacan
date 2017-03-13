@@ -16,7 +16,7 @@
 <input type="hidden" id="related-id" value="<?php echo get_post_meta($post->ID, 'socialdb_collection_property_related_id', TRUE); ?>">
 <input type="hidden" id="url-argument" value="<?php echo htmlentities(get_permalink(get_option('collection_root_id')).'?item='.$object->post_name); ?>">
 <div class="chatContainer">
-    <ol class="breadcrumb item-breadcrumbs" style="padding-top: 10px;">
+    <ol class="breadcrumb item-breadcrumbs breadcrumbs-debate" style="padding-top: 10px;">
         <li> <a href="<?php echo get_permalink(get_option('collection_root_id')); ?>"> <?php _e('Repository', 'tainacan') ?> </a> </li>
         <li> <a href="#" onclick="backToMainPageSingleItem()"> <?php echo $post->post_title; ?> </a> </li>
         <?php 
