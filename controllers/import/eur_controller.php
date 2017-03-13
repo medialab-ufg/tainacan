@@ -15,7 +15,7 @@ class EurController extends Controller {
         switch ($operation) {
 ################################################################################            
             case "import_eur":
-                error_reporting(E_ALL);
+                //error_reporting(E_ALL);
                 $eur_write_model = new EurWriteModel($data['collection_id']);
                 if ($data['search']==''):
                     $jSon['error'] = "<b>OPPSSS:</b> Preencha o campo de busca!";

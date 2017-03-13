@@ -579,7 +579,7 @@
     function compounds_validate_radio(property_id,i,compound_id){
         var selected = $("input[type='radio'][name='socialdb_property_"+compound_id+"_"+property_id+"_"+i+"[]']:checked");
         if (selected.length > 0) {
-            append_category_properties($(selected[0]).val(), $('#actual_field_term_'+compound_id+"_"+property_id+"_"+i).val());
+            //append_category_properties($(selected[0]).val(), $('#actual_field_term_'+compound_id+"_"+property_id+"_"+i).val());
             $('#actual_field_term_'+compound_id+"_"+property_id+"_"+i).val($(selected[0]).val()); 
             $('#core_validation_'+compound_id+'_'+property_id+"_"+i).val('true');
             set_field_valid_compounds(property_id,'core_validation_'+compound_id+'_'+property_id+"_"+i,compound_id);
@@ -604,9 +604,9 @@
         //verificando se existe propriedades para serem  adicionadas
         $.each($("input[type='checkbox'][name='socialdb_property_" + compound_id + "_"+property_id+"_"+i+"[]']"),function(index,value){
             if($(this).is(':checked')){
-                append_category_properties($(this).val());
+             //   append_category_properties($(this).val());
             }else{
-                append_category_properties(0,$(this).val());
+              //  append_category_properties(0,$(this).val());
             }
         });
     }
@@ -624,9 +624,9 @@
             //verificando se existe propriedades para serem  adicionadas
             $.each($("#field_property_term_"+compound_id+"_"+property_id+"_"+i+" option"),function(index,value){
                 if($(this).is(':selected')){
-                    append_category_properties($(this).val(),0,compound_id);
+                   // append_category_properties($(this).val(),0,compound_id);
                 }else{
-                    append_category_properties(0,$(this).val(),compound_id);
+                   // append_category_properties(0,$(this).val(),compound_id);
                 }
             });
         }else{
@@ -648,9 +648,9 @@
             //verificando se existe propriedades para serem  adicionadas
             $.each($("#field_property_term_"+compound_id+"_"+property_id+"_"+i+" option"),function(index,value){
                 if($(this).is(':selected')){
-                    append_category_properties($(this).val());
+                  //  append_category_properties($(this).val());
                 }else{
-                    append_category_properties(0,$(this).val());
+                  //  append_category_properties(0,$(this).val());
                 }
             });
         }else{
