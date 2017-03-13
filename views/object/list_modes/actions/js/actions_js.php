@@ -174,9 +174,14 @@
                                 base_count = baseX;
                             }
 
+                            var extra_padding = 0;
+                            if( itm.inf[idx].is_submeta ) {
+                                extra_padding = 20;
+                            }
+
                             pressPDF.setFontStyle('bold');
                             var p = base_count + 40;
-                            pressPDF.text( itm.inf[idx].meta, baseX*2, p);
+                            pressPDF.text( itm.inf[idx].meta, (baseX*2 + extra_padding) , p);
 
                             var f = p + 15;
                             var default_val = "--";
@@ -186,7 +191,7 @@
                                 default_val = itm.inf[idx].value;
                             }
 
-                            pressPDF.text(default_val, baseX*2, f);
+                            pressPDF.text(default_val, (baseX*2 + extra_padding), f);
                             base_count = p;
                         }
                     }
