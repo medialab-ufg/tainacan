@@ -27,7 +27,7 @@
                <?php
            }
         ?>
-        <li class="active"> <?php echo $object->post_title; ?> </li>
+        <li class="active"> <?php echo (strlen($object->post_title) > 40 ) ?  substr($object->post_title, 0, 40).'...' : $object->post_title; ?> </li>
     </ol>
     <br>
     <div class="chatHistoryContainer">
@@ -36,58 +36,152 @@
             <li class="commentLi commentstep-1" data-commentid="<?php echo $object->ID; ?>">
                 <table class="form-comments-table">
                     <tr>
-                        <td><div class="comment-timestamp"><?php echo $object->post_date_gmt ?></div></td>
-                        <td>
-                            <div class="comment-user">
-                                <?php echo get_user_by('id', $object->post_author)->display_name ?>
+                        <td class="row">
+                            <div class="col-md-1 no-padding">
+                                <div class="comment-avatar">
+                                    <?php echo get_avatar($object->post_author) ?>
+                                </div>    
                             </div>
-                        </td>
-                        <td>
-                            <div class="comment-avatar">
-                                <?php echo get_avatar($object->post_author) ?>
+                            <div class="col-md-11 no-padding" style="line-height: 0.9;">
+                                <p><b><?php echo get_user_by('id', $object->post_author)->display_name ?></b></p>
+                                <?php echo $object->post_date_gmt ?>
                             </div>
-                        </td>
-                        <td>
-                            <div id="comment-<?php echo $object->ID; ?>" 
-                                 data-commentid="<?php echo $object->ID; ?>" 
-                                 class="comment comment-step1">
-                                <h5>
-                                    <span class="label label-info">
-                                        <span id="constest_score_<?php echo $object->ID; ?>"><?php echo $view_helper->get_counter_ranking($ranking, $object->ID) ?></span>
-                                    </span>   
-                                    &nbsp;<span id='popover_positive_<?php echo $object->ID; ?>'></span><span id='popover_negative_<?php echo $object->ID; ?>'></span><b id="text-comment-<?php echo $object->ID; ?>"><?php echo $object->post_title; ?></b>
-                                </h5>    
-                                <div id="commentactions-<?php echo $object->ID; ?>" class="comment-actions">
-                                    <div class="btn-group" role="group" aria-label="...">
-                                        <button type="button" 
-                                                onclick="contest_save_vote_binary_up('<?php echo $ranking; ?>', '<?php echo $object->ID; ?>')" 
-                                                class="btn btn-success btn-sm">
-                                            <span class="glyphicon glyphicon-menu-up"></span>
-                                        </button>
-                                        <button type="button" onclick="contest_save_vote_binary_down('<?php echo $ranking; ?>', '<?php echo $object->ID; ?>')" class="btn btn-danger btn-sm">
-                                            <span class="glyphicon glyphicon-menu-down"></span>
-                                        </button>
-                                    </div>                                
-                                    <div class="btn-group" role="group" aria-label="...">
-                                        <!--button type="button" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-comment"></span> <?php _e('Reply','tainacan') ?></button-->
+                            <div class="col-md-12">
+                                 <div id="comment-<?php echo $object->ID; ?>" 
+                                     data-commentid="<?php echo $object->ID; ?>" 
+                                     class="comment comment-step1">
+                                     <b id="text-comment-<?php echo $object->ID; ?>"><?php echo $object->post_title; ?></b>
+                                 </div>     
+                            </div>
+                            <div class="col-md-12 argument-operation">
+                                <div class="score col-md-1 no-padding">
+                                    <span  onclick="contest_save_vote_binary_up('<?php echo $ranking; ?>', '<?php echo $object->ID; ?>')" >
+                                        <span class="glyphicon glyphicon-thumbs-up"></span>
+                                        <span id="constest_score_<?php echo $object->ID; ?>"><?php echo $view_helper->get_counter_ranking($ranking, $object->ID,'count_up') ?></span>
+                                    </span>
+                                    &nbsp;&nbsp;
+                                    <span  onclick="contest_save_vote_binary_down('<?php echo $ranking; ?>', '<?php echo $object->ID; ?>')">
+                                        <span class="glyphicon glyphicon-thumbs-down"></span>
+                                        <span id="constest_score_<?php echo $object->ID; ?>"><?php echo $view_helper->get_counter_ranking($ranking, $object->ID,'count_down') ?></span>
+                                    </span>    
+                                </div>
+                                <div class="argument-operation-links  col-md-11 no-padding">
+                                    <span class="pull-left">
+                                        <a href="javascript:void(0)"><?php _e('Favorable argument','tainacan') ?></a>
+                                        &nbsp;&nbsp;
+                                        <a href="javascript:void(0)"><?php _e('Counter argument','tainacan') ?></a>
+                                    </span>
+                                    <span class="link-center" >
+                                        <a><span class="caret"/><?php _e('More information','tainacan') ?></a>
+                                    </span>  
+                                    <span class="pull-right">
                                         <?php if($object->post_author   ==  get_current_user_id()): ?>
-                                        <button type="button" 
-                                                onclick="edit_comment( '<?php echo $object->ID; ?>')" 
-                                                class="btn btn-default btn-sm">
-                                            <span class="glyphicon glyphicon-edit"></span> <?php _e('Edit','tainacan') ?>
-                                        </button>
-                                        <button type="button" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash"></span> <?php _e('Remove','tainacan') ?></button>
-                                        <?php else: ?>
-                                        <button type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-alert"></span><?php _e('Report abuse','tainacan') ?></button>
-                                        <?php endif; ?>   
-                                        <button type="button" 
-                                                onclick="share_comment( '<?php echo $object->ID; ?>','<?php  echo htmlentities($object->post_title) ?>',$('#url-argument').val())" 
-                                                class="btn btn-default btn-sm">
-                                            <span class="glyphicon glyphicon-share"></span><?php _e('Share','tainacan') ?>
-                                        </button>
+                                            <a href="javascript:void(0)" onclick="edit_comment( '<?php echo $object->ID; ?>')">
+                                                 <?php _e('Edit','tainacan') ?>  <span class="glyphicon glyphicon-edit"></span>
+                                            </a>
+                                            &nbsp;&nbsp;
+                                            <a href="javascript:void(0)">
+                                                 <?php _e('Remove','tainacan') ?><span class="glyphicon glyphicon-trash"></span>
+                                            </a>
+                                            &nbsp;&nbsp;
+                                            <?php else: ?>
+                                            <a href="button">
+                                                <?php _e('Report abuse','tainacan') ?><span class="glyphicon glyphicon-alert"></span>
+                                            </a>
+                                            &nbsp;&nbsp;
+                                            <?php endif; ?>   
+                                            <a href="javascript:void(0)" 
+                                                    onclick="share_comment( '<?php echo $object->ID; ?>','<?php  echo htmlentities($object->post_title) ?>',$('#url-argument').val())" 
+                                                    >
+                                                <?php _e('Share','tainacan') ?><span class="glyphicon glyphicon-share"></span>
+                                            </a>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class='col-md-12 positive-argument' id='positive-argument-<?php echo $object->ID; ?>'>
+                                <span class="col-md-1 no-padding">
+                                    <img src="<?php echo get_template_directory_uri() ?>/modules/<?php echo MODULE_CONTEST ?>/libraries/images/smile-face.png">
+                                </span>
+                                <div class="col-md-1 no-padding">
+                                    <div class="comment-avatar">
+                                        <?php echo get_avatar(get_current_user_id()) ?>
                                     </div>    
                                 </div>
-                            </div>                                
+                                <div class="col-md-8">
+                                    <textarea rows="4" class="form-control"></textarea>
+                                </div>
+                                <div class="col-md-2">
+                                    <span class="pull-right glyphicon glyphicon-remove"></span>
+                                    <br><br><br>
+                                    <button class="btn btn-primary btn-block"><?php _e('Send','tainacan') ?></button>
+                                </div>
+                            </div>
+                            <div class='col-md-12 negative-argument' id='negative-argument-<?php echo $object->ID; ?>'>
+                                <span class="col-md-1 no-padding">
+                                    <img src="<?php echo get_template_directory_uri() ?>/modules/<?php echo MODULE_CONTEST ?>/libraries/images/rage-face.png">
+                                </span>
+                                <div class="col-md-1 no-padding">
+                                    <div class="comment-avatar">
+                                        <?php echo get_avatar(get_current_user_id()) ?>
+                                    </div>    
+                                </div>
+                                <div class="col-md-8">
+                                    <textarea rows="4" class="form-control"></textarea>
+                                </div>
+                                <div  class="col-md-2">
+                                    <span class="pull-right glyphicon glyphicon-remove"></span>
+                                    <br><br><br>
+                                    <button class="btn btn-primary btn-block"><?php _e('Send','tainacan') ?></button>
+                                </div>
+                            </div>
+                            <!--
+                            <div class="col-md-12">
+                                <div class="comment-timestamp"><?php echo $object->post_date_gmt ?></div>
+                                <div class="comment-user">
+                                    <?php echo get_user_by('id', $object->post_author)->display_name ?>
+                                </div>
+                                <div id="comment-<?php echo $object->ID; ?>" 
+                                     data-commentid="<?php echo $object->ID; ?>" 
+                                     class="comment comment-step1">
+                                    <h5>
+                                        <span class="label label-info">
+                                            <span id="constest_score_<?php echo $object->ID; ?>"><?php echo $view_helper->get_counter_ranking($ranking, $object->ID) ?></span>
+                                        </span>   
+                                    &nbsp;<span id='popover_positive_<?php echo $object->ID; ?>'></span><span id='popover_negative_<?php echo $object->ID; ?>'></span><b id="text-comment-<?php echo $object->ID; ?>"><?php echo $object->post_title; ?></b>
+                                    </h5>    
+                                    <div id="commentactions-<?php echo $object->ID; ?>" class="comment-actions">
+                                        <div class="btn-group" role="group" aria-label="...">
+                                            <button type="button" 
+                                                    onclick="contest_save_vote_binary_up('<?php echo $ranking; ?>', '<?php echo $object->ID; ?>')" 
+                                                    class="btn btn-success btn-sm">
+                                                <span class="glyphicon glyphicon-menu-up"></span>
+                                            </button>
+                                            <button type="button" onclick="contest_save_vote_binary_down('<?php echo $ranking; ?>', '<?php echo $object->ID; ?>')" class="btn btn-danger btn-sm">
+                                                <span class="glyphicon glyphicon-menu-down"></span>
+                                            </button>
+                                        </div>                                
+                                        <div class="btn-group" role="group" aria-label="...">
+                                            <!--button type="button" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-comment"></span> <?php _e('Reply','tainacan') ?></button>
+                                            <?php if($object->post_author   ==  get_current_user_id()): ?>
+                                            <button type="button" 
+                                                    onclick="edit_comment( '<?php echo $object->ID; ?>')" 
+                                                    class="btn btn-default btn-sm">
+                                                <span class="glyphicon glyphicon-edit"></span> <?php _e('Edit','tainacan') ?>
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash"></span> <?php _e('Remove','tainacan') ?></button>
+                                            <?php else: ?>
+                                            <button type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-alert"></span><?php _e('Report abuse','tainacan') ?></button>
+                                            <?php endif; ?>   
+                                            <button type="button" 
+                                                    onclick="share_comment( '<?php echo $object->ID; ?>','<?php  echo htmlentities($object->post_title) ?>',$('#url-argument').val())" 
+                                                    class="btn btn-default btn-sm">
+                                                <span class="glyphicon glyphicon-share"></span><?php _e('Share','tainacan') ?>
+                                            </button>
+                                        </div>    
+                                    </div>
+                                </div>     
+                            </div> 
+                            -->
                         </td>
                     </tr>
                 </table>
@@ -122,13 +216,13 @@
 
             var currentComment = $(this).data("commentid");
             $("#commentactions-" + currentComment).slideDown("fast");    
-            $("#comment-" + currentComment).stop().animate({opacity: "1", backgroundColor: "#f8f8f8", borderLeftWidth: "4px"}, {duration: 100, complete: function () {}});
+            //$("#comment-" + currentComment).stop().animate({opacity: "1", backgroundColor: "#f8f8f8", borderLeftWidth: "4px"}, {duration: 100, complete: function () {}});
 
         }, function () {
 
             var currentComment = $(this).data("commentid");
 
-            $("#comment-" + currentComment).stop().animate({opacity: "1", backgroundColor: "#fff", borderLeftWidth: "1px"}, {duration: 100, complete: function () {}});
+            //$("#comment-" + currentComment).stop().animate({opacity: "1", backgroundColor: "#fff", borderLeftWidth: "1px"}, {duration: 100, complete: function () {}});
 
             $("#commentactions-" + currentComment).slideUp("fast");
 
