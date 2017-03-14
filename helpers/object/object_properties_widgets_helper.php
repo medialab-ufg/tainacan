@@ -537,123 +537,117 @@ class ObjectWidgetsHelper extends ViewHelper {
         $result = [];
         $coumpounds_id = [];
         $property = $properties_compounds;
-        if(is_array($references['properties_to_avoid'])&&in_array($property['id'], $references['properties_to_avoid'])){
+        if(is_array($references['properties_to_avoid'])&&in_array($property['id'], $references['properties_to_avoid'])) {
              return '';
          }
-               $result['ids'][] = $property['id']; 
-               $references['compound_id'] = $property['id']; 
-               ?>
-               <div id="meta-item-<?php echo $property['id']; ?>"  class="form-group">
-                    <h2>
-                        <?php echo $property['name']; ?>
-                        <?php 
-                            if(has_action('modificate_label_insert_item_properties')):
-                                do_action('modificate_label_insert_item_properties', $property);
-                            endif;
-                            //acao para modificaco da propriedade de objeto na insercao do item
-                            if(has_action('modificate_insert_item_properties_compounds')): 
-                                     do_action('modificate_insert_item_properties_compounds',$property,$object_id,'property_value_'. $property['id'] .'_'.$object_id.'_add'); 
-                            endif;
-                            if ($property['metas']['socialdb_property_help']&&!empty(trim($property['metas']['socialdb_property_help']))) {
+
+        $result['ids'][] = $property['id'];
+        $references['compound_id'] = $property['id'];
+        ?>
+        <div id="meta-item-<?php echo $property['id']; ?>"  class="form-group">
+            <h2>
+                <?php echo $property['name']; ?>
+                <?php
+                if(has_action('modificate_label_insert_item_properties')):
+                    do_action('modificate_label_insert_item_properties', $property);
+                endif;
+                //acao para modificaco da propriedade de objeto na insercao do item
+                if(has_action('modificate_insert_item_properties_compounds')):
+                    do_action('modificate_insert_item_properties_compounds',$property,$object_id,'property_value_'. $property['id'] .'_'.$object_id.'_add');
+                endif;
+                if ($property['metas']['socialdb_property_help']&&!empty(trim($property['metas']['socialdb_property_help']))) {
+                    ?>
+                    <a class="pull-right" style="margin-right: 20px;">
+                        <span title="<?php echo $property['metas']['socialdb_property_help'] ?>"
+                              data-toggle="tooltip" data-placement="bottom" class="glyphicon glyphicon-question-sign"></span>
+                    </a>
+
+                    <?php
+                }
+                if ($property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] == 'true') { ?>
+                    <a id='required_field_<?php echo $property['id']; ?>' class="pull-right"
+                       style="margin-right: 15px;color:red;" >
+                        <span class="glyphicon glyphicon-remove"  title="<?php echo __('This metadata is required!','tainacan')?>"
+                              data-toggle="tooltip" data-placement="top" ></span>
+                    </a>
+                    <a id='ok_field_<?php echo $property['id']; ?>' class="pull-right" style="display: none;margin-right: 15px;color:green;"  >
+                        <span class="glyphicon glyphicon-ok" title="<?php echo __('Field filled successfully!','tainacan')?>"
+                              data-toggle="tooltip" data-placement="top" ></span>
+                    </a>
+                    <input type="hidden"
+                           id='core_validation_<?php echo $property['id']; ?>'
+                           class='core_validation'
+                           value='false'>
+                    <input type="hidden"
+                           id='core_validation_<?php echo $property['id']; ?>_message'
+                           value='<?php echo sprintf(__('The field %s is required','tainacan'),$property['name']); ?>'>
+                    <script> validate_all_fields_compounds(<?php echo $property['id']; ?>) </script>
+                    <?php
+                }
+                ?>
+            </h2>
+            <?php $cardinality = $this->render_cardinality_property($property);   ?>
+            <?php $properties_compounded = $property['metas']['socialdb_property_compounds_properties_id']; ?>
+            <?php //$class = 'col-md-'. (12/count($properties_compounded)); ?>
+            <div class="form-group" style="margin-bottom: 15px; margin-right: 15px;margin-left: 15px;">
+                <input  type="hidden" id='main_compound_id'
+                        value='<?php echo $references['compound_id'] ?>'>
+                <?php for($i = 0; $i<$cardinality;$i++):
+                    $is_show_container =  $this->is_set_container($object_id,$property,$property_compounded,$i);
+                    $position = 0;
+                    ?>
+                    <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>"
+                         class="col-md-12 no-padding" style="border-color: #ccc;<?php echo ($is_show_container) ? 'display:block': 'display:none'; ?>">
+                        <div class="col-md-12 no-padding">
+                            <?php foreach ($properties_compounded as $property_compounded):
+                                $coumpounds_id[] = $property_compounded['id'];
+                                $value = $this->get_value($object_id, $property['id'], $property_compounded['id'], $i, $position);
                                 ?>
-                                <a class="pull-right" 
-                                    style="margin-right: 20px;" >
-                                     <span title="<?php echo $property['metas']['socialdb_property_help'] ?>" 
-                                           data-toggle="tooltip" 
-                                           data-placement="bottom" 
-                                           class="glyphicon glyphicon-question-sign"></span>
-                                </a>
-                                <?php  
-                            }
-                            if ($property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] == 'true') {
-                                ?>
-                                <a id='required_field_<?php echo $property['id']; ?>' class="pull-right" 
-                                    style="margin-right: 15px;color:red;" >
-                                         <span class="glyphicon glyphicon-remove"  title="<?php echo __('This metadata is required!','tainacan')?>" 
-                                        data-toggle="tooltip" data-placement="top" ></span>
-                                 </a>
-                                 <a id='ok_field_<?php echo $property['id']; ?>' class="pull-right" style="display: none;margin-right: 15px;color:green;"  >
-                                         <span class="glyphicon glyphicon-ok" title="<?php echo __('Field filled successfully!','tainacan')?>" 
-                                        data-toggle="tooltip" data-placement="top" ></span>
-                                 </a>
-                                <input type="hidden" 
-                                         id='core_validation_<?php echo $property['id']; ?>' 
-                                         class='core_validation' 
-                                         value='false'>
-                                <input type="hidden" 
-                                         id='core_validation_<?php echo $property['id']; ?>_message'  
-                                         value='<?php echo sprintf(__('The field %s is required','tainacan'),$property['name']); ?>'>
-                                <script> validate_all_fields_compounds(<?php echo $property['id']; ?>) </script> 
-                                <?php  
-                            }
-                            ?>
-                    </h2> 
-                    <?php $cardinality = $this->render_cardinality_property($property);   ?>
-                    <?php $properties_compounded = $property['metas']['socialdb_property_compounds_properties_id']; ?>
-                    <?php //$class = 'col-md-'. (12/count($properties_compounded)); ?>
-                   <div class="form-group" style="margin-bottom: 15px; margin-right: 15px;margin-left: 15px;"> 
-                         <input  type="hidden" 
-                                id='main_compound_id' 
-                                value='<?php echo $references['compound_id'] ?>'>
-                        <?php for($i = 0; $i<$cardinality;$i++): 
-                             $is_show_container =  $this->is_set_container($object_id,$property,$property_compounded,$i);
-                            $position = 0;
-                            ?>
-                            <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
-                                 class="col-md-12 no-padding"
-                                 style="margin-left: 30px;border-color: #ccc; padding: 10px;<?php echo ($is_show_container) ? 'display:block': 'display:none'; ?>">
-                                <div class="col-md-11">
-                                <?php foreach ($properties_compounded as $property_compounded): 
-                                    $coumpounds_id[] = $property_compounded['id']; 
-                                    $value = $this->get_value($object_id, $property['id'], $property_compounded['id'], $i, $position);
+                                <input type="hidden" id='core_validation_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>'
+                                       class='core_validation_compounds_<?php echo $property['id']; ?>'
+                                       value='<?php echo (!$value) ? 'false' : 'true' ; ?>'>
+                                <div style="margin-bottom: 15px; border-bottom: 1px solid #e8e8e8" class="col-md-12">
+                                    <p style="color: black;"><?php echo $property_compounded['name']; ?></p>
+                                    <?php
+                                    $val = (is_bool($value)) ? false : $value;
+                                    if(isset($property_compounded['metas']['socialdb_property_data_widget'])):
+                                        $this->widget_property_data($property_compounded, $i,$references,$val);
+                                    elseif(isset($property_compounded['metas']['socialdb_property_object_category_id'])):
+                                        $cardinality = $this->render_cardinality_property($property_compounded);
+                                        $this->widget_property_object($property_compounded, $i,$references,$val);
+                                    elseif(isset($property_compounded['metas']['socialdb_property_term_widget'])):
+                                        $cardinality = $this->render_cardinality_property($property_compounded);
+                                        $this->widget_property_term($property_compounded, $i,$references,$val);
+                                    endif;
                                     ?>
-                                    <input  type="hidden" 
-                                            id='core_validation_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>' 
-                                            class='core_validation_compounds_<?php echo $property['id']; ?>' 
-                                            value='<?php echo (!$value) ? 'false' : 'true' ; ?>'>
-                                    <div style="padding-bottom: 15px; " class="col-md-12">
-                                        <p style="color: black;"><?php echo $property_compounded['name']; ?></p>
-                                        <?php 
-                                        $val = (is_bool($value)) ? false : $value;
-                                        if(isset($property_compounded['metas']['socialdb_property_data_widget'])): 
-                                            $this->widget_property_data($property_compounded, $i,$references,$val);
-                                        elseif(isset($property_compounded['metas']['socialdb_property_object_category_id'])):
-                                            $cardinality = $this->render_cardinality_property($property_compounded); 
-                                            $this->widget_property_object($property_compounded, $i,$references,$val);
-                                        elseif(isset($property_compounded['metas']['socialdb_property_term_widget'])):
-                                             $cardinality = $this->render_cardinality_property($property_compounded); 
-                                            $this->widget_property_term($property_compounded, $i,$references,$val);
-                                        endif; 
-                                        ?>
-                                        <input type="hidden" 
-                                                    name="cardinality_compound_<?php echo $property['id']; ?>_<?php echo $property_compounded['id']; ?>" 
-                                                    id="cardinality_compound_<?php echo $property['id']; ?>_<?php echo $property_compounded['id']; ?>"
-                                                    value="<?php echo $cardinality; ?>"> 
-                                    </div>
+                                    <input type="hidden" name="cardinality_compound_<?php echo $property['id']; ?>_<?php echo $property_compounded['id']; ?>"
+                                           id="cardinality_compound_<?php echo $property['id']; ?>_<?php echo $property_compounded['id']; ?>"
+                                           value="<?php echo $cardinality; ?>">
+                                </div>
                                 <?php $position++ ?>
-                                <?php endforeach; ?>
+                            <?php endforeach; ?>
                                 </div>    
-                                <?php if($i>0): ?>
-                                <div class="col-md-1">
-                                    <a style="cursor: pointer;" onclick="remove_container_compounds(<?php echo $property['id'] ?>,<?php echo $i ?>)" class="pull-right">
-                                        <span class="glyphicon glyphicon-remove"></span>
-                                    </a>
-                                </div>    
-                                <?php endif; ?>    
-                                <?php echo ($is_show_container==1) ? ''  : $this->render_button_cardinality($property,$i) ?>     
-                            </div>  
-                        <?php endfor; ?>
-                        <input type="hidden" 
-                               name="compounds_<?php echo $property['id']; ?>" 
-                               id="compounds_<?php echo $property['id']; ?>"
-                               value="<?php echo implode(',', array_unique($coumpounds_id)); ?>"> 
-                        <input type="hidden" 
-                               name="cardinality_<?php echo $property['id']; ?>" 
-                               id="cardinality_<?php echo $property['id']; ?>"
-                               value="<?php echo $cardinality; ?>"> 
-                        <?php $coumpounds_id = []; ?>
-                    </div>     
-                </div>   
-               <?php  
+                        <?php if($i>0): ?>
+                            <div class="col-md-1">
+                                <a style="cursor: pointer;" onclick="remove_container_compounds(<?php echo $property['id'] ?>,<?php echo $i ?>)" class="pull-right">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </a>
+                            </div>
+                        <?php endif; ?>
+                        <?php echo ($is_show_container==1) ? ''  : $this->render_button_cardinality($property,$i) ?>
+                    </div>
+                <?php endfor; ?>
+                <input type="hidden"
+                       name="compounds_<?php echo $property['id']; ?>"
+                       id="compounds_<?php echo $property['id']; ?>"
+                       value="<?php echo implode(',', array_unique($coumpounds_id)); ?>">
+                <input type="hidden"
+                       name="cardinality_<?php echo $property['id']; ?>"
+                       id="cardinality_<?php echo $property['id']; ?>"
+                       value="<?php echo $cardinality; ?>">
+                <?php $coumpounds_id = []; ?>
+            </div>
+        </div>
+        <?php
     }
 }
