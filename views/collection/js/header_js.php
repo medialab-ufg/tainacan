@@ -87,9 +87,9 @@
         $("#search_collections").val('');
         $("#search_collection_field").val('');
 
-        list_main_ordenation();
+        //list_main_ordenation();
         wpquery_clean();
-        reboot_form();
+        //reboot_form();
         $("button#clear").fadeOut();
     }
 

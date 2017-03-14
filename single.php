@@ -423,7 +423,7 @@ while (have_posts()) : the_post();
                                     if (is_user_logged_in()) {
                                         if (get_the_ID() != get_option('collection_root_id') && verify_collection_moderators(get_the_ID(), get_current_user_id())) {
                                             ?>
-                                            <button onclick="showTrash('<?php echo get_template_directory_uri(); ?>');" class="btn btn-default pull-right collection-trash">
+                                            <button onclick="show_trash_page();" class="btn btn-default pull-right collection-trash">
                                                 <?php _e('Trash', 'tainacan'); ?>
                                             </button>
                                             <?php
@@ -433,14 +433,14 @@ while (have_posts()) : the_post();
                                             $user_data = get_user_by('ID', get_current_user_id())->user_email;
                                             //if ($admin_email == $user_data || $blog_email == $user_data) {
                                             ?>
-                                            <button onclick="showTrash('<?php echo get_template_directory_uri(); ?>');" class="btn btn-default pull-right">
+                                            <button onclick="show_trash_page();" class="btn btn-default pull-right">
                                                 <?php _e('Trash', 'tainacan'); ?>
                                             </button>
                                             <?php
                                             //}
                                         }
                                         ?>
-                                        <button style="display: none;" id="hideTrash" onclick="showList('<?php echo get_template_directory_uri(); ?>');" class="btn btn-default pull-right"><?php _e('Exit', 'tainacan'); ?></button>
+                                        <button style="display: none;" id="hideTrash" onclick="hide_trash_page()" class="btn btn-default pull-right"><?php _e('Exit', 'tainacan'); ?></button>
                                         <?php
                                     }
                                     ?>

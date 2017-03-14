@@ -2417,5 +2417,22 @@
             $('#property_object_is_reverse').val('false');
         }
     }
+/************************************************ LIXEIRA **********************************************************/    
+function show_trash_page(){
+    $('#icon-search-bottom').parent().hide();
+    showTrash('<?php echo get_template_directory_uri(); ?>');
+    if($('#ul_menu_search').length>0){
+        $('#ul_menu_search').hide();
+    }
+}
+
+function hide_trash_page(){
+    $('#icon-search-bottom').parent().show(); 
+    showList('<?php echo get_template_directory_uri(); ?>');
+    if($('#ul_menu_search').length>0){
+        $('#ul_menu_search').show();
+    }
+}
+    
     
 </script>
