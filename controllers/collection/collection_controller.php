@@ -258,8 +258,14 @@ class CollectionController extends Controller {
                     return json_encode($collectionImportation->import($data));
                 }
                 break;
+            /*             * ****************** IMPORTÇÃO MAPAS CULTURAIS *************** */
             case 'mapa_cultural_import':
                 return json_encode(mapa_cultural());
+                break;
+
+            /*             * ********************** IMPORTAÇÃO MARC ****************** */
+            case 'import_marc':
+                import_marc();
                 break;
             /*             * ************************* TEMPLATES ********************* */
             case 'list-collection-templates':
