@@ -7,7 +7,7 @@ class ViewHelper {
      * 
      * @param int $parent O post parent dos filhos
      */
-    public function getChildrenItems($ranking,$parent,$depth) {
+    public function getChildrenItems($ranking,$parent,$depth,$collection_id,$root_post) {
         $direct_children = get_children(array('post_parent' => $parent));
         if(is_array($direct_children)): ?>    
             <?php foreach ($direct_children as $child): 
@@ -17,14 +17,133 @@ class ViewHelper {
                 <?php if($child->post_status != 'draft'): ?>    
                 <table class="form-comments-table">
                     <tr>
-                        <td><div class="comment-timestamp"><?php echo $child->post_date_gmt ?></div></td>
-                        <td><div class="comment-user"><?php echo get_user_by('id', $child->post_author)->display_name ?></div></td>
-                        <td>
+                       <td class="row">
+                            <div class="col-md-1 no-padding user-thumb-container">
+                                <div class="comment-avatar">
+                                    
+                                    <img src="<?php echo get_template_directory_uri() ?>/modules/<?php echo MODULE_CONTEST ?>/libraries/images/<?php echo ($position=='positive') ? 'smile': 'rage' ?>-face.png">
+                                    <?php echo get_avatar($child->post_author) ?>
+                                </div>    
+                            </div>
+                            <div class="col-md-10 no-padding" style="line-height: 0.9;margin-left: 4%;">
+                                <p><b><?php echo get_user_by('id', $child->post_author)->display_name ?></b></p>
+                                <?php echo $child->post_date_gmt ?>
+                            </div>
+                            <div class="col-md-12">
+                                 <div id="comment-<?php echo $object->ID; ?>" 
+                                     data-commentid="<?php echo $child->ID; ?>" 
+                                     class="comment">
+                                     <b id="text-comment-<?php echo $child->ID; ?>"><?php echo $child->post_title; ?></b>
+                                 </div>     
+                            </div>
+                            <div class="col-md-12 argument-operation">
+                                <div class="score col-md-1 no-padding">
+                                    <span  onclick="contest_save_vote_binary_up('<?php echo $ranking; ?>', '<?php echo $child->ID; ?>')" >
+                                        <span class="glyphicon glyphicon-thumbs-up"></span>
+                                        <span id="constest_score_<?php echo $child->ID; ?>_up"><?php echo $this->get_counter_ranking($ranking, $child->ID,'count_up') ?></span>
+                                    </span>
+                                    &nbsp;&nbsp;
+                                    <span  onclick="contest_save_vote_binary_down('<?php echo $ranking; ?>', '<?php echo $child->ID; ?>')">
+                                        <span class="glyphicon glyphicon-thumbs-down"></span>
+                                        <span id="constest_score_<?php echo $child->ID; ?>_down"><?php echo $this->get_counter_ranking($ranking, $child->ID,'count_down') ?></span>
+                                    </span>    
+                                </div>
+                                <div class="argument-operation-links  col-md-11 no-padding">
+                                    <span class="pull-left">
+                                        <a href="javascript:void(0)" onclick="open_positive_argument('<?php echo $child->ID; ?>')"><?php _e('Favorable argument','tainacan') ?></a>
+                                        &nbsp;&nbsp;
+                                        <a href="javascript:void(0)" onclick="open_negative_argument('<?php echo $child->ID; ?>')"><?php _e('Counter argument','tainacan') ?></a>
+                                    </span>
+                                    <span class="link-center" >
+                                        <a><span class="caret"/><?php _e('More information','tainacan') ?></a>
+                                    </span>  
+                                    <span class="pull-right">
+                                        <?php if($child->post_author   ==  get_current_user_id()): ?>
+                                            <a href="javascript:void(0)" onclick="edit_comment( '<?php echo $child->ID; ?>')">
+                                                 <?php _e('Edit','tainacan') ?>  <span class="glyphicon glyphicon-edit"></span>
+                                            </a>
+                                            &nbsp;&nbsp;
+                                            <a href="javascript:void(0)" onclick="delete_comment('<?php echo $child->ID; ?>')">
+                                                 <?php _e('Remove','tainacan') ?><span class="glyphicon glyphicon-trash"></span>
+                                            </a>
+                                            &nbsp;&nbsp;
+                                            <?php else: ?>
+                                            <a href="javascript:void(0)"
+                                                onclick="report_abuse('<?php echo $child->ID; ?>') ">
+                                                <?php _e('Report abuse','tainacan') ?><span class="glyphicon glyphicon-alert"></span>
+                                            </a>
+                                            &nbsp;&nbsp;
+                                            <?php endif; ?>   
+                                            <a href="javascript:void(0)" 
+                                                    onclick="share_comment( '<?php echo $child->ID; ?>','<?php  echo htmlentities($child->post_title) ?>',$('#url-argument').val())" 
+                                                    >
+                                                <?php _e('Share','tainacan') ?><span class="glyphicon glyphicon-share"></span>
+                                            </a>
+                                    </span>
+                                </div>
+                            </div>
+                            <div style="display:none" class='col-md-12 positive-argument' id='positive-argument-<?php echo $child->ID; ?>'>
+                                <form class="form_positive_argument">
+                                    <input type="hidden" id="collection_postive_argument_id" name="collection_id" value="<?php echo $collection_id; ?>">
+                                    <input type="hidden" name="classifications" value="">
+                                    <input type="hidden" name="root_argument" value="<?php echo $root_post; ?>">
+                                    <input type="hidden" name="argument_parent" value="<?php echo $child->ID; ?>">
+                                    <input type="hidden" name="operation" value="add_reply_positive">
+                                    <span class="col-md-1 no-padding user-thumb-container">
+                                        <img src="<?php echo get_template_directory_uri() ?>/modules/<?php echo MODULE_CONTEST ?>/libraries/images/smile-face.png">
+                                    </span>
+                                    <div class="col-md-1 no-padding user-thumb-container">
+                                        <div class="comment-avatar">
+                                            <?php echo get_avatar(get_current_user_id()) ?>
+                                        </div>    
+                                    </div>
+                                    <div class="col-md-8 text-area-container">
+                                        <textarea rows="4" class="form-control positive_argument" name="positive_argument"></textarea>
+                                    </div>
+                                    <div class="col-md-2  no-padding">
+                                        <span 
+                                            style="cursor: pointer;"
+                                            onclick="$('#positive-argument-<?php echo $child->ID; ?>').fadeOut()" 
+                                            class="pull-right glyphicon glyphicon-remove"></span>
+                                        <br><br><br>
+                                        <button type="submit" class="btn btn-primary btn-block"><?php _e('Send','tainacan') ?></button>
+                                    </div>
+                                </form>    
+                            </div>
+                            <div  style="display:none" class='col-md-12 negative-argument' id='negative-argument-<?php echo $child->ID; ?>'>
+                                <form class="form_negative_argument">
+                                    <input type="hidden" name="collection_id" value="<?php echo $collection_id; ?>">
+                                    <input type="hidden" name="classifications" value="">
+                                    <input type="hidden" name="root_argument" value="<?php echo $root_post; ?>">
+                                    <input type="hidden" name="argument_parent" value="<?php echo $child->ID; ?>">
+                                    <input type="hidden" name="operation" value="add_reply_negative">
+                                    <span class="col-md-1 no-padding user-thumb-container">
+                                        <img src="<?php echo get_template_directory_uri() ?>/modules/<?php echo MODULE_CONTEST ?>/libraries/images/rage-face.png">
+                                    </span>
+                                    <div class="col-md-1 no-padding user-thumb-container">
+                                        <div class="comment-avatar">
+                                            <?php echo get_avatar(get_current_user_id()) ?>
+                                        </div>    
+                                    </div>
+                                    <div class="col-md-8 text-area-container">
+                                        <textarea rows="4" class="form-control negative_argument" name="negative_argument" ></textarea>
+                                    </div>
+                                    <div  class="col-md-2  no-padding">
+                                        <span 
+                                            style="cursor: pointer;"
+                                            onclick="$('#negative-argument-<?php echo $child->ID; ?>').fadeOut()" 
+                                            class="pull-right glyphicon glyphicon-remove"></span>
+                                        <br><br><br>
+                                        <button type="submit" class="btn btn-primary btn-block"><?php _e('Send','tainacan') ?></button>
+                                    </div>
+                                </form>    
+                            </div>
+                            <!--
+                            <div class="comment-timestamp"><?php echo $child->post_date_gmt ?></div>
+                            <div class="comment-user"><?php echo get_user_by('id', $child->post_author)->display_name ?></div>
                             <div class="comment-avatar">
                                  <?php echo get_avatar($object->post_author) ?>
                             </div>
-                        </td>
-                        <td>
                             <div id="comment-<?php echo $child->ID ?>" data-commentid="<?php echo $child->ID ?>" class="comment commentstep-<?php echo $depth ?>">
                                 <span class="label label-<?php echo ($position=='positive') ? 'success': 'danger' ?>">
                                         <span id="thumbs-<?php echo $child->ID; ?>" class="glyphicon glyphicon-thumbs-<?php echo ($position=='positive') ? 'up': 'down' ?>"></span>
@@ -68,30 +187,35 @@ class ViewHelper {
                                     </div>                                  
                                 </div>
                             </div>
+                            -->
                         </td>
                     </tr>
                 </table>
                 <?php else: ?>     
                 <table class="form-comments-table">  
                     <tr>
-                        <td><div class="comment-timestamp"><?php echo $child->post_date_gmt ?></div></td>
-                        <td><div class="comment-user"><?php echo get_user_by('id', $child->post_author)->display_name ?></div></td>
-                        <td>
-                            <div class="comment-avatar">
-                                 <?php echo get_avatar($object->post_author) ?>
-                            </div>
-                        </td>
-                        <td>
-                            <div id="comment-<?php echo $child->ID ?>" data-commentid="<?php echo $child->ID ?>" class="comment commentstep-<?php echo $depth ?>">
-                                <span id="text-comment-<?php echo $child->ID; ?>"><i><b><?php echo __('Comment sent to the trash','tainacan') ?></b></i></span>
-                            </div>
-                        </td>
+                            <td class="row">
+                                 <div class="col-md-1 no-padding user-thumb-container">
+                                     <div class="comment-avatar">
+                                         <?php echo get_avatar($child->post_author) ?>
+                                     </div>    
+                                 </div>
+                                 <div class="col-md-11 no-padding" style="line-height: 0.9;">
+                                     <p><b><?php echo get_user_by('id', $child->post_author)->display_name ?></b></p>
+                                     <?php echo $child->post_date_gmt ?>
+                                 </div>
+                                 <div class="col-md-12">
+                                    <div id="comment-<?php echo $child->ID ?>" data-commentid="<?php echo $child->ID ?>" class="comment commentstep-<?php echo $depth ?>">
+                                        <span id="text-comment-<?php echo $child->ID; ?>"><i><b><?php echo __('Comment sent to the trash','tainacan') ?></b></i></span>
+                                    </div>
+                                 </div>    
+                             </td>
                     </tr>
                 </table>    
                 <?php endif; ?>        
                 </li>
             <?php
-                $this->getChildrenItems($ranking,$child->ID, $depth+1);
+                $this->getChildrenItems($ranking,$child->ID, $depth+1,$collection_id,$root_post);
             ?>
             <?php endforeach;  ?>
         <?php 
@@ -107,6 +231,7 @@ class ViewHelper {
     public function get_counter_ranking($ranking_id,$item_id,$type = null) {
         $ranking_model = new RankingContestModel;
         $count = $ranking_model->count_votes_binary($ranking_id, $item_id);
+        //var_dump($count,$type);
         if(isset($type) && isset($count[$type])){
             return $count[$type];
         }
