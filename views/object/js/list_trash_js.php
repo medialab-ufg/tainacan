@@ -44,6 +44,53 @@
 
         $("#container_three_columns").removeClass('white-background');
         setMenuContainerHeight();
+        
+        $('a.move_eliminate').on('click', function() {
+            var bulk_type = $('input.bulk_action_trash').val();
+            var selected_total = $('.selected-item').length;
+            var bulkds = [];
+            $('.selected-item').each(function(idx, el) {
+                var item_id = $(el).parent().attr("id").replace("object_", "");
+                bulkds.push(item_id);
+            });
+
+            if( selected_total > 0 ) {
+                var collection_id = $('#collection_id').val();
+                var main_title = '<?php _e("Attention","tainacan"); ?>';
+                var desc = '<?php _e("Are you sure in removing  ", "tainacan"); ?>' + selected_total + '<?php _e(" items permanently?", "tainacan"); ?>';
+                eliminate_itens_collection(main_title, desc, bulkds, collection_id);
+            } else {
+                showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e("You did not select any items to delete!", "tainacan") ?>', 'info');
+            }
+        });
+        
+        $('.selectable-items-trash').on('click', '.selectors-trash a', function(ev) {
+            var select = $(this).attr("class").split(" ")[0];
+            console.log( select);
+            $('input.bulk_action_trash').val( select );
+            var its_highlighted = $( $(this).siblings()[0]).hasClass('highlight');
+            var action =  $('input.bulk_action_trash').val();
+            
+            if( $(this).hasClass('highlight') ) {
+                $(this).addClass('highlight');
+            }else{
+                $(this).removeClass('highlight')
+            }
+            
+            if ( "select_all_trash" === select ) {
+                select_all_trash();
+            }
+            $( $(this).siblings()[0]).removeClass('highlight');
+            $('.selectable-actions').fadeIn();
+        });
+
+        $('.toggleSelectTrash').click(function() {
+            if( $(this).hasClass('selected-item') ) {
+                $(this).removeClass('selected-item')
+            }else{
+                $(this).addClass('selected-item');
+            }
+        });
 
     });
 
@@ -200,4 +247,29 @@
         autoplay: true,
         focusOnSelect: true
     });
+/*******************************************************************************/
+    function select_some_trash() {
+         if( ! $('.toggleSelectTrash').hasClass('selecting-item') ) {
+             toastr.info('<?php _e('Select items below to edit or exclude!', 'tainacan') ?>', '', set_toastr_class());
+         }
+
+         $('.object_id').each(function(idx, el) {
+            var item = $("#object_" + $(el).val() );
+            $(item).find('.toggleSelectTrash').addClass('selecting-item');
+         });
+    }
+
+    function select_all_trash() {
+        console.log($('.toggleSelectTrash'));
+        $(".toggleSelectTrash").removeClass('selected-item');
+        toastr.info('<?php _e('All items have been selected!', 'tainacan') ?>', '', set_toastr_class());
+        $('.toggleSelectTrash').each(function(idx, el) {
+            var item = $("#object_" + $(el).val() );
+            $(item).find(".toggleSelectTrash").addClass('selecting-item');
+            console.log('inside',$(item).find(".toggleSelectTrash"));
+        });
+    }
+    
+     
+    
 </script>

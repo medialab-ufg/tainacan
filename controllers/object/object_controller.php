@@ -876,6 +876,16 @@ class ObjectController extends Controller {
                 }
                 return json_encode($result);
                 break;
+            case 'eliminate_itens':
+                if(isset($data['ids']) && is_array($data['ids']) && is_user_logged_in()){
+                    foreach ($data['ids'] as $id) {
+                        wp_delete_post($id);
+                    }
+                }
+                $data['title'] = __('Success','tainacan'); 
+                $data['msg'] = __('Operation is successfully','tainacan'); 
+                $data['type'] = 'success'; 
+                return json_encode($data);
         }
     }
 

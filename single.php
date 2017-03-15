@@ -392,7 +392,7 @@ while (have_posts()) : the_post();
                                     </ul>
                                 </div>
 
-                                <div class="col-md-2 selectable-items">
+                                <div class="col-md-2 selectable-items" id="normal-selectable">
                                     <?php
                                     if (is_user_logged_in() && get_the_ID() != get_option('collection_root_id') &&
                                             verify_collection_moderators(get_the_ID(), get_current_user_id())):
@@ -417,13 +417,35 @@ while (have_posts()) : the_post();
                                         </div>
                                     <?php endif; ?>
                                 </div>
+                                <div class="col-md-2 selectable-items selectable-items-trash" id="trash-selectable" style="display: none;">
+                                    <?php
+                                    if (is_user_logged_in() && get_the_ID() != get_option('collection_root_id') &&
+                                            verify_collection_moderators(get_the_ID(), get_current_user_id())):
+                                        ?>
+                                        <label for="collection_single_ordenation"><?php _t('Select: ', 1); ?></label>
+                                        <div class="selectors selectors-trash">
+                                            <a onclick="select_some_trash()" class="select_some_trash">
+                                                <?php echo ViewHelper::render_icon("selection", "png", __("Select some items", "tainacan")); ?>
+                                            </a>
+                                            <a class="select_all_trash">
+                                                <?php echo ViewHelper::render_icon("select-all", "png", __("Select all items", "tainacan")); ?>
+                                            </a>
+                                            <input type="hidden" value="" class="bulk_action_trash" name="bulk_action">
+                                        </div>
+                                        <div class="selectable-actions" style="display: none;">
+                                            <a class="move_eliminate">
+                                                <span class="glyphicon glyphicon-trash"></span>
+                                            </a>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
 
                                 <div class="col-md-1 no-padding trash-div pull-right">
                                     <?php
                                     if (is_user_logged_in()) {
                                         if (get_the_ID() != get_option('collection_root_id') && verify_collection_moderators(get_the_ID(), get_current_user_id())) {
                                             ?>
-                                            <button onclick="show_trash_page();" class="btn btn-default pull-right collection-trash">
+                                            <button onclick="show_trash_page();" class="btn btn-default pull-right button-trash collection-trash">
                                                 <?php _e('Trash', 'tainacan'); ?>
                                             </button>
                                             <?php
@@ -433,14 +455,14 @@ while (have_posts()) : the_post();
                                             $user_data = get_user_by('ID', get_current_user_id())->user_email;
                                             //if ($admin_email == $user_data || $blog_email == $user_data) {
                                             ?>
-                                            <button onclick="show_trash_page();" class="btn btn-default pull-right">
+                                            <button onclick="show_trash_page();" class="btn btn-default button-trash pull-right">
                                                 <?php _e('Trash', 'tainacan'); ?>
                                             </button>
                                             <?php
                                             //}
                                         }
                                         ?>
-                                        <button style="display: none;" id="hideTrash" onclick="hide_trash_page()" class="btn btn-default pull-right"><?php _e('Exit', 'tainacan'); ?></button>
+                                        <button style="display: none;" id="hideTrash" onclick="hide_trash_page()" class="btn btn-default pull-right"><?php _e('Exit trash', 'tainacan'); ?></button>
                                         <?php
                                     }
                                     ?>

@@ -242,6 +242,35 @@ function clean_collection(title, text, collection_id) {
     });
 }
 
+function eliminate_itens_collection(main_title, desc, bulkds, collection_id) {
+    swal({
+        title: main_title,
+        text: desc,
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: 'btn-danger',
+        closeOnConfirm: true,
+        closeOnCancel: true
+    },
+    function (isConfirm) {
+        if (isConfirm) {
+            $('#modalImportMain').modal('show');//mostro o modal de carregamento
+            $.ajax({
+                type: "POST",
+                url: $('#src').val() + "/controllers/object/object_controller.php",
+                data: {
+                    operation: 'eliminate_itens',
+                    ids: bulkds}
+            }).done(function (result) {
+                $('#modalImportMain').modal('hide');//escondo o modal de carregamento
+                elem_first = jQuery.parseJSON(result);
+                wpquery_filter();
+                showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
+            });
+        }
+    });
+}
+
 function move_items_to_trash(title, text, obj_ids, collection_id) {
     swal({
        title: title,
