@@ -2,7 +2,6 @@
     include_once ('js/menu_left_js.php');
     $not_showed = false;
 ?>
-
 <div class="expand-all btn white tainacan-default-tags prime-color-bg" style="background-color: #79a6ce">
     <div class="action-text" style="display: inline-block"><?php _e('Collapse all', 'tainacan') ?></div>
     &nbsp;&nbsp;<span class="glyphicon-triangle-bottom white glyphicon"></span>

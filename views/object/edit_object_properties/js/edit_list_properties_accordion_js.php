@@ -148,10 +148,12 @@
                                 response: function( event, ui ) {
                                         if(ui.content && ui.content.length>0 && $('.form_autocomplete_value_'+property_id+'_mask').val()!==''){
                                            $.each(ui.content,function(index,value){
-                                               if($(event.target).val()==value.value || $(event.target).val().toLowerCase().trim()==value.value){
-                                                    toastr.error($(event.target).val()+'<?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                                               console.log( value.item_id , $('#object_id_edit').val())
+                                               if(($(event.target).val()==value.value || $(event.target).val().toLowerCase().trim()==value.value.toLowerCase().trim()) && value.item_id != $('#object_id_edit').val()){
+                                                    toastr.error($(event.target).val()+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
                                                     $(event.target).val('');
                                                }
+                                               $(".form_autocomplete_value_" + property_id).autocomplete('close');
                                            }); 
                                         }
                                     },
@@ -811,6 +813,9 @@
             $('#core_validation_'+id).val('true');
             $('#ok_field_'+id).show();
             $('#required_field_'+id).hide();
+            if(!$.isNumeric(id) && $('#fixed_id_'+id).length > 0){
+                var id =  $('#fixed_id_'+id).val();
+            }
             $('#meta-item-'+id+' h2').css('background-color','#fffff');
         }
         validate_all_fields();
@@ -824,6 +829,9 @@
                 cont++;
                 <?php if(!$is_view_mode): ?>
                 var id = $( this ).attr('id').replace('core_validation_','');
+                if(!$.isNumeric(id) && $('#fixed_id_'+id).length > 0){
+                     var id =  $('#fixed_id_'+id).val();
+                }
                 $('#meta-item-'+id+' h2').css('background-color','#ffcccc');
                 $.each($( "#submit_form_edit_object .tab-pane" ),function(index,seletor){
                     if($(seletor).find('#meta-item-'+id).length > 0){

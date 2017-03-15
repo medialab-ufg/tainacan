@@ -20,11 +20,11 @@ class ObjectController extends Controller {
             case "create_item_text":
                 //verifico se existe rascunho para se mostrado
                 $beta_id = get_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext', true);
-                if ($beta_id && is_numeric($beta_id)) {
-                    $data['object_id'] = $beta_id;
-                    $data['is_beta_text'] = true;
-                    return $this->operation('edit', $data);
-                }
+//                if ($beta_id && is_numeric($beta_id)) {
+//                    $data['object_id'] = $beta_id;
+//                    $data['is_beta_text'] = true;
+//                    return $this->operation('edit', $data);
+//                }
                 //se nao ele busca o cache da pagina de adiconar item
                 $has_cache = $this->has_cache($data['collection_id'], 'create-item-text');
                 $option = get_option('tainacan_cache');
@@ -213,6 +213,7 @@ class ObjectController extends Controller {
                 $recover_wpquery = $object_model->get_args($data);
                 //$post_status = ($collection_id == get_option('collection_root_id') ? 'draft' : 'trash');
                 $post_status = 'draft';
+                $recover_wpquery['post_status'] = $post_status;
                 $data['mycollections'] = 'true';
                 $args = $object_model->list_all($data, $post_status);
                 $data['loop'] = new WP_Query($args);
@@ -420,8 +421,37 @@ class ObjectController extends Controller {
                         if (($pcs[0] . $pcs[1]) == "socialdbproperty") {
                             $col_meta = get_term($pcs[2]);
                             if (!is_null($col_meta) && is_object($col_meta)) {
-                                $_pair = ['meta' => $col_meta->name, 'value' => $val[0]];
-                                $press['inf'][] = $_pair;
+                                if( 4 === count($pcs) && is_string($_item_meta[$meta][0]) ) {
+                                    $total_sub_metas = "";
+                                    $_sub_metas = explode(",", $_item_meta[$meta][0]);
+                                    if(is_array($_sub_metas)) {
+                                        $_pair = ['meta' => $col_meta->name, 'value'=> '_____________________________', 'submeta_header' => true];
+                                        $press['inf'][] = $_pair;
+
+                                        foreach ($_sub_metas as $s_meta) {
+                                            $_meta_ = get_metadata_by_mid('post', $s_meta);
+                                            if(is_object($_meta_)) {
+                                                $_title_id = explode("_", $_meta_->meta_key);
+                                                $_title = get_term($_title_id[2])->name;
+                                                $v = $_meta_->meta_value;
+                                                $_pair = ['meta' => $_title , 'value' => $v, 'is_submeta' => true];
+                                                $press['inf'][] = $_pair;
+                                                $aux_arr[] = $_title . "__" . $v;
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    $_pair = ['meta' => $col_meta->name, 'value' => $val[0]];
+                                    if(is_numeric($val[0])) {
+                                        $_check_text = get_post($val[0]);
+                                        if( !is_null($_check_text)) {
+                                            if( in_array($_check_text->post_title, $_item_meta['socialdb_object_commom_values']) ) {
+                                                $_pair['value'] = $_check_text->post_title;
+                                            }
+                                        }
+                                    }
+                                    $press['inf'][] = $_pair;
+                                }
                             } else {
                                 $press['set'][] = $col_meta;
                             }
@@ -429,7 +459,20 @@ class ObjectController extends Controller {
                             $press['excluded'][] = $meta;
                         }
                     }
-                }                
+                }
+
+                if( isset($press['inf']) ) {
+                    $init = 0;
+                    foreach ($press['inf'] as $_m_arr) {
+                        $_item_pair = $_m_arr['meta'] . "__" . $_m_arr['value'];
+                        if( in_array($_item_pair, $aux_arr) ) {
+                            if( is_null($_m_arr['is_submeta'])) {
+                                unset( $press['inf'][$init] );
+                            }
+                        }
+                        $init++;
+                    }
+                }
 
                 return json_encode($press);
 

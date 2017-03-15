@@ -7,6 +7,7 @@ $collection_default = get_option('disable_empty_collection');
 <input type="hidden" id="show_collection_default" name="show_collection_default" value="<?php echo (!$collection_default || $collection_default === 'false') ? 'show' : 'hide'; ?>">
 <input type="hidden" id="src" name="src" value="<?php echo get_template_directory_uri() ?>">
 <input type="hidden" id="repository_main_page" name="repository_main_page" value="true">
+<input type="hidden" id="collection_root_url" value="<?php echo get_the_permalink(get_option('collection_root_id')) ?>">
 <input type="hidden" id="info_messages" name="info_messages" value="<?php
 if (isset($_GET['info_messages'])) {
     echo $_GET['info_messages'];
@@ -57,13 +58,13 @@ if (isset($_GET['info_messages'])) {
         <div id="searchBoxIndex" class="col-md-3 col-sm-12 center">
             <form id="formSearchCollections" role="search">
                 <div class="input-group search-collection search-home">
-                    <input type="text" class="form-control" name="search_collections" id="search_collections" onfocus="changeBoxWidth(this)" placeholder="<?php _e('Find', 'tainacan') ?>"/>
+                    <input style="color:white;" type="text" class="form-control" name="search_collections" id="search_collections" onfocus="changeBoxWidth(this)" placeholder="<?php _e('Find', 'tainacan') ?>"/>
                     <span class="input-group-btn">
-                        <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                        <button class="btn btn-default" type="button"  onclick="redirectAdvancedSearch('#search_collections');"><span class="glyphicon glyphicon-search"></span></button>
                     </span>
                 </div>
             </form>
-            <a onclick="showAdvancedSearch('<?php echo get_template_directory_uri() ?>');" href="#" class="col-md-12 adv_search">
+            <a onclick="redirectAdvancedSearch(false);" href="javascript:void(0)" class="col-md-12 adv_search">
                 <span class="white"><?php _e('Advanced search', 'tainacan') ?></span>
             </a>
          </div>

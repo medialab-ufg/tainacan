@@ -2975,8 +2975,17 @@ function repository_page_title() {
     }
 }
 
-function get_collection_item_href($collection_id,$item_id = 0) {
+function get_collection_item_href($collection_id,$item_id = 0,$viewHelper = null) {
     if($item_id>0 && get_post($item_id)->post_type ==='socialdb_object'){
+        if(get_option('collection_root_id') == $collection_id && isset($viewHelper)){
+            $value = $viewHelper->helper_get_collection_by_object($item_id);
+            if(is_array($value) &&  $value[0]->guid){
+                $string = $value[0]->guid.'/'.get_post($item_id)->post_name;
+                return str_replace('collection/', '', $string);
+            }else{
+                return 'javascript:void(0)';
+            }
+        }
         return  'javascript:void(0)';
     }
     return ( get_option('collection_root_id') != $collection_id ) ? 'javascript:void(0)' : get_the_permalink();

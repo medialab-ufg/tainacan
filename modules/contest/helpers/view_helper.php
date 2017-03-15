@@ -104,9 +104,12 @@ class ViewHelper {
      * @param type $item_id
      * @return type
      */
-    public function get_counter_ranking($ranking_id,$item_id) {
+    public function get_counter_ranking($ranking_id,$item_id,$type = null) {
         $ranking_model = new RankingContestModel;
         $count = $ranking_model->count_votes_binary($ranking_id, $item_id);
+        if(isset($type) && isset($count[$type])){
+            return $count[$type];
+        }
         return $count['count_up'] - $count['count_down'];
     }
     

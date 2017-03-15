@@ -1,7 +1,7 @@
 <?php
 
 ini_set('max_input_vars', '10000');
-//error_reporting(0);
+error_reporting(0);
 session_write_close();
 ini_set('max_execution_time', '0');
 ini_set('memory_limit', '-1');
@@ -91,6 +91,7 @@ class EurWriteModel extends Model {
        update_post_meta($object_id, 'socialdb_object_dc_type', $this->Item_type);
        $this->set_common_field_values($object_id, 'object_type', $this->Item_type);
        update_post_meta($object_id, 'link_thumb', $thumb);
+       $this->add_thumbnail_url($thumb, $object_id);
         //categoria raiz da colecao
         wp_set_object_terms($object_id, array((int) $this->Root_category), 'socialdb_category_type');
         if ($post_meta_full) {
@@ -155,10 +156,10 @@ class EurWriteModel extends Model {
     function setImage($image) {
         //http://europeanastatic.eu/api/image?uri=http%3A%2F%2Fpurl.pt%2F13970%2Fcover.get&size=LARGE&type=TEXT
 
-        $new_image = explode('&', $image)[0];
-        $new_image = $this->removeQueryInImageUrl($new_image);
+        //$new_image = explode('&', $image)[0];
+        //$new_image = $this->removeQueryInImageUrl($new_image);
 
-        return $new_image;
+        return $image;
     }
 
     public function removeQueryInImageUrl($url) {

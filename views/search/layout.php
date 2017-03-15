@@ -197,7 +197,7 @@ $view_helper = new ViewHelper();
               <div style="padding-left: 15px">
                 <!------------------- Forma de visualizacao formulario de submissao -------------------------->
                 <div class="form-group">
-                    <label for="collection_ordenation_form"><?php _e('Select the form layout to create a new text item','tainacan'); ?></label>
+                    <label for="collection_ordenation_form"><?php _e('Select the form layout to create a new text item','tainacan'); ?></label><br>
                     <input type="radio" 
                            <?php echo ( $submission_visualization == 'two' || empty($submission_visualization) ) ? "checked = 'checked'" : ''; ?>
                            name="socialdb_collection_submission_visualization" 

@@ -497,8 +497,10 @@ class WPQueryModel extends Model {
      * Autor: Eduardo Humberto 
      */
     public function do_filter($recover_data) {
-        //se estiver buscando colecoes
-        if($recover_data['collection_id']==  get_option('collection_root_id') && (!isset($recover_data['post_type']) || empty($recover_data['post_type']) )){
+        //se estiver buscando 
+        if($recover_data['collection_id']==  get_option('collection_root_id') 
+                && (!isset($recover_data['post_type']) || empty($recover_data['post_type']) )
+                   && (!isset($recover_data['post_status']) || empty($recover_data['post_status']))){
                 $page = $this->set_page($recover_data);
                 $orderby = $this->set_order_by($recover_data);
                  $order = $this->set_type_order($recover_data);
@@ -544,6 +546,13 @@ class WPQueryModel extends Model {
             }else{
                 $post_type = $this->set_post_type($recover_data['collection_id'],$recover_data);
             }
+            $recover_data['post_type'] = $post_type;
+            //se estiver buscando na lixeira
+            if(isset($recover_data['post_status']) && !empty($recover_data['post_status'])){
+                $status = $recover_data['post_status'];
+            }else{
+                $status = 'publish';
+            }
             //all_data_inside
             $args = array(
                 'post_type' => $post_type,
@@ -552,7 +561,7 @@ class WPQueryModel extends Model {
                 'tax_query' => $tax_query,
                 'orderby' => $orderby,
                 'order' => $order,
-                'post_status' => 'publish',
+                'post_status' => $status,
                 //'no_found_rows' => true, // counts posts, remove if pagination required
                 'update_post_term_cache' => false, // grabs terms, remove if terms required (category, tag...)
                 'update_post_meta_cache' => false, // grabs post meta, remove if post meta required
@@ -570,7 +579,6 @@ class WPQueryModel extends Model {
             if(isset($recover_data['author']) && $recover_data['author'] != ''){
                 $args['author'] = $recover_data['author'];
             }
-            
             return $args;
         }
     }

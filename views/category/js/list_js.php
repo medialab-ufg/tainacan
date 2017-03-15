@@ -339,6 +339,10 @@
 
             },
             onCreate: function (node, span) {
+                 // $(span).attr('onmouseout',"hideContextMenu('#context_menu_"+node.data.key+"')");
+                   //     $(span).attr('onmouseover',"showContextMenu('#context_menu_"+node.data.key+"')");
+                    //    $(span).append('<a id="context_menu_'+node.data.key+'" onclick="triggerContextMenuCategories('+"'#ui-dynatree-id-"+node.data.key+"'"+
+                     //          ',event,'+"'myMenu'"+')" style="display:none;cursor:pointer;"><span class="glyphicon glyphicon-chevron-down"></span></a>');
                 bindContextMenu(span);
             },
             onPostInit: function (isReloading, isError) {
@@ -381,11 +385,11 @@
             }
         });
     }
-
+    
 <?php // --- Contextmenu helper: REALIZA AS ACOES DO CONTEXT MENU --------------------------------------------------   ?>
     function bindContextMenu(span) {
         // Add context menu to this node:
-        $(span).contextMenu({menu: "myMenu"}, function (action, el, pos) {
+        $(span).contextMenu({menu: "myMenu", trigger: 'hover'}, function (action, el, pos) {
             // The event was bound to the <span> tag, but the node object
             // is stored in the parent <li> tag
             var node = $.ui.dynatree.getNode(el);

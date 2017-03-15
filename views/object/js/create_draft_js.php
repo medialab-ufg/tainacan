@@ -4,44 +4,44 @@
      * @returns {undefined}
      */
     function createDraft() {
-        console.log('create-draft',$('.auto-save'));
-        $('#submit_form .auto-save').change(function () {
-            var verify = $('#submit_form').serialize();
-            $("#object_content").val(CKEDITOR.instances.object_editor.getData());
-            var selKeys = $.map($("#dynatree").dynatree("getSelectedNodes"), function (node) {
-                return node.data.key;
-            });
-            $('#object_classifications').val(selKeys.join(", "));
-            $.ajax({
-                url: $('#src').val() + '/controllers/object/object_draft_controller.php',
-                type: 'POST',
-                data: verify
-            }).done(function (result) {
-                elem_first = jQuery.parseJSON(result);
-                var string = 'Salvo automaticamente em ' + elem_first.date
-                        + ' ás ' + elem_first.hour;
-                $('#draft-text').text(string);
-            });
-        });
-
-        $('#submit_form_edit_object .auto-save').change(function () {
-            var verify = $('#submit_form_edit_object').serialize();
-            $("#object_content_edit").val(CKEDITOR.instances.objectedit_editor.getData());
-            var selKeys = $.map($("#dynatree").dynatree("getSelectedNodes"), function (node) {
-                return node.data.key;
-            });
-            $('#object_classifications').val(selKeys.join(", "));
-            $.ajax( {
-              url: $('#src').val()+'/controllers/object/object_draft_controller.php',
-                type: 'POST',
-                data: verify
-            }).done(function (result) {
-                elem_first = jQuery.parseJSON(result);
-                var string = 'Salvo automaticamente em ' + elem_first.date
-                        + ' ás ' + elem_first.hour;
-                $('#draft-text').text(string);
-            });
-        });
+//        console.log('create-draft',$('.auto-save'));
+//        $('#submit_form .auto-save').change(function () {
+//            var verify = $('#submit_form').serialize();
+//            $("#object_content").val(CKEDITOR.instances.object_editor.getData());
+//            var selKeys = $.map($("#dynatree").dynatree("getSelectedNodes"), function (node) {
+//                return node.data.key;
+//            });
+//            $('#object_classifications').val(selKeys.join(", "));
+//            $.ajax({
+//                url: $('#src').val() + '/controllers/object/object_draft_controller.php',
+//                type: 'POST',
+//                data: verify
+//            }).done(function (result) {
+//                elem_first = jQuery.parseJSON(result);
+//                var string = 'Salvo automaticamente em ' + elem_first.date
+//                        + ' ás ' + elem_first.hour;
+//                $('#draft-text').text(string);
+//            });
+//        });
+//
+//        $('#submit_form_edit_object .auto-save').change(function () {
+//            var verify = $('#submit_form_edit_object').serialize();
+//            $("#object_content_edit").val(CKEDITOR.instances.objectedit_editor.getData());
+//            var selKeys = $.map($("#dynatree").dynatree("getSelectedNodes"), function (node) {
+//                return node.data.key;
+//            });
+//            $('#object_classifications').val(selKeys.join(", "));
+//            $.ajax( {
+//              url: $('#src').val()+'/controllers/object/object_draft_controller.php',
+//                type: 'POST',
+//                data: verify
+//            }).done(function (result) {
+//                elem_first = jQuery.parseJSON(result);
+//                var string = 'Salvo automaticamente em ' + elem_first.date
+//                        + ' ás ' + elem_first.hour;
+//                $('#draft-text').text(string);
+//            });
+//        });
     }
     //setTimeout(function () {
         //createDraft();

@@ -144,9 +144,10 @@
                         if(ui.content && ui.content.length>0 && $('.form_autocomplete_value_'+property_id+'_mask').val()!==''){
                            $.each(ui.content,function(index,value){
                                if($(event.target).val()==value.value || $(event.target).val().toLowerCase().trim()==value.value){
-                                    toastr.error($(event.target).val()+'<?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                                    toastr.error($(event.target).val()+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
                                     $(event.target).val('');
                                }
+                               $(".form_autocomplete_value_" + property_id).autocomplete('close');
                            }); 
                         }
                     },
@@ -156,7 +157,7 @@
                         if( $('.form_autocomplete_value_'+property_id+'_mask').val()!==''){
                             $(event.target).html(''); 
                             $(event.target).val('');
-                            toastr.error(ui.item.value+'<?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                            toastr.error(ui.item.value+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
                             return false;
                         }
                         //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
@@ -806,6 +807,9 @@
             $('#core_validation_'+id).val('true');
             $('#ok_field_'+id).show();
             $('#required_field_'+id).hide();
+            if(!$.isNumeric(id) && $('#fixed_id_'+id).length > 0){
+                var id =  $('#fixed_id_'+id).val();
+            }
             $('#meta-item-'+id+' h2').css('background-color','#fffff');
         }
         validate_all_fields();
@@ -818,6 +822,9 @@
             if($( this ).val()==='false'){
                 cont++;
                 var id = $( this ).attr('id').replace('core_validation_','');
+                if(!$.isNumeric(id) && $('#fixed_id_'+id).length > 0){
+                     var id =  $('#fixed_id_'+id).val();
+                }
                 $('#meta-item-'+id+' h2').css('background-color','#ffcccc');
                 $.each($( "#submit_form .tab-pane" ),function(index,seletor){
                     if($(seletor).find('#meta-item-'+id).length > 0){

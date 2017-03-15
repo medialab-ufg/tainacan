@@ -7,8 +7,14 @@ and open the template in the editor.
     Created on : 26/09/2016, 12:35:12
     Author     : eduardo
 */
+.breadcrumbs-debate{
+    background-color: #e4e4e4 !important;
+}
+
+
+
 .chatTitleContainer {
-    text-align: left;
+    text-align: left; 
     font-size: 14pt;
     vertical-align: middle;
     display: table-cell;
@@ -20,7 +26,7 @@ and open the template in the editor.
 }
 
 .chatContainer {
-    margin-top: -20px;
+    margin-top: 20px;
     height: auto;
     width: 100%;
     background-color: #e4e4e4;
@@ -29,11 +35,13 @@ and open the template in the editor.
 }
 
 .chatHistoryContainer {
-
-    padding: 20px;
+    background-color: white;
+    color: black;
+    margin-top: -15px;
+    padding-right: 40px;
+    padding-left: 40px;
     height: auto;
     width: 100%;
-    background-color: #f4f4f4;
     border-top: 1px solid #e1e1e1;
     border-left: 1px solid #d4d4d4;
     border-right: 1px solid #d4d4d4;
@@ -43,6 +51,9 @@ and open the template in the editor.
 
 }
 
+.chatHistoryContainer b{
+    color: black;
+}
 .chatMessageControls {
 
     margin-top: 6px;
@@ -135,10 +146,14 @@ and open the template in the editor.
 
 }
 
+.form-comments-table{
+    width: 100%;
+}
+
 .form-comments-table tr:nth-child(1) td:nth-child(1) {
 
     font-size: 9pt;
-    color: #a7a7a7;
+    color: #000;
     white-space: nowrap;
     vertical-align: top;
 
@@ -166,7 +181,6 @@ and open the template in the editor.
 
     padding-top: 8px;
     font-size: 9pt;
-    color: #737373;
     font-weight: bold;
     vertical-align: top;
 
@@ -232,21 +246,14 @@ and open the template in the editor.
     background-color: #fff;
     font-size: 12px;
     margin: 0;
-    padding: 8px 8px;
     line-height: 1.5;
-    color: #9e9e9e;
+    color: #000;
     border-color: #ddd;
     cursor: pointer;
-    border: 1px solid #e6e6e6;
-    border-bottom: 3px solid #dddddd;
-    border-radius: 3px;  
+    //border: 1px solid #e6e6e6;
+    //border-bottom: 3px solid #dddddd;
+    //border-radius: 3px;  
     white-space: normal;
-
-}
-
-.comment:hover {
-
-    background-color: #fafafa;   
 
 }
 
@@ -259,8 +266,16 @@ and open the template in the editor.
 
 }
 
-.commentTD {
-
-
+.argument-operation {
+    margin-top: 15px;;
+}
+.argument-operation .score{
+    font-size: 15px;
+}
+.argument-operation .argument-operation-links{
+    font-weight: bold;
+}
+.argument-operation .argument-operation-links .link-center{
+   margin-left: 20%;
 }
 

@@ -247,7 +247,7 @@
     function get_tab_property_id(current_id){
         var tab_property_id = false;
         var json = jQuery.parseJSON($('#tabs_properties').val());
-        if(json.length>0){
+        if(json && json.length>0){
             $.each(json,function(index,object){
                 if(object[current_id]){
                     tab_property_id = object[current_id];
