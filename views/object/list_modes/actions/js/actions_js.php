@@ -134,7 +134,7 @@
                             thumb_ext = "PNG";
                         }
                         var item_thumb = new Image();
-                        item_thumb.src = itm.tmb.url;
+                        item_thumb.src = itm.tbn;
                         pressPDF.addImage(item_thumb, thumb_ext, baseX*2, desc_yDist, 80, 80);
 
                         desc_xDist = lMargin + (3*baseX);
@@ -165,7 +165,20 @@
                             var base_count = desc_yDist;
                         }
                     }
-                
+
+                    if(itm.attach) {
+                        var base_top = 10; // var attch_marg_left = 20;
+                        for (att in itm.attach) {
+                            /*  var attach_img = new Image(); attach_img.src = itm.attach[att].url; pressPDF.addImage(attach_img, "JPEG", 80 + attch_marg_left, 300, 80,80); attch_marg_left += 100; */
+                            base_top += 30;
+                            pressPDF.textWithLink( itm.attach[att].title , baseX*2, base_count + base_top, { url: itm.attach[att].url, href: '_blank' });
+                        }
+                    }
+
+                    if(base_top) {
+                        base_count += base_top;
+                    }
+
                     for( idx in itm.inf ) {
                         if(itm.inf[idx].meta) {
 
@@ -178,7 +191,6 @@
                             if( itm.inf[idx].is_submeta ) {
                                 extra_padding = 20;
                             }
-
                             pressPDF.setFontStyle('bold');
                             var p = base_count + 40;
                             pressPDF.text( itm.inf[idx].meta, (baseX*2 + extra_padding) , p);
@@ -190,7 +202,6 @@
                             if(itm.inf[idx].value) {                                
                                 default_val = itm.inf[idx].value;
                             }
-
                             pressPDF.text(default_val, (baseX*2 + extra_padding), f);
                             base_count = p;
                         }
