@@ -85,7 +85,7 @@
             e.preventDefault();
         });
         //submissao de formulario de edicao
-        $('#form_report_abuse').submit(function (e) {
+        $('.form_report_abuse').submit(function (e) {
             $.ajax({
                 url: $('#src').val() + "/controllers/event/event_controller.php",
                 type: 'POST',

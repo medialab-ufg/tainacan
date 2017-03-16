@@ -52,7 +52,7 @@
                                  <div id="comment-<?php echo $object->ID; ?>" 
                                      data-commentid="<?php echo $object->ID; ?>" 
                                      class="comment comment-step1">
-                                     <b id="text-comment-<?php echo $object->ID; ?>"><?php echo $object->post_title; ?></b>
+                                     <span id="text-comment-<?php echo $object->ID; ?>"><?php echo $object->post_title; ?></span>
                                  </div>     
                             </div>
                             <div class="col-md-12 argument-operation">
@@ -78,7 +78,15 @@
                                         <a href="javascript:void(0)" onclick="open_negative_argument('<?php echo $object->ID; ?>')"><?php _e('Counter argument','tainacan') ?></a>
                                     </span>
                                     <span class="link-center" >
-                                        <a><span class="caret"/><?php _e('More information','tainacan') ?></a>
+                                        <a href="javascript:void(0)" 
+                                           onclick="open_properties_argument(<?php echo $object->ID; ?>)"
+                                           id="open_properties_argument_<?php echo $object->ID; ?>">
+                                            <span class="glyphicon glyphicon-chevron-down"/><?php _e('More information','tainacan') ?>
+                                        </a>
+                                        <a href="javascript:void(0)" 
+                                           onclick="hide_properties_argument(<?php echo $object->ID; ?>)"
+                                           id="hide_properties_argument_<?php echo $object->ID; ?>"
+                                           style="display:none;"><span class="glyphicon glyphicon-chevron-up"/><?php _e('Hide information','tainacan') ?></a>
                                     </span>  
                                     <span class="pull-right">
                                         <?php if($object->post_author   ==  get_current_user_id()): ?>
@@ -160,6 +168,7 @@
                                     </div>
                                 </form>    
                             </div>
+                            <div style="display:none" class='col-md-12' id='properties-argument-<?php echo $object->ID; ?>'></div>
                             <!--
                             <div class="col-md-12">
                                 <div class="comment-timestamp"><?php echo $object->post_date_gmt ?></div>
