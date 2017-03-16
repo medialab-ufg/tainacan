@@ -39,3 +39,10 @@ function send_ajax($marc)
         }
     });
 }
+
+function save_mapping() {
+    $('#modalImportLoading').modal('show');
+    $('#progressbarmapas').remove();
+
+    
+}

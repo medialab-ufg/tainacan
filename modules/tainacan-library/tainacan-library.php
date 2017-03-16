@@ -110,22 +110,28 @@ add_action('add_show_all_meta', 'show_all_meta',10, 1);
 function show_all_meta($collection_id)
 {
     $all_properties_id = meta_ids($collection_id, false);
+    $all_marc_fields = get_all_marc_fields();
 
     ?>
         <div role="tabpanel" class="tab-pane" id="marc_tab">
+            <form action="" name="mapping" method="post">
             <?php foreach ($all_properties_id as $compound_name => $sub_properties) {?>
                 <div class='form-group'>
-                    <label class='col-md-12 col-sm-12 meta-title no-padding'> <?php echo $compound_name?> </label>
+                    <label class='col-md-12 col-sm-12 meta-title no-padding' name="<?= $compound_name?>" id="<?= $compound_name?>"> <?= $compound_name?> </label>
                 <?php foreach ($sub_properties as $name => $id){?>
-                        <label class='col-md-6 col-sm-12 meta-title no-padding'style="text-indent: 5%;"> <?php echo $name?> </label>
+                        <label class='col-md-6 col-sm-12 meta-title no-padding'style="text-indent: 5%;"> <?= $name?> </label>
                         <div class='col-md-6 col-sm-12 meta-value'>
-                            <select name="teste" class='data form-control' id='teste'>
-                                <option>Teste 1</option>
-                            </select>
+                                <select name="<?= $name ?>" class='data form-control' id="<?= $name ?>">
+                                    <?php foreach ($all_marc_fields as $field) { ?>
+                                        <option name="<?= $field ?>" id="<?= $field ?>" value="<?= $field ?>"><?= $field ?></option>
+                                    <?php } ?>
+                                </select>
                         </div>
                 <?php } ?>
                 </div>
             <?php } ?>
+            <button type="button" class="btn btn-primary btn-lg tainacan-blue-btn-bg pull-right" id="mapping_save" onclick="save_mapping()"><?php _e("Save", "tainacan"); ?></button>
+            </form>
         </div>
     <?php
 }
@@ -178,6 +184,378 @@ function meta_ids($collection_id, $change_names_for_numbers)
     }
 
     return $return;
+}
+
+function get_all_marc_fields()
+{
+    $marc_fiels = [];
+
+    $marc_fiels[] = '013 $a';
+    $marc_fiels[] = '013 $b';
+    $marc_fiels[] = '013 $c';
+    $marc_fiels[] = '013 $d';
+    $marc_fiels[] = '013 $e';
+    $marc_fiels[] = '013 $f';
+
+    $marc_fiels[] = '020 $a';
+
+    $marc_fiels[] = '022 $a';
+
+    $marc_fiels[] = '029 $a';
+
+    $marc_fiels[] = '040 $a';
+    $marc_fiels[] = '040 $b';
+
+    $marc_fiels[] = '041 #1';
+    $marc_fiels[] = '041 $a';
+    $marc_fiels[] = '041 $b';
+    $marc_fiels[] = '041 $h';
+
+    $marc_fiels[] = '043 $a';
+
+    $marc_fiels[] = '045 #1';
+    $marc_fiels[] = '045 $a';
+    $marc_fiels[] = '045 $b';
+    $marc_fiels[] = '045 $c';
+
+    $marc_fiels[] = '080 $2';
+    $marc_fiels[] = '080 $a';
+
+    $marc_fiels[] = '082 $2';
+    $marc_fiels[] = '082 $a';
+
+    $marc_fiels[] = '090 $a';
+    $marc_fiels[] = '090 $b';
+    $marc_fiels[] = '090 $c';
+
+    $marc_fiels[] = '095 $a';
+
+    $marc_fiels[] = '100 #1';
+    $marc_fiels[] = '100 $a';
+    $marc_fiels[] = '100 $b';
+    $marc_fiels[] = '100 $c';
+    $marc_fiels[] = '100 $d';
+    $marc_fiels[] = '100 $q';
+
+    $marc_fiels[] = '110 #1';
+    $marc_fiels[] = '110 $a';
+    $marc_fiels[] = '110 $b';
+    $marc_fiels[] = '110 $c';
+    $marc_fiels[] = '110 $d';
+    $marc_fiels[] = '110 $l';
+    $marc_fiels[] = '110 $n';
+
+    $marc_fiels[] = '111 #1';
+    $marc_fiels[] = '111 $a';
+    $marc_fiels[] = '111 $c';
+    $marc_fiels[] = '111 $d';
+    $marc_fiels[] = '111 $e';
+    $marc_fiels[] = '111 $g';
+    $marc_fiels[] = '111 $k';
+    $marc_fiels[] = '111 $n';
+
+    $marc_fiels[] = '130 #1';
+    $marc_fiels[] = '130 $a';
+    $marc_fiels[] = '130 $d';
+    $marc_fiels[] = '130 $f';
+    $marc_fiels[] = '130 $g';
+    $marc_fiels[] = '130 $k';
+    $marc_fiels[] = '130 $k';
+    $marc_fiels[] = '130 $l';
+    $marc_fiels[] = '130 $p';
+
+    $marc_fiels[] = '210 #1';
+    $marc_fiels[] = '210 #2';
+    $marc_fiels[] = '210 $a';
+    $marc_fiels[] = '210 $b';
+
+    $marc_fiels[] = '240 #1';
+    $marc_fiels[] = '240 #2';
+    $marc_fiels[] = '240 $a';
+    $marc_fiels[] = '240 $b';
+    $marc_fiels[] = '240 $f';
+    $marc_fiels[] = '240 $g';
+    $marc_fiels[] = '240 $k';
+    $marc_fiels[] = '240 $l';
+    $marc_fiels[] = '240 $n';
+    $marc_fiels[] = '240 $p';
+
+    $marc_fiels[] = '243 #1';
+    $marc_fiels[] = '243 #2';
+    $marc_fiels[] = '243 $a';
+    $marc_fiels[] = '243 $f';
+    $marc_fiels[] = '243 $g';
+    $marc_fiels[] = '243 $k';
+    $marc_fiels[] = '243 $l';
+
+    $marc_fiels[] = '245 #1';
+    $marc_fiels[] = '245 #2';
+    $marc_fiels[] = '245 $a';
+    $marc_fiels[] = '245 $b';
+    $marc_fiels[] = '245 $c';
+    $marc_fiels[] = '245 $h';
+    $marc_fiels[] = '245 $n';
+    $marc_fiels[] = '245 $p';
+
+    $marc_fiels[] = '246 #1';
+    $marc_fiels[] = '246 #2';
+    $marc_fiels[] = '246 $a';
+    $marc_fiels[] = '246 $b';
+    $marc_fiels[] = '246 $f';
+    $marc_fiels[] = '246 $g';
+    $marc_fiels[] = '246 $h';
+    $marc_fiels[] = '246 $i';
+    $marc_fiels[] = '246 $n';
+    $marc_fiels[] = '246 $p';
+
+    $marc_fiels[] = '250 $a';
+    $marc_fiels[] = '250 $b';
+
+    $marc_fiels[] = '255 $a';
+
+    $marc_fiels[] = '256 $a';
+
+    $marc_fiels[] = '257 $a';
+
+    $marc_fiels[] = '258 $a';
+    $marc_fiels[] = '258 $b';
+
+
+    $marc_fiels[] = '260 $a';
+    $marc_fiels[] = '260 $b';
+    $marc_fiels[] = '260 $c';
+    $marc_fiels[] = '260 $e';
+    $marc_fiels[] = '260 $f';
+    $marc_fiels[] = '260 $g';
+
+    $marc_fiels[] = '300 $a';
+    $marc_fiels[] = '300 $b';
+    $marc_fiels[] = '300 $c';
+    $marc_fiels[] = '300 $e';
+
+    $marc_fiels[] = '306 $a';
+
+    $marc_fiels[] = '310 $a';
+    $marc_fiels[] = '310 $b';
+
+    $marc_fiels[] = '321 $a';
+    $marc_fiels[] = '321 $b';
+
+    $marc_fiels[] = '340 $a';
+    $marc_fiels[] = '340 $b';
+    $marc_fiels[] = '340 $c';
+    $marc_fiels[] = '340 $d';
+    $marc_fiels[] = '340 $e';
+
+    $marc_fiels[] = '342 #1';
+    $marc_fiels[] = '342 #2';
+    $marc_fiels[] = '342 $a';
+    $marc_fiels[] = '342 $b';
+    $marc_fiels[] = '342 $c';
+    $marc_fiels[] = '342 $d';
+
+    $marc_fiels[] = '343 $a';
+    $marc_fiels[] = '343 $b';
+
+    $marc_fiels[] = '362 #1';
+    $marc_fiels[] = '362 $a';
+    $marc_fiels[] = '362 $z';
+
+    $marc_fiels[] = '490 #1';
+    $marc_fiels[] = '490 $a';
+    $marc_fiels[] = '490 $v';
+
+    $marc_fiels[] = '500 $a';
+
+    $marc_fiels[] = '501 $a';
+
+    $marc_fiels[] = '502 $a';
+
+    $marc_fiels[] = '504 $a';
+
+    $marc_fiels[] = '505 $a';
+
+    $marc_fiels[] = '515 $a';
+
+    $marc_fiels[] = '520 $a';
+    $marc_fiels[] = '520 $u';
+
+    $marc_fiels[] = '521 $a';
+
+    $marc_fiels[] = '525 $a';
+
+    $marc_fiels[] = '530 $a';
+
+    $marc_fiels[] = '534 $a';
+
+    $marc_fiels[] = '550 $a';
+
+    $marc_fiels[] = '555 #1';
+    $marc_fiels[] = '555 $3';
+    $marc_fiels[] = '555 $a';
+    $marc_fiels[] = '555 $b';
+    $marc_fiels[] = '555 $c';
+    $marc_fiels[] = '555 $d';
+    $marc_fiels[] = '555 $u';
+
+    $marc_fiels[] = '580 $a';
+
+    $marc_fiels[] = '590 $a';
+
+    $marc_fiels[] = '595 $a';
+    $marc_fiels[] = '595 $b';
+
+    $marc_fiels[] = '600 #1';
+    $marc_fiels[] = '600 $a';
+    $marc_fiels[] = '600 $b';
+    $marc_fiels[] = '600 $c';
+    $marc_fiels[] = '600 $d';
+    $marc_fiels[] = '600 $k';
+    $marc_fiels[] = '600 $q';
+    $marc_fiels[] = '600 $t';
+    $marc_fiels[] = '600 $x';
+    $marc_fiels[] = '600 $y';
+    $marc_fiels[] = '600 $z';
+    
+    $marc_fiels[] = '610 #1';
+    $marc_fiels[] = '610 $a';
+    $marc_fiels[] = '610 $b';
+    $marc_fiels[] = '610 $c';
+    $marc_fiels[] = '610 $d';
+    $marc_fiels[] = '610 $g';
+    $marc_fiels[] = '610 $k';
+    $marc_fiels[] = '610 $l';
+    $marc_fiels[] = '610 $n';
+    $marc_fiels[] = '610 $t';
+    $marc_fiels[] = '610 $x';
+    $marc_fiels[] = '610 $y';
+    $marc_fiels[] = '610 $z';
+
+    $marc_fiels[] = '611 #1';
+    $marc_fiels[] = '611 $a';
+    $marc_fiels[] = '611 $c';
+    $marc_fiels[] = '611 $d';
+    $marc_fiels[] = '611 $e';
+    $marc_fiels[] = '611 $n';
+    $marc_fiels[] = '611 $t';
+    $marc_fiels[] = '611 $x';
+    $marc_fiels[] = '611 $y';
+    $marc_fiels[] = '611 $z';
+
+    $marc_fiels[] = '630 #1';
+    $marc_fiels[] = '630 $a';
+    $marc_fiels[] = '630 $d';
+    $marc_fiels[] = '630 $f';
+    $marc_fiels[] = '630 $g';
+    $marc_fiels[] = '630 $k';
+    $marc_fiels[] = '630 $l';
+    $marc_fiels[] = '630 $p';
+    $marc_fiels[] = '630 $x';
+    $marc_fiels[] = '630 $y';
+    $marc_fiels[] = '630 $z';
+
+    $marc_fiels[] = '650 $a';
+    $marc_fiels[] = '650 $x';
+    $marc_fiels[] = '650 $y';
+    $marc_fiels[] = '650 $z';
+
+    $marc_fiels[] = '651 $a';
+    $marc_fiels[] = '651 $x';
+    $marc_fiels[] = '651 $y';
+    $marc_fiels[] = '651 $z';
+
+    $marc_fiels[] = '700 #1';
+    $marc_fiels[] = '700 #2';
+    $marc_fiels[] = '700 $a';
+    $marc_fiels[] = '700 $b';
+    $marc_fiels[] = '700 $c';
+    $marc_fiels[] = '700 $d';
+    $marc_fiels[] = '700 $e';
+    $marc_fiels[] = '700 $l';
+    $marc_fiels[] = '700 $q';
+    $marc_fiels[] = '700 $t';
+
+    $marc_fiels[] = '710 #1';
+    $marc_fiels[] = '710 #2';
+    $marc_fiels[] = '710 $a';
+    $marc_fiels[] = '710 $b';
+    $marc_fiels[] = '710 $c';
+    $marc_fiels[] = '710 $d';
+    $marc_fiels[] = '710 $g';
+    $marc_fiels[] = '710 $l';
+    $marc_fiels[] = '710 $n';
+    $marc_fiels[] = '710 $t';
+
+    $marc_fiels[] = '730 #1';
+    $marc_fiels[] = '730 #2';
+    $marc_fiels[] = '730 $a';
+    $marc_fiels[] = '730 $d';
+    $marc_fiels[] = '730 $f';
+    $marc_fiels[] = '730 $g';
+    $marc_fiels[] = '730 $k';
+    $marc_fiels[] = '730 $l';
+    $marc_fiels[] = '730 $p';
+    $marc_fiels[] = '730 $x';
+    $marc_fiels[] = '730 $y';
+    $marc_fiels[] = '730 $z';
+
+    $marc_fiels[] = '740 #1';
+    $marc_fiels[] = '740 #2';
+    $marc_fiels[] = '740 $a';
+    $marc_fiels[] = '740 $n';
+    $marc_fiels[] = '740 $p';
+
+    $marc_fiels[] = '830 #2';
+    $marc_fiels[] = '830 $a';
+    $marc_fiels[] = '830 $v';
+
+    $marc_fiels[] = '856 $d';
+    $marc_fiels[] = '856 $f';
+    $marc_fiels[] = '856 $u';
+    $marc_fiels[] = '856 $y';
+
+    $marc_fiels[] = '947 $a';
+    $marc_fiels[] = '947 $b';
+    $marc_fiels[] = '947 $c';
+    $marc_fiels[] = '947 $d';
+    $marc_fiels[] = '947 $e';
+    $marc_fiels[] = '947 $f';
+    $marc_fiels[] = '947 $g';
+    $marc_fiels[] = '947 $i';
+    $marc_fiels[] = '947 $j';
+    $marc_fiels[] = '947 $k';
+    $marc_fiels[] = '947 $l';
+    $marc_fiels[] = '947 $n';
+    $marc_fiels[] = '947 $o';
+    $marc_fiels[] = '947 $p';
+    $marc_fiels[] = '947 $q';
+    $marc_fiels[] = '947 $r';
+    $marc_fiels[] = '947 $s';
+    $marc_fiels[] = '947 $t';
+    $marc_fiels[] = '947 $u';
+    $marc_fiels[] = '947 $z';
+
+    return $marc_fiels;
+}
+
+function save_mapping_marc($name, $collection_id )
+{
+    $data_info = [];
+    $object_id = create_mapping($name, $collection_id);
+    
+}
+
+function create_mapping($name, $collection_id) {
+    $post = array(
+        'post_title' => $name,
+        'post_status' => 'publish',
+        'post_type' => 'socialdb_channel'
+    );
+    $object_id = wp_insert_post($post);
+    add_post_meta($object_id, 'socialdb_channel_identificator', $name);
+    add_post_meta($collection_id, 'socialdb_collection_channel', $object_id);
+    wp_set_object_terms($object_id, array((int) $this->parent->term_id), 'socialdb_channel_type');
+    return $object_id;
 }
 
 function import_marc()
