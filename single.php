@@ -427,7 +427,7 @@ while (have_posts()) : the_post();
                                             <a onclick="select_some_trash()" class="select_some_trash">
                                                 <?php echo ViewHelper::render_icon("selection", "png", __("Select some items", "tainacan")); ?>
                                             </a>
-                                            <a class="select_all_trash">
+                                            <a onclick="select_all_trash()" comment class="select_all_trash">
                                                 <?php echo ViewHelper::render_icon("select-all", "png", __("Select all items", "tainacan")); ?>
                                             </a>
                                             <input type="hidden" value="" class="bulk_action_trash" name="bulk_action">

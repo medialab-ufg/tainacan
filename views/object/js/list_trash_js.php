@@ -47,13 +47,16 @@
         
         $('a.move_eliminate').on('click', function() {
             var bulk_type = $('input.bulk_action_trash').val();
-            var selected_total = $('.selected-item').length;
+            var selected_total = 0;
             var bulkds = [];
             $('.selected-item').each(function(idx, el) {
-                var item_id = $(el).parent().attr("id").replace("object_", "");
-                bulkds.push(item_id);
+                if($(el).hasClass('item-colecao')){
+                    var item_id = $(el).parent().attr("id").replace("object_", "");
+                    bulkds.push(item_id);
+                    selected_total++;
+                }
             });
-
+            
             if( selected_total > 0 ) {
                 var collection_id = $('#collection_id').val();
                 var main_title = '<?php _e("Attention","tainacan"); ?>';
@@ -78,13 +81,13 @@
             }
             
             if ( "select_all_trash" === select ) {
-                select_all_trash();
+               // select_all_trash();
             }
             $( $(this).siblings()[0]).removeClass('highlight');
             $('.selectable-actions').fadeIn();
         });
 
-        $('.toggleSelectTrash').click(function() {
+        $('.toggleSelect').click(function() {
             if( $(this).hasClass('selected-item') ) {
                 $(this).removeClass('selected-item')
             }else{
@@ -249,24 +252,25 @@
     });
 /*******************************************************************************/
     function select_some_trash() {
-         if( ! $('.toggleSelectTrash').hasClass('selecting-item') ) {
+         if( ! $('.toggleSelect').hasClass('selecting-item') ) {
              toastr.info('<?php _e('Select items below to edit or exclude!', 'tainacan') ?>', '', set_toastr_class());
          }
 
          $('.object_id').each(function(idx, el) {
             var item = $("#object_" + $(el).val() );
-            $(item).find('.toggleSelectTrash').addClass('selecting-item');
+            $(item).find('.toggleSelect').addClass('selecting-item');
          });
     }
 
     function select_all_trash() {
-        console.log($('.toggleSelectTrash'));
-        $(".toggleSelectTrash").removeClass('selected-item');
+        console.log($('.toggleSelect'));
+        $(".toggleSelect").removeClass('selected-item');
         toastr.info('<?php _e('All items have been selected!', 'tainacan') ?>', '', set_toastr_class());
-        $('.toggleSelectTrash').each(function(idx, el) {
-            var item = $("#object_" + $(el).val() );
-            $(item).find(".toggleSelectTrash").addClass('selecting-item');
-            console.log('inside',$(item).find(".toggleSelectTrash"));
+       $(".toggleSelect").each(function(idx, el) {
+           if($(el).is(':visible')){
+                $(".toggleSelect").addClass('selected-item');
+                console.log('inside_',$(el).val());
+            }
         });
     }
     

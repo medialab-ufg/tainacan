@@ -4,7 +4,7 @@
 
     <input type="hidden" id="add_classification_allowed_<?php echo get_the_ID() ?>" name="add_classification_allowed" value="<?php echo (string) verify_allowed_action($collection_id, 'socialdb_collection_permission_add_classification', get_the_ID()); ?>" />
     <!-- TAINACAN: coloca a class row DO ITEM, sao cinco colunas possiveis todas elas podendo ser escondidas pelo o usuario, mas seu tamanho eh fixo col-md-2  -->
-    <div class="item-colecao toggleSelectTrash" <?php if (($countLine % 2) == 0) { echo "style='margin-right: 0'"; } ?>>
+    <div class="item-colecao toggleSelect" <?php if (($countLine % 2) == 0) { echo "style='margin-right: 0'"; } ?>>
 
         <div class="row droppableClassifications item-info">
             <div class="col-md-4 colFoto">
