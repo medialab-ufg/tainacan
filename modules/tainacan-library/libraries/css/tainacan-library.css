@@ -1,3 +1,10 @@
+/*Classes*/
+.add_padding
+{
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+/*Seletores*/
 #formmarc
 {
     padding: 13px;

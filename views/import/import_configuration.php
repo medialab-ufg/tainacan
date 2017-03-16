@@ -18,6 +18,11 @@ include_once ('js/import_configuration_js.php');
                     if (has_action('add_tab_mapas_culturais')) {
                         do_action("add_tab_mapas_culturais");
                     }
+                    
+                    if(has_action('add_tab_marc'))
+                    {
+                        do_action('add_tab_marc');
+                    }
                     ?>
                 </ul>
 
@@ -185,6 +190,11 @@ include_once ('js/import_configuration_js.php');
                     <?php
                     if (has_action('add_options_mapas_culturais')) {
                         do_action("add_options_mapas_culturais");
+                    }
+                    
+                    if(has_action('add_show_all_meta'))
+                    {
+                        do_action('add_show_all_meta', $collection_id);
                     }
                     ?>
 
