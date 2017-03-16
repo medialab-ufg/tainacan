@@ -413,6 +413,19 @@ class ObjectController extends Controller {
                 if ($_item_meta['_thumbnail_id']) {
                     $press['tmb']['url'] = get_post($_item_meta['_thumbnail_id'][0])->guid;
                     $press['tmb']['type'] = wp_check_filetype($press['tmb']['url']);
+
+                    $a = file_get_contents($press['tmb']['url']);
+                    $b64_img = base64_encode($a);
+                    $press['tbn'] = "data:" . $press['tmb']['type']['type'] . ";base64," . $b64_img;
+                }
+
+                $item_attachs = $objectfile_model->show_files(['collection_id'=> $data['collection_id'], 'object_id' => $object_id]);
+                if($item_attachs) {
+                    foreach($item_attachs['image'] as $attach_obj) {
+                        /* $att64 = base64_encode(file_get_contents($attach_obj->guid)); $att64_img = "data:image/jpeg;base64," . $att64;
+                        $press['attach'][] = [ 'url' => $att64_img, 'type' => wp_check_filetype($attach_obj->guid)]; */
+                        $press['attach'][] = [ 'title' => $attach_obj->post_title, 'url' => $attach_obj->guid ];
+                    }
                 }
 
                 foreach ($_item_meta as $meta => $val) {
@@ -435,6 +448,13 @@ class ObjectController extends Controller {
                                                 $_title = get_term($_title_id[2])->name;
                                                 $v = $_meta_->meta_value;
                                                 $_pair = ['meta' => $_title , 'value' => $v, 'is_submeta' => true];
+                                                if(is_numeric($v)) {
+                                                    $relation_meta_post = get_post($v);
+                                                    if( !is_null($relation_meta_post) ) {
+                                                        $_pair['value'] = $relation_meta_post->post_title;
+                                                    }
+                                                }
+
                                                 $press['inf'][] = $_pair;
                                                 $aux_arr[] = $_title . "__" . $v;
                                             }
@@ -465,9 +485,12 @@ class ObjectController extends Controller {
                     $init = 0;
                     foreach ($press['inf'] as $_m_arr) {
                         $_item_pair = $_m_arr['meta'] . "__" . $_m_arr['value'];
-                        if( in_array($_item_pair, $aux_arr) ) {
-                            if( is_null($_m_arr['is_submeta'])) {
-                                unset( $press['inf'][$init] );
+
+                        if (!is_null($aux_arr)) {
+                            if( in_array($_item_pair, $aux_arr) ) {
+                                if( is_null($_m_arr['is_submeta'])) {
+                                    unset( $press['inf'][$init] );
+                                }
                             }
                         }
                         $init++;
@@ -853,6 +876,16 @@ class ObjectController extends Controller {
                 }
                 return json_encode($result);
                 break;
+            case 'eliminate_itens':
+                if(isset($data['ids']) && is_array($data['ids']) && is_user_logged_in()){
+                    foreach ($data['ids'] as $id) {
+                        wp_delete_post($id);
+                    }
+                }
+                $data['title'] = __('Success','tainacan'); 
+                $data['msg'] = __('Operation is successfully','tainacan'); 
+                $data['type'] = 'success'; 
+                return json_encode($data);
         }
     }
 

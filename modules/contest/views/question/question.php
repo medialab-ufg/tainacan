@@ -25,7 +25,9 @@
                <?php
            }
         ?>
-        <li class="active"> <?php echo $object->post_title; ?> </li>
+        <li class="active">  
+            <?php echo (strlen($object->post_title) > 40 ) ?  substr($object->post_title, 0, 40).'...' : $object->post_title; ?>  
+        </li>
     </ol>
     <br>
     <div class="chatHistoryContainer">
@@ -57,7 +59,7 @@
                                                 class="btn btn-default btn-sm">
                                             <span class="glyphicon glyphicon-edit"></span> <?php _e('Edit','tainacan') ?>
                                         </button>
-                                        <button type="button" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash"></span> <?php _e('Remove','tainacan') ?></button>
+                                        <button type="button" onclick="delete_comment('<?php echo $object->ID; ?>')" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash"></span> <?php _e('Remove','tainacan') ?></button>
                                         <?php else: ?>
                                         <button type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-alert"></span><?php _e('Report abuse','tainacan') ?></button>
                                         <?php endif; ?>

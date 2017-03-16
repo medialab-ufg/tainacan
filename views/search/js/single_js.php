@@ -1252,9 +1252,17 @@
         wpquery_keyword(search_for);
     }
 
-    function backToMainPage(reload_container) {
+    function backToMainPage(reload_container, keep_search) {
         change_breadcrumbs_title('', ' ');
-        wpquery_clean();
+
+        if(keep_search && keep_search == true) {
+        } else {
+            wpquery_clean();
+            if (!reload_container) {
+                set_containers_class($('#collection_id').val());
+            }
+        }
+
         list_main_ordenation_filter();
         $('.modal-backdrop').hide();
         $('#main_part_collection').hide();
@@ -1270,9 +1278,6 @@
         $("#container_socialdb").show('fast');
         $('#main_part').show('slow');
         reinit_synonyms_tree();
-        if (!reload_container) {
-            set_containers_class($('#collection_id').val());
-        }
     }
 
     //apenas para a pagina de demonstracao do item
@@ -2420,6 +2425,9 @@
 /************************************************ LIXEIRA **********************************************************/    
 function show_trash_page(){
     $('#icon-search-bottom').parent().hide();
+    $('#normal-selectable').hide();
+    $('.button-trash').hide();
+    $('#trash-selectable').show();
     showTrash('<?php echo get_template_directory_uri(); ?>');
     if($('#ul_menu_search').length>0){
         $('#ul_menu_search').hide();
@@ -2428,6 +2436,9 @@ function show_trash_page(){
 
 function hide_trash_page(){
     $('#icon-search-bottom').parent().show(); 
+    $('#normal-selectable').show();
+    $('.button-trash').show();
+    $('#trash-selectable').hide();
     showList('<?php echo get_template_directory_uri(); ?>');
     if($('#ul_menu_search').length>0){
         $('#ul_menu_search').show();

@@ -4,7 +4,7 @@
         var stateObj = {foo: "bar"};
         history.replaceState(stateObj, "page 2", $('#socialdb_permalink_object').val());
         //submissao de formulario positivo
-        $('#form_positive_argument').submit(function (e) {
+        $('.form_positive_argument').submit(function (e) {
             hide_all_modals();
             show_modal_main();
             $.ajax({
@@ -32,7 +32,7 @@
             e.preventDefault();
         });
         //submissao de formulario negativo
-        $('#form_negative_argument').submit(function (e) {
+        $('.form_negative_argument').submit(function (e) {
             hide_all_modals();
             show_modal_main();
             $.ajax({
@@ -103,10 +103,39 @@
             e.preventDefault();
         });
         autocomplete_arguments('#text-edit-argument', $('#related-id').val());
-        autocomplete_arguments('#positive_argument', $('#related-id').val());
-        autocomplete_arguments('#negative_argument', $('#related-id').val());
+        autocomplete_arguments('.positive_argument', $('#related-id').val());
+        autocomplete_arguments('.negative_argument', $('#related-id').val());
         //var myVar = setInterval(function(){ myTimer() }, 60000);
     });
+    
+    function submit_positive_argument(seletor){
+            hide_all_modals();
+            show_modal_main();
+            $.ajax({
+                url: $('#src').val() + '/modules/<?php echo MODULE_CONTEST ?>/controllers/argument/contest_argument_controller.php',
+                type: 'POST',
+                data: new FormData(this),
+                processData: false,
+                contentType: false
+            }).success(function (result) {
+                $('.nav-tabs').tab();
+                $('.dropdown-toggle').dropdown();
+                elem = jQuery.parseJSON(result);
+                //show messages
+                var promisse = save_first_vote(elem.item_id);
+                promisse.done(function (result) {
+                    $('.modal').modal('hide');
+                    hide_modal_main();
+                    showItemObject($('#item_id').val(), $('#src').val());
+                    showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Operation was successfully!', 'tainacan') ?>', 'success');
+                    //if (elem.redirect)
+                    //window.location = elem.redirect;
+                });
+            }).error(function (error) {
+            });
+            console.log();
+            return false;
+    }
     /**
      * 
      * @param {type} property_id
@@ -131,7 +160,8 @@
             elem_first = jQuery.parseJSON(result);
             if (elem_first.is_user_logged_in && elem_first.results.length > 0) {
                 $.each(elem_first.results, function (index, result) {
-                    $(result.seletor).text(result.score.final_score);
+                    $(result.seletor+'_up').text(result.score.final_up);
+                    $(result.seletor+'_down').text(result.score.final_down);
                 });
                 $('#collection_postive_argument_id').val($("#collection_id").val());
                 $('[name="argument_parent"]').val(object_id);
@@ -168,7 +198,8 @@
             elem_first = jQuery.parseJSON(result);
             if (elem_first.is_user_logged_in && elem_first.results.length > 0) {
                 $.each(elem_first.results, function (index, result) {
-                    $(result.seletor).text(result.score.final_score);
+                    $(result.seletor+'_up').text(result.score.final_up);
+                    $(result.seletor+'_down').text(result.score.final_down);
                 });
                 $('#collection_negative_argument_id').val($("#collection_id").val());
                 $('[name="argument_parent"]').val(object_id);
@@ -317,6 +348,7 @@
         }).done(function (result) {
             $('#modalImportMain').modal('hide');//escondo o modal de carregamento
             elem_first = jQuery.parseJSON(result);
+            showItemObject($('#item_id').val(), $('#src').val());
             showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
         });
     }

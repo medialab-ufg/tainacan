@@ -124,7 +124,7 @@ $collection_route = get_post(get_option('collection_root_id'));
         if(data.collection == '<?php echo __('advanced-search','tainacan') ?>'){
             showAdvancedSearch($('#src').val());
         }else{
-            backToMainPage(); 
+            backToMainPage(null, true);
         }
     });
     //pagina do item

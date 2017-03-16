@@ -1,4 +1,4 @@
-<!-- Positive argument -->
+<!-- Positive argument -
     <div class="modal fade" 
          id="modalReplyPositiveArgument" 
          tabindex="-1" 
@@ -50,8 +50,8 @@
                 </form>
             </div>
         </div>
-    </div>
-<!-- negative argument -->
+    </div-->
+<!-- negative argument --
     <div class="modal fade" 
          id="modalReplyNegativeArgument" 
          tabindex="-1" 
@@ -103,7 +103,7 @@
                 </form>
             </div>
         </div>
-    </div>
+    </div-->
 <!--Editando comentario -->
  <div class="modal fade" 
          id="modalEditArgument" 

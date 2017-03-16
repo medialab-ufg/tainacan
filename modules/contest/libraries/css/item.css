@@ -104,12 +104,12 @@ and open the template in the editor.
     list-style-type: none;
     padding-bottom: 60px;
     padding-left: 0px;
-
+    margin-top: 10px;
 }
 
 .formComments li {
 
-    margin-bottom: 10px;
+    margin-bottom: 30px;
 
 }
 
@@ -121,28 +121,38 @@ and open the template in the editor.
 
 .commentstep-2 {
 
-    margin-left: 48px;
+    margin-left: 70px;
 
 }
 
 .commentstep-3 {
 
-    margin-left: 96px;
+    margin-left: 140px;
 
 }
 .commentstep-4 {
 
-    margin-left: 144px;
+    margin-left: 200px;
 
 }
 .commentstep-5 {
 
-    margin-left: 196px;
+    margin-left: 260px;
 
 }
 .commentstep-6 {
 
-    margin-left: 254px;
+    margin-left: 330px;
+
+}
+.commentstep-7 {
+
+    margin-left: 400px;
+
+}
+.commentstep-8 {
+
+    margin-left: 470px;
 
 }
 
@@ -265,13 +275,23 @@ and open the template in the editor.
     display: none;
 
 }
-
+/*** Nova pagina de  argumentos **/
+.text-area-container{
+    width: 73.32%;
+}
+.user-thumb-container{
+    width: 5%;
+}
 .argument-operation {
     margin-top: 15px;;
 }
 .argument-operation .score{
     font-size: 15px;
 }
+.score span{
+    cursor: pointer;
+}
+
 .argument-operation .argument-operation-links{
     font-weight: bold;
 }
