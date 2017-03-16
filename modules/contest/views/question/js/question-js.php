@@ -4,7 +4,7 @@
         var stateObj = {foo: "bar"};
         history.replaceState(stateObj, "page 2", $('#socialdb_permalink_object').val());
         //submissao de formulario positivo
-        $('#form_answer').submit(function (e) {
+        $('.form_answer').submit(function (e) {
             $('.modal').modal('hide');
             show_modal_main();
             $.ajax({
@@ -29,7 +29,7 @@
             e.preventDefault();
         });
         //submissao de formulario positivo
-        $('#form_positive_argument').submit(function (e) {
+        $('.form_positive_argument').submit(function (e) {
             hide_all_modals();
             show_modal_main();
             $.ajax({
@@ -57,7 +57,7 @@
             e.preventDefault();
         });
         //submissao de formulario negativo
-        $('#form_negative_argument').submit(function (e) {
+        $('.form_negative_argument').submit(function (e) {
             hide_all_modals();
             show_modal_main();
             $.ajax({
@@ -129,7 +129,7 @@
         });
         
     });
-    /**
+      /**
      * 
      * @param {type} property_id
      * @param {type} object_id
@@ -153,20 +153,21 @@
             elem_first = jQuery.parseJSON(result);
             if (elem_first.is_user_logged_in && elem_first.results.length > 0) {
                 $.each(elem_first.results, function (index, result) {
-                    $(result.seletor).text(result.score.final_score);
+                    $(result.seletor+'_up').text(result.score.final_up);
+                    $(result.seletor+'_down').text(result.score.final_down);
                 });
                 $('#collection_postive_argument_id').val($("#collection_id").val());
                 $('[name="argument_parent"]').val(object_id);
                 $('#argument_positive_text').text($('#text-comment-' + object_id).text());
                 show_properties_argument('positive', object_id);
-                $('#modalReplyPositiveArgument').modal('show');
+                show_popover_positive(object_id);
                 //showAlertGeneral('<?php _e('Vote successfully', 'tainacan') ?>', '<?php _e('Your like was computed', 'tainacan') ?>', '<?php _e('success') ?>');
             } else {
                 showAlertGeneral('<?php _e('Atention', 'tainacan') ?>', '<?php _e('You must sign up first to vote', 'tainacan') ?>', '<?php _e('error') ?>');
             }
         });
     }
-
+    
     /**
      * 
      * @param {type} property_id
@@ -190,13 +191,14 @@
             elem_first = jQuery.parseJSON(result);
             if (elem_first.is_user_logged_in && elem_first.results.length > 0) {
                 $.each(elem_first.results, function (index, result) {
-                    $(result.seletor).text(result.score.final_score);
+                    $(result.seletor+'_up').text(result.score.final_up);
+                    $(result.seletor+'_down').text(result.score.final_down);
                 });
                 $('#collection_negative_argument_id').val($("#collection_id").val());
                 $('[name="argument_parent"]').val(object_id);
                 show_properties_argument('negative', object_id);
                 $('#argument_negative_text').text($('#text-comment-' + object_id).text());
-                $('#modalReplyNegativeArgument').modal('show');
+                show_popover_negative(object_id);
             } else {
                 // showAlertGeneral('<?php _e('Atention', 'tainacan') ?>', '<?php _e('You must sign up first to vote', 'tainacan') ?>', '<?php _e('error') ?>');
             }
@@ -354,11 +356,11 @@
     }
     
     function add_answer(object_id){
-        $('#collection_answer_id').val($("#collection_id").val());
-        $('#answer_text').text($('#text-comment-' + object_id).text());
-        show_properties_argument('answer', object_id);
-        $('#modalAddAnswer').modal('show');
-        
+        //$('#collection_answer_id').val($("#collection_id").val());
+        //$('#answer_text').text($('#text-comment-' + object_id).text());
+        //show_properties_argument('answer', object_id);
+        //$('#modalAddAnswer').modal('show');
+        $('#reply-question-'+object_id).fadeIn();
     }
     
     function autocomplete_arguments(seletor,property_id){

@@ -20,7 +20,6 @@ and open the template in the editor.
     display: table-cell;
     height: 50px;
     width: 100%;
-    font-family: Expert-Sans-Regular, verdana, Arial, helvetica, sans-serif;
     color: #b5b5b5;
 
 }
@@ -251,12 +250,12 @@ and open the template in the editor.
 }
 
 .comment {
-
+    margin-top: 10px;
     max-width: 100%;
     background-color: #fff;
-    font-size: 12px;
+    font-size: 14px;
     margin: 0;
-    line-height: 1.5;
+    line-height: 1.1;
     color: #000;
     border-color: #ddd;
     cursor: pointer;
@@ -290,6 +289,7 @@ and open the template in the editor.
 }
 .score span{
     cursor: pointer;
+    font-weight: bold;
 }
 
 .argument-operation .argument-operation-links{

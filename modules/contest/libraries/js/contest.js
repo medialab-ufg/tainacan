@@ -40,3 +40,22 @@ function open_negative_argument(id){
     $('#positive-argument-'+id).fadeOut();
     $('#negative-argument-'+id).fadeIn();
 }
+//############## #3 Abrir os campos para visualizar propriedades #############
+function open_properties_argument(id){
+    show_modal_main();
+    $.ajax({
+        type: "POST",
+        url: $('#src').val() + "/modules/contest/controllers/item/item_controller.php",
+        data: {collection_id: $('#collection_id').val(), operation: 'list_properties_item', object_id: id}
+    }).done(function (result) {
+        hide_modal_main();
+        $('#open_properties_argument_'+ id).hide();
+        $('#hide_properties_argument_'+ id).show();
+        $('#properties-argument-' + id).html(result).fadeIn();
+    });
+}
+function hide_properties_argument(id){
+    $('#open_properties_argument_'+ id).show();
+    $('#hide_properties_argument_'+ id).hide();
+    $('#properties-argument-' + id).fadeOut();
+}

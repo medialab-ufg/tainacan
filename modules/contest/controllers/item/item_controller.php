@@ -4,6 +4,7 @@ $_GET['is_module_active'] = TRUE;
 require_once(dirname(__FILE__) . '../../../models/item/item_model.php');
 include_once(dirname(__FILE__) . '/../../../../controllers/general/general_controller.php');
 include_once(dirname(__FILE__) . '/../../../../models/category/category_model.php');
+include_once(dirname(__FILE__) . '/../../../../models/object/object_model.php');
 
 class ItemController extends Controller {
 
@@ -21,6 +22,11 @@ class ItemController extends Controller {
                 endif;    
             case 'initDynatreeConfigurationContest':
                 return $this->initDynatreeConfigurationContest($data);
+            case 'list_properties_item':
+                $object_model = new ObjectModel();
+                $data = $object_model->list_properties($data);
+                $data['categories_id'] = wp_get_object_terms($data['object_id'], 'socialdb_category_type',array('fields'=>'ids'));
+                return $this->render(dirname(__FILE__) . '../../../views/item/list_properties_item.php', $data);
         }
     }
 

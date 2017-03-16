@@ -33,7 +33,7 @@ class ViewHelper {
                                  <div id="comment-<?php echo $object->ID; ?>" 
                                      data-commentid="<?php echo $child->ID; ?>" 
                                      class="comment">
-                                     <b id="text-comment-<?php echo $child->ID; ?>"><?php echo $child->post_title; ?></b>
+                                     <span id="text-comment-<?php echo $child->ID; ?>"><?php echo $child->post_title; ?></span>
                                  </div>     
                             </div>
                             <div class="col-md-12 argument-operation">
@@ -55,7 +55,15 @@ class ViewHelper {
                                         <a href="javascript:void(0)" onclick="open_negative_argument('<?php echo $child->ID; ?>')"><?php _e('Counter argument','tainacan') ?></a>
                                     </span>
                                     <span class="link-center" >
-                                        <a><span class="caret"/><?php _e('More information','tainacan') ?></a>
+                                        <a href="javascript:void(0)" 
+                                           onclick="open_properties_argument(<?php echo $child->ID; ?>)"
+                                           id="open_properties_argument_<?php echo $child->ID; ?>">
+                                            <span class="glyphicon glyphicon-chevron-down"/><?php _e('More information','tainacan') ?>
+                                        </a>
+                                        <a href="javascript:void(0)" 
+                                           onclick="hide_properties_argument(<?php echo $child->ID; ?>)"
+                                           id="hide_properties_argument_<?php echo $child->ID; ?>"
+                                           style="display:none;"><span class="glyphicon glyphicon-chevron-up"/><?php _e('Hide information','tainacan') ?></a>
                                     </span>  
                                     <span class="pull-right">
                                         <?php if($child->post_author   ==  get_current_user_id()): ?>
@@ -138,6 +146,7 @@ class ViewHelper {
                                     </div>
                                 </form>    
                             </div>
+                           <div style="display:none" class='col-md-12' id='properties-argument-<?php echo $child->ID; ?>'></div>
                             <!--
                             <div class="comment-timestamp"><?php echo $child->post_date_gmt ?></div>
                             <div class="comment-user"><?php echo get_user_by('id', $child->post_author)->display_name ?></div>
