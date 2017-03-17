@@ -14,6 +14,7 @@
 <input type="hidden" id="ranking_id" value="<?php echo $ranking; ?>">
 <input type="hidden" id="socialdb_permalink_object" name="socialdb_permalink_object" value="<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>" />
 <input type="hidden" id="related-id" value="<?php echo get_post_meta($post->ID, 'socialdb_collection_property_related_id', TRUE); ?>">
+<input type="hidden" id="single_name" name="item_single_name" value="<?php echo $object->post_name; ?>" />
 <input type="hidden" id="url-argument" value="<?php echo htmlentities(get_permalink(get_option('collection_root_id')).'?item='.$object->post_name); ?>">
 <div class="chatContainer">
     <ol class="breadcrumb item-breadcrumbs breadcrumbs-debate" style="padding-top: 10px;">

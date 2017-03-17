@@ -12,6 +12,7 @@
 ?>  
 <input type="hidden" id="ranking_id" value="<?php echo $ranking; ?>">
 <input type="hidden" id="socialdb_permalink_object" name="socialdb_permalink_object" value="<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>" />
+<input type="hidden" id="single_name" name="item_single_name" value="<?php echo $object->post_name; ?>" />
 <input type="hidden" id="item_id" value="<?php echo $object->ID; ?>">
 <div class="chatContainer">
     <ol class="breadcrumb item-breadcrumbs  breadcrumbs-debate" style="padding-top: 10px;">

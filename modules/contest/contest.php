@@ -130,10 +130,10 @@ add_filter( 'show_custom_add_item_button', 'alter_button_add_item_contest', 10, 
 /**
  * Filtro que retorna o nome a ser usado pela categoria raiz da colecao
  */
-function alter_collection_object($name) {
-    return __('Argument Type','tainacan');
-}
-add_filter( 'collection_object', 'alter_collection_object', 10, 3 );
+//function alter_collection_object($name) {
+//    return __('Argument Type','tainacan');
+//}
+//add_filter( 'collection_object', 'alter_collection_object', 10, 3 );
 /*
  * Adicionando os metadados default diretamente na categoria raiz 
  */
@@ -146,16 +146,16 @@ function contest_insert_default_properties_collection($category_id,$collection_i
         add_term_meta($category_id, 'socialdb_category_property_id', $new_property['term_id']);
         add_post_meta($collection_id, 'socialdb_collection_ranking_default_id', $new_property['term_id']);
         //Related
-        $new_property = wp_insert_term(__('Related', 'tainacan'), 'socialdb_property_type', array('parent' => get_term_by('name', 'socialdb_property_object', 'socialdb_property_type')->term_id,
-            'slug' => "contest_related_property". mktime()));
-        update_term_meta($new_property['term_id'], 'socialdb_property_object_category_id', $category_id);
-        update_term_meta($new_property['term_id'], 'socialdb_property_created_category', $category_id); // adiciono a categoria de onde partiu esta propriedade
-        add_term_meta($category_id, 'socialdb_category_property_id', $new_property['term_id']);
-        add_post_meta($collection_id, 'socialdb_collection_property_related_id', $new_property['term_id']);
-        add_post_meta($collection_id, 'socialdb_collection_facets', $new_property['term_id']);
-        add_post_meta($collection_id, 'socialdb_collection_facet_' . $new_property['term_id'] . '_color', 'color_property8');
-        add_post_meta($collection_id, 'socialdb_collection_facet_' . $new_property['term_id'] . '_priority', 999);
-        add_post_meta($collection_id, 'socialdb_collection_facet_' . $new_property['term_id'] . '_widget', 'tree');
+//        $new_property = wp_insert_term(__('Related', 'tainacan'), 'socialdb_property_type', array('parent' => get_term_by('name', 'socialdb_property_object', 'socialdb_property_type')->term_id,
+//            'slug' => "contest_related_property". mktime()));
+//        update_term_meta($new_property['term_id'], 'socialdb_property_object_category_id', $category_id);
+//        update_term_meta($new_property['term_id'], 'socialdb_property_created_category', $category_id); // adiciono a categoria de onde partiu esta propriedade
+//        add_term_meta($category_id, 'socialdb_category_property_id', $new_property['term_id']);
+//        add_post_meta($collection_id, 'socialdb_collection_property_related_id', $new_property['term_id']);
+//        add_post_meta($collection_id, 'socialdb_collection_facets', $new_property['term_id']);
+//        add_post_meta($collection_id, 'socialdb_collection_facet_' . $new_property['term_id'] . '_color', 'color_property8');
+//        add_post_meta($collection_id, 'socialdb_collection_facet_' . $new_property['term_id'] . '_priority', 999);
+//        add_post_meta($collection_id, 'socialdb_collection_facet_' . $new_property['term_id'] . '_widget', 'tree');
         $parent_category_id = get_register_id('socialdb_category', 'socialdb_category_type');
         /* Criando a categoria raiz e adicionando seus metas */
         $facet_id = create_register(__('Subject','tainacan'), 'socialdb_category_type', array('parent' => $parent_category_id, 'slug' => "subject_" . mktime()));
