@@ -230,6 +230,11 @@ class CollectionModel extends Model {
             'post_type' => 'socialdb_collection',
             'post_name' => $data['socialdb_collection_address']
         );
+
+        if( isset($data['collection_owner']) ){
+            $post["post_author"] = $data['collection_owner'];
+        }
+
         $post_id = wp_update_post($post);
         //verificando se existe aquivos para ser incluidos
         if ($data['remove_cover']) {

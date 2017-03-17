@@ -173,7 +173,7 @@ else:
                     </form>
                     <input type="text" id="autocomplete_users" class="autocomplete_users form-control"
                            onkeyup="autocomplete_users('<?php echo $collection_id; ?>', '<?php echo $curr_id; ?>');"
-                           placeholder="Digite os três primeiras letras do nome do usuário"
+                           placeholder="<?php _t('Type the three first letters of the user name ', 1);?>"
                            class="chosen-selected form-control ui-autocomplete-input" autocomplete="off">
 
                     <div id="change_author_<?php echo $curr_id; ?>"></div>

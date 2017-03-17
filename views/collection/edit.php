@@ -224,7 +224,7 @@ $_showH = ("disabled" === $_en_header) ? false : true ;
                             echo 'selected = "selected"';
                         }
                         ?>>
-                                    <?php _e('Controlled - Only admins of the collection and the owners of the items can make downloads. Thumbnails of images are displayed.', 'tainacan'); ?>
+                            <?php _e('Controlled - Only admins of the collection and the owners of the items can make downloads. Thumbnails of images are displayed.', 'tainacan'); ?>
                         </option>
                     </select>
                     <input type="checkbox" id="add_watermark" name="add_watermark" value="true" <?php if($collection_metas['socialdb_collection_add_watermark']){ echo 'checked="checked"';}?>> <?php _e('Generate thumbnail with watermark', 'tainacan'); ?>
@@ -288,6 +288,23 @@ $_showH = ("disabled" === $_en_header) ? false : true ;
                 </div-->
 
                 <div class="form-group">
+                    <label for=""><?php _t('Change collection owner',1); ?></label>
+                    <?php /* <div class="form-control"> <div><?php echo _t('Current owner: ',1) .  get_the_author_meta("display_name", $collection_post->post_author); ?></div></div>*/ ?>
+                    <input type="text" id="get_users_auto" class="chosen-selected form-control ui-autocomplete-input"
+                           onkeyup="autocomplete_moderators('<?php echo $collection_post->ID; ?>', '#get_users_auto');"
+                           placeholder="<?php _t('Type the three first letters of the user name ', 1);?>"
+                           autocomplete="off">
+
+                    <div class="col-md-12 no-padding new_own_cont">
+                        <div class="new_owner_of_<?php echo $collection_post->ID; ?>">
+                            <?php _t('New owner: ',1); ?>
+                        </div>
+                        <input type="hidden" class="new_owner_of_<?php echo $collection_post->ID?>"
+                               name="collection_owner" id="collection_owner" value="<?php echo $collection_post->post_author; ?>" />
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label for="collection_moderation_type"><?php _e('Type of Moderation', 'tainacan'); ?></label> 
                     <select name="socialdb_collection_moderation_type" id="socialdb_collection_moderation_type" class="form-control" onchange="showModerationDays();">
                         <option value="moderador"  <?php
@@ -345,7 +362,7 @@ $_showH = ("disabled" === $_en_header) ? false : true ;
                 <div class="form-group">
                     <label for=""><?php _e('Collection Moderators', 'tainacan'); ?></label> 
                     <input type="text" onkeyup="autocomplete_moderators('<?php echo $collection_post->ID; ?>');" id="autocomplete_moderator" placeholder="<?php _e('Type the three first letters of the user name ', 'tainacan'); ?>"  class="chosen-selected form-control"  />
-                    <select onclick="clear_select_moderators(this);"  id="moderators_<?php echo $collection_post->ID; ?>" multiple class="chosen-selected2 form-control" style="height: auto;" multiple name="collection_moderators[]" id="chosen-selected2-user"  >
+                    <select onclick="clear_select_moderators(this);" id="moderators_<?php echo $collection_post->ID; ?>" multiple class="chosen-selected2 form-control" style="height: auto;" multiple name="collection_moderators[]" id="chosen-selected2-user"  >
                         <?php if ($collection_metas['socialdb_collection_moderator']) { ?>
                             <?php foreach ($collection_metas['socialdb_collection_moderator'] as $moderator) {  // percoro todos os objetos     ?>
                                 <option selected='selected' value="<?php echo $moderator['id'] ?>"><?php echo $moderator['name'] ?></option>

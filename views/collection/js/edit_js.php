@@ -138,31 +138,40 @@
         });
     }
 
-    function autocomplete_moderators(collection_id) {
-        $("#autocomplete_moderator").autocomplete({
-            source: $('#src').val() + '/controllers/user/user_controller.php?operation=list_user&collection_id=' + collection_id,
-            messages: {
-                noResults: '',
-                results: function () {
-                }
-            },
-            minLength: 2,
-            select: function (event, ui) {
-                console.log(event);
-                //$("#moderators_" + collection_id).html('');
-                //$("#moderators_" + collection_id).val('');
-                //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
-                var temp = $("#moderators_" + collection_id + " [value='" + ui.item.value + "']").val();
-                if (typeof temp == "undefined") {
-                    $("#moderators_" + collection_id).append("<option class='selected' value='" + ui.item.value + "' selected='selected' >" + ui.item.label + "</option>");
+    function autocomplete_moderators(collection_id, container) {
+        var _div_ = "#autocomplete_moderator",
+            base_temp = "#moderators_" + collection_id;
 
+        if(container)
+           _div_ = container;
+
+        $(_div_).autocomplete({
+            source: $('#src').val() + '/controllers/user/user_controller.php?operation=list_user&collection_id=' + collection_id,
+            messages: { noResults: '', results: function () {} }, minLength: 2,
+            select: function (event, ui) {
+                if(container && container != "#autocomplete_moderator") {
+                    var curr_owner = $('input[name="collection_owner"]').val();
+                    var new_own = ui.item.value;
+                    if( new_own != curr_owner ) {
+                        $('.new_own_cont').show();
+                        var own_str = '<?php _t('New owner: ',1); ?>' + ui.item.label;
+                        $('.new_owner_of_' + collection_id).html(own_str);
+                        $('input[name="collection_owner"]').val(new_own)
+                    }
+                } else {
+                    var temp = $(base_temp + " [value='" + ui.item.value + "']").val();
+                    if (typeof temp == "undefined") {
+                        $(base_temp).append("<option class='selected' value='" + ui.item.value + "' selected='selected' >" + ui.item.label + "</option>");
+                    }
                 }
+
                 setTimeout(function () {
-                    $("#autocomplete_moderator").val('');
+                    $(_div_).val('');
                 }, 100);
             }
         });
     }
+
     function clear_select_moderators(e) {
         $('option:selected', e).remove();
         //$('.chosen-selected2 option').prop('selected', 'selected');
