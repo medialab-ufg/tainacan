@@ -112,7 +112,6 @@ class UserController extends Controller {
 //                }
                 break;
 
-
             case "return_login_gplus":
                 $options = get_option('socialdb_theme_options');
                 $data['gplus_client'] = new apiClient();

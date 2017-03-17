@@ -438,7 +438,9 @@ class ObjectController extends Controller {
                                     $total_sub_metas = "";
                                     $_sub_metas = explode(",", $_item_meta[$meta][0]);
                                     if(is_array($_sub_metas)) {
-                                        $_pair = ['meta' => $col_meta->name, 'value'=> '_____________________________', 'submeta_header' => true];
+                                        $_pair = [ 'meta' => $col_meta->name,
+                                            'value'=> '_____________________________',
+                                            'submeta_header' => true ];
                                         $press['inf'][] = $_pair;
 
                                         foreach ($_sub_metas as $s_meta) {
@@ -498,6 +500,11 @@ class ObjectController extends Controller {
                 }
 
                 return json_encode($press);
+
+            case 'change_item_author':
+                $update_data = ['ID'=> intval($data["item_id"]), 'post_author' => intval($data['new_author']) ];
+                $ret['v'] = wp_update_post($update_data);
+                return json_encode($ret);
 
             case "list_single_object_version":
                 $user_model = new UserModel();

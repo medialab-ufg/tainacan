@@ -158,3 +158,35 @@ else:
         </div>
     </div>
 <?php endif; ?>
+
+<?php if(current_user_can('administrator')): ?>
+    <div class="modal fade modal_change_owner" id="modal_change_owner_<?php echo $curr_id; ?>" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <?php echo $viewHelper->render_modal_header('remove-sign', '', _t('Change item owner')); ?>
+
+                <div class="modal-body">
+                    <?php _t('Change ownership of ',1)?> <span class="current_col"> item </span>
+                    <form id="change_item_owner">
+
+                    </form>
+                    <input type="text" id="autocomplete_users" class="autocomplete_users form-control"
+                           onkeyup="autocomplete_users('<?php echo $collection_id; ?>', '<?php echo $curr_id; ?>');"
+                           placeholder="Digite os três primeiras letras do nome do usuário"
+                           class="chosen-selected form-control ui-autocomplete-input" autocomplete="off">
+
+                    <div id="change_author_<?php echo $curr_id; ?>"></div>
+                    <div class="col-md-12 no-padding">
+                        <label for="new_owner_of_<?php echo $curr_id; ?>"><?php _t('New owner: ',1); ?></label>
+                        <input type="text" class="form-control new_owner_of_<?php echo $curr_id?>" name="new_owner" value="" disabled/>
+                        <input type="hidden" name="new_user_id" value="">
+                    </div>
+                </div>
+
+                <?php echo $viewHelper->render_modal_footer("change_item_owner(\"$curr_id\")", _t('Send') ); ?>
+
+            </div>
+        </div>
+    </div>
+<?php endif; ?>

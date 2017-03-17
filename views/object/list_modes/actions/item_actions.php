@@ -8,8 +8,7 @@ if( is_null($curr_id) && is_null($itemURL) ) {
 }
 
 $rdfURL = $itemURL . '.rdf';
-$checkout = [
-    "out" => "do_checkout('". $curr_id ."')",
+$checkout = [ "out" => "do_checkout('". $curr_id ."')",
     "in" => "do_checkin('". $curr_id ."')",
     "discard" => "discard_checkout('". $curr_id ."')" ];
 
@@ -26,6 +25,8 @@ if($is_single_page) {
 
     $checkout = array_map("set_single", $checkout);
 }
+
+$is_repo_admin = current_user_can('administrator');
 ?>
 
 <?php if($is_single_page): ?>
@@ -73,6 +74,12 @@ if($is_single_page) {
             ?>
 
             <li> <a class="ac-open-file"> <?php _t('Print item',1); ?> </a> </li>
+
+            <?php if($is_repo_admin): ?>
+                <li>
+                    <a href="javascript:void(0)" class="change-owner" data-item="<?php echo $curr_id; ?>"><?php _t('Change item owner',1); ?></a>
+                </li>
+            <?php endif; ?>
 
             <?php if ($is_moderator || get_post($curr_id)->post_author == get_current_user_id()): ?>
                 <li>
