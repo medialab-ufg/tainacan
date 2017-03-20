@@ -434,5 +434,42 @@ class ViewHelper {
         <button onclick="backRoute($('#slug_collection').val());" id="btn_back_collection" class="btn btn-default pull-right"><?php _e('Back to collection','tainacan') ?></button>
         <?php
     }
-
+################################################################################    
+    /**
+     * 
+     */
+    public function getTargetProperties() {
+        $this->setJavascriptTragetProperties();
+        ?>
+        <div class="form-group">
+            <label for="property_object_required"><?php _e('Properties to use in search','tainacan'); ?></label>
+            <div id="properties_target" style="height: 200px;overflow-y: scroll;" ></div>
+            <input type="hidden" name="properties_target_value" id="properties_target_value">
+        </div>
+        <?php
+    }
+    
+    private function setJavascriptTragetProperties(){
+        ?>
+        <script>
+            function setTargetProperties(seletor){
+                $('#properties_target').html('');
+                if($(seletor).val()===''){
+                    
+                }else{
+                    $.ajax({
+                       type: "POST",
+                       url: $('#src').val() + "/controllers/property/property_controller.php",
+                       data: { operation: 'setTargetProperties',categories:$(seletor).val() }
+                   }).done(function(result) {
+                       var json = JSON.parse(result);
+                       $.each(json.properties,function(index,property){
+                           console.log(property);
+                       })
+                   });
+               }
+            }
+        </script>
+        <?php
+    }
 } // ViewHelper
