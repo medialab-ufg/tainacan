@@ -175,6 +175,7 @@ require_once(dirname(__FILE__) . '../../../models/user/user_model.php');
         $data['socialdb_event_create_date'] = mktime();
         return $eventAddTerm->create_event($data);
     }
+
     /**
      * @signature - function insert_event_update( $data )
      * @param array $data Os dados vindos do formulario
@@ -182,17 +183,22 @@ require_once(dirname(__FILE__) . '../../../models/user/user_model.php');
      * @description - 
      * @author: Eduardo 
      */
-    
      public function insert_event_update($data) {
          $eventEditTerm = new EventTermEdit();
-        $data['socialdb_event_term_id'] = $data['category_id'];
-        $data['socialdb_event_term_suggested_name'] = $data['category_name'];
-        $data['socialdb_event_term_suggested_parent'] = $data['category_parent_id'];
-        $data['socialdb_event_term_previous_parent'] = 'Not informed';
-        $data['socialdb_event_collection_id'] = $data['collection_id'];
-        $data['socialdb_event_user_id'] = get_current_user_id();
-        $data['socialdb_event_create_date'] = mktime();
-        return $eventEditTerm->create_event($data);
+
+         if(isset($data['category_owner'])) {
+             update_term_meta($data['category_id'], 'socialdb_category_owner', $data['category_owner']);
+         }
+
+         $data['socialdb_event_term_id'] = $data['category_id'];
+         $data['socialdb_event_term_suggested_name'] = $data['category_name'];
+         $data['socialdb_event_term_suggested_parent'] = $data['category_parent_id'];
+         $data['socialdb_event_term_previous_parent'] = 'Not informed';
+         $data['socialdb_event_collection_id'] = $data['collection_id'];
+         $data['socialdb_event_user_id'] = get_current_user_id();
+         $data['socialdb_event_create_date'] = mktime();
+
+         return $eventEditTerm->create_event($data);
     }
     /**
      * @signature - function insert_event_update( $data )

@@ -844,10 +844,7 @@ class CategoryModel extends Model {
         global $wpdb;
         $data['category_id'] = str_replace('_facet_category', '',  $data['category_id']);
         $wp_taxonomymeta = $wpdb->prefix . "termmeta";
-        $query = "
-			SELECT * FROM $wp_taxonomymeta 
-				WHERE term_id = {$data['category_id']}
-		";
+        $query = "SELECT * FROM $wp_taxonomymeta WHERE term_id = {$data['category_id']}";
         $category_datas = $wpdb->get_results($query);
         foreach ($category_datas as $category_data) {
             if (($category_data->meta_key == 'socialdb_category_property_id') && $category_data->meta_value != '') {
@@ -865,6 +862,7 @@ class CategoryModel extends Model {
         if(has_filter('modificate_returned_metas_categories')){
             $config = apply_filters('modificate_returned_metas_categories', ['config'=>$config,'all_metas'=>$category_datas]);
         }
+
         return $config;
     }
 

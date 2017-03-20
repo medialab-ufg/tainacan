@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: socialdb\n"
-"POT-Creation-Date: 2017-03-17 17:30-0300\n"
-"PO-Revision-Date: 2017-03-17 17:30-0300\n"
+"POT-Creation-Date: 2017-03-20 13:32-0300\n"
+"PO-Revision-Date: 2017-03-20 13:32-0300\n"
 "Last-Translator: Rodrigo de Oliveira <webmaster@rodrigodeoliveira.net>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -117,8 +117,8 @@ msgstr "Responder Comentário"
 #: comments.php:132 comments.php:163 helpers/view_helper.php:343 single.php:660
 #: single.php:730 single.php:768 single.php:814 single.php:844 single.php:884
 #: single.php:932 single.php:958 single.php:1123 single.php:1145
-#: single.php:1295 single.php:1365 views/category/list.php:142
-#: views/category/list.php:188 views/category/list.php:217
+#: single.php:1295 single.php:1365 views/category/list.php:158
+#: views/category/list.php:204 views/category/list.php:233
 #: views/category/taxonomy_zone.php:105 views/collection/config_menu.php:102
 #: views/collection/header_collection.php:224 views/event/list.php:283
 #: views/event/list.php:318 views/event/list.php:368
@@ -172,7 +172,7 @@ msgstr "Nos conte porque este conteúdo é abusivo"
 #: controllers/property/property_controller.php:31
 #: controllers/tag/tag_controller.php:37 functions.php:472
 #: views/advanced_search/js/advanced_search_js.php:29
-#: views/category/js/list_js.php:267 views/category/js/list_js.php:533
+#: views/category/js/list_js.php:290 views/category/js/list_js.php:564
 #: views/event/js/list_js.php:255
 #: views/import/csv/js/maping_attributes_js.php:93
 #: views/license/js/list_js.php:153
@@ -250,8 +250,8 @@ msgstr "Este nome não é permitido!"
 #: controllers/collection/collection_controller.php:67
 #: controllers/collection/collection_controller.php:80
 #: controllers/collection/collection_controller.php:87
-#: models/category/category_model.php:1084
-#: models/category/category_model.php:1244
+#: models/category/category_model.php:1082
+#: models/category/category_model.php:1242
 #: models/collection/collection_model.php:452
 #: models/collection/collection_model.php:914
 #: models/event/event_collection/event_collection_create_model.php:49
@@ -398,7 +398,7 @@ msgid "Property Data"
 msgstr "Metadado de dado"
 
 #: controllers/collection/collection_controller.php:132
-#: helpers/view_helper.php:87 views/category/list.php:230
+#: helpers/view_helper.php:87 views/category/list.php:246
 #: views/collection/js/edit_js.php:127 views/design/edit.php:13
 #: views/design/edit.php:141 views/object/create_item_url.php:147
 #: views/object/list_data_table.php:94 views/property/list.php:14
@@ -429,10 +429,10 @@ msgstr "Por favor, preencha o delimitador corretamente!"
 #: controllers/license/license_controller.php:39
 #: controllers/license/license_controller.php:60
 #: controllers/theme_options/theme_options_controller.php:58
-#: models/category/category_model.php:1057
-#: models/category/category_model.php:1063
-#: models/category/category_model.php:1191
-#: models/category/category_model.php:1215
+#: models/category/category_model.php:1055
+#: models/category/category_model.php:1061
+#: models/category/category_model.php:1189
+#: models/category/category_model.php:1213
 #: models/collection/collection_import_model.php:186
 #: models/event/event_object/event_object_create_model.php:97
 #: models/general/general_model.php:1794 models/general/general_model.php:1834
@@ -445,11 +445,11 @@ msgstr "Por favor, preencha o delimitador corretamente!"
 #: models/object/object_multiple_draft_model.php:152
 #: models/object/object_multiple_model.php:157
 #: models/object/object_multiple_model.php:562
-#: models/search/search_model.php:150 models/user/user_model.php:139
-#: models/user/user_model.php:354 models/user/user_model.php:370
-#: models/user/user_model.php:379 models/user/user_model.php:395
-#: models/user/user_model.php:446 views/category/js/list_js.php:28
-#: views/category/js/list_js.php:477 views/category/js/taxonomy_zone_js.php:70
+#: models/search/search_model.php:150 models/user/user_model.php:141
+#: models/user/user_model.php:356 models/user/user_model.php:372
+#: models/user/user_model.php:381 models/user/user_model.php:397
+#: models/user/user_model.php:448 views/category/js/list_js.php:28
+#: views/category/js/list_js.php:508 views/category/js/taxonomy_zone_js.php:70
 #: views/import/js/import_configuration_js.php:663
 #: views/import/js/import_configuration_js.php:690
 #: views/mapping/js/container_mapping_js.php:38 views/object/js/list_js.php:652
@@ -509,7 +509,7 @@ msgstr "Usuários"
 #: controllers/log/log_controller.php:23 helpers/log/log_helper.php:16
 #: helpers/view_helper.php:303 models/general/general_model.php:1606
 #: views/category/js/taxonomy_zone_js.php:18 views/category/list.php:11
-#: views/category/list.php:228 views/collection/js/edit_js.php:58
+#: views/category/list.php:244 views/collection/js/edit_js.php:58
 #: views/design/edit.php:134
 #: views/property/js/list_category_metadata_js.php:2153
 #: views/property/js/list_metadata_js.php:2368 views/search/menu_left.php:21
@@ -590,7 +590,7 @@ msgid "No Metadata Found"
 msgstr "Nenhum metadado encontrado"
 
 #: controllers/object/object_controller.php:892
-#: models/category/category_model.php:1080
+#: models/category/category_model.php:1078
 #: models/collection/collection_import_model.php:180
 #: models/collection/collection_model.php:448
 #: models/event/event_collection/event_collection_create_model.php:45
@@ -669,8 +669,8 @@ msgstr "Nenhum metadado encontrado"
 #: models/theme_options/theme_options_model.php:37
 #: models/theme_options/theme_options_model.php:55
 #: models/theme_options/theme_options_model.php:130
-#: models/user/user_model.php:126 models/user/user_model.php:366
-#: models/user/user_model.php:391 models/user/user_model.php:442
+#: models/user/user_model.php:128 models/user/user_model.php:368
+#: models/user/user_model.php:393 models/user/user_model.php:444
 #: views/category/js/taxonomy_zone_js.php:38 views/collection/js/edit_js.php:55
 #: views/event/js/list_js.php:51
 #: views/import/csv/js/edit_maping_attributes_js.php:51
@@ -902,7 +902,7 @@ msgid "(Painel Edit )"
 msgstr "(Painel de edição)"
 
 #: functions.php:449 helpers/view_helper.php:353 single.php:661 single.php:731
-#: single.php:845 single.php:885 single.php:1296 views/category/list.php:143
+#: single.php:845 single.php:885 single.php:1296 views/category/list.php:159
 #: views/category/taxonomy_zone.php:76 views/design/edit.php:239
 #: views/event/list.php:284 views/event/list.php:319
 #: views/export/oaipmh/mapping_attributes.php:38
@@ -936,7 +936,7 @@ msgstr "Responder"
 
 #: functions.php:469 single.php:546 single.php:579 single.php:606
 #: single.php:933 single.php:1179 single.php:1207 single.php:1254
-#: single.php:1273 views/category/list.php:116 views/collection/edit.php:382
+#: single.php:1273 views/category/list.php:132 views/collection/edit.php:382
 #: views/collection/edit.php:1018 views/object/edit.php:19
 #: views/object/edit_item_text.php:71 views/object/edit_item_text.php:582
 #: views/object/list_data_table.php:59 views/property/js/compounds_js.php:268
@@ -1339,7 +1339,7 @@ msgstr "Sair"
 msgid "Repository Configurations"
 msgstr "Configurações do Repositório"
 
-#: header.php:129 views/category/list.php:227
+#: header.php:129 views/category/list.php:243
 #: views/collection/config_menu.php:16 views/collection/config_menu.php:22
 #: views/design/edit.php:11 views/property/list.php:12
 #: views/ranking/list.php:11 views/search/edit.php:12
@@ -2075,35 +2075,35 @@ msgstr "Categorias do Usuário"
 msgid "Shared Categories"
 msgstr "Categorias Compartilhadas"
 
-#: models/category/category_model.php:442 views/category/js/list_js.php:266
+#: models/category/category_model.php:442 views/category/js/list_js.php:289
 msgid "Public Categories"
 msgstr "Categorias Públicas"
 
-#: models/category/category_model.php:1058
+#: models/category/category_model.php:1056
 msgid "Xml unformated"
 msgstr "XML não formatado "
 
-#: models/category/category_model.php:1064
+#: models/category/category_model.php:1062
 msgid "File corrupted"
 msgstr "Arquivo corrompido"
 
-#: models/category/category_model.php:1081
+#: models/category/category_model.php:1079
 msgid " successfully selected!"
 msgstr "selecionado com sucesso!"
 
-#: models/category/category_model.php:1085
+#: models/category/category_model.php:1083
 msgid "This category has no category children"
 msgstr "Esta categoria não tem categorias filhas"
 
-#: models/category/category_model.php:1190
+#: models/category/category_model.php:1188
 msgid "Category name is empty."
 msgstr "Nome da categoria está vazio"
 
-#: models/category/category_model.php:1214
+#: models/category/category_model.php:1212
 msgid "There is a category with this name and this parent"
 msgstr "Há categorias com este nome e com este pai"
 
-#: models/category/category_model.php:1243
+#: models/category/category_model.php:1241
 msgid ""
 "There is a category with this name in this hierarchy, are you sure to create "
 "another? Cancel edit the category, ok creates the new one."
@@ -3516,103 +3516,103 @@ msgstr "Seu nome de usuário válido será "
 msgid "Please type a username"
 msgstr "Por favor, digite seu usuário"
 
-#: models/user/user_model.php:127
+#: models/user/user_model.php:129
 msgid "User registered successfully! Your login is: "
 msgstr "Usuário cadastrado com sucesso! Seu login é: "
 
-#: models/user/user_model.php:140
+#: models/user/user_model.php:142
 msgid "Email already exists or login already exists!"
 msgstr "Este email já esta cadastrado ou login existente"
 
-#: models/user/user_model.php:149
+#: models/user/user_model.php:151
 msgid "Welcome on the Tainacan Repository "
 msgstr "Bem Vindo ao Repositório Tainacan"
 
-#: models/user/user_model.php:154
+#: models/user/user_model.php:156
 msgid "Welcome - "
 msgstr "Bem-Vindo(a) - "
 
-#: models/user/user_model.php:355
+#: models/user/user_model.php:357
 msgid "Your email was not found in our database!"
 msgstr "Seu email não foi encontrado em nossa base de dados!"
 
-#: models/user/user_model.php:367 models/user/user_model.php:392
+#: models/user/user_model.php:369 models/user/user_model.php:394
 msgid "Your new password was sent to your email!"
 msgstr "Sua nova senha foi enviada para seu email"
 
-#: models/user/user_model.php:371 models/user/user_model.php:396
+#: models/user/user_model.php:373 models/user/user_model.php:398
 msgid "Something went wrong. Error sending email."
 msgstr "Algo aconteceu inesperadamente. Erro ao enviar email."
 
-#: models/user/user_model.php:380
+#: models/user/user_model.php:382
 msgid "Your username was not found in our database!"
 msgstr "Nome de usuário não encontrado em nossa base de dados"
 
-#: models/user/user_model.php:410
+#: models/user/user_model.php:412
 msgid "You requested a new "
 msgstr "Você requisitou a nova"
 
-#: models/user/user_model.php:410
+#: models/user/user_model.php:412
 msgid " password"
 msgstr "senha "
 
-#: models/user/user_model.php:411 models/user/user_model.php:460
+#: models/user/user_model.php:413 models/user/user_model.php:462
 msgid "Hi"
 msgstr "Olá"
 
-#: models/user/user_model.php:412
+#: models/user/user_model.php:414
 msgid " You recently asked to reset your "
 msgstr "Você requisitou recentemente a alteração de sua "
 
-#: models/user/user_model.php:413
+#: models/user/user_model.php:415
 msgid "password"
 msgstr "senha "
 
-#: models/user/user_model.php:414
+#: models/user/user_model.php:416
 msgid "Click here to change your password"
 msgstr "Clique aqui para alterar sua senha"
 
-#: models/user/user_model.php:416
+#: models/user/user_model.php:418
 msgid "Your new password is:"
 msgstr "Sua nova senha é: "
 
-#: models/user/user_model.php:418
+#: models/user/user_model.php:420
 msgid "Didn't request this change?"
 msgstr "Não requisitou essa alteração?"
 
-#: models/user/user_model.php:419
+#: models/user/user_model.php:421
 msgid "If you didn't request a new password, let us know immediately"
 msgstr "Se não, deixe-nos saber imediatamente!"
 
-#: models/user/user_model.php:421
+#: models/user/user_model.php:423
 msgid "This message was sent to"
 msgstr "Esta mensagem foi enviada para "
 
-#: models/user/user_model.php:421
+#: models/user/user_model.php:423
 msgid "at your request"
 msgstr "como requisitado"
 
-#: models/user/user_model.php:443
+#: models/user/user_model.php:445
 msgid "Password changed successfully! Redirecting to login page..."
 msgstr "Senha alterada com sucesso! Redirecionando para a página de login..."
 
-#: models/user/user_model.php:447
+#: models/user/user_model.php:449
 msgid "Your old password do not match!"
 msgstr "Senha anterior não correspondente"
 
-#: models/user/user_model.php:459
+#: models/user/user_model.php:461
 msgid "An item has been shared with you! - "
 msgstr "Um item foi compartilhado com você! - "
 
-#: models/user/user_model.php:461
+#: models/user/user_model.php:463
 msgid " Someone shared an item with you in the "
 msgstr "Alguém compartilhou um item com você na"
 
-#: models/user/user_model.php:462
+#: models/user/user_model.php:464
 msgid "website."
 msgstr "site."
 
-#: models/user/user_model.php:463
+#: models/user/user_model.php:465
 msgid "Click here to see"
 msgstr "Clique aqui para visualizar "
 
@@ -3668,7 +3668,7 @@ msgid "Insert URL"
 msgstr "Inserir URL"
 
 #: single.php:316 single.php:540 single.php:573 single.php:601
-#: views/category/list.php:115 views/object/create.php:11
+#: views/category/list.php:131 views/object/create.php:11
 #: views/property/js/list_category_metadata_js.php:862
 #: views/property/js/list_metadata_js.php:933
 #: views/property/metadata/form_compounds.php:11
@@ -3731,7 +3731,7 @@ msgstr "Carregando itens..."
 msgid "View"
 msgstr "Visualizar"
 
-#: single.php:551 single.php:584 single.php:611 views/category/list.php:120
+#: single.php:551 single.php:584 single.php:611 views/category/list.php:136
 #: views/search/tags.php:61
 msgid "Remove"
 msgstr "Remover"
@@ -3771,7 +3771,7 @@ msgstr "Descreva sua categoria"
 msgid "Click on the tree and select the category as parent"
 msgstr "Clique na árvore e selecione a categoria pai"
 
-#: single.php:711 views/category/list.php:101
+#: single.php:711 views/category/list.php:117
 msgid "Category Properties"
 msgstr "Metadados da Categoria"
 
@@ -3779,11 +3779,11 @@ msgstr "Metadados da Categoria"
 msgid "Synonyms"
 msgstr "Sinônimos"
 
-#: single.php:757 views/category/list.php:136
+#: single.php:757 views/category/list.php:152
 msgid "Remove Category"
 msgstr "Apagar Categoria"
 
-#: single.php:760 single.php:951 views/category/list.php:139
+#: single.php:760 single.php:951 views/category/list.php:155
 #: views/property/list.php:352 views/property/metadata/form_compounds.php:92
 #: views/property/metadata/form_voting.php:82
 #: views/property/metadata_forms.php:186 views/ranking/list.php:95
@@ -3928,7 +3928,7 @@ msgstr "Confirme a nova senha"
 msgid "Type here your new password again"
 msgstr "Digite aqui sua nova senha novamente"
 
-#: single.php:1125 views/category/list.php:109 views/object/create.php:173
+#: single.php:1125 views/category/list.php:125 views/object/create.php:173
 #: views/object/create_item_text.php:317 views/object/create_item_text.php:320
 #: views/object/create_item_url.php:282 views/object/data_property_form.php:37
 #: views/object/delete.php:12 views/object/edit.php:262
@@ -4327,7 +4327,7 @@ msgid "Not Between"
 msgstr "Diferente"
 
 #: views/advanced_search/show_object_properties.php:3
-#: views/category/list.php:229 views/category/page.php:84
+#: views/category/list.php:245 views/category/page.php:84
 #: views/object/list_data_table.php:104 views/object/list_single_object.php:468
 #: views/object/list_single_object_version.php:453 views/property/list.php:33
 #: views/property/list.php:38 views/theme_options/property/list.php:13
@@ -4347,20 +4347,26 @@ msgstr "Licenças disponíveis"
 msgid "Unformated xml"
 msgstr "XML não formatado"
 
-#: views/category/js/list_js.php:197 views/category/js/list_js.php:242
-#: views/category/js/list_js.php:428
+#: views/category/js/list_js.php:197 views/category/js/list_js.php:243
+#: views/category/js/list_js.php:451
 msgid "Category root"
 msgstr "Categoria raiz"
 
-#: views/category/js/list_js.php:267
+#: views/category/js/list_js.php:269 views/category/list.php:68
+#: views/collection/edit.php:300 views/collection/js/edit_js.php:157
+#: views/object/list_modes/modals.php:181
+msgid "New owner: "
+msgstr "Novo proprietário: "
+
+#: views/category/js/list_js.php:290
 msgid "Please, select the category as public!"
 msgstr "Por favor, selecione a categoria como pública! "
 
-#: views/category/js/list_js.php:477
+#: views/category/js/list_js.php:508
 msgid "Invalid parent"
 msgstr "Pai inválido"
 
-#: views/category/js/list_js.php:533
+#: views/category/js/list_js.php:564
 msgid "The download will start in few seconds"
 msgstr "O download será iniciado em alguns segundos"
 
@@ -4414,109 +4420,118 @@ msgstr "Privado"
 msgid "Public"
 msgstr "Público"
 
-#: views/category/list.php:59
+#: views/category/list.php:60
+msgid "Change category owner"
+msgstr "Alterar dono da categoria"
+
+#: views/category/list.php:64 views/collection/edit.php:295
+#: views/collection/edit.php:364 views/object/list_modes/modals.php:176
+msgid "Type the three first letters of the user name "
+msgstr "Digite os três primeiras letras do nome do usuário"
+
+#: views/category/list.php:75
 msgid "Category moderators"
 msgstr "Moderadores das categorias"
 
-#: views/category/list.php:60
+#: views/category/list.php:76
 msgid "Type the three user initial letters"
 msgstr "Digite as três primeiras letras do nome do usuário"
 
-#: views/category/list.php:68 views/category/list.php:73
+#: views/category/list.php:84 views/category/list.php:89
 msgid "Current Phase"
 msgstr "Fase corrente"
 
-#: views/category/list.php:69 views/category/list.php:84
+#: views/category/list.php:85 views/category/list.php:100
 msgid "Year(s)"
 msgstr "Ano(s)"
 
-#: views/category/list.php:70 views/category/list.php:85
+#: views/category/list.php:86 views/category/list.php:101
 msgid "Month(s)"
 msgstr "Mês(Meses)"
 
-#: views/category/list.php:76
+#: views/category/list.php:92
 msgid "Explicate note"
 msgstr "Nota de Explicação"
 
-#: views/category/list.php:83
+#: views/category/list.php:99
 msgid "Intermediate Phase"
 msgstr "Fase Intermediária"
 
-#: views/category/list.php:88
+#: views/category/list.php:104
 msgid "Destination"
 msgstr "Destinação"
 
-#: views/category/list.php:89
+#: views/category/list.php:105
 msgid "Permanent guard"
 msgstr "Guarda Permanente"
 
-#: views/category/list.php:90
+#: views/category/list.php:106
 msgid "Elimination"
 msgstr "Eliminação"
 
-#: views/category/list.php:93
+#: views/category/list.php:109
 msgid "Classification Code"
 msgstr "Código de Classificação "
 
-#: views/category/list.php:94
+#: views/category/list.php:110
 msgid "Type here the category classification code"
 msgstr "Digite aqui o código de classficação desta categoria"
 
-#: views/category/list.php:97
+#: views/category/list.php:113
 msgid "Observation"
 msgstr "Observação"
 
-#: views/category/list.php:110 views/property/list.php:250
+#: views/category/list.php:126 views/property/list.php:250
 #: views/property/list.php:330 views/search/tags.php:55
 #: views/theme_options/property/list.php:163
 #: views/theme_options/property/list.php:234
 msgid "New"
 msgstr "Novo"
 
-#: views/category/list.php:121
+#: views/category/list.php:137
 msgid "Set as parent"
 msgstr "Setar como pai"
 
-#: views/category/list.php:122
+#: views/category/list.php:138
 msgid "Import taxonomy"
 msgstr "Importar Taxonomia"
 
-#: views/category/list.php:123
+#: views/category/list.php:139
 msgid "Export taxonomy"
 msgstr "Exportar Taxonomia "
 
-#: views/category/list.php:171 views/category/taxonomy_zone.php:92
+#: views/category/list.php:187 views/category/taxonomy_zone.php:92
 msgid "Import Taxonomy in "
 msgstr "Importar Taxonomia em"
 
-#: views/category/list.php:177 views/category/taxonomy_zone.php:96
+#: views/category/list.php:193 views/category/taxonomy_zone.php:96
 msgid "Send the xml file "
 msgstr "Enviar arquivo XML"
 
-#: views/category/list.php:201
+#: views/category/list.php:217
 msgid "Export Taxonomy "
 msgstr "Exportar Taxonomia"
 
-#: views/category/list.php:207
+#: views/category/list.php:223
 msgid "Do you confirm the download of this taxonomy: "
 msgstr "Confirma o download desta taxonomia:"
 
-#: views/category/list.php:216 views/search/tags.php:82
+#: views/category/list.php:232 views/search/tags.php:82
 msgid "Confirm"
 msgstr "Confirmar"
 
-#: views/category/list.php:231 views/collection/config_menu.php:48
+#: views/category/list.php:247 views/collection/config_menu.php:48
 msgid "Social"
 msgstr "Redes Sociais"
 
-#: views/category/list.php:232 views/design/edit.php:15
+#: views/category/list.php:248 views/design/edit.php:15
 #: views/design/edit.php:27 views/property/list.php:16
 #: views/ranking/list.php:15 views/search/edit.php:16
 #: views/theme_options/property/list.php:16
 msgid "Design"
 msgstr "Visual"
 
-#: views/category/list.php:235 views/design/edit.php:18
+#: views/category/list.php:251 views/design/edit.php:18
 #: views/object/js/list_js.php:14 views/property/list.php:19
 #: views/ranking/list.php:18 views/search/edit.php:19
 #: views/statistics/inc/i18n_strs.php:4
@@ -4524,7 +4539,7 @@ msgstr "Visual"
 msgid "Previous"
 msgstr "Anterior"
 
-#: views/category/list.php:236 views/property/list.php:20
+#: views/category/list.php:252 views/property/list.php:20
 #: views/ranking/list.php:19 views/search/edit.php:20
 #: views/theme_options/property/list.php:21
 msgid "Next"
@@ -4823,16 +4838,6 @@ msgstr "Deseja mostrar o ranking dos autores mais participativos?"
 #: views/collection/edit.php:291
 msgid "Change collection owner"
 msgstr "Mudar proprietário da coleção"
-
-#: views/collection/edit.php:295 views/collection/edit.php:364
-#: views/object/list_modes/modals.php:176
-msgid "Type the three first letters of the user name "
-msgstr "Digite os três primeiras letras do nome do usuário"
-
-#: views/collection/edit.php:300 views/collection/js/edit_js.php:157
-#: views/object/list_modes/modals.php:181
-msgid "New owner: "
-msgstr "Novo proprietário: "
 
 #: views/collection/edit.php:308
 msgid "Type of Moderation"

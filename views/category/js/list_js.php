@@ -64,7 +64,7 @@
                     $("#alert_error_categories").show();
                     $("#alert_success_categories").hide();
                     if (elem.message) {
-                        console.log(elem.message);
+                        // console.log(elem.message);
                         $("#message_category").text(elem.message);
                     }
                 }
@@ -84,7 +84,7 @@
                 },
                 minLength: 2,
                 select: function (event, ui) {
-                    console.log(event);
+                    // console.log(event);
                     var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
                     var temp = $("#chosen-selected2-user [value='" + ui.item.value + "']").val();
                     if (typeof temp == "undefined") {
@@ -104,126 +104,124 @@
     });
     //FUNCAO QUE REALIZA A INSERCAO OU EDICAO DE UMA CATEGORIA
     function submit_form(formData){
-                $('#modalImportMain').modal('show'); // mostra o modal de carregamento
-                // primeira requisicao para verificar se existe uma categoria 
-                // com este nome com o mesmo pai ou apenas notificar que existe
-                // um no abaixo que possui esse mesmo pai
-                $.ajax({
-                    type: "POST",
-                    url: $('#src').val() + "/controllers/category/category_controller.php",
-                    data: {
-                        category_id: $('#category_id').val(),
-                        suggested_name: $('#category_name').val(),
-                        parent_id: $("#category_parent_id").val(),
-                        operation_form: $("#operation_category_form").val(),
-                        operation: 'verify_name_in_taxonomy'
-                    }
-                }).done(function (result) {
-                    elem = jQuery.parseJSON(result);
-                    $("#category_description").val('');
-                    $("#category_parent_name").val('');
-                    $("#category_parent_id").val('');
-                    $("#chosen-selected2-user").html('');
-                    //se aconteceu algum erro na operacao ou existir uma categoria 
-                    //com este pai e com este nome
-                    if (elem.type == 'error') {
-                        $('#modalImportMain').modal('hide');//esconde o modal de carregamento
-                        showAlertGeneral(elem.title, elem.msg, elem.type);
-                        $("#alert_error_categories").hide();
-                        $("#alert_success_categories").hide();
-                    }
-                    // se existe algum no abaixo deste pai que possui um filho 
-                    // com esse nome
-                    else if (elem.type == 'info') {
-                        $('#modalImportMain').modal('hide');//esconde o modal de carregamento
-                        swal({
-                            title: elem.title,
-                            text: elem.msg,
-                            type: "warning",
-                            showCancelButton: true,
-                            confirmButtonClass: 'btn-danger',
-                            closeOnConfirm: true,
-                            closeOnCancel: true
-                        },
-                        function (isConfirm) {
-                            //se o usuario optar por criar uma categoria com este nome
-                            if (isConfirm) {
-                                $('#modalImportMain').modal('show');//mostra o modal de carregamento
-                                $.ajax({
-                                    url: $('#src').val() + '/controllers/category/category_controller.php',
-                                    type: 'POST',
-                                    data: formData,
-                                    processData: false,
-                                    contentType: false
-                                }).done(function (result) {
-                                    $('#modalImportMain').modal('hide');//esconde o modal de carregamento
-                                    $('.dropdown-toggle').dropdown();
-                                    $("#categories_dynatree").dynatree("getTree").reload();
-                                    //elem_first =jQuery.parseJSON(result); 
-                                    elem = jQuery.parseJSON(result);
-                                    if (elem.type.trim() === 'success') {
-                                        $("#alert_error_categories").hide();
-                                        $("#alert_success_categories").show();
-                                        clean_archive_mode();
-                                    } else {
-                                        $("#alert_error_categories").show();
-                                        $("#message_category").html(elem.msg);
-                                        $("#alert_success_categories").hide();
-                                    }
-                                    $('#category_name').val('');
-                                    $("#category_description").val('');
-
-                                });
+        $('#modalImportMain').modal('show'); // mostra o modal de carregamento
+        // primeira requisicao para verificar se existe uma categoria
+        // com este nome com o mesmo pai ou apenas notificar que existe
+        // um no abaixo que possui esse mesmo pai
+        $.ajax({
+            type: "POST",
+            url: $('#src').val() + "/controllers/category/category_controller.php",
+            data: {
+                category_id: $('#category_id').val(),
+                suggested_name: $('#category_name').val(),
+                parent_id: $("#category_parent_id").val(),
+                operation_form: $("#operation_category_form").val(),
+                operation: 'verify_name_in_taxonomy'
+            }
+        }).done(function (result) {
+            elem = jQuery.parseJSON(result);
+            $("#category_description").val('');
+            $("#category_parent_name").val('');
+            $("#category_parent_id").val('');
+            $("#chosen-selected2-user").html('');
+            //se aconteceu algum erro na operacao ou existir uma categoria
+            //com este pai e com este nome
+            if (elem.type == 'error') {
+                $('#modalImportMain').modal('hide');//esconde o modal de carregamento
+                showAlertGeneral(elem.title, elem.msg, elem.type);
+                $("#alert_error_categories").hide();
+                $("#alert_success_categories").hide();
+            }
+            // se existe algum no abaixo deste pai que possui um filho
+            // com esse nome
+            else if (elem.type == 'info') {
+                $('#modalImportMain').modal('hide');//esconde o modal de carregamento
+                swal({
+                        title: elem.title,
+                        text: elem.msg,
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: 'btn-danger',
+                        closeOnConfirm: true,
+                        closeOnCancel: true
+                    },
+                    function (isConfirm) {
+                        //se o usuario optar por criar uma categoria com este nome
+                        if (isConfirm) {
+                            $('#modalImportMain').modal('show');//mostra o modal de carregamento
+                            $.ajax({
+                                url: $('#src').val() + '/controllers/category/category_controller.php',
+                                type: 'POST',
+                                data: formData,
+                                processData: false,
+                                contentType: false
+                            }).done(function (result) {
+                                $('#modalImportMain').modal('hide');//esconde o modal de carregamento
+                                $('.dropdown-toggle').dropdown();
+                                $("#categories_dynatree").dynatree("getTree").reload();
+                                //elem_first =jQuery.parseJSON(result);
+                                elem = jQuery.parseJSON(result);
+                                if (elem.type.trim() === 'success') {
+                                    $("#alert_error_categories").hide();
+                                    $("#alert_success_categories").show();
+                                    clean_archive_mode();
+                                } else {
+                                    $("#alert_error_categories").show();
+                                    $("#message_category").html(elem.msg);
+                                    $("#alert_success_categories").hide();
+                                }
+                                $('#category_name').val('');
+                                $("#category_description").val('');
+                            });
                                //e.preventDefault();
-                            }
-                            // se nao ele quiser criar a categoria sera mostrado
-                            // para edicao a categoria para edicao
-                            else {
-                                $('#modalImportMain').modal('show');//mostra o modal de carregamento
-                                $("#category_name").val($('#category_name').val());
-                                $("#category_id").val(elem.id);
-                                $("#operation_category_form").val('update');
-                                $.ajax({
-                                    type: "POST",
-                                    url: $('#src').val() + "/controllers/category/category_controller.php",
-                                    data: {category_id: elem.id, operation: 'get_parent'}
-                                }).done(function (result) {
-                                    $('#modalImportMain').modal('hide');//esconde o modal de carregamento
-                                    elem = jQuery.parseJSON(result);
-                                    if (elem.name) {
-                                        $("#category_parent_name").val(elem.name);
-                                        $("#category_parent_id").val(elem.term_id);
-                                    } else {
-                                        $("#category_parent_name").val('<?php _e('Category root', 'tainacan'); ?>');
-                                        $("#category_parent_id").val('0');
-                                    }
-                                    $("#show_category_property").show();
-                                    $('.dropdown-toggle').dropdown();
-                                });
-                                // metas desta categoria
-                                $.ajax({
-                                    type: "POST",
-                                    url: $('#src').val() + "/controllers/category/category_controller.php",
-                                    data: {category_id: elem.id, operation: 'get_metas'}
-                                }).done(function (result) {
-                                    elem = jQuery.parseJSON(result);
-                                    console.log(elem);
-                                    if (elem.socialdb_category_permission) {
-                                        $("#category_permission").val(elem.socialdb_category_permission);
-                                    }
-                                    if (elem.socialdb_category_moderators) {
-                                        $("#chosen-selected2-user").html();
-                                        $.each(elem.socialdb_category_moderators, function (idx, user) {
-                                            if (user && user !== false) {
-                                                $("#chosen-selected2-user").append("<option class='selected' value='" + user.id + "' selected='selected' >" + user.name + "</option>");
-                                            }
-                                        });
-                                    }
-                                    $('.dropdown-toggle').dropdown();
-                                });
-                            }
-                        });
-                    }
+                        }
+                        // se nao ele quiser criar a categoria sera mostrado
+                        // para edicao a categoria para edicao
+                        else {
+                            $('#modalImportMain').modal('show');//mostra o modal de carregamento
+                            $("#category_name").val($('#category_name').val());
+                            $("#category_id").val(elem.id);
+                            $("#operation_category_form").val('update');
+                            $.ajax({
+                                type: "POST",
+                                url: $('#src').val() + "/controllers/category/category_controller.php",
+                                data: {category_id: elem.id, operation: 'get_parent'}
+                            }).done(function (result) {
+                                $('#modalImportMain').modal('hide');//esconde o modal de carregamento
+                                elem = jQuery.parseJSON(result);
+                                if (elem.name) {
+                                    $("#category_parent_name").val(elem.name);
+                                    $("#category_parent_id").val(elem.term_id);
+                                } else {
+                                    $("#category_parent_name").val('<?php _e('Category root', 'tainacan'); ?>');
+                                    $("#category_parent_id").val('0');
+                                }
+                                $("#show_category_property").show();
+                                $('.dropdown-toggle').dropdown();
+                            });
+                            // metas desta categoria
+                            $.ajax({
+                                type: "POST",
+                                url: $('#src').val() + "/controllers/category/category_controller.php",
+                                data: {category_id: elem.id, operation: 'get_metas'}
+                            }).done(function (result) {
+                                elem = jQuery.parseJSON(result);
+                                if (elem.socialdb_category_permission) {
+                                    $("#category_permission").val(elem.socialdb_category_permission);
+                                }
+                                if (elem.socialdb_category_moderators) {
+                                    $("#chosen-selected2-user").html();
+                                    $.each(elem.socialdb_category_moderators, function (idx, user) {
+                                        if (user && user !== false) {
+                                            $("#chosen-selected2-user").append("<option class='selected' value='" + user.id + "' selected='selected' >" + user.name + "</option>");
+                                        }
+                                    });
+                                }
+                                $('.dropdown-toggle').dropdown();
+                            });
+                        }
+                    });
+            }
                     // se a categoria passou por todas validacoes ela entao sera criada
                     // e todos os campos deverao ser resetados mostrando a mensagem
                     // de sucesso caso ela for criada corretamente
@@ -258,6 +256,28 @@
                        // e.preventDefault();
                     }
                 });
+    }
+
+    function complete_category_users(col_id) {
+        $("#cat_get_users").autocomplete({
+            source: $('#src').val() + '/controllers/user/user_controller.php?operation=list_user&collection_id=' + col_id,
+            minLength: 2,
+            select: function (event, ui) {
+                var own_str = '<?php _t('New owner: ',1); ?>' + ui.item.label;
+                var curr_own = $("#submit_form_category #category_owner").val();
+                var selected_own = ui.item.value;
+
+                $("#submit_form_category .cat_owner").text(own_str);
+                if(curr_own != selected_own) {
+                    $("#submit_form_category .new_own_category").show();
+                    $("#submit_form_category #category_owner").val(selected_own);
+                }
+
+                setTimeout(function () {
+                    $("#cat_get_users").val('');
+                }, 100);
+            }
+        });
     }
     
     // FUNCAO QUE MOSTRA MENSAGEM CASO O USUARIO ESTEJA INSERINDO UMA CATEGORIA PRIVADA
@@ -393,7 +413,7 @@
             // The event was bound to the <span> tag, but the node object
             // is stored in the parent <li> tag
             var node = $.ui.dynatree.getNode(el);
-            console.log(node.data.key);
+            // console.log(node.data.key);
             switch (action) {
                 case "add":
                     $("#category_name").val('');
@@ -443,13 +463,19 @@
                         data: {category_id: node.data.key, operation: 'get_metas'}
                     }).done(function (result) {
                         elem = jQuery.parseJSON(result);
-                       // console.log(elem);
-                        if(elem.term.description){
+                        if(elem.term.description) {
                             $("#category_description").val(elem.term.description);
                         }
                         if (elem.socialdb_category_permission) {
                             $("#category_permission").val(elem.socialdb_category_permission);
                         }
+
+                        if(elem.socialdb_category_owner) {
+                            $('.change-category-own').show();
+                            var owner = elem.socialdb_category_owner;
+                            $("#submit_form_category #category_owner").val(owner);
+                        }
+
                         if (elem.socialdb_category_moderators) {
                             $("#chosen-selected2-user").html('');
                             $.each(elem.socialdb_category_moderators, function (idx, user) {
