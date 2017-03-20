@@ -32,17 +32,45 @@ function send_ajax($marc)
             $("#modalImportMarc").modal("hide");
         },
         error: function () {
-           console.log("Error!!");
+            console.log("Error!!");
         },
-        success: function () {
-            console.log("Success")
+        success: function (elem) {
+            elem = JSON.parse(elem);
+            if(elem.result)
+            {
+                window.location = elem.url;
+            }
         }
     });
 }
 
-function save_mapping() {
-    $('#modalImportLoading').modal('show');
-    $('#progressbarmapas').remove();
+// valida a cardinalidade ao selecionar
+/*Hook.register(
+    'tainacan_library_import_action',
+    function ( args ) {
+        save_mapping_marc()
+    });
+*/
+function save_mapping_marc(){
+    $("#mapping_marc").submit(function (event) {
+        event.preventDefault();
 
-    
+        $('#modalImportLoading').modal('show');
+        $('#progressbarmapas').remove();
+
+        $.ajax({
+            url: $('#src').val() + '/controllers/collection/collection_controller.php',
+            type: 'POST',
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            success: function (r) {
+                var elem = JSON.parse(r);
+                if(elem.result)
+                {
+                    window.location = elem.url;
+                }
+            }
+        });
+    });
 }

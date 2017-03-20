@@ -265,7 +265,11 @@ class CollectionController extends Controller {
 
             /*             * ********************** IMPORTAÇÃO MARC ****************** */
             case 'import_marc':
-                import_marc();
+                return json_encode(import_marc());
+                break;
+            /*             * ***************** SALVAR MAPEAMENTO MARC **************** */
+            case 'save_mapping_marc':
+                return json_encode(save_mapping_marc($data));
                 break;
             /*             * ************************* TEMPLATES ********************* */
             case 'list-collection-templates':

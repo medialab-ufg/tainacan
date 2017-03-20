@@ -5,7 +5,14 @@
 
 define('MODULE_LIBRARY', 'tainacan-library');
 define('LIBRARY_CONTROLLERS', get_template_directory_uri() . '/modules/' . MODULE_LIBRARY );
+
+define("COLLECTION_MAPPING_MARC", "mappingMarc");
+define("MAPPING_MARC_ID", "socialdb_mapping_marc_id");
+define("MAPPING_MARC_TABLE", "socialdb_channel_marc_mapping_table");
+
+
 load_theme_textdomain("tainacan", dirname(__FILE__) . "/languages");
+
 
 /*
  * Adição de SCRIPTS
@@ -111,26 +118,75 @@ function show_all_meta($collection_id)
 {
     $all_properties_id = meta_ids($collection_id, false);
     $all_marc_fields = get_all_marc_fields();
+    $marc_mapping = get_marc_mapping($collection_id);
+
+    $marc_mapping_inverse = [];
+    if($marc_mapping != false)
+    {
+        foreach($marc_mapping as $compound_num => $subfields)
+        {
+            foreach ($subfields as $subfield => $prop_id)
+            {
+                if($subfield != 'compound_id')
+                {
+                    $marc_mapping_inverse[$prop_id] = $compound_num." $".$subfield;
+                }else $marc_mapping_inverse[$prop_id] = $compound_num;
+
+            }
+        }
+    }else $marc_mapping_inverse = false;
 
     ?>
         <div role="tabpanel" class="tab-pane" id="marc_tab">
-            <form action="" name="mapping" method="post">
+            <form name="mapping_marc" method="post" id="mapping_marc">
+                <input type="hidden" name="collection_id" value="<?php echo $collection_id ?>">
+                <input type="hidden" name="operation" value="save_mapping_marc">
             <?php foreach ($all_properties_id as $compound_name => $sub_properties) {?>
                 <div class='form-group'>
-                    <label class='col-md-12 col-sm-12 meta-title no-padding' name="<?= $compound_name?>" id="<?= $compound_name?>"> <?= $compound_name?> </label>
-                <?php foreach ($sub_properties as $name => $id){?>
-                        <label class='col-md-6 col-sm-12 meta-title no-padding'style="text-indent: 5%;"> <?= $name?> </label>
-                        <div class='col-md-6 col-sm-12 meta-value'>
-                                <select name="<?= $name ?>" class='data form-control' id="<?= $name ?>">
-                                    <?php foreach ($all_marc_fields as $field) { ?>
-                                        <option name="<?= $field ?>" id="<?= $field ?>" value="<?= $field ?>"><?= $field ?></option>
-                                    <?php } ?>
+                    <label class='col-md-6 col-sm-12 meta-title no-padding' name="<?= $compound_name?>" id="<?= $compound_name?>"> <?= $compound_name?> </label>
+
+                    <div class='col-md-6 col-sm-12 meta-value'>
+                        <select name="<?= $sub_properties['compound_id'] ?>" class='data form-control' id="<?= $compound_name ?>">
+                            <?php
+                                foreach ($all_marc_fields as $field)
+                                {
+                                    if($marc_mapping_inverse != false && $marc_mapping_inverse[$sub_properties['compound_id']] == $field)
+                                    {
+                                        echo "<option name='".$field."' value='".$field."' selected>". $field ."</option>";
+                                    }else
+                                    {
+                                        echo "<option name='".$field."' value='".$field."'>". $field ."</option>";
+                                    }
+
+                                }
+                            ?>
+                        </select>
+                    </div>
+                <?php foreach ($sub_properties as $name => $id){
+                    if($name != 'compound_id'){ ?>
+                        <div class="col-md-12 no-padding" style="margin: 10px 0 10px 0">
+                            <label class='col-md-6 col-sm-12 meta-title no-padding' style="text-indent: 5%; padding-bottom: 15px; border-bottom: 1px solid #e8e8e8"> <?= $name?> </label>
+                            <div class='col-md-6 col-sm-12 meta-value'>
+                                <select name="<?= $id ?>" class='data form-control' id="<?= $name ?>">
+                                    <?php
+                                    foreach ($all_marc_fields as $field) {
+                                        if($marc_mapping_inverse != false && $marc_mapping_inverse[$id] == $field)
+                                        {
+                                            echo "<option name='".$field."' value='".$field."' selected>". $field ."</option>";
+                                        } else {
+                                            echo "<option name='".$field."' value='".$field."'>". $field ."</option>";
+                                        }
+                                    }
+                                    ?>
                                 </select>
+                            </div>
                         </div>
-                <?php } ?>
+                <?php
+                    }
+                } ?>
                 </div>
             <?php } ?>
-            <button type="button" class="btn btn-primary btn-lg tainacan-blue-btn-bg pull-right" id="mapping_save" onclick="save_mapping()"><?php _e("Save", "tainacan"); ?></button>
+            <button type="submit" class="btn btn-primary btn-lg tainacan-blue-btn-bg pull-right" id="mapping_save" onclick="save_mapping_marc()"><?php _e("Save", "tainacan"); ?></button>
             </form>
         </div>
     <?php
@@ -142,7 +198,7 @@ function show_all_meta($collection_id)
 
 function meta_ids($collection_id, $change_names_for_numbers)
 {
-    $return = [];
+    $sub_properties_id = [];
 
     $category_root_id = get_post_meta($collection_id, 'socialdb_collection_object_type', true);
 
@@ -174,7 +230,7 @@ function meta_ids($collection_id, $change_names_for_numbers)
                 }
 
             }
-
+            $sub_properties_name['compound_id'] = $property;
             $properties_id[just_numbers($property_name)] = $property;
             if($change_names_for_numbers == true)
             {
@@ -190,6 +246,7 @@ function get_all_marc_fields()
 {
     $marc_fiels = [];
 
+    $marc_fiels[] = '013';
     $marc_fiels[] = '013 $a';
     $marc_fiels[] = '013 $b';
     $marc_fiels[] = '013 $c';
@@ -197,39 +254,51 @@ function get_all_marc_fields()
     $marc_fiels[] = '013 $e';
     $marc_fiels[] = '013 $f';
 
+    $marc_fiels[] = '020';
     $marc_fiels[] = '020 $a';
 
+    $marc_fiels[] = '022';
     $marc_fiels[] = '022 $a';
 
+    $marc_fiels[] = '029';
     $marc_fiels[] = '029 $a';
 
+    $marc_fiels[] = '040';
     $marc_fiels[] = '040 $a';
     $marc_fiels[] = '040 $b';
 
+    $marc_fiels[] = '041';
     $marc_fiels[] = '041 #1';
     $marc_fiels[] = '041 $a';
     $marc_fiels[] = '041 $b';
     $marc_fiels[] = '041 $h';
 
+    $marc_fiels[] = '043';
     $marc_fiels[] = '043 $a';
 
+    $marc_fiels[] = '045';
     $marc_fiels[] = '045 #1';
     $marc_fiels[] = '045 $a';
     $marc_fiels[] = '045 $b';
     $marc_fiels[] = '045 $c';
 
+    $marc_fiels[] = '080';
     $marc_fiels[] = '080 $2';
     $marc_fiels[] = '080 $a';
 
+    $marc_fiels[] = '082';
     $marc_fiels[] = '082 $2';
     $marc_fiels[] = '082 $a';
 
+    $marc_fiels[] = '090';
     $marc_fiels[] = '090 $a';
     $marc_fiels[] = '090 $b';
     $marc_fiels[] = '090 $c';
 
+    $marc_fiels[] = '095';
     $marc_fiels[] = '095 $a';
 
+    $marc_fiels[] = '100';
     $marc_fiels[] = '100 #1';
     $marc_fiels[] = '100 $a';
     $marc_fiels[] = '100 $b';
@@ -237,6 +306,7 @@ function get_all_marc_fields()
     $marc_fiels[] = '100 $d';
     $marc_fiels[] = '100 $q';
 
+    $marc_fiels[] = '110';
     $marc_fiels[] = '110 #1';
     $marc_fiels[] = '110 $a';
     $marc_fiels[] = '110 $b';
@@ -245,6 +315,7 @@ function get_all_marc_fields()
     $marc_fiels[] = '110 $l';
     $marc_fiels[] = '110 $n';
 
+    $marc_fiels[] = '111';
     $marc_fiels[] = '111 #1';
     $marc_fiels[] = '111 $a';
     $marc_fiels[] = '111 $c';
@@ -254,6 +325,7 @@ function get_all_marc_fields()
     $marc_fiels[] = '111 $k';
     $marc_fiels[] = '111 $n';
 
+    $marc_fiels[] = '130';
     $marc_fiels[] = '130 #1';
     $marc_fiels[] = '130 $a';
     $marc_fiels[] = '130 $d';
@@ -264,11 +336,13 @@ function get_all_marc_fields()
     $marc_fiels[] = '130 $l';
     $marc_fiels[] = '130 $p';
 
+    $marc_fiels[] = '210';
     $marc_fiels[] = '210 #1';
     $marc_fiels[] = '210 #2';
     $marc_fiels[] = '210 $a';
     $marc_fiels[] = '210 $b';
 
+    $marc_fiels[] = '240';
     $marc_fiels[] = '240 #1';
     $marc_fiels[] = '240 #2';
     $marc_fiels[] = '240 $a';
@@ -280,6 +354,7 @@ function get_all_marc_fields()
     $marc_fiels[] = '240 $n';
     $marc_fiels[] = '240 $p';
 
+    $marc_fiels[] = '243';
     $marc_fiels[] = '243 #1';
     $marc_fiels[] = '243 #2';
     $marc_fiels[] = '243 $a';
@@ -288,6 +363,7 @@ function get_all_marc_fields()
     $marc_fiels[] = '243 $k';
     $marc_fiels[] = '243 $l';
 
+    $marc_fiels[] = '245';
     $marc_fiels[] = '245 #1';
     $marc_fiels[] = '245 #2';
     $marc_fiels[] = '245 $a';
@@ -297,6 +373,7 @@ function get_all_marc_fields()
     $marc_fiels[] = '245 $n';
     $marc_fiels[] = '245 $p';
 
+    $marc_fiels[] = '246';
     $marc_fiels[] = '246 #1';
     $marc_fiels[] = '246 #2';
     $marc_fiels[] = '246 $a';
@@ -308,19 +385,24 @@ function get_all_marc_fields()
     $marc_fiels[] = '246 $n';
     $marc_fiels[] = '246 $p';
 
+    $marc_fiels[] = '250';
     $marc_fiels[] = '250 $a';
     $marc_fiels[] = '250 $b';
 
+    $marc_fiels[] = '255';
     $marc_fiels[] = '255 $a';
 
+    $marc_fiels[] = '256';
     $marc_fiels[] = '256 $a';
 
+    $marc_fiels[] = '257';
     $marc_fiels[] = '257 $a';
 
+    $marc_fiels[] = '258';
     $marc_fiels[] = '258 $a';
     $marc_fiels[] = '258 $b';
 
-
+    $marc_fiels[] = '260';
     $marc_fiels[] = '260 $a';
     $marc_fiels[] = '260 $b';
     $marc_fiels[] = '260 $c';
@@ -328,25 +410,32 @@ function get_all_marc_fields()
     $marc_fiels[] = '260 $f';
     $marc_fiels[] = '260 $g';
 
+    $marc_fiels[] = '300';
     $marc_fiels[] = '300 $a';
     $marc_fiels[] = '300 $b';
     $marc_fiels[] = '300 $c';
     $marc_fiels[] = '300 $e';
 
+    $marc_fiels[] = '306';
     $marc_fiels[] = '306 $a';
 
+    $marc_fiels[] = '310';
     $marc_fiels[] = '310 $a';
     $marc_fiels[] = '310 $b';
 
+    $marc_fiels[] = '321';
+    $marc_fiels[] = '321';
     $marc_fiels[] = '321 $a';
     $marc_fiels[] = '321 $b';
 
+    $marc_fiels[] = '340';
     $marc_fiels[] = '340 $a';
     $marc_fiels[] = '340 $b';
     $marc_fiels[] = '340 $c';
     $marc_fiels[] = '340 $d';
     $marc_fiels[] = '340 $e';
 
+    $marc_fiels[] = '342';
     $marc_fiels[] = '342 #1';
     $marc_fiels[] = '342 #2';
     $marc_fiels[] = '342 $a';
@@ -354,42 +443,58 @@ function get_all_marc_fields()
     $marc_fiels[] = '342 $c';
     $marc_fiels[] = '342 $d';
 
+    $marc_fiels[] = '343';
     $marc_fiels[] = '343 $a';
     $marc_fiels[] = '343 $b';
 
+    $marc_fiels[] = '362';
     $marc_fiels[] = '362 #1';
     $marc_fiels[] = '362 $a';
     $marc_fiels[] = '362 $z';
 
+    $marc_fiels[] = '490';
     $marc_fiels[] = '490 #1';
     $marc_fiels[] = '490 $a';
     $marc_fiels[] = '490 $v';
 
+    $marc_fiels[] = '500';
     $marc_fiels[] = '500 $a';
 
+    $marc_fiels[] = '501';
     $marc_fiels[] = '501 $a';
 
+    $marc_fiels[] = '502';
     $marc_fiels[] = '502 $a';
 
+    $marc_fiels[] = '504';
     $marc_fiels[] = '504 $a';
 
+    $marc_fiels[] = '505';
     $marc_fiels[] = '505 $a';
 
+    $marc_fiels[] = '515';
     $marc_fiels[] = '515 $a';
 
+    $marc_fiels[] = '520';
     $marc_fiels[] = '520 $a';
     $marc_fiels[] = '520 $u';
 
+    $marc_fiels[] = '521';
     $marc_fiels[] = '521 $a';
 
+    $marc_fiels[] = '525';
     $marc_fiels[] = '525 $a';
 
+    $marc_fiels[] = '530';
     $marc_fiels[] = '530 $a';
 
+    $marc_fiels[] = '534';
     $marc_fiels[] = '534 $a';
 
+    $marc_fiels[] = '550';
     $marc_fiels[] = '550 $a';
 
+    $marc_fiels[] = '555';
     $marc_fiels[] = '555 #1';
     $marc_fiels[] = '555 $3';
     $marc_fiels[] = '555 $a';
@@ -398,13 +503,17 @@ function get_all_marc_fields()
     $marc_fiels[] = '555 $d';
     $marc_fiels[] = '555 $u';
 
+    $marc_fiels[] = '580';
     $marc_fiels[] = '580 $a';
 
+    $marc_fiels[] = '590';
     $marc_fiels[] = '590 $a';
 
+    $marc_fiels[] = '595';
     $marc_fiels[] = '595 $a';
     $marc_fiels[] = '595 $b';
 
+    $marc_fiels[] = '600';
     $marc_fiels[] = '600 #1';
     $marc_fiels[] = '600 $a';
     $marc_fiels[] = '600 $b';
@@ -416,7 +525,8 @@ function get_all_marc_fields()
     $marc_fiels[] = '600 $x';
     $marc_fiels[] = '600 $y';
     $marc_fiels[] = '600 $z';
-    
+
+    $marc_fiels[] = '610';
     $marc_fiels[] = '610 #1';
     $marc_fiels[] = '610 $a';
     $marc_fiels[] = '610 $b';
@@ -431,6 +541,7 @@ function get_all_marc_fields()
     $marc_fiels[] = '610 $y';
     $marc_fiels[] = '610 $z';
 
+    $marc_fiels[] = '611';
     $marc_fiels[] = '611 #1';
     $marc_fiels[] = '611 $a';
     $marc_fiels[] = '611 $c';
@@ -442,6 +553,7 @@ function get_all_marc_fields()
     $marc_fiels[] = '611 $y';
     $marc_fiels[] = '611 $z';
 
+    $marc_fiels[] = '630';
     $marc_fiels[] = '630 #1';
     $marc_fiels[] = '630 $a';
     $marc_fiels[] = '630 $d';
@@ -454,16 +566,19 @@ function get_all_marc_fields()
     $marc_fiels[] = '630 $y';
     $marc_fiels[] = '630 $z';
 
+    $marc_fiels[] = '650';
     $marc_fiels[] = '650 $a';
     $marc_fiels[] = '650 $x';
     $marc_fiels[] = '650 $y';
     $marc_fiels[] = '650 $z';
 
+    $marc_fiels[] = '651';
     $marc_fiels[] = '651 $a';
     $marc_fiels[] = '651 $x';
     $marc_fiels[] = '651 $y';
     $marc_fiels[] = '651 $z';
 
+    $marc_fiels[] = '700';
     $marc_fiels[] = '700 #1';
     $marc_fiels[] = '700 #2';
     $marc_fiels[] = '700 $a';
@@ -475,6 +590,7 @@ function get_all_marc_fields()
     $marc_fiels[] = '700 $q';
     $marc_fiels[] = '700 $t';
 
+    $marc_fiels[] = '710';
     $marc_fiels[] = '710 #1';
     $marc_fiels[] = '710 #2';
     $marc_fiels[] = '710 $a';
@@ -486,6 +602,7 @@ function get_all_marc_fields()
     $marc_fiels[] = '710 $n';
     $marc_fiels[] = '710 $t';
 
+    $marc_fiels[] = '730';
     $marc_fiels[] = '730 #1';
     $marc_fiels[] = '730 #2';
     $marc_fiels[] = '730 $a';
@@ -499,21 +616,25 @@ function get_all_marc_fields()
     $marc_fiels[] = '730 $y';
     $marc_fiels[] = '730 $z';
 
+    $marc_fiels[] = '740';
     $marc_fiels[] = '740 #1';
     $marc_fiels[] = '740 #2';
     $marc_fiels[] = '740 $a';
     $marc_fiels[] = '740 $n';
     $marc_fiels[] = '740 $p';
 
+    $marc_fiels[] = '830';
     $marc_fiels[] = '830 #2';
     $marc_fiels[] = '830 $a';
     $marc_fiels[] = '830 $v';
 
+    $marc_fiels[] = '856';
     $marc_fiels[] = '856 $d';
     $marc_fiels[] = '856 $f';
     $marc_fiels[] = '856 $u';
     $marc_fiels[] = '856 $y';
 
+    $marc_fiels[] = '947';
     $marc_fiels[] = '947 $a';
     $marc_fiels[] = '947 $b';
     $marc_fiels[] = '947 $c';
@@ -538,28 +659,54 @@ function get_all_marc_fields()
     return $marc_fiels;
 }
 
-function save_mapping_marc($name, $collection_id )
+function save_mapping_marc($data)
 {
-    $data_info = [];
-    $object_id = create_mapping($name, $collection_id);
-    
-}
+    $collection_id = $data['collection_id'];
+    $mappingModel = new MappingModel();
 
-function create_mapping($name, $collection_id) {
-    $post = array(
-        'post_title' => $name,
-        'post_status' => 'publish',
-        'post_type' => 'socialdb_channel'
-    );
-    $object_id = wp_insert_post($post);
-    add_post_meta($object_id, 'socialdb_channel_identificator', $name);
-    add_post_meta($collection_id, 'socialdb_collection_channel', $object_id);
-    wp_set_object_terms($object_id, array((int) $this->parent->term_id), 'socialdb_channel_type');
-    return $object_id;
+    $data_info = [];
+    foreach ($data as $property_id => $value)
+    {
+        $subfield = just_letters($value);
+        if($subfield == null)
+        {
+            $subfield = 'compound_id';
+        }
+
+        $data_info[just_numbers($value)][$subfield] = $property_id;
+    }
+
+    if(empty(get_post_meta($collection_id, MAPPING_MARC_ID, true)))
+    {
+        $mapping_id = $mappingModel->create_mapping(COLLECTION_MAPPING_MARC, $collection_id);
+        add_post_meta($collection_id, MAPPING_MARC_ID, $mapping_id);
+        add_post_meta($mapping_id, 'socialdb_channel_marc_mapping', serialize($data_info));
+        print "IF\n";
+    }else
+    {
+        $output = OBJECT;
+        $postMappingId = get_post_by_name(COLLECTION_MAPPING_MARC, $output ,'socialdb_channel')->ID;
+        update_post_meta($postMappingId, MAPPING_MARC_TABLE, serialize($data_info));
+        print "collection_id: $collection_id";
+        $x = get_marc_mapping($collection_id);
+        if($x == false)
+        {
+            print "False";
+        }
+    }
+
+    $return['result'] = true;
+    if($return['result'])
+    {
+        $return['url'] = get_the_permalink($collection_id);;
+    }
+
+    //return $return;
 }
 
 function import_marc()
 {
+    $elem  = [];
     $marc = $_POST['marc'];
     $collection_id = $_POST['collection_id'];
 
@@ -567,7 +714,27 @@ function import_marc()
     $lines = split_lines($marc);
     $treated_lines = treat_lines($lines);
 
-    add_material($collection_id, $treated_lines);
+    $elem['result'] = add_material($collection_id, $treated_lines);
+    if($elem['result'])
+    {
+        $elem['url'] = get_the_permalink($collection_id);
+    }
+
+    return $elem;
+}
+
+function get_marc_mapping($collection_id)
+{
+    $mapping_id = get_post_meta($collection_id, MAPPING_MARC_ID, true);
+
+    if($mapping_id)
+    {
+        $mapping = get_post_meta($mapping_id, MAPPING_MARC_TABLE, true);
+        return unserialize($mapping);
+    }else
+    {
+        return false;
+    }
 }
 
 function split_lines($marc)
@@ -631,10 +798,6 @@ function remove_first_occurence($to_be_removed, $string)
     $length = strlen($to_be_removed);
 
     return substr($string, $length);
-}
-
-function just_numbers($str) {
-    return preg_replace("/[^0-9]/", "", $str);
 }
 
 function add_material($collection_id, $property_list)
@@ -1044,10 +1207,20 @@ function add_material($collection_id, $property_list)
 
         update_post_meta($data['ID'], 'socialdb_property_' . $properties_id[$field] . '_0', implode(',', $inserted_ids));
     }
+
+    return true;
 }
 
 function parse_save($object_id, $compound_id, $property_id, $value)
 {
     $object_model = new ObjectModel();
     return $object_model->add_value_compound($object_id,$compound_id, $property_id, 0, 0, $value);
+}
+
+function just_numbers($str) {
+    return preg_replace("/[^0-9]/", "", $str);
+}
+
+function just_letters($str) {
+    return preg_replace("/[^a-z]/", "", $str);
 }

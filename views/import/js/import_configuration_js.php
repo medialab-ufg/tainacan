@@ -31,6 +31,8 @@
             e.preventDefault();
             $(this).tab('show');
         });
+
+        //Hook.call('tainacan_library_import_action');
     });
 
     function validate_url() {
