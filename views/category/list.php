@@ -25,7 +25,7 @@ global $config;
         </div>    
     </div>
 </div>
-<div class="categories_menu" class="row">
+<div class="categories_menu">
     <div class="col-md-4">
         <div id="categories_dynatree" style='height: 400px;overflow: scroll;' >
         </div>
@@ -55,9 +55,24 @@ global $config;
                     <option value="public"><?php _e('Public', 'tainacan'); ?></option>
                 </select>
             </div>
+
+            <div class="form-group change-category-own" style="display: none">
+                <label> <?php _t('Change category owner',1); ?> </label>
+                <input type="text" id="cat_get_users" class="chosen-selected form-control ui-autocomplete-input"
+                       onkeyup="complete_category_users('<?php echo $collection_id; ?>');" autocomplete="off"
+                       placeholder="<?php _t('Type the three first letters of the user name ', 1);?>" >
+
+                <div class="col-md-12 no-padding new_own_category" style="margin: 10px 20px; display: none">
+                    <div class="cat_owner">
+                        <?php _t('New owner: ',1); ?>
+                    </div>
+                    <input type="hidden" name="category_owner" id="category_owner" value="" />
+                </div>
+            </div>
+
             <div class="form-group">
                 <label for="chosen-selected-user"><?php _e('Category moderators', 'tainacan'); ?></label>
-                <input type="text"  id="chosen-selected-user" placeholder="<?php _e('Type the three user initial letters', 'tainacan'); ?>" style="width: 50%;" class="chosen-selected form-control" />
+                <input type="text" id="chosen-selected-user" placeholder="<?php _e('Type the three user initial letters', 'tainacan'); ?>" style="width: 50%;" class="chosen-selected form-control" />
                 <select class="chosen-selected2 form-control" style="width: 50%;height: auto;" multiple name="category_moderators[]" id="chosen-selected2-user"  >
                     <div id="visual"></div>
                 </select>

@@ -250,7 +250,7 @@ and open the template in the editor.
 }
 
 .comment {
-    margin-top: 10px;
+    padding-top: 10px;
     max-width: 100%;
     background-color: #fff;
     font-size: 14px;

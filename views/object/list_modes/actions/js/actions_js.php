@@ -171,7 +171,7 @@
                         for (att in itm.attach) {
                             /*  var attach_img = new Image(); attach_img.src = itm.attach[att].url; pressPDF.addImage(attach_img, "JPEG", 80 + attch_marg_left, 300, 80,80); attch_marg_left += 100; */
                             base_top += 30;
-                            pressPDF.textWithLink( itm.attach[att].title , baseX*2, base_count + base_top, { url: itm.attach[att].url, href: '_blank' });
+                            pressPDF.textWithLink( itm.attach[att].title , baseX*2, base_count + base_top, { url: itm.attach[att].url, target: '_blank' });
                         }
                     }
 
@@ -213,7 +213,57 @@
             });
         });
 
+        $('a.change-owner').on('click', function(){
+            var c_id = $(this).attr('data-item');
+            var cur_title = $('#object_' + c_id + ' h4.item-display-title').text();
+            $("#modal_change_owner_"+c_id +" .current_col").text(cur_title);
+            $("#modal_change_owner_"+c_id).modal('show');
+        });
+
     });
+
+    function autocomplete_users(collection_id, item_id) {
+        $(".autocomplete_users").autocomplete({
+            source: $('#src').val() + '/controllers/user/user_controller.php?operation=list_user&collection_id=' + collection_id,
+            messages: {
+                noResults: '',
+                results: function () { }
+            },
+            minLength: 2,
+            select: function (event, ui) {
+                var temp = $("#moderators_" + collection_id + " [value='" + ui.item.value + "']").val();
+                if (typeof temp == "undefined") {
+                    $("#modal_change_owner_" + item_id + " input[name='new_owner']").val(ui.item.label);
+                    $("#modal_change_owner_" + item_id + " input[name='new_user_id']").val(ui.item.value);
+                }
+                setTimeout(function () {
+                    $(".autocomplete_users").val('');
+                }, 100);
+            }
+        });
+    }
+
+    function change_item_owner(item_id) {
+        var label = $.trim($('#object_' + item_id + ' h4.item-display-title').text());
+        var new_owner = $("#modal_change_owner_" + item_id + " input[name='new_user_id']").val();
+        var new_owner_name =  $("#modal_change_owner_" + item_id + " input[name='new_owner']").val();
+        swal({
+            title: '<?php _t("Change item owner",1); ?>',
+            text:  '<?php _t("Change ownership of ",1); ?>' + label + ' <?php _t("for",1); ?> ' + new_owner_name + '?',
+            type: 'warning',
+            showCancelButton: true,
+            closeOnConfirm: true,
+            closeOnCancel: true
+        }, function(isConfirm) {
+            $.ajax({
+                url: $('#src').val() + '/controllers/object/object_controller.php', type: 'POST',
+                data: { operation: 'change_item_author', item_id: item_id, new_author: new_owner }
+            }).done(function(rs){
+                $("#modal_change_owner_"+item_id).modal('hide');
+                location.reload();
+            })
+        });
+    }
 
     function do_checkout(id){
         $.ajax({
@@ -240,7 +290,7 @@
     function do_checkin(id){
         $('.dropdown-menu .dropdown-hover-show').trigger('mouseout');
         swal({
-                title: "<?php _e('Checkin') ?>",
+            title: "<?php _e('Checkin') ?>",
                 text: "<?php _e('Checkin motive:') ?>",
                 type: "input",
                 showCancelButton: true,

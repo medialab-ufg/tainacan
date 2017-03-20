@@ -2,6 +2,8 @@
 /*
  * View Responsavel em mostrar as propriedades na hora de EDITAR do objeto, NAO UTILIZADA NOS EVENTOS
  */
+
+include_once ('js/validation_fixed_fields.php');
 include_once ('js/edit_list_properties_accordion_js.php');
 include_once(dirname(__FILE__).'/../../../helpers/view_helper.php');
 include_once(dirname(__FILE__).'/../../../helpers/object/object_properties_widgets_helper.php');

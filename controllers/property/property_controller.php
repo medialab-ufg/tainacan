@@ -305,6 +305,20 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
                     }
                 }
                 return json_encode($data);
+            case 'setTargetProperties':
+                $categories = explode(',', $data['categories']);
+                $all_properties_id = [];
+                $properties = [];
+                foreach ($categories as $value) {
+                    $properties_raw = get_term_meta($value, 'socialdb_category_property_id');
+                    if(is_array($properties_raw)){
+                        $all_properties_id = array_merge($all_properties_id, array_filter($properties_raw));
+                    }
+                }
+                foreach ($all_properties_id as $property_id) {
+                    $properties[] = $property_model->get_all_property($property_id, true);
+                }
+                return json_encode(['properties'=>$properties]);
                 
                 
         }

@@ -567,3 +567,21 @@ form#advanced_search_submit {
     width: 74%
   }
 }
+
+.modal_change_owner {
+  .modal-body {
+    height: 170px;
+
+    #autocomplete_users {
+      margin: 10px 0 10px 0;
+    }
+  }
+}
+
+.new_own_cont {
+  font-weight: bolder;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  padding-left: 20px;
+  display: none;
+}

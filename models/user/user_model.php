@@ -51,7 +51,7 @@ class UserModel extends Model {
     /**
      * function list_user($data)
      * @param array $data os dados vindo do formulario
-     * @return json  com os dados do usuario
+     * @return json com os dados do usuario
      * 
      * Autor: Eduardo Humberto 
      */
@@ -63,12 +63,14 @@ class UserModel extends Model {
                 WHERE u.user_nicename LIKE '%{$data['term']}%'
                 ORDER BY u.user_nicename";
         $items = $wpdb->get_results($query);
+
         foreach ($items as $item) {
             $altCompleteL[] = array(
                 'value' => $item->ID,
                 'label' => $item->user_nicename
             );
         }
+
         return json_encode($altCompleteL);
     }
 

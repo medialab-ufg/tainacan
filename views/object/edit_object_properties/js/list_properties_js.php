@@ -3,6 +3,7 @@
         var src = $('#src').val();
         edit_list_properties_term_insert_objects();
         var properties_autocomplete = edit_get_val($("#edit_properties_autocomplete").val());
+        $('#propertiesRootAdvancedSearch').html('')
         //autocomplete_edit_item_property_data(properties_autocomplete); 
     });
 
@@ -313,6 +314,7 @@
                     onClick: function (node, event) {
                         // Close menu on click
                          var key = node.data.key;
+                         console.log(key,key.search('moreoptions')<0&&key.search('alphabet')<0,tree,$("#socialdb_propertyterm_"+tree));
                         if(key.search('moreoptions')<0&&key.search('alphabet')<0){
                             delete_value(node.data.key);
                             $("#socialdb_propertyterm_"+tree).html('');
@@ -324,7 +326,7 @@
                     onCreate: function (node, span) {
                          $("#field_property_term_"+tree).dynatree("getRoot").visit(function(node){
                            delete_value(node.data.key); 
-                           if(categories.indexOf(node.data.key)>-1){
+                           if(categories && categories.indexOf(node.data.key)>-1){
                                 node.select();
                             }
                         });
