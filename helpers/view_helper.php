@@ -221,6 +221,14 @@ class ViewHelper {
             return 1;
         endif;
     }
+    
+    public function get_date_edit($value){
+        if(strpos($value, '-')!==false){
+             return explode('-', $value)[2].'/' .explode('-',$value)[1].'/' .explode('-',$value)[0];
+        }else{
+            return $value;
+        }
+    }
 
     public static function render_icon($icon, $ext = "svg", $alt="") {
         if ($alt == "") { $alt = __( ucfirst( $icon ), 'tainacan'); }

@@ -3,8 +3,8 @@
  * View Responsavel em mostrar as propriedades na hora de EDITAR do objeto, NAO UTILIZADA NOS EVENTOS
  */
 
-include_once ('js/validation_fixed_fields.php');
-include_once ('js/edit_list_properties_accordion_js.php');
+include_once (dirname(__FILE__).'/../js/validation_fixed_fields.php');
+include_once (dirname(__FILE__).'/js/edit_list_properties_accordion_js.php');
 include_once(dirname(__FILE__).'/../../../helpers/view_helper.php');
 include_once(dirname(__FILE__).'/../../../helpers/object/object_properties_widgets_helper.php');
 $view_helper = new ViewHelper();
@@ -181,7 +181,7 @@ if (isset($property_object)):
                 <div>
                      <?php for($i = 0; $i<$cardinality;$i++):   ?>
                         <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
-                             style="padding-bottom: 10px;margin-bottom: 30px;<?php echo ($i===0||(is_array($property['metas']['value'])&&$i<count($property['metas']['value']))) ? 'display:block': 'display:none'; ?>">
+                             style="padding-bottom: 10px;margin-bottom: 30px;<?php echo ($i===0||(trim($property['metas']['value'][$i])!=''&&is_array($property['metas']['value'])&&$i<count($property['metas']['value']))) ? 'display:block': 'display:none'; ?>">
                              <div class="col-md-11">
                         <?php if ($property['type'] == 'text') { ?>     
                                 <input type="text" 
@@ -247,7 +247,7 @@ if (isset($property_object)):
                                         style="margin-right: 5px;" 
                                         size="13" 
                                         class="input_date auto-save form_autocomplete_value_<?php echo $property['id']; ?>" 
-                                        value="<?php if ($property['metas']['value']) echo (isset($property['metas']['value'][$i])?$property['metas']['value'][$i]:''); ?>"
+                                        value="<?php if ($property['metas']['value']) echo (isset($property['metas']['value'][$i]) ? $view_helper->get_date_edit($property['metas']['value'][$i]) :''); ?>"
                                         type="text" 
                                         id="socialdb_property_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
                                         name="socialdb_property_<?php echo $property['id']; ?>[]">   
