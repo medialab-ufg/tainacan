@@ -35,7 +35,7 @@
                         </a>
                     </div>
                     <div id="data-advanced-configuration-object" style="display: none;">
-                        <?php $view_helper->getTargetProperties() ?>
+                        <?php $view_helper->commomFieldsProperties(true) ?>
                         <div class="form-group category-fit-column" style="display: inline-block; width: 59%">
                             <label for="property_term_required" style="display: block"><?php _e('Elements Quantity:','tainacan'); ?></label>
                             <input type="radio" name="socialdb_property_object_cardinality" id="socialdb_property_object_cardinality_1"  value="1">&nbsp;<?php _e('Unic value','tainacan') ?>

@@ -46,6 +46,7 @@ foreach( $view_helper->get_metadata_types() as $type => $label):
                             </div>  
                             <div id="data-advanced-configuration-<?php echo $type ?>" style="display: none;">
                                 <div class="metadata-common-fields">
+                                    <?php $view_helper->commomFieldsProperties() ?>
                                     <div id="default_field" class="create_form-group">
                                         <label for="socialdb_property_default_value"><?php _e('Property data default value','tainacan'); ?></label>
                                         <input type="text" class="form-control" id="socialdb_property_data_default_value" name="socialdb_property_default_value" placeholder="<?php _e('Property Data Default Value','tainacan'); ?>"><br>
