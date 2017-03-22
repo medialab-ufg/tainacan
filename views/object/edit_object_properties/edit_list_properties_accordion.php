@@ -254,8 +254,9 @@ if (isset($property_object)):
                             <?php }
                              // gancho para tipos de metadados de dados diferentes
                             else if(has_action('modificate_edit_item_properties_data')){
+                                $property['contador'] = $i;
+                                $property['operation'] = 'edit';
                                 do_action('modificate_edit_item_properties_data',$property);
-                                continue;
                             }else{ ?>
                                 <input type="text"  
                                        value="<?php if ($property['metas']['value']) echo (isset($property['metas']['value'][$i])?$property['metas']['value'][$i]:''); ?>" 
