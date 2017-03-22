@@ -43,7 +43,17 @@ if (isset($property_object)):
                     $object_properties_widgets_helper->generateValidationIcons($property);
                     ?>
             </h2>
-            <div  >
+            <div>
+                <div class="metadata-related" 
+                    style="border-style: solid;border-width: 1px;border-color: #ccc; padding-top: 10px;padding-bottom: 40px;padding-right: 10px;padding-left: 10px;">
+                    <h6><b><?php _e('Related items','tainacan')?></b></h6>
+                    <input type="text" 
+                           disabled="disabled"
+                           placeholder="<?php _e('No registers','tainacan') ?>"
+                           class="form-control" >
+                    <br>
+                    <button class="btn btn-primary btn-primary pull-right" ><?php _e('Add','tainacan') ?></button>
+                <!--
                 <?php 
                 // botao que leva a colecao relacionada
                     if (isset($property['metas']['collection_data'][0]->post_title)):  ?>
@@ -102,9 +112,18 @@ if (isset($property_object)):
                             else { ?>   
                             <option value=""><?php _e('No objects added in this collection', 'tainacan'); ?></option>
                             <?php } ?>       
-                </select>
-        </div>  
-    </div>        
+                </select-->
+                </div>
+                <div class="metadata-search" 
+                     style="border-style: solid;border-width: 1px;border-color: #ccc; padding-top: 10px;padding-bottom: 40px;padding-right: 10px;padding-left: 10px; float: left;width: 100%;">
+                    <?php $object_properties_widgets_helper->search_related_properties_to_search($property); ?>     
+                </div>
+                 <div id="metadata-result-<?php echo $property['id']; ?>" 
+                      style="border-style: solid;border-width: 1px;border-color: #ccc; padding-top: 10px;padding-bottom: 40px;padding-right: 10px;padding-left: 10px; float: left;width: 100%;">
+                          
+                 </div>
+            </div>        
+        </div>        
     <?php } ?>
     <input type="hidden" name="properties_object_ids" id='properties_object_ids' value="<?php echo implode(',', $ids); ?>">
 <?php endif; ?>

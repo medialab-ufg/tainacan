@@ -5,7 +5,35 @@
         var search_properties_autocomplete = search_get_val($("#search_properties_autocomplete").val());
         autocomplete_object_property_add(search_properties_autocomplete);
         
-        show_collection_licenses();
+         $('#property_object_search_submit_<?php echo $property['id'] ?>').submit(function (e) {
+            e.preventDefault();
+            show_modal_main();
+            $.ajax({
+                url: $('#src').val() + '/controllers/advanced_search/advanced_search_controller.php',
+                type: 'POST',
+                data: new FormData(this),
+                processData: false,
+                contentType: false
+            }).done(function (result) {
+                elem = jQuery.parseJSON(result);
+                hide_modal_main();
+                if (elem.not_found) {
+                    swal({
+                        title: '<?php _e("Attention!", 'tainacan') ?>',
+                        text: '<?php _e("No results found!", 'tainacan') ?>',
+                        type: "warning",
+                        cancelButtonText: '<?php _e("Cancel", 'tainacan') ?>',
+                        showCancelButton: true,
+                        confirmButtonClass: 'btn-success',
+                        closeOnConfirm: true,
+                        closeOnCancel: true
+                    });
+                } else {
+                    $('#metadata-result-<?php echo $property['id']; ?>').html(elem.page);
+                }
+            });
+            e.preventDefault();
+        });
         //# - inicializa os tooltips
         $('[data-toggle="tooltip"]').tooltip();
     });

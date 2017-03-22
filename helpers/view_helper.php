@@ -180,7 +180,7 @@ class ViewHelper {
 
     public function render_button_cardinality($property,$i) {
         if ($property['metas']['socialdb_property_data_cardinality'] && $property['metas']['socialdb_property_data_cardinality'] == 'n'):
-            ?>  
+            ?> 
                 <?php if($i>0): ?>
                 <div class="col-md-1">
                     <a style="cursor: pointer;" onclick="remove_container(<?php echo $property['id'] ?>,<?php echo $i ?>)" class="pull-right">
@@ -192,7 +192,7 @@ class ViewHelper {
                <button type="button" 
                        id="button_property_<?php echo $property['id']; ?>_<?php echo $i; ?>"
                        onclick="show_fields_metadata_cardinality(<?php echo $property['id'] ?>,<?php echo $i ?>)" 
-                       style="margin-top: 50px;<?php echo (is_array($property['metas']['value'])&&($i+1)<count($property['metas']['value']))? 'display:none':'' ?>" 
+                       style="margin-top: 50px;<?php echo (isset($property['metas']['value'])&&is_array($property['metas']['value'])&&($i+1)<count($property['metas']['value']))? 'display:none':'' ?>" 
                        class="btn btn-primary btn-lg btn-xs btn-block">
                     <span class="glyphicon glyphicon-plus"></span><?php _e('Add field', 'tainacan') ?>
                 </button>

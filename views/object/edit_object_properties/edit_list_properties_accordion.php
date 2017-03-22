@@ -2,8 +2,6 @@
 /*
  * View Responsavel em mostrar as propriedades na hora de EDITAR do objeto, NAO UTILIZADA NOS EVENTOS
  */
-
-include_once (dirname(__FILE__).'/../js/validation_fixed_fields.php');
 include_once (dirname(__FILE__).'/js/edit_list_properties_accordion_js.php');
 include_once(dirname(__FILE__).'/../../../helpers/view_helper.php');
 include_once(dirname(__FILE__).'/../../../helpers/object/object_properties_widgets_helper.php');
@@ -181,7 +179,7 @@ if (isset($property_object)):
                 <div>
                      <?php for($i = 0; $i<$cardinality;$i++):   ?>
                         <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
-                             style="padding-bottom: 10px;margin-bottom: 30px;<?php echo ($i===0||(trim($property['metas']['value'][$i])!=''&&is_array($property['metas']['value'])&&$i<count($property['metas']['value']))) ? 'display:block': 'display:none'; ?>">
+                             style="padding-bottom: 10px;margin-bottom: 30px;<?php echo ($i===0||(trim($property['metas']['value'][$i])!='--'&&is_array($property['metas']['value'])&&$i<count($property['metas']['value']))) ? 'display:block': 'display:none'; ?>">
                              <div class="col-md-11">
                         <?php if ($property['type'] == 'text') { ?>     
                                 <input type="text" 

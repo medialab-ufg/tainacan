@@ -650,4 +650,31 @@ class ObjectWidgetsHelper extends ViewHelper {
         </div>
         <?php
     }
+    
+    /**
+     * metodo que retorna o html
+     * 
+      * @param type $property
+     */
+    public function search_related_properties_to_search($property){
+        $propertyModel = new PropertyModel;
+        $property_data = [];
+        $property_object = [];
+        $property_term = [];
+        $properties = $property['metas']["socialdb_property_to_search_in"];
+        if(isset($properties) && $properties != ''){
+            $properties = explode(',', $properties);
+            foreach ($properties as $property_related) {
+                $property_related = $propertyModel->get_all_property($property_related, true);
+                if(isset($property_related['metas']['socialdb_property_data_widget'])): 
+                    $property_data[] = $property_related;
+                elseif(isset($property_related['metas']['socialdb_property_object_category_id'])): 
+                    $property_object[] = $property_related;
+                elseif(isset($property_related['metas']['socialdb_property_term_widget'])): 
+                    $property_term[] = $property_related;
+                endif; 
+            }
+        }
+        include dirname(__FILE__).'/../../views/advanced_search/search_property_object_metadata.php';
+    }
 }

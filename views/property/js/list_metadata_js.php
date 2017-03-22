@@ -562,6 +562,7 @@
                 var nome = elem.name;
                 var meta_help = elem.metas.socialdb_property_help;
                 var default_value = elem.metas.socialdb_property_default_value;
+                var locked = (elem.metas.socialdb_property_locked) ? elem.metas.socialdb_property_locked : false;
                 var operation = 'update_property_data';
                 var search_widget = $("#meta-item-" + id).attr('data-widget');
 
@@ -671,6 +672,12 @@
                 } else {
                     $(meta_modal + " .form_property_data #socialdb_property_data_visualization_public").prop('checked', true);
                     $(meta_modal + " .form_property_data #socialdb_property_data_visualization_restrict").removeAttr('checked');
+                }
+                
+                //se o campo esta travado para edicao
+                $(meta_modal +" .property_lock_field").removeAttr('checked');
+                if (locked) {
+                    $(meta_modal +" .property_lock_field").prop('checked', true);
                 }
                 // $( meta_modal + " h4.modal-title").text('<?php _e('Edit property', 'tainacan') ?> - ' +  current_widget );
                 $(meta_modal + " h4.modal-title").text('<?php _e('Edit property', 'tainacan') ?>');
@@ -1476,7 +1483,7 @@
         }).done(function (result) {
             elem = $.parseJSON(result);
             var visualization = (elem.metas.socialdb_property_visualization) ? elem.metas.socialdb_property_visualization : 'public';
-
+            var locked = (elem.metas.socialdb_property_locked) ? elem.metas.socialdb_property_locked : false;
             $('#socialdb_property_vinculate_category_exist').prop('checked', 'checked');
             $('#socialdb_property_vinculate_category_exist').trigger('click');
             $('#property_term_new_category').val('');
@@ -1546,6 +1553,11 @@
             } else {
                 $("#socialdb_property_term_visualization_public").prop('checked', true);
                 $("#socialdb_property_term_visualization_restrict").removeAttr('checked');
+            }
+            //se o campo esta travado para edicao
+            $("#meta-category .property_lock_field").removeAttr('checked');
+            if (locked) {
+                $("#meta-category .property_lock_field").prop('checked', true);
             }
 
             var term_root = elem.metas.socialdb_property_term_root;

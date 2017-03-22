@@ -545,7 +545,8 @@ class ObjectModel extends Model {
             }else if(is_array($value) && !empty(is_array($value))){
                 $date_sql = [];
                 foreach ($value as $date) {
-                      $date_sql[] = explode('/', $date)[2].'-' .explode('/',$date)[1].'-' .explode('/',$date)[0];
+                      if($date !== '')
+                            $date_sql[] = explode('/', $date)[2].'-' .explode('/',$date)[1].'-' .explode('/',$date)[0];
                 }
                 $value = $date_sql;
             }
