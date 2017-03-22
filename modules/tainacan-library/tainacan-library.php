@@ -124,7 +124,7 @@ function show_all_meta($collection_id)
 
     $all_marc_fields = get_all_marc_fields();
     $marc_mapping = get_marc_mapping($collection_id);
-
+    //print_r($marc_mapping);
     $marc_mapping_inverse = [];
     if($marc_mapping['father'] != false)
     {
@@ -163,7 +163,7 @@ function show_all_meta($collection_id)
             }
         }
     }else $marc_mapping_inverse = false;
-    
+
     ?>
         <div role="tabpanel" class="tab-pane" id="marc_tab">
             <form name="mapping_marc" method="post" id="mapping_marc">
@@ -701,7 +701,7 @@ function save_mapping_marc($data)
     $meta_ids = meta_ids($collection_id, false);
     $ids_from_father = [];
     $ids_from_son = [];
-
+    //print_r($data);
     foreach ($meta_ids as $index =>$setIds)
     {
         foreach ($setIds as $field)
@@ -741,7 +741,7 @@ function save_mapping_marc($data)
             $father_data_info[just_numbers($value)][$subfield] = $property_id;
         }else $son_data_info[just_numbers($value)][$subfield] = $property_id;
     }
-
+    //print_r($son_data_info);
     if(get_post_by_name(COLLECTION_MAPPING_MARC_FATHER, OBJECT, "socialdb_channel") == null)
     {
         //Cria pai
@@ -763,13 +763,15 @@ function save_mapping_marc($data)
         update_post_meta($postMappingId, MAPPING_MARC_TABLE, serialize($father_data_info));
 
         //Verifica se o filho existe
-        if(get_post_by_name(COLLECTION_MAPPING_MARC_FATHER, OBJECT, "socialdb_channel") == null)//Não existe, criar filho
+        if(get_post_by_name(COLLECTION_MAPPING_MARC_SON.$collection_id, OBJECT, "socialdb_channel") == null)//Não existe, criar filho
         {
+            //print "filho não existe";
             $mapping_id = $mappingModel->create_mapping(COLLECTION_MAPPING_MARC_SON.$collection_id, $collection_id);
             add_post_meta($collection_id, MAPPING_MARC_ID_SON, $mapping_id);
             add_post_meta($mapping_id, MAPPING_MARC_TABLE, serialize($son_data_info));
         }else//Filho já existe, só atualizar filho
         {
+            //print "filho já exite";
             $postMappingId = get_post_by_name(COLLECTION_MAPPING_MARC_SON.$collection_id, OBJECT ,'socialdb_channel')->ID;
             update_post_meta($postMappingId, MAPPING_MARC_TABLE, serialize($son_data_info));
         }
