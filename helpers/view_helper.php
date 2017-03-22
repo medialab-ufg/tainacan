@@ -221,6 +221,14 @@ class ViewHelper {
             return 1;
         endif;
     }
+    
+    public function get_date_edit($value){
+        if(strpos($value, '-')!==false){
+             return explode('-', $value)[2].'/' .explode('-',$value)[1].'/' .explode('-',$value)[0];
+        }else{
+            return $value;
+        }
+    }
 
     public static function render_icon($icon, $ext = "svg", $alt="") {
         if ($alt == "") { $alt = __( ucfirst( $icon ), 'tainacan'); }
@@ -434,17 +442,38 @@ class ViewHelper {
         <button onclick="backRoute($('#slug_collection').val());" id="btn_back_collection" class="btn btn-default pull-right"><?php _e('Back to collection','tainacan') ?></button>
         <?php
     }
-################################################################################    
+    
+    /**
+     * 
+     * @param type $show_target_properties
+     */
+    public function commomFieldsProperties($show_target_properties = false) {
+        if($show_target_properties)
+            $this->getTargetProperties();
+        ?>
+        <div  class="form-group" style="margin-top:15px;">
+            <label for="property_lock_field"><?php _e('Lock this field','tainacan'); ?></label><br>
+            <input type="checkbox" name="socialdb_event_property_lock_field" class="property_lock_field"  value="true">&nbsp;<?php _e('Lock this field','tainacan'); ?>
+        </div>
+        <?php
+    }
+######################### Propriedades filtro ##################################    
     /**
      * 
      */
     public function getTargetProperties() {
         $this->setJavascriptTragetProperties();
         ?>
-        <div class="form-group">
+        <div class="form-group" style="margin-top:15px;">
             <label for="property_object_required"><?php _e('Properties to use in search','tainacan'); ?></label>
-            <div id="properties_target" style="height: 200px;overflow-y: scroll;" ></div>
-            <input type="hidden" name="properties_target_value" id="properties_target_value">
+            <div id="properties_target" style="height: 100px;overflow-y: scroll;" >
+                <center><?php _e('No properties found','tainacan') ?>!</center>
+            </div>
+            <input type="hidden" name="socialdb_event_property_to_search_in" id="properties_to_search_in">
+        </div>
+        <div class="form-group">
+            <label for="property_avoid_items"><?php _e('Avoid selected items','tainacan'); ?></label><br>
+            <input type="checkbox" name="socialdb_event_property_avoid_items" class="property_avoid_items"  value="true">&nbsp;<?php _e('Search only no selected items','tainacan'); ?><br>
         </div>
         <?php
     }
@@ -455,7 +484,7 @@ class ViewHelper {
             function setTargetProperties(seletor){
                 $('#properties_target').html('');
                 if($(seletor).val()===''){
-                    
+                     $('#properties_target').html('<center><?php _e('No properties found','tainacan') ?>!</center>');
                 }else{
                     $.ajax({
                        type: "POST",
@@ -463,11 +492,36 @@ class ViewHelper {
                        data: { operation: 'setTargetProperties',categories:$(seletor).val() }
                    }).done(function(result) {
                        var json = JSON.parse(result);
-                       $.each(json.properties,function(index,property){
-                           console.log(property);
-                       })
+                       if(json.properties.length==0){
+                            $('#properties_target').html('<center><?php _e('No properties found','tainacan') ?>!</center>');
+                       }else{
+                            $.each(json.properties,function(index,property){
+                                var is_checked = '';
+                                console.log($('#properties_to_search_in').val().split(',').indexOf(property.id),$('#properties_to_search_in').val().split(','),property.id);
+                                if($('#properties_to_search_in').val().split(',').indexOf(property.id.toString())>=0){
+                                    is_checked = 'checked="checked"'
+                                }
+                                $('#properties_target').append('<input type="checkbox" '+is_checked+' value="'+property.id+'" onchange="setValuesTargetProperties()" class="target_values">&nbsp;'+property.name+' ('+property.type+')<br>')
+                            })
+                       }
                    });
                }
+            }
+            
+            /**
+            *
+            ** @returns {undefined}             */
+            function setValuesTargetProperties(){
+                var size = $('.target_values').length;
+                var values = [];
+                if(size>0){
+                    $.each($('.target_values'),function(index,value){
+                        if($(value).is(':checked')){
+                           values.push($(value).val());
+                        }
+                    });
+                }
+                $('#properties_to_search_in').val(values.join(','));
             }
         </script>
         <?php

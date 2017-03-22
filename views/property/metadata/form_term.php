@@ -108,6 +108,7 @@
                                 </a>
                                 <!--------- FIM: A categoria raiz do metadado -------------->
                                 <div id="data-advanced-configuration-term" style="display: none;">
+                                    <?php $view_helper->commomFieldsProperties() ?>
                                     <div class="create_form-group form-group">
                                         <label for="socialdb_property_help"><?php _e('Property term text helper','tainacan'); ?></label>
                                         <input type="text" class="form-control" id="socialdb_property_help" name="socialdb_property_help" />

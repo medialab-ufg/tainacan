@@ -496,6 +496,7 @@ class ObjectModel extends Model {
                     continue;
                 }
                 $dados = json_decode($property_model->edit_property(array('property_id' => $property_id)));
+                $data["socialdb_property_$property_id"] = $this->updateDateValues($dados,$data["socialdb_property_$property_id"]);
                 if ($dados->type && in_array($dados->type, ['stars', 'like', 'binary'])) {
                     add_post_meta($object_id, 'socialdb_property_' . $dados->id, 0);
                     continue;
@@ -535,6 +536,21 @@ class ObjectModel extends Model {
                 }
             }
         }
+    }
+    
+    public function updateDateValues($property,$value) {
+        if($property->type=='date'){
+            if(!is_array($value) &&$value !== ''){
+                 $value = explode('/', $value)[2].'-' .explode('/',$value)[1].'-' .explode('/',$value)[0];
+            }else if(is_array($value) && !empty(is_array($value))){
+                $date_sql = [];
+                foreach ($value as $date) {
+                      $date_sql[] = explode('/', $date)[2].'-' .explode('/',$date)[1].'-' .explode('/',$date)[0];
+                }
+                $value = $date_sql;
+            }
+        }
+        return $value;
     }
 
     /**
