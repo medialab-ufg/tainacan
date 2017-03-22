@@ -6,8 +6,12 @@
 define('MODULE_LIBRARY', 'tainacan-library');
 define('LIBRARY_CONTROLLERS', get_template_directory_uri() . '/modules/' . MODULE_LIBRARY );
 
-define("COLLECTION_MAPPING_MARC", "mappingMarc");
-define("MAPPING_MARC_ID", "socialdb_mapping_marc_id");
+define("COLLECTION_MAPPING_MARC_FATHER", "mappingMarcFather");
+define("COLLECTION_MAPPING_MARC_SON", "mappingMarcSon");
+
+define("MAPPING_MARC_ID_FATHER", "socialdb_mapping_marc_id_father");
+define("MAPPING_MARC_ID_SON", "socialdb_mapping_marc_id_son");
+
 define("MAPPING_MARC_TABLE", "socialdb_channel_marc_mapping_table");
 
 
@@ -117,31 +121,57 @@ add_action('add_show_all_meta', 'show_all_meta',10, 1);
 function show_all_meta($collection_id)
 {
     $all_properties_id = meta_ids($collection_id, false);
+
     $all_marc_fields = get_all_marc_fields();
     $marc_mapping = get_marc_mapping($collection_id);
 
     $marc_mapping_inverse = [];
-    if($marc_mapping != false)
+    if($marc_mapping['father'] != false)
     {
-        foreach($marc_mapping as $compound_num => $subfields)
+        foreach($marc_mapping['father'] as $compound_num => $subfields)
         {
             foreach ($subfields as $subfield => $prop_id)
             {
                 if($subfield != 'compound_id')
                 {
-                    $marc_mapping_inverse[$prop_id] = $compound_num." $".$subfield;
-                }else $marc_mapping_inverse[$prop_id] = $compound_num;
+                    if($subfield == '1')
+                    {
+                        $simbol = '#';
+                    }else $simbol = '$';
 
+                    $marc_mapping_inverse[$prop_id] = $compound_num." $simbol".$subfield;
+                }else $marc_mapping_inverse[$prop_id] = $compound_num;
+            }
+        }
+
+        if($marc_mapping['son'] != false)
+        {
+            foreach($marc_mapping['son'] as $compound_num => $subfields)
+            {
+                foreach ($subfields as $subfield => $prop_id)
+                {
+                    if($subfield != 'compound_id')
+                    {
+                        if($subfield == '1')
+                        {
+                            $simbol = '#';
+                        }else $simbol = '$';
+
+                        $marc_mapping_inverse[$prop_id] = $compound_num." $simbol".$subfield;
+                    }else $marc_mapping_inverse[$prop_id] = $compound_num;
+                }
             }
         }
     }else $marc_mapping_inverse = false;
-
+    
     ?>
         <div role="tabpanel" class="tab-pane" id="marc_tab">
             <form name="mapping_marc" method="post" id="mapping_marc">
                 <input type="hidden" name="collection_id" value="<?php echo $collection_id ?>">
                 <input type="hidden" name="operation" value="save_mapping_marc">
-            <?php foreach ($all_properties_id as $compound_name => $sub_properties) {?>
+            <?php
+            foreach($all_properties_id as $setProperties){
+            foreach ($setProperties as $compound_name => $sub_properties) {?>
                 <div class='form-group'>
                     <label class='col-md-6 col-sm-12 meta-title no-padding' name="<?= $compound_name?>" id="<?= $compound_name?>"> <?= $compound_name?> </label>
 
@@ -150,7 +180,7 @@ function show_all_meta($collection_id)
                             <?php
                                 foreach ($all_marc_fields as $field)
                                 {
-                                    if($marc_mapping_inverse != false && $marc_mapping_inverse[$sub_properties['compound_id']] == $field)
+                                    if($marc_mapping_inverse != false && strcmp($marc_mapping_inverse[$sub_properties['compound_id']], $field) == 0)
                                     {
                                         echo "<option name='".$field."' value='".$field."' selected>". $field ."</option>";
                                     }else
@@ -170,7 +200,7 @@ function show_all_meta($collection_id)
                                 <select name="<?= $id ?>" class='data form-control' id="<?= $name ?>">
                                     <?php
                                     foreach ($all_marc_fields as $field) {
-                                        if($marc_mapping_inverse != false && $marc_mapping_inverse[$id] == $field)
+                                        if($marc_mapping_inverse != false && strcmp($marc_mapping_inverse[$id], $field) == 0)
                                         {
                                             echo "<option name='".$field."' value='".$field."' selected>". $field ."</option>";
                                         } else {
@@ -183,7 +213,7 @@ function show_all_meta($collection_id)
                         </div>
                 <?php
                     }
-                } ?>
+                } }?>
                 </div>
             <?php } ?>
             <button type="submit" class="btn btn-primary btn-lg tainacan-blue-btn-bg pull-right" id="mapping_save" onclick="save_mapping_marc()"><?php _e("Save", "tainacan"); ?></button>
@@ -198,8 +228,6 @@ function show_all_meta($collection_id)
 
 function meta_ids($collection_id, $change_names_for_numbers)
 {
-    $sub_properties_id = [];
-
     $category_root_id = get_post_meta($collection_id, 'socialdb_collection_object_type', true);
 
     $root_category = get_post_meta($collection_id, 'socialdb_collection_object_type', true);
@@ -210,8 +238,14 @@ function meta_ids($collection_id, $change_names_for_numbers)
     $father_properties = get_term_meta($father_root_category_id, 'socialdb_category_property_id');
     $father_properties = array_unique($father_properties);
 
-    $all_properties = array_merge($properties, $father_properties);
+    $return['son'] = get_ids($properties, $change_names_for_numbers);
+    $return['father'] =  get_ids($father_properties, $change_names_for_numbers);
 
+    return $return;
+}
+
+function get_ids($all_properties, $change_names_for_numbers)
+{
     foreach ($all_properties as $property){
         $property_name = get_term_by('id',$property,'socialdb_property_type')->name;
         $sub_properties = get_term_meta($property, 'socialdb_property_compounds_properties_id', true);
@@ -664,34 +698,80 @@ function save_mapping_marc($data)
     $collection_id = $data['collection_id'];
     $mappingModel = new MappingModel();
 
-    $data_info = [];
+    $meta_ids = meta_ids($collection_id, false);
+    $ids_from_father = [];
+    $ids_from_son = [];
+
+    foreach ($meta_ids as $index =>$setIds)
+    {
+        foreach ($setIds as $field)
+        {
+            foreach ($field as $subfield_id)
+            {
+                if($index == "father")
+                {
+                    $ids_from_father[] = $subfield_id;
+                }
+                else $ids_from_son[] = $subfield_id;
+            }
+        }
+    }
+
+    $father_data_info = [];
+    $son_data_info = [];
     foreach ($data as $property_id => $value)
     {
         $subfield = just_letters($value);
         if($subfield == null)
         {
-            $subfield = 'compound_id';
+            if(strstr($value, "#1"))
+            {
+                $subfield = "1";
+                $value = str_replace("#1", "", $value);
+            }else if (strstr($value, "$2"))
+            {
+                $subfield = "2";
+                $value = str_replace("$2", "", $value);
+            }
+            else $subfield = 'compound_id';
         }
 
-        $data_info[just_numbers($value)][$subfield] = $property_id;
+        if(in_array($property_id, $ids_from_father))
+        {
+            $father_data_info[just_numbers($value)][$subfield] = $property_id;
+        }else $son_data_info[just_numbers($value)][$subfield] = $property_id;
     }
 
-    if(empty(get_post_meta($collection_id, MAPPING_MARC_ID, true)))
+    if(get_post_by_name(COLLECTION_MAPPING_MARC_FATHER, OBJECT, "socialdb_channel") == null)
     {
-        $mapping_id = $mappingModel->create_mapping(COLLECTION_MAPPING_MARC, $collection_id);
-        add_post_meta($collection_id, MAPPING_MARC_ID, $mapping_id);
-        add_post_meta($mapping_id, 'socialdb_channel_marc_mapping', serialize($data_info));
-        print "IF\n";
+        //Cria pai
+        //$father_id = get_post_meta($collection_id, 'socialdb_collection_parent', true);//Pega id da coleção pai
+        $mapping_id = $mappingModel->create_mapping(COLLECTION_MAPPING_MARC_FATHER, $collection_id);
+        add_post_meta($collection_id, MAPPING_MARC_ID_FATHER, $mapping_id);
+        add_post_meta($mapping_id, MAPPING_MARC_TABLE, serialize($father_data_info));
+
+        //Adicionar pai para todas as coleções
+
+        //Cria filho
+        $mapping_id = $mappingModel->create_mapping(COLLECTION_MAPPING_MARC_SON.$collection_id, $collection_id);
+        add_post_meta($collection_id, MAPPING_MARC_ID_SON, $mapping_id);
+        add_post_meta($mapping_id, MAPPING_MARC_TABLE, serialize($son_data_info));
     }else
     {
-        $output = OBJECT;
-        $postMappingId = get_post_by_name(COLLECTION_MAPPING_MARC, $output ,'socialdb_channel')->ID;
-        update_post_meta($postMappingId, MAPPING_MARC_TABLE, serialize($data_info));
-        print "collection_id: $collection_id";
-        $x = get_marc_mapping($collection_id);
-        if($x == false)
+        //Atualiza Pai
+        $postMappingId = get_post_by_name(COLLECTION_MAPPING_MARC_FATHER, OBJECT ,'socialdb_channel')->ID;
+        update_post_meta($postMappingId, MAPPING_MARC_TABLE, serialize($father_data_info));
+
+        //Verifica se o filho existe
+        if(get_post_by_name(COLLECTION_MAPPING_MARC_FATHER, OBJECT, "socialdb_channel") == null)//Não existe, criar filho
         {
-            print "False";
+            $mapping_id = $mappingModel->create_mapping(COLLECTION_MAPPING_MARC_SON.$collection_id, $collection_id);
+            add_post_meta($collection_id, MAPPING_MARC_ID_SON, $mapping_id);
+            add_post_meta($mapping_id, MAPPING_MARC_TABLE, serialize($son_data_info));
+        }else//Filho já existe, só atualizar filho
+        {
+            $postMappingId = get_post_by_name(COLLECTION_MAPPING_MARC_SON.$collection_id, OBJECT ,'socialdb_channel')->ID;
+            update_post_meta($postMappingId, MAPPING_MARC_TABLE, serialize($son_data_info));
         }
     }
 
@@ -701,7 +781,7 @@ function save_mapping_marc($data)
         $return['url'] = get_the_permalink($collection_id);;
     }
 
-    //return $return;
+    return $return;
 }
 
 function import_marc()
@@ -725,15 +805,34 @@ function import_marc()
 
 function get_marc_mapping($collection_id)
 {
-    $mapping_id = get_post_meta($collection_id, MAPPING_MARC_ID, true);
-
-    if($mapping_id)
+    $father_mapping_id = get_post_meta($collection_id, MAPPING_MARC_ID_FATHER, true);
+    if(!$father_mapping_id)
     {
-        $mapping = get_post_meta($mapping_id, MAPPING_MARC_TABLE, true);
-        return unserialize($mapping);
+        $father_mapping_id = get_post_by_name(COLLECTION_MAPPING_MARC_FATHER, OBJECT, "socialdb_channel")->ID;
+    }
+
+    $son_mapping_id = get_post_meta($collection_id, MAPPING_MARC_ID_SON, true);
+    $return = [];
+    
+    if($father_mapping_id)
+    {
+        $father_mapping = get_post_meta($father_mapping_id, MAPPING_MARC_TABLE, true);
+        $return['father'] = unserialize($father_mapping);
+        if($son_mapping_id)
+        {
+            $son_mapping = get_post_meta($son_mapping_id, MAPPING_MARC_TABLE, true);
+            $return['son'] = unserialize($son_mapping);
+        }
+        else
+        {
+            $return['son'] = false;
+        }
+        
+        return $return;
     }else
     {
-        return false;
+        $return['father'] = false;
+        $return['son'] = false;
     }
 }
 
