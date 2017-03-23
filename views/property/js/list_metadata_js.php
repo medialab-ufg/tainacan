@@ -549,7 +549,7 @@
             data: {collection_id: $("#collection_id").val(), operation: 'edit_property_data', property_id: id}
         }).done(function (result) {
             elem = jQuery.parseJSON(result);
-
+            <?php do_action('edit_property_metadata'); ?>
             if (elem) {
                 var current_filters = $("#filters-accordion li"),
                         filters_ids = [],
@@ -1293,22 +1293,22 @@
             } else {
                 $("#property_object_required_true").prop('checked', true);
             }
-            
+
             //se o campo esta travado para edicao
             $("#meta-relationship .property_lock_field").removeAttr('checked');
             if (locked) {
                 $("#meta-relationship .property_lock_field").prop('checked', true);
             }
-            
+
             //se deve evitar itens ja selecionados
             $("#meta-relationship .property_avoid_items").removeAttr('checked');
             if (avoid_items) {
                 $("#meta-relationship .property_avoid_items").prop('checked', true);
             }
-            
+
             //propriedades usadas na busca
-            if(search.length > 0){
-                  $('#properties_to_search_in').val(search.join(','));
+            if (search.length > 0) {
+                $('#properties_to_search_in').val(search.join(','));
             }
 
             if (visualization == 'restrict') {

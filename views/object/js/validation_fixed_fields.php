@@ -13,17 +13,17 @@
             if(val!==''){
                 $('#core_validation_title').val('true');
                 validate_all_fields_fixed();
-                set_field_valid('title', 'core_validation_title');
+                set_field_valid_fixed('title', 'core_validation_title');
             }
             
             $('#object_name').keyup(function(){
                 if($(this).val()==''){
                     $('#core_validation_title').val('false');
-                    set_field_valid('title', 'core_validation_title');
+                    set_field_valid_fixed('title', 'core_validation_title');
                     validate_all_fields_fixed();
                 }else{
                     $('#core_validation_title').val('true');
-                    set_field_valid('title', 'core_validation_title');
+                    set_field_valid_fixed('title', 'core_validation_title');
                     validate_all_fields_fixed(); 
                 }
             });
@@ -41,17 +41,17 @@
             if(val!==''){
                 $('#core_validation_content').val('true');
                 validate_all_fields_fixed();
-                set_field_valid('content', 'core_validation_content');
+                set_field_valid_fixed('content', 'core_validation_content');
             }
             editor.on('key', function() {
                var result = editor.getData();
                if(result==''){
                     $('#core_validation_content').val('false');
-                    set_field_valid('content', 'core_validation_content');
+                    set_field_valid_fixed('content', 'core_validation_content');
                     validate_all_fields_fixed();
                 }else{
                     $('#core_validation_content').val('true');
-                    set_field_valid('content', 'core_validation_content');
+                    set_field_valid_fixed('content', 'core_validation_content');
                     validate_all_fields(); 
                 }
             });
@@ -63,16 +63,16 @@
             if(count>0){
                 $('#core_validation_attachments').val('true');
                 validate_all_fields_fixed();
-                set_field_valid('attachments', 'core_validation_attachments');
+                set_field_valid_fixed('attachments', 'core_validation_attachments');
             }
             
             if(count==0){
                  $('#core_validation_attachments').val('false');
-                 set_field_valid('attachments', 'core_validation_attachments');
+                 set_field_valid_fixed('attachments', 'core_validation_attachments');
                  validate_all_fields_fixed();
              }else{
                  $('#core_validation_attachments').val('true');
-                 set_field_valid('attachments', 'core_validation_attachments');
+                 set_field_valid_fixed('attachments', 'core_validation_attachments');
                  validate_all_fields_fixed(); 
              }
         }
@@ -84,17 +84,17 @@
             if(val!==''){
                 $('#core_validation_description').val('true');
                 validate_all_fields_fixed();
-                set_field_valid('description', 'core_validation_description');
+                set_field_valid_fixed('description', 'core_validation_description');
             }
             
             $('#object_description_example').keyup(function(){
                 if($(this).val()==''){
                     $('#core_validation_description').val('false');
-                    set_field_valid('description', 'core_validation_description');
+                    set_field_valid_fixed('description', 'core_validation_description');
                     validate_all_fields_fixed();
                 }else{
                     $('#core_validation_description').val('true');
-                    set_field_valid('description', 'core_validation_description');
+                    set_field_valid_fixed('description', 'core_validation_description');
                     validate_all_fields_fixed(); 
                 }
             });
@@ -107,17 +107,17 @@
             if(val!==''){
                 $('#core_validation_source').val('true');
                 validate_all_fields_fixed();
-                set_field_valid('source', 'core_validation_source');
+                set_field_valid_fixed('source', 'core_validation_source');
             }
             
             $('#object_source').keyup(function(){
                 if($(this).val()==''){
                     $('#core_validation_source').val('false');
-                    set_field_valid('source', 'core_validation_source');
+                    set_field_valid_fixed('source', 'core_validation_source');
                     validate_all_fields_fixed();
                 }else{
                     $('#core_validation_source').val('true');
-                    set_field_valid('source', 'core_validation_source');
+                    set_field_valid_fixed('source', 'core_validation_source');
                     validate_all_fields_fixed(); 
                 }
             });
@@ -130,17 +130,17 @@
             if(val!==''){
                 $('#core_validation_tags').val('true');
                 validate_all_fields_fixed();
-                set_field_valid('tags', 'core_validation_tags');
+                set_field_valid_fixed('tags', 'core_validation_tags');
             }
             
             $('#object_tags').keyup(function(){
                 if($(this).val()==''){
                     $('#core_validation_tags').val('false');
-                    set_field_valid('tags', 'core_validation_tags');
+                    set_field_valid_fixed('tags', 'core_validation_tags');
                     validate_all_fields_fixed();
                 }else{
                     $('#core_validation_tags').val('true');
-                    set_field_valid('tags', 'core_validation_tags');
+                    set_field_valid_fixed('tags', 'core_validation_tags');
                     validate_all_fields_fixed(); 
                 }
             });
@@ -153,16 +153,16 @@
             if(val!==''){
                 $('#core_validation_thumbnail').val('true');
                 validate_all_fields();
-                set_field_valid('thumbnail', 'core_validation_thumbnail');
+                set_field_valid_fixed('thumbnail', 'core_validation_thumbnail');
             }
             $('#object_thumbnail').change(function(){
                 if($(this).val()==''){
                     $('#core_validation_thumbnail').val('false');
-                    set_field_valid('thumbnail', 'core_validation_thumbnail');
+                    set_field_valid_fixed('thumbnail', 'core_validation_thumbnail');
                     validate_all_fields_fixed();
                 }else{
                     $('#core_validation_thumbnail').val('true');
-                    set_field_valid('thumbnail', 'core_validation_thumbnail');
+                    set_field_valid_fixed('thumbnail', 'core_validation_thumbnail');
                     validate_all_fields_fixed(); 
                 }
             });
@@ -183,5 +183,22 @@
             $('#submit_container').hide();
             $('#submit_container_message').show();
         }
+    }
+    
+     function set_field_valid_fixed(id,seletor){
+        if($('#'+seletor).val()==='false'){
+            $('#core_validation_'+id).val('false');
+            $('#ok_field_'+id).hide();
+            $('#required_field_'+id).show();
+        }else{
+            $('#core_validation_'+id).val('true');
+            $('#ok_field_'+id).show();
+            $('#required_field_'+id).hide();
+            if(!$.isNumeric(id) && $('#fixed_id_'+id).length > 0){
+                var id =  $('#fixed_id_'+id).val();
+            }
+            $('#meta-item-'+id+' h2').css('background-color','#fffff');
+        }
+        validate_all_fields_fixed();
     }
 </script>
