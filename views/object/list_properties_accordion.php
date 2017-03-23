@@ -47,11 +47,24 @@ if (isset($property_object)):
                 <div class="metadata-related" 
                     style="border-style: solid;border-width: 1px;border-color: #ccc; padding-top: 10px;padding-bottom: 40px;padding-right: 10px;padding-left: 10px;">
                     <h6><b><?php _e('Related items','tainacan')?></b></h6>
-                    <input type="text" 
-                           disabled="disabled"
-                           placeholder="<?php _e('No registers','tainacan') ?>"
-                           class="form-control" >
-                    <br>
+                    <span id="no_results_property_<?php echo $property['id']; ?>">
+                        <input type="text" 
+                               disabled="disabled"
+                               placeholder="<?php _e('No registers','tainacan') ?>"
+                               class="form-control" >
+                    </span>
+                    <span id="results_property_<?php echo $property['id']; ?>">
+                        <ul>
+                            
+                        </ul>
+                    </span>
+                    <select 
+                        id="property_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>_add" 
+                        multiple 
+                        style="display: none;" 
+                        name="socialdb_property_<?php echo $property['id']; ?>[]" 
+                        >   
+                    </select>
                     <button class="btn btn-primary btn-primary pull-right" ><?php _e('Add','tainacan') ?></button>
                 <!--
                 <?php 
@@ -103,20 +116,17 @@ if (isset($property_object)):
                        />  
                 <select onclick="clear_select_object_property(this,<?php echo $property['id']; ?>,<?php echo $object_id; ?>);" 
                         id="property_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>_add" 
-                        multiple class="chosen-selected2 form-control auto-save" 
-                        style="height: auto;" 
+                        multiple 
+                        style="display: none;" 
                         name="socialdb_property_<?php echo $property['id']; ?>[]" 
-                        >
-                        <?php 
-                            if (!empty($property['metas']['objects'])) {  } 
-                            else { ?>   
-                            <option value=""><?php _e('No objects added in this collection', 'tainacan'); ?></option>
-                            <?php } ?>       
-                </select-->
+                        >   
+                    </select>
+                    <br>
+                    <button class="btn btn-primary btn-primary  btn-lg pull-right" ><?php _e('Add','tainacan') ?></button-->
                 </div>
                 <div class="metadata-search" 
                      style="border-style: solid;border-width: 1px;border-color: #ccc; padding-top: 10px;padding-bottom: 40px;padding-right: 10px;padding-left: 10px; float: left;width: 100%;">
-                    <?php $object_properties_widgets_helper->search_related_properties_to_search($property); ?>     
+                    <?php $object_properties_widgets_helper->search_related_properties_to_search($property,$collection_id); ?>     
                 </div>
                  <div id="metadata-result-<?php echo $property['id']; ?>" 
                       style="border-style: solid;border-width: 1px;border-color: #ccc; padding-top: 10px;padding-bottom: 40px;padding-right: 10px;padding-left: 10px; float: left;width: 100%;">

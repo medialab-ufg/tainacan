@@ -656,7 +656,7 @@ class ObjectWidgetsHelper extends ViewHelper {
      * 
       * @param type $property
      */
-    public function search_related_properties_to_search($property){
+    public function search_related_properties_to_search($property,$collection_id){
         $propertyModel = new PropertyModel;
         $property_data = [];
         $property_object = [];

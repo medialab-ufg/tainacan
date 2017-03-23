@@ -1,12 +1,13 @@
  <form id="property_object_search_submit_<?php echo $property['id'] ?>">
      <input type="hidden" name="property_id" value="<?php echo $property['id'] ?>">
-     <input type="hidden" name="collection_id" value="<?php echo $collection_id ?>">
+     <input type="hidden" name="collection_id" value="0">
+     <input type="hidden" name="categories" value="<?php echo $property['metas']['socialdb_property_object_category_id'] ?>">
      <input type="hidden" name="properties_id" value="<?php echo implode(',', $properties) ?>">
         <?php 
         if (isset($property_data)||isset($property_term)||isset($property_object)): 
         include_once(dirname(__FILE__).'/../../helpers/view_helper.php');
         include_once(dirname(__FILE__).'/../../helpers/advanced_search/advanced_search_helper.php');
-        include_once ('js/search_property_object_metadata_js.php');
+        include('js/search_property_object_metadata_js.php');
         $advanced_search_helper = new AdvancedSearchHelper();
         $properties_terms_radio = [];
         $properties_terms_tree = [];
@@ -257,27 +258,6 @@
         <?php if(isset($property_compounds)): ?>
             <?php $advanced_search_helper->list_properties_compounds_search($property_compounds) ?>
         <?php endif; ?>
-        <div id="list_licenses_items" class="form-group col-md-12 no-padding" >
-             <label class="col-md-12 no-padding" for="object_tags">
-                        <?php echo __('Licenses','tainacan'); ?>
-                        <a  
-                                       style="margin-right: 20px;" >
-                                        <span title="<?php echo __('Available Licenses','tainacan') ?>" 
-                                              data-toggle="tooltip" 
-                                              data-placement="bottom" 
-                                              class="glyphicon glyphicon-question-sign"></span>
-                        </a>
-            </label>
-            <div class="col-md-8 no-padding" id="show_form_licenses">
-                       
-            </div>
-            <div class="col-md-4 no-padding padding-left-space">
-                <select class="form-control" id="object_license_operation" name="object_license_operation">
-                    <option value="3"><?php _e('Contains','tainacan'); ?></option>
-                    <option value="4"><?php _e('Does not Contain','tainacan'); ?></option>
-                </select>
-           </div>   
-        </div>
         <input type="hidden" name="search_properties_autocomplete" id='search_properties_autocomplete' value="<?php echo implode(',', $properties_autocomplete); ?>">
         <input type="hidden" name="properties_terms_radio" id='search_properties_terms_radio' value="<?php echo implode(',', $properties_terms_radio); ?>">
         <input type="hidden" name="properties_terms_tree" id='search_properties_terms_tree' value="<?php echo implode(',', $properties_terms_tree); ?>">
@@ -291,7 +271,7 @@
 <?php endif; ?>   
             <input type="hidden" name="operation" value="search_items_property_object">        
         <div class="col-md-12 no-padding" style="margin-top: 15px;">
-                    <button type="button" onclick="reboot_form()" class="btn btn-lg btn-default pull-left"><?php _e('Clear search', 'tainacan') ?></button>
-                    <button type="submit" onclick="clear_general_field()" class="btn btn-lg btn-success pull-right"><?php _e('Find', 'tainacan') ?></button>
+                    <button type="button" class="btn btn-lg btn-default pull-left"><?php _e('Clear search', 'tainacan') ?></button>
+                    <button type="submit"  class="btn btn-lg btn-success pull-right"><?php _e('Find', 'tainacan') ?></button>
         </div>
      </form>            

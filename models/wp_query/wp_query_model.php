@@ -1196,7 +1196,10 @@ class WPQueryModel extends Model {
      */
     public function advanced_searched_filter($data) {
         $recover_data = $this->clean($data);
-        if(isset($data['advanced_search_collection'])
+        if($data['collection_id']=='0'){
+            $recover_data['collection_id'] = 0; 
+            $recover_data['category_root_id'] = explode(',', $data['categories']);
+        }else if(isset($data['advanced_search_collection'])
                 &&get_option('collection_root_id')==$data['advanced_search_collection']){
             $recover_data['collection_id'] = 'all_items';
             $recover_data['category_root_id']='all_items';
@@ -1317,6 +1320,12 @@ class WPQueryModel extends Model {
                     }
                 }elseif($dados->type=='date'){//se for propriedade dedadso do tipo texto
                     if(isset($data["socialdb_property_$property_id"])&&!empty(trim($data["socialdb_property_$property_id"]))){ // se nao estivervazio
+                        if (strpos( $data["socialdb_property_$property_id"],'/')!==false) {
+                            $value = $data["socialdb_property_$property_id"];
+                            $date_sql = explode('/', $value)[2].'-' .explode('/', $value)[1].'-' .explode('/', $value)[0];
+                            $data["socialdb_property_$property_id"] = $date_sql;
+                        }
+                        
                         if($data["socialdb_property_{$property_id}_operation"]=='1'){ // se a opercao for totalmente igual
                              $array_data = ['value'=>$data["socialdb_property_$property_id"],'operation'=>'='];
                         }elseif($data["socialdb_property_{$property_id}_operation"]=='2'){ // totalmente diferente

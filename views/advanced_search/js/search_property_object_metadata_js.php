@@ -5,9 +5,9 @@
         var search_properties_autocomplete = search_get_val($("#search_properties_autocomplete").val());
         autocomplete_object_property_add(search_properties_autocomplete);
         
-         $('#property_object_search_submit_<?php echo $property['id'] ?>').submit(function (e) {
+        $('#property_object_search_submit_<?php echo $property['id'] ?>').submit(function (e) {
             e.preventDefault();
-            show_modal_main();
+            //show_modal_main();
             $.ajax({
                 url: $('#src').val() + '/controllers/advanced_search/advanced_search_controller.php',
                 type: 'POST',

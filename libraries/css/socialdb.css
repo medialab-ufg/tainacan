@@ -656,4 +656,40 @@ table.sorting-table tbody tr:not(.sorting-row) td {opacity: 0.2;}
     z-index: 9999999999;
  }
  
+ /********/
+ .selected-items-property-object{
+    margin-left: -40px;
+    font-size: 12pt;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+ }
  
+ .metadata-related{
+     border-style: solid;
+     border-width: 1px;
+     border-color: #ccc; 
+     padding-top: 10px;
+     padding-bottom: 40px;
+     padding-right: 10px;
+     padding-left: 10px;
+ }
+ 
+ .metadata-search{
+     border-style: solid;
+     border-width: 1px;
+     border-color: #ccc; 
+     padding-top: 10px;
+     padding-bottom: 40px;
+     padding-right: 10px;
+     padding-left: 10px;
+ } 
+ .metadata-matching{
+     border-style: solid;
+     border-width: 1px;
+     border-color: #ccc; 
+     padding-top: 10px;
+     padding-bottom: 40px;
+     padding-right: 10px;
+     padding-left: 10px;
+ }  
