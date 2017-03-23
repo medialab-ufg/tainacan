@@ -31,9 +31,10 @@ class EventObjectDeleteModel extends EventModel {
      */
     public function verify_event($data,$automatically_verified = false) {
        $actual_state = get_post_meta($data['event_id'], 'socialdb_event_confirmed',true);
-       if($actual_state!='confirmed'&&$automatically_verified||(isset($data['socialdb_event_confirmed'])&&$data['socialdb_event_confirmed']=='true')){// se o evento foi confirmado automaticamente ou pelos moderadores
+       // se o evento foi confirmado automaticamente ou pelos moderadores
+       if($actual_state!='confirmed'&&$automatically_verified||(isset($data['socialdb_event_confirmed'])&&$data['socialdb_event_confirmed']=='true')){
            $data = $this->update_post_status(get_post_meta($data['event_id'], 'socialdb_event_object_item_id',true),$data,$automatically_verified);    
-       }elseif($actual_state!='confirmed'){
+       } elseif($actual_state!='confirmed'){
            $this->set_approval_metas($data['event_id'], $data['socialdb_event_observation'], $automatically_verified);
            $this->update_event_state('not_confirmed', $data['event_id']);
            $data['msg'] = __('The event was successful NOT confirmed','tainacan');
@@ -60,11 +61,11 @@ class EventObjectDeleteModel extends EventModel {
         $collection_id = get_post_meta($data['event_id'],'socialdb_event_collection_id',true);
         // verifico se o item nao eh apenas vinculado
         $array =  get_post_meta($collection_id, 'socialdb_collection_vinculated_object');
-        if($array && is_array($array) && in_array($object_id, $array)){
+        if($array && is_array($array) && in_array($object_id, $array)) {
             delete_post_meta($collection_id, 'socialdb_collection_vinculated_object',$object_id);
             $result = wp_remove_object_terms( $object_id,(int) $this->get_category_root_of($collection_id),'socialdb_category_type');
             $value = $object_id;
-        }else{
+        } else {
             // Update the post
             $object = array(
                 'ID' => $object_id,
@@ -72,6 +73,10 @@ class EventObjectDeleteModel extends EventModel {
             );
             // Update the post into the database
             $value = wp_update_post($object);
+
+            if(has_filter('tainacan_delete_item_perm')) {
+                return apply_filters('tainacan_delete_item_perm', $value, $collection_id);
+            }
         }
         //verificando se todo
         if ($value > 0) {

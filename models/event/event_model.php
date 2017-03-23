@@ -403,6 +403,8 @@ abstract class EventModel extends Model {
     }
 
     /**
+     * metodo que verifica se acao pode ser executada
+     *
      * funcao que verifica se o evento deve ser verificado automaticamente
      * @param int $collection_id O id da colecao que sera feito o evento
      * @param string $action A acao que sera executada
@@ -412,6 +414,10 @@ abstract class EventModel extends Model {
      * @author Eduardo Humberto 
      */
     public function is_automatically_verify_event($collection_id, $action, $user_id, $event_id = 0) {
+        if (has_filter('tainacan_alter_permission_actions')) {
+            return apply_filters('tainacan_alter_permission_actions',$action, $collection_id);
+        }
+
         $is_repository_action = in_array($action, ['socialdb_collection_permission_create_collection', 'socialdb_collection_permission_delete_collection']);
         if ($collection_id == get_option('collection_root_id') && $is_repository_action) {
             $options = get_option('socialdb_repository_permissions');
@@ -419,7 +425,8 @@ abstract class EventModel extends Model {
         } else {
             $permission = get_post_meta($collection_id, $action, true);
         }
-// se for permissoes do repositorio
+
+        // se for permissoes do repositorio
         if ($is_repository_action) {
             if (!isset($permission) || $permission == 'approval') {
                 if (CollectionModel::is_moderator($collection_id, $user_id) || current_user_can('manage_options')) {
