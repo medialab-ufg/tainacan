@@ -57,14 +57,17 @@ function save_mapping_marc(){
 
         $('#modalImportLoading').modal('show');
         $('#progressbarmapas').remove();
-
+        var formData = new FormData(this);
         $.ajax({
             url: $('#src').val() + '/controllers/collection/collection_controller.php',
             type: 'POST',
-            data: new FormData(this),
+            data: formData,
             processData: false,
             contentType: false,
             success: function (r) {
+                /*for(var pair of formData.entries()) {
+                    console.log(pair[0]+ ', '+ pair[1]);
+                }*/
                 var elem = JSON.parse(r);
                 if(elem.result)
                 {

@@ -124,9 +124,9 @@ function show_all_meta($collection_id)
 
     $all_marc_fields = get_all_marc_fields();
     $marc_mapping = get_marc_mapping($collection_id);
-    //print_r($marc_mapping);
+
     $marc_mapping_inverse = [];
-    if($marc_mapping['father'] != false)
+    if(is_array($marc_mapping['father']))
     {
         foreach($marc_mapping['father'] as $compound_num => $subfields)
         {
@@ -174,13 +174,13 @@ function show_all_meta($collection_id)
             foreach ($setProperties as $compound_name => $sub_properties) {?>
                 <div class='form-group'>
                     <label class='col-md-6 col-sm-12 meta-title no-padding' name="<?= $compound_name?>" id="<?= $compound_name?>"> <?= $compound_name?> </label>
-
+                    <!--SelectBox Compound-->
                     <div class='col-md-6 col-sm-12 meta-value'>
-                        <select name="<?= $sub_properties['compound_id'] ?>" class='data form-control' id="<?= $compound_name ?>">
+                        <select name="<?php echo $sub_properties['compound_id'].' '.$sub_properties['compound_id'] ?>" class='data form-control' id="<?= $compound_name ?>">
                             <?php
                                 foreach ($all_marc_fields as $field)
                                 {
-                                    if($marc_mapping_inverse != false && strcmp($marc_mapping_inverse[$sub_properties['compound_id']], $field) == 0)
+                                    if($marc_mapping_inverse != false && strcmp($marc_mapping_inverse[$sub_properties['compound_id'].'_'.$sub_properties['compound_id']], $field) == 0)
                                     {
                                         echo "<option name='".$field."' value='".$field."' selected>". $field ."</option>";
                                     }else
@@ -196,11 +196,12 @@ function show_all_meta($collection_id)
                     if($name != 'compound_id'){ ?>
                         <div class="col-md-12 no-padding" style="margin: 10px 0 10px 0">
                             <label class='col-md-6 col-sm-12 meta-title no-padding' style="text-indent: 5%; padding-bottom: 15px; border-bottom: 1px solid #e8e8e8"> <?= $name?> </label>
+                            <!--SelectBox SubField-->
                             <div class='col-md-6 col-sm-12 meta-value'>
-                                <select name="<?= $id ?>" class='data form-control' id="<?= $name ?>">
+                                <select name="<?php echo $id.' '.$sub_properties['compound_id'] ?>" class='data form-control' id="<?= $name ?>">
                                     <?php
                                     foreach ($all_marc_fields as $field) {
-                                        if($marc_mapping_inverse != false && strcmp($marc_mapping_inverse[$id], $field) == 0)
+                                        if($marc_mapping_inverse != false && strcmp($marc_mapping_inverse[$id."_".$sub_properties['compound_id']], $field) == 0)
                                         {
                                             echo "<option name='".$field."' value='".$field."' selected>". $field ."</option>";
                                         } else {
@@ -365,7 +366,6 @@ function get_all_marc_fields()
     $marc_fiels[] = '130 $d';
     $marc_fiels[] = '130 $f';
     $marc_fiels[] = '130 $g';
-    $marc_fiels[] = '130 $k';
     $marc_fiels[] = '130 $k';
     $marc_fiels[] = '130 $l';
     $marc_fiels[] = '130 $p';
@@ -701,7 +701,7 @@ function save_mapping_marc($data)
     $meta_ids = meta_ids($collection_id, false);
     $ids_from_father = [];
     $ids_from_son = [];
-    //print_r($data);
+
     foreach ($meta_ids as $index =>$setIds)
     {
         foreach ($setIds as $field)
@@ -739,9 +739,12 @@ function save_mapping_marc($data)
         if(in_array($property_id, $ids_from_father))
         {
             $father_data_info[just_numbers($value)][$subfield] = $property_id;
-        }else $son_data_info[just_numbers($value)][$subfield] = $property_id;
+        }else
+        {
+            $son_data_info[just_numbers($value)][$subfield] = $property_id;
+        }
     }
-    //print_r($son_data_info);
+
     if(get_post_by_name(COLLECTION_MAPPING_MARC_FATHER, OBJECT, "socialdb_channel") == null)
     {
         //Cria pai
@@ -749,8 +752,6 @@ function save_mapping_marc($data)
         $mapping_id = $mappingModel->create_mapping(COLLECTION_MAPPING_MARC_FATHER, $collection_id);
         add_post_meta($collection_id, MAPPING_MARC_ID_FATHER, $mapping_id);
         add_post_meta($mapping_id, MAPPING_MARC_TABLE, serialize($father_data_info));
-
-        //Adicionar pai para todas as coleções
 
         //Cria filho
         $mapping_id = $mappingModel->create_mapping(COLLECTION_MAPPING_MARC_SON.$collection_id, $collection_id);
@@ -765,13 +766,11 @@ function save_mapping_marc($data)
         //Verifica se o filho existe
         if(get_post_by_name(COLLECTION_MAPPING_MARC_SON.$collection_id, OBJECT, "socialdb_channel") == null)//Não existe, criar filho
         {
-            //print "filho não existe";
             $mapping_id = $mappingModel->create_mapping(COLLECTION_MAPPING_MARC_SON.$collection_id, $collection_id);
             add_post_meta($collection_id, MAPPING_MARC_ID_SON, $mapping_id);
             add_post_meta($mapping_id, MAPPING_MARC_TABLE, serialize($son_data_info));
         }else//Filho já existe, só atualizar filho
         {
-            //print "filho já exite";
             $postMappingId = get_post_by_name(COLLECTION_MAPPING_MARC_SON.$collection_id, OBJECT ,'socialdb_channel')->ID;
             update_post_meta($postMappingId, MAPPING_MARC_TABLE, serialize($son_data_info));
         }
