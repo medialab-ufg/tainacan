@@ -38,7 +38,7 @@ function send_ajax($marc)
             elem = JSON.parse(elem);
             if(elem.result)
             {
-                window.location = elem.url;
+                //window.location = elem.url;
             }
         }
     });

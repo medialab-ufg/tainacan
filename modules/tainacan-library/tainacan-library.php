@@ -134,10 +134,11 @@ function show_all_meta($collection_id)
             {
                 if($subfield != 'compound_id')
                 {
-                    if($subfield == '1')
+                    if($subfield == '#1' || $subfield == '#2' || $subfield == '$1' || $subfield == '$2')
                     {
-                        $simbol = '#';
-                    }else $simbol = '$';
+                        $simbol = '';
+                    }
+                    else $simbol = '$';
 
                     $marc_mapping_inverse[$prop_id] = $compound_num." $simbol".$subfield;
                 }else $marc_mapping_inverse[$prop_id] = $compound_num;
@@ -152,10 +153,11 @@ function show_all_meta($collection_id)
                 {
                     if($subfield != 'compound_id')
                     {
-                        if($subfield == '1')
+                        if($subfield == '#1' || $subfield == '#2' || $subfield == '$1' || $subfield == '$2')
                         {
-                            $simbol = '#';
-                        }else $simbol = '$';
+                            $simbol = '';
+                        }
+                        else $simbol = '$';
 
                         $marc_mapping_inverse[$prop_id] = $compound_num." $simbol".$subfield;
                     }else $marc_mapping_inverse[$prop_id] = $compound_num;
@@ -636,6 +638,17 @@ function get_all_marc_fields()
     $marc_fiels[] = '710 $n';
     $marc_fiels[] = '710 $t';
 
+    $marc_fiels[] = '711';
+    $marc_fiels[] = '711 #1';
+    $marc_fiels[] = '711 $a';
+    $marc_fiels[] = '711 $c';
+    $marc_fiels[] = '711 $d';
+    $marc_fiels[] = '711 $e';
+    $marc_fiels[] = '711 $g';
+    $marc_fiels[] = '711 $k';
+    $marc_fiels[] = '711 $n';
+    $marc_fiels[] = '711 $t';
+
     $marc_fiels[] = '730';
     $marc_fiels[] = '730 #1';
     $marc_fiels[] = '730 #2';
@@ -726,17 +739,26 @@ function save_mapping_marc($data)
         {
             if(strstr($value, "#1"))
             {
-                $subfield = "1";
+                $subfield = "#1";
                 $value = str_replace("#1", "", $value);
-            }else if (strstr($value, "$2"))
+            }else if(strstr($value, "#2"))
             {
-                $subfield = "2";
+                $subfield = "#2";
+                $value = str_replace("#2", "", $value);
+            }else if (strstr($value, "$1"))
+            {
+                $subfield = "$1";
+                $value = str_replace("$1", "", $value);
+            }
+            else if (strstr($value, "$2"))
+            {
+                $subfield = "$2";
                 $value = str_replace("$2", "", $value);
             }
             else $subfield = 'compound_id';
         }
 
-        if(in_array($property_id, $ids_from_father))
+        if(in_array(explode("_", $property_id)[0], $ids_from_father))
         {
             $father_data_info[just_numbers($value)][$subfield] = $property_id;
         }else
@@ -807,6 +829,7 @@ function import_marc()
 function get_marc_mapping($collection_id)
 {
     $father_mapping_id = get_post_meta($collection_id, MAPPING_MARC_ID_FATHER, true);
+
     if(!$father_mapping_id)
     {
         $father_mapping_id = get_post_by_name(COLLECTION_MAPPING_MARC_FATHER, OBJECT, "socialdb_channel")->ID;
@@ -819,6 +842,7 @@ function get_marc_mapping($collection_id)
     {
         $father_mapping = get_post_meta($father_mapping_id, MAPPING_MARC_TABLE, true);
         $return['father'] = unserialize($father_mapping);
+
         if($son_mapping_id)
         {
             $son_mapping = get_post_meta($son_mapping_id, MAPPING_MARC_TABLE, true);
@@ -864,8 +888,10 @@ function treat_lines($lines)
 
         if(strlen($field) > 0)
         {
-            $array[$field]['1'] = $select_box_state[0];
-            $array[$field]['2'] = $select_box_state[1];
+            if($select_box_state[0] != '_')
+                $array[$field]['1'] = $select_box_state[0];
+            if($select_box_state[1] != '_')
+                $array[$field]['2'] = $select_box_state[1];
         }
 
         $line = remove_first_occurence($select_box_state."|", $line);
@@ -902,9 +928,7 @@ function remove_first_occurence($to_be_removed, $string)
 
 function add_material($collection_id, $property_list)
 {
-    $return = [];
-    $properties_id = [];
-    $data['object_name'] = 'Teste6';
+    $data['object_name'] = 'Teste8';
     $collection_import_model = new CollectionImportModel();
     $user_id = get_current_user_id();
     $post = array(
@@ -924,391 +948,57 @@ function add_material($collection_id, $property_list)
     $collection_import_model->set_common_field_values($data['ID'], 'title',$data['object_name']);
     $collection_import_model->set_common_field_values($data['ID'], 'description', $data['object_description']);
 
-
-    //Propriedades relacionadas a aquele individuo
-    $root_category = get_post_meta($collection_id, 'socialdb_collection_object_type', true);
-    $properties = get_term_meta($root_category,'socialdb_category_property_id');
-    $properties = array_unique($properties);
-
-    if($properties && is_array($properties)){
-
-        foreach ($properties as $property){
-            $property_name = get_term_by('id',$property,'socialdb_property_type')->name;
-            $sub_properties = get_term_meta($property, 'socialdb_property_compounds_properties_id', true);
-
-            if($sub_properties != null)
-            {
-                $sub_properties = explode(",", $sub_properties);
-                //$return[just_numbers($property_name)] = $sub_properties;
-
-                foreach ($sub_properties as $index => $value)
-                {
-                    $pn = get_term_by('id',$value,'socialdb_property_type')->name;
-                    $sub_properties_name[$pn] = $value;
-                }
-
-                $return[just_numbers($property_name)] = $sub_properties_name;
-                $properties_id[just_numbers($property_name)] = $property;
-            }
-        }
-    }
-
-    /* Pega metadados da coleção PAI*/
-    $father_root_category_id = get_term_by("id", $category_root_id, "socialdb_category_type")->parent;
-    $father_properties = get_term_meta($father_root_category_id, 'socialdb_category_property_id');
-    $father_properties = array_unique($father_properties);
-
-    if($father_properties && is_array($father_properties))
-    {
-        foreach($father_properties as $father_property)
-        {
-            $father_property_name = get_term_by('id',$father_property,'socialdb_property_type')->name;
-            $father_sub_properties = get_term_meta($father_property, 'socialdb_property_compounds_properties_id', true);
-
-            if($father_sub_properties != null)
-            {
-                $father_sub_properties = explode(",", $father_sub_properties);
-                //$return[just_numbers($father_property_name)] = $father_sub_properties;
-
-                foreach ($father_sub_properties as $index => $value)
-                {
-                    $pn = get_term_by('id',$value,'socialdb_property_type')->name;
-                    $father_sub_properties_name[$pn] = $value;
-                }
-
-                $return[just_numbers($father_property_name)] = $father_sub_properties_name;
-
-                $properties_id[just_numbers($father_property_name)] = $father_property;
-            }
-        }
-    }
-
-     /*!!!!!!Pega metadados da coleção PAI */
+    $marc_mapping = get_marc_mapping($collection_id);
 
     foreach($property_list as $field => $sub_fields)
     {
         $inserted_ids = [];
+        $compound_id = get_id_marc_mapping($marc_mapping, $field, "compound_id");
         switch($field)
         {
             case '013':
                 foreach($sub_fields as $sub_field => $value)
                 {
-                    switch ($sub_field)
-                    {
-                        case 'a':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Número'], $value);
-                            break;
-                        case 'b':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['País'], $value);
-                            break;
-                        case 'c':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Tipo'], $value);
-                            break;
-                        case 'd':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Data'], $value);
-                            break;
-                        case 'e':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Estado da patente'], $value);
-                            break;
-                        case 'f':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Parte de um documento'], $value);
-                            break;
-
-                    }
+                    $sub_field_id = get_id_marc_mapping($marc_mapping, $field, $sub_field);
+                    $inserted_ids[] = parse_save($data['ID'], $compound_id, $sub_field_id, $value);
                 }
                 break;
             case '020':
-                $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Número do ISBN'], $sub_fields['a']);
+                $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "a");
+                $inserted_ids[] = parse_save($data['ID'], $compound_id, $sub_field_id, $sub_fields['a']);
                 break;
             case '022':
-                $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Número do ISSN'], $sub_fields['a']);
+                $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "a");
+                $inserted_ids[] = parse_save($data['ID'], $compound_id, $sub_field_id, $sub_fields['a']);
                 break;
             case '029':
-                $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Número do ISNM'], $sub_fields['a']);
+                $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "a");
+                $inserted_ids[] = parse_save($data['ID'], $compound_id, $sub_field_id, $sub_fields['a']);
                 break;
-            case '040':
+            case '856':
                 foreach($sub_fields as $sub_field => $value)
                 {
-                    switch ($sub_field)
-                    {
-                        case 'a':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Código da agência catalogadora'], $value);
-                            break;
-                        case 'b':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Língua da catalogação'], $value);
-                            break;
-                    }
-                }
-                break;
-            case '041':
-                foreach($sub_fields as $sub_field => $value)
-                {
-                    switch ($sub_field)
-                    {
-                        case '1':
-                            $term_meta = get_term_meta($return[$field]['Indicação de tradução'] ,'socialdb_property_term_root', true);
-                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
-                            if($value == '0')
-                            {
-                                $category_root_id =  $term_children[0];
-                            }else $category_root_id = $term_children[1];
-
-                            wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type', true);
-                            $inserted_ids[] = $category_root_id.'_cat';
-
-                            break;
-                        case 'a':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Código do idioma do texto'], $value);
-                            break;
-                        case 'b':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Código do idioma do sumário ou resumo'], $value);
-                            break;
-                        case 'h':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Código do idioma do documento original'], $value);
-                            break;
-                    }
-                }
-                break;
-            case '043':
-                $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Código de área geográfica'], $sub_fields['a']);
-                break;
-            case '045':
-                foreach($sub_fields as $sub_field => $value)
-                {
-                    switch ($sub_field)
-                    {
-                        case '1':
-                            $term_meta = get_term_meta($return[$field]['Tipo do período cronológico'] ,'socialdb_property_term_root', true);
-                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
-
-                            switch ($value)
-                            {
-                                case '0':
-                                    $category_root_id =  $term_children[3];
-                                    break;
-                                case '1':
-                                    $category_root_id =  $term_children[2];
-                                    break;
-                                case '2':
-                                    $category_root_id =  $term_children[2];
-                                    break;
-                            }
-
-                            wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type', true);
-                            $inserted_ids[] = $category_root_id.'_cat';
-
-                            break;
-                        case 'a':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Código do período de tempo'], $value);
-                            break;
-                        case 'b':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Período de tempo formatado de 9999 a.C em diante'], $value);
-                            break;
-                        case 'c':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Período de tempo formatado anterior a 9999 a.C.'], $value);
-                            break;
-                    }
-                }
-                break;
-            case '080':
-                foreach($sub_fields as $sub_field => $value)
-                {
-                    switch ($sub_field)
-                    {
-                        case '2':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Número de edição da CDU'], $value);
-                            break;
-                        case 'a':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Número de Classificação'], $value);
-                            break;
-                    }
-                }
-                break;
-            case '082':
-                foreach($sub_fields as $sub_field => $value)
-                {
-                    switch ($sub_field)
-                    {
-                        case '2':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Número de edição da CDD'], $value);
-                            break;
-                        case 'a':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Número de Classificação'], $value);
-                            break;
-                    }
-                }
-                break;
-            case '090':
-                foreach($sub_fields as $sub_field => $value)
-                {
-                    switch ($sub_field)
-                    {
-                        case 'a':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Classificação'], $value);
-                            break;
-                        case 'b':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Código do autor'], $value);
-                            break;
-                        case 'c':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Edição - volume'], $value);
-                            break;
-                    }
-                }
-                break;
-            case '095':
-                $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Área do conhecimento'], $sub_fields['a']);
-                break;
-            case '100':
-                foreach($sub_fields as $sub_field => $value)
-                {
-                    switch ($sub_field)
-                    {
-                        case '1':
-                            $term_meta = get_term_meta($return[$field]['Forma de entrada'] ,'socialdb_property_term_root', true);
-                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
-
-                            switch ($value)
-                            {
-                                case '0':
-                                    $category_root_id =  $term_children[1];
-                                    break;
-                                case '1':
-                                    $category_root_id =  $term_children[3];
-                                    break;
-                                case '2':
-                                    $category_root_id =  $term_children[2];
-                                    break;
-                                case '3':
-                                    $category_root_id =  $term_children[0];
-                                    break;
-                            }
-
-                            wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type', true);
-                            $inserted_ids[] = $category_root_id.'_cat';
-
-                            break;
-                        case 'a':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Sobrenome e/ou prenome do autor'], $value);
-                            break;
-                        case 'b':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Numeração que segue o prenome'], $value);
-                            break;
-                        case 'c':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Título e outras palavras associadas ao nome'], $value);
-                            break;
-                        case 'd':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Datas associadas ao nome'], $value);
-                            break;
-                        case 'q':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Forma completa do nome'], $value);
-                            break;
-                    }
-                }
-                break;
-            case '110':
-                foreach($sub_fields as $sub_field => $value)
-                {
-                    switch ($sub_field)
-                    {
-                        case '1':
-                            $term_meta = get_term_meta($return[$field]['Forma de entrada'] ,'socialdb_property_term_root', true);
-                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
-
-                            switch ($value)
-                            {
-                                case '0':
-                                    $category_root_id =  $term_children[1];
-                                    break;
-                                case '1':
-                                    $category_root_id =  $term_children[0];
-                                    break;
-                                case '2':
-                                    $category_root_id =  $term_children[2];
-                                    break;
-                            }
-
-                            wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type', true);
-                            $inserted_ids[] = $category_root_id.'_cat';
-
-                            break;
-                        case 'a':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Nome da entidade ou do lugar'], $value);
-                            break;
-                        case 'b':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Unidades subordinadas'], $value);
-                            break;
-                        case 'c':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Local de realização do evento'], $value);
-                            break;
-                        case 'd':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Data da realização do evento'], $value);
-                            break;
-                        case 'l':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Língua do texto'], $value);
-                            break;
-                        case 'n':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Número da parte - seção da obra - ordem do evento'], $value);
-                            break;
-                    }
-                }
-                break;
-            case '111':
-                foreach($sub_fields as $sub_field => $value)
-                {
-                    switch ($sub_field)
-                    {
-                        case '1':
-                            $term_meta = get_term_meta($return[$field]['Forma de entrada*'] ,'socialdb_property_term_root', true);
-                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
-
-                            switch ($value)
-                            {
-                                case '0':
-                                    $category_root_id =  $term_children[1];
-                                    break;
-                                case '1':
-                                    $category_root_id =  $term_children[0];
-                                    break;
-                                case '2':
-                                    $category_root_id =  $term_children[2];
-                                    break;
-                            }
-
-                            wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type', true);
-                            $inserted_ids[] = $category_root_id.'_cat';
-
-                            break;
-                        case 'a':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Nome do evento'], $value);
-                            break;
-                        case 'c':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Local de realização do evento'], $value);
-                            break;
-                        case 'd':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Data da realização do evento'], $value);
-                            break;
-                        case 'e':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Nome de subunidades do evento'], $value);
-                            break;
-                        case 'g':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Informações adicionais'], $value);
-                            break;
-                        case 'k':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Subcabeçalhos'], $value);
-                            break;
-                        case 'n':
-                            $inserted_ids[] = parse_save($data['ID'], $properties_id[$field], $return[$field]['Número de ordem do evento'], $value);
-                            break;
-                    }
+                    $sub_field_id = get_id_marc_mapping($marc_mapping, $field, $sub_field);
+                    $inserted_ids[] = parse_save($data['ID'], $compound_id, $sub_field_id, $value);
                 }
                 break;
 
         }
-
-        update_post_meta($data['ID'], 'socialdb_property_' . $properties_id[$field] . '_0', implode(',', $inserted_ids));
+        print_r($inserted_ids);
+        update_post_meta($data['ID'], 'socialdb_property_' . $compound_id . '_0', implode(',', $inserted_ids));
     }
 
     return true;
+}
+
+function get_id_marc_mapping($marc_mapping, $field, $subfield)
+{
+    if($val = explode("_", $marc_mapping['father'][$field][$subfield])[0])
+    {
+        $compound_id = $val;
+    }else $compound_id = explode("_", $marc_mapping['son'][$field][$subfield])[0];
+
+    return $compound_id;
 }
 
 function parse_save($object_id, $compound_id, $property_id, $value)
