@@ -956,35 +956,525 @@ function add_material($collection_id, $property_list)
         $compound_id = get_id_marc_mapping($marc_mapping, $field, "compound_id");
         switch($field)
         {
-            case '013':
+            case '013' || '40' || '80' || '82' || '90' || '250' || '258' || '260' || '300' || '310' || '321' || '340' || '343' ||'856' || '520' ||
+                  '521' || '020' || '22' || '29' || '43' || '95' || '256' || '257' || '255' || '306' || '500' || '501' || '502' || '504' || '505' || '515' ||
+                  '525' || '530' || '534' || '550':
                 foreach($sub_fields as $sub_field => $value)
                 {
                     $sub_field_id = get_id_marc_mapping($marc_mapping, $field, $sub_field);
                     $inserted_ids[] = parse_save($data['ID'], $compound_id, $sub_field_id, $value);
                 }
                 break;
-            case '020':
-                $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "a");
-                $inserted_ids[] = parse_save($data['ID'], $compound_id, $sub_field_id, $sub_fields['a']);
-                break;
-            case '022':
-                $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "a");
-                $inserted_ids[] = parse_save($data['ID'], $compound_id, $sub_field_id, $sub_fields['a']);
-                break;
-            case '029':
-                $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "a");
-                $inserted_ids[] = parse_save($data['ID'], $compound_id, $sub_field_id, $sub_fields['a']);
-                break;
-            case '856':
+            case '041':
                 foreach($sub_fields as $sub_field => $value)
                 {
                     $sub_field_id = get_id_marc_mapping($marc_mapping, $field, $sub_field);
-                    $inserted_ids[] = parse_save($data['ID'], $compound_id, $sub_field_id, $value);
+                    switch ($sub_field)
+                    {
+                        case '1':
+                            //Indicação de tradução
+                            $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "#".$sub_field);
+                            $term_meta = get_term_meta($sub_field_id ,'socialdb_property_term_root', true);
+                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
+                            if($value == '0')
+                            {
+                                $category_root_id =  $term_children[0];
+                            }else $category_root_id = $term_children[1];
+
+                            wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type', true);
+                            $inserted_ids[] = $category_root_id.'_cat';
+                            break;
+                        default:
+                            $inserted_ids[] = parse_save($data['ID'], $compound_id, $sub_field_id, $value);
+                            break;
+                    }
+                }
+                break;
+            case '045':
+                foreach($sub_fields as $sub_field => $value)
+                {
+                    $sub_field_id = get_id_marc_mapping($marc_mapping, $field, $sub_field);
+                    switch ($sub_field)
+                    {
+                        case '1':
+                            //Tipo do período cronológico
+                            $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "#".$sub_field);
+                            $term_meta = get_term_meta($sub_field_id ,'socialdb_property_term_root', true);
+                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
+
+                            switch ($value)
+                            {
+                                case '0':
+                                    $category_root_id =  $term_children[3];
+                                    break;
+                                case '1':
+                                    $category_root_id =  $term_children[2];
+                                    break;
+                                case '2':
+                                    $category_root_id =  $term_children[2];
+                                    break;
+                            }
+
+                            wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type', true);
+                            $inserted_ids[] = $category_root_id.'_cat';
+
+                            break;
+                        default:
+                            $inserted_ids[] = parse_save($data['ID'], $compound_id, $sub_field_id, $value);
+                            break;
+                    }
+                }
+                break;
+            case '100':
+                foreach($sub_fields as $sub_field => $value)
+                {
+                    $sub_field_id = get_id_marc_mapping($marc_mapping, $field, $sub_field);
+                    switch ($sub_field)
+                    {
+                        case '1':
+                            //Forma de entrada: sobrenome simples ou composto
+                            $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "#".$sub_field);
+                            $term_meta = get_term_meta($sub_field_id ,'socialdb_property_term_root', true);
+                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
+
+                            switch ($value)
+                            {
+                                case '0':
+                                    $category_root_id =  $term_children[1];
+                                    break;
+                                case '1':
+                                    $category_root_id =  $term_children[3];
+                                    break;
+                                case '2':
+                                    $category_root_id =  $term_children[2];
+                                    break;
+                                case '3':
+                                    $category_root_id =  $term_children[0];
+                                    break;
+                            }
+
+                            wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type', true);
+                            $inserted_ids[] = $category_root_id.'_cat';
+
+                            break;
+                        default:
+                            $inserted_ids[] = parse_save($data['ID'], $compound_id, $sub_field_id, $value);
+                            break;
+                    }
+                }
+                break;
+            case '110' || '111':
+                foreach($sub_fields as $sub_field => $value)
+                {
+                    $sub_field_id = get_id_marc_mapping($marc_mapping, $field, $sub_field);
+                    switch ($sub_field)
+                    {
+                        case '1':
+                            //Forma de entrada: nome invertido
+                            $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "#".$sub_field);
+                            $term_meta = get_term_meta($sub_field_id ,'socialdb_property_term_root', true);
+                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
+
+                            switch ($value)
+                            {
+                                case '0':
+                                    $category_root_id =  $term_children[1];
+                                    break;
+                                case '1':
+                                    $category_root_id =  $term_children[0];
+                                    break;
+                                case '2':
+                                    $category_root_id =  $term_children[2];
+                                    break;
+                            }
+
+                            wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type', true);
+                            $inserted_ids[] = $category_root_id.'_cat';
+
+                            break;
+                        default:
+                            $inserted_ids[] = parse_save($data['ID'], $compound_id, $sub_field_id, $value);
+                            break;
+                    }
+                }
+                break;
+            case '130':
+                foreach($sub_fields as $sub_field => $value)
+                {
+                    $sub_field_id = get_id_marc_mapping($marc_mapping, $field, $sub_field);
+                    switch ($sub_field)
+                    {
+                        //Número de caracteres a desprezar
+                        case '1':
+                            $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "#".$sub_field);
+                            $term_meta = get_term_meta($sub_field_id ,'socialdb_property_term_root', true);
+                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
+
+                            if($value > 0)
+                            {
+                                $category_root_id =  $term_children[$value-1];
+                            }else
+                            {
+                                $category_root_id = $term_children[sizeof($term_children)-1];
+                            }
+
+                            wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type', true);
+                            $inserted_ids[] = $category_root_id.'_cat';
+
+                            break;
+                        default:
+                            $inserted_ids[] = parse_save($data['ID'], $compound_id, $sub_field_id, $value);
+                            break;
+                    }
+                }
+                break;
+            case '210':
+                foreach($sub_fields as $sub_field => $value)
+                {
+                    $sub_field_id = get_id_marc_mapping($marc_mapping, $field, $sub_field);
+                    switch ($sub_field)
+                    {
+                        //Entrada secundária de título
+                        case '1':
+                            $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "#".$sub_field);
+                            $term_meta = get_term_meta($sub_field_id ,'socialdb_property_term_root', true);
+                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
+
+                            switch ($value)
+                            {
+                                case '0':
+                                    $category_root_id =  $term_children[2];
+                                    break;
+                                case '1':
+                                    $category_root_id =  $term_children[1];
+                                    break;
+                            }
+
+                            wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type', true);
+                            $inserted_ids[] = $category_root_id.'_cat';
+
+                            break;
+                        //Tipo de Título
+                        case '2':
+                            $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "#".$sub_field);
+                            $term_meta = get_term_meta($sub_field_id ,'socialdb_property_term_root', true);
+                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
+
+                            switch ($value)
+                            {
+                                case '0':
+                                    $category_root_id =  $term_children[1];
+                                    break;
+                                default:
+                                    $category_root_id =  $term_children[2];
+                                    break;
+                            }
+
+                            wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type', true);
+                            $inserted_ids[] = $category_root_id.'_cat';
+
+                            break;
+                        default:
+                            $inserted_ids[] = parse_save($data['ID'], $compound_id, $sub_field_id, $value);
+                            break;
+                    }
+                }
+                break;
+            case '240' || '243' || '245':
+                foreach($sub_fields as $sub_field => $value)
+                {
+                    $sub_field_id = get_id_marc_mapping($marc_mapping, $field, $sub_field);
+                    switch ($sub_field)
+                    {
+                        //Gera entrada secundária na ficha
+                        case '1':
+                            $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "#".$sub_field);
+                            $term_meta = get_term_meta($sub_field_id ,'socialdb_property_term_root', true);
+                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
+
+                            switch ($value)
+                            {
+                                case '0':
+                                    $category_root_id =  $term_children[2];
+                                    break;
+                                case '1':
+                                    $category_root_id =  $term_children[1];
+                                    break;
+                            }
+
+                            wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type', true);
+                            $inserted_ids[] = $category_root_id.'_cat';
+
+                            break;
+                        //Número de caracteres a desprezar
+                        case '2':
+                            $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "#".$sub_field);
+                            $term_meta = get_term_meta($sub_field_id ,'socialdb_property_term_root', true);
+                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
+
+                            if($value > 0)
+                            {
+                                $category_root_id =  $term_children[$value-1];
+                            }else
+                            {
+                                $category_root_id = $term_children[sizeof($term_children)-1];
+                            }
+
+                            wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type', true);
+                            $inserted_ids[] = $category_root_id.'_cat';
+
+                            break;
+                        default:
+                            $inserted_ids[] = parse_save($data['ID'], $compound_id, $sub_field_id, $value);
+                            break;
+                    }
+                }
+                break;
+            case '246':
+                foreach($sub_fields as $sub_field => $value)
+                {
+                    $sub_field_id = get_id_marc_mapping($marc_mapping, $field, $sub_field);
+                    switch ($sub_field)
+                    {
+                        //Controle de nota/entrada secundária de título
+                        case '1':
+                            $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "#".$sub_field);
+                            $term_meta = get_term_meta($sub_field_id ,'socialdb_property_term_root', true);
+                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
+
+                            switch ($value)
+                            {
+                                case '3':
+                                    $category_root_id =  $term_children[1];
+                                    break;
+                                case '4':
+                                    $category_root_id =  $term_children[0];
+                                    break;
+                                case '5':
+                                    $category_root_id =  $term_children[2];
+                                    break;
+                                case '6':
+                                    $category_root_id =  $term_children[3];
+                                    break;
+                            }
+
+                            wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type', true);
+                            $inserted_ids[] = $category_root_id.'_cat';
+
+                            break;
+                        //Tipo de título: título lombada
+                        case '2':
+                            $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "#".$sub_field);
+                            $term_meta = get_term_meta($sub_field_id ,'socialdb_property_term_root', true);
+                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
+
+                            switch ($value)
+                            {
+                                case '0':
+                                    $category_root_id =  $term_children[4];
+                                    break;
+                                case '1':
+                                    $category_root_id =  $term_children[11];
+                                    break;
+                                case '2':
+                                    $category_root_id =  $term_children[10];
+                                    break;
+                                case '3':
+                                    $category_root_id =  $term_children[3];
+                                    break;
+                                case '4':
+                                    $category_root_id =  $term_children[7];
+                                    break;
+                                case '5':
+                                    $category_root_id =  $term_children[5];
+                                    break;
+                                case '6':
+                                    $category_root_id =  $term_children[9];
+                                    break;
+                                case '7':
+                                    $category_root_id =  $term_children[8];
+                                    break;
+                                case '8':
+                                    $category_root_id =  $term_children[3];
+                                    break;
+                            }
+
+                            wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type', true);
+                            $inserted_ids[] = $category_root_id.'_cat';
+
+                            break;
+                        default:
+                            $inserted_ids[] = parse_save($data['ID'], $compound_id, $sub_field_id, $value);
+                            break;
+                    }
+                }
+                break;
+            case '342':
+                foreach($sub_fields as $sub_field => $value)
+                {
+                    $sub_field_id = get_id_marc_mapping($marc_mapping, $field, $sub_field);
+                    switch ($sub_field)
+                    {
+                        //Dimensões de referência geospacial
+                        case '1':
+                            $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "#".$sub_field);
+                            $term_meta = get_term_meta($sub_field_id ,'socialdb_property_term_root', true);
+                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
+
+                            switch ($value)
+                            {
+                                case '0':
+                                    $category_root_id =  $term_children[1];
+                                    break;
+                                case '1':
+                                    $category_root_id =  $term_children[2];
+                                    break;
+                            }
+
+                            wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type', true);
+                            $inserted_ids[] = $category_root_id.'_cat';
+
+                            break;
+                        //Dimensões de referência geospacial
+                        case '2':
+                            $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "#".$sub_field);
+                            $term_meta = get_term_meta($sub_field_id ,'socialdb_property_term_root', true);
+                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
+
+                            switch ($value)
+                            {
+                                case '0':
+                                    $category_root_id =  $term_children[2];
+                                    break;
+                                case '1':
+                                    $category_root_id =  $term_children[7];
+                                    break;
+                                case '2':
+                                    $category_root_id =  $term_children[8];
+                                    break;
+                                case '3':
+                                    $category_root_id =  $term_children[4];
+                                    break;
+                                case '4':
+                                    $category_root_id =  $term_children[3];
+                                    break;
+                                case '5':
+                                    $category_root_id =  $term_children[5];
+                                    break;
+                                case '6':
+                                    $category_root_id =  $term_children[1];
+                                    break;
+                                case '7':
+                                    $category_root_id =  $term_children[0];
+                                    break;
+                                case '8':
+                                    $category_root_id =  $term_children[6];
+                                    break;
+                            }
+
+                            wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type', true);
+                            $inserted_ids[] = $category_root_id.'_cat';
+
+                            break;
+                        default:
+                            $inserted_ids[] = parse_save($data['ID'], $compound_id, $sub_field_id, $value);
+                            break;
+                    }
+                }
+                break;
+            case '362':
+                foreach($sub_fields as $sub_field => $value)
+                {
+                    $sub_field_id = get_id_marc_mapping($marc_mapping, $field, $sub_field);
+                    switch ($sub_field) {
+                        case '1':
+                            //Formato da data
+                            $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "#" . $sub_field);
+                            $term_meta = get_term_meta($sub_field_id, 'socialdb_property_term_root', true);
+                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
+
+                            switch ($value) {
+                                case '0':
+                                    $category_root_id = $term_children[3];
+                                    break;
+                                case '1':
+                                    $category_root_id = $term_children[2];
+                                    break;
+                            }
+
+                            wp_set_object_terms($data['ID'], array((int)$category_root_id), 'socialdb_category_type', true);
+                            $inserted_ids[] = $category_root_id . '_cat';
+
+                            break;
+                        default:
+                            $inserted_ids[] = parse_save($data['ID'], $compound_id, $sub_field_id, $value);
+                            break;
+                    }
+                }
+                break;
+            case '490':
+                foreach($sub_fields as $sub_field => $value)
+                {
+                    $sub_field_id = get_id_marc_mapping($marc_mapping, $field, $sub_field);
+                    switch ($sub_field) {
+                        case '1':
+                            //Política de desdobramento de série
+                            $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "#" . $sub_field);
+                            $term_meta = get_term_meta($sub_field_id, 'socialdb_property_term_root', true);
+                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
+
+                            switch ($value) {
+                                case '0':
+                                    $category_root_id = $term_children[3];
+                                    break;
+                                case '1':
+                                    $category_root_id = $term_children[2];
+                                    break;
+                            }
+
+                            wp_set_object_terms($data['ID'], array((int)$category_root_id), 'socialdb_category_type', true);
+                            $inserted_ids[] = $category_root_id . '_cat';
+
+                            break;
+                        default:
+                            $inserted_ids[] = parse_save($data['ID'], $compound_id, $sub_field_id, $value);
+                            break;
+                    }
+                }
+                break;
+            case '555':
+                foreach($sub_fields as $sub_field => $value)
+                {
+                    $sub_field_id = get_id_marc_mapping($marc_mapping, $field, $sub_field);
+                    switch ($sub_field) {
+                        case '1':
+                            //Política de desdobramento de série
+                            $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "#" . $sub_field);
+                            $term_meta = get_term_meta($sub_field_id, 'socialdb_property_term_root', true);
+                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
+
+                            switch ($value) {
+                                case '0':
+                                    $category_root_id = $term_children[3];
+                                    break;
+                                case '1':
+                                    $category_root_id = $term_children[2];
+                                    break;
+                            }
+
+                            wp_set_object_terms($data['ID'], array((int)$category_root_id), 'socialdb_category_type', true);
+                            $inserted_ids[] = $category_root_id . '_cat';
+
+                            break;
+                        default:
+                            $inserted_ids[] = parse_save($data['ID'], $compound_id, $sub_field_id, $value);
+                            break;
+                    }
                 }
                 break;
 
         }
-        print_r($inserted_ids);
+        //print_r($inserted_ids);
         update_post_meta($data['ID'], 'socialdb_property_' . $compound_id . '_0', implode(',', $inserted_ids));
     }
 
