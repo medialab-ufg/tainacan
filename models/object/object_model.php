@@ -496,6 +496,14 @@ class ObjectModel extends Model {
                     continue;
                 }
                 $dados = json_decode($property_model->edit_property(array('property_id' => $property_id)));
+                //filtro que altera a forma de atualizacao do metadado no item
+                if(has_filter('alter_update_item_property_value')){
+                     // se o filtro nao deseja que a forma de execucao  continue
+                     // ele retorna TRUE
+                    if(apply_filters('alter_update_item_property_value', $dados,$data))
+                            continue;
+                }
+                
                 $data["socialdb_property_$property_id"] = $this->updateDateValues($dados,$data["socialdb_property_$property_id"]);
                 if ($dados->type && in_array($dados->type, ['stars', 'like', 'binary'])) {
                     add_post_meta($object_id, 'socialdb_property_' . $dados->id, 0);
