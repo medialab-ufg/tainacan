@@ -16,8 +16,6 @@
                 contentType: false
             }).done(function (result) {
                 elem = jQuery.parseJSON(result);
-                $('#metadata-result-<?php echo $property['id']; ?>').show();
-                $('#metadata-search-<?php echo $property['id']; ?>').hide();
                 hide_modal_main();
                 if (elem.not_found) {
                     swal({
@@ -31,23 +29,40 @@
                         closeOnCancel: true
                     });
                 } else {
+                    $('#metadata-result-<?php echo $property['id']; ?>').show();
+                    $('#metadata-search-<?php echo $property['id']; ?>').hide();
                     $('#metadata-result-<?php echo $property['id']; ?>').html(elem.page);
                 }
             });
             e.preventDefault();
         });
         //# - inicializa os tooltips
+        $("#advanced_search_title_<?php echo $property['id'] ?>").autocomplete({
+           source: $('#src').val() + '/controllers/object/object_controller.php?operation=get_objects_by_property_json&property_id=' + <?php echo $property['id'] ?>,
+            messages: {
+                noResults: '',
+                results: function () {
+                }
+            },
+            minLength: 2,
+            select: function (event, ui) {
+                event.preventDefault();
+                $("#advanced_search_title_<?php echo $property['id'] ?>").val('');
+                $("#advanced_search_title_<?php echo $property['id'] ?>").val(ui.item.label);
+            }
+        });
+        
         $('[data-toggle="tooltip"]').tooltip();
     });
     
-    function clear_general_field(){
-        $('#advanced_search_general').val('');
+    function clear_all_field(){
+        $('#property_object_search_submit_<?php echo $property['id'] ?> input').val('');
     }
     
     function autocomplete_object_property_add(search_properties_autocomplete) {
          if (search_properties_autocomplete) {
             $.each(search_properties_autocomplete, function (idx, property_id) {
-                        $("#autocomplete_value_" + property_id).autocomplete({
+                        $("#property_object_search_submit_<?php echo $property['id'] ?> #autocomplete_value_" + property_id).autocomplete({
                             source: $('#src').val() + '/controllers/collection/collection_controller.php?operation=list_items_search_autocomplete&property_id=' + property_id,
                             messages: {
                                 noResults: '',
@@ -57,11 +72,11 @@
                             minLength: 2,
                             select: function (event, ui) {
                                 console.log(event);
-                                $("#autocomplete_value_" + property_id).val('');
+                                $("#property_object_search_submit_<?php echo $property['id'] ?> #autocomplete_value_" + property_id).val('');
                                 //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
                                 var temp = $("#property_value_" + property_id).val();
                                 if (typeof temp == "undefined") {
-                                    $("#autocomplete_value_" + property_id).val(ui.item.value);
+                                    $("#property_object_search_submit_<?php echo $property['id'] ?> #autocomplete_value_" + property_id).val(ui.item.value);
                                 }
                             }
                         });
@@ -76,12 +91,12 @@
 
 //************************* properties terms ******************************************//
     function search_list_properties_term_insert_objects() {
-        var radios = search_get_val($("#search_properties_terms_radio").val());
-        var selectboxes = search_get_val($("#search_properties_terms_selectbox").val());
-        var trees = search_get_val($("#search_properties_terms_tree").val());
-        var checkboxes = search_get_val($("#search_properties_terms_checkbox").val());
-        var multipleSelects = search_get_val($("#search_properties_terms_multipleselect").val());
-        var treecheckboxes = search_get_val($("#search_properties_terms_treecheckbox").val());
+        var radios = search_get_val($("#property_object_search_submit_<?php echo $property['id'] ?> #search_properties_terms_radio").val());
+        var selectboxes = search_get_val($("#property_object_search_submit_<?php echo $property['id'] ?> #search_properties_terms_selectbox").val());
+        var trees = search_get_val($("#property_object_search_submit_<?php echo $property['id'] ?> #search_properties_terms_tree").val());
+        var checkboxes = search_get_val($("#property_object_search_submit_<?php echo $property['id'] ?> #search_properties_terms_checkbox").val());
+        var multipleSelects = search_get_val($("#property_object_search_submit_<?php echo $property['id'] ?> #search_properties_terms_multipleselect").val());
+        var treecheckboxes = search_get_val($("#property_object_search_submit_<?php echo $property['id'] ?> #search_properties_terms_treecheckbox").val());
         search_list_radios(radios);
         search_list_tree(trees);
         search_list_selectboxes(selectboxes);
@@ -99,7 +114,7 @@
                     data: {collection_id: $("#collection_id").val(), operation: 'get_children_property_terms', property_id: radio}
                 }).done(function (result) {
                     elem = jQuery.parseJSON(result);
-                    $('#search_field_property_term_' + radio).html('');
+                    $('#property_object_search_submit_<?php echo $property['id'] ?> #search_field_property_term_' + radio).html('');
                     $.each(elem.children, function (idx, children) {
                         var required = '';
                         if(elem.metas.socialdb_property_required==='true'){
@@ -109,7 +124,7 @@
                         //     $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
                         //  } else {
                         var name = "'socialdb_propertyterm_"+radio+"'";
-                        $('#search_field_property_term_' + radio)
+                        $('#property_object_search_submit_<?php echo $property['id'] ?> #search_field_property_term_' + radio)
                                 .append('<input '+required+' onchange="onRadioChecked('+name+','+radio+')" type="radio" name="socialdb_propertyterm_'+radio+'" value="' + children.term_id + '">&nbsp;' + children.name + '<br>');
                         //  }
                     });
@@ -127,10 +142,10 @@
                     data: {collection_id: $("#collection_id").val(), operation: 'get_children_property_terms', property_id: checkbox}
                 }).done(function (result) {
                     elem = jQuery.parseJSON(result);
-                    $('#search_field_property_term_' + checkbox).html('');
+                    $('#property_object_search_submit_<?php echo $property['id'] ?> #search_field_property_term_' + checkbox).html('');
                     var name =  "'socialdb_propertyterm_"+checkbox+"[]'";
                     $.each(elem.children, function (idx, children) {
-                        $('#search_field_property_term_' + checkbox).append('<input onchange="onCheckboxValue('+name+','+checkbox+')" type="checkbox" name="socialdb_propertyterm_'+checkbox+'[]" value="' + children.term_id + '">&nbsp;' + children.name + '<br>');
+                        $('#property_object_search_submit_<?php echo $property['id'] ?> #search_field_property_term_' + checkbox).append('<input onchange="onCheckboxValue('+name+','+checkbox+')" type="checkbox" name="socialdb_propertyterm_'+checkbox+'[]" value="' + children.term_id + '">&nbsp;' + children.name + '<br>');
                     });
                     var required = '';
                     if(elem.metas.socialdb_property_required==='true'){
@@ -152,12 +167,13 @@
                     data: {collection_id: $("#collection_id").val(), operation: 'get_children_property_terms', property_id: selectbox}
                 }).done(function (result) {
                     elem = jQuery.parseJSON(result);
-                    $('#search_field_property_term_' + selectbox).html('');
+                    $('#property_object_search_submit_<?php echo $property['id'] ?> #search_field_property_term_' + selectbox).html('');
+                    $('#property_object_search_submit_<?php echo $property['id'] ?> #search_field_property_term_' + selectbox).append('<option value=""><?php _e('Select...','tainacan') ?></option>');
                     $.each(elem.children, function (idx, children) {
                         //  if (property.id == selected) {
                         //     $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
                         //  } else {
-                        $('#search_field_property_term_' + selectbox).append('<option value="' + children.term_id + '">' + children.name + '</option>');
+                        $('#property_object_search_submit_<?php echo $property['id'] ?> #search_field_property_term_' + selectbox).append('<option value="' + children.term_id + '">' + children.name + '</option>');
                         //  }
                     });
                 });
@@ -175,12 +191,12 @@
                     data: {collection_id: $("#collection_id").val(), operation: 'get_children_property_terms', property_id: multipleSelect}
                 }).done(function (result) {
                     elem = jQuery.parseJSON(result);
-                    $('#field_property_term_' + multipleSelect).html('');
+                    $('#property_object_search_submit_<?php echo $property['id'] ?> #field_property_term_' + multipleSelect).html('');
                     $.each(elem.children, function (idx, children) {
                         //  if (property.id == selected) {
                         //     $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
                         //  } else {
-                        $('#search_field_property_term_' + multipleSelect).append('<option value="' + children.term_id + '">' + children.name + '</option>');
+                        $('#property_object_search_submit_<?php echo $property['id'] ?> #search_field_property_term_' + multipleSelect).append('<option value="' + children.term_id + '">' + children.name + '</option>');
                         //  }
                     });
                 });
@@ -192,7 +208,7 @@
     function search_list_treecheckboxes(treecheckboxes) {
         if (treecheckboxes) {
             $.each(treecheckboxes, function (idx, treecheckbox) {
-                $("#search_field_property_term_"+treecheckbox).dynatree({
+                $("#property_object_search_submit_<?php echo $property['id'] ?> #search_field_property_term_"+treecheckbox).dynatree({
                     selectionVisible: true, // Make sure, selected nodes are visible (expanded).  
                     checkbox: true,
                     initAjax: {
@@ -218,8 +234,8 @@
                     },
                     onClick: function (node, event) {
                         // Close menu on click
-                        $("#property_object_category_id").val(node.data.key);
-                        $("#property_object_category_name").val(node.data.title);
+                        $("#property_object_search_submit_<?php echo $property['id'] ?> #property_object_category_id").val(node.data.key);
+                        $("#property_object_search_submit_<?php echo $property['id'] ?> #property_object_category_name").val(node.data.title);
 
                     },
                     onKeydown: function (node, event) {
@@ -259,7 +275,7 @@
         if (trees) {
             console.log(trees);
             $.each(trees, function (idx, tree) {
-                $("#search_field_property_term_"+tree).dynatree({
+                $("#property_object_search_submit_<?php echo $property['id'] ?> #search_field_property_term_"+tree).dynatree({
                     checkbox: true,
                     // Override class name for checkbox icon:
                     classNames: {checkbox: "dynatree-radio"},
@@ -292,8 +308,8 @@
                         // Close menu on click
                         var key = node.data.key;
                         if(key.search('moreoptions')<0&&key.search('alphabet')<0){
-                            $("#search_socialdb_propertyterm_"+tree).html('');
-                            $("#search_socialdb_propertyterm_"+tree).append('<option selected="selected" value="'+node.data.key+'" >'+node.data.title+'</option>')
+                            $("#property_object_search_submit_<?php echo $property['id'] ?> #search_socialdb_propertyterm_"+tree).html('');
+                            $("#property_object_search_submit_<?php echo $property['id'] ?> #search_socialdb_propertyterm_"+tree).append('<option selected="selected" value="'+node.data.key+'" >'+node.data.title+'</option>')
                          }
                     },
                     onKeydown: function (node, event) {
@@ -305,13 +321,13 @@
                     onActivate: function (node, event) {
                     },
                     onSelect: function (flag, node) {
-                        if ($("#socialdb_propertyterm_" + tree).val() === node.data.key) {
-                            $("#socialdb_propertyterm_" + tree).val("");
-                             $('#core_validation_'+tree).val('false');
+                        if ($("#property_object_search_submit_<?php echo $property['id'] ?> #socialdb_propertyterm_" + tree).val() === node.data.key) {
+                            $("#property_object_search_submit_<?php echo $property['id'] ?> #socialdb_propertyterm_" + tree).val("");
+                             $('#property_object_search_submit_<?php echo $property['id'] ?> #core_validation_'+tree).val('false');
                         } else {
-                            $("#socialdb_propertyterm_" + tree).val(node.data.key);
+                            $("#property_object_search_submit_<?php echo $property['id'] ?> #socialdb_propertyterm_" + tree).val(node.data.key);
                              append_category_properties_adv(node.data.key,tree );
-                            $('#core_validation_'+tree).val('true');
+                            $('#property_object_search_submit_<?php echo $property['id'] ?> #core_validation_'+tree).val('true');
                         }
                     },
                     dnd: {
@@ -331,25 +347,12 @@
             return value.split(',');
         }
     }
-    
-    function show_collection_licenses(){
-        $.ajax( {
-            url: $('#src').val()+'/controllers/object/object_controller.php',
-            type: 'POST',
-            data: {operation: 'show_collection_licenses_search',collection_id:$("#collection_id").val()}
-          } ).done(function( result ) {
-            //$('html, body').animate({
-               ///  scrollTop: parseInt($("#wpadminbar").offset().top)
-               // }, 900);       
-            $('#show_form_licenses').html(result); 
-        });
-    }
 /******************************* Category Properties***************************/
      function append_category_properties_adv(id,property_id ){
         //busco os metadados da categoria selecionada    
         if(id!==''){
             //adicionando metadados
-            $('#append_properties_categories_'+property_id+'_adv')
+            $('#property_object_search_submit_<?php echo $property['id'] ?> #append_properties_categories_'+property_id+'_adv')
                      .html('<center><img width="100" heigth="100" src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>"><?php _e('Loading metadata for this field','tainacan') ?></center>');
             $.ajax({
                 url: $('#src').val() + '/controllers/advanced_search/advanced_search_controller.php',
@@ -359,7 +362,7 @@
                 console.log('carregando metadados da propriedade',property_id);
                 hide_modal_main();
                 //list_all_objects(selKeys.join(", "), $("#collection_id").val());
-                $('#append_properties_categories_'+property_id+'_adv').html(result);
+                $('#property_object_search_submit_<?php echo $property['id'] ?> #append_properties_categories_'+property_id+'_adv').html(result);
             });
         }
     }

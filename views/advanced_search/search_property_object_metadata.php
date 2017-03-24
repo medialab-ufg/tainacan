@@ -2,9 +2,29 @@
      <input type="hidden" name="property_id" value="<?php echo $property['id'] ?>">
      <input type="hidden" name="collection_id" value="0">
      <input type="hidden" name="categories" value="<?php echo $property['metas']['socialdb_property_object_category_id'] ?>">
-     <input type="hidden" name="properties_id" value="<?php echo implode(',', $properties) ?>">
-        <?php 
-        if (isset($property_data)||isset($property_term)||isset($property_object)): 
+     <input type="hidden" name="properties_id" value="<?php echo (is_array($properties)) ?  implode(',', $properties) : '' ?>">
+<?php if(empty($property_data)&&empty($property_term)&&empty($property_object)): 
+    include('js/search_property_object_metadata_js.php');
+    ?>  
+         <div class="row col-md-12">
+            <label class="col-md-12 no-padding" for="advanced_search_title"><?php _e('Title or description', 'tainacan'); ?></label>
+            <div class="col-md-8 no-padding">
+                <input type="text" 
+                      
+                       class="form-control" 
+                       name="advanced_search_title" 
+                       id="advanced_search_title_<?php echo $property['id'] ?>"
+                       placeholder="<?php _e('Type the item title or its description', 'tainacan'); ?>">
+            </div>
+        </div>
+        <input type="hidden" name="search_properties_autocomplete" id='search_properties_autocomplete' value="">
+        <input type="hidden" name="properties_terms_radio" id='search_properties_terms_radio' value="">
+        <input type="hidden" name="properties_terms_tree" id='search_properties_terms_tree' value="">
+        <input type="hidden" name="properties_terms_selectbox" id='search_properties_terms_selectbox' value="">
+        <input type="hidden" name="properties_terms_checkbox" id='search_properties_terms_checkbox' value="">
+        <input type="hidden" name="properties_terms_multipleselect" id='search_properties_terms_multipleselect' value="">
+        <input type="hidden" name="properties_terms_treecheckbox" id='search_properties_terms_treecheckbox' value="">
+<?php else: 
         include_once(dirname(__FILE__).'/../../helpers/view_helper.php');
         include_once(dirname(__FILE__).'/../../helpers/advanced_search/advanced_search_helper.php');
         include('js/search_property_object_metadata_js.php');
@@ -92,7 +112,7 @@
         endif;
         
         
-         if((isset($property_term)&&count($property_term)>1)||(count($property_term)==1&&!empty($property_term[0]['has_children']))): 
+         if((isset($property_term)&&count($property_term)>0)): 
             ?>
             <?php foreach ($property_term as $property) { ?>
             <div class="row col-md-12" >
@@ -132,7 +152,7 @@
                             ?>
                             <select class="form-control"
                                     onchange="onSelectValue(this,<?php echo $property['id']; ?>)"
-                                    name="socialdb_property_<?php echo $property['id']; ?>" 
+                                    name="socialdb_propertyterm_<?php echo $property['id']; ?>" 
                                     id='search_field_property_term_<?php echo $property['id']; ?>' <?php
                             
                             ?>></select>
@@ -269,9 +289,9 @@
             <input type="hidden" id="properties_id_avoid" name="properties_id" value="<?php echo $all_ids; ?>">
         <?php endif; ?>
 <?php endif; ?>   
-            <input type="hidden" name="operation" value="search_items_property_object">        
+         <input type="hidden" name="operation" value="search_items_property_object">        
         <div class="col-md-12 no-padding" style="margin-top: 15px;">
-                    <button type="button" class="btn btn-lg btn-default pull-left"><?php _e('Clear search', 'tainacan') ?></button>
+            <button type="button" onclick="clear_all_field()" class="btn btn-lg btn-default pull-left"><?php _e('Clear search', 'tainacan') ?></button>
                     <button type="submit"  class="btn btn-lg btn-success pull-right"><?php _e('Find', 'tainacan') ?></button>
         </div>
      </form>            

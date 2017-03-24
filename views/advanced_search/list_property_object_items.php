@@ -1,18 +1,18 @@
-<div class="col-md-6 no-padding">
+<div class="col-md-12">
 <?php
  if (isset($loop_objects) && $loop_objects->have_posts()) :  ?>
-    <table class="table table-bordered" id="found_items_property_object_<?php echo $property_id ?>">
+    <table class="table table-bordered"  style="margin-top: 15px;" id="found_items_property_object_<?php echo $property_id ?>">
         <?php
         while ($loop_objects->have_posts()) : $loop_objects->the_post();
         ?>
             <tr id="line_property_object_<?php echo $property_id ?>_<?php echo get_the_ID() ?>">
-                <td style="width: 90%;font-size: 12pt;" class="title-text">
+                <td style="width: 100%;font-size: 12pt;" class="title-text" onclick="temporary_insert_items('<?php echo get_the_ID() ?>','<?php echo $property_id ?>')">
                     <span><?php the_title(); ?></span>
-                </td>
-                <td  style="width: 5%;cursor: pointer;" 
-                     class="click"
-                     onclick="temporary_insert_items('<?php echo get_the_ID() ?>','<?php echo $property_id ?>')">
-                        <span class="glyphicon glyphicon-chevron-right"/>
+                    <input style="display:none;" 
+                           type="checkbox" 
+                           name="temporary_items_<?php echo $property_id ?>[]" 
+                           class="item_values_<?php echo get_the_ID() ?>"
+                           value="<?php echo get_the_ID() ?>">
                 </td>
             </tr>    
         <?php    
@@ -23,14 +23,11 @@
 endif;
 ?>
 </div>
-<div style="border: 1px solid #ddd;" class="col-md-6">
-    <table class="table table-bordered" id="selected_items_property_object_<?php echo $property_id ?>"></table>
-</div>
 <!---------------------- FIM:LISTA DE OBJETOS ------------------------------------->   
 <div class="col-md-12 no-padding" style="padding-right: 0px;margin-top: 15px;">
     <button type="button" 
             class="btn btn-default btn-lg pull-left" 
-            onclick="back_to_search_form()">
+            onclick="$('#metadata-search-<?php echo $property_id ?>').show();$('#metadata-result-<?php echo $property_id ?>').hide();">
         <?php _e('Cancel','tainacan')?>
     </button>
     <button type="button" 
@@ -45,37 +42,40 @@ endif;
         $.each($('#results_property_<?php echo $property_id; ?> ul li'),function(index,value){
             //se ja existir retiro o botao de adiconar do lado esquerdo
             if($('#line_property_object_<?php echo $property_id ?>_'+$(value).attr('item')).length>0){
-                $('#line_property_object_<?php echo $property_id ?>_'+$(value).attr('item')).css('color','#ccc');
-                $('#line_property_object_<?php echo $property_id ?>_'+$(value).attr('item')+' .click').attr('onclick','');
+                $('#line_property_object_<?php echo $property_id ?>_'+$(value).attr('item')).css('color','#fff').css('background-color','#4285f4');
+                $('#line_property_object_<?php echo $property_id ?>_'+$(value).attr('item')+' .item_values_'+$(value).attr('item')).attr('checked','checked');
             }
         });
         $('#selected_items_property_object_<?php echo $property_id ?>').parent().height($('#found_items_property_object_<?php echo $property_id ?>').height())
     });
     //adicona o item nos selecionados
     function temporary_insert_items(id,property_id){
-        $('#line_property_object_'+property_id+'_'+id).css('color','#ccc');
-        $('#line_property_object_'+property_id+'_'+id+' .click').attr('onclick','');
-        $('#selected_items_property_object_'+property_id)
-                .append('<tr item="'+id+'" id="remove_line_property_object_'+property_id+'_'+id+'"><td style="width: 90%;font-size: 12pt;cursor:pointer" onclick="remove_line_property_object('+id+','+property_id+')">'
-                +$('#line_property_object_'+property_id+'_'+id+' .title-text').html()+'</td></tr>');
+        if(!$('#line_property_object_'+property_id+'_'+id+' .item_values_'+id).is(':checked')){
+            $('#line_property_object_'+property_id+'_'+id).css('color','#fff').css('background-color','#4285f4');
+            $('#line_property_object_'+property_id+'_'+id+' .item_values_'+id).attr('checked','checked');
+        }else{
+            remove_line_property_object(id,property_id)
+        }
     }
     //remove o item dos temporarios
     function remove_line_property_object(id,property_id){
-         $('#line_property_object_'+property_id+'_'+id).css('color','black');
-         $('#line_property_object_'+property_id+'_'+id+' .click').attr('onclick',"temporary_insert_items('"+id+"','"+property_id+"')");
-         $('#remove_line_property_object_'+property_id+'_'+id).remove();
+         $('#line_property_object_'+property_id+'_'+id).css('color','black').css('background-color','white');
+         $('#line_property_object_'+property_id+'_'+id+' .item_values_'+id).removeAttr('checked');
+         //$('#remove_line_property_object_'+property_id+'_'+id).remove();
     }
     // adiciona nos inseridos
     function save_selected_items_property_object(){
         var results = 0;
         //percorro todos os selecionados para serem inseridos
-        $.each($('#selected_items_property_object_<?php echo $property_id ?> tr'),function(index,value){
+        $.each($('input[name="temporary_items_<?php echo $property_id ?>[]"]:checked'),function(index,value){
             results++;
-            if($('#inserted_property_object_<?php echo $property_id ?>_'+$(value).attr('item')).length==0){
+            if($('#inserted_property_object_<?php echo $property_id ?>_'+$(value).val()).length==0){
+                //$('#line_property_object_<?php echo $property_id ?>_'+$(value).val()).css('color','#fff').css('background-color','#4285f4');
+               // $('#line_property_object_<?php echo $property_id ?>_'+$(value).val()+' .item_values_'+$(value).val()).attr('disabled','disabled');
                 $('#results_property_<?php echo $property_id; ?> ul')
-                        .append('<li id="inserted_property_object_<?php echo $property_id ?>_'+$(value).attr('item')+'" item="'+$(value).attr('item')+'" class="selected-items-property-object property-<?php echo $property_id; ?>">'+$(value).children().text()
+                        .append('<li id="inserted_property_object_<?php echo $property_id ?>_'+$(value).val()+'" item="'+$(value).val()+'" class="selected-items-property-object property-<?php echo $property_id; ?>">'+$('#line_property_object_<?php echo $property_id ?>_'+$(value).val()+' .title-text').html()
                         +'<span  onclick="remove_item_objet(this)" style="cursor:pointer;" class="pull-right glyphicon glyphicon-trash"></span></li>');
-                add_in_item_value($(value).attr('item'),<?php echo $property_id ?>);
+                add_in_item_value($(value).val(),<?php echo $property_id ?>);
             }
         });
         if(results>0){

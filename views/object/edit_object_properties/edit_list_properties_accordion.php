@@ -70,7 +70,7 @@ if (isset($property_object)):
                 <?php else: 
                     // botao que leva a colecao relacionada
                     if (isset($property['metas']['collection_data'][0]->post_title)):  ?>
-                        <a style="cursor: pointer;color: white;"
+                        <!--a style="cursor: pointer;color: white;"
                            id="add_item_popover_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"
                            class="btn btn-primary btn-xs popover_item" 
                             >
@@ -101,44 +101,11 @@ if (isset($property_object)):
                                         class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span></button>
                             </form>
                         </div> 
-                        <br><br>
+                        <br><br-->
+                        <?php $object_properties_widgets_helper->generateWidgetPropertyRelated($property,$object_id,$collection_id) ?>
                     <?php 
                      endif; 
                     ?>
-                    <input type="hidden" 
-                                id="cardinality_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"  
-                                value="<?php echo $view_helper->render_cardinality_property($property);   ?>">            
-                    <input type="text" 
-                           onkeyup="autocomplete_object_property_edit('<?php echo $property['id']; ?>', '<?php echo $object_id; ?>');" 
-                           id="autocomplete_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>" 
-                           placeholder="<?php _e('Type the three first letters of the object of this collection ', 'tainacan'); ?>"  
-                           class="chosen-selected form-control"  />    
-
-                    <select onclick="clear_select_object_property(this,'<?php echo $property['id']; ?>', '<?php echo $object_id; ?>');" 
-                            id="property_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>_edit" 
-                            multiple class="chosen-selected2 form-control auto-save" 
-                            style="height: auto;" 
-                            name="socialdb_property_<?php echo $property['id']; ?>[]"
-                            <?php 
-                                if ($property['metas']['socialdb_property_required'] == 'true'): 
-                                    echo 'required="required"';
-                                endif;
-                            ?> >
-                            <?php 
-                                if (!empty($property['metas']['objects'])) { ?>     
-                                    <?php foreach ($property['metas']['objects'] as $object) { ?>
-                                        <?php if (isset($property['metas']['value']) && !empty($property['metas']['value']) && in_array($object->ID, $property['metas']['value'])): // verifico se ele esta na lista de objetos da colecao   ?>    
-                                             <option selected='selected' value="<?php echo $object->ID ?>"><?php echo $object->post_title ?></span>
-                                    <?php endif; ?>
-                                <?php } ?> 
-                            <?php 
-                                }else { 
-                            ?>   
-                                <option value=""><?php _e('No objects added in this collection', 'tainacan'); ?></option>
-                            <?php 
-                                } 
-                            ?>       
-                    </select>
             <?php endif ?>        
         </div>  
     </div>     
