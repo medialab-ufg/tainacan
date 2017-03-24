@@ -44,8 +44,7 @@ if (isset($property_object)):
                     ?>
             </h2>
             <div>
-                <div class="metadata-related" 
-                    style="border-style: solid;border-width: 1px;border-color: #ccc; padding-top: 10px;padding-bottom: 40px;padding-right: 10px;padding-left: 10px;">
+                <div class="metadata-related">
                     <h6><b><?php _e('Related items','tainacan')?></b></h6>
                     <span id="no_results_property_<?php echo $property['id']; ?>">
                         <input type="text" 
@@ -65,7 +64,10 @@ if (isset($property_object)):
                         name="socialdb_property_<?php echo $property['id']; ?>[]" 
                         >   
                     </select>
-                    <button class="btn btn-primary btn-primary pull-right" ><?php _e('Add','tainacan') ?></button>
+                    <button class="btn btn-primary btn-primary pull-right"
+                            type="button"
+                            onclick="$('#metadata-search-<?php echo $property['id']; ?>').show();$('#metadata-result-<?php echo $property['id']; ?>').hide();"
+                            ><?php _e('Add','tainacan') ?></button>
                 <!--
                 <?php 
                 // botao que leva a colecao relacionada
@@ -124,13 +126,15 @@ if (isset($property_object)):
                     <br>
                     <button class="btn btn-primary btn-primary  btn-lg pull-right" ><?php _e('Add','tainacan') ?></button-->
                 </div>
-                <div class="metadata-search" 
-                     style="border-style: solid;border-width: 1px;border-color: #ccc; padding-top: 10px;padding-bottom: 40px;padding-right: 10px;padding-left: 10px; float: left;width: 100%;">
+                <div class="metadata-search"
+                     id="metadata-search-<?php echo $property['id']; ?>"
+                     style="display:none"
+                     >
                     <?php $object_properties_widgets_helper->search_related_properties_to_search($property,$collection_id); ?>     
                 </div>
-                 <div id="metadata-result-<?php echo $property['id']; ?>" 
-                      style="border-style: solid;border-width: 1px;border-color: #ccc; padding-top: 10px;padding-bottom: 40px;padding-right: 10px;padding-left: 10px; float: left;width: 100%;">
-                          
+                 <div class="metadata-matching"
+                      style="display:none"
+                      id="metadata-result-<?php echo $property['id']; ?>" >
                  </div>
             </div>        
         </div>        

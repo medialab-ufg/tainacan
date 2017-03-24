@@ -683,6 +683,8 @@ table.sorting-table tbody tr:not(.sorting-row) td {opacity: 0.2;}
      padding-bottom: 40px;
      padding-right: 10px;
      padding-left: 10px;
+     float: left;
+     width: 100%;
  } 
  .metadata-matching{
      border-style: solid;
@@ -692,4 +694,6 @@ table.sorting-table tbody tr:not(.sorting-row) td {opacity: 0.2;}
      padding-bottom: 40px;
      padding-right: 10px;
      padding-left: 10px;
+      float: left;
+     width: 100%;
  }  

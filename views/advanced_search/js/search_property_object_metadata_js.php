@@ -7,7 +7,7 @@
         
         $('#property_object_search_submit_<?php echo $property['id'] ?>').submit(function (e) {
             e.preventDefault();
-            //show_modal_main();
+            show_modal_main();
             $.ajax({
                 url: $('#src').val() + '/controllers/advanced_search/advanced_search_controller.php',
                 type: 'POST',
@@ -16,6 +16,8 @@
                 contentType: false
             }).done(function (result) {
                 elem = jQuery.parseJSON(result);
+                $('#metadata-result-<?php echo $property['id']; ?>').show();
+                $('#metadata-search-<?php echo $property['id']; ?>').hide();
                 hide_modal_main();
                 if (elem.not_found) {
                     swal({
