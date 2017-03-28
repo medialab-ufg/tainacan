@@ -302,20 +302,30 @@ while (have_posts()) : the_post();
 
                                             <?php
                                                 $_add_opts = unserialize(get_post_meta($_currentID_, 'socialdb_collection_add_item', true));
+												
                                                 $_add_modes = [
                                                     'write_text' => ['label' => _t('Write text'), 'action' => "showAddItemText()"],
                                                     'send_file' => ['label' => _t('Send file(s)'), 'action' => "showViewMultipleItems()"],
                                                     'send_file_zip' => ['label' => _t('Send file(s) via zip'), 'action' => "showSendFilesZip()"],
                                                     'insert_url' => ['label' => _t('Insert URL'), 'action' => "showAddItemURL()"]
                                                 ];
+												$add_item_str = __('Add', 'tainacan') . ' <span class="caret"></span>';
+												$hideStr = "";
+												if( is_array($_add_opts) && (count($_add_opts) === 1) ) {
+												    $hideStr = "style='display:none'";
+													$temp = $add_item_str;
+													$add_item_str  = '<a href="javascript:void(0)" style="color: white"';
+													$add_item_str .= 'onclick="' . $_add_modes[$_add_opts[0]]['action'] . '">' . $temp . '</a>';
+												}
+																							
                                             ?>
 
                                             <div class="btn-group" role="group" aria-label="...">
                                                 <div class="btn-group tainacan-add-wrapper">
                                                     <button type="button" class="btn btn-primary dropdown-toggle sec-color-bg" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <?php _e('Add', 'tainacan') ?> <span class="caret"></span>
+                                                        <?php echo $add_item_str ?>
                                                     </button>
-                                                    <ul class="dropdown-menu">
+                                                    <ul class="dropdown-menu" <?php echo $hideStr; ?> >
                                                         <?php if(false === is_array($_add_opts)) { ?>
                                                             <li><a onclick="showAddItemText()"> <?php _e('Write text', 'tainacan') ?> </a> </li>
                                                             <li><a onclick="showViewMultipleItems()"> <?php _e('Send file(s)', 'tainacan') ?>  </a> </li>
@@ -336,13 +346,6 @@ while (have_posts()) : the_post();
                                                                 echo '<li><a onclick="showAddItemText()">' . _e('Write text', 'tainacan') . '</a></li>';
                                                             }
                                                         }
-                                                        /*
-                                                        ?>
-                                                        <li><a onclick="showAddItemText()"  style="cursor: pointer;"><?php _e('Write text', 'tainacan') ?> </a></li>
-                                                        <li><a onclick="showViewMultipleItems()" style="cursor: pointer;" ><?php _e('Send file(s)', 'tainacan') ?>  </a></li>
-                                                        <li><a onclick="showSendFilesZip()" style="cursor: pointer;" ><?php _e('Send file(s) via zip', 'tainacan') ?>  </a></li>
-                                                        <li><a onclick="showAddItemURL();" style="cursor: pointer;" ><?php _e('Insert URL', 'tainacan') ?> </a></li>
-                                                        */
                                                         ?>
                                                     </ul>
                                                 </div>
