@@ -1,4 +1,5 @@
 <?php
+
 ini_set('auto_detect_line_endings', true);
 include_once ('../../../../../wp-config.php');
 include_once ('../../../../../wp-load.php');
@@ -113,7 +114,7 @@ class CsvModel extends Model {
         $mapping_model = new MappingModel('socialdb_channel_csv');
         $csv_add_columns = get_post_meta($data['mapping_id'], 'socialdb_channel_csv_add_columns', true);
         if ($csv_add_columns) {
-             update_post_meta($data['mapping_id'], 'socialdb_channel_csv_last_update', mktime());
+            update_post_meta($data['mapping_id'], 'socialdb_channel_csv_last_update', mktime());
             $this->insert_csv_with_columns($data['mapping_id'], $data['collection_id']);
             return true;
         }
@@ -332,11 +333,11 @@ class CsvModel extends Model {
                     if (!is_array($lines[$i]) || empty(array_filter($lines[$i]))) {
                         $i++;
                     }
-                    $order = $this->add_properties_columns($lines[$i], $collection_id,$title);
-                    $this->insertModeTable($order,$collection_id,$title);
+                    $order = $this->add_properties_columns($lines[$i], $collection_id, $title);
+                    $this->insertModeTable($order, $collection_id, $title);
                     $already = true;
-                } else if (isset($order) && count($order) > 0 ) {
-                    $this->add_value_column($order, $lines[$i], $collection_id,$title);
+                } else if (isset($order) && count($order) > 0) {
+                    $this->add_value_column($order, $lines[$i], $collection_id, $title);
                 }
             endfor;
             break;
@@ -349,14 +350,14 @@ class CsvModel extends Model {
      * @param type $collection_id
      * @return type
      */
-    public function add_properties_columns($header, $collection_id,$title) {
+    public function add_properties_columns($header, $collection_id, $title) {
         $order = [];
         $category_root_id = $this->get_category_root_of($collection_id);
         if ($header && is_array($header)) {
             foreach ($header as $index => $column) {
-                if(empty($column)) //se o titulo ja foi mapeado
+                if (empty($column)) //se o titulo ja foi mapeado
                     continue;
-                
+
                 $new_property = wp_insert_term((string) $column, 'socialdb_property_type', array('parent' => $this->get_property_type_id('socialdb_property_data'),
                     'slug' => $this->generate_slug((string) $column, 0)));
                 update_term_meta($new_property['term_id'], 'socialdb_property_required', 'false');
@@ -373,33 +374,37 @@ class CsvModel extends Model {
      * 
      * @param type $param
      */
-    public function add_value_column($properties, $values, $collection_id,$title_index) {
-        $object_id = socialdb_insert_object_csv([ ($title_index==='')?time():$values[$title_index]]);
+    public function add_value_column($properties, $values, $collection_id, $title_index) {
+        $title = (($title_index === '') ? time() : $values[$title_index]);
+        $object_id = socialdb_insert_object_csv([$title]);
+        $this->set_common_field_values($object_id, 'title', $title);
         foreach ($properties as $key => $property) {
             add_post_meta($object_id, 'socialdb_property_' . $property, $values[$key]);
+            $this->set_common_field_values($object_id, "socialdb_property_$property", $values[$key]);
         }
         $categories[] = $this->get_category_root_of($collection_id);
         update_post_meta($object_id, 'socialdb_object_from', 'external');
         update_post_meta($object_id, 'socialdb_object_dc_type', 'other');
+        $this->set_common_field_values($object_id, 'object_type', 'other');
         socialdb_add_tax_terms($object_id, $categories, 'socialdb_category_type');
     }
-    
+
     /**
      * 
      * @param type $properties as propriedades criadas
      * @param type $collection_id o id da colecao atual
      * @param type $title_index o index em que esta localizada a propriedade
      */
-    public function insertModeTable($properties,$collection_id,$title_index){
+    public function insertModeTable($properties, $collection_id, $title_index) {
         $data = [];
         foreach ($properties as $key => $property) {
-            if($title_index == $key){
-                $data[] = '{"id":'.get_term_by('slug', 'socialdb_property_fixed_title', 'socialdb_property_type')->term_id.',"order":'.$key.',"tipo":"property_data"}';
-            }else{
-                $data[] = '{"id":'.$property.',"order":'.$key.',"tipo":"property_data"}'; 
+            if ($title_index == $key) {
+                $data[] = '{"id":' . get_term_by('slug', 'socialdb_property_fixed_title', 'socialdb_property_type')->term_id . ',"order":' . $key . ',"tipo":"property_data"}';
+            } else {
+                $data[] = '{"id":' . $property . ',"order":' . $key . ',"tipo":"property_data"}';
             }
-        } 
-        update_post_meta($collection_id, 'socialdb_collection_table_metas', base64_encode(serialize($data)) );
+        }
+        update_post_meta($collection_id, 'socialdb_collection_table_metas', base64_encode(serialize($data)));
         update_post_meta($collection_id, 'socialdb_collection_list_mode', 'table');
     }
 
@@ -665,11 +670,11 @@ class CsvModel extends Model {
                 );
                 $mapping = [
                     ['socialdb_entity' => 'post_title', 'value' => 'title'],
-                    [ 'socialdb_entity' => 'socialdb_object_content', 'value' => 'content'],
-                    [ 'socialdb_entity' => 'post_content', 'value' => 'description'],
-                    [ 'socialdb_entity' => 'socialdb_object_dc_type', 'value' => 'item_type'],
-                    [ 'socialdb_entity' => 'post_permalink', 'value' => 'permalink'],
-                    [ 'socialdb_entity' => 'tag', 'value' => 'tags']
+                    ['socialdb_entity' => 'socialdb_object_content', 'value' => 'content'],
+                    ['socialdb_entity' => 'post_content', 'value' => 'description'],
+                    ['socialdb_entity' => 'socialdb_object_dc_type', 'value' => 'item_type'],
+                    ['socialdb_entity' => 'post_permalink', 'value' => 'permalink'],
+                    ['socialdb_entity' => 'tag', 'value' => 'tags']
                 ];
                 while (($csv_data = fgetcsv($objeto, 0, ';')) !== false) {
                     $count++;
