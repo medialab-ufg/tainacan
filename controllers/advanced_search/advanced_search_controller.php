@@ -108,7 +108,7 @@ class AdvancedSearchController extends Controller {
                 if(!isset($data['loop_objects'])) {
                     $return['not_found'] = true;
                 }
-                $return['page'] = $this->render(dirname(__FILE__) . '../../../views/advanced_search/list_property_object_items.php', $data);
+                $return['page'] = (isset($data['compound_id'])) ? $this->render(dirname(__FILE__) . '../../../views/advanced_search/compound_list_property_object_items.php', $data) : $this->render(dirname(__FILE__) . '../../../views/advanced_search/list_property_object_items.php', $data);
                 $return['data'] =  $data['data'];
                 return json_encode($return);
              case "wpquery_page_advanced_collection":

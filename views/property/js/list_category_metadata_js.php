@@ -2133,6 +2133,7 @@
                 }else{
                     remove_label_box(node.data.key);
                 }
+                setTargetProperties('#property_object_category_id');
                 <?php if(has_action('javascript_onselect_relationship_dynatree_property_object')): ?>
                     <?php do_action('javascript_onselect_relationship_dynatree_property_object') ?>
                 <?php endif; ?>

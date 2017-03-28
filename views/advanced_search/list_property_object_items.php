@@ -1,10 +1,18 @@
+<?php
+    include_once(dirname(__FILE__) . '/../../helpers/view_helper.php');
+    include_once(dirname(__FILE__) . '/../../helpers/object/object_properties_widgets_helper.php');
+    $object = new ObjectWidgetsHelper;
+?>
 <div class="col-md-12">
 <?php
  if (isset($loop_objects) && $loop_objects->have_posts()) :  ?>
     <table class="table table-bordered"  style="margin-top: 15px;" id="found_items_property_object_<?php echo $property_id ?>">
         <?php
         while ($loop_objects->have_posts()) : $loop_objects->the_post();
-        ?>
+            if($avoid_selected_items === '1' && $object->is_selected_property($property_id,  get_the_ID())){
+                continue;
+            }
+            ?>
             <tr id="line_property_object_<?php echo $property_id ?>_<?php echo get_the_ID() ?>">
                 <td style="width: 100%;font-size: 12pt;" class="title-text" onclick="temporary_insert_items('<?php echo get_the_ID() ?>','<?php echo $property_id ?>')">
                     <span><?php the_title(); ?></span>
@@ -40,6 +48,8 @@ endif;
     $(function(){
         //verificando se dentro os ja inseridos como relacionamento estao dentro do resultado da busca
         $.each($('#results_property_<?php echo $property_id; ?> ul li'),function(index,value){
+            $('#core_validation_'+property_id).val('true');
+            set_field_valid(property_id,'core_validation_'+property_id);
             //se ja existir retiro o botao de adiconar do lado esquerdo
             if($('#line_property_object_<?php echo $property_id ?>_'+$(value).attr('item')).length>0){
                 $('#line_property_object_<?php echo $property_id ?>_'+$(value).attr('item')).css('color','#fff').css('background-color','#4285f4');
@@ -70,8 +80,11 @@ endif;
         $.each($('input[name="temporary_items_<?php echo $property_id ?>[]"]:checked'),function(index,value){
             results++;
             if($('#inserted_property_object_<?php echo $property_id ?>_'+$(value).val()).length==0){
-                //$('#line_property_object_<?php echo $property_id ?>_'+$(value).val()).css('color','#fff').css('background-color','#4285f4');
-               // $('#line_property_object_<?php echo $property_id ?>_'+$(value).val()+' .item_values_'+$(value).val()).attr('disabled','disabled');
+                var object_id = ($('#object_id_add').length > 0) ? $('#object_id_add').val() : $('#object_id_edit').val();
+                if($('#cardinality_<?php echo $property_id ?>_'+object_id).val()=='1'){
+                    $('#results_property_<?php echo $property_id; ?> ul').html('');
+                    $('select[name="socialdb_property_<?php echo $property_id; ?>[]"]').html('');
+                }
                 $('#results_property_<?php echo $property_id; ?> ul')
                         .append('<li id="inserted_property_object_<?php echo $property_id ?>_'+$(value).val()+'" item="'+$(value).val()+'" class="selected-items-property-object property-<?php echo $property_id; ?>">'+$('#line_property_object_<?php echo $property_id ?>_'+$(value).val()+' .title-text').html()
                         +'<span  onclick="remove_item_objet(this)" style="cursor:pointer;" class="pull-right glyphicon glyphicon-trash"></span></li>');
@@ -96,6 +109,9 @@ endif;
     //adiciona no formulario de fato
     function add_in_item_value(id,property_id){
         $('select[name="socialdb_property_'+property_id+'[]"]').append('<option value="'+id+'" selected="selected">'+id+'</option>');
+        //validacao do campo
+        $('#core_validation_'+property_id).val('true');
+        set_field_valid(property_id,'core_validation_'+property_id);
     }
     //remove no formulario de fato
     function remove_in_item_value(id,property_id){

@@ -173,7 +173,7 @@ foreach($original_properties as $property):
                 ?>
             </h2>
             <div>
-                  <?php if($is_view_mode): ?>
+                <?php if($is_view_mode): ?>
                      <div id="labels_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">
                         <?php if (!empty($property['metas']['objects']) && !empty($property['metas']['value'])) { ?>
                             <?php foreach ($property['metas']['objects'] as $object) { // percoro todos os objetos  ?>
@@ -190,79 +190,9 @@ foreach($original_properties as $property):
                         ?>
                     </div>
                 <?php else: 
-                // botao que leva a colecao relacionada
-                    if (isset($property['metas']['collection_data'][0]->post_title)):  ?>
-                        <a style="cursor: pointer;color: white;"
-                           id="add_item_popover_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"
-                           class="btn btn-primary btn-xs popover_item" 
-                            >
-                               <span class="glyphicon glyphicon-plus"></span>
-                               <?php _e('Add new', 'tainacan'); ?>
-                               <?php echo ' ' . $property['metas']['collection_data'][0]->post_title; ?>
-                        </a>
-                        <script>
-                            $('#add_item_popover_<?php echo $property['id']; ?>_<?php echo $object_id; ?>').popover({ 
-                               html : true,
-                               placement: 'right',
-                               title: '<?php echo _e('Add item in the collection','tainacan').' '.$property['metas']['collection_data'][0]->post_title; ?>',
-                               content: function() {
-                                 return $("#popover_content_<?php echo $property['id']; ?>_<?php echo $object_id; ?>").html();
-                               }
-                            });
-                        </script>
-                        <div id="popover_content_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"   class="hide ">
-                            <form class="form-inline"  style="font-size: 12px;width: 300px;">
-                                <div class="form-group">
-                                  <input type="text" 
-                                         placeholder="<?php _e('Type the title','tainacan') ?>"
-                                         class="form-control" 
-                                         id="title_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">
-                                </div>
-                                <button type="button" 
-                                        onclick="add_new_item_by_title('<?php echo $property['metas']['collection_data'][0]->ID; ?>',$('#title_<?php echo $property['id']; ?>_<?php echo $object_id; ?>').val(),'#add_item_popover_<?php echo $property['id']; ?>_<?php echo $object_id; ?>',<?php echo $property['id']; ?>,<?php echo $object_id; ?>)"
-                                        class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span></button>
-                            </form>
-                        </div> 
-                        <br><br>
-                    <?php 
-                     endif; 
-                    ?>
-                    <input type="hidden" 
-                                id="cardinality_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"  
-                                value="<?php echo $view_helper->render_cardinality_property($property);   ?>">            
-                    <input type="text" 
-                           onkeyup="autocomplete_object_property_edit('<?php echo $property['id']; ?>', '<?php echo $object_id; ?>');" 
-                           id="autocomplete_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>" 
-                           placeholder="<?php _e('Type the three first letters of the object of this collection ', 'tainacan'); ?>"  
-                           class="chosen-selected form-control"  />    
-
-                    <select onclick="clear_select_object_property(this,'<?php echo $property['id']; ?>', '<?php echo $object_id; ?>');" 
-                            id="property_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>_edit" 
-                            multiple class="chosen-selected2 form-control" 
-                            style="height: auto;" 
-                            name="socialdb_property_<?php echo $property['id']; ?>[]"
-                            <?php 
-                                if ($property['metas']['socialdb_property_required'] == 'true'): 
-                                    echo 'required="required"';
-                                endif;
-                            ?> >
-                            <?php 
-                                if (!empty($property['metas']['objects'])) { ?>     
-                                    <?php foreach ($property['metas']['objects'] as $object) { ?>
-                                        <?php if (isset($property['metas']['value']) && !empty($property['metas']['value']) && in_array($object->ID, $property['metas']['value'])): // verifico se ele esta na lista de objetos da colecao   ?>    
-                                             <option selected='selected' value="<?php echo $object->ID ?>"><?php echo $object->post_title ?></span>
-                                    <?php endif; ?>
-                                <?php } ?> 
-                            <?php 
-                                }else { 
-                            ?>   
-                                <option value=""><?php _e('No objects added in this collection', 'tainacan'); ?></option>
-                            <?php 
-                                } 
-                            ?>       
-                    </select>
-                <?php endif ?>    
-        </div>  
+                     $object_properties_widgets_helper->generateWidgetPropertyRelated($property,$object->ID,$collection_id) ;
+                endif ?>    
+            </div>  
     </div>     
     <?php elseif($property['tipo'] == 'data'): 
         if(in_array($property['id'], $properties_to_avoid)){

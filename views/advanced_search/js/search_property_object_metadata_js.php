@@ -55,8 +55,8 @@
         $('[data-toggle="tooltip"]').tooltip();
     });
     
-    function clear_all_field(){
-        $('#property_object_search_submit_<?php echo $property['id'] ?> input').val('');
+    function clear_all_field(form){
+        $(form+' input').val('');
     }
     
     function autocomplete_object_property_add(search_properties_autocomplete) {
@@ -339,7 +339,7 @@
     
     // get value of the property
     function search_get_val(value) {
-        if (value === '') {
+        if (!value || value === '') {
             return false;
         } else if (value.split(',')[0] === '' && value !== '') {
             return [value];

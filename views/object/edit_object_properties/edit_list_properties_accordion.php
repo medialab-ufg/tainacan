@@ -67,9 +67,7 @@ if (isset($property_object)):
                         }
                         ?>
                     </div>
-                <?php else: 
-                    // botao que leva a colecao relacionada
-                    if (isset($property['metas']['collection_data'][0]->post_title)):  ?>
+                <?php else:   ?>
                         <!--a style="cursor: pointer;color: white;"
                            id="add_item_popover_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"
                            class="btn btn-primary btn-xs popover_item" 
@@ -103,9 +101,6 @@ if (isset($property_object)):
                         </div> 
                         <br><br-->
                         <?php $object_properties_widgets_helper->generateWidgetPropertyRelated($property,$object_id,$collection_id) ?>
-                    <?php 
-                     endif; 
-                    ?>
             <?php endif ?>        
         </div>  
     </div>     
