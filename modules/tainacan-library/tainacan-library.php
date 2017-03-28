@@ -121,7 +121,6 @@ add_action('add_show_all_meta', 'show_all_meta',10, 1);
 function show_all_meta($collection_id)
 {
     $all_properties_id = meta_ids($collection_id, false);
-
     $all_marc_fields = get_all_marc_fields();
     $marc_mapping = get_marc_mapping($collection_id);
 
@@ -134,11 +133,11 @@ function show_all_meta($collection_id)
             {
                 if($subfield != 'compound_id')
                 {
-                    if($subfield == '#1' || $subfield == '#2' || $subfield == '$1' || $subfield == '$2')
+                    if(just_letters($subfield))
                     {
-                        $simbol = '';
+                        $simbol = '$';
                     }
-                    else $simbol = '$';
+                    else $simbol = '';
 
                     $marc_mapping_inverse[$prop_id] = $compound_num." $simbol".$subfield;
                 }else $marc_mapping_inverse[$prop_id] = $compound_num;
@@ -153,11 +152,11 @@ function show_all_meta($collection_id)
                 {
                     if($subfield != 'compound_id')
                     {
-                        if($subfield == '#1' || $subfield == '#2' || $subfield == '$1' || $subfield == '$2')
+                        if(just_letters($subfield))
                         {
-                            $simbol = '';
+                            $simbol = '$';
                         }
-                        else $simbol = '$';
+                        else $simbol = '';
 
                         $marc_mapping_inverse[$prop_id] = $compound_num." $simbol".$subfield;
                     }else $marc_mapping_inverse[$prop_id] = $compound_num;
@@ -195,7 +194,8 @@ function show_all_meta($collection_id)
                         </select>
                     </div>
                 <?php foreach ($sub_properties as $name => $id){
-                    if($name != 'compound_id'){ ?>
+                    if($name != 'compound_id'){
+                        ?>
                         <div class="col-md-12 no-padding" style="margin: 10px 0 10px 0">
                             <label class='col-md-6 col-sm-12 meta-title no-padding' style="text-indent: 5%; padding-bottom: 15px; border-bottom: 1px solid #e8e8e8"> <?= $name?> </label>
                             <!--SelectBox SubField-->
@@ -214,6 +214,39 @@ function show_all_meta($collection_id)
                                 </select>
                             </div>
                         </div>
+                        <?php
+                        $category_parent = get_term_by("id", $id, 'socialdb_property_type')->parent;
+                        if(strcmp(get_term_by("id", $category_parent, 'socialdb_property_type')->name, "socialdb_property_term") == 0);
+                        {
+                            $term_meta = get_term_meta($id ,'socialdb_property_term_root', true);
+                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
+                            foreach ($term_children as $id_select_item)
+                            {
+                                $prop_name = get_term_by("id", $id_select_item,"socialdb_category_type")->name;
+                                ?>
+                                <div class="col-md-12 no-padding">
+                                    <label class='col-md-6 col-sm-12 meta-title no-padding' style="text-indent: 8%; padding-bottom: 15px; border-bottom: 1px solid #e8e8e8"> <?php echo $prop_name ?> </label>
+                                    <!--SelectBox SubField-->
+                                    <div class='col-md-6 col-sm-12 meta-value'>
+                                        <select name="<?php echo $id_select_item.' '.$sub_properties['compound_id'] ?>" class='data form-control' id="<?= $name ?>">
+                                            <?php
+                                            foreach ($all_marc_fields as $field) {
+                                                if($marc_mapping_inverse != false && strcmp($marc_mapping_inverse[$id_select_item."_".$sub_properties['compound_id']], $field) == 0)
+                                                {
+                                                    echo "<option name='".$field."' value='".$field."' selected>". $field ."</option>";
+                                                } else {
+                                                    echo "<option name='".$field."' value='".$field."'>". $field ."</option>";
+                                                }
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <?php
+                            }
+
+                        }
+                        ?>
                 <?php
                     }
                 } }?>
@@ -283,6 +316,8 @@ function get_all_marc_fields()
 {
     $marc_fiels = [];
 
+    $marc_fiels[] = '-';
+
     $marc_fiels[] = '013';
     $marc_fiels[] = '013 $a';
     $marc_fiels[] = '013 $b';
@@ -306,6 +341,8 @@ function get_all_marc_fields()
 
     $marc_fiels[] = '041';
     $marc_fiels[] = '041 #1';
+    $marc_fiels[] = '041 #1-0';
+    $marc_fiels[] = '041 #1-1';
     $marc_fiels[] = '041 $a';
     $marc_fiels[] = '041 $b';
     $marc_fiels[] = '041 $h';
@@ -315,6 +352,10 @@ function get_all_marc_fields()
 
     $marc_fiels[] = '045';
     $marc_fiels[] = '045 #1';
+    $marc_fiels[] = '045 #1-0';
+    $marc_fiels[] = '045 #1-1';
+    $marc_fiels[] = '045 #1-2';
+    $marc_fiels[] = '045 #1-3';
     $marc_fiels[] = '045 $a';
     $marc_fiels[] = '045 $b';
     $marc_fiels[] = '045 $c';
@@ -337,6 +378,10 @@ function get_all_marc_fields()
 
     $marc_fiels[] = '100';
     $marc_fiels[] = '100 #1';
+    $marc_fiels[] = '100 #1-0';
+    $marc_fiels[] = '100 #1-1';
+    $marc_fiels[] = '100 #1-2';
+    $marc_fiels[] = '100 #1-3';
     $marc_fiels[] = '100 $a';
     $marc_fiels[] = '100 $b';
     $marc_fiels[] = '100 $c';
@@ -345,6 +390,9 @@ function get_all_marc_fields()
 
     $marc_fiels[] = '110';
     $marc_fiels[] = '110 #1';
+    $marc_fiels[] = '110 #1-0';
+    $marc_fiels[] = '110 #1-1';
+    $marc_fiels[] = '110 #1-2';
     $marc_fiels[] = '110 $a';
     $marc_fiels[] = '110 $b';
     $marc_fiels[] = '110 $c';
@@ -354,6 +402,9 @@ function get_all_marc_fields()
 
     $marc_fiels[] = '111';
     $marc_fiels[] = '111 #1';
+    $marc_fiels[] = '111 #1-0';
+    $marc_fiels[] = '111 #1-1';
+    $marc_fiels[] = '111 #1-2';
     $marc_fiels[] = '111 $a';
     $marc_fiels[] = '111 $c';
     $marc_fiels[] = '111 $d';
@@ -364,6 +415,16 @@ function get_all_marc_fields()
 
     $marc_fiels[] = '130';
     $marc_fiels[] = '130 #1';
+    $marc_fiels[] = '130 #1-0';
+    $marc_fiels[] = '130 #1-1';
+    $marc_fiels[] = '130 #1-2';
+    $marc_fiels[] = '130 #1-3';
+    $marc_fiels[] = '130 #1-4';
+    $marc_fiels[] = '130 #1-5';
+    $marc_fiels[] = '130 #1-6';
+    $marc_fiels[] = '130 #1-7';
+    $marc_fiels[] = '130 #1-8';
+    $marc_fiels[] = '130 #1-9';
     $marc_fiels[] = '130 $a';
     $marc_fiels[] = '130 $d';
     $marc_fiels[] = '130 $f';
@@ -374,13 +435,29 @@ function get_all_marc_fields()
 
     $marc_fiels[] = '210';
     $marc_fiels[] = '210 #1';
+    $marc_fiels[] = '210 #1-0';
+    $marc_fiels[] = '210 #1-1';
     $marc_fiels[] = '210 #2';
+    $marc_fiels[] = '210 #2-0';
+    $marc_fiels[] = '210 #2-1';
     $marc_fiels[] = '210 $a';
     $marc_fiels[] = '210 $b';
 
     $marc_fiels[] = '240';
     $marc_fiels[] = '240 #1';
+    $marc_fiels[] = '240 #1-0';
+    $marc_fiels[] = '240 #1-1';
     $marc_fiels[] = '240 #2';
+    $marc_fiels[] = '240 #2-0';
+    $marc_fiels[] = '240 #2-1';
+    $marc_fiels[] = '240 #2-2';
+    $marc_fiels[] = '240 #2-3';
+    $marc_fiels[] = '240 #2-4';
+    $marc_fiels[] = '240 #2-5';
+    $marc_fiels[] = '240 #2-6';
+    $marc_fiels[] = '240 #2-7';
+    $marc_fiels[] = '240 #2-8';
+    $marc_fiels[] = '240 #2-9';
     $marc_fiels[] = '240 $a';
     $marc_fiels[] = '240 $b';
     $marc_fiels[] = '240 $f';
@@ -392,7 +469,19 @@ function get_all_marc_fields()
 
     $marc_fiels[] = '243';
     $marc_fiels[] = '243 #1';
+    $marc_fiels[] = '243 #1-0';
+    $marc_fiels[] = '243 #1-1';
     $marc_fiels[] = '243 #2';
+    $marc_fiels[] = '243 #2-0';
+    $marc_fiels[] = '243 #2-1';
+    $marc_fiels[] = '243 #2-2';
+    $marc_fiels[] = '243 #2-3';
+    $marc_fiels[] = '243 #2-4';
+    $marc_fiels[] = '243 #2-5';
+    $marc_fiels[] = '243 #2-6';
+    $marc_fiels[] = '243 #2-7';
+    $marc_fiels[] = '243 #2-8';
+    $marc_fiels[] = '243 #2-9';
     $marc_fiels[] = '243 $a';
     $marc_fiels[] = '243 $f';
     $marc_fiels[] = '243 $g';
@@ -401,7 +490,19 @@ function get_all_marc_fields()
 
     $marc_fiels[] = '245';
     $marc_fiels[] = '245 #1';
+    $marc_fiels[] = '245 #1-0';
+    $marc_fiels[] = '245 #1-1';
     $marc_fiels[] = '245 #2';
+    $marc_fiels[] = '245 #2-0';
+    $marc_fiels[] = '245 #2-1';
+    $marc_fiels[] = '245 #2-2';
+    $marc_fiels[] = '245 #2-3';
+    $marc_fiels[] = '245 #2-4';
+    $marc_fiels[] = '245 #2-5';
+    $marc_fiels[] = '245 #2-6';
+    $marc_fiels[] = '245 #2-7';
+    $marc_fiels[] = '245 #2-8';
+    $marc_fiels[] = '245 #2-9';
     $marc_fiels[] = '245 $a';
     $marc_fiels[] = '245 $b';
     $marc_fiels[] = '245 $c';
@@ -411,7 +512,21 @@ function get_all_marc_fields()
 
     $marc_fiels[] = '246';
     $marc_fiels[] = '246 #1';
+    $marc_fiels[] = '246 #1-0';
+    $marc_fiels[] = '246 #1-1';
+    $marc_fiels[] = '246 #1-2';
+    $marc_fiels[] = '246 #1-3';
     $marc_fiels[] = '246 #2';
+    $marc_fiels[] = '246 #2-0';
+    $marc_fiels[] = '246 #2-1';
+    $marc_fiels[] = '246 #2-2';
+    $marc_fiels[] = '246 #2-3';
+    $marc_fiels[] = '246 #2-4';
+    $marc_fiels[] = '246 #2-5';
+    $marc_fiels[] = '246 #2-6';
+    $marc_fiels[] = '246 #2-7';
+    $marc_fiels[] = '246 #2-8';
+    $marc_fiels[] = '246 #2-9';
     $marc_fiels[] = '246 $a';
     $marc_fiels[] = '246 $b';
     $marc_fiels[] = '246 $f';
@@ -473,7 +588,18 @@ function get_all_marc_fields()
 
     $marc_fiels[] = '342';
     $marc_fiels[] = '342 #1';
+    $marc_fiels[] = '342 #1-0';
+    $marc_fiels[] = '342 #1-1';
     $marc_fiels[] = '342 #2';
+    $marc_fiels[] = '342 #2-0';
+    $marc_fiels[] = '342 #2-1';
+    $marc_fiels[] = '342 #2-2';
+    $marc_fiels[] = '342 #2-3';
+    $marc_fiels[] = '342 #2-4';
+    $marc_fiels[] = '342 #2-5';
+    $marc_fiels[] = '342 #2-6';
+    $marc_fiels[] = '342 #2-7';
+    $marc_fiels[] = '342 #2-8';
     $marc_fiels[] = '342 $a';
     $marc_fiels[] = '342 $b';
     $marc_fiels[] = '342 $c';
@@ -485,11 +611,15 @@ function get_all_marc_fields()
 
     $marc_fiels[] = '362';
     $marc_fiels[] = '362 #1';
+    $marc_fiels[] = '362 #1-0';
+    $marc_fiels[] = '362 #1-1';
     $marc_fiels[] = '362 $a';
     $marc_fiels[] = '362 $z';
 
     $marc_fiels[] = '490';
     $marc_fiels[] = '490 #1';
+    $marc_fiels[] = '490 #1-0';
+    $marc_fiels[] = '490 #1-1';
     $marc_fiels[] = '490 $a';
     $marc_fiels[] = '490 $v';
 
@@ -532,6 +662,9 @@ function get_all_marc_fields()
 
     $marc_fiels[] = '555';
     $marc_fiels[] = '555 #1';
+    $marc_fiels[] = '555 #1-0';
+    $marc_fiels[] = '555 #1-1';
+    $marc_fiels[] = '555 #1-2';
     $marc_fiels[] = '555 $3';
     $marc_fiels[] = '555 $a';
     $marc_fiels[] = '555 $b';
@@ -551,6 +684,10 @@ function get_all_marc_fields()
 
     $marc_fiels[] = '600';
     $marc_fiels[] = '600 #1';
+    $marc_fiels[] = '600 #1-0';
+    $marc_fiels[] = '600 #1-1';
+    $marc_fiels[] = '600 #1-2';
+    $marc_fiels[] = '600 #1-3';
     $marc_fiels[] = '600 $a';
     $marc_fiels[] = '600 $b';
     $marc_fiels[] = '600 $c';
@@ -564,6 +701,9 @@ function get_all_marc_fields()
 
     $marc_fiels[] = '610';
     $marc_fiels[] = '610 #1';
+    $marc_fiels[] = '610 #1-0';
+    $marc_fiels[] = '610 #1-1';
+    $marc_fiels[] = '610 #1-2';
     $marc_fiels[] = '610 $a';
     $marc_fiels[] = '610 $b';
     $marc_fiels[] = '610 $c';
@@ -579,6 +719,9 @@ function get_all_marc_fields()
 
     $marc_fiels[] = '611';
     $marc_fiels[] = '611 #1';
+    $marc_fiels[] = '611 #1-0';
+    $marc_fiels[] = '611 #1-1';
+    $marc_fiels[] = '611 #1-1';
     $marc_fiels[] = '611 $a';
     $marc_fiels[] = '611 $c';
     $marc_fiels[] = '611 $d';
@@ -591,6 +734,16 @@ function get_all_marc_fields()
 
     $marc_fiels[] = '630';
     $marc_fiels[] = '630 #1';
+    $marc_fiels[] = '630 #1-0';
+    $marc_fiels[] = '630 #1-1';
+    $marc_fiels[] = '630 #1-2';
+    $marc_fiels[] = '630 #1-3';
+    $marc_fiels[] = '630 #1-4';
+    $marc_fiels[] = '630 #1-5';
+    $marc_fiels[] = '630 #1-6';
+    $marc_fiels[] = '630 #1-7';
+    $marc_fiels[] = '630 #1-8';
+    $marc_fiels[] = '630 #1-9';
     $marc_fiels[] = '630 $a';
     $marc_fiels[] = '630 $d';
     $marc_fiels[] = '630 $f';
@@ -616,7 +769,13 @@ function get_all_marc_fields()
 
     $marc_fiels[] = '700';
     $marc_fiels[] = '700 #1';
+    $marc_fiels[] = '700 #1-0';
+    $marc_fiels[] = '700 #1-1';
+    $marc_fiels[] = '700 #1-2';
+    $marc_fiels[] = '700 #1-3';
     $marc_fiels[] = '700 #2';
+    $marc_fiels[] = '700 #2-0';
+    $marc_fiels[] = '700 #2-1';
     $marc_fiels[] = '700 $a';
     $marc_fiels[] = '700 $b';
     $marc_fiels[] = '700 $c';
@@ -628,7 +787,12 @@ function get_all_marc_fields()
 
     $marc_fiels[] = '710';
     $marc_fiels[] = '710 #1';
+    $marc_fiels[] = '710 #1-0';
+    $marc_fiels[] = '710 #1-1';
+    $marc_fiels[] = '710 #1-2';
     $marc_fiels[] = '710 #2';
+    $marc_fiels[] = '710 #2-0';
+    $marc_fiels[] = '710 #2-1';
     $marc_fiels[] = '710 $a';
     $marc_fiels[] = '710 $b';
     $marc_fiels[] = '710 $c';
@@ -640,6 +804,9 @@ function get_all_marc_fields()
 
     $marc_fiels[] = '711';
     $marc_fiels[] = '711 #1';
+    $marc_fiels[] = '711 #1-0';
+    $marc_fiels[] = '711 #1-1';
+    $marc_fiels[] = '711 #1-2';
     $marc_fiels[] = '711 $a';
     $marc_fiels[] = '711 $c';
     $marc_fiels[] = '711 $d';
@@ -651,7 +818,19 @@ function get_all_marc_fields()
 
     $marc_fiels[] = '730';
     $marc_fiels[] = '730 #1';
+    $marc_fiels[] = '730 #1-0';
+    $marc_fiels[] = '730 #1-1';
+    $marc_fiels[] = '730 #1-2';
+    $marc_fiels[] = '730 #1-3';
+    $marc_fiels[] = '730 #1-4';
+    $marc_fiels[] = '730 #1-5';
+    $marc_fiels[] = '730 #1-6';
+    $marc_fiels[] = '730 #1-7';
+    $marc_fiels[] = '730 #1-8';
+    $marc_fiels[] = '730 #1-9';
     $marc_fiels[] = '730 #2';
+    $marc_fiels[] = '730 #2-0';
+    $marc_fiels[] = '730 #2-1';
     $marc_fiels[] = '730 $a';
     $marc_fiels[] = '730 $d';
     $marc_fiels[] = '730 $f';
@@ -665,13 +844,35 @@ function get_all_marc_fields()
 
     $marc_fiels[] = '740';
     $marc_fiels[] = '740 #1';
+    $marc_fiels[] = '740 #1-0';
+    $marc_fiels[] = '740 #1-1';
+    $marc_fiels[] = '740 #1-2';
+    $marc_fiels[] = '740 #1-3';
+    $marc_fiels[] = '740 #1-4';
+    $marc_fiels[] = '740 #1-5';
+    $marc_fiels[] = '740 #1-6';
+    $marc_fiels[] = '740 #1-7';
+    $marc_fiels[] = '740 #1-8';
+    $marc_fiels[] = '740 #1-9';
     $marc_fiels[] = '740 #2';
+    $marc_fiels[] = '740 #2-0';
+    $marc_fiels[] = '740 #2-1';
     $marc_fiels[] = '740 $a';
     $marc_fiels[] = '740 $n';
     $marc_fiels[] = '740 $p';
 
     $marc_fiels[] = '830';
     $marc_fiels[] = '830 #2';
+    $marc_fiels[] = '830 #2-0';
+    $marc_fiels[] = '830 #2-1';
+    $marc_fiels[] = '830 #2-2';
+    $marc_fiels[] = '830 #2-3';
+    $marc_fiels[] = '830 #2-4';
+    $marc_fiels[] = '830 #2-5';
+    $marc_fiels[] = '830 #2-6';
+    $marc_fiels[] = '830 #2-7';
+    $marc_fiels[] = '830 #2-8';
+    $marc_fiels[] = '830 #2-9';
     $marc_fiels[] = '830 $a';
     $marc_fiels[] = '830 $v';
 
@@ -734,36 +935,50 @@ function save_mapping_marc($data)
     $son_data_info = [];
     foreach ($data as $property_id => $value)
     {
-        $subfield = just_letters($value);
-        if($subfield == null)
+        if($value != '-')
         {
-            if(strstr($value, "#1"))
+            $subfield = just_letters($value);
+            if($subfield == null)
             {
-                $subfield = "#1";
-                $value = str_replace("#1", "", $value);
-            }else if(strstr($value, "#2"))
-            {
-                $subfield = "#2";
-                $value = str_replace("#2", "", $value);
-            }else if (strstr($value, "$1"))
-            {
-                $subfield = "$1";
-                $value = str_replace("$1", "", $value);
+                if(preg_match("/(#1)$/", $value))
+                {
+                    $subfield = "#1";
+                    $value = str_replace("#1", "", $value);
+                }else if(preg_match("/(#2)$/", $value))
+                {
+                    $subfield = "#2";
+                    $value = str_replace("#2", "", $value);
+                }else if (preg_match("/($1)$/", $value))
+                {
+                    $subfield = "$1";
+                    $value = str_replace("$1", "", $value);
+                }
+                else if (preg_match("/($2)$/", $value))
+                {
+                    $subfield = "$2";
+                    $value = str_replace("$2", "", $value);
+                }
+                else if (preg_match("/($3)$/", $value))
+                {
+                    $subfield = "$3";
+                    $value = str_replace("$3", "", $value);
+                }
+                else if (strlen($value) > 3)
+                {
+                    $subfield = end(explode(" ", $value));
+                    $value = explode(" ", $value)[0];
+                }
+                else $subfield = 'compound_id';
             }
-            else if (strstr($value, "$2"))
-            {
-                $subfield = "$2";
-                $value = str_replace("$2", "", $value);
-            }
-            else $subfield = 'compound_id';
-        }
 
-        if(in_array(explode("_", $property_id)[0], $ids_from_father))
-        {
-            $father_data_info[just_numbers($value)][$subfield] = $property_id;
-        }else
-        {
-            $son_data_info[just_numbers($value)][$subfield] = $property_id;
+            if(in_array(explode("_", $property_id)[0], $ids_from_father))
+            {
+                $father_data_info[just_numbers($value)][$subfield] = $property_id;
+            }else
+            {
+
+                $son_data_info[just_numbers($value)][$subfield] = $property_id;
+            }
         }
     }
 
@@ -817,10 +1032,12 @@ function import_marc()
     $lines = split_lines($marc);
     $treated_lines = treat_lines($lines);
 
-    $elem['result'] = add_material($collection_id, $treated_lines);
+    $add_material_return = add_material($collection_id, $treated_lines);
+
+    $elem['result'] = $add_material_return['ok'];
     if($elem['result'])
     {
-        $elem['url'] = get_the_permalink($collection_id);
+        $elem['url'] = get_the_permalink($collection_id)."/".get_post($add_material_return['material_id'])->post_name;
     }
 
     return $elem;
@@ -882,37 +1099,41 @@ function treat_lines($lines)
     foreach($lines as $line)
     {
         $field = strstr($line, " ", true);
-        $line = remove_first_occurence($field." ", $line);
-
-        $select_box_state = strstr($line, "|", true);
-
-        if(strlen($field) > 0)
+        
+        if($field != '000')
         {
-            if($select_box_state[0] != '_')
-                $array[$field]['1'] = $select_box_state[0];
-            if($select_box_state[1] != '_')
-                $array[$field]['2'] = $select_box_state[1];
-        }
+            $line = remove_first_occurence($field." ", $line);
 
-        $line = remove_first_occurence($select_box_state."|", $line);
+            $select_box_state = strstr($line, "|", true);
 
-        while(strlen($line) > 0)
-        {
-            $subFieldValue = strstr($line, "|", true);
-            if($subFieldValue == null)
+            if(strlen($field) > 0)
             {
-                $subFieldValue = $line;
-                $line = null;
-            }
-            else
-            {
-                $line = remove_first_occurence($subFieldValue."|", $line);
+                if($select_box_state[0] != '_')
+                    $array[$field]['#1'] = $select_box_state[0];
+                if($select_box_state[1] != '_')
+                    $array[$field]['#2'] = $select_box_state[1];
             }
 
-            $subField = $subFieldValue[0];
+            $line = remove_first_occurence($select_box_state."|", $line);
 
-            $subFieldValue = remove_first_occurence($subField, $subFieldValue);
-            $array[$field][$subField] = $subFieldValue;
+            while(strlen($line) > 0)
+            {
+                $subFieldValue = strstr($line, "|", true);
+                if($subFieldValue == null)
+                {
+                    $subFieldValue = $line;
+                    $line = null;
+                }
+                else
+                {
+                    $line = remove_first_occurence($subFieldValue."|", $line);
+                }
+
+                $subField = $subFieldValue[0];
+
+                $subFieldValue = remove_first_occurence($subField, $subFieldValue);
+                $array[$field][$subField] = $subFieldValue;
+            }
         }
     }
 
@@ -954,531 +1175,27 @@ function add_material($collection_id, $property_list)
     {
         $inserted_ids = [];
         $compound_id = get_id_marc_mapping($marc_mapping, $field, "compound_id");
-        switch($field)
+
+        foreach($sub_fields as $sub_field => $value)
         {
-            case '013' || '40' || '80' || '82' || '90' || '250' || '258' || '260' || '300' || '310' || '321' || '340' || '343' ||'856' || '520' ||
-                  '521' || '020' || '22' || '29' || '43' || '95' || '256' || '257' || '255' || '306' || '500' || '501' || '502' || '504' || '505' || '515' ||
-                  '525' || '530' || '534' || '550':
-                foreach($sub_fields as $sub_field => $value)
-                {
-                    $sub_field_id = get_id_marc_mapping($marc_mapping, $field, $sub_field);
-                    $inserted_ids[] = parse_save($data['ID'], $compound_id, $sub_field_id, $value);
-                }
-                break;
-            case '041':
-                foreach($sub_fields as $sub_field => $value)
-                {
-                    $sub_field_id = get_id_marc_mapping($marc_mapping, $field, $sub_field);
-                    switch ($sub_field)
-                    {
-                        case '1':
-                            //Indicação de tradução
-                            $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "#".$sub_field);
-                            $term_meta = get_term_meta($sub_field_id ,'socialdb_property_term_root', true);
-                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
-                            if($value == '0')
-                            {
-                                $category_root_id =  $term_children[0];
-                            }else $category_root_id = $term_children[1];
+            if($sub_field == '#1' || $sub_field == "#2")
+            {
+                $category_root_id = get_id_marc_mapping($marc_mapping, $field, $sub_field."-".$value);
 
-                            wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type', true);
-                            $inserted_ids[] = $category_root_id.'_cat';
-                            break;
-                        default:
-                            $inserted_ids[] = parse_save($data['ID'], $compound_id, $sub_field_id, $value);
-                            break;
-                    }
-                }
-                break;
-            case '045':
-                foreach($sub_fields as $sub_field => $value)
-                {
-                    $sub_field_id = get_id_marc_mapping($marc_mapping, $field, $sub_field);
-                    switch ($sub_field)
-                    {
-                        case '1':
-                            //Tipo do período cronológico
-                            $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "#".$sub_field);
-                            $term_meta = get_term_meta($sub_field_id ,'socialdb_property_term_root', true);
-                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
-
-                            switch ($value)
-                            {
-                                case '0':
-                                    $category_root_id =  $term_children[3];
-                                    break;
-                                case '1':
-                                    $category_root_id =  $term_children[2];
-                                    break;
-                                case '2':
-                                    $category_root_id =  $term_children[2];
-                                    break;
-                            }
-
-                            wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type', true);
-                            $inserted_ids[] = $category_root_id.'_cat';
-
-                            break;
-                        default:
-                            $inserted_ids[] = parse_save($data['ID'], $compound_id, $sub_field_id, $value);
-                            break;
-                    }
-                }
-                break;
-            case '100':
-                foreach($sub_fields as $sub_field => $value)
-                {
-                    $sub_field_id = get_id_marc_mapping($marc_mapping, $field, $sub_field);
-                    switch ($sub_field)
-                    {
-                        case '1':
-                            //Forma de entrada: sobrenome simples ou composto
-                            $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "#".$sub_field);
-                            $term_meta = get_term_meta($sub_field_id ,'socialdb_property_term_root', true);
-                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
-
-                            switch ($value)
-                            {
-                                case '0':
-                                    $category_root_id =  $term_children[1];
-                                    break;
-                                case '1':
-                                    $category_root_id =  $term_children[3];
-                                    break;
-                                case '2':
-                                    $category_root_id =  $term_children[2];
-                                    break;
-                                case '3':
-                                    $category_root_id =  $term_children[0];
-                                    break;
-                            }
-
-                            wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type', true);
-                            $inserted_ids[] = $category_root_id.'_cat';
-
-                            break;
-                        default:
-                            $inserted_ids[] = parse_save($data['ID'], $compound_id, $sub_field_id, $value);
-                            break;
-                    }
-                }
-                break;
-            case '110' || '111':
-                foreach($sub_fields as $sub_field => $value)
-                {
-                    $sub_field_id = get_id_marc_mapping($marc_mapping, $field, $sub_field);
-                    switch ($sub_field)
-                    {
-                        case '1':
-                            //Forma de entrada: nome invertido
-                            $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "#".$sub_field);
-                            $term_meta = get_term_meta($sub_field_id ,'socialdb_property_term_root', true);
-                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
-
-                            switch ($value)
-                            {
-                                case '0':
-                                    $category_root_id =  $term_children[1];
-                                    break;
-                                case '1':
-                                    $category_root_id =  $term_children[0];
-                                    break;
-                                case '2':
-                                    $category_root_id =  $term_children[2];
-                                    break;
-                            }
-
-                            wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type', true);
-                            $inserted_ids[] = $category_root_id.'_cat';
-
-                            break;
-                        default:
-                            $inserted_ids[] = parse_save($data['ID'], $compound_id, $sub_field_id, $value);
-                            break;
-                    }
-                }
-                break;
-            case '130':
-                foreach($sub_fields as $sub_field => $value)
-                {
-                    $sub_field_id = get_id_marc_mapping($marc_mapping, $field, $sub_field);
-                    switch ($sub_field)
-                    {
-                        //Número de caracteres a desprezar
-                        case '1':
-                            $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "#".$sub_field);
-                            $term_meta = get_term_meta($sub_field_id ,'socialdb_property_term_root', true);
-                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
-
-                            if($value > 0)
-                            {
-                                $category_root_id =  $term_children[$value-1];
-                            }else
-                            {
-                                $category_root_id = $term_children[sizeof($term_children)-1];
-                            }
-
-                            wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type', true);
-                            $inserted_ids[] = $category_root_id.'_cat';
-
-                            break;
-                        default:
-                            $inserted_ids[] = parse_save($data['ID'], $compound_id, $sub_field_id, $value);
-                            break;
-                    }
-                }
-                break;
-            case '210':
-                foreach($sub_fields as $sub_field => $value)
-                {
-                    $sub_field_id = get_id_marc_mapping($marc_mapping, $field, $sub_field);
-                    switch ($sub_field)
-                    {
-                        //Entrada secundária de título
-                        case '1':
-                            $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "#".$sub_field);
-                            $term_meta = get_term_meta($sub_field_id ,'socialdb_property_term_root', true);
-                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
-
-                            switch ($value)
-                            {
-                                case '0':
-                                    $category_root_id =  $term_children[2];
-                                    break;
-                                case '1':
-                                    $category_root_id =  $term_children[1];
-                                    break;
-                            }
-
-                            wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type', true);
-                            $inserted_ids[] = $category_root_id.'_cat';
-
-                            break;
-                        //Tipo de Título
-                        case '2':
-                            $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "#".$sub_field);
-                            $term_meta = get_term_meta($sub_field_id ,'socialdb_property_term_root', true);
-                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
-
-                            switch ($value)
-                            {
-                                case '0':
-                                    $category_root_id =  $term_children[1];
-                                    break;
-                                default:
-                                    $category_root_id =  $term_children[2];
-                                    break;
-                            }
-
-                            wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type', true);
-                            $inserted_ids[] = $category_root_id.'_cat';
-
-                            break;
-                        default:
-                            $inserted_ids[] = parse_save($data['ID'], $compound_id, $sub_field_id, $value);
-                            break;
-                    }
-                }
-                break;
-            case '240' || '243' || '245':
-                foreach($sub_fields as $sub_field => $value)
-                {
-                    $sub_field_id = get_id_marc_mapping($marc_mapping, $field, $sub_field);
-                    switch ($sub_field)
-                    {
-                        //Gera entrada secundária na ficha
-                        case '1':
-                            $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "#".$sub_field);
-                            $term_meta = get_term_meta($sub_field_id ,'socialdb_property_term_root', true);
-                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
-
-                            switch ($value)
-                            {
-                                case '0':
-                                    $category_root_id =  $term_children[2];
-                                    break;
-                                case '1':
-                                    $category_root_id =  $term_children[1];
-                                    break;
-                            }
-
-                            wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type', true);
-                            $inserted_ids[] = $category_root_id.'_cat';
-
-                            break;
-                        //Número de caracteres a desprezar
-                        case '2':
-                            $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "#".$sub_field);
-                            $term_meta = get_term_meta($sub_field_id ,'socialdb_property_term_root', true);
-                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
-
-                            if($value > 0)
-                            {
-                                $category_root_id =  $term_children[$value-1];
-                            }else
-                            {
-                                $category_root_id = $term_children[sizeof($term_children)-1];
-                            }
-
-                            wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type', true);
-                            $inserted_ids[] = $category_root_id.'_cat';
-
-                            break;
-                        default:
-                            $inserted_ids[] = parse_save($data['ID'], $compound_id, $sub_field_id, $value);
-                            break;
-                    }
-                }
-                break;
-            case '246':
-                foreach($sub_fields as $sub_field => $value)
-                {
-                    $sub_field_id = get_id_marc_mapping($marc_mapping, $field, $sub_field);
-                    switch ($sub_field)
-                    {
-                        //Controle de nota/entrada secundária de título
-                        case '1':
-                            $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "#".$sub_field);
-                            $term_meta = get_term_meta($sub_field_id ,'socialdb_property_term_root', true);
-                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
-
-                            switch ($value)
-                            {
-                                case '3':
-                                    $category_root_id =  $term_children[1];
-                                    break;
-                                case '4':
-                                    $category_root_id =  $term_children[0];
-                                    break;
-                                case '5':
-                                    $category_root_id =  $term_children[2];
-                                    break;
-                                case '6':
-                                    $category_root_id =  $term_children[3];
-                                    break;
-                            }
-
-                            wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type', true);
-                            $inserted_ids[] = $category_root_id.'_cat';
-
-                            break;
-                        //Tipo de título: título lombada
-                        case '2':
-                            $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "#".$sub_field);
-                            $term_meta = get_term_meta($sub_field_id ,'socialdb_property_term_root', true);
-                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
-
-                            switch ($value)
-                            {
-                                case '0':
-                                    $category_root_id =  $term_children[4];
-                                    break;
-                                case '1':
-                                    $category_root_id =  $term_children[11];
-                                    break;
-                                case '2':
-                                    $category_root_id =  $term_children[10];
-                                    break;
-                                case '3':
-                                    $category_root_id =  $term_children[3];
-                                    break;
-                                case '4':
-                                    $category_root_id =  $term_children[7];
-                                    break;
-                                case '5':
-                                    $category_root_id =  $term_children[5];
-                                    break;
-                                case '6':
-                                    $category_root_id =  $term_children[9];
-                                    break;
-                                case '7':
-                                    $category_root_id =  $term_children[8];
-                                    break;
-                                case '8':
-                                    $category_root_id =  $term_children[3];
-                                    break;
-                            }
-
-                            wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type', true);
-                            $inserted_ids[] = $category_root_id.'_cat';
-
-                            break;
-                        default:
-                            $inserted_ids[] = parse_save($data['ID'], $compound_id, $sub_field_id, $value);
-                            break;
-                    }
-                }
-                break;
-            case '342':
-                foreach($sub_fields as $sub_field => $value)
-                {
-                    $sub_field_id = get_id_marc_mapping($marc_mapping, $field, $sub_field);
-                    switch ($sub_field)
-                    {
-                        //Dimensões de referência geospacial
-                        case '1':
-                            $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "#".$sub_field);
-                            $term_meta = get_term_meta($sub_field_id ,'socialdb_property_term_root', true);
-                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
-
-                            switch ($value)
-                            {
-                                case '0':
-                                    $category_root_id =  $term_children[1];
-                                    break;
-                                case '1':
-                                    $category_root_id =  $term_children[2];
-                                    break;
-                            }
-
-                            wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type', true);
-                            $inserted_ids[] = $category_root_id.'_cat';
-
-                            break;
-                        //Dimensões de referência geospacial
-                        case '2':
-                            $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "#".$sub_field);
-                            $term_meta = get_term_meta($sub_field_id ,'socialdb_property_term_root', true);
-                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
-
-                            switch ($value)
-                            {
-                                case '0':
-                                    $category_root_id =  $term_children[2];
-                                    break;
-                                case '1':
-                                    $category_root_id =  $term_children[7];
-                                    break;
-                                case '2':
-                                    $category_root_id =  $term_children[8];
-                                    break;
-                                case '3':
-                                    $category_root_id =  $term_children[4];
-                                    break;
-                                case '4':
-                                    $category_root_id =  $term_children[3];
-                                    break;
-                                case '5':
-                                    $category_root_id =  $term_children[5];
-                                    break;
-                                case '6':
-                                    $category_root_id =  $term_children[1];
-                                    break;
-                                case '7':
-                                    $category_root_id =  $term_children[0];
-                                    break;
-                                case '8':
-                                    $category_root_id =  $term_children[6];
-                                    break;
-                            }
-
-                            wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type', true);
-                            $inserted_ids[] = $category_root_id.'_cat';
-
-                            break;
-                        default:
-                            $inserted_ids[] = parse_save($data['ID'], $compound_id, $sub_field_id, $value);
-                            break;
-                    }
-                }
-                break;
-            case '362':
-                foreach($sub_fields as $sub_field => $value)
-                {
-                    $sub_field_id = get_id_marc_mapping($marc_mapping, $field, $sub_field);
-                    switch ($sub_field) {
-                        case '1':
-                            //Formato da data
-                            $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "#" . $sub_field);
-                            $term_meta = get_term_meta($sub_field_id, 'socialdb_property_term_root', true);
-                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
-
-                            switch ($value) {
-                                case '0':
-                                    $category_root_id = $term_children[3];
-                                    break;
-                                case '1':
-                                    $category_root_id = $term_children[2];
-                                    break;
-                            }
-
-                            wp_set_object_terms($data['ID'], array((int)$category_root_id), 'socialdb_category_type', true);
-                            $inserted_ids[] = $category_root_id . '_cat';
-
-                            break;
-                        default:
-                            $inserted_ids[] = parse_save($data['ID'], $compound_id, $sub_field_id, $value);
-                            break;
-                    }
-                }
-                break;
-            case '490':
-                foreach($sub_fields as $sub_field => $value)
-                {
-                    $sub_field_id = get_id_marc_mapping($marc_mapping, $field, $sub_field);
-                    switch ($sub_field) {
-                        case '1':
-                            //Política de desdobramento de série
-                            $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "#" . $sub_field);
-                            $term_meta = get_term_meta($sub_field_id, 'socialdb_property_term_root', true);
-                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
-
-                            switch ($value) {
-                                case '0':
-                                    $category_root_id = $term_children[3];
-                                    break;
-                                case '1':
-                                    $category_root_id = $term_children[2];
-                                    break;
-                            }
-
-                            wp_set_object_terms($data['ID'], array((int)$category_root_id), 'socialdb_category_type', true);
-                            $inserted_ids[] = $category_root_id . '_cat';
-
-                            break;
-                        default:
-                            $inserted_ids[] = parse_save($data['ID'], $compound_id, $sub_field_id, $value);
-                            break;
-                    }
-                }
-                break;
-            case '555':
-                foreach($sub_fields as $sub_field => $value)
-                {
-                    $sub_field_id = get_id_marc_mapping($marc_mapping, $field, $sub_field);
-                    switch ($sub_field) {
-                        case '1':
-                            //Política de desdobramento de série
-                            $sub_field_id = get_id_marc_mapping($marc_mapping, $field, "#" . $sub_field);
-                            $term_meta = get_term_meta($sub_field_id, 'socialdb_property_term_root', true);
-                            $term_children = get_term_children($term_meta, 'socialdb_category_type');
-
-                            switch ($value) {
-                                case '0':
-                                    $category_root_id = $term_children[3];
-                                    break;
-                                case '1':
-                                    $category_root_id = $term_children[2];
-                                    break;
-                            }
-
-                            wp_set_object_terms($data['ID'], array((int)$category_root_id), 'socialdb_category_type', true);
-                            $inserted_ids[] = $category_root_id . '_cat';
-
-                            break;
-                        default:
-                            $inserted_ids[] = parse_save($data['ID'], $compound_id, $sub_field_id, $value);
-                            break;
-                    }
-                }
-                break;
-
+                wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type', true);
+                $inserted_ids[] = $category_root_id.'_cat';
+            }
+            else if(just_letters($sub_field))
+            {
+                $sub_field_id = get_id_marc_mapping($marc_mapping, $field, $sub_field);
+                $inserted_ids[] = parse_save($data['ID'], $compound_id, $sub_field_id, $value);
+            }
         }
-        //print_r($inserted_ids);
+
         update_post_meta($data['ID'], 'socialdb_property_' . $compound_id . '_0', implode(',', $inserted_ids));
     }
 
-    return true;
+    return array('ok' => true, 'material_id' => $data['ID']);
 }
 
 function get_id_marc_mapping($marc_mapping, $field, $subfield)

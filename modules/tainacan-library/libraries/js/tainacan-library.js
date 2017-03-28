@@ -30,15 +30,14 @@ function send_ajax($marc)
         data: {marc: $marc, collection_id: $("#collection_id").val()},
         beforeSend: function () {
             $("#modalImportMarc").modal("hide");
-        },
-        error: function () {
-            console.log("Error!!");
+            $("#modalImportLoading").modal("show");
+            $('#progressbarmapas').remove();
         },
         success: function (elem) {
             elem = JSON.parse(elem);
             if(elem.result)
             {
-                //window.location = elem.url;
+                window.location = elem.url;
             }
         }
     });
