@@ -1,3 +1,6 @@
+<!-----
+  View que mostra o formulario de busca da propriedade de objeto
+-->
 <!----------------------------   definindo o formulario ----------------------->
 <?php if (isset($property['compound_id'])): ?>
     <?php $form = "#property_object_search_submit_" . $property['compound_id'] . "_" . $property['id'] . "_" . $property['contador']; ?>

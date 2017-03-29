@@ -151,8 +151,8 @@ class PropertyModel extends Model {
             if(!isset($data['property_category_id'])){
                 $data['property_category_id'] = $this->get_category_root_of($data['collection_id']);
             }
-            if($data['socialdb_property_default_value']){
-                 $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_default_value', $data['socialdb_property_default_value']);
+            if($data['property_default_value']){
+                 $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_default_value', $data['property_default_value']);
             }
             $result[] = $this->vinculate_property($data['property_category_id'], $new_property['term_id']); // vinculo com a colecao/categoria
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_created_category', $data['property_category_id']);
@@ -249,6 +249,9 @@ class PropertyModel extends Model {
             update_term_meta($new_property['term_id'], 'socialdb_property_locked',$data['property_locked']);
             update_term_meta($new_property['term_id'], 'socialdb_property_to_search_in',$data['property_to_search_in']);
             update_term_meta($new_property['term_id'], 'socialdb_property_avoid_items',$data['property_avoid_items']);
+            if($data['property_default_value']&&!empty($data['property_default_value'])){
+                 $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_default_value', $data['property_default_value']);
+            }
             //selecionando varios relacionamentos ao mesmo tempo
             if(strpos($data['property_object_category_id'], ',')!==false){
                 $categories = array_filter(explode(',', $data['property_object_category_id']));
@@ -419,6 +422,9 @@ class PropertyModel extends Model {
             update_term_meta($new_property['term_id'], 'socialdb_property_locked',$data['property_locked']);
             update_term_meta($new_property['term_id'], 'socialdb_property_to_search_in',$data['property_to_search_in']);
             update_term_meta($new_property['term_id'], 'socialdb_property_avoid_items',$data['property_avoid_items']);
+            if($data['property_default_value']&&!empty($data['property_default_value'])){
+                 $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_default_value', $data['property_default_value']);
+            }
             //selecionando varios relacionamentos ao mesmo tempo
             if(strpos($data['property_object_category_id'], ',')!==false){
                 delete_term_meta($new_property['term_id'], 'socialdb_property_object_category_id');
@@ -484,8 +490,8 @@ class PropertyModel extends Model {
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_visualization',$data['property_visualization']);
             update_term_meta($new_property['term_id'], 'socialdb_property_locked',$data['property_locked']);
             update_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $data['socialdb_property_term_root'] . '_color', 'color13');
-            if($data['socialdb_property_default_value']&&!empty($data['socialdb_property_default_value'])){
-                 $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_default_value', $data['socialdb_property_default_value']);
+            if($data['property_default_value']&&!empty($data['property_default_value'])){
+                 $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_default_value', $data['property_default_value']);
             }
             if($data['socialdb_property_help']&&!empty($data['socialdb_property_help'])){
                 $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_help', $data['socialdb_property_help']);

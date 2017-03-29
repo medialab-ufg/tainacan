@@ -77,6 +77,17 @@
                             <select class="socialdb_event_property_tab form-control" name="socialdb_event_property_tab">
                             </select>
                         </div>
+                        <div  class="create_form-group">
+                            <label for="socialdb_property_default_value"><?php _e('Property data default value', 'tainacan'); ?></label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="default_value_text" 
+                                   onkeyup="autocomplete_object_property_default_value($('#property_object_category_id').val());"
+                                   name="default_value_text" 
+                                   placeholder="<?php _e('Type the name of the item', 'tainacan'); ?>"><br>
+                            <input type="hidden" 
+                                   id="socialdb_property_object_default_value" name="socialdb_event_property_default_value"><br>
+                        </div>
                     </div>    
                     <div class="form-group" style="margin-top: 15px;">
                         <label for="use-filter"><?php _e('Use as a filter','tainacan'); ?></label>

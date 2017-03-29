@@ -48,6 +48,7 @@ foreach( $view_helper->get_metadata_types() as $type => $label):
                                     <input type="radio" name="property_data_required" id="property_data_required_true"  value="true">&nbsp;<?php _e('Yes','tainacan'); ?>
                                     <input type="radio" name="property_data_required" id="property_data_required_false" value="false">&nbsp;<?php _e('No','tainacan'); ?>
                                 </div>
+                                <?php $view_helper->commomFieldsProperties() ?>
                                 <input type="hidden" name="property_data_widget" value="<?php echo $type ?>" class="property_data_widget">
                                 <input type="hidden" name="orientation" value="left-column">
                             </div>

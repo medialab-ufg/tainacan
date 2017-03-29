@@ -1,4 +1,9 @@
 <?php
+    /**
+     * 
+     * View que lista os itens encontrados na busca de propriedade de objeto em proprieddades Simples
+     * 
+     */
     include_once(dirname(__FILE__) . '/../../helpers/view_helper.php');
     include_once(dirname(__FILE__) . '/../../helpers/object/object_properties_widgets_helper.php');
     $object = new ObjectWidgetsHelper;

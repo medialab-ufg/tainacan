@@ -187,7 +187,8 @@ class ObjectWidgetsHelper extends ViewHelper {
      */
     public function widget_property_data($property,$i,$references,$value = false) {
         $references['properties_autocomplete'][] = $property['id'];
-        if($references['is_view_mode']){
+        if($references['is_view_mode'] 
+                || (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true')){
             if(isset($value) && !empty($value)): ?>
                 <p><?php  echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $value . "'" . ',' . $property['id'] . ')">' . $value . '</a>';  ?></p>
             <?php else: ?>
@@ -269,7 +270,7 @@ class ObjectWidgetsHelper extends ViewHelper {
      * @param int $i O indice do for da cardinalidade
      */
     public function widget_property_object($property,$i,$references,$value = false) {
-        if($references['is_view_mode']){
+        if($references['is_view_mode'] || (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true')){
             if(isset($value)): ?>
              <div id="labels_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">
                 <?php if (!empty($property['metas']['objects']) && !empty($value)) { ?>
@@ -295,41 +296,7 @@ class ObjectWidgetsHelper extends ViewHelper {
             $property['metas']['value'] = (is_array($value)) ? $value : [$value];
         }
         $this->generateWidgetPropertyRelatedCompound($property, $references['compound_id'], 0,$references['compound_id'],$i);
-        ?>
-        <!--input type="hidden" 
-                        id="cardinality_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>"  
-                        value="<?php echo $this->render_cardinality_property($property);   ?>">            
-        <input type="text" 
-               onkeyup="autocomplete_object_property_compound('<?php echo $references['compound_id']; ?>','<?php echo $property['id']; ?>', '<?php echo $i; ?>');" 
-               id="autocomplete_value_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
-               placeholder="<?php _e('Type the three first letters of the object of this collection ', 'tainacan'); ?>"  
-               class="chosen-selected form-control"  />    
-
-        <select onclick="clear_select_object_property_compound(this,'<?php echo $references['compound_id']; ?>','<?php echo $property['id']; ?>', '<?php echo $i; ?>');" 
-                id="property_value_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>_edit" 
-                multiple class="chosen-selected2 form-control" 
-                style="height: auto;" 
-                name="socialdb_property_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>[]"
-                <?php 
-                    if ($property['metas']['socialdb_property_required'] == 'true'): 
-                        echo 'required="required"';
-                    endif;
-                ?> >
-                <?php 
-                    if (!empty($property['metas']['objects'])) { ?>     
-                        <?php foreach ($property['metas']['objects'] as $object) { ?>
-                            <?php if ($value && $object->ID==$value): // verifico se ele esta na lista de objetos da colecao   ?>    
-                                 <option selected='selected' value="<?php echo $object->ID ?>"><?php echo $object->post_title ?></span>
-                        <?php endif; ?>
-                    <?php } ?> 
-                <?php 
-                    }else { 
-                ?>   
-                    <option value=""><?php _e('No objects added in this collection', 'tainacan'); ?></option>
-                <?php 
-                    } 
-                ?>       
-        </select-->    
+        ?>   
         <?php
     }
     
@@ -345,7 +312,7 @@ class ObjectWidgetsHelper extends ViewHelper {
             id='actual_value_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>'
             value="<?php if ($value) echo $value; ?>">
         <?php
-        if($references['is_view_mode']){
+        if($references['is_view_mode'] || (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true')){
             ?>
             <div id='label_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>'><p><?php  _e('empty field', 'tainacan') ?></p></div>  
             <?php
