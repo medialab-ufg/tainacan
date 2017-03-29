@@ -216,7 +216,7 @@ function show_all_meta($collection_id)
                         </div>
                         <?php
                         $category_parent = get_term_by("id", $id, 'socialdb_property_type')->parent;
-                        if(strcmp(get_term_by("id", $category_parent, 'socialdb_property_type')->name, "socialdb_property_term") == 0);
+                        if(strcmp(get_term_by("id", $category_parent, 'socialdb_property_type')->name, "socialdb_property_term") == 0)
                         {
                             $term_meta = get_term_meta($id ,'socialdb_property_term_root', true);
                             $term_children = get_term_children($term_meta, 'socialdb_category_type');
@@ -355,7 +355,6 @@ function get_all_marc_fields()
     $marc_fiels[] = '045 #1-0';
     $marc_fiels[] = '045 #1-1';
     $marc_fiels[] = '045 #1-2';
-    $marc_fiels[] = '045 #1-3';
     $marc_fiels[] = '045 $a';
     $marc_fiels[] = '045 $b';
     $marc_fiels[] = '045 $c';
@@ -436,7 +435,6 @@ function get_all_marc_fields()
     $marc_fiels[] = '210';
     $marc_fiels[] = '210 #1';
     $marc_fiels[] = '210 #1-0';
-    $marc_fiels[] = '210 #1-1';
     $marc_fiels[] = '210 #2';
     $marc_fiels[] = '210 #2-0';
     $marc_fiels[] = '210 #2-1';
@@ -526,7 +524,6 @@ function get_all_marc_fields()
     $marc_fiels[] = '246 #2-6';
     $marc_fiels[] = '246 #2-7';
     $marc_fiels[] = '246 #2-8';
-    $marc_fiels[] = '246 #2-9';
     $marc_fiels[] = '246 $a';
     $marc_fiels[] = '246 $b';
     $marc_fiels[] = '246 $f';
@@ -663,8 +660,7 @@ function get_all_marc_fields()
     $marc_fiels[] = '555';
     $marc_fiels[] = '555 #1';
     $marc_fiels[] = '555 #1-0';
-    $marc_fiels[] = '555 #1-1';
-    $marc_fiels[] = '555 #1-2';
+    $marc_fiels[] = '555 #1-8';
     $marc_fiels[] = '555 $3';
     $marc_fiels[] = '555 $a';
     $marc_fiels[] = '555 $b';
@@ -704,6 +700,7 @@ function get_all_marc_fields()
     $marc_fiels[] = '610 #1-0';
     $marc_fiels[] = '610 #1-1';
     $marc_fiels[] = '610 #1-2';
+    $marc_fiels[] = '610 #1-3';
     $marc_fiels[] = '610 $a';
     $marc_fiels[] = '610 $b';
     $marc_fiels[] = '610 $c';
@@ -721,7 +718,8 @@ function get_all_marc_fields()
     $marc_fiels[] = '611 #1';
     $marc_fiels[] = '611 #1-0';
     $marc_fiels[] = '611 #1-1';
-    $marc_fiels[] = '611 #1-1';
+    $marc_fiels[] = '611 #1-2';
+    $marc_fiels[] = '611 #1-3';
     $marc_fiels[] = '611 $a';
     $marc_fiels[] = '611 $c';
     $marc_fiels[] = '611 $d';
@@ -774,8 +772,7 @@ function get_all_marc_fields()
     $marc_fiels[] = '700 #1-2';
     $marc_fiels[] = '700 #1-3';
     $marc_fiels[] = '700 #2';
-    $marc_fiels[] = '700 #2-0';
-    $marc_fiels[] = '700 #2-1';
+    $marc_fiels[] = '700 #2-2';
     $marc_fiels[] = '700 $a';
     $marc_fiels[] = '700 $b';
     $marc_fiels[] = '700 $c';
@@ -791,8 +788,7 @@ function get_all_marc_fields()
     $marc_fiels[] = '710 #1-1';
     $marc_fiels[] = '710 #1-2';
     $marc_fiels[] = '710 #2';
-    $marc_fiels[] = '710 #2-0';
-    $marc_fiels[] = '710 #2-1';
+    $marc_fiels[] = '710 #2-2';
     $marc_fiels[] = '710 $a';
     $marc_fiels[] = '710 $b';
     $marc_fiels[] = '710 $c';
@@ -829,8 +825,7 @@ function get_all_marc_fields()
     $marc_fiels[] = '730 #1-8';
     $marc_fiels[] = '730 #1-9';
     $marc_fiels[] = '730 #2';
-    $marc_fiels[] = '730 #2-0';
-    $marc_fiels[] = '730 #2-1';
+    $marc_fiels[] = '730 #2-2';
     $marc_fiels[] = '730 $a';
     $marc_fiels[] = '730 $d';
     $marc_fiels[] = '730 $f';
@@ -855,8 +850,7 @@ function get_all_marc_fields()
     $marc_fiels[] = '740 #1-8';
     $marc_fiels[] = '740 #1-9';
     $marc_fiels[] = '740 #2';
-    $marc_fiels[] = '740 #2-0';
-    $marc_fiels[] = '740 #2-1';
+    $marc_fiels[] = '740 #2-2';
     $marc_fiels[] = '740 $a';
     $marc_fiels[] = '740 $n';
     $marc_fiels[] = '740 $p';
@@ -925,8 +919,37 @@ function save_mapping_marc($data)
                 if($index == "father")
                 {
                     $ids_from_father[] = $subfield_id;
+
+                    $category_parent = get_term_by("id", $subfield_id, 'socialdb_property_type')->parent;
+
+                    if(strcmp(get_term_by("id", $category_parent, 'socialdb_property_type')->name, "socialdb_property_term") == 0)
+                    {
+                        $term_meta = get_term_meta($subfield_id ,'socialdb_property_term_root', true);
+                        $term_children = get_term_children($term_meta, 'socialdb_category_type');
+
+                        foreach($term_children as $term_child_id)
+                        {
+                            $ids_from_father[] = $term_child_id;
+                        }
+                    }
                 }
-                else $ids_from_son[] = $subfield_id;
+                else if($index == 'son')
+                {
+                    $ids_from_son[] = $subfield_id;
+
+                    $category_parent = get_term_by("id", $subfield_id, 'socialdb_property_type')->parent;
+
+                    if(strcmp(get_term_by("id", $category_parent, 'socialdb_property_type')->name, "socialdb_property_term") == 0)
+                    {
+                        $term_meta = get_term_meta($subfield_id ,'socialdb_property_term_root', true);
+                        $term_children = get_term_children($term_meta, 'socialdb_category_type');
+
+                        foreach($term_children as $term_child_id)
+                        {
+                            $ids_from_son[] = $term_child_id;
+                        }
+                    }
+                }
             }
         }
     }
@@ -970,14 +993,15 @@ function save_mapping_marc($data)
                 }
                 else $subfield = 'compound_id';
             }
-
-            if(in_array(explode("_", $property_id)[0], $ids_from_father))
+            $item_id = explode("_", $property_id)[0];
+            if(in_array($item_id, $ids_from_son))
             {
                 $father_data_info[just_numbers($value)][$subfield] = $property_id;
-            }else
-            {
-
                 $son_data_info[just_numbers($value)][$subfield] = $property_id;
+            }else
+            if(in_array($item_id, $ids_from_father))
+            {
+                $father_data_info[just_numbers($value)][$subfield] = $property_id;
             }
         }
     }
