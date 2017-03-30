@@ -45,8 +45,8 @@ if (isset($property_object)):
             </h2>
             <?php if((isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true')): ?>
                 <div>
-                    <?php if(isset($property['metas']['socialdb_property_default_value']) && $property['metas']['socialdb_property_default_value']!=''): ?>
-                        <p><?php  echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $property['metas']['socialdb_property_default_value']. "'" . ',' . $property['id'] . ')">' .$property['metas']['socialdb_property_default_value'] . '</a>';  ?></p>
+                    <?php if(isset($property['metas']['socialdb_property_default_value']) && $property['metas']['socialdb_property_default_value']!=''): $property['metas']['value'][] = $property['metas']['socialdb_property_default_value']; ?>
+                        <p><?php  echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $property['metas']['socialdb_property_default_value']. "'" . ',' . $property['id'] . ')">' .get_post($property['metas']['socialdb_property_default_value'])->post_title . '</a>';  ?></p>
                     <?php else: ?>
                         <p><?php  _e('Empty field', 'tainacan') ?></p>
                     <?php endif ?>
