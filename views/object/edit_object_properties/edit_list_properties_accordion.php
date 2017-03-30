@@ -41,11 +41,11 @@ if (isset($property_object)):
                 <?php echo $property['name']; ?>
                 <?php
                 if(has_action('modificate_label_edit_item_properties')):
-                        do_action('modificate_label_insert_item_properties', $property);
+                    do_action('modificate_label_insert_item_properties', $property);
                 endif;
                 //acao para modificaco da propriedade de objeto na edicao do item
-                if(has_action('modificate_edit_item_properties_object')): 
-                         do_action('modificate_edit_item_properties_object',$property); 
+                if(has_action('modificate_edit_item_properties_object')):
+                    do_action('modificate_edit_item_properties_object',$property);
                 endif;
                 $object_properties_widgets_helper->generateValidationIcons($property);
                 ?>
@@ -55,16 +55,22 @@ if (isset($property_object)):
                            value="<?php echo ($property['metas']['socialdb_property_data_mask'] ) ? $property['metas']['socialdb_property_data_mask'] : '' ?>">
                 <?php if($is_view_mode || (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true')): ?>
                      <div id="labels_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">
-                        <?php if (!empty($property['metas']['objects']) && !empty($property['metas']['value'])) { ?>
-                            <?php foreach ($property['metas']['objects'] as $object) { // percoro todos os objetos  ?>
-                                <?php
-                                if (isset($property['metas']['value']) && !empty($property['metas']['value']) && in_array($object->ID, $property['metas']['value'])): // verifico se ele esta na lista de objetos da colecao
+                        <?php if ( !empty($property['metas']['value'])) {
+                            if(is_array($property['metas']['value'])) {
+                                foreach ( $property['metas']['value'] as $val_id) :
+                                    $ob = get_post($val_id);
+                                    if($ob) {
+                                       // echo '<b><a href="'. get_the_permalink($property['metas']['collection_data'][0]->ID) . '?item=' . $ob->post_name . '" >'. $ob->post_title . '</a></b><br>';
+                                        echo '<b>'. $ob->post_title . '</b> <br >';
+                                    }
+                                endforeach;
+                            } else {
+                                $object = get_post($property['metas']['value']);
+                                if ($object): // verifico se ele esta na lista de objetos da colecao
                                     echo '<b><a  href="' . get_the_permalink($property['metas']['collection_data'][0]->ID) . '?item=' . $object->post_name . '" >' . $object->post_title . '</a></b><br>';
                                 endif;
-                                ?>
-                            <?php } ?>
-                            <?php
-                        }else {
+                            }
+                        } else {
                             echo '<p>' . __('empty field', 'tainacan') . '</p>';
                         }
                         ?>
