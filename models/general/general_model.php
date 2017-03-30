@@ -601,11 +601,17 @@ class Model {
                     $data['type'] = $metas['socialdb_property_data_widget'];
                 } elseif (isset($metas['socialdb_property_term_widget']) && $metas['socialdb_property_term_widget'] != '') {
                     $data['type'] = $metas['socialdb_property_term_widget'];
+                    if(isset($metas['socialdb_property_default_value']) && is_numeric($metas['socialdb_property_default_value'])){
+                        $metas['socialdb_property_default_value_text'] = get_term_by('id', $metas['socialdb_property_default_value'], 'socialdb_category_type')->name;
+                    }
                 } else if (isset($metas['socialdb_property_object_category_id'])) {
                     if (is_array($metas['socialdb_property_object_category_id'])) {
                         $data['type'] = __('Multiple', 'tainacan');
                     } else if ($metas['socialdb_property_object_category_id']) {
                         $data['type'] = $this->get_type_property_object($metas['socialdb_property_object_category_id']);
+                        if(isset($metas['socialdb_property_default_value']) && is_numeric($metas['socialdb_property_default_value'])){
+                            $metas['socialdb_property_default_value_text'] = get_post($metas['socialdb_property_default_value'])->post_title;
+                        }
                     } else {
                         $data['type'] = __('No relations', 'tainacan');
                     }

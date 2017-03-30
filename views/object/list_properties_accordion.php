@@ -43,68 +43,20 @@ if (isset($property_object)):
                     $object_properties_widgets_helper->generateValidationIcons($property);
                     ?>
             </h2>
-            <div  >
-                <?php 
-                // botao que leva a colecao relacionada
-                    if (isset($property['metas']['collection_data'][0]->post_title)):  ?>
-                        <a style="cursor: pointer;color: white;"
-                           id="add_item_popover_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"
-                           class="btn btn-primary btn-xs popover_item" 
-                            >
-                               <span class="glyphicon glyphicon-plus"></span>
-                               <?php _e('Add new', 'tainacan'); ?>
-                               <?php echo ' ' . $property['metas']['collection_data'][0]->post_title; ?>
-                        </a>
-                        <script>
-                            $('#add_item_popover_<?php echo $property['id']; ?>_<?php echo $object_id; ?>').popover({ 
-                               html : true,
-                               placement: 'right',
-                               title: '<?php echo _e('Add item in the collection','tainacan').' '.esc_html($property['metas']['collection_data'][0]->post_title); ?>',
-                               content: function() {
-                                 return $("#popover_content_<?php echo $property['id']; ?>_<?php echo $object_id; ?>").html();
-                               }
-                            });
-                        </script>
-                        <div id="popover_content_<?php echo $property['id']; ?>_<?php echo $object_id; ?>" class="hide">
-                            <form class="form-inline" style="font-size: 12px;width: 300px;">
-                                <div class="form-group">
-                                  <input type="text" 
-                                         placeholder="<?php _e('Type the title','tainacan') ?>"
-                                         class="form-control" 
-                                         id="title_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">
-                                </div>
-                                <button type="button" 
-                                        onclick="add_new_item_by_title('<?php echo $property['metas']['collection_data'][0]->ID; ?>',$('#title_<?php echo $property['id']; ?>_<?php echo $object_id; ?>').val(),'#add_item_popover_<?php echo $property['id']; ?>_<?php echo $object_id; ?>',<?php echo $property['id']; ?>,<?php echo $object_id; ?>)"
-                                        class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span></button>
-                            </form>
-                        </div> 
-                        <br><br>
-                <?php 
-                    endif; 
-                ?>
-                 <input type="hidden" 
-                        id="cardinality_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"  
-                        value="<?php echo $view_helper->render_cardinality_property($property);   ?>">
-                <input type="text" 
-                       onkeyup="autocomplete_object_property_add('<?php echo $property['id']; ?>', '<?php echo $object_id; ?>');" 
-                       id="autocomplete_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>" 
-                       placeholder="<?php _e('Type the three first letters of the object', 'tainacan'); ?>"  
-                       class="chosen-selected form-control"  
-                       />  
-                <select onclick="clear_select_object_property(this,<?php echo $property['id']; ?>,<?php echo $object_id; ?>);" 
-                        id="property_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>_add" 
-                        multiple class="chosen-selected2 form-control auto-save" 
-                        style="height: auto;" 
-                        name="socialdb_property_<?php echo $property['id']; ?>[]" 
-                        >
-                        <?php 
-                            if (!empty($property['metas']['objects'])) {  } 
-                            else { ?>   
-                            <option value=""><?php _e('No objects added in this collection', 'tainacan'); ?></option>
-                            <?php } ?>       
-                </select>
-        </div>  
-    </div>        
+            <?php if((isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true')): ?>
+                <div>
+                    <?php if(isset($property['metas']['socialdb_property_default_value']) && $property['metas']['socialdb_property_default_value']!=''): $property['metas']['value'][] = $property['metas']['socialdb_property_default_value']; ?>
+                        <p><?php  echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $property['metas']['socialdb_property_default_value']. "'" . ',' . $property['id'] . ')">' .get_post($property['metas']['socialdb_property_default_value'])->post_title . '</a>';  ?></p>
+                    <?php else: ?>
+                        <p><?php  _e('Empty field', 'tainacan') ?></p>
+                    <?php endif ?>
+                </div> 
+            <?php else: ?>
+                <div>
+                    <?php $object_properties_widgets_helper->generateWidgetPropertyRelated($property,$object_id,$collection_id) ?>
+                </div>    
+            <?php endif; ?>
+        </div>        
     <?php } ?>
     <input type="hidden" name="properties_object_ids" id='properties_object_ids' value="<?php echo implode(',', $ids); ?>">
 <?php endif; ?>
@@ -128,6 +80,7 @@ if (isset($property_object)):
             </h2>
             <?php $cardinality = $view_helper->render_cardinality_property($property);   ?>
             <div>
+<<<<<<< .merge_file_a10324
                 <input type="hidden" class="form_autocomplete_value_<?php echo $property['id']; ?>_mask" 
                            value="<?php echo ($property['metas']['socialdb_property_data_mask'] ) ? $property['metas']['socialdb_property_data_mask'] : '' ?>">
                 <?php for($i = 0; $i<$cardinality;$i++):   ?>
@@ -214,6 +167,104 @@ if (isset($property_object)):
                      </div>         
                 <?php endfor;  ?>            
             </div>     
+=======
+                <?php if((isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true')): ?>
+                    <div>
+                        <?php if(isset($property['metas']['socialdb_property_default_value']) && $property['metas']['socialdb_property_default_value']!=''): ?>
+                            <p><?php  echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $property['metas']['socialdb_property_default_value']. "'" . ',' . $property['id'] . ')">' .$property['metas']['socialdb_property_default_value'] . '</a>';  ?></p>
+                        <?php else: ?>
+                            <p><?php  _e('Empty field', 'tainacan') ?></p>
+                        <?php endif ?>
+                    </div> 
+                <?php else: ?>
+                    <div>
+                        <input type="hidden" class="form_autocomplete_value_<?php echo $property['id']; ?>_mask" 
+                                   value="<?php echo ($property['metas']['socialdb_property_data_mask'] ) ? $property['metas']['socialdb_property_data_mask'] : '' ?>">
+                        <?php for($i = 0; $i<$cardinality;$i++):   ?>
+                        <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>" class="row"
+                             style="padding-bottom: 10px;margin-bottom: 10px;<?php echo ($i===0) ? 'display:block': 'display:none'; ?>">
+                              <div class="col-md-11">
+                               <?php if ($property['type'] == 'text') { ?>     
+                                    <input type="text" 
+                                           id="form_autocomplete_value_<?php echo $property['id']; ?>_origin" 
+                                           class="form-control auto-save form_autocomplete_value_<?php echo $property['id']; ?>" 
+                                           value="<?php
+                                                        if ($property['metas']['socialdb_property_default_value']): 
+                                                            echo $property['metas']['socialdb_property_default_value'];
+                                                        endif; ?>"
+                                           name="socialdb_property_<?php echo $property['id']; ?>[]" 
+                                           >
+                                <?php }elseif ($property['type'] == 'textarea') { ?>   
+                                    <textarea class="form-control auto-save form_autocomplete_value_<?php echo $property['id']; ?>" 
+                                              id="form_autocomplete_value_<?php echo $property['id']; ?>_origin" 
+                                              rows='9'
+                                              name="socialdb_property_<?php echo $property['id']; ?>[]"
+                                              ><?php if ($property['metas']['socialdb_property_default_value']):
+                                                     echo $property['metas']['socialdb_property_default_value'];
+                                                     endif; ?></textarea>
+                                <?php }elseif ($property['type'] == 'numeric') { ?>   
+                                    <input type="text" 
+                                           id="form_autocomplete_value_<?php echo $property['id']; ?>_origin" 
+                                           value="<?php  if ($property['metas']['socialdb_property_default_value']):
+                                                            echo $property['metas']['socialdb_property_default_value'];
+                                                        endif;  ?>" 
+                                           class="form-control auto-save form_autocomplete_value_<?php echo $property['id']; ?>" 
+                                           onkeypress='return onlyNumbers(event)'
+                                           name="socialdb_property_<?php echo $property['id']; ?>[]" <?php
+                                           if ($property['metas']['socialdb_property_required'] == 'true'): echo 'required="required"';
+                                           endif;
+                                           ?>>
+                                <?php }elseif ($property['type'] == 'autoincrement') { ?>   
+                                    <input disabled="disabled"  type="number" class="form-control" name="only_showed_<?php echo $property['id']; ?>" value="<?php
+                                    if (is_numeric($property['metas']['socialdb_property_data_value_increment'])): echo $property['metas']['socialdb_property_data_value_increment'] + 1;
+                                    endif;
+                                    ?>">
+                                    <!--input type="hidden"  name="socialdb_property_<?php echo $property['id']; ?>" value="<?php
+                                    if ($property['metas']['socialdb_property_data_value_increment']): echo $property['metas']['socialdb_property_data_value_increment'] + 1;
+                                    endif;
+                                    ?>" -->
+                                <?php }elseif ($property['type'] == 'radio' && $property['name'] == 'Status') { ?>   
+                                    <br>
+                                    <input   type="radio" onchange="validate_status(<?php echo $property['id']; ?>)" checked="checked" name="socialdb_property_<?php echo $property['id']; ?>" value="current">&nbsp;<?php _e('Current', 'tainacan') ?><br>
+                                    <input   type="radio" onchange="validate_status(<?php echo $property['id']; ?>)" name="socialdb_property_<?php echo $property['id']; ?>" value="intermediate">&nbsp;<?php _e('Intermediate', 'tainacan') ?><br>
+                                    <input   type="radio" onchange="validate_status(<?php echo $property['id']; ?>)" name="socialdb_property_<?php echo $property['id']; ?>" value="permanently">&nbsp;<?php _e('Permanently', 'tainacan') ?><br>
+                                <?php } else if($property['type'] == 'date'&&!has_action('modificate_insert_item_properties_data')) { ?>
+                                    <script>
+                                        $(function() {
+                                            init_metadata_date( "#form_autocomplete_value_<?php echo $property['id']; ?>_<?php echo $i ?>" );
+                                        });
+                                    </script>    
+                                    <input 
+                                        style="margin-right: 5px;" 
+                                        size="13" 
+                                        class="input_date auto-save form_autocomplete_value_<?php echo $property['id']; ?>" 
+                                        type="text" value="<?php
+                                        if ($property['metas']['socialdb_property_default_value']): echo $property['metas']['socialdb_property_default_value'];endif;?>" 
+                                        id="form_autocomplete_value_<?php echo $property['id']; ?>_<?php echo $i ?>" 
+                                        name="socialdb_property_<?php echo $property['id']; ?>[]" 
+                                        >
+                               <?php } 
+                                // gancho para tipos de metadados de dados diferentes
+                                else if(has_action('modificate_insert_item_properties_data')){
+                                    do_action('modificate_insert_item_properties_data',$property);
+                                    continue;
+                                }else{ ?>
+                                    <input type="text" 
+                                           value="<?php 
+                                                    if ($property['metas']['socialdb_property_default_value']): 
+                                                        echo $property['metas']['socialdb_property_default_value'];
+                                                    endif; ?>" 
+                                         class="form-control auto-save form_autocomplete_value_<?php echo $property['id']; ?>"
+                                         name="socialdb_property_<?php echo $property['id']; ?>[]" >
+                                       <?php } ?>
+                                </div>
+                                <?php echo $view_helper->render_button_cardinality($property,$i) ?>    
+                             </div>         
+                        <?php endfor;  ?>            
+                </div> 
+                <?php endif; ?>
+            </div>    
+>>>>>>> .merge_file_a03040
         </div>              
     <?php } ?>
     <?php
@@ -225,16 +276,26 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
         //}
         ?>
         <div id="meta-item-<?php echo $property['id']; ?>" class="form-group" <?php do_action('item_property_term_attributes') ?>>
-            <h2><?php echo $property['name']; ?>
-            <?php 
-            if(has_action('modificate_label_insert_item_properties')):
-                do_action('modificate_label_insert_item_properties', $property);
-            else: // validacoes e labels
-                    $property['metas']['socialdb_property_help'] = ($property['metas']['socialdb_property_help']==''&&$property['type'] == 'tree')? __('Select one option','tainacan') : '';
-                    $object_properties_widgets_helper->generateValidationIcons($property);
-             endif; 
-             ?>
-            </h2>    
+            <h2>
+                <?php echo $property['name']; ?>
+                <?php 
+                if(has_action('modificate_label_insert_item_properties')):
+                    do_action('modificate_label_insert_item_properties', $property);
+                else: // validacoes e labels
+                        $property['metas']['socialdb_property_help'] = ($property['metas']['socialdb_property_help']==''&&$property['type'] == 'tree')? __('Select one option','tainacan') : '';
+                        $object_properties_widgets_helper->generateValidationIcons($property);
+                 endif; 
+                 ?>
+            </h2>   
+            <?php if((isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true')): ?>
+                    <div>
+                        <?php if(isset($property['metas']['socialdb_property_default_value']) && $property['metas']['socialdb_property_default_value']!=''): ?>
+                            <p><?php  echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $property['metas']['socialdb_property_default_value']. "'" . ',' . $property['id'] . ')">' .$property['metas']['socialdb_property_default_value'] . '</a>';  ?></p>
+                        <?php else: ?>
+                            <p><?php  _e('Empty field', 'tainacan') ?></p>
+                        <?php endif ?>
+                    </div> 
+            <?php else: ?>
             <div>
             <?php
             if ($property['type'] == 'radio') {
@@ -322,6 +383,7 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
             }
             ?> 
             </div>   
+            <?php endif; ?>
             <div  id="append_properties_categories_<?php echo $property['id']; ?>"></div>
         </div>
     <?php } ?>

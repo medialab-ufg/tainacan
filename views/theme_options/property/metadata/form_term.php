@@ -39,14 +39,25 @@
                                     <select class="form-control" id="socialdb_property_term_widget" name="socialdb_property_term_widget">
                                     </select>
                                 </div>
-
+                                <?php $view_helper->commomFieldsProperties() ?>
+                                <div  class="form-group">
+                                     <label for="socialdb_property_default_value"><?php _e('Property data default value', 'tainacan'); ?></label>
+                                     <input type="text" 
+                                            class="form-control" 
+                                            id="default_value_text_term" 
+                                            onkeyup="autocomplete_term_property_default_value($('#socialdb_property_term_root').val());"
+                                            name="default_value_text" 
+                                            placeholder="<?php _e('Type the name of the category', 'tainacan'); ?>"><br>
+                                     <input type="hidden" 
+                                            id="socialdb_property_term_default_value" name="socialdb_event_property_default_value"><br>
+                                 </div>
                                 <hr class="modal-hr-style">
                             </div>
 
                             <!--div class="form-group">
                                 <label for="use-filter" style="display: inline-block"><?php _e('Use as a filter','tainacan'); ?></label>
                                 <input type="checkbox" onchange="toggle_term_widget(this)" value="use_filter" name="property_data_use_filter" class="property_data_use_filter" />
-                            </div-->
+                            </div--
 
                             <div class="term-widget" style="display: none">
 
@@ -71,7 +82,7 @@
                                         </optgroup>
                                     </select>
                                 </div>
-                            </div>
+                            </div>-->
 
                         </div>
                         <div style="float: right" class="category-fit-column right metadata-common-fields">

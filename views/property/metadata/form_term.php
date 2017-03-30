@@ -5,6 +5,7 @@
     .style-input {
         padding: 5px;border: 1px solid #ccc;border-radius: 4px; 
     }
+    #meta-category .ui-autocomplete { position: absolute; cursor: default;z-index:30 !important;} 
 </style>    
 <div id="meta-category" class="modal fade" role="dialog" aria-labelledby="Category">
     <div class="modal-dialog" role="document">
@@ -141,6 +142,17 @@
                                         <label for="socialdb_event_property_tab"><?php _e('Select the tab','tainacan'); ?></label>
                                         <select class="socialdb_event_property_tab form-control" name="socialdb_event_property_tab">
                                         </select>
+                                    </div>
+                                    <div  class="form-group">
+                                        <label for="socialdb_property_default_value"><?php _e('Property data default value', 'tainacan'); ?></label>
+                                        <input type="text" 
+                                               class="form-control" 
+                                               id="default_value_text_term" 
+                                               onkeyup="autocomplete_term_property_default_value($('#socialdb_property_term_root').val());"
+                                               name="default_value_text" 
+                                               placeholder="<?php _e('Type the name of the category', 'tainacan'); ?>"><br>
+                                        <input type="hidden" 
+                                               id="socialdb_property_term_default_value" name="socialdb_event_property_default_value"><br>
                                     </div>
                                 </div>   
                                 

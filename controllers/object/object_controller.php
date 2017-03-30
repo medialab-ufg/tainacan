@@ -324,6 +324,10 @@ class ObjectController extends Controller {
                 break;
             case "get_objects_by_property_json":// pega todos os objetos relacionado de uma propriedade e coloca em um array json
                 return $object_model->get_objects_by_property_json($data);
+            case "get_objects_default_value":// pega todos os objetos relacionado de uma propriedade e coloca em um array json
+                return $object_model->get_objects_by_selected_categories($data['categories'],$data['term']);    
+            case "get_terms_default_value":// pega todos os objetos relacionado de uma propriedade e coloca em um array json
+                return $object_model->search_term_by_parent($data['parent'],$data['term']);    
             case "get_property_object_value":// retorna os valores para uma propriedade de objeto especificao
                 return $object_model->get_property_object_value($data);
             case 'show_form_data_property':// mostra o formulario para insercao de propriedade de dados

@@ -79,6 +79,7 @@ class EventPropertyTermEdit extends EventModel {
         $data['property_visualization'] = get_post_meta($event_id, 'socialdb_event_property_visualization',true) ;
         $data['property_category_id'] = get_term_meta($data['property_term_id'], 'socialdb_property_created_category',true) ;
         $data['property_locked'] = get_post_meta($event_id, 'socialdb_event_property_lock_field',true) ;
+        $data['property_default_value'] = get_post_meta($event_id, 'socialdb_event_property_default_value',true) ;
         // chamo a funcao do model de propriedade para fazer a insercao
          $result = json_decode($propertyModel->update_property_term($data));
         if(isset($result->property_term_id)){

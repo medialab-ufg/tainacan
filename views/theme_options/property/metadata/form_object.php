@@ -32,6 +32,7 @@
                                 <input required="required" type="hidden"  id="property_object_category_id"  name="property_object_category_id" value="<?php //echo $category->term_id; ?>" >
                             <?php // endif; ?>
                         </div>
+                         <?php $view_helper->commomFieldsProperties(true) ?>
                          <div class="form-group category-fit-column" style="display: inline-block; width: 59%">
                             <label for="property_term_required" style="display: block"><?php _e('Elements Quantity:','tainacan'); ?></label>
                             <input type="radio" name="socialdb_property_object_cardinality" id="socialdb_property_object_cardinality_1"  value="1">&nbsp;<?php _e('Unic value','tainacan') ?>
@@ -51,6 +52,17 @@
                             <label for="property_object_reverse"><?php _e('Select the reverse property','tainacan'); ?></label>
                             <select class="form-control" id="property_object_reverse" name="property_object_reverse" onchange="setValueReverse(this)">
                             </select>
+                        </div>
+                         <div  class="create_form-group">
+                            <label for="socialdb_property_default_value"><?php _e('Property data default value', 'tainacan'); ?></label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="default_value_text" 
+                                   onkeyup="autocomplete_object_property_default_value($('#property_object_category_id').val());"
+                                   name="default_value_text" 
+                                   placeholder="<?php _e('Type the name of the item', 'tainacan'); ?>"><br>
+                            <input type="hidden" 
+                                   id="socialdb_property_object_default_value" name="socialdb_event_property_default_value"><br>
                         </div>
                         <input type="hidden" value="false" id="property_object_is_reverse" name="property_object_is_reverse">
 

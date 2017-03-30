@@ -38,7 +38,7 @@ class AdvancedSearchController extends Controller {
                 break;
             case 'select_collection':
                 return $this->get_collections();
-            case 'do_advanced_search':
+             case 'do_advanced_search':
                 $wpquery_model = new WPQueryModel();
                 $return = array();
                 // Se estiver buscando em todas as colecoes
@@ -93,6 +93,22 @@ class AdvancedSearchController extends Controller {
                 Log::addLog($logData);
                 
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/advanced_search/list_advanced_search.php', $data);
+                $return['data'] =  $data['data'];
+                return json_encode($return);   
+            case 'search_items_property_object':
+                $wpquery_model = new WPQueryModel();
+                $return = array();
+                $args_object = $wpquery_model->advanced_searched_filter($data);
+                $paramters_object = $wpquery_model->do_filter($args_object);
+                $loop_objects = new WP_Query($paramters_object);
+                if ($loop_objects&&$loop_objects->have_posts()) : 
+                    $data['loop_objects'] =  $loop_objects;
+                    $return['args_item'] = serialize($args_object);
+                endif;
+                if(!isset($data['loop_objects'])) {
+                    $return['not_found'] = true;
+                }
+                $return['page'] = (isset($data['compound_id'])) ? $this->render(dirname(__FILE__) . '../../../views/advanced_search/compound_list_property_object_items.php', $data) : $this->render(dirname(__FILE__) . '../../../views/advanced_search/list_property_object_items.php', $data);
                 $return['data'] =  $data['data'];
                 return json_encode($return);
              case "wpquery_page_advanced_collection":

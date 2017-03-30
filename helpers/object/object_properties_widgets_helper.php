@@ -187,7 +187,8 @@ class ObjectWidgetsHelper extends ViewHelper {
      */
     public function widget_property_data($property,$i,$references,$value = false) {
         $references['properties_autocomplete'][] = $property['id'];
-        if($references['is_view_mode']){
+        if($references['is_view_mode'] 
+                || (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true')){
             if(isset($value) && !empty($value)): ?>
                 <p><?php  echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $value . "'" . ',' . $property['id'] . ')">' . $value . '</a>';  ?></p>
             <?php else: ?>
@@ -269,7 +270,7 @@ class ObjectWidgetsHelper extends ViewHelper {
      * @param int $i O indice do for da cardinalidade
      */
     public function widget_property_object($property,$i,$references,$value = false) {
-        if($references['is_view_mode']){
+        if($references['is_view_mode'] || (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true')){
             if(isset($value)): ?>
              <div id="labels_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">
                 <?php if (!empty($property['metas']['objects']) && !empty($value)) { ?>
@@ -291,41 +292,11 @@ class ObjectWidgetsHelper extends ViewHelper {
             return;
         }
         // inputs
-        ?>
-        <input type="hidden" 
-                        id="cardinality_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>"  
-                        value="<?php echo $this->render_cardinality_property($property);   ?>">            
-        <input type="text" 
-               onkeyup="autocomplete_object_property_compound('<?php echo $references['compound_id']; ?>','<?php echo $property['id']; ?>', '<?php echo $i; ?>');" 
-               id="autocomplete_value_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
-               placeholder="<?php _e('Type the three first letters of the object of this collection ', 'tainacan'); ?>"  
-               class="chosen-selected form-control"  />    
-
-        <select onclick="clear_select_object_property_compound(this,'<?php echo $references['compound_id']; ?>','<?php echo $property['id']; ?>', '<?php echo $i; ?>');" 
-                id="property_value_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>_edit" 
-                multiple class="chosen-selected2 form-control" 
-                style="height: auto;" 
-                name="socialdb_property_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>[]"
-                <?php 
-                    if ($property['metas']['socialdb_property_required'] == 'true'): 
-                        echo 'required="required"';
-                    endif;
-                ?> >
-                <?php 
-                    if (!empty($property['metas']['objects'])) { ?>     
-                        <?php foreach ($property['metas']['objects'] as $object) { ?>
-                            <?php if ($value && $object->ID==$value): // verifico se ele esta na lista de objetos da colecao   ?>    
-                                 <option selected='selected' value="<?php echo $object->ID ?>"><?php echo $object->post_title ?></span>
-                        <?php endif; ?>
-                    <?php } ?> 
-                <?php 
-                    }else { 
-                ?>   
-                    <option value=""><?php _e('No objects added in this collection', 'tainacan'); ?></option>
-                <?php 
-                    } 
-                ?>       
-        </select>    
+        if($value){
+            $property['metas']['value'] = (is_array($value)) ? $value : [$value];
+        }
+        $this->generateWidgetPropertyRelatedCompound($property, $references['compound_id'], 0,$references['compound_id'],$i);
+        ?>   
         <?php
     }
     
@@ -341,7 +312,7 @@ class ObjectWidgetsHelper extends ViewHelper {
             id='actual_value_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>'
             value="<?php if ($value) echo $value; ?>">
         <?php
-        if($references['is_view_mode']){
+        if($references['is_view_mode'] || (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true')){
             ?>
             <div id='label_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>'><p><?php  _e('empty field', 'tainacan') ?></p></div>  
             <?php
@@ -649,5 +620,191 @@ class ObjectWidgetsHelper extends ViewHelper {
             </div>
         </div>
         <?php
+    }
+    
+    /**
+     * metodo que retorna o html
+     * 
+      * @param type $property
+     */
+    public function search_related_properties_to_search($property,$collection_id){
+        $propertyModel = new PropertyModel;
+        $property_data = [];
+        $property_object = [];
+        $property_term = [];
+        $properties = $property['metas']["socialdb_property_to_search_in"];
+        if(isset($properties) && $properties != ''){
+            $properties = explode(',', $properties);
+            foreach ($properties as $property_related) {
+                $property_related = $propertyModel->get_all_property($property_related, true);
+                if(isset($property_related['metas']['socialdb_property_data_widget'])): 
+                    $property_data[] = $property_related;
+                elseif(isset($property_related['metas']['socialdb_property_object_category_id'])): 
+                    $property_object[] = $property_related;
+                elseif(isset($property_related['metas']['socialdb_property_term_widget'])): 
+                    $property_term[] = $property_related;
+                endif; 
+            }
+        }
+        include dirname(__FILE__).'/../../views/advanced_search/search_property_object_metadata.php';
+    }
+    
+    /**
+     * 
+     * @param type $property
+     * @param type $object_id
+     * @param type $collection_id
+     */
+    public function generateWidgetPropertyRelated($property,$object_id,$collection_id) {
+        ?>
+        <div class="metadata-related">
+            <h6><b><?php _e('Related items', 'tainacan') ?></b></h6>
+            <span id="no_results_property_<?php echo $property['id']; ?>">
+                 <?php if (!isset($property['metas']['value']) || empty($property['metas']['value']) || !is_array($property['metas']['value'])): // verifico se ele esta na lista de objetos da colecao   ?>    
+                    <input type="text" 
+                           disabled="disabled"
+                           placeholder="<?php _e('No registers', 'tainacan') ?>"
+                           class="form-control" >
+                <?php endif; ?>
+            </span>
+            <span id="results_property_<?php echo $property['id']; ?>">
+                <ul>
+                    <?php if (isset($property['metas']['value']) && !empty($property['metas']['value']) && is_array($property['metas']['value'])): // verifico se ele esta na lista de objetos da colecao   ?>    
+                        <?php foreach ($property['metas']['value'] as $id): ?>
+                             <li id="inserted_property_object_<?php echo $property['id']; ?>_<?php echo $id; ?>" 
+                                 item="<?php echo $id; ?>" class="selected-items-property-object property-<?php echo $property['id']; ?>">
+                                     <?php echo get_post($id)->post_title; ?>
+                                 <span  onclick="$('#inserted_property_object_<?php echo $property['id']; ?>_<?php echo $id; ?>').remove();$('select[name=socialdb_property_<?php echo $property['id']; ?>[]]  option[value=<?php echo $id; ?>]').remove()" 
+                                        style="cursor:pointer;" class="pull-right glyphicon glyphicon-trash"></span>
+                             </li>       
+                        <?php endforeach; ?>    
+                   <?php endif; ?>
+                </ul>
+            </span>
+            <select 
+                id="property_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>_add" 
+                multiple 
+                style="display: none;" 
+                    name="socialdb_property_<?php echo $property['id']; ?>[]" 
+                >   
+                 <?php if (isset($property['metas']['value']) && !empty($property['metas']['value']) && is_array($property['metas']['value'])): // verifico se ele esta na lista de objetos da colecao   ?>    
+                        <?php foreach ($property['metas']['value'] as $id): ?>
+                        <option selected="selected" value="<?php echo $id; ?>"><?php echo $id; ?></option>
+                        <?php endforeach; ?>    
+               <?php endif; ?>
+            </select>
+            <input type="hidden" 
+                   id="cardinality_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"  
+                   value="<?php echo $this->render_cardinality_property($property); ?>"> 
+            <button class="btn  btn-lg btn-primary btn-primary pull-right"
+                    type="button"
+                    onclick="$('#metadata-search-<?php echo $property['id']; ?>').show();$('#metadata-result-<?php echo $property['id']; ?>').hide();"
+                    ><?php _e('Add', 'tainacan') ?></button>
+        </div>
+        <div class="metadata-search"
+             id="metadata-search-<?php echo $property['id']; ?>"
+             style="display:none"
+             >
+                 <?php $this->search_related_properties_to_search($property, $collection_id); ?>     
+        </div>
+        <div class="metadata-matching"
+             style="display:none"
+             id="metadata-result-<?php echo $property['id']; ?>" >
+        </div>   
+        <?php    
+    }
+    
+    /**
+     * 
+     * @param type $property
+     * @param type $object_id
+     * @param type $collection_id
+     * @param type $compound_id
+     * @param type $i
+     */
+    public function generateWidgetPropertyRelatedCompound($property,$object_id,$collection_id,$compound_id,$i) {
+        $property['compound_id'] = $compound_id;
+        $property['contador'] = $i;
+        ?>
+        <div class="metadata-related">
+            <h6><b><?php _e('Related items', 'tainacan') ?></b></h6>
+            <span id="no_results_property_<?php echo $compound_id; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>">
+                 <?php if (!isset($property['metas']['value']) || empty($property['metas']['value']) || !is_array($property['metas']['value'])): // verifico se ele esta na lista de objetos da colecao   ?>    
+                    <input type="text" 
+                           disabled="disabled"
+                           placeholder="<?php _e('No registers', 'tainacan') ?>"
+                           class="form-control" >
+                <?php endif; ?>
+            </span>
+            <span id="results_property_<?php echo $compound_id; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>">
+                <ul>
+                    <?php if (isset($property['metas']['value']) && !empty($property['metas']['value']) && is_array($property['metas']['value'])): // verifico se ele esta na lista de objetos da colecao   ?>    
+                        <?php foreach ($property['metas']['value'] as $id): ?>
+                             <li id="inserted_property_object_<?php echo $compound_id ?>_<?php echo $property['id'] ?>_<?php echo $i ?>_<?php echo $id; ?>" 
+                                 item="<?php echo $id; ?>" class="selected-items-property-object property-<?php echo $property['id']; ?>">
+                                     <?php echo get_post($id)->post_title; ?>
+                                 <span  onclick="$('#inserted_property_object_<?php echo $property['id']; ?>_<?php echo $id; ?>').remove();$('select[name=socialdb_property_<?php echo $property['id']; ?>[]]  option[value=<?php echo $id; ?>]').remove()" 
+                                        style="cursor:pointer;" class="pull-right glyphicon glyphicon-trash"></span>
+                             </li>       
+                        <?php endforeach; ?>    
+                   <?php endif; ?>
+                </ul>
+            </span>
+            <select 
+                id="property_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>_<?php echo $i; ?>" 
+                multiple 
+                style="display: none;" 
+                name="socialdb_property_<?php echo $compound_id; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>[]" 
+                >   
+                 <?php if (isset($property['metas']['value']) && !empty($property['metas']['value']) && is_array($property['metas']['value'])): // verifico se ele esta na lista de objetos da colecao   ?>    
+                        <?php foreach ($property['metas']['value'] as $id): ?>
+                        <option selected="selected" value="<?php echo $id; ?>"><?php echo $id; ?></option>
+                        <?php endforeach; ?>    
+               <?php endif; ?>
+            </select>
+             <input type="hidden" 
+                        id="cardinality_<?php echo $compound_id; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>"  
+                        value="<?php echo $this->render_cardinality_property($property);   ?>">   
+            <button class="btn  btn-lg btn-primary btn-primary pull-right"
+                    type="button"
+                    onclick="$('#metadata-search-<?php echo $compound_id; ?>-<?php echo $property['id']; ?>-<?php echo $i; ?>').show();$('#metadata-result-<?php echo $compound_id; ?>-<?php echo $property['id']; ?>-<?php echo $i; ?>').hide();"
+                    ><?php _e('Add', 'tainacan') ?></button>
+        </div>
+        <div class="metadata-search"
+             id="metadata-search-<?php echo $compound_id; ?>-<?php echo $property['id']; ?>-<?php echo $i; ?>"
+             style="display:none"
+             >
+                 <?php $this->search_related_properties_to_search($property, $collection_id); ?>     
+        </div>
+        <div class="metadata-matching"
+             style="display:none"
+             id="metadata-result-<?php echo $compound_id; ?>-<?php echo $property['id']; ?>-<?php echo $i; ?>" >
+        </div>   
+        <?php    
+    }
+    
+    /**
+     * 
+     * @param type $property_id
+     * @param type $item_id
+     */
+    public function is_selected_property($property_id,$item_id) {
+        global $wpdb;
+        $wp_posts = $wpdb->prefix . "posts";
+        $wp_postmeta = $wpdb->prefix . "postmeta";
+        if ($meta_key == '') {
+            $meta_key = 'socialdb_property_' . $property_id;
+        }
+        $query = "
+                        SELECT pm.* FROM $wp_posts p
+                        INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id    
+                        WHERE p.post_status LIKE 'publish' and pm.meta_key like '$meta_key' and pm.meta_value LIKE '%{$item_id}%'
+                ";
+        $result = $wpdb->get_results($query);
+        if ($result && is_array($result) && count(array_filter($result)) > 0) {
+            return true;
+        }else{
+            return false;
+        }
     }
 }
