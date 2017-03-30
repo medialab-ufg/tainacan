@@ -1670,9 +1670,9 @@
             var regExp = /(?:(?:http|https):\/\/)?(?:www.)?(?:youtube.com|youtu.be)\/([A-Za-z0-9-_]+)/im;
             var match_youtube = url.match(regExp);
             if (match_youtube) {
-                var reg = new RegExp("[&?]list=([a-z0-9_]+)", "i");
+                var reg = new RegExp("[&?]list=([a-z0-9_-]+)", "i");
                 var match = reg.exec(url);
-
+                
                 if (match) {
                     return match[1];
                 }
