@@ -555,6 +555,9 @@ class MappingModel extends Model {
                 if(is_file($targetdir.'/csv-package/administrative-settings.csv')){
                     $objeto = fopen($targetdir.'/csv-package/administrative-settings.csv', 'r');
                     $csv_data = fgetcsv($objeto, 0, $delimiter);
+                    while(($csv_data = fgetcsv($objeto, 0, $delimiter)) !== false){
+                        break;
+                    }
                     fclose($objeto);
                     $zip->close();
                     unlink($targetzip); //Deleting the Zipped file
