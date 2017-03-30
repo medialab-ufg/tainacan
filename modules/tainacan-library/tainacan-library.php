@@ -48,19 +48,29 @@ function tainacan_libraries_css() {
 /*
  * FILTERS and ACTIONS
  */
-add_filter('addLibraryMenu', 'addLibraryMenu');
-function addLibraryMenu()
+
+add_filter('addLibraryMenu', 'addLibraryMenu', 10, 1);
+function addLibraryMenu($collection_id)
 {
+
     ?>
     <div class="btn-group" role="group" aria-label="...">
         <div class="btn-group tainacan-add-wrapper">
-            <button type="button" class="btn btn-primary dropdown-toggle sec-color-bg" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <?php _e('Add', 'tainacan') ?> <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                <li><a onclick="showAddItemText()"  style="cursor: pointer;"><?php _e('Item', 'tainacan') ?> </a></li>
-                <li><a onclick="showModalImportMarc()" style="cursor: pointer;" id="addfrommarc" ><?php _e('Add from MARC', 'tainacan') ?>  </a></li>
-            </ul>
+            <?php
+                if($son_mapping_id = get_post_meta($collection_id, MAPPING_MARC_ID_SON, true)){
+            ?>
+                <button type="button" class="btn btn-primary dropdown-toggle sec-color-bg" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <?php _e('Add', 'tainacan') ?> <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a onclick="showAddItemText()"  style="cursor: pointer;"><?php _e('Item', 'tainacan') ?> </a></li>
+                    <li><a onclick="showModalImportMarc()" style="cursor: pointer;" id="addfrommarc" ><?php _e('Add from MARC', 'tainacan') ?>  </a></li>
+                </ul>
+            <?php } else { ?>
+                <button type="button" class="btn btn-primary dropdown-toggle sec-color-bg" aria-haspopup="true" onclick="showAddItemText()">
+                    <?php _e('Add', 'tainacan') ?> </span>
+                </button>
+            <?php } ?>
         </div>
     </div>
     <?php

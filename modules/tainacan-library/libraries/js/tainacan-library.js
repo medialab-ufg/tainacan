@@ -43,13 +43,6 @@ function send_ajax($marc)
     });
 }
 
-// valida a cardinalidade ao selecionar
-/*Hook.register(
-    'tainacan_library_import_action',
-    function ( args ) {
-        save_mapping_marc()
-    });
-*/
 function save_mapping_marc(){
     $("#mapping_marc").submit(function (event) {
         event.preventDefault();

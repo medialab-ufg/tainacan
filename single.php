@@ -297,7 +297,10 @@ while (have_posts()) : the_post();
                                         <?php if (has_filter('show_custom_add_item_button')): ?>
                                             <?php echo apply_filters('show_custom_add_item_button', ''); ?>
                                         <?php elseif (has_action('addLibraryMenu')): ?>
-                                            <?php do_action('addLibraryMenu') ?>
+                                            <?php
+                                                $collection_id = get_the_ID();
+                                                do_action('addLibraryMenu', $collection_id)
+                                            ?>
                                         <?php else: ?>
 
                                             <?php
