@@ -1929,7 +1929,7 @@
                 $(cur + " input[name='operation']").val('add_property_data');
             }
             $(cur + " input:checkbox").removeAttr('checked');
-            $(cur + " input").val('');
+            $(cur + " input[type='text']").val('');
             
         });
         $('#socialdb_property_term_cardinality_1').trigger('click');

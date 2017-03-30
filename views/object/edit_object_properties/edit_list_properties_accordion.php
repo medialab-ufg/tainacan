@@ -251,7 +251,9 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
                   }
                   
             ?>
-                <div id='labels_<?php echo $property['id']; ?>_<?php echo $object_id; ?>'> <p><?php  _e('empty field', 'tainacan') ?></p></div>  
+                <div id='labels_<?php echo $property['id']; ?>_<?php echo $object_id; ?>'>
+                    <?php $object_properties_widgets_helper->get_category_value($object_id,$property['id'],$property['metas']['socialdb_property_term_root']); ?>
+                </div>  
             <?php
               else:
             ?>

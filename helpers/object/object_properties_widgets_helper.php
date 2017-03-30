@@ -807,4 +807,32 @@ class ObjectWidgetsHelper extends ViewHelper {
             return false;
         }
     }
+    
+    /**
+     * 
+     */
+    public function get_category_value($object_id,$property_id,$parent) {
+        $has_value = false;
+        $terms = wp_get_post_terms( $object_id, 'socialdb_category_type' );
+        if($terms && is_array($terms)){
+            foreach ($terms as $term) {
+                $hierarchy = get_ancestors($term->term_id, 'socialdb_category_type');
+                if(is_array($hierarchy) && in_array($parent, $hierarchy)){
+                    $has_value = true;
+                    ?>
+                    <p>
+                       <a style="cursor:pointer;" onclick="wpquery_term_filter('<?php echo $term->term_id ?>','<?php echo $property_id  ?>')">
+                           <?php echo $term->name  ?>
+                       </a>
+                    </p><br>
+                    <?php
+                }
+            }
+        }
+        if(!$has_value){
+            ?>
+                <p><?php  _e('empty field', 'tainacan') ?></p>
+            <?php
+        }
+    }
 }

@@ -1,6 +1,6 @@
 <script>
     $(function () {
-        event_single_list_properties_term_insert_objects();
+        //event_single_list_properties_term_insert_objects();
     });
     function event_single_list_properties_term_insert_objects() {
        console.log('list_single_propreties'); 

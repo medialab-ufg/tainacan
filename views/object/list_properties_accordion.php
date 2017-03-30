@@ -47,6 +47,9 @@ if (isset($property_object)):
                 <div>
                     <?php if(isset($property['metas']['socialdb_property_default_value']) && $property['metas']['socialdb_property_default_value']!=''): $property['metas']['value'][] = $property['metas']['socialdb_property_default_value']; ?>
                         <p><?php  echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $property['metas']['socialdb_property_default_value']. "'" . ',' . $property['id'] . ')">' .get_post($property['metas']['socialdb_property_default_value'])->post_title . '</a>';  ?></p>
+                        <input type="hidden" 
+                           name="socialdb_property_<?php echo $property['id']; ?>[]" 
+                           value="<?php echo $property['metas']['socialdb_property_default_value'] ?>">
                     <?php else: ?>
                         <p><?php  _e('Empty field', 'tainacan') ?></p>
                     <?php endif ?>
@@ -201,7 +204,10 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
             <?php if((isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true')): ?>
                     <div>
                         <?php if(isset($property['metas']['socialdb_property_default_value']) && $property['metas']['socialdb_property_default_value']!=''): ?>
-                            <p><?php  echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $property['metas']['socialdb_property_default_value']. "'" . ',' . $property['id'] . ')">' .$property['metas']['socialdb_property_default_value'] . '</a>';  ?></p>
+                            <p><?php  echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $property['metas']['socialdb_property_default_value']. "'" . ',' . $property['id'] . ')">' .get_term_by('id', $property['metas']['socialdb_property_default_value'], 'socialdb_category_type')->name . '</a>';  ?></p>
+                            <input  type="hidden" 
+                                    name="socialdb_propertyterm_<?php echo $property['id']; ?>" 
+                                    value="<?php echo $property['metas']['socialdb_property_default_value'] ?>">
                         <?php else: ?>
                             <p><?php  _e('Empty field', 'tainacan') ?></p>
                         <?php endif ?>
