@@ -80,94 +80,6 @@ if (isset($property_object)):
             </h2>
             <?php $cardinality = $view_helper->render_cardinality_property($property);   ?>
             <div>
-<<<<<<< .merge_file_a10324
-                <input type="hidden" class="form_autocomplete_value_<?php echo $property['id']; ?>_mask" 
-                           value="<?php echo ($property['metas']['socialdb_property_data_mask'] ) ? $property['metas']['socialdb_property_data_mask'] : '' ?>">
-                <?php for($i = 0; $i<$cardinality;$i++):   ?>
-                <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>" class="row"
-                     style="padding-bottom: 10px;margin-bottom: 10px;<?php echo ($i===0) ? 'display:block': 'display:none'; ?>">
-                      <div class="col-md-11">
-                       <?php if ($property['type'] == 'text') { ?>     
-                            <input type="text" 
-                                   id="form_autocomplete_value_<?php echo $property['id']; ?>_origin" 
-                                   class="form-control auto-save form_autocomplete_value_<?php echo $property['id']; ?>" 
-                                   value="<?php
-                                                if ($property['metas']['socialdb_property_default_value']): 
-                                                    echo $property['metas']['socialdb_property_default_value'];
-                                                endif; ?>"
-                                   name="socialdb_property_<?php echo $property['id']; ?>[]" 
-                                   >
-                        <?php }elseif ($property['type'] == 'textarea') { ?>   
-                            <textarea class="form-control auto-save form_autocomplete_value_<?php echo $property['id']; ?>" 
-                                      id="form_autocomplete_value_<?php echo $property['id']; ?>_origin" 
-                                      rows='9'
-                                      name="socialdb_property_<?php echo $property['id']; ?>[]"
-                                      ><?php if ($property['metas']['socialdb_property_default_value']):
-                                             echo $property['metas']['socialdb_property_default_value'];
-                                             endif; ?></textarea>
-                        <?php }elseif ($property['type'] == 'numeric') { ?>   
-                            <input type="text" 
-                                   id="form_autocomplete_value_<?php echo $property['id']; ?>_origin" 
-                                   value="<?php  if ($property['metas']['socialdb_property_default_value']):
-                                                    echo $property['metas']['socialdb_property_default_value'];
-                                                endif;  ?>" 
-                                   class="form-control auto-save form_autocomplete_value_<?php echo $property['id']; ?>" 
-                                   onkeypress='return onlyNumbers(event)'
-                                   name="socialdb_property_<?php echo $property['id']; ?>[]" <?php
-                                   if ($property['metas']['socialdb_property_required'] == 'true'): echo 'required="required"';
-                                   endif;
-                                   ?>>
-                        <?php }elseif ($property['type'] == 'autoincrement') { ?>   
-                            <input disabled="disabled"  type="number" class="form-control" name="only_showed_<?php echo $property['id']; ?>" value="<?php
-                            if (is_numeric($property['metas']['socialdb_property_data_value_increment'])): echo $property['metas']['socialdb_property_data_value_increment'] + 1;
-                            endif;
-                            ?>">
-                            <!--input type="hidden"  name="socialdb_property_<?php echo $property['id']; ?>" value="<?php
-                            if ($property['metas']['socialdb_property_data_value_increment']): echo $property['metas']['socialdb_property_data_value_increment'] + 1;
-                            endif;
-                            ?>" -->
-                        <?php }elseif ($property['type'] == 'radio' && $property['name'] == 'Status') { ?>   
-                            <br>
-                            <input   type="radio" onchange="validate_status(<?php echo $property['id']; ?>)" checked="checked" name="socialdb_property_<?php echo $property['id']; ?>" value="current">&nbsp;<?php _e('Current', 'tainacan') ?><br>
-                            <input   type="radio" onchange="validate_status(<?php echo $property['id']; ?>)" name="socialdb_property_<?php echo $property['id']; ?>" value="intermediate">&nbsp;<?php _e('Intermediate', 'tainacan') ?><br>
-                            <input   type="radio" onchange="validate_status(<?php echo $property['id']; ?>)" name="socialdb_property_<?php echo $property['id']; ?>" value="permanently">&nbsp;<?php _e('Permanently', 'tainacan') ?><br>
-                        <?php } else if($property['type'] == 'date'&&!has_action('modificate_insert_item_properties_data')) { ?>
-                            <script>
-                                $(function() {
-                                    init_metadata_date( "#form_autocomplete_value_<?php echo $property['id']; ?>_<?php echo $i ?>" );
-                                });
-                            </script>    
-                            <input 
-                                style="margin-right: 5px;" 
-                                size="13" 
-                                class="input_date auto-save form_autocomplete_value_<?php echo $property['id']; ?>" 
-                                type="text" value="<?php
-                                if ($property['metas']['socialdb_property_default_value']): echo $property['metas']['socialdb_property_default_value'];endif;?>" 
-                                id="form_autocomplete_value_<?php echo $property['id']; ?>_<?php echo $i ?>" 
-                                name="socialdb_property_<?php echo $property['id']; ?>[]" 
-                                >
-                       <?php } 
-                        // gancho para tipos de metadados de dados diferentes
-                        else if(has_action('modificate_insert_item_properties_data')){
-                            $property['contador'] = $i;
-                            $property['operation'] = 'create';
-                            do_action('modificate_insert_item_properties_data',$property);
-                            //continue;
-                        }else{ ?>
-                            <input type="text" 
-                                   value="<?php 
-                                            if ($property['metas']['socialdb_property_default_value']): 
-                                                echo $property['metas']['socialdb_property_default_value'];
-                                            endif; ?>" 
-                                 class="form-control auto-save form_autocomplete_value_<?php echo $property['id']; ?>"
-                                 name="socialdb_property_<?php echo $property['id']; ?>[]" >
-                               <?php } ?>
-                        </div>
-                        <?php echo $view_helper->render_button_cardinality($property,$i) ?>    
-                     </div>         
-                <?php endfor;  ?>            
-            </div>     
-=======
                 <?php if((isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true')): ?>
                     <div>
                         <?php if(isset($property['metas']['socialdb_property_default_value']) && $property['metas']['socialdb_property_default_value']!=''): ?>
@@ -264,7 +176,6 @@ if (isset($property_object)):
                 </div> 
                 <?php endif; ?>
             </div>    
->>>>>>> .merge_file_a03040
         </div>              
     <?php } ?>
     <?php
