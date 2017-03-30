@@ -946,6 +946,9 @@
         } else {
             resetAllForms();
         }
+        
+        setTimeout(function(){  $('#meta-'+type+' input[type=text]').first().trigger('focus');cl( $('#meta-'+type+' input[type=text]').first()); }, 1000);
+       
     }
 
     function list_reverses(selected) {
