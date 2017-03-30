@@ -2155,7 +2155,7 @@
         $("#operation_property_data").val('add_property_data');
         $("#operation_property_object").val('add_property_object');
         $("#operation_property_term").val('add_property_term');
-        $('#submit_form_property_term').parents('form').find('input[type=text],textarea,select').filter(':visible').val('');
+        //$('#submit_form_property_term').parents('form').find('input[type=text],textarea,select').filter(':visible').val('');
     }
 
    function showPropertyCategoryDynatree(src) {

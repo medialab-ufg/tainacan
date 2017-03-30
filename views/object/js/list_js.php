@@ -201,7 +201,7 @@
         $("#container_three_columns").removeClass('white-background');
         setMenuContainerHeight();
 
-        $(".droppableClassifications").droppable({
+        $(".droppableClassifications .item-meta-box").droppable({
             hoverClass: "drophover",
             addClasses: true,
             //    tolerance: "pointer",

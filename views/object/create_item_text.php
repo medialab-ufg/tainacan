@@ -50,9 +50,10 @@
                     <?php else: ?>
                      <?php _e('Create new item - Write text','tainacan') ?></span>
                     <?php endif; ?>
-                    <button type="button" onclick="back_main_list();"class="btn btn-default pull-right">
+                    <!--button type="button" onclick="back_main_list();"class="btn btn-default pull-right"-->
+                    <a class="btn btn-default pull-right" href="<?php get_the_permalink($collection_id) ?>">
                         <b><?php _e('Back','tainacan') ?></b>
-                    </button>
+                    </a>
                     <br>
                     <small id="draft-text"></small>
                 </h4>

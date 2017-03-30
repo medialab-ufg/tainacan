@@ -4,6 +4,7 @@
         var src = $('#src').val();
         var properties_autocomplete = get_val($("#properties_autocomplete").val());
         autocomplete_property_data(properties_autocomplete);
+        $('#propertiesRootAdvancedSearch').html('');
         //# 3 - esconde, se necessario os campos de ranking e licencas
         
         if($('.hide_rankings')&&$('.hide_rankings').val()==='true'){
@@ -471,6 +472,7 @@
                         $('.dropdown-toggle').dropdown();
                     },
                     onSelect: function (flag, node) {
+                        console.log('unic dynatree',$("#socialdb_propertyterm_" + tree).val(), node.data.key);
                         if ($("#socialdb_propertyterm_" + tree).val() === node.data.key) {
                             append_category_properties(0,node.data.key,tree);
                             $("#socialdb_propertyterm_" + tree).val("");

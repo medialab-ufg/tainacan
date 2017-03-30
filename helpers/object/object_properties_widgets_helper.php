@@ -276,7 +276,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                 <?php if (!empty($property['metas']['objects']) && !empty($value)) { ?>
                     <?php foreach ($property['metas']['objects'] as $object) { // percoro todos os objetos  ?>
                         <?php
-                        if (isset($value) && !empty($value) && in_array($object->ID, $value)): // verifico se ele esta na lista de objetos da colecao
+                        if (isset($value) && !empty($value) && ((is_array($value) && in_array($object->ID, $value) ) || ($object->ID == $value) )): // verifico se ele esta na lista de objetos da colecao
                             echo '<b><a  href="' . get_the_permalink($property['metas']['collection_data'][0]->ID) . '?item=' . $object->post_name . '" >' . $object->post_title . '</a></b><br>';
                         endif;
                         ?>
