@@ -46,8 +46,8 @@ class ObjectModel extends Model {
         $data = $this->validate_form($data);
         $col_id = $data['collection_id'];
 
-       if (has_filter('tainacan_delete_related_item')) {
-            apply_filters('tainacan_delete_related_item', $data, $col_id);
+       if (has_action('tainacan_delete_related_item')) {
+            do_action('tainacan_delete_related_item', $data, $col_id);
         }
 
         if (isset($data['validation_error'])) {
