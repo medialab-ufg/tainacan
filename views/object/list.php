@@ -14,7 +14,7 @@ if ( $loop->have_posts() ): ?>
             while ( $loop->have_posts() ) : $loop->the_post(); $countLine++;
                 $curr_id = get_the_ID();
                 if(get_post()->post_type === 'socialdb_collection'){
-                    $term =  wp_get_post_terms( $curr_id, 'socialdb_collection_type' )[0];
+                    $term = wp_get_post_terms( $curr_id, 'socialdb_collection_type' )[0];
                     if($term->slug && $term->slug == 'socialdb_collection_private')
                         continue;
                 }
