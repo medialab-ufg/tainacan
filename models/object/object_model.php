@@ -41,7 +41,7 @@ class ObjectModel extends Model {
         $object_id = wp_insert_post($post);
         return $object_id;
     }
-    
+
     public function add($data) {
         $data = $this->validate_form($data);
         $col_id = $data['collection_id'];
