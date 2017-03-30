@@ -502,6 +502,7 @@
                 var nome = elem.name;
                 var meta_help = elem.metas.socialdb_property_help;
                 var default_value = elem.metas.socialdb_property_default_value;
+                var locked = (elem.metas.socialdb_property_locked) ? elem.metas.socialdb_property_locked : false;
                 var operation = 'update_property_data';
                 var search_widget = $("#meta-item-"+id).attr('data-widget');
                 $( meta_modal ).modal('show');
@@ -568,6 +569,12 @@
                 } else {
                     $( meta_modal + " .form_property_data #socialdb_property_data_cardinality_1").prop('checked', true);
                     $( meta_modal + " .form_property_data #socialdb_property_data_cardinality_n").removeAttr('checked');
+                }
+                
+                //se o campo esta travado para edicao
+                $(meta_modal +" .property_lock_field").removeAttr('checked');
+                if (locked) {
+                    $(meta_modal +" .property_lock_field").prop('checked', true);
                 }
                 // $( meta_modal + " h4.modal-title").text('<?php _e('Edit property','tainacan') ?> - ' +  current_widget );
                 $( meta_modal + " h4.modal-title").text('<?php _e('Edit property','tainacan') ?>');
@@ -957,7 +964,10 @@
             data: {collection_id: $("#collection_id").val(), operation: 'edit_property_object', property_id: id}
         }).done(function (result) {
             elem = jQuery.parseJSON(result);
-
+            var locked = (elem.metas.socialdb_property_locked) ? elem.metas.socialdb_property_locked : false;
+            var search = (elem.metas.socialdb_property_to_search_in) ? elem.metas.socialdb_property_to_search_in.split(',') : [];
+            var avoid_items = (elem.metas.socialdb_property_avoid_items) ? elem.metas.socialdb_property_avoid_items : false;
+            var default_value = (elem.metas.socialdb_property_default_value) ? elem.metas.socialdb_property_default_value : false;
             if ( is_metadata_filter( elem.id ) ) {
                 var use_filter = "use_filter";
                 $( "#meta-relationship .property_data_use_filter").prop("checked", true);
@@ -1039,6 +1049,30 @@
                 $("#property_object_required_false").prop('checked', true);
             } else {
                 $("#property_object_required_true").prop('checked', true);
+            }
+             //se o campo esta travado para edicao
+            $("#meta-relationship .property_lock_field").removeAttr('checked');
+            if (locked) {
+                $("#meta-relationship .property_lock_field").prop('checked', true);
+            }
+
+            //se deve evitar itens ja selecionados
+            $("#meta-relationship .property_avoid_items").removeAttr('checked');
+            if (avoid_items) {
+                $("#meta-relationship .property_avoid_items").prop('checked', true);
+            }
+
+            //propriedades usadas na busca
+            if (search.length > 0) {
+                $('#properties_to_search_in').val(search.join(','));
+            }
+            
+            //valor default da propriedade
+            $('#default_value_text').val('');
+            $('#socialdb_property_object_default_value').val('');
+            if(default_value){
+                $('#default_value_text').val(elem.metas.socialdb_property_default_value_text);
+                $('#socialdb_property_object_default_value').val(default_value);
             }
             $("#operation_property_object").val('update_property_object');
 
@@ -1174,7 +1208,8 @@
         }).done(function (result) {
             elem = $.parseJSON(result);
             $("#meta-category").modal('show');
-
+            var locked = (elem.metas.socialdb_property_locked) ? elem.metas.socialdb_property_locked : false;
+            var default_value = (elem.metas.socialdb_property_default_value) ? elem.metas.socialdb_property_default_value : false;
             if( $("#meta-item-"+id).hasClass('root_category') ) {
                 $( "#meta-category .metadata-common-fields").hide();
             } else {
@@ -1219,9 +1254,23 @@
                 $("#socialdb_property_help").val(elem.metas.socialdb_property_help);
             }
 
+             //se o campo esta travado para edicao
+            $("#meta-category .property_lock_field").removeAttr('checked');
+            if (locked) {
+                $("#meta-category .property_lock_field").prop('checked', true);
+            }
+
             var term_root = elem.metas.socialdb_property_term_root;
             if (term_root) {
                 get_category_root_name(term_root);
+            }
+            
+            //valor default da propriedade
+            $('#default_value_text_term').val('');
+            $('#socialdb_property_term_default_value').val('');
+            if(default_value){
+                $('#default_value_text_term').val(elem.metas.socialdb_property_default_value_text);
+                $('#socialdb_property_term_default_value').val(default_value);
             }
             $("#operation_property_term").val('update_property_term');
 
@@ -1900,6 +1949,9 @@
         $("#property_object_id").val('');
         $("#property_object_name").val('');
         $("#property_object_category_id").val('');
+        $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
+            node.select(false);
+        });
         $('#socialdb_property_default_value').val('');
         $("#property_object_facet_false").prop('checked', true);
         $("#property_object_is_reverse_false").prop('checked', true);
@@ -1954,6 +2006,10 @@
                 }else{
                     remove_label_box(node.data.key);
                 }
+                $('#default_value_text').val('');
+                $('#socialdb_property_object_default_value').val('');
+                setTargetProperties('#property_object_category_id');
+                //view helper
                 <?php if(has_action('javascript_onselect_relationship_dynatree_property_object')): ?>
                     <?php do_action('javascript_onselect_relationship_dynatree_property_object') ?>
                 <?php endif; ?>
@@ -1961,5 +2017,47 @@
             }
         });
     }
+     /**
+     ****************************************************************************
+     ************************* DEFAULT VALUE ************************
+     ****************************************************************************
+     **/
+     function autocomplete_object_property_default_value(categories){
+        if($("#default_value_text").val().length>0){
+            $("#default_value_text").autocomplete({
+                source: $('#src').val() + '/controllers/object/object_controller.php?operation=get_objects_default_value&categories=' + categories,
+                minLength: 2,
+                select: function (event, ui) {
+                    event.preventDefault();
+                    $('#default_value_text').val(ui.item.label);
+                    $('#socialdb_property_object_default_value').val(ui.item.value);
+                }
+            });
+        }else{
+            $('#default_value_text').val('');
+            $('#socialdb_property_object_default_value').val('');
+        }
+     }
+     
+      function autocomplete_term_property_default_value(parent){
+        if($("#default_value_text_term").val().length>0){
+            $("#default_value_text_term").autocomplete({
+                source: $('#src').val() + '/controllers/object/object_controller.php?operation=get_terms_default_value&parent=' + parent,
+                minLength: 2,
+                open: function(){
+                    $(this).autocomplete('widget').css('z-index', 2000);
+                    return false;
+                },
+                select: function (event, ui) {
+                    event.preventDefault();
+                    $('#default_value_text_term').val(ui.item.label);
+                    $('#socialdb_property_term_default_value').val(ui.item.value);
+                }
+            });
+        }else{
+            $('#default_value_text_term').val('');
+            $('#socialdb_property_term_default_value').val('');
+        }
+     }
     
 </script>

@@ -7,6 +7,9 @@ if($is_view_mode){
 }else{
     include_once ('js/create_draft_js.php');
 }
+
+
+include_once ('js/validation_fixed_fields.php');
 include_once(dirname(__FILE__).'/../../helpers/view_helper.php');
 include_once(dirname(__FILE__).'/../../helpers/object/object_helper.php');
 

@@ -562,6 +562,7 @@
                 var nome = elem.name;
                 var meta_help = elem.metas.socialdb_property_help;
                 var default_value = elem.metas.socialdb_property_default_value;
+                var locked = (elem.metas.socialdb_property_locked) ? elem.metas.socialdb_property_locked : false;
                 var operation = 'update_property_data';
                 var search_widget = $("#meta-item-" + id).attr('data-widget');
 
@@ -671,6 +672,12 @@
                 } else {
                     $(meta_modal + " .form_property_data #socialdb_property_data_visualization_public").prop('checked', true);
                     $(meta_modal + " .form_property_data #socialdb_property_data_visualization_restrict").removeAttr('checked');
+                }
+                
+                //se o campo esta travado para edicao
+                $(meta_modal +" .property_lock_field").removeAttr('checked');
+                if (locked) {
+                    $(meta_modal +" .property_lock_field").prop('checked', true);
                 }
                 // $( meta_modal + " h4.modal-title").text('<?php _e('Edit property', 'tainacan') ?> - ' +  current_widget );
                 $(meta_modal + " h4.modal-title").text('<?php _e('Edit property', 'tainacan') ?>');
@@ -1154,6 +1161,7 @@
             var locked = (elem.metas.socialdb_property_locked) ? elem.metas.socialdb_property_locked : false;
             var search = (elem.metas.socialdb_property_to_search_in) ? elem.metas.socialdb_property_to_search_in.split(',') : [];
             var avoid_items = (elem.metas.socialdb_property_avoid_items) ? elem.metas.socialdb_property_avoid_items : false;
+            var default_value = (elem.metas.socialdb_property_default_value) ? elem.metas.socialdb_property_default_value : false;
             if (is_metadata_filter(elem.id)) {
                 var use_filter = "use_filter";
                 $("#meta-relationship .property_data_use_filter").prop("checked", true);
@@ -1309,6 +1317,14 @@
             //propriedades usadas na busca
             if (search.length > 0) {
                 $('#properties_to_search_in').val(search.join(','));
+            }
+            
+            //valor default da propriedade
+            $('#default_value_text').val('');
+            $('#socialdb_property_object_default_value').val('');
+            if(default_value){
+                $('#default_value_text').val(elem.metas.socialdb_property_default_value_text);
+                $('#socialdb_property_object_default_value').val(default_value);
             }
 
             if (visualization == 'restrict') {
@@ -1476,7 +1492,8 @@
         }).done(function (result) {
             elem = $.parseJSON(result);
             var visualization = (elem.metas.socialdb_property_visualization) ? elem.metas.socialdb_property_visualization : 'public';
-
+            var locked = (elem.metas.socialdb_property_locked) ? elem.metas.socialdb_property_locked : false;
+            var default_value = (elem.metas.socialdb_property_default_value) ? elem.metas.socialdb_property_default_value : false;
             $('#socialdb_property_vinculate_category_exist').prop('checked', 'checked');
             $('#socialdb_property_vinculate_category_exist').trigger('click');
             $('#property_term_new_category').val('');
@@ -1547,11 +1564,25 @@
                 $("#socialdb_property_term_visualization_public").prop('checked', true);
                 $("#socialdb_property_term_visualization_restrict").removeAttr('checked');
             }
+            //se o campo esta travado para edicao
+            $("#meta-category .property_lock_field").removeAttr('checked');
+            if (locked) {
+                $("#meta-category .property_lock_field").prop('checked', true);
+            }
 
             var term_root = elem.metas.socialdb_property_term_root;
             if (term_root) {
                 get_category_root_name(term_root);
             }
+            
+            //valor default da propriedade
+            $('#default_value_text_term').val('');
+            $('#socialdb_property_term_default_value').val('');
+            if(default_value){
+                $('#default_value_text_term').val(elem.metas.socialdb_property_default_value_text);
+                $('#socialdb_property_term_default_value').val(default_value);
+            }
+            
             $("#operation_property_term").val('update_property_term');
 
             if (is_metadata_filter(term_root)) {
@@ -1884,7 +1915,7 @@
     });
 
     function resetAllForms() {
-        var forms = ['submit_form_property_data_text', 'submit_form_property_data_textarea', 'submit_form_property_data_date',
+        var forms = ['submit_form_property_data_text', 'submit_form_property_data_textarea', 'submit_form_property_data_date','submit_form_property_object',
             'submit_form_property_data_numeric', 'submit_form_property_data_autoincrement', 'submit_form_property_term', 'submit_form_ranking'];
         $(forms).each(function (idx, el) {
             document.getElementById(el).reset();
@@ -1894,18 +1925,26 @@
                 $(cur + " input[name='operation']").val('add_property_term');
             } else if (el == 'submit_form_ranking') {
                 $(cur + " input[name='operation']").val('add');
-            } else {
+            } else if(el !== 'submit_form_property_object') {
                 $(cur + " input[name='operation']").val('add_property_data');
             }
             $(cur + " input:checkbox").removeAttr('checked');
+            $(cur + " input").val('');
+            
         });
         $('#socialdb_property_term_cardinality_1').trigger('click');
         $("#submit_form_property_term #socialdb_property_term_root").html('');
+        if($('#data-advanced-configuration-object').is(':visible')){
+            toggle_advanced_configuration('#data-advanced-configuration-object');
+        }
         $('.dynatree-selected').removeClass('dynatree-selected');
         $("#terms_dynatree").dynatree("getRoot").visit(function (node) {
             node.select(false);
         });
-        $(".modal-title .edit").text('<?php _e('Add new property', 'tainacan') ?>');
+        $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
+            node.select(false);
+        });
+        $(".modal-title").text('<?php _e('Add new property', 'tainacan') ?>');
         $("#meta-category .term-widget").hide();
     }
 
@@ -2362,15 +2401,59 @@
                 } else {
                     remove_label_box(node.data.key);
                 }
-
+                $('#default_value_text').val('');
+                $('#socialdb_property_object_default_value').val('');
                 setTargetProperties('#property_object_category_id');
-<?php if (has_action('javascript_onselect_relationship_dynatree_property_object')): ?>
-    <?php do_action('javascript_onselect_relationship_dynatree_property_object') ?>
-<?php endif; ?>
+                //view helper
+                <?php if (has_action('javascript_onselect_relationship_dynatree_property_object')): ?>
+                    <?php do_action('javascript_onselect_relationship_dynatree_property_object') ?>
+                <?php endif; ?>
                 list_reverses();
             }
         });
     }
+    /**
+     ****************************************************************************
+     ************************* DEFAULT VALUE ************************
+     ****************************************************************************
+     **/
+     function autocomplete_object_property_default_value(categories){
+        if($("#default_value_text").val().length>0){
+            $("#default_value_text").autocomplete({
+                source: $('#src').val() + '/controllers/object/object_controller.php?operation=get_objects_default_value&categories=' + categories,
+                minLength: 2,
+                select: function (event, ui) {
+                    event.preventDefault();
+                    $('#default_value_text').val(ui.item.label);
+                    $('#socialdb_property_object_default_value').val(ui.item.value);
+                }
+            });
+        }else{
+            $('#default_value_text').val('');
+            $('#socialdb_property_object_default_value').val('');
+        }
+     }
+     
+      function autocomplete_term_property_default_value(parent){
+        if($("#default_value_text_term").val().length>0){
+            $("#default_value_text_term").autocomplete({
+                source: $('#src').val() + '/controllers/object/object_controller.php?operation=get_terms_default_value&parent=' + parent,
+                minLength: 2,
+                open: function(){
+                    $(this).autocomplete('widget').css('z-index', 2000);
+                    return false;
+                },
+                select: function (event, ui) {
+                    event.preventDefault();
+                    $('#default_value_text_term').val(ui.item.label);
+                    $('#socialdb_property_term_default_value').val(ui.item.value);
+                }
+            });
+        }else{
+            $('#default_value_text_term').val('');
+            $('#socialdb_property_term_default_value').val('');
+        }
+     }
     /**
      ****************************************************************************
      ************************* COLABORATION RANKING ************************

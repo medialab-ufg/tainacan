@@ -604,7 +604,7 @@ class ExportModel extends Model {
                         }
                     }
                 }
-                $array_property_name = '';
+                $array_property_name = [];
             }
 
             /** Arquivos * */
@@ -757,7 +757,7 @@ class ExportModel extends Model {
                         endif;
                     }
                 }
-                $array_property_name = '';
+                $array_property_name = [];
             }
             //property terms
             if ($categories_of_facet !== '' && is_array($categories_of_facet)) {

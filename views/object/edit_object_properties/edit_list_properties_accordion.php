@@ -2,8 +2,6 @@
 /*
  * View Responsavel em mostrar as propriedades na hora de EDITAR do objeto, NAO UTILIZADA NOS EVENTOS
  */
-
-include_once (dirname(__FILE__).'/../js/validation_fixed_fields.php');
 include_once (dirname(__FILE__).'/js/edit_list_properties_accordion_js.php');
 include_once(dirname(__FILE__).'/../../../helpers/view_helper.php');
 include_once(dirname(__FILE__).'/../../../helpers/object/object_properties_widgets_helper.php');
@@ -31,6 +29,8 @@ $references = [
 if($is_view_mode){
     $references['is_view_mode'] = true;
 }
+
+
 if (isset($property_object)):
     foreach ($property_object as $property) {
         $ids[] = $property['id']; ?>
@@ -53,7 +53,7 @@ if (isset($property_object)):
             <div>
                 <input type="hidden" class="form_autocomplete_value_<?php echo $property['id']; ?>_mask" 
                            value="<?php echo ($property['metas']['socialdb_property_data_mask'] ) ? $property['metas']['socialdb_property_data_mask'] : '' ?>">
-                <?php if($is_view_mode): ?>
+                <?php if($is_view_mode || (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true')): ?>
                      <div id="labels_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">
                         <?php if (!empty($property['metas']['objects']) && !empty($property['metas']['value'])) { ?>
                             <?php foreach ($property['metas']['objects'] as $object) { // percoro todos os objetos  ?>
@@ -69,78 +69,8 @@ if (isset($property_object)):
                         }
                         ?>
                     </div>
-                <?php else: 
-                    // botao que leva a colecao relacionada
-                    if (isset($property['metas']['collection_data'][0]->post_title)):  ?>
-                        <a style="cursor: pointer;color: white;"
-                           id="add_item_popover_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"
-                           class="btn btn-primary btn-xs popover_item" 
-                            >
-                               <span class="glyphicon glyphicon-plus"></span>
-                               <?php _e('Add new', 'tainacan'); ?>
-                               <?php echo ' ' . $property['metas']['collection_data'][0]->post_title; ?>
-                        </a>
-                        <script>
-                            $('#add_item_popover_<?php echo $property['id']; ?>_<?php echo $object_id; ?>').popover({ 
-                               html : true,
-                               placement: 'right',
-                               title: '<?php echo _e('Add item in the collection','tainacan').' '.$property['metas']['collection_data'][0]->post_title; ?>',
-                               content: function() {
-                                 return $("#popover_content_<?php echo $property['id']; ?>_<?php echo $object_id; ?>").html();
-                               }
-                            });
-                        </script>
-                        <div id="popover_content_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"   class="hide ">
-                            <form class="form-inline"  style="font-size: 12px;width: 300px;">
-                                <div class="form-group">
-                                  <input type="text" 
-                                         placeholder="<?php _e('Type the title','tainacan') ?>"
-                                         class="form-control" 
-                                         id="title_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">
-                                </div>
-                                <button type="button" 
-                                        onclick="add_new_item_by_title('<?php echo $property['metas']['collection_data'][0]->ID; ?>',$('#title_<?php echo $property['id']; ?>_<?php echo $object_id; ?>').val(),'#add_item_popover_<?php echo $property['id']; ?>_<?php echo $object_id; ?>',<?php echo $property['id']; ?>,<?php echo $object_id; ?>)"
-                                        class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span></button>
-                            </form>
-                        </div> 
-                        <br><br>
-                    <?php 
-                     endif; 
-                    ?>
-                    <input type="hidden" 
-                                id="cardinality_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"  
-                                value="<?php echo $view_helper->render_cardinality_property($property);   ?>">            
-                    <input type="text" 
-                           onkeyup="autocomplete_object_property_edit('<?php echo $property['id']; ?>', '<?php echo $object_id; ?>');" 
-                           id="autocomplete_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>" 
-                           placeholder="<?php _e('Type the three first letters of the object of this collection ', 'tainacan'); ?>"  
-                           class="chosen-selected form-control"  />    
-
-                    <select onclick="clear_select_object_property(this,'<?php echo $property['id']; ?>', '<?php echo $object_id; ?>');" 
-                            id="property_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>_edit" 
-                            multiple class="chosen-selected2 form-control auto-save" 
-                            style="height: auto;" 
-                            name="socialdb_property_<?php echo $property['id']; ?>[]"
-                            <?php 
-                                if ($property['metas']['socialdb_property_required'] == 'true'): 
-                                    echo 'required="required"';
-                                endif;
-                            ?> >
-                            <?php 
-                                if (!empty($property['metas']['objects'])) { ?>     
-                                    <?php foreach ($property['metas']['objects'] as $object) { ?>
-                                        <?php if (isset($property['metas']['value']) && !empty($property['metas']['value']) && in_array($object->ID, $property['metas']['value'])): // verifico se ele esta na lista de objetos da colecao   ?>    
-                                             <option selected='selected' value="<?php echo $object->ID ?>"><?php echo $object->post_title ?></span>
-                                    <?php endif; ?>
-                                <?php } ?> 
-                            <?php 
-                                }else { 
-                            ?>   
-                                <option value=""><?php _e('No objects added in this collection', 'tainacan'); ?></option>
-                            <?php 
-                                } 
-                            ?>       
-                    </select>
+                <?php else:   ?>
+                        <?php $object_properties_widgets_helper->generateWidgetPropertyRelated($property,$object_id,$collection_id) ?>
             <?php endif ?>        
         </div>  
     </div>     
@@ -166,22 +96,22 @@ if (isset($property_object)):
                 $object_properties_widgets_helper->generateValidationIcons($property);
                 ?>
             </h2>
-            <?php if($is_view_mode): ?>
-            <div>
-                <?php if(isset($property['metas']['value'][0])): ?>
-                    <?php foreach ($property['metas']['value'] as $value): if(empty($value)) continue; ?>
-                        <p><?php  echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $value. "'" . ',' . $property['id'] . ')">' .$value . '</a>';  ?></p>
-                     <?php endforeach;;?>
-                <?php else: ?>
-                    <p><?php  _e('empty field', 'tainacan') ?></p>
-                <?php endif ?>
-            </div> 
+            <?php if($is_view_mode || (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true')): ?>
+                <div>
+                    <?php if(isset($property['metas']['value'][0])): ?>
+                        <?php foreach ($property['metas']['value'] as $value): if(empty($value)) continue; ?>
+                            <p><?php  echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $value. "'" . ',' . $property['id'] . ')">' .$value . '</a>';  ?></p>
+                         <?php endforeach;;?>
+                    <?php else: ?>
+                        <p><?php  _e('empty field', 'tainacan') ?></p>
+                    <?php endif ?>
+                </div> 
             <?php else: ?>
                 <?php $cardinality = $view_helper->render_cardinality_property($property);   ?>
                 <div>
                      <?php for($i = 0; $i<$cardinality;$i++):   ?>
                         <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
-                             style="padding-bottom: 10px;margin-bottom: 30px;<?php echo ($i===0||(trim($property['metas']['value'][$i])!=''&&is_array($property['metas']['value'])&&$i<count($property['metas']['value']))) ? 'display:block': 'display:none'; ?>">
+                             style="padding-bottom: 10px;margin-bottom: 30px;<?php echo ($i===0||(trim($property['metas']['value'][$i])!='--'&&is_array($property['metas']['value'])&&$i<count($property['metas']['value']))) ? 'display:block': 'display:none'; ?>">
                              <div class="col-md-11">
                         <?php if ($property['type'] == 'text') { ?>     
                                 <input type="text" 
@@ -298,7 +228,7 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
             </h2>    
             <div>
             <?php
-              if($is_view_mode):
+              if($is_view_mode || (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true')):
                   switch ($property['type']){
                       case 'radio';
                           $properties_terms_radio[] = $property['id'];
