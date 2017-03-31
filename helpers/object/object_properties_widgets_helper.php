@@ -557,13 +557,13 @@ class ObjectWidgetsHelper extends ViewHelper {
                 }
                 ?>
             </h2>
-            <?php $cardinality = $this->render_cardinality_property($property);   ?>
+            <?php $cardinality_bigger = $this->render_cardinality_property($property);   ?>
             <?php $properties_compounded = $property['metas']['socialdb_property_compounds_properties_id']; ?>
             <?php //$class = 'col-md-'. (12/count($properties_compounded)); ?>
             <div class="form-group" style="margin-bottom: 15px; margin-right: 15px;margin-left: 15px;">
                 <input  type="hidden" id='main_compound_id'
                         value='<?php echo $references['compound_id'] ?>'>
-                <?php for($i = 0; $i<$cardinality;$i++):
+                <?php for($i = 0; $i<$cardinality_bigger;$i++):
                     $is_show_container =  $this->is_set_container($object_id,$property,$property_compounded,$i);
                     $position = 0;
                     ?>
@@ -615,7 +615,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                 <input type="hidden"
                        name="cardinality_<?php echo $property['id']; ?>"
                        id="cardinality_<?php echo $property['id']; ?>"
-                       value="<?php echo $cardinality; ?>">
+                       value="<?php echo $cardinality_bigger; ?>">
                 <?php $coumpounds_id = []; ?>
             </div>
         </div>
@@ -752,7 +752,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                              <li id="inserted_property_object_<?php echo $compound_id ?>_<?php echo $property['id'] ?>_<?php echo $i ?>_<?php echo $id; ?>" 
                                  item="<?php echo $id; ?>" class="selected-items-property-object property-<?php echo $property['id']; ?>">
                                      <?php echo get_post($id)->post_title; ?>
-                                 <span  onclick="$('#inserted_property_object_<?php echo $property['id']; ?>_<?php echo $id; ?>').remove();$('select[name=socialdb_property_<?php echo $property['id']; ?>[]]  option[value=<?php echo $id; ?>]').remove()" 
+                                 <span  onclick="$('#inserted_property_object_<?php echo $compound_id ?>_<?php echo $property['id'] ?>_<?php echo $i ?>_<?php echo $id; ?>').remove();$('select[name=socialdb_property_<?php echo $property['id']; ?>[]]  option[value=<?php echo $id; ?>]').remove()" 
                                         style="cursor:pointer;" class="pull-right glyphicon glyphicon-trash"></span>
                              </li>       
                         <?php endforeach; ?>    

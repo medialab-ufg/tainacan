@@ -185,6 +185,7 @@
             $.each(radios, function (idx, radio) {
                 if($('#cardinality_compound_'+compound_id+'_'+radio).length>0){
                     var cardinality = $('#cardinality_compound_'+compound_id+'_'+radio).val();
+                    var cardinality = $('#cardinality_'+compound_id).val();
                     var xhr = $.ajax({
                             url: $('#src').val() + '/controllers/property/property_controller.php',
                             type: 'POST',
@@ -268,7 +269,8 @@
         if (selectboxes) {
             $.each(selectboxes, function (idx, selectbox) {
                 if($('#cardinality_compound_'+compound_id+'_'+selectbox).length>0){
-                    var cardinality = $('#cardinality_compound_'+compound_id+'_'+selectbox).val();
+                    //var cardinality = $('#cardinality_compound_'+compound_id+'_'+selectbox).val();
+                    var cardinality = $('#cardinality_'+compound_id).val();
                     var xhr = $.ajax({
                             url: $('#src').val() + '/controllers/property/property_controller.php',
                             type: 'POST',
@@ -329,6 +331,7 @@
             $.each(multipleSelects, function (idx, multipleSelect) {
                 if($('#cardinality_compound_'+compound_id+'_'+multipleSelect).length>0){
                     var cardinality = $('#cardinality_compound_'+compound_id+'_'+multipleSelect).val();
+                    var cardinality = $('#cardinality_'+compound_id).val();
                     var xhr = $.ajax({
                             url: $('#src').val() + '/controllers/property/property_controller.php',
                             type: 'POST',
@@ -381,6 +384,7 @@
             $.each(treecheckboxes, function (idx, treecheckbox) {
                  if($('#cardinality_compound_'+compound_id+'_'+treecheckbox).length>0){
                     var cardinality = $('#cardinality_compound_'+compound_id+'_'+treecheckbox).val();
+                    var cardinality = $('#cardinality_'+compound_id).val();
                     for(var i = 0;i<cardinality;i++){
                         var value = $('#actual_value_'+compound_id+'_' + treecheckbox + '_' + i).val();
                         if($('#label_'+compound_id+'_' + tree + '_' + i).length>0){
@@ -478,6 +482,7 @@
                     console.log('#cardinality_compound_'+compound_id+'_'+tree);
                 if($('#cardinality_compound_'+compound_id+'_'+tree).length>0){
                     var cardinality = $('#cardinality_compound_'+compound_id+'_'+tree).val();
+                    var cardinality = $('#cardinality_'+compound_id).val();
                     for(var i = 0;i<cardinality;i++){
                         var value = $('#actual_value_'+compound_id+'_' + tree + '_' + i).val();
                         if($('#label_'+compound_id+'_' + tree + '_' + i).length>0){

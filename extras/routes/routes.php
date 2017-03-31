@@ -9,6 +9,11 @@ $collection_route = get_post(get_option('collection_root_id'));
     }
     ?>">
 <!-- Paginas da colecao -->
+<input type="hidden" id="goToEditObject" name="goToEditObject" value="<?php
+    if (get_query_var('edit-item') && get_query_var('collection') && get_query_var('item')) {
+        echo get_post_by_name(trim(get_query_var('item')),OBJECT,'socialdb_object')->ID;
+    }
+    ?>">
 <input type="hidden" id="goToAdvancedSearch" name="goToAdvancedSearch" value="<?php
     if ((get_query_var('advancedSearch') && get_query_var('collection') == $collection_route->post_name ) && get_query_var('advancedSearch')) {
         echo trim(get_query_var('advancedSearch'));
@@ -206,12 +211,16 @@ $collection_route = get_post(get_option('collection_root_id'));
      */
     function execute_route() {
          $.router.reset();
+         
+                    console.log('edit item',$('#goToEditObject').val());
         if ($('#object_page').val() !== '') {
             collection = $('#slug_collection').val();
             if(collection) {
                 showSingleObjectByName($('#object_page').val() , $('#src').val())
             }
-        } else if($('#goToLogin').val()!==''){
+        } else if($('#goToEditObject').val()!==''){
+               route_edit_object_item($('#goToEditObject').val())
+        }else if($('#goToLogin').val()!==''){
             showLoginScreen($('#src').val());
         }else if($('#goToAdvancedSearch').val()!==''){
              showAdvancedSearch($('#src').val());
@@ -421,5 +430,29 @@ $collection_route = get_post(get_option('collection_root_id'));
            $.router.go($('#route_blog').val()+collection+'/', 'My cool item');
         }else
            window.location = $('#route_blog').val();
+    }
+    
+    function route_edit_object_item(object_id) {
+       show_modal_main();
+        $.ajax({
+            type: "POST",
+            url: $('#src').val() + "/controllers/object/object_controller.php",
+            data: {collection_id: $('#collection_id').val(), operation: 'edit', object_id: object_id}
+        }).done(function (result) {
+            hide_modal_main();
+            if(result.trim().indexOf('checkout@')>=0){
+                $('.modal').modal('hide');//mostro o modal de carregamento
+                var arrayN = result.trim().split('@');
+                showAlertGeneral('<?php _e('Attention!','tainacan') ?>','<?php _e('Item blocked by user ') ?>'+arrayN[1]+' <?php _e('at','tainacan') ?> '+arrayN[2],'info');
+            }else{
+                $("#form").html('');
+                $('#main_part').hide();
+                $('#display_view_main_page').hide();
+                $('#loader_collections').hide();
+                $('#configuration').html(result).show();
+                $('.dropdown-toggle').dropdown();
+                $('.nav-tabs').tab();
+            }
+        });
     }
 </script>    

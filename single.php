@@ -111,7 +111,7 @@ while (have_posts()) : the_post();
     ?>">
     <!-- PAGINA DO ITEM -->
     <input type="hidden" id="object_page" name="object_page" value="<?php
-    if (get_query_var('item')) {
+    if (get_query_var('item') && !get_query_var('edit-item')) {
         echo trim(get_query_var('item'));
     }
     ?>">

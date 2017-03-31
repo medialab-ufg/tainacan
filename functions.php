@@ -311,12 +311,14 @@ function custom_rewrite_tag() {
     add_rewrite_tag('%email%', '([^&]+)');
     add_rewrite_tag('%tools%', '([^&]+)');
     add_rewrite_tag('%categories%', '([^&]+)');
+    add_rewrite_tag('%edit-item%', '([^&]+)');
 }
 
 add_action('init', 'custom_rewrite_tag', 10, 0);
 
 function custom_rewrite_basic() {
     $collection = get_post(get_option('collection_root_id'));
+    
     
     add_rewrite_rule('^feed_collection/([^/]*)', 'index.php?collection_name=$matches[1]', 'top');
     add_rewrite_rule('^oai', 'index.php?oaipmh=true', 'top');
@@ -350,8 +352,10 @@ function custom_rewrite_basic() {
     add_rewrite_rule('^'.__('signin','tainacan'), 'index.php?log-in=true', 'top');
     add_rewrite_rule('^'.__('signin','tainacan'), 'index.php?log-in=true', 'top');
     
+    add_rewrite_rule('^([^/]*)/([^/]*)/editar', 'index.php?collection=$matches[1]&item=$matches[2]&edit-item=true', 'top');
+    
     add_rewrite_rule('^([^/]*)/([^/]*)', 'index.php?collection=$matches[1]&item=$matches[2]', 'top');
-    flush_rewrite_rules();
+    //flush_rewrite_rules();
 }
 
 add_action('init', 'custom_rewrite_basic', 10, 0);
