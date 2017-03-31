@@ -87,6 +87,28 @@
                     });
                 }
     }
+    
+    function search_autocomplete_object_property_add(property_id,object_id) {
+        console.log($("#property_object_search_submit_"+property_id+" #autocomplete_value_" + property_id+"_"+object_id));
+        $("#property_object_search_submit_"+property_id+" #autocomplete_value_" + property_id+"_"+object_id).autocomplete({
+            source: $('#src').val() + '/controllers/collection/collection_controller.php?operation=list_items_search_autocomplete&property_id=' + property_id,
+            messages: {
+                noResults: '',
+                results: function () {
+                }
+            },
+            minLength: 2,
+            select: function (event, ui) {
+                console.log(event);
+                $("#property_object_search_submit_"+property_id+" #autocomplete_value_" + property_id).val('');
+                //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
+                var temp = $("#property_value_" + property_id).val();
+                if (typeof temp == "undefined") {
+                    $("#property_object_search_submit_"+property_id+" #autocomplete_value_" + property_id).val(ui.item.value);
+                }
+            }
+        });
+    }
 
     function clear_select_object_property(e) {
         $('option:selected', e).remove();

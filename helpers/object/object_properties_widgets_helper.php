@@ -632,6 +632,7 @@ class ObjectWidgetsHelper extends ViewHelper {
         $property_data = [];
         $property_object = [];
         $property_term = [];
+        $property_compounds = [];
         $properties = $property['metas']["socialdb_property_to_search_in"];
         if(isset($properties) && $properties != ''){
             $properties = explode(',', $properties);
@@ -643,6 +644,14 @@ class ObjectWidgetsHelper extends ViewHelper {
                     $property_object[] = $property_related;
                 elseif(isset($property_related['metas']['socialdb_property_term_widget'])): 
                     $property_term[] = $property_related;
+                elseif(isset($property_related['metas']['socialdb_property_compounds_properties_id'])): 
+                    $all_values = [];
+                    $values = explode(',', $property_related['metas']['socialdb_property_compounds_properties_id']);
+                    foreach ($values as $value) {
+                        $all_values[] = $propertyModel->get_all_property($value, true);
+                    }
+                    $property_related['metas']['socialdb_property_compounds_properties_id'] = $all_values;
+                    $property_compounds[] = $property_related;
                 endif; 
             }
         }

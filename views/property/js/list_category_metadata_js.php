@@ -1727,7 +1727,7 @@
             var cur = "#" + el;
             $(cur + " .data-widget").hide();
             $(cur + " input:checkbox").removeAttr('checked');
-            $(cur + " input").val('');
+            $(cur + " input[type=text]").val('');
         });
         $('#socialdb_property_term_cardinality_1').trigger('click');
         $("#submit_form_property_term #socialdb_property_term_root").html('');

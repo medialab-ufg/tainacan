@@ -20,7 +20,7 @@
         <input type="hidden" name="categories" value="<?php echo (is_array($property['metas']['socialdb_property_object_category_id'])) ? implode(",",$property['metas']['socialdb_property_object_category_id']) : $property['metas']['socialdb_property_object_category_id'] ?>">
         <input type="hidden" name="properties_id" value="<?php echo (is_array($properties)) ? implode(',', $properties) : '' ?>">
         <?php
-        if (empty($property_data) && empty($property_term) && empty($property_object)):
+        if (empty($property_data) && empty($property_term) && empty($property_object) && empty($property_compounds)):
             //se existir propriedades
             include_once(dirname(__FILE__) . '/../../helpers/view_helper.php');
             include_once(dirname(__FILE__) . '/../../helpers/advanced_search/advanced_search_helper.php');

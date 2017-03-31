@@ -848,6 +848,9 @@ class CategoryModel extends Model {
         $category_datas = $wpdb->get_results($query);
         foreach ($category_datas as $category_data) {
             if (($category_data->meta_key == 'socialdb_category_property_id') && $category_data->meta_value != '') {
+                if(!is_array($config[$category_data->meta_key])){
+                    $config[$category_data->meta_key] = array();
+                }
                 $config[$category_data->meta_key][] = $category_data->meta_value;
             } elseif ($category_data->meta_key == 'socialdb_category_moderators' && $category_data->meta_value != '') {
                 $user = $this->usermodel->get_user($category_data->meta_value);

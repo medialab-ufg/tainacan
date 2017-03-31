@@ -208,6 +208,7 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
                             <input  type="hidden" 
                                     name="socialdb_propertyterm_<?php echo $property['id']; ?>" 
                                     value="<?php echo $property['metas']['socialdb_property_default_value'] ?>">
+                            <script> append_category_properties(<?php echo $property['metas']['socialdb_property_default_value'] ?>,0,<?php echo $property['id']; ?> )</script>
                         <?php else: ?>
                             <p><?php  _e('Empty field', 'tainacan') ?></p>
                         <?php endif ?>
