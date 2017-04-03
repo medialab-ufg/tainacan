@@ -780,9 +780,14 @@ button.collection-trash {
   margin-top: 10px;
   margin-bottom: 20px;
   background: white;
-  padding-top: 15px;
+  // padding-top: 15px;
   border: 3px solid $item-border;
   @include context-item-menu-style(-1px, 0 10px 0 10px);
+
+  #table-view.table-bordered {
+    border: none !important;
+    border-collapse: collapse !important;
+  }
 
   #table-view {
     overflow-x: scroll;
