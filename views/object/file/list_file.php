@@ -53,20 +53,15 @@ include_once ('js/list_file_js.php');
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel"><?php echo __('Attachments','tainacan'); ?> </h4>
+                <h4 class="modal-title" id="myModalLabel"><?php _t('Attachments',1); ?> </h4>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <div id="carousel-attachment">
-                        <?php foreach ($attachments['image'] as $image): ?>
-                            <div class='slideshow-item' style="display:block;">
-                                <img src="<?= $image->guid ?>" />
-                                <?php /*
-                                <div class="image-caption"> <?= $image->post_content ?> </div>
-                                */ ?>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
+                <div id="carousel-attachment">
+                    <?php foreach ($attachments['image'] as $image): ?>
+                        <div class='slideshow-item' style="display:block;">
+                            <img src="<?= $image->guid ?>" />
+                        </div>
+                    <?php endforeach; ?>
                 </div>
             </div>
         </div>

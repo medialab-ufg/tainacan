@@ -1,6 +1,43 @@
 #single_item_tainacan {
   @include context-item-menu-style(2px, 0 15px 10px 20px);
 
+  #modalSlideShow {
+
+    .modal-dialog {
+      width: 980px;
+      .modal-content {
+        max-height: none !important;
+
+        .slick-prev {
+          z-index: 99;
+          left: 25px !important;
+        }
+
+        .slick-next {
+          z-index: 99;
+          right: 25px !important;
+        }
+
+        .slick-prev:before, .slick-next:before {
+          color: $brand-medium-blue !important;
+        }
+
+      }
+    }
+
+  } // #modalSlideShow
+
+  #carousel-attachment {
+    .slideshow-item {
+      img {
+        max-height: inherit !important;
+        max-width: inherit !important;
+      }
+
+    }
+  } // carousel attachment
+
+
   .single-title {
     font-weight: bolder;
     color: black !important;
