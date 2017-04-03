@@ -720,7 +720,7 @@ class ExportModel extends Model {
               }
               } */
 
-            $categories_of_facet = '';
+            $categories_of_facet = [];
 
             /** Propriedades de Atributos * */
             $root_category = $this->get_category_root_of($data['collection_id']);

@@ -472,6 +472,10 @@ while (have_posts()) : the_post();
                                         <?php
                                     }
                                     ?>
+                                        
+                                        <button onclick="export_selected_objects()" type="button" class="btn btn-default pull-right" data-toggle="tooltip" data-placement="top" title="<?php _e('Download Results','tainacan') ?>">
+                                         <span style="font-size: 15px;" class="glyphicon glyphicon-download-alt">
+                                     </button>
                                 </div>
                             </div>
                         </div>
