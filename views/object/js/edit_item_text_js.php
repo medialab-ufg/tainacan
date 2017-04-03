@@ -348,6 +348,7 @@
         $('#display_view_main_page').show();
         $("#container_three_columns").removeClass('white-background');
         $('#menu_object').show();
+        window.history.pushState('forward', null, $('#route_blog').val()+$('#slug_collection').val()+'/');
         //remove o checkout in
         //if(!id){
             id = '';
