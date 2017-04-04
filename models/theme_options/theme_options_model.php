@@ -391,7 +391,7 @@ class ThemeOptionsModel extends Model {
 
             if ($file === null):
                 $result = false;
-                $error = __("Envie um arquivo zip.", 'tainacan');
+                $error = __("Send file zip.", 'tainacan');
             elseif ($file['size'] > ($MaxFileSize * (1024 * 1024))):
                 $result = false;
                 $error = __("File is too big, max size is {$MaxFileSize}MB.", 'tainacan');
@@ -405,10 +405,10 @@ class ThemeOptionsModel extends Model {
                 }
                 if (move_uploaded_file($file['tmp_name'], TAINACAN_UPLOAD_FOLDER . '/data/aip/' . $name)):
                     $result = true;
-                    $error = __("Arquivo enviado com sucesso!", 'tainacan');
+                    $error = __("File sent successfully!", 'tainacan');
                 else:
                     $result = false;
-                    $error = __("Erro ao mover o arquivo. Favor tente mais tarde!", 'tainacan');
+                    $error = __("Fail sending file. Please try again!", 'tainacan');
                 endif;
             endif;
         }else {

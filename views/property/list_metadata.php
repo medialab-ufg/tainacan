@@ -8,6 +8,12 @@ $view_helper = new ViewHelper();
 $meta = get_post_meta($collection_id, 'socialdb_collection_fixed_properties_visibility', true);
 $tabs = unserialize(get_post_meta($collection_id, 'socialdb_collection_update_tab_organization',true));
 $array_visibility = ($meta&&$meta!=='') ? $meta : '';
+if(!session_id()) {
+        session_start();
+}
+unset($_SESSION['collection_'.$collection_id.'_properties']);
+unset($_SESSION['collection_'.$collection_id.'_ranking']);
+unset($_SESSION['tainacan-categories']);
 ?>
 
 <?php $view_helper->render_header_config_steps('metadata') ?>

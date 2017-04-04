@@ -93,6 +93,9 @@ class ObjectWidgetsHelper extends ViewHelper {
                                  style="border-style: solid;border-width: 1px;border-color: #ccc; padding: 10px;<?php echo ($is_show_container) ? 'display:block': 'display:none'; ?>">
                                 <div class="col-md-11">
                                 <?php foreach ($properties_compounded as $property_compounded): 
+                                    if(!isset( $property_compounded['id']) || empty($property_compounded['id'])){
+                                        continue;
+                                    }
                                     $coumpounds_id[] = $property_compounded['id']; 
                                     $value = $this->get_value($object_id, $property['id'], $property_compounded['id'], $i, $position);
                                     ?>

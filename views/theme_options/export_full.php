@@ -27,7 +27,6 @@ include_once ('../../helpers/view_helper.php');
                             
                             <button type="submit" onclick="start_loader_aip()" id="export_zip" class="btn btn-primary tainacan-blue-btn-bg"><?php _e('Export AIP', 'tainacan'); ?></button>
                             
-                            <!--button type="button" onclick="start_loader_aip()" id="export_csv" class="btn btn-primary tainacan-blue-btn-bg"><?php _e('TESTE', 'tainacan'); ?></button-->
                         </form>
                          <div class="modal fade" id="modalExportAIP" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                             <div class="modal-dialog">

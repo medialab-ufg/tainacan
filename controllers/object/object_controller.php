@@ -287,7 +287,16 @@ class ObjectController extends Controller {
                 return $this->render(dirname(__FILE__) . '../../../views/object/show_insert_object_properties.php', $data);
             // propriedades na insercao do objeto com o ACCORDION
             case 'show_object_properties_accordion'://
-                $data = $object_model->show_object_properties($data);
+                if(!session_id()) {
+                        session_start();
+                }
+                $cache = $_SESSION['collection_'.$data['collection_id'].'_properties'];
+                if(!$cache){
+                   $data = $object_model->show_object_properties($data);
+                   $_SESSION['collection_'.$data['collection_id'].'_properties'] = $data;
+                }else{
+                   $data = $cache;
+                }
                 return $this->render(dirname(__FILE__) . '../../../views/object/list_properties_accordion.php', $data);
             // propriedades na EDICAO do objeto
             case 'show_object_properties_edit'://

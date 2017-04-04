@@ -7,6 +7,7 @@
     include_once(dirname(__FILE__) . '/../../helpers/view_helper.php');
     include_once(dirname(__FILE__) . '/../../helpers/object/object_properties_widgets_helper.php');
     $object = new ObjectWidgetsHelper;
+    $found_items = []
 ?>
 <div class="col-md-12">
 <?php
@@ -17,6 +18,8 @@
             if($avoid_selected_items === '1' && $object->is_selected_property($property_id,  get_the_ID())){
                 continue;
             }
+            if(in_array( get_the_ID(), $found_items))
+                  continue;   
             ?>
             <tr id="line_property_object_<?php echo $property_id ?>_<?php echo get_the_ID() ?>">
                 <td style="width: 100%;font-size: 12pt;" class="title-text" onclick="temporary_insert_items('<?php echo get_the_ID() ?>','<?php echo $property_id ?>')">
@@ -28,7 +31,8 @@
                            value="<?php echo get_the_ID() ?>">
                 </td>
             </tr>    
-        <?php    
+        <?php  
+            $found_items[] = get_the_ID();
         endwhile; 
         ?>
     </table>    

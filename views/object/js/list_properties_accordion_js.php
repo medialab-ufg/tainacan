@@ -99,7 +99,7 @@
         if (properties_autocomplete) {
             $.each(properties_autocomplete, function (idx, property_id) {
                 if( $(".form_autocomplete_value_" + property_id).length==0){
-                    return false;
+                   // return false;
                 }
                 //validate
                 $(".form_autocomplete_value_" + property_id).keyup(function(){

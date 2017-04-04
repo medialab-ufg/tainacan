@@ -696,6 +696,7 @@
         var cont = 0;
         $( ".core_validation_compounds_"+compound_id).each(function( index ) {
             if($( this ).val()==='false'){
+                 console.log($( this ));
                 cont++;
             }
         });
