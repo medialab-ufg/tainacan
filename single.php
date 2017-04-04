@@ -316,7 +316,7 @@ while (have_posts()) : the_post();
 												$hideStr = "";
 												if( is_array($_add_opts) && (count($_add_opts) === 1) ) {
 												    $hideStr = "style='display:none'";
-													$temp = $add_item_str;
+													$temp = _t('Add');
 													$add_item_str  = '<a href="javascript:void(0)" style="color: white"';
 													$add_item_str .= 'onclick="' . $_add_modes[$_add_opts[0]]['action'] . '">' . $temp . '</a>';
 												}
