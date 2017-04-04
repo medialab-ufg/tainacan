@@ -726,6 +726,16 @@ class ExportModel extends Model {
             $root_category = $this->get_category_root_of($data['collection_id']);
             //$all_properties_id = get_term_meta($root_category, 'socialdb_category_property_id');
             $all_properties_id = array_unique($this->get_parent_properties($root_category, [], $root_category));
+            //buscando metadados de categoria
+            if($data['classifications']){
+                $values = explode(',', $data['classifications']);
+                foreach ($values as $value) {
+                    $properties = get_term_meta(trim($value), 'socialdb_category_property_id');
+                    if(is_array($properties))
+                        $all_properties_id = array_filter(array_unique(array_merge($all_properties_id, $properties)));
+                }
+            }
+            // listando dados
             if ($all_properties_id) {
                 foreach ($all_properties_id as $property_id) {
                     $property = get_term_by("id", $property_id, "socialdb_property_type");
@@ -741,18 +751,19 @@ class ExportModel extends Model {
                             foreach ($property_result_meta_value as $property_meta_value) {
                                 $array_property_name[] = get_post($property_meta_value)->post_title;
                             }
-                            $csv_data[utf8_decode($property->name)] = utf8_decode(implode(', ', $array_property_name));
+                            $csv_data[utf8_decode($property->name)] = utf8_decode(implode(', ', array_unique($array_property_name)));
                         } else {
                             $csv_data[utf8_decode($property->name)] = '';
                         }
                     } elseif ($type == 'socialdb_property_term') {
                         if (is_array($categories)):
                             foreach ($categories as $category) {
-                                $facet_id = $category_model->get_category_facet_parent($category->term_id, $data['collection_id']);
-                                if (!isset($facet_id) || $facet_id == $category->term_id) {
+                               // $facet_id = $category_model->get_category_facet_parent($category->term_id, $data['collection_id']);
+                                $facet_id = $this->is_children_term($property_id,$category->term_id);
+                                if (!$facet_id) {
                                     continue;
                                 }
-                                $categories_of_facet[$facet_id][] = $this->get_hierarchy_names($category->term_id, $facet_id);
+                                $categories_of_facet[$property_id][] = $this->get_hierarchy_names($category->term_id, $facet_id);
                             }
                         endif;
                     }
@@ -888,6 +899,26 @@ class ExportModel extends Model {
         }
         $loop = new WP_Query($args);
         return $loop;
+    }
+    
+    /**
+     * 
+     * @param type $property_id
+     * @param type $category_id
+     * @return boolean
+     */
+    public function is_children_term($property_id,$category_id) {
+        $has_value = false;
+        $term_root = get_term_meta($property_id, 'socialdb_property_term_root', true);
+        if($term_root){
+            $hierarchy = get_ancestors($category_id, 'socialdb_category_type');
+            if( in_array((int)$term_root, $hierarchy)){
+                return $term_root;
+            }
+            return false;
+        }else{
+            return false;
+        }
     }
 
     function get_name_file() {
