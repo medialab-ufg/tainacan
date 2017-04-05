@@ -23,6 +23,7 @@
             $.each(properties_autocomplete, function (idx, property_id) {
                 if($('#cardinality_compound_'+compound_id+'_'+property_id).length>0){
                     var cardinality = $('#cardinality_compound_'+compound_id+'_'+property_id).val();
+                    var cardinality = $('#cardinality_'+ compound_id ).val();
                     for(var i = 0;i<cardinality;i++){
                         dynatree_object_index["compounds_"+compound_id+"_"+ property_id  + '_' + i] = i;
                         if( $(".form_autocomplete_compounds_" + property_id + '_'+i).length==0){
@@ -679,7 +680,7 @@
 
      * @type Arguments     */
     function set_field_valid_compounds(id,seletor,compound_id){
-        //console.log('set_field_valid_compounds',id,seletor,compound_id,$('#'+seletor).val());
+        console.log('set_field_valid_compounds',id,seletor,compound_id,$('#'+seletor).val());
         if($('#'+seletor).val()==='false'){
             var slug = seletor.replace('core_validation_','');
             $('#ok_field_'+slug).hide();
