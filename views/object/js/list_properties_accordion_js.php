@@ -563,7 +563,7 @@
                 type: 'POST',
                 data: { operation: 'list_properties_categories_accordeon',properties_to_avoid:$('#properties_id').val(),categories: id, object_id:$('#object_id_add').val()}
             }).done(function (result) {
-                console.log('545')
+                console.log('append_properties_categories_');
                 hide_modal_main();
                 //list_all_objects(selKeys.join(", "), $("#collection_id").val());
                 $('#append_properties_categories_'+property_id).html(result);

@@ -462,7 +462,7 @@
         if (trees) {
             $.each(trees, function (idx, tree) {
                 
-                    console.log('#cardinality_compound_'+compound_id+'_'+tree);
+                    //console.log('#cardinality_compound_'+compound_id+'_'+tree);
                 if($('#cardinality_compound_'+compound_id+'_'+tree).length>0){
                     //var cardinality = $('#cardinality_compound_'+compound_id+'_'+tree).val();
                     var cardinality = $('#cardinality_'+compound_id).val();
@@ -623,7 +623,7 @@
      * @returns {undefined}     */
     function compounds_validate_selectbox(seletor,property_id,compound_id,i){
         var selected = $("#field_property_term_"+compound_id+"_"+property_id+"_"+i).find(":selected");
-        console.log(selected);
+        //console.log(selected);
         if (selected.length > 0) {
             $('#core_validation_'+compound_id+'_'+property_id+'_'+i).val('true');
             set_field_valid_compounds(property_id,'core_validation_'+compound_id+'_'+property_id+'_'+i,compound_id);
@@ -679,7 +679,7 @@
 
      * @type Arguments     */
     function set_field_valid_compounds(id,seletor,compound_id){
-        console.log('set_field_valid_compounds',id,seletor,compound_id,$('#'+seletor).val());
+        //console.log('set_field_valid_compounds',id,seletor,compound_id,$('#'+seletor).val());
         if($('#'+seletor).val()==='false'){
             var slug = seletor.replace('core_validation_','');
             $('#ok_field_'+slug).hide();
