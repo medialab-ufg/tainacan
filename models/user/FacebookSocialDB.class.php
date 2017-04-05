@@ -5,7 +5,7 @@
 //include_once 'facebook.php';
 
 /**
- *  Facebook class de publicaï¿½ï¿½o do wp-idea. 
+ *  Facebook class
  */
 class FacebookSocialDB {
 

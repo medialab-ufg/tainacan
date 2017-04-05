@@ -184,27 +184,6 @@ class ThemeOptionsController extends Controller {
                 return $populateModel->getProgress($data);
             case 'integrity_test':
                 $result = array();
-//                $collections = $theme_options_model->get_all_collections();
-//                foreach ($collections as $collection) {
-//                    $posts = $theme_options_model->get_collection_posts($collection->ID);
-//                    foreach ($posts as $post) {
-//                        $files = $theme_options_model->list_files_attachment($post->ID);
-//                        foreach ($files as $file) {
-//                            $md5_atual = ($theme_options_model->is_url_exist($file["guid"]) ? md5_file($file["guid"]) : 'Not Found!');
-//                            $result_test = ($file["md5_inicial"] == $md5_atual ? 'OK' : 'NOK');
-//                            add_post_meta($file['ID'], 'check_md5_' . time(), $md5_atual);
-//                            $info_file['id'] = $file["ID"];
-//                            $info_file['title'] = $file["name"];
-//                            $info_file['md5_inicial'] = $file["md5_inicial"];
-//                            $info_file['md5_atual'] = $md5_atual;
-//                            $info_file['result'] = $result_test;
-//
-//                            $result[] = $info_file;
-//                        }
-//                    }
-//                }
-
-
                 $files = $theme_options_model->get_all_attachments();
                 if (!empty($files)) {
                     foreach ($files as $file) {

@@ -1,8 +1,9 @@
 <?php
-
+/*
 include_once ('../../../../../wp-config.php');
 include_once ('../../../../../wp-load.php');
 include_once ('../../../../../wp-includes/wp-db.php');
+*/
 require_once(dirname(__FILE__) . '../../../event/event_model.php');
 
 class EventCollectionCreateModel extends EventModel {

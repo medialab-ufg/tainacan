@@ -3,8 +3,6 @@
  * Object Controller's view helper 
  * */
 class AdvancedSearchHelper extends ViewHelper {
-    
-    
     /**
      * 
      * @param array $properties_compounds

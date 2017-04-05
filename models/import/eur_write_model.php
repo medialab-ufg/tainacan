@@ -5,12 +5,6 @@ error_reporting(0);
 session_write_close();
 ini_set('max_execution_time', '0');
 ini_set('memory_limit', '-1');
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  * Description of Europeana_model
  *

@@ -1,6 +1,6 @@
 <?php
 /**
- * Event cONTROLLER
+ * Events Controller
  *
  */
 

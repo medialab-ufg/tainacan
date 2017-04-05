@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Author: Eduardo HUmberto
+ * Author: Eduardo Humberto
  */
 if(is_file(dirname(__FILE__) .'../../../../../wp-config.php')){
 include_once (dirname(__FILE__) .'../../../../../wp-config.php');
