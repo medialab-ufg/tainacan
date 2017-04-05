@@ -279,55 +279,42 @@ while (have_posts()) : the_post();
                             </form>    
                         </div>
 
-                        <!-- TAINACAN: esta div estao localizados o campo para o titulo e botao com o icone para o adicionar rapido, colado ao input - col-md-6 (bootstrap) -->
-                        <!--div class="col-md-6">
-                            <div class="input-group">
-                                <input onkeydown="if (event.keyCode === 13)
-                                            document.getElementById('click_fast_insert').click()" type="text" placeholder="<?php _e('Type the title or the URI to you object!', 'tainacan'); ?>" id="fast_insert_object" class="form-control input-medium placeholder" style="font-size: 13px; "></textarea>
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" id="click_fast_insert" onclick="fast_insert()" type="button"><span class="glyphicon glyphicon-plus"></span></button>
-                                </span>
-                            </div><!-- /input-group -->
-                        <!--/div-->
                         <!-- TAINACAN: esta div estao o botao que abre o formulario completo para submissao de itens, botao para ordenacao asc e desc, e o selectbox para selecionar a ordenacao  - col-md-6 (bootstrap) -->
                         <div class="col-md-12 header-colecao">
                             <div class="row">
                                 <?php if (get_option('collection_root_id') != get_the_ID() && (is_user_logged_in() && verify_allowed_action(get_the_ID(), 'socialdb_collection_permission_create_object'))): ?>
                                 <div class="tainacan-add-item col-md-1 no-padding" <?php if (has_filter('show_custom_add_item_button')): ?> style="margin-right:50px;"  <?php endif; ?> >
-                                        <?php if (has_filter('show_custom_add_item_button')): ?>
-                                            <?php echo apply_filters('show_custom_add_item_button', ''); ?>
-                                        <?php elseif (has_action('addLibraryMenu')): ?>
-                                            <?php
-                                                $collection_id = get_the_ID();
-                                                do_action('addLibraryMenu', $collection_id)
-                                            ?>
-                                        <?php else: ?>
-
-                                            <?php
-                                                $_add_opts = unserialize(get_post_meta($_currentID_, 'socialdb_collection_add_item', true));
-												
-                                                $_add_modes = [
-                                                    'write_text' => ['label' => _t('Write text'), 'action' => "showAddItemText()"],
-                                                    'send_file' => ['label' => _t('Send file(s)'), 'action' => "showViewMultipleItems()"],
-                                                    'send_file_zip' => ['label' => _t('Send file(s) via zip'), 'action' => "showSendFilesZip()"],
-                                                    'insert_url' => ['label' => _t('Insert URL'), 'action' => "showAddItemURL()"]
-                                                ];
-												$add_item_str = __('Add', 'tainacan') . ' <span class="caret"></span>';
-												$hideStr = "";
-												if( is_array($_add_opts) && (count($_add_opts) === 1) ) {
-												    $hideStr = "style='display:none'";
-													$temp = _t('Add');
-													$add_item_str  = '<a href="javascript:void(0)" style="color: white"';
-													$add_item_str .= 'onclick="' . $_add_modes[$_add_opts[0]]['action'] . '">' . $temp . '</a>';
-												}
-																							
+                                        <?php
+                                        if (has_filter('show_custom_add_item_button')):
+                                            echo apply_filters('show_custom_add_item_button', '');
+                                        elseif (has_action('addLibraryMenu')):
+                                            $collection_id = get_the_ID();
+                                            do_action('addLibraryMenu', $collection_id);
+                                        else:
+                                            $_add_opts = unserialize(get_post_meta($_currentID_, 'socialdb_collection_add_item', true));
+                                            $_add_modes = [
+                                                'write_text' => ['label' => _t('Write text'), 'action' => "showAddItemText()"],
+                                                'send_file' => ['label' => _t('Send file(s)'), 'action' => "showViewMultipleItems()"],
+                                                'send_file_zip' => ['label' => _t('Send file(s) via zip'), 'action' => "showSendFilesZip()"],
+                                                'insert_url' => ['label' => _t('Insert URL'), 'action' => "showAddItemURL()"]
+                                            ];
+                                            $add_item_str = '<button type="button" class="btn btn-primary dropdown-toggle sec-color-bg" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
+                                            $add_item_str .= __('Add', 'tainacan') . ' <span class="caret"></span>';
+                                            $add_item_str .= ' </button>';
+                                            $hideStr = "";
+                                            if( is_array($_add_opts) && (count($_add_opts) === 1) ) {
+                                                $hideStr = "style='display:none'";
+                                                $temp = _t('Add');
+                                                $add_item_str  = '<a href="javascript:void(0)" style="color: white; width: 100%;" class="btn"';
+                                                $add_item_str .= 'onclick="' . $_add_modes[$_add_opts[0]]['action'] . '">' . $temp . '</a>';
+                                            }
                                             ?>
 
                                             <div class="btn-group" role="group" aria-label="...">
                                                 <div class="btn-group tainacan-add-wrapper">
-                                                    <button type="button" class="btn btn-primary dropdown-toggle sec-color-bg" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
                                                         <?php echo $add_item_str ?>
-                                                    </button>
+
                                                     <ul class="dropdown-menu" <?php echo $hideStr; ?> >
                                                         <?php if(false === is_array($_add_opts)) { ?>
                                                             <li><a onclick="showAddItemText()"> <?php _e('Write text', 'tainacan') ?> </a> </li>

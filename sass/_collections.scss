@@ -120,7 +120,11 @@ button.collection-trash {
             margin-right: 15px;
 
             .btn-group { display: block; }
-            .tainacan-add-wrapper { border-radius: 4px; }
+            .tainacan-add-wrapper {
+              border-radius: 4px;
+              background: rgb(13, 109, 144);
+              text-align: center;
+            }
             button {
               color: white;
             }
