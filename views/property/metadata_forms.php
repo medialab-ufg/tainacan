@@ -238,6 +238,12 @@ endforeach;
                             <input type="checkbox" name="property_fixed_required" id="property_fixed_required"  value="true">&nbsp;<?php _e('Yes', 'tainacan'); ?>
                         </div>
                     </div> 
+                    <div id='container_mask_field' style="display: none;">
+                        <div id="mask_field" >
+                            <label for="property_fixed_mask_key" style="display: block"><?php _e('Mask key', 'tainacan'); ?></label>
+                            <input type="checkbox" name="property_fixed_mask_key" id="property_fixed_mask_key"  value="true">&nbsp;<?php _e('Yes', 'tainacan'); ?>
+                        </div>
+                    </div>
                 </div>  
             </div>
             <div class="modal-footer">

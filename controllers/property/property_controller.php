@@ -270,10 +270,13 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
                 endif;
                 $property_model->update_tab_organization($data['collection_id'], $data["tab"], $data['property_id']);
                 update_post_meta($data['collection_id'], 'socialdb_collection_property_'.$data['property_id'].'_required', $data['required']);
+                update_post_meta($data['collection_id'], 'socialdb_collection_property_'.$data['property_id'].'_mask_key', $data['mask_key']);
                 return json_encode($data);
             //buscando os dados da coleccao    
             case 'get_data_fixed_property_collection':
                 $data['is_required'] = get_post_meta($data['collection_id'], 'socialdb_collection_property_'.$data['property_id'].'_required', true);
+                $data['is_mask_key'] = get_post_meta($data['collection_id'], 'socialdb_collection_property_'.$data['property_id'].'_mask_key', true);
+                $data['term'] = get_term_by('id', $data['property_id'], 'socialdb_property_type');
                 return json_encode($data);
             //salvando a faceta de usuarios
             case 'save_ranking_colaboration_facet':

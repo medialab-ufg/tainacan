@@ -906,6 +906,13 @@ class ObjectController extends Controller {
                 $data['msg'] = __('Operation is successfully','tainacan'); 
                 $data['type'] = 'success'; 
                 return json_encode($data);
+            case 'search-items':
+                $result = [];
+                $items = $object_model->searchItemCollection($data['collection_id'],$data['term']);
+                foreach ($items as $item) {
+                   $result[] = ['value'=>$item->post_title,'label'=>$item->post_title] ;
+                }
+                return json_encode($result);
         }
     }
 

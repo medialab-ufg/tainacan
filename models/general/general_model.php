@@ -938,6 +938,33 @@ class Model {
             }
         }
     }
+    
+    /**
+     * 
+     * @global type $wpdb
+     * @param type $collection_id
+     * @param type $term
+     * @return type
+     */
+    public function searchItemCollection($collection_id,$term) {
+        global $wpdb;
+        $wp_posts = $wpdb->prefix . "posts";
+        $term_relationships = $wpdb->prefix . "term_relationships";
+        $term_taxonomy = $wpdb->prefix . "term_taxonomy";
+        $category_root_id = $this->get_category_root_of($collection_id);
+        $query = "
+                SELECT p.* FROM $wp_posts p
+                INNER JOIN $term_relationships t ON p.ID = t.object_id    
+                INNER JOIN $term_taxonomy tt ON tt.term_taxonomy_id = t.term_taxonomy_id    
+                WHERE p.post_type LIKE 'socialdb_object' AND p.post_title LIKE '%{$term}%' and tt.term_id IN (".$category_root_id.")
+        ";
+        $result = $wpdb->get_results($query);
+        if ($result && is_array($result) && count($result) > 0) {
+            return $result;
+        } else {
+            return array();
+        }
+    }
 
     /**
      * function vinculate_objects_with_property($property_id,$collection_id)

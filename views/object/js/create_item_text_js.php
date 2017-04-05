@@ -221,8 +221,42 @@ $(function(){
          $('#external_option').trigger('change');
          $('#object_url_others_input').val('<?php echo $has_file ?>');
     <?php endif; ?>
-     
-	
+     //autocomplete para o titulo no caso maskara
+    if($('.title_mask').val()=='true'){
+        $("#object_name").autocomplete({
+            source: $('#src').val() + '/controllers/object/object_controller.php?operation=search-items&collection_id='+$('#collection_id').val(),
+            messages: {
+                noResults: '',
+                results: function () {
+                }
+            },
+            response: function( event, ui ) {
+                if(ui.content && ui.content.length>0){
+                   $.each(ui.content,function(index,value){
+                       if($(event.target).val().trim()==value.value || $(event.target).val().toLowerCase().trim()==value.value.toLowerCase().trim()){
+                            toastr.error($(event.target).val()+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                            $(event.target).val('');
+                       }
+                       $("#object_name").autocomplete('close');
+                   }); 
+                }
+            },
+            minLength: 2,
+            select: function (event, ui) {
+                $("#object_name").val('');
+                $(event.target).html(''); 
+                $(event.target).val('');
+                toastr.error(ui.item.value+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                return false;
+            }
+        });
+        $("#object_name").hover(function(){
+            $("#object_name").trigger('keyup');
+        });
+        $("#object_name").change(function(){
+            $("#object_name").trigger('keyup');
+        });
+    }
 });
 
 function reorder_properties_add_item(tab_id,array_ids,seletor){

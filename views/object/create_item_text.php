@@ -93,8 +93,9 @@
                     ?>
                 </h2>
                  <div>
-
-
+                    <input type="hidden" 
+                           class="title_mask" 
+                           value="<?php echo get_post_meta($collection_id, 'socialdb_collection_property_'.$view_helper->terms_fixed['title']->term_id.'_mask_key', true) ?>">
                     <input class="form-control auto-save"
                            type="text"
                            id="object_name"

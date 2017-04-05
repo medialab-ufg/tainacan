@@ -2593,7 +2593,9 @@
                 property_id: $('#property_fixed_id').val(),
                 tab: $('#socialdb_event_property_tab_fixed').val(),
                 property_fixed_name: $('#modal_edit_fixed_property #property_fixed_name').val(),
-                required: $('#property_fixed_required').is(':checked')}
+                required: $('#property_fixed_required').is(':checked'),
+                mask_key: $('#property_fixed_mask_key').is(':checked')
+            }
         }).done(function (result) {
             $('#modal_edit_fixed_property').modal('hide');
             elem = jQuery.parseJSON(result);
@@ -2619,10 +2621,22 @@
             } else {
                 $('#property_fixed_required').removeAttr('checked');
             }
+            if (elem.is_mask_key == 'true') {
+                $('#property_fixed_mask_key').attr('checked', 'checked');
+            } else {
+                $('#property_fixed_mask_key').removeAttr('checked');
+            }
+            
             if (!get_tab_property_id(id)) {
                 $("#socialdb_event_property_tab_fixed option[value='default']").attr('selected', 'selected');
             } else {
                 $("#socialdb_event_property_tab_fixed option[value='" + get_tab_property_id(id) + "']").attr('selected', 'selected');
+            }
+            //show
+            if(elem.term && elem.term.slug == 'socialdb_property_fixed_title'){
+                $('#container_mask_field').show();
+            }else{
+                $('#container_mask_field').hide();
             }
 
         });
