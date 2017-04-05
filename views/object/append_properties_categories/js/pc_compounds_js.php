@@ -387,7 +387,7 @@
                     var cardinality = $('#cardinality_'+compound_id).val();
                     for(var i = 0;i<cardinality;i++){
                         var value = $('#actual_value_'+compound_id+'_' + treecheckbox + '_' + i).val();
-                        if($('#label_'+compound_id+'_' + tree + '_' + i).length>0){
+                        if($('#label_'+compound_id+'_' + treecheckbox + '_' + i).length>0){
                             var promisse =  get_metas(value);
                             promisse.done(function (result) {
                                 elem = jQuery.parseJSON(result);
