@@ -74,14 +74,14 @@ class CollectionModel extends Model {
         update_post_meta($collection_id, 'socialdb_collection_object_name', $data['collection_object']);
         //filtro para o nome da colecao
         if (has_filter('collection_object')) {
-            $name = (isset( $data['collection_object'])&&!empty($data['collection_object'])?$data['collection_object']:$data['collection_name']);
+            $name = (isset($data['collection_object']) && !empty($data['collection_object']) ? $data['collection_object'] : $data['collection_name']);
             $object_name = apply_filters('collection_object', $name);
         } else {
-            $object_name =  $data['collection_name'];
+            $object_name = $data['collection_name'];
         }
         create_root_collection_category($post->ID, $object_name); //(Criada em: functions.php) cria a categoria inicial que identifica os objetos da colecao
 
-        Log::addLog(['collection_id' => $collection_id, 'event_type' => 'user_collection', 'event' => 'add' ]);
+        Log::addLog(['collection_id' => $collection_id, 'event_type' => 'user_collection', 'event' => 'add']);
         return $post->ID;
     }
 
@@ -90,9 +90,9 @@ class CollectionModel extends Model {
      * @param type $collection_id
      */
     public function createSocialMappingDefault($collection_id) {
-        /***** MAPEAMENTO PADRAO DUBLIN CORE **/
+        /*         * *** MAPEAMENTO PADRAO DUBLIN CORE * */
         $mapping_model_dc = new MappingModel('socialdb_channel_oaipmhdc');
-        $mapping_dc_default_id =  $mapping_model_dc->create_mapping(__('Mapping Default','tainacan'), $collection_id);
+        $mapping_dc_default_id = $mapping_model_dc->create_mapping(__('Mapping Default', 'tainacan'), $collection_id);
         add_post_meta($mapping_dc_default_id, 'socialdb_channel_oaipmhdc_initial_size', '1');
         add_post_meta($mapping_dc_default_id, 'socialdb_channel_oaipmhdc_mapping', serialize([]));
         update_post_meta($collection_id, 'socialdb_collection_mapping_import_active', $mapping_dc_default_id);
@@ -212,8 +212,7 @@ class CollectionModel extends Model {
         $array_json['collection_name'] = $post->post_title;
         return json_encode($array_json);
     }
-    
-    
+
     /**
      * function update($data)
      * @param mix $data  Os dados que serao utilizados para atualizar a colecao
@@ -221,7 +220,7 @@ class CollectionModel extends Model {
      * metodo que atualiza os dados da colecao
      * Autor: Eduardo Humberto 
      */
-    public function update($data) {      
+    public function update($data) {
         $post = array(
             'ID' => $data['collection_id'],
             'post_title' => $data['collection_name'],
@@ -231,7 +230,7 @@ class CollectionModel extends Model {
             'post_name' => $data['socialdb_collection_address']
         );
 
-        if( isset($data['collection_owner']) ){
+        if (isset($data['collection_owner'])) {
             $post["post_author"] = $data['collection_owner'];
         }
 
@@ -251,14 +250,14 @@ class CollectionModel extends Model {
             delete_post_thumbnail($post_id);
         }
 
-        if($data['enable_header']) {
+        if ($data['enable_header']) {
             update_post_meta($post_id, 'socialdb_collection_show_header', 'enabled');
         } else {
             update_post_meta($post_id, 'socialdb_collection_show_header', 'disabled');
         }
 
-        Log::addLog(['collection_id' => $data['collection_id'], 'event_type' => 'user_collection', 'event' => 'edit' ]);
-        
+        Log::addLog(['collection_id' => $data['collection_id'], 'event_type' => 'user_collection', 'event' => 'edit']);
+
         if ($_FILES) {
             $this->add_thumbnail($post_id);
             $id_cover = $this->add_cover($post_id);
@@ -273,10 +272,10 @@ class CollectionModel extends Model {
         }
         if ($data['add_watermark']) {
             update_post_meta($post_id, 'socialdb_collection_add_watermark', true);
-        }else{
+        } else {
             update_post_meta($post_id, 'socialdb_collection_add_watermark', false);
         }
-        
+
         if ($data['collection_moderators'] && is_array($data['collection_moderators'])) {
             delete_post_meta($post_id, 'socialdb_collection_moderator');
             foreach ($data['collection_moderators'] as $moderator) {
@@ -284,7 +283,7 @@ class CollectionModel extends Model {
             }
         } else {
             delete_post_meta($post_id, 'socialdb_collection_moderator');
-        }               
+        }
         if ($data['socialdb_collection_parent'] != '' && ($data['socialdb_collection_parent'] != get_post_meta($post_id, 'socialdb_collection_parent', true))) {
             $old_parent = get_post_meta($post_id, 'socialdb_collection_parent', true);
             if ($old_parent && $old_parent != '' && get_term_by('id', $old_parent, 'socialdb_category_type')) {
@@ -302,10 +301,10 @@ class CollectionModel extends Model {
                 $category_root_id = $this->get_category_root_of($data['collection_id']);
                 $move_to = get_term_by('id', $data['socialdb_collection_parent'], 'socialdb_category_type');
                 if ($move_to && !is_wp_error($move_to)) {
-                $update_category = wp_update_term($category_root_id, 'socialdb_category_type', array(
-                    'parent' => $move_to->term_id
-                ));
-                update_post_meta($post_id, 'socialdb_collection_parent', $data['socialdb_collection_parent']);
+                    $update_category = wp_update_term($category_root_id, 'socialdb_category_type', array(
+                        'parent' => $move_to->term_id
+                    ));
+                    update_post_meta($post_id, 'socialdb_collection_parent', $data['socialdb_collection_parent']);
                     //$this->extend_collection($data['collection_id'], $move_to->term_id);
                 }
             }
@@ -314,7 +313,7 @@ class CollectionModel extends Model {
         if ($data['socialdb_collection_moderation_type'] == 'democratico') {
             update_post_meta($post_id, 'socialdb_collection_moderation_days', $data['socialdb_collection_moderation_days']);
         }
-            
+
         update_post_meta($post_id, 'socialdb_collection_moderation_type', $data['socialdb_collection_moderation_type']);
         update_post_meta($post_id, 'socialdb_collection_object_name', $data['socialdb_collection_object_name']);
         update_post_meta($post_id, 'socialdb_collection_hide_tags', $data['socialdb_collection_hide_tags']);
@@ -353,7 +352,7 @@ class CollectionModel extends Model {
         update_post_meta($post_id, 'socialdb_collection_permission_edit_tags', $data['socialdb_collection_permission_edit_tags']);
         update_post_meta($post_id, 'socialdb_collection_permission_delete_tags', $data['socialdb_collection_permission_delete_tags']);
         $data['collection_id'] = $post_id;
-        if(has_action('update_collection_configuration')){
+        if (has_action('update_collection_configuration')) {
             do_action('update_collection_configuration', $data);
         }
         $this->update_privacity($post_id, $data['collection_privacy']);
@@ -573,13 +572,12 @@ class CollectionModel extends Model {
                 $property_object = get_term_by('id', $property_id, 'socialdb_property_type');
                 $parent_name = PropertyModel::get_property_type($property_id);
                 $all_data = $this->get_all_property($property_id, true);
-                if(in_array($property_object->slug, $this->fixed_slugs)){
-                        $labels_collection = ($data['collection_id']!='') ? get_post_meta($data['collection_id'], 'socialdb_collection_fixed_properties_labels', true) : false;
-                        if($labels_collection):
-                            $array = unserialize($labels_collection);
-                            $property_object->name
-                                    = (isset($array[$property_object->term_id]))? $array[$property_object->term_id] : $property_object->name;
-                        endif;
+                if (in_array($property_object->slug, $this->fixed_slugs)) {
+                    $labels_collection = ($data['collection_id'] != '') ? get_post_meta($data['collection_id'], 'socialdb_collection_fixed_properties_labels', true) : false;
+                    if ($labels_collection):
+                        $array = unserialize($labels_collection);
+                        $property_object->name = (isset($array[$property_object->term_id])) ? $array[$property_object->term_id] : $property_object->name;
+                    endif;
                 }
                 $array = array('id' => $property_object->term_id, 'name' => $property_object->name, 'type' => $all_data['type']);
                 if ($parent_name == 'socialdb_property_data') {
@@ -588,10 +586,10 @@ class CollectionModel extends Model {
                     $data['property_data'][] = $array;
                 } elseif ($parent_name != 'socialdb_property_term' && isset($parent_name) && $parent_name != 'socialdb_property_object') {
                     $data['rankings'][] = $array;
-                } else if($_get_all_meta === "true") {
-                    if($parent_name == 'socialdb_property_term') {
+                } else if ($_get_all_meta === "true") {
+                    if ($parent_name == 'socialdb_property_term') {
                         $data['property_term'][] = $array;
-                    } else if($parent_name == 'socialdb_property_object') {
+                    } else if ($parent_name == 'socialdb_property_object') {
                         $data['property_object'][] = $array;
                     }
                 }
@@ -737,7 +735,7 @@ class CollectionModel extends Model {
                     'label' => $facet->name,
                     'category' => $facet->name,
                     'id' => $facet->term_id);
-                if($property['metas']['socialdb_property_object_category_id'])
+                if ($property['metas']['socialdb_property_object_category_id'])
                     $this->get_objects_autocomplete($property['id'], $property['metas']['socialdb_property_object_category_id'], $array_autocomplete);
             }
         }
@@ -833,6 +831,7 @@ class CollectionModel extends Model {
         $authors = $wpdb->get_results($query);
         return $authors;
     }
+
     /**
      * funcao que busca os autores mais participativos de uma colecao a partir
      * da quantidade de eventos criados na colecao
@@ -856,7 +855,8 @@ class CollectionModel extends Model {
 	LIMIT 10";
         $authors = $wpdb->get_results($query);
         return $authors;
-    }                
+    }
+
     /**
      * funcao que busca as propriedades de acategoria para montar na ordenacao
      * @param array $data Os dados vindos do formulario
@@ -904,7 +904,7 @@ class CollectionModel extends Model {
 
         $moderator = CollectionModel::is_moderator($data['collection_id'], get_current_user_id());
 
-        if ($privacity_name == 'socialdb_collection_public') {
+        if ($privacity_name == 'socialdb_collection_public' || current_user_can('manage_options')) {
             $result['privacity'] = true;
         } elseif ($privacity_name == 'socialdb_collection_private') {
             if ($moderator) {
@@ -982,7 +982,7 @@ class CollectionModel extends Model {
     public function get_filters($data) {
         $recover_data = unserialize(stripslashes($data['filters']));
         //author
-        if(isset($recover_data['author'])){
+        if (isset($recover_data['author'])) {
             $data['author'] = get_user_by('id', $recover_data['author'])->nickname;
         }
         //keyword
@@ -1169,22 +1169,23 @@ class CollectionModel extends Model {
         }
         return $data;
     }
+
     /**
      * metodo que realoca as propriedades de uma tab excluida
      * 
      * @param int $tab_id O id da aba
      * @param int $collection_id O id da colecao
      */
-    public function realocate_tabs_collection($tab_id,$collection_id){
-        $array = unserialize(get_post_meta($collection_id, 'socialdb_collection_update_tab_organization',true));
-        if($array && is_array($array) && $array[0]):
+    public function realocate_tabs_collection($tab_id, $collection_id) {
+        $array = unserialize(get_post_meta($collection_id, 'socialdb_collection_update_tab_organization', true));
+        if ($array && is_array($array) && $array[0]):
             foreach ($array[0] as $index => $value) {
-                if($tab_id==$value){
+                if ($tab_id == $value) {
                     $array[0][$index] = 'default';
                 }
             }
         endif;
-        update_post_meta($collection_id, 'socialdb_collection_update_tab_organization',  serialize($array));
+        update_post_meta($collection_id, 'socialdb_collection_update_tab_organization', serialize($array));
     }
 
 }
