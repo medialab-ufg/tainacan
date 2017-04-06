@@ -1033,7 +1033,20 @@
         
         return xhr;
     }
-
+      /**
+     * 
+     */
+    function show_key_container() {
+        if (!$('.mask_container').is(':visible')) {
+            $('.mask_container').show();
+            $('.mask_up').show();
+            $('.mask_down').hide();
+        } else {
+            $('.mask_container').hide();
+            $('.mask_up').hide();
+            $('.mask_down').show();
+        }
+    }
     function get_current_filters() {
         var current_filters = $("#filters-accordion li");
         var filters_data = [];

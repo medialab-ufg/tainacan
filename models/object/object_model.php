@@ -744,8 +744,6 @@ class ObjectModel extends Model {
         }
         //inserindo o objecto do item e o seu tipo
         $this->insert_item_resource($data);
-        //propriedades compostas
-        $this->insert_compounds($data, $data['ID']);
         //inserindo as classificacoes
         $this->update_classifications($data['object_classifications'], $data['ID'], $data['collection_id']);
         //inserindo tags
@@ -772,7 +770,8 @@ class ObjectModel extends Model {
         }
         // propriedade de termos
         $this->insert_properties_terms($data, $data['ID']);
-
+        //propriedades compostas
+        $this->insert_compounds($data, $data['ID']);
         $_log_data = [ 'collection_id' => $data['collection_id'], 'user_id' => get_current_user_id(),
             'event_type' => 'user_items', 'item_id' => $data['ID'], 'event' => 'edit'];
         Log::addLog($_log_data);
@@ -1971,6 +1970,9 @@ class ObjectModel extends Model {
         if ($type == 'socialdb_property_data' || $type == 'socialdb_property_object') {
             return $this->sdb_add_post_meta($object_id, 'socialdb_property_' . $property_id, $value);
         } else if ($type == 'socialdb_property_term') {
+            if($value==''){
+                return '';
+            }
             wp_set_object_terms($object_id, get_term_by('id', str_replace('_cat', '', $value), 'socialdb_category_type')->term_id, 'socialdb_category_type', true);
             return str_replace('_cat', '', $value) . '_cat';
         }

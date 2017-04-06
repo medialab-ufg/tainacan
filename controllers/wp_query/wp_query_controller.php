@@ -26,9 +26,9 @@ class WPQueryController extends Controller {
                 $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($collection_id, "socialdb_collection_table_metas", true)));
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($args);
-                if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
-                     $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
-                }
+//                if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
+//                     $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
+//                }
                 return json_encode($return);
             case "wpquery_radio":
                $return = array();
@@ -48,9 +48,9 @@ class WPQueryController extends Controller {
                 $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($collection_id, "socialdb_collection_table_metas", true)));
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($args);
-                if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
-                    $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
-                }
+//                if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
+//                    $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
+//                }
                 return json_encode($return);
             case "wpquery_checkbox":
                $return = array();
@@ -72,9 +72,9 @@ class WPQueryController extends Controller {
                 
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($args);
-                if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
-                    $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
-                }
+//                if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
+//                    $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
+//                }
                 return json_encode($return);
             case "wpquery_multipleselect":
                 $return = array();
@@ -94,9 +94,9 @@ class WPQueryController extends Controller {
                 $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($args['collection_id'], "socialdb_collection_table_metas", true)));
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($args);
-                if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
-                     $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
-                }
+//                if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
+//                     $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
+//                }
                 return json_encode($return);
             case "wpquery_range":
                 $return = array();
@@ -136,9 +136,9 @@ class WPQueryController extends Controller {
                 $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($args['collection_id'], "socialdb_collection_table_metas", true)));
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($args);
-                if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
-                    $return['page'] = utf8_decode(iconv('ISO-8859-1', 'UTF-8', $return['page']));
-                }
+//                if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
+//                    $return['page'] = utf8_decode(iconv('ISO-8859-1', 'UTF-8', $return['page']));
+//                }
                 return json_encode($return);
             case "wpquery_dynatree":
                 $return = array();
@@ -159,9 +159,9 @@ class WPQueryController extends Controller {
                 $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($args['collection_id'], "socialdb_collection_table_metas", true)));
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($args);
-                if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
-                     $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
-                }
+//                if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
+//                     $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
+//                }
                 return json_encode($return);
             case "wpquery_cloud":
                 $return = array();
@@ -180,9 +180,9 @@ class WPQueryController extends Controller {
                 $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($args['collection_id'], "socialdb_collection_table_metas", true)));
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($args);
-                if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
-                     $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
-                }
+//                if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
+//                     $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
+//                }
                 return json_encode($return);
             case "wpquery_link":
                 $return = array();
@@ -201,9 +201,9 @@ class WPQueryController extends Controller {
                 $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($args['collection_id'], "socialdb_collection_table_metas", true)));
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($args);
-                if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
-                     $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
-                }
+//                if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
+//                     $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
+//                }
                 return json_encode($return);
             case "wpquery_menu":
                 $return = array();
@@ -217,9 +217,9 @@ class WPQueryController extends Controller {
                 $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($args['collection_id'], "socialdb_collection_table_metas", true)));
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($args);
-                if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
-                     $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
-                }
+//                if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
+//                     $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
+//                }
                 return json_encode($return);
             case "wpquery_ordenation":
                 $return = array();
@@ -237,9 +237,9 @@ class WPQueryController extends Controller {
                 $data['is_moderator'] = CollectionModel::is_moderator($args['collection_id'], get_current_user_id());
                 $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($args['collection_id'], "socialdb_collection_table_metas", true)));
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
-                if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
-                     $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
-                }
+//                if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
+//                     $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
+//                }
                 $return['args'] = serialize($args);
                 return json_encode($return);
             case "wpquery_orderby":
@@ -259,9 +259,9 @@ class WPQueryController extends Controller {
                 $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($args['collection_id'], "socialdb_collection_table_metas", true)));
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($args);
-                if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
-                    $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
-                }
+//                if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
+//                    $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
+//                }
                 return json_encode($return);
             case "wpquery_page":
                 $return = array();
@@ -283,9 +283,9 @@ class WPQueryController extends Controller {
                 $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($args['collection_id'], "socialdb_collection_table_metas", true)));
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($args);
-                if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
-                    $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
-                }
+//                if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
+//                    $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
+//                }
                 return json_encode($return);
             case "wpquery_author":
                 $return = array();
@@ -305,9 +305,9 @@ class WPQueryController extends Controller {
                 $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($args['collection_id'], "socialdb_collection_table_metas", true)));
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($args);
-                if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
-                    $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
-                }
+//                if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
+//                    $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
+//                }
                 return json_encode($return);
             case "wpquery_keyword":
                 set_time_limit(0);
@@ -351,9 +351,9 @@ class WPQueryController extends Controller {
                 }else{
                     $return['empty_collection'] = false;
                 }
-                if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
-                    $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
-                }
+//                if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
+//                    $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
+//                }
                 return json_encode($return);
             case "clean":
                 $return = array();
@@ -374,9 +374,9 @@ class WPQueryController extends Controller {
                 }else{
                     $return['empty_collection'] = false;
                 }
-                if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
-                    $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
-                }
+//                if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
+//                    $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
+//                }
                 return json_encode($return);
             case "remove":
                 $return = array();
@@ -395,9 +395,9 @@ class WPQueryController extends Controller {
                 $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($args['collection_id'], "socialdb_collection_table_metas", true)));
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($args);
-                 if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
-                     $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
-                }
+//                 if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
+//                     $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
+//                }
                 return json_encode($return);         
          }
         

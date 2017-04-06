@@ -32,6 +32,7 @@ $references = [
 ];
 if($is_view_mode){
     $references['is_view_mode'] = true;
+    $references['object_id'] = $object_id;
 }
 
 $properties_concatenated = [];

@@ -317,7 +317,9 @@ class ObjectWidgetsHelper extends ViewHelper {
         <?php
         if($references['is_view_mode'] || (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true')){
             ?>
-            <div id='label_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>'><p><?php  _e('empty field', 'tainacan') ?></p></div>  
+            <div id='label_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>'>
+                 <?php $this->get_category_value($references['object_id'],$property['id'],$property['metas']['socialdb_property_term_root']); ?>
+            </div>  
             <?php
             return;
         }
@@ -837,6 +839,11 @@ class ObjectWidgetsHelper extends ViewHelper {
                            <?php echo $term->name  ?>
                        </a>
                     </p><br>
+                    <script>
+                        setTimeout(function(){
+                            append_category_properties('<?php echo $term->term_id ?>',0,'<?php echo $property_id ?>');
+                        }, 2000);
+                    </script>
                     <?php
                 }
             }

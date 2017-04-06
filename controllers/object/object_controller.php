@@ -201,9 +201,9 @@ class ObjectController extends Controller {
                 }
                 $logData = ['collection_id' => $collection_id, 'event_type' => 'user_collection', 'event' => 'view'];
                 Log::addLog($logData);
-                if (mb_detect_encoding($return['page'], 'auto') == 'UTF-8') {
-                    $return['page'] = iconv('ISO-8859-1', 'UTF-8', utf8_decode($return['page']));
-                }
+//                if (mb_detect_encoding($return['page'], 'auto') == 'UTF-8') {
+//                    $return['page'] = iconv('ISO-8859-1', 'UTF-8', utf8_decode($return['page']));
+//                }
                 return json_encode($return);
                 break;
             case "list_trash": // A listagem dos objetos na lixeira
