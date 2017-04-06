@@ -97,6 +97,17 @@
                                 results: function () {
                                 }
                             },
+                            response: function( event, ui ) {
+                                if(ui.content && ui.content.length>0 && $('.form_autocomplete_value_'+property_id+'_mask').val()!==''){
+                                   $.each(ui.content,function(index,value){
+                                       if($(event.target).val()==value.value || $(event.target).val().toLowerCase().trim()==value.value){
+                                            toastr.error($(event.target).val()+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                                            $(event.target).val('');
+                                       }
+                                       $(event.target).autocomplete('close');
+                                   }); 
+                                }
+                            },
                             minLength: 2,
                             select: function (event, ui) {
                                 $("#form_edit_autocomplete_value_" + property_id).val('');

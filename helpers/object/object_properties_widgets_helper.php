@@ -99,6 +99,9 @@ class ObjectWidgetsHelper extends ViewHelper {
                                     $coumpounds_id[] = $property_compounded['id']; 
                                     $value = $this->get_value($object_id, $property['id'], $property_compounded['id'], $i, $position);
                                     ?>
+                                    <input type="hidden" 
+                                           class="form_autocomplete_value_<?php echo $property_compounded['id']; ?>_mask" 
+                                            value="<?php echo ($property_compounded['metas']['socialdb_property_data_mask'] ) ? $property_compounded['metas']['socialdb_property_data_mask'] : '' ?>">
                                     <input  type="hidden" 
                                             id='core_validation_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>' 
                                             class='core_validation_compounds_<?php echo $property['id']; ?>' 
@@ -579,6 +582,9 @@ class ObjectWidgetsHelper extends ViewHelper {
                                 $coumpounds_id[] = $property_compounded['id'];
                                 $value = $this->get_value($object_id, $property['id'], $property_compounded['id'], $i, $position);
                                 ?>
+                                <input type="hidden" 
+                                           class="form_autocomplete_value_<?php echo $property_compounded['id']; ?>_mask" 
+                                            value="<?php echo ($property_compounded['metas']['socialdb_property_data_mask'] ) ? $property_compounded['metas']['socialdb_property_data_mask'] : '' ?>">
                                 <input type="hidden" id='core_validation_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>'
                                        class='core_validation_compounds_<?php echo $property['id']; ?>'
                                        value='<?php echo (!$value) ? 'false' : 'true' ; ?>'>
