@@ -1,10 +1,10 @@
 <?php
-include_once('./../../helpers/view_helper.php');
+include_once(dirname(__FILE__).'/../../helpers/view_helper.php');
 include_once('./../../helpers/object/object_helper.php');
 include_once ('js/list_js.php');
 include_once ('js/geolocation_js.php');
 include_once ('helper/loader.php');
-
+$viewHelper = new ViewHelper();
 $objHelper->renderCollectionPagination($loop->found_posts, $loop->post_count, $pagid, $show_string, 'top_pag');
 
 if ( $loop->have_posts() ): ?>
@@ -18,6 +18,12 @@ if ( $loop->have_posts() ): ?>
                     if($term->slug && $term->slug == 'socialdb_collection_private')
                         continue;
                 }
+//                else if(get_option('collection_root_id') == $collection_id){
+//                    $collection = $viewHelper->helper_get_collection_by_object($curr_id)[0];
+//                    if(!isset($collection->ID) || !$viewHelper->check_privacity_collection($collection->ID)){
+//                        continue;
+//                    }
+//                }
                 $latitude = get_post_meta($curr_id, "socialdb_property_" . $geo_coordinates["lat"]);
                 $longitude = get_post_meta($curr_id, "socialdb_property_" . $geo_coordinates["long"]);
                 $location = get_post_meta($curr_id, "socialdb_property_" . $geo_loc);

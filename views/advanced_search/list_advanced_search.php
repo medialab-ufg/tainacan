@@ -190,9 +190,13 @@ endif;
             <?php
             while ($loop_objects->have_posts()) : $loop_objects->the_post();
                 $countLine++;
+                $collection = $viewHelper->helper_get_collection_by_object(get_the_ID())[0];
+                //se a colecao for privada
+                if(!isset($collection->ID) || !$viewHelper->check_privacity_collection($collection->ID))
+                    continue;
                include(dirname(__FILE__)."/modals_adv.php");
                 ?>  
-                <?php $link =  get_the_permalink($viewHelper->helper_get_collection_by_object(get_the_ID())[0]->ID).'?item='.basename(get_permalink()); ?>
+                <?php $link =  get_the_permalink($collection->ID).'?item='.basename(get_permalink()); ?>
                  <li style="padding: 0px;" class="col-md-6" id="object_<?php echo get_the_ID() ?>">
                         <input type="hidden" id="add_classification_allowed_<?php echo get_the_ID() ?>" name="add_classification_allowed" value="<?php echo (string)verify_allowed_action($collection_id,'socialdb_collection_permission_add_classification',get_the_ID()); ?>" />
                     <!-- TAINACAN: coloca a class row DO ITEM, sao cinco colunas possiveis todas elas podendo ser escondidas pelo o usuario, mas seu tamanho eh fixo col-md-2  -->

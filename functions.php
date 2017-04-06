@@ -2129,7 +2129,7 @@ function verify_collection_moderators($collection_id, $user_id) {
         $_is_moderator = false;
     }
 
-    if ($user_id != 0 && ($user_id == $owner || $_is_moderator)) {
+    if ($user_id != 0 && ( current_user_can('manage_option') || $user_id == $owner || $_is_moderator)) {
         return true;
     } else {
         return false;

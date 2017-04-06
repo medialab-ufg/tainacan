@@ -370,6 +370,32 @@ class ViewHelper {
         ];
     }
     
+    /**
+     * 
+     * @param type $data
+     * @return type
+     */
+    public function check_privacity_collection($collection_id) {
+        $result = array();
+        $get_privacity = wp_get_object_terms($collection_id, 'socialdb_collection_type');
+        if ($get_privacity) {
+            foreach ($get_privacity as $privacity) {
+                $privacity_name = $privacity->name;
+            }
+        }
+        $moderator =  verify_collection_moderators($collection_id, get_current_user_id());
+
+        if ($privacity_name == 'socialdb_collection_public' || current_user_can('manage_options')) {
+            return true;
+        } elseif ($privacity_name == 'socialdb_collection_private') {
+            if ($moderator) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+    
     public static function getCollectionColors($col_id) {
        return unserialize(get_post_meta($col_id,'socialdb_default_color_scheme', true) );
     }
