@@ -193,6 +193,7 @@ if (isset($property_object)):
                             else if(has_action('modificate_edit_item_properties_data')){
                                 $property['contador'] = $i;
                                 $property['operation'] = 'edit';
+                                $property['object_id'] = $object_id;
                                 do_action('modificate_edit_item_properties_data',$property);
                             }else{ ?>
                                 <input type="text"  

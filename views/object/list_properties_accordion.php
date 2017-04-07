@@ -161,8 +161,11 @@ if (isset($property_object)):
                                <?php } 
                                 // gancho para tipos de metadados de dados diferentes
                                 else if(has_action('modificate_insert_item_properties_data')){
+                                    $property['contador'] = $i;
+                                    $property['operation'] = 'add';
+                                    $property['object_id'] = $object_id;
                                     do_action('modificate_insert_item_properties_data',$property);
-                                    continue;
+                                   // continue;
                                 }else{ ?>
                                     <input type="text" 
                                            value="<?php 
