@@ -14,11 +14,17 @@ $not_showed = false;
     ?>
 
     <?php if (is_user_logged_in()): ?>
-        <div style="margin-left: 15px;" class="form-group">
+        <div style="margin-left: 15px;" class="form-group" id='options-collections-search'>
             <div>
                 <input type="radio" onchange="showList('<?php echo get_template_directory_uri() ?>')"  value="1" name="opt_search_root_page" checked="checked">&nbsp; <?php _e('All Collections', 'tainacan'); ?><br>
                 <input type="radio" onchange="showListMyCollections('<?php echo get_template_directory_uri() ?>')"  value="2" name="opt_search_root_page">&nbsp; <?php _e('My Collections', 'tainacan'); ?><br>
                 <input type="radio" onchange="showListSharedCollections('<?php echo get_template_directory_uri() ?>')"  value="3" name="opt_search_root_page">&nbsp; <?php _e('Shared Collections', 'tainacan'); ?><br>
+            </div>
+        </div>
+        <div style="margin-left: 15px;display: none;" class="form-group" id='options-items-search'>
+            <div>
+                <input type="radio" onchange="wpquery_menu_left('')"  value="1" name="opt_search_root_page" checked="checked">&nbsp; <?php _e('All items', 'tainacan'); ?><br>
+                <input type="radio" onchange="wpquery_menu_left('<?php echo get_current_user_id() ?>')"  value="2" name="opt_search_root_page">&nbsp; <?php _e('My items', 'tainacan'); ?><br>
             </div>
         </div>
     <?php endif; ?>

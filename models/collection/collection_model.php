@@ -413,13 +413,22 @@ class CollectionModel extends Model {
     }
 
     public function update_privacity($collection_id, $privacity = 'public') {
+        $private_collections = get_option('socialdb_private_collections');
+        $private_collections = ($private_collections) ?  unserialize($private_collections) : [];
         if ($privacity == 'public') {
             $type = get_term_by('name', 'socialdb_collection_public', 'socialdb_collection_type');
             wp_set_post_terms($collection_id, array($type->term_id), 'socialdb_collection_type');
+            if($private_collections && is_array($private_collections) && isset($private_collections[$collection_id])){
+                unset($private_collections[$collection_id]);
+            }
         } else {
+            if(!isset($private_collections[$collection_id])){
+                $private_collections[$collection_id] = $this->get_category_root_of($collection_id);
+            }
             $type = get_term_by('name', 'socialdb_collection_private', 'socialdb_collection_type');
             wp_set_post_terms($collection_id, array($type->term_id), 'socialdb_collection_type');
         }
+        update_option('socialdb_private_collections', serialize($private_collections));
     }
 
     public function list_collection($args = null) {

@@ -1161,8 +1161,7 @@ class ObjectModel extends Model {
         }
         if ($data['mycollections'] && $data['mycollections'] == 'true') {
             $args['author'] = get_current_user_id();
-        }
-        if ($data['sharedcollections'] && $data['sharedcollections'] == 'true') {
+        }else if ($data['sharedcollections'] && $data['sharedcollections'] == 'true') {
             $meta_query = array('relation' => 'AND');
             $meta_query[] = array(
                 'key' => 'socialdb_collection_moderator',
@@ -1170,6 +1169,15 @@ class ObjectModel extends Model {
                 'compare' => 'LIKE'
             );
             $args['meta_query'] = $meta_query;
+        }else{
+            $tax_query = array('relation' => 'AND'); // devem ter a relacao AND para filtrar dentro da colecao
+            $tax_query[] = array(
+                    'taxonomy' => 'socialdb_collection_type',
+                    'field' => 'id',
+                    'terms' => get_term_by('name', 'socialdb_collection_public', 'socialdb_collection_type')->term_id,
+                    'operator' => 'IN'
+                );
+            $args['tax_query'] = $tax_query;
         }
         return $args;
     }

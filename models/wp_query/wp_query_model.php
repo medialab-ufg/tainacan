@@ -453,6 +453,11 @@ class WPQueryModel extends Model {
         if(isset($data['post_type']) && !empty($data['post_type'])){
             $recover_data['post_type'] = $data['post_type'];
         }
+        if(isset($data['author']) && !empty($data['author'])){
+            $recover_data['author'] = $data['author'];
+        }else{
+             $recover_data['author'] = '';
+        }
         return $recover_data;
     }
     
@@ -729,6 +734,17 @@ class WPQueryModel extends Model {
                 'terms' => $recover_data['category_root_id'],
                 'operator' => 'IN'
             );
+        }else if(!isset($recover_data['author']) || $recover_data['author']===''){
+            $private_collections = get_option('socialdb_private_collections');
+            $private_collections = ($private_collections) ?  unserialize($private_collections) : [];
+            if(!empty($private_collections)){
+                    $tax_query[] = array(
+                    'taxonomy' => 'socialdb_category_type',
+                    'field' => 'id',
+                    'terms' => $private_collections,
+                    'operator' => 'NOT IN'
+                );
+            }
         }
         $tax_query = $this->get_hash_synomys($recover_data,$tax_query);
         if(isset($recover_data['advanced_search']['tags'])){
