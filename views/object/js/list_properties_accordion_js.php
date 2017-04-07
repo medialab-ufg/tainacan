@@ -151,8 +151,9 @@
                                $(".form_autocomplete_value_" + property_id).autocomplete('close');
                            }); 
                         }
+                        clear_repeated_values(event.target,".form_autocomplete_value_" + property_id);
                     },
-                    minLength: 2,
+                    minLength: 1,
                     select: function (event, ui) {
                         $("#form_autocomplete_value_" + property_id).val('');
                         if( $('.form_autocomplete_value_'+property_id+'_mask').val()!==''){

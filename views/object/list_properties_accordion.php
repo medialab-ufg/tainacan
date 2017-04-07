@@ -101,7 +101,7 @@ if (isset($property_object)):
                               <div class="col-md-11">
                                <?php if ($property['type'] == 'text') { ?>     
                                     <input type="text" 
-                                           id="form_autocomplete_value_<?php echo $property['id']; ?>_origin" 
+                                           id="form_autocomplete_value_<?php echo $property['id']; ?>_<?php echo $i; ?>_origin" 
                                            class="form-control auto-save form_autocomplete_value_<?php echo $property['id']; ?>" 
                                            value="<?php
                                                         if ($property['metas']['socialdb_property_default_value']): 

@@ -87,6 +87,18 @@
             e.preventDefault();
         });
     });
+    //search repeated items
+    function clear_repeated_values(main_value,classes){
+       $.each($(classes),function(index,value){
+           if($(value).attr('id') !== $(main_value).attr('id') && 
+                   $(value).val() &&
+                   $(main_value).val() &&
+                   $(value).val().trim().toLowerCase() === $(main_value).val().trim().toLowerCase() ){
+                 toastr.error($(main_value).val()+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                $(main_value).val('');
+           }
+       });
+    }
     //slideUp
     function slideFormAdvancedDown(){
         if($('#propertiesRootAdvancedSearch').is(':visible')){

@@ -77,8 +77,9 @@
                                        $(event.target).autocomplete('close');
                                    }); 
                                 }
+                                clear_repeated_values(event.target,".form_autocomplete_compounds_" + property_id + '_'+i);
                             },
-                            minLength: 2,
+                            minLength: 1,
                             select: function (event, ui) {
                                 var i =  dynatree_object_index[$(this).attr('id')];
                                 $(".form_autocomplete_compounds_" + property_id + '_'+i).val('');
