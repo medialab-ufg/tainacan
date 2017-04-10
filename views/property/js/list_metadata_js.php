@@ -2594,7 +2594,7 @@
                 tab: $('#socialdb_event_property_tab_fixed').val(),
                 property_fixed_name: $('#modal_edit_fixed_property #property_fixed_name').val(),
                 required: $('#property_fixed_required').is(':checked'),
-                mask_key: $('#property_fixed_mask_key').is(':checked')
+                mask_key: $('.property_fixed_mask_key').filter(':checked').val()
             }
         }).done(function (result) {
             $('#modal_edit_fixed_property').modal('hide');
@@ -2621,10 +2621,15 @@
             } else {
                 $('#property_fixed_required').removeAttr('checked');
             }
-            if (elem.is_mask_key == 'true') {
-                $('#property_fixed_mask_key').attr('checked', 'checked');
+            if (elem.is_mask_key == 'true' || elem.is_mask_key == 'key') {
+                $('#fixed_mask_key').attr('checked', 'checked');
             } else {
-                $('#property_fixed_mask_key').removeAttr('checked');
+                $('#fixed_mask_key').removeAttr('checked');
+            }
+            if (elem.is_mask_key == 'repository_key') {
+                $('#fixed_mask_repository').attr('checked', 'checked');
+            } else {
+                $('#fixed_mask_repository').removeAttr('checked');
             }
             
             if (!get_tab_property_id(id)) {

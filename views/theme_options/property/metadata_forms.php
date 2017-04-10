@@ -49,6 +49,25 @@ foreach( $view_helper->get_metadata_types() as $type => $label):
                                     <input type="radio" name="property_data_required" id="property_data_required_false" value="false">&nbsp;<?php _e('No','tainacan'); ?>
                                 </div>
                                 <?php $view_helper->commomFieldsProperties() ?>
+                                <div class="create_form-group">
+                                    <a onclick="show_key_container()" href="javascript:void(0)"><?php _e('Mask', 'tainacan'); ?>&nbsp;&nbsp;<span class="mask_down glyphicon glyphicon-chevron-down"></span><span style="display:none;" class="mask_up glyphicon glyphicon-chevron-up"></span></a>
+                                    <!--select name='socialdb_property_data_mask' id='socialdb_property_data_mask' class="form-control">
+                                        <option value=""><?php _e('Select...', 'tainacan') ?></option>
+                                        <option value="key">_<?php _e('key', 'tainacan') ?></option>
+                                    </select-->
+                                    <div class="row mask_container" style="display:none;margin-top: 5px;">
+                                        <div class="col-md-6">
+                                            <input type="checkbox" name="socialdb_property_data_mask[]" value="key">&nbsp;_<?php _e('key', 'tainacan') ?><br>
+                                            <input type="checkbox" name="socialdb_property_data_mask[]" value="repository_key">&nbsp;<?php _e('Repository', 'tainacan') ?>&nbsp;_<?php _e('key', 'tainacan') ?>
+                                        </div>
+                                        <div class="col-md-6">
+
+                                        </div>
+                                    </div>
+                                    <?php
+                                    do_action('tainacan_date_aacr2', $type);
+                                    ?>
+                                </div>
                                 <input type="hidden" name="property_data_widget" value="<?php echo $type ?>" class="property_data_widget">
                                 <input type="hidden" name="orientation" value="left-column">
                             </div>

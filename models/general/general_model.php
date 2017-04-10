@@ -949,15 +949,23 @@ class Model {
     public function searchItemCollection($collection_id,$term) {
         global $wpdb;
         $wp_posts = $wpdb->prefix . "posts";
-        $term_relationships = $wpdb->prefix . "term_relationships";
-        $term_taxonomy = $wpdb->prefix . "term_taxonomy";
-        $category_root_id = $this->get_category_root_of($collection_id);
-        $query = "
-                SELECT p.* FROM $wp_posts p
-                INNER JOIN $term_relationships t ON p.ID = t.object_id    
-                INNER JOIN $term_taxonomy tt ON tt.term_taxonomy_id = t.term_taxonomy_id    
-                WHERE p.post_type LIKE 'socialdb_object' AND p.post_title LIKE '%{$term}%' and tt.term_id IN (".$category_root_id.")
-        ";
+        $mask = get_post_meta($collection_id, 'socialdb_collection_property_'. get_term_by('slug', 'socialdb_property_fixed_title', 'socialdb_property_type')->term_id.'_mask_key', true);
+        if ((!$mask || $mask!=='repository_key')) {
+            $term_relationships = $wpdb->prefix . "term_relationships";
+            $term_taxonomy = $wpdb->prefix . "term_taxonomy";
+            $category_root_id = $this->get_category_root_of($collection_id);
+            $query = "
+                    SELECT p.* FROM $wp_posts p
+                    INNER JOIN $term_relationships t ON p.ID = t.object_id    
+                    INNER JOIN $term_taxonomy tt ON tt.term_taxonomy_id = t.term_taxonomy_id    
+                    WHERE p.post_type LIKE 'socialdb_object' AND p.post_title LIKE '%{$term}%' and tt.term_id IN (".$category_root_id.")
+            ";  
+        } else {
+              $query = "
+                    SELECT p.* FROM $wp_posts p  
+                    WHERE p.post_type LIKE 'socialdb_object' AND p.post_title LIKE '%{$term}%'
+                ";  
+        }
         $result = $wpdb->get_results($query);
         if ($result && is_array($result) && count($result) > 0) {
             return $result;
@@ -1385,7 +1393,8 @@ class Model {
         global $wpdb;
         $wp_posts = $wpdb->prefix . "posts";
         $term_relationships = $wpdb->prefix . "term_relationships";
-        if ($data['collection_id'] != get_option('collection_root_id')) {
+        $mask = get_post_meta($data['collection_id'], 'socialdb_collection_property_'. get_term_by('slug', 'socialdb_property_fixed_title', 'socialdb_property_type')->term_id.'_mask_key', true);
+        if ($data['collection_id'] != get_option('collection_root_id') && (!$mask || $mask!=='repository_key')) {
             $category_root_id = $this->get_collection_category_root($data['collection_id']);
             $category_root_id = get_term_by('id', $category_root_id, 'socialdb_category_type');
             $where = "t.term_taxonomy_id = {$category_root_id->term_taxonomy_id} AND ";
@@ -1441,14 +1450,29 @@ class Model {
         global $wpdb;
         $wp_posts = $wpdb->prefix . "posts";
         $wp_postmeta = $wpdb->prefix . "postmeta";
+        $has_mask = get_term_meta($data['property_id'], 'socialdb_property_data_mask', true);
+        $term_relationships = $wpdb->prefix . "term_relationships";
         if ($meta_key == '') {
             $meta_key = 'socialdb_property_' . $data['property_id'];
         }
-        $query = "
+        //verifico a mascara para o metadao eh apenas na colecao
+        if($has_mask && $has_mask == 'key'){
+            $createdCategory = get_term_meta($data['property_id'], 'socialdb_property_created_category', true);
+            $category_root_id = get_term_by('id',$createdCategory, 'socialdb_category_type');
+            $query = "
+                        SELECT pm.* FROM $wp_posts p
+                        INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id    
+                        INNER JOIN $term_relationships t ON p.ID = t.object_id    
+                        WHERE t.term_taxonomy_id = {$category_root_id->term_taxonomy_id}
+                        AND p.post_status LIKE 'publish' and pm.meta_key like '$meta_key' and pm.meta_value LIKE '%{$data['term']}%'
+                ";
+        }else{
+            $query = "
                         SELECT pm.* FROM $wp_posts p
                         INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id    
                         WHERE p.post_status LIKE 'publish' and pm.meta_key like '$meta_key' and pm.meta_value LIKE '%{$data['term']}%'
                 ";
+        }
         $result = $wpdb->get_results($query);
         if ($result) {
             foreach ($result as $object) {

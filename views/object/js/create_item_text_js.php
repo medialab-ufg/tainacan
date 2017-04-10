@@ -222,7 +222,7 @@ $(function(){
          $('#object_url_others_input').val('<?php echo $has_file ?>');
     <?php endif; ?>
      //autocomplete para o titulo no caso maskara
-    if($('.title_mask').val()=='true'){
+    if($('.title_mask').val()!==''){
         $("#object_name").autocomplete({
             source: $('#src').val() + '/controllers/object/object_controller.php?operation=search-items&collection_id='+$('#collection_id').val(),
             messages: {
