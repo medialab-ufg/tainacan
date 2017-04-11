@@ -346,7 +346,7 @@ function custom_rewrite_basic() {
     add_rewrite_rule('^admin/'.__('import','tainacan'), 'index.php?collection='.$collection->post_name.'&import=true', 'top');
     add_rewrite_rule('^admin/'.__('export','tainacan'), 'index.php?collection='.$collection->post_name.'&export=true', 'top');
     add_rewrite_rule('^admin/'.__('statistics','tainacan'), 'index.php?collection='.$collection->post_name.'&statistics=true', 'top');
-    add_rewrite_rule('^admin/'.__('categories','tainacan'), 'index.php?collection='.$collection->post_name.'&categoriess=true', 'top');
+    add_rewrite_rule('^admin/'.__('categories','tainacan'), 'index.php?collection='.$collection->post_name.'&categories=true', 'top');
     //login
     add_rewrite_rule('^log-in', 'index.php?log-in=true', 'top');
     add_rewrite_rule('^'.__('signin','tainacan'), 'index.php?log-in=true', 'top');

@@ -131,6 +131,8 @@ class MappingController extends Controller {
                        $data['csv_data'] = $mapping_model->get_csv_in_zip_file($name_file, $delimiter);
                     }else if($type['extension']=='csv'){
                         $objeto = fopen($name_file, 'r');
+                        if(strpos($name_file, 'socialdb_csv')!==false)
+                            $csv_data = fgetcsv($objeto, 0, $delimiter);
                         while(($csv_data = fgetcsv($objeto, 0, $delimiter)) !== false){
                              $data['csv_data'] = $csv_data;
                              break;
@@ -189,7 +191,11 @@ class MappingController extends Controller {
                     //$name_file =  wp_get_attachment_link($file->ID, 'thumbnail', false, true);
                     $name_file = wp_get_attachment_url($file->ID);
                     $objeto = fopen($name_file, 'r');
-                    $data['csv_data'] = fgetcsv($objeto, 0, $delimiter);
+                    $csv_data = fgetcsv($objeto, 0, $delimiter);
+                    while(($csv_data = fgetcsv($objeto, 0, $delimiter)) !== false){
+                        break;
+                    }
+                    $data['csv_data'] = $csv_data;
                     break;
                 }
                 return $this->render(dirname(__FILE__) . '../../../views/import/csv/edit_mapping.php', $data);

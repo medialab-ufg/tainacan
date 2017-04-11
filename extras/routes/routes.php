@@ -232,6 +232,7 @@ $collection_route = get_post(get_option('collection_root_id'));
             }else if($('#goToRepositoryConfiguration').val()!==''){
                 showRepositoryConfiguration($('#src').val());
             }else if($('#goToRepositoryCategories').val()!==''){
+                console.log('categories redirect');
                 showCategoriesConfiguration($('#src').val());
             }else if($('#goToRepositoryEvents').val()!==''){
                 showEventsRepository($('#src').val());
