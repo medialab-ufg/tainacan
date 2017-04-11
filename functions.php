@@ -2059,7 +2059,7 @@ function create_initial_property($category_id, $collection_id, $category_root) {
         $new_property = wp_insert_term(__('Subject', 'tainacan'), 'socialdb_property_type', array('parent' => get_term_by('name', 'socialdb_property_term', 'socialdb_property_type')->term_id,
             'slug' => $slug));
         $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_required', 'false');
-        $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_term_cardinality', 'n');
+        $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_term_cardinality', '1');
         $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_term_widget', 'tree');
         $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_term_root', $category_id);
         add_post_meta($collection_id, 'socialdb_collection_subject_category', $category_id);

@@ -546,6 +546,7 @@
     }
 
     $('#formCsv').submit(function (e) {
+        show_modal_main();
         $.ajax({
             url: $('#src').val() + '/controllers/import/csv_controller.php',
             type: 'POST',
@@ -553,6 +554,7 @@
             processData: false,
             contentType: false
         }).done(function (result) {
+            hide_modal_main();
             try {
                 elem = jQuery.parseJSON(result);
                 if (elem.error) {

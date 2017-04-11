@@ -21,6 +21,7 @@
     //function save_csv_delimiter(){
     $('#form_import_csv_delimit').submit(function (e) {
         //e.preventDefault();
+        show_modal_main();
         $.ajax({
             url: $('#src').val() + "/controllers/mapping/mapping_controller.php",
             type: "POST",
@@ -32,6 +33,7 @@
                      form: $("#form_import_csv_delimit").serialize(),
                      operation: 'saving_delimiter_header_csv'}*/
         }).done(function (result) {
+            hide_modal_main();
             if(result.trim()==='false'){
                 listTableCSV();
                 $('#maping_container_csv').hide();
