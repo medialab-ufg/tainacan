@@ -4,6 +4,17 @@
         var properties_autocomplete = edit_get_val($("#pc_properties_autocomplete_<?php echo $categories ?>").val());
        // autocomplete_edit_item_property_data(properties_autocomplete); 
         $('[data-toggle="tooltip"]').tooltip();
+        $("textarea").on("keydown",function(e) {
+            var key = e.keyCode;
+            // If the user has pressed enter
+            if (key == 13) {
+                $(this).val($(this).val()+"\n");
+                return false;
+            }
+            else {
+                return true;
+            }
+        });
         pc_list_properties_term_insert_objects();
         pc_autocomplete_edit_item_property_data(properties_autocomplete)
     });

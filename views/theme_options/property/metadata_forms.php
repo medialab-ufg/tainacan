@@ -57,8 +57,8 @@ foreach( $view_helper->get_metadata_types() as $type => $label):
                                     </select-->
                                     <div class="row mask_container" style="display:none;margin-top: 5px;">
                                         <div class="col-md-6">
-                                            <input type="checkbox" name="socialdb_property_data_mask[]" value="key">&nbsp;_<?php _e('key', 'tainacan') ?><br>
-                                            <input type="checkbox" name="socialdb_property_data_mask[]" value="repository_key">&nbsp;<?php _e('Repository', 'tainacan') ?>&nbsp;_<?php _e('key', 'tainacan') ?>
+                                            <input type="radio" name="socialdb_property_data_mask[]" value="key">&nbsp;<?php _e('Collection key', 'tainacan') ?><br>
+                                            <input type="radio" name="socialdb_property_data_mask[]" value="repository_key">&nbsp;<?php _e('Repository key', 'tainacan') ?>?>
                                         </div>
                                         <div class="col-md-6">
 

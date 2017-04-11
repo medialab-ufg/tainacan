@@ -227,7 +227,7 @@
     // tree
     function search_list_tree(trees) {
         if (trees) {
-            console.log(trees);
+            //console.log(trees);
             $.each(trees, function (idx, tree) {
                 $("#search_field_property_term_"+tree).dynatree({
                     checkbox: true,

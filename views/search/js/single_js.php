@@ -7,7 +7,17 @@
         // *************** Iframe Popover Collection ****************
         $('[data-toggle="popover"]').popover();
         $('[data-toggle="tooltip"]').tooltip();
-
+        $("textarea").on("keydown",function(e) {
+            var key = e.keyCode;
+            // If the user has pressed enter
+            if (key == 13) {
+                $(this).val($(this).val()+"\n");
+                return false;
+            }
+            else {
+                return true;
+            }
+        });
         if ($('#is_filter').val() == '1') {
             $('#form').hide();
             $('#list').hide();

@@ -1,6 +1,17 @@
 <script>
     var dynatree_object_index = [];
     $(function () {
+        $("textarea").on("keydown",function(e) {
+            var key = e.keyCode;
+            // If the user has pressed enter
+            if (key == 13) {
+                $(this).val($(this).val()+"\n");
+                return false;
+            }
+            else {
+                return true;
+            }
+        });
         // # - autocomplete para as propriedades de dados
         var properties_autocomplete = compounds_get_val($("#properties_autocomplete").val());
         var compounds = compounds_get_val($("#properties_compounds").val()); 

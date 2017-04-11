@@ -5,7 +5,17 @@
         var properties_autocomplete = get_val($("#properties_autocomplete").val());
         autocomplete_property_data(properties_autocomplete);
         $('#propertiesRootAdvancedSearch').html('');
-        //# 3 - esconde, se necessario os campos de ranking e licencas
+        $("textarea").on("keydown",function(e) {
+            var key = e.keyCode;
+            // If the user has pressed enter
+            if (key == 13) {
+                $(this).val($(this).val()+"\n");
+                return false;
+            }
+            else {
+                return true;
+            }
+        });
         
         if($('.hide_rankings')&&$('.hide_rankings').val()==='true'){
             $('#list_ranking_items').hide();
