@@ -97,6 +97,10 @@
             e.preventDefault();
         });
     });
+    
+    $(document).ready(function() {
+        document.title = '<?php echo html_entity_decode(get_the_title()) ?>';
+    });
     //search repeated items
     function clear_repeated_values(main_value,classes){
        $.each($(classes),function(index,value){
