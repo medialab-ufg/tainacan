@@ -15,6 +15,42 @@ include_once("models/log/log_model.php");
 
 show_admin_bar(false);
 
+#### WIDGETS #####
+/*
+ * Função que carrega widgets padrões e ativa o menu de widgets em wp-admin.
+ * @author Weryques
+ *  */
+function tainacan_widgets_init(){
+    register_sidebar( array(
+        'name'          => __( 'Footer A', 'tainacan' ),
+        'id'            => 'footer-a',
+        'description'   => __( 'Add widgets here to appear in your footer.', 'tainacan' ),
+        'before_widget' => '<section id="%1$s" class="widget %2$s">',
+        'after_widget'  => '</section>',
+        'before_title'  => '<h2 class="widget-title">',
+        'after_title'   => '</h2>',
+    ));
+    register_sidebar( array(
+        'name'          => __( 'Footer B', 'tainacan' ),
+        'id'            => 'footer-b',
+        'description'   => __( 'Add widgets here to appear in your footer.', 'tainacan' ),
+        'before_widget' => '<section id="%1$s" class="widget %2$s">',
+        'after_widget'  => '</section>',
+        'before_title'  => '<h2 class="widget-title">',
+        'after_title'   => '</h2>',
+    ));
+    register_sidebar( array(
+        'name'          => __( 'Footer C', 'tainacan' ),
+        'id'            => 'footer-c',
+        'description'   => __( 'Add widgets here to appear in your footer.', 'tainacan' ),
+        'before_widget' => '<section id="%1$s" class="widget %2$s">',
+        'after_widget'  => '</section>',
+        'before_title'  => '<h2 class="widget-title">',
+        'after_title'   => '</h2>',
+    ));
+}
+add_action('widgets_init', 'tainacan_widgets_init');
+
 /**
  * Criando tabela taxonomymeta
  *
