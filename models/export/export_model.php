@@ -932,7 +932,7 @@ class ExportModel extends Model {
             return null;
         }
         //$filename = $this->get_name_file();
-        $filename = 'socialdb_csv';
+        $filename = 'tainacan_csv';
         $df = fopen("php://output", 'w');
         fputcsv($df, array_keys(reset($array)), $delimiter);
         foreach ($array as $row) {

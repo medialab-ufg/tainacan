@@ -118,6 +118,11 @@ abstract class EventModel extends Model {
             $info['count_up'] = $count['count_up'];
             $info['count_down'] = $count['count_down'];
         }
+        if(in_array($info['operation'], ['socialdb_event_object_create','socialdb_event_object_edit','socialdb_event_object_delete'])){
+            $collection_id  = get_post_meta($event->ID, 'socialdb_event_collection_id', true);
+            $link = get_the_permalink($collection_id). get_post(get_post_meta($event->ID, 'socialdb_event_object_item_id', true))->post_name;
+            $info['link'] = '<br><a target="_blank" href="'.$link.'">'.__('See item','tainacan').'</a>';
+        }
         return json_encode($info);
     }
 

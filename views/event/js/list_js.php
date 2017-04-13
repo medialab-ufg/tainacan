@@ -87,7 +87,9 @@
                 $('#event_description').html(elem.name);
                 if (elem.observation && elem.observation.indexOf('<a targ') >= 0) {
                     $('#link_new_item_not_observed').html(elem.observation);
-                } else {
+                }else if(elem.link){
+                     $('#link_new_item_not_observed').html(elem.link);
+                }else {
                     $('#event_observation').html(elem.observation);
                 }
                 $('#event_operation').val(elem.operation);

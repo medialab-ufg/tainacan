@@ -611,6 +611,7 @@ class WPQueryModel extends Model {
      * @author Eduardo Humberto 
      */
     public function set_type_order($data) {
+        $data['order_by'] = ( $data['order']) ? $data['order'] :  $data['order_by'];
         $array_defaults = ['socialdb_object_from','socialdb_object_dc_type','socialdb_object_dc_source','title','socialdb_license_id'];
         if (!isset($data['order_by'])||$data['order_by'] == '') {
             $order = get_post_meta($data['collection_id'], 'socialdb_collection_ordenation_form', true);
@@ -1252,6 +1253,8 @@ class WPQueryModel extends Model {
         //propriedades
         $recover_data = $this->set_properties_filter_advanced_search($recover_data, $data);
         $recover_data = $this->set_terms_filter_advanced_search($recover_data, $data);
+        $recover_data['orderby'] = 'title';
+        $recover_data['order'] = 'asc';
         return $recover_data;
     }
     /**

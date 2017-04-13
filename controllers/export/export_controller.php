@@ -33,7 +33,7 @@ class ExportController extends Controller {
                     if (!empty($export_model->get_collection_posts($data['collection_id']))) {
                         if ($data['export_zip_csv'] == 'only_csv') {
                             $csv_data = $export_model->generate_csv_data($data);
-                            $export_model->download_send_headers('socialdb_csv.csv');
+                            $export_model->download_send_headers('tainacan_csv.csv');
                             echo utf8_decode($export_model->array2csv($csv_data, $data['socialdb_delimiter_csv']));
                         } elseif ($data['export_zip_csv'] == 'csv_plus_zip') {
                             $csv_model = new CSVExportModel;
@@ -65,7 +65,7 @@ class ExportController extends Controller {
                 $export_model->create_zip_by_folder(dirname(__FILE__) . '../../../models/export', '/collections/', 'tainacan_full_csv');
                 $export_model->force_zip_download();
                 //$csv_data = $export_model->generate_csv_data($data);
-                //$export_model->download_send_headers("socialdb_csv.csv');
+                //$export_model->download_send_headers("tainacan_csv.csv');
                 //echo $export_model->array2csv($csv_data, $data['socialdb_delimiter_csv']);
                 Log::addLog(['collection_id' => $data['collection_id'], 'event_type' => 'imports', 'event' => 'export_csv']);
                 break;
@@ -73,7 +73,7 @@ class ExportController extends Controller {
                 if (!empty($export_model->get_collection_posts($data['collection_id']))) {
                     $data['loop'] = $export_model->get_selected_objects($data);
                     $csv_data = $export_model->generate_csv_data_selected($data);
-                    $export_model->download_send_headers('socialdb_csv.csv');
+                    $export_model->download_send_headers('tainacan_csv.csv');
                     echo $export_model->array2csv($csv_data);
                 }else{
                      wp_redirect(get_the_permalink($data['collection_id']) . '?info_title=Attention&info_messages=' . urlencode(__('This collection has no items to export!', 'tainacan')));

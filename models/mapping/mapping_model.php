@@ -502,6 +502,7 @@ class MappingModel extends Model {
     }
 
     public function unzip($file, $data) {
+        error_reporting(0);
         //if ($_FILES["collection_file"]["name"]) {
         //$file = $_FILES["collection_file"];
         $filename = $file["name"];
@@ -541,6 +542,7 @@ class MappingModel extends Model {
      */
     public function get_csv_in_zip_file($path,$delimiter) {
          /* here it is really happening */
+         error_reporting(0);
         $time = time();
         $targetdir = dirname(__FILE__) . "/" .$time;
         $targetzip = dirname(__FILE__)."/" . $time . ".zip";

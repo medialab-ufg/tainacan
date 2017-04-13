@@ -1690,6 +1690,7 @@
             var ranking_widget = elem.search_data_widget;
             var counter_range = elem.counter_range;
             //var ordenation = $('#meta-category input[name=filter_ordenation]:checked').val();
+            var ordenation = '';
             var range_obj = {counter_range: counter_range, sent_data: elem};
 
             if (elem.property_data_use_filter === "use_filter") {

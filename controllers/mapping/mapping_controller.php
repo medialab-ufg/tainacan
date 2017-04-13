@@ -131,7 +131,7 @@ class MappingController extends Controller {
                        $data['csv_data'] = $mapping_model->get_csv_in_zip_file($name_file, $delimiter);
                     }else if($type['extension']=='csv'){
                         $objeto = fopen($name_file, 'r');
-                        if(strpos($name_file, 'socialdb_csv')!==false)
+                        if(strpos($name_file, 'socialdb_csv')!==false && strpos($name_file, 'tainacan_csv')!==false)
                             $csv_data = fgetcsv($objeto, 0, $delimiter);
                         while(($csv_data = fgetcsv($objeto, 0, $delimiter)) !== false){
                              $data['csv_data'] = $csv_data;
