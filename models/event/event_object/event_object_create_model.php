@@ -91,7 +91,7 @@ class EventObjectCreateModel extends EventModel {
             $this->update_event_state('confirmed', $data['event_id']);
             $data['msg'] = __('The event was successful','tainacan');
             $data['type'] = 'success';
-            $data['title'] = __('Success');
+            $data['title'] = __('Success','tainacan');
         } else {
             $this->update_event_state('invalid', $data['event_id']); // seto a o evento como invalido
             $data['msg'] = __('This object does not exist anymore','tainacan');

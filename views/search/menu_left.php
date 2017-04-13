@@ -203,12 +203,12 @@ foreach ($facets as $facet):
      <?php 
      //para listagem de autores mais colaborativos
      elseif ($facet['widget'] == 'ranking_colaborations'):  ?>    
-        <div class="form-group">
+        <!--div class="form-group">
             <label for="ranking_users_colaborators" class="title-pipe"> <?php echo $facet['name']; ?></label>
             <div id="ranking_users_colaborators">
-                <?php echo get_view('collection',['operation'=>'get_most_colaborators_authors','collection_id'=>$collection_id]) ?>
+                <?php //echo get_view('collection',['operation'=>'get_most_colaborators_authors','collection_id'=>$collection_id]) ?>
             </div>
-        </div>
+        </div-->
      <?php 
      //para listagem de autores mais colaborativos
      elseif ($facet['widget'] == 'notifications'): $has_event_notification = true; ?>    
