@@ -725,12 +725,25 @@
             }
         });
         console.log(cont);
-        if(cont===0){
-            $('#core_validation_'+compound_id).val('true');
-            set_field_valid(compound_id,'core_validation_'+compound_id);
+        //se for do tipo de um field apenas
+        if($('#type_required_'+compound_id).length > 0){
+            var total_fields = $('#count_fields_'+compound_id).val();
+            if(cont!=total_fields){
+                $('#core_validation_'+compound_id).val('true');
+                set_field_valid(compound_id,'core_validation_'+compound_id);
+            }else{
+                $('#core_validation_'+compound_id).val('false');
+                set_field_valid(compound_id,'core_validation_'+compound_id);
+            }
+            
         }else{
-            $('#core_validation_'+compound_id).val('false');
-            set_field_valid(compound_id,'core_validation_'+compound_id);
+            if(cont===0){
+                $('#core_validation_'+compound_id).val('true');
+                set_field_valid(compound_id,'core_validation_'+compound_id);
+            }else{
+                $('#core_validation_'+compound_id).val('false');
+                set_field_valid(compound_id,'core_validation_'+compound_id);
+            }
         }
     }
 

@@ -114,7 +114,14 @@
              $('#compounds_id').val('');
             elem = jQuery.parseJSON(result);
             if ( elem != null ) {
-                list_collection_metadata();
+                 if(elem.operation != 'update_property_compounds'){     
+                    list_collection_metadata();
+                }else{
+                   // console.log($('#meta-item-'+elem.compound_id+' .property-name').first());
+                    $('#meta-item-'+elem.compound_id+' .property-name').first().text(elem.compounds_name);
+                    $( "#list-compounded-"+elem.compound_id ).html('');
+                    get_children_compounds(elem.compound_id,elem.compounds_id);
+                }
                 getRequestFeedback(elem.type, elem.msg);
             }
         });
@@ -171,7 +178,7 @@
                     if ( $.inArray(property.type, ranking_types) == -1 ) {
                             $(get_property_tab_seletor(tab_property_id)).append(
                                 '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '" data-widget="' + current_search_widget + '" class="' + property.type + ' ui-widget-content ui-corner-tr">' +
-                                '<label class="title-pipe">'+ add_compounds_button() + property.name + '</label><div class="action-icons">' +
+                                '<label class="title-pipe">'+ add_compounds_button() + '<span class="property-name">' + property.name + '</span>' + '</label><div class="action-icons">' +
                                 '<a class="edit-filter"></a>&nbsp;'+
                                 '<a onclick="edit_compounds(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
                                 '<span class="glyphicon glyphicon-edit"><span></a> ' +

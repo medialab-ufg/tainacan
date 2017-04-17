@@ -16,7 +16,7 @@ class ObjectWidgetsHelper extends ViewHelper {
             </a>
             <?php  
         }
-        if ($property['metas'] && $property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] == 'true') {
+        if ($property['metas'] && $property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] != 'false') {
             ?>
             <a id='required_field_<?php echo $property['id']; ?>' class="pull-right" 
                style="margin-right: 15px;color:red;" >
@@ -74,7 +74,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                                      do_action('modificate_insert_item_properties_compounds',$property,$object_id,'property_value_'. $property['id'] .'_'.$object_id.'_add'); 
                             endif;
                             $this->generateValidationIcons($property, true);
-                            $all_fields_validate =  $property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] == 'true';
+                            $all_fields_validate =  $property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] != 'false';
                             ?>
                     </h2> 
                     <?php $cardinality_bigger = $this->render_cardinality_property($property);   ?>
@@ -84,6 +84,14 @@ class ObjectWidgetsHelper extends ViewHelper {
                          <input  type="hidden" 
                                 id='main_compound_id' 
                                 value='<?php echo $references['compound_id'] ?>'>
+                        <?php if( $property['metas']['socialdb_property_required'] == 'true_one_field'): ?> 
+                        <input  type="hidden" 
+                                id='type_required_<?php echo $references['compound_id'] ?>' 
+                                value='<?php echo $property['metas']['socialdb_property_required'] ?>'> 
+                        <input  type="hidden" 
+                                id='count_fields_<?php echo $references['compound_id'] ?>' 
+                                value='<?php echo count($properties_compounded) ?>'>
+                        <?php endif; ?> 
                         <?php for($i = 0; $i<$cardinality_bigger;$i++): 
                              $is_show_container =  $this->is_set_container($object_id,$property,$property_compounded,$i);
                             $position = 0;
@@ -571,6 +579,14 @@ class ObjectWidgetsHelper extends ViewHelper {
             <div class="form-group" style="margin-bottom: 15px; margin-right: 15px;margin-left: 15px;">
                 <input  type="hidden" id='main_compound_id'
                         value='<?php echo $references['compound_id'] ?>'>
+                <?php if( $property['metas']['socialdb_property_required'] == 'true_one_field'): ?> 
+                <input  type="hidden" 
+                        id='type_required_<?php echo $references['compound_id'] ?>' 
+                        value='<?php echo $property['metas']['socialdb_property_required'] ?>'> 
+                <input  type="hidden" 
+                        id='count_fields_<?php echo $references['compound_id'] ?>' 
+                        value='<?php echo count($properties_compounded) ?>'>
+                <?php endif; ?> 
                 <?php for($i = 0; $i<$cardinality_bigger;$i++):
                     $is_show_container =  $this->is_set_container($object_id,$property,$property_compounded,$i);
                     $position = 0;

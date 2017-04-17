@@ -53,11 +53,22 @@
                         &nbsp;<input type="radio" name="socialdb_event_property_visualization" id="socialdb_property_compounds_visualization_restrict" value="restrict">&nbsp;<?php _e('Restrict','tainacan') ?>
                     </div>
                     <div class="form-group" >
-                        <input type="checkbox" 
+                        <input type="radio" 
+                               name="required" 
+                               id="property_compounds_required_false" 
+                               checked="checked"
+                               value="false">&nbsp;
+                        <b><?php _e('Not Required','tainacan'); ?></b>
+                        <input type="radio" 
                                name="required" 
                                id="property_compounds_required_true" 
                                value="true">&nbsp;
-                        <b><?php _e('Required','tainacan'); ?></b>
+                        <b><?php _e('Required to all fields','tainacan'); ?></b>
+                        <input type="radio" 
+                               name="required" 
+                               id="property_compounds_required_true_field" 
+                               value="true_one_field">&nbsp;
+                        <b><?php _e('Required to at least one field','tainacan'); ?></b>
                     </div>
                     <input type="hidden" id="compound_id" name="compound_id" value="">
                     <input type="hidden" id="compounds_collection_id" name="collection_id" value="<?php echo $collection_id; ?>">

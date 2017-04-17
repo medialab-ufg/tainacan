@@ -491,7 +491,12 @@
 
                 $(current_modal).modal('hide');
 
-                list_collection_metadata();
+                if(elem.operation != 'update_property_data'){     
+                    list_collection_metadata();
+                }else{
+                    $('#meta-item-'+elem.property_data_id+' .property-name').text(elem.property_data_name);
+                    $('#meta-item-'+elem.property_data_id+' .property-type').html(add_text_type(elem.property_data_widget));
+                }
                 getRequestFeedback(elem.type, elem.msg);
                 $("#dynatree_properties_filter").dynatree("getTree").reload();
                 //limpando caches
@@ -751,7 +756,8 @@
                         //adiciona na listagem
                         $(get_property_tab_seletor(tab_property_id)).append(
                             '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="root_category '+class_var+' ui-widget-content ui-corner-tr '+is_allowed_facet(property.slug)+'">' +
-                            '<label '+style+'   class="title-pipe">'+ add_filter_button(current_id) + property.name + '</label>' +
+                            '<label '+style+'   class="title-pipe">'+ add_filter_button(current_id) 
+                            + '<span class="property-name">' + property.name + '</span>' + '</label>' +
                             '<a onclick="edit_metadata(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
                             '<div class="action-icons">'+
                             '<a class="edit-filter"><span class="glyphicon glyphicon-sort sort-filter"></span></a>&nbsp;'+
@@ -761,7 +767,7 @@
                         if ( $.inArray(property.type, ranking_types) == -1 ) {
                             $(get_property_tab_seletor(tab_property_id)).append(
                                 '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '" data-widget="' + current_search_widget + '" class="' + property.type + ' ui-widget-content ui-corner-tr">' +
-                                '<label class="title-pipe">'+ add_filter_button(current_id) + property.name + '</label><div class="action-icons">' +
+                                '<label class="title-pipe">'+ add_filter_button(current_id) + '<span class="property-name">' + property.name + '</span>' + '</label><div class="action-icons">' +
                                 '<a class="edit-filter"><span class="glyphicon glyphicon-sort sort-filter"></span></a>&nbsp;'+
                                 '<a onclick="edit_metadata(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
                                 '<span class="glyphicon glyphicon-edit"><span></a> ' +
@@ -966,7 +972,11 @@
                 }
             }
 
-            list_collection_metadata();
+            if(elem.operation != 'update_property_object'){     
+                list_collection_metadata();
+            }else{
+                $('#meta-item-'+elem.property_object_id+' .property-name').text(elem.property_object_name)
+            }
             getRequestFeedback(elem.type, elem.msg);
             $("#dynatree_properties_filter").dynatree("getTree").reload();
             //limpando caches
@@ -1013,7 +1023,7 @@
                         (property.metas.socialdb_property_created_category && $('#property_category_id').val() !== property.metas.socialdb_property_created_category)) {
                         $(get_property_tab_seletor(tab_property_id)).append(
                             '<li tab="'+tab_property_id+'" id="meta-item-'+current_id+'" data-widget="' + property.search_widget + '" class="root_category ui-widget-content ui-corner-tr">' +
-                            '<label class="title-pipe">'+ add_filter_button(current_id) + property.name + '</label>' +
+                            '<label class="title-pipe">'+ add_filter_button(current_id) + '<span class="property-name">' + property.name + '</span>' + '</label>' +
                             '<a onclick="edit_property_object('+ current_id +')" class="edit_property_data" href="javascript:void(0)">' +
                             '<div class="action-icons">'+
                             '<a class="edit-filter"><span class="glyphicon glyphicon-sort sort-filter"></span></a>&nbsp;'+
@@ -1022,7 +1032,8 @@
                     } else {
                         if ( $.inArray(property.type, ranking_types) == -1 ) {
                             $(get_property_tab_seletor(tab_property_id)).append(
-                                '<li tab="'+tab_property_id+'" id="meta-item-'+current_id+'" data-widget="' + property.search_widget + '" class="ui-widget-content ui-corner-tr"><label class="title-pipe">'+ add_filter_button(current_id) + property.name +
+                                '<li tab="'+tab_property_id+'" id="meta-item-'+current_id+'" data-widget="' + property.search_widget + '" class="ui-widget-content ui-corner-tr"><label class="title-pipe">'+ add_filter_button(current_id) 
+                                + '<span class="property-name">' + property.name + '</span>' +
                                 '</label><div class="action-icons">' +
                                 '<a class="edit-filter"><span class="glyphicon glyphicon-sort sort-filter"></span></a>&nbsp;'+
                                 '<a onclick="edit_property_object('+ current_id +')" class="edit_property_data" href="javascript:void(0)">' +
@@ -1249,7 +1260,11 @@
             }
         
             $("#meta-category").modal('hide');
-            list_collection_metadata();
+            if(elem.operation != 'update_property_term'){     
+                list_collection_metadata();
+            }else{
+                $('#meta-item-'+elem.property_term_id+' .property-name').text(elem.property_term_name)
+            }
             getRequestFeedback(elem.type, elem.msg);
             $("#dynatree_properties_filter").dynatree("getTree").reload();
             //limpando caches
@@ -1309,7 +1324,8 @@
                             button = '<span class="glyphicon glyphicon-trash no-edit"></span>';
                         }
                         $(get_property_tab_seletor(tab_property_id)).append(
-                            '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '"  term_root_id="'+term_root_id+'" data-widget="' + property.search_widget + '" class="root_category '+class_var+' ui-widget-content ui-corner-tr term-root-'+term_root_id+'"><label '+style+' class="title-pipe">'+ add_filter_button(current_id) + property.name +
+                            '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '"  term_root_id="'+term_root_id+'" data-widget="' + property.search_widget + '" class="root_category '+class_var+' ui-widget-content ui-corner-tr term-root-'+term_root_id+'"><label '+style+' class="title-pipe">'
+                            + add_filter_button(current_id) + '<span class="property-name">' + property.name + '</span>' +
                             '</label><div class="action-icons">' +
                             '<a class="edit-filter"><span class="glyphicon glyphicon-sort sort-filter"></span></a>&nbsp;'+
                             '<a onclick="edit_term(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
@@ -1319,7 +1335,8 @@
                         if ( $.inArray(property.type, ranking_types) == -1 ) {
                             var term_root_id =  property.metas.socialdb_property_term_root;
                             $(get_property_tab_seletor(tab_property_id)).append(
-                                '<li tab="'+tab_property_id+'" term_root_id="'+term_root_id+'" id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="ui-widget-content ui-corner-tr term-root-'+term_root_id+'"><label class="title-pipe">'+ add_filter_button(current_id) + property.name +
+                                '<li tab="'+tab_property_id+'" term_root_id="'+term_root_id+'" id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="ui-widget-content ui-corner-tr term-root-'+term_root_id+'"><label class="title-pipe">'
+                                + add_filter_button(current_id) + '<span class="property-name">' + property.name + '</span>' +
                                 '</label><div class="action-icons"> <input type="hidden" class="property_data_id" value="' + current_id + '">' +
                                 '<input type="hidden" id="property_type_' + property.id + '" value="3">' +
                                 '<a class="edit-filter"><span class="glyphicon glyphicon-sort sort-filter"></span></a>&nbsp;'+
@@ -1546,7 +1563,11 @@
             document.getElementById('submit_form_ranking').reset();
             $('#meta-voting').modal('hide');
             getRequestFeedback(elem.success, elem.msg);
-            list_collection_metadata();
+            if(elem.operation != 'edit'){     
+                list_collection_metadata();
+            }else{
+                $('#meta-item-'+ranking_id+' .property-name').text(ranking_name)
+            }
             //limpando caches
             delete_all_cache_collection();
         });
@@ -2273,7 +2294,7 @@
      ****************************************************************************
      **/ 
     function add_text_type(type){
-     var string = '<span style="opacity:0.5;padding-left:5px;">'
+     var string = '<span class="property-type" style="opacity:0.5;padding-left:5px;">'
        if(type==='compound'){
             string += '(<?php echo (__('Compounds','tainacan')) ?>)';
        }else if(type==='category'||type==='tree'){

@@ -118,7 +118,14 @@
             $('#compounds_id').val('');
             elem = jQuery.parseJSON(result);
             if ( elem != null ) {
-                list_collection_metadata();
+                if(elem.operation != 'update_property_compounds'){     
+                    list_collection_metadata();
+                }else{
+                    // console.log($('#meta-item-'+elem.compound_id+' .property-name').first());
+                    $('#meta-item-'+elem.compound_id+' .property-name').first().text(elem.compounds_name);
+                    $( "#list-compounded-"+elem.compound_id ).html('');
+                    get_children_compounds(elem.compound_id,elem.compounds_id);
+                }
                 getRequestFeedback(elem.type, elem.msg);
             }
         });
@@ -222,7 +229,7 @@
                         //adiciona na listagem
                         $(get_property_tab_seletor(tab_property_id)).append(
                             '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="root_category '+class_var+' ui-widget-content ui-corner-tr '+is_allowed_facet(property.slug)+'">' +
-                            '<label '+style+'   class="title-pipe">'+ add_compounds_button() + property.name + add_text_type('compound') + '</label>' +
+                            '<label '+style+'   class="title-pipe">'+ add_compounds_button() + '<span class="property-name">' + property.name + '</span>' + add_text_type('compound') + '</label>' +
                             '<a onclick="edit_metadata(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
                             '<div class="action-icons">'+
                             '<a class="edit-filter"><span class="glyphicon glyphicon-sort sort-filter"></span></a>&nbsp;'+
@@ -232,7 +239,7 @@
                         if ( $.inArray(property.type, ranking_types) == -1 ) {
                             $(get_property_tab_seletor(tab_property_id)).append(
                                 '<li tab="'+tab_property_id+'" id="meta-item-' + current_id + '" data-widget="' + current_search_widget + '" class="' + property.type + ' ui-widget-content ui-corner-tr">' +
-                                '<label class="title-pipe">'+ add_compounds_button() + property.name + add_text_type('compound') + '</label><div class="action-icons">' +
+                                '<label class="title-pipe">'+ add_compounds_button() + '<span class="property-name">' + property.name + '</span>' + add_text_type('compound') + '</label><div class="action-icons">' +
                                 '<a class="edit-filter"><span class="glyphicon glyphicon-sort sort-filter"></span></a>&nbsp;'+
                                 '<a onclick="edit_compounds(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
                                 '<span class="glyphicon glyphicon-edit"><span></a> ' +
@@ -278,8 +285,13 @@
             // se for obrigatorio
             if (elem.metas.socialdb_property_required === 'true') {
                 $("#property_compounds_required_true").prop('checked', true);
+                $("#property_compounds_required_true_field").prop('checked', false);
+            }else if(elem.metas.socialdb_property_required === 'true_one_field'){
+                 $("#property_compounds_required_true").prop('checked', false);
+                $("#property_compounds_required_true_field").prop('checked', true);
             } else {
                 $("#property_compounds_required_true").prop('checked', false);
+                $("#property_compounds_required_true_field").prop('checked', false);
             }
             if(visualization=='restrict'){
                 $( "#socialdb_property_compounds_visualization_restrict").prop('checked', true);
@@ -353,7 +365,8 @@
                                 '<a onclick="'+string+'(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
                                 '<span style="margin-right:5px;color: #88A6CC;" class="glyphicon glyphicon-edit pull-right"><span></a> ' +
                                 
-                                '<span style="margin-right:5px;color: #88A6CC;" class="glyphicon glyphicon-sort sort-filter pull-right"></span>&nbsp;'+ add_filter_button(current_id) + property.name + add_text_type(current_search_widget) +'</li>')
+                                '<span style="margin-right:5px;color: #88A6CC;" class="glyphicon glyphicon-sort sort-filter pull-right"></span>&nbsp;'+ add_filter_button(current_id)
+                                + '<span class="property-name">' + property.name + '</span>' + add_text_type(current_search_widget) +'</li>')
             });
         });
     }
