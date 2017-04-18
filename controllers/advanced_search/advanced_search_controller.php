@@ -100,6 +100,7 @@ class AdvancedSearchController extends Controller {
                 $return = array();
                 $args_object = $wpquery_model->advanced_searched_filter($data);
                 $args_object['posts_per_page'] = 50;
+                $args_object['post_status'] = 'publish';
                 $paramters_object = $wpquery_model->do_filter($args_object);
                 $loop_objects = new WP_Query($paramters_object);
                 if ($loop_objects&&$loop_objects->have_posts()) : 

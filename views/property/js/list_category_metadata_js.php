@@ -1125,45 +1125,86 @@
 //            if ( related_collection != null ) {
 //                $("#property_object_category_id").val(related_collection);
 //            }
-            if(elem.metas.socialdb_property_object_category_id.constructor === Array){
-               //  console.log('first');
-                if($("#property_category_dynatree")){
-                       $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
-                               node.select(false);
-                       });
-                       $('#selected_categories_relationship').html('');
-                       $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
-                               if(elem.metas.socialdb_property_object_category_id.indexOf(node.data.key)>-1){
-                                    node.select(true);
-                                    ids = $('#property_object_category_id').val().split(',');
-                                    index = ids.indexOf(node.data.key);
-                                    if(index<0){
-                                        ids.push(node.data.key);
-                                       $('#property_object_category_id').val(ids.join(','));
-                                    }
-                               }
-                       });
+            var contador = 0;
+              if (elem.metas.socialdb_property_object_category_id && elem.metas.socialdb_property_object_category_id.constructor === Array) {
+                //  console.log('first');
+                if ($("#property_category_dynatree")) {
+                    $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
+                        node.select(false);
+                    });
+                    $('#selected_categories_relationship').html('');
+                    $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
+                        if (elem.metas.socialdb_property_object_category_id.indexOf(node.data.key) > -1) {
+                            contador++;
+                            node.select(true);
+                            ids = $('#property_object_category_id').val().split(',');
+                            index = ids.indexOf(node.data.key);
+                            if (index < 0) {
+                                ids.push(node.data.key);
+                                $('#property_object_category_id').val(ids.join(','));
+                            }
+                        }
+                    });
+                    if (contador === 0) {
+                        $('#selected_categories_relationship').html('');
+                        $.each(elem.metas.socialdb_property_object_category_id, function (index, value) {
+                            $.ajax({
+                                type: "POST",
+                                url: $('#src').val() + "/controllers/category/category_controller.php",
+                                data: {category_id:value, operation: 'get_metas'}
+                            }).done(function (result) {
+                                elem = jQuery.parseJSON(result);
+                                add_label_box(elem.term.term_id, elem.term.name, '#selected_categories_relationship');
+                                ids = $('#property_object_category_id').val().split(',');
+                                index = ids.indexOf(elem.term.term_id);
+                                if (index < 0) {
+                                    ids.push(elem.term.term_id);
+                                    $('#property_object_category_id').val(ids.join(','));
+                                }
+                            });
+                        });
+                    }
                 }
-            }else if(elem.metas.socialdb_property_object_category_id){
-               //  console.log('second');
-                 if($("#property_category_dynatree")){
-                       $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
-                               node.select(false);
-                       });
-                       $('#selected_categories_relationship').html('');
-                       $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
-                               if(elem.metas.socialdb_property_object_category_id===node.data.key){
-                                    node.select(true);
-                                    ids = $('#property_object_category_id').val().split(',');
-                                    index = ids.indexOf(node.data.key);
-                                    if(index<0){
-                                        ids.push(node.data.key);
-                                       $('#property_object_category_id').val(ids.join(','));
-                                    }
-                               }
-                       });
+            } 
+            else if (elem.metas.socialdb_property_object_category_id) {
+                //  console.log('second');
+                if ($("#property_category_dynatree")) {
+                    $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
+                        node.select(false);
+                    });
+                    $('#selected_categories_relationship').html('');
+                    $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
+                        //console.log(elem.metas.socialdb_property_object_category_id,node.data.key);
+                        if (elem.metas.socialdb_property_object_category_id === node.data.key) {
+                            node.select(true);
+                            contador++;
+                            ids = $('#property_object_category_id').val().split(',');
+                            index = ids.indexOf(node.data.key);
+                            if (index < 0) {
+                                ids.push(node.data.key);
+                                $('#property_object_category_id').val(ids.join(','));
+                            }
+                        }
+                    });
+                    if (contador === 0) {
+                        $('#selected_categories_relationship').html('');
+                        $.ajax({
+                            type: "POST",
+                            url: $('#src').val() + "/controllers/category/category_controller.php",
+                            data: {category_id: elem.metas.socialdb_property_object_category_id, operation: 'get_metas'}
+                        }).done(function (result) {
+                            elem = jQuery.parseJSON(result);
+                            add_label_box(elem.term.term_id, elem.term.name, '#selected_categories_relationship');
+                            ids = $('#property_object_category_id').val().split(',');
+                            index = ids.indexOf(elem.term.term_id);
+                            if (index < 0) {
+                                ids.push(elem.term.term_id);
+                                $('#property_object_category_id').val(ids.join(','));
+                            }
+                        });
+                    }
                 }
-            }    
+            } 
 
 
             $("#meta-relationship .modal-title").text('<?php _e('Edit property','tainacan') ?>');

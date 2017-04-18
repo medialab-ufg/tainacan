@@ -1250,7 +1250,8 @@
                         });
                     }
                 }
-            } else if (elem.metas.socialdb_property_object_category_id) {
+            } 
+            else if (elem.metas.socialdb_property_object_category_id) {
                 //  console.log('second');
                 if ($("#property_category_dynatree")) {
                     $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {

@@ -958,12 +958,12 @@ class Model {
                     SELECT p.* FROM $wp_posts p
                     INNER JOIN $term_relationships t ON p.ID = t.object_id    
                     INNER JOIN $term_taxonomy tt ON tt.term_taxonomy_id = t.term_taxonomy_id    
-                    WHERE p.post_type LIKE 'socialdb_object' AND p.post_title LIKE '%{$term}%' and tt.term_id IN (".$category_root_id.")
+                    WHERE p.post_type LIKE 'socialdb_object' AND  p.post_status LIKE 'publish'  AND p.post_title LIKE '%{$term}%' and tt.term_id IN (".$category_root_id.")
             ";  
         } else {
               $query = "
                     SELECT p.* FROM $wp_posts p  
-                    WHERE p.post_type LIKE 'socialdb_object' AND p.post_title LIKE '%{$term}%'
+                    WHERE p.post_type LIKE 'socialdb_object' AND  p.post_status LIKE 'publish'  AND p.post_title LIKE '%{$term}%'
                 ";  
         }
         $result = $wpdb->get_results($query);
