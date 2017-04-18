@@ -33,11 +33,11 @@ class social_media extends WP_Widget {
         echo '<div>';
 
         // This is where you run the code and display the output
-        echo '<a target="_blank" class="smedialink" href="'. $facebook_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/004-facebook-logo-button.png" alt="Facebook" />    Facebook</br></a>';
-        echo '<a target="_blank" class="smedialink" href="'. $youtube_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/005-play.png" alt="Youtube" />    Youtube</br></a>';
-        echo '<a target="_blank" class="smedialink" href="'. $twitter_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/003-twitter-logo-button.png" alt="Twitter" />    Twitter</br></a>';
-        echo '<a target="_blank" class="smedialink" href="'. $googleplus_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/002-google-plus-logo-button.png" alt="Google Plus" />    Google Plus</br></a>';
-        echo '<a target="_blank" class="smedialink" href="'. $github_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/001-github-logo.png" alt="Github"/>    Github</a>';
+        echo '<a target="_blank" class="smedialink" href="'. $facebook_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/004-facebook-logo-button.png" alt="Facebook" /> Facebook</br></a>';
+        echo '<a target="_blank" class="smedialink" href="'. $youtube_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/005-play.png" alt="Youtube" /> Youtube</br></a>';
+        echo '<a target="_blank" class="smedialink" href="'. $twitter_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/003-twitter-logo-button.png" alt="Twitter" /> Twitter</br></a>';
+        echo '<a target="_blank" class="smedialink" href="'. $googleplus_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/002-google-plus-logo-button.png" alt="Google Plus" /> Google Plus</br></a>';
+        echo '<a target="_blank" class="smedialink" href="'. $github_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/001-github-logo.png" alt="Github"/> Github</a>';
 
         echo '</div>';
         echo $args['after_widget'];
@@ -45,7 +45,7 @@ class social_media extends WP_Widget {
 
     // Widget Backend
     public function form( $instance ) {
-        $title = empty($instance['title']) ? __('Redes Sociais', 'wpb_widget_domain'): $instance['title'];
+        $title = empty($instance['title']) ? __('Redes sociais', 'wpb_widget_domain'): $instance['title'];
         $facebook_url = empty($instance['facebook_url']) ? __('https://www.facebook.com/people/Tainacan-Ufg/100009891673997', 'wpb_widget_domain') : $instance['facebook_url'];
         $youtube_url = empty($instance['youtube_url']) ? __('https://www.youtube.com/channel/UC_G6mfKrktesaBufjA9GU8w', 'wpb_widget_domain') : $instance['youtube_url'];
         $twitter_url = empty($instance['twitter_url']) ? __('https://twitter.com/hashtag/Tainacan', 'wpb_widget_domain') : $instance['twitter_url'];
