@@ -1,0 +1,59 @@
+/*
+ * @author Weryques
+*/
+
+.footer-widget-1{
+    float:left; width: 340px;
+    margin-left:40px;
+    margin-right:40px;
+}
+.footer-widget-2{
+    float: left;
+    width: 340px;
+    margin-left: 40px;
+    margin-right:40px;
+}
+.footer-widget-3{
+    float: left;
+    width: 340px;
+    margin-left: 40px;
+}
+.widgetcolumn12{
+    min-height: 200px;
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-right-color:#a5a7aa;
+}
+
+.widget-title{
+    color: white;
+}
+
+.wordpress-powered{
+    float: right;
+    margin-right: 40px;
+    font-size: 8pt;
+    color: white;
+    padding-top: 4px;
+}
+
+.widget{
+    color: white;
+}
+
+footer.a{
+    color: white;
+}
+
+.smedialink{
+    color: white;
+}
+.backicon{
+    background-color: white;
+    border-radius: 17px;
+    width: 25px;
+    height: 25px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-right: 9px;
+}

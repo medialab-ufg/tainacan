@@ -12,12 +12,15 @@ include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 include_once( dirname(__FILE__) . "/config/config.php" );
 require_once('wp_bootstrap_navwalker.php');
 include_once("models/log/log_model.php");
+include_once('views/widgets/widget_contact.php');
+include_once('views/widgets/widget_social_media.php');
+include_once('views/widgets/widget_site_map.php');
 
 show_admin_bar(false);
 
-#### WIDGETS #####
+#### WIDGETS AREAS #####
 /*
- * Função que carrega widgets padrões e ativa o menu de widgets em wp-admin.
+ * Função que carrega as áreas para widgets padrões e ativa o menu de widgets em wp-admin.
  * @author Weryques
  *  */
 function tainacan_widgets_init(){
@@ -27,8 +30,8 @@ function tainacan_widgets_init(){
         'description'   => __( 'Add widgets here to appear in your footer.', 'tainacan' ),
         'before_widget' => '<section id="%1$s" class="widget %2$s">',
         'after_widget'  => '</section>',
-        'before_title'  => '<h2 class="widget-title">',
-        'after_title'   => '</h2>',
+        'before_title'  => '<h5 class="widget-title">',
+        'after_title'   => '</h5>',
     ));
     register_sidebar( array(
         'name'          => __( 'Footer B', 'tainacan' ),
@@ -36,8 +39,8 @@ function tainacan_widgets_init(){
         'description'   => __( 'Add widgets here to appear in your footer.', 'tainacan' ),
         'before_widget' => '<section id="%1$s" class="widget %2$s">',
         'after_widget'  => '</section>',
-        'before_title'  => '<h2 class="widget-title">',
-        'after_title'   => '</h2>',
+        'before_title'  => '<h5 class="widget-title">',
+        'after_title'   => '</h5>',
     ));
     register_sidebar( array(
         'name'          => __( 'Footer C', 'tainacan' ),
@@ -45,8 +48,8 @@ function tainacan_widgets_init(){
         'description'   => __( 'Add widgets here to appear in your footer.', 'tainacan' ),
         'before_widget' => '<section id="%1$s" class="widget %2$s">',
         'after_widget'  => '</section>',
-        'before_title'  => '<h2 class="widget-title">',
-        'after_title'   => '</h2>',
+        'before_title'  => '<h5 class="widget-title">',
+        'after_title'   => '</h5>',
     ));
 }
 add_action('widgets_init', 'tainacan_widgets_init');
@@ -1648,7 +1651,8 @@ if (!function_exists("theme_styles")) {
                 'slick-theme' => '/libraries/css/slick/slick-theme.css',
                 'socialdbSweetAlert' => '/libraries/css/SweetAlert/sweet-alert.css',
                 'socialdbcss' => '/libraries/css/socialdb.css',
-                'tainacan' => '/libraries/css/tainacan.css'
+                'tainacan' => '/libraries/css/tainacan.css',
+                'footer' => '/libraries/css/footer.css'
             ];
             foreach ($home_css as $css_file => $css_path) {
                 add_tainacan_css($css_file, $css_path);
@@ -1677,7 +1681,8 @@ if (!function_exists("theme_styles")) {
                 'jqcloudcss' => '/libraries/css/jqcloud/jqcloud.css',
                 'toastr' => '/libraries/js/toastr/toastr.css',
                 'croppic' => '/libraries/css/croppic/croppic.css',
-                'tainacan' => '/libraries/css/tainacan.css'
+                'tainacan' => '/libraries/css/tainacan.css',
+                'footer' => '/libraries/css/footer.css'
             ];
             $column = get_post_meta(get_the_ID(), 'socialdb_collection_submission_visualization',true);
             if($column&&$column=='one'){
