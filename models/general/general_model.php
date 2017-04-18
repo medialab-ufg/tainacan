@@ -604,7 +604,7 @@ class Model {
                     if(isset($metas['socialdb_property_default_value']) && is_numeric($metas['socialdb_property_default_value'])){
                         $metas['socialdb_property_default_value_text'] = get_term_by('id', $metas['socialdb_property_default_value'], 'socialdb_category_type')->name;
                     }
-                } else if (isset($metas['socialdb_property_object_category_id'])) {
+                } else if (isset($metas['socialdb_property_object_category_id']) || isset($metas['socialdb_property_object_cardinality'])  ) {
                     if (is_array($metas['socialdb_property_object_category_id'])) {
                         $data['type'] = __('Multiple', 'tainacan');
                     } else if ($metas['socialdb_property_object_category_id']) {

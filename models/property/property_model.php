@@ -729,7 +729,7 @@ class PropertyModel extends Model {
             }
         //} else {
         //    $data['no_properties'] = true;
-        //}       
+        //}     
         return json_encode($data);
     }
     

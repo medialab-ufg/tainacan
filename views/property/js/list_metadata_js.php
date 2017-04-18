@@ -1075,7 +1075,7 @@
                 $.each(elem.property_object, function (idx, property) {
                     var current_id = property.id;
                     //buscando a aba da propriedade
-                    var tab_property_id = get_tab_property_id(current_id)
+                    var tab_property_id = get_tab_property_id(current_id);
                     //visibilidade do metadado
                     var isCompounded = is_compounded(property.metas.socialdb_property_is_compounds);
                     if (isCompounded || (property.metas.socialdb_property_visibility && property.metas.socialdb_property_visibility === 'hide')) {
@@ -1111,7 +1111,7 @@
                     }
                 });
             }
-
+            
         });
 
         return xhr;
@@ -1211,7 +1211,7 @@
 //                $("#property_object_category_id").val(related_collection);
 //            }
             var contador = 0;
-            if (elem.metas.socialdb_property_object_category_id.constructor === Array) {
+            if (elem.metas.socialdb_property_object_category_id && elem.metas.socialdb_property_object_category_id.constructor === Array) {
                 //  console.log('first');
                 if ($("#property_category_dynatree")) {
                     $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
@@ -2030,8 +2030,9 @@
     }
     /***************************** ORDENACAO *************************************/
     function reorder_properties(tab_id, array_ids) {
-        var $ul = $("#metadata-container-" + tab_id),
+        var $ul = $("#metadata-container-" + tab_id);
                 $items = $("#metadata-container-" + tab_id).children();
+        console.log($items);        
         $("#metadata-container-" + tab_id).html('');
         // loop backwards so you can just prepend elements in the list
         // instead of trying to place them at a specific position
