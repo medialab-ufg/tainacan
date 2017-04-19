@@ -309,19 +309,32 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
                 }
                 return json_encode($data);
             case 'setTargetProperties':
+                $title = get_term_by('slug', 'socialdb_property_fixed_title','socialdb_property_type');
                 $categories = explode(',', $data['categories']);
                 $all_properties_id = [];
                 $properties = [];
+                $title_labels = [];
                 foreach ($categories as $value) {
                     $properties_raw = get_term_meta($value, 'socialdb_category_property_id');
                     if(is_array($properties_raw)){
                         $all_properties_id = array_merge($all_properties_id, array_filter($properties_raw));
                     }
+                    $collection = $property_model->get_collection_by_category_root($value);
+                    if($collection && isset($collection[0])){
+                        $labels_collection = ($collection[0]->ID!='') ? get_post_meta($collection[0]->ID, 'socialdb_collection_fixed_properties_labels', true) : false;
+                        $labels_collection = ($labels_collection) ? unserialize($labels_collection) : false;
+                        if($labels_collection && $labels_collection[$title->term_id]){
+                            $title_labels[] = $labels_collection[$title->term_id];
+                        }else{
+                            $title_labels[] = $title->name;
+                        }
+                    }
+                    
                 }
                 foreach ($all_properties_id as $property_id) {
                     $properties[] = $property_model->get_all_property($property_id, true);
                 }
-                return json_encode(['properties'=>$properties]);
+                return json_encode(['properties'=>$properties,'title'=>['id'=>$title->term_id,'labels' => $title_labels ]]);
                 
                 
         }
