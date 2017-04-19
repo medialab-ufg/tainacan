@@ -723,10 +723,14 @@
 
      * @type Arguments     */
     function set_field_valid_compounds(id,seletor,compound_id){
-        if($('#'+seletor).val()==='false'){
-            $('#'+seletor).val('false');
+       if($('#'+seletor).val()==='false'){
+            var slug = seletor.replace('core_validation_','');
+            $('#ok_field_'+slug).hide();
+            $('#required_field_'+slug).show();
         }else{
-            $('#'+seletor).val('true');
+            var slug = seletor.replace('core_validation_','');
+            $('#ok_field_'+slug).show();
+            $('#required_field_'+slug).hide();
         }
         validate_all_fields_compounds(compound_id);
     }
