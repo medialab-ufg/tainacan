@@ -826,12 +826,16 @@
             $('#meta-item-'+id+' h2').css('background-color','#fffff');
         }
         validate_all_fields();
+        if($('#'+seletor).val()!=='false'){
+             $('#meta-item-'+id+' h2').css('background-color','#fffff');
+        }
     }
     
     function validate_all_fields(){
         var cont = 0;
         var cont_pane = 0;
         $( ".core_validation").each(function( index ) {
+            console.log($( this ).attr('id'),$( this ).val(),$( this ).is(':visible'));
             if($( this ).val()==='false'){
                 cont++;
                 var id = $( this ).attr('id').replace('core_validation_','');

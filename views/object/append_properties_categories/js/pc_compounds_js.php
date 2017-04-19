@@ -34,10 +34,11 @@
             $.each(properties_autocomplete, function (idx, property_id) {
                 if($('#cardinality_compound_'+compound_id+'_'+property_id).length>0){
                     var cardinality = $('#cardinality_compound_'+compound_id+'_'+property_id).val();
+                    var cardinality = $('#cardinality_'+ compound_id ).val();
                     for(var i = 0;i<cardinality;i++){
                         dynatree_object_index["compounds_"+compound_id+"_"+ property_id  + '_' + i] = i;
                         if( $(".form_autocomplete_compounds_" + property_id + '_'+i).length==0){
-                            return false;
+                            break;
                         }
                         //validate
                         $(".form_autocomplete_compounds_" + property_id + '_'+i).keyup(function(){
@@ -743,6 +744,7 @@
             }
         });
        //se for do tipo de um field apenas
+        console.log(cont,'pc compound');
         if($('#type_required_'+compound_id).length > 0){
             var total_fields = $('#count_fields_'+compound_id).val();
             if(cont!=total_fields){

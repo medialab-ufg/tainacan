@@ -350,9 +350,9 @@
                 var string = '';
                 var class_string = '';
                 var cat_id = ''
-                if(type=='1'){
+                if(type=='1' || property.metas.socialdb_property_data_widget){
                     string = 'edit_metadata';
-                }else if(type=='2'){
+                }else if(type=='2' || property.metas.socialdb_property_object_category_id){
                     string = 'edit_property_object';
                 }else if(type=='3'){
                     string = 'edit_term';

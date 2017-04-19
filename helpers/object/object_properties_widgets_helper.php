@@ -266,8 +266,12 @@ class ObjectWidgetsHelper extends ViewHelper {
         }
         // gancho para tipos de metadados de dados diferentes
         else if (has_action('modificate_edit_item_properties_data')) {
+            $property['contador'] = $i;
+            $property['operation'] = 'edit';
+            $property['object_id'] = $object_id;
+            $property['compound_id'] = $references['compound_id'];
             do_action('modificate_edit_item_properties_data', $property);
-            return false;
+            //return false;
         } else {
             ?>
             <input type="text" 
