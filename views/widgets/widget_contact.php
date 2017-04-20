@@ -39,23 +39,25 @@ class contact extends WP_Widget {
         echo '<div>';
 
         // This is where you run the code and display the output
+        echo '<p class="contactContent">';
+
         if ($institution) {
             echo $institution .'<br/>';
         }
         if ($cnpj){
-            echo $cnpj .'<br/><br/>';
+            echo 'CNPJ: '. $cnpj .'<br/><br/>';
         }
         if($street || $address_number) {
-            echo $street .' '. $address_number .'<br/>';
+            echo $street .' '. $address_number .',<br/>';
         }
         if($complement) {
-            echo $complement .'<br/>';
+            echo $complement .'.<br/>';
         }
         if($cep) {
             echo 'CEP: '. $cep .'<br/>';
         }
         if($city || $state || $country) {
-            echo $city .' - '. $state .' - '. $country .'<br/><br/>';
+            echo $city .' - '. $state .' - '. $country .'.<br/><br/>';
         }
         if($email) {
             echo $email .'<br/>';
@@ -63,6 +65,7 @@ class contact extends WP_Widget {
         if($phone) {
             echo 'Fone: '. $phone .'<br/>';
         }
+        echo '</p>';
 
         echo '</div>';
         echo $args['after_widget'];

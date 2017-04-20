@@ -18,6 +18,7 @@ include_once('views/widgets/widget_site_map.php');
 
 show_admin_bar(false);
 
+print_r(get_page_template());
 #### WIDGETS AREAS #####
 /*
  * Função que carrega as áreas para widgets padrões e ativa o menu de widgets em wp-admin.
