@@ -155,7 +155,8 @@ class CsvModel extends Model {
                             if ($metadata['socialdb_entity'] == 'post_title'):
                                 if (mb_detect_encoding($field_value, 'auto') == 'UTF-8')
                                     $field_value = iconv('ISO-8859-1', 'UTF-8', $field_value);
-                                $this->update_title($object_id, utf8_decode($field_value));
+                                //$this->update_title($object_id, utf8_decode($field_value));
+                                update_post_title($object_id, $field_value);
                                 $this->set_common_field_values($object_id, 'title', utf8_decode($field_value));
                             elseif ($metadata['socialdb_entity'] == 'post_content'):
                                 $content .= $field_value . ",";
@@ -267,7 +268,7 @@ class CsvModel extends Model {
                             elseif (strpos($metadata['socialdb_entity'], "objectproperty_") !== false):
                                 $trans = array("objectproperty_" => "");
                                 $id = strtr($metadata['socialdb_entity'], $trans);
-                                add_post_meta($object_id, 'socialdb_property_' . $id . '', utf8_decode($field_value));
+                                add_post_meta($object_id, 'socialdb_property_' . $id . '', $this->insertPropertyObjectItem($id,$field_value));
                             elseif (strpos($metadata['socialdb_entity'], "dataproperty_") !== false):
                                 $trans = array("dataproperty_" => "");
                                 $id = strtr($metadata['socialdb_entity'], $trans);
@@ -310,7 +311,7 @@ class CsvModel extends Model {
             return false;
         }
     }
-
+    
     ######################### begin: INSERINDO VALORES SEM MAPEAMENTO ############# 
     /**
      * 

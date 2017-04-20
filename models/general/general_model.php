@@ -2568,6 +2568,58 @@ class Model {
         endif;
         return $data['metadatas'];
     }
+    
+    /**
+     * function get_objects_by_selected_categories()
+     * @param string $categories Os dados vindo do formulario
+     * @return json com o id e o nome de cada objeto
+     * @author Eduardo Humberto
+     */
+    public function get_objects_by_selected_categories($categories,$term,$is_json = true) {
+        $json = [];
+        if($categories != ''){
+            global $wpdb;
+            $wp_posts = $wpdb->prefix . "posts";
+            $term_relationships = $wpdb->prefix . "term_relationships";
+            $property_model = new PropertyModel;
+            $query = "
+                            SELECT p.* FROM $wp_posts p
+                            INNER JOIN $term_relationships t ON p.ID = t.object_id    
+                            WHERE t.term_taxonomy_id IN ({$categories})
+                            AND p.post_type like 'socialdb_object' and p.post_status like 'publish' and p.post_title LIKE '%{$term}%'
+                    ";
+            $result = $wpdb->get_results($query);
+            if ($result) {
+                foreach ($result as $object) {
+                    $json[] = array('value' => $object->ID, 'label' => $object->post_title);
+                }
+            }
+        }
+        return ($is_json) ? json_encode($json) :$json;
+    }
+    
+    /**
+     * metodo que insere a propriedade de objeto com o valor na outra colecao
+     * @param type $property_id
+     * @param type $title
+     */
+    public function insertPropertyObjectItem($property_id,$title) {
+        $parent = get_term_meta($property_id, 'socialdb_property_object_category_id', true);
+        $array_categories = (is_array($parent)) ?  $parent : explode(',', $parent);
+        $ids = [];
+        foreach ($array_categories as $id) {
+            $ids[] = (int) $id;
+        }
+        //$array_categories = array_walk($array_categories, 'intval');
+        $has_inserted = $this->get_objects_by_selected_categories(implode(',', $ids),trim($title),false);
+        if(count($has_inserted) == 0){
+            $post_id = socialdb_insert_object($title);
+            wp_set_object_terms($post_id,$ids, 'socialdb_category_type');
+        } else{
+            $post_id = $has_inserted[0]['value'];
+        }
+        return $post_id;
+    }
 
     /**
      * 

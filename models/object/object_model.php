@@ -1491,34 +1491,7 @@ class ObjectModel extends Model {
         return json_encode($json);
     }
     
-    /**
-     * function get_objects_by_selected_categories()
-     * @param string $categories Os dados vindo do formulario
-     * @return json com o id e o nome de cada objeto
-     * @author Eduardo Humberto
-     */
-    public function get_objects_by_selected_categories($categories,$term) {
-        $json = [];
-        if($categories != ''){
-            global $wpdb;
-            $wp_posts = $wpdb->prefix . "posts";
-            $term_relationships = $wpdb->prefix . "term_relationships";
-            $property_model = new PropertyModel;
-            $query = "
-                            SELECT p.* FROM $wp_posts p
-                            INNER JOIN $term_relationships t ON p.ID = t.object_id    
-                            WHERE t.term_taxonomy_id IN ({$categories})
-                            AND p.post_type like 'socialdb_object' and p.post_status like 'publish' and p.post_title LIKE '%{$term}%'
-                    ";
-            $result = $wpdb->get_results($query);
-            if ($result) {
-                foreach ($result as $object) {
-                    $json[] = array('value' => $object->ID, 'label' => $object->post_title);
-                }
-            }
-        }
-        return json_encode($json);
-    }
+    
     
     /**
      * function get_objects_by_selected_categories()
