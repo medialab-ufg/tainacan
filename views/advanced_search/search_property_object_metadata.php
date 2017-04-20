@@ -20,36 +20,6 @@
         <input type="hidden" name="categories" value="<?php echo (is_array($property['metas']['socialdb_property_object_category_id'])) ? implode(",",$property['metas']['socialdb_property_object_category_id']) : $property['metas']['socialdb_property_object_category_id'] ?>">
         <input type="hidden" name="properties_id" value="<?php echo (is_array($properties)) ? implode(',', $properties) : '' ?>">
         <?php
-        if (empty($property_data) && empty($property_term) && empty($property_object) && empty($property_compounds)):
-            //se existir propriedades
-            include_once(dirname(__FILE__) . '/../../helpers/view_helper.php');
-            include_once(dirname(__FILE__) . '/../../helpers/advanced_search/advanced_search_helper.php');
-            if (!isset($property['compound_id'])) {
-                include('js/search_property_object_metadata_js.php');
-            } else {
-                include('js/compounds_search_property_object_metadata_js.php');
-            }
-            ?>  
-            <div class="row col-md-12">
-                <label class="col-md-12 no-padding" for="advanced_search_title"><?php _e('Title or description', 'tainacan'); ?></label>
-                <div class="col-md-8 no-padding">
-                    <input type="text" 
-
-                           class="form-control" 
-                           name="advanced_search_title" 
-                           id="advanced_search_title_<?php echo $property['id'] ?>"
-                           placeholder="<?php _e('Type the item title or its description', 'tainacan'); ?>">
-                </div>
-            </div>
-            <input type="hidden" name="search_properties_autocomplete" id='search_properties_autocomplete' value="">
-            <input type="hidden" name="properties_terms_radio" id='search_properties_terms_radio' value="">
-            <input type="hidden" name="properties_terms_tree" id='search_properties_terms_tree' value="">
-            <input type="hidden" name="properties_terms_selectbox" id='search_properties_terms_selectbox' value="">
-            <input type="hidden" name="properties_terms_checkbox" id='search_properties_terms_checkbox' value="">
-            <input type="hidden" name="properties_terms_multipleselect" id='search_properties_terms_multipleselect' value="">
-            <input type="hidden" name="properties_terms_treecheckbox" id='search_properties_terms_treecheckbox' value="">
-        <?php
-        else:
             include_once(dirname(__FILE__) . '/../../helpers/view_helper.php');
             include_once(dirname(__FILE__) . '/../../helpers/advanced_search/advanced_search_helper.php');
             if (!isset($property['compound_id'])) {
@@ -58,6 +28,7 @@
                 include('js/compounds_search_property_object_metadata_js.php');
             }
             $advanced_search_helper = new AdvancedSearchHelper();
+            $objectHelper = new ObjectWidgetsHelper;
             $properties_terms_radio = [];
             $properties_terms_tree = [];
             $properties_terms_selectbox = [];
@@ -66,6 +37,22 @@
             $properties_terms_treecheckbox = [];
             $properties_autocomplete = [];
             ?>
+    <?php if ((empty($property_data) && empty($property_term) && empty($property_object) && empty($property_compounds)) || $has_title): 
+            ?>    
+            <div class="row col-md-12">
+                <label class="col-md-12 no-padding" for="advanced_search_title">
+                    <?php echo  $objectHelper->get_labels_search_obejcts($property['metas']['socialdb_property_object_category_id']); ?>
+                </label>
+                <div class="col-md-8 no-padding">
+                    <input type="text" 
+
+                           class="form-control" 
+                           name="advanced_search_title" 
+                           id="advanced_search_title_<?php echo $property['id'] ?>"
+                           placeholder="<?php _e('Type the 3 first letters to activate autocomplete', 'tainacan'); ?>">
+                </div>
+            </div>
+    <?php endif; ?>           
     <?php if (isset($property_data)): ?>
                         <?php foreach ($property_data as $property) {
                             $properties_autocomplete[] = $property['id']; ?>
@@ -319,8 +306,7 @@
             <input type="hidden" name="properties_terms_treecheckbox" id='search_properties_terms_treecheckbox' value="<?php echo implode(',', $properties_terms_treecheckbox); ?>">
     <?php if (isset($all_ids)): ?>
                 <input type="hidden" id="properties_id_avoid" name="properties_id" value="<?php echo $all_ids; ?>">
-    <?php endif; ?>
-<?php endif; ?>   
+    <?php endif; ?>  
         <input type="hidden" name="operation" value="search_items_property_object">        
         <div class="col-md-12 no-padding" style="margin-top: 15px;">
             <button type="button" onclick="clear_all_field('<?php echo $form ?>')" class="btn btn-lg btn-default pull-left"><?php _e('Clear search', 'tainacan') ?></button>

@@ -669,7 +669,9 @@ class ObjectWidgetsHelper extends ViewHelper {
             $properties = explode(',', $properties);
             foreach ($properties as $property_related) {
                 $property_related = $propertyModel->get_all_property($property_related, true);
-                if(isset($property_related['metas']['socialdb_property_data_widget'])): 
+                if($property_related['id'] == $this->terms_fixed['title']->term_id):    
+                    $has_title = true;
+                elseif(isset($property_related['metas']['socialdb_property_data_widget'])): 
                     $property_data[] = $property_related;
                 elseif(isset($property_related['metas']['socialdb_property_object_category_id'])): 
                     $property_object[] = $property_related;
@@ -689,6 +691,29 @@ class ObjectWidgetsHelper extends ViewHelper {
         include dirname(__FILE__).'/../../views/advanced_search/search_property_object_metadata.php';
     }
     
+    /**
+     * 
+     * @param type $categories
+     * @return type
+     */
+    public function get_labels_search_obejcts($categories) {
+        $title_labels = [];
+        $categories = (is_array($categories)) ? $categories : explode(',', $categories);
+        foreach ($categories as $value) {
+            $collection = $this->get_collection_by_category_root($value);
+            if ($collection && isset($collection[0])) {
+                $labels_collection = ($collection[0]->ID != '') ? get_post_meta($collection[0]->ID, 'socialdb_collection_fixed_properties_labels', true) : false;
+                $labels_collection = ($labels_collection) ? unserialize($labels_collection) : false;
+                if ($labels_collection && $labels_collection[$this->terms_fixed['title']->term_id]) {
+                    $title_labels[] = $labels_collection[$this->terms_fixed['title']->term_id];
+                } else {
+                    $title_labels[] =  $this->terms_fixed['title']->name;
+                }
+            }
+        }
+        return implode('/', $title_labels);
+    }
+
     /**
      * 
      * @param type $property

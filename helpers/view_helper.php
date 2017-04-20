@@ -396,6 +396,32 @@ class ViewHelper {
         }
     }
     
+    /**
+     * function get_collection_by_category_root($user_id)
+     * @param int a categoria raiz de uma colecao
+     * @return array(wp_post) a colecao de onde pertence a categoria root
+     * @ metodo responsavel em retornar as colecoes de um determinando usuario
+     * @author: Eduardo Humberto 
+     */
+    public function get_collection_by_category_root($category_root_id) {
+        global $wpdb;
+        $wp_posts = $wpdb->prefix . "posts";
+        $wp_postmeta = $wpdb->prefix . "postmeta";
+        $query = "
+                    SELECT p.* FROM $wp_posts p
+                    INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id    
+                    WHERE pm.meta_key LIKE 'socialdb_collection_object_type' and pm.meta_value like '$category_root_id'
+            ";
+        $result = $wpdb->get_results($query);
+
+
+        if ($result && is_array($result) && count($result) > 0) {
+            return $result;
+        } else {
+            return array();
+        }
+    }
+    
     public static function getCollectionColors($col_id) {
        return unserialize(get_post_meta($col_id,'socialdb_default_color_scheme', true) );
     }
@@ -521,13 +547,18 @@ class ViewHelper {
                        if(json.properties.length==0){
                             $('#properties_target').html('<center><?php _e('No properties found','tainacan') ?>!</center>');
                        }else{
+                            var is_checked_title = '';
+                            if($('#properties_to_search_in').val().split(',').indexOf(json.title.id.toString())>=0){
+                                is_checked_title = 'checked="checked"'
+                            }
+                            $('#properties_target').append('<input type="checkbox" '+is_checked_title+' value="'+json.title.id+'" onchange="setValuesTargetProperties()" class="target_values">&nbsp;'+json.title.labels.join('/')+'<br>');
                             $.each(json.properties,function(index,property){
                                 var is_checked = '';
-                                console.log($('#properties_to_search_in').val().split(',').indexOf(property.id),$('#properties_to_search_in').val().split(','),property.id);
+                                //console.log($('#properties_to_search_in').val().split(',').indexOf(property.id),$('#properties_to_search_in').val().split(','),property.id);
                                 if($('#properties_to_search_in').val().split(',').indexOf(property.id.toString())>=0){
                                     is_checked = 'checked="checked"'
                                 }
-                                $('#properties_target').append('<input type="checkbox" '+is_checked+' value="'+property.id+'" onchange="setValuesTargetProperties()" class="target_values">&nbsp;'+property.name+' ('+property.type+')<br>')
+                                $('#properties_target').append('<input type="checkbox" '+is_checked+' value="'+property.id+'" onchange="setValuesTargetProperties()" class="target_values">&nbsp;'+property.name+' ('+property.type+')<br>');
                             })
                        }
                    });

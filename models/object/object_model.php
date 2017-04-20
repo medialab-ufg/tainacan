@@ -1469,16 +1469,18 @@ class ObjectModel extends Model {
         $wp_posts = $wpdb->prefix . "posts";
         $term_relationships = $wpdb->prefix . "term_relationships";
         $property_model = new PropertyModel;
+        $data['term'] = trim($data['term']);
         $all_data = $property_model->get_all_property($data['property_id'], true); // pego todos os dados possiveis da propriedad
+        $categories = (is_array($all_data['metas']['socialdb_property_object_category_id'])) ? implode(',', $all_data['metas']['socialdb_property_object_category_id']) : $all_data['metas']['socialdb_property_object_category_id'];
         //$category_root_id = get_term_by('id', $all_data['metas']['socialdb_property_object_category_id'], 'socialdb_category_type');
-//        $query = "
-//                        SELECT p.* FROM $wp_posts p
-//                        INNER JOIN $term_relationships t ON p.ID = t.object_id    
-//                        WHERE t.term_taxonomy_id = {$category_root_id->term_taxonomy_id}
-//                        AND p.post_type like 'socialdb_object' and p.post_status like 'publish' and p.post_title LIKE '%{$data['term']}%'
-//                ";
-//        $result = $wpdb->get_results($query);
-        $result = $this->get_category_root_posts($all_data['metas']['socialdb_property_object_category_id']);
+        $query = "
+                        SELECT p.* FROM $wp_posts p
+                        INNER JOIN $term_relationships t ON p.ID = t.object_id    
+                        WHERE t.term_taxonomy_id IN ({$categories})
+                        AND p.post_type like 'socialdb_object' and p.post_status like 'publish' and p.post_title LIKE '%{$data['term']}%'
+                ";
+        $result = $wpdb->get_results($query);
+        //$result = $this->get_category_root_posts($all_data['metas']['socialdb_property_object_category_id']);
         if ($result) {
             foreach ($result as $object) {
                 if (strpos(strtolower($object->post_title), strtolower($data['term'])) !== false) {
