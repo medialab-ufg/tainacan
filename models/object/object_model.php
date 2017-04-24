@@ -494,9 +494,11 @@ class ObjectModel extends Model {
         $property_model = new PropertyModel;
         if ($data['properties_id'] !== '') {
             $properties_id = explode(',', $data['properties_id']);
-
+            $properties_object_id = explode(',', $data['properties_object_ids']);
             foreach ($properties_id as $property_id) {
-                if (!isset($data["socialdb_property_$property_id"])) {
+                if(in_array($property_id, $properties_object_id) && !isset($data["socialdb_property_$property_id"])){
+                    $data["socialdb_property_$property_id"] = [];
+                }else if (!isset($data["socialdb_property_$property_id"])) {
                     continue;
                 }
                 $dados = json_decode($property_model->edit_property(array('property_id' => $property_id)));
@@ -521,6 +523,9 @@ class ObjectModel extends Model {
                 }// se estiver inserindo propriedade de objeto e tiver valores relacionado 
                 elseif (is_array($data["socialdb_property_$property_id"]) && !empty(is_array($data["socialdb_property_$property_id"]))) {
                     delete_post_meta($object_id, "socialdb_property_$property_id");
+                    if (isset($dados->metas->socialdb_property_object_is_reverse) && ($dados->metas->socialdb_property_object_is_reverse === 'true')) {
+                        $this->remove_itens_property_reverse($object_id, $data["collection_id"], $dados->metas->socialdb_property_object_reverse);
+                    }
                     $this->set_common_field_values($object_id, "socialdb_property_$property_id", $data["socialdb_property_$property_id"], 'item');
                     foreach ($data["socialdb_property_$property_id"] as $value) {
                         if (empty(trim($value)))
@@ -2265,6 +2270,19 @@ class ObjectModel extends Model {
             }
         }
         return $result;
+    }
+    
+    /**
+     * 
+     * @param type $item_id
+     * @param type $collection_id
+     * @param type $property_id
+     */
+    public function remove_itens_property_reverse($item_id,$collection_id,$property_id){
+        $items = $this->get_category_root_posts(get_term_meta($property_id, 'socialdb_property_created_category', true));
+        foreach ($items as $item) {
+            delete_post_meta($item->ID, 'socialdb_property_'.$property_id, $item_id);
+        }
     }
 
 }

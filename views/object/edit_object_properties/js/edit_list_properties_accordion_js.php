@@ -146,17 +146,26 @@
                                 },
                                 minLength: 2,
                                 response: function( event, ui ) {
-                                        if(ui.content && ui.content.length>0 && $('.form_autocomplete_value_'+property_id+'_mask').val()!==''){
-                                           $.each(ui.content,function(index,value){
-                                               console.log( value.item_id , $('#object_id_edit').val())
-                                               if(($(event.target).val()==value.value || $(event.target).val().toLowerCase().trim()==value.value.toLowerCase().trim()) && value.item_id != $('#object_id_edit').val()){
-                                                    toastr.error($(event.target).val()+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
-                                                    $(event.target).val('');
-                                               }
-                                               $(".form_autocomplete_value_" + property_id).autocomplete('close');
-                                           }); 
-                                        }
-                                    },
+                                    var myself = false;
+                                    var contador = false;
+                                    if(ui.content && ui.content.length>0 && $('.form_autocomplete_value_'+property_id+'_mask').val()!==''){
+                                       $.each(ui.content,function(index,value){
+                                           console.log( value.item_id , $('#object_id_edit').val())
+                                           if(($(event.target).val()==value.value || $(event.target).val().toLowerCase().trim()==value.value.toLowerCase().trim()) && value.item_id != $('#object_id_edit').val()){
+                                               contador++;
+                                           }else if(($(event.target).val()==value.value || $(event.target).val().toLowerCase().trim()==value.value.toLowerCase().trim()) && value.item_id == $('#object_id_edit').val()){
+                                               myself = true;
+                                           }
+                                           $(".form_autocomplete_value_" + property_id).autocomplete('close');
+                                       }); 
+
+                                       if(contador>0 && myself === false){
+                                            toastr.error($(event.target).val()+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                                            $(event.target).val('');
+                                            $(".form_autocomplete_value_" + property_id).autocomplete('close');
+                                       }
+                                    }
+                                },
                                 select: function (event, ui) {
                                     $("#form_autocomplete_value_" + property_id).val('');
                                     if( $('.form_autocomplete_value_'+property_id+'_mask').val()!=='' && $(event.target).val().indexOf('key')){
