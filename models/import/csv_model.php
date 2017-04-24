@@ -155,7 +155,8 @@ class CsvModel extends Model {
                             if ($metadata['socialdb_entity'] == 'post_title'):
                                 if (mb_detect_encoding($field_value, 'auto') == 'UTF-8')
                                     $field_value = iconv('ISO-8859-1', 'UTF-8', $field_value);
-                                $this->update_title($object_id, utf8_decode($field_value));
+                                //$this->update_title($object_id, utf8_decode($field_value));
+                                update_post_title($object_id, $field_value);
                                 $this->set_common_field_values($object_id, 'title', utf8_decode($field_value));
                             elseif ($metadata['socialdb_entity'] == 'post_content'):
                                 $content .= $field_value . ",";
@@ -243,7 +244,7 @@ class CsvModel extends Model {
                                         continue;
                                     }
                                 } else {
-                                    $fields_value = utf8_decode($field_value);
+                                    $fields_value = utf8_encode($field_value);
                                 }
                                 if (!empty($fields_value)):
 //if (strpos($fields_value, '||') !== false) {
@@ -267,7 +268,7 @@ class CsvModel extends Model {
                             elseif (strpos($metadata['socialdb_entity'], "objectproperty_") !== false):
                                 $trans = array("objectproperty_" => "");
                                 $id = strtr($metadata['socialdb_entity'], $trans);
-                                add_post_meta($object_id, 'socialdb_property_' . $id . '', utf8_decode($field_value));
+                                add_post_meta($object_id, 'socialdb_property_' . $id . '', $this->insertPropertyObjectItem($id,$field_value));
                             elseif (strpos($metadata['socialdb_entity'], "dataproperty_") !== false):
                                 $trans = array("dataproperty_" => "");
                                 $id = strtr($metadata['socialdb_entity'], $trans);
@@ -310,7 +311,7 @@ class CsvModel extends Model {
             return false;
         }
     }
-
+    
     ######################### begin: INSERINDO VALORES SEM MAPEAMENTO ############# 
     /**
      * 
@@ -357,9 +358,10 @@ class CsvModel extends Model {
             foreach ($header as $index => $column) {
                 if (empty($column)) //se o titulo ja foi mapeado
                     continue;
-
-                $new_property = wp_insert_term((string) $column, 'socialdb_property_type', array('parent' => $this->get_property_type_id('socialdb_property_data'),
-                    'slug' => $this->generate_slug((string) $column, 0)));
+                 
+                $new_property = socialdb_insert_term((string) utf8_encode($column), 'socialdb_property_type',  $this->get_property_type_id('socialdb_property_data'), $this->generate_slug((string) $column, 0));
+//                $new_property = wp_insert_term((string) $column, 'socialdb_property_type', array('parent' => $this->get_property_type_id('socialdb_property_data'),
+//                    'slug' => $this->generate_slug((string) $column, 0)));
                 update_term_meta($new_property['term_id'], 'socialdb_property_required', 'false');
                 update_term_meta($new_property['term_id'], 'socialdb_property_data_widget', 'text');
                 update_term_meta($new_property['term_id'], 'socialdb_property_created_category', $category_root_id);
@@ -379,7 +381,7 @@ class CsvModel extends Model {
         $object_id = socialdb_insert_object_csv([$title]);
         $this->set_common_field_values($object_id, 'title', $title);
         foreach ($properties as $key => $property) {
-            add_post_meta($object_id, 'socialdb_property_' . $property, $values[$key]);
+            add_post_meta($object_id, 'socialdb_property_' . $property, utf8_encode($values[$key]));
             $this->set_common_field_values($object_id, "socialdb_property_$property", $values[$key]);
         }
         $categories[] = $this->get_category_root_of($collection_id);
@@ -684,7 +686,7 @@ class CsvModel extends Model {
                         $arr_metas = array();
                         foreach ($csv_data as $key => $value) {
                             if (!in_array($value, $standart_metas) && trim($value) != '') {
-                                $property_id = $this->add_property_data(utf8_encode($value), $category_root_id);
+                                $property_id = $this->add_property_data($value, $category_root_id);
                                 add_term_meta($category_root_id, 'socialdb_category_property_id', $property_id);
                                 $arr_metas[] = array($key, $value, $property_id);
                                 $mapping[] = ['socialdb_entity' => 'dataproperty_' . $property_id, 'value' => $value];

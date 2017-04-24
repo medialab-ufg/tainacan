@@ -2590,6 +2590,22 @@ function update_post_content($object_id, $content) {
     $results = $wpdb->get_results($query);
 }
 
+
+/**
+ *
+ * Funcao que atualiza o content de um post
+ *
+ * @param string $object_id O id do objeto.
+ * @param string $content O conteudo a ser atualizado.
+ * @return void.
+ */
+function update_post_title($object_id, $title) {
+    global $wpdb;
+    $wp_posts = $wpdb->prefix . "posts";
+    $query = "UPDATE $wp_posts SET post_title = '" . $title . "' WHERE ID = $object_id";
+    $results = $wpdb->get_results($query);
+}
+
 /* * *****************************************************************************
  *               EVENTS                                                         *
  * ***************************************************************************** */
