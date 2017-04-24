@@ -18,7 +18,27 @@ include_once('views/widgets/widget_site_map.php');
 
 show_admin_bar(false);
 
-print_r(get_page_template());
+#### Desativar Widgets Padrões do Wordpress ####
+/*
+ * @author Weryques
+ * */
+function unregister_default_wp_widgets() {
+    unregister_widget('WP_Widget_Pages');
+    unregister_widget('WP_Widget_Calendar');
+    unregister_widget('WP_Widget_Archives');
+    unregister_widget('WP_Widget_Links');
+    unregister_widget('WP_Widget_Meta');
+    unregister_widget('WP_Widget_Search');
+    unregister_widget('WP_Widget_Text');
+    unregister_widget('WP_Widget_Categories');
+    unregister_widget('WP_Widget_Recent_Posts');
+    unregister_widget('WP_Widget_Recent_Comments');
+    unregister_widget('WP_Widget_RSS');
+    unregister_widget('WP_Widget_Tag_Cloud');
+    unregister_widget('WP_Nav_Menu_Widget');
+}
+add_action('widgets_init', 'unregister_default_wp_widgets', 1);
+
 #### WIDGETS AREAS #####
 /*
  * Função que carrega as áreas para widgets padrões e ativa o menu de widgets em wp-admin.
@@ -54,6 +74,54 @@ function tainacan_widgets_init(){
     ));
 }
 add_action('widgets_init', 'tainacan_widgets_init');
+
+#### LOAD DEFAULT WIDGETS ###
+/*
+ * Função que carrega os widgets padrões
+ * @author Weryques
+ * */
+function activate_widgets(){
+    $active_widgets = get_option('sidebars_widgets');
+
+    $sidebars = array('a' => 'footer-a', 'b' => 'footer-b', 'c' => 'footer-c');
+
+    if(!empty($active_widgets[$sidebars['a']]) or !empty($active_widgets[$sidebars['b']]) or !empty($active_widgets[$sidebars['c']])){
+        return;
+    }
+
+    $counter = 1;
+
+    $site_map_content = get_option('widget_site_map');
+    $social_media_content = get_option('widget_social_media');
+
+    $site_map_content[$counter] = array(
+        'title' => __('Mapa do site'), 'handbook' => '',
+        'option1_title' => '', 'option1_url' => '', 'option1_new_page' => '',
+        'option2_title' => '', 'option2_url' => '', 'option2_new_page' => '',
+        'option3_title' => '', 'option3_url' => '', 'option3_new_page' => '',
+        'option4_title' => '', 'option4_url' => '', 'option4_new_page' => '',
+    );
+    $social_media_content[$counter] = array(
+        'title' => __('Redes sociais'), 'facebook_url' => '',
+        'youtube_url' => '', 'twitter_url' => '',
+        'googleplus_url' => '', 'github_url' => ''
+    );
+    $contact_content[$counter] = array(
+        'title' => __('Contatos'), 'institution' => '', 'cnpj' => '',
+        'street' => '', 'address_number' => '', 'complement' => '', 'cep' => '',
+        'city' => '', 'state' => '', 'country' => '', 'email' => '', 'phone' => '',
+    );
+
+    $active_widgets[$sidebars['a']][] = 'site_map-'. $counter;
+    $active_widgets[$sidebars['b']][] = 'contact-' . $counter;
+    $active_widgets[$sidebars['c']][] = 'social_media-' . $counter;
+
+    update_option('sidebars_widgets', $active_widgets);
+    update_option('widget_site_map', $site_map_content);
+    update_option('widget_contact', $contact_content);
+    update_option('widget_social_media', $social_media_content);
+}
+add_action('widgets_init', 'activate_widgets');
 
 /**
  * Criando tabela taxonomymeta

@@ -74,7 +74,7 @@ class site_map extends WP_Widget {
             }
             echo '</div>
                     <div style="padding-left: 0px;" class="col-md-6">
-                        <li><a class="" href="'. $home .'">'. __('Coleções e busca avançada').'</a></li>
+                        <li><a class="" onclick="redirectAdvancedSearch(false)" href="javascript:void(0)">'. __('Coleções e busca avançada').'</a></li>
                         <li><a target="_blank" href="'. $handbook .'">'. __('Manual') .'</a></li>
                     ';
             if ($option3_title && $option3_url){
