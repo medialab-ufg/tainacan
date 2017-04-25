@@ -216,6 +216,7 @@ class CollectionController extends Controller {
             case 'list_items_search_autocomplete':
                 $property_model = new PropertyModel;
                 $property = get_term_by('id', $data['property_id'], 'socialdb_property_type');
+                $data['term'] = trim($data['term']);
                 if ($property) {
                     if (in_array($property->slug, $property_model->fixed_slugs)) {
                         if ($property->slug === 'socialdb_property_fixed_title'):
