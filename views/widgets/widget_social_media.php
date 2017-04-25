@@ -21,7 +21,7 @@ class social_media extends WP_Widget {
         $facebook_url = empty($instance['facebook_url']) ? __('https://www.facebook.com/tainacan.l3p', 'wpb_widget_domain') : $instance['facebook_url'];
         $youtube_url = empty($instance['youtube_url']) ? __('https://www.youtube.com/channel/UC_G6mfKrktesaBufjA9GU8w', 'wpb_widget_domain') : $instance['youtube_url'];
         $twitter_url = empty($instance['twitter_url']) ? __('https://twitter.com/Tainacan_L3P', 'wpb_widget_domain') : $instance['twitter_url'];
-        $googleplus_url = empty($instance['googleplus_url']) ? __('http://gmail.com/', 'wpb_widget_domain') : $instance['googleplus_url'];
+        $googleplus_url = empty($instance['googleplus_url']) ? __('https://plus.google.com/108603352387487216716', 'wpb_widget_domain') : $instance['googleplus_url'];
         $github_url = empty($instance['github_url']) ? __('https://github.com/medialab-ufg/tainacan', 'wpb_widget_domain') : $instance['github_url'];
 
         // before and after widget arguments are defined by themes
@@ -49,7 +49,7 @@ class social_media extends WP_Widget {
         $facebook_url = empty($instance['facebook_url']) ? __('https://www.facebook.com/tainacan.l3p', 'wpb_widget_domain') : $instance['facebook_url'];
         $youtube_url = empty($instance['youtube_url']) ? __('https://www.youtube.com/channel/UC_G6mfKrktesaBufjA9GU8w', 'wpb_widget_domain') : $instance['youtube_url'];
         $twitter_url = empty($instance['twitter_url']) ? __('https://twitter.com/Tainacan_L3P', 'wpb_widget_domain') : $instance['twitter_url'];
-        $googleplus_url = empty($instance['googleplus_url']) ? __('http://gmail.com/', 'wpb_widget_domain') : $instance['googleplus_url'];
+        $googleplus_url = empty($instance['googleplus_url']) ? __('https://plus.google.com/108603352387487216716', 'wpb_widget_domain') : $instance['googleplus_url'];
         $github_url = empty($instance['github_url']) ? __('https://github.com/medialab-ufg/tainacan', 'wpb_widget_domain') : $instance['github_url'];
 
         // Widget admin form
