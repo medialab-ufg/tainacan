@@ -572,7 +572,7 @@
             $.ajax({
                 url: $('#src').val() + '/controllers/object/object_controller.php',
                 type: 'POST',
-                data: { operation: 'list_properties_categories_accordeon',properties_to_avoid:$('#properties_id').val(),categories: id, object_id:$('#object_id_add').val()}
+                data: { operation: 'list_properties_categories_accordeon',properties_to_avoid:$('#properties_id').val(),categories: id, object_id:$('#object_id_add').val(),not_block:'true'}
             }).done(function (result) {
                 console.log('append_properties_categories_');
                 hide_modal_main();

@@ -202,7 +202,7 @@ class ObjectWidgetsHelper extends ViewHelper {
     public function widget_property_data($property,$i,$references,$value = false) {
         $references['properties_autocomplete'][] = $property['id'];
         if($references['is_view_mode'] 
-                || (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true')){
+                || (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true' && !isset($references['operation']))){
             if(isset($value) && !empty($value)): ?>
                 <p><?php  echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $value . "'" . ',' . $property['id'] . ')">' . $value . '</a>';  ?></p>
             <?php else: ?>
@@ -288,7 +288,7 @@ class ObjectWidgetsHelper extends ViewHelper {
      * @param int $i O indice do for da cardinalidade
      */
     public function widget_property_object($property,$i,$references,$value = false) {
-        if($references['is_view_mode'] || (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true')){
+        if($references['is_view_mode'] || (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true' && !isset($references['operation']))){
             if(isset($value)): ?>
              <div id="labels_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">
                 <?php if (!empty($property['metas']['objects']) && !empty($value)) { ?>
@@ -330,7 +330,7 @@ class ObjectWidgetsHelper extends ViewHelper {
             id='actual_value_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>'
             value="<?php if ($value) echo $value; ?>">
         <?php
-        if($references['is_view_mode'] || (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true')){
+        if($references['is_view_mode'] || (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true' && !isset($references['operation']))){
             ?>
             <div id='label_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>'>
                  <?php $this->get_category_value($references['object_id'],$property['id'],$property['metas']['socialdb_property_term_root']); ?>

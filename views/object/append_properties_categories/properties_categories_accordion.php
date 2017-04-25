@@ -34,6 +34,9 @@ if($is_view_mode){
     $references['is_view_mode'] = true;
     $references['object_id'] = $object_id;
 }
+if(isset($not_block)){
+     $references['operation'] = true;
+}
 
 $properties_concatenated = [];
 if (isset($property_object)):
@@ -174,7 +177,7 @@ foreach($original_properties as $property):
                 ?>
             </h2>
             <div>
-                <?php if($is_view_mode  || (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true')): ?>
+                <?php if($is_view_mode  || (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true' && !isset($not_block))): ?>
                      <div id="labels_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">
                         <?php if (!empty($property['metas']['objects']) && !empty($property['metas']['value'])) { ?>
                             <?php foreach ($property['metas']['objects'] as $object) { // percoro todos os objetos  ?>
@@ -246,7 +249,7 @@ foreach($original_properties as $property):
                 }
                 ?>
             </h2>
-            <?php if($is_view_mode  || (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true')): ?>
+            <?php if($is_view_mode  || (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true' && !isset($not_block))): ?>
                 <div>
                     <?php if(isset($property['metas']['value'][0])): ?>
                         <p><?php  echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $property['metas']['value'][0] . "'" . ',' . $property['id'] . ')">' . $property['metas']['value'][0] . '</a>';  ?></p>
@@ -391,7 +394,7 @@ foreach($original_properties as $property):
             </h2>    
             <div class="form-group">
                <?php
-                if($is_view_mode  || (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true')):
+                if($is_view_mode  || (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true' && !isset($not_block))):
                     switch ($property['type']){
                         case 'radio';
                             $properties_terms_radio[] = $property['id'];

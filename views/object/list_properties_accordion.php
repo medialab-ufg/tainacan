@@ -26,6 +26,7 @@ $references = [
     'properties_terms_multipleselect' => &$properties_terms_multipleselect,
     'properties_terms_treecheckbox' => &$properties_terms_treecheckbox   
 ];
+$references['operation'] = 'add';
 if (isset($property_object)):
      foreach ($property_object as $property) { 
         $ids[] = $property['id']; ?>
@@ -43,7 +44,7 @@ if (isset($property_object)):
                     $object_properties_widgets_helper->generateValidationIcons($property);
                     ?>
             </h2>
-            <?php if((isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true')): ?>
+            <?php if((isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true_')): ?>
                 <div>
                     <?php if(isset($property['metas']['socialdb_property_default_value']) && $property['metas']['socialdb_property_default_value']!=''): $property['metas']['value'][] = $property['metas']['socialdb_property_default_value']; ?>
                         <p><?php  echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $property['metas']['socialdb_property_default_value']. "'" . ',' . $property['id'] . ')">' .get_post($property['metas']['socialdb_property_default_value'])->post_title . '</a>';  ?></p>
@@ -83,7 +84,7 @@ if (isset($property_object)):
             </h2>
             <?php $cardinality = $view_helper->render_cardinality_property($property);   ?>
             <div>
-                <?php if((isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true')): ?>
+                <?php if((isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true_')): ?>
                     <div>
                         <?php if(isset($property['metas']['socialdb_property_default_value']) && $property['metas']['socialdb_property_default_value']!=''): ?>
                             <p><?php  echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $property['metas']['socialdb_property_default_value']. "'" . ',' . $property['id'] . ')">' .$property['metas']['socialdb_property_default_value'] . '</a>';  ?></p>
@@ -204,7 +205,7 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
                  endif; 
                  ?>
             </h2>   
-            <?php if((isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true')): ?>
+            <?php if((isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true_')): ?>
                     <div>
                         <?php if(isset($property['metas']['socialdb_property_default_value']) && $property['metas']['socialdb_property_default_value']!=''): ?>
                             <p><?php  echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $property['metas']['socialdb_property_default_value']. "'" . ',' . $property['id'] . ')">' .get_term_by('id', $property['metas']['socialdb_property_default_value'], 'socialdb_category_type')->name . '</a>';  ?></p>
