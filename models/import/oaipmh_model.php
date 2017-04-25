@@ -159,6 +159,15 @@ class OAIPMHModel extends Model {
         $root_category = $this->get_category_root_of($data['collection_id']);
         //$all_properties_id = get_term_meta($root_category, 'socialdb_category_property_id');
         $all_properties_id = $this->get_parent_properties($root_category, [],$root_category); 
+        //busco as propriedades sem domain
+        $properties_with_no_domain = $this->list_properties_by_collection($data['collection_id']);
+        if($properties_with_no_domain&&is_array($properties_with_no_domain)){
+            foreach ($properties_with_no_domain as $property_with_no_domain) {
+                if(!in_array($property_with_no_domain->term_id, $properties)){
+                    $all_properties_id[] = $property_with_no_domain->term_id;
+                }
+            }
+        }
         if ($all_properties_id) {
             foreach ($all_properties_id as $property_id) {
                 $property = get_term_by("id", $property_id, "socialdb_property_type");
