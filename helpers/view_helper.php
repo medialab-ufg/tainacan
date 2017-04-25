@@ -57,19 +57,21 @@ class ViewHelper {
     }
 
     public function renderRepositoryLogo($_logo_id, $fallback_title) {
-        $_max_img_width = "140px";
+        $_max_img_width = "100%";
+        $_max_img_height = "100%";
+
         if( isset($_logo_id) && get_the_post_thumbnail($_logo_id, 'thumbnail')) {
             $extraClass = "repository-logo";
 
             if (get_the_post_thumbnail($_logo_id, 'thumbnail')) {
               $_img_url = wp_get_attachment_url(get_post_thumbnail_id($_logo_id));
-              $ret = '<img src="' . $_img_url . '" style="max-width: '. $_max_img_width .'" />';
+              $ret = '<img src="' . $_img_url . '" style="max-width: '. $_max_img_width .'; max-height: '. $_max_img_height .';" />';
             } else {
               $ret = empty($fallback_title) ? __('Tainacan', 'tainacan') : $fallback_title;
             }
         } else {
             $extraClass = "logo-tainacan";
-            $ret = '<img src="'. get_template_directory_uri() . '/libraries/images/Tainacan_pb.svg'.'" width="'. $_max_img_width .'"/>';
+            $ret = '<img src="'. get_template_directory_uri() . '/libraries/images/Tainacan_pb.svg'.'" style="max-width: '. $_max_img_width .'; max-height: '. $_max_img_height .';"/>';
         }
 
       return "<a class='col-md-3 navbar-brand $extraClass' href='" . site_url() . "'>" . $ret . "</a>";
