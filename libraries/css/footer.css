@@ -44,8 +44,8 @@ footer li{
 }
 
 .backicon{
-    background-color: white;
-    border-radius: 17px;
+    /*background-color: white;*/
+    /*border-radius: 17px;*/
     width: 30px;
     height: 30px;
     margin-top: 5px;
@@ -54,7 +54,6 @@ footer li{
 }
 
 #footer{
-    /*min-height:200px*/;
     background-color: #939598;
     width: 100%;
     padding-top: 26px;

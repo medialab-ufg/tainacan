@@ -33,11 +33,11 @@ class social_media extends WP_Widget {
         echo '<div>';
 
         // This is where you run the code and display the output
-        echo '<a target="_blank" class="smedialink" href="'. $facebook_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/004-facebook-logo-button.png" alt="Facebook" /> Facebook</br></a>';
-        echo '<a target="_blank" class="smedialink" href="'. $youtube_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/005-play.png" alt="Youtube" /> Youtube</br></a>';
-        echo '<a target="_blank" class="smedialink" href="'. $twitter_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/003-twitter-logo-button.png" alt="Twitter" /> Twitter</br></a>';
-        echo '<a target="_blank" class="smedialink" href="'. $googleplus_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/002-google-plus-logo-button.png" alt="Google Plus" /> Google Plus</br></a>';
-        echo '<a target="_blank" class="smedialink" href="'. $github_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/001-github-logo.png" alt="Github"/> Github</a>';
+        echo '<a target="_blank" class="smedialink" href="'. $facebook_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/face.png" alt="Facebook" /> Facebook</br></a>';
+        echo '<a target="_blank" class="smedialink" href="'. $youtube_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/yt.png" alt="Youtube" /> Youtube</br></a>';
+        echo '<a target="_blank" class="smedialink" href="'. $twitter_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/twit.png" alt="Twitter" /> Twitter</br></a>';
+        echo '<a target="_blank" class="smedialink" href="'. $googleplus_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/gplus.png" alt="Google Plus" /> Google Plus</br></a>';
+        echo '<a target="_blank" class="smedialink" href="'. $github_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/ghub.png" alt="Github"/> Github</a>';
 
         echo '</div>';
         echo $args['after_widget'];
