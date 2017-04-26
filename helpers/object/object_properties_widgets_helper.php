@@ -294,7 +294,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                 <?php if (!empty($property['metas']['objects']) && !empty($value)) { ?>
                     <?php foreach ($property['metas']['objects'] as $object) { // percoro todos os objetos  ?>
                         <?php
-                        if (isset($value) && !empty($value) && ((is_array($value) && in_array($object->ID, $value) ) || ($object->ID == $value) )): // verifico se ele esta na lista de objetos da colecao
+                        if (isset($value) && !empty($value) && $object->post_status == 'publish' && ((is_array($value) && in_array($object->ID, $value) ) || ($object->ID == $value) )): // verifico se ele esta na lista de objetos da colecao
                             echo '<b><a  href="' . get_the_permalink($property['metas']['collection_data'][0]->ID) . '?item=' . $object->post_name . '" >' . $object->post_title . '</a></b><br>';
                         endif;
                         ?>
@@ -724,6 +724,7 @@ class ObjectWidgetsHelper extends ViewHelper {
         ?>
         <div class="metadata-related">
             <h6><b><?php _e('Related items', 'tainacan') ?></b></h6>
+            <?php $this->insert_button_add_other_collection($property, $object_id, $collection_id) ?>
             <span id="no_results_property_<?php echo $property['id']; ?>">
                  <?php if (!isset($property['metas']['value']) || empty($property['metas']['value']) || !is_array($property['metas']['value'])): // verifico se ele esta na lista de objetos da colecao   ?>    
                     <input type="text" 
@@ -763,7 +764,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                    value="<?php echo $this->render_cardinality_property($property); ?>"> 
             <button class="btn  btn-lg btn-primary btn-primary pull-right"
                     type="button"
-                    onclick="$('#metadata-search-<?php echo $property['id']; ?>').show();$('#metadata-result-<?php echo $property['id']; ?>').hide();"
+                    onclick="$('#metadata-search-<?php echo $property['id']; ?>').show();$('#metadata-result-<?php echo $property['id']; ?>').hide();$(this).hide()"
                     ><?php _e('Add', 'tainacan') ?></button>
         </div>
         <div class="metadata-search"
@@ -793,6 +794,7 @@ class ObjectWidgetsHelper extends ViewHelper {
         ?>
         <div class="metadata-related">
             <h6><b><?php _e('Related items', 'tainacan') ?></b></h6>
+            <?php $this->insert_button_add_other_collection($property, $object_id, $collection_id) ?>
             <span id="no_results_property_<?php echo $compound_id; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>">
                  <?php if (!isset($property['metas']['value']) || empty($property['metas']['value']) || !is_array($property['metas']['value'])): // verifico se ele esta na lista de objetos da colecao   ?>    
                     <input type="text" 
@@ -846,6 +848,47 @@ class ObjectWidgetsHelper extends ViewHelper {
              id="metadata-result-<?php echo $compound_id; ?>-<?php echo $property['id']; ?>-<?php echo $i; ?>" >
         </div>   
         <?php    
+    }
+    
+    
+    public function insert_button_add_other_collection($property,$object_id,$collection_id) {
+        // botao que leva a colecao relacionada
+            if (isset($property['metas']['collection_data'][0]->post_title)):  ?>
+                <a style="cursor: pointer;color: white;"
+                   id="add_item_popover_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"
+                   class="btn btn-primary btn-xs popover_item" 
+                    >
+                       <span class="glyphicon glyphicon-plus"></span>
+                       <?php _e('Add new', 'tainacan'); ?>
+                       <?php echo ' ' . $property['metas']['collection_data'][0]->post_title; ?>
+                </a>
+                <script>
+                    $('#add_item_popover_<?php echo $property['id']; ?>_<?php echo $object_id; ?>').popover({ 
+                       html : true,
+                       placement: 'right',
+                       title: '<?php echo _e('Add item in the collection','tainacan').' '.$property['metas']['collection_data'][0]->post_title; ?>',
+                       content: function() {
+                         return $("#popover_content_<?php echo $property['id']; ?>_<?php echo $object_id; ?>").html();
+                       }
+                    });
+                </script>
+                <div id="popover_content_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"   class="hide ">
+                    <form class="form-inline"  style="font-size: 12px;width: 300px;">
+                        <div class="form-group">
+                          <input type="text" 
+                                 style="margin-bottom: 13px;"
+                                 placeholder="<?php _e('Type the title','tainacan') ?>"
+                                 class="form-control" 
+                                 id="title_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">
+                        </div>
+                        <button type="button" 
+                                onclick="add_new_item_by_title('<?php echo $property['metas']['collection_data'][0]->ID; ?>',$('#title_<?php echo $property['id']; ?>_<?php echo $object_id; ?>').val(),'#add_item_popover_<?php echo $property['id']; ?>_<?php echo $object_id; ?>',<?php echo $property['id']; ?>,<?php echo $object_id; ?>)"
+                                class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span></button>
+                    </form>
+                </div> 
+                <br><br>
+        <?php 
+            endif; 
     }
     
     /**

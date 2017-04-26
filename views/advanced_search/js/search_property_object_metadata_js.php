@@ -51,7 +51,22 @@
             select: function (event, ui) {
                 event.preventDefault();
                 $("#advanced_search_title_<?php echo $property['id'] ?>").val('');
-                $("#advanced_search_title_<?php echo $property['id'] ?>").val(ui.item.label);
+                //$("#advanced_search_title_<?php echo $property['id'] ?>").val(ui.item.label);
+                if($('#inserted_property_object_<?php echo $property['id'] ?>_'+ui.item.value).length==0){
+                    var object_id = ($('#object_id_add').length > 0) ? $('#object_id_add').val() : $('#object_id_edit').val();
+                    if($('#cardinality_<?php echo $property['id'] ?>_'+object_id).val()=='1'){
+                        $('#results_property_<?php echo $property['id']; ?> ul').html('');
+                        $('select[name="socialdb_property_<?php echo $property['id']; ?>[]"]').html('');
+                    }
+                    $('#results_property_<?php echo $property['id']; ?> ul')
+                            .append('<li id="inserted_property_object_<?php echo $property['id'] ?>_'+ui.item.value+'" item="'+ui.item.value+'" class="selected-items-property-object property-<?php echo $property['id']; ?>">'+ui.item.label
+                            +'<span  onclick="remove_item_objet(this)" style="cursor:pointer;" class="pull-right glyphicon glyphicon-trash"></span></li>');
+                    $('select[name="socialdb_property_'+<?php echo $property['id']; ?>+'[]"]').append('<option value="'+ui.item.value+'" selected="selected">'+ui.item.value+'</option>');
+                    //validacao do campo
+                    $('#core_validation_'+<?php echo $property['id']; ?>).val('true');
+                    set_field_valid(<?php echo $property['id']; ?>,'core_validation_'+<?php echo $property['id']; ?>);
+                    $('#no_results_property_<?php echo $property['id']; ?>').hide()
+                }
             }
         });
         
@@ -59,7 +74,7 @@
     });
     
     function clear_all_field(form){
-        $(form+' input').val('');
+        $(form+' input[type=text]').val('');
     }
     
     function autocomplete_object_property_add(search_properties_autocomplete) {

@@ -60,7 +60,7 @@ if (isset($property_object)):
                             if(is_array($property['metas']['value'])) {
                                 foreach ( $property['metas']['value'] as $val_id) :
                                     $ob = get_post($val_id);
-                                    if($ob) {
+                                    if($ob && $ob->post_status == 'publish') {
                                        // echo '<b><a href="'. get_the_permalink($property['metas']['collection_data'][0]->ID) . '?item=' . $ob->post_name . '" >'. $ob->post_title . '</a></b><br>';
                                         echo '<b>'. $ob->post_title . '</b> <br >';
                                     }

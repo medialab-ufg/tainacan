@@ -57,7 +57,7 @@ endif;
     $(function(){
         //verificando se dentro os ja inseridos como relacionamento estao dentro do resultado da busca
         $.each($('#results_property_<?php echo $property_id; ?> ul li'),function(index,value){
-            $('#core_validation_'+property_id).val('true');
+            $('#core_validation_<?php echo $property_id; ?>').val('true');
             set_field_valid(property_id,'core_validation_'+property_id);
             //se ja existir retiro o botao de adiconar do lado esquerdo
             if($('#line_property_object_<?php echo $property_id ?>_'+$(value).attr('item')).length>0){
