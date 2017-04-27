@@ -93,6 +93,7 @@ function activate_widgets(){
 
     $site_map_content = get_option('widget_site_map');
     $social_media_content = get_option('widget_social_media');
+    $contact_content = get_option('widget_contact');
 
     $site_map_content[$counter] = array(
         'title' => __('Mapa do site'), 'handbook' => '',
