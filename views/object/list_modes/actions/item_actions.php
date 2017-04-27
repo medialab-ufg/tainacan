@@ -81,7 +81,13 @@ $is_repo_admin = current_user_can('administrator');
                 </li>
             <?php endif; ?>
 
-            <?php if ($is_moderator || get_post($curr_id)->post_author == get_current_user_id()): ?>
+            <?php
+            if(has_filter('tainacan_show_restore_options'))
+            {
+                $show = apply_filters('tainacan_show_restore_options', $collection_id);
+            }else $show = true;
+
+            if (($is_moderator || get_post($curr_id)->post_author == get_current_user_id()) && $show): ?>
                 <li>
                     <?php if( has_filter('show_edit_default') && apply_filters('show_edit_default', $collection_id) ) { ?>
                         <a onclick="edit_object('<?php echo $curr_id; ?>')"> <?php _t('Edit item',1); ?> </a>
@@ -133,7 +139,7 @@ $is_repo_admin = current_user_can('administrator');
                 <li>
                     <a class="ac-exclude-item"
                        onclick="delete_object('<?php echo $itemDelete['title']; ?>','<?php echo $itemDelete['text']; ?>','<?php echo $itemDelete['id']; ?>','<?php echo $itemDelete['time']; ?>')">
-                        <?php _t('Exclude item',1); ?>
+                        <?php _t('Exclude item',1);?>
                     </a>
                 </li>
             <?php endif; ?>

@@ -94,7 +94,15 @@ require_once(dirname(__FILE__).'../../../models/ranking/ranking_model.php');
         $logData = ['collection_id' => $data['socialdb_event_collection_id'],
           'item_id' => $data['socialdb_event_object_item_id'],
           'user_id' => $data['socialdb_event_user_id'], 'event_type' => 'user_items', 'event' => 'delete' ];
-        Log::addLog($logData);
+          
+          if(has_filter('tainacan_restore_descarted_item'))
+          {
+              apply_filters('tainacan_restore_descarted_item', $logData['item_id']);
+          }
+        
+          Log::addLog($logData);
+
+          
         return $event_object_delete_model->create_event($data);
       case 'socialdb_event_object_delete';
         $event_object_delete_model = new EventObjectDeleteModel();

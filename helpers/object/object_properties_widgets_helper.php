@@ -942,7 +942,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                             append_category_properties('<?php echo $term->term_id ?>',0,'<?php echo $property_id ?>');
                         }, 2000);
                     </script>
-                    <?php
+                    <?php   
                 }
             }
         }
