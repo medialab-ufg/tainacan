@@ -574,6 +574,8 @@ class ObjectWidgetsHelper extends ViewHelper {
                             <?php foreach ($properties_compounded as $property_compounded):
                                 $coumpounds_id[] = $property_compounded['id'];
                                 $value = $this->get_value($object_id, $property['id'], $property_compounded['id'], $i, $position);
+                                if(isset($property_compounded['metas']['socialdb_property_object_category_id']))
+                                                    $value = $property_compounded['metas']['value'];
                                 ?>
                                 <input type="hidden" 
                                         class="form_autocomplete_value_<?php echo $property_compounded['id']; ?>_mask" 
@@ -590,7 +592,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                                     <p style="color: black;"><?php echo $property_compounded['name']; ?>
                                         <?php
                                             if ((!$property['metas']['socialdb_property_required'] || $property['metas']['socialdb_property_required'] == 'false') && $property_compounded['metas']['socialdb_property_required']&&$property_compounded['metas']['socialdb_property_required'] == 'true') {
-                                         ?>
+                                                ?>
                                             <a id='required_field_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>' class="pull-right" 
                                                  style="margin-right: 15px;color:red;" >
                                                       <span class="glyphicon glyphicon-remove"  title="<?php echo __('This metadata is required!','tainacan')?>" 
@@ -806,7 +808,9 @@ class ObjectWidgetsHelper extends ViewHelper {
             <span id="results_property_<?php echo $compound_id; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>">
                 <ul>
                     <?php if (isset($property['metas']['value']) && !empty($property['metas']['value']) && is_array($property['metas']['value'])): // verifico se ele esta na lista de objetos da colecao   ?>    
-                        <?php foreach ($property['metas']['value'] as $id): ?>
+                        <?php  
+                        $property['metas']['value'] = array_unique($property['metas']['value']);
+                        foreach ($property['metas']['value'] as $id): ?>
                              <li id="inserted_property_object_<?php echo $compound_id ?>_<?php echo $property['id'] ?>_<?php echo $i ?>_<?php echo $id; ?>" 
                                  item="<?php echo $id; ?>" class="selected-items-property-object property-<?php echo $property['id']; ?>">
                                      <?php echo get_post($id)->post_title; ?>

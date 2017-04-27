@@ -1483,7 +1483,7 @@
         var show_button = false;
         $('#container_field_'+property_id+'_'+(id)).hide();
         $('#core_validation_'+property_id).val('true');
-        $('input[name="socialdb_property_'+property_id+'[]"]').val('');
+        $('#form_autocomplete_value_'+property_id+'_'+(id)+"_origin").val('');
         validate_all_fields();
         //se o proximo container
         if(!$('#container_field_'+property_id+'_'+(id+1)).is(':visible')){

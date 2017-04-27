@@ -707,6 +707,28 @@
             $('#container_field_'+property_id+'_'+(id)).hide();     
         }
     }
+    function remove_container(property_id,id){
+        var show_button = false;
+        $('#container_field_'+property_id+'_'+(id)).hide();
+        $('#core_validation_'+property_id).val('true');
+        $('#form_autocomplete_value_'+property_id+'_'+(id)+"_origin").val('');
+        if($('#socialdb_property_'+property_id+'_'+(id)).length>0)
+            $('#socialdb_property_'+property_id+'_'+(id)).val('');
+            
+        validate_all_fields();
+        //se o proximo container
+        if(!$('#container_field_'+property_id+'_'+(id+1)).is(':visible')){
+            show_button = true;
+        }
+        //busco o container que esta sendo mostrado
+        while(!$('#container_field_'+property_id+'_'+(id)).is(':visible')){
+            id--;
+        }
+        //se 
+        if(show_button)
+            $('#button_property_'+property_id+'_'+id).show();
+        
+    }
 //################################ VALIDACOES##############################################//
     function validate_status(property_id){
         var selected = $("input[type='radio'][name='socialdb_property_"+property_id+"']:checked");
