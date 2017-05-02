@@ -740,32 +740,46 @@
     
     function validate_all_fields_compounds(compound_id,index){
         var cont = 0;
-        $( ".core_validation_compounds_"+compound_id+"_"+index).each(function( index ) {
-            if($( this ).val()==='false'){
-                cont++;
+        var seletor = ($('.core_validation_'+compound_id+'_'+index).length > 0) ? '.core_validation_'+compound_id+'_'+index : '#core_validation_'+compound_id;
+        if(!index){
+            for(var i = 0;i<parseInt($("#cardinality_"+compound_id).val());i++){
+                if($('#container_field_'+compound_id+'_'+i).is(':visible')){
+                    $( ".core_validation_compounds_"+compound_id+"_"+i).each(function( index ) {
+                        if($( this ).val()==='false'){
+                            cont++;
+                        }
+                    });
+                }
             }
-        });
+        }else{
+            $( ".core_validation_compounds_"+compound_id+"_"+index).each(function( index ) {
+                if($( this ).val()==='false'){
+                    cont++;
+                }
+            });
+        }
        //se for do tipo de um field apenas
-        console.log(cont,'pc compound');
         if($('#type_required_'+compound_id).length > 0){
             var total_fields = $('#count_fields_'+compound_id).val();
             if(cont!=total_fields){
-                $('.core_validation_'+compound_id+'_'+index).val('true');
+                $(seletor).val('true');
                 set_field_valid(compound_id,'core_validation_'+compound_id);
             }else{
-                $('.core_validation_'+compound_id+'_'+index).val('false');
+                $(seletor).val('false');
                 set_field_valid(compound_id,'core_validation_'+compound_id);
             }
             
         }else{
             if(cont===0){
-                $('.core_validation_'+compound_id+'_'+index).val('true');
+                $(seletor).val('true');
                 set_field_valid(compound_id,'core_validation_'+compound_id);
             }else{
-                $('#core_validation_'+compound_id+'_'+index).val('false');
+                $(seletor).val('false');
                 set_field_valid(compound_id,'core_validation_'+compound_id);
             }
         }
+        
+        console.log(cont,'pc compound',seletor);
     }
     
     
