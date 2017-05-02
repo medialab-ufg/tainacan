@@ -582,7 +582,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                                         value="<?php echo ($property_compounded['metas']['socialdb_property_data_mask'] ) ? $property_compounded['metas']['socialdb_property_data_mask'] : '' ?>">
                                 <input  type="hidden" 
                                         id='core_validation_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>' 
-                                        class='core_validation_compounds_<?php echo $property['id']; ?>' 
+                                        class='core_validation_compounds_<?php echo $property['id']; ?>_<?php echo $i; ?>' 
                                     <?php if(!$all_fields_validate && (!$property_compounded['metas']['socialdb_property_required'] || $property_compounded['metas']['socialdb_property_required'] == 'false')):  ?>
                                         value='true'>
                                     <?php else: ?>
@@ -592,7 +592,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                                     <p style="color: black;"><?php echo $property_compounded['name']; ?>
                                         <?php
                                             if ((!$property['metas']['socialdb_property_required'] || $property['metas']['socialdb_property_required'] == 'false') && $property_compounded['metas']['socialdb_property_required']&&$property_compounded['metas']['socialdb_property_required'] == 'true') {
-                                                ?>
+                                                 ?>
                                             <a id='required_field_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>' class="pull-right" 
                                                  style="margin-right: 15px;color:red;" >
                                                       <span class="glyphicon glyphicon-remove"  title="<?php echo __('This metadata is required!','tainacan')?>" 
@@ -604,7 +604,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                                              </a>
                                              <input  type="hidden" 
                                                      id='core_validation_<?php echo $property['id']; ?>' 
-                                                     class='core_validation' 
+                                                     class='core_validation core_validation_<?php echo $property['id']; ?>_<?php echo $i; ?>' 
                                                      value='<?php echo (!$value) ? 'false' : 'true' ; ?>'>
                                              <input type="hidden" 
                                                       id='core_validation_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>_message'  

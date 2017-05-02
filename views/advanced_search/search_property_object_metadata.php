@@ -16,7 +16,7 @@
         <input type="hidden" name="collection_id" value="0">   
 <?php endif; ?>
 <!------------------------------------------------------------------------------>
-        <input type="hidden" name="avoid_selected_items" value="<?php echo (isset($property['metas']['socialdb_property_avoid_items']) && $property['metas']['socialdb_property_avoid_items'] == 'true') ? true : false ?>">
+        <input type="hidden" name="avoid_selected_items" id="avoid_selected_items_<?php echo $property['id'] ?>" value="<?php echo (isset($property['metas']['socialdb_property_avoid_items']) && $property['metas']['socialdb_property_avoid_items'] == 'true') ? 'true' : 'false' ?>">
         <input type="hidden" name="categories" value="<?php echo (is_array($property['metas']['socialdb_property_object_category_id'])) ? implode(",",$property['metas']['socialdb_property_object_category_id']) : $property['metas']['socialdb_property_object_category_id'] ?>">
         <input type="hidden" name="properties_id" value="<?php echo (is_array($properties)) ? implode(',', $properties) : '' ?>">
         <?php
