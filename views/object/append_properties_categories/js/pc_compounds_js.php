@@ -726,7 +726,7 @@
     function set_field_valid_compounds(id,seletor,compound_id){
         console.log(seletor,$('#'+seletor).val(),seletor.split('_'));
         var index = (seletor.split('_')[4]) ? seletor.split('_')[4] : 0
-       if($('#'+seletor).val()==='false'){
+        if($('#'+seletor).val()==='false'){
             var slug = seletor.replace('core_validation_','');
             $('#ok_field_'+slug).hide();
             $('#required_field_'+slug).show();

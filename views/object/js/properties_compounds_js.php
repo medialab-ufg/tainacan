@@ -701,9 +701,10 @@
     /**
     * 
 
-     * @type Arguments     */
+    * @type Arguments     */
     function set_field_valid_compounds(id,seletor,compound_id){
-        //console.log('set_field_valid_compounds',id,seletor,compound_id,$('#'+seletor).val());
+        console.log(seletor,$('#'+seletor).val(),seletor.split('_'));
+        var index = (seletor.split('_')[4]) ? seletor.split('_')[4] : 0
         if($('#'+seletor).val()==='false'){
             var slug = seletor.replace('core_validation_','');
             $('#ok_field_'+slug).hide();
@@ -713,35 +714,34 @@
             $('#ok_field_'+slug).show();
             $('#required_field_'+slug).hide();
         }
-        validate_all_fields_compounds(compound_id);
+        validate_all_fields_compounds(compound_id,index);
     }
     
-    function validate_all_fields_compounds(compound_id){
+    function validate_all_fields_compounds(compound_id,index){
         var cont = 0;
-        $( ".core_validation_compounds_"+compound_id).each(function( index ) {
+        $( ".core_validation_compounds_"+compound_id+"_"+index).each(function( index ) {
             if($( this ).val()==='false'){
-                 console.log($( this ));
                 cont++;
             }
         });
-        console.log(cont);
-        //se for do tipo de um field apenas
+       //se for do tipo de um field apenas
+        console.log(cont,'pc compound');
         if($('#type_required_'+compound_id).length > 0){
             var total_fields = $('#count_fields_'+compound_id).val();
             if(cont!=total_fields){
-                $('#core_validation_'+compound_id).val('true');
+                $('.core_validation_'+compound_id+'_'+index).val('true');
                 set_field_valid(compound_id,'core_validation_'+compound_id);
             }else{
-                $('#core_validation_'+compound_id).val('false');
+                $('.core_validation_'+compound_id+'_'+index).val('false');
                 set_field_valid(compound_id,'core_validation_'+compound_id);
             }
             
         }else{
             if(cont===0){
-                $('#core_validation_'+compound_id).val('true');
+                $('.core_validation_'+compound_id+'_'+index).val('true');
                 set_field_valid(compound_id,'core_validation_'+compound_id);
             }else{
-                $('#core_validation_'+compound_id).val('false');
+                $('#core_validation_'+compound_id+'_'+index).val('false');
                 set_field_valid(compound_id,'core_validation_'+compound_id);
             }
         }
