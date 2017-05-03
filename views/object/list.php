@@ -59,12 +59,13 @@ if ( $loop->have_posts() ): ?>
                else:
                     ?>
                     <div class="jumbotron">
-                        <h2 style="text-align: center;"><?php _e('This collection is empty, create the first item!', 'tainacan') ?></h2>
+                        <h2 style="text-align: center;"><?php _e('No collection or item found!', 'tainacan') ?></h2>
+                        <!--h2 style="text-align: center;"><?php _e('This collection is empty, create the first item!', 'tainacan') ?></h2>
                         <p style="text-align: center;">
                             <a onclick="showAddItemText()" class="btn btn-primary btn-lg" href="#" role="button">
                                 <span class="glyphicon glyphicon-plus"></span> <?php _e('Click here to add a new item', 'tainacan') ?>
                             </a>
-                        </p>
+                        </p-->
                     </div>
                   <?php 
                endif;
@@ -81,7 +82,8 @@ if ( $loop->have_posts() ): ?>
                         </p>
                     </div-->
                     <div class="jumbotron">
-                        <h2 style="text-align: center;"><?php _e('This repository is empty, create the first collection!', 'tainacan') ?></h2>
+                        <h2 style="text-align: center;"><?php _e('No collection or item found!', 'tainacan') ?></h2>
+                        <!--h2 style="text-align: center;"><?php _e('This repository is empty, create the first collection!', 'tainacan') ?></h2-->
                         </p>
                     </div>
                     <?php 
