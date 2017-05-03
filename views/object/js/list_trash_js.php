@@ -1,23 +1,27 @@
 <script>
     $(function () {
         var src = $('#src').val();
+        var default_viewMode = $("#default-viewMode").val();
 
         $('.pagination_items').jqPagination({
             link_string: '/?page={page_number}',
             max_page: $('#number_pages').val(),
             paged: function (page) {
                 $('html,body').animate({scrollTop: 0}, 'slow');
-                wpquery_page(page);
+                wpquery_page(page, default_viewMode, true);
             }
         });
 
-        var default_viewMode = $("#default-viewMode").val();
         if (default_viewMode == "slideshow") {
             getCollectionSlideshow();
+        } else if(default_viewMode == "table") {
+            setTimeout( function() {
+                wpquery_page(1, default_viewMode, true);
+            }, 300);
         }
+
         $('.viewMode-control li').removeClass('selected-viewMode');
         $('.viewMode-control li.' + default_viewMode).addClass('selected-viewMode');
-
 
         function get_colorScheme() {
             var coll_id = $('#collection_id').val();
@@ -273,7 +277,4 @@
             }
         });
     }
-    
-     
-    
 </script>

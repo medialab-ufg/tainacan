@@ -1104,13 +1104,15 @@
         });
     }
 
-    function wpquery_page(value, collection_viewMode) {
+    function wpquery_page(value, collection_viewMode, is_trash) {
         $('#list').hide();
         $('#loader_objects').show();
+
         $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/wp_query/wp_query_controller.php",
-            data: {operation: 'wpquery_page', wp_query_args: $('#wp_query_args').val(),posts_per_page:$('.col-items-per-page').val(), value: value, collection_id: $('#collection_id').val()}
+            data: { operation: 'wpquery_page', wp_query_args: $('#wp_query_args').val(), value: value,
+                posts_per_page: $('.col-items-per-page').val(), collection_id: $('#collection_id').val(), is_trash: is_trash}
         }).done(function (result) {
             elem = jQuery.parseJSON(result);
             $('#loader_objects').hide();
@@ -1123,6 +1125,15 @@
             }
             if (collection_viewMode) {
                 changeViewMode(collection_viewMode);
+            }
+
+            if(is_trash) {
+                $('li.item-redesocial').hide();
+                $('ul.item-menu-container').hide();
+                $('#table-view tr').each(function(num, item) {
+                    var curr_id = $(item).find('td').first().find('a').attr('data-id');
+                   $(item).find('td').last().html('<li> <a onclick="delete_permanently_object(\'Deletar Item\', \'Deletar este item permanentemente?\', ' + curr_id + ')" class="remove"> <span class="glyphicon glyphicon-trash"></span> </a> </li><li> <a onclick="restore_object(' + curr_id + ')"> <span class="glyphicon glyphicon-retweet"></span> </a></li>');
+                });
             }
 
             setMenuContainerHeight();

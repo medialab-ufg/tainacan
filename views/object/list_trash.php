@@ -14,7 +14,6 @@ $collection_list_mode = $collection_data['collection_metas']['socialdb_collectio
 // $collection_color_scheme = $collection_data['collection_metas']['socialdb_collection_color_scheme'];
 
 $viewHelper = new ViewHelper();
-// $collection_list_mode = "cards_trash";
 if( !$collection_list_mode ) {
     $collection_list_mode = "cards";
 }
@@ -32,7 +31,7 @@ if( !$collection_list_mode ) {
     if ($collection_data['collection_metas']['socialdb_collection_columns'] != '')
         $classColumn = 12 / $collection_data['collection_metas']['socialdb_collection_columns'];
     ?>
-    <div id="collection-view-mode">
+    <div id="collection-view-mode" class="trash-listing">
         <div id='<?php echo $collection_list_mode; ?>-viewMode' class='col-md-12 no-padding list-mode-set'>
             <?php while ( $loop->have_posts() ) : $loop->the_post(); $countLine++;
                 $curr_id = get_the_ID();
@@ -44,8 +43,7 @@ if( !$collection_list_mode ) {
             endwhile;
 
             include_once "list_modes/slideshow_trash.php";
-            //include_once "list_modes/table_trash.php";
-
+            include_once "list_modes/table_trash.php";
             ?>
         </div>
     </div>
@@ -75,11 +73,14 @@ endif;
 
 $numberItems = ceil($loop->found_posts / 10);
 if ($loop->found_posts > 10):
+    $_per_page_ = $loop->query['posts_per_page'];
+    if( $_per_page_ >= $loop->found_posts )
+        // $_per_page_ = $loop->found_posts;
+        $_per_page_ = 10;
     ?>
     <!-- TAINACAN: div com a paginacao da listagem -->
-    <div class="">
-        <div id="center_pagination" class="col-md-12">
-
+    <div>
+        <div class="col-md-12 center_pagination">
             <input type="hidden" id="number_pages" name="number_pages" value="<?= $numberItems; ?>">
             <div class="pagination_items col-md-4 pull-left">
                 <a href="#" class="btn btn-default btn-sm first" data-action="first"><span class="glyphicon glyphicon-backward"></span><!--&laquo;--></a>
@@ -90,8 +91,9 @@ if ($loop->found_posts > 10):
             </div>
 
             <div class="col-md-3 center">
-                <?php echo $show_string ?>
-                <?php echo "1 - " . $loop->query['posts_per_page'] . __(' of ', 'tainacan') . $loop->found_posts ?>
+                <?php
+                echo $show_string;
+                echo " 1 - " . $_per_page_  . __(' of ', 'tainacan') . $loop->found_posts; ?>
             </div>
 
             <div class="col-md-3 pull-right">
