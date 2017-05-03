@@ -1715,6 +1715,11 @@ function showModalFilters(action, category_root_name, category_root_id, dynatree
 }
 
 function showSingleObject(object_id, src) {
+    if($("#item_collection_"+object_id).length > 0 && $("#has_collection_"+object_id).val() !== $("#collection_id").val()){
+        window.location = $("#item_collection_"+object_id).val();
+        return true;
+    }
+    
     $.ajax({
         url: src + '/controllers/object/object_controller.php',
         type: 'POST',
