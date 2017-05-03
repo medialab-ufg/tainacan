@@ -113,6 +113,9 @@ class ObjectModel extends Model {
         if ($data['object_license']) {
             update_post_meta($data['ID'], 'socialdb_license_id', $data['object_license']);
         }
+        //salvo o id da colecao onde esta sendo atualizado o item e sua
+        update_post_meta($data['ID'], 'socialdb_object_collection_init', $col_id);
+        update_post_meta($data['ID'], 'socialdb_object_guid', site_url().'/'. get_post($col_id)->post_name.'/'.get_post($data['ID'])->post_name);
         update_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext', '');
         //propriedades compostas
         $this->insert_compounds($data, $data['ID']);
@@ -120,10 +123,8 @@ class ObjectModel extends Model {
         $logData = ['collection_id' => $col_id, 'item_id' => $data['ID'],
             'user_id' => $user_id, 'event_type' => 'user_items', 'event' => 'add'];
         $data = $this->insert_object_event($data['ID'], $data);
-        Log::addLog($logData); 
-        //salvo o id da colecao onde esta sendo atualizado o item e sua
-        update_post_meta($data['ID'], 'socialdb_object_collection_init', $col_id);
-        update_post_meta($data['ID'], 'socialdb_object_guid', site_url().'/'. get_post($col_id)->post_name.'/'.get_post($data['ID'])->post_name);
+        Log::addLog($logData);
+        
         return $data;
     }
 
