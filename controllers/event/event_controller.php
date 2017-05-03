@@ -99,7 +99,6 @@ require_once(dirname(__FILE__).'../../../models/ranking/ranking_model.php');
           {
               apply_filters('tainacan_restore_descarted_item', $logData['item_id']);
           }
-        
           Log::addLog($logData);
 
           
