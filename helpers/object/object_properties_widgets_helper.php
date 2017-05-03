@@ -110,9 +110,9 @@ class ObjectWidgetsHelper extends ViewHelper {
                                     <input type="hidden" 
                                            class="form_autocomplete_value_<?php echo $property_compounded['id']; ?>_mask" 
                                             value="<?php echo ($property_compounded['metas']['socialdb_property_data_mask'] ) ? $property_compounded['metas']['socialdb_property_data_mask'] : '' ?>">
-                                    <input  type="hidden" 
+                                   <input   type="hidden" 
                                             id='core_validation_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>' 
-                                            class='core_validation_compounds_<?php echo $property['id']; ?>' 
+                                            class='core_validation_compounds_<?php echo $property['id']; ?>_<?php echo $i; ?>' 
                                         <?php if(!$all_fields_validate && (!$property_compounded['metas']['socialdb_property_required'] || $property_compounded['metas']['socialdb_property_required'] == 'false')):  ?>
                                             value='true'>
                                         <?php else: ?>
@@ -134,7 +134,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                                                 </a>
                                                 <input  type="hidden" 
                                                         id='core_validation_<?php echo $property['id']; ?>' 
-                                                        class='core_validation' 
+                                                        class='core_validation core_validation_<?php echo $property['id']; ?>_<?php echo $i; ?>' 
                                                         value='<?php echo (!$value) ? 'false' : 'true' ; ?>'>
                                                 <input type="hidden" 
                                                          id='core_validation_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>_message'  
@@ -270,6 +270,7 @@ class ObjectWidgetsHelper extends ViewHelper {
             $property['operation'] = 'edit';
             $property['object_id'] = $object_id;
             $property['compound_id'] = $references['compound_id'];
+            $property['name_field'] = 'socialdb_property_'. $references['compound_id'].'_'. $property['id'].'_'. $i.'[]';
             do_action('modificate_edit_item_properties_data', $property);
             //return false;
         } else {
@@ -582,7 +583,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                                         value="<?php echo ($property_compounded['metas']['socialdb_property_data_mask'] ) ? $property_compounded['metas']['socialdb_property_data_mask'] : '' ?>">
                                 <input  type="hidden" 
                                         id='core_validation_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>' 
-                                        class='core_validation_compounds_<?php echo $property['id']; ?>' 
+                                        class='core_validation_compounds_<?php echo $property['id']; ?>_<?php echo $i; ?>' 
                                     <?php if(!$all_fields_validate && (!$property_compounded['metas']['socialdb_property_required'] || $property_compounded['metas']['socialdb_property_required'] == 'false')):  ?>
                                         value='true'>
                                     <?php else: ?>
@@ -592,7 +593,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                                     <p style="color: black;"><?php echo $property_compounded['name']; ?>
                                         <?php
                                             if ((!$property['metas']['socialdb_property_required'] || $property['metas']['socialdb_property_required'] == 'false') && $property_compounded['metas']['socialdb_property_required']&&$property_compounded['metas']['socialdb_property_required'] == 'true') {
-                                                ?>
+                                                 ?>
                                             <a id='required_field_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>' class="pull-right" 
                                                  style="margin-right: 15px;color:red;" >
                                                       <span class="glyphicon glyphicon-remove"  title="<?php echo __('This metadata is required!','tainacan')?>" 
@@ -604,7 +605,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                                              </a>
                                              <input  type="hidden" 
                                                      id='core_validation_<?php echo $property['id']; ?>' 
-                                                     class='core_validation' 
+                                                     class='core_validation core_validation_<?php echo $property['id']; ?>_<?php echo $i; ?>' 
                                                      value='<?php echo (!$value) ? 'false' : 'true' ; ?>'>
                                              <input type="hidden" 
                                                       id='core_validation_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>_message'  
@@ -838,7 +839,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                         value="<?php echo $this->render_cardinality_property($property);   ?>">   
             <button class="btn  btn-lg btn-primary btn-primary pull-right"
                     type="button"
-                    onclick="$('#metadata-search-<?php echo $compound_id; ?>-<?php echo $property['id']; ?>-<?php echo $i; ?>').show();$('#metadata-result-<?php echo $compound_id; ?>-<?php echo $property['id']; ?>-<?php echo $i; ?>').hide();"
+                    onclick="$('#metadata-search-<?php echo $compound_id; ?>-<?php echo $property['id']; ?>-<?php echo $i; ?>').show();$('#metadata-result-<?php echo $compound_id; ?>-<?php echo $property['id']; ?>-<?php echo $i; ?>').hide();$(this).hide()"
                     ><?php _e('Add', 'tainacan') ?></button>
         </div>
         <div class="metadata-search"

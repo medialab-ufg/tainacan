@@ -51,7 +51,24 @@
             select: function (event, ui) {
                 event.preventDefault();
                 $("#advanced_search_title_<?php echo $property['id'] ?>").val('');
-                $("#advanced_search_title_<?php echo $property['id'] ?>").val(ui.item.label);
+                console.log('<?php echo $property['metas']['socialdb_property_avoid_items'] ?>',$('#inserted_property_object_<?php echo $property['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $property['contador']; ?>_'+ui.item.value).length);
+                if($('#avoid_selected_items_<?php echo $property['id'] ?>').val()==='false'){
+                    console.log($('#inserted_property_object_<?php echo $property['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $property['contador']; ?>_'+ui.item.value).length);
+                    if($('#inserted_property_object_<?php echo $property['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $property['contador']; ?>_'+ui.item.value).length===0){
+                        $('#results_property_<?php echo $property['compound_id'] ?>_<?php echo $property['id'] ?>_<?php echo $property['contador'] ?> ul').html('');
+                        $('select[name="socialdb_property_<?php echo  $property['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $property['contador']; ?>[]"]').html('');
+                        $('#results_property_<?php echo  $property['compound_id'] ?>_<?php echo $property['id'] ?>_<?php echo $property['contador'] ?> ul')
+                                .append('<li id="inserted_property_object_<?php echo  $property['compound_id'] ?>_<?php echo $property['id'] ?>_<?php echo $property['contador'] ?>_'+ui.item.value+'" item="'+ui.item.value+'" class="selected-items-property-object property-<?php echo $property['id']; ?>">'+ui.item.label
+                                +'<span  onclick="remove_item_objet(this)" style="cursor:pointer;" class="pull-right glyphicon glyphicon-trash"></span></li>');
+                         $('select[name="socialdb_property_<?php echo $property['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $property['contador']; ?>[]"]').append('<option value="'+ui.item.value+'" selected="selected">'+ui.item.value+'</option>');
+                        //validacao do campo
+                        $('#core_validation_<?php echo $property['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $property['contador']; ?>').val('true');
+                        set_field_valid_compounds('<?php echo $property['id']; ?>','core_validation_<?php echo $property['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $property['contador']; ?>','<?php echo $property['compound_id']; ?>');
+                        $('#no_results_property_<?php echo $property['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $property['contador']; ?>').hide()
+                    }
+                }else{
+                    $("#advanced_search_title_<?php echo $property['id'] ?>").val(ui.item.label);
+                }
             }
         });
         

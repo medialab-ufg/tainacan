@@ -217,18 +217,13 @@ button#iframebutton {
   .dropdown-submenu {
     position:relative;
     > .dropdown-menu {
-      /*
-      top:0;
-      left:100%;
-      margin-top:-60px;
-      margin-left:-1px;
-      */
+      /* top:0; left:100%; margin-top:-60px; margin-left:-1px; */
     }
   }
 
   li {
     display: inline-table;
-    padding: 10px 20px 6px 20px;
+    padding: 10px 20px 8px 20px;
 
     &:first-child {
       padding-left: 0 !important;
@@ -240,6 +235,8 @@ button#iframebutton {
 
     ul {
       background: $dark-gray;
+      margin-top: -3px;
+
       li {
         padding-top: 0 !important;
         padding-left: 0 !important;
@@ -371,6 +368,7 @@ a:hover{text-decoration:underline}
     } // li
 } // #collections-menu
 
+.menu-ibram li:hover > ul,
 #collections-menu li:hover ul,
 #collections-menu ul li:hover ul{
    display:block;

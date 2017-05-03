@@ -855,7 +855,13 @@
     function validate_all_fields(){
         var cont = 0;
         var cont_pane = 0;
+        var deny_repeated_ids = [];
         $( ".core_validation").each(function( index ) {
+            if(deny_repeated_ids.indexOf($( this ).attr('id'))<0){
+                deny_repeated_ids.push($( this ).attr('id'));
+            }else{
+                return false;
+            }
             if($( this ).val()==='false'){
                 cont++;
                 <?php if(!$is_view_mode): ?>
@@ -876,7 +882,13 @@
         <?php if(!$is_view_mode): ?>
         $.each($( "#submit_form_edit_object .tab-pane" ),function(index,seletor){
                 var id_tab = $(seletor ).attr('id').replace('tab-','');
+                deny_repeated_ids = [];
                 $( seletor).find(".core_validation").each(function( index ) {
+                    if(deny_repeated_ids.indexOf($( this ).attr('id'))<0){
+                        deny_repeated_ids.push($( this ).attr('id'));
+                    }else{
+                        return false;
+                    }
                     if($( this ).val()==='false'){
                         cont_pane++;
                     }

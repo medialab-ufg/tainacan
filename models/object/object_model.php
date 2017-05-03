@@ -121,7 +121,7 @@ class ObjectModel extends Model {
             'user_id' => $user_id, 'event_type' => 'user_items', 'event' => 'add'];
         $data = $this->insert_object_event($data['ID'], $data);
         Log::addLog($logData);
-
+        
         return $data;
     }
 
@@ -492,8 +492,8 @@ class ObjectModel extends Model {
      */
     public function insert_properties_values($data, $object_id) {
         $property_model = new PropertyModel;
-        if ($data['properties_id'] !== '') {
-            $properties_id = explode(',', $data['properties_id']);
+        $properties_id = $this->get_all_properties_form_values($data);
+        if (!empty($properties_id) ){
             $properties_object_id = explode(',', $data['properties_object_ids']);
             foreach ($properties_id as $property_id) {
                 if(in_array($property_id, $properties_object_id) && !isset($data["socialdb_property_$property_id"])){
@@ -570,6 +570,28 @@ class ObjectModel extends Model {
         }
         return $value;
     }
+    
+    /**
+     * metodod que retorna todos os metadados possivies para insercao de valores
+     * @param type $data
+     * @return type
+     */
+    public function get_all_properties_form_values($data) {
+        $all_properties_id = [];
+        if ($data['properties_id'] !== '') {
+            $all_properties_id = explode(',', $data['properties_id']);
+        }
+        if(isset($data['pc_properties']) && !is_array($data['pc_properties'])){
+            $array = explode(',', $data['properties_id']);
+            $all_properties_id = array_merge($all_properties_id, $array);
+        }else if(isset($data['pc_properties']) && !is_array($data['pc_properties'])){
+            foreach ($data['pc_properties'] as $array_properties) {
+                $array = explode(',', $array_properties);
+                $all_properties_id = array_merge($all_properties_id, $array);
+            }
+        }
+        return $all_properties_id;
+    }
 
     /**
      * @signature - function clean_simetric_property($data)
@@ -595,8 +617,8 @@ class ObjectModel extends Model {
      * @author: Eduardo 
      */
     public function insert_properties_terms($data, $object_id) {
-        if ($data['properties_id'] !== '') {
-            $properties_id = explode(',', $data['properties_id']);
+        $properties_id = $this->get_all_properties_form_values($data);
+        if (!empty($properties_id)) {
             foreach ($properties_id as $property_id) {
                 if (isset($data["socialdb_propertyterm_$property_id"]) && !is_array($data["socialdb_propertyterm_$property_id"]) && $data["socialdb_propertyterm_$property_id"] !== '') {
                     wp_set_object_terms($object_id, array((int) $data["socialdb_propertyterm_$property_id"]), 'socialdb_category_type', true);
@@ -1903,13 +1925,24 @@ class ObjectModel extends Model {
      * @param int $object_id O id do item a ser adicionado
      */
     public function insert_compounds($data, $object_id) {
-        if ($data['properties_compounds'] !== '') {
-            $compounds = explode(',', $data['properties_compounds']);
-            // propriedade de categorias
-            if (isset($data['pc_properties_compounds']) && trim($data['pc_properties_compounds']) != '') {
-                $pc_compounds = explode(',', $data['pc_properties_compounds']);
+        $compounds = [];
+        // propriedade de categorias
+        if (isset($data['pc_properties_compounds']) && !is_array($data['pc_properties_compounds']) && trim($data['pc_properties_compounds']) != '') {
+            $pc_compounds = explode(',', $data['pc_properties_compounds']);
+            $compounds = array_merge($compounds, $pc_compounds);
+        }else if(isset($data['pc_properties_compounds']) && is_array($data['pc_properties_compounds']) && !empty($data['pc_properties_compounds'])){
+            foreach ($data['pc_properties_compounds'] as $array_properties) {
+                $pc_compounds = explode(',', $array_properties);
                 $compounds = array_merge($compounds, $pc_compounds);
             }
+        }
+        if ($data['properties_compounds'] !== '') {
+            $compounds_origin = explode(',', $data['properties_compounds']);
+            $compounds = array_merge($compounds, $compounds_origin);
+        }
+        //se existir propriedades compostas
+        if ($compounds && is_array($compounds)) {
+            $compounds = array_unique($compounds);
             foreach ($compounds as $compound) {
                 $properties_coumpounded = array_values(array_filter(explode(',', $data['compounds_' . $compound])));
                 $cardinality = $data['cardinality_' . $compound];
@@ -1922,6 +1955,8 @@ class ObjectModel extends Model {
                         }
                         if ($id != 0) {
                             $ids_metas[] = $id;
+                        }else{
+                            $ids_metas[] = false;
                         }
                     }
                     //salvando os valores

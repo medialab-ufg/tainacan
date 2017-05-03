@@ -23,7 +23,7 @@ $view_helper = new ObjectHelper($collection_id);
 <input type="hidden" id="socialdb_permalink_object" name="socialdb_permalink_object" value="<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>" />
 
 <ol class="breadcrumb item-breadcrumbs">
-    <li> <a href="<?php echo get_permalink(get_option('collection_root_id')); ?>"> <?php _e('Repository', 'tainacan') ?> </a> </li>
+    <li> <a href="<?php echo site_url(); ?>"> Home </a> </li>
     <li> <a href="javascript:void(0)" onclick="backToMainPageSingleItem()"> <?php echo get_post($collection_id)->post_title; ?> </a> </li>
     <li class="active"> <?php echo $object->post_title; ?> </li>
 

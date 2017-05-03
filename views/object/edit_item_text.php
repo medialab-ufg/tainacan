@@ -131,6 +131,9 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                      <?php if($is_view_mode): ?>
                         <a style="cursor:pointer;" onclick="wpquery_link_filter('<?php echo $object->post_title ?>','<?php echo $view_helper->terms_fixed['title']->term_id ?>')"><?php echo $object->post_title ?></a>
                      <?php else: ?>
+                        <input type="hidden" 
+                           class="title_mask" 
+                           value="<?php echo get_post_meta($collection_id, 'socialdb_collection_property_'.$view_helper->terms_fixed['title']->term_id.'_mask_key', true) ?>">
                         <input class="form-control auto-save"   
                               type="text"  
                               value="<?= $object->post_title ?>"

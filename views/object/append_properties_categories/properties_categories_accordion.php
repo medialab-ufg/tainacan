@@ -92,7 +92,7 @@ if (isset($property_compounds)):
     }
     ?>
     <input type="hidden" 
-        name="pc_properties_compounds" 
+        name="pc_properties_compounds[]" 
         id="pc_properties_compounds_<?php echo $references['categories'] ?>"
         value="<?php echo implode(',', $result['ids']); ?>"> 
     <?php
@@ -328,8 +328,11 @@ foreach($original_properties as $property):
                             <?php }
                              // gancho para tipos de metadados de dados diferentes
                             else if(has_action('modificate_edit_item_properties_data')){
+                                $property['contador'] = $i;
+                                $property['operation'] = 'edit';
+                                $property['object_id'] = $object_id;
                                 do_action('modificate_edit_item_properties_data',$property);
-                                continue;
+                                //continue;
                             }else{ ?>
                                 <input type="text"  
                                         id="form_autocomplete_value_<?php echo $property['id']; ?>_<?php echo $i; ?>_origin" 
@@ -493,7 +496,7 @@ foreach($original_properties as $property):
     <?php endif; ?>   
   <?php endforeach; ?>  
 </div>
-<input type="hidden" name="pc_properties" id='pc_properties' value="<?php echo implode(',', $ids); ?>">
+<input type="hidden" name="pc_properties[]" id='pc_properties' value="<?php echo implode(',', $ids); ?>">
 <input type="hidden" name="categories" id='pc_categories' value="">
 <input type="hidden" name="properties_autocomplete" 
        id='pc_properties_autocomplete_<?php echo $categories ?>' 
