@@ -134,8 +134,25 @@ $is_repo_admin = current_user_can('administrator');
             <?php if(!$is_single_page): ?>
                 <li class="collec-only"> <a class="ac-comment-item"> <?php _t('Comment item',1); ?> </a> </li>
             <?php endif; ?>
-
-            <?php if ($is_moderator || get_post($curr_id)->post_author == get_current_user_id()): ?>
+            <?php 
+            if(has_filter('tainacan_show_reason_modal') && !apply_filters("tainacan_show_restore_options", $collection_id)){
+                ?>
+                <li>
+                    <a class="ac-exclude-item"
+                       onclick="show_reason_modal(<?php echo $itemDelete['id']; ?>)">
+                        <?php _t('Exclude item',1);?>
+                    </a>
+                </li>
+                
+                <li style="display: none">
+                    <a class="ac-exclude-item" id="<?php echo $itemDelete['id']; ?>"
+                       onclick="delete_object('<?php echo $itemDelete['title']; ?>','<?php echo $itemDelete['text']; ?>','<?php echo $itemDelete['id']; ?>','<?php echo $itemDelete['time']; ?>');">
+                        <?php _t('Exclude item',1);?>
+                    </a>
+                </li>
+                <?php
+            }
+            else if ($is_moderator || get_post($curr_id)->post_author == get_current_user_id()): ?>
                 <li>
                     <a class="ac-exclude-item"
                        onclick="delete_object('<?php echo $itemDelete['title']; ?>','<?php echo $itemDelete['text']; ?>','<?php echo $itemDelete['id']; ?>','<?php echo $itemDelete['time']; ?>')">

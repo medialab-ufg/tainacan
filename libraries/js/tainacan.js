@@ -2890,3 +2890,27 @@ function logColAction(search_val, item_id) {
         });
     }
 }
+
+function show_reason_modal(id)
+{
+    $("#reasonModal").modal('show');
+    $("#btnRemoveReason").attr("data-id-exclude", id);
+}
+
+function exclude_item()
+{
+    var text = $("#reasontext").val();
+    if(text.length > 0)
+    {
+        var id_delete = $("#btnRemoveReason").attr("data-id-exclude");
+
+        $.ajax({
+            type: "POST",
+            url: $('#src').val() + "/controllers/event/event_controller.php",
+            data: {operation: 'save_reason_to_exclude', collection_id: id_delete, reason: text}
+        });
+
+        $("#reasonModal").modal('hide');
+        $("#" + id_delete).click();
+    }
+}

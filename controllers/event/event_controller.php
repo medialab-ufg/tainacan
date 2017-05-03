@@ -88,6 +88,9 @@ require_once(dirname(__FILE__).'../../../models/ranking/ranking_model.php');
         $event_object_create_model = new EventObjectCreateModel();
         return $event_object_create_model->verify_event($data);
       //object_delete
+      case 'save_reason_to_exclude':
+        add_post_meta($data['collection_id'], 'socialdb_reason_to_exclude', $data['reason']);
+        break;
 
       case 'add_event_object_delete':
         $event_object_delete_model = new EventObjectDeleteModel();

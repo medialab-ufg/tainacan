@@ -1381,6 +1381,11 @@ while (have_posts()) : the_post();
         {
             do_action('add_new_modals', '');
         }
+    
+        if(has_filter('tainacan_show_reason_modal')) 
+        {
+            apply_filters('tainacan_show_reason_modal', "");
+        }
     ?>
     <?php require_once (dirname(__FILE__) . '/views/search/js/single_js.php'); ?>
     <?php require_once (dirname(__FILE__) . '/extras/routes/routes.php'); ?>

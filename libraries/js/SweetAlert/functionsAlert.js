@@ -113,6 +113,7 @@ function remove_event_property_classication(title, text, category_id, object_id,
         }
     });
 }
+
 // deletar objeto
 function delete_object(title, text, object_id, time) {
     swal({
