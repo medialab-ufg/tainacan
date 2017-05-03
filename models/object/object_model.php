@@ -120,8 +120,10 @@ class ObjectModel extends Model {
         $logData = ['collection_id' => $col_id, 'item_id' => $data['ID'],
             'user_id' => $user_id, 'event_type' => 'user_items', 'event' => 'add'];
         $data = $this->insert_object_event($data['ID'], $data);
-        Log::addLog($logData);
-        
+        Log::addLog($logData); 
+        //salvo o id da colecao onde esta sendo atualizado o item e sua
+        update_post_meta($data['ID'], 'socialdb_object_collection_init', $col_id);
+        update_post_meta($data['ID'], 'socialdb_object_guid', site_url().'/'. get_post($col_id)->post_name.'/'.get_post($data['ID'])->post_name);
         return $data;
     }
 
@@ -802,7 +804,9 @@ class ObjectModel extends Model {
         $_log_data = [ 'collection_id' => $data['collection_id'], 'user_id' => get_current_user_id(),
             'event_type' => 'user_items', 'item_id' => $data['ID'], 'event' => 'edit'];
         Log::addLog($_log_data);
-
+         //salvo o id da colecao onde esta sendo atualizado o item e sua
+        update_post_meta($data['ID'], 'socialdb_object_collection_init', $col_id);
+        update_post_meta($data['ID'], 'socialdb_object_guid', site_url().'/'. get_post($data['collection_id'])->post_name.'/'.get_post($data['ID'])->post_name);
         //msg
         $data['msg'] = __('The event was successful', 'tainacan');
         $data['type'] = 'success';

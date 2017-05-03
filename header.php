@@ -235,7 +235,7 @@ $_src_ = get_template_directory_uri();
                         </ul>
                       </div>
 
-                      <?php if (!is_front_page()): // !is_page($stat_page) ?>
+                      <?php if (!is_front_page() && !is_plugin_active( 'ibram-tainacan/ibram-tainacan.php' )): // !is_page($stat_page) ?>
                         <form id="formSearchCollections" class="navbar-form navbar-right search-tainacan-collection" role="search">
                           <div class="input-group search-collection search-home">
                             <input style="display: none" type="text" class="form-control" name="search_collections" id="search_collections" placeholder="<?php _e('Find', 'tainacan') ?>"/>
