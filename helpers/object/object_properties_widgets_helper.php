@@ -839,7 +839,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                         value="<?php echo $this->render_cardinality_property($property);   ?>">   
             <button class="btn  btn-lg btn-primary btn-primary pull-right"
                     type="button"
-                    onclick="$('#metadata-search-<?php echo $compound_id; ?>-<?php echo $property['id']; ?>-<?php echo $i; ?>').show();$('#metadata-result-<?php echo $compound_id; ?>-<?php echo $property['id']; ?>-<?php echo $i; ?>').hide();"
+                    onclick="$('#metadata-search-<?php echo $compound_id; ?>-<?php echo $property['id']; ?>-<?php echo $i; ?>').show();$('#metadata-result-<?php echo $compound_id; ?>-<?php echo $property['id']; ?>-<?php echo $i; ?>').hide();$(this).hide()"
                     ><?php _e('Add', 'tainacan') ?></button>
         </div>
         <div class="metadata-search"
