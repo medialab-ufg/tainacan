@@ -114,7 +114,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                                             id='core_validation_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>' 
                                             class='core_validation_compounds_<?php echo $property['id']; ?>_<?php echo $i; ?>' 
                                         <?php if(!$all_fields_validate && (!$property_compounded['metas']['socialdb_property_required'] || $property_compounded['metas']['socialdb_property_required'] == 'false')):  ?>
-                                            value='true'>
+                                            value='true' validate_compound="false">
                                         <?php else: ?>
                                             value='<?php echo (!$value) ? 'false' : 'true' ; ?>'>
                                         <?php endif; ?>
@@ -134,6 +134,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                                                 </a>
                                                 <input  type="hidden" 
                                                         id='core_validation_<?php echo $property['id']; ?>' 
+                                                        name='core_validation_<?php echo $property['id']; ?>' 
                                                         class='core_validation core_validation_<?php echo $property['id']; ?>_<?php echo $i; ?>' 
                                                         value='<?php echo (!$value) ? 'false' : 'true' ; ?>'>
                                                 <input type="hidden" 
@@ -585,7 +586,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                                         id='core_validation_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>' 
                                         class='core_validation_compounds_<?php echo $property['id']; ?>_<?php echo $i; ?>' 
                                     <?php if(!$all_fields_validate && (!$property_compounded['metas']['socialdb_property_required'] || $property_compounded['metas']['socialdb_property_required'] == 'false')):  ?>
-                                        value='true'>
+                                        value='true' validate_compound="false">
                                     <?php else: ?>
                                         value='<?php echo (!$value) ? 'false' : 'true' ; ?>'>
                                     <?php endif; ?>
@@ -605,6 +606,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                                              </a>
                                              <input  type="hidden" 
                                                      id='core_validation_<?php echo $property['id']; ?>' 
+                                                     name='core_validation_<?php echo $property['id']; ?>' 
                                                      class='core_validation core_validation_<?php echo $property['id']; ?>_<?php echo $i; ?>' 
                                                      value='<?php echo (!$value) ? 'false' : 'true' ; ?>'>
                                              <input type="hidden" 

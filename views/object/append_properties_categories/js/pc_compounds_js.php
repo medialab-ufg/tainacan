@@ -598,6 +598,7 @@
         properties = $('#compounds_'+property_id).val().split(',');
         if(properties&&properties.length>0){
             for(var i = 0; i<properties.length; i++){
+                if(!$('#core_validation_'+property_id+'_'+properties[i]+'_'+((id+1))).attr('validate_compound')) 
                   $('#core_validation_'+property_id+'_'+properties[i]+'_'+((id+1))).val('false');
             }
              validate_all_fields_compounds(property_id);
@@ -762,9 +763,11 @@
         if($('#type_required_'+compound_id).length > 0){
             var total_fields = $('#count_fields_'+compound_id).val();
             if(cont!=total_fields){
+                $('input[name="core_validation_'+compound_id+'"]').val('true');
                 $(seletor).val('true');
                 set_field_valid(compound_id,'core_validation_'+compound_id);
             }else{
+                $('input[name="core_validation_'+compound_id+'"]').val('false');
                 $(seletor).val('false');
                 set_field_valid(compound_id,'core_validation_'+compound_id);
             }
@@ -772,14 +775,15 @@
         }else{
             if(cont===0){
                 $(seletor).val('true');
+                $('input[name="core_validation_'+compound_id+'"]').val('true');
                 set_field_valid(compound_id,'core_validation_'+compound_id);
             }else{
+                $('input[name="core_validation_'+compound_id+'"]').val('false');
                 $(seletor).val('false');
                 set_field_valid(compound_id,'core_validation_'+compound_id);
             }
         }
-        
-        console.log(cont,'pc compound',seletor);
+        console.log(cont,'pc compound',seletor,$('#core_validation_'+compound_id).val());
     }
     
     
