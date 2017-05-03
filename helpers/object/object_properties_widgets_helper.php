@@ -270,6 +270,7 @@ class ObjectWidgetsHelper extends ViewHelper {
             $property['operation'] = 'edit';
             $property['object_id'] = $object_id;
             $property['compound_id'] = $references['compound_id'];
+            $property['name_field'] = 'socialdb_property_'. $references['compound_id'].'_'. $property['id'].'_'. $i.'[]';
             do_action('modificate_edit_item_properties_data', $property);
             //return false;
         } else {
