@@ -76,7 +76,7 @@ $is_repo_admin = current_user_can('administrator');
             <li> <a class="ac-open-file"> <?php _t('Print item',1); ?> </a> </li>
 
             <?php if($is_repo_admin): ?>
-                <li>
+                <li class="tainacan-museum-clear">
                     <a href="javascript:void(0)" class="change-owner" data-item="<?php echo $curr_id; ?>"><?php _t('Change item owner',1); ?></a>
                 </li>
             <?php endif; ?>
@@ -97,12 +97,12 @@ $is_repo_admin = current_user_can('administrator');
                         </a>
                     <?php } ?>
                 </li>
-                <li> <a class="ac-duplicate-item" data-op="same"> <?php _t('Duplicate in this collection',1); ?> </a> </li>
-                <li> <a class="ac-duplicate-item" data-op="other"> <?php _t('Duplicate in other collection',1); ?> </a> </li>
+                <li class="tainacan-museum-clear"> <a class="ac-duplicate-item" data-op="same"> <?php _t('Duplicate in this collection',1); ?> </a> </li>
+                <li class="tainacan-museum-clear"> <a class="ac-duplicate-item" data-op="other"> <?php _t('Duplicate in other collection',1); ?> </a> </li>
             <?php
             else:
                 if (verify_allowed_action($collection_id, 'socialdb_collection_permission_delete_object')): ?>
-                <li>
+                <li class="tainacan-museum-clear">
                     <a onclick="show_report_abuse('<?php echo $curr_id ?>')" href="javascript:void(0)" class="report_abuse">
                         <?php _t('Report Abuse',1); ?>
                     </a>
@@ -114,25 +114,25 @@ $is_repo_admin = current_user_can('administrator');
             <?php if ($is_moderator || get_post($curr_id)->post_author == get_current_user_id()):
                 $has_checked_in = get_post_meta($curr_id, 'socialdb_object_checkout', true);
                 if(is_numeric($has_checked_in)) { ?>
-                    <li> <a class="ac-checkin" onclick="<?php echo $checkout['in'] ?>"> <?php _t('Check-in',1); ?> </a> </li>
-                    <li> <a class="ac-discard-checkout" onclick="<?php echo $checkout['discard'] ?>"> <?php _t('Discard Check-out',1); ?> </a> </li>
+                    <li class="tainacan-museum-clear"> <a class="ac-checkin" onclick="<?php echo $checkout['in'] ?>"> <?php _t('Check-in',1); ?> </a> </li>
+                    <li class="tainacan-museum-clear"> <a class="ac-discard-checkout" onclick="<?php echo $checkout['discard'] ?>"> <?php _t('Discard Check-out',1); ?> </a> </li>
                 <?php } else { ?>
-                    <li> <a class="ac-checkout" onclick="<?php echo $checkout['out'] ?>"> <?php _t('Check-out',1); ?> </a> </li>
+                    <li class="tainacan-museum-clear"> <a class="ac-checkout" onclick="<?php echo $checkout['out'] ?>"> <?php _t('Check-out',1); ?> </a> </li>
                 <?php } ?>
 
-                <li> <a class="ac-create-version"> <?php _t('Create new version',1); ?> </a> </li>
+                <li class="tainacan-museum-clear"> <a class="ac-create-version"> <?php _t('Create new version',1); ?> </a> </li>
             <?php endif; ?>
 
-            <li> <a class="ac-item-versions"> <?php _t('Item versions',1); ?> </a> </li>
+            <li class="tainacan-museum-clear"> <a class="ac-item-versions"> <?php _t('Item versions',1); ?> </a> </li>
 
-            <li> <a class="ac-item-rdf" href="<?php echo $rdfURL; ?>" target="_blank"> <?php _t('Export RDF',1); ?> </a> </li>
+            <li class="tainacan-museum-clear"> <a class="ac-item-rdf" href="<?php echo $rdfURL; ?>" target="_blank"> <?php _t('Export RDF',1); ?> </a> </li>
 
             <?php if($is_single_page): ?>
-                <li> <a class="ac-item-graph" onclick="showGraph('<?php echo $rdfURL; ?>')"> <?php _t('See graph',1); ?> </a> </li>
+                <li class="tainacan-museum-clear"> <a class="ac-item-graph" onclick="showGraph('<?php echo $rdfURL; ?>')"> <?php _t('See graph',1); ?> </a> </li>
             <?php endif; ?>
 
             <?php if(!$is_single_page): ?>
-                <li class="collec-only"> <a class="ac-comment-item"> <?php _t('Comment item',1); ?> </a> </li>
+                <li class="collec-only tainacan-museum-clear"> <a class="ac-comment-item"> <?php _t('Comment item',1); ?> </a> </li>
             <?php endif; ?>
 
             <?php if ($is_moderator || get_post($curr_id)->post_author == get_current_user_id()): ?>
