@@ -860,7 +860,8 @@ class ObjectWidgetsHelper extends ViewHelper {
     
     public function insert_button_add_other_collection($property,$object_id,$collection_id) {
         // botao que leva a colecao relacionada
-            if (isset($property['metas']['collection_data'][0]->post_title)):  ?>
+            if (isset($property['metas']['collection_data'][0]->post_title) 
+                    && ( isset($property['metas']['socialdb_property_habilitate_new_item']) && $property['metas']['socialdb_property_habilitate_new_item'] == 'true')):  ?>
                 <a style="cursor: pointer;color: white;"
                    id="add_item_popover_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"
                    class="btn btn-primary btn-xs popover_item" 

@@ -37,6 +37,11 @@
                     <div id="data-advanced-configuration-object" style="display: none;">
                         <?php $view_helper->commomFieldsProperties(true) ?>
                         <div class="form-group category-fit-column" style="display: inline-block; width: 59%">
+                            <label style="display: block"><?php _e('Habilitate add new item','tainacan'); ?></label>
+                            &nbsp;<input type="radio" name="socialdb_event_property_habilitate_new_item" id="new_item_true"   value="true">&nbsp;<?php _e('Yes','tainacan') ?>
+                            &nbsp;<input type="radio" name="socialdb_event_property_habilitate_new_item" id="new_item_false" checked="checked" value="false">&nbsp;<?php _e('No','tainacan') ?>
+                        </div>
+                        <div class="form-group category-fit-column" style="display: inline-block; width: 59%">
                             <label for="property_term_required" style="display: block"><?php _e('Elements Quantity:','tainacan'); ?></label>
                             <input type="radio" name="socialdb_property_object_cardinality" id="socialdb_property_object_cardinality_1"  value="1">&nbsp;<?php _e('Unic value','tainacan') ?>
                             <input type="radio" name="socialdb_property_object_cardinality" id="socialdb_property_object_cardinality_n" checked="checked" value="n">&nbsp;<?php _e('Multiple values','tainacan') ?>

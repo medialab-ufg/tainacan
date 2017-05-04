@@ -237,9 +237,15 @@
                 response: function( event, ui ) {
                     if(ui.content && ui.content.length>0){
                        $.each(ui.content,function(index,value){
-                           if($(event.target).val().trim()==value.value || $(event.target).val().toLowerCase().trim()==value.value.toLowerCase().trim()){
+                           if(value.item_id && value.item_id == $("#object_id_edit").val()){
+                               $("#object_name").autocomplete('close');
+                               return true;
+                           }
+                           
+                           if(($(event.target).val().trim()==value.value || $(event.target).val().toLowerCase().trim()==value.value.toLowerCase().trim())){
                                 toastr.error($(event.target).val()+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
                                 $(event.target).val('');
+                                $("#object_name").trigger('keyup');
                            }
                            $("#object_name").autocomplete('close');
                        }); 

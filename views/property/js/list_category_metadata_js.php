@@ -1105,6 +1105,7 @@
             var search = (elem.metas.socialdb_property_to_search_in) ? elem.metas.socialdb_property_to_search_in.split(',') : [];
             var avoid_items = (elem.metas.socialdb_property_avoid_items) ? elem.metas.socialdb_property_avoid_items : false;
             var default_value = (elem.metas.socialdb_property_default_value) ? elem.metas.socialdb_property_default_value : false;
+            var habilitate_new_item = (elem.metas.socialdb_property_habilitate_new_item) ? elem.metas.socialdb_property_habilitate_new_item : false;
             if ( is_metadata_filter( elem.id ) ) {
                 var use_filter = "use_filter";
                 $( "#meta-relationship .property_data_use_filter").prop("checked", true);
@@ -1244,6 +1245,15 @@
             //propriedades usadas na busca
             if (search.length > 0) {
                 $('#properties_to_search_in').val(search.join(','));
+            }
+            
+            //habilitar novo item
+            $("#meta-relationship #new_item_true").removeAttr('checked');
+            $("#meta-relationship #new_item_false").removeAttr('checked');
+            if (habilitate_new_item == 'true') {
+                $("#meta-relationship #new_item_true").prop('checked', true);
+            }else{
+                $("#meta-relationship #new_item_false").prop('checked', true);
             }
             
             //valor default da propriedade

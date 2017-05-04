@@ -1466,6 +1466,7 @@ function create_event_terms() {
     create_metas($event_property_object_term['term_id'], 'socialdb_event_property_object_metas', 'socialdb_event_property_lock_field', 'socialdb_event_property_lock_field');
     create_metas($event_property_object_term['term_id'], 'socialdb_event_property_object_metas', 'socialdb_event_property_to_search_in', 'socialdb_event_property_to_search_in');
     create_metas($event_property_object_term['term_id'], 'socialdb_event_property_object_metas', 'socialdb_event_property_avoid_items', 'socialdb_event_property_avoid_items');
+    create_metas($event_property_object_term['term_id'], 'socialdb_event_property_object_metas', 'socialdb_event_property_habilitate_new_item', 'socialdb_event_property_habilitate_new_item');
     ####### action para adicao de metadados no eventos de propriedade de object ######
     do_action('add_new_metas_event_property_object', $event_property_object_term, 'socialdb_event_property_object_metas');
     ############################################################################

@@ -249,6 +249,7 @@ class PropertyModel extends Model {
             update_term_meta($new_property['term_id'], 'socialdb_property_locked',$data['property_locked']);
             update_term_meta($new_property['term_id'], 'socialdb_property_to_search_in',$data['property_to_search_in']);
             update_term_meta($new_property['term_id'], 'socialdb_property_avoid_items',$data['property_avoid_items']);
+            update_term_meta($new_property['term_id'], 'socialdb_property_habilitate_new_item',$data['property_habilitate_new_item']);
             if($data['property_default_value']&&!empty($data['property_default_value'])){
                  $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_default_value', $data['property_default_value']);
             }
@@ -422,6 +423,7 @@ class PropertyModel extends Model {
             update_term_meta($new_property['term_id'], 'socialdb_property_locked',$data['property_locked']);
             update_term_meta($new_property['term_id'], 'socialdb_property_to_search_in',$data['property_to_search_in']);
             update_term_meta($new_property['term_id'], 'socialdb_property_avoid_items',$data['property_avoid_items']);
+            update_term_meta($new_property['term_id'], 'socialdb_property_habilitate_new_item',$data['property_habilitate_new_item']);
             if($data['property_default_value']&&!empty($data['property_default_value'])){
                  $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_default_value', $data['property_default_value']);
             }

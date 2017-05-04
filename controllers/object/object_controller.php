@@ -910,7 +910,7 @@ class ObjectController extends Controller {
                 $result = [];
                 $items = $object_model->searchItemCollection($data['collection_id'],trim($data['term']));
                 foreach ($items as $item) {
-                   $result[] = ['value'=>$item->post_title,'label'=>$item->post_title] ;
+                   $result[] = ['value'=>$item->post_title,'label'=>$item->post_title,'item_id'=>$item->ID] ;
                 }
                 return json_encode($result);
         }
