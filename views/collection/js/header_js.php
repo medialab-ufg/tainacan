@@ -107,7 +107,7 @@
             data: {collection_id: $('#collection_id').val(), operation: 'notification_events'}
         }).done(function (result) {
             if(result.length > 6 && result != undefined) {
-                $('.notification_events').html(result);
+                $('.notification_events').html(result).css('padding', '0 4px 2px 1px');
             } else {
                 $('.notification_events').hide();
             }
