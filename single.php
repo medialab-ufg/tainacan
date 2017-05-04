@@ -444,14 +444,14 @@ while (have_posts()) : the_post();
                                             $show = apply_filters('tainacan_show_restore_options', $collection_id);
                                         }else $show = true;
                                         if (get_the_ID() != get_option('collection_root_id') && verify_collection_moderators(get_the_ID(), get_current_user_id())) {
-                                            if($show == true)
-                                            {
+                                            //if($show == true)
+                                            //{
                                                 ?>
                                                 <button onclick="show_trash_page();" class="btn btn-default pull-right button-trash collection-trash">
                                                     <?php _e('Trash', 'tainacan'); ?>
                                                 </button>
                                                 <?php
-                                            }
+                                           // }
                                         } else {
                                             $admin_email = get_option('admin_email');
                                             $blog_email = get_bloginfo('admin_email');
