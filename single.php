@@ -282,8 +282,11 @@ while (have_posts()) : the_post();
                         <!-- TAINACAN: esta div estao o botao que abre o formulario completo para submissao de itens, botao para ordenacao asc e desc, e o selectbox para selecionar a ordenacao  - col-md-6 (bootstrap) -->
                         <div class="col-md-12 header-colecao">
                             <div class="row">
+                                <?php $_add_opts = unserialize(get_post_meta($_currentID_, 'socialdb_collection_add_item', true)); ?>
                                 <?php if (get_option('collection_root_id') != get_the_ID() && (is_user_logged_in() && verify_allowed_action(get_the_ID(), 'socialdb_collection_permission_create_object'))): ?>
-                                <div class="tainacan-add-item col-md-1 no-padding" <?php if (has_filter('show_custom_add_item_button')): ?> style="margin-right:50px;"  <?php endif; ?> >
+                                <div class="tainacan-add-item col-md-1 no-padding"
+                                    <?php if (has_filter('show_custom_add_item_button')): ?> style="margin-right:50px;" <?php endif; ?>
+                                    <?php if( is_null($_add_opts) && count($_add_opts) == 0 ): ?> style="display: none" <?php endif; ?> >
                                         <?php
                                         if (has_filter('show_custom_add_item_button')):
                                             echo apply_filters('show_custom_add_item_button', '');
@@ -291,7 +294,6 @@ while (have_posts()) : the_post();
                                             $collection_id = get_the_ID();
                                             do_action('addLibraryMenu', $collection_id);
                                         else:
-                                            $_add_opts = unserialize(get_post_meta($_currentID_, 'socialdb_collection_add_item', true));
                                             $_add_modes = [
                                                 'write_text' => ['label' => _t('Write text'), 'action' => "showAddItemText()"],
                                                 'send_file' => ['label' => _t('Send file(s)'), 'action' => "showViewMultipleItems()"],
@@ -313,7 +315,7 @@ while (have_posts()) : the_post();
                                             <div class="btn-group" role="group" aria-label="...">
                                                 <div class="btn-group tainacan-add-wrapper">
 
-                                                        <?php echo $add_item_str ?>
+                                                    <?php echo $add_item_str ?>
 
                                                     <ul class="dropdown-menu" <?php echo $hideStr; ?> >
                                                         <?php if(false === is_array($_add_opts)) { ?>

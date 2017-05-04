@@ -159,8 +159,12 @@ $view_helper = new ViewHelper();
                             if($_check_all) {
                                 $val_ck = "checked";
                             } else {
-                                if( in_array($type, $collection_add_item) ) {
-                                    $val_ck = "checked";
+                                if( !is_null($collection_add_item) ) {
+                                    if( in_array($type, $collection_add_item) ) {
+                                        $val_ck = "checked";
+                                    } else {
+                                        $val_ck = "";
+                                    }
                                 } else {
                                     $val_ck = "";
                                 }
