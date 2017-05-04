@@ -1100,6 +1100,13 @@
                 $('#collection_empty').show();
                 $('#items_not_found').hide();
             }
+            if(!elem.has_post && $("#collection_id").val() ===  $("#collection_root_id").val()){
+                search_items_query = $('#wp_query_args').val();
+                search_collections_query = $('#wp_query_args').val();
+               $('#click_ad_search_items').trigger('click');
+            }else{
+               search_collections_query = $('#wp_query_args').val();
+            }
             setMenuContainerHeight();
         });
     }
@@ -1223,7 +1230,13 @@
             $('#list').html(elem.page);
             $('#wp_query_args').val(elem.args);
             if (type && type == 'socialdb_collection') {
-                search_collections_query = $('#wp_query_args').val();
+                if(!elem.has_post && $("#collection_id").val() ===  $("#collection_root_id").val()){
+                    search_items_query = $('#wp_query_args').val();
+                    search_collections_query = $('#wp_query_args').val();
+                   $('#click_ad_search_items').trigger('click');
+                }else{
+                   search_collections_query = $('#wp_query_args').val();
+                }
             } else if (type && type == 'socialdb_object') {
                 search_items_query = $('#wp_query_args').val();
             }
