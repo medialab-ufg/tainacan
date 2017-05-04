@@ -47,7 +47,7 @@ class site_map extends WP_Widget {
 
         // This is where you run the code and display the output
         if($home){
-            echo '<div class="col-md-12" style="padding-left: 0px;">
+            echo '<div class="col-md-12">
                     <div style="padding-left: 0px;" class="col-md-6">
                         <li><a class="" href="'. $home .'">'. __('Inicio') .'</a></li>';
             if(is_user_logged_in()) {
