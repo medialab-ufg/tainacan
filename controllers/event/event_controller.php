@@ -89,7 +89,21 @@ require_once(dirname(__FILE__).'../../../models/ranking/ranking_model.php');
         return $event_object_create_model->verify_event($data);
       //object_delete
       case 'save_reason_to_exclude':
-        add_post_meta($data['collection_id'], 'socialdb_reason_to_exclude', $data['reason']);
+          $properties = get_term_meta($data['collection_id'],'socialdb_category_property_id');
+          $properties = array_unique($properties);
+          foreach ($properties as $property)
+          {
+              $property_name = get_term_by('id',$property,'socialdb_property_type')->name;
+              if(strcmp($property_name, "motivo") == 0)
+              {
+                  $collection_import_model = new CollectionImportModel();
+
+                  add_post_meta( $data['elem_id'],'socialdb_property_'.$property, $data['reason']);
+                  $collection_import_model->set_common_field_values( $data['elem_id'], "socialdb_property_$property", $data['reason']);
+
+                  break;
+              }
+          }
         break;
 
       case 'add_event_object_delete':

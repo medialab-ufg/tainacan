@@ -2912,7 +2912,7 @@ function exclude_item()
         $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/event/event_controller.php",
-            data: {operation: 'save_reason_to_exclude', collection_id: id_delete, reason: text}
+            data: {operation: 'save_reason_to_exclude', elem_id: id_delete, reason: text, collection_id: $('#collection_id').val()}
         });
 
         $("#reasonModal").modal('hide');
