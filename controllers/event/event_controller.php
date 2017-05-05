@@ -98,9 +98,12 @@ require_once(dirname(__FILE__).'../../../models/ranking/ranking_model.php');
               $property_name = get_term_by('id',$property,'socialdb_property_type')->name;
               if($property_name == 'Cancelamento')
               {
-                  $compound_id = $property;
-                  $sub_properties = get_term_meta($property, 'socialdb_property_compounds_properties_id', true);
-                  print $sub_properties;
+                  $sub_property = get_term_meta($property, 'socialdb_property_compounds_properties_id', true);
+
+                  $object_model = new ObjectModel();
+                  $inserted_ids[] = $object_model->add_value_compound($data['collection_id'], $property, (int) $sub_property, 0, 0, $data['reason']);
+
+                  update_post_meta($data['collection_id'], 'socialdb_property_' . $property . '_0', implode(',', $inserted_ids));
                   break;
               }
           }
