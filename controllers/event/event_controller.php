@@ -104,7 +104,7 @@ require_once(dirname(__FILE__).'../../../models/object/object_model.php');
                   $object_model = new ObjectModel();
                   $inserted_ids[] = $object_model->add_value_compound($data['collection_id'], $property, (int) $sub_property, 0, 0, $data['reason']);
 
-                  print $property_name." Sub: $sub_property\n";
+                  print $property_name." $property"." Sub: $sub_property\n";
                   print_r($inserted_ids);
                   print_r($data);
                   global $wpdb;
