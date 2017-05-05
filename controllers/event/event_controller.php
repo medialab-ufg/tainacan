@@ -103,56 +103,11 @@ require_once(dirname(__FILE__).'../../../models/object/object_model.php');
 
                   $object_model = new ObjectModel();
                   $inserted_ids[] = $object_model->add_value_compound($data['collection_id'], $property, (int) $sub_property, 0, 0, $data['reason']);
-
-                  print $property_name." $property"." Sub: $sub_property\n";
-                  print_r($inserted_ids);
-                  print_r($data);
-                  global $wpdb;
-                  print $wpdb->terms."\n";
-                  print_r(update_post_meta($data['collection_id'], 'socialdb_property_' . $property . '_0', implode(',', $inserted_ids)));
-                  break;
-              }
-          }
-
-
-
-          
-          /*global $wpdb;
-          $search = "Cancelamento";
-          $cancelamento = $wpdb->get_results("SELECT * FROM $wpdb->terms WHERE name LIKE '%$search%'");
-          print_r ($cancelamento);
-
-          foreach ($cancelamento as $bem_obj)
-          {
-              if(is_object($bem_obj)) {
-                  $_metas = get_term_meta($bem_obj->term_id);
-
-                  if (is_array($_metas)) {
-                      if (key_exists("socialdb_property_compounds_properties_id", $_metas)) {
-                          $compound_id = $_metas['socialdb_property_compounds_properties_id'][0];
-                          
-                          print "<br>";
-                      }
-                  }
-              }
-          }
-          /*$object_model = new ObjectModel();
-          $object_model->add_value_compound($data['collection_id'], $compound_id, $property_id, 0, 0, $value);
-          
-          $properties = get_term_meta($data['collection_id'],'socialdb_category_property_id');
-          $properties = array_unique($properties);
-          foreach ($properties as $property)
-          {
-              $property_name = get_term_by('id',$property,'socialdb_property_type')->name;
-              if(strcmp($property_name, "Cancelamento") == 0)
-              {
-                  $collection_import_model = new CollectionImportModel();
-
                   
-
+                  update_post_meta($data['collection_id'], 'socialdb_property_' . $property . '_0', implode(',', $inserted_ids));
                   break;
               }
-          }*/
+          }
         break;
 
       case 'add_event_object_delete':
