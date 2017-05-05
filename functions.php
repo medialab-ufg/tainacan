@@ -2377,6 +2377,32 @@ function socialdb_relation_exists($term, $object) {
 }
 
 /**
+ * 
+ * @param type $object
+ * @param type $taxonomy
+ * @return type
+ */
+function socialdb_relations_item($object, $taxonomy) {
+    global $wpdb;
+    $wp_posts = $wpdb->prefix . "posts";
+    $wp_term_taxonomy = $wpdb->prefix . "term_taxonomy";
+    $term_relationships = $wpdb->prefix . "term_relationships";
+    $query = "
+                    SELECT tt.* FROM $wp_posts p
+                    INNER JOIN $term_relationships tr ON p.ID = tr.object_id    
+                    INNER JOIN $wp_term_taxonomy tt ON tt.term_taxonomy_id = tr.term_taxonomy_id    
+                    WHERE p.ID = '$object'
+                    AND tt.taxonomy LIKE '$taxonomy'
+            ";
+    $result = $wpdb->get_results($query);
+    if ($result && is_array($result) && count($result) > 0) {
+        return $result;
+    } else {
+        return array();
+    }
+}
+
+/**
  *
  * Funcao que insere o relacionamento de um termo com um objeto
  *
