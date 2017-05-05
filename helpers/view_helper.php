@@ -332,11 +332,11 @@ class ViewHelper {
 
     <?php }
 
-    public static function render_config_title($title) {
+    public static function render_config_title($title,$has_link = false) {
         $onclick = 'backToMainPage();';
         $onclick = "backRoute($('#slug_collection').val());";
         echo "<h3 class='topo'> $title ";
-        self::buttonVoltar();
+        self::buttonVoltar((__("Events", 'tainacan') == $title) ? $has_link : false);
         echo  "</h3><hr>";
     }
 
@@ -490,11 +490,17 @@ class ViewHelper {
         }
     }
     
-    public static function buttonVoltar(){
-        ?>
-        <!--button onclick="backToMainPage();" class="btn btn-default pull-right"><?php _e('Back to collection', 'tainacan') ?></button-->
-        <button onclick="backRoute($('#slug_collection').val());" id="btn_back_collection" class="btn btn-default pull-right"><?php _e('Back to collection','tainacan') ?></button>
-        <?php
+    public static function buttonVoltar($redirect = false){
+        if($redirect){ ?>
+            <!--button onclick="backToMainPage();" class="btn btn-default pull-right"><?php _e('Back to collection', 'tainacan') ?></button-->
+            <button onclick="window.location = '<?php echo $redirect ?>'" id="btn_back_collection" class="btn btn-default pull-right"><?php _e('Back to collection','tainacan') ?></button>
+            <?php
+        }else{
+            ?>
+            <!--button onclick="backToMainPage();" class="btn btn-default pull-right"><?php _e('Back to collection', 'tainacan') ?></button-->
+            <button onclick="backRoute($('#slug_collection').val());" id="btn_back_collection" class="btn btn-default pull-right"><?php _e('Back to collection','tainacan') ?></button>
+            <?php
+        }
     }
     
     /**
