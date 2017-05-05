@@ -1138,13 +1138,13 @@
                 <?php if(!apply_filters('tainacan_show_restore_options', get_the_ID())): ?>
                         $('#table-view tr').each(function(num, item) {
                             var curr_id = $(item).find('td').first().find('a').attr('data-id');
-                            $(item).find('td').last().html('<li> <a onclick="showSingleObject(' + curr_id + ','+src+')"> <span class="glyphicon glyphicon-eye-open"></span> </a></li>');     
+                            $(item).find('td').last().html('<li> <a onclick="showSingleObject(' + curr_id + ','+src+','+is_trash+')"> <span class="glyphicon glyphicon-eye-open"></span> </a></li>');     
                         });
                          $('li.item-redesocial').hide();
                          $('ul.item-menu-container').hide();
                         $('.item-colecao').each(function(num, item) {
                               var curr_id = $(this).find('.post_id').last().val();
-                              $(this).find('.item-funcs').last().append('<li style="float: right; margin-left: 10px;"> <a onclick="showSingleObject(' + curr_id + ','+src+')"> <span class="glyphicon glyphicon-eye-open"></span> </a></li>');
+                              $(this).find('.item-funcs').last().append('<li style="float: right; margin-left: 10px;"> <a onclick="showSingleObject(' + curr_id + ','+src+','+is_trash+')"> <span class="glyphicon glyphicon-eye-open"></span> </a></li>');
                         });
                  <?php else:  ?>     
                         $('li.item-redesocial').hide();
