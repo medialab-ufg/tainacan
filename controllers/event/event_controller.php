@@ -103,7 +103,7 @@ require_once(dirname(__FILE__).'../../../models/object/object_model.php');
 
                   $object_model = new ObjectModel();
                   $inserted_ids[] = $object_model->add_value_compound($data['collection_id'], $property, (int) $sub_property, 0, 0, $data['reason']);
-                  
+                    
                   update_post_meta($data['collection_id'], 'socialdb_property_' . $property . '_0', implode(',', $inserted_ids));
                   break;
               }

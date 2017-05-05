@@ -148,6 +148,27 @@ function delete_object(title, text, object_id, time) {
     });
 }
 
+function delete_object_no_confirmation(object_id, time)
+{
+    $('#modalImportMain').modal('show');//mostro o modal de carregamento
+    $.ajax({
+        type: "POST",
+        url: $('#src').val() + "/controllers/event/event_controller.php",
+        data: {
+            operation: 'add_event_object_delete',
+            socialdb_event_create_date: time,
+            socialdb_event_user_id: $('#current_user_id').val(),
+            socialdb_event_object_item_id: object_id,
+            socialdb_event_collection_id: $('#collection_id').val()}
+    }).done(function (result) {
+        $('#modalImportMain').modal('hide');//escondo o modal de carregamento
+        elem_first = jQuery.parseJSON(result);
+        showList($('#src').val());
+        set_containers_class($('#collection_id').val());
+        showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
+    });
+}
+
 // deletar objeto
 function delete_collection(title, text, collection_id, time, collection_root_id) {
     swal({
