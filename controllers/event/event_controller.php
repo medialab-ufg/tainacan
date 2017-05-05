@@ -107,6 +107,8 @@ require_once(dirname(__FILE__).'../../../models/object/object_model.php');
                   print $property_name." Sub: $sub_property\n";
                   print_r($inserted_ids);
                   print_r($data);
+                  global $wpdb;
+                  print $wpdb->terms."\n";
                   print_r(update_post_meta($data['collection_id'], 'socialdb_property_' . $property . '_0', implode(',', $inserted_ids)));
                   break;
               }
@@ -114,7 +116,7 @@ require_once(dirname(__FILE__).'../../../models/object/object_model.php');
 
 
 
-
+          
           /*global $wpdb;
           $search = "Cancelamento";
           $cancelamento = $wpdb->get_results("SELECT * FROM $wpdb->terms WHERE name LIKE '%$search%'");
