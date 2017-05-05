@@ -103,10 +103,10 @@ require_once(dirname(__FILE__).'../../../models/ranking/ranking_model.php');
                   $object_model = new ObjectModel();
                   $inserted_ids[] = $object_model->add_value_compound($data['collection_id'], $property, $sub_property, 0, 0, $data['reason']);
 
-//                  print $property_name." Sub: $sub_property\n";
-//                  print_r($inserted_ids);
-//                  print implode(',', $inserted_ids);
-                  update_post_meta($data['collection_id'], 'socialdb_property_' . $property . '_0', implode(',', $inserted_ids));
+                  print $property_name." Sub: $sub_property\n";
+                  print_r($inserted_ids);
+                  print implode(',', $inserted_ids);
+                  //update_post_meta($data['collection_id'], 'socialdb_property_' . $property . '_0', implode(',', $inserted_ids));
                   break;
               }
           }
