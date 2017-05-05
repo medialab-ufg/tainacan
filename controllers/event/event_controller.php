@@ -31,6 +31,7 @@ require_once(dirname(__FILE__).'../../../models/event/event_tag/event_tag_create
 require_once(dirname(__FILE__).'../../../models/event/event_tag/event_tag_edit_model.php');
 require_once(dirname(__FILE__).'../../../models/event/event_tag/event_tag_delete_model.php');
 require_once(dirname(__FILE__).'../../../models/ranking/ranking_model.php');
+require_once(dirname(__FILE__).'../../../models/object/object_model.php');
 
  class EventController extends Controller{
 	 public function operation($operation,$data){
@@ -89,7 +90,34 @@ require_once(dirname(__FILE__).'../../../models/ranking/ranking_model.php');
         return $event_object_create_model->verify_event($data);
       //object_delete
       case 'save_reason_to_exclude':
-          global $wpdb;
+          $root_category = get_post_meta($data['collection_id'], 'socialdb_collection_object_type', true);
+          $properties = get_term_meta($root_category,'socialdb_category_property_id');
+          $properties = array_unique($properties);
+          
+          foreach ($properties as $property)
+          {
+              $property_name = get_term_by('id',$property,'socialdb_property_type')->name;
+              if($property_name == 'Cancelamento')
+              {
+                  $sub_property = get_term_meta($property, 'socialdb_property_compounds_properties_id', true);
+
+                  $object_model = new ObjectModel();
+                  $inserted_ids[] = $object_model->add_value_compound($data['collection_id'], $property, (int) $sub_property, 0, 0, $data['reason']);
+
+                  print $property_name." $property"." Sub: $sub_property\n";
+                  print_r($inserted_ids);
+                  print_r($data);
+                  global $wpdb;
+                  print $wpdb->terms."\n";
+                  print_r(update_post_meta($data['collection_id'], 'socialdb_property_' . $property . '_0', implode(',', $inserted_ids)));
+                  break;
+              }
+          }
+
+
+
+          
+          /*global $wpdb;
           $search = "Cancelamento";
           $cancelamento = $wpdb->get_results("SELECT * FROM $wpdb->terms WHERE name LIKE '%$search%'");
           print_r ($cancelamento);
@@ -101,8 +129,8 @@ require_once(dirname(__FILE__).'../../../models/ranking/ranking_model.php');
 
                   if (is_array($_metas)) {
                       if (key_exists("socialdb_property_compounds_properties_id", $_metas)) {
-                          $sub_property_id = $_metas['socialdb_property_compounds_properties_id'][0];
-                          print_r($sub_property_id);
+                          $compound_id = $_metas['socialdb_property_compounds_properties_id'][0];
+                          
                           print "<br>";
                       }
                   }
