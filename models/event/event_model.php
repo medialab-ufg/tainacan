@@ -13,7 +13,56 @@ abstract class EventModel extends Model {
 
     var $parent;
     var $permission_name;
+    
+    /**
+     * function list_events($data)
+     * @param array $data Os dados vindos do formulario
+     * @return array com os dados a serem montados na view
+     * 
+     * @author: Eduardo Humberto 
+     */
+    public static function list_events_notification($data) {
+        $collectionModel = new CollectionModel;
 
+        $data['moderation_type'] = get_post_meta($data['collection_id'], 'socialdb_collection_moderation_type', true);
+        $data['moderation_type'] = (empty($data['moderation_type']) ? 'moderador' : $data['moderation_type']);
+        if ($data['moderation_type'] == 'democratico') {
+            $data['moderation_days'] = get_post_meta($data['collection_id'], 'socialdb_collection_moderation_days', true);
+            $collection_events = EventModel::list_all_events_terms($data);
+        } else {
+            if (current_user_can('manage_options') || $collectionModel->is_moderator($data['collection_id'], get_current_user_id())) {
+                $collection_events = EventModel::list_all_events_terms($data);
+            } else {
+                $collection_events = EventModel::list_all_events_by_user($data);
+            }
+        }
+
+        $ranking_model = new RankingModel;
+
+        if (!empty($collection_events)) {
+            foreach ($collection_events as $event) {
+                $info['state'] = get_post_meta($event->ID, 'socialdb_event_confirmed', true);
+                $info['name'] = $event->post_title;
+                $info['date'] = get_post_meta($event->ID, 'socialdb_event_create_date', true);
+                $info['type'] = EventModel::get_type($event);
+                $info['id'] = $event->ID;
+                $info['dump'] = $collectionModel->get_collection_by_user(get_current_user_id());
+                if ($data['moderation_type'] == 'democratico') {
+                    $info['democratic_vote_id'] = get_post_meta($event->ID, 'socialdb_event_democratic_vote_id', true);
+                    $count = $ranking_model->count_votes_binary($info['democratic_vote_id'], $event->ID);
+                    $info['count_up'] = $count['count_up'];
+                    $info['count_down'] = $count['count_down'];
+                }
+                if ($info['state'] == '') {
+                    $data['events_not_observed'][] = $info;
+                } else {
+                    $data['events_observed'][] = $info;
+                }
+            }
+        }
+
+        return $data;
+    }
     /**
      * function list_events($data)
      * @param array $data Os dados vindos do formulario
@@ -46,7 +95,6 @@ abstract class EventModel extends Model {
                 $info['date'] = get_post_meta($event->ID, 'socialdb_event_create_date', true);
                 $info['type'] = EventModel::get_type($event);
                 $info['id'] = $event->ID;
-                $info['dump'] = $collectionModel->get_collection_by_user(get_current_user_id());
                 if ($data['moderation_type'] == 'democratico') {
                     $info['democratic_vote_id'] = get_post_meta($event->ID, 'socialdb_event_democratic_vote_id', true);
                     $count = $ranking_model->count_votes_binary($info['democratic_vote_id'], $event->ID);
@@ -218,62 +266,71 @@ abstract class EventModel extends Model {
      * @author: Eduardo Humberto 
      */
     public static function get_type($event) {
-        $terms = wp_get_object_terms($event->ID, 'socialdb_event_type');
-        $parent = get_term_by('id', $terms[0]->term_id, 'socialdb_event_type');
-        switch ($parent->name) {
-            case 'socialdb_event_object_create':
-                return __('Create Object', 'tainacan');
-            case 'socialdb_event_object_delete':
-                return __('Delete Object', 'tainacan');
-            case 'socialdb_event_classification_create':
-                return __('Add Classification', 'tainacan');
-            case 'socialdb_event_classification_delete':
-                return __('Delete Classification', 'tainacan');
-            case 'socialdb_event_term_delete':
-                return __('Delete Category', 'tainacan');
-            case 'socialdb_event_term_create':
-                return __('Create Category', 'tainacan');
-            case 'socialdb_event_term_edit':
-                return __('Edit Category', 'tainacan');
-            case 'socialdb_event_tag_delete':
-                return __('Delete Tag', 'tainacan');
-            case 'socialdb_event_tag_create':
-                return __('Create Tag', 'tainacan');
-            case 'socialdb_event_tag_edit':
-                return __('Edit Tag', 'tainacan');
-            case 'socialdb_event_property_data_delete':
-                return __('Delete Data Property', 'tainacan');
-            case 'socialdb_event_property_data_create':
-                return __('Create Data Property', 'tainacan');
-            case 'socialdb_event_property_data_edit':
-                return __('Edit Data Property', 'tainacan');
-            case 'socialdb_event_property_data_edit_value':
-                return __('Edit Data Property value', 'tainacan');
-            case 'socialdb_event_property_object_delete':
-                return __('Delete Object Property', 'tainacan');
-            case 'socialdb_event_property_object_create':
-                return __('Create Object Property', 'tainacan');
-            case 'socialdb_event_property_object_edit':
-                return __('Edit Object Property', 'tainacan');
-            case 'socialdb_event_property_object_edit_value':
-                return __('Edit Object Property value', 'tainacan');
-
-            case 'socialdb_event_property_term_delete':
-                return __('Delete Property', 'tainacan');
-            case 'socialdb_event_property_term_create':
-                return __('Create Term Property', 'tainacan');
-            case 'socialdb_event_property_term_edit':
-                return __('Edit Term Property', 'tainacan');
-            case 'socialdb_event_collection_delete':
-                return __('Delete Collection', 'tainacan');
-            case 'socialdb_event_collection_create':
-                return __('Create Collection', 'tainacan');
-            case 'socialdb_event_comment_create':
-                return __('Create Comment', 'tainacan');
-            case 'socialdb_event_comment_edit':
-                return __('Edit Comment', 'tainacan');
-            case 'socialdb_event_comment_delete':
-                return __('Delete Comment', 'tainacan');
+        $terms = socialdb_relations_item($event->ID, 'socialdb_event_type');
+        if(isset($terms[0]) && isset($terms[0]->term_id) ){
+            $parent = get_term_by('id', $terms[0]->term_id, 'socialdb_event_type');
+            switch ($parent->name) {
+                case 'socialdb_event_object_create':
+                    return __('Create Object', 'tainacan');
+                case 'socialdb_event_object_delete':
+                    return __('Delete Object', 'tainacan');
+                case 'socialdb_event_classification_create':
+                    return __('Add Classification', 'tainacan');
+                case 'socialdb_event_classification_delete':
+                    return __('Delete Classification', 'tainacan');
+                case 'socialdb_event_term_delete':
+                    return __('Delete Category', 'tainacan');
+                case 'socialdb_event_term_create':
+                    return __('Create Category', 'tainacan');
+                case 'socialdb_event_term_edit':
+                    return __('Edit Category', 'tainacan');
+                case 'socialdb_event_tag_delete':
+                    return __('Delete Tag', 'tainacan');
+                case 'socialdb_event_tag_create':
+                    return __('Create Tag', 'tainacan');
+                case 'socialdb_event_tag_edit':
+                    return __('Edit Tag', 'tainacan');
+                case 'socialdb_event_property_data_delete':
+                    return __('Delete Data Property', 'tainacan');
+                case 'socialdb_event_property_data_create':
+                    return __('Create Data Property', 'tainacan');
+                case 'socialdb_event_property_data_edit':
+                    return __('Edit Data Property', 'tainacan');
+                case 'socialdb_event_property_data_edit_value':
+                    return __('Edit Data Property value', 'tainacan');
+                case 'socialdb_event_property_object_delete':
+                    return __('Delete Object Property', 'tainacan');
+                case 'socialdb_event_property_object_create':
+                    return __('Create Object Property', 'tainacan');
+                case 'socialdb_event_property_object_edit':
+                    return __('Edit Object Property', 'tainacan');
+                case 'socialdb_event_property_object_edit_value':
+                    return __('Edit Object Property value', 'tainacan');
+                 case 'socialdb_event_property_compound_create':
+                    return __('Create Compound Property', 'tainacan');
+                case 'socialdb_event_property_compound_edit':
+                    return __('Edit Compound Property', 'tainacan'); 
+                    
+                    
+                case 'socialdb_event_property_term_delete':
+                    return __('Delete Property', 'tainacan');
+                case 'socialdb_event_property_term_create':
+                    return __('Create Term Property', 'tainacan');
+                case 'socialdb_event_property_term_edit':
+                    return __('Edit Term Property', 'tainacan');
+                case 'socialdb_event_collection_delete':
+                    return __('Delete Collection', 'tainacan');
+                case 'socialdb_event_collection_create':
+                    return __('Create Collection', 'tainacan');
+                case 'socialdb_event_comment_create':
+                    return __('Create Comment', 'tainacan');
+                case 'socialdb_event_comment_edit':
+                    return __('Edit Comment', 'tainacan');
+                case 'socialdb_event_comment_delete':
+                    return __('Delete Comment', 'tainacan');
+            }
+        }else{
+            return  __('Operation', 'tainacan');
         }
     }
 

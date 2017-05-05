@@ -41,7 +41,7 @@ require_once(dirname(__FILE__).'../../../models/ranking/ranking_model.php');
         return $this->render(dirname(__FILE__).'../../../views/event/list.php', $data);
         break;
       case 'notification_events':
-        $data = EventModel::list_events($data);
+        $data = EventModel::list_events_notification($data);
         if(isset($data['events_not_observed'])){
           $not_observed_events = '&nbsp;'.count($data['events_not_observed']).'&nbsp;';
         }
