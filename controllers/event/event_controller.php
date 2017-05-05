@@ -96,8 +96,16 @@ require_once(dirname(__FILE__).'../../../models/ranking/ranking_model.php');
 
           foreach ($cancelamento as $bem_obj)
           {
-              $_metas = get_term_meta($bem_obj->term_id);
-              print_r($_metas);
+              if(is_object($bem_obj)) {
+                  $_metas = get_term_meta($bem_obj->term_id);
+
+                  if (is_array($_metas)) {
+                      if (key_exists("socialdb_property_compounds_properties_id", $_metas)) {
+                          $sub_property_id = $_metas['socialdb_property_compounds_properties_id'][0];
+                          print_r($sub_property_id);
+                      }
+                  }
+              }
           }
           /*$object_model = new ObjectModel();
           $object_model->add_value_compound($data['collection_id'], $compound_id, $property_id, 0, 0, $value);
