@@ -491,6 +491,8 @@
                             $("#labels_" + property + "_<?php echo $object_id; ?>").append('<p><a style="cursor:pointer;" onclick="wpquery_term_filter(' + term.term_id + ',' + property + ')">' + term.name + '</a></p><br>');//zero o html do container que recebera os
                         }
                     });
+                    $('#core_validation_'+property).val('true');
+                    set_field_valid(property,'core_validation_'+property);
                 }else{
                     $("#labels_" + property + "_<?php echo $object_id; ?>").append('<p><?php  _e('empty field', 'tainacan') ?></p>');
                 }

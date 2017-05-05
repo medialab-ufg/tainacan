@@ -1,11 +1,12 @@
 <?php
 include_once ('../../helpers/view_helper.php');
 include_once ('js/list_js.php');
+$url = get_the_permalink($collection_id);
 ?>
 <div id="events_title" class="col-md-12">
 
     <div class="col-md-12 config_default_style" id="events_settings">
-        <?php ViewHelper::render_config_title( __("Events", 'tainacan') ); ?>
+        <?php ViewHelper::render_config_title( __("Events", 'tainacan'), $url ); ?>
 
         <div id="alert_success_categories" class="alert alert-success" style="display: none;">
             <button type="button" class="close" onclick="hide_alert();"><span aria-hidden="true">&times;</span></button>

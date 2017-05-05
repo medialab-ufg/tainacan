@@ -32,9 +32,13 @@ if ( $loop->have_posts() ): ?>
                 if($item_guid){
                     $url =  $item_guid;
                 }else{
-                    $value = $viewHelper->helper_get_collection_by_object($curr_id);
-                    $colection_init_post = $value[0];
-                    $url =  site_url().'/'.$colection_init_post->post_name.'/'.get_post()->post_name;
+                    if(apply_filters('tainacan_is_bens_collection',$collection_id)){
+                        $value = $viewHelper->helper_get_collection_by_object($curr_id);
+                        $colection_init_post = $value[0];
+                        $url =  site_url().'/'.$colection_init_post->post_name.'/'.get_post()->post_name;
+                    }else{
+                        $url = '';
+                    }
                 }
                 $curr_date = "<strong>" . __('Created at: ', 'tainacan') . "</strong>" . get_the_date('d/m/Y');
                 $_object_description = get_the_content();
