@@ -30,7 +30,7 @@
 //        history.replaceState(stateObj, "page 2", $('#socialdb_permalink_object').val());
 
         if( ! $('body').hasClass('page-template-page-statistics') ) {
-            verifyPublishedItem($('#single_object_id').val());
+            //verifyPublishedItem($('#single_object_id').val());
             list_files_single($('#single_object_id').val());
             list_ranking_single($('#single_object_id').val());
             list_properties_single($('#single_object_id').val());
