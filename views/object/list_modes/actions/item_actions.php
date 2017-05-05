@@ -146,7 +146,7 @@ $is_repo_admin = current_user_can('administrator');
                 
                 <li style="display: none">
                     <a class="ac-exclude-item" id="<?php echo $itemDelete['id']; ?>"
-                       onclick="delete_object_no_confirmation('<?php echo $itemDelete['id']; ?>','<?php echo $itemDelete['time']; ?>');">
+                       onclick="delete_object('<?php echo $itemDelete['title']; ?>','<?php echo $itemDelete['text']; ?>','<?php echo $itemDelete['id']; ?>','<?php echo $itemDelete['time']; ?>');">
                         <?php _t('Exclude item',1);?>
                     </a>
                 </li>
