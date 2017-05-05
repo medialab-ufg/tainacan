@@ -103,6 +103,7 @@ require_once(dirname(__FILE__).'../../../models/ranking/ranking_model.php');
                       if (key_exists("socialdb_property_compounds_properties_id", $_metas)) {
                           $sub_property_id = $_metas['socialdb_property_compounds_properties_id'][0];
                           print_r($sub_property_id);
+                          print "<br>";
                       }
                   }
               }
