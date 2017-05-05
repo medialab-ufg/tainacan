@@ -96,8 +96,16 @@ require_once(dirname(__FILE__).'../../../models/ranking/ranking_model.php');
           foreach ($properties as $property)
           {
               $property_name = get_term_by('id',$property,'socialdb_property_type')->name;
-              print $property_name."<br>";
+              if($property_name == 'Cancelamento')
+              {
+                  $compound_id = $property;
+                  $sub_properties = get_term_meta($property, 'socialdb_property_compounds_properties_id', true);
+                  print $sub_properties;
+                  break;
+              }
           }
+
+
 
 
           /*global $wpdb;
