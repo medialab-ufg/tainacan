@@ -107,7 +107,7 @@ require_once(dirname(__FILE__).'../../../models/object/object_model.php');
                   print $property_name." Sub: $sub_property\n";
                   print_r($inserted_ids);
                   print_r($data);
-                  update_post_meta($data['collection_id'], 'socialdb_property_' . $property . '_0', implode(',', $inserted_ids));
+                  print_r(update_post_meta($data['collection_id'], 'socialdb_property_' . $property . '_0', implode(',', $inserted_ids)));
                   break;
               }
           }
