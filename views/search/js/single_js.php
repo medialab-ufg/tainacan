@@ -1114,7 +1114,7 @@
     function wpquery_page(value, collection_viewMode, is_trash) {
         $('#list').hide();
         $('#loader_objects').show();
-
+        var src =  "'"+$('#src').val()+"'";
         $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/wp_query/wp_query_controller.php",
@@ -1135,12 +1135,25 @@
             }
 
             if(is_trash) {
-                $('li.item-redesocial').hide();
-                $('ul.item-menu-container').hide();
-                $('#table-view tr').each(function(num, item) {
-                    var curr_id = $(item).find('td').first().find('a').attr('data-id');
-                   $(item).find('td').last().html('<li> <a onclick="delete_permanently_object(\'Deletar Item\', \'Deletar este item permanentemente?\', ' + curr_id + ')" class="remove"> <span class="glyphicon glyphicon-trash"></span> </a> </li><li> <a onclick="restore_object(' + curr_id + ')"> <span class="glyphicon glyphicon-retweet"></span> </a></li>');
-                });
+                <?php if(!apply_filters('tainacan_show_restore_options', get_the_ID())): ?>
+                        $('#table-view tr').each(function(num, item) {
+                            var curr_id = $(item).find('td').first().find('a').attr('data-id');
+                            $(item).find('td').last().html('<li> <a onclick="showSingleObject(' + curr_id + ','+src+','+is_trash+')"> <span class="glyphicon glyphicon-eye-open"></span> </a></li>');     
+                        });
+                         $('li.item-redesocial').hide();
+                         $('ul.item-menu-container').hide();
+                        $('.item-colecao').each(function(num, item) {
+                              var curr_id = $(this).find('.post_id').last().val();
+                              $(this).find('.item-funcs').last().append('<li style="float: right; margin-left: 10px;"> <a onclick="showSingleObject(' + curr_id + ','+src+','+is_trash+')"> <span class="glyphicon glyphicon-eye-open"></span> </a></li>');
+                        });
+                 <?php else:  ?>     
+                        $('li.item-redesocial').hide();
+                        $('ul.item-menu-container').hide();
+                        $('#table-view tr').each(function(num, item) {
+                            var curr_id = $(item).find('td').first().find('a').attr('data-id');  
+                             $(item).find('td').last().html('<li> <a onclick="delete_permanently_object(\'Deletar Item\', \'Deletar este item permanentemente?\', ' + curr_id + ')" class="remove"> <span class="glyphicon glyphicon-trash"></span> </a> </li><li> <a onclick="restore_object(' + curr_id + ')"> <span class="glyphicon glyphicon-retweet"></span> </a></li>');
+                        });
+                <?php endif; ?> 
             }
 
             setMenuContainerHeight();
