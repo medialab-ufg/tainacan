@@ -114,6 +114,14 @@ $post_thumb = get_the_post_thumbnail($socialdb_logo, 'thumbnail');
             </div>
             <input type="hidden" id="operation" name="operation" value="update_configuration">
             <button type="submit" class="btn btn-primary pull-right"><?php _e('Submit','tainacan'); ?></button>
+
+            <!-- Mapeamento coleção -->
+            <?php
+            if(has_action("add_mapping_library_collections"))
+            {
+                do_action("add_mapping_library_collections");
+            }
+            ?>
         </form>
     </div>
 </div>

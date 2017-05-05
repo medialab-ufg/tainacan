@@ -268,6 +268,73 @@ function show_all_meta($collection_id)
     <?php
 }
 
+add_action('add_mapping_library_collections', 'mapping_library_collections');
+function mapping_library_collections()
+{
+    $args = array(
+        'posts_per_page' => 100,
+        'post_type' => 'socialdb_collection',
+    );
+    $posts = get_posts($args);
+
+    $posts_name = [];
+    foreach($posts as $post)
+    {
+        $posts_name[] = $post->post_title;
+    }
+
+    $should_be_mapped = array(
+        'Cadastro de usuario',
+        'Emprestimo',
+        'Devoluções',
+        'Reservas',
+        'Livro',
+        'Panfleto',
+        'Manuscrito',
+        'Tese',
+        'Periodico',
+        'Artigo',
+        'Arquivo de computador',
+        'Mapa',
+        'Foto',
+        'Filme',
+        'Partitura',
+        'Música',
+        'Som não musical',
+        'Objecto 3D',
+        'Exemplares',
+        'Autoridades',
+        'Vocabulário',
+        'Fornecedores',
+        'Requisições',
+        'Cotações',
+        'Pedidos'
+        );
+    ?>
+    <form class="form-group">
+    <?php
+
+    foreach ($should_be_mapped as $name)
+    {
+        ?>
+        <select name="<?php echo $name ?>" id="<?php echo $name ?>" class='data form-control'>
+            <?php
+                foreach ($posts_name as $post_name)
+                {
+                    ?>
+                        <option name='<?php echo $post_name ?>' value='<?php echo $post_name ?>'><?php echo $post_name ?></option>
+                    <?php
+                }
+            ?>
+        </select>
+        <?php
+    }
+
+    ?>
+    </form>
+    <?php
+}
+
 /*
  * Functions
  */

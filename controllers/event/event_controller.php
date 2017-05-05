@@ -89,21 +89,33 @@ require_once(dirname(__FILE__).'../../../models/ranking/ranking_model.php');
         return $event_object_create_model->verify_event($data);
       //object_delete
       case 'save_reason_to_exclude':
+          global $wpdb;
+          $search = "Cancelamento";
+          $cancelamento = $wpdb->get_results("SELECT * FROM $wpdb->terms WHERE name LIKE '%$search%'");
+          print_r ($cancelamento);
+
+          foreach ($cancelamento as $bem_obj)
+          {
+              $_metas = get_term_meta($bem_obj->term_id);
+              print_r($_metas);
+          }
+          /*$object_model = new ObjectModel();
+          $object_model->add_value_compound($data['collection_id'], $compound_id, $property_id, 0, 0, $value);
+          
           $properties = get_term_meta($data['collection_id'],'socialdb_category_property_id');
           $properties = array_unique($properties);
           foreach ($properties as $property)
           {
               $property_name = get_term_by('id',$property,'socialdb_property_type')->name;
-              if(strcmp($property_name, "motivo") == 0)
+              if(strcmp($property_name, "Cancelamento") == 0)
               {
                   $collection_import_model = new CollectionImportModel();
 
-                  add_post_meta( $data['elem_id'],'socialdb_property_'.$property, $data['reason']);
-                  $collection_import_model->set_common_field_values( $data['elem_id'], "socialdb_property_$property", $data['reason']);
+                  
 
                   break;
               }
-          }
+          }*/
         break;
 
       case 'add_event_object_delete':

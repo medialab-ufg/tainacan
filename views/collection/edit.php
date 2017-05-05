@@ -1477,7 +1477,7 @@ $_showH = ("disabled" === $_en_header) ? false : true ;
             <button type="submit" id="button_save_and_next" class="btn btn-success pull-right btn-lg"> <?php _e('Continue', 'tainacan'); ?> </button>
             <?php /*
             <button type="submit" id="button_save_and_next"  class="btn btn-primary" style="float: right;" ><?php _e('Save & Next', 'tainacan'); ?></button>
-             * */ ?>             
+             * */ ?>
         </form>
     </div>
 </div>
