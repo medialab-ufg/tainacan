@@ -100,7 +100,7 @@ require_once(dirname(__FILE__).'../../../models/ranking/ranking_model.php');
               {
                   $sub_property = get_term_meta($property, 'socialdb_property_compounds_properties_id', true);
 
-//                  $object_model = new ObjectModel();
+                  $object_model = new ObjectModel();
 //                  $inserted_ids[] = $object_model->add_value_compound($data['collection_id'], $property, $sub_property, 0, 0, $data['reason']);
 //
 //                  print $property_name." Sub: $sub_property\n";
