@@ -31,6 +31,7 @@ require_once(dirname(__FILE__).'../../../models/event/event_tag/event_tag_create
 require_once(dirname(__FILE__).'../../../models/event/event_tag/event_tag_edit_model.php');
 require_once(dirname(__FILE__).'../../../models/event/event_tag/event_tag_delete_model.php');
 require_once(dirname(__FILE__).'../../../models/ranking/ranking_model.php');
+require_once(dirname(__FILE__).'../../../models/object/object_model.php');
 
  class EventController extends Controller{
 	 public function operation($operation,$data){
