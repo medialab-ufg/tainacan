@@ -158,3 +158,48 @@
     margin-bottom: 10px;
   }
 }
+
+@media all and (min-width: 992px) and (max-width: 1211px) {
+
+  .header-colecao {
+    label {
+      &.order-by-label {
+        width: 100% !important;
+      }
+    } // label
+
+    .viewMode-control {
+      label.sec-color {
+        font-size: 90%;
+        width: 10%;
+      }
+      #collectionViewMode {
+        float: right !important;
+        padding: 3px 7px !important;
+      }
+    } // .viewMode-control
+    .trash-div {
+      width: 12% !important;
+      button {
+        padding: 3px 6.5px !important;
+        margin-left: 0 !important;
+        &.export-btn {
+          span {
+            font-size: 10px !important;
+          }
+          margin-right: 10px;
+        }
+      }
+    }
+  } // .header-colecao
+} // responsiveness for home collection actions and filters
+
+@media all and (min-width: 992px) and (max-width: 1016px) {
+  .trash-div {
+    button {
+      &.export-btn {
+        margin-right: 5px !important;
+      }
+    }
+  }
+}
