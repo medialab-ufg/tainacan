@@ -96,13 +96,19 @@ button.collection-trash {
           padding-bottom: 10px;
           padding-top: 10px;
 
+          button.export-btn {
+            span {
+              font-size: 15px;
+            }
+          }
+
           label {
             color: $brand-medium-blue;
             font-weight: normal;
             padding-top: 5px;
 
             &.order-by-label {
-              width: 140px;
+               width: 140px;
               // background-color: #0A246A;
             }
           } // label
