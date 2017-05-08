@@ -41,7 +41,7 @@
         <div class="col-md-2">
             <ul class="item-funcs right">
                 <input type="hidden" class="post_id" name="post_id" value="<?= $curr_id ?>">
-                <li>
+                <li class="tainacan-museum-clear">
                     <a id="modal_network<?php echo $curr_id; ?>" onclick="showModalShareNetwork(<?php echo $curr_id; ?>)">
                         <div style="cursor:pointer;" data-icon="&#xe00b;"></div>
                     </a>

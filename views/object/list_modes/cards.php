@@ -151,7 +151,7 @@ $itemURL = $_current_collection . basename(get_permalink());
 
                                 <ul class="item-funcs col-md-5 right">
                                     <input type="hidden" class="post_id" name="post_id" value="<?= $curr_id ?>">
-                                    <li class="item-redesocial">
+                                    <li class="item-redesocial tainacan-museum-clear">
                                         <a id="modal_network<?php echo $curr_id; ?>" onclick="showModalShareNetwork(<?php echo $curr_id; ?>)">
                                             <div style="cursor:pointer;" data-icon="&#xe00b;"></div>
                                         </a>
@@ -165,7 +165,7 @@ $itemURL = $_current_collection . basename(get_permalink());
 
                                 <ul class="item-funcs-table col-md-5 right" style="display:none;">
                                     <input type="hidden" class="post_id" name="post_id" value="<?= $curr_id ?>">
-                                    <li class="item-redesocial" style="float: right; margin-left: 10px">
+                                    <li class="item-redesocial tainacan-museum-clear" style="float: right; margin-left: 10px">
                                         <a id="modal_network<?php echo $curr_id; ?>" onclick="showModalShareNetwork(<?php echo $curr_id; ?>)">
                                             <div style="cursor:pointer;" data-icon="&#xe00b;"></div>
                                         </a>

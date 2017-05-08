@@ -30,7 +30,7 @@
                     <span class="glyphicon glyphicon-tint"></span> &nbsp; <?php _e('Layout', 'tainacan'); ?>
                 </a>
             </li>
-            <li <?php do_action('menu_collection_tags') ?>>
+            <li <?php do_action('menu_collection_tags') ?> class="tainacan-museum-clear">
                 <a style="cursor: pointer;" onclick="showCollectionTags('<?php echo get_template_directory_uri() ?>');updateStateCollection('tags');" >
                     <span class="glyphicon glyphicon-tag"></span> &nbsp; <?php _e('Tags', 'tainacan'); ?>
                 </a>
@@ -43,12 +43,12 @@
 
                 <li class="divider"></li>
 
-                <li <?php do_action('menu_collection_social_configuration') ?>>
+                <li <?php do_action('menu_collection_social_configuration') ?> class="tainacan-museum-clear">
                     <a style="cursor: pointer;" onclick=" showSocialConfiguration('<?php echo get_template_directory_uri() ?>');updateStateCollection('social');" >
                         <span class="glyphicon glyphicon-globe"></span> &nbsp;<?php _e('Social', 'tainacan'); ?>
                     </a>
                 </li>
-                <li  <?php do_action('menu_collection_license') ?>>
+                <li <?php do_action('menu_collection_license') ?> class="tainacan-museum-clear">
                     <a style="cursor: pointer;" onclick="showLicensesConfiguration('<?php echo get_template_directory_uri() ?>');updateStateCollection('licenses');" >
                         <span class="glyphicon glyphicon-duplicate"></span> &nbsp;<?php _e('Licenses', 'tainacan'); ?>
                     </a>
@@ -69,10 +69,14 @@
                     </a>
                 </li>
 
-                <li class="divider"></li>
+                <li class="divider tainacan-museum-clear"></li>
 
-                <li style="cursor: pointer;"><a onclick="delete_collection_redirect('<?php _e('Delete Collection', 'tainacan') ?>', '<?php echo __('Are you sure to remove the collection: ', 'tainacan') . $collection_post->post_title ?>', '<?php echo $collection_post->ID ?>', '<?= mktime() ?>', '<?php echo get_option('collection_root_id') ?>')" href="javascript:void(0)"><span class="glyphicon glyphicon-trash"></span>&nbsp;<?php _e('Delete', 'tainacan'); ?></a></li>
-                <li style="cursor: pointer;"><a onclick="clean_collection('<?php _e('Clean Collection', 'tainacan') ?>', '<?php echo __('Are you sure to remove all items', 'tainacan') ?>', '<?php echo $collection_post->ID ?>')" style="cursor: pointer;"><span class="glyphicon glyphicon-unchecked"></span>&nbsp;<?php _e('Clean Collection', 'tainacan'); ?></a></li>
+                <li class="tainacan-museum-clear" style="cursor: pointer;">
+                    <a onclick="delete_collection_redirect('<?php _e('Delete Collection', 'tainacan') ?>', '<?php echo __('Are you sure to remove the collection: ', 'tainacan') . $collection_post->post_title ?>', '<?php echo $collection_post->ID ?>', '<?= mktime() ?>', '<?php echo get_option('collection_root_id') ?>')" href="javascript:void(0)"><span class="glyphicon glyphicon-trash"></span>&nbsp;<?php _e('Delete', 'tainacan'); ?></a>
+                </li>
+                <li class="tainacan-museum-clear" style="cursor: pointer;">
+                    <a onclick="clean_collection('<?php _e('Clean Collection', 'tainacan') ?>', '<?php echo __('Are you sure to remove all items', 'tainacan') ?>', '<?php echo $collection_post->ID ?>')" style="cursor: pointer;"><span class="glyphicon glyphicon-unchecked"></span>&nbsp;<?php _e('Clean Collection', 'tainacan'); ?></a>
+                </li>
 
                 <li class="divider"></li>
 
