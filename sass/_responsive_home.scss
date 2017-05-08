@@ -179,7 +179,7 @@
       }
     } // .viewMode-control
     .trash-div {
-      width: 12% !important;
+      width: 12%;
       button {
         padding: 3px 6.5px !important;
         margin-left: 0 !important;
@@ -202,4 +202,82 @@
       }
     }
   }
+}
+
+@media all and (min-width: 650px) and (max-width: 991px) {
+  .header-colecao {
+    margin-top: 10px;
+
+    .row > div {
+      float: left;
+      &.col-md-5 {
+        width: 40%;
+      }
+    }
+
+    #collectionViewMode {
+      float: left !important;
+      padding: 3px 7px !important;
+    }
+
+    label {
+      &.order-by-label {
+        width: 60% !important;
+      }
+      &.sec-color {
+        float: left;
+        font-size: 85%;
+        width: 40%;
+      }
+    }
+    .trash-div {
+      //width: 12% !important;
+      button {
+        padding: 3px 6px !important;
+        margin-left: 0 !important;
+        &.export-btn {
+          span {
+            font-size: 10px !important;
+          }
+          margin-right: 10px;
+        }
+      }
+    }
+  } // header-colecao
+}
+
+@media all and (max-width: 650px){
+  .header-colecao {
+    margin-top: 20px !important;
+
+    .row > div {
+      float: left;
+      //border: 1px solid;
+
+      &.tainacan-add-item {
+        width: 20% !important;
+      }
+
+      &.col-md-5 {
+        width: 75%;
+      }
+
+      &.col-md-2 {
+        margin-top: 15px;
+        margin-left: 0 !important;
+        width: 25% !important;
+
+        .selectable-items .selectors {
+          width: 70% !important;
+        }
+      }
+    } // .row
+
+    .trash-div {
+      width: 35% !important;
+      float: left !important;
+      margin-left: 10%;
+      margin-top: 15px;
+    }
+  } // header-colecao
 }

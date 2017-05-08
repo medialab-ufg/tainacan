@@ -412,6 +412,7 @@ while (have_posts()) : the_post();
                                         </div>
                                     <?php endif; ?>
                                 </div>
+
                                 <div class="col-md-2 selectable-items selectable-items-trash" id="trash-selectable" style="display: none;">
                                     <?php
                                     if (is_user_logged_in() && get_the_ID() != get_option('collection_root_id') &&
