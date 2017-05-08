@@ -2902,6 +2902,9 @@ function show_reason_modal(id)
     $("#btnRemoveReason").attr("data-id-exclude", id);
 }
 
+//Modal addReason IBRAM
+
+//Exclui item selecionado 
 function exclude_item()
 {
     var text = $("#reasontext").val();
@@ -2917,5 +2920,18 @@ function exclude_item()
 
         $("#reasonModal").modal('hide');
         $("#" + id_delete).click();
+    }
+}
+
+//Verifica se botão de exclusão deve ser ativado
+function change_button()
+{
+    var text = $("#reasontext").val();
+    if(text.length > 0)
+    {
+        $("#btnRemoveReason").attr('disabled', false);
+    }else
+    {
+        $("#btnRemoveReason").attr('disabled', true);
     }
 }
