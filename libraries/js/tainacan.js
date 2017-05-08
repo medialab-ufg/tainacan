@@ -229,6 +229,11 @@ $(window).load(function () {
         redirectAdvancedSearch('#search_collections');
        // showAdvancedSearch($("#src").val(), search_for);
     });
+    $('#formSearchCollectionsIbram').submit(function (e) {
+        e.preventDefault();
+        showIbramSearch( $('#search_collections').val());
+       // showAdvancedSearch($("#src").val(), search_for);
+    });
 
     // When user types enter at main search box, it opens the advanced search form with the searched term
     /* $("#search_collections").keyup(function (e) {
@@ -1715,11 +1720,6 @@ function showModalFilters(action, category_root_name, category_root_id, dynatree
 }
 
 function showSingleObject(object_id, src,garbage) {
-    if(!garbage && $("#item_collection_"+object_id).length > 0 && $("#has_collection_"+object_id).val() !== $("#collection_id").val()){
-        window.location = $("#item_collection_"+object_id).val();
-        return true;
-    }
-    
     $.ajax({
         url: src + '/controllers/object/object_controller.php',
         type: 'POST',

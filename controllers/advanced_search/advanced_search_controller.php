@@ -67,7 +67,7 @@ class AdvancedSearchController extends Controller {
                     if($data['advanced_search_general']!==''){ //se utilizar a busca generalizada
                         $args_object = $wpquery_model->keyword_filter(['value'=>$data['advanced_search_general']]);
                         $args_object['collection_id'] = $data['advanced_search_collection'];
-                        $args_object['category_root_id'] = $wpquery_model->get_category_root_of($data['advanced_search_collection']);
+                        $args_object['category_root_id'] =  (has_filter('limit_search_collections')) ? apply_filters('limit_search_collections','') : $wpquery_model->get_category_root_of($data['advanced_search_collection']);
                         $paramters_object = $wpquery_model->do_filter($args_object); 
                         $loop_objects = new WP_Query($paramters_object);
                     }else{

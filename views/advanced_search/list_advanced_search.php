@@ -17,8 +17,8 @@ $number_elements = [10,20,50,100];
 ?>  
 <h3>
     <?php _e('Search Results', 'tainacan'); ?>
-    <a class="btn btn-default pull-right" onclick="redirect_collection($('#advanced_search_collection_id').val())" >
-        <?php _e('Back to the collection page', 'tainacan'); ?>
+    <a class="btn btn-default pull-right"  onclick="back_to_search_form()">
+        <?php _e('Do new search','tainacan')?>
     </a> 
 </h3>
 <hr>
@@ -314,13 +314,5 @@ endif;
     </div>
 </div>
 <!---------------------- FIM:LISTA DE OBJETOS ------------------------------------->   
-<div class="col-md-12" style="padding-right: 0px;margin-top: 15px;">
-    <button type="button" 
-            class="btn btn-success btn-lg pull-right" 
-            onclick="back_to_search_form()">
-        <?php _e('Do new search','tainacan')?>
-    </button>
-</div>
-
 
 

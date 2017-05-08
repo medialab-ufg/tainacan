@@ -199,6 +199,8 @@
                         //  } else {
                         if(categories&&categories.indexOf(children.term_id)>-1){
                             checked = 'checked="checked"';
+                            $('#core_validation_'+selectbox).val('true');
+                            set_field_valid(selectbox,'core_validation_'+selectbox);
                         }
                        //  delete_value(children.term_id);//retiro
                         $('#field_property_term_' + radio).append('<input '+checked+' '+required+' type="radio" name="socialdb_propertyterm_'+radio+'" value="' + children.term_id + '">&nbsp;' + children.name + '<br>');
@@ -230,6 +232,8 @@
                         }
                         if(categories&&categories.indexOf(children.term_id)>-1){
                             checked = 'checked="checked"';
+                            $('#core_validation_'+checkbox).val('true');
+                            set_field_valid(checkbox,'core_validation_'+checkbox);
                         }
                         //  if (property.id == selected) {
                         //     $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
@@ -270,6 +274,8 @@
                            //  delete_value(children.term_id);
                             if(categories&&categories.indexOf(children.term_id)>-1){
                                 checked = 'selected="selected"';
+                                $('#core_validation_'+selectbox).val('true');
+                                set_field_valid(selectbox,'core_validation_'+selectbox);
                             }
                             $('#field_property_term_' + selectbox).append('<option '+checked+' value="' + children.term_id + '">' + children.name + '</option>');
                             //  }

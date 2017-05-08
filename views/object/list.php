@@ -27,19 +27,6 @@ if ( $loop->have_posts() ): ?>
                 $latitude = get_post_meta($curr_id, "socialdb_property_" . $geo_coordinates["lat"]);
                 $longitude = get_post_meta($curr_id, "socialdb_property_" . $geo_coordinates["long"]);
                 $location = get_post_meta($curr_id, "socialdb_property_" . $geo_loc);
-                $item_guid = get_post_meta($curr_id, "socialdb_object_guid",true);
-                $collection_id_origin = get_post_meta($curr_id, "socialdb_object_collection_init",true);
-                if($item_guid){
-                    $url =  $item_guid;
-                }else{
-                    if(apply_filters('tainacan_is_bens_collection',$collection_id)){
-                        $value = $viewHelper->helper_get_collection_by_object($curr_id);
-                        $colection_init_post = $value[0];
-                        $url =  site_url().'/'.$colection_init_post->post_name.'/'.get_post()->post_name;
-                    }else{
-                        $url = '';
-                    }
-                }
                 $curr_date = "<strong>" . __('Created at: ', 'tainacan') . "</strong>" . get_the_date('d/m/Y');
                 $_object_description = get_the_content();
                 
@@ -47,10 +34,6 @@ if ( $loop->have_posts() ): ?>
                 include "list_modes/cards.php";
                 include "list_modes/list.php";
                 include "list_modes/gallery.php";
-                ?>
-                <input type="hidden" id="item_collection_<?php echo $curr_id ?>" value="<?php echo $url ?>">
-                <input type="hidden" id="has_collection_<?php echo $curr_id ?>" value="<?php echo $collection_id_origin ?>">
-                <?php
             endwhile;
 
             include_once "list_modes/slideshow.php";

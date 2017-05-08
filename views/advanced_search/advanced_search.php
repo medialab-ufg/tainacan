@@ -1,9 +1,12 @@
 <?php include_once ('js/advanced_search_js.php'); ?>
-<form id="advanced_search_submit">
+<form id="advanced_search_submit" style="margin-top: 15px;">
     <input type="hidden" id="advanced_search_operation" name="operation" value="do_advanced_search">   
     <input type="hidden" id="advanced_search_wp_query_args_collection" name="advanced_search_wp_query_args_collection" value="">
     <input type="hidden" id="advanced_search_wp_query_args_item" name="advanced_search_wp_query_args_collection" value="">
     <input type="hidden" id="advanced_search_collection_id" name="collection_id" value="<?php echo $collection_id; ?>">
+    <?php if(has_action('filter_search_alter')): ?>
+        <?php do_action('filter_search_alter',$home_search_term,$collection_id) ?>   
+    <?php else: ?>
     <div id="container_filtros" class="row">
         <ol class="breadcrumb">
             <li><a href="<?php echo get_permalink(get_option('collection_root_id')); ?>"> <?php _e('Repository', 'tainacan') ?> </a></li>
@@ -68,6 +71,7 @@
 <!--label for="search_for"><?php _e('for', 'tainacan'); ?></label>
 <input type="text" class="form-control" id="search_for" name="search_for" required="required" value="" -->
     </div> 
+    <?php endif; ?>
     <div id="resultados_advanced_search" style="display: none;">
         <ol class="breadcrumb" style="margin-top: -15px; padding-left: 0; background: #f2f2f2;">
             <li><a href="<?php echo get_permalink(get_option('collection_root_id')); ?>"> <?php _e('Repository', 'tainacan') ?> </a></li>

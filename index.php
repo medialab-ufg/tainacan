@@ -46,34 +46,35 @@ if (isset($_GET['info_messages'])) {
 <input type="hidden" id="socialdb_fb_api_id" name="socialdb_fb_api_id" value="<?php echo $options['socialdb_fb_api_id']; ?>">
 <input type="hidden" id="socialdb_embed_api_id" name="socialdb_embed_api_id" value="<?php echo $options['socialdb_embed_api_id']; ?>">
 <input type="hidden" id="collection_id" name="collection_id" value="<?php echo get_option('collection_root_id'); ?>">
-
 <div id="main_part" class="home">
-    <div class="row container-fluid">
-        <div class="project-info">
-            <center>
-                <h1> <?php bloginfo('name') ?> </h1>
-                <h3> <?php bloginfo('description') ?> </h3>
-            </center>
+    <?php if(has_action('alter_home_page')): ?>
+        <?php do_action('alter_home_page') ?>
+    <?php else: ?>
+        <div class="row container-fluid">
+            <div class="project-info">
+                <center>
+                    <h1> <?php bloginfo('name') ?> </h1>
+                    <h3> <?php bloginfo('description') ?> </h3>
+                </center>
+            </div>
+            <div id="searchBoxIndex" class="col-md-3 col-sm-12 center">
+                <form id="formSearchCollections" role="search">
+                    <div class="input-group search-collection search-home">
+                        <input style="color:white;" type="text" class="form-control" name="search_collections" id="search_collections" onfocus="changeBoxWidth(this)" placeholder="<?php _e('Find', 'tainacan') ?>"/>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button"  onclick="redirectAdvancedSearch('#search_collections');"><span class="glyphicon glyphicon-search"></span></button>
+                        </span>
+                    </div>
+                </form>
+                <a onclick="redirectAdvancedSearch(false);" href="javascript:void(0)" class="col-md-12 adv_search">
+                    <span class="white"><?php _e('Advanced search', 'tainacan') ?></span>
+                </a>
+             </div>
         </div>
-        <div id="searchBoxIndex" class="col-md-3 col-sm-12 center">
-            <form id="formSearchCollections" role="search">
-                <div class="input-group search-collection search-home">
-                    <input style="color:white;" type="text" class="form-control" name="search_collections" id="search_collections" onfocus="changeBoxWidth(this)" placeholder="<?php _e('Find', 'tainacan') ?>"/>
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="button"  onclick="redirectAdvancedSearch('#search_collections');"><span class="glyphicon glyphicon-search"></span></button>
-                    </span>
-                </div>
-            </form>
-            <a onclick="redirectAdvancedSearch(false);" href="javascript:void(0)" class="col-md-12 adv_search">
-                <span class="white"><?php _e('Advanced search', 'tainacan') ?></span>
-            </a>
-         </div>
-    </div>
 
-    <?php include_once "views/collection/collec_share.php"; ?>
-
+        <?php include_once "views/collection/collec_share.php"; ?>
+    <?php endif; ?>
 </div>
-
 </header>
 
 <!-- TAINACAN: esta div (AJAX) recebe html E esta presente tanto na index quanto no single, pois algumas views da administracao sao carregadas aqui -->
