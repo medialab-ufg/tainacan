@@ -234,6 +234,11 @@ $(window).load(function () {
         showIbramSearch( $('#search_collections').val());
        // showAdvancedSearch($("#src").val(), search_for);
     });
+    $('#formSearchCollectionsTopSearch').submit(function (e) {
+        e.preventDefault();
+        showIbramSearch( $('#search_collections').val());
+       // showAdvancedSearch($("#src").val(), search_for);
+    });
 
     // When user types enter at main search box, it opens the advanced search form with the searched term
     /* $("#search_collections").keyup(function (e) {

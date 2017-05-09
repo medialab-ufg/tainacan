@@ -53,6 +53,7 @@ $itemURL = $_current_collection . basename(get_permalink());
                                             echo '<input type="hidden" name="meta_id_table" value="' . $_META['id'] . '" data-mtype="' . $_META['tipo'] . '">';
 
                                         if ($_META['tipo'] === 'property_data') {
+                                            $meta_type = get_term_meta($_META['id'], 'socialdb_property_data_widget', true);
                                             $check_fixed = get_term($_meta_obj->id);
                                             $_out_ = $_DEFAULT_EMPTY_VALUE;
 
@@ -81,6 +82,13 @@ $itemURL = $_current_collection . basename(get_permalink());
                                                 if (!empty($__item_meta)) {
                                                     $_out_ = $__item_meta;
                                                 }
+                                            }
+
+                                            if ($meta_type == 'date') {
+                                                $date_temp = explode('-', $_out_);
+                                                if (count($date_temp) > 1):
+                                                    $_out_ = $date_temp[2] . '/' . $date_temp[1] . '/' . $date_temp[0];
+                                                endif;
                                             }
 
                                             echo '<input type="hidden" name="item_table_meta" value="' . $_out_ . '" />';

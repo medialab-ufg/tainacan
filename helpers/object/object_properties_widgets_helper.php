@@ -647,7 +647,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                                 </a>
                             </div>
                         <?php endif; ?>
-                        <?php echo ($is_show_container==1) ? ''  : $this->render_button_cardinality($property,$i) ?>
+                        <?php echo ($is_show_container==1) ? ''  : (!isset($references['is_view_mode'])) ? $this->render_button_cardinality($property,$i) : '' ?>
                     </div>
                 <?php endfor; ?>
                 <input type="hidden"

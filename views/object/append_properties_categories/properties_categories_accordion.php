@@ -251,10 +251,35 @@ foreach($original_properties as $property):
             </h2>
             <?php if($is_view_mode  || (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true' && !isset($not_block))): ?>
                 <div>
-                    <?php if(isset($property['metas']['value'][0])): ?>
-                        <p><?php  echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $property['metas']['value'][0] . "'" . ',' . $property['id'] . ')">' . $property['metas']['value'][0] . '</a>';  ?></p>
+                    <!--?php if(isset($property['metas']['value'][0])): ?>
+                        <p>< ?php  echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $property['metas']['value'][0] . "'" . ',' . $property['id'] . ')">' . $property['metas']['value'][0] . '</a>';  ?></p>
+                    < ?php else: ?>
+                        <p>< ?php  _e('empty field', 'tainacan') ?></p>
+                    < ?php endif ?-->
+                    
+                    <?php if (is_plugin_active('data_aacr2/data_aacr2.php') && $property['type'] == 'date' && get_post_meta($object_id, "socialdb_property_{$property['id']}_date", true)): ?>
+                        <?php $value = get_post_meta($object_id, "socialdb_property_{$property['id']}_date", true); ?>
+                        <p><?php echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $value . "'" . ',' . $property['id'] . ')">' . $value . '</a>'; ?></p>
+                    <?php elseif (isset($property['metas']['value'][0])): ?>
+                        <?php $is_property_date = false; ?>
+                        <?php if ($property['type'] == 'date'): ?>
+                            <?php $is_property_date = true; ?>
+                        <?php endif; ?>
+                        <?php foreach ($property['metas']['value'] as $value): if (empty($value)) continue; ?>
+                            <?php
+                            if ($is_property_date):
+                                $date_temp = explode('-', $value);
+                                if (count($date_temp)>1):
+                                    $value = $date_temp[2].'/'.$date_temp[1].'/'.$date_temp[0];
+                                endif;
+                            endif;
+                            ?>
+                            <p><?php echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $value . "'" . ',' . $property['id'] . ')">' . $value . '</a>'; ?></p>
+                            <?php
+                        endforeach;
+                        ?>
                     <?php else: ?>
-                        <p><?php  _e('empty field', 'tainacan') ?></p>
+                        <p><?php _e('empty field', 'tainacan') ?></p>
                     <?php endif ?>
                 </div> 
             <?php else: ?> 
