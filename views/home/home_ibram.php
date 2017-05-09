@@ -11,14 +11,56 @@ wp_nav_menu( ['theme_location' => $_current_menu, 'container_class' => 'containe
 
 $fixed_home_collections = ["Empréstimos", "Conservação", "Restaurações", "Exposição"];
 ?>
-<div class="col-md-12 ibram-home-container">
+<style>
+    .index-menu{
+        border: 4px solid #E8E8E8;
+        background: white;
+        padding: 10px 40px 30px 40px;
+        margin: 0 0 40px 0;
+        font-size: 13pt;
+        text-align: left;
+        color:black;
+    }
+    .index-menu p{
+        color:black;
+    }
+</style>
+<div class="col-md-12 ibram-home-container tainacan-config-container">
     <div class="row">
-        <?php foreach( $fixed_home_collections as $ibram_collection): ?>
-            <div class="col-md-3">
+        <div class="col-md-12">
+            <h4 class="title">
+                <a href="javascript:void(0)">
+                    <?php //echo $ibram_collection ?>
+                </a>
+            </h4>
+            <div class="container" >
+                <br>
+                <div class="index-menu">
+                    <p>Bem vindo ao Tainacan+Museu</p>
+                    <p>Uma plataforma de inventário, gestão e difusão digital, desenvolvida
+                    pelo Instituto Brasileiro de Museus (IBRAM) em parceria com a
+                    Universidade Federal Goiás (UFG) para atender às instituições de
+                    memória que preservam acervos museológicos.</p>
+
+                    <p>Nessa primeira versão, você poderá realizar:</p>
+                    <br>
+                    <p>·         Cadastro de bens museológicos permanentes e temporários</p>
+                    <p>·         Cadastro de conjuntos</p>
+                    <p>·         Cadastro de coleções</p>
+                    <p>·         Registrar o descarte e desaparecimento de bens.</p>
+                    <br>
+                   <p> Bom trabalho!</p>
+
+                </div>
+            </div>    
+        </div>
+        
+        <?php //foreach( $fixed_home_collections as $ibram_collection): ?>
+            <!--div class="col-md-3">
                 <div class="ibram-box">
                     <h4 class="title">
                         <a href="javascript:void(0)">
-                            <?php echo $ibram_collection ?>
+                            <?php //echo $ibram_collection ?>
                         </a>
                     </h4>
                     <div class="ibram-info-container">
@@ -29,7 +71,7 @@ $fixed_home_collections = ["Empréstimos", "Conservação", "Restaurações", "E
                     </div>
                 </div>
 
-            </div>
-        <?php endforeach; ?>
+            </div-->
+        <?php //endforeach; ?>
     </div>
 </div>
