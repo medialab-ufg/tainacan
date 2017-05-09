@@ -297,12 +297,14 @@ class ObjectWidgetsHelper extends ViewHelper {
      */
     public function widget_property_object($property,$i,$references,$value = false) {
         if($references['is_view_mode'] || (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true' && !isset($references['operation']))){
-            if(isset($value)): ?>
+            if(isset($value) && isset($value[$i])): 
+                $val = $value[$i]
+             ?>
              <div id="labels_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">
-                <?php if (!empty($property['metas']['objects']) && !empty($value)) { ?>
+                <?php if (!empty($property['metas']['objects']) && !empty($val)) { ?>
                     <?php foreach ($property['metas']['objects'] as $object) { // percoro todos os objetos  ?>
                         <?php
-                        if (isset($value) && !empty($value) && $object->post_status == 'publish' && ((is_array($value) && in_array($object->ID, $value) ) || ($object->ID == $value) )): // verifico se ele esta na lista de objetos da colecao
+                        if (isset($val) && !empty($val) && $object->post_status == 'publish' && ((is_array($val) && in_array($object->ID, $val) ) || ($object->ID == $val) )): // verifico se ele esta na lista de objetos da colecao
                             echo '<b><a  href="' . get_the_permalink($property['metas']['collection_data'][0]->ID) . '?item=' . $object->post_name . '" >' . $object->post_title . '</a></b><br>';
                         endif;
                         ?>
