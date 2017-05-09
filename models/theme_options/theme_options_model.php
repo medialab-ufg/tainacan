@@ -271,6 +271,24 @@ class ThemeOptionsModel extends Model {
         $data['type'] = "success";
         $data['reload'] = $reload;
 
+        //Salva mapeamento de Coleções do Tainacan Biblioteca
+        $mapping_info = [];
+        ini_set('display_errors', '0');     # don't show any errors...
+        error_reporting(E_ALL | E_STRICT);  # ...but do log them
+
+        foreach ($data as $collection_name => $id)
+        {
+            if(preg_match("/ColName:/", $collection_name))
+            {
+                $collection_name = end(explode(":", $collection_name));
+                $mapping_info[$collection_name] = $id;
+            }
+        }
+        
+        if(!empty($mapping_info))
+        {
+            update_option('socialdb_general_mapping_collection', $mapping_info);
+        }
 
         return json_encode($data);
     }
@@ -311,6 +329,7 @@ class ThemeOptionsModel extends Model {
                 }
             }
         }
+
         return $result;
     }
 

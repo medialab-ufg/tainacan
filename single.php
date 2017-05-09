@@ -442,17 +442,21 @@ while (have_posts()) : the_post();
                                         if(has_filter('tainacan_show_restore_options'))
                                         {
                                             $collection_id = get_the_ID();
-                                            $show = apply_filters('tainacan_show_restore_options', $collection_id);
-                                        }else $show = true;
+                                            $change_name = apply_filters('tainacan_show_restore_options', $collection_id);
+                                        }else $change_name = true;
+
+                                        if(!$change_name)
+                                        {
+                                            $trash_name = "Registros cancelados";
+                                        }else $trash_name = __('Trash', 'tainacan');
+
                                         if (get_the_ID() != get_option('collection_root_id') && verify_collection_moderators(get_the_ID(), get_current_user_id())) {
-                                            //if($show == true)
-                                            //{
-                                                ?>
-                                                <button onclick="show_trash_page();" class="btn btn-default pull-right button-trash collection-trash">
-                                                    <?php _e('Trash', 'tainacan'); ?>
-                                                </button>
-                                                <?php
-                                           // }
+
+                                            ?>
+                                            <button onclick="show_trash_page();" class="btn btn-default pull-right button-trash collection-trash">
+                                                <?php echo $trash_name ?>
+                                            </button>
+                                            <?php
                                         } else {
                                             $admin_email = get_option('admin_email');
                                             $blog_email = get_bloginfo('admin_email');
@@ -460,13 +464,19 @@ while (have_posts()) : the_post();
                                             //if ($admin_email == $user_data || $blog_email == $user_data) {
                                             ?>
                                             <button onclick="show_trash_page();" class="btn btn-default button-trash pull-right">
-                                                <?php _e('Trash', 'tainacan'); ?>
+                                                <?php echo $trash_name;?>
                                             </button>
                                             <?php
                                             //}
                                         }
+
+                                        if(!$change_name)
+                                        {
+                                            $exit_trash_name = "Sair registros cancelados";
+                                        }else $exit_trash_name = __('Exit trash', 'tainacan');
+                                        
                                         ?>
-                                        <button style="display: none;" id="hideTrash" onclick="hide_trash_page()" class="btn btn-default pull-right"><?php _e('Exit trash', 'tainacan'); ?></button>
+                                        <button style="display: none;" id="hideTrash" onclick="hide_trash_page()" class="btn btn-default pull-right"><?php echo $exit_trash_name ?></button>
                                         <?php
                                     }
                                     ?>

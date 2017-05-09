@@ -277,10 +277,10 @@ function mapping_library_collections()
     );
     $posts = get_posts($args);
 
-    $posts_name = [];
+    $posts_name_id = [];
     foreach($posts as $post)
     {
-        $posts_name[] = $post->post_title;
+        $posts_name_id[$post->post_title] = $post->ID;
     }
 
     $should_be_mapped = array(
@@ -310,28 +310,44 @@ function mapping_library_collections()
         'Cotações',
         'Pedidos'
         );
+    $mapping = get_option('socialdb_general_mapping_collection');
     ?>
-    <form class="form-group">
+    <h5 style="font-weight: bolder; margin-bottom: 2px;"> Mapeamento de coleções </h5>
     <?php
-
     foreach ($should_be_mapped as $name)
     {
+        //print_r($mapping);
+
+        //print "<br>$name<br>";
         ?>
-        <select name="<?php echo $name ?>" id="<?php echo $name ?>" class='data form-control'>
-            <?php
-                foreach ($posts_name as $post_name)
-                {
-                    ?>
-                        <option name='<?php echo $post_name ?>' value='<?php echo $post_name ?>'><?php echo $post_name ?></option>
+        <div class="col-md-12">
+            <div class="col-md-6 no-padding" style="margin: 10px 0 10px 0; border-bottom: 1px solid #e8e8e8">
+                <label class='meta-title no-padding' style=""><?php echo $name ?></label>
+            </div>
+            <div class="col-md-6">
+                <select name="ColName:<?php echo $name ?>" id="<?php echo $name ?>" class='data form-control'>
+
                     <?php
-                }
-            ?>
-        </select>
+                        $name = str_replace(" ", "_", $name);
+                        foreach ($posts_name_id as $post_name => $id)
+                        {
+                            if( $mapping[$name] == $id)
+                            {
+                                $selected = 'selected';
+                            }else $selected = '';
+
+                            ?>
+                                <option name='<?php echo $post_name ?>' value='<?php echo $id ?>' <?php echo $selected ?>><?php echo $post_name ?></option>
+                            <?php
+                        }
+                    ?>
+                </select>
+            </div>
+        </div>
         <?php
     }
 
     ?>
-    </form>
     <?php
 }
 

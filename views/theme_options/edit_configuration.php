@@ -112,8 +112,6 @@ $post_thumb = get_the_post_thumbnail($socialdb_logo, 'thumbnail');
                     </div>
                 </div>
             </div>
-            <input type="hidden" id="operation" name="operation" value="update_configuration">
-            <button type="submit" class="btn btn-primary pull-right"><?php _e('Submit','tainacan'); ?></button>
 
             <!-- Mapeamento coleção -->
             <?php
@@ -122,6 +120,9 @@ $post_thumb = get_the_post_thumbnail($socialdb_logo, 'thumbnail');
                 do_action("add_mapping_library_collections");
             }
             ?>
+
+            <input type="hidden" id="operation" name="operation" value="update_configuration">
+            <button type="submit" class="btn btn-primary pull-right"><?php _e('Submit','tainacan'); ?></button>
         </form>
     </div>
 </div>

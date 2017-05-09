@@ -134,7 +134,7 @@ $is_repo_admin = current_user_can('administrator');
             <?php if(!$is_single_page): ?>
                 <li class="collec-only tainacan-museum-clear"> <a class="ac-comment-item"> <?php _t('Comment item',1); ?> </a> </li>
             <?php endif; ?>
-            <?php 
+            <?php
             if(has_filter('tainacan_show_reason_modal') && !apply_filters("tainacan_show_restore_options", $collection_id)){
                 ?>
                 <li>
@@ -143,7 +143,7 @@ $is_repo_admin = current_user_can('administrator');
                         <?php _t('Exclude item',1);?>
                     </a>
                 </li>
-                
+
                 <li style="display: none">
                     <a class="ac-exclude-item" id="<?php echo $itemDelete['id']; ?>"
                        onclick="delete_object_no_confirmation('<?php echo $itemDelete['id']; ?>','<?php echo $itemDelete['time']; ?>');">
