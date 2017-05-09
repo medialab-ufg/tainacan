@@ -50,7 +50,18 @@ $fixed_home_collections = ["Empréstimos", "Conservação", "Restaurações", "E
                     <p>·         Registrar o descarte e desaparecimento de bens.</p>
                     <br>
                    <p> Bom trabalho!</p>
-
+                   <div class="row">
+                       <div class="col-xs-3 col-xs-offset-3 col-md-3">
+                           <a href="#" class="thumbnail">
+                               <img src="<?php echo get_template_directory_uri() . '/libraries/images/ibram/ibram.gif' ?>">
+                           </a>
+                       </div>
+                       <div class="col-xs-3 col-md-3" style="margin-top: 10px;">
+                           <a href="#" class="thumbnail">
+                                <img src="<?php echo get_template_directory_uri() . '/libraries/images/ibram/Media-Lab.png' ?>">
+                           </a>
+                       </div>
+                   </div>
                 </div>
             </div>    
         </div>

@@ -214,8 +214,8 @@
     function pc_list_checkboxes(checkboxes,categories) {
         console.log('pc loading checkboxes',checkboxes);
         if (checkboxes) {
-            addLabelViewPage(checkboxes,categories);
             $.each(checkboxes, function (idx, checkbox) {
+                addLabelViewPage(checkbox,categories);
                 $.ajax({
                     url: $('#src').val() + '/controllers/property/property_controller.php',
                     type: 'POST',
