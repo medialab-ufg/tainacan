@@ -129,7 +129,6 @@ if (isset($property_data)):
                             <p><?php echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $value . "'" . ',' . $property['id'] . ')">' . $value . '</a>'; ?></p>
                             <?php
                         endforeach;
-                        ;
                         ?>
                     <?php else: ?>
                         <p><?php _e('empty field', 'tainacan') ?></p>
