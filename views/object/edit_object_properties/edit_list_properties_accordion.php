@@ -64,13 +64,13 @@ if (isset($property_object)):
                                     $ob = get_post($val_id);
                                     if ($ob && $ob->post_status == 'publish') {
                                         // echo '<b><a href="'. get_the_permalink($property['metas']['collection_data'][0]->ID) . '?item=' . $ob->post_name . '" >'. $ob->post_title . '</a></b><br>';
-                                        echo '<b>' . $ob->post_title . '</b> <br >';
+                                        echo '<input type="hidden" name="socialdb_property_'.$property['id'].'[]" value="'.$ob->ID.'"><b>' . $ob->post_title . '</b> <br >';
                                     }
                                 endforeach;
                             } else {
                                 $object = get_post($property['metas']['value']);
                                 if ($object): // verifico se ele esta na lista de objetos da colecao
-                                    echo '<b><a  href="' . get_the_permalink($property['metas']['collection_data'][0]->ID) . '?item=' . $object->post_name . '" >' . $object->post_title . '</a></b><br>';
+                                    echo '<input type="hidden" name="socialdb_property_'.$property['id'].'[]" value="'.$object->ID.'"><b><a  href="' . get_the_permalink($property['metas']['collection_data'][0]->ID) . '?item=' . $object->post_name . '" >' . $object->post_title . '</a></b><br>';
                                 endif;
                             }
                         } else {
