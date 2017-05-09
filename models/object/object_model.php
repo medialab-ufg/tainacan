@@ -49,6 +49,10 @@ class ObjectModel extends Model {
        if (has_action('tainacan_delete_related_item')) {
             do_action('tainacan_delete_related_item', $data, $col_id);
         }
+        if(has_action("add_book_loan"))
+        {
+            do_action("add_book_loan", $data);
+        }
 
         if (isset($data['validation_error'])) {
             return json_encode($data);

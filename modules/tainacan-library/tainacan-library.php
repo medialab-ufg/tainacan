@@ -351,15 +351,15 @@ function mapping_library_collections()
     <?php
 }
 
+add_action('add_book_loan', 'get_related_id', 10, 1);
+function get_related_id($data)
+{
+        
+}
+
 /*
  * Functions
  */
-
-function get_related_id()
-{
-    
-}
-
 function meta_ids($collection_id, $change_names_for_numbers)
 {
     $category_root_id = get_post_meta($collection_id, 'socialdb_collection_object_type', true);

@@ -194,7 +194,12 @@ $_src_ = get_template_directory_uri();
 
                         <div class="nav navbar-nav navbar-right repository-settings clk">
 
-                          <ul id="collections-menu">
+                          <!--Exibe menus  "Coleções"-->
+                          <?php
+                            if (!has_action('tainacan_show_reason_modal'))
+                            {
+                          ?>
+                            <ul id="collections-menu">
                             <li class="collections">
                               <a href="<?php echo get_permalink($col_root_id); ?>" class='collecs'>
                                 <?php echo ViewHelper::render_icon('collection', 'png'); ?>
@@ -233,6 +238,7 @@ $_src_ = get_template_directory_uri();
                             </ul>
                           </li>
                         </ul>
+                          <?php } ?>
                       </div>
 
                       <?php if (!is_front_page() && !is_plugin_active( 'ibram-tainacan/ibram-tainacan.php' )): // !is_page($stat_page) ?>
