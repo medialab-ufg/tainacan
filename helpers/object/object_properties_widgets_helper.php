@@ -219,9 +219,15 @@ class ObjectWidgetsHelper extends ViewHelper {
                    class="form-control form_autocomplete_compounds_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
                    value="<?php if ($value) echo $value; ?>"
                    name="socialdb_property_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>[]">
-        <?php }elseif ($property['type'] == 'textarea') { ?>   
+        <?php }elseif ($property['type'] == 'textarea') {
+                    if(has_filter("tainacan_show_reason_modal") && $property['name'] == "Motivo")
+                    {
+                        $disabled = "disabled";
+                    }else $disabled = "";
+            ?>   
             <textarea class="form-control form_autocomplete_compounds_<?php echo $property['id']; ?>_<?php echo $i; ?>"
                       rows="10"
+                      <?php echo $disabled ?>
                       id="compounds_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
                       name="socialdb_property_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>[]" ><?php if ($value) echo $value; ?></textarea>
         <?php }elseif ($property['type'] == 'numeric') { ?>   

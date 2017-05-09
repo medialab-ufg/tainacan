@@ -355,6 +355,11 @@ function mapping_library_collections()
  * Functions
  */
 
+function get_related_id()
+{
+    
+}
+
 function meta_ids($collection_id, $change_names_for_numbers)
 {
     $category_root_id = get_post_meta($collection_id, 'socialdb_collection_object_type', true);
