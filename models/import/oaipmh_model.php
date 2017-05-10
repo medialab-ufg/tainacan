@@ -173,7 +173,7 @@ class OAIPMHModel extends Model {
                 $parent = '';
                 $property = get_term_by("id", $property_id, "socialdb_property_type");
                 $property_root = get_term_meta($property->term_id, 'socialdb_property_created_category', true);
-                $term = get_term_by('id', $property_root,'socialdb_category_type')
+                $term = get_term_by('id', $property_root,'socialdb_category_type');
                 if($term){
                     $parent = ' - <b>'.$term->name.'</b>';
                 }
