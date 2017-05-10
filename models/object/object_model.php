@@ -56,10 +56,11 @@ class ObjectModel extends Model {
         {
             $result = apply_filters("add_book_loan", $data);
             
-            if(!$result)
+            if(!$result['ok'])
             {
-                $ret['unavailable_item'] = true;
-                return json_encode($ret);
+                $result['unavailable_item'] = true;
+
+                return json_encode($result);
             }
         }
 

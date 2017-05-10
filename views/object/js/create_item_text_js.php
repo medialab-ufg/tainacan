@@ -124,7 +124,7 @@ $(function(){
                     }
                     else if(elem_first.unavailable_item)
                     {
-                        showAlertGeneral("Item insdiponível", "O Exemplar está indiponível para emprestimo", 'error');
+                        showAlertGeneral(elem_first.title, elem_first.msg, 'error');
                     }else{
                          $("#tainacan-breadcrumbs").hide();
                         $('#form').hide();

@@ -356,12 +356,15 @@ function book_loan($data)
 {
     $collection_id = $data['collection_id'];
     $mapping = get_option('socialdb_general_mapping_collection');
+    $title = "Item indisponível";
     if($mapping['Emprestimo'] == $collection_id)
     {
         $type = "Indisponível";
+        $msg = "Exemplar já emprestado.";
     }else if ($mapping['Devoluções'] == $collection_id)
     {
         $type = "Disponível";
+        $msg = "Exemplar já devolvido.";
     }else $type = false;
 
 
@@ -385,14 +388,17 @@ function book_loan($data)
                 }
                 else
                 {
-                    return false;
+                    $result['ok'] = false;
+                    $result['title'] = $title;
+                    $result['msg'] = $msg;
+                    
+                    return $result;
                 }
             }
-
         }
     }
-
-    return true;
+    $result['ok'] = true;
+    return $result;
 }
 
 /*
