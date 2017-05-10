@@ -46,12 +46,16 @@ class ObjectModel extends Model {
         $data = $this->validate_form($data);
         $col_id = $data['collection_id'];
 
+        //Taincan IBRAM
        if (has_action('tainacan_delete_related_item')) {
             do_action('tainacan_delete_related_item', $data, $col_id);
         }
-        if(has_action("add_book_loan"))
+        
+        //Tainacan Biblioteca
+        if(has_filter("add_book_loan"))
         {
-            $result = do_action("add_book_loan", $data);
+            $result = apply_filters("add_book_loan", $data);
+            
             if(!$result)
             {
                 $ret['unavailable_item'] = true;

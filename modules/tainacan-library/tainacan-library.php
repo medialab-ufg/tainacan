@@ -351,12 +351,21 @@ function mapping_library_collections()
     <?php
 }
 
-add_action('add_book_loan', 'book_loan', 10, 1);
+add_filter('add_book_loan', 'book_loan', 10, 1);
 function book_loan($data)
 {
     $collection_id = $data['collection_id'];
     $mapping = get_option('socialdb_general_mapping_collection');
     if($mapping['Emprestimo'] == $collection_id)
+    {
+        $type = "Indisponível";
+    }else if ($mapping['Devoluções'] == $collection_id)
+    {
+        $type = "Disponível";
+    }else $type = false;
+
+
+    if($type)
     {
         $related_ids = get_related_id($data);
         foreach ($related_ids as $id)
@@ -366,24 +375,23 @@ function book_loan($data)
             if($category_id)
             {
                 $disp_children = get_tainacan_category_children($category_id);
-                $option_id = get_term_by('id', $disp_children['Indisponível'], 'socialdb_category_type')->term_id;
+                $option_id = get_term_by('id', $disp_children[$type], 'socialdb_category_type')->term_id;
                 $last_saved_option_id = last_option_saved($id, $category_id);
-                
-                if($last_saved_option_id != $disp_children['Indisponível'])
+
+                if($last_saved_option_id != $disp_children[$type])
                 {
                     remove_last_option($disp_children, $id);
                     wp_set_object_terms($id, $option_id, 'socialdb_category_type', true);
                 }
-                else 
+                else
                 {
                     return false;
                 }
-                
             }
 
         }
     }
-    
+
     return true;
 }
 
