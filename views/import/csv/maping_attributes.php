@@ -22,8 +22,9 @@ include_once ('js/maping_attributes_js.php');
             </div>
             <div class="form-group">
                 <label for="socialdb_delimiter_code_csv"><?php _e('File Encoding','tainacan'); ?></label><br>
-                <select id="socialdb_delimiter_code_csv" name="socialdb_delimiter_code_csv" required="required" disabled="disabled" class="form-control">
+                <select id="socialdb_delimiter_code_csv" name="socialdb_delimiter_code_csv"  class="form-control">
                     <option value="utf8">UTF8</option>  
+                    <option value="iso8859-1">ISO 8859-1</option>  
                 </select>
             </div>
             <div class="form-group">

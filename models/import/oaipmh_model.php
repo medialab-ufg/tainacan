@@ -163,24 +163,30 @@ class OAIPMHModel extends Model {
         $properties_with_no_domain = $this->list_properties_by_collection($data['collection_id']);
         if($properties_with_no_domain&&is_array($properties_with_no_domain)){
             foreach ($properties_with_no_domain as $property_with_no_domain) {
-                if(!in_array($property_with_no_domain->term_id, $properties)){
+                if(!in_array($property_with_no_domain->term_id, $all_properties_id)){
                     $all_properties_id[] = $property_with_no_domain->term_id;
                 }
             }
         }
         if ($all_properties_id) {
             foreach ($all_properties_id as $property_id) {
+                $parent = '';
                 $property = get_term_by("id", $property_id, "socialdb_property_type");
+                $property_root = get_term_meta($property->term_id, 'socialdb_property_created_category', true);
+                $term = get_term_by('id', $property_root,'socialdb_category_type')
+                if($term){
+                    $parent = ' - <b>'.$term->name.'</b>';
+                }
                 if(in_array($property->slug, $this->fixed_slugs) ):
                     continue;
                 endif;
                 $type = $propertyModel->get_property_type($property_id); // pego o tipo da propriedade
                 if ($type == 'socialdb_property_object') {
-                    $html .= "<option value='objectproperty_" . $property_id . "'>" . $property->name . ' (' . __('Object Property','tainacan') . ')' . "</option>";
+                    $html .= "<option value='objectproperty_" . $property_id . "'>" . $property->name . ' (' . __('Object Property','tainacan') . ')' .$parent. "</option>";
                 } elseif ($type == 'socialdb_property_data') {
-                    $html .= "<option value='dataproperty_" . $property_id . "'>" . $property->name . ' (' . __('Data Property','tainacan') . ')' . "</option>";
+                    $html .= "<option value='dataproperty_" . $property_id . "'>" . $property->name . ' (' . __('Data Property','tainacan') . ')' .$parent. "</option>";
                 } elseif($type == 'socialdb_property_term'){
-                       $html .= "<option value='termproperty_" . $property_id . "'>" . $property->name . ' (' . __('Term Property','tainacan') . ')' . "</option>";
+                       $html .= "<option value='termproperty_" . $property_id . "'>" . $property->name . ' (' . __('Term Property','tainacan') . ')' .$parent. "</option>";
                 }
             }
         }

@@ -129,6 +129,7 @@ class CsvModel extends Model {
             $multi_values = get_post_meta($data['mapping_id'], 'socialdb_channel_csv_multi_values', true);
             $hierarchy = get_post_meta($data['mapping_id'], 'socialdb_channel_csv_hierarchy', true);
             $import_zip_csv = get_post_meta($data['mapping_id'], 'socialdb_channel_csv_import_zip', true);
+            $code = get_post_meta($data['mapping_id'], 'socialdb_channel_csv_code', true);
 
             $files = $mapping_model->show_files_csv($mapping_id);
             foreach ($files as $file) {
@@ -157,7 +158,7 @@ class CsvModel extends Model {
                                     $field_value = iconv('ISO-8859-1', 'UTF-8', $field_value);
                                 //$this->update_title($object_id, utf8_decode($field_value));
                                 update_post_title($object_id, $field_value);
-                                $this->set_common_field_values($object_id, 'title', utf8_decode($field_value));
+                                $this->set_common_field_values($object_id, 'title', $this->codification_value($field_value,$code));
                             elseif ($metadata['socialdb_entity'] == 'post_content'):
                                 $content .= $field_value . ",";
                             /* if (!isset($information)):
@@ -244,7 +245,7 @@ class CsvModel extends Model {
                                         continue;
                                     }
                                 } else {
-                                    $fields_value = utf8_encode($field_value);
+                                    $fields_value = $field_value;
                                 }
                                 if (!empty($fields_value)):
 //if (strpos($fields_value, '||') !== false) {
@@ -262,27 +263,24 @@ class CsvModel extends Model {
 //$parent = strtr($metadata['socialdb_entity'], $trans);
                                     foreach ($fields_value as $field_value):
 //$this->insert_category($field_value, $object_id, $data['collection_id'], $parent);
-                                        $this->insert_hierarchy($field_value, $object_id, $data['collection_id'], $parent, $property_id, $hierarchy);
+                                        $this->insert_hierarchy($this->codification_value($field_value,$code), $object_id, $data['collection_id'], $parent, $property_id, $hierarchy);
                                     endforeach;
                                 endif;
                             elseif (strpos($metadata['socialdb_entity'], "objectproperty_") !== false):
                                 $trans = array("objectproperty_" => "");
                                 $id = strtr($metadata['socialdb_entity'], $trans);
-                                add_post_meta($object_id, 'socialdb_property_' . $id . '', $this->insertPropertyObjectItem($id,$field_value));
+                                add_post_meta($object_id, 'socialdb_property_' . $id . '', $this->insertPropertyObjectItem($id,$this->codification_value($field_value,$code)));
                             elseif (strpos($metadata['socialdb_entity'], "dataproperty_") !== false):
                                 $trans = array("dataproperty_" => "");
                                 $id = strtr($metadata['socialdb_entity'], $trans);
-                                $has_inserted = add_post_meta($object_id, 'socialdb_property_' . $id, utf8_decode($field_value));
-                                if (!$has_inserted) {
-                                    $final_test = add_post_meta($object_id, 'socialdb_property_' . $id, utf8_encode($field_value));
-                                }
-                                $this->set_common_field_values($object_id, "socialdb_property_$id", $field_value);
+                                $has_inserted = add_post_meta($object_id, 'socialdb_property_' . $id, $this->codification_value($field_value,$code));
+                                $this->set_common_field_values($object_id, "socialdb_property_$id", $this->codification_value($field_value,$code));
                             endif;
                         }
                     }
-                    if (mb_detect_encoding($content, 'auto') == 'UTF-8') {
-                        $content = iconv('ISO-8859-1', 'UTF-8', $content);
-                    }
+                    //if (mb_detect_encoding($content, 'auto') == 'UTF-8') {
+                        $content = $this->codification_value($field_value,$content);
+                    //}
                     update_post_meta($object_id, 'socialdb_object_from', 'external');
                     $this->set_common_field_values($object_id, 'object_from', 'external');
                     update_post_content($object_id, utf8_decode($content));
@@ -328,6 +326,7 @@ class CsvModel extends Model {
             $delimiter = get_post_meta($mapping_id, 'socialdb_channel_csv_delimiter', true);
             $csv_has_header = get_post_meta($mapping_id, 'socialdb_channel_csv_has_header', true);
             $title = get_post_meta($mapping_id, 'socialdb_channel_csv_column_title', true);
+            $code = get_post_meta($mapping_id, 'socialdb_channel_csv_code', true);
             $lines = $this->read_csv_file($name_file, $delimiter, 0);
             for ($i = 0; $i < count($lines); $i++):
                 if ($i == 0 && !$already) {
@@ -338,7 +337,7 @@ class CsvModel extends Model {
                     $this->insertModeTable($order, $collection_id, $title);
                     $already = true;
                 } else if (isset($order) && count($order) > 0) {
-                    $this->add_value_column($order, $lines[$i], $collection_id, $title);
+                    $this->add_value_column($order, $lines[$i], $collection_id, $title,$code);
                 }
             endfor;
             break;
@@ -351,7 +350,7 @@ class CsvModel extends Model {
      * @param type $collection_id
      * @return type
      */
-    public function add_properties_columns($header, $collection_id, $title) {
+    public function add_properties_columns($header, $collection_id, $title,$code = 'utf8') {
         $order = [];
         $category_root_id = $this->get_category_root_of($collection_id);
         if ($header && is_array($header)) {
@@ -359,7 +358,7 @@ class CsvModel extends Model {
                 if (empty($column)) //se o titulo ja foi mapeado
                     continue;
                  
-                $new_property = socialdb_insert_term((string) utf8_encode($column), 'socialdb_property_type',  $this->get_property_type_id('socialdb_property_data'), $this->generate_slug((string) $column, 0));
+                $new_property = socialdb_insert_term($this->codification_value((string) $column, $code), 'socialdb_property_type',  $this->get_property_type_id('socialdb_property_data'), $this->generate_slug((string) $column, 0));
 //                $new_property = wp_insert_term((string) $column, 'socialdb_property_type', array('parent' => $this->get_property_type_id('socialdb_property_data'),
 //                    'slug' => $this->generate_slug((string) $column, 0)));
                 update_term_meta($new_property['term_id'], 'socialdb_property_required', 'false');
@@ -376,13 +375,13 @@ class CsvModel extends Model {
      * 
      * @param type $param
      */
-    public function add_value_column($properties, $values, $collection_id, $title_index) {
+    public function add_value_column($properties, $values, $collection_id, $title_index,$code = 'utf8') {
         $title = (($title_index === '') ? time() : $values[$title_index]);
         $object_id = socialdb_insert_object_csv([$title]);
         $this->set_common_field_values($object_id, 'title', $title);
         foreach ($properties as $key => $property) {
             add_post_meta($object_id, 'socialdb_property_' . $property, utf8_encode($values[$key]));
-            $this->set_common_field_values($object_id, "socialdb_property_$property", $values[$key]);
+            $this->set_common_field_values($object_id, "socialdb_property_$property", $this->codification_value($values[$key], $code));
         }
         $categories[] = $this->get_category_root_of($collection_id);
         update_post_meta($object_id, 'socialdb_object_from', 'external');
@@ -798,6 +797,18 @@ class CsvModel extends Model {
         if (is_file($dir_created)) {
             $thumbnail_id = $this->insert_attachment_file($dir_created, $object_id);
             set_post_thumbnail($object_id, $thumbnail_id);
+        }
+    }
+    
+    
+    /**
+     * 
+     */
+    public function codification_value($value,$code){
+        if($code == 'utf8'){
+            return utf8_encode($value);
+        }else{
+            return utf8_decode($value);
         }
     }
 
