@@ -116,9 +116,9 @@ class ObjectWidgetsHelper extends ViewHelper {
                                         <?php if(!$all_fields_validate && (!$property_compounded['metas']['socialdb_property_required'] || $property_compounded['metas']['socialdb_property_required'] == 'false')):  ?>
                                             value='true' validate_compound="false">
                                         <?php else: ?>
-                                            value='<?php echo (!$value) ? 'false' : 'true' ; ?>'>
+                                            value='<?php echo (!$value && $is_show_container) ? 'false' : 'true' ; ?>'>
                                         <?php endif; ?>
-                                    <div style="padding-bottom: 15px; " class="col-md-12">
+                                    <div style="padding-bottom: 15px; " class="col-md-12" id="only_field_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>">
                                         <p style="color: black;"><b><?php echo $property_compounded['name']; ?></b>
                                             <?php
                                                if ((!$property['metas']['socialdb_property_required'] || $property['metas']['socialdb_property_required'] == 'false') && $property_compounded['metas']['socialdb_property_required']&&$property_compounded['metas']['socialdb_property_required'] == 'true') {
@@ -135,12 +135,16 @@ class ObjectWidgetsHelper extends ViewHelper {
                                                 <input  type="hidden" 
                                                         id='core_validation_<?php echo $property['id']; ?>' 
                                                         name='core_validation_<?php echo $property['id']; ?>' 
-                                                        class='core_validation core_validation_<?php echo $property['id']; ?>_<?php echo $i; ?>' 
-                                                        value='<?php echo (!$value) ? 'false' : 'true' ; ?>'>
+                                                        class="core_validation core_validation_<?php echo $property['id']; ?>_<?php echo $i; ?>"
+                                                <?php if(!$is_show_container): ?>
+                                                      value='true'>
+                                                <?php else: ?>     
+                                                     value='<?php echo (!$value) ? 'false' : 'true' ; ?>'>
+                                                <?php endif; ?>
                                                 <input type="hidden" 
                                                          id='core_validation_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>_message'  
                                                          value='<?php echo sprintf(__('The field %s is required','tainacan'),$property['name']); ?>'>
-                                                  <script> set_field_valid_compounds(<?php echo $property['id']; ?>,'core_validation_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>',<?php echo $property_compounded['id']; ?>)</script> 
+                                                  <script> set_field_valid_compounds(<?php echo $property['id']; ?>,'core_validation_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>',<?php echo $property['id']; ?>)</script> 
                                             <?php  }  ?>
                                         </p>
                                         <?php 
@@ -298,7 +302,7 @@ class ObjectWidgetsHelper extends ViewHelper {
     public function widget_property_object($property,$i,$references,$value = false) {
         if($references['is_view_mode'] || (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true' && !isset($references['operation']))){
             if(isset($value)): 
-                if($value[$i])  
+                if(is_array($value) && $value[$i])  
                     $val = $value[$i];
                 else
                      $val = $value; 
@@ -620,7 +624,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                                     <?php else: ?>
                                         value='<?php echo (!$value) ? 'false' : 'true' ; ?>'>
                                     <?php endif; ?>
-                                <div style="margin-bottom: 15px; border-bottom: 1px solid #e8e8e8" class="col-md-12">
+                                <div style="margin-bottom: 15px; border-bottom: 1px solid #e8e8e8" class="col-md-12" id="only_field_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>">
                                     <p style="color: black;"><?php echo $property_compounded['name']; ?>
                                         <?php
                                             if ((!$property['metas']['socialdb_property_required'] || $property['metas']['socialdb_property_required'] == 'false') && $property_compounded['metas']['socialdb_property_required']&&$property_compounded['metas']['socialdb_property_required'] == 'true') {
@@ -642,7 +646,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                                              <input type="hidden" 
                                                       id='core_validation_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>_message'  
                                                       value='<?php echo sprintf(__('The field %s is required','tainacan'),$property['name']); ?>'>
-                                               <script> set_field_valid_compounds(<?php echo $property['id']; ?>,'core_validation_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>',<?php echo $property_compounded['id']; ?>)</script> 
+                                               <script> set_field_valid_compounds(<?php echo $property['id']; ?>,'core_validation_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>',<?php echo $property['id']; ?>)</script> 
                                          <?php  }  ?>
                                     </p>
                                     <?php

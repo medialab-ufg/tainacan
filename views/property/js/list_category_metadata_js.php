@@ -1101,6 +1101,7 @@
             data: {collection_id: $("#collection_id").val(), operation: 'edit_property_object', property_id: id}
         }).done(function (result) {
             elem = jQuery.parseJSON(result);
+            var cardinality =  (elem.metas.socialdb_property_object_cardinality) ? elem.metas.socialdb_property_object_cardinality : false;
             var locked = (elem.metas.socialdb_property_locked) ? elem.metas.socialdb_property_locked : false;
             var search = (elem.metas.socialdb_property_to_search_in) ? elem.metas.socialdb_property_to_search_in.split(',') : [];
             var avoid_items = (elem.metas.socialdb_property_avoid_items) ? elem.metas.socialdb_property_avoid_items : false;
@@ -1240,6 +1241,14 @@
             $("#meta-relationship .property_avoid_items").removeAttr('checked');
             if (avoid_items) {
                 $("#meta-relationship .property_avoid_items").prop('checked', true);
+            }
+            
+            if (cardinality && cardinality === 'n') {
+               $("#meta-relationship #socialdb_property_object_cardinality_n").prop('checked', true);
+               $("#meta-relationship #socialdb_property_object_cardinality_1").removeAttr('checked');
+            } else {
+                $("#meta-relationship #socialdb_property_object_cardinality_1").prop('checked', true);
+                $("#meta-relationship #socialdb_property_object_cardinality_n").removeAttr('checked');
             }
 
             //propriedades usadas na busca

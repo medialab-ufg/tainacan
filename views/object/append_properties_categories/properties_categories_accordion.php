@@ -194,7 +194,7 @@ foreach($original_properties as $property):
                         ?>
                     </div>
                 <?php else: 
-                     $object_properties_widgets_helper->generateWidgetPropertyRelated($property,$object->ID,$collection_id) ;
+                     $object_properties_widgets_helper->generateWidgetPropertyRelated($property,$object_id,$collection_id) ;
                 endif ?>    
             </div>  
     </div>     
