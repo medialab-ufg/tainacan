@@ -351,15 +351,149 @@ function mapping_library_collections()
     <?php
 }
 
-add_action('add_book_loan', 'get_related_id', 10, 1);
-function get_related_id($data)
+add_action('add_book_loan', 'book_loan', 10, 1);
+function book_loan($data)
 {
-        
+    $collection_id = $data['collection_id'];
+    $mapping = get_option('socialdb_general_mapping_collection');
+    if($mapping['Emprestimo'] == $collection_id)
+    {
+        $related_ids = get_related_id($data);
+        foreach ($related_ids as $id)
+        {
+            $id = $id[0];
+            $category_id = get_category_id(get_post($id)->post_parent, "Disponibilidade");
+            if($category_id)
+            {
+                $disp_children = get_tainacan_category_children($category_id);
+                $option_id = get_term_by('id', $disp_children['Indisponível'], 'socialdb_category_type')->term_id;
+                $last_saved_option_id = last_option_saved($id, $category_id);
+                
+                if($last_saved_option_id != $disp_children['Indisponível'])
+                {
+                    remove_last_option($disp_children, $id);
+                    wp_set_object_terms($id, $option_id, 'socialdb_category_type', true);
+                }
+                else 
+                {
+                    return false;
+                }
+                
+            }
+
+        }
+    }
+    
+    return true;
 }
 
 /*
  * Functions
  */
+function last_option_saved($post_id, $option_id)
+{
+    $terms = wp_get_post_terms( $post_id, 'socialdb_category_type' );
+    if($terms && is_array($terms)){
+        foreach ($terms as $term) {
+            $hierarchy = get_ancestors($term->term_id, 'socialdb_category_type');
+            if(is_array($hierarchy) && in_array($option_id, $hierarchy)){
+                return $term->term_id;
+            }
+        }
+    }
+
+    return false;
+}
+
+function remove_last_option($sub_options_children_ids, $post_id)
+{
+    $terms = wp_get_post_terms($post_id, 'socialdb_category_type');
+
+    $_item_terms = [];
+    foreach ($terms as $tm) {
+        array_push($_item_terms, $tm->term_id);
+    }
+
+    $previous_set_ids = [];
+    $available_children = [];
+    foreach ($sub_options_children_ids as $ch)
+    {
+        $_int_id_ = intval($ch);
+        if (in_array($_int_id_, $_item_terms))
+        {
+            $previous_set_ids[] = $_int_id_;
+        }
+        else
+        {
+            array_push($available_children, $_int_id_);
+        }
+    }
+
+    foreach ($previous_set_ids as $previous_set_id)
+    {
+        wp_remove_object_terms($post_id, get_term_by('id', $previous_set_id, 'socialdb_category_type')->term_id, 'socialdb_category_type');
+    }
+}
+
+function get_tainacan_category_children($parent_id) {
+    global $wpdb;
+    $data = [];
+    $wp_term_taxonomy = $wpdb->prefix . "term_taxonomy";
+    $query = "SELECT * FROM $wpdb->terms t INNER JOIN $wp_term_taxonomy tt ON t.term_id = tt.term_id
+				WHERE tt.parent = {$parent_id}  ORDER BY tt.count DESC,t.name ASC";
+    $result = $wpdb->get_results($query);
+    if ($result && !empty($result)) {
+        foreach ($result as $term) {
+            $data[$term->name] = $term->term_id;
+        }
+    }
+    return $data;
+}
+
+function get_category_id($collection_id, $metaname, $is_root = true)
+{
+    $term_id = false;
+    if($is_root)
+    {
+        $category_root_id = get_post_meta($collection_id, 'socialdb_collection_object_type', true);
+        $ids = get_term_meta($category_root_id, "socialdb_category_property_id");
+    }else
+    {
+        $ids = get_term_meta($collection_id, "socialdb_category_property_id");
+    }
+
+    foreach ($ids as $id)
+    {
+        $name = get_term_by("id", $id, "socialdb_property_type")->name;
+
+        if(strcmp($name,$metaname) == 0)
+        {
+
+            $term_id = get_term_meta($id, "socialdb_property_term_root", true);
+            break;
+        }
+    }
+
+    return $term_id;
+}
+
+function get_related_id($data)
+{
+    $post_ids = [];
+    $elem_ids = $data['properties_object_ids'];
+    $elem_ids = explode(",", $elem_ids);
+
+    foreach ($elem_ids as $id)
+    {
+        if(key_exists("socialdb_property_".$id, $data))
+        {
+            $post_ids[] = $data["socialdb_property_".$id];
+        }
+    }
+
+    return $post_ids;
+}
+
 function meta_ids($collection_id, $change_names_for_numbers)
 {
     $category_root_id = get_post_meta($collection_id, 'socialdb_collection_object_type', true);

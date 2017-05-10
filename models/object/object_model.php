@@ -51,7 +51,12 @@ class ObjectModel extends Model {
         }
         if(has_action("add_book_loan"))
         {
-            do_action("add_book_loan", $data);
+            $result = do_action("add_book_loan", $data);
+            if(!$result)
+            {
+                $ret['unavailable_item'] = true;
+                return json_encode($ret);
+            }
         }
 
         if (isset($data['validation_error'])) {
