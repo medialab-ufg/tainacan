@@ -840,23 +840,20 @@
         $( ".core_validation").each(function( index ) {
             if(deny_repeated_ids.indexOf($( this ).attr('id'))<0){
                 deny_repeated_ids.push($( this ).attr('id'));
-            }else{
-                return false;
-            }
-            console.log($( this ).attr('id'),$( this ).val());
-            if($( this ).val()==='false'){
-                cont++;
-                var id = $( this ).attr('id').replace('core_validation_','');
-                if(!$.isNumeric(id) && $('#fixed_id_'+id).length > 0){
-                     var id =  $('#fixed_id_'+id).val();
-                }
-                $('#meta-item-'+id+' h2').css('background-color','#ffcccc');
-                $.each($( "#submit_form .tab-pane" ),function(index,seletor){
-                    if($(seletor).find('#meta-item-'+id).length > 0){
-                        var id_tab = $(seletor ).attr('id').replace('tab-','');
-                        $('#click-tab-'+id_tab).css('background-color','#ffcccc');
+                if($( this ).val()==='false'){
+                    cont++;
+                    var id = $( this ).attr('id').replace('core_validation_','');
+                    if(!$.isNumeric(id) && $('#fixed_id_'+id).length > 0){
+                         var id =  $('#fixed_id_'+id).val();
                     }
-                });
+                    $('#meta-item-'+id+' h2').css('background-color','#ffcccc');
+                    $.each($( "#submit_form .tab-pane" ),function(index,seletor){
+                        if($(seletor).find('#meta-item-'+id).length > 0){
+                            var id_tab = $(seletor ).attr('id').replace('tab-','');
+                            $('#click-tab-'+id_tab).css('background-color','#ffcccc');
+                        }
+                    });
+                }
             }
         });
         $.each($( "#submit_form .tab-pane" ),function(index,seletor){
@@ -865,12 +862,11 @@
                 $( seletor).find(".core_validation").each(function( index ) {
                     if(deny_repeated_ids.indexOf($( this ).attr('id'))<0){
                         deny_repeated_ids.push($( this ).attr('id'));
-                    }else{
-                        return false;
+                        if($( this ).val()==='false'){
+                            cont_pane++;
+                        }
                     }
-                    if($( this ).val()==='false'){
-                        cont_pane++;
-                    }
+                    
                 });
                 if(cont_pane===0){
                      $('#click-tab-'+id_tab).css('background-color','white');

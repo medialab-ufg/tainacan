@@ -598,8 +598,11 @@
         properties = $('#compounds_'+property_id).val().split(',');
         if(properties&&properties.length>0){
             for(var i = 0; i<properties.length; i++){
-                if(!$('#core_validation_'+property_id+'_'+properties[i]+'_'+((id+1))).attr('validate_compound')) 
+                if(!$('#core_validation_'+property_id+'_'+properties[i]+'_'+((id+1))).attr('validate_compound')){
+                  $('#ok_field_'+property_id+'_'+properties[i]+'_'+((id+1))).hide();
+                  $('#required_field_'+property_id+'_'+properties[i]+'_'+((id+1))).show();
                   $('#core_validation_'+property_id+'_'+properties[i]+'_'+((id+1))).val('false');
+                }
             }
              validate_all_fields_compounds(property_id);
         }
@@ -735,6 +738,9 @@
             var slug = seletor.replace('core_validation_','');
             $('#ok_field_'+slug).show();
             $('#required_field_'+slug).hide();
+            if($('#only_field_'+slug+' #core_validation_'+compound_id).length >0){
+                $('#only_field_'+slug+' #core_validation_'+compound_id).val('true');
+            }
         }
         validate_all_fields_compounds(compound_id,index);
     }
@@ -742,7 +748,7 @@
     function validate_all_fields_compounds(compound_id,index){
         var cont = 0;
         var seletor = ($('.core_validation_'+compound_id+'_'+index).length > 0) ? '.core_validation_'+compound_id+'_'+index : '#core_validation_'+compound_id;
-        if(!index){
+        //if(!index){
             for(var i = 0;i<parseInt($("#cardinality_"+compound_id).val());i++){
                 if($('#container_field_'+compound_id+'_'+i).is(':visible')){
                     $( ".core_validation_compounds_"+compound_id+"_"+i).each(function( index ) {
@@ -752,13 +758,13 @@
                     });
                 }
             }
-        }else{
-            $( ".core_validation_compounds_"+compound_id+"_"+index).each(function( index ) {
-                if($( this ).val()==='false'){
-                    cont++;
-                }
-            });
-        }
+//        }else{
+//            $( ".core_validation_compounds_"+compound_id+"_"+index).each(function( index ) {
+//                if($( this ).val()==='false'){
+//                    cont++;
+//                }
+//            });
+//        }
        //se for do tipo de um field apenas
         if($('#type_required_'+compound_id).length > 0){
             var total_fields = $('#count_fields_'+compound_id).val();

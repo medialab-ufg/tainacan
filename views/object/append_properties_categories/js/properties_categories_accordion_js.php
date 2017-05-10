@@ -494,7 +494,7 @@
                 if (elem.terms && elem.terms.length > 0) {
                     $.each(elem.terms, function (index, term) {
                         if (term.term_id) {
-                            $("#labels_" + property + "_<?php echo $object_id; ?>").append('<p><a style="cursor:pointer;" onclick="wpquery_term_filter(' + term.term_id + ',' + property + ')">' + term.name + '</a></p><br>');//zero o html do container que recebera os
+                            $("#labels_" + property + "_<?php echo $object_id; ?>").append('<input type="hidden" name="socialdb_propertyterm_'+property+'[]" value="'+term.term_id+'"><p><a style="cursor:pointer;" onclick="wpquery_term_filter(' + term.term_id + ',' + property + ')">' + term.name + '</a></p><br>');//zero o html do container que recebera os
                         }
                     });
                     $('#core_validation_'+property).val('true');

@@ -93,13 +93,13 @@ class ObjectWidgetsHelper extends ViewHelper {
                                 value='<?php echo count($properties_compounded) ?>'>
                         <?php endif; ?> 
                         <?php for($i = 0; $i<$cardinality_bigger;$i++): 
-                             $is_show_container =  $this->is_set_container($object_id,$property,$property_compounded,$i);
-                            $position = 0;
-                            ?>
-                            <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
-                                 class="col-md-12 no-padding"
-                                 style="border-style: solid;border-width: 1px;border-color: #ccc; padding: 10px;<?php echo ($is_show_container) ? 'display:block': 'display:none'; ?>">
-                                <div class="col-md-11">
+                                $is_show_container =  $this->is_set_container($object_id,$property,$property_compounded,$i);
+                                $fields_filled =  $this->count_fields_container_value($object_id,$property,$property_compounded,$i);
+                                $position = 0;
+                                ?>
+                                <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>"
+                                     class="col-md-12 no-padding" style="border-color: #ccc;<?php echo ($is_show_container) ? ( (isset($references['is_view_mode']) && $all_fields_validate && $fields_filled != count($properties_compounded)) ? 'display:none' : 'display:block' ) : 'display:none'; ?>">
+                                    <div class="col-md-11">
                                 <?php foreach ($properties_compounded as $property_compounded): 
                                     if(!isset( $property_compounded['id']) || empty($property_compounded['id'])){
                                         continue;
@@ -116,9 +116,9 @@ class ObjectWidgetsHelper extends ViewHelper {
                                         <?php if(!$all_fields_validate && (!$property_compounded['metas']['socialdb_property_required'] || $property_compounded['metas']['socialdb_property_required'] == 'false')):  ?>
                                             value='true' validate_compound="false">
                                         <?php else: ?>
-                                            value='<?php echo (!$value) ? 'false' : 'true' ; ?>'>
+                                            value='<?php echo (!$value && $is_show_container) ? 'false' : 'true' ; ?>'>
                                         <?php endif; ?>
-                                    <div style="padding-bottom: 15px; " class="col-md-12">
+                                    <div style="padding-bottom: 15px; " class="col-md-12" id="only_field_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>">
                                         <p style="color: black;"><b><?php echo $property_compounded['name']; ?></b>
                                             <?php
                                                if ((!$property['metas']['socialdb_property_required'] || $property['metas']['socialdb_property_required'] == 'false') && $property_compounded['metas']['socialdb_property_required']&&$property_compounded['metas']['socialdb_property_required'] == 'true') {
@@ -135,12 +135,16 @@ class ObjectWidgetsHelper extends ViewHelper {
                                                 <input  type="hidden" 
                                                         id='core_validation_<?php echo $property['id']; ?>' 
                                                         name='core_validation_<?php echo $property['id']; ?>' 
-                                                        class='core_validation core_validation_<?php echo $property['id']; ?>_<?php echo $i; ?>' 
-                                                        value='<?php echo (!$value) ? 'false' : 'true' ; ?>'>
+                                                        class="core_validation core_validation_<?php echo $property['id']; ?>_<?php echo $i; ?>"
+                                                <?php if(!$is_show_container): ?>
+                                                      value='true'>
+                                                <?php else: ?>     
+                                                     value='<?php echo (!$value) ? 'false' : 'true' ; ?>'>
+                                                <?php endif; ?>
                                                 <input type="hidden" 
                                                          id='core_validation_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>_message'  
                                                          value='<?php echo sprintf(__('The field %s is required','tainacan'),$property['name']); ?>'>
-                                                  <script> set_field_valid_compounds(<?php echo $property['id']; ?>,'core_validation_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>',<?php echo $property_compounded['id']; ?>)</script> 
+                                                  <script> set_field_valid_compounds(<?php echo $property['id']; ?>,'core_validation_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>',<?php echo $property['id']; ?>)</script> 
                                             <?php  }  ?>
                                         </p>
                                         <?php 
@@ -297,13 +301,18 @@ class ObjectWidgetsHelper extends ViewHelper {
      */
     public function widget_property_object($property,$i,$references,$value = false) {
         if($references['is_view_mode'] || (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true' && !isset($references['operation']))){
-            if(isset($value)): ?>
+            if(isset($value)): 
+                if(is_array($value) && $value[$i])  
+                    $val = $value[$i];
+                else
+                     $val = $value; 
+             ?>
              <div id="labels_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">
-                <?php if (!empty($property['metas']['objects']) && !empty($value)) { ?>
+                <?php if (!empty($property['metas']['objects']) && !empty($val)) { ?>
                     <?php foreach ($property['metas']['objects'] as $object) { // percoro todos os objetos  ?>
                         <?php
-                        if (isset($value) && !empty($value) && $object->post_status == 'publish' && ((is_array($value) && in_array($object->ID, $value) ) || ($object->ID == $value) )): // verifico se ele esta na lista de objetos da colecao
-                            echo '<b><a  href="' . get_the_permalink($property['metas']['collection_data'][0]->ID) . '?item=' . $object->post_name . '" >' . $object->post_title . '</a></b><br>';
+                        if (isset($val) && !empty($val) && $object->post_status == 'publish' && ((is_array($val) && in_array($object->ID, $val) ) || ($object->ID == $val) )): // verifico se ele esta na lista de objetos da colecao
+                            echo '<input type="hidden" name="socialdb_property_'.$property['id'].'[]" value="'.$object->ID.'"><b><a  href="' . get_the_permalink($property['metas']['collection_data'][0]->ID) . '?item=' . $object->post_name . '" >' . $object->post_title . '</a></b><br>';
                         endif;
                         ?>
                     <?php } ?>
@@ -339,11 +348,19 @@ class ObjectWidgetsHelper extends ViewHelper {
             value="<?php if ($value) echo $value; ?>">
         <?php
         if($references['is_view_mode'] || (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true' && !isset($references['operation']))){
-            ?>
-            <div id='label_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>'>
-                 <?php $this->get_category_value($references['object_id'],$property['id'],$property['metas']['socialdb_property_term_root']); ?>
-            </div>  
-            <?php
+                if($property['metas']['socialdb_property_term_cardinality'] && $property['metas']['socialdb_property_term_cardinality'] == '1' && is_numeric($value)):
+                    ?>
+                    <div id='label_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>'>
+                         <?php echo get_term_by('id', $value,'socialdb_category_type')->name ?>
+                    </div>  
+                    <?php
+                else:  
+                    ?>
+                    <div id='label_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>'>
+                         <?php $this->get_category_value($references['object_id'],$property['id'],$property['metas']['socialdb_property_term_root']); ?>
+                    </div>  
+                    <?php
+                endif;
             return;
         }
         if ($property['type'] == 'radio') {
@@ -510,6 +527,16 @@ class ObjectWidgetsHelper extends ViewHelper {
         }
     }
     
+    public function count_fields_container_value($item_id,$compound,$property,$i) {
+        $compound_id = $compound['id'];
+        $values = get_post_meta($item_id,'socialdb_property_'.$compound_id.'_'.$i,true);
+        if($values&&$values!=''){
+            $array = array_filter(explode(',', $values));
+            return count($array);
+        }
+        return 0;
+    }
+    
     /**
      * verifico se existe algum valor nas proximas
      */
@@ -574,10 +601,11 @@ class ObjectWidgetsHelper extends ViewHelper {
                 <?php endif; ?> 
                 <?php for($i = 0; $i<$cardinality_bigger;$i++):
                     $is_show_container =  $this->is_set_container($object_id,$property,$property_compounded,$i);
+                    $fields_filled =  $this->count_fields_container_value($object_id,$property,$property_compounded,$i);
                     $position = 0;
                     ?>
                     <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>"
-                         class="col-md-12 no-padding" style="border-color: #ccc;<?php echo ($is_show_container) ? 'display:block': 'display:none'; ?>">
+                         class="col-md-12 no-padding" style="border-color: #ccc;<?php echo ($is_show_container) ? ( (isset($references['is_view_mode']) && $all_fields_validate && $fields_filled != count($properties_compounded)) ? 'display:none' : 'display:block' ) : 'display:none'; ?>">
                         <div class="col-md-12 no-padding">
                             <?php foreach ($properties_compounded as $property_compounded):
                                 $coumpounds_id[] = $property_compounded['id'];
@@ -596,7 +624,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                                     <?php else: ?>
                                         value='<?php echo (!$value) ? 'false' : 'true' ; ?>'>
                                     <?php endif; ?>
-                                <div style="margin-bottom: 15px; border-bottom: 1px solid #e8e8e8" class="col-md-12">
+                                <div style="margin-bottom: 15px; border-bottom: 1px solid #e8e8e8" class="col-md-12" id="only_field_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>">
                                     <p style="color: black;"><?php echo $property_compounded['name']; ?>
                                         <?php
                                             if ((!$property['metas']['socialdb_property_required'] || $property['metas']['socialdb_property_required'] == 'false') && $property_compounded['metas']['socialdb_property_required']&&$property_compounded['metas']['socialdb_property_required'] == 'true') {
@@ -618,7 +646,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                                              <input type="hidden" 
                                                       id='core_validation_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>_message'  
                                                       value='<?php echo sprintf(__('The field %s is required','tainacan'),$property['name']); ?>'>
-                                               <script> set_field_valid_compounds(<?php echo $property['id']; ?>,'core_validation_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>',<?php echo $property_compounded['id']; ?>)</script> 
+                                               <script> set_field_valid_compounds(<?php echo $property['id']; ?>,'core_validation_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>',<?php echo $property['id']; ?>)</script> 
                                          <?php  }  ?>
                                     </p>
                                     <?php
@@ -942,6 +970,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                 if(is_array($hierarchy) && in_array($parent, $hierarchy)){
                     $has_value = true;
                     ?>
+                    <input type="hidden" name="socialdb_propertyterm_<?php echo $property_id; ?>[]" value="<?php echo $term->term_id ?>">
                     <p>
                        <a style="cursor:pointer;" onclick="wpquery_term_filter('<?php echo $term->term_id ?>','<?php echo $property_id  ?>')">
                            <?php echo $term->name  ?>
@@ -950,7 +979,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                     <script>
                         setTimeout(function(){
                             append_category_properties('<?php echo $term->term_id ?>',0,'<?php echo $property_id ?>');
-                        }, 2000);
+                        }, 3000);
                     </script>
                     <?php   
                 }

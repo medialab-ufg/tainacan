@@ -859,24 +859,22 @@
         $( ".core_validation").each(function( index ) {
             if(deny_repeated_ids.indexOf($( this ).attr('id'))<0){
                 deny_repeated_ids.push($( this ).attr('id'));
-            }else{
-                return false;
-            }
-            if($( this ).val()==='false'){
-                cont++;
-                <?php if(!$is_view_mode): ?>
-                var id = $( this ).attr('id').replace('core_validation_','');
-                if(!$.isNumeric(id) && $('#fixed_id_'+id).length > 0){
-                     var id =  $('#fixed_id_'+id).val();
-                }
-                $('#meta-item-'+id+' h2').css('background-color','#ffcccc');
-                $.each($( "#submit_form_edit_object .tab-pane" ),function(index,seletor){
-                    if($(seletor).find('#meta-item-'+id).length > 0){
-                        var id_tab = $(seletor ).attr('id').replace('tab-','');
-                        $('#click-tab-'+id_tab).css('background-color','#ffcccc');
+                if($( this ).val()==='false'){
+                    cont++;
+                    <?php if(!$is_view_mode): ?>
+                    var id = $( this ).attr('id').replace('core_validation_','');
+                    if(!$.isNumeric(id) && $('#fixed_id_'+id).length > 0){
+                         var id =  $('#fixed_id_'+id).val();
                     }
-                });
-                <?php endif; ?>
+                    $('#meta-item-'+id+' h2').css('background-color','#ffcccc');
+                    $.each($( "#submit_form_edit_object .tab-pane" ),function(index,seletor){
+                        if($(seletor).find('#meta-item-'+id).length > 0){
+                            var id_tab = $(seletor ).attr('id').replace('tab-','');
+                            $('#click-tab-'+id_tab).css('background-color','#ffcccc');
+                        }
+                    });
+                    <?php endif; ?>
+                }
             }
         });
         <?php if(!$is_view_mode): ?>
@@ -886,11 +884,9 @@
                 $( seletor).find(".core_validation").each(function( index ) {
                     if(deny_repeated_ids.indexOf($( this ).attr('id'))<0){
                         deny_repeated_ids.push($( this ).attr('id'));
-                    }else{
-                        return false;
-                    }
-                    if($( this ).val()==='false'){
-                        cont_pane++;
+                        if($( this ).val()==='false'){
+                            cont_pane++;
+                        }
                     }
                 });
                 if(cont_pane===0){
