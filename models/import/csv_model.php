@@ -806,9 +806,9 @@ class CsvModel extends Model {
      */
     public function codification_value($value,$code){
         if($code == 'utf8'){
-            return utf8_encode($value);
+            return utf8_encode(utf8_decode($value));
         }else{
-            return utf8_decode($value);
+            return $value;
         }
     }
 
