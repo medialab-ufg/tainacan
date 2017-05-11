@@ -173,9 +173,11 @@ class OAIPMHModel extends Model {
                 $parent = '';
                 $property = get_term_by("id", $property_id, "socialdb_property_type");
                 $property_root = get_term_meta($property->term_id, 'socialdb_property_created_category', true);
-                $term = get_term_by('id', $property_root,'socialdb_category_type');
+                $term = socialdb_term_exists($property_root);
                 if($term){
-                    $parent = ' - <b>'.$term->name.'</b>';
+                    $parent = ' - '.$term['name'];
+                }else{
+                     $parent = ' - '.__('Removed category','tainacan');
                 }
                 if(in_array($property->slug, $this->fixed_slugs) ):
                     continue;
