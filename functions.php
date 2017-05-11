@@ -2355,9 +2355,9 @@ function socialdb_term_exists_by_slug($term, $taxonomy, $parent = null) {
  * @param string $taxonomy Metadata key A taxonomia do tipo do termo.
  * @return array com o id do termo se ele existir.
  */
-function socialdb_term_exists($term, $taxonomy) {
+function socialdb_term_exists($term, $taxonomy = '') {
     global $wpdb;
-    $sql = sprintf("select t.term_id, tt.term_taxonomy_id from %s tt inner join %s t on t.term_id = tt.term_id where t.term_id = %s ", $wpdb->term_taxonomy, $wpdb->terms, $term);
+    $sql = sprintf("select t.term_id, tt.term_taxonomy_id,t.name from %s tt inner join %s t on t.term_id = tt.term_id where t.term_id = %s ", $wpdb->term_taxonomy, $wpdb->terms, $term);
     return $wpdb->get_row($sql, ARRAY_A);
 }
 

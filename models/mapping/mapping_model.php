@@ -446,12 +446,13 @@ class MappingModel extends Model {
         return $data;
     }
 
-    public function save_delimiter_csv($mapping_id, $delimiter, $multi_values, $hierarchy, $import_zip_csv, $has_header = 0) {
+    public function save_delimiter_csv($mapping_id, $delimiter, $multi_values, $hierarchy, $import_zip_csv, $has_header = 0 ,$code = 'utf8') {
         update_post_meta($mapping_id, 'socialdb_channel_csv_delimiter', $delimiter);
         update_post_meta($mapping_id, 'socialdb_channel_csv_multi_values', $multi_values);
         update_post_meta($mapping_id, 'socialdb_channel_csv_hierarchy', $hierarchy);
         update_post_meta($mapping_id, 'socialdb_channel_csv_import_zip', $import_zip_csv);
         update_post_meta($mapping_id, 'socialdb_channel_csv_has_header', $has_header);
+        update_post_meta($mapping_id, 'socialdb_channel_csv_code', $code);
     }
 
     public function validate_zip(array $File, array $data, $Name = null) {
