@@ -105,7 +105,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                                         continue;
                                     }
                                     $coumpounds_id[] = $property_compounded['id']; 
-                                    $value = $this->get_value($object_id, $property['id'], $property_compounded['id'], $i, $position);
+                                    $value = $this->get_value($object_id, $property['id'], $property_compounded['id'], $i, $position,$references);
                                     ?>
                                     <input type="hidden" 
                                            class="form_autocomplete_value_<?php echo $property_compounded['id']; ?>_mask" 
@@ -451,7 +451,10 @@ class ObjectWidgetsHelper extends ViewHelper {
      * @param type $i
      * @return string/boolean
      */
-    public function get_value($item_id,$compound_id,$property,$i,$position) {
+    public function get_value($item_id,$compound_id,$property,$i,$position,$references = []) {
+        if(isset($references['operation']) && $references['operation'] == 'add'){
+            return false;
+        }
         $values = get_post_meta($item_id,'socialdb_property_'.$compound_id.'_'.$i,true);
         if($values&&$values!=''){
             $values = explode(',', $values);
@@ -609,7 +612,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                         <div class="col-md-12 no-padding">
                             <?php foreach ($properties_compounded as $property_compounded):
                                 $coumpounds_id[] = $property_compounded['id'];
-                                $value = $this->get_value($object_id, $property['id'], $property_compounded['id'], $i, $position);
+                                $value = $this->get_value($object_id, $property['id'], $property_compounded['id'], $i, $position,$references);
                                 if(isset($property_compounded['metas']['socialdb_property_object_category_id']))
                                                     $value = $property_compounded['metas']['value'];
                                 ?>

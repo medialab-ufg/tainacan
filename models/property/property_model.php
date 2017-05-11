@@ -57,6 +57,7 @@ class PropertyModel extends Model {
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_term_widget', $data['socialdb_property_term_widget']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_visualization',$data['property_visualization']);
             update_term_meta($new_property['term_id'], 'socialdb_property_locked',$data['property_locked']);
+            update_term_meta($new_property['term_id'], 'socialdb_property_habilitate_new_category',$data['property_habilitate_new_category']);
             //adicionando a categoria raiz
             if($data['socialdb_property_vinculate_category']=='create'&&$data['socialdb_property_new_category']){
                 $category_id = $this->add_category_root_property_term($data['socialdb_property_new_category']);
@@ -491,6 +492,7 @@ class PropertyModel extends Model {
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_term_root', $data['socialdb_property_term_root']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_visualization',$data['property_visualization']);
             update_term_meta($new_property['term_id'], 'socialdb_property_locked',$data['property_locked']);
+            update_term_meta($new_property['term_id'], 'socialdb_property_habilitate_new_category',$data['property_habilitate_new_category']);
             update_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $data['socialdb_property_term_root'] . '_color', 'color13');
             if($data['property_default_value']&&!empty($data['property_default_value'])){
                  $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_default_value', $data['property_default_value']);

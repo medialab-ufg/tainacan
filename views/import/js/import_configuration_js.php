@@ -605,10 +605,15 @@
                                         "<a href='javascript:void(0)' onclick=\"edit_mapping_csv(" + object.id + "," + collectionId + ")\"><span class='glyphicon glyphicon-edit'></span></a> &nbsp; " +
                                         "<a href='javascript:void(0)' onclick=\"do_import_csv('" + object.id + "')\"><span class='glyphicon glyphicon-arrow-down'></span></a></td></tr>");
                             } else {
-                                $("#table_csv").append("<tr><td>" + object.name + "</td>" +
-                                        "<td><a href='javascript:void(0)' onclick='delete_mapping(" + object.id + "," + collectionId + ")'><span class='glyphicon glyphicon-trash'></span></a> &nbsp; " +
-                                        "<a href='javascript:void(0)'><span style='opacity:0.4' class='glyphicon glyphicon-edit'></span></a> &nbsp; " +
-                                        "<a href='javascript:void(0)' ><span style='opacity:0.4' class='glyphicon glyphicon-arrow-down'>&nbsp;<?php _e('Imported in', 'tainacan') ?> " + object.lastUpdate + "</span></a></td></tr>");
+                                 $("#table_csv").append("<tr><td>" + object.name + "</td>" +
+                                        "<td><a href='javascript:void(0)' onclick='delete_mapping(" + object.id + "," + collectionId + " )'><span class='glyphicon glyphicon-trash'></span></a> &nbsp; " +
+                                        "<a href='javascript:void(0)' onclick=\"edit_mapping_csv(" + object.id + "," + collectionId + ")\"><span class='glyphicon glyphicon-edit'></span></a> &nbsp; " +
+                                        "<a href='javascript:void(0)' onclick=\"do_import_csv('" + object.id + "')\"><span class='glyphicon glyphicon-arrow-down'></span><?php _e('Imported in', 'tainacan') ?> " + object.lastUpdate + "</a></td></tr>");                          
+//                                $("#table_csv").append("<tr><td>" + object.name + "</td>" +
+//                                        "<td><a href='javascript:void(0)' onclick='delete_mapping(" + object.id + "," + collectionId + ")'><span class='glyphicon glyphicon-trash'></span></a> &nbsp; " +
+//                                        "<a href='javascript:void(0)'><span style='opacity:0.4' class='glyphicon glyphicon-edit'></span></a> &nbsp; " +
+//                                        "<a href='javascript:void(0)' ><span style='opacity:0.4' class='glyphicon glyphicon-arrow-down'>&nbsp;<?php _e('Imported in', 'tainacan') ?> " + object.lastUpdate + "</span></a></td></tr>");
+                                    
                             }
                         });
                         $("#table_csv").show();

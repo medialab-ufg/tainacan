@@ -14,7 +14,7 @@
     <table class="table table-bordered"  style="margin-top: 15px;" id="found_items_property_object_<?php echo $compound_id ?>_<?php echo $property_id ?>_<?php echo $contador ?>">
         <?php
         while ($loop_objects->have_posts()) : $loop_objects->the_post();
-            if($avoid_selected_items === '1' && $object->is_selected_property($property_id,  get_the_ID())){
+            if(($avoid_selected_items === '1'|| $avoid_selected_items == 'true') && $object->is_selected_property($property_id,  get_the_ID())){
                 continue;
             }
             ?>

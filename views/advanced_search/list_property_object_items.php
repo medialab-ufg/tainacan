@@ -15,7 +15,7 @@
     <table class="table table-bordered"  style="margin-top: 15px;" id="found_items_property_object_<?php echo $property_id ?>">
         <?php
         while ($loop_objects->have_posts()) : $loop_objects->the_post();
-            if($avoid_selected_items === '1' && $object->is_selected_property($property_id,  get_the_ID())){
+            if(($avoid_selected_items === '1'|| $avoid_selected_items == 'true') && $object->is_selected_property($property_id,  get_the_ID())){
                 continue;
             }
             if(in_array( get_the_ID(), $found_items))

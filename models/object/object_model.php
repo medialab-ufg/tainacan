@@ -1530,11 +1530,39 @@ class ObjectModel extends Model {
         if ($result) {
             foreach ($result as $object) {
                 if (strpos(strtolower($object->post_title), strtolower($data['term'])) !== false) {
-                    $json[] = array('value' => $object->ID, 'label' => $object->post_title);
+                    $array =  array('value' => $object->ID, 'label' => $object->post_title);
+                    if(isset($data['verify_selected']))
+                        $array['is_selected'] = $this->is_selected_property ($data['property_id'], $object->ID);
+                    $json[] = $array;
                 }
             }
         }
         return json_encode($json);
+    }
+    
+    /**
+     * 
+     * @param type $property_id
+     * @param type $item_id
+     */
+    public function is_selected_property($property_id,$item_id) {
+        global $wpdb;
+        $wp_posts = $wpdb->prefix . "posts";
+        $wp_postmeta = $wpdb->prefix . "postmeta";
+        if ($meta_key == '') {
+            $meta_key = 'socialdb_property_' . $property_id;
+        }
+        $query = "
+                        SELECT pm.* FROM $wp_posts p
+                        INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id    
+                        WHERE p.post_status LIKE 'publish' and pm.meta_key like '$meta_key' and pm.meta_value LIKE '%{$item_id}%'
+                ";
+        $result = $wpdb->get_results($query);
+        if ($result && is_array($result) && count(array_filter($result)) > 0) {
+            return true;
+        }else{
+            return false;
+        }
     }
     
     

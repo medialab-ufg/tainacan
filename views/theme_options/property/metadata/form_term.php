@@ -33,7 +33,11 @@
                                     <input type="radio" name="property_term_required" id="property_term_required_true" value="true">&nbsp;<?php _e('Yes','tainacan'); ?>
                                     <input type="radio" name="property_term_required" id="property_term_required_false" checked="checked" value="false">&nbsp;<?php _e('No','tainacan'); ?>
                                 </div>
-
+                                <div class="form-group category-fit-column" style="display: inline-block; width: 59%">
+                                    <label style="display: block"><?php _e('Habilitate add new category','tainacan'); ?></label>
+                                    &nbsp;<input type="radio" name="socialdb_event_property_habilitate_new_category" id="new_item_true"   value="true">&nbsp;<?php _e('Yes','tainacan') ?>
+                                    &nbsp;<input type="radio" name="socialdb_event_property_habilitate_new_category" id="new_item_false" checked="checked" value="false">&nbsp;<?php _e('No','tainacan') ?>
+                                </div>
                                 <div class="form-group">
                                     <label for="socialdb_property_term_widget"><?php _e('Property Term Widget','tainacan'); ?></label>
                                     <select class="form-control" id="socialdb_property_term_widget" name="socialdb_property_term_widget">

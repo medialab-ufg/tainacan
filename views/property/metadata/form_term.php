@@ -134,7 +134,12 @@
                                         <label for="property_term_required" style="margin-right: 10px;" ><?php _e('Visualization','tainacan'); ?> : </label>
                                         &nbsp;<input type="radio" name="socialdb_event_property_visualization" id="socialdb_property_term_visualization_public" checked="checked"  value="public">&nbsp;<?php _e('Public','tainacan') ?>
                                         &nbsp;<input type="radio" name="socialdb_event_property_visualization" id="socialdb_property_term_visualization_restrict" value="restrict">&nbsp;<?php _e('Restrict','tainacan') ?>
-                                    </div>                                    
+                                    </div>    
+                                    <div class="form-group category-fit-column" style="display: inline-block; width: 59%">
+                                        <label style="display: block"><?php _e('Habilitate add new category','tainacan'); ?></label>
+                                        &nbsp;<input type="radio" name="socialdb_event_property_habilitate_new_category" id="new_item_true"   value="true">&nbsp;<?php _e('Yes','tainacan') ?>
+                                        &nbsp;<input type="radio" name="socialdb_event_property_habilitate_new_category" id="new_item_false" checked="checked" value="false">&nbsp;<?php _e('No','tainacan') ?>
+                                    </div>
                                     <div class="form-group" >
                                         <input type="checkbox" name="property_term_required" id="property_term_required_true" value="true">&nbsp;<b><?php _e('Required','tainacan'); ?></b>
                                     </div>

@@ -1442,6 +1442,7 @@
             var visualization = (elem.metas.socialdb_property_visualization) ? elem.metas.socialdb_property_visualization : 'public';
             var locked = (elem.metas.socialdb_property_locked) ? elem.metas.socialdb_property_locked : false;
             var default_value = (elem.metas.socialdb_property_default_value) ? elem.metas.socialdb_property_default_value : false;
+            var habilitate_new_category = (elem.metas.socialdb_property_habilitate_new_category) ? elem.metas.socialdb_property_habilitate_new_category : false;
             $('#socialdb_property_vinculate_category_exist').prop('checked','checked');
             $('#socialdb_property_vinculate_category_exist').trigger('click');
             $('#property_term_new_category').val('');            
@@ -1503,6 +1504,15 @@
             }
             if(elem.metas.socialdb_property_help){
                 $("#socialdb_property_help").val(elem.metas.socialdb_property_help);
+            }
+            
+             //habilitar novo item
+            $("#meta-category #new_item_true").removeAttr('checked');
+            $("#meta-category #new_item_false").removeAttr('checked');
+            if (habilitate_new_category == 'true') {
+                $("#meta-category #new_item_true").prop('checked', true);
+            }else{
+                $("#meta-category #new_item_false").prop('checked', true);
             }
 
             //se o campo esta travado para edicao
