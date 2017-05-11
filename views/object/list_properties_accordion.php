@@ -154,8 +154,67 @@ if (isset($property_object)):
                                         style="margin-right: 5px;" 
                                         size="13" 
                                         class="input_date auto-save form_autocomplete_value_<?php echo $property['id']; ?>" 
-                                        type="text" value="<?php
-                                        if ($property['metas']['socialdb_property_default_value']): echo $property['metas']['socialdb_property_default_value'];endif;?>" 
+                                        type="text" value="
+                                        <?php
+                                            if ($property['metas']['socialdb_property_default_value']):
+                                                echo $property['metas']['socialdb_property_default_value'];
+                                            endif;
+
+                                            if(has_action("add_material_loan_devolution"))
+                                            {
+                                                //Get variable from DB
+                                                $loan_time = get_option('socialdb_loan_time');
+                                                $devolution_days = get_option('socialdb_devolution_weekday');
+                                                $devolution_day_problem_option = get_option('socialdb_devolution_day_problem');
+                                                if($devolution_day_problem_option == 'after')
+                                                    $sum = 1;
+                                                else $sum = -1;
+
+
+                                                $today = intval(date('d'));
+                                                $month = intval(date('m'));
+                                                $year = intval (date('Y'));
+                                                $days_in_month = date('t', mktime(0, 0, 0, $month, 1, $year));
+
+
+                                                $day_to_return += $today + $loan_time;
+                                                $go_on = false;
+                                                while ($day_to_return > $days_in_month && $go_on != true)
+                                                {
+                                                    $day_to_return -= $days_in_month;
+                                                    $next_month = $month + 1;
+
+                                                    if($next_month % 12 == 0)
+                                                    {
+                                                        $month = 12;
+                                                    }else if($next_month % 12 > $month)
+                                                    {
+                                                        $month = $next_month % 12;
+                                                    }
+
+                                                    if($next_month > 12)
+                                                    {
+                                                        $year++;
+                                                    }
+
+                                                    $days_in_month = date('t', mktime(0, 0, 0, $month, 1, $year));
+
+                                                    if($day_to_return < $days_in_month)
+                                                    {
+                                                        $actual_weekday = date("l", mktime(0, 0, 0, $month, $day_to_return, $year));
+                                                        while (!key_exists($actual_weekday, $devolution_days))
+                                                        {
+                                                            $day_to_return += $sum;
+                                                            $actual_weekday = date("l", mktime(0, 0, 0, $month, $day_to_return, $year));
+                                                        }
+
+                                                        $go_on = $true;
+                                                    }
+                                                }
+
+                                                echo date('d/m/Y', mktime(0, 0, 0, $month, $day_to_return, $year));
+                                            }
+                                        ?>"
                                         id="form_autocomplete_value_<?php echo $property['id']; ?>_<?php echo $i ?>" 
                                         name="socialdb_property_<?php echo $property['id']; ?>[]" 
                                         >

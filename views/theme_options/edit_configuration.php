@@ -119,6 +119,11 @@ $post_thumb = get_the_post_thumbnail($socialdb_logo, 'thumbnail');
             {
                 do_action("add_mapping_library_collections");
             }
+
+            if(has_action('add_material_loan_devolution'))
+            {
+                do_action('add_material_loan_devolution');
+            }
             ?>
 
             <input type="hidden" id="operation" name="operation" value="update_configuration">

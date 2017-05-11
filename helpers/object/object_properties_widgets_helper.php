@@ -288,7 +288,7 @@ class ObjectWidgetsHelper extends ViewHelper {
             ?>
             <input type="text" 
                    id="compounds_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>"
-                   value="<?php if ($value) echo $value; ?>" 
+                   value="<?php if ($value) echo $value; ?>"
                    class="form-control form_autocomplete_compounds_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
                    name="socialdb_property_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>[]" >
         <?php

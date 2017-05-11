@@ -316,19 +316,15 @@ function mapping_library_collections()
     <?php
     foreach ($should_be_mapped as $name)
     {
-        //print_r($mapping);
-
-        //print "<br>$name<br>";
         ?>
         <div class="col-md-12">
             <div class="col-md-6 no-padding" style="margin: 10px 0 10px 0; border-bottom: 1px solid #e8e8e8">
                 <label class='meta-title no-padding' style=""><?php echo $name ?></label>
             </div>
             <div class="col-md-6">
-                <select name="ColName:<?php echo $name ?>" id="<?php echo $name ?>" class='data form-control'>
+                <select name="collections[<?php echo $name ?>]" id="<?php echo $name ?>" class='data form-control'>
 
                     <?php
-                        $name = str_replace(" ", "_", $name);
                         foreach ($posts_name_id as $post_name => $id)
                         {
                             if( $mapping[$name] == $id)
@@ -401,6 +397,71 @@ function book_loan($data)
     return $result;
 }
 
+add_action('add_material_loan_devolution', 'material_loan_devolution');
+function material_loan_devolution()
+{
+    $loantime = get_option('socialdb_loan_time');
+    ?>
+    <h5 style="font-weight: bolder; margin-bottom: 2px;"> <?php _e('Material loan and devolution', 'tainacan') ?> </h5>
+
+    <div class="col-md-12">
+        <div class="col-md-6 no-padding" style="margin: 10px 0 10px 0; border-bottom: 1px solid #e8e8e8">
+            <label class='meta-title no-padding' style=""><?php _e('Default loan time (days)') ?></label>
+        </div>
+
+        <div class="col-md-6">
+            <input class="data form-control" type="number" min='1' list="sugestions" name="default_time" value="<?php echo $loantime ?>" required>
+            <datalist id="sugestions">
+                <option value="7">
+                <option value="8">
+                <option value="9">
+                <option value="10">
+            </datalist>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="col-md-6 no-padding" style="margin: 10px 0 10px 0; border-bottom: 1px solid #e8e8e8">
+            <label class='meta-title no-padding' style=""><?php _e('Devolution days') ?></label>
+        </div>
+
+        <?php
+            $devolution_week_day = get_option('socialdb_devolution_weekday');
+            $weekdays = array("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
+        ?>
+        <div class="col-md-6">
+            <?php
+                foreach ($weekdays as $weekday)
+                {
+                    if(key_exists($weekday, $devolution_week_day))
+                    {
+                        $checked = "checked";
+                    }else $checked = "";
+
+                    ?>
+                    <label class="checkbox-inline"><input type="checkbox" value="true" name="weekday[<?php echo $weekday ?>]" <?php echo $checked ?>><?php _e($weekday, "tainacan"); ?></label>
+                    <?php
+                }
+            ?>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="col-md-6 no-padding" style="margin: 10px 0 10px 0; border-bottom: 1px solid #e8e8e8">
+            <label class='meta-title no-padding' style=""><?php _e('If dovolution in a not devolution day') ?></label>
+        </div>
+
+        <?php
+            $devolution_day_option = get_option('socialdb_devolution_day_problem');
+        ?>
+
+        <div class="col-md-6">
+            <input type="radio" class="radio-inline" name="devolutionDayProblem" value="before" <?php if($devolution_day_option == 'before') echo "checked";?>> <?php _e("Before", "tainacan") ?>
+            <input type="radio" class="radio-inline" name="devolutionDayProblem" value="after" <?php if($devolution_day_option == 'after') echo "checked"; ?>> <?php _e("After", "tainacan") ?>
+        </div>
+    </div>
+    <?php
+}
 /*
  * Functions
  */

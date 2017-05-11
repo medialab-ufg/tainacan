@@ -208,6 +208,7 @@ class ThemeOptionsModel extends Model {
     }
 
     function update_configuration($data) {
+        
         $reload = false;
         $data['socialdb_repository_permissions'] = ['socialdb_collection_permission_create_collection' => $data['socialdb_collection_permission_create_collection'], 'socialdb_collection_permission_delete_collection' => $data['socialdb_collection_permission_delete_collection']];
         $data['repository_content'] = strip_tags($data['repository_content']);
@@ -272,22 +273,29 @@ class ThemeOptionsModel extends Model {
         $data['reload'] = $reload;
 
         //Salva mapeamento de Coleções do Tainacan Biblioteca
-        $mapping_info = [];
+
         ini_set('display_errors', '0');     # don't show any errors...
         error_reporting(E_ALL | E_STRICT);  # ...but do log them
 
-        foreach ($data as $collection_name => $id)
+        if(!empty($data['collections']))
         {
-            if(preg_match("/ColName:/", $collection_name))
-            {
-                $collection_name = end(explode(":", $collection_name));
-                $mapping_info[$collection_name] = $id;
-            }
+            update_option('socialdb_general_mapping_collection', $data['collections']);
+        }
+
+        //Loan time
+        $loan_time = $data['default_time'];
+        update_option('socialdb_loan_time', $loan_time);
+        
+        //Days of devolution
+        if(!empty($data['weekday']))
+        {
+            update_option('socialdb_devolution_weekday', $data['weekday']);
         }
         
-        if(!empty($mapping_info))
+        //Devolution day problem
+        if(!empty($data['devolutionDayProblem']))
         {
-            update_option('socialdb_general_mapping_collection', $mapping_info);
+            update_option('socialdb_devolution_day_problem', $data['devolutionDayProblem']);
         }
 
         return json_encode($data);
