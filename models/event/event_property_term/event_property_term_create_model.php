@@ -81,6 +81,7 @@ class EventPropertyTermCreate extends EventModel {
         $data['property_visualization'] = get_post_meta($event_id, 'socialdb_event_property_visualization',true) ;
         $data['property_locked'] = get_post_meta($event_id, 'socialdb_event_property_lock_field',true) ;
         $data['property_default_value'] = get_post_meta($event_id, 'socialdb_event_property_default_value',true) ;
+        $data['property_habilitate_new_category'] = get_post_meta($event_id, 'socialdb_event_property_habilitate_new_category',true) ;
         //inserindo o metadado
         $property_category_id = get_post_meta($event_id, 'socialdb_event_property_term_create_category_root_id',true) ;
         if($property_category_id&&$property_category_id!=$this->get_category_root_of($data['collection_id'])){

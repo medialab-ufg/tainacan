@@ -311,12 +311,14 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
             } elseif ($property['type'] == 'tree') {
                 $properties_terms_tree[] = $property['id'];
                 ?>
+                <?php if($property['metas']['socialdb_property_habilitate_new_category'] && $property['metas']['socialdb_property_habilitate_new_category'] == 'true'): ?>
                 <button type="button"
                         onclick="showModalFilters('add_category','<?php echo get_term_by('id', $property['metas']['socialdb_property_term_root'] , 'socialdb_category_type')->name ?>',<?php echo $property['metas']['socialdb_property_term_root'] ?>,'field_property_term_<?php echo $property['id']; ?>')" 
                         class="btn btn-primary btn-xs">
                             <span class="glyphicon glyphicon-plus"></span>
                             <?php _e('Add Category','tainacan'); ?>
                 </button>
+                <?php endif; ?>
                 <br><br>
                 <div st class="row">
                     <div  style='height: 150px;' class='col-lg-12'  id='field_property_term_<?php echo $property['id']; ?>'></div>
@@ -364,6 +366,8 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
                         <?php
             }elseif ($property['type'] == 'tree_checkbox') {
                 $properties_terms_treecheckbox[] = $property['id']; ?>
+                
+                <?php if($property['metas']['socialdb_property_habilitate_new_category'] && $property['metas']['socialdb_property_habilitate_new_category'] == 'true'): ?>
                 <button type="button"
                         onclick="showModalFilters('add_category','<?php echo get_term_by('id', $property['metas']['socialdb_property_term_root'] , 'socialdb_category_type')->name ?>',<?php echo $property['metas']['socialdb_property_term_root'] ?>,'field_property_term_<?php echo $property['id']; ?>')" 
                         class="btn btn-primary btn-xs">
@@ -371,6 +375,7 @@ if ((isset($property_term) && count($property_term) > 1) || (count($property_ter
                             <?php _e('Add Category','tainacan'); ?>
                 </button>
                 <br><br>
+                <?php endif; ?>
                 <div class="row">
                     <div style='height: 150px;' class='col-lg-12'  id='field_property_term_<?php echo $property['id']; ?>'></div>
                     <!--select multiple size='6' class='col-lg-6' name='socialdb_propertyterm_<?php echo $property['id']; ?>[]' id='socialdb_propertyterm_<?php echo $property['id']; ?>' <?php

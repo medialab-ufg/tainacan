@@ -122,6 +122,15 @@ class MappingController extends Controller {
                 $import_url_external = ($data['import_url_external']&&$data['import_url_external']=='url_externa') ? $data['import_url_external'] : 'false';
                 $csv_has_header = $data['socialdb_csv_has_header'];
                 $code = $data['socialdb_delimiter_code_csv'];
+                if($_FILES && isset($_FILES['csv_file'])){
+                    foreach ($_FILES as $file => $array) {
+                        if (!empty($_FILES[$file]["name"])) {
+                            $_FILES[$file]["name"] = remove_accent($_FILES[$file]["name"]);
+                            delete_post_meta($mapping_id, '_file_id');
+                            $newupload = $mapping_model->insert_attachment($file, $mapping_id);
+                        }
+                    }
+                }                
                 $mapping_model->save_delimiter_csv($mapping_id, $delimiter, $multi_values, $hierarchy, $import_url_external, $csv_has_header,$code);
                 $files = $mapping_model->show_files_csv($mapping_id);
                 foreach ($files as $file) {
@@ -130,7 +139,7 @@ class MappingController extends Controller {
                     $type = pathinfo($name_file);
                     if($type['extension']=='zip'){
                        $data['csv_data'] = $mapping_model->get_csv_in_zip_file($name_file, $delimiter);
-                    }else if($type['extension']=='csv'){
+                    }else{
                         $objeto = fopen($name_file, 'r');
                         if(strpos($name_file, 'socialdb_csv')!==false && strpos($name_file, 'tainacan_csv')!==false)
                             $csv_data = fgetcsv($objeto, 0, $delimiter);

@@ -41,7 +41,7 @@
         });
         //# - inicializa os tooltips
         $("#advanced_search_title_<?php echo $property['id'] ?>").autocomplete({
-           source: $('#src').val() + '/controllers/object/object_controller.php?operation=get_objects_by_property_json&property_id=' + <?php echo $property['id'] ?>,
+           source: $('#src').val() + '/controllers/object/object_controller.php?operation=get_objects_by_property_json&verify_selected=true&property_id=' + <?php echo $property['id'] ?>,
             messages: {
                 noResults: '',
                 results: function () {
@@ -51,6 +51,10 @@
             select: function (event, ui) {
                 event.preventDefault();
                 $("#advanced_search_title_<?php echo $property['id'] ?>").val('');
+                if(ui.item.is_selected && ui.item.is_selected === true){
+                    toastr.error(ui.item.label+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                    return false;
+                }
                 console.log('<?php echo $property['metas']['socialdb_property_avoid_items'] ?>',$('#inserted_property_object_<?php echo $property['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $property['contador']; ?>_'+ui.item.value).length);
                 if($('#avoid_selected_items_<?php echo $property['id'] ?>').val()==='false'){
                     console.log($('#inserted_property_object_<?php echo $property['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $property['contador']; ?>_'+ui.item.value).length);

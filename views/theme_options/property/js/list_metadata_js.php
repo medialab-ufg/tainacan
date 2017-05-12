@@ -1240,8 +1240,10 @@
         }).done(function (result) {
             elem = $.parseJSON(result);
             $("#meta-category").modal('show');
+            var visualization = (elem.metas.socialdb_property_visualization) ? elem.metas.socialdb_property_visualization : 'public';
             var locked = (elem.metas.socialdb_property_locked) ? elem.metas.socialdb_property_locked : false;
             var default_value = (elem.metas.socialdb_property_default_value) ? elem.metas.socialdb_property_default_value : false;
+            var habilitate_new_category = (elem.metas.socialdb_property_habilitate_new_category) ? elem.metas.socialdb_property_habilitate_new_category : false;
             if( $("#meta-item-"+id).hasClass('root_category') ) {
                 $( "#meta-category .metadata-common-fields").hide();
             } else {
@@ -1290,6 +1292,15 @@
             $("#meta-category .property_lock_field").removeAttr('checked');
             if (locked) {
                 $("#meta-category .property_lock_field").prop('checked', true);
+            }
+            
+            //habilitar novo item
+            $("#meta-category #new_item_true").removeAttr('checked');
+            $("#meta-category #new_item_false").removeAttr('checked');
+            if (habilitate_new_category == 'true') {
+                $("#meta-category #new_item_true").prop('checked', true);
+            }else{
+                $("#meta-category #new_item_false").prop('checked', true);
             }
 
             var term_root = elem.metas.socialdb_property_term_root;
