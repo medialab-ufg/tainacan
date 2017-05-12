@@ -58,7 +58,7 @@ include_once ('js/maping_attributes_js.php');
                            value="0"> <?php _e('No','tainacan'); ?>
                 </label>
             </div>
-            <h5><strong><?php _e('Alter File','tainacan') ?></strong>&nbsp;&nbsp;<small><?php  _e('This action will replace the previous file') ?></small></h5>
+            <h5><strong><?php _e('Alter File','tainacan') ?></strong>&nbsp;&nbsp;<small><?php  _e('This action will replace the previous file','tainacan') ?></small></h5>
             <div class="form-group">
                 <input type="file" accept=".csv,.zip" id="csv_file" name="csv_file" placeholder="<?php _e('Insert the CSV file', 'tainacan'); ?>">
             </div>
