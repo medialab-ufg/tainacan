@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: socialdb\n"
-"POT-Creation-Date: 2017-05-11 16:32-0300\n"
-"PO-Revision-Date: 2017-05-11 16:34-0300\n"
+"POT-Creation-Date: 2017-05-12 13:24-0300\n"
+"PO-Revision-Date: 2017-05-12 13:25-0300\n"
 "Last-Translator: Rodrigo de Oliveira <webmaster@rodrigodeoliveira.net>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -1314,8 +1314,8 @@ msgid "Categories of Collection"
 msgstr "Categorias da coleção"
 
 #: functions.php:2144 functions.php:2172
-#: models/theme_options/theme_options_model.php:932
-#: models/theme_options/theme_options_model.php:938
+#: models/theme_options/theme_options_model.php:940
+#: models/theme_options/theme_options_model.php:946
 msgid "Subject"
 msgstr "Assunto"
 
@@ -1930,8 +1930,8 @@ msgstr "Campo vazio"
 #: views/object/append_properties_categories/properties_categories_accordion.php:512
 #: views/object/edit_object_properties/edit_list_properties_accordion.php:306
 #: views/object/edit_object_properties/edit_list_properties_accordion.php:360
-#: views/object/list_properties_accordion.php:240
-#: views/object/list_properties_accordion.php:296
+#: views/object/list_properties_accordion.php:319
+#: views/object/list_properties_accordion.php:375
 #: views/object/multiple_items/editor_items.php:313
 #: views/object/multiple_items/editor_items.php:355
 #: views/object/multiple_social_network/editor_items.php:301
@@ -3241,7 +3241,7 @@ msgstr "item"
 #: views/advanced_search/js/search_property_object_metadata_js.php:197
 #: views/advanced_search/show_object_properties.php:30
 #: views/object/append_properties_categories/js/multiple_properties_categories_accordion_js.php:80
-#: views/object/list_properties_accordion.php:263
+#: views/object/list_properties_accordion.php:342
 #: views/object/multiple_items/js/editor_items_js.php:1194
 #: views/object/multiple_social_network/js/editor_items_js.php:1205
 #: views/object/temp/js/edit_multiple_js.php:1181
@@ -3635,13 +3635,13 @@ msgstr "Há tags com este nome"
 
 #: models/theme_options/theme_options_model.php:188
 #: models/theme_options/theme_options_model.php:203
-#: models/theme_options/theme_options_model.php:269
+#: models/theme_options/theme_options_model.php:270
 msgid "Sucess"
 msgstr "Sucesso "
 
 #: models/theme_options/theme_options_model.php:189
 #: models/theme_options/theme_options_model.php:204
-#: models/theme_options/theme_options_model.php:270
+#: models/theme_options/theme_options_model.php:271
 msgid "Options successfully updated!"
 msgstr "Opções alteradas com sucesso"
 
@@ -3649,23 +3649,23 @@ msgstr "Opções alteradas com sucesso"
 msgid "Options not updated!"
 msgstr "Opções não atualizadas"
 
-#: models/theme_options/theme_options_model.php:413
+#: models/theme_options/theme_options_model.php:421
 msgid "Send file zip."
 msgstr "Enviar arquivo zip"
 
-#: models/theme_options/theme_options_model.php:419
+#: models/theme_options/theme_options_model.php:427
 msgid "File not supported. Send .ZIP!"
 msgstr "Arquivo não suportado. Enviar .zip!"
 
-#: models/theme_options/theme_options_model.php:427
+#: models/theme_options/theme_options_model.php:435
 msgid "File sent successfully!"
 msgstr "Arquivo enviado com sucesso!"
 
-#: models/theme_options/theme_options_model.php:430
+#: models/theme_options/theme_options_model.php:438
 msgid "Fail sending file. Please try again!"
 msgstr "Falha em "
 
-#: models/theme_options/theme_options_model.php:435
+#: models/theme_options/theme_options_model.php:443
 msgid "Not implemented yet!"
 msgstr "Não implementado ainda!"
 
@@ -4097,7 +4097,7 @@ msgstr "Digite aqui sua nova senha novamente"
 #: views/object/temp/edit_multiple.php:853 views/property/list.php:164
 #: views/property/list.php:249 views/property/list.php:329
 #: views/ranking/add.php:51 views/ranking/edit.php:54 views/search/tags.php:54
-#: views/theme_options/edit_configuration.php:125
+#: views/theme_options/edit_configuration.php:130
 #: views/theme_options/property/list.php:104
 #: views/theme_options/property/list.php:162
 #: views/theme_options/property/list.php:233 views/user/profile.php:104
@@ -6064,7 +6064,7 @@ msgstr "Permanente"
 
 #: views/object/append_properties_categories/properties_categories_accordion.php:388
 #: views/object/edit_object_properties/edit_list_properties_accordion.php:256
-#: views/object/list_properties_accordion.php:203
+#: views/object/list_properties_accordion.php:282
 #: views/object/show_insert_object_properties.php:216
 msgid "Select one option"
 msgstr "Selecione uma opção"
@@ -6970,7 +6970,7 @@ msgstr "Comentar "
 
 #: views/object/list_properties_accordion.php:55
 #: views/object/list_properties_accordion.php:92
-#: views/object/list_properties_accordion.php:217
+#: views/object/list_properties_accordion.php:296
 msgid "Empty field"
 msgstr "Campo vazio"
 
@@ -8178,7 +8178,7 @@ msgstr "Criar nova"
 #: views/property/metadata/form_term.php:139
 #: views/theme_options/property/metadata/form_term.php:37
 msgid "Habilitate add new category"
-msgstr ""
+msgstr "Habilitar adicionar nova categoria"
 
 #: views/property/metadata/form_term.php:144
 #: views/property/metadata_forms.php:93

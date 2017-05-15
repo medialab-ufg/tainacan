@@ -109,19 +109,22 @@ $itemURL = $_current_collection . basename(get_permalink());
                                                    <?php
                                                } else if ($_META['tipo'] == 'property_object') {
                                                    $_prop_key = "socialdb_property_" . (string) $_META['id'];
-                                                   $_related_obj_id = (int) get_post_meta($curr_id, $_prop_key, true);
+                                                   $_related_obj_id =  get_post_meta($curr_id, $_prop_key);
                                                    $_father_name = get_term($_META['id'])->name;
                                                    $_item_meta_val = $_DEFAULT_EMPTY_VALUE;
-
-                                                   if ($_related_obj_id > 0) {
-                                                       $_obj_id = get_post($_related_obj_id)->ID;
-                                                       if ($_obj_id != $curr_id) {
-                                                           $_item_meta_val = get_post($_obj_id)->post_title;
+                                                   $values = [];
+                                                   if (count($_related_obj_id) > 0) {
+                                                       foreach ($_related_obj_id as $value) {
+                                                            $_obj_id = get_post($value)->ID;
+                                                            if ($_obj_id != $curr_id) {
+                                                                $values[] = get_post($_obj_id)->post_title;
+                                                            }
                                                        }
+                                                      
                                                    }
                                                    ?>
                                             <input id="tableV-meta-<?= $_META['id']; ?>" type="hidden" name="item_table_meta"
-                                                   data-parent="<?= $_father_name ?>" value="<?= $_item_meta_val; ?>" />
+                                                   data-parent="<?= $_father_name ?>" value="<?= (count($values)>0) ? implode('<br>', $values) : $_item_meta_val; ?>" />
                                                    <?php
                                                }
                                            endif; //is_object

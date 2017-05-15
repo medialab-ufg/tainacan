@@ -117,6 +117,7 @@ $(function(){
                     $('#modalImportMain').modal('hide');//mostro o modal de carregamento
                     elem_first =jQuery.parseJSON(result); 
                     if(!elem_first){
+                         console.log('Erro a ser observado',result);
                          showAlertGeneral('<?php _e('Attention!','tainacan') ?>', '<?php _e('Invalid submission, file is too big!','tainacan') ?>', 'error');
                     }
                     else if(elem_first.validation_error){
