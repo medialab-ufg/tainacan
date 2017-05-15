@@ -371,6 +371,14 @@ $view_helper = new ObjectHelper($collection_id);
 
                         </div>
                     </div>
+
+                    <?php
+                    $mapping = get_option('socialdb_general_mapping_collection');
+                    if(has_action("add_barcode") && $mapping['Exemplares'] == $collection_id)
+                    {
+                        do_action("add_barcode", "");
+                    }
+                    ?>
                 </div>
             </div>
 

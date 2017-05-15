@@ -17,7 +17,6 @@ define("MAPPING_MARC_TABLE", "socialdb_channel_marc_mapping_table");
 
 load_theme_textdomain("tainacan", dirname(__FILE__) . "/languages");
 
-
 /*
  * Adição de SCRIPTS
  */
@@ -27,7 +26,10 @@ add_action('wp_enqueue_scripts', 'tainacan_libraries_js');
 function tainacan_libraries_js() {
     wp_register_script('tainacan-library',
         get_template_directory_uri() . '/modules/' . MODULE_LIBRARY . '/libraries/js/tainacan-library.js', array('jquery'), '1.11');
-    $js_files = ['tainacan-library'];
+    wp_register_script('barcode',
+        get_template_directory_uri() . '/modules/' . MODULE_LIBRARY . '/libraries/js/barcode.js', array('jquery'), '1.11');
+    $js_files[] = ['tainacan-library'];
+    $js_files[] = ['barcode'];
     foreach ($js_files as $js_file):
         wp_enqueue_script($js_file);
     endforeach;
@@ -36,9 +38,10 @@ function tainacan_libraries_js() {
 //CSS
 add_action('wp_enqueue_scripts', 'tainacan_libraries_css');
 function tainacan_libraries_css() {
-    $registered_css = [
+    $registered_css = array(
         'tainacan-library' => '/libraries/css/tainacan-library.css'
-    ];
+    );
+    
     foreach ($registered_css as $css_file => $css_path) {
         wp_register_style($css_file, get_template_directory_uri() . '/modules/' . MODULE_LIBRARY  . $css_path);
         wp_enqueue_style($css_file);
@@ -448,7 +451,7 @@ function material_loan_devolution()
 
     <div class="col-md-12">
         <div class="col-md-6 no-padding" style="margin: 10px 0 10px 0; border-bottom: 1px solid #e8e8e8">
-            <label class='meta-title no-padding' style=""><?php _e('If dovolution in a not devolution day') ?></label>
+            <label class='meta-title no-padding' style=""><?php _e('If devolution in a not devolution day') ?></label>
         </div>
 
         <?php
@@ -458,6 +461,35 @@ function material_loan_devolution()
         <div class="col-md-6">
             <input type="radio" class="radio-inline" name="devolutionDayProblem" value="before" <?php if($devolution_day_option == 'before') echo "checked";?>> <?php _e("Before", "tainacan") ?>
             <input type="radio" class="radio-inline" name="devolutionDayProblem" value="after" <?php if($devolution_day_option == 'after') echo "checked"; ?>> <?php _e("After", "tainacan") ?>
+        </div>
+    </div>
+    <?php
+}
+
+add_action('add_barcode', 'gen_barcode', 10, 1);
+function gen_barcode($arg)
+{
+    ?>
+    <div class="box-item-paddings box-item-right"></div> <!--Gera linha-->
+    <div class="col-md-12">
+        <div id="barcode-box">
+            <h4 class="title-pipe single-title"> <?php _e('Barcode', 'tainacan'); ?></h4>
+            <button type="button" onclick="window.print()" class="btn btn-default btn-xs pull-right" style="margin-top: 5px;"><span class="glyphicon glyphicon-print"></span></button>
+            <div class="barcode-img">
+                <svg id="barcode"
+                     jsbarcode-value="1234567890123"
+                     jsbarcode-textmargin="0"
+                     jsbarcode-fontoptions="bold"
+                     style="width: 30%; height: 30%;">
+                </svg>
+
+                <script>
+                    JsBarcode("#barcode", "1234567890128", {
+                        format: "ean13",
+                        width: 3
+                    });
+                </script>
+            </div>
         </div>
     </div>
     <?php

@@ -4,8 +4,21 @@
     padding-top: 20px;
     padding-bottom: 20px;
 }
+
 /*Seletores*/
 #formmarc
 {
     padding: 13px;
+}
+
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    #barcode, #barcode *{
+        visibility: visible;
+        position: fixed;
+        left: 100px;
+        top: 150px;
+    }
 }
