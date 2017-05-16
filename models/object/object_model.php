@@ -1,5 +1,4 @@
 <?php
-
 include_once (dirname(__FILE__) . '/../../../../../wp-config.php');
 include_once (dirname(__FILE__) . '/../../../../../wp-load.php');
 include_once (dirname(__FILE__) . '/../../../../../wp-includes/wp-db.php');
@@ -43,6 +42,7 @@ class ObjectModel extends Model {
     }
 
     public function add($data) {
+        ini_set('max_input_vars', '10000');
         $data = $this->validate_form($data);
         $col_id = $data['collection_id'];
 
