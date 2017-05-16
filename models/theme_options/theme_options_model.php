@@ -1,9 +1,9 @@
 <?php
 
 ini_set('max_input_vars', '10000');
-include_once ('../../../../../wp-config.php');
-include_once ('../../../../../wp-load.php');
-include_once ('../../../../../wp-includes/wp-db.php');
+include_once (dirname(__FILE__) . '/../../../../../wp-config.php');
+include_once (dirname(__FILE__) . '/../../../../../wp-load.php');
+include_once (dirname(__FILE__) . '/../../../../../wp-includes/wp-db.php');
 require_once(dirname(__FILE__) . '../../general/general_model.php');
 require_once(dirname(__FILE__) . '../../collection/collection_model.php');
 
@@ -233,6 +233,13 @@ class ThemeOptionsModel extends Model {
         if (isset($data['remove_thumbnail']) && $data['remove_thumbnail']) {
             delete_post_thumbnail($socialdb_logo);
         }
+        
+        if (isset($data['remove_cover']) && $data['remove_cover']) {
+            $cover_id = get_option('socialdb_repository_cover_id');
+            wp_delete_attachment($cover_id);
+            delete_option('socialdb_repository_cover_id');
+            $reload = true;
+        }
 
         if (isset($data['disable_empty_collection']) && $data['disable_empty_collection'] == 'disabled') {
             update_option('disable_empty_collection', 'true');
@@ -255,9 +262,10 @@ class ThemeOptionsModel extends Model {
                 $socialdb_logo = $object_id;
             }
 
-            if (isset($_FILES['socialdb_collection_cover']) && !empty($_FILES['socialdb_collection_cover'])) {
-                $cover_id = $this->add_cover($socialdb_logo);
-                update_post_meta($socialdb_logo, 'socialdb_respository_cover_id', $cover_id);
+            if (isset($_FILES['socialdb_collection_cover']) && !empty($_FILES['socialdb_collection_cover']) && !empty($_FILES['socialdb_collection_cover']['name'])) {
+                $cover_id = $this->add_cover(get_option('collection_root_id'));
+                update_option('socialdb_repository_cover_id', $cover_id);
+                $reload = true;
             }
         }
 

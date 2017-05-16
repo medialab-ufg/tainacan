@@ -3111,7 +3111,7 @@ function format_home_items_char($char) {
 }
 
 function home_header_bg($bg_id) {
-    $cover_id = get_post_meta($bg_id, 'socialdb_respository_cover_id', true);
+    $cover_id = get_option( 'socialdb_repository_cover_id');
     if(has_filter('alter_image_index_container')){
         $image_url = ( $cover_id ) ? wp_get_attachment_url($cover_id) : apply_filters('alter_image_index_container','');
     }else{
@@ -3123,7 +3123,7 @@ function home_header_bg($bg_id) {
 }
 
 function repository_bg($col_id) {
-    $cover_id = get_post_meta($col_id, 'socialdb_repository_cover_id', true);
+    $cover_id = get_option( 'socialdb_repository_cover_id');
     $image_url = ( $cover_id ) ? wp_get_attachment_url($cover_id) : get_template_directory_uri() . '/libraries/images/bg-home' . rand(1, 5) . '.jpg';
     
     return $image_url;

@@ -28,12 +28,12 @@ $post_thumb = get_the_post_thumbnail($socialdb_logo, 'thumbnail');
                 <label for="repository_logo"><?php _e('Cover','tainacan'); ?></label>
                 <br>
                 <?php
-                $cover_id = get_post_meta($socialdb_logo, 'socialdb_respository_cover_id', true);
+                $cover_id = get_option('socialdb_repository_cover_id');
                 if($cover_id){
                   echo '<img src="'.  wp_get_attachment_thumb_url($cover_id).'">'; ?>
                 <br><br>
                 <label for="remove_thumbnail"><?php _e('Remove Cover','tainacan'); ?></label>
-                <input type="checkbox"  id="remove_cover" name="remove_thumbnail" value="true">
+                <input type="checkbox"  id="remove_cover" name="remove_cover" value="true">
                 <br><br>
                 <?php } ?>
                 <input type="file" size="50" id="socialdb_collection_cover" name="socialdb_collection_cover" class="btn btn-default btn-sm">

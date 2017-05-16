@@ -866,6 +866,10 @@
                 $('#collection_empty').show();
                 $('#items_not_found').hide();
             }
+            var curr_viewMode = $("#collection_single_ordenation").attr('data-viewMode');
+            if (curr_viewMode) {
+                changeViewMode(curr_viewMode);
+            }
             setMenuContainerHeight();
         });
     }
@@ -889,6 +893,10 @@
             if (elem.empty_collection) {
                 $('#collection_empty').show();
                 $('#items_not_found').hide();
+            }
+            var curr_viewMode = $("#collection_single_ordenation").attr('data-viewMode');
+            if (curr_viewMode) {
+                changeViewMode(curr_viewMode);
             }
 
             setMenuContainerHeight();
@@ -916,6 +924,10 @@
                 $('#items_not_found').hide();
             }
             setMenuContainerHeight();
+             var curr_viewMode = $("#collection_single_ordenation").attr('data-viewMode');
+            if (curr_viewMode) {
+                changeViewMode(curr_viewMode);
+            }
         });
     }
 
@@ -942,6 +954,10 @@
                 $('#items_not_found').hide();
             }
             setMenuContainerHeight();
+             var curr_viewMode = $("#collection_single_ordenation").attr('data-viewMode');
+            if (curr_viewMode) {
+                changeViewMode(curr_viewMode);
+            }
         });
     }
 
@@ -998,6 +1014,10 @@
                 $('#collection_empty').show();
                 $('#items_not_found').hide();
             }
+            var curr_viewMode = $("#collection_single_ordenation").attr('data-viewMode');
+            if (curr_viewMode) {
+                changeViewMode(curr_viewMode);
+            }
             setMenuContainerHeight();
         });
     }
@@ -1023,6 +1043,10 @@
                 if (elem.empty_collection) {
                     $('#collection_empty').show();
                     $('#items_not_found').hide();
+                }
+                var curr_viewMode = $("#collection_single_ordenation").attr('data-viewMode');
+                if (curr_viewMode) {
+                    changeViewMode(curr_viewMode);
                 }
                 setMenuContainerHeight();
             });
@@ -1108,6 +1132,10 @@
                search_collections_query = $('#wp_query_args').val();
             }
             setMenuContainerHeight();
+            var curr_viewMode = $("#collection_single_ordenation").attr('data-viewMode');
+            if (curr_viewMode) {
+                changeViewMode(curr_viewMode);
+            }
         });
     }
 
