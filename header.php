@@ -135,6 +135,7 @@ $_src_ = get_template_directory_uri();
                                       <li><a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_tools'); updateStateRepositorio('tools');" style="cursor: pointer;"><span  class="glyphicon glyphicon-tasks"></span> <?php _e('Tools', 'tainacan'); ?></a></li>
                                       <li><a onclick="repoConfig('<?php echo $_src_ ?>', 'import_full'); updateStateRepositorio('import');" style="cursor: pointer;"><span class="glyphicon glyphicon-import"></span> <?php _e('Import', 'tainacan'); ?></a></li>
                                       <li><a onclick="repoConfig('<?php echo $_src_ ?>', 'export_full'); updateStateRepositorio('export');" style="cursor: pointer;"><span class="glyphicon glyphicon-export"></span> <?php _e('Export', 'tainacan'); ?></a></li>
+                                      <li><a onclick="repoConfig('<?php echo $_src_ ?>', 'updates_page'); " style="cursor: pointer;"><span class="glyphicon glyphicon-refresh"></span> <?php _e('Updates', 'tainacan'); ?></a></li>
                                       <li><a class="repository-statistics" href="<?php echo get_the_permalink($stat_page); ?>"> <span class="glyphicon glyphicon-globe"></span> <?php _e('Statistics', 'tainacan'); ?> </a></li>
                                       <li class="divider" style="padding: 0"></li>
                                       <li class="repository-events">

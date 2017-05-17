@@ -1,7 +1,12 @@
 <?php
 include_once ('../../helpers/view_helper.php');
 include_once ('js/list_js.php');
-$url = get_the_permalink($collection_id);
+if($collection_id == get_option('collection_root_id')){
+    $url = false;
+}else{
+    $url = get_the_permalink($collection_id);
+}
+
 ?>
 <div id="events_title" class="col-md-12">
 

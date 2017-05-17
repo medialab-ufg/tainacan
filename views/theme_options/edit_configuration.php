@@ -5,7 +5,7 @@ include_once(dirname(__FILE__) . '/../../helpers/repository/repository_helper.ph
 $view_helper = new RepositoryHelper();
 $post_thumb = get_the_post_thumbnail($socialdb_logo, 'thumbnail');
 ?>
-<div class="col-md-12">
+<div class="col-md-12 ui-widget-content metadata-actions">
 
     <div class="col-md-12 config_default_style">
         <?php ViewHelper::render_config_title( __("Repository Configuration", 'tainacan') ); ?>

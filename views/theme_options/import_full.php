@@ -15,7 +15,7 @@ delete_option('socialdb_aip_importation');
                     <li role="presentation" class="active"><a id="click_oaipmhtab" href="#oaipmhtab-" aria-controls="oaipmhtab-" role="tab" data-toggle="tab"><?php _e('OAI-PMH', 'tainacan') ?></a></li>
                     <li role="presentation"><a id="click_zip" href="#zip" aria-controls="zip" role="tab" data-toggle="tab"><?php _e('AIP', 'tainacan') ?></a></li>
                     <li role="presentation"><a id="click_csv" href="#csv" aria-controls="csv" role="tab" data-toggle="tab"><?php _e('CSV Package', 'tainacan') ?></a></li>
-                    <li role="presentation"><a id="click_api" href="#api" aria-controls="api" role="tab" data-toggle="tab"><?php _e('API', 'tainacan') ?></a></li>
+                   
                 </ul>
                 <!-- Tab panes -->
                 <div class="tab-content">
