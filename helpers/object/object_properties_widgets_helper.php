@@ -546,7 +546,9 @@ class ObjectWidgetsHelper extends ViewHelper {
     public function has_next_compound($item_id,$compound,$i) {
        $max = $this->render_cardinality_property($compound);
        while($i<$max){
-           if(get_post_meta($item_id,'socialdb_property_'.$compound['id'].'_'.$i,true)){
+           $value = get_post_meta($item_id,'socialdb_property_'.$compound['id'].'_'.$i,true);
+           $values = array_filter( explode(',', $value) );
+           if(count($values)>0){
                return true;
            }
            $i++;
@@ -678,7 +680,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                                 </a>
                             </div>
                         <?php endif; ?>
-                        <?php echo ($is_show_container==1) ? ''  : (!isset($references['is_view_mode'])) ? $this->render_button_cardinality($property,$i) : '' ?>
+                            <?php echo ($is_show_container==1) ? ''  : (!isset($references['is_view_mode'])) ? $this->render_button_cardinality($property,$i) : '' ?>
                     </div>
                 <?php endfor; ?>
                 <input type="hidden"
@@ -777,15 +779,18 @@ class ObjectWidgetsHelper extends ViewHelper {
             </span>
             <span id="results_property_<?php echo $property['id']; ?>">
                 <ul>
-                    <?php if (isset($property['metas']['value']) && !empty($property['metas']['value']) && is_array($property['metas']['value'])): // verifico se ele esta na lista de objetos da colecao   ?>    
-                        <?php foreach ($property['metas']['value'] as $id): ?>
+                    <?php if (isset($property['metas']['value']) && !empty($property['metas']['value']) && is_array($property['metas']['value']) && $property['metas']['value'][$i]): // verifico se ele esta na lista de objetos da colecao   ?>    
+                        <?php  
+                        $property['metas']['value'] = array_unique($property['metas']['value']);
+                        $id = $property['metas']['value'][$i];
+                        //foreach ($property['metas']['value'] as $id): ?>
                              <li id="inserted_property_object_<?php echo $property['id']; ?>_<?php echo $id; ?>" 
                                  item="<?php echo $id; ?>" class="selected-items-property-object property-<?php echo $property['id']; ?>">
                                      <?php echo get_post($id)->post_title; ?>
                                  <span  onclick="$('#inserted_property_object_<?php echo $property['id']; ?>_<?php echo $id; ?>').remove();$('select[name=socialdb_property_<?php echo $property['id']; ?>[]]  option[value=<?php echo $id; ?>]').remove()" 
                                         style="cursor:pointer;" class="pull-right glyphicon glyphicon-trash"></span>
                              </li>       
-                        <?php endforeach; ?>    
+                        <?php //endforeach; ?>    
                    <?php endif; ?>
                 </ul>
             </span>
@@ -847,17 +852,18 @@ class ObjectWidgetsHelper extends ViewHelper {
             </span>
             <span id="results_property_<?php echo $compound_id; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>">
                 <ul>
-                    <?php if (isset($property['metas']['value']) && !empty($property['metas']['value']) && is_array($property['metas']['value'])): // verifico se ele esta na lista de objetos da colecao   ?>    
+                    <?php if (isset($property['metas']['value']) && !empty($property['metas']['value']) && is_array($property['metas']['value']) && $property['metas']['value'][$i]): // verifico se ele esta na lista de objetos da colecao   ?>    
                         <?php  
                         $property['metas']['value'] = array_unique($property['metas']['value']);
-                        foreach ($property['metas']['value'] as $id): ?>
+                        $id = $property['metas']['value'][$i];
+                        //foreach ($property['metas']['value'] as $id): ?>
                              <li id="inserted_property_object_<?php echo $compound_id ?>_<?php echo $property['id'] ?>_<?php echo $i ?>_<?php echo $id; ?>" 
                                  item="<?php echo $id; ?>" class="selected-items-property-object property-<?php echo $property['id']; ?>">
                                      <?php echo get_post($id)->post_title; ?>
                                  <span  onclick="$('#inserted_property_object_<?php echo $compound_id ?>_<?php echo $property['id'] ?>_<?php echo $i ?>_<?php echo $id; ?>').remove();$('select[name=socialdb_property_<?php echo $property['id']; ?>[]]  option[value=<?php echo $id; ?>]').remove()" 
                                         style="cursor:pointer;" class="pull-right glyphicon glyphicon-trash"></span>
                              </li>       
-                        <?php endforeach; ?>    
+                        <?php// endforeach; ?>    
                    <?php endif; ?>
                 </ul>
             </span>

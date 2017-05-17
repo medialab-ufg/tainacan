@@ -42,7 +42,7 @@ class ObjectModel extends Model {
     }
 
     public function add($data) {
-        ini_set('max_input_vars', '10000');
+        //ini_set('max_input_vars', '10000');
         $data = $this->validate_form($data);
         $col_id = $data['collection_id'];
 
@@ -136,10 +136,14 @@ class ObjectModel extends Model {
         // inserindo o evento
         $logData = ['collection_id' => $col_id, 'item_id' => $data['ID'],
             'user_id' => $user_id, 'event_type' => 'user_items', 'event' => 'add'];
-        $data = $this->insert_object_event($data['ID'], $data);
+        try{
+            $data = $this->insert_object_event($data['ID'], $data);
+        }catch(Exception $e){
+            $data['error'] = $e;
+        }
         Log::addLog($logData);
         
-        return $data;
+        return json_encode(['title'=>$data['title'],'type'=>$data['type'],'error' => ((isset($data['error'])) ? $data['error']  : ''),'msg'=>$data['msg']]);
     }
 
     /**

@@ -295,6 +295,7 @@ class ObjectController extends Controller {
                    $data = $object_model->show_object_properties($data);
                    $_SESSION['collection_'.$data['collection_id'].'_properties'] = $data;
                 }else{
+                   $cache['object_id'] =  $data['object_id'];
                    $data = $cache;
                 }
                 return $this->render(dirname(__FILE__) . '../../../views/object/list_properties_accordion.php', $data);
