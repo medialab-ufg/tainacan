@@ -29,11 +29,13 @@ include_once ('../../helpers/view_helper.php');
                                 </div><!-- /input-group -->
                                 <br>
                                 <div class="row col-md-12">
-                                    <div class="form-group">
-                                        <input type="text" id="api_user"  placeholder="<?php _e('Main repository user', 'tainacan'); ?>" class="form-control">
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="password" id="api_user"  placeholder="<?php _e('Main repository password', 'tainacan'); ?>" class="form-control">
+                                    <div class="col-md-4 no-padding">
+                                        <div class="form-group">
+                                            <input type="text" id="api_user"  placeholder="<?php _e('Main repository user', 'tainacan'); ?>" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="password" id="api_key"  placeholder="<?php _e('Main repository password', 'tainacan'); ?>" class="form-control">
+                                        </div>    
                                     </div>    
                                 </div>    
                             </div>
