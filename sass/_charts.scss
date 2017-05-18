@@ -187,11 +187,24 @@
     font-size: 12px;
     padding: 5px 0 0 20px;
 
+    a {
+      outline: 0 !important;
+    }
+
+    span.dynatree-active a {
+      border: none !important;
+    }
+
     p {
       font-size: 10px;
     }
     ul {
       padding-left: 0;
+      li {
+        a.dynatree-title {
+          border: none !important;
+        }
+      }
     }
   }
 } // report_type_stat -> dynatree
