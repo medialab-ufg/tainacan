@@ -677,8 +677,6 @@
      * @param {type} property_id
      * @returns {undefined}     */
     function edit_validate_selectbox(seletor,property_id,compound_id){
-         console.log('pc_list_properties',seletor,property_id);
-        
         if($(seletor).val()===''){
             $('#core_validation_'+property_id).val('false');
             set_field_valid(property_id,'core_validation_'+property_id);

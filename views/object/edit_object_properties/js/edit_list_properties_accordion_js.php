@@ -574,8 +574,19 @@
                 });
                 $('.category-'+remove_id).remove();
             }
-
-
+        }else if($('select[name="socialdb_propertyterm_'+property_id+'"]').is('select')){
+            $.each($('select[name="socialdb_propertyterm_'+property_id+'"] option'),function(index,val){
+                var i = selected_categories.indexOf($(this).val());
+                if(i>=0){
+                    selected_categories.splice(i, 1);
+                    $('#selected_categories').val(selected_categories.join(','));
+                    $.each($('.category-'+$(this).val()),function(index,value){
+                        var id = $(this).attr('property');
+                        remove_property_general(id);
+                    });
+                    $('.category-'+$(this).val()).remove();
+                }
+            });
         }
         
         //busco os metadados da categoria selecionada    
