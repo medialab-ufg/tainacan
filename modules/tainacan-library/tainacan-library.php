@@ -348,6 +348,7 @@ function mapping_library_collections()
 
     ?>
     <?php
+    daily_situation_update();
 }
 
 add_filter('add_book_loan', 'book_loan', 10, 1);
@@ -436,7 +437,7 @@ function material_loan_devolution()
             <?php
                 foreach ($weekdays as $weekday)
                 {
-                    if(key_exists($weekday, $devolution_week_day))
+                    if($devolution_week_day && key_exists($weekday, $devolution_week_day))
                     {
                         $checked = "checked";
                     }else $checked = "";
@@ -497,6 +498,174 @@ function gen_barcode($arg)
 /*
  * Functions
  */
+
+function daily_situation_update()
+{
+    global $wpdb;
+    $mapping = get_option('socialdb_general_mapping_collection');
+    $collection_id = $mapping['Emprestimo'];
+    $event = "
+        CREATE 
+        EVENT IF NOT EXISTS
+         e_daily_situation_update
+        ON SCHEDULE
+          EVERY 1 DAY_HOUR 
+        COMMENT 'Altera o Status dos livros'
+        DO
+          BEGIN 
+            SET SQL_SAFE_UPDATES = 0;
+            UPDATE
+                $wpdb->term_relationships
+            SET
+                term_taxonomy_id = 
+                (
+                    SELECT term_id FROM
+                        (
+                            SELECT t.term_id, t.name 
+                            FROM 
+                                $wpdb->terms t INNER JOIN $wpdb->term_taxonomy tt 
+                            ON 
+                                t.term_id = tt.term_id
+                            WHERE 
+                                tt.parent = (
+                                    SELECT meta_value 
+                                    FROM
+                                        $wpdb->termmeta
+                                    WHERE 
+                                        term_id = 
+                                            (SELECT tbterms.term_id
+                                            FROM 
+                                                $wpdb->term_taxonomy as tbtaxonomy, $wpdb->terms as tbterms 
+                                            WHERE 
+                                                tbtaxonomy.term_id in 
+                                                (SELECT meta_value 
+                                                 from 
+                                                    $wpdb->termmeta 
+                                                 WHERE 
+                                                    term_id = (
+                                                        SELECT 
+                                                            meta_value 
+                                                        from 
+                                                            $wpdb->postmeta 
+                                                        WHERE 
+                                                            post_id = $collection_id AND meta_key LIKE 'socialdb_collection_object_type') 
+                                                        AND 
+                                                            meta_key LIKE 'socialdb_category_property_id') 
+                                            AND 
+                                                tbtaxonomy.taxonomy LIKE 'socialdb_property_type' 
+                                            AND tbterms.name LIKE 'Situação da devolução'
+                                            LIMIT 1)
+                                        AND
+                                            meta_key LIKE 'socialdb_property_term_root'
+                                )  
+                            ORDER BY 
+                                tt.count DESC,
+                                t.name ASC
+                    
+                    ) AS options
+                    WHERE
+                        options.name LIKE 'Atrasado'
+                )
+            WHERE
+                object_id IN 
+                (
+                    SELECT post_id from ( 
+                    SELECT post_id, meta_value AS DevolutionDay, curdate() as Today
+                    FROM 
+                        $wpdb->postmeta 
+                    WHERE 
+                        meta_key 
+                    LIKE 
+                        CONCAT('socialdb_property_', 
+                        (SELECT tbterms.term_id AS data_dev
+                        FROM 
+                            $wpdb->term_taxonomy as tbtaxonomy, $wpdb->terms as tbterms 
+                        WHERE 
+                            tbtaxonomy.term_id in 
+                            (SELECT meta_value 
+                             from 
+                                $wpdb->termmeta 
+                             WHERE 
+                                term_id = (
+                                        SELECT 
+                                            meta_value 
+                                        from 
+                                            $wpdb->postmeta 
+                                        WHERE 
+                                            post_id = $collection_id AND meta_key LIKE 'socialdb_collection_object_type'
+                                        ) 
+                                    AND 
+                                        meta_key LIKE 'socialdb_category_property_id'
+                            ) 
+                        AND 
+                            tbtaxonomy.taxonomy LIKE 'socialdb_property_type' 
+                        AND tbterms.name LIKE 'Data de devolução'
+                        LIMIT 1)
+                    )
+                    AND
+                        meta_value != '') 
+                    as Devolution where Devolution.Today > Devolution.DevolutionDay
+                )
+                AND
+                term_taxonomy_id = 
+                (
+                    SELECT term_id FROM
+                        (
+                            SELECT t.term_id, t.name 
+                            FROM 
+                                $wpdb->terms t INNER JOIN $wpdb->term_taxonomy tt 
+                            ON 
+                                t.term_id = tt.term_id
+                            WHERE 
+                                tt.parent = (
+                                    SELECT meta_value 
+                                    FROM
+                                        $wpdb->termmeta
+                                    WHERE 
+                                        term_id = 
+                                            (SELECT tbterms.term_id
+                                            FROM 
+                                                $wpdb->term_taxonomy as tbtaxonomy, $wpdb->terms as tbterms 
+                                            WHERE 
+                                                tbtaxonomy.term_id in 
+                                                (SELECT meta_value 
+                                                 from 
+                                                    $wpdb->termmeta 
+                                                 WHERE 
+                                                    term_id = (
+                                                        SELECT 
+                                                            meta_value 
+                                                        from 
+                                                            $wpdb->postmeta 
+                                                        WHERE 
+                                                            post_id = $collection_id AND meta_key LIKE 'socialdb_collection_object_type') 
+                                                        AND 
+                                                            meta_key LIKE 'socialdb_category_property_id') 
+                                            AND 
+                                                tbtaxonomy.taxonomy LIKE 'socialdb_property_type' 
+                                            AND tbterms.name LIKE 'Situação da devolução'
+                                            LIMIT 1)
+                                        AND
+                                            meta_key LIKE 'socialdb_property_term_root'
+                                )  
+                            ORDER BY 
+                                tt.count DESC,
+                                t.name ASC
+                    
+                    ) AS options
+                    WHERE
+                        options.name LIKE 'A tempo'
+                )
+            ;
+            SET SQL_SAFE_UPDATES = 1;
+          END;
+    ";
+
+    return $wpdb->query($event);
+
+}
+daily_situation_update();
+
 function last_option_saved($post_id, $option_id)
 {
     $terms = wp_get_post_terms( $post_id, 'socialdb_category_type' );
@@ -568,16 +737,16 @@ function get_category_id($collection_id, $metaname, $is_root = true)
     {
         $ids = get_term_meta($collection_id, "socialdb_category_property_id");
     }
-
     foreach ($ids as $id)
     {
-        $name = get_term_by("id", $id, "socialdb_property_type")->name;
-
-        if(strcmp($name,$metaname) == 0)
+        if($id)
         {
-
-            $term_id = get_term_meta($id, "socialdb_property_term_root", true);
-            break;
+            $name = get_term_by("id", $id, "socialdb_property_type")->name;
+            if(strcmp($name,$metaname) == 0)
+            {
+                $term_id = get_term_meta($id, "socialdb_property_term_root", true);
+                break;
+            }
         }
     }
 
