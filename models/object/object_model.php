@@ -138,12 +138,12 @@ class ObjectModel extends Model {
             'user_id' => $user_id, 'event_type' => 'user_items', 'event' => 'add'];
         try{
             $data = $this->insert_object_event($data['ID'], $data);
+            $resource_json = json_decode($data);
         }catch(Exception $e){
-            $data['error'] = $e;
+            $error =  (string) $e;
         }
         Log::addLog($logData);
-        
-        return json_encode(['title'=>$data['title'],'type'=>$data['type'],'error' => ((isset($data['error'])) ? $data['error']  : ''),'msg'=>$data['msg']]);
+        return json_encode(['title'=>$resource_json->title,'type'=>$resource_json->type,'error' => ((isset($error)) ? $error  : ''),'msg'=>$resource_json->msg]);
     }
 
     /**

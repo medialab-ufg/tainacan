@@ -30,6 +30,13 @@
     <input type="hidden" id="object_id_add" name="object_id" value="<?php echo $object_id ?>">
     <input type="hidden" id="object_from" name="object_from" value="internal">
     <input type="hidden" id="object_type" name="object_type" value="text">
+    <input type="hidden"
+           id="object_classifications"
+           name="object_classifications"
+           value="<?php echo (isset($classifications)&&$classifications)? $classifications: "" ?>">
+    <input type="hidden" id="object_content" name="object_content" value="">
+    <input type="hidden" id="create_object_collection_id" name="collection_id" value="">
+    <input type="hidden" id="operation" name="operation_priority" value="add">
     <div class="row" style="background-color: #f1f2f2">
         <div style="<?php echo ($view_helper->hide_main_container)?'margin-left:1%;padding-left:15px;min-height:500px;padding-top:80px;':'' ?>"
             class="<?php echo ($view_helper->hide_main_container)?'col-md-12':'col-md-2' ?> menu_left_loader">
@@ -455,13 +462,6 @@
                     </div>
                 </div>
             <?php endif; ?>
-                <input type="hidden"
-                       id="object_classifications"
-                       name="object_classifications"
-                       value="<?php echo (isset($classifications)&&$classifications)? $classifications: "" ?>">
-                <input type="hidden" id="object_content" name="object_content" value="">
-                <input type="hidden" id="create_object_collection_id" name="collection_id" value="">
-                <input type="hidden" id="operation" name="operation" value="add">
                 <!--button onclick="back_main_list();" style="margin-bottom: 20px;"  class="btn btn-default btn-lg pull-left"><b><?php _e('Back','tainacan') ?></b></button-->
                 <button type="button"
                         onclick="back_main_list(<?php echo $object_id ?>);"
