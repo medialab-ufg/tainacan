@@ -124,7 +124,7 @@ $_src_ = get_template_directory_uri();
                                 <li class="divider"></li>
                                 <!-- TAINACAN: mostra acoes do repositorio dentro da tag <div id="configuration"> localizado no arquivo single.php -->
                                 <li class="admin-config-menu">
-                                  <a class="config" href="javascript:void(0)"> <?php _e('Repository Configurations', 'tainacan'); ?> <span class="caret"></span> </a>
+                                  <a class="config" href="javascript:void(0)"> <?php _e('Repository Control Panel', 'tainacan'); ?> <span class="caret"></span> </a>
                                   <ul class="admin-config-submenu" aria-expanded="false">
                                       <li><a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_general_configuration');updateStateRepositorio('configuration');" style="cursor: pointer;" ><span class="glyphicon glyphicon-wrench"></span> <?php _e('Configuration', 'tainacan'); ?></a></li>
                                       <li><a onclick="repoConfig('<?php echo $_src_ ?>', 'list_repository', 'property');updateStateRepositorio('metadata');" style="cursor: pointer;" ><span class="glyphicon glyphicon-list-alt"></span> <?php _e('Metadata', 'tainacan'); ?></a></li>

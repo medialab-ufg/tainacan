@@ -3,7 +3,9 @@ include_once ('../../../../../wp-config.php');
 include_once ('../../../../../wp-load.php');
 include_once ('../../../../../wp-includes/wp-db.php');
 include_once ('js/editor_items_js.php');
-include_once (dirname(__FILE__).'/../js/multiple_draft_js.php');
+if(!isset($edit_multiple)){
+    include_once (dirname(__FILE__).'/../js/multiple_draft_js.php');
+}
 include_once(dirname(__FILE__).'/../../../helpers/view_helper.php');
 
 $view_helper = new ViewHelper($collection_id);
@@ -387,11 +389,19 @@ $filesOther= [];
              style="background-color: white;border: 3px solid #E8E8E8;margin-left: 15px;">
             <?php if(!isset($is_beta_file)): ?>
             <h3>
-                <?php _e('Add new item - Insert URL','tainacan') ?>
-                <button type="button" onclick="back_main_list_socialnetwork();"
-                        class="btn btn-default pull-right"> 
-                            <?php _e('Cancel','tainacan') ?>
-                </button>
+                <?php if(isset($edit_multiple)): ?> 
+                    <?php _e('Edit multiple items','tainacan') ?>
+                    <button type="button" onclick="back_main_list();"
+                            class="btn btn-default pull-right"> 
+                                <?php _e('Cancel','tainacan') ?>
+                    </button>
+                <?php else: ?> 
+                    <?php _e('Add new item - Insert URL','tainacan') ?>
+                    <button type="button" onclick="back_main_list_socialnetwork();"
+                            class="btn btn-default pull-right"> 
+                                <?php _e('Cancel','tainacan') ?>
+                    </button>
+                <?php endif; ?> 
             </h3>
             <?php else: ?>
             <h3>
@@ -948,10 +958,18 @@ $filesOther= [];
                  </div>
              </div>
               <div class="col-md-12" style="padding: 15px;">
+                 <?php if(isset($edit_multiple)): ?> 
+                  <input type="hidden" id="edit_multiple" name="edit_multiple" value="true">
+                 <button type="button" onclick="back_main_list();"
+                        class="btn btn-lg btn-default pull-left"> 
+                            <?php _e('Cancel','tainacan') ?>
+                </button>
+                 <?php else: ?>   
                  <button type="button" onclick="back_main_list_socialnetwork();"
                         class="btn btn-lg btn-default pull-left"> 
                             <?php _e('Cancel','tainacan') ?>
                 </button>
+                 <?php endif; ?>   
                  <button type="submit" 
                           
                          id="submit_button" 

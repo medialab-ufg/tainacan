@@ -490,12 +490,12 @@ class ObjectMultipleModel extends Model {
                      $object = array(
                          'ID' => $post_id,
                          'post_title' => $data['title_'.$item_id],
-                         'post_status' => (isset($data['edit_multiple'])) ? 'published' :'inherit',
+                         'post_status' => (isset($data['edit_multiple'])) ? 'publish' :'inherit',
                          'post_content' => $data['description_'.$item_id],
                          'post_parent' => $col_id
                     );
                     delete_user_meta(get_current_user_id(), 'socialdb_collection_'.$col_id.'_betafile', $post_id);
-                    //wp_update_post($object);
+                    wp_update_post($object);
                     if(!isset($data['edit_multiple'])){
                         $this->insert_object_event($post_id, ['collection_id' => $col_id ]);
                     }

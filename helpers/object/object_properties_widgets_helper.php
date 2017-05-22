@@ -98,14 +98,15 @@ class ObjectWidgetsHelper extends ViewHelper {
                                 $position = 0;
                                 ?>
                                 <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>"
-                                     class="col-md-12 no-padding" style="border-color: #ccc;<?php echo ($is_show_container) ? ( (isset($references['is_view_mode']) && $all_fields_validate && $fields_filled != count($properties_compounded)) ? 'display:none' : 'display:block' ) : 'display:none'; ?>">
-                                    <div class="col-md-11">
+                                     class="col-md-12 no-padding" 
+                                     style="border-color: #ccc;
+                                     <?php echo ($is_show_container) ? ( ( ( isset($references['is_view_mode']) || $references['is_edit'] ) && $all_fields_validate && $fields_filled != count($properties_compounded)) ? 'display:none' : 'display:block' ) : 'display:none'; ?>">                                    <div class="col-md-11">
                                 <?php foreach ($properties_compounded as $property_compounded): 
                                     if(!isset( $property_compounded['id']) || empty($property_compounded['id'])){
                                         continue;
                                     }
                                     $coumpounds_id[] = $property_compounded['id']; 
-                                    $value = $this->get_value($object_id, $property['id'], $property_compounded['id'], $i, $position,$references);
+                                    $value = $this->get_value($object_id, $property['id'], $property_compounded, $i, $position,$references);
                                     ?>
                                     <input type="hidden" 
                                            class="form_autocomplete_value_<?php echo $property_compounded['id']; ?>_mask" 
@@ -174,7 +175,16 @@ class ObjectWidgetsHelper extends ViewHelper {
                                     </a>
                                 </div>    
                                 <?php endif; ?>    
-                                <?php echo ($is_show_container==1) ? ''  : (!isset($references['is_view_mode'])) ? $this->render_button_cardinality($property,$i) : '' ?>     
+                               <?php  if($references['is_edit'] && !isset($references['is_view_mode'])): 
+                                    $fields_filled =  $this->count_fields_container_value($object_id,$property,$property_compounded,$i+1);
+                                    $count =  count($properties_compounded);
+                                    if($all_fields_validate)
+                                        echo ($val && $fields_filled == $count ) ? ''  : $this->render_button_cardinality($property,$i) ;
+                                    else    
+                                        echo ($val && ($this->is_set_container($object_id,$property,$property_compounded,$i+1))) ? ''  : $this->render_button_cardinality($property,$i) ?>     
+                                <?php else: ?>    
+                                    <?php echo ($is_show_container==1) ? ''  : (!isset($references['is_view_mode'])) ? $this->render_button_cardinality($property,$i) : '' ?>     
+                                <?php endif; ?>        
                             </div>  
                         <?php endfor; ?>
                         <input type="hidden" 
@@ -462,8 +472,14 @@ class ObjectWidgetsHelper extends ViewHelper {
             if(strpos($value, '_cat')!==false){
                 return str_replace('_cat', '', $value);
             }else {
-                $object = get_metadata_by_mid('post', $value);
-                return (is_object($object)) ? $object->meta_value : false;
+                $object = get_metadata_by_mid('post', $value);;
+                if(is_object($object)){
+                    return $object->meta_value;
+                }else if(isset ($property['metas']['value']) && is_array($property['metas']['value']) && $property['metas']['value'][$i] && get_post( $property['metas']['value'][$i])){
+                     return $property['metas']['value'][$i];
+                }else{
+                    return false;
+                }
             }
         }else{
             if($i===0){
@@ -574,6 +590,8 @@ class ObjectWidgetsHelper extends ViewHelper {
 
         $result['ids'][] = $property['id'];
         $references['compound_id'] = $property['id'];
+        if(isset($references['is_view_mode']))
+             echo '<script> $(".glyphicon").hide() </script>'
         ?>
         <div id="meta-item-<?php echo $property['id']; ?>"  class="form-group">
             <h2>
@@ -610,11 +628,13 @@ class ObjectWidgetsHelper extends ViewHelper {
                     $position = 0;
                     ?>
                     <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>"
-                         class="col-md-12 no-padding" style="border-color: #ccc;<?php echo ($is_show_container) ? ( (isset($references['is_view_mode']) && $all_fields_validate && $fields_filled != count($properties_compounded)) ? 'display:none' : 'display:block' ) : 'display:none'; ?>">
+                         class="col-md-12 no-padding" 
+                         style="border-color: #ccc;
+                         <?php echo ($is_show_container) ? ( ( ( isset($references['is_view_mode']) || $references['is_edit'] ) && $all_fields_validate && $fields_filled != count($properties_compounded)) ? 'display:none' : 'display:block' ) : 'display:none'; ?>">
                         <div class="col-md-12 no-padding">
                             <?php foreach ($properties_compounded as $property_compounded):
                                 $coumpounds_id[] = $property_compounded['id'];
-                                $value = $this->get_value($object_id, $property['id'], $property_compounded['id'], $i, $position,$references);
+                                $value = $this->get_value($object_id, $property['id'], $property_compounded, $i, $position,$references);
                                 if(isset($property_compounded['metas']['socialdb_property_object_category_id']))
                                                     $value = $property_compounded['metas']['value'];
                                 ?>
@@ -673,14 +693,23 @@ class ObjectWidgetsHelper extends ViewHelper {
                                 <?php $position++ ?>
                             <?php endforeach; ?>
                                 </div>    
-                        <?php if($i>0): ?>
+                        <?php if($i>0 && !isset($references['is_view_mode'])): ?>
                             <div class="col-md-1">
                                 <a style="cursor: pointer;" onclick="remove_container_compounds(<?php echo $property['id'] ?>,<?php echo $i ?>)" class="pull-right">
                                     <span class="glyphicon glyphicon-remove"></span>
                                 </a>
                             </div>
                         <?php endif; ?>
-                            <?php echo ($is_show_container==1) ? ''  : (!isset($references['is_view_mode'])) ? $this->render_button_cardinality($property,$i) : '' ?>
+                            <?php  if($references['is_edit'] && !isset($references['is_view_mode'])): 
+                                    $fields_filled =  $this->count_fields_container_value($object_id,$property,$property_compounded,$i+1);
+                                    $count =  count($properties_compounded);
+                                    if($all_fields_validate)
+                                        echo ($val && $fields_filled == $count ) ? ''  : $this->render_button_cardinality($property,$i) ;
+                                    else    
+                                        echo ($val && ($this->is_set_container($object_id,$property,$property_compounded,$i+1))) ? ''  : $this->render_button_cardinality($property,$i) ?>     
+                           <?php else: ?>    
+                               <?php echo ($is_show_container==1) ? ''  : (!isset($references['is_view_mode'])) ? $this->render_button_cardinality($property,$i) : '' ?>     
+                           <?php endif; ?>        
                     </div>
                 <?php endfor; ?>
                 <input type="hidden"
@@ -779,7 +808,17 @@ class ObjectWidgetsHelper extends ViewHelper {
             </span>
             <span id="results_property_<?php echo $property['id']; ?>">
                 <ul>
-                    <?php if (isset($property['metas']['value']) && !empty($property['metas']['value']) && is_array($property['metas']['value']) && $property['metas']['value'][$i]): // verifico se ele esta na lista de objetos da colecao   ?>    
+                    <?php if((!isset($i) || empty($i)) && !empty($property['metas']['value']) && is_array($property['metas']['value'])):  
+                        $property['metas']['value'] = array_unique($property['metas']['value']);
+                        foreach ($property['metas']['value'] as $id): ?>
+                             <li id="inserted_property_object_<?php echo $property['id']; ?>_<?php echo $id; ?>" 
+                                 item="<?php echo $id; ?>" class="selected-items-property-object property-<?php echo $property['id']; ?>">
+                                     <?php echo get_post($id)->post_title; ?>
+                                 <span  onclick="$('#inserted_property_object_<?php echo $property['id']; ?>_<?php echo $id; ?>').remove();$('select[name=socialdb_property_<?php echo $property['id']; ?>[]]  option[value=<?php echo $id; ?>]').remove()" 
+                                        style="cursor:pointer;" class="pull-right glyphicon glyphicon-trash"></span>
+                             </li>       
+                        <?php endforeach; ?>    
+                    <?php elseif (isset($i) && isset($property['metas']['value']) && !empty($property['metas']['value']) && is_array($property['metas']['value']) && $property['metas']['value'][$i]): // verifico se ele esta na lista de objetos da colecao   ?>    
                         <?php  
                         $property['metas']['value'] = array_unique($property['metas']['value']);
                         $id = $property['metas']['value'][$i];

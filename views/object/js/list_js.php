@@ -322,7 +322,9 @@
                 data: { operation: 'edit_multiple_items', items_data: edit_data }
             }).done(function(html_res){
                 hide_modal_main();
-                $("#main_part").html(html_res);
+                $('#main_part').hide();
+                $('#configuration').html(html_res).show();
+                //$("#main_part").html(html_res);
             });
         });
 

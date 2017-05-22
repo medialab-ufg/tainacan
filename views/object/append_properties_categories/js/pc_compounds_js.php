@@ -677,12 +677,11 @@
      * @param {type} property_id
      * @returns {undefined}     */
     function edit_validate_selectbox(seletor,property_id,compound_id){
-        console.log(seletor);
         if($(seletor).val()===''){
             $('#core_validation_'+property_id).val('false');
             set_field_valid(property_id,'core_validation_'+property_id);
         }else{
-            append_category_properties($(seletor).val(), $('#socialdb_propertyterm_'+property_id+'_value').val());
+            append_category_properties($(seletor).val(), $('#socialdb_propertyterm_'+property_id+'_value').val(),property_id);
            $('#socialdb_propertyterm_'+property_id+'_value').val($(seletor).val()); 
             $('#core_validation_'+property_id).val('true');
             set_field_valid(property_id,'core_validation_'+property_id);

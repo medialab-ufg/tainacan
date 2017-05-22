@@ -934,7 +934,10 @@ class ObjectController extends Controller {
 /*
  * Controller execution
  */
-if ($_POST['operation']) {
+if($_POST['operation_priority']){
+    $operation = $_POST['operation_priority'];
+    $data = $_POST;
+}else if ($_POST['operation']) {
     $operation = $_POST['operation'];
     $data = $_POST;
 } else {
