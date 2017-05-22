@@ -22,6 +22,9 @@ class UserController extends Controller {
             case "list_user":
                 return $user_model->list_user($data);
                 break;
+            case "show_all_users":
+                return $this->render(dirname(__FILE__) . '../../../modules/tainacan-library/views/users.php');
+                break;
             case "add":
                 return $user_model->register_user($data);
                 break;

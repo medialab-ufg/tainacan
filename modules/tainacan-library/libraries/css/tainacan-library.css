@@ -5,6 +5,16 @@
     padding-bottom: 20px;
 }
 
+.users-button
+{
+    color: white;
+    margin-top: 26%;
+    margin-left: 10%;
+}
+.users-button:hover{
+    cursor: pointer;
+}
+
 /*Seletores*/
 #formmarc
 {
@@ -22,3 +32,4 @@
         top: 150px;
     }
 }
+

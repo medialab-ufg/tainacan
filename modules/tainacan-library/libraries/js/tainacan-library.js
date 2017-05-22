@@ -69,3 +69,47 @@ function save_mapping_marc(){
         });
     });
 }
+
+function get_users_page(src, op) {
+    var send_ctrl = 'user/user_controller.php';
+    var send_url = src + '/controllers/' + send_ctrl;
+    var send_data = { operation: op };
+
+    $.ajax({ type: 'POST', url: send_url, data: send_data })
+        .done(function(res){
+            resetHomeStyleSettingsLibrary();
+            $('#tainacan-breadcrumbs').hide();
+            $('#users_div').html(res).show();
+        })
+}
+
+function resetHomeStyleSettingsLibrary() {
+    //cl('Entering _resetHomeStyleSettings');
+    $('.ibram-home-container').hide();
+
+    if( $('body').hasClass('page-template-page-statistics') ) {
+        $("#tainacan-stats").hide();
+        $("#configuration").css('margin-top', '30px');
+    } else {
+        var $_main = '#main_part';
+        $("#configuration").css('margin-top', '0px');
+        if( $($_main).hasClass('home') ) {
+            $($_main).show().css('padding-bottom', '0%');
+            $('#display_view_main_page').hide();
+            $('body.home').css('background', 'white');
+            $("#searchBoxIndex").hide();
+            $('.repository-sharings').css('display', 'block');
+
+        } else {
+            $("#collection_post").css('margin-top', '0').hide();
+            $("#main_part_collection").show();
+            $('.collection_header').hide();
+            $($_main).hide();
+        }
+    }
+
+    var ibram_active = $('.ibram_menu_active').val();
+    if( ibram_active && ibram_active == true.toString() ) {
+        $('#collection_post').show();
+    }
+}

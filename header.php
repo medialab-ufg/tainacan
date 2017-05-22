@@ -242,6 +242,12 @@ $_src_ = get_template_directory_uri();
                           <?php } ?>
                       </div>
 
+                      <?php
+                      if(has_action("add_users_button"))
+                      {
+                        do_action("add_users_button");
+                      }
+                      ?>
                       <?php if (!is_front_page() && !is_plugin_active( 'ibram-tainacan/ibram-tainacan.php' )): // !is_page($stat_page) ?>
                         <form id="formSearchCollections" class="navbar-form navbar-right search-tainacan-collection" role="search">
                           <div class="input-group search-collection search-home">
@@ -262,7 +268,6 @@ $_src_ = get_template_directory_uri();
                           </form>
                       <?php endif; ?>
                     </div>
-
                   </div><!-- /.navbar-collapse -->
                 </div><!-- /.container-fluid -->
               </nav>

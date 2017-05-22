@@ -633,6 +633,7 @@ while (have_posts()) : the_post();
     <!-- TAINACAN: esta div (AJAX) mostra as configuracoes da colecao  -->
     <div id='container-fluid-configuration' class="container-fluid no-padding" style="background-color: #f1f2f2">
         <div id="configuration" class="col-md-12 no-padding" style="margin-top: 0;"></div>
+        <div id="users_div"  class="col-md-12 no-padding"></div>
     </div>
     <!-- TAINACAN: scripts utilizados para criacao e monagem dos widgets de pesquisa  -->
 

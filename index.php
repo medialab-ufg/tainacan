@@ -89,6 +89,10 @@ if (isset($_GET['info_messages'])) {
     <div id="display_view_main_page" class="container-fluid"></div>
 <?php endif; ?>
 
+<div id='container-fluid-configuration' class="container-fluid no-padding" style="background-color: #f1f2f2">
+    <div id="users_div"  class="col-md-12"></div>
+</div>
+
 <!-- TAINACAN: esta div possui um gif que e colocada como none quando a listagem de recents e populares  -->
 <div id="loader_collections">
     <img src="<?php echo get_template_directory_uri() . '/libraries/images/new_loader.gif' ?>" width="64px" height="64px" />

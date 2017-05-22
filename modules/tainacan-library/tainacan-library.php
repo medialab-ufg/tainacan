@@ -17,6 +17,8 @@ define("MAPPING_MARC_TABLE", "socialdb_channel_marc_mapping_table");
 
 load_theme_textdomain("tainacan", dirname(__FILE__) . "/languages");
 
+require_once ('/mail/tainacan-library-mail.php');
+
 /*
  * Adição de SCRIPTS
  */
@@ -491,6 +493,19 @@ function gen_barcode($arg)
                     });
                 </script>
             </div>
+        </div>
+    </div>
+    <?php
+}
+
+add_action("add_users_button", "users_button");
+function users_button()
+{
+    ?>
+    <div class="nav navbar-nav navbar-right" >
+        <div class="users-button" onclick="get_users_page('http://localhost/wordpress/biblioteca/wp-content/themes/tainacan', 'show_all_users')">
+            <i class="fa fa-users" aria-hidden="true"></i>
+            <?php _e("Users", "tainacan"); ?>
         </div>
     </div>
     <?php
