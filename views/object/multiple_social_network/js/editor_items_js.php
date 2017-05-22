@@ -1478,6 +1478,15 @@
         });
         
     }
+    
+    function back_main_list() {
+        $('#form').hide();
+        $('#configuration').hide();
+        $('#main_part').show();
+        $('#display_view_main_page').show();
+        $("#container_socialdb").show('fast');
+         showList($('#src').val());
+    }
     //accordion para os campos dos metados dos itens
     $("#accordion_socialnetwork").accordion({
         collapsible: true,
