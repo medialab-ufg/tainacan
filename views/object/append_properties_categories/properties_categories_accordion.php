@@ -34,6 +34,10 @@ if($is_view_mode){
     $references['is_view_mode'] = true;
     $references['object_id'] = $object_id;
 }
+if($isEdit){
+    $references['is_edit'] = true;
+}
+
 if(isset($not_block)){
      $references['operation'] = true;
 }

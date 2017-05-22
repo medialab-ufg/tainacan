@@ -98,8 +98,9 @@ class ObjectWidgetsHelper extends ViewHelper {
                                 $position = 0;
                                 ?>
                                 <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>"
-                                     class="col-md-12 no-padding" style="border-color: #ccc;<?php echo ($is_show_container) ? ( (isset($references['is_view_mode']) && $all_fields_validate && $fields_filled != count($properties_compounded)) ? 'display:none' : 'display:block' ) : 'display:none'; ?>">
-                                    <div class="col-md-11">
+                                     class="col-md-12 no-padding" 
+                                     style="border-color: #ccc;
+                                     <?php echo ($is_show_container) ? ( ( ( isset($references['is_view_mode']) || $references['is_edit'] ) && $all_fields_validate && $fields_filled != count($properties_compounded)) ? 'display:none' : 'display:block' ) : 'display:none'; ?>">                                    <div class="col-md-11">
                                 <?php foreach ($properties_compounded as $property_compounded): 
                                     if(!isset( $property_compounded['id']) || empty($property_compounded['id'])){
                                         continue;
@@ -174,7 +175,16 @@ class ObjectWidgetsHelper extends ViewHelper {
                                     </a>
                                 </div>    
                                 <?php endif; ?>    
-                                <?php echo ($is_show_container==1) ? ''  : (!isset($references['is_view_mode'])) ? $this->render_button_cardinality($property,$i) : '' ?>     
+                               <?php  if($references['is_edit'] && !isset($references['is_view_mode'])): 
+                                    $fields_filled =  $this->count_fields_container_value($object_id,$property,$property_compounded,$i+1);
+                                    $count =  count($properties_compounded);
+                                    if($all_fields_validate)
+                                        echo ($val && $fields_filled == $count ) ? ''  : $this->render_button_cardinality($property,$i) ;
+                                    else    
+                                        echo ($val && ($this->is_set_container($object_id,$property,$property_compounded,$i+1))) ? ''  : $this->render_button_cardinality($property,$i) ?>     
+                                <?php else: ?>    
+                                    <?php echo ($is_show_container==1) ? ''  : (!isset($references['is_view_mode'])) ? $this->render_button_cardinality($property,$i) : '' ?>     
+                                <?php endif; ?>        
                             </div>  
                         <?php endfor; ?>
                         <input type="hidden" 
@@ -618,7 +628,9 @@ class ObjectWidgetsHelper extends ViewHelper {
                     $position = 0;
                     ?>
                     <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>"
-                         class="col-md-12 no-padding" style="border-color: #ccc;<?php echo ($is_show_container) ? ( (isset($references['is_view_mode']) && $all_fields_validate && $fields_filled != count($properties_compounded)) ? 'display:none' : 'display:block' ) : 'display:none'; ?>">
+                         class="col-md-12 no-padding" 
+                         style="border-color: #ccc;
+                         <?php echo ($is_show_container) ? ( ( ( isset($references['is_view_mode']) || $references['is_edit'] ) && $all_fields_validate && $fields_filled != count($properties_compounded)) ? 'display:none' : 'display:block' ) : 'display:none'; ?>">
                         <div class="col-md-12 no-padding">
                             <?php foreach ($properties_compounded as $property_compounded):
                                 $coumpounds_id[] = $property_compounded['id'];
@@ -688,7 +700,16 @@ class ObjectWidgetsHelper extends ViewHelper {
                                 </a>
                             </div>
                         <?php endif; ?>
-                            <?php echo ($is_show_container==1) ? ''  : (!isset($references['is_view_mode'])) ? $this->render_button_cardinality($property,$i) : '' ?>
+                            <?php  if($references['is_edit'] && !isset($references['is_view_mode'])): 
+                                    $fields_filled =  $this->count_fields_container_value($object_id,$property,$property_compounded,$i+1);
+                                    $count =  count($properties_compounded);
+                                    if($all_fields_validate)
+                                        echo ($val && $fields_filled == $count ) ? ''  : $this->render_button_cardinality($property,$i) ;
+                                    else    
+                                        echo ($val && ($this->is_set_container($object_id,$property,$property_compounded,$i+1))) ? ''  : $this->render_button_cardinality($property,$i) ?>     
+                           <?php else: ?>    
+                               <?php echo ($is_show_container==1) ? ''  : (!isset($references['is_view_mode'])) ? $this->render_button_cardinality($property,$i) : '' ?>     
+                           <?php endif; ?>        
                     </div>
                 <?php endfor; ?>
                 <input type="hidden"
