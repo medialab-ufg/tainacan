@@ -69,7 +69,32 @@ function save_mapping_marc(){
         });
     });
 }
+function dataTable()
+{
+    var dataTable_options = {
+        searching: true,
+        paging: true,
+        info: false
+    };
 
+    $("#table-users").DataTable({
+        "order": [[ 0, "asc" ]],
+        "language": {
+            "lengthMenu": "Mostrar _MENU_ registros por página",
+            "zeroRecords": "Nada encontrado",
+            "info": "Mostrando _PAGE_ de _PAGES_",
+            "infoEmpty": "Nenhum registro diponível",
+            "infoFiltered": "(de um total de _MAX_ registros)",
+            "search": "Busca: ",
+            "paginate": {
+                "first":      "Primeira",
+                "last":       "Última",
+                "next":       "Próxima",
+                "previous":   "Anterior"
+            }
+        }
+    } );
+}
 function get_users_page(src, op) {
     var send_ctrl = 'user/user_controller.php';
     var send_url = src + '/controllers/' + send_ctrl;
@@ -80,19 +105,21 @@ function get_users_page(src, op) {
             resetHomeStyleSettingsLibrary();
             $('#tainacan-breadcrumbs').hide();
             $('#users_div').html(res).show();
+            dataTable();
         })
 }
 
 function resetHomeStyleSettingsLibrary() {
     //cl('Entering _resetHomeStyleSettings');
+    $('ul.menu-ibram').show();
     $('.ibram-home-container').hide();
 
     if( $('body').hasClass('page-template-page-statistics') ) {
         $("#tainacan-stats").hide();
-        $("#configuration").css('margin-top', '30px');
+        $("#users_div").css('margin-top', '30px');
     } else {
         var $_main = '#main_part';
-        $("#configuration").css('margin-top', '0px');
+        $("#users_div").css('margin-top', '0px');
         if( $($_main).hasClass('home') ) {
             $($_main).show().css('padding-bottom', '0%');
             $('#display_view_main_page').hide();
@@ -101,13 +128,15 @@ function resetHomeStyleSettingsLibrary() {
             $('.repository-sharings').css('display', 'block');
 
         } else {
-            $("#collection_post").css('margin-top', '0').hide();
+
+            //$("#collection_post").css('margin-top', '0').show();
             $("#main_part_collection").show();
             $('.collection_header').hide();
             $($_main).hide();
         }
     }
 
+    $("#configuration").hide();
     var ibram_active = $('.ibram_menu_active').val();
     if( ibram_active && ibram_active == true.toString() ) {
         $('#collection_post').show();

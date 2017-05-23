@@ -5,12 +5,13 @@
         notification_events_repository();
         $('.nav-tabs').tab();
         var dataTable_options = {
+            "order": [[4,"desc"]],
+            "aoColumnDefs": [ { "bVisible": false, "aTargets" : [4] } ],
             "initComplete": function() {
                 $("#event_verified_table_wrapper .row").eq(2).addClass('datatable-result-sets');
                 $("#event_not_verified_table_wrapper .row").eq(2).addClass('datatable-result-sets');
             },
             "language": {
-                // "url": "dataTables."
                 sInfo: "Exibindo de _START_ até _END_ de _TOTAL_ itens",
                 sLengthMenu: "Mostrar _MENU_ itens por página",
                 sInfoFiltered: "(filtrados de _MAX_ eventos)",

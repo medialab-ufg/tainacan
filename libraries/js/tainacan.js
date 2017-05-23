@@ -2445,7 +2445,9 @@ function resetHomeStyleSettings() {
             $($_main).hide();
         }
     }
-
+    
+    $("#users_div").hide();
+    
     var ibram_active = $('.ibram_menu_active').val();
     if( ibram_active && ibram_active == true.toString() ) {
         $('#collection_post').show();

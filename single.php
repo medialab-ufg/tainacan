@@ -64,8 +64,10 @@ while (have_posts()) : the_post();
     ?>
     <!-- TAINACAN: div necessaria para procedimentos do facebook  -->
     <div id="fb-root"></div>
+
     <!-- TAINACAN: esta div (AJAX) mostra o painel da colecao e suas acoes, estilos inline para descer a div apenas pois estava sob o header  -->
     <div id="collection_post" style="margin-top: 50px;"> </div>
+
     <!-- TAINACAN - BEGIN: ITENS NECESSARIOS PARA EXECUCAO DE VARIAS PARTES DO SOCIALDB -->
     <input type="hidden" id="visualization_page_category" name="visualization_page_category" value="<?php echo (!$visualization_page_category || $visualization_page_category === 'right_button') ? 'right_button' : 'click'; ?>">
     <input type="hidden" id="show_collection_default" name="show_collection_default" value="<?php echo (!$collection_default || $collection_default === 'false') ? 'show' : 'hide'; ?>">
@@ -85,85 +87,100 @@ while (have_posts()) : the_post();
         echo $_GET['search'];
     }
     ?>">
+
     <!-- Hidden para verificar se existe filtros via url -->
     <input type="hidden" id="is_filter" name="is_filter" value="<?php
     if (isset($_GET['is_filter'])) {
         echo $_GET['is_filter'];
     }
     ?>">
+
     <!-- Hidden para recuperacao de senha -->
     <input type="hidden" id="recovery_password" name="recovery_password" value="<?php
     if ($_GET['recovery_password']) {
         echo (int) base64_decode($_GET['recovery_password']);
     }
     ?>">
+
     <!-- Minhas colecoes -->
     <input type="hidden" id="mycollections" name="mycollections" value="<?php
     if (isset($_GET['mycollections'])) {
         echo 'true';
     }
     ?>">
+
     <!-- Colecoes compartilhadas -->
     <input type="hidden" id="sharedcollections" name="sharedcollections" value="<?php
     if (isset($_GET['sharedcollections'])) {
         echo 'true';
     }
     ?>">
+
     <!-- PAGINA DO ITEM -->
     <input type="hidden" id="object_page" name="object_page" value="<?php
     if (get_query_var('item') && !get_query_var('edit-item')) {
         echo trim(get_query_var('item'));
     }
     ?>">
+
     <!-- PAGINA DA CATEGORIA -->
     <input type="hidden" id="category_page" name="category_page" value="<?php
     if (isset($_GET['category'])) {
         echo trim($_GET['category']);
     }
     ?>">
+
     <!-- PAGINA DA PROPRIEDADE -->
     <input type="hidden" id="property_page" name="property_page" value="<?php
     if (isset($_GET['property'])) {
         echo trim($_GET['property']);
     }
     ?>">
+
     <!-- PAGINA DA TAG -->
     <input type="hidden" id="tag_page" name="tag_page" value="<?php
     if (isset($_GET['tag'])) {
         echo trim($_GET['tag']);
     }
     ?>">
+
     <input type="hidden" id="info_messages" name="info_messages" value="<?php
     if (isset($_GET['info_messages'])) {
         echo $_GET['info_messages'];
     }
     ?>">
+
     <input type="hidden" id="info_title" name="info_title" value="<?php
     if (isset($_GET['info_title'])) {
         echo $_GET['info_title'];
     }
     ?>">
+
     <input type="hidden" id="open_wizard" name="open_wizard" value="<?php
     if (isset($_GET['open_wizard'])) {
         echo $_GET['open_wizard'];
     }
     ?>">
+
     <!-- Se devera abrir o formulario de adicao item -->
     <input type="hidden" id="open_create_item_text" name="open_create_item_text" value="<?php
     if (isset($_GET['create-item'])) {
         echo $_GET['create-item'];
     }
     ?>">
+
     <input type="hidden" id="open_login" name="open_login" value="<?php
     if (isset($_GET['open_login'])) {
         echo $_GET['open_login'];
     }
     ?>">
+
     <input type="hidden" id="open_edit_item" name="open_edit_item" value="<?php
     if (isset($_GET['open_edit_item'])) {
         echo $_GET['open_edit_item'];
     }
     ?>">
+
     <input type="hidden" id="instagramInsertedIds" name="instagramInsertedIds" value="<?php
     if (isset($_SESSION['instagramInsertedIds'])) {
         if ($_SESSION['instagramInsertedIds'] != 'instagram_error') {
@@ -176,6 +193,7 @@ while (have_posts()) : the_post();
         echo 'false';
     }
     ?>">
+
     <input type="hidden" id="facebookInsertedIds" name="facebookInsertedIds" value="<?php
     if (isset($_SESSION['facebookInsertedIds'])) {
         if ($_SESSION['facebookInsertedIds'] != 'facebook_error') {
@@ -188,12 +206,14 @@ while (have_posts()) : the_post();
         echo 'false';
     }
     ?>">
+
     <input type="hidden" id="wp_query_args" name="wp_query_args" value=""> <!-- utilizado na busca -->
     <input type="hidden" id="change_collection_images" name="change_collection_images" value="">
     <input type="hidden" id="value_search" name="value_search" value=""> <!-- utilizado na busca -->
     <input type="hidden" id="flag_dynatree_ajax" name="flag_dynatree_ajax" value="true"> <!-- utilizado na busca -->
     <input type="hidden" id="global_tag_id" name="global_tag_id" value="<?php echo (get_term_by('slug', 'socialdb_property_fixed_tags', 'socialdb_property_type')->term_id) ? get_term_by('slug', 'socialdb_property_fixed_tags', 'socialdb_property_type')->term_id : 'tag' ?>"> <!-- utilizado na busca -->
     <input type="hidden" id="search-advanced-text" value="<?php echo (isset($_GET['search-advanced-text']) && !empty($_GET['search-advanced-text'])) ?  $_GET['search-advanced-text'] : '' ?>">
+
     <!-- TAINACAN - END: ITENS NECESSARIOS PARA EXECUCAO DE VARIAS PARTES DO SOCIALDB -->
 
     <!-- TAINACAN: esta div central que agrupa todos os locais para widgets e a listagem de objeto -->
@@ -541,7 +561,8 @@ while (have_posts()) : the_post();
         </div>
     </div>
     <!-- Fim do conteudo principal da pagina (div main part) -->
-    <!-- TAINACAN: esta div eh mostrada quando eh clicado com o botao direito sobre categorias e tags no dynatree  -->
+
+    <!-- TAINACAN: esta div é mostrada quando é clicado com o botao direito sobre categorias e tags no dynatree  -->
     <?php do_action('insert_new_contextmenu_dynatree') ?>
 
     <ul id="myMenuSingle" class="contextMenu" style="display:none;">
@@ -577,6 +598,7 @@ while (have_posts()) : the_post();
         </li>
         <?php // endif;     ?>
     </ul>
+
     <ul id="myMenuNoList" class="contextMenu" style="display:none;">
         <?php if (!$visualization_page_category || $visualization_page_category === 'right_button'): ?>   
             <li class="see">
@@ -605,7 +627,8 @@ while (have_posts()) : the_post();
         <?php //if (verify_collection_moderators(get_the_ID(), get_current_user_id())):  ?>
         <?php // endif;      ?>
     </ul>
-    <!-- TAINACAN: esta div eh mostrada quando eh clicado com o botao direito sobre categorias e tags no dynatree  -->
+
+    <!-- TAINACAN: esta div é mostrada quando eh clicado com o botao direito sobre categorias e tags no dynatree  -->
     <ul id="myMenuSingleTag" class="contextMenu" style="display:none;">
         <li class="see">
             <?php if (!$visualization_page_category || $visualization_page_category === 'right_button'): ?>    
@@ -630,12 +653,19 @@ while (have_posts()) : the_post();
             </li>
         <?php endif; ?>
     </ul>
+
     <!-- TAINACAN: esta div (AJAX) mostra as configuracoes da colecao  -->
     <div id='container-fluid-configuration' class="container-fluid no-padding" style="background-color: #f1f2f2">
         <div id="configuration" class="col-md-12 no-padding" style="margin-top: 0;"></div>
-        <div id="users_div"  class="col-md-12 no-padding"></div>
     </div>
-    <!-- TAINACAN: scripts utilizados para criacao e monagem dos widgets de pesquisa  -->
+
+    <div id='container-fluid-users' class="container-fluid no-padding" style="background-color: #f1f2f2">
+        <div id="users_div"  class="col-md-12" style="margin-top: 0;"></div>
+    </div>
+
+    <!-- TAINACAN: scripts utilizados para criacao e montagem dos widgets de pesquisa  -->
+
+    <!--------------------------------------------------------------- Definição de janelas modais --------------------------------------------------------------->
 
     <!-- TAINACAN: modal padrao bootstrap para adicao de categorias    -->
     <div class="modal fade" id="modalAddCategoria" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -753,6 +783,7 @@ while (have_posts()) : the_post();
             </div>
         </div>
     </div>
+
     <!-- modal propriedades -->
     <div class="modal fade bs-example-modal-lg" id="single_modal_category_property"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog modal-lg">
@@ -764,6 +795,7 @@ while (have_posts()) : the_post();
             </div>
         </div>
     </div>
+
     <!-- modal exluir -->
     <div class="modal fade" id="modalExcluirCategoria" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -791,6 +823,7 @@ while (have_posts()) : the_post();
             </div>
         </div>
     </div>
+
     <div class="modal fade" id="modal_send_files_items_zip" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -955,6 +988,7 @@ while (have_posts()) : the_post();
             </div>
         </div>
     </div>
+
     <!-- TAINACAN: modal padrao bootstrap para exclusao de tags   -->
     <div class="modal fade" id="modalExcluirTag" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -981,6 +1015,7 @@ while (have_posts()) : the_post();
             </div>
         </div>
     </div>
+
     <!-- TAINACAN: modal padrao bootstrap para demonstracao de execucao de processos, utilizado em varias partes do socialdb   -->
     <div class="modal fade" id="modalImportMain" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog">
@@ -1008,6 +1043,7 @@ while (have_posts()) : the_post();
         </div>
     </div>
 
+    <!-- TAINACAN: modal padrao bootstrap para confirmação de importação Mapas Culturais   -->
     <div class="modal fade" id="modalImportConfirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content"> <!--Conteúdo da janela modal-->
@@ -1056,6 +1092,8 @@ while (have_posts()) : the_post();
             </div>
         </div>
     </div>
+
+    <!-- TAINACAN: modal padrao bootstrap para exibição dos itens importados do Mapa Cultural   -->
     <div class="modal fade" id="modalImportFinished" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content"> <!--Conteúdo da janela modal-->
