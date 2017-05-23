@@ -34,7 +34,7 @@ function confirmationAPI(){
                 type: "POST",
                 url:$('#src').val() + "/controllers/theme_options/synchronize_controller.php",
                 data: {
-                        api_user: $('#api_key').val(),
+                        api_user: $('#api_user').val(),
                         api_key: $('#api_key').val(),
                         operation: 'start',
                         api_url:  $('#url_api').val()+'/wp-json'

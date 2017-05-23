@@ -84,6 +84,23 @@ class ObjectWidgetsHelper extends ViewHelper {
                          <input  type="hidden" 
                                 id='main_compound_id' 
                                 value='<?php echo $references['compound_id'] ?>'>
+                        <?php 
+                            $coumpounds_id = [];
+                            foreach ($properties_compounded as $property_compounded): 
+                                    if(!isset( $property_compounded['id']) || empty($property_compounded['id'])){
+                                        continue;
+                                    }
+                                    $coumpounds_id[] = $property_compounded['id']; 
+                            endforeach;    ?>
+                        <input type="hidden" 
+                               name="compounds_<?php echo $property['id']; ?>" 
+                               id="compounds_<?php echo $property['id']; ?>"
+                               value="<?php echo implode(',', array_unique($coumpounds_id)); ?>">       
+                        <input  type="hidden"
+                                name="cardinality_<?php echo $property['id']; ?>"
+                                id="cardinality_<?php echo $property['id']; ?>"
+                                value="<?php echo $cardinality_bigger; ?>">
+                        <?php $coumpounds_id = []; ?>
                         <?php if( $property['metas']['socialdb_property_required'] == 'true_one_field'): ?> 
                         <input  type="hidden" 
                                 id='type_required_<?php echo $references['compound_id'] ?>' 
@@ -187,15 +204,10 @@ class ObjectWidgetsHelper extends ViewHelper {
                                 <?php endif; ?>        
                             </div>  
                         <?php endfor; ?>
-                        <input type="hidden" 
-                               name="compounds_<?php echo $property['id']; ?>" 
-                               id="compounds_<?php echo $property['id']; ?>"
-                               value="<?php echo implode(',', array_unique($coumpounds_id)); ?>"> 
-                        <input type="hidden" 
+                        <!--input type="hidden" 
                                name="cardinality_<?php echo $property['id']; ?>" 
                                id="cardinality_<?php echo $property['id']; ?>"
-                               value="<?php echo $cardinality_bigger; ?>"> 
-                        <?php $coumpounds_id = []; ?>
+                               value="<?php echo $cardinality_bigger; ?>"--> 
                     </div>     
                 </div>   
                <?php
@@ -622,6 +634,23 @@ class ObjectWidgetsHelper extends ViewHelper {
                         id='count_fields_<?php echo $references['compound_id'] ?>' 
                         value='<?php echo count($properties_compounded) ?>'>
                 <?php endif; ?> 
+                <?php 
+                $coumpounds_id = []; 
+                    foreach ($properties_compounded as $property_compounded): 
+                            if(!isset( $property_compounded['id']) || empty($property_compounded['id'])){
+                                continue;
+                            }
+                            $coumpounds_id[] = $property_compounded['id']; 
+                    endforeach;    ?>
+                <input type="hidden" 
+                       name="compounds_<?php echo $property['id']; ?>" 
+                       id="compounds_<?php echo $property['id']; ?>"
+                       value="<?php echo implode(',', array_unique($coumpounds_id)); ?>">      
+                <input type="hidden"
+                       name="cardinality_<?php echo $property['id']; ?>"
+                       id="cardinality_<?php echo $property['id']; ?>"
+                       value="<?php echo $cardinality_bigger; ?>">
+                <?php $coumpounds_id = []; ?>
                 <?php for($i = 0; $i<$cardinality_bigger;$i++):
                     $is_show_container =  $this->is_set_container($object_id,$property,$property_compounded,$i);
                     $fields_filled =  $this->count_fields_container_value($object_id,$property,$property_compounded,$i);
@@ -712,15 +741,15 @@ class ObjectWidgetsHelper extends ViewHelper {
                            <?php endif; ?>        
                     </div>
                 <?php endfor; ?>
-                <input type="hidden"
+                <!--input type="hidden"
                        name="compounds_<?php echo $property['id']; ?>"
                        id="compounds_<?php echo $property['id']; ?>"
-                       value="<?php echo implode(',', array_unique($coumpounds_id)); ?>">
-                <input type="hidden"
+                       value="<?php echo implode(',', array_unique($coumpounds_id)); ?>"-->
+                <!--input type="hidden"
                        name="cardinality_<?php echo $property['id']; ?>"
                        id="cardinality_<?php echo $property['id']; ?>"
-                       value="<?php echo $cardinality_bigger; ?>">
-                <?php $coumpounds_id = []; ?>
+                       value="<?php echo $cardinality_bigger; ?>"-->
+                <?php //$coumpounds_id = []; ?>
             </div>
         </div>
         <?php
