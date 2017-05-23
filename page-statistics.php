@@ -85,7 +85,7 @@ if ( current_user_can('manage_options') ):
     </header> <!-- DO NOT ERASE -->
 
 
-    <div id='tainacan-stats' class='col-md-12 no-padding'>
+    <div id='tainacan-stats' class='row'>
         <center style="margin: 40px 0 40px 0">
             <img src="<?php echo get_template_directory_uri() . '/libraries/images/ajaxLoader.gif' ?>" width="64px" height="64px" />
             <br> <br>

@@ -5,7 +5,8 @@ class LogHelper extends ViewHelper {
     public function getChartsType() {
         return [ [ 'className' => 'defaultchart_div', 'img' => $this->getChartImg("chart_column") ],
             [ 'className' => 'piechart_div', 'img' => $this->getChartImg("chart_pie") ],
-            [ 'className' => 'barchart_div', 'img' => $this->getChartImg("chart_line") ] ];
+            [ 'className' => 'barchart_div', 'img' => $this->getChartImg("bar_chart") ],
+            [ 'className' => 'curvelinechart_div', 'img' => $this->getChartImg("chart_line")] ];
     }
     
     public function getReportTypes() {
