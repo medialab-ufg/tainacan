@@ -57,6 +57,7 @@ if($collection_id == get_option('collection_root_id')){
                                         <th><?php _e('Event Type', 'tainacan'); ?></th>
                                         <th><?php _e('Event Description', 'tainacan'); ?></th>
                                         <th><?php _e('State', 'tainacan'); ?></th>
+                                        <th><?php _e('Real Date', 'tainacan'); ?></th>
                                         <?php if ($moderation_type == 'democratico' && (current_user_can('manage_options') || verify_collection_moderators($collection_id, get_current_user_id()))): ?>
                                             <th>
                                                 <a onclick="democratic_check_events()"><?php _e('Select all', 'tainacan'); ?></a>/
@@ -122,6 +123,7 @@ if($collection_id == get_option('collection_root_id')){
                                                     </td>
                                                 <?php endif; ?>
                                             <?php } ?>
+                                            <td> <?php echo date($event['date']); ?> </td>
                                         </tr>
                                         <?php
                                     }
