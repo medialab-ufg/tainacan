@@ -820,7 +820,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                         <?php endforeach; ?>    
                     <?php elseif (isset($i) && isset($property['metas']['value']) && !empty($property['metas']['value']) && is_array($property['metas']['value']) && $property['metas']['value'][$i]): // verifico se ele esta na lista de objetos da colecao   ?>    
                         <?php  
-                        $property['metas']['value'] = array_unique($property['metas']['value']);
+                        //$property['metas']['value'] = array_unique($property['metas']['value']);
                         $id = $property['metas']['value'][$i];
                         //foreach ($property['metas']['value'] as $id): ?>
                              <li id="inserted_property_object_<?php echo $property['id']; ?>_<?php echo $id; ?>" 
@@ -893,7 +893,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                 <ul>
                     <?php if (isset($property['metas']['value']) && !empty($property['metas']['value']) && is_array($property['metas']['value']) && $property['metas']['value'][$i]): // verifico se ele esta na lista de objetos da colecao   ?>    
                         <?php  
-                        $property['metas']['value'] = array_unique($property['metas']['value']);
+                        //$property['metas']['value'] = array_unique($property['metas']['value']);
                         $id = $property['metas']['value'][$i];
                         //foreach ($property['metas']['value'] as $id): ?>
                              <li id="inserted_property_object_<?php echo $compound_id ?>_<?php echo $property['id'] ?>_<?php echo $i ?>_<?php echo $id; ?>" 
@@ -912,10 +912,13 @@ class ObjectWidgetsHelper extends ViewHelper {
                 style="display: none;" 
                 name="socialdb_property_<?php echo $compound_id; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>[]" 
                 >   
-                 <?php if (isset($property['metas']['value']) && !empty($property['metas']['value']) && is_array($property['metas']['value'])): // verifico se ele esta na lista de objetos da colecao   ?>    
-                        <?php foreach ($property['metas']['value'] as $id): ?>
+                 <?php if (isset($property['metas']['value']) && !empty($property['metas']['value']) && is_array($property['metas']['value']) && $property['metas']['value'][$i]): // verifico se ele esta na lista de objetos da colecao   ?>    
+                       <?php  
+                        $property['metas']['value'] = array_unique($property['metas']['value']);
+                        $id = $property['metas']['value'][$i];
+                        //foreach ($property['metas']['value'] as $id): ?>
                         <option selected="selected" value="<?php echo $id; ?>"><?php echo $id; ?></option>
-                        <?php endforeach; ?>    
+                        <?php //endforeach; ?>    
                <?php endif; ?>
             </select>
              <input type="hidden" 

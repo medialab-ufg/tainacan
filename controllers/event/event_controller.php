@@ -34,19 +34,17 @@ require_once(dirname(__FILE__).'../../../models/ranking/ranking_model.php');
 require_once(dirname(__FILE__).'../../../models/object/object_model.php');
 
  class EventController extends Controller{
-	 public function operation($operation,$data){
-             
-		switch ($operation) {
-      case "list":
-        $data = EventModel::list_events($data);
-        return $this->render(dirname(__FILE__).'../../../views/event/list.php', $data);
-        break;
-      case 'notification_events':
-        $data = EventModel::list_events_notification($data);
-        if(isset($data['events_not_observed'])){
-          $not_observed_events = '&nbsp;'.count($data['events_not_observed']).'&nbsp;';
-        }
-        return $not_observed_events;
+	 public function operation($operation,$data) {
+         switch ($operation) {
+             case "list":
+                 $data = EventModel::list_events($data);
+                 return $this->render(dirname(__FILE__).'../../../views/event/list.php', $data);
+             case 'notification_events':
+                 $data = EventModel::list_events_notification($data);
+                 if(isset($data['events_not_observed'])){
+                     $not_observed_events = '&nbsp;'.count($data['events_not_observed']).'&nbsp;';
+                 }
+                 return $not_observed_events;
       case 'notification_events_repository':
         $data['collection_id'] = get_option('collection_root_id');
         $data = EventModel::list_events($data);
@@ -120,8 +118,6 @@ require_once(dirname(__FILE__).'../../../models/object/object_model.php');
               apply_filters('tainacan_restore_descarted_item', $logData['item_id']);
           }
           Log::addLog($logData);
-
-          
         return $event_object_delete_model->create_event($data);
       case 'socialdb_event_object_delete';
         $event_object_delete_model = new EventObjectDeleteModel();
