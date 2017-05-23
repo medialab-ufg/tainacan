@@ -58,8 +58,6 @@ include_once('js/list_js.php');
             <div class="user-config-control col-md-12 no-padding">
                 <!-- Filters -->
                 <div class="col-md-10 pull-left no-padding">
-                    <span class="config-title"><?php _t('Filters:',1); ?></span>
-
                     <!-- Period -->
                     <style>
                         .inputPeriod{
@@ -71,9 +69,17 @@ include_once('js/list_js.php');
                             transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
                         }
                     </style>
-                    <input size="14" type="text" class="input_date inputPeriod" value="" placeholder="from: dd/mm/aaaa" id="from_period" name="from_period">
-                    <input type="text" class="input_date inputPeriod" size="14" value="" placeholder="until: dd/mm/aaaa" id="to_period" name="to_period">
+                    <div class="col-md-5" style="width: auto">
+                      <span class="config-title"><?php _e('Filters: '); ?></span>
+                      <input type="text" class="input_date inputPeriod" value="" placeholder="<?php _e('from: dd/mm/aaaa')?>" id="from_period" name="from_period">
+                      <input type="text" class="input_date inputPeriod"  value="" placeholder="<?php _e('until: dd/mm/aaaa')?>" id="to_period" name="to_period">
+                    </div>
 
+                    <div class="col-md-5" style="width: auto">
+                      <label class="radio-inline"><input type="radio" id="days" name="optradio"> <?php _e('Days')?></label>
+                      <label class="radio-inline"><input type="radio" id="weeks" name="optradio"> <?php _e('Weeks')?></label>
+                      <label class="radio-inline"><input type="radio" id="months" name="optradio"> <?php _e('Months') ?></label>
+                    </div>
                     <!--  <span class="current-chart">--><?php //_t('User Stats',1); ?><!--</span> -->
                 </div>
             </div>
@@ -91,20 +97,21 @@ include_once('js/list_js.php');
             <div class="col-md-2 pull-right no-padding chartChanger">
 <!--                <span class="config-title">--><?php //_t('Mode:',1); ?><!--</span>-->
                 <button data-toggle="dropdown" class="btn btn-default" id="statChartType" type="button">
-                    <img src="<?php echo $_log_helper->getChartsType()[0]['img']; ?>" alt="<?php echo $_log_helper->getChartsType()[0]['className']; ?>">
+                  <img src="<?php echo $_log_helper->getChartsType()[0]['img']; ?>" alt="<?php echo $_log_helper->getChartsType()[0]['className']; ?>">
                 </button>
 
                 <ul class="dropdown-menu statChartType" aria-labelledby="statChartType">
-                    <?php $_log_helper->renderChartsDropdown(); ?>
+                  <?php $_log_helper->renderChartsDropdown(); ?>
                 </ul>
             </div>
+
             <div id="defaultchart_div"></div> <!--Div that will hold the pie chart-->
             <div class="hide" id="piechart_div" style="width: 650px; height: 300px;"></div>
             <div class="hide" id="barchart_div"></div>
             <div class="hide" id="curvelinechart_div"></div>
 
             <div id="no_chart_data" class="hide">
-                <h3> <?php _t('There is no data yet for this report!', 1); ?> </h3>
+              <h3> <?php _t('There is no data yet for this report!', 1); ?> </h3>
             </div>
 
             <input type="hidden" value="default" class="selected_chart_type" />
@@ -116,8 +123,8 @@ include_once('js/list_js.php');
         <div id="charts-resume" class="col-md-12">
             <table>
                 <tbody>
-                <tr class="headers"> <th class="curr-parent"> <?php _t('Status',1); ?> </th> </tr>
-                <tr class="content"> <td class="curr-filter"> <?php _t('Users:',1); ?> </td> </tr>
+                  <tr class="headers"> <th class="curr-parent"> <?php _e('Status'); ?> </th> </tr>
+                  <tr class="content"> <td class="curr-filter"> <?php _e('Total:'); ?> </td> </tr>
                 </tbody>
             </table>
         </div>
