@@ -788,7 +788,7 @@
                 set_field_valid(compound_id,'core_validation_'+compound_id);
             }
         }
-        console.log(cont,'pc compound',seletor,$('#core_validation_'+compound_id).val());
+        //console.log(cont,'pc compound',seletor,$('#core_validation_'+compound_id).val());
     }
     
     

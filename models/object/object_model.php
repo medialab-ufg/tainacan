@@ -641,11 +641,22 @@ class ObjectModel extends Model {
         $properties_id = $this->get_all_properties_form_values($data);
         if (!empty($properties_id)) {
             foreach ($properties_id as $property_id) {
+                $old_values =  get_post_meta($object_id, 'socialdb_property_'. $property_id.'_cat');
+                if($old_values && is_array($old_values)){
+                    foreach ($old_values as $old_value) {
+                        $categories[] = (int) $old_value;
+                        delete_post_meta($$object_id, 'socialdb_property_'. $property_id.'_cat');
+                        wp_remove_object_terms($object_id, $categories, 'socialdb_category_type');
+                    }
+                }
+                
                 if (isset($data["socialdb_propertyterm_$property_id"]) && !is_array($data["socialdb_propertyterm_$property_id"]) && $data["socialdb_propertyterm_$property_id"] !== '') {
+                    add_post_meta($object_id, 'socialdb_property_'. $property_id.'_cat',$data["socialdb_propertyterm_$property_id"]);
                     wp_set_object_terms($object_id, array((int) $data["socialdb_propertyterm_$property_id"]), 'socialdb_category_type', true);
                     $this->set_common_field_values($object_id, "socialdb_propertyterm_$property_id", [(int) $data["socialdb_propertyterm_$property_id"]], 'term');
                 } elseif (is_array($data["socialdb_propertyterm_$property_id"]) && !empty(is_array($data["socialdb_propertyterm_$property_id"]))) {
                     foreach ($data["socialdb_propertyterm_$property_id"] as $value) {
+                        add_post_meta($object_id, 'socialdb_property_'. $property_id.'_cat',$value);
                         wp_set_object_terms($object_id, array((int) $value), 'socialdb_category_type', true);
                         $this->set_common_field_values($object_id, "socialdb_propertyterm_$property_id", $data["socialdb_propertyterm_$property_id"], 'term');
                     }
