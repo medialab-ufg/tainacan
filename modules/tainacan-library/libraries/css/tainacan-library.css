@@ -33,6 +33,10 @@
     border-bottom: 1px solid #0c698b;
 }
 
+.user-row:hover{
+    cursor: pointer;
+}
+
 /*Seletores*/
 #formmarc
 {

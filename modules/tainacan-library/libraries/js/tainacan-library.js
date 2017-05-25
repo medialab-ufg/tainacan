@@ -95,6 +95,25 @@ function dataTable()
         }
     } );
 }
+
+function showUser(userID) {
+    var send_url = $('#src').val() + "/modules/tainacan-library/controllers/user_controller.php";
+    $.ajax({
+        type: 'POST',
+        url: send_url,
+        data: {operation: 'get_user', user_id: userID}
+    }).done(function(res){
+        var user = jQuery.parseJSON(res);
+        var to_show = '';
+        $.each(user.data, function(index, val){
+
+            to_show += index + ": " + val + "<br>";
+        });
+        $("#modalShowUser").modal("show");
+        $("#user_info").html(to_show).show();
+    })
+}
+
 function get_users_page(src, op) {
     var send_ctrl = 'user/user_controller.php';
     var send_url = src + '/controllers/' + send_ctrl;

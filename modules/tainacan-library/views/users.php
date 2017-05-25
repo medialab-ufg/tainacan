@@ -16,7 +16,7 @@
             $signed_up_users = get_users();
             foreach ($signed_up_users as $user) {
                 ?>
-                <tr>
+                <tr onclick="showUser(<?php echo $user->id ?>);" class="user-row">
                     <td> <?php echo $user->display_name; ?> </td>
                     <td> <?php echo $user->user_login; ?> </td>
                     <td> <?php echo $user->user_email; ?> </td>

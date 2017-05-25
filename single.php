@@ -1134,7 +1134,6 @@ while (have_posts()) : the_post();
                     </button>
 
                 </div><!--Fim rodapé-->
-
             </div>
         </div>
     </div>
@@ -1427,7 +1426,29 @@ while (have_posts()) : the_post();
             </div>
         </div>
     </div>
-    
+
+    <!-- TAINACAN: modal padrao bootstrap para exibição dos itens importados do Mapa Cultural   -->
+    <div class="modal fade" id="modalShowUser" tabindex="-1" role="dialog" aria-labelledby="ShowUser" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content"> <!--Conteúdo da janela modal-->
+                <div class="modal-header"><!--Cabeçalho-->
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only"><?php _e('Do you really want to close?', 'tainacan') ?></span>
+                    </button>
+
+                    <h4 class="modal-title text-center"><?php _e('User information', 'tainacan') ?></h4>
+                </div><!--Fim cabeçalho-->
+
+                <div class="modal-body" style="margin-bottom: 30px;"><!--Conteúdo-->
+                    <div class="col-md-12" id="user_info">
+                        
+                    </div>
+                </div><!--Fim conteúdo-->
+            </div>
+        </div>
+    </div>
+
     <?php
         if(has_action('add_new_modals'))
         {

@@ -119,6 +119,27 @@ class UserModel extends Model {
             update_user_meta($user_id, 'prof_resume', $p_resume);
         }
 
+        if(has_action('add_new_user_properties')) //Verifica se é biblioteca
+        {
+            //Bib User Properties
+            $user_properties['mobile_number'] = sanitize_text_field($data['mobile_number']);
+            $user_properties['gender'] = sanitize_text_field($data['gender']);
+            $user_properties['land_line'] = sanitize_text_field($data['land_line']);
+            $user_properties['rg'] = sanitize_text_field($data['rg']);
+            $user_properties['CPF'] = sanitize_text_field($data['CPF']);
+            $user_properties['CEP'] = sanitize_text_field($data['CEP']);
+            $user_properties['address'] = sanitize_text_field($data['address']);
+            $user_properties['number'] = sanitize_text_field($data['number']);
+            $user_properties['additional_address'] = sanitize_text_field($data['additional_address']);
+            $user_properties['birthday'] = sanitize_text_field($data['birthday']);
+
+            foreach ($user_properties as $index => $value)
+            {
+                update_user_meta($user_id, $index, $value);
+            }
+            
+        }
+
         $get_login = get_user_by('id', $user_id);
 
         //On success

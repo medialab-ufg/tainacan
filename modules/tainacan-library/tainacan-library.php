@@ -510,6 +510,108 @@ function users_button()
     </div>
     <?php
 }
+
+add_action("add_root_properties", "root_properties");
+function root_properties()
+{
+    ?>
+    <div class="form-group">
+        <label for="user_type"><?php _e('User type', 'tainacan'); ?><span style="color: #EE0000;"> *</span></label>
+        <select class="form-control" name="user_type" id="user_type">
+            <option value="employee"><?php _e("Employee", "tainacan"); ?></option>
+            <option value="reader"><?php _e("Reader", "tainacan"); ?></option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="user_situation"><?php _e('User situation', 'tainacan'); ?><span style="color: #EE0000;"> *</span></label>
+        <select class="form-control" name="user_situation" id="user_situation">
+            <option value="active"><?php _e("Active", "tainacan"); ?></option>
+            <option value="blocked"><?php _e("Blocked", "tainacan"); ?></option>
+            <option value="pendencies"><?php _e("Has pendencies", "tainacan"); ?></option>
+            <option value="inactive"><?php _e("Inactive", "tainacan"); ?></option>
+        </select>
+    </div>
+    <?php
+}
+
+add_action("add_new_user_properties", "new_user_properties");
+function new_user_properties()
+{
+    ?>
+    <!-- Sexo -->
+    <div class="form-group">
+        <label for="gender"><?php _e('Gender', 'tainacan'); ?><!--span style="color: #EE0000;"> *</span--></label>
+        <select class="form-control" name="gender" id="user_gender">
+            <option value="m"><?php _e("Male", "tainacan"); ?></option>
+            <option value="f"><?php _e("Female", "tainacan"); ?></option>
+        </select>
+    </div>
+
+    <!-- Telefone celular    -->
+    <div class="form-group">
+        <label for="mobile_number"><?php _e('Mobile phone', 'tainacan'); ?></label>
+        <input class="form-control" type="tel" placeholder="<?php _e("Mobile phone", "tainacan"); ?>" name="mobile_phone" id="mobile_phone">
+    </div>
+
+    <!-- Telefone celular    -->
+    <div class="form-group">
+        <label for="land_line"><?php _e('Land line', 'tainacan'); ?></label>
+        <input class="form-control" type="tel" placeholder="<?php _e("Land line", "tainacan"); ?>" name="land_line" id="land_line">
+    </div>
+
+    <!-- RG -->
+    <div class="form-group">
+        <label for="rg"><?php _e('RG', 'tainacan'); ?></label>
+        <input class="form-control" type="" placeholder="<?php _e("RG", "tainacan"); ?>" name="rg" id="rg">
+    </div>
+
+    <!-- CPF -->
+    <div class="form-group">
+        <label for="cpf"><?php _e('CPF', 'tainacan'); ?></label>
+        <input class="form-control" placeholder="<?php _e("CPF", "tainacan"); ?>" name="CPF" id="CPF">
+    </div>
+
+    <!-- CEP -->
+    <div class="form-group">
+        <label for="CEP"><?php _e('CEP', 'tainacan'); ?></label>
+        <input class="form-control" type="" placeholder="<?php _e("CEP", "tainacan"); ?>" name="CEP" id="CEP">
+    </div>
+
+
+    <!-- Endereço -->
+    <div class="form-group">
+        <label for="address"><?php _e('Address', 'tainacan'); ?></label>
+        <input class="form-control" type="text" placeholder="<?php _e("Address", "tainacan"); ?>" name="address" id="address">
+    </div>
+
+    <div class="form-group">
+        <label for="number"><?php _e('Number', 'tainacan'); ?></label>
+        <input class="form-control" type="number" placeholder="<?php _e("Number", "tainacan"); ?>" name="number" id="number">
+    </div>
+
+    <div class="form-group">
+        <label for="additional_address"><?php _e('Additional address', 'tainacan'); ?></label>
+        <input class="form-control" type="text" placeholder="<?php _e("Additional address", "tainacan"); ?>" name="additional_address" id="additional_address">
+    </div>
+
+    <!-- Data de nascimento -->
+    <div class="form-group">
+        <label for="birthday"><?php _e('Birthday', 'tainacan'); ?></label>
+        <input class="form-control" type="date" placeholder="<?php _e("Birthday", "tainacan"); ?>" name="birthday" id="birthday">
+    </div>
+
+    <!-- Input das mascaras -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.min.js"></script>
+    <script>
+        $("#mobile_phone").mask('(00) 0-0000-0000');
+        $("#land_line").mask('(00) 0000-0000');
+        $("#CPF").mask( '000.000.000-00', {reverse: true} );
+        $("#CEP").mask('00000-000');
+        $("#rg").mask('00.000.000-0')
+    </script>
+    <?php
+}
 /*
  * Functions
  */

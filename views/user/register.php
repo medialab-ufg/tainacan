@@ -90,6 +90,13 @@ if (!empty($app['app_id']) && !empty($app['app_secret'])) {
             <br> <br>
 
             <div class="expanded-register" style="display: none">
+
+                <?php if(has_action('add_new_user_properties'))
+                {
+                    do_action('add_new_user_properties');
+                }
+                ?>
+
                 <div class="form-group">
                     <label for="about_you"> <?php _e('About you', 'tainacan'); ?> </label>
                     <input type="text" name="about_you" class="form-control about_you">
