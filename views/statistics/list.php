@@ -29,7 +29,6 @@ include_once('js/list_js.php');
 <!--                </p>-->
 <!--            </div>-->
 <!--        </div>-->
-
         <div class="form-group">
             <label for="object_tags" class="title-pipe">
                 <span class="prepend-filter-label glyphicon-chevron-down blue glyphicon sec-color" style="color: #79a6ce !important;"></span>
@@ -59,26 +58,16 @@ include_once('js/list_js.php');
                 <!-- Filters -->
                 <div class="col-md-10 pull-left no-padding">
                     <!-- Period -->
-                    <style>
-                        .inputPeriod{
-                            font-size: 14x;
-                            background-color: #fff;
-                            border: 1px solid #ccc;
-                            border-radius: 4px;
-                            box-shadow: inset 0 1px 1px rgba(0,0,0, .075);
-                            transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-                        }
-                    </style>
                     <div class="col-md-5" style="width: auto">
                       <span class="config-title"><?php _e('Filters: '); ?></span>
-                      <input type="text" class="input_date inputPeriod" value="" placeholder="<?php _e('from: dd/mm/aaaa')?>" id="from_period" name="from_period">
-                      <input type="text" class="input_date inputPeriod"  value="" placeholder="<?php _e('until: dd/mm/aaaa')?>" id="to_period" name="to_period">
+                      <input type="text" class="inputPeriod" value="" placeholder="<?php _e('from: dd/mm/aaaa')?>" id="from_period" name="from_period">
+                      <input type="text" class="inputPeriod"  value="" placeholder="<?php _e('to: dd/mm/aaaa')?>" id="to_period" name="to_period">
                     </div>
 
                     <div class="col-md-5" style="width: auto">
                       <label class="radio-inline"><input type="radio" id="days" name="optradio"> <?php _e('Days')?></label>
                       <label class="radio-inline"><input type="radio" id="weeks" name="optradio"> <?php _e('Weeks')?></label>
-                      <label class="radio-inline"><input type="radio" id="months" name="optradio"> <?php _e('Months') ?></label>
+                      <label class="radio-inline"><input type="radio" id="months" name="optradio" checked> <?php _e('Months') ?></label>
                     </div>
                     <!--  <span class="current-chart">--><?php //_t('User Stats',1); ?><!--</span> -->
                 </div>

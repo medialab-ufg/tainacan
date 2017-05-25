@@ -86,23 +86,53 @@
         // Specific functions to repository or collections stat page
         normalizeStatPage();
 
-        $(".period-config .input_date").datepicker({
-            //altFormat: 'dd/mm/yy',
-            dateFormat: 'yy-mm-dd',
-            dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
-            dayNamesMin: ['D','S','T','Q','Q','S','S','D'],
-            dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],
-            monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
-            monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
-            nextText: $(".stats-i18n .next-text").text(),
-            prevText: $(".stats-i18n .prev-text").text(),
+        var dateFormat = "dd/mm/yy";
+        //period-config
+        $("#from_period").datepicker({
+//            dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
+//            dayNamesMin: ['D','S','T','Q','Q','S','S','D'],
+//            dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],
+//            monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+//            monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+//            nextText: $(".stats-i18n .next-text").text(),
+//            prevText: $(".stats-i18n .prev-text").text(),
+            dateFormat: 'dd/mm/yy',
             showButtonPanel: false,
             showAnim: 'clip',
+            changeMonth: true,
+            changeYear: true,
+            minDate: '01/01/2016',
+            maxDate: '0',
             onSelect: function(dateText, obj) {
                 var which = obj.id.toString().replace("_period", "");
                 $("#pdf-chart .period ." + which).text(dateText);
             }
+        }).on("change", function () {
+            $("#to_period").datepicker("option", "minDate", getDate(this));
         });
+
+        $("#to_period").datepicker({
+            dateFormat: 'dd/mm/yy',
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: false,
+            showAnim: 'clip',
+            maxDate: '0'
+        }).on("change", function () {
+            $("#from_period").datepicker("option", "maxDate", getDate(this));
+        });
+
+        function getDate(element) {
+            var date;
+
+            try {
+                date = $.datepicker.parseDate(dateFormat, element.value);
+            } catch (error){
+                date = null;
+            }
+
+            return date;
+        }
 
         $('a.change-mode').on('click', function() {
             var selected_chart = $(this).attr('data-chart');
@@ -167,7 +197,7 @@
         children: getStatsTree(),
         onClick: function(node, event) {
             var parent = node.parent.data.title; //titulo da div parent, ex: users
-            var node_action = node.data.href; //href do li dentro da div parent //tirar href e colocar id
+            var node_action = node.data.id; //id do li dentro da div parent
             var chart_text = node.data.title;
             var chain = $('.temp-set').html(chart_text).text().replace(/\//gi, "");
             var split_title = chain.split(" ");
@@ -208,60 +238,60 @@
 
     function statusChildren() {
         return [
-            { title: "Status <p> logins / registros / banidos / excluídos </p>", href: "status", addClass: 'repoOnly'},
-            { title: "Itens <p> criaram / editaram / apagaram / <br/> visualizaram / baixaram</p>", href: "items" },
-            { title: "Perfil <p> Pessoas que aderiram a um perfil </p>", href: "profile", addClass: 'repoOnly'},
-            { title: "Categorias <p> criaram / editaram / apagaram / visualizaram </p>", href: "category" },
-            { title: "Coleção <p> criaram / editaram / apagaram / visualizaram </p>", href: "collection", addClass: 'repoOnly' }
+            { title: "Status <p> logins / registros / banidos / excluídos </p>", id: "status", addClass: 'repoOnly'},
+            { title: "Itens <p> criaram / editaram / apagaram / <br/> visualizaram / baixaram</p>", id: "items" },
+            { title: "Perfil <p> Pessoas que aderiram a um perfil </p>", id: "profile", addClass: 'repoOnly'},
+            { title: "Categorias <p> criaram / editaram / apagaram / visualizaram </p>", id: "category" },
+            { title: "Coleção <p> criaram / editaram / apagaram / visualizaram </p>", id: "collection", addClass: 'repoOnly' }
         ];
     }
 
     function itensChildren() {
         return [
-            { title: "Usuário <p> view / comentado / votado </p>", href: "user" },
-            { title: "Status <p> ativos / rascunhos / lixeira / excluídos </p>", href: "general_status" },
-            { title: "Coleção <p> número de itens por coleção </p>", href: "top_collections", addClass: 'repoOnly' }
+            { title: "Usuário <p> view / comentado / votado </p>", id: "user" },
+            { title: "Status <p> ativos / rascunhos / lixeira / excluídos </p>", id: "general_status" },
+            { title: "Coleção <p> número de itens por coleção </p>", id: "top_collections", addClass: 'repoOnly' }
         ];
     }
 
     function collectionsChildren() {
         return [
-            { title: "Status <p> criadas / editadas / excluídas / visualizadas / baixadas</p>", href: "collection", addClass: 'repoOnly'},
-            { title: "Buscas Frequentes <p> ranking das buscas mais realizadas </p>", href: "repo_searches", addClass: 'repoOnly'},
-            { title: "Buscas <p> termos mais pesquisados </p>", href: "collection_searches", addClass: 'collecOnly'}
+            { title: "Status <p> criadas / editadas / excluídas / visualizadas / baixadas</p>", id: "collection", addClass: 'repoOnly'},
+            { title: "Buscas Frequentes <p> ranking das buscas mais realizadas </p>", id: "repo_searches", addClass: 'repoOnly'},
+            { title: "Buscas <p> termos mais pesquisados </p>", id: "collection_searches", addClass: 'collecOnly'}
         ];
     }
 
     function commentsChildren() {
-        return [{ title: "Status <p> adicionados / editados / excluídos / visualizados </p>", href: "comments" }];
+        return [{ title: "Status <p> adicionados / editados / excluídos / visualizados </p>", id: "comments" }];
     }
 
     function categoryChildren() {
-        return [{ title: "Status <p> criados / editados / excluídos </p>", href: "category" }];
+        return [{ title: "Status <p> criados / editados / excluídos </p>", id: "category" }];
     }
 
     function tagsChildren() {
-        return [{ title: "Status <p> adicionados / editados / excluídos </p>", href: 'tags' }];
+        return [{ title: "Status <p> adicionados / editados / excluídos </p>", id: 'tags' }];
     }
 
     function importsChildren() {
         return [
-            { title: "<p> Acessos OAI-PMH <br/> Importação / Exportação CSV <br/> Importação formato Tainacan <br/> Exportação formato Tainacan </p>", href: 'imports', addClass: 'repoOnly'},
-            { title: "<p> Acessos OAI-PMH <br/> Harvesting OAI-PMH <br/> Importação CSV <br/> Exportação CSV</p>", href: 'collection_imports', addClass: 'collecOnly'}
+            { title: "<p> Acessos OAI-PMH <br/> Importação / Exportação CSV <br/> Importação formato Tainacan <br/> Exportação formato Tainacan </p>", id: 'imports', addClass: 'repoOnly'},
+            { title: "<p> Acessos OAI-PMH <br/> Harvesting OAI-PMH <br/> Importação CSV <br/> Exportação CSV</p>", id: 'collection_imports', addClass: 'collecOnly'}
         ];
     }
 
     function adminChildren() {
         return [
-            { title: "Páginas Administrativas <p> Configurações / metadados / chaves / licenças /<br /> e-mail boas vindas / ferramentas </p>", href: 'admin', addClass: 'repoOnly'},
-            { title: "<p> Configurações / metadados / layout / redes sociais <br /> licenças / importação / exportação </p>", href: 'collection_admin', addClass: 'collecOnly' }
+            { title: "Páginas Administrativas <p> Configurações / metadados / chaves / licenças /<br /> e-mail boas vindas / ferramentas </p>", id: 'admin', addClass: 'repoOnly'},
+            { title: "<p> Configurações / metadados / layout / redes sociais <br /> licenças / importação / exportação </p>", id: 'collection_admin', addClass: 'collecOnly' }
         ];
     }
 
+    //Report type list
     function getStatsTree() {
         return [
-            { title: $('.stats-users').text(), noLink: true, expand: true, unselectable: true,
-                hideCheckbox: true, children: statusChildren() },
+            { title: $('.stats-users').text(), noLink: true, expand: true, unselectable: true, hideCheckbox: true, children: statusChildren() },
             { title: $('.stats-items').text(), noLink: true, unselectable: true, hideCheckbox: true, children: itensChildren() },
             { title: $('.stats-collections').text(), noLink: true, hideCheckbox: true, children: collectionsChildren() },
             { title: $('.stats-comments').text(), noLink: true, hideCheckbox: true, children: commentsChildren() },
