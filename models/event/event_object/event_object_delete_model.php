@@ -11,7 +11,8 @@ class EventObjectDeleteModel extends EventModel {
     /**
      * function generate_title($data)
      * @param string $data  Os dados vindo do formulario
-     * @return ara  
+     * @return ara
+     *
      * 
      * Autor: Eduardo Humberto 
      */
@@ -31,8 +32,16 @@ class EventObjectDeleteModel extends EventModel {
      */
     public function verify_event($data,$automatically_verified = false) {
        $actual_state = get_post_meta($data['event_id'], 'socialdb_event_confirmed',true);
+
+        if (has_filter('tainacan_alter_permission_actions')) {
+            if(is_null($actual_state) && $data['socialdb_event_confirmed']=='true') {
+                $this->update_event_state('confirmed', $data['event_id']);
+                $actual_state = get_post_meta($data['event_id'], 'socialdb_event_confirmed',true);
+            }
+        }
+
        // se o evento foi confirmado automaticamente ou pelos moderadores
-       if($actual_state!='confirmed'&&$automatically_verified||(isset($data['socialdb_event_confirmed'])&&$data['socialdb_event_confirmed']=='true')){
+       if( $actual_state!='confirmed'&&$automatically_verified  ||(isset($data['socialdb_event_confirmed'])&&$data['socialdb_event_confirmed']=='true') ) {
            $data = $this->update_post_status(get_post_meta($data['event_id'], 'socialdb_event_object_item_id',true),$data,$automatically_verified);    
        } elseif($actual_state!='confirmed'){
            $this->set_approval_metas($data['event_id'], $data['socialdb_event_observation'], $automatically_verified);
