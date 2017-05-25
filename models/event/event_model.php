@@ -478,7 +478,7 @@ abstract class EventModel extends Model {
      */
     public function is_automatically_verify_event($collection_id, $action, $user_id, $event_id = 0) {
         if (has_filter('tainacan_alter_permission_actions')) {
-            return apply_filters('tainacan_alter_permission_actions',$action, $collection_id);
+            return apply_filters('tainacan_alter_permission_actions',$action, $collection_id, $event_id);
         }
 
         $is_repository_action = in_array($action, ['socialdb_collection_permission_create_collection', 'socialdb_collection_permission_delete_collection']);

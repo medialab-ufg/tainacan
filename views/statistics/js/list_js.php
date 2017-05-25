@@ -45,8 +45,8 @@
 
     TainacanChart.prototype.displayFixedBase = function() {
         $("#charts-resume table tr.headers").html("<th class='curr-parent'> Status: </th>");
-        var parent_title = $(".current_parent_report").val();
-        $("#charts-resume table tr.content").html("<td class='curr-filter'>" + parent_title + "</td>");
+        //var parent_title = $(".current_parent_report").val();
+        $("#charts-resume table tr.content").html("<td class='curr-filter'> Total: </td>");
     };
 
     TainacanChart.prototype.displayBaseAppend = function(title, value) {
@@ -173,16 +173,16 @@
             var split_title = chain.split(" ");
 
             <!-- Filters: -- / -- -->
-            if(parent) {
-                // $(".current-chart").html( parent + "<span class='glyphicon glyphicon-triangle-right'></span>" + split_title[0] );
-                if(split_title[0]) {
-                    var updated_text =  parent + "<span> / </span>" + split_title[0];
-                } else {
-                    var updated_text = parent;
-                }
-                //atualiza o subtitulo do repository statistics 'Filters: -- / --'
-                $(".current-chart").html( updated_text );
-            }
+//            if(parent) {
+//                // $(".current-chart").html( parent + "<span class='glyphicon glyphicon-triangle-right'></span>" + split_title[0] );
+//                if(split_title[0]) {
+//                    var updated_text =  parent + "<span> / </span>" + split_title[0];
+//                } else {
+//                    var updated_text = parent;
+//                }
+//                //atualiza o subtitulo do repository statistics 'Filters: -- / --'
+//                $(".current-chart").html( updated_text );
+//            }
 
             if(node_action) {
                 fetchData(parent, node_action);

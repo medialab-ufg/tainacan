@@ -619,6 +619,15 @@
             }
             validate_all_fields_compounds(property_id);
         }
+        <?php if($references['is_edit']): ?>
+        if($('#button_property_'+property_id+'_'+(id-1)).length == 0){
+            $('#container_field_'+property_id+'_'+(id-1)).append("<button type='button' id='button_property_"+property_id+"_"+(id-1)+"' onclick='show_fields_metadata_cardinality_compounds("+property_id+","+(id-1)+")'"+
+                    "style='margin-top: 5px;' class='btn btn-primary btn-lg btn-xs btn-block'>" +
+                    "<span class='glyphicon glyphicon-plus'></span>Adicionar campo</button>");
+        }else{
+            $('#button_property_'+property_id+'_'+(id-1)).show();
+        }
+        <?php else: ?>
         //se o proximo container
         if(!$('#container_field_'+property_id+'_'+(id+1)).is(':visible')){
             show_button = true;
@@ -630,6 +639,7 @@
         //se 
         if(show_button)
             $('#button_property_'+property_id+'_'+id).show();
+        <?php endif; ?>
         
     }
     //################################ VALIDACOES##############################################//
@@ -788,7 +798,7 @@
                 set_field_valid(compound_id,'core_validation_'+compound_id);
             }
         }
-        console.log(cont,'pc compound',seletor,$('#core_validation_'+compound_id).val());
+        //console.log(cont,'pc compound',seletor,$('#core_validation_'+compound_id).val());
     }
     
     
