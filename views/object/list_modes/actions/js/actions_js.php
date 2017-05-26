@@ -77,6 +77,10 @@
                 data: { operation: 'press_item', object_id: item_id, collection_id: $('#collection_id').val() }
             }).done(function(r){
                 var itm = $.parseJSON(r);
+
+                cl(itm);
+                // return false;
+
                 if(itm) {
                     var pressPDF = new jsPDF('p','pt');
                     var baseX = 20;
@@ -114,9 +118,11 @@
                     pressPDF.setFontSize(9.5);
                     pressPDF.text( $(".item-author strong").first().text(), (line_dims.startX + 15), dist_from_top + 20); // Author
                     pressPDF.setFontType('normal');
-                    pressPDF.text( itm.author, (line_dims.startX + 70), dist_from_top + 20);
 
-                    var author_width = pressPDF.getTextDimensions(itm.author).w;
+                    var author_name = (itm.author != null) ? itm.author : 'Tainacan';
+                    pressPDF.text( author_name, (line_dims.startX + 70), dist_from_top + 20);
+
+                    var author_width = pressPDF.getTextDimensions(author_name).w + 2;
                     pressPDF.text(' em ' + item_date, (line_dims.startX + 70) + author_width, dist_from_top + 20);
 
                     var item_desc = itm.desc;
