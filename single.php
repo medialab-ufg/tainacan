@@ -1445,6 +1445,12 @@ while (have_posts()) : the_post();
                         
                     </div>
                 </div><!--Fim conteúdo-->
+
+                <div class="modal-footer">
+                    <input type="hidden" id="elemenID" value="">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><?php _e('Close', 'tainacan'); ?></button>
+                    <button type="button" onclick="update_user_info();" id="btn_update_user" class="btn btn-primary right"><?php _e('Save'); ?></button>
+                </div>
             </div>
         </div>
     </div>

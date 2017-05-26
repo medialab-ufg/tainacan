@@ -14,14 +14,19 @@
         <tbody id = "table-view-elementsll" >
             <?php
             $signed_up_users = get_users();
-            foreach ($signed_up_users as $user) {
-                ?>
-                <tr onclick="showUser(<?php echo $user->id ?>);" class="user-row">
-                    <td> <?php echo $user->display_name; ?> </td>
-                    <td> <?php echo $user->user_login; ?> </td>
-                    <td> <?php echo $user->user_email; ?> </td>
-                </tr>
-                <?php
+            foreach ($signed_up_users as $user_raw) {
+
+                if(!user_can( $user_raw->id, 'manage_options' ))
+                {
+                    $user = get_user_meta($user_raw->id);
+                    ?>
+                    <tr onclick="showUser(<?php echo $user_raw->id ?>);" class="user-row">
+                        <td> <?php echo $user['first_name'][0] . " " . $user['last_name'][0]; ?> </td>
+                        <td> <?php echo $user_raw->user_login; ?> </td>
+                        <td> <?php echo $user_raw->user_email; ?> </td>
+                    </tr>
+                    <?php
+                }
             }
             ?>
         </tbody >

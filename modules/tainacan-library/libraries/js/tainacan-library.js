@@ -71,12 +71,6 @@ function save_mapping_marc(){
 }
 function dataTable()
 {
-    var dataTable_options = {
-        searching: true,
-        paging: true,
-        info: false
-    };
-
     $("#table-users").DataTable({
         "order": [[ 0, "asc" ]],
         "language": {
@@ -98,19 +92,40 @@ function dataTable()
 
 function showUser(userID) {
     var send_url = $('#src').val() + "/modules/tainacan-library/controllers/user_controller.php";
+    $("#elemenID").attr("value", userID);
     $.ajax({
         type: 'POST',
         url: send_url,
         data: {operation: 'get_user', user_id: userID}
     }).done(function(res){
-        var user = jQuery.parseJSON(res);
-        var to_show = '';
-        $.each(user.data, function(index, val){
-
-            to_show += index + ": " + val + "<br>";
-        });
         $("#modalShowUser").modal("show");
-        $("#user_info").html(to_show).show();
+        $("#user_info").html(res).show();
+
+    })
+}
+
+function update_user_info()
+{
+    var send_url = $('#src').val() + "/modules/tainacan-library/controllers/user_controller.php?operation=update_user_info";
+
+    var formData = new FormData($("#editUser")[0]);
+
+    var elemenID = $("#elemenID").val();
+    formData.append('elemenID', elemenID);
+
+    $.ajax({
+        type: 'POST',
+        url: send_url,
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (r) {
+            /*for(var pair of formData.entries()) {
+                console.log(pair[0]+ ', '+ pair[1]);
+            }*/
+            get_users_page('http://localhost/wordpress/biblioteca/wp-content/themes/tainacan', 'show_all_users');
+            $("#modalShowUser").modal("hide");
+        }
     })
 }
 

@@ -501,14 +501,18 @@ function gen_barcode($arg)
 add_action("add_users_button", "users_button");
 function users_button()
 {
-    ?>
-    <div class="nav navbar-nav navbar-right" >
-        <div class="users-button" onclick="get_users_page('http://localhost/wordpress/biblioteca/wp-content/themes/tainacan', 'show_all_users')">
-            <i class="fa fa-users" aria-hidden="true"></i>
-            <?php _e("Users", "tainacan"); ?>
+    if(current_user_can('administrator'))
+    {
+        ?>
+        <div class="nav navbar-nav navbar-right">
+            <div class="users-button"
+                 onclick="get_users_page('http://localhost/wordpress/biblioteca/wp-content/themes/tainacan', 'show_all_users')">
+                <i class="fa fa-users" aria-hidden="true"></i>
+                <?php _e("Users", "tainacan"); ?>
+            </div>
         </div>
-    </div>
-    <?php
+        <?php
+    }
 }
 
 add_action("add_root_properties", "root_properties");
@@ -1869,4 +1873,14 @@ function just_numbers($str) {
 
 function just_letters($str) {
     return preg_replace("/[^a-z]/", "", $str);
+}
+
+function update_user_properties($data)
+{
+    $userID = $data['elemenID'];
+    foreach($data as $index => $value)
+    {
+        update_user_meta($userID, $index, $value);
+    }
+    return true;
 }
