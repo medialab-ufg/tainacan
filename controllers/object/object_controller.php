@@ -480,7 +480,7 @@ class ObjectController extends Controller {
                                                     if(is_numeric($v)) {
                                                         $relation_meta_post = get_post($v);
                                                         if( !is_null($relation_meta_post) ) {
-                                                            $_pair['value'] = $relation_meta_post->post_title . " - " . $total_index;
+                                                            $_pair['value'] = $relation_meta_post->post_title;
                                                         }
                                                     }
 
