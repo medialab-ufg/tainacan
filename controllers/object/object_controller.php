@@ -441,7 +441,6 @@ class ObjectController extends Controller {
 
                 $total_index = 0;
                 foreach ($_item_meta as $meta => $val) {
-                    // verificar se é um metadado composto
                     $check_typeof_meta = explode( "_", $meta);
 
                     $is_compound_meta = false;
@@ -458,7 +457,6 @@ class ObjectController extends Controller {
                             $col_meta = get_term($pcs[2]);
                             if (!is_null($col_meta) && is_object($col_meta)) {
                                 if( 4 === count($pcs) && is_string($_item_meta[$meta][0]) ) {
-                                    // $total_sub_metas = "";
                                     $_sub_metas = explode(",", $_item_meta[$meta][0]);
 
                                     if(is_array($_sub_metas)) { 
@@ -467,44 +465,56 @@ class ObjectController extends Controller {
                                         $press['inf'][] = $_pair;
 
                                         $current_submeta_vals = [];
+                                        $curr_meta = 0;
                                         foreach($_sub_metas as $s_meta) {
+                                            $_meta_ = get_metadata_by_mid('post', $s_meta);
+
                                             if(ctype_digit($s_meta)) {
-                                                $_meta_ = get_metadata_by_mid('post', $s_meta);
+
                                                 if(is_object($_meta_)) {
                                                     $_title_id = explode("_", $_meta_->meta_key);
                                                     $_title = get_term($_title_id[2])->name;
                                                     $v = $_meta_->meta_value;
-                                                    $press['so_valores'][] = $v;
 
                                                     $_pair = ['meta' => $_title , 'value' => $v, 'is_submeta' => true];
                                                     if(is_numeric($v)) {
                                                         $relation_meta_post = get_post($v);
                                                         if( !is_null($relation_meta_post) ) {
-                                                            $_pair['value'] = $relation_meta_post->post_title;
+                                                            $_pair['value'] = $relation_meta_post->post_title . " - " . $total_index;
                                                         }
+                                                    }
+
+                                                    if( $_pair['value'] != "" && ! empty($_pair['value']) ) {
+                                                        $press['inf'][] = $_pair;
+                                                        $aux_arr[] = $_title . "__" . $v;
                                                     }
 
                                                     if( !empty($_pair['value']) && !is_null($_pair['value'])) {
                                                         array_push($current_submeta_vals, $_pair['value']);
                                                     }
 
-                                                    $press['inf'][] = $_pair;
-                                                    $aux_arr[] = $_title . "__" . $v;
+                                                    if( $is_compound_meta && empty($current_submeta_vals)) {
+                                                        unset($press['inf'][$total_index]);
+                                                    }
                                                 }
+
                                             } else {
+                                                $_title_id = explode("_", $_meta_->meta_key);
+                                                $_title = get_term($_title_id[2])->name;
+
                                                 $cat_check = explode("_", $s_meta);
                                                 if( count($cat_check) == 2 && $cat_check[1] === "cat" ) {
-                                                    $_term_name_ = get_term_by("id", intval($cat_check[0]) )->name;
-                                                    $_pair = ['meta' => 'taks_ttl' , 'value' => $_term_name_, 'is_submeta' => true];
+                                                    $compounds_metas_titles = get_term_meta($col_meta->term_id, 'socialdb_property_compounds_properties_id', true);
+                                                    $titles_ids_arr = explode(",", $compounds_metas_titles);
+                                                    $string_title = get_term($titles_ids_arr[$curr_meta])->name;
+                                                    $_term_name_ = get_term(intval($cat_check[0]))->name;
+                                                    $_pair = ['meta' => $string_title, 'value' => $_term_name_, 'is_submeta' => true];
 
                                                     $press['inf'][] = $_pair;
+                                                    $aux_arr[] = $_title . "__" . $_term_name_;
                                                 }
                                             }
-                                        } // compound sub metas loop
-
-                                        if( $is_compound_meta && empty($current_submeta_vals)) {
-                                            $press['removido'][] = $_pair;
-                                            unset($press['inf'][$total_index]);
+                                            $curr_meta++;
                                         }
                                     }
                                 } else {
