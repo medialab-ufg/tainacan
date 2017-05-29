@@ -207,6 +207,17 @@ class ThemeOptionsModel extends Model {
         return json_encode($data);
     }
 
+    function update_devolution_email_alert($data)
+    {
+        update_option('socialdb_devolution_email_alert', $data['devolution_email_alert']);
+
+        $data['title'] = __("Sucess", 'tainacan');
+        $data['msg'] = __("Options successfully updated!", 'tainacan');
+        $data['type'] = "success";
+
+        return json_encode($data);
+    }
+    
     function update_configuration($data) {
         
         $reload = false;

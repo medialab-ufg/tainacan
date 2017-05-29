@@ -104,6 +104,12 @@ class UserModel extends Model {
             'wp_capabilities' => 'a:1:{s:10:"subscriber";b:1;}'
         );
 
+        //Verifica se o novo usuario esta sendo cadastrado com funcionario da biblioteca, caso sim então ele é cadastrado como administrador
+        if(key_exists('user_type', $data) && strcmp(sanitize_text_field($data['user_type']), 'employee') == 0)
+        {
+            $userdata['wp_user_level'] = 10; //Admin Level
+        }
+
         $user_id = wp_insert_user($userdata);
 
         if(isset($data['about_you'])) {
@@ -122,16 +128,21 @@ class UserModel extends Model {
         if(has_action('add_new_user_properties')) //Verifica se é biblioteca
         {
             //Bib User Properties
-            $user_properties['mobile_number'] = sanitize_text_field($data['mobile_number']);
-            $user_properties['gender'] = sanitize_text_field($data['gender']);
-            $user_properties['land_line'] = sanitize_text_field($data['land_line']);
-            $user_properties['rg'] = sanitize_text_field($data['rg']);
-            $user_properties['CPF'] = sanitize_text_field($data['CPF']);
-            $user_properties['CEP'] = sanitize_text_field($data['CEP']);
-            $user_properties['address'] = sanitize_text_field($data['address']);
-            $user_properties['number'] = sanitize_text_field($data['number']);
-            $user_properties['additional_address'] = sanitize_text_field($data['additional_address']);
-            $user_properties['birthday'] = sanitize_text_field($data['birthday']);
+            $user_properties = [];
+            foreach($data as $index => $value)
+            {
+                $user_properties[$index] = sanitize_text_field($data[$index]);
+            }
+
+            if(!key_exists("user_type", $data))
+            {
+                $user_properties['user_type'] = 'reader';
+            }
+
+            if(!key_exists('user_situation', $data))
+            {
+                $user_properties['user_situation'] = 'active';
+            }
 
             foreach ($user_properties as $index => $value)
             {

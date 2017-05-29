@@ -1,6 +1,13 @@
 <div class="col-md-12 table-view-container top-div table-responsive" >
 
-    <h1><?php _e("Signed up users"); ?></h1>
+    <div class="col-md-6">
+        <h1><?php _e("Signed up users"); ?></h1>
+    </div>
+    <div class="col-md-6">
+        <button class="btn btn-default pull-right" style="margin-top: 20px;" type="button" onclick="registerUser('<?php echo get_template_directory_uri(); ?>');" href="javascript:void(0)">
+            <?php _e("Register new user", "tainacan"); ?>
+        </button>
+    </div>
 
     <table id = "table-users" class="table table-striped table-bordered table-hover dataTable" >
         <thead >

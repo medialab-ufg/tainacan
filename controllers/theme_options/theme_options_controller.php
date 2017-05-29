@@ -42,6 +42,9 @@ class ThemeOptionsController extends Controller {
             case "update_welcome_email":
                 return $theme_options_model->update_welcome_email($data);
                 break;
+            case "update_devolution_email_alert_content":
+                return $theme_options_model->update_devolution_email_alert($data);
+                break;
             case "edit_licenses":
                 $data = $theme_options_model->get_theme_general_options_data();
                 Log::addLog(['event_type' => 'admin', 'event' => 'licenses']);

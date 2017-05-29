@@ -19,5 +19,25 @@
                 showWelcomeEmail(src);
             });
         });
+        
+        
+        //Tainacan Biblioteca
+        CKEDITOR.replace( 'devolution_email_alert' );
+        $('#devolution_email').submit(function (e) {
+            $("#devolution_email_alert_content").val(CKEDITOR.instances.devolution_email_alert.getData());
+            e.preventDefault();
+            $.ajax({
+                url: $("#src").val() + '/controllers/theme_options/theme_options_controller.php',
+                type: 'POST',
+                data: new FormData(this),
+                processData: false,
+                contentType: false
+            }).done(function (result) {
+                elem = jQuery.parseJSON(result);
+                showAlertGeneral(elem.title, elem.msg, elem.type);
+                showWelcomeEmail(src);
+            });
+        });
+        
     });
 </script>

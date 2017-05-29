@@ -554,7 +554,7 @@ function new_user_properties()
 
     <!-- Telefone celular    -->
     <div class="form-group">
-        <label for="mobile_number"><?php _e('Mobile phone', 'tainacan'); ?></label>
+        <label for="mobile_phone"><?php _e('Mobile phone', 'tainacan'); ?></label>
         <input class="form-control" type="tel" placeholder="<?php _e("Mobile phone", "tainacan"); ?>" name="mobile_phone" id="mobile_phone">
     </div>
 
@@ -616,6 +616,7 @@ function new_user_properties()
     </script>
     <?php
 }
+
 /*
  * Functions
  */

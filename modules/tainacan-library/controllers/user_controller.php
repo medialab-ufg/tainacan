@@ -33,6 +33,32 @@ class userController extends Controller
                         <span id="result_username"></span>
                     </div>
 
+                    <div class="form-group">
+                        <label for="user_type"><?php _e('User type', 'tainacan'); ?><span style="color: #EE0000;"> *</span></label>
+                        <select class="form-control" name="user_type" id="user_type">
+                            <option value="employee" <?php if(strcmp($user_meta['user_type'][0], 'employee') == 0) echo 'selected' ?>><?php _e("Employee", "tainacan"); ?></option>
+                            <option value="reader" <?php if(strcmp($user_meta['user_type'][0], 'reader') == 0) echo 'selected' ?> ><?php _e("Reader", "tainacan"); ?></option>
+                        </select>
+                    </div>
+
+
+                    <?php
+                        $user_situation = $user_meta['user_situation'][0];
+                        $active_situation = array("active" => '', 'blocked' => '', 'pendencies' => '', 'inactive' => '');
+                        $active_situation[$user_situation] = 'selected';
+                    ?>
+
+                    <div class="form-group">
+                        <label for="user_situation"><?php _e('User situation', 'tainacan'); ?><span style="color: #EE0000;"> *</span></label>
+                        <select class="form-control" name="user_situation" id="user_situation">
+                            <option value="active" <?php echo $active_situation['active']; ?>><?php _e("Active", "tainacan"); ?></option>
+                            <option value="blocked" <?php echo $active_situation['blocked']; ?>><?php _e("Blocked", "tainacan"); ?></option>
+                            <option value="pendencies" <?php echo $active_situation['pendencies']; ?>><?php _e("Has pendencies", "tainacan"); ?></option>
+                            <option value="inactive" <?php echo $active_situation['inactive']; ?>><?php _e("Inactive", "tainacan"); ?></option>
+                        </select>
+                    </div>
+
+                    <!------------------------------------------------------- Opcional ------------------------------------------------------->
                     <!-- Sexo -->
                     <div class="form-group">
                         <label for="gender"><?php _e('Gender', 'tainacan'); ?><!--span style="color: #EE0000;"> *</span--></label>
@@ -55,8 +81,8 @@ class userController extends Controller
 
                     <!-- Telefone celular    -->
                     <div class="form-group">
-                        <label for="mobile_number"><?php _e('Mobile phone', 'tainacan'); ?></label>
-                        <input class="form-control" value="<?php echo $user_meta['mobile_number'][0]; ?>" type="tel" placeholder="<?php _e("Mobile phone", "tainacan"); ?>" name="mobile_phone" id="mobile_phone">
+                        <label for="mobile_phone"><?php _e('Mobile phone', 'tainacan'); ?></label>
+                        <input class="form-control" value="<?php echo $user_meta['mobile_phone'][0]; ?>" type="tel" placeholder="<?php _e("Mobile phone", "tainacan"); ?>" name="mobile_phone" id="mobile_phone">
                     </div>
 
                     <!-- Telefone fixo    -->
@@ -92,7 +118,7 @@ class userController extends Controller
 
                     <div class="form-group">
                         <label for="number"><?php _e('Number', 'tainacan'); ?></label>
-                        <input class="form-control" value="<?php echo $user_meta['number'][0]; ?>" type="number" placeholder="<?php _e("Number", "tainacan"); ?>" name="number" id="number">
+                        <input class="form-control" min="1" value="<?php echo $user_meta['number'][0]; ?>" type="number" placeholder="<?php _e("Number", "tainacan"); ?>" name="number" id="number">
                     </div>
 
                     <div class="form-group">
@@ -124,7 +150,7 @@ class userController extends Controller
                     <script>
                         $("#mobile_phone").mask('(00) 0-0000-0000');
                         $("#land_line").mask('(00) 0000-0000');
-                        $("#CPF").mask( '000.000.000-00', {reverse: true} );
+                        $("#CPF").mask( '000.000.000-00');
                         $("#CEP").mask('00000-000');
                         $("#rg").mask('00.000.000-0')
                     </script>

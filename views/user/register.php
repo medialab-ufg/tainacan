@@ -84,6 +84,16 @@ if (!empty($app['app_id']) && !empty($app['app_secret'])) {
                     <label for="user_pass"><?php _e('Confirm Password', 'tainacan'); ?><span style="color: #EE0000;"> *</span></label>
                     <input type="password" required="required" class="form-control" name="user_conf_pass" id="user_conf_pass" placeholder="<?php _e('Confirm your password', 'tainacan'); ?>">
                 </div>
+
+                <?php
+                if(current_user_can('administrator'))
+                {
+                    if(has_action('add_root_properties'))
+                    {
+                        do_action('add_root_properties');
+                    }
+                }
+                ?>
             </div>
 
             <a href="#" class="more-options-register"> <?php _e('More options', 'tainacan'); ?> </a>
