@@ -462,7 +462,6 @@ class ObjectController extends Controller {
                                                     $_title_id = explode("_", $_meta_->meta_key);
                                                     $_title = get_term($_title_id[2])->name;
                                                     $v = $_meta_->meta_value;
-
                                                     $_pair = ['meta' => $_title , 'value' => $v, 'is_submeta' => true];
                                                     if(is_numeric($v)) {
                                                         $relation_meta_post = get_post($v);
@@ -489,7 +488,7 @@ class ObjectController extends Controller {
                                                 $_title = get_term($_title_id[2])->name;
 
                                                 $cat_check = explode("_", $s_meta);
-                                                if( count($cat_check) == 2 && $cat_check[1] === "cat" ) {
+                                                if(count($cat_check) == 2 && $cat_check[1] === "cat") {
                                                     $compounds_metas_titles = get_term_meta($col_meta->term_id, 'socialdb_property_compounds_properties_id', true);
                                                     $titles_ids_arr = explode(",", $compounds_metas_titles);
                                                     $string_title = get_term($titles_ids_arr[$curr_meta])->name;
@@ -506,6 +505,11 @@ class ObjectController extends Controller {
                                     }
                                 } else {
                                     $_pair = ['meta' => $col_meta->name, 'value' => $val[0]];
+                                    $_meta_type = get_term_meta($col_meta->term_id, 'socialdb_property_data_widget', true);
+                                    if("date" === $_meta_type) {
+                                        $_pair['value'] = date('d/m/Y', strtotime($_pair['value']));
+                                    }
+
                                     if(is_numeric($val[0])) {
                                         $_check_text = get_post($val[0]);
                                         if( !is_null($_check_text)) {
@@ -547,13 +551,9 @@ class ObjectController extends Controller {
                                 unset( $press['inf'][$init] );
                             }
                         }
-
                         $init++;
                     }
-
                 }
-
-
 
                 return json_encode($press);
 

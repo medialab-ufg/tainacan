@@ -13,17 +13,6 @@ if ( $loop->have_posts() ): ?>
             <?php
             while ( $loop->have_posts() ) : $loop->the_post(); $countLine++;
                 $curr_id = get_the_ID();
-//                if(get_post()->post_type === 'socialdb_collection'){
-//                    $term = wp_get_post_terms( $curr_id, 'socialdb_collection_type' )[0];
-//                    if($term->slug && $term->slug == 'socialdb_collection_private')
-//                        continue;
-//                }
-//                else if(get_option('collection_root_id') == $collection_id){
-//                    $collection = $viewHelper->helper_get_collection_by_object($curr_id)[0];
-//                    if(!isset($collection->ID) || !$viewHelper->check_privacity_collection($collection->ID)){
-//                        continue;
-//                    }
-//                }
                 $latitude = get_post_meta($curr_id, "socialdb_property_" . $geo_coordinates["lat"]);
                 $longitude = get_post_meta($curr_id, "socialdb_property_" . $geo_coordinates["long"]);
                 $location = get_post_meta($curr_id, "socialdb_property_" . $geo_loc);
