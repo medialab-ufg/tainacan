@@ -72,6 +72,7 @@
 
         $('a.ac-open-file').on('click', function() {
             var item_id = $(this).parents().find('.open_item_actions').first().attr('id').replace('action-', '');
+            show_modal_main();
             $.ajax({
                 url: path, type: 'POST',
                 data: { operation: 'press_item', object_id: item_id, collection_id: $('#collection_id').val() }
@@ -95,7 +96,14 @@
                     var projectLogo = new Image();
                     projectLogo.src = $(logo).attr("src");
                     var logo_settings = { width: (projectLogo.naturalWidth * 0.48), height: (projectLogo.naturalHeight * 0.48) };
-                    pressPDF.addImage(projectLogo, 'PNG', line_dims.startX + 15, line_dims.startY - 45, logo_settings.width, logo_settings.height);
+
+                    try {
+                        pressPDF.addImage(projectLogo, 'PNG', line_dims.startX + 15, line_dims.startY - 45, logo_settings.width, logo_settings.height);
+                    } catch (e) {
+                        cl('Error adding tainacan\'s logo');
+                        cl(e);
+                    }
+
                     pressPDF.rect(line_dims.startX, line_dims.startY, line_dims.length, line_dims.thickness, 'F');
                     pressPDF.rect(line_dims.startX, line_dims.startY + 50, line_dims.length, line_dims.thickness, 'F');
 
@@ -137,7 +145,11 @@
                         }
                         var item_thumb = new Image();
                         item_thumb.src = itm.tbn;
-                        pressPDF.addImage(item_thumb, thumb_ext, baseX*2, desc_yDist, 80, 80);
+                        try {
+                            pressPDF.addImage(item_thumb, thumb_ext, baseX*2, desc_yDist, 80, 80);
+                        } catch (err) {
+                            cl(err);
+                        }
 
                         desc_xDist = lMargin + (3*baseX);
                         desc_max_width = 410;
@@ -212,6 +224,7 @@
                     pressPDF.save( itm.output + '.pdf');
                 }
 
+                hide_modal_main();
             });
         });
 
