@@ -193,6 +193,7 @@
                         base_count += base_top;
                     }
 
+                    var max = itm.inf.length;
                     for( idx in itm.inf ) {
                         if(itm.inf[idx].meta) {
 
@@ -212,8 +213,8 @@
                             var f = p + 15;
                             var default_val = "--";
                             pressPDF.setFontStyle('normal');
-                            
-                            if(itm.inf[idx].value) {                                
+
+                            if(itm.inf[idx].value) {
                                 default_val = itm.inf[idx].value;
                             }
                             pressPDF.text(default_val, (baseX*2 + extra_padding), f);

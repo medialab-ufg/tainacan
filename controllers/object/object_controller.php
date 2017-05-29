@@ -427,6 +427,7 @@ class ObjectController extends Controller {
                 }
 
                 $total_index = 0;
+                $_to_be_removed = [];
                 foreach ($_item_meta as $meta => $val) {
                     $check_typeof_meta = explode( "_", $meta);
 
@@ -448,14 +449,12 @@ class ObjectController extends Controller {
 
                                     if(is_array($_sub_metas)) { 
                                         $final_title = $col_meta->name;
-                                        $_pair = [
-                                            'meta' => $final_title,
-                                            'value'=> '_____________________________',
-                                            'submeta_header' => true ];
+                                        $_pair = ['meta' => $final_title, 'value'=> '_____________________________', 'submeta_header' => true, 'header_idx' => $total_index];
                                         $press['inf'][] = $_pair;
 
                                         $current_submeta_vals = [];
                                         $curr_meta = 0;
+
                                         foreach($_sub_metas as $s_meta) {
                                             $_meta_ = get_metadata_by_mid('post', $s_meta);
                                             if(ctype_digit($s_meta)) {
@@ -501,8 +500,9 @@ class ObjectController extends Controller {
                                                     $aux_arr[] = $_title . "__" . $_term_name_;
                                                 }
                                             }
+
                                             $curr_meta++;
-                                        }
+                                        } // submetas loop
                                     }
                                 } else {
                                     $_pair = ['meta' => $col_meta->name, 'value' => $val[0]];
@@ -519,9 +519,11 @@ class ObjectController extends Controller {
                             } else {
                                 $press['set'][] = $col_meta;
                             }
-                        } else {
-                            $press['excluded'][] = $meta;
-                        }
+                        } /* else { $press['excluded'][] = $meta; } */
+                    }
+
+                    if($is_compound_meta && empty($current_submeta_vals)) {
+                        array_push($_to_be_removed, $total_index);
                     }
                     $total_index++;
                 }
@@ -538,9 +540,20 @@ class ObjectController extends Controller {
                                 }
                             }
                         }
+
+                        $_curr_header_idx = $_m_arr['header_idx'];
+                        if( isset($_curr_header_idx) && is_int($_curr_header_idx) ) {
+                            if( in_array($_curr_header_idx, $_to_be_removed) ) {
+                                unset( $press['inf'][$init] );
+                            }
+                        }
+
                         $init++;
                     }
+
                 }
+
+
 
                 return json_encode($press);
 
