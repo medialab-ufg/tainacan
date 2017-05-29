@@ -50,14 +50,28 @@ $fixed_home_collections = ["Empréstimos", "Conservação", "Restaurações", "E
                     <p>·         Registrar o descarte e desaparecimento de bens.</p>
                     <br>
                    <p> Bom trabalho!</p>
-                   <div class="row">
-                       <div class="col-xs-offset-3 col-md-3">
-                           <img src="<?php echo get_template_directory_uri() . '/libraries/images/ibram/ibram.gif' ?>" style="width: 100%" alt="IBRAM" title="IBRAM">
-                       </div>
-                       <div class="col-md-3" style="margin-top: 10px;">
+                   <center>
+                   <div style="width: 80%;margin-top: 50px;" class="row">
+                       <div class="col-md-2" style="margin-top: 10px;">
                            <img src="<?php echo get_template_directory_uri() . '/libraries/images/ibram/Media-Lab.png' ?>" style="width: 100%" alt="Media Lab UFG" title="Media Lab UFG">
                        </div>
+                       <div class="col-md-2" style="margin-top: -10px;">
+                           <img src="<?php echo get_template_directory_uri() . '/libraries/images/ibram/Marca_UFG_cor_completa_horizontal.png' ?>" style="width: 100%" alt="Media Lab UFG" title="Media Lab UFG">
+                       </div>
+                       <div class="col-md-2">
+                           <img src="<?php echo get_template_directory_uri() . '/libraries/images/ibram/ibram.gif' ?>" style="width: 100%" alt="IBRAM" title="IBRAM">
+                       </div>
+                       <div class="col-md-2" style="margin-top: 10px;">
+                           <img src="<?php echo get_template_directory_uri() . '/libraries/images/ibram/ministerioeducacao.png' ?>" style="width: 100%" alt="Media Lab UFG" title="Media Lab UFG">
+                       </div>
+                       <div class="col-md-2" style="margin-top: 15px;">
+                           <img src="<?php echo get_template_directory_uri() . '/libraries/images/ibram/minc.png' ?>" style="width: 90%" alt="Media Lab UFG" title="Media Lab UFG">
+                       </div>
+                       <div class="col-md-2" style="margin-top: 10px;">
+                           <img src="<?php echo get_template_directory_uri() . '/libraries/images/ibram/governo-federal-brasil-logo-novo-temer.png' ?>" style="width: 100%" alt="Media Lab UFG" title="Media Lab UFG">
+                       </div>
                    </div>
+                   </center>    
                 </div>
             </div>    
         </div>

@@ -412,69 +412,97 @@ class ObjectController extends Controller {
                 ];
 
                 // Pegar # de brs
-                if (strlen($press['desc']) > 0) {
-                    $line_breaks = 0;
-                    $_desc_pieces = explode("\n", $press['desc']);
-                    foreach ($_desc_pieces as $line) {
-                        if (strlen($line) == 1) {
-                            $line_breaks++;
-                        }
-                    }
-                    $press['breaks'] = $line_breaks;
-                }
+                $press['breaks'] = $this->get_item_line_breaks($press["desc"]);
 
                 $_item_meta = get_post_meta($object_id);
                 if ($_item_meta['_thumbnail_id']) {
-                    $press['tmb']['url'] = get_post($_item_meta['_thumbnail_id'][0])->guid;
-                    $press['tmb']['type'] = wp_check_filetype($press['tmb']['url']);
-
-                    $a = file_get_contents($press['tmb']['url']);
-                    $b64_img = base64_encode($a);
-                    $press['tbn'] = "data:" . $press['tmb']['type']['type'] . ";base64," . $b64_img;
+                    $press['tbn'] = $this->format_item_thumb($_item_meta['_thumbnail_id']);
                 }
 
                 $item_attachs = $objectfile_model->show_files(['collection_id'=> $data['collection_id'], 'object_id' => $object_id]);
                 if($item_attachs) {
                     foreach($item_attachs['image'] as $attach_obj) {
-                        /* $att64 = base64_encode(file_get_contents($attach_obj->guid)); $att64_img = "data:image/jpeg;base64," . $att64;
-                        $press['attach'][] = [ 'url' => $att64_img, 'type' => wp_check_filetype($attach_obj->guid)]; */
                         $press['attach'][] = [ 'title' => $attach_obj->post_title, 'url' => $attach_obj->guid ];
                     }
                 }
 
+                $total_index = 0;
+                $_to_be_removed = [];
                 foreach ($_item_meta as $meta => $val) {
+                    $check_typeof_meta = explode( "_", $meta);
+
+                    $is_compound_meta = false;
+                    if( count($check_typeof_meta) == 4 && ctype_digit($check_typeof_meta[3]) ) {
+                        $last_meta_id = intval($check_typeof_meta[3]);
+                        if( $last_meta_id >= 0 && $last_meta_id <= 24 ) {
+                            $is_compound_meta = true;
+                        }
+                    }
+
                     if (is_string($meta)) {
                         $pcs = explode("_", $meta);
                         if (($pcs[0] . $pcs[1]) == "socialdbproperty") {
                             $col_meta = get_term($pcs[2]);
                             if (!is_null($col_meta) && is_object($col_meta)) {
                                 if( 4 === count($pcs) && is_string($_item_meta[$meta][0]) ) {
-                                    $total_sub_metas = "";
                                     $_sub_metas = explode(",", $_item_meta[$meta][0]);
-                                    if(is_array($_sub_metas)) {
-                                        $_pair = [ 'meta' => $col_meta->name,
-                                            'value'=> '_____________________________',
-                                            'submeta_header' => true ];
+
+                                    if(is_array($_sub_metas)) { 
+                                        $final_title = $col_meta->name;
+                                        $_pair = ['meta' => $final_title, 'value'=> '_____________________________', 'submeta_header' => true, 'header_idx' => $total_index];
                                         $press['inf'][] = $_pair;
 
-                                        foreach ($_sub_metas as $s_meta) {
+                                        $current_submeta_vals = [];
+                                        $curr_meta = 0;
+
+                                        foreach($_sub_metas as $s_meta) {
                                             $_meta_ = get_metadata_by_mid('post', $s_meta);
-                                            if(is_object($_meta_)) {
-                                                $_title_id = explode("_", $_meta_->meta_key);
-                                                $_title = get_term($_title_id[2])->name;
-                                                $v = $_meta_->meta_value;
-                                                $_pair = ['meta' => $_title , 'value' => $v, 'is_submeta' => true];
-                                                if(is_numeric($v)) {
-                                                    $relation_meta_post = get_post($v);
-                                                    if( !is_null($relation_meta_post) ) {
-                                                        $_pair['value'] = $relation_meta_post->post_title;
+                                            if(ctype_digit($s_meta)) {
+                                                if(is_object($_meta_)) {
+                                                    $_title_id = explode("_", $_meta_->meta_key);
+                                                    $_title = get_term($_title_id[2])->name;
+                                                    $v = $_meta_->meta_value;
+
+                                                    $_pair = ['meta' => $_title , 'value' => $v, 'is_submeta' => true];
+                                                    if(is_numeric($v)) {
+                                                        $relation_meta_post = get_post($v);
+                                                        if( !is_null($relation_meta_post) ) {
+                                                            $_pair['value'] = $relation_meta_post->post_title;
+                                                        }
+                                                    }
+
+                                                    if( $_pair['value'] != "" && ! empty($_pair['value']) ) {
+                                                        $press['inf'][] = $_pair;
+                                                        $aux_arr[] = $_title . "__" . $v;
+                                                    }
+
+                                                    if( !empty($_pair['value']) && !is_null($_pair['value'])) {
+                                                        array_push($current_submeta_vals, $_pair['value']);
+                                                    }
+
+                                                    if( $is_compound_meta && empty($current_submeta_vals)) {
+                                                        unset($press['inf'][$total_index]);
                                                     }
                                                 }
+                                            } else {
+                                                $_title_id = explode("_", $_meta_->meta_key);
+                                                $_title = get_term($_title_id[2])->name;
 
-                                                $press['inf'][] = $_pair;
-                                                $aux_arr[] = $_title . "__" . $v;
+                                                $cat_check = explode("_", $s_meta);
+                                                if( count($cat_check) == 2 && $cat_check[1] === "cat" ) {
+                                                    $compounds_metas_titles = get_term_meta($col_meta->term_id, 'socialdb_property_compounds_properties_id', true);
+                                                    $titles_ids_arr = explode(",", $compounds_metas_titles);
+                                                    $string_title = get_term($titles_ids_arr[$curr_meta])->name;
+                                                    $_term_name_ = get_term(intval($cat_check[0]))->name;
+                                                    $_pair = ['meta' => $string_title, 'value' => $_term_name_, 'is_submeta' => true];
+
+                                                    $press['inf'][] = $_pair;
+                                                    $aux_arr[] = $_title . "__" . $_term_name_;
+                                                }
                                             }
-                                        }
+
+                                            $curr_meta++;
+                                        } // submetas loop
                                     }
                                 } else {
                                     $_pair = ['meta' => $col_meta->name, 'value' => $val[0]];
@@ -491,10 +519,13 @@ class ObjectController extends Controller {
                             } else {
                                 $press['set'][] = $col_meta;
                             }
-                        } else {
-                            $press['excluded'][] = $meta;
-                        }
+                        } /* else { $press['excluded'][] = $meta; } */
                     }
+
+                    if($is_compound_meta && empty($current_submeta_vals)) {
+                        array_push($_to_be_removed, $total_index);
+                    }
+                    $total_index++;
                 }
 
                 if( isset($press['inf']) ) {
@@ -509,9 +540,20 @@ class ObjectController extends Controller {
                                 }
                             }
                         }
+
+                        $_curr_header_idx = $_m_arr['header_idx'];
+                        if( isset($_curr_header_idx) && is_int($_curr_header_idx) ) {
+                            if( in_array($_curr_header_idx, $_to_be_removed) ) {
+                                unset( $press['inf'][$init] );
+                            }
+                        }
+
                         $init++;
                     }
+
                 }
+
+
 
                 return json_encode($press);
 
@@ -835,7 +877,6 @@ class ObjectController extends Controller {
                 return $this->render(dirname(__FILE__) . '../../../views/object/list_versions.php', $data);
                 break;
             case 'delete_version':
-                //var_dump($data);
                 $original = get_post_meta($data['version_id'], 'socialdb_version_postid', true);
                 if ($original) {
                     //E uma versao
@@ -845,7 +886,6 @@ class ObjectController extends Controller {
                 }
                 break;
             case 'restore_version':
-                //var_dump($data);
                 $item = get_post($data['active_id']);
                 $newItem = $data['version_id'];
                 $object_model->revertItem($item, $newItem);
@@ -863,8 +903,6 @@ class ObjectController extends Controller {
                 $version_numbers = $object_model->checkVersions($original);
                 //$version = $object_model->checkVersions($original);
                 $new_version = count($version_numbers) + 2;
-                //var_dump($version_numbers, $new_version);
-                //exit();
                 $newItem = $object_model->createVersionItem($item, $data['collection_id']);
                 if ($newItem) {
                     $object_model->copyItemMetas($newItem, $metas);
@@ -914,6 +952,44 @@ class ObjectController extends Controller {
                    $result[] = ['value'=>$item->post_title,'label'=>$item->post_title,'item_id'=>$item->ID] ;
                 }
                 return json_encode($result);
+        }
+    }
+	
+	private function get_item_line_breaks($text) {
+		$total_br = 0;
+		if( strlen($text) > 0 ) {
+			$_desc_pieces = explode("\n", $text);  // ↵
+			foreach($_desc_pieces as $line) {
+				if(strlen($line) == 1) {
+					$total_br++;
+				}				
+			}
+		}
+
+		return $total_br;
+	}
+
+	private function format_item_thumb($_thumb_id) {
+        $img_URL = false;
+
+        if( is_array($_thumb_id) ) {
+            $img_URL = get_post($_thumb_id[0])->guid;
+        } else if( is_string($_thumb_id) ) {
+            $img_URL = get_post($_thumb_id)->guid;
+        }
+
+        if($img_URL) {
+            $img_check = wp_check_filetype($img_URL);
+            $file_archive = file_get_contents($img_URL);
+            $b64_img = base64_encode($file_archive);
+
+            return [
+                'url' => "data:" . $img_check['type'] . ";base64," . $b64_img,
+                'ext' => $img_check['ext']
+            ];
+
+        } else {
+            return false;
         }
     }
 

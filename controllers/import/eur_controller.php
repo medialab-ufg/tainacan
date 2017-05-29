@@ -118,7 +118,6 @@ class EurController extends Controller {
                                         } else {
                                             $jSon['error'] = "<b>OPPSSS:</b> Erro ao encontrar metadados dos itens. Entre em contato com o administrador do sistema!";
                                         }
-                                        //var_dump($Read->getResult(), $Read->getRowCount());
                                     }
                                 } else {
                                     $jSon['error'] = "<b>OPPSSS:</b> Nenhum item encontrado na busca!";

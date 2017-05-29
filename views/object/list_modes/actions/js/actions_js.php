@@ -72,6 +72,7 @@
 
         $('a.ac-open-file').on('click', function() {
             var item_id = $(this).parents().find('.open_item_actions').first().attr('id').replace('action-', '');
+            show_modal_main();
             $.ajax({
                 url: path, type: 'POST',
                 data: { operation: 'press_item', object_id: item_id, collection_id: $('#collection_id').val() }
@@ -95,7 +96,14 @@
                     var projectLogo = new Image();
                     projectLogo.src = $(logo).attr("src");
                     var logo_settings = { width: (projectLogo.naturalWidth * 0.48), height: (projectLogo.naturalHeight * 0.48) };
-                    pressPDF.addImage(projectLogo, 'PNG', line_dims.startX + 15, line_dims.startY - 45, logo_settings.width, logo_settings.height);
+
+                    try {
+                        pressPDF.addImage(projectLogo, 'PNG', line_dims.startX + 15, line_dims.startY - 45, logo_settings.width, logo_settings.height);
+                    } catch (e) {
+                        cl('Error adding tainacan\'s logo');
+                        cl(e);
+                    }
+
                     pressPDF.rect(line_dims.startX, line_dims.startY, line_dims.length, line_dims.thickness, 'F');
                     pressPDF.rect(line_dims.startX, line_dims.startY + 50, line_dims.length, line_dims.thickness, 'F');
 
@@ -114,19 +122,21 @@
                     pressPDF.setFontSize(9.5);
                     pressPDF.text( $(".item-author strong").first().text(), (line_dims.startX + 15), dist_from_top + 20); // Author
                     pressPDF.setFontType('normal');
-                    pressPDF.text( itm.author, (line_dims.startX + 70), dist_from_top + 20);
 
-                    var author_width = pressPDF.getTextDimensions(itm.author).w;
+                    var author_name = (itm.author != null) ? itm.author : 'Tainacan';
+                    pressPDF.text( author_name, (line_dims.startX + 70), dist_from_top + 20);
+
+                    var author_width = pressPDF.getTextDimensions(author_name).w + 2;
                     pressPDF.text(' em ' + item_date, (line_dims.startX + 70) + author_width, dist_from_top + 20);
 
                     var item_desc = itm.desc;
                     var desc_yDist = 140;
                     var desc_xDist = lMargin + baseX;
                     var desc_max_width = (pdfInMM-lMargin-rMargin);
-                    if(itm.tmb) {
+                    if(itm.tbn) {
                         lMargin = 80;
                         pdfInMM = 490;
-                        var thumb_ext = itm.tmb.type.ext;
+                        var thumb_ext = itm.tbn.ext;
 
                         if(thumb_ext == "jpg" || thumb_ext == "jpeg") {
                             thumb_ext = "JPEG";
@@ -134,8 +144,12 @@
                             thumb_ext = "PNG";
                         }
                         var item_thumb = new Image();
-                        item_thumb.src = itm.tbn;
-                        pressPDF.addImage(item_thumb, thumb_ext, baseX*2, desc_yDist, 80, 80);
+                        item_thumb.src = itm.tbn.url;
+                        try {
+                            pressPDF.addImage(item_thumb, thumb_ext, baseX*2, desc_yDist, 80, 80);
+                        } catch (err) {
+                            cl(err);
+                        }
 
                         desc_xDist = lMargin + (3*baseX);
                         desc_max_width = 410;
@@ -179,6 +193,7 @@
                         base_count += base_top;
                     }
 
+                    var max = itm.inf.length;
                     for( idx in itm.inf ) {
                         if(itm.inf[idx].meta) {
 
@@ -198,8 +213,8 @@
                             var f = p + 15;
                             var default_val = "--";
                             pressPDF.setFontStyle('normal');
-                            
-                            if(itm.inf[idx].value) {                                
+
+                            if(itm.inf[idx].value) {
                                 default_val = itm.inf[idx].value;
                             }
                             pressPDF.text(default_val, (baseX*2 + extra_padding), f);
@@ -210,6 +225,7 @@
                     pressPDF.save( itm.output + '.pdf');
                 }
 
+                hide_modal_main();
             });
         });
 
