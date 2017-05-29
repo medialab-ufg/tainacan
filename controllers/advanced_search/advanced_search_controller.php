@@ -53,7 +53,6 @@ class AdvancedSearchController extends Controller {
                         $paramters_collection = $wpquery_model->do_filter($args_collection);
                         $loop_objects = new WP_Query($paramters_object);
                         $loop_collections = new WP_Query($paramters_collection);
-                       // var_dump($loop_collections);
                     } else {
                         $args_object = $wpquery_model->advanced_searched_filter($data);
                         $paramters_object = $wpquery_model->do_filter($args_object);

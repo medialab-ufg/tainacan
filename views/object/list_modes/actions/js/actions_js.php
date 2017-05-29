@@ -133,10 +133,10 @@
                     var desc_yDist = 140;
                     var desc_xDist = lMargin + baseX;
                     var desc_max_width = (pdfInMM-lMargin-rMargin);
-                    if(itm.tmb) {
+                    if(itm.tbn) {
                         lMargin = 80;
                         pdfInMM = 490;
-                        var thumb_ext = itm.tmb.type.ext;
+                        var thumb_ext = itm.tbn.ext;
 
                         if(thumb_ext == "jpg" || thumb_ext == "jpeg") {
                             thumb_ext = "JPEG";
@@ -144,7 +144,7 @@
                             thumb_ext = "PNG";
                         }
                         var item_thumb = new Image();
-                        item_thumb.src = itm.tbn;
+                        item_thumb.src = itm.tbn.url;
                         try {
                             pressPDF.addImage(item_thumb, thumb_ext, baseX*2, desc_yDist, 80, 80);
                         } catch (err) {

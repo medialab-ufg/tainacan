@@ -412,24 +412,11 @@ class ObjectController extends Controller {
                 ];
 
                 // Pegar # de brs
-                if (strlen($press['desc']) > 0) {
-                    $line_breaks = 0;
-                    $_desc_pieces = explode("\n", $press['desc']);
-                    foreach ($_desc_pieces as $line) {
-                        if (strlen($line) == 1) {
-                            $line_breaks++;
-                        }
-                    }
-                    $press['breaks'] = $line_breaks;
-                }
+                $press['breaks'] = $this->get_item_line_breaks($press["desc"]);
 
                 $_item_meta = get_post_meta($object_id);
                 if ($_item_meta['_thumbnail_id']) {
-                    $press['tmb']['url'] = get_post($_item_meta['_thumbnail_id'][0])->guid;
-                    $press['tmb']['type'] = wp_check_filetype($press['tmb']['url']);
-                    $file_archive = file_get_contents($press['tmb']['url']);
-                    $b64_img = base64_encode($file_archive);
-                    $press['tbn'] = "data:" . $press['tmb']['type']['type'] . ";base64," . $b64_img;
+                    $press['tbn'] = $this->format_item_thumb($_item_meta['_thumbnail_id']);
                 }
 
                 $item_attachs = $objectfile_model->show_files(['collection_id'=> $data['collection_id'], 'object_id' => $object_id]);
@@ -461,16 +448,17 @@ class ObjectController extends Controller {
 
                                     if(is_array($_sub_metas)) { 
                                         $final_title = $col_meta->name;
-                                        $_pair = [ 'meta' => $final_title, 'value'=> '_____________________________', 'submeta_header' => true ];
+                                        $_pair = [
+                                            'meta' => $final_title,
+                                            'value'=> '_____________________________',
+                                            'submeta_header' => true ];
                                         $press['inf'][] = $_pair;
 
                                         $current_submeta_vals = [];
                                         $curr_meta = 0;
                                         foreach($_sub_metas as $s_meta) {
                                             $_meta_ = get_metadata_by_mid('post', $s_meta);
-
                                             if(ctype_digit($s_meta)) {
-
                                                 if(is_object($_meta_)) {
                                                     $_title_id = explode("_", $_meta_->meta_key);
                                                     $_title = get_term($_title_id[2])->name;
@@ -497,7 +485,6 @@ class ObjectController extends Controller {
                                                         unset($press['inf'][$total_index]);
                                                     }
                                                 }
-
                                             } else {
                                                 $_title_id = explode("_", $_meta_->meta_key);
                                                 $_title = get_term($_title_id[2])->name;
@@ -877,7 +864,6 @@ class ObjectController extends Controller {
                 return $this->render(dirname(__FILE__) . '../../../views/object/list_versions.php', $data);
                 break;
             case 'delete_version':
-                //var_dump($data);
                 $original = get_post_meta($data['version_id'], 'socialdb_version_postid', true);
                 if ($original) {
                     //E uma versao
@@ -887,7 +873,6 @@ class ObjectController extends Controller {
                 }
                 break;
             case 'restore_version':
-                //var_dump($data);
                 $item = get_post($data['active_id']);
                 $newItem = $data['version_id'];
                 $object_model->revertItem($item, $newItem);
@@ -905,8 +890,6 @@ class ObjectController extends Controller {
                 $version_numbers = $object_model->checkVersions($original);
                 //$version = $object_model->checkVersions($original);
                 $new_version = count($version_numbers) + 2;
-                //var_dump($version_numbers, $new_version);
-                //exit();
                 $newItem = $object_model->createVersionItem($item, $data['collection_id']);
                 if ($newItem) {
                     $object_model->copyItemMetas($newItem, $metas);
@@ -956,6 +939,44 @@ class ObjectController extends Controller {
                    $result[] = ['value'=>$item->post_title,'label'=>$item->post_title,'item_id'=>$item->ID] ;
                 }
                 return json_encode($result);
+        }
+    }
+	
+	private function get_item_line_breaks($text) {
+		$total_br = 0;
+		if( strlen($text) > 0 ) {
+			$_desc_pieces = explode("\n", $text);  // ↵
+			foreach($_desc_pieces as $line) {
+				if(strlen($line) == 1) {
+					$total_br++;
+				}				
+			}
+		}
+
+		return $total_br;
+	}
+
+	private function format_item_thumb($_thumb_id) {
+        $img_URL = false;
+
+        if( is_array($_thumb_id) ) {
+            $img_URL = get_post($_thumb_id[0])->guid;
+        } else if( is_string($_thumb_id) ) {
+            $img_URL = get_post($_thumb_id)->guid;
+        }
+
+        if($img_URL) {
+            $img_check = wp_check_filetype($img_URL);
+            $file_archive = file_get_contents($img_URL);
+            $b64_img = base64_encode($file_archive);
+
+            return [
+                'url' => "data:" . $img_check['type'] . ";base64," . $b64_img,
+                'ext' => $img_check['ext']
+            ];
+
+        } else {
+            return false;
         }
     }
 
