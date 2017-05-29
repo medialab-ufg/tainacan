@@ -11,7 +11,7 @@ class SynchronizeController extends Controller {
         $synchronize_model = new SynchronizeModel();
         switch ($operation) {
             case "start":
-                $data = $synchronize_model->start($data);
+                return $synchronize_model->start($data);
                 break;
         }
     }
