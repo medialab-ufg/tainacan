@@ -126,6 +126,8 @@ class SynchronizeModel extends Model {
                     continue;
                 $this->collectionProperties = [];
                 $this->metasCollection = $this->readCollectionMeta($post['ID']);
+                //atualizando as colecoes
+                $this->updateCollection($post,$this->metasCollection);   
                 //setando a variavel da classe com a categoria raiz
                 $this->setCategoryRootCollection();
                 //insere a categoira e desce recursivamente as propriedades do termo raiz
@@ -134,13 +136,10 @@ class SynchronizeModel extends Model {
                 $this->findChildrenCategoriesAndProperties($this->rootCategoryCollection);
                 //sobe atraves da categoria raiz se exisitr uma hierarquia
                 $this->getPropertiesAbove($this->rootCategoryCollection) ;
-                //
-                $this->getPropertiesAbove($this->rootCategoryCollection) ;
+                //depois de todas as categorias as propriedades
+                $this->processProperties() ;       
                 //atualizando as colecoes
-                $this->updateCollection($post,$metas);
-                
-                
-                
+                HelpersAPIModel::updateCollectionsRelations($post['ID'],$metas, $this);  
             }
         }  
     }
@@ -154,15 +153,15 @@ class SynchronizeModel extends Model {
         if(!MappingAPI::hasMapping($this->url, 'collections', $post['ID'])){
             $has_post_with_this_name = get_post_by_name($post['title']);
             if($has_post_with_this_name){
+                HelpersAPIModel::updateCollection($post,$metas,$this,$has_post_with_this_name->ID);
                 MappingAPI::saveMapping($this->url, 'collections', $post['ID'], $has_post_with_this_name->ID);
-                HelpersAPIModel::updateCollection($post,$metas,$has_post_with_this_name->ID);
             }else{
-                $id = HelpersAPIModel::createCollection($post);
+                $id = HelpersAPIModel::createCollection($post,$metas,$this);
                 MappingAPI::saveMapping($this->url, 'collections', $post['ID'],$id);
             }
         }else{
             $ID = MappingAPI::hasMapping($this->url, 'collections', $post['ID']);
-            HelpersAPIModel::updateCollection($post,$metas,$ID);
+            HelpersAPIModel::updateCollection($post,$metas,$this,$ID);
         }
     }
     
@@ -173,21 +172,21 @@ class SynchronizeModel extends Model {
     public function updateCategory($category,$metas){
         if(!MappingAPI::hasMapping($this->url, 'categories', $category['ID'])){
             if(isset($category['parent']) && $category['parent']['slug'] == 'socialdb_taxonomy'){
-                $id = HelpersAPIModel::createCategory($category,$metas, get_term_by('slug', 'socialdb_taxonomy', 'socialdb_category_type')->term_id);
+                $id = HelpersAPIModel::createCategory($category,$metas,$this, get_term_by('slug', 'socialdb_taxonomy', 'socialdb_category_type')->term_id);
             }else if(isset($category['parent']) && $category['parent']['slug'] == 'socialdb_category'){
-                $id = HelpersAPIModel::createCategory($category,$metas,get_term_by('slug', 'socialdb_category', 'socialdb_category_type')->term_id);
+                $id = HelpersAPIModel::createCategory($category,$metas,$this,get_term_by('slug', 'socialdb_category', 'socialdb_category_type')->term_id);
             }else if(isset($category['parent'])){
                 if(!MappingAPI::hasMapping($this->url, 'categories',$category['parent']['ID'])){
-                    $id = HelpersAPIModel::createCategory($category,$metas);
+                    $id = HelpersAPIModel::createCategory($category,$metas,$this);
                 }else{
                     $ID_parent = MappingAPI::hasMapping($this->url, 'categories', $category['parent']['ID']);
-                    $id = HelpersAPIModel::createCategory($category,$metas,$ID_parent);
+                    $id = HelpersAPIModel::createCategory($category,$metas,$ID_parent,$this);
                 }
             }
             MappingAPI::saveMapping($this->url, 'categories', $category['ID'],$id);
         }else{
             $ID = MappingAPI::hasMapping($this->url, 'categories', $category['ID']);
-            HelpersAPIModel::updateCategory($ID,$category,$metas);
+            HelpersAPIModel::updateCategory($ID,$category,$metas,$this);
         }
     }
     
@@ -288,61 +287,32 @@ class SynchronizeModel extends Model {
         }
     }
     
-    
-    public function processProperties($param) {
-        
-    }
-}
-
-################################################################################
-class MappingAPI extends Model{
-    public static function hasMapping($url,$type,$id_api){
-        $option = get_option('mapping-api-tainacan');
-        if($option){
-           $array = unserialize($option); 
-           foreach ($array as $index => $map) {
-               if($map['url'] == $url && isset($map[$type][$id_api])){
-                   return $map[$type][$id_api];
-               }
-           }
-           //se nao foi mapeado
-           return false;
-        }else{
-           return false;
+    /**
+     * 
+     */
+    public function processProperties() {
+        if(is_array($this->collectionProperties)){
+            foreach ($this->collectionProperties as $category_api => $properties) {
+                $category_blog = MappingAPI::hasMapping($this->url, 'categories' , $category_api);
+                if(is_array($properties)){
+                    foreach ($properties as $property_api => $metas) {
+                        $term = $this->readProperty($property_api);
+                        if(!MappingAPI::hasMapping($this->url, 'properties' , $property_api)){
+                           $id = HelpersAPIModel::createProperty($term, $metas, $this);
+                        }else{
+                           $id = HelpersAPIModel::updateProperty($term, $metas, $class);
+                        }
+                        $this->addProperty($category_blog, $id);
+                    }
+                }
+            }
         }
     }
     
-    
-    /**
-     * 
-     * @param type $url
-     * @param type $type
-     * @param type $id_api
-     * @param type $id_blog
-     */
-    public static function saveMapping($url,$type,$id_api,$id_blog){
-        $block = false;
-        $option = get_option('mapping-api-tainacan');
-        if($option){
-           $array = unserialize($option); 
-           foreach ($array as $index => $map) {
-               if($map['url'] == $url){
-                   $block = TRUE;
-                   $map[$type][$id_api] = $id_blog;
-               }
-               $array[$index] = $map;
-           }
-           //se nao foi mapeado
-           if(!$block){
-                $var = array('url'=>$url,'collections'=>[],'properties'=>[],'categories'=>[]);
-                $var[$type][$id_api] = $id_blog;
-                $array[] = $var; 
-           }
-           update_option('mapping-api-tainacan', serialize($array));
-        }else{
-            $var = array('url'=>$url,'collections'=>[],'properties'=>[],'categories'=>[]);
-            $var[$type][$id_api] = $id_blog;
-            update_option('mapping-api-tainacan', serialize([$var]));
+    public function addProperty($cat_id,$prop_id) {
+        $metas = get_term_meta($cat_id, 'socialdb_category_property_id');
+        if((!$metas) || (is_array($metas) && !in_array($cat_id, $metas))){
+            add_term_meta($cat_id, 'socialdb_category_property_id', $prop_id);
         }
     }
 }
