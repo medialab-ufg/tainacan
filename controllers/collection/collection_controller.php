@@ -74,12 +74,6 @@ class CollectionController extends Controller {
                             if ($new_collection_id) {
                                 // $result = json_decode($this->insert_collection_event($new_collection_id, $data));
                                 return ( $this->insert_collection_event($new_collection_id, $data));
-
-                                if ($result->type == 'success') {
-                                    header("location:" . get_permalink($new_collection_id) . '?open_wizard=true');
-                                } else {
-                                    header("location:" . get_permalink(get_option('collection_root_id')) . '?info_messages=' . __('Collection sent for approval', 'tainacan') . '&info_title=' . __('Attention', 'tainacan'));
-                                }
                             } else {
                                 return ['error' => __('Error creating template collection', 'tainacan')];
                             }

@@ -1533,7 +1533,7 @@ class ObjectModel extends Model {
         $property_model = new PropertyModel;
         $data['term'] = trim($data['term']);
         $all_data = $property_model->get_all_property($data['property_id'], true); // pego todos os dados possiveis da propriedad
-        $categories = (is_array($all_data['metas']['socialdb_property_object_category_id'])) ? implode(',', $all_data['metas']['socialdb_property_object_category_id']) : $all_data['metas']['socialdb_property_object_category_id'];
+        $categories = (is_array($all_data['metas']['socialdb_property_object_category_id'])) ? implode(',', array_filter($all_data['metas']['socialdb_property_object_category_id'])) : $all_data['metas']['socialdb_property_object_category_id'];
         //$category_root_id = get_term_by('id', $all_data['metas']['socialdb_property_object_category_id'], 'socialdb_category_type');
         $query = "
                         SELECT p.* FROM $wp_posts p
