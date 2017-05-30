@@ -45,9 +45,8 @@
                 </label>
                 <div class="col-md-8 no-padding">
                     <input type="text" 
-
-                           class="form-control" 
                            name="advanced_search_title" 
+                           class="form-control <?php if (isset($property['compound_id'])): ?> advanced_search_title_<?php echo $property['compound_id'] ?>_<?php echo $property['id'] ?>_<?php echo $property['contador'] ?><?php endif; ?>"
                            id="advanced_search_title_<?php echo $property['id'] ?>"
                            placeholder="<?php _e('Type the 3 first letters to activate autocomplete', 'tainacan'); ?>">
                 </div>

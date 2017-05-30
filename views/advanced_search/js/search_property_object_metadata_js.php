@@ -51,7 +51,7 @@
             select: function (event, ui) {
                 event.preventDefault();
                 $("#advanced_search_title_<?php echo $property['id'] ?>").val('');
-                if(ui.item.is_selected && ui.item.is_selected === true){
+                if($('#avoid_selected_items_<?php echo $property['id'] ?>').val()==='true' && ui.item.is_selected && ui.item.is_selected === true){
                     toastr.error(ui.item.label+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
                     return false;
                 }
