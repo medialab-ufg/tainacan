@@ -71,10 +71,20 @@ unset($_SESSION['tainacan-categories']);
                     <li>
                        <!--a  data-toggle="modal" data-target="#meta-<?php echo $type ?>"-->
                        <a onclick="$('#meta-<?php echo $type ?>').modal('show');clear_form('<?php echo $type ?>');$('#meta-<?php echo $type ?> input[type=text]').first().focus()" > 
-                           <img  
+                           <?php
+                           if($type == 'user')
+                           {
+                               ?>
+                               <span class="glyphicon glyphicon-user"></span>
+                               <?php
+                           }else{
+                           ?>
+                           <img
                                <?php if($type=='metadata_compound'): echo 'height="15" width="15"'; endif;?>
                                src="<?php $view_helper->get_metadata_icon($type); ?>" 
                                alt="<?php echo $type ?>" title="<?php echo $type ?>">
+
+                           <?php }?>
                             <?php echo $label ?>
                         </a>
                     </li>

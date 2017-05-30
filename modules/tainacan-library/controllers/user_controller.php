@@ -160,6 +160,9 @@ class userController extends Controller
             case 'update_user_info':
                 return update_user_properties($_POST);
                 break;
+            case 'add_property_data';
+                return json_encode(add_user_as_meta());
+                break;
             default:
                 return false;
                 break;

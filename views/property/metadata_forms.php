@@ -256,7 +256,7 @@ endforeach;
     </div>
 </div>
 <?php
-foreach (['object', 'term', 'voting', 'filter', 'tag', 'compounds'] as $metadata) {
+foreach (['object', 'term', 'voting', 'filter', 'tag', 'compounds', 'user'] as $metadata) {
     include_once "metadata/form_$metadata.php";
 }
 ?>

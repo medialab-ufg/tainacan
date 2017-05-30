@@ -1709,7 +1709,32 @@
         }
     }
 
+    /**
+     ****************************************************************************
+     ************************* USER METADATA ************************************
+     ****************************************************************************
+     **/
+    $("#meta-user #submit_form_property_data_user").submit(function (e) {
+        e.preventDefault();
+        $('.modal').modal('hide');
+        $('#modalImportMain').modal('show');
+        $.ajax({
+            url: src + '/modules/tainacan-library/controllers/user_controller.php',
+            type: 'POST',
+            data: new FormData(this),
+            processData: false,
+            contentType: false
+        }).done(function (result) {
+            elem = $.parseJSON(result);
+            $('#modalImportMain').modal('hide');
 
+            
+            //limpando caches
+            delete_all_cache_collection();
+        });
+    });
+    
+    
     /**
      ****************************************************************************
      ************************* RANKING FUNCTIONS ********************************

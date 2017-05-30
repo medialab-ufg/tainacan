@@ -621,6 +621,12 @@ function new_user_properties()
  * Functions
  */
 
+function add_user_as_meta()
+{
+    
+}
+
+
 function daily_situation_update()
 {
     global $wpdb;

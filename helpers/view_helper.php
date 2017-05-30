@@ -78,7 +78,7 @@ class ViewHelper {
     }
 
     public function get_metadata_types() {
-        return $this->metadata_types = [
+        $this->metadata_types = [
             'text' => __('Text', 'tainacan'),
             'textarea' => __('Long text', 'tainacan'),
             'date' => __('Date', 'tainacan'),
@@ -89,6 +89,13 @@ class ViewHelper {
             'voting' => __('Rankings', 'tainacan'),
             'metadata_compound' => __('Compounds', 'tainacan'),
         ];
+
+        if(has_action("add_new_user_properties"))
+        {
+            $this->metadata_types['user'] = __('User', 'tainacan');
+        }
+
+        return $this->metadata_types;
     }
 
     public function get_property_data_types() {
@@ -147,7 +154,7 @@ class ViewHelper {
     }
 
     public function get_special_metadata() {
-        return $this->special_metadata = ['relationship', 'category', 'voting','compounds','metadata_compound'];
+        return $this->special_metadata = ['relationship', 'category', 'voting','compounds','metadata_compound', 'user'];
     }
 
     public function get_metadata_icon($metadata_type) {
