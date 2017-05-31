@@ -2327,6 +2327,16 @@ function socialdb_insert_term($name, $taxonomy, $parent, $slug, $description = '
     return $array;
 }
 
+function socialdb_update_term_name($term_id,$name) {
+    global $wpdb;
+    $args = array('name' => $name);
+    $array = array('term_id' => $term_id);
+    if ($term_id) {
+        $wpdb->update($wpdb->terms, $args,array( 'term_id' => $term_id ));
+    } 
+    return $array;
+}
+
 /**
  *
  * Funcao que verifica a existencia de um termo pelo seu slug do tipo categoria

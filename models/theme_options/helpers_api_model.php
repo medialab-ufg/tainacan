@@ -1,6 +1,10 @@
 <?php
 
 ini_set('max_input_vars', '10000');
+error_reporting(E_ALL);
+session_write_close();
+ini_set('max_execution_time', '0');
+ini_set('memory_limit', '-1');
 include_once (dirname(__FILE__) . '/../../../../../wp-config.php');
 include_once (dirname(__FILE__) . '/../../../../../wp-load.php');
 include_once (dirname(__FILE__) . '/../../../../../wp-includes/wp-db.php');
@@ -8,17 +12,17 @@ require_once(dirname(__FILE__) . '../../general/general_model.php');
 
 class HelpersAPIModel extends Model {
 
-    public static function createCollection($post, SynchronizeModel $class) {
+    public static function createCollection($post,$metas, SynchronizeModel $class) {
+        $model = new Model();
         $collection = array(
             'post_type' => 'socialdb_collection',
             'post_title' => $post['title'],
             'post_status' => 'publish',
-            'post_name' => $post['name'],
             'post_content' => $post['content'],
             'post_author' => get_current_user_id(),
         );
         $collection_id = wp_insert_post($collection);
-        $this->createSocialMappingDefault($collection_id);
+        $model->createSocialMappingDefault($collection_id);
         foreach ($metas as $meta) {
             if($meta['key'] == 'socialdb_collection_object_type' 
                     || $meta['key'] == 'socialdb_collection_longitude_meta'
@@ -30,7 +34,7 @@ class HelpersAPIModel extends Model {
                     || strpos($meta['key'], 'socialdb_collection_facet_') !== false
                     || strpos($meta['key'], 'socialdb_collection_property_') !== false ){
                 continue;
-            }else if($meta['key'] == 'socialdb_collection_default_tab'){
+            }else if($meta['key'] == 'socialdb_collection_tab'){
                  HelpersAPIModel::insertTabs($meta['ID'],$meta['value'],$collection_id,$class->url);
             }else{
                  update_post_meta($collection_id, $meta['key'], $meta['value']);
@@ -57,7 +61,7 @@ class HelpersAPIModel extends Model {
             'ID'=> $idBlog,
             'post_title' => $post['title'],
             'post_status' => 'publish',
-            'post_content' => $post['description'],
+            'post_content' => $post['content'],
             'post_author' => get_current_user_id(),
         ); 
         $collection_id = wp_update_post($collection);
@@ -72,7 +76,7 @@ class HelpersAPIModel extends Model {
                     || strpos($meta['key'], 'socialdb_collection_facet_') !== false
                     || strpos($meta['key'], 'socialdb_collection_property_') !== false ){
                 continue;
-            }else if($meta['key'] == 'socialdb_collection_default_tab'){
+            }else if($meta['key'] == 'socialdb_collection_tab'){
                 HelpersAPIModel::insertTabs($meta['ID'],$meta['value'],$collection_id,$class->url);
             }else{
                  update_post_meta($collection_id, $meta['key'], $meta['value']);
@@ -112,6 +116,38 @@ class HelpersAPIModel extends Model {
                     $id_blog = ( MappingAPI::hasMapping($class->url, 'properties',$id_api) ) ? MappingAPI::hasMapping($class->url, 'properties', $id_api) : MappingAPI::hasMapping($class->url, 'categories', $id_api);
                     update_post_meta($collection_id,'socialdb_collection_property_'.$id_blog.'_mask_key', $meta['value']);
                 }
+            }else if($meta['key'] == 'socialdb_collection_default_ordering'){
+                update_post_meta($collection_id,'socialdb_collection_default_ordering', MappingAPI::hasMapping($class->url, 'properties', $id_api));
+            }else if($meta['key'] == 'socialdb_collection_longitude_meta'){
+                update_post_meta($collection_id,'socialdb_collection_longitude_meta', MappingAPI::hasMapping($class->url, 'properties', $id_api));
+            }else if($meta['key'] == 'socialdb_collection_latitude_meta'){
+                update_post_meta($collection_id,'socialdb_collection_latitude_meta', MappingAPI::hasMapping($class->url, 'properties', $id_api));
+            }else if($meta['key'] == 'socialdb_collection_properties_ordenation'){
+                $new_array = [];
+                $array = unserialize(unserialize(base64_decode($meta['value'])));
+                if(is_array($array)){
+                    foreach ($array as $key => $value) {
+                        $properties = explode(',', $value);
+                        $values = [];
+                        $new_index = ($key == 'default') ? 'default' : MappingAPI::hasMapping($class->url, 'tabs', $key);
+                        foreach ($properties as $property) {
+                            $id =  MappingAPI::hasMapping($class->url, 'properties', str_replace('compounds-', '', $property));
+                            $values[] = (strpos($property, 'compounds-') !== false) ? 'compounds-'.$id : $id;
+                        }
+                        $new_array[$new_index] = implode(',', $values);
+                    }
+                }
+                update_post_meta($collection_id,'socialdb_collection_properties_ordenation', serialize($new_array));
+            }else if($meta['key'] == 'socialdb_collection_update_tab_organization'){
+                $new_array = [];
+                $array = unserialize(unserialize(base64_decode($meta['value'])));
+                if(is_array($array) && is_array($array[0])){
+                    foreach ($array[0] as $key => $value) {
+                        $new_array[MappingAPI::hasMapping($class->url, 'properties', $key)] = 
+                                ($value == 'default') ? 'default' : MappingAPI::hasMapping($class->url, 'tabs', $key);
+                    }
+                }
+                update_post_meta($collection_id,'socialdb_collection_properties_ordenation', serialize($new_array));
             }
         }
     }
@@ -153,16 +189,18 @@ class HelpersAPIModel extends Model {
      * @return type
      */
     public static function createCategory($category, $metas, SynchronizeModel $class, $parent_id = false) {
-        $array = wp_insert_term($category['name'], 'socialdb_category_type', array('parent' => (!$parent) ? get_term_by('slug', 'socialdb_taxonomy', 'socialdb_category_type')->term_id : $parent_id,
-            'slug' => $this->generate_slug(trim($category['name']), 0)));
+        $model = new Model();
+        $array = wp_insert_term($category['name'], 'socialdb_category_type', array('parent' => (!$parent_id) ? get_term_by('slug', 'socialdb_taxonomy', 'socialdb_category_type')->term_id : $parent_id,
+            'slug' => $model->generate_slug(trim($category['name']), 0)));
         add_term_meta($array['term_id'], 'socialdb_category_owner', get_current_user_id());
         update_term_meta($array['term_id'], 'socialdb_token', $class->token);
         return $array['term_id'];
     }
 
     public static function updateCategory($id, $category, $metas, SynchronizeModel $class) {
-        $array = wp_update_term($id, 'socialdb_category_type', array(
-            'name' => $category['name']));
+         $array = socialdb_update_term_name($id,$category['name']);
+//        $array = wp_update_term($id, 'socialdb_category_type', array(
+//            'name' => $category['name']));
         update_term_meta($array['term_id'], 'socialdb_token', $class->token);
         return $array['term_id'];
     }
@@ -174,14 +212,15 @@ class HelpersAPIModel extends Model {
      * @return type
      */
     public static function createProperty($property, $metas, SynchronizeModel $class) {
-        $array = ['socialdb_property_data', 'socialdb_property_object', 'socialdb_property_term'];
-        if (in_array($property['parent']['slug'], $array)) {
+        $model = new Model();
+        $array = ['socialdb_property_data', 'socialdb_property_object', 'socialdb_property_term','socialdb_property_compounds'];
+        if (isset($property['parent']) && in_array($property['parent']['slug'], $array)) {
             
-            if(in_array($property['slug'], $this->fixed_slugs)){
-                $array['term_id'] = get_term_by('slug', $value,'socialdb_property_type')->term_id;
+            if(in_array($property['slug'], $model->fixed_slugs)){
+                $array['term_id'] = get_term_by('slug', $property['slug'],'socialdb_property_type')->term_id;
             }else{
                 $array = wp_insert_term($property['name'], 'socialdb_property_type', array('parent' => get_term_by('slug', $property['parent']['slug'], 'socialdb_property_type')->term_id,
-                    'slug' => $this->generate_slug(trim($property['name']), 0)));
+                    'slug' => $model->generate_slug(trim($property['name']), 0)));
             }
             //metas
             if (is_array($metas) && isset($array['term_id'])) {
@@ -200,7 +239,7 @@ class HelpersAPIModel extends Model {
                         if (!MappingAPI::hasMapping($class->url, 'properties', $meta['value'])) {
                             $term = $class->readProperty($meta['value']);
                             $metas_reverse = $class->readPropertyMetas($meta['value']);
-                            $this->createProperty($term, $metas_reverse, $class);
+                            HelpersAPIModel::createProperty($term, $metas_reverse, $class);
                         } else {
                             update_term_meta($array['term_id'], $meta['key'], MappingAPI::hasMapping($class->url, 'properties', $meta['value']));
                         }
@@ -208,8 +247,22 @@ class HelpersAPIModel extends Model {
                           update_term_meta($array['term_id'], $meta['key'], MappingAPI::hasMapping($class->url, 'collections', $meta['value']));
                     }else if($meta['key'] == 'socialdb_property_created_category' && trim($meta['value']) != ''){
                           update_term_meta($array['term_id'], $meta['key'], MappingAPI::hasMapping($class->url, 'categories', $meta['value']));
-                    }else {
+                    }else if ($meta['key'] == 'socialdb_property_compounds_properties_id' && trim($meta['value']) != '') {
+                        $ids = explode(',', $meta['value']);
+                        $new_ids = [];
+                        foreach ($ids as $value) {
+                            $new_ids[] = MappingAPI::hasMapping($class->url, 'properties', $value);
+                        }
                         update_term_meta($array['term_id'], $meta['key'], implode(',', $new_ids));
+                    }else if ($meta['key'] == 'socialdb_property_is_compounds' && trim($meta['value']) != ''){
+                        $array_serializado = unserialize(unserialize(base64_decode($meta['value'])));
+                        $new_ids = [];
+                        foreach ($array_serializado as $index => $value) {
+                            $new_ids[MappingAPI::hasMapping($class->url, 'properties', $index)] = $value;
+                        }
+                        update_term_meta($array['term_id'], $meta['key'], serialize($new_ids));
+                    }else {
+                        update_term_meta($array['term_id'], $meta['key'], $meta['value']);
                     }
                 }
             }
@@ -220,7 +273,7 @@ class HelpersAPIModel extends Model {
     public static function updateProperty($property, $metas, SynchronizeModel $class) {
         $array = ['socialdb_property_data', 'socialdb_property_object', 'socialdb_property_term'];
         if (in_array($property['parent']['slug'], $array)) {
-            $array = wp_update_term(MappingAPI::hasMapping($class->url, 'categories', $property['ID']), 'socialdb_property_type', 
+            $array = wp_update_term(MappingAPI::hasMapping($class->url, 'properties', $property['ID']), 'socialdb_property_type', 
                     array('name'=> $property['name']));
             //metas
             if (is_array($metas) && isset($array['term_id'])) {
@@ -238,7 +291,7 @@ class HelpersAPIModel extends Model {
                         if (!MappingAPI::hasMapping($class->url, 'properties', $meta['value'])) {
                             $term = $class->readProperty($meta['value']);
                             $metas_reverse = $class->readPropertyMetas($meta['value']);
-                            $this->createProperty($term, $metas_reverse, $class);
+                            HelpersAPIModel::createProperty($term, $metas_reverse, $class);
                         } else {
                             update_term_meta($array['term_id'], $meta['key'], MappingAPI::hasMapping($class->url, 'properties', $meta['value']));
                         }
@@ -246,8 +299,22 @@ class HelpersAPIModel extends Model {
                           update_term_meta($array['term_id'], $meta['key'], MappingAPI::hasMapping($class->url, 'collections', $meta['value']));
                     }else if($meta['key'] == 'socialdb_property_created_category' && trim($meta['value']) != ''){
                           update_term_meta($array['term_id'], $meta['key'], MappingAPI::hasMapping($class->url, 'categories', $meta['value']));
-                    }else {
+                    }else if ($meta['key'] == 'socialdb_property_compounds_properties_id' && trim($meta['value']) != '') {
+                        $ids = explode(',', $meta['value']);
+                        $new_ids = [];
+                        foreach ($ids as $value) {
+                            $new_ids[] = MappingAPI::hasMapping($class->url, 'properties', $value);
+                        }
                         update_term_meta($array['term_id'], $meta['key'], implode(',', $new_ids));
+                    }else if ($meta['key'] == 'socialdb_property_is_compounds' && trim($meta['value']) != ''){
+                        $array_serializado = unserialize(unserialize(base64_decode($meta['value'])));
+                        $new_ids = [];
+                        foreach ($array_serializado as $index => $value) {
+                            $new_ids[MappingAPI::hasMapping($class->url, 'properties', $index)] = $value;
+                        }
+                        update_term_meta($array['term_id'], $meta['key'], serialize($new_ids));
+                    }else {
+                        update_term_meta($array['term_id'], $meta['key'], $meta['value']);
                     }
                 }
             }
@@ -263,11 +330,12 @@ class HelpersAPIModel extends Model {
     * 
     */
    public static function insertTabs($ID,$name,$collection_id,$url) {
+        $model = new Model();
         if(!MappingAPI::hasMapping($url, 'tabs', $ID)){
-            $new_id = $this->sdb_add_post_meta($collection_id, 'socialdb_collection_tab',$name);
+            $new_id = $model->sdb_add_post_meta($collection_id, 'socialdb_collection_tab',$name);
             MappingAPI::saveMapping($url, 'tabs', $ID, $new_id);
         }else{
-            $this->sdb_update_post_meta(MappingAPI::hasMapping($url, 'tabs', $ID), $name);
+            $model->sdb_update_post_meta(MappingAPI::hasMapping($url, 'tabs', $ID), $name);
         }
    }
 
@@ -323,6 +391,39 @@ class MappingAPI extends Model {
             $var = array('url' => $url, 'collections' => [], 'properties' => [], 'categories' => [],'tabs'=>[]);
             $var[$type][$id_api] = $id_blog;
             update_option('mapping-api-tainacan', serialize([$var]));
+        }
+    }
+    
+    /**
+     * 
+     * @param string $url
+     * @param string $token
+     */
+    public static function garbageCollector($url,$token) {
+        $option = get_option('mapping-api-tainacan');
+        if ($option) {
+            $arrays = unserialize($option);
+            foreach ($arrays as $index => $array) {
+                if($index == 'collections'){
+                    foreach ($array as $id_blog) {
+                        $has_token = get_post_meta($id_blog, 'socialdb_token', true);
+                        if(!$has_token || $has_token != $token){
+                            $collection = array(
+                                'ID'=> $id_blog,
+                                'post_status' => 'draft'
+                            ); 
+                            $collection_id = wp_update_post($collection);
+                        }
+                    }
+                }else if($index == 'categories' || $index == 'properties'){
+                    foreach ($array as $id_blog) {
+                        $has_token = get_term_meta($id_blog, 'socialdb_token', true);
+                        if(!$has_token || $has_token != $token){
+                            wp_delete_term($id_blog,($index == 'categories') ? 'socialdb_category_type': 'socialdb_property_type');
+                        }
+                    }
+                }
+            }
         }
     }
 

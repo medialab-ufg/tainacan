@@ -1,5 +1,6 @@
 <?php
-
+ini_set('max_execution_time', '0');
+error_reporting(E_ALL);
 ini_set('max_input_vars', '10000');
 include_once (dirname(__FILE__) . '/../../../../../wp-config.php');
 include_once (dirname(__FILE__) . '/../../../../../wp-load.php');
@@ -137,11 +138,13 @@ class SynchronizeModel extends Model {
                 //sobe atraves da categoria raiz se exisitr uma hierarquia
                 $this->getPropertiesAbove($this->rootCategoryCollection) ;
                 //depois de todas as categorias as propriedades
-                $this->processProperties() ;       
+                $this->processProperties();       
                 //atualizando as colecoes
-                HelpersAPIModel::updateCollectionsRelations($post['ID'],$metas, $this);  
+                HelpersAPIModel::updateCollectionsRelations($post['ID'],$this->metasCollection, $this);  
             }
+            MappingAPI::garbageCollector($this->url, $this->token);
         }  
+        return json_encode(['result'=>true]);
     }
     
     /**
@@ -180,13 +183,21 @@ class SynchronizeModel extends Model {
                     $id = HelpersAPIModel::createCategory($category,$metas,$this);
                 }else{
                     $ID_parent = MappingAPI::hasMapping($this->url, 'categories', $category['parent']['ID']);
-                    $id = HelpersAPIModel::createCategory($category,$metas,$ID_parent,$this);
+                    $id = HelpersAPIModel::createCategory($category,$metas,$this,$ID_parent);
                 }
+            }else{
+                 $id = HelpersAPIModel::createCategory($category,$metas,$this, get_term_by('slug', 'socialdb_taxonomy', 'socialdb_category_type')->term_id);
             }
             MappingAPI::saveMapping($this->url, 'categories', $category['ID'],$id);
+            return true;
         }else{
             $ID = MappingAPI::hasMapping($this->url, 'categories', $category['ID']);
+            $has_token = get_term_meta($ID, 'socialdb_token', true);
+            if($has_token && $has_token == $this->token){
+                return false;
+            }
             HelpersAPIModel::updateCategory($ID,$category,$metas,$this);
+            return true;
         }
     }
     
@@ -212,7 +223,7 @@ class SynchronizeModel extends Model {
                 $metas = $this->readTermMetas($term['parent']['ID']);
                 if(is_array($metas)){
                     foreach ($metas as $meta) {
-                        if($meta['key'] == 'socialdb_category_property_id'){
+                        if($meta['key'] == 'socialdb_category_property_id' && $meta['value'] != ''){
                             $property_metas = $this->readPropertyMetas($meta['value']);
                             $this->collectionProperties[$term['parent']['ID']][$meta['value']] = $property_metas;
                             $this->findCategoriesInProperties($property_metas);
@@ -239,12 +250,12 @@ class SynchronizeModel extends Model {
      * @return boolean
      */
     public function getProperties($term) {
-        if($term['ID']){
+        if($term && isset($term['ID'])){
             $metas = $this->readTermMetas($term['ID']);
-            $this->updateCategory($term,$metas);
-            if(is_array($metas)){
+            $continue = $this->updateCategory($term,$metas);
+            if($continue && is_array($metas)){
                 foreach ($metas as $meta) {
-                    if($meta['key'] == 'socialdb_category_property_id'){
+                    if($meta['key'] == 'socialdb_category_property_id' && $meta['value'] != ''){
                         $property_metas = $this->readPropertyMetas($meta['value']);
                         //adiciono os metas encontrados no array de dados de metadados
                         $this->collectionProperties[$term['ID']][$meta['value']] = $property_metas;
@@ -279,6 +290,9 @@ class SynchronizeModel extends Model {
      * @param type $term
      */
     public function findChildrenCategoriesAndProperties($term) {
+        if(!isset($term['ID'])){
+            return false;
+        }
         $children = $this->readCategoriesChildren($term['ID']);
         if($children && is_array($children)){
             foreach ($children as $child) {
@@ -300,7 +314,7 @@ class SynchronizeModel extends Model {
                         if(!MappingAPI::hasMapping($this->url, 'properties' , $property_api)){
                            $id = HelpersAPIModel::createProperty($term, $metas, $this);
                         }else{
-                           $id = HelpersAPIModel::updateProperty($term, $metas, $class);
+                           $id = HelpersAPIModel::updateProperty($term, $metas, $this);
                         }
                         $this->addProperty($category_blog, $id);
                     }
@@ -309,6 +323,11 @@ class SynchronizeModel extends Model {
         }
     }
     
+    /**
+     * 
+     * @param type $cat_id
+     * @param type $prop_id
+     */
     public function addProperty($cat_id,$prop_id) {
         $metas = get_term_meta($cat_id, 'socialdb_category_property_id');
         if((!$metas) || (is_array($metas) && !in_array($cat_id, $metas))){
