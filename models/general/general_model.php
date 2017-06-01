@@ -2398,6 +2398,90 @@ class Model {
         return $dynatree;
     }
     
+    /**
+     * 
+     * @param type $collection_id
+     */
+    public function createSocialMappingDefault($collection_id) {
+        /*         * *** MAPEAMENTO PADRAO DUBLIN CORE * */
+        $mapping_model_dc = new MappingModel('socialdb_channel_oaipmhdc');
+        $mapping_dc_default_id = $mapping_model_dc->create_mapping(__('Mapping Default', 'tainacan'), $collection_id);
+        add_post_meta($mapping_dc_default_id, 'socialdb_channel_oaipmhdc_initial_size', '1');
+        add_post_meta($mapping_dc_default_id, 'socialdb_channel_oaipmhdc_mapping', serialize([]));
+        update_post_meta($collection_id, 'socialdb_collection_mapping_import_active', $mapping_dc_default_id);
+        delete_post_meta($collection_id, 'socialdb_collection_channel');
+        /** YOUTUBE * */
+        $mapping_model_youtube = new MappingModel('socialdb_channel_youtube');
+        $mapping_id_youtube = $mapping_model_youtube->create_mapping('socialdb_channel_youtube', $collection_id);
+
+        $arr_youtube[] = array('tag' => 'title', 'socialdb_entity' => 'post_title');
+        $arr_youtube[] = array('tag' => 'description', 'socialdb_entity' => 'post_content');
+        $arr_youtube[] = array('tag' => 'url', 'socialdb_entity' => 'post_permalink');
+        $arr_youtube[] = array('tag' => 'content', 'socialdb_entity' => 'socialdb_object_content');
+        $arr_youtube[] = array('tag' => 'source', 'socialdb_entity' => 'socialdb_object_dc_source');
+        $arr_youtube[] = array('tag' => 'type', 'socialdb_entity' => 'socialdb_object_dc_type');
+
+        add_post_meta($mapping_id_youtube, 'socialdb_channel_youtube_mapping', serialize($arr_youtube));
+        add_post_meta($mapping_id_youtube, 'socialdb_channel_youtube_collection_id', $collection_id);
+        add_post_meta($mapping_id_youtube, 'socialdb_channel_youtube_inserted_ids', serialize(array()));
+
+        /** FACEBOOK * */
+        $mapping_model_facebook = new MappingModel('socialdb_channel_facebook');
+        $mapping_id_fb = $mapping_model_facebook->create_mapping('socialdb_channel_facebook', $collection_id);
+
+        $arr_fb[] = array('tag' => 'id', 'socialdb_entity' => 'post_title');
+        $arr_fb[] = array('tag' => 'name', 'socialdb_entity' => 'post_content');
+        $arr_fb[] = array('tag' => 'link', 'socialdb_entity' => 'post_permalink');
+        $arr_fb[] = array('tag' => 'content', 'socialdb_entity' => 'socialdb_object_content');
+        $arr_fb[] = array('tag' => 'source', 'socialdb_entity' => 'socialdb_object_dc_source');
+        $arr_fb[] = array('tag' => 'type', 'socialdb_entity' => 'socialdb_object_dc_type');
+
+        add_post_meta($mapping_id_fb, 'socialdb_channel_facebook_mapping', serialize($arr_fb));
+        add_post_meta($mapping_id_fb, 'socialdb_channel_facebook_collection_id', $collection_id);
+
+        /** INSTAGRAM * */
+        $mapping_model_instagram = new MappingModel('socialdb_channel_instagram');
+        $mapping_id_instagram = $mapping_model_instagram->create_mapping('socialdb_channel_instagram', $collection_id);
+
+        $arr_instagram[] = array('tag' => 'id', 'socialdb_entity' => 'post_title');
+        $arr_instagram[] = array('tag' => 'caption', 'socialdb_entity' => 'post_content');
+        $arr_instagram[] = array('tag' => 'link', 'socialdb_entity' => 'post_permalink');
+        $arr_instagram[] = array('tag' => 'content', 'socialdb_entity' => 'socialdb_object_content');
+        $arr_instagram[] = array('tag' => 'source', 'socialdb_entity' => 'socialdb_object_dc_source');
+        $arr_instagram[] = array('tag' => 'type', 'socialdb_entity' => 'socialdb_object_dc_type');
+
+        add_post_meta($mapping_id_instagram, 'socialdb_channel_instagram_mapping', serialize($arr_instagram));
+        add_post_meta($mapping_id_instagram, 'socialdb_channel_instagram_collection_id', $collection_id);
+
+        /** FLICKR * */
+        $mapping_model_flickr = new MappingModel('socialdb_channel_flickr');
+        $mapping_id_flickr = $mapping_model_flickr->create_mapping('socialdb_channel_flickr', $collection_id);
+
+        $arr_flickr[] = array('tag' => 'title', 'socialdb_entity' => 'post_title');
+        $arr_flickr[] = array('tag' => 'description', 'socialdb_entity' => 'post_content');
+        $arr_flickr[] = array('tag' => 'url', 'socialdb_entity' => 'post_permalink');
+        $arr_flickr[] = array('tag' => 'content', 'socialdb_entity' => 'socialdb_object_content');
+        $arr_flickr[] = array('tag' => 'source', 'socialdb_entity' => 'socialdb_object_dc_source');
+        $arr_flickr[] = array('tag' => 'type', 'socialdb_entity' => 'socialdb_object_dc_type');
+
+        add_post_meta($mapping_id_flickr, 'socialdb_channel_flickr_mapping', serialize($arr_flickr));
+        add_post_meta($mapping_id_flickr, 'socialdb_channel_flickr_collection_id', $collection_id);
+
+        /** VIMEO * */
+        $mapping_model_vimeo = new MappingModel('socialdb_channel_vimeo');
+        $mapping_id_vimeo = $mapping_model_vimeo->create_mapping('socialdb_channel_vimeo', $collection_id);
+
+        $arr_vimeo[] = array('tag' => 'name', 'socialdb_entity' => 'post_title');
+        $arr_vimeo[] = array('tag' => 'description', 'socialdb_entity' => 'post_content');
+        $arr_vimeo[] = array('tag' => 'link', 'socialdb_entity' => 'post_permalink');
+        $arr_vimeo[] = array('tag' => 'content', 'socialdb_entity' => 'socialdb_object_content');
+        $arr_vimeo[] = array('tag' => 'source', 'socialdb_entity' => 'socialdb_object_dc_source');
+        $arr_vimeo[] = array('tag' => 'type', 'socialdb_entity' => 'socialdb_object_dc_type');
+
+        add_post_meta($mapping_id_vimeo, 'socialdb_channel_vimeo_mapping', serialize($arr_vimeo));
+        add_post_meta($mapping_id_vimeo, 'socialdb_channel_vimeo_collection_id', $collection_id);
+    }
+    
 ###################### EXPORTACAO TAINACAN #####################################    
      /**
      * @signature - generate_properties_xml($properties_id,$xml)

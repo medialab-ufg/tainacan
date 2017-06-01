@@ -30,7 +30,8 @@ class MappingModel extends Model {
         $object_id = wp_insert_post($post);
         add_post_meta($object_id, 'socialdb_channel_identificator', $name);
         add_post_meta($collection_id, 'socialdb_collection_channel', $object_id);
-        wp_set_object_terms($object_id, array((int) $this->parent->term_id), 'socialdb_channel_type');
+        if(isset($this->parent->term_id))
+            wp_set_object_terms($object_id, array((int) $this->parent->term_id), 'socialdb_channel_type');
         return $object_id;
     }
 

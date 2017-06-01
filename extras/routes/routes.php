@@ -9,6 +9,11 @@ $collection_route = get_post(get_option('collection_root_id'));
     }
     ?>">
 <!-- Paginas da colecao -->
+<input type="hidden" id="goToAddItem" name="goToAddItem" value="<?php
+    if (get_query_var('add-item') && get_query_var('collection') && get_query_var('item')) {
+         echo trim(get_query_var('add-item'));
+    }
+    ?>">
 <input type="hidden" id="goToEditObject" name="goToEditObject" value="<?php
     if (get_query_var('edit-item') && get_query_var('collection') && get_query_var('item')) {
         echo get_post_by_name(trim(get_query_var('item')),OBJECT,'socialdb_object')->ID;
@@ -220,6 +225,8 @@ $collection_route = get_post(get_option('collection_root_id'));
             }
         } else if($('#goToEditObject').val()!==''){
                route_edit_object_item($('#goToEditObject').val())
+        }else if($('#goToAddItem').val()!==''){
+            
         }else if($('#goToLogin').val()!==''){
             showLoginScreen($('#src').val());
         }else if($('#goToAdvancedSearch').val()!==''){

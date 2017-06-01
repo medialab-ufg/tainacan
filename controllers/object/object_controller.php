@@ -17,6 +17,9 @@ class ObjectController extends Controller {
         $objectfile_model = new ObjectFileModel;
         switch ($operation) {
             // #1 ADICIONAR ITEMS TIPO TEXTO
+            case "create-item":
+                $data['object_id'] = $object_model->create();
+                return $this->render(dirname(__FILE__) . '../../../views/formItem/formItem.php', $data);
             case "create_item_text":
                 //verifico se existe rascunho para se mostrado
                 $beta_id = get_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext', true);
@@ -408,11 +411,9 @@ class ObjectController extends Controller {
                     "desc" => $_object->post_content,
                     "output" => substr($_object->post_name, 0, 15) . mktime(),
                     "data_c" => explode(" ", $_object->post_date)[0],
-                    "object" => get_post($object_id)
+                    "object" => get_post($object_id),
+                    "breaks" => $this->get_item_line_breaks($_object->post_content) // Pegar # de brs
                 ];
-
-                // Pegar # de brs
-                $press['breaks'] = $this->get_item_line_breaks($press["desc"]);
 
                 $_item_meta = get_post_meta($object_id);
                 if ($_item_meta['_thumbnail_id']) {
@@ -426,12 +427,29 @@ class ObjectController extends Controller {
                     }
                 }
 
+                $tabs = [
+                    'order' => unserialize(get_post_meta($data['collection_id'], 'socialdb_collection_properties_ordenation')[0]),
+                    'names' => get_post_meta($data['collection_id'], 'socialdb_collection_tab')
+                ];
+
+                if( is_array($tabs['order']) ) {
+                    foreach ($tabs['order'] as $tab_id => $children) {
+                        if("default"===$tab_id) {
+                            $press['abas'][] = 'Padrão';
+                        } else {
+                            $press['abas'][] = $this->get_tab_name($tab_id);
+                        }
+                    }
+
+                    $press['tabs'] = $tabs;
+                }
+
                 $total_index = 0;
                 $_to_be_removed = [];
                 foreach ($_item_meta as $meta => $val) {
                     $check_typeof_meta = explode( "_", $meta);
-
                     $is_compound_meta = false;
+
                     if( count($check_typeof_meta) == 4 && ctype_digit($check_typeof_meta[3]) ) {
                         $last_meta_id = intval($check_typeof_meta[3]);
                         if( $last_meta_id >= 0 && $last_meta_id <= 24 ) {
@@ -446,12 +464,13 @@ class ObjectController extends Controller {
                             if (!is_null($col_meta) && is_object($col_meta)) {
                                 if( 4 === count($pcs) && is_string($_item_meta[$meta][0]) ) {
                                     $_sub_metas = explode(",", $_item_meta[$meta][0]);
+                                    $_current_term_id = $col_meta->term_id;
+                                    $curr_term_metas = explode(",",get_term_meta($_current_term_id,'socialdb_property_compounds_properties_id', true));
 
                                     if(is_array($_sub_metas)) { 
                                         $final_title = $col_meta->name;
                                         $_pair = ['meta' => $final_title, 'value'=> '_____________________________', 'submeta_header' => true, 'header_idx' => $total_index];
                                         $press['inf'][] = $_pair;
-
                                         $current_submeta_vals = [];
                                         $curr_meta = 0;
 
@@ -479,9 +498,19 @@ class ObjectController extends Controller {
                                                         array_push($current_submeta_vals, $_pair['value']);
                                                     }
 
-                                                    if( $is_compound_meta && empty($current_submeta_vals)) {
+                                                    if( $is_compound_meta && empty($current_submeta_vals) && $last_meta_id > 0) {
                                                         unset($press['inf'][$total_index]);
                                                     }
+                                                } else {
+                                                    $_curr_term_name = get_term($curr_term_metas[$curr_meta])->name;
+                                                    $_pair = ['meta' => $_curr_term_name , 'value' => "--", 'is_submeta' => true];
+
+                                                    $post_val = $this->get_tab_name(intval($s_meta));
+                                                    if( !is_null($post_val) && $post_val ) {
+                                                        $_pair['value'] = $post_val;
+                                                    }
+
+                                                    $press['inf'][] = $_pair;
                                                 }
                                             } else {
                                                 $_title_id = explode("_", $_meta_->meta_key);
@@ -526,7 +555,7 @@ class ObjectController extends Controller {
                         } /* else { $press['excluded'][] = $meta; } */
                     }
 
-                    if($is_compound_meta && empty($current_submeta_vals)) {
+                    if($is_compound_meta && empty($current_submeta_vals) && $last_meta_id > 0) {
                         array_push($_to_be_removed, $total_index);
                     }
                     $total_index++;
@@ -991,6 +1020,22 @@ class ObjectController extends Controller {
         } else {
             return false;
         }
+    }
+
+    private function get_tab_name($tab_id) {
+        global $wpdb;
+
+        if( intval($tab_id) <= 0) {
+            return false;
+        }
+
+        $meta = $wpdb->get_row($wpdb->prepare("SELECT * FROM $wpdb->postmeta WHERE meta_id=%d", $tab_id));
+
+        if( is_null($meta) || empty($meta)) {
+            return false;
+        }
+
+        return $meta;
     }
 
     /**

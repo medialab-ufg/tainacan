@@ -30,6 +30,7 @@ function confirmationAPI(){
     },
     function (isConfirm) {
         if (isConfirm) {
+            show_modal_main();
             $.ajax({
                 type: "POST",
                 url:$('#src').val() + "/controllers/theme_options/synchronize_controller.php",
@@ -40,11 +41,14 @@ function confirmationAPI(){
                         api_url:  $('#url_api').val()+'/wp-json'
                 },
                 dataType: 'json'
-            }).error(function(){
+            }).error(function(result){
+                hide_modal_main();
+                console.log(result);
                 showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('URL unformmated or service unavailable!', 'tainacan') ?>', 'error');
             }).done(function (result) {
+                hide_modal_main();
                 if(result){
-                     showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('Connection established!', 'tainacan') ?>', 'success');
+                     showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('Operation successfully!', 'tainacan') ?>', 'success');
                 }else{
                      showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('URL unformmated or service unavailable!', 'tainacan') ?>', 'error');
                 }
