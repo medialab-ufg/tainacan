@@ -305,6 +305,7 @@ class HelpersAPIModel extends Model {
                         foreach ($ids as $value) {
                             $new_ids[] = MappingAPI::hasMapping($class->url, 'properties', $value);
                         }
+                        var_dump($meta['value'],$new_ids);
                         update_term_meta($array['term_id'], $meta['key'], implode(',', $new_ids));
                     }else if ($meta['key'] == 'socialdb_property_is_compounds' && trim($meta['value']) != ''){
                         $array_serializado = unserialize(unserialize(base64_decode($meta['value'])));

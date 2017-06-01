@@ -22,7 +22,7 @@ class SynchronizeModel extends Model {
     /***************************** Metodos para leitura na API ****************/
     
     public function readCollectionsPublished(){
-        $qry_str = "/posts?type=socialdb_collection&filter[status]=publish&user=".$this->User.'&password='.$this->Pass;;
+        $qry_str = "/posts?type=socialdb_collection&filter[status]=publish&filter[posts_per_page]=-1&user=".$this->User.'&password='.$this->Pass;;
         $ch = curl_init();
         // Set query data here with the URL
         curl_setopt($ch, CURLOPT_URL, $this->url. $qry_str);
