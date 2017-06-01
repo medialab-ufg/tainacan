@@ -621,12 +621,6 @@ function new_user_properties()
  * Functions
  */
 
-function add_user_as_meta()
-{
-    
-}
-
-
 function daily_situation_update()
 {
     global $wpdb;
@@ -793,6 +787,38 @@ function daily_situation_update()
 
 }
 daily_situation_update();
+
+function search_for_user($user_name)
+{
+    $users = get_users();
+    $users_found = [];
+    $user_name = strtolower($user_name);
+
+    foreach ($users as $user)
+    {
+        $display_name = strtolower($user->data->display_name);
+        $user_login = strtolower($user->data->user_login);
+        
+        if(strpos($display_name, $user_name) !== false || strpos($user_login, $user_name) !== false)
+        {
+            $users_found[] = ['display_name' => $user->data->display_name, 'user_login' => $user->data->user_login, 'id' => $user->data->ID];
+        }
+    }
+    
+    /* Montando estrutura para exibição */
+    ?>
+    <ul class="list-inline">
+        <?php
+        foreach ($users_found as $user)
+        {
+            ?>
+            <li class="col-md-2 user_result" style="cursor: pointer;"><?php echo $user['display_name']; ?></li>
+            <?php
+        }
+        ?>
+    </ul>
+    <?php
+}
 
 function last_option_saved($post_id, $option_id)
 {

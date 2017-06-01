@@ -33,6 +33,16 @@
     border-bottom: 1px solid #0c698b;
 }
 
+.user_result
+{
+    border: lightgray solid 1px;
+    border-radius: 3px;
+    padding: 6px;
+    margin-left: 8px;
+    margin-right: 8px;
+    margin-top: 4px;
+}
+
 .user-row:hover{
     cursor: pointer;
 }

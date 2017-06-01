@@ -246,7 +246,45 @@ if (isset($property_object)):
                                     $property['object_id'] = $object_id;
                                     do_action('modificate_insert_item_properties_data',$property);
                                    // continue;
-                                }else{ ?>
+                                }else if($property['type'] == 'user')
+                                {
+                                    ?>
+                                   <?php //print_r($property); ?>
+                                        <!--Look for user-->
+                                       <div class="metadata-related col-md-12">
+                                           <div class="col-md-2">
+                                                <div id="user-info" style="border: solid;">
+
+                                                </div>
+                                           </div>
+                                           <div class="col-md-10">
+                                               <form id="users_search_<?php echo $property['id'] ?>">
+                                                   <div class="form-group" style="border-bottom: none;">
+                                                        <label><?php _e("User's name"); ?>: </label>
+                                                       <div class="input-group">
+                                                           <input class="form-control" type="text" id="text_box_search" onkeyup="verify_enter(window.event, 'magnifying_glass');" placeholder="<?php _e("Type user's name", "tainacan");?>">
+
+                                                           <span class="input-group-addon" style="cursor: pointer;" id="magnifying_glass" onclick="search_for_users()">
+                                                               <span class="glyphicon glyphicon-search"></span>
+                                                           </span>
+                                                       </div>
+
+                                                       <div id="where_to_show_users" style="margin-top: 13px; display: none;">
+                                                           <label>
+                                                               <?php _e("Users found")?>
+                                                           </label>
+                                                           <div id="users_found">
+                                                               <!-- Onde os usuarios encontrados serão colocados -->
+                                                           </div>
+                                                       </div>
+                                                   </div>
+                                               </form>
+                                           </div>
+                                       </div>
+                                   <?php
+                                }
+                                else{
+                               ?>
                                     <input type="text" 
                                            value="<?php 
                                                     if ($property['metas']['socialdb_property_default_value']): 

@@ -104,6 +104,35 @@ function showUser(userID) {
     })
 }
 
+function search_for_users() {
+    var user_name = $("#text_box_search").val();
+    var send_url = $('#src').val() + "/modules/tainacan-library/controllers/user_controller.php?operation=search_for_user";
+    $.ajax({
+        type: 'POST',
+        url: send_url,
+        data: {user_name: user_name},
+        success: function (result) {
+
+            $("#where_to_show_users").show();
+            $("#users_found").html(result);
+        }
+    });
+}
+
+function verify_enter(e, button_click_id)
+{
+    if(e.keyCode)
+        code = e.keyCode;
+    else if(e.which)
+        code = e.which;
+
+    if(code == 13)
+    {
+        $("#"+button_click_id).click();
+    }
+        
+}
+
 function update_user_info()
 {
     var send_url = $('#src').val() + "/modules/tainacan-library/controllers/user_controller.php?operation=update_user_info";
@@ -176,3 +205,4 @@ function resetHomeStyleSettingsLibrary() {
         $('#collection_post').show();
     }
 }
+

@@ -182,7 +182,7 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
      */
     public function widget_property_data($property,$i,$references,$value = false) {
         $references['properties_autocomplete'][] = $property['id'];
-        if ($property['type'] == 'text') { ?>     
+        if ($property['type'] == 'text') { ?>
             <input type="text" 
                    id="compounds_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
                    class="form-control form_autocomplete_compounds_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
@@ -231,7 +231,7 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
                value="<?php if ($value) echo $value; ?>"
                type="text" 
                id="compounds_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
-               name="socialdb_property_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>[]">   
+               name="socialdb_property_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>[]">
         <?php
         }
         // gancho para tipos de metadados de dados diferentes
@@ -242,10 +242,10 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
             ?>
             <input type="text" 
                    id="compounds_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>"
-                   value="<?php if ($value) echo $value; ?>" 
+                   value="<?php if ($value) echo $value; ?>"
                    class="form-control form_autocomplete_compounds_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
                    name="socialdb_property_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>[]" >
-        <?php
+            <?php
         }
     }
     /**
