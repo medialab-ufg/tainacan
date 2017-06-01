@@ -1,6 +1,6 @@
 <?php
 ini_set('max_execution_time', '0');
-error_reporting(E_ALL);
+error_reporting(0);
 ini_set('max_input_vars', '10000');
 include_once (dirname(__FILE__) . '/../../../../../wp-config.php');
 include_once (dirname(__FILE__) . '/../../../../../wp-load.php');
@@ -273,7 +273,7 @@ class SynchronizeModel extends Model {
     public function findCategoriesInProperties($metas) {
         if($metas && is_array($metas)){
             foreach ($metas as $meta) {
-                if(($meta['key'] == 'socialdb_property_term_root' || $meta['key'] == 'socialdb_property_object_category_id') && trim($meta['value']) != ''){
+                if((isset($meta['key']) && isset($meta['value'])) && ($meta['key'] == 'socialdb_property_term_root' || $meta['key'] == 'socialdb_property_object_category_id') && trim($meta['value']) != ''){
                     $ids = explode(',', $meta['value']);
                     foreach ($ids as $id) {
                         $term = $this->readTerm($id);// le o termo que estava dentro do meta deste metadado

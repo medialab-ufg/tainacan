@@ -253,6 +253,12 @@
                     tab_property_id = object[current_id];
                 }
             });
+        }else if(json){
+            $.each(json,function(index,object){
+                if(index == current_id){
+                    tab_property_id = object;
+                }
+            });
         }
         if(!tab_property_id){
             return 'default';

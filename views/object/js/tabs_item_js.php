@@ -127,7 +127,17 @@
                     tab_property_id = 'default';
                 }
             });
+        }else if(json){
+            $.each(json,function(index,object){
+                if(index == current_id){
+                    tab_property_id = object;
+                    return true;
+                } else{
+                    tab_property_id = 'default';
+                }
+            });
         }
+        console.log(tab_property_id);
         return tab_property_id;
     }
     //insere as propriedades na abacorreta

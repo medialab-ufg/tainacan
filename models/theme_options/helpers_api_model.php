@@ -1,7 +1,7 @@
 <?php
 
 ini_set('max_input_vars', '10000');
-error_reporting(E_ALL);
+error_reporting(0);
 session_write_close();
 ini_set('max_execution_time', '0');
 ini_set('memory_limit', '-1');
@@ -124,7 +124,15 @@ class HelpersAPIModel extends Model {
                 update_post_meta($collection_id,'socialdb_collection_latitude_meta', MappingAPI::hasMapping($class->url, 'properties', $id_api));
             }else if($meta['key'] == 'socialdb_collection_properties_ordenation'){
                 $new_array = [];
-                $array = unserialize(unserialize(base64_decode($meta['value'])));
+                try{
+                    $array = unserialize(base64_decode($meta['value']));
+                    if(!is_array($array))
+                        $array = unserialize($array);
+                } catch (Exception $e){
+                    $array = unserialize(utf8_decode(base64_decode($meta['value'])));
+                    if(!is_array($array))
+                        $array = unserialize($array);
+                }
                 if(is_array($array)){
                     foreach ($array as $key => $value) {
                         $properties = explode(',', $value);
@@ -144,11 +152,31 @@ class HelpersAPIModel extends Model {
                 if(is_array($array) && is_array($array[0])){
                     foreach ($array[0] as $key => $value) {
                         $new_array[MappingAPI::hasMapping($class->url, 'properties', $key)] = 
-                                ($value == 'default') ? 'default' : MappingAPI::hasMapping($class->url, 'tabs', $key);
+                                ($value == 'default') ? 'default' : MappingAPI::hasMapping($class->url, 'tabs', $value);
                     }
                 }
-                update_post_meta($collection_id,'socialdb_collection_properties_ordenation', serialize($new_array));
+                update_post_meta($collection_id,'socialdb_collection_update_tab_organization', serialize([$new_array]));
+            }else if($meta['key'] == 'socialdb_collection_fixed_properties_visibility'){
+                $new_array = [];
+                $array =explode(',',$meta['value']);
+                if(is_array($array)){
+                    foreach ($array as $value) {
+                        $new_array[] = MappingAPI::hasMapping($class->url, 'properties', $value);
+                    }
+                }
+                update_post_meta($collection_id,'socialdb_collection_fixed_properties_visibility', implode(',',$new_array));
+            }else if($meta['key'] == 'socialdb_collection_fixed_properties_labels'){
+                $new_array = [];
+                $array = unserialize(unserialize(base64_decode($meta['value'])));
+                if(is_array($array)){
+                    foreach ($array as $key => $value) {
+                        $new_array[MappingAPI::hasMapping($class->url, 'properties', $key)] = $value;
+                    }
+                }
+                update_post_meta($collection_id,'socialdb_collection_fixed_properties_labels', serialize($new_array));
             }
+            
+            
         }
     }
     
@@ -259,6 +287,15 @@ class HelpersAPIModel extends Model {
                         $new_ids = [];
                         foreach ($array_serializado as $index => $value) {
                             $new_ids[MappingAPI::hasMapping($class->url, 'properties', $index)] = $value;
+                            if(MappingAPI::hasMapping($class->url, 'properties', $index) !== false){
+                                $id = MappingAPI::hasMapping($class->url, 'properties', $index);
+                                $terms = get_term_meta($id, 'socialdb_property_compounds_properties_id', true);
+                                $ids = array_filter(explode(',', $terms));
+                                if(is_array($ids) && !in_array($array['term_id'], $ids)){
+                                    $ids[] = $array['term_id'];
+                                    update_term_meta($id,'socialdb_property_compounds_properties_id', implode(',', $ids));
+                                }
+                            }
                         }
                         update_term_meta($array['term_id'], $meta['key'], serialize($new_ids));
                     }else {
@@ -305,13 +342,21 @@ class HelpersAPIModel extends Model {
                         foreach ($ids as $value) {
                             $new_ids[] = MappingAPI::hasMapping($class->url, 'properties', $value);
                         }
-                        var_dump($meta['value'],$new_ids);
                         update_term_meta($array['term_id'], $meta['key'], implode(',', $new_ids));
                     }else if ($meta['key'] == 'socialdb_property_is_compounds' && trim($meta['value']) != ''){
                         $array_serializado = unserialize(unserialize(base64_decode($meta['value'])));
                         $new_ids = [];
                         foreach ($array_serializado as $index => $value) {
                             $new_ids[MappingAPI::hasMapping($class->url, 'properties', $index)] = $value;
+                            if(MappingAPI::hasMapping($class->url, 'properties', $index) !== false){
+                                $id = MappingAPI::hasMapping($class->url, 'properties', $index);
+                                $terms = get_term_meta($id, 'socialdb_property_compounds_properties_id', true);
+                                $ids = array_filter(explode(',', $terms));
+                                if(is_array($ids) && !in_array($array['term_id'], $ids)){
+                                    $ids[] = $array['term_id'];
+                                    update_term_meta($id,'socialdb_property_compounds_properties_id', implode(',', $ids));
+                                }
+                            }
                         }
                         update_term_meta($array['term_id'], $meta['key'], serialize($new_ids));
                     }else {
