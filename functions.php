@@ -3361,5 +3361,7 @@ if ( ! defined("MANUAL_TAINACAN_URL") ) {
     }
 }
 
+/************* API ********************/
+include_once 'extras/json-rest-api/plugin.php';
 /************* Remove o post type das colecoes ********************/
 include_once 'extras/remove-slug-post/remove-slug-custom-post-type.php';
