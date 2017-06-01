@@ -421,6 +421,7 @@ function custom_rewrite_tag() {
     add_rewrite_tag('%tools%', '([^&]+)');
     add_rewrite_tag('%categories%', '([^&]+)');
     add_rewrite_tag('%edit-item%', '([^&]+)');
+    add_rewrite_tag('%add-item%', '([^&]+)');
 }
 
 add_action('init', 'custom_rewrite_tag', 10, 0);
@@ -462,7 +463,7 @@ function custom_rewrite_basic() {
     add_rewrite_rule('^'.__('signin','tainacan'), 'index.php?log-in=true', 'top');
     
     add_rewrite_rule('^([^/]*)/([^/]*)/editar', 'index.php?collection=$matches[1]&item=$matches[2]&edit-item=true', 'top');
-    
+    add_rewrite_rule('^([^/]*)/criar-item', 'index.php?collection=$matches[1]&add-item=true', 'top');
     add_rewrite_rule('^([^/]*)/([^/]*)', 'index.php?collection=$matches[1]&item=$matches[2]', 'top');
     //flush_rewrite_rules();
 }

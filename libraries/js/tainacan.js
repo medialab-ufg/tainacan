@@ -1773,6 +1773,23 @@ function showSingleObjectByName(object_name, src) {
         }
     });
 }
+//PARA CRIAR NOVOS ITEMS
+function createItemPage(src) {
+    $.ajax({
+        url: src + '/controllers/object/object_controller.php',
+        type: 'POST',
+        data: {operation: 'create-item',collection_id: $("#collection_id").val()}
+    }).done(function (result) {
+        var json = JSON.parse(result);
+        if (json.html) {
+            $('#main_part').hide();
+            $('#collection_post').hide();
+            $('#configuration').html(json.html);
+        }
+    });
+}
+
+
 //PARA CATEGORIAS
 function showPageCategories(slug_category, src) {
     // console.log('I am here');

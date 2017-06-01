@@ -823,7 +823,11 @@ class PropertyModel extends Model {
         if($value){
            $array =  unserialize($value);
            if(is_array($array)){
-               unset($array[0]['']);
+               try{
+                   // unset($array[0]['']);
+               } catch (Exception $e){
+                   
+               }
                return json_encode($array);
            }else{
                return json_encode(false);  

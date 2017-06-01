@@ -17,6 +17,9 @@ class ObjectController extends Controller {
         $objectfile_model = new ObjectFileModel;
         switch ($operation) {
             // #1 ADICIONAR ITEMS TIPO TEXTO
+            case "create-item":
+                $data['object_id'] = $object_model->create();
+                return $this->render(dirname(__FILE__) . '../../../views/formItem/formItem.php', $data);
             case "create_item_text":
                 //verifico se existe rascunho para se mostrado
                 $beta_id = get_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext', true);
