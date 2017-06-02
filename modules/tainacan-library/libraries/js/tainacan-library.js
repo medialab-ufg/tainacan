@@ -133,6 +133,25 @@ function verify_enter(e, button_click_id)
         
 }
 
+function select_user(obj)
+{
+    //Tratamento CSS
+    $(".user_result_selected").removeClass("user_result_selected");
+    $(obj).addClass("user_result_selected");
+    set_field_valid($("#meta_id").val(), "");
+    //Selecionando usuario
+    $("#no_users_msg").hide();
+    $("#place_to_show_user_info").show();
+
+    //Colocando informações na tela
+    $("#selected_user_name").val($(obj).text().trim());
+    $("#selected_user_login").val($(obj).attr('data-login').trim());
+    $("#selected_user_email").val($(obj).attr('data-email').trim());
+    $("#selected_user_cpf").val($(obj).attr('data-cpf').trim());
+
+    $("#selected_user_info_hidden").val($(obj).attr('data-id').trim());
+}
+
 function update_user_info()
 {
     var send_url = $('#src').val() + "/modules/tainacan-library/controllers/user_controller.php?operation=update_user_info";

@@ -18,7 +18,7 @@
             </tr >
         </thead >
 
-        <tbody id = "table-view-elementsll" >
+        <tbody id = "table-view-elements" >
             <?php
             $signed_up_users = get_users();
             foreach ($signed_up_users as $user_raw) {

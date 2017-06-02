@@ -219,9 +219,72 @@ if (isset($property_data)):
                                         $property['operation'] = 'edit';
                                         $property['object_id'] = $object_id;
                                         do_action('modificate_edit_item_properties_data', $property);
-                                    } else {
+                                    }elseif($property['type'] == "user")
+                                    {
+                                        $user_id = get_post_meta($collection_id, "socialdb_property_".$property['id'].'[]', true);
+
                                         ?>
-                                    <input type="text"  
+                                            <!--Look for user-->
+                                            <?php print("UserID: ".$user_id); ?>
+                                            <input type="hidden" id="selected_user_info_hidden" name="socialdb_proprety_<?php echo $property['id']; ?>[]" value="">
+                                            <div class="metadata-related col-md-12">
+                                                <div class="col-md-3">
+                                                    <div class="selected_user">
+                                                        <div id="selected-user-info">
+                                                            <p class="text-center text-primary" style="font-size: 15px; padding-top: 30%;" id="no_users_msg">
+                                                                <?php _e("No user selected", "tainacan"); ?>
+                                                            </p>
+                                                            <div id="place_to_show_user_info" style="display: none;">
+                                                                <div class="label_info">
+                                                                    <label class="label label-default"><?php _e("Name", "tainacan"); ?></label>
+                                                                    <input class="form-control" type="text" readonly id="selected_user_name" value=""><br>
+                                                                </div>
+                                                                <div class="label_info">
+                                                                    <label class="label label-default"><?php _e("User login", "tainacan"); ?></label>
+                                                                    <input class="form-control" type="text" readonly id="selected_user_login"><br>
+                                                                </div>
+                                                                <div class="label_info">
+                                                                    <label class="label label-default"><?php _e("E-mail", "tainacan"); ?></label>
+                                                                    <input class="form-control" type="text" readonly id="selected_user_email"></label><br>
+                                                                </div>
+                                                                <div class="label_info">
+                                                                    <label class="label label-default"><?php _e("CPF", "tainacan"); ?></label>
+                                                                    <input class="form-control" type="text" readonly id="selected_user_cpf"></label><br>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-9">
+                                                    <form id="users_search_<?php echo $property['id'] ?>">
+                                                        <div class="form-group" style="border-bottom: none;">
+                                                            <label><?php _e("User's name"); ?>: </label>
+                                                            <div class="input-group">
+                                                                <input class="form-control" type="text" id="text_box_search" onkeyup="verify_enter(window.event, 'magnifying_glass');" placeholder="<?php _e("Type user's name", "tainacan");?>">
+
+                                                                   <span class="input-group-addon" style="cursor: pointer;" id="magnifying_glass" onclick="search_for_users()">
+                                                                       <span class="glyphicon glyphicon-search"></span>
+                                                                   </span>
+                                                            </div>
+
+                                                            <div id="where_to_show_users" style="margin-top: 13px; display: none;">
+                                                                <label>
+                                                                    <?php _e("Users found")?>
+                                                                </label>
+                                                                <input type="hidden" id="meta_id" value="<?php echo $property['id'] ?>">
+                                                                <div class="col-md-12" id="users_found">
+                                                                    <!-- Onde os usuarios encontrados serão colocados -->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        <?php
+                                    }
+                                    else {
+                                        ?>
+                                        <input type="text"
                                            id="form_autocomplete_value_<?php echo $property['id']; ?>_<?php echo $i; ?>_origin" 
                                            value="<?php if ($property['metas']['value']) echo (isset($property['metas']['value'][$i]) ? $property['metas']['value'][$i] : ''); ?>" 
                                            class="form-control auto-save form_autocomplete_value_<?php echo $property['id']; ?>" 

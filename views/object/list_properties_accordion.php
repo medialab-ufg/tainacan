@@ -249,15 +249,37 @@ if (isset($property_object)):
                                 }else if($property['type'] == 'user')
                                 {
                                     ?>
-                                   <?php //print_r($property); ?>
                                         <!--Look for user-->
+                                       <input type="hidden" id="selected_user_info_hidden" name="socialdb_proprety_<?php echo $property['id']; ?>[]" value="">
                                        <div class="metadata-related col-md-12">
-                                           <div class="col-md-2">
-                                                <div id="user-info" style="border: solid;">
-
+                                           <div class="col-md-3">
+                                                <div class="selected_user">
+                                                    <div id="selected-user-info">
+                                                        <p class="text-center text-primary" style="font-size: 15px; padding-top: 30%;" id="no_users_msg">
+                                                            <?php _e("No user selected", "tainacan"); ?>
+                                                        </p>
+                                                        <div id="place_to_show_user_info" style="display: none;">
+                                                            <div class="label_info">
+                                                                <label class="label label-default"><?php _e("Name", "tainacan"); ?></label>
+                                                                <input class="form-control" type="text" readonly id="selected_user_name" value=""><br>
+                                                            </div>
+                                                            <div class="label_info">
+                                                                <label class="label label-default"><?php _e("User login", "tainacan"); ?></label>
+                                                                <input class="form-control" type="text" readonly id="selected_user_login"><br>
+                                                            </div>
+                                                            <div class="label_info">
+                                                                <label class="label label-default"><?php _e("E-mail", "tainacan"); ?></label>
+                                                                <input class="form-control" type="text" readonly id="selected_user_email"></label><br>
+                                                            </div>
+                                                            <div class="label_info">
+                                                                <label class="label label-default"><?php _e("CPF", "tainacan"); ?></label>
+                                                                <input class="form-control" type="text" readonly id="selected_user_cpf"></label><br>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                            </div>
-                                           <div class="col-md-10">
+                                           <div class="col-md-9">
                                                <form id="users_search_<?php echo $property['id'] ?>">
                                                    <div class="form-group" style="border-bottom: none;">
                                                         <label><?php _e("User's name"); ?>: </label>
@@ -273,7 +295,8 @@ if (isset($property_object)):
                                                            <label>
                                                                <?php _e("Users found")?>
                                                            </label>
-                                                           <div id="users_found">
+                                                           <input type="hidden" id="meta_id" value="<?php echo $property['id'] ?>">
+                                                           <div class="col-md-12" id="users_found">
                                                                <!-- Onde os usuarios encontrados serão colocados -->
                                                            </div>
                                                        </div>

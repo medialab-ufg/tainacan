@@ -43,14 +43,54 @@
     margin-top: 4px;
 }
 
+.selected_user
+{
+    border: lightgray solid 1px;
+    border-radius: 3px;
+    min-height: 21.2em;
+
+}
+
+.user_result:hover
+{
+    background-color: lightgrey;
+}
+
+.user_result_selected
+{
+    background-color: grey;
+    color: white;
+}
+
 .user-row:hover{
     cursor: pointer;
 }
 
+.label_info
+{
+    margin-top: 4px;
+}
 /*Seletores*/
 #formmarc
 {
     padding: 13px;
+}
+
+#place_to_show_user_info
+{
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 6px;
+}
+
+#users_found
+{
+    overflow: auto;
+    height: 155px;
+    border: lightgray solid 1px;
+    border-radius: 3px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 @media print {

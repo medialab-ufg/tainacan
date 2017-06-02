@@ -796,12 +796,19 @@ function search_for_user($user_name)
 
     foreach ($users as $user)
     {
+        //print_r($user);break;
         $display_name = strtolower($user->data->display_name);
         $user_login = strtolower($user->data->user_login);
         
         if(strpos($display_name, $user_name) !== false || strpos($user_login, $user_name) !== false)
         {
-            $users_found[] = ['display_name' => $user->data->display_name, 'user_login' => $user->data->user_login, 'id' => $user->data->ID];
+            $cpf = get_user_meta($user->data->ID, 'CPF');
+            $users_found[] = ['display_name' => $user->data->display_name,
+                'user_login' => $user->data->user_login,
+                'id' => $user->data->ID,
+                'user_email' => $user->data->user_email,
+                'cpf' => $cpf[0]
+            ];
         }
     }
     
@@ -812,7 +819,14 @@ function search_for_user($user_name)
         foreach ($users_found as $user)
         {
             ?>
-            <li class="col-md-2 user_result" style="cursor: pointer;"><?php echo $user['display_name']; ?></li>
+            <li class="col-md-2 user_result" style="cursor: pointer;" onclick="select_user(this);"
+                data-id="<?php echo $user['id']; ?>"
+                data-login="<?php echo $user['user_login']; ?>"
+                data-email="<?php echo $user['user_email']; ?>"
+                data-cpf="<?php echo $user['cpf'] ?>"
+            >
+                <?php echo $user['display_name']; ?>
+            </li>
             <?php
         }
         ?>
