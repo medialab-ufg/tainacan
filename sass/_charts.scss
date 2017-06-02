@@ -98,6 +98,14 @@
         transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
       }
 
+      label.label-from{
+        font-weight: normal !important;
+      }
+      
+      label.label-until{
+        font-weight: normal !important;
+      }
+
       span.config-title {
         color: $brand-medium-blue;
         font-weight: bolder;

@@ -10,7 +10,7 @@ $collection_route = get_post(get_option('collection_root_id'));
     ?>">
 <!-- Paginas da colecao -->
 <input type="hidden" id="goToAddItem" name="goToAddItem" value="<?php
-    if (get_query_var('add-item') && get_query_var('collection') && get_query_var('item')) {
+    if (get_query_var('add-item') && get_query_var('collection')) {
          echo trim(get_query_var('add-item'));
     }
     ?>">
@@ -216,8 +216,7 @@ $collection_route = get_post(get_option('collection_root_id'));
      */
     function execute_route() {
          $.router.reset();
-         
-                    console.log('edit item',$('#goToEditObject').val());
+         console.log('edit item',$('#goToAddItem').val());
         if ($('#object_page').val() !== '') {
             collection = $('#slug_collection').val();
             if(collection) {
@@ -226,7 +225,7 @@ $collection_route = get_post(get_option('collection_root_id'));
         } else if($('#goToEditObject').val()!==''){
                route_edit_object_item($('#goToEditObject').val())
         }else if($('#goToAddItem').val()!==''){
-            
+            createItemPage($('#src').val());
         }else if($('#goToLogin').val()!==''){
             showLoginScreen($('#src').val());
         }else if($('#goToAdvancedSearch').val()!==''){

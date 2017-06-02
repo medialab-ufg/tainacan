@@ -31,59 +31,95 @@ class Log extends Model {
         return ['ip' => $_SERVER['REMOTE_ADDR'], 'event_date' => date('Y-m-d H:i:s')];
     }
 
-    public static function getUserEvents($event_type, $event, $encoded = true, $from = '', $to = '', $collection_id = NULL) {
+    public static function getUserEvents($event_type, $event, $encoded = true, $from = '', $to = '', $collection_id = NULL, $filter) {
         global $wpdb;
         $_alias = "total_" . $event;
 
-        if(empty($from)) {
-            $from = "2016-01-01";
-        }
-        if(empty($to)) {
-            $to = date("Y-m-d", strtotime("tomorrow"));
-        }
+        if(($collection_id == 'null' || is_null($collection_id)) and $filter == 'months'){
+            $fr = substr($from, 0, 7);
+            $t = substr($to, 0, 7);
 
-        if( $collection_id == 'null' || is_null($collection_id) ) {
-            $sql = sprintf("SELECT COUNT(id) as '$_alias' FROM %s WHERE event_type = '$event_type' AND event = '$event' AND event_date BETWEEN '$from' AND '$to'", self::_table() );
-        } else {
-            $sql = sprintf("SELECT COUNT(id) as '$_alias' FROM %s WHERE event_type = '$event_type' AND event = '$event' 
+            $SQL_query = sprintf(
+                " select * from ((select * 
+                          from (select event, substring(event_date, 1, 7) as date, count(id)  as total 
+                            from %s 
+                              where event = '$event' and event_type = '$event_type' 
+                                group by (substring(event_date, 1, 7))) 
+                        res1  
+                          where date between '$fr' and '$t') 
+                          res2 
+                            natural join (select count(id) as event_total from %s 
+                              where event = '$event' and event_type = '$event_type' and substring(event_date, 1, 7) between '$fr' and '$t') 
+                            res3)", self::_table(), self::_table());
+        }
+        else if(($collection_id == 'null' || is_null($collection_id)) and $filter == 'weeks'){
+            $SQL_query = sprintf(
+                "select * from ((select * 
+                          from (select event, (week(substring(event_date, 1, 10))) as week_number, count(id) as total 
+                            from %s 
+                              where event = '$event' and event_type = '$event_type' and substring(event_date, 1, 10) between '$from' and '$to' 
+                                group by (week(substring(event_date, 1, 10)))) 
+                        res1) 
+                        res2 
+                        natural join (select count(id) as event_total from %s 
+                          where event = '$event' and event_type = '$event_type' and substring(event_date, 1, 10) between '$from' and '$to') 
+                          res3)", self::_table(), self::_table());
+        }
+        else if(($collection_id == 'null' || is_null($collection_id)) and $filter == 'days'){
+            $SQL_query = sprintf(
+                "select * from ((select * 
+                          from (select event, substring(event_date, 1, 10) as date, count(id) as total 
+                            from %s
+                              where event = '$event' and event_type = '$event_type' 
+                                group by (substring(event_date, 1, 10))) 
+                        res1  
+                          where date between '$from' and '$to') 
+                          res2 natural join (select count(id) as event_total from %s 
+                              where event = '$event' and event_type = '$event_type' and substring(event_date, 1, 10) between '$from' and '$to') 
+                            res3)", self::_table(), self::_table());
+        }
+        else {
+            $SQL_query = sprintf("SELECT COUNT(id) as '$_alias' FROM %s WHERE event_type = '$event_type' AND event = '$event'
                    AND collection_id = '$collection_id' AND event_date BETWEEN '$from' AND '$to'", self::_table() );
         }
 
-        if( $encoded ) {
-            return json_encode( $wpdb->get_results($sql) );
-        } else {
-            return $wpdb->get_results($sql, ARRAY_N);
+        if($encoded){
+            return json_encode($wpdb->get_results($SQL_query));
+        }
+        else{
+            $ret = $wpdb->get_results($SQL_query);
+            return $ret;
         }
     }
     
     private function get_event_type($spec) {
         switch($spec) {
             case 'items':
-                return ['color' => '#0EEAFF', 'events' => self::getDefaultFields(['download', 'vote'])];
+                return ['events' => self::getDefaultFields(['download', 'vote'])];
             case 'category':
-                return ['color' => '#D6DF22', 'events' => self::getDefaultFields()];
+                return ['events' => self::getDefaultFields()];
             case 'collection':
-                return ['color' => '#149271', 'events' => self::getDefaultFields()];
+                return ['events' => self::getDefaultFields()];
             case 'comments':
-                return ['color' => '#8DC53E', 'events' => self::getDefaultFields()];
+                return ['events' => self::getDefaultFields()];
             case 'tags':
-                return ['color' => 'orange', 'events' => self::getDefaultFields()];
+                return ['events' => self::getDefaultFields()];
             case 'user':
-                return ['color' => '#E63333', 'events' => ['view', 'comment', 'vote'] ];
+                return ['events' => ['view', 'comment', 'vote'] ];
             case 'status':
-                return ['color' => '#79A7CF', 'events' => ['login', 'register', 'delete_user'] ];
+                return ['events' => ['login', 'register', 'delete_user'] ];
             case 'general_status':
-                return ['color' => '#EF4C28', 'events' => ['active', 'draft', 'trash', 'delete'] ];
+                return ['events' => ['active', 'draft', 'trash', 'delete'] ];
             case 'profile':
-                return ['color' => '#F09302', 'events' => ['subscriber', 'administrator', 'editor', 'author', 'contributor'] ];
+                return ['events' => ['subscriber', 'administrator', 'editor', 'author', 'contributor'] ];
             case 'imports':
-                return ['color' => '#43F7B1', 'events' => ['access_oai_pmh', 'import_csv', 'export_csv', 'import_tainacan', 'export_tainacan'] ];
+                return ['events' => ['access_oai_pmh', 'import_csv', 'export_csv', 'import_tainacan', 'export_tainacan'] ];
             case 'collection_imports':
-                return ['color' => '#CC181E', 'events' => ['access_oai_pmh', 'harvest_oai_pmh', 'import_csv', 'export_csv'] ];
+                return ['events' => ['access_oai_pmh', 'harvest_oai_pmh', 'import_csv', 'export_csv'] ];
             case 'admin':
-                return ['color' => '#027758', 'events' => ['config', 'metadata', 'keys', 'licenses', 'welcome_mail', 'tools'] ];
+                return ['events' => ['config', 'metadata', 'keys', 'licenses', 'welcome_mail', 'tools'] ];
             case 'collection_admin':
-                return ['color' => 'goldenrod', 'events' => ['config', 'metadata', 'layout', 'social_media', 'licenses', 'import', 'export'] ];
+                return ['events' => ['config', 'metadata', 'layout', 'social_media', 'licenses', 'import', 'export'] ];
         }
     }
 
@@ -92,7 +128,7 @@ class Log extends Model {
         return ( is_array($extra_fields) && !empty($extra_fields) ) ? array_merge($base_defaults, $extra_fields) : $base_defaults;
     }
 
-    public static function user_events($event_type, $spec, $from, $to, $collection_id = NULL) {
+    public static function user_events($event_type, $spec, $from, $to, $collection_id = NULL, $filter) {
         $_events_ = self::get_event_type($spec);
 
         if( "top_collections_items" == $event_type ) {
@@ -103,19 +139,36 @@ class Log extends Model {
             return self::getFrequentSearches($collection_id);
         } else {
             if($_events_) {
-                $_stats = [];
+                $_stats = array();
+
                 foreach ($_events_['events'] as $ev) {
-                    $evt_count_ = self::getUserEvents($event_type, $ev, false, $from, $to, $collection_id);
-                    $l_data = array_pop($evt_count_);
-                    $_stats[] = $l_data[0];
+                    $results = self::getUserEvents($event_type, $ev, false, $from, $to, $collection_id, $filter);
+
+                   $i = 0;
+                   //echo "\n";
+                   if($filter == 'months' || $filter == 'days') {
+                       foreach ($results as $key => $data) {
+                           $_stats[] = [ $data->event, $data->date, $data->total, $data->event_total ];
+//                           echo "<script> console.log('Stats: '+ " . $_stats . " +'Stats i: '+ " . $_stats[$i] . ");
+//                           console.log(' Data x: '+ " . $data->event . "+' '+" . $data->date . "+' '+" . $data->total . "); </script>";
+                           $i += 1;
+                       }
+                   }
+                   else if($filter == 'weeks'){
+                        foreach ($results as $key => $data){
+                            $_stats[] = [ $data->event, $data->week_number, $data->total, $data->event_total ];
+                        }
+                   }
                 }
-                $prepared_struct = array_combine($_events_['events'], $_stats);
-                $stat_data = [ "stat_title" => [ 'Coleções do Usuário', 'Qtd' ], "stat_object" => $prepared_struct, "color" => $_events_['color']  ];
+
+                $stat_data = [ "stat_object" => $_stats, "columns" => $_events_ ];
             } else {
                 $stat_data = [];
             }
 
-            return json_encode($stat_data);
+            $return_date = json_encode($stat_data, JSON_NUMERIC_CHECK, JSON_FORCE_OBJECT);
+
+            return $return_date;
         }
     }
 

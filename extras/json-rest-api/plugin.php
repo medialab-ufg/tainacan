@@ -1,62 +1,12 @@
 <?php
-
-function json_basic_auth_handler( $user ) {
-	global $wp_json_basic_auth_error;
-	$wp_json_basic_auth_error = null;
-	// Don't authenticate twice
-	if ( ! empty( $user ) ) {
-               remove_filter( 'determine_current_user', 'json_basic_auth_handler', 20 );
-               add_filter( 'determine_current_user', 'json_basic_auth_handler', 20 );
-               $wp_json_basic_auth_error = true;
-	       return $user;
-	}
-        
-	
-       // var_dump('adsadsasd');
-        
-	// Check that we're trying to authenticate
-//	if ( !isset( $_SERVER['PHP_AUTH_USER'] ) ) {
-//		return $user;
-//	}
-        if(isset($_GET['user'])||isset($_POST['user'])||isset($_PUT['user'])||isset($_DELETE['user'])){
-                if($_GET['user']){
-                   $username = $_GET['user'];
-                   $password = $_GET['password'];
-                }
-                elseif($_POST['user']){
-                   $username = $_POST['user'];
-                   $password = $_POST['password'];
-                }elseif($_PUT['user']){
-                    $username = $_PUT['user'];
-                   $password = $_PUT['password'];
-                }elseif($_DELETE['user']){
-                    $username = $_DELETE['user'];
-                   $password = $_DELETE['password'];
-                }
-	}else{
-            $username = $_SERVER['PHP_AUTH_USER'];
-	   $password = $_SERVER['PHP_AUTH_PW'];
-        }
-	/**
-	 * In multi-site, wp_authenticate_spam_check filter is run on authentication. This filter calls
-	 * get_currentuserinfo which in turn calls the determine_current_user filter. This leads to infinite
-	 * recursion and a stack overflow unless the current function is removed from the determine_current_user
-	 * filter during authentication.
-	 */
-	remove_filter( 'determine_current_user', 'json_basic_auth_handler', 20 );
-	$user = wp_authenticate( $username, $password );
-	add_filter( 'determine_current_user', 'json_basic_auth_handler', 20 );
-
-	if ( is_wp_error( $user ) ) {
-		$wp_json_basic_auth_error = $user;
-		return null;
-	}
-
-	$wp_json_basic_auth_error = true;
-
-	return $user->ID;
+if(!is_user_logged_in() && isset($_SERVER['PHP_AUTH_USER']) && $_SERVER['PHP_AUTH_USER']){
+    global $wp_json_basic_auth_error;
+   $wp_json_basic_auth_error = null;
+    $username = $_SERVER['PHP_AUTH_USER'];
+    $password = $_SERVER['PHP_AUTH_PW'];
+    $user = wp_authenticate( $username, $password );
+    wp_set_current_user( $user->ID );
 }
-add_filter( 'determine_current_user', 'json_basic_auth_handler', 9999 );
 
 function json_basic_auth_error( $error ) {
 	// Passthrough other errors
@@ -75,8 +25,6 @@ add_filter( 'json_authentication_errors', 'json_basic_auth_error' );
  * Description: JSON-based REST API for WordPress, developed as part of GSoC 2013.
  * Version: 1.2.5
  * Author: WP REST API Team
- * Author URI: http://wp-api.org/
- * Plugin URI: https://github.com/WP-API/WP-API
  */
 
 /**

@@ -161,7 +161,7 @@
                     var extra_yDist = 0;
                     if(item_desc) {
                       if(itm.breaks && itm.breaks > 0) {
-                          if(itm.tmb) {
+                          if(itm.tbn) {
                               extra_yDist = itm.breaks * 30;
                           } else {
                               extra_yDist = itm.breaks * 20;
@@ -173,7 +173,7 @@
                     if(item_desc) {
                         var base_count = desc_yDist + desc_height + (baseX*2) + extra_yDist;
                     } else {
-                        if(itm.tmb) {
+                        if(itm.tbn) {
                             var base_count = desc_yDist + 80;
                         } else {
                             var base_count = desc_yDist;

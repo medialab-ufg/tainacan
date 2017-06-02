@@ -251,7 +251,7 @@ class HelpersAPIModel extends Model {
                     'slug' => $model->generate_slug(trim($property['name']), 0)));
             }
             //metas
-            if (is_array($metas) && isset($array['term_id'])) {
+            if (!is_wp_error($array) && is_array($metas) && isset($array['term_id'])) {
                 MappingAPI::saveMapping($class->url, 'properties', $property['ID'], $array['term_id']);
                 update_term_meta($array['term_id'], 'socialdb_token', $class->token);
                 foreach ($metas as $meta) {
@@ -344,6 +344,7 @@ class HelpersAPIModel extends Model {
                         }
                         update_term_meta($array['term_id'], $meta['key'], implode(',', $new_ids));
                     }else if ($meta['key'] == 'socialdb_property_is_compounds' && trim($meta['value']) != ''){
+                        error_reporting(0);
                         $array_serializado = unserialize(unserialize(base64_decode($meta['value'])));
                         $new_ids = [];
                         foreach ($array_serializado as $index => $value) {
