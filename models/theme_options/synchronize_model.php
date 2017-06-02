@@ -13,6 +13,7 @@ class SynchronizeModel extends Model {
     public $Pass;
     public $url;
     public $token;
+    public $headers;
     public $rootCategory = false;
     public $metasCollection;
     public $rootCategoryCollection = [];
@@ -22,85 +23,92 @@ class SynchronizeModel extends Model {
     /***************************** Metodos para leitura na API ****************/
     
     public function readCollectionsPublished(){
-        $qry_str = "/posts?type=socialdb_collection&filter[status]=publish&filter[posts_per_page]=-1&user=".$this->User.'&password='.$this->Pass;;
+        $qry_str = "/posts?type=socialdb_collection&filter[status]=publish&filter[posts_per_page]=-1";
         $ch = curl_init();
         // Set query data here with the URL
         curl_setopt($ch, CURLOPT_URL, $this->url. $qry_str);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_TIMEOUT, '3');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $this->headers);
         $content = trim(curl_exec($ch));
         curl_close($ch);
         return json_decode($content, true);
     }
     
     public function readCollectionMeta($id){
-        $qry_str = "/posts/" . $id . "/meta?user=".$this->User.'&password='.$this->Pass;
+        $qry_str = "/posts/" . $id . "/meta";
         $ch = curl_init();
         // Set query data here with the URL
         curl_setopt($ch, CURLOPT_URL,$this->url. $qry_str);
         //curl_setopt($ch, CURLOPT_USERPWD, "$this->User:$this->Pass"); //Your credentials goes here
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_TIMEOUT, '3');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $this->headers);
         $metas = trim(curl_exec($ch));
         $metas_collection = json_decode($metas, true);
         return $metas_collection;
     }
     
     public function readTerm($id) {
-        $qry_str = "/taxonomies/socialdb_category_type/terms/".$id."?user=".$this->User.'&password='.$this->Pass;;
+        $qry_str = "/taxonomies/socialdb_category_type/terms/".$id;
         $ch = curl_init();
         // Set query data here with the URL
         curl_setopt($ch, CURLOPT_URL, $this->url. $qry_str);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_TIMEOUT, '3');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $this->headers);
         $content = trim(curl_exec($ch));
         curl_close($ch);
         return json_decode($content, true);
     }
     
     public function readProperty($id) {
-        $qry_str = "/taxonomies/socialdb_property_type/terms/".$id."?user=".$this->User.'&password='.$this->Pass;;
+        $qry_str = "/taxonomies/socialdb_property_type/terms/".$id;
         $ch = curl_init();
         // Set query data here with the URL
         curl_setopt($ch, CURLOPT_URL, $this->url. $qry_str);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_TIMEOUT, '3');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $this->headers);
         $content = trim(curl_exec($ch));
         curl_close($ch);
         return json_decode($content, true);
     }
     
     public function readTermMetas($id) {
-        $qry_str = "/taxonomies/socialdb_category_type/terms/".$id."/meta?user=".$this->User.'&password='.$this->Pass;;
+        $qry_str = "/taxonomies/socialdb_category_type/terms/".$id."/meta";
         $ch = curl_init();
         // Set query data here with the URL
         curl_setopt($ch, CURLOPT_URL, $this->url. $qry_str);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_TIMEOUT, '3');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $this->headers);
         $content = trim(curl_exec($ch));
         curl_close($ch);
         return json_decode($content, true);
     }
     
     public function readPropertyMetas($id) {
-        $qry_str = "/taxonomies/socialdb_property_type/terms/".$id."/meta?user=".$this->User.'&password='.$this->Pass;;
+        $qry_str = "/taxonomies/socialdb_property_type/terms/".$id."/meta";
         $ch = curl_init();
         // Set query data here with the URL
         curl_setopt($ch, CURLOPT_URL, $this->url. $qry_str);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_TIMEOUT, '3');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $this->headers);
         $content = trim(curl_exec($ch));
         curl_close($ch);
         return json_decode($content, true);
     }
     
     public function readCategoriesChildren($term_id) {
-        $qry_str = "/taxonomies/socialdb_category_type/terms?filter[child_of]=".$term_id."&user=".$this->User.'&password='.$this->Pass;;
+        $qry_str = "/taxonomies/socialdb_category_type/terms?filter[child_of]=".$term_id;
         $ch = curl_init();
         // Set query data here with the URL
         curl_setopt($ch, CURLOPT_URL, $this->url. $qry_str);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_TIMEOUT, '3');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $this->headers);
         $content = trim(curl_exec($ch));
         curl_close($ch);
         return json_decode($content, true);
@@ -118,6 +126,11 @@ class SynchronizeModel extends Model {
         $this->Pass = $data['api_key'];
         $this->url = $data['api_url'];
         $this->token = md5(uniqid(rand(), true));
+        $this->headers = array(
+            'Authorization: Basic '. base64_encode($this->User.":".$this->Pass) // <---
+        );
+        
+        
         $content = $this->readCollectionsPublished();
         if (empty($content)) {
             return false;
