@@ -1780,12 +1780,9 @@ function createItemPage(src) {
         type: 'POST',
         data: {operation: 'create-item',collection_id: $("#collection_id").val()}
     }).done(function (result) {
-        var json = JSON.parse(result);
-        if (json.html) {
-            $('#main_part').hide();
-            $('#collection_post').hide();
-            $('#configuration').html(json.html);
-        }
+        $('#main_part').hide();
+        $('#collection_post').hide();
+        $('#configuration').html(result);
     });
 }
 

@@ -1323,6 +1323,7 @@ class VisualizationModel extends CollectionModel {
         foreach ($facets_id as $facet_id) {
             $widget = get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $facet_id . '_widget', true);
             $orientation = get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $facet_id . '_orientation', true);
+            $data['has_left']  = 'true';
             if ($widget == 'tree') {
                 $tree_orientation = get_post_meta($data['collection_id'], 'socialdb_collection_facet_widget_tree_orientation', true);
                 if ($tree_orientation == 'left-column' || $tree_orientation == '') {

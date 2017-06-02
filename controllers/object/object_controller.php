@@ -18,8 +18,12 @@ class ObjectController extends Controller {
         switch ($operation) {
             // #1 ADICIONAR ITEMS TIPO TEXTO
             case "create-item":
-                $data['object_id'] = $object_model->create();
-                return $this->render(dirname(__FILE__) . '../../../views/formItem/formItem.php', $data);
+                include_once dirname(__FILE__) . '../../../views/object/formItem/helper/formItem.class.php';
+                $data['ID'] = $object_model->create();
+                $data['formItem'] = new FormItem();
+                $data['properties'] = $object_model->show_object_properties($data);
+                $data['modeView'] = get_post_meta($data['collection_id'], 'socialdb_collection_submission_visualization', true);
+                return $this->render(dirname(__FILE__) . '../../../views/object/formItem/formItem.php', $data);
             case "create_item_text":
                 //verifico se existe rascunho para se mostrado
                 $beta_id = get_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext', true);
