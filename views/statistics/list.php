@@ -13,22 +13,6 @@ include_once('js/list_js.php');
 
     <!-- Barra lateral esquerda -->
     <div id="statistics-config" class="col-md-3 ui-widget-header">
-
-        <!-- Periodo -->
-<!--        <div class="form-group period-config">-->
-<!--            <label class="title-pipe">-->
-<!--                <span class="prepend-filter-label glyphicon-chevron-down blue glyphicon sec-color" style="color: #79a6ce !important;"></span>-->
-<!--                --><?php //_t('Period',true); ?>
-<!--            </label>-->
-<!--            <div class="date-range-filter">-->
-<!--                <p> <span> --><?php //_t('From',1) ?><!-- </span>-->
-<!--                    <input size="7" type="text" class="input_date form-control" value="" placeholder="dd/mm/aaaa" id="from_period" name="from_period">-->
-<!--                </p>-->
-<!--                <p> <span> --><?php //_t('until',1) ?><!-- </span>-->
-<!--                    <input type="text" class="input_date form-control" size="7" value="" placeholder="dd/mm/aaaa" id="to_period" name="to_period"> <br />-->
-<!--                </p>-->
-<!--            </div>-->
-<!--        </div>-->
         <div class="form-group">
             <label for="object_tags" class="title-pipe">
                 <span class="prepend-filter-label glyphicon-chevron-down blue glyphicon sec-color" style="color: #79a6ce !important;"></span>
@@ -60,14 +44,14 @@ include_once('js/list_js.php');
                     <!-- Period -->
                     <div class="col-md-5" style="width: auto">
                       <span class="config-title"><?php _e('Filters: '); ?></span>
-                      <input type="text" class="inputPeriod" value="" placeholder="<?php _e('from: dd/mm/aaaa')?>" id="from_period" name="from_period">
-                      <input type="text" class="inputPeriod"  value="" placeholder="<?php _e('to: dd/mm/aaaa')?>" id="to_period" name="to_period">
+                      <label class="label-from"><?php _e('from: ')?></label><input type="text" class="inputPeriod" value="" placeholder="<?php _e('from: dd/mm/aaaa')?>" id="from_period" name="from_period">
+                      <label class="label-until"><?php _e('until: ')?></label><input type="text" class="inputPeriod"  value="" placeholder="<?php _e('until: dd/mm/aaaa')?>" id="to_period" name="to_period">
                     </div>
 
                     <div class="col-md-5" style="width: auto">
-                      <label class="radio-inline"><input type="radio" id="days" name="optradio"> <?php _e('Days')?></label>
-                      <label class="radio-inline"><input type="radio" id="weeks" name="optradio"> <?php _e('Weeks')?></label>
-                      <label class="radio-inline"><input type="radio" id="months" name="optradio" checked> <?php _e('Months') ?></label>
+                      <label class="radio-inline"><input type="radio" id="days" value="days" name="optradio"> <?php _e('Days')?></label>
+                      <label class="radio-inline"><input type="radio" id="weeks" value="weeks" name="optradio"> <?php _e('Weeks')?></label>
+                      <label class="radio-inline"><input type="radio" id="months" value="months" name="optradio" checked> <?php _e('Months') ?></label>
                     </div>
                     <!--  <span class="current-chart">--><?php //_t('User Stats',1); ?><!--</span> -->
                 </div>

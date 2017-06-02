@@ -1,6 +1,6 @@
 <script type="text/javascript">
-    google.charts.load('current', {'packages':['bar','corechart']});
-    //google.charts.setOnLoadCallback(drawChart);
+    google.charts.load('current', {'packages':['default','corechart']}); //bar
+    google.charts.setOnLoadCallback(loadChart);
     
     var TainacanChart = function(){};
     TainacanChart.prototype.getMappedTitles = function() {
@@ -87,21 +87,15 @@
         normalizeStatPage();
 
         var dateFormat = "dd/mm/yy";
-        //period-config
+
+        // Period config
         $("#from_period").datepicker({
-//            dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
-//            dayNamesMin: ['D','S','T','Q','Q','S','S','D'],
-//            dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],
-//            monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
-//            monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
-//            nextText: $(".stats-i18n .next-text").text(),
-//            prevText: $(".stats-i18n .prev-text").text(),
             dateFormat: 'dd/mm/yy',
             showButtonPanel: false,
             showAnim: 'clip',
             changeMonth: true,
             changeYear: true,
-            minDate: '01/01/2016',
+            minDate: '01-01-2016',
             maxDate: '0',
             onSelect: function(dateText, obj) {
                 var which = obj.id.toString().replace("_period", "");
@@ -117,7 +111,7 @@
             changeYear: true,
             showButtonPanel: false,
             showAnim: 'clip',
-            maxDate: '0'
+            maxDate: '0',
         }).on("change", function () {
             $("#from_period").datepicker("option", "maxDate", getDate(this));
         });
@@ -134,6 +128,72 @@
             return date;
         }
 
+        //Default period
+        $("#from_period").val('01/01/'+today().substring(6,10));
+        $("#to_period").val(today());
+
+        //On set from and to
+        function today() {
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth()+1; //January is 0!
+            var yyyy = today.getFullYear();
+
+            if(dd<10) {
+                dd='0'+dd
+            }
+
+            if(mm<10) {
+                mm='0'+mm
+            }
+
+            return today = dd+'/'+mm+'/'+yyyy;
+        }
+
+        $("#from_period").on('change', function () {
+            var diffe = Math.ceil( ($("#to_period").datepicker('getDate') - $("#from_period").datepicker('getDate')) / (1000 * 60 * 60 * 24) ) + 1;
+            //console.log(diffe);
+
+            if(diffe < 7){
+                $("#weeks").prop('disabled', true);
+                $("#months").prop('disabled', true);
+            }
+            else if(diffe < 28){
+                $("#months").prop('disabled', true);
+            }
+            else{
+                $("#weeks").prop('disabled', false);
+                $("#months").prop('disabled', false);
+            }
+            loadChart();
+        });
+
+        $("#to_period").on('change', function () {
+            var diffe = Math.ceil( ($("#to_period").datepicker('getDate') - $("#from_period").datepicker('getDate')) / (1000 * 60 * 60 * 24) ) + 1;
+            //console.log(diffe);
+
+            if(diffe < 7){
+                $("#weeks").prop('disabled', true);
+                $("#months").prop('disabled', true);
+            }
+            else if(diffe < 28){
+                $("#months").prop('disabled', true);
+            }
+            else{
+                $("#weeks").prop('disabled', false);
+                $("#months").prop('disabled', false);
+            }
+            loadChart();
+        });
+
+        //-
+
+        //On change filter type week, day, month
+        $("input[type=radio][name=optradio]").on('change', function () {
+            loadChart();
+        });
+
+        //On change chart type
         $('a.change-mode').on('click', function() {
             var selected_chart = $(this).attr('data-chart');
             var curr_img = $(this).html();
@@ -153,7 +213,7 @@
 
             $("#statChartType").html(curr_img);
              // Click again at current selected node to trigger chart drawing
-            $('.dynatree-selected').click();
+            loadChart();
         });
     });
 
@@ -201,19 +261,7 @@
             var chart_text = node.data.title;
             var chain = $('.temp-set').html(chart_text).text().replace(/\//gi, "");
             var split_title = chain.split(" ");
-
-            <!-- Filters: -- / -- -->
-//            if(parent) {
-//                // $(".current-chart").html( parent + "<span class='glyphicon glyphicon-triangle-right'></span>" + split_title[0] );
-//                if(split_title[0]) {
-//                    var updated_text =  parent + "<span> / </span>" + split_title[0];
-//                } else {
-//                    var updated_text = parent;
-//                }
-//                //atualiza o subtitulo do repository statistics 'Filters: -- / --'
-//                $(".current-chart").html( updated_text );
-//            }
-
+            
             if(node_action) {
                 fetchData(parent, node_action);
             }
@@ -303,16 +351,44 @@
     }
 
     function fetchData(parent, action) {
-        var from = $("#from_period").val(); //periodo
-        var to = $("#to_period").val(); //periodo
+//        var from = "";
+//        var to = "";
+//        if( ($("#from_period").val()) && ($("#to_period").val()) ) {
+        var f = $("#from_period").val().split('/');
+        var t = $("#to_period").val().split('/');
+
+        var dfrom = new Date(f[2], f[1] - 1, f[0]);
+        var dto = new Date(t[2], t[1] - 1, t[0]);
+
+        var from = dfrom.toISOString().split('T')[0];
+        var to = dto.toISOString().split('T')[0];
+
+        //console.log(" "+ from +" "+ to);
+//        }
+
         var stat_path = $('.stat_path').val() || $('#src').val(); //url do tema
         var c_id = $('.get_collection_stats').val() || null; //id da coleção ?!
 
+        var filter = '';
+        if($('#days').is(":checked")){
+            filter = $('#days').val();
+        }
+        else if($('#weeks').is(":checked") && $('#weeks').is(":enabled")){
+            filter = $('#weeks').val();
+        }
+        else if($('#months').is(":checked") && $('#months').is(":enabled")){
+            filter = $('#months').val();
+        }
+
         $.ajax({
             url: stat_path + '/controllers/log/log_controller.php', type: 'POST',
-            data: { operation: 'user_events', parent: parent, event: action, from: from, to: to, collec_id: c_id }
-        }).done(function(r) {
-            var res_json = $.parseJSON(r);
+            data: { operation: 'user_events', parent: parent, event: action, from: from, to: to, collec_id: c_id, filter: filter }
+        }).done(function(resp) {
+            //console.log("Done: " + resp);
+
+            var res_json = JSON.parse(resp);
+            //console.log("Res: "+ res_json);
+
             var chart = $('.selected_chart_type').val(); //tipo de chart selecionado
             $(".current_parent_report").val(parent); //nome do parent atual 'ex: Users'
 
@@ -323,35 +399,44 @@
                 toggleElements(["#"+chart+"chart_div", "#charts-resume"]);
                 toggleElements(["#charts-container #no_chart_data"], true);
                 setTimeout( function() {
-                    drawChart(chart, action, res_json)
+                    drawChart(chart, action, res_json, filter)
                 }, 300);
-
             }
         });
     }
 
-    function drawChart(chart_type, title, data_obj) {
-        // if has stats data
-        console.log(data_obj); //REMOVER DEPOIS
+    function drawChart(chart_type, title, data_obj, filter) {
+        console.log(data_obj); // Show data object
         if(data_obj) {
-            var tai_chart = new TainacanChart();
-            var basis = [ title, ' #Itens ', {role: 'style'} ]; // 'Qtd'
-            var color = data_obj.color || '#79a6ce';
-            var csvData = [];
+            var tai_chart = new TainacanChart(); // New instance of TainacanChart
+            var csvData = []; // The Array to create CSV file
+            var chart_data = new google.visualization.DataTable(); // The DataTable to insert in Charts
+            var columnsData = data_obj.columns.events; // Array that contains name of events (login, add, etc.) 
 
-            if(color) {
-                if(chart_type == "default") {
-                    var chart_data = [basis];
-                } else {
-                    var chart_data = new google.visualization.DataTable();
-                    chart_data.addColumn('string', title);
-                    chart_data.addColumn('number', 'Qtd');
+            // Preparation of DataTables to different filters
+
+            if(filter == "days" || filter == "months"){
+                chart_data.addColumn('string', 'date');
+                for(evnt in columnsData){
+                    chart_data.addColumn('number', tai_chart.getMappedTitles()[columnsData[evnt]]);
+                }
+            }
+            else if(filter == "weeks"){
+                chart_data.addColumn('number', 'week_number');
+                for(evnt in columnsData){
+                    chart_data.addColumn('number', tai_chart.getMappedTitles()[columnsData[evnt]]);
                 }
             }
 
+            //
+
+            // If stat object has values
             if(data_obj.stat_object) {
-                // Dynamic header's chart data
+
+                // Show in statistics page footer with stats and totals
                 tai_chart.displayFixedBase();
+                
+                // This if is not used
                 if(data_obj.item_status) {
                     for( index_i in data_obj.stat_object ){
                         for( t in data_obj.stat_object[index_i] ){
@@ -368,26 +453,113 @@
                         }
                     }
                 } else {
-                    for( event in data_obj.stat_object ) {
-                        var obj_total = parseInt(data_obj.stat_object[event]);
-                        var curr_evt_title = tai_chart.getMappedTitles()[event];
-                        var curr_tupple = [ curr_evt_title, obj_total ];
+                    //Where the magic happens!
 
-                        if( typeof chart_data === 'object' && typeof chart_data != "undefined") {
-                            if(chart_data instanceof google.visualization.DataTable) { //true se != 'default'
-                                chart_data.addRow(curr_tupple);
-                            } else {
-                                chart_data.push([ curr_tupple[0], curr_tupple[1], color ]);
+                    var rows = [[]]; // Array that contains rows of DataTable
+                    var flag = ''; // Var that contains name of actual event
+                    
+                    rows[0] = ['-'];
+                    
+                    //console.log('Rows created: '+ rows);
+
+                    for( j in data_obj.stat_object ) {
+                        var array_n = data_obj.stat_object[j]; // Array that contains the actual array from stat_object
+                        var le2 = columnsData.length; // Var that contains total of events
+
+                        //console.log('Array_n: '+ array_n +' Rows[0][0]: '+ rows[0][0]);
+
+                        // If has value in first array
+                        if(rows[0][0]){
+                            //console.log("1 if");
+                          for(k in rows){
+                              var el = rows[Number(k)]; // Var that contains actual array from rows
+                              //console.log(el[0] + ' <- el -> '+ el);
+                              // If date is equal to date of an existing element and array exist
+                              if(el[0] == array_n[1]){ 
+                                //console.log('2 if');
+                                for(x in columnsData){
+                                    //If event is equal to event in existing element
+                                    if(columnsData[Number(x)] == array_n[0]){ 
+                                        var indCol = Number(x)+1; // Var that contains the index of event
+                                        break;
+                                    }
+                                }
+
+                                el[indCol] = array_n[2]; // the actual receive total of expecifc event
+                                
+                                for(var g = 0; g <= le2; g++){
+                                    if(!el[g]){
+                                        el[g] = 0;
+                                    }
+                                }
+
+                                rows[k] = el; // The existing array is changed
+
+                                break;
+                              }
+                              // Array with same date doesn't exist
+                              else{
+                                  //console.log('1 else');
+
+                                  rows.push([array_n[1]]); // Add new array with date of actual array of stat data
+                                  //console.log('Push: '+ rows);
+
+                                  for(z in columnsData){
+                                      //If event is equal to event in existing element
+                                      if(columnsData[Number(z)] == array_n[0]){ 
+                                          var indColu = Number(z)+1; // Var that contains the index of event
+                                          break;
+                                      }
+                                  }
+
+                                  var le = rows.length-1; // Var that contains the total of rows
+                                 
+                                  rows[le][0] = array_n[1]; // Add new date to array
+                                  rows[le][indColu] = array_n[2]; // Add new value to array
+
+                                  // Add zero in black array position
+                                  for(var g = 0; g <= le2; g++){
+                                      if(!rows[le][g]){
+                                        rows[le][g] = 0;
+                                      }
+                                  }
+
+                                  //console.log(array_n[2] +' '+ array_n[3]);
+                                  //console.log('Rows le: '+ rows[le] +' <> '+ le +' <> '+rows[0] +' <> '+ rows[1] +' indColu: '+ indColu);
+                                  //remove the empty initial element
+                                  //console.log("before: "+ rows)
+                                  if(rows[0][0] == '-'){
+                                    rows.splice(0,1); 
+                                  }
+                                  break;
                             }
-                        } else {
-                            cl('NO data available!');
                         }
+                    }
 
-                        csvData.push( curr_tupple );
-                        tai_chart.displayBaseAppend(curr_tupple[0], curr_tupple[1]);
-                    } // for
+//                        if( typeof chart_data === 'object' && typeof chart_data != "undefined") {
+//                            if(chart_data instanceof google.visualization.DataTable) { //true se != 'default'
+//                                chart_data.addRow(curr_tupple);
+//                            } else {
+//                                chart_data.push([ curr_tupple[0], curr_tupple[1], color ]);
+//                            }
+//                        } else {
+//                            cl('NO data available!');
+//                        }
+//
+                        csvData.push( array_n );
+
+                        if(flag != array_n[0]){
+                           flag = array_n[0];
+                           var curr_evt_title = tai_chart.getMappedTitles()[flag];
+                           //console.log(flag);
+
+                           tai_chart.displayBaseAppend(curr_evt_title, array_n[3]);
+                        }
+                    } // end of for
+
+                    //console.log("after: "+ rows);
+                    chart_data.addRows(rows);
                 }
-
             } else if(data_obj.quality_stat) {
                 tai_chart.appendQualityBase();
                 for( colecao in data_obj.quality_stat ) {
@@ -409,92 +581,87 @@
             tai_chart.createCsvFile(csvData);
 
             var div_chart = $("#charts-container").get(0);
-            if("NO_CHART" == color) {
-                $(div_chart).addClass('hide');
-                var frst_td = $("#charts-resume table tr.headers td").get(0);
-                $(frst_td).text("Buscas Frequentes");
-                var sec_td = $("#charts-resume table tr.headers td").get(1);
-                $(sec_td).text("Nº de itens");
-                return;
-            } else {
+//            if("NO_CHART" == color) {
+//                $(div_chart).addClass('hide');
+//                var frst_td = $("#charts-resume table tr.headers td").get(0);
+//                $(frst_td).text("Buscas Frequentes");
+//                var sec_td = $("#charts-resume table tr.headers td").get(1);
+//                $(sec_td).text("Nº de itens");
+//                return;
+//            } else {
                 $(div_chart).removeClass('hide');
                 // draw chart based at generated json data
-                renderChart(title, chart_type, chart_data, color);
-            }
+                renderChart(title, chart_type, chart_data);
+//            }
 
         }
     } // drawChart()
 
-    function renderChart(current_title, type, stat_data, chart_color) {
-        var color = chart_color || '#79a6ce';
-        console.log('#1 stat_data: '+ stat_data +'\n'+ 'type: '+ type);
+    function renderChart(current_title, type, stat_data) {
+       // var color = chart_color || '#79a6ce';
+       // console.log('#1 stat_data: '+ JSON.stringify(stat_data) +'\n'+ 'type: '+ type);
         // Google Charts objects
         if( type == 'pie' ) {
             var piechart = new google.visualization.PieChart(document.getElementById('piechart_div'));
-            var piechart_options = { title:'Qtd ' + current_title, is3D: true,
-                colors: ['#F09B35','#8DA9BF','#F2C38D','#E6AC03', '#D94308', '#013453'] }; // '#0F4F8D','#2B85C1' tons de azul
+            var pieOptions = {
+                is3D: true,
+                colors: ['#F09B35','#8DA9BF','#F2C38D','#E6AC03', '#D94308', '#013453'],
+                legend: {position: 'top', alignment: 'center', textStyle: {fontSize: 12}}
+            }; // '#0F4F8D','#2B85C1' tons de azul
 
             google.visualization.events.addListener(piechart, 'ready', function() {
                 var chart_png = piechart.getImageURI();
                 $('.dynamic-chart-img').removeClass('hide').attr('src', chart_png );
             });
 
-            piechart.draw(stat_data, piechart_options);
+            piechart.draw(stat_data, pieOptions);
         }
         else if ( type == 'bar' ) {
             var barchart = new google.visualization.BarChart(document.getElementById('barchart_div'));
-            var barchart_options = {title:'Barchart stats', width: 800, height:300, legend: 'none', colors: ['#013453', 'orange']};
+            var barOptions = {
+                bars: 'horizontal',
+                legend: {position: 'top', alignment: 'center', textStyle: {fontSize: 12}}
+            };
 
             google.visualization.events.addListener(barchart, 'ready', function() {
                 var chart_png = barchart.getImageURI();
                 $('.dynamic-chart-img').removeClass('hide').attr('src', chart_png );
             });
 
-            barchart.draw(stat_data, barchart_options);
+            barchart.draw(stat_data, barOptions);
         }
         else if( type == 'default' ) {
             var default_chart = new google.visualization.ColumnChart(document.getElementById('defaultchart_div'));
-            var data = new google.visualization.arrayToDataTable( stat_data );
-            var default_options = { colors: [color], legend: 'none' };
+            var defaOptions = {
+                bars: 'vertical',
+                legend: {position: 'top', alignment: 'center', textStyle: {fontSize: 12}}
+            };
 
             google.visualization.events.addListener(default_chart, 'ready', function(){
                 var chart_png = default_chart.getImageURI();
                 $('.dynamic-chart-img').removeClass('hide').attr('src', chart_png );
             });
 
-            default_chart.draw(data, default_options);
+            default_chart.draw(stat_data, defaOptions);
         }
         else if( type == 'curveline'){
-            var tessst = $.parseJSON(stat_data);
-            console.log('#2 stat_data: '+ tessst +'\n'+ 'type: '+ type);
+            //var tessst = $.parseJSON(stat_data);
+            //console.log('#2 stat_data: '+ tessst +'\n'+ 'type: '+ type);
 
             var linechart = new google.visualization.LineChart(document.getElementById('curvelinechart_div'));
-            var data = new google.visualization.arrayToDataTable([
-                ['Filter', 'viewed', 'added', 'edited', 'deleted'],
-                ['01/01', 12, 34, 2, 6],
-                ['02/01', 6, 16, 4, 3],
-                ['02/01', 24, 5, 6, 1]
-            ]);
-
-            console.log(data);
-
-            var options = {
+            var curveOptions = {
                 curveType: 'function',
-                color: [color],
-                legend: 'none'
+                legend: {position: 'top', alignment: 'center', textStyle: {fontSize: 12}}
             };
 
-            console.log('#2 data: '+ tessst +'\n'+ 'type: '+ type +'\n'+ linechart +'\n'+ options);
+            //console.log('#2 data: '+ tessst +'\n'+ 'type: '+ type +'\n'+ linechart +'\n'+ curveOptions);
 
             google.visualization.events.addListener(linechart, 'ready', function(){
                 var chart_png = linechart.getImageURI();
                 $('.dynamic-chart-img').removeClass('hide').attr('src', chart_png);
             });
 
-            //linechart.draw(stat_data, options);
-            linechart.draw(data, options);
-
-
+            linechart.draw(stat_data, curveOptions);
         }
         $('.chartChanger').removeClass('hide');
     }
@@ -623,4 +790,9 @@
     }
 
     $("#report_type_stat").dynatree(stats_dynatree_opts);
+
+    //On Load page or change filters
+    function loadChart(){
+        $('.dynatree-selected').click();
+    }
 </script>
