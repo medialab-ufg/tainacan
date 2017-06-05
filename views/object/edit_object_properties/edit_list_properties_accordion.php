@@ -221,35 +221,33 @@ if (isset($property_data)):
                                         do_action('modificate_edit_item_properties_data', $property);
                                     }elseif($property['type'] == "user")
                                     {
-                                        $user_id = get_post_meta($collection_id, "socialdb_property_".$property['id'].'[]', true);
+                                        $user_id = get_post_meta($object_id, "socialdb_property_".$property['id'], true);
+                                        $user = get_user_by("id", $user_id);
+                                        $cpf = get_user_meta($user->data->ID, 'CPF')[0];
 
                                         ?>
                                             <!--Look for user-->
-                                            <?php print("UserID: ".$user_id); ?>
-                                            <input type="hidden" id="selected_user_info_hidden" name="socialdb_proprety_<?php echo $property['id']; ?>[]" value="">
+                                            <input type="text" id="selected_user_info_hidden" name="socialdb_property_<?php echo $property['id']; ?>[]" value="<?php echo $user_id; ?>" style="display: none;">
                                             <div class="metadata-related col-md-12">
                                                 <div class="col-md-3">
                                                     <div class="selected_user">
                                                         <div id="selected-user-info">
-                                                            <p class="text-center text-primary" style="font-size: 15px; padding-top: 30%;" id="no_users_msg">
-                                                                <?php _e("No user selected", "tainacan"); ?>
-                                                            </p>
-                                                            <div id="place_to_show_user_info" style="display: none;">
+                                                            <div id="place_to_show_user_info">
                                                                 <div class="label_info">
                                                                     <label class="label label-default"><?php _e("Name", "tainacan"); ?></label>
-                                                                    <input class="form-control" type="text" readonly id="selected_user_name" value=""><br>
+                                                                    <input class="form-control" type="text" readonly id="selected_user_name" value="<?php echo $user->data->display_name; ?>"><br>
                                                                 </div>
                                                                 <div class="label_info">
                                                                     <label class="label label-default"><?php _e("User login", "tainacan"); ?></label>
-                                                                    <input class="form-control" type="text" readonly id="selected_user_login"><br>
+                                                                    <input class="form-control" type="text" readonly id="selected_user_login" value="<?php echo $user->data->user_login; ?>"><br>
                                                                 </div>
                                                                 <div class="label_info">
                                                                     <label class="label label-default"><?php _e("E-mail", "tainacan"); ?></label>
-                                                                    <input class="form-control" type="text" readonly id="selected_user_email"></label><br>
+                                                                    <input class="form-control" type="text" readonly id="selected_user_email" value="<?php echo $user->data->user_email; ?>"></label><br>
                                                                 </div>
                                                                 <div class="label_info">
                                                                     <label class="label label-default"><?php _e("CPF", "tainacan"); ?></label>
-                                                                    <input class="form-control" type="text" readonly id="selected_user_cpf"></label><br>
+                                                                    <input class="form-control" type="text" readonly id="selected_user_cpf" value="<?php echo $cpf ?>"></label><br>
                                                                 </div>
                                                             </div>
                                                         </div>

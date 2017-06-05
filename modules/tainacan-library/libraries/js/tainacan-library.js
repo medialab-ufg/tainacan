@@ -106,17 +106,20 @@ function showUser(userID) {
 
 function search_for_users() {
     var user_name = $("#text_box_search").val();
-    var send_url = $('#src').val() + "/modules/tainacan-library/controllers/user_controller.php?operation=search_for_user";
-    $.ajax({
-        type: 'POST',
-        url: send_url,
-        data: {user_name: user_name},
-        success: function (result) {
+    if(user_name.length > 0)
+    {
+        var send_url = $('#src').val() + "/modules/tainacan-library/controllers/user_controller.php?operation=search_for_user";
+        $.ajax({
+            type: 'POST',
+            url: send_url,
+            data: {user_name: user_name},
+            success: function (result) {
 
-            $("#where_to_show_users").show();
-            $("#users_found").html(result);
-        }
-    });
+                $("#where_to_show_users").show();
+                $("#users_found").html(result);
+            }
+        });
+    }
 }
 
 function verify_enter(e, button_click_id)

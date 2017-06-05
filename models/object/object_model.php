@@ -52,7 +52,8 @@ class ObjectModel extends Model {
         }
         
         //Tainacan Biblioteca
-        if(has_filter("add_book_loan"))
+        $mapping = get_option('socialdb_general_mapping_collection');
+        if(has_filter("add_book_loan") && $mapping['Emprestimo'] == $col_id)
         {
             $result = apply_filters("add_book_loan", $data);
             
@@ -67,6 +68,7 @@ class ObjectModel extends Model {
         if (isset($data['validation_error'])) {
             return json_encode($data);
         }
+
         $category_root_id = $this->collection_model->get_category_root_of($col_id);
         $user_id = get_current_user_id();
         if ($user_id == 0) {
@@ -81,6 +83,7 @@ class ObjectModel extends Model {
             'post_type' => 'socialdb_object',
             'post_parent' => $col_id
         );
+
         $data['ID'] = wp_update_post($post);
         //deleto o rascunho assim que adiciono
         delete_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext');
@@ -90,17 +93,24 @@ class ObjectModel extends Model {
             'ID' => $data['object_id'],
             'post_name' => $slug
         );
+
         $data['ID'] = wp_update_post($post);
+
         //inserindo o objecto do item e o seu tipo
         $this->insert_item_resource($data);
+
         //categoria raiz da colecao
         wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type');
+
         //inserindo as classificacoes
         $this->insert_classifications($data['object_classifications'], $data['ID']);
+
         //inserindo tags
         $this->insert_tags($data['object_tags'], $col_id, $data['ID']);
+
         //inserindo os valores das propriedades
         $this->insert_properties_values($data, $data['ID']);
+
         //verificando se existe aquivos para ser incluidos
         if ($_FILES) {
             $attachment_id = $this->add_thumbnail($data['ID']);
@@ -108,18 +118,22 @@ class ObjectModel extends Model {
                 set_post_thumbnail($data['ID'], $attachment_id);
             }
         }
+
         //inserido via img via url
         if (isset($data['thumbnail_url']) && $data['thumbnail_url']) {
             $this->add_thumbnail_url($data['thumbnail_url'], $data['ID']);
         }
+
         //inserindo a url fonte dos dados
         if (isset($data['object_url']) && $data['object_url']) {
             update_post_meta($data['ID'], 'socialdb_uri_imported', $data['object_url']);
         }
+
         //verificando se existe mapeamento ativo
         if (get_post_meta($col_id, 'socialdb_collection_mapping_exportation_active')) {
             add_post_meta($data['ID'], 'socialdb_channel_id', get_post_meta($col_id, 'socialdb_collection_mapping_exportation_active', true));
         }
+
         // propriedade de termos
         $this->insert_properties_terms($data, $data['ID']);
 
@@ -127,12 +141,15 @@ class ObjectModel extends Model {
         if ($data['object_license']) {
             update_post_meta($data['ID'], 'socialdb_license_id', $data['object_license']);
         }
+
         //salvo o id da colecao onde esta sendo atualizado o item e sua
         update_post_meta($data['ID'], 'socialdb_object_collection_init', $col_id);
         update_post_meta($data['ID'], 'socialdb_object_guid', site_url().'/'. get_post($col_id)->post_name.'/'.get_post($data['ID'])->post_name);
         update_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext', '');
+
         //propriedades compostas
         $this->insert_compounds($data, $data['ID']);
+
         // inserindo o evento
         $logData = ['collection_id' => $col_id, 'item_id' => $data['ID'],
             'user_id' => $user_id, 'event_type' => 'user_items', 'event' => 'add'];
@@ -142,7 +159,9 @@ class ObjectModel extends Model {
         }catch(Exception $e){
             $error =  (string) $e;
         }
+
         Log::addLog($logData);
+
         return json_encode(['title'=>$resource_json->title,'type'=>$resource_json->type,'error' => ((isset($error)) ? $error  : ''),'msg'=>$resource_json->msg]);
     }
 
@@ -522,6 +541,7 @@ class ObjectModel extends Model {
                 }else if (!isset($data["socialdb_property_$property_id"])) {
                     continue;
                 }
+
                 $dados = json_decode($property_model->edit_property(array('property_id' => $property_id)));
                 //filtro que altera a forma de atualizacao do metadado no item
                 if(has_filter('alter_update_item_property_value')){
@@ -536,17 +556,22 @@ class ObjectModel extends Model {
                     add_post_meta($object_id, 'socialdb_property_' . $dados->id, 0);
                     continue;
                 }
+
+
                 //se for para inserir os valores das propriedades de dados
                 if (!is_array($data["socialdb_property_$property_id"]) && $data["socialdb_property_$property_id"] !== '') {
                     update_post_meta($object_id, "socialdb_property_$property_id", $data["socialdb_property_$property_id"]);
-                    //inserir o valor no metadado de valor comu
+                    //inserir o valor no metadado de valor comum
                     $this->set_common_field_values($object_id, "socialdb_property_$property_id", $data["socialdb_property_$property_id"]);
                 }// se estiver inserindo propriedade de objeto e tiver valores relacionado 
-                elseif (is_array($data["socialdb_property_$property_id"]) && !empty(is_array($data["socialdb_property_$property_id"]))) {
+                elseif (is_array($data["socialdb_property_$property_id"]) && !empty(is_array($data["socialdb_property_$property_id"])))
+                {
                     delete_post_meta($object_id, "socialdb_property_$property_id");
-                    if (isset($dados->metas->socialdb_property_object_is_reverse) && ($dados->metas->socialdb_property_object_is_reverse === 'true')) {
+                    if (isset($dados->metas->socialdb_property_object_is_reverse) && ($dados->metas->socialdb_property_object_is_reverse === 'true'))
+                    {
                         $this->remove_itens_property_reverse($object_id, $data["collection_id"], $dados->metas->socialdb_property_object_reverse);
                     }
+
                     $this->set_common_field_values($object_id, "socialdb_property_$property_id", $data["socialdb_property_$property_id"], 'item');
                     foreach ($data["socialdb_property_$property_id"] as $value) {
                         if (empty(trim($value)))

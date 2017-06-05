@@ -159,7 +159,8 @@ if (isset($property_object)):
                                             if ($property['metas']['socialdb_property_default_value']):
                                                 echo $property['metas']['socialdb_property_default_value'];
                                             endif;
-                                           if(has_action("add_material_loan_devolution"))
+                                            $mapping = get_option('socialdb_general_mapping_collection');
+                                           if(has_action("add_material_loan_devolution") && $mapping['Emprestimo'] == $collection_id)
                                            {
                                                //Get variable from DB
                                                $loan_time = get_option('socialdb_loan_time');
@@ -250,7 +251,7 @@ if (isset($property_object)):
                                 {
                                     ?>
                                         <!--Look for user-->
-                                       <input type="hidden" id="selected_user_info_hidden" name="socialdb_proprety_<?php echo $property['id']; ?>[]" value="">
+                                       <input type="text" id="selected_user_info_hidden" name="socialdb_property_<?php echo $property['id']; ?>[]" value="" style="display: none;">
                                        <div class="metadata-related col-md-12">
                                            <div class="col-md-3">
                                                 <div class="selected_user">

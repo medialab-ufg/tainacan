@@ -15,6 +15,7 @@ class ObjectController extends Controller {
     public function operation($operation, $data) {
         $object_model = new ObjectModel();
         $objectfile_model = new ObjectFileModel;
+
         switch ($operation) {
             // #1 ADICIONAR ITEMS TIPO TEXTO
             case "create-item":
