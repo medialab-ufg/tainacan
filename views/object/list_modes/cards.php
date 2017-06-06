@@ -91,6 +91,12 @@ $itemURL = $_current_collection . basename(get_permalink());
                                                 endif;
                                             }
 
+                                            if($meta_type == 'user')
+                                            {
+                                                $user = get_user_by("id", $_out_);
+                                                $_out_ = $user->data->display_name;
+                                            }
+                                            
                                             echo '<input type="hidden" name="item_table_meta" value="' . $_out_ . '" />';
                                         } else if ($_META['tipo'] === 'property_term') {
                                             $_current_object_terms_ = get_the_terms($curr_id, "socialdb_category_type");

@@ -1431,7 +1431,7 @@ while (have_posts()) : the_post();
         </div>
     </div>
 
-    <!-- TAINACAN: modal padrao bootstrap para exibição dos itens importados do Mapa Cultural   -->
+    <!-- TAINACAN: modal padrao bootstrap para exibição de um unico usuario   -->
     <div class="modal fade" id="modalShowUser" tabindex="-1" role="dialog" aria-labelledby="ShowUser" aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog modal-lg">
             <div class="modal-content"> <!--Conteúdo da janela modal-->
