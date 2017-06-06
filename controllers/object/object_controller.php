@@ -19,11 +19,23 @@ class ObjectController extends Controller {
         switch ($operation) {
             // #1 ADICIONAR ITEMS TIPO TEXTO
             case "create-item":
-                include_once dirname(__FILE__) . '../../../views/object/formItem/helper/formItem.class.php';
                 $data['ID'] = $object_model->create();
+                //class
+                include_once dirname(__FILE__) . '../../../views/object/formItem/helper/formItem.class.php';
                 $data['formItem'] = new FormItem($data['collection_id']);
-                $data['properties'] = $object_model->show_object_properties($data);
                 $data['modeView'] = get_post_meta($data['collection_id'], 'socialdb_collection_submission_visualization', true);
+                //sessao
+                if(!session_id()) {
+                        session_start();
+                }
+                $cache = $_SESSION['collection_'.$data['collection_id'].'_properties'];
+                //if(!$cache){
+                   $data['properties'] = $object_model->show_object_properties($data);
+                   $_SESSION['collection_'.$data['collection_id'].'_properties'] = $data;
+                //}else{
+                   //$cache['ID'] =  $data['ID'];
+                  // $data['properties'] = $cache;
+                //}
                 return $this->render(dirname(__FILE__) . '../../../views/object/formItem/formItem.php', $data);
             case "create_item_text":
                 //verifico se existe rascunho para se mostrado

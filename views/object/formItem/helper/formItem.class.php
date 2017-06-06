@@ -1,6 +1,9 @@
 <?php
 include_once(dirname(__FILE__) . '../../../../../models/object/object_model.php');
 include_once (dirname(__FILE__) . '/formItemText.class.php');
+include_once (dirname(__FILE__) . '/formItemCategory.class.php');
+include_once (dirname(__FILE__) . '/formItemObject.class.php');
+include_once (dirname(__FILE__) . '/formItemCompound.class.php');
 //fixos
 include_once (dirname(__FILE__) . '/formItemTitle.class.php');
 include_once (dirname(__FILE__) . '/formItemThumbnail.class.php');
@@ -268,11 +271,20 @@ class FormItem extends Model{
                    $class->widget($property, $this->itemId);
                 }else{
                     $data = ['text','textarea','date','number','numeric','auto-increment'];
-                    if(in_array($property['type'], $data)){
+                    $term = ['selectbox','radio','checbox','tree','tree_checkbox','multipleselect'];
+                    $object = (isset ($property['metas']['socialdb_property_object_category_id']) && !empty($property['metas']['socialdb_property_object_category_id'])) ? true : false;
+                    if(in_array($property['type'], $data) && !$object){
                        $class = new FormItemText(); 
                        $class->widget($property, $this->itemId);
-                    }else{
-                        var_dump($property['type'] );
+                    }else if(in_array($property['type'], $term) && !$object){
+                       $class = new FormItemCategory(); 
+                       $class->widget($property, $this->itemId);
+                    }else if($object){
+                       $class = new FormItemObject(); 
+                       $class->widget($property, $this->itemId);
+                    }else if($property['type'] == __('Compounds','tainacan')){
+                       $class = new FormItemCompound(); 
+                       $class->widget($property, $this->itemId);
                     }
                 }
             }
