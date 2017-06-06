@@ -101,7 +101,6 @@
                         pressPDF.addImage(projectLogo, 'PNG', line_dims.startX + 15, line_dims.startY - 45, logo_settings.width, logo_settings.height);
                     } catch (e) {
                         cl('Error adding tainacan\'s logo');
-                        cl(e);
                     }
 
                     pressPDF.rect(line_dims.startX, line_dims.startY, line_dims.length, line_dims.thickness, 'F');
@@ -202,6 +201,12 @@
                                 base_count = baseX;
                             }
 
+                            var extra_line_height = 0;
+                            var val_height = itm.inf[idx].meta_breaks;
+                            if( val_height && $.isNumeric(val_height) ) {
+                                extra_line_height = 10 * val_height;
+                            }
+
                             var extra_padding = 0;
                             if( itm.inf[idx].is_submeta ) {
                                 extra_padding = 20;
@@ -218,7 +223,7 @@
                                 default_val = itm.inf[idx].value;
                             }
                             pressPDF.text(default_val, (baseX*2 + extra_padding), f);
-                            base_count = p;
+                            base_count = p + extra_line_height;
                         }
                     }
 

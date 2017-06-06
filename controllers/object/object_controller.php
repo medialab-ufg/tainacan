@@ -433,21 +433,12 @@ class ObjectController extends Controller {
                 }
 
                 $tabs = [
-                    'order' => unserialize(get_post_meta($data['collection_id'], 'socialdb_collection_properties_ordenation')[0]),
+                    'order' => get_post_meta($data['collection_id'], 'socialdb_collection_properties_ordenation'),
+                    'organize' => unserialize( get_post_meta($data['collection_id'], 'socialdb_collection_update_tab_organization', true))[0],
                     'names' => get_post_meta($data['collection_id'], 'socialdb_collection_tab')
                 ];
 
-                if( is_array($tabs['order']) ) {
-                    foreach ($tabs['order'] as $tab_id => $children) {
-                        if("default"===$tab_id) {
-                            $press['abas'][] = 'Padrão';
-                        } else {
-                            $press['abas'][] = $this->get_tab_name($tab_id);
-                        }
-                    }
-
-                    $press['tabs'] = $tabs;
-                }
+                $press['meta_ids_ord'] = explode(",",unserialize($tabs['order'][0])['default']);
 
                 $total_index = 0;
                 $_to_be_removed = [];
@@ -474,7 +465,8 @@ class ObjectController extends Controller {
 
                                     if(is_array($_sub_metas)) { 
                                         $final_title = $col_meta->name;
-                                        $_pair = ['meta' => $final_title, 'value'=> '_____________________________', 'submeta_header' => true, 'header_idx' => $total_index];
+                                        $press['meta_ids'][] = $_current_term_id;
+                                        $_pair = ['meta' => $final_title, 'value'=> '_____________________________', 'submeta_header' => true, 'header_idx' => $total_index, 'meta_id' => $_current_term_id, 'meta_tab' => $tabs['organize'][$_current_term_id]];
                                         $press['inf'][] = $_pair;
                                         $current_submeta_vals = [];
                                         $curr_meta = 0;
@@ -484,10 +476,13 @@ class ObjectController extends Controller {
                                             if(ctype_digit($s_meta)) {
                                                 if(is_object($_meta_)) {
                                                     $_title_id = explode("_", $_meta_->meta_key);
-                                                    $_title = get_term($_title_id[2])->name;
+                                                    $_title = get_term($_title_id[2]);
                                                     $v = $_meta_->meta_value;
-                                                    $_pair = ['meta' => $_title , 'value' => $v, 'is_submeta' => true];
-                                                    if(is_numeric($v)) {
+                                                    $_pair = ['meta' => $_title->name , 'value' => $v, 'is_submeta' => true];
+
+                                                    $_meta_type = get_term_meta($_title->term_id, 'socialdb_property_data_widget', true);
+
+                                                    if(is_numeric($v) && $_meta_type !== "numeric" ) {
                                                         $relation_meta_post = get_post($v);
                                                         if( !is_null($relation_meta_post) ) {
                                                             $_pair['value'] = $relation_meta_post->post_title;
@@ -496,7 +491,7 @@ class ObjectController extends Controller {
 
                                                     if( $_pair['value'] != "" && ! empty($_pair['value']) ) {
                                                         $press['inf'][] = $_pair;
-                                                        $aux_arr[] = $_title . "__" . $v;
+                                                        $aux_arr[] = $_title->name . "__" . $v;
                                                     }
 
                                                     if( !empty($_pair['value']) && !is_null($_pair['value'])) {
@@ -506,6 +501,9 @@ class ObjectController extends Controller {
                                                     if( $is_compound_meta && empty($current_submeta_vals) && $last_meta_id > 0) {
                                                         unset($press['inf'][$total_index]);
                                                     }
+
+                                                    $press['meta_ids'][] = $_title->term_id;
+
                                                 } else {
                                                     $_curr_term_name = get_term($curr_term_metas[$curr_meta])->name;
                                                     $_pair = ['meta' => $_curr_term_name , 'value' => "--", 'is_submeta' => true];
@@ -515,6 +513,7 @@ class ObjectController extends Controller {
                                                         $_pair['value'] = $post_val;
                                                     }
 
+                                                    $press['meta_ids'][] = get_term($curr_term_metas[$curr_meta])->term_id;
                                                     $press['inf'][] = $_pair;
                                                 }
                                             } else {
@@ -530,6 +529,7 @@ class ObjectController extends Controller {
                                                     $_pair = ['meta' => $string_title, 'value' => $_term_name_, 'is_submeta' => true];
 
                                                     $press['inf'][] = $_pair;
+                                                    $press['meta_ids'][] = get_term($titles_ids_arr[$curr_meta])->term_id;
                                                     $aux_arr[] = $_title . "__" . $_term_name_;
                                                 }
                                             }
@@ -539,12 +539,15 @@ class ObjectController extends Controller {
                                     }
                                 } else {
                                     $_pair = ['meta' => $col_meta->name, 'value' => $val[0]];
+
                                     $_meta_type = get_term_meta($col_meta->term_id, 'socialdb_property_data_widget', true);
                                     if("date" === $_meta_type) {
                                         $_pair['value'] = date('d/m/Y', strtotime($_pair['value']));
+                                    } else if ("textarea" === $_meta_type) {
+                                        $_pair["meta_breaks"] = $this->get_item_line_breaks($val[0]);
                                     }
 
-                                    if(is_numeric($val[0])) {
+                                    if(is_numeric($val[0]) && "numeric" !== $_meta_type) {
                                         $_check_text = get_post($val[0]);
                                         if( !is_null($_check_text)) {
                                             if( in_array($_check_text->post_title, $_item_meta['socialdb_object_commom_values']) ) {
@@ -552,6 +555,9 @@ class ObjectController extends Controller {
                                             }
                                         }
                                     }
+
+                                    // $press['ctn'][] = [$_pair, 'tipo' => $_meta_type];
+                                    $press['meta_ids'][] = $col_meta->term_id;
                                     $press['inf'][] = $_pair;
                                 }
                             } else {
@@ -565,6 +571,8 @@ class ObjectController extends Controller {
                     }
                     $total_index++;
                 }
+
+                $press['meta_ids'] = array_unique($press['meta_ids']);
 
                 if( isset($press['inf']) ) {
                     $init = 0;
@@ -992,12 +1000,10 @@ class ObjectController extends Controller {
 	private function get_item_line_breaks($text) {
 		$total_br = 0;
 		if( strlen($text) > 0 ) {
-			$_desc_pieces = explode("\n", $text);  // ↵
-			foreach($_desc_pieces as $line) {
-				if(strlen($line) == 1) {
-					$total_br++;
-				}				
-			}
+            $_desc_pieces = str_replace(PHP_EOL, "-----------", $text);  // ↵
+            $_desc_pieces = explode("-----------", $_desc_pieces);
+
+            $total_br = count($_desc_pieces);
 		}
 
 		return $total_br;
@@ -1041,6 +1047,20 @@ class ObjectController extends Controller {
         }
 
         return $meta;
+    }
+
+    private function get_tab_id($collection, $tab_name) {
+        global $wpdb;
+
+        if( ctype_digit($collection) && !empty($tab_name) ) {
+            $meta = $wpdb->get_row( $wpdb->prepare("SELECT * FROM $wpdb->postmeta WHERE post_id=%d AND meta_key='socialdb_collection_tab' AND meta_value=%s", $collection, $tab_name));
+
+            if( !is_null($meta) ) {
+                return $meta;
+            }
+        }
+
+        return false;
     }
 
     /**
