@@ -12,7 +12,7 @@
             delete: '<?php _t("Deleted",1); ?>',
             comment: '<?php _t("Commented",1); ?>',
             vote: '<?php _t("Voted",1); ?>',
-            login: '<?php _t("Login",1); ?>',
+            login: '<?php _t("Logged in",1); ?>',
             register: '<?php _t("Registers",1); ?>',
             delete_user: '<?php _t("Excluded",1); ?>',
             administrator: '<?php _t("Administrator",1); ?>',
@@ -28,10 +28,10 @@
             export: '<?php _t("Exportation",1); ?>',
             import_tainacan: '<?php _t("Tainacan Importation",1); ?>',
             export_tainacan: '<?php _t("Tainacan Exportation",1); ?>',
-            total_active: '<?php _t("Active",1); ?>',
-            total_draft: '<?php _t("Draft",1); ?>',
-            total_trash: '<?php _t("Trash",1); ?>',
-            total_delete: '<?php _t("Deleted",1); ?>',
+            publish: '<?php _t("Active",1); ?>',
+            draft: '<?php _t("Draft",1); ?>',
+            trash: '<?php _t("Trash",1); ?>',
+            //total_delete: '<?php _t("Deleted",1); ?>',
             config: '<?php _t("Configurations",1); ?>',
             welcome_mail: '<?php _t("Welcome Mail",1); ?>',
             licenses: '<?php _t("Licenses",1); ?>',
@@ -219,7 +219,7 @@
 
     $("#statistics-config").accordion({
         collapsible: true,
-        active: 1,
+        active: 0,
         header: "label",
         animate: 200,
         heightStyle: "content",
@@ -384,7 +384,7 @@
             url: stat_path + '/controllers/log/log_controller.php', type: 'POST',
             data: { operation: 'user_events', parent: parent, event: action, from: from, to: to, collec_id: c_id, filter: filter }
         }).done(function(resp) {
-            //console.log("Done: " + resp);
+            console.log("Done: " + resp);
 
             var res_json = JSON.parse(resp);
             //console.log("Res: "+ res_json);
@@ -410,28 +410,32 @@
         if(data_obj) {
             var tai_chart = new TainacanChart(); // New instance of TainacanChart
             var csvData = []; // The Array to create CSV file
-            var chart_data = new google.visualization.DataTable(); // The DataTable to insert in Charts
-            var columnsData = data_obj.columns.events; // Array that contains name of events (login, add, etc.) 
-
+            var chart_data = new google.visualization.DataTable(); // The DataTable to insert in Charts      
+            if(data_obj.columns.events){
+                var columnsData = data_obj.columns.events; // Array that contains name of events (login, add, etc.) 
+            }
+            else if(data_obj.columns){
+                var columnsData = data_obj.columns;
+            }
             // Preparation of DataTables to different filters
 
             if(filter == "days" || filter == "months"){
                 chart_data.addColumn('string', 'date');
                 for(evnt in columnsData){
-                    chart_data.addColumn('number', tai_chart.getMappedTitles()[columnsData[evnt]]);
+                    chart_data.addColumn('number', tai_chart.getMappedTitles()[columnsData[evnt]] ? tai_chart.getMappedTitles()[columnsData[evnt]] : columnsData[evnt]);
                 }
             }
             else if(filter == "weeks"){
                 chart_data.addColumn('number', 'week_number');
                 for(evnt in columnsData){
-                    chart_data.addColumn('number', tai_chart.getMappedTitles()[columnsData[evnt]]);
+                    chart_data.addColumn('number', tai_chart.getMappedTitles()[columnsData[evnt]] ? tai_chart.getMappedTitles()[columnsData[evnt]] : columnsData[evnt]);
                 }
             }
 
             //
 
             // If stat object has values
-            if(data_obj.stat_object) {
+            if(data_obj.stat_object && data_obj.stat_object[0]) {
 
                 // Show in statistics page footer with stats and totals
                 tai_chart.displayFixedBase();
@@ -550,31 +554,35 @@
 
                         if(flag != array_n[0]){
                            flag = array_n[0];
-                           var curr_evt_title = tai_chart.getMappedTitles()[flag];
+                           var curr_evt_title = tai_chart.getMappedTitles()[flag] ? tai_chart.getMappedTitles()[flag] : flag;
                            //console.log(flag);
-
                            tai_chart.displayBaseAppend(curr_evt_title, array_n[3]);
                         }
                     } // end of for
-
                     //console.log("after: "+ rows);
                     chart_data.addRows(rows);
                 }
             } else if(data_obj.quality_stat) {
                 tai_chart.appendQualityBase();
+                var d = new google.visualization.DataTable();
+                d.addColumn("string", "total");
                 for( colecao in data_obj.quality_stat ) {
                     for( c in data_obj.quality_stat[colecao]) {
                         var obj_total = parseInt(data_obj.quality_stat[colecao][c]);
                         var curr_tupple = [c,obj_total];
-                        if( chart_data instanceof google.visualization.DataTable ) {
-                            chart_data.addRow(curr_tupple);
+                        if( d instanceof google.visualization.DataTable ) {
+                            d.addRow(curr_tupple);
                         } else {
-                            chart_data.push([c,obj_total, '#2D882D']);
+                            d.push([c,obj_total, '#2D882D']);
                         }
                         csvData.push( curr_tupple );
                         tai_chart.appendQualityData(curr_tupple[0], curr_tupple[1]);
                     } // for
                 }
+            }
+            else if(!data_obj.stat_object[0]){
+                chart_data.addRow();
+                tai_chart.displayFixedBase();
             }
 
             // Generate CSV file for current chart
