@@ -21,7 +21,7 @@ class ObjectController extends Controller {
             case "create-item":
                 include_once dirname(__FILE__) . '../../../views/object/formItem/helper/formItem.class.php';
                 $data['ID'] = $object_model->create();
-                $data['formItem'] = new FormItem();
+                $data['formItem'] = new FormItem($data['collection_id']);
                 $data['properties'] = $object_model->show_object_properties($data);
                 $data['modeView'] = get_post_meta($data['collection_id'], 'socialdb_collection_submission_visualization', true);
                 return $this->render(dirname(__FILE__) . '../../../views/object/formItem/formItem.php', $data);
