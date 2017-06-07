@@ -10,4 +10,16 @@ class TextAreaClass extends FormItem{
                     ></textarea>
         <?php
     }
+    
+    public function template() {
+        return '
+        <textarea  
+                compound="##compound##"
+                item="##item##"
+                id="textarea-field-##compound##-##property##-##index##" 
+                class="form-control auto-save textarea-field-##compound##-##property##" 
+                rows="9"
+                name="socialdb_property_##property##[]" ></textarea>
+        ';
+    }
 }

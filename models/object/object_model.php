@@ -671,7 +671,7 @@ class ObjectModel extends Model {
                     foreach ($old_values as $old_value) {
                         $categories = [];
                         $categories[] = (int) $old_value;
-                        delete_post_meta($$object_id, 'socialdb_property_'. $property_id.'_cat');
+                        delete_post_meta($object_id, 'socialdb_property_'. $property_id.'_cat');
                         wp_remove_object_terms($object_id, $categories, 'socialdb_category_type');
                     }
                 }

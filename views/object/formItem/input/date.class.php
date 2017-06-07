@@ -36,5 +36,18 @@ class DateClass extends FormItem {
         </script> 
         <?php
     }
+    
+    public function template() {
+        return esc_html('<input  
+                type="text" 
+                size="13"
+                compound="##compound##"
+                item="##item##"
+                id="date-field-##compound##-##property##-##index##" 
+                class="form-control date-field-##compound##-##property##" 
+                value=""
+                name="socialdb_property_##property##[]" >
+        ');
+    }
 
 }
