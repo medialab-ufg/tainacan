@@ -451,6 +451,7 @@ class ObjectController extends Controller {
                 ];
 
                 $press['meta_ids_ord'] = explode(",",unserialize($tabs['order'][0])['default']);
+                $ord_list = [];
 
                 $total_index = 0;
                 $_to_be_removed = [];
@@ -477,12 +478,14 @@ class ObjectController extends Controller {
 
                                     if(is_array($_sub_metas)) { 
                                         $final_title = $col_meta->name;
-                                        $press['meta_ids'][] = $_current_term_id;
+                                        // $press['meta_ids'][] = $_current_term_id;
                                         $_pair = ['meta' => $final_title, 'value'=> '_____________________________', 'submeta_header' => true, 'header_idx' => $total_index, 'meta_id' => $_current_term_id, 'meta_tab' => $tabs['organize'][$_current_term_id]];
                                         $press['inf'][] = $_pair;
+
+                                        $ord_list[$_pair['meta_id']] = $_pair;
+
                                         $current_submeta_vals = [];
                                         $curr_meta = 0;
-
                                         foreach($_sub_metas as $s_meta) {
                                             $_meta_ = get_metadata_by_mid('post', $s_meta);
                                             if(ctype_digit($s_meta)) {
@@ -490,7 +493,7 @@ class ObjectController extends Controller {
                                                     $_title_id = explode("_", $_meta_->meta_key);
                                                     $_title = get_term($_title_id[2]);
                                                     $v = $_meta_->meta_value;
-                                                    $_pair = ['meta' => $_title->name , 'value' => $v, 'is_submeta' => true];
+                                                    $_pair = ['meta' => $_title->name , 'value' => $v, 'is_submeta' => true, 'meta_id' => $_title->term_id];
 
                                                     $_meta_type = get_term_meta($_title->term_id, 'socialdb_property_data_widget', true);
 
@@ -504,6 +507,7 @@ class ObjectController extends Controller {
                                                     if( $_pair['value'] != "" && ! empty($_pair['value']) ) {
                                                         $press['inf'][] = $_pair;
                                                         $aux_arr[] = $_title->name . "__" . $v;
+                                                        $ord_list[$_pair['meta_id']] = $_pair;
                                                     }
 
                                                     if( !empty($_pair['value']) && !is_null($_pair['value'])) {
@@ -517,16 +521,17 @@ class ObjectController extends Controller {
                                                     $press['meta_ids'][] = $_title->term_id;
 
                                                 } else {
-                                                    $_curr_term_name = get_term($curr_term_metas[$curr_meta])->name;
-                                                    $_pair = ['meta' => $_curr_term_name , 'value' => "--", 'is_submeta' => true];
+                                                    $_curr_term = get_term($curr_term_metas[$curr_meta]);
+                                                    $_pair = ['meta' => $_curr_term->name , 'value' => "--", 'is_submeta' => true, 'meta_id' => $_curr_term->term_id];
 
                                                     $post_val = $this->get_tab_name(intval($s_meta));
                                                     if( !is_null($post_val) && $post_val ) {
                                                         $_pair['value'] = $post_val;
                                                     }
 
-                                                    $press['meta_ids'][] = get_term($curr_term_metas[$curr_meta])->term_id;
+                                                    $press['meta_ids'][] = $_curr_term->term_id;
                                                     $press['inf'][] = $_pair;
+                                                    $ord_list[$_pair['meta_id']] = $_pair;
                                                 }
                                             } else {
                                                 $_title_id = explode("_", $_meta_->meta_key);
@@ -538,9 +543,10 @@ class ObjectController extends Controller {
                                                     $titles_ids_arr = explode(",", $compounds_metas_titles);
                                                     $string_title = get_term($titles_ids_arr[$curr_meta])->name;
                                                     $_term_name_ = get_term(intval($cat_check[0]))->name;
-                                                    $_pair = ['meta' => $string_title, 'value' => $_term_name_, 'is_submeta' => true];
+                                                    $_pair = ['meta' => $string_title, 'value' => $_term_name_, 'is_submeta' => true, 'meta_id' => get_term($titles_ids_arr[$curr_meta])->term_id];
 
                                                     $press['inf'][] = $_pair;
+                                                    $ord_list[$_pair['meta_id']] = $_pair;
                                                     $press['meta_ids'][] = get_term($titles_ids_arr[$curr_meta])->term_id;
                                                     $aux_arr[] = $_title . "__" . $_term_name_;
                                                 }
@@ -550,7 +556,7 @@ class ObjectController extends Controller {
                                         } // submetas loop
                                     }
                                 } else {
-                                    $_pair = ['meta' => $col_meta->name, 'value' => $val[0]];
+                                    $_pair = ['meta' => $col_meta->name, 'value' => $val[0], 'meta_id' => $col_meta->term_id];
 
                                     $_meta_type = get_term_meta($col_meta->term_id, 'socialdb_property_data_widget', true);
                                     if("date" === $_meta_type) {
@@ -571,6 +577,7 @@ class ObjectController extends Controller {
                                     // $press['ctn'][] = [$_pair, 'tipo' => $_meta_type];
                                     $press['meta_ids'][] = $col_meta->term_id;
                                     $press['inf'][] = $_pair;
+                                    $ord_list[$_pair['meta_id']] = $_pair;
                                 }
                             } else {
                                 $press['set'][] = $col_meta;
@@ -586,6 +593,8 @@ class ObjectController extends Controller {
 
                 $press['meta_ids'] = array_unique($press['meta_ids']);
 
+                $s = [];
+                $aux_ids = [];
                 if( isset($press['inf']) ) {
                     $init = 0;
                     foreach ($press['inf'] as $_m_arr) {
@@ -595,6 +604,8 @@ class ObjectController extends Controller {
                             if( in_array($_item_pair, $aux_arr) ) {
                                 if( is_null($_m_arr['is_submeta'])) {
                                     unset( $press['inf'][$init] );
+                                } else {
+                                    $aux_ids[] = $init;
                                 }
                             }
                         }
@@ -603,11 +614,45 @@ class ObjectController extends Controller {
                         if( isset($_curr_header_idx) && is_int($_curr_header_idx) ) {
                             if( in_array($_curr_header_idx, $_to_be_removed) ) {
                                 unset( $press['inf'][$init] );
+                            } else {
+                                $aux_ids[] = $init;
                             }
                         }
+
+                        if( !is_null($press['inf'][$init]['meta_id']) )
+                            array_push($s, $press['inf'][$init]['meta_id']);
+
                         $init++;
                     }
                 }
+
+                $info_ordenada = [];
+                $info_desord = [];
+                $add_ordered = [];
+                foreach($press['meta_ids_ord'] as $oid) {
+                    $curr_id = explode("compounds-", $oid);
+                    $id = $curr_id[0];
+
+                    if(count($curr_id) == 2)
+                        $id = $curr_id[1];
+
+                    if( array_key_exists($id, $ord_list) ) {
+                        $info_ordenada[] = $ord_list[$id];
+                        array_push($add_ordered, $id);
+                    } else {
+                        $info_desord[] = $ord_list[$id];
+                    }
+
+                }
+
+                $orders_id_keys = array_keys($ord_list);
+                foreach ($orders_id_keys as $desorder_ids ) {
+                    if(! in_array($desorder_ids, $add_ordered) ) {
+                        $info_desord[] = $ord_list[$desorder_ids];
+                    }
+                }
+
+                $press['inf'] = array_merge($info_ordenada, $info_desord);
 
                 return json_encode($press);
 

@@ -194,8 +194,7 @@
 
                     var max = itm.inf.length;
                     for( idx in itm.inf ) {
-                        if(itm.inf[idx].meta) {
-
+                        if(itm.inf[idx] != 'null' && itm.inf[idx] !== null) {
                             if(base_count >= maxHeightOffset) {
                                 pressPDF.addPage();
                                 base_count = baseX;
