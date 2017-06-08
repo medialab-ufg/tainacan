@@ -469,25 +469,31 @@ function material_loan_devolution()
     <?php
 }
 
-add_action('add_barcode', 'gen_barcode', 10, 1);
-function gen_barcode($arg)
+add_action('add_barcode', 'gen_barcode', 10, 2);
+function gen_barcode($collection_id, $object_id)
 {
+    global $wpdb;
+    $bar_number = barcode_number($object_id, 13);
+    
+    $tombo_id = get_collection_property_id($collection_id, "Tombo Patrimonial");
+    $tombo_val = get_post_meta($object_id, 'socialdb_property_'.$tombo_id)[1];
+
     ?>
     <div class="box-item-paddings box-item-right"></div> <!--Gera linha-->
+    <input type="hidden" id="tombo_val" value="<?php echo $tombo_val; ?>">
     <div class="col-md-12">
         <div id="barcode-box">
             <h4 class="title-pipe single-title"> <?php _e('Barcode', 'tainacan'); ?></h4>
-            <button type="button" onclick="window.print()" class="btn btn-default btn-xs pull-right" style="margin-top: 5px;"><span class="glyphicon glyphicon-print"></span></button>
-            <div class="barcode-img">
+            <button type="button" onclick="print_div('barcode-img', $('#tombo_val').val());" class="btn btn-default btn-xs pull-right" style="margin-top: 5px;"><span class="glyphicon glyphicon-print"></span></button>
+            <div id="barcode-img" class="barcode-img">
                 <svg id="barcode"
-                     jsbarcode-value="1234567890123"
                      jsbarcode-textmargin="0"
                      jsbarcode-fontoptions="bold"
                      style="width: 30%; height: 30%;">
                 </svg>
-
+                
                 <script>
-                    JsBarcode("#barcode", "1234567890128", {
+                    JsBarcode("#barcode", "<?php echo $bar_number; ?>", {
                         format: "ean13",
                         width: 3
                     });
@@ -496,6 +502,11 @@ function gen_barcode($arg)
         </div>
     </div>
     <?php
+}
+
+function barcode_number($number, $length_out)
+{
+    return sprintf("%0".$length_out."s",   $number);
 }
 
 add_action("add_users_button", "users_button");
@@ -784,9 +795,25 @@ function daily_situation_update()
     ";
 
     return $wpdb->query($event);
-
 }
 daily_situation_update();
+
+function get_collection_property_id($collection_id, $property_name)
+{
+    $root_category = get_post_meta($collection_id, 'socialdb_collection_object_type', true);
+    $properties = get_term_meta($root_category,'socialdb_category_property_id');
+    $properties = array_unique($properties);
+    foreach ($properties as $id)
+    {
+        $name = get_term_by('id', $id,'socialdb_property_type')->name;
+        if(strcmp($property_name, $name) === 0)
+        {
+            return $id;
+        }
+    }
+
+
+}
 
 function search_for_user($user_name)
 {
@@ -940,11 +967,11 @@ function get_related_id($data)
 
 function meta_ids($collection_id, $change_names_for_numbers)
 {
-    $category_root_id = get_post_meta($collection_id, 'socialdb_collection_object_type', true);
-
     $root_category = get_post_meta($collection_id, 'socialdb_collection_object_type', true);
     $properties = get_term_meta($root_category,'socialdb_category_property_id');
     $properties = array_unique($properties);
+
+    $category_root_id = get_post_meta($collection_id, 'socialdb_collection_object_type', true);
 
     $father_root_category_id = get_term_by("id", $category_root_id, "socialdb_category_type")->parent;
     $father_properties = get_term_meta($father_root_category_id, 'socialdb_category_property_id');

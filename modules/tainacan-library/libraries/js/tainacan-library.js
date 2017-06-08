@@ -228,3 +228,13 @@ function resetHomeStyleSettingsLibrary() {
     }
 }
 
+function print_div(div_id, tombo)
+{
+    var conteudo = document.getElementById(div_id).innerHTML,
+        tela_impressao = window.open('about:blank');
+
+    tela_impressao.document.write("<div>"+conteudo+"<div>");
+    tela_impressao.document.write("<div>"+tombo+"</div>");
+    tela_impressao.window.print();
+    tela_impressao.window.close();
+}

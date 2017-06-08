@@ -2,6 +2,8 @@
 add_action("add_loan_mail", "loan_mail");
 function loan_mail()
 {
+    $text = get_option('socialdb_devolution_email_alert');
+
     ?>
     <div class="col-md-12 config_default_style" id="dddd">
         <?php ViewHelper::render_config_title( __("Devolution Email Configuration", 'tainacan') ); ?>
@@ -10,7 +12,9 @@ function loan_mail()
             <!------------------- Descricao-------------------------->
             <div class="form-group">
                 <label for="collection_description"><?php _e('Email','tainacan'); ?></label>
-                <textarea rows="4" id="devolution_email_alert" name="devolution_email_alert"   value="" placeholder='<?= __("Type here the email that will be sent when some material should be returned"); ?>'><?php echo ''; ?></textarea>
+                <textarea rows="4" id="devolution_email_alert" name="devolution_email_alert"   value="" placeholder='<?= __("Type here the email that will be sent when some material should be returned"); ?>'>
+                    <?php echo $text; ?>
+                </textarea>
                 <input type="hidden" name="devolution_email_alert_content" id="devolution_email_alert_content" value="" >
 
             </div>

@@ -131,7 +131,18 @@ $_src_ = get_template_directory_uri();
                                       <li><a href="<?php echo get_bloginfo('url') ?>/wp-admin/users.php"> <span class="glyphicon glyphicon-user"></span> <?php _e('Users', 'tainacan'); ?> </a></li>
                                       <li class="tainacan-museum-clear" <?php do_action('menu_repository_social_api') ?>><a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_configuration');updateStateRepositorio('social');" style="cursor: pointer;"><span class="glyphicon glyphicon-globe"></span>  <?php _e('Social / API Keys', 'tainacan'); ?></a></li>
                                       <li class="tainacan-museum-clear" <?php do_action('menu_repository_license') ?>><a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_licenses');updateStateRepositorio('licenses');" style="cursor: pointer;"><span class="glyphicon glyphicon-duplicate"></span> <?php _e('Licenses', 'tainacan'); ?></a></li>
-                                      <li class="tainacan-museum-clear"><a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_welcome_email'); updateStateRepositorio('email');" style="cursor: pointer;"><span  class="glyphicon glyphicon-envelope"></span> <?php _e('Welcome Email', 'tainacan'); ?></a></li>
+                                      <?php
+                                        if(has_action('addLibraryMenu'))
+                                        {
+                                            $email_name = __("E-mails configuration", "tainacan");
+                                        }else $email_name = __('Welcome Email', 'tainacan');
+                                      ?>
+                                      <li class="tainacan-museum-clear">
+                                          <a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_welcome_email'); updateStateRepositorio('email');" style="cursor: pointer;">
+                                              <span  class="glyphicon glyphicon-envelope"></span>
+                                              <?php echo $email_name ?>
+                                          </a>
+                                      </li>
                                       <li><a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_tools'); updateStateRepositorio('tools');" style="cursor: pointer;"><span  class="glyphicon glyphicon-tasks"></span> <?php _e('Tools', 'tainacan'); ?></a></li>
                                       <li><a onclick="repoConfig('<?php echo $_src_ ?>', 'import_full'); updateStateRepositorio('import');" style="cursor: pointer;"><span class="glyphicon glyphicon-import"></span> <?php _e('Import', 'tainacan'); ?></a></li>
                                       <li><a onclick="repoConfig('<?php echo $_src_ ?>', 'export_full'); updateStateRepositorio('export');" style="cursor: pointer;"><span class="glyphicon glyphicon-export"></span> <?php _e('Export', 'tainacan'); ?></a></li>
