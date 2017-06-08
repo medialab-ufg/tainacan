@@ -384,7 +384,7 @@
             url: stat_path + '/controllers/log/log_controller.php', type: 'POST',
             data: { operation: 'user_events', parent: parent, event: action, from: from, to: to, collec_id: c_id, filter: filter }
         }).done(function(resp) {
-            console.log("Done: " + resp);
+        console.log("Done: " + resp);
 
             var res_json = JSON.parse(resp);
             //console.log("Res: "+ res_json);
@@ -403,6 +403,17 @@
                 }, 300);
             }
         });
+    }
+
+    //Verify if element exist
+    function existIn(array_n, rows){
+        for(h in rows){
+            //console.log("Aa: "+ h +" aa: "+ rows);
+            if(array_n[1] == rows[Number(h)][0]){
+                return [false, Number(h)];
+            }
+        }
+        return true;
     }
 
     function drawChart(chart_type, title, data_obj, filter) {
@@ -465,22 +476,22 @@
                     rows[0] = ['-'];
                     
                     //console.log('Rows created: '+ rows);
-
                     for( j in data_obj.stat_object ) {
                         var array_n = data_obj.stat_object[j]; // Array that contains the actual array from stat_object
                         var le2 = columnsData.length; // Var that contains total of events
-
-                        //console.log('Array_n: '+ array_n +' Rows[0][0]: '+ rows[0][0]);
+                        //console.log("Array actual 1: "+ array_n);
 
                         // If has value in first array
                         if(rows[0][0]){
-                            //console.log("1 if");
                           for(k in rows){
-                              var el = rows[Number(k)]; // Var that contains actual array from rows
-                              //console.log(el[0] + ' <- el -> '+ el);
+                              //console.log("rows a 1: "+ rows);
                               // If date is equal to date of an existing element and array exist
-                              if(el[0] == array_n[1]){ 
-                                //console.log('2 if');
+                              var temp  = existIn(array_n, rows);
+                              //console.log("temp: "+ temp);
+                              var el = rows[Number(temp[1])]; // Var that contains actual array from rows
+                             // console.log("rows aa 1: "+ el);
+
+                              if(temp[0] == false){ 
                                 for(x in columnsData){
                                     //If event is equal to event in existing element
                                     if(columnsData[Number(x)] == array_n[0]){ 
@@ -488,7 +499,7 @@
                                         break;
                                     }
                                 }
-
+                                //console.log("rows a 2: "+ rows);
                                 el[indCol] = array_n[2]; // the actual receive total of expecifc event
                                 
                                 for(var g = 0; g <= le2; g++){
@@ -497,17 +508,16 @@
                                     }
                                 }
 
-                                rows[k] = el; // The existing array is changed
-
+                                rows[Number(temp[1])] = el; // The existing array is changed
+                                //console.log("rows a 3: "+ rows);
                                 break;
                               }
                               // Array with same date doesn't exist
-                              else{
-                                  //console.log('1 else');
-
-                                  rows.push([array_n[1]]); // Add new array with date of actual array of stat data
-                                  //console.log('Push: '+ rows);
-
+                              else {
+                                
+                                  //console.log("rows 1: "+ rows);
+                                  rows.push([]);
+                                  //console.log("rows 2: "+ rows);
                                   for(z in columnsData){
                                       //If event is equal to event in existing element
                                       if(columnsData[Number(z)] == array_n[0]){ 
@@ -515,41 +525,31 @@
                                           break;
                                       }
                                   }
-
+                                  //console.log("rows 3: "+ rows);
                                   var le = rows.length-1; // Var that contains the total of rows
                                  
+                                 
                                   rows[le][0] = array_n[1]; // Add new date to array
+                                  //console.log("rows 4: "+ rows);
                                   rows[le][indColu] = array_n[2]; // Add new value to array
-
+                                  //console.log("rows 5: "+ rows);
+                                 
                                   // Add zero in black array position
                                   for(var g = 0; g <= le2; g++){
                                       if(!rows[le][g]){
                                         rows[le][g] = 0;
                                       }
                                   }
-
-                                  //console.log(array_n[2] +' '+ array_n[3]);
-                                  //console.log('Rows le: '+ rows[le] +' <> '+ le +' <> '+rows[0] +' <> '+ rows[1] +' indColu: '+ indColu);
+                                  //console.log("rows 6: "+ rows);
                                   //remove the empty initial element
-                                  //console.log("before: "+ rows)
                                   if(rows[0][0] == '-'){
                                     rows.splice(0,1); 
                                   }
-                                  break;
+                                  //console.log("rows 7: "+ rows);
                             }
                         }
                     }
 
-//                        if( typeof chart_data === 'object' && typeof chart_data != "undefined") {
-//                            if(chart_data instanceof google.visualization.DataTable) { //true se != 'default'
-//                                chart_data.addRow(curr_tupple);
-//                            } else {
-//                                chart_data.push([ curr_tupple[0], curr_tupple[1], color ]);
-//                            }
-//                        } else {
-//                            cl('NO data available!');
-//                        }
-//
                         csvData.push( array_n );
 
                         if(flag != array_n[0]){
@@ -559,6 +559,8 @@
                            tai_chart.displayBaseAppend(curr_evt_title, array_n[3]);
                         }
                     } // end of for
+                    //console.log("before: "+ rows);
+                    rows.sort(); 
                     //console.log("after: "+ rows);
                     chart_data.addRows(rows);
                 }
