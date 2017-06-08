@@ -384,7 +384,7 @@
             url: stat_path + '/controllers/log/log_controller.php', type: 'POST',
             data: { operation: 'user_events', parent: parent, event: action, from: from, to: to, collec_id: c_id, filter: filter }
         }).done(function(resp) {
-        //console.log("Done: " + resp);
+        console.log("Done: " + resp);
 
             var res_json = JSON.parse(resp);
             //console.log("Res: "+ res_json);
@@ -403,6 +403,17 @@
                 }, 300);
             }
         });
+    }
+
+    //Verify if element exist
+    function existIn(array_n, rows){
+        for(h in rows){
+            //console.log("Aa: "+ h +" aa: "+ rows);
+            if(array_n[1] == rows[Number(h)][0]){
+                return [false, Number(h)];
+            }
+        }
+        return true;
     }
 
     function drawChart(chart_type, title, data_obj, filter) {
@@ -473,10 +484,14 @@
                         // If has value in first array
                         if(rows[0][0]){
                           for(k in rows){
-                              var el = rows[Number(k)]; // Var that contains actual array from rows
                               //console.log("rows a 1: "+ rows);
                               // If date is equal to date of an existing element and array exist
-                              if(el[0] == array_n[1]){ 
+                              var temp  = existIn(array_n, rows);
+                              //console.log("temp: "+ temp);
+                              var el = rows[Number(temp[1])]; // Var that contains actual array from rows
+                             // console.log("rows aa 1: "+ el);
+
+                              if(temp[0] == false){ 
                                 for(x in columnsData){
                                     //If event is equal to event in existing element
                                     if(columnsData[Number(x)] == array_n[0]){ 
@@ -493,7 +508,7 @@
                                     }
                                 }
 
-                                rows[Number(k)] = el; // The existing array is changed
+                                rows[Number(temp[1])] = el; // The existing array is changed
                                 //console.log("rows a 3: "+ rows);
                                 break;
                               }
@@ -535,16 +550,6 @@
                         }
                     }
 
-//                        if( typeof chart_data === 'object' && typeof chart_data != "undefined") {
-//                            if(chart_data instanceof google.visualization.DataTable) { //true se != 'default'
-//                                chart_data.addRow(curr_tupple);
-//                            } else {
-//                                chart_data.push([ curr_tupple[0], curr_tupple[1], color ]);
-//                            }
-//                        } else {
-//                            cl('NO data available!');
-//                        }
-//
                         csvData.push( array_n );
 
                         if(flag != array_n[0]){
@@ -555,26 +560,7 @@
                         }
                     } // end of for
                     //console.log("before: "+ rows);
-
-                    //remove possible duplicates
-                    //#TODO this should not be necessary. Indentify the cause in future and fix.
-                    rows = rows.filter(function unique() {
-                            var list = {}, id;
-                            for(var i = 0; i < rows.length; i++){
-                                id = rows[i][0];
-                                if(id in list){
-                                    rows.splice(i, 1);
-                                    --i;
-                                }
-                                else{
-                                    list[id] = true;
-                                }
-                            }
-                            return rows;
-                        });
-
-                    rows.sort();
-                    
+                    rows.sort(); 
                     //console.log("after: "+ rows);
                     chart_data.addRows(rows);
                 }
