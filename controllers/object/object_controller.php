@@ -48,18 +48,18 @@ class ObjectController extends Controller {
                 //se nao ele busca o cache da pagina de adiconar item
                 $has_cache = $this->has_cache($data['collection_id'], 'create-item-text');
                 $option = get_option('tainacan_cache');
-                if ($has_cache && $option != 'false' && $data['classifications'] == '') {
-                    $has_cache = htmlspecialchars_decode(stripslashes($has_cache)) .
-                            '<input type="hidden" id="temporary_id_item" value="' . $object_model->create() . '">' .
-                            file_get_contents(dirname(__FILE__) . '../../../views/object/js/create_item_text_cache_js.php') .
-                            file_get_contents(dirname(__FILE__) . '../../../views/object/js/create_draft_js.php');
-                    return $has_cache;
-                } else {
+//                if ($has_cache && $option != 'false' && $data['classifications'] == '') {
+//                    $has_cache = htmlspecialchars_decode(stripslashes($has_cache)) .
+//                            '<input type="hidden" id="temporary_id_item" value="' . $object_model->create() . '">' .
+//                            file_get_contents(dirname(__FILE__) . '../../../views/object/js/create_item_text_cache_js.php') .
+//                            file_get_contents(dirname(__FILE__) . '../../../views/object/js/create_draft_js.php');
+//                    return $has_cache;
+//                } else {
                     $data['object_name'] = get_post_meta($data['collection_id'], 'socialdb_collection_object_name', true);
                     $data['socialdb_collection_attachment'] = get_post_meta($data['collection_id'], 'socialdb_collection_attachment', true);
                     $data['object_id'] = $object_model->create();
                     return $this->render(dirname(__FILE__) . '../../../views/object/create_item_text.php', $data);
-                }
+                //}
                 break;
             // FIM : ADICIONAR ITEMS TIPO TEXTO
             // #1 ADICIONAR ITEMS TIPO URL
@@ -310,14 +310,15 @@ class ObjectController extends Controller {
                 if(!session_id()) {
                         session_start();
                 }
-                $cache = $_SESSION['collection_'.$data['collection_id'].'_properties'];
-                if(!$cache){
-                   $data = $object_model->show_object_properties($data);
-                   $_SESSION['collection_'.$data['collection_id'].'_properties'] = $data;
-                }else{
-                   $cache['object_id'] =  $data['object_id'];
-                   $data = $cache;
-                }
+ //               $cache = $_SESSION['collection_'.$data['collection_id'].'_properties'];
+//                if(!$cache){
+//                   $data = $object_model->show_object_properties($data);
+//                   $_SESSION['collection_'.$data['collection_id'].'_properties'] = $data;
+//                }else{
+//                   $cache['object_id'] =  $data['object_id'];
+//                   $data = $cache;
+//                }
+                $data = $object_model->show_object_properties($data);
                 return $this->render(dirname(__FILE__) . '../../../views/object/list_properties_accordion.php', $data);
             // propriedades na EDICAO do objeto
             case 'show_object_properties_edit'://

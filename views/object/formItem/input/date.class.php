@@ -2,7 +2,8 @@
 
 class DateClass extends FormItem {
 
-    public function generate($property_id, $item_id, $compound_id, $index_id) {
+    public function generate($compound, $property_id, $item_id, $index_id) {
+        $compound_id = $compound['id'];
         ?>
         <input 
             style="margin-right: 5px;" 
@@ -14,10 +15,47 @@ class DateClass extends FormItem {
             $this->initScriptsDate($property_id, $item_id, $compound_id, $index_id);
         }
 
-        public function initScriptsDate($property_id, $item_id, $compound_id, $index_id) {
-            ?>
+        public function initScriptsDate($property_id, $item_id, $compound_id, $index_id) { ?>
         <script>
             init_metadata_date("#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>");
+
+            $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').keyup(function () {
+                $.ajax({
+                    url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                    type: 'POST',
+                    data: {
+                        operation: 'saveValue',
+                        type: 'data',
+                        value: $(this).val(),
+                        item_id: '<?php echo $item_id ?>',
+                        compound_id: '<?php echo $compound_id ?>',
+                        property_children_id: '<?php echo $property_id ?>',
+                        index: <?php echo $index_id ?>,
+                        indexCoumpound: 0
+                    }
+                }).done(function (result) {
+
+                });
+            });
+            
+            $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').change(function () {
+                $.ajax({
+                    url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                    type: 'POST',
+                    data: {
+                        operation: 'saveValue',
+                        type: 'data',
+                        value: $(this).val(),
+                        item_id: '<?php echo $item_id ?>',
+                        compound_id: '<?php echo $compound_id ?>',
+                        property_children_id: '<?php echo $property_id ?>',
+                        index: <?php echo $index_id ?>
+                    }
+                }).done(function (result) {
+
+                });
+            });
+
             function init_metadata_date(seletor) {
                 $(seletor).datepicker({
                     dateFormat: 'dd/mm/yy',
@@ -36,18 +74,4 @@ class DateClass extends FormItem {
         </script> 
         <?php
     }
-    
-    public function template() {
-        return esc_html('<input  
-                type="text" 
-                size="13"
-                compound="##compound##"
-                item="##item##"
-                id="date-field-##compound##-##property##-##index##" 
-                class="form-control date-field-##compound##-##property##" 
-                value=""
-                name="socialdb_property_##property##[]" >
-        ');
-    }
-
 }

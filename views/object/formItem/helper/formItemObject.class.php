@@ -6,7 +6,7 @@ class FormItemObject extends FormItem{
     public $objectClass;
     
     public function widget($property,$item_id) {
-        $this->objectClass = new ObjectClass();
+        $this->objectClass = new ObjectClass($this->collection_id);
         $values = $this->getValuePropertyHelper($item_id, $property_id);
         $isMultiple = ($property['metas']['socialdb_property_data_cardinality'] == 'n') ? true : false;
         $filledValues = ($values) ? count($values) : 1;
@@ -21,7 +21,7 @@ class FormItemObject extends FormItem{
                 ?>
             </h2>
             <div>
-                <?php $this->objectClass->generate($property, $item_id, 0, $index) ?>
+                <?php $this->objectClass->generate($property,['id'=>0], $item_id, 0) ?>
             </div>
         </div>
         <?php

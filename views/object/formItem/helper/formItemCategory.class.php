@@ -26,15 +26,15 @@ class FormItemCategory extends FormItem{
             </h2>
             <div>
                 <?php if($property['type'] == 'selectbox'): ?>
-                    <?php $this->selectboxClass->generate($property, $item_id, 0, $index) ?>
+                    <?php $this->selectboxClass->generate($property,['id'=>0], $item_id, 0) ?>
                 <?php elseif($property['type'] == 'tree'): ?>
-                    <?php $this->simpleTreeClass->generate($property, $item_id, 0, $index) ?>
+                    <?php $this->simpleTreeClass->generate($property,['id'=>0], $item_id, 0) ?>
                 <?php elseif($property['type'] == 'radio'): ?>
-                    <?php $this->radioClass->generate($property, $item_id, 0, $index) ?>
+                    <?php $this->radioClass->generate($property,['id'=>0], $item_id, 0) ?>
                 <?php elseif($property['type'] == 'checkbox' || $property['type'] == 'multipleselect'): ?>
-                    <?php $this->checkboxClass->generate($property, $item_id, 0, $index) ?>
+                    <?php $this->checkboxClass->generate($property,['id'=>0], $item_id, 0) ?>
                 <?php elseif($property['type'] == 'tree_checkbox'): ?>
-                    <?php $this->multipleTreeClass->generate($property, $item_id, 0, $index) ?>
+                    <?php $this->multipleTreeClass->generate($property,['id'=>0], $item_id, 0) ?>
                 <?php endif; ?>
             </div>
         </div>

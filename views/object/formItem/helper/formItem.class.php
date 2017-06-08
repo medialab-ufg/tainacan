@@ -280,7 +280,7 @@ class FormItem extends Model{
                        $class = new FormItemCategory(); 
                        $class->widget($property, $this->itemId);
                     }else if($object){
-                       $class = new FormItemObject(); 
+                       $class = new FormItemObject($this->collection_id); 
                        $class->widget($property, $this->itemId);
                     }else if($property['type'] == __('Compounds','tainacan')){
                        $class = new FormItemCompound(); 
