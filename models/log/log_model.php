@@ -301,7 +301,7 @@ class Log extends Model {
         //     return self::getItemsStatus($spec, $collection_id);
         // } 
         else if("repo_searches" == $event_type || $event_type == "collection_searches") {
-            return self::getFrequentSearches($collection_id);
+            return self::getFrequentSearches($collection_id, from, $to, $filter);
         } else {
             if($_events_) {
                 $_stats = array();
@@ -413,11 +413,15 @@ class Log extends Model {
         return $top_collections;
     }
 
-    public function getFrequentSearches( $collection_id = NULL) {
+    public function getFrequentSearches( $collection_id = NULL, $from, $to, $filter) {
         global $wpdb;
 
-        if($collection_id == 'null' || is_null($collection_id) ) {
-            $sql = sprintf("");
+        if(($collection_id == 'null' || is_null($collection_id)) ) {
+            $sql = sprintf(
+                "SELECT event, substring(event_date, 1, 10) AS date, count(event) AS total 
+                FROM %s 
+                    WHERE event_type LIKE '%search' AND (substring(event_date, 1, 10)) between '$from' AND '$to'
+                    GROUP BY event, (substring(event_date, 1, 10))", self::_table());
             //$sql = sprintf("SELECT event AS term, COUNT(*) AS t_count FROM %s WHERE event_type = 'advanced_search' GROUP BY event ORDER BY COUNT(*) DESC", self::_table());
         } else {
             $sql = sprintf("SELECT event AS term, COUNT(*) AS t_count FROM %s WHERE event_type='collection_search' AND collection_id='$collection_id' GROUP BY event ORDER BY COUNT(*) DESC", self::_table());
@@ -426,11 +430,11 @@ class Log extends Model {
         $_searches = $wpdb->get_results($sql);
 
         $_s_arr = [];
-        foreach($_searches as $_s) {
-            array_push( $_s_arr, [ $_s->term => $_s->t_count]);
+        foreach($_searches as $data) {
+            array_push( $_s_arr, [ $data->event, $data->date, $date->total, $data->event_total ]);
         }
 
-        $stat_data = [ "stat_title" => [ 'Buscas Frequentes', 'Qtd' ], "quality_stat" => $_s_arr, "color" => 'NO_CHART'];
+        $stat_data = [ "stat_object" => $_s_arr, "color" => 'NO_CHART'];
         return json_encode( $stat_data );
     }
 
