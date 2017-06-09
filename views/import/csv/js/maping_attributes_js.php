@@ -10,6 +10,7 @@
             data: {collection_id: $('#collection_id').val(), operation: 'generate_selects'}
         }).done(function (result) {
             $('.data').html(result);
+            $('#tmp_div_all_metas').html(result);
 
         });
     });
