@@ -1,0 +1,16 @@
+version: '2'
+services:
+  database:
+    image: mysql
+    container_name: some-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=my-secret-pw
+  web:
+    container_name: tainacan
+    image: tainacan:1
+    ports:
+     - "8080:80"
+    volumes:
+     - /home/leo/devel/docker:/var/www/html/wp-content/themes/tainacan
+    links:
+     - database
