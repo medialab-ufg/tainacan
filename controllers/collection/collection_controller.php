@@ -100,7 +100,7 @@ class CollectionController extends Controller {
             case "delete":
                 return $collection_model->delete($data);
             case "list":
-                return $collection_model->list_collection();
+                return false;
             case "show_header":
                 $mycollections = $data['mycollections'];
                 $sharedcollections = $data['sharedcollections'];
