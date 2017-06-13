@@ -68,15 +68,15 @@ class FormItemCompound extends FormItem {
                                     <div style="padding-bottom: 15px; " class="col-md-12">
                                         <p style="color: black;"><?php echo $child['name']; ?></p>
                                     <?php if ($child['type'] == 'text'): ?>
-                                        <?php $this->textClass->generate($child['id'], $item_id, 0, $index) ?>
+                                        <?php $this->textClass->generate($property,$child['id'], $item_id,$index) ?>
                                     <?php elseif ($child['type'] == 'date'): ?>
-                                        <?php $this->dateClass->generate($child['id'], $item_id, 0, $index) ?>
+                                        <?php $this->dateClass->generate($property,$child['id'], $item_id,$index) ?>
                                     <?php elseif ($child['type'] == 'textarea'): ?>
-                                        <?php $this->textareaClass->generate($child['id'], $item_id, 0, $index) ?>
+                                        <?php $this->textareaClass->generate($property,$child['id'], $item_id,$index) ?>
                                     <?php elseif ($child['type'] == 'numeric' || $child['type'] == 'number'): ?>
-                                        <?php $this->numericClass->generate($child['id'], $item_id, 0, $index) ?>
+                                        <?php $this->numericClass->generate($property,$child['id'], $item_id,$index) ?>
                                     <?php elseif ($child['type'] == 'autoincrement'): ?>
-                                        <?php $this->textClass->generate($child['id'], $item_id, 0, $index) ?>
+                                        <?php $this->textClass->generate($property,$child['id'], $item_id,$index) ?>
                                     <?php elseif ($child['type'] == 'selectbox'): ?>
                                         <?php $this->selectboxClass->generate($child, $item_id, 0, $index) ?>
                                     <?php elseif ($child['type'] == 'tree'): ?>
@@ -88,7 +88,7 @@ class FormItemCompound extends FormItem {
                                     <?php elseif ($child['type'] == 'tree_checkbox'): ?>
                                         <?php $this->multipleTreeClass->generate($child, $item_id, 0, $index) ?>
                                      <?php elseif ($object): ?>
-                                        <?php $this->objectClass->generate($child, $item_id, 0, $index) ?>
+                                        <?php $this->objectClass->generate($property, $child,$item_id, $index) ?>
                                     <?php endif; ?>
                                     </div>
                                 <?php endforeach; ?>    

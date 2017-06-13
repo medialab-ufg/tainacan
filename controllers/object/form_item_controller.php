@@ -8,6 +8,7 @@ require_once(dirname(__FILE__) . '../../../models/object/object_model.php');
 require_once(dirname(__FILE__) . '../../../models/collection/collection_model.php');
 require_once(dirname(__FILE__) . '../../../controllers/general/general_controller.php');
 require_once(dirname(__FILE__) . '../../../models/user/user_model.php');
+require_once(dirname(__FILE__) . '../../../models/object/object_save_values.php');
 
 class FormItemController extends Controller {
 
@@ -17,8 +18,20 @@ class FormItemController extends Controller {
             case "appendContainerText":
                 include_once dirname(__FILE__) . '../../../views/object/formItem/helper/formItem.class.php';
                 $class = new FormItemText($data['collection_id']);
-                
-                echo $class->appendContainerText(unserialize(stripslashes($data['property_details'])),$data['item_id'],$data['index']);  
+                return $class->appendContainerText(unserialize(stripslashes($data['property_details'])),$data['item_id'],$data['index']);  
+            case "saveValue":
+                $class = new ObjectSaveValuesModel();
+                return $class->saveValue($data['item_id'], 
+                        $data['compound_id'], 
+                        $data['property_children_id'], 
+                        $data['type'], 
+                        $data['index'], 
+                        $data['value'],
+                        (isset($data['indexCoumpound']) ? $data['indexCoumpound'] : false )
+                        );
+            case "removeValue":
+                $class = new ObjectSaveValuesModel();
+                return $class->removeValue($data['item_id'], $data['compound_id'], $data['property_children_id'], $data['type'], $data['index'], $data['value']);
         }
     }
 	

@@ -37,6 +37,16 @@ class ObjectController extends Controller {
                   // $data['properties'] = $cache;
                 //}
                 return $this->render(dirname(__FILE__) . '../../../views/object/formItem/formItem.php', $data);
+                // propriedades de categoria
+            case 'appendCategoryMetadata'://
+                    //class
+                    include_once dirname(__FILE__) . '../../../views/object/formItem/helper/formItem.class.php';
+                    $data['formItem'] = new FormItem($data['collection_id']);
+                    $data = $object_model->show_object_properties($data);
+                    return $this->render(dirname(__FILE__) . '../../../views/object/append_properties_categories/properties_categories_accordion.php', $data);
+                    break;
+
+
             case "create_item_text":
                 //verifico se existe rascunho para se mostrado
                 $beta_id = get_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext', true);
@@ -48,18 +58,18 @@ class ObjectController extends Controller {
                 //se nao ele busca o cache da pagina de adiconar item
                 $has_cache = $this->has_cache($data['collection_id'], 'create-item-text');
                 $option = get_option('tainacan_cache');
-                if ($has_cache && $option != 'false' && $data['classifications'] == '') {
-                    $has_cache = htmlspecialchars_decode(stripslashes($has_cache)) .
-                            '<input type="hidden" id="temporary_id_item" value="' . $object_model->create() . '">' .
-                            file_get_contents(dirname(__FILE__) . '../../../views/object/js/create_item_text_cache_js.php') .
-                            file_get_contents(dirname(__FILE__) . '../../../views/object/js/create_draft_js.php');
-                    return $has_cache;
-                } else {
+//                if ($has_cache && $option != 'false' && $data['classifications'] == '') {
+//                    $has_cache = htmlspecialchars_decode(stripslashes($has_cache)) .
+//                            '<input type="hidden" id="temporary_id_item" value="' . $object_model->create() . '">' .
+//                            file_get_contents(dirname(__FILE__) . '../../../views/object/js/create_item_text_cache_js.php') .
+//                            file_get_contents(dirname(__FILE__) . '../../../views/object/js/create_draft_js.php');
+//                    return $has_cache;
+//                } else {
                     $data['object_name'] = get_post_meta($data['collection_id'], 'socialdb_collection_object_name', true);
                     $data['socialdb_collection_attachment'] = get_post_meta($data['collection_id'], 'socialdb_collection_attachment', true);
                     $data['object_id'] = $object_model->create();
                     return $this->render(dirname(__FILE__) . '../../../views/object/create_item_text.php', $data);
-                }
+                //}
                 break;
             // FIM : ADICIONAR ITEMS TIPO TEXTO
             // #1 ADICIONAR ITEMS TIPO URL
@@ -310,14 +320,15 @@ class ObjectController extends Controller {
                 if(!session_id()) {
                         session_start();
                 }
-                $cache = $_SESSION['collection_'.$data['collection_id'].'_properties'];
-                if(!$cache){
-                   $data = $object_model->show_object_properties($data);
-                   $_SESSION['collection_'.$data['collection_id'].'_properties'] = $data;
-                }else{
-                   $cache['object_id'] =  $data['object_id'];
-                   $data = $cache;
-                }
+ //               $cache = $_SESSION['collection_'.$data['collection_id'].'_properties'];
+//                if(!$cache){
+//                   $data = $object_model->show_object_properties($data);
+//                   $_SESSION['collection_'.$data['collection_id'].'_properties'] = $data;
+//                }else{
+//                   $cache['object_id'] =  $data['object_id'];
+//                   $data = $cache;
+//                }
+                $data = $object_model->show_object_properties($data);
                 return $this->render(dirname(__FILE__) . '../../../views/object/list_properties_accordion.php', $data);
             // propriedades na EDICAO do objeto
             case 'show_object_properties_edit'://
@@ -355,9 +366,9 @@ class ObjectController extends Controller {
             case "get_objects_by_property_json":// pega todos os objetos relacionado de uma propriedade e coloca em um array json
                 return $object_model->get_objects_by_property_json($data);
             case "get_objects_default_value":// pega todos os objetos relacionado de uma propriedade e coloca em um array json
-                return $object_model->get_objects_by_selected_categories($data['categories'],$data['term']);    
+                return $object_model->get_objects_by_selected_categories($data['categories'],$data['term']);
             case "get_terms_default_value":// pega todos os objetos relacionado de uma propriedade e coloca em um array json
-                return $object_model->search_term_by_parent($data['parent'],$data['term']);    
+                return $object_model->search_term_by_parent($data['parent'],$data['term']);
             case "get_property_object_value":// retorna os valores para uma propriedade de objeto especificao
                 return $object_model->get_property_object_value($data);
             case 'show_form_data_property':// mostra o formulario para insercao de propriedade de dados
@@ -476,7 +487,7 @@ class ObjectController extends Controller {
                                     $_current_term_id = $col_meta->term_id;
                                     $curr_term_metas = explode(",",get_term_meta($_current_term_id,'socialdb_property_compounds_properties_id', true));
 
-                                    if(is_array($_sub_metas)) { 
+                                    if(is_array($_sub_metas)) {
                                         $final_title = $col_meta->name;
                                         // $press['meta_ids'][] = $_current_term_id;
                                         $_pair = ['meta' => $final_title, 'value'=> '_____________________________', 'submeta_header' => true, 'header_idx' => $total_index, 'meta_id' => $_current_term_id, 'meta_tab' => $tabs['organize'][$_current_term_id]];
@@ -1040,9 +1051,9 @@ class ObjectController extends Controller {
                         wp_delete_post($id);
                     }
                 }
-                $data['title'] = __('Success','tainacan'); 
-                $data['msg'] = __('Operation is successfully','tainacan'); 
-                $data['type'] = 'success'; 
+                $data['title'] = __('Success','tainacan');
+                $data['msg'] = __('Operation is successfully','tainacan');
+                $data['type'] = 'success';
                 return json_encode($data);
             case 'search-items':
                 $result = [];
@@ -1053,7 +1064,7 @@ class ObjectController extends Controller {
                 return json_encode($result);
         }
     }
-	
+
 	private function get_item_line_breaks($text) {
 		$total_br = 0;
 		if( strlen($text) > 0 ) {

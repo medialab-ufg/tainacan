@@ -17,12 +17,13 @@ include_once (dirname(__FILE__) . '/formItemLicense.class.php');
 include_once (dirname(__FILE__) . '/formItemType.class.php');
 
 class FormItem extends Model{
-     
+
     public $metadatas;
     public $isView;
     public $itemId;
     public $mediaHabilitate = false;
     public $collection_id = false;
+    public $allPropertiesIds = [];
     public $fixed_slugs_helper = [
         'socialdb_property_fixed_title',
         'socialdb_property_fixed_description',
@@ -30,12 +31,12 @@ class FormItem extends Model{
         'socialdb_property_fixed_source',
         'socialdb_property_fixed_license',
         'socialdb_property_fixed_thumbnail',
-        'socialdb_property_fixed_attachments', 
+        'socialdb_property_fixed_attachments',
         'socialdb_property_fixed_tags',
         'socialdb_property_fixed_type'
         ];
    public $terms_fixed;
-    
+
    public static $default_color_schemes = [
         'blue'   => ['#7AA7CF', '#0C698B'],
         'brown'  => ['#874A1D', '#4D311F'],
@@ -43,7 +44,7 @@ class FormItem extends Model{
         'violet' => ['#7852B2', '#31185C'],
         'grey'   => ['#58595B', '#231F20'],
     ];
-    
+
     function __construct($collection_id = 0) {
         $this->collection_id = $collection_id;
         $this->terms_fixed = [
@@ -59,7 +60,7 @@ class FormItem extends Model{
         ];
         //verifico se existe labels da colecao
         if($this->collection_id !== 0):
-           $this->get_labels_fixed_properties($this->collection_id); 
+           $this->get_labels_fixed_properties($this->collection_id);
         endif;
     }
     /**
@@ -75,12 +76,20 @@ class FormItem extends Model{
         $this->structureProperties($ordenation,$tabs,$allTabs,$properties);
         if ( (!$tabs || empty($tabs)) && !$default_tab && !$allTabs):
             ?>
+            <div class="expand-all-div"  onclick="open_accordeon('default')" >
+                <a class="expand-all-link" href="javascript:void(0)">
+                     <?php _e('Expand all', 'tainacan') ?>&nbsp;&nbsp;<span class="caret"></span></a>
+            </div>
+            <hr>
+            <div id="accordeon-default" class="multiple-items-accordion" style="margin-top:-20px;">
+                  <?php $this->listPropertiesbyTab('default') ?>
+            </div>
             <?php
         else:
             ?>
-            <input  type="hidden" 
-                    name="tabs_properties" 
-                    id="tabs_properties" 
+            <input  type="hidden"
+                    name="tabs_properties"
+                    id="tabs_properties"
                     value='<?php echo ($tabs && is_array($tabs)) ? json_encode($tabs) : ''; ?>'/>
             <!-- Abas para a Listagem dos metadados -->
             <ul id="tabs_item" class="nav nav-tabs" style="background: white">
@@ -91,7 +100,7 @@ class FormItem extends Model{
                         </span>
                     </a>
                 </li>
-                <?php 
+                <?php
                 if($allTabs && is_array($allTabs)){
                     foreach ($allTabs as $tab) {
                         ?>
@@ -118,7 +127,7 @@ class FormItem extends Model{
                           <?php $this->listPropertiesbyTab('default') ?>
                     </div>
                 </div>
-                <?php 
+                <?php
                 if($allTabs && is_array($allTabs)){
                     foreach ($allTabs as $tab) {
                         ?>
@@ -135,12 +144,12 @@ class FormItem extends Model{
                         <?php
                     }
                 } ?>
-            </div>    
+            </div>
         <?php
         endif;
         $this->initScripts();
     }
-    
+
     /**
      * Metodo que organiza os os metadados de acordo com sua aba
      * @param type $propertiesOrdenation
@@ -154,7 +163,7 @@ class FormItem extends Model{
             foreach ($allTabs as $tab) {
                 $arrayIds[$tab->meta_id] = [];
             }
-        }            
+        }
         //olhando na ordenacao
         if($propertiesOrdenation && is_array($propertiesOrdenation)){
             foreach ($propertiesOrdenation as $tab => $ordenation) {
@@ -173,7 +182,7 @@ class FormItem extends Model{
         $arrayMapTabs = $this->verifyPropertiesWithoutTabs($arrayIds, $properties);
         $this->setMetadata($arrayMapTabs, $properties);
     }
-    
+
     /**
      * veririca se um metadado nao esta no array que ordenam as abas
      * @param type $arrayMapTabs
@@ -199,11 +208,11 @@ class FormItem extends Model{
         }
         return $arrayMapTabs;
     }
-    
+
     /**
-     * metodo que olha no array de propriedades e retorna as informacoes 
+     * metodo que olha no array de propriedades e retorna as informacoes
      * necessarias
-     * 
+     *
      * @param type $id
      * @param type $properties
      */
@@ -224,7 +233,7 @@ class FormItem extends Model{
         }
         return false;
     }
-    
+
     /**
      * setando a variavel da classe com os dados para serem listados na
      * @param type $arrayMapTabs
@@ -239,34 +248,35 @@ class FormItem extends Model{
               }
           }
     }
-    
-    
+
+
     /**
-     * 
+     *
      * @param type $properties1
      */
     public function listPropertiesbyTab($tab_id){
         if(is_array($this->metadatas[$tab_id])){
             foreach ($this->metadatas[$tab_id] as $property) {
+                $this->allPropertiesIds[] = $property['id'];
                 if(in_array($property['slug'], $this->fixed_slugs)){
                    if($property['slug'] == 'socialdb_property_fixed_title'){
-                       $class = new FormItemTitle($this->collection_id); 
+                       $class = new FormItemTitle($this->collection_id);
                    }else if($property['slug'] == 'socialdb_property_fixed_thumbnail'){
-                       $class = new FormItemThumbnail($this->collection_id); 
+                       $class = new FormItemThumbnail($this->collection_id);
                    }else if($property['slug'] == 'socialdb_property_fixed_content'){
-                       $class = new FormItemContent($this->collection_id); 
+                       $class = new FormItemContent($this->collection_id);
                    }else if($property['slug'] == 'socialdb_property_fixed_description'){
-                       $class = new FormItemDescription($this->collection_id); 
+                       $class = new FormItemDescription($this->collection_id);
                    }else if($property['slug'] == 'socialdb_property_fixed_attachments'){
-                       $class = new FormItemAttachment($this->collection_id); 
+                       $class = new FormItemAttachment($this->collection_id);
                    }else if($property['slug'] == 'socialdb_property_fixed_source'){
-                       $class = new FormItemSource($this->collection_id); 
+                       $class = new FormItemSource($this->collection_id);
                    }else if($property['slug'] == 'socialdb_property_fixed_type'){
-                       $class = new FormItemType($this->collection_id); 
+                       $class = new FormItemType($this->collection_id);
                    }else if($property['slug'] == 'socialdb_property_fixed_tags'){
-                       $class = new FormItemTags($this->collection_id); 
+                       $class = new FormItemTags($this->collection_id);
                    }else if($property['slug'] == 'socialdb_property_fixed_license'){
-                       $class = new FormItemLicense($this->collection_id); 
+                       $class = new FormItemLicense($this->collection_id);
                    }
                    $class->widget($property, $this->itemId);
                 }else{
@@ -274,25 +284,50 @@ class FormItem extends Model{
                     $term = ['selectbox','radio','checbox','tree','tree_checkbox','multipleselect'];
                     $object = (isset ($property['metas']['socialdb_property_object_category_id']) && !empty($property['metas']['socialdb_property_object_category_id'])) ? true : false;
                     if(in_array($property['type'], $data) && !$object){
-                       $class = new FormItemText(); 
+                       $class = new FormItemText();
                        $class->widget($property, $this->itemId);
                     }else if(in_array($property['type'], $term) && !$object){
-                       $class = new FormItemCategory(); 
+                       $class = new FormItemCategory();
                        $class->widget($property, $this->itemId);
                     }else if($object){
-                       $class = new FormItemObject(); 
+                       $class = new FormItemObject($this->collection_id);
                        $class->widget($property, $this->itemId);
                     }else if($property['type'] == __('Compounds','tainacan')){
-                       $class = new FormItemCompound(); 
+                       $class = new FormItemCompound();
                        $class->widget($property, $this->itemId);
                     }
                 }
             }
         }
     }
-    
+
     /**
-     * 
+    *
+    **/
+    public startCategoryMetadata($properties_to_avoid,$data){
+       $allProperties = [];
+       $allProperties = $this->propertyCategoriesMergeArray($allProperties,$properties_to_avoid,$data,'socialdb_property_data');
+       $allProperties = $this->propertyCategoriesMergeArray($allProperties,$properties_to_avoid,$data,'socialdb_property_object');
+       $allProperties = $this->propertyCategoriesMergeArray($allProperties,$properties_to_avoid,$data,'socialdb_property_term');
+       $allProperties = $this->propertyCategoriesMergeArray($allProperties,$properties_to_avoid,$data,'socialdb_property_compounds');
+    }
+
+
+    public function propertyCategoriesMergeArray($arrayAll,$properties_to_avoid,$data,$type){
+      if (isset($data[$type])):
+          $ids = [];
+          foreach ($data[$type] as $property) {
+              if(in_array($property['id'], $properties_to_avoid)){
+                  continue;
+              }
+              $arrayAll[$property['id']] = $property;
+          }
+      endif;
+      return $arrayAll;
+    }
+
+    /**
+     *
      * @param type $item_id
      * @param type $property_id
      * @return boolean
@@ -306,9 +341,9 @@ class FormItem extends Model{
             return false;
         }
     }
-    
+
     /**
-     * 
+     *
      * @param type $collection_id
      */
     public function get_labels_fixed_properties($collection_id){
@@ -318,18 +353,18 @@ class FormItem extends Model{
                 $array = unserialize($labels_collection);
                 if(!isset($this->terms_fixed[$slug]->name))
                     continue;
-                    
-                $this->terms_fixed[$slug]->name 
+
+                $this->terms_fixed[$slug]->name
                         = (isset($array[$this->terms_fixed[$slug]->term_id]))?$array[$this->terms_fixed[$slug]->term_id]:$this->terms_fixed[$slug]->name;
             else:
                 $this->terms_fixed[$slug]->name = $this->terms_fixed[$slug]->name;
             endif;
         }
-        
+
     }
-    
+
     /**
-     * scripts deste 
+     * scripts deste
      */
     public function initScripts() {
         ?>
@@ -361,14 +396,28 @@ class FormItem extends Model{
                            currHeader.children('.ui-icon').toggleClass('ui-icon-triangle-1-e',isPanelSelected).toggleClass('ui-icon-triangle-1-s',!isPanelSelected);
 
                             // Toggle the panel's content
-                           currContent.toggleClass('accordion-content-active',!isPanelSelected)    
+                           currContent.toggleClass('accordion-content-active',!isPanelSelected)
                            if (isPanelSelected) { currContent.slideUp(); }  else { currContent.slideDown(); }
 
                            return false; // Cancels the default action
                        }
-                    
+
                 });
-        </script>    
-        <?php    
+
+                /**
+                */
+                function appendCategoryMetadata(categories,item_id,seletor){
+                  $.ajax({
+                      url: $('#src').val() + '/controllers/object/object_controller.php',
+                      type: 'POST',
+                      data: {
+                        operation: 'appendCategoryMetadata',
+                        properties_to_avoid:'<?php echo implode(',',$this->allPropertiesIds) ?>',categories: categories,item_id}
+                  }).done(function (result) {
+                      $(seletor).html(result);
+                  });
+                }
+        </script>
+        <?php
     }
 }

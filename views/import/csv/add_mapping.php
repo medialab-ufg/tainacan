@@ -24,5 +24,6 @@ include_once ('js/maping_attributes_js.php');
         <?php } ?>
             <button type="button" id="submit_button_import_csv" class="btn btn-primary" onclick="save_csv_mapping()"><?php echo __('Save','tainacan'); ?></button>
         </form> 
+        <div id="tmp_div_all_metas"></div>
     </div>
     

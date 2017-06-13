@@ -18,7 +18,33 @@ require_once(dirname(__FILE__) . '../../general/general_model.php');
  */
 class ObjectSaveValuesModel extends Model {
     
-    
+    public function removeValue($item_id,$compound_id,$property_children_id,$type,$index,$value) {
+        $is_compound = ($property_children_id == 0) ? false : true;
+        $property_children_id = ($property_children_id == 0) ? $compound_id : $property_children_id;
+        $meta = get_post_meta($item_id, 'socialdb_property_helper_'.$compound_id, true);
+        if($meta){
+            $array = unserialize($meta);
+            if(is_array($array) && isset($array[$index]) && isset($array[$index][$property_children_id]) && isset($array[$index][$property_children_id]['values'])){
+                $values = $array[$index][$property_children_id]['values'];
+                $updateValues = [];
+                foreach ($values as $index => $meta_id) {
+                    $meta = $this->sdb_get_post_meta($meta_id);
+                    if($meta && $meta->meta_value != $value){
+                        $updateValues[] = $meta_id;
+                    }else if($meta && $meta->meta_value == $value){
+                        // removo o valor do postmeta pelo meta_id
+                        $this->sdb_delete_post_meta($meta->meta_id);
+                        if($is_compound){
+                            //removo o composto
+                            $this->updateCompoundMeta($item_id, $compound_id, $property_children_id, $index, '');
+                        }
+                    }
+                }
+                $array[$index][$property_children_id]['values'] = $updateValues;
+                update_post_meta($item_id, 'socialdb_property_helper_'.$compound_id, serialize($array));
+            }
+        }
+    }
     /**
      * 
      * @param type $item_id
@@ -30,7 +56,7 @@ class ObjectSaveValuesModel extends Model {
      * @param type $indexCompound
      * @return boolean
      */
-    public function saveValue($item_id,$compound_id,$property_children_id,$type,$index,$value,$indexCompound = 0) {
+    public function saveValue($item_id,$compound_id,$property_children_id,$type,$index,$value,$indexCompound) {
         $meta = get_post_meta($item_id, 'socialdb_property_helper_'.$compound_id, true);
         if($meta){
             $array = unserialize($meta);
@@ -42,7 +68,7 @@ class ObjectSaveValuesModel extends Model {
                 // array de valores (necessario se existir a necessidade de compostas com valores multivalorados)
                 $values = $array[$index][$property_children_id]['values'];
                 //busco o valor do postmeta bruto para ser atualizado
-                $meta_value = (isset($values[$indexCompound])) ? $this->sdb_get_post_meta($values[$indexCompound]) : false;
+                $meta_value = (is_numeric($indexCompound) && isset($values[(int)$indexCompound])) ? $this->sdb_get_post_meta($values[(int)$indexCompound]) : false;
                 //caso esse postmeta exista
                 if($meta_value){
                     $this->updateValue($item_id, $meta_value, $compound_id, $property_children_id, $index, $value);
@@ -50,13 +76,13 @@ class ObjectSaveValuesModel extends Model {
                 //caso nao exista esse, postmeta ele sera criado e salvo no helper
                 else{
                     $meta_id = $this->createValue($item_id, $type, $compound_id, $property_children_id, $index, $value);
-                    $array[$index][$property_children_id]['values'][$indexCompound] = $meta_id;
+                    $array[$index][$property_children_id]['values'][] = $meta_id;
                 }
             }else{
                 $meta_id = $this->createValue($item_id, $type, $compound_id, $property_children_id, $index, $value);
                 $new_children = [
                     'type' => $type,
-                    'values' => [ $indexCompound => $meta_id]
+                    'values' => [$meta_id]
                 ];
                 $array[$index][$property_children_id]= $new_children;
             }
@@ -65,11 +91,12 @@ class ObjectSaveValuesModel extends Model {
             $meta_id = $this->createValue($item_id, $type, $compound_id, $property_children_id, $index, $value);
             $new_children = [
                 'type' => $type,
-                'values' => [ $indexCompound => $meta_id]
+                'values' => [$meta_id]
             ];
             $array[$index][$property_children_id]= $new_children;
         }
         update_post_meta($item_id, 'socialdb_property_helper_'.$compound_id, serialize($array));
+        return true;
     }
     
     /**
@@ -84,16 +111,20 @@ class ObjectSaveValuesModel extends Model {
      */
     public function createValue($item_id,$type,$compound_id,$property_children_id,$index,$value) {
         // caso seja um metadado simples/ se nao 
-        $is_compound = ($property_children_id === 0) ? false : true;
-        $property_children_id = ($property_children_id === 0) ? $compound_id : $property_children_id;
+        $is_compound = ($property_children_id == 0) ? false : true;
+        $property_children_id = ($property_children_id == 0) ? $compound_id : $property_children_id;
         if($type == 'term'){
-            $meta_id = $this->sdb_add_post_meta ($item_id, 'socialdb_property_'.$property_children_id.'_cat', $value);
+            $meta_id = $this->sdb_add_post_meta($item_id, 'socialdb_property_'.$property_children_id.'_cat', $value);
+            // adiciono no relacionamento do item
+            wp_set_object_terms($object_id, array((int) $value), 'socialdb_category_type', true);
+            //adciono no array comum de busca
+            $this->set_common_field_values($item_id, "socialdb_propertyterm_$property_children_id", [(int) $value], 'term');
             if($is_compound){
                 //quando o metadao e termo seu id sera colocado no  array
                 $this->updateCompoundMeta($item_id, $compound_id, $property_children_id, $index, $value.'_cat');
             }
         }else{
-            $meta_id = $this->sdb_add_post_meta ($item_id, 'socialdb_property_'.$property_children_id, $value);
+            $meta_id = $this->sdb_add_post_meta($item_id, 'socialdb_property_'.$property_children_id, $value);
             if($is_compound){
                 //neste caso sera o meta_id
                 $this->updateCompoundMeta($item_id, $compound_id, $property_children_id, $index, $meta_id);
@@ -118,8 +149,8 @@ class ObjectSaveValuesModel extends Model {
      */
     public function updateValue($item_id,$meta_value,$compound_id,$property_children_id,$index,$value) {
         // caso seja um metadado simples/ se nao 
-        $is_compound = ($property_children_id === 0) ? false : true;
-        $property_children_id = ($property_children_id === 0) ? $compound_id : $property_children_id;
+        $is_compound = ($property_children_id == 0) ? false : true;
+        $property_children_id = ($property_children_id == 0) ? $compound_id : $property_children_id;
         // caso o postmeta esteja apontado para uma categoria seu meta_key sera socialdb-property_#_cat
         if(strpos($meta_value->meta_key, '_cat')!==false){
             //pego seu id
@@ -142,7 +173,10 @@ class ObjectSaveValuesModel extends Model {
                 $this->sdb_update_post_meta($meta_value->meta_id, $value);
             }
         }else if(strpos($meta_value->meta_key, 'socialdb_property_')!==false){
-             $this->sdb_update_post_meta($meta_value->meta_id, $value);
+            $this->sdb_update_post_meta($meta_value->meta_id, $value);
+            if($is_compound){
+                $this->updateCompoundMeta($item_id, $compound_id, $property_children_id, $index, $meta_value->meta_id);
+            }
         }
     }
     
@@ -166,7 +200,8 @@ class ObjectSaveValuesModel extends Model {
         if($childrens_value){
             $childrens_value = explode(',', $childrens_value);
             foreach ($childrens as $index_value  => $child) {
-                $childrens_value[$index_value] = $newValue;
+                if($child == $children_id)
+                    $childrens_value[$index_value] = $newValue;
             }
             update_post_meta($item, 'socialdb_property_' . $compound_id . '_' . $index, implode(',', $childrens_value));
         }else{
@@ -178,7 +213,7 @@ class ObjectSaveValuesModel extends Model {
                     $new_array[] = '';
                 }
             }
-            update_post_meta($item, 'socialdb_property_' . $compound_id . '_' . $index, implode(',', $childrens_value));
+            update_post_meta($item, 'socialdb_property_' . $compound_id . '_' . $index, implode(',', $new_array));
         }
         
     }

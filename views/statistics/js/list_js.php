@@ -483,15 +483,14 @@
 
                         // If has value in first array
                         if(rows[0][0]){
-                          for(k in rows){
-                              //console.log("rows a 1: "+ rows);
-                              // If date is equal to date of an existing element and array exist
-                              var temp  = existIn(array_n, rows);
+                            //console.log("rows a 1: "+ rows);
+                            // If date is equal to date of an existing element and array exist
+                            var temp  = existIn(array_n, rows);
                               //console.log("temp: "+ temp);
-                              var el = rows[Number(temp[1])]; // Var that contains actual array from rows
+                            var el = rows[Number(temp[1])]; // Var that contains actual array from rows
                              // console.log("rows aa 1: "+ el);
 
-                              if(temp[0] == false){ 
+                            if(temp[0] == false){ 
                                 for(x in columnsData){
                                     //If event is equal to event in existing element
                                     if(columnsData[Number(x)] == array_n[0]){ 
@@ -510,45 +509,42 @@
 
                                 rows[Number(temp[1])] = el; // The existing array is changed
                                 //console.log("rows a 3: "+ rows);
-                                break;
-                              }
+                            }
                               // Array with same date doesn't exist
-                              else {
-                                
-                                  //console.log("rows 1: "+ rows);
-                                  rows.push([]);
-                                  //console.log("rows 2: "+ rows);
-                                  for(z in columnsData){
-                                      //If event is equal to event in existing element
-                                      if(columnsData[Number(z)] == array_n[0]){ 
-                                          var indColu = Number(z)+1; // Var that contains the index of event
-                                          break;
-                                      }
-                                  }
-                                  //console.log("rows 3: "+ rows);
-                                  var le = rows.length-1; // Var that contains the total of rows
+                            else {
+                                //console.log("rows 1: "+ rows);
+                                rows.push([]);
+                                //console.log("rows 2: "+ rows);
+                                for(z in columnsData){
+                                //If event is equal to event in existing element
+                                    if(columnsData[Number(z)] == array_n[0]){ 
+                                        var indColu = Number(z)+1; // Var that contains the index of event
+                                        break;
+                                    }
+                                }
+                                //console.log("rows 3: "+ rows);
+                                var le = rows.length-1; // Var that contains the total of rows
                                  
                                  
-                                  rows[le][0] = array_n[1]; // Add new date to array
-                                  //console.log("rows 4: "+ rows);
-                                  rows[le][indColu] = array_n[2]; // Add new value to array
-                                  //console.log("rows 5: "+ rows);
+                                rows[le][0] = array_n[1]; // Add new date to array
+                                //console.log("rows 4: "+ rows);
+                                rows[le][indColu] = array_n[2]; // Add new value to array
+                                //console.log("rows 5: "+ rows);
                                  
-                                  // Add zero in black array position
-                                  for(var g = 0; g <= le2; g++){
-                                      if(!rows[le][g]){
+                                // Add zero in black array position
+                                for(var g = 0; g <= le2; g++){
+                                    if(!rows[le][g]){
                                         rows[le][g] = 0;
-                                      }
-                                  }
-                                  //console.log("rows 6: "+ rows);
-                                  //remove the empty initial element
-                                  if(rows[0][0] == '-'){
+                                    }
+                                }
+                                //console.log("rows 6: "+ rows);
+                                //remove the empty initial element
+                                if(rows[0][0] == '-'){
                                     rows.splice(0,1); 
-                                  }
-                                  //console.log("rows 7: "+ rows);
+                                }
+                                //console.log("rows 7: "+ rows);
                             }
                         }
-                    }
 
                         csvData.push( array_n );
 
