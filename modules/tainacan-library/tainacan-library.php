@@ -478,13 +478,25 @@ function gen_barcode($collection_id, $object_id)
     $tombo_id = get_collection_property_id($collection_id, "Tombo Patrimonial");
     $tombo_val = get_post_meta($object_id, 'socialdb_property_'.$tombo_id)[1];
 
+    $classificacao_id = get_collection_property_id($collection_id, "Classificação");
+    $classificacao_val = get_post_meta($object_id,'socialdb_property_'.$classificacao_id)[0];
+
+    $codigo_autor_id = get_collection_property_id($collection_id, "Código do autor");
+    $codigo_autor_val = get_post_meta($object_id,'socialdb_property_'.$codigo_autor_id)[0];
+
+    $ed_vol_id = get_collection_property_id($collection_id, 'Edição / volume');
+    $ed_vol_val = get_post_meta($object_id,'socialdb_property_'.$ed_vol_id)[0];
+
+    $n_exemplar_id = get_collection_property_id($collection_id, 'Número do exemplar');
+    $n_exemplar_val = get_post_meta($object_id,'socialdb_property_'.$n_exemplar_id)[0];
+
     ?>
     <div class="box-item-paddings box-item-right"></div> <!--Gera linha-->
     <input type="hidden" id="tombo_val" value="<?php echo $tombo_val; ?>">
     <div class="col-md-12">
         <div id="barcode-box">
             <h4 class="title-pipe single-title"> <?php _e('Barcode', 'tainacan'); ?></h4>
-            <button type="button" onclick="print_div('barcode-img', $('#tombo_val').val());" class="btn btn-default btn-xs pull-right" style="margin-top: 5px;"><span class="glyphicon glyphicon-print"></span></button>
+            <button type="button" onclick="print_barcode('barcode-img', $('#tombo_val').val());" class="btn btn-default btn-xs pull-right" style="margin-top: 5px;"><span class="glyphicon glyphicon-print"></span></button>
             <div id="barcode-img" class="barcode-img">
                 <svg id="barcode"
                      jsbarcode-textmargin="0"
@@ -499,8 +511,41 @@ function gen_barcode($collection_id, $object_id)
                     });
                 </script>
             </div>
+            <button type="button" onclick="print_spine_label();" class="btn btn-default pull-right" style="position: relative; bottom: 30px; ">
+                <span class="glyphicon glyphicon-print"></span>
+                <?php _e("Print spine label", 'tainacan'); ?>
+            </button>
         </div>
     </div>
+    <?php
+    if($classificacao_val)
+    {
+        ?>
+        <input type="hidden" id="classificação" value="<?php echo $classificacao_val; ?>">
+        <?php
+    }
+
+    if($codigo_autor_val)
+    {
+        ?>
+        <input type="hidden" id="codigo_autor" value="<?php echo $codigo_autor_val; ?>">
+        <?php
+    }
+
+    if($ed_vol_val)
+    {
+        ?>
+        <input type="hidden" id="edi_vol" value="<?php echo $ed_vol_val; ?>">
+        <?php
+    }
+
+    if($n_exemplar_val)
+    {
+        ?>
+        <input type="hidden" id="exemplar" value="<?php echo $n_exemplar_val; ?>">
+        <?php
+    }
+    ?>
     <?php
 }
 
@@ -1957,4 +2002,14 @@ function update_user_properties($data)
         update_user_meta($userID, $index, $value);
     }
     return true;
+}
+
+/*
+ * Entrada: ID da coleção que se deseja obter os filhos
+ * Retorno: ID de todos os filhos de uma determinada coleção
+ */
+function get_objects_children_from_collection($collection_id)
+{
+//    $args
+//    get_posts()
 }

@@ -164,6 +164,9 @@ class userController extends Controller
                 $user_name = $_POST['user_name'];
                 return  search_for_user($user_name);
                 break;
+            case 'get_impressions_page':
+                return $this->render(dirname(__FILE__) . '../../views/impressions.php');
+                break;
             default:
                 return false;
                 break;

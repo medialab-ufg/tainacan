@@ -194,6 +194,16 @@ function get_users_page(src, op) {
         })
 }
 
+function get_impressions_page(src) {
+    var send_url = src + "/modules/tainacan-library/controllers/user_controller.php?operation=get_impressions_page"
+    $.ajax({ type: 'POST', url: send_url})
+        .done(function(res){
+            resetHomeStyleSettingsLibrary();
+            $('#tainacan-breadcrumbs').hide();
+            $('#users_div').html(res).show();
+        })
+}
+
 function resetHomeStyleSettingsLibrary() {
     //cl('Entering _resetHomeStyleSettings');
     $('ul.menu-ibram').show();
@@ -228,7 +238,7 @@ function resetHomeStyleSettingsLibrary() {
     }
 }
 
-function print_div(div_id, tombo)
+function print_barcode(div_id, tombo)
 {
     var conteudo = document.getElementById(div_id).innerHTML,
         tela_impressao = window.open('about:blank');
@@ -237,4 +247,29 @@ function print_div(div_id, tombo)
     tela_impressao.document.write("<div>"+tombo+"</div>");
     tela_impressao.window.print();
     tela_impressao.window.close();
+}
+
+function print_spine_label()
+{
+    var classific = $("#classificação").val(),
+        codigo_autor = $("#codigo_autor").val(),
+        edi_vol = $("#edi_vol").val(),
+        exemplar = $("#exemplar").val(),
+        tela_impressao = window.open('about:blank'),
+        conteudo =
+            "<div style='text-align: center; border: 1px solid #E8E8E8; border-radius: 3px; text-align: center;'>" +
+                "<div style='margin: 10px;' >"+
+                    "<strong>Classificação: </strong>" + classific + "<br>" +
+                    "<strong>Código do autor: </strong>" + codigo_autor + "<br>" +
+                    "<strong>Exemplar: </strong>"+ exemplar + "<br>" +
+                    "<strong>Edição/volume: </strong>" + edi_vol+ "<br>" +
+                "</div>"
+            "</div>"
+        ;
+
+    tela_impressao.document.write(conteudo);
+    tela_impressao.window.print();
+    tela_impressao.window.close();
+
+
 }

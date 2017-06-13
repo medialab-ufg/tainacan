@@ -143,6 +143,14 @@ $_src_ = get_template_directory_uri();
                                               <?php echo $email_name ?>
                                           </a>
                                       </li>
+                                      <?php
+                                        if(has_action("addLibraryMenu"))
+                                        {
+                                          ?>
+                                        <li><a style="cursor: pointer;" onclick="get_impressions_page('http://localhost/wordpress/biblioteca/wp-content/themes/tainacan');"><span  class="glyphicon glyphicon-print"></span> <?php _e('Impressions', 'tainacan'); ?></a></li>
+                                          <?php
+                                        }
+                                      ?>
                                       <li><a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_tools'); updateStateRepositorio('tools');" style="cursor: pointer;"><span  class="glyphicon glyphicon-tasks"></span> <?php _e('Tools', 'tainacan'); ?></a></li>
                                       <li><a onclick="repoConfig('<?php echo $_src_ ?>', 'import_full'); updateStateRepositorio('import');" style="cursor: pointer;"><span class="glyphicon glyphicon-import"></span> <?php _e('Import', 'tainacan'); ?></a></li>
                                       <li><a onclick="repoConfig('<?php echo $_src_ ?>', 'export_full'); updateStateRepositorio('export');" style="cursor: pointer;"><span class="glyphicon glyphicon-export"></span> <?php _e('Export', 'tainacan'); ?></a></li>
