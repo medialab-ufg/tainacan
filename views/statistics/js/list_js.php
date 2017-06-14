@@ -1,45 +1,45 @@
 <script type="text/javascript">
-    google.charts.load('current', {'packages':['default','corechart']}); //bar
+    google.charts.load('current', {'packages':['bar', 'line', 'corechart']}); //bar
     google.charts.setOnLoadCallback(loadChart);
     
     var TainacanChart = function(){};
     TainacanChart.prototype.getMappedTitles = function() {
         return {
-            add: '<?php _t("Added",1); ?>',
-            edit: '<?php _t("Edited",1); ?>',
-            view: '<?php _t("Viewed",1); ?>',
-            download: '<?php _t("Downloaded",1); ?>',
-            delete: '<?php _t("Deleted",1); ?>',
-            comment: '<?php _t("Commented",1); ?>',
-            vote: '<?php _t("Voted",1); ?>',
-            login: '<?php _t("Logged in",1); ?>',
-            register: '<?php _t("Registers",1); ?>',
-            delete_user: '<?php _t("Excluded",1); ?>',
-            administrator: '<?php _t("Administrator",1); ?>',
-            author: '<?php _t("Author",1); ?>',
-            editor: '<?php _t("Editor",1); ?>',
-            subscriber: '<?php _t("Subscriber",1); ?>',
-            contributor: '<?php _t("Colaborator",1); ?>',
-            access_oai_pmh: '<?php _t("OAI-PMH Accesses",1); ?>',
-            harvest_oai_pmh: '<?php _t("Harvesting OAI-PMH",1); ?>',
-            import_csv: '<?php _t("CSV Importation",1); ?>',
-            export_csv: '<?php _t("CSV Exportation",1); ?>',
-            import: '<?php _t("Importation",1); ?>',
-            export: '<?php _t("Exportation",1); ?>',
-            import_tainacan: '<?php _t("Tainacan Importation",1); ?>',
-            export_tainacan: '<?php _t("Tainacan Exportation",1); ?>',
-            publish: '<?php _t("Active",1); ?>',
-            draft: '<?php _t("Draft",1); ?>',
-            trash: '<?php _t("Trash",1); ?>',
-            //total_delete: '<?php _t("Deleted",1); ?>',
-            config: '<?php _t("Configurations",1); ?>',
-            welcome_mail: '<?php _t("Welcome Mail",1); ?>',
-            licenses: '<?php _t("Licenses",1); ?>',
-            keys: '<?php _t("Keys",1); ?>',
-            tools: '<?php _t("Tools",1); ?>',
-            metadata: '<?php _t("Metadata",1); ?>',
-            layout: '<?php _t("Layout",1); ?>',
-            social_media: '<?php _t("Social Media",1); ?>'
+            add: '<?php _t("Added", 1); ?>',
+            edit: '<?php _t("Edited", 1); ?>',
+            view: '<?php _t("Viewed", 1); ?>',
+            download: '<?php _t("Downloaded", 1); ?>',
+            delete: '<?php _t("Deleted", 1); ?>',
+            comment: '<?php _t("Commented", 1); ?>',
+            vote: '<?php _t("Voted", 1); ?>',
+            login: '<?php _t("Logged in", 1); ?>',
+            register: '<?php _t("Registers", 1); ?>',
+            delete_user: '<?php _t("Excluded", 1); ?>',
+            administrator: '<?php _t("Administrator", 1); ?>',
+            author: '<?php _t("Author", 1); ?>',
+            editor: '<?php _t("Editor", 1); ?>',
+            subscriber: '<?php _t("Subscriber", 1); ?>',
+            contributor: '<?php _t("Colaborator", 1); ?>',
+            access_oai_pmh: '<?php _t("OAI-PMH Accesses", 1); ?>',
+            harvest_oai_pmh: '<?php _t("Harvesting OAI-PMH", 1); ?>',
+            import_csv: '<?php _t("CSV Importation", 1); ?>',
+            export_csv: '<?php _t("CSV Exportation", 1); ?>',
+            import: '<?php _t("Importation", 1); ?>',
+            export: '<?php _t("Exportation", 1); ?>',
+            import_tainacan: '<?php _t("Tainacan Importation", 1); ?>',
+            export_tainacan: '<?php _t("Tainacan Exportation", 1); ?>',
+            publish: '<?php _t("Active", 1); ?>',
+            draft: '<?php _t("Draft", 1); ?>',
+            trash: '<?php _t("Trash", 1); ?>',
+            //total_delete: '<?php _t("Deleted", 1); ?>',
+            config: '<?php _t("Configurations", 1); ?>',
+            welcome_mail: '<?php _t("Welcome Mail", 1); ?>',
+            licenses: '<?php _t("Licenses", 1); ?>',
+            keys: '<?php _t("Keys", 1); ?>',
+            tools: '<?php _t("Tools", 1); ?>',
+            metadata: '<?php _t("Metadata", 1); ?>',
+            layout: '<?php _t("Layout", 1); ?>',
+            social_media: '<?php _t("Social Media", 1); ?>'
         };
     };
 
@@ -61,8 +61,14 @@
         $("#charts-resume table tr.quality-content").remove();
     };
 
+    TainacanChart.prototype.appendSearchesBase = function(){
+        $("#charts-resume table tr.headers").html("<td>Termo</td><td>Quantidade de buscas</td>");
+        $("#charts-resume table tr.content").html("");
+        $("#charts-resume table tr.quality-content").remove();
+    }
+
     TainacanChart.prototype.appendQualityData = function(title, qtd) {
-        $("#charts-resume table tbody").append("<tr class='quality-content'><td>"+ title +"</td><td>"+qtd+"</td></tr>");
+        $("#charts-resume table tbody").append("<tr class='quality-content'><td>"+ title +"</td><td>"+ qtd +"</td></tr>");
     };
 
     TainacanChart.prototype.getStatDesc = function(title, desc) {
@@ -387,7 +393,7 @@
         console.log("Done: " + resp);
 
             var res_json = JSON.parse(resp);
-            //console.log("Res: "+ res_json);
+            console.log("Res: "+ res_json);
 
             var chart = $('.selected_chart_type').val(); //tipo de chart selecionado
             $(".current_parent_report").val(parent); //nome do parent atual 'ex: Users'
@@ -452,26 +458,11 @@
                 tai_chart.displayFixedBase();
                 
                 // This if is not used
-                if(data_obj.item_status) {
-                    for( index_i in data_obj.stat_object ){
-                        for( t in data_obj.stat_object[index_i] ){
-                            var obj_total = parseInt(data_obj.stat_object[index_i][t]);
-                            var curr_evt_title = tai_chart.getMappedTitles()[t];
-                            var curr_tupple = [ curr_evt_title, obj_total ];
-                            if( chart_data instanceof google.visualization.DataTable ) {
-                                chart_data.addRow(curr_tupple);
-                            } else {
-                                chart_data.push([curr_evt_title,obj_total, '#EF4C28']);
-                            }
-                            csvData.push( curr_tupple );
-                            tai_chart.displayBaseAppend(curr_tupple[0], curr_tupple[1]);
-                        }
-                    }
-                } else {
-                    //Where the magic happens!
+                    // Where the magic happens!
 
                     var rows = [[]]; // Array that contains rows of DataTable
                     var flag = ''; // Var that contains name of actual event
+                    var cole_flag = 0;
                     
                     rows[0] = ['-'];
                     
@@ -550,34 +541,34 @@
 
                         if(flag != array_n[0]){
                            flag = array_n[0];
+                           
                            var curr_evt_title = tai_chart.getMappedTitles()[flag] ? tai_chart.getMappedTitles()[flag] : flag;
                            //console.log(flag);
-                           tai_chart.displayBaseAppend(curr_evt_title, array_n[3]);
+                           if(title == 'top_collections'){
+                               if (cole_flag == 0){
+                                   tai_chart.appendQualityBase();
+                                   cole_flag = 1;
+                               } 
+                               tai_chart.appendQualityData(curr_evt_title, array_n[3]);
+                           }
+                           else if(title == 'repo_searches' || title == 'collection_searches'){
+                               if(cole_flag == 0){
+                                   tai_chart.appendSearchesBase();
+                                   cole_flag = 1;
+                               }
+                               tai_chart.appendQualityData(curr_evt_title, array_n[3]);
+                           }
+                           else{
+                               // Display status and total
+                               tai_chart.displayBaseAppend(curr_evt_title, array_n[3]);
+                           }
                         }
                     } // end of for
                     //console.log("before: "+ rows);
                     rows.sort(); 
                     //console.log("after: "+ rows);
                     chart_data.addRows(rows);
-                }
-            } else if(data_obj.quality_stat) {
-                tai_chart.appendQualityBase();
-                var d = new google.visualization.DataTable();
-                d.addColumn("string", "total");
-                for( colecao in data_obj.quality_stat ) {
-                    for( c in data_obj.quality_stat[colecao]) {
-                        var obj_total = parseInt(data_obj.quality_stat[colecao][c]);
-                        var curr_tupple = [c,obj_total];
-                        if( d instanceof google.visualization.DataTable ) {
-                            d.addRow(curr_tupple);
-                        } else {
-                            d.push([c,obj_total, '#2D882D']);
-                        }
-                        csvData.push( curr_tupple );
-                        tai_chart.appendQualityData(curr_tupple[0], curr_tupple[1]);
-                    } // for
-                }
-            }
+            } 
             else if(!data_obj.stat_object[0]){
                 chart_data.addRow();
                 tai_chart.displayFixedBase();
@@ -587,19 +578,9 @@
             tai_chart.createCsvFile(csvData);
 
             var div_chart = $("#charts-container").get(0);
-//            if("NO_CHART" == color) {
-//                $(div_chart).addClass('hide');
-//                var frst_td = $("#charts-resume table tr.headers td").get(0);
-//                $(frst_td).text("Buscas Frequentes");
-//                var sec_td = $("#charts-resume table tr.headers td").get(1);
-//                $(sec_td).text("Nº de itens");
-//                return;
-//            } else {
-                $(div_chart).removeClass('hide');
-                // draw chart based at generated json data
-                renderChart(title, chart_type, chart_data);
-//            }
-
+            $(div_chart).removeClass('hide');
+            // draw chart based at generated json data
+            renderChart(title, chart_type, chart_data);
         }
     } // drawChart()
 
@@ -612,7 +593,11 @@
             var pieOptions = {
                 is3D: true,
                 colors: ['#F09B35','#8DA9BF','#F2C38D','#E6AC03', '#D94308', '#013453'],
-                legend: {position: 'top', alignment: 'center', textStyle: {fontSize: 12}}
+                legend: {position: 'top', alignment: 'center', textStyle: {fontSize: 11}},
+                fontSize: 10,
+                selectionMode: 'multiple',
+                tooltip: {trigger: 'selection'},
+                aggregationTarget: 'category'
             }; // '#0F4F8D','#2B85C1' tons de azul
 
             google.visualization.events.addListener(piechart, 'ready', function() {
@@ -626,7 +611,11 @@
             var barchart = new google.visualization.BarChart(document.getElementById('barchart_div'));
             var barOptions = {
                 bars: 'horizontal',
-                legend: {position: 'top', alignment: 'center', textStyle: {fontSize: 12}}
+                legend: {position: 'top', alignment: 'center', textStyle: {fontSize: 11}},
+                fontSize: 10,
+                selectionMode: 'multiple',
+                tooltip: {trigger: 'selection'},
+                aggregationTarget: 'category'
             };
 
             google.visualization.events.addListener(barchart, 'ready', function() {
@@ -640,7 +629,11 @@
             var default_chart = new google.visualization.ColumnChart(document.getElementById('defaultchart_div'));
             var defaOptions = {
                 bars: 'vertical',
-                legend: {position: 'top', alignment: 'center', textStyle: {fontSize: 12}}
+                legend: {position: 'top', alignment: 'center', textStyle: {fontSize: 11}},
+                fontSize: 10,
+                selectionMode: 'multiple',
+                tooltip: {trigger: 'selection'},
+                aggregationTarget: 'category'
             };
 
             google.visualization.events.addListener(default_chart, 'ready', function(){
@@ -657,7 +650,11 @@
             var linechart = new google.visualization.LineChart(document.getElementById('curvelinechart_div'));
             var curveOptions = {
                 curveType: 'function',
-                legend: {position: 'top', alignment: 'center', textStyle: {fontSize: 12}}
+                legend: {position: 'top', alignment: 'center', textStyle: {fontSize: 11}},
+                fontSize: 10,
+                selectionMode: 'multiple',
+                tooltip: {trigger: 'selection'},
+                aggregationTarget: 'category'
             };
 
             //console.log('#2 data: '+ tessst +'\n'+ 'type: '+ type +'\n'+ linechart +'\n'+ curveOptions);
@@ -781,7 +778,7 @@
         pdf.rect(line_dims.startX, footer_set.startY, line_dims.length, line_dims.thickness, 'F');
         pdf.fromHTML( $('#user_details').get(0), line_dims.startX, footer_set.startY );
 
-        var right_footer_text = '<?php _t("Page ",1); ?>' + 1 + '<?php _t(" of ",1); ?>' + pdf.internal.getNumberOfPages();
+        var right_footer_text = '<?php _t("Page ", 1); ?>' + 1 + '<?php _t(" of ", 1); ?>' + pdf.internal.getNumberOfPages();
         pdf.text(right_footer_text, footer_set.startX + 350, pdf.internal.pageSize.height - 20);
 
         var timeStamp = d.getFullYear() + d.getDay() + d.getMilliseconds();

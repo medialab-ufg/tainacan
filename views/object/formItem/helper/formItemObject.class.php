@@ -10,6 +10,7 @@ class FormItemObject extends FormItem{
         $values = $this->getValuePropertyHelper($item_id, $property_id);
         $isMultiple = ($property['metas']['socialdb_property_data_cardinality'] == 'n') ? true : false;
         $filledValues = ($values) ? count($values) : 1;
+        $isRequired = ($property['metas'] && $property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] != 'false') ? true : false;
         ?>
         <div id="meta-item-<?php echo $property['id']; ?>" class="form-group" >
              <h2>
@@ -19,6 +20,9 @@ class FormItemObject extends FormItem{
                     do_action('modificate_label_insert_item_properties', $property);
                 endif;
                 ?>
+                <?php if ($isRequired): ?>
+                *
+                <?php endif ?>
             </h2>
             <div>
                 <?php $this->objectClass->generate($property,['id'=>0], $item_id, 0) ?>

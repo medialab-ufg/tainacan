@@ -18,7 +18,11 @@ class FormItemController extends Controller {
             case "appendContainerText":
                 include_once dirname(__FILE__) . '../../../views/object/formItem/helper/formItem.class.php';
                 $class = new FormItemText($data['collection_id']);
-                return $class->appendContainerText(unserialize(stripslashes($data['property_details'])),$data['item_id'],$data['index']);  
+                return $class->appendContainerText(unserialize(stripslashes(html_entity_decode($data['property_details']))),$data['item_id'],$data['index']);  
+             case "appendContainerCompounds":
+                include_once dirname(__FILE__) . '../../../views/object/formItem/helper/formItem.class.php';
+                $class = new FormItemCompound($data['collection_id']);
+                return $class->appendContainerCompounds(unserialize(stripslashes(html_entity_decode($data['property_details']))),$data['item_id'],$data['index']);      
             case "saveValue":
                 $class = new ObjectSaveValuesModel();
                 return $class->saveValue($data['item_id'], 
@@ -32,6 +36,9 @@ class FormItemController extends Controller {
             case "removeValue":
                 $class = new ObjectSaveValuesModel();
                 return $class->removeValue($data['item_id'], $data['compound_id'], $data['property_children_id'], $data['type'], $data['index'], $data['value']);
+            case "removeIndexValues":
+                $class = new ObjectSaveValuesModel();
+                return $class->removeIndexValue($data['item_id'], $data['compound_id'], $data['index']);    
         }
     }
 	

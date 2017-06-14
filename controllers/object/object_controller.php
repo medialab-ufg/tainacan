@@ -41,12 +41,11 @@ class ObjectController extends Controller {
             case 'appendCategoryMetadata'://
                     //class
                     include_once dirname(__FILE__) . '../../../views/object/formItem/helper/formItem.class.php';
-                    $data['formItem'] = new FormItem($data['collection_id']);
+                    $formItem = new FormItem($data['collection_id']);
                     $data = $object_model->show_object_properties($data);
-                    return $this->render(dirname(__FILE__) . '../../../views/object/append_properties_categories/properties_categories_accordion.php', $data);
+                    $properties_to_avoid = explode(',', $data['properties_to_avoid']);
+                    return $formItem->startCategoryMetadata($properties_to_avoid, $data);
                     break;
-
-
             case "create_item_text":
                 //verifico se existe rascunho para se mostrado
                 $beta_id = get_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext', true);
@@ -602,7 +601,10 @@ class ObjectController extends Controller {
                     $total_index++;
                 }
 
-                $press['meta_ids'] = array_unique($press['meta_ids']);
+                if( ! is_null($press['meta_ids']) ) {
+                    $press['meta_ids'] = array_unique($press['meta_ids']);
+                }
+
 
                 $s = [];
                 $aux_ids = [];

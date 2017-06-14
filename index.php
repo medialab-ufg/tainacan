@@ -93,7 +93,7 @@ if (isset($_GET['info_messages'])) {
     <div id="users_div"  class="col-md-12">
 
     </div>
-    <link href="http://localhost/wordpress/biblioteca/wp-content/themes/tainacan/libraries/css/bootstrap_data_table/data_table.css?ver=4.7.5" rel="stylesheet" type="text/css">
+    <?php /* <link href="http://localhost/wordpress/biblioteca/wp-content/themes/tainacan/libraries/css/bootstrap_data_table/data_table.css?ver=4.7.5" rel="stylesheet" type="text/css"> */ ?>
 </div>
 
 <!-- TAINACAN: esta div possui um gif que e colocada como none quando a listagem de recents e populares  -->

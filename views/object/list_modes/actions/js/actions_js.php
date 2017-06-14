@@ -212,17 +212,20 @@
                             }
                             pressPDF.setFontStyle('bold');
                             var p = base_count + 40;
-                            pressPDF.text( itm.inf[idx].meta, (baseX*2 + extra_padding) , p);
+                            var meta_title = itm.inf[idx].meta;
 
-                            var f = p + 15;
-                            var default_val = "--";
-                            pressPDF.setFontStyle('normal');
+                            if(meta_title) {
+                                pressPDF.text( meta_title, (baseX*2 + extra_padding) , p);
+                                var f = p + 15;
+                                var default_val = "--";
+                                pressPDF.setFontStyle('normal');
 
-                            if(itm.inf[idx].value) {
-                                default_val = itm.inf[idx].value;
+                                if(itm.inf[idx].value) {
+                                    default_val = itm.inf[idx].value;
+                                }
+                                pressPDF.text(default_val, (baseX*2 + extra_padding), f);
+                                base_count = p + extra_line_height;
                             }
-                            pressPDF.text(default_val, (baseX*2 + extra_padding), f);
-                            base_count = p + extra_line_height;
                         }
                     }
 

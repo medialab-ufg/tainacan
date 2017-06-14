@@ -19,7 +19,24 @@ class ObjectClass extends FormItem {
         if ($property_id == 0) {
             $property = $compound;
         }
+        $this->isRequired = ($property['metas'] && $property['metas']['socialdb_property_required'] && $property['metas']['socialdb_property_required'] != 'false') ? true : false;
         ?>
+        <input type="hidden" id="required_<?php echo $compound_id; ?>_<?php echo $property_id; ?>_<?php echo $index_id; ?>" value="<?php echo (string)$this->isRequired  ?>">
+        <?php if($this->isRequired): ?>
+        <div class="form-group" 
+             id="validation-<?php echo $compound['id'] ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>"
+             style="border-bottom:none;">
+                <span style="display: none;" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                <span style="display: none;" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                <span id="input2Status" class="sr-only">(status)</span>
+                <input type="hidden" 
+                       <?php if($property_id !== 0): ?>
+                       compound="<?php echo $compound['id'] ?>"
+                       <?php endif; ?>
+                       class="validate-class validate-compound-<?php echo $compound['id'] ?>"
+                       value="false">
+        </div>        
+        <?php endif; ?>
         <div class="metadata-related">
             <h6><b><?php _e('Related items', 'tainacan') ?></b></h6>
             <?php //$this->insert_button_add_other_collection($property, $object_id, $collection_id) ?>

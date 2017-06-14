@@ -78,10 +78,10 @@ include_once('js/list_js.php');
                 </ul>
             </div>
 
-            <div id="defaultchart_div"></div> <!--Div that will hold the pie chart-->
-            <div class="hide" id="piechart_div" style="width: 650px; height: 300px;"></div>
-            <div class="hide" id="barchart_div"></div>
-            <div class="hide" id="curvelinechart_div"></div>
+            <div id="defaultchart_div" style="width: 100%; height: 350px;"></div> <!--Div that will hold the pie chart-->
+            <div class="hide" id="piechart_div" style="width: 100%; height: 350px;"></div>
+            <div class="hide" id="barchart_div" style="width: 100%; height: 350px;"></div>
+            <div class="hide" id="curvelinechart_div" style="width: 100%; height: 350px;"></div>
 
             <div id="no_chart_data" class="hide">
               <h3> <?php _t('There is no data yet for this report!', 1); ?> </h3>

@@ -74,8 +74,17 @@
 
   function getAverageCoord(coord_arr, size) {
       var total_sum = 0.0;
+      var downgrade = 0;
       for(var i = 0; i < size; i++) {
-          total_sum += parseFloat(coord_arr[i]);
+          if( isNaN(coord_arr[i]) ) {
+              downgrade++;
+          } else {
+              total_sum += parseFloat(coord_arr[i]);
+          }
+      }
+
+      if(downgrade > 0) {
+          size = downgrade;
       }
 
       return total_sum / size;
@@ -91,8 +100,12 @@
       if( total_map_markers > 0 ) {
           try {
               var ctr = new google.maps.LatLng( medium_coords.lat, medium_coords.long);
+              var zm = half_length;
+              if( isNaN(half_length) ) {
+                  zm = 0;
+              }
               var mapOpts = {
-                  zoom: half_length,
+                  zoom: zm,
                   center: ctr, mapTypeId: google.maps.MapTypeId.ROADMAP
               };
               var map = new google.maps.Map(document.getElementById(map_div), mapOpts);
@@ -118,9 +131,14 @@
                   }
               } // for
 
-              // Better auto zoom and auto center
-              map.fitBounds(bounds);
-              map.panToBounds(bounds);
+              if(bounds) {
+                  if( !isNaN(bounds.b.b) && !isNaN(bounds.b.f)) {
+                      // Better auto zoom and auto center
+                      map.fitBounds(bounds);
+                      map.panToBounds(bounds);
+                  }
+              }
+
               $("#center_pagination").hide();
 
           } catch(err) {
