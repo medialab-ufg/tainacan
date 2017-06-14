@@ -100,16 +100,14 @@ function showPageEditProperty(id,src){
                         $("#menu_object").hide();
                         $("#container_socialdb").hide('slow');
                         $("#list").hide('slow');
-                        $("#loader_objects").hide();
-
-                        var form = $("#form");
-                        $(form).html(result);
-                        $(form).css('background','white');
-                        $(form).css('border','3px solid #E8E8E8');
-                        $(form).css('margin-left','-3px');
-                        $(form).css('height','2000px');
-                        $(form).css('border-top','none');
-                        $(form).show('slow');
+                        $("#loader_objects").hide();            
+                        $("#form").html(result);
+                        $('#form').css('background','white');
+                        $('#form').css('border','3px solid #E8E8E8');
+                        $('#form').css('margin-left','-3px');
+                        $('#form').css('height','2000px');
+                        $('#form').css('border-top','none');
+                        $('#form').show('slow');
                         //$('#single_category_property').html(result);
                         //$('#single_modal_category_property').modal('show');
                     });
@@ -126,17 +124,14 @@ function showPageCreateProperty(parent,src){
                         $("#menu_object").hide();
                         $("#container_socialdb").hide('slow');
                         $("#list").hide('slow');
-                        $("#loader_objects").hide();
-
-                        var form = $("#form");
-
-                        $(form).html(result);
-                        $(form).css('background','white');
-                        $(form).css('border','3px solid #E8E8E8');
-                        $(form).css('margin-left','-3px');
-                        $(form).css('height','2000px');
-                        $(form).css('border-top','none');
-                        $(form).show('slow');
+                        $("#loader_objects").hide();            
+                        $("#form").html(result);
+                        $('#form').css('background','white');
+                        $('#form').css('border','3px solid #E8E8E8');
+                        $('#form').css('margin-left','-3px');
+                        $('#form').css('height','2000px');
+                        $('#form').css('border-top','none');
+                        $('#form').show('slow');
                         //$('#single_category_property').html(result);
                         //$('#single_modal_category_property').modal('show');
                     });
@@ -187,8 +182,7 @@ function ontology_get_property_type(src,property_id){
  *  funcao que abre o dynatree para importacao de taxonomia
  */
 function initDynatreeSelectTaxonomy(src) {
-    var dynatree_select_taxonomies = $("#dynatree_select_taxonomies");
-    $(dynatree_select_taxonomies).dynatree({
+    $("#dynatree_select_taxonomies").dynatree({
         checkbox: true,
         // Override class name for checkbox icon:
         classNames: {checkbox: "dynatree-radio"},
@@ -216,7 +210,7 @@ function initDynatreeSelectTaxonomy(src) {
         }
     });
     
-    $(dynatree_select_taxonomies).dynatree("getRoot").visit(function(node){
+    $("#dynatree_select_taxonomies").dynatree("getRoot").visit(function(node){
         node.select(false);
     });
 }
@@ -285,7 +279,7 @@ function reInitDynatree() {
         selectionVisible: true, // Make sure, selected nodes are visible (expanded).  
         checkbox: true,
         initAjax: {
-            url: src + '/controllers/collection/collection_controller.php',
+            url: $('#src').val() + '/controllers/collection/collection_controller.php',
             data: {
                 collection_id: $("#collection_id").val(),
                 operation: 'initDynatreeSingleEdit',
@@ -474,21 +468,19 @@ function form_property_data_init(src){
 }
 
 function initDynatrees(src){
-    var collection_id = $("#collection_id").val();
     $.ajax({
         type: "POST",
         url: src + '/controllers/filters/filters_controller.php',
         data: {
-                collection_id: collection_id,
+                collection_id: $("#collection_id").val(),
                 order: 'name',
                 operation: 'restrictionsDynatreeProperties'
             }
     }).done(function (result) {
         var json_propriedades = jQuery.parseJSON(result);
-        //dynatree_restriction_1
-        var dynatree_data_restriction_1 = $("#dynatree_data_restriction_1");
-        $(dynatree_data_restriction_1).empty();
-        $(dynatree_data_restriction_1).dynatree({
+        //dynatree_restriction_1 
+        $("#dynatree_data_restriction_1").empty();
+        $("#dynatree_data_restriction_1").dynatree({
             selectionVisible: true, // Make sure, selected nodes are visible (expanded).  
             checkbox: true,
             children: json_propriedades,
@@ -505,16 +497,15 @@ function initDynatrees(src){
         type: "POST",
         url: src + '/controllers/filters/filters_controller.php',
         data: {
-                collection_id: collection_id,
+                collection_id: $("#collection_id").val(),
                 order: 'name',
                 operation: 'parentDataDynatreeProperties'
             }
     }).done(function (result) {
         var json_propriedades = jQuery.parseJSON(result);
         //parent
-        var dynatree_property_data_parent = $("#dynatree_property_data_parent");
-        $(dynatree_property_data_parent).empty();
-        $(dynatree_property_data_parent).dynatree({
+        $("#dynatree_property_data_parent").empty();
+        $("#dynatree_property_data_parent").dynatree({
             checkbox: true,
             // Override class name for checkbox icon:
             classNames: {checkbox: "dynatree-radio"},
@@ -1311,9 +1302,8 @@ function validate_mapa_cultural(url_base)
         $('#modalImportLoading').modal('show');
         $('#modalImportLoading h3').text('Validando...');
         $('#divprogress').css('padding', 20);
-        var progressbarmapas = $('#progressbarmapas');
-        $(progressbarmapas).css('padding', 3);
-        $(progressbarmapas).val(0);
+        $('#progressbarmapas').css('padding', 3);
+        $('#progressbarmapas').val(0);
 
         var agents, projects, spaces, events;
         $.when(
@@ -1325,7 +1315,7 @@ function validate_mapa_cultural(url_base)
                     '@count': 1
                 },function (returned_agents) {
                     agents = returned_agents;
-                    $(progressbarmapas).val($(progressbarmapas).val() + 25);
+                    $('#progressbarmapas').val($('#progressbarmapas').val() + 25);
                 }
             ),
             $.getJSON(
@@ -1336,7 +1326,7 @@ function validate_mapa_cultural(url_base)
                     '@count': 1
                 },function (returned_spaces) {
                     spaces = returned_spaces;
-                    $(progressbarmapas).val($(progressbarmapas).val() + 25);
+                    $('#progressbarmapas').val($('#progressbarmapas').val() + 25);
                 }
             ),
             $.getJSON(
@@ -1347,7 +1337,7 @@ function validate_mapa_cultural(url_base)
                     '@count': 1
                 },function (returned_projects) {
                     projects = returned_projects;
-                    $(progressbarmapas).val($(progressbarmapas).val() + 25);
+                    $('#progressbarmapas').val($('#progressbarmapas').val() + 25);
                 }
             ),
             $.getJSON(
@@ -1358,7 +1348,7 @@ function validate_mapa_cultural(url_base)
                     '@count': 1
                 },function (returned_events) {
                     events = returned_events;
-                    $(progressbarmapas).val($(progressbarmapas).val() + 25);
+                    $('#progressbarmapas').val($('#progressbarmapas').val() + 25);
                 }
             )
         ).then(function () {

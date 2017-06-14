@@ -2956,3 +2956,37 @@ function change_button()
         $("#btnRemoveReason").attr('disabled', true);
     }
 }
+
+//Gera thumbnail de um pdf
+var pdfURL = 'http://www.axmag.com/download/pdfurl-guide.pdf';
+function generate_pdf_thumbnail(pdfURL, elementID)
+{
+    PDFJS.workerSrc = 'http://localhost/wordpress/biblioteca/wp-content/themes/tainacan/libraries/pdfThumb/' + "pdf.worker.js";
+    PDFJS.getDocument(pdfURL).then(function (pdf) {
+        pdf.getPage(1).then(function (page) {  //1 is the page number we want to retrieve
+            var viewport = page.getViewport(0.5);
+            var canvas = document.createElement('canvas');
+            var ctx = canvas.getContext('2d');
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            var renderContext = {
+                canvasContext: ctx,
+                viewport: viewport
+            };
+
+            page.render(renderContext).then(function () {
+                //set to draw behind current content
+                ctx.globalCompositeOperation = "destination-over";
+
+                //set background color
+                ctx.fillStyle = "#ffffff";
+
+                //draw background / rect on entire canvas
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                var img = canvas.toDataURL();
+                $("#" + elementID).html('<img src="' + img + '"/>');
+            });
+        });
+    });
+}
