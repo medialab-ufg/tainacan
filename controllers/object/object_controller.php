@@ -601,7 +601,10 @@ class ObjectController extends Controller {
                     $total_index++;
                 }
 
-                $press['meta_ids'] = array_unique($press['meta_ids']);
+                if( ! is_null($press['meta_ids']) ) {
+                    $press['meta_ids'] = array_unique($press['meta_ids']);
+                }
+
 
                 $s = [];
                 $aux_ids = [];
