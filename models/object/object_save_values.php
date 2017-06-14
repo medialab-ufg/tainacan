@@ -45,6 +45,37 @@ class ObjectSaveValuesModel extends Model {
             }
         }
     }
+    
+    /**
+     * 
+     * @param type $item_id
+     * @param type $compound_id
+     * @param type $property_children_id
+     * @param type $type
+     * @param type $index
+     * @param type $value
+     */
+    public function removeIndexValue($item_id,$compound_id,$index) {
+        $meta = get_post_meta($item_id, 'socialdb_property_helper_'.$compound_id, true);
+        if($meta){
+            $array = unserialize($meta);
+            if(is_array($array) && isset($array[$index])){
+                foreach ($array[$index] as $property_children_id => $type_and_values) {
+                    $values = $array[$index][$property_children_id]['values'];
+                    foreach ($values as $index => $meta_id) {
+                        $meta = $this->sdb_get_post_meta($meta_id);
+                        if($meta){
+                            // removo o valor do postmeta pelo meta_id
+                            $this->sdb_delete_post_meta($meta->meta_id);
+                            delete_post_meta($item_id, 'socialdb_property_'.$compound_id.'_'.$index);
+                        }
+                    }
+                }
+                unset($array[$index]);
+                update_post_meta($item_id, 'socialdb_property_helper_'.$compound_id, serialize($array));
+            }
+        }
+    }
     /**
      * 
      * @param type $item_id

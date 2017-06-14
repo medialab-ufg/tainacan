@@ -1,8 +1,12 @@
 <?php
 
 class AutoIncrementClass extends FormItem{
-    public function generate($compound, $property_id, $item_id, $index_id) {
+     public function generate($compound,$property,$item_id,$index_id) {
         $compound_id = $compound['id'];
+        $property_id = $property['id'];
+        if ($property_id == 0) {
+            $property = $compound;
+        }
         ?>
         <input 
             disabled="disabled"  

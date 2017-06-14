@@ -19,10 +19,23 @@ class FormItemCategory extends FormItem{
         $this->radioClass = new RadioClass();
         $this->checkboxClass = new CheckboxClass();
         $this->multipleTreeClass = new MultipleTreeClass();
+        $isRequired = ($property['metas'] && $property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] != 'false') ? true : false;
         ?>
+        <style>
+            .category-properties h2{
+                font-size: 12px;
+                text-indent: 2%;
+                font-weight: bold;
+                color: black;
+                margin-left: -30px;
+            }
+        </style>
         <div id="meta-item-<?php echo $property['id']; ?>" class="form-group" >
              <h2>
                 <?php echo $property['name']; ?>
+                <?php if ($isRequired): ?>
+                *
+                <?php endif ?>
             </h2>
             <div>
                 <?php if($property['type'] == 'selectbox'): ?>
@@ -36,6 +49,7 @@ class FormItemCategory extends FormItem{
                 <?php elseif($property['type'] == 'tree_checkbox'): ?>
                     <?php $this->multipleTreeClass->generate($property,['id'=>0], $item_id, 0) ?>
                 <?php endif; ?>
+                <div class="category-properties" id="appendCategoryMetadata_<?php echo $property['id']; ?>_0_0"></div>
             </div>
         </div>
         <?php

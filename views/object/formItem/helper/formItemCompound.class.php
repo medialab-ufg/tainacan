@@ -45,6 +45,7 @@ class FormItemCompound extends FormItem {
         $isMultiple = ($property['metas']['socialdb_property_compounds_cardinality'] == 'n') ? true : false;
         $filledValues = ($values) ? count($values) : 1;
         $childrenProperties = $property['metas']['socialdb_property_compounds_properties_id'];
+        $isRequired = ($property['metas'] && $property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] != 'false') ? true : false;
         ?>
         <div id="meta-item-<?php echo $property['id']; ?>" class="form-group" >
             <h2>
@@ -54,6 +55,15 @@ class FormItemCompound extends FormItem {
                     do_action('modificate_label_insert_item_properties', $property);
                 endif;
                 ?>
+                <?php if ($isRequired && $property['metas']['socialdb_property_required'] !== 'true'): ?>
+                *
+                <span id="AllFieldsShouldBeFilled<?php echo $property['id']; ?>"></span>
+                <?php elseif ($isRequired && $property['metas']['socialdb_property_required'] !== 'true_one_field'): ?>
+                (*)
+                <span id="oneFieldShouldBeFilled<?php echo $property['id']; ?>"></span>
+                <?php else: ?>
+                <span id="someFieldsAreRequired<?php echo $property['id']; ?>"></span>
+                <?php endif ?>
             </h2>
             <div>
                 <?php for ($index = 0; $index < $filledValues; $index++): ?>
@@ -63,30 +73,40 @@ class FormItemCompound extends FormItem {
                             <?php if (is_array($childrenProperties)): ?>
                                 <?php
                                 foreach ($childrenProperties as $child):
+                                    $isRequiredChildren = ($child['metas'] && $child['metas']['socialdb_property_required']&&$child['metas']['socialdb_property_required'] != 'false') ? true : false;
                                     $object = (isset($child['metas']['socialdb_property_object_category_id']) && !empty($child['metas']['socialdb_property_object_category_id'])) ? true : false;
                                     ?>
                                     <div style="padding-bottom: 15px; " class="col-md-12">
-                                        <p style="color: black;"><?php echo $child['name']; ?></p>
+                                        <p style="color: black;">
+                                            <?php echo $child['name']; ?>
+                                            <?php 
+                                            if ($isRequiredChildren): ?>
+                                             *
+                                             <script>
+                                                 $('#someFieldsAreRequired<?php echo $property['id']; ?>').html('(*)')
+                                             </script>
+                                            <?php endif ?>
+                                        </p>
                                     <?php if ($child['type'] == 'text'): ?>
-                                        <?php $this->textClass->generate($property,$child['id'], $item_id,$index) ?>
+                                        <?php $this->textClass->generate($property,$child, $item_id,$index) ?>
                                     <?php elseif ($child['type'] == 'date'): ?>
-                                        <?php $this->dateClass->generate($property,$child['id'], $item_id,$index) ?>
+                                        <?php $this->dateClass->generate($property,$child, $item_id,$index) ?>
                                     <?php elseif ($child['type'] == 'textarea'): ?>
-                                        <?php $this->textareaClass->generate($property,$child['id'], $item_id,$index) ?>
+                                        <?php $this->textareaClass->generate($property,$child, $item_id,$index) ?>
                                     <?php elseif ($child['type'] == 'numeric' || $child['type'] == 'number'): ?>
-                                        <?php $this->numericClass->generate($property,$child['id'], $item_id,$index) ?>
+                                        <?php $this->numericClass->generate($property,$child, $item_id,$index) ?>
                                     <?php elseif ($child['type'] == 'autoincrement'): ?>
-                                        <?php $this->textClass->generate($property,$child['id'], $item_id,$index) ?>
+                                        <?php $this->textClass->generate($property,$child, $item_id,$index) ?>
                                     <?php elseif ($child['type'] == 'selectbox'): ?>
-                                        <?php $this->selectboxClass->generate($child, $item_id, 0, $index) ?>
+                                        <?php $this->selectboxClass->generate($property,$child, $item_id,$index) ?>
                                     <?php elseif ($child['type'] == 'tree'): ?>
-                                        <?php $this->simpleTreeClass->generate($child, $item_id, 0, $index) ?>
+                                        <?php $this->simpleTreeClass->generate($property,$child, $item_id,$index) ?>
                                     <?php elseif ($child['type'] == 'radio'): ?>
-                                        <?php $this->radioClass->generate($child, $item_id, 0, $index) ?>
+                                        <?php $this->radioClass->generate($property,$child, $item_id,$index) ?>
                                     <?php elseif ($child['type'] == 'checkbox' || $child['type'] == 'multipleselect'): ?>
-                                        <?php $this->checkboxClass->generate($child, $item_id, 0, $index) ?>
+                                        <?php $this->checkboxClass->generate($property,$child, $item_id,$index) ?>
                                     <?php elseif ($child['type'] == 'tree_checkbox'): ?>
-                                        <?php $this->multipleTreeClass->generate($child, $item_id, 0, $index) ?>
+                                        <?php $this->multipleTreeClass->generate($property,$child, $item_id,$index) ?>
                                      <?php elseif ($object): ?>
                                         <?php $this->objectClass->generate($property, $child,$item_id, $index) ?>
                                     <?php endif; ?>
@@ -94,7 +114,7 @@ class FormItemCompound extends FormItem {
                                 <?php endforeach; ?>    
                         <?php endif; ?>
                         </div>
-            <?php if ($index > 0): ?>
+                    <?php if ($index > 0): ?>
                             <div class="col-md-1">
                                 <a style="cursor: pointer;" onclick="remove_container(<?php echo $property['id'] ?>,<?php echo $$index ?>)" class="pull-right">
                                     <span class="glyphicon glyphicon-remove"></span>
@@ -103,16 +123,121 @@ class FormItemCompound extends FormItem {
                     <?php endif; ?>
                     </div>    
                 <?php endfor; ?>
+                <div id="appendCompoundsContainer"></div>
         <?php if ($isMultiple): ?>
-                    <button type="button" 
-                            onclick="show_fields_metadata_cardinality(<?php echo $property['id'] ?>,<?php echo $i ?>)" 
-                            style="margin-top: 50px;" 
-                            class="btn btn-primary btn-lg btn-xs btn-block">
+                <center>
+                    <button type="button"  
+                            style="width: 50%;margin-bottom: 5px;"
+                            class="btn btn-primary btn-lg btn-xs js-append-property-<?php echo $property['id'] ?>">
                         <span class="glyphicon glyphicon-plus"></span><?php _e('Add field', 'tainacan') ?>
                     </button>
+                </center>    
         <?php endif; ?>
             </div>
         </div>
+        <?php
+        $this->initScriptsCompoundsContainer($property, $item_id, $index);
+    }
+    
+    public function appendContainerCompounds($property,$item_id,$index) {
+        $values = $this->getValuePropertyHelper($item_id, $property_id);
+        $childrenProperties = $property['metas']['socialdb_property_compounds_properties_id'];
+        ?>
+        <div id="container-field-<?php echo $property['id'] ?>-<?php echo $index ?>" 
+             class="row" style="padding-bottom: 10px;margin-bottom: 10px;">
+            <div class="col-md-11">
+                <?php if (is_array($childrenProperties)): ?>
+                    <?php
+                    foreach ($childrenProperties as $child):
+                        $isRequiredChildren = ($child['metas'] && $child['metas']['socialdb_property_required']&&$child['metas']['socialdb_property_required'] != 'false') ? true : false;
+                        $object = (isset($child['metas']['socialdb_property_object_category_id']) && !empty($child['metas']['socialdb_property_object_category_id'])) ? true : false;
+                        ?>
+                        <div style="padding-bottom: 15px; " class="col-md-12">
+                            <p style="color: black;">
+                                <?php echo $child['name']; ?>
+                                <?php 
+                                if ($isRequiredChildren): ?>
+                                 *
+                                <?php endif ?>
+                            </p>
+                        <?php if ($child['type'] == 'text'): ?>
+                            <?php $this->textClass->generate($property,$child, $item_id,$index) ?>
+                        <?php elseif ($child['type'] == 'date'): ?>
+                            <?php $this->dateClass->generate($property,$child, $item_id,$index) ?>
+                        <?php elseif ($child['type'] == 'textarea'): ?>
+                            <?php $this->textareaClass->generate($property,$child, $item_id,$index) ?>
+                        <?php elseif ($child['type'] == 'numeric' || $child['type'] == 'number'): ?>
+                            <?php $this->numericClass->generate($property,$child, $item_id,$index) ?>
+                        <?php elseif ($child['type'] == 'autoincrement'): ?>
+                            <?php $this->textClass->generate($property,$child, $item_id,$index) ?>
+                        <?php elseif ($child['type'] == 'selectbox'): ?>
+                            <?php $this->selectboxClass->generate($property,$child, $item_id,$index) ?>
+                        <?php elseif ($child['type'] == 'tree'): ?>
+                            <?php $this->simpleTreeClass->generate($property,$child, $item_id,$index) ?>
+                        <?php elseif ($child['type'] == 'radio'): ?>
+                            <?php $this->radioClass->generate($property,$child, $item_id,$index) ?>
+                        <?php elseif ($child['type'] == 'checkbox' || $child['type'] == 'multipleselect'): ?>
+                            <?php $this->checkboxClass->generate($property,$child, $item_id,$index) ?>
+                        <?php elseif ($child['type'] == 'tree_checkbox'): ?>
+                            <?php $this->multipleTreeClass->generate($property,$child, $item_id,$index) ?>
+                         <?php elseif ($object): ?>
+                            <?php $this->objectClass->generate($property, $child,$item_id, $index) ?>
+                        <?php endif; ?>
+                        </div>
+                    <?php endforeach; ?>    
+            <?php endif; ?>
+            </div>
+            <div class="col-md-1">
+                <a style="cursor: pointer;" onclick="remove_container_compounds(<?php echo $property['id'] ?>,<?php echo $index ?>,'<?php echo $item_id ?>')" class="pull-right">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </a>
+            </div> 
+        </div>    
+        <?php
+    }
+    /**
+     * 
+     * @param type $property
+     * @param type $item_id
+     * @param type $index
+     */
+    public function initScriptsCompoundsContainer($property, $item_id, $index) {
+        ?>
+        <script>
+            var index = <?php echo $index; ?> + 1;
+
+            $('.js-append-property-<?php echo $property['id'] ?>').click(function(){
+                //console.log(<?php echo $item_id ?>,<?php echo $index ?>);
+                $.ajax({
+                    url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                    type: 'POST',
+                    data: {
+                        collection_id: $("#collection_id").val(),
+                        operation: 'appendContainerCompounds',
+                        item_id:'<?php echo $item_id ?>',
+                        property_details: '<?php echo htmlentities(serialize($property)) ?>',
+                        index: index
+                    }
+                }).done(function (result) {
+                    $('#meta-item-<?php echo $property['id']; ?> #appendCompoundsContainer').append(result);
+                    index++;
+                });
+            });
+            
+            function remove_container_compounds(property_id,index_id,item_id){
+                $('#container-field-'+property_id+'-'+index_id).remove();
+                $.ajax({
+                       url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                       type: 'POST',
+                       data: {
+                           operation: 'removeIndexValues',
+                           item_id:item_id,
+                           compound_id:property_id,
+                           index: index_id
+                       }
+                   });
+            }
+        </script> 
         <?php
     }
 
