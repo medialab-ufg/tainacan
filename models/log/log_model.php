@@ -33,7 +33,6 @@ class Log extends Model {
 
     public static function getUserEvents($event_type, $event, $encoded = true, $from = '', $to = '', $collection_id = NULL, $filter) {
         global $wpdb;
-        $_alias = "total_" . $event;
 
         if(($collection_id == 'null' || is_null($collection_id)) and $filter == 'months'){
             $fr = substr($from, 0, 7);
@@ -58,7 +57,6 @@ class Log extends Model {
                                 WHERE post_status = '$event' AND post_type = 'socialdb_object' AND substring(post_date, 1, 7) between '$fr' AND '$t'
                         ) res3
                     )", self::_posts_table(), self::_posts_table());
-                //SELECT COUNT(id) AS total_active FROM wp_posts WHERE post_type='socialdb_object' AND post_status='publish'
             }
             else if($event == 'delete' and $event_type == 'general_status_items'){
                 $SQL_query = sprintf(
@@ -223,8 +221,196 @@ class Log extends Model {
             }
         }
         else {
-            $SQL_query = sprintf("SELECT COUNT(id) AS '$_alias' FROM %s WHERE event_type = '$event_type' AND event = '$event'
-                   AND collection_id = '$collection_id' AND event_date BETWEEN '$from' AND '$to'", self::_table() );
+            // Collection id isn't null
+
+            if($filter == 'months'){
+                $fr = substr($from, 0, 7);
+                $t = substr($to, 0, 7);
+
+                if($event == 'publish' || $event == 'draft' || $event == 'trash'){
+                    $SQL_query = sprintf(
+                    "SELECT * FROM (
+                        (
+                            SELECT * 
+                                FROM (
+                                    SELECT post_status AS event, substring(post_date, 1, 7) AS date, count(id) AS total
+                                    FROM %s
+                                        WHERE post_type = 'socialdb_object' AND post_status = '$event' AND collection_id = '$collection_id'
+                                        GROUP BY (substring(post_date, 1, 7))
+                                ) res1
+                                WHERE date between '$fr' AND '$t'
+                        ) res2 
+                        NATURAL JOIN (
+                            SELECT count(id) AS event_total 
+                            FROM %s
+                                WHERE post_status = '$event' AND post_type = 'socialdb_object' AND collection_id = '$collection_id' AND substring(post_date, 1, 7) between '$fr' AND '$t'
+                        ) res3
+                    )", self::_posts_table(), self::_posts_table());
+                }
+                else if($event == 'delete' and $event_type == 'general_status_items'){
+                    $SQL_query = sprintf(
+                    "SELECT * FROM (
+                        (
+                            SELECT * 
+                                FROM (
+                                    SELECT event, substring(event_date, 1, 7) AS date, count(id) AS total 
+                                    FROM %s
+                                        WHERE event = '$event' AND event_type = 'user_items' AND collection_id = '$collection_id' 
+                                        GROUP BY (substring(event_date, 1, 7))
+                                ) res1  
+                                WHERE date between '$from' AND '$to'
+                        ) res2 
+                        NATURAL JOIN (
+                            SELECT count(id) AS event_total 
+                            FROM %s 
+                                WHERE event = '$event' AND event_type = 'user_items' AND collection_id = '$collection_id' AND substring(event_date, 1, 7) between '$fr' AND '$t'
+                        ) res3
+                    )", self::_table(), self::_table());
+                }
+                else{
+                    $SQL_query = sprintf(
+                    "SELECT * FROM (
+                        (
+                            SELECT * 
+                            FROM (
+                                SELECT event, substring(event_date, 1, 7) AS date, count(id)  AS total 
+                                FROM %s 
+                                    WHERE event = '$event' AND event_type = '$event_type' AND collection_id = '$collection_id'
+                                    GROUP BY (substring(event_date, 1, 7))
+                            ) res1  
+                            WHERE date between '$fr' AND '$t'
+                        ) res2 
+                        NATURAL JOIN (
+                            SELECT count(id) AS event_total 
+                            FROM %s 
+                                WHERE event = '$event' AND event_type = '$event_type'  AND collection_id = '$collection_id' AND substring(event_date, 1, 7) between '$fr' AND '$t'
+                        ) res3
+                    )", self::_table(), self::_table());
+                }
+            }
+            else if($filter == 'weeks'){
+                if($event == 'publish' || $event == 'draft' || $event == 'trash'){
+                    $SQL_query = sprintf(
+                        "SELECT * FROM (
+                            (
+                                SELECT * 
+                                FROM (
+                                    SELECT post_status AS event, (week(substring(post_date, 1, 10))) AS week_number, count(id) AS total 
+                                    FROM %s 
+                                        WHERE post_status = '$event' AND post_type = '$event_type' AND collection_id = '$collection_id' AND substring(post_date, 1, 10) between '$from' AND '$to' 
+                                        GROUP BY (week(substring(post_date, 1, 10)))
+                                ) res1
+                            ) res2 
+                            NATURAL JOIN (
+                                SELECT count(id) AS event_total 
+                                FROM %s 
+                                    WHERE post_status = '$event' AND post_type = '$event_type' AND collection_id = '$collection_id' AND substring(post_date, 1, 10) between '$from' AND '$to'
+                            ) res3
+                        )", self::_posts_table(), self::_posts_table());
+                }
+                else if($event == 'delete' and $event_type == 'general_status_items'){
+                    $SQL_query = sprintf(
+                        "SELECT * FROM (
+                            (
+                                SELECT * 
+                                FROM (
+                                    SELECT event, (week(substring(event_date, 1, 10))) AS week_number, count(id) AS total 
+                                    FROM %s 
+                                        WHERE event = '$event' AND event_type = 'user_items' AND collection_id = '$collection_id' AND substring(event_date, 1, 10) between '$from' AND '$to' 
+                                        GROUP BY (week(substring(event_date, 1, 10)))
+                                ) res1
+                            ) res2 
+                            NATURAL JOIN (
+                                SELECT count(id) AS event_total 
+                                FROM %s 
+                                    WHERE event = '$event' AND event_type = 'user_items' AND collection_id = '$collection_id' AND substring(event_date, 1, 10) between '$from' AND '$to'
+                            ) res3
+                        )", self::_table(), self::_table());
+                }
+                else{
+                    $SQL_query = sprintf(
+                        "SELECT * FROM (
+                            (
+                                SELECT * 
+                                FROM (
+                                    SELECT event, (week(substring(event_date, 1, 10))) AS week_number, count(id) AS total 
+                                    FROM %s 
+                                        WHERE event = '$event' AND event_type = '$event_type' AND collection_id = '$collection_id' AND substring(event_date, 1, 10) between '$from' AND '$to' 
+                                        GROUP BY (week(substring(event_date, 1, 10)))
+                                ) res1
+                            ) res2 
+                            NATURAL JOIN (
+                                SELECT count(id) AS event_total 
+                                FROM %s 
+                                    WHERE event = '$event' AND event_type = '$event_type' AND collection_id = '$collection_id' AND substring(event_date, 1, 10) between '$from' AND '$to'
+                            ) res3
+                        )", self::_table(), self::_table());
+                }
+            }
+            else if($filter == 'days'){
+                if($event == 'publish' || $event == 'draft' || $event == 'trash'){
+                    $SQL_query = sprintf(
+                        "SELECT * FROM (
+                            (
+                                SELECT *
+                                FROM (
+                                    SELECT post_status AS event, substring(post_date, 1, 10) AS date, count(id) AS total
+                                    FROM %s
+                                        WHERE post_type = 'socialdb_object' AND post_status='$event' AND collection_id = '$collection_id'
+                                        GROUP BY (substring(post_date, 1, 10))
+                                ) res1
+                                WHERE date between '$from' AND '$to'
+                            ) res2 
+                            NATURAL JOIN (
+                                SELECT count(id) AS event_total 
+                                FROM %s
+                                    WHERE post_status = '$event' AND post_type = 'socialdb_object' AND collection_id = '$collection_id' AND substring(post_date, 1, 10) between '$from' AND '$to'
+                            ) res3
+                        )", self::_posts_table(), self::_posts_table());
+                }
+                else if($event == 'delete' and $event_type == 'general_status_items'){
+                    $SQL_query = sprintf(
+                        "SELECT * FROM (
+                            (
+                                SELECT * 
+                                FROM (
+                                    SELECT event, substring(event_date, 1, 10) AS date, count(id) AS total 
+                                    FROM %s
+                                        WHERE event = '$event' AND event_type = 'user_items' AND collection_id = '$collection_id'
+                                        GROUP BY (substring(event_date, 1, 10))
+                                ) res1  
+                                WHERE date between '$from' AND '$to'
+                            ) res2 
+                            NATURAL JOIN (
+                                SELECT count(id) AS event_total 
+                                FROM %s 
+                                    WHERE event = '$event' AND event_type = 'user_items' AND collection_id = '$collection_id' AND substring(event_date, 1, 10) between '$from' AND '$to'
+                            ) res3
+                        )", self::_table(), self::_table());
+                }
+                else{
+                    $SQL_query = sprintf(
+                        "SELECT * FROM (
+                            (
+                                SELECT * 
+                                FROM (
+                                    SELECT event, substring(event_date, 1, 10) AS date, count(id) AS total 
+                                    FROM %s
+                                        WHERE event = '$event' AND event_type = '$event_type' AND collection_id = '$collection_id'
+                                        GROUP BY (substring(event_date, 1, 10))
+                                ) res1  
+                                WHERE date between '$from' AND '$to'
+                            ) res2 
+                            NATURAL JOIN (
+                                SELECT count(id) AS event_total 
+                                FROM %s 
+                                    WHERE event = '$event' AND event_type = '$event_type' AND collection_id = '$collection_id' AND substring(event_date, 1, 10) between '$from' AND '$to'
+                            ) res3
+                        )", self::_table(), self::_table());
+                }
+            }
+            // $SQL_query = sprintf("SELECT COUNT(id) AS '$_alias' FROM %s WHERE event_type = '$event_type' AND event = '$event'
+            //        AND collection_id = '$collection_id' AND event_date BETWEEN '$from' AND '$to'", self::_table() );
         }
 
         if($encoded){
@@ -275,6 +461,8 @@ class Log extends Model {
     public static function user_events($event_type, $spec, $from, $to, $collection_id = NULL, $filter) {
         $_events_ = self::get_event_type($spec);
 
+        // event_type = 'collection' isn't work
+
         if( "top_collections_items" == $event_type ) {
             $top_collections = self::getTopCollections($from, $to, $filter);
             $cols_array = array();
@@ -296,13 +484,30 @@ class Log extends Model {
             $return_data = json_encode($stat_data, JSON_NUMERIC_CHECK, JSON_FORCE_OBJECT);
 
             return $return_data;
-        } 
-        // else if("general_status_items" === $event_type) {
-        //     return self::getItemsStatus($spec, $collection_id);
-        // } 
+        }
         else if("repo_searches" == $event_type || $event_type == "collection_searches") {
-            return self::getFrequentSearches($collection_id, from, $to, $filter);
-        } else {
+            $searches = self::getFrequentSearches($collection_id, $from, $to, $filter);
+
+            $sarr = array();
+            $events = array();
+            foreach($searches as $key => $data) {
+                if($filter != 'weeks'){
+                    array_push($sarr, [ $data->event, $data->date, $data->total, $data->event_total ]);
+                    array_push($events, $data->event);
+                }
+                else{
+                    array_push($sarr, [ $data->event, $data->week_number, $data->total, $data->event_total ]);
+                    array_push($events, $data->event);
+                }
+            }
+
+            $stat_data = ["stat_object" => $sarr, "columns" => array_values(array_unique($events))];
+
+            $return_data = json_encode($stat_data, JSON_NUMERIC_CHECK, JSON_FORCE_OBJECT);
+
+            return $return_data;
+        } 
+        else {
             if($_events_) {
                 $_stats = array();
 
@@ -382,7 +587,7 @@ class Log extends Model {
                                 GROUP BY post_parent
                         ) res3 
                         ON res2.event = res3.post_parent
-                    );", self::_posts_table(), self::_posts_table());
+                    )", self::_posts_table(), self::_posts_table());
         }
         else if($filter == 'days'){
             $sql = sprintf(
@@ -404,68 +609,152 @@ class Log extends Model {
                                 GROUP BY post_parent
                         ) res3 
                         ON res2.event = res3.post_parent
-                    );", self::_posts_table(), self::_posts_table());
+                    )", self::_posts_table(), self::_posts_table());
         }
-        // $sql = sprintf("SELECT post_parent, COUNT(id) AS total_collection FROM %s WHERE post_type='socialdb_object' AND post_parent > 0 GROUP BY post_parent ORDER BY COUNT(*) DESC;", self::_posts_table());
+
         $top_collections = $wpdb->get_results($sql);
-        //$stat_data = ["quality_stat" => $cols_array, "color" => '#73880a'];
-        //return json_encode( $stat_data );
+
         return $top_collections;
     }
 
     public function getFrequentSearches( $collection_id = NULL, $from, $to, $filter) {
         global $wpdb;
 
-        if(($collection_id == 'null' || is_null($collection_id)) ) {
-            $sql = sprintf(
-                "SELECT event, substring(event_date, 1, 10) AS date, count(event) AS total 
-                FROM %s 
-                    WHERE event_type LIKE '%search' AND (substring(event_date, 1, 10)) between '$from' AND '$to'
-                    GROUP BY event, (substring(event_date, 1, 10))", self::_table());
-            //$sql = sprintf("SELECT event AS term, COUNT(*) AS t_count FROM %s WHERE event_type = 'advanced_search' GROUP BY event ORDER BY COUNT(*) DESC", self::_table());
-        } else {
-            $sql = sprintf("SELECT event AS term, COUNT(*) AS t_count FROM %s WHERE event_type='collection_search' AND collection_id='$collection_id' GROUP BY event ORDER BY COUNT(*) DESC", self::_table());
+        if(($collection_id == 'null' || is_null($collection_id))){
+            $event_type = 'advanced_search'; //this don't work
+           
+            if($filter == 'days' ) {
+                $SQL_query = sprintf(
+                    "SELECT event, date, total, event_total 
+                    FROM (
+                            (
+                            SELECT event, substring(event_date, 1, 10) AS date, count(event) AS total 
+                            FROM %s 
+                                WHERE event_type = '$event_type' AND (substring(event_date, 1, 10)) between '$from' AND '$to'
+                                GROUP BY event, (substring(event_date, 1, 10))
+                            ) res1 
+                            JOIN (
+                                SELECT event AS event2, count(event) AS event_total
+                                FROM %s
+                                    WHERE event_type = '$event_type' AND (substring(event_date, 1, 10)) between '$from' AND '$to'
+                                    GROUP BY event
+                            ) res2
+                            ON res1.event = res2.event2
+                    )", self::_table(), self::_table());
+                //$sql = sprintf("SELECT event AS term, COUNT(*) AS t_count FROM %s WHERE event_type = 'advanced_search' GROUP BY event ORDER BY COUNT(*) DESC", self::_table());
+            } 
+            else if($filter == 'weeks' ){
+
+                $SQL_query = sprintf(
+                    "SELECT event, week_number, total, event_total
+                    FROM (
+                        (
+                            SELECT event, week(substring(event_date, 1, 10)) as week_number, count(event) AS total
+                            FROM %s
+                                WHERE event_type = '$event_type' AND (substring(event_date, 1, 10)) between '$from' AND '$to'
+                                GROUP BY event, (week(substring(event_date, 1, 10)))
+                        ) res1
+                        JOIN (
+                            SELECT event AS event2, count(event) AS event_total
+                            FROM %s
+                                WHERE event_type = '$event_type' AND (substring(event_date, 1, 10)) between '$from' AND '$to'
+                                GROUP BY event
+                        ) res2
+                        ON res1.event = res2.event2
+                    )", self::_table(), self::_table());
+            }
+            else if($filter == 'months' ){
+                $fr = substr($from, 0, 7);
+                $t = substr($to, 0, 7);
+
+                $SQL_query = sprintf(
+                    "SELECT event, date, total, event_total 
+                    FROM (
+                            (
+                            SELECT event, substring(event_date, 1, 7) AS date, count(event) AS total 
+                            FROM %s 
+                                WHERE event_type = '$event_type' AND (substring(event_date, 1, 7)) between '$fr' AND '$t'
+                                GROUP BY event, (substring(event_date, 1, 7))
+                            ) res1 
+                            JOIN (
+                                SELECT event AS event2, count(event) AS event_total
+                                FROM %s
+                                    WHERE event_type = '$event_type' AND (substring(event_date, 1, 7)) between '$fr' AND '$t'
+                                    GROUP BY event
+                            ) res2
+                            ON res1.event = res2.event2
+                    )", self::_table(), self::_table());
+            }
+        }
+        else {
+            $event_type = 'collection_search';
+
+            if($filter == 'days' ) {
+                $SQL_query = sprintf(
+                    "SELECT event, date, total, event_total 
+                    FROM (
+                            (
+                            SELECT event, substring(event_date, 1, 10) AS date, count(event) AS total 
+                            FROM %s 
+                                WHERE event_type = '$event_type' AND collection_id = '$collection_id' AND (substring(event_date, 1, 10)) between '$from' AND '$to'
+                                GROUP BY event, (substring(event_date, 1, 10))
+                            ) res1 
+                            JOIN (
+                                SELECT event AS event2, count(event) AS event_total
+                                FROM %s
+                                    WHERE event_type = '$event_type' AND collection_id = '$collection_id' AND (substring(event_date, 1, 10)) between '$from' AND '$to'
+                                    GROUP BY event
+                            ) res2
+                            ON res1.event = res2.event2
+                    )", self::_table(), self::_table());
+                //$sql = sprintf("SELECT event AS term, COUNT(*) AS t_count FROM %s WHERE event_type = 'advanced_search' GROUP BY event ORDER BY COUNT(*) DESC", self::_table());
+            } 
+            else if($filter == 'weeks' ){
+
+                $SQL_query = sprintf(
+                    "SELECT event, week_number, total, event_total
+                    FROM (
+                        (
+                            SELECT event, week(substring(event_date, 1, 10)) as week_number, count(event) AS total
+                            FROM %s
+                                WHERE event_type = '$event_type' AND collection_id = '$collection_id' AND (substring(event_date, 1, 10)) between '$from' AND '$to'
+                                GROUP BY event, (week(substring(event_date, 1, 10)))
+                        ) res1
+                        JOIN (
+                            SELECT event AS event2, count(event) AS event_total
+                            FROM %s
+                                WHERE event_type = '$event_type' AND collection_id = '$collection_id' AND (substring(event_date, 1, 10)) between '$from' AND '$to'
+                                GROUP BY event
+                        ) res2
+                        ON res1.event = res2.event2
+                    )", self::_table(), self::_table());
+            }
+            else if($filter == 'months' ){
+                $fr = substr($from, 0, 7);
+                $t = substr($to, 0, 7);
+
+                $SQL_query = sprintf(
+                    "SELECT event, date, total, event_total 
+                    FROM (
+                            (
+                            SELECT event, substring(event_date, 1, 7) AS date, count(event) AS total 
+                            FROM %s 
+                                WHERE event_type = '$event_type' AND collection_id = '$collection_id' AND (substring(event_date, 1, 7)) between '$fr' AND '$t'
+                                GROUP BY event, (substring(event_date, 1, 7))
+                            ) res1 
+                            JOIN (
+                                SELECT event AS event2, count(event) AS event_total
+                                FROM %s
+                                    WHERE event_type = '$event_type' AND collection_id = '$collection_id' AND (substring(event_date, 1, 7)) between '$fr' AND '$t'
+                                    GROUP BY event
+                            ) res2
+                            ON res1.event = res2.event2
+                    )", self::_table(), self::_table());
+            }
         }
 
-        $_searches = $wpdb->get_results($sql);
+        $searches = $wpdb->get_results($SQL_query);
 
-        $_s_arr = [];
-        foreach($_searches as $data) {
-            array_push( $_s_arr, [ $data->event, $data->date, $date->total, $data->event_total ]);
-        }
-
-        $stat_data = [ "stat_object" => $_s_arr, "color" => 'NO_CHART'];
-        return json_encode( $stat_data );
-    }
-
-    // public function getItemsStatus($spec, $collection_id = NULL) {
-    //     global $wpdb;
-
-    //     if( $collection_id == 'null' || is_null($collection_id) ) {
-    //         $status['active'] = sprintf("SELECT COUNT(id) AS total_active FROM wp_posts WHERE post_type='socialdb_object' AND post_status='publish'", self::_posts_table());
-    //         $status['draft'] = sprintf("SELECT COUNT(id) AS total_draft FROM wp_posts WHERE post_type='socialdb_object' AND post_status='draft'", self::_posts_table());
-    //         $status['trash'] = sprintf("SELECT COUNT(id) AS total_trash FROM wp_posts WHERE post_type='socialdb_object' AND post_status='trash'", self::_posts_table());
-    //         $status['deleted'] = sprintf("SELECT count(id) AS total_delete FROM wp_statistics WHERE event_type='user_items' AND event='delete'",self::_table());
-    //     } else {
-    //         $status['active'] = sprintf("SELECT COUNT(id) AS total_active FROM wp_posts WHERE post_type='socialdb_object' AND post_status='publish' AND post_parent='$collection_id'", self::_posts_table());
-    //         $status['draft'] = sprintf("SELECT COUNT(id) AS total_draft FROM wp_posts WHERE post_type='socialdb_object' AND post_status='draft'  AND post_parent='$collection_id'", self::_posts_table());
-    //         $status['trash'] = sprintf("SELECT COUNT(id) AS total_trash FROM wp_posts WHERE post_type='socialdb_object' AND post_status='trash' AND post_parent='$collection_id'", self::_posts_table());
-    //         $status['deleted'] = sprintf("SELECT count(id) AS total_delete FROM wp_statistics WHERE event_type='user_items' AND event='delete' AND collection_id='$collection_id'",self::_table());
-    //     }
-    //     //post_date
-    //     $_res = [];
-    //     $_stat_obj = self::get_event_type($spec);
-    //     foreach($status as $s) {
-    //         $_obj = array_pop($wpdb->get_results($s));
-    //         array_push( $_res, $_obj );
-    //     }
-    //     $stat_data = ["stat_title" => ['Status dos Itens', '#'], "stat_object" => $_res, "color" => $_stat_obj['color'], "item_status" => true];
-    //     return json_encode($stat_data);
-    // }
-
-    public static function getUserStatus($event) {
-        global $wpdb;
-        $sql = sprintf("SELECT COUNT(id) AS total_status FROM %s WHERE event_type = 'user_collection' AND event = '$event'", self::_table() );
-        return json_encode( $wpdb->get_results($sql) );
+        return $searches;
     }
 }
