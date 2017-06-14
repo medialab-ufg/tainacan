@@ -430,26 +430,6 @@ class CollectionModel extends Model {
         update_option('socialdb_private_collections', serialize($private_collections));
     }
 
-    public function list_collection($args = null) {
-        global $wp_query;
-        $tax_query = array('relation' => 'IN');
-        $tax_query[] = array(
-            'taxonomy' => 'category-ideas',
-            'field' => 'id',
-            'terms' => array('8')
-        );
-        $args = array(
-            'post_type' => 'ideas',
-            'paged' => 1,
-            'tax_query' => $tax_query,
-            'orderby' => 'date',
-            'order' => 'DESC',
-        );
-        query_posts($args);
-
-        include(dirname(__FILE__) . '../../../views/collection/list.php');
-    }
-
     public function delete($data) {
         if (wp_delete_post($data['collection_id'])) {
             $data['title'] = __('Success', 'tainacan');
