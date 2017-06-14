@@ -458,7 +458,7 @@
                 tai_chart.displayFixedBase();
                 
                 // This if is not used
-                // Where the magic happens!
+                    // Where the magic happens!
 
                     var rows = [[]]; // Array that contains rows of DataTable
                     var flag = ''; // Var that contains name of actual event
@@ -535,6 +535,7 @@
                                 }
                                 //console.log("rows 7: "+ rows);
                             }
+                        }
 
                         csvData.push( array_n );
 
@@ -567,7 +568,6 @@
                     rows.sort(); 
                     //console.log("after: "+ rows);
                     chart_data.addRows(rows);
-                }
             } 
             else if(!data_obj.stat_object[0]){
                 chart_data.addRow();
@@ -585,8 +585,8 @@
     } // drawChart()
 
     function renderChart(current_title, type, stat_data) {
-        // var color = chart_color || '#79a6ce';
-        // console.log('#1 stat_data: '+ JSON.stringify(stat_data) +'\n'+ 'type: '+ type);
+       // var color = chart_color || '#79a6ce';
+       // console.log('#1 stat_data: '+ JSON.stringify(stat_data) +'\n'+ 'type: '+ type);
         // Google Charts objects
         if( type == 'pie' ) {
             var piechart = new google.visualization.PieChart(document.getElementById('piechart_div'));
