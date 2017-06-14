@@ -39,6 +39,18 @@ class FormItemController extends Controller {
             case "removeIndexValues":
                 $class = new ObjectSaveValuesModel();
                 return $class->removeIndexValue($data['item_id'], $data['compound_id'], $data['index']);    
+            case 'updateItem':
+                $category_root_id = $object_model->get_category_root_of($data['collection_id']);
+                $post = array(
+                    'ID' => $data['item_id'],
+                    'post_status' => 'publish',
+                    'post_parent' => $data['collection_id']
+                );
+                $data['ID'] = wp_update_post($post);
+                //categoria raiz da colecao
+                wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type',true);
+                update_post_meta($data['ID'], 'socialdb_object_collection_init', $data['collection_id']);
+                return $object_model->insert_object_event($data['ID'], $data);;
         }
     }
 	

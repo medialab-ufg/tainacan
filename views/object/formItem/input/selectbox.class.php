@@ -12,7 +12,7 @@ class SelectboxClass extends FormItem{
         <?php if ($this->isRequired): ?> 
         <div class="form-group" 
              id="validation-<?php echo $compound['id'] ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>"
-             style="border-bottom:none;"> 
+             style="border-bottom:none;padding: 0px;"> 
                <?php endif; ?>
                 <select class="form-control auto-save" 
                         id='selectbox-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>' >
@@ -31,11 +31,18 @@ class SelectboxClass extends FormItem{
                        <?php if($property_id !== 0): ?>
                        compound="<?php echo $compound['id'] ?>"
                        <?php endif; ?>
+                       property="<?php echo $property['id'] ?>"
                        class="validate-class validate-compound-<?php echo $compound['id'] ?>"
                        value="false">
         </div> 
-        <?php endif; ?>     
-        <?php
+        <?php elseif($property_id !== 0): ?> 
+        <input  type="hidden" 
+                compound="<?php echo $compound['id'] ?>"
+                property="<?php echo $property['id'] ?>"
+                id="validation-<?php echo $compound['id'] ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>"
+                class="compound-one-field-should-be-filled-<?php echo $compound['id'] ?>"
+                value="false">
+        <?php endif;  
         $this->initScriptsSelectBoxClass($compound_id, $property_id, $item_id, $index_id);
     }
     

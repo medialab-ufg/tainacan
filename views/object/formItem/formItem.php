@@ -1,6 +1,6 @@
 <form  id="submit-form" 
        onkeypress="return (event.keyCode == 13) ? false : true ;" 
-       style="margin-left: 15px;">
+       style="margin-left: 15px;margin-top: 50px;">
     <?php 
     if($modeView&&$modeView=='one'){
         include_once(dirname(__FILE__).'/formItemMetadata.php');

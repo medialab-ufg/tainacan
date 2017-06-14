@@ -12,9 +12,8 @@ class NumericClass extends FormItem{
         <?php if ($this->isRequired): ?> 
         <div class="form-group" 
              id="validation-<?php echo $compound['id'] ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>"
-             style="border-bottom:none;">
+             style="border-bottom:none;padding: 0px;">
                  <input type="text" 
-                        style="margin-left: -25px;"
                         id="numeric-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>" 
                         value="" 
                         class="form-control auto-save form_autocomplete_value_<?php echo $property_id; ?>" 
@@ -28,16 +27,25 @@ class NumericClass extends FormItem{
                        <?php if($property_id !== 0): ?>
                        compound="<?php echo $compound['id'] ?>"
                        <?php endif; ?>
+                       property="<?php echo $property['id'] ?>"
                        class="validate-class validate-compound-<?php echo $compound['id'] ?>"
                        value="false">
          </div>
         <?php else: ?> 
-         <input type="text" 
-                id="numeric-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>" 
-                value="" 
-                class="form-control auto-save form_autocomplete_value_<?php echo $property_id; ?>" 
-                onkeypress='return onlyNumbers(event)'
-                name="socialdb_property_<?php echo $property_id; ?>[]">
+            <?php if($property_id !== 0): ?> 
+                    <input  type="hidden" 
+                            compound="<?php echo $compound['id'] ?>"
+                            property="<?php echo $property['id'] ?>"
+                            id="validation-<?php echo $compound['id'] ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>"
+                            class="compound-one-field-should-be-filled-<?php echo $compound['id'] ?>"
+                            value="false">
+            <?php endif;  ?>
+            <input type="text" 
+                   id="numeric-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>" 
+                   value="" 
+                   class="form-control auto-save form_autocomplete_value_<?php echo $property_id; ?>" 
+                   onkeypress='return onlyNumbers(event)'
+                   name="socialdb_property_<?php echo $property_id; ?>[]">
         <?php
         endif;
         $this->initScriptsNumericClass($compound_id,$property_id, $item_id, $index_id);

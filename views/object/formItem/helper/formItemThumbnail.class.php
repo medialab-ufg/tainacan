@@ -8,6 +8,7 @@ class FormItemThumbnail extends FormItem {
                 <h2>
                     <?php echo ($this->terms_fixed['thumbnail']) ? $this->terms_fixed['thumbnail']->name : _e('Thumbnail', 'tainacan') ?>
                     <?php do_action('optional_message') ?>
+                    <?php $this->validateIcon('alert-compound-'.$property['id'],__('Required field','tainacan')) ?>
                 </h2>
                 <div  >
                     <input type="hidden" name="thumbnail_url" id="thumbnail_url" value="">
