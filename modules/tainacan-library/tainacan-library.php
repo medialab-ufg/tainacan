@@ -20,10 +20,10 @@ load_theme_textdomain("tainacan", dirname(__FILE__) . "/languages");
 /*
  * Require de functions 
  */
-require_once ('/functions/marc_functions.php');
-require_once ('/functions/helpers_functions.php');
+require_once ('functions/marc_functions.php');
+require_once ('functions/helpers_functions.php');
 
-require_once ('/mail/tainacan-library-mail.php');
+require_once ('mail/tainacan-library-mail.php');
 
 /*
  * Adição de SCRIPTS
