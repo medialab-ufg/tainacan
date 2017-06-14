@@ -35,6 +35,7 @@ class FormItemText extends FormItem {
                 ?>
                 <?php if ($isRequired): ?>
                 *
+                <?php $this->validateIcon('alert-compound-'.$property['id'],__('Required field','tainacan')) ?>
                 <?php endif ?>
             </h2>
             <div>

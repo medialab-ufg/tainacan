@@ -82,8 +82,17 @@ class FormItem extends Model {
                     <?php _e('Expand all', 'tainacan') ?>&nbsp;&nbsp;<span class="caret"></span></a>
             </div>
             <hr>
-            <div id="accordeon-default" class="multiple-items-accordion" style="margin-top:-20px;">
-                <?php $this->listPropertiesbyTab('default') ?>
+             <div id="tab-content-metadata" class="tab-content" style="background: white;">
+                <div id="tab-default"  class="tab-pane fade in active" style="background: white;margin-bottom: 15px;">
+                    <div class="expand-all-div"  onclick="open_accordeon('default')" >
+                        <a class="expand-all-link" href="javascript:void(0)">
+                            <?php _e('Expand all', 'tainacan') ?>&nbsp;&nbsp;<span class="caret"></span></a>
+                    </div>
+                    <hr>
+                    <div id="accordeon-default" class="multiple-items-accordion" style="margin-top:-20px;">
+                        <?php $this->listPropertiesbyTab('default') ?>
+                    </div>
+                </div>
             </div>
             <?php
         else:
@@ -94,22 +103,24 @@ class FormItem extends Model {
                     value='<?php echo ($tabs && is_array($tabs)) ? json_encode($tabs) : ''; ?>'/>
             <!-- Abas para a Listagem dos metadados -->
             <ul id="tabs_item" class="nav nav-tabs" style="background: white">
-                <li  role="presentation" class="active">
+                <li  role="presentation" class="active" key="default">
                     <a id="click-tab-default" href="#tab-default" aria-controls="tab-default" role="tab" data-toggle="tab">
                         <span  id="default-tab-title">
                             <?php echo (!$default_tab) ? _e('Default', 'tainacan') : $default_tab ?>
                         </span>
+                        <?php $this->validateIcon('alert-default') ?>
                     </a>
                 </li>
                 <?php
                 if ($allTabs && is_array($allTabs)) {
                     foreach ($allTabs as $tab) {
                         ?>
-                        <li  role="presentation">
+                        <li  role="presentation" key="<?php echo $tab->meta_id ?>">
                             <a id="click-tab-<?php echo $tab->meta_id ?>" href="#tab-<?php echo $tab->meta_id ?>" aria-controls="tab-<?php echo $tab->meta_id ?>" role="tab" data-toggle="tab">
                                 <span  id="<?php echo $tab->meta_id ?>-tab-title">
                                     <?php echo $tab->meta_value ?>
                                 </span>
+                                <?php $this->validateIcon('alert-'.$tab->meta_id) ?>
                             </a>
                         </li>
                         <?php
@@ -146,6 +157,18 @@ class FormItem extends Model {
                     }
                 }
                 ?>
+            </div>
+            <button type="button"
+                    onclick="back_main_list(<?php echo $object_id ?>);"
+                    style="margin-bottom: 20px;"
+                    class="btn btn-default btn-lg pull-left"><?php _e('Discard','tainacan'); ?>
+            </button>
+            <div id="submit_container">
+                <button type="button"
+                        id="submit-form-item"
+                        style="margin-bottom: 20px;"
+                        class="btn btn-success btn-lg pull-right send-button">
+                            <?php _e('Save','tainacan'); ?></button>
             </div>
         <?php
         endif;
@@ -363,6 +386,8 @@ class FormItem extends Model {
     
     /**
      * 
+     * metodo para a lisaagem de metadados de categoria
+     * 
      * @param type $properties
      */
     public function propertyCategoryList($properties) {
@@ -445,6 +470,15 @@ class FormItem extends Model {
             endif;
         }
     }
+    
+    /**
+     * 
+     */
+    public function validateIcon($id,$text = '') {
+        ?>
+            &nbsp;<span id="<?php echo $id ?>" class="pull-right validateIcon" style="color:red;font-size: 11px;display: none;"><?php echo $text ?>&nbsp;<span style="color:red;font-size: 13px;" class="glyphicon glyphicon-exclamation-sign pull-right"></span></span>    
+        <?php    
+    }
 
     /**
      * scripts deste
@@ -490,7 +524,109 @@ class FormItem extends Model {
                 }
 
             });
-
+            
+            
+            /* Verificando se o item pode ser publicado ou atualizado */
+            $('#submit-form-item').click(function(){
+                var publish = true;
+                //escondo as mensagens anteriores
+                $('.validateIcon').hide()
+                //var compounds = {};
+                $('.validate-class').each(function(){
+                    if($(this).val()==='false'){
+                        if($(this).hasClass('compound-one-field-should-be-filled')){
+                            var compound_id = $(this).attr('compound');
+                            var has_one = false;
+                            //verifico se um dos composto esta preenchido
+                            $('.compound-one-field-should-be-filled-'+compound_id).each(function(){
+                                // pego o id do atual que sera utilizado para buscar a aba 
+                                // caso nao seja encontrado nenhum composto preenchido
+                                var key = $(this).attr('id');
+                                if($(this).val()!=='false'){
+                                    has_one = true
+                                }
+                            });
+                            // se nenhum campo preenchido estiver mostro a 
+                            // mensagem do composto e da aba
+                            if(!has_one){
+                                publish = false;
+                                $('#alert-compound-'+$(this).attr('compound')).show();
+                                var tab = getPropertyTab(key);
+                                $('#alert-'+tab).show();
+                            }
+                        }else{
+                            //ja coloco falso pois eh um campo obrigatorio que nao foi preenchido
+                            publish = false;
+                            // pego o id do atual que sera utilizado para buscar a aba 
+                            // caso nao seja encontrado nenhum composto preenchido
+                            var key = $(this).parent().attr('id');
+                            console.log($(this).attr('property'),$(this).attr('compound'));
+                            //mostro a mensagem do proprio metadado
+                            $('#alert-compound-'+$(this).attr('property')).show();
+                            // busco a aba
+                            var tab = getPropertyTab(key);
+                            //mostro a mensagem
+                            $('#alert-'+tab).show();
+                            //se for metadado composto
+                            if($(this).attr('compound')){
+                                $('#alert-compound-'+$(this).attr('compound')).show();
+//                                if(!compounds[$(this).attr('compound')])
+//                                    compounds[$(this).attr('compound')] = [$(this).attr('property')];
+//                                else
+//                                    compounds[$(this).attr('compound')].push($(this).attr('property'));
+                            }
+                        }
+                    }
+                });
+                //apos todas as validacoes
+                if(!publish){
+                    $('html, body').animate({
+                        scrollTop: $("#submit-form").offset().top
+                    }, 1000);
+                }else{
+                    updateItem();
+                }
+            });
+            
+            /**
+             * funcao que procura qual aba pertence o id passad como parametro
+             * @param {type} id
+             * @returns {undefined}
+             */
+            function getPropertyTab(id){
+                var tab = ''
+                if($('#tabs_item').length){
+                    $('#tabs_item li').each(function(){
+                        var key = $(this).attr('key');
+                        if($('#tab-'+key).find($('#'+id)).length>0){
+                            tab = key;
+                        }
+                    });
+                }
+                return tab;
+            }
+            
+            
+            /**
+             * funcao que publica o item
+             * @returns {undefined}
+             */
+            function updateItem(){
+                $.ajax({
+                    url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                    type: 'POST',
+                    data: {
+                        operation: 'updateItem',
+                        item_id:'<?php echo $this->itemId ?>',
+                        collection_id:$('#collection_id').val()}
+                }).done(function (result) {
+                    var json = JSON.parse(result)
+                     showAlertGeneral(json.title,json.msg,json.type);
+                     routerGo($('#slug_collection').val());
+                     
+                });
+            }
+            
             /**
              */
             function appendCategoryMetadata(categories, item_id, seletor) {
@@ -509,6 +645,8 @@ class FormItem extends Model {
                         $(seletor).css('margin-top','10px');
                         $(seletor).css('height','auto');
                         $(seletor).html(result);
+                    }else{
+                        $(seletor).html('');
                     }
                 });
             }
@@ -528,12 +666,14 @@ class FormItem extends Model {
                     $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .glyphicon-remove').show();
                     $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .glyphicon-ok').hide();
                     $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .validate-class').val('false');
+                    $('#validation-'+compound_id+'-'+property_id+'-'+index_id).val('false');
                 }else{
                     $('#validation-'+compound_id+'-'+property_id+'-'+index_id).removeClass('has-error has-feedback');
                     $('#validation-'+compound_id+'-'+property_id+'-'+index_id).addClass('has-success has-feedback');
                     $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .glyphicon-remove').hide();
                     $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .glyphicon-ok').show();
                     $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .validate-class').val('true');
+                    $('#validation-'+compound_id+'-'+property_id+'-'+index_id).val('true');
                     setTimeout(function(){
                         if( $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .form-control').val()!=''){
                             $('#validation-'+compound_id+'-'+property_id+'-'+index_id).removeClass('has-success has-feedback');

@@ -7,6 +7,7 @@ class FormItemSource extends FormItem {
         <div class="form-group">
             <h2>
                 <?php echo ($this->terms_fixed['source']) ? $this->terms_fixed['source']->name : _e('Source', 'tainacan') ?>
+                <?php $this->validateIcon('alert-compound-'.$property['id'],__('Required field','tainacan')) ?>   
             </h2>
             <div  >
                 <input

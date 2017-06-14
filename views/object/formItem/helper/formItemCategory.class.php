@@ -35,6 +35,7 @@ class FormItemCategory extends FormItem{
                 <?php echo $property['name']; ?>
                 <?php if ($isRequired): ?>
                 *
+                <?php $this->validateIcon('alert-compound-'.$property['id'],__('Required field','tainacan')) ?>    
                 <?php endif ?>
             </h2>
             <div>

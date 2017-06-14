@@ -7,6 +7,7 @@ class FormItemAttachment extends FormItem {
             <div class="form-group">
                 <h2>
                     <?php echo ($this->terms_fixed['attachments']) ? $this->terms_fixed['attachments']->name : _e('Attachments', 'tainacan') ?>
+                    <?php $this->validateIcon('alert-compound-'.$property['id'],__('Required field','tainacan')) ?>    
                 </h2>
                 <div >
                     <div id="dropzone_new"

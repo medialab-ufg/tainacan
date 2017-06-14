@@ -6,6 +6,7 @@ class FormItemDescription extends FormItem {
         <div class="form-group" >
             <h2>
                 <?php echo ($this->terms_fixed['description']) ? $this->terms_fixed['description']->name : _e('Description', 'tainacan') ?>
+                <?php $this->validateIcon('alert-compound-'.$property['id'],__('Required field','tainacan')) ?>     
             </h2>
             <div >
                 <textarea class="form-control auto-save"

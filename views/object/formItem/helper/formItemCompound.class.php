@@ -55,15 +55,20 @@ class FormItemCompound extends FormItem {
                     do_action('modificate_label_insert_item_properties', $property);
                 endif;
                 ?>
-                <?php if ($isRequired && $property['metas']['socialdb_property_required'] !== 'true'): ?>
-                *
-                <span id="AllFieldsShouldBeFilled<?php echo $property['id']; ?>"></span>
-                <?php elseif ($isRequired && $property['metas']['socialdb_property_required'] !== 'true_one_field'): ?>
-                (*)
-                <span id="oneFieldShouldBeFilled<?php echo $property['id']; ?>"></span>
+                <?php if ($isRequired && $property['metas']['socialdb_property_required'] == 'true'): ?>
+                    *
+                    <span id="AllFieldsShouldBeFilled<?php echo $property['id']; ?>"></span>
+                <?php elseif ($isRequired && $property['metas']['socialdb_property_required'] === 'true_one_field'): ?>
+                    (*)
+                    <input 
+                        type="hidden" 
+                        value="false" 
+                        compound="<?php echo $property['id']; ?>"
+                        class="validate-class compound-one-field-should-be-filled">
                 <?php else: ?>
-                <span id="someFieldsAreRequired<?php echo $property['id']; ?>"></span>
+                    <span id="someFieldsAreRequired<?php echo $property['id']; ?>"></span>
                 <?php endif ?>
+                <?php $this->validateIcon('alert-compound-'.$property['id'],__('Required field','tainacan')) ?>    
             </h2>
             <div>
                 <?php for ($index = 0; $index < $filledValues; $index++): ?>
@@ -73,6 +78,7 @@ class FormItemCompound extends FormItem {
                             <?php if (is_array($childrenProperties)): ?>
                                 <?php
                                 foreach ($childrenProperties as $child):
+                                    $child['metas']['socialdb_property_required'] = ($isRequired && $property['metas']['socialdb_property_required'] == 'true') ? 'true' : $child['metas']['socialdb_property_required'];
                                     $isRequiredChildren = ($child['metas'] && $child['metas']['socialdb_property_required']&&$child['metas']['socialdb_property_required'] != 'false') ? true : false;
                                     $object = (isset($child['metas']['socialdb_property_object_category_id']) && !empty($child['metas']['socialdb_property_object_category_id'])) ? true : false;
                                     ?>
@@ -81,6 +87,7 @@ class FormItemCompound extends FormItem {
                                             <?php echo $child['name']; ?>
                                             <?php 
                                             if ($isRequiredChildren): ?>
+                                            <?php $this->validateIcon('alert-compound-'.$child['id'],__('Required field','tainacan')) ?>
                                              *
                                              <script>
                                                  $('#someFieldsAreRequired<?php echo $property['id']; ?>').html('(*)')

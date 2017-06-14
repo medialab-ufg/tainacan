@@ -7,6 +7,7 @@ class FormItemType extends FormItem {
         <div class="form-group">
             <h2>
                 <?php echo ($this->terms_fixed['type']) ? $this->terms_fixed['type']->name :  _e('Type','tainacan') ?>
+                 <?php $this->validateIcon('alert-compound-'.$property['id'],__('Required field','tainacan')) ?>
             </h2>
             <div>
                 <select class="form-control">

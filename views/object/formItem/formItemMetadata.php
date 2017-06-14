@@ -10,7 +10,7 @@ $css = ($habilitateMedia == 'true') ? 'width: 72%; margin-left: 15px;margin-righ
             <h4><?php _e('Loading metadata...', 'tainacan') ?></h4>
         </center>
     </div>
-    <div style=" <?php echo $css ?>"
+    <div style="<?php echo $css ?>"
          class="col-md-12 menu_left">
         <h4>
             <?php if (has_action('label_add_item')): ?>
@@ -26,7 +26,7 @@ $css = ($habilitateMedia == 'true') ? 'width: 72%; margin-left: 15px;margin-righ
             <small id="draft-text"></small>
         </h4>
         <hr>
-        <!--------------------------- ABAS----------------------------->
+        <!--------------------------- ABAS e TODO FORMULARIO ------------------->
         <?php $formItem->start($collection_id,$ID,$properties) ?>      
     </div>
 </div>
