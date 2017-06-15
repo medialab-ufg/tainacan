@@ -17,12 +17,24 @@ class ObjectController extends Controller {
         $objectfile_model = new ObjectFileModel;
 
         switch ($operation) {
-            // #1 ADICIONAR ITEMS TIPO TEXTO
+            // #1 ADICIONAR e EDITAR ITEM
+            case "edit-item":
             case "create-item":
-                $data['ID'] = $object_model->create();
                 //class
                 include_once dirname(__FILE__) . '../../../views/object/formItem/helper/formItem.class.php';
-                $data['formItem'] = new FormItem($data['collection_id']);
+                if(isset($data['item_id'])){
+                  $formClass = new FormItem($data['collection_id'],__('Edit item','tainacan'));
+                  $checkout = get_post_meta($data['object_id'], 'socialdb_object_checkout', true);
+                  if (is_numeric($checkout) && !isset($data['motive'])) {
+                      $user = get_user_by('id', $checkout)->display_name;
+                      $time = get_post_meta($data['object_id'], 'socialdb_object_checkout_time', true);
+                      return 'checkout@' . $user . '@' . date('d/m/Y', $time);
+                  }
+                }else{
+                  $formClass = new FormItem($data['collection_id']);
+                }
+                $data['ID'] = (isset($data['item_id'])) ? $data['item_id'] :  $object_model->create() ;
+                $data['formItem'] = $formClass;
                 $data['modeView'] = get_post_meta($data['collection_id'], 'socialdb_collection_submission_visualization', true);
                 //sessao
                 if(!session_id()) {
@@ -37,7 +49,7 @@ class ObjectController extends Controller {
                   // $data['properties'] = $cache;
                 //}
                 return $this->render(dirname(__FILE__) . '../../../views/object/formItem/formItem.php', $data);
-                // propriedades de categoria
+            // propriedades de categoria
             case 'appendCategoryMetadata'://
                     //class
                     include_once dirname(__FILE__) . '../../../views/object/formItem/helper/formItem.class.php';
@@ -46,6 +58,7 @@ class ObjectController extends Controller {
                     $properties_to_avoid = explode(',', $data['properties_to_avoid']);
                     return $formItem->startCategoryMetadata($properties_to_avoid, $data);
                     break;
+################################################################################
             case "create_item_text":
                 //verifico se existe rascunho para se mostrado
                 $beta_id = get_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext', true);
