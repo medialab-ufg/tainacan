@@ -7,45 +7,51 @@ class RadioClass extends FormItem{
         if ($property_id == 0) {
             $property = $compound;
         }
+        $autoValidate = false;
+        $values = ($this->value && is_array($this->getValues($this->value[$index_id][$property_id]))) ? $this->getValues($this->value[$index_id][$property_id]) : false;
         $this->isRequired = ($property['metas'] && $property['metas']['socialdb_property_required'] && $property['metas']['socialdb_property_required'] != 'false') ? true : false;
         ?>
-        <?php if ($this->isRequired): ?> 
-        <div class="form-group" 
+        <?php if ($this->isRequired): ?>
+        <div class="form-group"
              id="validation-<?php echo $compound['id'] ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>"
-             style="border-bottom:none;"> 
+             style="border-bottom:none;">
                 <?php endif; ?>
                 <?php if($property['has_children'] && is_array($property['has_children'])): ?>
-                    <?php foreach ($property['has_children'] as $child): ?>
+                    <?php foreach ($property['has_children'] as $child):
+                        $is_selected = ($values && in_array($child->term_id,$values)) ? 'selected' : '';
+                        $autoValidate = ($values && in_array($child->term_id,$values)) ? true : false;
+                        ?>
                         <input type="radio"
+                               <?php echo $is_selected ?>
                                name="radio-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>[]"
                                value="<?php echo $child->term_id ?>">&nbsp;<?php echo $child->name ?>
-                    <?php endforeach; ?>      
+                    <?php endforeach; ?>
                 <?php endif;
-        if ($this->isRequired): ?> 
+        if ($this->isRequired): ?>
                 <span style="display: none;" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
                 <span style="display: none;" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
                 <span id="input2Status" class="sr-only">(status)</span>
-                <input type="hidden" 
+                <input type="hidden"
                        <?php if($property_id !== 0): ?>
                        compound="<?php echo $compound['id'] ?>"
                        <?php endif; ?>
                       property="<?php echo $property['id'] ?>"
                        class="validate-class validate-compound-<?php echo $compound['id'] ?>"
-                       value="false">
-        </div> 
-        <?php elseif($property_id !== 0): ?> 
-        <input  type="hidden" 
+                       value="<?php echo ($autoValidate) ? 'true' : 'false' ?>">
+        </div>
+        <?php elseif($property_id !== 0): ?>
+        <input  type="hidden"
                 compound="<?php echo $compound['id'] ?>"
                 property="<?php echo $property['id'] ?>"
                 id="validation-<?php echo $compound['id'] ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>"
                 class="compound-one-field-should-be-filled-<?php echo $compound['id'] ?>"
-                value="false">
-        <?php endif;         
+                value="<?php echo ($autoValidate) ? 'true' : 'false' ?>">
+        <?php endif;
         $this->initScriptsRadioBoxClass($compound_id, $property_id, $item_id, $index_id);
     }
 
     /**
-     * 
+     *
      * @param type $property
      * @param type $item_id
      * @param type $index

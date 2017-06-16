@@ -686,6 +686,31 @@ class FormItem extends Model {
                 });
             }
 
+            Hook.register('appendCategoryMetadata',function(args){
+              var categories = args[0]
+              var item_id = args[1];
+              var seletor = args[2];
+              $(seletor)
+                   .html('<center><img width="100" heigth="100" src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>"><?php _e('Loading metadata for this field','tainacan') ?></center>');
+              $.ajax({
+                  url: $('#src').val() + '/controllers/object/object_controller.php',
+                  type: 'POST',
+                  data: {
+                      operation: 'appendCategoryMetadata',
+                      properties_to_avoid: '<?php echo implode(',', $this->allPropertiesIds) ?>', categories: categories,object_id:item_id ,item_id:item_id,collection_id:$('#collection_id').val()}
+              }).done(function (result) {
+                  if(result !== ''){
+                      $(seletor).css('border','1px solid #ccc');
+                      $(seletor).css('padding','5px;');
+                      $(seletor).css('margin-top','10px');
+                      $(seletor).css('height','auto');
+                      $(seletor).html(result);
+                  }else{
+                      $(seletor).html('');
+                  }
+              });
+            });
+
             /**
             *
 
@@ -717,6 +742,34 @@ class FormItem extends Model {
                     }, 2000);
                 }
             }
+            Hook.register('validateFieldsMetadataText',function(args){
+              var val = args[0];
+              var compound_id = args[1]
+              var property_id = args[2];
+              var index_id = args[3];
+              if(val == ''){
+                  $('#validation-'+compound_id+'-'+property_id+'-'+index_id).removeClass('has-success has-feedback');
+                  $('#validation-'+compound_id+'-'+property_id+'-'+index_id).addClass('has-error has-feedback');
+                  $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .glyphicon-remove').show();
+                  $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .glyphicon-ok').hide();
+                  $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .validate-class').val('false');
+                  $('#validation-'+compound_id+'-'+property_id+'-'+index_id).val('false');
+              }else{
+                  $('#validation-'+compound_id+'-'+property_id+'-'+index_id).removeClass('has-error has-feedback');
+                  $('#validation-'+compound_id+'-'+property_id+'-'+index_id).addClass('has-success has-feedback');
+                  $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .glyphicon-remove').hide();
+                  $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .glyphicon-ok').show();
+                  $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .validate-class').val('true');
+                  $('#validation-'+compound_id+'-'+property_id+'-'+index_id).val('true');
+                  setTimeout(function(){
+                      if( $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .form-control').val()!=''){
+                          $('#validation-'+compound_id+'-'+property_id+'-'+index_id).removeClass('has-success has-feedback');
+                          $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .glyphicon-ok').hide();
+                      }
+                  }, 2000);
+              }
+            });
+
         </script>
         <?php
     }

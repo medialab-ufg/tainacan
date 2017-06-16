@@ -50,9 +50,16 @@ class FormItemCategory extends FormItem{
                 <?php elseif($property['type'] == 'tree_checkbox'): ?>
                     <?php $this->multipleTreeClass->generate($property,['id'=>0], $item_id, 0) ?>
                 <?php endif; ?>
-                <div class="category-properties" id="appendCategoryMetadata_<?php echo $property['id']; ?>_0_0"></div>
+                <div class="category-properties" id="appendCategoryMetadata_<?php echo $property['id']; ?>_0_0">
+                </div>
             </div>
         </div>
+        <?php if($this->value && is_array($this->getValues($this->value[0][0])) && !empty($this->getValues($this->value[0][0]))): ?>
+        <script>
+         var ids = '<?php echo implode(',',$this->getValues($this->value[0][0])) ?>';
+         Hook.call('appendCategoryMetadata',[ids, <?php echo $property['id'] ?>, '#appendCategoryMetadata_<?php echo $property['id']; ?>_0_0']);
+        </script>
+        <?php endif; ?>
         <?php
     }
 }

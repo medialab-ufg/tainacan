@@ -8,8 +8,15 @@ class SimpleTreeClass extends FormItem {
         if ($property_id == 0) {
             $property = $compound;
         }
+        $autoValidate = false;
+        $values = ($this->value && is_array($this->getValues($this->value[$index_id][$property_id]))) ? $this->getValues($this->value[$index_id][$property_id]) : false;
+        if($values && is_array($values)){
+            foreach ($values as $value) {
+               $autoValidate = ($property['has_children'] && is_array($property['has_children']) && in_array($value,$property['has_children'])) ? true : false;
+            }
+        }
         $this->isRequired = ($property['metas'] && $property['metas']['socialdb_property_required'] && $property['metas']['socialdb_property_required'] != 'false');
-        var_dump($this->getValues($this->value[$property_id][$index_id]));
+        //var_dump($this->getValues($this->value[$property_id][$index_id]));
         ?>
         <?php if ($this->isRequired): ?>
             <div class="form-group"
@@ -32,7 +39,7 @@ class SimpleTreeClass extends FormItem {
                        <?php endif; ?>
                        property="<?php echo $property['id'] ?>"
                        class="validate-class validate-compound-<?php echo $compound['id'] ?>"
-                       value="false">
+                       value="<?php echo ($autoValidate) ? 'true' : 'false' ?>">
             </div>
        <?php elseif($property_id !== 0): ?>
         <input  type="hidden"
@@ -40,7 +47,7 @@ class SimpleTreeClass extends FormItem {
                 property="<?php echo $property['id'] ?>"
                 id="validation-<?php echo $compound['id'] ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>"
                 class="compound-one-field-should-be-filled-<?php echo $compound['id'] ?>"
-                value="false">
+                value="<?php echo ($autoValidate) ? 'true' : 'false' ?>">
         <?php endif;
         if ($property['has_children'] && is_array($property['has_children']))
             $this->initScriptsSimpleTreeClass($compound_id, $property_id, $item_id, $index_id, $property['has_children']);
@@ -55,14 +62,14 @@ class SimpleTreeClass extends FormItem {
     public function initScriptsSimpleTreeClass($compound_id, $property_id, $item_id, $index_id, $children) {
         ?>
         <script>
-            $(function () {
+            $(document).ready(function () {
                 $("#simple-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>").dynatree({
                     checkbox: true,
                     // Override class name for checkbox icon:
                     classNames: {checkbox: "dynatree-radio"},
                     selectMode: 1,
                     selectionVisible: true, // Make sure, selected nodes are visible (expanded).
-                    children: <?php echo $this->generateJson($children) ?>,
+                    children: <?php echo $this->generateJson($compound_id, $property_id, $item_id, $index_id,$children) ?>,
                     onLazyRead: function (node) {
                         node.appendAjax({
                             url: $('#src').val() + '/controllers/collection/collection_controller.php',
@@ -91,10 +98,27 @@ class SimpleTreeClass extends FormItem {
                                     indexCoumpound: 0
                                 }
                             });
+                            appendCategoryMetadata(node.data.key, <?php echo $compound_id ?>, '#appendCategoryMetadata_<?php echo $compound_id; ?>_0_0');
                             <?php if ($this->isRequired): ?>
-                                validateFieldsMetadataText(node.data.key, '<?php echo $compound_id ?>', '<?php echo $property_id ?>', '<?php echo $index_id ?>')
+                                validateFieldsMetadataText(
+                                  node.data.key, '<?php echo $compound_id ?>', '<?php echo $property_id ?>', '<?php echo $index_id ?>');
                             <?php endif; ?>
                         } else {
+                             $('#appendCategoryMetadata_<?php echo $compound_id; ?>_0_0').html('');
+                             $.ajax({
+                                 url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                                 type: 'POST',
+                                 data: {
+                                     operation: 'saveValue',
+                                     type: 'term',
+                                     value: '',
+                                     item_id: '<?php echo $item_id ?>',
+                                     compound_id: '<?php echo $compound_id ?>',
+                                     property_children_id: '<?php echo $property_id ?>',
+                                     index: <?php echo $index_id ?>,
+                                     indexCoumpound: 0
+                                 }
+                             });
                             <?php if ($this->isRequired): ?>
                                 validateFieldsMetadataText('', '<?php echo $compound_id ?>', '<?php echo $property_id ?>', '<?php echo $index_id ?>')
                             <?php endif; ?>
@@ -106,12 +130,13 @@ class SimpleTreeClass extends FormItem {
         <?php
     }
 
-    public function generateJson($array) {
+    public function generateJson($compound_id, $property_id, $item_id, $index_id,$array) {
         foreach ($array as $term) {
+            $is_selected = ($this->value && is_array($this->getValues($this->value[$index_id][$property_id])) && in_array($term->term_id,$this->getValues($this->value[$index_id][$property_id]))) ? true : false;
             if (mb_detect_encoding($term->name) == 'UTF-8' || mb_detect_encoding($term->name) == 'ASCII') {
-                $dynatree[] = array('title' => ucfirst(Words($term->name, 30)), 'key' => $term->term_id, 'isLazy' => true,'expand' => false, 'addClass' => 'color1');
+                $dynatree[] = array('select'=>$is_selected,'title' => ucfirst(Words($term->name, 30)), 'key' => $term->term_id, 'isLazy' => true,'expand' => false, 'addClass' => 'color1');
             } else {
-                $dynatree[] = array('title' => ucfirst(Words(utf8_decode(utf8_encode($term->name)), 30)), 'key' => $term->term_id, 'isLazy' => true, 'expand' => false, 'addClass' => 'color1');
+                $dynatree[] = array('select'=>$is_selected,'title' => ucfirst(Words(utf8_decode(utf8_encode($term->name)), 30)), 'key' => $term->term_id, 'isLazy' => true, 'expand' => false, 'addClass' => 'color1');
             }
         }
         return json_encode($dynatree);

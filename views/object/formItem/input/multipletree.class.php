@@ -8,12 +8,19 @@ class MultipleTreeClass extends FormItem {
         if ($property_id == 0) {
             $property = $compound;
         }
+        $autoValidate = false;
+        $values = ($this->value && is_array($this->getValues($this->value[$index_id][$property_id]))) ? $this->getValues($this->value[$index_id][$property_id]) : false;
+        if($values && is_array($values)){
+            foreach ($values as $value) {
+               $autoValidate = ($property['has_children'] && is_array($property['has_children']) && in_array($value,$property['has_children'])) ? true : false;
+            }
+        }
         $this->isRequired = ($property['metas'] && $property['metas']['socialdb_property_required'] && $property['metas']['socialdb_property_required'] != 'false') ? true : false;
         ?>
-        <?php if ($this->isRequired): ?> 
-        <div class="form-group" 
+        <?php if ($this->isRequired): ?>
+        <div class="form-group"
              id="validation-<?php echo $compound['id'] ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>"
-             style="border-bottom:none;"> 
+             style="border-bottom:none;">
                 <?php endif; ?>
                 <div class="row">
                     <div style='height: 150px;'
@@ -21,26 +28,26 @@ class MultipleTreeClass extends FormItem {
                          id='multiple-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>'>
                     </div>
                 </div>
-                <?php if ($this->isRequired): ?> 
+                <?php if ($this->isRequired): ?>
                 <span style="display: none;" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
                 <span style="display: none;" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
                 <span id="input2Status" class="sr-only">(status)</span>
-                <input type="hidden" 
+                <input type="hidden"
                        <?php if($property_id !== 0): ?>
                        compound="<?php echo $compound['id'] ?>"
                        <?php endif; ?>
                        property="<?php echo $property['id'] ?>"
                        class="validate-class validate-compound-<?php echo $compound['id'] ?>"
-                       value="false">
-        </div> 
-        <?php elseif($property_id !== 0): ?> 
-        <input  type="hidden" 
+                       value="<?php echo ($autoValidate) ? 'true' : 'false' ?>">
+        </div>
+        <?php elseif($property_id !== 0): ?>
+        <input  type="hidden"
                 compound="<?php echo $compound['id'] ?>"
                 property="<?php echo $property['id'] ?>"
                 id="validation-<?php echo $compound['id'] ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>"
                 class="compound-one-field-should-be-filled-<?php echo $compound['id'] ?>"
-                value="false">
-        <?php endif;  
+                value="<?php echo ($autoValidate) ? 'true' : 'false' ?>">
+        <?php endif;
         if ($property['has_children'] && is_array($property['has_children']))
             $this->initScriptsMultipleTreeClass($compound_id, $property_id, $item_id, $index_id, $property['has_children']);
     }
@@ -57,7 +64,7 @@ class MultipleTreeClass extends FormItem {
             $("#multiple-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>").dynatree({
                 selectionVisible: true, // Make sure, selected nodes are visible (expanded).
                 checkbox: true,
-                children: <?php echo $this->generateJson($children) ?>,
+                children: <?php echo $this->generateJson($compound_id, $property_id, $item_id, $index_id,$children) ?>,
                 onLazyRead: function (node) {
                     node.appendAjax({
                         url: $('#src').val() + '/controllers/collection/collection_controller.php',
@@ -104,9 +111,15 @@ class MultipleTreeClass extends FormItem {
                         return node;
                     });
                     if(selKeys.length > 0){
+                        appendCategoryMetadata(node.data.key, <?php echo $compound_id ?>, '#appendCategoryMetadata_<?php echo $compound_id; ?>_0_0');
+                        <?php if ($this->isRequired): ?>
                         validateFieldsMetadataText('true','<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>');
+                        <?php endif ?>
                     }else{
+                        $('#appendCategoryMetadata_<?php echo $compound_id; ?>_0_0').html('');
+                        <?php if ($this->isRequired): ?>
                         validateFieldsMetadataText('','<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>');
+                        <?php endif ?>
                     }
                 }
             });
@@ -114,12 +127,13 @@ class MultipleTreeClass extends FormItem {
         <?php
     }
 
-    public function generateJson($array) {
+    public function generateJson($compound_id, $property_id, $item_id, $index_id,$array) {
         foreach ($array as $term) {
+            $is_selected = ($this->value && is_array($this->getValues($this->value[$index_id][$property_id])) && in_array($term->term_id,$this->getValues($this->value[$index_id][$property_id]))) ? true : false;
             if (mb_detect_encoding($term->name) == 'UTF-8' || mb_detect_encoding($term->name) == 'ASCII') {
-                $dynatree[] = array('title' => ucfirst(Words($term->name, 30)), 'key' => $key, 'isLazy' => true, 'expand' => true, 'addClass' => 'color1');
+                $dynatree[] = array('select'=>$is_selected,'title' => ucfirst(Words($term->name, 30)), 'key' => $term->term_id, 'isLazy' => true,'expand' => false, 'addClass' => 'color1');
             } else {
-                $dynatree[] = array('title' => ucfirst(Words(utf8_decode(utf8_encode($term->name)), 30)), 'key' => $term->term_id, 'isLazy' => true, 'expand' => true, 'addClass' => 'color1');
+                $dynatree[] = array('select'=>$is_selected,'title' => ucfirst(Words(utf8_decode(utf8_encode($term->name)), 30)), 'key' => $term->term_id, 'isLazy' => true, 'expand' => false, 'addClass' => 'color1');
             }
         }
         return json_encode($dynatree);

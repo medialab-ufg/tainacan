@@ -42,8 +42,8 @@ class FormItemText extends FormItem {
                 <?php endif ?>
             </h2>
             <div>
-                <?php foreach ($this->value as $index => $value): ?>
-                    <div id="container-field"
+                <?php var_dump($this->value); foreach ($this->value as $index => $value): ?>
+                    <div id="container-field-<?php echo $property['id'] ?>-<?php echo $index ?>"
                          class="row" style="padding-bottom: 10px;margin-bottom: 10px;">
                         <div class="col-md-11">
                             <?php if ($property['type'] == 'text'): ?>
@@ -60,7 +60,7 @@ class FormItemText extends FormItem {
                         </div>
                         <?php if ($index > 0): ?>
                             <div class="col-md-1">
-                                <a style="cursor: pointer;" onclick="remove_container(<?php echo $property['id'] ?>,<?php echo $$index ?>)" class="pull-right">
+                                <a style="cursor: pointer;" onclick="remove_container('<?php echo $property['id'] ?>','<?php echo $index ?>',<?php echo $item_id ?>)" class="pull-right">
                                     <span class="glyphicon glyphicon-remove"></span>
                                 </a>
                             </div>
@@ -109,7 +109,7 @@ class FormItemText extends FormItem {
                 <?php endif; ?>
             </div>
             <div class="col-md-1">
-                <a style="cursor: pointer;" onclick="remove_container(<?php echo $property['id'] ?>,<?php echo $index ?>)" class="pull-right">
+                <a style="cursor: pointer;" onclick="remove_container('<?php echo $property['id'] ?>','<?php echo $index ?>',<?php echo $item_id ?>)" class="pull-right">
                     <span class="glyphicon glyphicon-remove"></span>
                 </a>
             </div>
