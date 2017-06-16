@@ -8,39 +8,40 @@ class SimpleTreeClass extends FormItem {
         if ($property_id == 0) {
             $property = $compound;
         }
-        $this->isRequired = ($property['metas'] && $property['metas']['socialdb_property_required'] && $property['metas']['socialdb_property_required'] != 'false')
+        $this->isRequired = ($property['metas'] && $property['metas']['socialdb_property_required'] && $property['metas']['socialdb_property_required'] != 'false');
+        var_dump($this->getValues($this->value[$property_id][$index_id]));
         ?>
-        <?php if ($this->isRequired): ?> 
-            <div class="form-group" 
+        <?php if ($this->isRequired): ?>
+            <div class="form-group"
                  id="validation-<?php echo $compound['id'] ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>"
-                 style="border-bottom:none;"> 
-                 <?php endif; ?>        
+                 style="border-bottom:none;">
+                 <?php endif; ?>
             <div class="row">
                 <div style='height: 150px;'
                      class='col-lg-12'
                      id='simple-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>'>
                 </div>
             </div>
-            <?php if ($this->isRequired): ?> 
+            <?php if ($this->isRequired): ?>
                 <span style="display: none;" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
                 <span style="display: none;" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
                 <span id="input2Status" class="sr-only">(status)</span>
-                <input type="hidden" 
+                <input type="hidden"
                 <?php if ($property_id !== 0): ?>
                            compound="<?php echo $compound['id'] ?>"
                        <?php endif; ?>
-                       property="<?php echo $property['id'] ?>" 
+                       property="<?php echo $property['id'] ?>"
                        class="validate-class validate-compound-<?php echo $compound['id'] ?>"
                        value="false">
-            </div> 
-       <?php elseif($property_id !== 0): ?> 
-        <input  type="hidden" 
+            </div>
+       <?php elseif($property_id !== 0): ?>
+        <input  type="hidden"
                 compound="<?php echo $compound['id'] ?>"
                 property="<?php echo $property['id'] ?>"
                 id="validation-<?php echo $compound['id'] ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>"
                 class="compound-one-field-should-be-filled-<?php echo $compound['id'] ?>"
                 value="false">
-        <?php endif;  
+        <?php endif;
         if ($property['has_children'] && is_array($property['has_children']))
             $this->initScriptsSimpleTreeClass($compound_id, $property_id, $item_id, $index_id, $property['has_children']);
     }
@@ -90,13 +91,13 @@ class SimpleTreeClass extends FormItem {
                                     indexCoumpound: 0
                                 }
                             });
-        <?php if ($this->isRequired): ?>
+                            <?php if ($this->isRequired): ?>
                                 validateFieldsMetadataText(node.data.key, '<?php echo $compound_id ?>', '<?php echo $property_id ?>', '<?php echo $index_id ?>')
-        <?php endif; ?>
+                            <?php endif; ?>
                         } else {
-        <?php if ($this->isRequired): ?>
+                            <?php if ($this->isRequired): ?>
                                 validateFieldsMetadataText('', '<?php echo $compound_id ?>', '<?php echo $property_id ?>', '<?php echo $index_id ?>')
-        <?php endif; ?>
+                            <?php endif; ?>
                         }
                     }
                 });

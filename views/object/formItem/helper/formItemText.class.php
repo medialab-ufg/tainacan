@@ -15,14 +15,17 @@ class FormItemText extends FormItem {
     public $class;
 
     public function widget($property, $item_id) {
-        $this->textClass = new TextClass();
-        $this->dateClass = new DateClass();
-        $this->textareaClass = new TextAreaClass();
-        $this->numericClass = new NumericClass();
-        $this->autoincrementClass = new AutoIncrementClass();
+        $this->textClass = new TextClass(0,'',$this->value);
+        $this->dateClass = new DateClass(0,'',$this->value);
+        $this->textareaClass = new TextAreaClass(0,'',$this->value);
+        $this->numericClass = new NumericClass(0,'',$this->value);
+        $this->autoincrementClass = new AutoIncrementClass(0,'',$this->value);
         $values = $this->getValuePropertyHelper($item_id, $property_id);
+        $this->setLastIndex();
         $isMultiple = ($property['metas']['socialdb_property_data_cardinality'] == 'n') ? true : false;
         $filledValues = ($values) ? count($values) : 1;
+
+
         $isRequired = ($property['metas'] && $property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] != 'false') ? true : false;
         ?>
         <div id="meta-item-<?php echo $property['id']; ?>" class="form-group" >
@@ -39,8 +42,8 @@ class FormItemText extends FormItem {
                 <?php endif ?>
             </h2>
             <div>
-                <?php for ($index = 0; $index < $filledValues; $index++): ?>
-                    <div id="container-field" 
+                <?php foreach ($this->value as $index => $value): ?>
+                    <div id="container-field"
                          class="row" style="padding-bottom: 10px;margin-bottom: 10px;">
                         <div class="col-md-11">
                             <?php if ($property['type'] == 'text'): ?>
@@ -60,13 +63,13 @@ class FormItemText extends FormItem {
                                 <a style="cursor: pointer;" onclick="remove_container(<?php echo $property['id'] ?>,<?php echo $$index ?>)" class="pull-right">
                                     <span class="glyphicon glyphicon-remove"></span>
                                 </a>
-                            </div> 
+                            </div>
                         <?php endif; ?>
-                    </div>    
-                <?php endfor; ?>
+                    </div>
+                <?php endforeach; ?>
                     <div id="appendTextContainer"></div>
                 <?php if ($isMultiple): ?>
-                    <button type="button" 
+                    <button type="button"
                             class="btn btn-primary btn-lg btn-xs btn-block js-append-property-<?php echo $property['id'] ?>">
                         <span class="glyphicon glyphicon-plus"></span><?php _e('Add field', 'tainacan') ?>
                     </button>
@@ -85,7 +88,7 @@ class FormItemText extends FormItem {
         $this->autoincrementClass = new AutoIncrementClass();
         $values = $this->getValuePropertyHelper($item_id, $property_id)
         ?>
-        <div id="container-field-<?php echo $property['id'] ?>-<?php echo $index ?>" 
+        <div id="container-field-<?php echo $property['id'] ?>-<?php echo $index ?>"
              class="row" style="padding-bottom: 10px;margin-bottom: 10px;">
             <div class="col-md-11">
                 <?php if ($property['type'] == 'text'): ?>
@@ -109,13 +112,21 @@ class FormItemText extends FormItem {
                 <a style="cursor: pointer;" onclick="remove_container(<?php echo $property['id'] ?>,<?php echo $index ?>)" class="pull-right">
                     <span class="glyphicon glyphicon-remove"></span>
                 </a>
-            </div> 
-        </div>    
+            </div>
+        </div>
         <?php
     }
 
+    public function setLastIndex(){
+       if($this->value && is_array($this->value)){
+          //$this->value[] = '';
+       }else{
+         $this->value = [''];
+       }
+    }
+
     /**
-     * 
+     *
      * @param type $property
      * @param type $item_id
      * @param type $index
@@ -142,7 +153,7 @@ class FormItemText extends FormItem {
                     index++;
                 });
             });
-            
+
             function remove_container(property_id,index_id,item_id){
                 $('#container-field-'+property_id+'-'+index_id).remove();
                 $.ajax({
@@ -156,7 +167,7 @@ class FormItemText extends FormItem {
                        }
                    });
             }
-        </script> 
+        </script>
         <?php
     }
 

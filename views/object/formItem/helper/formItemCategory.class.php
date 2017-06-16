@@ -14,11 +14,11 @@ class FormItemCategory extends FormItem{
 
 
     public function widget($property,$item_id) {
-        $this->selectboxClass = new SelectboxClass();
-        $this->simpleTreeClass = new SimpleTreeClass();
-        $this->radioClass = new RadioClass();
-        $this->checkboxClass = new CheckboxClass();
-        $this->multipleTreeClass = new MultipleTreeClass();
+        $this->selectboxClass = new SelectboxClass(0,'',$this->value);
+        $this->simpleTreeClass = new SimpleTreeClass(0,'',$this->value);
+        $this->radioClass = new RadioClass(0,'',$this->value);
+        $this->checkboxClass = new CheckboxClass(0,'',$this->value);
+        $this->multipleTreeClass = new MultipleTreeClass(0,'',$this->value);
         $isRequired = ($property['metas'] && $property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] != 'false') ? true : false;
         ?>
         <style>
@@ -35,7 +35,7 @@ class FormItemCategory extends FormItem{
                 <?php echo $property['name']; ?>
                 <?php if ($isRequired): ?>
                 *
-                <?php $this->validateIcon('alert-compound-'.$property['id'],__('Required field','tainacan')) ?>    
+                <?php $this->validateIcon('alert-compound-'.$property['id'],__('Required field','tainacan')) ?>
                 <?php endif ?>
             </h2>
             <div>

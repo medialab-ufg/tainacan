@@ -45,8 +45,9 @@ class FormItem extends Model {
     ];
     public $isRequired;
     public $title;
+    public $value;
 
-    function __construct($collection_id = 0,$title = '') {
+    function __construct($collection_id = 0,$title = '',$value= false) {
         $this->collection_id = $collection_id;
         $this->terms_fixed = [
             'title' => get_term_by('slug', 'socialdb_property_fixed_title', 'socialdb_property_type'),
@@ -64,6 +65,7 @@ class FormItem extends Model {
             $this->get_labels_fixed_properties($this->collection_id);
         endif;
         $this->title = ($title == '') ? __('Create new item - Write text', 'tainacan'):$title;
+        $this->value = $value;
     }
 
     /**
@@ -319,15 +321,19 @@ class FormItem extends Model {
                     $object = (isset($property['metas']['socialdb_property_object_category_id']) && !empty($property['metas']['socialdb_property_object_category_id'])) ? true : false;
                     if (in_array($property['type'], $data) && !$object) {
                         $class = new FormItemText();
+                        $class->value = $this->getValuePropertyHelper($this->itemId,$property['id']);
                         $class->widget($property, $this->itemId);
                     } else if (in_array($property['type'], $term) && !$object) {
                         $class = new FormItemCategory();
+                        $class->value = $this->getValuePropertyHelper($this->itemId,$property['id']);
                         $class->widget($property, $this->itemId);
                     } else if ($object) {
                         $class = new FormItemObject($this->collection_id);
+                        $class->value = $this->getValuePropertyHelper($this->itemId,$property['id']);
                         $class->widget($property, $this->itemId);
                     } else if ($property['type'] == __('Compounds', 'tainacan')) {
                         $class = new FormItemCompound();
+                        $class->value = $this->getValuePropertyHelper($this->itemId,$property['id']);
                         $class->widget($property, $this->itemId);
                     }
                 }
@@ -430,15 +436,19 @@ class FormItem extends Model {
                     $object = (isset($property['metas']['socialdb_property_object_category_id']) && !empty($property['metas']['socialdb_property_object_category_id'])) ? true : false;
                     if (in_array($property['type'], $data) && !$object) {
                         $class = new FormItemText();
+                        $class->value = $this->getValuePropertyHelper($this->itemId,$property['id']);
                         $class->widget($property, $this->itemId);
                     } else if (in_array($property['type'], $term) && !$object) {
                         $class = new FormItemCategory();
+                        $class->value = $this->getValuePropertyHelper($this->itemId,$property['id']);
                         $class->widget($property, $this->itemId);
                     } else if ($object) {
                         $class = new FormItemObject($this->collection_id);
+                        $class->value = $this->getValuePropertyHelper($this->itemId,$property['id']);
                         $class->widget($property, $this->itemId);
                     } else if ($property['type'] == __('Compounds', 'tainacan')) {
                         $class = new FormItemCompound();
+                        $class->value = $this->getValuePropertyHelper($this->itemId,$property['id']);
                         $class->widget($property, $this->itemId);
                     }
                 }
@@ -460,6 +470,19 @@ class FormItem extends Model {
         } else {
             return false;
         }
+    }
+
+    public function getValues($array){
+       $ids = [];
+       if(is_array($array)){
+          $values = $array['values'];
+          foreach ($values as $key => $value) {
+            $meta = $this->sdb_get_post_meta($value);
+            if(isset($meta->meta_value))
+                $ids[] = $meta->meta_value;
+          }
+       }
+       return $ids;
     }
 
     /**
