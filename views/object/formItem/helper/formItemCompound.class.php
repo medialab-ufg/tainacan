@@ -25,18 +25,18 @@ class FormItemCompound extends FormItem {
     public $multipleTreeClass;
     public $objectClass;
 
-    public function __construct() {
-        $this->textClass = new TextClass();
-        $this->dateClass = new DateClass();
-        $this->textareaClass = new TextAreaClass();
-        $this->numericClass = new NumericClass();
-        $this->autoincrementClass = new AutoIncrementClass();
-        $this->selectboxClass = new SelectboxClass();
-        $this->simpleTreeClass = new SimpleTreeClass();
-        $this->radioClass = new RadioClass();
-        $this->checkboxClass = new CheckboxClass();
-        $this->multipleTreeClass = new MultipleTreeClass();
-        $this->objectClass = new ObjectClass();
+    public function __construct($collection_id,$value) {
+        $this->textClass = new TextClass($collection_id,'',$value);
+        $this->dateClass = new DateClass($collection_id,'',$value);
+        $this->textareaClass = new TextAreaClass($collection_id,'',$value);
+        $this->numericClass = new NumericClass($collection_id,'',$value);
+        $this->autoincrementClass = new AutoIncrementClass($collection_id,'',$value);
+        $this->selectboxClass = new SelectboxClass($collection_id,'',$value);
+        $this->simpleTreeClass = new SimpleTreeClass($collection_id,'',$value);
+        $this->radioClass = new RadioClass($collection_id,'',$value);
+        $this->checkboxClass = new CheckboxClass($collection_id,'',$value);
+        $this->multipleTreeClass = new MultipleTreeClass($collection_id,'',$value);
+        $this->objectClass = new ObjectClass($collection_id,'',$value);
     }
 
     public function widget($property, $item_id) {

@@ -59,10 +59,11 @@ class ObjectSaveValuesModel extends Model {
         $meta = get_post_meta($item_id, 'socialdb_property_helper_'.$compound_id, true);
         if($meta){
             $array = unserialize($meta);
-            if(is_array($array) && isset($array[$index])){
+            var_dump($array);
+            if(is_array($array) && isset($array[(int)$index])){
                 foreach ($array[$index] as $property_children_id => $type_and_values) {
                     $values = $array[$index][$property_children_id]['values'];
-                    foreach ($values as $index => $meta_id) {
+                    foreach ($values as $i => $meta_id) {
                         $meta = $this->sdb_get_post_meta($meta_id);
                         if($meta){
                             // removo o valor do postmeta pelo meta_id
@@ -71,7 +72,7 @@ class ObjectSaveValuesModel extends Model {
                         }
                     }
                 }
-                unset($array[$index]);
+                unset($array[intval(trim($index))]);
                 update_post_meta($item_id, 'socialdb_property_helper_'.$compound_id, serialize($array));
             }
         }
@@ -98,6 +99,7 @@ class ObjectSaveValuesModel extends Model {
                 $type = $array[$index][$property_children_id]['type'];
                 // array de valores (necessario se existir a necessidade de compostas com valores multivalorados)
                 $values = $array[$index][$property_children_id]['values'];
+                var_dump($values);
                 //busco o valor do postmeta bruto para ser atualizado
                 $meta_value = (is_numeric($indexCompound) && isset($values[(int)$indexCompound])) ? $this->sdb_get_post_meta($values[(int)$indexCompound]) : false;
                 //caso esse postmeta exista

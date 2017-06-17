@@ -8,6 +8,8 @@ class DateClass extends FormItem {
         if ($property_id == 0) {
             $property = $compound;
         }
+        $values = ($this->value && is_array($this->getValues($this->value[$index_id][$property_id]))) ? $this->getValues($this->value[$index_id][$property_id]) : false;
+        $autoValidate = ($values && isset($values[0]) && !empty($values[0])) ? true : false;
         $this->isRequired = ($property['metas'] && $property['metas']['socialdb_property_required'] && $property['metas']['socialdb_property_required'] != 'false') ? true : false;
         ?>
         <?php if ($this->isRequired): ?> 
@@ -17,6 +19,7 @@ class DateClass extends FormItem {
                  <input 
                     style="margin-right: 5px;" 
                     size="13"
+                    value="<?php echo ($values && isset($values[0]) && !empty($values[0])) ? $values[0] : ''; ?>"
                     id="date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>"
                     class="input_date input auto-save form_autocomplete_value_<?php echo $property_id; ?>" 
                     aria-describedby="input2Status"
@@ -30,7 +33,7 @@ class DateClass extends FormItem {
                        <?php endif; ?>
                        property="<?php echo $property['id'] ?>"
                        class="validate-class validate-compound-<?php echo $compound['id'] ?>"
-                       value="false">
+                       value="<?php echo ($autoValidate) ? 'true' : 'false' ?>">
          </div>
         <?php else: ?> 
             <?php if($property_id !== 0): ?> 
@@ -39,7 +42,7 @@ class DateClass extends FormItem {
                             property="<?php echo $property['id'] ?>"
                             id="validation-<?php echo $compound['id'] ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>"
                             class="compound-one-field-should-be-filled-<?php echo $compound['id'] ?>"
-                            value="false">
+                            value="<?php echo ($autoValidate) ? 'true' : 'false' ?>">
             <?php endif;  ?>
             <input 
                 style="margin-right: 5px;" 

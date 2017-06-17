@@ -20,6 +20,7 @@ class FormItemText extends FormItem {
         $this->textareaClass = new TextAreaClass(0,'',$this->value);
         $this->numericClass = new NumericClass(0,'',$this->value);
         $this->autoincrementClass = new AutoIncrementClass(0,'',$this->value);
+        //buscando o valor
         $values = $this->getValuePropertyHelper($item_id, $property_id);
         $this->setLastIndex();
         $isMultiple = ($property['metas']['socialdb_property_data_cardinality'] == 'n') ? true : false;
@@ -42,7 +43,8 @@ class FormItemText extends FormItem {
                 <?php endif ?>
             </h2>
             <div>
-                <?php var_dump($this->value); foreach ($this->value as $index => $value): ?>
+                <?php $first = false;
+                  foreach ($this->value as $index => $value):  ?>
                     <div id="container-field-<?php echo $property['id'] ?>-<?php echo $index ?>"
                          class="row" style="padding-bottom: 10px;margin-bottom: 10px;">
                         <div class="col-md-11">
@@ -58,12 +60,13 @@ class FormItemText extends FormItem {
                                 <?php $this->autoincrementClass->generate($property,['id'=>0], $item_id, $index) ?>
                             <?php endif; ?>
                         </div>
-                        <?php if ($index > 0): ?>
+                        <?php if ($first): ?>
                             <div class="col-md-1">
                                 <a style="cursor: pointer;" onclick="remove_container('<?php echo $property['id'] ?>','<?php echo $index ?>',<?php echo $item_id ?>)" class="pull-right">
                                     <span class="glyphicon glyphicon-remove"></span>
                                 </a>
                             </div>
+                        <?php else: $first = true; ?>    
                         <?php endif; ?>
                     </div>
                 <?php endforeach; ?>

@@ -227,7 +227,7 @@ class FormItem extends Model {
      * @return type
      */
     public function verifyPropertiesWithoutTabs($arrayMapTabs, $properties) {
-        $types = ['property_data', 'property_object', 'property_term', 'property_compounds'];
+        $types = ['property_data', 'property_object', 'property_term', 'property_compounds','fixeds'];
         foreach ($types as $type) {
             if ($properties[$type] && is_array($properties[$type])) {
                 foreach ($properties[$type] as $data) {
@@ -295,6 +295,11 @@ class FormItem extends Model {
             foreach ($this->metadatas[$tab_id] as $property) {
                 $this->allPropertiesIds[] = $property['id'];
                 if (in_array($property['slug'], $this->fixed_slugs)) {
+                    $visibility = (get_term_meta($property['id'],'socialdb_property_visibility',true));
+                    if($visibility == 'hide'){
+                        continue;
+                    }
+
                     if ($property['slug'] == 'socialdb_property_fixed_title') {
                         $class = new FormItemTitle($this->collection_id);
                     } else if ($property['slug'] == 'socialdb_property_fixed_thumbnail') {
@@ -332,8 +337,7 @@ class FormItem extends Model {
                         $class->value = $this->getValuePropertyHelper($this->itemId,$property['id']);
                         $class->widget($property, $this->itemId);
                     } else if ($property['type'] == __('Compounds', 'tainacan')) {
-                        $class = new FormItemCompound();
-                        $class->value = $this->getValuePropertyHelper($this->itemId,$property['id']);
+                        $class = new FormItemCompound( $this->collection_id ,$this->getValuePropertyHelper($this->itemId,$property['id']));
                         $class->widget($property, $this->itemId);
                     }
                 }
@@ -464,7 +468,7 @@ class FormItem extends Model {
      */
     public function getValuePropertyHelper($item_id, $property_id) {
         $meta = get_post_meta($item_id, 'socialdb_property_helper_' . $property_id, true);
-        if ($meta) {
+        if ($meta && $meta != '') {
             $array = unserialize($meta);
             return $array;
         } else {

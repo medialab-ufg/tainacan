@@ -1439,6 +1439,7 @@ class ObjectModel extends Model {
                 $all_data = $property_model->get_all_property($property_id, true); // pego todos os dados possiveis da propriedade
                 //retirando os metadados fixos
                 if (isset($all_data['slug']) && in_array($all_data['slug'], $this->fixed_slugs)):
+                    $data['fixeds'][] = $all_data;
                     continue;
                 endif;
                 //retirando os metadados compostos
