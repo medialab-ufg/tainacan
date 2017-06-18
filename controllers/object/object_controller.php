@@ -20,8 +20,9 @@ class ObjectController extends Controller {
             // #1 ADICIONAR e EDITAR ITEM
             case "edit-item":
             case "create-item":
-                //class
+                //classe que executa toda a logica
                 include_once dirname(__FILE__) . '../../../views/object/formItem/helper/formItem.class.php';
+                //verificacoes para edicao ou criacao deitem
                 if(isset($data['item_id'])){
                   $formClass = new FormItem($data['collection_id'],__('Edit item','tainacan'));
                   $checkout = get_post_meta($data['object_id'], 'socialdb_object_checkout', true);
@@ -31,23 +32,37 @@ class ObjectController extends Controller {
                       return 'checkout@' . $user . '@' . date('d/m/Y', $time);
                   }
                 }else{
-                  $formClass = new FormItem($data['collection_id']);
+                  $beta_id = get_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext', true);
+                  if ($beta_id && is_numeric($beta_id)) {
+                    $formClass = new FormItem($data['collection_id'],__('Continue editting...','tainacan'));
+                    $data['item_id'] = $beta_id;
+                  }else{
+                    $formClass = new FormItem($data['collection_id']);
+                  }  
                 }
-                $data['ID'] = (isset($data['item_id'])) ? $data['item_id'] :  $object_model->create() ;
+                //se nao existir algum ID eu crio
+                if(isset($data['item_id'])) { 
+                    $data['ID'] = $data['item_id']; 
+                }else{  
+                    $data['ID'] = $object_model->create();
+                    update_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext', $data['ID']); 
+                }
+                //jogo a class no array que sera utlizado no formulario
                 $data['formItem'] = $formClass;
                 $data['modeView'] = get_post_meta($data['collection_id'], 'socialdb_collection_submission_visualization', true);
                 //sessao
                 if(!session_id()) {
                         session_start();
                 }
+                //verifico se ja existe as propriedades no cache
                 $cache = $_SESSION['collection_'.$data['collection_id'].'_properties'];
-                //if(!$cache){
+                if(!$cache){
                    $data['properties'] = $object_model->show_object_properties($data);
-                   $_SESSION['collection_'.$data['collection_id'].'_properties'] = $data;
-                //}else{
-                   //$cache['ID'] =  $data['ID'];
-                  // $data['properties'] = $cache;
-                //}
+                   $_SESSION['collection_'.$data['collection_id'].'_properties'] = $data['properties'];
+                }else{
+                   $data['properties'] = $cache;
+                }
+                //renderizo
                 return $this->render(dirname(__FILE__) . '../../../views/object/formItem/formItem.php', $data);
             // propriedades de categoria
             case 'appendCategoryMetadata'://

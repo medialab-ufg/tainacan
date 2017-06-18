@@ -55,12 +55,16 @@ class FormItemCategory extends FormItem{
                 </div>
             </div>
         </div>
-        <?php if($this->value && is_array($this->getValues($this->value[0][0])) && !empty($this->getValues($this->value[0][0]))): ?>
+        <?php 
+        //CASO EXISTA VALORES DE CATEGORIAS,BUSCO SEUS METADADOS
+        if($this->value && is_array($this->getValues($this->value[0][0])) && !empty($this->getValues($this->value[0][0]))): 
+        ?>
         <script>
          var ids = '<?php echo implode(',',$this->getValues($this->value[0][0])) ?>';
          Hook.call('appendCategoryMetadata',[ids, <?php echo $property['id'] ?>, '#appendCategoryMetadata_<?php echo $property['id']; ?>_0_0']);
         </script>
-        <?php endif; ?>
+        <?php 
+        endif; ?>
         <?php
     }
 }

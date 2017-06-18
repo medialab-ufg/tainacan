@@ -85,7 +85,7 @@ class FormItem extends Model {
             <hr>
              <div id="tab-content-metadata" class="tab-content" style="background: white;">
                 <div id="tab-default"  class="tab-pane fade in active" style="background: white;margin-bottom: 15px;">
-                    <div class="expand-all-div"  onclick="open_accordeon('default')" >
+                    <div class="expand-all-div"  onclick="openAccordeon('default')" >
                         <a class="expand-all-link" href="javascript:void(0)">
                             <?php _e('Expand all', 'tainacan') ?>&nbsp;&nbsp;<span class="caret"></span></a>
                     </div>
@@ -143,7 +143,7 @@ class FormItem extends Model {
             </ul>
             <div id="tab-content-metadata" class="tab-content" style="background: white;">
                 <div id="tab-default"  class="tab-pane fade in active" style="background: white;margin-bottom: 15px;">
-                    <div class="expand-all-div"  onclick="open_accordeon('default')" >
+                    <div class="expand-all-div"  onclick="openAccordeon('default')" >
                         <a class="expand-all-link" href="javascript:void(0)">
                             <?php _e('Expand all', 'tainacan') ?>&nbsp;&nbsp;<span class="caret"></span></a>
                     </div>
@@ -157,7 +157,7 @@ class FormItem extends Model {
                     foreach ($allTabs as $tab) {
                         ?>
                         <div id="tab-<?php echo $tab->meta_id ?>"  class="tab-pane fade" style="background: white;margin-bottom: 15px;">
-                            <div class="expand-all-div"  onclick="open_accordeon('<?php echo $tab->meta_id ?>')" >
+                            <div class="expand-all-div"  onclick="openAccordeon('<?php echo $tab->meta_id ?>')" >
                                 <a class="expand-all-link" href="javascript:void(0)">
                                     <?php _e('Expand all', 'tainacan') ?>&nbsp;&nbsp;<span class="caret"></span></a>
                             </div>
@@ -172,7 +172,7 @@ class FormItem extends Model {
                 ?>
             </div>
             <button type="button"
-                    onclick="back_main_list(<?php echo $object_id ?>);"
+                    onclick="backMainListOrDiscard(<?php echo $ID ?>);"
                     style="margin-bottom: 20px;"
                     class="btn btn-default btn-lg pull-left"><?php _e('Discard','tainacan'); ?>
             </button>
@@ -407,7 +407,7 @@ class FormItem extends Model {
 
     /**
      *
-     * metodo para a lisaagem de metadados de categoria
+     * metodo para a listagem de metadados de categoria
      *
      * @param type $properties
      */
@@ -576,7 +576,11 @@ class FormItem extends Model {
     public function initScripts() {
         ?>
         <script>
-            console.log(' -- Begin execution - Form item')
+            console.log(' -- Begin execution - Form item');
+            $('input ,select').focus(function(){
+                showChangesUpdate();
+            });
+
             $('.tabs').tab();
             $(".multiple-items-accordion").accordion({
                 active: false,
@@ -614,6 +618,18 @@ class FormItem extends Model {
                 }
 
             });
+
+            function openAccordeon(id){
+                if( $('#tab-'+id+' .ui-accordion-content').is(':visible')){
+                    $('#tab-'+id).find("div.action-text").html('Expandir todos');
+                    $('#tab-'+id+' .ui-accordion-content').fadeOut();
+                    $('.cloud_label').click();
+                }else{
+                    $('#tab-'+id+' .ui-accordion-content').fadeIn();
+                    $('.cloud_label').click();
+                    $('#tab-'+id).find("div.action-text").html('Retrair tudo');
+                }
+            }
 
 
             /* Verificando se o item pode ser publicado ou atualizado */
@@ -695,6 +711,51 @@ class FormItem extends Model {
                 }
                 return tab;
             }
+
+            function showChangesUpdate(){
+                var d = new Date();
+                var string = '<?php _e('Saved at ','tainacan') ?>'+ d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear()
+                       + ' - ' + d.getHours()+':'+d.getMinutes();
+                $('#draft-text').text(string);
+            }
+
+
+            /**
+            * funcao que destroi o rascunho
+            */
+            function backMainListOrDiscard(id) {
+                    swal({
+                        title: 'Atenção ',
+                        text: 'Confirme sua ação:',
+                        type: "info",
+                        showCancelButton: true,
+                        confirmButtonClass: 'btn-primary',
+                        closeOnConfirm: true,
+                        closeOnCancel: true,
+                        confirmButtonText: "Voltar e descartar",
+                        cancelButtonText: "Apenas voltar",
+                    },
+                    function (isConfirm) {
+                        $('#form').hide();
+                        $("#tainacan-breadcrumbs").hide();
+                        $('#configuration').hide();
+                        $('#main_part').show();
+                        $('#display_view_main_page').show();
+                        $("#container_three_columns").removeClass('white-background');
+                        $('#menu_object').show();
+                        if (isConfirm) {
+                            $.ajax({
+                                url: $('#src').val() + '/controllers/object/object_controller.php',
+                                type: 'POST',
+                                data: {operation: 'delete_temporary_object', collection_id: $('#collection_id').val(), delete_draft: 'true', ID: id}
+                            }).done(function (result) {
+                                // $('html, body').animate({
+                                //   scrollTop: parseInt($("#wpadminbar").offset().top)
+                                // }, 900);  
+                            });
+                        }
+                    });
+                }
 
 
             /**

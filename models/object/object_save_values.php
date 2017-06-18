@@ -44,6 +44,7 @@ class ObjectSaveValuesModel extends Model {
                 update_post_meta($item_id, 'socialdb_property_helper_'.$compound_id, serialize($array));
             }
         }
+        return json_encode(['date'=> date('d/m/y'),'hour'=> date('H:i:s')]);
     }
     
     /**
@@ -76,6 +77,7 @@ class ObjectSaveValuesModel extends Model {
                 update_post_meta($item_id, 'socialdb_property_helper_'.$compound_id, serialize($array));
             }
         }
+        return json_encode(['date'=> date('d/m/y'),'hour'=> date('H:i:s')]);
     }
     /**
      * 
@@ -128,7 +130,7 @@ class ObjectSaveValuesModel extends Model {
             $array[$index][$property_children_id]= $new_children;
         }
         update_post_meta($item_id, 'socialdb_property_helper_'.$compound_id, serialize($array));
-        return true;
+        return json_encode(['date'=> date('d/m/y'),'hour'=> date('H:i:s')]);
     }
     
     /**

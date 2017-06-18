@@ -3,7 +3,7 @@
 $css = ($habilitateMedia == 'true') ? 'width: 72%; margin-left: 15px;margin-right: 10px;padding-left: 15px;' : 'margin-left:1%;width: 98%;padding-left:15px;';
 ?>
 <div class="row" style="background-color: #f1f2f2">
-    <div style="display: none;margin-left:1%;padding-left:15px;min-height:500px;padding-top:80px;"
+    <div style="display: none;margin-left:1%;padding-left:15px;min-height:500px;"
          class="col-md-12 menu_left_loader">
         <center>
             <img src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>">
@@ -28,7 +28,7 @@ $css = ($habilitateMedia == 'true') ? 'width: 72%; margin-left: 15px;margin-righ
             <small id="draft-text"></small>
         </h4>
         <hr>
-        <!--------------------------- ABAS e TODO FORMULARIO ------------------->
+        <!-- ABAS e TODO FORMULARIO -->
         <?php $formItem->start($collection_id,$ID,$properties) ?>
     </div>
 </div>

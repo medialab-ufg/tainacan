@@ -1,10 +1,12 @@
 <?php
 
 class FormItemTitle extends FormItem{
+  var $hasKey;
 
     public function widget($property,$item_id) {
         $this->isRequired = get_post_meta($this->collection_id, 'socialdb_collection_property_'.$this->terms_fixed['title']->term_id.'_required', true);
         $title = get_post($item_id)->post_title;
+        $this->hasKey = get_post_meta($this->collection_id, 'socialdb_collection_property_'.$this->terms_fixed['title']->term_id.'_mask_key', true);
         ?>
         <!-- TAINACAN: titulo do item -->
         <div class="form-group">
@@ -60,10 +62,18 @@ class FormItemTitle extends FormItem{
                     data: {
                         operation: 'saveTitle',
                         value: $(this).val(),
-                        item_id:'<?php echo $item_id ?>'
+                        item_id:'<?php echo $item_id ?>',
+                        collection_id:$('#collection_id').val(),
+                        hasKey: '<?php echo (!$this->hasKey ||$this->hasKey === '') ? 'false' :'true' ?>'
                     }
                 }).done(function (result) {
-
+                    <?php if($this->hasKey): ?>
+                     var json =JSON.parse(result);
+                     if(json.value){
+                        $('#item-title').val('');
+                            toastr.error(json.value+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                     }
+                    <?php endif; ?>
                 });
             });
         </script>

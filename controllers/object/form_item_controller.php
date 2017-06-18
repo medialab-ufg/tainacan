@@ -9,6 +9,7 @@ require_once(dirname(__FILE__) . '../../../models/collection/collection_model.ph
 require_once(dirname(__FILE__) . '../../../controllers/general/general_controller.php');
 require_once(dirname(__FILE__) . '../../../models/user/user_model.php');
 require_once(dirname(__FILE__) . '../../../models/object/object_save_values.php');
+date_default_timezone_set('America/Sao_Paulo');
 
 class FormItemController extends Controller {
 
@@ -102,6 +103,20 @@ class FormItemController extends Controller {
                 $class = new ObjectSaveValuesModel();
                 return $class->removeIndexValue($data['item_id'], $data['compound_id'], $data['index']);
             case 'saveTitle':
+                //SE FOR METADADO CHAVE FACO VALIDACAO
+                if(isset($data['hasKey']) && $data['hasKey'] === 'true'){
+                    $json =$object_model->get_data_by_property_json(
+                        [
+                        'collection_id'=> $data['collection_id'],
+                        'term'=>$data['value']
+                        ]);
+                    if($json && is_array($json) && count($json) > 0){
+                        foreach ($json as $value) {
+                            if($value->post_title === $data['value'] && $value->ID != $data['item_id'] ){}
+                                 return json_encode($data);
+                        }
+                    }
+                }
                 $slug = wp_unique_post_slug(sanitize_title_with_dashes($data['value']), $data['item_id'], 'inherit', 'socialdb_object', 0);
                 $post = array(
                     'ID' => $data['item_id'],
@@ -150,6 +165,7 @@ class FormItemController extends Controller {
                 //categoria raiz da colecao
                 wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type',true);
                 update_post_meta($data['ID'], 'socialdb_object_collection_init', $data['collection_id']);
+                update_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext', '');
                 return $object_model->insert_object_event($data['ID'], $data);;
         }
     }

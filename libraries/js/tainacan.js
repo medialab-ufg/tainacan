@@ -1780,9 +1780,13 @@ function createItemPage(src) {
         type: 'POST',
         data: {operation: 'create-item',collection_id: $("#collection_id").val()}
     }).done(function (result) {
+        $("#form").html('');
         $('#main_part').hide();
-        $('#collection_post').hide();
-        $('#configuration').html(result);
+        $('#display_view_main_page').hide();
+        $('#loader_collections').hide();
+        $('#configuration').html(result).show();
+        $('.dropdown-toggle').dropdown();
+        $('.nav-tabs').tab();
     });
 }
 

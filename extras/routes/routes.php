@@ -225,7 +225,21 @@ $collection_route = get_post(get_option('collection_root_id'));
         } else if($('#goToEditObject').val()!==''){
                route_edit_object_item($('#goToEditObject').val())
         }else if($('#goToAddItem').val()!==''){
-            createItemPage($('#src').val());
+            $('#configuration').html(
+            '<div style="margin-left:1%;padding-left:15px;min-height:500px;padding-top:80px;" class="col-md-12 menu_left_loader">'+
+                '<center>'+
+                       '<img src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>">'+
+                       '<h4><?php _e('Loading metadata...', 'tainacan') ?></h4>'+
+                '</center>'+
+             '</div>').show();
+            $("#tainacan-breadcrumbs").show();
+            $("#tainacan-breadcrumbs .current-config").show().text('> <?php  echo __('New item','tainacan') ?>');
+            console.log($("#tainacan-breadcrumbs .current-config"));
+            $('#main_part').hide();
+            $('#collection_post').show();
+            $('#display_view_main_page').hide();
+            $('#loader_collections').hide();
+                createItemPage($('#src').val());
         }else if($('#goToLogin').val()!==''){
             showLoginScreen($('#src').val());
         }else if($('#goToAdvancedSearch').val()!==''){
@@ -451,6 +465,7 @@ $collection_route = get_post(get_option('collection_root_id'));
         $("#tainacan-breadcrumbs .current-config").text('> <?php  echo __('Edit item','tainacan') ?>');
         $('#main_part').hide();
         $('#collection_post').show();
+        $('#collection_post .headers_container').hide();
         $('#display_view_main_page').hide();
         $('#loader_collections').hide();
         $.ajax({
