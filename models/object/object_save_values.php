@@ -27,7 +27,7 @@ class ObjectSaveValuesModel extends Model {
             if(is_array($array) && isset($array[$index]) && isset($array[$index][$property_children_id]) && isset($array[$index][$property_children_id]['values'])){
                 $values = $array[$index][$property_children_id]['values'];
                 $updateValues = [];
-                foreach ($values as $index => $meta_id) {
+                foreach ($values as $i => $meta_id) {
                     $meta = $this->sdb_get_post_meta($meta_id);
                     if($meta && $meta->meta_value != $value){
                         $updateValues[] = $meta_id;
@@ -99,7 +99,6 @@ class ObjectSaveValuesModel extends Model {
                 $type = $array[$index][$property_children_id]['type'];
                 // array de valores (necessario se existir a necessidade de compostas com valores multivalorados)
                 $values = $array[$index][$property_children_id]['values'];
-                var_dump($values);
                 //busco o valor do postmeta bruto para ser atualizado
                 $meta_value = (is_numeric($indexCompound) && isset($values[(int)$indexCompound])) ? $this->sdb_get_post_meta($values[(int)$indexCompound]) : false;
                 //caso esse postmeta exista
@@ -182,8 +181,8 @@ class ObjectSaveValuesModel extends Model {
      */
     public function updateValue($item_id,$meta_value,$compound_id,$property_children_id,$index,$value) {
         // caso seja um metadado simples/ se nao 
-        $is_compound = ($property_children_id == 0) ? false : true;
-        $property_children_id = ($property_children_id == 0) ? $compound_id : $property_children_id;
+        $is_compound = ($property_children_id === 0) ? false : true;
+        $property_children_id = ($property_children_id === 0) ? $compound_id : $property_children_id;
         // caso o postmeta esteja apontado para uma categoria seu meta_key sera socialdb-property_#_cat
         if(strpos($meta_value->meta_key, '_cat')!==false){
             //pego seu id

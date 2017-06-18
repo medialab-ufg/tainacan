@@ -17,6 +17,10 @@ class SimpleTreeClass extends FormItem {
         }
         $this->isRequired = ($property['metas'] && $property['metas']['socialdb_property_required'] && $property['metas']['socialdb_property_required'] != 'false');
         //var_dump($this->getValues($this->value[$property_id][$index_id]));
+        $isView = $this->viewValue($property,$values,'term');
+        if($isView){
+            return true;
+        }
         ?>
         <?php if ($this->isRequired): ?>
             <div class="form-group"

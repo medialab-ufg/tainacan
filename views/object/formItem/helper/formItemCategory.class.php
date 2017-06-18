@@ -33,6 +33,7 @@ class FormItemCategory extends FormItem{
         <div id="meta-item-<?php echo $property['id']; ?>" class="form-group" >
              <h2>
                 <?php echo $property['name']; ?>
+                <?php $this->hasTextHelper($property);  ?>
                 <?php if ($isRequired): ?>
                 *
                 <?php $this->validateIcon('alert-compound-'.$property['id'],__('Required field','tainacan')) ?>

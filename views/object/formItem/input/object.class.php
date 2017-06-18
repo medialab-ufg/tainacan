@@ -22,6 +22,11 @@ class ObjectClass extends FormItem {
         $values = ($this->value && is_array($this->getValues($this->value[$index_id][$property_id]))) ? $this->getValues($this->value[$index_id][$property_id]) : false;
         $autoValidate = ($values && !empty($values)) ? true : false;
         $this->isRequired = ($property['metas'] && $property['metas']['socialdb_property_required'] && $property['metas']['socialdb_property_required'] != 'false') ? true : false;
+        $isMultiple = ($property['metas']['socialdb_property_data_cardinality'] == 'n') ? true : false;
+        $isView = $this->viewValue($property,$values,'term');
+        if($isView){
+            return true;
+        }
         ?>
         <input type="hidden" id="required_<?php echo $compound_id; ?>_<?php echo $property_id; ?>_<?php echo $index_id; ?>" value="<?php echo (string)$this->isRequired  ?>">
         <?php if($this->isRequired): ?>
@@ -166,13 +171,14 @@ class ObjectClass extends FormItem {
                         if ($('#avoid_selected_items_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>').val() === 'false') {
                             console.log($('#inserted_property_object_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>_' + ui.item.value));
                             if ($('#inserted_property_object_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>_' + ui.item.value).length === 0) {
-                                $('#results_property_<?php echo $compound_id ?>_<?php echo $propert_id ?>_<?php echo $index_id ?> ul').html('');
+                                <?php if($isMultiple): ?>
+                                    $('#results_property_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?> ul').html('');
+                                <?php endif; ?>
                                 $('#results_property_<?php echo $compound_id ?>_<?php echo $propert_id ?>_<?php echo $index_id ?> ul')
                                         .append('<li id="inserted_property_object_<?php echo $compound_id ?>_<?php echo $propert_id ?>_<?php echo $index_id ?>_' + ui.item.value + '" item="' + ui.item.value + '" class="selected-items-property-object property-<?php echo $propert_id; ?>">' + ui.item.label
-                                                + '<span  onclick="remove_item_objet(this)" style="cursor:pointer;" class="pull-right glyphicon glyphicon-trash"></span></li>');
+                                                + '<span  onclick="original_remove_in_item_value_compound_<?php echo $compound_id ?>_<?php echo $property_id; ?>_<?php echo $index_id; ?>('+ui.item.value+',this)" style="cursor:pointer;" class="pull-right glyphicon glyphicon-trash"></span></li>');
                                 //validacao do campo
-                                $('#core_validation_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>').val('true');
-                                $('#no_results_property_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>').hide()
+                                original_add_in_item_value_compound_<?php echo $compound_id ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>(ui.item.value);
                             }
                         } else {
                             $("#advanced_search_title_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>").val(ui.item.label);
@@ -211,12 +217,12 @@ class ObjectClass extends FormItem {
                                     var object_id = ($('#object_id_add').length > 0) ? $('#object_id_add').val() : $('#object_id_edit').val();
                                     if ($('#cardinality_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>_' + object_id).val() == '1') {
                                         $('#results_property_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?> ul').html('');
-
                                     }
                                     $('#results_property_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?> ul')
                                             .append('<li id="inserted_property_object<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>_' + ui.item.value + '" item="' + ui.item.value + '" class="selected-items-property-object property-<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>">' + ui.item.label
                                                     + '<span  onclick="remove_item_objet(this)" style="cursor:pointer;" class="pull-right glyphicon glyphicon-trash"></span></li>');
                                     //validacao do campo
+                                    original_add_in_item_value_compound_<?php echo $compound_id ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>(ui.item.value);
                                 }
                             }
                         });
@@ -260,6 +266,7 @@ class ObjectClass extends FormItem {
                     data: {
                         operation: 'removeValue',
                         type:'object',
+                        <?php if($property_id!==0) echo 'indexCoumpound:0,' ?>
                         value: id,
                         item_id:'<?php echo $item_id ?>',
                         compound_id:'<?php echo $compound_id ?>',
@@ -271,6 +278,25 @@ class ObjectClass extends FormItem {
                      validateFieldsMetadataText('','<?php echo $compound_id ?>','<?php echo $propert_id ?>','<?php echo $index_id ?>');
                      $('#no_results_property_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>').show();
                 }
+            }
+            //adiciona no formulario de fato
+            function original_add_in_item_value_compound_<?php echo $compound_id ?>_<?php echo $propert_id; ?>_<?php echo $contador; ?>(id){
+                $.ajax({
+                    url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                    type: 'POST',
+                    data: {
+                        operation: 'saveValue',
+                        type:'object',
+                        <?php if($propert_id!==0) echo 'indexCoumpound:0,' ?>
+                        value: id,
+                        item_id:'<?php echo $item_id ?>',
+                        compound_id:'<?php echo $compound_id ?>',
+                        property_children_id: '<?php echo $propert_id ?>',
+                        index: <?php echo $index_id ?>
+                    }
+                });
+                console.log(id,'<?php echo $compound_id ?>','<?php echo $propert_id ?>','<?php echo $index_id ?>');
+                validateFieldsMetadataText(id,'<?php echo $compound_id ?>','<?php echo $propert_id ?>','<?php echo $index_id ?>')
             }
 
             //************************* properties terms ******************************************//

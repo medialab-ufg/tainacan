@@ -25,7 +25,7 @@ class FormItemText extends FormItem {
         $this->setLastIndex();
         $isMultiple = ($property['metas']['socialdb_property_data_cardinality'] == 'n') ? true : false;
         $filledValues = ($values) ? count($values) : 1;
-
+        $isKey = (isset($property['metas']['socialdb_property_data_mask']) && $property['metas']['socialdb_property_data_mask'] !== '') ? true:false;
 
         $isRequired = ($property['metas'] && $property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] != 'false') ? true : false;
         ?>
@@ -37,6 +37,7 @@ class FormItemText extends FormItem {
                     do_action('modificate_label_insert_item_properties', $property);
                 endif;
                 ?>
+                <?php $this->hasTextHelper($property);  ?>
                 <?php if ($isRequired): ?>
                 *
                 <?php $this->validateIcon('alert-compound-'.$property['id'],__('Required field','tainacan')) ?>
@@ -49,14 +50,19 @@ class FormItemText extends FormItem {
                          class="row" style="padding-bottom: 10px;margin-bottom: 10px;">
                         <div class="col-md-11">
                             <?php if ($property['type'] == 'text'): ?>
+                                <?php $this->textClass->isKey = $isKey ?>
                                 <?php $this->textClass->generate($property,['id'=>0], $item_id, $index) ?>
                             <?php elseif ($property['type'] == 'date'): ?>
+                                <?php $this->dateClass->isKey = $isKey ?>
                                 <?php $this->dateClass->generate($property,['id'=>0], $item_id, $index) ?>
                             <?php elseif ($property['type'] == 'textarea'): ?>
+                                <?php $this->textareaClass->isKey = $isKey ?>
                                 <?php $this->textareaClass->generate($property,['id'=>0], $item_id, $index) ?>
                             <?php elseif ($property['type'] == 'numeric' || $property['type'] == 'number'): ?>
+                                <?php $this->numericClass->isKey = $isKey ?>
                                 <?php $this->numericClass->generate($property,['id'=>0], $item_id, $index) ?>
                             <?php elseif ($property['type'] == 'autoincrement'): ?>
+                                <?php $this->autoincrementClass->isKey = $isKey ?>
                                 <?php $this->autoincrementClass->generate($property,['id'=>0], $item_id, $index) ?>
                             <?php endif; ?>
                         </div>

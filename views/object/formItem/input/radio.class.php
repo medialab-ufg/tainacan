@@ -10,6 +10,10 @@ class RadioClass extends FormItem{
         $autoValidate = false;
         $values = ($this->value && is_array($this->getValues($this->value[$index_id][$property_id]))) ? $this->getValues($this->value[$index_id][$property_id]) : false;
         $this->isRequired = ($property['metas'] && $property['metas']['socialdb_property_required'] && $property['metas']['socialdb_property_required'] != 'false') ? true : false;
+        $isView = $this->viewValue($property,$values,'term');
+        if($isView){
+            return true;
+        }
         ?>
         <?php if ($this->isRequired): ?>
         <div class="form-group"

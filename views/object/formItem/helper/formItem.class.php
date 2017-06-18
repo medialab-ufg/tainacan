@@ -46,6 +46,7 @@ class FormItem extends Model {
     public $isRequired;
     public $title;
     public $value;
+    public $isKey;
 
     function __construct($collection_id = 0,$title = '',$value= false) {
         $this->collection_id = $collection_id;
@@ -487,6 +488,58 @@ class FormItem extends Model {
           }
        }
        return $ids;
+    }
+
+    /**
+    *
+    */
+    public function viewValue($property,$values,$type){
+        if($values&& !empty($values) &&(isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true')){
+            foreach ($values as $value) {
+                if($type == 'data'){
+                    ?>
+                    <p><i><?php echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $value . "'" . ',' . $property['id'] . ')">' . $value . '</a>'; ?></i></p>
+                    <?php
+                }else if($type == 'object'){
+                    $ob = get_post($value);
+                    if ($ob && $ob->post_status == 'publish') {
+                        // echo '<b><a href="'. get_the_permalink($property['metas']['collection_data'][0]->ID) . '?item=' . $ob->post_name . '" >'. $ob->post_title . '</a></b><br>';
+                        echo '<input type="hidden" name="socialdb_property_'.$property['id'].'[]" value="'.$ob->ID.'"><p><i>' . $ob->post_title . '</p> <br >';
+                    }
+                }else{
+                    $ob = get_term_by('id',$value,'socialdb_category_type');
+                    if ($ob) {
+                        ?>
+                        <p>
+                            <i>
+                               <a style="cursor:pointer;" onclick="wpquery_term_filter('<?php echo $ob->term_id ?>','<?php echo $property['id'] ?>')">
+                                   <?php echo $ob->name  ?>
+                               </a>
+                            </i>   
+                        </p><br>
+                        <?php
+                    }
+                }
+            }
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public function hasTextHelper($property){
+        if($property['metas'] &&$property['metas']['socialdb_property_help']&&!empty(trim($property['metas']['socialdb_property_help']))){
+            ?>
+             <span     title="<?php echo $property['metas']['socialdb_property_help'] ?>" 
+                       data-toggle="tooltip" 
+                       data-placement="top"  class="glyphicon glyphicon-info-sign"></span>
+            <script type="text/javascript">
+            $(function () {
+              $('[data-toggle="tooltip"]').tooltip()
+            })
+            </script>
+            <?php
+        }
     }
 
     /**

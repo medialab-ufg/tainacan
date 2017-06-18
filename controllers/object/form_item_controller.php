@@ -25,6 +25,20 @@ class FormItemController extends Controller {
                 return $class->appendContainerCompounds(unserialize(stripslashes(html_entity_decode($data['property_details']))),$data['item_id'],$data['index']);
             case "saveValue":
                 $class = new ObjectSaveValuesModel();
+                if(isset($data['isKey']) && $data['isKey'] === 'true'){
+                    $json =$object_model->get_data_by_property_json(
+                        [
+                        'property_id'=>($data['property_children_id']==='0') ? $data['compound_id'] : $data['property_children_id'],
+                        'term'=>$data['value']
+                        ]);
+                    $json_decode = json_decode($json);
+                    if($json_decode && is_array($json_decode) && count($json_decode) > 0){
+                        foreach ($json_decode as $value) {
+                            if($value->value === $data['value'] && $value->item_id != $data['item_id'] )
+                                 return json_encode($data);
+                        }
+                    }
+                }
                 return $class->saveValue($data['item_id'],
                         $data['compound_id'],
                         $data['property_children_id'],

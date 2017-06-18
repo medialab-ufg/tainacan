@@ -68,6 +68,7 @@ class FormItemCompound extends FormItem {
                 <?php else: ?>
                     <span id="someFieldsAreRequired<?php echo $property['id']; ?>"></span>
                 <?php endif ?>
+                <?php $this->hasTextHelper($property);  ?>
                 <?php $this->validateIcon('alert-compound-'.$property['id'],__('Required field','tainacan')) ?>    
             </h2>
             <div>
@@ -81,6 +82,7 @@ class FormItemCompound extends FormItem {
                                     $child['metas']['socialdb_property_required'] = ($isRequired && $property['metas']['socialdb_property_required'] == 'true') ? 'true' : $child['metas']['socialdb_property_required'];
                                     $isRequiredChildren = ($child['metas'] && $child['metas']['socialdb_property_required']&&$child['metas']['socialdb_property_required'] != 'false') ? true : false;
                                     $object = (isset($child['metas']['socialdb_property_object_category_id']) && !empty($child['metas']['socialdb_property_object_category_id'])) ? true : false;
+                                    $isKey = (isset($child['metas']['socialdb_property_data_mask']) && $child['metas']['socialdb_property_data_mask'] !== '') ? true:false;
                                     ?>
                                     <div style="padding-bottom: 15px; " class="col-md-12">
                                         <p style="color: black;">
@@ -93,17 +95,23 @@ class FormItemCompound extends FormItem {
                                                  $('#someFieldsAreRequired<?php echo $property['id']; ?>').html('(*)')
                                              </script>
                                             <?php endif ?>
+                                            <?php $this->hasTextHelper($child);  ?>
                                         </p>
                                     <?php if ($child['type'] == 'text'): ?>
+                                        <?php $this->textClass->isKey = $isKey ?>
                                         <?php $this->textClass->generate($property,$child, $item_id,$index) ?>
                                     <?php elseif ($child['type'] == 'date'): ?>
+                                        <?php $this->dateClass->isKey = $isKey ?>
                                         <?php $this->dateClass->generate($property,$child, $item_id,$index) ?>
                                     <?php elseif ($child['type'] == 'textarea'): ?>
+                                        <?php $this->textareaClass->isKey = $isKey ?>
                                         <?php $this->textareaClass->generate($property,$child, $item_id,$index) ?>
                                     <?php elseif ($child['type'] == 'numeric' || $child['type'] == 'number'): ?>
+                                        <?php $this->numericClass->isKey = $isKey ?>
                                         <?php $this->numericClass->generate($property,$child, $item_id,$index) ?>
                                     <?php elseif ($child['type'] == 'autoincrement'): ?>
-                                        <?php $this->textClass->generate($property,$child, $item_id,$index) ?>
+                                         <?php $this->autoincrementClass->isKey = $isKey ?>
+                                        <?php $this->autoincrementClass->generate($property,$child, $item_id,$index) ?>
                                     <?php elseif ($child['type'] == 'selectbox'): ?>
                                         <?php $this->selectboxClass->generate($property,$child, $item_id,$index) ?>
                                     <?php elseif ($child['type'] == 'tree'): ?>

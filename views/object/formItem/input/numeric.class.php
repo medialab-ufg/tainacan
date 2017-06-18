@@ -7,9 +7,17 @@ class NumericClass extends FormItem{
         if ($property_id == 0) {
             $property = $compound;
         }
+        //verifico se tem valor default
+        $hasDefaultValue = (isset($property['metas']['socialdb_property_default_value']) && $property['metas']['socialdb_property_default_value']!='') ? $property['metas']['socialdb_property_default_value'] : false;
         $values = ($this->value && is_array($this->getValues($this->value[$index_id][$property_id]))) ? $this->getValues($this->value[$index_id][$property_id]) : false;
+        //se nao possuir nem valor default verifico se ja existe
+        $values = (!$values && $hasDefaultValue) ? [$hasDefaultValue] : $values;
         $autoValidate = ($values && isset($values[0]) && !empty($values[0])) ? true : false;
         $this->isRequired = ($property['metas'] && $property['metas']['socialdb_property_required'] && $property['metas']['socialdb_property_required'] != 'false') ? true : false;
+        $isView = $this->viewValue($property,$values,'term');
+        if($isView){
+            return true;
+        }
         ?>
         <?php if ($this->isRequired): ?> 
         <div class="form-group" 
@@ -51,6 +59,12 @@ class NumericClass extends FormItem{
         <?php
         endif;
         $this->initScriptsNumericClass($compound_id,$property_id, $item_id, $index_id);
+        if($hasDefaultValue): ?>
+            <script>
+                $('#numeric-field-<?php echo $compound['id'] ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').trigger('keyup');
+            </script>
+        <?php endif;    
+
     }
     
     /**
@@ -77,10 +91,17 @@ class NumericClass extends FormItem{
                         compound_id:'<?php echo $compound_id ?>',
                         property_children_id: '<?php echo $property_id ?>',
                         index: <?php echo $index_id ?>,
-                        indexCoumpound: 0
+                        indexCoumpound: 0,
+                        isKey: <?php echo ($this->isKey) ? 'true':'false' ?>
                     }
                 }).done(function (result) {
-                
+                    <?php if($this->isKey): ?>
+                     var json =JSON.parse(result);
+                     if(json.value){
+                        $('#numeric-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val('');
+                            toastr.error(json.value+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                     }
+                    <?php endif; ?>
                 });
             });
         </script> 
