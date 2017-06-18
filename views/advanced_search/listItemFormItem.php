@@ -126,7 +126,8 @@ endif;
                 item_id:'<?php echo $item_id ?>',
                 compound_id:'<?php echo $compound_id ?>',
                 property_children_id: '<?php echo $property_id ?>',
-                index: <?php echo $contador ?>
+                index: <?php echo $contador ?>,
+                reverse: $('#reverse_<?php echo $compound_id ?>_<?php echo $property_id; ?>_<?php echo $contador; ?>').val()
             }
         });
         console.log(id,'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $contador ?>');
@@ -146,7 +147,8 @@ endif;
                 item_id:'<?php echo $item_id ?>',
                 compound_id:'<?php echo $compound_id ?>',
                 property_children_id: '<?php echo $property_id ?>',
-                index: <?php echo $contador ?>
+                index: <?php echo $contador ?>,
+                reverse: $('#reverse_<?php echo $compound_id ?>_<?php echo $property_id; ?>_<?php echo $contador; ?>').val()
             }
         });
         if($('#results_property_<?php echo $compound_id; ?>_<?php echo $property_id?>_<?php echo $contador; ?> ul li').length==0){

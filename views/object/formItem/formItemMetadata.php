@@ -21,7 +21,7 @@ $css = ($habilitateMedia == 'true') ? 'width: 72%; margin-left: 15px;margin-righ
                 <?php _e('Create new item - Write text', 'tainacan') ?>
             <?php endif; ?>
             <!--button type="button" onclick="back_main_list();"class="btn btn-default pull-right"-->
-            <a class="btn btn-default pull-right" href="<?php get_the_permalink($collection_id) ?>">
+            <a class="btn btn-default pull-right" href="<?php echo get_the_permalink($collection_id) ?>">
                 <b><?php _e('Back', 'tainacan') ?></b>
             </a>
             <br>

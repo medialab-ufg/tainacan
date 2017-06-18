@@ -1,7 +1,7 @@
 <?php
 
 class MultipleTreeClass extends FormItem {
-
+    var $hasDefaultValue;
     public function generate($compound, $property, $item_id, $index_id) {
         $compound_id = $compound['id'];
         $property_id = $property['id'];
@@ -9,7 +9,9 @@ class MultipleTreeClass extends FormItem {
             $property = $compound;
         }
         $autoValidate = false;
+        $this->hasDefaultValue = (isset($property['metas']['socialdb_property_default_value']) && $property['metas']['socialdb_property_default_value']!='') ? $property['metas']['socialdb_property_default_value'] : false;
         $values = ($this->value && is_array($this->getValues($this->value[$index_id][$property_id]))) ? $this->getValues($this->value[$index_id][$property_id]) : false;
+        $values = (!$values && $this->hasDefaultValue) ? [$this->hasDefaultValue] : $values;
         if($values && is_array($values)){
             foreach ($values as $value) {
                $autoValidate = ($property['has_children'] && is_array($property['has_children']) && in_array($value,$property['has_children'])) ? true : false;
@@ -134,6 +136,7 @@ class MultipleTreeClass extends FormItem {
     public function generateJson($compound_id, $property_id, $item_id, $index_id,$array) {
         foreach ($array as $term) {
             $is_selected = ($this->value && is_array($this->getValues($this->value[$index_id][$property_id])) && in_array($term->term_id,$this->getValues($this->value[$index_id][$property_id]))) ? true : false;
+            $is_selected = (!$is_selected && $this->hasDefaultValue == $term->term_id ) ? true : $is_selected;
             if (mb_detect_encoding($term->name) == 'UTF-8' || mb_detect_encoding($term->name) == 'ASCII') {
                 $dynatree[] = array('select'=>$is_selected,'title' => ucfirst(Words($term->name, 30)), 'key' => $term->term_id, 'isLazy' => true,'expand' => false, 'addClass' => 'color1');
             } else {

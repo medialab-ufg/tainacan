@@ -19,7 +19,9 @@ class ObjectClass extends FormItem {
         if ($property_id == 0) {
             $property = $compound;
         }
+        $hasDefaultValue = (isset($property['metas']['socialdb_property_default_value']) && $property['metas']['socialdb_property_default_value']!='') ? $property['metas']['socialdb_property_default_value'] : false;
         $values = ($this->value && is_array($this->getValues($this->value[$index_id][$property_id]))) ? $this->getValues($this->value[$index_id][$property_id]) : false;
+        $values = (!$values && $hasDefaultValue) ? [$hasDefaultValue] : $values;
         $autoValidate = ($values && !empty($values)) ? true : false;
         $this->isRequired = ($property['metas'] && $property['metas']['socialdb_property_required'] && $property['metas']['socialdb_property_required'] != 'false') ? true : false;
         $isMultiple = ($property['metas']['socialdb_property_data_cardinality'] == 'n') ? true : false;
@@ -27,7 +29,10 @@ class ObjectClass extends FormItem {
         if($isView){
             return true;
         }
+        $isReverse = ($property['metas'] && $property['metas']['socialdb_property_object_reverse'] && is_numeric($property['metas']['socialdb_property_object_reverse'])) ? $property['metas']['socialdb_property_object_reverse']: 'false';
+        
         ?>
+        <input type="hidden" id="reverse_<?php echo $compound_id; ?>_<?php echo $property_id; ?>_<?php echo $index_id; ?>" value="<?php echo $isReverse  ?>">
         <input type="hidden" id="required_<?php echo $compound_id; ?>_<?php echo $property_id; ?>_<?php echo $index_id; ?>" value="<?php echo (string)$this->isRequired  ?>">
         <?php if($this->isRequired): ?>
         <div class="form-group" 
@@ -95,6 +100,25 @@ class ObjectClass extends FormItem {
         </div>   
         <?php
         $this->initScriptsObjectClass($compound_id, $property_id, $item_id, $index_id);
+        if($hasDefaultValue): ?>
+            <script>
+                $.ajax({
+                    url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                    type: 'POST',
+                    data: {
+                        operation: 'saveValue',
+                        type:'object',
+                        <?php if($property_id!==0) echo 'indexCoumpound:0,' ?>
+                        value: '<?php echo $hasDefaultValue ?>',
+                        item_id:'<?php echo $item_id ?>',
+                        compound_id:'<?php echo $compound_id ?>',
+                        property_children_id: '<?php echo $property_id ?>',
+                        index: <?php echo $index_id ?>,
+                        reverse: $('#reverse_<?php echo $compound_id ?>_<?php echo $property_id; ?>_<?php echo $index_id; ?>').val()
+                    }
+                });
+            </script>
+        <?php endif;
     }
 
     /**
@@ -271,7 +295,8 @@ class ObjectClass extends FormItem {
                         item_id:'<?php echo $item_id ?>',
                         compound_id:'<?php echo $compound_id ?>',
                         property_children_id: '<?php echo $propert_id ?>',
-                        index: <?php echo $index_id ?>
+                        index: <?php echo $index_id ?>,
+                        reverse: $('#reverse_<?php echo $compound_id ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>').val()
                     }
                 });
                 if($('#results_property_<?php echo $compound_id; ?>_<?php echo $propert_id?>_<?php echo $index_id; ?> ul li').length==0){
@@ -292,7 +317,8 @@ class ObjectClass extends FormItem {
                         item_id:'<?php echo $item_id ?>',
                         compound_id:'<?php echo $compound_id ?>',
                         property_children_id: '<?php echo $propert_id ?>',
-                        index: <?php echo $index_id ?>
+                        index: <?php echo $index_id ?>,
+                        reverse: $('#reverse_<?php echo $compound_id ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>').val()
                     }
                 });
                 console.log(id,'<?php echo $compound_id ?>','<?php echo $propert_id ?>','<?php echo $index_id ?>');

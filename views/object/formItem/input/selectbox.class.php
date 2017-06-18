@@ -8,7 +8,9 @@ class SelectboxClass extends FormItem{
         if ($property_id == 0) {
             $property = $compound;
         }
+        $hasDefaultValue = (isset($property['metas']['socialdb_property_default_value']) && $property['metas']['socialdb_property_default_value']!='') ? $property['metas']['socialdb_property_default_value'] : false;
         $values = ($this->value && is_array($this->getValues($this->value[$index_id][$property_id]))) ? $this->getValues($this->value[$index_id][$property_id]) : false;
+        $values = (!$values && $hasDefaultValue) ? [$hasDefaultValue] : $values;
         $this->isRequired = ($property['metas'] && $property['metas']['socialdb_property_required'] && $property['metas']['socialdb_property_required'] != 'false') ? true : false;
         $isView = $this->viewValue($property,$values,'term');
         if($isView){
@@ -26,7 +28,8 @@ class SelectboxClass extends FormItem{
                     <?php if($property['has_children'] && is_array($property['has_children'])): ?>
                         <?php foreach ($property['has_children'] as $child):
                             $is_selected = ($values && in_array($child->term_id,$values)) ? 'selected' : '';
-                            $autoValidate = ($values && in_array($child->term_id,$values)) ? true : false;
+                            if(!$autoValidate)
+                                $autoValidate = ($values && in_array($child->term_id,$values)) ? true : false;
                             ?>
                             <option <?php echo $is_selected ?> value="<?php echo $child->term_id ?>"><?php echo $child->name ?></option>
                         <?php endforeach; ?>
@@ -53,6 +56,14 @@ class SelectboxClass extends FormItem{
                 value="<?php echo ($autoValidate) ? 'true' : 'false' ?>">
         <?php endif;
         $this->initScriptsSelectBoxClass($compound_id, $property_id, $item_id, $index_id);
+        if(!$this->value && $hasDefaultValue): ?>
+        <script>
+        $(document).ready(function () {
+            $('#selectbox-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').trigger('change');
+        });
+        </script>
+        <?php
+        endif;
     }
 
     /**
@@ -65,7 +76,8 @@ class SelectboxClass extends FormItem{
         ?>
         <script>
             $('#selectbox-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').change(function(){
-                appendCategoryMetadata($(this).val(), <?php echo $compound_id ?>, '#appendCategoryMetadata_<?php echo $compound_id; ?>_0_0');
+                Hook.call('appendCategoryMetadata',[$(this).val(), <?php echo $compound_id ?>, '#appendCategoryMetadata_<?php echo $compound_id; ?>_0_0']);
+                //appendCategoryMetadata($(this).val(), <?php echo $compound_id ?>, '#appendCategoryMetadata_<?php echo $compound_id; ?>_0_0');
                 $.ajax({
                     url: $('#src').val() + '/controllers/object/form_item_controller.php',
                     type: 'POST',
@@ -81,7 +93,8 @@ class SelectboxClass extends FormItem{
                     }
                 });
                 <?php if($this->isRequired): ?>
-                    validateFieldsMetadataText($(this).val(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>');
+                    Hook.call('validateFieldsMetadataText',[$(this).val(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>']);
+                    //validateFieldsMetadataText($(this).val(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>');
                 <?php endif; ?>
             });
         </script>

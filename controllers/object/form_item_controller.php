@@ -25,6 +25,7 @@ class FormItemController extends Controller {
                 return $class->appendContainerCompounds(unserialize(stripslashes(html_entity_decode($data['property_details']))),$data['item_id'],$data['index']);
             case "saveValue":
                 $class = new ObjectSaveValuesModel();
+                //SE FOR METADADO CHAVE FACO VALIDACAO
                 if(isset($data['isKey']) && $data['isKey'] === 'true'){
                     $json =$object_model->get_data_by_property_json(
                         [
@@ -39,6 +40,31 @@ class FormItemController extends Controller {
                         }
                     }
                 }
+                //SE EXISITIR UM METADADOREVERSO ELE INSERE O VALOR NO REVERSO
+                if(isset($data['reverse']) && $data['reverse'] !== 'true'){
+                    $meta = unserialize(get_term_meta($data['reverse'], 'socialdb_property_is_compounds', true));
+                    if (!$meta || !is_array($meta)):
+                        $compound_id = $data['reverse'];
+                        $property_children_id = 0;
+                    else:
+                        foreach ($meta as $key => $value) {
+                           if($value === 'true'){
+                                $compound_id = $key;
+                                $property_children_id = $data['reverse'];
+                           }
+                        }
+                    endif;
+
+                    $class->saveValue($data['value'],
+                        $compound_id,
+                        $property_children_id,
+                        $data['type'],
+                        $data['index'],
+                        $data['item_id'],
+                        (isset($data['indexCoumpound']) ? $data['indexCoumpound'] : false )
+                        );
+                }
+                //INSERE O VALOR DE FATO
                 return $class->saveValue($data['item_id'],
                         $data['compound_id'],
                         $data['property_children_id'],
@@ -49,6 +75,28 @@ class FormItemController extends Controller {
                         );
             case "removeValue":
                 $class = new ObjectSaveValuesModel();
+                if(isset($data['reverse']) && $data['reverse'] !== 'true'){
+                    $meta = unserialize(get_term_meta($data['reverse'], 'socialdb_property_is_compounds', true));
+                    if (!$meta || !is_array($meta)):
+                        $compound_id = $data['reverse'];
+                        $property_children_id = 0;
+                    else:
+                        foreach ($variable as $key => $value) {
+                           if($value === 'true'){
+                                $compound_id = $key;
+                                $property_children_id = $data['reverse'];
+                           }
+                        }
+                    endif;
+
+                    $class->removeValue($data['value'],
+                        $compound_id,
+                        $property_children_id,
+                        $data['type'],
+                        $data['index'],
+                        $data['item_id']
+                        );
+                }
                 return $class->removeValue($data['item_id'], $data['compound_id'], $data['property_children_id'], $data['type'], $data['index'], $data['value']);
             case "removeIndexValues":
                 $class = new ObjectSaveValuesModel();
@@ -96,7 +144,6 @@ class FormItemController extends Controller {
                 $category_root_id = $object_model->get_category_root_of($data['collection_id']);
                 $post = array(
                     'ID' => $data['item_id'],
-                    'post_status' => 'publish',
                     'post_parent' => $data['collection_id']
                 );
                 $data['ID'] = wp_update_post($post);
