@@ -25,7 +25,7 @@ class FormItemCompound extends FormItem {
     public $multipleTreeClass;
     public $objectClass;
 
-    public function __construct($collection_id,$value) {
+    public function __construct($collection_id,$value = false) {
         $this->textClass = new TextClass($collection_id,'',$value);
         $this->dateClass = new DateClass($collection_id,'',$value);
         $this->textareaClass = new TextAreaClass($collection_id,'',$value);
@@ -40,8 +40,8 @@ class FormItemCompound extends FormItem {
     }
 
     public function widget($property, $item_id) {
-
         $values = $this->getValuePropertyHelper($item_id, $property_id);
+        $this->setLastIndex();
         $isMultiple = ($property['metas']['socialdb_property_compounds_cardinality'] == 'n') ? true : false;
         $filledValues = ($values) ? count($values) : 1;
         $childrenProperties = $property['metas']['socialdb_property_compounds_properties_id'];
@@ -72,7 +72,8 @@ class FormItemCompound extends FormItem {
                 <?php $this->validateIcon('alert-compound-'.$property['id'],__('Required field','tainacan')) ?>    
             </h2>
             <div>
-                <?php for ($index = 0; $index < $filledValues; $index++): ?>
+               <?php $first = false;
+                  foreach ($this->value as $index => $value):  ?>
                     <div id="container-field" 
                          class="row" style="padding-bottom: 10px;margin-bottom: 10px;">
                         <div class="col-md-11">
@@ -129,15 +130,16 @@ class FormItemCompound extends FormItem {
                                 <?php endforeach; ?>    
                         <?php endif; ?>
                         </div>
-                    <?php if ($index > 0): ?>
+                    <?php if ($first): ?>
                             <div class="col-md-1">
                                 <a style="cursor: pointer;" onclick="remove_container(<?php echo $property['id'] ?>,<?php echo $$index ?>)" class="pull-right">
                                     <span class="glyphicon glyphicon-remove"></span>
                                 </a>
                             </div> 
+                    <?php else: $first = true; ?>    
                     <?php endif; ?>
                     </div>    
-                <?php endfor; ?>
+                <?php endforeach; ?>
                 <div id="appendCompoundsContainer"></div>
         <?php if ($isMultiple): ?>
                 <center>
@@ -172,8 +174,13 @@ class FormItemCompound extends FormItem {
                                 <?php echo $child['name']; ?>
                                 <?php 
                                 if ($isRequiredChildren): ?>
+                                <?php $this->validateIcon('alert-compound-'.$child['id'],__('Required field','tainacan')) ?>
                                  *
+                                 <script>
+                                     $('#someFieldsAreRequired<?php echo $property['id']; ?>').html('(*)')
+                                 </script>
                                 <?php endif ?>
+                                <?php $this->hasTextHelper($child);  ?>
                             </p>
                         <?php if ($child['type'] == 'text'): ?>
                             <?php $this->textClass->generate($property,$child, $item_id,$index) ?>
@@ -209,6 +216,14 @@ class FormItemCompound extends FormItem {
             </div> 
         </div>    
         <?php
+    }
+    
+    public function setLastIndex(){
+       if($this->value && is_array($this->value)){
+          //$this->value[] = '';
+       }else{
+         $this->value = [''];
+       }
     }
     /**
      * 

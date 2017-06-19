@@ -162,11 +162,16 @@ class FormItemController extends Controller {
                     'post_parent' => $data['collection_id']
                 );
                 $data['ID'] = wp_update_post($post);
+                //Tainacan IBRAM
+                if (has_action('tainacan_delete_related_item')) {
+                    $values = ['object_id'=> $data['ID']];
+                    do_action('tainacan_delete_related_item', $values, $data['collection_id']);
+                 }
                 //categoria raiz da colecao
                 wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type',true);
                 update_post_meta($data['ID'], 'socialdb_object_collection_init', $data['collection_id']);
                 update_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext', '');
-                return $object_model->insert_object_event($data['ID'], $data);;
+                return $object_model->insert_object_event($data['ID'], $data);
         }
     }
 

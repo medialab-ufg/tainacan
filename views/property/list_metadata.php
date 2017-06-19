@@ -11,8 +11,9 @@ $array_visibility = ($meta&&$meta!=='') ? $meta : '';
 if(!session_id()) {
         session_start();
 }
-unset($_SESSION['collection_'.$collection_id.'_properties']);
-unset($_SESSION['collection_'.$collection_id.'_ranking']);
+
+delete_post_meta($collection_id,'properties-cached');
+delete_post_meta($collection_id,'rankings-cached');
 unset($_SESSION['tainacan-categories']);
 ?>
 

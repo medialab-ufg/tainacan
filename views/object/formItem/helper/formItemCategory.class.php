@@ -60,9 +60,33 @@ class FormItemCategory extends FormItem{
         if($this->value && is_array($this->getValues($this->value[0][0])) && !empty($this->getValues($this->value[0][0]))): 
         ?>
         <script>
-         var ids = '<?php echo implode(',',$this->getValues($this->value[0][0])) ?>';
-         Hook.call('appendCategoryMetadata',[ids, <?php echo $property['id'] ?>, '#appendCategoryMetadata_<?php echo $property['id']; ?>_0_0']);
-        </script>
+        var ids = '<?php echo implode(',', $this->getValues($this->value[0][0])) ?>';
+        Hook.register('appendCategoryMetadataHere',function(args){
+             var categories = args[0]
+             var item_id = args[1];
+             var seletor = args[2];
+             $(seletor)
+                  .html('<center><img width="100" heigth="100" src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>"><?php _e('Loading metadata for this field', 'tainacan') ?></center>');
+             $.ajax({
+                 url: $('#src').val() + '/controllers/object/object_controller.php',
+                 type: 'POST',
+                 data: {
+                     operation: 'appendCategoryMetadata',
+                     properties_to_avoid: '<?php echo implode(',', $this->allPropertiesIds) ?>', categories: categories,object_id:item_id ,item_id:item_id,collection_id:$('#collection_id').val()}
+             }).done(function (result) {
+                 if(result !== ''){
+                     $(seletor).css('border','1px solid #ccc');
+                     $(seletor).css('padding','5px;');
+                     $(seletor).css('margin-top','10px');
+                     $(seletor).css('height','auto');
+                     $(seletor).html(result);
+                 }else{
+                     $(seletor).html('');
+                 }
+             });
+           });
+        Hook.call('appendCategoryMetadataHere',[ids, <?php echo $property['id'] ?>, '#appendCategoryMetadata_<?php echo $property['id']; ?>_0_0']);
+       </script>
         <?php 
         endif; ?>
         <?php
