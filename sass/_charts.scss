@@ -37,7 +37,7 @@
   }
 
   /* Left side */
-  #statistics-config {
+  .statistics-config {
     background: white;
     border: none;
     font-size: 12px;
@@ -46,16 +46,12 @@
     padding-top: 20px;
 
     .period-config {
-      p {
-        span {
-          color: black;
-        }
-        input {
-          display: inline-block;
-          width: 80%;
-        }
+      h6 {
+        color: black;
       }
-
+      .input-size {
+        width: 80%;
+      }
     } // .period-config
     label.title-pipe {
       @include accordion_label_style($padding: 4px 0 4px 0);
@@ -184,7 +180,7 @@
   width: 0;
 }
 
-#report_type_stat {
+#report-type-stat {
   padding: 0;
     
     span.hllog {
@@ -229,7 +225,7 @@
       }
     }
   }
-} // report_type_stat -> dynatree
+} // report-type-stat -> dynatree
 
 // Ul that changes current chart
 ul.statChartType {

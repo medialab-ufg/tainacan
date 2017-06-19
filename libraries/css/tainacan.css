@@ -2043,18 +2043,17 @@ h4.modal-title {
   .statistics-container #charts-display {
     background-color: #f1f2f2;
     padding-top: 20px; }
-  .statistics-container #statistics-config {
+  .statistics-container .statistics-config {
     background: white;
     border: none;
     font-size: 12px;
     border-right: 3px solid #E8E8E8;
     padding-top: 20px; }
-    .statistics-container #statistics-config .period-config p span {
+    .statistics-container .statistics-config .period-config h6 {
       color: black; }
-    .statistics-container #statistics-config .period-config p input {
-      display: inline-block;
+    .statistics-container .statistics-config .period-config .input-size {
       width: 80%; }
-    .statistics-container #statistics-config label.title-pipe {
+    .statistics-container .statistics-config label.title-pipe {
       border-left: 4px solid #79a6ce;
       text-align: left;
       font-size: 12px;
@@ -2067,10 +2066,10 @@ h4.modal-title {
       padding: 4px 0 4px 0;
       padding-left: 5px;
       width: 90% !important; }
-      .statistics-container #statistics-config label.title-pipe span {
+      .statistics-container .statistics-config label.title-pipe span {
         font-size: 10px;
         text-indent: 0; }
-      .statistics-container #statistics-config label.title-pipe span {
+      .statistics-container .statistics-config label.title-pipe span {
         color: red !important; }
   .statistics-container .chart-header {
     border: 3px solid #E8E8E8;
@@ -2161,26 +2160,26 @@ h4.modal-title {
   vertical-align: top;
   width: 0; }
 
-#report_type_stat {
+#report-type-stat {
   padding: 0; }
-  #report_type_stat .dynatree-icon {
+  #report-type-stat .dynatree-icon {
     display: none; }
-  #report_type_stat .dynatree-container {
+  #report-type-stat .dynatree-container {
     border: none;
     font-size: 12px;
     padding: 5px 0 0 20px; }
-    #report_type_stat .dynatree-container a {
+    #report-type-stat .dynatree-container a {
       outline: 0 !important; }
-    #report_type_stat .dynatree-container .dynatree-title {
+    #report-type-stat .dynatree-container .dynatree-title {
       font-weight: normal;
       font-family: Oscine; }
-    #report_type_stat .dynatree-container span.dynatree-active a {
+    #report-type-stat .dynatree-container span.dynatree-active a {
       border: none !important; }
-    #report_type_stat .dynatree-container p {
+    #report-type-stat .dynatree-container p {
       font-size: 10px; }
-    #report_type_stat .dynatree-container ul {
+    #report-type-stat .dynatree-container ul {
       padding-left: 0; }
-      #report_type_stat .dynatree-container ul li a.dynatree-title {
+      #report-type-stat .dynatree-container ul li a.dynatree-title {
         border: none !important; }
 
 ul.statChartType {
