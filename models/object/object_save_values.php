@@ -150,7 +150,7 @@ class ObjectSaveValuesModel extends Model {
         if($type == 'term'){
             $meta_id = $this->sdb_add_post_meta($item_id, 'socialdb_property_'.$property_children_id.'_cat', $value);
             // adiciono no relacionamento do item
-            wp_set_object_terms($object_id, array((int) $value), 'socialdb_category_type', true);
+            wp_set_object_terms($item_id, array((int) $value), 'socialdb_category_type', true);
             //adciono no array comum de busca
             $this->set_common_field_values($item_id, "socialdb_propertyterm_$property_children_id", [(int) $value], 'term');
             if($is_compound){
@@ -196,7 +196,7 @@ class ObjectSaveValuesModel extends Model {
                 // atualizo o valor do postmeta pelo meta_id
                 $this->sdb_update_post_meta($meta_value->meta_id, $value);
                 // adiciono no relacionamento do item
-                wp_set_object_terms($object_id, array((int) $value), 'socialdb_category_type', true);
+                wp_set_object_terms($item_id, array((int) $value), 'socialdb_category_type', true);
                 //adciono no array comum de busca
                 $this->set_common_field_values($item_id, "socialdb_propertyterm_$property_children_id", [(int) $value], 'term');
                 //se for composto

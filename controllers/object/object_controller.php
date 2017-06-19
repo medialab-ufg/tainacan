@@ -55,12 +55,12 @@ class ObjectController extends Controller {
                         session_start();
                 }
                 //verifico se ja existe as propriedades no cache
-                $cache = $_SESSION['collection_'.$data['collection_id'].'_properties'];
-                if(!$cache){
+                $cache = get_post_meta($data['collection_id'], 'properties-cached', true);
+                if(!$cache || $cache === ''){
                    $data['properties'] = $object_model->show_object_properties($data);
-                   $_SESSION['collection_'.$data['collection_id'].'_properties'] = $data['properties'];
+                   update_post_meta($data['collection_id'], 'properties-cached', serialize($data['properties']));
                 }else{
-                   $data['properties'] = $cache;
+                   $data['properties'] = unserialize($cache);
                 }
                 //renderizo
                 return $this->render(dirname(__FILE__) . '../../../views/object/formItem/formItem.php', $data);

@@ -14,7 +14,7 @@ class FormItemText extends FormItem {
     public $autoincrementClass;
     public $class;
 
-    public function widget($property, $item_id) {
+    public function widget($property, $item_id,$showButton = true) {
         $this->textClass = new TextClass(0,'',$this->value);
         $this->dateClass = new DateClass(0,'',$this->value);
         $this->textareaClass = new TextAreaClass(0,'',$this->value);
@@ -77,7 +77,7 @@ class FormItemText extends FormItem {
                     </div>
                 <?php endforeach; ?>
                     <div id="appendTextContainer"></div>
-                <?php if ($isMultiple): ?>
+                <?php if ($isMultiple && $showButton): ?>
                     <button type="button"
                             class="btn btn-primary btn-lg btn-xs btn-block js-append-property-<?php echo $property['id'] ?>">
                         <span class="glyphicon glyphicon-plus"></span><?php _e('Add field', 'tainacan') ?>

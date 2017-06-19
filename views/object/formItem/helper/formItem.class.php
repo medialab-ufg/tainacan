@@ -80,6 +80,7 @@ class FormItem extends Model {
         $default_tab = get_post_meta($collection_id, 'socialdb_collection_default_tab', true);
         $allTabs = $this->sdb_get_post_meta_by_value($collection_id, 'socialdb_collection_tab');
         $this->structureProperties($ordenation, $tabs, $allTabs, $properties);
+        $this->setAllIds();
         if ((!$tabs || empty($tabs)) && !$default_tab && !$allTabs):
             ?>
             <hr>
@@ -331,6 +332,7 @@ class FormItem extends Model {
                         $class->widget($property, $this->itemId);
                     } else if (in_array($property['type'], $term) && !$object) {
                         $class = new FormItemCategory();
+                        $class->allPropertiesIds = $this->allPropertiesIds;
                         $class->value = $this->getValuePropertyHelper($this->itemId,$property['id']);
                         $class->widget($property, $this->itemId);
                     } else if ($object) {
@@ -345,9 +347,22 @@ class FormItem extends Model {
             }
         }
     }
+    
+    /**
+     * 
+     */
+    public function setAllIds() {
+         if (is_array($this->metadatas)){
+             foreach ($this->metadatas as $tab_id => $properties) {
+                 foreach ($properties as $property) {
+                     $this->allPropertiesIds[] = $property['id'];
+                 }
+             }
+         }
+    }
 
     /**
-     *
+     * metodod que adiciona todos os ids usados, importante para metadados de categoria
      * */
     public function startCategoryMetadata($properties_to_avoid, $data) {
         $this->itemId = $data['item_id'];
@@ -445,6 +460,7 @@ class FormItem extends Model {
                         $class->widget($property, $this->itemId);
                     } else if (in_array($property['type'], $term) && !$object) {
                         $class = new FormItemCategory();
+                        $class->allPropertiesIds = $this->allPropertiesIds;
                         $class->value = $this->getValuePropertyHelper($this->itemId,$property['id']);
                         $class->widget($property, $this->itemId);
                     } else if ($object) {
@@ -452,7 +468,7 @@ class FormItem extends Model {
                         $class->value = $this->getValuePropertyHelper($this->itemId,$property['id']);
                         $class->widget($property, $this->itemId);
                     } else if ($property['type'] == __('Compounds', 'tainacan')) {
-                        $class = new FormItemCompound();
+                        $class = new FormItemCompound($this->collection_id, $this->getValuePropertyHelper($this->itemId,$property['id']));
                         $class->value = $this->getValuePropertyHelper($this->itemId,$property['id']);
                         $class->widget($property, $this->itemId);
                     }
@@ -566,7 +582,7 @@ class FormItem extends Model {
      */
     public function validateIcon($id,$text = '') {
         ?>
-            &nbsp;<span id="<?php echo $id ?>" class="pull-right validateIcon" style="color:red;font-size: 11px;display: none;"><?php echo $text ?>&nbsp;<span style="color:red;font-size: 13px;" class="glyphicon glyphicon-exclamation-sign pull-right"></span></span>
+            &nbsp;<span id="<?php echo $id ?>" class="<?php echo $id ?> pull-right validateIcon" style="color:red;font-size: 11px;display: none;"><?php echo $text ?>&nbsp;<span style="color:red;font-size: 13px;" class="glyphicon glyphicon-exclamation-sign pull-right"></span></span>
         <?php
     }
 
@@ -636,7 +652,7 @@ class FormItem extends Model {
             $('#submit-form-item').click(function(){
                 var publish = true;
                 //escondo as mensagens anteriores
-                $('.validateIcon').hide()
+                $('.validateIcon').hide();
                 //var compounds = {};
                 $('.validate-class').each(function(){
                     if($(this).val()==='false'){
@@ -656,7 +672,7 @@ class FormItem extends Model {
                             // mensagem do composto e da aba
                             if(!has_one){
                                 publish = false;
-                                $('#alert-compound-'+$(this).attr('compound')).show();
+                                $('.alert-compound-'+$(this).attr('compound')).show();
                                 var tab = getPropertyTab(key);
                                 $('#alert-'+tab).show();
                             }
@@ -666,16 +682,19 @@ class FormItem extends Model {
                             // pego o id do atual que sera utilizado para buscar a aba
                             // caso nao seja encontrado nenhum composto preenchido
                             var key = $(this).parent().attr('id');
-                            console.log($(this).attr('property'),$(this).attr('compound'));
+                            //console.log($(this).attr('property'),$(this).attr('compound'));
                             //mostro a mensagem do proprio metadado
-                            $('#alert-compound-'+$(this).attr('property')).show();
+                            if($(this).parent().parent().find('p .alert-compound-'+$(this).attr('property')).length>0)
+                                $(this).parent().parent().find('p .alert-compound-'+$(this).attr('property')).show();
+                            else
+                                $('.alert-compound-'+$(this).attr('property')).show();
                             // busco a aba
                             var tab = getPropertyTab(key);
                             //mostro a mensagem
                             $('#alert-'+tab).show();
                             //se for metadado composto
                             if($(this).attr('compound')){
-                                $('#alert-compound-'+$(this).attr('compound')).show();
+                                $('.alert-compound-'+$(this).attr('compound')).show();
 //                                if(!compounds[$(this).attr('compound')])
 //                                    compounds[$(this).attr('compound')] = [$(this).attr('property')];
 //                                else

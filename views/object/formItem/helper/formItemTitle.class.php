@@ -12,6 +12,9 @@ class FormItemTitle extends FormItem{
         <div class="form-group">
             <h2>
                 <?php echo ($this->terms_fixed['title']) ? $this->terms_fixed['title']->name :  _e('Title','tainacan') ?>
+                <?php if($this->isRequired === 'true'): ?>
+                *
+                <?php endif; ?>
                 <?php $this->validateIcon('alert-compound-'.$property['id'],__('Required field','tainacan')) ?>
             </h2>
             <div>
@@ -33,7 +36,7 @@ class FormItemTitle extends FormItem{
                                <input type="hidden"
                                       property="<?php echo $property['id'] ?>"
                                       class="validate-class validate-compound-<?php echo $property['id'] ?>"
-                                      value="false">
+                                      value="<?php echo ($title !== 'Temporary_post') ? 'true' : 'false' ?>">
                               <?php endif; ?>
                   </div>
             </div>

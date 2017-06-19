@@ -55,6 +55,7 @@ class DateClass extends FormItem {
             <input 
                 style="margin-right: 5px;" 
                 size="13"
+                value="<?php echo ($values && isset($values[0]) && !empty($values[0])) ? $values[0] : ''; ?>"
                 id="date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>"
                 class="input_date auto-save form_autocomplete_value_<?php echo $property_id; ?>" 
                 type="text" value="">

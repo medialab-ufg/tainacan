@@ -24,11 +24,12 @@ class CheckboxClass extends FormItem{
                 <?php endif; ?>
                 <?php if($property['has_children'] && is_array($property['has_children'])): ?>
                     <?php foreach ($property['has_children'] as $child):
-                        $is_selected = ($values && in_array($child->term_id,$values)) ? 'selected' : '';
+                        $is_selected = ($values && in_array($child->term_id,$values)) ? 'checked' : '';
                         if(!$autoValidate)
                           $autoValidate = ($values && in_array($child->term_id,$values)) ? true : false;
                         ?>
                         <input type="checkbox"
+                               <?php echo $is_selected ?>
                                name="checkbox-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>[]"
                                value="<?php echo $child->term_id ?>">&nbsp;<?php echo $child->name ?><br>
                     <?php endforeach; ?>
