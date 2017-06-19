@@ -1876,10 +1876,14 @@ if (!function_exists("theme_js")) {
         /* Google Charts Loader */
         wp_register_script("routes", get_template_directory_uri() . '/libraries/js/router/jquery.routes.js');
 
+        /* PDF Thumbnail */
+        wp_register_script("pdf_thumbnail", get_template_directory_uri() . '/libraries/js/pdfThumb/pdf.js');
+        wp_register_script("pdf_thumbnail_worker", get_template_directory_uri() . '/libraries/js/pdfThumb/pdf.worker.js');
+
         $js_files = ['jquery_min', 'jqueryUi', 'bootstrap.min', 'JitJs', 'JitExcanvasJs', 'tainacan', 'DynatreeJs', 'ckeditorjs',
             'contextMenu', 'ColorPicker', 'SweetAlert', 'SweetAlertJS','js-xls', 'FileSaver', 'jsPDF', 'jsPDF_auto_table', 'tableExport', 'jquerydataTablesmin', 'data_table', 'raty',
             'jqpagination', 'dropzone', 'croppic', 'bootstrap-combobox', 'FacebookJS', 'row-sorter', 'maskedInput',
-            'montage', 'prettyphoto', 'select2', 'slick','timepicker', 'jqcloud', 'toastrjs', 'gloader','routes'];
+            'montage', 'prettyphoto', 'select2', 'slick','timepicker', 'jqcloud', 'toastrjs', 'gloader','routes', 'pdf_thumbnail', 'pdf_thumbnail_worker'];
 
         foreach ($js_files as $js_file):
             wp_enqueue_script($js_file);

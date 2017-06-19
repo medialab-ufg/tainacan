@@ -2956,37 +2956,39 @@ function change_button()
         $("#btnRemoveReason").attr('disabled', true);
     }
 }
-
+//object_dc_type
 //Gera thumbnail de um pdf
-var pdfURL = 'http://www.axmag.com/download/pdfurl-guide.pdf';
-function generate_pdf_thumbnail(pdfURL, elementID)
+function generate_pdf_thumbnail(pdf_url, curr_id)
 {
-    PDFJS.workerSrc = 'http://localhost/wordpress/biblioteca/wp-content/themes/tainacan/libraries/pdfThumb/' + "pdf.worker.js";
-    PDFJS.getDocument(pdfURL).then(function (pdf) {
-        pdf.getPage(1).then(function (page) {  //1 is the page number we want to retrieve
-            var viewport = page.getViewport(0.5);
-            var canvas = document.createElement('canvas');
-            var ctx = canvas.getContext('2d');
-            canvas.height = viewport.height;
-            canvas.width = viewport.width;
+    PDFJS.getDocument(pdf_url).promise.then(function (doc) {
+        var page = [];
+        page.push(1);
 
-            var renderContext = {
-                canvasContext: ctx,
-                viewport: viewport
-            };
-
-            page.render(renderContext).then(function () {
-                //set to draw behind current content
-                ctx.globalCompositeOperation = "destination-over";
-
-                //set background color
-                ctx.fillStyle = "#ffffff";
-
-                //draw background / rect on entire canvas
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                var img = canvas.toDataURL();
-                $("#" + elementID).html('<img src="' + img + '"/>');
-            });
+        return Promise.all(page.map(function (num) {
+            return doc.getPage(num).then(makeThumb)
+                .then(function (canvas) {
+                    document.getElementById(pdf_url).appendChild(canvas);
+                });
+        }));
+    }).catch(function () {
+        /* Ajax para pegar icone padrão */
+        $.ajax({
+            type: "POST",
+            url: $('#src').val() + "/controllers/object/object_controller.php?operation=default_img&curr_id="+curr_id,
+            data: {curr_id: curr_id}
+        }).done(function (result) {
+            var div_img = document.getElementById(pdf_url);
+            div_img.innerHTML = result;
         });
+    });
+}
+
+function makeThumb(page) {
+    var vp = page.getViewport(1);
+    var canvas = document.createElement("canvas");
+    canvas.width = canvas.height = 170;//170
+    var scale = Math.min(canvas.width / vp.width, canvas.height / vp.height);
+    return page.render({canvasContext: canvas.getContext("2d"), viewport: page.getViewport(scale)}).promise.then(function () {
+        return canvas;
     });
 }

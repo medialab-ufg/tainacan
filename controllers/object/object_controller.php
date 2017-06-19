@@ -1047,6 +1047,10 @@ class ObjectController extends Controller {
                 }
                 return json_encode($result);
                 break;
+            case 'default_img':
+                $curr_id = $data['curr_id'];
+                return(get_item_thumb_image($curr_id));
+                break;
             case 'eliminate_itens':
                 if(isset($data['ids']) && is_array($data['ids']) && is_user_logged_in()){
                     foreach ($data['ids'] as $id) {
