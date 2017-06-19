@@ -27,7 +27,7 @@ class ObjectSaveValuesModel extends Model {
             if(is_array($array) && isset($array[$index]) && isset($array[$index][$property_children_id]) && isset($array[$index][$property_children_id]['values'])){
                 $values = $array[$index][$property_children_id]['values'];
                 $updateValues = [];
-                foreach ($values as $index => $meta_id) {
+                foreach ($values as $i => $meta_id) {
                     $meta = $this->sdb_get_post_meta($meta_id);
                     if($meta && $meta->meta_value != $value){
                         $updateValues[] = $meta_id;
@@ -44,6 +44,7 @@ class ObjectSaveValuesModel extends Model {
                 update_post_meta($item_id, 'socialdb_property_helper_'.$compound_id, serialize($array));
             }
         }
+        return json_encode(['date'=> date('d/m/y'),'hour'=> date('H:i:s')]);
     }
     
     /**
@@ -59,10 +60,11 @@ class ObjectSaveValuesModel extends Model {
         $meta = get_post_meta($item_id, 'socialdb_property_helper_'.$compound_id, true);
         if($meta){
             $array = unserialize($meta);
-            if(is_array($array) && isset($array[$index])){
+            var_dump($array);
+            if(is_array($array) && isset($array[(int)$index])){
                 foreach ($array[$index] as $property_children_id => $type_and_values) {
                     $values = $array[$index][$property_children_id]['values'];
-                    foreach ($values as $index => $meta_id) {
+                    foreach ($values as $i => $meta_id) {
                         $meta = $this->sdb_get_post_meta($meta_id);
                         if($meta){
                             // removo o valor do postmeta pelo meta_id
@@ -71,10 +73,11 @@ class ObjectSaveValuesModel extends Model {
                         }
                     }
                 }
-                unset($array[$index]);
+                unset($array[intval(trim($index))]);
                 update_post_meta($item_id, 'socialdb_property_helper_'.$compound_id, serialize($array));
             }
         }
+        return json_encode(['date'=> date('d/m/y'),'hour'=> date('H:i:s')]);
     }
     /**
      * 
@@ -127,7 +130,7 @@ class ObjectSaveValuesModel extends Model {
             $array[$index][$property_children_id]= $new_children;
         }
         update_post_meta($item_id, 'socialdb_property_helper_'.$compound_id, serialize($array));
-        return true;
+        return json_encode(['date'=> date('d/m/y'),'hour'=> date('H:i:s')]);
     }
     
     /**
@@ -147,7 +150,7 @@ class ObjectSaveValuesModel extends Model {
         if($type == 'term'){
             $meta_id = $this->sdb_add_post_meta($item_id, 'socialdb_property_'.$property_children_id.'_cat', $value);
             // adiciono no relacionamento do item
-            wp_set_object_terms($object_id, array((int) $value), 'socialdb_category_type', true);
+            wp_set_object_terms($item_id, array((int) $value), 'socialdb_category_type', true);
             //adciono no array comum de busca
             $this->set_common_field_values($item_id, "socialdb_propertyterm_$property_children_id", [(int) $value], 'term');
             if($is_compound){
@@ -180,8 +183,8 @@ class ObjectSaveValuesModel extends Model {
      */
     public function updateValue($item_id,$meta_value,$compound_id,$property_children_id,$index,$value) {
         // caso seja um metadado simples/ se nao 
-        $is_compound = ($property_children_id == 0) ? false : true;
-        $property_children_id = ($property_children_id == 0) ? $compound_id : $property_children_id;
+        $is_compound = ($property_children_id === 0) ? false : true;
+        $property_children_id = ($property_children_id === 0) ? $compound_id : $property_children_id;
         // caso o postmeta esteja apontado para uma categoria seu meta_key sera socialdb-property_#_cat
         if(strpos($meta_value->meta_key, '_cat')!==false){
             //pego seu id
@@ -193,7 +196,7 @@ class ObjectSaveValuesModel extends Model {
                 // atualizo o valor do postmeta pelo meta_id
                 $this->sdb_update_post_meta($meta_value->meta_id, $value);
                 // adiciono no relacionamento do item
-                wp_set_object_terms($object_id, array((int) $value), 'socialdb_category_type', true);
+                wp_set_object_terms($item_id, array((int) $value), 'socialdb_category_type', true);
                 //adciono no array comum de busca
                 $this->set_common_field_values($item_id, "socialdb_propertyterm_$property_children_id", [(int) $value], 'term');
                 //se for composto

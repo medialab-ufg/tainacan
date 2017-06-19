@@ -11,14 +11,50 @@ include_once('js/list_js.php');
 
     <?php $_log_helper->render_statistic_menu(); ?>
 
-    <!-- Barra lateral esquerda -->
-    <div id="statistics-config" class="col-md-3 ui-widget-header">
-        <div class="form-group">
+    <!-- Barra lateral esquerda :ui-widget-header-->
+    <div class="col-md-3">
+        <!-- Periodo -->
+        <div id="config-filt" class="statistics-config form-group">
+            <label class="title-pipe">
+                <span class="prepend-filter-label glyphicon-chevron-down blue glyphicon sec-color" style="color: #79a6ce !important;"></span>
+                <?php _e('Period'); ?>
+            </label>
+             <div class="date-range-filter period-config">
+                <div> 
+                    <h6> <?php _e('From: '); ?></h6>
+                    <input type="text" class="input_date input-size form-control" value="" placeholder="dd/mm/aaaa" id="from_period" name="from_period">
+                </div>
+                <div> 
+                    <h6><?php _e('Until: '); ?></h6>
+                    <input type="text" class="input_date input-size form-control" value="" placeholder="dd/mm/aaaa" id="to_period" name="to_period"> <br />
+                </div>
+                <!-- Dynatree filter-->
+                <div>
+                    <input type="radio" id="days" value="days" name="optradio"> <?php _e('Days'); ?>
+                </div>
+                <div>
+                    <input type="radio" id="weeks" value="weeks" name="optradio"> <?php _e('Weeks'); ?>
+                </div>
+                <div>
+                    <input type="radio" id="months" value="months" name="optradio" checked> <?php _e('Months'); ?>
+                </div>
+                <div>
+                    <input type="radio" id="nofilter" name="optradio" value="nofilter"> <?php _e('No filter'); ?>
+                </div>
+
+                <!--<div id="report-filters"></div>-->
+            </div>
+
+            
+        </div>
+
+        <div id="config-repo" class="statistics-config form-group">
             <label for="object_tags" class="title-pipe">
                 <span class="prepend-filter-label glyphicon-chevron-down blue glyphicon sec-color" style="color: #79a6ce !important;"></span>
-                <?php _t('Report type',true); ?>
+                <?php _e('Report type'); ?>
             </label>
-            <div id="report_type_stat"></div>
+            <!-- Dynatree report type -->
+            <div id="report-type-stat"></div>
         </div>
     </div>
 
@@ -41,18 +77,12 @@ include_once('js/list_js.php');
             <div class="user-config-control col-md-12 no-padding">
                 <!-- Filters -->
                 <div class="col-md-10 pull-left no-padding">
-                    <!-- Period -->
+                     <!--Period 
                     <div class="col-md-5" style="width: auto">
                       <span class="config-title"><?php _e('Filters: '); ?></span>
                       <label class="label-from"><?php _e('from: ')?></label><input type="text" class="inputPeriod" value="" placeholder="<?php _e('from: dd/mm/aaaa')?>" id="from_period" name="from_period">
                       <label class="label-until"><?php _e('until: ')?></label><input type="text" class="inputPeriod"  value="" placeholder="<?php _e('until: dd/mm/aaaa')?>" id="to_period" name="to_period">
-                    </div>
-
-                    <div class="col-md-5" style="width: auto">
-                      <label class="radio-inline"><input type="radio" id="days" value="days" name="optradio"> <?php _e('Days')?></label>
-                      <label class="radio-inline"><input type="radio" id="weeks" value="weeks" name="optradio"> <?php _e('Weeks')?></label>
-                      <label class="radio-inline"><input type="radio" id="months" value="months" name="optradio" checked> <?php _e('Months') ?></label>
-                    </div>
+                    </div>-->
                     <!--  <span class="current-chart">--><?php //_t('User Stats',1); ?><!--</span> -->
                 </div>
             </div>

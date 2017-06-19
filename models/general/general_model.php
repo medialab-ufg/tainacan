@@ -1448,6 +1448,7 @@ class Model {
      */
     public function get_data_by_property_json($data, $meta_key = '') {
         global $wpdb;
+        $json =[];
         $wp_posts = $wpdb->prefix . "posts";
         $wp_postmeta = $wpdb->prefix . "postmeta";
         $has_mask = get_term_meta($data['property_id'], 'socialdb_property_data_mask', true);
@@ -1466,12 +1467,14 @@ class Model {
                         WHERE t.term_taxonomy_id = {$category_root_id->term_taxonomy_id}
                         AND p.post_status LIKE 'publish' and pm.meta_key like '$meta_key' and pm.meta_value LIKE '%{$data['term']}%'
                 ";
-        }else{
+        }else if($has_mask){
             $query = "
                         SELECT pm.* FROM $wp_posts p
                         INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id    
                         WHERE p.post_status LIKE 'publish' and pm.meta_key like '$meta_key' and pm.meta_value LIKE '%{$data['term']}%'
                 ";
+        }else{
+            return json_encode([]);
         }
         $result = $wpdb->get_results($query);
         if ($result) {

@@ -194,7 +194,7 @@
 
         //-
 
-        //On change filter type week, day, month
+        // On change filter type week, day, month
         $("input[type=radio][name=optradio]").on('change', function () {
             loadChart();
         });
@@ -223,7 +223,16 @@
         });
     });
 
-    $("#statistics-config").accordion({
+    $("#config-repo").accordion({
+        collapsible: true,
+        active: 0,
+        header: "label",
+        animate: 200,
+        heightStyle: "content",
+        icons: false
+    });
+
+    $("#config-filt").accordion({
         collapsible: true,
         active: 0,
         header: "label",
@@ -247,8 +256,8 @@
 
     var tChart = new TainacanChart();
 
-    <!-- Report type configs -->
-    var stats_dynatree_opts = {
+    // Report type configs
+    var statsDynatreeData = {
         minExpandLevel: 1,
         selectionVisible: true,
         checkbox:  true,
@@ -290,6 +299,7 @@
         }
     };
 
+    // Dynatrees report's children
     function statusChildren() {
         return [
             { title: "Status <p> logins / registros / banidos / excluídos </p>", id: "status", addClass: 'repoOnly'},
@@ -369,13 +379,14 @@
         var from = dfrom.toISOString().split('T')[0];
         var to = dto.toISOString().split('T')[0];
 
-        //console.log(" "+ from +" "+ to);
+        console.log(" "+ from +" "+ to);
 //        }
 
         var stat_path = $('.stat_path').val() || $('#src').val(); //url do tema
         var c_id = $('.get_collection_stats').val() || null; //id da coleção ?!
 
-        var filter = '';
+        var filter = 'months';
+        
         if($('#days').is(":checked")){
             filter = $('#days').val();
         }
@@ -792,9 +803,10 @@
         }
     }
 
-    $("#report_type_stat").dynatree(stats_dynatree_opts);
+    // Load dynatree
+    $("#report-type-stat").dynatree(statsDynatreeData);
 
-    //On Load page or change filters
+    // On Load page or change filters
     function loadChart(){
         $('.dynatree-selected').click();
     }

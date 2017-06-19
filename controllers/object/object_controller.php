@@ -17,27 +17,54 @@ class ObjectController extends Controller {
         $objectfile_model = new ObjectFileModel;
 
         switch ($operation) {
-            // #1 ADICIONAR ITEMS TIPO TEXTO
+            // #1 ADICIONAR e EDITAR ITEM
+            case "edit-item":
             case "create-item":
-                $data['ID'] = $object_model->create();
-                //class
+                //classe que executa toda a logica
                 include_once dirname(__FILE__) . '../../../views/object/formItem/helper/formItem.class.php';
-                $data['formItem'] = new FormItem($data['collection_id']);
+                //verificacoes para edicao ou criacao deitem
+                if(isset($data['item_id'])){
+                  $formClass = new FormItem($data['collection_id'],__('Edit item','tainacan'));
+                  $checkout = get_post_meta($data['object_id'], 'socialdb_object_checkout', true);
+                  if (is_numeric($checkout) && !isset($data['motive'])) {
+                      $user = get_user_by('id', $checkout)->display_name;
+                      $time = get_post_meta($data['object_id'], 'socialdb_object_checkout_time', true);
+                      return 'checkout@' . $user . '@' . date('d/m/Y', $time);
+                  }
+                }else{
+                  $beta_id = get_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext', true);
+                  if ($beta_id && is_numeric($beta_id)) {
+                    $formClass = new FormItem($data['collection_id'],__('Continue editting...','tainacan'));
+                    $data['item_id'] = $beta_id;
+                  }else{
+                    $formClass = new FormItem($data['collection_id']);
+                  }  
+                }
+                //se nao existir algum ID eu crio
+                if(isset($data['item_id'])) { 
+                    $data['ID'] = $data['item_id']; 
+                }else{  
+                    $data['ID'] = $object_model->create();
+                    update_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext', $data['ID']); 
+                }
+                //jogo a class no array que sera utlizado no formulario
+                $data['formItem'] = $formClass;
                 $data['modeView'] = get_post_meta($data['collection_id'], 'socialdb_collection_submission_visualization', true);
                 //sessao
                 if(!session_id()) {
                         session_start();
                 }
-                $cache = $_SESSION['collection_'.$data['collection_id'].'_properties'];
-                //if(!$cache){
+                //verifico se ja existe as propriedades no cache
+                $cache = get_post_meta($data['collection_id'], 'properties-cached', true);
+                if(!$cache || $cache === ''){
                    $data['properties'] = $object_model->show_object_properties($data);
-                   $_SESSION['collection_'.$data['collection_id'].'_properties'] = $data;
-                //}else{
-                   //$cache['ID'] =  $data['ID'];
-                  // $data['properties'] = $cache;
-                //}
+                   update_post_meta($data['collection_id'], 'properties-cached', serialize($data['properties']));
+                }else{
+                   $data['properties'] = unserialize($cache);
+                }
+                //renderizo
                 return $this->render(dirname(__FILE__) . '../../../views/object/formItem/formItem.php', $data);
-                // propriedades de categoria
+            // propriedades de categoria
             case 'appendCategoryMetadata'://
                     //class
                     include_once dirname(__FILE__) . '../../../views/object/formItem/helper/formItem.class.php';
@@ -46,6 +73,7 @@ class ObjectController extends Controller {
                     $properties_to_avoid = explode(',', $data['properties_to_avoid']);
                     return $formItem->startCategoryMetadata($properties_to_avoid, $data);
                     break;
+################################################################################
             case "create_item_text":
                 //verifico se existe rascunho para se mostrado
                 $beta_id = get_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext', true);

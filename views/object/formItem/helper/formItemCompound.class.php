@@ -25,23 +25,23 @@ class FormItemCompound extends FormItem {
     public $multipleTreeClass;
     public $objectClass;
 
-    public function __construct() {
-        $this->textClass = new TextClass();
-        $this->dateClass = new DateClass();
-        $this->textareaClass = new TextAreaClass();
-        $this->numericClass = new NumericClass();
-        $this->autoincrementClass = new AutoIncrementClass();
-        $this->selectboxClass = new SelectboxClass();
-        $this->simpleTreeClass = new SimpleTreeClass();
-        $this->radioClass = new RadioClass();
-        $this->checkboxClass = new CheckboxClass();
-        $this->multipleTreeClass = new MultipleTreeClass();
-        $this->objectClass = new ObjectClass();
+    public function __construct($collection_id,$value = false) {
+        $this->textClass = new TextClass($collection_id,'',$value);
+        $this->dateClass = new DateClass($collection_id,'',$value);
+        $this->textareaClass = new TextAreaClass($collection_id,'',$value);
+        $this->numericClass = new NumericClass($collection_id,'',$value);
+        $this->autoincrementClass = new AutoIncrementClass($collection_id,'',$value);
+        $this->selectboxClass = new SelectboxClass($collection_id,'',$value);
+        $this->simpleTreeClass = new SimpleTreeClass($collection_id,'',$value);
+        $this->radioClass = new RadioClass($collection_id,'',$value);
+        $this->checkboxClass = new CheckboxClass($collection_id,'',$value);
+        $this->multipleTreeClass = new MultipleTreeClass($collection_id,'',$value);
+        $this->objectClass = new ObjectClass($collection_id,'',$value);
     }
 
     public function widget($property, $item_id) {
-
         $values = $this->getValuePropertyHelper($item_id, $property_id);
+        $this->setLastIndex();
         $isMultiple = ($property['metas']['socialdb_property_compounds_cardinality'] == 'n') ? true : false;
         $filledValues = ($values) ? count($values) : 1;
         $childrenProperties = $property['metas']['socialdb_property_compounds_properties_id'];
@@ -55,48 +55,64 @@ class FormItemCompound extends FormItem {
                     do_action('modificate_label_insert_item_properties', $property);
                 endif;
                 ?>
-                <?php if ($isRequired && $property['metas']['socialdb_property_required'] !== 'true'): ?>
-                *
-                <span id="AllFieldsShouldBeFilled<?php echo $property['id']; ?>"></span>
-                <?php elseif ($isRequired && $property['metas']['socialdb_property_required'] !== 'true_one_field'): ?>
-                (*)
-                <span id="oneFieldShouldBeFilled<?php echo $property['id']; ?>"></span>
+                <?php if ($isRequired && $property['metas']['socialdb_property_required'] == 'true'): ?>
+                    *
+                    <span id="AllFieldsShouldBeFilled<?php echo $property['id']; ?>"></span>
+                <?php elseif ($isRequired && $property['metas']['socialdb_property_required'] === 'true_one_field'): ?>
+                    (*)
+                    <input 
+                        type="hidden" 
+                        value="false" 
+                        compound="<?php echo $property['id']; ?>"
+                        class="validate-class compound-one-field-should-be-filled">
                 <?php else: ?>
-                <span id="someFieldsAreRequired<?php echo $property['id']; ?>"></span>
+                    <span id="someFieldsAreRequired<?php echo $property['id']; ?>"></span>
                 <?php endif ?>
+                <?php $this->hasTextHelper($property);  ?>
+                <?php $this->validateIcon('alert-compound-'.$property['id'],__('Required field','tainacan')) ?>    
             </h2>
             <div>
-                <?php for ($index = 0; $index < $filledValues; $index++): ?>
+               <?php $first = false;
+                  foreach ($this->value as $index => $value):  ?>
                     <div id="container-field" 
                          class="row" style="padding-bottom: 10px;margin-bottom: 10px;">
                         <div class="col-md-11">
                             <?php if (is_array($childrenProperties)): ?>
                                 <?php
                                 foreach ($childrenProperties as $child):
+                                    $child['metas']['socialdb_property_required'] = ($isRequired && $property['metas']['socialdb_property_required'] == 'true') ? 'true' : $child['metas']['socialdb_property_required'];
                                     $isRequiredChildren = ($child['metas'] && $child['metas']['socialdb_property_required']&&$child['metas']['socialdb_property_required'] != 'false') ? true : false;
                                     $object = (isset($child['metas']['socialdb_property_object_category_id']) && !empty($child['metas']['socialdb_property_object_category_id'])) ? true : false;
+                                    $isKey = (isset($child['metas']['socialdb_property_data_mask']) && $child['metas']['socialdb_property_data_mask'] !== '') ? true:false;
                                     ?>
                                     <div style="padding-bottom: 15px; " class="col-md-12">
                                         <p style="color: black;">
                                             <?php echo $child['name']; ?>
                                             <?php 
                                             if ($isRequiredChildren): ?>
+                                            <?php $this->validateIcon('alert-compound-'.$child['id'],__('Required field','tainacan')) ?>
                                              *
                                              <script>
                                                  $('#someFieldsAreRequired<?php echo $property['id']; ?>').html('(*)')
                                              </script>
                                             <?php endif ?>
+                                            <?php $this->hasTextHelper($child);  ?>
                                         </p>
                                     <?php if ($child['type'] == 'text'): ?>
+                                        <?php $this->textClass->isKey = $isKey ?>
                                         <?php $this->textClass->generate($property,$child, $item_id,$index) ?>
                                     <?php elseif ($child['type'] == 'date'): ?>
+                                        <?php $this->dateClass->isKey = $isKey ?>
                                         <?php $this->dateClass->generate($property,$child, $item_id,$index) ?>
                                     <?php elseif ($child['type'] == 'textarea'): ?>
+                                        <?php $this->textareaClass->isKey = $isKey ?>
                                         <?php $this->textareaClass->generate($property,$child, $item_id,$index) ?>
                                     <?php elseif ($child['type'] == 'numeric' || $child['type'] == 'number'): ?>
+                                        <?php $this->numericClass->isKey = $isKey ?>
                                         <?php $this->numericClass->generate($property,$child, $item_id,$index) ?>
                                     <?php elseif ($child['type'] == 'autoincrement'): ?>
-                                        <?php $this->textClass->generate($property,$child, $item_id,$index) ?>
+                                         <?php $this->autoincrementClass->isKey = $isKey ?>
+                                        <?php $this->autoincrementClass->generate($property,$child, $item_id,$index) ?>
                                     <?php elseif ($child['type'] == 'selectbox'): ?>
                                         <?php $this->selectboxClass->generate($property,$child, $item_id,$index) ?>
                                     <?php elseif ($child['type'] == 'tree'): ?>
@@ -114,15 +130,16 @@ class FormItemCompound extends FormItem {
                                 <?php endforeach; ?>    
                         <?php endif; ?>
                         </div>
-                    <?php if ($index > 0): ?>
+                    <?php if ($first): ?>
                             <div class="col-md-1">
                                 <a style="cursor: pointer;" onclick="remove_container(<?php echo $property['id'] ?>,<?php echo $$index ?>)" class="pull-right">
                                     <span class="glyphicon glyphicon-remove"></span>
                                 </a>
                             </div> 
+                    <?php else: $first = true; ?>    
                     <?php endif; ?>
                     </div>    
-                <?php endfor; ?>
+                <?php endforeach; ?>
                 <div id="appendCompoundsContainer"></div>
         <?php if ($isMultiple): ?>
                 <center>
@@ -157,8 +174,13 @@ class FormItemCompound extends FormItem {
                                 <?php echo $child['name']; ?>
                                 <?php 
                                 if ($isRequiredChildren): ?>
+                                <?php $this->validateIcon('alert-compound-'.$child['id'],__('Required field','tainacan')) ?>
                                  *
+                                 <script>
+                                     $('#someFieldsAreRequired<?php echo $property['id']; ?>').html('(*)')
+                                 </script>
                                 <?php endif ?>
+                                <?php $this->hasTextHelper($child);  ?>
                             </p>
                         <?php if ($child['type'] == 'text'): ?>
                             <?php $this->textClass->generate($property,$child, $item_id,$index) ?>
@@ -194,6 +216,14 @@ class FormItemCompound extends FormItem {
             </div> 
         </div>    
         <?php
+    }
+    
+    public function setLastIndex(){
+       if($this->value && is_array($this->value)){
+          //$this->value[] = '';
+       }else{
+         $this->value = [''];
+       }
     }
     /**
      * 

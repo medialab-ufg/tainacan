@@ -7,16 +7,25 @@ class NumericClass extends FormItem{
         if ($property_id == 0) {
             $property = $compound;
         }
+        //verifico se tem valor default
+        $hasDefaultValue = (isset($property['metas']['socialdb_property_default_value']) && $property['metas']['socialdb_property_default_value']!='') ? $property['metas']['socialdb_property_default_value'] : false;
+        $values = ($this->value && is_array($this->getValues($this->value[$index_id][$property_id]))) ? $this->getValues($this->value[$index_id][$property_id]) : false;
+        //se nao possuir nem valor default verifico se ja existe
+        $values = (!$values && $hasDefaultValue) ? [$hasDefaultValue] : $values;
+        $autoValidate = ($values && isset($values[0]) && !empty($values[0])) ? true : false;
         $this->isRequired = ($property['metas'] && $property['metas']['socialdb_property_required'] && $property['metas']['socialdb_property_required'] != 'false') ? true : false;
+        $isView = $this->viewValue($property,$values,'term');
+        if($isView){
+            return true;
+        }
         ?>
         <?php if ($this->isRequired): ?> 
         <div class="form-group" 
              id="validation-<?php echo $compound['id'] ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>"
-             style="border-bottom:none;">
+             style="border-bottom:none;padding: 0px;">
                  <input type="text" 
-                        style="margin-left: -25px;"
                         id="numeric-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>" 
-                        value="" 
+                        value="<?php echo ($values && isset($values[0]) && !empty($values[0])) ? $values[0] : ''; ?>"
                         class="form-control auto-save form_autocomplete_value_<?php echo $property_id; ?>" 
                         onkeypress='return onlyNumbers(event)'
                         aria-describedby="input2Status"
@@ -28,19 +37,34 @@ class NumericClass extends FormItem{
                        <?php if($property_id !== 0): ?>
                        compound="<?php echo $compound['id'] ?>"
                        <?php endif; ?>
+                       property="<?php echo $property['id'] ?>"
                        class="validate-class validate-compound-<?php echo $compound['id'] ?>"
-                       value="false">
+                       value="<?php echo ($autoValidate) ? 'true' : 'false' ?>">
          </div>
         <?php else: ?> 
-         <input type="text" 
-                id="numeric-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>" 
-                value="" 
-                class="form-control auto-save form_autocomplete_value_<?php echo $property_id; ?>" 
-                onkeypress='return onlyNumbers(event)'
-                name="socialdb_property_<?php echo $property_id; ?>[]">
+            <?php if($property_id !== 0): ?> 
+                    <input  type="hidden" 
+                            compound="<?php echo $compound['id'] ?>"
+                            property="<?php echo $property['id'] ?>"
+                            id="validation-<?php echo $compound['id'] ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>"
+                            class="compound-one-field-should-be-filled-<?php echo $compound['id'] ?>"
+                            value="<?php echo ($autoValidate) ? 'true' : 'false' ?>">
+            <?php endif;  ?>
+            <input type="text" 
+                   id="numeric-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>" 
+                   value="" 
+                   class="form-control auto-save form_autocomplete_value_<?php echo $property_id; ?>" 
+                   onkeypress='return onlyNumbers(event)'
+                   name="socialdb_property_<?php echo $property_id; ?>[]">
         <?php
         endif;
         $this->initScriptsNumericClass($compound_id,$property_id, $item_id, $index_id);
+        if($hasDefaultValue): ?>
+            <script>
+                $('#numeric-field-<?php echo $compound['id'] ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').trigger('keyup');
+            </script>
+        <?php endif;    
+
     }
     
     /**
@@ -67,10 +91,17 @@ class NumericClass extends FormItem{
                         compound_id:'<?php echo $compound_id ?>',
                         property_children_id: '<?php echo $property_id ?>',
                         index: <?php echo $index_id ?>,
-                        indexCoumpound: 0
+                        indexCoumpound: 0,
+                        isKey: <?php echo ($this->isKey) ? 'true':'false' ?>
                     }
                 }).done(function (result) {
-                
+                    <?php if($this->isKey): ?>
+                     var json =JSON.parse(result);
+                     if(json.value){
+                        $('#numeric-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val('');
+                            toastr.error(json.value+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                     }
+                    <?php endif; ?>
                 });
             });
         </script> 

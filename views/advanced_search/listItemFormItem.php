@@ -38,7 +38,7 @@
 endif;
 ?>
 </div>
-<!---------------------- FIM:LISTA DE OBJETOS ------------------------------------->   
+<!-- FIM:LISTA DE OBJETOS -->   
 <div class="col-md-12 no-padding" style="padding-right: 0px;margin-top: 15px;">
     <button type="button" 
             class="btn btn-default btn-lg pull-left" 
@@ -121,11 +121,13 @@ endif;
             data: {
                 operation: 'saveValue',
                 type:'object',
+                <?php if($property_id!==0) echo 'indexCoumpound:0,' ?>
                 value: id,
                 item_id:'<?php echo $item_id ?>',
                 compound_id:'<?php echo $compound_id ?>',
                 property_children_id: '<?php echo $property_id ?>',
-                index: <?php echo $contador ?>
+                index: <?php echo $contador ?>,
+                reverse: $('#reverse_<?php echo $compound_id ?>_<?php echo $property_id; ?>_<?php echo $contador; ?>').val()
             }
         });
         console.log(id,'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $contador ?>');
@@ -140,11 +142,13 @@ endif;
             data: {
                 operation: 'removeValue',
                 type:'object',
+                <?php if($property_id!==0) echo 'indexCoumpound:0,' ?>
                 value: id,
                 item_id:'<?php echo $item_id ?>',
                 compound_id:'<?php echo $compound_id ?>',
                 property_children_id: '<?php echo $property_id ?>',
-                index: <?php echo $contador ?>
+                index: <?php echo $contador ?>,
+                reverse: $('#reverse_<?php echo $compound_id ?>_<?php echo $property_id; ?>_<?php echo $contador; ?>').val()
             }
         });
         if($('#results_property_<?php echo $compound_id; ?>_<?php echo $property_id?>_<?php echo $contador; ?> ul li').length==0){
