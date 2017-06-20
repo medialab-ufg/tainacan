@@ -92,9 +92,15 @@ $is_repo_admin = current_user_can('administrator');
                     <?php if( has_filter('show_edit_default') && apply_filters('show_edit_default', $collection_id) ) { ?>
                         <a onclick="edit_object('<?php echo $curr_id; ?>')"> <?php _t('Edit item',1); ?> </a>
                     <?php } else { ?>
+                        <?php if(hasHelper($curr_id)): ?>
+                        <a href="<?php echo get_the_permalink($collection_id).get_post($curr_id)->post_name.'/editar'; ?>">   
+                            <?php _t('Edit item',1); ?>
+                        </a>
+                        <?php else: ?>
                         <a id="edit_button_<?php echo $curr_id; ?>" onclick="edit_object_item('<?php echo $curr_id ?>')">
                             <?php _t('Edit item',1); ?>
                         </a>
+                        <?php endif; ?>
                     <?php } ?>
                 </li>
                 <li class="tainacan-museum-clear"> <a class="ac-duplicate-item" data-op="same"> <?php _t('Duplicate in this collection',1); ?> </a> </li>

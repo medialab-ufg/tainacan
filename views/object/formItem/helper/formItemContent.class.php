@@ -1,15 +1,15 @@
 <?php
 class FormItemContent extends FormItem {
 
-    public function widget($property, $item_id) {
+    public function widget($property, $item_id,$isFocusMedia = false) {
         $this->isRequired = get_post_meta($this->collection_id, 'socialdb_collection_property_'.$property['id'].'_required', true);
         $content = get_post_meta($item_id,'socialdb_object_content',true);
         ?>
         <div class="form-group" >
-            <h2>
+             <?php echo ($isFocusMedia) ? '<h5>' : '<h2>' ?>
                 <?php echo ($this->terms_fixed['content']) ? $this->terms_fixed['content']->name : _e('Content', 'tainacan') ?>
                 <?php $this->validateIcon('alert-compound-'.$property['id'],__('Required field','tainacan')) ?>
-            </h2>
+            <?php echo ($isFocusMedia) ? '</h5>' : '</h2>' ?>
             <div >
                <input type="hidden"
                      value="<?php echo get_post_meta($this->collection_id, 'socialdb_collection_property_'.$property['id'].'_mask_key', true) ?>">
