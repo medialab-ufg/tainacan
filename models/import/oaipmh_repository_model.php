@@ -43,7 +43,9 @@ class OAIPMHRepositoryModel extends OAIPMHModel {
      * @param string $name O nome da colecao
      */
     public function insert_collection($slug,$name){
-        if(!get_term_by('slug', $slug, 'socialdb_category_type')){
+        if(get_term_by('slug', $slug, 'socialdb_category_type'))
+            wp_delete_term(get_term_by('slug', $slug, 'socialdb_category_type')->term_id, 'socialdb_category_type');
+        //if(!get_term_by('slug', $slug, 'socialdb_category_type')){
             $collection_model = new CollectionModel;
             $collection = array(
                 'post_type' => 'socialdb_collection',
@@ -52,7 +54,7 @@ class OAIPMHRepositoryModel extends OAIPMHModel {
                 'post_author' => get_current_user_id(),
             );
            $collection_id = wp_insert_post($collection);
-           $result = socialdb_insert_term($name, 'socialdb_category_type', $this->get_category_root_id(), $slug); 
+            $result = socialdb_insert_term($name, 'socialdb_category_type', $this->get_category_root(), $slug); 
             $type = get_term_by('name', 'socialdb_collection_public', 'socialdb_collection_type');
             wp_set_post_terms($collection_id, array($type->term_id), 'socialdb_collection_type');
             update_post_meta($collection_id, 'socialdb_collection_object_type',$result['term_id']); 
@@ -61,7 +63,7 @@ class OAIPMHRepositoryModel extends OAIPMHModel {
             if (get_option('socialdb_pattern_licenses')) {
                 update_post_meta($collection_id, 'socialdb_collection_license_pattern', get_option('socialdb_pattern_licenses'));
             }
-        }
+        //}
     }
 }
 
