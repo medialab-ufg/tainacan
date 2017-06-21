@@ -7,10 +7,12 @@ include_once (dirname(__FILE__) . '../../../models/property/property_model.php')
 include_once (dirname(__FILE__) . '../../../models/ranking/ranking_model.php');
 include_once (dirname(__FILE__) . '../../../models/category/category_model.php');
 include_once (dirname(__FILE__) . '../../../models/event/event_object/event_object_create_model.php');
-require_once (dirname(__FILE__) . '../../../libraries/php/PdfToText/PdfToText.phpclass');
 require_once(dirname(__FILE__) . '../../general/general_model.php');
 require_once(dirname(__FILE__) . '../../user/user_model.php');
 require_once(dirname(__FILE__) . '../../tag/tag_model.php');
+
+/*Carrega o leitor de PDF*/
+require_once (dirname(__FILE__) . '../../../libraries/php/PDFParser/vendor/autoload.php');
 
 /**
  * The class ObjectModel 
@@ -245,11 +247,20 @@ class ObjectMultipleModel extends Model {
         if(strcmp($data['type_'.$item_id],'pdf') == 0)
         {
             $url_file = wp_get_attachment_url($item_id);
-            $pdf 	=  new PdfToText ($url_file) ;
-            $this->set_common_field_values($post_id, "socialdb_property_$item_id", $pdf->Text);
 
+            try
+            {
+                $parser = new \Smalot\PdfParser\Parser();
+                $pdf = $parser->parseFile($url_file);
+                $pdf_text = $pdf->getText();
+                
+                $this->set_common_field_values($post_id, "socialdb_property_$item_id", $pdf_text);
+            }catch (Exception $e)
+            {
+                //Can't read PDF file, just move on.
+            }
         }
-
+        
         $this->set_common_field_values($post_id, 'object_from', 'internal');
         $this->set_common_field_values($post_id, 'object_source', $data['source_'.$item_id]);
         $this->set_common_field_values($post_id, 'object_type', $data['object_type']);
