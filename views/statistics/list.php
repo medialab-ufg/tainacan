@@ -39,7 +39,7 @@ include_once('js/list_js.php');
                     <input type="radio" id="months" value="months" name="optradio" checked> <?php _e('Months'); ?>
                 </div>
                 <div>
-                    <input type="radio" id="nofilter" name="optradio" value="nofilter"> <?php _e('No filter'); ?>
+                    <input type="radio" id="nofilter" name="optradio" value="nofilter" disabled> <?php _e('No filter'); ?>
                 </div>
 
                 <!--<div id="report-filters"></div>-->
