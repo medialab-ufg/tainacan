@@ -43,12 +43,15 @@ class FormItem extends Model {
         'violet' => ['#7852B2', '#31185C'],
         'grey' => ['#58595B', '#231F20'],
     ];
+    public $isMediaFocus;
     public $isRequired;
     public $title;
     public $value;
     public $isKey;
 
     function __construct($collection_id = 0,$title = '',$value= false) {
+        $habilitateMedia = ($collection_id === 0) ? '' : get_post_meta($collection_id, 'socialdb_collection_habilitate_media', true);
+        $this->mediaHabilitate = ($habilitateMedia =='true') ? true:false;
         $this->collection_id = $collection_id;
         $this->terms_fixed = [
             'title' => get_term_by('slug', 'socialdb_property_fixed_title', 'socialdb_property_type'),
@@ -73,7 +76,8 @@ class FormItem extends Model {
      * gera as abas no formulario
      * @param type $collection_id
      */
-    public function start($collection_id, $item_id, $properties) {
+    public function start($collection_id, $item_id, $properties,$isMediaFocus = false) {
+        $this->isMediaFocus = $isMediaFocus;
         $this->itemId = $item_id;
         $tabs = unserialize(get_post_meta($collection_id, 'socialdb_collection_update_tab_organization', true));
         $ordenation = unserialize(get_post_meta($collection_id, 'socialdb_collection_properties_ordenation', true));
@@ -81,111 +85,144 @@ class FormItem extends Model {
         $allTabs = $this->sdb_get_post_meta_by_value($collection_id, 'socialdb_collection_tab');
         $this->structureProperties($ordenation, $tabs, $allTabs, $properties);
         $this->setAllIds();
-        if ((!$tabs || empty($tabs)) && !$default_tab && !$allTabs):
+        $class = ($this->mediaHabilitate) ? 'col-md-9 no-padding':'col-md-12 no-padding';
+        if($this->isMediaFocus){
             ?>
-            <hr>
-             <div id="tab-content-metadata" class="tab-content" style="background: white;">
-                <div id="tab-default"  class="tab-pane fade in active" style="background: white;margin-bottom: 15px;">
-                    <div class="expand-all-div"  onclick="openAccordeon('default')" >
-                        <a class="expand-all-link" href="javascript:void(0)">
-                            <?php _e('Expand all', 'tainacan') ?>&nbsp;&nbsp;<span class="caret"></span></a>
-                    </div>
-                    <hr>
-                    <div id="accordeon-default" class="multiple-items-accordion" style="margin-top:-20px;">
-                        <?php $this->listPropertiesbyTab('default') ?>
+            <div class="col-md-12 no-padding">
+                
+                <div id="tab-content-metadata" class="col-md-3 tab-content no-padding" style="background: white;">
+                   <div id="tab-default"  class="tab-pane fade in active" style="background: white;margin-bottom: 15px;">
+                       <div class="expand-all-div"  onclick="openAccordeon('default')" >
+                           <a class="expand-all-link" href="javascript:void(0)">
+                               <?php _e('Expand all', 'tainacan') ?>&nbsp;&nbsp;<span class="caret"></span></a>
+                       </div>
+                       <hr style="border-color: white;">
+                       <div id="accordeon-default" class="multiple-items-accordion" style="margin-top:-20px;">
+                           <?php $this->listPropertiesbyTab('default') ?>
+                       </div>
+                   </div>
+                </div>
+                <div class="col-md-9">
+                    <?php
+                    foreach ($this->metadatas['default'] as $property) {
+                        if (in_array($property['slug'], $this->fixed_slugs)) {
+                            if ($property['slug'] == 'socialdb_property_fixed_title') {
+                                $class = new FormItemTitle($this->collection_id);
+                                $class->widget($property, $this->itemId,true);
+                            }else if ($property['slug'] == 'socialdb_property_fixed_content') {
+                                $class = new FormItemContent($this->collection_id);
+                                $class->widget($property, $this->itemId,true);
+                            }else if ($property['slug'] == 'socialdb_property_fixed_attachments') {
+                                $class = new FormItemAttachment($this->collection_id);
+                                $class->widget($property, $this->itemId,true);
+                            }
+                        }
+                    }
+                    ?>
+                </div>
+            </div>    
+            <?php
+        }else if ((!$tabs || empty($tabs)) && !$default_tab && !$allTabs):
+            ?>
+            <div class="col-md-12 no-padding">
+                <div id="tab-content-metadata" class="tab-content <?php echo $class ?>" style="background: white;">
+                    <div id="tab-default"  class="tab-pane fade in active" style="background: white;margin-bottom: 15px;">
+                        <div class="expand-all-div"  onclick="openAccordeon('default')" >
+                            <a class="expand-all-link" href="javascript:void(0)">
+                                <?php _e('Expand all', 'tainacan') ?>&nbsp;&nbsp;<span class="caret"></span></a>
+                        </div>
+                        <hr>
+                        <div id="accordeon-default" class="multiple-items-accordion" style="margin-top:-20px;">
+                            <?php $this->listPropertiesbyTab('default') ?>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <button type="button"
-                    onclick="back_main_list(<?php echo $object_id ?>);"
-                    style="margin-bottom: 20px;"
-                    class="btn btn-default btn-lg pull-left"><?php _e('Discard','tainacan'); ?>
-            </button>
-            <div id="submit_container">
-                <button type="button"
-                        id="submit-form-item"
-                        style="margin-bottom: 20px;"
-                        class="btn btn-success btn-lg pull-right send-button">
-                            <?php _e('Save','tainacan'); ?></button>
-            </div>
+            </div>    
             <?php
         else:
             ?>
-            <input  type="hidden"
-                    name="tabs_properties"
-                    id="tabs_properties"
-                    value='<?php echo ($tabs && is_array($tabs)) ? json_encode($tabs) : ''; ?>'/>
-            <!-- Abas para a Listagem dos metadados -->
-            <ul id="tabs_item" class="nav nav-tabs" style="background: white">
-                <li  role="presentation" class="active" key="default">
-                    <a id="click-tab-default" href="#tab-default" aria-controls="tab-default" role="tab" data-toggle="tab">
-                        <span  id="default-tab-title">
-                            <?php echo (!$default_tab) ? _e('Default', 'tainacan') : $default_tab ?>
-                        </span>
-                        <?php $this->validateIcon('alert-default') ?>
-                    </a>
-                </li>
-                <?php
-                if ($allTabs && is_array($allTabs)) {
-                    foreach ($allTabs as $tab) {
-                        ?>
-                        <li  role="presentation" key="<?php echo $tab->meta_id ?>">
-                            <a id="click-tab-<?php echo $tab->meta_id ?>" href="#tab-<?php echo $tab->meta_id ?>" aria-controls="tab-<?php echo $tab->meta_id ?>" role="tab" data-toggle="tab">
-                                <span  id="<?php echo $tab->meta_id ?>-tab-title">
-                                    <?php echo $tab->meta_value ?>
+            <div class="col-md-12 no-padding">
+                <input  type="hidden"
+                        name="tabs_properties"
+                        id="tabs_properties"
+                        value='<?php echo ($tabs && is_array($tabs)) ? json_encode($tabs) : ''; ?>'/>
+                <!-- Abas para a Listagem dos metadados -->
+                <div class="<?php echo $class ?>">
+                    <ul id="tabs_item" class="nav nav-tabs " style="background: white">
+                        <li  role="presentation" class="active" key="default">
+                            <a id="click-tab-default" href="#tab-default" aria-controls="tab-default" role="tab" data-toggle="tab">
+                                <span  id="default-tab-title">
+                                    <?php echo (!$default_tab) ? _e('Default', 'tainacan') : $default_tab ?>
                                 </span>
-                                <?php $this->validateIcon('alert-'.$tab->meta_id) ?>
+                                <?php $this->validateIcon('alert-default') ?>
                             </a>
                         </li>
                         <?php
-                    }
-                }
-                ?>
-            </ul>
-            <div id="tab-content-metadata" class="tab-content" style="background: white;">
-                <div id="tab-default"  class="tab-pane fade in active" style="background: white;margin-bottom: 15px;">
-                    <div class="expand-all-div"  onclick="openAccordeon('default')" >
-                        <a class="expand-all-link" href="javascript:void(0)">
-                            <?php _e('Expand all', 'tainacan') ?>&nbsp;&nbsp;<span class="caret"></span></a>
-                    </div>
-                    <hr>
-                    <div id="accordeon-default" class="multiple-items-accordion" style="margin-top:-20px;">
-                        <?php $this->listPropertiesbyTab('default') ?>
-                    </div>
-                </div>
-                <?php
-                if ($allTabs && is_array($allTabs)) {
-                    foreach ($allTabs as $tab) {
+                        if ($allTabs && is_array($allTabs)) {
+                            foreach ($allTabs as $tab) {
+                                ?>
+                                <li  role="presentation" key="<?php echo $tab->meta_id ?>">
+                                    <a id="click-tab-<?php echo $tab->meta_id ?>" href="#tab-<?php echo $tab->meta_id ?>" aria-controls="tab-<?php echo $tab->meta_id ?>" role="tab" data-toggle="tab">
+                                        <span  id="<?php echo $tab->meta_id ?>-tab-title">
+                                            <?php echo $tab->meta_value ?>
+                                        </span>
+                                        <?php $this->validateIcon('alert-'.$tab->meta_id) ?>
+                                    </a>
+                                </li>
+                                <?php
+                            }
+                        }
                         ?>
-                        <div id="tab-<?php echo $tab->meta_id ?>"  class="tab-pane fade" style="background: white;margin-bottom: 15px;">
-                            <div class="expand-all-div"  onclick="openAccordeon('<?php echo $tab->meta_id ?>')" >
+                    </ul>
+                    <div id="tab-content-metadata" class="tab-content" style="background: white;">
+                        <div id="tab-default"  class="tab-pane fade in active" style="background: white;margin-bottom: 15px;">
+                            <div class="expand-all-div"  onclick="openAccordeon('default')" >
                                 <a class="expand-all-link" href="javascript:void(0)">
                                     <?php _e('Expand all', 'tainacan') ?>&nbsp;&nbsp;<span class="caret"></span></a>
                             </div>
                             <hr>
-                            <div id="accordeon-<?php echo $tab->meta_id ?>" class="multiple-items-accordion" style="margin-top:-20px;">
-                                <?php $this->listPropertiesbyTab($tab->meta_id) ?>
+                            <div id="accordeon-default" class="multiple-items-accordion" style="margin-top:-20px;">
+                                <?php $this->listPropertiesbyTab('default') ?>
                             </div>
                         </div>
                         <?php
-                    }
-                }
-                ?>
-            </div>
-            <button type="button"
-                    onclick="backMainListOrDiscard(<?php echo $ID ?>);"
-                    style="margin-bottom: 20px;"
-                    class="btn btn-default btn-lg pull-left"><?php _e('Discard','tainacan'); ?>
-            </button>
-            <div id="submit_container">
-                <button type="button"
-                        id="submit-form-item"
-                        style="margin-bottom: 20px;"
-                        class="btn btn-success btn-lg pull-right send-button">
-                            <?php _e('Save','tainacan'); ?></button>
+                        if ($allTabs && is_array($allTabs)) {
+                            foreach ($allTabs as $tab) {
+                                ?>
+                                <div id="tab-<?php echo $tab->meta_id ?>"  class="tab-pane fade" style="background: white;margin-bottom: 15px;">
+                                    <div class="expand-all-div"  onclick="openAccordeon('<?php echo $tab->meta_id ?>')" >
+                                        <a class="expand-all-link" href="javascript:void(0)">
+                                            <?php _e('Expand all', 'tainacan') ?>&nbsp;&nbsp;<span class="caret"></span></a>
+                                    </div>
+                                    <hr>
+                                    <div id="accordeon-<?php echo $tab->meta_id ?>" class="multiple-items-accordion" style="margin-top:-20px;">
+                                        <?php $this->listPropertiesbyTab($tab->meta_id) ?>
+                                    </div>
+                                </div>
+                                <?php
+                            }
+                        }
+                        ?>
+                    </div>
+                </div>
+                <?php if($this->mediaHabilitate) $this->mediaHabilitate() ?>
             </div>
         <?php
         endif;
+        ?>
+        <button type="button"
+                onclick="backMainListOrDiscard(<?php echo $ID ?>);"
+                style="margin-bottom: 20px;"
+                class="btn btn-default btn-lg pull-left"><?php _e('Discard','tainacan'); ?>
+        </button>
+        <div id="submit_container">
+            <button type="button"
+                    id="submit-form-item"
+                    style="margin-bottom: 20px;"
+                    class="btn btn-success btn-lg pull-right send-button">
+                        <?php _e('Save','tainacan'); ?></button>
+        </div>    
+        <?php    
         $this->initScripts();
     }
 
@@ -302,26 +339,34 @@ class FormItem extends Model {
                         continue;
                     }
 
-                    if ($property['slug'] == 'socialdb_property_fixed_title') {
+                    if ($property['slug'] == 'socialdb_property_fixed_title' && !$this->isMediaFocus) {
                         $class = new FormItemTitle($this->collection_id);
+                        $class->widget($property, $this->itemId);
                     } else if ($property['slug'] == 'socialdb_property_fixed_thumbnail') {
                         $class = new FormItemThumbnail($this->collection_id);
-                    } else if ($property['slug'] == 'socialdb_property_fixed_content') {
+                        $class->widget($property, $this->itemId);
+                    } else if ($property['slug'] == 'socialdb_property_fixed_content'&& !$this->isMediaFocus) {
                         $class = new FormItemContent($this->collection_id);
+                        $class->widget($property, $this->itemId);
                     } else if ($property['slug'] == 'socialdb_property_fixed_description') {
                         $class = new FormItemDescription($this->collection_id);
-                    } else if ($property['slug'] == 'socialdb_property_fixed_attachments') {
+                        $class->widget($property, $this->itemId);
+                    } else if ($property['slug'] == 'socialdb_property_fixed_attachments' && !$this->isMediaFocus) {
                         $class = new FormItemAttachment($this->collection_id);
+                        $class->widget($property, $this->itemId);
                     } else if ($property['slug'] == 'socialdb_property_fixed_source') {
                         $class = new FormItemSource($this->collection_id);
+                        $class->widget($property, $this->itemId);
                     } else if ($property['slug'] == 'socialdb_property_fixed_type') {
                         $class = new FormItemType($this->collection_id);
+                        $class->widget($property, $this->itemId);
                     } else if ($property['slug'] == 'socialdb_property_fixed_tags') {
                         $class = new FormItemTags($this->collection_id);
+                        $class->widget($property, $this->itemId);
                     } else if ($property['slug'] == 'socialdb_property_fixed_license') {
                         $class = new FormItemLicense($this->collection_id);
+                        $class->widget($property, $this->itemId);
                     }
-                    $class->widget($property, $this->itemId);
                 } else {
                     $data = ['text', 'textarea', 'date', 'number', 'numeric', 'auto-increment'];
                     $term = ['selectbox', 'radio', 'checkbox', 'tree', 'tree_checkbox', 'multipleselect'];
@@ -585,6 +630,58 @@ class FormItem extends Model {
             &nbsp;<span id="<?php echo $id ?>" class="<?php echo $id ?> pull-right validateIcon" style="color:red;font-size: 11px;display: none;"><?php echo $text ?>&nbsp;<span style="color:red;font-size: 13px;" class="glyphicon glyphicon-exclamation-sign pull-right"></span></span>
         <?php
     }
+    
+    /**
+     * 
+     */
+    public function mediaHabilitate() {
+        ?>
+          <div class="col-md-3"
+               style="background: white;font: 11px Arial;padding-left: 1% 2% 0px 15px;margin-top: 0px">
+                <h4>
+                   <?php echo ($view_helper->terms_fixed['thumbnail']) ? $view_helper->terms_fixed['thumbnail']->name :  _e('Thumbnail','tainacan') ?>
+               </h4>
+                <hr>
+                <div id="thumnbail_place"  style="margin-top:15px;">
+                        <input type="hidden" name="thumbnail_url" id="thumbnail_url" value="">
+                        <div id="image_side_create_object">
+                            <img width="150" height="150" class="thumbnail" src="<?php echo get_the_post_thumbnail_url($item_id) ?>">
+                        </div>
+                        <form id="formUpdateThumbnail">
+                            <input type="file"
+                                   id="object_thumbnail"
+                                   name="object_thumbnail"
+                                   class="form-control auto-save">
+                            <input type="hidden" name="operation" value="saveThumbnail">
+                            <input type="hidden" name="item_id" value="<?php echo $this->itemId ?>">
+                        </form>
+                </div>
+                <br><br>
+                <h4>
+                   <?php echo ($view_helper->terms_fixed['attachments']) ? $view_helper->terms_fixed['attachments']->name :  _e('Attachments','tainacan') ?>
+               </h4>
+                <hr>
+                 <div >
+                     <center>
+                     <div id="dropzone_new"
+                         class="dropzone"
+                         style="margin-bottom: 15px;min-height: 150px;padding-top: 0px;">
+                                <div class="dz-message" data-dz-message>
+                                    <span style="text-align: center;vertical-align: middle;">
+                                        <h3>
+                                            <span class="glyphicon glyphicon-upload"></span>
+                                            <b><?php _e('Drop Files','tainacan')  ?></b>
+                                                <?php _e('to upload','tainacan')  ?>
+                                        </h3>
+                                        <h4>(<?php _e('or click','tainacan')  ?>)</h4>
+                                    </span>
+                                </div>
+                     </div>
+                     </center>
+                 </div>
+            </div>
+        <?php    
+    }
 
     /**
      * scripts deste
@@ -843,6 +940,7 @@ class FormItem extends Model {
                       $(seletor).css('height','auto');
                       $(seletor).html(result);
                   }else{
+                      $(seletor).css('border','none');
                       $(seletor).html('');
                   }
               });

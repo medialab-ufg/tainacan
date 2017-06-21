@@ -2650,6 +2650,27 @@ function update_post_title($object_id, $title) {
     $results = $wpdb->get_results($query);
 }
 
+/**
+ * 
+ * @param type $item_id
+ * @return boolean
+ */
+function hasHelper($item_id) {
+    global $wpdb;
+    $wp_postmeta = $wpdb->prefix . "postmeta";
+    $query = "
+                    SELECT p.* FROM $wp_postmeta p  
+                    WHERE p.post_id = '$item_id'
+                    AND p.meta_key LIKE '%socialdb_property_helper_%' AND p.meta_key  NOT LIKE 'socialdb_property_helper_false'
+            ";
+    $result = $wpdb->get_results($query);
+    if ($result && is_array($result) && count($result) > 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 /* * *****************************************************************************
  *               EVENTS                                                         *
  * ***************************************************************************** */

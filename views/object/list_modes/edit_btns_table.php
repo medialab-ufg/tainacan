@@ -11,9 +11,15 @@
                 } else {
                     $has_checked_in = get_post_meta( $curr_id ,'socialdb_object_checkout', true);
                     ?>
-                   <a id="edit_button_<?php echo $curr_id ?>" style="cursor: pointer;"
-                      data-toggle="dropdown" role="button" aria-expanded="false"
-                       onclick="edit_object_item('<?php echo $curr_id ?>')">
+                        <?php if(!hasHelper($curr_id)): ?>
+                         <a id="edit_button_<?php echo $curr_id ?>" style="cursor: pointer;"
+                           data-toggle="dropdown" role="button" aria-expanded="false"
+                            onclick="edit_object_item('<?php echo $curr_id ?>')">
+                         <?php else: ?>    
+                         <a id="edit_button_<?php echo $curr_id ?>" style="cursor: pointer;"
+                           data-toggle="dropdown" role="button" aria-expanded="false"
+                            href="<?php echo get_the_permalink($collection_id).get_post($curr_id)->post_name.'/editar'; ?>">   
+                         <?php endif; ?>    
                     <?php } ?>
                     <span class="glyphicon glyphicon-edit"></span>
                    </a>
