@@ -49,7 +49,7 @@ class CollectionController extends Controller {
                     __('signup','tainacan')
                 );
 
-                if (in_array($name_lower, $NotAllowed)) {
+                if (in_array($name_lower, $NotAllowed) || preg_match('/^oaipmh/', $name_lower)) {
                     header("location:" . get_permalink(get_option('collection_root_id')) . '?info_messages=' . __('This collection name is not allowed!', 'tainacan') . '&info_title=' . __('Attention', 'tainacan'));
                 } else {
                     if (empty($data['collection_name']) || empty($data['collection_object'])):

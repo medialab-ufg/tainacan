@@ -7,6 +7,7 @@ include_once (dirname(__FILE__) . '../../../models/property/property_model.php')
 include_once (dirname(__FILE__) . '../../../models/ranking/ranking_model.php');
 include_once (dirname(__FILE__) . '../../../models/category/category_model.php');
 include_once (dirname(__FILE__) . '../../../models/event/event_object/event_object_create_model.php');
+require_once (dirname(__FILE__) . '../../../libraries/php/PdfToText/PdfToText.phpclass');
 require_once(dirname(__FILE__) . '../../general/general_model.php');
 require_once(dirname(__FILE__) . '../../user/user_model.php');
 require_once(dirname(__FILE__) . '../../tag/tag_model.php');
@@ -34,7 +35,8 @@ class ObjectMultipleModel extends Model {
 
       foreach ($items_id as $item_id) {
         $post_id = $this->insert_post($data,trim($item_id));
-        if($post_id) {
+        if($post_id)
+        {
           $this->vinculate_collection($data, $post_id);
           $this->item_resource($data, $item_id, $post_id);
           $this->item_attachments($data, $item_id, $post_id);
@@ -47,7 +49,9 @@ class ObjectMultipleModel extends Model {
           $result['ids'][] = $post_id;
           $col_id = $data['collection_id'];
           $user_id = get_current_user_id();
-          if ($user_id == 0) {
+
+          if ($user_id == 0)
+          {
             $user_id = get_option('anonimous_user');
           }
 
@@ -158,6 +162,7 @@ class ObjectMultipleModel extends Model {
       $result['title'] = __('No items inserted successfully!','tainacan');
       $result['type'] = 'error';
     }
+
     return json_encode($result);
   }
   /**
@@ -230,11 +235,21 @@ class ObjectMultipleModel extends Model {
      * @description - funcao que insere metadados essenciais do objeto como tipo,origem  
      * @author: Eduardo 
      */
-    public function item_resource($data,$item_id,$post_id) {
+    public function item_resource($data,$item_id,$post_id) 
+    {
         update_post_meta( $post_id, 'socialdb_object_from', 'internal');
         update_post_meta( $post_id, 'socialdb_object_dc_source', $data['source_'.$item_id]);
         update_post_meta( $post_id, 'socialdb_object_content', $item_id);
         update_post_meta( $post_id, 'socialdb_object_dc_type', $data['type_'.$item_id]);
+
+        if(strcmp($data['type_'.$item_id],'pdf') == 0)
+        {
+            $url_file = wp_get_attachment_url($item_id);
+            $pdf 	=  new PdfToText ($url_file) ;
+            $this->set_common_field_values($post_id, "socialdb_property_$item_id", $pdf->Text);
+
+        }
+
         $this->set_common_field_values($post_id, 'object_from', 'internal');
         $this->set_common_field_values($post_id, 'object_source', $data['source_'.$item_id]);
         $this->set_common_field_values($post_id, 'object_type', $data['object_type']);
