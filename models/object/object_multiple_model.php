@@ -522,11 +522,35 @@ class ObjectMultipleModel extends Model {
                     );
                     delete_user_meta(get_current_user_id(), 'socialdb_collection_'.$col_id.'_betafile', $post_id);
                     wp_update_post($object);
-                    if(!isset($data['edit_multiple'])){
+
+                    if(!isset($data['edit_multiple']))
+                    {
                         $this->insert_object_event($post_id, ['collection_id' => $col_id ]);
                     }
+
+                    /* Getting PDF text */
+                    $extension = end(explode(".", $data["source_$item_id"]));
+                    if(strcmp($extension,'pdf') == 0)
+                    {
+                        $url_file = $data["source_$item_id"];
+
+                        try
+                        {
+                            $parser = new \Smalot\PdfParser\Parser();
+                            $pdf = $parser->parseFile($url_file);
+                            $pdf_text = $pdf->getText();
+
+                            $this->set_common_field_values($post_id, "socialdb_property_$item_id", $pdf_text);
+                        }catch (Exception $e)
+                        {
+                            //Can't read PDF file, just move on.
+                        }
+                    }
+                    /* Getting PDF text */
+
                     $this->set_common_field_values($post_id, 'title', $object['post_title']);
                     $this->set_common_field_values($post_id, 'description', $object['post_content']);
+
                     if($post_id){
                         if(!isset($data['edit_multiple'])){
                             $this->vinculate_collection($data, $post_id);
@@ -589,6 +613,7 @@ class ObjectMultipleModel extends Model {
             $result['title'] = __('No items inserted successfully!','tainacan');
             $result['type'] = 'error';
         }
+
         return json_encode($result);
     }
     

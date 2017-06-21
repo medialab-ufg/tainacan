@@ -1702,6 +1702,7 @@
                                     else {
                                         var any_file_type = validateAnyFile();
                                         if (any_file_type) {
+                                            
                                             // É uma URL de um arquivo. Executar a importação deste arquivo.
                                             show_modal_main();
                                             //showFormCreateURLFile($('#item_url_import_all').val(), any_file_type);
