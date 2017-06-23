@@ -93,6 +93,7 @@ class CsvController extends Controller {
         $objeto = fopen($file_name, 'r');
         $count = 0;
         $lines = array();
+        $lines_final = array();
         // LEITURA DO ARQUIVO
         //$time_before_read = microtime() - $time_start;
         while (($csv_data = fgetcsv($objeto, 0, $delimiter)) !== false) {
@@ -103,7 +104,14 @@ class CsvController extends Controller {
             $lines = $csv_data;
             break;
         }
-        return array_filter($lines);
+        foreach ($lines as $value) {
+            if(mb_detect_encoding($value, 'auto')=='UTF-8'){
+                $lines_final[] = iconv("Windows-1252","UTF-8" , $value);
+            }else{
+                $lines_final[] = $value;
+            }
+        }
+        return array_filter($lines_final);
     }
 
 }

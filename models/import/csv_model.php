@@ -333,8 +333,8 @@ class CsvModel extends Model {
                     if (!is_array($lines[$i]) || empty(array_filter($lines[$i]))) {
                         $i++;
                     }
-                    $order = $this->add_properties_columns($lines[$i], $collection_id, $title);
-                    $this->insertModeTable($order, $collection_id, $title);
+                    $order = $this->add_properties_columns($lines[$i], $collection_id, $title,$code);
+                    $this->insertModeTable(array_unique($order), $collection_id, $title);
                     $already = true;
                 } else if (isset($order) && count($order) > 0) {
                     $this->add_value_column($order, $lines[$i], $collection_id, $title,$code);
@@ -380,7 +380,7 @@ class CsvModel extends Model {
         $object_id = socialdb_insert_object_csv([$title]);
         $this->set_common_field_values($object_id, 'title', $title);
         foreach ($properties as $key => $property) {
-            add_post_meta($object_id, 'socialdb_property_' . $property, utf8_encode($values[$key]));
+            add_post_meta($object_id, 'socialdb_property_' . $property,$this->codification_value((string)$values[$key],$code));
             $this->set_common_field_values($object_id, "socialdb_property_$property", $this->codification_value($values[$key], $code));
         }
         $categories[] = $this->get_category_root_of($collection_id);
@@ -808,6 +808,11 @@ class CsvModel extends Model {
         if($code == 'utf8'){
             return utf8_encode(utf8_decode($value));
         }else{
+            if(mb_detect_encoding($value, 'auto')=='UTF-8'){
+               return iconv("Windows-1252","UTF-8" , $value);
+            }else{
+               return $value;
+            }
             return $value;
         }
     }

@@ -12,9 +12,13 @@ class MultipleTreeClass extends FormItem {
         $this->hasDefaultValue = (isset($property['metas']['socialdb_property_default_value']) && $property['metas']['socialdb_property_default_value']!='') ? $property['metas']['socialdb_property_default_value'] : false;
         $values = ($this->value && is_array($this->getValues($this->value[$index_id][$property_id]))) ? $this->getValues($this->value[$index_id][$property_id]) : false;
         $values = (!$values && $this->hasDefaultValue) ? [$this->hasDefaultValue] : $values;
-        if($values && is_array($values)){
+        if($values && is_array($values) && $property['has_children'] && is_array($property['has_children'])){
             foreach ($values as $value) {
-               $autoValidate = ($property['has_children'] && is_array($property['has_children']) && in_array($value,$property['has_children'])) ? true : false;
+                foreach ($property['has_children'] as $child) {
+                    if($value == $child->term_id){
+                        $autoValidate = true;
+                    }
+                }
             }
         }
         $this->isRequired = ($property['metas'] && $property['metas']['socialdb_property_required'] && $property['metas']['socialdb_property_required'] != 'false') ? true : false;
