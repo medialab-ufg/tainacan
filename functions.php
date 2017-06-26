@@ -3213,6 +3213,7 @@ function get_item_thumb_image($item_id, $size="thumbnail") {
         if( count($_post_img_id) > 0 ) {
             $_img_id = (int) $_post_img_id[0];
             $_img_url = get_post($_img_id)->guid;
+            
             return '<img src="'. $_img_url .'" alt="" class="img-responsive" style="max-width: 100%" />';
         } else {
             return '<img src="' . get_item_thumbnail_default($item_id) . '" class="img-responsive" style="max-width: 100%">';

@@ -668,6 +668,7 @@ $references = [
                                 <!-- Hidden para as categorias, tags e attachments  -->
                                 <input type="hidden" id="source_<?php echo $file['ID'] ?>" name="source_<?php echo $file['ID'] ?>" value=''>
                                 <input type="hidden" name="type_<?php echo $file['ID'] ?>" value='pdf'>
+                                <input type="hidden" id="pdf_url_<?php echo $file['ID'] ?>" name="pdf_url_<?php echo $file['ID'] ?>" value='<?php echo wp_get_attachment_url($file['ID']); ?>'>
                                 <input type="hidden" id='parent_<?php echo $file['ID'] ?>' name="parent_<?php echo $file['ID'] ?>" value=''>
                                 <input type="hidden" id='attachments_<?php echo $file['ID'] ?>' name="attachments_<?php echo $file['ID'] ?>" value=''>
                                 <input type="hidden" id='description_<?php echo $file['ID'] ?>' name="description_<?php echo $file['ID'] ?>" value=''>

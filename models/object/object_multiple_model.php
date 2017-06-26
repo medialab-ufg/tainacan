@@ -28,6 +28,7 @@ class ObjectMultipleModel extends Model {
      * @author: Eduardo 
      */
   public function add($data) {
+      //print_r($data);
       $result = [];
       $items_id = explode(',', $data['items_id']); // id de todos os itens
 
@@ -253,6 +254,7 @@ class ObjectMultipleModel extends Model {
                 $parser = new \Smalot\PdfParser\Parser();
                 $pdf = $parser->parseFile($url_file);
                 $pdf_text = $pdf->getText();
+                error_reporting(1);
                 
                 $this->set_common_field_values($post_id, "socialdb_property_$item_id", $pdf_text);
             }catch (Exception $e)
@@ -297,6 +299,54 @@ class ObjectMultipleModel extends Model {
             }
         }
 
+        //PDF Thumbnail
+        if(strcmp($data['type_'.$item_id], 'pdf') == 0)
+        {
+            $upload_dir = wp_upload_dir();
+
+            $upload_path = str_replace( '/', DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
+            $image = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $data['pdf_thumbnail_'.$item_id]));
+            $filename = 'pdf_thumb_'.$item_id.'.png';
+
+            $hashed_filename = md5( $filename . microtime() ) . '_' . $filename;
+
+            // @new
+            $image_upload = file_put_contents( $upload_path . $hashed_filename, $image );
+
+            //HANDLE UPLOADED FILE
+            if( !function_exists( 'wp_handle_sideload' ) ) {
+                require_once( ABSPATH . 'wp-admin/includes/file.php' );
+            }
+
+            // Without that I'm getting a debug error!?
+            if( !function_exists( 'wp_get_current_user' ) ) {
+                require_once( ABSPATH . 'wp-includes/pluggable.php' );
+            }
+
+            $file             = array();
+            $file['error']    = '';
+            $file['tmp_name'] = $upload_path . $hashed_filename;
+            $file['name']     = $hashed_filename;
+            $file['type']     = 'image/png';
+            $file['size']     = filesize( $upload_path . $hashed_filename );
+
+            // upload file to server
+            // @new use $file instead of $image_upload
+            $file_return = wp_handle_sideload( $file, array( 'test_form' => false ) );
+
+            $filename = $file_return['file'];
+            $attachment = array(
+                'post_mime_type' => $file_return['type'],
+                'post_title' => preg_replace('/\.[^.]+$/', '', basename($filename)),
+                'post_content' => '',
+                'post_status' => 'inherit',
+                'guid' => $upload_dir['url'] . '/' . basename($filename)
+            );
+            $attach_id = wp_insert_attachment( $attachment, $filename );
+
+            set_post_thumbnail($post_id, $attach_id);
+
+        }
     }
     /**
      * @signature - item_tags($data)

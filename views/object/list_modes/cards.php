@@ -29,37 +29,7 @@ $itemURL = $_current_collection . basename(get_permalink());
                 <div class="col-md-4 colFoto no-padding">
                     <a href="<?php echo get_collection_item_href($collection_id, $curr_id, $viewHelper); ?>"
                        onclick="<?php get_item_click_event($collection_id, $curr_id) ?>">
-                        <?php
-                        $elem_meta = get_post_meta($curr_id);
-                        $attachment_id = $elem_meta['socialdb_object_content'][0];
-                        $pdf_online_url = $elem_meta['socialdb_object_dc_source'][0];
-                        $url_file = wp_get_attachment_url($attachment_id);
-
-                        if(strcmp($elem_meta['socialdb_object_dc_type'][0], 'pdf') == 0)
-                        {
-                            if(!empty($pdf_online_url))
-                            {
-                                $url_file = $pdf_online_url;
-                            }
-                            
-                            ?>
-                                <div id="<?php echo $url_file; ?>"> <!-- Thumb do PDF é colocada aqui --> </div>
-
-                                <iframe data-url="<?php echo $url_file; ?>" data-curr-id="<?php echo $curr_id; ?>"
-                                        onload="generate_pdf_thumbnail($(this).attr('data-url'), $(this).attr('data-curr-id'));" style="display: none;">
-                                    <!-- Utilizado como gatilho para carregar a thumb do PDF -->
-                                </iframe>
-                            <?php
-
-                            get_item_thumb_image($curr_id);
-                        } else
-                        {
-                            ?>
-                                 <?php echo get_item_thumb_image($curr_id); ?>
-                            <?php
-                        }
-                        ?>
-
+                        <?php echo get_item_thumb_image($curr_id); ?>
                     </a>
                 </div>
 

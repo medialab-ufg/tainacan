@@ -41,7 +41,7 @@
             $.each($("input:checkbox[name='selected_items']:checked"), function () {
                 selected_items.push($(this).val());
             });
-            var is_empty = false;;
+            var is_empty = false;
             $.each($("input:checkbox[name='selected_items']"), function () {
                 if($('#title_' + $(this).val()).val().trim()==''){
                     is_empty = true;
@@ -50,10 +50,12 @@
             if(!is_empty){
                 $('#selected_items_id').val(selected_items.join(','));
                 $('#modalImportMain').modal('show');
+                var formData = new FormData(this);
+                
                 $.ajax({
                     url: src + '/controllers/object/object_multiple_controller.php',
                     type: 'POST',
-                    data: new FormData(this),
+                    data: formData,
                     processData: false,
                     contentType: false
                 }).done(function (result) {

@@ -2962,35 +2962,29 @@ function change_button()
 }
 //object_dc_type
 //Gera thumbnail de um pdf
-function generate_pdf_thumbnail(pdf_url, curr_id)
+function generate_pdf_thumbnail(pdf_url)
 {
     PDFJS.getDocument(pdf_url).promise.then(function (doc) {
         var page = [];
-        page.push(1);
+        page.push(1);//Get first page
 
         return Promise.all(page.map(function (num) {
             return doc.getPage(num).then(makeThumb)
                 .then(function (canvas) {
-                    document.getElementById(pdf_url).appendChild(canvas);
+                    var img = canvas.toDataURL("image/png");
+
+                    return img;
                 });
         }));
-    }).catch(function () {
-        /* Ajax para pegar icone padrão */
-        $.ajax({
-            type: "POST",
-            url: $('#src').val() + "/controllers/object/object_controller.php?operation=default_img&curr_id="+curr_id,
-            data: {curr_id: curr_id}
-        }).done(function (result) {
-            var div_img = document.getElementById(pdf_url);
-            div_img.innerHTML = result;
-        });
     });
+
 }
 
 function makeThumb(page) {
     var vp = page.getViewport(1);
     var canvas = document.createElement("canvas");
-    canvas.width = canvas.height = 170;//170
+    canvas.width = 595;
+    canvas.height = 842;
     var scale = Math.min(canvas.width / vp.width, canvas.height / vp.height);
     return page.render({canvasContext: canvas.getContext("2d"), viewport: page.getViewport(scale)}).promise.then(function () {
         return canvas;

@@ -37,43 +37,75 @@
         $('#sumbit_multiple_items').submit(function (e) {
             e.preventDefault();
             $('#modalImportMain').modal('show');
-             var is_empty = false;
+            var is_empty = false;
             $.each($("input:checkbox[name='selected_items']"), function () {
                 if($('#title_' + $(this).val()).val().trim()==''){
                     is_empty = true;
                 }
             });
+
+            var formData = new FormData(this);
             if(!is_empty){
-                $.ajax({
-                    url: src + '/controllers/object/object_multiple_controller.php',
-                    type: 'POST',
-                    data: new FormData(this),
-                    processData: false,
-                    contentType: false
-                }).done(function (result) {
-                    $('#modalImportMain').modal('hide');
-                    elem_first = jQuery.parseJSON(result);
+                var itens_id = formData.get('items_id');
+                itens_id = itens_id.split(",");
 
-                    cl(elem_first);
+                var itemsFetcher = itens_id.map(function(item, index) {
+                    if (formData.get("type_" + item) == 'pdf')
+                    {
+                        var pdf_url = formData.get("pdf_url_" + item);
+                        
+                        return new Promise(function(resolve, reject) {
+                            PDFJS.getDocument(pdf_url).promise.then(function(doc) {
+                                var page = [];
+                                page.push(1); //Get first page
 
-                    if (elem_first.type && elem_first.type == 'success') {
-                        $('#form').hide();
-                        $("#tainacan-breadcrumbs").hide();
-                        $('#configuration').hide();
-                        $('#main_part').show();
-                        $('#display_view_main_page').show();
-                        $("#container_socialdb").show('fast');
-                        //$("#dynatree").dynatree("getTree").reload();
-                        //showList(src);
-                        wpquery_clean();
-                        $('#create_button').show();
-                        $('#menu_object').show();
-                        showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
-                    } else {
-                        showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
+                                return Promise.all(page.map(function(num) {
+                                    return doc.getPage(num).then(makeThumb)
+                                        .then(function(canvas) {
+                                            var img = canvas.toDataURL("image/png");
+
+                                            formData.append("pdf_thumbnail_" + item, img);
+                                            resolve("It's done!");
+                                        });
+                                }));
+                            });
+                        });
                     }
                 });
-            }else{
+
+                Promise.all(itemsFetcher).then(function(){
+                    $.ajax({
+                        url: src + '/controllers/object/object_multiple_controller.php',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false
+                    }).done(function (result) {
+                        $('#modalImportMain').modal('hide');
+                        elem_first = jQuery.parseJSON(result);
+
+                        cl(elem_first);
+
+                        if (elem_first.type && elem_first.type == 'success') {
+                            $('#form').hide();
+                            $("#tainacan-breadcrumbs").hide();
+                            $('#configuration').hide();
+                            $('#main_part').show();
+                            $('#display_view_main_page').show();
+                            $("#container_socialdb").show('fast');
+                            //$("#dynatree").dynatree("getTree").reload();
+                            //showList(src);
+                            wpquery_clean();
+                            $('#create_button').show();
+                            $('#menu_object').show();
+                            showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
+                        } else {
+                            showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
+                        }
+                    });
+                });
+            }
+            else{
                 showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('There are empty title, please fill before submit!', 'tainacan') ?>', 'info');
             }
             e.preventDefault();
