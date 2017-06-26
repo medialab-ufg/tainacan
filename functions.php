@@ -1846,7 +1846,7 @@ if (!function_exists("theme_js")) {
         /* dropzone */
         wp_register_script('bootstrap-combobox', get_template_directory_uri() . '/libraries/js/combobox/bootstrap-combobox.js');
         /* Facebook */
-        wp_register_script('FacebookJS', 'http://connect.facebook.net/en_US/all.js');
+        wp_register_script('FacebookJS', 'https://connect.facebook.net/en_US/all.js');
         /* Row Sorter */
         wp_register_script('row-sorter', get_template_directory_uri() . '/libraries/js/row_sorter/jquery.rowsorter.js');
         /* Masked Input */
