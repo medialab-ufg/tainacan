@@ -514,7 +514,7 @@ class FormItem extends Model {
                         $class->widget($property, $this->itemId);
                     } else if ($property['type'] == __('Compounds', 'tainacan')) {
                         $class = new FormItemCompound($this->collection_id, $this->getValuePropertyHelper($this->itemId,$property['id']));
-                        $class->value = $this->getValuePropertyHelper($this->itemId,$property['id']);
+                        //$class->value = $this->getValuePropertyHelper($this->itemId,$property['id']);
                         $class->widget($property, $this->itemId);
                     }
                 }
@@ -645,7 +645,7 @@ class FormItem extends Model {
                 <div id="thumnbail_place"  style="margin-top:15px;">
                         <input type="hidden" name="thumbnail_url" id="thumbnail_url" value="">
                         <div id="image_side_create_object">
-                            <img width="150" height="150" class="thumbnail" src="<?php echo get_the_post_thumbnail_url($item_id) ?>">
+                            <img width="150" height="150" class="thumbnail" src="<?php echo get_the_post_thumbnail_url($this->itemId) ?>">
                         </div>
                         <form id="formUpdateThumbnail">
                             <input type="file"
@@ -975,6 +975,12 @@ class FormItem extends Model {
                             $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .glyphicon-ok').hide();
                         }
                     }, 2000);
+                    //mostro a mensagem do proprio metadado
+                    console.log( $('#validation-'+compound_id+'-'+property_id+'-'+index_id).parent().parent().find('p .alert-compound-'+property_id));
+                    if( $('#validation-'+compound_id+'-'+property_id+'-'+index_id).parent().parent().find('p .alert-compound-'+property_id).length>0)
+                         $('#validation-'+compound_id+'-'+property_id+'-'+index_id).parent().parent().find('p .alert-compound-'+property_id).hide();
+                    else
+                        $('.alert-compound-'+compound_id).hide();
                 }
             }
             Hook.register('validateFieldsMetadataText',function(args){
@@ -1002,6 +1008,12 @@ class FormItem extends Model {
                           $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .glyphicon-ok').hide();
                       }
                   }, 2000);
+                  //mostro a mensagem do proprio metadado
+                    console.log( $('#validation-'+compound_id+'-'+property_id+'-'+index_id).parent().parent().find('p .alert-compound-'+property_id));
+                    if( $('#validation-'+compound_id+'-'+property_id+'-'+index_id).parent().parent().find('p .alert-compound-'+property_id).length>0)
+                         $('#validation-'+compound_id+'-'+property_id+'-'+index_id).parent().parent().find('p .alert-compound-'+property_id).hide();
+                    else
+                        $('.alert-compound-'+compound_id).hide();
               }
             });
 

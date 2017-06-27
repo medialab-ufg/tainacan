@@ -59,6 +59,128 @@ class HelpersModel extends Model {
             }
         }
     }
+    
+    public static function create_helper_item(){
+        $model = new HelpersModel;
+        $items = $model->getAllItemsPublished();
+        foreach ($items as $item) {
+            $model->getAllPropertiesFromItem($item->ID) ;
+        }
+        update_option('tainacan_update_items_helpers', 'true');
+    }
+    
+    /**
+     * 
+     * @global type $wpdb
+     * @return boolean
+     */
+    public function getAllItemsPublished() {
+        global $wpdb;
+        $wp_posts = $wpdb->prefix . "posts";
+        $query = "
+                        SELECT * FROM $wp_posts p  
+                        WHERE p.post_type LIKE 'socialdb_object' and p.post_status LIKE 'publish'
+                ";
+        $result = $wpdb->get_results($query);
+        if ($result && !empty($result)) {
+            return $result;
+        } else {
+            return false;
+        }
+    }
+    
+    public function getAllPropertiesFromItem($item_id) {
+        global $wpdb;
+        $array_compounds = [];
+        $array_singles = [];
+        $array_value_singles = [];
+        $wp_postmeta = $wpdb->prefix . "postmeta";
+        $query = "
+                        SELECT * FROM $wp_postmeta p  
+                        WHERE p.post_id = '".$item_id."' 
+                            and ( p.meta_key LIKE 'socialdb_property_%' OR p.meta_key LIKE 'socialdb_propertyterm_%') AND p.meta_key NOT LIKE 'socialdb_property_helper_%'
+                ";
+        $result = $wpdb->get_results($query);
+        if ($result && !empty($result)) {
+            foreach ($result as $item) {
+                $count = explode('_', $item->meta_key);
+                if(count($count) > 3){
+                    if(is_numeric($count[2]) && $count[3] !== 'cat')
+                       $array_compounds[$count[2]][$count[3]] = $item->meta_value;
+                    else if(is_numeric($count[2]) && $count[3] === 'cat')
+                       $array_compounds[$count[2]][$count[3]] =['value'=>$item->meta_value,'meta_id'=>$item->meta_id];
+                }else{
+                    $array_singles[$count[2]][$item->meta_id] = $item->meta_value;
+                    $array_value_singles[$item->meta_id]['value'] = $item->meta_value;
+                    $array_value_singles[$item->meta_id]['property_id'] = $count[2];
+                }
+            }
+            $this->saveHelper($item_id,$array_compounds, $array_singles,$array_value_singles);
+        } else {
+            return false;
+        }
+    }
+    
+    
+    public function saveHelper($item_id,$coumpounds,$singles,$values) {
+        echo '<pre>';
+        foreach ($coumpounds as $compound_id => $indexes) {
+            $array = [];
+            foreach ($indexes as $index => $metas) {
+                if($index === 'cat'){
+                    $array[0][0] = [
+                            'type' => 'term',
+                            'values' => [$metas['meta_id']]
+                        ]; 
+                }else{
+                    $metas = explode(',', $metas);
+                    foreach ($metas as $index_compounds => $meta_id){
+                       if(strpos($meta_id,'_cat')!==false){ 
+                           $properties = get_term_meta($compound_id, 'socialdb_property_compounds_properties_id', true);
+                           $cat_id = str_replace('_cat', '', $meta_id);   
+                           $property_id = explode(',', $properties)[$index_compounds];
+                           $meta_id = $this->sdb_add_post_meta($item_id, 'socialdb_property_'.$property_id.'_cat', $cat_id);
+                           $new_children = [
+                                          'type' => 'term',
+                                          'values' => [$meta_id]
+                                      ];
+                                      $array[$index][$property_id] = $new_children; 
+                        }else{    
+                            if($meta_id && is_numeric($meta_id)) { 
+                                if(trim($values[$meta_id]['value']) !== ''){
+                                      $new_children = [
+                                          'type' => is_numeric($values[$meta_id]['value']) ? 'object' : 'data',
+                                          'values' => [$meta_id]
+                                      ];
+                                      $array[$index][$values[$meta_id]['property_id']] = $new_children; 
+                               }
+                            }
+                       }
+                    }
+                }
+            }
+            //var_dump($compound_id);
+            print_r($array);
+            update_post_meta($item_id, 'socialdb_property_helper_'.$compound_id, serialize($array));
+        }
+        
+        foreach ($singles as $single_id => $indexes) {
+            $array = [];
+            foreach ($indexes as $meta_id  => $meta_value) {
+                $index = 0;
+                if(trim($meta_value) !== ''){
+                        $new_children = [
+                            'type' => 'data',
+                            'values' => [$meta_id]
+                        ];
+                        $array[$index][0] = $new_children; 
+                        $index++;
+                }
+            }
+            print_r($array);
+            update_post_meta($item_id, 'socialdb_property_helper_'.$single_id, serialize($array));
+        }
+    }
 
     /**
      * metodo que insere os valores de cada item 

@@ -73,7 +73,7 @@ class RadioClass extends FormItem{
         ?>
         <script>
             $('input[name="radio-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>[]"]').change(function(){
-                Hook.call('appendCategoryMetadata',[$(this).val(), <?php echo $compound_id ?>, '#appendCategoryMetadata_<?php echo $compound_id; ?>_0_0']);
+                Hook.call('appendCategoryMetadata',[$(this).val(), <?php echo $item_id ?>, '#appendCategoryMetadata_<?php echo $compound_id; ?>_0_0']);
                 $.ajax({
                     url: $('#src').val() + '/controllers/object/form_item_controller.php',
                     type: 'POST',

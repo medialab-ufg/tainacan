@@ -85,7 +85,7 @@ class FormItemCategory extends FormItem{
                  }
              });
            });
-        Hook.call('appendCategoryMetadataHere',[ids, <?php echo $property['id'] ?>, '#appendCategoryMetadata_<?php echo $property['id']; ?>_0_0']);
+        Hook.call('appendCategoryMetadataHere',[ids, <?php echo $item_id ?>, '#appendCategoryMetadata_<?php echo $property['id']; ?>_0_0']);
        </script>
         <?php 
         endif; ?>

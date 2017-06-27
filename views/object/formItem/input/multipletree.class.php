@@ -121,7 +121,7 @@ class MultipleTreeClass extends FormItem {
                         return node;
                     });
                     if(selKeys.length > 0){
-                        appendCategoryMetadata(node.data.key, <?php echo $compound_id ?>, '#appendCategoryMetadata_<?php echo $compound_id; ?>_0_0');
+                        appendCategoryMetadata(node.data.key, <?php echo $item_id ?>, '#appendCategoryMetadata_<?php echo $compound_id; ?>_0_0');
                         <?php if ($this->isRequired): ?>
                         validateFieldsMetadataText('true','<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>');
                         <?php endif ?>
