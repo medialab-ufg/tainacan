@@ -805,15 +805,15 @@ class CsvModel extends Model {
      * 
      */
     public function codification_value($value,$code){
+        var_dump($code,mb_detect_encoding($value, 'auto'),iconv("Windows-1252","UTF-8" , $value), utf8_encode(utf8_decode($value)));
         if($code == 'utf8'){
             return utf8_encode(utf8_decode($value));
         }else{
-            if(mb_detect_encoding($value, 'auto')=='UTF-8'){
-               return iconv("Windows-1252","UTF-8" , $value);
+            if(!mb_detect_encoding($value, 'auto') || mb_detect_encoding($value, 'auto')=='UTF-8' || mb_detect_encoding($value, 'auto')=='ANSII'){
+               return  iconv("Windows-1252","UTF-8" , $value);
             }else{
                return $value;
             }
-            return $value;
         }
     }
 
