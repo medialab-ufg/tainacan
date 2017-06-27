@@ -1122,14 +1122,17 @@ class ObjectController extends Controller {
 
         if($img_URL) {
             $img_check = wp_check_filetype($img_URL);
-            $file_archive = file_get_contents($img_URL);
-            $b64_img = base64_encode($file_archive);
+            $file_archive = @file_get_contents($img_URL);
 
-            return [
-                'url' => "data:" . $img_check['type'] . ";base64," . $b64_img,
-                'ext' => $img_check['ext']
-            ];
-
+            if($file_archive) {
+                $b64_img = base64_encode($file_archive);
+                return [
+                    'url' => "data:" . $img_check['type'] . ";base64," . $b64_img,
+                    'ext' => $img_check['ext']
+                ];
+            } else {
+                return false;
+            }
         } else {
             return false;
         }
