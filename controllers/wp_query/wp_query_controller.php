@@ -335,9 +335,9 @@ class WPQueryController extends Controller {
                 $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($args['collection_id'], "socialdb_collection_table_metas", true)));
                 $return['page'] =   $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($args);
-                if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
+                /* if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
                     $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
-                }
+                } */
                 Log::addLog(['collection_id' => $data['collection_id'], 'event_type' => 'collection_search', 'event' => $data['value'] ]);
 
                 return json_encode($return);

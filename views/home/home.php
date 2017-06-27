@@ -33,7 +33,7 @@
                                 </div>
                                 <div class="panel-footer home-title">
                                     <a href="<?php echo get_the_permalink($item_data->ID); ?>">
-                                        <span class="collection-name"> <?php echo Words($item_data->post_title, 20) ?> </span>
+                                        <span class="collection-name"> <?php echo wp_trim_words($item_data->post_title, 20) ?> </span>
                                     </a>
                                 </div>
                             </div>
