@@ -801,6 +801,92 @@ $references = [
                 <hr>
                 <?php
             }
+
+            //OFFICE DOCUMENTS
+            if(is_array($items['office'])){
+                ?>
+                <div id="container_office" class='col-md-12'>
+                    <h4>
+                        <input class="class_selected_items"
+                               type='checkbox'
+                               id='selectAllOther'
+                               onclick="selectOther()"
+                               value='#'> &nbsp;<?php _e('Others Files','tainacan') ?>
+                    </h4>
+                    <?php
+                    foreach ($items['office'] as $file) {
+                        $files[] = $file['ID'];
+                        $filesOther[] = $file['ID'];
+                        ?>
+                        <div onclick="focusItem('<?php echo $file['ID'] ?>')" >
+                            <div
+                                id="wrapper_<?php echo $file['ID'] ?>"
+                                class="col-md-3 item-default"
+                                style="padding-top: 20px;cursor: pointer;">
+                                <center>
+                                    <div style="padding-top: 20px;padding-bottom: 20px;cursor: pointer;" class="item" id="panel_<?php echo $file['ID'] ?>"  ><!-- container do item -->
+                                        <input style="display:none" class="class_selected_items" id="item_option_<?php echo $file['ID'] ?>"  onchange="selectedItems()" type="checkbox" name="selected_items" value="<?php echo $file['ID'] ?>" >
+                                        <input id="attachment_option_<?php echo $file['ID'] ?>" onchange="manipulateAttachaments('<?php echo $file['ID'] ?>')" class="class_checkboxAttachments" style="display:none" type="checkbox" name="checkboxAttachments"  value="<?php echo $file['ID'] ?>">
+                                        <?php echo wp_get_attachment_image( $file['ID'],'thumbnail',1,['alt'   =>'' ] ); ?>
+                                    </div>
+                                    <input required="required"
+                                           class='input_title'
+                                           placeholder="<?php _e('Add a title','tainacan') ?>"
+                                           type="text" id='title_<?php echo $file['ID'] ?>'
+                                           name='title_<?php echo $file['ID'] ?>'
+                                           value='<?php echo $file['name'] ?>'>
+                                    <!-- Hidden para as categorias, tags e attachments  -->
+                                    <input type="hidden" id="source_<?php echo $file['ID'] ?>" name="source_<?php echo $file['ID'] ?>" value=''>
+                                    <input type="hidden" name="type_<?php echo $file['ID'] ?>" value='office'>
+                                    <input type="hidden" name="ext_<?php echo $file['ID'] ?>" value='<?php echo $file['ext'];?>'>
+                                    <input type="hidden" id='parent_<?php echo $file['ID'] ?>' name="parent_<?php echo $file['ID'] ?>" value=''>
+                                    <input type="hidden" id='attachments_<?php echo $file['ID'] ?>' name="attachments_<?php echo $file['ID'] ?>" value=''>
+                                    <input type="hidden" id='description_<?php echo $file['ID'] ?>' name="description_<?php echo $file['ID'] ?>" value=''>
+                                    <input type="hidden" id='categorias_<?php echo $file['ID'] ?>' name="categorias_<?php echo $file['ID'] ?>" value=''>
+                                    <input type="hidden" id='tags_<?php echo $file['ID'] ?>' name="tags_<?php echo $file['ID'] ?>" value=''>
+                                    <input type="hidden" id='license_<?php echo $file['ID'] ?>' name="license_<?php echo $file['ID'] ?>" value=''>
+                                    <!-- hiddens para valores das propriedades de dados dos items a serem criados -->
+                                    <?php
+                                    if(is_array($data_properties)):
+                                        foreach ($data_properties as $value) { ?>
+                                            <input type="hidden"
+                                                   name='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>'
+                                                   id='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>'
+                                                   value='<?php if($value['default_value']&&!empty($value['default_value'])): echo $value['default_value']; endif; ?>'>
+                                        <?php  }
+                                    endif;
+                                    ?>
+                                    <!-- hiddens para valores das propriedades de OBJETO dos items a serem criados -->
+                                    <?php
+                                    if(is_array($object_properties)):
+                                        foreach ($object_properties as $value) { ?>
+                                            <input type="hidden"
+                                                   name='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
+                                                   id='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
+                                                   value=''>
+                                        <?php  }
+                                    endif;
+                                    ?>
+                                    <?php
+                                    if(is_array($term_properties_id)):
+                                        foreach ($term_properties_id as $value) { ?>
+                                            <input type="hidden"
+                                                   name='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
+                                                   id='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
+                                                   value=''>
+                                        <?php  }
+                                    endif;
+                                    ?>
+                                </center>
+                            </div>
+                        </div>
+                        <?php
+                    }
+                    ?>
+                </div>
+                <?php
+            }
+
              // OUTROS
             if(is_array($items['others'])){ 
                 ?>
@@ -813,7 +899,7 @@ $references = [
                            value='#'> &nbsp;<?php _e('Others Files','tainacan') ?>
                 </h4>
                 <?php
-                    foreach ($items['others'] as $file) { 
+                    foreach ($items['others'] as $file) {
                         $files[] = $file['ID'];
                         $filesOther[] = $file['ID'];
                         ?>

@@ -561,7 +561,8 @@ table.sorting-table tbody tr:not(.sorting-row) td {opacity: 0.2;}
   #container_text,
   #container_pdfs,
   #container_videos,
-  #container_audios, 
+  #container_audios,
+  #container_office,
   #container_others {
       background-color: #c1d0dd;
       padding-right: 0px;

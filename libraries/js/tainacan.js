@@ -2962,7 +2962,7 @@ function change_button()
 }
 //object_dc_type
 //Gera thumbnail de um pdf
-function generate_pdf_thumbnail(pdf_url)
+/*function generate_pdf_thumbnail(pdf_url)
 {
     PDFJS.getDocument(pdf_url).promise.then(function (doc) {
         var page = [];
@@ -2978,7 +2978,7 @@ function generate_pdf_thumbnail(pdf_url)
         }));
     });
 
-}
+}*/
 
 function makeThumb(page) {
     var vp = page.getViewport(1);

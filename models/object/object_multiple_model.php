@@ -11,8 +11,11 @@ require_once(dirname(__FILE__) . '../../general/general_model.php');
 require_once(dirname(__FILE__) . '../../user/user_model.php');
 require_once(dirname(__FILE__) . '../../tag/tag_model.php');
 
-/*Carrega o leitor de PDF*/
+/*Extrator de texto PDF*/
 require_once (dirname(__FILE__) . '../../../libraries/php/PDFParser/vendor/autoload.php');
+
+/*Extrator de texto Office Documents*/
+require_once (dirname(__FILE__) . '../../../libraries/php/OfficeToPlainText/OfficeDocumentToPlainText.php');
 
 /**
  * The class ObjectModel 
@@ -28,7 +31,6 @@ class ObjectMultipleModel extends Model {
      * @author: Eduardo 
      */
   public function add($data) {
-      //print_r($data);
       $result = [];
       $items_id = explode(',', $data['items_id']); // id de todos os itens
 
@@ -260,6 +262,16 @@ class ObjectMultipleModel extends Model {
             }catch (Exception $e)
             {
                 //Can't read PDF file, just move on.
+            }
+        }else if(strcmp($data['type_'.$item_id], 'office') == 0)
+        {
+            $file_path = get_attached_file($item_id);
+            
+            $reader = new OfficeDocumentToPlainText($file_path);
+            $document_text = $reader->getDocumentText();
+            if($document_text)
+            {
+                $this->set_common_field_values($post_id, "socialdb_property_$item_id", $document_text);
             }
         }
         

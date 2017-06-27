@@ -212,29 +212,41 @@ class ObjectFileModel extends Model {
                         $ext = pathinfo($extension, PATHINFO_EXTENSION);
                         if(in_array($ext, ['mp4','m4v','wmv','avi','mpg','ogv','3gp','3g2'])){
                             $result['videos'][] = $obj;     
-                         }elseif (in_array($ext, ['jpg','jpeg','png','gif', 'tiff'])) {
-                            $obj['metas'] = $metas;
-                            $result['image'][] = $obj;
+                        }elseif (in_array($ext, ['jpg','jpeg','png','gif', 'tiff'])) {
+                           $obj['metas'] = $metas;
+                           $result['image'][] = $obj;
+                           /*
+                            * TODO: confirm if code below should be removed
+                            * */
+                           if( in_array($ext, ['jpg', 'jpeg', 'tiff']) ) {
+                               /*
+                               $property_model = new PropertyModel();
+                               $_exif_data = exif_read_data($_file_path_, 0, true);
+                               unset($_exif_data['FILE']);
+                               unset($_exif_data['COMPUTED']);
+                               */
+                           }
 
-                            /*
-                             * TODO: confirm if code below should be removed
-                             * */
-                            if( in_array($ext, ['jpg', 'jpeg', 'tiff']) ) {
-                                /*
-                                $property_model = new PropertyModel();
-                                $_exif_data = exif_read_data($_file_path_, 0, true);
-                                unset($_exif_data['FILE']);
-                                unset($_exif_data['COMPUTED']);
-                                */
-                            }
+                        }
+                        elseif (in_array($ext, ['mp3','m4a','ogg','wav','wma']))
+                        {
+                           $result['audio'][] = $obj;
+                        }
+                        elseif(in_array($ext, ['pdf']))
+                        {
+                           $result['pdf'][] = $obj;
+                        }
+                        elseif (in_array($ext, ['doc', 'docx', 'pptx', 'xlsx']))
+                        {
+                            $result['office'][] = $obj;
 
-                         } elseif (in_array($ext, ['mp3','m4a','ogg','wav','wma'])) {
-                            $result['audio'][] = $obj;
-                         } elseif(in_array($ext, ['pdf'])){
-                            $result['pdf'][] = $obj;
-                         } else{
+                            $last_position = count($result['office']) - 1;
+                            
+                            $result['office'][$last_position]['ext'] = $ext;
+                        }
+                        else{
                             $result['others'][] = $obj;
-                         }
+                        }
                         
                     }
                 }
