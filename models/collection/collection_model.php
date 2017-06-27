@@ -550,11 +550,13 @@ class CollectionModel extends Model {
         $data['general_ordenation'][] = array('id' => $recent_property->term_id, 'name' => $recent_property->name);
         $data['general_ordenation'][] = array('id' => 'comment_count', 'name' => __('Populars', 'tainacan'));
         $data['general_ordenation'][] = array('id' => 'title', 'name' => __('Title', 'tainacan'));
+        /*
         if ($data['collection_id'] != get_option('collection_root_id')):
             $data['general_ordenation'][] = array('id' => 'socialdb_object_dc_type', 'name' => __('Type', 'tainacan'));
             $data['general_ordenation'][] = array('id' => 'socialdb_object_from', 'name' => __('Format', 'tainacan'));
             $data['general_ordenation'][] = array('id' => 'socialdb_license_id', 'name' => __('Licenses', 'tainacan'));
         endif;
+        */
         if ($all_properties_id && is_array($all_properties_id) && $all_properties_id[0]) {
             foreach ($all_properties_id as $property_id) {
                 $property_object = get_term_by('id', $property_id, 'socialdb_property_type');
@@ -567,23 +569,35 @@ class CollectionModel extends Model {
                         $property_object->name = (isset($array[$property_object->term_id])) ? $array[$property_object->term_id] : $property_object->name;
                     endif;
                 }
-                $array = array('id' => $property_object->term_id, 'name' => $property_object->name, 'type' => $all_data['type']);
-                if ($parent_name == 'socialdb_property_data') {
-                    // $is_ordenation = get_term_meta($property_object->term_id, 'socialdb_property_data_column_ordenation')[0];
-                    // if ($is_ordenation == 'true')
-                    $data['property_data'][] = $array;
-                } elseif ($parent_name != 'socialdb_property_term' && isset($parent_name) && $parent_name != 'socialdb_property_object') {
-                    $data['rankings'][] = $array;
-                } else if ($_get_all_meta === "true") {
-                    if ($parent_name == 'socialdb_property_term') {
-                        $data['property_term'][] = $array;
-                    } else if ($parent_name == 'socialdb_property_object') {
-                        $data['property_object'][] = $array;
+
+                if( $this->filter_ordenation($property_object->name, $all_data["type"]) ) {
+                    $array = array('id' => $property_object->term_id, 'name' => $property_object->name, 'type' => $all_data['type']);
+                    if ($parent_name == 'socialdb_property_data') {
+                        // $is_ordenation = get_term_meta($property_object->term_id, 'socialdb_property_data_column_ordenation')[0];
+                        // if ($is_ordenation == 'true')
+                        $data['property_data'][] = $array;
+                    } elseif ($parent_name != 'socialdb_property_term' && isset($parent_name) && $parent_name != 'socialdb_property_object') {
+                        $data['rankings'][] = $array;
+                    } else if ($_get_all_meta === "true") {
+                        if ($parent_name == 'socialdb_property_term') {
+                            $data['property_term'][] = $array;
+                        } else if ($parent_name == 'socialdb_property_object') {
+                            $data['property_object'][] = $array;
+                        }
                     }
                 }
             }
         }
         return $data;
+    }
+
+    private function filter_ordenation($str, $type) {
+        $unused_filters = [_t("Description"), _t("Content"),_t("Thumbnail"),_t("Attachments"),_t("Type"),_t("License")];
+        $filter = true;
+        if( ("radio" === $type || "textarea" === $type || "file" === $type ) && in_array($str, $unused_filters)) {
+            $filter = false;
+        }
+        return $filter;
     }
 
     /**
