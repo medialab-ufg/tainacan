@@ -109,7 +109,6 @@ button.collection-trash {
 
             &.order-by-label {
                width: 140px;
-              // background-color: #0A246A;
             }
           } // label
 
@@ -119,9 +118,6 @@ button.collection-trash {
           }
 
           .tainacan-add-item {
-            /*
-            float: left;
-            */
             width: 11%;
             margin-right: 15px;
 
@@ -164,7 +160,7 @@ button.collection-trash {
             }
           }
 
-          button#sort_list:last-child {
+          button#desc {
             margin-left: 5px;
           }
 

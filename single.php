@@ -387,8 +387,8 @@ while (have_posts()) : the_post();
                                         <option value=""><?php _e('Sorted by', 'tainacan') ?></option>
                                     </select>
 
-                                    <button onclick="change_ordenation('asc')" type="button" id="sort_list" class="btn btn-default pull-right"><span class="glyphicon glyphicon-sort-by-attributes"></span></button>
-                                    <button onclick="change_ordenation('desc')" type="button" id="sort_list" class="btn btn-default pull-right"><span class="glyphicon glyphicon-sort-by-attributes-alt"></span></button>
+                                    <button type="button" id="asc" class="btn btn-default pull-right sort_list"><span class="glyphicon glyphicon-sort-by-attributes"></span></button>
+                                    <button type="button" id="desc" class="btn btn-default pull-right sort_list"><span class="glyphicon glyphicon-sort-by-attributes-alt"></span></button>
                                 </div>
 
                                 <?php

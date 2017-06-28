@@ -244,15 +244,16 @@ class WPQueryController extends Controller {
                 return json_encode($return);
             case "wpquery_orderby":
                 $return = array();
-                if(empty($wpquery_model->get_collection_posts($data['collection_id']))){
+                if(empty($wpquery_model->get_collection_posts($data['collection_id']))) {
                     $return['empty_collection'] = true;
-                }else{
+                } else {
                     $return['empty_collection'] = false;
                 }
                 $collection_model = new CollectionModel;
                 $args = $wpquery_model->orderby_filter($data);
-                $paramters = $wpquery_model->do_filter($args);
-                $data['loop'] =  new WP_Query($paramters);
+                $params = $wpquery_model->do_filter($args);
+
+                $data['loop'] =  new WP_Query($params);
                 $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
                 $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);
                 $data['is_moderator'] = CollectionModel::is_moderator($args['collection_id'], get_current_user_id());

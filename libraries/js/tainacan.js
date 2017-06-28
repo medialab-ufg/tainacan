@@ -889,7 +889,6 @@ function showList(src) {
         }).done(function (result) {
             $('#hideTrash').hide();
             elem = jQuery.parseJSON(result);
-            //console.log(elem,result);
             $('#loader_objects').hide();
             $('#list').html(elem.page);
             $('#wp_query_args').val(elem.args);

@@ -569,7 +569,7 @@ class CollectionModel extends Model {
                         $property_object->name = (isset($array[$property_object->term_id])) ? $array[$property_object->term_id] : $property_object->name;
                     endif;
                 }
-
+                
                 if( $this->filter_ordenation($property_object->name, $all_data["type"]) ) {
                     $array = array('id' => $property_object->term_id, 'name' => $property_object->name, 'type' => $all_data['type']);
                     if ($parent_name == 'socialdb_property_data') {
@@ -592,9 +592,9 @@ class CollectionModel extends Model {
     }
 
     private function filter_ordenation($str, $type) {
-        $unused_filters = [_t("Description"), _t("Content"),_t("Thumbnail"),_t("Attachments"),_t("Type"),_t("License")];
+        $unused_filters = [_t("Source"),_t("Description"), _t("Content"),_t("Thumbnail"),_t("Attachments"),_t("Type"),_t("License")];
         $filter = true;
-        if( ("radio" === $type || "textarea" === $type || "file" === $type ) && in_array($str, $unused_filters)) {
+        if( ("radio" === $type || "textarea" === $type || "file" === $type ) && in_array(_t($str), $unused_filters)) {
             $filter = false;
         }
         return $filter;

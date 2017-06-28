@@ -259,11 +259,12 @@ class WPQueryModel extends Model {
      */
     public function orderby_filter($data) {
         $recover_data = unserialize(stripslashes($data['wp_query_args']));
-         unset($recover_data['pagid']);
+        unset($recover_data['pagid']);
         $ordenation = $data['value'];
         if (!empty($ordenation)) {
-            $recover_data['order_by'] = $ordenation;
-        } 
+            $recover_data['order'] = strtoupper($ordenation);
+        }
+
         return $recover_data;
     }
     
@@ -502,38 +503,39 @@ class WPQueryModel extends Model {
      * Autor: Eduardo Humberto 
      */
     public function do_filter($recover_data) {
-        //se estiver buscando 
-        if($recover_data['collection_id']==  get_option('collection_root_id') 
-                && (!isset($recover_data['post_type']) || empty($recover_data['post_type']) )
-                   && (!isset($recover_data['post_status']) || empty($recover_data['post_status']))){
-                $page = $this->set_page($recover_data);
-                $orderby = $this->set_order_by($recover_data);
-                 $order = $this->set_type_order($recover_data);
-                $args = array(
-                    'post_type' => 'socialdb_collection',
-                    'paged' => (int)$page,
-                    'posts_per_page' => (isset($recover_data['posts_per_page']))?$recover_data['posts_per_page']:50,
-                    'orderby' => $orderby,
-                    'order' => $order,
-                    //'no_found_rows' => true, // counts posts, remove if pagination required
-                    'update_post_term_cache' => false, // grabs terms, remove if terms required (category, tag...)
-                    'update_post_meta_cache' => false, // grabs post meta, remove if post meta required
-                ); 
-                if (isset($recover_data['keyword']) && $recover_data['keyword'] != '') {
-                   $args['s'] = $recover_data['keyword'];
-                   $args['orderby'] = 'title';
-                   $args['order'] = 'ASC';
-                }
-             return $args;
-        }else{
+        // Se estiver buscando
+        if( $recover_data['collection_id'] == get_option('collection_root_id')
+            && (!isset($recover_data['post_type']) || empty($recover_data['post_type']) )
+            && (!isset($recover_data['post_status']) || empty($recover_data['post_status'])))
+        {
+            $page = $this->set_page($recover_data);
+            $orderby = $this->set_order_by($recover_data);
+            $order = $this->set_type_order($recover_data);
+            $args = array(
+                'post_type' => 'socialdb_collection',
+                'paged' => (int)$page,
+                'posts_per_page' => (isset($recover_data['posts_per_page']))?$recover_data['posts_per_page']:50,
+                'orderby' => $orderby,
+                'order' => $order,
+                //'no_found_rows' => true, // counts posts, remove if pagination required
+                'update_post_term_cache' => false, // grabs terms, remove if terms required (category, tag...)
+                'update_post_meta_cache' => false, // grabs post meta, remove if post meta required
+            );
+            if (isset($recover_data['keyword']) && $recover_data['keyword'] != '') {
+                $args['s'] = $recover_data['keyword'];
+                $args['orderby'] = 'title';
+                $args['order'] = 'ASC';
+            }
+            return $args;
+        } else {
             $page = $this->set_page($recover_data);
             $orderby = $this->set_order_by($recover_data);
             $array_defaults = ['socialdb_object_from','socialdb_object_dc_type','socialdb_object_dc_source','title','socialdb_license_id','comment_count'];
             if ($orderby == 'meta_value_num') {
                 $meta_key = 'socialdb_property_' . trim($recover_data['ordenation_id']);
-            }elseif(in_array($orderby, $array_defaults)){
+            } elseif(in_array($orderby, $array_defaults)) {
                  $meta_key = $orderby;
-            }else{
+            } else {
                 $meta_key = '';
             }
             // inserindo as categorias e as tags na query
@@ -542,7 +544,8 @@ class WPQueryModel extends Model {
                 $tax_query = apply_filters('update_tax_query',$tax_query,$recover_data['collection_id'],TRUE);
             }
             //a forma de ordenacao
-            $order = $this->set_type_order($recover_data);
+            // $order = $this->set_type_order($recover_data);
+            $order = $recover_data['order'];
             // se vai listar as colecoes ou objetos
             if(isset($recover_data['post_type']) && !empty($recover_data['post_type']) ){
                 $post_type = $recover_data['post_type'];

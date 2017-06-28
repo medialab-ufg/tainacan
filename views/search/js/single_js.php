@@ -96,6 +96,13 @@
             });
             e.preventDefault();
         });
+
+        $(".sort_list").on('click', function() {
+            var action = $(this).attr("id");
+            $(".sort_list").css('background', 'white');
+            $(this).css('background', 'buttonface');
+            change_ordenation(action);
+        });
     });
     
     $(document).ready(function() {
