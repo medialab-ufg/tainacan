@@ -154,10 +154,10 @@ class CsvModel extends Model {
                         if ($metadata['socialdb_entity'] !== '') {
                             $field_value = $lines[$i][str_replace('csv_p', '', $metadata['value'])];
                             if ($metadata['socialdb_entity'] == 'post_title'):
-                                if (mb_detect_encoding($field_value, 'auto') == 'UTF-8')
-                                    $field_value = iconv('ISO-8859-1', 'UTF-8', $field_value);
+//                                if (mb_detect_encoding($field_value, 'auto') == 'UTF-8')
+//                                    $field_value = iconv('ISO-8859-1', 'UTF-8', $field_value);
                                 //$this->update_title($object_id, utf8_decode($field_value));
-                                update_post_title($object_id, $field_value);
+                                update_post_title($object_id, $this->codification_value((string)$field_value,$code));
                                 $this->set_common_field_values($object_id, 'title', $this->codification_value($field_value,$code));
                             elseif ($metadata['socialdb_entity'] == 'post_content'):
                                 $content .= $field_value . ",";
@@ -377,7 +377,7 @@ class CsvModel extends Model {
      */
     public function add_value_column($properties, $values, $collection_id, $title_index,$code = 'utf8') {
         $title = (($title_index === '') ? time() : $values[$title_index]);
-        $object_id = socialdb_insert_object_csv([$title]);
+        $object_id = socialdb_insert_object_csv([$this->codification_value((string)$title,$code)]);
         $this->set_common_field_values($object_id, 'title', $title);
         foreach ($properties as $key => $property) {
             add_post_meta($object_id, 'socialdb_property_' . $property,$this->codification_value((string)$values[$key],$code));
@@ -805,10 +805,10 @@ class CsvModel extends Model {
      * 
      */
     public function codification_value($value,$code){
-        var_dump($code,mb_detect_encoding($value, 'auto'),iconv("Windows-1252","UTF-8" , $value), utf8_encode(utf8_decode($value)));
         if($code == 'utf8'){
             return utf8_encode(utf8_decode($value));
         }else{
+            var_dump($code,mb_detect_encoding($value, 'auto'),iconv("Windows-1252","UTF-8" , $value), utf8_encode(utf8_decode($value)),(!mb_detect_encoding($value, 'auto') || mb_detect_encoding($value, 'auto')=='UTF-8' || mb_detect_encoding($value, 'auto')=='ANSII'));
             if(!mb_detect_encoding($value, 'auto') || mb_detect_encoding($value, 'auto')=='UTF-8' || mb_detect_encoding($value, 'auto')=='ANSII'){
                return  iconv("Windows-1252","UTF-8" , $value);
             }else{
