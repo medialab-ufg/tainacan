@@ -24,6 +24,9 @@ class DateClass extends FormItem {
         <div class="form-group" 
              id="validation-<?php echo $compound['id'] ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>"
              style="border-bottom:none;padding: 0px;">
+                <?php if(has_action('alter_input_date')): ?>
+                    <?php do_action('alter_input_date',['compound'=>$compound,'property_id'=>$property_id,'property'=>$property,'index'=>$index_id,'autoValidate'=>$autoValidate]) ?>
+                <?php else: ?> 
                  <input 
                     style="margin-right: 5px;" 
                     size="13"
@@ -32,6 +35,7 @@ class DateClass extends FormItem {
                     class="input_date input auto-save form_autocomplete_value_<?php echo $property_id; ?>" 
                     aria-describedby="input2Status"
                     type="text" value="">
+                <?php endif; ?> 
                 <span style="display: none;" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
                 <span style="display: none;" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
                 <span id="input2Status" class="sr-only">(status)</span>
@@ -52,13 +56,17 @@ class DateClass extends FormItem {
                             class="compound-one-field-should-be-filled-<?php echo $compound['id'] ?>"
                             value="<?php echo ($autoValidate) ? 'true' : 'false' ?>">
             <?php endif;  ?>
-            <input 
-                style="margin-right: 5px;" 
-                size="13"
-                value="<?php echo ($values && isset($values[0]) && !empty($values[0])) ? $values[0] : ''; ?>"
-                id="date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>"
-                class="input_date auto-save form_autocomplete_value_<?php echo $property_id; ?>" 
-                type="text" value="">
+            <?php if(has_action('alter_input_date')): var_dump('sssss'); ?>
+                 <?php do_action('alter_input_date',['compound'=>$compound,'property_id'=>$property_id,'property'=>$property,'index'=>$index_id,'autoValidate'=>$autoValidate]) ?>
+            <?php else: ?>         
+                <input 
+                    style="margin-right: 5px;" 
+                    size="13"
+                    value="<?php echo ($values && isset($values[0]) && !empty($values[0])) ? $values[0] : ''; ?>"
+                    id="date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>"
+                    class="input_date auto-save form_autocomplete_value_<?php echo $property_id; ?>" 
+                    type="text" value="">
+            <?php endif; ?> 
         <?php
         endif;
                 $this->initScriptsDate($property_id, $item_id, $compound_id, $index_id);
