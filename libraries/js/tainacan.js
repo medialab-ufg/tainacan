@@ -876,9 +876,9 @@ function populateList(src) {
     ;
 
 }
-// mostra a listagem inicial
+// Mostra a listagem inicial
 function showList(src) {
-    if($('#search-advanced-text').val() == ''){
+    if($('#search-advanced-text').val() == '') {
         $('.selectors a').removeClass('highlight');
         $('#list').hide();
         $('#loader_objects').show();
@@ -889,10 +889,16 @@ function showList(src) {
         }).done(function (result) {
             $('#hideTrash').hide();
             elem = jQuery.parseJSON(result);
+
+            var set_order = elem.preset_order;
+            if(set_order) {
+                var order_btn = $(".header-colecao button#" + set_order.toLowerCase());
+                $(".sort_list").css('background', 'white');
+                $(order_btn).css('background', 'buttonface');
+            }
             $('#loader_objects').hide();
-            $('#list').html(elem.page);
             $('#wp_query_args').val(elem.args);
-            $('#list').show();
+            $('#list').html(elem.page).show();
             if (elem.empty_collection) {
                 $('#collection_empty').show();
                 $('#items_not_found').hide();

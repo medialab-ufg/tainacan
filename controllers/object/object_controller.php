@@ -251,6 +251,8 @@ class ObjectController extends Controller {
                 $data['is_moderator'] = CollectionModel::is_moderator($data['collection_id'], get_current_user_id());
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($recover_wpquery);
+                $return['preset_order'] = $recover_wpquery['order'];
+
                 if (empty($object_model->get_collection_posts($data['collection_id']))) {
                     $return['empty_collection'] = true;
                 } else {
@@ -258,9 +260,7 @@ class ObjectController extends Controller {
                 }
                 $logData = ['collection_id' => $collection_id, 'event_type' => 'user_collection', 'event' => 'view'];
                 Log::addLog($logData);
-//                if (mb_detect_encoding($return['page'], 'auto') == 'UTF-8') {
-//                    $return['page'] = iconv('ISO-8859-1', 'UTF-8', utf8_decode($return['page']));
-//                }
+                /* if (mb_detect_encoding($return['page'], 'auto') == 'UTF-8') {  $return['page'] = iconv('ISO-8859-1', 'UTF-8', utf8_decode($return['page'])); } */
                 return json_encode($return);
                 break;
             case "list_trash": // A listagem dos objetos na lixeira
