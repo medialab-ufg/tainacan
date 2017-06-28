@@ -4,8 +4,7 @@ Using PDFParser without Composer
 */
 $vendorDir = get_template_directory();
 $vendorDir .= "/libraries/php/PDFParser/vendor";
-print $vendorDir;
-//$vendorDir = '../vendor';
+
 $tcpdf_files = Array(
     'Datamatrix' => $vendorDir . '/tecnickcom/tcpdf/include/barcodes/datamatrix.php',
     'PDF417' => $vendorDir . '/tecnickcom/tcpdf/include/barcodes/pdf417.php',

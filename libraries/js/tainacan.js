@@ -3002,7 +3002,7 @@ $(document).on("submit", "#reindexation_form", function (event) {
         contentType: false
     }).done(function (result) {
         elem = jQuery.parseJSON(result);
-        
+        //ssdfdasd
     });
 
     /*for(var pair of formData.entries()) {
