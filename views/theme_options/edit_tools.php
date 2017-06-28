@@ -8,6 +8,10 @@ include_once ('js/edit_tools_js.php');
         <ul class="nav nav-tabs">
             <li role="presentation" class="active"><a href="#aba-populate" aria-controls="property_data_tab" role="tab" data-toggle="tab"><?php _e('Populate', 'tainacan') ?></a></li>
             <li role="presentation"><a href="#aba-teste-integridade" aria-controls="property_object_tab" role="tab" data-toggle="tab"><?php _e('Integrity Test', 'tainacan') ?></a></li>
+
+            <li role="presentation">
+                <a href="#aba-reindexacao" aria-controls="property_object_tab" role="tab" data-toggle="tab"><?php _e('Reindexation', 'tainacan') ?></a>
+            </li>
         </ul>
         <div class="tab-content">
             <!-- Aba Popular Coleção-->
@@ -58,6 +62,7 @@ include_once ('js/edit_tools_js.php');
                     <button type="submit" id="submit_tools"  class="btn btn-primary pull-right"><?php _e('Populate', 'tainacan'); ?></button>
                 </form>
             </div>
+
             <!-- Aba Teste de Integridade-->
             <div id="aba-teste-integridade" class="tab-pane fade">
                 <br>
@@ -98,6 +103,22 @@ include_once ('js/edit_tools_js.php');
                 <div id="show_generate_pdf" style="padding-left: 20px !important; padding-bottom: 20px !important; display: none;">
                     <button id="generate_pdf_test"  class="btn btn-primary" onclick="javascript:autoTablePDF();"><?php _e('Generate PDF', 'tainacan'); ?></button>
                 </div>
+            </div>
+
+            <!-- Aba Reindexação -->
+            <p id="aba-reindexacao" class="tab-pane fade">
+                <h4 style="padding: 10px 0 0 15px"><?php _e('Reindexation', 'tainacan'); ?></h4>
+                <hr>
+                <?php _e('Choose what will be reindexed:');?>
+                <br><br>
+
+                <form id="reindexation_form">
+                    <input type="checkbox" name="pdf_text"> <?php _e("Reindex text from PDF files", "tainacan"); ?><br>
+                    <input type="checkbox" name="pdf_thumbnail"> <?php _e("Reindex thumbnails from PDF files", "tainacan"); ?><br>
+                    <input type="checkbox" name="office_text"> <?php _e("Reindex text from Microsoft Office files", "tainacan"); ?><br>
+                    <br>
+                    <button class="btn btn-primary" type="submit"><?php _e("Reindex", "tainacan"); ?></button>
+                </form>
             </div>
         </div>
         <br>

@@ -2989,3 +2989,33 @@ function makeThumb(page) {
         return canvas;
     });
 }
+
+$(document).on("submit", "#reindexation_form", function (event) {
+    event.preventDefault();
+    var formData = new FormData(this);
+
+    $.ajax({
+        url: $("#src").val() + '/controllers/collection/collection_controller.php',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false
+    }).done(function (result) {
+        elem = jQuery.parseJSON(result);
+        
+    });
+
+    /*for(var pair of formData.entries()) {
+        console.log(pair[0]+ ', '+ pair[1]);
+    }*/
+});
+
+$("#reindexation_form").on('submit', function (event) {
+    alet("Aqui");
+    event.preventDefault();
+    var formData = new FormData(this);
+
+    for(var pair of formData.entries()) {
+     console.log(pair[0]+ ', '+ pair[1]);
+    }
+});
