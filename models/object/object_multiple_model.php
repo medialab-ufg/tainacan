@@ -168,7 +168,7 @@ class ObjectMultipleModel extends Model {
       $result['type'] = 'error';
     }
 
-    //return json_encode($result);
+    return json_encode($result);
   }
   /**
    * @signature - insert_post($data)

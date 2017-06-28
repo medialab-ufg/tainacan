@@ -100,7 +100,7 @@
             }
         });
     }
-
+    
     function edit_items_uploaded() {
         var do_extract = $('input[name="extract_exif"]').prop("checked");
         show_modal_main();
