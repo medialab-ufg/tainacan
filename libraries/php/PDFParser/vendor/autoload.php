@@ -2,8 +2,8 @@
 /*
 Using PDFParser without Composer
 */
-$vendorDir = get_template_directory_uri();
-$vendorDir .= "/libraries/php/PDFParser/vendor";
+
+$vendorDir = "../../libraries/php/PDFParser/vendor";
 
 $tcpdf_files = Array(
     'Datamatrix' => $vendorDir . '/tecnickcom/tcpdf/include/barcodes/datamatrix.php',
