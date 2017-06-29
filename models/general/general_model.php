@@ -1398,7 +1398,7 @@ class Model {
             $category_root_id = $this->get_collection_category_root($data['collection_id']);
             $category_root_id = get_term_by('id', $category_root_id, 'socialdb_category_type');
             $where = "t.term_taxonomy_id = {$category_root_id->term_taxonomy_id} AND ";
-            $inner_join = ' INNER JOIN $term_relationships t ON p.ID = t.object_id ';
+            $inner_join = " INNER JOIN $term_relationships t ON p.ID = t.object_id ";
         } else {
             $where = "";
             $inner_join = '';

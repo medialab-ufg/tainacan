@@ -25,6 +25,7 @@ class FormItemController extends Controller {
                 $class = new FormItemCompound($data['collection_id']);
                 return $class->appendContainerCompounds(unserialize(stripslashes(html_entity_decode($data['property_details']))),$data['item_id'],$data['index']);
             case "saveValue":
+                $data['value'] = trim($data['value']);
                 $class = new ObjectSaveValuesModel();
                 // action para salvar dados extras
                 if(has_action('action_save_item')){
@@ -107,6 +108,7 @@ class FormItemController extends Controller {
                 $class = new ObjectSaveValuesModel();
                 return $class->removeIndexValue($data['item_id'], $data['compound_id'], $data['index']);
             case 'saveTitle':
+                $data['value'] = trim($data['value']);
                 //SE FOR METADADO CHAVE FACO VALIDACAO
                 if(isset($data['hasKey']) && $data['hasKey'] === 'true'){
                     $json = json_decode($object_model->get_objects_by_property_json_advanced_search(
