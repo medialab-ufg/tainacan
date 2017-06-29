@@ -26,6 +26,10 @@ class FormItemController extends Controller {
                 return $class->appendContainerCompounds(unserialize(stripslashes(html_entity_decode($data['property_details']))),$data['item_id'],$data['index']);
             case "saveValue":
                 $class = new ObjectSaveValuesModel();
+                // action para salvar dados extras
+                if(has_action('action_save_item')){
+                    do_action('action_save_item', $data);
+                }
                 //SE FOR METADADO CHAVE FACO VALIDACAO
                 if(isset($data['isKey']) && $data['isKey'] === 'true'){
                     $json =$object_model->get_data_by_property_json(
@@ -105,15 +109,16 @@ class FormItemController extends Controller {
             case 'saveTitle':
                 //SE FOR METADADO CHAVE FACO VALIDACAO
                 if(isset($data['hasKey']) && $data['hasKey'] === 'true'){
-                    $json =$object_model->get_data_by_property_json(
+                    $json = json_decode($object_model->get_objects_by_property_json_advanced_search(
                         [
                         'collection_id'=> $data['collection_id'],
                         'term'=>$data['value']
-                        ]);
+                        ]));
                     if($json && is_array($json) && count($json) > 0){
                         foreach ($json as $value) {
-                            if($value->post_title === $data['value'] && $value->ID != $data['item_id'] ){}
-                                 return json_encode($data);
+                            if($value->label === $data['value'] && $value->ID != $data['item_id'] ){
+                                return json_encode($data);
+                            }
                         }
                     }
                 }

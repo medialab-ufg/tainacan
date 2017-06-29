@@ -25,7 +25,8 @@ class DateClass extends FormItem {
              id="validation-<?php echo $compound['id'] ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>"
              style="border-bottom:none;padding: 0px;">
                 <?php if(has_action('alter_input_date')): ?>
-                    <?php do_action('alter_input_date',['compound'=>$compound,'property_id'=>$property_id,'property'=>$property,'index'=>$index_id,'autoValidate'=>$autoValidate]) ?>
+                    <?php do_action('alter_input_date',
+                            ['value'=> $values,'item_id'=>$item_id,'compound'=>$compound,'property_id'=>$property_id,'property'=>$property,'index'=>$index_id,'autoValidate'=>$autoValidate]) ?>
                 <?php else: ?> 
                  <input 
                     style="margin-right: 5px;" 
