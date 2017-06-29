@@ -3,10 +3,6 @@
  * Template Name: Statistics
  */
 
-add_action('tainacan-header-end', function() {
-    include('header-statistics.php');
-});
-
 $home_url = get_bloginfo('url');
 $repository_title = get_bloginfo('name');
 $repo_desc = get_bloginfo('description');
