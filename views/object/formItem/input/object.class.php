@@ -24,7 +24,7 @@ class ObjectClass extends FormItem {
         $values = (!$values && $hasDefaultValue) ? [$hasDefaultValue] : $values;
         $autoValidate = ($values && !empty($values)) ? true : false;
         $this->isRequired = ($property['metas'] && $property['metas']['socialdb_property_required'] && $property['metas']['socialdb_property_required'] != 'false') ? true : false;
-        $isMultiple = ($property['metas']['socialdb_property_data_cardinality'] == 'n') ? true : false;
+        $isMultiple = ($property['metas']['socialdb_property_object_cardinality'] == 'n') ? true : false;
         $isView = $this->viewValue($property,$values,'term');
         if($isView){
             return true;
@@ -32,6 +32,7 @@ class ObjectClass extends FormItem {
         $isReverse = ($property['metas'] && $property['metas']['socialdb_property_object_reverse'] && is_numeric($property['metas']['socialdb_property_object_reverse'])) ? $property['metas']['socialdb_property_object_reverse']: 'false';
         
         ?>
+        <input type="hidden" id="cardinality_<?php echo $compound_id; ?>_<?php echo $property_id; ?>_<?php echo $index_id; ?>" value="<?php echo ($isMultiple) ? 'true' : 'false'  ?>">
         <input type="hidden" id="reverse_<?php echo $compound_id; ?>_<?php echo $property_id; ?>_<?php echo $index_id; ?>" value="<?php echo $isReverse  ?>">
         <input type="hidden" id="required_<?php echo $compound_id; ?>_<?php echo $property_id; ?>_<?php echo $index_id; ?>" value="<?php echo (string)$this->isRequired  ?>">
         <?php if($this->isRequired): ?>
@@ -99,7 +100,7 @@ class ObjectClass extends FormItem {
              id="metadata-result-<?php echo $compound_id; ?>-<?php echo $property_id; ?>-<?php echo $index_id; ?>" >
         </div>   
         <?php
-        $this->initScriptsObjectClass($compound_id, $property_id, $item_id, $index_id);
+        $this->initScriptsObjectClass($compound_id, $property_id, $item_id, $index_id,$isMultiple);
         if($hasDefaultValue): ?>
             <script>
                 $.ajax({
@@ -127,7 +128,7 @@ class ObjectClass extends FormItem {
      * @param type $item_id
      * @param type $index
      */
-    public function initScriptsObjectClass($compound_id, $propert_id, $item_id, $index_id) {
+    public function initScriptsObjectClass($compound_id, $propert_id, $item_id, $index_id,$isMultiple) {
         ?>
         <script>
             //mostrar o campo de pesquisa
@@ -195,12 +196,13 @@ class ObjectClass extends FormItem {
                         if ($('#avoid_selected_items_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>').val() === 'false') {
                             console.log($('#inserted_property_object_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>_' + ui.item.value));
                             if ($('#inserted_property_object_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>_' + ui.item.value).length === 0) {
-                                <?php if($isMultiple): ?>
+                                <?php if(!$isMultiple): ?>
                                     $('#results_property_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?> ul').html('');
                                 <?php endif; ?>
+                                $('#no_results_property_<?php echo $compound_id ?>_<?php echo $propert_id ?>_<?php echo $index_id ?>').hide();
                                 $('#results_property_<?php echo $compound_id ?>_<?php echo $propert_id ?>_<?php echo $index_id ?> ul')
                                         .append('<li id="inserted_property_object_<?php echo $compound_id ?>_<?php echo $propert_id ?>_<?php echo $index_id ?>_' + ui.item.value + '" item="' + ui.item.value + '" class="selected-items-property-object property-<?php echo $propert_id; ?>">' + ui.item.label
-                                                + '<span  onclick="original_remove_in_item_value_compound_<?php echo $compound_id ?>_<?php echo $property_id; ?>_<?php echo $index_id; ?>('+ui.item.value+',this)" style="cursor:pointer;" class="pull-right glyphicon glyphicon-trash"></span></li>');
+                                                + '<span  onclick="original_remove_in_item_value_compound_<?php echo $compound_id ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>('+ui.item.value+',this)" style="cursor:pointer;" class="pull-right glyphicon glyphicon-trash"></span></li>');
                                 //validacao do campo
                                 original_add_in_item_value_compound_<?php echo $compound_id ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>(ui.item.value);
                             }
@@ -283,7 +285,7 @@ class ObjectClass extends FormItem {
 
             //remove no formulario de fato
             function original_remove_in_item_value_compound_<?php echo $compound_id ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>(id,seletor){
-                $(seletor).remove();
+                $(seletor).parent().remove();
                 $.ajax({
                     url: $('#src').val() + '/controllers/object/form_item_controller.php',
                     type: 'POST',
@@ -305,7 +307,7 @@ class ObjectClass extends FormItem {
                 }
             }
             //adiciona no formulario de fato
-            function original_add_in_item_value_compound_<?php echo $compound_id ?>_<?php echo $propert_id; ?>_<?php echo $contador; ?>(id){
+            function original_add_in_item_value_compound_<?php echo $compound_id ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>(id){
                 $.ajax({
                     url: $('#src').val() + '/controllers/object/form_item_controller.php',
                     type: 'POST',

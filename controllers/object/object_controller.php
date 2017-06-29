@@ -22,6 +22,10 @@ class ObjectController extends Controller {
             case "create-item":
                 //classe que executa toda a logica
                 include_once dirname(__FILE__) . '../../../views/object/formItem/helper/formItem.class.php';
+                //sessao
+                if(!session_id()) {
+                        session_start();
+                }
                 //verificacoes para edicao ou criacao deitem
                 if(isset($data['item_id'])){
                   $formClass = new FormItem($data['collection_id'],__('Edit item','tainacan'));
@@ -31,6 +35,7 @@ class ObjectController extends Controller {
                       $time = get_post_meta($data['object_id'], 'socialdb_object_checkout_time', true);
                       return 'checkout@' . $user . '@' . date('d/m/Y', $time);
                   }
+                  $_SESSION['operation-form'] = 'edit';
                 }else{
                   $beta_id = get_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext', true);
                   if ($beta_id && is_numeric($beta_id)) {
@@ -38,7 +43,8 @@ class ObjectController extends Controller {
                     $data['item_id'] = $beta_id;
                   }else{
                     $formClass = new FormItem($data['collection_id']);
-                  }  
+                  } 
+                   $_SESSION['operation-form'] = 'add';
                 }
                 //se nao existir algum ID eu crio
                 if(isset($data['item_id'])) { 
@@ -50,10 +56,6 @@ class ObjectController extends Controller {
                 //jogo a class no array que sera utlizado no formulario
                 $data['formItem'] = $formClass;
                 $data['modeView'] = get_post_meta($data['collection_id'], 'socialdb_collection_submission_visualization', true);
-                //sessao
-                if(!session_id()) {
-                        session_start();
-                }
                 //verifico se ja existe as propriedades no cache
                 $cache = get_post_meta($data['collection_id'], 'properties-cached', true);
                 if(!$cache || $cache === ''){

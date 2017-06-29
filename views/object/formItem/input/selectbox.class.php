@@ -20,7 +20,7 @@ class SelectboxClass extends FormItem{
         <?php if ($this->isRequired): ?>
         <div class="form-group"
              id="validation-<?php echo $compound['id'] ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>"
-             style="border-bottom:none;padding: 0px;">
+             style="border-bottom:none;padding: 0px;margin-bottom: 10px;">
                <?php endif; ?>
                 <select class="form-control auto-save"
                         id='selectbox-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>' >

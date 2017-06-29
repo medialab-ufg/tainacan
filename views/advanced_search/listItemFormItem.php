@@ -89,8 +89,10 @@ endif;
             if($('#inserted_property_object_<?php echo $compound_id ?>_<?php echo $property_id ?>_<?php echo $contador ?>_'+$(value).val()).length==0){
                 //$('#line_property_object_<?php echo $property_id ?>_'+$(value).val()).css('color','#fff').css('background-color','#4285f4');
                // $('#line_property_object_<?php echo $property_id ?>_'+$(value).val()+' .item_values_'+$(value).val()).attr('disabled','disabled');
-                $('#results_property_<?php echo $compound_id ?>_<?php echo $property_id ?>_<?php echo $contador ?> ul').html('');
-                $('select[name="socialdb_property_<?php echo $compound_id; ?>_<?php echo $property_id; ?>_<?php echo $contador; ?>[]"]').html('');
+                if($('#cardinality_<?php echo $compound_id ?>_<?php echo $property_id ?>_<?php echo $contador ?>').val()==='false'){
+                    $('#results_property_<?php echo $compound_id ?>_<?php echo $property_id ?>_<?php echo $contador ?> ul').html('');
+                }
+                //$('select[name="socialdb_property_<?php echo $compound_id; ?>_<?php echo $property_id; ?>_<?php echo $contador; ?>[]"]').html('');
                 $('#results_property_<?php echo $compound_id ?>_<?php echo $property_id ?>_<?php echo $contador ?> ul')
                         .append('<li id="inserted_property_object_<?php echo $compound_id ?>_<?php echo $property_id ?>_<?php echo $contador ?>_'+$(value).val()+'" item="'+$(value).val()+'" class="selected-items-property-object property-<?php echo $property_id; ?>">'+$('#line_property_object_<?php echo $compound_id ?>_<?php echo $property_id ?>_<?php echo $contador ?>_'+$(value).val()+' .title-text').html()
                         +'<span  onclick="remove_item_objet_<?php echo $compound_id ?>_<?php echo $property_id; ?>_<?php echo $contador; ?>(this)" style="cursor:pointer;" class="pull-right glyphicon glyphicon-trash"></span></li>');

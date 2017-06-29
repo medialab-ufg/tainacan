@@ -338,7 +338,11 @@ class FormItem extends Model {
                     if($visibility == 'hide'){
                         continue;
                     }
-
+                    if(has_filter('property_is_visible')){
+                        if(!apply_filters('property_is_visible', $property,$this->collection_id)){
+                            continue;
+                        }
+                    }
                     if ($property['slug'] == 'socialdb_property_fixed_title' && !$this->isMediaFocus) {
                         $class = new FormItemTitle($this->collection_id);
                         $class->widget($property, $this->itemId);
@@ -555,7 +559,7 @@ class FormItem extends Model {
     *
     */
     public function viewValue($property,$values,$type){
-        if($values&& !empty($values) &&(isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true')){
+        if($_SESSION && $_SESSION['operation-form'] == 'edit' &&(isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true')){
             foreach ($values as $value) {
                 if($type == 'data'){
                     ?>
