@@ -4,7 +4,7 @@
  */
 
 add_action('tainacan-header-end', function() {
-    include('header-statistcs.php');
+    include('header-statistics.php');
 });
 
 $home_url = get_bloginfo('url');
