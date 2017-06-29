@@ -70,6 +70,11 @@ class ObjectController extends Controller {
             case 'appendCategoryMetadata'://
                     //class
                     include_once dirname(__FILE__) . '../../../views/object/formItem/helper/formItem.class.php';
+                    //sessao
+                    if(!session_id()) {
+                            session_start();
+                    }
+                    $_SESSION['operation-form'] = $data['operationForm'];
                     $formItem = new FormItem($data['collection_id']);
                     $data = $object_model->show_object_properties($data);
                     $properties_to_avoid = explode(',', $data['properties_to_avoid']);

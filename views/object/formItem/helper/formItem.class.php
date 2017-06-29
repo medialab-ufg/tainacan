@@ -559,6 +559,10 @@ class FormItem extends Model {
     *
     */
     public function viewValue($property,$values,$type){
+        //sessao
+        if(!session_id()) {
+                session_start();
+        }
         if($_SESSION && $_SESSION['operation-form'] == 'edit' &&(isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true')){
             foreach ($values as $value) {
                 if($type == 'data'){
@@ -910,6 +914,7 @@ class FormItem extends Model {
                     type: 'POST',
                     data: {
                         operation: 'appendCategoryMetadata',
+                        operationForm:'<?php echo ($_SESSION && $_SESSION['operation-form']) ? $_SESSION['operation-form'] : 'add' ?>',
                         properties_to_avoid: '<?php echo implode(',', $this->allPropertiesIds) ?>', categories: categories,object_id:item_id ,item_id:item_id,collection_id:$('#collection_id').val()}
                 }).done(function (result) {
                     if(result !== ''){
@@ -935,6 +940,7 @@ class FormItem extends Model {
                   type: 'POST',
                   data: {
                       operation: 'appendCategoryMetadata',
+                      operationForm:'<?php echo ($_SESSION && $_SESSION['operation-form']) ? $_SESSION['operation-form'] : 'add' ?>',
                       properties_to_avoid: '<?php echo implode(',', $this->allPropertiesIds) ?>', categories: categories,object_id:item_id ,item_id:item_id,collection_id:$('#collection_id').val()}
               }).done(function (result) {
                   if(result !== ''){
