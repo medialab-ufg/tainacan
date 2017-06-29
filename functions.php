@@ -3146,7 +3146,7 @@ function format_home_items_char($char) {
     print ucwords(str_split(replace_accents($char))[0]);
 }
 
-function home_header_bg($bg_id) {
+function get_repository_cover_url() {
     $cover_id = get_option( 'socialdb_repository_cover_id');
     if(has_filter('alter_image_index_container')){
         $image_url = ( $cover_id ) ? wp_get_attachment_url($cover_id) : apply_filters('alter_image_index_container','');
@@ -3154,8 +3154,7 @@ function home_header_bg($bg_id) {
         $image_url = ( $cover_id ) ? wp_get_attachment_url($cover_id) : get_template_directory_uri() . '/libraries/images/bg-home' . rand(1, 5) . '.jpg';
     }
     
-
-    return '<header style="background-image: url(' . $image_url . ')">';
+    return $image_url;
 }
 
 function repository_bg($col_id) {
@@ -3248,6 +3247,14 @@ if ( ! function_exists('get_menu_thumb_path') ) {
     }
 }
 
+add_action('tainacan-header-end', function() {
+
+    if (is_front_page()) {
+        include('header-front-page.php');
+        return;
+    }
+
+});
 
 /**
  *

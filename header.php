@@ -53,11 +53,15 @@ $_src_ = get_template_directory_uri();
             </head>
             <!-- TAINACAN: tag body adaptado para o gplus -->
             <body <?php body_class(); ?> itemscope>
-              <?php
-              if (is_front_page() || is_page($stat_page)) {
-                echo home_header_bg($socialdb_logo);
-              }
-
+              
+            <?php if (!is_single('socialdb_collection')): ?>
+              
+              <header style="background-image: url(<?php echo get_repository_cover_url(); ?>)">
+              
+            <?php endif; ?>
+                
+              
+              <?php 
               global $wp_query;
               $collection_id = $wp_query->post->ID;
               $collection_owner = $wp_query->post->post_author;
@@ -350,3 +354,9 @@ $_src_ = get_template_directory_uri();
                   </div>
                 </div>
               </div>
+            
+            <?php do_action('tainacan-header-end'); ?>
+            
+            <?php if (!is_single('socialdb_collection')): ?>
+              </header>
+            <?php endif; ?>
