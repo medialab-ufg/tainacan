@@ -44,25 +44,25 @@
                 }
             });
 
-            var formData = new FormData(this);
+            let formData = new FormData(this);
             if(!is_empty){
-                var itens_id = formData.get('items_id');
+                let itens_id = formData.get('items_id');
                 itens_id = itens_id.split(",");
 
-                var itemsFetcher = itens_id.map(function(item, index) {
-                    if (formData.get("type_" + item) == 'pdf')
+                let itemsFetcher = itens_id.map(function(item, index) {
+                    if (formData.get("type_" + item) === 'pdf')
                     {
-                        var pdf_url = formData.get("pdf_url_" + item);
+                        let pdf_url = formData.get("pdf_url_" + item);
                         
                         return new Promise(function(resolve, reject) {
                             PDFJS.getDocument(pdf_url).promise.then(function(doc) {
-                                var page = [];
+                                let page = [];
                                 page.push(1); //Get first page
 
                                 return Promise.all(page.map(function(num) {
                                     return doc.getPage(num).then(makeThumb)
                                         .then(function(canvas) {
-                                            var img = canvas.toDataURL("image/png");
+                                            let img = canvas.toDataURL("image/png");
 
                                             formData.append("pdf_thumbnail_" + item, img);
                                             resolve("It's done!");

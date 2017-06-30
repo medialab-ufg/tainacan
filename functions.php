@@ -10,6 +10,8 @@ add_action('init', 'register_taxonomies');
 //load_theme_textdomain("tainacan", dirname(__FILE__) . "/languages");
 include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 include_once( dirname(__FILE__) . "/config/config.php" );
+require_once (dirname(__FILE__) . '/libraries/php/PDFParser/vendor/autoload.php');
+require_once (dirname(__FILE__) . '/libraries/php/OfficeToPlainText/OfficeDocumentToPlainText.php');
 require_once('wp_bootstrap_navwalker.php');
 include_once("models/log/log_model.php");
 include_once('views/widgets/widget_contact.php');
@@ -3364,6 +3366,202 @@ function current_user_id_or_anon() {
     return $user_id;
 }
 
+function reindex($options)
+{
+    $pdf_text = isset($options['pdf_text']) ? true : false;
+    $office_text = isset($options['office_text']) ? true : false;
+
+    if($pdf_text || $office_text)
+    {
+        $args = array(
+            "numberposts" => -1,
+            "post_type" => 'socialdb_object'
+        );
+
+        $posts = get_posts($args);
+
+        $PDFidPostAttachmentURL = [];
+        $OFFICEidPostAttachmentURL = [];
+
+        /*
+         * MIME TYPES:
+         *
+         * PDF: application/pdf
+         * Word .doc: application/msword
+         * Word .docx: application/vnd.openxmlformats-officedocument.wordprocessingml.document
+         * Excel .xlsx: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+         * Power Point .pptx: application/vnd.openxmlformats-officedocument.presentationml.presentation
+         */
+
+        $office_mimes = array(
+            'application/msword',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+        );
+
+        foreach($posts as $post)
+        {
+            $post_meta = get_post_meta($post->ID);
+            $attachment_id = $post_meta['socialdb_object_content'][0];
+            $url_file = wp_get_attachment_url($attachment_id);
+            if($url_file)
+            {
+                $post_mime = get_post_mime_type($attachment_id);
+                if(strcmp($post_mime, 'application/pdf') == 0)
+                {
+                    $PDFidPostAttachmentURL[$post->ID] = array("post_meta" => $post_meta, 'url' => $url_file, 'attachment_id' => $attachment_id);
+                }elseif(in_array($post_mime, $office_mimes))
+                {
+                    $OFFICEidPostAttachmentURL[$post->ID] = array("post_meta" => $post_meta, 'url' => $url_file, 'attachment_id' => $attachment_id);
+                }
+            }
+        }
+
+        if($pdf_text)
+        {
+            foreach($PDFidPostAttachmentURL as $post_id => $info)
+            {
+                if(!array_key_exists('socialdb_pdf_text', $info['post_meta']))
+                {
+                    get_add_pdf_text($post_id, $info['attachment_id']);
+                }
+            }
+        }
+
+        if($office_text)
+        {
+            foreach($OFFICEidPostAttachmentURL as $post_id => $info)
+            {
+                if(!array_key_exists('socialdb_office_document_text', $info['post_meta']))
+                {
+                    get_add_office_document_text($post_id, $info['attachment_id']);
+                }
+            }
+        }
+    }
+
+    $result["msg"] = __("Reindexation complete,Success", "tainacan");
+    $result["result"] = true;
+    return $result;
+}
+
+function get_pdf_no_thumb_ids()
+{
+    $args = array(
+        "numberposts" => -1,
+        "post_type" => 'socialdb_object'
+    );
+
+    $posts = get_posts($args);
+
+    $PDFidAttachment = [];
+    foreach($posts as $post)
+    {
+        if(!has_post_thumbnail($post->ID))
+        {
+            $post_meta = get_post_meta($post->ID);
+            $attachment_id = $post_meta['socialdb_object_content'][0];
+            $url_file = wp_get_attachment_url($attachment_id);
+            if($url_file)
+            {
+                $post_mime = get_post_mime_type($attachment_id);
+                if(strcmp($post_mime, 'application/pdf') == 0)
+                {
+                    $PDFidAttachment[$post->ID] = $url_file;
+                }
+            }
+        }
+    }
+    
+    return $PDFidAttachment;
+}
+
+function save_canvas_pdf_thumbnails($canvas_images)
+{
+    $upload_dir = wp_upload_dir();
+    $upload_path = str_replace( '/', DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
+
+    foreach($canvas_images as $post_id => $canvas_image)
+    {
+        $image = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $canvas_image));
+        $filename = 'pdf_thumb_'.$post_id.'.png';
+
+        $hashed_filename = md5( $filename . microtime() ) . '_' . $filename;
+
+        // @new
+        $image_upload = file_put_contents( $upload_path . $hashed_filename, $image );
+
+        //HANDLE UPLOADED FILE
+        if( !function_exists( 'wp_handle_sideload' ) ) {
+            require_once( ABSPATH . 'wp-admin/includes/file.php' );
+        }
+
+        // Without that I'm getting a debug error!?
+        if( !function_exists( 'wp_get_current_user' ) ) {
+            require_once( ABSPATH . 'wp-includes/pluggable.php' );
+        }
+
+        $file             = array();
+        $file['error']    = '';
+        $file['tmp_name'] = $upload_path . $hashed_filename;
+        $file['name']     = $hashed_filename;
+        $file['type']     = 'image/png';
+        $file['size']     = filesize( $upload_path . $hashed_filename );
+
+        // upload file to server
+        // @new use $file instead of $image_upload
+        $file_return = wp_handle_sideload( $file, array( 'test_form' => false ) );
+
+        $filename = $file_return['file'];
+        $attachment = array(
+            'post_mime_type' => $file_return['type'],
+            'post_title' => preg_replace('/\.[^.]+$/', '', basename($filename)),
+            'post_content' => '',
+            'post_status' => 'inherit',
+            'guid' => $upload_dir['url'] . '/' . basename($filename)
+        );
+        $attach_id = wp_insert_attachment( $attachment, $filename );
+
+        set_post_thumbnail($post_id, $attach_id);
+    }
+
+    $return['msg'] = __("Reindexation complete,Success", "tainacan");
+    $return['result'] = true;
+    return $return;
+}
+
+function get_add_pdf_text($post_id, $item_id)
+{
+    $url_file = wp_get_attachment_url($item_id);
+    try
+    {
+        $parser = new \Smalot\PdfParser\Parser();
+        $pdf = $parser->parseFile($url_file);
+        $pdf_text = $pdf->getText();
+        error_reporting(1);
+        $model = new Model();
+        $model->set_common_field_values($post_id, "socialdb_property_$item_id", $pdf_text);
+        update_post_meta($post_id, "socialdb_pdf_text", true);
+    }catch (Exception $e)
+    {
+        //Can't read PDF file, just move on.
+    }
+}
+
+function get_add_office_document_text($post_id, $item_id)
+{
+    $file_path = get_attached_file($item_id);
+
+    $reader = new OfficeDocumentToPlainText($file_path);
+    $document_text = $reader->getDocumentText();
+    if($document_text)
+    {
+        $model = new Model();
+        $model->set_common_field_values($post_id, "socialdb_property_$item_id", $document_text);
+        update_post_meta($post_id, "socialdb_office_document_text", true);
+    }
+}
 ################# INSTANCIA OS MODULOS SE ESTIVEREM ATIVADOS#################
 instantiate_modules();
 ################################################################################

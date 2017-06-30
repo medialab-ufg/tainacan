@@ -227,6 +227,7 @@ class CollectionController extends Controller {
                 } else {
                     return $visualization_model->get_terms_by_property_json($data);
                 }
+                break;
             case 'list_items_search_autocomplete_advanced_search':
                 return $visualization_model->get_objects_by_property_json_advanced_search($data);
             /*             * ******************* Visibilidade ********************* */
@@ -388,6 +389,16 @@ class CollectionController extends Controller {
                 return json_encode($visualization_model->get_color_schemes($data['collection_id']));
             case 'get_default_color_scheme':
                 return json_encode($visualization_model->get_default_color_scheme($data['collection_id']));
+                break;
+            case 'reindex':
+                return json_encode(reindex($data));
+                break;
+            case 'pdf_no_thumb_ids':
+                return json_encode(get_pdf_no_thumb_ids());
+                break;
+            case 'pdf_thumbnail':
+                return json_encode(save_canvas_pdf_thumbnails($_POST));
+                break;
         }
     }
 

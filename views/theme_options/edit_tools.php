@@ -116,6 +116,7 @@ include_once ('js/edit_tools_js.php');
                     <input type="checkbox" name="pdf_text"> <?php _e("Reindex text from PDF files", "tainacan"); ?><br>
                     <input type="checkbox" name="pdf_thumbnail"> <?php _e("Reindex thumbnails from PDF files", "tainacan"); ?><br>
                     <input type="checkbox" name="office_text"> <?php _e("Reindex text from Microsoft Office files", "tainacan"); ?><br>
+                    <input type="hidden" name="operation" value="reindex">
                     <br>
                     <button class="btn btn-primary" type="submit"><?php _e("Reindex", "tainacan"); ?></button>
                 </form>

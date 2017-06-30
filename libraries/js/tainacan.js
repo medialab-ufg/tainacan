@@ -2986,11 +2986,11 @@ function change_button()
 }*/
 
 function makeThumb(page) {
-    var vp = page.getViewport(1);
-    var canvas = document.createElement("canvas");
+    let vp = page.getViewport(1);
+    let canvas = document.createElement("canvas");
     canvas.width = 595;
     canvas.height = 842;
-    var scale = Math.min(canvas.width / vp.width, canvas.height / vp.height);
+    let scale = Math.min(canvas.width / vp.width, canvas.height / vp.height);
     return page.render({canvasContext: canvas.getContext("2d"), viewport: page.getViewport(scale)}).promise.then(function () {
         return canvas;
     });
@@ -2998,30 +2998,99 @@ function makeThumb(page) {
 
 $(document).on("submit", "#reindexation_form", function (event) {
     event.preventDefault();
-    var formData = new FormData(this);
+    let formData = new FormData(this);
 
-    $.ajax({
-        url: $("#src").val() + '/controllers/collection/collection_controller.php',
-        type: 'POST',
-        data: formData,
-        processData: false,
-        contentType: false
-    }).done(function (result) {
-        elem = jQuery.parseJSON(result);
-        //ssdfdasd
-    });
+    //PDF and office document text
+    if(formData.get('pdf_text') || formData.get('office_text') || formData.get('pdf_thumbnail'))
+    {
+        $("#modalImportMain").modal("show");
+        let promises = [];
+        //PDF text and Office Document text
+        promises.push(new Promise(function(resolve, reject){
+                if(formData.get('pdf_text') || formData.get('office_text'))
+                {
+                    $.ajax({
+                        url: $("#src").val() + '/controllers/collection/collection_controller.php',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false
+                    }).done(function (result) {
+                        elem = jQuery.parseJSON(result);
+                        resolve(elem.msg);
+                    });
+                }else resolve("");
+            })
+        );
 
-    /*for(var pair of formData.entries()) {
-        console.log(pair[0]+ ', '+ pair[1]);
-    }*/
-});
+        //PDF Thumbnail
+        promises.push(new Promise(function (right, wrong) {
+            if(formData.get('pdf_thumbnail'))
+            {
+                $.ajax({
+                    url: $("#src").val() + '/controllers/collection/collection_controller.php',
+                    type: 'POST',
+                    data: {operation: 'pdf_no_thumb_ids'}
+                }).done(function (result) {
+                    result = jQuery.parseJSON(result);
+                    itens_id = Object.keys(result).map(function(post_id) {return [post_id, result[post_id]]; });
 
-$("#reindexation_form").on('submit', function (event) {
-    alet("Aqui");
-    event.preventDefault();
-    var formData = new FormData(this);
+                    formData = new FormData();
+                    let itemsFetcher = itens_id.map(function(info, index) {
+                        let post_id = info[0];
+                        let pdf_url = info[1];
 
-    for(var pair of formData.entries()) {
-     console.log(pair[0]+ ', '+ pair[1]);
+                        return new Promise(function(resolve, reject) {
+                            PDFJS.getDocument(pdf_url).promise.then(function(doc) {
+                                let page = [];
+                                page.push(1); //Get first page
+
+                                return Promise.all(page.map(function(num) {
+                                    return doc.getPage(num).then(makeThumb)
+                                        .then(function(canvas) {
+                                            let img = canvas.toDataURL("image/png");
+
+                                            formData.append(post_id, img);
+                                            resolve("It's done!");
+                                        });
+                                }));
+                            });
+                        });
+                    });
+
+                    Promise.all(itemsFetcher).then(function(){
+                        $.ajax({
+                            url: $("#src").val() + '/controllers/collection/collection_controller.php?operation=pdf_thumbnail',
+                            type: 'POST',
+                            data: formData,
+                            processData: false,
+                            contentType: false
+                        }).done(function (result) {
+                            elem = jQuery.parseJSON(result);
+                            right(elem.msg);
+                        });
+                    });
+
+                });
+            }
+            else right("");
+        }));
+
+        Promise.all(promises).then(function(values){
+            $("#modalImportMain").modal("hide");
+            let CompleteMsg, success, msg;
+            if(values[0].length > 0)
+            {
+                CompleteMsg = values[0];
+            }else CompleteMsg = values [1];
+
+            msg = CompleteMsg.split(",")[0];
+            success = CompleteMsg.split(",")[1];
+            swal(
+                success,
+                msg,
+                "success"
+            );
+        });
     }
 });

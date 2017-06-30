@@ -259,6 +259,7 @@ class ObjectMultipleModel extends Model {
                 error_reporting(1);
                 
                 $this->set_common_field_values($post_id, "socialdb_property_$item_id", $pdf_text);
+                update_post_meta($post_id, "socialdb_pdf_text", true);
             }catch (Exception $e)
             {
                 //Can't read PDF file, just move on.
@@ -272,6 +273,7 @@ class ObjectMultipleModel extends Model {
             if($document_text)
             {
                 $this->set_common_field_values($post_id, "socialdb_property_$item_id", $document_text);
+                update_post_meta($post_id, "socialdb_office_document_text", true);
             }
         }
         
@@ -354,10 +356,9 @@ class ObjectMultipleModel extends Model {
                 'post_status' => 'inherit',
                 'guid' => $upload_dir['url'] . '/' . basename($filename)
             );
+            
             $attach_id = wp_insert_attachment( $attachment, $filename );
-
             set_post_thumbnail($post_id, $attach_id);
-
         }
     }
     /**
