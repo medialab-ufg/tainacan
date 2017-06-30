@@ -56,7 +56,8 @@ class ObjectWidgetsHelper extends ViewHelper {
         $coumpounds_id = [];
         if (isset($properties_compounds)):
             foreach ($properties_compounds as $property) { 
-               if(isset($references['properties_to_avoid']) && is_array($references['properties_to_avoid'])&&in_array($property['id'], $references['properties_to_avoid'])){
+               if( ( has_filter('skip_compound_property') && apply_filters('skip_compound_property',$property,$object_id)) 
+                       || ( isset($references['properties_to_avoid']) && is_array($references['properties_to_avoid'])&&in_array($property['id'], $references['properties_to_avoid']))){
                     continue;
                 }
                $result['ids'][] = $property['id']; 
@@ -74,7 +75,8 @@ class ObjectWidgetsHelper extends ViewHelper {
                                      do_action('modificate_insert_item_properties_compounds',$property,$object_id,'property_value_'. $property['id'] .'_'.$object_id.'_add'); 
                             endif;
                             $this->generateValidationIcons($property, true);
-                            $all_fields_validate =  $property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] != 'false';
+                           // $all_fields_validate =  $property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] != 'false';
+                            $all_fields_validate =  $property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] == 'true';
                             ?>
                     </h2> 
                     <?php $cardinality_bigger = $this->render_cardinality_property($property);   ?>
@@ -117,7 +119,8 @@ class ObjectWidgetsHelper extends ViewHelper {
                                 <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>"
                                      class="col-md-12 no-padding" 
                                      style="border-color: #ccc;
-                                     <?php echo ($is_show_container) ? ( ( ( isset($references['is_view_mode']) || $references['is_edit'] ) && $all_fields_validate && $fields_filled != count($properties_compounded)) ? 'display:none' : 'display:block' ) : 'display:none'; ?>">                                    <div class="col-md-11">
+                                     <?php echo ($is_show_container) ? ( ( ( isset($references['is_view_mode']) || $references['is_edit'] ) && $all_fields_validate && $fields_filled != count($properties_compounded)) ? 'display:none' : 'display:block' ) : 'display:none'; ?>">
+                                    <div class="col-md-11">
                                 <?php foreach ($properties_compounded as $property_compounded): 
                                     if(!isset( $property_compounded['id']) || empty($property_compounded['id'])){
                                         continue;
@@ -334,7 +337,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                     <?php foreach ($property['metas']['objects'] as $object) { // percoro todos os objetos  ?>
                         <?php
                         if (isset($val) && !empty($val) && $object->post_status == 'publish' && ((is_array($val) && in_array($object->ID, $val) ) || ($object->ID == $val) )): // verifico se ele esta na lista de objetos da colecao
-                            echo '<input type="hidden" name="socialdb_property_'.$property['id'].'[]" value="'.$object->ID.'"><b><a  href="' . get_the_permalink($property['metas']['collection_data'][0]->ID) . '?item=' . $object->post_name . '" >' . $object->post_title . '</a></b><br>';
+                            echo '<input type="hidden" name="socialdb_property_'.$property['id'].'[]" value="'.$object->ID.'"><i><a  href="' . get_the_permalink($property['metas']['collection_data'][0]->ID) . '?item=' . $object->post_name . '" >' . $object->post_title . '</a></i><br>';
                         endif;
                         ?>
                     <?php } ?>

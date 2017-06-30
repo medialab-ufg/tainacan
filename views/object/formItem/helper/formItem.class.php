@@ -333,15 +333,15 @@ class FormItem extends Model {
         if (is_array($this->metadatas[$tab_id])) {
             foreach ($this->metadatas[$tab_id] as $property) {
                 $this->allPropertiesIds[] = $property['id'];
+                if(has_filter('property_is_visible')){
+                    if(!apply_filters('property_is_visible', $property,$this->collection_id)){
+                        continue;
+                    }
+                }
                 if (in_array($property['slug'], $this->fixed_slugs)) {
                     $visibility = (get_term_meta($property['id'],'socialdb_property_visibility',true));
                     if($visibility == 'hide'){
                         continue;
-                    }
-                    if(has_filter('property_is_visible')){
-                        if(!apply_filters('property_is_visible', $property,$this->collection_id)){
-                            continue;
-                        }
                     }
                     if ($property['slug'] == 'socialdb_property_fixed_title' && !$this->isMediaFocus) {
                         $class = new FormItemTitle($this->collection_id);
