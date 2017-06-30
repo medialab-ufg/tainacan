@@ -57,14 +57,14 @@ class FormItemTitle extends FormItem{
         <script>
             $('#item-title').keyup(function(){
                 <?php if($this->isRequired === 'true'):  ?>
-                    validateFieldsMetadataText($(this).val(),'<?php echo $property['id'] ?>','0','0')
+                    validateFieldsMetadataText($(this).val().trim(),'<?php echo $property['id'] ?>','0','0')
                 <?php endif; ?>
                 $.ajax({
                     url: $('#src').val() + '/controllers/object/form_item_controller.php',
                     type: 'POST',
                     data: {
                         operation: 'saveTitle',
-                        value: $(this).val(),
+                        value: $(this).val().trim(),
                         item_id:'<?php echo $item_id ?>',
                         collection_id:$('#collection_id').val(),
                         hasKey: '<?php echo (!$this->hasKey ||$this->hasKey === '') ? 'false' :'true' ?>'

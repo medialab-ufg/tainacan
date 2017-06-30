@@ -58,7 +58,8 @@ class DateClass extends FormItem {
                             value="<?php echo ($autoValidate) ? 'true' : 'false' ?>">
             <?php endif;  ?>
             <?php if(has_action('alter_input_date')): ?>
-                 <?php do_action('alter_input_date',['compound'=>$compound,'property_id'=>$property_id,'property'=>$property,'index'=>$index_id,'autoValidate'=>$autoValidate]) ?>
+                <?php do_action('alter_input_date',
+                            ['value'=> $values,'item_id'=>$item_id,'compound'=>$compound,'property_id'=>$property_id,'property'=>$property,'index'=>$index_id,'autoValidate'=>$autoValidate]) ?>
             <?php else: ?>         
                 <input 
                     style="margin-right: 5px;" 
@@ -84,7 +85,7 @@ class DateClass extends FormItem {
 
             $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').keyup(function () {
                 <?php if($this->isRequired):  ?>
-                    validateFieldsMetadataText($(this).val(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>')
+                    validateFieldsMetadataText($(this).val().trim(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>')
                 <?php endif; ?>
                 $.ajax({
                     url: $('#src').val() + '/controllers/object/form_item_controller.php',
@@ -92,7 +93,7 @@ class DateClass extends FormItem {
                     data: {
                         operation: 'saveValue',
                         type: 'data',
-                        value: $(this).val(),
+                        value: $(this).val().trim(),
                         item_id: '<?php echo $item_id ?>',
                         compound_id: '<?php echo $compound_id ?>',
                         property_children_id: '<?php echo $property_id ?>',

@@ -78,7 +78,7 @@ class NumericClass extends FormItem{
         <script>
             $('#numeric-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').keyup(function(){
                 <?php if($this->isRequired):  ?>
-                    validateFieldsMetadataText($(this).val(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>')
+                    validateFieldsMetadataText($(this).val().trim(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>')
                 <?php endif; ?>
                 $.ajax({
                     url: $('#src').val() + '/controllers/object/form_item_controller.php',
@@ -86,7 +86,7 @@ class NumericClass extends FormItem{
                     data: {
                         operation: 'saveValue',
                         type:'data',
-                        value: $(this).val(),
+                        value: $(this).val().trim(),
                         item_id:'<?php echo $item_id ?>',
                         compound_id:'<?php echo $compound_id ?>',
                         property_children_id: '<?php echo $property_id ?>',
