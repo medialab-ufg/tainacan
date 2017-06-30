@@ -3057,7 +3057,7 @@ $(document).on("submit", "#reindexation_form", function (event) {
                             });
                         });
                     });
-                    //
+                    
                     Promise.all(itemsFetcher).then(function(){
                         $.ajax({
                             url: $("#src").val() + '/controllers/collection/collection_controller.php?operation=pdf_thumbnail',
