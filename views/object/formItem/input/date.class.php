@@ -57,7 +57,7 @@ class DateClass extends FormItem {
                             class="compound-one-field-should-be-filled-<?php echo $compound['id'] ?>"
                             value="<?php echo ($autoValidate) ? 'true' : 'false' ?>">
             <?php endif;  ?>
-            <?php if(has_action('alter_input_date')): var_dump('sssss'); ?>
+            <?php if(has_action('alter_input_date')): ?>
                  <?php do_action('alter_input_date',['compound'=>$compound,'property_id'=>$property_id,'property'=>$property,'index'=>$index_id,'autoValidate'=>$autoValidate]) ?>
             <?php else: ?>         
                 <input 

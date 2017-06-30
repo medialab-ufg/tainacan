@@ -245,7 +245,7 @@ class FormItemCompound extends FormItem {
                         collection_id: $("#collection_id").val(),
                         operation: 'appendContainerCompounds',
                         item_id:'<?php echo $item_id ?>',
-                        property_details: '<?php echo htmlentities(serialize($property)) ?>',
+                        property_details: "<?php echo htmlentities(serialize($property)) ?>",
                         index: index
                     }
                 }).done(function (result) {
