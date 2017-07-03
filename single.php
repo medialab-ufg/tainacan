@@ -43,7 +43,7 @@ if (!has_nav_menu('menu-ibram')):
     $_r_bg = repository_bg($col_root_id);
     ?>
     <div id="main_part_collection" class="collection_repo_config" 
-         style="background: url(<?php echo $_r_bg; ?>); display: none; margin-top: 50px;">
+         style="background: url(<?php echo $_r_bg; ?>); display: none; margin-top: 0px;">
         <div class="row container-fluid">
             <div class="project-info">
                 <center>
