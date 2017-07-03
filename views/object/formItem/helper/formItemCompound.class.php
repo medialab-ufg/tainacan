@@ -1,4 +1,5 @@
 <?php
+include_once (dirname(__FILE__) . '/formItem.class.php');
 include_once (dirname(__FILE__) . '/../input/text.class.php');
 include_once (dirname(__FILE__) . '/../input/date.class.php');
 include_once (dirname(__FILE__) . '/../input/textarea.class.php');

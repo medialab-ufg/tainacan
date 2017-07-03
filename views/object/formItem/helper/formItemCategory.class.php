@@ -51,7 +51,7 @@ class FormItemCategory extends FormItem{
                 <?php elseif($property['type'] == 'tree_checkbox'): ?>
                     <?php $this->multipleTreeClass->generate($property,['id'=>0], $item_id, 0) ?>
                 <?php endif; ?>
-                <div class="category-properties" id="appendCategoryMetadata_<?php echo $property['id']; ?>_0_0">
+                <div class="category-properties" style="float:left;width: 100%;padding-bottom:15px;" id="appendCategoryMetadata_<?php echo $property['id']; ?>_0_0">
                 </div>
             </div>
         </div>

@@ -933,6 +933,9 @@ class FormItem extends Model {
                         $(seletor).css('padding','5px;');
                         $(seletor).css('margin-top','10px');
                         $(seletor).css('height','auto');
+                        $(seletor).css('float','left');
+                        $(seletor).css('width','100%');
+                        $(seletor).css('padding-bottom','15px');
                         $(seletor).html(result);
                     }else{
                         $(seletor).html('');
@@ -959,6 +962,9 @@ class FormItem extends Model {
                       $(seletor).css('padding','5px;');
                       $(seletor).css('margin-top','10px');
                       $(seletor).css('height','auto');
+                      $(seletor).css('float','left');
+                      $(seletor).css('width','100%');
+                      $(seletor).css('padding-bottom','15px');
                       $(seletor).html(result);
                   }else{
                       $(seletor).css('border','none');
