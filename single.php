@@ -13,7 +13,7 @@ while (have_posts()) : the_post();
 endwhile;
 ///****************************** EXECUTANDO SCRIPTS AVULSOS *********************/
 if(!get_option('tainacan_update_items_helpers')){
-    //HelpersController::execute_script('0003', ['collection_id' => 'all']);
+    HelpersController::execute_script('0003', ['collection_id' => 'all']);
 }else if (isset($_GET['execute-script'])):
     error_reporting(E_ALL);
     if ($_GET['execute-script'] == '0003') {
