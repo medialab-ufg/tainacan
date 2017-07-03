@@ -153,7 +153,9 @@ class DateClass extends FormItem {
                     prevText: 'Anterior',
                     showOn: "button",
                     buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif",
-                    buttonImageOnly: true
+                    buttonImageOnly: true,
+                    changeMonth: true,
+                    changeYear: true
                 });
             }
         </script> 
