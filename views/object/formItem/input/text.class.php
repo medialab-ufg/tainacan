@@ -1,4 +1,5 @@
 <?php
+include_once (dirname(__FILE__) . '/../helper/formItem.class.php');
 
 class TextClass extends FormItem{
 

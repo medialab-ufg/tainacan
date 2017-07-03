@@ -563,7 +563,8 @@ class FormItem extends Model {
         if(!session_id()) {
                 session_start();
         }
-        if($_SESSION && $_SESSION['operation-form'] == 'edit' &&(isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true')){
+        if($_SESSION && $_SESSION['operation-form'] == 'edit' 
+                && (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true') && is_array($values) && !empty($values)){
             foreach ($values as $value) {
                 if($type == 'data'){
                     ?>

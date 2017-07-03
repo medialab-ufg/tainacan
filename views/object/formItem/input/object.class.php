@@ -25,7 +25,8 @@ class ObjectClass extends FormItem {
         $autoValidate = ($values && !empty($values)) ? true : false;
         $this->isRequired = ($property['metas'] && $property['metas']['socialdb_property_required'] && $property['metas']['socialdb_property_required'] != 'false') ? true : false;
         $isMultiple = ($property['metas']['socialdb_property_object_cardinality'] == 'n') ? true : false;
-        $isView = $this->viewValue($property,$values,'term');
+        
+        $isView = $this->viewValue($property,$values,'object');
         if($isView){
             return true;
         }

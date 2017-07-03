@@ -17,7 +17,8 @@ require_once(dirname(__FILE__) . '../../general/general_model.php');
  */
 class HelpersModel extends Model {
     
-      /**
+    public $usedIds = [];
+    /**
      * metodo que atualiza o metadado comum que centraliza os valores para 
      * facilitar uma busca completa do item e suas classificacoes EM TODAS
      * AS COLECOES
@@ -66,7 +67,7 @@ class HelpersModel extends Model {
         foreach ($items as $item) {
             $model->getAllPropertiesFromItem($item->ID) ;
         }
-        update_option('tainacan_update_items_helpers', 'true');
+        //update_option('tainacan_update_items_helpers', 'true');
     }
     
     /**
@@ -123,7 +124,6 @@ class HelpersModel extends Model {
     
     
     public function saveHelper($item_id,$coumpounds,$singles,$values) {
-        echo '<pre>';
         foreach ($coumpounds as $compound_id => $indexes) {
             $array = [];
             foreach ($indexes as $index => $metas) {
@@ -160,8 +160,9 @@ class HelpersModel extends Model {
                 }
             }
             //var_dump($compound_id);
-            print_r($array);
+            //print_r($array);
             update_post_meta($item_id, 'socialdb_property_helper_'.$compound_id, serialize($array));
+            $this->usedIds[] = $compound_id;
         }
         
         foreach ($singles as $single_id => $indexes) {
@@ -177,9 +178,33 @@ class HelpersModel extends Model {
                         $index++;
                 }
             }
-            print_r($array);
+            //print_r($array);
             update_post_meta($item_id, 'socialdb_property_helper_'.$single_id, serialize($array));
+            $this->usedIds[] = $single_id;
         }
+        //busco as categorias deste item
+        $terms = wp_get_object_terms($item_id, 'socialdb_category_type');
+        //busco as propriedades de categoria que ainda tiveram os valores setados
+        foreach ($this->getCollectionProperties($item_id) as $property) {
+            $array = [];
+            if(isset($property['metas']['socialdb_property_term_root']) && is_array($terms)){
+                $values_set = [];
+                foreach ($terms as $term) {
+                    $ancestors = get_ancestors($term->term_id, 'socialdb_category_type');
+                    if(is_array($ancestors) && in_array($property['metas']['socialdb_property_term_root'], $ancestors)){
+                        $meta_id = $this->sdb_add_post_meta($item_id, 'socialdb_property_'.$property['id'].'_cat', $term->term_id);
+                        $values_set[] = $meta_id;
+                    }
+                }
+                $new_children = [
+                    'type' => 'term',
+                    'values' => $values_set
+                ];
+                $array[0][0] = $new_children; 
+                update_post_meta($item_id, 'socialdb_property_helper_'.$property['id'], serialize($array));
+            }
+        }
+        
     }
 
     /**
@@ -238,6 +263,34 @@ class HelpersModel extends Model {
                         $this->set_common_field_values($item_id,  "socialdb_property_$property_id",$values,'item');
             }
         }
+    }
+    
+    private function getCollectionProperties($item_id){
+        $properties = [];
+        $term_types = ['selectbox', 'radio', 'checkbox', 'tree', 'tree_checkbox', 'multipleselect'];
+        $terms = wp_get_object_terms($item_id, 'socialdb_category_type');
+        if ($terms) {
+            foreach ($terms as $term) {
+                if($this->verify_collection_category_root($term->term_id)){
+                    $ids = get_term_meta($term->term_id, 'socialdb_category_property_id');
+                    break;
+                }
+            }
+        }
+        // itero sobre os metadados da colecao
+        if(isset($ids) && is_array($ids)){
+            foreach ($ids as $id) {
+                // se ele ja nao foi encontrado como postmeta eh pq ainda nao foi
+                // eontrado seu valor ou esta vazio
+                if(!in_array($id, $this->usedIds)){
+                    $property = $this->get_all_property($id, true);
+                    if (isset($property['type']) && in_array($property['type'], $term_types)) {
+                        $properties[] = $property;
+                    }
+                }
+            }
+        }
+        return $properties;
     }
 
 }
