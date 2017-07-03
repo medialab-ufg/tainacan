@@ -2,3 +2,11 @@
 data
 cache
 .idea/
+/libraries/php/PDFParser/vendor/smalot/pdfparser/.gitattributes
+/libraries/php/PDFParser/vendor/smalot/pdfparser/.gitignore
+/libraries/php/PDFParser/vendor/smalot/pdfparser/LICENSE.txt
+/libraries/php/PDFParser/vendor/smalot/pdfparser/README.md
+/libraries/php/PDFParser/vendor/tecnickcom/tcpdf/README.TXT
+/libraries/php/PDFParser/vendor/tecnickcom/tcpdf/LICENSE.TXT
+/libraries/php/PDFParser/vendor/tecnickcom/tcpdf/CHANGELOG.TXT
+/libraries/php/PDFParser/vendor/tecnickcom/tcpdf/examples/
