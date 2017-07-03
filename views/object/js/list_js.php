@@ -350,6 +350,19 @@
 
         $('#collection-slideShow .item-menu-container').removeClass('navbar-right').addClass('navbar-left');
 
+        var $setViewMode = $('.selected-viewMode').attr('class');
+        if($setViewMode) {
+            $setViewMode = $setViewMode.split(" ")[0];
+            if("table" === $setViewMode) {
+                $(window).resize(function() {
+                    if ($(window).width() < 820) {
+                        changeViewMode("cards");
+                    } else {
+                        changeViewMode($setViewMode);
+                    }
+                });
+            }
+        }
     });
 
     function set_toastr_class() {

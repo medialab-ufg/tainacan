@@ -295,8 +295,7 @@ $(window).load(function () {
 
     });
 
-    function show_result()
-    {
+    function show_result() {
         $('#modalImportConfirm').modal('show');
     }
     //submit do importar zip para colecoes
@@ -543,12 +542,9 @@ $(window).load(function () {
             }
 
         });
-
     });
 
-
-    
-});
+}); // On load Tainacan' main page
 
 $(document).ready(function () {
     $('.input_date').mask('00/00/0000');
