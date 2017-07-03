@@ -2,25 +2,23 @@
     $(function () {
         var src = $('#src').val();
         var dataTable_options = {
-            /*
             "language": {
-                sInfo: "< ?php _e('Showing from', 'tainacan'); ?>" + " _START_ " + "< ?php _e('until', 'tainacan'); ?>"
-                + " _END_ " + "< ?php _e('until', 'tainacan'); ?>" + " _TOTAL_ " + "< ?php _e('items', 'tainacan'); ?>",
-                sLengthMenu: "< ?php _e('Show', 'tainacan'); ?>" + " _MENU_ " + "< ?php _e('items per page', 'tainacan'); ?>",
+                sInfo: "<?php _e('Showing from', 'tainacan'); ?>" + " _START_ " + "<?php _e('until', 'tainacan'); ?>"
+                + " _END_ " + "<?php _e('until', 'tainacan'); ?>" + " _TOTAL_ " + "<?php _e('items', 'tainacan'); ?>",
+                sLengthMenu: "<?php _t('Show', 1); ?>" + " _MENU_ " + "<?php _e('items per page', 'tainacan'); ?>",
                 sInfoFiltered: "(filtrados de _MAX_ eventos)",
-                zeroRecords: "< ?php _e('No matching records found', 'tainacan'); ?>",
-                search: "< ?php _e('Search: ', 'tainacan'); ?>",
+                zeroRecords: "<?php _e('No matching records found', 'tainacan'); ?>",
+                search: "<?php _e('Search: ', 'tainacan'); ?>",
                 paginate: {
-                    first: "< ?php _e('First', 'tainacan'); ?>",
-                    previous: "< ?php _e('Previous', 'tainacan'); ?>",
-                    next: "< ?php _e('Next ', 'tainacan'); ?>",
-                    last: "< ?php _e('Last', 'tainacan'); ?>"
+                    first: "<?php _e('First', 'tainacan'); ?>",
+                    previous: "<?php _e('Previous', 'tainacan'); ?>",
+                    next: "<?php _e('Next ', 'tainacan'); ?>",
+                    last: "<?php _e('Last', 'tainacan'); ?>"
                 }
             },
-            */
-            searching: false,
-            paging: false,
-            info: false
+            lengthMenu: [10, 15, 25, 50],
+            searching: false
+            /* paging: false, info: false */
         };
         $('.list-view-container').eq(0).css('border-top', 0);
 
@@ -173,7 +171,7 @@
             // getSlideshowTime();
             getCollectionSlideshow();
         } else if(default_viewMode === "table") {
-            // $(".center_pagination").hide();
+            $(".center_pagination").hide();
         }
         $('.viewMode-control li').removeClass('selected-viewMode');
         $('.viewMode-control li.' + default_viewMode).addClass('selected-viewMode');

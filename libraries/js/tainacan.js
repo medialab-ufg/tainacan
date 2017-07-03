@@ -2770,26 +2770,15 @@ function setMenuContainerHeight() {
     }
 }
 
-/*
- $(window).on('resize', function(ev) {
- var window_width = $(window).width();
- if(window_width < 1010) {
- 
- }
- });
- */
-
 function changeViewMode(viewMode) {    
     if (viewMode === "slideshow") {
         getCollectionSlideshow();
     } else {
-        /*
         if (viewMode === "table") {
             $(".center_pagination").hide();
         } else {
             $(".center_pagination").show();
         }
-        */
 
         $("#temp-viewMode").val(viewMode);
         $("#collection_single_ordenation").attr('data-viewMode', viewMode);

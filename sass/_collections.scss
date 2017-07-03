@@ -795,6 +795,10 @@ button.collection-trash {
     border-collapse: collapse !important;
   }
 
+  #table-view_wrapper {
+    padding-top: 10px;
+  }
+
   #table-view {
     overflow-x: scroll;
     overflow: auto;
