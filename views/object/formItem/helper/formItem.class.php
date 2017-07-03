@@ -645,7 +645,7 @@ class FormItem extends Model {
     public function mediaHabilitate() {
         ?>
           <div class="col-md-3"
-               style="background: white;font: 11px Arial;padding-left: 1% 2% 0px 15px;margin-top: 0px">
+               style="background: white;font: 11px Arial;padding:0px;margin-top: 0px;width: 24%;margin-left: 15px;">
                 <h4>
                    <?php echo ($view_helper->terms_fixed['thumbnail']) ? $view_helper->terms_fixed['thumbnail']->name :  _e('Thumbnail','tainacan') ?>
                </h4>
@@ -689,6 +689,16 @@ class FormItem extends Model {
                  </div>
             </div>
         <?php    
+    }
+    
+    public function sortArrayChildren($children) {
+        if(count($children) > 0){
+            var_dump(usort($children, function($a, $b)
+            {
+                return strcmp($a->name, $b->name);
+            }));
+        }
+        return $children;
     }
 
     /**

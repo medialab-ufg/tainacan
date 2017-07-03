@@ -1213,6 +1213,9 @@ class Model {
 		";
         $result = $wpdb->get_results($query);
         if (isset($result) && !empty($result) && count($result) > 0) {
+            if(isset($result[0]->post_status) && $result[0]->post_status != 'publish' && current_user_can('manage_options')){
+                return false;
+            }
             return true;
         } else {
             return false;
