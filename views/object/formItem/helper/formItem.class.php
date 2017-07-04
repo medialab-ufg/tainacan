@@ -1,20 +1,5 @@
 <?php
 include_once(dirname(__FILE__) . '../../../../../models/object/object_model.php');
-include_once (dirname(__FILE__) . '/formItemText.class.php');
-include_once (dirname(__FILE__) . '/formItemCategory.class.php');
-include_once (dirname(__FILE__) . '/formItemObject.class.php');
-include_once (dirname(__FILE__) . '/formItemCompound.class.php');
-//fixos
-include_once (dirname(__FILE__) . '/formItemTitle.class.php');
-include_once (dirname(__FILE__) . '/formItemThumbnail.class.php');
-include_once (dirname(__FILE__) . '/formItemAttachment.class.php');
-include_once (dirname(__FILE__) . '/formItemContent.class.php');
-include_once (dirname(__FILE__) . '/formItemThumbnail.class.php');
-include_once (dirname(__FILE__) . '/formItemDescription.class.php');
-include_once (dirname(__FILE__) . '/formItemSource.class.php');
-include_once (dirname(__FILE__) . '/formItemTags.class.php');
-include_once (dirname(__FILE__) . '/formItemLicense.class.php');
-include_once (dirname(__FILE__) . '/formItemType.class.php');
 
 class FormItem extends Model {
 
@@ -1049,3 +1034,18 @@ class FormItem extends Model {
     }
 
 }
+include_once (dirname(__FILE__) . '/formItemText.class.php');
+include_once (dirname(__FILE__) . '/formItemCategory.class.php');
+include_once (dirname(__FILE__) . '/formItemObject.class.php');
+include_once (dirname(__FILE__) . '/formItemCompound.class.php');
+//fixos
+include_once (dirname(__FILE__) . '/formItemTitle.class.php');
+include_once (dirname(__FILE__) . '/formItemThumbnail.class.php');
+include_once (dirname(__FILE__) . '/formItemAttachment.class.php');
+include_once (dirname(__FILE__) . '/formItemContent.class.php');
+include_once (dirname(__FILE__) . '/formItemThumbnail.class.php');
+include_once (dirname(__FILE__) . '/formItemDescription.class.php');
+include_once (dirname(__FILE__) . '/formItemSource.class.php');
+include_once (dirname(__FILE__) . '/formItemTags.class.php');
+include_once (dirname(__FILE__) . '/formItemLicense.class.php');
+include_once (dirname(__FILE__) . '/formItemType.class.php');
