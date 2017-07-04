@@ -181,6 +181,7 @@ function contest_insert_default_properties_collection($category_id,$collection_i
 ##################### 11# REMOCAO DE CAMPOS DESNECESSÁRIOS #########################
 /** ESCONDER CAMPOS DO FORMULARIO DE ADICAO E EDICAO DE PROPRIEDADE DE OBJETOS*/
 add_action('collection_create_name_object', 'hide_field');
+add_action('hide_actions_item', 'hide_field');
 /******************************************************************************/
 function hide_field() {
     echo 'style="display:none;"';                          

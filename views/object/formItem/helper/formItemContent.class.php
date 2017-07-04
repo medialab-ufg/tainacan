@@ -10,6 +10,9 @@ class FormItemContent extends FormItem {
         <div class="form-group" >
              <?php echo ($isFocusMedia) ? '<h5>' : '<h2>' ?>
                 <?php echo ($this->terms_fixed['content']) ? $this->terms_fixed['content']->name : _e('Content', 'tainacan') ?>
+                <?php if($this->isRequired === 'true'): ?>
+                *
+                <?php endif; ?>
                 <?php $this->validateIcon('alert-compound-'.$property['id'],__('Required field','tainacan')) ?>
             <?php echo ($isFocusMedia) ? '</h5>' : '</h2>' ?>
             <div >
@@ -52,7 +55,7 @@ class FormItemContent extends FormItem {
             CKEDITOR.instances.item_content.on('contentDom', function() {
                 CKEDITOR.instances.item_content.document.on('keyup', function(event) {
                       <?php if($this->isRequired === 'true'):  ?>
-                          validateFieldsMetadataText($(this).val(),'<?php echo $property['id'] ?>','0','0')
+                          validateFieldsMetadataText(CKEDITOR.instances.item_content.getData(),'<?php echo $property['id'] ?>','0','0')
                       <?php endif; ?>
                       $.ajax({
                           url: $('#src').val() + '/controllers/object/form_item_controller.php',

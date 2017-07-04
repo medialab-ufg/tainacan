@@ -30,7 +30,7 @@ $is_repo_admin = current_user_can('administrator');
 ?>
 
 <?php if($is_single_page): ?>
-    <ul class="item-funcs right">
+<ul class="item-funcs right">
         <input type="hidden" class="post_id" name="post_id" value="<?= $curr_id ?>">
         <li>
             <a id="modal_network<?php echo $curr_id; ?>" onclick="showModalShareNetwork(<?php echo $curr_id; ?>)">
@@ -40,7 +40,7 @@ $is_repo_admin = current_user_can('administrator');
     </ul>
 <?php endif; ?>
 
-<ul class="nav navbar-bar navbar-right item-menu-container">
+<ul class="nav navbar-bar navbar-right item-menu-container"  <?php if(has_action('hide_actions_item')) do_action('hide_actions_item') ?> >
     <li class="dropdown open_item_actions" id="action-<?php echo $curr_id; ?>">
         <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
             <?php echo ViewHelper::render_icon("config", "png", _t('Item options')); ?>
