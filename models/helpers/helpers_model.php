@@ -67,7 +67,7 @@ class HelpersModel extends Model {
         foreach ($items as $item) {
             $model->getAllPropertiesFromItem($item->ID) ;
         }
-        //update_option('tainacan_update_items_helpers', 'true');
+        update_option('tainacan_update_items_helpers', 'true');
     }
     
     /**
