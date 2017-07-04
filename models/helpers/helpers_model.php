@@ -63,11 +63,11 @@ class HelpersModel extends Model {
     
     public static function create_helper_item(){
         $model = new HelpersModel;
+        update_option('tainacan_update_items_helpers', 'true');
         $items = $model->getAllItemsPublished();
         foreach ($items as $item) {
             $model->getAllPropertiesFromItem($item->ID) ;
         }
-        update_option('tainacan_update_items_helpers', 'true');
     }
     
     /**
@@ -78,9 +78,11 @@ class HelpersModel extends Model {
     public function getAllItemsPublished() {
         global $wpdb;
         $wp_posts = $wpdb->prefix . "posts";
+        $wp_postmeta = $wpdb->prefix . "postmeta";
         $query = "
-                        SELECT * FROM $wp_posts p  
-                        WHERE p.post_type LIKE 'socialdb_object' and p.post_status LIKE 'publish'
+                        SELECT distinct p.ID,p.* FROM $wp_posts p  
+                        INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id    
+                        WHERE p.post_type LIKE 'socialdb_object' and p.post_status LIKE 'publish' and pm.meta_key NOT LIKE 'socialdb_property_helper_%'
                 ";
         $result = $wpdb->get_results($query);
         if ($result && !empty($result)) {
