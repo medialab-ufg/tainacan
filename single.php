@@ -14,6 +14,7 @@ endwhile;
 ///****************************** EXECUTANDO SCRIPTS AVULSOS *********************/
 if(!get_option('tainacan_update_items_helpers')){
     HelpersController::execute_script('0003', ['collection_id' => 'all']);
+     wp_redirect(get_the_permalink());
 }else if (isset($_GET['execute-script'])):
     error_reporting(E_ALL);
     if ($_GET['execute-script'] == '0003') {
