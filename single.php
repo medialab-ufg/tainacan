@@ -72,7 +72,7 @@ while (have_posts()) : the_post();
     <div id="fb-root"></div>
 
     <!-- TAINACAN: esta div (AJAX) mostra o painel da colecao e suas acoes, estilos inline para descer a div apenas pois estava sob o header  -->
-    <div id="collection_post" style="margin-top: 50px;"> </div>
+    <div id="collection_post" style="margin-top: 0px;"> </div>
 
     <!-- TAINACAN - BEGIN: ITENS NECESSARIOS PARA EXECUCAO DE VARIAS PARTES DO SOCIALDB -->
     <input type="hidden" id="visualization_page_category" name="visualization_page_category" value="<?php echo (!$visualization_page_category || $visualization_page_category === 'right_button') ? 'right_button' : 'click'; ?>">
