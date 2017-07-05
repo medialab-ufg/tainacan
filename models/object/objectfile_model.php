@@ -179,6 +179,88 @@ class ObjectFileModel extends Model {
         }
     }
     
+    /**
+     * 
+     * @param type $data
+     * @return type
+     */
+    public function create_item_by_files($data){
+        $post = get_post($data['object_id']);
+        $result = array();
+        if (!is_object(get_post_thumbnail_id())) {
+            $args = array(
+                'post_type' => 'attachment',
+                'numberposts' => -1,
+                'post_status' => null,
+                'post_parent' => $post->ID,
+                'exclude' => get_post_thumbnail_id()
+            );
+            //  var_dump($args);
+            $attachments = get_posts($args);
+            $arquivos = get_post_meta($post->ID, '_file_id');
+            if ($attachments) {
+                foreach ($attachments as $attachment) {
+                    if (in_array($attachment->ID, $arquivos)) {
+                        $_file_path_ = get_attached_file($attachment->ID);
+                        $metas = wp_get_attachment_metadata($attachment->ID);
+                        $item_id = socialdb_insert_object($attachment->post_title);
+                        update_post_meta($item_id, 'socialdb_object_content', $attachment->ID);
+                        update_post_meta($item_id, 'socialdb_object_from','internal');
+                        $obj['ID'] = $item_id;
+                        $obj['name'] = $attachment->post_title;
+                        $obj['size'] = filesize($_file_path_);
+                        $extension = $attachment->guid;
+                        $ext = pathinfo($extension, PATHINFO_EXTENSION);
+                        if(in_array($ext, ['mp4','m4v','wmv','avi','mpg','ogv','3gp','3g2'])){
+                            update_post_meta($item_id, 'socialdb_object_dc_type', 'video');
+                            $result['videos'][] = $obj;     
+                        }elseif (in_array($ext, ['jpg','jpeg','png','gif', 'tiff'])) {
+                           update_post_meta($item_id, 'socialdb_object_dc_type', 'image'); 
+                           $obj['metas'] = $metas;
+                           $result['image'][] = $obj;
+                           /*
+                            * TODO: confirm if code below should be removed
+                            * */
+                           if( in_array($ext, ['jpg', 'jpeg', 'tiff']) ) {
+                               /*
+                               $property_model = new PropertyModel();
+                               $_exif_data = exif_read_data($_file_path_, 0, true);
+                               unset($_exif_data['FILE']);
+                               unset($_exif_data['COMPUTED']);
+                               */
+                           }
+
+                        }
+                        elseif (in_array($ext, ['mp3','m4a','ogg','wav','wma']))
+                        {
+                           update_post_meta($item_id, 'socialdb_object_dc_type', 'audio');  
+                           $result['audio'][] = $obj;
+                        }
+                        elseif(in_array($ext, ['pdf']))
+                        {
+                           update_post_meta($item_id, 'socialdb_object_dc_type', 'pdf');   
+                           $result['pdf'][] = $obj;
+                        }
+                        elseif (in_array($ext, ['doc', 'docx', 'pptx', 'xlsx']))
+                        {
+                             update_post_meta($item_id, 'socialdb_object_dc_type', 'other');  
+                            $result['office'][] = $obj;
+
+                            $last_position = count($result['office']) - 1;
+                            
+                            $result['office'][$last_position]['ext'] = $ext;
+                        }
+                        else{
+                            update_post_meta($item_id, 'socialdb_object_dc_type', 'other');  
+                            $result['others'][] = $obj;
+                        }
+                        
+                    }
+                }
+            }
+        }
+        return $result;
+    }
       /**
      * @signature - get_files($data)
      * @param array $data Os dados vindos do formulario

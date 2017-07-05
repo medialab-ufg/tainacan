@@ -20,6 +20,12 @@ var Hook = {
                 if (true != Hook.hooks[name][i](arguments)) {
                     break;
                 }
+    },
+    callMultiple: function (name, arguments) {
+        if ('undefined' != typeof (Hook.hooks[name]))
+            for (i = 0; i < Hook.hooks[name].length; ++i)
+                if (true != Hook.hooks[name][i](arguments)) {
+                }
     }
 };
 
