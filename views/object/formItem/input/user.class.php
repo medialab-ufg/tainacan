@@ -92,7 +92,7 @@ class UserClass extends FormItem
         <?php
         $this->initScriptsIncrementClass($compound_id,$property_id, $item_id, $index_id);
     }
-
+//
     /**
      *
      * @param type $property
