@@ -73,7 +73,7 @@ function addLibraryMenu($collection_id)
                     <?php _e('Add', 'tainacan') ?> <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a href="window.location = '<?php echo get_the_permalink($collection_id).'criar-item'; ?>'"  style="cursor: pointer;"><?php _e('Item', 'tainacan') ?> </a></li>
+                    <li><a href="javascript: window.location = '<?php echo get_the_permalink($collection_id).'criar-item'; ?>'"  style="cursor: pointer;"><?php _e('Item', 'tainacan') ?> </a></li>
                     <li><a onclick="showModalImportMarc()" style="cursor: pointer;" id="addfrommarc" ><?php _e('Add from MARC', 'tainacan') ?>  </a></li>
                 </ul>
             <?php } else { ?>
@@ -566,11 +566,11 @@ function users_button()
 {
     if(current_user_can('administrator'))
     {
+        $dir = get_template_directory_uri();
         ?>
         <div class="nav navbar-nav navbar-right">
-            <div class="users-button"
-                 onclick="get_users_page('http://localhost/wordpress/biblioteca/wp-content/themes/tainacan', 'show_all_users')">
-                <i class="fa fa-users" aria-hidden="true"></i>
+            <div class="users-button" onclick="get_users_page('<?php echo $dir ?>', 'show_all_users')">
+<!--                <i class="fa fa-users" aria-hidden="true"></i>-->
                 <?php _e("Users", "tainacan"); ?>
             </div>
         </div>

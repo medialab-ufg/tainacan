@@ -90,7 +90,7 @@ function dataTable()
     } );
 }
 
-/*function showUser(userID) {
+function showUser(userID) {
     var send_url = $('#src').val() + "/modules/tainacan-library/controllers/user_controller.php";
     $("#elemenID").attr("value", userID);
     $.ajax({
@@ -102,7 +102,7 @@ function dataTable()
         $("#user_info").html(res).show();
 
     })
-}*/
+}
 
 function verify_enter(e, button_click_id)
 {
@@ -156,7 +156,7 @@ function update_user_info()
             /*for(var pair of formData.entries()) {
                 console.log(pair[0]+ ', '+ pair[1]);
             }*/
-            get_users_page('http://localhost/wordpress/biblioteca/wp-content/themes/tainacan', 'show_all_users');
+            get_users_page($("#src").val(), 'show_all_users');
             $("#modalShowUser").modal("hide");
         }
     })
