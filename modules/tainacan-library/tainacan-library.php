@@ -63,7 +63,6 @@ function tainacan_libraries_css() {
 add_filter('addLibraryMenu', 'addLibraryMenu', 10, 1);
 function addLibraryMenu($collection_id)
 {
-
     ?>
     <div class="btn-group" role="group" aria-label="...">
         <div class="btn-group tainacan-add-wrapper">
@@ -74,11 +73,11 @@ function addLibraryMenu($collection_id)
                     <?php _e('Add', 'tainacan') ?> <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a onclick="showAddItemText()"  style="cursor: pointer;"><?php _e('Item', 'tainacan') ?> </a></li>
+                    <li><a href="window.location = '<?php echo get_the_permalink($collection_id).'criar-item'; ?>'"  style="cursor: pointer;"><?php _e('Item', 'tainacan') ?> </a></li>
                     <li><a onclick="showModalImportMarc()" style="cursor: pointer;" id="addfrommarc" ><?php _e('Add from MARC', 'tainacan') ?>  </a></li>
                 </ul>
             <?php } else { ?>
-                <button type="button" class="btn btn-primary dropdown-toggle sec-color-bg" aria-haspopup="true" onclick="showAddItemText()">
+                <button type="button" class="btn btn-primary dropdown-toggle sec-color-bg" aria-haspopup="true" onclick="window.location = '<?php echo get_the_permalink($collection_id).'criar-item'; ?>'">
                     <?php _e('Add', 'tainacan') ?> </span>
                 </button>
             <?php } ?>
@@ -378,10 +377,12 @@ function book_loan($data)
 
     if($type)
     {
-        $related_ids = get_related_id($data);
+        $related_id = get_collection_property_id($data['collection_id'], 'Livro/Exemplar');
+
+        $related_ids = get_post_meta($data['item_id'], 'socialdb_property_'.$related_id);
+        
         foreach ($related_ids as $id)
         {
-            $id = $id[0];
             $category_id = get_category_id(get_post($id)->post_parent, "Disponibilidade");
             if($category_id)
             {
@@ -862,8 +863,6 @@ function get_collection_property_id($collection_id, $property_name)
             return $id;
         }
     }
-
-
 }
 
 function search_for_user($user_name)

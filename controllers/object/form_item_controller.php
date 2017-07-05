@@ -163,17 +163,45 @@ class FormItemController extends Controller {
                  $object_model->insert_tags($data['value'], $data['collection_id'], $data['item_id']);
                  break;
             case 'updateItem':
+                //Tainacan Biblioteca
+                $mapping = get_option('socialdb_general_mapping_collection');
+                if(has_filter("add_book_loan") && isset($mapping) && ($mapping['Emprestimo'] == $data['collection_id'] || $mapping['Devoluções'] == $data['collection_id']))    
+                {
+                    $result = apply_filters("add_book_loan", $data);
+
+                    if(!$result['ok'])
+                    {
+                        $result['unavailable_item'] = true;
+
+                        return json_encode($result);
+                    }else $data['ok'] = true;
+                }else $data['ok'] = true;
+
                 $category_root_id = $object_model->get_category_root_of($data['collection_id']);
-                $post = array(
-                    'ID' => $data['item_id'],
-                    'post_parent' => $data['collection_id']
-                );
+                
+                if(strcmp(get_post($data['item_id'])->post_title, 'Temporary_post') == 0)
+                {
+                    $post = array(
+                        'post_title' => time(),
+                        'ID' => $data['item_id'],
+                        'post_parent' => $data['collection_id']
+                    );
+                }else
+                {
+                    $post = array(
+                        'ID' => $data['item_id'],
+                        'post_parent' => $data['collection_id']
+                    );
+                }
+
                 $data['ID'] = wp_update_post($post);
                 //Tainacan IBRAM
                 if (has_action('tainacan_delete_related_item')) {
                     $values = ['object_id'=> $data['ID']];
                     do_action('tainacan_delete_related_item', $values, $data['collection_id']);
                  }
+
+                
                 //categoria raiz da colecao
                 wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type',true);
                 update_post_meta($data['ID'], 'socialdb_object_collection_init', $data['collection_id']);

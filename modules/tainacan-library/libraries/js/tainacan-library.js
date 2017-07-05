@@ -90,7 +90,7 @@ function dataTable()
     } );
 }
 
-function showUser(userID) {
+/*function showUser(userID) {
     var send_url = $('#src').val() + "/modules/tainacan-library/controllers/user_controller.php";
     $("#elemenID").attr("value", userID);
     $.ajax({
@@ -102,25 +102,7 @@ function showUser(userID) {
         $("#user_info").html(res).show();
 
     })
-}
-
-function search_for_users() {
-    var user_name = $("#text_box_search").val();
-    if(user_name.length > 0)
-    {
-        var send_url = $('#src').val() + "/modules/tainacan-library/controllers/user_controller.php?operation=search_for_user";
-        $.ajax({
-            type: 'POST',
-            url: send_url,
-            data: {user_name: user_name},
-            success: function (result) {
-
-                $("#where_to_show_users").show();
-                $("#users_found").html(result);
-            }
-        });
-    }
-}
+}*/
 
 function verify_enter(e, button_click_id)
 {
@@ -136,12 +118,12 @@ function verify_enter(e, button_click_id)
         
 }
 
-function select_user(obj)
+/*function select_user(obj)
 {
     //Tratamento CSS
     $(".user_result_selected").removeClass("user_result_selected");
     $(obj).addClass("user_result_selected");
-    set_field_valid($("#meta_id").val(), "");
+
     //Selecionando usuario
     $("#no_users_msg").hide();
     $("#place_to_show_user_info").show();
@@ -153,7 +135,7 @@ function select_user(obj)
     $("#selected_user_cpf").val($(obj).attr('data-cpf').trim());
 
     $("#selected_user_info_hidden").val($(obj).attr('data-id').trim());
-}
+}*/
 
 function update_user_info()
 {

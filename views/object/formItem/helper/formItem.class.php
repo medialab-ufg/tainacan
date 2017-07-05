@@ -357,7 +357,7 @@ class FormItem extends Model {
                         $class->widget($property, $this->itemId);
                     }
                 } else {
-                    $data = ['text', 'textarea', 'date', 'number', 'numeric', 'auto-increment'];
+                    $data = ['text', 'textarea', 'date', 'number', 'numeric', 'auto-increment', 'user'];
                     $term = ['selectbox', 'radio', 'checkbox', 'tree', 'tree_checkbox', 'multipleselect'];
                     $object = (isset($property['metas']['socialdb_property_object_category_id']) && !empty($property['metas']['socialdb_property_object_category_id'])) ? true : false;
                     if (in_array($property['type'], $data) && !$object) {
@@ -893,10 +893,13 @@ class FormItem extends Model {
                         collection_id:$('#collection_id').val()}
                 }).done(function (result) {
                     hide_modal_main();
-                    var json = JSON.parse(result)
-                     showAlertGeneral(json.title,json.msg,json.type);
-                     routerGo($('#slug_collection').val());
-                     showList($('#src').val());
+                    var json = JSON.parse(result);
+                    if(json.ok)
+                    {
+                        showAlertGeneral(json.title,json.msg,json.type);
+                        routerGo($('#slug_collection').val());
+                        showList($('#src').val());
+                    }else showAlertGeneral(json.title,json.msg,json.type);
                 });
             }
 

@@ -112,6 +112,7 @@ include_once ('js/edit_tools_js.php');
                 <?php _e('Choose what will be reindexed:');?>
                 <br><br>
 
+                <!-- Reindex options -->
                 <form id="reindexation_form">
                     <input type="checkbox" name="pdf_text"> <?php _e("Reindex text from PDF files", "tainacan"); ?><br>
                     <input type="checkbox" name="pdf_thumbnail"> <?php _e("Reindex thumbnails from PDF files", "tainacan"); ?><br>

@@ -2981,6 +2981,14 @@ function makeThumb(page) {
     });
 }
 
+/*
+    Descrição curta: Submit opções a serem Reindexadas
+
+    Como e realizado: As captura do texto de PDF'S e Office Documents é relizada no back-end. A geração de miniaturas é
+    realizada em conjunto entre o back-end e front-end. O JavaScript faz a requisição dos documentos .pdf, gera a tag canvas
+    para cada .pdf e então os envia para o servidor para que sejam convertidas em .png e então adicionadas como thumbnail dos
+    novos itens.
+ */
 $(document).on("submit", "#reindexation_form", function (event) {
     event.preventDefault();
     let formData = new FormData(this);
