@@ -192,27 +192,27 @@
                         base_count += base_top;
                     }
 
-                    var max = itm.inf.length;
-                    for( idx in itm.inf ) {
-                        if(itm.inf[idx] != 'null' && itm.inf[idx] !== null) {
+                    var max = itm.set.length;
+                    for( idx in itm.set ) {
+                        if(itm.set[idx] != 'null' && itm.set[idx] !== null) {
                             if(base_count >= maxHeightOffset) {
                                 pressPDF.addPage();
                                 base_count = baseX;
                             }
 
                             var extra_line_height = 0;
-                            var val_height = itm.inf[idx].meta_breaks;
+                            var val_height = itm.set[idx].meta_breaks;
                             if( val_height && $.isNumeric(val_height) ) {
                                 extra_line_height = 10 * val_height;
                             }
 
                             var extra_padding = 0;
-                            if( itm.inf[idx].is_submeta ) {
+                            if( itm.set[idx].is_submeta ) {
                                 extra_padding = 20;
                             }
                             pressPDF.setFontStyle('bold');
                             var p = base_count + 40;
-                            var meta_title = itm.inf[idx].meta;
+                            var meta_title = itm.set[idx].meta;
 
                             if(meta_title) {
                                 pressPDF.text( meta_title, (baseX*2 + extra_padding) , p);
@@ -220,8 +220,8 @@
                                 var default_val = "--";
                                 pressPDF.setFontStyle('normal');
 
-                                if(itm.inf[idx].value) {
-                                    default_val = itm.inf[idx].value;
+                                if(itm.set[idx].value) {
+                                    default_val = itm.set[idx].value;
                                 }
                                 pressPDF.text(default_val, (baseX*2 + extra_padding), f);
                                 base_count = p + extra_line_height;
