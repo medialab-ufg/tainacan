@@ -466,7 +466,8 @@ class MappingAPI extends Model {
                     foreach ($array as $id_blog) {
                         $has_token = get_term_meta($id_blog, 'socialdb_token', true);
                         if(!$has_token || $has_token != $token){
-                            wp_delete_term($id_blog,($index == 'categories') ? 'socialdb_category_type': 'socialdb_property_type');
+                            if($id_blog != $this->get_category_root())
+                                wp_delete_term($id_blog,($index == 'categories') ? 'socialdb_category_type': 'socialdb_property_type');
                         }
                     }
                 }

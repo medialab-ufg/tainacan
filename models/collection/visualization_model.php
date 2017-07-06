@@ -1554,6 +1554,7 @@ class VisualizationModel extends CollectionModel {
                         SELECT COUNT(pm.meta_value) AS count,pm.* FROM $wp_posts p
                         INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id    
                         WHERE pm.meta_key like 'socialdb_property_{$id}'
+                        AND p.post_status LIKE 'publish'
                         GROUP BY pm.meta_value
                         ORDER BY $order
                 ";

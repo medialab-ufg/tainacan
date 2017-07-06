@@ -215,6 +215,7 @@ class ObjectFileModel extends Model {
                             update_post_meta($item_id, 'socialdb_object_dc_type', 'video');
                             $result['videos'][] = $obj;     
                         }elseif (in_array($ext, ['jpg','jpeg','png','gif', 'tiff'])) {
+                           set_post_thumbnail($item_id, $attachment->ID);
                            update_post_meta($item_id, 'socialdb_object_dc_type', 'image'); 
                            $obj['metas'] = $metas;
                            $result['image'][] = $obj;

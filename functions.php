@@ -1614,6 +1614,7 @@ function create_event_terms() {
  *  Adiciona as propriedades fixas do repositorio
  */
 function add_fixed_properties($category_root_term) {
+    $metas = get_term_meta($category_root_term['term_id'], 'socialdb_category_property_id');
     if (!get_term_by('slug', 'socialdb_property_fixed_title', 'socialdb_property_type') ) {
         $new_property = wp_insert_term(__('Title', 'tainacan'), 'socialdb_property_type', array('parent' => get_term_by('name', 'socialdb_property_data', 'socialdb_property_type')->term_id,
             'slug' => "socialdb_property_fixed_title"));
@@ -1623,7 +1624,10 @@ function add_fixed_properties($category_root_term) {
         $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_visibility', 'show');
         update_term_meta($new_property['term_id'], 'socialdb_property_created_category', $category_root_term['term_id']); // adiciono a categoria de onde partiu esta propriedade
         add_term_meta($category_root_term['term_id'], 'socialdb_category_property_id', $new_property['term_id']);
+    }else if(!in_array(get_term_by('slug', 'socialdb_property_fixed_title', 'socialdb_property_type')->term_id, $metas)){
+         add_term_meta($category_root_term['term_id'], 'socialdb_category_property_id', get_term_by('slug', 'socialdb_property_fixed_title', 'socialdb_property_type')->term_id);
     }
+    
     if (!get_term_by('slug', 'socialdb_property_fixed_description', 'socialdb_property_type') ) {
         $new_property = wp_insert_term(__('Description', 'tainacan'), 'socialdb_property_type', array('parent' => get_term_by('name', 'socialdb_property_data', 'socialdb_property_type')->term_id,
             'slug' => "socialdb_property_fixed_description"));
@@ -1633,7 +1637,10 @@ function add_fixed_properties($category_root_term) {
         $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_visibility', 'show');
         update_term_meta($new_property['term_id'], 'socialdb_property_created_category', $category_root_term['term_id']); // adiciono a categoria de onde partiu esta propriedade
         add_term_meta($category_root_term['term_id'], 'socialdb_category_property_id', $new_property['term_id']);
+    }else if(!in_array(get_term_by('slug', 'socialdb_property_fixed_description', 'socialdb_property_type')->term_id, $metas)){
+         add_term_meta($category_root_term['term_id'], 'socialdb_category_property_id', get_term_by('slug', 'socialdb_property_fixed_description', 'socialdb_property_type')->term_id);
     }
+    
     if (!get_term_by('slug', 'socialdb_property_fixed_content', 'socialdb_property_type') ) {
         $new_property = wp_insert_term(__('Content', 'tainacan'), 'socialdb_property_type', array('parent' => get_term_by('name', 'socialdb_property_data', 'socialdb_property_type')->term_id,
             'slug' => "socialdb_property_fixed_content"));
@@ -1643,7 +1650,10 @@ function add_fixed_properties($category_root_term) {
         $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_visibility', 'show');
         update_term_meta($new_property['term_id'], 'socialdb_property_created_category', $category_root_term['term_id']); // adiciono a categoria de onde partiu esta propriedade
         add_term_meta($category_root_term['term_id'], 'socialdb_category_property_id', $new_property['term_id']);
+    }else if(!in_array(get_term_by('slug', 'socialdb_property_fixed_content', 'socialdb_property_type')->term_id, $metas)){
+         add_term_meta($category_root_term['term_id'], 'socialdb_category_property_id', get_term_by('slug', 'socialdb_property_fixed_content', 'socialdb_property_type')->term_id);
     }
+    
     if (!get_term_by('slug', 'socialdb_property_fixed_source', 'socialdb_property_type') ) {
         $new_property = wp_insert_term(__('Source', 'tainacan'), 'socialdb_property_type', array('parent' => get_term_by('name', 'socialdb_property_data', 'socialdb_property_type')->term_id,
             'slug' => "socialdb_property_fixed_source"));
@@ -1653,7 +1663,10 @@ function add_fixed_properties($category_root_term) {
         $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_visibility', 'show');
         update_term_meta($new_property['term_id'], 'socialdb_property_created_category', $category_root_term['term_id']); // adiciono a categoria de onde partiu esta propriedade
         add_term_meta($category_root_term['term_id'], 'socialdb_category_property_id', $new_property['term_id']);
+    }else if(!in_array(get_term_by('slug', 'socialdb_property_fixed_source', 'socialdb_property_type')->term_id, $metas)){
+         add_term_meta($category_root_term['term_id'], 'socialdb_category_property_id', get_term_by('slug', 'socialdb_property_fixed_source', 'socialdb_property_type')->term_id);
     }
+    
     if (!get_term_by('slug', 'socialdb_property_fixed_license', 'socialdb_property_type') ) {
         $new_property = wp_insert_term(__('License', 'tainacan'), 'socialdb_property_type', array('parent' => get_term_by('name', 'socialdb_property_data', 'socialdb_property_type')->term_id,
             'slug' => "socialdb_property_fixed_license"));
@@ -1663,7 +1676,10 @@ function add_fixed_properties($category_root_term) {
         $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_visibility', 'show');
         update_term_meta($new_property['term_id'], 'socialdb_property_created_category', $category_root_term['term_id']); // adiciono a categoria de onde partiu esta propriedade
         add_term_meta($category_root_term['term_id'], 'socialdb_category_property_id', $new_property['term_id']);
+    }else if(!in_array(get_term_by('slug', 'socialdb_property_fixed_license', 'socialdb_property_type')->term_id, $metas)){
+         add_term_meta($category_root_term['term_id'], 'socialdb_category_property_id', get_term_by('slug', 'socialdb_property_fixed_license', 'socialdb_property_type')->term_id);
     }
+    
     if (!get_term_by('slug', 'socialdb_property_fixed_thumbnail', 'socialdb_property_type') ) {
         $new_property = wp_insert_term(__('Thumbnail', 'tainacan'), 'socialdb_property_type', array('parent' => get_term_by('name', 'socialdb_property_data', 'socialdb_property_type')->term_id,
             'slug' => "socialdb_property_fixed_thumbnail"));
@@ -1673,7 +1689,10 @@ function add_fixed_properties($category_root_term) {
         $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_visibility', 'show');
         update_term_meta($new_property['term_id'], 'socialdb_property_created_category', $category_root_term['term_id']); // adiciono a categoria de onde partiu esta propriedade
         add_term_meta($category_root_term['term_id'], 'socialdb_category_property_id', $new_property['term_id']);
+    }else if(!in_array(get_term_by('slug', 'socialdb_property_fixed_thumbnail', 'socialdb_property_type')->term_id, $metas)){
+         add_term_meta($category_root_term['term_id'], 'socialdb_category_property_id', get_term_by('slug', 'socialdb_property_fixed_thumbnail', 'socialdb_property_type')->term_id);
     }
+    
     if (!get_term_by('slug', 'socialdb_property_fixed_attachments', 'socialdb_property_type') ) {
         $new_property = wp_insert_term(__('Attachments', 'tainacan'), 'socialdb_property_type', array('parent' => get_term_by('name', 'socialdb_property_data', 'socialdb_property_type')->term_id,
             'slug' => "socialdb_property_fixed_attachments"));
@@ -1683,7 +1702,10 @@ function add_fixed_properties($category_root_term) {
         $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_visibility', 'show');
         update_term_meta($new_property['term_id'], 'socialdb_property_created_category', $category_root_term['term_id']); // adiciono a categoria de onde partiu esta propriedade
         add_term_meta($category_root_term['term_id'], 'socialdb_category_property_id', $new_property['term_id']);
+    }else if(!in_array(get_term_by('slug', 'socialdb_property_fixed_attachments', 'socialdb_property_type')->term_id, $metas)){
+         add_term_meta($category_root_term['term_id'], 'socialdb_category_property_id', get_term_by('slug', 'socialdb_property_fixed_attachments', 'socialdb_property_type')->term_id);
     }
+    
     if (!get_term_by('slug', 'socialdb_property_fixed_tags', 'socialdb_property_type') ) {
         $new_property = wp_insert_term(__('Tags', 'tainacan'), 'socialdb_property_type', array('parent' => get_term_by('name', 'socialdb_property_term', 'socialdb_property_type')->term_id,
             'slug' => "socialdb_property_fixed_tags"));
@@ -1695,7 +1717,10 @@ function add_fixed_properties($category_root_term) {
         $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_is_fixed', 'true');
         update_term_meta($new_property['term_id'], 'socialdb_property_created_category', $category_root_term['term_id']); // adiciono a categoria de onde partiu esta propriedade
         add_term_meta($category_root_term['term_id'], 'socialdb_category_property_id', $new_property['term_id']);
+    }else if(!in_array(get_term_by('slug', 'socialdb_property_fixed_tags', 'socialdb_property_type')->term_id, $metas)){
+         add_term_meta($category_root_term['term_id'], 'socialdb_category_property_id', get_term_by('slug', 'socialdb_property_fixed_tags', 'socialdb_property_type')->term_id);
     }
+    
     if (!get_term_by('slug', 'socialdb_property_fixed_type', 'socialdb_property_type') ) {
         $new_property = wp_insert_term(__('Type', 'tainacan'), 'socialdb_property_type', array('parent' => get_term_by('name', 'socialdb_property_data', 'socialdb_property_type')->term_id,
             'slug' => "socialdb_property_fixed_type"));
@@ -1705,7 +1730,10 @@ function add_fixed_properties($category_root_term) {
         $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_visibility', 'show');
         update_term_meta($new_property['term_id'], 'socialdb_property_created_category', $category_root_term['term_id']); // adiciono a categoria de onde partiu esta propriedade
         add_term_meta($category_root_term['term_id'], 'socialdb_category_property_id', $new_property['term_id']);
+    }else if(!in_array(get_term_by('slug', 'socialdb_property_fixed_type', 'socialdb_property_type')->term_id, $metas)){
+         add_term_meta($category_root_term['term_id'], 'socialdb_category_property_id', get_term_by('slug', 'socialdb_property_fixed_type', 'socialdb_property_type')->term_id);
     }
+    
 }
 
 

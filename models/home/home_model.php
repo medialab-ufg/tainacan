@@ -49,7 +49,7 @@ class HomeModel extends Model {
     public function get_items_of_type($type) {
         $public_values = [];
         $viewHelper = new ViewHelper();
-        $array_posts = get_posts( [ 'post_type' => 'socialdb_object', 'meta_key' => 'socialdb_object_dc_type',
+        $array_posts = get_posts( [ 'post_type' => 'socialdb_object','post_status' => 'publish', 'meta_key' => 'socialdb_object_dc_type',
                 'meta_value' => $type, 'posts_per_page' => 20 ] );
         foreach ($array_posts as $post) {
             $collection = $viewHelper->helper_get_collection_by_object($post->ID)[0];
