@@ -26,6 +26,9 @@ var Hook = {
             for (i = 0; i < Hook.hooks[name].length; ++i)
                 if (true != Hook.hooks[name][i](arguments)) {
                 }
+    },
+    clearActions: function (name) {
+        Hook.hooks[name] = []
     }
 };
 

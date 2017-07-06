@@ -50,22 +50,37 @@ class FormItemSource extends FormItemMultiple {
     public function initScriptsSourceContainer($property, $item_id) {
         ?>
               <script>
-                  $('#item_source').keyup(function(){
-                        <?php if($this->isRequired === 'true'):  ?>
-                            validateFieldsMetadataText($(this).val(),'<?php echo $property['id'] ?>','0','0')
-                        <?php endif; ?>
-                        $.ajax({
-                            url: $('#src').val() + '/controllers/object/form_item_controller.php',
-                            type: 'POST',
-                            data: {
-                                operation: 'saveSource',
-                                value: $(this).val(),
-                                item_id:'<?php echo $item_id ?>'
-                            }
-                        }).done(function (result) {
+                      $('#item_source').keyup(function(){
+                            $.ajax({
+                                url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                                type: 'POST',
+                                data: {
+                                    operation: 'saveSource',
+                                    value: $(this).val(),
+                                    item_id: $('#item-multiple-selected').val().trim()
+                                }
+                            }).done(function (result) {
 
-                        });
-                  });
+                            });
+                      });
+                      
+                     Hook.register(
+                            'get_single_item_value',
+                            function ( args ) {
+                                $.ajax({
+                                    url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                                    type: 'POST',
+                                    data: {
+                                        operation: 'getSource',
+                                        item_id:args[0]
+                                    }
+                                }).done(function (result) {
+                                    var json = JSON.parse(result);
+                                    if(json.value){
+                                        $('#item_source').val(json.value);
+                                    }
+                                });
+                     });
               </script>
         <?php
     }

@@ -96,7 +96,7 @@ class MultipleTreeClass extends FormItemMultiple {
                                 operation: 'saveValue',
                                 type: 'term',
                                 value: node.data.key,
-                                item_id: '<?php echo $item_id ?>',
+                                item_id: $('#item-multiple-selected').val().trim(),
                                 compound_id: '<?php echo $compound_id ?>',
                                 property_children_id: '<?php echo $property_id ?>',
                                 index: <?php echo $index_id ?>
@@ -110,7 +110,7 @@ class MultipleTreeClass extends FormItemMultiple {
                                 operation: 'removeValue',
                                 type: 'term',
                                 value: node.data.key,
-                                item_id: '<?php echo $item_id ?>',
+                                item_id: $('#item-multiple-selected').val().trim(),
                                 compound_id: '<?php echo $compound_id ?>',
                                 property_children_id: '<?php echo $property_id ?>',
                                 index: <?php echo $index_id ?>
@@ -133,6 +133,32 @@ class MultipleTreeClass extends FormItemMultiple {
                     }
                 }
             });
+            
+            Hook.register(
+                    'get_single_item_value',
+                    function ( args ) {
+                        $.ajax({
+                            url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                            type: 'POST',
+                            data: {
+                                operation: 'getDataValue',
+                                compound_id:'<?php echo $compound_id ?>',
+                                property_children_id: '<?php echo $property_id ?>',
+                                index: <?php echo $index_id ?>,
+                                item_id:args[0]
+                            }
+                        }).done(function (result) {
+                            var json = JSON.parse(result);
+                            if(json.value){
+                                var selKeys = $.map($("#multiple-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>").dynatree("getSelectedNodes"), function (node) {
+                                    if(json.value.indexOf(node.data.key)>=0){
+                                        node.select(true);
+                                    }
+                                    return node;
+                                });
+                            }
+                        });
+                });
         </script>
         <?php
     }

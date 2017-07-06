@@ -54,31 +54,28 @@ class FormItemTitle extends FormItemMultiple{
     public function initScriptsTitleContainer($property, $item_id) {
         ?>
         <script>
-            $('#item-title').keyup(function(){
-                <?php if($this->isRequired === 'true'):  ?>
-                    validateFieldsMetadataText($(this).val().trim(),'<?php echo $property['id'] ?>','0','0')
-                <?php endif; ?>
-                $.ajax({
-                    url: $('#src').val() + '/controllers/object/form_item_controller.php',
-                    type: 'POST',
-                    data: {
-                        operation: 'saveTitle',
-                        value: $(this).val().trim(),
-                        item_id:'<?php echo $item_id ?>',
-                        collection_id:$('#collection_id').val(),
-                        hasKey: '<?php echo (!$this->hasKey ||$this->hasKey === '') ? 'false' :'true' ?>'
-                    }
-                }).done(function (result) {
-                    <?php if($this->hasKey): ?>
-                     var json =JSON.parse(result);
-                     if(json.value){
-                        $('#item-title').val('');
-                        validateFieldsMetadataText($('#item-title').val(),'<?php echo $property['id'] ?>','0','0')
-                            toastr.error(json.value+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
-                     }
-                    <?php endif; ?>
+                $('#item-title').keyup(function(){
+                    $.ajax({
+                        url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                        type: 'POST',
+                        data: {
+                            operation: 'saveTitle',
+                            value: $(this).val().trim(),
+                            item_id: $('#item-multiple-selected').val().trim(),
+                            collection_id:$('#collection_id').val(),
+                            hasKey: '<?php echo (!$this->hasKey ||$this->hasKey === '') ? 'false' :'true' ?>'
+                        }
+                    }).done(function (result) {
+                        <?php if($this->hasKey): ?>
+                         var json =JSON.parse(result);
+                         if(json.value){
+                            $('#item-title').val('');
+                            validateFieldsMetadataText($('#item-title').val(),'<?php echo $property['id'] ?>','0','0')
+                                toastr.error(json.value+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                         }
+                        <?php endif; ?>
+                    });
                 });
-            });
             
             Hook.register(
             'get_single_item_value',

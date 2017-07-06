@@ -207,6 +207,33 @@ class FormItemController extends Controller {
                 update_post_meta($data['ID'], 'socialdb_object_collection_init', $data['collection_id']);
                 update_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext', '');
                 return $object_model->insert_object_event($data['ID'], $data);
+            //Buscando valores 
+            case 'getDescription':
+                $data['value'] = get_post($data['item_id'])->post_content;
+                return json_encode($data);
+                break;
+            case 'getSource':
+                $data['value'] = get_post_meta($data['item_id'],'socialdb_object_dc_source',true);
+                return json_encode($data);
+                break;
+            case 'getTags':
+                $string = [];
+                $tags = wp_get_object_terms($data['item_id'], 'socialdb_tag_type');
+                if($tags && is_array($tags)){
+                    foreach ($tags as $tag) {
+                        $string[] = $tag->name;
+                    }
+                }
+                $data['value'] = ($string) ? implode(',', $string) : '';
+                return json_encode($data);
+                break;
+            case 'getDataValue':
+                $class = new ObjectSaveValuesModel();
+                $result = $class->getValuePropertyHelper($data['item_id'], $data['compound_id']);
+                if($result && isset($result[$data['index']][$data['property_children_id']])){
+                     $data['value'] = $class->getValues($result[$data['index']][$data['property_children_id']]);
+                }
+                return json_encode($data);
         }
     }
 

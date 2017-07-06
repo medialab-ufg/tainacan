@@ -215,6 +215,34 @@ class ObjectClass extends FormItemMultiple {
 
                 $('[data-toggle="tooltip"]').tooltip();
             });
+            
+            Hook.register(
+                'get_single_item_value',
+                function ( args ) {
+                    $.ajax({
+                        url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                        type: 'POST',
+                        data: {
+                            operation: 'getObjectValue',
+                            compound_id:'<?php echo $compound_id ?>',
+                            property_children_id: '<?php echo $property_id ?>',
+                            index: <?php echo $index_id ?>,
+                            item_id:args[0]
+                        }
+                    }).done(function (result) {
+                        var json = JSON.parse(result);
+                        if(json.value){
+                            $('#results_property_<?php echo $compound_id ?>_<?php echo $property_id ?>_<?php echo $index_id ?> ul').html('');
+                            if(json.value){
+                                $.each(json.value,function(index,value){
+                                    $('#results_property_<?php echo $compound_id ?>_<?php echo $property_id ?>_<?php echo $index_id ?> ul')
+                                            .append('<li id="inserted_property_object_<?php echo $compound_id ?>_<?php echo $index_id ?>_<?php echo $contador ?>_'+$(value).val()+'" item="'+$(value).val()+'" class="selected-items-property-object property-<?php echo $property_id; ?>">'+$('#line_property_object_<?php echo $compound_id ?>_<?php echo $property_id ?>_<?php echo $contador ?>_'+$(value).val()+' .title-text').html()
+                                            +'<span  onclick="remove_item_objet_<?php echo $compound_id ?>_<?php echo $index_id; ?>_<?php echo $contador; ?>(this)" style="cursor:pointer;" class="pull-right glyphicon glyphicon-trash"></span></li>');
+                                });
+                            }
+                        }
+                    });
+            });
 
             function clear_all_field(form) {
                 $(form + ' input[type=text]').val('');
@@ -295,7 +323,7 @@ class ObjectClass extends FormItemMultiple {
                         type:'object',
                         <?php if($property_id!==0) echo 'indexCoumpound:0,' ?>
                         value: id,
-                        item_id:'<?php echo $item_id ?>',
+                        item_id: $('#item-multiple-selected').val().trim(),
                         compound_id:'<?php echo $compound_id ?>',
                         property_children_id: '<?php echo $propert_id ?>',
                         index: <?php echo $index_id ?>,

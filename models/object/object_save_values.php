@@ -254,5 +254,36 @@ class ObjectSaveValuesModel extends Model {
     
     
     
+    /**
+     *
+     * @param type $item_id
+     * @param type $property_id
+     * @return boolean
+     */
+    public function getValuePropertyHelper($item_id, $property_id) {
+        $meta = get_post_meta($item_id, 'socialdb_property_helper_' . $property_id, true);
+        if ($meta && $meta != '') {
+            $array = unserialize($meta);
+            return $array;
+        } else {
+            return false;
+        }
+    }
+
+    public function getValues($array){
+       $ids = [];
+       if(is_array($array)){
+          $values = $array['values'];
+          foreach ($values as $key => $value) {
+            $meta = $this->sdb_get_post_meta($value);
+            if(isset($meta->meta_value))
+                $ids[] = $meta->meta_value;
+          }
+       }
+       return $ids;
+    }
+    
+    
+    
 
 }

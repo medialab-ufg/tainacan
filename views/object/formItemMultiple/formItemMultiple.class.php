@@ -45,6 +45,7 @@ class FormItemMultiple extends Model {
      * @param Array $properties O array com os tipos separados image,pdf,video,other
      */
     public function start($data,$properties) {
+        $this->initScripts();
         ?>
         <div class="row" style="padding-right: 0px;padding-left: 0px;">
             <?php $this->loadMetadataContainer($properties); ?>
@@ -60,6 +61,7 @@ class FormItemMultiple extends Model {
     public function loadMetadataContainer($properties_raw) {
         $this->structureProperties($properties_raw);
         ?>
+        <input type="hidden" id="item-multiple-selected">
         <div id='form_properties_items' class="col-md-3 menu_left_files menu-left-size">
             <h3 style="display:none;" id='labels_items_selected' >
                 <?php _e('Editting ','tainacan') ?>
@@ -80,7 +82,6 @@ class FormItemMultiple extends Model {
             <h3> <?php _e('Select items to edit...','tainacan') ?> </h3>
         </div>
         <?php    
-        $this->initScripts();
     }
     
     /**
@@ -312,15 +313,16 @@ class FormItemMultiple extends Model {
                     if ($property['slug'] == 'socialdb_property_fixed_title' && !$this->isMediaFocus) {
                         $class = new FormItemTitle($this->collection_id);
                         $class->widget($property, $this->itemId);
-                    }  else if ($property['slug'] == 'socialdb_property_fixed_content'&& !$this->isMediaFocus) {
-                        $class = new FormItemContent($this->collection_id);
-                        $class->widget($property, $this->itemId);
-                    } else if ($property['slug'] == 'socialdb_property_fixed_description') {
+//                    }  else if ($property['slug'] == 'socialdb_property_fixed_content'&& !$this->isMediaFocus) {
+//                        $class = new FormItemContent($this->collection_id);
+//                        $class->widget($property, $this->itemId);
+//                    } 
+                    }else if ($property['slug'] == 'socialdb_property_fixed_description') {
                         $class = new FormItemDescription($this->collection_id);
                         $class->widget($property, $this->itemId);
                     } else if ($property['slug'] == 'socialdb_property_fixed_attachments' && !$this->isMediaFocus) {
-                        $class = new FormItemAttachment($this->collection_id);
-                        $class->widget($property, $this->itemId);
+                        //$class = new FormItemAttachment($this->collection_id);
+                        //$class->widget($property, $this->itemId);
                     } else if ($property['slug'] == 'socialdb_property_fixed_source') {
                         $class = new FormItemSource($this->collection_id);
                         $class->widget($property, $this->itemId);
@@ -361,8 +363,9 @@ class FormItemMultiple extends Model {
         ?>
         <script>
             console.log(' -- Begin execution - Form item Multiple');
+            Hook.clearActions('get_single_item_value');
             $('input ,select').focus(function(){
-                showChangesUpdate();
+                //showChangesUpdate();
             });
 
             $('.tabs').tab();

@@ -54,23 +54,38 @@ class FormItemTags extends FormItemMultiple {
    public function initScriptsTagsContainer($property, $item_id) {
        ?>
              <script>
-                 $('#object_tags').blur(function(){
-                       <?php if($this->isRequired === 'true'):  ?>
-                           validateFieldsMetadataText($(this).val(),'<?php echo $property['id'] ?>','0','0')
-                       <?php endif; ?>
-                       $.ajax({
-                           url: $('#src').val() + '/controllers/object/form_item_controller.php',
-                           type: 'POST',
-                           data: {
-                               operation: 'saveTags',
-                               value: $(this).val(),
-                               collection_id:$('#collection_id').val(),
-                               item_id:'<?php echo $item_id ?>'
-                           }
-                       }).done(function (result) {
+                    $('#object_tags').blur(function(){
+                            $.ajax({
+                                url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                                type: 'POST',
+                                data: {
+                                    operation: 'saveTags',
+                                    value: $(this).val(),
+                                    collection_id:$('#collection_id').val(),
+                                    item_id: $('#item-multiple-selected').val().trim()
+                                }
+                            }).done(function (result) {
 
-                       });
-                 });
+                            });
+                    });
+                    
+                    Hook.register(
+                        'get_single_item_value',
+                        function ( args ) {
+                            $.ajax({
+                                url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                                type: 'POST',
+                                data: {
+                                    operation: 'getTags',
+                                    item_id:args[0]
+                                }
+                            }).done(function (result) {
+                                var json = JSON.parse(result);
+                                if(json.value){
+                                    $('#object_tags').val(json.value);
+                                }
+                            });
+                    });
              </script>
        <?php
    }

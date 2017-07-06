@@ -81,7 +81,7 @@ class RadioClass extends FormItemMultiple{
                         operation: 'saveValue',
                         type:'term',
                         value: $(this).val(),
-                        item_id:'<?php echo $item_id ?>',
+                        item_id: $('#item-multiple-selected').val().trim(),
                         compound_id:'<?php echo $compound_id ?>',
                         property_children_id: '<?php echo $property_id ?>',
                         index: <?php echo $index_id ?>,
@@ -92,6 +92,31 @@ class RadioClass extends FormItemMultiple{
                     Hook.call('validateFieldsMetadataText',[$(this).val(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>']);
                     //validateFieldsMetadataText($(this).val(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>')
                 <?php endif; ?>
+            });
+            
+            Hook.register(
+                'get_single_item_value',
+                function ( args ) {
+                    $.ajax({
+                        url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                        type: 'POST',
+                        data: {
+                            operation: 'getDataValue',
+                            compound_id:'<?php echo $compound_id ?>',
+                            property_children_id: '<?php echo $property_id ?>',
+                            index: <?php echo $index_id ?>,
+                            item_id:args[0]
+                        }
+                    }).done(function (result) {
+                        var json = JSON.parse(result);
+                        if(json.value){
+                            $.each($('input[name="radio-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>[]"]'),function(index,value){
+                                if(json.value.indexOf($(value).val()))>=0){
+                                    $(value).attr('checked','checked');
+                                }
+                            });
+                        }
+                    });
             });
         </script>
         <?php

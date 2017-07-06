@@ -56,7 +56,6 @@ class ItemsClass extends FormItemMultiple{
                                    name='title_<?php echo $file['ID'] ?>' 
                                    value='<?php echo $file['name'] ?>'>
                             <!-- Hidden para as categorias, tags e attachments  -->
-                            <input type="hidden" id='helper_<?php echo $file['ID'] ?>' name="helper_<?php echo $file['ID'] ?>" value='<?php echo $this->getJsonHelper($file['ID']) ?>'>
                         </center>          
                     </div>    
                   <?php         
@@ -82,30 +81,6 @@ class ItemsClass extends FormItemMultiple{
             'audio' => __('Audio Files','tainacan'),
             'others' => __('Others Files','tainacan')
         ];
-    }
-    
-    /**
-     * 
-     * @global type $wpdb
-     * @param type $item_id
-     * @return type
-     */
-    public function getJsonHelper($item_id) {
-        global $wpdb;
-        $helpers = [];
-        $wp_postmeta = $wpdb->prefix . "postmeta";
-        $query = "
-                        SELECT * FROM $wp_postmeta p  
-                        WHERE p.post_id = '".$item_id."' 
-                            and p.meta_key LIKE 'socialdb_property_helper_%'
-                ";
-        $result = $wpdb->get_results($query);
-        if ($result && !empty($result)) {
-            foreach ($result as $item) {
-                $helpers['helpers'][] = unserialize($item->meta_value);
-            }
-        }    
-        return json_encode($helpers);
     }
     
     /**
@@ -295,6 +270,7 @@ class ItemsClass extends FormItemMultiple{
                     $("#number_of_items_selected").text(selected_items.length);// total de items selecionados
                     //verifico as acoes que devem ser executadas
                     //hook para acionar as acoes de cada widget
+                    $('#item-multiple-selected').val(item_id);
                     if(Hook.is_register( 'get_single_item_value')){
                         Hook.callMultiple( 'get_single_item_value', [ item_id ] );
                     }
