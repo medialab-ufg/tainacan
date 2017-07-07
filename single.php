@@ -59,7 +59,7 @@ if (!has_nav_menu('menu-ibram')):
 else:
     echo '<input type="hidden" name="ibram_menu" value="ibram_menu_activated" />';
     ?>
-    <style type="text/css"> .ibram-header {  margin-top: 50px; } </style>
+    <style type="text/css"> .ibram-header {  margin-top: 0px; } </style>
 <?php
 endif;
 
