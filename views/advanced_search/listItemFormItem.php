@@ -123,7 +123,7 @@ endif;
             data: {
                 operation: 'saveValue',
                 type:'object',
-                <?php if($property_id!==0) echo 'indexCoumpound:0,' ?>
+                <?php if($property_id!==0 && $cardinality == 'false') echo 'indexCoumpound:0,' ?>
                 value: id,
                 item_id:'<?php echo $item_id ?>',
                 compound_id:'<?php echo $compound_id ?>',
@@ -144,7 +144,7 @@ endif;
             data: {
                 operation: 'removeValue',
                 type:'object',
-                <?php if($property_id!==0) echo 'indexCoumpound:0,' ?>
+                <?php if($property_id!==0  && $cardinality == 'false') echo 'indexCoumpound:0,' ?>
                 value: id,
                 item_id:'<?php echo $item_id ?>',
                 compound_id:'<?php echo $compound_id ?>',
