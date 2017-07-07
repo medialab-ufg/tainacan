@@ -131,6 +131,7 @@ class FormItemController extends Controller {
                     'post_name' => $slug
                 );
                 $data['ID'] = wp_update_post($post);
+                return json_encode([true]);
                 break;
             case 'saveDescription':
                       $post = array(

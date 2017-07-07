@@ -214,7 +214,7 @@ class DateClass extends FormItem {
                     <?php if($this->isKey): ?>
                      var json =JSON.parse(result);
                      if(json.value){
-                        $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val('');
+                        //$('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val('');
                             toastr.error(json.value+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
                      }
                     <?php endif; ?>
