@@ -375,15 +375,15 @@ $_src_ = get_template_directory_uri();
   // Header btn-toggle
  // Solução rápida
  
-$('#btn-toggle').click(function(){
-    if( ($('#to-collapse').hasClass('in')) ){
+$('#btn-toggle').click(function(e){
+    if( $('#to-collapse').hasClass('in') ){
         $('#to-collapse').removeClass('in');
-        $('#btn-toggle').addClass('collapsed');
+        //$('#btn-toggle').addClass('collapsed');
         $('#to-collapse').css('height', 'auto');
     }
     else{
         $('#to-collapse').addClass('in');
-        $('#btn-toggle').removeClass('collapsed'); 
+        //$('#btn-toggle').removeClass('collapsed'); 
         $('#to-collapse').css('height', 'auto');
     }
 });
