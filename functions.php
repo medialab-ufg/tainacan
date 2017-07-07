@@ -177,7 +177,15 @@ function createRepoStatPage() {
 
 function setup_statisticsLog() {
     global $wpdb;
-    createRepoStatPage();
+    
+    //$curret_blog_ID = get_current_blog_id();
+    //$statistics_page_= get_page_by_title('Statistics');
+    //$statistics_ID = $statistics_ID->ID;
+
+    //if(is_null(get_blog_post($current_blog_ID, $statistics_ID))){
+        createRepoStatPage();
+    //}
+
     $charset_collate = '';
     if (!empty($wpdb->charset))
         $charset_collate = "DEFAULT CHARACTER SET $wpdb->charset";

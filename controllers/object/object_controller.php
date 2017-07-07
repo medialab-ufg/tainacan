@@ -630,7 +630,43 @@ class ObjectController extends Controller {
                                     $ord_list[$_pair['meta_id']] = $_pair;
                                 }
                             } else {
-                                $press['set'][] = $col_meta;
+                                $prop = unserialize(get_post_meta($object_id, $meta)[0]);
+                                $_meta_header_ = get_term($pcs[3]);
+
+                                if( is_array($prop) ) {
+                                    for ($i = 0; $i < count($prop); $i++) {
+                                        if(array_key_exists('0', $prop[$i])) {
+                                            $ff_ID = $prop[$i][0]['values']['0'];
+                                            $_meta_ = $this->sdb_get_post_meta($ff_ID);
+                                            $final_val = $_meta_->meta_value;
+
+                                            if( $prop[$i][0]['type'] == "term" ) {
+                                                $final_val = get_term($final_val)->name;
+                                            }
+
+                                            $_pair = ['meta' => $_meta_header_->name, 'value' => $final_val, 'meta_id' => $_meta_->meta_id];
+                                            $press['set'][] = $_pair;
+                                        } else {
+                                            $_pair = ['meta' => $_meta_header_->name, 'value' => '_____________________________', 'submeta_header' => true];
+                                            $press['set'][] = $_pair;
+
+                                            foreach ($prop[$i] as $child_id => $child_data) {
+                                                $child_term = get_term($child_id);
+                                                $main_val = $child_data["values"][0];
+                                                $m_val = $this->sdb_get_post_meta($main_val);
+                                                $final_val = $m_val->meta_value;
+
+                                                if( "term" == $child_data["type"] ) {
+                                                    $m_val = get_term($final_val);
+                                                    $final_val = $m_val->name;
+                                                }
+
+                                                $_pair = ['meta' => $child_term->name, 'value' => $final_val, 'is_submeta' => true];
+                                                $press['set'][] = $_pair;
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         } /* else { $press['excluded'][] = $meta; } */
                     }
@@ -1190,6 +1226,19 @@ class ObjectController extends Controller {
     public function get_author_name($author_id) {
         $object_model = new ObjectModel();
         return $object_model->get_object_author($author_id, 'name');
+    }
+
+    private function sdb_get_post_meta($meta_id) {
+        global $wpdb;
+        $query = "SELECT * FROM $wpdb->postmeta WHERE meta_id = $meta_id";
+        $result = $wpdb->get_results($query);
+        if ($result && is_array($result)) {
+            return $result[0];
+        } elseif ($result && isset($result->ID)) {
+            return $result;
+        } else {
+            return false;
+        }
     }
 
 }
