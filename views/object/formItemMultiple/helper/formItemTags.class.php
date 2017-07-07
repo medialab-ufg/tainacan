@@ -86,6 +86,24 @@ class FormItemTags extends FormItemMultiple {
                                 }
                             });
                     });
+                    
+                    Hook.register(
+                        'get_multiple_item_value',
+                        function ( args ) {
+                            $.ajax({
+                                url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                                type: 'POST',
+                                data: {
+                                    operation: 'getTags',
+                                    item_id:args
+                                }
+                            }).done(function (result) {
+                                var json = JSON.parse(result);
+                                if(json.value){
+                                    $('#object_tags').val(json.value);
+                                }
+                            });
+                    });
              </script>
        <?php
    }

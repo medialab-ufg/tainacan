@@ -218,10 +218,21 @@ class FormItemController extends Controller {
                 break;
             case 'getTags':
                 $string = [];
-                $tags = wp_get_object_terms($data['item_id'], 'socialdb_tag_type');
-                if($tags && is_array($tags)){
-                    foreach ($tags as $tag) {
-                        $string[] = $tag->name;
+                if(is_array($data['item_id'])){
+                    foreach ($data['item_id'] as $item_id) {
+                        $tags = wp_get_object_terms($item_id, 'socialdb_tag_type');
+                        if($tags && is_array($tags)){
+                            foreach ($tags as $tag) {
+                                $string[] = $tag->name;
+                            }
+                        }
+                    }
+                }else{
+                    $tags = wp_get_object_terms($data['item_id'], 'socialdb_tag_type');
+                    if($tags && is_array($tags)){
+                        foreach ($tags as $tag) {
+                            $string[] = $tag->name;
+                        }
                     }
                 }
                 $data['value'] = ($string) ? implode(',', $string) : '';
@@ -234,6 +245,20 @@ class FormItemController extends Controller {
                      $data['value'] = $class->getValues($result[$data['index']][$data['property_children_id']]);
                 }
                 return json_encode($data);
+            case 'getObjectValue':
+                $values = [];
+                $class = new ObjectSaveValuesModel();
+                $result = $class->getValuePropertyHelper($data['item_id'], $data['compound_id']);
+                if($result && isset($result[$data['index']][$data['property_children_id']])){
+                    $ids = $class->getValues($result[$data['index']][$data['property_children_id']]);
+                    if($ids && is_array($ids)){
+                        foreach ($ids as $id) {
+                            $values[$id] = get_post($id)->post_title;
+                        }
+                    }
+                    $data['value'] = $values;
+                }
+                return json_encode($data);    
         }
     }
 
@@ -251,5 +276,12 @@ if ($_POST['operation']) {
 }
 
 $form_item_controller = new FormItemController();
-echo $form_item_controller->operation($operation, $data);
-?>
+if(isset($data['item_id']) && !is_array($data['item_id']) && strpos($data['item_id'], ',') !== false ){
+    $ids = explode(',', $data['item_id']);
+    foreach ($ids as $id) {
+        $data['item_id'] = $id;
+        $form_item_controller->operation($operation, $data);
+    }
+}else{
+    echo $form_item_controller->operation($operation, $data);
+}

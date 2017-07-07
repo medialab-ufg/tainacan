@@ -76,8 +76,15 @@ class FormItemDescription extends FormItemMultiple {
                             if(json.value){
                                 $('#item-description').val(json.value);
                             }
-                        });
                     });
+                });
+                
+                Hook.register(
+                    'get_multiple_item_value',
+                    function ( args ) {
+                        $('#item-description').val('');
+                        $('#item-description').attr("placeholder", "<?php _e('Alter ', 'tainacan') ?>" + args.length + " <?php _e(' items', 'tainacan') ?>");
+                });
         </script>
         <?php
     }

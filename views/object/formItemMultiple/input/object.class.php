@@ -219,29 +219,39 @@ class ObjectClass extends FormItemMultiple {
             Hook.register(
                 'get_single_item_value',
                 function ( args ) {
+                    $('#item-id-obejct-input').val(args[0])
                     $.ajax({
                         url: $('#src').val() + '/controllers/object/form_item_controller.php',
                         type: 'POST',
                         data: {
                             operation: 'getObjectValue',
                             compound_id:'<?php echo $compound_id ?>',
-                            property_children_id: '<?php echo $property_id ?>',
+                            property_children_id: '<?php echo $propert_id ?>',
                             index: <?php echo $index_id ?>,
                             item_id:args[0]
                         }
                     }).done(function (result) {
                         var json = JSON.parse(result);
                         if(json.value){
-                            $('#results_property_<?php echo $compound_id ?>_<?php echo $property_id ?>_<?php echo $index_id ?> ul').html('');
+                            $('#metadata-search-<?php echo $compound_id ?>-<?php echo $propert_id ?>-<?php echo $index_id ?>').show();
+                            $('#metadata-result-<?php echo $compound_id ?>-<?php echo $propert_id ?>-<?php echo $index_id ?>').hide();
+                            $('#results_property_<?php echo $compound_id ?>_<?php echo $propert_id ?>_<?php echo $index_id ?> ul').html('');
                             if(json.value){
                                 $.each(json.value,function(index,value){
-                                    $('#results_property_<?php echo $compound_id ?>_<?php echo $property_id ?>_<?php echo $index_id ?> ul')
-                                            .append('<li id="inserted_property_object_<?php echo $compound_id ?>_<?php echo $index_id ?>_<?php echo $contador ?>_'+$(value).val()+'" item="'+$(value).val()+'" class="selected-items-property-object property-<?php echo $property_id; ?>">'+$('#line_property_object_<?php echo $compound_id ?>_<?php echo $property_id ?>_<?php echo $contador ?>_'+$(value).val()+' .title-text').html()
-                                            +'<span  onclick="remove_item_objet_<?php echo $compound_id ?>_<?php echo $index_id; ?>_<?php echo $contador; ?>(this)" style="cursor:pointer;" class="pull-right glyphicon glyphicon-trash"></span></li>');
+                                    $('#results_property_<?php echo $compound_id ?>_<?php echo $propert_id ?>_<?php echo $index_id ?> ul')
+                                            .append('<li id="inserted_property_object_<?php echo $compound_id ?>_<?php echo $propert_id ?>_<?php echo $index_id ?>_'+index+'" item="'+index+'" class="selected-items-property-object property-<?php echo $propert_id; ?>">'+ value
+                                            +'<span  onclick="remove_item_objet_<?php echo $compound_id ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>(this)" style="cursor:pointer;" class="pull-right glyphicon glyphicon-trash"></span></li>');
                                 });
+                                $('#no_results_property_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $contador; ?>').show();
                             }
                         }
                     });
+            });
+            
+            Hook.register(
+                'get_multiple_item_value',
+                function ( args ) {
+                    $('#results_property_<?php echo $compound_id ?>_<?php echo $propert_id ?>_<?php echo $index_id ?> ul').html('');
             });
 
             function clear_all_field(form) {
@@ -345,7 +355,7 @@ class ObjectClass extends FormItemMultiple {
                         type:'object',
                         <?php if($propert_id!==0) echo 'indexCoumpound:0,' ?>
                         value: id,
-                        item_id:'<?php echo $item_id ?>',
+                        item_id:$('#item-multiple-selected').val().trim(),
                         compound_id:'<?php echo $compound_id ?>',
                         property_children_id: '<?php echo $propert_id ?>',
                         index: <?php echo $index_id ?>,
@@ -709,7 +719,7 @@ class ObjectClass extends FormItemMultiple {
             <input type="hidden" name="collection_id" value="0">
             <input type="hidden" name="compound_id" value="<?php echo $this->compound_id ?>">
             <input type="hidden" name="contador" value="<?php echo $this->index_id ?>">
-            <input type="hidden" name="item_id" value="<?php echo $this->item_id ?>">
+            <input type="hidden" name="item_id" id="item-id-obejct-input" value="<?php echo $this->item_id ?>">
             <!------------------------------------------------------------------------------>
             <input type="hidden" name="avoid_selected_items" id="avoid_selected_items_<?php echo $this->compound_id ?>_<?php echo $this->property_id ?>_<?php echo $this->index_id ?>" value="<?php echo (isset($property['metas']['socialdb_property_avoid_items']) && $property['metas']['socialdb_property_avoid_items'] == 'true') ? 'true' : 'false' ?>">
             <input type="hidden" name="categories" value="<?php echo (is_array($property['metas']['socialdb_property_object_category_id'])) ? implode(",", $property['metas']['socialdb_property_object_category_id']) : $property['metas']['socialdb_property_object_category_id'] ?>">

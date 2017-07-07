@@ -161,6 +161,15 @@ class SimpleTreeClass extends FormItemMultiple {
                             }
                         });
                 });
+                
+                Hook.register(
+                    'get_multiple_item_value',
+                    function ( args ) {
+                        var selKeys = $.map($("#simple-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>").dynatree("getSelectedNodes"), function (node) {
+                            node.select(false);
+                            return node;
+                        });
+                });
             });
         </script>
         <?php

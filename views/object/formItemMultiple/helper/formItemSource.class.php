@@ -81,6 +81,13 @@ class FormItemSource extends FormItemMultiple {
                                     }
                                 });
                      });
+                     
+                    Hook.register(
+                        'get_multiple_item_value',
+                        function ( args ) {
+                            $('#item_source').val('');
+                            $('#item_source').attr("placeholder", "<?php _e('Alter ', 'tainacan') ?>" + args.length + " <?php _e(' items', 'tainacan') ?>");
+                    });
               </script>
         <?php
     }

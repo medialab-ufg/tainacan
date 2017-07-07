@@ -118,9 +118,16 @@ class TextAreaClass extends FormItemMultiple{
                 }).done(function (result) {
                     var json = JSON.parse(result);
                     if(json.value){
-                        $('#item_source').val(json.value.join(','));
+                        $('#textarea-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val(json.value.join(','));
                     }
                 });
+            });
+            
+            Hook.register(
+            'get_multiple_item_value',
+            function ( args ) {
+                $('#textarea-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val('');
+                $('#textarea-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').attr("placeholder", "<?php _e('Alter ', 'tainacan') ?>" + args.length + " <?php _e(' items', 'tainacan') ?>");
             });
         </script> 
         <?php

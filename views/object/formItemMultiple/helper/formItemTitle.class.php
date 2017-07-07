@@ -78,9 +78,16 @@ class FormItemTitle extends FormItemMultiple{
                 });
             
             Hook.register(
-            'get_single_item_value',
-            function ( args ) {
-                $('#item-title').val($('#title_'+args[0]).val());
+                'get_single_item_value',
+                function ( args ) {
+                    $('#item-title').val($('#title_'+args[0]).val());
+            });
+            
+            Hook.register(
+                'get_multiple_item_value',
+                function ( args ) {
+                    $('#item-title').val('');
+                    $('#item-title').attr("placeholder", "<?php _e('Replace ', 'tainacan') ?>" + args.length + " <?php _e(' titles', 'tainacan') ?>");
             });
         </script>
         <?php

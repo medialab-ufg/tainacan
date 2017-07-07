@@ -111,11 +111,19 @@ class RadioClass extends FormItemMultiple{
                         var json = JSON.parse(result);
                         if(json.value){
                             $.each($('input[name="radio-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>[]"]'),function(index,value){
-                                if(json.value.indexOf($(value).val()))>=0){
+                                if(json.value.indexOf($(value).val())>=0){
                                     $(value).attr('checked','checked');
                                 }
                             });
                         }
+                    });
+            });
+            
+            Hook.register(
+                'get_multiple_item_value',
+                function ( args ) {
+                    $.each($('input[name="radio-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>[]"]'),function(index,value){
+                        $(value).removeAttr('checked');
                     });
             });
         </script>

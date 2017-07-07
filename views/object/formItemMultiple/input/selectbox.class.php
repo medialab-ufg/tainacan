@@ -124,6 +124,14 @@ class SelectboxClass extends FormItemMultiple{
                         }
                     });
             });
+            
+            Hook.register(
+            'get_multiple_item_value',
+            function ( args ) {
+                $.each($('#selectbox-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?> option'),function(index,value){
+                    $(value).removeAttr('selected','selected');
+                });
+            });
         </script>
         <?php
     }
