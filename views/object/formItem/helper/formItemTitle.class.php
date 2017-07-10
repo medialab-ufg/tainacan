@@ -55,7 +55,7 @@ class FormItemTitle extends FormItem{
     public function initScriptsTitleContainer($property, $item_id) {
         ?>
         <script>
-            $('#item-title').keyup(function(){
+            $('#item-title').blur(function(){
                 <?php if($this->isRequired === 'true'):  ?>
                     validateFieldsMetadataText($(this).val().trim(),'<?php echo $property['id'] ?>','0','0')
                 <?php endif; ?>
@@ -74,7 +74,7 @@ class FormItemTitle extends FormItem{
                      var json =JSON.parse(result);
                      if(json.value){
                         //$('#item-title').val('');
-                        validateFieldsMetadataText($('#item-title').val(),'<?php echo $property['id'] ?>','0','0')
+                        validateFieldsMetadataText('','<?php echo $property['id'] ?>','0','0')
                             toastr.error(json.value+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
                      }
                     <?php endif; ?>

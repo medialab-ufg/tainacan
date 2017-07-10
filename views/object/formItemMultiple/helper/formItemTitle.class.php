@@ -54,7 +54,7 @@ class FormItemTitle extends FormItemMultiple{
     public function initScriptsTitleContainer($property, $item_id) {
         ?>
         <script>
-                $('#item-title').keyup(function(){
+                $('#item-title').blur(function(){
                     $.ajax({
                         url: $('#src').val() + '/controllers/object/form_item_controller.php',
                         type: 'POST',

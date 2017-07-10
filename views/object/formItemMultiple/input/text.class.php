@@ -68,7 +68,7 @@ class TextClass extends FormItemMultiple{
         $this->initScriptsTextClass($compound['id'], $property_id, $item_id, $index_id);
         if($hasDefaultValue): ?>
             <script>
-                $('#text-field-<?php echo $compound['id'] ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').trigger('keyup');
+                $('#text-field-<?php echo $compound['id'] ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').trigger('blur');
             </script>
         <?php endif;     
     }
@@ -83,10 +83,10 @@ class TextClass extends FormItemMultiple{
         ?>
         <script>
              $('#text-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').change(function(){
-                 $(this).trigger('keyup');
+                // $(this).trigger('blur');
              });
 
-            $('#text-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').keyup(function(){
+            $('#text-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').blur(function(){
                 <?php if($this->isRequired):  ?>
                     validateFieldsMetadataText($(this).val().trim(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>')
                 <?php endif; ?>

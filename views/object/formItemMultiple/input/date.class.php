@@ -74,7 +74,7 @@ class DateClass extends FormItemMultiple {
                 $this->initScriptsDate($property_id, $item_id, $compound_id, $index_id);
         if($hasDefaultValue): ?>
             <script>
-                $('#date-field-<?php echo $compound['id'] ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').trigger('keyup');
+                $('#date-field-<?php echo $compound['id'] ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').trigger('blur');
             </script>
         <?php endif;         
         }
@@ -83,7 +83,7 @@ class DateClass extends FormItemMultiple {
         <script>
             init_metadata_date("#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>");
 
-            $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').keyup(function () {
+            $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').blur(function () {
                 <?php if($this->isRequired):  ?>
                     validateFieldsMetadataText($(this).val().trim(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>')
                 <?php endif; ?>

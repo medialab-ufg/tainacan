@@ -140,18 +140,18 @@ class ObjectController extends Controller {
                 endif;
                 break;
             case "editor_items":
-                $data['properties'] = $object_model->show_object_properties($data);
-                $data['items'] = $objectfile_model->get_files($data);
-                if ($data['items'] && empty(!$data['items'])) {
-                    return $this->render(dirname(__FILE__) . '../../../views/object/multiple_items/editor_items.php', $data);
-                } else {
-                    return 0;
-                }
-//                include_once dirname(__FILE__) . '../../../views/object/formItemMultiple/formItemMultiple.class.php';
-//                $class = new FormItemMultiple($data['collection_id']);
 //                $data['properties'] = $object_model->show_object_properties($data);
-//                $data['items'] = $objectfile_model->create_item_by_files($data);
-//                $class->start($data['items'], $data['properties']);
+//                $data['items'] = $objectfile_model->get_files($data);
+//                if ($data['items'] && empty(!$data['items'])) {
+//                    return $this->render(dirname(__FILE__) . '../../../views/object/multiple_items/editor_items.php', $data);
+//                } else {
+//                    return 0;
+//                }
+                include_once dirname(__FILE__) . '../../../views/object/formItemMultiple/formItemMultiple.class.php';
+                $class = new FormItemMultiple($data['collection_id'],__('Add new item - Send local file', 'tainacan'),'add-files');
+                $data['properties'] = $object_model->show_object_properties($data);
+                $data['items'] = $objectfile_model->create_item_by_files($data);
+                $class->start($data['items'], $data['properties']);
                 break;
             //END: EDITOR DE ITEMS MULTIPLOS
             //# EDITOR DE ITENS PARA REDES SOCIAIS

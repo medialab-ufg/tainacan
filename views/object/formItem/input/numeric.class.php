@@ -61,7 +61,7 @@ class NumericClass extends FormItem{
         $this->initScriptsNumericClass($compound_id,$property_id, $item_id, $index_id);
         if($hasDefaultValue): ?>
             <script>
-                $('#numeric-field-<?php echo $compound['id'] ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').trigger('keyup');
+                $('#numeric-field-<?php echo $compound['id'] ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').trigger('blur');
             </script>
         <?php endif;    
 
@@ -76,7 +76,7 @@ class NumericClass extends FormItem{
     public function initScriptsNumericClass($compound_id,$property_id, $item_id, $index_id) {
         ?>
         <script>
-            $('#numeric-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').keyup(function(){
+            $('#numeric-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').blur(function(){
                 <?php if($this->isRequired):  ?>
                     validateFieldsMetadataText($(this).val().trim(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>')
                 <?php endif; ?>

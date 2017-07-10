@@ -153,7 +153,7 @@ class DateClass extends FormItem {
                 $this->initScriptsDate($property_id, $item_id, $compound_id, $index_id);
         if($hasDefaultValue): ?>
             <script>
-                $('#date-field-<?php echo $compound['id'] ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').trigger('keyup');
+                $('#date-field-<?php echo $compound['id'] ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').trigger('blur');
             </script>
         <?php endif;         
         }
@@ -162,7 +162,7 @@ class DateClass extends FormItem {
         <script>
             init_metadata_date("#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>");
 
-            $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').keyup(function () {
+            $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').blur(function () {
                 <?php if($this->isRequired):  ?>
                 Hook.call('validateFieldsMetadataText',[$(this).val(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>']);
                     //validateFieldsMetadataText($(this).val(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>')

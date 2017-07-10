@@ -73,7 +73,7 @@ class TextAreaClass extends FormItemMultiple{
     public function initScriptsTextAreaClass($compound_id,$property_id, $item_id, $index_id) {
         ?>
         <script>
-            $('#textarea-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').keyup(function(){
+            $('#textarea-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').blur(function(){
                 <?php if($this->isRequired):  ?>
                     validateFieldsMetadataText($(this).val().trim(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>')
                 <?php endif; ?>

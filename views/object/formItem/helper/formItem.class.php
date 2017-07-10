@@ -671,6 +671,7 @@ class FormItem extends Model {
                                     </span>
                                 </div>
                      </div>
+                         <button type="button" onclick="$('#dropzone_new').trigger('click')" class="btn btn-primary"><?php _e('Upload more files','tainacan') ?></button>
                      </center>
                  </div>
             </div>

@@ -48,7 +48,7 @@ class ItemsClass extends FormItemMultiple{
                                       <img src="<?php echo get_item_thumbnail_default($file['ID']); ?>" class="img-responsive">
                                 <?php }  ?> 
                             </div>     
-                            <input required="required" 
+                            <input 
                                    style="margin-top: 10px;" 
                                    placeholder="<?php _e('Add a title','tainacan') ?>" 
                                    type="text" 
@@ -66,6 +66,14 @@ class ItemsClass extends FormItemMultiple{
             <?php
             endif;
         endforeach;
+        ?>
+        <!--------------- FIM: container todos os itens  ----------------------------->
+        <div style="display: none" class="col-md-12" id='attachments_item_upload'>
+             <h3><?php _e('Attachments','tainacan'); ?></h3>
+             <div  id="dropzone_new" class="dropzone" style="min-height: 150px;">
+             </div>
+         </div>
+        <?php
         $this->initScriptsLocal();
     }
     
@@ -93,6 +101,20 @@ class ItemsClass extends FormItemMultiple{
     public function initScriptsLocal() {
         ?>
         <script>
+            var myDropzone;
+                $('.input_title').blur(function(){
+                    $.ajax({
+                        url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                        type: 'POST',
+                        data: {
+                            operation: 'saveTitle',
+                            value: $(this).val().trim(),
+                            item_id: $(this).parent().parent().attr('item'),
+                            collection_id:$('#collection_id').val()
+                        }
+                    }).done(function (result) {
+                    });
+                });
             /******************************** Manipulação das cores ao selecionar itens setando se eh anexo o u nao******************************************/
             function focusItem(id) {
                 if ($('#buttonBackItems').is(':visible')) { // eh pq esta selecionando anexos
@@ -282,6 +304,8 @@ class ItemsClass extends FormItemMultiple{
                     if(Hook.is_register( 'get_single_item_value')){
                         Hook.callMultiple( 'get_single_item_value', [ item_id ] );
                     }
+                    //mostra os anexos
+                    init_dropzone_attachments(item_id);
                 } else if (selected_items.length > 1) {
                     $("#buttonSelectedAttachments").hide();// mostra o botao de anexos
                     $("#form_properties_items").show(); // mostra o formulario para edicao
@@ -297,6 +321,8 @@ class ItemsClass extends FormItemMultiple{
                     if(Hook.is_register( 'get_multiple_item_value')){
                         Hook.callMultiple( 'get_multiple_item_value', selected_items );
                     }
+                    //esconde anexos
+                    destroy_dropzone();
                 } else {
                     $("#buttonSelectedAttachments").hide();// mostra o botao de anexos
                     $('#list_ranking_items').hide();
@@ -305,6 +331,8 @@ class ItemsClass extends FormItemMultiple{
                     if(Hook.is_register( 'get_multiple_item_value')){
                         Hook.callMultiple( 'get_multiple_item_value', [] );
                     }
+                    //esconde anexos
+                    destroy_dropzone();
                 }
             }
             // FIM: AO SELECIONAR ITEMS
@@ -384,6 +412,69 @@ class ItemsClass extends FormItemMultiple{
             //setar classe do toaster
             function set_toastr_class() {
                 return {positionClass: 'toast-bottom-right', preventDuplicates: true};
+            }
+            
+            //anexos do item
+            function init_dropzone_attachments(id){
+                //dropzone para adicionar anexos
+                destroy_dropzone();
+                $('#dropzone_new').html('');
+                $('#dropzone_new')
+                        .append('<div class="dz-message" data-dz-message><span style="text-align: center;vertical-align: middle;line-height: 90px;"><h2><span class="glyphicon glyphicon-upload"></span><b><?php _e('Drop Files','tainacan')  ?></b> <?php _e('to upload','tainacan')  ?></h2><h4>(<?php _e('or click','tainacan')  ?>)</h4>')
+                        ;
+                $('#attachments_item_upload').show();
+                 myDropzone = new Dropzone("div#dropzone_new", {
+                        accept: function(file, done) {
+                              if (file.type === ".exe") {
+                                  done("Error! Files of this type are not accepted");
+                              }
+                              else { done(); }
+                        },
+                        init: function () {
+                            thisDropzone = this;
+                            this.on("removedfile", function (file) {
+                                if(!noCleaning){
+                                    //    if (!file.serverId) { return; } // The file hasn't been uploaded
+                                    $.get($('#src').val() + '/controllers/object/object_controller.php?operation=delete_file&object_id=' + id + '&file_name=' + file.name, function (data) {
+                                        if (data.trim() === 'false') {
+                                            showAlertGeneral('<?php _e("Atention!", 'tainacan') ?>', '<?php _e("An error ocurred, File already removed or corrupted!", 'tainacan') ?>', 'error');
+                                        } else {
+                                            showAlertGeneral('<?php _e("Success", 'tainacan') ?>', '<?php _e("File removed!", 'tainacan') ?>', 'success');
+                                        }
+                                    }); // Send the file id along
+                                }
+                            });
+                            $.get($('#src').val() + '/controllers/object/object_controller.php?operation=list_files&object_id=' + id, function (data) {
+                                try {
+                                    //var jsonObject = JSON.parse(data);
+                                    $.each(data, function (key, value) {
+                                        if (value.name !== undefined && value.name !== 0) {
+                                            var mockFile = {name: value.name, size: value.size};
+                                            thisDropzone.options.addedfile.call(thisDropzone, mockFile);
+                                        }
+                                    });
+                                }
+                                catch (e)
+                                {
+                                    // handle error 
+                                }
+                            });
+                        },                
+                        url: $('#src').val() + '/controllers/object/object_controller.php?operation=save_file&object_id=' + id,
+                        addRemoveLinks: true
+
+                    });
+
+            }
+            
+            //destroy dropzone
+            function destroy_dropzone(){
+                $('#attachments_item_upload').hide();
+                if(myDropzone){
+                   noCleaning = true;
+                   myDropzone.destroy();
+                   noCleaning = false;
+                }
             }
         </script> 
         <?php

@@ -10,6 +10,7 @@ class FormItemMultiple extends Model {
     public $collection_id = false;
     public $terms_fixed;
     public $title;
+    public $operation;
     public $allPropertiesIds = [];
     public $fixed_slugs_helper = [
         'socialdb_property_fixed_title',
@@ -23,7 +24,7 @@ class FormItemMultiple extends Model {
         'socialdb_property_fixed_type'
     ];
     
-    function __construct($collection_id = 0,$title = '') {
+    function __construct($collection_id = 0,$title = '',$operation = '') {
         $this->collection_id = $collection_id;
         $this->terms_fixed = [
             'title' => get_term_by('slug', 'socialdb_property_fixed_title', 'socialdb_property_type'),
@@ -36,7 +37,8 @@ class FormItemMultiple extends Model {
             'tags' => get_term_by('slug', 'socialdb_property_fixed_tags', 'socialdb_property_type'),
             'type' => get_term_by('slug', 'socialdb_property_fixed_type', 'socialdb_property_type')
         ];
-        //$this->title = ($title == '') ? __('Create new item - Write text', 'tainacan'):$title;
+        $this->title = $title;
+        $this->operation = $operation;
         $this->itemId = 'multiple';
     }
     /**
@@ -95,7 +97,7 @@ class FormItemMultiple extends Model {
         </div>
         <div class='col-md-9 pull-right' 
              style="background-color: white;border: 3px solid #E8E8E8;margin-left: 15px;">
-            <?php if(!isset($is_beta_file)): ?>
+            <?php if($this->operation !== 'add-files'): ?>
             <h3>
                 <?php if(isset($edit_multiple)): ?> 
                     <?php _e('Edit multiple items','tainacan') ?>
@@ -113,7 +115,7 @@ class FormItemMultiple extends Model {
             </h3>
             <?php else: ?>
             <h3>
-                <?php _e('Continue editting...  Insert URL','tainacan') ?>
+                <?php echo $this->title ?>
                 <button type="button" onclick="back_main_list_discard();"
                         class="btn btn-default pull-right"> 
                             <?php _e('Cancel','tainacan') ?>
@@ -125,6 +127,13 @@ class FormItemMultiple extends Model {
             <hr>
             <!----------------------------- BUTTONS -------------------------------------->
            <div style="padding-bottom: 20px;" >
+               <?php if($this->operation == 'add-files'): ?>
+               <button type="button"
+                        onclick="upload_more_files()" 
+                        class="btn btn-primary">
+                    <span class="glyphicon glyphicon-upload"></span>&nbsp;<?php _e('Upload more files','tainacan') ?>
+                </button>
+               <?php endif; ?>
                <div class="btn-group">
                    <button id="selectOptions" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                      <?php _e('Select','tainacan') ?> <span class="caret"></span>
