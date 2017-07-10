@@ -252,9 +252,8 @@ $_src_ = get_template_directory_uri();
                               <li role="separator" class="divider"></li>
                               <li> 
                                     <!-- Opt. Create collection -->
-                                    <a class="create-collection">
-                                        <?php _e('Create collection', 'tainacan') ?>
-                                      <span class="glyphicon glyphicon-chevron-right"></span>
+                                    <a class="create-collection" onclick="showModalCreateCollection()">
+                                        <?php _e('Create collection', 'tainacan') ?> 
                                     </a>
 
                                     <!--<ul class="sub-menu">
