@@ -162,7 +162,10 @@ class ObjectController extends Controller {
                 $data['properties'] = $object_model->show_object_properties($data);
                 $data['items'] = $objectfile_model->get_inserted_items_social_network($data);
                 if ($data['items'] && empty(!$data['items'])) {
-                    return $this->render(dirname(__FILE__) . '../../../views/object/multiple_social_network/editor_items.php', $data);
+                    //return $this->render(dirname(__FILE__) . '../../../views/object/multiple_social_network/editor_items.php', $data);
+                    include_once dirname(__FILE__) . '../../../views/object/formItemMultiple/formItemMultiple.class.php';
+                    $class = new FormItemMultiple($data['collection_id'],__('Add new item - Insert URL', 'tainacan'),'add-social-network');
+                    $class->start($data['items'], $data['properties']);
                 } else {
                     return 0;
                 }
@@ -175,7 +178,10 @@ class ObjectController extends Controller {
                 $data['items_id'] = get_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betafile');
                 $data['items'] = $objectfile_model->get_inserted_items_social_network($data);
                 if ($data['items'] && empty(!$data['items'])) {
-                    return $this->render(dirname(__FILE__) . '../../../views/object/multiple_social_network/editor_items.php', $data);
+                    //return $this->render(dirname(__FILE__) . '../../../views/object/multiple_social_network/editor_items.php', $data);
+                    include_once dirname(__FILE__) . '../../../views/object/formItemMultiple/formItemMultiple.class.php';
+                    $class = new FormItemMultiple($data['collection_id'],__('Continue editting...  Insert URL', 'tainacan'),'add-social-network-beta');
+                    $class->start($data['items'], $data['properties']);
                 } else {
                     return 0;
                 }
@@ -1006,10 +1012,14 @@ class ObjectController extends Controller {
                     $data['items_id'] [] = $_previous['id'];
                     //array_push( $set, [ 'ID' => $_previous['id'], 'title' => $_previous['title'], 'desc' => $_previous['desc'] ] );
                 }
+                $data['properties'] = $object_model->show_object_properties($data);
                 $data['items'] = $objectfile_model->get_inserted_items_social_network($data);
                 $data['edit_multiple'] = true;
                 if ($data['items'] && empty(!$data['items'])) {
-                    return $this->render(dirname(__FILE__) . '../../../views/object/multiple_social_network/editor_items.php', $data);
+                    //return $this->render(dirname(__FILE__) . '../../../views/object/multiple_social_network/editor_items.php', $data);
+                    include_once dirname(__FILE__) . '../../../views/object/formItemMultiple/formItemMultiple.class.php';
+                    $class = new FormItemMultiple($data['collection_id'],__('Edit items', 'tainacan'),'edit-items');
+                    $class->start($data['items'], $data['properties']);
                 }
                 //return $this->render( dirname(__FILE__) . '../../../views/object/temp/edit_multiple.php', [ 'edit_data' => $set ] );
                 break;

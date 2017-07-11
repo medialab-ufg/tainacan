@@ -87,7 +87,7 @@ class CheckboxClass extends FormItemMultiple{
                            index: <?php echo $index_id ?>
                        }
                    });
-                   Hook.call('appendCategoryMetadata',[$(this).val(), <?php echo $item_id ?>, '#appendCategoryMetadata_<?php echo $compound_id; ?>_0_0']);
+                   Hook.call('appendCategoryMetadata',[$(this).val(), $('#item-multiple-selected').val().trim(),, '#appendCategoryMetadata_<?php echo $compound_id; ?>_0_0']);
                  }else{
                     $.ajax({
                        url: $('#src').val() + '/controllers/object/form_item_controller.php',

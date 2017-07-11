@@ -20,8 +20,16 @@ class FormItemController extends Controller {
                 include_once dirname(__FILE__) . '../../../views/object/formItem/helper/formItem.class.php';
                 $class = new FormItemText($data['collection_id']);
                 return $class->appendContainerText(unserialize(stripslashes(html_entity_decode($data['property_details']))),$data['item_id'],$data['index']);
-             case "appendContainerCompounds":
+            case "appendContainerCompounds":
                 include_once dirname(__FILE__) . '../../../views/object/formItem/helper/formItem.class.php';
+                $class = new FormItemCompound($data['collection_id']);
+                return $class->appendContainerCompounds(unserialize(stripslashes(html_entity_decode($data['property_details']))),$data['item_id'],$data['index']);
+            case "appendContainerTextMultiple":
+                include_once dirname(__FILE__) . '../../../views/object/formItemMultiple/formItemMultiple.class.php';
+                $class = new FormItemText($data['collection_id']);
+                return $class->appendContainerText(unserialize(stripslashes(html_entity_decode($data['property_details']))),$data['item_id'],$data['index']);
+            case "appendContainerCompoundsMultiple":
+                include_once dirname(__FILE__) . '../../../views/object/formItemMultiple/formItemMultiple.class.php';
                 $class = new FormItemCompound($data['collection_id']);
                 return $class->appendContainerCompounds(unserialize(stripslashes(html_entity_decode($data['property_details']))),$data['item_id'],$data['index']);
             case "saveValue":
@@ -244,6 +252,9 @@ class FormItemController extends Controller {
                 $result = $class->getValuePropertyHelper($data['item_id'], $data['compound_id']);
                 if($result && isset($result[$data['index']][$data['property_children_id']])){
                      $data['value'] = $class->getValues($result[$data['index']][$data['property_children_id']]);
+                     $this->array_set_pointer($result, $data['index']);
+                     $next = next($result);
+                     $data['nextIndex'] =  ($next) ? key($result) : false;
                 }
                 return json_encode($data);
             case 'getObjectValue':
@@ -259,7 +270,33 @@ class FormItemController extends Controller {
                     }
                     $data['value'] = $values;
                 }
-                return json_encode($data);    
+                return json_encode($data);   
+            case 'publishItems':
+                delete_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betafile');
+                $class = new ObjectSaveValuesModel();
+                if(is_array($data['items'])){
+                    foreach ($data['items'] as $item) {
+                        $post = array(
+                        'ID' => $item,
+                        'post_status' => 'publish');
+                        $data['ID'][] = wp_update_post($post);
+                        $category_root_id = $class->get_category_root_of($data['collection_id']);
+                        //categoria raiz da colecao
+                        wp_set_object_terms($item, array((int) $category_root_id), 'socialdb_category_type',true);
+                    }
+                }
+                return json_encode($data);   
+        }
+    }
+    
+    public function array_set_pointer(&$array, $value){
+        reset($array);
+        while($val=current($array))
+        {
+            if(key($val)==$value) 
+                break;
+
+            next($array);
         }
     }
 

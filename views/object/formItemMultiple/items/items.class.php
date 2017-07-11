@@ -16,6 +16,7 @@ class ItemsClass extends FormItemMultiple{
                 </h4>                   
                 <?php
                 foreach ($items[$type] as $file) { 
+                    $this->addDraft($file['ID']);
                     ?>
                     <div    id="wrapper_<?php echo $file['ID'] ?>"  
                             class="col-md-3 item-default item-<?php echo $type ?>" 
@@ -45,7 +46,7 @@ class ItemsClass extends FormItemMultiple{
                                 if(get_the_post_thumbnail($file['ID'], 'thumbnail')){
                                    echo get_the_post_thumbnail($file['ID'], 'thumbnail');
                                 }else{ ?>
-                                      <img src="<?php echo get_item_thumbnail_default($file['ID']); ?>" class="img-responsive">
+                                <img width="150" src="<?php echo get_item_thumbnail_default($file['ID']); ?>" class="img-responsive">
                                 <?php }  ?> 
                             </div>     
                             <input 
@@ -86,10 +87,21 @@ class ItemsClass extends FormItemMultiple{
             'text' => __('Text/Url','tainacan'),
             'image' => __('Image Files','tainacan'),
             'video' => __('Videos Files','tainacan'),
+            'videos' => __('Videos Files','tainacan'),
             'pdf' => __('PDF Files','tainacan'),
             'audio' => __('Audio Files','tainacan'),
             'others' => __('Others Files','tainacan')
         ];
+    }
+    
+    /**
+     * 
+     */
+    public function addDraft($id){
+        $items = get_user_meta(get_current_user_id(), 'socialdb_collection_' . $this->collection_id . '_betafile');
+        if(!$items || !in_array($id, $items)){
+            add_user_meta(get_current_user_id(), 'socialdb_collection_' . $this->collection_id . '_betafile',$id);
+        }
     }
     
     /**

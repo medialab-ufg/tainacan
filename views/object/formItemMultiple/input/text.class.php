@@ -90,6 +90,7 @@ class TextClass extends FormItemMultiple{
                 <?php if($this->isRequired):  ?>
                     validateFieldsMetadataText($(this).val().trim(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>')
                 <?php endif; ?>
+                    console.log($('#item-multiple-selected').val());
                 $.ajax({
                     url: $('#src').val() + '/controllers/object/form_item_controller.php',
                     type: 'POST',
@@ -130,11 +131,47 @@ class TextClass extends FormItemMultiple{
                     }
                 }).done(function (result) {
                     var json = JSON.parse(result);
+                    $('#text-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').attr("placeholder", "<?php _e('Alter ', 'tainacan') ?>1<?php _e(' item', 'tainacan') ?>");
                     if(json.value){
                         $('#text-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val(json.value.join(','));
                     }
+                    if(json.nextIndex){
+                        getNextValue(args[0],json.nextIndex);
+                    }
                 });
             });
+            
+            function getNextValue(item,index){
+                console.log()
+                if($('.js-append-property-<?php echo $compound_id ?>').length>0){
+                    if(!$('#text-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-'+index).is(':visible'))
+                        $('.js-append-property-<?php echo $compound_id ?>').trigger('click');
+                    
+                    setTimeout(function(){ 
+                        $.ajax({
+                            url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                            type: 'POST',
+                            data: {
+                                operation: 'getDataValue',
+                                compound_id:'<?php echo $compound_id ?>',
+                                property_children_id: '<?php echo $property_id ?>',
+                                index: index,
+                                item_id:item
+                            }
+                        }).done(function (result) {
+                            var json = JSON.parse(result);
+                            $('#text-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-'+index).attr("placeholder", "<?php _e('Alter ', 'tainacan') ?>1<?php _e(' item', 'tainacan') ?>");
+                            if(json.value){
+                                $('#text-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-'+index).val(json.value.join(','));
+                            }
+                            if(json.nextIndex){
+                                getNextValue(item,json.nextIndex);
+                            }
+                        });
+                    }, 1000);
+                    
+                }
+            }
             
             Hook.register(
             'get_multiple_item_value',

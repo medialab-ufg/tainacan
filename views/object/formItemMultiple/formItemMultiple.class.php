@@ -99,15 +99,15 @@ class FormItemMultiple extends Model {
              style="background-color: white;border: 3px solid #E8E8E8;margin-left: 15px;">
             <?php if($this->operation !== 'add-files'): ?>
             <h3>
-                <?php if(isset($edit_multiple)): ?> 
-                    <?php _e('Edit multiple items','tainacan') ?>
-                    <button type="button" onclick="back_main_list();"
+                <?php if($this->operation === 'add-social-network-beta'): ?> 
+                    <?php echo $this->title ?>
+                    <button type="button" onclick="back_main_list_discard();"
                             class="btn btn-default pull-right"> 
                                 <?php _e('Cancel','tainacan') ?>
                     </button>
                 <?php else: ?> 
-                    <?php _e('Add new item - Insert URL','tainacan') ?>
-                    <button type="button" onclick="back_main_list_socialnetwork();"
+                    <?php echo $this->title ?>
+                    <button type="button" onclick="back_main_list();"
                             class="btn btn-default pull-right"> 
                                 <?php _e('Cancel','tainacan') ?>
                     </button>
@@ -116,7 +116,7 @@ class FormItemMultiple extends Model {
             <?php else: ?>
             <h3>
                 <?php echo $this->title ?>
-                <button type="button" onclick="back_main_list_discard();"
+                <button type="button" onclick="back_main_list();"
                         class="btn btn-default pull-right"> 
                             <?php _e('Cancel','tainacan') ?>
                 </button>
@@ -157,7 +157,7 @@ class FormItemMultiple extends Model {
             <div style="max-height: 500px;overflow-y: scroll">
                 <div  id="selectable">
                     <?php
-                        $class = new ItemsClass();
+                        $class = new ItemsClass($this->collection_id);
                         $class->listItems($data);
                     ?>
                 </div>    
@@ -181,7 +181,8 @@ class FormItemMultiple extends Model {
                             <?php _e('Cancel','tainacan') ?>
                 </button>
                  <?php endif; ?>   
-                 <button type="submit" 
+                  <button type="button" 
+                          onclick="saveItems()"
                          id="submit_button" 
                          class="btn btn-lg btn-success pull-right">
                              <?php _e('Submit','tainacan'); ?>
@@ -249,41 +250,7 @@ class FormItemMultiple extends Model {
     */
     public function viewValue($property,$values,$type){
         //sessao
-        if(!session_id()) {
-                session_start();
-        }
-        if($_SESSION && $_SESSION['operation-form'] == 'edit' 
-                && (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true') && is_array($values) && !empty($values)){
-            foreach ($values as $value) {
-                if($type == 'data'){
-                    ?>
-                    <p><i><?php echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $value . "'" . ',' . $property['id'] . ')">' . $value . '</a>'; ?></i></p>
-                    <?php
-                }else if($type == 'object'){
-                    $ob = get_post($value);
-                    if ($ob && $ob->post_status == 'publish') {
-                        // echo '<b><a href="'. get_the_permalink($property['metas']['collection_data'][0]->ID) . '?item=' . $ob->post_name . '" >'. $ob->post_title . '</a></b><br>';
-                        echo '<input type="hidden" name="socialdb_property_'.$property['id'].'[]" value="'.$ob->ID.'"><p><i>' . $ob->post_title . '</p> <br >';
-                    }
-                }else{
-                    $ob = get_term_by('id',$value,'socialdb_category_type');
-                    if ($ob) {
-                        ?>
-                        <p>
-                            <i>
-                               <a style="cursor:pointer;" onclick="wpquery_term_filter('<?php echo $ob->term_id ?>','<?php echo $property['id'] ?>')">
-                                   <?php echo $ob->name  ?>
-                               </a>
-                            </i>   
-                        </p><br>
-                        <?php
-                    }
-                }
-            }
-            return true;
-        }else{
-            return false;
-        }
+        return false;
     }
     
     public function hasTextHelper($property){
@@ -372,7 +339,9 @@ class FormItemMultiple extends Model {
         ?>
         <script>
             console.log(' -- Begin execution - Form item Multiple');
+            hide_modal_main();
             Hook.clearActions('get_single_item_value');
+            Hook.clearActions('get_multiple_item_value');
             $('input ,select').focus(function(){
                 //showChangesUpdate();
             });
@@ -414,6 +383,105 @@ class FormItemMultiple extends Model {
                 }
 
             });
+            
+            function saveItems(){
+                var has_selected = [];
+                var allIds = [];
+                $.each($("input:checkbox[name='selected_items']"), function () {
+                    allIds.push($(this).val());
+                });
+                <?php if($this->operation == 'add-files'): ?>
+                $.each($("input:checkbox[name='selected_items']:checked"), function () {
+                    has_selected.push($(this).val());
+                });
+                 <?php endif;  ?>
+                if(has_selected.length>0){
+                    swal({
+                        title: '<?php _e('Attention', 'tainacan') ?>',
+                        text: '<?php _e('Save only ', 'tainacan') ?>' + has_selected.length + ' <?php _e(' selected items ?', 'tainacan') ?>',
+                        type: "info",
+                        showCancelButton: true,
+                        confirmButtonClass: 'btn-primary',
+                        closeOnConfirm: true,
+                        closeOnCancel: true
+                    },
+                    function (isConfirm) {
+                        if(isConfirm){
+                            publishItems(has_selected);
+                        }else{
+                            //publishItems(allIds);
+                        }
+                    });
+                }else{
+                    publishItems(allIds);
+                }
+            }
+            
+            function back_main_list_discard() {
+                swal({
+                    title: '<?php _e('Attention','tainacan') ?>',
+                    text: '<?php _e('Confirm your action','tainacan') ?>',
+                    type: "info",
+                    showCancelButton: true,
+                    confirmButtonClass: 'btn-primary',
+                    closeOnConfirm: true,
+                    closeOnCancel: true,
+                    confirmButtonText: "<?php _e('Back and discard','tainacan') ?>",
+                    cancelButtonText: "<?php _e('Just back', 'tainacan') ?>",
+                },
+                        function (isConfirm) {
+                            $('#form').hide();
+                            $("#tainacan-breadcrumbs").hide();
+                            $('#configuration').hide();
+                            $('#main_part').show();
+                            $('#display_view_main_page').show();
+                            $("#container_three_columns").removeClass('white-background');
+                            $('#menu_object').show();
+                            if (isConfirm) {
+                                $.ajax({
+                                    url: $('#src').val() + '/controllers/object/object_draft_controller.php',
+                                    type: 'POST',
+                                    data: {operation: 'clear_betafiles', collection_id: $('#collection_id').val()}
+                                }).done(function (result) {
+                                    // $('html, body').animate({
+                                    //   scrollTop: parseInt($("#wpadminbar").offset().top)
+                                    // }, 900);  
+                                });
+                            }
+                        });
+            }
+            
+            function back_main_list() {
+                 $('#form').hide();
+                $("#tainacan-breadcrumbs").hide();
+                $('#configuration').hide();
+                $('#main_part').show();
+                $('#display_view_main_page').show();
+                $("#container_three_columns").removeClass('white-background');
+                $('#menu_object').show();
+                wpquery_clean();
+            }
+            
+            function publishItems(ids){
+                show_modal_main();
+                $.ajax({
+                    url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                    type: 'POST',
+                    data: {
+                        operation: 'publishItems', 
+                        items: ids, 
+                        collection_id: $("#collection_id").val()}
+                }).done(function (result) {
+                    hide_modal_main();
+                    $('#form').hide();
+                    $("#tainacan-breadcrumbs").hide();
+                    $('#configuration').hide();
+                    $('#main_part').show();
+                    $('#display_view_main_page').show();
+                    wpquery_clean();
+                    showAlertGeneral('<?php _e('Success','tainacan') ?>', '<?php _e('Operation was successfully!','tainacan') ?>', 'success');
+                });
+            }
           </script>
         <?php
     }    

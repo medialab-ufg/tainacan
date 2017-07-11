@@ -95,7 +95,7 @@ class FormItemText extends FormItemMultiple {
         $this->textareaClass = new TextAreaClass();
         $this->numericClass = new NumericClass();
         $this->autoincrementClass = new AutoIncrementClass();
-        $values = $this->getValuePropertyHelper($item_id, $property_id)
+        $values = $this->getValuePropertyHelper($item_id, $property_id);
         ?>
         <div id="container-field-<?php echo $property['id'] ?>-<?php echo $index ?>"
              class="row" style="padding-bottom: 10px;margin-bottom: 10px;">
@@ -146,13 +146,12 @@ class FormItemText extends FormItemMultiple {
             var index = <?php echo $index; ?> + 1;
 
             $('.js-append-property-<?php echo $property['id'] ?>').click(function(){
-                console.log(<?php echo $item_id ?>,<?php echo $index ?>);
                 $.ajax({
                     url: $('#src').val() + '/controllers/object/form_item_controller.php',
                     type: 'POST',
                     data: {
                         collection_id: $("#collection_id").val(),
-                        operation: 'appendContainerText',
+                        operation: 'appendContainerTextMultiple',
                         item_id:'<?php echo $item_id ?>',
                         property_details: '<?php echo serialize($property) ?>',
                         index: index

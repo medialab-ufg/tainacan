@@ -243,7 +243,7 @@ class FormItemCompound extends FormItemMultiple {
                     type: 'POST',
                     data: {
                         collection_id: $("#collection_id").val(),
-                        operation: 'appendContainerCompounds',
+                        operation: 'appendContainerCompoundsMultiple',
                         item_id:'<?php echo $item_id ?>',
                         property_details: "<?php echo htmlentities(serialize($property)) ?>",
                         index: index

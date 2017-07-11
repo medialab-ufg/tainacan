@@ -374,11 +374,11 @@ class ObjectFileModel extends Model {
                 }elseif($type=='text'){
                      $result['text'][] = $obj;   
                 }elseif($type=='pdf'){
-                     $result['text'][] = $obj;   
+                     $result['pdf'][] = $obj;   
                 }elseif($type=='other'||$type=='others'){
-                     $result['text'][] = $obj;   
+                     $result['other'][] = $obj;   
                 }elseif($type=='audio'){
-                     $result['text'][] = $obj;   
+                     $result['audio'][] = $obj;   
                 }else{
                     $result['text'][] = $obj;  
                 }
