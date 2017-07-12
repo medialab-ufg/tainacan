@@ -331,8 +331,15 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
                     }
                     
                 }
+                if(is_array($all_properties_id)){
+                    $all_properties_id = array_filter($all_properties_id);
+                }
                 foreach ($all_properties_id as $property_id) {
-                    $properties[] = $property_model->get_all_property($property_id, true);
+                    $array = $property_model->get_all_property($property_id, true);
+                    if(isset($array['metas']['socialdb_property_created_category'])){
+                        $array['category'] = get_term_by('id', $array['metas']['socialdb_property_created_category'],'socialdb_category_type');
+                    }
+                    $properties[] = $array;
                 }
                 return json_encode(['properties'=>$properties,'title'=>['id'=>$title->term_id,'labels' => $title_labels ]]);
                 

@@ -533,7 +533,7 @@ class ViewHelper {
         ?>
         <div class="form-group" style="margin-top:15px;">
             <label for="property_object_required"><?php _e('Properties to use in search','tainacan'); ?></label>
-            <div id="properties_target" style="height: 100px;overflow-y: scroll;" >
+            <div id="properties_target" style="height: 150px;overflow-y: scroll;" >
                 <center><?php _e('No properties found','tainacan') ?>!</center>
             </div>
             <input type="hidden" name="socialdb_event_property_to_search_in" id="properties_to_search_in">
@@ -559,6 +559,7 @@ class ViewHelper {
                        data: { operation: 'setTargetProperties',categories:$(seletor).val() }
                    }).done(function(result) {
                        var json = JSON.parse(result);
+                       $('#properties_target').html('');
                        if(json.properties.length==0){
                             $('#properties_target').html('<center><?php _e('No properties found','tainacan') ?>!</center>');
                        }else{
@@ -566,14 +567,16 @@ class ViewHelper {
                             if($('#properties_to_search_in').val().split(',').indexOf(json.title.id.toString())>=0){
                                 is_checked_title = 'checked="checked"'
                             }
-                            $('#properties_target').append('<input type="checkbox" '+is_checked_title+' value="'+json.title.id+'" onchange="setValuesTargetProperties()" class="target_values">&nbsp;'+json.title.labels.join('/')+'<br>');
+                            if(json.title.id)
+                                $('#properties_target').append('<input type="checkbox" '+is_checked_title+' value="'+json.title.id+'" onchange="setValuesTargetProperties()" class="target_values">&nbsp;'+json.title.labels.join('/')+'<br>');
                             $.each(json.properties,function(index,property){
                                 var is_checked = '';
                                 //console.log($('#properties_to_search_in').val().split(',').indexOf(property.id),$('#properties_to_search_in').val().split(','),property.id);
                                 if($('#properties_to_search_in').val().split(',').indexOf(property.id.toString())>=0){
                                     is_checked = 'checked="checked"'
                                 }
-                                $('#properties_target').append('<input type="checkbox" '+is_checked+' value="'+property.id+'" onchange="setValuesTargetProperties()" class="target_values">&nbsp;'+property.name+' ('+property.type+')<br>');
+                                if(property.category.name)
+                                    $('#properties_target').append('<input type="checkbox" '+is_checked+' value="'+property.id+'" onchange="setValuesTargetProperties()" class="target_values">&nbsp;'+property.name+' ('+property.type+') - ' + property.category.name + '<br>');
                             })
                        }
                    });

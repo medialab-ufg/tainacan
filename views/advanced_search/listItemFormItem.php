@@ -7,36 +7,42 @@
     include_once(dirname(__FILE__) . '/../../helpers/view_helper.php');
     include_once(dirname(__FILE__) . '/../../helpers/object/object_properties_widgets_helper.php');
     $object = new ObjectWidgetsHelper;
+    $hasItem = 0;
 ?>
 <div class="col-md-12">
-<?php
- if (isset($loop_objects) && $loop_objects->have_posts()) :  ?>
-    <table class="table table-bordered"  style="margin-top: 15px;" id="found_items_property_object_<?php echo $compound_id ?>_<?php echo $property_id ?>_<?php echo $contador ?>">
-        <?php
-        while ($loop_objects->have_posts()) : $loop_objects->the_post();
-            if(($avoid_selected_items === '1'|| $avoid_selected_items == 'true') && $object->is_selected_property($property_id,  get_the_ID())){
-                continue;
-            }
+    <?php
+     if (isset($loop_objects) && $loop_objects->have_posts()) :  ?>
+        <table class="table table-bordered"  style="margin-top: 15px;" id="found_items_property_object_<?php echo $compound_id ?>_<?php echo $property_id ?>_<?php echo $contador ?>">
+            <?php
+            while ($loop_objects->have_posts()) : $loop_objects->the_post();
+                $id = ($property_id === '0') ? $compound_id : $property_id;
+                if(($avoid_selected_items === '1'|| $avoid_selected_items == 'true') && $object->is_selected_property($id,  get_the_ID())){
+                    continue;
+                }
+                $hasItem++
+                ?>
+                <tr id="line_property_object_<?php echo $compound_id ?>_<?php echo $property_id ?>_<?php echo $contador ?>_<?php echo get_the_ID() ?>">
+                    <td style="width: 100%;font-size: 12pt;"
+                        class="title-text" 
+                        onclick="temporary_insert_items_compound_<?php echo $compound_id ?>_<?php echo $property_id; ?>_<?php echo $contador; ?>('<?php echo get_the_ID() ?>','<?php echo $contador ?>')">
+                        <span><?php the_title(); ?></span>
+                        <input style="display:none;" 
+                               type="checkbox" 
+                               name="temporary_items_<?php echo $compound_id ?>_<?php echo $property_id ?>_<?php echo $contador ?>[]" 
+                               class="item_values_<?php echo get_the_ID() ?>"
+                               value="<?php echo get_the_ID() ?>">
+                    </td>
+                </tr>    
+            <?php    
+            endwhile; 
             ?>
-            <tr id="line_property_object_<?php echo $compound_id ?>_<?php echo $property_id ?>_<?php echo $contador ?>_<?php echo get_the_ID() ?>">
-                <td style="width: 100%;font-size: 12pt;"
-                    class="title-text" 
-                    onclick="temporary_insert_items_compound_<?php echo $compound_id ?>_<?php echo $property_id; ?>_<?php echo $contador; ?>('<?php echo get_the_ID() ?>','<?php echo $contador ?>')">
-                    <span><?php the_title(); ?></span>
-                    <input style="display:none;" 
-                           type="checkbox" 
-                           name="temporary_items_<?php echo $compound_id ?>_<?php echo $property_id ?>_<?php echo $contador ?>[]" 
-                           class="item_values_<?php echo get_the_ID() ?>"
-                           value="<?php echo get_the_ID() ?>">
-                </td>
-            </tr>    
-        <?php    
-        endwhile; 
-        ?>
-    </table>    
-     <?php   
-endif;
-?>
+        </table>    
+         <?php   
+    endif;
+    ?>
+    <?php if($hasItem === 0): ?>
+     <div class="alert alert-info" role="alert"><?php _e('No items found','tainacan') ?>!</div>
+    <?php endif ?>
 </div>
 <!-- FIM:LISTA DE OBJETOS -->   
 <div class="col-md-12 no-padding" style="padding-right: 0px;margin-top: 15px;">

@@ -121,7 +121,8 @@ class MultipleTreeClass extends FormItemMultiple {
                         return node;
                     });
                     if(selKeys.length > 0){
-                        appendCategoryMetadata(node.data.key, <?php echo $item_id ?>, '#appendCategoryMetadata_<?php echo $compound_id; ?>_0_0');
+                        Hook.call('appendCategoryMetadata',[node.data.key, $('#item-multiple-selected').val().trim(), '#appendCategoryMetadata_<?php echo $compound_id; ?>_0_0']);
+                        //appendCategoryMetadata(node.data.key, <?php echo $item_id ?>, '#appendCategoryMetadata_<?php echo $compound_id; ?>_0_0');
                         <?php if ($this->isRequired): ?>
                         //validateFieldsMetadataText('true','<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>');
                         <?php endif ?>
@@ -150,11 +151,10 @@ class MultipleTreeClass extends FormItemMultiple {
                         }).done(function (result) {
                             var json = JSON.parse(result);
                             if(json.value){
-                                var selKeys = $.map($("#multiple-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>").dynatree("getSelectedNodes"), function (node) {
+                                $("#multiple-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>").dynatree("getRoot").visit(function (node) {
                                     if(json.value.indexOf(node.data.key)>=0){
                                         node.select(true);
                                     }
-                                    return node;
                                 });
                             }
                         });
