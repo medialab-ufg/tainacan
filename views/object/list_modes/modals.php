@@ -36,8 +36,6 @@ $root_id = get_option('collection_root_id');
                         <div class="col-md-12">
                             <?php echo __('Email: ', 'tainacan'); ?><br>
                             <input type="text" id="email_object_share<?php echo get_the_ID() ?>" class="form-control" /><br>
-                            <?php echo __('Share in other collection: ', 'tainacan'); ?><br>
-                            <input type="text" id="collections_object_share<?php echo get_the_ID() ?>" class="form-control autocomplete_share_item" >
                             <input type="hidden" name="collection_id" id="collections_object_share<?php echo get_the_ID() ?>_id"  >
                             <input type="hidden" name="collection_id" id="collections_object_share<?php echo get_the_ID() ?>_url"  >
                         </div>

@@ -751,5 +751,14 @@
                 $('.nav-tabs').tab();
             });
         });
-    }   
+    }
+
+    function open_share_modal(id) {
+        var $_modal_id = $('.in').attr('id');
+        if ($_modal_id == 'collection-slideShow') {
+            $('#modal_share_network' + id).addClass('slideshow-mode');
+            $('.in').modal('hide');
+        }
+        $('#modal_share_network' + id).modal('show');
+    }
 </script>
