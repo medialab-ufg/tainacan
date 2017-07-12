@@ -146,7 +146,7 @@ $is_repo_admin = current_user_can('administrator');
                 <li>
                     <a class="ac-exclude-item"
                        onclick="show_reason_modal(<?php echo $itemDelete['id']; ?>)">
-                        <?php _t('Exclude item',1);?>
+                        <?php echo (has_filter('alter_label_exclude') && has_filter('tainacan_show_reason_modal')) ? apply_filters("alter_label_exclude", $collection_id) : _t('Excluded item',1);?>
                     </a>
                 </li>
 
