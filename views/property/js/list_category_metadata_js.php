@@ -384,7 +384,7 @@
         var arrFacets = [];
         var facet_priority = tableID + " .facet-priority";
         $(facet_priority).each(function (idx, el) {
-            console.log( $(el).text() );
+            //console.log( $(el).text() );
             count = $(this).parent().children().index($(this)) + 1;
             var input_id = $(this).find("input[class='find_facet']").attr('id') + '';
             if (input_id != 'undefined') {
@@ -470,12 +470,12 @@
                     if( (current_type == "date" || current_type == "numeric") && property_widget == "range") {
                         var range_obj = { counter_range: elem.counter_data_range, sent_data: elem };
                     }
-                    console.log(' current_operation  = '+current_operation); 
+                    //console.log(' current_operation  = '+current_operation); 
                     if ( current_operation == "add_property_data" ) {
                         setCollectionFacet( "add", new_property_id, property_widget, color_facet, range_obj);
                     } else if( current_operation == "update_property_data" ) {
                         var item_was_dragged = $(current_modal + " .data-widget").hasClass('select-meta-filter');
-                        console.log(' item was dragged  = '+item_was_dragged);
+                        //console.log(' item was dragged  = '+item_was_dragged);
                         if( item_was_dragged ) {
                             setCollectionFacet( "add", current_property_id, property_widget, color_facet );
                             $(current_modal + " .data-widget").removeClass('select-meta-filter');
@@ -724,7 +724,7 @@
                     var current_id = property.id;
                     var current_search_widget = property.search_widget;
                     //buscando a aba da propriedade
-                    var tab_property_id = get_tab_property_id(current_id)
+                    var tab_property_id = get_tab_property_id(current_id);
                     //visibilidade do metadado
                     var isCompounded = is_compounded(property.metas.socialdb_property_is_compounds);
                     if(isCompounded||(property.metas.socialdb_property_visibility&&property.metas.socialdb_property_visibility==='hide')){
@@ -2402,7 +2402,8 @@
         var item_search_widget = seletor.attr("data-widget");
         var is_fixed_meta = seletor.hasClass('fixed-property');
         var is_blocked = seletor.hasClass('block-facet');
-        if(is_blocked||$( "#" + id).length>0||(seletor.attr('term_root_id')&&$( "#" + seletor.attr('term_root_id')).length>0)){
+        if(is_blocked||$( "#" + id).length>0||(seletor.attr('term_root_id')&&$( "#" + seletor.attr('term_root_id')).length>0))
+        {
             showAlertGeneral('<?php _e('Attention!','tainacan') ?>','<?php _e('Metadata already inserted or not allowed as filter','tainacan') ?>','info');
             return false;
         }else{
@@ -2474,7 +2475,7 @@
      * @param {type} seletor
      * @returns {undefined}     */
     function toggle_advanced_configuration(seletor) {
-        console.log(seletor);
+        //console.log(seletor);
         if ($(seletor).is(':visible')) {
             $(seletor).slideUp();
         } else {

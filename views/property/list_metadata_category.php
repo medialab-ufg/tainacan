@@ -65,7 +65,7 @@ $array_visibility = ($meta&&$meta!=='') ? $meta : '';
                 <span id="message_category"></span>
             </div>
         </div>
-
+        
         <div class="add-property-btn btn-group col-md-12">
             <button class="btn btn-primary btn-lg dropdown-toggle" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true" onclick="resetAllForms()">
                 <span style="color:white;"><?php _e('Add Property', 'tainacan'); ?> <span style="color:white;" class="caret"></span></span> 

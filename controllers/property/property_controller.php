@@ -173,6 +173,9 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
             case "list_property_compounds":
                 return $property_model->list_property_compounds($data);
                 break;
+            case "update_default_search_widget":
+                $property_model->update_default_search_widget($data['collection_id'], $data['info']);
+                break;
             case 'show_reverses':// utiliza a mesma funcao porem muda a categoria para procuar suas propriedades
                 $array_final = [];
                 if(strpos($data['category_id'], ',')!==false):

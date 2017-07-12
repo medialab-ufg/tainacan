@@ -5,10 +5,12 @@
     var $current_meta_form = "#submit_form_property_data_" + current_meta_type;
     var $form_ranking = $("#meta-voting #submit_form_ranking");
     var ranking_types = ["binary", "stars", "like"];
+
      //inicia o dynatree de propriedades
      var types_compounds = []; // array que mostra o tipo das propriedades compostas
     initDynatreeFilterProperties(src);
     $("#tainacan-breadcrumbs").show();
+    
     $("#tainacan-breadcrumbs .current-config").text('<?php _e('Repository Metadata','tainacan') ?>');
     
     $('.property_data_use_filter').click(function() {
@@ -34,12 +36,14 @@
         list_reverses();
         $('#show_reverse_properties').show();
     });
+    
     //reverse property
     $('#property_object_is_reverse_false').click(function (e) {
         $('#show_reverse_properties').hide();
     });
 
      var changeable_selects = ['#socialdb_property_term_widget', '#property_term_filter_widget'];
+    
     // cardinality type 1
     $('#socialdb_property_term_cardinality_1').click(function (e) {
         $(changeable_selects).each(function (idx, el) {
@@ -65,7 +69,9 @@
 
         term_widget_options('#socialdb_property_term_widget');
     });
+    
     $('#socialdb_property_term_cardinality_1').trigger('click');
+    
     //vinculacao de categorias
     $('#socialdb_property_vinculate_category_exist').click(function (e) {
         if ($('#socialdb_property_vinculate_category_exist').is(':checked')) {
@@ -97,6 +103,7 @@
         });
         e.preventDefault();
     });
+    
     $('.remove').click(function (e) {
         var id = $(this).closest('td').find('.post_id').val();
         $.get(src + '/views/ranking/delete.php?id=' + id, function (data) {
@@ -240,7 +247,8 @@
         });
     }
 
-    function setCollectionFacet( operation, metadata_id, metadata_widget, color_facet, counter_obj, menu_style_id ) {
+    function setCollectionFacet( operation, metadata_id, metadata_widget, color_facet, counter_obj, menu_style_id )
+    {
         var collection_id = $("#property_data_collection_id").val();
         var meta_id;
 
@@ -279,17 +287,22 @@
 
             $.ajax({ url: src + '/controllers/search/search_controller.php', type: 'POST', data: data }).done(function(r){
 				elem = $.parseJSON(r);
-               // list_collection_facets();
+                list_collection_facets();
             });
         }
     }
 
     function removeFacet(item_id) {
         var collection_id = $("#collection_id").val();
+        show_modal_main();
         $.ajax({
             type: "POST",
-            url: src + "/controllers/search/search_controller.php",
-            data: { operation: 'delete_facet', facet_id: item_id, collection_id: collection_id }
+            url: $('#src').val() + "/controllers/search/search_controller.php",
+            data: {operation: 'delete_facet', facet_id: item_id, collection_id: collection_id}
+        }).done(function (rs) {
+            list_collection_metadata();
+            hide_modal_main();
+            showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Filter removed successfully', 'tainacan') ?>', 'success');
         });
     }
 
@@ -303,13 +316,15 @@
         });
     }
 
+    //Exibe lista de filtros
     function list_collection_facets() {
         $.ajax({
             url: src + '/controllers/search/search_controller.php',
             type: 'POST',
             data: {operation: 'list_facets', collection_id: $('#collection_id').val()},
             success: function (data) {
-                if (data) {
+                if (data) 
+                {
                     $("#filters-accordion").html('');
                     var facetsObj = $.parseJSON(data);
                     if (facetsObj && facetsObj != null) {
@@ -317,7 +332,7 @@
                             if ( el.nome == null && el.id != "tree" ) {
                                 removeFacet(el.id);
                             } else {
-                                var current_prop = getPropertyType(el.prop);
+                                /*var current_prop = getPropertyType(el.prop);
 
                                 var item_html = '<li id="'+ el.id +'" data-widget="'+el.widget+'" class="form-group metadata-facet filter-'+el.id+'">' +
                                     '<label class="title-pipe">' + el.nome + '<div class="pull-right">';
@@ -340,14 +355,63 @@
                                     }
                                 }
 
-                                item_html += '<span class="glyphicon glyphicon-edit"></span></a> <span class="glyphicon glyphicon-sort sort-filter"></span></div> </label></li>';
-                                $("#filters-accordion").append( item_html );
+                                item_html += '<span class="glyphicon glyphicon-edit"></span></a>' + add_remove_filter_button(el.id) + '</div> </label></li>';
+                                //item_html += '<span class="glyphicon glyphicon-edit"></span></a> <span class="glyphicon glyphicon-sort sort-filter"></span></div> </label></li>';
+                                $("#filters-accordion").append( item_html );*/
+
+                                var id = el.id;
+                                if (id === 'tag') {
+                                    id = $('#global_tag_id').val();
+                                }
+                                var current_prop = getPropertyType(el.prop);
+                                //console.log(el,(el.prop == null) , !isNaN(el.id) , $('.term-root-'+el.id).attr('id'));
+                                var item_html = '<li id="' + id + '" data-widget="' + el.widget + '" class="form-group metadata-facet filter-' + el.id + '">' +
+                                    '<label class="title-pipe">&nbsp;&nbsp;&nbsp;&nbsp;' + el.nome + '<div class="pull-right"><a class="edit-filter"><span class="glyphicon glyphicon-sort sort-filter"></span></a>';
+
+                                if (current_prop == "data") {
+                                    item_html += '<a onclick="edit_metadata(' + el.id + ')" class="edit-filter">';
+                                } else if (current_prop == "object") {
+                                    item_html += '<a onclick="edit_property_object(' + el.id + ')" class="edit-filter">';
+                                } else if (current_prop == "ranking_stars" || current_prop == "ranking_binary" || current_prop == "ranking_like") {
+                                    item_html += '<a onclick="edit_ranking(' + el.id + ')" class="edit-filter">';
+                                } else if ((el.prop == null || el.prop == 'socialdb_property_term') && !isNaN(el.id) && $('.term-root-' + el.id).attr('id')) {
+                                    var item_term_id = $('.term-root-' + el.id).attr('id').replace("meta-item-", "");
+                                    item_html += '<a onclick="edit_term(' + item_term_id + ')" class="edit-filter">';
+                                } else if ((el.prop == null || el.prop == 'socialdb_property_term') && !isNaN(el.id) && $('.coumpound_id_' + el.id)) {
+                                    var item_term_id = $('.coumpound_id_' + el.id).attr('id');
+                                    item_html += '<a onclick="edit_term(' + item_term_id + ')" class="edit-filter">';
+                                } else if (el.id == "tag") {
+                                    item_html += '<a onclick="edit_tag(this)" class="edit-filter ' + el.id + '" data-filter="true" data-title="' + el.nome + '" class="edit-filter">';
+                                } else {
+                                    if ((el.id).indexOf("socialdb_") == 0) {
+                                        item_html += '<a onclick="edit_filter(this)" class="edit-filter ' + el.id + '" data-filter="true" data-title="' + el.nome + '" class="edit-filter">';
+                                    } else {
+                                        item_html += '<a class="edit-filter" >';
+                                    }
+                                }
+
+                                item_html += '<span class="glyphicon glyphicon-edit"></span></a>' + add_remove_filter_button(el.id) + '</div> </label></li>';
+                                $("#filters-accordion").append(item_html);
                             }
                         });
                     }
                 }
             }
         });
+    }
+
+    function add_remove_filter_button(id)
+    {
+        if (id == 'ranking_colaborations') {
+            return '  <a class="pull-right" title="<?php _e('Remove filter', 'tainacan') ?>" style="cursor:pointer;" onclick="removeFacet(' + "'" + id + "'" + ');">' +
+                '<span class="glyphicon glyphicon glyphicon-trash"></span></a>';
+        } else if (id == 'tag') {
+            return '  <a class="pull-right" title="<?php _e('Remove filter', 'tainacan') ?>" style="cursor:pointer;" onclick="removeFacet(' + "'tag'" + ');">' +
+                '<span class="glyphicon glyphicon glyphicon-trash"></span></a>';
+        } else {
+            return '  <a class="pull-right" title="<?php _e('Remove filter', 'tainacan') ?>" style="cursor:pointer;" onclick="removeFacet(' + id + ');">' +
+                '<span class="glyphicon glyphicon glyphicon-trash"></span></a>';
+        }
     }
 
     function getPropertyType(property) {
@@ -453,13 +517,17 @@
                 var color_facet = elem.color_facet;
                 var collection_id = $('#collection_id').val();
 
-                if ( elem.property_data_use_filter == "use_filter" )  {
+                if ( elem.property_data_use_filter == "use_filter" )
+                {
                     var range_obj = {};
-                    if( (current_type == "date" || current_type == "numeric") && property_widget == "range") {
+
+                    if( (current_type == "date" || current_type == "numeric") && property_widget == "range")
+                    {
                         var range_obj = { counter_range: elem.counter_data_range, sent_data: elem };
                     }
 
-                    if ( current_operation == "add_property_data" ) {
+                    if ( current_operation == "add_property_data" )
+                    {
                         setCollectionFacet( "add", new_property_id, property_widget, color_facet, range_obj);
                     } else if( current_operation == "update_property_data" ) {
                         var item_was_dragged = $(current_modal + " .data-widget").hasClass('select-meta-filter');
@@ -519,7 +587,8 @@
         }).done(function (result) {
             elem = jQuery.parseJSON(result);
 
-            if (elem) {
+            if (elem)
+            {
                 var current_filters = $("#filters-accordion li"),
                     filters_ids = [],
                     current_widget = elem.metas.socialdb_property_data_widget;
@@ -576,6 +645,8 @@
                 $(current_filters).each(function(idx, el) { filters_ids.push($(el).attr('id')); });
 
                 var formatted_id = "" + id + "";
+                //console.log(formatted_id);
+                //console.log(filters_ids);
                 if ( $.inArray(formatted_id, filters_ids) > -1 ) {
                     var use_filter = "use_filter";
                     $( meta_modal + " .form_property_data .property_data_use_filter").prop("checked", true);
@@ -594,14 +665,17 @@
                 $( meta_modal + " .form_property_data #socialdb_property_data_default_value").val(default_value);
                 $( meta_modal + " .form_property_data #operation_property_data").val(operation);
 
-                if (item_required) {
+                if (item_required)
+                {
                     $( meta_modal + " .form_property_data #property_data_required_true").prop('checked', true);
                     $( meta_modal + " .form_property_data #property_data_required_false").removeAttr('checked');
-                } else {
+                }
+                else
+                {
                     $( meta_modal + " .form_property_data #property_data_required_false").prop('checked', true);
                 }
                 
-                if (cardinality&&cardinality==='n') {
+                if (cardinality && cardinality === 'n') {
                     $( meta_modal + " .form_property_data #socialdb_property_data_cardinality_n").prop('checked', true);
                     $( meta_modal + " .form_property_data #socialdb_property_data_cardinality_1").removeAttr('checked');
                 } else {
@@ -690,50 +764,183 @@
             elem = jQuery.parseJSON(result);
             //list_collection_facets();
 
-            if (elem.no_properties !== true) {
-                $.each(elem.property_data, function (idx, property) {
+            if (elem.no_properties !== true)
+            {
+                var default_search_widget = [];
+                $.each(elem.property_data, function (idx, property)
+                {
                     //visibilidade do metadado
                     var isCompounded = is_compounded(property.metas.socialdb_property_is_compounds);
                     types_compounds[property.id] = 1;
+
                     if(isCompounded){
                         return true;
                     }
-                    var current_id = property.id;
-                    var current_search_widget = property.search_widget;
-                    console.log(property);
+                    //console.log(JSON.stringify(property));
+
+                    var current_id = property.id,
+                        current_search_widget = property.search_widget,
+                        fixed_meta = property.metas.socialdb_property_is_fixed,
+                        property_visibility = property.metas.socialdb_property_visibility;
+
+                    if(!current_search_widget && fixed_meta && !not_allowed_facet(property.slug))
+                    {
+                        default_search_widget.push(property.id);
+                        current_search_widget = 'tree';
+                    }
                     
-                    if ( property.metas.socialdb_property_is_fixed && property.metas.socialdb_property_is_fixed === 'true' ) {
-                        if(property.metas.socialdb_property_visibility&&property.metas.socialdb_property_visibility==='show'){
+                    if ( fixed_meta && fixed_meta === 'true' )
+                    {
+                        if(property_visibility && property_visibility === 'show')
+                        {
                             var visibility = '<a vis="show" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-open"></span></a>';
                             var style = '';
-                        }else{
-                            var style = 'style="opacity:0.33;"';
+                        }
+                        else
+                        {
+                            var style = 'opacity:0.33;';
                             var visibility = '<a vis="hide" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-close"></span></a>';
                         }
-                        
+
                         $('ul#metadata-container').append(
-                            '<li id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="root_category ui-widget-content ui-corner-tr">' +
-                            '<label '+style+' class="title-pipe">' + '<span class="property-name">' + property.name + '</span>' + '</label>' +
-                            '<a onclick="edit_metadata(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
-                            '<div class="action-icons"> <span class="glyphicon glyphicon-edit"></span></a> ' +
-                            visibility+'</div></li>');
+                            '<li id="meta-item-' + current_id + '" data-widget="' + current_search_widget + '" class="root_category ui-widget-content ui-corner-tr fixed-property">' +
+                                '<label style="'+style+'" class="title-pipe">' +
+                                    '<a title="Adicionar como filtro" style="cursor:pointer; margin-right:15px;" onclick="add_filter(' + property.id + ', \'' + property.slug +'\')">' +
+                                        '<span class="glyphicon glyphicon-menu-left"></span>' +
+                                    '</a>' +
+                                    '<span class="property-name">' + property.name + '</span>' +
+                                '</label>' +
+                                '<a onclick="edit_metadata(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
+                                    '<div class="action-icons"> ' +
+                                        '<span class="glyphicon glyphicon-edit"></span>' +
+                                '</a> ' +
+                            visibility+'</div>' +
+                            '</li>');
                     } else {
                         if ( $.inArray(property.type, ranking_types) == -1 ) {
                             $('ul#metadata-container').append(
                                 '<li id="meta-item-' + current_id + '" data-widget="' + current_search_widget + '" class="' + property.type + ' ui-widget-content ui-corner-tr">' +
-                                '<label class="title-pipe">' + '<span class="property-name">' + property.name + '</span>' + '</label><div class="action-icons">' +
-                                '<a onclick="edit_metadata(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
-                                '<span class="glyphicon glyphicon-edit"><span></a> ' +
-                                '<input type="hidden" class="property_id" value="' + property.id + '">' +
-                                '<input type="hidden" class="property_name" value="' + property.name + '">' +
-                                '<a onclick="delete_property(' + current_id + ',' + 1 + ')" class="delete_property" href="javascript:void(0)">' +
-                                '<span class="glyphicon glyphicon-trash"><span></a></div></li>');
+                                    '<label class="title-pipe">' +
+                                        '<span class="property-name">' + property.name + '</span>' +
+                                    '</label>' +
+                                    '<div class="action-icons">' +
+                                        '<a onclick="edit_metadata(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
+                                            '<span class="glyphicon glyphicon-edit"><span>' +
+                                        '</a> ' +
+
+                                        '<input type="hidden" class="property_id" value="' + property.id + '">' +
+                                        '<input type="hidden" class="property_name" value="' + property.name + '">' +
+
+                                        '<a onclick="delete_property(' + current_id + ',' + 1 + ')" class="delete_property" href="javascript:void(0)">' +
+                                            '<span class="glyphicon glyphicon-trash"><span>' +
+                                        '</a>' +
+                                    '</div>' +
+                                '</li>');
                         }
                     }
                 });
+
+                if(default_search_widget.length > 0)
+                {
+                    update_default_search_widget($('#collection_id').val(), default_search_widget);
+                }
+
+                list_collection_facets();
             }
         });
         return xhr;
+    }
+
+    //Add as filter
+    function add_filter(id, slug) {
+        var item_id = 'meta-item-' + id;
+
+        var seletor = $("#" + item_id);
+        var item_search_widget = seletor.attr("data-widget");
+        var is_fixed_meta = seletor.hasClass('fixed-property');
+        var is_blocked = seletor.hasClass('block-facet');
+            /*Not permited facet*/      /*Already inserted*/
+        if (not_allowed_facet(slug) || $("#" + id).length > 0 /*is_blocked || (seletor.attr('term_root_id') && $("#" + seletor.attr('term_root_id')).length > 0)*/)
+        {
+            showAlertGeneral('<?php _e('Attention!', 'tainacan') ?>', '<?php _e('Metadata already inserted or not allowed as filter', 'tainacan') ?>', 'info');
+            return false;
+        } else
+        {
+            /*if (is_fixed_meta)
+            {
+                setCollectionFacet("add", item_id, "tree", 'alphabetic');
+                showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Metadata inserted as filter successfully', 'tainacan') ?>', 'success');
+                $('.data-widget').addClass('select-meta-filter').show();
+                $('.term-widget').addClass('select-meta-filter').show();
+            } else {*/
+                if (item_search_widget === "null" || item_search_widget == "undefined")
+                {
+                    $("#" + item_id + " .edit_property_data").click();
+                    $("#" + item_id + " .edit_ranking").click();
+                    $(".property_data_use_filter").click();
+                    $(".property_data_use_filter").attr('checked', 'checked');
+
+                    $('.data-widget').addClass('select-meta-filter').show();
+                    $('.term-widget').addClass('select-meta-filter').show();
+                }
+                else
+                {
+                    setCollectionFacet("add", item_id, item_search_widget, 'alphabetic');
+                    showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Metadata inserted as filter successfully', 'tainacan') ?>', 'success');
+
+                    $('.data-widget').addClass('select-meta-filter').show();
+                    $('.term-widget').addClass('select-meta-filter').show();
+                }
+
+
+            /*}*/
+        }
+
+        list_collection_metadata();
+    }
+
+    function change_visibility(property_id)
+    {
+        if ($('#visibility_'+property_id).attr('vis')==='hide')
+        {
+            $('#visibility_'+property_id).html('<span class="glyphicon glyphicon-eye-open"></span>');
+            $('#visibility_'+property_id).attr('vis','show');
+            $('#meta-item-'+property_id+' .title-pipe').fadeTo( "fast",1 );
+        } else {
+            //$('#meta-item-'+property_id+' .title-pipe').css('opacity','0.5');
+            $('#meta-item-'+property_id+' .title-pipe').fadeTo( "fast", 0.33 );
+            $('#visibility_'+property_id).html('<span class="glyphicon glyphicon-eye-close"></span>');
+            $('#visibility_'+property_id).attr('vis','hide');
+        }
+
+        $.ajax({
+            url: $('#src').val() + '/controllers/property/property_controller.php',
+            type: 'POST',
+            data: {collection_id: $("#collection_id").val(), operation: 'alter_visibility', property_id: property_id}
+        }).done(function (result) {
+            elem = jQuery.parseJSON(result);
+            delete_all_cache_collection();
+        });
+    }
+
+    // funcao que bloqueia as facetas que nao sao permitidas
+    function not_allowed_facet(slug)
+    {
+        var not_allowed = ['socialdb_property_fixed_thumbnail','socialdb_property_fixed_attachments','socialdb_property_fixed_content','socialdb_property_fixed_description'];
+        if(not_allowed.indexOf(slug) >= 0)
+            return true;
+        else
+            return false;
+    }
+
+    //Atualiza search_widget_padrão
+    function update_default_search_widget(collection_id, ids)
+    {
+        $.ajax({
+            url: $('#src').val() + "/controllers/property/property_controller.php",
+            type: 'POST',
+            data: {operation: 'update_default_search_widget', info: JSON.parse(JSON.stringify(ids)), collection_id: collection_id}
+        });
     }
 
     function edit_filter(item) {
@@ -846,27 +1053,6 @@
                     }
                 });
             }
-        });
-    }
-    
-     function change_visibility(property_id) {
-        if ($('#visibility_'+property_id).attr('vis')==='hide') {
-                $('#visibility_'+property_id).html('<span class="glyphicon glyphicon-eye-open"></span>');
-                $('#visibility_'+property_id).attr('vis','show');
-                $('#meta-item-'+property_id+' .title-pipe').fadeTo( "fast",1 );
-        } else {
-            //$('#meta-item-'+property_id+' .title-pipe').css('opacity','0.5');
-            $('#meta-item-'+property_id+' .title-pipe').fadeTo( "fast", 0.33 );
-            $('#visibility_'+property_id).html('<span class="glyphicon glyphicon-eye-close"></span>');
-            $('#visibility_'+property_id).attr('vis','hide');
-        }
-        $.ajax({
-            url: $('#src').val() + '/controllers/property/property_controller.php',
-            type: 'POST',
-            data: {collection_id: $("#collection_id").val(), operation: 'alter_visibility', property_id: property_id}
-        }).done(function (result) {
-            elem = jQuery.parseJSON(result);
-            delete_all_cache_collection();
         });
     }
 
@@ -1263,6 +1449,7 @@
             });
         });
     }
+
     get_menu_property('terms');
 
     function edit_term(id) {
@@ -1417,7 +1604,6 @@
             $("#meta-category #select_menu_style").fadeOut();
         }
     }
-
 
     /**
      ****************************************************************************
@@ -1696,7 +1882,9 @@
         });
     });
 
-    function list_collection_metadata() {
+    //Exibe lista de metadados
+    function list_collection_metadata()
+    {
         var fixed_meta = $("ul#metadata-container .fixed-meta");
         $('#loader_metadados_page').show();
         $('#metadata-container').hide();
@@ -1716,8 +1904,8 @@
                 data: { operation: 'get_ordenation_properties',collection_id:$('#collection_id').val() }
             }).done(function(result) {
                 var json = $.parseJSON(result);
-                console.log(json.ordenation);
-                if(json&&json.ordenation&&json.ordenation.default){
+                //console.log(json.ordenation);
+                if(json && json.ordenation && json.ordenation.default){
                     reorder_properties(json.ordenation.default.split(','));
                 }
                 $('#loader_metadados_page').hide();
@@ -2126,9 +2314,9 @@
         });
     }
      /**
-     * 
+     *
      */
-    function show_key_container() {
+     function show_key_container() {
         if (!$('.mask_container').is(':visible')) {
             $('.mask_container').show();
             $('.mask_up').show();
@@ -2139,9 +2327,9 @@
             $('.mask_down').show();
         }
     }
-    
+
     /**
-     * 
+     *
      * @param {type} seletor
      * @returns {undefined}     */
     function toggle_advanced_configuration(seletor) {
@@ -2155,7 +2343,7 @@
     }
      /**
      ****************************************************************************
-     ************************* DEFAULT VALUE ************************
+     ************************* DEFAULT VALUE ************************************
      ****************************************************************************
      **/
      function autocomplete_object_property_default_value(categories){
@@ -2174,7 +2362,7 @@
             $('#socialdb_property_object_default_value').val('');
         }
      }
-     
+
       function autocomplete_term_property_default_value(parent){
         if($("#default_value_text_term").val().length>0){
             $("#default_value_text_term").autocomplete({
@@ -2197,7 +2385,7 @@
      }
      /**
      ****************************************************************************
-     ************************* FUNCOES PARA AREA DE CRIACAO DE TAXONOMIAS ************************
+     ****************** FUNCOES PARA AREA DE CRIACAO DE TAXONOMIAS **************
      ****************************************************************************
      **/
     var selected_element;
@@ -2225,6 +2413,7 @@
         }
         selected_element = object;
     }
+
     //quando uma categoria tem o foco perdido
     function blur_event_taxonomy_create_zone(object) {
         var seletor = $(object).find('.taxonomy-list-name').first();
@@ -2236,6 +2425,7 @@
         $(input).hide();
         $(seletor).text($(input).val());
     }
+
     // quando algo eh escrito no container de cada categoria
     function keypress_event_taxonomy_create_zone(object, e) {
         // pego o span com o texto
@@ -2257,7 +2447,7 @@
             if ($(object).find('ul').first().length > 0) {
                 children = "<ul >" + $(object).find('ul').first().html() + '</ul>';
             }
-            //atraves do seletor do li ou ul 
+            //atraves do seletor do li ou ul
             $(object)
                     // create a new li item
                     .before("<li class='taxonomy-list-create'   >" +
@@ -2281,6 +2471,7 @@
         }
         save_taxonomy();
     }
+
     //verifica se o container possui algum li, funcao apenas caso estiver vazio
     function verify_has_li() {
         if ($('#taxonomy_create_zone').has('ul').length == 0) {
@@ -2288,6 +2479,7 @@
                     new_category_html + '</li></ul>')
         }
     }
+
     //adicionando uma categoria na irma acima
     function add_hierarchy_taxonomy_create_zone() {
         var input = $(selected_element).find('.input-taxonomy-create').first();
@@ -2315,6 +2507,7 @@
         }
         save_taxonomy();
     }
+
     //volta uma 'casa' para a categoria, subindo na hierarquia
     function remove_hierarchy_taxonomy_create_zone() {
         //verifico se nao esta querendo subir de hierarquia
@@ -2341,6 +2534,7 @@
         $(selected_element).remove();
         save_taxonomy();
     }
+
     //insere o input para adicao da categoria
     function add_field_category() {
         $('.input-taxonomy-create').hide();
@@ -2365,6 +2559,7 @@
 
         $('#taxonomy_create_zone').find('.input-taxonomy-create').focus().is(':visible');
     }
+
     //subir categoria entre as suas irmas na hieraquia
     function up_category_taxonomy() {
         if ($(selected_element).is(':visible') && selected_element.length > 0) {
@@ -2373,6 +2568,7 @@
             click_event_taxonomy_create_zone(selected_element);
         }
     }
+
     //descer categoria entre as suas irmas na hieraquia
     function down_category_taxonomy() {
         if ($(selected_element).is(':visible') && selected_element.length > 0) {
@@ -2381,6 +2577,7 @@
             click_event_taxonomy_create_zone(selected_element);
         }
     }
+
     //salva a taxonomia craida
     function save_taxonomy() {
         var string = $('#taxonomy_create_zone').html();

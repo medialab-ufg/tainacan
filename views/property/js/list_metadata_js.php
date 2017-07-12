@@ -10,6 +10,7 @@
     change_breadcrumbs_title('<?php _e('Metadata', 'tainacan') ?>');
     //inicia o dynatree de propriedades
     initDynatreeFilterProperties(src);
+
     $('.property_data_use_filter').click(function () {
         if ($(this).attr('checked') == 'checked') {
             $('div.data-widget').show();
@@ -37,6 +38,7 @@
         list_reverses();
         $('#show_reverse_properties').show();
     });
+
     //reverse property
     $('#property_object_is_reverse_false').click(function (e) {
         $('#show_reverse_properties').hide();
@@ -68,7 +70,9 @@
 
         term_widget_options('#socialdb_property_term_widget');
     });
+
     $('#socialdb_property_term_cardinality_1').trigger('click');
+
     //vinculacao de categorias
     $('#socialdb_property_vinculate_category_exist').click(function (e) {
         if ($('#socialdb_property_vinculate_category_exist').is(':checked')) {
@@ -91,26 +95,26 @@
     });
 
 
-//    $('.edit').click(function (e) {
-//        var id = $(this).closest('td').find('.post_id').val();
-//        $.get(src + '/views/ranking/edit.php?id=' + id, function (data) {
-//            $("#form").html(data).show();
-//            $("#list").hide();
-//            $('#create_button').hide();
-//            e.preventDefault();
-//        });
-//        e.preventDefault();
-//    });
-//    $('.remove').click(function (e) {
-//        var id = $(this).closest('td').find('.post_id').val();
-//        $.get(src + '/views/ranking/delete.php?id=' + id, function (data) {
-//            $("#remove").html(data).show();
-//            $("#form").hide(data);
-//            $("#list").hide();
-//            $('#create_button').hide();
-//        });
-//        e.preventDefault();
-//    });
+    /*$('.edit').click(function (e) {
+        var id = $(this).closest('td').find('.post_id').val();
+        $.get(src + '/views/ranking/edit.php?id=' + id, function (data) {
+            $("#form").html(data).show();
+            $("#list").hide();
+            $('#create_button').hide();
+            e.preventDefault();
+        });
+        e.preventDefault();
+    });
+    $('.remove').click(function (e) {
+        var id = $(this).closest('td').find('.post_id').val();
+        $.get(src + '/views/ranking/delete.php?id=' + id, function (data) {
+            $("#remove").html(data).show();
+            $("#form").hide(data);
+            $("#list").hide();
+            $('#create_button').hide();
+        });
+        e.preventDefault();
+    });*/
 
     /* Executed by script's start */
     $(function () {
@@ -126,12 +130,14 @@
             $('.back-to-collection').show();
             $('#next_property_wizard').hide();
         }
+
         $('#collection_list_ranking_id').val(current_collection_id);
         $('#collection_ranking_type_id').val(current_collection_id);
         $('#collection_ranking_id').val(current_collection_id);
         $('#property_term_collection_id').val(current_collection_id);
         $('#property_data_collection_id').val(current_collection_id); // setando o valor da colecao no formulario
         $('#property_object_collection_id').val(current_collection_id); // setando o valor da colecao no formulario
+
         showPropertyCategoryDynatree(src);
         showTermsDynatree(src); //mostra o dynatree
         list_collection_metadata();
@@ -255,7 +261,8 @@
         var collection_id = $("#property_data_collection_id").val();
         var meta_id;
 
-        if (typeof metadata_id != 'undefined') {
+        if (typeof metadata_id != 'undefined') 
+        {
 
             if (typeof metadata_id == "number") {
                 meta_id = metadata_id.toString();
@@ -289,7 +296,11 @@
             data.search_add_facet = meta_id;
             data.search_data_orientation = "left-column";
 
-            $.ajax({url: src + '/controllers/search/search_controller.php', type: 'POST', data: data}).done(function (r) {
+            $.ajax({
+                url: src + '/controllers/search/search_controller.php',
+                type: 'POST',
+                data: data
+            }).done(function (r) {
                 elem = $.parseJSON(r);
                 list_collection_facets();
             });
@@ -297,7 +308,7 @@
     }
 
     function removeFacet(item_id) {
-        console.log(item_id);
+        //console.log(item_id);
         var collection_id = $("#collection_id").val();
         show_modal_main();
         $.ajax({
@@ -337,7 +348,7 @@
                             if (el.nome == null && el.id != "tree") {
                                 removeFacet(el.id);
                             } else {
-                                console.log(el);
+                                //console.log(el);
                                 var id = el.id;
                                 if (id === 'tag') {
                                     id = $('#global_tag_id').val();
@@ -753,8 +764,10 @@
             data: {collection_id: $('#collection_id').val(), operation: 'list_property_data', category_id: $('#property_category_id').val()}
         });
 
-        xhr.done(function (result) {
+        xhr.done(function (result)
+        {
             elem = jQuery.parseJSON(result);
+
             if (elem.tabs) {
                 $('#tabs_properties').val(elem.tabs);
             }
@@ -788,7 +801,9 @@
                     //se for propriedade do repositorio
                     if (repo_prop && repo_prop === true || (created_cat && prop_cat_id !== created_cat)) {
                         var fixed_meta = property.metas.socialdb_property_is_fixed;
+
                         var blog_email = '<?php echo is_super_admin(get_current_user_id()); ?>';
+
                         if (fixed_meta && fixed_meta == 'true' && (blog_email === '1')) {
                             class_var = 'fixed-property';
                             if (visibility_properties.length === 0 || (visibility_properties.indexOf(current_id.toString()) < 0)) {
@@ -935,6 +950,7 @@
         $('.modal').modal('hide');
         $("#modal_remove_property").modal('show');
     }
+
     //limpando os formularios ao abrir o modal
     function clear_form(type) {
 
@@ -975,6 +991,7 @@
             }
         });
     }
+
     /**
      funcao quer altera a visibilidade os metadados fixos de uma colecao 
      * @param {type} e
@@ -1516,6 +1533,7 @@
             });
         });
     }
+
     get_menu_property('terms');
 
     function edit_term(id) {
@@ -2056,6 +2074,7 @@
             });
         });
     }
+
     /***************************** ORDENACAO *************************************/
     function reorder_properties(tab_id, array_ids) {
         var $ul = $("#metadata-container-" + tab_id);
@@ -2463,12 +2482,13 @@
             }
         });
     }
+
     /**
      ****************************************************************************
      ************************* DEFAULT VALUE ************************
      ****************************************************************************
      **/
-     function autocomplete_object_property_default_value(categories){
+    function autocomplete_object_property_default_value(categories){
         if($("#default_value_text").val().length>0){
             $("#default_value_text").autocomplete({
                 source: $('#src').val() + '/controllers/object/object_controller.php?operation=get_objects_default_value&categories=' + categories,
@@ -2485,7 +2505,7 @@
         }
      }
      
-      function autocomplete_term_property_default_value(parent){
+    function autocomplete_term_property_default_value(parent){
         if($("#default_value_text_term").val().length>0){
             $("#default_value_text_term").autocomplete({
                 source: $('#src').val() + '/controllers/object/object_controller.php?operation=get_terms_default_value&parent=' + parent,
@@ -2505,6 +2525,7 @@
             $('#socialdb_property_term_default_value').val('');
         }
      }
+
     /**
      ****************************************************************************
      ************************* COLABORATION RANKING ************************
@@ -2557,6 +2578,7 @@
         return '<a  title="<?php _e('Add as filter', 'tainacan') ?>" style="cursor:pointer;margin-right:15px;" onclick="add_filter(' + id + ')">' +
                 '<span class="glyphicon glyphicon-menu-left"></span></a>';
     }
+
     function add_remove_filter_button(id) {
         if (id == 'ranking_colaborations') {
             return '  <a class="pull-right" title="<?php _e('Remove filter', 'tainacan') ?>" style="cursor:pointer;" onclick="removeFacet(' + "'" + id + "'" + ');">' +
@@ -2569,6 +2591,7 @@
                     '<span class="glyphicon glyphicon glyphicon-trash"></span></a>';
         }
     }
+
     //add facet
     function add_filter(id) {
         var item_id = 'meta-item-' + id;
@@ -2576,19 +2599,21 @@
         var item_search_widget = seletor.attr("data-widget");
         var is_fixed_meta = seletor.hasClass('fixed-property');
         var is_blocked = seletor.hasClass('block-facet');
+
         if (is_blocked || $("#" + id).length > 0 || (seletor.attr('term_root_id') && $("#" + seletor.attr('term_root_id')).length > 0)) {
             showAlertGeneral('<?php _e('Attention!', 'tainacan') ?>', '<?php _e('Metadata already inserted or not allowed as filter', 'tainacan') ?>', 'info');
             return false;
-        } else {
-            console.log(is_fixed_meta);
-            if (is_fixed_meta) {
-                console.log('add fixed meta');
+        } else
+        {
+            if (is_fixed_meta)
+            {
                 setCollectionFacet("add", item_id, "tree", 'alphabetic');
                 showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Metadata inserted as filter successfully', 'tainacan') ?>', 'success');
                 $('.data-widget').addClass('select-meta-filter').show();
                 $('.term-widget').addClass('select-meta-filter').show();
             } else {
-                if (item_search_widget === "null" || item_search_widget == "undefined") {
+                if (item_search_widget === "null" || item_search_widget == "undefined")
+                {
                     $("#" + item_id + " .edit_property_data").click();
                     $("#" + item_id + " .edit_ranking").click();
                     $(".property_data_use_filter").click();
@@ -2605,6 +2630,7 @@
         }
         list_collection_metadata();
     }
+
     /**
      * 
      * @param {type} seletor
@@ -2618,6 +2644,7 @@
         }
 
     }
+
     /**
      ****************************************************************************
      ************************* PROPERTY FIXED FUNCTIONS ************************
@@ -2630,6 +2657,7 @@
         $('#modal_edit_fixed_property #property_fixed_name').val(name);
         $('#modal_edit_fixed_property').modal('show');
     }
+
     //funcao que altera o rotulo de um metadado fixo em uma colecao
     function alter_fixed_properties_label() {
         $.ajax({
@@ -2653,6 +2681,7 @@
             delete_all_cache_collection();
         });
     }
+
     // funcao que busca se o metadado obrigatorio
     function get_fixed_property_data(id) {
         $.ajax({
@@ -2695,6 +2724,7 @@
 
         });
     }
+
     // funcao que bloqueia as facetas que nao sao permitidas
     function is_allowed_facet(slug) {
         var not_allowed = ['socialdb_property_fixed_thumbnail', 'socialdb_property_fixed_attachments', 'socialdb_property_fixed_content', 'socialdb_property_fixed_description'];
@@ -2725,6 +2755,7 @@
             '<input maxlength="255" type="text" ' +
             'onblur="blur_event_taxonomy_create_zone($(this).parent())"' +
             'onkeyup="keypress_event_taxonomy_create_zone($(this).parent(),event)" class="input-taxonomy-create style-input">';
+
     // quando se clica sobre a categoria
     function click_event_taxonomy_create_zone(object) {
         $('.input-taxonomy-create').hide();
@@ -2743,6 +2774,7 @@
         }
         selected_element = object;
     }
+
     //quando uma categoria tem o foco perdido
     function blur_event_taxonomy_create_zone(object) {
         var seletor = $(object).find('.taxonomy-list-name').first();
@@ -2754,6 +2786,7 @@
         $(input).hide();
         $(seletor).text($(input).val());
     }
+
     // quando algo eh escrito no container de cada categoria
     function keypress_event_taxonomy_create_zone(object, e) {
         // pego o span com o texto
@@ -2799,6 +2832,7 @@
         }
         save_taxonomy();
     }
+
     //verifica se o container possui algum li, funcao apenas caso estiver vazio
     function verify_has_li() {
         if ($('#taxonomy_create_zone').has('ul').length == 0) {
@@ -2806,6 +2840,7 @@
                     new_category_html + '</li></ul>')
         }
     }
+
     //adicionando uma categoria na irma acima
     function add_hierarchy_taxonomy_create_zone() {
         var input = $(selected_element).find('.input-taxonomy-create').first();
@@ -2833,6 +2868,7 @@
         }
         save_taxonomy();
     }
+
     //volta uma 'casa' para a categoria, subindo na hierarquia
     function remove_hierarchy_taxonomy_create_zone() {
         //verifico se nao esta querendo subir de hierarquia
@@ -2859,6 +2895,7 @@
         $(selected_element).remove();
         save_taxonomy();
     }
+
     //insere o input para adicao da categoria
     function add_field_category() {
         $('.input-taxonomy-create').hide();
@@ -2883,6 +2920,7 @@
 
         $('#taxonomy_create_zone').find('.input-taxonomy-create').focus().is(':visible');
     }
+
     //subir categoria entre as suas irmas na hieraquia
     function up_category_taxonomy() {
         if ($(selected_element).is(':visible') && selected_element.length > 0) {
@@ -2891,6 +2929,7 @@
             click_event_taxonomy_create_zone(selected_element);
         }
     }
+
     //descer categoria entre as suas irmas na hieraquia
     function down_category_taxonomy() {
         if ($(selected_element).is(':visible') && selected_element.length > 0) {
@@ -2899,9 +2938,11 @@
             click_event_taxonomy_create_zone(selected_element);
         }
     }
+
     //salva a taxonomia craida
     function save_taxonomy() {
         var string = $('#taxonomy_create_zone').html();
         $('#socialdb_property_term_new_taxonomy').val(string.trim());
     }
+
 </script>

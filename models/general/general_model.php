@@ -597,14 +597,20 @@ class Model {
             $data['slug'] = $property->slug;
             if ($property_id) {
                 $metas = $this->get_property_meta_data($property_id);
-                if (isset($metas['socialdb_property_data_widget'])) {
+                if (isset($metas['socialdb_property_data_widget']))
+                {
                     $data['type'] = $metas['socialdb_property_data_widget'];
-                } elseif (isset($metas['socialdb_property_term_widget']) && $metas['socialdb_property_term_widget'] != '') {
+                }
+                elseif (isset($metas['socialdb_property_term_widget']) && $metas['socialdb_property_term_widget'] != '')
+                {
                     $data['type'] = $metas['socialdb_property_term_widget'];
-                    if(isset($metas['socialdb_property_default_value']) && is_numeric($metas['socialdb_property_default_value'])){
+                    if(isset($metas['socialdb_property_default_value']) && is_numeric($metas['socialdb_property_default_value']))
+                    {
                         $metas['socialdb_property_default_value_text'] = get_term_by('id', $metas['socialdb_property_default_value'], 'socialdb_category_type')->name;
                     }
-                } else if (isset($metas['socialdb_property_object_category_id']) || isset($metas['socialdb_property_object_cardinality'])  ) {
+                }
+                else if (isset($metas['socialdb_property_object_category_id']) || isset($metas['socialdb_property_object_cardinality'])  )
+                {
                     if (is_array($metas['socialdb_property_object_category_id'])) {
                         $data['type'] = __('Multiple', 'tainacan');
                     } else if ($metas['socialdb_property_object_category_id']) {
@@ -615,15 +621,22 @@ class Model {
                     } else {
                         $data['type'] = __('No relations', 'tainacan');
                     }
-                } else if(isset($metas['socialdb_property_compounds_properties_id'])){
+                }
+                else if(isset($metas['socialdb_property_compounds_properties_id']))
+                {
                      $data['type'] = __('Compounds', 'tainacan');
-                }else {
+                }else
+                {
                     $type = $this->get_ranking_type($property->parent);
                     $data['type'] = $type;
                 }
-                if ($get_metas) {
-                    if (isset($metas['socialdb_property_created_category']) && $metas['socialdb_property_created_category'] != '') {
-                        if ($metas['socialdb_property_created_category'] == get_term_by('slug', 'socialdb_category', 'socialdb_category_type')->term_id) {
+
+                if ($get_metas)
+                {
+                    if (isset($metas['socialdb_property_created_category']) && $metas['socialdb_property_created_category'] != '')
+                    {
+                        if ($metas['socialdb_property_created_category'] == get_term_by('slug', 'socialdb_category', 'socialdb_category_type')->term_id)
+                        {
                             $metas['is_repository_property'] = true;
                         } else {
                             $metas['is_repository_property'] = false;
@@ -631,16 +644,21 @@ class Model {
                     }
                     $data['metas'] = $metas;
                 }
-                if (!empty($collection_id)) {
+
+                if (!empty($collection_id))
+                {
                     $data['search_widget'] = get_post_meta($collection_id, 'socialdb_collection_facet_' . $property_id . '_widget')[0];
                     $data['color_facet'] = get_post_meta($collection_id, 'socialdb_collection_facet_' . $property_id . '_color')[0];
                     $data['ordenation_facet'] = get_post_meta($collection_id, 'socialdb_collection_facet_' . $property_id . '_ordenation')[0];
                 }
             }
         endif;
-        if (has_filter('modificate_values_get_all_property')) {
+
+        if (has_filter('modificate_values_get_all_property'))
+        {
             $data = apply_filters('modificate_values_get_all_property', $data);
         }
+
         return $data;
     }
 

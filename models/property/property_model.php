@@ -664,7 +664,8 @@ class PropertyModel extends Model {
      * @author Eduardo
     **/
 
-    public function list_property_data($data) {
+    public function list_property_data($data)
+    {
         $collection_id = $data['collection_id'];
         $category_property = $this->set_category($data); // seto a categoria de onde vira as propriedades a partir dos dados vindos da view
         $data['tabs'] = $this->get_tabs_list($data['collection_id']);
@@ -673,27 +674,47 @@ class PropertyModel extends Model {
         //$properties_verification = $this->categoryModel->get_properties($collection_id, []);
        // if ($this->has_properties($category_property->term_id)||!empty($properties_verification)) {// verifico se existe propriedades
             //$all_properties_id = get_term_meta($category_property->term_id, 'socialdb_category_property_id');
-            if($category_property->slug!='socialdb_category'&&$data['is_root']){
+            if($category_property->slug!='socialdb_category'&&$data['is_root'])
+            {
                 $all_properties_id = $this->categoryModel->get_properties($collection_id, []);
-            }else{
+            }else
+            {
                $all_properties_id = array_unique($this->get_parent_properties($category_property->term_id, [],$category_property->term_id));
             }
-            if(is_array($all_properties_id)){
+
+            if(is_array($all_properties_id))
+            {
                 $all_properties_id = array_unique($all_properties_id);
-                foreach ($all_properties_id as $property_id) {// varro todas propriedades
+                foreach ($all_properties_id as $property_id)// varro todas propriedades
+                {
                     $type = $this->get_property_type_hierachy($property_id); // pego o tipo da propriedade
-                    $all_data = $this->get_all_property($property_id,true, $collection_id); // pego todos os dados possiveis da propriedade;
-                    if ($type === 'socialdb_property_data') {// pego o tipo
+                    $all_data = $this->get_all_property($property_id, true, $collection_id); // pego todos os dados possiveis da propriedade;
+                    if ($type === 'socialdb_property_data')
+                    {
+                        // pego o tipo
                         $data['property_data'][] = $all_data;
                         $data['no_properties'] = false;
                     }
                 }
-                if (!isset($data['no_properties'])) {
+                if (!isset($data['no_properties']))
+                {
                     $data['no_properties'] = true;
                 }
-            }else{
+            }else {
                  $data['no_properties'] = true;
-            }return json_encode($data);
+            }
+        //print_r($data);
+        return json_encode($data);
+    }
+
+    public function update_default_search_widget($collection_id, $ids)
+    {
+        foreach ($ids as $property_id)
+        {
+            update_post_meta($collection_id, 'socialdb_collection_facet_' . $property_id . '_widget', 'tree');
+            update_post_meta($collection_id, 'socialdb_collection_facet_' . $property_id . '_color', ' color_property2');
+            update_post_meta($collection_id, 'socialdb_collection_facet_' . $property_id . '_ordenation', 'alphabetic');
+        }
     }
 
     /* function list_property_object() */
