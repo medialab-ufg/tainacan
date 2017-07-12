@@ -2928,18 +2928,24 @@ function show_reason_modal(id)
 
 //Modal addReason IBRAM
 
-//Exclui item selecionado 
-function exclude_item()
-{
+// Exclui item selecionado
+function exclude_item() {
     var text = $("#reasontext").val();
-    if(text.length > 0)
-    {
+    if(text.length > 0) {
         var id_delete = $("#btnRemoveReason").attr("data-id-exclude");
-
+        var it_name = $.trim($("#object_" + id_delete + " h4 a").text());
         $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/event/event_controller.php",
-            data: {operation: 'save_reason_to_exclude', elem_id: id_delete, reason: text, collection_id: $('#collection_id').val()}
+            data: {operation: 'save_reason_to_exclude', elem_id: id_delete, reason: text, collection_id: $('#collection_id').val(), item: it_name}
+        }).done(function(r) {
+            var jsn = $.parseJSON(r);
+            if( jsn.success ) {
+                swal(jsn.title, jsn.msg, 'success');
+            } else {
+                var err_msg = 'Erro ao cancelar o item ' + jsn.nome + '! Tente novamente mais tarde';
+                swal('Erro!', err_msg, 'error');
+            }
         });
 
         $("#reasonModal").modal('hide');
@@ -2959,25 +2965,6 @@ function change_button()
         $("#btnRemoveReason").attr('disabled', true);
     }
 }
-//object_dc_type
-//Gera thumbnail de um pdf
-/*function generate_pdf_thumbnail(pdf_url)
-{
-    PDFJS.getDocument(pdf_url).promise.then(function (doc) {
-        var page = [];
-        page.push(1);//Get first page
-
-        return Promise.all(page.map(function (num) {
-            return doc.getPage(num).then(makeThumb)
-                .then(function (canvas) {
-                    var img = canvas.toDataURL("image/png");
-
-                    return img;
-                });
-        }));
-    });
-
-}*/
 
 function makeThumb(page) {
     let vp = page.getViewport(1);

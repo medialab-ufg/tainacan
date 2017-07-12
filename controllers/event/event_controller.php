@@ -92,16 +92,23 @@ require_once(dirname(__FILE__).'../../../models/object/object_model.php');
           $properties = get_term_meta($root_category,'socialdb_category_property_id');
           $properties = array_unique($properties);
           
-          foreach ($properties as $property)
-          {
+          foreach ($properties as $property) {
               $property_name = get_term_by('id',$property,'socialdb_property_type')->name;
-              if($property_name == 'Cancelamento')
-              {
+              if($property_name == 'Cancelamento') {
                   $sub_property = intval(get_term_meta($property, 'socialdb_property_compounds_properties_id', true));
 
                   $object_model = new ObjectModel();
-                  $inserted_ids[] = $object_model->add_value_compound($data['collection_id'], $property, $sub_property, 0, 0, $data['reason']);
-                  update_post_meta($data['elem_id'], 'socialdb_property_' . $property . '_0', implode(',', $inserted_ids));
+                  $res['ids'] = $inserted_ids[] = $object_model->add_value_compound($data['collection_id'], $property, $sub_property, 0, 0, $data['reason']);
+                  $res['props'] = update_post_meta($data['elem_id'], 'socialdb_property_' . $property . '_0', implode(',', $inserted_ids));
+                  $res['nome'] = $data['item'];
+
+                  if(!empty($res) && ctype_digit($res['ids']) && ($res['ids'] != false)) {
+                      $res['success'] = true;
+                      $res['title'] = __('Success', 'tainacan');
+                      $res['msg'] = sprintf(  __('The item "%s" has been successfully canceled!', 'tainacan'), $data['item'] );
+                  }
+
+                  return json_encode($res);
                   break;
               }
           }
