@@ -55,6 +55,12 @@ class FormItemTitle extends FormItemMultiple{
         ?>
         <script>
                 $('#item-title').blur(function(){
+                    var ids = $('#item-multiple-selected').val().trim().split(',');
+                    //atualizo o input
+                    $.each(ids,function(index,value){
+                        $('#title_'+value).val($('#item-title').val().trim());
+                    })
+                    //
                     $.ajax({
                         url: $('#src').val() + '/controllers/object/form_item_controller.php',
                         type: 'POST',

@@ -45,10 +45,10 @@ class YoutubeController extends Controller {
                     if($id):
                         return json_encode([$id]);
                     else:
-                        return false;
+                        return json_encode(['error'=>'no id']);
                     endif;
                 } else {
-                    return false;
+                     return json_encode(['error'=>'no parsed']);
                 }
                 break;
             case "import_video_channel":

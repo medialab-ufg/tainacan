@@ -178,6 +178,15 @@ class ItemsClass extends FormItemMultiple{
                 });
             }
             /******************************** Esconde os itens selecionados *******************************************/
+            function unpublish_item(id){
+                $.ajax({
+                    url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                    type: 'POST',
+                    data: {operation: 'unpublish_item', id: id}
+                }).done(function (result) { 
+                });
+            }
+            
             function removeSelected() {
                 var size = $("input:checkbox[name='selected_items']:checked").length;
                 swal({
@@ -202,6 +211,7 @@ class ItemsClass extends FormItemMultiple{
                         $.each($("input:checkbox[name='selected_items']:checked"), function () {
                             //retiro dos checados
                             $(this).removeAttr('checked');
+                            unpublish_item($(this).val());
                             //escondo seu wrapper
                             $("#wrapper_" + $(this).val()).remove();
                             //retiro o item do array de items geral

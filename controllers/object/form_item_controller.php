@@ -126,7 +126,7 @@ class FormItemController extends Controller {
                         ]));
                     if($json && is_array($json) && count($json) > 0){
                         foreach ($json as $value) {
-                            if($value->label === $data['value'] && $value->ID != $data['item_id'] ){
+                            if(strtolower($value->label) === strtolower($data['value']) && $value->ID != $data['item_id'] ){
                                 return json_encode($data);
                             }
                         }
@@ -285,7 +285,13 @@ class FormItemController extends Controller {
                         wp_set_object_terms($item, array((int) $category_root_id), 'socialdb_category_type',true);
                     }
                 }
-                return json_encode($data);   
+                return json_encode($data);  
+            case 'unpublish_item':
+                $post = array(
+                        'ID' => $data['id'],
+                        'post_status' => 'draft');
+                wp_update_post($post);
+                return json_encode(true);          
         }
     }
     

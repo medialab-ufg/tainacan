@@ -343,7 +343,7 @@ class FormItemMultiple extends Model {
             Hook.clearActions('get_single_item_value');
             Hook.clearActions('get_multiple_item_value');
             $('input ,select').focus(function(){
-                //showChangesUpdate();
+                showChangesUpdate();
             });
 
             $('.tabs').tab();
@@ -481,6 +481,13 @@ class FormItemMultiple extends Model {
                     wpquery_clean();
                     showAlertGeneral('<?php _e('Success','tainacan') ?>', '<?php _e('Operation was successfully!','tainacan') ?>', 'success');
                 });
+            }
+            
+            function showChangesUpdate(){
+                var d = new Date();
+                var string = '<?php _e('Saved at ','tainacan') ?>'+ d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear()
+                       + ' - ' + d.getHours()+':'+d.getMinutes();
+                $('#draft-text').text(string);
             }
           </script>
         <?php
