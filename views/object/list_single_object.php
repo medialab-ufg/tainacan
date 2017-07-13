@@ -119,7 +119,7 @@ $view_helper = new ObjectHelper($collection_id);
                                             $step1 = explode('v=', $metas['socialdb_object_content'][0]);
                                             $step2 = explode('&', $step1[1]);
                                             $video_id = $step2[0];
-                                            $content = "<div style='height:600px; display: flex !important;'  ><iframe  class='embed-responsive-item' src='http://www.youtube.com/embed/" . $video_id . "?html5=1' allowfullscreen frameborder='0'></iframe></div>";
+                                            $content = "<div style='height:600px; display: flex !important;'  ><iframe  class='embed-responsive-item' src='https://www.youtube.com/embed/" . $video_id . "?html5=1' allowfullscreen frameborder='0'></iframe></div>";
                                         } elseif (strpos($metas['socialdb_object_content'][0], 'vimeo') !== false) {
                                             $step1 = explode('/', rtrim($metas['socialdb_object_content'][0], '/'));
                                             $video_id = end($step1);
