@@ -83,7 +83,7 @@ foreach( $view_helper->get_metadata_types() as $type => $label):
                                     <select name="search_data_widget" id="search_data_widget" class="form-control" data-type="<?php echo $type ?>"
                                             onclick="select_tree_color('<?php echo "#meta-$type" ?>')"
                                             onchange="show_increase_btn('<?php echo $type ?>', this)">
-                                        <?php echo $view_helper->get_type_default_widget($type); ?>
+                                        <?php echo $view_helper->render_widgets_options(); ?>
                                     </select>
 
                                     <?php if (in_array($type, ["date", "numeric"])) { ?>
@@ -99,7 +99,7 @@ foreach( $view_helper->get_metadata_types() as $type => $label):
                                     <?php } ?>
 
                                     <div id="color_field_property_search"
-                                        <?php if ($type != "text") { ?> style="display: none;" <?php } else { ?> style="display: block" <?php } ?> >
+                                            <?php  if ($type != "text") { ?> style="display: none;" <?php } else { ?> style="display: block" <?php }?> >
                                         <h5 style="color: black"><strong><?php _e('Set the facet color', 'tainacan'); ?></strong></h5>
                                         <div class="form-group" style="padding-left: 5px">
                                             <?php

@@ -170,7 +170,16 @@ class ViewHelper {
             return "<option value='from_to'>" . __('From/To', 'tainacan') . "</option>";
         }
     }
-
+    
+    public function render_widgets_options()
+    {
+        ?>
+            <option value='tree'> <?php _e('Tree', 'tainacan'); ?> </option>
+            <option value='searchbox'><?php _e('Search box with autocomplete', 'tainacan'); ?></option>
+            <option value='cloud'><?php _e('Tag Cloud', 'tainacan'); ?>  </option>
+        <?php
+    }
+    
     public function render_tree_colors() {
         ?>
         <div id="color_field_property_search">
