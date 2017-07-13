@@ -20,7 +20,7 @@ class ObjectSaveValuesModel extends Model {
     
     public function removeValue($item_id,$compound_id,$property_children_id,$type,$index,$value) {
         $is_compound = ($property_children_id == 0) ? false : true;
-        $property_children_id = ($property_children_id == 0) ? $compound_id : $property_children_id;
+        //$property_children_id = ($property_children_id == 0) ? $compound_id : $property_children_id;
         $meta = get_post_meta($item_id, 'socialdb_property_helper_'.$compound_id, true);
         if($meta){
             $array = unserialize($meta);
