@@ -492,7 +492,6 @@ class ObjectController extends Controller {
                 if ($_item_meta['_thumbnail_id']) {
                     $press['tbn'] = $this->format_item_thumb($_item_meta['_thumbnail_id']);
                 }
-
                 $item_attachs = $objectfile_model->show_files(['collection_id'=> $data['collection_id'], 'object_id' => $object_id]);
                 if($item_attachs) {
                     foreach($item_attachs['image'] as $attach_obj) {
@@ -503,9 +502,15 @@ class ObjectController extends Controller {
                 $tabs = [ 'order' => get_post_meta($data['collection_id'], 'socialdb_collection_properties_ordenation'),
                     'organize' => unserialize( get_post_meta($data['collection_id'], 'socialdb_collection_update_tab_organization', true))[0],
                     'names' => get_post_meta($data['collection_id'], 'socialdb_collection_tab') ];
-
                 $press['meta_ids_ord'] = explode(",",unserialize($tabs['order'][0])['default']);
                 $ord_list = [];
+
+				foreach($tabs["organize"] as $id => $tb) {
+					$mt = "socialdb_property_helper_${id}";
+					if( !array_key_exists($mt, $_item_meta)) {
+                        $_item_meta[$mt] = ["--"];
+					}
+				}
 
                 $total_index = 0;
                 $_to_be_removed = [];
@@ -719,20 +724,22 @@ class ObjectController extends Controller {
                 }
 
                 $tabs_unodr = [];
-                foreach ($press['set'] as $set_info) {
-                    $mID = $set_info['meta_id'];
-					
-                    if( isset( $tabs['organize'][$mID]) && ($tabs['organize'][$mID] != "default") && ctype_digit($tabs['organize'][$mID]) ) {
-                        array_push($tabs_unodr, $set_info);
-                    } else {
-						
-						if( isset($set_info['is_submeta']) && $set_info['is_submeta'] && isset($set_info['submeta_tab_parent'])) {
-							if( isset( $tabs['organize'][$set_info['submeta_tab_parent']] ) ) {
-								array_push( $tabs_unodr, $set_info);
-							}				
-						}
-									
-					}
+                if($press['set']) {
+                    foreach ($press['set'] as $set_info) {
+                        $mID = $set_info['meta_id'];
+
+                        if( isset( $tabs['organize'][$mID]) && ($tabs['organize'][$mID] != "default") && ctype_digit($tabs['organize'][$mID]) ) {
+                            array_push($tabs_unodr, $set_info);
+                        } else {
+
+                            if( isset($set_info['is_submeta']) && $set_info['is_submeta'] && isset($set_info['submeta_tab_parent'])) {
+                                if( isset( $tabs['organize'][$set_info['submeta_tab_parent']] ) ) {
+                                    array_push( $tabs_unodr, $set_info);
+                                }
+                            }
+
+                        }
+                    }
                 }
 
                 $final_ordered = [];

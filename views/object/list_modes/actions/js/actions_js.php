@@ -192,7 +192,7 @@
                         base_count += base_top;
                     }
 
-                    var max = itm.set.length;
+                    // var max = itm.set.length;
                     for( idx in itm.set ) {
                         if(itm.set[idx] != 'null' && itm.set[idx] !== null) {
                             if(base_count >= maxHeightOffset) {
