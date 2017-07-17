@@ -2942,6 +2942,7 @@ function exclude_item() {
             var jsn = $.parseJSON(r);
             if( jsn.success ) {
                 swal(jsn.title, jsn.msg, 'success');
+                document.getElementById("cancelReason").reset();
             } else {
                 var err_msg = 'Erro ao cancelar o item ' + jsn.nome + '! Tente novamente mais tarde';
                 swal('Erro!', err_msg, 'error');
