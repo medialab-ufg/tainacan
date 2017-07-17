@@ -718,11 +718,6 @@ class ObjectController extends Controller {
                     $press['meta_ids'] = array_unique($press['meta_ids']);
                 }
 
-                /*
-					var_dump($tabs['organize']); 
-					var_dump($press['meta_ids_ord']); 
-				*/
-
                 $tabs_unodr = [];
                 foreach ($press['set'] as $set_info) {
                     $mID = $set_info['meta_id'];
@@ -748,7 +743,9 @@ class ObjectController extends Controller {
                     }
                 }
 
-                $press['set'] = array_merge($final_ordered, $tabs_unodr);                
+                if(!empty($tabs_unodr)) {
+                    $press['set'] = array_merge($final_ordered, $tabs_unodr);
+                };
 
                 $s = [];
                 $aux_ids = [];
