@@ -139,34 +139,44 @@ class FormItemController extends Controller {
                     'post_name' => $slug
                 );
                 $data['ID'] = wp_update_post($post);
+                $object_model->set_common_field_values($data['ID'], 'title', $post['post_title']);
                 return json_encode([true]);
                 break;
             case 'saveDescription':
-                      $post = array(
-                          'ID' => $data['item_id'],
-                          'post_content' => $data['value']
-                      );
-                      $data['ID'] = wp_update_post($post);
-                      break;
+                $post = array(
+                    'ID' => $data['item_id'],
+                    'post_content' => $data['value']
+                );
+                $object_model->set_common_field_values($data['item_id'], 'description', $post['post_content']);
+                $data['ID'] = wp_update_post($post);
+                break;
             case 'saveContent':
                     update_post_meta($data['item_id'],'socialdb_object_content',$data['value']);
+                    $object_model->set_common_field_values($data['item_id'], 'object_content', $data['value']);
                     break;
             case 'saveType':
                     update_post_meta($data['item_id'],'socialdb_object_dc_type',$data['value']);
+                    $object_model->set_common_field_values($data['item_id'], 'object_type', $data['value']);
                     break;
             case 'saveSource':
-                  update_post_meta($data['item_id'],'socialdb_object_dc_source',$data['value']);
-                  break;
+                update_post_meta($data['item_id'],'socialdb_object_dc_source',$data['value']);
+                $object_model->set_common_field_values($data['item_id'], 'object_source', $data['value']);
+                break;
             case 'saveLicense':
                  update_post_meta($data['item_id'],'socialdb_license_id',$data['value']);
                  break;
             case 'saveThumbnail':
+                $result = [];
                 if ($_FILES) {
                     $attachment_id = $object_model->add_thumbnail($data['item_id']);
+                    $result['attachment'] = $attachment_id;
                     if (isset($_FILES['object_thumbnail']) && !empty($_FILES['object_thumbnail'])) {
-                        set_post_thumbnail($data['item_id'], $attachment_id);
+                        //$result['set_post'] = set_post_thumbnail($data['item_id'], $attachment_id);
+                        $result['file'] = $_FILES['object_thumbnail'];
+                        $result['data'] = $data;
                     }
                 }
+                return json_encode($result);
                 break;
             case 'saveTags':
                  $object_model->insert_tags($data['value'], $data['collection_id'], $data['item_id']);

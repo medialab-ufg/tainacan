@@ -14,7 +14,7 @@ class FormItemThumbnail extends FormItem {
                 </h2>
                 <div  >
                     <div id="image_side_create_object">
-                      <img class="thumbnail" src="<?php echo get_the_post_thumbnail_url($item_id) ?>">
+                        <img height="150" width="150" class="thumbnail" src="<?php echo get_the_post_thumbnail_url($item_id) ?>">
                     </div>
                     <form></form>
                     <form id="formUpdateThumbnail">

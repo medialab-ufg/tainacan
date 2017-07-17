@@ -33,6 +33,7 @@ class FormItem extends Model {
     public $title;
     public $value;
     public $isKey;
+    public $collectionPropertiesView;
 
     function __construct($collection_id = 0,$title = '',$value= false) {
         $habilitateMedia = ($collection_id === 0) ? '' : get_post_meta($collection_id, 'socialdb_collection_habilitate_media', true);
@@ -52,6 +53,12 @@ class FormItem extends Model {
         //verifico se existe labels da colecao
         if ($this->collection_id !== 0):
             $this->get_labels_fixed_properties($this->collection_id);
+            $meta = get_post_meta($this->collection_id, 'socialdb_collection_fixed_properties_visibility', true);
+            if ($meta && $meta != ''):
+                $this->collectionPropertiesView = explode(',', $meta);
+            else:
+                $this->collectionPropertiesView = [];
+            endif;
         endif;
         $this->title = ($title == '') ? __('Create new item - Write text', 'tainacan'):$title;
         $this->value = $value;
@@ -325,7 +332,7 @@ class FormItem extends Model {
                 }
                 if (in_array($property['slug'], $this->fixed_slugs)) {
                     $visibility = (get_term_meta($property['id'],'socialdb_property_visibility',true));
-                    if($visibility == 'hide'){
+                    if($visibility == 'hide' || in_array($property['id'], $this->collectionPropertiesView)){
                         continue;
                     }
                     if ($property['slug'] == 'socialdb_property_fixed_title' && !$this->isMediaFocus) {
@@ -631,7 +638,7 @@ class FormItem extends Model {
     public function mediaHabilitate() {
         ?>
           <div class="col-md-3"
-               style="background: white;font: 11px Arial;padding:0px;margin-top: 0px;width: 24%;margin-left: 15px;">
+               style="background: white;font: 11px Arial;padding:0px;margin-top: 0px;width: 23%;margin-left: 15px;">
                 <h4>
                    <?php echo ($view_helper->terms_fixed['thumbnail']) ? $view_helper->terms_fixed['thumbnail']->name :  _e('Thumbnail','tainacan') ?>
                </h4>

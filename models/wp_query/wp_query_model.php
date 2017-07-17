@@ -1274,6 +1274,9 @@ class WPQueryModel extends Model {
         if ($data['properties_id'] !== '') {
             $properties_id = explode(',', $data['properties_id']);
             foreach ($properties_id as $property_id) {
+                if(!$data["socialdb_property_".$property_id."_operation"])
+                    continue;
+                
                 if ($data["socialdb_propertyterm_$property_id"]&&!is_array($data["socialdb_propertyterm_$property_id"]) && $data["socialdb_propertyterm_$property_id"] !== '') {
                     $recover_data['facets'][$property_id] = $data["socialdb_propertyterm_$property_id"];
                     $recover_data['facets_operation'][$property_id] = $this->get_operation_numeric_advanced_search($data["socialdb_property_".$property_id."_operation"]);
