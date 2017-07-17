@@ -584,6 +584,9 @@ class WPQueryModel extends Model {
             if (isset($recover_data['post_type']) && $recover_data['post_type']=='socialdb_collection') {
                 $args['s'] = $recover_data['keyword'];
             }
+            if(isset($recover_data['advanced_search']) && isset($recover_data['keyword'])){
+                $args['s'] = $recover_data['keyword'];
+            }
             if(isset($recover_data['author']) && $recover_data['author'] != ''){
                 $args['author'] = $recover_data['author'];
             }
