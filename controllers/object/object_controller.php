@@ -652,7 +652,20 @@ class ObjectController extends Controller {
                                             }
 
                                             $_pair = [ 'meta' => $_meta_header_->name, 'value' => $final_val,
-                                                'meta_id' => $_fmt_ID, 'meta_breaks' => $this->format_to_type($ff_ID, $final_val)];
+                                                'meta_id' => $_fmt_ID, 'meta_breaks' => $this->format_to_type($_fmt_ID, $final_val)];
+
+
+                                            $_compound_check = get_term_meta($_fmt_ID, "socialdb_property_compounds_properties_id", true);
+                                            if ( empty($_compound_check) ) {
+                                                $chk_compound_child = unserialize(get_term_meta($_fmt_ID, "socialdb_property_is_compounds", true));
+                                                if(is_array($chk_compound_child)) {
+                                                    if( isset( $tabs['organize'][key($chk_compound_child)] ) && ($tabs['organize'][key($chk_compound_child)] != "default") ) {
+                                                        $_pair['submeta_tab_parent'] = key($chk_compound_child);
+                                                    }
+                                                    $_pair['is_submeta'] = true;
+                                                }
+
+                                            };
 
                                             $ord_list[$_pair['meta_id']] = $_pair;
                                             $press['set'][] = $_pair;
@@ -710,7 +723,7 @@ class ObjectController extends Controller {
                                     $press['set'][] = $_pair;
                                 }
                             }
-                        } else { $press['excluded'][] = $meta; }
+                        } /*else { $press['excluded'][] = $meta; } */
                     }
 
                     if($is_compound_meta && empty($current_submeta_vals) && $last_meta_id > 0) {
@@ -1265,13 +1278,13 @@ class ObjectController extends Controller {
 
     private function format_to_type($meta_id, $meta_value) {
         $_meta_type = get_term_meta($meta_id, 'socialdb_property_data_widget', true);
-        /* var_dump($_meta_type); var_dump($meta_value); var_dump('========================='); */
-        if("date" === $_meta_type) {
-            // return date('d/m/Y', strtotime($meta_value) );
-        } else if ("textarea" === $_meta_type) {
-            //var_dump($meta_value);
 
-            return $this->get_item_line_breaks($meta_value);
+        if( !empty($_meta_type) ) {
+            if("date" === $_meta_type) {
+                return date('d/m/Y', strtotime($meta_value) );
+            } else if ("textarea" === $_meta_type) {
+                return $this->get_item_line_breaks($meta_value);
+            }
         }
 
         return 0;
