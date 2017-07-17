@@ -566,7 +566,7 @@ class FormItem extends Model {
                     $ob = get_post($value);
                     if ($ob && $ob->post_status == 'publish') {
                         // echo '<b><a href="'. get_the_permalink($property['metas']['collection_data'][0]->ID) . '?item=' . $ob->post_name . '" >'. $ob->post_title . '</a></b><br>';
-                        echo '<input type="hidden" name="socialdb_property_'.$property['id'].'[]" value="'.$ob->ID.'"><p><i>' . $ob->post_title . '</p> <br >';
+                        echo '<input type="hidden" name="socialdb_property_'.$property['id'].'[]" value="'.$ob->ID.'"><p><i>' . $ob->post_title . '</i></p> <br >';
                     }
                 }else{
                     $ob = get_term_by('id',$value,'socialdb_category_type');

@@ -2106,7 +2106,7 @@ class ObjectModel extends Model {
             }
         }
     }
-
+    
     public function copyItem($item, $collection_id, $update = false) {
         $id = ($update ? $item->ID : 0);
         $arrItem = [
