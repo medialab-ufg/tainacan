@@ -11,20 +11,7 @@ wp_nav_menu( ['theme_location' => $_current_menu, 'container_class' => 'containe
 
 $fixed_home_collections = ["Empréstimos", "Conservação", "Restaurações", "Exposição"];
 ?>
-<style>
-    .index-menu{
-        border: 4px solid #E8E8E8;
-        background: white;
-        padding: 10px 40px 30px 40px;
-        margin: 0 0 40px 0;
-        font-size: 13pt;
-        text-align: left;
-        color:black;
-    }
-    .index-menu p{
-        color:black;
-    }
-</style>
+
 <div class="col-md-12 ibram-home-container tainacan-config-container">
     <div class="row">
         <div class="col-md-12">
@@ -75,24 +62,5 @@ $fixed_home_collections = ["Empréstimos", "Conservação", "Restaurações", "E
                 </div>
             </div>    
         </div>
-        
-        <?php //foreach( $fixed_home_collections as $ibram_collection): ?>
-            <!--div class="col-md-3">
-                <div class="ibram-box">
-                    <h4 class="title">
-                        <a href="javascript:void(0)">
-                            <?php //echo $ibram_collection ?>
-                        </a>
-                    </h4>
-                    <div class="ibram-info-container">
-                        <p> <?php echo rand(10, 50); ?> em atraso </p>
-                        <p> <?php echo rand(1, 70); ?> para vencer </p>
-                        <p> <?php echo rand(60, 150); ?> em andamento </p>
-                        <p> <?php echo rand(40, 120); ?> devolvidos esta semana </p>
-                    </div>
-                </div>
-
-            </div-->
-        <?php //endforeach; ?>
     </div>
 </div>
