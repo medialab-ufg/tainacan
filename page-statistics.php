@@ -80,10 +80,11 @@ if ( current_user_can('manage_options') ):
     <input type="hidden" class="stat_path" value="<?php echo get_template_directory_uri() ?>">
     <input type="hidden" id="src" value="<?php echo get_template_directory_uri() ?>">
 
-<!--  <div id="configuration" class="col-md-12"> </div>-->
-
     </header> <!-- DO NOT ERASE -->
-
+    
+    <div id='container-fluid-configuration' class="container-fluid no-padding" style="background-color: #f1f2f2">
+        <div id="configuration" class="col-md-12 no-padding" style="margin-top: 0;"></div>
+    </div>
 
     <div id='tainacan-stats' class='row'>
         <center style="margin: 40px 0 40px 0">
