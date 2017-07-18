@@ -468,6 +468,7 @@
                 $('#div_left').show();
                 load_root_menu_left(collection_id);
             } else if (elem.has_left && elem.has_left == 'true' && (!elem.has_right || elem.has_right !== 'true')) {
+                console.log(elem);
                 $('#div_central').show();
                 $('#div_central').removeClass('col-md-12');
                 $('#div_central').addClass('col-md-9');
@@ -475,6 +476,7 @@
                 load_menu_left(collection_id);
             } else {
 <?php if (!has_filter('category_root_as_facet') || apply_filters('category_root_as_facet', true)): ?>
+                console.log(elem);
                     $('#div_left').hide();
                     $('#div_central').removeClass('col-md-9');
                     $('#div_central').removeClass('col-md-10');
@@ -845,7 +847,8 @@
      * */
     //wp query functions #######################################################
     // faz as filtragens de links externos e retorna para a pagina de listagem
-    function wpquery_link_filter(value, facet_id) {
+    function wpquery_link_filter(value, facet_id)
+    {
         $('#display_view_main_page').show();
         $('#collection_post').show();
         $('#configuration').hide().html('');
@@ -873,8 +876,10 @@
             setMenuContainerHeight();
         });
     }
+
     // faz as filtragens de links externos e retorna para a pagina de listagem PARA termos
-    function wpquery_term_filter(value, facet_id) {
+    function wpquery_term_filter(value, facet_id)
+    {
         $('#display_view_main_page').show();
         $('#collection_post').show();
         $('#configuration').hide();
@@ -908,14 +913,26 @@
         });
     }
 
-    function wpquery_filter_by_facet(value, facet_id, operation) {
+    function wpquery_filter_by_facet(value, facet_id, operation)
+    {
+        //Check box
         $("#list").hide();
         $('#loader_objects').show();
         var facet_id = facet_id || "";
+
+        var args = $('#wp_query_args').val();
+        //Caso seja a home do repositorio
+        if($("#click_ad_search_items").length > 0)
+        {
+            $("#ul_menu_search > li:not(.active)").addClass("active");
+            $("#ul_menu_search > li:first").removeClass("active");
+            args = search_items_query;//Search itens query possui o parametro para ser usado na busca de itens
+        }
+
         $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/wp_query/wp_query_controller.php",
-            data: {operation: operation, value: value, facet_id: facet_id, wp_query_args: $('#wp_query_args').val(), collection_id: $('#collection_id').val()}
+            data: {operation: operation, value: value, facet_id: facet_id, wp_query_args: args, collection_id: $('#collection_id').val()}
         }).done(function (result) {
             var elem = $.parseJSON(result);
             $('#loader_objects').hide();
@@ -968,6 +985,7 @@
     function wpquery_checkbox(seletor, facet_id) {
         $('#list').hide();
         $('#loader_objects').show();
+
         var value = $('input:checkbox:checked#' + seletor).map(function () {
             return this.value;
         }).get().join(",");
@@ -997,6 +1015,7 @@
 
     function wpquery_multipleselect(facet_id, seletor) {
         $('#list').hide();
+
         var value = '';
         $('#loader_objects').show();
         if (!$('#' + seletor)) {
@@ -1008,16 +1027,31 @@
                 value = '';
             }
         }
+
+        var args = $('#wp_query_args').val();
+        //Caso seja a home do repositorio
+        if($("#click_ad_search_items").length > 0)
+        {
+            $("#ul_menu_search > li:not(.active)").addClass("active");
+            $("#ul_menu_search > li:first").removeClass("active");
+            args = search_items_query;//Search itens query possui o parametro para ser usado na busca de itens
+        }
+
         $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/wp_query/wp_query_controller.php",
-            data: {operation: 'wpquery_multipleselect', facet_id: facet_id, wp_query_args: $('#wp_query_args').val(), value: value, collection_id: $('#collection_id').val()}
+            data: {operation: 'wpquery_multipleselect', facet_id: facet_id, wp_query_args: args, value: value, collection_id: $('#collection_id').val()}
         }).done(function (result) {
             elem = jQuery.parseJSON(result);
+            
             $('#loader_objects').hide();
-            $('#list').html(elem.page);
+            
+            $("#list").html(elem.page);
+
             $('#wp_query_args').val(elem.args);
+
             set_popover_content($("#socialdb_permalink_collection").val() + '?' + elem.url + '&is_filter=1');
+
             show_filters($('#collection_id').val(), elem.args);
             $('#list').show();
             if (elem.empty_collection) {
@@ -1465,7 +1499,8 @@
         history.replaceState(stateObj, "page 2", '?');
     }
 
-    function show_filters(collection_id, filters) {
+    function show_filters(collection_id, filters)
+    {
         $.ajax({
             url: $('#src').val() + '/controllers/collection/collection_controller.php',
             type: 'POST',
@@ -1488,170 +1523,170 @@
 
     //***************************************** BEGIN SOCIAL NETWORK IMPORT *********************************************//
 
-//    function import_youtube_video_url() {
-//        var youtube_video_url = $('#youtube_video_url').val().trim();
-//        var collectionId = $('#collection_id').val();
-//
-//        if (youtube_video_url) {
-//            $('#modalImportMain').modal('show');
-//            var src = $('#src').val();
-//
-//            $.ajax({
-//                url: src + '/controllers/social_network/youtube_controller.php',
-//                type: 'POST',
-//                data: {operation: 'import_video_url',
-//                    video_url: youtube_video_url,
-//                    collectionId: collectionId},
-//                success: function (response) {
-//                    $('#modalImportMain').modal('hide');
-//                    if (response) {
-//                        showAlertGeneral('<?php _e('Success', 'tainacan'); ?>', '<?php _e('Video imported successfully', 'tainacan'); ?>', 'success');
-//                        set_containers_class(collectionId);
-//                        wpquery_clean();
-//                    } else {
-//                        showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Invalid URL or Video already inserted.', 'tainacan'); ?>', 'error');
-//                    }
-//                }
-//            });
-//            $('#youtube_video_url').val('');
-//            $('#modalshowModalImportSocialNetwork').modal('hide');
-//        } else {
-//            showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Necessary to inform Youtube video url', 'tainacan'); ?>', 'error');
-//        }
-//    }
+/*    function import_youtube_video_url() {
+        var youtube_video_url = $('#youtube_video_url').val().trim();
+        var collectionId = $('#collection_id').val();
 
-//    function import_youtube_channel() {
-//        var inputIdentifierYoutube = $('#youtube_identifier_input').val().trim();
-//        var inputPlaylistYoutube = $('#youtube_playlist_identifier_input').val().trim();
-//        var collectionId = $('#collection_id').val();
-//
-//        if (inputIdentifierYoutube) {
-//            $('#modalImportMain').modal('show');
-//            var src = $('#src').val();
-//
-//            //ajax
-//            $.ajax({
-//                url: src + '/controllers/social_network/youtube_controller.php',
-//                type: 'POST',
-//                data: {operation: 'import_video_channel',
-//                    identifier: inputIdentifierYoutube,
-//                    playlist: inputPlaylistYoutube,
-//                    collectionId: collectionId},
-//                success: function (response) {
-//                    $('#modalImportMain').modal('hide');
-//                    var json = JSON.parse(response);
-//                    if (json.length > 0) {
-//                        showViewMultipleItemsSocialNetwork(json);
-//                        //showAlertGeneral('<?php _e('Success', 'tainacan'); ?>', '<?php _e('OK', 'tainacan'); ?>', 'success');
-//                        //wpquery_clean();
-//                    }
-//                    else {
-//                        showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Invalid Channel/Playlist or no videos to be imported', 'tainacan'); ?>', 'error');
-//                    }
-//                }
-//            });
-//            //end ajax
-//
-//            $('#youtube_identifier_input').val('');
-//            $('#youtube_playlist_identifier_input').val('');
-//            $('#modalshowModalImportSocialNetwork').modal('hide');
-//        } else {
-//            showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Necessary to inform Youtube channel identifier', 'tainacan'); ?>', 'error');
-//        }
-//    }
+        if (youtube_video_url) {
+            $('#modalImportMain').modal('show');
+            var src = $('#src').val();
 
-//    function import_flickr() {
-//        var inputIdentifierFlickr = $('#flickr_identifier_input').val().trim();
-//        var collectionId = $('#collection_id').val();
-//
-//        if (inputIdentifierFlickr) {
-//            $('#modalImportMain').modal('show');
-//            var src = $('#src').val();
-//
-//            $.ajax({
-//                url: src + '/controllers/social_network/flickr_controller.php',
-//                type: 'POST',
-//                data: {operation: 'import_flickr_items',
-//                    identifier: inputIdentifierFlickr,
-//                    collectionId: collectionId},
-//                success: function (response) {
-//                    //se a gravação no banco foi realizado, a tabela é incrementada
-//                    $('#modalImportMain').modal('hide');
-//                    var json = JSON.parse(response);
-//                    if (json.length > 0) {
-//                        showViewMultipleItemsSocialNetwork(json);
-//                        //showAlertGeneral('<?php _e('Success', 'tainacan'); ?>', '<?php _e('OK', 'tainacan'); ?>', 'success');
-//                        //wpquery_clean();
-//                    }
-//                    else {
-//                        showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Invalid Flickr identifier or no items to be imported', 'tainacan'); ?>', 'error');
-//                    }
-//                }
-//            });
-//            $('#flickr_identifier_input').val('');
-//            $('#modalshowModalImportSocialNetwork').modal('hide');
-//        }
-//        else {
-//            showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Necessary to inform Flickr identifier', 'tainacan'); ?>', 'error');
-//            $('#flickr_identifier_input').val('');
-//        }
-//    }
+            $.ajax({
+                url: src + '/controllers/social_network/youtube_controller.php',
+                type: 'POST',
+                data: {operation: 'import_video_url',
+                    video_url: youtube_video_url,
+                    collectionId: collectionId},
+                success: function (response) {
+                    $('#modalImportMain').modal('hide');
+                    if (response) {
+                        showAlertGeneral('<?php _e('Success', 'tainacan'); ?>', '<?php _e('Video imported successfully', 'tainacan'); ?>', 'success');
+                        set_containers_class(collectionId);
+                        wpquery_clean();
+                    } else {
+                        showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Invalid URL or Video already inserted.', 'tainacan'); ?>', 'error');
+                    }
+                }
+            });
+            $('#youtube_video_url').val('');
+            $('#modalshowModalImportSocialNetwork').modal('hide');
+        } else {
+            showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Necessary to inform Youtube video url', 'tainacan'); ?>', 'error');
+        }
+    }
 
-//    function import_instagram() {
-//        var inputIdentifierInstagram = $('#instagram_identifier_input').val().trim();
-//        var collection_id = $('#collection_id').val();
-//
-//        if (inputIdentifierInstagram) {
-//            $('#modalImportMain').modal('show');
-//            var src = $('#src').val();
-//
-//            window.location = src + "/controllers/social_network/instagram_controller.php?collection_id=" + collection_id + "&operation=getPhotosInstagram&identifier=" + inputIdentifierInstagram;
-//
-//            $('#instagram_identifier_input').val('');
-//            $('#modalshowModalImportSocialNetwork').modal('hide');
-//        }
-//        else {
-//            showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Necessary to inform Instagram identifier', 'tainacan'); ?>', 'error');
-//        }
-//    }
+    function import_youtube_channel() {
+        var inputIdentifierYoutube = $('#youtube_identifier_input').val().trim();
+        var inputPlaylistYoutube = $('#youtube_playlist_identifier_input').val().trim();
+        var collectionId = $('#collection_id').val();
 
-//    function import_vimeo() {
-//        var inputIdentifierVimeo = $('#vimeo_identifier_input').val().trim();
-//        var collectionId = $('#collection_id').val();
-//
-//        if (inputIdentifierVimeo) {
-//            $('#modalImportMain').modal('show');
-//            var src = $('#src').val();
-//
-//            $.ajax({
-//                url: src + '/controllers/social_network/vimeo_controller.php',
-//                type: 'POST',
-//                data: {operation: 'import_vimeo_items',
-//                    identifier: inputIdentifierVimeo,
-//                    import_type: $('input[name="optradio_vimeo"]:checked').val(),
-//                    collectionId: collectionId},
-//                success: function (response) {
-//                    //se a gravação no banco foi realizado, a tabela é incrementada
-//                    $('#modalImportMain').modal('hide');
-//                    var json = JSON.parse(response);
-//                    if (json.length > 0) {
-//                        showViewMultipleItemsSocialNetwork(json);
-//                        //showAlertGeneral('<?php _e('Success', 'tainacan'); ?>', '<?php _e('OK', 'tainacan'); ?>', 'success');
-//                        //wpquery_clean();
-//                    }
-//                    else {
-//                        showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Invalid Vimeo identifier or no items to be imported', 'tainacan'); ?>', 'error');
-//                    }
-//                }
-//            });
-//            $('#vimeo_identifier_input').val('');
-//            $('#modalshowModalImportSocialNetwork').modal('hide');
-//        }
-//        else {
-//            showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Necessary to inform Vimeo identifier', 'tainacan'); ?>', 'error');
-//            $('#vimeo_identifier_input').val('');
-//        }
-//    }
+        if (inputIdentifierYoutube) {
+            $('#modalImportMain').modal('show');
+            var src = $('#src').val();
+
+            //ajax
+            $.ajax({
+                url: src + '/controllers/social_network/youtube_controller.php',
+                type: 'POST',
+                data: {operation: 'import_video_channel',
+                    identifier: inputIdentifierYoutube,
+                    playlist: inputPlaylistYoutube,
+                    collectionId: collectionId},
+                success: function (response) {
+                    $('#modalImportMain').modal('hide');
+                    var json = JSON.parse(response);
+                    if (json.length > 0) {
+                        showViewMultipleItemsSocialNetwork(json);
+                        //showAlertGeneral('<?php _e('Success', 'tainacan'); ?>', '<?php _e('OK', 'tainacan'); ?>', 'success');
+                        //wpquery_clean();
+                    }
+                    else {
+                        showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Invalid Channel/Playlist or no videos to be imported', 'tainacan'); ?>', 'error');
+                    }
+                }
+            });
+            //end ajax
+
+            $('#youtube_identifier_input').val('');
+            $('#youtube_playlist_identifier_input').val('');
+            $('#modalshowModalImportSocialNetwork').modal('hide');
+        } else {
+            showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Necessary to inform Youtube channel identifier', 'tainacan'); ?>', 'error');
+        }
+    }
+
+    function import_flickr() {
+        var inputIdentifierFlickr = $('#flickr_identifier_input').val().trim();
+        var collectionId = $('#collection_id').val();
+
+        if (inputIdentifierFlickr) {
+            $('#modalImportMain').modal('show');
+            var src = $('#src').val();
+
+            $.ajax({
+                url: src + '/controllers/social_network/flickr_controller.php',
+                type: 'POST',
+                data: {operation: 'import_flickr_items',
+                    identifier: inputIdentifierFlickr,
+                    collectionId: collectionId},
+                success: function (response) {
+                    //se a gravação no banco foi realizado, a tabela é incrementada
+                    $('#modalImportMain').modal('hide');
+                    var json = JSON.parse(response);
+                    if (json.length > 0) {
+                        showViewMultipleItemsSocialNetwork(json);
+                        //showAlertGeneral('<?php _e('Success', 'tainacan'); ?>', '<?php _e('OK', 'tainacan'); ?>', 'success');
+                        //wpquery_clean();
+                    }
+                    else {
+                        showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Invalid Flickr identifier or no items to be imported', 'tainacan'); ?>', 'error');
+                    }
+                }
+            });
+            $('#flickr_identifier_input').val('');
+            $('#modalshowModalImportSocialNetwork').modal('hide');
+        }
+        else {
+            showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Necessary to inform Flickr identifier', 'tainacan'); ?>', 'error');
+            $('#flickr_identifier_input').val('');
+        }
+    }
+
+    function import_instagram() {
+        var inputIdentifierInstagram = $('#instagram_identifier_input').val().trim();
+        var collection_id = $('#collection_id').val();
+
+        if (inputIdentifierInstagram) {
+            $('#modalImportMain').modal('show');
+            var src = $('#src').val();
+
+            window.location = src + "/controllers/social_network/instagram_controller.php?collection_id=" + collection_id + "&operation=getPhotosInstagram&identifier=" + inputIdentifierInstagram;
+
+            $('#instagram_identifier_input').val('');
+            $('#modalshowModalImportSocialNetwork').modal('hide');
+        }
+        else {
+            showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Necessary to inform Instagram identifier', 'tainacan'); ?>', 'error');
+        }
+    }
+
+    function import_vimeo() {
+        var inputIdentifierVimeo = $('#vimeo_identifier_input').val().trim();
+        var collectionId = $('#collection_id').val();
+
+        if (inputIdentifierVimeo) {
+            $('#modalImportMain').modal('show');
+            var src = $('#src').val();
+
+            $.ajax({
+                url: src + '/controllers/social_network/vimeo_controller.php',
+                type: 'POST',
+                data: {operation: 'import_vimeo_items',
+                    identifier: inputIdentifierVimeo,
+                    import_type: $('input[name="optradio_vimeo"]:checked').val(),
+                    collectionId: collectionId},
+                success: function (response) {
+                    //se a gravação no banco foi realizado, a tabela é incrementada
+                    $('#modalImportMain').modal('hide');
+                    var json = JSON.parse(response);
+                    if (json.length > 0) {
+                        showViewMultipleItemsSocialNetwork(json);
+                        //showAlertGeneral('<?php _e('Success', 'tainacan'); ?>', '<?php _e('OK', 'tainacan'); ?>', 'success');
+                        //wpquery_clean();
+                    }
+                    else {
+                        showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Invalid Vimeo identifier or no items to be imported', 'tainacan'); ?>', 'error');
+                    }
+                }
+            });
+            $('#vimeo_identifier_input').val('');
+            $('#modalshowModalImportSocialNetwork').modal('hide');
+        }
+        else {
+            showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Necessary to inform Vimeo identifier', 'tainacan'); ?>', 'error');
+            $('#vimeo_identifier_input').val('');
+        }
+    }*/
 
     //--------------------------- TELA DE IMPORTACAO DE MULTIPLO ARQUIVOS --------------------------
     function showViewMultipleItemsSocialNetwork(imported_ids) {
@@ -2154,6 +2189,7 @@
             showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Necessary to inform Youtube video url', 'tainacan'); ?>', 'error');
         }
     }
+
     // faz a importacao do tipo texto e joga para a tela de multiplos
     function import_text(url) {
         var key = $('#socialdb_embed_api_id').val();
@@ -2312,7 +2348,6 @@
             }
         });
     }
-
 
     function import_youtube_channel(inputIdentifierYoutube) {
         var collectionId = $('#collection_id').val();
@@ -2488,6 +2523,7 @@
             $('#item_url_import_all').val('');
         }
     }
+
     //*****************************************  END IMPORT ALL  *********************************************//
     /**
      * funcao que concatena um array em um input, separado por virgulas
@@ -2602,6 +2638,4 @@ function hide_trash_page(){
         $('#ul_menu_search').show();
     }
 }
-    
-    
 </script>

@@ -343,6 +343,33 @@
                 if (data) {
                     $("#filters-accordion").html('');
                     var facetsObj = $.parseJSON(data);
+
+                    /*
+                        Remove facetas repetidas, faceta do repositorio que estava anteriormente na coleção e foi adicionada ao repositorio
+                     */
+                    var unique_ids = [];
+                    facetsObj.forEach(function(elemento, idx){
+                        let id = elemento.id;
+                        let id_rep = $.inArray(id, unique_ids);
+                        if(id_rep == -1)
+                        {
+                            unique_ids.push(id);
+                        }else
+                        {
+                            if(elemento.is_repository_facet == "true")
+                            {
+                                unique_ids.splice(id_rep, 1);
+                                unique_ids.push(id);
+                            }else
+                            {
+                                facetsObj.splice(idx, 1);
+                            }
+                        }
+                    });
+                    /*
+                        Fim remoção
+                     */
+
                     if (facetsObj && facetsObj != null) {
                         $.each(facetsObj, function (index, el) {
                             if (el.nome == null && el.id != "tree") {
@@ -356,7 +383,10 @@
                                 var current_prop = getPropertyType(el.prop);
                                 //console.log(el,(el.prop == null) , !isNaN(el.id) , $('.term-root-'+el.id).attr('id'));
                                 var item_html = '<li id="' + id + '" data-widget="' + el.widget + '" class="form-group metadata-facet filter-' + el.id + '">' +
-                                        '<label class="title-pipe">&nbsp;&nbsp;&nbsp;&nbsp;' + el.nome + '<div class="pull-right"><a class="edit-filter"><span class="glyphicon glyphicon-sort sort-filter"></span></a>';
+                                                    '<label class="title-pipe">&nbsp;&nbsp;&nbsp;&nbsp;' + el.nome + '<div class="pull-right">' +
+                                                        '<a class="edit-filter">' +
+                                                            '<span class="glyphicon glyphicon-sort sort-filter"> </span>' +
+                                                        '</a>';
 
                                 if (current_prop == "data") {
                                     item_html += '<a onclick="edit_metadata(' + el.id + ')" class="edit-filter">';
@@ -380,7 +410,18 @@
                                     }
                                 }
 
-                                item_html += '<span class="glyphicon glyphicon-edit"></span></a>' + add_remove_filter_button(el.id) + '</div> </label></li>';
+                                if(el.is_repository_facet)
+                                {
+                                    var remove =
+                                    '<a class="pull-right" title="Remover filtro" style="cursor:pointer; pointer-events: none; opacity: 0.33;" onclick="removeFacet(26);">' +
+                                        '<span class="glyphicon glyphicon glyphicon-trash"></span>' +
+                                    '</a>';
+
+                                    item_html += '<span class="glyphicon glyphicon-edit"></span></a>' + remove + '</div> </label></li>';
+                                }else
+                                {
+                                    item_html += '<span class="glyphicon glyphicon-edit"></span></a>' + add_remove_filter_button(el.id) + '</div> </label></li>';
+                                }
                                 $("#filters-accordion").append(item_html);
                             }
                         });

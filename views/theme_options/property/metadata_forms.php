@@ -98,8 +98,7 @@ foreach( $view_helper->get_metadata_types() as $type => $label):
                                         <input type='hidden' id='counter_data_range' name="counter_data_range" value='0'>
                                     <?php } ?>
 
-                                    <div id="color_field_property_search"
-                                            <?php  if ($type != "text") { ?> style="display: none;" <?php } else { ?> style="display: block" <?php }?> >
+                                    <div id="color_field_property_search" style="display: block">
                                         <h5 style="color: black"><strong><?php _e('Set the facet color', 'tainacan'); ?></strong></h5>
                                         <div class="form-group" style="padding-left: 5px">
                                             <?php

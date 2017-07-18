@@ -10,7 +10,22 @@ class SearchController extends Controller {
         $search_model = new SearchModel();
         switch ($operation) {
             case "list_facets":
+                $repository_id = get_post_by_name("tainacan-colecoes")->ID;
                 $arrFacets = $search_model->get_saved_facets($data['collection_id']);
+                
+                if($repository_id != $data['collection_id'])
+                {
+                    $repository_facets = $search_model->get_saved_facets($repository_id);
+                    $repo_facets = [];
+                    foreach ($repository_facets as $facet)
+                    {
+                        $facet['is_repository_facet'] = true;
+                        $repo_facets[] = $facet;
+                    }
+                    
+                    $arrFacets = array_merge($repo_facets, $arrFacets);
+                }
+                
                 return json_encode($arrFacets);
                 break;
             case "edit":

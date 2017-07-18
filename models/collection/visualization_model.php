@@ -7,6 +7,7 @@ require_once(dirname(__FILE__) . '../../property/property_model.php');
 require_once(dirname(__FILE__) . '../../license/license_model.php');
 require_once(dirname(__FILE__) . '../../category/category_model.php');
 require_once(dirname(__FILE__) . '../../collection/collection_model.php');
+require_once(dirname(__FILE__) . '../../collection/visualization_model.php');
 
 class VisualizationModel extends CollectionModel {
     
@@ -1320,6 +1321,9 @@ class VisualizationModel extends CollectionModel {
 
     public function set_container_classes($data) {
         $facets_id = array_filter(array_unique(get_post_meta($data['collection_id'], 'socialdb_collection_facets')));
+        $repository_id = get_post_by_name("tainacan-colecoes")->ID;
+        $visualization_model = new VisualizationModel();
+        $repository_facets = $visualization_model->get_facets_visualization($repository_id);
         foreach ($facets_id as $facet_id) {
             $widget = get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $facet_id . '_widget', true);
             $orientation = get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $facet_id . '_orientation', true);
@@ -1339,6 +1343,7 @@ class VisualizationModel extends CollectionModel {
                 }
             }
         }
+        if($repository_facets) $data['has_left'] = "true";
         return $data;
     }
 

@@ -815,18 +815,20 @@
                         if(property_visibility && property_visibility === 'show')
                         {
                             var visibility = '<a vis="show" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-open"></span></a>';
-                            var style = '';
+                            var style = '',
+                                addFilterStyle = '';
                         }
                         else
                         {
                             var style = 'opacity:0.33;';
-                            var visibility = '<a vis="hide" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-close"></span></a>';
+                            var visibility = '<a vis="hide" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-close"></span></a>',
+                                addFilterStyle = 'pointer-events: none;';
                         }
-
+                        /* Standard meta */
                         $('ul#metadata-container').append(
                             '<li id="meta-item-' + current_id + '" data-widget="' + current_search_widget + '" class="root_category ui-widget-content ui-corner-tr fixed-property">' +
                                 '<label style="'+style+'" class="title-pipe">' +
-                                    '<a title="Adicionar como filtro" id ="addFilter_'+ property.id +'"  style="cursor:pointer; margin-right:15px;" onclick="add_filter(' + property.id + ', \'' + property.slug +'\')">' +
+                                    '<a title="Adicionar como filtro" id ="addFilter_'+ property.id +'"  style="cursor:pointer; margin-right:15px;' + addFilterStyle + '" onclick="add_filter(' + property.id + ', \'' + property.slug +'\')">' +
                                         '<span class="glyphicon glyphicon-menu-left"></span>' +
                                     '</a>' +
                                     '<span class="property-name">' + property.name + '</span>' +
@@ -838,10 +840,14 @@
                             visibility+'</div>' +
                             '</li>');
                     } else {
+                        /* Added meta */
                         if ( $.inArray(property.type, ranking_types) == -1 ) {
                             $('ul#metadata-container').append(
                                 '<li id="meta-item-' + current_id + '" data-widget="' + current_search_widget + '" class="' + property.type + ' ui-widget-content ui-corner-tr">' +
                                     '<label class="title-pipe">' +
+                                        '<a title="Adicionar como filtro" id ="addFilter_'+ property.id +'"  style="cursor:pointer; margin-right:15px;' + addFilterStyle + '" onclick="add_filter(' + property.id + ', \'' + property.slug +'\')">' +
+                                            '<span class="glyphicon glyphicon-menu-left"></span>' +
+                                        '</a>' +
                                         '<span class="property-name">' + property.name + '</span>' +
                                     '</label>' +
                                     '<div class="action-icons">' +
@@ -1430,18 +1436,26 @@
                      if ( property.metas.socialdb_property_is_fixed && property.metas.socialdb_property_is_fixed === 'true' ) {
                         if(property.metas.socialdb_property_visibility&&property.metas.socialdb_property_visibility==='show'){
                             var visibility = '<a vis="show" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-open"></span></a>';
-                            var style = '';
+                            var style = '',
+                                addFilterStyle = '';
                         }else{
                             var style = 'style="opacity:0.33;"';
-                            var visibility = '<a vis="hide" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-close"></span></a>';
+                            var visibility = '<a vis="hide" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-close"></span></a>',
+                                addFilterStyle = 'pointer-events: none;';
                         }
                         
                         $('ul#metadata-container').append(
-                            '<li id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="root_category ui-widget-content ui-corner-tr"><label '+style+' class="title-pipe">'
-                            + '<span class="property-name">' + property.name + '</span>' +
-                            '</label><div class="action-icons">' +
-                            '<a onclick="edit_term(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
-                            '<span class="glyphicon glyphicon-edit"><span></a> ' +
+                            '<li id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="root_category ui-widget-content ui-corner-tr">' +
+                                '<label '+style+' class="title-pipe">' +
+                                     '<a title="Adicionar como filtro" id ="addFilter_'+ property.id +'"  style="cursor:pointer; margin-right:15px;' + addFilterStyle + '" onclick="add_filter(' + property.id + ', \'' + property.slug +'\')">' +
+                                        '<span class="glyphicon glyphicon-menu-left"></span>' +
+                                     '</a>'
+                                    + '<span class="property-name">' + property.name + '</span>' +
+                                '</label><div class="action-icons">' +
+
+                                '<a onclick="edit_term(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
+                                    '<span class="glyphicon glyphicon-edit"><span>' +
+                                '</a> ' +
                             visibility+'</div></li>');
                     } else {
                         if ( $.inArray(property.type, ranking_types) == -1 ) {
@@ -1926,8 +1940,8 @@
         //apos o termino de$("ul#metadata-container").html('').append(fixed_meta);
         //apos o termino  todos os carregamentos
         $.when( 
-            list_property_data(), 
-            list_property_terms(),
+            list_property_data(), //Added and standard meta
+            list_property_terms(), //Tags meta
             list_property_object(),
             list_property_compounds(),
             list_ranking()
