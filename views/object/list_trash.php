@@ -1,32 +1,13 @@
 <?php
-/*
- * View responsavel em mostrar o menu mais opcoes com as votacoes, propriedades e arquivos anexos
- *
- */
 include_once('./../../helpers/view_helper.php');
 include_once('./../../helpers/object/object_helper.php');
 include_once ('js/list_trash_js.php');
-
-$countLine = 0;
-$classColumn = 12;
-$show_string = is_root_category($collection_id) ?  __('Showing collections:','tainacan') : __('Showing Items:', 'tainacan');
-$collection_list_mode = $collection_data['collection_metas']['socialdb_collection_list_mode'];
-// $collection_color_scheme = $collection_data['collection_metas']['socialdb_collection_color_scheme'];
+include_once ('helper/loader.php');
 
 $viewHelper = new ViewHelper();
-if( !$collection_list_mode ) {
-    $collection_list_mode = "cards";
-}
+$objHelper->renderCollectionPagination($loop->found_posts, $loop->post_count, $pagid, $show_string, 'top_pag');
 
-?>
-
-<!-- TAINACAN: hidden utilizados para execucao de processos desta view (list.php)  -->
-<input type="hidden" id="keyword_pagination" name="keyword_pagination" value="<?php if (isset($keyword)) echo $keyword; ?>" />
-<input type="hidden" id="sorted_form" name="sorted_form" value="<?php echo $sorted_by; ?>" />
-<input type="hidden" id="default-viewMode" value="<?php echo $collection_list_mode; ?>">
-<input type="hidden" id="temp-viewMode" value="">
-
-<?php if ( $loop->have_posts() ):
+if ( $loop->have_posts() ):
     // Determina # de colunas;
     if ($collection_data['collection_metas']['socialdb_collection_columns'] != '')
         $classColumn = 12 / $collection_data['collection_metas']['socialdb_collection_columns'];
