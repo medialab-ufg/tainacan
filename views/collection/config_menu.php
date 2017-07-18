@@ -7,7 +7,7 @@
 <ul class="nav navbar-bar navbar-right">
     <li class="dropdown collec_menu_opnr">
     <?php if ((verify_collection_moderators($current_collection_id, get_current_user_id()) || current_user_can('manage_options')) && get_post_type($current_collection_id) == 'socialdb_collection'): ?>
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+        <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
             <span class="notification_events"></span>
             <div class="fab">
                 <?php if("disabled" == $_enable_header_):
@@ -88,46 +88,71 @@
                 </li>
 
                 <?php if (!verify_collection_moderators($current_collection_id, get_current_user_id()) && !current_user_can('manage_options')): ?>
-                    <li><a onclick="show_report_abuse_collection('<?php echo $current_collection_id; ?>');" style="color:<?php echo $collection_metas['socialdb_collection_board_link_color']; ?>" href="#"><span class="glyphicon glyphicon-warning-sign"></span> <?php _e('Report Abuse', 'tainacan'); ?>&nbsp;</a></li>
-                    <!-- modal exluir -->
-                    <div class="modal fade" id="modal_delete_collection<?php echo $current_collection_id; ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <form>
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-trash"></span>&nbsp;<?php _e('Report Abuse', 'tainacan'); ?></h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <?php echo __('Describe why the collection: ') . $collection_post->post_title . __(' is abusive: ', 'tainacan'); ?>
-                                        <textarea id="observation_delete_collection<?php echo $current_collection_id ?>" class="form-control"></textarea>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo __('Close', 'tainacan'); ?></button>
-                                        <button onclick="report_abuse_collection('<?php _e('Delete Collection', 'tainacan') ?>', '<?php _e('Are you sure to remove the collection: ', 'tainacan') . $collection_post->post_title ?>', '<?php echo $current_collection_id ?>', '<?php echo mktime() ?>', '<?php echo get_option('collection_root_id') ?>')" type="button" class="btn btn-primary"><?php echo __('Delete', 'tainacan'); ?></button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+                    <li>
+                        <a onclick="show_report_abuse_collection('<?php echo $current_collection_id; ?>');" style="color:<?php echo $collection_metas['socialdb_collection_board_link_color']; ?>" href="javascript:void(0)">
+                            <span class="glyphicon glyphicon-warning-sign"></span> <?php _e('Report Abuse', 'tainacan'); ?>
+                        </a>
+                    </li>
                 <?php endif; ?>
                 <?php
             }
             ?>
         </ul>
+
     <?php elseif(is_user_logged_in()): ?>
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" >
+
+        <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" >
             <div class="fab">
-                <img src="<?php echo get_template_directory_uri() ?>/libraries/images/configuracao.svg" alt="" class="img-responsive">
+                <?php if("disabled" == $_enable_header_):
+                    echo ViewHelper::render_icon("config", "png", _t('Collection configuration'));
+                else: ?>
+                    <img src="<?php echo get_template_directory_uri() ?>/libraries/images/configuracao.svg" alt="<?php _t('Configuration', 1); ?>" class="img-responsive">
+                <?php endif; ?>
             </div>
         </a>
+
         <ul class="dropdown-menu dropdown-show" role="menu">
-            <li><a onclick="showEvents('<?php echo get_template_directory_uri() ?>');" style="color:<?php echo $collection_metas['socialdb_collection_board_link_color']; ?>" href="#"><span class="glyphicon glyphicon-flash"></span> <?php _e('Events', 'tainacan'); ?>&nbsp;<span id="notification_events" style="background-color:red;color:white;font-size:13px;"></span></a></li>
+            <li>
+                <a onclick="showEvents('<?php echo get_template_directory_uri() ?>');" style="color:<?php echo $collection_metas['socialdb_collection_board_link_color']; ?>" href="javascript:void(0)">
+                    <span class="glyphicon glyphicon-flash"></span> <?php _e('Events', 'tainacan'); ?>&nbsp;<span id="notification_events" style="background-color:red;color:white;font-size:13px;"></span>
+                </a>
+            </li>
             <?php if (!verify_collection_moderators($collection_post->ID, get_current_user_id()) && !current_user_can('manage_options')): ?>
-                <li><a onclick="show_report_abuse_collection('<?php echo $collection_post->ID; ?>');"  style="cursor: pointer;"><span class="glyphicon glyphicon-warning-sign"></span> <?php _e('Report Abuse', 'tainacan'); ?>&nbsp;</a></li>
+                <li>
+                    <a onclick="show_report_abuse_collection('<?php echo $collection_post->ID; ?>');"  style="cursor: pointer;">
+                        <span class="glyphicon glyphicon-warning-sign"></span> <?php _e('Report Abuse', 'tainacan'); ?>&nbsp;
+                    </a>
+                </li>
             <?php endif; ?>
         </ul>
+
     <?php endif; ?>
 </li>
 
 </ul>
+
+<?php
+$not_admin = !verify_collection_moderators($current_collection_id, get_current_user_id()) && !current_user_can('manage_options');
+if( is_user_logged_in() && $not_admin): ?>
+    <!-- modal exluir -->
+    <div class="modal fade" id="modal_delete_collection<?php echo $current_collection_id; ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form>
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-trash"></span>&nbsp;<?php _e('Report Abuse', 'tainacan'); ?></h4>
+                    </div>
+                    <div class="modal-body" style="color: black;">
+                        <?php echo _t('Describe why the collection ') . $collection_post->post_title . __(' is abusive: ', 'tainacan'); ?>
+                        <textarea id="observation_delete_collection<?php echo $current_collection_id ?>" class="form-control"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo __('Close', 'tainacan'); ?></button>
+                        <button onclick="report_abuse_collection('<?php _e('Delete Collection', 'tainacan') ?>', '<?php _e('Are you sure to remove the collection: ', 'tainacan') . $collection_post->post_title ?>', '<?php echo $current_collection_id ?>', '<?php echo mktime() ?>', '<?php echo get_option('collection_root_id') ?>')" type="button" class="btn btn-primary"><?php echo __('Delete', 'tainacan'); ?></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>

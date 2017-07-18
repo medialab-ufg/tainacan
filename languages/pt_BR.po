@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: socialdb\n"
-"POT-Creation-Date: 2017-07-17 10:03-0300\n"
-"PO-Revision-Date: 2017-07-17 10:04-0300\n"
+"POT-Creation-Date: 2017-07-18 13:50-0300\n"
+"PO-Revision-Date: 2017-07-18 13:52-0300\n"
 "Last-Translator: Rodrigo de Oliveira <webmaster@rodrigodeoliveira.net>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -137,7 +137,7 @@ msgstr "Responder Comentário"
 #: single.php:1218 single.php:1368 single.php:1438 single.php:1468
 #: views/category/list.php:157 views/category/list.php:203
 #: views/category/list.php:232 views/category/taxonomy_zone.php:105
-#: views/collection/config_menu.php:106
+#: views/collection/config_menu.php:152
 #: views/collection/header_collection.php:224 views/event/list.php:295
 #: views/event/list.php:330 views/event/list.php:380
 #: views/mapping/container_mapping.php:13
@@ -173,8 +173,8 @@ msgid "Send"
 msgstr "Enviar"
 
 #: comments.php:148 functions.php:588 views/advanced_search/modals_adv.php:62
-#: views/collection/config_menu.php:91 views/collection/config_menu.php:99
-#: views/collection/config_menu.php:127
+#: views/collection/config_menu.php:94 views/collection/config_menu.php:124
+#: views/collection/config_menu.php:145
 #: views/collection/header_collection.php:214
 #: views/object/list_data_table.php:63 views/object/list_data_table.php:71
 #: views/object/list_modes/actions/item_actions.php:113
@@ -466,13 +466,13 @@ msgstr "Votações"
 
 #: controllers/collection/collection_controller.php:337 functions.php:1947
 #: helpers/object/object_helper.php:34
-#: views/object/formItem/helper/formItem.class.php:140
+#: views/object/formItem/helper/formItem.class.php:147
 #: views/property/list_metadata.php:108 views/property/list_metadata.php:115
 msgid "Default"
 msgstr "Padrão"
 
 #: controllers/event/event_controller.php:107
-#: controllers/object/object_controller.php:1209
+#: controllers/object/object_controller.php:1226
 #: models/category/category_model.php:1081
 #: models/collection/collection_import_model.php:180
 #: models/collection/collection_model.php:435
@@ -786,7 +786,7 @@ msgstr "Itens "
 #: models/export/export_model.php:84
 #: views/advanced_search/advanced_search.php:66
 #: views/advanced_search/show_object_properties.php:68
-#: views/collection/config_menu.php:35 views/collection/edit.php:645
+#: views/collection/config_menu.php:36 views/collection/edit.php:645
 #: views/object/create_item_text.php:258 views/object/edit_item_text.php:427
 #: views/object/formItem/helper/formItemTags.class.php:17
 #: views/object/formItemMultiple/helper/formItemTags.class.php:16
@@ -872,15 +872,15 @@ msgstr "Exibindo coleções:"
 msgid "Showing Items:"
 msgstr "Exibindo itens:"
 
-#: controllers/object/object_controller.php:1021
+#: controllers/object/object_controller.php:1038
 msgid "Edit items"
 msgstr "Editar vários itens"
 
-#: controllers/object/object_controller.php:1185
+#: controllers/object/object_controller.php:1202
 msgid "No Metadata Found"
 msgstr "Nenhum metadado encontrado"
 
-#: controllers/object/object_controller.php:1210
+#: controllers/object/object_controller.php:1227
 #: models/ranking/ranking_model.php:119
 msgid "Operation is successfully"
 msgstr "Operação realizada com sucesso!"
@@ -957,7 +957,7 @@ msgid "Contatos"
 msgstr ""
 
 #: functions.php:166 header.php:17 header.php:166 helpers/view_helper.php:459
-#: views/collection/config_menu.php:68
+#: views/collection/config_menu.php:69
 msgid "Statistics"
 msgstr "Estatísticas"
 
@@ -1061,7 +1061,7 @@ msgstr "(Painel de edição)"
 #: views/object/create_item_text.php:477 views/object/create_item_text.php:480
 #: views/object/edit.php:240 views/object/edit_item_text.php:823
 #: views/object/edit_item_text.php:839
-#: views/object/formItem/helper/formItem.class.php:208
+#: views/object/formItem/helper/formItem.class.php:215
 #: views/property/metadata/form_compounds.php:107
 #: views/property/metadata/form_voting.php:86 views/ranking/list.php:99
 #: views/search/edit.php:102 views/search/edit.php:315
@@ -1110,8 +1110,8 @@ msgstr "Deletar este comentário?"
 #: functions.php:596 single.php:837 single.php:1029 single.php:1253
 #: single.php:1281 single.php:1328 single.php:1347
 #: views/advanced_search/modals_adv.php:77
-#: views/advanced_search/modals_adv.php:104 views/collection/config_menu.php:75
-#: views/collection/config_menu.php:107 views/collection/edit.php:383
+#: views/advanced_search/modals_adv.php:104 views/collection/config_menu.php:76
+#: views/collection/config_menu.php:153 views/collection/edit.php:383
 #: views/collection/edit.php:1019 views/collection/header_collection.php:228
 #: views/object/list_data_table.php:56 views/object/list_data_table.php:79
 #: views/object/list_modes/modals.php:124
@@ -1275,7 +1275,7 @@ msgid "Parent Category:"
 msgstr "Categoria pai:"
 
 #: functions.php:1283 models/object/object_model.php:1774
-#: models/wp_query/wp_query_model.php:1199
+#: models/wp_query/wp_query_model.php:1202
 msgid "Recents"
 msgstr "Recentes "
 
@@ -1363,7 +1363,7 @@ msgstr "Licença"
 #: views/design/edit.php:89 views/design/edit.php:120 views/design/edit.php:177
 #: views/object/create_item_text.php:176 views/object/create_item_text.php:337
 #: views/object/edit_item_text.php:305 views/object/edit_item_text.php:522
-#: views/object/formItem/helper/formItem.class.php:636
+#: views/object/formItem/helper/formItem.class.php:643
 #: views/object/formItem/helper/formItemThumbnail.class.php:11
 #: views/object/formItemMultiple/helper/formItemThumbnail.class.php:10
 #: views/object/list_single_object.php:216
@@ -1377,7 +1377,7 @@ msgstr "Miniatura"
 #: views/object/edit_item_text.php:261 views/object/edit_item_text.php:555
 #: views/object/edit_item_text.php:757 views/object/file/list_file.php:12
 #: views/object/file/list_file.php:56
-#: views/object/formItem/helper/formItem.class.php:655
+#: views/object/formItem/helper/formItem.class.php:662
 #: views/object/formItem/helper/formItemAttachment.class.php:11
 #: views/object/formItemMultiple/formItemMultiple.class.php:167
 #: views/object/formItemMultiple/helper/formItemAttachment.class.php:10
@@ -1514,10 +1514,10 @@ msgid "Repository Control Panel"
 msgstr "Painel de Controle do Repositório"
 
 #: header.php:137 views/category/list.php:242
-#: views/collection/config_menu.php:16 views/collection/config_menu.php:22
-#: views/design/edit.php:11 views/property/list.php:12
-#: views/ranking/list.php:11 views/search/edit.php:12
-#: views/theme_options/property/list.php:11
+#: views/collection/config_menu.php:17 views/collection/config_menu.php:23
+#: views/collection/config_menu.php:110 views/design/edit.php:11
+#: views/property/list.php:12 views/ranking/list.php:11
+#: views/search/edit.php:12 views/theme_options/property/list.php:11
 msgid "Configuration"
 msgstr "Configuração"
 
@@ -1539,8 +1539,8 @@ msgstr "Metadados"
 msgid "Social / API Keys"
 msgstr "Chaves de APIs / Redes Sociais"
 
-#: header.php:141 views/advanced_search/show_object_properties.php:347
-#: views/collection/config_menu.php:53 views/object/create_item_text.php:290
+#: header.php:141 views/advanced_search/show_object_properties.php:348
+#: views/collection/config_menu.php:54 views/object/create_item_text.php:290
 #: views/object/create_item_url.php:119 views/object/edit_item_text.php:474
 #: views/object/formItem/helper/formItemLicense.class.php:13
 #: views/object/formItemMultiple/helper/formItemLicense.class.php:12
@@ -1574,7 +1574,7 @@ msgstr "Ferramentas"
 #: single.php:1263 single.php:1270 single.php:1282 single.php:1290
 #: single.php:1329 single.php:1337 single.php:1348 single.php:1362
 #: single.php:1439 single.php:1440 views/category/list.php:11
-#: views/collection/config_menu.php:58 views/import/import_configuration.php:8
+#: views/collection/config_menu.php:59 views/import/import_configuration.php:8
 #: views/import/import_configuration.php:171
 #: views/import/js/import_configuration_js.php:4 views/object/create.php:84
 #: views/object/create_item_url.php:233 views/object/edit.php:100
@@ -1595,7 +1595,7 @@ msgstr "Ferramentas"
 msgid "Import"
 msgstr "Importar"
 
-#: header.php:164 views/collection/config_menu.php:63
+#: header.php:164 views/collection/config_menu.php:64
 #: views/export/index_export.php:10 views/export/js/index_export_js.php:5
 #: views/theme_options/export_full.php:7
 #: views/theme_options/js/export_full_js.php:3
@@ -1607,8 +1607,8 @@ msgid "Updates"
 msgstr "Atualizar"
 
 #: header.php:171 helpers/view_helper.php:355 models/event/event_model.php:724
-#: single.php:1086 views/collection/config_menu.php:85
-#: views/collection/config_menu.php:125 views/event/js/list_js.php:3
+#: single.php:1086 views/collection/config_menu.php:86
+#: views/collection/config_menu.php:118 views/event/js/list_js.php:3
 #: views/event/list.php:12
 msgid "Events"
 msgstr "Eventos"
@@ -1656,7 +1656,7 @@ msgstr "Importar coleção"
 #: header.php:291 header.php:300 index.php:63 single.php:262
 #: views/advanced_search/advanced_search.php:39
 #: views/advanced_search/search_property_object_metadata.php:312
-#: views/advanced_search/show_object_properties.php:380
+#: views/advanced_search/show_object_properties.php:381
 #: views/object/formItem/input/object.class.php:979
 #: views/object/formItemMultiple/input/object.class.php:1016
 msgid "Find"
@@ -1789,9 +1789,9 @@ msgstr "Diferente"
 #: views/advanced_search/show_object_properties.php:80
 #: views/advanced_search/show_object_properties.php:132
 #: views/advanced_search/show_object_properties.php:144
-#: views/advanced_search/show_object_properties.php:247
-#: views/advanced_search/show_object_properties.php:287
-#: views/advanced_search/show_object_properties.php:361
+#: views/advanced_search/show_object_properties.php:248
+#: views/advanced_search/show_object_properties.php:288
+#: views/advanced_search/show_object_properties.php:362
 #: views/object/formItem/input/object.class.php:746
 #: views/object/formItem/input/object.class.php:761
 #: views/object/formItem/input/object.class.php:865
@@ -1821,9 +1821,9 @@ msgstr "Contém"
 #: views/advanced_search/show_object_properties.php:81
 #: views/advanced_search/show_object_properties.php:133
 #: views/advanced_search/show_object_properties.php:145
-#: views/advanced_search/show_object_properties.php:248
-#: views/advanced_search/show_object_properties.php:288
-#: views/advanced_search/show_object_properties.php:362
+#: views/advanced_search/show_object_properties.php:249
+#: views/advanced_search/show_object_properties.php:289
+#: views/advanced_search/show_object_properties.php:363
 #: views/object/formItem/input/object.class.php:747
 #: views/object/formItem/input/object.class.php:762
 #: views/object/formItem/input/object.class.php:866
@@ -1874,7 +1874,7 @@ msgstr "Antes"
 #: helpers/advanced_search/advanced_search_helper.php:146
 #: views/advanced_search/properties_categories_search.php:186
 #: views/advanced_search/search_property_object_metadata.php:228
-#: views/advanced_search/show_object_properties.php:276
+#: views/advanced_search/show_object_properties.php:277
 #: views/object/formItem/input/object.class.php:894
 #: views/object/formItemMultiple/input/object.class.php:931
 msgid "Type the three first letters of the item of this collection "
@@ -1884,7 +1884,7 @@ msgstr "Digite as três primeiras letras do item desta coleção"
 #: helpers/object/single_properties_widgets_helper.php:287
 #: views/advanced_search/properties_categories_search.php:191
 #: views/advanced_search/search_property_object_metadata.php:235
-#: views/advanced_search/show_object_properties.php:281
+#: views/advanced_search/show_object_properties.php:282
 #: views/object/append_properties_categories/multiple_properties_categories_accordion.php:92
 #: views/object/edit_object_properties/list_properties.php:60
 #: views/object/formItem/input/object.class.php:902
@@ -2025,10 +2025,10 @@ msgstr "Data"
 #: helpers/object/object_helper.php:51 views/object/create_item_text.php:75
 #: views/object/create_item_url.php:27 views/object/edit_item_text.php:109
 #: views/object/edit_object_properties/js/edit_list_properties_accordion_js.php:29
-#: views/object/formItem/helper/formItem.class.php:82
-#: views/object/formItem/helper/formItem.class.php:117
-#: views/object/formItem/helper/formItem.class.php:166
-#: views/object/formItem/helper/formItem.class.php:180
+#: views/object/formItem/helper/formItem.class.php:89
+#: views/object/formItem/helper/formItem.class.php:124
+#: views/object/formItem/helper/formItem.class.php:173
+#: views/object/formItem/helper/formItem.class.php:187
 #: views/object/formItemMultiple/formItemMultiple.class.php:76
 #: views/object/js/list_properties_accordion_js.php:38
 #: views/object/js/tabs_item_js.php:56 views/object/js/tabs_item_js.php:186
@@ -2247,8 +2247,8 @@ msgid "Relationship"
 msgstr "Relacionamento"
 
 #: helpers/view_helper.php:90 models/general/general_model.php:627
-#: views/object/formItem/helper/formItem.class.php:376
-#: views/object/formItem/helper/formItem.class.php:504
+#: views/object/formItem/helper/formItem.class.php:383
+#: views/object/formItem/helper/formItem.class.php:511
 #: views/object/formItemMultiple/formItemMultiple.class.php:326
 #: views/property/js/list_category_metadata_js.php:2369
 #: views/property/js/list_metadata_js.php:2553
@@ -2344,11 +2344,11 @@ msgstr "Adicionar campo"
 msgid "Configurations"
 msgstr "Configurações"
 
-#: helpers/view_helper.php:334 views/collection/config_menu.php:25
+#: helpers/view_helper.php:334 views/collection/config_menu.php:26
 msgid "Metadata and Filters"
 msgstr "Metadados e Filtros"
 
-#: helpers/view_helper.php:339 views/collection/config_menu.php:30
+#: helpers/view_helper.php:339 views/collection/config_menu.php:31
 #: views/search/js/layout_js.php:63 views/statistics/js/list_js.php:41
 msgid "Layout"
 msgstr "Layout"
@@ -2608,7 +2608,7 @@ msgstr "Outro"
 #: models/collection/collection_model.php:1168
 #: views/advanced_search/properties_categories_search.php:228
 #: views/advanced_search/search_property_object_metadata.php:272
-#: views/advanced_search/show_object_properties.php:318
+#: views/advanced_search/show_object_properties.php:319
 #: views/object/formItem/input/object.class.php:939
 #: views/object/formItemMultiple/input/object.class.php:976
 #: views/object/js/list_js.php:7 views/object/js/list_js.php:8
@@ -3070,7 +3070,7 @@ msgid "Edit Term Property"
 msgstr "Editar metadado de Termo"
 
 #: models/event/event_model.php:322 views/advanced_search/modals_adv.php:90
-#: views/collection/config_menu.php:75 views/collection/config_menu.php:107
+#: views/collection/config_menu.php:76 views/collection/config_menu.php:153
 #: views/collection/header_collection.php:227
 #: views/object/list_modes/modals.php:139
 #: views/theme_options/edit_configuration.php:106
@@ -3421,6 +3421,7 @@ msgstr "Metadado de termo "
 
 #: models/export/export_model.php:115
 #: models/social_network/social_mapping_model.php:11 single.php:877
+#: views/advanced_search/show_object_properties.php:247
 #: views/import/csv/js/maping_attributes_js.php:88
 #: views/object/append_properties_categories/js/pc_compounds_js.php:322
 #: views/object/append_properties_categories/js/properties_categories_accordion_js.php:270
@@ -3444,7 +3445,7 @@ msgid "Attachment"
 msgstr "Anexos "
 
 #: models/export/rdf_repository_model.php:94
-#: models/object/object_model.php:1771 models/wp_query/wp_query_model.php:1196
+#: models/object/object_model.php:1771 models/wp_query/wp_query_model.php:1199
 #: views/object/list_single_object.php:241
 #: views/object/list_single_object_version.php:320
 #: views/property/js/list_metadata_js.php:2571
@@ -3680,7 +3681,7 @@ msgstr "A licença sugerida é: "
 msgid "Something went wrong! Please try again!"
 msgstr "Algo deu errado! Por favor tente novamente!"
 
-#: models/object/object_model.php:1769 models/wp_query/wp_query_model.php:1194
+#: models/object/object_model.php:1769 models/wp_query/wp_query_model.php:1197
 msgid "Data property"
 msgstr "Metadados de dado"
 
@@ -4066,7 +4067,7 @@ msgid "Loading Statistics ..."
 msgstr "Carregando Estatísticas ..."
 
 #: single.php:291 views/advanced_search/search_property_object_metadata.php:311
-#: views/advanced_search/show_object_properties.php:379
+#: views/advanced_search/show_object_properties.php:380
 #: views/object/formItem/input/object.class.php:978
 #: views/object/formItemMultiple/input/object.class.php:1015
 msgid "Clear search"
@@ -4649,8 +4650,8 @@ msgstr "já está inserido!"
 #: views/advanced_search/js/search_property_object_metadata_js.php:382
 #: views/advanced_search/js/show_insert_object_properties_js.php:323
 #: views/object/edit_object_properties/js/edit_list_properties_accordion_js.php:603
-#: views/object/formItem/helper/formItem.class.php:911
-#: views/object/formItem/helper/formItem.class.php:940
+#: views/object/formItem/helper/formItem.class.php:918
+#: views/object/formItem/helper/formItem.class.php:947
 #: views/object/formItem/helper/formItemCategory.class.php:69
 #: views/object/formItem/input/object.class.php:595
 #: views/object/formItemMultiple/helper/formItemCategory.class.php:69
@@ -4742,7 +4743,7 @@ msgstr "Descreva o porquê do item "
 
 #: views/advanced_search/modals_adv.php:73
 #: views/advanced_search/modals_adv.php:100
-#: views/collection/config_menu.php:102
+#: views/collection/config_menu.php:148
 #: views/collection/header_collection.php:218
 #: views/object/list_data_table.php:74 views/object/list_modes/modals.php:120
 #: views/object/list_modes/modals.php:149
@@ -4750,8 +4751,8 @@ msgstr "Descreva o porquê do item "
 msgid " is abusive: "
 msgstr " é abusivo:"
 
-#: views/advanced_search/modals_adv.php:91 views/collection/config_menu.php:75
-#: views/collection/config_menu.php:107
+#: views/advanced_search/modals_adv.php:91 views/collection/config_menu.php:76
+#: views/collection/config_menu.php:153
 #: views/collection/header_collection.php:227
 #: views/object/list_modes/edit_btns.php:56
 #: views/object/list_modes/edit_btns_table.php:61
@@ -4760,15 +4761,14 @@ msgid "Are you sure to remove the collection: "
 msgstr "Tem certeza que deseja remover a coleção:"
 
 #: views/advanced_search/modals_adv.php:100
-#: views/collection/config_menu.php:102
 #: views/collection/header_collection.php:218
 #: views/object/list_modes/modals.php:149
 msgid "Describe why the collection: "
-msgstr "Descre por que a coleção:"
+msgstr "Descreva por que a coleção: "
 
 #: views/advanced_search/properties_categories_search.php:245
 #: views/advanced_search/search_property_object_metadata.php:289
-#: views/advanced_search/show_object_properties.php:335
+#: views/advanced_search/show_object_properties.php:336
 #: views/object/formItem/input/object.class.php:956
 #: views/object/formItemMultiple/input/object.class.php:993
 msgid "Between"
@@ -4776,7 +4776,7 @@ msgstr "Entre"
 
 #: views/advanced_search/properties_categories_search.php:246
 #: views/advanced_search/search_property_object_metadata.php:290
-#: views/advanced_search/show_object_properties.php:336
+#: views/advanced_search/show_object_properties.php:337
 #: views/object/formItem/input/object.class.php:957
 #: views/object/formItemMultiple/input/object.class.php:994
 msgid "Not Between"
@@ -4800,7 +4800,7 @@ msgstr "Metadados"
 msgid "Item source"
 msgstr "Fonte do item"
 
-#: views/advanced_search/show_object_properties.php:350
+#: views/advanced_search/show_object_properties.php:351
 msgid "Available Licenses"
 msgstr "Licenças disponíveis"
 
@@ -4985,7 +4985,7 @@ msgstr "Confirma o download desta taxonomia:"
 msgid "Confirm"
 msgstr "Confirmar"
 
-#: views/category/list.php:246 views/collection/config_menu.php:48
+#: views/category/list.php:246 views/collection/config_menu.php:49
 msgid "Social"
 msgstr "Redes Sociais"
 
@@ -5048,17 +5048,21 @@ msgstr "Importar Taxonomia"
 msgid "Save & Next"
 msgstr "Salvar e Continuar"
 
-#: views/collection/config_menu.php:14
+#: views/collection/config_menu.php:14 views/collection/config_menu.php:108
 msgid "Collection configuration"
 msgstr "Configuração da coleção"
 
-#: views/collection/config_menu.php:78 views/object/js/list_js.php:286
+#: views/collection/config_menu.php:79 views/object/js/list_js.php:286
 msgid "Clean Collection"
 msgstr "Remover todos os itens"
 
-#: views/collection/config_menu.php:78 views/object/js/list_js.php:286
+#: views/collection/config_menu.php:79 views/object/js/list_js.php:286
 msgid "Are you sure to remove all items"
 msgstr "Tem certeza que deseja remover TODOS os itens "
+
+#: views/collection/config_menu.php:148
+msgid "Describe why the collection "
+msgstr "Descreva por que a coleção "
 
 #: views/collection/edit.php:17
 msgid "Collection Configuration"
@@ -6482,7 +6486,7 @@ msgstr "Carregando metadados..."
 #: views/object/create_item_text.php:58 views/object/create_item_text.php:379
 #: views/object/formItem/formItemMedia.php:21
 #: views/object/formItem/formItemMetadata.php:21
-#: views/object/formItem/helper/formItem.class.php:56
+#: views/object/formItem/helper/formItem.class.php:63
 #: views/object/js/create_item_text_js.php:6
 msgid "Create new item - Write text"
 msgstr "Criar novo item - Escrever texto"
@@ -6502,7 +6506,7 @@ msgstr "Faça o upload de anexos para seu item"
 #: views/object/create_item_text.php:158 views/object/create_item_text.php:363
 #: views/object/create_item_text.php:456 views/object/edit_item_text.php:286
 #: views/object/edit_item_text.php:568 views/object/edit_item_text.php:767
-#: views/object/formItem/helper/formItem.class.php:667
+#: views/object/formItem/helper/formItem.class.php:674
 #: views/object/formItem/helper/formItemAttachment.class.php:22
 #: views/object/formItemMultiple/helper/formItemAttachment.class.php:21
 #: views/object/formItemMultiple/items/items.class.php:445
@@ -6516,7 +6520,7 @@ msgstr "Arraste seus arquivos"
 #: views/object/create_item_text.php:159 views/object/create_item_text.php:364
 #: views/object/create_item_text.php:457 views/object/edit_item_text.php:287
 #: views/object/edit_item_text.php:569 views/object/edit_item_text.php:768
-#: views/object/formItem/helper/formItem.class.php:668
+#: views/object/formItem/helper/formItem.class.php:675
 #: views/object/formItem/helper/formItemAttachment.class.php:23
 #: views/object/formItemMultiple/helper/formItemAttachment.class.php:22
 #: views/object/formItemMultiple/items/items.class.php:445
@@ -6530,7 +6534,7 @@ msgstr "para upload"
 #: views/object/create_item_text.php:161 views/object/create_item_text.php:366
 #: views/object/create_item_text.php:459 views/object/edit_item_text.php:289
 #: views/object/edit_item_text.php:571 views/object/edit_item_text.php:770
-#: views/object/formItem/helper/formItem.class.php:670
+#: views/object/formItem/helper/formItem.class.php:677
 #: views/object/formItem/helper/formItemAttachment.class.php:25
 #: views/object/formItemMultiple/helper/formItemAttachment.class.php:24
 #: views/object/formItemMultiple/items/items.class.php:445
@@ -6570,7 +6574,7 @@ msgstr "Licenças cadastradas para este item "
 #: views/object/create_item_text.php:470 views/object/edit_item_text.php:84
 #: views/object/edit_item_text.php:505 views/object/edit_item_text.php:597
 #: views/object/edit_item_text.php:831
-#: views/object/formItem/helper/formItem.class.php:201
+#: views/object/formItem/helper/formItem.class.php:208
 msgid "Discard"
 msgstr "Descartar"
 
@@ -6838,13 +6842,13 @@ msgstr "Selecione o metadado reverso"
 msgid "No Attachments"
 msgstr "Sem Anexos"
 
-#: views/object/formItem/helper/formItem.class.php:674
+#: views/object/formItem/helper/formItem.class.php:681
 #: views/object/formItemMultiple/formItemMultiple.class.php:134
 #: views/object/multiple_items/editor_items.php:414
 msgid "Upload more files"
 msgstr " Inserir mais arquivos "
 
-#: views/object/formItem/helper/formItem.class.php:838
+#: views/object/formItem/helper/formItem.class.php:845
 #: views/object/formItemMultiple/formItemMultiple.class.php:488
 msgid "Saved at "
 msgstr "Salvo em "
