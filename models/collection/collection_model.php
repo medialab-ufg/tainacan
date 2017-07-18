@@ -570,7 +570,7 @@ class CollectionModel extends Model {
                     endif;
                 }
                 
-                if( $this->filter_ordenation($property_object->name, $all_data["type"]) ) {
+                if( $this->filter_ordenation($property_object->name, $all_data["type"]) && !in_array($property_object->slug, $this->fixed_slugs) ) {
                     $array = array('id' => $property_object->term_id, 'name' => $property_object->name, 'type' => $all_data['type']);
                     if ($parent_name == 'socialdb_property_data') {
                         // $is_ordenation = get_term_meta($property_object->term_id, 'socialdb_property_data_column_ordenation')[0];

@@ -364,6 +364,9 @@ class FormItem extends Model {
                         $class->widget($property, $this->itemId);
                     }
                 } else {
+                    if(in_array($property['id'], $this->collectionPropertiesView)){
+                        continue;
+                    }
                     $data = ['text', 'textarea', 'date', 'number', 'numeric', 'auto-increment', 'user'];
                     $term = ['selectbox', 'radio', 'checkbox', 'tree', 'tree_checkbox', 'multipleselect'];
                     $object = (isset($property['metas']['socialdb_property_object_category_id']) && !empty($property['metas']['socialdb_property_object_category_id'])) ? true : false;

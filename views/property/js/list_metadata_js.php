@@ -804,7 +804,7 @@
 
                         var blog_email = '<?php echo is_super_admin(get_current_user_id()); ?>';
 
-                        if (fixed_meta && fixed_meta == 'true' && (blog_email === '1')) {
+                        //if (fixed_meta && fixed_meta == 'true' && (blog_email === '1')) {
                             class_var = 'fixed-property';
                             if (visibility_properties.length === 0 || (visibility_properties.indexOf(current_id.toString()) < 0)) {
                                 button = '<a vis="show" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-open"></span></a>';
@@ -812,10 +812,10 @@
                                 style = 'style="opacity:0.33;"';
                                 button = '<a vis="hide" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-close"></span></a>';
                             }
-                        } else {
-                            class_var = 'fixed-property';
-                            button = '<span class="glyphicon glyphicon-trash no-edit"></span>';
-                        }
+                        //} else {
+                         //   class_var = 'fixed-property';
+                         //   button = '<span class="glyphicon glyphicon-trash no-edit"></span>';
+                        //}
                         //adiciona na listagem
                         generate_html_fixed_property(current_id, property, tab_property_id, class_var, style, button);
                     } else if (prop_slug && prop_slug.indexOf("exif-") >= 0) {

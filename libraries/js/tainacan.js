@@ -790,7 +790,11 @@ function showTopSearch() {
     $('#search_collections').fadeTo(300, 1, function () {
         $("#expand-top-search").css('border', '1px solid whitesmoke');
         $('#search_collections').focus();
-        $('#expand-top-search').attr('onclick','redirectAdvancedSearch("#search_collections")');
+        if($('.menu-ibram').length>0){
+            $('#expand-top-search').attr('onclick','showIbramSearch($("#search_collections").val())');
+        }else{
+            $('#expand-top-search').attr('onclick','redirectAdvancedSearch("#search_collections")');
+        }
         $("#expand-top-search").addClass('showing-input');
     });
 }
