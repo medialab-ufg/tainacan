@@ -1,4 +1,5 @@
 <?php
+include_once (dirname(__FILE__) . '/formItem.class.php');
 include_once (dirname(__FILE__) . '/../input/text.class.php');
 include_once (dirname(__FILE__) . '/../input/date.class.php');
 include_once (dirname(__FILE__) . '/../input/textarea.class.php');
@@ -245,7 +246,7 @@ class FormItemCompound extends FormItem {
                         collection_id: $("#collection_id").val(),
                         operation: 'appendContainerCompounds',
                         item_id:'<?php echo $item_id ?>',
-                        property_details: '<?php echo htmlentities(serialize($property)) ?>',
+                        property_details: "<?php echo htmlentities(serialize($property)) ?>",
                         index: index
                     }
                 }).done(function (result) {

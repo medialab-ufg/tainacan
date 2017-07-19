@@ -31,6 +31,21 @@ body.home {
     background: $collections-bg-color;
     text-align: center;
 
+
+    .index-menu{
+      border: 4px solid #E8E8E8;
+      background: white;
+      padding: 10px 40px 30px 40px;
+      margin: 0 0 40px 0;
+      font-size: 13pt;
+      text-align: left;
+      color:black;
+
+      p {
+        color:black;
+      }
+    }
+
     .col-md-3 {
       padding: 20px;
 

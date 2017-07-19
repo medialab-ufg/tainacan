@@ -61,7 +61,7 @@ class NumericClass extends FormItem{
         $this->initScriptsNumericClass($compound_id,$property_id, $item_id, $index_id);
         if($hasDefaultValue): ?>
             <script>
-                $('#numeric-field-<?php echo $compound['id'] ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').trigger('keyup');
+                $('#numeric-field-<?php echo $compound['id'] ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').trigger('blur');
             </script>
         <?php endif;    
 
@@ -76,9 +76,9 @@ class NumericClass extends FormItem{
     public function initScriptsNumericClass($compound_id,$property_id, $item_id, $index_id) {
         ?>
         <script>
-            $('#numeric-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').keyup(function(){
+            $('#numeric-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').blur(function(){
                 <?php if($this->isRequired):  ?>
-                    validateFieldsMetadataText($(this).val(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>')
+                    validateFieldsMetadataText($(this).val().trim(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>')
                 <?php endif; ?>
                 $.ajax({
                     url: $('#src').val() + '/controllers/object/form_item_controller.php',
@@ -86,7 +86,7 @@ class NumericClass extends FormItem{
                     data: {
                         operation: 'saveValue',
                         type:'data',
-                        value: $(this).val(),
+                        value: $(this).val().trim(),
                         item_id:'<?php echo $item_id ?>',
                         compound_id:'<?php echo $compound_id ?>',
                         property_children_id: '<?php echo $property_id ?>',
@@ -98,7 +98,7 @@ class NumericClass extends FormItem{
                     <?php if($this->isKey): ?>
                      var json =JSON.parse(result);
                      if(json.value){
-                        $('#numeric-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val('');
+                        //$('#numeric-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val('');
                             toastr.error(json.value+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
                      }
                     <?php endif; ?>

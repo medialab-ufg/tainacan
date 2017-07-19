@@ -1,9 +1,11 @@
 <?php
+include_once (dirname(__FILE__) . '/formItem.class.php');
 include_once (dirname(__FILE__) . '/../input/text.class.php');
 include_once (dirname(__FILE__) . '/../input/date.class.php');
 include_once (dirname(__FILE__) . '/../input/textarea.class.php');
 include_once (dirname(__FILE__) . '/../input/numeric.class.php');
 include_once (dirname(__FILE__) . '/../input/autoincrement.class.php');
+include_once (dirname(__FILE__) . '/../input/user.class.php');
 
 class FormItemText extends FormItem {
 
@@ -12,6 +14,7 @@ class FormItemText extends FormItem {
     public $textareaClass;
     public $numericClass;
     public $autoincrementClass;
+    public $userClass;
     public $class;
 
     public function widget($property, $item_id,$showButton = true) {
@@ -20,6 +23,8 @@ class FormItemText extends FormItem {
         $this->textareaClass = new TextAreaClass(0,'',$this->value);
         $this->numericClass = new NumericClass(0,'',$this->value);
         $this->autoincrementClass = new AutoIncrementClass(0,'',$this->value);
+        $this->userClass = new UserClass(0, '', $this->value);
+        
         //buscando o valor
         $values = $this->getValuePropertyHelper($item_id, $property_id);
         $this->setLastIndex();
@@ -64,6 +69,9 @@ class FormItemText extends FormItem {
                             <?php elseif ($property['type'] == 'autoincrement'): ?>
                                 <?php $this->autoincrementClass->isKey = $isKey ?>
                                 <?php $this->autoincrementClass->generate($property,['id'=>0], $item_id, $index) ?>
+                            <?php elseif ($property['type'] == 'user'): ?>
+                                <?php $this->userClass->isKey = $isKey ?>
+                                <?php $this->userClass->generate($property, ['id' => 0], $item_id, $index); ?>
                             <?php endif; ?>
                         </div>
                         <?php if ($first): ?>

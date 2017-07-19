@@ -20,6 +20,15 @@ var Hook = {
                 if (true != Hook.hooks[name][i](arguments)) {
                     break;
                 }
+    },
+    callMultiple: function (name, arguments) {
+        if ('undefined' != typeof (Hook.hooks[name]))
+            for (i = 0; i < Hook.hooks[name].length; ++i)
+                if (true != Hook.hooks[name][i](arguments)) {
+                }
+    },
+    clearActions: function (name) {
+        Hook.hooks[name] = []
     }
 };
 
@@ -295,8 +304,7 @@ $(window).load(function () {
 
     });
 
-    function show_result()
-    {
+    function show_result() {
         $('#modalImportConfirm').modal('show');
     }
     //submit do importar zip para colecoes
@@ -543,12 +551,9 @@ $(window).load(function () {
             }
 
         });
-
     });
 
-
-    
-});
+}); // On load Tainacan' main page
 
 $(document).ready(function () {
     $('.input_date').mask('00/00/0000');
@@ -785,7 +790,11 @@ function showTopSearch() {
     $('#search_collections').fadeTo(300, 1, function () {
         $("#expand-top-search").css('border', '1px solid whitesmoke');
         $('#search_collections').focus();
-        $('#expand-top-search').attr('onclick','redirectAdvancedSearch("#search_collections")');
+        if($('.menu-ibram').length>0){
+            $('#expand-top-search').attr('onclick','showIbramSearch($("#search_collections").val())');
+        }else{
+            $('#expand-top-search').attr('onclick','redirectAdvancedSearch("#search_collections")');
+        }
         $("#expand-top-search").addClass('showing-input');
     });
 }
@@ -2774,26 +2783,15 @@ function setMenuContainerHeight() {
     }
 }
 
-/*
- $(window).on('resize', function(ev) {
- var window_width = $(window).width();
- if(window_width < 1010) {
- 
- }
- });
- */
-
 function changeViewMode(viewMode) {    
     if (viewMode === "slideshow") {
         getCollectionSlideshow();
     } else {
-        /*
         if (viewMode === "table") {
             $(".center_pagination").hide();
         } else {
             $(".center_pagination").show();
         }
-        */
 
         $("#temp-viewMode").val(viewMode);
         $("#collection_single_ordenation").attr('data-viewMode', viewMode);
@@ -2934,18 +2932,25 @@ function show_reason_modal(id)
 
 //Modal addReason IBRAM
 
-//Exclui item selecionado 
-function exclude_item()
-{
+// Exclui item selecionado
+function exclude_item() {
     var text = $("#reasontext").val();
-    if(text.length > 0)
-    {
+    if(text.length > 0) {
         var id_delete = $("#btnRemoveReason").attr("data-id-exclude");
-
+        var it_name = $.trim($("#object_" + id_delete + " h4 a").text());
         $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/event/event_controller.php",
-            data: {operation: 'save_reason_to_exclude', elem_id: id_delete, reason: text, collection_id: $('#collection_id').val()}
+            data: {operation: 'save_reason_to_exclude', elem_id: id_delete, reason: text, collection_id: $('#collection_id').val(), item: it_name}
+        }).done(function(r) {
+            var jsn = $.parseJSON(r);
+            if( jsn.success ) {
+                swal(jsn.title, jsn.msg, 'success');
+                document.getElementById("cancelReason").reset();
+            } else {
+                var err_msg = 'Erro ao cancelar o item ' + jsn.nome + '! Tente novamente mais tarde';
+                swal('Erro!', err_msg, 'error');
+            }
         });
 
         $("#reasonModal").modal('hide');
@@ -2965,63 +2970,121 @@ function change_button()
         $("#btnRemoveReason").attr('disabled', true);
     }
 }
-//object_dc_type
-//Gera thumbnail de um pdf
-/*function generate_pdf_thumbnail(pdf_url)
-{
-    PDFJS.getDocument(pdf_url).promise.then(function (doc) {
-        var page = [];
-        page.push(1);//Get first page
-
-        return Promise.all(page.map(function (num) {
-            return doc.getPage(num).then(makeThumb)
-                .then(function (canvas) {
-                    var img = canvas.toDataURL("image/png");
-
-                    return img;
-                });
-        }));
-    });
-
-}*/
 
 function makeThumb(page) {
-    var vp = page.getViewport(1);
-    var canvas = document.createElement("canvas");
+    let vp = page.getViewport(1);
+    let canvas = document.createElement("canvas");
     canvas.width = 595;
     canvas.height = 842;
-    var scale = Math.min(canvas.width / vp.width, canvas.height / vp.height);
+    let scale = Math.min(canvas.width / vp.width, canvas.height / vp.height);
     return page.render({canvasContext: canvas.getContext("2d"), viewport: page.getViewport(scale)}).promise.then(function () {
         return canvas;
     });
 }
 
+/*
+    Descrição curta: Submit opções a serem Reindexadas
+
+    Como e realizado: As captura do texto de PDF'S e Office Documents é relizada no back-end. A geração de miniaturas é
+    realizada em conjunto entre o back-end e front-end. O JavaScript faz a requisição dos documentos .pdf, gera a tag canvas
+    para cada .pdf e então os envia para o servidor para que sejam convertidas em .png e então adicionadas como thumbnail dos
+    novos itens.
+ */
 $(document).on("submit", "#reindexation_form", function (event) {
     event.preventDefault();
-    var formData = new FormData(this);
+    let formData = new FormData(this);
 
-    $.ajax({
-        url: $("#src").val() + '/controllers/collection/collection_controller.php',
-        type: 'POST',
-        data: formData,
-        processData: false,
-        contentType: false
-    }).done(function (result) {
-        elem = jQuery.parseJSON(result);
-        //ssdfdasd
-    });
+    //PDF and office document text
+    if(formData.get('pdf_text') || formData.get('office_text') || formData.get('pdf_thumbnail'))
+    {
+        $("#modalImportMain").modal("show");
+        let promises = [];
+        //PDF text and Office Document text
+        promises.push(new Promise(function(resolve, reject){
+                if(formData.get('pdf_text') || formData.get('office_text'))
+                {
+                    $.ajax({
+                        url: $("#src").val() + '/controllers/collection/collection_controller.php',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false
+                    }).done(function (result) {
+                        elem = jQuery.parseJSON(result);
+                        resolve(elem.msg);
+                    });
+                }else resolve("");
+            })
+        );
 
-    /*for(var pair of formData.entries()) {
-        console.log(pair[0]+ ', '+ pair[1]);
-    }*/
-});
+        //PDF Thumbnail
+        promises.push(new Promise(function (right, wrong) {
+            if(formData.get('pdf_thumbnail'))
+            {
+                $.ajax({
+                    url: $("#src").val() + '/controllers/collection/collection_controller.php',
+                    type: 'POST',
+                    data: {operation: 'pdf_no_thumb_ids'}
+                }).done(function (result) {
+                    result = jQuery.parseJSON(result);
+                    itens_id = Object.keys(result).map(function(post_id) {return [post_id, result[post_id]]; });
 
-$("#reindexation_form").on('submit', function (event) {
-    alet("Aqui");
-    event.preventDefault();
-    var formData = new FormData(this);
+                    formData = new FormData();
+                    let itemsFetcher = itens_id.map(function(info, index) {
+                        let post_id = info[0];
+                        let pdf_url = info[1];
 
-    for(var pair of formData.entries()) {
-     console.log(pair[0]+ ', '+ pair[1]);
+                        return new Promise(function(resolve, reject) {
+                            PDFJS.getDocument(pdf_url).promise.then(function(doc) {
+                                let page = [];
+                                page.push(1); //Get first page
+
+                                return Promise.all(page.map(function(num) {
+                                    return doc.getPage(num).then(makeThumb)
+                                        .then(function(canvas) {
+                                            let img = canvas.toDataURL("image/png");
+
+                                            formData.append(post_id, img);
+                                            resolve("It's done!");
+                                        });
+                                }));
+                            });
+                        });
+                    });
+                    
+                    Promise.all(itemsFetcher).then(function(){
+                        $.ajax({
+                            url: $("#src").val() + '/controllers/collection/collection_controller.php?operation=pdf_thumbnail',
+                            type: 'POST',
+                            data: formData,
+                            processData: false,
+                            contentType: false
+                        }).done(function (result) {
+                            elem = jQuery.parseJSON(result);
+                            right(elem.msg);
+                        });
+                    });
+
+                });
+            }
+            else right("");
+        }));
+
+        Promise.all(promises).then(function(values){
+            $("#modalImportMain").modal("hide");
+            let CompleteMsg, success, msg;
+            if(values[0].length > 0)
+            {
+                CompleteMsg = values[0];
+            }else CompleteMsg = values [1];
+
+            msg = CompleteMsg.split(",")[0];
+            success = CompleteMsg.split(",")[1];
+            swal(
+                success,
+                msg,
+                "success"
+            );
+        });
     }
 });

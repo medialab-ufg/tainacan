@@ -216,7 +216,7 @@
                             ?>
                             <select class="form-control"
                                     onchange="onSelectValue(this,<?php echo $property['id']; ?>)"
-                                    name="socialdb_property_<?php echo $property['id']; ?>" 
+                                    name="socialdb_propertyterm_<?php echo $property['id']; ?>" 
                                     id='search_field_property_term_<?php echo $property['id']; ?>' <?php
                             
                             ?>></select>
@@ -244,8 +244,9 @@
                 </div>              
                 <div class="col-md-4 no-padding padding-left-space">
                     <select class="form-control" id="socialdb_property_<?php echo $property['id']; ?>_operation" name="socialdb_property_<?php echo $property['id']; ?>_operation">
-                       <option value="in"><?php _e('Contains','tainacan'); ?></option>
-                            <option value="not_in"><?php _e('Does not Contain','tainacan'); ?></option>
+                       <option value=""><?php _e('Select','tainacan'); ?>...</option>
+                       <option value="3"><?php _e('Contains','tainacan'); ?></option>
+                       <option value="4"><?php _e('Does not Contain','tainacan'); ?></option>
                     </select>
                </div>  
                <div class="col-md-12" id="append_properties_categories_<?php echo $property['id']; ?>_adv"></div> 
@@ -284,8 +285,8 @@
                     </div>
                     <div class="col-md-4 no-padding padding-left-space">
                         <select class="form-control" id="socialdb_property_<?php echo $property['id']; ?>_operation" name="socialdb_property_<?php echo $property['id']; ?>_operation">
-                            <option value="in"><?php _e('Contains','tainacan'); ?></option>
-                            <option value="not_in"><?php _e('Does not Contain','tainacan'); ?></option>
+                            <option value="3"><?php _e('Contains','tainacan'); ?></option>
+                            <option value="4"><?php _e('Does not Contain','tainacan'); ?></option>
                         </select>
                    </div>   
                  </div>                

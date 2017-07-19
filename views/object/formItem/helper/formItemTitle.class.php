@@ -1,5 +1,5 @@
 <?php
-
+include_once (dirname(__FILE__) . '/../helper/formItem.class.php');
 class FormItemTitle extends FormItem{
   var $hasKey;
 
@@ -55,16 +55,16 @@ class FormItemTitle extends FormItem{
     public function initScriptsTitleContainer($property, $item_id) {
         ?>
         <script>
-            $('#item-title').keyup(function(){
+            $('#item-title').blur(function(){
                 <?php if($this->isRequired === 'true'):  ?>
-                    validateFieldsMetadataText($(this).val(),'<?php echo $property['id'] ?>','0','0')
+                    validateFieldsMetadataText($(this).val().trim(),'<?php echo $property['id'] ?>','0','0')
                 <?php endif; ?>
                 $.ajax({
                     url: $('#src').val() + '/controllers/object/form_item_controller.php',
                     type: 'POST',
                     data: {
                         operation: 'saveTitle',
-                        value: $(this).val(),
+                        value: $(this).val().trim(),
                         item_id:'<?php echo $item_id ?>',
                         collection_id:$('#collection_id').val(),
                         hasKey: '<?php echo (!$this->hasKey ||$this->hasKey === '') ? 'false' :'true' ?>'
@@ -73,7 +73,8 @@ class FormItemTitle extends FormItem{
                     <?php if($this->hasKey): ?>
                      var json =JSON.parse(result);
                      if(json.value){
-                        $('#item-title').val('');
+                        //$('#item-title').val('');
+                        validateFieldsMetadataText('','<?php echo $property['id'] ?>','0','0')
                             toastr.error(json.value+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
                      }
                     <?php endif; ?>

@@ -39,7 +39,13 @@ class EventObjectDeleteModel extends EventModel {
                 $actual_state = get_post_meta($data['event_id'], 'socialdb_event_confirmed',true);
             }
         }
-
+        //filtro que altera o retorno do evento
+        if(has_filter('tainacan_alter_delete_object')){
+            $break =  apply_filters('tainacan_alter_delete_object',$data);
+            if($break){
+                return json_encode($break);
+            }
+        }
        // se o evento foi confirmado automaticamente ou pelos moderadores
        if( $actual_state!='confirmed'&&$automatically_verified  ||(isset($data['socialdb_event_confirmed'])&&$data['socialdb_event_confirmed']=='true') ) {
            $data = $this->update_post_status(get_post_meta($data['event_id'], 'socialdb_event_object_item_id',true),$data,$automatically_verified);    

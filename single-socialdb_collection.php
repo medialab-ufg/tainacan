@@ -13,11 +13,12 @@ while (have_posts()) : the_post();
 endwhile;
 ///****************************** EXECUTANDO SCRIPTS AVULSOS *********************/
 if(!get_option('tainacan_update_items_helpers')){
-    //HelpersController::execute_script('0003', ['collection_id' => 'all']);
+    HelpersController::execute_script('0003', ['collection_id' => 'all']);
+     wp_redirect(get_the_permalink());
 }else if (isset($_GET['execute-script'])):
     error_reporting(E_ALL);
     if ($_GET['execute-script'] == '0003') {
-      //  HelpersController::execute_script('0003', ['collection_id' => 'all']);
+        HelpersController::execute_script('0003', ['collection_id' => 'all']);
     } else if ($_GET['execute-script'] == '0002') {
         HelpersController::execute_script('0002', ['collection_id' => 'all']);
     } else if ($_GET['execute-script'] == '0001') {
@@ -43,7 +44,7 @@ if (!has_nav_menu('menu-ibram')):
     $_r_bg = repository_bg($col_root_id);
     ?>
     <div id="main_part_collection" class="collection_repo_config" 
-         style="background: url(<?php echo $_r_bg; ?>); display: none; margin-top: 50px;">
+         style="background: url(<?php echo $_r_bg; ?>); display: none; margin-top: 0px;">
         <div class="row container-fluid">
             <div class="project-info">
                 <center>
@@ -58,7 +59,7 @@ if (!has_nav_menu('menu-ibram')):
 else:
     echo '<input type="hidden" name="ibram_menu" value="ibram_menu_activated" />';
     ?>
-    <style type="text/css"> .ibram-header {  margin-top: 50px; } </style>
+    <style type="text/css"> .ibram-header {  margin-top: 0px; } </style>
 <?php
 endif;
 
@@ -71,7 +72,7 @@ while (have_posts()) : the_post();
     <div id="fb-root"></div>
 
     <!-- TAINACAN: esta div (AJAX) mostra o painel da colecao e suas acoes, estilos inline para descer a div apenas pois estava sob o header  -->
-    <div id="collection_post" style="margin-top: 50px;"> </div>
+    <div id="collection_post" style="margin-top: 0px;"> </div>
 
     <!-- TAINACAN - BEGIN: ITENS NECESSARIOS PARA EXECUCAO DE VARIAS PARTES DO SOCIALDB -->
     <input type="hidden" id="visualization_page_category" name="visualization_page_category" value="<?php echo (!$visualization_page_category || $visualization_page_category === 'right_button') ? 'right_button' : 'click'; ?>">

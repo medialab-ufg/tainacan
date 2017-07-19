@@ -1,5 +1,5 @@
 <?php
-
+include_once (dirname(__FILE__) . '/formItem.class.php');
 class FormItemType extends FormItem {
 
     public function widget($property, $item_id) {

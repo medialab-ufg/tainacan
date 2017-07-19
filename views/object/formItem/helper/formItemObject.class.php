@@ -1,4 +1,5 @@
 <?php
+include_once (dirname(__FILE__) . '/formItem.class.php');
 include_once (dirname(__FILE__) . '/../input/object.class.php');
 
 class FormItemObject extends FormItem{

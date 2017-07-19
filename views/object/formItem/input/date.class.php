@@ -12,6 +12,85 @@ class DateClass extends FormItem {
         $hasDefaultValue = (isset($property['metas']['socialdb_property_default_value']) && $property['metas']['socialdb_property_default_value']!='') ? $property['metas']['socialdb_property_default_value'] : false;
         $values = ($this->value && is_array($this->getValues($this->value[$index_id][$property_id]))) ? $this->getValues($this->value[$index_id][$property_id]) : false;
         //se nao possuir nem valor default verifico se ja existe
+
+        $mapping = get_option('socialdb_general_mapping_collection');
+        $collection_id = $property['metas']['socialdb_property_collection_id'];
+        if(has_action("add_material_loan_devolution") && $mapping['Emprestimo'] == $collection_id)
+        {
+            //Get variable from DB
+            $loan_time = get_option('socialdb_loan_time');
+            $devolution_days = get_option('socialdb_devolution_weekday');
+            $devolution_day_problem_option = get_option('socialdb_devolution_day_problem');
+            if($devolution_day_problem_option == 'after')
+                $sum = 1;
+            else $sum = -1;
+
+
+            $today = intval(date('d'));
+            $month = intval(date('m'));
+            $year = intval (date('Y'));
+            $days_in_month = date('t', mktime(0, 0, 0, $month, 1, $year));
+            $actual_weekday = '';
+
+
+            $day_to_return += $today + $loan_time;
+            while ($day_to_return > $days_in_month)
+            {
+                $day_to_return -= $days_in_month;
+                $next_month = $month + 1;
+
+                if($next_month % 12 == 0)
+                {
+                    $month = 12;
+                }else if($next_month % 12 > $month)
+                {
+                    $month = $next_month % 12;
+                }
+
+                if($next_month > 12)
+                {
+                    $year++;
+                }
+
+                $days_in_month = date('t', mktime(0, 0, 0, $month, 1, $year));
+            }
+
+            if($day_to_return < $days_in_month)
+            {
+                $actual_weekday = date("l", mktime(0, 0, 0, $month, $day_to_return, $year));
+
+                while (!array_key_exists($actual_weekday, $devolution_days))
+                {
+                    $day_to_return += $sum;
+                    $actual_weekday = date("l", mktime(0, 0, 0, $month, $day_to_return, $year));
+
+                    if($day_to_return > $days_in_month)
+                    {
+                        $day_to_return -= $days_in_month;
+                        $next_month = $month + 1;
+
+                        if($next_month % 12 == 0)
+                        {
+                            $month = 12;
+                        }else if($next_month % 12 > $month)
+                        {
+                            $month = $next_month % 12;
+                        }
+
+                        if($next_month > 12)
+                        {
+                            $year++;
+                        }
+
+                        $days_in_month = date('t', mktime(0, 0, 0, $month, 1, $year));
+                    }
+                }
+            }
+
+            $values[0] = date('d/m/Y', mktime(0, 0, 0, $month, $day_to_return, $year));
+            $hasDefaultValue = true;
+        }
+        
         $values = (!$values && $hasDefaultValue) ? [$hasDefaultValue] : $values;
         $autoValidate = ($values && isset($values[0]) && !empty($values[0])) ? true : false;
         $this->isRequired = ($property['metas'] && $property['metas']['socialdb_property_required'] && $property['metas']['socialdb_property_required'] != 'false') ? true : false;
@@ -57,8 +136,9 @@ class DateClass extends FormItem {
                             class="compound-one-field-should-be-filled-<?php echo $compound['id'] ?>"
                             value="<?php echo ($autoValidate) ? 'true' : 'false' ?>">
             <?php endif;  ?>
-            <?php if(has_action('alter_input_date')): var_dump('sssss'); ?>
-                 <?php do_action('alter_input_date',['compound'=>$compound,'property_id'=>$property_id,'property'=>$property,'index'=>$index_id,'autoValidate'=>$autoValidate]) ?>
+            <?php if(has_action('alter_input_date')): ?>
+                <?php do_action('alter_input_date',
+                            ['value'=> $values,'item_id'=>$item_id,'compound'=>$compound,'property_id'=>$property_id,'property'=>$property,'index'=>$index_id,'autoValidate'=>$autoValidate]) ?>
             <?php else: ?>         
                 <input 
                     style="margin-right: 5px;" 
@@ -73,7 +153,7 @@ class DateClass extends FormItem {
                 $this->initScriptsDate($property_id, $item_id, $compound_id, $index_id);
         if($hasDefaultValue): ?>
             <script>
-                $('#date-field-<?php echo $compound['id'] ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').trigger('keyup');
+                $('#date-field-<?php echo $compound['id'] ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').trigger('blur');
             </script>
         <?php endif;         
         }
@@ -82,9 +162,10 @@ class DateClass extends FormItem {
         <script>
             init_metadata_date("#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>");
 
-            $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').keyup(function () {
+            $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').blur(function () {
                 <?php if($this->isRequired):  ?>
-                    validateFieldsMetadataText($(this).val(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>')
+                Hook.call('validateFieldsMetadataText',[$(this).val(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>']);
+                    //validateFieldsMetadataText($(this).val(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>')
                 <?php endif; ?>
                 $.ajax({
                     url: $('#src').val() + '/controllers/object/form_item_controller.php',
@@ -92,7 +173,7 @@ class DateClass extends FormItem {
                     data: {
                         operation: 'saveValue',
                         type: 'data',
-                        value: $(this).val(),
+                        value: $(this).val().trim(),
                         item_id: '<?php echo $item_id ?>',
                         compound_id: '<?php echo $compound_id ?>',
                         property_children_id: '<?php echo $property_id ?>',
@@ -133,7 +214,7 @@ class DateClass extends FormItem {
                     <?php if($this->isKey): ?>
                      var json =JSON.parse(result);
                      if(json.value){
-                        $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val('');
+                        //$('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val('');
                             toastr.error(json.value+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
                      }
                     <?php endif; ?>
@@ -152,7 +233,9 @@ class DateClass extends FormItem {
                     prevText: 'Anterior',
                     showOn: "button",
                     buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif",
-                    buttonImageOnly: true
+                    buttonImageOnly: true,
+                    changeMonth: true,
+                    changeYear: true
                 });
             }
         </script> 

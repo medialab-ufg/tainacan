@@ -25,7 +25,8 @@ class ObjectClass extends FormItem {
         $autoValidate = ($values && !empty($values)) ? true : false;
         $this->isRequired = ($property['metas'] && $property['metas']['socialdb_property_required'] && $property['metas']['socialdb_property_required'] != 'false') ? true : false;
         $isMultiple = ($property['metas']['socialdb_property_object_cardinality'] == 'n') ? true : false;
-        $isView = $this->viewValue($property,$values,'term');
+        
+        $isView = $this->viewValue($property,$values,'object');
         if($isView){
             return true;
         }
@@ -109,7 +110,7 @@ class ObjectClass extends FormItem {
                     data: {
                         operation: 'saveValue',
                         type:'object',
-                        <?php if($property_id!==0) echo 'indexCoumpound:0,' ?>
+                        <?php if($property_id!==0 && !$isMultiple) echo 'indexCoumpound:0,' ?>
                         value: '<?php echo $hasDefaultValue ?>',
                         item_id:'<?php echo $item_id ?>',
                         compound_id:'<?php echo $compound_id ?>',
@@ -285,14 +286,14 @@ class ObjectClass extends FormItem {
 
             //remove no formulario de fato
             function original_remove_in_item_value_compound_<?php echo $compound_id ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>(id,seletor){
-                $(seletor).parent().remove();
+                $(seletor).remove();
                 $.ajax({
                     url: $('#src').val() + '/controllers/object/form_item_controller.php',
                     type: 'POST',
                     data: {
                         operation: 'removeValue',
                         type:'object',
-                        <?php if($property_id!==0) echo 'indexCoumpound:0,' ?>
+                        <?php if($property_id!==0 && !$isMultiple) echo 'indexCoumpound:0,' ?>
                         value: id,
                         item_id:'<?php echo $item_id ?>',
                         compound_id:'<?php echo $compound_id ?>',
@@ -314,7 +315,7 @@ class ObjectClass extends FormItem {
                     data: {
                         operation: 'saveValue',
                         type:'object',
-                        <?php if($propert_id!==0) echo 'indexCoumpound:0,' ?>
+                        <?php if($propert_id!==0 && !$isMultiple) echo 'indexCoumpound:0,' ?>
                         value: id,
                         item_id:'<?php echo $item_id ?>',
                         compound_id:'<?php echo $compound_id ?>',
@@ -682,6 +683,7 @@ class ObjectClass extends FormItem {
             <input type="hidden" name="contador" value="<?php echo $this->index_id ?>">
             <input type="hidden" name="item_id" value="<?php echo $this->item_id ?>">
             <!------------------------------------------------------------------------------>
+            <input type="hidden" name="cardinality" value="<?php echo ($property['metas']['socialdb_property_object_cardinality'] == 'n') ? 'true' : 'false' ?>">
             <input type="hidden" name="avoid_selected_items" id="avoid_selected_items_<?php echo $this->compound_id ?>_<?php echo $this->property_id ?>_<?php echo $this->index_id ?>" value="<?php echo (isset($property['metas']['socialdb_property_avoid_items']) && $property['metas']['socialdb_property_avoid_items'] == 'true') ? 'true' : 'false' ?>">
             <input type="hidden" name="categories" value="<?php echo (is_array($property['metas']['socialdb_property_object_category_id'])) ? implode(",", $property['metas']['socialdb_property_object_category_id']) : $property['metas']['socialdb_property_object_category_id'] ?>">
             <input type="hidden" name="properties_id" value="<?php echo (is_array($properties)) ? implode(',', $properties) : '' ?>">

@@ -20,7 +20,7 @@ if (!empty($app['app_id']) && !empty($app['app_secret'])) {
 
 }
 ?>
-<div class="col-md-12" style="background: #E8E8E8; padding-top: 50px; margin-top: -20px; padding-bottom: 50px;">
+<div class="col-md-12" style="background: #E8E8E8; padding-top: 50px; margin-top: 0px; padding-bottom: 50px;">
     <div class="col-md-7 center" style="background: white; border: 2px solid #d8d6d6; padding: 25px">
 
         <form id="formUserRegister" name="formUserRegister" type="POST">

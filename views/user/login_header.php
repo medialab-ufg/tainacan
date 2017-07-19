@@ -83,8 +83,8 @@ if (!empty($app['app_id']) && !empty($app['app_secret'])) {
             <label for="inputPassword" class="sr-only-no"><?php _e("Password",'tainacan'); ?></label>
             <input type="password" id="inputPassword" name="password" class="form-control" placeholder="<?php _e('Password','tainacan') ?>" required="">
 
-            <br><label><a style="cursor: pointer;" id="open_myModalForgotPasswordHeader"><?php _e("Forgot password?",'tainacan'); ?></a></label>
             <button class="btn btn-lg btn-primary pull-right send-login" type="submit"><?php _e("Login",'tainacan'); ?></button>
+            <br><label><a style="cursor: pointer;" id="open_myModalForgotPasswordHeader"><?php _e("Forgot password?",'tainacan'); ?></a></label>
         </form>
 
     </div>

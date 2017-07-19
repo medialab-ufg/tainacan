@@ -1,20 +1,5 @@
 <?php
 include_once(dirname(__FILE__) . '../../../../../models/object/object_model.php');
-include_once (dirname(__FILE__) . '/formItemText.class.php');
-include_once (dirname(__FILE__) . '/formItemCategory.class.php');
-include_once (dirname(__FILE__) . '/formItemObject.class.php');
-include_once (dirname(__FILE__) . '/formItemCompound.class.php');
-//fixos
-include_once (dirname(__FILE__) . '/formItemTitle.class.php');
-include_once (dirname(__FILE__) . '/formItemThumbnail.class.php');
-include_once (dirname(__FILE__) . '/formItemAttachment.class.php');
-include_once (dirname(__FILE__) . '/formItemContent.class.php');
-include_once (dirname(__FILE__) . '/formItemThumbnail.class.php');
-include_once (dirname(__FILE__) . '/formItemDescription.class.php');
-include_once (dirname(__FILE__) . '/formItemSource.class.php');
-include_once (dirname(__FILE__) . '/formItemTags.class.php');
-include_once (dirname(__FILE__) . '/formItemLicense.class.php');
-include_once (dirname(__FILE__) . '/formItemType.class.php');
 
 class FormItem extends Model {
 
@@ -48,6 +33,7 @@ class FormItem extends Model {
     public $title;
     public $value;
     public $isKey;
+    public $collectionPropertiesView;
 
     function __construct($collection_id = 0,$title = '',$value= false) {
         $habilitateMedia = ($collection_id === 0) ? '' : get_post_meta($collection_id, 'socialdb_collection_habilitate_media', true);
@@ -67,6 +53,12 @@ class FormItem extends Model {
         //verifico se existe labels da colecao
         if ($this->collection_id !== 0):
             $this->get_labels_fixed_properties($this->collection_id);
+            $meta = get_post_meta($this->collection_id, 'socialdb_collection_fixed_properties_visibility', true);
+            if ($meta && $meta != ''):
+                $this->collectionPropertiesView = explode(',', $meta);
+            else:
+                $this->collectionPropertiesView = [];
+            endif;
         endif;
         $this->title = ($title == '') ? __('Create new item - Write text', 'tainacan'):$title;
         $this->value = $value;
@@ -333,15 +325,15 @@ class FormItem extends Model {
         if (is_array($this->metadatas[$tab_id])) {
             foreach ($this->metadatas[$tab_id] as $property) {
                 $this->allPropertiesIds[] = $property['id'];
-                if (in_array($property['slug'], $this->fixed_slugs)) {
-                    $visibility = (get_term_meta($property['id'],'socialdb_property_visibility',true));
-                    if($visibility == 'hide'){
+                if(has_filter('property_is_visible')){
+                    if(!apply_filters('property_is_visible', $property,$this->collection_id)){
                         continue;
                     }
-                    if(has_filter('property_is_visible')){
-                        if(!apply_filters('property_is_visible', $property,$this->collection_id)){
-                            continue;
-                        }
+                }
+                if (in_array($property['slug'], $this->fixed_slugs)) {
+                    $visibility = (get_term_meta($property['id'],'socialdb_property_visibility',true));
+                    if($visibility == 'hide' || in_array($property['id'], $this->collectionPropertiesView)){
+                        continue;
                     }
                     if ($property['slug'] == 'socialdb_property_fixed_title' && !$this->isMediaFocus) {
                         $class = new FormItemTitle($this->collection_id);
@@ -372,7 +364,10 @@ class FormItem extends Model {
                         $class->widget($property, $this->itemId);
                     }
                 } else {
-                    $data = ['text', 'textarea', 'date', 'number', 'numeric', 'auto-increment'];
+                    if(in_array($property['id'], $this->collectionPropertiesView)){
+                        continue;
+                    }
+                    $data = ['text', 'textarea', 'date', 'number', 'numeric', 'auto-increment', 'user'];
                     $term = ['selectbox', 'radio', 'checkbox', 'tree', 'tree_checkbox', 'multipleselect'];
                     $object = (isset($property['metas']['socialdb_property_object_category_id']) && !empty($property['metas']['socialdb_property_object_category_id'])) ? true : false;
                     if (in_array($property['type'], $data) && !$object) {
@@ -559,7 +554,12 @@ class FormItem extends Model {
     *
     */
     public function viewValue($property,$values,$type){
-        if($_SESSION && $_SESSION['operation-form'] == 'edit' &&(isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true')){
+        //sessao
+        if(!session_id()) {
+                session_start();
+        }
+        if($_SESSION && $_SESSION['operation-form'] == 'edit' 
+                && (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true') && is_array($values) && !empty($values)){
             foreach ($values as $value) {
                 if($type == 'data'){
                     ?>
@@ -569,7 +569,7 @@ class FormItem extends Model {
                     $ob = get_post($value);
                     if ($ob && $ob->post_status == 'publish') {
                         // echo '<b><a href="'. get_the_permalink($property['metas']['collection_data'][0]->ID) . '?item=' . $ob->post_name . '" >'. $ob->post_title . '</a></b><br>';
-                        echo '<input type="hidden" name="socialdb_property_'.$property['id'].'[]" value="'.$ob->ID.'"><p><i>' . $ob->post_title . '</p> <br >';
+                        echo '<input type="hidden" name="socialdb_property_'.$property['id'].'[]" value="'.$ob->ID.'"><p><i>' . $ob->post_title . '</i></p> <br >';
                     }
                 }else{
                     $ob = get_term_by('id',$value,'socialdb_category_type');
@@ -641,7 +641,7 @@ class FormItem extends Model {
     public function mediaHabilitate() {
         ?>
           <div class="col-md-3"
-               style="background: white;font: 11px Arial;padding-left: 1% 2% 0px 15px;margin-top: 0px">
+               style="background: white;font: 11px Arial;padding:0px;margin-top: 0px;width: 23%;margin-left: 15px;">
                 <h4>
                    <?php echo ($view_helper->terms_fixed['thumbnail']) ? $view_helper->terms_fixed['thumbnail']->name :  _e('Thumbnail','tainacan') ?>
                </h4>
@@ -681,10 +681,21 @@ class FormItem extends Model {
                                     </span>
                                 </div>
                      </div>
+                         <button type="button" onclick="$('#dropzone_new').trigger('click')" class="btn btn-primary"><?php _e('Upload more files','tainacan') ?></button>
                      </center>
                  </div>
             </div>
         <?php    
+    }
+    
+    public function sortArrayChildren($children) {
+        if(count($children) > 0){
+            var_dump(usort($children, function($a, $b)
+            {
+                return strcmp($a->name, $b->name);
+            }));
+        }
+        return $children;
     }
 
     /**
@@ -893,10 +904,13 @@ class FormItem extends Model {
                         collection_id:$('#collection_id').val()}
                 }).done(function (result) {
                     hide_modal_main();
-                    var json = JSON.parse(result)
-                     showAlertGeneral(json.title,json.msg,json.type);
-                     routerGo($('#slug_collection').val());
-                     showList($('#src').val());
+                    var json = JSON.parse(result);
+                    if(json.ok)
+                    {
+                        showAlertGeneral(json.title,json.msg,json.type);
+                        routerGo($('#slug_collection').val());
+                        showList($('#src').val());
+                    }else showAlertGeneral(json.title,json.msg,json.type);
                 });
             }
 
@@ -910,6 +924,7 @@ class FormItem extends Model {
                     type: 'POST',
                     data: {
                         operation: 'appendCategoryMetadata',
+                        operationForm:'<?php echo ($_SESSION && $_SESSION['operation-form']) ? $_SESSION['operation-form'] : 'add' ?>',
                         properties_to_avoid: '<?php echo implode(',', $this->allPropertiesIds) ?>', categories: categories,object_id:item_id ,item_id:item_id,collection_id:$('#collection_id').val()}
                 }).done(function (result) {
                     if(result !== ''){
@@ -917,6 +932,9 @@ class FormItem extends Model {
                         $(seletor).css('padding','5px;');
                         $(seletor).css('margin-top','10px');
                         $(seletor).css('height','auto');
+                        $(seletor).css('float','left');
+                        $(seletor).css('width','100%');
+                        $(seletor).css('padding-bottom','15px');
                         $(seletor).html(result);
                     }else{
                         $(seletor).html('');
@@ -935,6 +953,7 @@ class FormItem extends Model {
                   type: 'POST',
                   data: {
                       operation: 'appendCategoryMetadata',
+                      operationForm:'<?php echo ($_SESSION && $_SESSION['operation-form']) ? $_SESSION['operation-form'] : 'add' ?>',
                       properties_to_avoid: '<?php echo implode(',', $this->allPropertiesIds) ?>', categories: categories,object_id:item_id ,item_id:item_id,collection_id:$('#collection_id').val()}
               }).done(function (result) {
                   if(result !== ''){
@@ -942,6 +961,9 @@ class FormItem extends Model {
                       $(seletor).css('padding','5px;');
                       $(seletor).css('margin-top','10px');
                       $(seletor).css('height','auto');
+                      $(seletor).css('float','left');
+                      $(seletor).css('width','100%');
+                      $(seletor).css('padding-bottom','15px');
                       $(seletor).html(result);
                   }else{
                       $(seletor).css('border','none');
@@ -1026,3 +1048,18 @@ class FormItem extends Model {
     }
 
 }
+include_once (dirname(__FILE__) . '/formItemText.class.php');
+include_once (dirname(__FILE__) . '/formItemCategory.class.php');
+include_once (dirname(__FILE__) . '/formItemObject.class.php');
+include_once (dirname(__FILE__) . '/formItemCompound.class.php');
+//fixos
+include_once (dirname(__FILE__) . '/formItemTitle.class.php');
+include_once (dirname(__FILE__) . '/formItemThumbnail.class.php');
+include_once (dirname(__FILE__) . '/formItemAttachment.class.php');
+include_once (dirname(__FILE__) . '/formItemContent.class.php');
+include_once (dirname(__FILE__) . '/formItemThumbnail.class.php');
+include_once (dirname(__FILE__) . '/formItemDescription.class.php');
+include_once (dirname(__FILE__) . '/formItemSource.class.php');
+include_once (dirname(__FILE__) . '/formItemTags.class.php');
+include_once (dirname(__FILE__) . '/formItemLicense.class.php');
+include_once (dirname(__FILE__) . '/formItemType.class.php');

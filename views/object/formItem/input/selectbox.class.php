@@ -25,7 +25,9 @@ class SelectboxClass extends FormItem{
                 <select class="form-control auto-save"
                         id='selectbox-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>' >
                     <option value=""><?php _e('Select','tainacan') ?>...</option>
-                    <?php if($property['has_children'] && is_array($property['has_children'])): ?>
+                    <?php if($property['has_children'] && is_array($property['has_children'])): 
+                        $property['has_children'] = $this->sortArrayChildren($property['has_children']);
+                        ?>
                         <?php foreach ($property['has_children'] as $child):
                             $is_selected = ($values && in_array($child->term_id,$values)) ? 'selected' : '';
                             if(!$autoValidate)

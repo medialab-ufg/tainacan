@@ -44,7 +44,9 @@ class OAIPMHRepositoryModel extends OAIPMHModel {
      */
     public function insert_collection($slug,$name){
         if(get_term_by('slug', $slug, 'socialdb_category_type'))
-            wp_delete_term(get_term_by('slug', $slug, 'socialdb_category_type')->term_id, 'socialdb_category_type');
+            $term = get_term_by('slug', $slug, 'socialdb_category_type')->term_id;
+            if($term != $this->get_category_root())    
+                wp_delete_term($term, 'socialdb_category_type');
         //if(!get_term_by('slug', $slug, 'socialdb_category_type')){
             $collection_model = new CollectionModel;
             $collection = array(

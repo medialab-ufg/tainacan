@@ -70,6 +70,11 @@ class ObjectController extends Controller {
             case 'appendCategoryMetadata'://
                     //class
                     include_once dirname(__FILE__) . '../../../views/object/formItem/helper/formItem.class.php';
+                    //sessao
+                    if(!session_id()) {
+                            session_start();
+                    }
+                    $_SESSION['operation-form'] = $data['operationForm'];
                     $formItem = new FormItem($data['collection_id']);
                     $data = $object_model->show_object_properties($data);
                     $properties_to_avoid = explode(',', $data['properties_to_avoid']);
@@ -135,13 +140,18 @@ class ObjectController extends Controller {
                 endif;
                 break;
             case "editor_items":
+//                $data['properties'] = $object_model->show_object_properties($data);
+//                $data['items'] = $objectfile_model->get_files($data);
+//                if ($data['items'] && empty(!$data['items'])) {
+//                    return $this->render(dirname(__FILE__) . '../../../views/object/multiple_items/editor_items.php', $data);
+//                } else {
+//                    return 0;
+//                }
+                include_once dirname(__FILE__) . '../../../views/object/formItemMultiple/formItemMultiple.class.php';
+                $class = new FormItemMultiple($data['collection_id'],__('Add new item - Send local file', 'tainacan'),'add-files');
                 $data['properties'] = $object_model->show_object_properties($data);
-                $data['items'] = $objectfile_model->get_files($data);
-                if ($data['items'] && empty(!$data['items'])) {
-                    return $this->render(dirname(__FILE__) . '../../../views/object/multiple_items/editor_items.php', $data);
-                } else {
-                    return 0;
-                }
+                $data['items'] = $objectfile_model->create_item_by_files($data);
+                $class->start($data['items'], $data['properties']);
                 break;
             //END: EDITOR DE ITEMS MULTIPLOS
             //# EDITOR DE ITENS PARA REDES SOCIAIS
@@ -152,7 +162,10 @@ class ObjectController extends Controller {
                 $data['properties'] = $object_model->show_object_properties($data);
                 $data['items'] = $objectfile_model->get_inserted_items_social_network($data);
                 if ($data['items'] && empty(!$data['items'])) {
-                    return $this->render(dirname(__FILE__) . '../../../views/object/multiple_social_network/editor_items.php', $data);
+                    //return $this->render(dirname(__FILE__) . '../../../views/object/multiple_social_network/editor_items.php', $data);
+                    include_once dirname(__FILE__) . '../../../views/object/formItemMultiple/formItemMultiple.class.php';
+                    $class = new FormItemMultiple($data['collection_id'],__('Add new item - Insert URL', 'tainacan'),'add-social-network');
+                    $class->start($data['items'], $data['properties']);
                 } else {
                     return 0;
                 }
@@ -165,7 +178,10 @@ class ObjectController extends Controller {
                 $data['items_id'] = get_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betafile');
                 $data['items'] = $objectfile_model->get_inserted_items_social_network($data);
                 if ($data['items'] && empty(!$data['items'])) {
-                    return $this->render(dirname(__FILE__) . '../../../views/object/multiple_social_network/editor_items.php', $data);
+                    //return $this->render(dirname(__FILE__) . '../../../views/object/multiple_social_network/editor_items.php', $data);
+                    include_once dirname(__FILE__) . '../../../views/object/formItemMultiple/formItemMultiple.class.php';
+                    $class = new FormItemMultiple($data['collection_id'],__('Continue editting...  Insert URL', 'tainacan'),'add-social-network-beta');
+                    $class->start($data['items'], $data['properties']);
                 } else {
                     return 0;
                 }
@@ -476,7 +492,6 @@ class ObjectController extends Controller {
                 if ($_item_meta['_thumbnail_id']) {
                     $press['tbn'] = $this->format_item_thumb($_item_meta['_thumbnail_id']);
                 }
-
                 $item_attachs = $objectfile_model->show_files(['collection_id'=> $data['collection_id'], 'object_id' => $object_id]);
                 if($item_attachs) {
                     foreach($item_attachs['image'] as $attach_obj) {
@@ -484,14 +499,18 @@ class ObjectController extends Controller {
                     }
                 }
 
-                $tabs = [
-                    'order' => get_post_meta($data['collection_id'], 'socialdb_collection_properties_ordenation'),
+                $tabs = [ 'order' => get_post_meta($data['collection_id'], 'socialdb_collection_properties_ordenation'),
                     'organize' => unserialize( get_post_meta($data['collection_id'], 'socialdb_collection_update_tab_organization', true))[0],
-                    'names' => get_post_meta($data['collection_id'], 'socialdb_collection_tab')
-                ];
-
+                    'names' => get_post_meta($data['collection_id'], 'socialdb_collection_tab') ];
                 $press['meta_ids_ord'] = explode(",",unserialize($tabs['order'][0])['default']);
                 $ord_list = [];
+
+				foreach($tabs["organize"] as $id => $tb) {
+					$mt = "socialdb_property_helper_${id}";
+					if( !array_key_exists($mt, $_item_meta)) {
+                        $_item_meta[$mt] = ["--"];
+					}
+				}
 
                 $total_index = 0;
                 $_to_be_removed = [];
@@ -521,8 +540,7 @@ class ObjectController extends Controller {
                                         // $press['meta_ids'][] = $_current_term_id;
                                         $_pair = ['meta' => $final_title, 'value'=> '_____________________________', 'submeta_header' => true, 'header_idx' => $total_index, 'meta_id' => $_current_term_id, 'meta_tab' => $tabs['organize'][$_current_term_id]];
                                         $press['inf'][] = $_pair;
-
-                                        $ord_list[$_pair['meta_id']] = $_pair;
+                                        // $_pair['meta_id']] = $_pair;
 
                                         $current_submeta_vals = [];
                                         $curr_meta = 0;
@@ -546,8 +564,7 @@ class ObjectController extends Controller {
 
                                                     if( $_pair['value'] != "" && ! empty($_pair['value']) ) {
                                                         $press['inf'][] = $_pair;
-                                                        $aux_arr[] = $_title->name . "__" . $v;
-                                                        $ord_list[$_pair['meta_id']] = $_pair;
+                                                        $aux_arr[] = $_title->name . "__" . $v; // $ord_list[$_pair['meta_id']] = $_pair;
                                                     }
 
                                                     if( !empty($_pair['value']) && !is_null($_pair['value'])) {
@@ -570,8 +587,7 @@ class ObjectController extends Controller {
                                                     }
 
                                                     $press['meta_ids'][] = $_curr_term->term_id;
-                                                    $press['inf'][] = $_pair;
-                                                    $ord_list[$_pair['meta_id']] = $_pair;
+                                                    $press['inf'][] = $_pair; // $ord_list[$_pair['meta_id']] = $_pair;
                                                 }
                                             } else {
                                                 $_title_id = explode("_", $_meta_->meta_key);
@@ -585,8 +601,7 @@ class ObjectController extends Controller {
                                                     $_term_name_ = get_term(intval($cat_check[0]))->name;
                                                     $_pair = ['meta' => $string_title, 'value' => $_term_name_, 'is_submeta' => true, 'meta_id' => get_term($titles_ids_arr[$curr_meta])->term_id];
 
-                                                    $press['inf'][] = $_pair;
-                                                    $ord_list[$_pair['meta_id']] = $_pair;
+                                                    $press['inf'][] = $_pair;  // $ord_list[$_pair['meta_id']] = $_pair;
                                                     $press['meta_ids'][] = get_term($titles_ids_arr[$curr_meta])->term_id;
                                                     $aux_arr[] = $_title . "__" . $_term_name_;
                                                 }
@@ -613,16 +628,102 @@ class ObjectController extends Controller {
                                             }
                                         }
                                     }
-
-                                    // $press['ctn'][] = [$_pair, 'tipo' => $_meta_type];
                                     $press['meta_ids'][] = $col_meta->term_id;
-                                    $press['inf'][] = $_pair;
-                                    $ord_list[$_pair['meta_id']] = $_pair;
+                                    $press['inf'][] = $_pair;  // $ord_list[$_pair['meta_id']] = $_pair;
                                 }
                             } else {
-                                $press['set'][] = $col_meta;
+                                $prop = unserialize(get_post_meta($object_id, $meta)[0]);
+                                $_meta_header_ = get_term($pcs[3]);
+
+                                if( is_array($prop) && count($prop) > 0 ) {
+                                    for ($i = 0; $i < count($prop); $i++) {
+                                        if(array_key_exists('0', $prop[$i])) {
+                                            $ff_ID = $prop[$i][0]['values']['0'];
+                                            $_meta_ = $this->sdb_get_post_meta($ff_ID);
+                                            $final_val = $_meta_->meta_value;
+
+                                            $_fmt_ID = str_replace("socialdb_property_", "", $_meta_->meta_key);
+                                            if( strpos($_fmt_ID,"_cat") ) {
+                                                $_fmt_ID = explode("_", $_fmt_ID)[0];
+                                            }
+
+                                            if($prop[$i][0]['type'] == "term") {
+                                                $final_val = get_term($final_val)->name;
+                                            }
+
+                                            $_pair = [ 'meta' => $_meta_header_->name, 'value' => $final_val,
+                                                'meta_id' => $_fmt_ID, 'meta_breaks' => $this->format_to_type($_fmt_ID, $final_val)];
+
+
+                                            $_compound_check = get_term_meta($_fmt_ID, "socialdb_property_compounds_properties_id", true);
+                                            if ( empty($_compound_check) ) {
+                                                $chk_compound_child = unserialize(get_term_meta($_fmt_ID, "socialdb_property_is_compounds", true));
+                                                if(is_array($chk_compound_child)) {
+                                                    if( isset( $tabs['organize'][key($chk_compound_child)] ) && ($tabs['organize'][key($chk_compound_child)] != "default") ) {
+                                                        $_pair['submeta_tab_parent'] = key($chk_compound_child);
+                                                    }
+                                                    $_pair['is_submeta'] = true;
+                                                }
+
+                                            };
+
+                                            $ord_list[$_pair['meta_id']] = $_pair;
+                                            $press['set'][] = $_pair;
+                                        } else {
+                                            $_pair = ['meta' => $_meta_header_->name, 'meta_id' => $_meta_header_->term_id,
+                                                'value' => '_____________________________', 'submeta_header' => true ];
+
+                                            $ord_list[$_pair['meta_id']] = $_pair;
+                                            $press['set'][] = $_pair;
+
+                                            foreach ($prop[$i] as $child_id => $child_data) {
+                                                $child_term = get_term($child_id);
+                                                $main_val = $child_data["values"][0];
+                                                $m_val = $this->sdb_get_post_meta($main_val);
+                                                $final_val = $m_val->meta_value;
+
+                                                if( "term" == $child_data["type"] ) {
+                                                    $m_val = get_term($final_val);
+                                                    $final_val = $m_val->name;
+                                                }
+
+                                                $_pair = [ 'meta' => $child_term->name, 'value' => $final_val, 'meta_id' => $child_id,
+                                                    'is_submeta' => true, 'meta_breaks' => $this->format_to_type($child_id, $final_val) ];
+                                                
+                                                $ord_list[$_pair['meta_id']] = $_pair;
+                                                $press['set'][] = $_pair;
+                                            }
+                                        }
+                                    }
+                                
+								// Apenas se o valor dos metadados estiverem vazios
+                                } else if( !is_null($pcs[3]) && ctype_digit($pcs[3]) ) {
+                                    $header = get_term($pcs[3]);
+                                    $_compound_check = get_term_meta($header->term_id, "socialdb_property_compounds_properties_id", true);
+                                    $is_compound = !empty($_compound_check);
+
+                                    $_pair = ['meta' => $header->name, 'value' => '--', 'meta_id' => $header->term_id];
+
+                                    if($is_compound) {
+                                        $_pair['value']          = '_____________________________';
+                                        $_pair['submeta_header'] = true;
+                                    } else {
+                                        $chk_compound_child = unserialize(get_term_meta($header->term_id, "socialdb_property_is_compounds", true));
+                                        if(is_array($chk_compound_child)) {
+                                            
+                                            if( isset( $tabs['organize'][key($chk_compound_child)] ) && ($tabs['organize'][key($chk_compound_child)] != "default") ) {
+                                                $_pair['submeta_tab_parent'] = key($chk_compound_child);
+                                            }
+
+                                            $_pair['is_submeta'] = true;
+                                        }
+                                    }
+
+                                    $ord_list[$_pair['meta_id']] = $_pair;
+                                    $press['set'][] = $_pair;
+                                }
                             }
-                        } /* else { $press['excluded'][] = $meta; } */
+                        } /*else { $press['excluded'][] = $meta; } */
                     }
 
                     if($is_compound_meta && empty($current_submeta_vals) && $last_meta_id > 0) {
@@ -635,6 +736,36 @@ class ObjectController extends Controller {
                     $press['meta_ids'] = array_unique($press['meta_ids']);
                 }
 
+                $tabs_unodr = [];
+                if($press['set']) {
+                    foreach ($press['set'] as $set_info) {
+                        $mID = $set_info['meta_id'];
+
+                        if( isset( $tabs['organize'][$mID]) && ($tabs['organize'][$mID] != "default") && ctype_digit($tabs['organize'][$mID]) ) {
+                            array_push($tabs_unodr, $set_info);
+                        } else {
+
+                            if( isset($set_info['is_submeta']) && $set_info['is_submeta'] && isset($set_info['submeta_tab_parent'])) {
+                                if( isset( $tabs['organize'][$set_info['submeta_tab_parent']] ) ) {
+                                    array_push( $tabs_unodr, $set_info);
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+                $final_ordered = [];
+                foreach ( $press['meta_ids_ord'] as $mio ) {
+                    $format_id = str_replace("compounds-", "", $mio);
+                    if(array_key_exists($format_id, $ord_list)) {
+                        array_push($final_ordered, $ord_list[$format_id]);
+                    }
+                }
+
+                if(!empty($tabs_unodr)) {
+                    $press['set'] = array_merge($final_ordered, $tabs_unodr);
+                };
 
                 $s = [];
                 $aux_ids = [];
@@ -669,6 +800,7 @@ class ObjectController extends Controller {
                     }
                 }
 
+                /*
                 $info_ordenada = [];
                 $info_desord = [];
                 $add_ordered = [];
@@ -685,9 +817,8 @@ class ObjectController extends Controller {
                     } else {
                         $info_desord[] = $ord_list[$id];
                     }
-
-                }
-
+                } 
+				
                 $orders_id_keys = array_keys($ord_list);
                 foreach ($orders_id_keys as $desorder_ids ) {
                     if(! in_array($desorder_ids, $add_ordered) ) {
@@ -695,7 +826,8 @@ class ObjectController extends Controller {
                     }
                 }
 
-                $press['inf'] = array_merge($info_ordenada, $info_desord);
+                $press['inf'] = array_merge($info_ordenada, $info_desord); 
+				*/
 
                 return json_encode($press);
 
@@ -897,10 +1029,14 @@ class ObjectController extends Controller {
                     $data['items_id'] [] = $_previous['id'];
                     //array_push( $set, [ 'ID' => $_previous['id'], 'title' => $_previous['title'], 'desc' => $_previous['desc'] ] );
                 }
+                $data['properties'] = $object_model->show_object_properties($data);
                 $data['items'] = $objectfile_model->get_inserted_items_social_network($data);
                 $data['edit_multiple'] = true;
                 if ($data['items'] && empty(!$data['items'])) {
-                    return $this->render(dirname(__FILE__) . '../../../views/object/multiple_social_network/editor_items.php', $data);
+                    //return $this->render(dirname(__FILE__) . '../../../views/object/multiple_social_network/editor_items.php', $data);
+                    include_once dirname(__FILE__) . '../../../views/object/formItemMultiple/formItemMultiple.class.php';
+                    $class = new FormItemMultiple($data['collection_id'],__('Edit items', 'tainacan'),'edit-items');
+                    $class->start($data['items'], $data['properties']);
                 }
                 //return $this->render( dirname(__FILE__) . '../../../views/object/temp/edit_multiple.php', [ 'edit_data' => $set ] );
                 break;
@@ -1140,6 +1276,20 @@ class ObjectController extends Controller {
         }
     }
 
+    private function format_to_type($meta_id, $meta_value) {
+        $_meta_type = get_term_meta($meta_id, 'socialdb_property_data_widget', true);
+
+        if( !empty($_meta_type) ) {
+            if("date" === $_meta_type) {
+                return date('d/m/Y', strtotime($meta_value) );
+            } else if ("textarea" === $_meta_type) {
+                return $this->get_item_line_breaks($meta_value);
+            }
+        }
+
+        return 0;
+    }
+
     private function get_tab_name($tab_id) {
         global $wpdb;
 
@@ -1180,6 +1330,19 @@ class ObjectController extends Controller {
     public function get_author_name($author_id) {
         $object_model = new ObjectModel();
         return $object_model->get_object_author($author_id, 'name');
+    }
+
+    private function sdb_get_post_meta($meta_id) {
+        global $wpdb;
+        $query = "SELECT * FROM $wpdb->postmeta WHERE meta_id = $meta_id";
+        $result = $wpdb->get_results($query);
+        if ($result && is_array($result)) {
+            return $result[0];
+        } elseif ($result && isset($result->ID)) {
+            return $result;
+        } else {
+            return false;
+        }
     }
 
 }

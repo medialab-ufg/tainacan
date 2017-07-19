@@ -103,7 +103,8 @@ public function add($data) {
 
     public function update($data) {
         $collection_id = $data['collection_id'];
-        if ($data['property_id'] != '') {
+        if ($data['property_id'] != '')
+        {
             $fixed_id = get_term_by('slug', 'socialdb_property_fixed_tags', 'socialdb_property_type')->term_id;
             if($data['property_id']==$fixed_id){
                 $data['property_id'] = 'tag';

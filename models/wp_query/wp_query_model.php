@@ -584,6 +584,9 @@ class WPQueryModel extends Model {
             if (isset($recover_data['post_type']) && $recover_data['post_type']=='socialdb_collection') {
                 $args['s'] = $recover_data['keyword'];
             }
+            if(isset($recover_data['advanced_search']) && isset($recover_data['keyword'])){
+                $args['s'] = $recover_data['keyword'];
+            }
             if(isset($recover_data['author']) && $recover_data['author'] != ''){
                 $args['author'] = $recover_data['author'];
             }
@@ -1271,6 +1274,9 @@ class WPQueryModel extends Model {
         if ($data['properties_id'] !== '') {
             $properties_id = explode(',', $data['properties_id']);
             foreach ($properties_id as $property_id) {
+                if(!$data["socialdb_property_".$property_id."_operation"])
+                    continue;
+                
                 if ($data["socialdb_propertyterm_$property_id"]&&!is_array($data["socialdb_propertyterm_$property_id"]) && $data["socialdb_propertyterm_$property_id"] !== '') {
                     $recover_data['facets'][$property_id] = $data["socialdb_propertyterm_$property_id"];
                     $recover_data['facets_operation'][$property_id] = $this->get_operation_numeric_advanced_search($data["socialdb_property_".$property_id."_operation"]);

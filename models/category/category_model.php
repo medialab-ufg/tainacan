@@ -242,7 +242,7 @@ class CategoryModel extends Model {
 
     public function delete($data) {
         if (!$this->verify_collection_category_root($data['category_delete_id'])) {
-            if (wp_delete_term($data['category_delete_id'], 'socialdb_category_type')) {
+            if ($data['category_delete_id'] != $this->get_category_root() && wp_delete_term($data['category_delete_id'], 'socialdb_category_type')) {
                 $data['success'] = 'true';
                 $log_data = ['collection_id' => $data['collection_id'], 'resource_id' => $data['category_delete_id'], 'user_id' => get_current_user_id(), 'event_type' => 'user_category', 'event' => 'delete' ];
                 Log::addLog($log_data);

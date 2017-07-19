@@ -170,13 +170,20 @@ class CollectionController extends Controller {
                 return json_encode($visualization_model->set_container_classes($data));
                 break;
             case 'load_menu_left':
+                $repository_id = get_post_by_name("tainacan-colecoes")->ID;
                 $data['selected_menu_style_id'] = $this->get_selected_menu_style($data['collection_id']);
                 $data['selected_menu_style_json'] = $this->get_menu_style_json($data['selected_menu_style_id']);
+
                 $data['facets'] = $visualization_model->get_facets_visualization($data['collection_id']);
+                $repository_facets = $visualization_model->get_facets_visualization($repository_id);
+
+                $data['facets'] = array_merge($repository_facets, $data['facets']);
+
                 $data['has_tree'] = $visualization_model->has_tree($data['collection_id'], 'left-column');
                 if ($data['has_tree']) {
                     $data['tree'] = $visualization_model->get_data_tree($data['collection_id']);
                 }
+                
                 return $this->render(dirname(__FILE__) . '../../../views/search/menu_left.php', $data);
                 break;
             case 'load_root_menu_left':
@@ -227,6 +234,7 @@ class CollectionController extends Controller {
                 } else {
                     return $visualization_model->get_terms_by_property_json($data);
                 }
+                break;
             case 'list_items_search_autocomplete_advanced_search':
                 return $visualization_model->get_objects_by_property_json_advanced_search($data);
             /*             * ******************* Visibilidade ********************* */
@@ -388,6 +396,16 @@ class CollectionController extends Controller {
                 return json_encode($visualization_model->get_color_schemes($data['collection_id']));
             case 'get_default_color_scheme':
                 return json_encode($visualization_model->get_default_color_scheme($data['collection_id']));
+                break;
+            case 'reindex':
+                return json_encode(reindex($data));
+                break;
+            case 'pdf_no_thumb_ids':
+                return json_encode(get_pdf_no_thumb_ids());
+                break;
+            case 'pdf_thumbnail':
+                return json_encode(save_canvas_pdf_thumbnails($_POST));
+                break;
         }
     }
 

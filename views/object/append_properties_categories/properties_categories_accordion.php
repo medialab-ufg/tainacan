@@ -261,8 +261,8 @@ foreach($original_properties as $property):
                         <p>< ?php  _e('empty field', 'tainacan') ?></p>
                     < ?php endif ?-->
                     
-                    <?php if (is_plugin_active('data_aacr2/data_aacr2.php') && $property['type'] == 'date' && get_post_meta($object_id, "socialdb_property_{$property['id']}_date", true)): ?>
-                        <?php $value = get_post_meta($object_id, "socialdb_property_{$property['id']}_date", true); ?>
+                    <?php if (is_plugin_active('data_aacr2/data_aacr2.php') && $property['type'] == 'date' && get_post_meta($object_id, "socialdb_property_{$property['id']}_0_date", true)): ?>
+                        <?php $value = get_post_meta($object_id, "socialdb_property_{$property['id']}_0_date", true); ?>
                         <p><?php echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $value . "'" . ',' . $property['id'] . ')">' . $value . '</a>'; ?></p>
                     <?php elseif (isset($property['metas']['value'][0])): ?>
                         <?php $is_property_date = false; ?>

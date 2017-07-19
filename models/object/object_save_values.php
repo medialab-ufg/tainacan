@@ -20,7 +20,7 @@ class ObjectSaveValuesModel extends Model {
     
     public function removeValue($item_id,$compound_id,$property_children_id,$type,$index,$value) {
         $is_compound = ($property_children_id == 0) ? false : true;
-        $property_children_id = ($property_children_id == 0) ? $compound_id : $property_children_id;
+        //$property_children_id = ($property_children_id == 0) ? $compound_id : $property_children_id;
         $meta = get_post_meta($item_id, 'socialdb_property_helper_'.$compound_id, true);
         if($meta){
             $array = unserialize($meta);
@@ -145,7 +145,7 @@ class ObjectSaveValuesModel extends Model {
      */
     public function createValue($item_id,$type,$compound_id,$property_children_id,$index,$value) {
         // caso seja um metadado simples/ se nao 
-        $is_compound = ($property_children_id == 0) ? false : true;
+        $is_compound = ($property_children_id === 0 || $property_children_id === "0") ? false : true;
         $property_children_id = ($property_children_id == 0) ? $compound_id : $property_children_id;
         if($type == 'term'){
             $meta_id = $this->sdb_add_post_meta($item_id, 'socialdb_property_'.$property_children_id.'_cat', $value);
@@ -183,7 +183,7 @@ class ObjectSaveValuesModel extends Model {
      */
     public function updateValue($item_id,$meta_value,$compound_id,$property_children_id,$index,$value) {
         // caso seja um metadado simples/ se nao 
-        $is_compound = ($property_children_id === 0) ? false : true;
+        $is_compound = ($property_children_id === 0 || $property_children_id === "0") ? false : true;
         $property_children_id = ($property_children_id === 0) ? $compound_id : $property_children_id;
         // caso o postmeta esteja apontado para uma categoria seu meta_key sera socialdb-property_#_cat
         if(strpos($meta_value->meta_key, '_cat')!==false){
@@ -250,6 +250,37 @@ class ObjectSaveValuesModel extends Model {
             update_post_meta($item, 'socialdb_property_' . $compound_id . '_' . $index, implode(',', $new_array));
         }
         
+    }
+    
+    
+    
+    /**
+     *
+     * @param type $item_id
+     * @param type $property_id
+     * @return boolean
+     */
+    public function getValuePropertyHelper($item_id, $property_id) {
+        $meta = get_post_meta($item_id, 'socialdb_property_helper_' . $property_id, true);
+        if ($meta && $meta != '') {
+            $array = unserialize($meta);
+            return $array;
+        } else {
+            return false;
+        }
+    }
+
+    public function getValues($array){
+       $ids = [];
+       if(is_array($array)){
+          $values = $array['values'];
+          foreach ($values as $key => $value) {
+            $meta = $this->sdb_get_post_meta($value);
+            if(isset($meta->meta_value))
+                $ids[] = $meta->meta_value;
+          }
+       }
+       return $ids;
     }
     
     

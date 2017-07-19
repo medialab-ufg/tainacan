@@ -10,7 +10,6 @@
 <div id="accordion">
 <?php
 do_action('before_facets',$facets,$collection_id);
-
 // TAINACAN: widgets do menu esquerdo
 foreach ($facets as $facet):
     if ($facet['widget'] == 'tree' && !$not_showed): $not_showed = true ?>

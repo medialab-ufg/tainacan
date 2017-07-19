@@ -8,7 +8,7 @@ get_header();
 <input type="hidden" id="total_collections" name="total_collections" value="">
 <input type="hidden" id="last_index" name="last_index" value="0">
 
-<?php if ( has_nav_menu("menu-ibram") ):
+<?php if (has_nav_menu("menu-ibram")):
      include_once ("views/home/home_ibram.php");
     else: ?>
     <div id="display_view_main_page" class="container-fluid"></div>
@@ -16,16 +16,17 @@ get_header();
 
 <div id='container-fluid-configuration' class="container-fluid no-padding" style="background-color: #f1f2f2">
     <div id="users_div"> <!-- class="col-md-12" > é classe de users_div -->
-
     </div>
-    <?php /* <link href="http://localhost/wordpress/biblioteca/wp-content/themes/tainacan/libraries/css/bootstrap_data_table/data_table.css?ver=4.7.5" rel="stylesheet" type="text/css"> */ ?>
 </div>
 
-<!-- TAINACAN: esta div possui um gif que e colocada como none quando a listagem de recents e populares  -->
-<div id="loader_collections">
-    <img src="<?php echo get_template_directory_uri() . '/libraries/images/new_loader.gif' ?>" width="64px" height="64px" />
-    <h3> <?php _e('Loading Collections...', 'tainacan') ?> </h3>
-</div>
+
+<?php if( ! has_nav_menu("menu-ibram") ): ?>
+    <div id="loader_collections">
+        <img src="<?php echo get_template_directory_uri() . '/libraries/images/new_loader.gif' ?>" width="64px" height="64px" />
+        <h3> <?php _e('Loading Collections...', 'tainacan') ?> </h3>
+    </div>
+<?php endif; ?>
+
 <!-- TAINACAN: modal padrao bootstrap para demonstracao de execucao de processos, utilizado em varias partes do socialdb   -->
 <div class="modal fade" id="modalImportMain" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">

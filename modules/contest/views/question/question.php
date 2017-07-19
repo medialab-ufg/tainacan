@@ -71,26 +71,38 @@
                                            style="display:none;"><span class="glyphicon glyphicon-chevron-up"/><?php _e('Hide information','tainacan') ?></a>
                                     </span>  
                                     <span class="pull-right">
-                                        <?php if($object->post_author   ==  get_current_user_id()): ?>
-                                            <a href="javascript:void(0)" onclick="edit_comment( '<?php echo $object->ID; ?>')">
-                                                 <?php _e('Edit','tainacan') ?>  <span class="glyphicon glyphicon-edit"></span>
-                                            </a>
-                                            &nbsp;&nbsp;
-                                            <a href="javascript:void(0)" onclick="delete_comment('<?php echo $object->ID; ?>')">
-                                                 <?php _e('Remove','tainacan') ?><span class="glyphicon glyphicon-trash"></span>
-                                            </a>
-                                            &nbsp;&nbsp;
-                                        <?php else: ?>
-                                            <a href="javascript:void(0)"   onclick="report_abuse('<?php echo $child->ID; ?>') ">
-                                                <?php _e('Report abuse','tainacan') ?><span class="glyphicon glyphicon-alert"></span>
-                                            </a>
-                                            &nbsp;&nbsp;
-                                         <?php endif; ?>   
-                                            <a href="javascript:void(0)" 
-                                                    onclick="share_comment( '<?php echo $object->ID; ?>','<?php  echo htmlentities($object->post_title) ?>',$('#url-argument').val())" 
-                                                    >
-                                                <?php _e('Share','tainacan') ?><span class="glyphicon glyphicon-share"></span>
-                                            </a>
+                                        <ul class="nav navbar-bar navbar-right item-menu-container" style="margin-top: -15px;" >
+                                            <li class="dropdown open_item_actions" id="action-<?php echo $object->ID;; ?>">
+                                                <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                                    <?php echo ViewHelper::render_icon("config", "png", _t('Item options')); ?>
+                                                </a>
+                                                <ul class="dropdown-menu pull-right dropdown-show new-item-menu" role="menu" id="item-menu-options">    
+                                                    <?php if($object->post_author   ==  get_current_user_id()): ?>
+                                                        <li style="margin-bottom: 0px;" class="tainacan-museum-clear"><a href="javascript:void(0)" onclick="edit_comment( '<?php echo $object->ID; ?>')">
+                                                               <span class="glyphicon glyphicon-edit"></span>&nbsp;<?php _e('Edit','tainacan') ?>
+                                                            </a>
+                                                        </li>
+                                                        <li style="margin-bottom: 0px;" class="tainacan-museum-clear">
+                                                            <a href="javascript:void(0)" onclick="delete_comment('<?php echo $object->ID; ?>')">
+                                                                <span class="glyphicon glyphicon-trash"></span>&nbsp;<?php _e('Remove','tainacan') ?>
+                                                            </a>
+                                                        </li>
+                                                    <?php else: ?>
+                                                        <li style="margin-bottom: 0px;" class="tainacan-museum-clear">
+                                                            <a href="javascript:void(0)"   onclick="report_abuse('<?php echo $child->ID; ?>') ">
+                                                                <span class="glyphicon glyphicon-alert"></span>&nbsp;<?php _e('Report abuse','tainacan') ?>
+                                                            </a>
+                                                        </li>
+                                                     <?php endif; ?>   
+                                                        <li  style="margin-bottom: 0px;width: 200px;" class="item-redesocial">
+                                                            <a href="javascript:void(0)" 
+                                                                            onclick="share_comment( '<?php echo $object->ID; ?>','<?php  echo htmlentities($object->post_title) ?>',$('#url-argument').val())" >
+                                                                <span class="glyphicon glyphicon-share"></span>&nbsp;<?php _e('Share','tainacan') ?>
+                                                            </a>
+                                                        </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
                                     </span>
                                 </div>
                             </div>
@@ -219,26 +231,38 @@
                                                     style="display:none;"><span class="glyphicon glyphicon-chevron-up"/><?php _e('Hide information','tainacan') ?></a>
                                             </span>  
                                             <span class="pull-right">
-                                                <?php if($object->post_author   ==  get_current_user_id()): ?>
-                                                    <a href="javascript:void(0)" onclick="edit_comment( '<?php echo $child->ID; ?>')">
-                                                         <?php _e('Edit','tainacan') ?>  <span class="glyphicon glyphicon-edit"></span>
-                                                    </a>
-                                                    &nbsp;&nbsp;
-                                                    <a href="javascript:void(0)" onclick="delete_comment('<?php echo $child->ID; ?>')">
-                                                         <?php _e('Remove','tainacan') ?><span class="glyphicon glyphicon-trash"></span>
-                                                    </a>
-                                                    &nbsp;&nbsp;
-                                                <?php else: ?>
-                                                    <a href="javascript:void(0)"   onclick="report_abuse('<?php echo $child->ID; ?>') ">
-                                                        <?php _e('Report abuse','tainacan') ?><span class="glyphicon glyphicon-alert"></span>
-                                                    </a>
-                                                    &nbsp;&nbsp;
-                                                 <?php endif; ?>   
-                                                    <a href="javascript:void(0)" 
-                                                            onclick="share_comment( '<?php echo $child->ID; ?>','<?php  echo htmlentities($child->post_title) ?>',$('#url-argument').val())" 
-                                                            >
-                                                        <?php _e('Share','tainacan') ?><span class="glyphicon glyphicon-share"></span>
-                                                    </a>
+                                               <ul class="nav navbar-bar navbar-right item-menu-container" style="margin-top: -15px;" >
+                                                    <li class="dropdown open_item_actions" id="action-<?php echo $child->ID;; ?>">
+                                                        <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                                            <?php echo ViewHelper::render_icon("config", "png", _t('Item options')); ?>
+                                                        </a>
+                                                        <ul class="dropdown-menu pull-right dropdown-show new-item-menu" role="menu" id="item-menu-options">    
+                                                            <?php if($child->post_author   ==  get_current_user_id()): ?>
+                                                                <li style="margin-bottom: 0px;" class="tainacan-museum-clear"><a href="javascript:void(0)" onclick="edit_comment( '<?php echo $child->ID; ?>')">
+                                                                       <span class="glyphicon glyphicon-edit"></span>&nbsp;<?php _e('Edit','tainacan') ?>
+                                                                    </a>
+                                                                </li>
+                                                                <li style="margin-bottom: 0px;" class="tainacan-museum-clear">
+                                                                    <a href="javascript:void(0)" onclick="delete_comment('<?php echo $child->ID; ?>')">
+                                                                        <span class="glyphicon glyphicon-trash"></span>&nbsp;<?php _e('Remove','tainacan') ?>
+                                                                    </a>
+                                                                </li>
+                                                            <?php else: ?>
+                                                                <li style="margin-bottom: 0px;" class="tainacan-museum-clear">
+                                                                    <a href="javascript:void(0)"   onclick="report_abuse('<?php echo $child->ID; ?>') ">
+                                                                        <span class="glyphicon glyphicon-alert"></span>&nbsp;<?php _e('Report abuse','tainacan') ?>
+                                                                    </a>
+                                                                </li>
+                                                             <?php endif; ?>   
+                                                                <li  style="margin-bottom: 0px;width: 200px;" class="item-redesocial">
+                                                                    <a href="javascript:void(0)" 
+                                                                                    onclick="share_comment( '<?php echo $child->ID; ?>','<?php  echo htmlentities($child->post_title) ?>',$('#url-argument').val())" >
+                                                                        <span class="glyphicon glyphicon-share"></span>&nbsp;<?php _e('Share','tainacan') ?>
+                                                                    </a>
+                                                                </li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
                                             </span>
                                         </div>
                                     </div>

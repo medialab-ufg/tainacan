@@ -5,10 +5,12 @@
     var $current_meta_form = "#submit_form_property_data_" + current_meta_type;
     var $form_ranking = $("#meta-voting #submit_form_ranking");
     var ranking_types = ["binary", "stars", "like"];
+
      //inicia o dynatree de propriedades
      var types_compounds = []; // array que mostra o tipo das propriedades compostas
     initDynatreeFilterProperties(src);
     $("#tainacan-breadcrumbs").show();
+    
     $("#tainacan-breadcrumbs .current-config").text('<?php _e('Repository Metadata','tainacan') ?>');
     
     $('.property_data_use_filter').click(function() {
@@ -34,12 +36,14 @@
         list_reverses();
         $('#show_reverse_properties').show();
     });
+    
     //reverse property
     $('#property_object_is_reverse_false').click(function (e) {
         $('#show_reverse_properties').hide();
     });
 
      var changeable_selects = ['#socialdb_property_term_widget', '#property_term_filter_widget'];
+    
     // cardinality type 1
     $('#socialdb_property_term_cardinality_1').click(function (e) {
         $(changeable_selects).each(function (idx, el) {
@@ -65,7 +69,9 @@
 
         term_widget_options('#socialdb_property_term_widget');
     });
+    
     $('#socialdb_property_term_cardinality_1').trigger('click');
+    
     //vinculacao de categorias
     $('#socialdb_property_vinculate_category_exist').click(function (e) {
         if ($('#socialdb_property_vinculate_category_exist').is(':checked')) {
@@ -97,6 +103,7 @@
         });
         e.preventDefault();
     });
+    
     $('.remove').click(function (e) {
         var id = $(this).closest('td').find('.post_id').val();
         $.get(src + '/views/ranking/delete.php?id=' + id, function (data) {
@@ -240,18 +247,20 @@
         });
     }
 
-    function setCollectionFacet( operation, metadata_id, metadata_widget, color_facet, counter_obj, menu_style_id ) {
+    function setCollectionFacet(operation, metadata_id, metadata_widget, ordenation, color_facet, counter_obj, menu_style_id)
+    {
         var collection_id = $("#property_data_collection_id").val();
         var meta_id;
 
-        if ( typeof metadata_id != 'undefined' ) {
+        if (typeof metadata_id != 'undefined')
+        {
 
-            if ( typeof metadata_id == "number" ) {
+            if (typeof metadata_id == "number") {
                 meta_id = metadata_id.toString();
             } else {
-                if ( metadata_id.indexOf("socialdb_") != -1 ) {
+                if (metadata_id.indexOf("socialdb_") != -1) {
                     meta_id = metadata_id;
-                } else if (metadata_id.indexOf("meta-item") === -1 ) {
+                } else if (metadata_id.indexOf("meta-item") === -1) {
                     meta_id = metadata_id;
                 } else {
                     meta_id = metadata_id.replace("meta-item-", "");
@@ -261,35 +270,45 @@
             var cf = color_facet || "color_property2";
             var search_data_widget = metadata_widget || "tree";
             var data = {};
-			
-            if ( ! $.isEmptyObject(counter_obj) ) {
+
+            if (!$.isEmptyObject(counter_obj)) {
                 var item_counter_range = counter_obj.counter_range || "0";
                 data = counter_obj.sent_data;
-            } else if( search_data_widget == "menu" && menu_style_id ) {
-                data = { collection_id: collection_id, search_data_widget: search_data_widget, operation: operation, select_menu_style: menu_style_id };
+            } else if (search_data_widget == "menu" && menu_style_id) {
+                data = {collection_id: collection_id, search_data_widget: search_data_widget, operation: operation, select_menu_style: menu_style_id, ordenation: ordenation};
             } else {
-                data = { collection_id: collection_id, search_data_widget: search_data_widget, operation: operation };
+                data = {collection_id: collection_id, search_data_widget: search_data_widget, operation: operation, ordenation: ordenation};
             }
 
             data.operation = operation;
+            data.ordenation = ordenation;
             data.property_id = meta_id;
             data.color_facet = cf;
             data.search_add_facet = meta_id;
-            data.search_data_orientation = "left-column";		
+            data.search_data_orientation = "left-column";
 
-            $.ajax({ url: src + '/controllers/search/search_controller.php', type: 'POST', data: data }).done(function(r){
-				elem = $.parseJSON(r);
-               // list_collection_facets();
+            $.ajax({
+                url: src + '/controllers/search/search_controller.php',
+                type: 'POST',
+                data: data
+            }).done(function (r) {
+                elem = $.parseJSON(r);
+                list_collection_facets();
             });
         }
     }
 
     function removeFacet(item_id) {
         var collection_id = $("#collection_id").val();
+        show_modal_main();
         $.ajax({
             type: "POST",
-            url: src + "/controllers/search/search_controller.php",
-            data: { operation: 'delete_facet', facet_id: item_id, collection_id: collection_id }
+            url: $('#src').val() + "/controllers/search/search_controller.php",
+            data: {operation: 'delete_facet', facet_id: item_id, collection_id: collection_id}
+        }).done(function (rs) {
+            list_collection_metadata();
+            hide_modal_main();
+            showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Filter removed successfully', 'tainacan') ?>', 'success');
         });
     }
 
@@ -303,13 +322,15 @@
         });
     }
 
+    //Exibe lista de filtros
     function list_collection_facets() {
         $.ajax({
             url: src + '/controllers/search/search_controller.php',
             type: 'POST',
             data: {operation: 'list_facets', collection_id: $('#collection_id').val()},
             success: function (data) {
-                if (data) {
+                if (data) 
+                {
                     $("#filters-accordion").html('');
                     var facetsObj = $.parseJSON(data);
                     if (facetsObj && facetsObj != null) {
@@ -317,7 +338,7 @@
                             if ( el.nome == null && el.id != "tree" ) {
                                 removeFacet(el.id);
                             } else {
-                                var current_prop = getPropertyType(el.prop);
+                                /*var current_prop = getPropertyType(el.prop);
 
                                 var item_html = '<li id="'+ el.id +'" data-widget="'+el.widget+'" class="form-group metadata-facet filter-'+el.id+'">' +
                                     '<label class="title-pipe">' + el.nome + '<div class="pull-right">';
@@ -340,14 +361,63 @@
                                     }
                                 }
 
-                                item_html += '<span class="glyphicon glyphicon-edit"></span></a> <span class="glyphicon glyphicon-sort sort-filter"></span></div> </label></li>';
-                                $("#filters-accordion").append( item_html );
+                                item_html += '<span class="glyphicon glyphicon-edit"></span></a>' + add_remove_filter_button(el.id) + '</div> </label></li>';
+                                //item_html += '<span class="glyphicon glyphicon-edit"></span></a> <span class="glyphicon glyphicon-sort sort-filter"></span></div> </label></li>';
+                                $("#filters-accordion").append( item_html );*/
+
+                                var id = el.id;
+                                if (id === 'tag') {
+                                    id = $('#global_tag_id').val();
+                                }
+                                var current_prop = getPropertyType(el.prop);
+                                //console.log(el,(el.prop == null) , !isNaN(el.id) , $('.term-root-'+el.id).attr('id'));
+                                var item_html = '<li id="' + id + '" data-widget="' + el.widget + '" class="form-group metadata-facet filter-' + el.id + '">' +
+                                    '<label class="title-pipe">&nbsp;&nbsp;&nbsp;&nbsp;' + el.nome + '<div class="pull-right"><a class="edit-filter"><span class="glyphicon glyphicon-sort sort-filter"></span></a>';
+
+                                if (current_prop == "data") {
+                                    item_html += '<a onclick="edit_metadata(' + el.id + ')" class="edit-filter">';
+                                } else if (current_prop == "object") {
+                                    item_html += '<a onclick="edit_property_object(' + el.id + ')" class="edit-filter">';
+                                } else if (current_prop == "ranking_stars" || current_prop == "ranking_binary" || current_prop == "ranking_like") {
+                                    item_html += '<a onclick="edit_ranking(' + el.id + ')" class="edit-filter">';
+                                } else if ((el.prop == null || el.prop == 'socialdb_property_term') && !isNaN(el.id) && $('.term-root-' + el.id).attr('id')) {
+                                    var item_term_id = $('.term-root-' + el.id).attr('id').replace("meta-item-", "");
+                                    item_html += '<a onclick="edit_term(' + item_term_id + ')" class="edit-filter">';
+                                } else if ((el.prop == null || el.prop == 'socialdb_property_term') && !isNaN(el.id) && $('.coumpound_id_' + el.id)) {
+                                    var item_term_id = $('.coumpound_id_' + el.id).attr('id');
+                                    item_html += '<a onclick="edit_term(' + item_term_id + ')" class="edit-filter">';
+                                } else if (el.id == "tag") {
+                                    item_html += '<a onclick="edit_tag(this)" class="edit-filter ' + el.id + '" data-filter="true" data-title="' + el.nome + '" class="edit-filter">';
+                                } else {
+                                    if ((el.id).indexOf("socialdb_") == 0) {
+                                        item_html += '<a onclick="edit_filter(this)" class="edit-filter ' + el.id + '" data-filter="true" data-title="' + el.nome + '" class="edit-filter">';
+                                    } else {
+                                        item_html += '<a class="edit-filter" >';
+                                    }
+                                }
+
+                                item_html += '<span class="glyphicon glyphicon-edit"></span></a>' + add_remove_filter_button(el.id) + '</div> </label></li>';
+                                $("#filters-accordion").append(item_html);
                             }
                         });
                     }
                 }
             }
         });
+    }
+
+    function add_remove_filter_button(id)
+    {
+        if (id == 'ranking_colaborations') {
+            return '  <a class="pull-right" title="<?php _e('Remove filter', 'tainacan') ?>" style="cursor:pointer;" onclick="removeFacet(' + "'" + id + "'" + ');">' +
+                '<span class="glyphicon glyphicon glyphicon-trash"></span></a>';
+        } else if (id == 'tag') {
+            return '  <a class="pull-right" title="<?php _e('Remove filter', 'tainacan') ?>" style="cursor:pointer;" onclick="removeFacet(' + "'tag'" + ');">' +
+                '<span class="glyphicon glyphicon glyphicon-trash"></span></a>';
+        } else {
+            return '  <a class="pull-right" title="<?php _e('Remove filter', 'tainacan') ?>" style="cursor:pointer;" onclick="removeFacet(' + id + ');">' +
+                '<span class="glyphicon glyphicon glyphicon-trash"></span></a>';
+        }
     }
 
     function getPropertyType(property) {
@@ -451,23 +521,28 @@
                 var current_property_id = elem.property_data_id;
                 var property_widget = elem.search_data_widget;
                 var color_facet = elem.color_facet;
+                var ordenation_facet = elem.filter_ordenation;
                 var collection_id = $('#collection_id').val();
 
-                if ( elem.property_data_use_filter == "use_filter" )  {
+                if ( elem.property_data_use_filter == "use_filter" )
+                {
                     var range_obj = {};
-                    if( (current_type == "date" || current_type == "numeric") && property_widget == "range") {
+
+                    if( (current_type == "date" || current_type == "numeric") && property_widget == "range")
+                    {
                         var range_obj = { counter_range: elem.counter_data_range, sent_data: elem };
                     }
 
-                    if ( current_operation == "add_property_data" ) {
-                        setCollectionFacet( "add", new_property_id, property_widget, color_facet, range_obj);
+                    if ( current_operation == "add_property_data" )
+                    {
+                        setCollectionFacet( "add", new_property_id, property_widget, ordenation_facet, color_facet, range_obj);
                     } else if( current_operation == "update_property_data" ) {
                         var item_was_dragged = $(current_modal + " .data-widget").hasClass('select-meta-filter');
                         if( item_was_dragged ) {
-                            setCollectionFacet( "add", current_property_id, property_widget, color_facet );
+                            setCollectionFacet( "add", current_property_id, property_widget, ordenation_facet, color_facet );
                             $(current_modal + " .data-widget").removeClass('select-meta-filter');
                         } else {
-                            setCollectionFacet( "update", current_property_id, property_widget, color_facet, range_obj );
+                            setCollectionFacet( "update", current_property_id, property_widget, ordenation_facet, color_facet, range_obj );
                         }
                     }
                 }
@@ -518,8 +593,9 @@
             data: {collection_id: $("#collection_id").val(), operation: 'edit_property_data', property_id: id}
         }).done(function (result) {
             elem = jQuery.parseJSON(result);
-
-            if (elem) {
+            console.log(elem);
+            if (elem)
+            {
                 var current_filters = $("#filters-accordion li"),
                     filters_ids = [],
                     current_widget = elem.metas.socialdb_property_data_widget;
@@ -527,7 +603,7 @@
                     current_widget = 'text';
                 }
                 var item_required = $.parseJSON(elem.metas.socialdb_property_required);
-                var cardinality =elem.metas.socialdb_property_data_cardinality;
+                var cardinality = elem.metas.socialdb_property_data_cardinality;
                 var meta_modal = "#meta-" + current_widget;
                 var nome = elem.name;
                 var meta_help = elem.metas.socialdb_property_help;
@@ -535,8 +611,10 @@
                 var locked = (elem.metas.socialdb_property_locked) ? elem.metas.socialdb_property_locked : false;
                 var operation = 'update_property_data';
                 var search_widget = $("#meta-item-"+id).attr('data-widget');
-                $( meta_modal ).modal('show');
+                var color_facet = elem.color_facet;
+                var ordenation_facet = elem.ordenation_facet;
 
+                $( meta_modal ).modal('show');
 
                 if ( ! elem.metas.socialdb_property_is_fixed || elem.metas.socialdb_property_is_fixed === 'false') {
                     $( meta_modal + " #select-data-type").show().addClass('edit-metadata-type');
@@ -585,6 +663,20 @@
                 if ( use_filter === "use_filter" ) {
                     var current_data_widget = $("#meta-item-"+id).attr('data-widget');
                     $( meta_modal + " .form_property_data #search_data_widget").val( current_data_widget );
+
+                    if(current_data_widget != "tree")
+                    {
+                        $(meta_modal + " #color_field_property_search").hide();
+                    }
+                    else $(meta_modal + " #"+color_facet).attr("checked", "checked");
+
+                    if(ordenation_facet != null)
+                    {
+                        if(ordenation_facet == 'number')
+                        {
+                            $(meta_modal + " #filter_ordenation_1").attr("checked", "checked");
+                        }
+                    }
                 }
 
                 $( meta_modal + " .form_property_data #search_add_facet").val(id);
@@ -594,14 +686,17 @@
                 $( meta_modal + " .form_property_data #socialdb_property_data_default_value").val(default_value);
                 $( meta_modal + " .form_property_data #operation_property_data").val(operation);
 
-                if (item_required) {
+                if (item_required)
+                {
                     $( meta_modal + " .form_property_data #property_data_required_true").prop('checked', true);
                     $( meta_modal + " .form_property_data #property_data_required_false").removeAttr('checked');
-                } else {
+                }
+                else
+                {
                     $( meta_modal + " .form_property_data #property_data_required_false").prop('checked', true);
                 }
                 
-                if (cardinality&&cardinality==='n') {
+                if (cardinality && cardinality === 'n') {
                     $( meta_modal + " .form_property_data #socialdb_property_data_cardinality_n").prop('checked', true);
                     $( meta_modal + " .form_property_data #socialdb_property_data_cardinality_1").removeAttr('checked');
                 } else {
@@ -690,53 +785,195 @@
             elem = jQuery.parseJSON(result);
             //list_collection_facets();
 
-            if (elem.no_properties !== true) {
-                $.each(elem.property_data, function (idx, property) {
+            if (elem.no_properties !== true)
+            {
+                var default_search_widget = [];
+                $.each(elem.property_data, function (idx, property)
+                {
                     //visibilidade do metadado
                     var isCompounded = is_compounded(property.metas.socialdb_property_is_compounds);
                     types_compounds[property.id] = 1;
+
                     if(isCompounded){
                         return true;
                     }
-                    var current_id = property.id;
-                    var current_search_widget = property.search_widget;
-                    console.log(property);
+                    //console.log(JSON.stringify(property));
+
+                    var current_id = property.id,
+                        current_search_widget = property.search_widget,
+                        fixed_meta = property.metas.socialdb_property_is_fixed,
+                        property_visibility = property.metas.socialdb_property_visibility;
+
+                    if(!current_search_widget && fixed_meta && !not_allowed_facet(property.slug))
+                    {
+                        default_search_widget.push(property.id);
+                        current_search_widget = 'tree';
+                    }
                     
-                    if ( property.metas.socialdb_property_is_fixed && property.metas.socialdb_property_is_fixed === 'true' ) {
-                        if(property.metas.socialdb_property_visibility&&property.metas.socialdb_property_visibility==='show'){
+                    if ( fixed_meta && fixed_meta === 'true' )
+                    {
+                        if(property_visibility && property_visibility === 'show')
+                        {
                             var visibility = '<a vis="show" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-open"></span></a>';
-                            var style = '';
-                        }else{
-                            var style = 'style="opacity:0.33;"';
-                            var visibility = '<a vis="hide" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-close"></span></a>';
+                            var style = '',
+                                addFilterStyle = '';
                         }
-                        
+                        else
+                        {
+                            var style = 'opacity:0.33;';
+                            var visibility = '<a vis="hide" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-close"></span></a>',
+                                addFilterStyle = 'pointer-events: none;';
+                        }
+                        /* Standard meta */
                         $('ul#metadata-container').append(
-                            '<li id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="root_category ui-widget-content ui-corner-tr">' +
-                            '<label '+style+' class="title-pipe">' + '<span class="property-name">' + property.name + '</span>' + '</label>' +
-                            '<a onclick="edit_metadata(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
-                            '<div class="action-icons"> <span class="glyphicon glyphicon-edit"></span></a> ' +
-                            visibility+'</div></li>');
+                            '<li id="meta-item-' + current_id + '" data-widget="' + current_search_widget + '" class="root_category ui-widget-content ui-corner-tr fixed-property">' +
+                                '<label style="'+style+'" class="title-pipe">' +
+                                    '<a title="Adicionar como filtro" id ="addFilter_'+ property.id +'"  style="cursor:pointer; margin-right:15px;' + addFilterStyle + '" onclick="add_filter(' + property.id + ', \'' + property.slug +'\')">' +
+                                        '<span class="glyphicon glyphicon-menu-left"></span>' +
+                                    '</a>' +
+                                    '<span class="property-name">' + property.name + '</span>' +
+                                '</label>' +
+                                '<a onclick="edit_metadata(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
+                                    '<div class="action-icons"> ' +
+                                        '<span class="glyphicon glyphicon-edit"></span>' +
+                                '</a> ' +
+                            visibility+'</div>' +
+                            '</li>');
                     } else {
+                        /* Added meta */
                         if ( $.inArray(property.type, ranking_types) == -1 ) {
                             $('ul#metadata-container').append(
                                 '<li id="meta-item-' + current_id + '" data-widget="' + current_search_widget + '" class="' + property.type + ' ui-widget-content ui-corner-tr">' +
-                                '<label class="title-pipe">' + '<span class="property-name">' + property.name + '</span>' + '</label><div class="action-icons">' +
-                                '<a onclick="edit_metadata(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
-                                '<span class="glyphicon glyphicon-edit"><span></a> ' +
-                                '<input type="hidden" class="property_id" value="' + property.id + '">' +
-                                '<input type="hidden" class="property_name" value="' + property.name + '">' +
-                                '<a onclick="delete_property(' + current_id + ',' + 1 + ')" class="delete_property" href="javascript:void(0)">' +
-                                '<span class="glyphicon glyphicon-trash"><span></a></div></li>');
+                                    '<label class="title-pipe">' +
+                                        '<a title="Adicionar como filtro" id ="addFilter_'+ property.id +'"  style="cursor:pointer; margin-right:15px;' + addFilterStyle + '" onclick="add_filter(' + property.id + ', \'' + property.slug +'\')">' +
+                                            '<span class="glyphicon glyphicon-menu-left"></span>' +
+                                        '</a>' +
+                                        '<span class="property-name">' + property.name + '</span>' +
+                                    '</label>' +
+                                    '<div class="action-icons">' +
+                                        '<a onclick="edit_metadata(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
+                                            '<span class="glyphicon glyphicon-edit"><span>' +
+                                        '</a> ' +
+
+                                        '<input type="hidden" class="property_id" value="' + property.id + '">' +
+                                        '<input type="hidden" class="property_name" value="' + property.name + '">' +
+
+                                        '<a onclick="delete_property(' + current_id + ',' + 1 + ')" class="delete_property" href="javascript:void(0)">' +
+                                            '<span class="glyphicon glyphicon-trash"><span>' +
+                                        '</a>' +
+                                    '</div>' +
+                                '</li>');
                         }
                     }
                 });
+
+                if(default_search_widget.length > 0)
+                {
+                    update_default_search_widget($('#collection_id').val(), default_search_widget);
+                }
+
+                list_collection_facets();
             }
         });
         return xhr;
     }
 
-    function edit_filter(item) {
+    //Add as filter
+    function add_filter(id, slug) {
+        var item_id = 'meta-item-' + id;
+
+        var seletor = $("#" + item_id);
+        var item_search_widget = seletor.attr("data-widget");
+        var is_fixed_meta = seletor.hasClass('fixed-property');
+        var is_blocked = seletor.hasClass('block-facet');
+            /*Not permited facet*/      /*Already inserted*/
+        if (not_allowed_facet(slug) || $("#" + id).length > 0 /*is_blocked || (seletor.attr('term_root_id') && $("#" + seletor.attr('term_root_id')).length > 0)*/)
+        {
+            showAlertGeneral('<?php _e('Attention!', 'tainacan') ?>', '<?php _e('Metadata already inserted or not allowed as filter', 'tainacan') ?>', 'info');
+            return false;
+        } else
+        {
+            /*if (is_fixed_meta)
+            {
+                setCollectionFacet("add", item_id, "tree", 'alphabetic');
+                showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Metadata inserted as filter successfully', 'tainacan') ?>', 'success');
+                $('.data-widget').addClass('select-meta-filter').show();
+                $('.term-widget').addClass('select-meta-filter').show();
+            } else {*/
+                if (item_search_widget === "null" || item_search_widget == "undefined")
+                {
+                    $("#" + item_id + " .edit_property_data").click();
+                    $("#" + item_id + " .edit_ranking").click();
+                    $(".property_data_use_filter").click();
+                    $(".property_data_use_filter").attr('checked', 'checked');
+
+                    $('.data-widget').addClass('select-meta-filter').show();
+                    $('.term-widget').addClass('select-meta-filter').show();
+                }
+                else
+                {
+                    setCollectionFacet("add", item_id, item_search_widget);
+                    showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Metadata inserted as filter successfully', 'tainacan') ?>', 'success');
+
+                    $('.data-widget').addClass('select-meta-filter').show();
+                    $('.term-widget').addClass('select-meta-filter').show();
+                }
+
+
+            /*}*/
+        }
+
+        list_collection_metadata();
+    }
+
+    function change_visibility(property_id)
+    {
+        if ($('#visibility_'+property_id).attr('vis')==='hide')
+        {
+            $('#visibility_'+property_id).html('<span class="glyphicon glyphicon-eye-open"></span>');
+            $('#visibility_'+property_id).attr('vis','show');
+            $('#meta-item-'+property_id+' .title-pipe').fadeTo( "fast",1 );
+            $("#addFilter_" + property_id).css("pointer-events", 'auto');
+        } else {
+            //$('#meta-item-'+property_id+' .title-pipe').css('opacity','0.5');
+            $("#addFilter_" + property_id).css("pointer-events", 'none');
+            $('#meta-item-'+property_id+' .title-pipe').fadeTo( "fast", 0.33 );
+            $('#visibility_'+property_id).html('<span class="glyphicon glyphicon-eye-close"></span>');
+            $('#visibility_'+property_id).attr('vis','hide');
+        }
+
+        $.ajax({
+            url: $('#src').val() + '/controllers/property/property_controller.php',
+            type: 'POST',
+            data: {collection_id: $("#collection_id").val(), operation: 'alter_visibility', property_id: property_id}
+        }).done(function (result) {
+            elem = jQuery.parseJSON(result);
+            delete_all_cache_collection();
+        });
+    }
+
+    // funcao que bloqueia as facetas que nao sao permitidas
+    function not_allowed_facet(slug)
+    {
+        var not_allowed = ['socialdb_property_fixed_thumbnail','socialdb_property_fixed_attachments','socialdb_property_fixed_content','socialdb_property_fixed_description'];
+        if(not_allowed.indexOf(slug) >= 0)
+            return true;
+        else
+            return false;
+    }
+
+    //Atualiza search_widget_padrão
+    function update_default_search_widget(collection_id, ids)
+    {
+        $.ajax({
+            url: $('#src').val() + "/controllers/property/property_controller.php",
+            type: 'POST',
+            data: {operation: 'update_default_search_widget', info: JSON.parse(JSON.stringify(ids)), collection_id: collection_id}
+        });
+    }
+
+    function edit_filter(item)
+    {
         var item_id = $(item).attr('class');
         var item_title = $(item).attr('data-title');
         var is_filter = $(item).attr('data-filter');
@@ -758,18 +995,20 @@
         $("#meta-filter").modal('show');
     }
 
-    $("#submit_form_filter").submit(function(e) {
+    $("#submit_form_filter").submit(function(e)
+    {
         e.preventDefault();
         var id_correto = $("#meta-filter #search_add_facet").val();
         var cor_faceta = $('input[name=color_facet]:checked', "#submit_form_filter").val();
+        var ordenation_facet = $('input[name=filter_ordenation]:checked', "#submit_form_filter").val();
         var use_filter = $("#meta-filter .property_data_use_filter").prop('checked');
         var operation = $("#meta-filter .operation").val();
 
         if (use_filter) {
             if ( operation == "update" ) {
-                setCollectionFacet(operation, id_correto, "tree", cor_faceta);
+                setCollectionFacet(operation, id_correto, "tree", ordenation_facet,cor_faceta);
             } else {
-                setCollectionFacet("add", id_correto, "tree", cor_faceta);
+                setCollectionFacet("add", id_correto, "tree", ordenation_facet, cor_faceta);
             }
         } else {
             removeFacet(id_correto);
@@ -782,7 +1021,8 @@
         delete_all_cache_collection();
     });
 
-    function edit_tag(item) {
+    function edit_tag(item)
+    {
         var item_id = $(item).attr('class');
         var item_title = $(item).attr('data-title');
         var is_filter = $(item).attr('data-filter');
@@ -797,7 +1037,8 @@
         $("#meta-tag").modal('show');
     }
 
-    $("#submit_form_tag").submit(function(e) {
+    $("#submit_form_tag").submit(function(e)
+    {
         e.preventDefault();
         var id_correto = $("#meta-tag #search_add_facet").val();
         var data_widget = $("#meta-tag #search_data_widget").val();
@@ -815,7 +1056,8 @@
         //list_collection_facets();
     });
 
-    function delete_property(id, type) {
+    function delete_property(id, type)
+    {
         $("#property_delete_collection_id").val( $("#collection_id").val() );
         var name_html = $("#meta-item-" + id + " .property_name").val();
         $("#property_delete_id").val( id );
@@ -827,7 +1069,8 @@
         $("#modal_remove_property").modal('show');
     }
 
-    function list_reverses(selected) {
+    function list_reverses(selected)
+    {
         $.ajax({
             url: $('#src').val() + '/controllers/property/property_controller.php',
             type: 'POST',
@@ -846,27 +1089,6 @@
                     }
                 });
             }
-        });
-    }
-    
-     function change_visibility(property_id) {
-        if ($('#visibility_'+property_id).attr('vis')==='hide') {
-                $('#visibility_'+property_id).html('<span class="glyphicon glyphicon-eye-open"></span>');
-                $('#visibility_'+property_id).attr('vis','show');
-                $('#meta-item-'+property_id+' .title-pipe').fadeTo( "fast",1 );
-        } else {
-            //$('#meta-item-'+property_id+' .title-pipe').css('opacity','0.5');
-            $('#meta-item-'+property_id+' .title-pipe').fadeTo( "fast", 0.33 );
-            $('#visibility_'+property_id).html('<span class="glyphicon glyphicon-eye-close"></span>');
-            $('#visibility_'+property_id).attr('vis','hide');
-        }
-        $.ajax({
-            url: $('#src').val() + '/controllers/property/property_controller.php',
-            type: 'POST',
-            data: {collection_id: $("#collection_id").val(), operation: 'alter_visibility', property_id: property_id}
-        }).done(function (result) {
-            elem = jQuery.parseJSON(result);
-            delete_all_cache_collection();
         });
     }
 
@@ -894,15 +1116,15 @@
             var current_operation = elem.operation;
             if ( elem.property_data_use_filter == "use_filter" ) {
                 if ( current_operation == "add_property_object" ) {
-                    setCollectionFacet("add", elem.results.new_property_id, elem.search_data_widget, elem.color_facet );
+                    setCollectionFacet("add", elem.results.new_property_id, elem.search_data_widget, elem.filter_ordenation, elem.color_facet );
                 } else if (current_operation == "update_property_object") {
                     var item_was_dragged = $("#meta-relationship .data-widget").hasClass('select-meta-filter');                
 
                     if (item_was_dragged) {
-                        setCollectionFacet("add", elem.property_object_id, elem.search_data_widget, elem.color_facet );
+                        setCollectionFacet("add", elem.property_object_id, elem.search_data_widget, elem.filter_ordenation, elem.color_facet );
                         $("#meta-relationship .data-widget").removeClass('select-meta-filter');
                     } else {
-                        setCollectionFacet("update", elem.property_object_id, elem.search_data_widget, elem.color_facet );    
+                        setCollectionFacet("update", elem.property_object_id, elem.search_data_widget, elem.filter_ordenation, elem.color_facet );
                     }
                     
                 }
@@ -1164,13 +1386,13 @@
 
             if ( elem.property_data_use_filter == "use_filter" ) {
                 if ( current_operation == "add_property_term" ) {
-                    setCollectionFacet("add", term_root_id, elem.property_term_filter_widget, elem.color_facet, "", menu_style_id );
+                    setCollectionFacet("add", term_root_id, elem.property_term_filter_widget, elem.filter_ordenation, elem.color_facet, "", menu_style_id );
                 } else if (current_operation == "update_property_term") {
                     if ( item_was_dragged ) {
-                        setCollectionFacet("add", term_root_id, elem.property_term_filter_widget, elem.color_facet, "", menu_style_id );
+                        setCollectionFacet("add", term_root_id, elem.property_term_filter_widget, elem.filter_ordenation, elem.color_facet, "", menu_style_id );
                         $("#meta-category .term-widget").removeClass('select-meta-filter');
                     } else {
-                        setCollectionFacet("update", term_root_id, elem.property_term_filter_widget, elem.color_facet, "", menu_style_id );
+                        setCollectionFacet("update", term_root_id, elem.property_term_filter_widget, elem.filter_ordenation, elem.color_facet, "", menu_style_id );
                     }
                 }
             }
@@ -1214,18 +1436,26 @@
                      if ( property.metas.socialdb_property_is_fixed && property.metas.socialdb_property_is_fixed === 'true' ) {
                         if(property.metas.socialdb_property_visibility&&property.metas.socialdb_property_visibility==='show'){
                             var visibility = '<a vis="show" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-open"></span></a>';
-                            var style = '';
+                            var style = '',
+                                addFilterStyle = '';
                         }else{
                             var style = 'style="opacity:0.33;"';
-                            var visibility = '<a vis="hide" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-close"></span></a>';
+                            var visibility = '<a vis="hide" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-close"></span></a>',
+                                addFilterStyle = 'pointer-events: none;';
                         }
                         
                         $('ul#metadata-container').append(
-                            '<li id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="root_category ui-widget-content ui-corner-tr"><label '+style+' class="title-pipe">'
-                            + '<span class="property-name">' + property.name + '</span>' +
-                            '</label><div class="action-icons">' +
-                            '<a onclick="edit_term(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
-                            '<span class="glyphicon glyphicon-edit"><span></a> ' +
+                            '<li id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="root_category ui-widget-content ui-corner-tr">' +
+                                '<label '+style+' class="title-pipe">' +
+                                     '<a title="Adicionar como filtro" id ="addFilter_'+ property.id +'"  style="cursor:pointer; margin-right:15px;' + addFilterStyle + '" onclick="add_filter(' + property.id + ', \'' + property.slug +'\')">' +
+                                        '<span class="glyphicon glyphicon-menu-left"></span>' +
+                                     '</a>'
+                                    + '<span class="property-name">' + property.name + '</span>' +
+                                '</label><div class="action-icons">' +
+
+                                '<a onclick="edit_term(' + current_id + ')" class="edit_property_data" href="javascript:void(0)">' +
+                                    '<span class="glyphicon glyphicon-edit"><span>' +
+                                '</a> ' +
                             visibility+'</div></li>');
                     } else {
                         if ( $.inArray(property.type, ranking_types) == -1 ) {
@@ -1263,6 +1493,7 @@
             });
         });
     }
+
     get_menu_property('terms');
 
     function edit_term(id) {
@@ -1418,7 +1649,6 @@
         }
     }
 
-
     /**
      ****************************************************************************
      ************************* RANKING FUNCTIONS ********************************
@@ -1446,7 +1676,7 @@
 
             if ( elem.property_data_use_filter === "use_filter" ) {
                 if ( current_operation == "add" ) {
-                    setCollectionFacet("add", new_ranking_id, ranking_widget, "", range_obj);
+                    setCollectionFacet("add", new_ranking_id, ranking_widget,"", "", range_obj);
                 } else if (current_operation == "edit") {
                     var item_was_dragged = $("#meta-voting .data-widget").hasClass('select-meta-filter');
                     if(item_was_dragged) {
@@ -1493,7 +1723,8 @@
 
     });
 
-    function list_ranking() {
+    function list_ranking()
+    {
         var xhr = $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/ranking/ranking_controller.php",
@@ -1535,7 +1766,8 @@
         return xhr;
     }
 
-    function delete_ranking(ranking_id) {
+    function delete_ranking(ranking_id)
+    {
         var ranking_title = $("#meta-item-" + ranking_id + " .title-pipe").text();
         $("#ranking_delete_collection_id").val($("#collection_id").val());
         $("#ranking_delete_id").val(ranking_id);
@@ -1585,7 +1817,8 @@
         });
     }
 
-    function increase_range() {
+    function increase_range()
+    {
         var count = $('#counter_range').val();
         $('#counter_range').val( parseInt(count) + 1 );
 
@@ -1633,7 +1866,8 @@
     }
 
     // Seelct2 Helper function
-    function addMenuThumb(item) {
+    function addMenuThumb(item)
+    {
         if ( !item.id ) return item.text;
         var item_id = item.id;
         var f = item_id.replace(/menu_style_/g, "");
@@ -1696,7 +1930,9 @@
         });
     });
 
-    function list_collection_metadata() {
+    //Exibe lista de metadados
+    function list_collection_metadata()
+    {
         var fixed_meta = $("ul#metadata-container .fixed-meta");
         $('#loader_metadados_page').show();
         $('#metadata-container').hide();
@@ -1704,8 +1940,8 @@
         //apos o termino de$("ul#metadata-container").html('').append(fixed_meta);
         //apos o termino  todos os carregamentos
         $.when( 
-            list_property_data(), 
-            list_property_terms(),
+            list_property_data(), //Added and standard meta
+            list_property_terms(), //Tags meta
             list_property_object(),
             list_property_compounds(),
             list_ranking()
@@ -1716,8 +1952,8 @@
                 data: { operation: 'get_ordenation_properties',collection_id:$('#collection_id').val() }
             }).done(function(result) {
                 var json = $.parseJSON(result);
-                console.log(json.ordenation);
-                if(json&&json.ordenation&&json.ordenation.default){
+                //console.log(json.ordenation);
+                if(json && json.ordenation && json.ordenation.default){
                     reorder_properties(json.ordenation.default.split(','));
                 }
                 $('#loader_metadados_page').hide();
@@ -1751,7 +1987,8 @@
       }
     }
     
-    function getRequestFeedback(status, error_msg) {
+    function getRequestFeedback(status, error_msg)
+    {
         if (status === 'success' || status === 'true' || status === true ) {
             $("#alert_error_properties").hide();
             $("#alert_success_properties").show();
@@ -1769,7 +2006,8 @@
         }, 3000);
     }
 
-    function change_meta_type() {
+    function change_meta_type()
+    {
         var open_modal = get_open_model_id();
         var selected_type = $( open_modal + " #select-data-type option:selected").val();
         var set_type = $(open_modal + " .property_data_widget").val();
@@ -1780,13 +2018,14 @@
         $( open_modal + " #search_data_widget").attr("data-type", selected_type).focus();
     }
 
-    function get_open_model_id() {
+    function get_open_model_id()
+    {
         return "#" + $('.modal.in').attr("id");
     }
 
     $("select#search_data_widget").on("focus", function () {
         var open_modal = get_open_model_id();
-        if ( open_modal.indexOf("#meta-") != -1 ) {
+        if ( open_modal.indexOf("#meta-") != -1 && $("select#search_data_widget").children().length < 3) {
             var meta_type = $(this).attr("data-type");
             var $search_data_widget = $( open_modal + ' #search_data_widget');
             $($search_data_widget).html('');
@@ -1802,8 +2041,8 @@
                     .append('<option value="multipleselect"> ' + '<?php _e('Multiple Select', 'tainacan') ?>' + ' </option>');
             } else {
                 $($search_data_widget)
-                    .append('<option value="searchbox">' + '<?php _e('Search box with autocomplete', 'tainacan') ?>' + '</option>')
                     .append('<option value="tree">' + '<?php _e('Tree', 'tainacan') ?>' + '</option>')
+                    .append('<option value="searchbox">' + '<?php _e('Search box with autocomplete', 'tainacan') ?>' + '</option>')
                     .append('<option value="cloud">' + '<?php _e('Tag Cloud', 'tainacan') ?>' + '</option>');
             }
 
@@ -2033,7 +2272,7 @@
 
     //limpando os formularios ao abrir o modal
     function clear_form(type){
-        console.log(type);
+        //console.log(type);
         if(type=='metadata_compound'){
             initDynatreeFilterProperties(src);
             $('#compound_id').val('');
@@ -2126,9 +2365,9 @@
         });
     }
      /**
-     * 
+     *
      */
-    function show_key_container() {
+     function show_key_container() {
         if (!$('.mask_container').is(':visible')) {
             $('.mask_container').show();
             $('.mask_up').show();
@@ -2139,9 +2378,9 @@
             $('.mask_down').show();
         }
     }
-    
+
     /**
-     * 
+     *
      * @param {type} seletor
      * @returns {undefined}     */
     function toggle_advanced_configuration(seletor) {
@@ -2155,7 +2394,7 @@
     }
      /**
      ****************************************************************************
-     ************************* DEFAULT VALUE ************************
+     ************************* DEFAULT VALUE ************************************
      ****************************************************************************
      **/
      function autocomplete_object_property_default_value(categories){
@@ -2174,7 +2413,7 @@
             $('#socialdb_property_object_default_value').val('');
         }
      }
-     
+
       function autocomplete_term_property_default_value(parent){
         if($("#default_value_text_term").val().length>0){
             $("#default_value_text_term").autocomplete({
@@ -2197,7 +2436,7 @@
      }
      /**
      ****************************************************************************
-     ************************* FUNCOES PARA AREA DE CRIACAO DE TAXONOMIAS ************************
+     ****************** FUNCOES PARA AREA DE CRIACAO DE TAXONOMIAS **************
      ****************************************************************************
      **/
     var selected_element;
@@ -2225,6 +2464,7 @@
         }
         selected_element = object;
     }
+
     //quando uma categoria tem o foco perdido
     function blur_event_taxonomy_create_zone(object) {
         var seletor = $(object).find('.taxonomy-list-name').first();
@@ -2236,6 +2476,7 @@
         $(input).hide();
         $(seletor).text($(input).val());
     }
+
     // quando algo eh escrito no container de cada categoria
     function keypress_event_taxonomy_create_zone(object, e) {
         // pego o span com o texto
@@ -2257,7 +2498,7 @@
             if ($(object).find('ul').first().length > 0) {
                 children = "<ul >" + $(object).find('ul').first().html() + '</ul>';
             }
-            //atraves do seletor do li ou ul 
+            //atraves do seletor do li ou ul
             $(object)
                     // create a new li item
                     .before("<li class='taxonomy-list-create'   >" +
@@ -2281,6 +2522,7 @@
         }
         save_taxonomy();
     }
+
     //verifica se o container possui algum li, funcao apenas caso estiver vazio
     function verify_has_li() {
         if ($('#taxonomy_create_zone').has('ul').length == 0) {
@@ -2288,6 +2530,7 @@
                     new_category_html + '</li></ul>')
         }
     }
+
     //adicionando uma categoria na irma acima
     function add_hierarchy_taxonomy_create_zone() {
         var input = $(selected_element).find('.input-taxonomy-create').first();
@@ -2315,8 +2558,10 @@
         }
         save_taxonomy();
     }
+
     //volta uma 'casa' para a categoria, subindo na hierarquia
-    function remove_hierarchy_taxonomy_create_zone() {
+    function remove_hierarchy_taxonomy_create_zone()
+    {
         //verifico se nao esta querendo subir de hierarquia
         var input = $(selected_element).find('.input-taxonomy-create').first();
         if ($(input).val() === '') {
@@ -2341,6 +2586,7 @@
         $(selected_element).remove();
         save_taxonomy();
     }
+
     //insere o input para adicao da categoria
     function add_field_category() {
         $('.input-taxonomy-create').hide();
@@ -2365,6 +2611,7 @@
 
         $('#taxonomy_create_zone').find('.input-taxonomy-create').focus().is(':visible');
     }
+
     //subir categoria entre as suas irmas na hieraquia
     function up_category_taxonomy() {
         if ($(selected_element).is(':visible') && selected_element.length > 0) {
@@ -2373,6 +2620,7 @@
             click_event_taxonomy_create_zone(selected_element);
         }
     }
+
     //descer categoria entre as suas irmas na hieraquia
     function down_category_taxonomy() {
         if ($(selected_element).is(':visible') && selected_element.length > 0) {
@@ -2381,6 +2629,7 @@
             click_event_taxonomy_create_zone(selected_element);
         }
     }
+
     //salva a taxonomia craida
     function save_taxonomy() {
         var string = $('#taxonomy_create_zone').html();
