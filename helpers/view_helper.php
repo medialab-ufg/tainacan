@@ -451,12 +451,14 @@ class ViewHelper {
         <div class="col-md-12 no-padding" id="collection-steps">
             <ul class="col-md-10">
                 <li id="dashboard" class="col-md-2 <?php $this->is_current($current_step,'config'); ?>">
-                    <a onclick="showCollectionConfiguration('<?php echo $path ?>');">
+                    <a onclick="">
                         <h4> <?php _e('Dashboard', 'tainacan')?> </h4>
                     </a>
                 </li>
                 <li id="stats" class="col-md-2 <?php $this->is_current($current_step,'categories'); ?> categories">
-                    <a> <h4> <?php _e('Statistics', 'tainacan')?> </h4> </a>
+                    <a onclick=""> 
+                        <h4> <?php _e('Statistics', 'tainacan')?> </h4> 
+                    </a>
                 </li>
             </ul>
 

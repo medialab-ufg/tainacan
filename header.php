@@ -250,25 +250,23 @@ $_src_ = get_template_directory_uri();
                                 <?php if (is_user_logged_in()) : ?>
                                   
                               <li role="separator" class="divider"></li>
-                              <li> 
-                                    <!-- Opt. Create collection -->
-                                    <a class="create-collection" onclick="showModalCreateCollection()">
-                                        <?php _e('Create collection', 'tainacan') ?> 
-                                    </a>
 
-                                    <!--<ul class="sub-menu">
-                                      <li class="click_new_collection">
-                                        <a  id="click_new_collection" onclick="showModalCreateCollection()">
-                                            <?php _e('General', 'tainacan'); ?>
-                                        </a>
+                              <li class="dropdown-submenu"> 
+                                    <!-- Opt. Create collection -->
+                                    <a class="create-collection">
+                                        <?php _e('Create collection', 'tainacan'); ?> 
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                      <li>
+                                        <a style="cursor: pointer;" id="click_new_collection"> <?php _e('General', 'tainacan'); ?> </a>
                                       </li>
-                                    </ul>-->
+                                    </ul>
                               </li>
 
                               <li>
-                                    <a onclick="showModalImportCollection();" href="javascript:void(0)">
-                                        <?php _e('Import collection', 'tainacan') ?>
-                                    </a>
+                                <a onclick="showModalImportCollection();" href="javascript:void(0)">
+                                  <?php _e('Import collection', 'tainacan') ?>
+                                </a>
                               </li>
 
                                 <?php endif; ?>
