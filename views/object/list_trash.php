@@ -52,40 +52,5 @@ if ( $loop->have_posts() ):
 <?php
 endif;
 
-$numberItems = ceil($loop->found_posts / 10);
-if ($loop->found_posts > 10):
-    $_per_page_ = $loop->query['posts_per_page'];
-    if( $_per_page_ >= $loop->found_posts )
-        // $_per_page_ = $loop->found_posts;
-        $_per_page_ = 10;
-    ?>
-    <!-- TAINACAN: div com a paginacao da listagem -->
-    <div>
-        <div class="col-md-12 center_pagination">
-            <input type="hidden" id="number_pages" name="number_pages" value="<?= $numberItems; ?>">
-            <div class="pagination_items col-md-4 pull-left">
-                <a href="#" class="btn btn-default btn-sm first" data-action="first"><span class="glyphicon glyphicon-backward"></span><!--&laquo;--></a>
-                <a href="#" class="btn btn-default btn-sm previous" data-action="previous"><span class="glyphicon glyphicon-step-backward"></span><!--&lsaquo;--></a>
-                <input type="text"  style="width: 90px;" readonly="readonly"  data-current-page="<?php if (isset($pagid)) echo $pagid; ?>" data-max-page="0" />
-                <a href="#" class="btn btn-default btn-sm next" data-action="next"><span class="glyphicon glyphicon-step-forward"></span><!--&rsaquo;--></a>
-                <a href="#" class="btn btn-default btn-sm last" data-action="last"><span class="glyphicon glyphicon-forward"></span><!--   &raquo; --></a>
-            </div>
-
-            <div class="col-md-3 center">
-                <?php
-                echo $show_string;
-                echo " 1 - " . $_per_page_  . __(' of ', 'tainacan') . $loop->found_posts; ?>
-            </div>
-
-            <div class="col-md-3 pull-right">
-                <?php _e('Items per page:', 'tainacan') ?>
-                <select name="items-per-page" id="items-per-page">
-                    <option disabled value="<?php echo $loop->query['posts_per_page'] ?>"><?php echo $loop->query['posts_per_page'] ?></option>
-                </select>
-            </div>
-
-        </div>
-    </div>
-<?php endif; ?>
-
+$objHelper->renderCollectionPagination($loop->found_posts, $loop->post_count, $pagid, $show_string, 'bottom_pag');
 
