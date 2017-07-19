@@ -474,7 +474,7 @@ function custom_rewrite_basic() {
     
     add_rewrite_rule('^([^/]*)/([^/]*)/editar', 'index.php?collection=$matches[1]&item=$matches[2]&edit-item=true', 'top');
     add_rewrite_rule('^([^/]*)/criar-item', 'index.php?collection=$matches[1]&add-item=true', 'top');
-    add_rewrite_rule('^([^/]*)/([^/]*)', 'index.php?collection=$matches[1]&item=$matches[2]', 'top');
+    //add_rewrite_rule('^([^/]*)/([^/]*)', 'index.php?collection=$matches[1]&item=$matches[2]', 'top');
     //flush_rewrite_rules();
 }
 
