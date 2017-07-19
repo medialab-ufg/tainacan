@@ -3289,7 +3289,7 @@ add_action('tainacan-header-end', function() {
 
     $stat_page = get_page_by_title(__('Statistics', 'tainacan'))->ID;
 
-    if (!is_single('socialdb_collection') && !is_single($stat_page)) {
+    if (!is_singular('socialdb_collection') && !is_single($stat_page)) {
         include('header-front-page.php');
         return;
     } elseif (is_single($stat_page)) {

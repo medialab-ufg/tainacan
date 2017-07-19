@@ -54,7 +54,7 @@ $_src_ = get_template_directory_uri();
             <!-- TAINACAN: tag body adaptado para o gplus -->
             <body <?php body_class(); ?> itemscope>
               
-            <?php if (!is_single('socialdb_collection')): ?>
+            <?php if (!is_singular('socialdb_collection')): ?>
               
               <header style="background-image: url(<?php echo get_repository_cover_url(); ?>)">
               
@@ -377,7 +377,7 @@ $_src_ = get_template_directory_uri();
        
             <?php do_action('tainacan-header-end'); ?>
             
-            <?php if (!is_single('socialdb_collection')): ?>
+            <?php if (!is_singular('socialdb_collection')): ?>
               </header>
             <?php endif; ?>
 
