@@ -97,12 +97,12 @@ class ObjectHelper extends ViewHelper {
                                
                 <input type="hidden" id="number_pages" name="number_pages" value="<?php echo $_num_pages_; ?>">
                 <div class="pagination_items col-md-4 pull-left">
-                    <a href="#" class="btn btn-default btn-sm first" data-action="first"><span class="glyphicon glyphicon-backward"></span><!--&laquo;--></a>
-                    <a href="#" class="btn btn-default btn-sm previous" data-action="previous"><span class="glyphicon glyphicon-step-backward"></span><!--&lsaquo;--></a>
+                    <a href="javascript:void(0)" class="btn btn-default btn-sm first" data-action="first"><span class="glyphicon glyphicon-backward"></span><!--&laquo;--></a>
+                    <a href="javascript:void(0)" class="btn btn-default btn-sm previous" data-action="previous"><span class="glyphicon glyphicon-step-backward"></span><!--&lsaquo;--></a>
                     <input type="text" readonly="readonly" data-max-page="0" class="pagination-count"
                            data-current-page="<?php if (isset($page_id)) echo $page_id; ?>" />
-                    <a href="#" class="btn btn-default btn-sm next" data-action="next"><span class="glyphicon glyphicon-step-forward"></span><!--&rsaquo;--></a>
-                    <a href="#" class="btn btn-default btn-sm last" data-action="last"><span class="glyphicon glyphicon-forward"></span><!--   &raquo; --></a>
+                    <a href="javascript:void(0)" class="btn btn-default btn-sm next" data-action="next"><span class="glyphicon glyphicon-step-forward"></span><!--&rsaquo;--></a>
+                    <a href="javascript:void(0)" class="btn btn-default btn-sm last" data-action="last"><span class="glyphicon glyphicon-forward"></span><!--   &raquo; --></a>
                 </div>
 
                 <div class="col-md-4 center">
@@ -112,7 +112,7 @@ class ObjectHelper extends ViewHelper {
                 </div>
 
                 <div class="col-md-3 pull-right per_page">
-                    <?php _e('Items per page:', 'tainacan'); ?>
+                    <?php _t('Items per page:', 1); ?>
                     <select name="items-per-page" class="col-items-per-page">
                        <?php $this->getItemsPerPage(); ?>
                     </select>

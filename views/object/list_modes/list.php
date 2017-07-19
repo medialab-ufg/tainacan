@@ -1,4 +1,4 @@
-<div class="droppableClassifications col-md-12 no-padding list-view-container top-div toggleSelect" 
+<div class="droppableClassifications col-md-12 no-padding list-view-container top-div toggleSelect"
     data-order="<?php echo $countLine; ?>"
     <?php if ($collection_list_mode != "list"): ?> style="display: none" <?php endif ?> >
     
@@ -24,7 +24,7 @@
 
         <div class="col-md-3 author-created">
             <div class="item-author"><?php echo "<strong>" . __('Created by: ', 'tainacan') . "</strong>" . get_the_author(); ?></div>
-            <div class="item-creation"><?php echo $curr_date ?></div>
+            <div class="item-creation"> <?php echo $curr_date ?> </div>
         </div>
 
         <div class="col-md-2 no-padding">
@@ -46,10 +46,8 @@
                         <div style="cursor:pointer;" data-icon="&#xe00b;"></div>
                     </a>
                 </li>
-                <?php // include "edit_btns.php"; ?>
             </ul>
             <?php include "actions/item_actions.php"; ?>
-            
         </div>
     </div>
 </div>

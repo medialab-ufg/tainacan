@@ -7,6 +7,11 @@ if ($_last_char != "/") {
 }
 
 $itemURL = $_current_collection . basename(get_permalink());
+$latitude = get_post_meta($curr_id, "socialdb_property_" . $geo_coordinates["lat"]);
+$longitude = get_post_meta($curr_id, "socialdb_property_" . $geo_coordinates["long"]);
+$location = get_post_meta($curr_id, "socialdb_property_" . $geo_loc);
+$arroz = "<strong>" . __('Created at: ', 'tainacan') . "</strong>" . get_the_date('d/m/Y');
+$_object_description = get_the_content();
 ?>
 <li class="col-md-6 cards-view-container top-div"
     id="object_<?php echo $curr_id ?>" data-order="<?php echo $countLine; ?>"
@@ -14,11 +19,8 @@ $itemURL = $_current_collection . basename(get_permalink());
 
     <input type="hidden" id="add_classification_allowed_<?php echo $curr_id ?>" name="add_classification_allowed" value="<?php echo (string) verify_allowed_action($collection_id, 'socialdb_collection_permission_add_classification', $curr_id); ?>" />
     <!-- TAINACAN: coloca a class row DO ITEM, sao cinco colunas possiveis todas elas podendo ser escondidas pelo o usuario, mas seu tamanho eh fixo col-md-2  -->
-    <div class="item-colecao toggleSelect" <?php
-    if (($countLine % 2) == 0) {
-        echo "style='margin-right: 0'";
-    }
-    ?>>
+    <div class="item-colecao toggleSelect" <?php if (($countLine % 2) == 0) { echo "style='margin-right: 0'"; } ?>>
+
         <input type="hidden" class="latitude"  value="<?php echo $latitude[0]; ?>" />
         <input type="hidden" class="longitude" value="<?php echo $longitude[0]; ?>" />
         <input type="hidden" class="location" value="<?php echo $location[0]; ?>" />
@@ -140,8 +142,6 @@ $itemURL = $_current_collection . basename(get_permalink());
                                ?>
 
                         <h4 class="item-display-title">
-                            <!--a href="<?php echo get_collection_item_href($collection_id, $curr_id); ?>"
-                               onclick="<?php get_item_click_event($collection_id, $curr_id) ?>"-->
                             <a href="<?php echo get_collection_item_href($collection_id, $curr_id, $viewHelper); ?>"
                                onclick="<?php get_item_click_event($collection_id, $curr_id) ?>">
                                    <?php echo wp_trim_words($_item_title_, 13); ?>
@@ -187,7 +187,6 @@ $itemURL = $_current_collection . basename(get_permalink());
                                             <div style="cursor:pointer;" data-icon="&#xe00b;"></div>
                                         </a>
                                     </li>
-                                    <?php // include "edit_btns_table.php";   ?>
                                 </ul>
 
                             </div> <!--.editing-item -->
