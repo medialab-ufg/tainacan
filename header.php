@@ -9,7 +9,6 @@
 include_once('helpers/view_helper.php');
 
 global $current_user;
-get_currentuserinfo();
 $socialdb_logo = get_option('socialdb_logo');
 $socialdb_title = get_option('blogname');
 $col_root_id = get_option('collection_root_id');

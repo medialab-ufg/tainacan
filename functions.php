@@ -487,11 +487,6 @@ if (!current_user_can('manage_options')) {
     show_admin_bar(false);
 }
 
-
-if( current_user_can('manage_options') ) {
-
-}
-
 /**
  * Função responsavel por permitir zip
  * * */
