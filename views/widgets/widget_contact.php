@@ -18,17 +18,17 @@ class contact extends WP_Widget {
     // Creating widget front-end
     public function widget( $args, $instance ){
         $title = apply_filters('widget_title', $instance['title']);
-        $institution = empty($instance['institution']) ? __('UFG - Universidade Federal de Goiás', 'wpb_widget_domain') : $instance['institution'];
-        $cnpj = empty($instance['cnpj']) ? __('01567601/0001-43', 'wpb_widget_domain') : $instance['cnpj'];
-        $street = empty($instance['street']) ? __('Avenidade Esperança', 'wpb_widget_domain') : $instance['street'];
-        $address_number = empty($instance['address_number']) ? __('s/n', 'wpb_widget_domain') : $instance['address_number'];
-        $complement = empty($instance['complement']) ? __('Campus Samambaia - Prédio da Reitoria', 'wpb_widget_domain') : $instance['complement'];
-        $cep = empty($instance['cep']) ? __('74690-900', 'wpb_widget_domain') : $instance['cep'];
-        $city = empty($instance['city']) ? __('Goiânia', 'wpb_widget_domain') : $instance['city'];
-        $state = empty($instance['state']) ? __('Goiás', 'wpb_widget_domain') : $instance['state'];
-        $country = empty($instance['country']) ? __('Brasil', 'wpb_widget_domain') : $instance['country'];
-        $email = empty($instance['email']) ? __('tainacan@tainacan.com', 'wpb_widget_domain') : $instance['email'];
-        $phone = empty($instance['phone']) ? __('+55 62 3521 1000', 'wpb_widget_domain') : $instance['phone'];
+        $institution = empty($instance['institution']) ? '' : $instance['institution'];
+        $cnpj = empty($instance['cnpj']) ? '' : $instance['cnpj'];
+        $street = empty($instance['street']) ? '' : $instance['street'];
+        $address_number = empty($instance['address_number']) ? '' : $instance['address_number'];
+        $complement = empty($instance['complement']) ? '' : $instance['complement'];
+        $cep = empty($instance['cep']) ? '' : $instance['cep'];
+        $city = empty($instance['city']) ? '' : $instance['city'];
+        $state = empty($instance['state']) ? '' : $instance['state'];
+        $country = empty($instance['country']) ? '' : $instance['country'];
+        $email = empty($instance['email']) ? '' : $instance['email'];
+        $phone = empty($instance['phone']) ? '' : $instance['phone'];
 
         // before and after widget arguments are defined by themes
         echo $args['before_widget'];
@@ -73,18 +73,18 @@ class contact extends WP_Widget {
 
     // Widget Backend
     public function form( $instance ) {
-        $title = empty($instance['title']) ? __('Contatos', 'wpb_widget_domain'): $instance['title'];
-        $institution = empty($instance['institution']) ? __('UFG - Universidade Federal de Goiás', 'wpb_widget_domain') : $instance['institution'];
-        $cnpj = empty($instance['cnpj']) ? __('01567601/0001-43', 'wpb_widget_domain') : $instance['cnpj'];
-        $street = empty($instance['street']) ? __('Avenidade Esperança', 'wpb_widget_domain') : $instance['street'];
-        $address_number = empty($instance['address_number']) ? __('s/n', 'wpb_widget_domain') : $instance['address_number'];
-        $complement = empty($instance['complement']) ? __('Campus Samambaia - Prédio da Reitoria', 'wpb_widget_domain') : $instance['complement'];
-        $cep = empty($instance['cep']) ? __('74690-900', 'wpb_widget_domain') : $instance['cep'];
-        $city = empty($instance['city']) ? __('Goiânia', 'wpb_widget_domain') : $instance['city'];
-        $state = empty($instance['state']) ? __('Goiás', 'wpb_widget_domain') : $instance['state'];
-        $country = empty($instance['country']) ? __('Brasil', 'wpb_widget_domain') : $instance['country'];
-        $email = empty($instance['email']) ? __('tainacan@tainacan.com', 'wpb_widget_domain') : $instance['email'];
-        $phone = empty($instance['phone']) ? __('+55 62 3521 1000', 'wpb_widget_domain') : $instance['phone'];
+        $title = empty($instance['title']) ? '': $instance['title'];
+        $institution = empty($instance['institution']) ? '' : $instance['institution'];
+        $cnpj = empty($instance['cnpj']) ? '' : $instance['cnpj'];
+        $street = empty($instance['street']) ? '' : $instance['street'];
+        $address_number = empty($instance['address_number']) ? '' : $instance['address_number'];
+        $complement = empty($instance['complement']) ? '' : $instance['complement'];
+        $cep = empty($instance['cep']) ? '' : $instance['cep'];
+        $city = empty($instance['city']) ? '' : $instance['city'];
+        $state = empty($instance['state']) ? '' : $instance['state'];
+        $country = empty($instance['country']) ? '' : $instance['country'];
+        $email = empty($instance['email']) ? '' : $instance['email'];
+        $phone = empty($instance['phone']) ? '' : $instance['phone'];
 
         // Widget admin form
         ?>
