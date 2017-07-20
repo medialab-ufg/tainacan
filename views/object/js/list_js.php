@@ -116,9 +116,14 @@
             page_string: '<?php _t("Page ",1); ?>' + '{current_page}' + '<?php _t(" of ",1); ?>' + ' {max_page}',
             max_page: $('#number_pages').val(),
             paged: function (page) {
+                var trash_page = false;
+                var list_trash = $("#is_trash").val();
+                if(1===list_trash)
+                    trash_page = true;
+
                 $('html,body').animate({scrollTop: 0}, 'slow');
                 var current_mode = $('.selected-viewMode').attr('class').split(" ")[0];
-                wpquery_page(page, current_mode);
+                wpquery_page(page, current_mode, trash_page);
             }
         });
 
@@ -137,7 +142,12 @@
                 base_calculus = parseInt(pag_status_qtd) - 1;
                 init = (base_calculus * limit) + 1;
                 var limit = parseInt(this.value);
-                $('span.per-page').text(total_items);
+                var current_limit = init + limit;
+
+                if(current_limit > total_items)
+                    current_limit = total_items;
+
+                $('span.per-page').text(current_limit);
             } else {
                 $('span.per-page').text(show_max_count);
             }

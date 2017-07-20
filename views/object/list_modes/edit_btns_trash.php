@@ -1,4 +1,3 @@
-
 <?php
 $_show_edit_buttons = true;
 

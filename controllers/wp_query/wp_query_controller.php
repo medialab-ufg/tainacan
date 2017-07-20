@@ -260,9 +260,6 @@ class WPQueryController extends Controller {
                 $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($args['collection_id'], "socialdb_collection_table_metas", true)));
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($args);
-//                if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
-//                    $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
-//                }
                 return json_encode($return);
             case "wpquery_page":
                 $return = array();
@@ -283,7 +280,6 @@ class WPQueryController extends Controller {
                 $data['is_moderator'] = CollectionModel::is_moderator($args['collection_id'], get_current_user_id());
                 $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($args['collection_id'], "socialdb_collection_table_metas", true)));
 
-
                 if(isset($data['is_trash']) && $data['is_trash'] === true) {
                     $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list_trash.php', $data);
                 } else {
@@ -291,9 +287,7 @@ class WPQueryController extends Controller {
                 }
 
                 $return['args'] = serialize($args);
-//                if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
-//                    $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
-//                }
+
                 return json_encode($return);
             case "wpquery_author":
                 $return = array();
@@ -313,9 +307,6 @@ class WPQueryController extends Controller {
                 $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($args['collection_id'], "socialdb_collection_table_metas", true)));
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($args);
-//                if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
-//                    $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
-//                }
                 return json_encode($return);
             case "wpquery_keyword":
                 set_time_limit(0);
