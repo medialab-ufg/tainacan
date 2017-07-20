@@ -533,6 +533,10 @@ button.collection-trash {
       .item-display-title {
         margin: 0;
         font-size: 16px;
+        a {
+          color: black;
+          font-weight: bolder;
+        }
       }
 
       .item-description {
@@ -546,9 +550,9 @@ button.collection-trash {
 
     } // .list-view-container
       .item-thumb {
-            a img {
-                    max-width: 30px !important;
-            }
+        a img, img {
+          max-width: 30px !important;
+        }
       }
     } // list-viewMode
 

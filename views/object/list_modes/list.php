@@ -7,18 +7,24 @@
             value="<?php echo (string) verify_allowed_action($collection_id, 'socialdb_collection_permission_add_classification', $curr_id); ?>" />
     
     <div>
+
         <div class="col-md-1 item-thumb">
-            <a href="<?php echo get_collection_item_href($collection_id); ?>"
-               onclick="<?php get_item_click_event($collection_id, $curr_id )?>">
-                <?php echo get_item_thumb_image($curr_id); ?>
-            </a>
+            <?php if(empty($is_trash)): ?>
+                <a href="<?php echo get_collection_item_href($collection_id, $curr_id, $viewHelper); ?>"
+                   onclick="<?php get_item_click_event($collection_id, $curr_id) ?>">
+                    <?php echo get_item_thumb_image($curr_id); ?>
+                </a>
+            <?php elseif ($is_trash): echo get_item_thumb_image($curr_id); endif; ?>
         </div>
+
         <div class="col-md-4 no-padding">
             <h4 class="item-display-title">
-                <a href="<?php echo get_collection_item_href($collection_id); ?>" style="color: black; font-weight: bolder"
-                   onclick="<?php get_item_click_event($collection_id, $curr_id )?>">
-                    <?php the_title(); ?>
-                </a>
+                <?php if(empty($is_trash)): ?>
+                    <a href="<?php echo get_collection_item_href($collection_id, $curr_id, $viewHelper); ?>"
+                       onclick="<?php get_item_click_event($collection_id, $curr_id) ?>">
+                        <?php the_title(); ?>
+                    </a>
+                <?php elseif ($is_trash): the_title(); endif; ?>
             </h4>
         </div>
 
@@ -39,15 +45,21 @@
         </div>
 
         <div class="col-md-2">
-            <ul class="item-funcs right">
-                <input type="hidden" class="post_id" name="post_id" value="<?= $curr_id ?>">
-                <li class="tainacan-museum-clear">
-                    <a id="modal_network<?php echo $curr_id; ?>" onclick="showModalShareNetwork(<?php echo $curr_id; ?>)">
-                        <div style="cursor:pointer;" data-icon="&#xe00b;"></div>
-                    </a>
-                </li>
-            </ul>
-            <?php include "actions/item_actions.php"; ?>
+            <?php if(empty($is_trash)): ?>
+                <ul class="item-funcs right">
+                    <input type="hidden" class="post_id" name="post_id" value="<?= $curr_id ?>">
+                    <li class="tainacan-museum-clear">
+                        <a id="modal_network<?php echo $curr_id; ?>" onclick="showModalShareNetwork(<?php echo $curr_id; ?>)">
+                            <div style="cursor:pointer;" data-icon="&#xe00b;"></div>
+                        </a>
+                    </li>
+                </ul>
+                <?php
+                include "actions/item_actions.php";
+            elseif ($is_trash):
+                include "edit_btns_trash.php";
+            endif; ?>
         </div>
+
     </div>
 </div>

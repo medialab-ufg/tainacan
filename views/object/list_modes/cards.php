@@ -31,10 +31,10 @@ $_object_description = get_the_content();
                 <div class="col-md-4 colFoto no-padding">
 
                     <?php if(empty($is_trash)): ?>
-                    <a href="<?php echo get_collection_item_href($collection_id, $curr_id, $viewHelper); ?>"
-                       onclick="<?php get_item_click_event($collection_id, $curr_id) ?>">
-                        <?php echo get_item_thumb_image($curr_id); ?>
-                    </a>
+                        <a href="<?php echo get_collection_item_href($collection_id, $curr_id, $viewHelper); ?>"
+                           onclick="<?php get_item_click_event($collection_id, $curr_id) ?>">
+                            <?php echo get_item_thumb_image($curr_id); ?>
+                        </a>
                     <?php elseif ($is_trash): ?>
                         <?php echo get_item_thumb_image($curr_id); ?>
                     <?php endif; ?>
@@ -148,7 +148,6 @@ $_object_description = get_the_content();
                         ?>
 
                         <h4 class="item-display-title">
-
                             <?php if(empty($is_trash)): ?>
                                 <a href="<?php echo get_collection_item_href($collection_id, $curr_id, $viewHelper); ?>"
                                    onclick="<?php get_item_click_event($collection_id, $curr_id) ?>">
@@ -157,7 +156,6 @@ $_object_description = get_the_content();
                             <?php elseif ($is_trash): ?>
                                 <?php echo wp_trim_words($_item_title_, 13); ?>
                             <?php endif; ?>
-
                         </h4>
 
                         <div class="item-description"> <?php echo $_trim_desc; ?> </div>
