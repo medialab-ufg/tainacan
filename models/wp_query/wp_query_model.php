@@ -64,7 +64,7 @@ class WPQueryModel extends Model {
                     if (strpos($classification, '_') === false && $classification) {
                         $key = $category_model->get_category_facet_parent(trim($classification), $data['collection_id']);
                         $used_parents[] = $key;
-                        if(!in_array($classification,  $result[$key]))
+                        if(!isset($result[$key])||!in_array($classification,  $result[$key]))
                             $result[$key][] = $classification;
                     } elseif (strpos($classification, '_') !== false && strpos($classification, 'tag') !== false) {
                         $result['tags'][] = explode('_', $classification)[0];  

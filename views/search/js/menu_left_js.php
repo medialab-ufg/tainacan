@@ -172,6 +172,8 @@
                 }
             },
             onCreate: function (node, span) {
+                if(!$('body').hasClass('logged-in'))
+                    return false;
                 var key = node.data.key;
                 $(span).attr('id',"ui-dynatree-id-" + node.data.key)
                 var n = key.toString().indexOf("_");

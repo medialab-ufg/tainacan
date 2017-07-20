@@ -18,6 +18,8 @@
                 $id = ($property_id === '0') ? $compound_id : $property_id;
                 if(($avoid_selected_items === '1'|| $avoid_selected_items == 'true') && $object->is_selected_property($id,  get_the_ID())){
                     continue;
+                }else if(has_filter('avoid-items-list-items-property-object') && apply_filters('avoid-items-list-items-property-object', $compound_id,$property_id, get_the_ID())){
+                    continue;
                 }
                 $hasItem++
                 ?>
