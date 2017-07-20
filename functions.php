@@ -18,6 +18,8 @@ include_once('views/widgets/widget_contact.php');
 include_once('views/widgets/widget_social_media.php');
 include_once('views/widgets/widget_site_map.php');
 
+include('controllers/collection/collection_controller.php');
+
 show_admin_bar(false);
 
 #### Desativar Widgets Padrões do Wordpress ####

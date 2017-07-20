@@ -4,6 +4,16 @@ include_once (dirname(__FILE__) . '/../../../../../wp-load.php');
 include_once (dirname(__FILE__) . '/../../../../../wp-includes/wp-db.php');
 
  class Controller {
+    
+    function __construct() {
+    
+        $ajaxMethodName = str_replace('Controller', '', get_called_class());
+        //var_dump($ajaxMethodName); die;
+        add_action('wp_ajax_' . $ajaxMethodName, array(&$this, 'operation') );
+    
+    }
+    
+    
     public function render($file, $variables = array()) {
         extract($variables);
 

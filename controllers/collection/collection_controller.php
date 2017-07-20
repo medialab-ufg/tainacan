@@ -12,6 +12,12 @@ include_once (dirname(__FILE__) . '../../../models/event/event_collection/event_
 class CollectionController extends Controller {
 
     public function operation($operation, $data) {
+        
+        $operation = $_POST['operation'];
+        
+        
+        $data = $_POST;
+        
         $collection_model = new CollectionModel();
         $collection_parent_model = new CollectionParentModel();
         $visualization_model = new VisualizationModel();
@@ -108,7 +114,8 @@ class CollectionController extends Controller {
                 $data['mycollections'] = $mycollections;
                 $data['sharedcollections'] = $sharedcollections;
                 $data['json_autocomplete'] = $collection_model->create_main_json_autocomplete($data['collection_post']->ID);
-                return $this->render(dirname(__FILE__) . '../../../views/collection/header_collection.php', $data);
+                echo $this->render(dirname(__FILE__) . '../../../views/collection/header_collection.php', $data);
+                die;
             // break;
             case "edit_configuration":
                 if (is_user_logged_in()) {
@@ -407,6 +414,8 @@ class CollectionController extends Controller {
                 return json_encode(save_canvas_pdf_thumbnails($_POST));
                 break;
         }
+        
+        die;
     }
 
     /**
@@ -432,14 +441,14 @@ class CollectionController extends Controller {
 /*
  * Controller execution
  */
-if ($_POST['operation']) {
-    $operation = $_POST['operation'];
-    $data = $_POST;
-} else {
-    $operation = $_GET['operation'];
-    $data = $_GET;
-}
+//if ($_POST['operation']) {
+//    $operation = $_POST['operation'];
+//    $data = $_POST;
+//} else {
+//    $operation = $_GET['operation'];
+//    $data = $_GET;
+//}
 
 $collection_controller = new CollectionController();
-echo $collection_controller->operation($operation, $data);
+//echo $collection_controller->operation($operation, $data);
 ?>
