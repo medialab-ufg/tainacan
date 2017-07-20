@@ -158,7 +158,7 @@ $is_repo_admin = current_user_can('administrator');
                 </li>
                 <?php
             }
-            else if ($is_moderator || get_post($curr_id)->post_author == get_current_user_id()): ?>
+            else if ($is_moderator || get_post($curr_id)->post_author == get_current_user_id() || verify_allowed_action($collection_id, 'socialdb_collection_permission_delete_object')): ?>
                 <li>
                     <a class="ac-exclude-item"
                        onclick="delete_object('<?php echo $itemDelete['title']; ?>','<?php echo $itemDelete['text']; ?>','<?php echo $itemDelete['id']; ?>','<?php echo $itemDelete['time']; ?>')">
