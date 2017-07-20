@@ -46,6 +46,7 @@ class WPQueryModel extends Model {
         $recover_data = unserialize(stripslashes($data['wp_query_args']));
         $terms = explode(',', $data['value']);
          unset($recover_data['pagid']);
+         unset($recover_data['keyword']);
         unset($recover_data['properties_object_tree']);
         unset($recover_data['properties_data_tree']);
         unset($recover_data['license_tree']);
@@ -63,7 +64,8 @@ class WPQueryModel extends Model {
                     if (strpos($classification, '_') === false && $classification) {
                         $key = $category_model->get_category_facet_parent(trim($classification), $data['collection_id']);
                         $used_parents[] = $key;
-                        $result[$key][] = $classification;
+                        if(!in_array($classification,  $result[$key]))
+                            $result[$key][] = $classification;
                     } elseif (strpos($classification, '_') !== false && strpos($classification, 'tag') !== false) {
                         $result['tags'][] = explode('_', $classification)[0];  
                     } elseif (strpos($classification, '_') !== false 
@@ -106,8 +108,9 @@ class WPQueryModel extends Model {
                         }
                     }elseif (strpos($classification, 'title') !== false) {
                         $value = trim(explode('_', $classification)[0]);
-                        $recover_data['keyword'][] = get_post($value)->post_title;
-                    }
+                        if(!isset($recover_data['keyword']) ||(is_array( $recover_data['keyword']) && !in_array(get_post($value)->post_title,  $recover_data['keyword'])))
+                            $recover_data['keyword'][] = get_post($value)->post_title;
+                    }   
                 }
             }
         }

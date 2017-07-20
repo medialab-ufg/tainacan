@@ -9,10 +9,16 @@
         echo $author;
     }
     //keyword
-    if (isset($keyword) && $keyword != '') { ?>
+    if (isset($keyword) && !is_array($keyword) && $keyword != '') { ?>
          <a onclick="remove_search_word()" href="#"> <span class="glyphicon glyphicon-remove white"></span> </a>
         <?php
         echo $keyword;
+    }else if(isset($keyword) && is_array($keyword)){
+        foreach($keyword as $key): ?>
+            <a onclick="remove_search_word('<?php echo $key ?>')" href="#"> <span class="glyphicon glyphicon-remove white"></span> </a>
+            <?php
+            echo $key;
+        endforeach;
     }
 
     //categories

@@ -53,7 +53,7 @@ class TextAreaClass extends FormItem{
                     id="textarea-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>" 
                     rows='9'
                     name="socialdb_property_<?php echo $property['id']; ?>[]"
-                    ></textarea>
+                    ><?php echo ($values && isset($values[0]) && !empty($values[0])) ? $values[0] : ''; ?></textarea>
         <?php
         endif;
         $this->initScriptsTextAreaClass($compound_id,$property_id, $item_id, $index_id);

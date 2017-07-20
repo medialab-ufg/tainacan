@@ -126,6 +126,23 @@ class HelpersModel extends Model {
     
     
     public function saveHelper($item_id,$coumpounds,$singles,$values) {
+        foreach ($singles as $single_id => $indexes) {
+            $array = [];            
+            $index = 0;
+            foreach ($indexes as $meta_id  => $meta_value) {
+                if(trim($meta_value) !== ''){
+                        $new_children = [
+                            'type' => 'data',
+                            'values' => [$meta_id]
+                        ];
+                        $array[$index][0] = $new_children; 
+                        $index++;
+                }
+            }
+            update_post_meta($item_id, 'socialdb_property_helper_'.$single_id, serialize($array));
+            if(!empty($array))
+                $this->usedIds[] = $single_id;
+        }
         foreach ($coumpounds as $compound_id => $indexes) {
             $array = [];
             foreach ($indexes as $index => $metas) {
@@ -144,7 +161,7 @@ class HelpersModel extends Model {
                            $meta_id = $this->sdb_add_post_meta($item_id, 'socialdb_property_'.$property_id.'_cat', $cat_id);
                            $new_children = [
                                           'type' => 'term',
-                                          'values' => [$meta_id]
+                                          'values' => [(int)$meta_id]
                                       ];
                                       $array[$index][$property_id] = $new_children; 
                         }else{    
@@ -165,24 +182,6 @@ class HelpersModel extends Model {
             //print_r($array);
             update_post_meta($item_id, 'socialdb_property_helper_'.$compound_id, serialize($array));
             $this->usedIds[] = $compound_id;
-        }
-        
-        foreach ($singles as $single_id => $indexes) {
-            $array = [];
-            foreach ($indexes as $meta_id  => $meta_value) {
-                $index = 0;
-                if(trim($meta_value) !== ''){
-                        $new_children = [
-                            'type' => 'data',
-                            'values' => [$meta_id]
-                        ];
-                        $array[$index][0] = $new_children; 
-                        $index++;
-                }
-            }
-            //print_r($array);
-            update_post_meta($item_id, 'socialdb_property_helper_'.$single_id, serialize($array));
-            $this->usedIds[] = $single_id;
         }
         //busco as categorias deste item
         $terms = wp_get_object_terms($item_id, 'socialdb_category_type');
