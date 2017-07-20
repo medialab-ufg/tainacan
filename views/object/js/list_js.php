@@ -122,26 +122,32 @@
             }
         });
 
-        $(".col-items-per-page").on('change', function() {            
+        $(".col-items-per-page").on('change', function() {
             var pag_status_qtd = $("#pagination_current_page").val();
             var base_calculus = 0;
             var init = 1;
             var limit = parseInt(this.value);
-            if(pag_status_qtd != "" && pag_status_qtd > 1) {                
-                base_calculus = parseInt(pag_status_qtd) - 1;
-                init = (base_calculus * 50) + 1;
-                var limit = parseInt(this.value);
-                $('span.per-page').text( init + limit);
-            } else {
-                $('span.per-page').text(limit);
-            }
-            
-           var viewMode = $("#temp-viewMode").val();
-           var container = $('.' + viewMode +'-view-container');
-           $('span.base-page-init').text( init );
-           $(".col-items-per-page").val(limit);
+            var total_items = $.trim($(".col-total-items").first().text());
+            var show_max_count = limit;
 
-           $(container).each(function(idx, el) {
+            if(limit > total_items)
+                show_max_count = total_items;
+
+            if(pag_status_qtd != "" && pag_status_qtd > 1) {
+                base_calculus = parseInt(pag_status_qtd) - 1;
+                init = (base_calculus * limit) + 1;
+                var limit = parseInt(this.value);
+                $('span.per-page').text(total_items);
+            } else {
+                $('span.per-page').text(show_max_count);
+            }
+
+            var viewMode = $("#temp-viewMode").val();
+            var container = $('.' + viewMode +'-view-container');
+            $('span.base-page-init').text( init );
+            $(".col-items-per-page").val(limit);
+
+            $(container).each(function(idx, el) {
               var item_num = parseInt( $(el).attr('data-order') );
               if( $.isNumeric( item_num ) ) {
                   if ( item_num <= limit ) {
@@ -816,6 +822,74 @@
     $('.collection-slides').slick(collection_slick_settings);
     $('.main-slide').slick(main_slick_settings);
 
-    // setTimeout( function() {}, 500);
+    function restore_object(object_id) {
+        show_modal_main();
+        $.ajax({
+            type: "POST",
+            url: $('#src').val() + "/controllers/object/object_controller.php",
+            data: {collection_id: $('#collection_id').val(), operation: 'restore_object', object_id: object_id}
+        }).done(function (result) {
+            if (result) {
+                showAlertGeneral('<?php _e('Success', 'tainacan'); ?>', '<?php _e('The restoration of the item was successful!', 'tainacan'); ?>', 'success');
+                showTrash($('#src').val());
+            } else {
+                hide_modal_main();
+                showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Error restoring the item.', 'tainacan'); ?>', 'error');
+            }
+        });
+    }
+
+    function delete_permanently_object(title, text, object_id) {
+        swal({
+                title: title,
+                text: text,
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: 'btn-danger',
+                closeOnConfirm: true,
+                closeOnCancel: true
+            },
+            function (isConfirm) {
+                if (isConfirm) {
+                    show_modal_main();
+                    $.ajax({
+                        type: "POST",
+                        url: $('#src').val() + "/controllers/object/object_controller.php",
+                        data: {collection_id: $('#collection_id').val(), operation: 'delete_permanently_object', object_id: object_id}
+                    }).done(function (result) {
+                        if (result) {
+                            showAlertGeneral('<?php _e('Success', 'tainacan'); ?>', '<?php _e('Item successfully deleted!', 'tainacan'); ?>', 'success');
+                            showTrash($('#src').val());
+                        } else {
+                            hide_modal_main();
+                            showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Oops! Failed attempt to delete.', 'tainacan'); ?>', 'error');
+                        }
+                    });
+                }
+            });
+    }
+
+    function select_some_trash() {
+        if( ! $('.toggleSelect').hasClass('selecting-item') ) {
+            toastr.info('<?php _e('Select items below to edit or exclude!', 'tainacan') ?>', '', set_toastr_class());
+        }
+
+        $('.object_id').each(function(idx, el) {
+            var item = $("#object_" + $(el).val() );
+            $(item).find('.toggleSelect').addClass('selecting-item');
+        });
+    }
+
+    function select_all_trash() {
+        console.log($('.toggleSelect'));
+        $(".toggleSelect").removeClass('selected-item');
+        toastr.info('<?php _e('All items have been selected!', 'tainacan') ?>', '', set_toastr_class());
+        $(".toggleSelect").each(function(idx, el) {
+            if($(el).is(':visible')){
+                $(".toggleSelect").addClass('selected-item');
+                console.log('inside_',$(el).val());
+            }
+        });
+    }
 
 </script>

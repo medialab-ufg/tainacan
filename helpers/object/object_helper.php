@@ -108,7 +108,7 @@ class ObjectHelper extends ViewHelper {
                 <div class="col-md-4 center">
                     <?php echo $proper_str; ?> <span class="base-page-init"> 1 </span> -
                     <span class='per-page'> <?php echo $items_per_page ?> </span>
-                    <?php echo __(' of ', 'tainacan') . $_total_items_; ?>
+                    <?php _t(' of ', 1); ?> <span class="col-total-items"> <?php echo $_total_items_; ?> </span>
                 </div>
 
                 <div class="col-md-3 pull-right per_page">

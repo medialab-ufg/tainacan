@@ -111,23 +111,6 @@
     }
 // END:fim das funcoes que mostram as propriedades
 
-    function example(object_id) {
-        $('#modalImportMain').modal('show');//mostro o modal de carregamento
-        $.ajax({
-            type: "POST",
-            url: $('#src').val() + "/controllers/object/object_controller.php",
-            data: {collection_id: $('#collection_id').val(), operation: 'edit', object_id: object_id}
-        }).done(function (result) {
-            hide_modal_main();
-            $("#form").html('');
-            $('#main_part').hide();
-            $('#display_view_main_page').hide();
-            $('#loader_collections').hide();
-            $('#configuration').html(result).show();
-            $('.dropdown-toggle').dropdown();
-            $('.nav-tabs').tab();
-        });
-    }
 
     function restore_object(object_id) {
         show_modal_main();
