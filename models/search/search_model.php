@@ -288,7 +288,7 @@ public function add($data) {
         return $result;
     }
 
-    public function get_saved_facets($collection_id) {
+    public function get_saved_facets($collection_id, $is_repository = false, $child_id = 0) {
         $default_tree_orientation = get_post_meta($collection_id, 'socialdb_collection_facet_widget_tree_orientation', true);
         $default_tree_orientation = ($default_tree_orientation != '' ? $default_tree_orientation : 'left-column');
         $facets_id = array_filter(array_unique(get_post_meta($collection_id, 'socialdb_collection_facets')));
@@ -358,8 +358,16 @@ public function add($data) {
                     }
                 }
             }
+            if($is_repository)
+            {
+                $facet['priority'] = get_post_meta($child_id, 'socialdb_collection_facet_' . $facet_id . '_priority', true);
+            }
 
-            $facet['priority'] = get_post_meta($collection_id, 'socialdb_collection_facet_' . $facet_id . '_priority', true);
+            if(!$is_repository || !$facet['priority'])
+            {
+                $facet['priority'] = get_post_meta($collection_id, 'socialdb_collection_facet_' . $facet_id . '_priority', true);
+            }
+
 
             $arrFacets[] = $facet;
         }
@@ -437,10 +445,13 @@ public function add($data) {
 
     function save_new_priority($data) {
         if(isset($data['arrFacets'])) {
-            foreach ($data['arrFacets'] as $facet) {
-                if($facet[0] == get_term_by('slug', 'socialdb_property_fixed_tags', 'socialdb_property_type')->term_id){
+            foreach ($data['arrFacets'] as $facet)
+            {
+                if($facet[0] == get_term_by('slug', 'socialdb_property_fixed_tags', 'socialdb_property_type')->term_id)
+                {
                     $facet[0] = 'tag';
                 }
+
                 update_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $facet[0] . '_priority', $facet[1]);
             }
         }

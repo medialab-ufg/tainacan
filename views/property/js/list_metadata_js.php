@@ -324,9 +324,11 @@
 
     function updateFacetPosition(arrFacets) {
         var prepared_arr = [];
+
         $.each(arrFacets, function (idx, el) {
             prepared_arr[prepared_arr.length] = [el, idx];
         });
+
         $.ajax({
             url: src + '/controllers/search/search_controller.php',
             type: 'POST',
@@ -342,16 +344,16 @@
             success: function (data) {
                 if (data) {
                     $("#filters-accordion").html('');
-                    var facetsObj = $.parseJSON(data);
+                    let facetsObj = $.parseJSON(data);
 
                     /*
                         Remove facetas repetidas, faceta do repositorio que estava anteriormente na coleção e foi adicionada ao repositorio
                      */
-                    var unique_ids = [];
+                    let unique_ids = [];
                     facetsObj.forEach(function(elemento, idx){
                         let id = elemento.id;
                         let id_rep = $.inArray(id, unique_ids);
-                        if(id_rep == -1)
+                        if(id_rep === -1)
                         {
                             unique_ids.push(id);
                         }else

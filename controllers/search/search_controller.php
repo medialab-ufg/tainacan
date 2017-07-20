@@ -15,7 +15,7 @@ class SearchController extends Controller {
                 
                 if($repository_id != $data['collection_id'])
                 {
-                    $repository_facets = $search_model->get_saved_facets($repository_id);
+                    $repository_facets = $search_model->get_saved_facets($repository_id, true, $data['collection_id']);
                     $repo_facets = [];
                     foreach ($repository_facets as $facet)
                     {
@@ -24,6 +24,7 @@ class SearchController extends Controller {
                     }
                     
                     $arrFacets = array_merge($repo_facets, $arrFacets);
+                    usort($arrFacets, 'compare_priority'); // sort by priority
                 }
                 
                 return json_encode($arrFacets);
