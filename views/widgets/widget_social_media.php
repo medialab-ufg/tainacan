@@ -18,11 +18,11 @@ class social_media extends WP_Widget {
     // Creating widget front-end
     public function widget( $args, $instance ){
         $title = apply_filters('widget_title', $instance['title']);
-        $facebook_url = empty($instance['facebook_url']) ? __('https://www.facebook.com/tainacan.l3p', 'wpb_widget_domain') : $instance['facebook_url'];
-        $youtube_url = empty($instance['youtube_url']) ? __('https://www.youtube.com/channel/UC_G6mfKrktesaBufjA9GU8w', 'wpb_widget_domain') : $instance['youtube_url'];
-        $twitter_url = empty($instance['twitter_url']) ? __('https://twitter.com/Tainacan_L3P', 'wpb_widget_domain') : $instance['twitter_url'];
-        $googleplus_url = empty($instance['googleplus_url']) ? __('https://plus.google.com/108603352387487216716', 'wpb_widget_domain') : $instance['googleplus_url'];
-        $github_url = empty($instance['github_url']) ? __('https://github.com/medialab-ufg/tainacan', 'wpb_widget_domain') : $instance['github_url'];
+        $facebook_url = empty($instance['facebook_url']) ? '' : $instance['facebook_url'];
+        $youtube_url = empty($instance['youtube_url']) ? '' : $instance['youtube_url'];
+        $twitter_url = empty($instance['twitter_url']) ? '' : $instance['twitter_url'];
+        $googleplus_url = empty($instance['googleplus_url']) ? '' : $instance['googleplus_url'];
+        $github_url = empty($instance['github_url']) ? '' : $instance['github_url'];
 
         // before and after widget arguments are defined by themes
         echo $args['before_widget'];
@@ -33,11 +33,11 @@ class social_media extends WP_Widget {
         echo '<div>';
 
         // This is where you run the code and display the output
-        echo '<a target="_blank" class="smedialink" href="'. $facebook_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/face.png" alt="Facebook" /> Facebook</br></a>';
-        echo '<a target="_blank" class="smedialink" href="'. $youtube_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/yt.png" alt="Youtube" /> Youtube</br></a>';
-        echo '<a target="_blank" class="smedialink" href="'. $twitter_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/twit.png" alt="Twitter" /> Twitter</br></a>';
-        echo '<a target="_blank" class="smedialink" href="'. $googleplus_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/gplus.png" alt="Google Plus" /> Google Plus</br></a>';
-        echo '<a target="_blank" class="smedialink" href="'. $github_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/ghub.png" alt="Github"/> Github</a>';
+        if (!empty($facebook_url)) echo '<a target="_blank" class="smedialink" href="'. $facebook_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/face.png" alt="Facebook" /> Facebook</br></a>';
+        if (!empty($youtube_url)) echo '<a target="_blank" class="smedialink" href="'. $youtube_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/yt.png" alt="Youtube" /> Youtube</br></a>';
+        if (!empty($twitter_url)) echo '<a target="_blank" class="smedialink" href="'. $twitter_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/twit.png" alt="Twitter" /> Twitter</br></a>';
+        if (!empty($googleplus_url)) echo '<a target="_blank" class="smedialink" href="'. $googleplus_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/gplus.png" alt="Google Plus" /> Google Plus</br></a>';
+        if (!empty($github_url)) echo '<a target="_blank" class="smedialink" href="'. $github_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/ghub.png" alt="Github"/> Github</a>';
 
         echo '</div>';
         echo $args['after_widget'];
@@ -46,11 +46,11 @@ class social_media extends WP_Widget {
     // Widget Backend
     public function form( $instance ) {
         $title = empty($instance['title']) ? __('Redes sociais', 'wpb_widget_domain'): $instance['title'];
-        $facebook_url = empty($instance['facebook_url']) ? __('https://www.facebook.com/tainacan.l3p', 'wpb_widget_domain') : $instance['facebook_url'];
-        $youtube_url = empty($instance['youtube_url']) ? __('https://www.youtube.com/channel/UC_G6mfKrktesaBufjA9GU8w', 'wpb_widget_domain') : $instance['youtube_url'];
-        $twitter_url = empty($instance['twitter_url']) ? __('https://twitter.com/Tainacan_L3P', 'wpb_widget_domain') : $instance['twitter_url'];
-        $googleplus_url = empty($instance['googleplus_url']) ? __('https://plus.google.com/108603352387487216716', 'wpb_widget_domain') : $instance['googleplus_url'];
-        $github_url = empty($instance['github_url']) ? __('https://github.com/medialab-ufg/tainacan', 'wpb_widget_domain') : $instance['github_url'];
+        $facebook_url = empty($instance['facebook_url']) ? '' : $instance['facebook_url'];
+        $youtube_url = empty($instance['youtube_url']) ? '' : $instance['youtube_url'];
+        $twitter_url = empty($instance['twitter_url']) ? '' : $instance['twitter_url'];
+        $googleplus_url = empty($instance['googleplus_url']) ? '' : $instance['googleplus_url'];
+        $github_url = empty($instance['github_url']) ? '' : $instance['github_url'];
 
         // Widget admin form
         ?>
