@@ -2934,7 +2934,7 @@ function show_reason_modal(id)
 
 // Exclui item selecionado
 function exclude_item() {
-    var text = $("#reasontext").val();
+    var text = $("#reasontext").val().trim();
     if(text.length > 0) {
         var id_delete = $("#btnRemoveReason").attr("data-id-exclude");
         var it_name = $.trim($("#object_" + id_delete + " h4 a").text());
@@ -2961,7 +2961,7 @@ function exclude_item() {
 //Verifica se botão de exclusão deve ser ativado
 function change_button()
 {
-    var text = $("#reasontext").val();
+    var text = $("#reasontext").val().trim();
     if(text.length > 0)
     {
         $("#btnRemoveReason").attr('disabled', false);
