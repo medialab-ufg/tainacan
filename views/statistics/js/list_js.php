@@ -198,7 +198,7 @@
         $("input[type=radio][name=optradio]").on('change', function () {
             loadChart();
         });
-
+        
         //On change chart type
         $('a.change-mode').on('click', function() {
             var selected_chart = $(this).attr('data-chart');
@@ -677,7 +677,7 @@
 
             linechart.draw(stat_data, curveOptions);
         }
-        $('.chartChanger').removeClass('hide');
+        //$('.chartChanger').removeClass('hide');
     }
 
     $('a.dl-pdf').click(function() {

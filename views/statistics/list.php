@@ -62,52 +62,48 @@ include_once('js/list_js.php');
     <div id="charts-display" class="col-md-9">
 
         <div class="chart-header btn-group col-md-12">
-            <!-- Download -->
-            <div class="col-md-1 pull-right no-padding" style="width: auto;">
-                <button class="btn btn-default" data-toggle="dropdown" type="button" id="downloadStat">
-                    <?php _t('Download: ',true); ?> <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu downloadStat" aria-labelledby="downloadStat">
-                    <?php $_log_helper->getDownloadTypes(); ?>
-                </ul>
-            </div>
-
             <?php $_log_helper->render_config_title(_t('Repository statistics')); ?>
-            
-            <div class="user-config-control col-md-12 no-padding">
-                <!-- Filters -->
-                <div class="col-md-10 pull-left no-padding">
-                     <!--Period 
+           
+            <!-- Cabeçalho dos gráficos -->
+            <div class="user-config-control col-md-12">
+                <!-- Início botão Download -->
+                <div class="col-md-1 pull-right">
+                    <button class="btn btn-default" data-toggle="dropdown" type="button" id="downloadStat">
+                        <?php _t('Download ',true); ?> <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu downloadStat" aria-labelledby="downloadStat">
+                        <?php $_log_helper->getDownloadTypes(); ?>
+                    </ul>
+                </div>
+                <!-- Fim botão Download -->
+
+                <!-- Início botão tipo de gráfico -->
+                <div class="col-md-2 pull-right">
+                    <span class="config-title"><?php _t('Mode: ',1); ?></span>
+                    <button type="button" data-toggle="dropdown" class="btn btn-default" id="statChartType">
+                        <img src="<?php echo $_log_helper->getChartsType()[0]['img']; ?>" alt="<?php echo $_log_helper->getChartsType()[0]['className']; ?>"> 
+                    </button>
+                   
+                    <ul class="dropdown-menu statChartType" aria-labelledby="statChartType">
+                        <?php $_log_helper->renderChartsDropdown(); ?>
+                    </ul>
+                </div>
+                <!-- Fim botão tipo de gráfico -->
+
+               <!-- Filters -->
+                <!-- <div class="col-md-10 pull-left no-padding"> 
                     <div class="col-md-5" style="width: auto">
                       <span class="config-title"><?php _e('Filters: '); ?></span>
                       <label class="label-from"><?php _e('from: ')?></label><input type="text" class="inputPeriod" value="" placeholder="<?php _e('from: dd/mm/aaaa')?>" id="from_period" name="from_period">
                       <label class="label-until"><?php _e('until: ')?></label><input type="text" class="inputPeriod"  value="" placeholder="<?php _e('until: dd/mm/aaaa')?>" id="to_period" name="to_period">
-                    </div>-->
-                    <!--  <span class="current-chart">--><?php //_t('User Stats',1); ?><!--</span> -->
-                </div>
+                    </div>
+                    <span class="current-chart"><?php //_t('User Stats',1); ?></span>
+                </div> -->
             </div>
         </div>
 
         <!-- Chart container -->
         <div id="charts-container" class="col-md-12" style="text-align: center">
-            <!-- Chart type -->
-            <style>
-                .chartChanger{
-                    z-index: 1;
-                    width: auto;
-                }
-            </style>
-            <div class="col-md-2 pull-right no-padding chartChanger">
-<!--                <span class="config-title">--><?php //_t('Mode:',1); ?><!--</span>-->
-                <button data-toggle="dropdown" class="btn btn-default" id="statChartType" type="button">
-                  <img src="<?php echo $_log_helper->getChartsType()[0]['img']; ?>" alt="<?php echo $_log_helper->getChartsType()[0]['className']; ?>">
-                </button>
-
-                <ul class="dropdown-menu statChartType" aria-labelledby="statChartType">
-                  <?php $_log_helper->renderChartsDropdown(); ?>
-                </ul>
-            </div>
-
             <div id="defaultchart_div" style="width: 100%; height: 350px;"></div> <!--Div that will hold the pie chart-->
             <div class="hide" id="piechart_div" style="width: 100%; height: 350px;"></div>
             <div class="hide" id="barchart_div" style="width: 100%; height: 350px;"></div>
