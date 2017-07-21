@@ -2820,6 +2820,7 @@ function setCollectionViewIcon(item_class) {
 }
 
 function getCollectionSlideshow() {
+    $(".center_pagination.bottom_pag").hide();
     $("#collection-slideShow").modal('show');
 }
 

@@ -41,7 +41,7 @@ $title_prefix = __("Collection", "tainacan");
 
                                     <div class="col-md-12 meta-configs">
                                         <?php if (get_option('collection_root_id') != $collection_id): ?>
-                                            
+
                                         <div class="col-md-6 pull-left">
                                             <!-- TAINACAN: container(AJAX) que mostra o html com os rankings do objeto-->
                                             <div id="r_slideshow_<?php echo $curr_id ?>" class="rankings-container" style="text-align: right"></div>
