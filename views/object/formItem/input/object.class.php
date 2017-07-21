@@ -286,7 +286,7 @@ class ObjectClass extends FormItem {
 
             //remove no formulario de fato
             function original_remove_in_item_value_compound_<?php echo $compound_id ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>(id,seletor){
-                $(seletor).remove();
+                $(seletor).parent().remove();
                 $.ajax({
                     url: $('#src').val() + '/controllers/object/form_item_controller.php',
                     type: 'POST',

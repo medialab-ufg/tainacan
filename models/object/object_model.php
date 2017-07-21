@@ -1511,7 +1511,7 @@ class ObjectModel extends Model {
                 $all_data['metas']['value'] = $property_model->get_object_property_value($data['object_id'], $property_id);
                 $all_data['metas']['object_id'] = $data['object_id'];
             }
-            $all_data['has_children'] = $this->getChildren($all_data['metas']['socialdb_property_term_root']);
+            $all_data['has_children'] = $this->getChildren($all_data['metas']['socialdb_property_term_root'],'t.name ASC');
             $data['property_term'][] = $all_data;
         }
         return $all_data;
