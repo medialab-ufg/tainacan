@@ -13,11 +13,12 @@ $location = get_post_meta($curr_id, "socialdb_property_" . $geo_loc);
 $arroz = "<strong>" . __('Created at: ', 'tainacan') . "</strong>" . get_the_date('d/m/Y');
 $_object_description = get_the_content();
 ?>
-<li class="col-md-6 cards-view-container top-div"
-    id="object_<?php echo $curr_id ?>" data-order="<?php echo $countLine; ?>"
+<li class="col-md-6 cards-view-container top-div" id="object_<?php echo $curr_id ?>" data-order="<?php echo $countLine; ?>"
     <?php if ($collection_list_mode != "cards"): ?> style="display: none;" <?php endif ?> >
 
     <input type="hidden" id="add_classification_allowed_<?php echo $curr_id ?>" name="add_classification_allowed" value="<?php echo (string) verify_allowed_action($collection_id, 'socialdb_collection_permission_add_classification', $curr_id); ?>" />
+    <input type="hidden" value="<?php echo $curr_id ?>" class="object_id">
+
     <!-- TAINACAN: coloca a class row DO ITEM, sao cinco colunas possiveis todas elas podendo ser escondidas pelo o usuario, mas seu tamanho eh fixo col-md-2  -->
     <div class="item-colecao toggleSelect" <?php if (($countLine % 2) == 0) { echo "style='margin-right: 0'"; } ?>>
 
@@ -216,7 +217,6 @@ $_object_description = get_the_content();
                     <?php if(empty($is_trash)): ?>
                         <div class="show-item-metadata">
                             <!-- CATEGORIES AND TAGS -->
-                            <input type="hidden" value="<?php echo $curr_id ?>" class="object_id">
                             <button id="show_classificiations_<?php echo $curr_id ?>" style="width:100%" class="btn btn-default"
                                     onclick="show_classifications('<?php echo $curr_id ?>')">
                                 <?php _e('Metadata', 'tainacan'); ?>

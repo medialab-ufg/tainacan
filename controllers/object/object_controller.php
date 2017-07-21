@@ -294,6 +294,7 @@ class ObjectController extends Controller {
                 $data['loop'] = new WP_Query($args);
                 $data['collection_data'] = $collection_model->get_collection_data($collection_id);
                 $data["show_string"] = is_root_category($collection_id) ? __('Showing collections:', 'tainacan') : __('Showing Items:', 'tainacan');
+                $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($collection_id, "socialdb_collection_table_metas", true)));
                 $data['is_trash'] = true;
 
                 $view_count = get_post_meta($collection_id, 'collection_view_count', true);

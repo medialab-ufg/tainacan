@@ -2616,6 +2616,7 @@
             $('#property_object_is_reverse').val('false');
         }
     }
+
 /************************************************ LIXEIRA **********************************************************/    
 function show_trash_page()
 {
@@ -2635,11 +2636,13 @@ function show_trash_page()
 function hide_trash_page(){
     $('#icon-search-bottom').parent().show(); 
     $('#normal-selectable').show();
-    $('.button-trash').show();
+    $("#hideTrash").hide();
     $('#trash-selectable').hide();
     showList('<?php echo get_template_directory_uri(); ?>');
     if($('#ul_menu_search').length>0){
         $('#ul_menu_search').show();
     }
+
+    $('.button-trash').show();
 }
 </script>

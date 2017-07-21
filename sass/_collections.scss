@@ -8,7 +8,7 @@ button.collection-trash, button#hideTrash {
 }
 
 button.collection-trash {
-  margin-left: 10px;
+  // margin-left: 10px;
 }
 
 .tainacan-steps {
@@ -77,12 +77,6 @@ button.collection-trash {
 
     #div_central {
       position: relative;
-      /*
-      overflow-y:auto;
-      overflow-x:hidden;
-      overflow: auto;
-      max-height:100px;
-      */
       padding-left: 2%;
       padding-right: 0;
 
@@ -97,6 +91,8 @@ button.collection-trash {
           padding-top: 10px;
 
           button.export-btn {
+            margin-left: 10px;
+            margin-right: 10px;
             span {
               font-size: 15px;
             }
@@ -358,6 +354,9 @@ button.collection-trash {
     */
     .ui-autocomplete { z-index:1051; }
     #cards-viewMode, #cards_trash-viewMode {
+      margin-bottom: 15px;
+      margin-top: 5px;
+
       @include context-item-menu-style();
 
     .item-colecao {
@@ -508,6 +507,7 @@ button.collection-trash {
     */
     #list-viewMode {
       margin-top: 15px;
+      margin-bottom: 15px;
       border: 3px solid $item-border;
       @include context-item-menu-style(2px, 0 10px 0 20px);
 
@@ -809,6 +809,19 @@ button.collection-trash {
 
   #table-view_wrapper {
     padding-top: 10px;
+
+    li.item-redesocial {
+      float: right;
+      margin-left: 10px;
+    }
+
+    li.remove-permanent, li.restore-item {
+      float: left;
+    }
+
+    li.restore-item {
+      margin-left: 10px;
+    }
   }
 
   #table-view {

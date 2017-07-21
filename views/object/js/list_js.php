@@ -56,7 +56,7 @@
             }
         } else {
             var fxd_ttle = $("#repo_fixed_title").val();
-            $('tr.dynamic-table-metas').append('<th>' + fxd_ttle  + '</th>');
+            $('tr.dynamic-table-metas').append('<th>' + fxd_ttle + '</th>');
             meta_table_set = false;
         }
 
@@ -64,12 +64,18 @@
         $('tr.dynamic-table-metas').append('<th>' + action_label + '</th>');
         var total_objs = $('.object_id').length;
 
+        var trash_check = $("#is_trash").val();
         $('.object_id').each(function(idx, el) {
             var c_id = $(this).val();
             var see_more = '<?php _e( "View Object","tainacan"); ?>';
             var item_order = parseInt( $("#object_" + c_id).attr('data-order') );
-            var actions = $("#object_" + c_id + " .item-funcs-table").html();
-            actions += $("#object_" + c_id + " .new-item-actions").html();
+
+            if(trash_check) {
+                var actions = $("#object_" + c_id + " .item-funcs").html();
+            } else {
+                var actions = $("#object_" + c_id + " .item-funcs").html();
+                actions += $("#object_" + c_id + " .new-item-actions").html();
+            }
 
             var _table_html = "<tr>";
             if(meta_table_set) {
@@ -80,7 +86,7 @@
                     if(image_brand == n) {
                         var item_img = $("#object_" + c_id + " .item-info img").get(0);
                         meta_val = $(item_img).attr('src');
-                        _table_html += "<img src="+meta_val+" class='img-responsie' width='120'>";
+                        _table_html += "<img src="+meta_val+" class='img-responsive' width='120'>";
                     } else {
                         var meta_val = $(meta).val() || "--";
                         _table_html += meta_val;
@@ -92,7 +98,7 @@
                 var title = $.trim($("#object_" + c_id + " .item-display-title a").text());
                 _table_html += "<td> <a class='tview-title' data-id='"+c_id+"' href='javascript:void(0)'>"+title+" </a></td>";
             }
-            // _table_html += "<td style='width: 10%'> <ul>" + actions + "</ul> </td> </tr>";
+
             _table_html += "<td style='width: 7%'> " + actions + " </td> </tr>";
             $( "#table-view-elements" ).append( _table_html );
 

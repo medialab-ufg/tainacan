@@ -28,8 +28,6 @@
                                         <?php elseif ($is_trash): the_title(); endif; ?>
                                     </h3>
 
-
-
                                     <div class="col-md-11 center center-block main-current-container" style="float: none; margin: 10px auto !important;">
                                         <?php $viewHelper->videoSlideItemHtml($curr_id); ?>
                                     </div>
@@ -59,7 +57,6 @@
                                                     </ul>
                                                 <?php endif; ?>
                                             </div>
-
                                     <?php endif; ?>
                                     </div>
 
