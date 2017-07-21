@@ -639,6 +639,8 @@ class FormItem extends Model {
      * 
      */
     public function mediaHabilitate() {
+        $thumbnailClass = new FormItemThumbnail();
+        $attachamentClass = new FormItemAttachment();
         ?>
           <div class="col-md-3"
                style="background: white;font: 11px Arial;padding:0px;margin-top: 0px;width: 23%;margin-left: 15px;">
@@ -649,8 +651,14 @@ class FormItem extends Model {
                 <div id="thumnbail_place"  style="margin-top:15px;">
                         <input type="hidden" name="thumbnail_url" id="thumbnail_url" value="">
                         <div id="image_side_create_object">
-                            <img width="150" height="150" class="thumbnail" src="<?php echo get_the_post_thumbnail_url($this->itemId) ?>">
+                            <?php if(has_post_thumbnail($this->itemId)): ?>
+                                <img width="150" height="150" class="thumbnail" src="<?php echo get_the_post_thumbnail_url($this->itemId) ?>">
+                            <?php else: ?>
+                                <img width="150" height="150" class="thumbnail" src="<?php echo get_template_directory_uri() ?>/libraries/images/image.png">
+                            <?php endif; ?>
+                                <button type="button" style="margin-bottom: 15px;" onclick="removeThumbnail(<?php echo $this->itemId ?>,'<?php echo get_template_directory_uri() ?>/libraries/images/image.png')" class="btn btn-xs btn-default"><?php _e('Remove image','tainacan') ?></button>
                         </div>
+                        <form></form>
                         <form id="formUpdateThumbnail">
                             <input type="file"
                                    id="object_thumbnail"
@@ -660,6 +668,9 @@ class FormItem extends Model {
                             <input type="hidden" name="item_id" value="<?php echo $this->itemId ?>">
                         </form>
                 </div>
+                <?php
+                    $thumbnailClass->initScriptsThumbnailContainer($view_helper->terms_fixed['thumbnail']->term_id, $this->itemId);
+                ?>
                 <br><br>
                 <h4>
                    <?php echo ($view_helper->terms_fixed['attachments']) ? $view_helper->terms_fixed['attachments']->name :  _e('Attachments','tainacan') ?>
@@ -681,8 +692,11 @@ class FormItem extends Model {
                                     </span>
                                 </div>
                      </div>
-                         <button type="button" onclick="$('#dropzone_new').trigger('click')" class="btn btn-primary"><?php _e('Upload more files','tainacan') ?></button>
+                         <button style="margin-bottom: 30px;" type="button" onclick="$('#dropzone_new').trigger('click')" class="btn btn-primary"><?php _e('Upload more files','tainacan') ?></button>
                      </center>
+                     <?php
+                        $attachamentClass->initScriptsAttachmentContainer($view_helper->terms_fixed['attachments']->term_id, $this->itemId);
+                    ?>
                  </div>
             </div>
         <?php    

@@ -28,9 +28,9 @@ class FormItemAttachment extends FormItem {
                     </div>
                 </div>
             </div>
-        <?php endif; ?>
-        <?php
-        $this->initScriptsAttachmentContainer($property, $item_id);
+         <?php
+        $this->initScriptsAttachmentContainer($property, $item_id); ?>    
+        <?php endif;
     }
 
 

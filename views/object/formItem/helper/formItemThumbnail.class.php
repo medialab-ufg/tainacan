@@ -27,9 +27,8 @@ class FormItemThumbnail extends FormItem {
                     </form>
                 </div>
             </div>
-        <?php endif; ?>
-        <?php
-        $this->initScriptsThumbnailContainer($property, $item_id);
+         <?php $this->initScriptsThumbnailContainer($property, $item_id);
+         endif; 
     }
 
     /**
@@ -84,6 +83,19 @@ class FormItemThumbnail extends FormItem {
                 return false;
             }
         });
+        
+        function removeThumbnail(item_id,defaultImagem){
+            $('#image_side_create_object img').attr('src', defaultImagem).fadeIn('slow');
+            $('#object_thumbnail').val('');
+            $.ajax( {
+              url: $('#src').val() + '/controllers/object/form_item_controller.php',
+              type: 'POST',
+              data: {
+                        operation: 'removeThumbnail',
+                        item_id:item_id
+                    }
+            } );
+        }
         </script>
         <?php
     }

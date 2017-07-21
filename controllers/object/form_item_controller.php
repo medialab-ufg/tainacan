@@ -178,6 +178,9 @@ class FormItemController extends Controller {
                 }
                 return json_encode($result);
                 break;
+            case 'removeThumbnail':
+                delete_post_thumbnail( $data['item_id'] );
+                return json_encode([]);
             case 'saveTags':
                  $object_model->insert_tags($data['value'], $data['collection_id'], $data['item_id']);
                  break;
