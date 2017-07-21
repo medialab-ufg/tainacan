@@ -975,7 +975,6 @@ function showTrash(src) {
         hide_modal_main();
         $('#hideTrash').show();
         elem = jQuery.parseJSON(result);
-        //console.log(elem,result);
         $('#loader_objects').hide();
         $('#list').html(elem.page);
         $('#wp_query_args').val(elem.args);

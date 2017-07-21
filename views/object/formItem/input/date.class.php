@@ -2,7 +2,8 @@
 
 class DateClass extends FormItem {
 
-    public function generate($compound,$property,$item_id,$index_id) {
+    public function generate($compound,$property,$item_id,$index_id)
+    {
         $compound_id = $compound['id'];
         $property_id = $property['id'];
         if ($property_id == 0) {
@@ -158,15 +159,20 @@ class DateClass extends FormItem {
         <?php endif;         
         }
 
-        public function initScriptsDate($property_id, $item_id, $compound_id, $index_id) { ?>
-        <script>
-            init_metadata_date("#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>");
+    public function initScriptsDate($property_id, $item_id, $compound_id, $index_id) { ?>
+    <script>
+        init_metadata_date("#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>");
 
-            $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').blur(function () {
+        $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').blur(function () {
+            let field_value = $(this).val().split("/");
+            let day = field_value[0], month = field_value[1], year = field_value[2];
+            if(day_exist(day, month, year))
+            {
                 <?php if($this->isRequired):  ?>
-                Hook.call('validateFieldsMetadataText',[$(this).val(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>']);
-                    //validateFieldsMetadataText($(this).val(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>')
+                Hook.call('validateFieldsMetadataText',[$(this).val().trim(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>']);
+                //validateFieldsMetadataText($(this).val(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>')
                 <?php endif; ?>
+
                 $.ajax({
                     url: $('#src').val() + '/controllers/object/form_item_controller.php',
                     type: 'POST',
@@ -183,18 +189,24 @@ class DateClass extends FormItem {
                     }
                 }).done(function (result) {
                     <?php if($this->isKey): ?>
-                     var json =JSON.parse(result);
-                     if(json.value){
+                    let json =JSON.parse(result);
+                    if(json.value){
                         $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val('');
-                            toastr.error(json.value+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
-                     }
+                        toastr.error(json.value+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                    }
                     <?php endif; ?>
                 });
-            });
-            
-            $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').change(function () {
+            }
+        });
+
+        $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').change(function ()
+        {
+            let field_value = $(this).val().split("/");
+            let day = field_value[0], month = field_value[1], year = field_value[2];
+            if(day_exist(day, month, year))
+            {
                 <?php if($this->isRequired):  ?>
-                    validateFieldsMetadataText($(this).val(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>')
+                validateFieldsMetadataText($(this).val(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>')
                 <?php endif; ?>
                 $.ajax({
                     url: $('#src').val() + '/controllers/object/form_item_controller.php',
@@ -212,33 +224,60 @@ class DateClass extends FormItem {
                     }
                 }).done(function (result) {
                     <?php if($this->isKey): ?>
-                     var json =JSON.parse(result);
-                     if(json.value){
+                    let json = JSON.parse(result);
+                    if(json.value){
                         //$('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val('');
-                            toastr.error(json.value+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
-                     }
+                        toastr.error(json.value+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                    }
                     <?php endif; ?>
                 });
-            });
-
-            function init_metadata_date(seletor) {
-                $(seletor).datepicker({
-                    dateFormat: 'dd/mm/yy',
-                    dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
-                    dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
-                    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
-                    monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
-                    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-                    nextText: 'Próximo',
-                    prevText: 'Anterior',
-                    showOn: "button",
-                    buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif",
-                    buttonImageOnly: true,
-                    changeMonth: true,
-                    changeYear: true
-                });
             }
-        </script> 
-        <?php
-    }
+        });
+
+        function init_metadata_date(seletor) {
+            $(seletor).datepicker({
+                dateFormat: 'dd/mm/yy',
+                dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                nextText: 'Próximo',
+                prevText: 'Anterior',
+                showOn: "button",
+                buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif",
+                buttonImageOnly: true,
+                changeMonth: true,
+                changeYear: true
+            });
+        }
+
+        function day_exist(day, month_number, year)
+        {
+            month_number--;
+            let days_in_month = [/*January*/31,/*Fabruary*/ 28,/*March*/ 31,/*April*/ 30,/*May*/ 31,/*June*/ 30, /*July*/31,
+                               /*August*/31, /*September*/30, /*October*/31,/*November*/ 30, /*December*/ 31];
+            if(is_leap(year))
+            {
+                /*February*/
+                days_in_month[1] = 29;
+            }
+
+            if(day > days_in_month[month_number] || day < 1 || month_number > 11 || month_number < 0)
+            {
+                return false;
+            }
+            else return true;
+        }
+
+        function is_leap(year)
+        {
+            if(year % 400 === 0 || (year % 4 === 0 && year % 100 !== 0))//Is a leap year
+            {
+                return true;
+            }else return false;
+        }
+    </script>
+    <?php
+}
 }

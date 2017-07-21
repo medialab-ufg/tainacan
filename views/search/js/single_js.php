@@ -2617,13 +2617,17 @@
         }
     }
 /************************************************ LIXEIRA **********************************************************/    
-function show_trash_page(){
+function show_trash_page()
+{
     $('#icon-search-bottom').parent().hide();
     $('#normal-selectable').hide();
     $('.button-trash').hide();
     $('#trash-selectable').show();
+
     showTrash('<?php echo get_template_directory_uri(); ?>');
-    if($('#ul_menu_search').length>0){
+
+    if($('#ul_menu_search').length > 0)
+    {
         $('#ul_menu_search').hide();
     }
 }
