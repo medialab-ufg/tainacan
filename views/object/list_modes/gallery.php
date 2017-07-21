@@ -7,31 +7,35 @@
     }    
 ?>
 
-<div class="col-md-3 gallery-view-container top-div <?php echo $additional_curr_class ?>"   
-     data-order="<?php echo $countLine; ?>"  
+<div class="col-md-3 gallery-view-container top-div <?php echo $additional_curr_class ?>" data-order="<?php echo $countLine; ?>"
      <?php if ($collection_list_mode != "gallery"): ?> style="display: none" <?php endif ?> >
     
     <input type="hidden" id="add_classification_allowed_<?php echo get_the_ID() ?>" name="add_classification_allowed" value="<?php echo (string) verify_allowed_action($collection_id, 'socialdb_collection_permission_add_classification', get_the_ID()); ?>" />
+
     <div class="gallery-wrapper droppableClassifications toggleSelect">
+
         <div class="item-thumb">
-            <a href="<?php echo get_collection_item_href($collection_id); ?>"
-               onclick="<?php get_item_click_event($collection_id, $curr_id )?>">
-                <?php echo get_item_thumb_image($curr_id); ?>
-            </a>
+            <?php if(empty($is_trash)): ?>
+                <a href="<?php echo get_collection_item_href($collection_id); ?>"
+                   onclick="<?php get_item_click_event($collection_id, $curr_id) ?>">
+                    <?php echo get_item_thumb_image($curr_id); ?>
+                </a>
+            <?php elseif ($is_trash): echo get_item_thumb_image($curr_id); endif; ?>
         </div>
 
         <div class=" title-container">
             <h5 class="item-display-title">
-                <a href="<?php echo get_collection_item_href($collection_id); ?>"
-                   onclick="<?php get_item_click_event($collection_id, $curr_id )?>">
-                    <?php echo wp_trim_words( get_the_title(), 4 ); ?>
-                </a>
+                <?php if(empty($is_trash)): ?>
+                    <a href="<?php echo get_collection_item_href($collection_id); ?>"
+                       onclick="<?php get_item_click_event($collection_id, $curr_id) ?>">
+                        <?php  echo wp_trim_words( get_the_title(), 4 ); ?>
+                    </a>
+                <?php elseif ($is_trash): echo wp_trim_words( get_the_title(), 4 ); endif; ?>
             </h5>
 
             <div class="gallery-metadata">
                 <div class="col-md-5 no-padding">
-                    <?php if (get_option('collection_root_id') != $collection_id): ?>                
-                        <!-- TAINACAN: container(AJAX) que mostra o html com os rankings do objeto-->
+                    <?php if (get_option('collection_root_id') != $collection_id): ?>
                         <?php if(has_action('container_rankings_gallery')): ?>
                             <?php do_action('container_rankings_gallery',$curr_id) ?>
                         <?php else: ?>
@@ -39,21 +43,27 @@
                         <?php endif; ?>                    
                     <?php endif; ?>
                 </div>
-                <ul class="item-funcs col-md-6 right">
-                    <input type="hidden" class="post_id" name="post_id" value="<?= $curr_id ?>">
-                    <li class="tainacan-museum-clear">
-                        <a id="modal_network<?php echo $curr_id; ?>" onclick="showModalShareNetwork(<?php echo $curr_id; ?>)">
-                            <div style="cursor:pointer;" data-icon="&#xe00b;"></div>
-                        </a>
-                    </li>
 
-                    <?php // include "edit_btns.php"; ?>                    
-                </ul>
-                
-                <?php include "actions/item_actions.php"; ?>
+                <?php if(empty($is_trash)): ?>
+                    <ul class="item-funcs col-md-6 right">
+                        <input type="hidden" class="post_id" name="post_id" value="<?= $curr_id ?>">
+                        <li class="tainacan-museum-clear">
+                            <a id="modal_network<?php echo $curr_id; ?>" onclick="showModalShareNetwork(<?php echo $curr_id; ?>)">
+                                <div style="cursor:pointer;" data-icon="&#xe00b;"></div>
+                            </a>
+                        </li>
+                    </ul>
+                    <?php
+                    include "actions/item_actions.php";
 
-            </div>         
+                elseif ($is_trash): ?>
+                    <ul class="item-funcs col-md-6 right">
+                        <input type="hidden" class="post_id" name="post_id" value="<?= $curr_id ?>">
+                        <?php include "edit_btns_trash.php"; ?>
+                    </ul>
+                <?php endif; ?>
+            </div>
+
         </div>
-        
     </div>
  </div>

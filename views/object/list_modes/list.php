@@ -2,12 +2,10 @@
     data-order="<?php echo $countLine; ?>"
     <?php if ($collection_list_mode != "list"): ?> style="display: none" <?php endif ?> >
     
-    <input type="hidden" id="add_classification_allowed_<?php echo $curr_id ?>" 
-            name="add_classification_allowed"
+    <input type="hidden" id="add_classification_allowed_<?php echo $curr_id ?>" name="add_classification_allowed"
             value="<?php echo (string) verify_allowed_action($collection_id, 'socialdb_collection_permission_add_classification', $curr_id); ?>" />
     
     <div>
-
         <div class="col-md-1 item-thumb">
             <?php if(empty($is_trash)): ?>
                 <a href="<?php echo get_collection_item_href($collection_id, $curr_id, $viewHelper); ?>"
