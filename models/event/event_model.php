@@ -418,27 +418,34 @@ abstract class EventModel extends Model {
         $this->create_democratic_vote(array('event_id' => $event_created['ID'], 'collection_id' => $data['socialdb_event_collection_id']));
         if ($event_created && $event_created['ID']) { // se criou com sucesso
             $this->instantiate_metas_event($event_created['ID'], $this->parent->name, $data); // instancia e coloca os valores nos meta dados do evento
-            if ($this->is_automatically_verify_event($data['socialdb_event_collection_id'], $this->permission_name, $data['socialdb_event_user_id'], $event_created['ID'])) {
+            if ($this->is_automatically_verify_event($data['socialdb_event_collection_id'], $this->permission_name, $data['socialdb_event_user_id'], $event_created['ID']))
+            {
                 $data['event_id'] = $event_created['ID'];
                 $data = $this->verify_event($data, true);
                 return $data;
-            } elseif (isset($data['socialdb_event_delete_collection_id']) && get_post($data['socialdb_event_delete_collection_id'])->post_author == get_current_user_id()) {
+            } elseif (isset($data['socialdb_event_delete_collection_id']) && get_post($data['socialdb_event_delete_collection_id'])->post_author == get_current_user_id())
+            {
                 $data['event_id'] = $event_created['ID'];
                 $data = $this->verify_event($data, true);
                 return $data;
-            } else {
-                if (isset($data['socialdb_event_observation']) && $data['socialdb_event_observation'] !== '') {
+            } else
+            {
+                if (isset($data['socialdb_event_observation']) && $data['socialdb_event_observation'] !== '')
+                {
                     update_post_meta($event_created['ID'], 'socialdb_event_observation', $data['socialdb_event_observation']);
-                } elseif ($this->parent->name == 'socialdb_event_object_create') {
+                } elseif ($this->parent->name == 'socialdb_event_object_create')
+                {
                     $object = get_post($data['socialdb_event_object_item_id']);
                     $url = '<a target="_blanck" href="' . get_the_permalink($data['socialdb_event_collection_id']) . '?item=' . $object->post_name . '">' . __('See item (Open a new Tab)') . '</a>';
                     update_post_meta($event_created['ID'], 'socialdb_event_observation', $url);
                 }
+
                 $data['msg'] = __('The event was sent for approval', 'tainacan');
                 $data['type'] = 'info';
                 $data['title'] = __('Attention', 'tainacan');
             }
-        } else {
+        } else
+        {
             $data['msg'] = __('An error happened, please try again', 'tainacan');
             $data['type'] = 'error';
             $data['title'] = 'Erro';
