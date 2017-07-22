@@ -6,6 +6,8 @@ class LogController extends Controller {
         switch($op):
             case "show_statistics":
                 return $this->render(dirname(__FILE__) . '../../../views/statistics/list.php', $data);
+            case "show_dashboard":
+                return $this->render(dirname(__FILE__) . '../../../views/statistics/statistics_dashboard.php', $data);
             case "user_events":
                 $log = new Log();
                 $_evt = $this->getEventType($data['parent'], $data['event']);

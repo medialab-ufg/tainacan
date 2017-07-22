@@ -3092,3 +3092,31 @@ $(document).on("submit", "#reindexation_form", function (event) {
         });
     }
 });
+
+//####### Estatísticas - Funções para carregar dashboard e statistics #######
+// Mostrar o dashboard
+function showDashboard(){
+    $.ajax({
+        url: $('.stat_path').val() + '/controllers/log/log_controller.php',
+        type: 'POST',
+        data: { operation: 'show_dashboard' }
+    }).done(function(res) {
+        $("#dynatree-estatisticas").hide();
+        $("#charts-display").hide();
+        $("#dashb").show();
+        $("#dashb").html(res);
+        $("#dashboard").css("border-top","3px solid rgb(210, 169, 109)");
+        $("#stats").css("border-top","0px solid rgb(0,0,0)");
+    });
+}
+
+// Mostra estatísticas
+function showStats(){
+    $("#dashb").hide();
+    $("#dynatree-estatisticas").show();
+    $("#charts-display").show();
+    $("#dashboard").css("border-top","");
+    $("#stats").css("border-top","3px solid rgb(210, 169, 109)");
+}
+
+//#######

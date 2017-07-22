@@ -1,7 +1,15 @@
+#bgc-dashboard{
+  background-color: #f1f2f2;
+  .bgc-widget{
+    background-color: white;
+    margin-bottom: 10px;
+  }
+}
+
 .statistics-container {
 
   #collection-steps {
-    margin-bottom: 0;
+    margin-bottom: 10px;
     #conclude_config {
       display: none;
     }
@@ -13,17 +21,11 @@
         padding: 5px 0 0 0;
 
         &#dashboard {
-
+          width: 10%;
         }
         &#stats {
-          border-top: 3px solid $default-golden;
-          width: 9%;
-          padding: 5px 0 0 0;
-          a {
-            h4 {
-              font-weight: bolder
-            }
-          }
+          width: 10%;
+          border-top: 3px solid rgb(210, 169, 109);
         }
 
       } // li

@@ -11,8 +11,9 @@ include_once('js/list_js.php');
 
     <?php $_log_helper->render_statistic_menu(); ?>
 
+    <div id="dashb"></div>
     <!-- Barra lateral esquerda :ui-widget-header-->
-    <div class="col-md-3">
+    <div id="dynatree-estatisticas" class="col-md-3">
         <!-- Periodo -->
         <div id="config-filt" class="statistics-config form-group">
             <label class="title-pipe">
