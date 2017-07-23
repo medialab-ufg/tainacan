@@ -81,7 +81,12 @@
             if(meta_table_set) {
                 var item_table_metas = $('#object_' + c_id + ' input[type="hidden"][name="item_table_meta"]');
                 $(item_table_metas).each(function(n, meta) {
-                    _table_html += "<td> <a class='tview-title' data-id='"+c_id+"' title='"+see_more+"'>";
+
+                    if(trash_check) {
+                        _table_html += "<td>";
+                    } else {
+                        _table_html += "<td> <a class='tview-title' data-id='"+c_id+"' title='"+see_more+"'>";
+                    }
 
                     if(image_brand == n) {
                         var item_img = $("#object_" + c_id + " .item-info img").get(0);
@@ -92,7 +97,12 @@
                         _table_html += meta_val;
                     }
 
-                    _table_html += "</a></td>";
+                    if(trash_check) {
+                        _table_html += "</td>";
+                    } else {
+                        _table_html += "</a></td>";
+                    }
+
                 });
             } else {
                 var title = $.trim($("#object_" + c_id + " .item-display-title a").text());
