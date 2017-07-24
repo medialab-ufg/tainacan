@@ -491,7 +491,10 @@ class Log extends Model {
             $sarr = array();
             $events = array();
             foreach($searches as $key => $data) {
-                if($filter != 'weeks'){
+                if($filter == 'nofilter'){
+                    array_push($sarr, [ $data->event, $data->total ]);
+                }
+                else if($filter != 'weeks'){
                     array_push($sarr, [ $data->event, $data->date, $data->total, $data->event_total ]);
                     array_push($events, $data->event);
                 }
@@ -641,7 +644,6 @@ class Log extends Model {
                             ) res2
                             ON res1.event = res2.event2
                     )", self::_table(), self::_table());
-                //$sql = sprintf("SELECT event AS term, COUNT(*) AS t_count FROM %s WHERE event_type = 'advanced_search' GROUP BY event ORDER BY COUNT(*) DESC", self::_table());
             } 
             else if($filter == 'weeks' ){
 
@@ -684,6 +686,15 @@ class Log extends Model {
                             ) res2
                             ON res1.event = res2.event2
                     )", self::_table(), self::_table());
+            }
+            else{
+                $SQL_query = sprintf(
+                    "SELECT event, count(*) AS total 
+                        FROM %s 
+                        WHERE event_type = '$event_type' 
+                        GROUP BY event 
+                        ORDER BY count(*) DESC LIMIT 10
+                    ", self::_table());
             }
         }
         else {
@@ -750,6 +761,15 @@ class Log extends Model {
                             ) res2
                             ON res1.event = res2.event2
                     )", self::_table(), self::_table());
+            }
+            else{
+                $SQL_query = sprintf(
+                    "SELECT event, count(*) AS total 
+                        FROM %s 
+                        WHERE event_type = '$event_type' AND collection_id = '$collection_id' 
+                        GROUP BY event 
+                        ORDER BY count(*) DESC LIMIT 10
+                    ", self::_table());
             }
         }
 

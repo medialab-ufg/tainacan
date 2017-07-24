@@ -11,19 +11,12 @@ include_once('js/dashboard_js.php');
           <tr>
             <th class="text-left">Buscas Frequentes</th>
             <th class="text-right">
-              <a class="glyphicon glyphicon-refresh"></a>
+              <a href="javascript:void(0)" id="refresh-buscas-frequentes" class="glyphicon glyphicon-refresh"></a>
             </th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td class="text-left">Hello World!</td>
-            <td class="text-right">100</td>
-          </tr>
-          <tr>
-            <td class="text-left">Rélou Wordi! 20</td>
-            <td class="text-right">200</td>
-          </tr>
+        <tbody id="tbody-buscas-frequentes">
+          <!-- Conteúdo dinâmico, vindo de dashboard_js.php -->
         </tbody>
       </table>
     </div>
