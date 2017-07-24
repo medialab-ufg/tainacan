@@ -20,8 +20,6 @@ if($_show_edit_buttons) {
         </a>
     </li>
     <li class="restore-item">
-        <a style="cursor: pointer;" onclick="restore_object('<?php echo $curr_id ?>')">
-            <span class="glyphicon glyphicon-retweet"></span>
-        </a>
+        <a onclick="restore_object('<?php echo $curr_id ?>')"> <span class="glyphicon glyphicon-retweet"></span> </a>
     </li>
 <?php } ?>

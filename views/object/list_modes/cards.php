@@ -10,7 +10,6 @@ $itemURL = $_current_collection . basename(get_permalink());
 $latitude = get_post_meta($curr_id, "socialdb_property_" . $geo_coordinates["lat"]);
 $longitude = get_post_meta($curr_id, "socialdb_property_" . $geo_coordinates["long"]);
 $location = get_post_meta($curr_id, "socialdb_property_" . $geo_loc);
-$arroz = "<strong>" . __('Created at: ', 'tainacan') . "</strong>" . get_the_date('d/m/Y');
 $_object_description = get_the_content();
 ?>
 <li class="col-md-6 cards-view-container top-div" id="object_<?php echo $curr_id ?>" data-order="<?php echo $countLine; ?>"

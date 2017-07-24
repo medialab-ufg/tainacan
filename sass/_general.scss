@@ -585,3 +585,11 @@ form#advanced_search_submit {
   padding-left: 20px;
   display: none;
 }
+
+#collection_empty {
+  .jumbotron {
+    h2 {
+      text-align: center;
+    }
+  }
+}

@@ -821,6 +821,9 @@ button.collection-trash {
 
     li.restore-item {
       margin-left: 10px;
+      a {
+        cursor: pointer;
+      }
     }
   }
 

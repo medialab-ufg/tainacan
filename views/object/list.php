@@ -23,7 +23,7 @@ if ( $loop->have_posts() ) { ?>
             endwhile;
 
             include_once "list_modes/slideshow.php";
-            include_once "list_modes/table.php";            
+            include_once "list_modes/table.php";
             include_once "list_modes/geolocation.php";
             ?>
         </div>
@@ -36,18 +36,13 @@ if ( $loop->have_posts() ) { ?>
         <span class="glyphicon glyphicon-warning-sign"></span> <?php _t('No objects found!', 1); ?>
     </div>
 
-    <!-- TAINACAN: se a colecao estiver vazia eh mostrado -->
     <div id="collection_empty" style="display:none">
         <?php
         if (get_option('collection_root_id') != $collection_id):
             if (has_action('empty_collection_message')):
                 do_action('empty_collection_message');
             else:
-                ?>
-                <div class="jumbotron">
-                    <h2 style="text-align: center;"><?php _e('No collection or item found!', 'tainacan') ?></h2>
-                </div>
-                <?php
+                echo '<div class="jumbotron"><h2>' . _t('No collection or item found!') . '</h2></div>';
             endif;
         endif; ?>
     </div>

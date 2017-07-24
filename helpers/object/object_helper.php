@@ -10,21 +10,10 @@ class ObjectHelper extends ViewHelper {
             $collection_id = $this->collection_id;
         $tabs = unserialize(get_post_meta($collection_id, 'socialdb_collection_update_tab_organization', true));
         $default_tab = get_post_meta($collection_id, 'socialdb_collection_default_tab', true);
-        if ( !$tabs || empty($tabs) && !$default_tab):
-            ?>
-            <!--div    style="<?php echo ($this->hide_main_container) ? 'margin-bottom:0%' : '' ?>" 
-                    class="expand-all-item btn white tainacan-default-tags">
-                <div class="action-text" 
-                     style="display: inline-block;">
-            <?php _e('Expand all', 'tainacan') ?></div>
-                &nbsp;&nbsp;<span class="glyphicon-triangle-bottom white glyphicon"></span>
-            </div-->   
-            <?php
-        else:
-            ?>
-            <input  type="hidden" 
-                    name="tabs_properties" 
-                    id="tabs_properties" 
+        if (!$tabs || empty($tabs) && !$default_tab):
+            _t('Expand all', 1);
+        else: ?>
+            <input type="hidden" name="tabs_properties" id="tabs_properties"
                     value='<?php echo ($tabs && is_array($tabs)) ? json_encode($tabs) : ''; ?>'/>
             <!-- Abas para a Listagem dos metadados -->
             <ul id="tabs_item" class="nav nav-tabs" style="background: white">
@@ -43,14 +32,7 @@ class ObjectHelper extends ViewHelper {
                              <?php _e('Expand all', 'tainacan') ?>&nbsp;&nbsp;<span class="caret"></span></a>
                     </div>
                     <hr>
-                    <!--div    style="margin-bottom:0%" 
-                            onclick="open_accordeon('default')"
-                            class="expand-all-item btn white tainacan-default-tags">
-                        <div class="action-text" 
-                             style="display: inline-block;">
-            <?php _e('Expand all', 'tainacan') ?></div>
-                        &nbsp;&nbsp;<span class="glyphicon-triangle-bottom white glyphicon"></span>
-                    </div-->
+                    <?php _e('Expand all', 'tainacan') ?>
                     <div id="accordeon-default" class="multiple-items-accordion" style="margin-top:-20px;"></div>
                 </div>
             </div>    
