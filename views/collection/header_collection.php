@@ -274,3 +274,5 @@ $thumb_url = $collection_thumb ? wp_get_attachment_url($collection_thumb) : get_
     <a href="javascript:void(0)" onclick="backRoute($('#slug_collection').val());"> <span class="collection-title"></span></a> <span class="last-arrow"> </span>
     <div class="current-config" style="display: inline-block;"> </div>
 </div>
+
+<input type="hidden" class="stat_path" value="<?php echo get_template_directory_uri() ?>">
