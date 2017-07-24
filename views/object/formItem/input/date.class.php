@@ -196,6 +196,9 @@ class DateClass extends FormItem {
                     }
                     <?php endif; ?>
                 });
+            }else{
+                $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val('');
+                toastr.error(' <?php _e('Invalid date!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
             }
         });
 
