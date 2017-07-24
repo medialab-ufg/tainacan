@@ -1412,7 +1412,8 @@ function list_main_ordenation(has_category_properties) {
             $("#collection_single_ordenation").append("<optgroup label='" + elem.names.data_property + "'>");
             $.each(elem.property_data, function (idx, data) {
                 if (data && data !== false) {
-                    $("#collection_single_ordenation").append("<option value='" + data.id + "'  >" + data.name + "</option>");
+                    var hide = (data.hide) ? 'style="display:none"' : '';
+                    $("#collection_single_ordenation").append("<option "+hide+" value='" + data.id + "'  >" + data.name + "</option>");
                 }
             });
             //get_categories_properties_ordenation();
