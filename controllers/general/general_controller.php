@@ -6,7 +6,6 @@ include_once (dirname(__FILE__) . '/../../../../../wp-includes/wp-db.php');
  class Controller {
     public function render($file, $variables = array()) {
         extract($variables);
-
         ob_start();
         include $file;
         $renderedView = ob_get_clean();

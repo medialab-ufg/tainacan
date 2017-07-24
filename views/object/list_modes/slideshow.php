@@ -20,12 +20,12 @@
 
                                 <div class="wrapper">
                                     <h3>
-                                        <?php if(empty($is_trash)): ?>
+                                        <?php if(empty($trash_list)): ?>
                                             <a href="<?php echo get_collection_item_href($collection_id); ?>"
                                                onclick="<?php get_item_click_event($collection_id, $curr_id) ?>">
                                                 <?php the_title(); ?>
                                             </a>
-                                        <?php elseif ($is_trash): the_title(); endif; ?>
+                                        <?php elseif ($trash_list): the_title(); endif; ?>
                                     </h3>
 
                                     <div class="col-md-11 center center-block main-current-container" style="float: none; margin: 10px auto !important;">
@@ -41,7 +41,7 @@
 
                                             <div class="col-md-6 left pull-right">
 
-                                                <?php if(empty($is_trash)): include "actions/item_actions.php"; ?>
+                                                <?php if(empty($trash_list)): include "actions/item_actions.php"; ?>
                                                     <ul class="item-funcs" style="text-align: left">
                                                         <input type="hidden" class="post_id" name="post_id" value="<?= $curr_id ?>">
                                                         <li class="tainacan-museum-clear">
@@ -50,7 +50,7 @@
                                                             </a>
                                                         </li>
                                                     </ul>
-                                                <?php elseif ($is_trash): ?>
+                                                <?php elseif ($trash_list): ?>
                                                     <ul class="item-funcs col-md-6 right">
                                                         <input type="hidden" class="post_id" name="post_id" value="<?= $curr_id ?>">
                                                         <?php include "edit_btns_trash.php"; ?>

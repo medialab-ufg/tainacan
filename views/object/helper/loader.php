@@ -46,4 +46,4 @@ $numberItems = ceil($loop->found_posts / 10);
 <input type="hidden" id="repo_fixed_thumb" value="<?php echo $_fxd_meta['thumb']; ?>">
 <input type="hidden" id="original_post_count" value="<?php echo $loop->post_count; ?>" />
 <input type="hidden" id="pagination_current_page" value="<?php echo $pagid; ?>" />
-<input type="hidden" id="is_trash" value="<?php echo $is_trash; ?>">
+<input type="hidden" id="is_trash" value="<?php echo $trash_list; ?>">

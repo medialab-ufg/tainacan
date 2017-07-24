@@ -15,22 +15,22 @@
     <div class="gallery-wrapper droppableClassifications toggleSelect">
 
         <div class="item-thumb">
-            <?php if(empty($is_trash)): ?>
+            <?php if(empty($trash_list)): ?>
                 <a href="<?php echo get_collection_item_href($collection_id); ?>"
                    onclick="<?php get_item_click_event($collection_id, $curr_id) ?>">
                     <?php echo get_item_thumb_image($curr_id); ?>
                 </a>
-            <?php elseif ($is_trash): echo get_item_thumb_image($curr_id); endif; ?>
+            <?php elseif ($trash_list): echo get_item_thumb_image($curr_id); endif; ?>
         </div>
 
         <div class=" title-container">
             <h5 class="item-display-title">
-                <?php if(empty($is_trash)): ?>
+                <?php if(empty($trash_list)): ?>
                     <a href="<?php echo get_collection_item_href($collection_id); ?>"
                        onclick="<?php get_item_click_event($collection_id, $curr_id) ?>">
                         <?php  echo wp_trim_words( get_the_title(), 4 ); ?>
                     </a>
-                <?php elseif ($is_trash): echo wp_trim_words( get_the_title(), 4 ); endif; ?>
+                <?php elseif ($trash_list): echo wp_trim_words( get_the_title(), 4 ); endif; ?>
             </h5>
 
             <div class="gallery-metadata">
@@ -44,7 +44,7 @@
                     <?php endif; ?>
                 </div>
 
-                <?php if(empty($is_trash)): ?>
+                <?php if(empty($trash_list)): ?>
                     <ul class="item-funcs col-md-6 right">
                         <input type="hidden" class="post_id" name="post_id" value="<?= $curr_id ?>">
                         <li class="tainacan-museum-clear">
@@ -56,7 +56,7 @@
                     <?php
                     include "actions/item_actions.php";
 
-                elseif ($is_trash): ?>
+                elseif ($trash_list): ?>
                     <ul class="item-funcs col-md-6 right">
                         <input type="hidden" class="post_id" name="post_id" value="<?= $curr_id ?>">
                         <?php include "edit_btns_trash.php"; ?>

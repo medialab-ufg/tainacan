@@ -292,10 +292,10 @@ class ObjectController extends Controller {
                 $data['mycollections'] = 'true';
                 $args = $object_model->list_all($data, $post_status);
                 $data['loop'] = new WP_Query($args);
+                $data['trash_list'] = true;
                 $data['collection_data'] = $collection_model->get_collection_data($collection_id);
                 $data["show_string"] = is_root_category($collection_id) ? __('Showing collections:', 'tainacan') : __('Showing Items:', 'tainacan');
                 $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($collection_id, "socialdb_collection_table_metas", true)));
-                $data['is_trash'] = true;
 
                 $view_count = get_post_meta($collection_id, 'collection_view_count', true);
                 if (empty($view_count)):
@@ -310,6 +310,7 @@ class ObjectController extends Controller {
                 }
                 $data['listed_by'] = $object_model->get_ordered_name($data['collection_id'], $data['ordenation_id'], $data['order_by']);
                 $data['is_moderator'] = CollectionModel::is_moderator($data['collection_id'], get_current_user_id());
+
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($recover_wpquery);
                 if (empty($object_model->get_collection_posts($data['collection_id']))) {

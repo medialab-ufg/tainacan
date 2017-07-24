@@ -983,7 +983,6 @@ function showTrash(src) {
             $('#collection_empty').show();
             $('#items_not_found').hide();
         }
-        console.log($('#table-view_wrapper'));
         if($('#table-view_wrapper').is(':visible')){
             wpquery_clean();
         }

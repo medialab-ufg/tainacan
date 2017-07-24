@@ -31,12 +31,12 @@ $_object_description = get_the_content();
             <div class="item-info">
                 <div class="col-md-4 colFoto no-padding">
 
-                    <?php if(empty($is_trash)): ?>
+                    <?php if(empty($trash_list)): ?>
                         <a href="<?php echo get_collection_item_href($collection_id, $curr_id, $viewHelper); ?>"
                            onclick="<?php get_item_click_event($collection_id, $curr_id) ?>">
                             <?php echo get_item_thumb_image($curr_id); ?>
                         </a>
-                    <?php elseif ($is_trash): ?>
+                    <?php elseif ($trash_list): ?>
                         <?php echo get_item_thumb_image($curr_id); ?>
                     <?php endif; ?>
 
@@ -149,12 +149,12 @@ $_object_description = get_the_content();
                         ?>
 
                         <h4 class="item-display-title">
-                            <?php if(empty($is_trash)): ?>
+                            <?php if(empty($trash_list)): ?>
                                 <a href="<?php echo get_collection_item_href($collection_id, $curr_id, $viewHelper); ?>"
                                    onclick="<?php get_item_click_event($collection_id, $curr_id) ?>">
                                     <?php echo wp_trim_words($_item_title_, 13); ?>
                                 </a>
-                            <?php elseif ($is_trash): ?>
+                            <?php elseif ($trash_list): ?>
                                 <?php echo wp_trim_words($_item_title_, 13); ?>
                             <?php endif; ?>
                         </h4>
@@ -179,16 +179,16 @@ $_object_description = get_the_content();
 
                                 <ul class="item-funcs col-md-5 right">
                                     <input type="hidden" class="post_id" name="post_id" value="<?= $curr_id ?>">
-                                    <?php if (empty($is_trash)) { ?>
+                                    <?php if (empty($trash_list)) { ?>
                                         <li class="item-redesocial tainacan-museum-clear">
                                             <a id="modal_network<?php echo $curr_id; ?>" onclick="showModalShareNetwork(<?php echo $curr_id; ?>)">
                                                 <div style="cursor:pointer;" data-icon="&#xe00b;"></div>
                                             </a>
                                         </li>
-                                    <?php } elseif($is_trash) { include "edit_btns_trash.php"; } ?>
+                                    <?php } elseif($trash_list) { include "edit_btns_trash.php"; } ?>
                                 </ul>
 
-                                <?php if(empty($is_trash)): ?>
+                                <?php if(empty($trash_list)): ?>
 
                                     <div class="new-item-actions">
                                         <?php include "actions/item_actions.php"; ?>
@@ -214,7 +214,7 @@ $_object_description = get_the_content();
 
                     </div>
 
-                    <?php if(empty($is_trash)): ?>
+                    <?php if(empty($trash_list)): ?>
                         <div class="show-item-metadata">
                             <!-- CATEGORIES AND TAGS -->
                             <button id="show_classificiations_<?php echo $curr_id ?>" style="width:100%" class="btn btn-default"

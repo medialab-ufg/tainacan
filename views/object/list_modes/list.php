@@ -7,22 +7,22 @@
     
     <div>
         <div class="col-md-1 item-thumb">
-            <?php if(empty($is_trash)): ?>
+            <?php if(empty($trash_list)): ?>
                 <a href="<?php echo get_collection_item_href($collection_id, $curr_id, $viewHelper); ?>"
                    onclick="<?php get_item_click_event($collection_id, $curr_id) ?>">
                     <?php echo get_item_thumb_image($curr_id); ?>
                 </a>
-            <?php elseif ($is_trash): echo get_item_thumb_image($curr_id); endif; ?>
+            <?php elseif ($trash_list): echo get_item_thumb_image($curr_id); endif; ?>
         </div>
 
         <div class="col-md-4 no-padding">
             <h4 class="item-display-title">
-                <?php if(empty($is_trash)): ?>
+                <?php if(empty($trash_list)): ?>
                     <a href="<?php echo get_collection_item_href($collection_id, $curr_id, $viewHelper); ?>"
                        onclick="<?php get_item_click_event($collection_id, $curr_id) ?>">
                         <?php the_title(); ?>
                     </a>
-                <?php elseif ($is_trash): the_title(); endif; ?>
+                <?php elseif ($trash_list): the_title(); endif; ?>
             </h4>
         </div>
 
@@ -43,7 +43,7 @@
         </div>
 
         <div class="col-md-2">
-            <?php if(empty($is_trash)): ?>
+            <?php if(empty($trash_list)): ?>
                 <ul class="item-funcs right">
                     <input type="hidden" class="post_id" name="post_id" value="<?= $curr_id ?>">
                     <li class="tainacan-museum-clear">
@@ -54,7 +54,7 @@
                 </ul>
                 <?php
                 include "actions/item_actions.php";
-            elseif ($is_trash):
+            elseif ($trash_list):
                 include "edit_btns_trash.php";
             endif; ?>
         </div>
