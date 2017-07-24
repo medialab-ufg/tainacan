@@ -11,14 +11,18 @@ $latitude = get_post_meta($curr_id, "socialdb_property_" . $geo_coordinates["lat
 $longitude = get_post_meta($curr_id, "socialdb_property_" . $geo_coordinates["long"]);
 $location = get_post_meta($curr_id, "socialdb_property_" . $geo_loc);
 $_object_description = get_the_content();
+$item_title = wp_trim_words(get_the_title(), 13);
+$_trim_desc = $_object_description;
 ?>
+
 <li class="col-md-6 cards-view-container top-div" id="object_<?php echo $curr_id ?>" data-order="<?php echo $countLine; ?>"
     <?php if ($collection_list_mode != "cards"): ?> style="display: none;" <?php endif ?> >
 
     <input type="hidden" id="add_classification_allowed_<?php echo $curr_id ?>" name="add_classification_allowed" value="<?php echo (string) verify_allowed_action($collection_id, 'socialdb_collection_permission_add_classification', $curr_id); ?>" />
     <input type="hidden" value="<?php echo $curr_id ?>" class="object_id">
 
-    <!-- TAINACAN: coloca a class row DO ITEM, sao cinco colunas possiveis todas elas podendo ser escondidas pelo o usuario, mas seu tamanho eh fixo col-md-2  -->
+    <?php ObjectHelper::getTableViewData($table_meta_array, $loop->current_post, $curr_id, $viewHelper::$fixed_slugs); ?>
+
     <div class="item-colecao toggleSelect" <?php if (($countLine % 2) == 0) { echo "style='margin-right: 0'"; } ?>>
 
         <input type="hidden" class="latitude"  value="<?php echo $latitude[0]; ?>" />
@@ -28,134 +32,26 @@ $_object_description = get_the_content();
         <div class="droppableClassifications">
 
             <div class="item-info">
-                <div class="col-md-4 colFoto no-padding">
 
+                <div class="col-md-4 colFoto no-padding">
                     <?php if(empty($trash_list)): ?>
                         <a href="<?php echo get_collection_item_href($collection_id, $curr_id, $viewHelper); ?>"
                            onclick="<?php get_item_click_event($collection_id, $curr_id) ?>">
                             <?php echo get_item_thumb_image($curr_id); ?>
                         </a>
-                    <?php elseif ($trash_list): ?>
-                        <?php echo get_item_thumb_image($curr_id); ?>
-                    <?php endif; ?>
-
+                    <?php elseif ($trash_list): echo get_item_thumb_image($curr_id); endif; ?>
                 </div>
 
                 <div class="col-md-8 flex-box item-meta-box" style="flex-direction:column;">
                     <div class="item-meta col-md-12 no-padding">
-                        <?php
-                        $_item_title_ = get_the_title();
-                        $_trim_desc = $_object_description;
-
-                        if (is_array($table_meta_array) && count($table_meta_array) > 0):
-                            $_DEFAULT_EMPTY_VALUE = "--";
-                            //$_trim_desc = wp_trim_words($_object_description, 16);
-                            foreach ($table_meta_array as $item_meta_info):
-                                $fmt = str_replace("\\", "", $item_meta_info);
-                                if (is_string($fmt)):
-                                    $_meta_obj = json_decode($fmt);
-                                    if (is_object($_meta_obj)):
-
-                                        $_META = ['id' => $_meta_obj->id, 'tipo' => $_meta_obj->tipo];
-                                        if ($loop->current_post === 0)
-                                            echo '<input type="hidden" name="meta_id_table" value="' . $_META['id'] . '" data-mtype="' . $_META['tipo'] . '">';
-
-                                        if ($_META['tipo'] === 'property_data') {
-                                            $meta_type = get_term_meta($_META['id'], 'socialdb_property_data_widget', true);
-                                            $check_fixed = get_term($_meta_obj->id);
-                                            $_out_ = $_DEFAULT_EMPTY_VALUE;
-
-                                            if (in_array($check_fixed->slug, $viewHelper::$fixed_slugs)) {
-                                                $_slug = $check_fixed->slug;
-                                                $base = str_replace("socialdb_property_fixed_", "", $_slug);
-                                                switch ($base) {
-                                                    case "title":
-                                                        $_out_ = $_item_title_;
-                                                        break;
-                                                    case "description":
-                                                        $_out_ = $_trim_desc;
-                                                        break;
-                                                    case "source":
-                                                        $_out_ = get_post_meta($curr_id, "socialdb_object_dc_source")[0];
-                                                        break;
-                                                    case "type":
-                                                        $_out_ = get_post_meta($curr_id, "socialdb_object_dc_type")[0];
-                                                        break;
-                                                    case "license":
-                                                        $_out_ = get_post_meta($curr_id, "socialdb_license_id")[0];
-                                                        break;
-                                                }
-                                            } else {
-                                                $__item_meta = get_post_meta($curr_id, "socialdb_property_$_meta_obj->id", true) ?: $_DEFAULT_EMPTY_VALUE;
-                                                if (!empty($__item_meta)) {
-                                                    $_out_ = $__item_meta;
-                                                }
-                                            }
-
-                                            if ($meta_type == 'date') {
-                                                $date_temp = explode('-', $_out_);
-                                                if (count($date_temp) > 1):
-                                                    $_out_ = $date_temp[2] . '/' . $date_temp[1] . '/' . $date_temp[0];
-                                                endif;
-                                            }
-
-                                            if($meta_type == 'user')
-                                            {
-                                                $user = get_user_by("id", $_out_);
-                                                $_out_ = $user->data->display_name;
-                                            }
-                                            
-                                            echo '<input type="hidden" name="item_table_meta" value="' . $_out_ . '" />';
-                                        } else if ($_META['tipo'] === 'property_term') {
-                                            $_current_object_terms_ = get_the_terms($curr_id, "socialdb_category_type");
-                                            $_father_name = get_term($_META['id'])->name;
-                                            $_father_category_id = (int) get_term_meta($_META['id'])['socialdb_property_term_root'][0];
-                                            $_item_meta_val = $_DEFAULT_EMPTY_VALUE;
-
-                                            foreach ($_current_object_terms_ as $curr_term) {
-                                                if ($curr_term->parent == $_father_category_id) {
-                                                    $_item_meta_val = $curr_term->name;
-                                                }
-                                            }
-                                            ?>
-                                            <input id="tableV-meta-<?= $_META['id']; ?>" type="hidden" name="item_table_meta"
-                                                   data-parent="<?= $_father_name ?>" value="<?= $_item_meta_val; ?>" />
-                                                   <?php
-                                               } else if ($_META['tipo'] == 'property_object') {
-                                                   $_prop_key = "socialdb_property_" . (string) $_META['id'];
-                                                   $_related_obj_id =  get_post_meta($curr_id, $_prop_key);
-                                                   $_father_name = get_term($_META['id'])->name;
-                                                   $_item_meta_val = $_DEFAULT_EMPTY_VALUE;
-                                                   $values = [];
-                                                   if (count($_related_obj_id) > 0) {
-                                                       foreach ($_related_obj_id as $value) {
-                                                            $_obj_id = get_post($value)->ID;
-                                                            if ($_obj_id != $curr_id) {
-                                                                $values[] = get_post($_obj_id)->post_title;
-                                                            }
-                                                       }
-                                                      
-                                                   }
-                                                   ?>
-                                            <input id="tableV-meta-<?= $_META['id']; ?>" type="hidden" name="item_table_meta"
-                                                   data-parent="<?= $_father_name ?>" value="<?= (count($values)>0) ? implode('<br>', $values) : $_item_meta_val; ?>" />
-                                                   <?php
-                                               }
-                                           endif; //is_object
-                                       endif; // is_string
-                                   endforeach;
-                               endif;
-                        ?>
 
                         <h4 class="item-display-title">
                             <?php if(empty($trash_list)): ?>
                                 <a href="<?php echo get_collection_item_href($collection_id, $curr_id, $viewHelper); ?>"
                                    onclick="<?php get_item_click_event($collection_id, $curr_id) ?>">
-                                    <?php echo wp_trim_words($_item_title_, 13); ?>
+                                    <?php echo $item_title; ?>
                                 </a>
-                            <?php elseif ($trash_list): ?>
-                                <?php echo wp_trim_words($_item_title_, 13); ?>
-                            <?php endif; ?>
+                            <?php elseif ($trash_list): echo $item_title; endif; ?>
                         </h4>
 
                         <div class="item-description"> <?php echo $_trim_desc; ?> </div>

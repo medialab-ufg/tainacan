@@ -497,12 +497,14 @@ class ObjectController extends Controller {
                 $press['meta_ids_ord'] = explode(",",unserialize($tabs['order'][0])['default']);
                 $ord_list = [];
 
-				foreach($tabs["organize"] as $id => $tb) {
-					$mt = "socialdb_property_helper_${id}";
-					if( !array_key_exists($mt, $_item_meta)) {
-                        $_item_meta[$mt] = ["--"];
-					}
-				}
+                if($tabs['organize']) {
+                    foreach($tabs["organize"] as $id => $tb) {
+                        $mt = "socialdb_property_helper_${id}";
+                        if( !array_key_exists($mt, $_item_meta)) {
+                            $_item_meta[$mt] = ["--"];
+                        }
+                    }
+                }
 
                 $total_index = 0;
                 $_to_be_removed = [];
