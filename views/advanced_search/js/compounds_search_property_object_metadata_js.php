@@ -55,9 +55,7 @@
                     toastr.error(ui.item.label+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
                     return false;
                 }
-                console.log('<?php echo $property['metas']['socialdb_property_avoid_items'] ?>',$('#inserted_property_object_<?php echo $property['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $property['contador']; ?>_'+ui.item.value).length);
                 if($('#avoid_selected_items_<?php echo $property['id'] ?>').val()==='false'){
-                    console.log($('#inserted_property_object_<?php echo $property['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $property['contador']; ?>_'+ui.item.value));
                     if($('#inserted_property_object_<?php echo $property['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $property['contador']; ?>_'+ui.item.value).length===0){
                         $('#results_property_<?php echo $property['compound_id'] ?>_<?php echo $property['id'] ?>_<?php echo $property['contador'] ?> ul').html('');
                         $('select[name="socialdb_property_<?php echo  $property['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $property['contador']; ?>[]"]').html('');
@@ -96,7 +94,6 @@
                             },
                             minLength: 2,
                             select: function (event, ui) {
-                                console.log(event);
                                 $("#property_object_search_submit_<?php echo $property['id'] ?> #autocomplete_value_" + property_id).val('');
                                 //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
                                 var temp = $("#property_value_" + property_id).val();
@@ -125,7 +122,6 @@
     }
     
     function search_autocomplete_object_property_add(property_id,object_id) {
-        console.log($("#property_object_search_submit_"+property_id+" #autocomplete_value_" + property_id+"_"+object_id));
         $("#property_object_search_submit_"+property_id+" #autocomplete_value_" + property_id+"_"+object_id).autocomplete({
             source: $('#src').val() + '/controllers/collection/collection_controller.php?operation=list_items_search_autocomplete&property_id=' + property_id,
             messages: {
@@ -135,7 +131,6 @@
             },
             minLength: 2,
             select: function (event, ui) {
-                console.log(event);
                 $("#property_object_search_submit_"+property_id+" #autocomplete_value_" + property_id).val('');
                 //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
                 var temp = $("#property_value_" + property_id).val();
@@ -335,7 +330,6 @@
     // tree
     function search_list_tree(trees) {
         if (trees) {
-            console.log(trees);
             $.each(trees, function (idx, tree) {
                 $("#property_object_search_submit_<?php echo $property['id'] ?> #search_field_property_term_"+tree).dynatree({
                     checkbox: true,
@@ -421,7 +415,6 @@
                 type: 'POST',
                 data: { operation: 'get_categories_properties',properties_to_avoid:$('#properties_id_avoid').val(),categories: id,property_searched_id:property_id}
             }).done(function (result) {
-                console.log('carregando metadados da propriedade',property_id);
                 hide_modal_main();
                 //list_all_objects(selKeys.join(", "), $("#collection_id").val());
                 $('#property_object_search_submit_<?php echo $property['id'] ?> #append_properties_categories_'+property_id+'_adv').html(result);

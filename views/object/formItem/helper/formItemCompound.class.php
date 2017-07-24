@@ -238,7 +238,6 @@ class FormItemCompound extends FormItem {
             var index = <?php echo $index; ?> + 1;
 
             $('.js-append-property-<?php echo $property['id'] ?>').click(function(){
-                //console.log(<?php echo $item_id ?>,<?php echo $index ?>);
                 $.ajax({
                     url: $('#src').val() + '/controllers/object/form_item_controller.php',
                     type: 'POST',

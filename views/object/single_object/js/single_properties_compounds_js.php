@@ -60,7 +60,6 @@
                             }
                         });
                         // end validate
-                        console.log( $(".form_autocomplete_compounds_" + property_id + '_'+i));
                         $(".form_autocomplete_compounds_" + property_id + '_'+i).autocomplete({
                             source: $('#src').val() + '/controllers/collection/collection_controller.php?operation=list_items_search_autocomplete&property_id=' + property_id,
                             messages: {
@@ -438,7 +437,6 @@
                     for(var i = 0;i<cardinality;i++){
                         var value = $('#actual_value_'+compound_id+'_' + tree + '_' + i).val();
                         dynatree_object_index["field_property_term_"+compound_id+"_"+ tree  + '_' + i] = i;
-                        console.log(dynatree_object_index,"field_property_term_"+compound_id+"_"+ tree  + '_' + i);
                         $("#dynatree_property_term_"+compound_id+"_" + tree + '_' + i).dynatree({
                                 checkbox: true,
                                 // Override class name for checkbox icon:
@@ -498,7 +496,6 @@
                                         $('#core_validation_'+compound_id+'_'+ tree + '_' + i).val('true');
                                         // set_field_valid_compounds(tree,'core_validation_'+compound_id+'_' + tree + '_' + i,compound_id);
                                     }
-                                    console.log($("#field_property_term_"+compound_id+"_" + tree + '_' + i),compound_id,tree,i);
                                 }
                             });
                     }
@@ -599,7 +596,6 @@
      * @param {type} property_id
      * @returns {undefined}     */
     function edit_validate_selectbox(seletor,property_id,compound_id){
-        console.log(seletor);
         if($(seletor).val()===''){
             $('#core_validation_'+property_id).val('false');
             //set_field_valid_compounds(property_id,'core_validation_'+ compound_id + "_"+property_id+"_"+i,compound_id);
@@ -618,7 +614,6 @@
      * @returns {undefined}     */
     function compounds_validate_multipleselectbox(seletor,property_id,compound_id,i){
         var selected = $("#field_property_term_"+compound_id+"_"+property_id+"_"+i).find(":selected");
-        console.log(selected);
         if (selected.length > 0) {
             $('#core_validation_'+compound_id+'_'+property_id+'_'+i).val('true');
             // set_field_valid_compounds(property_id,'core_validation_'+ compound_id + "_"+property_id+"_"+i,compound_id);

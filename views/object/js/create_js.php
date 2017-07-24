@@ -22,7 +22,6 @@ $(function(){
         //hook para validacao do formulario
         if(Hook.is_register( 'tainacan_validate_create_item_form')){
             Hook.call( 'tainacan_validate_create_item_form', [ $( this ).serializeArray() ] );
-            console.log(Hook.result.is_validated);
             if(!Hook.result.is_validated){
                 $('#modalImportMain').modal('hide');//mostro o modal de carregamento
                 showAlertGeneral('<?php _e('Attention','tainacan') ?>', Hook.result.message, 'info');
@@ -203,7 +202,6 @@ function back_main_list() {
          $('#object_url_text').hide();// esconde o campo de url para textos
          $('#object_url_others').show('slow');// o campo para colocar a url do item sem ser texto
          $('#object_url_others_input').val(url);
-         console.log($('#object_url_others').val());
          $('#video_type').attr('checked','checked');
          return false;
     }
@@ -258,7 +256,6 @@ function back_main_list() {
         $('#loading').hide('slow');
 
     }).fail(function (result) {
-        console.log('error', result, url);
         $('#loading').hide();
         hide_modal_main();
         showAlertGeneral('Atenção', 'URL inexistente ou indisponível', 'error');

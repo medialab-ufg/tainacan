@@ -38,15 +38,9 @@ function init() {
         }
     }).done(function (result) {
         json = jQuery.parseJSON(result);
-
-
-
-        console.log(json);
-
         //init Spacetree
         //Create a new ST instance
         var st = new $jit.ST({
-            //console.log(json);
             //id of viz container element
             injectInto: 'spacetree',
             //set duration for the animation
@@ -147,7 +141,6 @@ function init() {
             Events: {
                 enable: true,
                 onClick: function (node, eventInfo, e) {
-                    console.log(node.id);
                     if (typeof node.id != "undefined")
                     {
                        list_all_objects(node.id, $("#collection_id").val(), $('#collection_single_ordenation').val())

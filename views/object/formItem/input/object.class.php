@@ -193,9 +193,7 @@ class ObjectClass extends FormItem {
                             toastr.error(ui.item.label + ' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
                             return false;
                         }
-                        console.log('<?php echo $property['metas']['socialdb_property_avoid_items'] ?>', $('#inserted_property_object_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>_' + ui.item.value).length);
                         if ($('#avoid_selected_items_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>').val() === 'false') {
-                            console.log($('#inserted_property_object_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>_' + ui.item.value));
                             if ($('#inserted_property_object_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>_' + ui.item.value).length === 0) {
                                 <?php if(!$isMultiple): ?>
                                     $('#results_property_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?> ul').html('');
@@ -233,7 +231,6 @@ class ObjectClass extends FormItem {
                             },
                             minLength: 2,
                             select: function (event, ui) {
-                                console.log(event);
                                 $("#property_object_search_submit_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?> #autocomplete_value_" + property_id).val('');
                                 //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
                                 var temp = $("#property_value_" + property_id).val();
@@ -258,7 +255,6 @@ class ObjectClass extends FormItem {
             }
 
             function search_autocomplete_object_property_add(property_id, object_id) {
-                console.log($("#property_object_search_submit_" + property_id + " #autocomplete_value_" + property_id + "_" + object_id));
                 $("#property_object_search_submit_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?> #autocomplete_value_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>_" + object_id).autocomplete({
                     source: $('#src').val() + '/controllers/collection/collection_controller.php?operation=list_items_search_autocomplete&property_id=' + property_id,
                     messages: {
@@ -268,7 +264,6 @@ class ObjectClass extends FormItem {
                     },
                     minLength: 2,
                     select: function (event, ui) {
-                        console.log(event);
                         $("#property_object_search_submit_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?> #autocomplete_value_" + property_id).val('');
                         //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
                         var temp = $("#property_value_" + property_id).val();
@@ -324,7 +319,6 @@ class ObjectClass extends FormItem {
                         reverse: $('#reverse_<?php echo $compound_id ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>').val()
                     }
                 });
-                console.log(id,'<?php echo $compound_id ?>','<?php echo $propert_id ?>','<?php echo $index_id ?>');
                 validateFieldsMetadataText(id,'<?php echo $compound_id ?>','<?php echo $propert_id ?>','<?php echo $index_id ?>')
             }
 
@@ -512,7 +506,6 @@ class ObjectClass extends FormItem {
             // tree
             function search_list_tree(trees) {
                 if (trees) {
-                    console.log(trees);
                     $.each(trees, function (idx, tree) {
                         $("#property_object_search_submit_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?> #search_field_property_term_" + tree).dynatree({
                             checkbox: true,
@@ -598,7 +591,6 @@ class ObjectClass extends FormItem {
                         type: 'POST',
                         data: {operation: 'get_categories_properties', properties_to_avoid: $('#properties_id_avoid').val(), categories: id, property_searched_id: property_id}
                     }).done(function (result) {
-                        console.log('carregando metadados da propriedade', property_id);
                         hide_modal_main();
                         //list_all_objects(selKeys.join(", "), $("#collection_id").val());
                         $('#property_object_search_submit_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?> #append_properties_categories_' + property_id + '_adv').html(result);

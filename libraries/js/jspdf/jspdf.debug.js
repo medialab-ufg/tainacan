@@ -1607,7 +1607,6 @@
                     //curY = f2((pageHeight - (y - this._runningPageHeight)) * k);
 
                     //			if (curY < 0){
-                    //				console.log('auto page break');
                     //				this.addPage();
                     //				this._runningPageHeight = y -  (activeFontSize * 1.7 / k);
                     //				curY = f2(pageHeight - activeFontSize * 1.7 /k);
@@ -2438,8 +2437,6 @@
             if (typeof this.acroformPlugin.acroFormDictionaryRoot != 'undefined') {
                 // for safety, shouldn't normally be the case
                 this.internal.write('/AcroForm ' + this.acroformPlugin.acroFormDictionaryRoot.objId + ' ' + 0 + ' R');
-            } else {
-                console.log('Root missing...');
             }
         };
 
@@ -3156,9 +3153,7 @@ Q\n";
                         _objId = jsPDF.API.acroformPlugin.internal.newObjectDeferred();
                     }
                 }
-                if (!_objId) {
-                    console.log("Couldn't create Object ID");
-                }
+
                 return _objId;
             },
             configurable: false
@@ -3573,7 +3568,6 @@ Q\n";
 
     AcroForm.RadioButton.prototype.setAppearance = function (appearance) {
         if (!('createAppearanceStream' in appearance && 'createMK' in appearance)) {
-            console.log("Couldn't assign Appearance to RadioButton. Appearance was Invalid!");
             return;
         }
         for (var i in this.__Kids) {
@@ -4746,8 +4740,6 @@ Q\n";
             getJpegSizeFromBytes = function getJpegSizeFromBytes(data) {
 
                 var hdr = data[0] << 8 | data[1];
-                console.log(data);
-                cl('^^^^^');
 
                 // if (hdr !== 0xFFD8) throw new Error('Supplied data is not a JPEG');
 
@@ -6761,7 +6753,6 @@ Q\n";
                 var v2Support = typeof this.pdf.internal.newObject2 === 'function';
 
                 if (!v2Support) {
-                    console.log('jsPDF v2 not enabled');
                     return;
                 }
 

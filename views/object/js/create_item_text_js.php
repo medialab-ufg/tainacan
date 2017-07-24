@@ -24,7 +24,6 @@ $(function(){
                 data: { operation: 'get_ordenation_properties',collection_id:$('#collection_id').val() }
             }).done(function(result) {
                 var json = $.parseJSON(result);
-                console.log(json,'ordenation');
                 if(json&&json.ordenation&&json.ordenation!==''){
                      for (var $property in json.ordenation) {
                         if (json.ordenation.hasOwnProperty($property)) {
@@ -117,7 +116,6 @@ $(function(){
                     $('#modalImportMain').modal('hide');//mostro o modal de carregamento
                     elem_first =jQuery.parseJSON(result); 
                     if(!elem_first){
-                         console.log('Erro a ser observado',result);
                          showAlertGeneral('<?php _e('Attention!','tainacan') ?>', '<?php _e('Invalid submission, file is too big!','tainacan') ?>', 'error');
                     }
                     else if(elem_first.validation_error){
@@ -415,7 +413,6 @@ function back_main_list(discard) {
          $('#object_url_text').hide();// esconde o campo de url para textos
          $('#object_url_others').show('slow');// o campo para colocar a url do item sem ser texto
          $('#object_url_others_input').val(url);
-         console.log($('#object_url_others').val());
          $('#video_type').attr('checked','checked');
          return false;
     }
@@ -470,7 +467,6 @@ function back_main_list(discard) {
         $('#loading').hide('slow');
 
     }).fail(function (result) {
-        console.log('error', result, url);
         $('#loading').hide();
         hide_modal_main();
         showAlertGeneral('Atenção', 'URL inexistente ou indisponível', 'error');

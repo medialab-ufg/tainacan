@@ -54,7 +54,6 @@
                 contentType: false
             }).done(function (result) {
                 elem = jQuery.parseJSON(result);
-                console.log(elem);
                 hide_modal_main();
                 if (elem.args_collection) {
                     search_collections_query = elem.args_collection;
@@ -62,7 +61,6 @@
                     if (elem.args_item) {
                         search_items_query = elem.args_item;
                     }
-                    console.log(elem.has_collection , elem.has_item);
                     if(elem.has_collection && elem.has_item){
                         $('#click_ad_search_collection').parent().show();
                         $('#click_ad_search_items').parent().show();
@@ -214,7 +212,6 @@
             },
             minLength: 2,
             select: function (event, ui) {
-                console.log(event);
                 $("#advanced_search_title").val('');
                 //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
                 var temp = $("#property_value_").val();
@@ -304,7 +301,6 @@
     }
     // mostra modal de resposta
     function showModalReply(comment_parent_id) {
-        console.log($('#modalReplyComment'));
         $('#comment_id').val(comment_parent_id);
         $('#modalReplyComment').modal("show");
     }
@@ -452,7 +448,6 @@
         }
     }
 
-
     function set_containers_class(collection_id) {
         $.ajax({
             type: "POST",
@@ -462,36 +457,24 @@
             $('.dropdown-toggle').dropdown();
             elem = jQuery.parseJSON(result);
             if ($('#collection_root_id').val() == elem.collection_id) {
-                $('#div_central').show();
-                $('#div_central').removeClass('col-md-12');
-                $('#div_central').addClass('col-md-9');
+                $('#div_central').show().removeClass('col-md-12').addClass('col-md-9');
                 $('#div_left').show();
                 load_root_menu_left(collection_id);
             } else if (elem.has_left && elem.has_left == 'true' && (!elem.has_right || elem.has_right !== 'true')) {
-                console.log(elem);
-                $('#div_central').show();
-                $('#div_central').removeClass('col-md-12');
-                $('#div_central').addClass('col-md-9');
+                $('#div_central').show().removeClass('col-md-12').addClass('col-md-9');
                 $('#div_left').show();
                 load_menu_left(collection_id);
             } else {
-<?php if (!has_filter('category_root_as_facet') || apply_filters('category_root_as_facet', true)): ?>
-                console.log(elem);
-                    $('#div_left').hide();
-                    $('#div_central').removeClass('col-md-9');
-                    $('#div_central').removeClass('col-md-10');
-                    $('#div_central').removeClass('col-md-12');
-                    $('#div_central').addClass('col-md-12');
-                    $('#div_central').show();
-                    $('#div_left').html('');
-<?php else: ?>
-                    load_menu_left(collection_id);
-<?php endif; ?>
+                <?php if (!has_filter('category_root_as_facet') || apply_filters('category_root_as_facet', true)): ?>
+                $('#div_left').hide().html('');
+                $('#div_central').removeClass('col-md-9 col-md-10').addClass('col-md-12').show();
+                <?php else: ?>
+                load_menu_left(collection_id);
+                <?php endif; ?>
                 // load_menu_top(collection_id);
             }
         });
     }
-
 
     function load_menu_left(collection_id) {
         $.ajax({
@@ -556,7 +539,6 @@
                 item_id: item_id}
         }).done(function (result) {
             json = JSON.parse(result);
-            console.log(json);
             if (json.is_removed) {
                 showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('This item has been removed, redirecting to collection home page! ', 'tainacan') ?>', 'error');
                 window.location = json.url;
@@ -749,7 +731,6 @@
             // The event was bound to the <span> tag, but the node object
             // is stored in the parent <li> tag
             var node = $.ui.dynatree.getNode(el);
-            console.log(node.data.key);
             switch (action) {
                 case "see":
                     var src = $('#src').val();
@@ -809,7 +790,6 @@
                                     $('#tag_synonyms').val(elem.socialdb_term_synonyms.join(','));
                                     $("#dynatree_synonyms_tag").dynatree("getRoot").visit(function (node) {
                                         var str = node.data.key.replace("_tag", "");
-                                        console.log(str, elem.socialdb_term_synonyms.indexOf(str) >= 0);
                                         if (elem.socialdb_term_synonyms.indexOf(str) >= 0) {
                                             node.select(true);
                                         }
@@ -1374,7 +1354,6 @@
             $('#loader_objects').hide();
             $('#list').html(elem.page);
             $('#wp_query_args').val(elem.args);
-            //console.log(elem.listed_by_value);
             $('#collection_single_ordenation').val(elem.listed_by_value);
             set_popover_content($("#socialdb_permalink_collection").val() + '?' + elem.url + '&is_filter=1');
             show_filters($('#collection_id').val(), elem.args);
@@ -1719,28 +1698,24 @@
             var youtube_url = validateYouTubeUrl();
             if (youtube_url) {
                 // É uma URL de um vídeo do youtube. Executar a importação do vídeo.
-                // console.log(youtube_url);
                 import_youtube_video_url();
             } else {
                 var youtube_channel_url = validateYouTubeChannelUrl();
                 if (youtube_channel_url) {
                     // É uma URL de um canal do youtube. Executar a importação dos vídeos de canal.
                     var res = inputImportAll.split(youtube_channel_url[4]);
-                    // console.log(res[1]);
                     import_youtube_channel(res[1]);
                 }
                 else {
                     var youtube_playlist_url = validateYouTubePlaylistUrl();
                     if (youtube_playlist_url) {
                         // É uma URL de uma playlist do youtube. Executar a importação dos vídeos da playlist.
-                        // console.log(youtube_playlist_url);
                         import_youtube_playlist(youtube_playlist_url);
                     }
                     else {
                         var instagram_url = validateInstagramUrl();
                         if (instagram_url) {
                             // É uma URL do instagram. Executar a importação dos imagens e vídeos do usuario.
-                            // console.log(instagram_url);
                             import_instagram(instagram_url);
                         } else {
                             var vimeo_url = validateVimeoUrl();
@@ -1748,10 +1723,8 @@
                                 // É uma URL do vimeo. Executar a importação dos vídeos.
                                 vimeo_url = vimeo_url.split("/");
                                 if (vimeo_url[3].localeCompare('channels') === 0) {
-                                    // console.log('Canal: ' + vimeo_url[4]);
                                     import_vimeo('channels', vimeo_url[4]);
                                 } else {
-                                    // console.log('Usuario: ' + vimeo_url[3]);
                                     import_vimeo('users', vimeo_url[3]);
                                 }
                             }
@@ -1759,14 +1732,12 @@
                                 var flickr_url = validateFlickrUrl();
                                 if (flickr_url) {
                                     // É uma URL do Flickr. Executar a importação dos itens do usuário.
-                                    // console.log(flickr_url);
                                     import_flickr(flickr_url);
                                 }
                                 else {
                                     var facebook_url = validateFacebookUrl();
                                     if (facebook_url) {
                                         // É uma URL do Facebook. Executar a importação dos itens do usuário.
-                                        // console.log(facebook_url);
                                     }
                                     else {
                                         var any_file_type = validateAnyFile();
@@ -1800,7 +1771,6 @@
                                                     $('#item_url_import_all').val('');
                                                     $("#sites_import_icon").addClass("grayscale");
                                                     $('#modalshowModalImportAll').modal('hide');
-                                                    // console.log('URL Regular. Enviar pro Embed.ly.');
                                                 }
                                             } else {
                                                 showAlertGeneral("<?php _e('Alert', 'tainacan'); ?>", "<?php _e('Please, insert a valid URL', 'tainacan'); ?>", "error");
@@ -1920,10 +1890,8 @@
             if (match) {
                 var result = url.split('/');
                 if (typeof result[6] != 'undefined' && result[6] != '' && (result[5] == 'albums' || result[5] == 'sets')) {
-                    //console.log(result[6]);
                     return 'albums/' + result[4] + '/' + result[6];
                 } else if (typeof result[5] != 'undefined' && result[5] != '') {
-                    //console.log(result[5]);
                     return 'singleitem/' + result[4] + '/' + result[5];
                 } else {
                     return 'all/' + result[4];
@@ -2199,7 +2167,6 @@
             import_text_alternative(url);
         } else {
             $.getJSON(ajaxurl, {}, function (json) {
-                console.log(json);
                 var description = '', title = '';
                 if (json.title !== undefined && json.title != null && json.title != false) {
                     title = json.title;
@@ -2250,7 +2217,6 @@
                     }
                 });
             }).fail(function (result) {
-                // console.log('error', result, url);
                 hide_modal_main();
                 showAlertGeneral('Atenção', 'URL inexistente ou indisponível', 'error');
             });
@@ -2260,7 +2226,6 @@
     function import_text_alternative(url) {
         var ajaxurl = $('#src').val() + '/controllers/object/object_controller.php?operation=parse_url_alternative&url=' + url;
         $.getJSON(ajaxurl, {}, function (json) {
-            console.log(json);
             var description = '', title = '';
             if (json.title !== undefined && json.title != null && json.title != false) {
                 title = json.title;

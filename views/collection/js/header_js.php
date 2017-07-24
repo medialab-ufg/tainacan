@@ -198,6 +198,5 @@
 //mostrar modal de denuncia
     function show_report_abuse_collection(collection_id) {
         $('#modal_delete_collection' + collection_id).modal('show');
-        console.log($('#modal_delete_collection' + collection_id));
     }
 </script>

@@ -163,44 +163,9 @@
             var is_fixed_meta = $("#" + item_id).hasClass('fixed-property');
             var is_blocked = $("#" + item_id).hasClass('block-facet');
             var $sorter_span = "<span class='glyphicon glyphicon-sort sort-filter'></span>";
-//            if(is_blocked||$( "#" + item_id.replace('meta-item-','')).length>0){
-//                list_collection_metadata();
-//                showAlertGeneral('<?php _e('Attention!', 'tainacan') ?>','<?php _e('Metadata already inserted or not allowed as filter', 'tainacan') ?>','info');
-//                return false;
-//            }
-//            
-//            if ( $ui_container === "filters-accordion" ) {
-//                list_collection_metadata();
-//                $("#filters-accordion").addClass("receiving-metadata");
-//                $( "#" + item_id + " .action-icons").append( $sorter_span );
-//                if ( is_fixed_meta ) {
-//                    setCollectionFacet("add", item_id, "tree");
-//                    showAlertGeneral('<?php _e('Success', 'tainacan') ?>','<?php _e('Metadata inserted as filter successfully', 'tainacan') ?>','success');
-//                    $('.data-widget').removeClass('select-meta-filter');
-//                } else {
-//                    
-//                console.log(' item_search_widget :'+item_search_widget);
-//                    if ( item_search_widget === "null" || item_search_widget == "undefined" ) {
-//                        $("#"+item_id + " a").first().click();
-//                        $(".property_data_use_filter").click();
-//                        $('.data-widget').addClass('select-meta-filter').show();
-//                        $('.term-widget').addClass('select-meta-filter').show();
-//                    } else {
-//                        $('.data-widget').removeClass('select-meta-filter');
-//                        $('.term-widget').removeClass('select-meta-filter');
-//                        setCollectionFacet( "add", item_id, item_search_widget );
-//                    }
-//                }
-//
-//            } else if ( $ui_container === "metadata-container" ) {
-//                $(ui.item.context).addClass('hide');
-//            }
+
         },
         remove: function (event, ui) {
-//            var $ui_container = ui.item.context.parentNode.id;
-//            if ( $ui_container === "metadata-container" ) {
-//                removeFacet(ui.item.context.id);
-//            }
         },
         stop: function (event, ui) {
             var $ui_container = ui.item.context.parentNode.id;
@@ -209,7 +174,6 @@
             if ($ui_container === "filters-accordion") {
                 updateFacetPosition(sortedIds);
             }
-            // $("#metadata-container").removeClass("change-meta-container");
         },
         sort: function (event, ui) {
             // $("#filters-accordion").addClass("adding-meta");
@@ -308,7 +272,6 @@
     }
 
     function removeFacet(item_id) {
-        //console.log(item_id);
         var collection_id = $("#collection_id").val();
         show_modal_main();
         $.ajax({
@@ -377,13 +340,11 @@
                             if (el.nome == null && el.id != "tree") {
                                 removeFacet(el.id);
                             } else {
-                                //console.log(el);
                                 var id = el.id;
                                 if (id === 'tag') {
                                     id = $('#global_tag_id').val();
                                 }
                                 var current_prop = getPropertyType(el.prop);
-                                //console.log(el,(el.prop == null) , !isNaN(el.id) , $('.term-root-'+el.id).attr('id'));
                                 var item_html = '<li id="' + id + '" data-widget="' + el.widget + '" class="form-group metadata-facet filter-' + el.id + '">' +
                                                     '<label class="title-pipe">&nbsp;&nbsp;&nbsp;&nbsp;' + el.nome + '<div class="pull-right">' +
                                                         '<a class="edit-filter">' +
@@ -455,7 +416,6 @@
         var arrFacets = [];
         var facet_priority = tableID + " .facet-priority";
         $(facet_priority).each(function (idx, el) {
-            console.log($(el).text());
             count = $(this).parent().children().index($(this)) + 1;
             var input_id = $(this).find("input[class='find_facet']").attr('id') + '';
             if (input_id != 'undefined') {
@@ -512,7 +472,6 @@
         $(el).submit(function (e) {
             e.preventDefault();
             var current_data = $(el).serialize();
-            //console.log(current_data);
             var path = src + '/controllers/property/property_controller.php';
             $('.modal').modal('hide');
             $('#modalImportMain').modal('show');
@@ -543,12 +502,10 @@
                     if ((current_type == "date" || current_type == "numeric") && property_widget == "range") {
                         var range_obj = {counter_range: elem.counter_data_range, sent_data: elem};
                     }
-                    // console.log(' current_operation  = '+current_operation); 
                     if (current_operation == "add_property_data") {
                         setCollectionFacet("add", new_property_id, property_widget, ordenation, color_facet, range_obj);
                     } else if (current_operation == "update_property_data") {
                         var item_was_dragged = $(current_modal + " .data-widget").hasClass('select-meta-filter');
-                        //console.log(' item was dragged  = '+item_was_dragged);
                         if (item_was_dragged) {
                             setCollectionFacet("add", current_property_id, property_widget, ordenation, color_facet);
                             $(current_modal + " .data-widget").removeClass('select-meta-filter');
@@ -961,7 +918,6 @@
         $("#meta-tag").modal('hide');
         var use_filter = $("#meta-tag .property_data_use_filter").prop('checked');
         var ordenation = $('#meta-tag input[name=filter_ordenation]:checked').val()
-        console.log("add", id_correto, data_widget, ordenation);
         if (use_filter) {
             setCollectionFacet("update", id_correto, data_widget, ordenation);
         } else {
@@ -1273,7 +1229,6 @@
 //            }
             var contador = 0;
             if (elem.metas.socialdb_property_object_category_id && elem.metas.socialdb_property_object_category_id.constructor === Array) {
-                //  console.log('first');
                 if ($("#property_category_dynatree")) {
                     $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
                         node.select(false);
@@ -1313,14 +1268,12 @@
                 }
             } 
             else if (elem.metas.socialdb_property_object_category_id) {
-                //  console.log('second');
                 if ($("#property_category_dynatree")) {
                     $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
                         node.select(false);
                     });
                     $('#selected_categories_relationship').html('');
                     $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
-                        //console.log(elem.metas.socialdb_property_object_category_id,node.data.key);
                         if (elem.metas.socialdb_property_object_category_id === node.data.key) {
                             node.select(true);
                             contador++;
@@ -1740,7 +1693,6 @@
                 elem = jQuery.parseJSON(result);
                 add_label_box_term(elem.term.term_id, elem.term.name, '#selected_categories_term');
                 $("#socialdb_property_term_root").val(elem.term.term_id);
-                // console.log(elem);
             });
         }
 
@@ -1801,7 +1753,6 @@
                     setCollectionFacet("add", new_ranking_id, ranking_widget, ordenation, "", range_obj);
                 } else if (current_operation == "edit") {
                     var item_was_dragged = $("#meta-voting .data-widget").hasClass('select-meta-filter');
-                    console.log(item_was_dragged);
                     if (item_was_dragged) {
                         setCollectionFacet("add", elem.ranking_id, ranking_widget, ordenation);
                         $("#meta-voting .data-widget").removeClass('select-meta-filter');
@@ -1962,7 +1913,6 @@
 
                 // define_voting_widget(item_type);
             } else {
-                console.log(item_type);
                 define_voting_widget(item_type);
             }
 
@@ -2122,7 +2072,6 @@
     function reorder_properties(tab_id, array_ids) {
         var $ul = $("#metadata-container-" + tab_id);
                 $items = $("#metadata-container-" + tab_id).children();
-        console.log($items);        
         $("#metadata-container-" + tab_id).html('');
         // loop backwards so you can just prepend elements in the list
         // instead of trying to place them at a specific position
@@ -2396,7 +2345,6 @@
         var $widget_select = $("#meta-voting #search_data_widget");
 
         $("#meta-voting #search_data_widget option").remove();
-        console.log(item);
         if (ranking_type === 'stars') {
             $widget_select.append('<option value="stars"><?php _e('Stars', 'tainacan'); ?></option>');
             $("#meta-voting #range_submit").hide();
@@ -2679,7 +2627,6 @@
      * @param {type} seletor
      * @returns {undefined}     */
     function toggle_advanced_configuration(seletor) {
-        console.log(seletor);
         if ($(seletor).is(':visible')) {
             $(seletor).slideUp();
         } else {

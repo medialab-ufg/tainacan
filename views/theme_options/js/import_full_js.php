@@ -88,7 +88,6 @@
             type: 'POST',
             data: {operation: 'list_aip_files'},
             success: function (data) {
-                console.log(data);
                 if (data && data !== '[]' && data !== '') {
                     var jsonObject = jQuery.parseJSON(data);
                     if (jsonObject && jsonObject != null) {
@@ -329,14 +328,12 @@
                     mapping_id: mapping_id
                 }
             }).done(function (result) {
-                console.log('success');
                 $('#loader_validacao').hide('slow');
                 $('#maping_container_repository').html(result);
                 $('#maping_container_repository').show();
                 $('#url_base_oai').attr("disable");
 
             }).fail(function (jqXHR, textStatus, errorThrown) {
-                console.log('erro');
                 $('#loader_validacao').hide();
                 showAlertGeneral('<?php _e('Atention', 'tainacan') ?>', '<?php _e('Server not found or not available', 'tainacan') ?>', '<?php _e('error') ?>');
             });
@@ -569,7 +566,6 @@
     }
 
     function upload_aip_zip() {
-        console.log('entrou aqui');
         show_modal_main();
         var src = $('#src').val();
 

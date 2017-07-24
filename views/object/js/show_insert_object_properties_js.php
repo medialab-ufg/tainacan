@@ -18,7 +18,6 @@
             },
             minLength: 2,
             select: function (event, ui) {
-                console.log(event);
                 $("#autocomplete_value_" + property_id + "_" + object_id).html('');
                 $("#autocomplete_value_" + property_id + "_" + object_id).val('');
                 //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();

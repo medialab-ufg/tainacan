@@ -43,7 +43,6 @@ function confirmationAPI(){
                 dataType: 'json'
             }).error(function(result){
                 hide_modal_main();
-                console.log(result);
                 showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('URL unformmated or service unavailable!', 'tainacan') ?>', 'error');
             }).done(function (result) {
                 hide_modal_main();

@@ -75,7 +75,6 @@
                      selKeys = ordenateCompundedNodes(selKeys);
                      //limitacao da quantidade de propriedades selecionados
                      if(selKeys.length>0&&selKeys.length<=50){
-                         console.log(selKeys);
                          $.each(selKeys,function(index,node){
                              var type = types_compounds[node.data.key];
                              var string = '';
@@ -121,7 +120,6 @@
                 if(elem.operation != 'update_property_compounds'){     
                     list_collection_metadata();
                 }else{
-                    // console.log($('#meta-item-'+elem.compound_id+' .property-name').first());
                     $('#meta-item-'+elem.compound_id+' .property-name').first().text(elem.compounds_name);
                     $( "#list-compounded-"+elem.compound_id ).html('');
                     get_children_compounds(elem.compound_id,elem.compounds_id);
@@ -133,7 +131,6 @@
     
     function ordenateCompundedKeys(keys){
         var selected = $('#compounds_id').val();
-        console.log(selected);
         if(selected.trim()!=""){
             var keys_ordenate = selected.split(',');
             if(keys_ordenate.length>keys.length){

@@ -5,7 +5,6 @@ function show_edit_data_property_form(object_id,property_id){
         url: $('#src').val()+"/controllers/object/objectsingle_controller.php",
         data: {collection_id:  $('#collection_id').val(),operation:'show_edit_data_property_form',property_id:property_id,object_id:object_id}
     }).done(function( result ) {
-        console.log('#list_all_properties_'+object_id);
         $('#single_edit_data_property_form_'+object_id).html(result);
         $('#single_list_all_properties_'+object_id).hide();
         $('#single_data_property_form_'+object_id).hide();
@@ -22,7 +21,6 @@ function show_edit_object_property_form(object_id,property_id){
         url: $('#src').val()+"/controllers/object/objectsingle_controller.php",
         data: {collection_id:  $('#collection_id').val(),operation:'show_edit_object_property_form',property_id:property_id,object_id:object_id}
     }).done(function( result ) {
-        console.log('#list_all_properties_'+object_id);
          $('#single_edit_object_property_form_'+object_id).html(result);
         $('#single_list_all_properties_'+object_id).hide();
         $('#single_data_property_form_'+object_id).hide();

@@ -57,9 +57,6 @@ function save_mapping_marc(){
             processData: false,
             contentType: false,
             success: function (r) {
-                /*for(var pair of formData.entries()) {
-                    console.log(pair[0]+ ', '+ pair[1]);
-                }*/
                 var elem = JSON.parse(r);
                 if(elem.result)
                 {
@@ -153,9 +150,6 @@ function update_user_info()
         processData: false,
         contentType: false,
         success: function (r) {
-            /*for(var pair of formData.entries()) {
-                console.log(pair[0]+ ', '+ pair[1]);
-            }*/
             get_users_page($("#src").val(), 'show_all_users');
             $("#modalShowUser").modal("hide");
         }
@@ -187,7 +181,6 @@ function get_impressions_page(src) {
 }
 
 function resetHomeStyleSettingsLibrary() {
-    //cl('Entering _resetHomeStyleSettings');
     $('ul.menu-ibram').show();
     $('.ibram-home-container').hide();
 

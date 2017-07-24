@@ -77,7 +77,6 @@
             data: {property_id: property_id,object_id:object_id , operation: 'get_property_object_value',}
         }).done(function (result) {
             elem = jQuery.parseJSON(result);
-            console.log(elem);
             if (elem.values) {
                 $("#property_value_" + property_id + "_" + object_id).html();
                 $.each(elem.values, function (idx, value) {
@@ -129,7 +128,6 @@
             },
             minLength: 2,
             select: function (event, ui) {
-                console.log(event);
                 $("#autocomplete_value_" + property_id + "_" + object_id).html('');
                 $("#autocomplete_value_" + property_id + "_" + object_id).val('');
                 //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();

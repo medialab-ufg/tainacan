@@ -158,7 +158,6 @@
 
         $("#from_period").on('change', function () {
             var diffe = Math.ceil( ($("#to_period").datepicker('getDate') - $("#from_period").datepicker('getDate')) / (1000 * 60 * 60 * 24) ) + 1;
-            //console.log(diffe);
 
             if(diffe < 7){
                 $("#weeks").prop('disabled', true);
@@ -176,7 +175,6 @@
 
         $("#to_period").on('change', function () {
             var diffe = Math.ceil( ($("#to_period").datepicker('getDate') - $("#from_period").datepicker('getDate')) / (1000 * 60 * 60 * 24) ) + 1;
-            //console.log(diffe);
 
             if(diffe < 7){
                 $("#weeks").prop('disabled', true);
@@ -367,9 +365,6 @@
     }
 
     function fetchData(parent, action) {
-//        var from = "";
-//        var to = "";
-//        if( ($("#from_period").val()) && ($("#to_period").val()) ) {
         var f = $("#from_period").val().split('/');
         var t = $("#to_period").val().split('/');
 
@@ -378,9 +373,6 @@
 
         var from = dfrom.toISOString().split('T')[0];
         var to = dto.toISOString().split('T')[0];
-
-        console.log(" "+ from +" "+ to);
-//        }
 
         var stat_path = $('.stat_path').val() || $('#src').val(); //url do tema
         var c_id = $('.get_collection_stats').val() || null; //id da coleção ?!
@@ -401,11 +393,8 @@
             url: stat_path + '/controllers/log/log_controller.php', type: 'POST',
             data: { operation: 'user_events', parent: parent, event: action, from: from, to: to, collec_id: c_id, filter: filter }
         }).done(function(resp) {
-        console.log("Done: " + resp);
 
             var res_json = JSON.parse(resp);
-            console.log("Res: "+ res_json);
-
             var chart = $('.selected_chart_type').val(); //tipo de chart selecionado
             $(".current_parent_report").val(parent); //nome do parent atual 'ex: Users'
 
@@ -425,7 +414,6 @@
     //Verify if element exist
     function existIn(array_n, rows){
         for(h in rows){
-            //console.log("Aa: "+ h +" aa: "+ rows);
             if(array_n[1] == rows[Number(h)][0]){
                 return [false, Number(h)];
             }
@@ -434,7 +422,6 @@
     }
 
     function drawChart(chart_type, title, data_obj, filter) {
-        console.log(data_obj); // Show data object
         if(data_obj) {
             var tai_chart = new TainacanChart(); // New instance of TainacanChart
             var csvData = []; // The Array to create CSV file
@@ -467,30 +454,22 @@
 
                 // Show in statistics page footer with stats and totals
                 tai_chart.displayFixedBase();
-                
-                // This if is not used
-                    // Where the magic happens!
 
                     var rows = [[]]; // Array that contains rows of DataTable
                     var flag = ''; // Var that contains name of actual event
                     var cole_flag = 0;
                     
                     rows[0] = ['-'];
-                    
-                    //console.log('Rows created: '+ rows);
+
                     for( j in data_obj.stat_object ) {
                         var array_n = data_obj.stat_object[j]; // Array that contains the actual array from stat_object
                         var le2 = columnsData.length; // Var that contains total of events
-                        //console.log("Array actual 1: "+ array_n);
 
                         // If has value in first array
-                        if(rows[0][0]){
-                            //console.log("rows a 1: "+ rows);
+                        if(rows[0][0]) {
                             // If date is equal to date of an existing element and array exist
                             var temp  = existIn(array_n, rows);
-                              //console.log("temp: "+ temp);
                             var el = rows[Number(temp[1])]; // Var that contains actual array from rows
-                             // console.log("rows aa 1: "+ el);
 
                             if(temp[0] == false){ 
                                 for(x in columnsData){
@@ -500,7 +479,6 @@
                                         break;
                                     }
                                 }
-                                //console.log("rows a 2: "+ rows);
                                 el[indCol] = array_n[2]; // the actual receive total of expecifc event
                                 
                                 for(var g = 0; g <= le2; g++){
@@ -510,13 +488,10 @@
                                 }
 
                                 rows[Number(temp[1])] = el; // The existing array is changed
-                                //console.log("rows a 3: "+ rows);
                             }
                               // Array with same date doesn't exist
                             else {
-                                //console.log("rows 1: "+ rows);
                                 rows.push([]);
-                                //console.log("rows 2: "+ rows);
                                 for(z in columnsData){
                                 //If event is equal to event in existing element
                                     if(columnsData[Number(z)] == array_n[0]){ 
@@ -524,14 +499,11 @@
                                         break;
                                     }
                                 }
-                                //console.log("rows 3: "+ rows);
                                 var le = rows.length-1; // Var that contains the total of rows
                                  
                                  
                                 rows[le][0] = array_n[1]; // Add new date to array
-                                //console.log("rows 4: "+ rows);
                                 rows[le][indColu] = array_n[2]; // Add new value to array
-                                //console.log("rows 5: "+ rows);
                                  
                                 // Add zero in black array position
                                 for(var g = 0; g <= le2; g++){
@@ -539,12 +511,10 @@
                                         rows[le][g] = 0;
                                     }
                                 }
-                                //console.log("rows 6: "+ rows);
                                 //remove the empty initial element
                                 if(rows[0][0] == '-'){
                                     rows.splice(0,1); 
                                 }
-                                //console.log("rows 7: "+ rows);
                             }
                         }
 
@@ -554,7 +524,6 @@
                            flag = array_n[0];
                            
                            var curr_evt_title = tai_chart.getMappedTitles()[flag] ? tai_chart.getMappedTitles()[flag] : flag;
-                           //console.log(flag);
                            if(title == 'top_collections'){
                                if (cole_flag == 0){
                                    tai_chart.appendQualityBase();
@@ -575,9 +544,7 @@
                            }
                         }
                     } // end of for
-                    //console.log("before: "+ rows);
-                    rows.sort(); 
-                    //console.log("after: "+ rows);
+                    rows.sort();
                     chart_data.addRows(rows);
             } 
             else if(!data_obj.stat_object[0]){
@@ -597,7 +564,6 @@
 
     function renderChart(current_title, type, stat_data) {
        // var color = chart_color || '#79a6ce';
-       // console.log('#1 stat_data: '+ JSON.stringify(stat_data) +'\n'+ 'type: '+ type);
         // Google Charts objects
         if( type == 'pie' ) {
             var piechart = new google.visualization.PieChart(document.getElementById('piechart_div'));
@@ -655,9 +621,6 @@
             default_chart.draw(stat_data, defaOptions);
         }
         else if( type == 'curveline'){
-            //var tessst = $.parseJSON(stat_data);
-            //console.log('#2 stat_data: '+ tessst +'\n'+ 'type: '+ type);
-
             var linechart = new google.visualization.LineChart(document.getElementById('curvelinechart_div'));
             var curveOptions = {
                 curveType: 'function',
@@ -667,8 +630,6 @@
                 tooltip: {trigger: 'selection'},
                 aggregationTarget: 'category'
             };
-
-            //console.log('#2 data: '+ tessst +'\n'+ 'type: '+ type +'\n'+ linechart +'\n'+ curveOptions);
 
             google.visualization.events.addListener(linechart, 'ready', function(){
                 var chart_png = linechart.getImageURI();

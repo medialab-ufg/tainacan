@@ -414,7 +414,6 @@ $(window).load(function () {
             contentType: false
         }).done(function (result) {
             $('#modalImportMain').modal('hide');//esconde o modal de carregamento
-            console.log(' value of category page is ' + $('#category_page').val());
             if ($('#category_page').val() !== '') {
                 showPageCategories($('#category_page').val(), src);
             }
@@ -522,7 +521,6 @@ $(window).load(function () {
         }).done(function (result) {
             $('#modalImportMain').modal('hide');//esconde o modal de carregamento
             elem = jQuery.parseJSON(result);
-            console.log(elem);
             if (elem.result === '1') {
                 confirm_success_register_user(elem.title, elem.msg, elem.url);
             } else {
@@ -737,7 +735,6 @@ function show_modal_edit_category(title, key) {
         data: {category_id: key, operation: 'get_metas'}
     }).done(function (result) {
         elem = jQuery.parseJSON(result);
-        // console.log(elem);
         if (elem.term.description) {
             $("#category_edit_description").val(elem.term.description);
         }
@@ -872,7 +869,6 @@ function populateList(src) {
         type: 'POST',
         data: {operation: 'list'}
     }).done(function (result) {
-        console.log(result);
         obj = jQuery.parseJSON(result);
         $.each(obj, function (idx, elem) {
             elem = jQuery.parseJSON(elem);
@@ -928,11 +924,9 @@ function showListMyCollections(src) {
     }).done(function (result) {
         $('#hideTrash').hide();
         elem = jQuery.parseJSON(result);
-        //console.log(elem,result);
         $('#loader_objects').hide();
-        $('#list').html(elem.page);
         $('#wp_query_args').val(elem.args);
-        $('#list').show();
+
         if (elem.empty_collection) {
             $('#collection_empty').show();
             $('#items_not_found').hide();
@@ -953,11 +947,9 @@ function showListSharedCollections(src) {
     }).done(function (result) {
         $('#hideTrash').hide();
         elem = jQuery.parseJSON(result);
-        //console.log(elem,result);
         $('#loader_objects').hide();
-        $('#list').html(elem.page);
         $('#wp_query_args').val(elem.args);
-        $('#list').show();
+        $('#list').html(elem.page).show();
         if (elem.empty_collection) {
             $('#collection_empty').show();
             $('#items_not_found').hide();
@@ -1164,10 +1156,7 @@ function showDynatreeSingleEdit(src) {
             });
         },
         init: function (event, data, flag) {
-            console.log(event, data, "flag=" + flag);
         }, onCreate: function (node, span) {
-            //bindContextMenuSingle(span);
-            //$('.dropdown-toggle').dropdown();
             var categories = $('#category_synonyms').val().split(',');
             if (categories > 0 && categories.indexOf(node.data.key) >= 0) {
                 node.select(true);
@@ -1515,8 +1504,6 @@ function get_categories_properties_ordenation() {
     }).done(function (result) {
         //$("#collection_single_ordenation").html('');
         elem = jQuery.parseJSON(result);
-
-        // console.log(result);
         if (elem.property_data) {
             // list_main_ordenation(true);
             $("#collection_single_ordenation").append("<optgroup id='category_property_label' label='" + elem.names.data_property + "'>");
@@ -1809,7 +1796,6 @@ function createItemPage(src) {
 
 //PARA CATEGORIAS
 function showPageCategories(slug_category, src) {
-    // console.log('I am here');
     $("#menu_object").hide();
     $("#category_page").val(slug_category);
     $("#container_socialdb").hide('slow');
@@ -1823,10 +1809,8 @@ function showPageCategories(slug_category, src) {
         hide_modal_main();
         json = JSON.parse(result);
         if (json.html) {
-            // console.log('show the page of '+slug_category);
             $("#loader_objects").hide();
-            $("#form").html(json.html);
-            $('#form').show('slow');
+            $("#form").html(json.html).show('slow');
             // $('#create_button').hide();
         } else {
             $("#menu_object").show();
@@ -2230,7 +2214,6 @@ function insert_object_url(url, classifications) {
     $('#loading').fadeIn(1000);
     $('#loading').fadeTo("slow", 0.8);
     $.getJSON(ajaxurl, {}, function (json) {
-        console.log(json);
         var description = '', title = '';
         if (json.title !== undefined && json.title != null && json.title != false) {
             title = json.title;
@@ -2347,7 +2330,6 @@ function insert_object_url(url, classifications) {
         $('#modal_import_objet_url').modal('show');
 
     }).fail(function (result) {
-        // console.log('error', result, url);
         $('#loading').hide();
         showAlertGeneral('Atenção', 'URL inexistente ou indisponível', 'error');
     });
@@ -2436,7 +2418,6 @@ function restoreHeader() {
 }
 
 function setAdminHeader(root_id, col_id) {
-    // cl('__setAdminHeader__');
     var ibram_active = $('.ibram_menu_active').val();
     if(ibram_active && ibram_active == true.toString()) {
         $('#collection_post').show();
@@ -2455,7 +2436,6 @@ function setAdminHeader(root_id, col_id) {
 }
 
 function resetHomeStyleSettings() {
-    //cl('Entering _resetHomeStyleSettings');
     $('ul.menu-ibram').hide();
     $('.ibram-home-container').hide();
 
@@ -2570,7 +2550,6 @@ function bytesToSize(bytes) {
 // apenas numeros no input
 function onlyNumbers(e) {
     var tecla = (window.event) ? event.keyCode : e.which;
-    console.log(tecla);
     if ((tecla > 47 && tecla < 58))
         return true;
     else {
@@ -2633,7 +2612,6 @@ function display_view_main_page() {
 // FACEBOOK METHODS
 function graphStreamPublish(message, link, picture, name, description) {
     //showLoader(true);
-    console.log(FB);
     FB.api('/me/feed', 'post',
             {
                 message: message,
@@ -2645,7 +2623,6 @@ function graphStreamPublish(message, link, picture, name, description) {
             },
     function (response) {
         //showLoader(false);
-        console.log(response);
         if (!response || response.error) {
             alert('Error occured');
         } else {

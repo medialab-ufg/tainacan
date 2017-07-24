@@ -327,7 +327,6 @@ function ontologyBindContextMenu(span) {
             // The event was bound to the <span> tag, but the node object
             // is stored in the parent <li> tag
             var node = $.ui.dynatree.getNode(el);
-            console.log(node.data.key);
             switch (action) {
                 case "equivalentclassAdd":
                     ontology_insert_category(node.data.key,node.data.title,'equivalentclass');
@@ -351,7 +350,6 @@ function ontologyBindContextMenu(span) {
 function ontology_insert_category(id,name,type){
     var html = '<span id="'+type+'_'+id+'" style="margin:4px;padding:2px;background:#73AD21;color:white;">'+name+'<a style="color:white;" onclick="ontology_remove_category('+"'"+id+"'"+','+"'"+name+"'"+','+"'"+type+"'"+')"><span class="glyphicon glyphicon-remove"></span></a></div>';
     var values =  $('#add_'+type+'_ids').val().split(',');
-    console.log(id,name,type);
     if(!values||values.indexOf(id)<0){
         if(!values){
            values = []; 
@@ -512,17 +510,14 @@ function initDynatrees(src){
             selectMode: 1,
             children: json_propriedades,
             onSelect: function (flag, node) {
-               
                 //equivalent properties
-                console.log(node);
-                    $('#data_socialdb_property_parent').val(node.data.key);
+                $('#data_socialdb_property_parent').val(node.data.key);
             }
         });
     });
 }
 
 function set_fields_edit_property_data(elem){
-    console.log(elem);
     //toggleSlide('submit_form_property_data','list_properties_data');
     $('#socialdb_property_data_description').val(elem.description);
     if(elem.parent!==0){
@@ -689,10 +684,8 @@ function initDynatreesObject(src){
             selectMode: 1,
             children: json_propriedades,
             onSelect: function (flag, node) {
-               
                 //equivalent properties
-                console.log(node);
-                    $('#object_socialdb_property_parent').val(node.data.key);
+                $('#object_socialdb_property_parent').val(node.data.key);
             }
         });
     });
@@ -771,7 +764,6 @@ function initDynatreesObjectRestriction(src){
 }
 
 function set_fields_edit_property_object(elem){
-    console.log(elem);
    // toggleSlide('submit_form_property_object','list_properties_object');
     $('#socialdb_property_object_description').val(elem.description);
     if(elem.parent!==0){

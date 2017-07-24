@@ -142,7 +142,6 @@
               $("#center_pagination").hide();
 
           } catch(err) {
-              console.log(err);
           }
 
           total_map_markers = 1;

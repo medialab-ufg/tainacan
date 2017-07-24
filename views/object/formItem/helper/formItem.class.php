@@ -718,7 +718,6 @@ class FormItem extends Model {
     public function initScripts() {
         ?>
         <script>
-            console.log(' -- Begin execution - Form item');
             $('input ,select').focus(function(){
                 showChangesUpdate();
             });
@@ -808,7 +807,6 @@ class FormItem extends Model {
                             // pego o id do atual que sera utilizado para buscar a aba
                             // caso nao seja encontrado nenhum composto preenchido
                             var key = $(this).parent().attr('id');
-                            //console.log($(this).attr('property'),$(this).attr('compound'));
                             //mostro a mensagem do proprio metadado
                             if($(this).parent().parent().find('p .alert-compound-'+$(this).attr('property')).length>0)
                                 $(this).parent().parent().find('p .alert-compound-'+$(this).attr('property')).show();
@@ -1016,7 +1014,6 @@ class FormItem extends Model {
                         }
                     }, 2000);
                     //mostro a mensagem do proprio metadado
-                    console.log( $('#validation-'+compound_id+'-'+property_id+'-'+index_id).parent().parent().find('p .alert-compound-'+property_id));
                     if( $('#validation-'+compound_id+'-'+property_id+'-'+index_id).parent().parent().find('p .alert-compound-'+property_id).length>0)
                          $('#validation-'+compound_id+'-'+property_id+'-'+index_id).parent().parent().find('p .alert-compound-'+property_id).hide();
                     else
@@ -1049,7 +1046,6 @@ class FormItem extends Model {
                       }
                   }, 2000);
                   //mostro a mensagem do proprio metadado
-                    console.log( $('#validation-'+compound_id+'-'+property_id+'-'+index_id).parent().parent().find('p .alert-compound-'+property_id));
                     if( $('#validation-'+compound_id+'-'+property_id+'-'+index_id).parent().parent().find('p .alert-compound-'+property_id).length>0)
                          $('#validation-'+compound_id+'-'+property_id+'-'+index_id).parent().parent().find('p .alert-compound-'+property_id).hide();
                     else

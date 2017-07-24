@@ -212,7 +212,6 @@
     }
     // checkboxes
     function pc_list_checkboxes(checkboxes,categories) {
-        console.log('pc loading checkboxes',checkboxes);
         if (checkboxes) {
             $.each(checkboxes, function (idx, checkbox) {
                 addLabelViewPage(checkbox,categories);

@@ -122,7 +122,6 @@
                     }
                 });
             }
-            //console.log(elem.rankings);
             if (elem.rankings) {
                 $("#collection_order").append("<optgroup label='<?php _e('Rankings', 'tainacan') ?>'>");
                 $.each(elem.rankings, function (idx, ranking) {
@@ -296,7 +295,6 @@
             }
             data.img_url = $(cropped).attr('src');
         }
-        console.log(data);
         $.ajax({ url: $('#src').val() + '/controllers/collection/collection_controller.php', type: 'POST', data: data });
     };
 

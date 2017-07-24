@@ -338,7 +338,6 @@ class FormItemMultiple extends Model {
     public function initScripts() {
         ?>
         <script>
-            console.log(' -- Begin execution - Form item Multiple');
             hide_modal_main();
             Hook.clearActions('get_single_item_value');
             Hook.clearActions('get_multiple_item_value');

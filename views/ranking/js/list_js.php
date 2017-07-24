@@ -98,7 +98,6 @@
             data: {collection_id: $('#collection_list_ranking_id').val(), operation: 'list_ranking'}
         }).done(function (result) {
             elem = jQuery.parseJSON(result);
-            cl(elem);
             if (elem.no_properties !== true) {
                 $('#no_properties_object').hide();
                 $('#table_ranking').html('');

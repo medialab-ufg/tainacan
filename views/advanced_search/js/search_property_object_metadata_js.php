@@ -97,7 +97,6 @@
                             },
                             minLength: 2,
                             select: function (event, ui) {
-                                console.log(event);
                                 $("#property_object_search_submit_<?php echo $property['id'] ?> #autocomplete_value_" + property_id).val('');
                                 //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
                                 var temp = $("#property_value_" + property_id).val();
@@ -299,7 +298,6 @@
     // tree
     function search_list_tree(trees) {
         if (trees) {
-            console.log(trees);
             $.each(trees, function (idx, tree) {
                 $("#property_object_search_submit_<?php echo $property['id'] ?> #search_field_property_term_"+tree).dynatree({
                     checkbox: true,
@@ -385,7 +383,6 @@
                 type: 'POST',
                 data: { operation: 'get_categories_properties',properties_to_avoid:$('#properties_id_avoid').val(),categories: id,property_searched_id:property_id}
             }).done(function (result) {
-                console.log('carregando metadados da propriedade',property_id);
                 hide_modal_main();
                 //list_all_objects(selKeys.join(", "), $("#collection_id").val());
                 $('#property_object_search_submit_<?php echo $property['id'] ?> #append_properties_categories_'+property_id+'_adv').html(result);

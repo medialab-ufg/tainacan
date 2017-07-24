@@ -432,53 +432,6 @@
             $('.nav-tabs').tab();
         });
     }
-//
-    function submit_comment_old() {
-        $.ajax({
-            type: "POST",
-            url: '<?php echo get_option('siteurl'); ?>/wp-comments-post.php',
-            data: {
-                comment_post_ID: $('#single_object_id').val(),
-                comment: $('#comment').val(),
-                author: $('#author').val(),
-                email: $('#email').val(),
-                url: $('#url').val(),
-                redirect_to: $('#redirect_to').val()}
-        }).done(function (result) {
-            console.log(result);
-            list_comments($('#single_object_id').val());
-            $('.dropdown-toggle').dropdown();
-            $('.nav-tabs').tab();
-        });
-    }
-
-
-    function submit_comment_reply_old() {
-        $.ajax({
-            type: "POST",
-            url: '<?php echo get_option('siteurl'); ?>/wp-comments-post.php',
-            data: {
-                socialdb_event_user_id: $('#current_user_id').val(),
-                comment_post_ID: $('#single_object_id').val(),
-                comment: $('#comment_msg_reply').val(),
-                author: $('#author_reply').val(),
-                email: $('#email_reply').val(),
-                url: $('#url_reply').val(),
-                redirect_to: $('#redirect_to').val(),
-                comment_parent: $('#comment_id').val()
-            }
-        }).done(function (result) {
-            list_comments($('#single_object_id').val());
-            $('.dropdown-toggle').dropdown();
-            $('.nav-tabs').tab();
-            $('#modalReplyComment').modal("hide");
-            showAlertGeneral('<?php _e('Success', 'tainacan'); ?>', '<?php _e('Reply successfully sent.', 'tainacan'); ?>', 'success');
-            $('html, body').animate({
-                scrollTop: $("#comments").offset().top
-            }, 2000);
-        });
-    }
-
 
     /******************************* Metadados Fixos *******************************/
     // back title
@@ -630,7 +583,6 @@
                 add_tag_item(object_id, elem.term_id);
             } else {
                 $('#modalImportMain').modal('hide');//mostro o modal de carregamento
-                console.log(elem);
                 showAlertGeneral(elem.title, '<?php _e('This tag was sent for approval, the classification will be able after this operation!', 'tainacan') ?>', elem.type);
             }
 

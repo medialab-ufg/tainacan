@@ -168,7 +168,6 @@
     }
     //funcao responsavel em listar as abas nos selects
     function list_tabs(){
-        //console.log('list-tabs');
         $.ajax({
             url: $('#src').val() + '/controllers/collection/collection_controller.php',
             type: 'POST',
@@ -227,7 +226,6 @@
                      tab = $(el).attr('tab');
                      data.push(p);
                 });
-                console.log(tab);
                 $.ajax({
                      type: "POST",
                      url: $('#src').val() + "/controllers/collection/collection_controller.php",

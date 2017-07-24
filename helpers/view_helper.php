@@ -582,7 +582,6 @@ class ViewHelper {
                                 $('#properties_target').append('<input type="checkbox" '+is_checked_title+' value="'+json.title.id+'" onchange="setValuesTargetProperties()" class="target_values">&nbsp;'+json.title.labels.join('/')+'<br>');
                             $.each(json.properties,function(index,property){
                                 var is_checked = '';
-                                //console.log($('#properties_to_search_in').val().split(',').indexOf(property.id),$('#properties_to_search_in').val().split(','),property.id);
                                 if($('#properties_to_search_in').val().split(',').indexOf(property.id.toString())>=0){
                                     is_checked = 'checked="checked"'
                                 }

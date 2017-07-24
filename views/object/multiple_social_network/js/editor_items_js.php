@@ -488,7 +488,6 @@
             var dataProperties = $("#multiple_properties_data_id").val().split(',').filter(function (v) {
                 return v !== ''
             });
-            console.log($("#multiple_properties_data_id").val());
             for (var i = 0; i < dataProperties.length; i++) {
                 $('.multiple_socialdb_property_' + dataProperties[i]).each(function(index,value){
                     $(this).val('');
@@ -791,7 +790,6 @@
     // FIM: AO SELECIONAR ITEMS
     // coloca o titulo para todos os items selecionados
     function setTitle(title) {
-        console.log($(title).val());
         $.each($("input:checkbox[name='selected_items']:checked"), function () {
             $("#title_" + $(this).val()).val($(title).val());
         });
@@ -827,7 +825,6 @@
     // coloca a fonte para todos os items selecionados
     function setSource(source) {
         var counter = 0;
-        console.log(source);
         if ($(source).val() != '') {
             $.each($("input:checkbox[name='selected_items']:checked"), function () {
                 counter++;
@@ -1068,7 +1065,6 @@
      * @returns {undefined}
      */
     function multiple_autocomplete_property_data(properties_autocomplete) {
-        console.log(properties_autocomplete);
          if (properties_autocomplete) {
             $.each(properties_autocomplete, function (idx, property_id) {
                         $("#multiple_socialdb_property_" + property_id).autocomplete({
@@ -1126,7 +1122,6 @@
     }
 
     function clear_select_object_property(e, property_id) {
-        console.log($(e).val());
         removePropertyObject($(e).val(), property_id);
         $('option:selected', e).remove();
         //$('.chosen-selected2 option').prop('selected', 'selected');
@@ -1503,7 +1498,6 @@
         stop: function () {
             $(".ui-selected", this).each(function () {
                 var id = this.id;
-                console.log(id.replace('panel_', ''));
                 focusItem(id.replace('panel_', ''));
             });
         }

@@ -370,7 +370,6 @@
                                     id = $('#global_tag_id').val();
                                 }
                                 var current_prop = getPropertyType(el.prop);
-                                //console.log(el,(el.prop == null) , !isNaN(el.id) , $('.term-root-'+el.id).attr('id'));
                                 var item_html = '<li id="' + id + '" data-widget="' + el.widget + '" class="form-group metadata-facet filter-' + el.id + '">' +
                                     '<label class="title-pipe">&nbsp;&nbsp;&nbsp;&nbsp;' + el.nome + '<div class="pull-right"><a class="edit-filter"><span class="glyphicon glyphicon-sort sort-filter"></span></a>';
 
@@ -442,7 +441,6 @@
         var arrFacets = [];
         var facet_priority = tableID + " .facet-priority";
         $(facet_priority).each(function (idx, el) {
-            console.log( $(el).text() );
             count = $(this).parent().children().index($(this)) + 1;
             var input_id = $(this).find("input[class='find_facet']").attr('id') + '';
             if (input_id != 'undefined') {
@@ -593,7 +591,6 @@
             data: {collection_id: $("#collection_id").val(), operation: 'edit_property_data', property_id: id}
         }).done(function (result) {
             elem = jQuery.parseJSON(result);
-            console.log(elem);
             if (elem)
             {
                 var current_filters = $("#filters-accordion li"),
@@ -797,7 +794,6 @@
                     if(isCompounded){
                         return true;
                     }
-                    //console.log(JSON.stringify(property));
 
                     var current_id = property.id,
                         current_search_widget = property.search_widget,
@@ -1254,7 +1250,6 @@
 //                $("#property_object_category_id").val(related_collection);
 //            }
             if(elem.metas.socialdb_property_object_category_id.constructor === Array){
-               //  console.log('first');
                 if($("#property_category_dynatree")){
                        $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
                                node.select(false);
@@ -1273,7 +1268,6 @@
                        });
                 }
             }else if(elem.metas.socialdb_property_object_category_id){
-               //  console.log('second');
                  if($("#property_category_dynatree")){
                        $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
                                node.select(false);
@@ -1620,7 +1614,6 @@
                 elem = jQuery.parseJSON(result);
                 add_label_box_term(elem.term.term_id, elem.term.name, '#selected_categories_term');
                 $("#socialdb_property_term_root").val(elem.term.term_id);
-                // console.log(elem);
             });
         }
 
@@ -1848,7 +1841,7 @@
             url: src + "/controllers/search/search_controller.php",
             data: { operation: 'get_menu_ids' }
         }).error(function() {
-            cl('<?php _e("Something went wrong. Try again later.", "tainacan") ?>');
+
         }).done(function(result) {
             var menu_item = $.parseJSON(result);
 
@@ -1952,7 +1945,6 @@
                 data: { operation: 'get_ordenation_properties',collection_id:$('#collection_id').val() }
             }).done(function(result) {
                 var json = $.parseJSON(result);
-                //console.log(json.ordenation);
                 if(json && json.ordenation && json.ordenation.default){
                     reorder_properties(json.ordenation.default.split(','));
                 }
@@ -2272,7 +2264,6 @@
 
     //limpando os formularios ao abrir o modal
     function clear_form(type){
-        //console.log(type);
         if(type=='metadata_compound'){
             initDynatreeFilterProperties(src);
             $('#compound_id').val('');
@@ -2384,7 +2375,6 @@
      * @param {type} seletor
      * @returns {undefined}     */
     function toggle_advanced_configuration(seletor) {
-        console.log(seletor);
         if ($(seletor).is(':visible')) {
             $(seletor).slideUp();
         } else {

@@ -54,7 +54,6 @@
                 $('#maping_container').html(result);
 
             }).fail(function (jqXHR, textStatus, errorThrown) {
-                console.log('erro');
                 $('#loader_validacao').hide();
                 $('#validate_url_container').show('slow');
                 showAlertGeneral('<?php _e('Atention', 'tainacan') ?>', '<?php _e('Server not found or not available', 'tainacan') ?>', '<?php _e('error') ?>');
@@ -87,7 +86,6 @@
                 $('#maping_container_metatags').html(result);
 
             }).fail(function (jqXHR, textStatus, errorThrown) {
-                console.log('erro');
                 $('#loader_validacao_metatags').hide();
                 $('#validate_url_container').show('slow');
                 showAlertGeneral('<?php _e('Atention', 'tainacan') ?>', '<?php _e('Server not found or not available', 'tainacan') ?>', '<?php _e('error') ?>');
@@ -240,7 +238,6 @@
             showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Mapping', 'tainacan') ?> ' + is_harvesting + ' successfuly', '<?php _e('success') ?>');
 
         }).fail(function (jqXHR, textStatus, errorThrown) {
-            console.log('erro');
             $('#loader_validacao').hide();
             showAlertGeneral('<?php _e('Atention', 'tainacan') ?>', '<?php _e('Server not found or not available', 'tainacan') ?>', '<?php _e('error') ?>');
         });
@@ -267,14 +264,12 @@
                     mapping_id: mapping_id
                 }
             }).done(function (result) {
-                console.log('success');
                 $('#loader_validacao').hide('slow');
                 $('#maping_container').html(result);
                 $('#maping_container').show();
                 $('#url_base_oai').attr("disable");
 
             }).fail(function (jqXHR, textStatus, errorThrown) {
-                console.log('erro');
                 $('#loader_validacao').hide();
                 showAlertGeneral('<?php _e('Atention', 'tainacan') ?>', '<?php _e('Server not found or not available', 'tainacan') ?>', '<?php _e('error') ?>');
             });
@@ -294,14 +289,12 @@
                 operation: 'edit_mapping_oaipmh_default'
             }
         }).done(function (result) {
-            console.log('success');
             $('#loader_validacao').hide('slow');
             $('#maping_container').html(result);
             $('#maping_container').show();
             $('#url_base_oai').attr("disable");
 
         }).fail(function (jqXHR, textStatus, errorThrown) {
-            console.log('erro');
             $('#loader_validacao').hide();
             showAlertGeneral('<?php _e('Atention', 'tainacan') ?>', '<?php _e('Server not found or not available', 'tainacan') ?>', '<?php _e('error') ?>');
         });
@@ -330,7 +323,6 @@
             $('#maping_container_metatags').show();
 
         }).fail(function (jqXHR, textStatus, errorThrown) {
-            console.log('erro');
             $('#loader_validacao').hide();
             showAlertGeneral('<?php _e('Atention', 'tainacan') ?>', '<?php _e('Server not found or not available', 'tainacan') ?>', '<?php _e('error') ?>');
         });

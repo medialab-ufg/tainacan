@@ -3,7 +3,6 @@
         //event_single_list_properties_term_insert_objects();
     });
     function event_single_list_properties_term_insert_objects() {
-       console.log('list_single_propreties'); 
        var categories = edit_get_val($("#edit_object_categories_id").val());
         var radios = edit_get_val($("#properties_terms_radio").val());
         var selectboxes = edit_get_val($("#properties_terms_selectbox").val());

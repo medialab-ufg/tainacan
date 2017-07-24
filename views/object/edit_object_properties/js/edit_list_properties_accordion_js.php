@@ -150,7 +150,6 @@
                                     var contador = false;
                                     if(ui.content && ui.content.length>0 && $('.form_autocomplete_value_'+property_id+'_mask').val()!==''){
                                        $.each(ui.content,function(index,value){
-                                           console.log( value.item_id , $('#object_id_edit').val())
                                            if(($(event.target).val()==value.value || $(event.target).val().toLowerCase().trim()==value.value.toLowerCase().trim()) && value.item_id != $('#object_id_edit').val()){
                                                contador++;
                                            }else if(($(event.target).val()==value.value || $(event.target).val().toLowerCase().trim()==value.value.toLowerCase().trim()) && value.item_id == $('#object_id_edit').val()){
@@ -606,7 +605,6 @@
                 type: 'POST',
                 data: { <?php echo ($is_view_mode) ? 'is_view_mode:true,' : '' ?>operation: 'list_properties_categories_accordeon',properties_to_avoid:$('#properties_id').val(),categories: id, object_id:$('#object_id_edit').val(),isEdit:true}
             }).done(function (result) {
-                console.log('568');
                 //hide_modal_main();
                 //list_all_objects(selKeys.join(", "), $("#collection_id").val());
                $('#append_properties_categories_'+property_id).html(result);
@@ -675,7 +673,6 @@
                            return false; // Cancels the default action
                        }
                    });
-                    console.log($('#meta-item-'+property_id+' h2'),'#meta-item-'+property_id+' h2')
         }
          $('[data-toggle="tooltip"]').tooltip();
     }

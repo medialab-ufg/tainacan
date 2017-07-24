@@ -27,19 +27,6 @@
         $('input[name=qualifier_'+id).val('');
         
      }
-   // function saving_data(collection_id,data){
-     //   $.ajax({
-      //      dataType: "json",
-     //       type: "POST",
-     //       url: $('#src').val() + "/controllers/import/import_controller.php",
-     //       data: {
-     //           collection_id: collection_id,
-       //         all_data:data,
-      //          form: $("#form_import").serialize(),
-      //          operation: 'saving_data'}
-      //  }).done(function (result) {
-      //      console.log(result);
-      //  });    
-   // }
+
     
 </script>

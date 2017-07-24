@@ -90,7 +90,6 @@ class TextClass extends FormItemMultiple{
                 <?php if($this->isRequired):  ?>
                     validateFieldsMetadataText($(this).val().trim(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>')
                 <?php endif; ?>
-                    console.log($('#item-multiple-selected').val());
                 $.ajax({
                     url: $('#src').val() + '/controllers/object/form_item_controller.php',
                     type: 'POST',
@@ -142,7 +141,6 @@ class TextClass extends FormItemMultiple{
             });
             
             function getNextValue(item,index){
-                console.log()
                 if($('.js-append-property-<?php echo $compound_id ?>').length>0){
                     if(!$('#text-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-'+index).is(':visible'))
                         $('.js-append-property-<?php echo $compound_id ?>').trigger('click');

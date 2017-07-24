@@ -131,7 +131,6 @@
             showAlertGeneral('<?php _e('Attention','tainacan') ?>', '<?php _e('Please, there are emtpy fields','tainacan') ?>', 'info');
             return false;
         }
-    console.log('3');
         $.ajax({
             url: $("#src").val() + '/controllers/theme_options/theme_options_controller.php',
             type: 'POST',

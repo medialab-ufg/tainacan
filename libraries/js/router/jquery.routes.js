@@ -229,8 +229,7 @@
     {
 
         var dataList = [];
-        
-       // console.log("ROUTES:");
+
 
         for(var i = 0, ii = routeList.length; i < ii; i++)
         {

@@ -259,7 +259,6 @@
                 if (elem.no_properties === false) {
                     $('#property_object_reverse').html('<option value=""><?php _e('None','tainacan') ?></option>');
                     $.each(elem.property_object, function (idx, property) {
-                        //console.log(property.id,selected);
                         if (property.id == selected) {
                             $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
                         } else {
@@ -325,9 +324,7 @@
             $("#property_object_id").val(elem.id);
             $("#property_object_name").val(elem.name);
             //relacionamento da propriedade de objeto
-            //console.log(elem.metas.socialdb_property_object_category_id.constructor ===Array);
             if(elem.metas.socialdb_property_object_category_id && elem.metas.socialdb_property_object_category_id.constructor === Array){
-               //  console.log('first');
                 if($("#property_category_dynatree")){
                        $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
                                node.select(false);
@@ -345,7 +342,6 @@
                        });
                 }
             }else if(elem.metas.socialdb_property_object_category_id){
-               //  console.log('second');
                  if($("#property_category_dynatree")){
                        $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
                                node.select(false);
@@ -535,8 +531,6 @@
                 <?php if(has_action('javascript_onselect_relationship_dynatree_property_object')): ?>
                     <?php do_action('javascript_onselect_relationship_dynatree_property_object') ?>
                 <?php endif; ?>
-                    
-                console.log($('#property_object_category_id').val());
             }
         });
     }
@@ -609,7 +603,6 @@
         }).done(function (result) {
              $('#loader_object').hide();
             elem = jQuery.parseJSON(result);
-            console.log(elem);
             if (elem.no_properties !== true) {
                 $('#no_properties_object').hide();
                 $('#list_properties_object').show();
@@ -787,7 +780,6 @@
                     url: $('#src').val() + "/controllers/category/category_controller.php",
                     data: {collection_id: $('#collection_id').val(), operation: 'verify_has_children', category_id: node.data.key}
                 }).done(function (result) {
-                    console.log($("#socialdb_property_term_root").val());
                     $('.dropdown-toggle').dropdown();
                     elem_first = jQuery.parseJSON(result);
                     if (elem_first.type === 'error') {
@@ -892,10 +884,8 @@
                     type:type
                   },
                   success: function( data ) {
-                    console.log(data);
                     response( data );
                   },error: function (qXHR,textStatus,errorThrown){
-                      console.log(qXHR,textStatus,errorThrown);
                   }
                 });
             },

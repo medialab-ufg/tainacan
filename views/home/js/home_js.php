@@ -40,7 +40,6 @@ $('.carousel-home-ajax').slick( getSlickSettings() );
           data: { operation: 'load_item_type', item_type: type },
           complete: ajax_carousel,
           error: function (jqXHR, textStatus, errorThrown) {
-              console.log(textStatus + " in JSON data " + errorThrown + " " + jqXHR)
           }
       }).done( function(result) {
           var element = JSON.parse(result);

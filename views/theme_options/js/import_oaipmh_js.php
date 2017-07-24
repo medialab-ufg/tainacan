@@ -63,7 +63,6 @@
                 $('#maping_container_repository').html(result);
 
             }).fail(function (jqXHR, textStatus, errorThrown) {
-                //console.log('erro');
                 $('#loader_validacao').hide();
                 $('#validate_url_container').show('slow');
                 showAlertGeneral('<?php _e('Atention', 'tainacan') ?>', '<?php _e('Server not found or not available', 'tainacan') ?>', '<?php _e('error') ?>');
@@ -99,7 +98,6 @@
             showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Mapping', 'tainacan') ?> ' + is_harvesting + ' successfuly', '<?php _e('success') ?>');
 
         }).fail(function (jqXHR, textStatus, errorThrown) {
-            console.log('erro');
             $('#loader_validacao').hide();
             showAlertGeneral('<?php _e('Atention', 'tainacan') ?>', '<?php _e('Server not found or not available', 'tainacan') ?>', '<?php _e('error') ?>');
         });

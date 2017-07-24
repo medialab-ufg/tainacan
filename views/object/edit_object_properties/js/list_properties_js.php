@@ -314,7 +314,6 @@
                     onClick: function (node, event) {
                         // Close menu on click
                          var key = node.data.key;
-                         console.log(key,key.search('moreoptions')<0&&key.search('alphabet')<0,tree,$("#socialdb_propertyterm_"+tree));
                         if(key.search('moreoptions')<0&&key.search('alphabet')<0){
                             delete_value(node.data.key);
                             $("#socialdb_propertyterm_"+tree).html('');

@@ -100,8 +100,6 @@
                 messages: { noResults: '', results: function () { } },
                 minLength: 2,
                 select: function (event, ui) {
-                    // console.log(event);
-                    // var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
                     var temp = $("#chosen-selected2-user [value='" + ui.item.value + "']").val();
                     if (typeof temp == "undefined") {
                         $("#chosen-selected2-user").append("<option class='selected' value='" + ui.item.value + "' selected='selected' >" + ui.item.label + "</option>");
@@ -161,7 +159,6 @@
                 }
             }, onRender: function (isReloading, isError) {
                 // var selNodes = node.tree.getSelectedNodes();
-                //console.log(selNodes);
 
             },
             onKeydown: function (node, event) {
@@ -218,7 +215,6 @@
             // The event was bound to the <span> tag, but the node object
             // is stored in the parent <li> tag
             var node = $.ui.dynatree.getNode(el);
-            console.log(node.data.key);
             switch (action) {
                 case "edit":
                     $("#tag_name").val(node.data.title);
@@ -244,7 +240,6 @@
                         data: {category_id: node.data.key, operation: 'get_metas'}
                     }).done(function (result) {
                         elem = jQuery.parseJSON(result);
-                        // console.log(elem);
                         if (elem.term.description) {
                             $("#category_description").val(elem.term.description);
                         }
@@ -264,7 +259,6 @@
                     });
                     break;
                 case "delete":
-                    // console.log(node.data);
                     $("#tag_single_delete_id").val(node.data.key);
                     $("#delete_tag_name").text(node.data.title);
                     $('#modalExcluirTagUnique').modal('show');

@@ -34,7 +34,6 @@
                 data: {operation: 'form_default_mapping', mapping_id: $('input[name=socialdb_default_mapping]:checked').val(), collection_id: $("#collection_id").val()}
             }).done(function (result) {
                 elem = jQuery.parseJSON(result);
-                console.log(elem);
                 if (elem.result === '1') {
                     listTableOAIPMHDC();
                     $("#oai_repository").html(elem.html);
@@ -200,11 +199,9 @@
                 mapping_id: mapping_id
             }
         }).done(function (result) {
-            console.log('success');
             $('#maping_container_export').html(result).show();
 
         }).fail(function (jqXHR, textStatus, errorThrown) {
-            console.log('erro');
             $('#loader_validacao').hide();
             showAlertGeneral('<?php _e('Atention', 'tainacan') ?>', '<?php _e('Server not found or not available', 'tainacan') ?>', '<?php _e('error') ?>');
         });

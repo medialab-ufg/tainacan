@@ -83,9 +83,6 @@
                     }).done(function (result) {
                         $('#modalImportMain').modal('hide');
                         elem_first = jQuery.parseJSON(result);
-
-                        cl(elem_first);
-
                         if (elem_first.type && elem_first.type == 'success') {
                             $('#form').hide();
                             $("#tainacan-breadcrumbs").hide();
@@ -132,7 +129,6 @@
                 data: { operation: 'get_ordenation_properties',collection_id:$('#collection_id').val() }
             }).done(function(result) {
                 var json = $.parseJSON(result);
-                console.log(json.ordenation,' assim');
                 if(json&&json.ordenation&&json.ordenation!==''){
                     if(json.ordenation.default){
                          reorder_properties_multiple_item(json.ordenation.default.split(','));
@@ -502,7 +498,6 @@
             var dataProperties = $("#multiple_properties_data_id").val().split(',').filter(function (v) {
                 return v !== ''
             });
-            //console.log($("#multiple_properties_data_id").val());
             for (var i = 0; i < dataProperties.length; i++) {
                 $('.multiple_socialdb_property_' + dataProperties[i]).each(function(index,value){
                     $(this).val('');
@@ -812,7 +807,6 @@
     // coloca a descricao para todos os items selecionados
     function setDescription(description) {
         var counter = 0;
-        console.log($(description).val());
         if ($(description).val() != '') {
             $.each($("input:checkbox[name='selected_items']:checked"), function () {
                 counter++;
@@ -1084,7 +1078,6 @@
      * @returns {undefined}
      */
     function multiple_autocomplete_property_data(properties_autocomplete) {
-        console.log(properties_autocomplete);
          if (properties_autocomplete) {
             $.each(properties_autocomplete, function (idx, property_id) {
                         $("#multiple_socialdb_property_" + property_id).autocomplete({
@@ -1119,7 +1112,6 @@
             },
             minLength: 2,
             select: function (event, ui) {
-                //console.log(event);
                 var already_selected = false;
                 $("#multiple_property_value_" + property_id + "_" + object_id+"_add option").each(function(){
                         if($(this).val()==ui.item.value){
@@ -1145,10 +1137,8 @@
     }
 
     function clear_select_object_property(e, property_id) {
-        //console.log($(e).val());
         removePropertyObject($(e).val(), property_id);
         $('option:selected', e).remove();
-        //$('.chosen-selected2 option').prop('selected', 'selected');
     }
 
 //************************* properties terms (MOSTRA OS DADOS DE METADADOS DE TERMO) ******************************************//
@@ -1480,7 +1470,6 @@
         stop: function () {
             $(".ui-selected", this).each(function () {
                 var id = this.id;
-                console.log(id.replace('panel_', ''));
                 focusItem(id.replace('panel_', ''));
             });
         }

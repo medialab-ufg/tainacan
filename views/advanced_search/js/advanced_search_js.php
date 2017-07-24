@@ -74,7 +74,6 @@
             },
             minLength: 2,
             select: function (event, ui) {
-                console.log(event);
                 $("#advanced_search_title").val('');
                 //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
                 var temp = $("#property_value_").val();

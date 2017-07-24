@@ -279,7 +279,6 @@ class AdvancedSearchHelper extends ViewHelper {
                         values.push($(value).val());
                     });
                 }
-                //console.log('values',seletor,values);
                 return values;
             }
         </script>

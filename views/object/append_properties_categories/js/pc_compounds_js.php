@@ -503,7 +503,6 @@
         if (trees) {
             $.each(trees, function (idx, tree) {
                 
-                    console.log('#cardinality_compound_'+compound_id+'_'+tree);
                 if($('#cardinality_compound_'+compound_id+'_'+tree).length>0){
                     var cardinality = $('#cardinality_compound_'+compound_id+'_'+tree).val();
                     var cardinality = $('#cardinality_'+compound_id).val();
@@ -705,7 +704,6 @@
      * @returns {undefined}     */
     function compounds_validate_multipleselectbox(seletor,property_id,compound_id,i){
         var selected = $("#field_property_term_"+compound_id+"_"+property_id+"_"+i).find(":selected");
-        console.log(selected);
         if (selected.length > 0) {
             $('#core_validation_'+compound_id+'_'+property_id+'_'+i).val('true');
             set_field_valid(property_id,'core_validation_'+compound_id+'_'+property_id+'_'+i,compound_id);
@@ -737,7 +735,6 @@
 
      * @type Arguments     */
     function set_field_valid_compounds(id,seletor,compound_id){
-        console.log(seletor,$('#'+seletor).val(),seletor.split('_'));
         var index = (seletor.split('_')[4]) ? seletor.split('_')[4] : 0
         if($('#'+seletor).val()==='false'){
             var slug = seletor.replace('core_validation_','');
@@ -798,11 +795,8 @@
                 set_field_valid(compound_id,'core_validation_'+compound_id);
             }
         }
-        //console.log(cont,'pc compound',seletor,$('#core_validation_'+compound_id).val());
     }
-    
-    
-    
+
     function get_metas(id){
         return $.ajax({
             type: "POST",

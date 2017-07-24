@@ -85,7 +85,6 @@
         //hook para validacao do formulario
         if(Hook.is_register( 'tainacan_validate_single_save_data_property')){
             Hook.call( 'tainacan_validate_single_save_data_property', [ property_id,object_id] );
-            console.log(Hook.result.is_validated);
             if(!Hook.result.is_validated){
                 showAlertGeneral('<?php _e('Attention','tainacan') ?>', Hook.result.message, 'info');
                 return false;
@@ -149,7 +148,6 @@
                     data: {property_id: property_id, object_id: object_id, operation: 'get_property_object_value', }
                 }).done(function (result) {
                     elem = jQuery.parseJSON(result);
-                    console.log(elem);
                     if (elem.values) {
                         $("#single_property_value_" + property_id + "_" + object_id).html('');
                         $.each(elem.values, function (idx, value) {
@@ -179,7 +177,6 @@
         //hook para validacao do formulario
         if(Hook.is_register( 'tainacan_validate_single_save_object_property')){
             Hook.call( 'tainacan_validate_single_save_object_property', [ property_id,object_id] );
-            console.log(Hook.result.is_validated);
             if(!Hook.result.is_validated){
                 showAlertGeneral('<?php _e('Attention','tainacan') ?>', Hook.result.message, 'info');
                 return false;
@@ -220,7 +217,6 @@
             },
             minLength: 2,
             select: function (event, ui) {
-                console.log(event);
                 $("#single_autocomplete_value_" + property_id + "_" + object_id).html('');
                 $("#single_autocomplete_value_" + property_id + "_" + object_id).val('');
                 //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
@@ -466,7 +462,6 @@
                     onActivate: function (node, event_single) {
                     },
                     onSelect: function (flag, node) {
-                        console.log(flag);
                         if (categories.indexOf(node.data.key) < 0) {
                             add_classification(<?php echo $object_id; ?>, node.data.key);
                         } else {

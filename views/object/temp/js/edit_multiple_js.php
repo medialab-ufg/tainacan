@@ -55,9 +55,6 @@
                 }).done(function (result) {
                     $('#modalImportMain').modal('hide');
                     elem_first = jQuery.parseJSON(result);
-
-                    cl(elem_first);
-                    
                     if(elem_first.total_bulk_edit > 0) {
                         showAlertGeneral("<?php _e('Success', 'tainacan') ?>", "<?php _e('Successfully edited items!', 'tainacan') ?>", 'success');
                         location.reload();
@@ -253,7 +250,6 @@
     }
     /******************************** Manipulação das cores ao selecionar itens setando se eh anexo o u nao******************************************/
     function focus_item(id) {
-        cl("Alterando : " + id);
         // $('#wrapper_' + id).toggleClass('multiple-edit-select');
         $('#wrapper_' + id).toggleClass('selected-border');
 
@@ -471,7 +467,6 @@
             var dataProperties = $("#multiple_properties_data_id").val().split(',').filter(function (v) {
                 return v !== ''
             });
-            //console.log($("#multiple_properties_data_id").val());
             for (var i = 0; i < dataProperties.length; i++) {
                 $('.multiple_socialdb_property_' + dataProperties[i]).each(function(index,value){
                     $(this).val('');
@@ -1039,7 +1034,6 @@
      * @returns {undefined}
      */
     function multiple_autocomplete_property_data(properties_autocomplete) {
-        console.log(properties_autocomplete);
         if (properties_autocomplete) {
             $.each(properties_autocomplete, function (idx, property_id) {
                 $("#multiple_socialdb_property_" + property_id).autocomplete({
@@ -1074,7 +1068,6 @@
             },
             minLength: 2,
             select: function (event, ui) {
-                //console.log(event);
                 var already_selected = false;
                 $("#multiple_property_value_" + property_id + "_" + object_id+"_add option").each(function(){
                     if($(this).val()==ui.item.value){
@@ -1100,7 +1093,6 @@
     }
 
     function clear_select_object_property(e, property_id) {
-        //console.log($(e).val());
         removePropertyObject($(e).val(), property_id);
         $('option:selected', e).remove();
         //$('.chosen-selected2 option').prop('selected', 'selected');
@@ -1435,8 +1427,6 @@
         stop: function () {
             $(".ui-selected", this).each(function () {
                 var id = this.id;
-                cl("ID: => " + id);
-                console.log("VEJA AGORA! " + id.replace('panel_', ''));
                 focus_item(id.replace('panel_', ''));
             });
         }

@@ -117,7 +117,6 @@
                  if(elem.operation != 'update_property_compounds'){     
                     list_collection_metadata();
                 }else{
-                   // console.log($('#meta-item-'+elem.compound_id+' .property-name').first());
                     $('#meta-item-'+elem.compound_id+' .property-name').first().text(elem.compounds_name);
                     $( "#list-compounded-"+elem.compound_id ).html('');
                     get_children_compounds(elem.compound_id,elem.compounds_id);

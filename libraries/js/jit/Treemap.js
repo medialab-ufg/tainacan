@@ -38,9 +38,6 @@ function init() {
         }
     }).done(function (result) {
         json = jQuery.parseJSON(result);
-
-        console.log(json);
-
         //end
         //init TreeMap
         var tm = new $jit.TM.Squarified({
@@ -56,7 +53,6 @@ function init() {
             Events: {
                 enable: true,
                 onClick: function (node) {
-                    console.log(node.id);
                     if (node)
                         tm.enter(node);
                     if (typeof node.id != "undefined")
@@ -65,16 +61,11 @@ function init() {
                     }
                 },
                 onRightClick: function () {
-
                     tm.out();
-
-                    //console.log(tm.clickedNode.id,$("#collection_id").val());
                     if (tm.clickedNode.id != $("#collection_id").val())
                     {
-                        //console.log(tm.clickedNode.adjacencies);
                         $.each(tm.clickedNode.adjacencies, function (name, value) {
                             var nameNode = String(name);
-                            //console.log(nameNode);
                             if(nameNode == $("#collection_id").val())
                             {
                                 list_all_objects('', $("#collection_id").val(), $('#collection_single_ordenation').val());
@@ -85,9 +76,6 @@ function init() {
                         });
 
                     }
-//                    console.log(tm.clickedNode.adjacencies);
-//                    console.log(tm.clickedNode);
-
                 }
             },
             duration: 1000,

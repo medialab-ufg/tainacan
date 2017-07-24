@@ -257,21 +257,16 @@
    }
    function info(msg) {
     if (verbosity >= VERBOSITY_LEVELS.infos) {
-     console.log('Info: ' + msg);
     }
    }
    function warn(msg) {
     if (verbosity >= VERBOSITY_LEVELS.warnings) {
-     console.log('Warning: ' + msg);
     }
    }
    function deprecated(details) {
-    console.log('Deprecated API usage: ' + details);
    }
    function error(msg) {
     if (verbosity >= VERBOSITY_LEVELS.errors) {
-     console.log('Error: ' + msg);
-     console.log(backtrace());
     }
     throw new Error(msg);
    }

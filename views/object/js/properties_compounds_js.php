@@ -485,8 +485,6 @@
     function compounds_list_tree(trees,categories,compound_id) {
         if (trees) {
             $.each(trees, function (idx, tree) {
-                
-                    //console.log('#cardinality_compound_'+compound_id+'_'+tree);
                 if($('#cardinality_compound_'+compound_id+'_'+tree).length>0){
                     //var cardinality = $('#cardinality_compound_'+compound_id+'_'+tree).val();
                     var cardinality = $('#cardinality_'+compound_id).val();
@@ -661,7 +659,6 @@
      * @returns {undefined}     */
     function compounds_validate_selectbox(seletor,property_id,compound_id,i){
         var selected = $("#field_property_term_"+compound_id+"_"+property_id+"_"+i).find(":selected");
-        //console.log(selected);
         if (selected.length > 0) {
             $('#core_validation_'+compound_id+'_'+property_id+'_'+i).val('true');
             set_field_valid_compounds(property_id,'core_validation_'+compound_id+'_'+property_id+'_'+i,compound_id);
@@ -685,7 +682,6 @@
      * @returns {undefined}     */
     function compounds_validate_multipleselectbox(seletor,property_id,compound_id,i){
         var selected = $("#field_property_term_"+compound_id+"_"+property_id+"_"+i).find(":selected");
-        console.log(selected);
         if (selected.length > 0) {
             $('#core_validation_'+compound_id+'_'+property_id+'_'+i).val('true');
             set_field_valid(property_id,'core_validation_'+compound_id+'_'+property_id+'_'+i,compound_id);
@@ -717,7 +713,6 @@
 
     * @type Arguments     */
     function set_field_valid_compounds(id,seletor,compound_id){
-        //console.log(seletor,$('#'+seletor).val(),seletor.split('_'));
         var index = (seletor.split('_')[4]) ? seletor.split('_')[4] : 0
         if($('#'+seletor).val()==='false'){
             var slug = seletor.replace('core_validation_','');
@@ -737,7 +732,6 @@
     function validate_all_fields_compounds(compound_id,index){
         var cont = 0;
         var seletor = ($('.core_validation_'+compound_id+'_'+index).length > 0) ? '.core_validation_'+compound_id+'_'+index : '#core_validation_'+compound_id;
-        console.log(seletor,index);
         //if(!index){
             for(var i = 0;i<parseInt($("#cardinality_"+compound_id).val());i++){
                 //if($('#container_field_'+compound_id+'_'+i).is(':visible')){
@@ -779,7 +773,6 @@
                 set_field_valid(compound_id,'core_validation_'+compound_id);
             }
         }
-        console.log(cont,'compounds',seletor,'#core_validation_'+compound_id,$('#core_validation_'+compound_id).val());
     }
 
 </script>

@@ -168,7 +168,6 @@
 //                    $('.data-widget').removeClass('select-meta-filter');
 //                } else {
 //                    
-//                console.log(' item_search_widget :'+item_search_widget);
 //                    if ( item_search_widget === "null" || item_search_widget == "undefined" ) {
 //                        $("#"+item_id + " a").first().click();
 //                        $(".property_data_use_filter").click();
@@ -384,7 +383,6 @@
         var arrFacets = [];
         var facet_priority = tableID + " .facet-priority";
         $(facet_priority).each(function (idx, el) {
-            //console.log( $(el).text() );
             count = $(this).parent().children().index($(this)) + 1;
             var input_id = $(this).find("input[class='find_facet']").attr('id') + '';
             if (input_id != 'undefined') {
@@ -470,12 +468,10 @@
                     if( (current_type == "date" || current_type == "numeric") && property_widget == "range") {
                         var range_obj = { counter_range: elem.counter_data_range, sent_data: elem };
                     }
-                    //console.log(' current_operation  = '+current_operation); 
                     if ( current_operation == "add_property_data" ) {
                         setCollectionFacet( "add", new_property_id, property_widget, color_facet, range_obj);
                     } else if( current_operation == "update_property_data" ) {
                         var item_was_dragged = $(current_modal + " .data-widget").hasClass('select-meta-filter');
-                        //console.log(' item was dragged  = '+item_was_dragged);
                         if( item_was_dragged ) {
                             setCollectionFacet( "add", current_property_id, property_widget, color_facet );
                             $(current_modal + " .data-widget").removeClass('select-meta-filter');
@@ -1129,7 +1125,6 @@
 //            }
             var contador = 0;
               if (elem.metas.socialdb_property_object_category_id && elem.metas.socialdb_property_object_category_id.constructor === Array) {
-                //  console.log('first');
                 if ($("#property_category_dynatree")) {
                     $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
                         node.select(false);
@@ -1169,14 +1164,12 @@
                 }
             } 
             else if (elem.metas.socialdb_property_object_category_id) {
-                //  console.log('second');
                 if ($("#property_category_dynatree")) {
                     $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
                         node.select(false);
                     });
                     $('#selected_categories_relationship').html('');
                     $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
-                        //console.log(elem.metas.socialdb_property_object_category_id,node.data.key);
                         if (elem.metas.socialdb_property_object_category_id === node.data.key) {
                             node.select(true);
                             contador++;
@@ -1620,7 +1613,6 @@
                     setCollectionFacet("add", new_ranking_id, ranking_widget, "", range_obj);
                 } else if (current_operation == "edit") {
                     var item_was_dragged = $("#meta-voting .data-widget").hasClass('select-meta-filter');
-                    console.log(item_was_dragged);
                     if(item_was_dragged) {
                         setCollectionFacet("add", elem.ranking_id, ranking_widget);    
                         $("#meta-voting .data-widget").removeClass('select-meta-filter');
@@ -1798,7 +1790,6 @@
             url: src + "/controllers/search/search_controller.php",
             data: { operation: 'get_menu_ids' }
         }).error(function() {
-            cl('<?php _e("Something went wrong. Try again later.", "tainacan") ?>');
         }).done(function(result) {
             var menu_item = $.parseJSON(result);
 
@@ -2475,7 +2466,6 @@
      * @param {type} seletor
      * @returns {undefined}     */
     function toggle_advanced_configuration(seletor) {
-        //console.log(seletor);
         if ($(seletor).is(':visible')) {
             $(seletor).slideUp();
         } else {

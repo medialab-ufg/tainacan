@@ -24,7 +24,6 @@
             var property_license_id = $('#property_license_id').val();
             $('#meta-item-'+property_license_id).hide();
             $('.list_licenses_items').hide();
-            console.log('license',$('#list_licenses_items').length>0);
             if($('#list_licenses_items').length>0){
                 $('#list_licenses_items').remove();
             }

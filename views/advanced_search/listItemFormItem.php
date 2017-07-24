@@ -140,7 +140,6 @@
                 reverse: $('#reverse_<?php echo $compound_id ?>_<?php echo $property_id; ?>_<?php echo $contador; ?>').val()
             }
         });
-        console.log(id,'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $contador ?>');
         validateFieldsMetadataText(id,'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $contador ?>')
     }
     //remove no formulario de fato

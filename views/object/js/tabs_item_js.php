@@ -137,7 +137,6 @@
                 }
             });
         }
-        console.log(tab_property_id);
         return tab_property_id;
     }
     //insere as propriedades na abacorreta

@@ -24,7 +24,6 @@
                 data: {operation: 'form_default_mapping', mapping_id: $('input[name=socialdb_default_mapping]:checked').val(), collection_id: $("#collection_id").val()}
             }).done(function (result) {
                 elem = jQuery.parseJSON(result);
-                console.log(elem);
                 if (elem.result === '1') {
                     listTableOAIPMHDC();
                     $("#oai_repository").html(elem.html);

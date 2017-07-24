@@ -130,7 +130,6 @@ $collection_route = get_post(get_option('collection_root_id'));
     /********** cadastro de rotas ********/
      //pagina central da colecao
     $.router.add( $('#route_blog').val()+':collection', function(data) {
-        console.log('rota only collection');
         if(data.collection == '<?php echo __('advanced-search','tainacan') ?>'){
             showAdvancedSearch($('#src').val());
         }else{
@@ -139,7 +138,6 @@ $collection_route = get_post(get_option('collection_root_id'));
     });
     //pagina do item
     $.router.add( $('#route_blog').val()+':collection/:item', function(data) {
-        console.log('rota item',data);
         if(data.collection == 'admin'){
             <?php if (current_user_can('manage_options')): ?>
                 if(data.item=='<?php echo __('metadata','tainacan') ?>'){
@@ -165,7 +163,6 @@ $collection_route = get_post(get_option('collection_root_id'));
                 }
             <?php endif; ?>
         }else{
-            //console.log(previousRoute ,window.location.pathname);
             if(previousRoute === window.location.pathname){
                 $.router.go($('#route_blog').val()+$('#slug_collection').val());
             }else{
@@ -216,7 +213,6 @@ $collection_route = get_post(get_option('collection_root_id'));
      */
     function execute_route() {
          $.router.reset();
-         //console.log('edit item',$('#goToAddItem').val());
         if ($('#object_page').val() !== '') {
             collection = $('#slug_collection').val();
             if(collection) {
@@ -234,7 +230,6 @@ $collection_route = get_post(get_option('collection_root_id'));
              '</div>').show();
             $("#tainacan-breadcrumbs").show();
             $("#tainacan-breadcrumbs .current-config").show().text('> <?php  echo __('New item','tainacan') ?>');
-            console.log($("#tainacan-breadcrumbs .current-config"));
             $('#main_part').hide();
             $('#collection_post').show();
             $('#display_view_main_page').hide();
@@ -252,7 +247,6 @@ $collection_route = get_post(get_option('collection_root_id'));
             }else if($('#goToRepositoryConfiguration').val()!==''){
                 showRepositoryConfiguration($('#src').val());
             }else if($('#goToRepositoryCategories').val()!==''){
-                console.log('categories redirect');
                 showCategoriesConfiguration($('#src').val());
             }else if($('#goToRepositoryEvents').val()!==''){
                 showEventsRepository($('#src').val());
@@ -273,7 +267,6 @@ $collection_route = get_post(get_option('collection_root_id'));
         //COLECAO ROTAS
         <?php if ((verify_collection_moderators(get_the_ID(), get_current_user_id()) || current_user_can('manage_options')) && get_post_type(get_the_ID()) == 'socialdb_collection'): ?>
         else if($('#goToCollectionMetadata').val()!==''){
-            console.log('redirect');
             showPropertiesAndFilters($('#src').val());
         }else if($('#goToCollectionConfiguration').val()!==''){
             showCollectionConfiguration($('#src').val());
@@ -444,7 +437,6 @@ $collection_route = get_post(get_option('collection_root_id'));
      * @returns {undefined}
      */
     function backRoute(collection){
-        console.log(collection,previousRoute,window.location.pathname);
         if(collection) {
             restoreHeader();
             previousRoute = $('#route_blog').val()+collection+'/';

@@ -604,7 +604,6 @@
     }
 
     function send_duplicate_item(object_id) {
-        //console.log($('input[name=duplicate_item]:checked', '#formDuplicateItem'+object_id).val());
         if ($('input[name=duplicate_item]:checked', '#formDuplicateItem' + object_id).val() == 'this_collection') {
             //Duplicate in this collection
             $('#modalImportMain').modal('show');//mostro o modal de carregamento
@@ -907,13 +906,11 @@
     }
 
     function select_all_trash() {
-        console.log($('.toggleSelect'));
         $(".toggleSelect").removeClass('selected-item');
         toastr.info('<?php _e('All items have been selected!', 'tainacan') ?>', '', set_toastr_class());
         $(".toggleSelect").each(function(idx, el) {
             if($(el).is(':visible')){
                 $(".toggleSelect").addClass('selected-item');
-                console.log('inside_',$(el).val());
             }
         });
     }

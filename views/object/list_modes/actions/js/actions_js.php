@@ -147,7 +147,7 @@
                         try {
                             pressPDF.addImage(item_thumb, thumb_ext, baseX*2, desc_yDist, 80, 80);
                         } catch (err) {
-                            cl(err);
+
                         }
 
                         desc_xDist = lMargin + (3*baseX);

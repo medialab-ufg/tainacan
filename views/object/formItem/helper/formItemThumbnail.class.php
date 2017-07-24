@@ -72,7 +72,6 @@ class FormItemThumbnail extends FormItem {
                     });
                 };
                 reader.readAsDataURL(this.files[0]);
-                console.log($('#formUpdateThumbnail'));
                 $('#formUpdateThumbnail').trigger('submit');
             } else {
                 showAlertGeneral('<?php _e("Atention!", 'tainacan') ?>', '<?php _e("An error ocurred, File is not compatible!", 'tainacan') ?>', 'error');

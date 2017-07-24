@@ -266,7 +266,6 @@ function back_main_list() {
          $('#object_url_text').hide();// esconde o campo de url para textos
          $('#object_url_others').show('slow');// o campo para colocar a url do item sem ser texto
          $('#object_url_others_input').val(url);
-         console.log($('#object_url_others').val());
          $('#video_type').attr('checked','checked');
          return false;
     }
@@ -321,7 +320,6 @@ function back_main_list() {
         $('#loading').hide('slow');
 
     }).fail(function (result) {
-        console.log('error', result, url);
         $('#loading').hide();
         hide_modal_main();
         showAlertGeneral('Atenção', 'URL inexistente ou indisponível', 'error');
@@ -459,7 +457,6 @@ function back_main_list() {
             }
         }).done(function (result) {
              elem_first =jQuery.parseJSON(result); 
-             console.log(elem_first);
              $('#create_rating_' + object_id + '_' + property_id).raty({
                     score: Math.ceil((elem_first.results.final_score*2))/2,
                     half: true,
@@ -602,7 +599,6 @@ function back_main_list() {
             },
             minLength: 2,
             select: function (event, ui) {
-                console.log(event);
                 $("#autocomplete_value_" + property_id + "_" + object_id).html('');
                 $("#autocomplete_value_" + property_id + "_" + object_id).val('');
                 //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
@@ -1799,7 +1795,6 @@ var dynatree_object_index = [];
      * @param {type} property_id
      * @returns {undefined}     */
     function edit_validate_selectbox(seletor,property_id,compound_id){
-        console.log(seletor);
         if($(seletor).val()===''){
             $('#core_validation_'+property_id).val('false');
             set_field_valid(property_id,'core_validation_'+property_id);
@@ -1818,7 +1813,6 @@ var dynatree_object_index = [];
      * @returns {undefined}     */
     function compounds_validate_multipleselectbox(seletor,property_id,compound_id,i){
         var selected = $("#field_property_term_"+compound_id+"_"+property_id+"_"+i).find(":selected");
-        console.log(selected);
         if (selected.length > 0) {
             $('#core_validation_'+compound_id+'_'+property_id+'_'+i).val('true');
             set_field_valid(property_id,'core_validation_'+compound_id+'_'+property_id+'_'+i,compound_id);

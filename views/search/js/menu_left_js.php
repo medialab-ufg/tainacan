@@ -80,7 +80,6 @@
                 if ($(".contextMenu:visible").length > 0) {
                     $(".contextMenu").hide();
                 }
-                //console.log(event);
                 //verifico aonde esta clicando
                 if($('#visualization_page_category').val()==='click' && 
                         ((event.srcElement && event.srcElement.className==='dynatree-title') || (event.target && event.target.className==='dynatree-title'))){
@@ -114,7 +113,6 @@
                             ( (node.data.key.indexOf("_moreoptions")>=0 || node.data.key.indexOf("alphabet")>=0) ) && (select === false || select === 0 ) ){
                         select = true;
                         node.select(true);
-                        console.log('activate true');
                         if((node.data.key.indexOf("_moreoptions")>=0 || node.data.key.indexOf("alphabet")>=0)){
                             node.expand(true);
                         }
@@ -122,7 +120,6 @@
                         select = false;
                         node.select(false);
                         node.deactivate();
-                        console.log('activate false');
                         if((node.data.key.indexOf("_moreoptions")>=0 || node.data.key.indexOf("alphabet")>=0)){
                             node.expand(false);
                         }
@@ -458,7 +455,6 @@
             $("#ui-dynatree-id-" + node.data.key).hover(function () {
                 
                 $(this).data('hover-dynatree', window.setTimeout(function (){
-                     console.log($("#ui-dynatree-id-" + node.data.key),node.span.offsetLeft);
                      $("#ui-dynatree-id-" + node.data.key).trigger("mousedown", {
                                     pageX: 50,
                                     pageY: 50,
@@ -483,7 +479,6 @@
             },
             minLength: 2,
             select: function (event, ui) {
-                // console.log(event);
                 $("#autocomplete_multipleselect_" + property_id).html('');
                 $("#autocomplete_multipleselect_" + property_id).val('');
                 //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();

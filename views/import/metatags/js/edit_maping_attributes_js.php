@@ -30,7 +30,6 @@
             var jsonObject = jQuery.parseJSON(result);
             if (jsonObject && jsonObject != null) {
                 $.each(jsonObject.mapping, function (id, object) {
-                    console.log(object);
                     $('[name=mapping_metatags_' + (id + 1) + ']').val(object.tag);
                     $('[name=select_mapping_metatags_' + (id + 1) + ']').append('<option value="'+object.tag+'" >'+object.tag+'</option>')
                     //$('[name=mapping_dublin_core_' + (id + 1) + ']').val(object.tag);

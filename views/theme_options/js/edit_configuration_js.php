@@ -124,7 +124,6 @@
                 addActiveKey: true
             },
             onSelect: function (flag, node) {
-                console.log(node)
                 if(node.bSelected&&node.childList){
                     $.each(node.childList,function(index,node){
                         node.select(true);
@@ -154,44 +153,4 @@
             list_templates();
         });
     }
-    /*
-    function list_templates() {
-         $.ajax({
-            type: "POST",
-            url: $('#src').val() + "/controllers/collection/collection_controller.php",
-            data: {
-                operation: 'list-collection-templates',
-                is_json:true
-               }
-        }).done(function (result) {
-            $('#collection_templates').html('');
-            elem_first = jQuery.parseJSON(result);
-            if(elem_first&&elem_first.length>0){
-                $.each(elem_first,function(index,value){
-                     $('#collection_templates').append('<option selected="selected" value="'+value.directory+'">'+value.title+'</option>');
-                });
-                $('#show_collection_empty').show();
-            }else{
-                $('#show_collection_empty').hide();
-            }
-        });
-    }
-    */
-    // desabilita as colecaoes vazia no repositorio
-//    function disable_empty_collection(selector){
-//        selector = $(selector);
-//        console.log(selector.prop( "checked" ));
-//        $.ajax({
-//                url: $("#src").val() + '/controllers/theme_options/theme_options_controller.php',
-//                type: 'POST',
-//                data: {
-//                    operation:'disable_empty_collection';
-//                    situ
-//                }
-//        }).done(function (result) {
-//            elem = jQuery.parseJSON(result);
-//            showAlertGeneral(elem.title, elem.msg, elem.type);
-//            showRepositoryConfiguration(src);
-//        });
-//    }
 </script>

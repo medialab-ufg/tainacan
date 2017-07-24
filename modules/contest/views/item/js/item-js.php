@@ -139,7 +139,6 @@
                 });
             }).error(function (error) {
             });
-            console.log();
             return false;
     }
     /**
@@ -226,7 +225,6 @@
             data: {operation: 'show_object_properties', object_id: object_id, collection_id: $("#collection_id").val()}
         });
         promisse.done(function (result) {
-            console.log('#properties_' + type);
             $('#properties_' + type).html(result);
         });
     }
@@ -239,7 +237,6 @@
             data: {operation: 'show_object_properties_edit', object_id: object_id, collection_id: $("#collection_id").val()}
         });
         promisse.done(function (result) {
-            console.log('#properties_' + type);
             $('#properties_' + type).html(result);
         });
     }
@@ -379,7 +376,6 @@
             },
             minLength: 2,
             select: function (event, ui) {
-                console.log(event);
                 event.preventDefault();
                 var label = ui.item.label;
                 $(seletor).val(label);

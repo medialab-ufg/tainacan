@@ -433,8 +433,7 @@
 //                $('#latitude_select option[value="'+set_lat+'"]').attr('selected','selected');
 //                $('#longitude_select option[value="'+set_long+'"]').attr('selected','selected');
 //            }
-            
-            console.log('#latitude_select option[value="'+set_lat+'"]', $('#latitude_select option[value="'+set_lat+'"]'));
+
             if (location) {
                 $(".location select[name='location']").val(location);
             }
@@ -523,7 +522,6 @@
     * 
     */
     function showHabilitateMedia(seletor,value){
-        console.log($(seletor).val());
         if($(seletor).is(':checked') && value){
             $('#habilitateMedia').show();
         }else{

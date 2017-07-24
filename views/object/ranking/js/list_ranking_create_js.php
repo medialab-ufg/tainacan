@@ -35,7 +35,6 @@
             }
         }).done(function (result) {
              elem_first =jQuery.parseJSON(result); 
-             console.log(elem_first);
              $('#create_rating_' + object_id + '_' + property_id).raty({
                     score: Math.ceil((elem_first.results.final_score*2))/2,
                     half: true,
@@ -46,7 +45,6 @@
                     }
                 });   
             $('#create_counter_' + object_id + '_' + property_id).text(elem_first.results.count);
-            console.log(elem_first);
             if(elem_first.is_user_logged_in){
                 score = Math.ceil((score*2))/2;
                 elem_first.results.final_score = Math.ceil((elem_first.results.final_score*2))/2;

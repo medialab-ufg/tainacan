@@ -45,9 +45,7 @@
 
         //formulario de submissao
         $('#submit_form_search_data').submit(function (e) {
-            // cl($("#search_add_facet").val());
             var form_data = $(this).serialize();
-            cl(form_data);
 
             e.preventDefault();
             $.ajax({
@@ -59,10 +57,6 @@
             }).done(function (result) {
                 list_facets();
                 elem = jQuery.parseJSON(result);
-
-                cl("Preste atenção nos detalhes abaixo");
-                cl(elem);
-
                 showAlertGeneral(elem.title, elem.msg, elem.type);
                 setTimeout(function () {
                     renumber_all();
@@ -143,7 +137,6 @@
                 $("#collection_order").append("<optgroup label='<?php _e('Data properties','tainacan') ?>'>");
                 $.each(elem.property_data, function (idx, data) {
                     if (data && data !== false) {
-                        console.log(data);
                         $("#collection_order").append("<option value='" + data.id + "' selected='selected' >" + data.name + " - ( <?php _e('Type','tainacan') ?>:"+data.type+" ) </option>");
                     }
                 });
@@ -498,7 +491,6 @@
             data: {collection_id: $('#collection_id').val(), operation: 'list_property_data', category_id: $('#property_category_id').val()}
         }).done(function (result) {
             elem = jQuery.parseJSON(result);
-            cl(elem);
             if (elem.no_properties !== true) {
                 $('#collection_order_properties').html('');
                 $.each(elem.property_data, function (idx, property) {
@@ -600,7 +592,6 @@
 
     function showOrientationStyles() {
         var orientation_class = $("#search_data_orientation option:selected").attr('class');
-        console.log('A classe da coluna é: ' + orientation_class );
         $("#select_menu_style option").each(function(idx, el){
             var item_classes = $(el).attr('class');
             var filter = "";

@@ -66,7 +66,6 @@
             },
             minLength: 2,
             select: function (event, ui) {
-                console.log(event);
                 $("#autocomplete_value_" + property_id + "_" + object_id).html('');
                 $("#autocomplete_value_" + property_id + "_" + object_id).val('');
                 //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
@@ -483,7 +482,6 @@
                         $('.dropdown-toggle').dropdown();
                     },
                     onSelect: function (flag, node) {
-                        console.log('unic dynatree',$("#socialdb_propertyterm_" + tree).val(), node.data.key);
                         if ($("#socialdb_propertyterm_" + tree).val() === node.data.key) {
                             append_category_properties(0,node.data.key,tree);
                             $("#socialdb_propertyterm_" + tree).val("");
@@ -585,7 +583,6 @@
                 type: 'POST',
                 data: { operation: 'list_properties_categories_accordeon',properties_to_avoid:$('#properties_id').val(),categories: id, object_id:$('#object_id_add').val(),not_block:'true'}
             }).done(function (result) {
-                console.log('append_properties_categories_');
                 hide_modal_main();
                 //list_all_objects(selKeys.join(", "), $("#collection_id").val());
                 $('#append_properties_categories_'+property_id).html(result);
@@ -596,7 +593,6 @@
         }
     }
     function insert_html_property_category(property_id){
-        console.log('insert_html_property_category');
         var flag = false;
         $ul = $("#text_accordion");
         $items = $("#text_accordion").children();
@@ -652,14 +648,12 @@
                            return false; // Cancels the default action
                        }
                 });
-          console.log($('#meta-item-'+property_id+' h2'),'#meta-item-'+property_id+' h2')
          $('#meta-item-'+property_id+' h2').trigger('click');
          $('[data-toggle="tooltip"]').tooltip();
     }
     //retira as bordas
     function removeBorderCat(property_id){
         $properties_append = $('#append_properties_categories_'+property_id).children().children();
-        console.log($properties_append);
         $properties_append.animate({borderWidth : '1px',borderColor: '#d3d3d3',borderStyle:"solid"}, 'slow', 'linear');
     }
     

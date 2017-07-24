@@ -20,9 +20,7 @@
                     node.select(node);
                 }
             });
-        }catch(err) {
-           console.log('No dynatree found!');
-        }
+        } catch(err) { }
         
         
         show_object_properties_edit();//mostra as propriedades do item, com os formularios e seus widgets
@@ -61,7 +59,6 @@
                Hook.call( 'tainacan_validate_create_item_form', [ $( this ).serializeArray() ] );
                 if(!Hook.result.is_validated){
                     $('#modalImportMain').modal('hide');//mostro o modal de carregamento
-                    console.log(Hook.result);
                     showAlertGeneral('<?php _e('Attention','tainacan') ?>', Hook.result.message, 'info');
                     return false;
                 }
@@ -90,7 +87,6 @@
                 try {
                       $("#dynatree").dynatree("getTree").reload();
                 }catch(err) {
-                    console.log('No dynatree found!');
                 }
                 showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
                 $('.dropdown-toggle').dropdown();
@@ -223,7 +219,6 @@
         $('#loading').fadeIn(1000);
         $('#loading').fadeTo("slow", 0.8);
         $.getJSON(ajaxurl, {}, function (json) {
-            console.log(json);
             var description = '', title = '';
             if (json.title !== undefined && json.title != null && json.title != false) {
                 title = json.title;
@@ -262,7 +257,6 @@
             $('#loading').hide('slow');
 
         }).fail(function (result) {
-            console.log('error', result, url);
             $('#loading').hide();
             showAlertGeneral('Atenção', 'URL inexistente ou indisponível', 'error');
         });
