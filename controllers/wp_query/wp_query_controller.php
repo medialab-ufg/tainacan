@@ -128,17 +128,21 @@ class WPQueryController extends Controller {
                 }
                 $collection_model = new CollectionModel;
                 $args = $wpquery_model->fromto_filter($data);
+                $meta_id = key($args["properties_data_fromto_date"]);
                 $paramters = $wpquery_model->do_filter($args);
-                $data['loop'] =  new WP_Query($paramters);
+                $param_type = $paramters["meta_query"][0]["type"];
+                $date_range = $paramters["meta_query"][0]["value"];
+
+                $result_objects = $wpquery_model->getRangeItems($param_type, $date_range, $meta_id);
+                $data['loop'] =  new WP_Query($result_objects);
+
                 $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
                 $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);
                 $data['is_moderator'] = CollectionModel::is_moderator($args['collection_id'], get_current_user_id());
                 $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($args['collection_id'], "socialdb_collection_table_metas", true)));
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($args);
-//                if(mb_detect_encoding($return['page'], 'auto')=='UTF-8'){
-//                    $return['page'] = utf8_decode(iconv('ISO-8859-1', 'UTF-8', $return['page']));
-//                }
+
                 return json_encode($return);
             case "wpquery_dynatree":
                 $return = array();

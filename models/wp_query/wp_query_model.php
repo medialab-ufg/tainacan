@@ -24,7 +24,7 @@ class WPQueryModel extends Model {
      * Metodo reponsavel em determinar se deve listar as colecoes ou objetos
      * Autor: Eduardo Humberto 
      */
-    public function set_post_type($collection_id,$data) {
+    public function set_post_type($collection_id) {
         if ($collection_id == get_option('collection_root_id')) {
             return 'socialdb_collection';
         } else {
@@ -427,6 +427,7 @@ class WPQueryModel extends Model {
         $recover_data = unserialize(stripslashes($data['wp_query_args']));
          unset($recover_data['pagid']);
         $property = get_term_by('id', $data['facet_id'], 'socialdb_property_type');
+
         if ($property) {
             if ($data['facet_type'] == 'date') {
                 $new_range_filters = explode(',',$data['value']);
@@ -506,11 +507,12 @@ class WPQueryModel extends Model {
      * Autor: Eduardo Humberto 
      */
     public function do_filter($recover_data) {
+        $is_root_collection = $recover_data['collection_id'] == get_option('collection_root_id');
+        $post_type_unset    = ( !isset($recover_data['post_type']) || empty($recover_data['post_type']) );
+        $post_status_unset  = ( !isset($recover_data['post_status']) || empty($recover_data['post_status']) );
+
         // Se estiver buscando
-        if( $recover_data['collection_id'] == get_option('collection_root_id')
-            && (!isset($recover_data['post_type']) || empty($recover_data['post_type']) )
-            && (!isset($recover_data['post_status']) || empty($recover_data['post_status'])))
-        {
+        if( $is_root_collection && $post_type_unset && $post_status_unset) {
             $page = $this->set_page($recover_data);
             $orderby = $this->set_order_by($recover_data);
             $order = $this->set_type_order($recover_data);
@@ -550,29 +552,31 @@ class WPQueryModel extends Model {
             // $order = $this->set_type_order($recover_data);
             $order = $recover_data['order'];
             // se vai listar as colecoes ou objetos
-            if(isset($recover_data['post_type']) && !empty($recover_data['post_type']) ){
+            if(isset($recover_data['post_type']) && !empty($recover_data['post_type']) ) {
                 $post_type = $recover_data['post_type'];
-            }else if(isset($recover_data['advanced_search'])){
+            } else if(isset($recover_data['advanced_search'])) {
                 $post_type = 'socialdb_object';
-            }else{
+            } else {
                 $post_type = $this->set_post_type($recover_data['collection_id'],$recover_data);
             }
+
             $recover_data['post_type'] = $post_type;
             //se estiver buscando na lixeira
             if(isset($recover_data['post_status']) && !empty($recover_data['post_status'])){
                 $status = $recover_data['post_status'];
-            }else{
+            } else {
                 $status = 'publish';
             }
+
             //all_data_inside
             $args = array(
-                'post_type' => $post_type,
-                'paged' => (int)$page,
-                'posts_per_page' => (isset($recover_data['posts_per_page']))?$recover_data['posts_per_page']:10,
-                'tax_query' => $tax_query,
-                'orderby' => $orderby,
-                'order' => $order,
-                'post_status' => $status,
+                'post_type'      => $post_type,
+                'paged'          => (int) $page,
+                'posts_per_page' => (isset($recover_data['posts_per_page']))?$recover_data['posts_per_page']:50,
+                'tax_query'      => $tax_query,
+                'orderby'        => $orderby,
+                'order'          => $order,
+                'post_status'    => $status,
                 //'no_found_rows' => true, // counts posts, remove if pagination required
                 'update_post_term_cache' => false, // grabs terms, remove if terms required (category, tag...)
                 'update_post_meta_cache' => false, // grabs post meta, remove if post meta required
@@ -581,6 +585,7 @@ class WPQueryModel extends Model {
             if ($meta_query) {
                 $args['meta_query'] = $meta_query;
             }
+
             if (isset($meta_key)&&!in_array($meta_key, ['title','comment_count','date'])) {
                 $args['meta_key'] = $meta_key;
             }
@@ -593,7 +598,34 @@ class WPQueryModel extends Model {
             if(isset($recover_data['author']) && $recover_data['author'] != ''){
                 $args['author'] = $recover_data['author'];
             }
+
             return $args;
+        }
+    }
+
+    public function getRangeItems($type, $dateRange, $meta_id) {
+        if( ctype_digit($meta_id) && "date" === $type && is_array($dateRange) && count($dateRange) == 2) {
+            $meta_name = "socialdb_property_${meta_id}";
+
+            global $wpdb;
+            $resultSet = $wpdb->get_results("SELECT * FROM `wp_postmeta` WHERE `meta_key` LIKE '" . $meta_name . "' AND `meta_value` IS NOT NULL");
+            $res = [];
+
+            if(is_array($resultSet)) {
+                $time = ['from' => strtotime($dateRange[0]), 'to' => strtotime($dateRange[1])];
+                foreach ($resultSet as $item) {
+                    if( !empty($item->meta_value) ) {
+                        $fmt_time = strtotime($item->meta_value);
+                        if( $time['from'] < $fmt_time && $fmt_time < $time['to'] ) {
+                            array_push($res, (int) $item->post_id);
+                        }
+                    }
+                }
+            }
+
+            return ['post_type' => 'socialdb_object', 'post__in' => $res];
+        } else {
+            return array();
         }
     }
 
