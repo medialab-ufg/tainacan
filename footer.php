@@ -40,8 +40,9 @@
     <section class="logo-footer flogo-bar">
         <img class="logofooter"src="<?php echo get_template_directory_uri().'/libraries/images/Tainacan_pb.svg' ?>" width="60">
         <section class="wordpress-powered">
-            <?php _e('Tainacan is proudly powered by', 'tainacan'); ?>
-            <a href="https://wordpress.org/" > WordPress </a>
+            <?php bloginfo( 'name' ); _e(' is proudly powered by', 'tainacan'); ?>
+            <a class="text-info" href="http://tainacan.org" target="_blank"> Tainacan </a> <?php _e('and', 'tainacan') ?>
+            <a class="text-info" href="https://wordpress.org/" target="_blank"> WordPress </a>
         </section>
     </section>
 </div>
