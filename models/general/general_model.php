@@ -1469,7 +1469,7 @@ class Model {
      * @return json com o id e o nome de cada objeto
      * @author Eduardo Humberto
      */
-    public function get_data_by_property_json($data, $meta_key = '') {
+    public function get_data_by_property_json($data, $meta_key = '',$is_search = false) {
         global $wpdb;
         $json =[];
         $wp_posts = $wpdb->prefix . "posts";
@@ -1480,7 +1480,7 @@ class Model {
             $meta_key = 'socialdb_property_' . $data['property_id'];
         }
         //verifico a mascara para o metadao eh apenas na colecao
-        if($has_mask && $has_mask == 'key'){
+        if(($has_mask && $has_mask == 'key') || $is_search){
             $createdCategory = get_term_meta($data['property_id'], 'socialdb_property_created_category', true);
             $category_root_id = get_term_by('id',$createdCategory, 'socialdb_category_type');
             $query = "

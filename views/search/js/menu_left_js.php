@@ -472,7 +472,7 @@
  
     function autocomplete_menu_left(property_id) {
         $("#autocomplete_multipleselect_" + property_id).autocomplete({
-            source: $('#src').val() + '/controllers/collection/collection_controller.php?operation=list_items_search_autocomplete&property_id=' + property_id + '&collection_id='+$('#collection_id').val(),
+            source: $('#src').val() + '/controllers/collection/collection_controller.php?operation=list_items_search_autocomplete&is_search=true&property_id=' + property_id + '&collection_id='+$('#collection_id').val(),
             messages: {
                 noResults: '',
                 results: function () { }

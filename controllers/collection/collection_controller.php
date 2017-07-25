@@ -228,7 +228,9 @@ class CollectionController extends Controller {
                         endif;
                     }else if ($property_model->get_property_type($property->term_id) == 'socialdb_property_object') {
                         return $visualization_model->get_objects_by_property_json($data);
-                    } else {
+                    }else if(isset($data['is_search'])){
+                        return $visualization_model->get_data_by_property_json($data,'',true);
+                    }else {
                         return $visualization_model->get_data_by_property_json($data);
                     }
                 } else {
