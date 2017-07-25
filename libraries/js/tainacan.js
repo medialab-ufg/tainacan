@@ -975,9 +975,11 @@ function showTrash(src) {
             $('#collection_empty').show();
             $('#items_not_found').hide();
         }
+        return; 
+        /*
         if($('#table-view_wrapper').is(':visible')){
             wpquery_clean();
-        }
+        } */
     });
 
 }
