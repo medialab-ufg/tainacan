@@ -142,7 +142,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                                     <div style="padding-bottom: 15px; " class="col-md-12" id="only_field_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>">
                                         <p style="color: black;"><b><?php echo $property_compounded['name']; ?></b>
                                             <?php
-                                               if ((!$property['metas']['socialdb_property_required'] || $property['metas']['socialdb_property_required'] == 'false') && $property_compounded['metas']['socialdb_property_required']&&$property_compounded['metas']['socialdb_property_required'] == 'true') {
+                                               if ( ( !isset($references['is_view_mode']) || $references['is_view_mode'] === false ) && (!$property['metas']['socialdb_property_required'] || $property['metas']['socialdb_property_required'] == 'false') && $property_compounded['metas']['socialdb_property_required']&&$property_compounded['metas']['socialdb_property_required'] == 'true') {
                                             ?>
                                                <a id='required_field_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>' class="pull-right" 
                                                     style="margin-right: 15px;color:red;" >
