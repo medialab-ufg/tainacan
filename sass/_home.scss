@@ -181,10 +181,12 @@ body.home {
     .panel {
       width: 190px;
       height: 215px;
+      background: #f5f5f5;
 
       .panel-body {
         // padding: 10px !important;
         height: 178px;
+        background: white;
 
         a {
           img {
