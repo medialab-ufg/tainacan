@@ -608,7 +608,7 @@ class WPQueryModel extends Model {
             $meta_name = "socialdb_property_${meta_id}";
 
             global $wpdb;
-            $resultSet = $wpdb->get_results("SELECT * FROM `wp_postmeta` WHERE `meta_key` LIKE '" . $meta_name . "' AND `meta_value` IS NOT NULL");
+            $resultSet = $wpdb->get_results("SELECT * FROM $wpdb->postmeta WHERE `meta_key` LIKE '" . $meta_name . "' AND `meta_value` IS NOT NULL");
             $res = [];
 
             if(is_array($resultSet)) {

@@ -13,7 +13,7 @@
   var lat_long_count = 0;
   $(objs).each(function(idx, el) {
       var current_id = $(el).val();
-      var current_content   = "<div class='col-md-12'>"+ $.trim( $("#object_" + current_id ).html() )+ "</div>";
+      var current_content = "<div class='col-md-12 item-geo-wrapper'>"+ $.trim( $("#object_" + current_id ).html() )+ "</div>";
       var marker_uniq_id = "_item_" + current_id;
 
       if ( use_approx_mode && use_approx_mode === "use_approx_mode" ) {
@@ -95,7 +95,6 @@
       long: getAverageCoord(sorted_longs, sorted_longs.length)
   };
 
-
   function initMap(map_div) {
       if( total_map_markers > 0 ) {
           try {
@@ -152,7 +151,6 @@
               $('.geolocation-view-container .error-map').show();
           }
       }
-
   }
     
   if ( use_approx_mode && use_approx_mode !== "use_approx_mode" ) {

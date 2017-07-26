@@ -4,14 +4,10 @@
     <div id="map_filtered" style="height: 500px; width: 100%; display: none"></div>
 
   <div class="not-configured" style="display: none">
-      <h5>
-        <?php _e('This collection is not configured to use geolocation mode.', 'tainacan'); ?>    
-      </h5>      
+      <h5> <?php _t('This collection is not configured to use geolocation mode.', 1); ?> </h5>
   </div>
     <div class="error-map" style="display: none">
-        <h5>
-            <?php _e('No items have geographic location data in this listing.', 'tainacan'); ?>
-        </h5>
+        <h5> <?php _t('No items have geographic location data in this listing.', 1); ?> </h5>
     </div>
 </div>
 
