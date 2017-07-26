@@ -1,4 +1,6 @@
 <?php
+var_dump('test');
+exit();
 /*
  * Template Name: Index
  * Description: Pagina inicial da colecao
