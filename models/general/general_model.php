@@ -1410,7 +1410,7 @@ class Model {
      * @return json com o id e o nome de cada objeto
      * @author Eduardo Humberto
      */
-    public function get_objects_by_property_json_advanced_search($data) {
+    public function get_objects_by_property_json_advanced_search($data,$is_search = false) {
         global $wpdb;
         $wp_posts = $wpdb->prefix . "posts";
         $term_relationships = $wpdb->prefix . "term_relationships";
@@ -1428,10 +1428,22 @@ class Model {
                         SELECT p.* FROM $wp_posts p
                         $inner_join    
                         WHERE $where p.post_type like 'socialdb_object' AND p.post_status like 'publish' and ( p.post_title LIKE '%{$data['term']}%' OR p.post_content LIKE '%{$data['term']}%')
-                ";   
+                ";                  
         $result = $wpdb->get_results($query);
+        if($is_search){
+            $query = "
+                        SELECT p.* FROM $wp_posts p    
+                        WHERE p.post_date > NOW() - INTERVAL 1 DAY and p.post_type like 'socialdb_object' AND p.post_status like 'inherit' and ( p.post_title LIKE '%{$data['term']}%' OR p.post_content LIKE '%{$data['term']}%')
+                ";    
+            $resultInherit = $wpdb->get_results($query);            
+        }
         if ($result) {
             foreach ($result as $object) {
+                $json[] = array('ID'=> $object->ID,'value' => $object->post_title, 'label' => $object->post_title);
+            }
+        }
+        if (isset($resultInherit) && is_array($resultInherit)) {
+            foreach ($resultInherit as $object) {
                 $json[] = array('ID'=> $object->ID,'value' => $object->post_title, 'label' => $object->post_title);
             }
         }
