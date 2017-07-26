@@ -40,7 +40,8 @@ class EventObjectDeleteModel extends EventModel {
             }
         }
         //filtro que altera o retorno do evento
-        if(has_filter('tainacan_alter_delete_object')){
+        if(has_filter('tainacan_alter_delete_object'))
+        {
             $break =  apply_filters('tainacan_alter_delete_object',$data);
             if($break){
                 return json_encode($break);

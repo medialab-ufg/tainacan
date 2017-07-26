@@ -141,7 +141,7 @@ function delete_object(title, text, object_id, time) {
                 $('#modalImportMain').modal('hide');//escondo o modal de carregamento
                 elem_first = jQuery.parseJSON(result);
                 showList($('#src').val());
-                 set_containers_class($('#collection_id').val());
+                set_containers_class($('#collection_id').val());
                 showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
             });
         }

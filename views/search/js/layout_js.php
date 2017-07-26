@@ -245,7 +245,6 @@
             data: {operation: 'list_ordenation', collection_id: $("#collection_id").val(), get_all_meta: true}
         }).done(function (result) {
             elem = jQuery.parseJSON(result);
-
             var table_meta_ids = [];
             $('input[name="meta_id_table"]').each(function(idx, el) {
                 var valor = $(el).val();
@@ -264,7 +263,8 @@
             var default_span_html = '<li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>';
             var correct_order = [], default_order = [];
             
-            if (elem.property_data) {
+            if (elem.property_data)
+            {
                 $("#collection_order").append("<optgroup label='<?php _e('Data properties','tainacan') ?>'>");
                 var iOrder = 0;
                 <?php 
@@ -353,8 +353,8 @@
                 <?php                
                 endif;
                 ?>
-               
             }
+
             if (elem.property_object) {
                 $.each(elem.property_object, function (idx, data) {
                     if (data && data !== false) {
@@ -378,6 +378,7 @@
                     iOrder++;
                 });
             }
+
             if (elem.property_term) {
                 $.each(elem.property_term, function (idx, data) {
                     if (data && data !== false) {
@@ -404,7 +405,7 @@
                     iOrder++;
                 });
             }
-           
+
             $(correct_order).each(function(idx, el) {
                 $(".table-meta-config #sort-metas").append(el);
             });

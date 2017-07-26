@@ -416,13 +416,16 @@ abstract class EventModel extends Model {
         $this->notificate_moderators_email($data['socialdb_event_collection_id'], $title);
         $event_created = $this->insert_event($title); // insere o termo do evento no banco
         $this->create_democratic_vote(array('event_id' => $event_created['ID'], 'collection_id' => $data['socialdb_event_collection_id']));
-        if ($event_created && $event_created['ID']) { // se criou com sucesso
+
+        if ($event_created && $event_created['ID'])// se criou com sucesso
+        {
             $this->instantiate_metas_event($event_created['ID'], $this->parent->name, $data); // instancia e coloca os valores nos meta dados do evento
             if ($this->is_automatically_verify_event($data['socialdb_event_collection_id'], $this->permission_name, $data['socialdb_event_user_id'], $event_created['ID']))
-            {
+            {//
                 $data['event_id'] = $event_created['ID'];
                 $data = $this->verify_event($data, true);
                 return $data;
+
             } elseif (isset($data['socialdb_event_delete_collection_id']) && get_post($data['socialdb_event_delete_collection_id'])->post_author == get_current_user_id())
             {
                 $data['event_id'] = $event_created['ID'];

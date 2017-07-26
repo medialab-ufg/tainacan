@@ -10,7 +10,8 @@ global $config;
     <div class="col-md-12 tainacan-topo-categoria">
         <h3><?php _e('Categories', 'tainacan') ?><small>&nbsp;&nbsp;&nbsp;<!--a href="#MyWizard" onclick="show_modal_import_taxonomy()"><?php _e('Import', 'tainacan') ?></a--></small>
             <button onclick="backToMainPage();" class="btn btn-default pull-right"><?php _e('Back to collection', 'tainacan') ?></button>
-        </h3> 
+        </h3>
+        
         <hr>
         <div id="alert_success_categories" class="alert alert-success" style="display: none;">
             <button type="button" class="close" onclick="hide_alert();"><span aria-hidden="true">&times;</span></button>

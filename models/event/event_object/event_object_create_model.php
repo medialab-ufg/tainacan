@@ -54,7 +54,8 @@ class EventObjectCreateModel extends EventModel {
            $data['type'] = 'info';
              $data['title'] = __('Atention','tainacan');
        }
-        $this->notificate_user_email(get_post_meta($data['event_id'], 'socialdb_event_collection_id',true),  get_post_meta($data['event_id'], 'socialdb_event_user_id',true), $data['event_id']);
+
+       $this->notificate_user_email(get_post_meta($data['event_id'], 'socialdb_event_collection_id',true),  get_post_meta($data['event_id'], 'socialdb_event_user_id',true), $data['event_id']);
        return json_encode($data);
     }
       /**

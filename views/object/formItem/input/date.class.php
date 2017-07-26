@@ -189,8 +189,9 @@ class DateClass extends FormItem {
                     }
                 }).done(function (result) {
                     <?php if($this->isKey): ?>
-                    let json =JSON.parse(result);
-                    if(json.value){
+                    let json = JSON.parse(result);
+                    if(json.value)
+                    {
                         $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val('');
                         toastr.error(json.value+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
                     }
@@ -209,7 +210,7 @@ class DateClass extends FormItem {
             if(day_exist(day, month, year))
             {
                 <?php if($this->isRequired):  ?>
-                validateFieldsMetadataText($(this).val(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>')
+                validateFieldsMetadataText($(this).val(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>');
                 <?php endif; ?>
                 $.ajax({
                     url: $('#src').val() + '/controllers/object/form_item_controller.php',

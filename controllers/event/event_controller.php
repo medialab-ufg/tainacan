@@ -125,7 +125,8 @@ require_once(dirname(__FILE__).'../../../models/object/object_model.php');
               apply_filters('tainacan_restore_descarted_item', $logData['item_id']);
           }
           Log::addLog($logData);
-        return $event_object_delete_model->create_event($data);
+          $return = $event_object_delete_model->create_event($data);
+        return $return;
       case 'socialdb_event_object_delete';
         $event_object_delete_model = new EventObjectDeleteModel();
         return $event_object_delete_model->verify_event($data);

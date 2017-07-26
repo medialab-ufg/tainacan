@@ -55,7 +55,7 @@ class ObjectWidgetsHelper extends ViewHelper {
         $result = [];
         $coumpounds_id = [];
         if (isset($properties_compounds)):
-            foreach ($properties_compounds as $property) { 
+            foreach ($properties_compounds as $property) {
                if( ( has_filter('skip_compound_property') && apply_filters('skip_compound_property',$property,$object_id)) 
                        || ( isset($references['properties_to_avoid']) && is_array($references['properties_to_avoid'])&&in_array($property['id'], $references['properties_to_avoid']))){
                     continue;

@@ -2746,17 +2746,26 @@ class Model {
      * @return boolean True para caso a adicao ou atualizacao for feita com 
      * sucesso ou FALSE caso ocorra alguma falha
      */
-    public function set_common_field_values($item_id, $index, $value, $type = '') {
+    public function set_common_field_values($item_id, $index, $value, $type = '')
+    {
         if (!$index || trim($index) == '') {
             return false;
         }
+
         $indexes = get_post_meta($item_id, 'socialdb_object_commom_index', true);
+        if(is_string($indexes))
+        {
+            do{
+                $indexes = unserialize($indexes);
+            }
+            while (is_string($indexes));
+        }
+
         $values = get_post_meta($item_id, 'socialdb_object_commom_values');
         if (is_array($value)):
             $this->set_common_field_values_array($item_id, $indexes, $index, $value, $type);
         else:
             if ($indexes && $values) {
-                $indexes = unserialize($indexes);
                 if (isset($indexes[$index])) {
                     $position = $indexes[$index];
                     $this->sdb_update_post_meta($position, $value);
@@ -2787,7 +2796,11 @@ class Model {
      */
     public function set_common_field_values_array($item_id, $indexes, $index, $value_array, $type) {
         if ($indexes) {//verifico se ja existe os postmeta com o array de indices
-            $indexes = unserialize($indexes); // desserializo para um array comum
+            if(!is_array($indexes))
+            {
+                $indexes = unserialize($indexes);// desserializo para um array comum
+            }
+
             if (isset($indexes[$index]) && is_array($indexes[$index])) {
                 $positions = $indexes[$index];
                 unset($indexes[$index]);
