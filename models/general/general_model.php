@@ -2742,6 +2742,23 @@ class Model {
         }
         return $post_id;
     }
+    
+    public function getCollectionTermProperties($collection_id){
+        $properties = [];
+        $term_types = ['selectbox', 'radio', 'checkbox', 'tree', 'tree_checkbox', 'multipleselect'];
+        $ids = get_term_meta($this->get_category_root_of($collection_id), 'socialdb_category_property_id');
+        // itero sobre os metadados da colecao
+        if(isset($ids) && is_array($ids)){
+            foreach ($ids as $id) {
+                $property = $this->get_all_property($id, true);
+                if (isset($property['type']) && in_array($property['type'], $term_types)) {
+                    $properties[] = $property;
+                }
+                
+            }
+        }
+        return $properties;
+    }
 
     /**
      * 

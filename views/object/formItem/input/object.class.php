@@ -994,6 +994,9 @@ class ObjectClass extends FormItem {
                 }
             }
         }
+        if(empty(array_filter($title_labels))){
+            return __('Keyword','tainacan');
+        }
         return implode('/', $title_labels);
     }
 

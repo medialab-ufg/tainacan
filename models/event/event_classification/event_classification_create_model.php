@@ -5,6 +5,7 @@ include_once ('../../../../../wp-load.php');
 include_once ('../../../../../wp-includes/wp-db.php');
 */
 require_once(dirname(__FILE__) . '../../../event/event_model.php');
+require_once(dirname(__FILE__) . '../../../object/object_save_values.php');
 
 class EventClassificationCreateModel extends EventModel {
 
@@ -84,11 +85,19 @@ class EventClassificationCreateModel extends EventModel {
      * Autor: Eduardo Humberto 
      */
     public function insert_event_category($object_id,$data,$collection_id,$automatically_verified = false){
+        $class = new ObjectSaveValuesModel();
         //pego a categoria
         $category = get_term_by('id',  get_post_meta($data['event_id'], 'socialdb_event_classification_term_id',true),'socialdb_category_type');
         if($category&&$object_id){// se a categoria ou objeto forem validos
-            wp_set_object_terms( $object_id, $category->term_id,'socialdb_category_type',true);
-            $this->concatenate_commom_field_value( $object_id, "socialdb_propertyterm_".$this->get_category_property($category->term_id, $collection_id), $category->term_id);
+            $class->saveValue($object_id,
+                        $this->getPropertyCategory( $category->term_id, $collection_id),
+                        0,
+                        'term',
+                        rand(1, 199),
+                        $category->term_id,  rand(1, 199)
+                        );
+//            wp_set_object_terms( $object_id, $category->term_id,'socialdb_category_type',true);
+//            $this->concatenate_commom_field_value( $object_id, "socialdb_propertyterm_".$this->get_category_property($category->term_id, $collection_id), $category->term_id);
             $this->set_approval_metas($data['event_id'], $data['socialdb_event_observation'], $automatically_verified);
             $this->update_event_state('confirmed', $data['event_id']);
             $data['msg'] = __('The event was successful','tainacan');
@@ -102,6 +111,17 @@ class EventClassificationCreateModel extends EventModel {
         }
         
        return $data;
+    }
+    
+    public function getPropertyCategory($category,$collection_id) {
+        foreach ($this->getCollectionTermProperties($collection_id) as $property) {
+            if(isset($property['metas']['socialdb_property_term_root'])){
+                $ancestors = get_ancestors($category, 'socialdb_category_type');
+                if(is_array($ancestors) && in_array($property['metas']['socialdb_property_term_root'], $ancestors)){
+                    return $property['id'];
+                }
+            }
+        }
     }
       /**
      * function insert_event_tag($object_id,$data,$automatically_verified = false)
@@ -162,12 +182,19 @@ class EventClassificationCreateModel extends EventModel {
             $metas = get_post_meta($object_id, 'socialdb_property_'.$property->term_id);
             if($metas&&$metas[0]!=''&&is_array($metas)){
                 if(!in_array($relationship_id, $metas)):
-                    add_post_meta($object_id, 'socialdb_property_'.$property->term_id, $relationship_id);
-                    if(is_numeric($relationship_id)) {
-                        $this->concatenate_commom_field_value_object($object_id, "socialdb_property_" . $property->term_id, $relationship_id);    
+                    $class = new ObjectSaveValuesModel();
+                    if(get_post($relationship_id)) {
+                       $type = 'object'; 
                     } else {
-                        $this->concatenate_commom_field_value($object_id, "socialdb_property_" . $property->term_id_, $relationship_id);
-                    }                    
+                        $type = 'data'; 
+                    }    
+                    $class->saveValue($object_id,
+                        $property->term_id,
+                        0,
+                        $type,
+                        rand(1, 199),
+                        $relationship_id, false
+                        );  
                 else:
                     $data['msg'] = __('This classification is already confirmed','tainacan');
                     $data['type'] = 'info';

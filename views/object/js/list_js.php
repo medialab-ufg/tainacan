@@ -245,7 +245,7 @@
                 //logMsg("droppable.over, %o, %o", event, ui);
             },
             drop: function (event, ui) {
-                var object_id = $(this).closest('div').find('.object_id').val();
+                var object_id = $(this).parent().parent().parent().parent().find('.object_id').val();
                 if (object_id == null) {
                     object_id = $(this).siblings().first().attr("id")
                             .replace("add_classification_allowed_", "")
