@@ -1166,10 +1166,13 @@ class CollectionModel extends Model {
         if (isset($recover_data['properties_data_fromto_date'])) {
             $property = array();
             foreach ($recover_data['properties_data_fromto_date'] as $property_id => $value) {
-                //$filter['node_key'] = $category;
                 $property['property_id'] = $property_id;
                 $property['value'] = implode(',', $value);
-                $property['name'] = str_replace(',', ' ' . __('until', 'tainacan') . ' ', implode(',', $value));
+
+                $from = date("d/m/Y", strtotime($value[0]));
+                $to = date("d/m/Y", strtotime($value[1]));
+                
+                $property['name'] = $from . " " ._t('until') . " " . $to;
                 $data['properties_data_fromto_date'][] = $property;
             }
         }
