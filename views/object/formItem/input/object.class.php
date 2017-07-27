@@ -61,7 +61,7 @@ class ObjectClass extends FormItem {
         <?php endif;   ?>
         <div class="metadata-related">
             <h6><b><?php _e('Related items', 'tainacan') ?></b></h6>
-            <?php //$this->insert_button_add_other_collection($property, $object_id, $collection_id) ?>
+            <?php $this->insert_button_add_other_collection($property, $this->item_id, $this->collection_id) ?>
             <span id="no_results_property_<?php echo $compound_id; ?>_<?php echo $property_id; ?>_<?php echo $index_id; ?>">
                 <?php if (!$autoValidate): // verifico se ele esta na lista de objetos da colecao    ?>    
                 <input type="text" 
@@ -179,7 +179,7 @@ class ObjectClass extends FormItem {
                 });
                 //# - inicializa os tooltips
                 $(".advanced_search_title_<?php echo $compound_id ?>_<?php echo $propert_id ?>_<?php echo $index_id ?>").autocomplete({
-                    source: $('#src').val() + '/controllers/object/object_controller.php?operation=get_objects_by_property_json&verify_selected=true&property_id=' + <?php echo $propert_id ?>,
+                    source: $('#src').val() + '/controllers/object/object_controller.php?operation=get_objects_by_property_json&verify_selected=true&property_id=' + <?php echo ($propert_id!='0') ? $propert_id : $compound_id ?>,
                     messages: {
                         noResults: '',
                         results: function () {
@@ -613,6 +613,36 @@ class ObjectClass extends FormItem {
                 });
                 append_category_properties_adv(values.join(','), property_id);
             }
+            
+            //######## INSERCAO DE UM ITEM AVULSO EM UMA COLECAO #########################//    
+                function add_new_item_by_title_widget(collection_id,title,seletor,property_id,object_id){
+                    if(title.trim()===''){
+                        showAlertGeneral('<?php _e('Attention!','tainacan') ?>','<?php _e('Item title is empty!','tainacan') ?>','info');
+                    }else{
+                        $(seletor).trigger('click');
+                        $('#title_'+ property_id + "_" + object_id ).val('');
+                        show_modal_main();
+                        $.ajax({
+                            url: $('#src').val() + '/controllers/object/object_controller.php',
+                            type: 'POST',
+                            data: { operation: 'insert_fast', collection_id: collection_id, title: title}
+                        }).done(function (result) {
+                            hide_modal_main();
+                            wpquery_filter();
+                            //list_all_objects(selKeys.join(", "), $("#collection_id").val());
+                            elem_first = jQuery.parseJSON(result);
+                            showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
+                            if(elem_first.type==='success'){
+                                $("#no_results_property_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>").hide();
+                                $('#results_property_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?> ul')
+                                            .append('<li id="inserted_property_object<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>_' +  elem_first.item.ID + '" item="' +  elem_first.item.ID + '" class="selected-items-property-object property-<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>">' + elem_first.item.post_title
+                                                    + '<span  onclick="remove_item_objet(this)" style="cursor:pointer;" class="pull-right glyphicon glyphicon-trash"></span></li>');
+                                    //validacao do campo
+                                    original_add_in_item_value_compound_<?php echo $compound_id ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>(elem_first.item.ID);
+                            }
+                        });
+                    }
+                }
         </script> 
         <?php
     }
@@ -698,7 +728,7 @@ class ObjectClass extends FormItem {
                     <div class="col-md-8 no-padding">
                         <input type="text" 
                                name="advanced_search_title" 
-                               class="form-control <?php if (isset($this->compound_id)): ?> advanced_search_title_<?php echo $this->compound_id ?>_<?php echo $property['id'] ?>_<?php echo $this->index_id ?><?php endif; ?>"
+                               class="form-control <?php if (isset($this->compound_id)): ?> advanced_search_title_<?php echo $this->compound_id ?>_<?php echo ($this->property_id != '0') ? $property['id'] : '0' ?>_<?php echo $this->index_id ?><?php endif; ?>"
                                id="advanced_search_title_<?php echo $property['id'] ?>"
                                placeholder="<?php _e('Type the 3 first letters to activate autocomplete', 'tainacan'); ?>">
                     </div>
@@ -998,6 +1028,52 @@ class ObjectClass extends FormItem {
             return __('Keyword','tainacan');
         }
         return implode('/', $title_labels);
+    }
+    
+    /**
+     * 
+     * @param type $param
+     */
+    public function insert_button_add_other_collection($property, $object_id, $collection_id) {
+        // botao que leva a colecao relacionada
+            if (isset($property['metas']['collection_data'][0]->post_title) 
+                    && ( isset($property['metas']['socialdb_property_habilitate_new_item']) && $property['metas']['socialdb_property_habilitate_new_item'] == 'true')):  ?>
+                <a style="cursor: pointer;color: white;"
+                   id="add_item_popover_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"
+                   class="btn btn-primary btn-xs popover_item" 
+                    >
+                       <span class="glyphicon glyphicon-plus"></span>
+                       <?php _e('Add new', 'tainacan'); ?>
+                       <?php echo ' ' . $property['metas']['collection_data'][0]->post_title; ?>
+                </a>
+                <script>
+                    $('#add_item_popover_<?php echo $property['id']; ?>_<?php echo $object_id; ?>').popover({ 
+                       html : true,
+                       placement: 'right',
+                       title: '<?php echo _e('Add item in the collection','tainacan').' '.$property['metas']['collection_data'][0]->post_title; ?>',
+                       content: function() {
+                         return $("#popover_content_<?php echo $property['id']; ?>_<?php echo $object_id; ?>").html();
+                       }
+                    });
+                </script>
+                <div id="popover_content_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"   class="hide ">
+                    <form class="form-inline"  style="font-size: 12px;width: 300px;">
+                        <div class="form-group">
+                          <input type="text" 
+                                 style="margin-bottom: 13px;"
+                                 placeholder="<?php _e('Type the title','tainacan') ?>"
+                                 class="form-control" 
+                                 id="title_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">
+                        </div>
+                        <button type="button" 
+                                style="height: 35px;"
+                                onclick="add_new_item_by_title_widget('<?php echo $property['metas']['collection_data'][0]->ID; ?>',$('#title_<?php echo $property['id']; ?>_<?php echo $object_id; ?>').val(),'#add_item_popover_<?php echo $property['id']; ?>_<?php echo $object_id; ?>',<?php echo $property['id']; ?>,<?php echo $object_id; ?>)"
+                                class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span></button>
+                    </form>
+                </div> 
+                <br><br>
+        <?php 
+            endif; 
     }
 
 }
