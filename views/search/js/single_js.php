@@ -1071,34 +1071,64 @@
     }
 
     function wpquery_fromto(facet_id, facet_type) {
-
         if ($('#facet_' + facet_id + '_1').val() !== '' && $('#facet_' + facet_id + '_2').val() !== '') {
-            $('#list').hide();
-            $('#loader_objects').show();
-            var value = $('#facet_' + facet_id + '_1').val() + ',' + $('#facet_' + facet_id + '_2').val();
-            $.ajax({
-                type: "POST",
-                url: $('#src').val() + "/controllers/wp_query/wp_query_controller.php",
-                data: {operation: 'wpquery_fromto', facet_id: facet_id, facet_type: facet_type, wp_query_args: $('#wp_query_args').val(), value: value, collection_id: $('#collection_id').val()}
-            }).done(function (result) {
-                elem = jQuery.parseJSON(result);
-                $('#loader_objects').hide();
-                $('#list').html(elem.page);
-                $('#wp_query_args').val(elem.args);
-                set_popover_content($("#socialdb_permalink_collection").val() + '?' + elem.url + '&is_filter=1');
-                show_filters($('#collection_id').val(), elem.args);
-                $('#list').show();
-                if (elem.empty_collection) {
-                    $('#collection_empty').show();
-                    $('#items_not_found').hide();
-                }
-                var curr_viewMode = $("#collection_single_ordenation").attr('data-viewMode');
-                if (curr_viewMode) {
-                    changeViewMode(curr_viewMode);
-                }
-                setMenuContainerHeight();
-            });
+            var date_from = $('#facet_' + facet_id + '_1').val();
+            var date_to = $('#facet_' + facet_id + '_2').val();
+            var value = date_from + ',' + date_to;
+
+            if(dataValida(date_from) && dataValida(date_to)) {
+                $('#list').hide();
+                $('#loader_objects').show();
+
+                $.ajax({
+                    type: "POST",
+                    url: $('#src').val() + "/controllers/wp_query/wp_query_controller.php",
+                    data: {operation: 'wpquery_fromto', facet_id: facet_id, facet_type: facet_type, wp_query_args: $('#wp_query_args').val(), value: value, collection_id: $('#collection_id').val()}
+                }).done(function (result) {
+                    elem = jQuery.parseJSON(result);
+                    $('#loader_objects').hide();
+                    $('#list').html(elem.page);
+                    $('#wp_query_args').val(elem.args);
+                    set_popover_content($("#socialdb_permalink_collection").val() + '?' + elem.url + '&is_filter=1');
+                    show_filters($('#collection_id').val(), elem.args);
+                    $('#list').show();
+                    if (elem.empty_collection) {
+                        $('#collection_empty').show();
+                        $('#items_not_found').hide();
+                    }
+                    var curr_viewMode = $("#collection_single_ordenation").attr('data-viewMode');
+                    if (curr_viewMode) {
+                        changeViewMode(curr_viewMode);
+                    }
+                    setMenuContainerHeight();
+                });
+            } else {
+                swal("Data inválida!");
+                return false;
+            }
         }
+    }
+
+    function dataValida(dateString) {
+        var regex_date = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
+
+        if(!regex_date.test(dateString))
+            return false;
+
+        var parts   = dateString.split("/");
+        var dia     = parseInt(parts[0]);
+        var mes   = parseInt(parts[1]);
+        var ano    = parseInt(parts[2]);
+        var qtdDiaMes = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+        if(ano < 1000 || ano > 3000 || mes == 0 || mes > 12)
+            return false;
+
+        // Anos bissextos
+        if(ano % 400 == 0 || (ano % 100 != 0 && ano % 4 == 0))
+            qtdDiaMes[1] = 29;
+
+        return (dia > 0 && dia <= qtdDiaMes[mes - 1]);
     }
 
     function wpquery_ordenation(value, temp_list_mode) {

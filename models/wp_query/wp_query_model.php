@@ -607,25 +607,42 @@ class WPQueryModel extends Model {
         if( ctype_digit($meta_id) && "date" === $type && is_array($dateRange) && count($dateRange) == 2) {
             $meta_name = "socialdb_property_${meta_id}";
 
-            global $wpdb;
-            $resultSet = $wpdb->get_results("SELECT * FROM $wpdb->postmeta WHERE `meta_key` LIKE '" . $meta_name . "' AND `meta_value` IS NOT NULL");
-            $res = [];
+            if($this->validateFilterDate($dateRange[0]) && $this->validateFilterDate($dateRange[1])) {
+                global $wpdb;
+                $resultSet = $wpdb->get_results("SELECT * FROM $wpdb->postmeta WHERE `meta_key` LIKE '" . $meta_name . "' AND `meta_value` IS NOT NULL");
+                $res = [];
 
-            if(is_array($resultSet)) {
-                $time = ['from' => strtotime($dateRange[0]), 'to' => strtotime($dateRange[1])];
-                foreach ($resultSet as $item) {
-                    if( !empty($item->meta_value) ) {
-                        $fmt_time = strtotime($item->meta_value);
-                        if( $time['from'] < $fmt_time && $fmt_time < $time['to'] ) {
-                            array_push($res, (int) $item->post_id);
+                if(is_array($resultSet)) {
+                    $time = ['from' => strtotime($dateRange[0]), 'to' => strtotime($dateRange[1])];
+                    foreach ($resultSet as $item) {
+                        if( !empty($item->meta_value) ) {
+                            $fmt_time = strtotime($item->meta_value);
+                            if( $time['from'] < $fmt_time && $fmt_time < $time['to'] ) {
+                                array_push($res, (int) $item->post_id);
+                            }
                         }
                     }
                 }
+                return ['post_type' => 'socialdb_object', 'post__in' => $res];
+            } else {
+                return array();
             }
-
-            return ['post_type' => 'socialdb_object', 'post__in' => $res];
         } else {
             return array();
+        }
+    }
+
+    private function validateFilterDate($date){
+        $parts = explode("-", $date);
+
+        if(count($parts) === 3) {
+            $year  = (int) $parts[0];
+            $month = (int) $parts[1];
+            $day   = (int) $parts[2];
+
+            return checkdate($month, $day, $year);
+        } else {
+            return false;
         }
     }
 
