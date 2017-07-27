@@ -495,6 +495,7 @@ class ObjectController extends Controller {
                     'organize' => unserialize( get_post_meta($data['collection_id'], 'socialdb_collection_update_tab_organization', true))[0],
                     'names' => get_post_meta($data['collection_id'], 'socialdb_collection_tab') ];
                 $press['meta_ids_ord'] = explode(",",unserialize($tabs['order'][0])['default']);
+
                 $ord_list = [];
 
                 if($tabs['organize']) {
@@ -701,10 +702,10 @@ class ObjectController extends Controller {
                                     if($is_compound) {
                                         $_pair['value']          = '_____________________________';
                                         $_pair['submeta_header'] = true;
+                                        $_pair['children'] = $_compound_check;
                                     } else {
                                         $chk_compound_child = unserialize(get_term_meta($header->term_id, "socialdb_property_is_compounds", true));
                                         if(is_array($chk_compound_child)) {
-                                            
                                             if( isset( $tabs['organize'][key($chk_compound_child)] ) && ($tabs['organize'][key($chk_compound_child)] != "default") ) {
                                                 $_pair['submeta_tab_parent'] = key($chk_compound_child);
                                             }
@@ -717,7 +718,7 @@ class ObjectController extends Controller {
                                     $press['set'][] = $_pair;
                                 }
                             }
-                        } /*else { $press['excluded'][] = $meta; } */
+                        }
                     }
 
                     if($is_compound_meta && empty($current_submeta_vals) && $last_meta_id > 0) {
@@ -736,11 +737,15 @@ class ObjectController extends Controller {
                         $mID = $set_info['meta_id'];
 
                         if( isset( $tabs['organize'][$mID]) && ($tabs['organize'][$mID] != "default") && ctype_digit($tabs['organize'][$mID]) ) {
-                            array_push($tabs_unodr, $set_info);
+                            if( !isset($set_info['submeta_header']) ) {
+                                array_push($tabs_unodr, $set_info);
+                            }
                         } else {
-
                             if( isset($set_info['is_submeta']) && $set_info['is_submeta'] && isset($set_info['submeta_tab_parent'])) {
                                 if( isset( $tabs['organize'][$set_info['submeta_tab_parent']] ) ) {
+                                    if(!in_array( $ord_list[$set_info['submeta_tab_parent']], $tabs_unodr))
+                                        array_push($tabs_unodr, $ord_list[$set_info['submeta_tab_parent']]);
+
                                     array_push( $tabs_unodr, $set_info);
                                 }
                             }
@@ -760,68 +765,6 @@ class ObjectController extends Controller {
                 if(!empty($tabs_unodr)) {
                     $press['set'] = array_merge($final_ordered, $tabs_unodr);
                 };
-
-                $s = [];
-                $aux_ids = [];
-                if( isset($press['inf']) ) {
-                    $init = 0;
-                    foreach ($press['inf'] as $_m_arr) {
-                        $_item_pair = $_m_arr['meta'] . "__" . $_m_arr['value'];
-
-                        if (!is_null($aux_arr)) {
-                            if( in_array($_item_pair, $aux_arr) ) {
-                                if( is_null($_m_arr['is_submeta'])) {
-                                    unset( $press['inf'][$init] );
-                                } else {
-                                    $aux_ids[] = $init;
-                                }
-                            }
-                        }
-
-                        $_curr_header_idx = $_m_arr['header_idx'];
-                        if( isset($_curr_header_idx) && is_int($_curr_header_idx) ) {
-                            if( in_array($_curr_header_idx, $_to_be_removed) ) {
-                                unset( $press['inf'][$init] );
-                            } else {
-                                $aux_ids[] = $init;
-                            }
-                        }
-
-                        if( !is_null($press['inf'][$init]['meta_id']) )
-                            array_push($s, $press['inf'][$init]['meta_id']);
-
-                        $init++;
-                    }
-                }
-
-                /*
-                $info_ordenada = [];
-                $info_desord = [];
-                $add_ordered = [];
-                foreach($press['meta_ids_ord'] as $oid) {
-                    $curr_id = explode("compounds-", $oid);
-                    $id = $curr_id[0];
-
-                    if(count($curr_id) == 2)
-                        $id = $curr_id[1];
-
-                    if( array_key_exists($id, $ord_list) ) {
-                        $info_ordenada[] = $ord_list[$id];
-                        array_push($add_ordered, $id);
-                    } else {
-                        $info_desord[] = $ord_list[$id];
-                    }
-                } 
-				
-                $orders_id_keys = array_keys($ord_list);
-                foreach ($orders_id_keys as $desorder_ids ) {
-                    if(! in_array($desorder_ids, $add_ordered) ) {
-                        $info_desord[] = $ord_list[$desorder_ids];
-                    }
-                }
-
-                $press['inf'] = array_merge($info_ordenada, $info_desord); 
-				*/
 
                 return json_encode($press);
 
