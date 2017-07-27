@@ -298,62 +298,80 @@
     };
 
     // Dynatrees report's children
+    // User
     function statusChildren() {
+        /* 
+        * user_status 
+        * user_items
+        * user_profile
+        * user_category
+        * user_collection
+        */
         return [
-            { title: "Status <p> logins / registros / banidos / excluídos </p>", id: "status", addClass: 'repoOnly'},
-            { title: "Itens <p> criaram / editaram / apagaram / <br/> visualizaram / baixaram</p>", id: "items" },
-            { title: "Perfil <p> Pessoas que aderiram a um perfil </p>", id: "profile", addClass: 'repoOnly'},
-            { title: "Categorias <p> criaram / editaram / apagaram / visualizaram </p>", id: "category" },
-            { title: "Coleção <p> criaram / editaram / apagaram / visualizaram </p>", id: "collection", addClass: 'repoOnly' }
+            { title: "Status <p> logins / registrados / excluídos </p>", id: "status", addClass: 'repoOnly'},
+            //{ title: "Itens <p> criaram / editaram / apagaram / <br/> visualizaram / baixaram</p>", id: "items" },
+            { title: "Perfil <p> assinante / administrador / <br/> editor / autor / colaborador </p>", id: "profile", addClass: 'repoOnly'},
+            //{ title: "Categorias <p> criaram / editaram / apagaram / visualizaram </p>", id: "category" },
+            //{ title: "Coleção <p> criaram / editaram / apagaram / visualizaram </p>", id: "collection", addClass: 'repoOnly' }
         ];
     }
-
+    // Items
     function itensChildren() {
+        /* 
+        * user_items
+        * general_status_items
+        * top_collections_items
+        */
         return [
-            { title: "Usuário <p> view / comentado / votado </p>", id: "user" },
+            { title: "Usuário <p> visualizados / comentados / votados </p>", id: "user" },
             { title: "Status <p> ativos / rascunhos / lixeira / excluídos </p>", id: "general_status" },
-            { title: "Coleção <p> número de itens por coleção </p>", id: "top_collections", addClass: 'repoOnly' }
+           // { title: "Coleção <p> número de itens por coleção </p>", id: "top_collections", addClass: 'repoOnly' }
         ];
     }
-
+    // Collections
     function collectionsChildren() {
         return [
-            { title: "Status <p> criadas / editadas / excluídas / visualizadas / baixadas</p>", id: "collection", addClass: 'repoOnly'},
-            { title: "Buscas Frequentes <p> ranking das buscas mais realizadas </p>", id: "repo_searches", addClass: 'repoOnly'},
+            { title: "Status <p> adicionadas / visualizadas / editadas / escluídas </p>", id: "collection", addClass: 'repoOnly'},
+            { title: "Itens <p> ilustrações (número de itens por <br/> coleção) </p>", id: "top_collections", addClass: 'repoOnly' },
+            // Independem de parent:
+            //{ title: "Buscas Frequentes <p> ranking das buscas mais realizadas </p>", id: "repo_searches", addClass: 'repoOnly'},
             { title: "Buscas <p> termos mais pesquisados </p>", id: "collection_searches", addClass: 'collecOnly'}
         ];
     }
-
+    // Comments
     function commentsChildren() {
-        return [{ title: "Status <p> adicionados / editados / excluídos / visualizados </p>", id: "comments" }];
+        // comment
+        return [{ title: "Status <p> adicionados / visualizados / editados / excluídos </p>", id: "comments" }];
     }
 
     function categoryChildren() {
-        return [{ title: "Status <p> criados / editados / excluídos </p>", id: "category" }];
+        // user_category
+        return [{ title: "Status <p> adicionados / visualizados / editados / excluídos </p>", id: "category" }];
     }
 
     function tagsChildren() {
-        return [{ title: "Status <p> adicionados / editados / excluídos </p>", id: 'tags' }];
+        return [{ title: "Status <p> adicionados / visualizados / editados / excluídos </p>", id: 'tags' }];
     }
 
     function importsChildren() {
         return [
-            { title: "<p> Acessos OAI-PMH <br/> Importação / Exportação CSV <br/> Importação formato Tainacan <br/> Exportação formato Tainacan </p>", id: 'imports', addClass: 'repoOnly'},
-            { title: "<p> Acessos OAI-PMH <br/> Harvesting OAI-PMH <br/> Importação CSV <br/> Exportação CSV</p>", id: 'collection_imports', addClass: 'collecOnly'}
+            { title: "Quantidade <p> Acessos OAI-PMH <br/> Importação CSV / Exportação CSV <br/> Importação formato Tainacan <br/> Exportação formato Tainacan </p>", id: 'imports', addClass: 'repoOnly'},
+            { title: "Quantidade <p> Acessos OAI-PMH <br/> Harvesting OAI-PMH <br/> Importação CSV <br/> Exportação CSV</p>", id: 'collection_imports', addClass: 'collecOnly'}
         ];
     }
 
     function adminChildren() {
         return [
-            { title: "Páginas Administrativas <p> Configurações / metadados / chaves / licenças /<br /> e-mail boas vindas / ferramentas </p>", id: 'admin', addClass: 'repoOnly'},
-            { title: "<p> Configurações / metadados / layout / redes sociais <br /> licenças / importação / exportação </p>", id: 'collection_admin', addClass: 'collecOnly' }
+            { title: "Páginas principais <p> Configurações / metadados / chaves / licenças /<br /> e-mail boas vindas / ferramentas </p>", id: 'admin', addClass: 'repoOnly'},
+            { title: "Ações Administrativas <p> Configurações / metadados / layout / redes sociais <br /> licenças / importação / exportação </p>", id: 'collection_admin', addClass: 'collecOnly' },
+            { title: "Buscas Frequentes <p> ranking das buscas mais realizadas em <br/> todo o site (buscas avançadas e não) </p>", id: "repo_searches", addClass: 'repoOnly'},
         ];
     }
 
     //Report type list
     function getStatsTree() {
         return [
-            { title: $('.stats-users').text(), noLink: true, expand: true, unselectable: true, hideCheckbox: true, children: statusChildren() },
+            { title: $('.stats-users').text(), addClass: 'repoOnly', noLink: true, expand: true, unselectable: true, hideCheckbox: true, children: statusChildren() },
             { title: $('.stats-items').text(), noLink: true, unselectable: true, hideCheckbox: true, children: itensChildren() },
             { title: $('.stats-collections').text(), noLink: true, hideCheckbox: true, children: collectionsChildren() },
             { title: $('.stats-comments').text(), noLink: true, hideCheckbox: true, children: commentsChildren() },
@@ -563,7 +581,7 @@
     } // drawChart()
 
     function renderChart(current_title, type, stat_data) {
-       // var color = chart_color || '#79a6ce';
+        // var color = chart_color || '#79a6ce';
         // Google Charts objects
         if( type == 'pie' ) {
             var piechart = new google.visualization.PieChart(document.getElementById('piechart_div'));

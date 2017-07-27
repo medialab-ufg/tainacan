@@ -463,13 +463,13 @@ class Log extends Model {
 
         // event_type = 'collection' isn't work
 
-        if( "top_collections_items" == $event_type ) {
+        if( "top_collections" == $event_type ) {
             $top_collections = self::getTopCollections($from, $to, $filter);
             $cols_array = array();
             $class_names = array();
 
             foreach ($top_collections as $col => $data) {
-                $_title = get_post($data->event)->post_title; //Point to position of collection in database table.
+                $_title = get_post($data->event)->post_title; // Point to position of collection in database table.
                 //array_push($cols_array, [$_title => $col->total_collection ]);
                 if($filter != 'weeks'){
                     array_push($cols_array, [ $_title, $data->date, $data->total, $data->event_total ]);
@@ -624,7 +624,7 @@ class Log extends Model {
         global $wpdb;
 
         if(($collection_id == 'null' || is_null($collection_id))){
-            $event_type = 'advanced_search'; //this don't work
+            $event_type = '%%search'; //this don't work
            
             if($filter == 'days' ) {
                 $SQL_query = sprintf(
@@ -633,13 +633,13 @@ class Log extends Model {
                             (
                             SELECT event, substring(event_date, 1, 10) AS date, count(event) AS total 
                             FROM %s 
-                                WHERE event_type = '$event_type' AND (substring(event_date, 1, 10)) between '$from' AND '$to'
+                                WHERE event_type like '". $event_type ."' AND (substring(event_date, 1, 10)) between '$from' AND '$to'
                                 GROUP BY event, (substring(event_date, 1, 10))
                             ) res1 
                             JOIN (
                                 SELECT event AS event2, count(event) AS event_total
                                 FROM %s
-                                    WHERE event_type = '$event_type' AND (substring(event_date, 1, 10)) between '$from' AND '$to'
+                                    WHERE event_type like '". $event_type ."' AND (substring(event_date, 1, 10)) between '$from' AND '$to'
                                     GROUP BY event
                             ) res2
                             ON res1.event = res2.event2
@@ -653,13 +653,13 @@ class Log extends Model {
                         (
                             SELECT event, week(substring(event_date, 1, 10)) as week_number, count(event) AS total
                             FROM %s
-                                WHERE event_type = '$event_type' AND (substring(event_date, 1, 10)) between '$from' AND '$to'
+                                WHERE event_type like '". $event_type ."'  AND (substring(event_date, 1, 10)) between '$from' AND '$to'
                                 GROUP BY event, (week(substring(event_date, 1, 10)))
                         ) res1
                         JOIN (
                             SELECT event AS event2, count(event) AS event_total
                             FROM %s
-                                WHERE event_type = '$event_type' AND (substring(event_date, 1, 10)) between '$from' AND '$to'
+                                WHERE event_type like '". $event_type ."'  AND (substring(event_date, 1, 10)) between '$from' AND '$to'
                                 GROUP BY event
                         ) res2
                         ON res1.event = res2.event2
@@ -675,13 +675,13 @@ class Log extends Model {
                             (
                             SELECT event, substring(event_date, 1, 7) AS date, count(event) AS total 
                             FROM %s 
-                                WHERE event_type = '$event_type' AND (substring(event_date, 1, 7)) between '$fr' AND '$t'
+                                WHERE event_type like '". $event_type ."'  AND (substring(event_date, 1, 7)) between '$fr' AND '$t'
                                 GROUP BY event, (substring(event_date, 1, 7))
                             ) res1 
                             JOIN (
                                 SELECT event AS event2, count(event) AS event_total
                                 FROM %s
-                                    WHERE event_type = '$event_type' AND (substring(event_date, 1, 7)) between '$fr' AND '$t'
+                                    WHERE event_type like '". $event_type ."'  AND (substring(event_date, 1, 7)) between '$fr' AND '$t'
                                     GROUP BY event
                             ) res2
                             ON res1.event = res2.event2
@@ -691,7 +691,7 @@ class Log extends Model {
                 $SQL_query = sprintf(
                     "SELECT event, count(*) AS total 
                         FROM %s 
-                        WHERE event_type = '$event_type' 
+                        WHERE event_type like '". $event_type ."'
                         GROUP BY event 
                         ORDER BY count(*) DESC LIMIT 10
                     ", self::_table());

@@ -189,8 +189,11 @@ class AdvancedSearchController extends Controller {
                     $return['args_collection'] =  serialize($args_collection);
                     $return['has_collection'] = $loop_collections->have_posts();
                 endif;
-                $logData = ['collection_id' => $data['collection_id'], 'event_type' => 'advanced_search', 'event' => $data['advanced_search_general'] ];
-                Log::addLog($logData);
+                //if($data['advanced_search_title']){
+                // Mudar advanced_search_general para advanced_search_title resolve o problema de registro das buscas
+                    $logData = ['collection_id' => $data['collection_id'], 'event_type' => 'advanced_search', 'event' => $data['advanced_search_general'] ];
+                    Log::addLog($logData);
+                //}
                 //$return['page'] = $this->render(dirname(__FILE__) . '../../../views/advanced_search/list_advanced_search.php', $data);
                 $return['data'] =  $data['data'];
                 return json_encode($return);    

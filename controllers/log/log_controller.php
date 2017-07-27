@@ -18,7 +18,7 @@ class LogController extends Controller {
                 break;
         endswitch;
     }
-
+    // Essa função abaixo aparenta, a princípio, ser desnecessária. Mas será mantida por enquanto.
     private function getEventType($parent_name, $_event_suffix) {
         switch ($parent_name) {
             case _t('Users'):
@@ -26,7 +26,7 @@ class LogController extends Controller {
                 return "user_" . $_event_suffix;
             case _t('Comments'):
                 return "comment";
-            case _t('Items'):
+            case _t('Items'): // inútil
                 return $_event_suffix . "_items";
             case _t('Tags'):
                 return "tags";
