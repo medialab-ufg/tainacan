@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: socialdb\n"
-"POT-Creation-Date: 2017-07-24 16:35-0300\n"
-"PO-Revision-Date: 2017-07-24 16:36-0300\n"
+"POT-Creation-Date: 2017-07-27 14:15-0300\n"
+"PO-Revision-Date: 2017-07-27 14:23-0300\n"
 "Last-Translator: Rodrigo de Oliveira <webmaster@rodrigodeoliveira.net>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -135,8 +135,8 @@ msgstr "Responder Comentário"
 #: single.php:726 single.php:796 single.php:836 single.php:883 single.php:913
 #: single.php:953 single.php:1001 single.php:1028 single.php:1196
 #: single.php:1218 single.php:1368 single.php:1438 single.php:1468
-#: views/category/list.php:157 views/category/list.php:203
-#: views/category/list.php:232 views/category/taxonomy_zone.php:105
+#: views/category/list.php:158 views/category/list.php:204
+#: views/category/list.php:233 views/category/taxonomy_zone.php:105
 #: views/collection/config_menu.php:151
 #: views/collection/header_collection.php:224 views/event/list.php:295
 #: views/event/list.php:330 views/event/list.php:380
@@ -206,9 +206,9 @@ msgstr "Nos conte porque este conteúdo é abusivo"
 #: views/object/edit_object_properties/js/edit_list_properties_accordion_js.php:173
 #: views/object/edit_object_properties/js/edit_list_properties_accordion_js.php:531
 #: views/object/formItem/helper/formItemTitle.class.php:78
-#: views/object/formItem/input/date.class.php:195
-#: views/object/formItem/input/date.class.php:201
-#: views/object/formItem/input/date.class.php:233
+#: views/object/formItem/input/date.class.php:196
+#: views/object/formItem/input/date.class.php:202
+#: views/object/formItem/input/date.class.php:234
 #: views/object/formItem/input/numeric.class.php:102
 #: views/object/formItem/input/object.class.php:163
 #: views/object/formItem/input/object.class.php:193
@@ -307,7 +307,7 @@ msgstr "Este nome não é permitido!"
 #: models/event/event_collection/event_collection_create_model.php:50
 #: models/event/event_collection/event_collection_delete_model.php:50
 #: models/event/event_comment/event_comment_create_model.php:52
-#: models/event/event_model.php:445 models/object/object_model.php:1870
+#: models/event/event_model.php:448 models/object/object_model.php:1870
 #: models/object/object_model.php:1943 models/search/search_model.php:483
 #: models/theme_options/theme_options_model.php:192
 #: views/collection/js/edit_js.php:39 views/collection/js/edit_js.php:76
@@ -454,17 +454,17 @@ msgid "Property Data"
 msgstr "Metadado de dado"
 
 #: controllers/collection/collection_controller.php:127
-#: helpers/view_helper.php:89 views/category/list.php:245
+#: helpers/view_helper.php:89 views/category/list.php:246
 #: views/collection/js/edit_js.php:126 views/design/edit.php:13
 #: views/design/edit.php:141 views/object/create_item_url.php:147
 #: views/object/list_data_table.php:94 views/property/list.php:14
 #: views/ranking/list.php:13 views/search/edit.php:14 views/search/edit.php:246
-#: views/search/js/edit_js.php:145 views/search/js/layout_js.php:416
+#: views/search/js/edit_js.php:145 views/search/js/layout_js.php:417
 #: views/theme_options/property/list.php:14
 msgid "Rankings"
 msgstr "Votações"
 
-#: controllers/collection/collection_controller.php:344 functions.php:1947
+#: controllers/collection/collection_controller.php:346 functions.php:1947
 #: helpers/object/object_helper.php:23
 #: views/object/formItem/helper/formItem.class.php:147
 #: views/property/list_metadata.php:108 views/property/list_metadata.php:115
@@ -486,9 +486,9 @@ msgstr "Padrão"
 #: models/event/event_comment/event_comment_edit_model.php:47
 #: models/event/event_comment/event_comment_edit_model.php:78
 #: models/event/event_object/event_object_create_model.php:51
-#: models/event/event_object/event_object_create_model.php:94
-#: models/event/event_object/event_object_delete_model.php:57
-#: models/event/event_object/event_object_delete_model.php:107
+#: models/event/event_object/event_object_create_model.php:95
+#: models/event/event_object/event_object_delete_model.php:58
+#: models/event/event_object/event_object_delete_model.php:108
 #: models/event/event_property_compounds/event_property_compounds_create_model.php:48
 #: models/event/event_property_compounds/event_property_compounds_create_model.php:95
 #: models/event/event_property_compounds/event_property_compounds_create_model.php:106
@@ -535,7 +535,7 @@ msgstr "Padrão"
 #: models/event/event_term/event_term_delete_model.php:85
 #: models/event/event_term/event_term_edit_model.php:53
 #: models/event/event_term/event_term_edit_model.php:114
-#: models/general/general_model.php:1872 models/general/general_model.php:1911
+#: models/general/general_model.php:1884 models/general/general_model.php:1923
 #: models/license/license_model.php:30 models/license/license_model.php:42
 #: models/license/license_model.php:59 models/license/license_model.php:71
 #: models/license/license_model.php:179 models/mapping/mapping_model.php:61
@@ -679,8 +679,8 @@ msgstr "Por favor, preencha o delimitador corretamente!"
 #: models/category/category_model.php:1192
 #: models/category/category_model.php:1216
 #: models/collection/collection_import_model.php:186
-#: models/event/event_object/event_object_create_model.php:99
-#: models/general/general_model.php:1877 models/general/general_model.php:1917
+#: models/event/event_object/event_object_create_model.php:100
+#: models/general/general_model.php:1889 models/general/general_model.php:1929
 #: models/mapping/mapping_model.php:65 models/object/object_model.php:239
 #: models/object/object_model.php:249 models/object/object_model.php:256
 #: models/object/object_model.php:267 models/object/object_model.php:272
@@ -751,9 +751,9 @@ msgid "Users"
 msgstr "Usuários"
 
 #: controllers/log/log_controller.php:25 helpers/log/log_helper.php:17
-#: helpers/view_helper.php:329 models/general/general_model.php:1689
+#: helpers/view_helper.php:329 models/general/general_model.php:1701
 #: views/category/js/taxonomy_zone_js.php:18 views/category/list.php:11
-#: views/category/list.php:243 views/collection/js/edit_js.php:58
+#: views/category/list.php:244 views/collection/js/edit_js.php:58
 #: views/design/edit.php:134
 #: views/property/js/list_category_metadata_js.php:2362
 #: views/property/js/list_metadata_js.php:2546 views/search/menu_left.php:20
@@ -813,7 +813,7 @@ msgstr "Administração"
 
 #: controllers/mapping/mapping_controller.php:88
 #: models/collection/collection_model.php:94
-#: models/general/general_model.php:2434 models/mapping/mapping_model.php:763
+#: models/general/general_model.php:2446 models/mapping/mapping_model.php:763
 msgid "Mapping Default"
 msgstr "Mapeamento padrão"
 
@@ -856,7 +856,7 @@ msgstr "Continue sua edição... Inserir URL"
 
 #: controllers/object/object_controller.php:250
 #: controllers/object/object_controller.php:297
-#: controllers/wp_query/wp_query_controller.php:278
+#: controllers/wp_query/wp_query_controller.php:282
 #: views/advanced_search/list_advanced_search.php:160
 #: views/advanced_search/loops_page/list_collection_search.php:124
 msgid "Showing collections:"
@@ -864,7 +864,7 @@ msgstr "Exibindo coleções:"
 
 #: controllers/object/object_controller.php:250
 #: controllers/object/object_controller.php:297
-#: controllers/wp_query/wp_query_controller.php:278
+#: controllers/wp_query/wp_query_controller.php:282
 msgid "Showing Items:"
 msgstr "Exibindo itens:"
 
@@ -921,8 +921,12 @@ msgid "Your username and/or password are wrong. User not Found!"
 msgstr "Seu usuário e/ou senha estão incorretos."
 
 #: footer.php:43
-msgid "Tainacan is proudly powered by"
-msgstr "Tainacan é orgulhosamente mantido com"
+msgid " is proudly powered by"
+msgstr "é orgulhosamente mantido por"
+
+#: footer.php:44
+msgid "and"
+msgstr "e"
 
 #: functions.php:51
 msgid "Footer A"
@@ -1041,7 +1045,7 @@ msgstr "(Painel de edição)"
 
 #: functions.php:573 helpers/view_helper.php:379 index.php:138 single.php:727
 #: single.php:797 single.php:914 single.php:954 single.php:1369 single.php:1469
-#: views/category/list.php:158 views/category/taxonomy_zone.php:76
+#: views/category/list.php:159 views/category/taxonomy_zone.php:76
 #: views/design/edit.php:239 views/event/list.php:296 views/event/list.php:331
 #: views/export/oaipmh/mapping_attributes.php:38
 #: views/import/csv/add_mapping.php:25
@@ -1076,7 +1080,7 @@ msgstr "Responder"
 
 #: functions.php:593 single.php:602 single.php:636 single.php:664
 #: single.php:1002 single.php:1252 single.php:1280 single.php:1327
-#: single.php:1346 views/category/list.php:131 views/collection/edit.php:382
+#: single.php:1346 views/category/list.php:132 views/collection/edit.php:382
 #: views/collection/edit.php:1018 views/object/edit.php:19
 #: views/object/edit_item_text.php:79 views/object/edit_item_text.php:593
 #: views/object/list_data_table.php:59 views/property/js/compounds_js.php:272
@@ -1270,7 +1274,7 @@ msgid "Parent Category:"
 msgstr "Categoria pai:"
 
 #: functions.php:1283 models/object/object_model.php:1774
-#: models/wp_query/wp_query_model.php:1205
+#: models/wp_query/wp_query_model.php:1237
 msgid "Recents"
 msgstr "Recentes "
 
@@ -1401,7 +1405,7 @@ msgstr "Anexos"
 #: views/search/js/edit_js.php:148 views/search/js/edit_js.php:500
 #: views/search/js/edit_js.php:524 views/search/js/layout_js.php:235
 #: views/search/js/layout_js.php:283 views/search/js/layout_js.php:323
-#: views/search/js/layout_js.php:419 views/search/js/layout_js.php:453
+#: views/search/js/layout_js.php:420 views/search/js/layout_js.php:454
 #: views/theme_options/property/js/list_js.php:491
 #: views/theme_options/property/js/list_js.php:511
 msgid "Type"
@@ -1508,7 +1512,7 @@ msgstr "Sair"
 msgid "Repository Control Panel"
 msgstr "Painel de Controle do Repositório"
 
-#: header.php:137 views/category/list.php:242
+#: header.php:137 views/category/list.php:243
 #: views/collection/config_menu.php:16 views/collection/config_menu.php:22
 #: views/collection/config_menu.php:109 views/design/edit.php:11
 #: views/property/list.php:12 views/ranking/list.php:11
@@ -1601,7 +1605,7 @@ msgstr "Exportação"
 msgid "Updates"
 msgstr "Atualizar"
 
-#: header.php:171 helpers/view_helper.php:355 models/event/event_model.php:731
+#: header.php:171 helpers/view_helper.php:355 models/event/event_model.php:734
 #: single.php:1086 views/collection/config_menu.php:85
 #: views/collection/config_menu.php:117 views/event/js/list_js.php:3
 #: views/event/list.php:12
@@ -2158,7 +2162,7 @@ msgstr "Clique em adicionar para pesquisar novos itens"
 #: views/advanced_search/compound_list_property_object_items.php:51
 #: views/advanced_search/listItemFormItem.php:59
 #: views/advanced_search/list_property_object_items.php:53
-#: views/category/list.php:130 views/object/create.php:11
+#: views/category/list.php:131 views/object/create.php:11
 #: views/object/formItem/input/object.class.php:92
 #: views/object/formItemMultiple/input/object.class.php:92
 #: views/property/js/list_category_metadata_js.php:879
@@ -2496,12 +2500,12 @@ msgstr ""
 "outra? Cancele para visualizar esta categoria, clique ok para criar a nova."
 
 #: models/collection/collection_import_model.php:181
-#: models/general/general_model.php:1873 models/general/general_model.php:1912
+#: models/general/general_model.php:1885 models/general/general_model.php:1924
 msgid "All categories imported successfully"
 msgstr "Todas categorias importadas com sucesso!"
 
 #: models/collection/collection_import_model.php:187
-#: models/general/general_model.php:1878 models/general/general_model.php:1918
+#: models/general/general_model.php:1890 models/general/general_model.php:1930
 msgid "Xml incompatible"
 msgstr "XML incompatível"
 
@@ -2667,32 +2671,32 @@ msgstr "Um erro não esperado ocorreu!"
 msgid "Categories of "
 msgstr "Categorias de "
 
-#: models/event/event_classification/event_classification_create_model.php:26
+#: models/event/event_classification/event_classification_create_model.php:27
 msgid "Add the category : "
 msgstr "Adicionar Categoria: "
 
-#: models/event/event_classification/event_classification_create_model.php:30
+#: models/event/event_classification/event_classification_create_model.php:31
 msgid "Add the classification : "
 msgstr "Adicionar classificação: "
 
-#: models/event/event_classification/event_classification_create_model.php:30
+#: models/event/event_classification/event_classification_create_model.php:31
 #: models/event/event_classification/event_classification_delete_model.php:30
 #: models/event/event_property_object/event_property_object_edit_value_model.php:33
 #: models/event/event_property_object/event_property_object_edit_value_model.php:37
 msgid " of the object property "
 msgstr "do metadado de objeto"
 
-#: models/event/event_classification/event_classification_create_model.php:37
+#: models/event/event_classification/event_classification_create_model.php:38
 msgid "Add the tag : "
 msgstr "Adicionar a tag: "
 
-#: models/event/event_classification/event_classification_create_model.php:40
+#: models/event/event_classification/event_classification_create_model.php:41
 #: models/event/event_classification/event_classification_delete_model.php:36
 #: models/event/event_comment/event_comment_create_model.php:27
 msgid " in the object "
 msgstr " no item "
 
-#: models/event/event_classification/event_classification_create_model.php:72
+#: models/event/event_classification/event_classification_create_model.php:73
 #: models/event/event_classification/event_classification_delete_model.php:69
 #: models/event/event_collection/event_collection_create_model.php:48
 #: models/event/event_collection/event_collection_delete_model.php:48
@@ -2700,7 +2704,7 @@ msgstr " no item "
 #: models/event/event_comment/event_comment_delete_model.php:49
 #: models/event/event_comment/event_comment_edit_model.php:49
 #: models/event/event_object/event_object_create_model.php:53
-#: models/event/event_object/event_object_delete_model.php:59
+#: models/event/event_object/event_object_delete_model.php:60
 #: models/event/event_property_compounds/event_property_compounds_create_model.php:50
 #: models/event/event_property_compounds/event_property_compounds_delete_model.php:46
 #: models/event/event_property_compounds/event_property_compounds_edit_model.php:50
@@ -2725,9 +2729,9 @@ msgstr " no item "
 msgid "This event is already confirmed"
 msgstr "Este evento já foi confirmado"
 
-#: models/event/event_classification/event_classification_create_model.php:94
-#: models/event/event_classification/event_classification_create_model.php:125
-#: models/event/event_classification/event_classification_create_model.php:184
+#: models/event/event_classification/event_classification_create_model.php:103
+#: models/event/event_classification/event_classification_create_model.php:145
+#: models/event/event_classification/event_classification_create_model.php:211
 #: models/event/event_classification/event_classification_delete_model.php:109
 #: models/event/event_classification/event_classification_delete_model.php:160
 #: models/event/event_classification/event_classification_delete_model.php:200
@@ -2736,8 +2740,8 @@ msgstr "Este evento já foi confirmado"
 #: models/event/event_comment/event_comment_create_model.php:98
 #: models/event/event_comment/event_comment_delete_model.php:74
 #: models/event/event_comment/event_comment_edit_model.php:76
-#: models/event/event_object/event_object_create_model.php:92
-#: models/event/event_object/event_object_delete_model.php:105
+#: models/event/event_object/event_object_create_model.php:93
+#: models/event/event_object/event_object_delete_model.php:106
 #: models/event/event_property_compounds/event_property_compounds_create_model.php:93
 #: models/event/event_property_compounds/event_property_compounds_create_model.php:104
 #: models/event/event_property_compounds/event_property_compounds_delete_model.php:103
@@ -2767,21 +2771,21 @@ msgstr "Este evento já foi confirmado"
 msgid "The event was successful"
 msgstr "O evento foi realizado com sucesso."
 
-#: models/event/event_classification/event_classification_create_model.php:98
+#: models/event/event_classification/event_classification_create_model.php:107
 #: models/event/event_classification/event_classification_delete_model.php:124
 msgid "Object or category invalid"
 msgstr "Item ou categoria inválida"
 
-#: models/event/event_classification/event_classification_create_model.php:129
+#: models/event/event_classification/event_classification_create_model.php:149
 #: models/event/event_classification/event_classification_delete_model.php:170
 msgid "Object or tag invalid"
 msgstr "Item ou tag inválida"
 
-#: models/event/event_classification/event_classification_create_model.php:172
+#: models/event/event_classification/event_classification_create_model.php:199
 msgid "This classification is already confirmed"
 msgstr "Esta classificação já foi confirmada"
 
-#: models/event/event_classification/event_classification_create_model.php:189
+#: models/event/event_classification/event_classification_create_model.php:216
 #: models/event/event_classification/event_classification_delete_model.php:204
 msgid "Object, Property or relationship invalid"
 msgstr "Item, metadado ou relacionamento inválido"
@@ -2805,7 +2809,7 @@ msgstr "Remover a tag:"
 #: models/event/event_comment/event_comment_delete_model.php:45
 #: models/event/event_comment/event_comment_edit_model.php:45
 #: models/event/event_object/event_object_create_model.php:49
-#: models/event/event_object/event_object_delete_model.php:55
+#: models/event/event_object/event_object_delete_model.php:56
 #: models/event/event_property_compounds/event_property_compounds_create_model.php:46
 #: models/event/event_property_compounds/event_property_compounds_delete_model.php:42
 #: models/event/event_property_compounds/event_property_compounds_edit_model.php:46
@@ -2848,8 +2852,8 @@ msgstr "Criar Coleção "
 
 #: models/event/event_collection/event_collection_create_model.php:86
 #: models/event/event_collection/event_collection_delete_model.php:88
-#: models/event/event_object/event_object_create_model.php:97
-#: models/event/event_object/event_object_delete_model.php:145
+#: models/event/event_object/event_object_create_model.php:98
+#: models/event/event_object/event_object_delete_model.php:146
 #: models/event/event_property_compounds/event_property_compounds_edit_value_model.php:154
 #: models/event/event_property_data/event_property_data_edit_value_model.php:149
 #: models/event/event_property_object/event_property_object_edit_value_model.php:124
@@ -2875,7 +2879,7 @@ msgstr "Deletar Comentário "
 #: models/event/event_comment/event_comment_delete_model.php:51
 #: models/event/event_comment/event_comment_edit_model.php:51
 #: models/event/event_object/event_object_create_model.php:55
-#: models/event/event_object/event_object_delete_model.php:61
+#: models/event/event_object/event_object_delete_model.php:62
 #: models/event/event_property_compounds/event_property_compounds_create_model.php:52
 #: models/event/event_property_compounds/event_property_compounds_delete_model.php:48
 #: models/event/event_property_compounds/event_property_compounds_edit_model.php:52
@@ -3086,73 +3090,73 @@ msgstr "Deletar Comentário"
 msgid "Operation"
 msgstr "Operação"
 
-#: models/event/event_model.php:439
+#: models/event/event_model.php:442
 msgid "See item (Open a new Tab)"
 msgstr "Ver Item (Abrir uma nova aba) "
 
-#: models/event/event_model.php:443
+#: models/event/event_model.php:446
 msgid "The event was sent for approval"
 msgstr "O evento foi enviado para aprovação"
 
-#: models/event/event_model.php:449
+#: models/event/event_model.php:452
 msgid "An error happened, please try again"
 msgstr "Um erro ocorreu, por favor tente novamente"
 
-#: models/event/event_model.php:634
+#: models/event/event_model.php:637
 msgid "Event automatically verified"
 msgstr "Evento automaticamente verificado"
 
-#: models/event/event_model.php:662
+#: models/event/event_model.php:665
 msgid "Messages: Result of your event"
 msgstr "Mensagens: Resultado de seu evento"
 
-#: models/event/event_model.php:666
+#: models/event/event_model.php:669
 msgid "Event result"
 msgstr "Resultado do evento"
 
-#: models/event/event_model.php:669
+#: models/event/event_model.php:672
 msgid "Event in the collection "
 msgstr "Evento na coleção  "
 
-#: models/event/event_model.php:672 models/event/event_model.php:674
+#: models/event/event_model.php:675 models/event/event_model.php:677
 msgid "The event "
 msgstr "O evento "
 
-#: models/event/event_model.php:672
+#: models/event/event_model.php:675
 msgid " was confirmed "
 msgstr "foi confirmado"
 
-#: models/event/event_model.php:674
+#: models/event/event_model.php:677
 msgid "was not confirmed "
 msgstr "não foi confirmado"
 
-#: models/event/event_model.php:676
+#: models/event/event_model.php:679
 msgid "Obervations by collection's moderators "
 msgstr "Observações dos moderadores da Coleção"
 
-#: models/event/event_model.php:713 views/event/js/list_js.php:83
+#: models/event/event_model.php:716 views/event/js/list_js.php:83
 #: views/event/js/list_js.php:116 views/event/js/list_js.php:146
 #: views/permission/page.php:154
 msgid "Anonimous"
 msgstr "Anônimo"
 
-#: models/event/event_model.php:724
+#: models/event/event_model.php:727
 msgid "Warning: Event Approved"
 msgstr "Atenção: Evento aprovado"
 
-#: models/event/event_model.php:726
+#: models/event/event_model.php:729
 msgid "Warning: Event sent to Approvation"
 msgstr "Atenção: Evento enviado para aprovação"
 
-#: models/event/event_model.php:734
+#: models/event/event_model.php:737
 msgid "Event in collection "
 msgstr "Evento na coleção "
 
-#: models/event/event_model.php:735
+#: models/event/event_model.php:738
 msgid "Author User"
 msgstr "usuário"
 
-#: models/event/event_model.php:739
+#: models/event/event_model.php:742
 msgid "Description: "
 msgstr "Descrição: "
 
@@ -3438,7 +3442,7 @@ msgid "Attachment"
 msgstr "Anexos "
 
 #: models/export/rdf_repository_model.php:94
-#: models/object/object_model.php:1771 models/wp_query/wp_query_model.php:1202
+#: models/object/object_model.php:1771 models/wp_query/wp_query_model.php:1234
 #: views/object/list_single_object.php:241
 #: views/object/list_single_object_version.php:320
 #: views/property/js/list_metadata_js.php:2562
@@ -3674,7 +3678,7 @@ msgstr "A licença sugerida é: "
 msgid "Something went wrong! Please try again!"
 msgstr "Algo deu errado! Por favor tente novamente!"
 
-#: models/object/object_model.php:1769 models/wp_query/wp_query_model.php:1200
+#: models/object/object_model.php:1769 models/wp_query/wp_query_model.php:1232
 msgid "Data property"
 msgstr "Metadados de dado"
 
@@ -4134,7 +4138,7 @@ msgstr "Carregando itens..."
 msgid "View"
 msgstr "Visualizar"
 
-#: single.php:607 single.php:641 single.php:669 views/category/list.php:135
+#: single.php:607 single.php:641 single.php:669 views/category/list.php:136
 #: views/search/tags.php:61
 msgid "Remove"
 msgstr "Remover"
@@ -4144,30 +4148,30 @@ msgid "See"
 msgstr "Ver"
 
 #: single.php:705 single.php:706 single.php:758 single.php:759
-#: views/category/list.php:38 views/category/list.php:39
+#: views/category/list.php:39 views/category/list.php:40
 #: views/property/metadata/form_term.php:72
 #: views/theme_options/property/metadata/form_term.php:72
 msgid "Category name"
 msgstr "Nome da categoria"
 
-#: single.php:709 single.php:763 views/category/list.php:42
+#: single.php:709 single.php:763 views/category/list.php:43
 msgid "Category parent"
 msgstr "Categoria pai"
 
-#: single.php:710 views/category/list.php:43
+#: single.php:710 views/category/list.php:44
 msgid "Right click on the tree and select the category as parent"
 msgstr "Clique com o botão direito na árvore e selecione a categoria pai"
 
-#: single.php:714 single.php:769 views/category/list.php:47
+#: single.php:714 single.php:769 views/category/list.php:48
 msgid "Category description"
 msgstr "Descrição da categoria"
 
 #: single.php:714 single.php:769 single.php:942 single.php:979
-#: views/category/list.php:47 views/search/tags.php:43
+#: views/category/list.php:48 views/search/tags.php:43
 msgid "Optional"
 msgstr "Opcional"
 
-#: single.php:717 single.php:772 views/category/list.php:48
+#: single.php:717 single.php:772 views/category/list.php:49
 msgid "Describe your category"
 msgstr "Descreva sua categoria"
 
@@ -4175,7 +4179,7 @@ msgstr "Descreva sua categoria"
 msgid "Click on the tree and select the category as parent"
 msgstr "Clique na árvore e selecione a categoria pai"
 
-#: single.php:777 views/category/list.php:116
+#: single.php:777 views/category/list.php:117
 msgid "Category Properties"
 msgstr "Metadados da Categoria"
 
@@ -4183,11 +4187,11 @@ msgstr "Metadados da Categoria"
 msgid "Synonyms"
 msgstr "Sinônimos"
 
-#: single.php:825 views/category/list.php:151
+#: single.php:825 views/category/list.php:152
 msgid "Remove Category"
 msgstr "Apagar Categoria"
 
-#: single.php:828 single.php:1021 views/category/list.php:154
+#: single.php:828 single.php:1021 views/category/list.php:155
 #: views/property/list.php:352 views/property/metadata/form_compounds.php:103
 #: views/property/metadata/form_voting.php:82
 #: views/property/metadata_forms.php:193 views/ranking/list.php:95
@@ -4328,7 +4332,7 @@ msgstr "Confirme a nova senha"
 msgid "Type here your new password again"
 msgstr "Digite aqui sua nova senha novamente"
 
-#: single.php:1198 views/category/list.php:124 views/object/create.php:173
+#: single.php:1198 views/category/list.php:125 views/object/create.php:173
 #: views/object/create_item_text.php:326 views/object/create_item_text.php:329
 #: views/object/create_item_url.php:282 views/object/data_property_form.php:37
 #: views/object/delete.php:12 views/object/edit.php:262
@@ -4615,8 +4619,8 @@ msgstr "Todas as coleções"
 #: views/object/edit_object_properties/js/edit_list_properties_accordion_js.php:162
 #: views/object/edit_object_properties/js/edit_list_properties_accordion_js.php:173
 #: views/object/formItem/helper/formItemTitle.class.php:78
-#: views/object/formItem/input/date.class.php:195
-#: views/object/formItem/input/date.class.php:233
+#: views/object/formItem/input/date.class.php:196
+#: views/object/formItem/input/date.class.php:234
 #: views/object/formItem/input/numeric.class.php:102
 #: views/object/formItem/input/object.class.php:193
 #: views/object/formItem/input/text.class.php:112
@@ -4778,7 +4782,7 @@ msgid "Type the 3 first letters to activate autocomplete"
 msgstr "Digite as 3 primeiras letras para ativar o autocompletar"
 
 #: views/advanced_search/show_object_properties.php:3
-#: views/category/list.php:244 views/category/page.php:84
+#: views/category/list.php:245 views/category/page.php:84
 #: views/object/list_data_table.php:104 views/object/list_single_object.php:387
 #: views/object/list_single_object_version.php:453 views/property/list.php:33
 #: views/property/list.php:38 views/theme_options/property/list.php:13
@@ -4803,7 +4807,7 @@ msgstr "XML não formatado"
 msgid "Category root"
 msgstr "Categoria raiz"
 
-#: views/category/js/list_js.php:264 views/category/list.php:67
+#: views/category/js/list_js.php:264 views/category/list.php:68
 #: views/collection/edit.php:300 views/collection/js/edit_js.php:156
 #: views/object/list_modes/modals.php:179
 msgid "New owner: "
@@ -4832,7 +4836,7 @@ msgstr "Categorias salvas com sucesso!"
 msgid "Click here to edit the category name"
 msgstr "Clique aqui para editar o nome da categoria"
 
-#: views/category/list.php:17 views/design/edit.php:52 views/event/list.php:16
+#: views/category/list.php:18 views/design/edit.php:52 views/event/list.php:16
 #: views/property/list.php:46 views/property/list_metadata.php:54
 #: views/property/list_metadata_category.php:58 views/ranking/add.php:19
 #: views/ranking/edit.php:20 views/ranking/list.php:33
@@ -4842,7 +4846,7 @@ msgstr "Clique aqui para editar o nome da categoria"
 msgid "Operation was successful."
 msgstr "Operação realizada com sucesso."
 
-#: views/category/list.php:22 views/design/edit.php:56 views/event/list.php:20
+#: views/category/list.php:23 views/design/edit.php:56 views/event/list.php:20
 #: views/property/list.php:51 views/property/list_metadata.php:59
 #: views/property/list_metadata_category.php:63 views/ranking/add.php:23
 #: views/ranking/edit.php:24 views/ranking/list.php:37
@@ -4852,19 +4856,19 @@ msgstr "Operação realizada com sucesso."
 msgid "Error! Operation was unsuccessful."
 msgstr "Erro! Operação não realizada."
 
-#: views/category/list.php:32 views/search/tags.php:33
+#: views/category/list.php:33 views/search/tags.php:33
 msgid "Add selected categories as facets"
 msgstr "Adicionar categorias selecionadas como facetas"
 
-#: views/category/list.php:52
+#: views/category/list.php:53
 msgid "Category privacity"
 msgstr "Privacidade das categorias"
 
-#: views/category/list.php:54 views/collection/edit.php:165
+#: views/category/list.php:55 views/collection/edit.php:165
 msgid "Private"
 msgstr "Privado"
 
-#: views/category/list.php:55 views/collection/edit.php:158
+#: views/category/list.php:56 views/collection/edit.php:158
 #: views/property/metadata/form_compounds.php:52
 #: views/property/metadata/form_object.php:77
 #: views/property/metadata/form_term.php:135
@@ -4874,118 +4878,118 @@ msgstr "Privado"
 msgid "Public"
 msgstr "Público"
 
-#: views/category/list.php:60
+#: views/category/list.php:61
 msgid "Change category owner"
 msgstr "Alterar dono da categoria"
 
-#: views/category/list.php:63 views/collection/edit.php:295
+#: views/category/list.php:64 views/collection/edit.php:295
 #: views/collection/edit.php:364 views/object/list_modes/modals.php:174
 msgid "Type the three first letters of the user name "
 msgstr "Digite os três primeiras letras do nome do usuário"
 
-#: views/category/list.php:74
+#: views/category/list.php:75
 msgid "Category moderators"
 msgstr "Moderadores das categorias"
 
-#: views/category/list.php:75
+#: views/category/list.php:76
 msgid "Type the three user initial letters"
 msgstr "Digite as três primeiras letras do nome do usuário"
 
-#: views/category/list.php:83 views/category/list.php:88
+#: views/category/list.php:84 views/category/list.php:89
 msgid "Current Phase"
 msgstr "Fase corrente"
 
-#: views/category/list.php:84 views/category/list.php:99
+#: views/category/list.php:85 views/category/list.php:100
 msgid "Year(s)"
 msgstr "Ano(s)"
 
-#: views/category/list.php:85 views/category/list.php:100
+#: views/category/list.php:86 views/category/list.php:101
 msgid "Month(s)"
 msgstr "Mês(Meses)"
 
-#: views/category/list.php:91
+#: views/category/list.php:92
 msgid "Explicate note"
 msgstr "Nota de Explicação"
 
-#: views/category/list.php:98
+#: views/category/list.php:99
 msgid "Intermediate Phase"
 msgstr "Fase Intermediária"
 
-#: views/category/list.php:103
+#: views/category/list.php:104
 msgid "Destination"
 msgstr "Destinação"
 
-#: views/category/list.php:104
+#: views/category/list.php:105
 msgid "Permanent guard"
 msgstr "Guarda Permanente"
 
-#: views/category/list.php:105
+#: views/category/list.php:106
 msgid "Elimination"
 msgstr "Eliminação"
 
-#: views/category/list.php:108
+#: views/category/list.php:109
 msgid "Classification Code"
 msgstr "Código de Classificação "
 
-#: views/category/list.php:109
+#: views/category/list.php:110
 msgid "Type here the category classification code"
 msgstr "Digite aqui o código de classficação desta categoria"
 
-#: views/category/list.php:112
+#: views/category/list.php:113
 msgid "Observation"
 msgstr "Observação"
 
-#: views/category/list.php:125 views/property/list.php:250
+#: views/category/list.php:126 views/property/list.php:250
 #: views/property/list.php:330 views/search/tags.php:55
 #: views/theme_options/property/list.php:163
 #: views/theme_options/property/list.php:234
 msgid "New"
 msgstr "Novo"
 
-#: views/category/list.php:136
+#: views/category/list.php:137
 msgid "Set as parent"
 msgstr "Setar como pai"
 
-#: views/category/list.php:137
+#: views/category/list.php:138
 msgid "Import taxonomy"
 msgstr "Importar Taxonomia"
 
-#: views/category/list.php:138
+#: views/category/list.php:139
 msgid "Export taxonomy"
 msgstr "Exportar Taxonomia "
 
-#: views/category/list.php:186 views/category/taxonomy_zone.php:92
+#: views/category/list.php:187 views/category/taxonomy_zone.php:92
 msgid "Import Taxonomy in "
 msgstr "Importar Taxonomia em"
 
-#: views/category/list.php:192 views/category/taxonomy_zone.php:96
+#: views/category/list.php:193 views/category/taxonomy_zone.php:96
 msgid "Send the xml file "
 msgstr "Enviar arquivo XML"
 
-#: views/category/list.php:216
+#: views/category/list.php:217
 msgid "Export Taxonomy "
 msgstr "Exportar Taxonomia"
 
-#: views/category/list.php:222
+#: views/category/list.php:223
 msgid "Do you confirm the download of this taxonomy: "
 msgstr "Confirma o download desta taxonomia:"
 
-#: views/category/list.php:231 views/search/tags.php:82
+#: views/category/list.php:232 views/search/tags.php:82
 msgid "Confirm"
 msgstr "Confirmar"
 
-#: views/category/list.php:246 views/collection/config_menu.php:48
+#: views/category/list.php:247 views/collection/config_menu.php:48
 msgid "Social"
 msgstr "Redes Sociais"
 
-#: views/category/list.php:247 views/design/edit.php:15
+#: views/category/list.php:248 views/design/edit.php:15
 #: views/design/edit.php:27 views/property/list.php:16
 #: views/ranking/list.php:15 views/search/edit.php:16
 #: views/theme_options/property/list.php:16
 msgid "Design"
 msgstr "Visual"
 
-#: views/category/list.php:250 views/design/edit.php:18
+#: views/category/list.php:251 views/design/edit.php:18
 #: views/object/js/list_js.php:15 views/property/list.php:19
 #: views/ranking/list.php:18 views/search/edit.php:19
 #: views/statistics/inc/i18n_strs.php:4
@@ -4993,7 +4997,7 @@ msgstr "Visual"
 msgid "Previous"
 msgstr "Anterior"
 
-#: views/category/list.php:251 views/property/list.php:20
+#: views/category/list.php:252 views/property/list.php:20
 #: views/ranking/list.php:19 views/search/edit.php:20
 #: views/theme_options/property/list.php:21
 msgid "Next"
@@ -5541,7 +5545,7 @@ msgid "Please set a valid address"
 msgstr "Por favor, digite um endereço válido"
 
 #: views/collection/js/edit_js.php:110 views/search/js/edit_js.php:129
-#: views/search/js/layout_js.php:256
+#: views/search/js/layout_js.php:255
 msgid "General ordenation"
 msgstr "Ordenação padrão"
 
@@ -6967,11 +6971,15 @@ msgstr "Escolha a Licença"
 msgid "An error ocurred, File is not compatible!"
 msgstr "Arquivo não compatível!"
 
-#: views/object/formItem/input/date.class.php:201
+#: views/object/formItem/input/date.class.php:202
 #: views/object/formItemMultiple/input/date.class.php:119
 #: views/object/formItemMultiple/input/date.class.php:156
 msgid "Invalid date!"
 msgstr "Data inválida!"
+
+#: views/object/formItem/input/object.class.php:998
+msgid "Keyword"
+msgstr "Palavra Chave"
 
 #: views/object/formItem/input/user.class.php:44
 #: views/object/list_properties_accordion.php:260
@@ -7645,11 +7653,11 @@ msgstr "Versionamento"
 msgid "Change ownership of "
 msgstr "Mudar proprietário de "
 
-#: views/object/list_modes/geolocation.php:8
+#: views/object/list_modes/geolocation.php:7
 msgid "This collection is not configured to use geolocation mode."
 msgstr "Esta coleção não está configurada para usar o modo de geolocalização."
 
-#: views/object/list_modes/geolocation.php:13
+#: views/object/list_modes/geolocation.php:10
 msgid "No items have geographic location data in this listing."
 msgstr "Nenhum item possui dados de localização geográfica nesta listagem."
 
@@ -9026,7 +9034,7 @@ msgid "Something went wrong. Try again later."
 msgstr "Algo inesperado ocorreu. Por favor tente novamente. "
 
 #: views/search/js/edit_js.php:506 views/search/js/edit_js.php:529
-#: views/search/js/layout_js.php:457
+#: views/search/js/layout_js.php:458
 msgid "No data properties inserted"
 msgstr "Nenhum metadado de dado adicionado"
 
@@ -10151,6 +10159,9 @@ msgstr "Local de trabalho atual"
 #: views/user/register.php:119
 msgid "Professional Resume"
 msgstr "Resumo profissional"
+
+#~ msgid "Tainacan is proudly powered by"
+#~ msgstr "Tainacan é orgulhosamente mantido com"
 
 #~ msgid "Reply successfully sent."
 #~ msgstr "Resposta enviada com sucesso."
