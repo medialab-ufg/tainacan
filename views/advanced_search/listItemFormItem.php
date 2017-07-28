@@ -91,10 +91,12 @@
     // adiciona nos inseridos
     function save_selected_items_property_object_compound_<?php echo $compound_id ?>_<?php echo $property_id; ?>_<?php echo $contador; ?>(){
         var results = 0;
+        var ids = [];
         //percorro todos os selecionados para serem inseridos
         $.each($('input[name="temporary_items_<?php echo $compound_id ?>_<?php echo $property_id ?>_<?php echo $contador ?>[]"]:checked'),function(index,value){
             results++;
             if($('#inserted_property_object_<?php echo $compound_id ?>_<?php echo $property_id ?>_<?php echo $contador ?>_'+$(value).val()).length==0){
+                ids.push($(value).val());
                 //$('#line_property_object_<?php echo $property_id ?>_'+$(value).val()).css('color','#fff').css('background-color','#4285f4');
                // $('#line_property_object_<?php echo $property_id ?>_'+$(value).val()+' .item_values_'+$(value).val()).attr('disabled','disabled');
                 if($('#cardinality_<?php echo $compound_id ?>_<?php echo $property_id ?>_<?php echo $contador ?>').val()==='false'){
@@ -104,10 +106,11 @@
                 $('#results_property_<?php echo $compound_id ?>_<?php echo $property_id ?>_<?php echo $contador ?> ul')
                         .append('<li id="inserted_property_object_<?php echo $compound_id ?>_<?php echo $property_id ?>_<?php echo $contador ?>_'+$(value).val()+'" item="'+$(value).val()+'" class="selected-items-property-object property-<?php echo $property_id; ?>">'+$('#line_property_object_<?php echo $compound_id ?>_<?php echo $property_id ?>_<?php echo $contador ?>_'+$(value).val()+' .title-text').html()
                         +'<span  onclick="remove_item_objet_<?php echo $compound_id ?>_<?php echo $property_id; ?>_<?php echo $contador; ?>(this)" style="cursor:pointer;" class="pull-right glyphicon glyphicon-trash"></span></li>');
-                add_in_item_value_compound_<?php echo $compound_id ?>_<?php echo $property_id; ?>_<?php echo $contador; ?>($(value).val());
+                //add_in_item_value_compound_<?php echo $compound_id ?>_<?php echo $property_id; ?>_<?php echo $contador; ?>($(value).val());
             }
         });
         if(results>0){
+            add_in_item_value_compound_<?php echo $compound_id ?>_<?php echo $property_id; ?>_<?php echo $contador; ?>(ids);
             $('#no_results_property_<?php echo $compound_id ?>_<?php echo $property_id ?>_<?php echo $contador ?>').hide()
         }
     }
@@ -124,7 +127,7 @@
     
     //adiciona no formulario de fato
     function add_in_item_value_compound_<?php echo $compound_id ?>_<?php echo $property_id; ?>_<?php echo $contador; ?>(id){
-        $('select[name="socialdb_property_<?php echo $compound_id; ?>_<?php echo $property_id; ?>_<?php echo $contador; ?>[]"]').append('<option value="'+id+'" selected="selected">'+id+'</option>');
+        //$('select[name="socialdb_property_<?php echo $compound_id; ?>_<?php echo $property_id; ?>_<?php echo $contador; ?>[]"]').append('<option value="'+id+'" selected="selected">'+id+'</option>');
         $.ajax({
             url: $('#src').val() + '/controllers/object/form_item_controller.php',
             type: 'POST',
@@ -140,7 +143,7 @@
                 reverse: $('#reverse_<?php echo $compound_id ?>_<?php echo $property_id; ?>_<?php echo $contador; ?>').val()
             }
         });
-        validateFieldsMetadataText(id,'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $contador ?>')
+        validateFieldsMetadataText('true','<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $contador ?>')
     }
     //remove no formulario de fato
     function remove_in_item_value_compound_<?php echo $compound_id ?>_<?php echo $property_id; ?>_<?php echo $contador; ?>(id){

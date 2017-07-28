@@ -219,7 +219,7 @@ class FormItemController extends Controller {
                 $data['ID'] = wp_update_post($post);
                 //Tainacan IBRAM
                 if (has_action('tainacan_delete_related_item')) {
-                    $values = ['object_id'=> $data['ID']];
+                    $values = ['object_id'=> $data['ID'],'collection_id'=> $data['collection_id']];
                     do_action('tainacan_delete_related_item', $values, $data['collection_id']);
                  }
 
@@ -339,6 +339,13 @@ if(isset($data['item_id']) && !is_array($data['item_id']) && strpos($data['item_
         $data['item_id'] = $id;
         $form_item_controller->operation($operation, $data);
     }
+}else if($operation == 'saveValue' && is_array( $data['value'])){
+    $ids = $data['value'];
+    foreach ($ids as $id) {
+        $data['value'] = $id;
+        $form_item_controller->operation($operation, $data);
+    }
+    echo '[]';
 }else{
     echo $form_item_controller->operation($operation, $data);
 }

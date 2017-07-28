@@ -325,20 +325,32 @@ class ObjectWidgetsHelper extends ViewHelper {
      * @param int $i O indice do for da cardinalidade
      */
     public function widget_property_object($property,$i,$references,$value = false) {
+        $propertyModel = new PropertyModel;
         if($references['is_view_mode'] || (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true' && !isset($references['operation']))){
-            if(isset($value)): 
-                if(is_array($value) && $value[$i])  
-                    $val = $value[$i];
-                else
-                     $val = $value; 
+            $meta = get_post_meta($references['object_id'], 'socialdb_property_helper_' . $references['compound_id'], true);
+            if ($meta && $meta != '') {
+                $array = unserialize($meta);
+                if(isset($array[$i][$property['id']]) ){
+                    $values = $array[$i][$property['id']]['values'];
+                    $objects = [];
+                    foreach ($values as $value) {
+                        $objects[] = get_post($propertyModel->sdb_get_post_meta($value)->meta_value);
+                    }
+                }
+            } 
+//            if(isset($value)): 
+//                if(is_array($value) && $value[$i])  
+//                    $val = $value[$i];
+//                else
+//                     $val = $value; 
              ?>
              <div id="labels_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">
-                <?php if (!empty($property['metas']['objects']) && !empty($val)) { ?>
-                    <?php foreach ($property['metas']['objects'] as $object) { // percoro todos os objetos  ?>
+                <?php if (isset($objects)) { ?>
+                    <?php foreach ($objects as $object) { // percoro todos os objetos  ?>
                         <?php
-                        if (isset($val) && !empty($val) && $object->post_status == 'publish' && ((is_array($val) && in_array($object->ID, $val) ) || ($object->ID == $val) )): // verifico se ele esta na lista de objetos da colecao
+                        //if (isset($val) && !empty($val) && $object->post_status == 'publish' && ((is_array($val) && in_array($object->ID, $val) ) || ($object->ID == $val) )): // verifico se ele esta na lista de objetos da colecao
                             echo '<input type="hidden" name="socialdb_property_'.$property['id'].'[]" value="'.$object->ID.'"><i><a  href="' . get_the_permalink($property['metas']['collection_data'][0]->ID) . '?item=' . $object->post_name . '" >' . $object->post_title . '</a></i><br>';
-                        endif;
+                       // endif;
                         ?>
                     <?php } ?>
                     <?php
@@ -347,7 +359,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                 }
                 ?>
             </div>
-            <?php endif;
+            <?php //endif;
             
             return;
         }

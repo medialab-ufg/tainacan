@@ -836,7 +836,7 @@ class FormItem extends Model {
                     }else{
                         updateItem();
                     }
-                }, 800);
+                }, 600);
             });
 
             /**
