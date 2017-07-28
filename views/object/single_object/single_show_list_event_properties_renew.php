@@ -174,12 +174,26 @@ if (isset($property_data)):
                     ?>
                     <p>
                         <?php
-                        if (filter_var($value, FILTER_VALIDATE_URL)):
-                            echo '<b><a target="_blank" href="' . $value . '" >' . $value . '</a></b>';
+                        $is_url = filter_var($value, FILTER_VALIDATE_URL);
+                        if(!$is_url)
+                        {
+                            $is_url = filter_var("http://".$value, FILTER_VALIDATE_URL);
+                            if(!$is_url)
+                            {
+                                $is_url = filter_var("http://www.".$value, FILTER_VALIDATE_URL);
+                                if($is_url)
+                                {
+                                     $value_href = "http://www.".$value;
+                                }
+                            }else $value_href = "http://".$value;
+                        }else $value_href = $value;
+
+                        if ($is_url):
+                            echo '<b><a class="can_short" target="_blank" href="' . $value_href . '" >' . $value . '</a></b>';
                         elseif (filter_var(trim($value), FILTER_VALIDATE_EMAIL)):
-                            echo '<b><a target="_blank" href="mailto:' . $value . '">' . $value . '</a></b>';
+                            echo '<b><a class="can_short" target="_blank" href="mailto:' . $value . '">' . $value . '</a></b>';
                         elseif ($value):
-                            echo '<b><a class="can_short" style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $value . "'" . ',' . $property['id'] . ')">' . $value . '</a></b>';
+                            echo '<b><a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $value . "'" . ',' . $property['id'] . ')">' . $value . '</a></b>';
                         endif;
                         ?>
                     </p>
