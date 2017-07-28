@@ -2,7 +2,7 @@
 include_once('js/dashboard_js.php');
 ?>
 <!-- DASHBOARD -->
-<div class="container-fluid" id="bgc-dashboard">
+<div class="container-fluid">
   <div class"row">
     
     <div id="dash-buscas-frequentes" class="bgc-widget col-md-4 table-responsive">

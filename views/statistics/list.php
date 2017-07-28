@@ -11,7 +11,7 @@ include_once('js/list_js.php');
 
     <?php $_log_helper->render_statistic_menu(); ?>
 
-    <div id="dashb"></div>
+    <div id="dashb" class="jumbotron hidden"></div>
     <!-- Barra lateral esquerda :ui-widget-header-->
     <div id="dynatree-estatisticas" class="col-md-3">
         <!-- Periodo -->

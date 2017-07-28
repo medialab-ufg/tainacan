@@ -12,7 +12,7 @@
             delete: '<?php _t("Deleted", 1); ?>',
             comment: '<?php _t("Commented", 1); ?>',
             vote: '<?php _t("Voted", 1); ?>',
-            login: '<?php _t("Logged in", 1); ?>',
+            login: 'Logins',
             register: '<?php _t("Registers", 1); ?>',
             delete_user: '<?php _t("Excluded", 1); ?>',
             administrator: '<?php _t("Administrator", 1); ?>',
@@ -155,26 +155,11 @@
 
             return today = dd+'/'+mm+'/'+yyyy;
         }
+    });
 
-        $("#from_period").on('change', function () {
-            var diffe = Math.ceil( ($("#to_period").datepicker('getDate') - $("#from_period").datepicker('getDate')) / (1000 * 60 * 60 * 24) ) + 1;
-
-            if(diffe < 7){
-                $("#weeks").prop('disabled', true);
-                $("#months").prop('disabled', true);
-            }
-            else if(diffe < 28){
-                $("#months").prop('disabled', true);
-            }
-            else{
-                $("#weeks").prop('disabled', false);
-                $("#months").prop('disabled', false);
-            }
-            loadChart();
-        });
-
-        $("#to_period").on('change', function () {
-            var diffe = Math.ceil( ($("#to_period").datepicker('getDate') - $("#from_period").datepicker('getDate')) / (1000 * 60 * 60 * 24) ) + 1;
+//  On change period
+    $("#from_period").on('change', function () {
+        var diffe = Math.ceil( ($("#to_period").datepicker('getDate') - $("#from_period").datepicker('getDate')) / (1000 * 60 * 60 * 24) ) + 1;
 
             if(diffe < 7){
                 $("#weeks").prop('disabled', true);
@@ -190,14 +175,31 @@
             loadChart();
         });
 
-        //-
+    $("#to_period").on('change', function () {
+        var diffe = Math.ceil( ($("#to_period").datepicker('getDate') - $("#from_period").datepicker('getDate')) / (1000 * 60 * 60 * 24) ) + 1;
 
-        // On change filter type week, day, month
+            if(diffe < 7){
+                $("#weeks").prop('disabled', true);
+                $("#months").prop('disabled', true);
+            }
+            else if(diffe < 28){
+                $("#months").prop('disabled', true);
+            }
+            else{
+                $("#weeks").prop('disabled', false);
+                $("#months").prop('disabled', false);
+            }
+            loadChart();
+        });
+// -------
+
+// On change filter type week, day, month
         $("input[type=radio][name=optradio]").on('change', function () {
             loadChart();
         });
-        
-        //On change chart type
+// ------- 
+
+//On change chart type
         $('a.change-mode').on('click', function() {
             var selected_chart = $(this).attr('data-chart');
             var curr_img = $(this).html();
@@ -219,7 +221,7 @@
              // Click again at current selected node to trigger chart drawing
             loadChart();
         });
-    });
+//-------
 
     $("#config-repo").accordion({
         collapsible: true,
