@@ -698,3 +698,10 @@ table.sorting-table tbody tr:not(.sorting-row) td {opacity: 0.2;}
       float: left;
      width: 100%;
  }
+
+.can_short {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: block;
+}

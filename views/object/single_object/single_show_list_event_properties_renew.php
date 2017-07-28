@@ -179,7 +179,7 @@ if (isset($property_data)):
                         elseif (filter_var(trim($value), FILTER_VALIDATE_EMAIL)):
                             echo '<b><a target="_blank" href="mailto:' . $value . '">' . $value . '</a></b>';
                         elseif ($value):
-                            echo '<b><a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $value . "'" . ',' . $property['id'] . ')">' . $value . '</a></b>';
+                            echo '<b><a class="can_short" style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $value . "'" . ',' . $property['id'] . ')">' . $value . '</a></b>';
                         endif;
                         ?>
                     </p>
