@@ -775,66 +775,68 @@ class FormItem extends Model {
 
             /* Verificando se o item pode ser publicado ou atualizado */
             $('#submit-form-item').click(function(){
-                var publish = true;
-                //escondo as mensagens anteriores
-                $('.validateIcon').hide();
-                //var compounds = {};
-                $('.validate-class').each(function(){
-                    if($(this).val()==='false'){
-                        if($(this).hasClass('compound-one-field-should-be-filled')){
-                            var compound_id = $(this).attr('compound');
-                            var has_one = false;
-                            //verifico se um dos composto esta preenchido
-                            $('.compound-one-field-should-be-filled-'+compound_id).each(function(){
+                setTimeout(function(){
+                    var publish = true;
+                    //escondo as mensagens anteriores
+                    $('.validateIcon').hide();
+                    //var compounds = {};
+                    $('.validate-class').each(function(){
+                        if($(this).val()==='false'){
+                            if($(this).hasClass('compound-one-field-should-be-filled')){
+                                var compound_id = $(this).attr('compound');
+                                var has_one = false;
+                                //verifico se um dos composto esta preenchido
+                                $('.compound-one-field-should-be-filled-'+compound_id).each(function(){
+                                    // pego o id do atual que sera utilizado para buscar a aba
+                                    // caso nao seja encontrado nenhum composto preenchido
+                                    var key = $(this).attr('id');
+                                    if($(this).val()!=='false'){
+                                        has_one = true
+                                    }
+                                });
+                                // se nenhum campo preenchido estiver mostro a
+                                // mensagem do composto e da aba
+                                if(!has_one){
+                                    publish = false;
+                                    $('.alert-compound-'+$(this).attr('compound')).show();
+                                    var tab = getPropertyTab(key);
+                                    $('#alert-'+tab).show();
+                                }
+                            }else{
+                                //ja coloco falso pois eh um campo obrigatorio que nao foi preenchido
+                                publish = false;
                                 // pego o id do atual que sera utilizado para buscar a aba
                                 // caso nao seja encontrado nenhum composto preenchido
-                                var key = $(this).attr('id');
-                                if($(this).val()!=='false'){
-                                    has_one = true
-                                }
-                            });
-                            // se nenhum campo preenchido estiver mostro a
-                            // mensagem do composto e da aba
-                            if(!has_one){
-                                publish = false;
-                                $('.alert-compound-'+$(this).attr('compound')).show();
+                                var key = $(this).parent().attr('id');
+                                //mostro a mensagem do proprio metadado
+                                if($(this).parent().parent().find('p .alert-compound-'+$(this).attr('property')).length>0)
+                                    $(this).parent().parent().find('p .alert-compound-'+$(this).attr('property')).show();
+                                else
+                                    $('.alert-compound-'+$(this).attr('property')).show();
+                                // busco a aba
                                 var tab = getPropertyTab(key);
+                                //mostro a mensagem
                                 $('#alert-'+tab).show();
-                            }
-                        }else{
-                            //ja coloco falso pois eh um campo obrigatorio que nao foi preenchido
-                            publish = false;
-                            // pego o id do atual que sera utilizado para buscar a aba
-                            // caso nao seja encontrado nenhum composto preenchido
-                            var key = $(this).parent().attr('id');
-                            //mostro a mensagem do proprio metadado
-                            if($(this).parent().parent().find('p .alert-compound-'+$(this).attr('property')).length>0)
-                                $(this).parent().parent().find('p .alert-compound-'+$(this).attr('property')).show();
-                            else
-                                $('.alert-compound-'+$(this).attr('property')).show();
-                            // busco a aba
-                            var tab = getPropertyTab(key);
-                            //mostro a mensagem
-                            $('#alert-'+tab).show();
-                            //se for metadado composto
-                            if($(this).attr('compound')){
-                                $('.alert-compound-'+$(this).attr('compound')).show();
-//                                if(!compounds[$(this).attr('compound')])
-//                                    compounds[$(this).attr('compound')] = [$(this).attr('property')];
-//                                else
-//                                    compounds[$(this).attr('compound')].push($(this).attr('property'));
+                                //se for metadado composto
+                                if($(this).attr('compound')){
+                                    $('.alert-compound-'+$(this).attr('compound')).show();
+    //                                if(!compounds[$(this).attr('compound')])
+    //                                    compounds[$(this).attr('compound')] = [$(this).attr('property')];
+    //                                else
+    //                                    compounds[$(this).attr('compound')].push($(this).attr('property'));
+                                }
                             }
                         }
+                    });
+                    //apos todas as validacoes
+                    if(!publish){
+                        $('html, body').animate({
+                            scrollTop: $("#submit-form").offset().top
+                        }, 1000);
+                    }else{
+                        updateItem();
                     }
-                });
-                //apos todas as validacoes
-                if(!publish){
-                    $('html, body').animate({
-                        scrollTop: $("#submit-form").offset().top
-                    }, 1000);
-                }else{
-                    updateItem();
-                }
+                }, 800);
             });
 
             /**
