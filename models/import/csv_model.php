@@ -808,7 +808,7 @@ class CsvModel extends Model {
         if($code == 'utf8'){
             return utf8_encode(utf8_decode($value));
         }else{
-            var_dump($code,mb_detect_encoding($value, 'auto'),iconv("Windows-1252","UTF-8" , $value), utf8_encode(utf8_decode($value)),(!mb_detect_encoding($value, 'auto') || mb_detect_encoding($value, 'auto')=='UTF-8' || mb_detect_encoding($value, 'auto')=='ANSII'));
+           // var_dump($code,mb_detect_encoding($value, 'auto'),iconv("Windows-1252","UTF-8" , $value), utf8_encode(utf8_decode($value)),(!mb_detect_encoding($value, 'auto') || mb_detect_encoding($value, 'auto')=='UTF-8' || mb_detect_encoding($value, 'auto')=='ANSII'));
             if(!mb_detect_encoding($value, 'auto') || mb_detect_encoding($value, 'auto')=='UTF-8' || mb_detect_encoding($value, 'auto')=='ANSII'){
                return  iconv("Windows-1252","UTF-8" , $value);
             }else{

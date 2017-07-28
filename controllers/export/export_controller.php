@@ -73,7 +73,15 @@ class ExportController extends Controller {
                 if (!empty($export_model->get_collection_posts($data['collection_id']))) {
                     $data['loop'] = $export_model->get_selected_objects($data);
                     $csv_data = $export_model->generate_csv_data_selected($data);
-                    $export_model->download_send_headers('tainacan_csv.csv');
+                   // $export_model->download_send_headers('tainacan_csv.csv');
+                    header('Content-Description: File Transfer');
+                    header('Content-Type: application/octet-stream');
+                    header('Content-Disposition: attachment; filename=tainacan_items_csv.csv');
+                    header('Content-Transfer-Encoding: binary');
+                    header('Expires: 0');
+                    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+                    header('Pragma: public');
+                    echo "\xEF\xBB\xBF"; // UTF-8 BOM
                     echo $export_model->array2csv($csv_data);
                 }else{
                      wp_redirect(get_the_permalink($data['collection_id']) . '?info_title=Attention&info_messages=' . urlencode(__('This collection has no items to export!', 'tainacan')));

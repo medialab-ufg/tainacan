@@ -471,6 +471,7 @@ class ExportModel extends Model {
         $propertyModel = new PropertyModel;
         $facets_id = CollectionModel::get_facets($data['collection_id']);
         $objects = $this->get_collection_posts($data['collection_id']);
+        $csv_data = [];
         foreach ($objects as $object) {
             if ($object->ID == $data['collection_id']) {
                 continue;
@@ -626,6 +627,7 @@ class ExportModel extends Model {
         $propertyModel = new PropertyModel;
         $facets_id = CollectionModel::get_facets($data['collection_id']);
         $objects = $data['loop'];
+        $csv = [];
         while ($objects->have_posts()) {
             $objects->the_post();
             $object = get_post(get_the_ID());
@@ -634,14 +636,14 @@ class ExportModel extends Model {
             }
             /** Title * */
             if (get_the_title() != "") {
-                $csv_data['title'] = utf8_decode(get_the_title());
+                $csv_data['title'] = get_the_title();
             } else {
                 $csv_data['title'] = '';
             }
 
             /** Description * */
             if (get_the_content() != "") {
-                $description = utf8_decode(get_the_content());
+                $description = get_the_content();
 //                if(mb_detect_encoding($description, 'auto')=='UTF-8'){
 //                    $description = iconv('ISO-8859-1', 'UTF-8', $description);
 //                }
@@ -676,7 +678,7 @@ class ExportModel extends Model {
 
             /** Source  * */
             if (get_post_meta($object->ID, 'socialdb_object_dc_source')) {
-                $csv_data['item_source'] = utf8_decode(get_post_meta($object->ID, 'socialdb_object_dc_source', true));
+                $csv_data['item_source'] = get_post_meta($object->ID, 'socialdb_object_dc_source', true);
             }
 
             /** URL * */
@@ -689,7 +691,7 @@ class ExportModel extends Model {
             /** Tags * */
             $tags = wp_get_object_terms(get_the_ID(), 'socialdb_tag_type', array('fields' => 'names'));
             if (!empty($tags)) {
-                $csv_data['tags'] = utf8_decode(implode('||', $tags));
+                $csv_data['tags'] = implode('||', $tags);
             } else {
                 $csv_data['tags'] = '';
             }
@@ -744,16 +746,16 @@ class ExportModel extends Model {
                     endif;
                     $type = $propertyModel->get_property_type($property_id); // pego o tipo da propriedade
                     if ($type == 'socialdb_property_data') {
-                        $csv_data[utf8_decode($property->name)] = get_post_meta(get_the_ID(), 'socialdb_property_' . $property_id, true);
+                        $csv_data[$property->name] = get_post_meta(get_the_ID(), 'socialdb_property_' . $property_id, true);
                     } elseif ($type == 'socialdb_property_object') {
                         $property_result_meta_value = get_post_meta(get_the_ID(), 'socialdb_property_' . $property_id);
                         if (is_array($property_result_meta_value) && $property_result_meta_value[0] != '') {
                             foreach ($property_result_meta_value as $property_meta_value) {
                                 $array_property_name[] = get_post($property_meta_value)->post_title;
                             }
-                            $csv_data[utf8_decode($property->name)] = utf8_decode(implode(', ', array_unique($array_property_name)));
+                            $csv_data[$property->name] = implode(', ', array_unique($array_property_name));
                         } else {
-                            $csv_data[utf8_decode($property->name)] = '';
+                            $csv_data[$property->name] = '';
                         }
                     } elseif ($type == 'socialdb_property_term') {
                         if (is_array($categories)):
@@ -778,9 +780,9 @@ class ExportModel extends Model {
                         $term = get_term_by('id', $property_id, 'socialdb_category_type');
                     }
                     if (is_array($categories_of_facet[$property_id])):
-                        $csv_data[utf8_decode($term->name)] = utf8_decode(implode(', ', array_unique($categories_of_facet[$property_id])));
+                        $csv_data[$term->name] = implode(', ', array_unique($categories_of_facet[$property_id]));
                     else:
-                        $csv_data[utf8_decode($term->name)] = '';
+                        $csv_data[$term->name] = '';
                     endif;
                 }
             }

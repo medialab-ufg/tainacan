@@ -1292,7 +1292,11 @@ class Model {
                 } else {
                     if (strpos($classification, '_') !== false && strpos($classification, 'tag') === false) {
                         $value = explode('_', $classification);
-                        $result[$value[1]][] = trim($value[0]);
+                        if(isset($value[2]) && $value[2] == 'datatext'){
+                            $result[$value[1]][] = $this->sdb_get_post_meta($value[0])->meta_value;
+                        }else{
+                             $result[$value[1]][] = trim($value[0]);
+                        }
                     }
                 }
             }
