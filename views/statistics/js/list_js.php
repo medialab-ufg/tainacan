@@ -44,9 +44,9 @@
     };
 
     TainacanChart.prototype.displayFixedBase = function() {
-        $("#charts-resume table tr.headers").html("<th class='curr-parent'> Status: </th>");
+        $("#charts-resume table tr.headers").html("<th class='curr-parent'> Status </th>");
         //var parent_title = $(".current_parent_report").val();
-        $("#charts-resume table tr.content").html("<td class='curr-filter'> Total: </td>");
+        $("#charts-resume table tr.content").html("<td class='curr-filter'> Total </td>");
     };
 
     TainacanChart.prototype.displayBaseAppend = function(title, value) {

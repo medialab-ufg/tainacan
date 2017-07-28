@@ -126,7 +126,7 @@
     }
 
     ul.downloadStat {
-      min-width: 46% !important;
+      min-width: 30% !important;
       /* li {
         text-align: right;
       } */
@@ -231,13 +231,13 @@
 
 // Ul that changes current chart
 ul.statChartType {
-  min-width: 20% !important;
+  min-width: 15% !important;
   // right: 72px !important;
-  li {
-    a {
-      padding: 3px 12px !important;
-    }
-  }
+  // li {
+  //   a {
+  //     padding: 3px 12px !important;
+  //   }
+  // }
 } // .statChartType
 
 #stats-cover {

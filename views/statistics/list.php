@@ -20,7 +20,7 @@ include_once('js/list_js.php');
                 <span class="prepend-filter-label glyphicon-chevron-down blue glyphicon sec-color" style="color: #79a6ce !important;"></span>
                 <?php _e('Period'); ?>
             </label>
-             <div class="date-range-filter period-config">
+            <div class="date-range-filter period-config">
                 <div> 
                     <h6> <?php _e('From: '); ?></h6>
                     <input type="text" class="input_date input-size form-control" value="" placeholder="dd/mm/aaaa" id="from_period" name="from_period">
@@ -42,11 +42,8 @@ include_once('js/list_js.php');
                 <div>
                     <input type="radio" id="nofilter" name="optradio" value="nofilter" disabled> <?php _e('No filter'); ?>
                 </div>
-
                 <!--<div id="report-filters"></div>-->
             </div>
-
-            
         </div>
 
         <div id="config-repo" class="statistics-config form-group">
@@ -62,29 +59,31 @@ include_once('js/list_js.php');
     <!-- Chart display -->
     <div id="charts-display" class="col-md-9">
 
-        <div class="chart-header btn-group col-md-12">
+        <div class="chart-header row">
             <?php $_log_helper->render_config_title(_t('Repository statistics')); ?>
            
             <!-- Cabeçalho dos gráficos -->
             <div class="user-config-control col-md-12">
+                
                 <!-- Início botão Download -->
-                <div class="col-md-1 pull-right">
-                    <button class="btn btn-default" data-toggle="dropdown" type="button" id="downloadStat">
-                        <?php _t('Download ',true); ?> <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu downloadStat" aria-labelledby="downloadStat">
-                        <?php $_log_helper->getDownloadTypes(); ?>
-                    </ul>
+                <div class="pull-right">
+                    <div class="col-md-12">
+                        <button class="btn btn-default" data-toggle="dropdown" type="button" id="downloadStat">
+                            <span class="config-title"> <?php _t('Download ',true); ?> </span> <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu downloadStat" aria-labelledby="downloadStat">
+                            <?php $_log_helper->getDownloadTypes(); ?>
+                        </ul>
+                    </div>
                 </div>
                 <!-- Fim botão Download -->
 
                 <!-- Início botão tipo de gráfico -->
-                <div class="col-md-2 pull-right">
+                <div class="col-md-3 pull-right">
                     <span class="config-title"><?php _t('Mode: ',1); ?></span>
                     <button type="button" data-toggle="dropdown" class="btn btn-default" id="statChartType">
                         <img src="<?php echo $_log_helper->getChartsType()[0]['img']; ?>" alt="<?php echo $_log_helper->getChartsType()[0]['className']; ?>"> 
                     </button>
-                   
                     <ul class="dropdown-menu statChartType" aria-labelledby="statChartType">
                         <?php $_log_helper->renderChartsDropdown(); ?>
                     </ul>
