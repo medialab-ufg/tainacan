@@ -340,7 +340,14 @@ public function add($data) {
                     $facet['nome'] = $property->name;
                     $property = get_term_by('id', $facet['id'], 'socialdb_category_type');
                     if($property){
-                         $facet['nome'] = $property->name;
+                        if(in_array($property->slug, $this->fixed_slugs)){
+                            $labels_collection =  get_post_meta($collection_id, 'socialdb_collection_fixed_properties_labels', true);
+                            if ($labels_collection):
+                                $array = unserialize($labels_collection);
+                                $property->name = (isset($array[$property->term_id])) ? $array[$property->term_id] : $property->name;
+                            endif;
+                        }
+                        $facet['nome'] = $property->name;
                     }
                 } else if( $facet['widget'] == 'menu' ) {
                     $property = get_term_by('id', $facet['id'], 'socialdb_category_type');
