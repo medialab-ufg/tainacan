@@ -1175,7 +1175,8 @@
         return $("#filters-accordion li#" + formatted_id).attr("data-widget");
     }
 
-    function edit_property_object(id) {
+    function edit_property_object(id)
+    {
         list_tabs();
         $.ajax({
             url: $('#src').val() + '/controllers/property/property_controller.php',

@@ -571,22 +571,29 @@ class ViewHelper {
                    }).done(function(result) {
                        var json = JSON.parse(result);
                        $('#properties_target').html('');
-                       if(json.properties.length==0){
+                       if(json.properties.length == 0){
                             $('#properties_target').html('<center><?php _e('No properties found','tainacan') ?>!</center>');
                        }else{
                             var is_checked_title = '';
-                            if($('#properties_to_search_in').val().split(',').indexOf(json.title.id.toString())>=0){
+                            if($('#properties_to_search_in').val().split(',').indexOf(json.title.id.toString()) >= 0)
+                            {
                                 is_checked_title = 'checked="checked"'
                             }
+
                             if(json.title.id)
                                 $('#properties_target').append('<input type="checkbox" '+is_checked_title+' value="'+json.title.id+'" onchange="setValuesTargetProperties()" class="target_values">&nbsp;'+json.title.labels.join('/')+'<br>');
+
                             $.each(json.properties,function(index,property){
                                 var is_checked = '';
-                                if($('#properties_to_search_in').val().split(',').indexOf(property.id.toString())>=0){
+                                if($('#properties_to_search_in').val().split(',').indexOf(property.id.toString())>=0)
+                                {
                                     is_checked = 'checked="checked"'
                                 }
+
                                 if(property.category.name)
+                                {
                                     $('#properties_target').append('<input type="checkbox" '+is_checked+' value="'+property.id+'" onchange="setValuesTargetProperties()" class="target_values">&nbsp;'+property.name+' ('+property.type+') - ' + property.category.name + '<br>');
+                                }
                             })
                        }
                    });

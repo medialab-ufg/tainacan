@@ -1869,7 +1869,7 @@ DynaTreeNode.prototype = {
 				self.setLazyNodeStatus(DTNodeStatus_Error, {info: textStatus, tooltip: "" + errorThrown});
 				}
 		});
-		$.ajax(options);
+		return $.ajax(options);
 	},
 
 	move: function(targetNode, mode) {

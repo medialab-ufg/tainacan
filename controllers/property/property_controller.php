@@ -193,12 +193,15 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
                     }else{
                         $return['no_properties'] = false;
                     }
+
                     $return = json_encode($return);
                 else:
                     $return =  $property_model->list_property_object($data,true);
                 endif;
+
                 $return = json_decode($return);
-                //retorno apenas as propriedades que se relacionam com a categoria atual 
+
+                //retorno apenas as propriedades que se relacionam com a categoria atual
                 //(a qual pertence a propriedade que esta criando a reversa)
                 if(!$return->no_properties){
                     foreach ($return->property_object as $property) {
@@ -210,6 +213,7 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
                     } 
                     $return->property_object = $array_final;
                 }
+
                 return json_encode($return);
             // properties repository
             case "list_repository_default":

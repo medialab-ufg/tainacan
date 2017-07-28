@@ -1089,7 +1089,32 @@
         return $("#filters-accordion li#" + formatted_id).attr("data-widget");
     }
 
-    function edit_property_object(id) {
+    function select_dynatree_checkbox(elem, node, contador)
+    {
+        if (elem.metas.socialdb_property_object_category_id.indexOf(node.data.key) > -1) {
+            if(node.bExpanded === true)
+            {
+                node.childList.forEach(function (item, indice){
+                    contador += select_dynatree_checkbox(elem, item, contador);
+                });
+            }
+
+            contador++;
+            node.select(true);
+            let ids = $('#property_object_category_id').val().split(',');
+            let index = ids.indexOf(node.data.key);
+            if (index < 0) {
+                ids.push(node.data.key);
+                $('#property_object_category_id').val(ids.join(','));
+            }
+        }
+
+        return contador;
+    }
+
+    function edit_property_object(id)
+    {
+        localStorage.setItem("property_id", id);
         list_tabs();
         $.ajax({
             url: $('#src').val() + '/controllers/property/property_controller.php',
@@ -1103,6 +1128,7 @@
             var avoid_items = (elem.metas.socialdb_property_avoid_items) ? elem.metas.socialdb_property_avoid_items : false;
             var default_value = (elem.metas.socialdb_property_default_value) ? elem.metas.socialdb_property_default_value : false;
             var habilitate_new_item = (elem.metas.socialdb_property_habilitate_new_item) ? elem.metas.socialdb_property_habilitate_new_item : false;
+
             if ( is_metadata_filter( elem.id ) ) {
                 var use_filter = "use_filter";
                 $( "#meta-relationship .property_data_use_filter").prop("checked", true);
@@ -1124,25 +1150,37 @@
 //                $("#property_object_category_id").val(related_collection);
 //            }
             var contador = 0;
-              if (elem.metas.socialdb_property_object_category_id && elem.metas.socialdb_property_object_category_id.constructor === Array) {
-                if ($("#property_category_dynatree")) {
+            if (elem.metas.socialdb_property_object_category_id && elem.metas.socialdb_property_object_category_id.constructor === Array)
+            {
+                if ($("#property_category_dynatree"))
+                {
                     $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
                         node.select(false);
                     });
+
                     $('#selected_categories_relationship').html('');
+
                     $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
-                        if (elem.metas.socialdb_property_object_category_id.indexOf(node.data.key) > -1) {
+                        contador += select_dynatree_checkbox(elem, node, contador);
+                            /*if (elem.metas.socialdb_property_object_category_id.indexOf(node.data.key) > -1) {
+                            if(node.bExpanded === true)
+                            {
+                                let key = node.childList[0].data.key;
+                                console.log(key);
+                            }
                             contador++;
                             node.select(true);
-                            ids = $('#property_object_category_id').val().split(',');
-                            index = ids.indexOf(node.data.key);
+                            let ids = $('#property_object_category_id').val().split(',');
+                            let index = ids.indexOf(node.data.key);
                             if (index < 0) {
                                 ids.push(node.data.key);
                                 $('#property_object_category_id').val(ids.join(','));
                             }
-                        }
+                        }*/
                     });
-                    if (contador === 0) {
+
+                    if (contador === 0)
+                    {
                         $('#selected_categories_relationship').html('');
                         $.each(elem.metas.socialdb_property_object_category_id, function (index, value) {
                             $.ajax({
@@ -1162,8 +1200,9 @@
                         });
                     }
                 }
-            } 
-            else if (elem.metas.socialdb_property_object_category_id) {
+            }
+            else if (elem.metas.socialdb_property_object_category_id)
+            {
                 if ($("#property_category_dynatree")) {
                     $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
                         node.select(false);
@@ -1199,7 +1238,7 @@
                         });
                     }
                 }
-            } 
+            }
 
 
             $("#meta-relationship .modal-title").text('<?php _e('Edit property','tainacan') ?>');
@@ -2266,7 +2305,7 @@
             selectionVisible: true, // Make sure, selected nodes are visible (expanded).  
             checkbox: true,
             initAjax: {
-                  url: src + '/controllers/category/category_controller.php',
+                url: src + '/controllers/category/category_controller.php',
                 data: {
                     collection_id: $("#collection_id").val(),
                     operation: 'initDynatreeTerms',
@@ -2275,13 +2314,29 @@
                 , addActiveKey: true
             },
             onLazyRead: function (node) {
-                node.appendAjax({
-                    url: src + '/controllers/category/category_controller.php',
-                    data: {
-                        collection_id: $("#collection_id").val(),
-                        category_id: node.data.key,
-                        classCss: node.data.addClass,
-                        operation: 'findDynatreeChild'
+                let property_id = localStorage.getItem("property_id");
+                $.when(
+                    node.appendAjax({
+                        url: src + '/controllers/category/category_controller.php',
+                        data: {
+                            collection_id: $("#collection_id").val(),
+                            category_id: node.data.key,
+                            classCss: node.data.addClass,
+                            property_id: property_id,
+                            operation: 'findDynatreeChild'
+                        }
+                    })
+                ).then(function(){
+                    if(node.bExpanded === true)
+                    {
+                        let ids = $('#property_object_category_id').val().split(',');
+                        node.childList.forEach(function (item, indice){
+                            if(item.bSelected === true)
+                            {
+                                ids.push(item.data.key);
+                            }
+                        });
+                        $('#property_object_category_id').val(ids.join(','));
                     }
                 });
             },
@@ -2292,17 +2347,24 @@
 
             },
             onSelect: function (flag, node) {
-                if(concatenate_in_array(node.data.key,'#property_object_category_id')){
+                if(concatenate_in_array(node.data.key,'#property_object_category_id'))
+                {
                     add_label_box(node.data.key,node.data.title,'#selected_categories_relationship');
-                }else{
+                }else
+                {
                     remove_label_box(node.data.key);
                 }
-                 $('#default_value_text').val('');
+
+                $('#default_value_text').val('');
                 $('#socialdb_property_object_default_value').val('');
                 setTargetProperties('#property_object_category_id');
-                <?php if(has_action('javascript_onselect_relationship_dynatree_property_object')): ?>
-                    <?php do_action('javascript_onselect_relationship_dynatree_property_object') ?>
-                <?php endif; ?>
+                <?php
+                    if(has_action('javascript_onselect_relationship_dynatree_property_object'))
+                    {
+                        do_action('javascript_onselect_relationship_dynatree_property_object');
+                    }
+                ?>
+
                 list_reverses();
             }
         });

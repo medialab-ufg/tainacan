@@ -541,29 +541,43 @@ class CategoryModel extends Model {
     /* @author: Eduardo */
 
     public function find_dynatree_children($data) {
+        //print_r($data);
+        $property_model = new PropertyModel();
+        $collection_id = ($data['collection_id'])? $data['collection_id'] : '';
+        $info = $property_model->get_all_property($data['property_id'], true,$collection_id); // pego todos os dados possiveis da propriedade
+        $selected_ids = $info['metas']['socialdb_property_object_category_id'];
         $dynatree = [];
+
         if (isset($data['hide_checkbox'])) {
             $hide_checkbox = true;
         } else {
             $hide_checkbox = false;
         }
+
         $data['classCss'] = ($data['classCss'])?$data['classCss']:'color4';
-        $childrens = $this->get_categories($data['category_id']);
-        if (is_array($childrens) && count($childrens) > 0) {
-            foreach ($childrens as $child) {
+        $children = $this->get_categories($data['category_id']);
+        if (is_array($children) && count($children) > 0) {
+            foreach ($children as $child)
+            {
+                $selected = false;
+                if(is_array($selected_ids) && in_array($child->term_id, $selected_ids) )
+                {
+                    $selected = true;
+                }
+
                 //verifica se o proximo nivel possui mais descendentes
                 $sub_childrens = $this->get_categories($child->term_id);
                 if (is_array($sub_childrens) && count($sub_childrens) > 0) {
                     if (is_array(CollectionModel::get_facets($data['collection_id']))&&in_array($child->term_id, CollectionModel::get_facets($data['collection_id']))) {
                         $dynatree[] = array('title' => $child->name, 'hideCheckbox' => $hide_checkbox, 'key' => $child->term_id, 'addClass' => $data['classCss'], 'isLazy' => true, 'select' => true);
                     } else {
-                        $dynatree[] = array('title' => $child->name, 'hideCheckbox' => $hide_checkbox, 'key' => $child->term_id, 'addClass' => $data['classCss'], 'isLazy' => true);
+                        $dynatree[] = array('title' => $child->name, 'hideCheckbox' => $hide_checkbox, 'key' => $child->term_id, 'addClass' => $data['classCss'], 'isLazy' => true, 'select' => $selected);
                     }
                 } else {
                     if (is_array(CollectionModel::get_facets($data['collection_id']))&&in_array($child->term_id,CollectionModel::get_facets($data['collection_id']))) {
                         $dynatree[] = array('title' => $child->name, 'hideCheckbox' => $hide_checkbox, 'key' => $child->term_id, 'addClass' => $data['classCss'], 'select' => true);
                     } else {
-                        $dynatree[] = array('title' => $child->name, 'hideCheckbox' => $hide_checkbox, 'key' => $child->term_id, 'addClass' => $data['classCss']);
+                        $dynatree[] = array('title' => $child->name, 'hideCheckbox' => $hide_checkbox, 'key' => $child->term_id, 'addClass' => $data['classCss'], 'select' => $selected);
                     }
                 }
             }

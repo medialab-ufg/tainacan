@@ -2526,11 +2526,12 @@
      * @param {string} O id do input que esta sendo concatenado
      * @returns {void}     */
     function concatenate_in_array(key, seletor) {
-        var ids = [];
-        var result;
-        if ($(seletor).val() !== '') {
+        let ids = [];
+        let result;
+        if ($(seletor).val() !== '')
+        {
             ids = $(seletor).val().split(',');
-            index = ids.indexOf(key);
+            let index = ids.indexOf(key);
             if (index >= 0) {
                 ids.splice(index, 1);
                 result = false;
@@ -2544,6 +2545,7 @@
             $(seletor).val(ids.join(','));
             result = true;
         }
+
         return result;
     }
 
@@ -2553,18 +2555,18 @@
     }
 
     function remove_label_box(id, dynatree) {
-        var cont = 0;
+        let cont = 0;
         if (!dynatree)
             dynatree = "#property_category_dynatree";
         $(dynatree).dynatree("getRoot").visit(function (node) {
-            if (node.data.key == id) {
+            if (node.data.key === id) {
                 cont++;
                 node.select(false);
             }
         });
         if (cont === 0) {
-            var ids = $('#property_object_category_id').val().split(',');
-            var index = ids.indexOf(id);
+            let ids = $('#property_object_category_id').val().split(',');
+            let index = ids.indexOf(id);
             if (index >= 0) {
                 ids.splice(index, 1);
                 $('#property_object_category_id').val(ids.join(','));
