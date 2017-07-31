@@ -605,3 +605,33 @@ a.validade-error {
 a.validate-ok {
   color:green;
 }
+
+.common-crop {
+  margin-bottom: 20px;
+  background: #ece9e9;
+  position: relative;
+}
+
+#logo_crop {
+  width: 130px;
+  height: 100px;
+}
+
+#cover_crop {
+  width: 100%;
+  height: 150px;
+}
+
+#thumb-idea-form {
+  margin-top: 10px;
+  label {
+    display: block;
+  }
+  img {
+    display: block;
+    margin-bottom: 5px;
+  }
+  .crop-wrapper {
+    margin-top: 10px;
+  }
+}

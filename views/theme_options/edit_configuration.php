@@ -3,7 +3,8 @@ include_once ('js/edit_configuration_js.php');
 include_once(dirname(__FILE__) . '/../../helpers/view_helper.php');
 include_once(dirname(__FILE__) . '/../../helpers/repository/repository_helper.php');
 $view_helper = new RepositoryHelper();
-$post_thumb = get_the_post_thumbnail($socialdb_logo, 'thumbnail');
+// $post_thumb = get_the_post_thumbnail($socialdb_logo, 'thumbnail');
+$post_thumb = get_post($socialdb_logo)->guid;
 ?>
 <div class="col-md-12 ui-widget-content metadata-actions">
 
@@ -22,10 +23,15 @@ $post_thumb = get_the_post_thumbnail($socialdb_logo, 'thumbnail');
                 <?php endif; ?>
                 <input type="file" size="50" id="repository_logo" name="repository_logo" class="btn btn-default btn-sm">
                 <br>
+                <div>
+                    <label for="logo"><?php _t('Logo',1); ?></label>
+                    <div id="logo_crop" class="common-crop"></div>
+                </div>
             </div>
             <!------------------- Capa do repositorio ----------------------------->
             <div id="cover-idea-form">
-                <label for="repository_logo"><?php _e('Cover','tainacan'); ?></label>
+                <label for="repository_cover"><?php _t('Cover',1); ?></label>
+                <div id="cover_crop" class="common-crop"></div>
                 <br>
                 <?php
                 $cover_id = get_option('socialdb_repository_cover_id');

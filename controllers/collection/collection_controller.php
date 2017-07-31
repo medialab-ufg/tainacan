@@ -215,6 +215,25 @@ class CollectionController extends Controller {
                     $retorno['collection_cover_img'] = update_post_meta($data['collection_id'], 'socialdb_collection_cover_id', $img_id);
                 }
                 return json_encode($retorno);
+            case 'set_repository_img':
+                $_crop_path_ = $data["img_url"];
+                $img_title = _t("Logo");
+                if(isset($data["img_title"]))
+                    $img_title = $data["img_title"];
+
+                $file_ext = wp_check_filetype($_crop_path_);
+                $attachment = ['guid'=>$_crop_path_, 'post_mime_type' => 'image/'.$file_ext['ext'], 'post_title' => $img_title];
+
+                $img_id = wp_insert_attachment($attachment);
+
+                if(isset($data["type"]) && ctype_digit($img_id) && $img_id > 0) {
+                    if("logo_crop" === $data["type"]) {
+                        update_option("socialdb_logo", $img_id);
+                    } else if("cover_crop") {
+                        update_option("socialdb_repository_cover_id", $img_id);
+                    }
+                }
+                break;
             case 'list_items_search_autocomplete':
                 $property_model = new PropertyModel;
                 $property = get_term_by('id', $data['property_id'], 'socialdb_property_type');

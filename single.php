@@ -41,10 +41,8 @@ $_color_scheme = ViewHelper::getCollectionColors($_currentID_);
 $search_color = ($_color_scheme) ? $_color_scheme["primary"] : "#79a6ce";
 
 if (!has_nav_menu('menu-ibram')):
-    $_r_bg = repository_bg($col_root_id);
-    ?>
-    <div id="main_part_collection" class="collection_repo_config" 
-         style="background: url(<?php echo $_r_bg; ?>); display: none; margin-top: 0px;">
+    $_r_bg = repository_bg($col_root_id); ?>
+    <div id="main_part_collection" class="collection_repo_config" style="background: url(<?php echo $_r_bg; ?>); display: none; margin-top: 0">
         <div class="row container-fluid">
             <div class="project-info">
                 <center>
@@ -55,11 +53,6 @@ if (!has_nav_menu('menu-ibram')):
             <?php include_once "views/collection/collec_share.php"; ?>
         </div>
     </div>
-    <?php
-else:
-    echo '<input type="hidden" name="ibram_menu" value="ibram_menu_activated" />';
-    ?>
-    <style type="text/css"> .ibram-header {  margin-top: 0px; } </style>
 <?php
 endif;
 

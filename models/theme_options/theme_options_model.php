@@ -219,12 +219,9 @@ class ThemeOptionsModel extends Model {
     }
     
     function update_configuration($data) {
-        
         $reload = false;
         $data['socialdb_repository_permissions'] = ['socialdb_collection_permission_create_collection' => $data['socialdb_collection_permission_create_collection'], 'socialdb_collection_permission_delete_collection' => $data['socialdb_collection_permission_delete_collection']];
         $data['repository_content'] = strip_tags($data['repository_content']);
-
-        /*         * ***** */
 
         update_option('blogname', $data['repository_title']);
         update_option('blogdescription', $data['repository_content']);
@@ -234,15 +231,13 @@ class ThemeOptionsModel extends Model {
             $reload = true;
         } else {
             update_option('tainacan_module_activate', '');
-            $reload = false;
         }
-
-        /*         * ***** */
 
         $socialdb_logo = get_option('socialdb_logo');
 
         if (isset($data['remove_thumbnail']) && $data['remove_thumbnail']) {
             delete_post_thumbnail($socialdb_logo);
+            wp_delete_post($socialdb_logo, true);
         }
         
         if (isset($data['remove_cover']) && $data['remove_cover']) {
@@ -258,7 +253,7 @@ class ThemeOptionsModel extends Model {
             update_option('disable_empty_collection', 'false');
         }
 
-        //var_dump($_FILES); exit();
+        /*
         if ($_FILES) {
             if ($socialdb_logo) {
                 $this->add_thumbnail($socialdb_logo);
@@ -278,7 +273,7 @@ class ThemeOptionsModel extends Model {
                 update_option('socialdb_repository_cover_id', $cover_id);
                 $reload = true;
             }
-        }
+        } */
 
         if (isset($data['tainacan_cache']) && $data['tainacan_cache'] == 'true') {
             update_option('tainacan_cache', 'false');

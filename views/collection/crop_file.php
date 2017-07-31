@@ -23,9 +23,13 @@ $cropH = $_POST['cropH'];
 // rotation angle
 $angle = $_POST['rotation'];
 
+$_file_ = ['name' => basename($imgUrl), 'ext' => wp_check_filetype($imgUrl)];
+$replace = "." . $_file_["ext"]["ext"];
+$final_name = str_replace($replace,"", $_file_["name"]);
+
 $jpeg_quality = 100;
 $current_rand = rand();
-$output_filename = dirname($imgUrl). "/cropped_".$current_rand;
+$output_filename = dirname($imgUrl). "/" . $final_name . "_" . $current_rand;
 
 $what = getimagesize($imgUrl);
 
@@ -38,7 +42,6 @@ switch(strtolower($what['mime'])) {
     case 'image/jpeg':
         $img_r = imagecreatefromjpeg($imgUrl);
 		$source_image = imagecreatefromjpeg($imgUrl);
-		error_log("jpg");
 		$type = '.jpeg';
         break;
     case 'image/gif':
@@ -50,9 +53,9 @@ switch(strtolower($what['mime'])) {
 }
 
 
-//Check write Access to Directory
+// Check write Access to Directory
 if(!is_writable(dirname($imagePath))) {
-	$response = ["status" => 'error', "message" => __("Something went wrong. Please try again.", "tainacan") ];
+	$response = ["status" => 'error', "message" => _t("Something went wrong. Please try again.") ];
 } else {
     // resize the original image to size of editor
     $resizedImage = imagecreatetruecolor($imgW, $imgH);
@@ -73,12 +76,8 @@ if(!is_writable(dirname($imagePath))) {
 	$final_image = imagecreatetruecolor($cropW, $cropH);
 	imagecolortransparent($final_image, imagecolorallocate($final_image, 0, 0, 0));
 	imagecopyresampled($final_image, $cropped_rotated_image, 0, 0, $imgX1, $imgY1, $cropW, $cropH, $cropW, $cropH);
-	// finally output png image
-	//imagepng($final_image, $output_filename.$type, $png_quality);
-	imagejpeg($final_image, ($imagePath . "cropped_".$current_rand.$type), $jpeg_quality);
-	$response = Array(
-	    "status" => 'success',
-	    "url" => $output_filename.$type
-    );
+
+	imagejpeg($final_image, ($imagePath . $final_name."_".$current_rand.$type), $jpeg_quality);
+	$response = [ "status" => 'success', "url" => $output_filename.$type ];
 }
 print json_encode($response);
