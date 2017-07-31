@@ -41,7 +41,8 @@ class FormItemCompound extends FormItem {
     }
 
     public function widget($property, $item_id) {
-        $values = $this->getValuePropertyHelper($item_id, $property_id);
+        //$values = $this->getValuePropertyHelper($item_id, $property_id);
+        $this->value = $this->getValuePropertyHelper($item_id, $property['id']);
         $this->setLastIndex();
         $isMultiple = ($property['metas']['socialdb_property_compounds_cardinality'] == 'n') ? true : false;
         $filledValues = ($values) ? count($values) : 1;

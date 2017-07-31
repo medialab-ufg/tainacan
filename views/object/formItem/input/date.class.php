@@ -162,6 +162,18 @@ class DateClass extends FormItem {
     public function initScriptsDate($property_id, $item_id, $compound_id, $index_id) { ?>
     <script>
         init_metadata_date("#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>");
+        
+        if('<?php echo $index_id; ?>' !=='0' && '<?php echo $property_id; ?>' ==='0'  && $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val()==''){
+            $('.js-append-property-<?php echo $compound_id ?>').hide();
+        }
+        $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').keyup(function(){
+            if($(this).val()=='' && '<?php echo $property_id; ?>' === '0'){
+                $('.js-append-property-<?php echo $compound_id ?>').hide();
+            }else if('<?php echo $property_id; ?>' === '0'){
+                $('.js-append-property-<?php echo $compound_id ?>').show();
+            }
+        });
+        //enviando valores
 
         $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').blur(function () {
             let field_value = $(this).val().split("/");
