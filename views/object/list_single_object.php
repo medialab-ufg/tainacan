@@ -90,7 +90,17 @@ $view_helper = new ObjectHelper($collection_id);
                                         $content = '<video width="400" controls><source src="' . $url . '">' . __('Your browser does not support HTML5 video.', 'tainacan') . '</video>';
                                         break;
                                     case 'pdf':
-                                        $content = '<embed src="' . $url . '" width="600" height="500" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">';
+
+                                        $view = get_template_directory_uri() . '/libraries/js/pdfThumb/pdfJS/web/viewer.html?file='.$url;
+                                        $content = "
+                                        <script>
+                                            PDFJS.disableStream = true;
+                                            PDFJS.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.js';
+                                        </script>
+                                        <iframe src='$view' height='500px' allowfullscreen webkitallowfullscreen></iframe>
+                                        ";
+
+                                        //'<embed src="' . $url . '" width="600" height="500" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">';
                                         break;
                                     default:
                                         $content = '<p style="text-align:center;">' . __('File link:') . ' <a target="_blank" href="' . $url . '">' . __('Click here!', 'tainacan') . '</a></p>';
