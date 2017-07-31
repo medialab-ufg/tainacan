@@ -93,10 +93,6 @@ $view_helper = new ObjectHelper($collection_id);
 
                                         $view = get_template_directory_uri() . '/libraries/js/pdfThumb/pdfJS/web/viewer.html?file='.$url;
                                         $content = "
-                                        <script>
-                                            PDFJS.disableStream = true;
-                                            PDFJS.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.js';
-                                        </script>
                                         <iframe src='$view' height='500px' allowfullscreen webkitallowfullscreen></iframe>
                                         ";
 

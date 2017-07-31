@@ -713,4 +713,7 @@
         }
         $('#modal_share_network' + id).modal('show');
     }
+
+    PDFJS.disableStream = true;
+    PDFJS.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.js';
 </script>
