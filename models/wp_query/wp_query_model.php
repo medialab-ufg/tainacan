@@ -547,6 +547,8 @@ class WPQueryModel extends Model {
             $tax_query = $this->get_tax_query($recover_data);
             if(has_filter('update_tax_query')){
                 $tax_query = apply_filters('update_tax_query',$tax_query,$recover_data['collection_id'],TRUE);
+            }else if(has_filter('update_tax_query_args')){
+                $tax_query = apply_filters('update_tax_query_args',$tax_query);
             }
             //a forma de ordenacao
             // $order = $this->set_type_order($recover_data);
