@@ -622,7 +622,7 @@ a.validate-ok {
   height: 150px;
 }
 
-#thumb-idea-form {
+#thumb-idea-form, #cover-idea-form {
   margin-top: 10px;
   label {
     display: block;
@@ -631,7 +631,7 @@ a.validate-ok {
     display: block;
     margin-bottom: 5px;
   }
-  .remove-repository-logo {
+  .remove-repository-logo, .remove-repository-cover {
     display: inline-block;
     padding: 5px 10px 2px 10px;
     border: 1px solid #e3e3e3;

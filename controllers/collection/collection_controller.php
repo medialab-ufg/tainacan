@@ -229,7 +229,7 @@ class CollectionController extends Controller {
                 if(isset($data["type"]) && ctype_digit($img_id) && $img_id > 0) {
                     if("logo_crop" === $data["type"]) {
                         update_option("socialdb_logo", $img_id);
-                    } else if("cover_crop") {
+                    } else if("cover_crop" === $data["type"]) {
                         update_option("socialdb_repository_cover_id", $img_id);
                     }
                 }

@@ -34,14 +34,12 @@
         };
 
         cropOpts.onAfterImgCrop = function() {
-            var img_height = this.objH;
             var repo_config = this.id;
-
-            var img_idx = (img_height==100) ? 0 : 1;
-            var img = $("img.croppedImg").get(img_idx);
+            var croppd_imgs = $("img.croppedImg").length;
+            var img = $("img.croppedImg").get( (croppd_imgs-1) ) ;
             var img_url = $(img).attr("src");
             var data = { operation: 'set_repository_img', collection_id: $("#collection_id").val(),
-                img_height: img_height, img_url: img_url, img_title: getCroppedFileName(img_url), type: repo_config };
+                img_url: img_url, img_title: getCroppedFileName(img_url), type: repo_config };
             var path = src + '/controllers/collection/collection_controller.php';
             $.ajax({url: path, type: 'POST', data: data});
         };
@@ -57,7 +55,7 @@
 
                 return fileName;
             } else {
-                return false;
+                return st;
             }
         }
     });

@@ -244,6 +244,7 @@ class ThemeOptionsModel extends Model {
             $cover_id = get_option('socialdb_repository_cover_id');
             wp_delete_attachment($cover_id);
             delete_option('socialdb_repository_cover_id');
+            wp_delete_post($cover_id, true);
             $reload = true;
         }
 
@@ -292,25 +293,18 @@ class ThemeOptionsModel extends Model {
         error_reporting(E_ALL | E_STRICT);  # ...but do log them
 
         if(!empty($data['collections']))
-        {
             update_option('socialdb_general_mapping_collection', $data['collections']);
-        }
 
-        //Loan time
-        $loan_time = $data['default_time'];
-        update_option('socialdb_loan_time', $loan_time);
+        // Loan time
+        update_option('socialdb_loan_time', $data['default_time']);
         
         //Days of devolution
         if(!empty($data['weekday']))
-        {
             update_option('socialdb_devolution_weekday', $data['weekday']);
-        }
         
         //Devolution day problem
         if(!empty($data['devolutionDayProblem']))
-        {
             update_option('socialdb_devolution_day_problem', $data['devolutionDayProblem']);
-        }
 
         return json_encode($data);
     }

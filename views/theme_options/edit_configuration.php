@@ -9,6 +9,14 @@ if(is_object($custom_logo)) {
     $logo = $custom_logo->guid;
     $logo_edit = _t("Edit logo");
 }
+
+$cover_id = get_option('socialdb_repository_cover_id');
+$cover = get_post($cover_id);
+$cover_str = _t("Cover");
+if(is_object($cover) && $cover->post_type === "attachment") {
+    $cover_img = $cover->guid;
+    $cover_edit = _t("Edit cover");
+}
 ?>
 <div class="col-md-12 ui-widget-content metadata-actions">
 
@@ -30,54 +38,47 @@ if(is_object($custom_logo)) {
                         <label for="remove_thumbnail"> <?php _e('Remove Thumbnail','tainacan');?> </label>
                     </div>
                 <?php endif; ?>
-
                 <div>
-                    <?php if(isset($logo)): ?>
-                        <label for="logo"><?php echo $logo_edit; ?></label>
-                    <?php else: ?>
-                        <label for="logo"><?php echo $logo_str; ?></label>
-                    <?php endif; ?>
-
+                    <label for="logo"> <?php echo (isset($logo)) ? $logo_edit : $logo_str; ?> </label>
                     <div id="logo_crop" class="common-crop"></div>
                 </div>
             </div>
-            <hr>
+
+            <hr style="border-color: #e3e3e3">
+
             <!------------------- Capa do repositorio ----------------------------->
             <div id="cover-idea-form">
-                <label for="repository_cover"><?php _t('Cover',1); ?></label>
+                <?php if($cover_id): ?>
+                    <label for="repository_cover"> <?php echo $cover_str; ?> </label>
+                    <img src="<?php echo $cover_img; ?>" alt="<?php echo $cover_str; ?>" title="<?php echo $cover_str; ?>" class="img-thumbnail"/>
+
+                    <div class="remove-repository-cover">
+                        <input type="checkbox" id="remove_cover" name="remove_cover" value="true">
+                        <label for="remove_cover"> <?php _t('Remove Cover',1);?> </label>
+                    </div>
+                <?php endif; ?>
+
+                <label for="repository_cover"> <?php echo (isset($cover_img)) ? $cover_edit : $cover_str; ?> </label>
                 <div id="cover_crop" class="common-crop"></div>
-                <br>
-                <?php
-                $cover_id = get_option('socialdb_repository_cover_id');
-                if($cover_id){
-                  echo '<img src="'.  wp_get_attachment_thumb_url($cover_id).'">'; ?>
-                <br><br>
-                <label for="remove_thumbnail"><?php _e('Remove Cover','tainacan'); ?></label>
-                <input type="checkbox"  id="remove_cover" name="remove_cover" value="true">
-                <br><br>
-                <?php } ?>
-                <input type="file" size="50" id="socialdb_collection_cover" name="socialdb_collection_cover" class="btn btn-default btn-sm">
-                <br>
             </div>
+
+            <hr style="border-color: #e3e3e3">
+
             <!------------------- Descricao---------------------------------------->
             <div class="form-group">
                 <label for="collection_description"><?php _e('Repository description','tainacan'); ?></label>
-                <textarea rows="4" id="editor" name="editor"   value="" placeholder='<?= __("Describe your collection in few words"); ?>'><?php echo $blog_description; ?></textarea>
+                <textarea rows="4" id="editor" name="editor"   value="" placeholder='<?= _t("Describe your collection in few words"); ?>'><?php echo $blog_description; ?></textarea>
                 <input type="hidden" name="repository_content" id="repository_content" value="" />
             </div>
+
             <!---------------- Modo de operacao --------------------------------->
             <div class="form-group">
-                <label for="repository_operation"><?php _e('Repository operation','tainacan'); ?></label>
-                <br>
+                <label for="repository_operation"><?php _e('Repository operation','tainacan'); ?></label> <br>
                 <input <?php echo (!$view_helper->operation||$view_helper->operation=='')? 'checked="checked"':'' ?>
-                        type="radio"
-                        name="tainacan_module_activate"
-                        value="default">&nbsp;<?php _e('Repository','tainacan') ?> <br>
+                        type="radio" name="tainacan_module_activate" value="default">&nbsp;<?php _t('Repository',1) ?> <br>
                 <?php foreach ($view_helper->get_available_modules() as $module): ?>
                 <input <?php echo ($view_helper->operation==$module)? 'checked="checked"':'' ?>
-                        type="radio"
-                        name="tainacan_module_activate"
-                        value="<?php echo $module ?>">&nbsp;<?php _e($module,'tainacan') ?> <br>
+                        type="radio" name="tainacan_module_activate" value="<?php echo $module ?>">&nbsp;<?php _t($module,1) ?> <br>
                 <?php endforeach; ?>
             </div>
             
@@ -93,11 +94,11 @@ if(is_object($custom_logo)) {
                           <h5 style="font-weight: bolder"> <?php _e('Habilitate Collection template', 'tainacan'); ?></h5>
                         <div id="dynatree-collection-templates"></div>
                     </div>
-                    <!--div class="form-group row"  id="show_collection_empty" style="display: none;">
+                    <?php /* div class="form-group row"  id="show_collection_empty" style="display: none;">
                         <input type="checkbox" value="disabled" name="disable_empty_collection"
                             <?php echo (get_option('disable_empty_collection')=='true')?'checked="checked"':''; ?> />
                         &nbsp<?php _e('Disable Empty Collection', 'tainacan'); ?>
-                    </div -->
+                    </div */?>
                 </div>
             </div>
             <!---------------- Cache --------------------------------->
@@ -105,9 +106,7 @@ if(is_object($custom_logo)) {
                 <h5 style="font-weight: bolder"> <?php _e('Tainacan Cache','tainacan'); ?> </h5>
                 <div class="col-md-12 no-padding">
                     <input <?php echo (get_option('tainacan_cache')==='false')? 'checked="checked"':'' ?>
-                        type="checkbox"
-                        name="tainacan_cache"
-                        value="true">&nbsp;<?php _e('Disable Tainacan cache','tainacan') ?> <br>
+                        type="checkbox" name="tainacan_cache" value="true">&nbsp;<?php _t('Disable Tainacan cache',1) ?> <br>
                 </div>
             </div>
             <div class="form-group">
@@ -136,14 +135,10 @@ if(is_object($custom_logo)) {
             <!-- Mapeamento coleção -->
             <?php
             if(has_action("add_mapping_library_collections"))
-            {
                 do_action("add_mapping_library_collections");
-            }
 
             if(has_action('add_material_loan_devolution'))
-            {
                 do_action('add_material_loan_devolution');
-            }
             ?>
 
             <input type="hidden" id="operation" name="operation" value="update_configuration">
