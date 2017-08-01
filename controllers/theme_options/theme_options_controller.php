@@ -18,14 +18,12 @@ class ThemeOptionsController extends Controller {
                 } else {
                     return $this->render(dirname(__FILE__) . '../../../views/theme_options/edit.php');
                 }
-                break;
             case "edit_general_configuration":
                 $collectioModelTemplates = new CollectionTemplatesModel;
                 $data = $theme_options_model->get_theme_general_options_data();
                 $data['templates'] = $collectioModelTemplates->get_collections_templates();
                 Log::addLog(['user_id' => get_current_user_id(), 'event_type' => 'admin', 'event' => 'config']);
                 return $this->render(dirname(__FILE__) . '../../../views/theme_options/edit_configuration.php', $data);
-                break;
             case "edit_welcome_email":
                 $data['socialdb_welcome_email'] = get_option('socialdb_welcome_email');
                 Log::addLog(['user_id' => get_current_user_id(), 'event_type' => 'admin', 'event' => 'welcome_mail']);
@@ -35,29 +33,22 @@ class ThemeOptionsController extends Controller {
                 return $this->render(dirname(__FILE__) . '../../../views/theme_options/updates_page.php', $data);
             case "update_options":
                 return $theme_options_model->update($data);
-                break;
             case "update_configuration":
                 return $theme_options_model->update_configuration($data);
-                break;
             case "update_welcome_email":
                 return $theme_options_model->update_welcome_email($data);
-                break;
             case "update_devolution_email_alert_content":
                 return $theme_options_model->update_devolution_email_alert($data);
-                break;
             case "edit_licenses":
                 $data = $theme_options_model->get_theme_general_options_data();
                 Log::addLog(['event_type' => 'admin', 'event' => 'licenses']);
                 return $this->render(dirname(__FILE__) . '../../../views/theme_options/licenses/edit.php', $data);
-                break;
             case "listStandartLicenses":
                 $arrLicenses = $theme_options_model->get_licenses('standart');
                 return json_encode($arrLicenses);
-                break;
             case "listCustomLicenses":
                 $arrLicenses = $theme_options_model->get_licenses('custom');
                 return json_encode($arrLicenses);
-                break;
             case "add_repository_license":
                 if ($data['add_license_url'] == '' && $data['add_license_description'] == ''):
                     $result['title'] = __('Error', 'tainacan');
@@ -74,39 +65,31 @@ class ThemeOptionsController extends Controller {
                 endif;
 
                 return json_encode($result);
-                break;
             case "get_license_to_edit":
                 $license = $theme_options_model->get_license_to_edit($data['license_id']);
                 return json_encode($license);
-                break;
             case "edit_repository_license":
                 $result = $theme_options_model->edit_repository_license($data);
                 return json_encode($result);
-                break;
             case "delete_custom_license":
                 $result = $theme_options_model->delete_repository_license($data['license_id']);
                 return json_encode($result);
-                break;
             case "change_pattern_license":
                 $result = $theme_options_model->change_pattern_license($data['license_id']);
                 return json_encode($result);
-                break;
             /*             * ************************* POPULAR COLECOES********************** */
             case "edit_tools":
                 Log::addLog(['user_id' => get_current_user_id(), 'event_type' => 'admin', 'event' => 'tools']);
                 return $this->render(dirname(__FILE__) . '../../../views/theme_options/edit_tools.php', $data);
-                break;
             case "import_full":
                 return $this->render(dirname(__FILE__) . '../../../views/theme_options/import_full.php', $data);
-                break;
             case "list_aip_files":
                 $files = $theme_options_model->getAipFiles();
                 if (is_array($files)) {
                     return json_encode($files);
                 } else {
-                     return json_encode([]);
+                    return json_encode([]);
                 }
-                break;
             case "import_dspace_aip":
                 ini_set('max_execution_time', '0');
                 error_reporting(E_ALL);
@@ -171,16 +154,13 @@ class ThemeOptionsController extends Controller {
             case "delete_aip_file":
                 $result = $theme_options_model->delete_aip_file($data['file']);
                 return $result;
-                break;
             case "upload_aip_zip":
                 //var_dump($data, $_FILES);
                 $file = (isset($_FILES['aip_pkg']) ? $_FILES['aip_pkg'] : null);
                 $result = $theme_options_model->upload_aip_file($file, $data);
                 return $result;
-                break;
             case "export_full":
                 return $this->render(dirname(__FILE__) . '../../../views/theme_options/export_full.php', $data);
-                break;
             case 'populate_collection':
                 $populateModel = new PopulateModel($data['items_category']);
                 return $populateModel->populate_collection($data);
@@ -219,10 +199,8 @@ class ThemeOptionsController extends Controller {
             case 'get_info_export_aip':
                 $export_model = new ExportAIP;
                 return $export_model->get_info_export_aip($data);
-                break;
             case 'get_info_import_aip':
                 return $theme_options_model->get_info_import_aip($data);
-                break;
         }
     }
     

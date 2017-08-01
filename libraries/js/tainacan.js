@@ -2401,16 +2401,15 @@ function repoConfig(src, op, ctrl, col_id) {
     }
     var send_url = src + '/controllers/' + send_ctrl;
     var send_data = { operation: op };
-    if(col_id) {
+    if(col_id)
         send_data.collection_id = col_id;
-    }
     
     $.ajax({ type: 'POST', url: send_url, data: send_data })
         .done(function(res){
             resetHomeStyleSettings();
             $('#tainacan-breadcrumbs').hide();
             $('#configuration').html(res).show();
-    })
+    });
 }
 
 function restoreHeader() {

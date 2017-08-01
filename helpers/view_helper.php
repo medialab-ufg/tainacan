@@ -57,24 +57,30 @@ class ViewHelper {
     }
 
     public function renderRepositoryLogo($_logo_id, $fallback_title) {
-        $_max_img_width = "100%";
-        $_max_img_height = "100%";
-
-        if( isset($_logo_id) && get_the_post_thumbnail($_logo_id, 'thumbnail')) {
-            $extraClass = "repository-logo";
-
-            if (get_the_post_thumbnail($_logo_id, 'thumbnail')) {
-              $_img_url = wp_get_attachment_url(get_post_thumbnail_id($_logo_id));
-              $ret = '<img src="' . $_img_url . '" style="max-width: '. $_max_img_width .'; max-height: '. $_max_img_height .';" />';
+        $extraClass = "";
+        $home = home_url();
+        if(isset($_logo_id)) {
+            $former_logo = get_the_post_thumbnail($_logo_id, 'thumbnail');
+            if($former_logo) {
+                $extraClass = "repository-logo";
+                $_img_url = wp_get_attachment_url( get_post_thumbnail_id($_logo_id) );
+                $ret = "<img class='tainacan-repo-logo' src='$_img_url' />";
             } else {
-              $ret = empty($fallback_title) ? __('Tainacan', 'tainacan') : $fallback_title;
+                $logo_obj = get_post($_logo_id);
+                if(is_object($logo_obj) && $logo_obj->post_type === "attachment") {
+                    $crop_logo = $logo_obj->guid;
+                    $ret = "<img class='tainacan-repo-logo' src='$crop_logo' />";
+                } else {
+                    $extraClass = "logo-tainacan";
+                    $default_logo = get_template_directory_uri() . '/libraries/images/Tainacan_pb.svg';
+                    $ret = "<img class='tainacan-repo-logo' src='$default_logo' />";
+                }
             }
         } else {
-            $extraClass = "logo-tainacan";
-            $ret = '<img src="'. get_template_directory_uri() . '/libraries/images/Tainacan_pb.svg'.'" style="max-width: '. $_max_img_width .'; max-height: '. $_max_img_height .';"/>';
+            $ret = empty($fallback_title) ? _t("Tainacan") : $fallback_title;
         }
 
-      return "<a class='col-md-3 navbar-brand $extraClass' href='" . site_url() . "'>" . $ret . "</a>";
+        return "<a class='col-md-3 navbar-brand $extraClass' href='$home'> $ret </a>";
     }
 
     public function get_metadata_types() {

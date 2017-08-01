@@ -40,11 +40,8 @@ $_enable_header_ = get_post_meta($_currentID_, 'socialdb_collection_show_header'
 $_color_scheme = ViewHelper::getCollectionColors($_currentID_);
 $search_color = ($_color_scheme) ? $_color_scheme["primary"] : "#79a6ce";
 
-if (!has_nav_menu('menu-ibram')):
-    $_r_bg = repository_bg($col_root_id);
-    ?>
-    <div id="main_part_collection" class="collection_repo_config" 
-         style="background: url(<?php echo $_r_bg; ?>); display: none; margin-top: 0px;">
+if (!has_nav_menu('menu-ibram')): ?>
+    <div id="main_part_collection" class="collection_repo_config" style="background: url(<?php echo repository_bg(); ?>); display: none; margin-top: 0">
         <div class="row container-fluid">
             <div class="project-info">
                 <center>
@@ -55,18 +52,12 @@ if (!has_nav_menu('menu-ibram')):
             <?php include_once "views/collection/collec_share.php"; ?>
         </div>
     </div>
-    <?php
-else:
-    echo '<input type="hidden" name="ibram_menu" value="ibram_menu_activated" />';
-    ?>
-    <style type="text/css"> .ibram-header {  margin-top: 0px; } </style>
 <?php
 endif;
 
 while (have_posts()) : the_post();
-    if (get_post(get_the_ID())->post_status != 'publish') {
+    if (get_post(get_the_ID())->post_status != 'publish')
         wp_redirect(site_url());
-    }
     ?>
     <!-- TAINACAN: div necessaria para procedimentos do facebook  -->
     <div id="fb-root"></div>
@@ -88,11 +79,7 @@ while (have_posts()) : the_post();
     <input type="hidden" id="collection_root_url" value="<?php echo get_the_permalink(get_option('collection_root_id')) ?>">
     <input type="hidden" id="socialdb_permalink_collection" name="socialdb_permalink_collection" value="<?php echo get_the_permalink(get_the_ID()); ?>" />
     <input type="hidden" id="slug_collection" name="slug_collection" value="<?php echo get_post(get_the_ID())->post_name; ?>"> <!-- utilizado na busca -->
-    <input type="hidden" id="search_collection_field" name="search_collection_field" value="<?php
-    if ($_GET['search']) {
-        echo $_GET['search'];
-    }
-    ?>">
+    <input type="hidden" id="search_collection_field" name="search_collection_field" value="<?php if ($_GET['search']) echo $_GET['search']; ?>">
 
     <!-- Hidden para verificar se existe filtros via url -->
     <input type="hidden" id="is_filter" name="is_filter" value="<?php

@@ -196,9 +196,6 @@ $_src_ = get_template_directory_uri();
                               </a>
                             </li>
                           <?php else : ?> <!-- is not logged in -->
-                          
-                          
-                            
                             <li>
                               <div id="login-box" class="login-dropdown">
                                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

@@ -219,12 +219,9 @@ class ThemeOptionsModel extends Model {
     }
     
     function update_configuration($data) {
-        
         $reload = false;
         $data['socialdb_repository_permissions'] = ['socialdb_collection_permission_create_collection' => $data['socialdb_collection_permission_create_collection'], 'socialdb_collection_permission_delete_collection' => $data['socialdb_collection_permission_delete_collection']];
         $data['repository_content'] = strip_tags($data['repository_content']);
-
-        /*         * ***** */
 
         update_option('blogname', $data['repository_title']);
         update_option('blogdescription', $data['repository_content']);
@@ -234,21 +231,20 @@ class ThemeOptionsModel extends Model {
             $reload = true;
         } else {
             update_option('tainacan_module_activate', '');
-            $reload = false;
         }
-
-        /*         * ***** */
 
         $socialdb_logo = get_option('socialdb_logo');
 
         if (isset($data['remove_thumbnail']) && $data['remove_thumbnail']) {
             delete_post_thumbnail($socialdb_logo);
+            wp_delete_post($socialdb_logo, true);
         }
         
         if (isset($data['remove_cover']) && $data['remove_cover']) {
             $cover_id = get_option('socialdb_repository_cover_id');
             wp_delete_attachment($cover_id);
             delete_option('socialdb_repository_cover_id');
+            wp_delete_post($cover_id, true);
             $reload = true;
         }
 
@@ -258,7 +254,7 @@ class ThemeOptionsModel extends Model {
             update_option('disable_empty_collection', 'false');
         }
 
-        //var_dump($_FILES); exit();
+        /*
         if ($_FILES) {
             if ($socialdb_logo) {
                 $this->add_thumbnail($socialdb_logo);
@@ -278,7 +274,7 @@ class ThemeOptionsModel extends Model {
                 update_option('socialdb_repository_cover_id', $cover_id);
                 $reload = true;
             }
-        }
+        } */
 
         if (isset($data['tainacan_cache']) && $data['tainacan_cache'] == 'true') {
             update_option('tainacan_cache', 'false');
@@ -297,25 +293,18 @@ class ThemeOptionsModel extends Model {
         error_reporting(E_ALL | E_STRICT);  # ...but do log them
 
         if(!empty($data['collections']))
-        {
             update_option('socialdb_general_mapping_collection', $data['collections']);
-        }
 
-        //Loan time
-        $loan_time = $data['default_time'];
-        update_option('socialdb_loan_time', $loan_time);
+        // Loan time
+        update_option('socialdb_loan_time', $data['default_time']);
         
         //Days of devolution
         if(!empty($data['weekday']))
-        {
             update_option('socialdb_devolution_weekday', $data['weekday']);
-        }
         
         //Devolution day problem
         if(!empty($data['devolutionDayProblem']))
-        {
             update_option('socialdb_devolution_day_problem', $data['devolutionDayProblem']);
-        }
 
         return json_encode($data);
     }

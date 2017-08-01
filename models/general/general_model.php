@@ -118,8 +118,6 @@ class Model {
             }
             if(get_post($attach_id)->guid)
               update_post_meta($attach_id, 'md5_inicial', md5_file(get_post($attach_id)->guid));
-            else
-                var_dump($attach_id);
         }
         return $attach_id;
     }

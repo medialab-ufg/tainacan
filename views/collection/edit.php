@@ -15,7 +15,6 @@ $_showH = ("disabled" === $_en_header) ? false : true ;
     <div class="col-md-12 tainacan-config-container">
         <h3>
             <?php _e('Collection Configuration', 'tainacan'); ?>
-            <!--button onclick="backToMainPage();" id="btn_back_collection" class="btn btn-default pull-right"><?php _e('Back to collection', 'tainacan') ?></button-->
             <?php ViewHelper::buttonVoltar() ?>
         </h3>
         <hr>
@@ -41,23 +40,19 @@ $_showH = ("disabled" === $_en_header) ? false : true ;
                         <?php echo ($_showH) ? 'checked="checked"' : '' ?> >
                     <?php _t('Enable',1); ?>
 
-                    <div id="thumb-idea-form" class="form-group enablelize"
-                         style="margin-top: 10px; <?php echo ($_showH) ? '' : 'display:none'; ?>">
-                        <div class="">
-                            <label for="collection_thumbnail" style="display: block;"><?php _e('Collection thumbnail', 'tainacan'); ?></label>
+                    <div id="thumb-idea-form" class="form-group enablelize" style="<?php echo ($_showH) ? '' : 'display:none'; ?>">
+                        <div>
+                            <label for="collection_thumbnail"> <?php _e('Collection thumbnail', 'tainacan'); ?> </label>
                             <?php if($collection_thumb_id): ?>
-                                <img src="<?php echo $thumb_url ?>" alt="" style="display: block; margin-bottom: 5px;" />
+                                <img src="<?php echo $thumb_url ?>"
+                                     alt="<?php _t("Collection thumbnail"); ?>" title="<?php _t("Collection thumbnail"); ?>" />
                                 <label for="remove_thumbnail"><?php _e('Remove Thumbnail', 'tainacan'); ?></label> &nbsp;
                                 <input type="checkbox"  id="remove_thumbnail" name="remove_thumbnail" value="true">
-                                <?php /* <input type="button" class="btn btn-default edit-collection-tumb" value='<?php _e("Edit thumb","tainacan"); ?>' style="display: block"/> */?>
                             <?php endif; ?>
                         </div>
-                        <div style="margin-top: 10px;">
+                        <div class="crop-wrapper">
                             <div id="collection_crop_thumb"></div>
                         </div>
-
-                        <?php /* <!--<button onclick="remove_thumbnail('<?php echo $collection_post->ID; ?>')" class="btn btn-default" ><?php _e('Remove thumbnail') ?></button>--><br><br>
-                            <label for="remove_thumbnail"><?php _e("Change collection's thumbnail", "tainacan"); ?></label><input type="file" size="50" id="collection_thumbnail" name="collection_thumbnail" class="btn btn-default btn-sm"> */ ?>
                     </div>
 
                     <div id="socialdb_cover" class="form-group enablelize" style="<?php echo ($_showH) ? '':'display:none'?>">
@@ -1475,9 +1470,6 @@ $_showH = ("disabled" === $_en_header) ? false : true ;
             <button type="button" class="btn btn-default pull-left btn-lg" onclick="backToMainPage()"><?php _e('Cancel', 'tainacan'); ?></button>
             
             <button type="submit" id="button_save_and_next" class="btn btn-success pull-right btn-lg"> <?php _e('Continue', 'tainacan'); ?> </button>
-            <?php /*
-            <button type="submit" id="button_save_and_next"  class="btn btn-primary" style="float: right;" ><?php _e('Save & Next', 'tainacan'); ?></button>
-             * */ ?>
         </form>
     </div>
 </div>
