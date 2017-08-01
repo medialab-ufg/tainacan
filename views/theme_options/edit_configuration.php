@@ -3,8 +3,12 @@ include_once ('js/edit_configuration_js.php');
 include_once(dirname(__FILE__) . '/../../helpers/view_helper.php');
 include_once(dirname(__FILE__) . '/../../helpers/repository/repository_helper.php');
 $view_helper = new RepositoryHelper();
-// $post_thumb = get_the_post_thumbnail($socialdb_logo, 'thumbnail');
-$post_thumb = get_post($socialdb_logo)->guid;
+$custom_logo = get_post($socialdb_logo);
+$logo_str = _t("Logo");
+if(is_object($custom_logo)) {
+    $logo = $custom_logo->guid;
+    $logo_edit = _t("Edit logo");
+}
 ?>
 <div class="col-md-12 ui-widget-content metadata-actions">
 
@@ -15,16 +19,23 @@ $post_thumb = get_post($socialdb_logo)->guid;
                 <label for="repository_title"><?php _e('Repository Title','tainacan'); ?></label>
                 <input type="text" class="form-control" id="repository_title" name="repository_title" required="required" value="<?php echo $blog_name; ?>">
             </div>
+
             <div id="thumb-idea-form">
-                <label for="repository_logo"><?php _e('Logo','tainacan'); ?></label> <br>
-                <?php  if($post_thumb): echo $post_thumb; ?> <br><br>
-                    <label for="remove_thumbnail"> <?php _e('Remove Thumbnail','tainacan');?> </label>
-                    <input type="checkbox" id="remove_thumbnail" name="remove_thumbnail" value="true"> <br><br>
+                <?php if(isset($logo)): ?>
+                    <label for="repository_logo"> <?php echo $logo_str; ?> </label>
+                    <img src="<?php echo $logo; ?>" alt="<?php _t("Logo"); ?>" title="<?php _t("Logo"); ?>">
+
+                    <input type="checkbox" id="remove_thumbnail" name="remove_thumbnail" value="true">
+                    <label for="remove_thumbnail" style="display: inline-block"> <?php _e('Remove Thumbnail','tainacan');?> </label>
                 <?php endif; ?>
-                <input type="file" size="50" id="repository_logo" name="repository_logo" class="btn btn-default btn-sm">
-                <br>
+
                 <div>
-                    <label for="logo"><?php _t('Logo',1); ?></label>
+                    <?php if(isset($logo)): ?>
+                        <label for="logo"><?php echo $logo_edit; ?></label>
+                    <?php else: ?>
+                        <label for="logo"><?php echo $logo_str; ?></label>
+                    <?php endif; ?>
+
                     <div id="logo_crop" class="common-crop"></div>
                 </div>
             </div>

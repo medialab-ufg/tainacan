@@ -1,9 +1,8 @@
 <script>
-    var src = $('#src').val();
     $(function () {
+        var src = $('#src').val();
         change_breadcrumbs_title('<?php _e('Repository Configuration','tainacan') ?>');
         showCKEditor();
-        //list_templates();
         autocomplete_collection_templates();
         init_dynatree_collection_template();
         $('#submit_form_edit_repository_configuration').submit(function (e) {
@@ -25,10 +24,46 @@
                 get_collections_template(src);
             });
         });
+        var cropOpts = {
+            uploadUrl: src + '/views/collection/upload_file.php',
+            cropUrl: src + '/views/collection/crop_file.php',
+            imgEyecandy: true,
+            imgEyecandyOpacity: 0.1,
+            modal: true,
+            loaderHtml: '<div class="loader bubblingG"><span id="bubblingG_1"></span><span id="bubblingG_2"></span><span id="bubblingG_3"></span></div>'
+        };
+
+        cropOpts.onAfterImgCrop = function() {
+            var img_height = this.objH;
+            var repo_config = this.id;
+
+            var img_idx = (img_height==100) ? 0 : 1;
+            var img = $("img.croppedImg").get(img_idx);
+            var img_url = $(img).attr("src");
+            var data = { operation: 'set_repository_img', collection_id: $("#collection_id").val(),
+                img_height: img_height, img_url: img_url, img_title: getCroppedFileName(img_url), type: repo_config };
+            var path = src + '/controllers/collection/collection_controller.php';
+            $.ajax({url: path, type: 'POST', data: data});
+        };
+
+        var logo  = new Croppic("logo_crop", cropOpts);
+        var cover = new Croppic("cover_crop", cropOpts);
+
+        function getCroppedFileName(st) {
+            if(st && (typeof st === "string")) {
+                var fileName = st.split("/").reverse()[0];
+                var fileExt = fileName.substr(fileName.lastIndexOf('.'));
+                fileName = fileName.replace(fileExt,"");
+
+                return fileName;
+            } else {
+                return false;
+            }
+        }
     });
-    
-    
+
     function autocomplete_collection_templates() {
+        var src = $('#src').val();
         $("#collection_template").autocomplete({
             source: src + '/controllers/collection/collection_controller.php?operation=get_collections_json',
             messages: {
@@ -111,8 +146,8 @@
     }
     
     function init_dynatree_collection_template(){
-         $("#dynatree-collection-templates").dynatree({
-            selectionVisible: true, // Make sure, selected nodes are visible (expanded).  
+        $("#dynatree-collection-templates").dynatree({
+            selectionVisible: true, // Make sure, selected nodes are visible (expanded).
             checkbox: true,
             initAjax: {
                 url: $('#src').val() + '/controllers/collection/collection_controller.php',
@@ -122,12 +157,13 @@
                 },
                 addActiveKey: true
             },
+            autoFocus: false, // Evita que o Dynatree faça Scroll para si mesmo quando iniciar
             onSelect: function (flag, node) {
                 if(node.bSelected&&node.childList){
                     $.each(node.childList,function(index,node){
                         node.select(true);
                     });
-                }else if(node.childList){
+                } else if(node.childList){
                     $.each(node.childList,function(index,node){
                         node.select(false);
                     });
@@ -139,7 +175,7 @@
         });
     }
     
-    function toggleHabilitateTemplate(key,type){
+    function toggleHabilitateTemplate(key,type) {
         $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/collection/collection_controller.php",
@@ -152,42 +188,4 @@
             list_templates();
         });
     }
-
-    var cropOpts = {
-        uploadUrl: src + '/views/collection/upload_file.php',
-        cropUrl: src + '/view/collection/crop_file.php',
-        imgEyecandy: true,
-        imgEyecandyOpacity: 0.1,
-        modal: true,
-        loaderHtml: '<div class="loader bubblingG"><span id="bubblingG_1"></span><span id="bubblingG_2"></span><span id="bubblingG_3"></span></div>'
-    };
-
-    cropOpts.onAfterImgCrop = function() {
-        var img_height = this.objH;
-        var repo_config = this.id;
-
-        var img_idx = (img_height==100) ? 0 : 1;
-        var img = $("img.croppedImg").get(img_idx);
-        var img_url = $(img).attr("src");
-        var data = { operation: 'set_repository_img', collection_id: $("#collection_id").val(),
-        img_height: img_height, img_url: img_url, img_title: getCroppedFileName(img_url), type: repo_config };
-        var path = src + '/controllers/collection/collection_controller.php';
-        $.ajax({url: path, type: 'POST', data: data});
-    };
-
-    var logo  = new Croppic("logo_crop", cropOpts);
-    var cover = new Croppic("logo_crop", cropOpts);
-
-    function getCroppedFileName(st) {
-        if(st && (typeof st === "string")) {
-            var fileName = st.split("/").reverse()[0];
-            var fileExt = fileName.substr(fileName.lastIndexOf('.'));
-            fileName = fileName.replace(fileExt,"");
-
-            return fileName;
-        } else {
-            return false;
-        }
-    }
-
 </script>
