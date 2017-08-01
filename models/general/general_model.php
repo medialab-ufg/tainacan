@@ -419,7 +419,8 @@ class Model {
 				WHERE p.post_id = {$collection_id}
 		";
         $collections_data = $wpdb->get_results($query);
-        foreach ($collections_data as $collection_data) {
+        foreach ($collections_data as $collection_data)
+        {
             if ($collection_data->meta_key == 'socialdb_collection_facets') {
                 if ($collection_data->meta_value != '') {
                     $config[$collection_data->meta_key][] = get_term_by('id', $collection_data->meta_value, 'socialdb_category_type');
@@ -432,6 +433,7 @@ class Model {
                 $config[$collection_data->meta_key] = $collection_data->meta_value;
             }
         }
+
         $config['sociadb_collection_privacity'] = wp_get_post_terms($collection_id, 'socialdb_collection_type');
         $config['socialdb_collection_property_object_facets'] = $this->get_property_object_facets($this->get_category_root_of($collection_id));
         $data['collection_metas'] = $config;

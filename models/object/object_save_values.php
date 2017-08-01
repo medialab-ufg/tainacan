@@ -159,6 +159,7 @@ class ObjectSaveValuesModel extends Model {
             }
         }else{
             $meta_id = $this->sdb_add_post_meta($item_id, 'socialdb_property_'.$property_children_id, $value);
+            $this->set_common_field_values($item_id, "socialdb_property_$property_children_id", $value);
             if($is_compound){
                 //neste caso sera o meta_id
                 $this->updateCompoundMeta($item_id, $compound_id, $property_children_id, $index, $meta_id);
@@ -208,6 +209,7 @@ class ObjectSaveValuesModel extends Model {
             }
         }else if(strpos($meta_value->meta_key, 'socialdb_property_')!==false){
             $this->sdb_update_post_meta($meta_value->meta_id, $value);
+            $this->set_common_field_values($item_id, "socialdb_property_$property_children_id", $value);
             if($is_compound){
                 $this->updateCompoundMeta($item_id, $compound_id, $property_children_id, $index, $meta_value->meta_id);
             }
