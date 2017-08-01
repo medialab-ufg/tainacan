@@ -238,11 +238,13 @@ $(window).load(function () {
         redirectAdvancedSearch('#search_collections');
        // showAdvancedSearch($("#src").val(), search_for);
     });
+    
     $('#formSearchCollectionsIbram').submit(function (e) {
         e.preventDefault();
-        showIbramSearch( $('#search_collections').val());
-       // showAdvancedSearch($("#src").val(), search_for);
+        //showIbramSearch( $('#search_collections').val());
+        showAdvancedSearch($('#src').val(), $('#formSearchCollectionsIbram #search_collections').val());
     });
+    
     $('#formSearchCollectionsTopSearch').submit(function (e) {
         e.preventDefault();
         showIbramSearch( $('#search_collections').val());
