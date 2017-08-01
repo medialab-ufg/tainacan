@@ -62,7 +62,10 @@ $_trim_desc = $_object_description;
                                 <div class="item-author"><?php echo "<strong>" . __('Created by: ', 'tainacan') . "</strong>" . wp_trim_words(get_the_author(), 2); ?></div>
                             </div>
                             <div class="col-md-6">
-                                <div class="item-creation"><?php echo $curr_date; ?></div>
+                                <div class="item-creation">
+                                    <strong> <?php _t('Created at: ',1) ?> </strong>
+                                    <span> <?php echo get_the_date('d/m/Y'); ?> </span>
+                                </div>
                             </div>
                         </div>
                         <?php if (get_option('collection_root_id') != $collection_id): ?>

@@ -28,7 +28,9 @@
 
         <div class="col-md-3 author-created">
             <div class="item-author"><?php echo "<strong>" . __('Created by: ', 'tainacan') . "</strong>" . get_the_author(); ?></div>
-            <div class="item-creation"> <?php echo $curr_date ?> </div>
+            <div class="item-creation">
+                <strong> <?php _t('Created at: ',1) ?> </strong> <?php echo get_the_date('d/m/Y'); ?>
+            </div>
         </div>
 
         <div class="col-md-2 no-padding">

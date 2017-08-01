@@ -110,9 +110,7 @@
                     var formatted_date = "Consultado em " + getTodayFormatted();
                     pressPDF.text(formatted_date, 400, line_dims.startY - 5); // Consultado em
 
-                    var create_txt = $(".item-creation strong").first().text();
-                    var item_date = $("#object_" + item_id + " .item-creation").text().replace(create_txt, "");
-
+                    var item_date = $("#object_" + item_id + " .item-creation span").text();
                     var dist_from_top = line_dims.startY + 20;
                     pressPDF.setFontType('bold');
                     pressPDF.setFontSize(12);
