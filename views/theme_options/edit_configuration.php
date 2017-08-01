@@ -23,10 +23,12 @@ if(is_object($custom_logo)) {
             <div id="thumb-idea-form">
                 <?php if(isset($logo)): ?>
                     <label for="repository_logo"> <?php echo $logo_str; ?> </label>
-                    <img src="<?php echo $logo; ?>" alt="<?php _t("Logo"); ?>" title="<?php _t("Logo"); ?>">
+                    <img src="<?php echo $logo; ?>" alt="<?php echo $logo_str; ?>" title="<?php echo $logo_str;?>" class="img-thumbnail">
 
-                    <input type="checkbox" id="remove_thumbnail" name="remove_thumbnail" value="true">
-                    <label for="remove_thumbnail" style="display: inline-block"> <?php _e('Remove Thumbnail','tainacan');?> </label>
+                    <div class="remove-repository-logo">
+                        <input type="checkbox" id="remove_thumbnail" name="remove_thumbnail" value="true">
+                        <label for="remove_thumbnail"> <?php _e('Remove Thumbnail','tainacan');?> </label>
+                    </div>
                 <?php endif; ?>
 
                 <div>
@@ -39,6 +41,7 @@ if(is_object($custom_logo)) {
                     <div id="logo_crop" class="common-crop"></div>
                 </div>
             </div>
+            <hr>
             <!------------------- Capa do repositorio ----------------------------->
             <div id="cover-idea-form">
                 <label for="repository_cover"><?php _t('Cover',1); ?></label>
