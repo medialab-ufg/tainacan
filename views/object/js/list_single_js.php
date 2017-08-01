@@ -714,6 +714,17 @@
         $('#modal_share_network' + id).modal('show');
     }
 
-    PDFJS.disableStream = true;
-    PDFJS.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.js';
+    /*PDFJS.disableStream = true;
+    PDFJS.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.js';*/
+    function hide_pdf_viewer_buttons()
+    {
+        let inter = setInterval(function() {
+            if($('#iframePDF').contents().find('#openFile').length > 0)
+            {
+                $('#iframePDF').contents().find('#openFile').css('display', 'none');
+                $('#iframePDF').contents().find('#viewBookmark').css('display', 'none');
+                clearInterval(inter);
+            }
+        }, 100);
+    }
 </script>

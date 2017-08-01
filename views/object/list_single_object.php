@@ -92,9 +92,15 @@ $view_helper = new ObjectHelper($collection_id);
                                     case 'pdf':
 
                                         $view = get_template_directory_uri() . '/libraries/js/pdfThumb/pdfJS/web/viewer.html?file='.$url;
-                                        $content = "
-                                        <iframe src='$view' height='500px' allowfullscreen webkitallowfullscreen></iframe>
-                                        ";
+                                        $iframe_script = "";
+                                        $content =
+                                            "
+                                             <script>
+                                                hide_pdf_viewer_buttons();
+                                             </script>
+                                             <iframe id='iframePDF' name='iframePDF' src='$view' height='500px' allowfullscreen webkitallowfullscreen>
+                                                        
+                                             </iframe>";
 
                                         //'<embed src="' . $url . '" width="600" height="500" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">';
                                         break;

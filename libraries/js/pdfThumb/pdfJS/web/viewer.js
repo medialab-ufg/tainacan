@@ -3055,9 +3055,11 @@ var pdfjsWebLibs;
       items.presentationModeButton.addEventListener('click', function (e) {
        eventBus.dispatch('presentationmode');
       });
+
       items.openFile.addEventListener('click', function (e) {
-       eventBus.dispatch('openfile');
+       //eventBus.dispatch('openfile');
       });
+
       items.print.addEventListener('click', function (e) {
        eventBus.dispatch('print');
       });
@@ -6447,7 +6449,7 @@ var pdfjsWebLibs;
     'http://mozilla.github.io',
     'https://mozilla.github.io',
    ];
-   
+
    validateFileURL = function validateFileURL(file) {
     try {
      var viewerOrigin = new URL(window.location.href).origin || 'null';
