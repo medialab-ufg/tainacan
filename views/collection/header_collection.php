@@ -238,9 +238,15 @@ $thumb_url = $collection_thumb ? wp_get_attachment_url($collection_thumb) : get_
     $cover_url = wp_get_attachment_url(get_post_meta($root_category_cover_id, 'socialdb_respository_cover_id', true));
     $_curr_user_ = ['is_logged' => is_user_logged_in(), 'is_subscriber' =>  current_user_can('subscriber'), 'is_admin' => current_user_can('manage_options') ];
 
-    if( $_curr_user_['is_logged'] && $_curr_user_['is_admin'] ) {
+//    if( $_curr_user_['is_logged'] && $_curr_user_['is_admin'] ) {
+//        $_current_menu = "menu-ibram";
+//    } else if ( !$_curr_user_['is_logged'] || $_curr_user_['is_subscriber']) {
+//        $_current_menu = "menu-ibram-visitor";
+//    }
+    
+    if( $_curr_user_['is_logged']) {
         $_current_menu = "menu-ibram";
-    } else if ( !$_curr_user_['is_logged'] || $_curr_user_['is_subscriber']) {
+    } else if ( !$_curr_user_['is_logged']) {
         $_current_menu = "menu-ibram-visitor";
     }
 

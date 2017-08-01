@@ -545,7 +545,7 @@ class CategoryModel extends Model {
         $property_model = new PropertyModel();
         $collection_id = ($data['collection_id'])? $data['collection_id'] : '';
         $info = $property_model->get_all_property($data['property_id'], true,$collection_id); // pego todos os dados possiveis da propriedade
-        $selected_ids = $info['metas']['socialdb_property_object_category_id'];
+        $selected_ids = (!isset($data['selectedCategories'])) ? $info['metas']['socialdb_property_object_category_id'] : array_filter(explode(',', $data['selectedCategories']));
         $dynatree = [];
 
         if (isset($data['hide_checkbox'])) {

@@ -2559,14 +2559,14 @@
         if (!dynatree)
             dynatree = "#property_category_dynatree";
         $(dynatree).dynatree("getRoot").visit(function (node) {
-            if (node.data.key === id) {
+            if (node.data.key == id) {
                 cont++;
                 node.select(false);
             }
         });
         if (cont === 0) {
             let ids = $('#property_object_category_id').val().split(',');
-            let index = ids.indexOf(id);
+            let index = ids.indexOf(id.toString());
             if (index >= 0) {
                 ids.splice(index, 1);
                 $('#property_object_category_id').val(ids.join(','));
