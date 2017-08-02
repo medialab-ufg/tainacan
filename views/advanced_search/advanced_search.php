@@ -74,8 +74,8 @@
     <?php endif; ?>
     <div id="resultados_advanced_search" style="display: none;">
         <ol class="breadcrumb" style="margin-top: -15px; padding-left: 0; background: #f2f2f2;">
-            <li><a href="<?php echo get_permalink(get_option('collection_root_id')); ?>"> <?php _e('Repository', 'tainacan') ?> </a></li>
-            <li><a href="#" onclick="backToMainPageSingleItem()"><?php echo get_post($collection_id)->post_title; ?></a></li>
+            <li><a href="<?php echo site_url(); ?>"> <?php _e('Repository', 'tainacan') ?> </a></li>
+            <!--li><a href="#" onclick="backToMainPageSingleItem()"><?php echo get_post($collection_id)->post_title; ?></a></li-->
             <li class="active"><?php echo __('Advanced Search','tainacan'); ?></li>
         </ol>
         <div id="container_resultados_advanced_search" class="quadrante"></div>
