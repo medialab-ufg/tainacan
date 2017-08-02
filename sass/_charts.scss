@@ -39,7 +39,6 @@
   }
 }
 
-
 .bgc-widget{
     background-color: white;
     a {
@@ -49,6 +48,19 @@
 
 #dashb{
   margin-bottom: 0px;
+
+  // div row
+  .margin-rl{
+    margin-left: 80px !important;
+  }
+
+  // widgets
+  .margin-r10px{
+    margin-right: 10px;
+  }
+  .margin-t10px{
+    margin-top: 10px;
+  }
 }
 
 .statistics-container {

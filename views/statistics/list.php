@@ -2,6 +2,8 @@
 include_once(dirname(__FILE__).'/../../helpers/view_helper.php');
 include_once(dirname(__FILE__).'/../../helpers/log/log_helper.php');
 include_once(dirname(__FILE__).'/../../models/log/log_model.php');
+include_once('./../../helpers/object/object_helper.php');
+
 $_log_helper = new LogHelper();
 
 include_once('inc/i18n_strs.php'); 
@@ -120,6 +122,10 @@ include_once('js/list_js.php');
 
         <!-- Chart resume -->
         <div id="charts-resume" class="col-md-12">
+            <?php 
+                //$objHelper = new ObjectHelper();
+                //$objHelper->renderCollectionPagination(11, 10, "Buscas Frequentes", "buscas", 'top_pag');
+            ?>
             <table>
                 <tbody>
                   <tr class="headers"> <th class="curr-parent"> <?php _e('Status'); ?> </th> </tr>

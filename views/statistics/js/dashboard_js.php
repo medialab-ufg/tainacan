@@ -1,5 +1,4 @@
 <script type="text/javascript">
-
 $(function () {
   fetchDashData("repo_searches");
   // Outros
@@ -17,6 +16,30 @@ function refreshSpin(idBtnRefresh) {
 }
 //
 
+// Início - Refresh usuário por perfil
+$("#refresh-perfis-usuario").on("click", function profUserRefresh() {
+  $("tbody-perfis-usuario").html('');
+
+  refreshSpin("#refresh-perfis-usuario");
+
+  setTimeout(function() {
+    //fetchDashData();
+  }, 700);
+});
+// Fim - Refresh usuário por perfil
+
+// Início - Refresh eventos
+$("#refresh-eventos").on("click", function eventsRefresh() {
+  $("tbody-eventos").html('');
+
+  refreshSpin("#refresh-eventos");
+
+  setTimeout(function() {
+    //fetchDashData();
+  }, 700);
+});
+// Fim - Refresh eventos
+
 // Início - Refresh buscas frequentes
 $("#refresh-buscas-frequentes").on("click", function buscFreqRefresh() {
   $('#tbody-buscas-frequentes').html('');
@@ -25,7 +48,7 @@ $("#refresh-buscas-frequentes").on("click", function buscFreqRefresh() {
   
   setTimeout(function() {
     fetchDashData("repo_searches");
-  }, 900);
+  }, 700);
 });
 
 function renderTBodyBFreq(rJSON) {
@@ -54,9 +77,9 @@ function fetchDashData(action) {
   } else {
       setTimeout(function() {
         renderTBodyBFreq(rJSON.stat_object);
-      }, 100);
+      }, 300);
     }
   });
 }
-  
+
 </script>
