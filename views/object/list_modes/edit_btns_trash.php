@@ -5,6 +5,7 @@ $item_context = "collection";
 if( has_filter('tainacan_show_restore_options') ) {
     $_show_edit_buttons = apply_filters('tainacan_show_restore_options', $collection_id);
 }
+
 if($_show_edit_buttons) {
      if (get_option('collection_root_id') != $collection_id):
          if ($is_moderator || get_post($curr_id)->post_author == get_current_user_id())
@@ -22,4 +23,9 @@ if($_show_edit_buttons) {
     <li class="restore-item">
         <a onclick="restore_object('<?php echo $curr_id ?>')"> <span class="glyphicon glyphicon-retweet"></span> </a>
     </li>
+
+<?php } else {
+    $itemURL = get_the_permalink($collection_id) . '/' . get_post($curr_id)->post_name;
+    ?>
+    <a href="<?php echo $itemURL; ?>"> <span class="glyphicon glyphicon-eye-open"></span> </a>
 <?php } ?>

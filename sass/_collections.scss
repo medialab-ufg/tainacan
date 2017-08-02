@@ -3,14 +3,6 @@
     padding-top: 20px;
 }
 
-button.collection-trash, button#hideTrash {
-    color: $brand-medium-blue !important;
-}
-
-button.collection-trash {
-  // margin-left: 10px;
-}
-
 .tainacan-steps {
     margin: 10px -30px 20px -30px;
     background: white;
@@ -151,8 +143,19 @@ button.collection-trash {
           .trash-div {
             width: 14%;
 
+            button.collection-trash, button#hideTrash {
+              color: $brand-medium-blue !important;
+              margin-left: 5px !important;
+            }
+
             button {
               font-size: 12px !important;
+
+              &.export-btn {
+                padding: 6px;
+                margin: 0;
+                font-size: 9px !important;
+              }
             }
           }
 

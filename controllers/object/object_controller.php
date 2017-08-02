@@ -799,6 +799,7 @@ class ObjectController extends Controller {
             case "list_single_object_by_name":
                 $user_model = new UserModel();
                 $object_name = $data['object_name'];
+
                 $args = array(
                     'name' => $object_name,
                     'post_type' => 'socialdb_object',
@@ -807,15 +808,15 @@ class ObjectController extends Controller {
                 );
                 $result = get_posts($args);
                 if (empty($result) || !isset($result)) {
-                    $args = array(
-                        'name' => $object_name,
-                        'post_type' => 'socialdb_object',
-                        'post_status' => 'inherit',
-                        'numberposts' => 1
-                    );
+                    $args['post_status'] = 'inherit';
                     $result = get_posts($args);
                 }
-                if (count($result) > 0 && isset($result[0]) && in_array($result[0]->post_status, array('publish', 'inherit'))) {
+                if (empty($result) || !isset($result)) {
+                    $args['post_status'] = 'draft';
+                    $result = get_posts($args);
+                }
+
+                if (count($result) > 0 && isset($result[0]) && in_array($result[0]->post_status, array('publish', 'inherit','draft'))) {
                     $data['object'] = $result[0];
                     $data["username"] = $user_model->get_user($data['object']->post_author)['name'];
                     $data['metas'] = get_post_meta($data['object']->ID);
