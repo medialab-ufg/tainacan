@@ -1042,6 +1042,7 @@ function verify_allowed_action($collection_id, $name_permission, $object_id = 0)
     $user_id = get_current_user_id();
     $permission = get_post_meta($collection_id, $name_permission, true);
     $is_admin = verify_collection_moderators($collection_id, $user_id);
+
     if (!$is_admin && $object_id != 0) {
         $item = get_post($object_id);
         $is_admin = ($item->post_author == $user_id) ? true : false;
@@ -1049,7 +1050,7 @@ function verify_allowed_action($collection_id, $name_permission, $object_id = 0)
     if ($is_admin) {
         return true;
     } else {
-        if ($permission == 'unallowed') {
+        if ($permission == 'unallowed' || $permission == "approval") {
             return false;
         } else {
             return true;

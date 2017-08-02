@@ -27,6 +27,7 @@ if($is_single_page) {
 }
 
 $is_repo_admin = current_user_can('administrator');
+$is_current_user_the_author = get_post($curr_id)->post_author == get_current_user_id();
 ?>
 
 <?php if($is_single_page): ?>
@@ -117,7 +118,7 @@ $is_repo_admin = current_user_can('administrator');
                 endif;
             endif; ?>
 
-            <?php if ($is_moderator || get_post($curr_id)->post_author == get_current_user_id()):
+            <?php if ($is_moderator || $is_current_user_the_author):
                 $has_checked_in = get_post_meta($curr_id, 'socialdb_object_checkout', true);
                 if(is_numeric($has_checked_in)) { ?>
                     <li class="tainacan-museum-clear"> <a class="ac-checkin" onclick="<?php echo $checkout['in'] ?>"> <?php _t('Check-in',1); ?> </a> </li>
@@ -135,14 +136,16 @@ $is_repo_admin = current_user_can('administrator');
 
             <?php if($is_single_page): ?>
                 <li class="tainacan-museum-clear"> <a class="ac-item-graph" onclick="showGraph('<?php echo $rdfURL; ?>')"> <?php _t('See graph',1); ?> </a> </li>
-            <?php endif; ?>
+            <?php endif; 
 
-            <?php if(!$is_single_page): ?>
+            if(!$is_single_page): ?>
                 <li class="collec-only tainacan-museum-clear"> <a class="ac-comment-item"> <?php _t('Comment item',1); ?> </a> </li>
-            <?php endif; ?>
             <?php
-            if(has_filter('tainacan_show_reason_modal') && !apply_filters("tainacan_show_restore_options", $collection_id)){
-                ?>
+            endif;
+
+            if( has_filter('tainacan_show_reason_modal') && ! apply_filters("tainacan_show_restore_options", $collection_id) 
+                && ($is_repo_admin || $is_current_user_the_author) ) {
+            ?>
                 <li>
                     <a class="ac-exclude-item"
                        onclick="show_reason_modal(<?php echo $itemDelete['id']; ?>)">
@@ -158,7 +161,7 @@ $is_repo_admin = current_user_can('administrator');
                 </li>
                 <?php
             }
-            else if ($is_moderator || get_post($curr_id)->post_author == get_current_user_id() || verify_allowed_action($collection_id, 'socialdb_collection_permission_delete_object')): ?>
+            else if ($is_moderator || $is_current_user_the_author || verify_allowed_action($collection_id, 'socialdb_collection_permission_delete_object')): ?>
                 <li>
                     <a class="ac-exclude-item"
                        onclick="delete_object('<?php echo $itemDelete['title']; ?>','<?php echo $itemDelete['text']; ?>','<?php echo $itemDelete['id']; ?>','<?php echo $itemDelete['time']; ?>')">
