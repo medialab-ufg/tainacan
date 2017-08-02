@@ -3056,9 +3056,9 @@ var pdfjsWebLibs;
        eventBus.dispatch('presentationmode');
       });
 
-      items.openFile.addEventListener('click', function (e) {
-       //eventBus.dispatch('openfile');
-      });
+      /*items.openFile.addEventListener('click', function (e) {
+       eventBus.dispatch('openfile');
+      });*/
 
       items.print.addEventListener('click', function (e) {
        eventBus.dispatch('print');
