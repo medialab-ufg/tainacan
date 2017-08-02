@@ -41,6 +41,40 @@ include_once('js/dashboard_js.php');
       </table>
     </div>
 
+    <!-- Widget a definir -->
+    <div id="" class="bgc-widget col-md-3 col-sm-3 col-lg-3 table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th class="text-left"> <?php _e('No name', 'tainacan'); ?> </th>
+            <th class="text-right">
+              <a href="javascript:void(0)" id="" class="glyphicon glyphicon-refresh"></a>
+            </th>
+          </tr>
+        </thead>
+        <tbody id="">
+          <!-- Conteúdo dinâmico, vindo de dashboard_js.php -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Widget a definir -->
+    <div id="" class="bgc-widget margin-r10px col-md-3 col-sm-3 col-lg-3 table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th class="text-left"> <?php _e('No name', 'tainacan'); ?> </th>
+            <th class="text-right">
+              <a href="javascript:void(0)" id="" class="glyphicon glyphicon-refresh"></a>
+            </th>
+          </tr>
+        </thead>
+        <tbody id="">
+          <!-- Conteúdo dinâmico, vindo de dashboard_js.php -->
+        </tbody>
+      </table>
+    </div>
+
     <!-- Widget Eventos -->
     <div id="dash-eventos" class="bgc-widget col-md-3 col-sm-3 col-lg-3 table-responsive">
       <table class="table table-hover">
@@ -68,8 +102,12 @@ include_once('js/dashboard_js.php');
             </th>
           </tr>
         </thead>
-        <tbody id="tbody-perfis-usuario">
-          <!-- Gráfico dinâmico, vindo de dashboard_js.php com Google Charts -->
+        <tbody>
+          <tr>
+            <td id="gChart-perfis-usuario" width="100%" height="310px">
+              <!-- Gráfico dinâmico, vindo de dashboard_js.php -->
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>

@@ -220,6 +220,13 @@ class Log extends Model {
                     )", self::_table(), self::_table());
             }
         }
+        else if(($collection_id == 'null' || is_null($collection_id)) and $filter == 'nofilter'){
+            $SQL_query = sprintf(
+                "SELECT event, count(id) AS total
+                    FROM %s
+                    WHERE event_type = '$event_type' AND event = '$event'
+                ", self::_table() );
+        }
         else {
             // Collection id isn't null
 
@@ -527,6 +534,11 @@ class Log extends Model {
                     else if($filter == 'weeks'){
                         foreach ($results as $key => $data){
                             $_stats[] = [ $data->event, $data->week_number, $data->total, $data->event_total ];
+                        }
+                    }
+                    else if($filter == 'nofilter'){
+                        foreach ($results as $key => $data){
+                            $_stats[] = [ $data->event, $data->total ];
                         }
                     }
                 }
