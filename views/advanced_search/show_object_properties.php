@@ -40,7 +40,7 @@
                     <select class="form-control" id="socialdb_property_type_operation" name="socialdb_property_type_operation">
                         <option value="1"><?php _e('Equals','tainacan'); ?></option>
                         <option value="2"><?php _e('Not equals','tainacan'); ?></option>
-                        <option value="3"><?php _e('Contains','tainacan'); ?></option>
+                        <option value="3" selected><?php _e('Contains','tainacan'); ?></option>
                         <option value="4"><?php _e('Does not Contain','tainacan'); ?></option>
                     </select>
              </div>
@@ -59,7 +59,7 @@
                     <select class="form-control" id="socialdb_property_source_operation" name="socialdb_property_source_operation">
                         <option value="1"><?php _e('Equals','tainacan'); ?></option>
                         <option value="2"><?php _e('Not equals','tainacan'); ?></option>
-                        <option value="3"><?php _e('Contains','tainacan'); ?></option>
+                        <option value="3" selected><?php _e('Contains','tainacan'); ?></option>
                         <option value="4"><?php _e('Does not Contain','tainacan'); ?></option>
                     </select>
              </div>
@@ -77,7 +77,7 @@
                    <select class="form-control" id="socialdb_property_tag_operation" name="socialdb_property_tag_operation">
                        <option value="1"><?php _e('Equals','tainacan'); ?></option>
                        <option value="2"><?php _e('Not equals','tainacan'); ?></option>
-                       <option value="3"><?php _e('Contains','tainacan'); ?></option>
+                       <option value="3" selected><?php _e('Contains','tainacan'); ?></option>
                        <option value="4"><?php _e('Does not Contain','tainacan'); ?></option>
                    </select>
             </div>     
@@ -129,7 +129,7 @@
                                 <select class="form-control" id="advanced_search_property_<?php echo $property['id']; ?>_operation" name="socialdb_property_<?php echo $property['id']; ?>_operation">
                                     <option value="1"><?php _e('Equals','tainacan'); ?></option>
                                     <option value="2"><?php _e('Not equals','tainacan'); ?></option>
-                                    <option value="3"><?php _e('Contains','tainacan'); ?></option>
+                                    <option value="3" selected><?php _e('Contains','tainacan'); ?></option>
                                     <option value="4"><?php _e('Does not Contain','tainacan'); ?></option>
                                 </select>
                            </div>
@@ -141,7 +141,7 @@
                                 <select class="form-control" id="socialdb_property_<?php echo $property['id']; ?>_operation" name="socialdb_property_<?php echo $property['id']; ?>_operation">
                                     <option value="1"><?php _e('Equals','tainacan'); ?></option>
                                     <option value="2"><?php _e('Not equals','tainacan'); ?></option>
-                                    <option value="3"><?php _e('Contains','tainacan'); ?></option>
+                                    <option value="3" selected><?php _e('Contains','tainacan'); ?></option>
                                     <option value="4"><?php _e('Does not Contain','tainacan'); ?></option>
                                 </select>
                            </div> 
