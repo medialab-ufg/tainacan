@@ -68,18 +68,20 @@ class ObjectController extends Controller {
                 return $this->render(dirname(__FILE__) . '../../../views/object/formItem/formItem.php', $data);
             // propriedades de categoria
             case 'appendCategoryMetadata'://
-                    //class
-                    include_once dirname(__FILE__) . '../../../views/object/formItem/helper/formItem.class.php';
-                    //sessao
-                    if(!session_id()) {
-                            session_start();
-                    }
-                    $_SESSION['operation-form'] = $data['operationForm'];
-                    $formItem = new FormItem($data['collection_id']);
-                    $data = $object_model->show_object_properties($data);
-                    $properties_to_avoid = explode(',', $data['properties_to_avoid']);
-                    return $formItem->startCategoryMetadata($properties_to_avoid, $data);
-                    break;
+                //class
+                include_once dirname(__FILE__) . '../../../views/object/formItem/helper/formItem.class.php';
+
+                //sessao
+                if(!session_id()) {
+                        session_start();
+                }
+
+                $_SESSION['operation-form'] = $data['operationForm'];
+                $formItem = new FormItem($data['collection_id']);
+                $data = $object_model->show_object_properties($data);
+                $properties_to_avoid = explode(',', $data['properties_to_avoid']);
+                return $formItem->startCategoryMetadata($properties_to_avoid, $data);
+                break;
 ################################################################################
             case "create_item_text":
                 //verifico se existe rascunho para se mostrado

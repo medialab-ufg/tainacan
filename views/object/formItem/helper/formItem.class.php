@@ -415,7 +415,14 @@ class FormItem extends Model {
         $allProperties = $this->propertyCategoriesMergeArray($allProperties, $properties_to_avoid, $data, 'property_object');
         $allProperties = $this->propertyCategoriesMergeArray($allProperties, $properties_to_avoid, $data, 'property_term');
         $allProperties = $this->propertyCategoriesMergeArray($allProperties, $properties_to_avoid, $data, 'property_compounds');
+        $before = $allProperties;
         $allProperties = $this->propertyCategoryOrdenate($data['categories'], $allProperties);
+        if($before == $allProperties)
+        {
+            $category_id = current($allProperties)['metas']['socialdb_property_created_category'];
+            $allProperties = $this->propertyCategoryOrdenate($category_id, $allProperties);
+        }
+
         $this->propertyCategoryList($allProperties);
     }
 
