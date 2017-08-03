@@ -51,6 +51,7 @@ $_showH = ("disabled" === $_en_header) ? false : true ;
                             <?php endif; ?>
                         </div>
                         <div class="crop-wrapper">
+                            <p><?php _e("Image aspect ratio") ?>  <strong>1:1</strong></p>
                             <div id="collection_crop_thumb"></div>
                         </div>
                     </div>
