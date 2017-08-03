@@ -84,9 +84,11 @@ class FormItem extends Model {
                 
                 <div id="tab-content-metadata" class="col-md-3 tab-content no-padding" style="background: white;">
                    <div id="tab-default"  class="tab-pane fade in active" style="background: white;margin-bottom: 15px;">
-                       <div class="expand-all-div"  onclick="openAccordeon('default')" >
+                       <!-- data-operation 1 Means expand -->
+                       <div class="expand-all-div"  onclick="openAccordeon('default')" data-operation="1">
                            <a class="expand-all-link" href="javascript:void(0)">
-                               <?php _e('Expand all', 'tainacan') ?>&nbsp;&nbsp;<span class="caret"></span></a>
+                               <?php _e('Expand all', 'tainacan') ?>&nbsp;&nbsp;<span class="caret"></span>
+                           </a>
                        </div>
                        <hr style="border-color: white;">
                        <div id="accordeon-default" class="multiple-items-accordion" style="margin-top:-20px;">
@@ -119,7 +121,8 @@ class FormItem extends Model {
             <div class="col-md-12 no-padding">
                 <div id="tab-content-metadata" class="tab-content <?php echo $class ?>" style="background: white;">
                     <div id="tab-default"  class="tab-pane fade in active" style="background: white;margin-bottom: 15px;">
-                        <div class="expand-all-div"  onclick="openAccordeon('default')" >
+                        <!-- data-operation 1 Means expand -->
+                        <div class="expand-all-div"  onclick="openAccordeon('default')" data-operation="1">
                             <a class="expand-all-link" href="javascript:void(0)">
                                 <?php _e('Expand all', 'tainacan') ?>&nbsp;&nbsp;<span class="caret"></span></a>
                         </div>
@@ -168,9 +171,11 @@ class FormItem extends Model {
                     </ul>
                     <div id="tab-content-metadata" class="tab-content" style="background: white;">
                         <div id="tab-default"  class="tab-pane fade in active" style="background: white;margin-bottom: 15px;">
-                            <div class="expand-all-div"  onclick="openAccordeon('default')" >
+                            <!-- data-operation 1 Means expand -->
+                            <div class="expand-all-div"  onclick="openAccordeon('default')" data-operation="1">
                                 <a class="expand-all-link" href="javascript:void(0)">
-                                    <?php _e('Expand all', 'tainacan') ?>&nbsp;&nbsp;<span class="caret"></span></a>
+                                    <?php _e('Expand all', 'tainacan') ?>&nbsp;&nbsp;<span class="caret"></span>
+                                </a>
                             </div>
                             <hr>
                             <div id="accordeon-default" class="multiple-items-accordion" style="margin-top:-20px;">
@@ -182,7 +187,8 @@ class FormItem extends Model {
                             foreach ($allTabs as $tab) {
                                 ?>
                                 <div id="tab-<?php echo $tab->meta_id ?>"  class="tab-pane fade" style="background: white;margin-bottom: 15px;">
-                                    <div class="expand-all-div"  onclick="openAccordeon('<?php echo $tab->meta_id ?>')" >
+                                    <!-- data-operation 1 Means expand -->
+                                    <div class="expand-all-div"  onclick="openAccordeon('<?php echo $tab->meta_id ?>')" data-operation="1">
                                         <a class="expand-all-link" href="javascript:void(0)">
                                             <?php _e('Expand all', 'tainacan') ?>&nbsp;&nbsp;<span class="caret"></span></a>
                                     </div>
@@ -768,14 +774,22 @@ class FormItem extends Model {
             });
 
             function openAccordeon(id){
-                if( $('#tab-'+id+' .ui-accordion-content').is(':visible')){
+                let op = $('div.expand-all-div').attr('data-operation');
+
+                if( op == 0)//Retrair
+                {
                     $('#tab-'+id).find("div.action-text").html('Expandir todos');
-                    $('#tab-'+id+' .ui-accordion-content').fadeOut();
+                    $('#tab-'+id+' h2.accordion-header-active').click();
                     $('.cloud_label').click();
+                    $('div.expand-all-div').attr('data-operation', 1);
+                    $('#tab-'+id).find(".expand-all-link").html('Expandir todos <span class="caret"></span>');
                 }else{
-                    $('#tab-'+id+' .ui-accordion-content').fadeIn();
+                    //Expandir
+                    $('#tab-'+id).find("div.action-text").html('Retrair todos');
+                    $('#tab-'+id+' h2:not(.accordion-header-active)').click();
                     $('.cloud_label').click();
-                    $('#tab-'+id).find("div.action-text").html('Retrair tudo');
+                    $('div.expand-all-div').attr('data-operation', 0);
+                    $('#tab-'+id).find(".expand-all-link").html('Retrair todos <span class="caret"></span>');
                 }
             }
 
