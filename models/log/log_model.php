@@ -473,21 +473,25 @@ class Log extends Model {
         if( "top_collections" == $event_type ) {
             $top_collections = self::getTopCollections($from, $to, $filter);
             $cols_array = array();
-            $class_names = array();
+            $events = array();
 
             foreach ($top_collections as $col => $data) {
                 $_title = get_post($data->event)->post_title; // Point to position of collection in database table.
                 //array_push($cols_array, [$_title => $col->total_collection ]);
-                if($filter != 'weeks'){
+                if($filter == 'nofilter'){
+                    array_push($cols_array, [ $_title, $data->total ]);
+                    array_push($events, $_title);
+                }
+                else if($filter != 'weeks'){
                     array_push($cols_array, [ $_title, $data->date, $data->total, $data->event_total ]);
                 }
                 else{
                     array_push($cols_array, [ $_title, $data->week_number, $data->total, $data->event_total ]);
                 }
-                array_push($class_names, $_title);
+                array_push($events, $_title);
             }
 
-            $stat_data = [ "stat_object" => $cols_array, "columns" => array_values(array_unique($class_names)) ];
+            $stat_data = [ "stat_object" => $cols_array, "columns" => array_values(array_unique($events)) ];
             $return_data = json_encode($stat_data, JSON_NUMERIC_CHECK, JSON_FORCE_OBJECT);
 
             return $return_data;
@@ -498,8 +502,12 @@ class Log extends Model {
             $sarr = array();
             $events = array();
             foreach($searches as $key => $data) {
-                if($filter == 'nofilter'){
+                if($filter == 'nofilter-dash'){
                     array_push($sarr, [ $data->event, $data->total ]);
+                }
+                else if($filter == 'nofilter'){
+                    array_push($sarr, [ $data->event, $data->total ]);
+                    array_push($events, $data->event);
                 }
                 else if($filter != 'weeks'){
                     array_push($sarr, [ $data->event, $data->date, $data->total, $data->event_total ]);
@@ -561,7 +569,7 @@ class Log extends Model {
             $fr = substr($from, 0, 7);
             $t = substr($to, 0, 7);
 
-            $sql = sprintf(
+            $SQL_query = sprintf(
                 "SELECT event, date, total, event_total 
                     FROM (
                         (
@@ -583,7 +591,7 @@ class Log extends Model {
                     )", self::_posts_table(), self::_posts_table());
         }
         else if($filter == 'weeks'){
-            $sql = sprintf(
+            $SQL_query = sprintf(
                 "SELECT event, week_number, total, event_total 
                     FROM (
                         (
@@ -605,7 +613,7 @@ class Log extends Model {
                     )", self::_posts_table(), self::_posts_table());
         }
         else if($filter == 'days'){
-            $sql = sprintf(
+            $SQL_query = sprintf(
                 "SELECT event, date, total, event_total 
                     FROM (
                         (
@@ -626,8 +634,17 @@ class Log extends Model {
                         ON res2.event = res3.post_parent
                     )", self::_posts_table(), self::_posts_table());
         }
+        else if($filter == 'nofilter'){
+            $SQL_query = sprintf(
+                "SELECT post_parent AS event, count(*) AS total 
+                    FROM %s 
+                    WHERE post_parent > 0 AND post_type = 'socialdb_object'
+                    GROUP BY post_parent 
+                    ORDER BY count(*) DESC
+                ", self::_posts_table());
+        }
 
-        $top_collections = $wpdb->get_results($sql);
+        $top_collections = $wpdb->get_results($SQL_query);
 
         return $top_collections;
     }
@@ -636,7 +653,7 @@ class Log extends Model {
         global $wpdb;
 
         if(($collection_id == 'null' || is_null($collection_id))){
-            $event_type = '%%search'; //this don't work
+            $event_type = '%%search%%'; //this don't work
            
             if($filter == 'days' ) {
                 $SQL_query = sprintf(
@@ -655,7 +672,7 @@ class Log extends Model {
                                     GROUP BY event
                             ) res2
                             ON res1.event = res2.event2
-                    )", self::_table(), self::_table());
+                    ) ORDER BY event_total DESC ", self::_table(), self::_table());
             } 
             else if($filter == 'weeks' ){
 
@@ -675,7 +692,7 @@ class Log extends Model {
                                 GROUP BY event
                         ) res2
                         ON res1.event = res2.event2
-                    )", self::_table(), self::_table());
+                    ) ORDER BY event_total DESC ", self::_table(), self::_table());
             }
             else if($filter == 'months' ){
                 $fr = substr($from, 0, 7);
@@ -697,15 +714,24 @@ class Log extends Model {
                                     GROUP BY event
                             ) res2
                             ON res1.event = res2.event2
-                    )", self::_table(), self::_table());
+                    ) ORDER BY event_total DESC ", self::_table(), self::_table());
             }
-            else{
+            else if($filter == 'nofilter-dash'){
                 $SQL_query = sprintf(
                     "SELECT event, count(*) AS total 
                         FROM %s 
                         WHERE event_type like '". $event_type ."'
                         GROUP BY event 
                         ORDER BY count(*) DESC LIMIT 10
+                    ", self::_table());
+            }
+            else if($filter == 'nofilter'){
+                $SQL_query = sprintf(
+                    "SELECT event, count(*) AS total 
+                        FROM %s 
+                        WHERE event_type like '". $event_type ."'
+                        GROUP BY event 
+                        ORDER BY count(*) DESC
                     ", self::_table());
             }
         }
@@ -774,13 +800,22 @@ class Log extends Model {
                             ON res1.event = res2.event2
                     )", self::_table(), self::_table());
             }
-            else{
+            else if($filter == 'nofilter-dash'){
+                $SQL_query = sprintf(
+                    "SELECT event, count(*) AS total 
+                        FROM %s 
+                        WHERE event_type like '". $event_type ."'
+                        GROUP BY event 
+                        ORDER BY count(*) DESC LIMIT 10
+                    ", self::_table());
+            }
+            else if($filter == 'nofilter'){
                 $SQL_query = sprintf(
                     "SELECT event, count(*) AS total 
                         FROM %s 
                         WHERE event_type = '$event_type' AND collection_id = '$collection_id' 
                         GROUP BY event 
-                        ORDER BY count(*) DESC LIMIT 10
+                        ORDER BY count(*) DESC
                     ", self::_table());
             }
         }

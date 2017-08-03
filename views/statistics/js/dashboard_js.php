@@ -3,8 +3,8 @@ google.charts.load('current', {'packages':['bar', 'line', 'corechart']}); //bar
 //google.charts.setOnLoadCallback(drawGChart);
 
 $(function () {
-  fetchDashData("repo_searches", "Collections");
-  fetchDashData("profile", "Users");
+  fetchDashData("repo_searches", "Collections", "nofilter-dash");
+  fetchDashData("profile", "Users", "nofilter");
   // Outros
 });
 
@@ -27,7 +27,7 @@ $("#refresh-perfis-usuario").on("click", function profUserRefresh() {
   refreshSpin("#refresh-perfis-usuario");
 
   setTimeout(function() {
-    fetchDashData("profile", "Users");
+    fetchDashData("profile", "Users", "nofilter");
   }, 700);
 });
 // Fim - Refresh usuário por perfil
@@ -51,7 +51,7 @@ $("#refresh-buscas-frequentes").on("click", function buscFreqRefresh() {
   refreshSpin("#refresh-buscas-frequentes");
   
   setTimeout(function() {
-    fetchDashData("repo_searches", "Collections");
+    fetchDashData("repo_searches", "Collections", "nofilter-dash");
   }, 700);
 });
 
@@ -68,13 +68,14 @@ function renderTBodyBFreq(rJSON) {
 }
 // Fim - Refresh buscas frequentes
 
-function fetchDashData(action, parent) {
+function fetchDashData(action, parent, filter) {
   $.ajax({
     url: $(".stat_path").val() + '/controllers/log/log_controller.php', type: 'POST',
-    data: { operation: 'user_events', parent: parent, event: action, from: "", to: "", collec_id: null, filter: "nofilter" }
+    data: { operation: 'user_events', parent: parent, event: action, from: "", to: "", collec_id: null, filter: filter }
   }).done(function(resp) {
-
+    console.log(resp);
     var rJSON = JSON.parse(resp);
+    console.log(rJSON);
 
     if( (rJSON.stat_object == null) || rJSON.stat_object.length == 0) {
       switch (action) {
@@ -119,7 +120,6 @@ function drawGChart(gChartType, dataJobj) {
 
     for(var key in objStats){
       gChartDataTable.addRow([objColumn[key], objStats[key][1]]);
-      console.log(gChartDataTable +' '+ [objColumn[key], objStats[key][1]]);
     }
 
     var columnGChart = new google.charts.Bar(document.getElementById('gChart-perfis-usuario'));

@@ -67,6 +67,12 @@
         $("#charts-resume table tr.quality-content").remove();
     }
 
+    TainacanChart.prototype.appendNoFilterBase = function () {
+        $("#charts-resume table tr.headers").html("<td>Coluna</td><td>Total</td>");
+        $("#charts-resume table tr.content").html("");
+        $("#charts-resume table tr.quality-content").remove();
+    }
+
     TainacanChart.prototype.appendQualityData = function(title, qtd) {
         $("#charts-resume table tbody").append("<tr class='quality-content'><td>"+ title +"</td><td>"+ qtd +"</td></tr>");
     };
@@ -408,13 +414,20 @@
         else if($('#months').is(":checked") && $('#months').is(":enabled")){
             filter = $('#months').val();
         }
+        else if($('#nofilter').is(":checked")){
+            filter = $('#nofilter').val();
+        }
 
         $.ajax({
             url: stat_path + '/controllers/log/log_controller.php', type: 'POST',
             data: { operation: 'user_events', parent: parent, event: action, from: from, to: to, collec_id: c_id, filter: filter }
         }).done(function(resp) {
+            console.log(resp +'\n');
 
             var res_json = JSON.parse(resp);
+
+            console.log(res_json);
+
             var chart = $('.selected_chart_type').val(); //tipo de chart selecionado
             $(".current_parent_report").val(parent); //nome do parent atual 'ex: Users'
 
@@ -466,11 +479,15 @@
                     chart_data.addColumn('number', tai_chart.getMappedTitles()[columnsData[evnt]] ? tai_chart.getMappedTitles()[columnsData[evnt]] : columnsData[evnt]);
                 }
             }
+            else if(filter == "nofilter"){
+                chart_data.addColumn('string', 'eventName');
+                chart_data.addColumn('number', 'total');
+            }
 
             //
 
             // If stat object has values
-            if(data_obj.stat_object && data_obj.stat_object[0]) {
+            if(data_obj.stat_object && data_obj.stat_object[0] && filter != "nofilter") {
 
                 // Show in statistics page footer with stats and totals
                 tai_chart.displayFixedBase();
@@ -548,7 +565,8 @@
                                if (cole_flag == 0){
                                    tai_chart.appendQualityBase();
                                    cole_flag = 1;
-                               } 
+                               }
+                               // Display collections e items (total) 
                                tai_chart.appendQualityData(curr_evt_title, array_n[3]);
                            }
                            else if(title == 'repo_searches' || title == 'collection_searches'){
@@ -556,6 +574,7 @@
                                    tai_chart.appendSearchesBase();
                                    cole_flag = 1;
                                }
+                               // Display term and searches (total)
                                tai_chart.appendQualityData(curr_evt_title, array_n[3]);
                            }
                            else{
@@ -566,7 +585,26 @@
                     } // end of for
                     rows.sort();
                     chart_data.addRows(rows);
-            } 
+            }
+            else if(data_obj.stat_object && data_obj.stat_object[0] && filter == "nofilter"){
+                var cole_flag = 0;
+                var objStats = data_obj.stat_object;
+                
+                if(data_obj.columns.events){
+                    var objColumn = data_obj.columns.events;
+                }
+                else{
+                    var objColumn = data_obj.columns;
+                }
+
+                tai_chart.appendNoFilterBase();
+                for(var key in objStats){
+                    currentColData = tai_chart.getMappedTitles()[objColumn[key]] ? tai_chart.getMappedTitles()[objColumn[key]] : objColumn[key];
+
+                    chart_data.addRow([currentColData, objStats[key][1]]);
+                    tai_chart.appendQualityData(currentColData, objStats[key][1]);
+                }
+            }
             else if(!data_obj.stat_object[0]){
                 chart_data.addRow();
                 tai_chart.displayFixedBase();
@@ -577,20 +615,26 @@
 
             var div_chart = $("#charts-container").get(0);
             $(div_chart).removeClass('hide');
+            
             // draw chart based at generated json data
-            renderChart(title, chart_type, chart_data);
+            renderChart(title, chart_type, chart_data, filter);
         }
     } // drawChart()
 
-    function renderChart(current_title, type, stat_data) {
+    function renderChart(current_title, type, stat_data, filter) {
         // var color = chart_color || '#79a6ce';
         // Google Charts objects
+        var legendOpt = {position: 'top', alignment: 'center', textStyle: {fontSize: 11}};
+        if(filter == "nofilter"){
+            legendOpt = {position: 'none'};
+        }
+
         if( type == 'pie' ) {
             var piechart = new google.visualization.PieChart(document.getElementById('piechart_div'));
             var pieOptions = {
                 is3D: true,
                 colors: ['#F09B35','#8DA9BF','#F2C38D','#E6AC03', '#D94308', '#013453'],
-                legend: {position: 'top', alignment: 'center', textStyle: {fontSize: 11}},
+                legend: legendOpt,
                 fontSize: 10,
                 selectionMode: 'multiple',
                 tooltip: {trigger: 'selection'},
@@ -608,7 +652,7 @@
             var barchart = new google.visualization.BarChart(document.getElementById('barchart_div'));
             var barOptions = {
                 bars: 'horizontal',
-                legend: {position: 'top', alignment: 'center', textStyle: {fontSize: 11}},
+                legend: legendOpt,
                 fontSize: 10,
                 selectionMode: 'multiple',
                 tooltip: {trigger: 'selection'},
@@ -626,7 +670,7 @@
             var default_chart = new google.visualization.ColumnChart(document.getElementById('defaultchart_div'));
             var defaOptions = {
                 bars: 'vertical',
-                legend: {position: 'top', alignment: 'center', textStyle: {fontSize: 11}},
+                legend: legendOpt,
                 fontSize: 10,
                 selectionMode: 'multiple',
                 tooltip: {trigger: 'selection'},
@@ -644,7 +688,7 @@
             var linechart = new google.visualization.LineChart(document.getElementById('curvelinechart_div'));
             var curveOptions = {
                 curveType: 'function',
-                legend: {position: 'top', alignment: 'center', textStyle: {fontSize: 11}},
+                legend: legendOpt,
                 fontSize: 10,
                 selectionMode: 'multiple',
                 tooltip: {trigger: 'selection'},

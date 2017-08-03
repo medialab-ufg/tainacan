@@ -17,7 +17,7 @@ include_once('js/dashboard_js.php');
         <tbody id="tbody-local-usuarios">
           <tr>
             <td>
-              <iframe height="310px" width="100%" scrolling="no" frameborder="0" src="<?php echo get_template_directory_uri() . '/views/statistics/inc/maps-local-usuario.html' ?>"></iframe>
+              <iframe height="347px" width="100%" scrolling="no" frameborder="0" src="<?php echo get_template_directory_uri() . '/views/statistics/inc/maps-local-usuario.html' ?>"></iframe>
             </td>
           </tr>
         </tbody>
@@ -52,14 +52,16 @@ include_once('js/dashboard_js.php');
             </th>
           </tr>
         </thead>
-        <tbody id="">
-          <!-- Conteúdo dinâmico, vindo de dashboard_js.php -->
-        </tbody>
+          <tr>
+            <td height="370px">
+              <!-- Conteúdo dinâmico, vindo de dashboard_js.php -->
+            </td>
+          </tr>
       </table>
     </div>
 
     <!-- Widget a definir -->
-    <div id="" class="bgc-widget margin-r10px col-md-3 col-sm-3 col-lg-3 table-responsive">
+    <div id="" class="bgc-widget margin-t10px margin-r10px col-md-3 col-sm-3 col-lg-3 table-responsive">
       <table class="table">
         <thead>
           <tr>
@@ -70,13 +72,17 @@ include_once('js/dashboard_js.php');
           </tr>
         </thead>
         <tbody id="">
-          <!-- Conteúdo dinâmico, vindo de dashboard_js.php -->
+          <tr>
+            <td height="310px">
+              <!-- Conteúdo dinâmico, vindo de dashboard_js.php -->
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
 
     <!-- Widget Eventos -->
-    <div id="dash-eventos" class="bgc-widget col-md-3 col-sm-3 col-lg-3 table-responsive">
+    <div id="dash-eventos" class="bgc-widget margin-t10px margin-r10px col-md-3 col-sm-3 col-lg-3 table-responsive">
       <table class="table table-hover">
         <thead>
           <tr>
@@ -87,7 +93,11 @@ include_once('js/dashboard_js.php');
           </tr>
         </thead>
         <tbody id="tbody-eventos">
-          <!-- Conteúdo dinâmico, vindo de dashboard_js.php -->
+          <tr>
+            <td height="310px">
+              <!-- Conteúdo dinâmico, vindo de dashboard_js.php -->
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>

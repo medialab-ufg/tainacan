@@ -24,25 +24,25 @@ include_once('js/list_js.php');
             </label>
             <div class="date-range-filter period-config">
                 <div> 
-                    <h6> <?php _e('From: '); ?></h6>
+                    <h6> <?php _e('From: ', 'tainacan'); ?></h6>
                     <input type="text" class="input_date input-size form-control" value="" placeholder="dd/mm/aaaa" id="from_period" name="from_period">
                 </div>
                 <div> 
-                    <h6><?php _e('Until: '); ?></h6>
+                    <h6><?php _e('Until: ', 'tainacan'); ?></h6>
                     <input type="text" class="input_date input-size form-control" value="" placeholder="dd/mm/aaaa" id="to_period" name="to_period"> <br />
                 </div>
                 <!-- Dynatree filter-->
                 <div>
-                    <input type="radio" id="days" value="days" name="optradio"> <?php _e('Days'); ?>
+                    <input type="radio" id="days" value="days" name="optradio"> <?php _e('Days', 'tainacan'); ?>
                 </div>
                 <div>
-                    <input type="radio" id="weeks" value="weeks" name="optradio"> <?php _e('Weeks'); ?>
+                    <input type="radio" id="weeks" value="weeks" name="optradio"> <?php _e('Weeks', 'tainacan'); ?>
                 </div>
                 <div>
-                    <input type="radio" id="months" value="months" name="optradio" checked> <?php _e('Months'); ?>
+                    <input type="radio" id="months" value="months" name="optradio" checked> <?php _e('Months', 'tainacan'); ?>
                 </div>
                 <div>
-                    <input type="radio" id="nofilter" name="optradio" value="nofilter" disabled> <?php _e('No filter'); ?>
+                    <input type="radio" id="nofilter" name="optradio" value="nofilter"> <?php _e('No filter', 'tainacan'); ?>
                 </div>
                 <!--<div id="report-filters"></div>-->
             </div>
@@ -51,7 +51,7 @@ include_once('js/list_js.php');
         <div id="config-repo" class="statistics-config form-group">
             <label for="object_tags" class="title-pipe">
                 <span class="prepend-filter-label glyphicon-chevron-down blue glyphicon sec-color" style="color: #79a6ce !important;"></span>
-                <?php _e('Report type'); ?>
+                <?php _e('Report type', 'tainacan'); ?>
             </label>
             <!-- Dynatree report type -->
             <div id="report-type-stat"></div>
@@ -71,7 +71,7 @@ include_once('js/list_js.php');
                 <div class="pull-right">
                     <div class="col-md-12">
                         <button class="btn btn-default" data-toggle="dropdown" type="button" id="downloadStat">
-                            <span class="config-title"> <?php _t('Download ',true); ?> </span> <span class="caret"></span>
+                            <span class="config-title"> <?php _t('Download ', true); ?> </span> <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu downloadStat" aria-labelledby="downloadStat">
                             <?php $_log_helper->getDownloadTypes(); ?>
