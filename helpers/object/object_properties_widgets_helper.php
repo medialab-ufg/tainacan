@@ -112,14 +112,14 @@ class ObjectWidgetsHelper extends ViewHelper {
                                 value='<?php echo count($properties_compounded) ?>'>
                         <?php endif; ?> 
                         <?php for($i = 0; $i<$cardinality_bigger;$i++): 
-                                $is_show_container =  $this->is_set_container($object_id,$property,$property_compounded,$i);
+                                //$is_show_container =  $this->is_set_container($object_id,$property,$property_compounded,$i);
                                 $fields_filled =  $this->count_fields_container_value($object_id,$property,$property_compounded,$i);
                                 $position = 0;
                                 ?>
                                 <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>"
                                      class="col-md-12 no-padding" 
                                      style="border-color: #ccc;
-                                     <?php echo ($is_show_container) ? ( ( ( isset($references['is_view_mode']) || $references['is_edit'] ) && $all_fields_validate && $fields_filled != count($properties_compounded)) ? 'display:none' : 'display:block' ) : 'display:none'; ?>">
+                                     <?php //echo ($is_show_container) ? ( ( ( isset($references['is_view_mode']) || $references['is_edit'] ) && $all_fields_validate && $fields_filled != count($properties_compounded)) ? 'display:none' : 'display:block' ) : 'display:none'; ?>">
                                     <div class="col-md-11">
                                 <?php foreach ($properties_compounded as $property_compounded): 
                                     if(!isset( $property_compounded['id']) || empty($property_compounded['id'])){
@@ -231,10 +231,26 @@ class ObjectWidgetsHelper extends ViewHelper {
      */
     public function widget_property_data($property,$i,$references,$value = false) {
         $references['properties_autocomplete'][] = $property['id'];
-        if($references['is_view_mode'] 
-                || (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true' && !isset($references['operation']))){
-            if(isset($value) && !empty($value)): ?>
-                <p><?php  echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $value . "'" . ',' . $property['id'] . ')">' . $value . '</a>';  ?></p>
+        if($references['is_view_mode']){
+            $meta = get_post_meta($references['object_id'], 'socialdb_property_helper_' . $references['compound_id'], true);
+            $cont = 0;
+            if ($meta && $meta != '') {
+                $array = unserialize($meta);
+                if(isset($array[$i][$property['id']]) ){
+                    $values = $array[$i][$property['id']]['values'];
+                    $objects = [];
+                    foreach ($values as $value) {
+                        $value = $this->sdb_get_post_meta($value)->meta_value; 
+                        if(isset($value) && trim($value) != ''){
+                            $cont++;
+                            $objects[] = $value;
+                        }
+                    }
+                }
+            } 
+            if($cont>0): ?>
+                <?php $string = implode(',', $objects) ?>
+                <p><i><?php  echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $string . "'" . ',' . $property['id'] . ')">' . $string . '</a>';  ?></i></p>
             <?php else: ?>
                 <p><?php  _e('empty field', 'tainacan') ?></p>
             <?php endif;
@@ -385,19 +401,34 @@ class ObjectWidgetsHelper extends ViewHelper {
             value="<?php if ($value) echo $value; ?>">
         <?php
         if($references['is_view_mode'] || (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true' && !isset($references['operation']))){
-                if($property['metas']['socialdb_property_term_cardinality'] && $property['metas']['socialdb_property_term_cardinality'] == '1' && is_numeric($value)):
+            $meta = get_post_meta($references['object_id'], 'socialdb_property_helper_' . $references['compound_id'], true);
+            $cont = 0;
+            if ($meta && $meta != '') {
+                $array = unserialize($meta);
+                if(isset($array[$i][$property['id']]) ){
+                    $values = $array[$i][$property['id']]['values'];
+                    $terms = [];
+                    foreach ($values as $value) {
+                        $value = $this->sdb_get_post_meta($value)->meta_value; 
+                        if(isset($value) && trim($value) != ''){
+                            $cont++;
+                            $terms[] = get_term_by('id', $value, 'socialdb_category_type');
+                        }
+                    }
+                }
+            } 
+            //mostrando o valor
+            if($cont>0): 
+                foreach ($terms as $term):
                     ?>
                     <div id='label_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>'>
-                         <?php echo get_term_by('id', $value,'socialdb_category_type')->name ?>
+                        <i><?php echo $term->name ?></i>
                     </div>  
                     <?php
-                else:  
-                    ?>
-                    <div id='label_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>'>
-                         <?php $this->get_category_value($references['object_id'],$property['id'],$property['metas']['socialdb_property_term_root']); ?>
-                    </div>  
-                    <?php
-                endif;
+                endforeach;    
+            else:  
+                echo '<p>' . __('empty field', 'tainacan') . '</p>';
+            endif;
             return;
         }
         if ($property['type'] == 'radio') {
@@ -667,14 +698,15 @@ class ObjectWidgetsHelper extends ViewHelper {
                        value="<?php echo $cardinality_bigger; ?>">
                 <?php $coumpounds_id = []; ?>
                 <?php for($i = 0; $i<$cardinality_bigger;$i++):
-                    $is_show_container =  $this->is_set_container($object_id,$property,$property_compounded,$i);
+                    //$is_show_container =  $this->is_set_container($object_id,$property,$property_compounded,$i);
+                    $is_show_container =  true;
                     $fields_filled =  $this->count_fields_container_value($object_id,$property,$property_compounded,$i);
                     $position = 0;
                     ?>
                     <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>"
                          class="col-md-12 no-padding" 
                          style="border-color: #ccc;
-                         <?php echo ($is_show_container) ? ( ( ( isset($references['is_view_mode']) || $references['is_edit'] ) && $all_fields_validate && $fields_filled != count($properties_compounded)) ? 'display:none' : 'display:block' ) : 'display:none'; ?>">
+                         <?php // echo ($is_show_container) ? ( ( ( isset($references['is_view_mode']) || $references['is_edit'] ) && $all_fields_validate && $fields_filled != count($properties_compounded)) ? 'display:none' : 'display:block' ) : 'display:none'; ?>">
                         <div class="col-md-12 no-padding">
                             <?php foreach ($properties_compounded as $property_compounded):
                                 $coumpounds_id[] = $property_compounded['id'];
