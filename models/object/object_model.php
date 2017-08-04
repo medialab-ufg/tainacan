@@ -2406,8 +2406,4 @@ class ObjectModel extends Model {
         return false;
     }
 
-    public function isCompoundMeta() {
-
-    }
-
 }

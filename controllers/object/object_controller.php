@@ -672,8 +672,33 @@ class ObjectController extends Controller {
                                                         $extra = unserialize(($helper[0]));
                                                         if(is_array($extra) && !empty($extra)) {
                                                             $extra_id = $extra[0][0]["values"][0];
-                                                            $extra_res = $this->sdb_get_post_meta($extra_id);
-                                                            $_pair['extras'][] = ['meta' => $nome->name, 'value' => $extra_res->meta_value, 'meta_id' => $id];
+
+                                                            if( is_null($extra_id) && is_array($extra[0]) && !empty($extra[0]) ) {
+                                                                $_compound_check = get_term_meta($id, "socialdb_property_compounds_properties_id", true);
+                                                                $is_compound = !empty($_compound_check);
+                                                                if($is_compound) {
+                                                                    $_pair['extras'][] = ['meta' => $nome->name, 'value' => '_____________________________', 'meta_id' => $id];
+
+                                                                    $count = 1;
+                                                                    foreach ($extra[0] as $child_id => $extra_children) {
+                                                                        $child_title = get_term($child_id)->name;
+                                                                        $_val_ = ".";
+                                                                        $set_val = $this->sdb_get_post_meta($extra_children["values"][0]);
+
+                                                                        if($extra_children["type"] === "object") {
+                                                                            $_val_ = get_post($set_val->meta_value)->post_title;
+                                                                        } else if($extra_children["type"] === "term") {
+                                                                            $_val_ = get_term($set_val->meta_value)->name;
+                                                                        }
+
+                                                                        $_pair['extras'][] = ['meta' => $child_title, 'value' => $_val_, 'meta_id' => $child_id, 'extra_submeta' => true, 'extra_padding' => ($count*20)];
+                                                                        $count++;
+                                                                    }
+                                                                }
+                                                            } else {
+                                                                $extra_res = $this->sdb_get_post_meta($extra_id);
+                                                                $_pair['extras'][] = ['meta' => $nome->name, 'value' => $extra_res->meta_value, 'meta_id' => $id];
+                                                            }
                                                         }
                                                     }
                                                 }

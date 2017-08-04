@@ -72,7 +72,7 @@
 
         $('a.ac-open-file').on('click', function() {
             var item_id = $(this).parents().find('.open_item_actions').first().attr('id').replace('action-', '');
-            // show_modal_main();
+            show_modal_main();
             $.ajax({
                 url: path, type: 'POST',
                 data: { operation: 'press_item', object_id: item_id, collection_id: $('#collection_id').val() }
@@ -230,22 +230,31 @@
                                 var count = 1;
                                 for( ex in itm.set[idx].extras ) {
                                     var title = itm.set[idx].extras[ex].meta;
+                                    var is_extra_sub_compound = itm.set[idx].extras[ex].extra_submeta;
+                                    var plusX = 0;
+                                    if(is_extra_sub_compound && (is_extra_sub_compound == true))
+                                        plusX = 20;
+
                                     var extra_p = (p + 40);
                                     if(count > 1)
                                         extra_p = extra_p + (count*20);
 
+                                    var is_extra_sub_padding = itm.set[idx].extras[ex].extra_padding;
+                                    if(is_extra_sub_padding)
+                                        extra_p += is_extra_sub_padding - 20;
+
                                     if(title) {
                                         pressPDF.setFontStyle('bold');
-                                        pressPDF.text( title, (baseX*2 + 20), extra_p );
+                                        pressPDF.text( title, (baseX*2 + 20 + plusX), extra_p);
                                         var extra_f = extra_p + 20;
 
                                         var vl = itm.set[idx].extras[ex].value;
-                                        var v = "----";
+                                        var extra_val = "---";
                                         if(vl)
-                                            v = vl;
+                                            extra_val = vl;
 
                                         pressPDF.setFontStyle('normal');
-                                        pressPDF.text(v, (baseX*2 + 20), extra_f );
+                                        pressPDF.text(extra_val, (baseX*2 + 20 + plusX), extra_f);
                                         base_count = extra_f + extra_line_height;
                                     }
                                     count++;
