@@ -72,7 +72,7 @@
 
         $('a.ac-open-file').on('click', function() {
             var item_id = $(this).parents().find('.open_item_actions').first().attr('id').replace('action-', '');
-            show_modal_main();
+            // show_modal_main();
             $.ajax({
                 url: path, type: 'POST',
                 data: { operation: 'press_item', object_id: item_id, collection_id: $('#collection_id').val() }
@@ -190,7 +190,6 @@
                         base_count += base_top;
                     }
 
-                    // var max = itm.set.length;
                     for( idx in itm.set ) {
                         if(itm.set[idx] != 'null' && itm.set[idx] !== null) {
                             if(base_count >= maxHeightOffset) {
@@ -205,7 +204,8 @@
                             }
 
                             var extra_padding = 0;
-                            if( itm.set[idx].is_submeta ) {
+                            var check_submeta = itm.set[idx].is_submeta;
+                            if( check_submeta && (check_submeta === true) ) {
                                 extra_padding = 20;
                             }
                             pressPDF.setFontStyle('bold');
@@ -224,6 +224,34 @@
                                 pressPDF.text(default_val, (baseX*2 + extra_padding), f);
                                 base_count = p + extra_line_height;
                             }
+
+                            var meta_extras = itm.set[idx].extras;
+                            if( meta_extras && (meta_extras.length > 0)  ) {
+                                var count = 1;
+                                for( ex in itm.set[idx].extras ) {
+                                    var title = itm.set[idx].extras[ex].meta;
+                                    var extra_p = (p + 40);
+                                    if(count > 1)
+                                        extra_p = extra_p + (count*20);
+
+                                    if(title) {
+                                        pressPDF.setFontStyle('bold');
+                                        pressPDF.text( title, (baseX*2 + 20), extra_p );
+                                        var extra_f = extra_p + 20;
+
+                                        var vl = itm.set[idx].extras[ex].value;
+                                        var v = "----";
+                                        if(vl)
+                                            v = vl;
+
+                                        pressPDF.setFontStyle('normal');
+                                        pressPDF.text(v, (baseX*2 + 20), extra_f );
+                                        base_count = extra_f + extra_line_height;
+                                    }
+                                    count++;
+                                }
+                            }
+
                         }
                     }
 

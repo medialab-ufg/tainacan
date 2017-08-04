@@ -493,13 +493,8 @@ class ObjectController extends Controller {
                     }
                 }
 
-                $tabs = [ 'order' => get_post_meta($data['collection_id'], 'socialdb_collection_properties_ordenation'),
-                    'organize' => unserialize( get_post_meta($data['collection_id'], 'socialdb_collection_update_tab_organization', true))[0],
-                    'names' => get_post_meta($data['collection_id'], 'socialdb_collection_tab') ];
+                $tabs = $object_model->getItemTabs($data['collection_id']);
                 $press['meta_ids_ord'] = explode(",",unserialize($tabs['order'][0])['default']);
-
-                $ord_list = [];
-
                 if($tabs['organize']) {
                     foreach($tabs["organize"] as $id => $tb) {
                         $mt = "socialdb_property_helper_${id}";
@@ -511,6 +506,7 @@ class ObjectController extends Controller {
 
                 $total_index = 0;
                 $_to_be_removed = [];
+                $ord_list = [];
                 foreach ($_item_meta as $meta => $val) {
                     $check_typeof_meta = explode( "_", $meta);
                     $is_compound_meta = false;
@@ -576,7 +572,7 @@ class ObjectController extends Controller {
 
                                                 } else {
                                                     $_curr_term = get_term($curr_term_metas[$curr_meta]);
-                                                    $_pair = ['meta' => $_curr_term->name , 'value' => "--", 'is_submeta' => true, 'meta_id' => $_curr_term->term_id];
+                                                    $_pair = ['meta' => $_curr_term->name , 'value' => "--__", 'is_submeta' => true, 'meta_id' => $_curr_term->term_id];
 
                                                     $post_val = $this->get_tab_name(intval($s_meta));
                                                     if( !is_null($post_val) && $post_val ) {
@@ -640,32 +636,52 @@ class ObjectController extends Controller {
                                             $final_val = $_meta_->meta_value;
 
                                             $_fmt_ID = str_replace("socialdb_property_", "", $_meta_->meta_key);
-                                            if( strpos($_fmt_ID,"_cat") ) {
+                                            if( strpos($_fmt_ID,"_cat") )
                                                 $_fmt_ID = explode("_", $_fmt_ID)[0];
-                                            }
 
+                                            $previous_term_id = 0;
                                             if($prop[$i][0]['type'] == "term") {
+                                                $previous_term_id = $final_val;
                                                 $final_val = get_term($final_val)->name;
                                             }
 
                                             $_pair = [ 'meta' => $_meta_header_->name, 'value' => $final_val,
                                                 'meta_id' => $_fmt_ID, 'meta_breaks' => $this->format_to_type($_fmt_ID, $final_val)];
 
-
                                             $_compound_check = get_term_meta($_fmt_ID, "socialdb_property_compounds_properties_id", true);
-                                            if ( empty($_compound_check) ) {
+                                            if( empty($_compound_check) ) {
                                                 $chk_compound_child = unserialize(get_term_meta($_fmt_ID, "socialdb_property_is_compounds", true));
                                                 if(is_array($chk_compound_child)) {
                                                     if( isset( $tabs['organize'][key($chk_compound_child)] ) && ($tabs['organize'][key($chk_compound_child)] != "default") ) {
                                                         $_pair['submeta_tab_parent'] = key($chk_compound_child);
+                                                        $_pair['is_submeta'] = true;
                                                     }
-                                                    $_pair['is_submeta'] = true;
+                                                } else {
+                                                    $_pair['is_submeta'] = false;
                                                 }
+                                            }
 
-                                            };
+                                            $_meta_category_metas_ = get_term_meta( (int) $previous_term_id,'socialdb_category_property_id');
+                                            if(is_array($_meta_category_metas_) && count($_meta_category_metas_) > 0) {
+                                                foreach ($_meta_category_metas_ as $id) {
+                                                    $extra_helper = "socialdb_property_helper_${id}";
+                                                    $nome = get_term_by("id",$id,"socialdb_property_type");
+
+                                                    $helper = get_post_meta($object_id, $extra_helper);
+                                                    if(is_array($helper)) {
+                                                        $extra = unserialize(($helper[0]));
+                                                        if(is_array($extra) && !empty($extra)) {
+                                                            $extra_id = $extra[0][0]["values"][0];
+                                                            $extra_res = $this->sdb_get_post_meta($extra_id);
+                                                            $_pair['extras'][] = ['meta' => $nome->name, 'value' => $extra_res->meta_value, 'meta_id' => $id];
+                                                        }
+                                                    }
+                                                }
+                                            }
 
                                             $ord_list[$_pair['meta_id']] = $_pair;
                                             $press['set'][] = $_pair;
+
                                         } else {
                                             $_pair = ['meta' => $_meta_header_->name, 'meta_id' => $_meta_header_->term_id,
                                                 'value' => '_____________________________', 'submeta_header' => true ];
@@ -704,12 +720,48 @@ class ObjectController extends Controller {
                                     if($is_compound) {
                                         $_pair['value']          = '_____________________________';
                                         $_pair['submeta_header'] = true;
-                                        $_pair['children'] = $_compound_check;
+                                        $_pair['children']       = $_compound_check;
                                     } else {
                                         $chk_compound_child = unserialize(get_term_meta($header->term_id, "socialdb_property_is_compounds", true));
                                         if(is_array($chk_compound_child)) {
                                             if( isset( $tabs['organize'][key($chk_compound_child)] ) && ($tabs['organize'][key($chk_compound_child)] != "default") ) {
                                                 $_pair['submeta_tab_parent'] = key($chk_compound_child);
+                                                $_parent_set_values = get_post_meta($object_id,"socialdb_property_helper_" . $_pair['submeta_tab_parent'],true);
+                                                if(is_string($_parent_set_values) && !empty($_parent_set_values) ) {
+                                                    $_parent_values_arr = unserialize($_parent_set_values);
+
+                                                    if(is_array($_parent_values_arr[0])) {
+                                                        foreach ($_parent_values_arr[0] as $_val_arr) {
+                                                            if($_val_arr["type"] === "object") {
+                                                               $fn =  $this->sdb_get_post_meta($_val_arr["values"][0]);
+                                                               $prev = get_post($fn->meta_value);
+                                                               $_pair['value'] = $prev->post_title;
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            } else {
+                                                $check = ($tabs['organize'][key($chk_compound_child)] == "default");
+                                                $_meta_parent_ = key($chk_compound_child);
+
+                                                if($check) {
+                                                    $par_vals = get_post_meta($object_id,"socialdb_property_helper_" . $_meta_parent_,true);
+                                                    if(!empty($par_vals)) {
+                                                        // print_r($_pair['meta'] . " => " . $_pair['value'] . " :: " . $_pair['meta_id']);
+                                                        $par_arr = unserialize($par_vals);
+                                                        $_current = $par_arr[0][$_pair['meta_id']];
+                                                        if( is_array($_current) && !empty($_current) ) {
+                                                            $children_vals = $this->sdb_get_post_meta($_current["values"][0]);
+                                                            if(is_object($children_vals)) {
+                                                                if($_current["type"] === "data") {
+                                                                    $_pair['value'] = $children_vals->meta_value;
+                                                                } else if ($_current["type"] === "term") {
+                                                                    $_pair['value'] =  get_term($children_vals->meta_value)->name;
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
                                             }
 
                                             $_pair['is_submeta'] = true;
@@ -1028,8 +1080,6 @@ class ObjectController extends Controller {
                 return json_encode($data);
                 break;
             case 'versioning':
-                //var_dump($data);
-                //exit();
                 $item = get_post($data['object_id']);
                 $metas = get_post_meta($item->ID);
                 $version = $object_model->checkVersionNumber($item);
@@ -1037,8 +1087,6 @@ class ObjectController extends Controller {
                 $version_numbers = $object_model->checkVersions($original);
                 //$version = $object_model->checkVersions($original);
                 $new_version = count($version_numbers) + 2;
-                //var_dump($version_numbers, $new_version);
-                //exit();
                 $newItem = $object_model->createVersionItem($item, $data['collection_id']);
                 if ($newItem) {
                     $object_model->copyItemMetas($newItem, $metas);
@@ -1049,16 +1097,8 @@ class ObjectController extends Controller {
                 } else {
                     return false;
                 }
-                //var_dump($version_numbers, $new_version);
-                /* $item = get_post($data['object_id']);
-                  $newItem = $object_model->createVersionItem($item, $data['collection_id']); //inherit - revision
-                  $metas = get_post_meta($item->ID);
-                  $object_model->copyItemMetas($newItem, $metas);
-                  $object_model->copyItemCategories($newItem, $data['object_id']);
-                  $object_model->copyItemTags($newItem, $data['object_id']); */
                 break;
             case 'show_item_versions':
-                //var_dump($data); //collection_id, object_id
                 $user_model = new UserModel();
                 $object_id = $data['object_id'];
                 $data['object'] = get_post($object_id);
@@ -1233,31 +1273,15 @@ class ObjectController extends Controller {
     private function get_tab_name($tab_id) {
         global $wpdb;
 
-        if( intval($tab_id) <= 0) {
+        if( intval($tab_id) <= 0)
             return false;
-        }
 
         $meta = $wpdb->get_row($wpdb->prepare("SELECT * FROM $wpdb->postmeta WHERE meta_id=%d", $tab_id));
 
-        if( is_null($meta) || empty($meta)) {
+        if( is_null($meta) || empty($meta) )
             return false;
-        }
 
         return $meta;
-    }
-
-    private function get_tab_id($collection, $tab_name) {
-        global $wpdb;
-
-        if( ctype_digit($collection) && !empty($tab_name) ) {
-            $meta = $wpdb->get_row( $wpdb->prepare("SELECT * FROM $wpdb->postmeta WHERE post_id=%d AND meta_key='socialdb_collection_tab' AND meta_value=%s", $collection, $tab_name));
-
-            if( !is_null($meta) ) {
-                return $meta;
-            }
-        }
-
-        return false;
     }
 
     /**
