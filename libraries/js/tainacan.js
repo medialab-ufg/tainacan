@@ -1295,10 +1295,11 @@ function showCategoriesConfiguration(src, is_front) {
         $("#form").html('');
 
         if (is_front) {
-            $('#searchBoxIndex').hide();
+            /*$('#searchBoxIndex').hide();
             $('#configuration').addClass('col-md-12').css({background: 'white', padding: "20px"}).html(result).show();
             $("#display_view_main_page").remove();
-            $("body.home .tainacan-topo-categoria button").remove();
+            $("body.home .tainacan-topo-categoria button").remove();*/
+            window.location = window.location.href;
         } else {
             $('#main_part').hide();
             $('#collection_post').hide();
