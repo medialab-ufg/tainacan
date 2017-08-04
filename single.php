@@ -1459,6 +1459,8 @@ while (have_posts()) : the_post();
         </div>
     </div>
 
+
+
     <?php
     if (has_action('add_new_modals')) {
         do_action('add_new_modals', '');
