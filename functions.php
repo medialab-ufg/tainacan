@@ -3599,6 +3599,81 @@ function get_add_office_document_text($post_id, $item_id)
         update_post_meta($post_id, "socialdb_office_document_text", true);
     }
 }
+
+function get_documents_text($ids)
+{
+    //Gera texto de documentos do office e pdf
+    $posts = [];
+    foreach($ids as $id)
+    {
+        $posts[] = get_post($id);
+    }
+
+    $PDFidPostAttachmentURL = [];
+    $OFFICEidPostAttachmentURL = [];
+
+    /*
+     * MIME TYPES:
+     *
+     * PDF: application/pdf
+     * Word .doc: application/msword
+     * Word .docx: application/vnd.openxmlformats-officedocument.wordprocessingml.document
+     * Excel .xlsx: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+     * Power Point .pptx: application/vnd.openxmlformats-officedocument.presentationml.presentation
+     */
+
+    $office_mimes = array(
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+    );
+
+    $postID_pdfURL = [];
+    foreach($posts as $post)
+    {
+        $post_meta = get_post_meta($post->ID);
+        $attachment_id = $post_meta['socialdb_object_content'][0];
+        $url_file = wp_get_attachment_url($attachment_id);
+        if($url_file)
+        {
+            $post_mime = get_post_mime_type($attachment_id);
+            if(strcmp($post_mime, 'application/pdf') == 0)
+            {
+                $PDFidPostAttachmentURL[$post->ID] = array("post_meta" => $post_meta, 'url' => $url_file, 'attachment_id' => $attachment_id);
+                $postID_pdfURL[$post->ID] = $url_file;
+            }elseif(in_array($post_mime, $office_mimes))
+            {
+                $OFFICEidPostAttachmentURL[$post->ID] = array("post_meta" => $post_meta, 'url' => $url_file, 'attachment_id' => $attachment_id);
+            }
+        }
+    }
+
+    foreach($PDFidPostAttachmentURL as $post_id => $info)
+    {
+        if(!array_key_exists('socialdb_pdf_text', $info['post_meta']))
+        {
+            get_add_pdf_text($post_id, $info['attachment_id']);
+        }
+    }
+
+    foreach($OFFICEidPostAttachmentURL as $post_id => $info)
+    {
+        if(!array_key_exists('socialdb_office_document_text', $info['post_meta']))
+        {
+            get_add_office_document_text($post_id, $info['attachment_id']);
+        }
+    }
+
+    if(!empty($postID_pdfURL))
+    {
+        return $postID_pdfURL;
+    }
+    else
+    {
+        return false;
+    }
+}
 ################# INSTANCIA OS MODULOS SE ESTIVEREM ATIVADOS#################
 instantiate_modules();
 ################################################################################

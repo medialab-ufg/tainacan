@@ -287,7 +287,8 @@ class FormItemController extends Controller {
             case 'publishItems':
                 delete_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betafile');
                 $class = new ObjectSaveValuesModel();
-                if(is_array($data['items'])){
+                if(is_array($data['items']))
+                {
                     foreach ($data['items'] as $item) {
                         $post = array(
                         'ID' => $item,
@@ -297,7 +298,10 @@ class FormItemController extends Controller {
                         //categoria raiz da colecao
                         wp_set_object_terms($item, array((int) $category_root_id), 'socialdb_category_type',true);
                     }
+
+                    $data['postID_pdfURL'] = get_documents_text($data['items']);
                 }
+
                 return json_encode($data);  
             case 'unpublish_item':
                 $post = array(

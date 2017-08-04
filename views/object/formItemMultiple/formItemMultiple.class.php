@@ -469,14 +469,20 @@ class FormItemMultiple extends Model {
                     data: {
                         operation: 'publishItems', 
                         items: ids, 
-                        collection_id: $("#collection_id").val()}
+                        collection_id: $("#collection_id").val()
+                    }
                 }).done(function (result) {
                     hide_modal_main();
-                    $('#form').hide();
+
+                    generate_pdfThumb(result);
+
+                    /*$('#form').hide();
                     $("#tainacan-breadcrumbs").hide();
                     $('#configuration').hide();
                     $('#main_part').show();
-                    $('#display_view_main_page').show();
+                    $('#display_view_main_page').show();*/
+
+                    window.location = window.location.href;
                     wpquery_clean();
                     showAlertGeneral('<?php _e('Success','tainacan') ?>', '<?php _e('Operation was successfully!','tainacan') ?>', 'success');
                 });

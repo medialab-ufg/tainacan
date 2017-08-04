@@ -2974,10 +2974,61 @@ function makeThumb(page) {
     para cada .pdf e então os envia para o servidor para que sejam convertidas em .png e então adicionadas como thumbnail dos
     novos itens.
  */
+function generate_pdfThumb(postID_pdfURL)
+{
+    result = jQuery.parseJSON(postID_pdfURL);
+    result = result.postID_pdfURL;
+
+    itens_id = Object.keys(result).map(function(post_id) {return [post_id, result[post_id]]; });
+
+    let formData = new FormData();
+    let promises = [];
+    promises.push(new Promise(function (right, wrong) {
+        let itemsFetcher = itens_id.map(function(info, index) {
+            let post_id = info[0];
+            let pdf_url = info[1];
+
+            return new Promise(function(resolve, reject) {
+                PDFJS.getDocument(pdf_url).promise.then(function(doc) {
+                    let page = [];
+                    page.push(1); //Get first page
+
+                    return Promise.all(page.map(function(num) {
+                        return doc.getPage(num).then(makeThumb)
+                            .then(function(canvas) {
+                                let img = canvas.toDataURL("image/png");
+
+                                formData.append(post_id, img);
+                                resolve("It's done!");
+                            });
+                    }));
+                });
+            });
+        });
+
+        Promise.all(itemsFetcher).then(function(){
+            $.ajax({
+                url: $("#src").val() + '/controllers/collection/collection_controller.php?operation=pdf_thumbnail',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false
+            }).done(function (result) {
+                elem = jQuery.parseJSON(result);
+                right(elem.msg);
+            });
+        });
+    }));
+
+    Promise.all(promises).then(function(values){
+        return true;
+    });
+}
+
 $(document).on("submit", "#reindexation_form", function (event) {
     event.preventDefault();
-    let formData = new FormData(this);
 
+    let formData = new FormData(this);
     //PDF and office document text
     if(formData.get('pdf_text') || formData.get('office_text') || formData.get('pdf_thumbnail'))
     {
