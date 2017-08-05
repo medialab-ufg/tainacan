@@ -156,17 +156,15 @@
                     pressPDF.text(desc_xDist, desc_yDist+10, descricao);
 
                     var extra_yDist = 0;
-                    if(item_desc) {
-                      if(itm.breaks && itm.breaks > 0) {
-                          if(itm.tbn) {
-                              extra_yDist = itm.breaks * 30;
-                          } else {
-                              extra_yDist = itm.breaks * 20;
-                          }
-                      }
+                    if(item_desc && itm.breaks && itm.breaks > 0) {
+                        if(itm.tbn) {
+                            extra_yDist = itm.breaks * 5;
+                        } else {
+                            extra_yDist = itm.breaks * 2;
+                        }
                     }
 
-                    var desc_height = Math.round(Math.round(pressPDF.getTextDimensions(descricao).h) * 1.5);
+                    var desc_height = Math.round(Math.round(pressPDF.getTextDimensions(descricao).h) * 1.3);
                     if(item_desc) {
                         var base_count = desc_yDist + desc_height + (baseX*2) + extra_yDist;
                     } else {

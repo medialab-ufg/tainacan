@@ -572,7 +572,7 @@ class ObjectController extends Controller {
 
                                                 } else {
                                                     $_curr_term = get_term($curr_term_metas[$curr_meta]);
-                                                    $_pair = ['meta' => $_curr_term->name , 'value' => "--__", 'is_submeta' => true, 'meta_id' => $_curr_term->term_id];
+                                                    $_pair = ['meta' => $_curr_term->name , 'value' => "----", 'is_submeta' => true, 'meta_id' => $_curr_term->term_id];
 
                                                     $post_val = $this->get_tab_name(intval($s_meta));
                                                     if( !is_null($post_val) && $post_val ) {
@@ -640,9 +640,11 @@ class ObjectController extends Controller {
                                                 $_fmt_ID = explode("_", $_fmt_ID)[0];
 
                                             $previous_term_id = 0;
-                                            if($prop[$i][0]['type'] == "term") {
+                                            if($prop[$i][0]['type'] === "term") {
                                                 $previous_term_id = $final_val;
                                                 $final_val = get_term($final_val)->name;
+                                            } else if($prop[$i][0]['type'] === "object") {
+                                                $final_val = get_post($final_val)->post_title;
                                             }
 
                                             $_pair = [ 'meta' => $_meta_header_->name, 'value' => $final_val,
@@ -772,7 +774,6 @@ class ObjectController extends Controller {
                                                 if($check) {
                                                     $par_vals = get_post_meta($object_id,"socialdb_property_helper_" . $_meta_parent_,true);
                                                     if(!empty($par_vals)) {
-                                                        // print_r($_pair['meta'] . " => " . $_pair['value'] . " :: " . $_pair['meta_id']);
                                                         $par_arr = unserialize($par_vals);
                                                         $_current = $par_arr[0][$_pair['meta_id']];
                                                         if( is_array($_current) && !empty($_current) ) {
