@@ -1987,6 +1987,7 @@ function registerUser(path) {
     }).done(function (r) {
         resetHomeStyleSettings();
         $('#main_part').hide();
+        $('.menu-ibram').hide();
         $('#configuration').html(r).show();
     });
 }
