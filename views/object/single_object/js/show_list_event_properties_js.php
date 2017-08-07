@@ -20,8 +20,8 @@
     }
 
     function edit_data_property(property_id, object_id) {
-        $("#single_cancel_" + property_id + "_" + object_id).show();
         $("#single_edit_" + property_id + "_" + object_id).hide();
+        $("#single_cancel_" + property_id + "_" + object_id).show();
         $("#single_save_" + property_id + "_" + object_id).show();
         $("#single_property_value_" + property_id + "_" + object_id).prop({
             disabled: false

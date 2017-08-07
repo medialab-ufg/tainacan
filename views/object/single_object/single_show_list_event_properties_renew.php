@@ -215,20 +215,21 @@ if (isset($property_data)):
             <!--- Fim: Mostra o valor do metadado----->
             <!-- Widgets para edicao -->
                 <?php
+
                   if(has_action('modificate_single_item_properties_data')){
                        do_action('modificate_single_item_properties_data',$property,$object_id);
-                  }else if ($property['type'] === 'text') { ?>
+                  }else if ($property['type'] === 'text') {?>
                     <input style="display: none;" disabled="disabled" value="<?php if ($property['metas']['value']) echo $property['metas']['value'][0]; ?>" type="text" id="single_property_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>" class="form-control" name="socialdb_property_<?php echo $property['id']; ?>" <?php
                     if (!$property['metas']['socialdb_property_required']): echo 'required="required"';
                     endif;
                     ?>>
-                <?php } elseif ($property['type'] === 'textarea') { ?>
+                <?php } elseif ($property['type'] === 'textarea') {?>
                     <textarea style="display: none;" disabled="disabled" id="single_property_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>" class="form-control" name="socialdb_property_<?php echo $property['id']; ?>" <?php
                     if (!$property['metas']['socialdb_property_required']): echo 'required="required"';
                     endif;
                     ?>><?php if ($property['metas']['value']) echo $property['metas']['value'][0]; ?>
                     </textarea>
-              <?php }elseif ($property['type'] === 'date'&&!has_action('modificate_single_item_properties_data')) {
+              <?php }elseif ($property['type'] === 'date' && !has_action('modificate_single_item_properties_data')) {
                   ?>
                     <input style="display: none;"
                            disabled="disabled"
@@ -245,6 +246,10 @@ if (isset($property_data)):
                     endif;
                     ?>>
                <?php } ?>
+                <input style="display: none;" disabled="disabled" value="<?php if ($property['metas']['value']) echo $property['metas']['value'][0]; ?>" id="single_property_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>" type="text" class="form-control" name="socialdb_property_<?php echo $property['id']; ?>" <?php
+                if (!$property['metas']['socialdb_property_required']): echo 'required="required"';
+                endif;
+                ?>>
                 <input style="display: none;" type="hidden" id="single_property_<?php echo $property['id']; ?>_<?php echo $object_id; ?>_value_before" name="property_<?php echo $property['id']; ?>_<?php echo $object_id; ?>_value_before" value="<?php if (is_array($property['metas']['value'])) echo implode(',', $property['metas']['value']); ?>">
             </p>
 
