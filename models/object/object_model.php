@@ -2403,6 +2403,22 @@ class ObjectModel extends Model {
             ];
         }
 
+        return [];
+    }
+
+    public function getPDFBase($post_id) {
+        $obj = get_post($post_id);
+
+        if( is_object($obj) ) {
+            return [
+                "author" => $this->user_model->get_user($obj->post_author)['name'],
+                "title" => $obj->post_title,
+                "desc" => $obj->post_content,
+                "output" => substr($obj->post_name, 0, 15) . mktime(),
+                "data_c" => explode(" ", $obj->post_date)[0]
+            ];
+        }
+
         return false;
     }
 

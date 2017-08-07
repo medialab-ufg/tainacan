@@ -468,19 +468,9 @@ class ObjectController extends Controller {
                 }
                 break;
             case 'press_item':
-                $user_model = new UserModel();
                 $object_id = $data['object_id'];
-                $_object = get_post($object_id);
-
-                $press = [
-                    "author" => $user_model->get_user($_object->post_author)['name'],
-                    "title" => $_object->post_title,
-                    "desc" => $_object->post_content,
-                    "output" => substr($_object->post_name, 0, 15) . mktime(),
-                    "data_c" => explode(" ", $_object->post_date)[0],
-                    "object" => get_post($object_id),
-                    "breaks" => $this->get_item_line_breaks($_object->post_content) // Pegar # de brs
-                ];
+                $press = $object_model->getPDFBase($object_id);
+                $press["breaks"] = $this->get_item_line_breaks($press["desc"]); // Pegar # de brs
 
                 $_item_meta = get_post_meta($object_id);
                 if ($_item_meta['_thumbnail_id']) {
@@ -504,253 +494,136 @@ class ObjectController extends Controller {
                     }
                 }
 
-                $total_index = 0;
-                $_to_be_removed = [];
                 $ord_list = [];
                 foreach ($_item_meta as $meta => $val) {
                     $check_typeof_meta = explode( "_", $meta);
-                    $is_compound_meta = false;
 
-                    if( count($check_typeof_meta) == 4 && ctype_digit($check_typeof_meta[3]) ) {
-                        $last_meta_id = intval($check_typeof_meta[3]);
-                        if( $last_meta_id >= 0 && $last_meta_id <= 24 ) {
-                            $is_compound_meta = true;
-                        }
-                    }
+                    if ( is_string($meta) && ($check_typeof_meta[0] . $check_typeof_meta[1]) == "socialdbproperty" ) {
+                        $prop = unserialize( get_post_meta($object_id, $meta)[0] );
+                        $_meta_header_ = get_term($check_typeof_meta[3]);
 
-                    if (is_string($meta)) {
-                        $pcs = explode("_", $meta);
-                        if (($pcs[0] . $pcs[1]) == "socialdbproperty") {
-                            $col_meta = get_term($pcs[2]);
-                            if (!is_null($col_meta) && is_object($col_meta)) {
-                                if( 4 === count($pcs) && is_string($_item_meta[$meta][0]) ) {
-                                    $_sub_metas = explode(",", $_item_meta[$meta][0]);
-                                    $_current_term_id = $col_meta->term_id;
-                                    $curr_term_metas = explode(",",get_term_meta($_current_term_id,'socialdb_property_compounds_properties_id', true));
+                        if( is_array($prop) && count($prop) > 0 ) {
+                            for ($i = 0; $i < count($prop); $i++) {
+                                if(array_key_exists('0', $prop[$i])) {
+                                    $ff_ID = $prop[$i][0]['values']['0'];
+                                    $_meta_ = $this->sdb_get_post_meta($ff_ID);
+                                    $final_val = $_meta_->meta_value;
 
-                                    if(is_array($_sub_metas)) {
-                                        $final_title = $col_meta->name;
-                                        // $press['meta_ids'][] = $_current_term_id;
-                                        $_pair = ['meta' => $final_title, 'value'=> '_____________________________', 'submeta_header' => true, 'header_idx' => $total_index, 'meta_id' => $_current_term_id, 'meta_tab' => $tabs['organize'][$_current_term_id]];
-                                        $press['inf'][] = $_pair;
-                                        // $_pair['meta_id']] = $_pair;
+                                    $_fmt_ID = str_replace("socialdb_property_", "", $_meta_->meta_key);
+                                    if( strpos($_fmt_ID,"_cat") )
+                                        $_fmt_ID = explode("_", $_fmt_ID)[0];
 
-                                        $current_submeta_vals = [];
-                                        $curr_meta = 0;
-                                        foreach($_sub_metas as $s_meta) {
-                                            $_meta_ = get_metadata_by_mid('post', $s_meta);
-                                            if(ctype_digit($s_meta)) {
-                                                if(is_object($_meta_)) {
-                                                    $_title_id = explode("_", $_meta_->meta_key);
-                                                    $_title = get_term($_title_id[2]);
-                                                    $v = $_meta_->meta_value;
-                                                    $_pair = ['meta' => $_title->name , 'value' => $v, 'is_submeta' => true, 'meta_id' => $_title->term_id];
-
-                                                    $_meta_type = get_term_meta($_title->term_id, 'socialdb_property_data_widget', true);
-
-                                                    if(is_numeric($v) && $_meta_type !== "numeric" ) {
-                                                        $relation_meta_post = get_post($v);
-                                                        if( !is_null($relation_meta_post) ) {
-                                                            $_pair['value'] = $relation_meta_post->post_title;
-                                                        }
-                                                    }
-
-                                                    if( $_pair['value'] != "" && ! empty($_pair['value']) ) {
-                                                        $press['inf'][] = $_pair;
-                                                        $aux_arr[] = $_title->name . "__" . $v; // $ord_list[$_pair['meta_id']] = $_pair;
-                                                    }
-
-                                                    if( !empty($_pair['value']) && !is_null($_pair['value'])) {
-                                                        array_push($current_submeta_vals, $_pair['value']);
-                                                    }
-
-                                                    if( $is_compound_meta && empty($current_submeta_vals) && $last_meta_id > 0) {
-                                                        unset($press['inf'][$total_index]);
-                                                    }
-
-                                                    $press['meta_ids'][] = $_title->term_id;
-
-                                                } else {
-                                                    $_curr_term = get_term($curr_term_metas[$curr_meta]);
-                                                    $_pair = ['meta' => $_curr_term->name , 'value' => "----", 'is_submeta' => true, 'meta_id' => $_curr_term->term_id];
-
-                                                    $post_val = $this->get_tab_name(intval($s_meta));
-                                                    if( !is_null($post_val) && $post_val ) {
-                                                        $_pair['value'] = $post_val;
-                                                    }
-
-                                                    $press['meta_ids'][] = $_curr_term->term_id;
-                                                    $press['inf'][] = $_pair; // $ord_list[$_pair['meta_id']] = $_pair;
-                                                }
-                                            } else {
-                                                $_title_id = explode("_", $_meta_->meta_key);
-                                                $_title = get_term($_title_id[2])->name;
-
-                                                $cat_check = explode("_", $s_meta);
-                                                if(count($cat_check) == 2 && $cat_check[1] === "cat") {
-                                                    $compounds_metas_titles = get_term_meta($col_meta->term_id, 'socialdb_property_compounds_properties_id', true);
-                                                    $titles_ids_arr = explode(",", $compounds_metas_titles);
-                                                    $string_title = get_term($titles_ids_arr[$curr_meta])->name;
-                                                    $_term_name_ = get_term(intval($cat_check[0]))->name;
-                                                    $_pair = ['meta' => $string_title, 'value' => $_term_name_, 'is_submeta' => true, 'meta_id' => get_term($titles_ids_arr[$curr_meta])->term_id];
-
-                                                    $press['inf'][] = $_pair;  // $ord_list[$_pair['meta_id']] = $_pair;
-                                                    $press['meta_ids'][] = get_term($titles_ids_arr[$curr_meta])->term_id;
-                                                    $aux_arr[] = $_title . "__" . $_term_name_;
-                                                }
-                                            }
-
-                                            $curr_meta++;
-                                        } // submetas loop
-                                    }
-                                } else {
-                                    $_pair = ['meta' => $col_meta->name, 'value' => $val[0], 'meta_id' => $col_meta->term_id];
-
-                                    $_meta_type = get_term_meta($col_meta->term_id, 'socialdb_property_data_widget', true);
-                                    if("date" === $_meta_type) {
-                                        $_pair['value'] = date('d/m/Y', strtotime($_pair['value']));
-                                    } else if ("textarea" === $_meta_type) {
-                                        $_pair["meta_breaks"] = $this->get_item_line_breaks($val[0]);
+                                    $previous_term_id = 0;
+                                    if($prop[$i][0]['type'] === "term") {
+                                        $previous_term_id = $final_val;
+                                        $final_val = get_term($final_val)->name;
+                                    } else if($prop[$i][0]['type'] === "object") {
+                                        $final_val = get_post($final_val)->post_title;
                                     }
 
-                                    if(is_numeric($val[0]) && "numeric" !== $_meta_type) {
-                                        $_check_text = get_post($val[0]);
-                                        if( !is_null($_check_text)) {
-                                            if( in_array($_check_text->post_title, $_item_meta['socialdb_object_commom_values']) ) {
-                                                $_pair['value'] = $_check_text->post_title;
+                                    $_pair = [ 'meta' => $_meta_header_->name, 'value' => $final_val,
+                                        'meta_id' => $_fmt_ID, 'meta_breaks' => $this->format_to_type($_fmt_ID, $final_val)];
+
+                                    $_compound_check = get_term_meta($_fmt_ID, "socialdb_property_compounds_properties_id", true);
+                                    if( empty($_compound_check) ) {
+                                        $chk_compound_child = unserialize(get_term_meta($_fmt_ID, "socialdb_property_is_compounds", true));
+                                        if(is_array($chk_compound_child)) {
+                                            if( isset( $tabs['organize'][key($chk_compound_child)] ) && ($tabs['organize'][key($chk_compound_child)] != "default") ) {
+                                                $_pair['submeta_tab_parent'] = key($chk_compound_child);
+                                                $_pair['is_submeta'] = true;
                                             }
+                                        } else {
+                                            $_pair['is_submeta'] = false;
                                         }
                                     }
-                                    $press['meta_ids'][] = $col_meta->term_id;
-                                    $press['inf'][] = $_pair;  // $ord_list[$_pair['meta_id']] = $_pair;
-                                }
-                            } else {
-                                $prop = unserialize(get_post_meta($object_id, $meta)[0]);
-                                $_meta_header_ = get_term($pcs[3]);
 
-                                if( is_array($prop) && count($prop) > 0 ) {
-                                    for ($i = 0; $i < count($prop); $i++) {
-                                        if(array_key_exists('0', $prop[$i])) {
-                                            $ff_ID = $prop[$i][0]['values']['0'];
-                                            $_meta_ = $this->sdb_get_post_meta($ff_ID);
-                                            $final_val = $_meta_->meta_value;
+                                    $_meta_category_metas_ = get_term_meta( (int) $previous_term_id,'socialdb_category_property_id');
+                                    if(is_array($_meta_category_metas_) && count($_meta_category_metas_) > 0) {
+                                        foreach ($_meta_category_metas_ as $id) {
+                                            $extra_helper = "socialdb_property_helper_${id}";
+                                            $nome = get_term_by("id",$id,"socialdb_property_type");
 
-                                            $_fmt_ID = str_replace("socialdb_property_", "", $_meta_->meta_key);
-                                            if( strpos($_fmt_ID,"_cat") )
-                                                $_fmt_ID = explode("_", $_fmt_ID)[0];
+                                            $helper = get_post_meta($object_id, $extra_helper);
+                                            if(is_array($helper)) {
+                                                $extra = unserialize(($helper[0]));
+                                                if(is_array($extra) && !empty($extra)) {
+                                                    $extra_id = $extra[0][0]["values"][0];
 
-                                            $previous_term_id = 0;
-                                            if($prop[$i][0]['type'] === "term") {
-                                                $previous_term_id = $final_val;
-                                                $final_val = get_term($final_val)->name;
-                                            } else if($prop[$i][0]['type'] === "object") {
-                                                $final_val = get_post($final_val)->post_title;
-                                            }
+                                                    if( is_null($extra_id) && is_array($extra[0]) && !empty($extra[0]) ) {
+                                                        $_compound_check = get_term_meta($id, "socialdb_property_compounds_properties_id", true);
+                                                        $is_compound = !empty($_compound_check);
+                                                        if($is_compound) {
+                                                            $_pair['extras'][] = ['meta' => $nome->name, 'value' => '_____________________________', 'meta_id' => $id];
 
-                                            $_pair = [ 'meta' => $_meta_header_->name, 'value' => $final_val,
-                                                'meta_id' => $_fmt_ID, 'meta_breaks' => $this->format_to_type($_fmt_ID, $final_val)];
+                                                            $count = 1;
+                                                            foreach ($extra[0] as $child_id => $extra_children) {
+                                                                $child_title = get_term($child_id)->name;
+                                                                $_val_ = ".";
+                                                                $set_val = $this->sdb_get_post_meta($extra_children["values"][0]);
 
-                                            $_compound_check = get_term_meta($_fmt_ID, "socialdb_property_compounds_properties_id", true);
-                                            if( empty($_compound_check) ) {
-                                                $chk_compound_child = unserialize(get_term_meta($_fmt_ID, "socialdb_property_is_compounds", true));
-                                                if(is_array($chk_compound_child)) {
-                                                    if( isset( $tabs['organize'][key($chk_compound_child)] ) && ($tabs['organize'][key($chk_compound_child)] != "default") ) {
-                                                        $_pair['submeta_tab_parent'] = key($chk_compound_child);
-                                                        $_pair['is_submeta'] = true;
-                                                    }
-                                                } else {
-                                                    $_pair['is_submeta'] = false;
-                                                }
-                                            }
-
-                                            $_meta_category_metas_ = get_term_meta( (int) $previous_term_id,'socialdb_category_property_id');
-                                            if(is_array($_meta_category_metas_) && count($_meta_category_metas_) > 0) {
-                                                foreach ($_meta_category_metas_ as $id) {
-                                                    $extra_helper = "socialdb_property_helper_${id}";
-                                                    $nome = get_term_by("id",$id,"socialdb_property_type");
-
-                                                    $helper = get_post_meta($object_id, $extra_helper);
-                                                    if(is_array($helper)) {
-                                                        $extra = unserialize(($helper[0]));
-                                                        if(is_array($extra) && !empty($extra)) {
-                                                            $extra_id = $extra[0][0]["values"][0];
-
-                                                            if( is_null($extra_id) && is_array($extra[0]) && !empty($extra[0]) ) {
-                                                                $_compound_check = get_term_meta($id, "socialdb_property_compounds_properties_id", true);
-                                                                $is_compound = !empty($_compound_check);
-                                                                if($is_compound) {
-                                                                    $_pair['extras'][] = ['meta' => $nome->name, 'value' => '_____________________________', 'meta_id' => $id];
-
-                                                                    $count = 1;
-                                                                    foreach ($extra[0] as $child_id => $extra_children) {
-                                                                        $child_title = get_term($child_id)->name;
-                                                                        $_val_ = ".";
-                                                                        $set_val = $this->sdb_get_post_meta($extra_children["values"][0]);
-
-                                                                        if($extra_children["type"] === "object") {
-                                                                            $_val_ = get_post($set_val->meta_value)->post_title;
-                                                                        } else if($extra_children["type"] === "term") {
-                                                                            $_val_ = get_term($set_val->meta_value)->name;
-                                                                        }
-
-                                                                        $_pair['extras'][] = ['meta' => $child_title, 'value' => $_val_, 'meta_id' => $child_id, 'extra_submeta' => true, 'extra_padding' => ($count*20)];
-                                                                        $count++;
-                                                                    }
+                                                                if($extra_children["type"] === "object") {
+                                                                    $_val_ = get_post($set_val->meta_value)->post_title;
+                                                                } else if($extra_children["type"] === "term") {
+                                                                    $_val_ = get_term($set_val->meta_value)->name;
                                                                 }
-                                                            } else {
-                                                                $extra_res = $this->sdb_get_post_meta($extra_id);
-                                                                $_pair['extras'][] = ['meta' => $nome->name, 'value' => $extra_res->meta_value, 'meta_id' => $id];
+
+                                                                $_pair['extras'][] = ['meta' => $child_title, 'value' => $_val_, 'meta_id' => $child_id, 'extra_submeta' => true, 'extra_padding' => ($count*20)];
+                                                                $count++;
                                                             }
                                                         }
+                                                    } else {
+                                                        $extra_res = $this->sdb_get_post_meta($extra_id);
+                                                        $_pair['extras'][] = ['meta' => $nome->name, 'value' => $extra_res->meta_value, 'meta_id' => $id];
                                                     }
                                                 }
                                             }
-
-                                            $ord_list[$_pair['meta_id']] = $_pair;
-                                            $press['set'][] = $_pair;
-
-                                        } else {
-                                            $_pair = ['meta' => $_meta_header_->name, 'meta_id' => $_meta_header_->term_id,
-                                                'value' => '_____________________________', 'submeta_header' => true ];
-
-                                            $ord_list[$_pair['meta_id']] = $_pair;
-                                            $press['set'][] = $_pair;
-
-                                            foreach ($prop[$i] as $child_id => $child_data) {
-                                                $child_term = get_term($child_id);
-                                                $main_val = $child_data["values"][0];
-                                                $m_val = $this->sdb_get_post_meta($main_val);
-                                                $final_val = $m_val->meta_value;
-
-                                                if( "term" == $child_data["type"] ) {
-                                                    $m_val = get_term($final_val);
-                                                    $final_val = $m_val->name;
-                                                }
-
-                                                $_pair = [ 'meta' => $child_term->name, 'value' => $final_val, 'meta_id' => $child_id,
-                                                    'is_submeta' => true, 'meta_breaks' => $this->format_to_type($child_id, $final_val) ];
-                                                
-                                                $ord_list[$_pair['meta_id']] = $_pair;
-                                                $press['set'][] = $_pair;
-                                            }
                                         }
                                     }
+
+                                    $ord_list[$_pair['meta_id']] = $_pair;
+                                    $press['set'][] = $_pair;
+
+                                } else {
+                                    $_pair = ['meta' => $_meta_header_->name, 'meta_id' => $_meta_header_->term_id,
+                                        'value' => '_____________________________', 'submeta_header' => true ];
+
+                                    $ord_list[$_pair['meta_id']] = $_pair;
+                                    $press['set'][] = $_pair;
+
+                                    foreach ($prop[$i] as $child_id => $child_data) {
+                                        $child_term = get_term($child_id);
+                                        $main_val = $child_data["values"][0];
+                                        $m_val = $this->sdb_get_post_meta($main_val);
+                                        $final_val = $m_val->meta_value;
+
+                                        if( "term" == $child_data["type"] ) {
+                                            $m_val = get_term($final_val);
+                                            $final_val = $m_val->name;
+                                        }
+
+                                        $_pair = [ 'meta' => $child_term->name, 'value' => $final_val, 'meta_id' => $child_id,
+                                            'is_submeta' => true, 'meta_breaks' => $this->format_to_type($child_id, $final_val) ];
+                                                
+                                        $ord_list[$_pair['meta_id']] = $_pair;
+                                        $press['set'][] = $_pair;
+                                    }
+                                }
+                            }
                                 
-								// Apenas se o valor dos metadados estiverem vazios
-                                } else if( !is_null($pcs[3]) && ctype_digit($pcs[3]) ) {
-                                    $header = get_term($pcs[3]);
-                                    $_compound_check = get_term_meta($header->term_id, "socialdb_property_compounds_properties_id", true);
-                                    $is_compound = !empty($_compound_check);
+                            // Apenas se o valor dos metadados estiverem vazios
+                        } else if( !is_null($check_typeof_meta[3]) && ctype_digit($check_typeof_meta[3]) ) {
+                            $_compound_check = get_term_meta($_meta_header_->term_id, "socialdb_property_compounds_properties_id", true);
+                            $is_compound = !empty($_compound_check);
 
-                                    $_pair = ['meta' => $header->name, 'value' => '--', 'meta_id' => $header->term_id];
+                            $_pair = ['meta' => $_meta_header_->name, 'value' => '--', 'meta_id' => $_meta_header_->term_id];
 
-                                    if($is_compound) {
-                                        $_pair['value']          = '_____________________________';
-                                        $_pair['submeta_header'] = true;
-                                        $_pair['children']       = $_compound_check;
-                                    } else {
-                                        $chk_compound_child = unserialize(get_term_meta($header->term_id, "socialdb_property_is_compounds", true));
-                                        if(is_array($chk_compound_child)) {
+                            if($is_compound) {
+                                $_pair['value']          = '_____________________________';
+                                $_pair['submeta_header'] = true;
+                                $_pair['children']       = $_compound_check;
+                            } else {
+                                $chk_compound_child = unserialize(get_term_meta($_meta_header_->term_id, "socialdb_property_is_compounds", true));
+                                if(is_array($chk_compound_child)) {
                                             if( isset( $tabs['organize'][key($chk_compound_child)] ) && ($tabs['organize'][key($chk_compound_child)] != "default") ) {
                                                 $_pair['submeta_tab_parent'] = key($chk_compound_child);
                                                 $_parent_set_values = get_post_meta($object_id,"socialdb_property_helper_" . $_pair['submeta_tab_parent'],true);
@@ -792,30 +665,21 @@ class ObjectController extends Controller {
 
                                             $_pair['is_submeta'] = true;
                                         }
-                                    }
-
-                                    $ord_list[$_pair['meta_id']] = $_pair;
-                                    $press['set'][] = $_pair;
-                                }
                             }
+
+                            $ord_list[$_pair['meta_id']] = $_pair;
+                            $press['set'][] = $_pair;
                         }
                     }
-
-                    if($is_compound_meta && empty($current_submeta_vals) && $last_meta_id > 0) {
-                        array_push($_to_be_removed, $total_index);
-                    }
-                    $total_index++;
                 }
 
-                if( ! is_null($press['meta_ids']) ) {
+                if(!is_null($press['meta_ids']))
                     $press['meta_ids'] = array_unique($press['meta_ids']);
-                }
 
                 $tabs_unodr = [];
                 if($press['set']) {
                     foreach ($press['set'] as $set_info) {
                         $mID = $set_info['meta_id'];
-
                         if( isset( $tabs['organize'][$mID]) && ($tabs['organize'][$mID] != "default") && ctype_digit($tabs['organize'][$mID]) ) {
                             if( !isset($set_info['submeta_header']) ) {
                                 array_push($tabs_unodr, $set_info);
@@ -829,22 +693,20 @@ class ObjectController extends Controller {
                                     array_push( $tabs_unodr, $set_info);
                                 }
                             }
-
                         }
                     }
                 }
 
                 $final_ordered = [];
-                foreach ( $press['meta_ids_ord'] as $mio ) {
+                foreach ($press['meta_ids_ord'] as $mio) {
                     $format_id = str_replace("compounds-", "", $mio);
                     if(array_key_exists($format_id, $ord_list)) {
                         array_push($final_ordered, $ord_list[$format_id]);
                     }
                 }
 
-                if(!empty($tabs_unodr)) {
+                if(!empty($tabs_unodr))
                     $press['set'] = array_merge($final_ordered, $tabs_unodr);
-                };
 
                 return json_encode($press);
 
