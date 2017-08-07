@@ -7,10 +7,10 @@ class TainacanApi extends WP_REST_Controller {
     function __construct() {
         $this->base['collections'] = '/collections';
         $this->base['collection'] = '/collections/(?P<id>[\d]+)';
-        $this->base['objects'] = '/collections/(?P<id>[\d]+)/objects';
-        $this->base['object'] = '/collections/(?P<id>[\d]+)/objects/(?P<id>[\d]+)';
+        $this->base['items'] = '/collections/(?P<id>[\d]+)/items';
+        $this->base['item'] = '/collections/(?P<id>[\d]+)/items/(?P<post>[\d]+)';
         $this->base['metadatas'] = '/collections/(?P<id>[\d]+)/metadata';
-        $this->base['metadata'] = '/collections/(?P<id>[\d]+)/metadata/(?P<id>[\d]+)';
+        $this->base['metadata'] = '/collections/(?P<id>[\d]+)/metadata/(?P<meta>[\d]+)';
         $this->base['repository'] = '/repository';
         $this->base['repository-objects'] = '/repository/objects';
         $this->base['repository-metadata'] = '/repository/metadata';
@@ -29,6 +29,33 @@ class TainacanApi extends WP_REST_Controller {
             array(
                 'methods' => WP_REST_Server::READABLE,
                 'callback' => array(CollectionsApi, 'get_collections'),
+                'permission_callback' => array($this, 'get_items_permissions_check'),
+                'args' => array(
+                ),
+            )
+        ));
+        register_rest_route($namespace, $this->base['collection'], array(
+            array(
+                'methods' => WP_REST_Server::READABLE,
+                'callback' => array(CollectionsApi, 'get_collection'),
+                'permission_callback' => array($this, 'get_items_permissions_check'),
+                'args' => array(
+                ),
+            )
+        ));
+        register_rest_route($namespace, $this->base['items'], array(
+            array(
+                'methods' => WP_REST_Server::READABLE,
+                'callback' => array(CollectionsApi, 'get_collection_items'),
+                'permission_callback' => array($this, 'get_items_permissions_check'),
+                'args' => array(
+                ),
+            )
+        ));
+        register_rest_route($namespace, $this->base['item'], array(
+            array(
+                'methods' => WP_REST_Server::READABLE,
+                'callback' => array(CollectionsApi, 'get_collection_item'),
                 'permission_callback' => array($this, 'get_items_permissions_check'),
                 'args' => array(
                 ),
