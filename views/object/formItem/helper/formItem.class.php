@@ -902,13 +902,13 @@ class FormItem extends Model {
                         cancelButtonText: "Apenas voltar",
                     },
                     function (isConfirm) {
-                        $('#form').hide();
-                        $("#tainacan-breadcrumbs").hide();
-                        $('#configuration').hide();
-                        $('#main_part').show();
-                        $('#display_view_main_page').show();
-                        $("#container_three_columns").removeClass('white-background');
-                        $('#menu_object').show();
+//                        $('#form').hide();
+//                        $("#tainacan-breadcrumbs").hide();
+//                        $('#configuration').hide();
+//                        $('#main_part').show();
+//                        $('#display_view_main_page').show();
+//                        $("#container_three_columns").removeClass('white-background');
+//                        $('#menu_object').show();
                         if (isConfirm) {
                             $.ajax({
                                 url: $('#src').val() + '/controllers/object/object_controller.php',
@@ -920,6 +920,7 @@ class FormItem extends Model {
                                 // }, 900);  
                             });
                         }
+                        window.location = '<?php echo get_the_permalink($this->collection_id) ?>'
                     });
                 }
 

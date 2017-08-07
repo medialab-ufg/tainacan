@@ -822,8 +822,11 @@ class ObjectController extends Controller {
             //temp file
             case 'delete_temporary_object':
                 if (isset($data['delete_draft'])) {
+                    $data['ID'] = get_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext',true);
                     delete_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext');
                     delete_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betafile');
+                    if(is_numeric($data['ID']))
+                        return $object_model->delete($data);
                 }
                 if ($data['ID'] && get_post($data['ID'])->post_status === 'betatext'):
                     $post = array(
