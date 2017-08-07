@@ -62,6 +62,7 @@ if (jQuery)
                                 // Detect mouse position
                                 var d = {}, x, y;
                                 if (self.innerHeight) {
+
                                     d.pageYOffset = self.pageYOffset;
                                     d.pageXOffset = self.pageXOffset;
                                     d.innerHeight = self.innerHeight;
@@ -78,8 +79,15 @@ if (jQuery)
                                     d.innerHeight = document.body.clientHeight;
                                     d.innerWidth = document.body.clientWidth;
                                 }
+
                                 (e.pageX) ? x = e.pageX : x = e.clientX + d.scrollLeft;
                                 (e.pageY) ? y = e.pageY : y = e.clientY + d.scrollTop;
+
+                                let categorias = window.location.href.split('/');
+                                if(categorias[categorias.length - 2] === 'categorias' && categorias[categorias.length - 3] === 'admin')
+                                {
+                                    y -= 233;
+                                }
 
                                 // Show the menu
                                 $(document).unbind('click');
@@ -200,8 +208,10 @@ if (jQuery)
                     d.innerHeight = document.body.clientHeight;
                     d.innerWidth = document.body.clientWidth;
                 }
+
                 (e.pageX) ? x = e.pageX : x = e.clientX + d.scrollLeft;
                 (e.pageY) ? y = e.pageY : y = e.clientY + d.scrollTop;
+
 
                 // Show the menu
                 $(document).unbind('click');
