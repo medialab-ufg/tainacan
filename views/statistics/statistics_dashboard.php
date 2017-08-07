@@ -102,6 +102,7 @@ include_once('js/dashboard_js.php');
       </table>
     </div>
 
+    <!-- Widget Perfis Usuário -->
     <div id="dash-perfis-usuario" class="bgc-widget margin-t10px col-md-5 col-sm-5 col-lg-5 table-responsive">
       <table class="table">
         <thead>

@@ -448,8 +448,8 @@ class ViewHelper {
         $current_step = 'sa';
         $path = get_template_directory_uri();
         ?>
-        <div class="col-md-12 no-padding" id="collection-steps">
-            <ul class="col-md-10">
+        <div class="row" id="collection-steps">
+            <ul class="row">
                 <li id="dashboard" class="col-md-2 <?php $this->is_current($current_step,'config'); ?>">
                     <a onclick="showDashboard(<?php get_template_directory_uri() ?>)">
                         <h4> <?php _e('Dashboard', 'tainacan')?> </h4>
