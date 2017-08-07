@@ -3270,7 +3270,7 @@ function get_item_thumb_image($item_id, $size="thumbnail") {
 
             $html_image = $DOM->asXML();
         }
-        
+
         return $html_image;
     }
 }
