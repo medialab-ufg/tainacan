@@ -72,11 +72,13 @@ class site_map extends WP_Widget {
                     echo '<li><a class="" href="'. $option2_url .'">'. $option2_title .'</a></li>';
                 }
             }
-            echo '</div>
-                    <div style="padding-left: 0px;" class="col-md-6">
-                        <li><a class="" onclick="redirectAdvancedSearch(false)" href="javascript:void(0)">'. __('Coleções e busca').'</a></li>
-                        <li><a target="_blank" href="'. $handbook .'">'. __('Manual') .'</a></li>
-                    ';
+            
+            if(!has_filter('tainacan_show_restore_options'))
+                echo '</div>
+                        <div style="padding-left: 0px;" class="col-md-6">
+                            <li><a class="" onclick="redirectAdvancedSearch(false)" href="javascript:void(0)">'. __('Coleções e busca').'</a></li>
+                            <li><a target="_blank" href="'. $handbook .'">'. __('Manual') .'</a></li>
+                        ';
             if ($option3_title && $option3_url){
                 if($option3_new_page) {
                     echo '<li><a class="" target="_blank" href="' . $option3_url . '">' . $option3_title . '</a></li>';

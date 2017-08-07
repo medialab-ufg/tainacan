@@ -63,12 +63,11 @@ class ObjectClass extends FormItem {
             <h6><b><?php _e('Related items', 'tainacan') ?></b></h6>
             <?php $this->insert_button_add_other_collection($property, $this->item_id, $this->collection_id) ?>
             <span id="no_results_property_<?php echo $compound_id; ?>_<?php echo $property_id; ?>_<?php echo $index_id; ?>">
-                <?php if (!$autoValidate): // verifico se ele esta na lista de objetos da colecao    ?>    
                 <input type="text" 
                        disabled="disabled"
+                       <?php echo (!$autoValidate) ? '' : ' style="display:none;" '  ?>
                        placeholder="<?php _e('No registers', 'tainacan') ?>"
                        class="form-control" >
-                <?php endif;  ?>
             </span>
             <span id="results_property_<?php echo $compound_id; ?>_<?php echo $property_id; ?>_<?php echo $index_id; ?>">
                 <ul>
@@ -281,7 +280,7 @@ class ObjectClass extends FormItem {
 
             //remove no formulario de fato
             function original_remove_in_item_value_compound_<?php echo $compound_id ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>(id,seletor){
-                $(seletor).parent().remove();
+                $(seletor).remove();
                 $.ajax({
                     url: $('#src').val() + '/controllers/object/form_item_controller.php',
                     type: 'POST',
@@ -297,9 +296,9 @@ class ObjectClass extends FormItem {
                         reverse: $('#reverse_<?php echo $compound_id ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>').val()
                     }
                 });
-                if($('#results_property_<?php echo $compound_id; ?>_<?php echo $propert_id?>_<?php echo $index_id; ?> ul li').length==0){
+                if($('#results_property_<?php echo $compound_id; ?>_<?php echo $propert_id?>_<?php echo $index_id; ?> ul li').length===0){
                      validateFieldsMetadataText('','<?php echo $compound_id ?>','<?php echo $propert_id ?>','<?php echo $index_id ?>');
-                     $('#no_results_property_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>').show();
+                    $('#no_results_property_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>').show();
                 }
             }
             //adiciona no formulario de fato

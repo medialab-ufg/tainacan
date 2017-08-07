@@ -1414,7 +1414,7 @@ class Model {
      * @return json com o id e o nome de cada objeto
      * @author Eduardo Humberto
      */
-    public function get_objects_by_property_json_advanced_search($data,$is_search = false) {
+    public function get_objects_by_property_json_advanced_search($data,$is_search = false,$where = " p.post_status like 'publish'  AND ") {
         global $wpdb;
         $wp_posts = $wpdb->prefix . "posts";
         $term_relationships = $wpdb->prefix . "term_relationships";
@@ -1422,16 +1422,16 @@ class Model {
         if ($data['collection_id'] != get_option('collection_root_id') && (!$mask || $mask!=='repository_key')) {
             $category_root_id = $this->get_collection_category_root($data['collection_id']);
             $category_root_id = get_term_by('id', $category_root_id, 'socialdb_category_type');
-            $where = "t.term_taxonomy_id = {$category_root_id->term_taxonomy_id} AND ";
+            $where = "t.term_taxonomy_id = {$category_root_id->term_taxonomy_id} AND ".$where;
             $inner_join = " INNER JOIN $term_relationships t ON p.ID = t.object_id ";
         } else {
-            $where = "";
+            $where = "".$where;
             $inner_join = '';
         }
         $query = "
                         SELECT p.* FROM $wp_posts p
                         $inner_join    
-                        WHERE $where p.post_type like 'socialdb_object' AND p.post_status like 'publish' and ( p.post_title LIKE '%{$data['term']}%' OR p.post_content LIKE '%{$data['term']}%')
+                        WHERE $where p.post_type like 'socialdb_object' and ( p.post_title LIKE '%{$data['term']}%' OR p.post_content LIKE '%{$data['term']}%')
                 ";                  
         $result = $wpdb->get_results($query);
         if($is_search){
