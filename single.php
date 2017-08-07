@@ -239,8 +239,8 @@ while (have_posts()) : the_post();
                                         </div>
 
                                         <div class="search-colecao">
-                                            <div class="input-group" style="z-index: 1;">
-                                                <input  style="font-size: 13px;z-index: 1;" class="form-control input-medium placeholder ui-autocomplete-input" id="search_objects"
+                                            <div class="input-group">
+                                                <input class="form-control input-medium placeholder ui-autocomplete-input" id="search_objects"
                                                         onkeyup="set_value(this)" 
                                                         onkeydown="if (event.keyCode === 13)
                                                                     document.getElementById('search_main').click();"
@@ -254,6 +254,7 @@ while (have_posts()) : the_post();
                                                 </span>
                                             </div>
                                         </div>
+
                                     </div>
 
                                 </div>
