@@ -83,17 +83,14 @@ if (jQuery)
                                 (e.pageX) ? x = e.pageX : x = e.clientX + d.scrollLeft;
                                 (e.pageY) ? y = e.pageY : y = e.clientY + d.scrollTop;
 
-                                let categorias = window.location.href.split('/');
-                                if(categorias[categorias.length - 2] === 'categorias' && categorias[categorias.length - 3] === 'admin')
-                                {
-                                    y -= 233;
-                                }
+                                y = e.clientY;
 
                                 // Show the menu
                                 $(document).unbind('click');
-                                                        $(menu).css({ top: y, left: x }).fadeIn(o.inSpeed);
+                                $(menu).css({top: y, left: x }).fadeIn(o.inSpeed);
+
                                 // Hover events
-                                                        $(menu).find('A').mouseover( function() {
+                                    $(menu).find('A').mouseover( function() {
                                     $(menu).find('LI.hover').removeClass('hover');
                                     $(this).parent().addClass('hover');
                                 }).mouseout(function () {
