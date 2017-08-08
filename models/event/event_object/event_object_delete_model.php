@@ -94,7 +94,12 @@ class EventObjectDeleteModel extends EventModel {
 
             if(has_filter('tainacan_delete_item_perm')) {
                 $this->update_event_state('confirmed', $data['event_id']); // seto a o evento como invalido
-                return apply_filters('tainacan_delete_item_perm', $value, $collection_id);
+                //return apply_filters('tainacan_delete_item_perm', $value, $collection_id);
+                apply_filters('tainacan_delete_item_perm', $value, $collection_id);
+                $data['msg'] = __('The event was successful','tainacan');
+                $data['type'] = 'success';
+                $data['title'] = __('Success','tainacan');
+                return $data;
             }
         }
         //verificando se todo
