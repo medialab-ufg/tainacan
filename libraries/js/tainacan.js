@@ -1295,11 +1295,11 @@ function showCategoriesConfiguration(src, is_front) {
         $("#form").html('');
 
         if (is_front) {
-            /*$('#searchBoxIndex').hide();
-            $('#configuration').addClass('col-md-12').css({background: 'white', padding: "20px"}).html(result).show();
+            $('#searchBoxIndex').hide();
+            $('#users_div').addClass('col-md-12').css({background: 'white', padding: "20px"}).html(result).show();
+            $('.ibram-home-container').html('');
             $("#display_view_main_page").remove();
-            $("body.home .tainacan-topo-categoria button").remove();*/
-            window.location = window.location.href;
+            $("body.home .tainacan-topo-categoria button").remove();
         } else {
             $('#main_part').hide();
             $('#collection_post').hide();
