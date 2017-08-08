@@ -139,7 +139,9 @@ $is_current_user_the_author = get_post($curr_id)->post_author == get_current_use
             <?php endif; 
 
             if(!$is_single_page): ?>
-                <li class="collec-only tainacan-museum-clear"> <a class="ac-comment-item"> <?php _t('Comment item',1); ?> </a> </li>
+                <li class="collec-only tainacan-museum-clear">
+                    <a class="ac-comment-item"> <?php _t('Comment item',1); ?> </a>
+                </li>
             <?php
             endif;
 

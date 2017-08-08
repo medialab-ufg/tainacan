@@ -1050,7 +1050,7 @@ function verify_allowed_action($collection_id, $name_permission, $object_id = 0)
     if ($is_admin) {
         return true;
     } else {
-        if ($permission == 'unallowed' || $permission == "approval") {
+        if ($permission == 'unallowed' /*|| $permission == "approval"*/) {
             return false;
         } else {
             return true;
