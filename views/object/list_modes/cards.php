@@ -33,7 +33,7 @@ $_trim_desc = $_object_description;
 
             <div class="item-info">
 
-                <div class="col-md-4 colFoto no-padding">
+                <div class="col-md-4 colFoto no-padding img-thumbnail">
                     <?php if(empty($trash_list)): ?>
                         <a href="<?php echo get_collection_item_href($collection_id, $curr_id, $viewHelper); ?>"
                            onclick="<?php get_item_click_event($collection_id, $curr_id) ?>">
