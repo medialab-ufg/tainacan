@@ -5,8 +5,9 @@
         notification_events_repository();
         $('.nav-tabs').tab();
         var dataTable_options = {
-            "order": [[4,"desc"]],
-            "aoColumnDefs": [ { "bVisible": false, "aTargets" : [4] } ],
+            "order": [[5,"desc"]],
+            //"aoColumnDefs": [ { "bVisible": false, "aTargets" : [5] } ],
+            "aoColumns": [{"iDataSort": 5},{"bSortable": true},{"bSortable": true},{"bSortable": true},null, { "bVisible": false } ],
             "initComplete": function() {
                 $("#event_verified_table_wrapper .row").eq(2).addClass('datatable-result-sets');
                 $("#event_not_verified_table_wrapper .row").eq(2).addClass('datatable-result-sets');

@@ -306,9 +306,9 @@ abstract class EventModel extends Model {
                     return __('Edit Object Property', 'tainacan');
                 case 'socialdb_event_property_object_edit_value':
                     return __('Edit Object Property value', 'tainacan');
-                 case 'socialdb_event_property_compound_create':
+                 case 'socialdb_event_property_compounds_create':
                     return __('Create Compound Property', 'tainacan');
-                case 'socialdb_event_property_compound_edit':
+                case 'socialdb_event_property_compounds_edit':
                     return __('Edit Compound Property', 'tainacan'); 
                     
                     
