@@ -17,10 +17,15 @@ abstract class CollectionsApi {
     public function get_collection_items($request) {
         $params = $request->get_params();
 
-        var_dump($params);
+        //var_dump($params);
 
         $CollectionModel = new CollectionModel;
-        return $CollectionModel->get_collection_posts($params['id']);
+        $data =  $CollectionModel->get_collection_posts($params['id']);
+        if ($data) {
+            return new WP_REST_Response( $data, 200 );
+        }else{
+            return new WP_Error('empty_collection',  __( 'No items inserted or found!', 'tainacan' ), array('status' => 404));
+        }
     }
 
     public function get_collection_item($request) {
