@@ -79,7 +79,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                             $all_fields_validate =  $property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] == 'true';
                             ?>
                     </h2> 
-                    <?php $cardinality_bigger = $this->render_cardinality_property($property);   ?>
+                    <?php $cardinality_bigger = $this->render_cardinality_property($property,$object_id);   ?>
                     <?php $properties_compounded = $property['metas']['socialdb_property_compounds_properties_id']; ?>
                     <?php //$class = 'col-md-'. (12/count($properties_compounded)); ?>
                     <div style="margin-right: 15px;margin-left: 15px;" > 
@@ -101,7 +101,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                         <input  type="hidden"
                                 name="cardinality_<?php echo $property['id']; ?>"
                                 id="cardinality_<?php echo $property['id']; ?>"
-                                value="<?php echo $cardinality_bigger; ?>">
+                                value="<?php echo count($cardinality_bigger); ?>">
                         <?php $coumpounds_id = []; ?>
                         <?php if( $property['metas']['socialdb_property_required'] == 'true_one_field'): ?> 
                         <input  type="hidden" 
@@ -111,7 +111,8 @@ class ObjectWidgetsHelper extends ViewHelper {
                                 id='count_fields_<?php echo $references['compound_id'] ?>' 
                                 value='<?php echo count($properties_compounded) ?>'>
                         <?php endif; ?> 
-                        <?php for($i = 0; $i<$cardinality_bigger;$i++): 
+                        <?php //for($i = 0; $i<$cardinality_bigger;$i++): 
+                             foreach($cardinality_bigger as $i => $values): 
                                 //$is_show_container =  $this->is_set_container($object_id,$property,$property_compounded,$i);
                                 $fields_filled =  $this->count_fields_container_value($object_id,$property,$property_compounded,$i);
                                 $position = 0;
@@ -206,11 +207,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                                     <?php echo ($is_show_container==1) ? ''  : (!isset($references['is_view_mode'])) ? $this->render_button_cardinality($property,$i) : '' ?>     
                                 <?php endif; ?>        
                             </div>  
-                        <?php endfor; ?>
-                        <!--input type="hidden" 
-                               name="cardinality_<?php echo $property['id']; ?>" 
-                               id="cardinality_<?php echo $property['id']; ?>"
-                               value="<?php echo $cardinality_bigger; ?>"--> 
+                        <?php endforeach; ?>
                     </div>     
                 </div>   
                <?php
@@ -666,7 +663,7 @@ class ObjectWidgetsHelper extends ViewHelper {
                    $all_fields_validate =  $property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] != 'false';
                 ?>
             </h2>
-            <?php $cardinality_bigger = $this->render_cardinality_property($property);   ?>
+            <?php $cardinality_bigger = $this->render_cardinality_property($property,$object_id);  ?>
             <?php $properties_compounded = $property['metas']['socialdb_property_compounds_properties_id']; ?>
             <?php //$class = 'col-md-'. (12/count($properties_compounded)); ?>
             <div class="form-group" style="margin-bottom: 15px; margin-right: 15px;margin-left: 15px;">
@@ -695,9 +692,10 @@ class ObjectWidgetsHelper extends ViewHelper {
                 <input type="hidden"
                        name="cardinality_<?php echo $property['id']; ?>"
                        id="cardinality_<?php echo $property['id']; ?>"
-                       value="<?php echo $cardinality_bigger; ?>">
+                       value="<?php echo count($cardinality_bigger); ?>">
                 <?php $coumpounds_id = []; ?>
-                <?php for($i = 0; $i<$cardinality_bigger;$i++):
+                <?php //for($i = 0; $i<$cardinality_bigger;$i++):
+                     foreach($cardinality_bigger as $i => $values):
                     //$is_show_container =  $this->is_set_container($object_id,$property,$property_compounded,$i);
                     $is_show_container =  true;
                     $fields_filled =  $this->count_fields_container_value($object_id,$property,$property_compounded,$i);
@@ -787,15 +785,11 @@ class ObjectWidgetsHelper extends ViewHelper {
                                <?php echo ($is_show_container==1) ? ''  : (!isset($references['is_view_mode'])) ? $this->render_button_cardinality($property,$i) : '' ?>     
                            <?php endif; ?>        
                     </div>
-                <?php endfor; ?>
+                <?php endforeach; ?>
                 <!--input type="hidden"
                        name="compounds_<?php echo $property['id']; ?>"
                        id="compounds_<?php echo $property['id']; ?>"
                        value="<?php echo implode(',', array_unique($coumpounds_id)); ?>"-->
-                <!--input type="hidden"
-                       name="cardinality_<?php echo $property['id']; ?>"
-                       id="cardinality_<?php echo $property['id']; ?>"
-                       value="<?php echo $cardinality_bigger; ?>"-->
                 <?php //$coumpounds_id = []; ?>
             </div>
         </div>

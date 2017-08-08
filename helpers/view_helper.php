@@ -234,7 +234,7 @@ class ViewHelper {
         endif;
     }
     
-     public function render_cardinality_property($property,$is_data = 'false') {
+     public function render_cardinality_property($property,$object_id = 0) {
 //         if (isset($property['metas']['socialdb_property_data_cardinality']) && $property['metas']['socialdb_property_data_cardinality'] == 'n'):
 //            return 25;
 //        elseif(isset($property['metas']['socialdb_property_object_cardinality']) && $property['metas']['socialdb_property_object_cardinality'] == 'n'):
@@ -244,12 +244,15 @@ class ViewHelper {
 //        else:
 //            return 1;
 //        endif;
+        if($object_id===0) 
+            return 1;
+            
         $meta = get_post_meta($object_id, 'socialdb_property_helper_' . $property['id'], true);
         if($meta && $meta != ''){
             $array = unserialize($meta);
-            return count($array);
+            return $array;
         }else{
-            return 1;
+            return [];
         }
     }
     
@@ -652,13 +655,13 @@ class ViewHelper {
                         
                         if($type == 'data'){
                             ?>
-                            <p><i><?php echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $value . "'" . ',' . $property['id'] . ')">' . $value . '</a>'; ?></i></p>
+                                <p><i><?php echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $value . "'" . ',' . $property['id'] . ')">' . $value . '</a>'; ?></i></p>
                             <?php
                         }else if($type == 'object'){
                             $ob = get_post($value);
                             if ($ob && $ob->post_status == 'publish') {
                                 // echo '<b><a href="'. get_the_permalink($property['metas']['collection_data'][0]->ID) . '?item=' . $ob->post_name . '" >'. $ob->post_title . '</a></b><br>';
-                                echo '<input type="hidden" name="socialdb_property_'.$property_id.'[]" value="'.$ob->ID.'"><p><i>' . $ob->post_title . '</i></p> <br >';
+                                echo '<input type="hidden" name="socialdb_property_'.$property_id.'[]" value="'.$ob->ID.'"><p style="color:black"><i>' . $ob->post_title . '</i></p> <br >';
                             }
                         }else{
                             $ob = get_term_by('id',$value,'socialdb_category_type');

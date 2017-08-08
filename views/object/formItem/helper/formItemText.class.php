@@ -151,7 +151,7 @@ class FormItemText extends FormItem {
     public function initScriptsTextContainer($property, $item_id, $index) {
         ?>
         <script>
-            var index = <?php echo $index; ?> + 1;
+            var index_<?php echo $property['id'] ?> = <?php echo $index; ?> + 1;
 
             $('.js-append-property-<?php echo $property['id'] ?>').click(function(){
                 $.ajax({
@@ -162,11 +162,11 @@ class FormItemText extends FormItem {
                         operation: 'appendContainerText',
                         item_id:'<?php echo $item_id ?>',
                         property_details: '<?php echo serialize($property) ?>',
-                        index: index
+                        index: index_<?php echo $property['id'] ?>
                     }
                 }).done(function (result) {
                     $('#meta-item-<?php echo $property['id']; ?> #appendTextContainer').append(result);
-                    index++;
+                    index_<?php echo $property['id'] ?>++;
                 });
             });
 

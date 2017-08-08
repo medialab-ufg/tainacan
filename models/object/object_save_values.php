@@ -60,7 +60,7 @@ class ObjectSaveValuesModel extends Model {
         $meta = get_post_meta($item_id, 'socialdb_property_helper_'.$compound_id, true);
         if($meta){
             $array = unserialize($meta);
-            var_dump($array);
+            //var_dump($array);
             if(is_array($array) && isset($array[(int)$index])){
                 foreach ($array[$index] as $property_children_id => $type_and_values) {
                     $values = $array[$index][$property_children_id]['values'];
