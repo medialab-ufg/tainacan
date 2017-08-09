@@ -708,14 +708,12 @@
     function open_share_modal(id) {
         var $_modal_id = $('.in').attr('id');
         if ($_modal_id == 'collection-slideShow') {
-            $('#modal_share_network' + id).addClass('slideshow-mode');
+            $('#modal_share_network_item' + id).addClass('slideshow-mode');
             $('.in').modal('hide');
         }
-        $('#modal_share_network' + id).modal('show');
+        $('#modal_share_network_item' + id).modal('show');
     }
 
-    /*PDFJS.disableStream = true;
-    PDFJS.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.js';*/
     function hide_pdf_viewer_buttons()
     {
         let inter = setInterval(function() {
