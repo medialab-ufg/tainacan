@@ -30,7 +30,6 @@ class CollectionController extends Controller {
             case "create":
                 return $collection_model->create();
             case 'simple_add':
-                
                 $data['collection_name'] = trim($data['collection_name']);
                 $data['collection_object'] = trim($data['collection_object']);
 

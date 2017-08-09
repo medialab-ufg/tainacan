@@ -405,6 +405,12 @@ a:hover{text-decoration:underline}
 #tainacan-menu {
   border-radius: 4px;
   background-color: white !important;
+
+  li {
+    a {
+      cursor: pointer;
+    }
+  }
 }
 
 .login-inner-container {

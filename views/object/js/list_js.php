@@ -793,7 +793,7 @@
     }
 
     function showModalCreateCollection() {
-        $('#myModal').modal('show');
+        $('#newCollection').modal('show');
     }
 
     var col_title = $('.titulo-colecao h3.title').text();

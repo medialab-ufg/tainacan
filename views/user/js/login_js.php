@@ -43,10 +43,6 @@ $(function() {
             e.preventDefault();
     });
     
-    $('#open_myModalForgotPasswordHeader').click(function (e) {
-        $('#myModalForgotPasswordHeader').modal('show');
-    });
-    
     $( '#formUserForgotPasswordHeader' ).submit( function( e ) {
        
        $.ajax( {

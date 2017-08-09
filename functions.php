@@ -487,11 +487,6 @@ if (!current_user_can('manage_options')) {
     show_admin_bar(false);
 }
 
-
-if( current_user_can('manage_options') ) {
-
-}
-
 /**
  * Função responsavel por permitir zip
  * * */
@@ -3211,12 +3206,9 @@ function set_config_return_button($is_home) {
 }
 
 function repository_page_title() {
-    //if (wp_title('&raquo;', false)) {
-      //  return wp_title('&raquo;');
-    //} else {
     if(get_option('blogname')){
         return get_option('blogname');
-    }else{
+    } else {
         return __('Tainacan', 'tainacan');
     }
 }

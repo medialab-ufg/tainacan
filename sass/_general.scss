@@ -666,3 +666,11 @@ a.validate-ok {
     margin-top: 10px;
   }
 }
+
+#newCollection {
+  #createCollection {
+    .modal-body {
+      padding: 0 15px 0 15px;
+    }
+  }
+}

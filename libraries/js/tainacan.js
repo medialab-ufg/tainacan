@@ -155,11 +155,11 @@ $(window).load(function () {
     });
 
     $('#click_new_collection').click(function (e) {
-        $('#myModal').modal('show');
+        $('#newCollection').modal('show');
     });
 
     function showModalCreateCollection() {
-        $('#myModal').modal('show');
+        $('#newCollection').modal('show');
     }
 
     if (window != window.top) {
@@ -261,6 +261,7 @@ $(window).load(function () {
 
     //submit do importar colecao
     $('#importCollection').submit(function (e) {
+        alert('oi'); return false;
         $('.nav-tabs').tab();
         $('.dropdown-toggle').dropdown();
         $('#modalImportCollection').modal('hide');
@@ -512,7 +513,7 @@ $(window).load(function () {
 
     $('#formUserRegister').submit(function (e) {
         e.preventDefault();
-        $('#myModalRegister').modal('hide');
+        $('#newCollectionRegister').modal('hide');
         $('#modalImportMain').modal('show');//mostro o modal de carregamento
         $.ajax({
             url: $("#src").val() + '/controllers/user/user_controller.php',
@@ -698,7 +699,7 @@ function add_li_collection_template(el, $_element) {
         $('ul.templates').remove();
         var text = $('.create-collection').text();
         $('a.create-collection').text(text).css('cursor', 'pointer').click(function () {
-            $('#myModal').modal('show');
+            $('#newCollection').modal('show');
         });
     }
 }
@@ -781,7 +782,7 @@ function check_privacity(src)
 }
 //modal_block modal que bloqueia acoes do usuario
 function showModalImportCollection() {
-    $("#myModal").modal('hide');
+    $("#newCollection").modal('hide');
     $("#modalImportCollection").modal('show');
 }
 
@@ -798,7 +799,19 @@ function showTopSearch() {
     });
 }
 
-
+$('form#createCollection').submit(function() {
+    alert('teste')
+    $('#newCollection').modal('hide');
+    show_modal_main();
+    var formData = new FormData(this);
+    cl(formData);
+    return false;
+    $.ajax({
+        url: $('#src').val() + '/controllers/collection/collection_controller.php', type: 'POST', data: formData
+    }).done(function (result) {
+        $('#result_username').html(result);
+    });
+});
     
 /**
  * funcao que redireciona para a home da colecao para a busca avancada
@@ -1947,7 +1960,6 @@ $(function () {
         }
     });
 
-
     // Do NOT load this actions at statistics page
     if( ! $('body').hasClass('page-template-page-statistics') ) {
         list_templates("#collections-menu ul.templates");
@@ -1962,6 +1974,52 @@ $(function () {
             add_collection_template(col_name, evt);
         }
     });
+
+    $("#login-box").hover(function() {
+        $('#login-out').removeClass('login-outer-container');
+        $('#login-in' ).removeClass();
+    });
+
+    $('#LoginForm').submit( function(e) {
+        show_modal_main();
+        $.ajax({
+            url: $('#src_login').val()+'/controllers/user/user_controller.php',
+            type: 'POST', data: new FormData( this ),
+            processData: false, contentType: false
+        }).done(function( result ) {
+            elem =jQuery.parseJSON(result);
+            if(elem.login === 1) {
+                window.location = elem.url;
+            } else {
+                hide_modal_main();
+                showAlertGeneral(elem.title, elem.msg, elem.type);
+            }
+        });
+        e.preventDefault();
+    });
+
+    $('#open_myModalForgotPasswordHeader').click(function (e) {
+        $("#forgot_password").toggleClass("hide_elem");
+    });
+
+    $( '#formUserForgotPasswordHeader' ).submit( function( e ) {
+        $.ajax( {
+            url: $('#src_login').val()+'/controllers/user/user_controller.php',
+            type: 'POST',
+            data: new FormData( this ),
+            processData: false,
+            contentType: false
+        } ).done(function( result ) {
+            elem =jQuery.parseJSON(result);
+            showAlertGeneral(elem.title, elem.msg, elem.type);
+            if(elem.type == 'success'){
+                $('#myModalForgotPassword').modal('hide');
+            }
+            $('#user_login_forgot').val('');
+        });
+        e.preventDefault();
+    });
+
 });
 
 function showLoginScreen(src) {
@@ -2004,7 +2062,6 @@ function showProfileScreen(src) {
         $('#collection_post').hide();
         $('#configuration').html(result);
     });
-
 }
 
 function check_passwords()
@@ -3152,4 +3209,15 @@ function showStats(){
     $("#stats").css("border-top","3px solid rgb(210, 169, 109)");
 }
 
-//#######
+$('#btn-toggle').click(function(e) {
+    if( $('#to-collapse').hasClass('in') ){
+        $('#to-collapse').removeClass('in');
+        //$('#btn-toggle').addClass('collapsed');
+        $('#to-collapse').css('height', 'auto');
+    }
+    else{
+        $('#to-collapse').addClass('in');
+        //$('#btn-toggle').removeClass('collapsed');
+        $('#to-collapse').css('height', 'auto');
+    }
+});
