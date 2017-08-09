@@ -25,6 +25,7 @@ class TainacanApi extends WP_REST_Controller {
         $version = '1';
         $namespace = 'tainacan/v' . $version;
         $base = 'route';
+        //************* START COLLECTION ENDPOINTS ****************//
         register_rest_route($namespace, $this->base['collections'], array(
             array(
                 'methods' => WP_REST_Server::READABLE,
@@ -43,6 +44,8 @@ class TainacanApi extends WP_REST_Controller {
                 ),
             )
         ));
+        //************* END COLLECTION ENDPOINTS ****************//
+        //************* START COLLECTION ITEMS ENDPOINTS ****************//
         register_rest_route($namespace, $this->base['items'], array(
             array(
                 'methods' => WP_REST_Server::READABLE,
@@ -61,6 +64,8 @@ class TainacanApi extends WP_REST_Controller {
                 ),
             )
         ));
+        //************* END COLLECTION ITEMS ENDPOINTS ****************//
+        //************* START REPOSITORY ENDPOINTS ****************//
         register_rest_route($namespace, $this->base['repository'], array(
             array(
                 'methods' => WP_REST_Server::READABLE,
@@ -70,7 +75,25 @@ class TainacanApi extends WP_REST_Controller {
                 ),
             )
         ));
-
+        register_rest_route($namespace, $this->base['repository-items'], array(
+            array(
+                'methods' => WP_REST_Server::READABLE,
+                'callback' => array(CollectionsApi, 'get_repository_items'),
+                'permission_callback' => array($this, 'get_items_permissions_check'),
+                'args' => array(
+                ),
+            )
+        ));
+        register_rest_route($namespace, $this->base['repository-metadata'], array(
+            array(
+                'methods' => WP_REST_Server::READABLE,
+                'callback' => array(CollectionsApi, 'get_repository_metadata'),
+                'permission_callback' => array($this, 'get_items_permissions_check'),
+                'args' => array(
+                ),
+            )
+        ));
+        //************* END REPOSITORY ENDPOINTS ****************//
         //************* START EXAMPLES ****************//
         register_rest_route($namespace, '/' . $base, array(
             array(
