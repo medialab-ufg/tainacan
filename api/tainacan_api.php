@@ -12,7 +12,7 @@ class TainacanApi extends WP_REST_Controller {
         $this->base['metadatas'] = '/collections/(?P<id>[\d]+)/metadata';
         $this->base['metadata'] = '/collections/(?P<id>[\d]+)/metadata/(?P<meta>[\d]+)';
         $this->base['repository'] = '/repository';
-        $this->base['repository-objects'] = '/repository/objects';
+        $this->base['repository-items'] = '/repository/items';
         $this->base['repository-metadata'] = '/repository/metadata';
 
         add_action('rest_api_init', array(&$this, 'register_routes'));
@@ -56,6 +56,15 @@ class TainacanApi extends WP_REST_Controller {
             array(
                 'methods' => WP_REST_Server::READABLE,
                 'callback' => array(CollectionsApi, 'get_collection_item'),
+                'permission_callback' => array($this, 'get_items_permissions_check'),
+                'args' => array(
+                ),
+            )
+        ));
+        register_rest_route($namespace, $this->base['repository'], array(
+            array(
+                'methods' => WP_REST_Server::READABLE,
+                'callback' => array(CollectionsApi, 'get_repository'),
                 'permission_callback' => array($this, 'get_items_permissions_check'),
                 'args' => array(
                 ),
