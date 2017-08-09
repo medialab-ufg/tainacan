@@ -35,23 +35,6 @@
               <div class="fab"><small><h6><b><></b></h6></small></div>
             </button>
 
-            <script type="text/javascript"> /*
-                function set_popover_content(content) {
-                    $('[data-toggle="popover"]').popover();
-                    var myPopover = $('#iframebutton').data('popover');
-                    $('#iframebutton').popover('hide');
-                    if (myPopover) {
-                        myPopover.options.html = true;
-                        //<iframe width="560" height="315" src="https://www.youtube.com/embed/CGyEd0aKWZE" frameborder="0" allowfullscreen></iframe>
-                        myPopover.options.content = '<form>Search URL:&nbsp<input type="text" style="width:165px;" value="' + content + '" /><br><br>Iframe:&nbsp<input type="text" style="width:200px;" value="<iframe style=\'width:100%\' height=\'1000\' src=\'' + content + '\' frameborder=\'0\'></iframe>" /></form>';
-                    }
-                }
-                set_popover_content($("#socialdb_permalink_collection").val() + '?' + elem.url + '&is_filter=1'); */
-            </script>
-
-            <!--button style="float:right;margin-left:5px;" id="iframebutton" type="button" class="btn btn-default btn-sm" data-container="body" data-toggle="popover" data-placement="left" data-title="URL Iframe" data-content="">
-                <span class="glyphicon glyphicon-link"></span>
-            </button-->
         </div>
     </div>
 </div>

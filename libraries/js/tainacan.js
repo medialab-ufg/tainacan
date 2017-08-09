@@ -800,12 +800,9 @@ function showTopSearch() {
 }
 
 $('form#createCollection').submit(function() {
-    alert('teste')
     $('#newCollection').modal('hide');
     show_modal_main();
     var formData = new FormData(this);
-    cl(formData);
-    return false;
     $.ajax({
         url: $('#src').val() + '/controllers/collection/collection_controller.php', type: 'POST', data: formData
     }).done(function (result) {
@@ -823,7 +820,6 @@ function redirectAdvancedSearch(field){
     else if($(field).val()!=='')
         window.location = $('#collection_root_url').val()+'?search-advanced-text='+$(field).val()
 }
-
 
 $("#expand-top-search").hover(function () {
     $("#expand-top-search").css('border', '1px solid whitesmoke');

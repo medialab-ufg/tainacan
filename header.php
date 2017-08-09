@@ -13,6 +13,12 @@ $col_root_id = get_option('collection_root_id');
 $stat_page = get_page_by_title(__('Statistics', 'tainacan'))->ID;
 $viewHelper = new ViewHelper();
 $_src_ = get_template_directory_uri();
+
+global $wp_query;
+$collection_id = $wp_query->post->ID;
+$collection_owner = $wp_query->post->post_author;
+$user_owner = get_user_by('id', $collection_owner)->display_name;
+$_header_enabled = get_post_meta($collection_id, 'socialdb_collection_show_header', true);
 ?>
 <html <?php language_attributes(); ?> xmlns:fb="http://www.facebook.com/2008/fbml" class="no-js"><!--<![endif]-->
 <head>
@@ -50,17 +56,8 @@ $_src_ = get_template_directory_uri();
 
 <!-- TAINACAN: tag body adaptado para o gplus -->
 <body <?php body_class(); ?> itemscope>
-    <?php
-    if (is_front_page() || is_page($stat_page)) {
-        echo home_header_bg($socialdb_logo);
-    }
 
-    global $wp_query;
-    $collection_id = $wp_query->post->ID;
-    $collection_owner = $wp_query->post->post_author;
-    $user_owner = get_user_by('id', $collection_owner)->display_name;
-    $_header_enabled = get_post_meta($collection_id, 'socialdb_collection_show_header', true);
-    ?>
+    <?php if (is_front_page() || is_page($stat_page)) { echo home_header_bg($socialdb_logo); } ?>
 
     <!-- TAINACAN: tag nav, utilizando classes do bootstrap nao modificadas, onde estao localizados os links que chamam paginas da administracao do repositorio -->
     <nav <?php echo set_navbar_bg_color('black', $stat_page); ?> class="navbar navbar-default header-navbar">
@@ -91,5 +88,4 @@ $_src_ = get_template_directory_uri();
         </div> <!-- /.container-fluid -->
     </nav>
 
-
-<?php get_template_part("partials/modals","header"); ?>
+    <?php get_template_part("partials/modals","header"); ?>

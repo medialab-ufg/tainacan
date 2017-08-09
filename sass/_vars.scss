@@ -161,6 +161,7 @@ $default-margin: 20px 0 20px 0;
 
 @mixin header_style() {
   .project-info {
+    text-align: center;
 
     h1, h3 {
       color: white;
