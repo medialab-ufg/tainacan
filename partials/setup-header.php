@@ -9,7 +9,6 @@ $_special_configs = [
     'tax' => ( (isset($_GET['tax'])) ? trim($_GET['tax']) : '')
 ];
 ?>
-
 <!-- TAINACAN: Hiddens responsaveis em realizar ações do repositório -->
 <input type="hidden" id="show_collection_default" name="show_collection_default"
        value="<?php echo (!$collection_default || $collection_default === 'false') ? 'show' : 'hide'; ?>" />
@@ -33,4 +32,4 @@ $_special_configs = [
 <!-- PAGINA DA TAG -->
 <input type="hidden" id="tag_page" name="tag_page" value="<?php echo $_special_configs['tag']; ?>" />
 <!-- PAGINA DA TAXONOMIA -->
-<input type="hidden" id="tax_page" name="object_page" value="<?php echo $_special_configs['tax']; ?>">
+<input type="hidden" id="tax_page" name="object_page" value="<?php echo $_special_configs['tax']; ?>" />

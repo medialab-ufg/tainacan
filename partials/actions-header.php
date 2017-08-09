@@ -3,6 +3,7 @@ global $current_user;
 $_src_ = get_template_directory_uri();
 $col_root_id = get_option('collection_root_id');
 $email_name = (has_action('addLibraryMenu')) ? _t("E-mails configuration") : _t('Welcome Email');
+$stat_page = get_page_by_title(__('Statistics', 'tainacan'))->ID;
 ?>
 
 <!-- TAINACAN: Opções de ações do administrador, Cadastro, Login, Perfil, Manual do Usuário, e Coleções -->

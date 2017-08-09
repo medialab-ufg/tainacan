@@ -31,13 +31,13 @@ get_template_part("partials/setup","header");
     <?php endif; ?>
 </div>
 
-<?php if (is_front_page() || is_page($stat_page)) { echo '</header>'; } ?>
+<?php if (is_front_page()) { echo '</header>'; } ?>
 
     <!-- TAINACAN: esta div (AJAX) recebe html e está presente tanto na index quanto no single, pois algumas views da administracao sao carregadas aqui -->
     <div id="configuration"  class="col-md-12 no-padding"></div>
 
 <?php if (has_nav_menu("menu-ibram")):
-     include_once ("views/home/home_ibram.php");
+    get_template_part("partials/home","ibram");
     else: ?>
         <div id="display_view_main_page" class="container-fluid"></div>
         <div id="loader_collections">
