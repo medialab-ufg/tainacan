@@ -367,14 +367,17 @@
       background: white;
       border-radius: 2px;
       margin: 1.5% 1.5% 0.2% 0;
-      height: 190px;
+      height: 180px;
       padding: 10px;
 
       .item-info {
         .colFoto {
-          background: #f5f5f5;
-          height: 160px;
+          // background: #f5f5f5;
+          height: 150px;
+          width: 23%;
           border-radius: 2px !important;
+          float: left;
+
           img {
             border-radius: 2px;
             display: block;
@@ -391,11 +394,14 @@
 
         .item-meta-box {
           position: relative;
-          height: 160px;
+          height: 150px;
+          flex-direction:column;
+          margin-left: 2%;
 
           a {
             font-weight: bolder;
           }
+
           h4 {
             margin: 0 0 3px 0;
             height: 40px;
@@ -426,7 +432,13 @@
           .show-item-metadata {
             position: absolute;
             bottom: 0;
-            width: 95%;
+            width: 100%;
+
+              .cards-voting {
+                padding: 2px;
+                font-size: 12px;
+              }
+
           }
 
         } // .item-meta-box
@@ -502,7 +514,7 @@
         height: 150px;
         border-radius: 4px;
         border: 1px solid #aaa;
-        margin-top: -18px;
+        margin-top: -28px;
       }
     } // item colecao
 
