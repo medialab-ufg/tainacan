@@ -215,7 +215,9 @@ while (have_posts()) : the_post();
         <div id="container_three_columns" class="container-fluid">
             <div class="row">
                 <!-- TAINACAN: esta div (AJAX) mostra os widgets para pesquisa que estao setadas na esquerda  -->
-                <div id="div_left" class="col-md-3"></div>
+                <div id="div_left" class="col-md-3">
+                    <!-- Div left content -->
+                </div>
 
                 <!-- TAINACAN: esta div agrupa a listagem de itens ,submissao de novos itens e ordencao -->
                 <div id="div_central" class="col-md-9">

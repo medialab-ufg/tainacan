@@ -546,7 +546,10 @@
         icons: false
     });
 
-    $('#accordion .ui-accordion-content').show();
+    if(!isMobile())
+    {
+        $('#accordion .ui-accordion-content').show();
+    }
 
     $('.expand-all').toggle(function() {
         setMenuContainerHeight();
@@ -555,12 +558,12 @@
         $('#accordion .ui-accordion-content').fadeOut();
         $('.prepend-filter-label').switchClass('glyphicon-triangle-bottom','glyphicon-triangle-right');
         $(this).find('span').switchClass('glyphicon-triangle-bottom','glyphicon-triangle-right');
-        $('.cloud_label').click();
+        //$('.cloud_label').click();
     }, function() {
         $('#accordion .ui-accordion-content').fadeIn();
         $('.prepend-filter-label').switchClass('glyphicon-triangle-right', 'glyphicon-triangle-bottom');
         $(this).find('span').switchClass('glyphicon-triangle-right', 'glyphicon-triangle-bottom');
-        $('.cloud_label').click();
+        //$('.cloud_label').click();
         $(this).find("div.action-text").text( '<?php _e('Collapse all', 'tainacan') ?>' );
     });
 
@@ -630,5 +633,10 @@ $(function() {
         minWidth: 200,
         alsoResizeReverse: "#div_central"
     });
+
+    if(isMobile())
+    {
+        $('.expand-all').click();
+    }
 });
 </script>
