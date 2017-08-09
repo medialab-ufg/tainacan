@@ -1,7 +1,4 @@
 <?php
-include_once ('../../../../../wp-config.php');
-include_once ('../../../../../wp-load.php');
-include_once ('../../../../../wp-includes/wp-db.php');
 include_once (dirname(__FILE__) . '../../../models/collection/collection_model.php');
 include_once (dirname(__FILE__) . '../../../models/license/license_model.php');
 include_once (dirname(__FILE__) . '../../../models/property/property_model.php');
@@ -1591,6 +1588,108 @@ class WPQueryModel extends Model {
         return $meta_query;
     }
     
-    
+    /**
+     * 
+     * @param array $params
+     * @param int $collection_id
+     */
+    public function queryAPI($filter,$collection_id = 0){
+        $args = [
+            'update_post_term_cache' => false, // grabs terms, remove if terms required (category, tag...)
+            'update_post_meta_cache' => false
+        ];
+        
+        // se vai filtrar colecao ou item DEFAULT:ITEM
+        $args['post_type'] = (isset($filter['post_type'])) ? $filter['post_type'] : 'socialdb_object';
+        
+         //o statuss a ser filtrado
+        $args['post_status'] = (isset($filter['post_status'])) ? $filter['post_status'] : 'publish';
+        
+        //se for em uma colecao especifica
+        if($collection_id !== 0){
+            $root_category_id = $this->get_category_root_of($collection_id);
+            $args['tax_query'] = ['relation' => 'AND'];
+            $args['tax_query'][] = [ 
+                'taxonomy' => 'socialdb_category_type',
+                'field' => 'id',
+                'terms' => $root_category_id,
+                'operator' => 'IN'
+            ];
+        }        
+        
+        // se existe titulo
+        if($filter['title']){
+            $args['title'] = $filter['title'];
+        }
+        
+        //se existe pagina
+        if($filter['page']){
+            $args['paged'] = $filter['page'];
+        }
+        
+        //se existe limitacao pagina
+        if($filter['items_per_page']){
+            $args['posts_per_page'] = $filter['items_per_page'];
+        }
+        
+        //se existe limitacao pagina
+        if($filter['items_per_page']){
+            $args['posts_per_page'] = $filter['items_per_page'];
+        }
+        
+        //ordenacao tipo
+        if($filter['order_by']){
+            if(is_numeric($filter['order_by'])){
+                $args['orderby'] = 'meta_value_num';
+                $args['meta_key'] = 'socialdb_property_'.$filter['order_by'];
+            }else{
+                $args['orderby'] = $filter['order_by'];
+            }
+        }
+        
+        //ordenacao forma
+        if($filter['order']){
+            $args['order'] = $filter['order'];
+        }
+        
+        //queries data
+        if($filter['date']){
+            if(isset($filter['date']['before'])){
+                $before = new Datetime($filter['date']['before']);
+                $args['date_query']['before'] = $before->format(DATE_ATOM);
+            }
+            if(isset($filter['date']['after'])){
+                $after = new Datetime($filter['date']['after']);
+                $args['date_query']['after'] = $after->format(DATE_ATOM);;
+            }
+            if(isset($filter['date']['exactly'])){
+                if($filter['date']['exactly']==='TODAY' || $filter['date']['exactly']==='today'){
+                    $today = getdate();
+                    $args['date_query']['year'] =  $today['year'];
+                    $args['date_query']['month'] = $today['mon'];
+                    $args['date_query']['day'] = $today['mday'];
+                }else{
+                    $exactly = new Datetime($filter['date']['exactly']); 
+                    if(is_object($exactly)){
+                        $args['date_query']['year'] = $exactly->format('Y');
+                        $args['date_query']['month'] = $exactly->format('m');
+                        $args['date_query']['day'] = $exactly->format('d');
+                        
+                        if($exactly->format('H')  !== '00')
+                            $args['date_query']['hour'] = $exactly->format('H');
+                        
+                        if($exactly->format('i')  !== '00')
+                            $args['date_query']['minute'] = $exactly->format('i');
+                        
+                        if($exactly->format('s')  !== '00')
+                            $args['date_query']['second'] = $exactly->format('s');
+                    }else{
+                        $args['error'] = __('Invalid exactly date','tainacan');
+                    }
+                }
+            }
+        }
+        return $args;
+    }
 
 }

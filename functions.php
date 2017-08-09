@@ -31,6 +31,7 @@ function AutoLoad() {
 function MyAutoLoad($Class) {
     $Matches = array();
     preg_match_all('/((?:^|[A-Z])[a-z]+)/', $Class, $Matches);
+                        
     if (!empty($Matches)):
         $ArrClass = $Matches[0];
         $Folder = strtolower(end($ArrClass));
@@ -56,6 +57,11 @@ function MyAutoLoad($Class) {
             endforeach;
         endif;
     endif;
+    //excecoes
+    if(is_null($iDir)){
+        if($File === 'query_model')
+             include_once (__DIR__ . '/models/wp_query/wp_' .$File . '.php');
+    }
 }
 
 add_action('init', 'AutoLoad');

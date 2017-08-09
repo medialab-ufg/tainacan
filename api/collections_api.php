@@ -16,9 +16,12 @@ abstract class CollectionsApi {
 
     public function get_collection_items($request) {
         $params = $request->get_params();
-
-        //var_dump($params);
-
+        
+        //se existir consultas
+        if(isset($params['filter']))
+            return CollectionsApi::filterByArgs($params);
+        
+        //caso for uma consulta simples
         $CollectionModel = new CollectionModel;
         $data =  $CollectionModel->get_collection_posts($params['id']);
         if ($data) {
@@ -37,6 +40,27 @@ abstract class CollectionsApi {
         }
         $Result['metas'] = get_post_meta($params['post']);
         return $Result;
+    }
+    
+    private function filterByArgs($params){
+        $filters = $params['filter'];
+        $wpQueryModel = new WPQueryModel();
+        $args = $wpQueryModel->queryAPI($filters,$params['id']);
+        $loop = new WP_Query($args);
+        if ($loop->have_posts()) {
+            $data = [];
+            while ( $loop->have_posts() ) : $loop->the_post();
+                $data[] = [
+                    'ID'  => get_the_ID(),
+                    'title' => get_the_title(),
+                    'created_date' => get_post()->post_date,
+                    'content' => get_the_content()
+                ];
+            endwhile;    
+            return new WP_REST_Response( $data, 200 );
+        }else{
+            return new WP_Error('empty_search',  __( 'No items found with these arguments!', 'tainacan' ), array('status' => 404));
+        }
     }
 
 }
