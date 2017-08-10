@@ -1,11 +1,18 @@
 <?php
 get_header();
+get_template_part("partials/setup","header");
 
-/*
-include_once(dirname(__FILE__).'/../../helpers/view_helper.php');
-include_once(dirname(__FILE__).'/../../helpers/object/object_helper.php');
-*/
-// include_once ('js/list_single_js.php');
+include_once( dirname(__FILE__) . '/helpers/view_helper.php' );
+include_once( dirname(__FILE__) . '/helpers/object/object_helper.php' );
+include_once( dirname(__FILE__) .  '/views/object/js/list_single_js.php' );
+
+while(have_posts()): the_post();
+    $_item_ = $post;
+    $parent = get_post($post->post_parent);
+endwhile;
+$metas = get_post_meta($post->ID);
+$collection_id = $parent->ID;
+$object_id = $_item_->ID;
 
 $create_perm_object = verify_allowed_action($collection_id, 'socialdb_collection_permission_create_property_object');
 $edit_perm_object = verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_property_object');
@@ -16,18 +23,15 @@ $delete_perm_data = verify_allowed_action($collection_id, 'socialdb_collection_p
 
 $meta_type = ucwords($metas['socialdb_object_dc_type'][0]);
 $meta_source = $metas['socialdb_object_dc_source'][0];
-// $view_helper = new ObjectHelper($collection_id);
+$view_helper = new ObjectHelper($collection_id);
 ?>
-<input type="hidden" name="single_object_id" id="single_object_id" value="<?php echo $object->ID; ?>" >
-<input type="hidden" id="single_name" name="item_single_name" value="<?php echo $object->post_name; ?>" />
-<input type="hidden" id="socialdb_permalink_object" name="socialdb_permalink_object" value="<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>" />
 
 <ol class="breadcrumb item-breadcrumbs">
     <li> <a href="<?php echo site_url(); ?>"> Home </a> </li>
-    <li> <a href="javascript:void(0)" onclick="backToMainPageSingleItem()"> <?php echo get_post($collection_id)->post_title; ?> </a> </li>
-    <li class="active"> <?php echo $object->post_title; ?> </li>
+    <li> <a href="<?php echo $parent->guid; ?>"> <?php echo $parent->post_title; ?> </a> </li>
+    <li class="active"> <?php echo $_item_->post_title; ?> </li>
 
-    <button data-title="<?php printf(__("URL of %s", "tainacan"), $object->post_title); ?>" id="iframebuttonObject" data-container="body"
+    <button data-title="<?php printf(__("URL of %s", "tainacan"), $post->post_title); ?>" id="iframebuttonObject" data-container="body"
             class="btn bt-default content-back pull-right" data-toggle="popoverObject" data-placement="left" data-content="">
         <span class="glyphicon glyphicon-link"></span>
     </button>
@@ -37,10 +41,10 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
     <div class="col-md-9 item-main-data row" style="padding-right: 0;">
 
         <div class="col-md-12 content-title single-item-title tainacan-header-info no-padding">
-            <div class="col-md-10" style="margin-top:14px;" <?php //echo $view_helper->get_visibility($view_helper->terms_fixed['title']) ?>>
-                <h3 id="text_title"><?php echo $object->post_title; ?></h3>
+            <div class="col-md-10" style="margin-top:14px;" <?php echo $view_helper->get_visibility($view_helper->terms_fixed['title']) ?>>
+                <h3 id="text_title"><?php echo $post->post_title; ?></h3>
                 <span id="event_title" style="display:none;">
-                    <input type="text" value="<?php echo $object->post_title; ?>" id="title_field" class="form-control">
+                    <input type="text" value="<?php echo $post->post_title; ?>" id="title_field" class="form-control">
                 </span>
                 <small>
                     <?php if (verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_property_data_value', $object_id)): ?>
@@ -48,9 +52,9 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                             <span class="glyphicon glyphicon-arrow-left" ></span>
                         </button>
                         <button type="button" onclick="edit_title()" id="edit_title" class="btn btn-default btn-xs">
-                            <span class="glyphicon glyphicon-edit"></span> <?php // viewHelper::render_icon("edit_object"); ?>
+                            <span class="glyphicon glyphicon-edit"></span> <?php viewHelper::render_icon("edit_object"); ?>
                         </button>
-                        <button type="button" onclick="save_title('<?php echo $object->ID ?>')" id="save_title" class="btn btn-default btn-xs" style="display: none;"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+                        <button type="button" onclick="save_title('<?php echo $post->ID ?>')" id="save_title" class="btn btn-default btn-xs" style="display: none;"><span class="glyphicon glyphicon-floppy-disk"></span></button>
                     <?php endif; ?>
                 </small>
             </div>
@@ -63,13 +67,14 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                 <hr class="single-item-divider" />
             </div>
 
-            <div class="col-md-6"> <b> <?php echo __('Sent by: ', 'tainacan'); ?> </b> <?php echo get_the_author_meta("display_name", $object->post_author); ?> </div>
-            <div class="col-md-6" style="text-align: right"> <span> <b> <?php _e('Sent date: ', 'tainacan'); ?> </b>  <?php echo get_the_date('d/m/y', $object->ID); ?> </span> </div>
+            <div class="col-md-6"> <b> <?php echo __('Sent by: ', 'tainacan'); ?> </b> <?php echo get_the_author_meta("display_name", $post->post_author); ?> </div>
+            <div class="col-md-6" style="text-align: right"> <span> <b> <?php _e('Sent date: ', 'tainacan'); ?> </b>  <?php echo get_the_date('d/m/y', $post->ID); ?> </span> </div>
 
             <div class="col-md-12" style="padding-bottom: 20px;">
                 <div class="content-wrapper" <?php if (has_action('home_item_content_div')) do_action('home_item_content_div') ?> style="padding: 0; margin-top: 10px;">
                     <div>
-                        <?php if ($metas['socialdb_object_dc_type'][0] == 'text') {
+                        <?php
+                        if ($metas['socialdb_object_dc_type'][0] == 'text') {
                             echo $metas['socialdb_object_content'][0];
                         } else {
                             if ($metas['socialdb_object_from'][0] == 'internal' && wp_get_attachment_url($metas['socialdb_object_content'][0])) {
@@ -79,8 +84,8 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                                         $content = '<audio controls><source src="' . $url . '">' . __('Your browser does not support the audio element.', 'tainacan') . '</audio>';
                                         break;
                                     case 'image':
-                                        if (get_the_post_thumbnail($object->ID, 'thumbnail')) {
-                                            $url_image = get_the_post_thumbnail($object->ID, 'large', [ 'class'=> 'img-responsive img-thumbnail' ] );
+                                        if (get_the_post_thumbnail($post->ID, 'thumbnail')) {
+                                            $url_image = get_the_post_thumbnail($post->ID, 'large', [ 'class'=> 'img-responsive img-thumbnail' ] );
                                             $style_watermark = ($has_watermark ? 'style="background:url(' . $url_watermark . ') no-repeat center; background-size: contain;"' : '');
                                             $opacity_watermark = ($has_watermark ? 'opacity: 0.80;' : '');
                                             $content = '<center ' . $style_watermark . '>' . $url_image . '</center>';
@@ -116,8 +121,8 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                                     case 'image':
                                         $style_watermark = ($has_watermark ? 'style="background:url(' . $url_watermark . ') no-repeat center; background-size: contain;"' : '');
                                         $opacity_watermark = ($has_watermark ? 'opacity: 0.80;' : '');
-                                        if (get_the_post_thumbnail($object->ID, 'thumbnail')) {
-                                            $url_image = wp_get_attachment_url(get_post_thumbnail_id($object->ID, 'large'));
+                                        if (get_the_post_thumbnail($post->ID, 'thumbnail')) {
+                                            $url_image = wp_get_attachment_url(get_post_thumbnail_id($post->ID, 'large'));
                                             $content = '<center ' . $style_watermark . '><img style="max-width:480px; ' . $opacity_watermark . '"  src="' . $url_image . '" class="img-responsive" /></center>';
 //                                            $content = '<center><a href="#" onclick="$.prettyPhoto.open([\'' . $url_image . '\'], [\'\'], [\'\']);return false">
 //                                                        <img style="max-width:880px;"  src="' . $url_image . '" class="img-responsive" />
@@ -161,10 +166,10 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
 
             <div class="col-md-12 item-fixed-data no-padding">
                 <div class="col-md-6 left-container no-padding">
-                    <div class="item-source box-item-paddings" <?php // echo $view_helper->get_visibility($view_helper->terms_fixed['source']) ?> style="border-top:none" >
+                    <div class="item-source box-item-paddings" <?php echo $view_helper->get_visibility($view_helper->terms_fixed['source']) ?> style="border-top:none" >
                         <div class="row" <?php if (has_action('home_item_source_div')) do_action('home_item_source_div') ?> style="padding-left: 30px;">
                             <div class="col-md-12 no-padding">
-                                <h4 class="title-pipe single-title"> <?php //echo ($view_helper->terms_fixed['source']) ? $view_helper->terms_fixed['source']->name :  _e('Source','tainacan') ?> </h4>
+                                <h4 class="title-pipe single-title"> <?php echo ($view_helper->terms_fixed['source']) ? $view_helper->terms_fixed['source']->name :  _e('Source','tainacan') ?> </h4>
                                 <div class="edit-field-btn">
                                     <?php
                                     // verifico se o metadado pode ser alterado
@@ -173,13 +178,11 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                                         <small>
                                             <button type="button" onclick="cancel_source()" id="cancel_source" class="btn btn-default btn-xs" style="display: none;" ><span class="glyphicon glyphicon-arrow-left" ></span></button>
                                             <button type="button" onclick="edit_source()" id="edit_source" class="btn btn-default btn-xs" ><span class="glyphicon glyphicon-edit"></span></button>
-                                            <button type="button" onclick="save_source('<?php echo $object->ID ?>')" id="save_source"class="btn btn-default btn-xs" style="display: none;"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+                                            <button type="button" onclick="save_source('<?php echo $post->ID ?>')" id="save_source"class="btn btn-default btn-xs" style="display: none;"><span class="glyphicon glyphicon-floppy-disk"></span></button>
                                         </small>
                                     <?php endif; ?>
                                 </div>
-                                <div id="text_source">
-                                    <?php echo format_item_text_source($meta_source); ?>
-                                </div>
+                                <div id="text_source"> <?php echo format_item_text_source($meta_source); ?> </div>
                                 <div id="event_source" style="display:none;" >
                                     <input type="text" class="form-control" id="source_field" value="<?php echo $meta_source; ?>"
                                            name="source_field" placeholder="<?php _e('Type the source and click save!') ?>" >
@@ -187,19 +190,18 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                             </div>
                         </div>
                     </div>
-                    <div class="item-type box-item-paddings" <?php // echo $view_helper->get_visibility($view_helper->terms_fixed['type']) ?> style="border-top: none" >
+                    <div class="item-type box-item-paddings" <?php echo $view_helper->get_visibility($view_helper->terms_fixed['type']) ?> style="border-top: none" >
                         <div class="row" <?php if (has_action('home_item_type_div')) do_action('home_item_type_div') ?> style="padding-left: 30px;">
                             <div class="col-md-12 no-padding">
                                 <h4 class="title-pipe single-title"> <?php _e('Type', 'tainacan'); ?></h4>
                                 <div class="edit-field-btn">
                                     <?php
                                     // verifico se o metadado pode ser alterado
-                                    if (verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_property_data_value', $object_id)):
-                                        ?>
+                                    if (verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_property_data_value', $object_id)): ?>
                                         <small>
                                             <button type="button" onclick="cancel_type()" id="cancel_type" class="btn btn-default btn-xs" style="display: none;" ><span class="glyphicon glyphicon-arrow-left" ></span></button>
                                             <button type="button" onclick="edit_type()" id="edit_type" class="btn btn-default btn-xs" ><span class="glyphicon glyphicon-edit"></span></button>
-                                            <button type="button" onclick="save_type('<?php echo $object->ID ?>')" id="save_type"class="btn btn-default btn-xs" style="display: none;"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+                                            <button type="button" onclick="save_type('<?php echo $post->ID ?>')" id="save_type"class="btn btn-default btn-xs" style="display: none;"><span class="glyphicon glyphicon-floppy-disk"></span></button>
                                         </small>
                                     <?php endif; ?>
                                 </div>
@@ -223,9 +225,9 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                             </div>
                         </div>
                     </div>
-                    <div class="item-thumb box-item-paddings" <?php //echo $view_helper->get_visibility($view_helper->terms_fixed['thumbnail']) ?> style="border-top: none; border-bottom: none" >
+                    <div class="item-thumb box-item-paddings" <?php echo $view_helper->get_visibility($view_helper->terms_fixed['thumbnail']) ?> style="border-top: none; border-bottom: none" >
                         <div class="content-thumb" style="padding-left: 15px; ">
-                            <h4 class="title-pipe single-title">  <?php // echo ($view_helper->terms_fixed['thumbnail']) ? $view_helper->terms_fixed['thumbnail']->name :  _e('Thumbnail', 'tainacan'); ?></h4>
+                            <h4 class="title-pipe single-title">  <?php echo ($view_helper->terms_fixed['thumbnail']) ? $view_helper->terms_fixed['thumbnail']->name :  _e('Thumbnail', 'tainacan'); ?></h4>
                             <div class="edit-field-btn">
                                 <?php
                                 // Evento para alteracao do thumbnail de um item
@@ -237,11 +239,11 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                                 <?php endif; ?>
                             </div>
                             <div>
-                                <?php if (get_the_post_thumbnail($object->ID, 'thumbnail')) {
-                                    $url_image = wp_get_attachment_url(get_post_thumbnail_id($object->ID));
-                                    echo get_the_post_thumbnail($object->ID, 'thumbnail');
+                                <?php if (get_the_post_thumbnail($post->ID, 'thumbnail')) {
+                                    $url_image = wp_get_attachment_url(get_post_thumbnail_id($post->ID));
+                                    echo get_the_post_thumbnail($post->ID, 'thumbnail');
                                 } else { ?>
-                                    <img class="img-responsive" src="<?php echo get_item_thumbnail_default($object->ID); ?>" width="45%" />
+                                    <img class="img-responsive" src="<?php echo get_item_thumbnail_default($post->ID); ?>" width="45%" />
                                 <?php } ?>
                             </div>
                         </div>
@@ -251,18 +253,18 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                 <div class="col-md-6 right-container" style="margin-left: 0;">
                     <div class="item-ranking box-item-paddings box-item-right" style="border-top:none">
                         <h4 class="title-pipe single-title"> <?php _e('Ranking', 'tainacan'); ?></h4>
-                        <div id="single_list_ranking_<?php echo $object->ID; ?>" class="row"></div>
+                        <div id="single_list_ranking_<?php echo $post->ID; ?>" class="row"></div>
                     </div>
                     <div class="item-share box-item-paddings box-item-right">
                         <h4 class="title-pipe single-title"> <?php _e('Sharing', 'tainacan'); ?></h4>
                         <div class="content-redesocial-NO" style="width: 100%">
-                            <a class="fb" target="_blank" href="http://www.facebook.com/sharer/sharer.php?s=100&amp;p[url]=<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>&amp;p[images][0]=<?php echo wp_get_attachment_url(get_post_thumbnail_id($object->ID)); ?>&amp;p[title]=<?php echo htmlentities($object->post_title); ?>&amp;p[summary]=<?php echo strip_tags($object->post_content); ?>">
+                            <a class="fb" target="_blank" href="http://www.facebook.com/sharer/sharer.php?s=100&amp;p[url]=<?php echo get_the_permalink($collection_id) . '?item=' . $post->post_name; ?>&amp;p[images][0]=<?php echo wp_get_attachment_url(get_post_thumbnail_id($post->ID)); ?>&amp;p[title]=<?php echo htmlentities($post->post_title); ?>&amp;p[summary]=<?php echo strip_tags($post->post_content); ?>">
                                 <img src="<?php echo get_template_directory_uri() . '/libraries/images/icons/icon-facebook.png'; ?>" />
                             </a>
-                            <a class="twitter" target="_blank" href="https://twitter.com/intent/tweet?url=<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>&amp;text=<?php echo htmlentities($object->post_title); ?>&amp;via=socialdb">
+                            <a class="twitter" target="_blank" href="https://twitter.com/intent/tweet?url=<?php echo get_the_permalink($collection_id) . '?item=' . $post->post_name; ?>&amp;text=<?php echo htmlentities($post->post_title); ?>&amp;via=socialdb">
                                 <img src="<?php echo get_template_directory_uri() . '/libraries/images/icons/icon-twitter.png'; ?>" />
                             </a>
-                            <a class="gplus" target="_blank" href="https://plus.google.com/share?url=<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>">
+                            <a class="gplus" target="_blank" href="https://plus.google.com/share?url=<?php echo get_the_permalink($collection_id) . '?item=' . $post->post_name; ?>">
                                 <img src="<?php echo get_template_directory_uri() . '/libraries/images/icons/icon-googleplus.png'; ?>" />
                             </a>
 
@@ -274,17 +276,17 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                                 </a>
                                 <ul style=" z-index: 9999;" class="dropdown-menu submenu-hover-open" role="menu">
                                     <li>
-                                        <a target="_blank" href="<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>.rdf"  ><span class="glyphicon glyphicon-upload"></span> <?php _e('RDF', 'tainacan'); ?>&nbsp;
+                                        <a target="_blank" href="<?php echo get_the_permalink($collection_id) . '?item=' . $post->post_name; ?>.rdf"  ><span class="glyphicon glyphicon-upload"></span> <?php _e('RDF', 'tainacan'); ?>&nbsp;
                                         </a>
                                     </li>
                                     <?php if (is_restful_active()): ?>
                                         <li>
-                                            <a href="<?php echo site_url() . '/wp-json/posts/' . $object->ID . '/?type=socialdb_object' ?>"  ><span class="glyphicon glyphicon-upload"></span> <?php _e('JSON', 'tainacan'); ?>&nbsp;
+                                            <a href="<?php echo site_url() . '/wp-json/posts/' . $post->ID . '/?type=socialdb_object' ?>"  ><span class="glyphicon glyphicon-upload"></span> <?php _e('JSON', 'tainacan'); ?>&nbsp;
                                             </a>
                                         </li>
                                     <?php endif; ?>
                                     <li>
-                                        <a onclick="showGraph('<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>.rdf')"  style="cursor: pointer;"   >
+                                        <a onclick="showGraph('<?php echo get_the_permalink($collection_id) . '?item=' . $post->post_name; ?>.rdf')"  style="cursor: pointer;"   >
                                             <span class="glyphicon glyphicon-upload"></span> <?php _e('Graph', 'tainacan'); ?>&nbsp;
                                         </a>
                                     </li>
@@ -299,7 +301,7 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
 
                     if(has_action("add_barcode") && $mapping['Exemplares'] == $collection_id)
                     {
-                        do_action("add_barcode", $collection_id, $object->ID);
+                        do_action("add_barcode", $collection_id, $post->ID);
                     }
                     ?>
                 </div>
@@ -309,8 +311,8 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
 
         <div class="col-md-12 item-metadata no-padding">
 
-            <div class="item-description box-item-paddings" <?php // echo $view_helper->get_visibility($view_helper->terms_fixed['description']) ?>>
-                <h4 class="title-pipe single-title"><?php // echo ($view_helper->terms_fixed['description']) ? $view_helper->terms_fixed['description']->name :  _e('Description', 'tainacan'); ?> </h4>
+            <div class="item-description box-item-paddings" <?php echo $view_helper->get_visibility($view_helper->terms_fixed['description']) ?>>
+                <h4 class="title-pipe single-title"><?php echo ($view_helper->terms_fixed['description']) ? $view_helper->terms_fixed['description']->name :  _e('Description', 'tainacan'); ?> </h4>
                 <div class="edit-field-btn">
                     <?php
                     // verifico se o metadado pode ser alterado
@@ -319,20 +321,20 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                         <small>
                             <button type="button" onclick="cancel_description()" id="cancel_description" class="btn btn-default btn-xs" style="display: none;" ><span class="glyphicon glyphicon-arrow-left" ></span></button>
                             <button type="button" onclick="edit_description()" id="edit_description" class="btn btn-default btn-xs" ><span class="glyphicon glyphicon-edit"></span></button>
-                            <button type="button" onclick="save_description('<?php echo $object->ID ?>')" id="save_description"class="btn btn-default btn-xs" style="display: none;"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+                            <button type="button" onclick="save_description('<?php echo $post->ID ?>')" id="save_description"class="btn btn-default btn-xs" style="display: none;"><span class="glyphicon glyphicon-floppy-disk"></span></button>
                         </small>
                     <?php endif; ?>
                 </div>
 
                 <div id="text_description">
-                    <div style="white-space: pre-wrap;"><?php echo $object->post_content; ?></div>
+                    <div style="white-space: pre-wrap;"><?php echo $post->post_content; ?></div>
                 </div>
                 <div id="event_description" style="display:none; min-height: 150px;">
-                    <textarea class="col-md-12 form-control" id="description_field" style="width:100%; min-height: 150px;"><?php echo $object->post_content; ?></textarea>
+                    <textarea class="col-md-12 form-control" id="description_field" style="width:100%; min-height: 150px;"><?php echo $post->post_content; ?></textarea>
                 </div>
             </div>
 
-            <div class="col-md-6 left-container" <?php // echo $view_helper->get_visibility($view_helper->terms_fixed['license']) ?> style="border-right: 3px solid #e8e8e8">
+            <div class="col-md-6 left-container" <?php echo $view_helper->get_visibility($view_helper->terms_fixed['license']) ?> style="border-right: 3px solid #e8e8e8">
                 <!-- Licencas do item -->
                 <div class="box-item-paddings item-license" <?php if (has_action('home_item_license_div')) do_action('home_item_license_div') ?> style="border: none;" >
                     <h4 class="title-pipe single-title"> <?php _e('License', 'tainacan'); ?></h4>
@@ -344,7 +346,7 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                             <small>
                                 <button type="button" onclick="cancel_license()" id="cancel_license" class="btn btn-default btn-xs" style="display: none;" ><span class="glyphicon glyphicon-arrow-left" ></span></button>
                                 <button type="button" onclick="edit_license()" id="edit_license" class="btn btn-default btn-xs" ><span class="glyphicon glyphicon-edit"></span></button>
-                                <button type="button" onclick="save_license('<?php echo $object->ID ?>')" id="save_license"class="btn btn-default btn-xs" style="display: none;"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+                                <button type="button" onclick="save_license('<?php echo $post->ID ?>')" id="save_license"class="btn btn-default btn-xs" style="display: none;"><span class="glyphicon glyphicon-floppy-disk"></span></button>
                             </small>
                         <?php endif; ?>
                     </DIV>
@@ -363,37 +365,37 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
 
             <div class="col-md-6 right-container no-padding">
                 <!-- Tags -->
-                <div class="box-item-paddings item-tags" <?php // echo $view_helper->get_visibility($view_helper->terms_fixed['tags']) ?> <?php if (has_action('home_item_tag_div')) do_action('home_item_tag_div') ?>>
+                <div class="box-item-paddings item-tags" <?php echo $view_helper->get_visibility($view_helper->terms_fixed['tags']) ?> <?php if (has_action('home_item_tag_div')) do_action('home_item_tag_div') ?>>
                     <h4 class="title-pipe single-title"> <?php _e('Tags', 'tainacan'); ?></h4>
                     <div class="edit-field-btn">
                         <?php
                         // verifico se o metadado pode ser alterado
-                        if (verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_tag', $object->ID)):
+                        if (verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_tag', $post->ID)):
                             ?>
                             <button type="button" onclick="cancel_tag()" id="cancel_tag" class="btn btn-default btn-xs" style="display: none;" ><span class="glyphicon glyphicon-arrow-left" ></span></button>
                             <button type="button" onclick="edit_tag()" id="edit_tag" class="btn btn-default btn-xs" ><span class="glyphicon glyphicon-edit"></span></button>
-                            <button type="button" onclick="save_tag('<?php echo $object->ID ?>')" id="save_tag" class="btn btn-default btn-xs" style="display: none;"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+                            <button type="button" onclick="save_tag('<?php echo $post->ID ?>')" id="save_tag" class="btn btn-default btn-xs" style="display: none;"><span class="glyphicon glyphicon-floppy-disk"></span></button>
                         <?php endif; ?>
                     </div>
 
                     </h4>
                     <div>
-                        <input type="hidden" value="<?php echo $object->ID ?>" class="object_id">
-                        <center><button id="single_show_classificiations_<?php echo $object->ID; ?>" onclick="show_classifications_single('<?php echo $object->ID; ?>')" class="btn btn-default btn-lg"><?php _e('Show classifications', 'tainacan'); ?></button></center>
-                        <div id="single_classifications_<?php echo $object->ID ?>">
+                        <center><button id="single_show_classificiations_<?php echo $post->ID; ?>" onclick="show_classifications_single('<?php echo $post->ID; ?>')" class="btn btn-default btn-lg"><?php _e('Show classifications', 'tainacan'); ?></button></center>
+                        <div id="single_classifications_<?php echo $post->ID ?>">
                         </div>
                         <div id="event_tag" style="display:none;">
                             <input type="text" style="width:50%;" class="form-control col-md-6" id="event_tag_field"  placeholder="<?php _e('Type the tag name', 'tainacan') ?>">
                         </div>
                         <script>
-                            $('#single_show_classificiations_<?php echo $object->ID ?>').hide().trigger('click');
+                            $('#single_show_classificiations_<?php echo $post->ID ?>').hide().trigger('click');
                         </script>
                     </div>
                 </div>
             </div>
 
+
+            <!-- Metadados do item -->
             <div class="col-md-12 all-metadata no-padding">
-                <!-- Metadados do item -->
                 <div>
                     <div class="meta-header" style="padding: 10px 20px 10px 20px">
                         <h4 class="title-pipe single-title"> <?php _e('Properties', 'tainacan') ?></h4>
@@ -404,10 +406,10 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                                 </button>
                                 <ul aria-labelledby="btnGroupVerticalDrop1" role="menu" class="dropdown-menu add-metadata">
                                     <?php if ($create_perm_data): ?>
-                                        <li>&nbsp;<span class="glyphicon glyphicon-th-list graydrop"></span>&nbsp;<span><a class="add_property_data" onclick="show_form_data_property_single('<?php echo $object->ID ?>')" href="#property_form_<?php echo $object->ID ?>"><?php _e('Add new data property', 'tainacan'); ?></a></span></li>
+                                        <li>&nbsp;<span class="glyphicon glyphicon-th-list graydrop"></span>&nbsp;<span><a class="add_property_data" onclick="show_form_data_property_single('<?php echo $post->ID ?>')" href="#property_form_<?php echo $post->ID ?>"><?php _e('Add new data property', 'tainacan'); ?></a></span></li>
                                     <?php endif; ?>
                                     <?php if ($create_perm_object): ?>
-                                        <li>&nbsp;<span class="glyphicon glyphicon-th-list graydrop"></span>&nbsp;<span><a class="add_property_object" onclick="show_form_object_property_single('<?php echo $object->ID ?>')" href="#property_form_<?php echo $object->ID ?>"><?php _e('Add new object property', 'tainacan'); ?></a></span></li>
+                                        <li>&nbsp;<span class="glyphicon glyphicon-th-list graydrop"></span>&nbsp;<span><a class="add_property_object" onclick="show_form_object_property_single('<?php echo $post->ID ?>')" href="#property_form_<?php echo $post->ID ?>"><?php _e('Add new object property', 'tainacan'); ?></a></span></li>
                                     <?php endif; ?>
                                 </ul>
                             <?php endif; ?>
@@ -425,13 +427,13 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                     </div>
 
                     <div>
-                        <div id="single_list_all_properties_<?php echo $object->ID ?>" class="single_list_properties">
+                        <div id="single_list_all_properties_<?php echo $post->ID ?>" class="single_list_properties">
                             <center><img width="100" heigth="100" src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>"><?php _e('Loading metadata for this item','tainacan') ?></center>
                         </div>
-                        <div id="single_data_property_form_<?php echo $object->ID ?>"></div>
-                        <div id="single_object_property_form_<?php echo $object->ID ?>"></div>
-                        <div id="single_edit_data_property_form_<?php echo $object->ID ?>"></div>
-                        <div id="single_edit_object_property_form_<?php echo $object->ID ?>"></div>
+                        <div id="single_data_property_form_<?php echo $post->ID ?>"></div>
+                        <div id="single_object_property_form_<?php echo $post->ID ?>"></div>
+                        <div id="single_edit_data_property_form_<?php echo $post->ID ?>"></div>
+                        <div id="single_edit_object_property_form_<?php echo $post->ID ?>"></div>
                     </div>
                 </div>
             </div>
@@ -446,7 +448,7 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
     </div>
     <div class="col-md-3 item-attachments">
         <div <?php if (has_action('home_item_attachments_div')) do_action('home_item_attachments_div') ?> >
-            <div id="single_list_files_<?php echo $object->ID ?>"></div>
+            <div id="single_list_files_<?php echo $post->ID ?>"></div>
         </div>
     </div>
 </div>
@@ -454,15 +456,16 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
 <div class="container-fluid">
 </div>
 
+<?php
+/*
+ *  R >
+ *
 <div id="container_three_columns" class="container-fluid white-background">
     <div class="row">
         <div class="col-md-2">
             <div class="row">
             </div>
-            <div class="row same-height">
-                <input type="hidden" class="post_id" name="post_id" value="<?= $object->ID ?>">
-            </div>
-
+            <div class="row same-height"></div>
         </div>
 
         <!-- TAINACAN: esta div agrupa a listagem de itens ,submissao de novos itens e ordencao -->
@@ -474,11 +477,15 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
         ?> >
             <?php
             //Acao que permite que os modulos insiram novas divs para o item
-            do_action('home_item_insert_container', $object->ID)
+            do_action('home_item_insert_container', $post->ID)
             ?>
         </div>
     </div>
 </div>
+ *
+ * < R
+ */
+?>
 
 <!-- Modal para upload de thumbnail -->
 <div class="modal fade" id="single_modal_thumbnail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -503,19 +510,18 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
 </div>
 
 
-
-<div class="modal fade modal-share-network" id="modal_share_network_item<?php echo $object->ID ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade modal-share-network" id="modal_share_network_item<?php echo $post->ID ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
 
-            <?php // echo $view_helper->render_modal_header('remove-sign', '<span class="glyphicon glyphicon-share"></span> ', __('Share', 'tainacan')); ?>
+            <?php echo $view_helper->render_modal_header('remove-sign', '<span class="glyphicon glyphicon-share"></span> ', __('Share', 'tainacan')); ?>
 
             <div class="modal-body">
                 <form name="form_share_item<?php echo get_the_ID() ?>" id="form_share_item<?php echo get_the_ID() ?>" method="post">
                     <div class="row">
                         <div class="col-md-6">
                             <?php _t('Post it on: ', 1); ?><br>
-                            <a target="_blank" href="https://twitter.com/intent/tweet?url=<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>&amp;text=<?php echo htmlentities(get_the_title()); ?>&amp;via=socialdb">
+                            <a target="_blank" href="https://twitter.com/intent/tweet?url=<?php echo get_the_permalink($collection_id) . '?item=' . $post->post_name; ?>&amp;text=<?php echo htmlentities(get_the_title()); ?>&amp;via=socialdb">
                                 <?php echo ViewHelper::render_icon('twitter-square', 'png', 'Twitter'); ?>
                             </a>
 
@@ -523,17 +529,17 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                                 <?php echo ViewHelper::render_icon('facebook-square', 'png', 'Facebook'); ?>
                             </a>
 
-                            <a target="_blank" href="https://plus.google.com/share?url=<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>">
+                            <a target="_blank" href="https://plus.google.com/share?url=<?php echo get_the_permalink($collection_id) . '?item=' . $post->post_name; ?>">
                                 <?php echo ViewHelper::render_icon('googleplus-square', 'png', 'Google Plus'); ?>
                             </a>
 
                             <br> <br>
                             <?php _t('Link: ', 1); ?>
-                            <input type="text" id="link_object_share<?php echo get_the_ID() ?>" class="form-control" value="<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>" />
+                            <input type="text" id="link_object_share<?php echo get_the_ID() ?>" class="form-control" value="<?php echo get_the_permalink($collection_id) . '?item=' . $post->post_name; ?>" />
                         </div>
                         <div class="col-md-6">
                             <?php _t('Embed it: ', 1); ?>
-                            <textarea id="embed_object<?php echo get_the_ID() ?>" class="form-control" rows="5"><?php echo '<iframe width="1024" height="768" src="' . get_the_permalink($collection_id) . '?item=' . $object->post_name . '" frameborder="0"></iframe>'; ?></textarea>
+                            <textarea id="embed_object<?php echo get_the_ID() ?>" class="form-control" rows="5"><?php echo '<iframe width="1024" height="768" src="' . get_the_permalink($collection_id) . '?item=' . $post->post_name . '" frameborder="0"></iframe>'; ?></textarea>
                         </div>
                     </div>
                     <hr>
@@ -548,7 +554,7 @@ $meta_source = $metas['socialdb_object_dc_source'][0];
                 </form>
             </div>
 
-            <?php // echo $view_helper->render_modal_footer("send_share_item(\"$curr_id\")", __('Send', 'tainacan')); ?>
+            <?php echo $view_helper->render_modal_footer("send_share_item(\"$curr_id\")", __('Send', 'tainacan')); ?>
 
         </div>
     </div>

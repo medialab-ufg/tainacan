@@ -13,7 +13,7 @@ $_special_configs = [
 <input type="hidden" id="show_collection_default" name="show_collection_default"
        value="<?php echo (!$collection_default || $collection_default === 'false') ? 'show' : 'hide'; ?>" />
 <input type="hidden" id="src" name="src" value="<?php echo get_template_directory_uri() ?>" />
-<input type="hidden" id="repository_main_page" name="repository_main_page" value="true" />
+<input type="hidden" id="repository_main_page" name="repository_main_page" value="<?php echo is_front_page() ?>" />
 <input type="hidden" id="collection_root_url" value="<?php echo get_the_permalink(get_option('collection_root_id')) ?>" />
 <input type="hidden" id="socialdb_fb_api_id" name="socialdb_fb_api_id" value="<?php echo $options['socialdb_fb_api_id']; ?>" />
 <input type="hidden" id="socialdb_embed_api_id" name="socialdb_embed_api_id" value="<?php echo $options['socialdb_embed_api_id']; ?>" />
@@ -23,8 +23,6 @@ $_special_configs = [
 <input type="hidden" id="last_index" name="last_index" value="0" />
 
 <input type="hidden" id="info_messages" name="info_messages" value="<?php echo $_special_configs['info_messages']; ?>" />
-<!-- PAGINA DO ITEM -->
-<input type="hidden" id="object_page" name="object_page" value="<?php echo $_special_configs['item']; ?>" />
 <!-- PAGINA DA CATEGORIA -->
 <input type="hidden" id="category_page" name="category_page" value="<?php echo $_special_configs['category']; ?>" />
 <!-- PAGINA DA PROPRIEDADE -->
@@ -33,3 +31,15 @@ $_special_configs = [
 <input type="hidden" id="tag_page" name="tag_page" value="<?php echo $_special_configs['tag']; ?>" />
 <!-- PAGINA DA TAXONOMIA -->
 <input type="hidden" id="tax_page" name="object_page" value="<?php echo $_special_configs['tax']; ?>" />
+
+<!-- PAGINA DO ITEM -->
+<?php if(is_single()): $parent = get_post($post->post_parent); ?>
+
+    <input type="hidden" id="object_page"      name="object_page"      value="<?php echo $_special_configs['item']; ?>" />
+    <input type="hidden" id="single_object_id" name="single_object_id" value="<?php echo $post->ID; ?>" />
+    <input type="hidden" id="single_name"      name="item_single_name" value="<?php echo $post->post_name; ?>" />
+    <input type="hidden" id="socialdb_permalink_object" name="socialdb_permalink_object" value="<?php echo get_the_permalink($parent->ID) . '?item=' . $post->post_name; ?>" />
+    <input type="hidden" class="object_id"     value="<?php echo $post->ID ?>"  />
+    <input type="hidden" class="post_id"       name="post_id" value="<?= $post->ID ?>">
+
+<?php endif; ?>

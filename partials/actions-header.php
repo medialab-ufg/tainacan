@@ -21,7 +21,7 @@ $stat_page = get_page_by_title(__('Statistics', 'tainacan'))->ID;
                     <li> <a href="javascript:void(0)" onclick="showProfileScreen('<?php echo $_src_ ?>');"> <?php _e('Profile', 'tainacan'); ?></a> </li>
 
                     <li>
-                        <a onclick="showCategoriesConfiguration('<?php echo $_src_; ?>', '<?php echo is_front_page(); ?>');updateStateRepositorio('categories');" >
+                        <a onclick="showCategoriesConfiguration('<?php echo $_src_; ?>', '<?php echo is_front_page(); ?>');/*updateStateRepositorio('categories');*/" >
                             <?php _e('My Categories', 'tainacan'); ?>
                         </a>
                     </li>
@@ -35,12 +35,12 @@ $stat_page = get_page_by_title(__('Statistics', 'tainacan'))->ID;
                         <li class="dropdown-header"> <?php _t('Repository Control Panel', 1); ?> </li>
 
                         <li>
-                            <a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_general_configuration');updateStateRepositorio('configuration');">
+                            <a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_general_configuration');/*updateStateRepositorio('configuration');*/">
                                 <span class="glyphicon glyphicon-wrench"></span> <?php _t('Configuration', 1); ?>
                             </a>
                         </li>
                         <li>
-                            <a onclick="repoConfig('<?php echo $_src_ ?>', 'list_repository', 'property');updateStateRepositorio('metadata');">
+                            <a onclick="repoConfig('<?php echo $_src_ ?>', 'list_repository', 'property');/*updateStateRepositorio('metadata');*/">
                                 <span class="glyphicon glyphicon-list-alt"></span> <?php _t('Metadata', 1); ?>
                             </a>
                         </li>
@@ -50,37 +50,33 @@ $stat_page = get_page_by_title(__('Statistics', 'tainacan'))->ID;
                             </a>
                         </li>
                         <li class="tainacan-museum-clear" <?php do_action('menu_repository_social_api') ?>>
-                            <a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_configuration');updateStateRepositorio('social');">
+                            <a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_configuration');/*updateStateRepositorio('social');*/">
                                 <span class="glyphicon glyphicon-globe"></span>  <?php _t('Social / API Keys', 1); ?>
                             </a>
                         </li>
                         <li class="tainacan-museum-clear" <?php do_action('menu_repository_license') ?>>
-                            <a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_licenses');updateStateRepositorio('licenses');">
+                            <a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_licenses');/*updateStateRepositorio('licenses');*/">
                                 <span class="glyphicon glyphicon-duplicate"></span> <?php _t('Licenses', 1); ?>
                             </a>
                         </li>
                         <li class="tainacan-museum-clear">
-                            <a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_welcome_email'); updateStateRepositorio('email');">
+                            <a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_welcome_email'); /*updateStateRepositorio('email');*/">
                                 <span  class="glyphicon glyphicon-envelope"></span> <?php echo $email_name ?>
                             </a>
                         </li>
 
-                        <?php if (has_action("addLibraryMenu")) { ?>
-                            <li> <a onclick="get_impressions_page('http://localhost/wordpress/biblioteca/wp-content/themes/tainacan');"><span  class="glyphicon glyphicon-print"></span> <?php _e('Impressions', 'tainacan'); ?></a></li>
-                        <?php } ?>
-
                         <li>
-                            <a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_tools'); updateStateRepositorio('tools');">
+                            <a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_tools'); /*updateStateRepositorio('tools');*/">
                                 <span  class="glyphicon glyphicon-tasks"></span> <?php _t('Tools', 1); ?>
                             </a>
                         </li>
                         <li>
-                            <a onclick="repoConfig('<?php echo $_src_ ?>', 'import_full'); updateStateRepositorio('import');">
+                            <a onclick="repoConfig('<?php echo $_src_ ?>', 'import_full'); /*updateStateRepositorio('import');*/">
                                 <span class="glyphicon glyphicon-import"></span> <?php _t('Import', 1); ?>
                             </a>
                         </li>
                         <li>
-                            <a onclick="repoConfig('<?php echo $_src_ ?>', 'export_full'); updateStateRepositorio('export');">
+                            <a onclick="repoConfig('<?php echo $_src_ ?>', 'export_full'); /*updateStateRepositorio('export');*/">
                                 <span class="glyphicon glyphicon-export"></span> <?php _t('Export', 1); ?>
                             </a>
                         </li>
@@ -98,7 +94,7 @@ $stat_page = get_page_by_title(__('Statistics', 'tainacan'))->ID;
                         <li role="separator" class="divider" style="padding: 0"></li>
 
                         <li class="repository-events">
-                            <a onclick="repoConfig('<?php echo $_src_ ?>', 'list_events_repository', 'event', '<?php echo $col_root_id ?>'); updateStateRepositorio('events');">
+                            <a onclick="repoConfig('<?php echo $_src_ ?>', 'list_events_repository', 'event', '<?php echo $col_root_id ?>'); /*updateStateRepositorio('events');*/">
                                 <span class="glyphicon glyphicon-flash"></span> <?php _e('Events', 'tainacan'); ?>&nbsp;&nbsp;
                                 <span id="notification_events_repository"></span>
                             </a>

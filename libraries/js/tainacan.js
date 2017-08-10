@@ -101,7 +101,7 @@ $(window).load(function () {
     }
 
     //verifico se esta mandando alguma mensagem
-    if ($('#repository_main_page').val() === 'true') {
+    if ($('#repository_main_page').val() === '1') {
         display_view_main_page();
     }
     //verifico se esta recuperando senha
@@ -261,7 +261,6 @@ $(window).load(function () {
 
     //submit do importar colecao
     $('#importCollection').submit(function (e) {
-        alert('oi'); return false;
         $('.nav-tabs').tab();
         $('.dropdown-toggle').dropdown();
         $('#modalImportCollection').modal('hide');
@@ -1960,7 +1959,6 @@ $(function () {
     if( ! $('body').hasClass('page-template-page-statistics') ) {
         list_templates("#collections-menu ul.templates");
     }
-
 
     $(document).on("click", ".added", function (e) {
         e.preventDefault();

@@ -1,17 +1,14 @@
 <script>
     $(function () {
+        /*
+         *    R >
+         *
         $("#main_part_collection").hide();
         var is_item_home = $("#configuration .item-breadcrumbs").siblings().first().is("#single_object_id");
-        if( is_item_home ) {
+        if( is_item_home )
             $("#configuration").css('margin-top', 50);
-        }
 
-        change_breadcrumbs_title('<?php _e('Import', 'tainacan') ?>');
-
-        $('img').bind('contextmenu', function (e) {
-            return false;
-        });
-
+        change_breadcrumbs_title( '< ? php _e('Import', 'tainacan') ?>');
         var is_col_header_visible = $(".collection_header").is(":visible");
         if (!is_col_header_visible) {
             //$('.header-navbar').css("margin-bottom", 0);
@@ -22,30 +19,40 @@
         if (window.history && window.history.pushState) {
             previousRoute = window.location.pathname;
             window.history.pushState('forward', null, $('#route_blog').val()+$('#slug_collection').val()+'/'+$('#single_name').val());
-            //
         }
-        var stateObj = {foo: "bar"};
+
+         var myPopoverObject = $('#iframebuttonObject').data('popover');
+         $('#iframebuttonObject').popover('hide');
+         myPopoverObject.options.html = true;
+         //<iframe width="560" height="315" src="https://www.youtube.com/embed/CGyEd0aKWZE" frameborder="0" allowfullscreen></iframe>
+         myPopoverObject.options.content = $('#socialdb_permalink_object').val();
+
+        *
+        *    < R
+        */
+
+        $('img').bind('contextmenu', function (e) {
+            return false;
+        });
+        var item_id = $('#single_object_id').val();
+        $('body').css('background-color', '#f1f2f2');
+
+        // var stateObj = {foo: "bar"};
         $('#form').html('');
 //        $('#object_page').val($('#single_name').val());
 //        history.replaceState(stateObj, "page 2", $('#socialdb_permalink_object').val());
 
-        if( ! $('body').hasClass('page-template-page-statistics') ) {
-            //verifyPublishedItem($('#single_object_id').val());
-            list_files_single($('#single_object_id').val());
-            list_ranking_single($('#single_object_id').val());
-            list_properties_single($('#single_object_id').val());
-            list_properties_edit_remove_single($('#single_object_id').val());
-            list_comments($('#single_object_id').val());
+
+        if(!$('body').hasClass('page-template-page-statistics')) {
+            list_files_single(item_id);
+            list_ranking_single(item_id);
+            list_properties_single(item_id);
+            list_properties_edit_remove_single(item_id);
+            list_comments(item_id);
             $('[data-toggle="popoverObject"]').popover();
         }
 
 
-        var myPopoverObject = $('#iframebuttonObject').data('popover');
-        $('#iframebuttonObject').popover('hide');
-        myPopoverObject.options.html = true;
-        //<iframe width="560" height="315" src="https://www.youtube.com/embed/CGyEd0aKWZE" frameborder="0" allowfullscreen></iframe>
-        myPopoverObject.options.content = $('#socialdb_permalink_object').val();
-        // form thumbnail
         $('#formThumbnail').submit(function (e) {
             e.preventDefault();
             $('#single_modal_thumbnail').modal('hide');
@@ -66,16 +73,17 @@
                 }
             });
         });
+
         //carrego as licensas ativas
         $.ajax({
+            // url: $('#src').val() + '/controllers/object/object_controller.php',
             url: $('#src').val() + '/controllers/object/object_controller.php',
             type: 'POST',
-            data: {operation: 'show_collection_licenses', object_id: $('#single_object_id').val(), collection_id: $("#collection_id").val()}
+            data: {operation: 'show_collection_licenses', object_id: item_id, collection_id: $("#collection_id").val()}
         }).done(function (result) {
             $('#event_license').html(result);
         });
     });
-
 
     /*
      * Increments item's collection view count
@@ -112,6 +120,7 @@
 //END
 //BEGIN:as proximas funcoes sao para mostrar os eventos
 // list_properties(id): funcao que mostra a primiera listagem de propriedades
+
     function list_properties_single(id) {
         $.ajax({
             type: "POST",
@@ -332,7 +341,6 @@
         });
     }
 
-
     function single_remove_event_tag_classication(title, text, tag_id, object_id, time) {
         swal({
             title: title,
@@ -406,6 +414,7 @@
         backToMainPage();
         edit_object_item(object_id);
     }
+
 // editando objeto
     function edit_object_item(object_id) {
         var stateObj = {foo: "bar"};
@@ -430,19 +439,60 @@
             }
         });
     }
+
 //################  FUNCOES PARA OS COMENTARIOS ################################# 
 //listando os comentarios
     function list_comments(object_id) {
         $.ajax({
-            type: "POST",
-            url: $('#src').val() + "/controllers/object/object_controller.php",
-            data: {collection_id: $('#collection_id').val(), operation: 'list_comments', object_id: object_id}
+            type: "POST", url: $('#src').val() + "/controllers/object/object_controller.php",
+            data: { collection_id: $('#collection_id').val(), operation: 'list_comments', object_id: object_id }
         }).done(function (result) {
             verifyPublishedItem(object_id);
             $("#comments_object").html(result);
-            $('.dropdown-toggle').dropdown();
-            $('.nav-tabs').tab();
         });
+    }
+
+    function verifyPublishedItem(item_id) {
+        $.ajax({
+            url: $('#src').val() + '/controllers/object/objectsingle_controller.php',
+            type: 'POST',
+            data: { operation: 'verifyPublishedItem', collection_id: $("#collection_id").val(), item_id: item_id}
+        }).done(function (result) {
+            json = JSON.parse(result);
+            if (json.is_removed) {
+                showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('This item has been removed, redirecting to collection home page! ', 'tainacan') ?>', 'error');
+                window.location = json.url;
+            }
+        });
+    }
+
+    function submit_comment(object_id) {
+        if ($('#comment').val().trim() === '') {
+            showAlertGeneral('<?php _e('Attention!', 'tainacan') ?>', '<?php _e('Fill your comment', 'tainacan') ?>', 'info');
+        } else {
+            show_modal_main();
+            $.ajax({
+                type: "POST", url: $('#src').val() + "/controllers/event/event_controller.php",
+                data: {
+                    operation: 'add_event_comment_create',
+                    socialdb_event_create_date: '<?php echo mktime() ?>',
+                    socialdb_event_user_id: $('#current_user_id').val(),
+                    socialdb_event_comment_create_object_id: object_id,
+                    socialdb_event_comment_create_content: $('#comment').val(),
+                    socialdb_event_comment_author_name: $('#author').val(),
+                    socialdb_event_comment_author_email: $('#email').val(),
+                    socialdb_event_comment_author_website: $('#url').val(),
+                    socialdb_event_comment_term_id: $('#socialdb_event_comment_term_id').val(),
+                    socialdb_event_comment_parent: 0,
+                    socialdb_event_collection_id: $('#collection_id').val()}
+            }).done(function (result) {
+                hide_modal_main();
+                elem_first = jQuery.parseJSON(result);
+                showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
+                list_comments_general();
+                $("#comment_item"+object_id).modal('hide');
+            });
+        }
     }
 
     /******************************* Metadados Fixos *******************************/
@@ -458,6 +508,7 @@
     function save_license(object_id) {
         insert_fixed_metadata(object_id, 'license', $('input[name="object_license"]:checked').val());
     }
+
     function edit_license() {
         $('#edit_license').hide();
         $('#text_license').hide();
@@ -644,7 +695,6 @@
             showSingleObjectByName($('#object_page').val(), $('#src').val());
         });
     }
-
 
      function single_do_checkout(id){
         $.ajax({

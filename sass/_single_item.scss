@@ -356,11 +356,15 @@
 } // #single_item_tainacan
 
 .item-breadcrumbs {
-  margin-top: 10px;
-  padding-top: 0;
-  background: $collections-bg-color !important;
+  /* R
+    margin-top: 10px;
+    padding-top: 0;
+  */
+  padding-top: 20px;
+  margin-top: 0;
   color: $brand-medium-blue !important;
   font-weight: bolder;
+  background: $collections-bg-color !important;
 
   .content-back {
     color: $brand-medium-blue;
