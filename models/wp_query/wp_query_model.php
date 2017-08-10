@@ -17,9 +17,9 @@ class WPQueryModel extends Model {
     /**
      * function set_post_type()
      * @param int $collection_id
-     * @return void 
+     * @return void
      * Metodo reponsavel em determinar se deve listar as colecoes ou objetos
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
     public function set_post_type($collection_id) {
         if ($collection_id == get_option('collection_root_id')) {
@@ -32,9 +32,9 @@ class WPQueryModel extends Model {
     /**
      * function dynatree_filter()
      * @param array Array com os dados da colecao
-     * @return void 
+     * @return void
      * Metodo reponsavel em separar os tipos selecionados no dynatree e colo
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
     public function dynatree_filter($data) {
         $category_model = new CategoryModel();
@@ -53,7 +53,7 @@ class WPQueryModel extends Model {
         if(isset($recover_data['tags']) && is_array($recover_data['tags'])){
             foreach ($recover_data['tags'] as $tag) {
                 $result['tags'][] = $tag;
-            }    
+            }
         }
         if (!empty($terms)) {
             if (is_array($terms)) {
@@ -64,8 +64,8 @@ class WPQueryModel extends Model {
                         if(!isset($result[$key])||!in_array($classification,  $result[$key]))
                             $result[$key][] = $classification;
                     } elseif (strpos($classification, '_') !== false && strpos($classification, 'tag') !== false) {
-                        $result['tags'][] = explode('_', $classification)[0];  
-                    } elseif (strpos($classification, '_') !== false 
+                        $result['tags'][] = explode('_', $classification)[0];
+                    } elseif (strpos($classification, '_') !== false
                             && strpos($classification, 'datatext') === false
                             && strpos($classification, 'title') === false
                             && strpos($classification, 'license')=== false
@@ -107,7 +107,7 @@ class WPQueryModel extends Model {
                         $value = trim(explode('_', $classification)[0]);
                         if(!isset($recover_data['keyword']) ||(is_array( $recover_data['keyword']) && !in_array(get_post($value)->post_title,  $recover_data['keyword'])))
                             $recover_data['keyword'][] = get_post($value)->post_title;
-                    }   
+                    }
                 }
             }
         }
@@ -115,7 +115,7 @@ class WPQueryModel extends Model {
         if(!isset($result['tags'])&&isset($recover_data['tags'])){
             unset($recover_data['tags']);
         }
-        
+
         //adciono no array de informacoes
         if($result&&!empty($result)){
             foreach ($result as $facet => $terms) {
@@ -141,9 +141,9 @@ class WPQueryModel extends Model {
     /**
      * function cloud_filter()
      * @param array Array com os dados da colecao
-     * @return void 
+     * @return void
      * Metodo reponsavel em determinar se deve listar as colecoes ou objetos
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
     public function cloud_filter($data) {
         $recover_data = unserialize(stripslashes($data['wp_query_args']));
@@ -163,9 +163,9 @@ class WPQueryModel extends Model {
     /**
      * function link_metadata_filter()
      * @param array Array com os dados da colecao
-     * @return void 
+     * @return void
      * Metodo reponsavel em filtrar itens por uma propriedade de dados
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
     public function link_metadata_filter($data) {
         $recover_data = unserialize(stripslashes($data['wp_query_args']));
@@ -176,13 +176,13 @@ class WPQueryModel extends Model {
         }
         return $recover_data;
     }
-    
+
     /**
      * function checkbox_filter()
      * @param array Array com os dados da colecao
-     * @return void 
+     * @return void
      * Metodo reponsavel em determinar se deve listar as colecoes ou objetos
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
     public function radio_filter($data) {
         $recover_data = unserialize(stripslashes($data['wp_query_args']));
@@ -195,13 +195,13 @@ class WPQueryModel extends Model {
         }
         return $recover_data;
     }
-    
+
      /**
      * function checkbox_filter()
      * @param array Array com os dados da colecao
-     * @return void 
+     * @return void
      * Metodo reponsavel em determinar se deve listar as colecoes ou objetos
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
     public function menu_filter($data) {
         $recover_data = unserialize(stripslashes($data['wp_query_args']));
@@ -218,9 +218,9 @@ class WPQueryModel extends Model {
     /**
      * function select_filter($data)
      * @param array Array com os dados da colecao
-     * @return void 
+     * @return void
      * Metodo reponsavel em determinar se deve listar as colecoes ou objetos
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
     public function select_filter($data) {
         $recover_data = unserialize(stripslashes($data['wp_query_args']));
@@ -236,9 +236,9 @@ class WPQueryModel extends Model {
     /**
      * function checkbox_filter()
      * @param array Array com os dados da colecao
-     * @return void 
+     * @return void
      * Metodo reponsavel em determinar se deve listar as colecoes ou objetos
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
     public function ordenation_filter($data) {
         $recover_data = unserialize(stripslashes($data['wp_query_args']));
@@ -246,16 +246,16 @@ class WPQueryModel extends Model {
         $ordenation = $data['value'];
         if (!empty($ordenation)) {
             $recover_data['ordenation_id'] = $ordenation;
-        } 
+        }
         return $recover_data;
     }
-    
+
      /**
      * function checkbox_filter()
      * @param array Array com os dados da colecao
-     * @return void 
+     * @return void
      * Metodo reponsavel em determinar se deve listar as colecoes ou objetos
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
     public function orderby_filter($data) {
         $recover_data = unserialize(stripslashes($data['wp_query_args']));
@@ -267,13 +267,13 @@ class WPQueryModel extends Model {
 
         return $recover_data;
     }
-    
+
      /**
      * function checkbox_filter()
      * @param array Array com os dados da colecao
-     * @return void 
+     * @return void
      * Metodo reponsavel em determinar se deve listar as colecoes ou objetos
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
     public function keyword_filter($data) {
         $recover_data = unserialize(stripslashes($data['wp_query_args']));
@@ -287,9 +287,9 @@ class WPQueryModel extends Model {
     /**
      * function checkbox_filter()
      * @param array Array com os dados da colecao
-     * @return void 
+     * @return void
      * Metodo reponsavel em determinar se deve listar as colecoes ou objetos
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
     public function page_filter($data) {
         $recover_data = unserialize(stripslashes($data['wp_query_args']));
@@ -305,24 +305,24 @@ class WPQueryModel extends Model {
     /**
      * function checkbox_filter()
      * @param array Array com os dados da colecao
-     * @return void 
+     * @return void
      * Metodo reponsavel em determinar de qual autpr se esta buscando os itens
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
     public function author_filter($data) {
         $recover_data = unserialize(stripslashes($data['wp_query_args']));
         $author = $data['value'];
         if (!empty($author)) {
             $recover_data['author'] = $author;
-        } 
+        }
         return $recover_data;
     }
     /**
      * function checkbox_filter()
      * @param array Array com os dados da colecao
-     * @return void 
+     * @return void
      * Metodo reponsavel em determinar se deve listar as colecoes ou objetos
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
     public function checkbox_filter($data) {
         $recover_data = unserialize(stripslashes($data['wp_query_args']));
@@ -354,9 +354,9 @@ class WPQueryModel extends Model {
     /**
      * function checkbox_filter()
      * @param array Array com os dados da colecao
-     * @return void 
+     * @return void
      * Metodo reponsavel em determinar se deve listar as colecoes ou objetos
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
     public function multipleselect_filter($data) {
         $recover_data = unserialize(stripslashes($data['wp_query_args']));
@@ -387,9 +387,9 @@ class WPQueryModel extends Model {
     /**
      * function checkbox_filter()
      * @param array Array com os dados da colecao
-     * @return void 
+     * @return void
      * Metodo reponsavel em determinar se deve listar as colecoes ou objetos
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
     public function range_filter($data) {
         $recover_data = unserialize(stripslashes($data['wp_query_args']));
@@ -416,9 +416,9 @@ class WPQueryModel extends Model {
     /**
      * function checkbox_filter()
      * @param array Array com os dados da colecao
-     * @return void 
+     * @return void
      * Metodo reponsavel em determinar se deve listar as colecoes ou objetos
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
     public function fromto_filter($data) {
         $recover_data = unserialize(stripslashes($data['wp_query_args']));
@@ -442,13 +442,13 @@ class WPQueryModel extends Model {
         }
         return $recover_data;
     }
-    
+
      /**
      * function checkbox_filter()
      * @param array Array com os dados da colecao
-     * @return void 
+     * @return void
      * Metodo reponsavel em determinar se deve listar as colecoes ou objetos
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
     public function filter($data) {
         $recover_data = unserialize(stripslashes($data['wp_query_args']));
@@ -462,13 +462,13 @@ class WPQueryModel extends Model {
         }
         return $recover_data;
     }
-    
+
       /**
      * function checkbox_filter()
      * @param array Array com os dados da colecao
-     * @return void 
+     * @return void
      * Metodo reponsavel em determinar se deve listar as colecoes ou objetos
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
     public function clean($data) {
         $recover_data = unserialize(stripslashes($data['wp_query_args']));
@@ -499,9 +499,9 @@ class WPQueryModel extends Model {
     /**
      * function do_filter()
      * @param array Array com os dados do ultimo filtro
-     * @return void 
+     * @return void
      * Metodo reponsavel em determinar se deve listar as colecoes ou objetos
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
     public function do_filter($recover_data) {
         $is_root_collection = $recover_data['collection_id'] == get_option('collection_root_id');
@@ -650,7 +650,7 @@ class WPQueryModel extends Model {
      * @param array $data O array de dados vindo do formulario
      * @return int com a pagina a ser visualizada
      * Metodo reponsavel em  retornar o fromato que sera ordenado (crescente ou decrescente)
-     * @author Eduardo Humberto 
+     * @author Eduardo Humberto
      */
     public function set_page($data) {
         if (isset($data['pagid']) && $data['pagid'] != '' && is_numeric($data['pagid'])) {
@@ -665,7 +665,7 @@ class WPQueryModel extends Model {
      * @param array $data O array de dados vindo do formulario
      * @return string com o tipo de pesquisa que sera realizada
      * Metodo reponsavel em  retornar o fromato que sera ordenado (crescente ou decrescente)
-     * @author Eduardo Humberto 
+     * @author Eduardo Humberto
      */
     public function set_type_order($data) {
         $data['order_by'] = ( $data['order']) ? $data['order'] :  $data['order_by'];
@@ -691,7 +691,7 @@ class WPQueryModel extends Model {
      * @param array $data O array de dados vindo do formulario
      * @return string com o tipo de pesquisa que sera realizada
      * Metodo reponsavel em  retornar o tipo de ordem que sera utilizado no wp_query
-     * @author Eduardo Humberto 
+     * @author Eduardo Humberto
      */
     public function set_order_by($data) {
         $defaults = false;
@@ -713,11 +713,11 @@ class WPQueryModel extends Model {
             }else{
                 return trim($data['orderby']);
             }
-        } 
+        }
         else {
              $default = get_post_meta($data['collection_id'], 'socialdb_collection_default_ordering',true);
             if((empty($default)||$default=='')||($property && $property->slug == 'socialdb_ordenation_recent')){
-                return 'date'; 
+                return 'date';
             }else{
                 return trim($default);
             }
@@ -726,9 +726,9 @@ class WPQueryModel extends Model {
      /**
      * function remove_filter()
      * @param array Array com os dados da colecao
-     * @return void 
+     * @return void
      * Metodo reponsavel em determinar se deve listar as colecoes ou objetos
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
     public function remove_filter($data) {
         $recover_data = unserialize(stripslashes($data['wp_query_args']));
@@ -778,9 +778,9 @@ class WPQueryModel extends Model {
      * @param array $categories as categorias selecionadas no dynatree a serem utilizadas na filtragem das colecoes
      * @param int $collection_id O id da colecao
      * @param array $tags as tags selecionadas no dynatree
-     * @return array com os dados a serem utilizados no wp_query 
+     * @return array com os dados a serem utilizados no wp_query
      * Metodo reponsavel em  montar o array que sera utilizado no Wp_query
-     * @author Eduardo Humberto 
+     * @author Eduardo Humberto
      */
     public function get_tax_query($recover_data) {
         // coloco categorias no array tax query
@@ -838,8 +838,8 @@ class WPQueryModel extends Model {
      * @signature categories_by_facet($categories, $collection_id)
      * @param array $categories as categorias selecionadas no dynatree a serem utilizadas na filtragem das colecoes
      * @param int $collection_id O id da colecao
-     * @return array com os categorias separadas pela faceta (faceta como chave no array) 
-     * @author Eduardo Humberto 
+     * @return array com os categorias separadas pela faceta (faceta como chave no array)
+     * @author Eduardo Humberto
      */
     public function categories_by_facet($categories, $collection_id) {
         $categories_by_facet = array();
@@ -858,9 +858,9 @@ class WPQueryModel extends Model {
      * @param array $categories as categorias selecionadas no dynatree a serem utilizadas na filtragem das colecoes
      * @param int $collection_id O id da colecao
      * @param array $tags as tags selecionadas no dynatree
-     * @return array com os dados a serem utilizados no wp_query 
+     * @return array com os dados a serem utilizados no wp_query
      * Metodo reponsavel em  montar o array que sera utilizado no Wp_query
-     * @author Eduardo Humberto 
+     * @author Eduardo Humberto
      */
     public function get_meta_query($recover_data) {
         $meta_query = array();
@@ -956,7 +956,7 @@ class WPQueryModel extends Model {
                 'value' => $recover_data['license_tree'],
                 'compare' => 'IN'
             );
-            
+
         }
         // busca pelo o tipo do item
         if (isset($recover_data['type_tree'])) {
@@ -969,7 +969,7 @@ class WPQueryModel extends Model {
                     unset($to_exclude[array_search(trim($value_id), $to_exclude)]);
                     $to_include[] = trim($value_id);
                 }else{
-                    $has_other = true; 
+                    $has_other = true;
                 }
             }
             if($has_other){
@@ -983,7 +983,7 @@ class WPQueryModel extends Model {
                     'value' =>$to_include,
                     'compare' => 'IN');
             }
-            
+
         }
         // busca pelo o formato do item
         if (isset($recover_data['format_tree'])) {
@@ -1028,14 +1028,14 @@ class WPQueryModel extends Model {
                             'value' => $value_id,
                             'compare' => 'IN'
                         );
-                else:    
+                else:
                     $meta_query[] = array(
                         'key' => 'socialdb_property_' . $property_id,
                         'value' => (is_array($value_id)? array_map("trim", $value_id):trim($value_id)),
                         'compare' => 'IN'
                     );
                 endif;
-                
+
             }
         }
         if (isset($recover_data['properties_data_fromto_numeric'])) {
@@ -1107,7 +1107,7 @@ class WPQueryModel extends Model {
         $meta_query = $this->set_arguments_advanced_search($meta_query,$recover_data);
         return $meta_query;
     }
-    
+
     public function get_hash_synomys(&$recover_data,$tax_query){
         $hashs = [];
         $array = [];
@@ -1115,7 +1115,7 @@ class WPQueryModel extends Model {
         $no_hash_tag = [];
         $query_synonyms = array('relation' => 'OR');
         // buscando os sinonimos de uma categoria no array de dados de uma pesquisa,
-        // se caso a categoria nao possuir sinonimos, sera incluido seu id para 
+        // se caso a categoria nao possuir sinonimos, sera incluido seu id para
         // ser realizado a busca
         if(isset($recover_data['facets'])&&  is_array($recover_data['facets'])):
             foreach ($recover_data['facets'] as $key_facet => $category_by_facet) {
@@ -1131,36 +1131,36 @@ class WPQueryModel extends Model {
                         if(empty($recover_data['facets'][$key_facet])||!is_array($recover_data['facets'][$key_facet])){
                             unset($recover_data['facets'][$key_facet]);
                         }
-                       $hashs[] = $hash; 
+                       $hashs[] = $hash;
                     }else{ // se a categoria nao possuir HASH
-                       $no_hash[$key_facet][$key_category] = $category; 
+                       $no_hash[$key_facet][$key_category] = $category;
                        $array[] = $category;
-                    } 
+                    }
                 }
-                  
+
             }
         endif;
         // buscando os sinonimos de uma tag no array de dados de uma pesquisa,
-        // se caso a tag nao possuir sinonimos, sera incluido seu id para 
+        // se caso a tag nao possuir sinonimos, sera incluido seu id para
         // ser realizado a busca
         if(isset($recover_data['tags'])):
             foreach ($recover_data['tags'] as $key_tag => $tag) {
                 $hash = get_term_meta($tag,'socialdb_term_synonyms',true);
                 if($hash&&$hash!=''){
-                     unset($recover_data['tags'][$key_tag]); 
+                     unset($recover_data['tags'][$key_tag]);
                     if(empty($recover_data['tags'])){
                         unset($recover_data['tags']);
                     }
-                     $hashs[] = $hash; 
+                     $hashs[] = $hash;
                 }else{ // se a categoria nao possuir HASH
-                    $no_hash_tag[$key_tag] = $tag; 
+                    $no_hash_tag[$key_tag] = $tag;
                     $array[] = $category;
-                 }  
+                 }
             }
         endif;
-         // buscando os sinonimos de uma categoria no array 
+         // buscando os sinonimos de uma categoria no array
          // de dados de uma pesquisa NA busca avancada,
-        // se caso a categoria nao possuir sinonimos, sera incluido seu id para 
+        // se caso a categoria nao possuir sinonimos, sera incluido seu id para
         // ser realizado a busca
         if(isset($recover_data['advanced_search']['tags'])):
             foreach ($recover_data['advanced_search']['tags'] as $key_tag => $tag) {
@@ -1170,15 +1170,15 @@ class WPQueryModel extends Model {
                 }
                 $hash = get_term_meta($tag_term->term_id,'socialdb_term_synonyms',true);
                 if($hash&&$hash!=''){
-                     unset($recover_data['advanced_search']['tags'][$key_tag]); 
+                     unset($recover_data['advanced_search']['tags'][$key_tag]);
                     if(empty($recover_data['advanced_search']['tags'])){
                         unset($recover_data['advanced_search']['tags']);
                     }
-                     $hashs[] = $hash; 
+                     $hashs[] = $hash;
                 }else{ // se a categoria nao possuir HASH
-                    $no_hash_tag[$key_tag] = $tag_term->term_id; 
+                    $no_hash_tag[$key_tag] = $tag_term->term_id;
                     $array[] = $category;
-                 }  
+                 }
             }
         endif;
         //adicionando no array do wpquery
@@ -1215,7 +1215,7 @@ class WPQueryModel extends Model {
             //REMOVO AS TAGS
             if($no_hash_tag&&!empty($no_hash_tag)){
                 foreach ($no_hash_tag as $key_tag => $tag) {
-                    unset($recover_data['tags'][$key_tag]); 
+                    unset($recover_data['tags'][$key_tag]);
                     if(empty($recover_data['tags'])){
                         unset($recover_data['tags']);
                     }
@@ -1264,21 +1264,21 @@ class WPQueryModel extends Model {
     /**
      * function select_filter($data)
      * @param array Array com os dados da colecao
-     * @return void 
+     * @return void
      * Metodo reponsavel em determinar se deve listar as colecoes ou objetos
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
     public function advanced_searched_filter($data) {
         $recover_data = $this->clean($data);
         if($data['collection_id']=='0'){
-            $recover_data['collection_id'] = 0; 
+            $recover_data['collection_id'] = 0;
             $recover_data['category_root_id'] = explode(',', $data['categories']);
         }else if(isset($data['advanced_search_collection'])
                 &&get_option('collection_root_id')==$data['advanced_search_collection']){
             $recover_data['collection_id'] = 'all_items';
             $recover_data['category_root_id']='all_items';
         }else{
-            $recover_data['collection_id'] = $data['collection_id']; 
+            $recover_data['collection_id'] = $data['collection_id'];
             $recover_data['category_root_id'] = $this->get_category_root_of($recover_data['collection_id']);
         }
         //$recover_data['collection_id'] = $data['collection_id'];
@@ -1286,7 +1286,7 @@ class WPQueryModel extends Model {
         $ordenation = $data['value'];
         if (!empty($ordenation)) {
             $recover_data['pagid'] = $ordenation;
-        } 
+        }
         //verificando a pesquisa no titulo e descricao
         if($data['advanced_search_title']){
             $recover_data['keyword'] = $data['advanced_search_title'];
@@ -1317,9 +1317,9 @@ class WPQueryModel extends Model {
     /**
      * function select_filter($data)
      * @param array Array com os dados da colecao
-     * @return void 
+     * @return void
      * Metodo reponsavel em determinar se deve listar as colecoes ou objetos
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
     public function set_terms_filter_advanced_search($recover_data,$data){
         if ($data['properties_id'] !== '') {
@@ -1327,7 +1327,7 @@ class WPQueryModel extends Model {
             foreach ($properties_id as $property_id) {
                 if(!$data["socialdb_property_".$property_id."_operation"])
                     continue;
-                
+
                 if ($data["socialdb_propertyterm_$property_id"]&&!is_array($data["socialdb_propertyterm_$property_id"]) && $data["socialdb_propertyterm_$property_id"] !== '') {
                     $recover_data['facets'][$property_id] = $data["socialdb_propertyterm_$property_id"];
                     $recover_data['facets_operation'][$property_id] = $this->get_operation_numeric_advanced_search($data["socialdb_property_".$property_id."_operation"]);
@@ -1336,7 +1336,7 @@ class WPQueryModel extends Model {
                       $recover_data['facets'][$property_id][] = $value;
                       $recover_data['facets_operation'][$property_id] = $this->get_operation_numeric_advanced_search($data["socialdb_property_".$property_id."_operation"]);
                     }
-                } 
+                }
             }
         }
         return $recover_data;
@@ -1344,9 +1344,9 @@ class WPQueryModel extends Model {
      /**
      * function select_filter($data)
      * @param array Array com os dados da colecao
-     * @return void 
+     * @return void
      * Metodo reponsavel em determinar se deve listar as colecoes ou objetos
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
     public function set_properties_filter_advanced_search($recover_data,$data){
         $property_model = new PropertyModel;
@@ -1360,10 +1360,10 @@ class WPQueryModel extends Model {
                              $array_data = ['value'=>$data["socialdb_property_$property_id"],'operation'=>'='];
                         }elseif($data["socialdb_property_{$property_id}_operation"]=='2'){ // totalmente diferente
                              $array_data = ['value'=>$data["socialdb_property_$property_id"],'operation'=>'!='];
-                        }elseif($data["socialdb_property_{$property_id}_operation"]=='3'){ // contem alguma das palavras 
+                        }elseif($data["socialdb_property_{$property_id}_operation"]=='3'){ // contem alguma das palavras
                              $array_data = ['value'=>$data["socialdb_property_$property_id"],'operation'=>'LIKE'];
                         }
-                        elseif($data["socialdb_property_{$property_id}_operation"]=='4'){ // NAO contenha qualquer das palavras 
+                        elseif($data["socialdb_property_{$property_id}_operation"]=='4'){ // NAO contenha qualquer das palavras
                              $array_data = ['value'=> $data["socialdb_property_$property_id"],'operation'=>'NOT LIKE'];
                         }
                         $recover_data['advanced_search']['text'][$property_id] = $array_data;
@@ -1375,10 +1375,10 @@ class WPQueryModel extends Model {
                              $array_data = ['value'=>$data["socialdb_property_$property_id"],'operation'=>'='];
                         }elseif($data["socialdb_property_{$property_id}_operation"]=='2'){ // totalmente diferente
                              $array_data = ['value'=>$data["socialdb_property_$property_id"],'operation'=>'!='];
-                        }elseif($data["socialdb_property_{$property_id}_operation"]=='3'){ // contem alguma das palavras 
+                        }elseif($data["socialdb_property_{$property_id}_operation"]=='3'){ // contem alguma das palavras
                              $array_data = ['value'=> $data["socialdb_property_$property_id"],'operation'=>'LIKE'];
                         }
-                        elseif($data["socialdb_property_{$property_id}_operation"]=='4'){ // NAO contenha qualquer das palavras 
+                        elseif($data["socialdb_property_{$property_id}_operation"]=='4'){ // NAO contenha qualquer das palavras
                              $array_data = ['value'=>  $data["socialdb_property_$property_id"],'operation'=>'NOT LIKE'];
                         }
                         $recover_data['advanced_search']['textarea'][$property_id] = $array_data;
@@ -1389,10 +1389,10 @@ class WPQueryModel extends Model {
                              $array_data = ['value'=>$data["socialdb_property_$property_id"],'operation'=>'='];
                         }elseif($data["socialdb_property_{$property_id}_operation"]=='2'){ // totalmente diferente
                              $array_data = ['value'=>$data["socialdb_property_$property_id"],'operation'=>'!='];
-                        }elseif($data["socialdb_property_{$property_id}_operation"]=='3'){ // contem alguma das palavras 
+                        }elseif($data["socialdb_property_{$property_id}_operation"]=='3'){ // contem alguma das palavras
                              $array_data = ['value'=> $data["socialdb_property_$property_id"],'operation'=>'>='];
                         }
-                        elseif($data["socialdb_property_{$property_id}_operation"]=='4'){ // NAO contenha qualquer das palavras 
+                        elseif($data["socialdb_property_{$property_id}_operation"]=='4'){ // NAO contenha qualquer das palavras
                              $array_data = ['value'=>$data["socialdb_property_$property_id"],'operation'=>'<='];
                         }
                         $recover_data['advanced_search']['numeric'][$property_id] = $array_data;
@@ -1404,15 +1404,15 @@ class WPQueryModel extends Model {
                             $date_sql = explode('/', $value)[2].'-' .explode('/', $value)[1].'-' .explode('/', $value)[0];
                             $data["socialdb_property_$property_id"] = $date_sql;
                         }
-                        
+
                         if($data["socialdb_property_{$property_id}_operation"]=='1'){ // se a opercao for totalmente igual
                              $array_data = ['value'=>$data["socialdb_property_$property_id"],'operation'=>'='];
                         }elseif($data["socialdb_property_{$property_id}_operation"]=='2'){ // totalmente diferente
                              $array_data = ['value'=>$data["socialdb_property_$property_id"],'operation'=>'!='];
-                        }elseif($data["socialdb_property_{$property_id}_operation"]=='3'){ // contem alguma das palavras 
+                        }elseif($data["socialdb_property_{$property_id}_operation"]=='3'){ // contem alguma das palavras
                              $array_data = ['value'=> $data["socialdb_property_$property_id"],'operation'=>'>='];
                         }
-                        elseif($data["socialdb_property_{$property_id}_operation"]=='4'){ // NAO contenha qualquer das palavras 
+                        elseif($data["socialdb_property_{$property_id}_operation"]=='4'){ // NAO contenha qualquer das palavras
                              $array_data = ['value'=>$data["socialdb_property_$property_id"],'operation'=>'<='];
                         }
                         $recover_data['advanced_search']['date'][$property_id] = $array_data;
@@ -1425,26 +1425,26 @@ class WPQueryModel extends Model {
                 }elseif($data["socialdb_property_".$property_id."_1"]&&$data["socialdb_property_".$property_id."_2"]){
                    $array_data = [
                        'value'=>[$data["socialdb_property_".$property_id."_1"],$data["socialdb_property_".$property_id."_2"]],
-                       'operation'=> ($data["socialdb_property_".$property_id."_operation"]=='1')?'BETWEEN':'NOT BETWEEN' ];     
+                       'operation'=> ($data["socialdb_property_".$property_id."_operation"]=='1')?'BETWEEN':'NOT BETWEEN' ];
                     $recover_data['advanced_search']['ranking_numeric'][$property_id] = $array_data;
                 }elseif($data["socialdb_property_".$property_id."_stars"]){
                     $array_data = [
                        'value'=>  explode('_', $data["socialdb_property_".$property_id."_stars"]),
-                       'operation'=> ($data["socialdb_property_".$property_id."_operation"]=='1')?'BETWEEN':'NOT BETWEEN' ];     
+                       'operation'=> ($data["socialdb_property_".$property_id."_operation"]=='1')?'BETWEEN':'NOT BETWEEN' ];
                     $recover_data['advanced_search']['ranking_stars'][$property_id] = $array_data;
                 }elseif($data["object_license"]&&  is_array($data["object_license"])){
                     $array_data = [
                        'value'=>  $data["object_license"],
-                       'operation'=> ($data["object_license_operation"]=='3')?'IN':'NOT IN' ];     
+                       'operation'=> ($data["object_license_operation"]=='3')?'IN':'NOT IN' ];
                     $recover_data['advanced_search']['license'] = $array_data;
                 }
-                
+
             }
         }
         return $recover_data;
     }
     /**
-     * Retorna o tipo de operacao para strins       
+     * Retorna o tipo de operacao para strins
      * @param type $operation
      * @return string
      */
@@ -1453,9 +1453,9 @@ class WPQueryModel extends Model {
             return'=';
         } elseif ($operation == '2') { // totalmente diferente
             return '!=';
-        } elseif ($operation == '3') { // contem alguma das palavras 
+        } elseif ($operation == '3') { // contem alguma das palavras
             return 'LIKE';
-        } elseif ($operation == '4') { // NAO contenha qualquer das palavras 
+        } elseif ($operation == '4') { // NAO contenha qualquer das palavras
             return 'NOT LIKE';
         }
     }
@@ -1469,9 +1469,9 @@ class WPQueryModel extends Model {
             return'=';
         } elseif ($operation == '2') { // totalmente diferente
             return '!=';
-        } elseif ($operation == '3') { // contem alguma das palavras 
+        } elseif ($operation == '3') { // contem alguma das palavras
             return 'IN';
-        } elseif ($operation == '4') { // NAO contenha qualquer das palavras 
+        } elseif ($operation == '4') { // NAO contenha qualquer das palavras
             return 'NOT IN';
         }
     }
@@ -1479,9 +1479,9 @@ class WPQueryModel extends Model {
     /**
      * function select_filter($data)
      * @param array Array com os dados da colecao
-     * @return void 
+     * @return void
      * Metodo reponsavel em determinar se deve listar as colecoes ou objetos
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
     public function set_arguments_advanced_search($meta_query,$recover_data) {
         //date
@@ -1498,7 +1498,7 @@ class WPQueryModel extends Model {
         }
         //numeric
         if (isset($recover_data['advanced_search']['numeric'])) {
-            
+
             foreach ($recover_data['advanced_search']['numeric'] as $property_id => $array) {
                 $meta_query[] = array(
                     'key' => 'socialdb_property_' . $property_id,
@@ -1510,7 +1510,7 @@ class WPQueryModel extends Model {
         }
         // text
          if (isset($recover_data['advanced_search']['text'])) {
-            
+
             foreach ($recover_data['advanced_search']['text'] as $property_id => $array) {
                 $meta_query[] = array(
                     'key' => 'socialdb_property_' . $property_id,
@@ -1521,7 +1521,7 @@ class WPQueryModel extends Model {
         }
         // textarea
         if (isset($recover_data['advanced_search']['textarea'])) {
-           
+
             foreach ($recover_data['advanced_search']['textarea'] as $property_id => $array) {
                 $meta_query[] = array(
                     'key' => 'socialdb_property_' . $property_id,
@@ -1532,7 +1532,7 @@ class WPQueryModel extends Model {
         }
         // textarea
         if (isset($recover_data['advanced_search']['object'])) {
-            
+
             foreach ($recover_data['advanced_search']['object'] as $property_id => $array) {
                 $meta_query[] = array(
                     'key' => 'socialdb_property_' . $property_id,
@@ -1587,9 +1587,9 @@ class WPQueryModel extends Model {
         }
         return $meta_query;
     }
-    
+
     /**
-     * 
+     *
      * @param array $params
      * @param int $collection_id
      */
@@ -1598,45 +1598,45 @@ class WPQueryModel extends Model {
             'update_post_term_cache' => false, // grabs terms, remove if terms required (category, tag...)
             'update_post_meta_cache' => false
         ];
-        
+
         // se vai filtrar colecao ou item DEFAULT:ITEM
         $args['post_type'] = (isset($filter['post_type'])) ? $filter['post_type'] : 'socialdb_object';
-        
+
          //o statuss a ser filtrado
         $args['post_status'] = (isset($filter['post_status'])) ? $filter['post_status'] : 'publish';
-        
+
         //se for em uma colecao especifica
         if($collection_id !== 0){
             $root_category_id = $this->get_category_root_of($collection_id);
             $args['tax_query'] = ['relation' => 'AND'];
-            $args['tax_query'][] = [ 
+            $args['tax_query'][] = [
                 'taxonomy' => 'socialdb_category_type',
                 'field' => 'id',
                 'terms' => $root_category_id,
                 'operator' => 'IN'
             ];
-        }        
-        
+        }
+
         // se existe titulo
         if($filter['title']){
             $args['title'] = $filter['title'];
         }
-        
+
         //se existe pagina
         if($filter['page']){
             $args['paged'] = $filter['page'];
         }
-        
+
         //se existe limitacao pagina
         if($filter['items_per_page']){
             $args['posts_per_page'] = $filter['items_per_page'];
         }
-        
+
         //se existe limitacao pagina
         if($filter['items_per_page']){
             $args['posts_per_page'] = $filter['items_per_page'];
         }
-        
+
         //ordenacao tipo
         if($filter['order_by']){
             if(is_numeric($filter['order_by'])){
@@ -1646,12 +1646,12 @@ class WPQueryModel extends Model {
                 $args['orderby'] = $filter['order_by'];
             }
         }
-        
+
         //ordenacao forma
         if($filter['order']){
             $args['order'] = $filter['order'];
         }
-        
+
         //queries data
         if($filter['date']){
             if(isset($filter['date']['before'])){
@@ -1669,18 +1669,18 @@ class WPQueryModel extends Model {
                     $args['date_query']['month'] = $today['mon'];
                     $args['date_query']['day'] = $today['mday'];
                 }else{
-                    $exactly = new Datetime($filter['date']['exactly']); 
+                    $exactly = new Datetime($filter['date']['exactly']);
                     if(is_object($exactly)){
                         $args['date_query']['year'] = $exactly->format('Y');
                         $args['date_query']['month'] = $exactly->format('m');
                         $args['date_query']['day'] = $exactly->format('d');
-                        
+
                         if($exactly->format('H')  !== '00')
                             $args['date_query']['hour'] = $exactly->format('H');
-                        
+
                         if($exactly->format('i')  !== '00')
                             $args['date_query']['minute'] = $exactly->format('i');
-                        
+
                         if($exactly->format('s')  !== '00')
                             $args['date_query']['second'] = $exactly->format('s');
                     }else{
@@ -1689,7 +1689,31 @@ class WPQueryModel extends Model {
                 }
             }
         }
+
+        //metadados
+        if($filter['metadata']){
+          $args['meta_query']['relation'] = (isset($filter['metadata']['op'])) ? $filter['metadata']['op'] : 'AND' ;
+          foreach ($filter['metadata'] as $property_id => $values_op) {
+              if(is_numeric($property_id)){
+                  if(isset($values_op['values'])){
+                      $array = array(
+                          'key' => 'socialdb_property_' . $property_id,
+                          'value' => $values_op['values'],
+                        //  'type' => 'date',
+                          'compare' => $values_op['op']
+                      );
+
+                      $type = $this->get_property_type($property_id);
+                      if($type === 'socialdb_property_data'){
+                          $widget = get_term_meta($property_id,'socialdb_property_data_widget',true);
+                          if($widget == 'date' || $widget == 'numeric')
+                              $array['type'] = $widget;
+                      }
+                      $args['meta_query'][] = $array;
+                  }
+              }
+          }
+        }
         return $args;
     }
-
 }
