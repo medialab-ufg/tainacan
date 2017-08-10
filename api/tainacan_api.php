@@ -69,7 +69,7 @@ class TainacanApi extends WP_REST_Controller {
         register_rest_route($namespace, $this->base['repository'], array(
             array(
                 'methods' => WP_REST_Server::READABLE,
-                'callback' => array(CollectionsApi, 'get_repository'),
+                'callback' => array(RepositoryApi, 'get_repository'),
                 'permission_callback' => array($this, 'get_items_permissions_check'),
                 'args' => array(
                 ),
@@ -78,7 +78,7 @@ class TainacanApi extends WP_REST_Controller {
         register_rest_route($namespace, $this->base['repository-items'], array(
             array(
                 'methods' => WP_REST_Server::READABLE,
-                'callback' => array(CollectionsApi, 'get_repository_items'),
+                'callback' => array(RepositoryApi, 'get_repository_items'),
                 'permission_callback' => array($this, 'get_items_permissions_check'),
                 'args' => array(
                 ),
