@@ -7,6 +7,7 @@ class Log extends Model {
 
     const _TABLE_SUFFIX_ = "statistics";
     const _POSTS_TABLE = "posts";
+    const _USERS_TABLE = "users";
 
     public static function _table() {
         return $GLOBALS['wpdb']->prefix . self::_TABLE_SUFFIX_;
@@ -14,6 +15,10 @@ class Log extends Model {
 
     public static function _posts_table() {
         return $GLOBALS['wpdb']->prefix . self::_POSTS_TABLE;
+    }
+
+    public static function _users_table(){
+        return $GLOBALS['wpdb']->prefix . self::_USERS_TABLE;
     }
 
     public static function addLog($logData) {
@@ -435,7 +440,7 @@ class Log extends Model {
                 return ['events' => self::getDefaultFields(['download', 'vote'])];
             case 'category':
                 return ['events' => self::getDefaultFields()];
-            case 'collection':
+            case 'user_collection':
                 return ['events' => self::getDefaultFields()];
             case 'comments':
                 return ['events' => self::getDefaultFields()];
@@ -465,12 +470,25 @@ class Log extends Model {
         return ( is_array($extra_fields) && !empty($extra_fields) ) ? array_merge($base_defaults, $extra_fields) : $base_defaults;
     }
 
-    public static function user_events($event_type, $spec, $from, $to, $collection_id = NULL, $filter) {
+    public static function user_events($event_type, $spec, $from, $to, $collection_id = NULL, $filter, $detail) {
         $_events_ = self::get_event_type($spec);
 
-        // event_type = 'collection' isn't work
+        if($detail == 'detail'){
+            $value_detail = self::getValuesDetail($event_type, $spec, $from, $to, $collection_id);
+            $vdtl_data = array();
+            
+            foreach ($value_detail as $valdt => $data) {
+                if($event_type == 'users'){
+                    array_push($vdtl_data, [$data->user, $data->date]);
+                }
+            }
 
-        if( "top_collections" == $event_type ) {
+            $stat_data = ["stat_object" => $vdtl_data];
+            $return_data = json_encode($stat_data, JSON_NUMERIC_CHECK, JSON_FORCE_OBJECT);
+
+            return $return_data;
+        }
+        else if( "top_collections" == $event_type ) {
             $top_collections = self::getTopCollections($from, $to, $filter);
             $cols_array = array();
             $events = array();
@@ -824,4 +842,27 @@ class Log extends Model {
 
         return $searches;
     }
+
+    public function getValuesDetail($report, $event, $from, $to, $collection_id){
+        global $wpdb;
+        
+        if(is_null($collection_id) || $collection_id == 'null'){
+            if($report == 'users'){
+                $SQL_query = sprintf(
+                    "SELECT user_login AS user, event_date AS date
+                        FROM %s JOIN %s ON %s.ID = user_id
+                        WHERE event = '$event' AND (substring(event_date, 1, 10)) BETWEEN '$from' AND '$to'
+                    ", self::_table(), self::_users_table(), self::_users_table());
+            }
+        }
+        else{
+
+        }
+
+        $value_detail = $wpdb->get_results($SQL_query);
+
+        return $value_detail;
+    }
+
+    // select user_login, event_date, event from wp_statistics join wp_users on wp_users.ID = user_id where event = 'login' and (substring(event_date, 1, 10)) between from and to;
 }

@@ -112,8 +112,24 @@ include_once('js/list_js.php');
                 <div class="hide" id="barchart_div" style="width: 100%; height: 500px;"></div>
                 <div class="hide" id="curvelinechart_div" style="width: 100%; height: 500px;"></div>
 
+                <!-- Mensagem 'não há dados' -->
                 <div id="no_chart_data" class="hide">
-                <h3> <?php _t('There is no data yet for this report!', 1); ?> </h3>
+                    <h3> <?php _t('There is no data yet for this report!', 1); ?> </h3>
+                </div>
+
+                <!-- Tabela de exibição dos detalhes dos valores -->
+                <div id="values-details" class="hide table-responsive">
+                    <button onclick="javascript:closeDetail()" type="button" class="close" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                    <table id="table-detail" class="table table-hover">
+                        <thead id="thead-detail">
+                            <tr class="headers">
+                                <!-- Conteúdo dinâmico, vindo de list_js.php -->
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-detail">
+                            <!-- Conteúdo dinâmico, vindo de list_js.php -->
+                        </tbody>
+                    </table>
                 </div>
 
                 <input type="hidden" value="default" class="selected_chart_type" />
@@ -122,17 +138,50 @@ include_once('js/list_js.php');
             </div>
 
             <!-- Chart resume -->
-            <div id="charts-resume" class="">
-                <?php 
-                    //$objHelper = new ObjectHelper();
-                    //$objHelper->renderCollectionPagination(11, 10, "Buscas Frequentes", "buscas", 'top_pag');
-                ?>
-                <table>
+            <div id="charts-resume" class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr class="headers"> 
+                            <th class="curr-parent"> <?php _e('Status', 'tainacan'); ?> </th> 
+                        </tr>
+                        <tr>
+                            <th class="more-detail-message"> <?php _e('Click on values to more detail', 'tainacan') ?> <span class='glyphicon glyphicon-info-sign'></span> </th>
+                        </tr>
+                    </thead>
                     <tbody>
-                    <tr class="headers"> <th class="curr-parent"> <?php _e('Status'); ?> </th> </tr>
-                    <tr class="content"> <td class="curr-filter"> <?php _e('Total:'); ?> </td> </tr>
+                        <tr class="content"> 
+                            <td class="curr-filter"> <?php _e('Total', 'tainacan'); ?> </td> 
+                        </tr>
                     </tbody>
                 </table>
+                <!-- <div class="row hidden" id="pagination-buscas">
+                    <div class="col-lg-4 col-md-4">
+                        <ul class="pagination mg0">
+                            <li>
+                                <a href="#" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                                </li>
+                                    <li><a href="#">1</a></li>
+                                <li>
+                                <a href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-4">
+                        
+                    </div>
+                    <div class="col-lg-1 col-md-1">
+                        <select class="form-control">
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
+                </div> -->
             </div>
 
             <div class="col-md-12 no-padding" style="background: #e3e3c7; margin-top: 10px; text-align: center; display: none;">

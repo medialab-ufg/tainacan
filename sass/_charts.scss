@@ -221,6 +221,17 @@
   }
 } // statistics-container
 
+#values-details{
+  table {
+    tr {
+      border-top: 1px solid $brand-medium-blue;}
+      th{
+        font-weight: bolder;
+        color: $brand-medium-blue;
+      }
+  }
+}
+
 #charts-resume {
   //@include single_item_container_style();
   margin: 0 40px 0 40px;
@@ -237,20 +248,35 @@
       th, td {
         padding: 5px 10px;
       }
-      &:first-child {
+      th{
         font-weight: bolder;
         color: $brand-medium-blue;
+      }
+      .more-detail-message{
+        font-size: 7pt;
+        color: rgba(12, 105, 139, 0.5);
       }
       &:nth-child(2) {
         td {
           padding: 5px 10px;
-          &:first-child {
-            font-weight: bolder;
-          }
+          // &:first-child {
+          //   font-weight: bolder;
+          // }
         } // td
       }
     }
   } // table
+  .a-color{
+    color: rgba(0, 0, 0, 0.8) !important;
+    text-decoration: none;
+    span{
+      color: rgba(12, 105, 139, 0.5);
+      font-size: 8pt;
+    }
+  }
+  .mg0{
+    margin: 0 !important;
+  }
 } // #charts-resume
 
 .right-caret {

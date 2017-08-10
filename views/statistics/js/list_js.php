@@ -45,41 +45,43 @@
 
     TainacanChart.prototype.displayFixedBase = function() {
         $("#charts-resume table tr.headers").html("<th class='curr-parent'> Status </th>");
-        //var parent_title = $(".current_parent_report").val();
-        $("#charts-resume table tr.content").html("<td class='curr-filter'> Total </td>");
+        var parent_title = $(".current_parent_report").val();
+        $("#charts-resume table tr.content").html("<td class='curr-filter'> "+ parent_title +" </td>");
     };
 
     TainacanChart.prototype.displayBaseAppend = function(title, value) {
         $("#charts-resume table tr.headers").append("<th>"+ title +"</th>");
         $("#charts-resume table tr.quality-content").remove();
-        $("#charts-resume table tr.content").append("<td>"+ value +"</td>");
+        $("#charts-resume table tr.content").append("<td> <a id='"+ title +"' onclick='javascript:renderDetail(this)' href='javascript:void(0)' id='detail-base' class='a-color'>"+ value +" <span class='glyphicon glyphicon-info-sign'></span> </a> </td>");
     };
 
     TainacanChart.prototype.appendQualityBase = function() {
-        $("#charts-resume table tr.headers").html("<td>Coleção</td><td>Nº de itens</td>");
+        $("#charts-resume table tr.headers").html("<th>Coleção</th><th>Nº de itens</th>");
         $("#charts-resume table tr.content").html("");
         $("#charts-resume table tr.quality-content").remove();
     };
 
     TainacanChart.prototype.appendSearchesBase = function(){
-        $("#charts-resume table tr.headers").html("<td>Termo</td><td>Quantidade de buscas</td>");
+        $("#charts-resume table tr.headers").html("<th>Termo</th><th>Quantidade de buscas</th>");
         $("#charts-resume table tr.content").html("");
         $("#charts-resume table tr.quality-content").remove();
     }
 
     TainacanChart.prototype.appendNoFilterBase = function () {
-        $("#charts-resume table tr.headers").html("<td>Coluna</td><td>Total</td>");
+        $("#charts-resume table tr.headers").html("<th>Status</th><th>Total</th>");
         $("#charts-resume table tr.content").html("");
         $("#charts-resume table tr.quality-content").remove();
     }
 
     TainacanChart.prototype.appendQualityData = function(title, qtd) {
-        $("#charts-resume table tbody").append("<tr class='quality-content'><td>"+ title +"</td><td>"+ qtd +"</td></tr>");
+        $("#charts-resume table tbody").append(
+            "<tr class='quality-content'><td>"+ title +"</td><td> <a id='"+ title +"' onclick='javascript:renderDetail(this)' href='javascript:void(0)' id='detail-quality' class='a-color'>"+ qtd +" <span class='glyphicon glyphicon-info-sign'></span> </a> </td></tr>"
+        );
     };
 
-    TainacanChart.prototype.getStatDesc = function(title, desc) {
-        return title + "<p>"+ desc +"</p>";
-    };
+    // TainacanChart.prototype.getStatDesc = function(title, desc) {
+    //     return title + "<p>"+ desc +"</p>";
+    // };
 
     TainacanChart.prototype.createCsvFile = function(csvData) {
         var csvContent = "data:text/csv;charset=utf-8,";
@@ -94,6 +96,126 @@
         $('a.dl-csv').attr('download', 'exported-chart.csv');
     };
     
+    function renderDetailThead(thead) {
+        $('#thead-detail tr').html('');
+
+        for (var key in thead) {
+            $('#thead-detail tr').append("<th class='text-center'>"+ thead[key] +"</th>");
+        }
+    }
+
+    function renderDetailTbody(tbody) {
+        $('#tbody-detail').html('');
+
+        var tbElement = tbody['stat_object'];
+        
+        for (var key in tbElement) {
+            var tbCell = tbElement[key];
+
+            $('#tbody-detail').append("<tr class='"+ key +"'></tr>");
+            tbCell.forEach(function(element) {
+                $('#tbody-detail tr.'+ key +'').append(
+                    "<td class='text-center'>"+ element +"</td>"
+                );
+            }, this);
+        }
+    }
+
+    function renderDetail(e) {
+        var chart = $('.selected_chart_type').val();
+
+        toggleElements(["#"+chart+"chart_div", "#charts-resume"], true);
+        toggleElements(["#charts-container #values-details"]);
+
+        var report = $("#report-type-stat").dynatree("getActiveNode");
+
+        var eventName = e.id;
+
+        if(report.parent.data.title == 'Users'){
+            switch (eventName) {
+                case 'Logins':
+                    var thead = {
+                        column1: 'Usuários que fizeram login',
+                        column2: 'Data - Horário'
+                    }
+
+                    renderDetailThead(thead);
+                    fetchData('users', 'login', 'detail');
+                    break;
+                case 'Registers':
+                case 'Registrados':
+                    var thead = {
+                        column1: 'Usuários que se registram',
+                        column2: 'Data - Horário'
+                    }
+
+                    renderDetailThead(thead);
+                    fetchData('users', 'register', 'detail');
+                    break;
+                case 'Excluded':
+                case 'Excluídos':
+                    var thead = {
+                        column1: 'Usuários excluídos',
+                        column2: 'Data - Horário'
+                    }
+
+                    renderDetailThead(thead);
+                    fetchData('users', 'delete_user', 'detail');
+                    break;
+                case 'Assinante':
+                case 'Subscriber':
+                    var thead = {
+                        column1: 'Assinantes',
+                        column2: 'Desde'
+                    }
+
+                    renderDetailThead(thead);
+                    fetchData('users', 'subscriber', 'detail');
+                    break;
+                case 'Administrador':
+                case 'Administrator':
+                    var thead = {
+                        column1: 'Administradores',
+                        column2: 'Desde'
+                    }
+
+                    renderDetailThead(thead);
+                    fetchData('users', 'administrator', 'detail');
+                    break;
+                default:
+                    break;
+            }
+        }
+        else if(report.parent.data.title == 'Itens'){
+
+        }
+        else if(report.parent.data.title == 'Collections'){
+
+        }
+        else if(report.parent.data.title == 'Comments'){
+
+        }
+        else if(report.parent.data.title == 'Categories'){
+
+        }
+        else if(report.parent.data.title == 'Tags'){
+
+        }
+        else if(report.parent.data.title == 'Import / Export'){
+
+        }
+        else if(report.parent.data.title == 'Administration'){
+
+        }
+    }
+
+    function closeDetail() {
+        var chart = $('.selected_chart_type').val();
+
+        toggleElements(["#"+chart+"chart_div", "#charts-resume"]);
+        toggleElements(["#values-details", "#no_chart_data"], true);
+    }
+
     $(function() {
         // Specific functions to repository or collections stat page
         normalizeStatPage();
@@ -197,15 +319,15 @@
             }
             loadChart();
         });
-// -------
+        // -------
 
-// On change filter type week, day, month
+        // On change filter type week, day, month
         $("input[type=radio][name=optradio]").on('change', function () {
             loadChart();
         });
-// ------- 
+        // ------- 
 
-//On change chart type
+        //On change chart type
         $('a.change-mode').on('click', function() {
             var selected_chart = $(this).attr('data-chart');
             var curr_img = $(this).html();
@@ -227,7 +349,7 @@
              // Click again at current selected node to trigger chart drawing
             loadChart();
         });
-//-------
+        //-------
 
     $("#config-repo").accordion({
         collapsible: true,
@@ -282,7 +404,7 @@
             var chart_text = node.data.title;
             var chain = $('.temp-set').html(chart_text).text().replace(/\//gi, "");
             var split_title = chain.split(" ");
-            
+
             if(node_action) {
                 fetchData(parent, node_action);
             }
@@ -339,7 +461,7 @@
     // Collections
     function collectionsChildren() {
         return [
-            { title: "Status <p> adicionadas / visualizadas / editadas / escluídas </p>", id: "collection", addClass: 'repoOnly'},
+            { title: "Status <p> adicionadas / visualizadas / editadas / excluídas </p>", id: "user_collection", addClass: 'repoOnly'},
             { title: "Itens <p> ilustrações (número de itens por <br/> coleção) </p>", id: "top_collections", addClass: 'repoOnly' },
             // Independem de parent:
             //{ title: "Buscas Frequentes <p> ranking das buscas mais realizadas </p>", id: "repo_searches", addClass: 'repoOnly'},
@@ -390,19 +512,24 @@
         ];
     }
 
-    function fetchData(parent, action) {
+    // Return the period
+    function getPeriodFilter(){
         var f = $("#from_period").val().split('/');
         var t = $("#to_period").val().split('/');
 
         var dfrom = new Date(f[2], f[1] - 1, f[0]);
         var dto = new Date(t[2], t[1] - 1, t[0]);
 
-        var from = dfrom.toISOString().split('T')[0];
-        var to = dto.toISOString().split('T')[0];
+        var dateFilter = { 
+            from: dfrom.toISOString().split('T')[0],
+            to: dto.toISOString().split('T')[0]
+        }
 
-        var stat_path = $('.stat_path').val() || $('#src').val(); //url do tema
-        var c_id = $('.get_collection_stats').val() || null; //id da coleção ?!
+        return dateFilter;
+    }
 
+    // Return the filter selected
+    function getFilterSelected(params) {
         var filter = 'months';
         
         if($('#days').is(":checked")){
@@ -417,28 +544,48 @@
         else if($('#nofilter').is(":checked")){
             filter = $('#nofilter').val();
         }
+        
+        return filter;
+    }
+
+    // POST
+    function fetchData(parent, action, operation = 'user_events') {
+
+        var stat_path = $('.stat_path').val() || $('#src').val(); //url do tema
+        var c_id = $('.get_collection_stats').val() || null; //id da coleção ?!
+
+        var from = getPeriodFilter()['from'];
+        var to = getPeriodFilter()['to'];
+
+        var filter = getFilterSelected();
+
 
         $.ajax({
             url: stat_path + '/controllers/log/log_controller.php', type: 'POST',
-            data: { operation: 'user_events', parent: parent, event: action, from: from, to: to, collec_id: c_id, filter: filter }
+            data: { operation: operation, parent: parent, event: action, from: from, to: to, collec_id: c_id, filter: filter}
         }).done(function(resp) {
-            console.log(resp +'\n');
-
-            var res_json = JSON.parse(resp);
-
-            console.log(res_json);
-
+            console.log(resp);
+            var resJSON = JSON.parse(resp);
+            console.log(resJSON);
             var chart = $('.selected_chart_type').val(); //tipo de chart selecionado
             $(".current_parent_report").val(parent); //nome do parent atual 'ex: Users'
 
-            if( (res_json == null) || res_json.length == 0) {
-                toggleElements(["#charts-container div", "#charts-resume"], true);
-                toggleElements(["#charts-container #no_chart_data"]);
-            } else {
-                toggleElements(["#"+chart+"chart_div", "#charts-resume"]);
-                toggleElements(["#charts-container #no_chart_data"], true);
-                setTimeout( function() {
-                    drawChart(chart, action, res_json, filter)
+            if(operation == 'user_events'){
+                if( (resJSON.stat_object == null) || resJSON.stat_object.length == 0) {
+                    toggleElements(["#charts-container div", "#charts-resume"], true);
+                    toggleElements(["#charts-container #no_chart_data"]);
+                } else {
+                    toggleElements(["#"+chart+"chart_div", "#charts-resume"]);
+                    toggleElements(["#no_chart_data", "#values-details"], true);
+                    
+                    setTimeout( function() {
+                        drawChart(chart, action, resJSON, filter)
+                    }, 300);
+                }
+            }
+            else if(operation == 'detail'){
+                setTimeout(function() {
+                    renderDetailTbody(resJSON);
                 }, 300);
             }
         });
@@ -452,6 +599,15 @@
             }
         }
         return true;
+    }
+
+    function showPag(rpType) {
+        if(rpType == 'repo_searches' || rpType == 'collection_searches'){
+            $('#pagination-buscas').removeClass('hidden');
+        }
+        else{
+            $('#pagination-buscas').addClass('hidden');
+        }
     }
 
     function drawChart(chart_type, title, data_obj, filter) {
@@ -583,7 +739,9 @@
                            }
                         }
                     } // end of for
+                    
                     rows.sort();
+                
                     chart_data.addRows(rows);
             }
             else if(data_obj.stat_object && data_obj.stat_object[0] && filter == "nofilter"){
@@ -616,6 +774,9 @@
             var div_chart = $("#charts-container").get(0);
             $(div_chart).removeClass('hide');
             
+            // Pagination searches
+            showPag(title);
+
             // draw chart based at generated json data
             renderChart(title, chart_type, chart_data, filter);
         }
@@ -656,7 +817,7 @@
                 fontSize: 10,
                 selectionMode: 'multiple',
                 tooltip: {trigger: 'selection'},
-                aggregationTarget: 'category'
+                aggregationTarget: 'category',
             };
 
             google.visualization.events.addListener(barchart, 'ready', function() {
@@ -674,7 +835,7 @@
                 fontSize: 10,
                 selectionMode: 'multiple',
                 tooltip: {trigger: 'selection'},
-                aggregationTarget: 'category'
+                aggregationTarget: 'category',
             };
 
             google.visualization.events.addListener(default_chart, 'ready', function(){
@@ -687,12 +848,12 @@
         else if( type == 'curveline'){
             var linechart = new google.visualization.LineChart(document.getElementById('curvelinechart_div'));
             var curveOptions = {
-                curveType: 'function',
+                //curveType: 'function',
                 legend: legendOpt,
                 fontSize: 10,
                 selectionMode: 'multiple',
                 tooltip: {trigger: 'selection'},
-                aggregationTarget: 'category'
+                aggregationTarget: 'category',
             };
 
             google.visualization.events.addListener(linechart, 'ready', function(){
