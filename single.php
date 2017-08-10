@@ -1465,7 +1465,6 @@ while (have_posts()) : the_post();
     </div>
 
 
-
     <?php
     if (has_action('add_new_modals')) {
         do_action('add_new_modals', '');
@@ -1476,7 +1475,7 @@ while (have_posts()) : the_post();
     }
     ?>
     <?php require_once (dirname(__FILE__) . '/views/search/js/single_js.php'); ?>
-    <?php require_once (dirname(__FILE__) . '/extras/routes/routes.php'); ?>
+    <?php // require_once (dirname(__FILE__) . '/extras/routes/routes.php'); ?>
 
     <?php
 endwhile; // end of the loop.

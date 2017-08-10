@@ -474,7 +474,7 @@ function custom_rewrite_basic() {
     
     add_rewrite_rule('^([^/]*)/([^/]*)/editar', 'index.php?collection=$matches[1]&item=$matches[2]&edit-item=true', 'top');
     add_rewrite_rule('^([^/]*)/criar-item', 'index.php?collection=$matches[1]&add-item=true', 'top');
-    add_rewrite_rule('^([^/]*)/([^/]*)', 'index.php?collection=$matches[1]&item=$matches[2]', 'top');
+    // add_rewrite_rule('^([^/]*)/([^/]*)', 'index.php?collection=$matches[1]&item=$matches[2]', 'top');
     //flush_rewrite_rules();
 }
 
@@ -862,7 +862,7 @@ function register_post_types() {
         'public' => true,
         'query_var' => 'collection',
         'rewrite' => array(
-            'slug' => 'collection',
+            'slug' => 'colecao',
             'with_front' => false),
         'supports' => array(
             'title',
@@ -907,7 +907,7 @@ function register_post_types() {
         'public' => true,
         'query_var' => 'object',
         'rewrite' => array(
-            'slug' => 'object',
+            'slug' => 'item',
             'with_front' => false),
         'supports' => array(
             'title',
@@ -3704,4 +3704,4 @@ if ( ! defined("MANUAL_TAINACAN_URL") ) {
 /************* API ********************/
 include_once 'extras/json-rest-api/plugin.php';
 /************* Remove o post type das colecoes ********************/
-include_once 'extras/remove-slug-post/remove-slug-custom-post-type.php';
+// include_once 'extras/remove-slug-post/remove-slug-custom-post-type.php';
