@@ -61,6 +61,8 @@ function MyAutoLoad($Class) {
     if(is_null($iDir)){
         if($File === 'query_model')
              include_once (__DIR__ . '/models/wp_query/wp_' .$File . '.php');
+        if($File === 'object_file_model')
+            include_once (__DIR__ . '/models/object/objectfile_model.php');
     }
 }
 

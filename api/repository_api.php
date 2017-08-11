@@ -23,7 +23,7 @@ abstract class RepositoryApi {
         if ($loop->have_posts()) {
             $data = [];
             while ( $loop->have_posts() ) : $loop->the_post();
-                $array['item'] = get_post();
+                $array['item'] = CollectionsApi::get_item( get_post()->ID,$params['id'] );
                 $data[] = $array;
             endwhile;
             return new WP_REST_Response( $data, 200 );

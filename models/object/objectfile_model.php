@@ -290,6 +290,7 @@ class ObjectFileModel extends Model {
                         $metas = wp_get_attachment_metadata($attachment->ID);
                         $obj['ID'] = $attachment->ID;
                         $obj['name'] = $attachment->post_title;
+                        $obj['url'] = $attachment->guid;
                         $obj['size'] = filesize($_file_path_);
                         $extension = $attachment->guid;
                         $ext = pathinfo($extension, PATHINFO_EXTENSION);
