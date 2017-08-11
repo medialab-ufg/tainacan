@@ -5,6 +5,7 @@ $_special_configs = [
     'info_messages' => ( (isset($_GET['info_messages'])) ? trim($_GET['info_messages']) : ''),
     'item' => ( (isset($_GET['item'])) ? trim($_GET['item']) : ''),
     'category' => ( (isset($_GET['category'])) ? trim($_GET['category']) : ''),
+    'property' => ( (isset($_GET['property'])) ? trim($_GET['property']) : ''),
     'tag' => ( (isset($_GET['tag'])) ? trim($_GET['tag']) : ''),
     'tax' => ( (isset($_GET['tax'])) ? trim($_GET['tax']) : '')
 ];
@@ -22,15 +23,15 @@ $root_id = get_option('collection_root_id');
 <!-- PAGINA DA CATEGORIA -->
 <input type="hidden" id="category_page" name="category_page" value="<?php echo $_special_configs['category']; ?>" />
 <!-- PAGINA DA PROPRIEDADE -->
-<input type="hidden" id="property_page" name="property_page" value="<?php echo $_special_configs['category']; ?>" />
+<input type="hidden" id="property_page" name="property_page" value="<?php echo $_special_configs['property']; ?>" />
 <!-- PAGINA DA TAG -->
 <input type="hidden" id="tag_page" name="tag_page" value="<?php echo $_special_configs['tag']; ?>" />
 <!-- PAGINA DA TAXONOMIA -->
-<input type="hidden" id="tax_page" name="object_page" value="<?php echo $_special_configs['tax']; ?>" />
+<input type="hidden" id="tax_page" name="tax_page" value="<?php echo $_special_configs['tax']; ?>" />
 
 <?php
 if(is_single()) {
-        $parent = get_post($post->post_parent);
+    $parent = get_post($post->post_parent);
 
     if(is_singular('socialdb_object')) { ?>
         <!-- PAGINA DO ITEM -->
@@ -44,7 +45,17 @@ if(is_single()) {
     <?php } else if(is_singular('socialdb_collection')) {
         $visualization_page_category = get_post_meta($post->ID, 'socialdb_collection_visualization_page_category', true);
         $collection_default = get_option('disable_empty_collection');
-        // $options = get_option('socialdb_theme_options');
+        $collection_params = [
+            "recovery_password" => ( (int) base64_decode(getPageParam('recovery_password')) ),
+            "is_filter" => getPageParam('is_filter'),
+            "info_messages" => getPageParam('info_messages'),
+            "info_title" => getPageParam('info_title'),
+            "mycollections" => getPageParam('mycollections', true),
+            "sharedcollections" => getPageParam('sharedcollections', true),
+            "open_wizard" => getPageParam('open_wizard'),
+            "open_login" => getPageParam('open_login'),
+            "open_edit_item" => getPageParam('open_edit_item'),
+        ];
         ?>
         <!-- TAINACAN - BEGIN: ITENS NECESSARIOS PARA EXECUCAO DE VARIAS PARTES DO SOCIALDB -->
         <input type="hidden" id="visualization_page_category" name="visualization_page_category"
@@ -58,9 +69,27 @@ if(is_single()) {
         <input type="hidden" id="socialdb_permalink_collection" name="socialdb_permalink_collection" value="<?php echo get_the_permalink($post->ID); ?>" />
         <input type="hidden" id="slug_collection" name="slug_collection" value="<?php echo $post->post_name; ?>"> <!-- utilizado na busca -->
         <input type="hidden" id="search_collection_field" name="search_collection_field" value="<?php if ($_GET['search']) echo $_GET['search']; ?>" />
+        <!-- Se devera abrir o formulario de adicao item -->
+        <input type="hidden" id="open_create_item_text" name="open_create_item_text"
+               value="<?php if (isset($_GET['create-item'])) { echo $_GET['create-item']; } ?>">
+        <input type="hidden" id="object_page" name="object_page"
+               value="<?php if (get_query_var('item') && !get_query_var('edit-item')) { echo trim(get_query_var('item')); } ?>">
 
-    <?php
-    }
+        <input type="hidden" id="wp_query_args" name="wp_query_args" value=""> <!-- utilizado na busca -->
+        <input type="hidden" id="change_collection_images" name="change_collection_images" value="">
+        <input type="hidden" id="value_search" name="value_search" value=""> <!-- utilizado na busca -->
+        <input type="hidden" id="flag_dynatree_ajax" name="flag_dynatree_ajax" value="true"> <!-- utilizado na busca -->
+        <input type="hidden" id="global_tag_id" name="global_tag_id" value="<?php echo (get_term_by('slug', 'socialdb_property_fixed_tags', 'socialdb_property_type')->term_id) ? get_term_by('slug', 'socialdb_property_fixed_tags', 'socialdb_property_type')->term_id : 'tag' ?>"> <!-- utilizado na busca -->
+        <input type="hidden" id="search-advanced-text" value="<?php echo (isset($_GET['search-advanced-text']) && !empty($_GET['search-advanced-text'])) ? $_GET['search-advanced-text'] : '' ?>">
+
+        <input type="hidden" id="instagramInsertedIds" name="instagramInsertedIds" value="<?php echo socialMediaResponse($_SESSION['instagramInsertedIds'], "instagram"); ?>">
+        <input type="hidden" id="facebookInsertedIds" name="facebookInsertedIds" value="<?php echo socialMediaResponse($_SESSION['facebookInsertedIds'], "facebook"); ?>">
+
+        <?php foreach ($collection_params as $k => $param): ?>
+            <input type="hidden" id="<?php echo $k?>" name="<?php echo $k?>" value="<?php echo $param; ?>"/>
+        <?php
+        endforeach;
+    } // is collection's page
 } else { ?>
     <input type="hidden" id="collection_id" name="collection_id" value="<?php echo $root_id; ?>" />
 <?php } ?>

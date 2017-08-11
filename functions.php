@@ -3665,6 +3665,31 @@ function get_documents_text($ids)
         return false;
     }
 }
+
+function getPageParam($param, $returnTrue = false) {
+    if($returnTrue)
+        $positive_return = true;
+    else
+        $positive_return = trim($_GET[$param]);
+
+    return isset($_GET[$param]) ? $positive_return : '';
+}
+
+function socialMediaResponse($smIDs, $smName) {
+    if($smName === "facebook" || "instagram" === $smName) {
+        if (isset($smIDs)) {
+            if ($smIDs != ($smName .'_error')) {
+                return $smIDs;
+            } else {
+                return $smName . '_error';
+            }
+            unset($smIDs);
+        } else {
+            return 'false';
+        }
+    }
+}
+
 ################# INSTANCIA OS MODULOS SE ESTIVEREM ATIVADOS#################
 instantiate_modules();
 ################################################################################
