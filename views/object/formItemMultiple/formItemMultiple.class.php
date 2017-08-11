@@ -475,16 +475,6 @@ class FormItemMultiple extends Model {
                     hide_modal_main();
 
                     generate_pdfThumb(result);
-
-                    /*$('#form').hide();
-                    $("#tainacan-breadcrumbs").hide();
-                    $('#configuration').hide();
-                    $('#main_part').show();
-                    $('#display_view_main_page').show();*/
-
-                    window.location = window.location.href;
-                    wpquery_clean();
-                    showAlertGeneral('<?php _e('Success','tainacan') ?>', '<?php _e('Operation was successfully!','tainacan') ?>', 'success');
                 });
             }
             
@@ -493,6 +483,19 @@ class FormItemMultiple extends Model {
                 var string = '<?php _e('Saved at ','tainacan') ?>'+ d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear()
                        + ' - ' + d.getHours()+':'+d.getMinutes();
                 $('#draft-text').text(string);
+            }
+
+            function finish_process()
+            {
+                $('#form').hide();
+                $("#tainacan-breadcrumbs").hide();
+                $('#configuration').hide();
+                $('#main_part').show();
+                $('#display_view_main_page').show();
+
+
+                wpquery_clean();
+                showAlertGeneral('<?php _e('Success','tainacan') ?>', '<?php _e('Operation was successfully!','tainacan') ?>', 'success');
             }
           </script>
         <?php
