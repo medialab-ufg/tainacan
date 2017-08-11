@@ -16,18 +16,6 @@ class HomeController extends Controller {
                 $result = $home_model->format_item_data($items_array);
                 return json_encode($result);
                 break;
-            case "total_collections":
-                global $wpdb;
-                $return = [];
-                $wp_posts = $wpdb->prefix . "posts";
-                $query = "SELECT p.* FROM $wp_posts p WHERE p.post_type LIKE 'socialdb_collection'
-                          AND p.post_status LIKE 'publish' AND p.ID NOT IN (".get_option('collection_root_id').")
-                        ";                 
-                $results = $wpdb->get_results($query);
-                if ($results&&is_array($results)&&count($results)>0) {
-                    $return['size'] = count($results);
-                }
-                return json_encode($return);
             case "verifyAction":
                 return $home_model->verifyAction($data);
         endswitch;

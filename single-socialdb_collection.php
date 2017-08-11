@@ -27,8 +27,9 @@ endif;
 /* * **************************************************************************** */
 session_start();
 get_header();
+get_template_part("partials/setup","header");
 global $config;
-session_start();
+// session_start();
 $options = get_option('socialdb_theme_options');
 $_currentID_ = get_the_ID();
 $collection_default = get_option('disable_empty_collection');
@@ -52,11 +53,6 @@ if (!has_nav_menu('menu-ibram')): ?>
     <?php
 endif;
 
-
-var_dump($collection_default);
-var_dump(get_option('collection_root_id'));
-var_dump(get_the_permalink(get_option('collection_root_id')));
-
 while (have_posts()) : the_post();
     if (get_post(get_the_ID())->post_status != 'publish')
         wp_redirect(site_url());
@@ -65,23 +61,7 @@ while (have_posts()) : the_post();
     <div id="fb-root"></div>
 
     <!-- TAINACAN: esta div (AJAX) mostra o painel da colecao e suas acoes, estilos inline para descer a div apenas pois estava sob o header  -->
-    <div id="collection_post" style="margin-top: 0px;"> </div>
-
-    <!-- TAINACAN - BEGIN: ITENS NECESSARIOS PARA EXECUCAO DE VARIAS PARTES DO SOCIALDB -->
-    <input type="hidden" id="visualization_page_category" name="visualization_page_category" value="<?php echo (!$visualization_page_category || $visualization_page_category === 'right_button') ? 'right_button' : 'click'; ?>">
-    <input type="hidden" id="show_collection_default" name="show_collection_default" value="<?php echo (!$collection_default || $collection_default === 'false') ? 'show' : 'hide'; ?>">
-    <input type="hidden" id="socialdb_fb_api_id" name="socialdb_fb_api_id" value="<?php echo $options['socialdb_fb_api_id']; ?>">
-    <input type="hidden" id="socialdb_embed_api_id" name="socialdb_embed_api_id" value="<?php echo $options['socialdb_embed_api_id']; ?>">
-    <input type="hidden" id="current_user_id" name="current_user_id" value="<?php echo get_current_user_id(); ?>">
-    <input type="hidden" id="src" name="src" value="<?php echo get_template_directory_uri() ?>">
-    <input type="hidden" id="collection_id" name="collection_id" value="<?php echo get_the_ID() ?>">
-    <input type="hidden" id="mode" name="mode" value="<?php echo $mode ?>">
-    <input type="hidden" id="site_url" value="<?php echo site_url(); ?>" >
-    <input type="hidden" id="collection_root_id" value="<?php echo get_option('collection_root_id'); ?>">
-    <input type="hidden" id="collection_root_url" value="<?php echo get_the_permalink(get_option('collection_root_id')) ?>">
-    <input type="hidden" id="socialdb_permalink_collection" name="socialdb_permalink_collection" value="<?php echo get_the_permalink(get_the_ID()); ?>" />
-    <input type="hidden" id="slug_collection" name="slug_collection" value="<?php echo get_post(get_the_ID())->post_name; ?>"> <!-- utilizado na busca -->
-    <input type="hidden" id="search_collection_field" name="search_collection_field" value="<?php if ($_GET['search']) echo $_GET['search']; ?>">
+    <div id="collection_post" style="margin-top: 0"> </div>
 
     <!-- Hidden para verificar se existe filtros via url -->
     <input type="hidden" id="is_filter" name="is_filter" value="<?php

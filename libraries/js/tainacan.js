@@ -2658,9 +2658,8 @@ function show_field_properties(property_id, show_id) {
 //--------------------------------- MAIN PAGE DO REPOSITORIO -------------------------------//
 function display_view_main_page() {
     $.ajax({
-        url: $("#src").val() + '/controllers/home/home_controller.php',
-        type: 'POST',
-        data: {operation: 'display_view_main_page', max_collection_showed: $("#max_collection_showed").val()}
+        url: $("#src").val() + '/controllers/home/home_controller.php', type: 'POST',
+        data: {operation: 'display_view_main_page'}
     }).done(function (result) {
         $("#loader_collections").hide('slow');
         $("#display_view_main_page").html(result);
