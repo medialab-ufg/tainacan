@@ -436,8 +436,8 @@ class Log extends Model {
     
     private function get_event_type($spec) {
         switch($spec) {
-            case 'items':
-                return ['events' => self::getDefaultFields(['download', 'vote'])];
+            // case 'items':
+            //     return ['events' => self::getDefaultFields(['download', 'vote'])];
             case 'category':
                 return ['events' => self::getDefaultFields()];
             case 'user_collection':
@@ -451,7 +451,7 @@ class Log extends Model {
             case 'status':
                 return ['events' => ['login', 'register', 'delete_user'] ];
             case 'general_status':
-                return ['events' => ['publish', 'draft', 'trash', 'delete'] ];
+                return ['events' => self::getDefaultFields(['download', 'vote', 'publish', 'draft', 'trash'])];
             case 'profile':
                 return ['events' => ['subscriber', 'administrator', 'editor', 'author', 'contributor'] ];
             case 'imports':
@@ -473,6 +473,10 @@ class Log extends Model {
     public static function user_events($event_type, $spec, $from, $to, $collection_id = NULL, $filter, $detail) {
         $_events_ = self::get_event_type($spec);
 
+        if($event_type == 'general_status_items'){
+            $event_type = 'user_items';
+        }
+
         if($detail == 'detail'){
             $value_detail = self::getValuesDetail($event_type, $spec, $from, $to, $collection_id);
             $vdtl_data = array();
@@ -480,6 +484,9 @@ class Log extends Model {
             foreach ($value_detail as $valdt => $data) {
                 if($event_type == 'users'){
                     array_push($vdtl_data, [$data->user, $data->date]);
+                }
+                else if($event_type == 'items'){
+                    array_push($vdtl_data, [$data->user, $data->item, $data->date]);
                 }
             }
 
@@ -854,6 +861,23 @@ class Log extends Model {
                         WHERE event = '$event' AND (substring(event_date, 1, 10)) BETWEEN '$from' AND '$to'
                     ", self::_table(), self::_users_table(), self::_users_table());
             }
+            else if($report == 'items'){
+                if($event == 'publish' || $event == 'draft' || $event == 'trash'){
+                    $SQL_query = sprintf(
+                        "SELECT user_login AS user, post_title AS item, post_date AS date
+                            FROM %s, %s
+                            WHERE post_author = %s.ID AND post_type = 'socialdb_object' AND post_status = '$event' AND (substring(post_date, 1, 10)) BETWEEN '$from' AND '$to'
+                        ", self::_users_table(), self::_posts_table(), self::_users_table());
+                        
+                }
+                else{
+                    $SQL_query = sprintf(
+                        "SELECT user_login AS user, post_title AS item, event_date AS date
+                            FROM %s, %s, %s
+                            WHERE %s.ID = item_id AND user_id = %s.ID AND event = '$event' AND (substring(event_date, 1, 10)) BETWEEN '$from' AND '$to'
+                        ", self::_table(), self::_users_table(), self::_posts_table(), self::_posts_table(), self::_users_table());
+                } 
+            }
         }
         else{
 
@@ -863,6 +887,6 @@ class Log extends Model {
 
         return $value_detail;
     }
-
+    // select user_login, wp_users.ID, post_author, post_title, wp_posts.ID, event, event_date from wp_statistics, wp_users, wp_posts where wp_posts.ID = item_id and user_id = wp_users.ID and event = 'view' and (substring(event_date, 1, 10)) between '2017-01-01' and '2017-08-08';
     // select user_login, event_date, event from wp_statistics join wp_users on wp_users.ID = user_id where event = 'login' and (substring(event_date, 1, 10)) between from and to;
 }

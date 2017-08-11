@@ -127,11 +127,19 @@
         toggleElements(["#"+chart+"chart_div", "#charts-resume"], true);
         toggleElements(["#charts-container #values-details"]);
 
-        var report = $("#report-type-stat").dynatree("getActiveNode");
+        var report = $(".current_parent_report").val();
+
+        if(report){
+            var title = report;
+        }
+        else{
+            console.log('Erro desconhecido '+ report);
+            return false;
+        }
 
         var eventName = e.id;
 
-        if(report.parent.data.title == 'Users'){
+        if(title == 'Users'){
             switch (eventName) {
                 case 'Logins':
                     var thead = {
@@ -186,25 +194,138 @@
                     break;
             }
         }
-        else if(report.parent.data.title == 'Itens'){
+        else if(title == 'Items'){
+            switch (eventName) {
+                case 'Viewed':
+                case 'Visualizados':
+                    var thead = {
+                        column1: 'Usuário que visualizou',
+                        column2: 'Item',
+                        column3: 'Data - Horário'
+                    }
+
+                    renderDetailThead(thead);
+                    fetchData('items', 'view', 'detail');
+                    break;
+                case 'Commented':
+                case 'Comentados':
+                    var thead = {
+                        column1: 'Usuário que comentou',
+                        column2: 'Item',
+                        column3: 'Data - Horário'
+                    }
+                    
+                    renderDetailThead(thead);
+                    fetchData('items', 'comment', 'detail');
+                    break;
+                case 'Voted':
+                case 'Votados':
+                    var thead = {
+                        column1: 'Usuário que votou',
+                        column2: 'Item',
+                        column3: 'Data - Horário'
+                    }
+
+                    renderDetailThead(thead);
+                    fetchData('items', 'vote', 'detail');
+                    break;
+                case 'Added':
+                case 'Adicionados':
+                    var thead = {
+                        column1: 'Usuário que adicionou',
+                        column2: 'Item (Nome do item ao ser adicionado)',
+                        column3: 'Data - Horário'
+                    }
+
+                    renderDetailThead(thead);
+                    fetchData('items', 'add', 'detail');
+                    break;
+                case 'Active':
+                case 'Ativos':
+                    var thead = {
+                        column1: 'Usuário que publicou (ativou)',
+                        column2: 'Item (Nome atual)',
+                        column3: 'Data - Horário'
+                    }
+
+                    renderDetailThead(thead);
+                    fetchData('items', 'publish', 'detail');
+                    break;
+                case 'Edited':
+                case 'Editados':
+                    var thead = {
+                        column1: 'Usuário que editou)',
+                        column2: 'Item',
+                        column3: 'Data - Horário'
+                    }
+
+                    renderDetailThead(thead);
+                    fetchData('items', 'edit', 'detail');
+                    break;
+                case 'Deleted':
+                case 'Deletados':
+                    var thead = {
+                        column1: 'Usuário que deletou',
+                        column2: 'Item',
+                        column3: 'Data - Horário'
+                    }
+
+                    renderDetailThead(thead);
+                    fetchData('items', 'delete', 'detail');
+                    break;
+                case 'Downloaded':
+                case 'Baixados':
+                    var thead = {
+                        column1: 'Usuário que baixou',
+                        column2: 'Item',
+                        column3: 'Data - Horário'
+                    }
+
+                    renderDetailThead(thead);
+                    fetchData('items', 'download', 'detail');
+                    break;
+                case 'Draft':
+                case 'Rascunhos':
+                    var thead = {
+                        column1: 'Usuário que colocou em rascunho',
+                        column2: 'Item',
+                        column3: 'Data - Horário'
+                    }
+
+                    renderDetailThead(thead);
+                    fetchData('items', 'draft', 'detail');
+                    break;
+                case 'Trash':
+                case 'Lixeira':
+                    var thead = {
+                        column1: 'Usuário que colocou na lixeira',
+                        column2: 'Item',
+                        column3: 'Data - Horário'
+                    }
+
+                    renderDetailThead(thead);
+                    fetchData('items', 'trash', 'detail');
+                    break;
+                default:
+                    break;
+            }
+        }
+        else if(title == 'Collections'){
 
         }
-        else if(report.parent.data.title == 'Collections'){
+        else if(title == 'Comments'){
 
         }
-        else if(report.parent.data.title == 'Comments'){
+        else if(title == 'Categories'){
 
         }
-        else if(report.parent.data.title == 'Categories'){
+        else if(title == 'Tags'){
 
         }
-        else if(report.parent.data.title == 'Tags'){
+        else if(title == 'Import / Export'){
 
         }
-        else if(report.parent.data.title == 'Import / Export'){
-
-        }
-        else if(report.parent.data.title == 'Administration'){
+        else if(title == 'Administration'){
 
         }
     }
@@ -399,7 +520,8 @@
         classNames: { checkbox: 'dynatree-radio'},
         children: getStatsTree(),
         onClick: function(node, event) {
-            var parent = node.parent.data.title; //titulo da div parent, ex: users
+            var parent = node.parent.data.title; //titulo da div parent, ex: Users
+            $(".current_parent_report").val(parent); //nome do parent atual 'ex: Users'
             var node_action = node.data.id; //id do li dentro da div parent
             var chart_text = node.data.title;
             var chain = $('.temp-set').html(chart_text).text().replace(/\//gi, "");
@@ -454,7 +576,7 @@
         */
         return [
             { title: "Usuário <p> visualizados / comentados / votados </p>", id: "user" },
-            { title: "Status <p> ativos / rascunhos / lixeira / excluídos </p>", id: "general_status" },
+            { title: "Status <p> ativos / rascunhos / lixeira / excluídos / <br/> adicionados / editados / excluídos / <br/> visualizados / baixados </p>", id: "general_status" },
            // { title: "Coleção <p> número de itens por coleção </p>", id: "top_collections", addClass: 'repoOnly' }
         ];
     }
@@ -568,7 +690,6 @@
             var resJSON = JSON.parse(resp);
             console.log(resJSON);
             var chart = $('.selected_chart_type').val(); //tipo de chart selecionado
-            $(".current_parent_report").val(parent); //nome do parent atual 'ex: Users'
 
             if(operation == 'user_events'){
                 if( (resJSON.stat_object == null) || resJSON.stat_object.length == 0) {

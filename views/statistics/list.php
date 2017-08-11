@@ -119,7 +119,7 @@ include_once('js/list_js.php');
 
                 <!-- Tabela de exibição dos detalhes dos valores -->
                 <div id="values-details" class="hide table-responsive">
-                    <button onclick="javascript:closeDetail()" type="button" class="close" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                    <button onclick="javascript:closeDetail()" type="button" class="close" title="Close"> <span aria-hidden="true">&times;</span> </button>
                     <table id="table-detail" class="table table-hover">
                         <thead id="thead-detail">
                             <tr class="headers">
@@ -150,7 +150,7 @@ include_once('js/list_js.php');
                     </thead>
                     <tbody>
                         <tr class="content"> 
-                            <td class="curr-filter"> <?php _e('Total', 'tainacan'); ?> </td> 
+                            <td class="curr-filter"></td> 
                         </tr>
                     </tbody>
                 </table>
