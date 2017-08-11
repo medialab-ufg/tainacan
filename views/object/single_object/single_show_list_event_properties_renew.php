@@ -86,7 +86,6 @@ $ids = [];
                 ?>
             </div>
             <div style="display: none;" id="widget_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">
-
                 <?php
                 //acao para modificaco da propriedade de objeto na insercao do item
                 if(has_action('modificate_single_item_properties_object')):
@@ -263,7 +262,7 @@ if (isset($property_term)): ?>
     <?php foreach ($property_term as $property) {
         if(!$objectHelper->is_public_property($property))
             continue;
-        if (count($property['has_children']) > 0): ?>
+        if (count($property['has_children']) > 0):?>
             <div class="col-md-6 property-term no-padding">
                 <div class="box-item-paddings">
                     <h4 class="title-pipe single-title"> <?php echo $property['name']; ?></h4>
@@ -304,7 +303,8 @@ if (isset($property_term)): ?>
                             <?php echo '<p>' . __('empty field', 'tainacan') . '</p>'; ?>
                         </div>
                     <?php endif; ?>                    
-                    
+
+                    <!-- Edição de metadado -->
                     <div style="display:none;" id="widget_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">
                         <?php
                         if ($property['type'] == 'radio') {
@@ -355,9 +355,9 @@ if (isset($property_term)): ?>
         }
     endif;
     
-    if(isset($property_compounds)):
-        $objectHelper->list_properties_compounds($property_compounds, $object_id, $references);
-   endif;
+if(isset($property_compounds)):
+    $objectHelper->list_properties_compounds($property_compounds, $object_id, $references);
+endif;
     ?>
     <input type="hidden" name="categories_id" id='event_single_object_categories_id_<?php echo $object_id; ?>' value="<?php echo implode(',', $categories_id); ?>">
     <input type="hidden" name="properties_terms_radio" id='event_single_properties_terms_radio' value="<?php echo implode(',', array_unique($properties_terms_radio)); ?>">
