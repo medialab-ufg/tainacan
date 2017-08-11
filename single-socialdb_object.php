@@ -6,13 +6,10 @@ include_once( dirname(__FILE__) . '/helpers/view_helper.php' );
 include_once( dirname(__FILE__) . '/helpers/object/object_helper.php' );
 include_once( dirname(__FILE__) .  '/views/object/js/list_single_js.php' );
 
-while(have_posts()): the_post();
-    $_item_ = $post;
-    $parent = get_post($post->post_parent);
-endwhile;
+$parent = get_post($post->post_parent);
 $metas = get_post_meta($post->ID);
 $collection_id = $parent->ID;
-$object_id = $_item_->ID;
+$object_id = $post->ID;
 
 $create_perm_object = verify_allowed_action($collection_id, 'socialdb_collection_permission_create_property_object');
 $edit_perm_object = verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_property_object');
@@ -29,7 +26,7 @@ $view_helper = new ObjectHelper($collection_id);
 <ol class="breadcrumb item-breadcrumbs">
     <li> <a href="<?php echo site_url(); ?>"> Home </a> </li>
     <li> <a href="<?php echo $parent->guid; ?>"> <?php echo $parent->post_title; ?> </a> </li>
-    <li class="active"> <?php echo $_item_->post_title; ?> </li>
+    <li class="active"> <?php echo $post->post_title; ?> </li>
 
     <button data-title="<?php printf(__("URL of %s", "tainacan"), $post->post_title); ?>" id="iframebuttonObject" data-container="body"
             class="btn bt-default content-back pull-right" data-toggle="popoverObject" data-placement="left" data-content="">

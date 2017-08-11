@@ -32,14 +32,42 @@ $_special_configs = [
 <!-- PAGINA DA TAXONOMIA -->
 <input type="hidden" id="tax_page" name="object_page" value="<?php echo $_special_configs['tax']; ?>" />
 
-<!-- PAGINA DO ITEM -->
-<?php if(is_single()): $parent = get_post($post->post_parent); ?>
+<?php
+if(is_single()):
+        $parent = get_post($post->post_parent);
 
-    <input type="hidden" id="object_page"      name="object_page"      value="<?php echo $_special_configs['item']; ?>" />
-    <input type="hidden" id="single_object_id" name="single_object_id" value="<?php echo $post->ID; ?>" />
-    <input type="hidden" id="single_name"      name="item_single_name" value="<?php echo $post->post_name; ?>" />
-    <input type="hidden" id="socialdb_permalink_object" name="socialdb_permalink_object" value="<?php echo get_the_permalink($parent->ID) . '?item=' . $post->post_name; ?>" />
-    <input type="hidden" class="object_id"     value="<?php echo $post->ID ?>"  />
-    <input type="hidden" class="post_id"       name="post_id" value="<?= $post->ID ?>">
+    if(is_singular('socialdb_object')) { ?>
+        <!-- PAGINA DO ITEM -->
+        <input type="hidden" id="object_page"      name="object_page"      value="<?php echo $_special_configs['item']; ?>" />
+        <input type="hidden" id="single_object_id" name="single_object_id" value="<?php echo $post->ID; ?>" />
+        <input type="hidden" id="single_name"      name="item_single_name" value="<?php echo $post->post_name; ?>" />
+        <input type="hidden" id="socialdb_permalink_object" name="socialdb_permalink_object" value="<?php echo get_the_permalink($parent->ID) . '?item=' . $post->post_name; ?>" />
+        <input type="hidden" class="object_id"     value="<?php echo $post->ID ?>"  />
+        <input type="hidden" class="post_id"       name="post_id" value="<?= $post->ID ?>">
 
-<?php endif; ?>
+    <?php } else if(is_singular('socialdb_collection')) {
+        $visualization_page_category = get_post_meta($post->ID, 'socialdb_collection_visualization_page_category', true);
+        $collection_default = get_option('disable_empty_collection');
+        // $options = get_option('socialdb_theme_options');
+        $root_id = get_option('collection_root_id');
+        ?>
+
+        <!-- TAINACAN - BEGIN: ITENS NECESSARIOS PARA EXECUCAO DE VARIAS PARTES DO SOCIALDB -->
+        <input type="hidden" id="visualization_page_category" name="visualization_page_category" value="<?php echo (!$visualization_page_category || $visualization_page_category === 'right_button') ? 'right_button' : 'click'; ?>">
+        <input type="hidden" id="show_collection_default" name="show_collection_default" value="<?php echo (!$collection_default || $collection_default === 'false') ? 'show' : 'hide'; ?>" />
+        <input type="hidden" id="socialdb_fb_api_id" name="socialdb_fb_api_id" value="<?php echo $options['socialdb_fb_api_id']; ?>" />
+        <input type="hidden" id="socialdb_embed_api_id" name="socialdb_embed_api_id" value="<?php echo $options['socialdb_embed_api_id']; ?>" />
+        <input type="hidden" id="current_user_id" name="current_user_id" value="<?php echo get_current_user_id(); ?>" />
+        <input type="hidden" id="collection_id" name="collection_id" value="<?php echo $post->ID ?>" />
+        <input type="hidden" id="mode" name="mode" value="<?php echo $mode ?>" />
+        <input type="hidden" id="site_url" value="<?php echo site_url(); ?>" />
+        <input type="hidden" id="collection_root_id" value="<?php echo $root_id; ?>" />
+        <input type="hidden" id="collection_root_url" value="<?php echo get_the_permalink($root_id); ?>" />
+        <input type="hidden" id="socialdb_permalink_collection" name="socialdb_permalink_collection" value="<?php echo get_the_permalink($post->ID); ?>" />
+        <input type="hidden" id="slug_collection" name="slug_collection" value="<?php echo $post->post_name; ?>"> <!-- utilizado na busca -->
+        <input type="hidden" id="search_collection_field" name="search_collection_field" value="<?php if ($_GET['search']) echo $_GET['search']; ?>" />
+
+    <?php
+    }
+
+endif; ?>

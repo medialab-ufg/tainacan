@@ -2461,7 +2461,7 @@ function repoConfig(src, op, ctrl, col_id) {
         .done(function(res){
             resetHomeStyleSettings();
             $('#tainacan-breadcrumbs').hide();
-            $('#configuration').html(res).show();
+            $('#single_item_tainacan').html(res).show();
     });
 }
 
