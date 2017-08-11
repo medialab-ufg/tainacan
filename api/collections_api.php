@@ -2,8 +2,26 @@
 
 abstract class CollectionsApi {
 
-    public function get_collections() {
+    public function get_collections($request) {
+        $params = $request->get_params();
+        
         $CollectionModel = new CollectionModel;
+        $wpQueryModel = new WPQueryModel();
+        if(isset($params['filter'])){
+            $params['filter']['post_type'] = 'socialdb_collection';
+            $args = $wpQueryModel->queryAPI($params['filter']);
+            $loop = new WP_Query($args);
+            if ($loop->have_posts()) {
+                $data = [];
+                while ( $loop->have_posts() ) : $loop->the_post();
+                    $array['item'] = CollectionsApi::get_item( get_post()->ID );
+                    $data[] = $array;
+                endwhile;
+                return new WP_REST_Response( $data, 200 );
+            }else{
+                return new WP_Error('empty_search',  __( 'No items found with these arguments!', 'tainacan' ), array('status' => 404));
+            }
+        }
         return $CollectionModel->get_all_collections();
     }
 
@@ -69,7 +87,10 @@ abstract class CollectionsApi {
         if(empty($collection_id)){
           $collection_id = $CollectionModel->get_collection_by_object($item_id)[0]->ID;
         }
-        $item->guid = get_the_permalink($collection_id).$item->post_name;
+        
+        //busco a url certa caso for post type object
+        if($item->post_type === 'socialdb_object')
+            $item->guid = get_the_permalink($collection_id).$item->post_name;
         
         //thumbnail do item
         if(has_post_thumbnail($item_id)){
@@ -97,6 +118,8 @@ abstract class CollectionsApi {
         $metadatas = CollectionsApi::structProperties($properties);
         $args = $wpQueryModel->queryAPI($filters,$params['id']);
         $loop = new WP_Query($args);
+        
+        //itero sobre os itens
         if ($loop->have_posts()) {
             $data = [];
             while ( $loop->have_posts() ) : $loop->the_post();
@@ -108,6 +131,22 @@ abstract class CollectionsApi {
         }else{
             return new WP_Error('empty_search',  __( 'No items found with these arguments!', 'tainacan' ), array('status' => 404));
         }
+    }
+    
+    /**
+     * 
+     * @param type $property
+     */
+    public function getTypeProperty($property) {
+        $wpQueryModel = new WPQueryModel();
+        $is_object = (isset($property['metas']['socialdb_property_object_category_id']) && !empty($property['metas']['socialdb_property_object_category_id'])) ? true : false;
+        if($is_object){
+            return 'item';
+        }else if(in_array($property['slug'], $wpQueryModel->fixed_slugs)){
+            return 'property-default';
+        }else{
+            return $property['type'];
+        }         
     }
 
     /**
@@ -183,7 +222,7 @@ abstract class CollectionsApi {
         
         //se estiver buscando os valores de um item especifico
         if($type === 'item'){
-            $return = ['id' => $property['id'],'name'=>$property['name'],'type'=>$property['type'],'children'=>[]];
+            $return = ['id' => $property['id'],'name'=>$property['name'],'type'=> CollectionsApi::getTypeProperty($property),'children'=>[]];
             $childrens =  $property['metas']['socialdb_property_compounds_properties_id'];
             $childrens = (is_array($childrens)) ? $childrens : explode(',', $childrens);
             
@@ -226,8 +265,7 @@ abstract class CollectionsApi {
     
     private function get_values_atom($property,$value){
         $wpQueryModel = new WPQueryModel();
-        $is_object = (isset($property['metas']['socialdb_property_object_category_id']) && !empty($property['metas']['socialdb_property_object_category_id'])) ? true : false;
-        $array = ['id' => $property['id'],'name'=>$property['name'],'type'=>($is_object) ? 'item' : $property['type']];
+        $array = ['id' => $property['id'],'name'=>$property['name'],'type'=>CollectionsApi::getTypeProperty($property)];
         if(isset($value[$property['id']]) && is_array($value[$property['id']]['values']) && !empty($value[$property['id']]['values'])){
             foreach ($value[$property['id']]['values'] as $meta_id) {
                 $array['values'][] = $wpQueryModel->sdb_get_post_meta($meta_id)->meta_value;
@@ -252,7 +290,7 @@ abstract class CollectionsApi {
         $return = [];
         $wpQueryModel = new WPQueryModel();
         if($type === 'item'){
-            $return = ['id' => $property['id'],'name'=>$property['name'],'type'=>$property['type']];
+            $return = ['id' => $property['id'],'name'=>$property['name'],'type'=> CollectionsApi::getTypeProperty($property)];
             if($values){
                 foreach ($values as $value) {
                     if(isset($value[0]) && is_array($value[0]['values']) && !empty($value[0]['values'])){
@@ -291,7 +329,7 @@ abstract class CollectionsApi {
         $empty = false;
         $wpQueryModel = new WPQueryModel();
         if($type === 'item'){
-            $return = ['id' => $property['id'],'name'=>$property['name'],'type'=>'item'];
+            $return = ['id' => $property['id'],'name'=>$property['name'],'type'=> CollectionsApi::getTypeProperty($property)];
             if($values){
                 foreach ($values as $value) {
                     if(isset($value[0]) && is_array($value[0]['values']) && !empty($value[0]['values'])){
@@ -325,7 +363,7 @@ abstract class CollectionsApi {
         $return = [];
         $wpQueryModel = new WPQueryModel();
         if($type === 'item'){
-            $return = ['id' => $property['id'],'name'=>$property['name'],'type'=>$property['type']];
+            $return = ['id' => $property['id'],'name'=>$property['name'],'type'=> CollectionsApi::getTypeProperty($property)];
             if($values){
                 foreach ($values as $value) {
                     if(isset($value[0]) && is_array($value[0]['values']) && !empty($value[0]['values'])){
@@ -362,6 +400,7 @@ abstract class CollectionsApi {
                 $properties = array_merge ($properties, $terms);
         }
         
+        //retirando possiveis duplicacoes
         $properties = array_filter($properties);
         foreach ($properties as $metadata) {
             $metadata = $wpQueryModel->get_all_property($metadata,true);

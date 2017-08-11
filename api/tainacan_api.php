@@ -45,6 +45,17 @@ class TainacanApi extends WP_REST_Controller {
             )
         ));
         //************* END COLLECTION ENDPOINTS ****************//
+        //************* START COLLECTION METADATA ENDPOINTS ****************//
+        register_rest_route($namespace, $this->base['metadatas'], array(
+            array(
+                'methods' => WP_REST_Server::READABLE,
+                'callback' => array(CollectionsMetadataApi, 'list_metadatas'),
+                'permission_callback' => array($this, 'get_items_permissions_check'),
+                'args' => array(
+                ),
+            )
+        ));
+        //************* END COLLECTION METADATA ENDPOINTS ****************//
         //************* START COLLECTION ITEMS ENDPOINTS ****************//
         register_rest_route($namespace, $this->base['items'], array(
             array(
