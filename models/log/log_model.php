@@ -485,8 +485,11 @@ class Log extends Model {
                 if($event_type == 'users'){
                     array_push($vdtl_data, [$data->user, $data->date]);
                 }
-                else if($event_type == 'items'){
+                else if($event_type == 'items' || $event_type == 'collections'){
                     array_push($vdtl_data, [$data->user, $data->item, $data->date]);
+                }
+                else if($event_type == 'c_items'){
+                    array_push($vdtl_data, [$data->user, $data->item, $data->collection, $data->date]);
                 }
             }
 
@@ -878,6 +881,42 @@ class Log extends Model {
                         ", self::_table(), self::_users_table(), self::_posts_table(), self::_posts_table(), self::_users_table());
                 } 
             }
+            else if($report == 'collections' || $report == 'c_items'){
+                if($event == 'edit' || $event == 'view'){
+                    $SQL_query = sprintf(
+                        "SELECT user_login AS user, post_title AS item, post_date AS date 
+                            FROM %s, %s, %s 
+                            WHERE collection_id = %s.ID AND user_id = post_author AND post_author = %s.ID AND event_type = 'user_collection' 
+                                AND event = '$event' AND substring(event_date, 1, 10) BETWEEN '$from' AND '$to'
+                            ", self::_table(), self::_users_table(), self::_posts_table(), self::_posts_table(), self::_users_table());
+                }
+                else if($event == 'add' || $event == 'delete'){
+                    $event = ($event == 'add') ? 'Create' : 'Delete';
+                    $title_event = $event .' the Collection%%';
+
+                    $SQL_query = sprintf(
+                        "SELECT user_login AS user, substring(post_title, 23) as item, post_date AS date 
+                            FROM %s, %s where post_author = %s.ID and post_title like '". $title_event ."' and substring(post_date, 1, 10) BETWEEN '$from' and '$to'
+                        ", self::_posts_table(), self::_users_table(), self::_users_table());
+                }
+                else{
+                    // Para os itens
+                    $SQL_query = sprintf(
+                        "SELECT user, item, collection, date 
+                            FROM (
+                                (
+                                    SELECT post_title AS collection, ID 
+                                        FROM %s 
+                                        WHERE post_type = 'socialdb_collection' AND post_status = 'publish' AND post_title = '$event'
+                                ) A 
+                                JOIN (
+                                    SELECT post_title AS item, post_date AS date, post_parent, user_login AS user FROM %s, %s
+                                        WHERE post_author = %s.ID AND post_type = 'socialdb_object'
+                                    ) B 
+                                ON A.ID = B.post_parent)
+                        ", self::_posts_table(), self::_posts_table(), self::_users_table(), self::_users_table());
+                }
+            }
         }
         else{
 
@@ -887,6 +926,14 @@ class Log extends Model {
 
         return $value_detail;
     }
+
+    // select user, item, collection, date from ((select post_title as collection, ID from wp_posts where post_type = 'socialdb_collection' and post_status = 'publish') A join (select post_title as item, post_date as date, post_parent, user_login as user from wp_posts, wp_users where post_author = wp_users.ID and post_type = 'socialdb_object') B  on A.ID = B.post_parent);
+
     // select user_login, wp_users.ID, post_author, post_title, wp_posts.ID, event, event_date from wp_statistics, wp_users, wp_posts where wp_posts.ID = item_id and user_id = wp_users.ID and event = 'view' and (substring(event_date, 1, 10)) between '2017-01-01' and '2017-08-08';
     // select user_login, event_date, event from wp_statistics join wp_users on wp_users.ID = user_id where event = 'login' and (substring(event_date, 1, 10)) between from and to;
+
+    // ADD COL: select post_author, post_date, substring(post_title, 23), user_login from wp_users, wp_posts where post_author = wp_users.ID and post_title like 'Create the Collection%' and substring(post_date, 1, 10) between '2017-01-01' and '2017-06-01';
+    // DELETE COL: select post_author, post_date, substring(post_title, 23), user_login from wp_users, wp_posts where post_author = wp_users.ID and post_title like 'Delete the Collection%' and substring(post_date, 1, 10) between '2017-01-01' and '2017-06-01';
+
+    // select post_author, post_date, post_title, user_login from wp_statistics, wp_posts, wp_users where collection_id = wp_posts.ID and user_id = post_author and post_author = wp_users.ID and event_type = 'user_collection' and event = 'edit' and substring(event_date, 1, 10) between '2017-01-01' and '2017-08-14';
 }

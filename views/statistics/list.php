@@ -26,11 +26,11 @@ include_once('js/list_js.php');
                 <div class="date-range-filter period-config">
                     <div> 
                         <h6> <?php _e('From: ', 'tainacan'); ?></h6>
-                        <input type="text" class="input_date input-size form-control" value="" placeholder="dd/mm/aaaa" id="from_period" name="from_period">
+                        <input type="text" class="input_date input-size form-control" value="" id="from_period" name="from_period">
                     </div>
                     <div> 
                         <h6><?php _e('Until: ', 'tainacan'); ?></h6>
-                        <input type="text" class="input_date input-size form-control" value="" placeholder="dd/mm/aaaa" id="to_period" name="to_period"> <br />
+                        <input type="text" class="input_date input-size form-control" value="" id="to_period" name="to_period"> <br />
                     </div>
                     <!-- Dynatree filter-->
                     <div>
@@ -43,7 +43,7 @@ include_once('js/list_js.php');
                         <input type="radio" id="months" value="months" name="optradio" checked> <?php _e('Months', 'tainacan'); ?>
                     </div>
                     <div>
-                        <input type="radio" id="nofilter" name="optradio" value="nofilter"> <?php _e('No filter', 'tainacan'); ?>
+                        <input type="radio" id="nofilter" name="optradio" value="nofilter"> <?php _e('No temporal scale', 'tainacan'); ?>
                     </div>
                     <!--<div id="report-filters"></div>-->
                 </div>
@@ -145,7 +145,7 @@ include_once('js/list_js.php');
                             <th class="curr-parent"> <?php _e('Status', 'tainacan'); ?> </th> 
                         </tr>
                         <tr>
-                            <th class="more-detail-message"> <?php _e('Click on values to more detail', 'tainacan') ?> <span class='glyphicon glyphicon-info-sign'></span> </th>
+                            <th class="more-detail-message"> <?php _e('Click on values to see more details', 'tainacan') ?> <span class='glyphicon glyphicon-info-sign'></span> </th>
                         </tr>
                     </thead>
                     <tbody>

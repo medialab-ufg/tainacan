@@ -139,7 +139,148 @@
 
         var eventName = e.id;
 
-        if(title == 'Users'){
+        var geral = 'Added, Edited, Viewed, Deleted, Adicionados, Visualizados, Editados, Excluídos';
+        console.log(geral.search('0'));
+        // Cases comuns entre vários relatórios
+        if(geral.search(eventName) != '-1'){
+            switch (eventName) {
+                case 'Added':
+                case 'Adicionados':
+                    if(title == 'Items' || title == 'Itens'){
+                        var thead = {
+                            column1: 'Usuário que adicionou',
+                            column2: 'Item (Nome do item ao ser adicionado)',
+                            column3: 'Data - Horário'
+                        }
+
+                        renderDetailThead(thead);
+                        fetchData('items', 'add', 'detail');
+                        break;
+                    }
+                    else if(title == 'Collections' || title == 'Coleções'){
+                        var thead = {
+                            column1: 'Usuário que adicionou (criou)',
+                            column2: 'Coleção',
+                            column3: 'Data - Horário'
+                        }
+
+                        renderDetailThead(thead);
+                        fetchData('collections', 'add', 'detail');
+                    }
+                    else if(title == 'Comments'  || title == 'Comentários'){
+
+                    }
+                    else if(title == 'Categories' || title == 'Categorias'){
+
+                    }
+                    else if(title == 'Tags'){
+
+                    }
+                    break;
+                case 'Edited':
+                case 'Editados':
+                    if(title == 'Items' || title == 'Itens'){
+                        var thead = {
+                            column1: 'Usuário que editou)',
+                            column2: 'Item',
+                            column3: 'Data - Horário'
+                        }
+
+                        renderDetailThead(thead);
+                        fetchData('items', 'edit', 'detail');
+                        break;
+                    }
+                    else if(title == 'Collections' || title == 'Coleções'){
+                        var thead = {
+                            column1: 'Usuário que editou',
+                            column2: 'Coleção',
+                            column3: 'Data - Horário'
+                        }
+                        
+                        renderDetailThead(thead);
+                        fetchData('collections', 'edit', 'detail');
+                    }
+                    else if(title == 'Comments'  || title == 'Comentários'){
+
+                    }
+                    else if(title == 'Categories' || title == 'Categorias'){
+
+                    }
+                    else if(title == 'Tags'){
+
+                    }
+                    break;
+                case 'Viewed':
+                case 'Visualizados':
+                    if(title == 'Items' || title == 'Itens'){
+                        var thead = {
+                            column1: 'Usuário que visualizou',
+                            column2: 'Item',
+                            column3: 'Data - Horário'
+                        }
+
+                        renderDetailThead(thead);
+                        fetchData('items', 'view', 'detail');
+                        break;
+                    }
+                    else if(title == 'Collections' || title == 'Coleções'){
+                        var thead = {
+                            column1: 'Usuário que visualizou',
+                            column2: 'Coleção',
+                            column3: 'Data - Horário'
+                        }
+                        
+                        renderDetailThead(thead);
+                        fetchData('collections', 'view', 'detail');
+                    }
+                    else if(title == 'Comments'  || title == 'Comentários'){
+
+                    }
+                    else if(title == 'Categories' || title == 'Categorias'){
+
+                    }
+                    else if(title == 'Tags'){
+
+                    }
+                    break;
+                case 'Deleted':
+                case 'Excluídos':
+                    if(title == 'Items' || title == 'Itens'){
+                        var thead = {
+                            column1: 'Usuário que deletou',
+                            column2: 'Item',
+                            column3: 'Data - Horário'
+                        }
+
+                        renderDetailThead(thead);
+                        fetchData('items', 'delete', 'detail');
+                        break;
+                    }
+                    else if(title == 'Collections' || title == 'Coleções'){
+                        var thead = {
+                            column1: 'Usuário que excluiu',
+                            column2: 'Coleção',
+                            column3: 'Data - Horário'
+                        }
+                        
+                        renderDetailThead(thead);
+                        fetchData('collections', 'delete', 'detail');
+                    }
+                    else if(title == 'Comments'  || title == 'Comentários'){
+
+                    }
+                    else if(title == 'Categories' || title == 'Categorias'){
+
+                    }
+                    else if(title == 'Tags'){
+
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        else if(title == 'Users' || title == 'Usuários'){
             switch (eventName) {
                 case 'Logins':
                     var thead = {
@@ -194,19 +335,8 @@
                     break;
             }
         }
-        else if(title == 'Items'){
+        else if(title == 'Items' || title == 'Itens'){
             switch (eventName) {
-                case 'Viewed':
-                case 'Visualizados':
-                    var thead = {
-                        column1: 'Usuário que visualizou',
-                        column2: 'Item',
-                        column3: 'Data - Horário'
-                    }
-
-                    renderDetailThead(thead);
-                    fetchData('items', 'view', 'detail');
-                    break;
                 case 'Commented':
                 case 'Comentados':
                     var thead = {
@@ -229,17 +359,7 @@
                     renderDetailThead(thead);
                     fetchData('items', 'vote', 'detail');
                     break;
-                case 'Added':
-                case 'Adicionados':
-                    var thead = {
-                        column1: 'Usuário que adicionou',
-                        column2: 'Item (Nome do item ao ser adicionado)',
-                        column3: 'Data - Horário'
-                    }
 
-                    renderDetailThead(thead);
-                    fetchData('items', 'add', 'detail');
-                    break;
                 case 'Active':
                 case 'Ativos':
                     var thead = {
@@ -251,28 +371,7 @@
                     renderDetailThead(thead);
                     fetchData('items', 'publish', 'detail');
                     break;
-                case 'Edited':
-                case 'Editados':
-                    var thead = {
-                        column1: 'Usuário que editou)',
-                        column2: 'Item',
-                        column3: 'Data - Horário'
-                    }
-
-                    renderDetailThead(thead);
-                    fetchData('items', 'edit', 'detail');
-                    break;
-                case 'Deleted':
-                case 'Deletados':
-                    var thead = {
-                        column1: 'Usuário que deletou',
-                        column2: 'Item',
-                        column3: 'Data - Horário'
-                    }
-
-                    renderDetailThead(thead);
-                    fetchData('items', 'delete', 'detail');
-                    break;
+            
                 case 'Downloaded':
                 case 'Baixados':
                     var thead = {
@@ -310,22 +409,32 @@
                     break;
             }
         }
-        else if(title == 'Collections'){
+        else if(title == 'Collections' || title == 'Coleções'){
+            // Essa condição é para as ilustrações
+            // eventName nesse caso será o 'post_title' da coleção
+            var thead = {
+                column1: 'Usuário que adicionou',
+                column2: 'Item',
+                column3: 'Coleção',
+                column4: 'Data - Horário'
+            }
+                        
+            renderDetailThead(thead);
+            fetchData('c_items', eventName, 'detail');
+        }
+        else if(title == 'Comments'  || title == 'Comentários'){
 
         }
-        else if(title == 'Comments'){
-
-        }
-        else if(title == 'Categories'){
+        else if(title == 'Categories' || title == 'Categorias'){
 
         }
         else if(title == 'Tags'){
 
         }
-        else if(title == 'Import / Export'){
+        else if(title == 'Import / Export' || title == 'Importar / Exportar'){
 
         }
-        else if(title == 'Administration'){
+        else if(title == 'Administration' || title == 'Administração'){
 
         }
     }
@@ -467,7 +576,7 @@
             $("div#" + selected_chart).removeClass('hide');
 
             $("#statChartType").html(curr_img);
-             // Click again at current selected node to trigger chart drawing
+            // Click again at current selected node to trigger chart drawing
             loadChart();
         });
         //-------
@@ -906,7 +1015,7 @@
     function renderChart(current_title, type, stat_data, filter) {
         // var color = chart_color || '#79a6ce';
         // Google Charts objects
-        var legendOpt = {position: 'top', alignment: 'center', textStyle: {fontSize: 11}};
+        var legendOpt = {position: 'top', alignment: 'center', textStyle: {fontSize: 11}, maxLines: 2};
         if(filter == "nofilter"){
             legendOpt = {position: 'none'};
         }
