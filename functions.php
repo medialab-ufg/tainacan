@@ -19,6 +19,7 @@ include_once('views/widgets/widget_social_media.php');
 include_once('views/widgets/widget_site_map.php');
 
 show_admin_bar(false);
+add_theme_support( 'post-thumbnails' );
 
 #### Desativar Widgets Padrões do Wordpress ####
 /*

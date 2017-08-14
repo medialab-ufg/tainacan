@@ -35,7 +35,7 @@ $view_helper = new ObjectHelper($collection_id);
 </ol>
 
 <div id="single_item_tainacan" class="col-md-12">
-    <div class="col-md-9 item-main-data row" style="padding-right: 0;">
+    <div class="col-md-9 item-main-data row">
 
         <div class="col-md-12 content-title single-item-title tainacan-header-info no-padding">
             <div class="col-md-10" style="margin-top:14px;" <?php echo $view_helper->get_visibility($view_helper->terms_fixed['title']) ?>>
@@ -56,7 +56,7 @@ $view_helper = new ObjectHelper($collection_id);
                 </small>
             </div>
 
-            <div class="new-item-actions" style="margin-top:15px;margin-right: 5px;">
+            <div class="new-item-actions">
                 <?php include_once dirname(__FILE__) . "/views/object/list_modes/actions/item_actions.php"; ?>
             </div>
 
