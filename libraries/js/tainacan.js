@@ -71,28 +71,27 @@ $(window).load(function () {
     // Do NOT load this actions at statistics page
     if( ! $('body').hasClass('page-template-page-statistics') ) {
         $("area[rel^='prettyPhoto']").prettyPhoto();
+        if(src) {
+            get_collections_template(src);
+            check_privacity(src);
+            list_main_ordenation();
+            showDynatreeSingleEdit(src);
+            showHeaderCollection(src);
+            show_most_participatory_authors(src);
+            //get_categories_properties_ordenation();
+            notification_events_repository();
+            list_templates("#collections-menu ul.templates");
 
-        /************************* VERIFICACAO DE PAGINAS **************************/
-        //verifico se esta querendo visualizar um objeto especifico
-        if ($('#category_page').val() !== '') {
-            showPageCategories($('#category_page').val(), src);
+            if ($('#category_page').val() !== '') {
+                showPageCategories($('#category_page').val(), src);
+            }
+            if ($('#property_page').val() !== '') {
+                showPageProperties($('#property_page').val(), src);
+            }
+            if ($('#tag_page').val() !== '') {
+                showPageTags($('#tag_page').val(), src);
+            }
         }
-        if ($('#property_page').val() !== '') {
-            showPageProperties($('#property_page').val(), src);
-        }
-        if ($('#tag_page').val() !== '') {
-            showPageTags($('#tag_page').val(), src);
-        }
-        /************************* FIM VERIFICACAO DE PAGINAS **********************/
-
-        get_collections_template(src);
-        check_privacity(src);
-        list_main_ordenation();
-        showDynatreeSingleEdit(src);
-        showHeaderCollection(src);
-        show_most_participatory_authors(src);
-        //get_categories_properties_ordenation();
-        notification_events_repository();
 
         //verifico se esta mandando alguma mensagem
         if ($('#info_messages').val() !== '' && $('#info_title').val() !== '') {
@@ -623,11 +622,6 @@ function add_collection_template(col, template_name) {
 }
 
 /******************* funcoes para templates de colecoes ***********************/
-function listTemplates() {
-    $('#list_templates').show();
-    $('#form_new_collection').hide();
-    get_collections_template(src);
-}
 
 function backTemplates() {
     $('#list_templates').show();
@@ -1247,17 +1241,18 @@ function reinit_tag_tree() {
 
 
 function showHeaderCollection(src) {
-    $.ajax({
-        url: src + '/controllers/collection/collection_controller.php',
-        type: 'POST',
-        data: {operation: 'show_header', collection_id: $("#collection_id").val(), sharedcollections: $("#sharedcollections").val(), mycollections: $("#mycollections").val()}
-    }).done(function (result) {
-        $("#collection_post").html(result);
-        $('.nav-tabs').tab();
-        $('.dropdown-toggle').dropdown();
-    });
+    if(src) {
+        $.ajax({
+            url: src + '/controllers/collection/collection_controller.php',
+            type: 'POST',
+            data: {operation: 'show_header', collection_id: $("#collection_id").val(), sharedcollections: $("#sharedcollections").val(), mycollections: $("#mycollections").val()}
+        }).done(function (result) {
+            $("#collection_post").html(result);
+            $('.nav-tabs').tab();
+            $('.dropdown-toggle').dropdown();
+        });
+    }
 }
-
 
 function showCollectionConfiguration(src) {
     $.ajax({
@@ -1955,11 +1950,6 @@ $(function () {
             nav.removeClass("menuFixo");
         }
     });
-
-    // Do NOT load this actions at statistics page
-    if( ! $('body').hasClass('page-template-page-statistics') ) {
-        list_templates("#collections-menu ul.templates");
-    }
 
     $(document).on("click", ".added", function (e) {
         e.preventDefault();

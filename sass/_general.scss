@@ -701,3 +701,21 @@ a.validate-ok {
      color: black;
    }
 }
+
+.tainacan-content-area {
+  .tainacan-article-wrapper {
+    margin-bottom: 10px;
+
+    .post-thumbnail {
+      float: left;
+      margin-right: 15px;
+    }
+
+    .post-thumbnail, .entry-header {
+      display: inline-block;
+    }
+    .entry-header h3 {
+      margin-top: 0;
+    }
+  }
+}
