@@ -680,7 +680,7 @@ a.validate-ok {
 }
 
 #modalImportMain {
-  modal-content {
+  .modal-content {
     text-align: center;
   }
 }
@@ -691,4 +691,13 @@ a.validate-ok {
 
 .tainacan-page-area {
   background: white;
+}
+
+.single-post-wrapper {
+  border-radius: 0;
+  padding: 10px;
+  margin-bottom: 20px;
+   p {
+     color: black;
+   }
 }

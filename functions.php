@@ -3188,7 +3188,7 @@ function home_header_bg($bg_id) {
         $image_url = ( $cover_id ) ? wp_get_attachment_url($cover_id) : get_template_directory_uri() . '/libraries/images/bg-home' . rand(1, 5) . '.jpg';
     }
 
-    return '<header style="background-image: url(' . $image_url . ')">';
+    return 'background-image: url(' . $image_url . ');';
 }
 
 function repository_bg() {
@@ -3667,10 +3667,14 @@ function get_documents_text($ids)
 }
 
 function getPageParam($param, $returnTrue = false) {
-    if($returnTrue)
+    if($returnTrue) {
         $positive_return = true;
-    else
+    } else {
         $positive_return = trim($_GET[$param]);
+        if($param === "recovery_password") {
+            $positive_return = (int) base64_decode($positive_return);
+        }
+    }
 
     return isset($_GET[$param]) ? $positive_return : '';
 }

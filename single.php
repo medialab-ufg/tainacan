@@ -4,7 +4,7 @@
             <?php while (have_posts()): the_post(); ?>
                 <h1 class="entry-title"><?php the_title(); ?></h1> <hr />
 
-                <div class="content-wrapper"> <?php echo the_content(); ?> </div>
+                <div class="single-post-wrapper"> <?php echo the_content(); ?> </div>
 
                 <?php if (comments_open() || get_comments_number()): ?>
                     <div class="comments-wrapper"> <?php comments_template(); ?> </div>

@@ -41,7 +41,7 @@ $_header_enabled = get_post_meta($collection_id, 'socialdb_collection_show_heade
             <meta name="description" content="<?php echo get_the_content() ?>" />
             <link rel="alternate" type="application/rdf+xml" href="<?php echo get_the_permalink(); ?>?.rdf">
             <?php $_GOOGLE_API_KEY = "AIzaSyBZXPZcDMGeT-CDugrsYWn6D0PQSnq_odg"; ?>
-            <script src="http://maps.googleapis.com/maps/api/js?key=<?php echo $_GOOGLE_API_KEY; ?>"></script>
+            <script src="https://maps.googleapis.com/maps/api/js?key=<?php echo $_GOOGLE_API_KEY; ?>"></script>
             
             <?php if (is_restful_active()) { ?>
                 <link rel="alternate" type="application/json" href="<?php echo site_url() . '/wp-json/posts/' . get_the_ID() . '/?type=socialdb_collection' ?>">
@@ -57,7 +57,8 @@ $_header_enabled = get_post_meta($collection_id, 'socialdb_collection_show_heade
 <!-- TAINACAN: tag body adaptado para o gplus -->
 <body <?php body_class(); ?> itemscope>
 
-    <?php if (is_front_page() || is_page($stat_page)) { echo home_header_bg($socialdb_logo); } ?>
+<?php if (is_front_page() || is_page($stat_page))
+    echo "<header style='" . home_header_bg($socialdb_logo) . "'>"; // Tag is closed at home and stat's templates ?>
 
     <!-- TAINACAN: tag nav, utilizando classes do bootstrap nao modificadas, onde estao localizados os links que chamam paginas da administracao do repositorio -->
     <nav <?php echo set_navbar_bg_color('black', $stat_page); ?> class="navbar navbar-default header-navbar">

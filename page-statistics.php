@@ -80,7 +80,7 @@ if ( current_user_can('manage_options') ):
     <input type="hidden" class="stat_path" value="<?php echo get_template_directory_uri() ?>">
     <input type="hidden" id="src" value="<?php echo get_template_directory_uri() ?>">
 
-    </header> <!-- DO NOT ERASE -->
+    </header> <!-- closes opening header tag at header.php -->
     
     <div id='container-fluid-configuration' class="container-fluid no-padding" style="background-color: #f1f2f2">
         <div id="configuration" class="col-md-12 no-padding" style="margin-top: 0;"></div>

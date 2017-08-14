@@ -104,6 +104,7 @@ $(window).load(function () {
     if ($('#repository_main_page').val() === '1') {
         display_view_main_page();
     }
+
     //verifico se esta recuperando senha
     if ($('#recovery_password').val() !== '') {
         $('#password_user_id').val($('#recovery_password').val());
@@ -2447,6 +2448,7 @@ function showAPIConfiguration(src) {
 }
 
 function repoConfig(src, op, ctrl, col_id) {
+    var is_front = $("#repository_main_page").val();
     if ( ctrl == 'property' || ctrl == 'event' ) {
         var send_ctrl = ctrl + '/' + ctrl + '_controller.php'; 
     } else {
@@ -2461,7 +2463,12 @@ function repoConfig(src, op, ctrl, col_id) {
         .done(function(res){
             resetHomeStyleSettings();
             $('#tainacan-breadcrumbs').hide();
-            $('#single_item_tainacan').html(res).show();
+
+            if(is_front == 1) {
+                $('#configuration').html(res).show();
+            } else {
+                $('#single_item_tainacan').html(res).show();
+            }
     });
 }
 

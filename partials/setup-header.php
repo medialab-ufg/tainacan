@@ -46,7 +46,7 @@ if(is_single()) {
         $visualization_page_category = get_post_meta($post->ID, 'socialdb_collection_visualization_page_category', true);
         $collection_default = get_option('disable_empty_collection');
         $collection_params = [
-            "recovery_password" => ( (int) base64_decode(getPageParam('recovery_password')) ),
+            "recovery_password" => getPageParam('recovery_password'),
             "is_filter" => getPageParam('is_filter'),
             "info_messages" => getPageParam('info_messages'),
             "info_title" => getPageParam('info_title'),

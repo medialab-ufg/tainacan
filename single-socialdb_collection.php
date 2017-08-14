@@ -26,9 +26,7 @@ get_header();
 get_template_part("partials/setup","header");
 global $config;
 // session_start();
-$options = get_option('socialdb_theme_options');
 $_currentID_ = get_the_ID();
-$collection_default = get_option('disable_empty_collection');
 $visualization_page_category = get_post_meta($_currentID_, 'socialdb_collection_visualization_page_category', true);
 $_enable_header_ = get_post_meta($_currentID_, 'socialdb_collection_show_header', true);
 $_color_scheme = ViewHelper::getCollectionColors($_currentID_);
@@ -226,9 +224,7 @@ while (have_posts()) : the_post();
                                     <button type="button" id="desc" class="btn btn-default pull-right sort_list"><span class="glyphicon glyphicon-sort-by-attributes-alt"></span></button>
                                 </div>
 
-                                <?php
-                                $HideFromPlugin = (has_action('alter_home_page') ? 'hide' : '');
-                                ?>
+                                <?php $HideFromPlugin = (has_action('alter_home_page') ? 'hide' : ''); ?>
                                 <div class="col-md-2 no-padding viewMode-control <?= $HideFromPlugin; ?>">
                                     <label class="sec-color"> <?php _e('Show:', 'tainacan') ?> </label>
                                     <button id="collectionViewMode" data-toggle="dropdown" type="button" class="btn btn-default"></button>

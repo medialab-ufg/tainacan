@@ -2,7 +2,7 @@
 include_once (dirname(__FILE__) . '/../../../../../wp-config.php');
 include_once (dirname(__FILE__) . '/../../../../../wp-load.php');
 include_once (dirname(__FILE__) . '/../../../../../wp-includes/wp-db.php');
-include_once (dirname(__FILE__) . '../../../models/collection/collection_model.php');
+require_once (dirname(__FILE__) . '../../../models/collection/collection_model.php');
 include_once (dirname(__FILE__) . '../../../models/license/license_model.php');
 include_once (dirname(__FILE__) . '../../../models/property/property_model.php');
 include_once (dirname(__FILE__) . '../../../models/category/category_model.php');
@@ -1715,6 +1715,7 @@ class ObjectModel extends Model {
      */
     public function get_properties_facets($array_results, $collection_id) {
         $categoryModel = new CategoryModel;
+
         $data = array();
         if ($array_results) {
             foreach ($array_results as $object) {
@@ -1722,7 +1723,7 @@ class ObjectModel extends Model {
                 $facets = CollectionModel::get_facets($collection_id);
                 //$is_facet = get_term_meta($property_id, 'socialdb_property_object_is_facet', true);
                 //if ($is_facet && $is_facet == 'true') {
-                if (in_array($property_id, $facets)) {
+                if (is_array($facets) && in_array($property_id, $facets)) {
                     $property['property_id'] = $property_id;
                     $property['relationship_id'] = $object->meta_value;
                     if (get_term_by('id', $property_id, 'socialdb_property_type')) {
