@@ -49,7 +49,9 @@ abstract class CollectionsApi {
         if ($data) {
              foreach ($data as $value) {
                $array['item'] = CollectionsApi::get_item($value->ID);
-               $array['metadata'] = CollectionsApi::getValuesItem($metadatas,$value->ID);
+               if($params['includeMetadata'] === '1')
+                    $array['metadata'] = CollectionsApi::getValuesItem($metadatas,$value->ID);
+               
                $items[] = $array;
              }
             return new WP_REST_Response( $items, 200 );
@@ -124,7 +126,8 @@ abstract class CollectionsApi {
             $data = [];
             while ( $loop->have_posts() ) : $loop->the_post();
                 $array['item'] = CollectionsApi::get_item( get_post()->ID );
-                $array['metadata'] = CollectionsApi::getValuesItem($metadatas,get_the_ID());
+                if($params['includeMetadata'] === '1')
+                    $array['metadata'] = CollectionsApi::getValuesItem($metadatas,get_the_ID());
                 $data[] = $array;
             endwhile;
             return new WP_REST_Response( $data, 200 );
@@ -144,6 +147,8 @@ abstract class CollectionsApi {
             return 'item';
         }else if(in_array($property['slug'], $wpQueryModel->fixed_slugs)){
             return 'property-default';
+        }else if($property['type'] === __('Compounds', 'tainacan')){
+            return 'compound';
         }else{
             return $property['type'];
         }         
@@ -251,13 +256,6 @@ abstract class CollectionsApi {
                 }
                  $return['children'][] = $column;
             }            
-        }else{
-        //valores a serem retornados para uma colecao     
-            $return = ['id' => $property['id'],'name'=>$property['name'],'children'=>[]];
-            foreach ($property['socialdb_property_compounds_properties_id'] as $children) {
-                $children_array = ['id' => $children['id'],'name'=>$children['name']];
-            }
-            $return['children'][] = $children_array;
         }
         return $return;
     }
