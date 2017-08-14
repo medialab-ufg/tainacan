@@ -421,12 +421,26 @@ class Model {
         {
             if ($collection_data->meta_key == 'socialdb_collection_facets') {
                 if ($collection_data->meta_value != '') {
-                    $config[$collection_data->meta_key][] = get_term_by('id', $collection_data->meta_value, 'socialdb_category_type');
+                    $term = get_term_by('id', $collection_data->meta_value, 'socialdb_category_type');
                 }
+                if(!$term){
+                     $term = get_term_by('id', $collection_data->meta_value, 'socialdb_property_type');
+                }
+                if($term)
+                    $config[$collection_data->meta_key][] = $term;
             } elseif (in_array($collection_data->meta_key, array('socialdb_collection_moderator', 'socialdb_collection_channel'))) {
                 if ($collection_data->meta_value != '') {
-                    $config[$collection_data->meta_key][] = $this->get_user($collection_data->meta_value);
+                    $term = $this->get_user($collection_data->meta_value);
+                    if($term)
+                        $config[$collection_data->meta_key][] = $term;
                 }
+                if(!$term){
+                     $post = get_post($collection_data->meta_value);
+                     $fixeds = ['socialdb_channel_instagram','socialdb_channel_facebook','socialdb_channel_youtube','socialdb_channel_flickr','socialdb_channel_vimeo'];
+                     if($post && $post->post_type === 'socialdb_channel' && !in_array($post->post_title, $fixeds))
+                        $config[$collection_data->meta_key][] = $post;
+                }
+                
             } else {
                 $config[$collection_data->meta_key] = $collection_data->meta_value;
             }

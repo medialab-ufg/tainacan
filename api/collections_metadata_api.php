@@ -2,8 +2,49 @@
 
 abstract class CollectionsMetadataApi {
     
-    public function get_metadata($param) {
+    /**
+     * 
+     * @param type $param
+     * @return \WP_REST_Response
+     */
+    public function get_metadata($request) {
+        $ObjectModel = new ObjectModel();
+        $params = $request->get_params();
+        $collection_id = $params['id'];
+        $property_id = $params['meta'];
         
+        //labels fixos
+        $params['labels_collection'] = unserialize(get_post_meta($collection_id, 'socialdb_collection_fixed_properties_labels', true));
+        
+        //visibilidade dos metadados fixos
+        $params['visibility'] = explode(',',get_post_meta($collection_id, 'socialdb_collection_fixed_properties_visibility', true)) ;
+        
+        //todos os valores
+        $property = $ObjectModel->get_all_property($property_id, true);
+        
+        //detalhes
+        $details = [
+            'id' => $property['id'],
+            'name'=> $property['name'],
+            'slug'=> $property['slug'],
+            'type'=> CollectionsApi::getTypeProperty($property),
+        ];
+        if( $details['type'] != 'property-default'){
+            $details['metadata'] = CollectionsMetadataApi::includeMetadata($property);
+            $details['visibility'] = ( in_array($property['id'], $params['visibility'])) ? 'off' : 'on';
+        }elseif ($details['type'] === 'property-default' ) {
+            $visibility = (get_term_meta($property['id'],'socialdb_property_visibility',true));
+            $details['real-name'] = $details['name'];
+            $details['name'] = (isset($params['labels_collection'][$property['id']])) ? $params['labels_collection'][$property['id']] :  $details['name'];
+            $details['visibility'] = ($visibility === 'hide' || in_array($property['id'], $params['visibility'])) ? 'off' : 'on';
+            $required = get_post_meta($params['id'], 'socialdb_collection_property_'.$property['id'].'_required', true);
+            $details['required'] = ($required != '') ? true : false;
+            $is_mask = get_post_meta($params['id'], 'socialdb_collection_property_'.$property['id'].'_mask_key', true);
+            $details['is_mask'] = ($is_mask != '') ? $is_mask : false;
+        }
+
+        $response[] = $details;
+        return new WP_REST_Response( $response, 200 );
     }
     /**
      * 

@@ -78,7 +78,6 @@ abstract class CollectionsApi {
     public function get_item($item_id,$attachments = false) {
         $CollectionModel = new CollectionModel;
         $item = get_post($item_id);
-        unset($item->post_type);
         unset($item->menu_order);
         unset($item->post_mime_type);
         unset($item->pinged);
@@ -94,6 +93,14 @@ abstract class CollectionsApi {
         if($item->post_type === 'socialdb_object')
             $item->guid = get_the_permalink($collection_id).$item->post_name;
         
+       //caso o post type collection verifico se possui a capap
+        if($item->post_type === 'socialdb_collection'){
+            $cover_id = get_post_meta($item_id, 'socialdb_collection_cover_id', true);
+            if($cover_id && $cover_id !== '')
+                $item->cover = get_attachment_link($cover_id);
+        }
+        
+        unset($item->post_type);
         //thumbnail do item
         if(has_post_thumbnail($item_id)){
             $item->thumbnail = get_the_post_thumbnail_url($item_id);
