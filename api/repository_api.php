@@ -2,39 +2,48 @@
 
 abstract class RepositoryApi {
 
-
-    public function get_repository_items($request) {
-        $items = [];
+    /**
+     * Metodo que retonra os dados do repositorio
+     * @param WP_REST_Request $request
+     * @return WP_REST_Response
+     */
+    public function get_repository($request) {
+        $response = [];
         $params = $request->get_params();
-
-        //se NAO existir consultas
-        if(!isset($params['filter']))
-            $params['filter'] = [];
-
-        return RepositoryApi::filterByArgs($params);
-    }
-
-    // Metodos da classe
-    private function filterByArgs($params){
-        $filters = $params['filter'];
-        $wpQueryModel = new WPQueryModel();
-        $args = $wpQueryModel->queryAPI($filters);
-        $loop = new WP_Query($args);
-        if ($loop->have_posts()) {
-            $data = [];
-            while ( $loop->have_posts() ) : $loop->the_post();
-                $array['item'] = CollectionsApi::get_item( get_post()->ID,$params['id'] );
-                $data[] = $array;
-            endwhile;
-            return new WP_REST_Response( $data, 200 );
-        }else{
-            return new WP_Error('empty_search',  __( 'No items inserted in this repository or found with these arguments!', 'tainacan' ), array('status' => 404));
+        //informacoes gerais
+        $response['title'] = get_bloginfo('blogname');
+        $response['description'] = get_bloginfo('blogname');
+        $response['admin_email'] = get_bloginfo('admin_email');
+        
+        // logo do repositorio
+        $logo = wp_get_attachment_url(get_option('socialdb_logo'));
+        if($logo){
+            $response['logo'] = $logo;
         }
+        
+        // capa repositorio
+        $cover = wp_get_attachment_url(get_option('socialdb_repository_cover_id'));
+        if($cover){
+            $response['cover'] = $cover;
+        }
+        
+        //informacoes completas
+        if(isset($params['includeMetadata']) && $params['includeMetadata'] === '1'){
+            $response['disable_empty_collection'] = get_option('disable_empty_collection');
+            $response['repository_permissions'] = get_option('socialdb_repository_permissions');
+            //caso tenha algum plugin que queira alterar esta resposta
+            if(has_filter('alter_repository_api_response')){
+               $response = apply_filters('alter_repository_api_response', $response);
+            }
+        }
+        //retorno ja com a classe especifica
+        return new WP_REST_Response( $response, 200 );
     }
-    
+
+
     /**
      * 
-     * @param WP_REST_Request $request
+     * @param /WP_REST_Request $request
      */
     public function get_repository_metadata($request) {
         $wpQueryModel = new WPQueryModel();
@@ -72,5 +81,23 @@ abstract class RepositoryApi {
         }
         
         return $response;
+    }
+    
+    // Metodo da classe
+    private function filterByArgs($params){
+        $filters = $params['filter'];
+        $wpQueryModel = new WPQueryModel();
+        $args = $wpQueryModel->queryAPI($filters);
+        $loop = new WP_Query($args);
+        if ($loop->have_posts()) {
+            $data = [];
+            while ( $loop->have_posts() ) : $loop->the_post();
+                $array['item'] = CollectionsApi::get_item( get_post()->ID,$params['id'] );
+                $data[] = $array;
+            endwhile;
+            return new WP_REST_Response( $data, 200 );
+        }else{
+            return new WP_Error('empty_search',  __( 'No items inserted in this repository or found with these arguments!', 'tainacan' ), array('status' => 404));
+        }
     }
 }
