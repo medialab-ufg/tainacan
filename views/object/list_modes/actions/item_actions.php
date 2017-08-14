@@ -1,11 +1,20 @@
 <?php
 include_once("js/actions_js.php");
 
-if( is_null($curr_id) && is_null($itemURL) ) {
-    $is_single_page = true;
-    $curr_id = $object->ID;
-    $itemURL = get_the_permalink($collection_id) . '?item=' . $object->post_name;
-}
+if(!isset($collection_id))
+    $collection_id = $post->post_parent;
+
+if(!isset($curr_id))
+    $curr_id = get_the_ID();
+
+if(!isset($is_single_page))
+    $is_single_page = is_single();
+
+if(!isset($itemURL))
+    $itemURL = get_the_permalink($collection_id) . '?item=' . $post->post_name;
+
+if(!isset($collection_metas))
+    $collection_metas = get_post_meta($collection_id, 'socialdb_collection_download_control', true);
 
 $rdfURL = $itemURL . '.rdf';
 $checkout = [ "out" => "do_checkout('". $curr_id ."')",
@@ -15,7 +24,7 @@ $checkout = [ "out" => "do_checkout('". $curr_id ."')",
 $itemDelete = [
     'id' => $curr_id, 
     'title' =>  _t('Delete Object'),
-    'time' => mktime(),
+    'time' => time(),
     'text' => _t('Are you sure to remove the object: ') . get_the_title() ];
 
 if($is_single_page) {
@@ -54,9 +63,9 @@ $is_current_user_the_author = get_post($curr_id)->post_author == get_current_use
 
             if($is_single_page) {
                 if ($collection_metas == 'allowed' || ($collection_metas == 'moderate' && is_user_logged_in()) || ($collection_metas == 'controlled' && ($is_moderator || $object->post_author == get_current_user_id()))) {
-                    $thumb_id = get_post_thumbnail_id($object->ID, 'full');
+                    $thumb_id = get_post_thumbnail_id($curr_id, 'full');
                     if ($metas['socialdb_object_dc_type'][0] == 'image') {
-                        $url_image = wp_get_attachment_url(get_post_thumbnail_id($object->ID, 'full'));
+                        $url_image = wp_get_attachment_url(get_post_thumbnail_id($curr_id, 'full'));
                          ?>
                         <li>
                             <a href="<?php echo $url_image; ?>" download="<?php echo $object->post_title; ?>.jpg" onclick="downloadItem('<?php echo $thumb_id; ?>');">

@@ -245,7 +245,7 @@
                 url: $('#src').val() + "/controllers/event/event_controller.php",
                 data: {
                     operation: 'add_event_comment_create',
-                    socialdb_event_create_date: '<?php echo mktime() ?>',
+                    socialdb_event_create_date: '<?php echo time() ?>',
                     socialdb_event_user_id: $('#current_user_id').val(),
                     socialdb_event_comment_create_object_id: object_id,
                     socialdb_event_comment_create_content: $('#comment').val(),
@@ -274,7 +274,7 @@
                 url: $('#src').val() + "/controllers/event/event_controller.php",
                 data: {
                     operation: 'add_event_comment_create',
-                    socialdb_event_create_date: '<?php echo mktime() ?>',
+                    socialdb_event_create_date: '<?php echo time() ?>',
                     socialdb_event_user_id: $('#current_user_id').val(),
                     socialdb_event_comment_create_object_id: object_id,
                     socialdb_event_comment_create_content: $('#comment_msg_reply').val(),
@@ -385,7 +385,7 @@
                 url: $('#src').val() + "/controllers/event/event_controller.php",
                 data: {
                     operation: 'add_event_comment_delete',
-                    socialdb_event_create_date: '<?php echo mktime() ?>',
+                    socialdb_event_create_date: '<?php echo time() ?>',
                     socialdb_event_observation: $('#comment_msg_report').val(),
                     socialdb_event_user_id: $('#current_user_id').val(),
                     socialdb_event_comment_delete_id: $('#comment_id_report').val(),
@@ -407,7 +407,7 @@
             $.ajax({
                 type: "POST",
                 url: $('#src').val() + "/controllers/event/event_controller.php",
-                data: {operation: 'add_event_comment_edit', socialdb_event_create_date: '<?php echo mktime() ?>',
+                data: {operation: 'add_event_comment_edit', socialdb_event_create_date: '<?php echo time() ?>',
                     socialdb_event_user_id: $('#current_user_id').val(), socialdb_event_comment_edit_id: comment_id,
                     socialdb_event_comment_edit_object_id: $("#single_object_id").val(),
                     socialdb_event_comment_edit_content: $('#edit_field_value_' + comment_id).val(),

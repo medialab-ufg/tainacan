@@ -82,8 +82,11 @@ if(is_single()) {
         <input type="hidden" id="global_tag_id" name="global_tag_id" value="<?php echo (get_term_by('slug', 'socialdb_property_fixed_tags', 'socialdb_property_type')->term_id) ? get_term_by('slug', 'socialdb_property_fixed_tags', 'socialdb_property_type')->term_id : 'tag' ?>"> <!-- utilizado na busca -->
         <input type="hidden" id="search-advanced-text" value="<?php echo (isset($_GET['search-advanced-text']) && !empty($_GET['search-advanced-text'])) ? $_GET['search-advanced-text'] : '' ?>">
 
-        <input type="hidden" id="instagramInsertedIds" name="instagramInsertedIds" value="<?php echo socialMediaResponse($_SESSION['instagramInsertedIds'], "instagram"); ?>">
-        <input type="hidden" id="facebookInsertedIds" name="facebookInsertedIds" value="<?php echo socialMediaResponse($_SESSION['facebookInsertedIds'], "facebook"); ?>">
+        <?php if( isset($_SESSION['instagramInsertedIds']) ): ?>
+            <input type="hidden" id="instagramInsertedIds" name="instagramInsertedIds" value="<?php echo socialMediaResponse($_SESSION['instagramInsertedIds'], "instagram"); ?>">
+        <?php elseif ( isset($_SESSION['facebookInsertedIds']) ): ?>
+            <input type="hidden" id="facebookInsertedIds" name="facebookInsertedIds" value="<?php echo socialMediaResponse($_SESSION['facebookInsertedIds'], "facebook"); ?>">
+        <?php endif; ?>
 
         <?php foreach ($collection_params as $k => $param): ?>
             <input type="hidden" id="<?php echo $k?>" name="<?php echo $k?>" value="<?php echo $param; ?>"/>

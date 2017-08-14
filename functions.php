@@ -330,9 +330,6 @@ $conditional_scripts = array(
     'html5shiv-printshiv' => '//cdn.jsdelivr.net/html5shiv/3.7.2/html5shiv-printshiv.js',
     'respond' => '//cdn.jsdelivr.net/respond/1.4.2/respond.min.js'
 );
-foreach ($conditional_scripts as $handle => $src) {
-    wp_enqueue_script($handle, $src, array(), '', false);
-}
 add_filter('script_loader_tag', function( $tag, $handle ) use ( $conditional_scripts ) {
     if (array_key_exists($handle, $conditional_scripts)) {
         $tag = "<!--[if lt IE 9]>$tag<![endif]-->";
@@ -439,8 +436,7 @@ add_action('init', 'custom_rewrite_tag', 10, 0);
 
 function custom_rewrite_basic() {
     $collection = get_post(get_option('collection_root_id'));
-    
-    
+
     add_rewrite_rule('^feed_collection/([^/]*)', 'index.php?collection_name=$matches[1]', 'top');
     add_rewrite_rule('^oai', 'index.php?oaipmh=true', 'top');
     add_rewrite_rule('^'.__('advanced-search','tainacan'), 'index.php?collection='.$collection->post_name.'&advancedSearch=true', 'top');
@@ -455,7 +451,7 @@ function custom_rewrite_basic() {
     add_rewrite_rule('^([^/]*)/admin/'.__('import','tainacan'), 'index.php?collection=$matches[1]&import=true', 'top');
     add_rewrite_rule('^([^/]*)/admin/'.__('export','tainacan'), 'index.php?collection=$matches[1]&export=true', 'top');
     add_rewrite_rule('^([^/]*)/admin/'.__('statistics','tainacan'), 'index.php?collection=$matches[1]&statistics=true', 'top');
-    
+
     //paginas do repositorio
     add_rewrite_rule('^admin/'.__('metadata','tainacan'), 'index.php?collection='.$collection->post_name.'&metadata=true', 'top');
     add_rewrite_rule('^admin/'.__('events','tainacan'), 'index.php?collection='.$collection->post_name.'&events=true', 'top');
@@ -472,7 +468,7 @@ function custom_rewrite_basic() {
     add_rewrite_rule('^log-in', 'index.php?log-in=true', 'top');
     add_rewrite_rule('^'.__('signin','tainacan'), 'index.php?log-in=true', 'top');
     add_rewrite_rule('^'.__('signin','tainacan'), 'index.php?log-in=true', 'top');
-    
+
     add_rewrite_rule('^([^/]*)/([^/]*)/editar', 'index.php?collection=$matches[1]&item=$matches[2]&edit-item=true', 'top');
     add_rewrite_rule('^([^/]*)/criar-item', 'index.php?collection=$matches[1]&add-item=true', 'top');
     // add_rewrite_rule('^([^/]*)/([^/]*)', 'index.php?collection=$matches[1]&item=$matches[2]', 'top');
@@ -480,13 +476,6 @@ function custom_rewrite_basic() {
 }
 
 add_action('init', 'custom_rewrite_basic', 10, 0);
-
-/**
- * Mostra a barra de admin padrão do wordpress apenas para usuarios com permissao de administrador
- * * */
-if (!current_user_can('manage_options')) {
-    show_admin_bar(false);
-}
 
 /**
  * Função responsavel por permitir zip
@@ -1908,17 +1897,22 @@ if (!function_exists("theme_js")) {
 
         /* Google Charts Loader */
         wp_register_script("gloader", get_template_directory_uri() . '/libraries/js/gchart/gloader.js');
-        /* Google Charts Loader */
+
         wp_register_script("routes", get_template_directory_uri() . '/libraries/js/router/jquery.routes.js');
+
+        wp_register_script("html5shiv", '//cdn.jsdelivr.net/html5shiv/3.7.2/html5shiv.js');
+        wp_register_script("html5shiv-printshiv", '//cdn.jsdelivr.net/html5shiv/3.7.2/html5shiv-printshiv.js');
+        wp_register_script("respond", '//cdn.jsdelivr.net/respond/1.4.2/respond.min.js');
 
         /* PDF Thumbnail */
         wp_register_script("pdf_thumbnail", get_template_directory_uri() . '/libraries/js/pdfThumb/pdfJS/build/pdf.js');
         wp_register_script("pdf_thumbnail_worker", get_template_directory_uri() . '/libraries/js/pdfThumb/pdfJS/build/pdf.worker.js');
 
         $js_files = ['jquery_min', 'jqueryUi', 'bootstrap.min', 'JitJs', 'JitExcanvasJs', 'tainacan', 'DynatreeJs', 'ckeditorjs',
-            'contextMenu', 'ColorPicker', 'SweetAlert', 'SweetAlertJS','js-xls', 'FileSaver', 'jsPDF', 'jsPDF_auto_table', 'tableExport', 'jquerydataTablesmin', 'data_table', 'raty',
-            'jqpagination', 'dropzone', 'croppic', 'bootstrap-combobox', 'FacebookJS', 'row-sorter', 'maskedInput',
-            'montage', 'prettyphoto', 'select2', 'slick','timepicker', 'jqcloud', 'toastrjs', 'gloader','routes', 'pdf_thumbnail', 'pdf_thumbnail_worker'];
+            'contextMenu', 'ColorPicker', 'SweetAlert', 'SweetAlertJS','js-xls', 'FileSaver', 'jsPDF', 'jsPDF_auto_table',
+            'tableExport', 'jquerydataTablesmin', 'data_table', 'raty', 'jqpagination', 'dropzone', 'croppic', 'bootstrap-combobox',
+            'FacebookJS', 'row-sorter', 'maskedInput', 'montage', 'prettyphoto', 'select2', 'slick','timepicker', 'jqcloud',
+            'toastrjs', 'gloader','routes', 'html5shiv', 'html5shiv-printshiv', 'respond', 'pdf_thumbnail', 'pdf_thumbnail_worker'];
 
         foreach ($js_files as $js_file):
             wp_enqueue_script($js_file);
@@ -3668,12 +3662,15 @@ function get_documents_text($ids)
 }
 
 function getPageParam($param, $returnTrue = false) {
+    $positive_return = "";
     if($returnTrue) {
         $positive_return = true;
     } else {
-        $positive_return = trim($_GET[$param]);
-        if($param === "recovery_password") {
-            $positive_return = (int) base64_decode($positive_return);
+        if(isset($_GET[$param])) {
+            $positive_return = trim($_GET[$param]);
+            if($param === "recovery_password") {
+                $positive_return = (int) base64_decode($positive_return);
+            }
         }
     }
 
@@ -3681,7 +3678,7 @@ function getPageParam($param, $returnTrue = false) {
 }
 
 function socialMediaResponse($smIDs, $smName) {
-    if($smName === "facebook" || "instagram" === $smName) {
+    if(!is_null($smIDs) && $smName === "facebook" || "instagram" === $smName) {
         if (isset($smIDs)) {
             if ($smIDs != ($smName .'_error')) {
                 return $smIDs;
