@@ -1,6 +1,6 @@
 <?php
 $curr_id = get_the_ID();
-$curr_time = mktime();
+$curr_time = time();
 $root_id = get_option('collection_root_id');
 $collection_id = $viewHelper->helper_get_collection_by_object(get_the_ID())[0]->ID
 /*

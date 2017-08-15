@@ -63,12 +63,12 @@ if(is_single()) {
         <input type="hidden" id="socialdb_embed_api_id" name="socialdb_embed_api_id" value="<?php echo $options['socialdb_embed_api_id']; ?>" />
         <input type="hidden" id="current_user_id" name="current_user_id" value="<?php echo get_current_user_id(); ?>" />
         <input type="hidden" id="collection_id" name="collection_id" value="<?php echo $post->ID ?>" />
-        <input type="hidden" id="mode" name="mode" value="<?php echo $mode ?>" />
+<!--        <input type="hidden" id="mode" name="mode" value="--><?php //echo $mode ?><!--" />-->
         <input type="hidden" id="site_url" value="<?php echo site_url(); ?>" />
         <input type="hidden" id="collection_root_id" value="<?php echo $root_id; ?>" />
         <input type="hidden" id="socialdb_permalink_collection" name="socialdb_permalink_collection" value="<?php echo get_the_permalink($post->ID); ?>" />
         <input type="hidden" id="slug_collection" name="slug_collection" value="<?php echo $post->post_name; ?>"> <!-- utilizado na busca -->
-        <input type="hidden" id="search_collection_field" name="search_collection_field" value="<?php if ($_GET['search']) echo $_GET['search']; ?>" />
+        <input type="hidden" id="search_collection_field" name="search_collection_field" value="<?php if ( isset($_GET['search'])) echo $_GET['search']; ?>" />
         <!-- Se devera abrir o formulario de adicao item -->
         <input type="hidden" id="open_create_item_text" name="open_create_item_text"
                value="<?php if (isset($_GET['create-item'])) { echo $_GET['create-item']; } ?>">

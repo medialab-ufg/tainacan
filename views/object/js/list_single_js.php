@@ -474,7 +474,7 @@
                 type: "POST", url: $('#src').val() + "/controllers/event/event_controller.php",
                 data: {
                     operation: 'add_event_comment_create',
-                    socialdb_event_create_date: '<?php echo mktime() ?>',
+                    socialdb_event_create_date: '<?php echo time() ?>',
                     socialdb_event_user_id: $('#current_user_id').val(),
                     socialdb_event_comment_create_object_id: object_id,
                     socialdb_event_comment_create_content: $('#comment').val(),
@@ -629,7 +629,7 @@
             type: 'POST',
             data: {
                 operation: 'add_event_tag_create',
-                socialdb_event_create_date: '<?php echo mktime() ?>',
+                socialdb_event_create_date: '<?php echo time() ?>',
                 socialdb_event_user_id: $('#current_user_id').val(),
                 socialdb_event_tag_suggested_name: $('#event_tag_field').val(),
                 socialdb_event_collection_id: $('#collection_id').val()
@@ -658,7 +658,7 @@
             url: $('#src').val() + "/controllers/event/event_controller.php",
             data: {
                 operation: 'add_event_classification_create',
-                socialdb_event_create_date: '<?php echo mktime(); ?>',
+                socialdb_event_create_date: '<?php echo time(); ?>',
                 socialdb_event_user_id: $('#current_user_id').val(),
                 socialdb_event_classification_object_id: object_id,
                 socialdb_event_classification_term_id: value_id.join(','),
@@ -682,7 +682,7 @@
             data: {
                 socialdb_event_collection_id: $('#collection_id').val(),
                 operation: 'add_event_property_data_edit_value',
-                socialdb_event_create_date: '<?php echo mktime(); ?>',
+                socialdb_event_create_date: '<?php echo time(); ?>',
                 socialdb_event_user_id: $('#current_user_id').val(),
                 socialdb_event_property_data_edit_value_object_id: object_id,
                 socialdb_event_property_data_edit_value_property_id: type,

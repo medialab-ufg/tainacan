@@ -77,7 +77,7 @@ while (have_posts()) : the_post();
                                     <div class="col-md-12">
                                         <div class="titulo-colecao">
                                             <?php if ($_enable_header_ === "disabled") {
-                                                include("views/collection/config_menu.php"); ?>
+                                                 include("views/collection/config_menu.php"); ?>
                                                 <h3 class="title"> <?php echo get_the_title(); ?> </h3>
                                                 <hr>
                                             <?php } ?>

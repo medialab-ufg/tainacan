@@ -16,6 +16,9 @@ if(!isset($itemURL))
 if(!isset($collection_metas))
     $collection_metas = get_post_meta($collection_id, 'socialdb_collection_download_control', true);
 
+if(!isset($is_moderator))
+    $is_moderator = CollectionModel::is_moderator($collection_id, get_current_user_id());
+
 $rdfURL = $itemURL . '.rdf';
 $checkout = [ "out" => "do_checkout('". $curr_id ."')",
     "in" => "do_checkin('". $curr_id ."')",

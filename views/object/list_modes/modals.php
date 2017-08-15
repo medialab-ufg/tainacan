@@ -1,7 +1,7 @@
 <?php
 $curr_id = get_the_ID();
 $curr_title = get_the_title();
-$curr_time = mktime();
+$curr_time = time();
 $root_id = get_option('collection_root_id');
 /*
  * TAINACAN: modal para compartilhar o item

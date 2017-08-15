@@ -5,6 +5,7 @@ get_template_part("partials/setup","header");
 include_once( dirname(__FILE__) . '/helpers/view_helper.php' );
 include_once( dirname(__FILE__) . '/helpers/object/object_helper.php' );
 include_once( dirname(__FILE__) .  '/views/object/js/list_single_js.php' );
+include_once( dirname(__FILE__) .  '/models/collection/collection_model.php' );
 
 $parent = get_post($post->post_parent);
 $metas = get_post_meta($post->ID);
