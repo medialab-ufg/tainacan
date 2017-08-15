@@ -481,7 +481,7 @@ class Log extends Model {
                 if($event_type == 'users'){
                     array_push($vdtl_data, [$data->user, $data->date]);
                 }
-                else if($event_type == 'items' || $event_type == 'collections' || $event_type == 'comments'){
+                else if($event_type == 'items' || $event_type == 'collections' || $event_type == 'comments' || $event_type = 'categories'){
                     array_push($vdtl_data, [$data->user, $data->item, $data->date]);
                 }
                 else if($event_type == 'c_items'){
@@ -921,7 +921,23 @@ class Log extends Model {
                     ", self::_table(), self::_posts_table(), self::_users_table(), self::_posts_table(), self::_users_table());
             }
             else if($report == 'categories'){
-                
+                if($event == 'add' || $event == 'edit' || $event == 'delete'){
+                    $event = ($event == 'add') ? 'Create' : (($event == 'edit') ? 'Edit' : 'Delete');
+                    $title_event = $event .' the category%%';
+
+                    $SQL_query = sprintf(
+                        "SELECT user_login AS user, substring(post_title, locate('(', post_title)) AS item, post_date AS date 
+                            FROM %s, %s 
+                            WHERE post_author = %s.ID AND post_title LIKE '". $title_event ."'
+                        ", self::_users_table(), self::_posts_table(), self::_users_table());
+                }
+                else if($event == 'view'){
+                    $SQL_query = sprintf(
+                        "SELECT user_login AS user, substring(post_title, locate('(', post_title)) AS item, post_date AS date 
+                            FROM %s, %s, %s 
+                            WHERE post_author = %s.ID AND post_author = user_id AND resource_id = %s.ID AND event = '$event' AND event_type = 'user_category'
+                        ", self::_users_table(), self::_table(), self::_posts_table(), self::_users_table(), self::_posts_table());
+                }
             }
         }
         else{

@@ -180,7 +180,7 @@
                     else if(title == 'Categories' || title == 'Categorias'){
                         var thead = {
                             column1: 'Usuário que adicionou a categoria',
-                            column2: 'Categoria',
+                            column2: '(Categoria) Info',
                             column3: 'Data - Horário'
                         }
 
@@ -225,7 +225,14 @@
                         fetchData('comments', 'edit', 'detail');
                     }
                     else if(title == 'Categories' || title == 'Categorias'){
+                        var thead = {
+                            column1: 'Usuário que editou a categoria',
+                            column2: '(Categoria) Info',
+                            column3: 'Data - Horário'
+                        }
 
+                        renderDetailThead(thead);
+                        fetchData('categories', 'edit', 'detail');
                     }
                     else if(title == 'Tags'){
 
@@ -255,7 +262,14 @@
                         fetchData('collections', 'view', 'detail');
                     }
                     else if(title == 'Categories' || title == 'Categorias'){
+                        var thead = {
+                            column1: 'Usuário que visualizou a categoria',
+                            column2: '(Categoria) Info',
+                            column3: 'Data - Horário'
+                        }
 
+                        renderDetailThead(thead);
+                        fetchData('categories', 'view', 'detail');
                     }
                     else if(title == 'Tags'){
 
@@ -295,7 +309,14 @@
                         fetchData('comments', 'delete', 'detail');
                     }
                     else if(title == 'Categories' || title == 'Categorias'){
+                        var thead = {
+                            column1: 'Usuário que excluiu a categoria',
+                            column2: '(Categoria) Info',
+                            column3: 'Data - Horário'
+                        }
 
+                        renderDetailThead(thead);
+                        fetchData('categories', 'delete', 'detail');
                     }
                     else if(title == 'Tags'){
 
