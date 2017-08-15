@@ -1,7 +1,7 @@
 <?php
-include_once ('../../../../../wp-config.php');
-include_once ('../../../../../wp-load.php');
-include_once ('../../../../../wp-includes/wp-db.php');
+include_once (dirname(__FILE__) . '/../../../../../wp-config.php');
+include_once (dirname(__FILE__) . '/../../../../../wp-load.php');
+include_once (dirname(__FILE__) . '/../../../../../wp-includes/wp-db.php');
 include_once (dirname(__FILE__) . '../../../models/collection/collection_model.php');
 include_once (dirname(__FILE__) . '../../../models/category/category_model.php');
 include_once (dirname(__FILE__) . '../../../models/event/event_object/event_object_create_model.php');

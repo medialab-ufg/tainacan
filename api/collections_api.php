@@ -73,20 +73,27 @@ abstract class CollectionsApi {
         }
     }
 
+    /**
+     *
+     *
+     * @param $request
+     * @return WP_Error
+     */
     public function get_collection_item($request) {
+        $ObjectModel = new ObjectModel();
         $params = $request->get_params();
 
         $Result['item'] =  CollectionsApi::get_item($params['post'],TRUE);
         $properties = $ObjectModel->show_object_properties(['collection_id'=>$params['id']]);
-        $metadatas = CollectionsApi::structProperties($properties);
+        $metadata = CollectionsApi::structProperties($properties);
         if (empty($Result['item'])) {
             return new WP_Error('invalid_item_id', 'Invalid Item ID', array('status' => 404));
         }
-        $Result['metadata'] = CollectionsApi::getValuesItem($metadatas,$params['post']);;
-        return $Result;
+        $Result['metadata'] = CollectionsApi::getValuesItem($metadata,$params['post']);;
+        return new WP_REST_Response( $Result, 200 );
     }
-/*******************************************************************************/
-// Metodos usados pela classe
+    /*******************************************************************************/
+    // Metodos usados pela classe
     
     public function get_item($item_id,$attachments = false) {
         $CollectionModel = new CollectionModel;
@@ -105,6 +112,8 @@ abstract class CollectionsApi {
         //busco a url certa caso for post type object
         if($item->post_type === 'socialdb_object'){
             $item->guid = get_the_permalink($collection_id).$item->post_name;
+            //link do item
+            $item->link = [ RepositoryApi::getLink('object',$item_id,'self',[ 'collection_id' => $collection_id ]) ];
         }
         
        //caso o post type collection verifico se possui a capap
@@ -112,6 +121,8 @@ abstract class CollectionsApi {
             $cover_id = get_post_meta($item_id, 'socialdb_collection_cover_id', true);
             if($cover_id && $cover_id !== '')
                 $item->cover = get_attachment_link($cover_id);
+            //referncia ao link da colecao na api
+            $item->link = [ RepositoryApi::getLink('collection',$item_id) ];
         }
         
         unset($item->post_type);
@@ -177,8 +188,8 @@ abstract class CollectionsApi {
 
     /**
      * unifica o array de todos os metadados
-     * @param type $properties
-     * @return type
+     * @param array $properties
+     * @return array com todos os metadados unificados
      */
     private function structProperties($properties) {
         $structedProperties = [];
@@ -235,8 +246,8 @@ abstract class CollectionsApi {
     }
 
     /**
-     * metodo que prerpara o array de propriedade composto a ser mostrado
-     * na resposta
+     * Metodo que prerpara o array de propriedade composto a ser mostrado
+     * na resposta da
      * @param type $property
      * @param type $type
      * @param type $values
@@ -280,8 +291,14 @@ abstract class CollectionsApi {
         }
         return $return;
     }
-    
-    
+
+    /**
+     *
+     *
+     * @param $property
+     * @param $value A linha de um helper dos valores de um item
+     * @return array Os valores reais de um metadado
+     */
     private function get_values_atom($property,$value){
         $wpQueryModel = new WPQueryModel();
         $array = ['id' => $property['id'],'name'=>$property['name'],'type'=>CollectionsApi::getTypeProperty($property)];
@@ -407,7 +424,14 @@ abstract class CollectionsApi {
         }
         return $return;
     }
-    
+
+    /**
+     * Metodo que busca os valores dos metadados extras de categoria
+     *
+     * @param $values A(s) categoria selecionada que sera buscado os metadados
+     * @param $item_id O id do item para buscar os valores
+     * @return array Os metadados extras de categoria
+     */
     public function getCategoryProperties($values,$item_id) {
         $properties = [];
         $array = [];

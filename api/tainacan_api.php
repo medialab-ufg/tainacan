@@ -3,7 +3,10 @@
 class TainacanApi extends WP_REST_Controller {
 
     private $base = array();
-
+    public static $version = 1;
+    public static $namespace_tainacan = 'tainacan/v';
+            
+    
     function __construct() {
         $this->base['collections'] = '/collections';
         $this->base['collection'] = '/collections/(?P<id>[\d]+)';
@@ -22,8 +25,8 @@ class TainacanApi extends WP_REST_Controller {
      * Register the routes for the objects of the controller.
      */
     public function register_routes() {
-        $version = '1';
-        $namespace = 'tainacan/v' . $version;
+        $version = self::$version;
+        $namespace = self::$namespace_tainacan . self::$version;
         $base = 'route';
         //************* START COLLECTION ENDPOINTS ****************//
         register_rest_route($namespace, $this->base['collections'], array(

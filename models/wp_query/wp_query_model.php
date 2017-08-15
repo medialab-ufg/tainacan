@@ -1620,7 +1620,7 @@ class WPQueryModel extends Model {
         // se existe titulo e for do tipo objeto
         if($filter['title'] && $args['post_type'] == 'socialdb_object'){
             $args['title'] = $filter['title'];
-        }else{
+        }else if($filter['title']){
             $args['s'] = $filter['title'];
         }
 
@@ -1694,28 +1694,34 @@ class WPQueryModel extends Model {
 
         //metadados
         if($filter['metadata']){
-          $args['meta_query']['relation'] = (isset($filter['metadata']['op'])) ? $filter['metadata']['op'] : 'AND' ;
-          foreach ($filter['metadata'] as $property_id => $values_op) {
-              if(is_numeric($property_id)){
-                  if(isset($values_op['values'])){
-                      $array = array(
-                          'key' => 'socialdb_property_' . $property_id,
-                          'value' => $values_op['values'],
-                        //  'type' => 'date',
-                          'compare' => $values_op['op']
-                      );
+              $args['meta_query']['relation'] = (isset($filter['metadata']['op'])) ? $filter['metadata']['op'] : 'AND' ;
+              foreach ($filter['metadata'] as $property_id => $values_op) {
+                  if(is_numeric($property_id)){
+                      if(isset($values_op['values'])){
+                          $values_op['op'] = (is_array($values_op['values']) && in_array($values_op['op'],['LIKE','='])) ? 'IN' : $values_op['op'];
 
-                      $type = $this->get_property_type($property_id);
-                      if($type === 'socialdb_property_data'){
-                          $widget = get_term_meta($property_id,'socialdb_property_data_widget',true);
-                          if($widget == 'date' || $widget == 'numeric')
-                              $array['type'] = $widget;
+                          //verificando se eh do tipo categoria
+                           $type = $this->get_property_type_hierachy($property_id);
+
+                           $array = array(
+                              'key' => ($type === 'socialdb_property_term') ? 'socialdb_property_' . $property_id . '_cat' : 'socialdb_property_' . $property_id,
+                              'value' => $values_op['values'],
+                            //  'type' => 'date',
+                              'compare' => $values_op['op']
+                          );
+
+                          $type = $this->get_property_type($property_id);
+                          if($type === 'socialdb_property_data'){
+                              $widget = get_term_meta($property_id,'socialdb_property_data_widget',true);
+                              if($widget == 'date' || $widget == 'numeric')
+                                  $array['type'] = $widget;
+                          }
+                          $args['meta_query'][] = $array;
                       }
-                      $args['meta_query'][] = $array;
                   }
               }
-          }
         }
+       // var_dump($args);
         return $args;
     }
 }

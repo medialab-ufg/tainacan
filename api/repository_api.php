@@ -83,6 +83,23 @@ abstract class RepositoryApi {
         return $response;
     }
     
+    /**
+     * 
+     * @param string $type O tipo da entidade
+     * @param int $id O id da entidade
+     * @param string (Optional) $rel O tipo de relacionamento do link
+     * @param array (Optional) $args Outros argumentos que podem ser utilizados
+     * @return array  O array com o link
+     */
+    public function getLink($type,$id,$rel = 'self',$args = []) {
+        if($type == 'collection'){
+            $href = get_bloginfo('url').'/wp-json/'.TainacanApi::$namespace_tainacan.TainacanApi::$version.'/collections/'.$id;
+        }else if($type == 'object'){
+             $href = get_bloginfo('url').'/wp-json/'.TainacanApi::$namespace_tainacan.TainacanApi::$version.'/collections/'.$args['collection_id'].'/items/'.$id;
+        }
+        return ['rel'=>$rel,'href'=>$href];
+    }
+    
     // Metodo da classe
     private function filterByArgs($params){
         $filters = $params['filter'];
