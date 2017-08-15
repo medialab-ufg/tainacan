@@ -451,13 +451,36 @@ class FormItemMultiple extends Model {
             }
             
             function back_main_list() {
-                 $('#form').hide();
+                $('#form').hide();
                 $("#tainacan-breadcrumbs").hide();
                 $('#configuration').hide();
                 $('#main_part').show();
                 $('#display_view_main_page').show();
                 $("#container_three_columns").removeClass('white-background');
                 $('#menu_object').show();
+                /*PDF CASE*/
+                var idImage = [];
+                var ids = sessionStorage.getItem('pdf_ids');
+
+                //IndexedDB
+                window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+                window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
+                window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
+
+                if (window.indexedDB && ids)
+                {
+                    const dbname = "pdf_thumbnails", dbversion = 1, tbname = "pdf_thumbnails";
+                    var db, request = indexedDB.open(dbname, dbversion);
+                    ids = ids.split(",");
+
+                    //Banco aberto com sucesso
+                    request.onsuccess = function(event)
+                    {
+                        db = event.target.result;
+                        delete_pdf_db(ids, db, tbname);
+                    };
+                }
+
                 wpquery_clean();
             }
             
@@ -472,9 +495,15 @@ class FormItemMultiple extends Model {
                         collection_id: $("#collection_id").val()
                     }
                 }).done(function (result) {
-                    hide_modal_main();
+                    var result = JSON.parse(result);
 
-                    generate_pdfThumb(result);
+                    if(result.there_are_pdfFiles)
+                    {
+                        generate_pdfThumb();
+                    }else
+                    {
+                        finish_process();
+                    }
                 });
             }
             
@@ -487,12 +516,12 @@ class FormItemMultiple extends Model {
 
             function finish_process()
             {
+                hide_modal_main();
                 $('#form').hide();
                 $("#tainacan-breadcrumbs").hide();
                 $('#configuration').hide();
                 $('#main_part').show();
                 $('#display_view_main_page').show();
-
 
                 wpquery_clean();
                 showAlertGeneral('<?php _e('Success','tainacan') ?>', '<?php _e('Operation was successfully!','tainacan') ?>', 'success');

@@ -7,19 +7,90 @@
         var myDropzone = new Dropzone("#dropzone_multiple_items", {
             maxFilesize: parseInt('<?php echo file_upload_max_size(); ?>') / 1024 / 1024,
             accept: function(file, done) {
+                //Cria miniatura para arquivos PDF
+                if(file.type == 'application/pdf')
+                {
+                    this.on("complete", function(file){
+                        //IndexedDB
+                        window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+                        window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
+                        window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
 
-                    /*var reader = new FileReader();
-                    reader.addEventListener("loadend", function(event)
-                    {
-                        console.log("OK");
+                        if (window.indexedDB) {
+                            const dbname = "pdf_thumbnails", dbversion = 1, tbname = "pdf_thumbnails";
+                            var db, pdfThumbImage, gen_image = [];
+                            var request = indexedDB.open(dbname, dbversion);
+
+                            var reader = new FileReader();
+                            gen_image.push(new Promise(function(resolve, reject){
+                                reader.addEventListener("loadend", function(event)
+                                {
+                                    var base64PDF = reader.result;
+                                    var binary_file = convertDataURIToBinary(base64PDF);
+
+                                    //Gera Thumb
+                                    PDFJS.getDocument(binary_file).promise.then(function (doc) {
+                                        let page = [];
+                                        page.push(1); //Get first page
+                                        return Promise.all(page.map(function (num) {
+                                            return doc.getPage(num).then(makeThumb)
+                                                .then(function (canvas) {
+                                                    pdfThumbImage = {file_id: file.id, base64IMAGE: canvas.toDataURL("image/png")};
+                                                    resolve("It's done");
+                                                });
+                                        }));
+                                    });
+                                });
+
+                                reader.readAsDataURL(file);
+                            }));
+
+                            /**** Adiciona a imagem de um arquivo pdf ao banco quando ele é criado ****/
+                            request.onupgradeneeded = function(event) {
+                                var db = event.target.result;
+
+                                var objectStore = db.createObjectStore(tbname, { keyPath: "file_id" });
+                                objectStore.createIndex("base64IMAGE", "base64IMAGE", { unique: false });
+
+                                objectStore.transaction.oncomplete = function(event) {
+                                    // Armazenando valores no novo objectStore.
+                                    var pdfObjectStore = db.transaction(tbname, "readwrite").objectStore(tbname);
+                                }
+                            };
+
+                            //Banco aberto com sucesso
+                            request.onsuccess = function(event)
+                            {
+                                Promise.all(gen_image).then(function(){
+                                    var db = event.target.result;
+                                    var transaction = db.transaction([tbname], "readwrite");
+                                    var objectStore = transaction.objectStore(tbname);
+
+                                    var addObject = objectStore.add(pdfThumbImage);
+                                    addObject.onsuccess = function()
+                                    {
+                                        var files_id = sessionStorage.getItem('pdf_ids');
+                                        if(files_id)
+                                        {
+                                            files_id += ","+file.id;
+
+                                        }else
+                                        {
+                                            files_id = file.id;
+                                        }
+
+                                        sessionStorage.setItem('pdf_ids', files_id);
+                                    };
+                                });
+                            };
+                        }
                     });
-                    reader.readAsDataURL(file);*/
+                }
 
-
-                    if (file.type === ".exe") {
-                        done("Error! Files of this type are not accepted");
-                    }
-                    else { done(); }
+                if (file.type === ".exe") {
+                    done("Error! Files of this type are not accepted");
+                }
+                else { done(); }
             },
             init: function () {
                 thisDropzone = this;

@@ -205,6 +205,10 @@ class ObjectFileModel extends Model {
                         $metas = wp_get_attachment_metadata($attachment->ID);
                         $item_id = socialdb_insert_object($attachment->post_title);
                         update_post_meta($item_id, 'socialdb_object_content', $attachment->ID);
+                        wp_update_post(array(
+                            'ID' => $attachment->ID,
+                            'post_parent' => $item_id
+                        ));
                         update_post_meta($item_id, 'socialdb_object_from','internal');
                         $obj['ID'] = $item_id;
                         $obj['name'] = $attachment->post_title;
