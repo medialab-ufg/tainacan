@@ -149,8 +149,7 @@ while (have_posts()) : the_post();
                                         if (has_filter('show_custom_add_item_button')):
                                             echo apply_filters('show_custom_add_item_button', '');
                                         elseif (has_action('addLibraryMenu')):
-                                            $collection_id = get_the_ID();
-                                            do_action('addLibraryMenu', $collection_id);
+                                            do_action('addLibraryMenu', $_currentID_);
                                         else:
                                             $_add_modes = [
                                                 'write_text' => ['label' => _t('Write text'), 'action' => "showAddItemText()"],
@@ -167,7 +166,7 @@ while (have_posts()) : the_post();
                                                 $temp = _t('Add');
                                                 //$add_item_str = '<a href="javascript:void(0)" style="color: white; width: 100%;" class="btn"';
                                                 //$add_item_str .= 'onclick="' . $_add_modes[$_add_opts[0]]['action'] . '">' . $temp . '</a>';
-                                                $add_item_str = '<a href="'. get_the_permalink($collection_id).'criar-item" style="color: white; width: 100%;" class="btn"';
+                                                $add_item_str = '<a href="'. get_the_permalink($_currentID_).'criar-item" style="color: white; width: 100%;" class="btn"';
                                                 $add_item_str .= '>' . $temp . '</a>';
                                             }
                                             ?>
@@ -180,7 +179,7 @@ while (have_posts()) : the_post();
                                                     <ul class="dropdown-menu" <?php echo $hideStr; ?> >
                                                         <?php if (false === is_array($_add_opts)) { ?>
                                                             <!--li><a onclick="showAddItemText()"> <?php _e('Write text', 'tainacan') ?> </a> </li-->
-                                                            <li><a href="<?php echo get_the_permalink($collection_id).'criar-item'; ?>"> <?php _e('Write text', 'tainacan') ?> </a> </li>
+                                                            <li><a href="<?php echo get_the_permalink($_currentID_).'criar-item'; ?>"> <?php _e('Write text', 'tainacan') ?> </a> </li>
                                                             <li><a onclick="showViewMultipleItems()"> <?php _e('Send file(s)', 'tainacan') ?>  </a> </li>
                                                             <li><a onclick="showSendFilesZip()"> <?php _e('Send file(s) via zip', 'tainacan') ?>  </a> </li>
                                                             <li><a onclick="showAddItemURL();"> <?php _e('Insert URL', 'tainacan') ?> </a> </li>
@@ -197,13 +196,13 @@ while (have_posts()) : the_post();
                                                                             </li>
                                                                             <?php
                                                                         }else{
-                                                                            echo '<li><a class="add_'.$_mode .'"  href="'.get_the_permalink($collection_id).'criar-item">' . __('Write text', 'tainacan') . '</a></li>';
+                                                                            echo '<li><a class="add_'.$_mode .'"  href="'.get_the_permalink($_currentID_).'criar-item">' . __('Write text', 'tainacan') . '</a></li>';
                                                                         }
                                                                     }
                                                                 }
                                                             } else {
                                                                 //echo '<li><a onclick="showAddItemText()">' . _e('Write text', 'tainacan') . '</a></li>';
-                                                                echo '<li><a href="'.get_the_permalink($collection_id).'criar-item">' . __('Write text', 'tainacan') . '</a></li>';
+                                                                echo '<li><a href="'.get_the_permalink($_currentID_).'criar-item">' . __('Write text', 'tainacan') . '</a></li>';
                                                             }
                                                         }
                                                         ?>
@@ -309,8 +308,7 @@ while (have_posts()) : the_post();
                                     <?php
                                     if (is_user_logged_in()) {
                                         if (has_filter('tainacan_show_restore_options')) {
-                                            $collection_id = get_the_ID();
-                                            $change_name = apply_filters('tainacan_show_restore_options', $collection_id);
+                                            $change_name = apply_filters('tainacan_show_restore_options', $_currentID_);
                                         } else
                                             $change_name = true;
 

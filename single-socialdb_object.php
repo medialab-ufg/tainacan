@@ -20,7 +20,12 @@ $edit_perm_data = verify_allowed_action($collection_id, 'socialdb_collection_per
 $delete_perm_data = verify_allowed_action($collection_id, 'socialdb_collection_permission_delete_property_data');
 
 $meta_type = ucwords($metas['socialdb_object_dc_type'][0]);
-$meta_source = $metas['socialdb_object_dc_source'][0];
+$item_opts = [
+    'source' => (key_exists('socialdb_object_dc_source', $metas) ? $metas['socialdb_object_dc_source'][0] : ''),
+    'license' => (key_exists('socialdb_license_id', $metas) ? $metas['socialdb_license_id'][0] : -1),
+    'from' => (key_exists('socialdb_object_from', $metas) ? $metas['socialdb_object_from'][0] : '')
+];
+
 $view_helper = new ObjectHelper($collection_id);
 ?>
 
@@ -75,7 +80,7 @@ $view_helper = new ObjectHelper($collection_id);
                         if ($metas['socialdb_object_dc_type'][0] == 'text') {
                             echo $metas['socialdb_object_content'][0];
                         } else {
-                            if ($metas['socialdb_object_from'][0] == 'internal' && wp_get_attachment_url($metas['socialdb_object_content'][0])) {
+                            if ($item_opts['from'] == 'internal' && wp_get_attachment_url($metas['socialdb_object_content'][0])) {
                                 $url = wp_get_attachment_url($metas['socialdb_object_content'][0]);
                                 switch ($metas['socialdb_object_dc_type'][0]) {
                                     case 'audio':
@@ -180,9 +185,9 @@ $view_helper = new ObjectHelper($collection_id);
                                         </small>
                                     <?php endif; ?>
                                 </div>
-                                <div id="text_source"> <?php echo format_item_text_source($meta_source); ?> </div>
+                                <div id="text_source"> <?php echo format_item_text_source($item_opts['source']); ?> </div>
                                 <div id="event_source" style="display:none;" >
-                                    <input type="text" class="form-control" id="source_field" value="<?php echo $meta_source; ?>"
+                                    <input type="text" class="form-control" id="source_field" value="<?php echo $item_opts['source']; ?>"
                                            name="source_field" placeholder="<?php _e('Type the source and click save!') ?>" >
                                 </div>
                             </div>
@@ -347,14 +352,14 @@ $view_helper = new ObjectHelper($collection_id);
                                 <button type="button" onclick="save_license('<?php echo $post->ID ?>')" id="save_license"class="btn btn-default btn-xs" style="display: none;"><span class="glyphicon glyphicon-floppy-disk"></span></button>
                             </small>
                         <?php endif; ?>
-                    </DIV>
+                    </div>
                     <div id="text_license">
-                        <p><?php
-                            if (isset(get_post($metas['socialdb_license_id'][0])->post_title))
-                                echo get_post($metas['socialdb_license_id'][0])->post_title;
+                        <p>
+                            <?php if ( is_object(get_post($item_opts['license'])) && isset(get_post($item_opts['license'])->post_title))
+                                echo get_post($item_opts['license'])->post_title;
                             else
-                                echo __('No license registered for this item', 'tainacan');
-                            ?></p>
+                                _t('No license registered for this item', 1); ?>
+                        </p>
                     </div>
                     <div id="event_license" style="display: none;">
                     </div>
