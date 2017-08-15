@@ -29,7 +29,12 @@ abstract class CollectionsApi {
         $params = $request->get_params();
 
         $CollectionModel = new CollectionModel;
-        return $CollectionModel->get_collection_data($params['id']);
+        $data =  $CollectionModel->get_collection_data($params['id']);
+        if($data)
+            return new WP_REST_Response( CollectionsFiltersApi::getCollectionFilters($data), 200 );
+        else
+            return new WP_Error('collection_not_found',  __( 'No collections found!', 'tainacan' ), array('status' => 404));
+        
     }
 
     public function get_collection_items($request) {
