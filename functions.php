@@ -3732,3 +3732,13 @@ if ( ! defined("MANUAL_TAINACAN_URL") ) {
 include_once 'extras/json-rest-api/plugin.php';
 /************* Remove o post type das colecoes ********************/
 // include_once 'extras/remove-slug-post/remove-slug-custom-post-type.php';
+
+add_action('wp', function() {
+    $request = $_SERVER['REQUEST_URI'];
+    $basic_path = basename(site_url());
+    $check = str_replace("/$basic_path/", "", $request);
+    if ( $check == "adm/config" ) {
+        locate_template( "configs.php" , true, false );
+        die();
+    }
+});
