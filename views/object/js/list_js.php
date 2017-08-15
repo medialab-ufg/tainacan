@@ -224,6 +224,7 @@
                     $('.prime-color').css('color', color_scheme.secondary);
                     $('.sec-color-bg').css('background', color_scheme.secondary);
                     $('.sec-color').css('color', color_scheme.secondary);
+                    $('.main-color').css('color', color_scheme.primary);
                 } else {
                     // default tainacan light blue color
                     $(['#div_left .expand-all','#filters_collection .search-resultset']).each(function(id, e){

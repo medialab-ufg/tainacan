@@ -56,7 +56,7 @@ $is_current_user_the_author = get_post($curr_id)->post_author == get_current_use
 <ul class="nav navbar-bar navbar-right item-menu-container"  <?php if(has_action('hide_actions_item')) do_action('hide_actions_item') ?> >
     <li class="dropdown open_item_actions" id="action-<?php echo $curr_id; ?>">
         <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-            <?php echo ViewHelper::render_icon("config", "png", _t('Item options')); ?>
+            <span class="dashicons dashicons-admin-generic main-color"></span>
         </a>
         <ul class="dropdown-menu pull-right dropdown-show new-item-menu" role="menu" id="item-menu-options">
             <?php if(!$is_single_page): ?>
