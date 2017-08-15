@@ -7,22 +7,30 @@ abstract class CollectionsApi {
         
         $CollectionModel = new CollectionModel;
         $wpQueryModel = new WPQueryModel();
+        $data = [];
         if(isset($params['filter'])){
             $params['filter']['post_type'] = 'socialdb_collection';
             $args = $wpQueryModel->queryAPI($params['filter']);
             $loop = new WP_Query($args);
             if ($loop->have_posts()) {
-                $data = [];
                 while ( $loop->have_posts() ) : $loop->the_post();
-                    $array['item'] = CollectionsApi::get_item( get_post()->ID );
-                    $data[] = $array;
+                    $data[] = CollectionsApi::get_item( get_post()->ID );
                 endwhile;
                 return new WP_REST_Response( $data, 200 );
             }else{
                 return new WP_Error('empty_search',  __( 'No items found with these arguments!', 'tainacan' ), array('status' => 404));
             }
+        }else{
+            $collections = $CollectionModel->get_all_collections();
+            $collection_root_id = get_option('collection_root_id');
+            foreach ($collections as $collection) {
+                if($collection_root_id != $collection->ID)
+                    $data[] = CollectionsApi::get_item( $collection->ID );
+            }
+            if(count($data)>0)
+                return new WP_REST_Response( $data, 200 );
         }
-        return $CollectionModel->get_all_collections();
+       return new WP_Error('empty_search',  __( 'No items found with these arguments!', 'tainacan' ), array('status' => 404));
     }
 
     public function get_collection($request) {
@@ -74,7 +82,7 @@ abstract class CollectionsApi {
         if (empty($Result['item'])) {
             return new WP_Error('invalid_item_id', 'Invalid Item ID', array('status' => 404));
         }
-        $Result['metas'] = CollectionsApi::getValuesItem($metadatas,$params['post']);;
+        $Result['metadata'] = CollectionsApi::getValuesItem($metadatas,$params['post']);;
         return $Result;
     }
 /*******************************************************************************/
@@ -95,8 +103,9 @@ abstract class CollectionsApi {
         }
         
         //busco a url certa caso for post type object
-        if($item->post_type === 'socialdb_object')
+        if($item->post_type === 'socialdb_object'){
             $item->guid = get_the_permalink($collection_id).$item->post_name;
+        }
         
        //caso o post type collection verifico se possui a capap
         if($item->post_type === 'socialdb_collection'){

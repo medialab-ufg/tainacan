@@ -1617,9 +1617,11 @@ class WPQueryModel extends Model {
             ];
         }
 
-        // se existe titulo
-        if($filter['title']){
+        // se existe titulo e for do tipo objeto
+        if($filter['title'] && $args['post_type'] == 'socialdb_object'){
             $args['title'] = $filter['title'];
+        }else{
+            $args['s'] = $filter['title'];
         }
 
         //se existe pagina
@@ -1633,8 +1635,8 @@ class WPQueryModel extends Model {
         }
 
         //se existe limitacao pagina
-        if($filter['items_per_page']){
-            $args['posts_per_page'] = $filter['items_per_page'];
+        if($filter['author']){
+            $args['author'] = $filter['author'];
         }
 
         //ordenacao tipo
