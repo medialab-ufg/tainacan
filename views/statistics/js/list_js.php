@@ -178,7 +178,14 @@
                         fetchData('comments', 'add', 'detail');
                     }
                     else if(title == 'Categories' || title == 'Categorias'){
+                        var thead = {
+                            column1: 'Usuário que adicionou a categoria',
+                            column2: 'Categoria',
+                            column3: 'Data - Horário'
+                        }
 
+                        renderDetailThead(thead);
+                        fetchData('categories', 'add', 'detail');
                     }
                     else if(title == 'Tags'){
 
@@ -794,7 +801,6 @@
 
         var filter = getFilterSelected();
 
-
         $.ajax({
             url: stat_path + '/controllers/log/log_controller.php', type: 'POST',
             data: { operation: operation, parent: parent, event: action, from: from, to: to, collec_id: c_id, filter: filter}
@@ -809,7 +815,7 @@
                     toggleElements(["#charts-container div", "#charts-resume"], true);
                     toggleElements(["#charts-container #no_chart_data"]);
                 } else {
-                    toggleElements(["#"+chart+"chart_div", "#charts-resume"]);
+                    toggleElements(["#"+ chart +"chart_div", "#charts-resume"]);
                     toggleElements(["#no_chart_data", "#values-details"], true);
                     
                     setTimeout( function() {
@@ -864,7 +870,7 @@
                 }
             }
             else if(filter == "weeks"){
-                chart_data.addColumn('number', 'week_number');
+                chart_data.addColumn('string', 'week_number');
                 for(evnt in columnsData){
                     chart_data.addColumn('number', tai_chart.getMappedTitles()[columnsData[evnt]] ? tai_chart.getMappedTitles()[columnsData[evnt]] : columnsData[evnt]);
                 }
@@ -1034,7 +1040,7 @@
                 selectionMode: 'multiple',
                 tooltip: {trigger: 'selection'},
                 aggregationTarget: 'category'
-            }; // '#0F4F8D','#2B85C1' tons de azul
+            };
 
             google.visualization.events.addListener(piechart, 'ready', function() {
                 var chart_png = piechart.getImageURI();

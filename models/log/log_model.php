@@ -111,10 +111,10 @@ class Log extends Model {
                         (
                             SELECT * 
                             FROM (
-                                SELECT post_status AS event, (week(substring(post_date, 1, 10))) AS week_number, count(id) AS total 
+                                SELECT post_status AS event, INSERT((yearweek(substring(post_date, 1, 10))), 5, 0, '/ week-') AS week_number, count(id) AS total 
                                 FROM %s 
                                     WHERE post_status = '$event' AND post_type = '$event_type' AND substring(post_date, 1, 10) between '$from' AND '$to' 
-                                    GROUP BY (week(substring(post_date, 1, 10)))
+                                    GROUP BY INSERT((yearweek(substring(post_date, 1, 10))), 5, 0, '/ week-')
                             ) res1
                         ) res2 
                         NATURAL JOIN (
@@ -130,10 +130,10 @@ class Log extends Model {
                         (
                             SELECT * 
                             FROM (
-                                SELECT event, (week(substring(event_date, 1, 10))) AS week_number, count(id) AS total 
+                                SELECT event, INSERT((yearweek(substring(event_date, 1, 10))), 5, 0, '/ week-') AS week_number, count(id) AS total 
                                 FROM %s 
                                     WHERE event = '$event' AND event_type = 'user_items' AND substring(event_date, 1, 10) between '$from' AND '$to' 
-                                    GROUP BY (week(substring(event_date, 1, 10)))
+                                    GROUP BY INSERT((yearweek(substring(event_date, 1, 10))), 5, 0, '/ week-')
                             ) res1
                         ) res2 
                         NATURAL JOIN (
@@ -149,10 +149,10 @@ class Log extends Model {
                         (
                             SELECT * 
                             FROM (
-                                SELECT event, (week(substring(event_date, 1, 10))) AS week_number, count(id) AS total 
+                                SELECT event, INSERT((yearweek(substring(event_date, 1, 10))), 5, 0, '/ week-') AS week_number, count(id) AS total 
                                 FROM %s 
                                     WHERE event = '$event' AND event_type = '$event_type' AND substring(event_date, 1, 10) between '$from' AND '$to' 
-                                    GROUP BY (week(substring(event_date, 1, 10)))
+                                    GROUP BY INSERT((yearweek(substring(event_date, 1, 10))), 5, 0, '/ week-')
                             ) res1
                         ) res2 
                         NATURAL JOIN (
@@ -307,10 +307,10 @@ class Log extends Model {
                             (
                                 SELECT * 
                                 FROM (
-                                    SELECT post_status AS event, (week(substring(post_date, 1, 10))) AS week_number, count(id) AS total 
+                                    SELECT post_status AS event, INSERT((yearweek(substring(post_date, 1, 10))), 5, 0, '/ week-') AS week_number, count(id) AS total 
                                     FROM %s 
                                         WHERE post_status = '$event' AND post_type = '$event_type' AND collection_id = '$collection_id' AND substring(post_date, 1, 10) between '$from' AND '$to' 
-                                        GROUP BY (week(substring(post_date, 1, 10)))
+                                        GROUP BY INSERT((yearweek(substring(post_date, 1, 10))), 5, 0, '/ week-')
                                 ) res1
                             ) res2 
                             NATURAL JOIN (
@@ -326,10 +326,10 @@ class Log extends Model {
                             (
                                 SELECT * 
                                 FROM (
-                                    SELECT event, (week(substring(event_date, 1, 10))) AS week_number, count(id) AS total 
+                                    SELECT event, INSERT((yearweek(substring(event_date, 1, 10))), 5, 0, '/ week-') AS week_number, count(id) AS total 
                                     FROM %s 
                                         WHERE event = '$event' AND event_type = 'user_items' AND collection_id = '$collection_id' AND substring(event_date, 1, 10) between '$from' AND '$to' 
-                                        GROUP BY (week(substring(event_date, 1, 10)))
+                                        GROUP BY INSERT((yearweek(substring(event_date, 1, 10))), 5, 0, '/ week-')
                                 ) res1
                             ) res2 
                             NATURAL JOIN (
@@ -345,10 +345,10 @@ class Log extends Model {
                             (
                                 SELECT * 
                                 FROM (
-                                    SELECT event, (week(substring(event_date, 1, 10))) AS week_number, count(id) AS total 
+                                    SELECT event, INSERT((yearweek(substring(event_date, 1, 10))), 5, 0, '/ week-') AS week_number, count(id) AS total 
                                     FROM %s 
                                         WHERE event = '$event' AND event_type = '$event_type' AND collection_id = '$collection_id' AND substring(event_date, 1, 10) between '$from' AND '$to' 
-                                        GROUP BY (week(substring(event_date, 1, 10)))
+                                        GROUP BY INSERT((yearweek(substring(event_date, 1, 10))), 5, 0, '/ week-')
                                 ) res1
                             ) res2 
                             NATURAL JOIN (
@@ -621,7 +621,7 @@ class Log extends Model {
                         (
                             SELECT event, week_number, count(event) AS total 
                             FROM (
-                                SELECT post_parent AS event, week(substring(post_date, 1, 10)) AS week_number 
+                                SELECT post_parent AS event, yearweek(substring(post_date, 1, 10)) AS week_number 
                                 FROM %s 
                                     WHERE post_parent > 0 AND post_type = 'socialdb_object' AND substring(post_date, 1, 10) between '$from' AND '$to'
                             ) res1 
@@ -704,10 +704,10 @@ class Log extends Model {
                     "SELECT event, week_number, total, event_total
                     FROM (
                         (
-                            SELECT event, week(substring(event_date, 1, 10)) as week_number, count(event) AS total
+                            SELECT event, yearweek(substring(event_date, 1, 10)) as week_number, count(event) AS total
                             FROM %s
                                 WHERE event_type like '". $event_type ."'  AND (substring(event_date, 1, 10)) between '$from' AND '$to'
-                                GROUP BY event, (week(substring(event_date, 1, 10)))
+                                GROUP BY event, (yearweek(substring(event_date, 1, 10)))
                         ) res1
                         JOIN (
                             SELECT event AS event2, count(event) AS event_total
@@ -788,10 +788,10 @@ class Log extends Model {
                     "SELECT event, week_number, total, event_total
                     FROM (
                         (
-                            SELECT event, week(substring(event_date, 1, 10)) as week_number, count(event) AS total
+                            SELECT event, yearweek(substring(event_date, 1, 10)) as week_number, count(event) AS total
                             FROM %s
                                 WHERE event_type = '$event_type' AND collection_id = '$collection_id' AND (substring(event_date, 1, 10)) between '$from' AND '$to'
-                                GROUP BY event, (week(substring(event_date, 1, 10)))
+                                GROUP BY event, (yearweek(substring(event_date, 1, 10)))
                         ) res1
                         JOIN (
                             SELECT event AS event2, count(event) AS event_total
@@ -919,6 +919,9 @@ class Log extends Model {
                         FROM %s, %s, %s 
                         WHERE item_id = %s.ID AND %s.ID = post_author AND user_id = post_author AND event='$event' AND event_type = 'comment'
                     ", self::_table(), self::_posts_table(), self::_users_table(), self::_posts_table(), self::_users_table());
+            }
+            else if($report == 'categories'){
+                
             }
         }
         else{
