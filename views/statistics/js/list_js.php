@@ -140,7 +140,7 @@
         var eventName = e.id;
 
         var geral = 'Added, Edited, Viewed, Deleted, Adicionados, Visualizados, Editados, Excluídos';
-        console.log(geral.search('0'));
+
         // Cases comuns entre vários relatórios
         if(geral.search(eventName) != '-1'){
             switch (eventName) {
@@ -168,7 +168,14 @@
                         fetchData('collections', 'add', 'detail');
                     }
                     else if(title == 'Comments'  || title == 'Comentários'){
+                        var thead = {
+                            column1: 'Usuário que comentou',
+                            column2: 'Item comentado',
+                            column3: 'Data - Horário'
+                        }
 
+                        renderDetailThead(thead);
+                        fetchData('comments', 'add', 'detail');
                     }
                     else if(title == 'Categories' || title == 'Categorias'){
 
@@ -201,7 +208,14 @@
                         fetchData('collections', 'edit', 'detail');
                     }
                     else if(title == 'Comments'  || title == 'Comentários'){
+                        var thead = {
+                            column1: 'Usuário que editou o comentário',
+                            column2: 'Item comentado',
+                            column3: 'Data - Horário'
+                        }
 
+                        renderDetailThead(thead);
+                        fetchData('comments', 'edit', 'detail');
                     }
                     else if(title == 'Categories' || title == 'Categorias'){
 
@@ -232,9 +246,6 @@
                         
                         renderDetailThead(thead);
                         fetchData('collections', 'view', 'detail');
-                    }
-                    else if(title == 'Comments'  || title == 'Comentários'){
-
                     }
                     else if(title == 'Categories' || title == 'Categorias'){
 
@@ -267,7 +278,14 @@
                         fetchData('collections', 'delete', 'detail');
                     }
                     else if(title == 'Comments'  || title == 'Comentários'){
+                        var thead = {
+                            column1: 'Usuário que excluiu o comentário',
+                            column2: 'Item comentado',
+                            column3: 'Data - Horário'
+                        }
 
+                        renderDetailThead(thead);
+                        fetchData('comments', 'delete', 'detail');
                     }
                     else if(title == 'Categories' || title == 'Categorias'){
 
@@ -337,17 +355,6 @@
         }
         else if(title == 'Items' || title == 'Itens'){
             switch (eventName) {
-                case 'Commented':
-                case 'Comentados':
-                    var thead = {
-                        column1: 'Usuário que comentou',
-                        column2: 'Item',
-                        column3: 'Data - Horário'
-                    }
-                    
-                    renderDetailThead(thead);
-                    fetchData('items', 'comment', 'detail');
-                    break;
                 case 'Voted':
                 case 'Votados':
                     var thead = {
@@ -421,9 +428,6 @@
                         
             renderDetailThead(thead);
             fetchData('c_items', eventName, 'detail');
-        }
-        else if(title == 'Comments'  || title == 'Comentários'){
-
         }
         else if(title == 'Categories' || title == 'Categorias'){
 
@@ -684,7 +688,7 @@
         * top_collections_items
         */
         return [
-            { title: "Usuário <p> visualizados / comentados / votados </p>", id: "user" },
+            { title: "Usuário <p> visualizados / votados </p>", id: "user" },
             { title: "Status <p> ativos / rascunhos / lixeira / excluídos / <br/> adicionados / editados / excluídos / <br/> visualizados / baixados </p>", id: "general_status" },
            // { title: "Coleção <p> número de itens por coleção </p>", id: "top_collections", addClass: 'repoOnly' }
         ];
@@ -702,7 +706,7 @@
     // Comments
     function commentsChildren() {
         // comment
-        return [{ title: "Status <p> adicionados / visualizados / editados / excluídos </p>", id: "comments" }];
+        return [{ title: "Status <p> adicionados / editados / excluídos </p>", id: "comments" }];
     }
 
     function categoryChildren() {
