@@ -119,8 +119,6 @@
     }
 //END
 //BEGIN:as proximas funcoes sao para mostrar os eventos
-// list_properties(id): funcao que mostra a primiera listagem de propriedades
-
     function list_properties_single(id) {
         $.ajax({
             type: "POST",
@@ -128,6 +126,7 @@
             data: {collection_id: $('#collection_id').val(), operation: 'list_properties_renew', object_id: id}
         }).done(function (result) {
             $('#single_list_all_properties_' + id).html(result);
+
             var main_height = $('#single_item_tainacan .item-main-data').height();
             $("#single_item_tainacan .item-attachments").height(main_height);
 
@@ -691,8 +690,12 @@
         }).done(function (result) {
             $('#modalImportMain').modal('hide');//mostro o modal de carregamento
             elem = jQuery.parseJSON(result);
+            if(elem.type === 'success')
+                $("#text_title").text(value);
+
+            cancel_title();
             showAlertGeneral(elem.title, elem.msg, elem.type);
-            showSingleObjectByName($('#object_page').val(), $('#src').val());
+            //showSingleObjectByName($('#object_page').val(), $('#src').val());
         });
     }
 

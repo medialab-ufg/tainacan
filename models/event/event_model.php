@@ -385,16 +385,18 @@ abstract class EventModel extends Model {
      * 
      * Autor: Eduardo Humberto 
      */
-    public function instantiate_metas_event($id, $name, $data) {
+    public function instantiate_metas_event($id, $name, $data)
+    {
         global $wpdb;
         $term = get_term_by('name', $name, 'socialdb_event_type');
-        if ($term) {
+        if ($term)
+        {
             $metas = $wpdb->get_results("SELECT meta_value FROM {$wpdb->prefix}termmeta"
                     . " WHERE meta_key like '{$name}_metas' ");
             if (is_array($metas)) {
                 foreach ($metas as $meta) {
                     update_post_meta($id, $meta->meta_value, $data[$meta->meta_value]);
-//create_metas($id, $meta->meta_value, $data[$meta->meta_value], $data[$meta->meta_value]);
+                    //create_metas($id, $meta->meta_value, $data[$meta->meta_value], $data[$meta->meta_value]);
                 }
             }
             $parent = get_term_by('id', $term->parent, 'socialdb_event_type');
@@ -421,7 +423,7 @@ abstract class EventModel extends Model {
         {
             $this->instantiate_metas_event($event_created['ID'], $this->parent->name, $data); // instancia e coloca os valores nos meta dados do evento
             if ($this->is_automatically_verify_event($data['socialdb_event_collection_id'], $this->permission_name, $data['socialdb_event_user_id'], $event_created['ID']))
-            {//
+            {
                 $data['event_id'] = $event_created['ID'];
                 $data = $this->verify_event($data, true);
                 return $data;

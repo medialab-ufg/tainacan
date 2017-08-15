@@ -525,9 +525,10 @@
                         });
                     },
                     onSelect: function (flag, node) {
+                        //Tree = ID da propriedade
                         $("#socialdb_propertyterm_" + tree + "_<?php echo $object_id; ?>").html('');
                         $("#socialdb_propertyterm_" + tree + "_<?php echo $object_id; ?>").append('<option selected="selected" value="' + node.data.key + '" >' + node.data.title + '</option>');
-                        get_event_single_tree(node.data.key, $('#value_single_tree_' + tree + '_<?php echo $object_id; ?>').val(), tree,<?php echo $object_id; ?>);
+                        get_event_single_tree(node.data.key, $('#value_single_tree_' + tree + '_<?php echo $object_id; ?>').val(), tree, <?php echo $object_id; ?>);
                         $('#value_single_tree_' + tree + '_<?php echo $object_id; ?>').val(node.data.key);
                     }
                 });
@@ -797,7 +798,8 @@
         },
         function (isConfirm) {
             if (isConfirm) {
-                //adiciona a escolhida 
+
+                //adiciona a escolhida
                 $.ajax({
                     type: "POST",
                     url: $('#src').val() + "/controllers/event/event_controller.php",
@@ -806,6 +808,7 @@
                         socialdb_event_create_date: '<?php echo mktime(); ?>',
                         socialdb_event_user_id: $('#current_user_id').val(),
                         socialdb_event_classification_object_id: object_id,
+                        socialdb_event_classification_property_id: property_id,
                         socialdb_event_classification_term_id: value_actual,
                         socialdb_event_classification_type: 'category',
                         socialdb_event_collection_id: $('#collection_id').val()}
@@ -814,9 +817,11 @@
                     show_classifications(object_id);
                     list_properties_single(object_id);
                     showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
+
                     //limpando caches
                     delete_all_cache_collection();
                 });
+
                 //retira a anterior
                 $.ajax({
                     type: "POST",
@@ -826,6 +831,7 @@
                         socialdb_event_create_date: '<?php echo mktime(); ?>',
                         socialdb_event_user_id: $('#current_user_id').val(),
                         socialdb_event_classification_object_id: object_id,
+                        socialdb_event_classification_property_id: property_id,
                         socialdb_event_classification_term_id: value_before,
                         socialdb_event_classification_type: 'category',
                         socialdb_event_collection_id: $('#collection_id').val()}
