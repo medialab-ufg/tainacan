@@ -50,27 +50,29 @@ abstract class CollectionsApi {
         $params = $request->get_params();
 
         //se existir consultas
-        if(isset($params['filter']))
-            return CollectionsApi::filterByArgs($params);
+        $array['id'] = $params['id'];
+        $array['includeMetadata'] = $params['includeMetadata'];
+        $array['filter'] = ( isset($params['filter']) ) ? $params['filter'] : [];
+        return CollectionsApi::filterByArgs($array);
 
         //caso for uma consulta simples
-        $CollectionModel = new CollectionModel;
-        $ObjectModel = new ObjectModel();
-        $properties = $ObjectModel->show_object_properties(['collection_id'=>$params['id']]);
-        $metadatas = CollectionsApi::structProperties($properties);
-        $data =  $CollectionModel->get_collection_posts($params['id']);
-        if ($data) {
-             foreach ($data as $value) {
-               $array['item'] = CollectionsApi::get_item($value->ID);
-               if($params['includeMetadata'] === '1')
-                    $array['metadata'] = CollectionsApi::getValuesItem($metadatas,$value->ID);
-               
-               $items[] = $array;
-             }
-            return new WP_REST_Response( $items, 200 );
-        }else{
-            return new WP_Error('empty_collection',  __( 'No items inserted or found!', 'tainacan' ), array('status' => 404));
-        }
+//        $CollectionModel = new CollectionModel;
+//        $ObjectModel = new ObjectModel();
+//        $properties = $ObjectModel->show_object_properties(['collection_id'=>$params['id']]);
+//        $metadatas = CollectionsApi::structProperties($properties);
+//        $data =  $CollectionModel->get_collection_posts($params['id']);
+//        if ($data) {
+//             foreach ($data as $value) {
+//               $array['item'] = CollectionsApi::get_item($value->ID);
+//               if($params['includeMetadata'] === '1')
+//                    $array['metadata'] = CollectionsApi::getValuesItem($metadatas,$value->ID);
+//
+//               $items[] = $array;
+//             }
+//            return new WP_REST_Response( $items, 200 );
+//        }else{
+//            return new WP_Error('empty_collection',  __( 'No items inserted or found!', 'tainacan' ), array('status' => 404));
+//        }
     }
 
     /**
@@ -156,11 +158,19 @@ abstract class CollectionsApi {
         //itero sobre os itens
         if ($loop->have_posts()) {
             $data = [];
+            //total de itens
+            $data['found_items'] = $loop->found_posts;
+
+            //limite
+            $data['items_per_page'] = $loop->post_count;
+
+            //page
+            $data['page'] = (isset($args['paged'])) ? $args['paged'] : 1;
             while ( $loop->have_posts() ) : $loop->the_post();
                 $array['item'] = CollectionsApi::get_item( get_post()->ID );
                 if($params['includeMetadata'] === '1')
                     $array['metadata'] = CollectionsApi::getValuesItem($metadatas,get_the_ID());
-                $data[] = $array;
+                $data['items'][] = $array;
             endwhile;
             return new WP_REST_Response( $data, 200 );
         }else{

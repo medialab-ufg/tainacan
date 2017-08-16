@@ -45,7 +45,9 @@ abstract class RepositoryApi {
      * @param /WP_REST_Request $request
      */
     public function get_repository_items($request) {
-        
+        $params = $request->get_params();
+        $array['filter'] = ( isset($params['filter']) ) ? $params['filter'] : [];
+        return RepositoryApi::filterByArgs($array);
     }
 
     /**
@@ -115,10 +117,20 @@ abstract class RepositoryApi {
         $loop = new WP_Query($args);
         if ($loop->have_posts()) {
             $data = [];
+            //total de itens
+            $data['found_items'] = $loop->found_posts;
+
+            //limite
+            $data['items_per_page'] = $loop->post_count;
+
+            //page
+            $data['page'] = (isset($args['paged'])) ? $args['paged'] : 1;
+
             while ($loop->have_posts()) : $loop->the_post();
                 $array['item'] = CollectionsApi::get_item(get_post()->ID, $params['id']);
-                $data[] = $array;
+                $data['items'][] = $array;
             endwhile;
+
             return new WP_REST_Response($data, 200);
         }else {
             return new WP_Error('empty_search', __('No items inserted in this repository or found with these arguments!', 'tainacan'), array('status' => 404));
