@@ -82,9 +82,9 @@ class TextClass extends FormItem{
     public function initScriptsTextClass($compound_id,$property_id, $item_id, $index_id) {
         ?>
         <script>
-             $('#text-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').change(function(){
-                 $(this).trigger('blur');
-             });
+//             $('#text-field-<?php //echo $compound_id ?>//-<?php //echo $property_id ?>//-<?php //echo $index_id; ?>//').change(function(){
+//                 $(this).trigger('blur');
+//             });
              
             if('<?php echo $index_id; ?>' !=='0' && '<?php echo $property_id; ?>' ==='0'  && $('#text-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val()==''){
                 $('.js-append-property-<?php echo $compound_id ?>').hide();
