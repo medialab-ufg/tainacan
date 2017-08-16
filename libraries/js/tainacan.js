@@ -3130,6 +3130,49 @@ $(document).on("submit", "#reindexation_form", function (event) {
     }
 });
 
+function verify_empty_box(elements_id, email_id, button_id)
+{
+    let ids = elements_id.split(",");
+    let button = $("#"+button_id);
+
+    if(email_id.length === 0)
+    {
+        var valide_email = true;
+    }else var valide_email = validate_email(email_id);
+
+    for(let element_id of ids)
+    {
+        let text_box = $("#"+element_id);
+        if($(text_box).val().trim().length === 0 || valide_email === false)
+        {
+            $(button).attr("disabled", true);
+            return;
+        }
+    }
+
+    $("#"+button_id).attr("disabled", false);
+}
+
+function validate_email(email_id)
+{
+    let email_box_value = $("#"+email_id).val().trim();
+
+    if(email_box_value.length > 0)
+    {
+        let email_parts = email_box_value.split("@");
+        if(email_parts.length === 2 && email_parts[0].length > 0 && email_parts[1].length > 0)
+        {
+            let where = email_parts[1].split(".");
+            if(where.length === 2 && where[0].length > 0 && where[1].length > 0)
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 /*Verifica se a página está sendo acessada através de um dispositivo movél*/
 function isMobile(){
     let a = navigator.userAgent||navigator.vendor||window.opera;
