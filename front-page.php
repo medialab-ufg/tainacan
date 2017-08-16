@@ -25,8 +25,6 @@ get_template_part("partials/setup","header");
                     </a>
                 </div>
             </div>
-
-            <?php include_once "views/collection/collec_share.php"; ?>
         <?php endif; ?>
     </div>
 

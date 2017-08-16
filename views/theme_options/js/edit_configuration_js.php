@@ -22,9 +22,6 @@
                     var redir_url = $("#site_url").val();
                     window.location = redir_url;
                 }
-
-                // showRepositoryConfiguration(src);
-                // get_collections_template(src);
             });
         });
         var cropOpts = {
