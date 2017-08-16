@@ -3737,7 +3737,7 @@ add_action('wp', function() {
     $request = $_SERVER['REQUEST_URI'];
     $basic_path = basename(site_url());
     $check = str_replace("/$basic_path/", "", $request);
-    if ( $check == "adm/config" ) {
+    if (strpos($check, "adm/") === 0 && preg_match('/\badm/b', $request) !== 0) {
         locate_template( "configs.php" , true, false );
         die();
     }
