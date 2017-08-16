@@ -93,10 +93,10 @@ $(window).load(function () {
             }
         }
 
-        //verifico se esta mandando alguma mensagem
-        if ($('#info_messages').val() !== '' && $('#info_title').val() !== '') {
-            showAlertGeneral($('#info_title').val(), $('#info_messages').val(), 'info');
-        }
+        // verifico se esta mandando alguma mensagem
+        var info = { title:  $('#info_title').val(), messages:  $('#info_messages').val() };
+        if (info.title && info.messages)
+            showAlertGeneral(info.title, $('#info_messages').val(), 'info');
     }
 
     //verifico se esta mandando alguma mensagem

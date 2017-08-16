@@ -1,16 +1,23 @@
 <?php
-// include_once ('js/edit_configuration_js.php');
-include_once(dirname(__FILE__) . '/../../helpers/view_helper.php');
-include_once(dirname(__FILE__) . '/../../helpers/repository/repository_helper.php');
+include_once ( dirname(__FILE__) . '/../../views/theme_options/js/edit_configuration_js.php');
+include_once ( dirname(__FILE__) . '/../../helpers/view_helper.php');
+include_once ( dirname(__FILE__) . '/../../helpers/repository/repository_helper.php');
 $view_helper = new RepositoryHelper();
+
+$blog_name = get_option('blogname');
+$blog_description = get_option('blogdescription');
+$socialdb_logo = get_option('socialdb_logo');
+$socialdb_repository_permissions = get_option('socialdb_repository_permissions');
+$cover_id = get_option('socialdb_repository_cover_id');
+
 $custom_logo = get_post($socialdb_logo);
 $logo_str = _t("Logo");
+
 if(is_object($custom_logo)) {
     $logo = $custom_logo->guid;
     $logo_edit = _t("Edit logo");
 }
 
-$cover_id = get_option('socialdb_repository_cover_id');
 $cover = get_post($cover_id);
 $cover_str = _t("Cover");
 if(is_object($cover) && $cover->post_type === "attachment") {

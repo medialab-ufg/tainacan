@@ -1,8 +1,10 @@
 
 // Type = success, warning, info or error
 function showAlertGeneral(title, msg, type) {
-    swal(title, msg, type);
-    $('.nav-tabs').tab();
+    if(title && msg) {
+        swal(title, msg, type);
+        $('.nav-tabs').tab();
+    }
 }
 
 //Alert Privacity

@@ -3733,12 +3733,14 @@ include_once 'extras/json-rest-api/plugin.php';
 /************* Remove o post type das colecoes ********************/
 // include_once 'extras/remove-slug-post/remove-slug-custom-post-type.php';
 
-add_action('wp', function() {
+function load_repository_configs() {
     $request = $_SERVER['REQUEST_URI'];
     $basic_path = basename(site_url());
     $check = str_replace("/$basic_path/", "", $request);
-    if (strpos($check, "adm/") === 0 && preg_match('/\badm/b', $request) !== 0) {
+    if (strpos($check, "adm/") === 0 && preg_match('/\badm\b/', $request) == 1) {
         locate_template( "configs.php" , true, false );
         die();
     }
-});
+}
+
+add_action('wp', 'load_repository_configs');

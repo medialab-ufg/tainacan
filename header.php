@@ -15,9 +15,16 @@ $viewHelper = new ViewHelper();
 $_src_ = get_template_directory_uri();
 
 global $wp_query;
-$collection_id = $wp_query->post->ID;
-$collection_owner = $wp_query->post->post_author;
-$user_owner = get_user_by('id', $collection_owner)->display_name;
+
+if (is_object($wp_query->post)) {
+    $collection_id = $wp_query->post->ID;
+    $collection_owner = $wp_query->post->post_author;
+} else {
+    $collection_id = 0;
+    $collection_owner = "";
+}
+
+// $user_owner = get_user_by('id', $collection_owner)->display_name;
 $_header_enabled = get_post_meta($collection_id, 'socialdb_collection_show_header', true);
 ?>
 <html <?php language_attributes(); ?> xmlns:fb="http://www.facebook.com/2008/fbml" class="no-js"><!--<![endif]-->
@@ -30,13 +37,15 @@ $_header_enabled = get_post_meta($collection_id, 'socialdb_collection_show_heade
         <link rel="alternate" type="application/rdf+xml" href="<?php echo site_url(); ?>/?.rdf">
         <?php if (is_restful_active()) { ?>
             <link rel="alternate" type="application/json" href="<?php echo site_url(); ?>/wp-json/">
-        <?php } ?>
-    <?php } elseif (is_page_tainacan()) { ?>
+        <?php
+        }
+    } elseif (is_page_tainacan()) { ?>
         <link rel="alternate" type="application/rdf+xml" href="<?php echo get_the_permalink(); ?>?<?php echo get_page_tainacan() ?>=<?php echo trim($_GET[get_page_tainacan()]) ?>.rdf">
         <?php if (is_restful_active()) { ?>
           <link rel="alternate" type="application/json" href="<?php echo site_url() . '/wp-json/posts/' . get_post_by_name($_GET[get_page_tainacan()], OBJECT, 'socialdb_object')->ID . '/?type=socialdb_object' ?>">
-            <?php } ?>
-    <?php } elseif (is_single()) { ?>
+            <?php
+        }
+    } elseif (is_single()) { ?>
             <meta name="thumbnail_url" content="<?php echo get_the_post_thumbnail_url(get_the_ID()) ?>" />
             <meta name="description" content="<?php echo get_the_content() ?>" />
             <link rel="alternate" type="application/rdf+xml" href="<?php echo get_the_permalink(); ?>?.rdf">
@@ -45,8 +54,8 @@ $_header_enabled = get_post_meta($collection_id, 'socialdb_collection_show_heade
             
             <?php if (is_restful_active()) { ?>
                 <link rel="alternate" type="application/json" href="<?php echo site_url() . '/wp-json/posts/' . get_the_ID() . '/?type=socialdb_collection' ?>">
-            <?php } ?>
-    <?php } ?>
+            <?php }
+    } ?>
 
     <?php echo set_config_return_button(is_front_page()); ?>
 

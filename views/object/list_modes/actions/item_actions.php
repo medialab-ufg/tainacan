@@ -11,7 +11,7 @@ if(!isset($is_single_page))
     $is_single_page = is_single();
 
 if(!isset($itemURL))
-    $itemURL = get_the_permalink($collection_id) . '?item=' . $post->post_name;
+    $itemURL = get_the_permalink($curr_id);
 
 if(!isset($collection_metas))
     $collection_metas = get_post_meta($collection_id, 'socialdb_collection_download_control', true);

@@ -368,7 +368,8 @@ class ViewHelper {
         $onclick = 'backToMainPage();';
         $onclick = "backRoute($('#slug_collection').val());";
         echo "<h3 class='topo'> $title ";
-        self::buttonVoltar((__("Events", 'tainacan') == $title) ? $has_link : false);
+        // self::buttonVoltar((__("Events", 'tainacan') == $title) ? $has_link : false);
+        self::backButton();
         echo  "</h3><hr>";
     }
 
@@ -535,6 +536,10 @@ class ViewHelper {
             <button onclick="backRoute($('#slug_collection').val());" id="btn_back_collection" class="btn btn-default pull-right"><?php _e('Back to collection','tainacan') ?></button>
             <?php
         }
+    }
+
+    public static function backButton() {
+        echo "<button onclick='window.history.back()' class='btn btn-default pull-right'>" . _t("Back") . "</button>";
     }
     
     /**
