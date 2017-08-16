@@ -481,11 +481,11 @@ class Log extends Model {
                 if($event_type == 'users'){
                     array_push($vdtl_data, [$data->user, $data->date]);
                 }
-                else if($event_type == 'items' || $event_type == 'collections' || $event_type == 'comments' || $event_type = 'categories'){
-                    array_push($vdtl_data, [$data->user, $data->item, $data->date]);
-                }
                 else if($event_type == 'c_items'){
                     array_push($vdtl_data, [$data->user, $data->item, $data->collection, $data->date]);
+                }
+                else if($event_type == 'items' || $event_type == 'collections' || $event_type == 'comments' || $event_type = 'categories'){
+                    array_push($vdtl_data, [$data->user, $data->item, $data->date]);
                 }
             }
 
@@ -892,7 +892,7 @@ class Log extends Model {
 
                     $SQL_query = sprintf(
                         "SELECT user_login AS user, substring(post_title, 23) as item, post_date AS date 
-                            FROM %s, %s where post_author = %s.ID and post_title like '". $title_event ."' and substring(post_date, 1, 10) BETWEEN '$from' and '$to'
+                            FROM %s, %s where post_author = %s.ID and post_title like '". $title_event ."' AND substring(post_date, 1, 10) BETWEEN '$from' AND '$to'
                         ", self::_posts_table(), self::_users_table(), self::_users_table());
                 }
                 else{
@@ -906,8 +906,9 @@ class Log extends Model {
                                         WHERE post_type = 'socialdb_collection' AND post_status = 'publish' AND post_title = '$event'
                                 ) A 
                                 JOIN (
-                                    SELECT post_title AS item, post_date AS date, post_parent, user_login AS user FROM %s, %s
-                                        WHERE post_author = %s.ID AND post_type = 'socialdb_object'
+                                    SELECT post_title AS item, post_date AS date, post_parent, user_login AS user 
+                                        FROM %s, %s
+                                        WHERE post_author = %s.ID AND post_type = 'socialdb_object' AND substring(post_date, 1, 10) BETWEEN '$from' AND '$to'
                                     ) B 
                                 ON A.ID = B.post_parent)
                         ", self::_posts_table(), self::_posts_table(), self::_users_table(), self::_users_table());
@@ -917,25 +918,27 @@ class Log extends Model {
                 $SQL_query = sprintf(
                     "SELECT user_login AS user, post_title AS item, event_date AS date 
                         FROM %s, %s, %s 
-                        WHERE item_id = %s.ID AND %s.ID = post_author AND user_id = post_author AND event='$event' AND event_type = 'comment'
+                        WHERE item_id = %s.ID AND %s.ID = post_author AND user_id = post_author AND event='$event' AND event_type = 'comment' AND substring(event_date, 1, 10) BETWEEN '$from' AND '$to'
                     ", self::_table(), self::_posts_table(), self::_users_table(), self::_posts_table(), self::_users_table());
             }
-            else if($report == 'categories'){
+            else if($report == 'categories' || $report == 'tags'){
                 if($event == 'add' || $event == 'edit' || $event == 'delete'){
                     $event = ($event == 'add') ? 'Create' : (($event == 'edit') ? 'Edit' : 'Delete');
-                    $title_event = $event .' the category%%';
+                    $title_event = ($report == 'categories') ? $event .' the category%%' : $event .' the tag%%';
 
                     $SQL_query = sprintf(
                         "SELECT user_login AS user, substring(post_title, locate('(', post_title)) AS item, post_date AS date 
                             FROM %s, %s 
-                            WHERE post_author = %s.ID AND post_title LIKE '". $title_event ."'
+                            WHERE post_author = %s.ID AND post_title LIKE '". $title_event ."' AND substring(post_date, 1, 10) BETWEEN '$from' AND '$to'
                         ", self::_users_table(), self::_posts_table(), self::_users_table());
                 }
                 else if($event == 'view'){
+                    $evtype = ($report == 'categories') ? 'user_category' : 'tags';
+                    
                     $SQL_query = sprintf(
                         "SELECT user_login AS user, substring(post_title, locate('(', post_title)) AS item, post_date AS date 
                             FROM %s, %s, %s 
-                            WHERE post_author = %s.ID AND post_author = user_id AND resource_id = %s.ID AND event = '$event' AND event_type = 'user_category'
+                            WHERE post_author = %s.ID AND post_author = user_id AND resource_id = %s.ID AND event = '$event' AND event_type = '". $evtype ."' AND substring(post_date, 1, 10) BETWEEN '$from' AND '$to'
                         ", self::_users_table(), self::_table(), self::_posts_table(), self::_users_table(), self::_posts_table());
                 }
             }
@@ -949,3 +952,5 @@ class Log extends Model {
         return $value_detail;
     }
 }
+
+//select user_login as user, substring(post_title, locate('(', post_title)) as item, post_date as date from wp_posts, wp_users where post_author = wp_users.ID and post_title like 'Create the tag%' AND substring(post_date, 1, 10) BETWEEN '2016-01-01' AND '2017-08-16';

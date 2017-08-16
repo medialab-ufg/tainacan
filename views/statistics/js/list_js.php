@@ -188,7 +188,14 @@
                         fetchData('categories', 'add', 'detail');
                     }
                     else if(title == 'Tags'){
+                        var thead = {
+                            column1: 'Usuário que adicionou a tag',
+                            column2: '(Tag) Info',
+                            column3: 'Data - Horário'
+                        }
 
+                        renderDetailThead(thead);
+                        fetchData('tags', 'add', 'detail');
                     }
                     break;
                 case 'Edited':
@@ -235,7 +242,14 @@
                         fetchData('categories', 'edit', 'detail');
                     }
                     else if(title == 'Tags'){
+                        var thead = {
+                            column1: 'Usuário que editou a tag',
+                            column2: '(Tag) Info',
+                            column3: 'Data - Horário'
+                        }
 
+                        renderDetailThead(thead);
+                        fetchData('tags', 'edit', 'detail');
                     }
                     break;
                 case 'Viewed':
@@ -272,7 +286,14 @@
                         fetchData('categories', 'view', 'detail');
                     }
                     else if(title == 'Tags'){
+                        var thead = {
+                            column1: 'Usuário que visualizou a tag',
+                            column2: '(Tag) Info',
+                            column3: 'Data - Horário'
+                        }
 
+                        renderDetailThead(thead);
+                        fetchData('tags', 'view', 'detail');
                     }
                     break;
                 case 'Deleted':
@@ -319,7 +340,14 @@
                         fetchData('categories', 'delete', 'detail');
                     }
                     else if(title == 'Tags'){
+                        var thead = {
+                            column1: 'Usuário que excluiu a tag',
+                            column2: '(Tag) Info',
+                            column3: 'Data - Horário'
+                        }
 
+                        renderDetailThead(thead);
+                        fetchData('tags', 'delete', 'detail');
                     }
                     break;
                 default:
@@ -456,12 +484,6 @@
                         
             renderDetailThead(thead);
             fetchData('c_items', eventName, 'detail');
-        }
-        else if(title == 'Categories' || title == 'Categorias'){
-
-        }
-        else if(title == 'Tags'){
-
         }
         else if(title == 'Import / Export' || title == 'Importar / Exportar'){
 
