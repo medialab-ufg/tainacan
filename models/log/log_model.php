@@ -478,7 +478,7 @@ class Log extends Model {
             $vdtl_data = array();
             
             foreach ($value_detail as $valdt => $data) {
-                if($event_type == 'users'){
+                if($event_type == 'users' || $event_type == 'administration' || $event_type == 'busca'){
                     array_push($vdtl_data, [$data->user, $data->date]);
                 }
                 else if($event_type == 'c_items'){
@@ -942,6 +942,15 @@ class Log extends Model {
                         ", self::_users_table(), self::_table(), self::_posts_table(), self::_users_table(), self::_posts_table());
                 }
             }
+            else if($report == 'administration' || $report == 'busca'){
+                $evtype = ($report == 'administration') ? 'event_type = \'admin\'' : 'event_type like \'%%search%%\'';
+
+                $SQL_query = sprintf(
+                    "SELECT user_login AS user, event_date AS date 
+                        FROM %s, %s 
+                        WHERE user_id = %s.ID AND ". $evtype ." AND event = '$event' AND substring(event_date, 1, 10) BETWEEN '$from' AND '$to'
+                    ", self::_users_table(), self::_table(), self::_users_table());
+            }
         }
         else{
 
@@ -952,5 +961,3 @@ class Log extends Model {
         return $value_detail;
     }
 }
-
-//select user_login as user, substring(post_title, locate('(', post_title)) as item, post_date as date from wp_posts, wp_users where post_author = wp_users.ID and post_title like 'Create the tag%' AND substring(post_date, 1, 10) BETWEEN '2016-01-01' AND '2017-08-16';

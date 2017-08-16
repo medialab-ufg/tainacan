@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    google.charts.load('current', {'packages':['bar', 'line', 'corechart']}); //bar
+    google.charts.load('current', {'packages':['bar', 'line', 'corechart']});
     google.charts.setOnLoadCallback(loadChart);
     
     var TainacanChart = function(){};
@@ -489,7 +489,117 @@
 
         }
         else if(title == 'Administration' || title == 'Administração'){
+            switch (eventName) {
+                case 'Configurations':
+                case 'Configurações':
+                    var thead = {
+                        column1: 'Usuário que acessou a página de configurações',
+                        column2: 'Data - Horário'
+                    }
 
+                    renderDetailThead(thead);
+                    fetchData('administration', 'config', 'detail');
+                    break;
+                case 'Metadata':
+                case 'Metadados':
+                    var thead = {
+                        column1: 'Usuário que acessou a página de metadados',
+                        column2: 'Data - Horário'
+                    }
+
+                    renderDetailThead(thead);
+                    fetchData('administration', 'metadata', 'detail');
+                    break;
+                case 'Keys':
+                case 'Chaves':
+                    var thead = {
+                        column1: 'Usuário que acessou a página de chaves',
+                        column2: 'Data - Horário'
+                    }
+
+                    renderDetailThead(thead);
+                    fetchData('administration', 'keys', 'detail');
+                    break;
+                case 'Licenses':
+                case 'Licenças':
+                    var thead = {
+                        column1: 'Usuário que acessou a página de licenças',
+                        column2: 'Data - Horário'
+                    }
+
+                    renderDetailThead(thead);
+                    fetchData('administration', 'licenses', 'detail');
+                    break;
+                case 'Welcome Mail':
+                case 'E-mail de Boas vindas':
+                    var thead = {
+                        column1: 'Usuário que acessou a página de e-mail de boas vindas',
+                        column2: 'Data - Horário'
+                    }
+
+                    renderDetailThead(thead);
+                    fetchData('administration', 'welcome_mail', 'detail');
+                    break;
+                case 'Tools':
+                case 'Ferramentas':
+                    var thead = {
+                        column1: 'Usuário que acessou a página de ferramentas',
+                        column2: 'Data - Horário'
+                    }
+
+                    renderDetailThead(thead);
+                    fetchData('administration', 'tools', 'detail');
+                    break;
+                case 'Layout':
+                    var thead = {
+                        column1: 'Usuário que acessou a página de layouts',
+                        column2: 'Data - Horário'
+                    }
+
+                    renderDetailThead(thead);
+                    fetchData('administration', 'layout', 'detail');
+                    break;
+                case 'Social Media':
+                case 'Redes Sociais':
+                    var thead = {
+                        column1: 'Usuário que acessou a página de redes sociais',
+                        column2: 'Data - Horário'
+                    }
+
+                    renderDetailThead(thead);
+                    fetchData('administration', 'social_media', 'detail');
+                    break;
+                case 'Importation':
+                case 'Importação':
+                    var thead = {
+                        column1: 'Usuário que acessou a página de importações',
+                        column2: 'Data - Horário'
+                    }
+
+                    renderDetailThead(thead);
+                    fetchData('administration', 'import', 'detail');
+                    break;
+                case 'Exportation':
+                case 'Exportação':
+                    var thead = {
+                        column1: 'Usuário que acessou a página de exportações',
+                        column2: 'Data - Horário'
+                    }
+
+                    renderDetailThead(thead);
+                    fetchData('administration', 'export', 'detail');
+                    break;
+                default:
+                    var thead = {
+                        column1: 'Usuário que fez a busca por '+ eventName,
+                        column2: 'Data - Horário'
+                    }
+
+                    renderDetailThead(thead);
+                    fetchData('busca', eventName, 'detail');
+                    break;
+                    break;
+            }
         }
     }
 
@@ -569,71 +679,69 @@
         }
     });
 
-//  On change period
+    function disableEnableWeekMonth(bool) {
+        $("#weeks").prop('disabled', bool);
+        $("#months").prop('disabled', bool);
+    }
+
+    function verifyDiff(diff) {
+        if(diffe < 7){
+            disableEnableWeekMonth(true);
+        }
+        else if(diffe < 28){
+            $("#months").prop('disabled', true);
+        }
+        else{
+            disableEnableWeekMonth(false);
+        }
+    }
+
+    //  On change period
     $("#from_period").on('change', function () {
         var diffe = Math.ceil( ($("#to_period").datepicker('getDate') - $("#from_period").datepicker('getDate')) / (1000 * 60 * 60 * 24) ) + 1;
-
-            if(diffe < 7){
-                $("#weeks").prop('disabled', true);
-                $("#months").prop('disabled', true);
-            }
-            else if(diffe < 28){
-                $("#months").prop('disabled', true);
-            }
-            else{
-                $("#weeks").prop('disabled', false);
-                $("#months").prop('disabled', false);
-            }
-            loadChart();
-        });
+        
+        verifyDiff(diff);
+        loadChart();
+    });
 
     $("#to_period").on('change', function () {
         var diffe = Math.ceil( ($("#to_period").datepicker('getDate') - $("#from_period").datepicker('getDate')) / (1000 * 60 * 60 * 24) ) + 1;
+        
+        verifyDiff(diff)
+        loadChart();
+    });
+    // -------
 
-            if(diffe < 7){
-                $("#weeks").prop('disabled', true);
-                $("#months").prop('disabled', true);
+    // On change filter type week, day, month
+    $("input[type=radio][name=optradio]").on('change', function () {
+        loadChart();
+    });
+    // ------- 
+
+    //On change chart type
+    $('a.change-mode').on('click', function() {
+        var selected_chart = $(this).attr('data-chart');
+        var curr_img = $(this).html();
+        var chart_type = selected_chart.replace('chart_div', '');
+
+        $('.selected_chart_type').val(chart_type);
+        
+        $(".statChartType li").each(function(idx, elem){
+            if( $(elem).attr('class') == selected_chart ) {
+                $(elem).addClass('hide');
+            } else {
+                $(elem).removeClass('hide');
             }
-            else if(diffe < 28){
-                $("#months").prop('disabled', true);
-            }
-            else{
-                $("#weeks").prop('disabled', false);
-                $("#months").prop('disabled', false);
-            }
-            loadChart();
         });
-        // -------
 
-        // On change filter type week, day, month
-        $("input[type=radio][name=optradio]").on('change', function () {
-            loadChart();
-        });
-        // ------- 
+        $("#charts-container div").addClass('hide');
+        $("div#" + selected_chart).removeClass('hide');
 
-        //On change chart type
-        $('a.change-mode').on('click', function() {
-            var selected_chart = $(this).attr('data-chart');
-            var curr_img = $(this).html();
-            var chart_type = selected_chart.replace('chart_div', '');
-
-            $('.selected_chart_type').val(chart_type);
-            $(".statChartType li").each(function(idx, elem){
-               if( $(elem).attr('class') == selected_chart ) {
-                   $(elem).addClass('hide');
-               } else {
-                   $(elem).removeClass('hide');
-               }
-            });
-
-            $("#charts-container div").addClass('hide');
-            $("div#" + selected_chart).removeClass('hide');
-
-            $("#statChartType").html(curr_img);
-            // Click again at current selected node to trigger chart drawing
-            loadChart();
-        });
-        //-------
+        $("#statChartType").html(curr_img);
+        // Click again at current selected node to trigger chart drawing
+        loadChart();
+    });
+    //-------
 
     $("#config-repo").accordion({
         collapsible: true,
@@ -777,9 +885,9 @@
 
     function adminChildren() {
         return [
-            { title: "Páginas principais <p> Configurações / metadados / chaves / licenças /<br /> e-mail boas vindas / ferramentas </p>", id: 'admin', addClass: 'repoOnly'},
-            { title: "Ações Administrativas <p> Configurações / metadados / layout / redes sociais <br /> licenças / importação / exportação </p>", id: 'collection_admin', addClass: 'collecOnly' },
-            { title: "Buscas Frequentes <p> ranking das buscas mais realizadas em <br/> todo o site (buscas avançadas e não) </p>", id: "repo_searches", addClass: 'repoOnly'},
+            { title: "Páginas <p> Configurações / metadados / chaves / licenças /<br /> e-mail boas vindas / ferramentas </p>", id: 'admin', addClass: 'repoOnly'},
+            { title: "Páginas <p> Configurações / metadados / layout / redes sociais <br /> licenças / importação / exportação </p>", id: 'collection_admin', addClass: 'collecOnly' },
+            { title: "Buscas Frequentes <p> ranking das buscas mais realizadas em <br/> todo o site (buscas avançadas e não avançadas) </p>", id: "repo_searches", addClass: 'repoOnly'},
         ];
     }
 
@@ -1068,7 +1176,7 @@
     function renderChart(current_title, type, stat_data, filter) {
         // var color = chart_color || '#79a6ce';
         // Google Charts objects
-        var legendOpt = {position: 'top', alignment: 'center', textStyle: {fontSize: 11}, maxLines: 2};
+        var legendOpt = {position: 'top', alignment: 'center', textStyle: {fontSize: 11}, maxLines: 3};
         if(filter == "nofilter"){
             legendOpt = {position: 'none'};
         }
