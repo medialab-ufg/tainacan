@@ -462,7 +462,7 @@ class UserModel extends Model {
                     " . __('Your new password is:', 'tainacan') . "<br><hr>
                     {$new_password}<hr><br><br>
                     " . __("Didn't request this change?", 'tainacan') . "<br>
-                     " . __("If you didn't request a new password, let us know immediately", 'tainacan') . ".<br> $email_msg <br><hr>
+                     " . __("If you didn't request a new password, let us know immediately", 'tainacan') . ".<br> <a href='mailto:". $email_msg ." target='_top'> $email_msg</a> <br><hr>
 
                     <small>" . __("This message was sent to", 'tainacan') . " {$user->data->user_email} " . __("at your request", 'tainacan') . ".<br>
                     {$site_name}</small>
