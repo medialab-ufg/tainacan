@@ -92,8 +92,8 @@ body.error404 {
     bottom: 0;
     width: 100%;
     margin-top: -10px;
-
   }
+  
   .page-not-found {
     margin: 0 auto;
     text-align: center;
@@ -104,6 +104,12 @@ body.error404 {
         color: white;
       }
     }
+  }
+
+  section.logo-footer {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
   }
 }
 /*

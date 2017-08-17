@@ -34,7 +34,7 @@ require_once(dirname(__FILE__).'../../../models/ranking/ranking_model.php');
 require_once(dirname(__FILE__).'../../../models/object/object_model.php');
 
  class EventController extends Controller{
-	 public function operation($operation,$data) {
+     public function operation($operation,$data) {
          switch ($operation) {
              case "list":
                  $data = EventModel::list_events($data);
@@ -45,19 +45,21 @@ require_once(dirname(__FILE__).'../../../models/object/object_model.php');
                      $not_observed_events = '&nbsp;'.count($data['events_not_observed']).'&nbsp;';
                  }
                  return $not_observed_events;
-      case 'notification_events_repository':
-        $data['collection_id'] = get_option('collection_root_id');
-        $data = EventModel::list_events($data);
-        if(isset($data['events_not_observed'])){
-          $not_observed_events = '&nbsp;'.count($data['events_not_observed']).'&nbsp;';
-        }
-        return $not_observed_events;
-      case 'get_event_info':
-        return  EventModel::get_event($data);
-      case 'list_events_repository':
-        $data = EventModel::list_events($data);
-        return $this->render(dirname(__FILE__).'../../../views/event/list.php', $data);
-            case 'user_notification':
+             case 'notification_events_repository':
+                 $data['collection_id'] = get_option('collection_root_id');
+                 $data = EventModel::list_events($data);
+                 if(isset($data['events_not_observed'])){
+                     $not_observed_events = '&nbsp;'.count($data['events_not_observed']).'&nbsp;';
+                 }
+                 return $not_observed_events;
+             case 'get_event_info':
+                 return  EventModel::get_event($data);
+             case 'list_events_repository':
+                 $data = EventModel::list_events($data);
+                 if( isset($data['only_data']) && $data['only_data'])
+                     return $data;
+                 return $this->render(dirname(__FILE__).'../../../views/event/list.php', $data);
+             case 'user_notification':
                 return json_encode( EventModel::get_user_notifications() );
       // APROVACAO DE EVENTOS DEMOCRATICOS
       case 'process_events_selected':

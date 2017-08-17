@@ -5,7 +5,7 @@ include_once ('../../helpers/view_helper.php');
 <div class="col-md-12 ui-widget-content metadata-actions">
 
     <div id="export_settings" class="col-md-12 config_default_style">
-        <?php ViewHelper::render_config_title(__("Import", 'tainacan')); ?>
+        <?php ViewHelper::render_config_title( _t("Import")); ?>
         <div class="col-md-12 no-padding">
             <div role="tabpanel">
                 <!-- Nav tabs -->
