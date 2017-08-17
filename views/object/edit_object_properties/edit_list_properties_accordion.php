@@ -119,7 +119,7 @@ if (isset($property_data)):
                         <?php $value = get_post_meta($object_id, "socialdb_property_{$property['id']}_0_date", true); ?>
                         <p><?php echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $value . "'" . ',' . $property['id'] . ')">' . $value . '</a>'; ?></p>
                     <?php else: ?>
-                        <?php $object_properties_widgets_helper->getValuesViewSingle($meta,$property['id']) ?>
+                        <?php $object_properties_widgets_helper->getValuesViewSingle($meta,$property['id'], $property['type']) ?>
                     <?php endif ?>
                 </div> 
             <?php else: ?>
