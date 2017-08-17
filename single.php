@@ -292,7 +292,10 @@ while (have_posts()) : the_post();
                                         <h3><?php _e('Please wait...', 'tainacan') ?></h3>
                                     </center>
                                 </div>
-                            </form>    
+                            </form>
+                            <div id="items_not_found" class="alert alert-danger" style="display: none;">
+                                <span class="glyphicon glyphicon-warning-sign"></span> <?php _e("Itens not found!", "tainacan"); ?>
+                            </div>
                         </div>
 
                         <!-- TAINACAN: esta div estao o botao que abre o formulario completo para submissao de itens, botao para ordenacao asc e desc, e o selectbox para selecionar a ordenacao  - col-md-6 (bootstrap) -->

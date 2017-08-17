@@ -805,7 +805,7 @@ function showTopSearch() {
 * @type o campo que sera buscado 
 */    
 function redirectAdvancedSearch(field){
-    if(field===false)
+    if(field === false)
          window.location = $('#collection_root_url').val()+'?search-advanced-text=@'
     else if($(field).val()!=='')
         window.location = $('#collection_root_url').val()+'?search-advanced-text='+$(field).val()
