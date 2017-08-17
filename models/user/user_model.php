@@ -438,7 +438,7 @@ class UserModel extends Model {
 
     public function send_reset_password_email($user, $new_password) {
         $site_name = get_option('blogname');
-        $link = get_the_permalink(get_option('collection_root_id')) . "?recovery_password=" . base64_encode($user->data->ID);
+        $link = get_the_permalink(get_option('collection_root_id'));
 
         $to = $user->data->user_email;
         $subject = __("You requested a new ", 'tainacan') . $site_name . __(" password", 'tainacan');
