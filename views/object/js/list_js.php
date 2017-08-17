@@ -855,7 +855,12 @@
             data: {collection_id: $('#collection_id').val(), operation: 'restore_object', object_id: object_id}
         }).done(function (result) {
             if (result) {
-                showAlertGeneral('<?php _e('Success', 'tainacan'); ?>', '<?php _e('The restoration of the item was successful!', 'tainacan'); ?>', 'success');
+                elem = JSON.parse(result);
+                if(typeof elem === 'object'){
+                    showAlertGeneral(elem.title, elem.msg, elem.type);
+                }else{
+                    showAlertGeneral('<?php _e('Success', 'tainacan'); ?>', '<?php _e('The restoration of the item was successful!', 'tainacan'); ?>', 'success');
+                }
                 showTrash($('#src').val());
             } else {
                 hide_modal_main();

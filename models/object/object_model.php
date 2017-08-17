@@ -1959,6 +1959,13 @@ class ObjectModel extends Model {
     }
 
     public function restoreItem($object_id) {
+        if(has_filter('before_restore_item')){
+            $result = apply_filters('before_restore_item',$object_id);
+            if($result){
+                return json_encode($result);
+            }
+        }
+
         $my_post = array(
             'ID' => $object_id,
             'post_status' => 'publish'
