@@ -798,7 +798,18 @@ function showTopSearch() {
     });
 }
 
+function troggle_disable_input(id)
+{
+    var elem = document.getElementById(id);
 
+    if($(elem).prop('disabled'))
+    {
+        $(elem).prop('disabled', false);
+    }else
+    {
+        $(elem).prop('disabled', true);
+    }
+}
     
 /**
  * funcao que redireciona para a home da colecao para a busca avancada

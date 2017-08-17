@@ -437,6 +437,18 @@ class UserModel extends Model {
     }
 
     public function send_reset_password_email($user, $new_password) {
+
+        if(get_option("tainacan_show_support_email") === 'true')
+        {
+            $email_msg = __("Send us an email to:", "tainacan");
+
+            $email = get_option("tainacan_reset_password_support_email");
+            if($email_msg)
+            {
+                $email_msg .= " $email";
+            }else $email_msg = '';
+        }
+
         $site_name = get_option('blogname');
         $link = get_the_permalink(get_option('collection_root_id'));
 
@@ -445,12 +457,12 @@ class UserModel extends Model {
         $content = __('Hi', 'tainacan') . " {$user->data->display_name},<br><br>
                     " . __(' You recently asked to reset your ', 'tainacan') . " " . $site_name . " 
                     " . __('password', 'tainacan') . " .<br>
-                    <a href='{$link}' target='_blank'>" . __('Click here to change your password', 'tainacan') . ".</a><br><br>
+                    <a href='{$link}' target='_blank'>" . __('Click here to resume your access with your new password', 'tainacan') . ".</a><br><br>
 
                     " . __('Your new password is:', 'tainacan') . "<br><hr>
                     {$new_password}<hr><br><br>
                     " . __("Didn't request this change?", 'tainacan') . "<br>
-                     " . __("If you didn't request a new password, let us know immediately", 'tainacan') . ".<br><br><hr>
+                     " . __("If you didn't request a new password, let us know immediately", 'tainacan') . ".<br> $email_msg <br><hr>
 
                     <small>" . __("This message was sent to", 'tainacan') . " {$user->data->user_email} " . __("at your request", 'tainacan') . ".<br>
                     {$site_name}</small>

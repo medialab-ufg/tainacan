@@ -218,7 +218,8 @@ class ThemeOptionsModel extends Model {
         return json_encode($data);
     }
     
-    function update_configuration($data) {
+    function update_configuration($data)
+    {
         $reload = false;
         $data['socialdb_repository_permissions'] = ['socialdb_collection_permission_create_collection' => $data['socialdb_collection_permission_create_collection'], 'socialdb_collection_permission_delete_collection' => $data['socialdb_collection_permission_delete_collection']];
         $data['repository_content'] = strip_tags($data['repository_content']);
@@ -280,6 +281,13 @@ class ThemeOptionsModel extends Model {
             update_option('tainacan_cache', 'false');
         } else {
             update_option('tainacan_cache', 'true');
+        }
+
+        if (isset($data['tainacan_show_support_email']) && $data['tainacan_show_support_email'] == 'true') {
+            update_option('tainacan_show_support_email', 'true');
+            update_option('tainacan_reset_password_support_email', strip_tags($data['tainacan_reset_password_support_email']));
+        } else {
+            update_option('tainacan_show_support_email', 'false');
         }
 
         $data['title'] = __("Sucess", 'tainacan');
