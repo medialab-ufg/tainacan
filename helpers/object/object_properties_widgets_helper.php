@@ -229,6 +229,14 @@ class ObjectWidgetsHelper extends ViewHelper {
     public function widget_property_data($property,$i,$references,$value = false) {
         $references['properties_autocomplete'][] = $property['id'];
         if($references['is_view_mode']){
+            if (is_plugin_active('data_aacr2/data_aacr2.php') && $property['type'] == 'date' && get_post_meta($references['object_id'], "socialdb_property_{$property['id']}_0_date", true)): ?>
+                <?php $value = get_post_meta($references['object_id'], "socialdb_property_{$property['id']}_0_date", true); ?>
+                <?php $value = str_replace('[','',str_replace(']','',$value)); ?>
+                <p><?php echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $value . "'" . ',' . $property['id'] . ')">[ ' . $value . ' ]</a>'; ?></p>
+            <?php
+                return;
+            endif;
+
             $meta = get_post_meta($references['object_id'], 'socialdb_property_helper_' . $references['compound_id'], true);
             $cont = 0;
             if ($meta && $meta != '') {
@@ -237,14 +245,14 @@ class ObjectWidgetsHelper extends ViewHelper {
                     $values = $array[$i][$property['id']]['values'];
                     $objects = [];
                     foreach ($values as $value) {
-                        $value = $this->sdb_get_post_meta($value)->meta_value; 
+                        $value = $this->sdb_get_post_meta($value)->meta_value;
                         if(isset($value) && trim($value) != ''){
                             $cont++;
                             $objects[] = $value;
                         }
                     }
                 }
-            } 
+            }
             if($cont>0): ?>
                 <?php $string = implode(',', $objects) ?>
                 <p><i><?php  echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $string . "'" . ',' . $property['id'] . ')">' . $string . '</a>';  ?></i></p>
