@@ -1,6 +1,5 @@
-<script>
+<script type="text/javascript">
     $(function () {
-        change_breadcrumbs_title('<?php _e('Welcome Email Configuration','tainacan') ?>');
         var src = $('#src').val();
         showCKEditor();
 

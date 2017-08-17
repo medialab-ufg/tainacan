@@ -11,6 +11,7 @@ if(!empty($has_template) && $has_template != "" && current_user_can('manage_opti
 
     get_header();
     get_template_part("partials/setup","header");
+    get_template_part("partials/header/cover");
     get_template_part( "partials/admin/admin", $config_request );
     get_footer();
     exit();

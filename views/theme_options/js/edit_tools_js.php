@@ -1,13 +1,10 @@
 <script>
-    var integrity_test;
-
+    var integrity_test = "";
     $(function () {
         var src = $('#src').val();
-        change_breadcrumbs_title('<?php _e('Tools','tainacan') ?>');
         autocomplete_collection();
 
         $('#submit_form_integrity_test').submit(function (e) {
-            integrity_test = '';
             $('#show_generate_pdf').hide();
             e.preventDefault();
             show_modal_main();
@@ -35,14 +32,11 @@
                     $('#show_generate_pdf').show();
                     //$('#dataTable_console').DataTable().api().ajax.reload();
                 }
-                //showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('successfully', 'tainacan') ?>', 'success');
-                //showTools(src);
             }).error(function (result) {
                 hide_modal_main();
                 $('#show_console_test').hide();
                 $('#show_generate_pdf').hide();
                 showAlertGeneral('<?php _e('Error', 'tainacan') ?>', '<?php _e('Please, try again!', 'tainacan') ?>', 'error');
-                // showTools(src);
             });
         });
 
@@ -61,18 +55,14 @@
                 contentType: false
             }).done(function (result) {
                 elem = jQuery.parseJSON(result);
-                // $('#modalPopulate').modal('hide');
                 window.clearInterval(intervalPopulate);
                 window.clearInterval(intervalo_tools);
                 showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Collection populated successfully', 'tainacan') ?>', 'success');
-                //showTools(src);
             }).error(function (result) {
                 elem = jQuery.parseJSON(result);
-                // $('#modalPopulate').modal('hide');
                 window.clearInterval(intervalPopulate);
                 window.clearInterval(intervalo_tools);
                 showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Collection populated successfully', 'tainacan') ?>', 'success');
-                // showTools(src);
             });
         });
     });
@@ -87,7 +77,6 @@
 
         ];
         var rows = [];
-
         $.each(integrity_test, function (id, object) {
             rows.push({id: object.id, title: object.title, md5_initial: object.md5_inicial, md5_final: object.md5_atual, resultado: object.result});
         });
@@ -121,45 +110,6 @@
         doc.save('integiry_test.pdf');
     }
 
-    function demoFromHTML() {
-        var pdf = new jsPDF('p', 'pt', 'a4');
-        // source can be HTML-formatted string, or a reference
-        // to an actual DOM element from which the text will be scraped.
-        source = $('#table_content_div')[0];
-
-        // we support special element handlers. Register them with jQuery-style 
-        // ID selector for either ID or node name. ("#iAmID", "div", "span" etc.)
-        // There is no support for any other type of selectors 
-        // (class, of compound) at this time.
-        specialElementHandlers = {
-            // element with id of "bypass" - jQuery style selector
-            '#bypassme': function (element, renderer) {
-                // true = "handled elsewhere, bypass text extraction"
-                return true
-            }
-        };
-        margins = {
-            top: 80,
-            bottom: 60,
-            left: 40,
-            width: 800
-        };
-        // all coords and widths are in jsPDF instance's declared units
-        // 'inches' in this case
-        pdf.fromHTML(
-                source, // HTML string or DOM elem ref.
-                margins.left, // x coord
-                margins.top, {// y coord
-                    'width': margins.width, // max width of content on PDF
-                    'elementHandlers': specialElementHandlers
-                },
-        function (dispose) {
-            // dispose: object with X, Y of the last line add to the PDF 
-            //          this allow the insertion of new lines after html
-            pdf.save('Test.pdf');
-        }, margins);
-    }
-
     function autocomplete_collection() {
         $("#collection").autocomplete({
             source: $('#src').val() + '/controllers/collection/collection_controller.php?operation=get_collections_json',
@@ -179,33 +129,27 @@
 
     function somaCategorias() {
         if ($.isNumeric($("#subcategories_per_level").val()) && $.isNumeric($("#number_levels").val())) {
-            //var total = $("#subcategories_per_level").val()^$("#number_levels").val();
             var total = Math.pow($("#subcategories_per_level").val(), $("#number_levels").val());
             $("#total_categories").val(total);
-        }
-        else {
+        } else {
             $("#total_categories").val('');
         }
     }
 
     function somaItens() {
         if ($.isNumeric($("#total_categories").val()) && $.isNumeric($("#items_category").val())) {
-            //var total = $("#subcategories_per_level").val()^$("#number_levels").val();
             var total = $("#total_categories").val() * $("#items_category").val();
             $("#total_items").val(total);
-        }
-        else {
+        } else {
             $("#total_items").val('');
         }
     }
 
     function somaClassificacao() {
         if ($.isNumeric($("#total_items").val()) && $.isNumeric($("#classification").val())) {
-            //var total = $("#subcategories_per_level").val()^$("#number_levels").val();
             var total = $("#total_items").val() * $("#classification").val();
             $("#total_classifications").val(total);
-        }
-        else {
+        } else {
             $("#total_classifications").val('');
         }
     }

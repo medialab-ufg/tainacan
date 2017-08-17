@@ -221,11 +221,11 @@ $thumb_url = $collection_thumb ? wp_get_attachment_url($collection_thumb) : get_
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">
-                              <?php echo __('Close', 'tainacan'); ?>
+                              <?php _t('Close', 1); ?>
                             </button>
                             <button
                                 onclick="report_abuse_collection('<?php _e('Delete Collection', 'tainacan') ?>', '<?php _e('Are you sure to remove the collection: ', 'tainacan') . $collection_post->post_title ?>', '<?php echo $collection_post->ID ?>', '<?php echo time() ?>', '<?php echo get_option('collection_root_id') ?>')"
-                                type="button" class="btn btn-primary"><?php echo __('Delete', 'tainacan'); ?></button>
+                                type="button" class="btn btn-primary"><?php _t('Delete', 1); ?></button>
                         </div>
                     </form>
                 </div>

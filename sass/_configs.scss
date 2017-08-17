@@ -294,3 +294,14 @@
     border-radius: 4px;
     margin-bottom: 15px;
 }
+
+#config-cover {
+  height: 200px;
+  text-align: center;
+  padding-top: 5%;
+  h1, h3 {
+    color: white;
+    margin: 0;
+    text-shadow: -2px 1px 4px #27272d;
+  }
+}
