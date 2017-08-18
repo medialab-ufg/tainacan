@@ -253,7 +253,8 @@ foreach($original_properties as $property):
                     
                     <?php if (is_plugin_active('data_aacr2/data_aacr2.php') && $property['type'] == 'date' && get_post_meta($object_id, "socialdb_property_{$property['id']}_0_date", true)): ?>
                         <?php $value = get_post_meta($object_id, "socialdb_property_{$property['id']}_0_date", true); ?>
-                        <p><?php echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $value . "'" . ',' . $property['id'] . ')">' . $value . '</a>'; ?></p>
+                        <?php $value = str_replace('[','',str_replace(']','',$value)); ?>
+                        <p><?php echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $value . "'" . ',' . $property['id'] . ')">[ ' . $value . ' ]</a>'; ?></p>
                      <?php else: ?>
                         <?php $object_properties_widgets_helper->getValuesViewSingle($meta,$property['id']) ?>
                     <?php endif ?>

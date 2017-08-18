@@ -798,14 +798,25 @@ function showTopSearch() {
     });
 }
 
+function troggle_disable_input(id)
+{
+    var elem = document.getElementById(id);
 
+    if($(elem).prop('disabled'))
+    {
+        $(elem).prop('disabled', false);
+    }else
+    {
+        $(elem).prop('disabled', true);
+    }
+}
     
 /**
  * funcao que redireciona para a home da colecao para a busca avancada
 * @type o campo que sera buscado 
 */    
 function redirectAdvancedSearch(field){
-    if(field===false)
+    if(field === false)
          window.location = $('#collection_root_url').val()+'?search-advanced-text=@'
     else if($(field).val()!=='')
         window.location = $('#collection_root_url').val()+'?search-advanced-text='+$(field).val()

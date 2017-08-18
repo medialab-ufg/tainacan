@@ -722,7 +722,7 @@ class ObjectClass extends FormItem {
                 ?>    
                 <div class="row col-md-12">
                     <label class="col-md-12 no-padding" for="advanced_search_title">
-                        <?php echo $this->get_labels_search_obejcts($property['metas']['socialdb_property_object_category_id']); ?>
+                        <?php echo (has_filter('alter_label_item_search')) ? apply_filters('alter_label_item_search',$property) : $this->get_labels_search_obejcts($property['metas']['socialdb_property_object_category_id']); ?>
                     </label>
                     <div class="col-md-8 no-padding">
                         <input type="text" 

@@ -56,31 +56,43 @@
                 elem = jQuery.parseJSON(result);
                 hide_modal_main();
                 if (elem.args_collection) {
+
                     search_collections_query = elem.args_collection;
                     $('#wp_query_args').val(search_collections_query);
-                    if (elem.args_item) {
+                    if (elem.args_item)
+                    {
                         search_items_query = elem.args_item;
                     }
-                    if(elem.has_collection && elem.has_item){
+
+                    $("#items_not_found").hide();
+
+                    if(elem.has_collection && elem.has_item)
+                    {
                         $('#click_ad_search_collection').parent().show();
                         $('#click_ad_search_items').parent().show();
                         $('#click_ad_search_collection').trigger('click');
-                    }else if(elem.has_collection && !elem.has_item){
+                    }else if(elem.has_collection && !elem.has_item)
+                    {
                         $('#click_ad_search_collection').trigger('click');
                         $('#click_ad_search_collection').parent().show();
                         $('#click_ad_search_items').parent().hide();
-                    }else if(!elem.has_collection && elem.has_item){
+                    }else if(!elem.has_collection && elem.has_item)
+                    {
                         $('#click_ad_search_collection').parent().hide();
                         $('#click_ad_search_items').parent().show();
                         $('#click_ad_search_items').trigger('click');
-                    }else if(!elem.has_collection && !elem.has_item){
-                         $('#click_ad_search_items').trigger('click');
+                    }else if(!elem.has_collection && !elem.has_item)
+                    {
+                        $('#click_ad_search_items').trigger('click');
                         $('#click_ad_search_collection').parent().hide();
                         $('#click_ad_search_items').parent().hide();
+                        $("#items_not_found").show();
+
                     }
                     
                 }
-                else if (elem.args_item) {
+                else if (elem.args_item)
+                {
                     search_items_query = elem.args_item;
                     $('#wp_query_args').val(search_items_query);
                     if( $('#click_ad_search_items').length>0){

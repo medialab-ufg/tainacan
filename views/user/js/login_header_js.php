@@ -27,7 +27,6 @@ $(function() {
     });
     
     $( '#formUserForgotPasswordHeader' ).submit( function( e ) {
-       
        $.ajax( {
               url: $('#src_login').val()+'/controllers/user/user_controller.php',
               type: 'POST',
