@@ -992,15 +992,6 @@
         return true;
     }
 
-    function showPag(rpType) {
-        if(rpType == 'repo_searches' || rpType == 'collection_searches'){
-            $('#pagination-buscas').removeClass('hidden');
-        }
-        else{
-            $('#pagination-buscas').addClass('hidden');
-        }
-    }
-
     function drawChart(chart_type, title, data_obj, filter) {
         if(data_obj) {
             var tai_chart = new TainacanChart(); // New instance of TainacanChart
@@ -1164,9 +1155,6 @@
 
             var div_chart = $("#charts-container").get(0);
             $(div_chart).removeClass('hide');
-            
-            // Pagination searches
-            showPag(title);
 
             // draw chart based at generated json data
             renderChart(title, chart_type, chart_data, filter);

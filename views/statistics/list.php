@@ -106,7 +106,7 @@ include_once('js/list_js.php');
             </div>
 
             <!-- Chart container -->
-            <div id="charts-container" class="" style="text-align: center">
+            <div id="charts-container" class="">
                 <div id="defaultchart_div" style="width: 100%; height: 500px;"></div> <!--Div that will hold the pie chart-->
                 <div class="hide" id="piechart_div" style="width: 100%; height: 500px;"></div>
                 <div class="hide" id="barchart_div" style="width: 100%; height: 500px;"></div>
@@ -119,7 +119,7 @@ include_once('js/list_js.php');
 
                 <!-- Tabela de exibição dos detalhes dos valores -->
                 <div id="values-details" class="hide table-responsive">
-                    <button onclick="javascript:closeDetail()" type="button" class="close" title="Close"> <span aria-hidden="true">&times;</span> </button>
+                    <button onclick="javascript:closeDetail()" type="button" class="close" title="Close"> <span aria-hidden="true">&times;</span> </button>    
                     <table id="table-detail" class="table table-hover">
                         <thead id="thead-detail">
                             <tr class="headers">
@@ -138,7 +138,7 @@ include_once('js/list_js.php');
             </div>
 
             <!-- Chart resume -->
-            <div id="charts-resume" class="table-responsive">
+            <div id="charts-resume" class="table-responsive"> 
                 <table class="table table-hover">
                     <thead>
                         <tr class="headers"> 
@@ -148,40 +148,12 @@ include_once('js/list_js.php');
                             <th class="more-detail-message"> <?php _e('Click on values to see more details', 'tainacan') ?> <span class='glyphicon glyphicon-info-sign'></span> </th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="tbody-d">
                         <tr class="content"> 
                             <td class="curr-filter"></td> 
                         </tr>
                     </tbody>
                 </table>
-                <!-- <div class="row hidden" id="pagination-buscas">
-                    <div class="col-lg-4 col-md-4">
-                        <ul class="pagination mg0">
-                            <li>
-                                <a href="#" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                                </li>
-                                    <li><a href="#">1</a></li>
-                                <li>
-                                <a href="#" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="col-lg-4">
-                        
-                    </div>
-                    <div class="col-lg-1 col-md-1">
-                        <select class="form-control">
-                            <option value="10">10</option>
-                            <option value="20">20</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                        </select>
-                    </div>
-                </div> -->
             </div>
 
             <div class="col-md-12 no-padding" style="background: #e3e3c7; margin-top: 10px; text-align: center; display: none;">
