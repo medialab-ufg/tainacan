@@ -2,7 +2,7 @@
 include_once ( dirname(__FILE__) . '/../../helpers/view_helper.php');
 include_once ( dirname(__FILE__) . '/../../views/theme_options/js/updates_page_js.php');
 ?>
-<div class="col-md-12 ui-widget-content metadata-actions">
+<div class="col-md-12">
 
     <div id="export_settings" class="col-md-12 config_default_style">
         <?php ViewHelper::render_config_title(_("Import")); ?>

@@ -12,13 +12,14 @@ if(!empty($has_template) && $has_template != "" && current_user_can('manage_opti
     get_header();
     get_template_part("partials/setup","header");
     get_template_part("partials/header/cover");
-    get_template_part( "partials/admin/admin", $config_request );
+    echo "<section class='admin-configs'>";
+        get_template_part( "partials/admin/admin", $config_request );
+    echo "</section>";
     get_footer();
     exit();
 } else {
     $wp_query->set_404();
     status_header( 404 );
-
     get_template_part( 404 );
     exit();
 }

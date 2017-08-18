@@ -725,3 +725,18 @@ a.validate-ok {
     }
   }
 }
+
+section.admin-configs {
+  padding-top: 20px;
+  padding-botom: 20px;
+  background: $collections-bg-color;
+  width: 100%;
+  float: left;
+}
+
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus {
+  color: white !important;
+  background-color: #232323 !important;
+}

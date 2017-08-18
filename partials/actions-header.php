@@ -35,7 +35,8 @@ $stat_page = get_page_by_title(__('Statistics', 'tainacan'))->ID;
                         <li class="dropdown-header"> <?php _t('Repository Control Panel', 1); ?> </li>
 
                         <li>
-                            <a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_general_configuration');/*updateStateRepositorio('configuration');*/">
+                            <?php /* <a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_general_configuration'); updateStateRepositorio('configuration'); "> */ ?>
+                            <a href="<?php getAdmin('config'); ?>">
                                 <span class="glyphicon glyphicon-wrench"></span> <?php _t('Configuration', 1); ?>
                             </a>
                         </li>
@@ -50,38 +51,45 @@ $stat_page = get_page_by_title(__('Statistics', 'tainacan'))->ID;
                             </a>
                         </li>
                         <li class="tainacan-museum-clear" <?php do_action('menu_repository_social_api') ?>>
-                            <a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_configuration');/*updateStateRepositorio('social');*/">
+                            <?php /* <a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_configuration'); updateStateRepositorio('social'); "> */ ?>
+                            <a href="<?php getAdmin('keys'); ?>">
                                 <span class="glyphicon glyphicon-globe"></span>  <?php _t('Social / API Keys', 1); ?>
                             </a>
                         </li>
                         <li class="tainacan-museum-clear" <?php do_action('menu_repository_license') ?>>
-                            <a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_licenses');/*updateStateRepositorio('licenses');*/">
+                            <?php /* <a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_licenses'); updateStateRepositorio('licenses'); "> */ ?>
+                            <a href="<?php getAdmin('licenses'); ?>">
                                 <span class="glyphicon glyphicon-duplicate"></span> <?php _t('Licenses', 1); ?>
                             </a>
                         </li>
                         <li class="tainacan-museum-clear">
-                            <a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_welcome_email'); /*updateStateRepositorio('email');*/">
+                            <?php /* <a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_welcome_email'); updateStateRepositorio('email'); "> */ ?>
+                            <a href="<?php getAdmin('email'); ?>">
                                 <span  class="glyphicon glyphicon-envelope"></span> <?php echo $email_name ?>
                             </a>
                         </li>
 
                         <li>
-                            <a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_tools'); /*updateStateRepositorio('tools');*/">
+                            <?php /* <a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_tools'); updateStateRepositorio('tools'); "> */ ?>
+                            <a href="<?php getAdmin('tools'); ?>">
                                 <span  class="glyphicon glyphicon-tasks"></span> <?php _t('Tools', 1); ?>
                             </a>
                         </li>
                         <li>
-                            <a onclick="repoConfig('<?php echo $_src_ ?>', 'import_full'); /*updateStateRepositorio('import');*/">
+                            <?php /* <a onclick="repoConfig('<?php echo $_src_ ?>', 'import_full'); updateStateRepositorio('import'); "> */ ?>
+                            <a href="<?php getAdmin('import'); ?>">
                                 <span class="glyphicon glyphicon-import"></span> <?php _t('Import', 1); ?>
                             </a>
                         </li>
                         <li>
-                            <a onclick="repoConfig('<?php echo $_src_ ?>', 'export_full'); /*updateStateRepositorio('export');*/">
+                            <?php /* <a onclick="repoConfig('<?php echo $_src_ ?>', 'export_full'); updateStateRepositorio('export'); "> */ ?>
+                            <a href="<?php getAdmin('export'); ?>">
                                 <span class="glyphicon glyphicon-export"></span> <?php _t('Export', 1); ?>
                             </a>
                         </li>
                         <li>
-                            <a onclick="repoConfig('<?php echo $_src_ ?>', 'updates_page'); ">
+                            <?php /* <a onclick="repoConfig('<?php echo $_src_ ?>', 'updates_page'); "> */ ?>
+                            <a href="<?php getAdmin('update'); ?>">
                                 <span class="glyphicon glyphicon-refresh"></span> <?php _t('Updates', 1); ?>
                             </a>
                         </li>
@@ -94,7 +102,8 @@ $stat_page = get_page_by_title(__('Statistics', 'tainacan'))->ID;
                         <li role="separator" class="divider" style="padding: 0"></li>
 
                         <li class="repository-events">
-                            <a onclick="repoConfig('<?php echo $_src_ ?>', 'list_events_repository', 'event', '<?php echo $col_root_id ?>'); /*updateStateRepositorio('events');*/">
+                            <?php /* <a onclick="repoConfig('<?php echo $_src_ ?>', 'list_events_repository', 'event', '<?php echo $col_root_id ?>'); updateStateRepositorio('events');"> */ ?>
+                            <a href="<?php getAdmin('events'); ?>">
                                 <span class="glyphicon glyphicon-flash"></span> <?php _e('Events', 'tainacan'); ?>&nbsp;&nbsp;
                                 <span id="notification_events_repository"></span>
                             </a>

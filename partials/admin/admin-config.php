@@ -25,8 +25,7 @@ if(is_object($cover) && $cover->post_type === "attachment") {
     $cover_edit = _t("Edit cover");
 }
 ?>
-<div class="col-md-12 ui-widget-content metadata-actions">
-
+<div class="col-md-12">
     <div class="col-md-12 config_default_style">
         <?php ViewHelper::render_config_title( __("Repository Configuration", 'tainacan') ); ?>
         <form id="submit_form_edit_repository_configuration">

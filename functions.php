@@ -3692,6 +3692,10 @@ function socialMediaResponse($smIDs, $smName) {
     }
 }
 
+function getAdmin($page) {
+    echo site_url() . "/adm/$page";
+}
+
 ################# INSTANCIA OS MODULOS SE ESTIVEREM ATIVADOS#################
 instantiate_modules();
 ################################################################################

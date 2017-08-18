@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: socialdb\n"
 "POT-Creation-Date: 2017-08-14 15:10-0300\n"
-"PO-Revision-Date: 2017-08-14 15:11-0300\n"
+"PO-Revision-Date: 2017-08-18 14:10-0300\n"
 "Last-Translator: Rodrigo de Oliveira <webmaster@rodrigodeoliveira.net>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -1096,7 +1096,7 @@ msgstr "estatisitcas"
 
 #: functions.php:464
 msgid "tools"
-msgstr "ferramenta"
+msgstr "ferramentas"
 
 #: functions.php:466
 msgid "welcome-email"
