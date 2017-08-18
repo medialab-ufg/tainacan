@@ -123,7 +123,7 @@ class FormItemController extends Controller {
                         [
                         'collection_id'=> $data['collection_id'],
                         'term'=>$data['value']
-                        ],true));
+                        ],true,'')); 
                     if($json && is_array($json) && count($json) > 0){
                         foreach ($json as $value) {
                             if(strtolower($value->label) === strtolower($data['value']) && $value->ID != $data['item_id'] ){
@@ -185,6 +185,7 @@ class FormItemController extends Controller {
                  $object_model->insert_tags($data['value'], $data['collection_id'], $data['item_id']);
                  break;
             case 'updateItem':
+                $item = get_post($data['item_id']);
                 //Tainacan Biblioteca
                 $mapping = get_option('socialdb_general_mapping_collection');
                 if(has_filter("add_book_loan") && isset($mapping) && ($mapping['Emprestimo'] == $data['collection_id'] || $mapping['Devoluções'] == $data['collection_id']))    
@@ -201,7 +202,7 @@ class FormItemController extends Controller {
 
                 $category_root_id = $object_model->get_category_root_of($data['collection_id']);
                 
-                if(strcmp(get_post($data['item_id'])->post_title, 'Temporary_post') == 0)
+                if(strcmp($item->post_title, 'Temporary_post') == 0)
                 {
                     $post = array(
                         'post_title' => time(),
@@ -228,7 +229,14 @@ class FormItemController extends Controller {
                 wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type',true);
                 update_post_meta($data['ID'], 'socialdb_object_collection_init', $data['collection_id']);
                 update_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext', '');
-                return $object_model->insert_object_event($data['ID'], $data);
+                if($item->post_status === 'publish'):
+                    $data['msg'] = __('The event was successful', 'tainacan');
+                    $data['type'] = 'success';
+                    $data['title'] = __('Success', 'tainacan');
+                    return json_encode($data);
+                else:    
+                    return $object_model->insert_object_event($data['ID'], $data);
+                endif;
             //Buscando valores 
             case 'getDescription':
                 $data['value'] = get_post($data['item_id'])->post_content;
@@ -287,7 +295,8 @@ class FormItemController extends Controller {
             case 'publishItems':
                 delete_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betafile');
                 $class = new ObjectSaveValuesModel();
-                if(is_array($data['items'])){
+                if(is_array($data['items']))
+                {
                     foreach ($data['items'] as $item) {
                         $post = array(
                         'ID' => $item,
@@ -297,7 +306,10 @@ class FormItemController extends Controller {
                         //categoria raiz da colecao
                         wp_set_object_terms($item, array((int) $category_root_id), 'socialdb_category_type',true);
                     }
+
+                    $data['postID_pdfURL'] = get_documents_text($data['items']);
                 }
+
                 return json_encode($data);  
             case 'unpublish_item':
                 $post = array(

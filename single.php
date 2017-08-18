@@ -40,11 +40,8 @@ $_enable_header_ = get_post_meta($_currentID_, 'socialdb_collection_show_header'
 $_color_scheme = ViewHelper::getCollectionColors($_currentID_);
 $search_color = ($_color_scheme) ? $_color_scheme["primary"] : "#79a6ce";
 
-if (!has_nav_menu('menu-ibram')):
-    $_r_bg = repository_bg($col_root_id);
-    ?>
-    <div id="main_part_collection" class="collection_repo_config" 
-         style="background: url(<?php echo $_r_bg; ?>); display: none; margin-top: 0px;">
+if (!has_nav_menu('menu-ibram')): ?>
+    <div id="main_part_collection" class="collection_repo_config" style="background: url(<?php echo repository_bg(); ?>); display: none; margin-top: 0">
         <div class="row container-fluid">
             <div class="project-info">
                 <center>
@@ -55,18 +52,12 @@ if (!has_nav_menu('menu-ibram')):
             <?php include_once "views/collection/collec_share.php"; ?>
         </div>
     </div>
-    <?php
-else:
-    echo '<input type="hidden" name="ibram_menu" value="ibram_menu_activated" />';
-    ?>
-    <style type="text/css"> .ibram-header {  margin-top: 0px; } </style>
 <?php
 endif;
 
 while (have_posts()) : the_post();
-    if (get_post(get_the_ID())->post_status != 'publish') {
+    if (get_post(get_the_ID())->post_status != 'publish')
         wp_redirect(site_url());
-    }
     ?>
     <!-- TAINACAN: div necessaria para procedimentos do facebook  -->
     <div id="fb-root"></div>
@@ -88,11 +79,7 @@ while (have_posts()) : the_post();
     <input type="hidden" id="collection_root_url" value="<?php echo get_the_permalink(get_option('collection_root_id')) ?>">
     <input type="hidden" id="socialdb_permalink_collection" name="socialdb_permalink_collection" value="<?php echo get_the_permalink(get_the_ID()); ?>" />
     <input type="hidden" id="slug_collection" name="slug_collection" value="<?php echo get_post(get_the_ID())->post_name; ?>"> <!-- utilizado na busca -->
-    <input type="hidden" id="search_collection_field" name="search_collection_field" value="<?php
-    if ($_GET['search']) {
-        echo $_GET['search'];
-    }
-    ?>">
+    <input type="hidden" id="search_collection_field" name="search_collection_field" value="<?php if ($_GET['search']) echo $_GET['search']; ?>">
 
     <!-- Hidden para verificar se existe filtros via url -->
     <input type="hidden" id="is_filter" name="is_filter" value="<?php
@@ -228,7 +215,9 @@ while (have_posts()) : the_post();
         <div id="container_three_columns" class="container-fluid">
             <div class="row">
                 <!-- TAINACAN: esta div (AJAX) mostra os widgets para pesquisa que estao setadas na esquerda  -->
-                <div id="div_left" class="col-md-3"></div>
+                <div id="div_left" class="col-md-3">
+                    <!-- Div left content -->
+                </div>
 
                 <!-- TAINACAN: esta div agrupa a listagem de itens ,submissao de novos itens e ordencao -->
                 <div id="div_central" class="col-md-9">
@@ -252,8 +241,8 @@ while (have_posts()) : the_post();
                                         </div>
 
                                         <div class="search-colecao">
-                                            <div class="input-group" style="z-index: 1;">
-                                                <input  style="font-size: 13px;z-index: 1;" class="form-control input-medium placeholder ui-autocomplete-input" id="search_objects"
+                                            <div class="input-group">
+                                                <input class="form-control input-medium placeholder ui-autocomplete-input" id="search_objects"
                                                         onkeyup="set_value(this)" 
                                                         onkeydown="if (event.keyCode === 13)
                                                                     document.getElementById('search_main').click();"
@@ -267,6 +256,7 @@ while (have_posts()) : the_post();
                                                 </span>
                                             </div>
                                         </div>
+
                                     </div>
 
                                 </div>
@@ -582,7 +572,7 @@ while (have_posts()) : the_post();
     <!-- TAINACAN: esta div é mostrada quando é clicado com o botao direito sobre categorias e tags no dynatree  -->
     <?php do_action('insert_new_contextmenu_dynatree') ?>
 
-    <ul id="myMenuSingle" class="contextMenu" style="display:none;">
+    <ul id="myMenuSingle" class="contextMenu" style="display:none; position: fixed">
         <?php if (!$visualization_page_category || $visualization_page_category === 'right_button'): ?>   
             <li class="see">
                 <a href="#see" style="background-position: 6px 40%;padding:1px 5px 1px 28px;background-repeat:no-repeat;background-image:url('<?php echo get_template_directory_uri() ?>/libraries/css/images/see.png')">
@@ -673,11 +663,15 @@ while (have_posts()) : the_post();
 
     <!-- TAINACAN: esta div (AJAX) mostra as configuracoes da colecao  -->
     <div id='container-fluid-configuration' class="container-fluid no-padding" style="background-color: #f1f2f2">
-        <div id="configuration" class="col-md-12 no-padding" style="margin-top: 0;"></div>
+        <div id="configuration" class="col-md-12 no-padding" style="margin-top: 0;">
+
+        </div>
     </div>
 
     <div id='container-fluid-users' class="container-fluid no-padding" style="background-color: #f1f2f2">
-        <div id="users_div"  class="col-md-12" style="margin-top: 0;"></div>
+        <div id="users_div"  class="col-md-12" style="margin-top: 0;">
+
+        </div>
     </div>
 
     <!-- TAINACAN: scripts utilizados para criacao e montagem dos widgets de pesquisa  -->
@@ -1471,6 +1465,8 @@ while (have_posts()) : the_post();
             </div>
         </div>
     </div>
+
+
 
     <?php
     if (has_action('add_new_modals')) {

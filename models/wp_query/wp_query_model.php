@@ -284,7 +284,7 @@ class WPQueryModel extends Model {
         $ordenation = $data['value'];
         if (!empty($ordenation)) {
             $recover_data['keyword'] = $ordenation;
-        } 
+        }
         return $recover_data;
     }
     /**

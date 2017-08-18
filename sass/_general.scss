@@ -174,6 +174,20 @@ body.error404 {
       box-shadow: none;
     }
 
+    .input-group {
+      z-index: 1;
+
+      #search_objects {
+        font-size: 13px;
+        z-index: 1;
+        height: 35px;
+      }
+
+      #search_main {
+        height: 35px;
+      }
+    }
+
     input {
       border-color: #aaa;
       color: black;
@@ -188,7 +202,7 @@ body.error404 {
       color: #AAAAAA;
       border-color: #AAAAAA;
     }
-  }
+  } // .search-colecao
 
   .img-edit{
     color: rgba(255,255,255,0.5);
@@ -604,4 +618,51 @@ a.validade-error {
 
 a.validate-ok {
   color:green;
+}
+
+.common-crop {
+  margin-bottom: 20px;
+  background: #f5f5f5;
+  position: relative;
+}
+
+#logo_crop {
+  width: 130px;
+  height: 100px;
+}
+
+#cover_crop {
+  width: 100%;
+  height: 150px;
+}
+
+#thumb-idea-form, #cover-idea-form {
+  margin-top: 10px;
+  label {
+    display: block;
+  }
+  img {
+    display: block;
+    margin-bottom: 5px;
+  }
+  .remove-repository-logo, .remove-repository-cover {
+    display: inline-block;
+    padding: 5px 10px 2px 10px;
+    border: 1px solid #e3e3e3;
+    margin-bottom: 10px;
+    background: #f5f5f5;
+    border-radius: 2px;
+
+    input {
+      float: left;
+      margin-right: 5px;
+    }
+
+    label {
+      display: inline-block;
+    }
+  }
+  .crop-wrapper {
+    margin-top: 10px;
+  }
 }

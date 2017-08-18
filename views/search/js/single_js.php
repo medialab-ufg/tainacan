@@ -236,7 +236,10 @@
 
 
     function submit_comment(object_id) {
-        if ($('#comment').val().trim() === '') {
+        let comment_content = $('#comment').val().trim();
+        comment_content = remove_script_tags(comment_content);
+
+        if (comment_content === '') {
             showAlertGeneral('<?php _e('Attention!', 'tainacan') ?>', '<?php _e('Fill your comment', 'tainacan') ?>', 'info');
         } else {
             show_modal_main();
@@ -248,7 +251,7 @@
                     socialdb_event_create_date: '<?php echo mktime() ?>',
                     socialdb_event_user_id: $('#current_user_id').val(),
                     socialdb_event_comment_create_object_id: object_id,
-                    socialdb_event_comment_create_content: $('#comment').val(),
+                    socialdb_event_comment_create_content: comment_content,
                     socialdb_event_comment_author_name: $('#author').val(),
                     socialdb_event_comment_author_email: $('#email').val(),
                     socialdb_event_comment_author_website: $('#url').val(),
@@ -264,6 +267,20 @@
             });
         }
     }
+
+    function remove_script_tags(text)
+    {
+        //Opening tags
+        var div = document.createElement('div');
+        div.innerHTML = text;
+        var scripts = div.getElementsByTagName('script');
+        var i = scripts.length;
+        while (i--) {
+            scripts[i].parentNode.removeChild(scripts[i]);
+        }
+        return div.innerHTML;
+    }
+
     // submissao da resposta a um comentario
     function submit_comment_reply(object_id) {
         if ($('#comment_msg_reply').val().trim() === '') {

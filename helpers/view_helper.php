@@ -57,24 +57,30 @@ class ViewHelper {
     }
 
     public function renderRepositoryLogo($_logo_id, $fallback_title) {
-        $_max_img_width = "100%";
-        $_max_img_height = "100%";
-
-        if( isset($_logo_id) && get_the_post_thumbnail($_logo_id, 'thumbnail')) {
-            $extraClass = "repository-logo";
-
-            if (get_the_post_thumbnail($_logo_id, 'thumbnail')) {
-              $_img_url = wp_get_attachment_url(get_post_thumbnail_id($_logo_id));
-              $ret = '<img src="' . $_img_url . '" style="max-width: '. $_max_img_width .'; max-height: '. $_max_img_height .';" />';
+        $extraClass = "";
+        $home = home_url();
+        if(isset($_logo_id)) {
+            $former_logo = get_the_post_thumbnail($_logo_id, 'thumbnail');
+            if($former_logo) {
+                $extraClass = "repository-logo";
+                $_img_url = wp_get_attachment_url( get_post_thumbnail_id($_logo_id) );
+                $ret = "<img class='tainacan-repo-logo' src='$_img_url' />";
             } else {
-              $ret = empty($fallback_title) ? __('Tainacan', 'tainacan') : $fallback_title;
+                $logo_obj = get_post($_logo_id);
+                if(is_object($logo_obj) && $logo_obj->post_type === "attachment") {
+                    $crop_logo = $logo_obj->guid;
+                    $ret = "<img class='tainacan-repo-logo' src='$crop_logo' />";
+                } else {
+                    $extraClass = "logo-tainacan";
+                    $default_logo = get_template_directory_uri() . '/libraries/images/Tainacan_pb.svg';
+                    $ret = "<img class='tainacan-repo-logo' src='$default_logo' />";
+                }
             }
         } else {
-            $extraClass = "logo-tainacan";
-            $ret = '<img src="'. get_template_directory_uri() . '/libraries/images/Tainacan_pb.svg'.'" style="max-width: '. $_max_img_width .'; max-height: '. $_max_img_height .';"/>';
+            $ret = empty($fallback_title) ? _t("Tainacan") : $fallback_title;
         }
 
-      return "<a class='col-md-3 navbar-brand $extraClass' href='" . site_url() . "'>" . $ret . "</a>";
+        return "<a class='col-md-3 navbar-brand $extraClass' href='$home'> $ret </a>";
     }
 
     public function get_metadata_types() {
@@ -228,16 +234,26 @@ class ViewHelper {
         endif;
     }
     
-     public function render_cardinality_property($property,$is_data = 'false') {
-        if (isset($property['metas']['socialdb_property_data_cardinality']) && $property['metas']['socialdb_property_data_cardinality'] == 'n'):
-            return 25;
-        elseif(isset($property['metas']['socialdb_property_object_cardinality']) && $property['metas']['socialdb_property_object_cardinality'] == 'n'):
-             return 25;
-        elseif(isset($property['metas']['socialdb_property_compounds_cardinality']) && $property['metas']['socialdb_property_compounds_cardinality'] == 'n'):
-             return 25;
-        else:
+     public function render_cardinality_property($property,$object_id = 0) {
+//         if (isset($property['metas']['socialdb_property_data_cardinality']) && $property['metas']['socialdb_property_data_cardinality'] == 'n'):
+//            return 25;
+//        elseif(isset($property['metas']['socialdb_property_object_cardinality']) && $property['metas']['socialdb_property_object_cardinality'] == 'n'):
+//             return 25;
+//        elseif(isset($property['metas']['socialdb_property_compounds_cardinality']) && $property['metas']['socialdb_property_compounds_cardinality'] == 'n'):
+//             return 25;
+//        else:
+//            return 1;
+//        endif;
+        if($object_id===0) 
             return 1;
-        endif;
+            
+        $meta = get_post_meta($object_id, 'socialdb_property_helper_' . $property['id'], true);
+        if($meta && $meta != ''){
+            $array = unserialize($meta);
+            return $array;
+        }else{
+            return [];
+        }
     }
     
     public function get_date_edit($value){
@@ -617,5 +633,78 @@ class ViewHelper {
             }
         </script>
         <?php
+    }
+    
+    
+    /**
+     * 
+     */
+    public function getValuesViewSingle($meta,$property_id) {
+        $cont = 0;
+        if ($meta && $meta != '') {
+            $array = unserialize($meta);
+            foreach ($array as $property) {
+                foreach ($property as $atom) {
+                    $type = $atom['type'];
+                    $values = $atom['values'];
+                    foreach ($values as $value) {
+                        $value = $this->sdb_get_post_meta($value)->meta_value;
+                        if(isset($value) && trim($value) != ''){
+                            $cont++;
+                        }
+                        
+                        if($type == 'data'){
+                            ?>
+                                <p><i><?php echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $value . "'" . ',' . $property['id'] . ')">' . $value . '</a>'; ?></i></p>
+                            <?php
+                        }else if($type == 'object'){
+                            $ob = get_post($value);
+                            if ($ob && $ob->post_status == 'publish') {
+                                // echo '<b><a href="'. get_the_permalink($property['metas']['collection_data'][0]->ID) . '?item=' . $ob->post_name . '" >'. $ob->post_title . '</a></b><br>';
+                                echo '<input type="hidden" name="socialdb_property_'.$property_id.'[]" value="'.$ob->ID.'"><p style="color:black"><i>' . $ob->post_title . '</i></p> <br >';
+                            }
+                        }else{
+                            $ob = get_term_by('id',$value,'socialdb_category_type');
+                            if ($ob) {
+                                ?>
+                                <p>
+                                    <i>
+                                       <a style="cursor:pointer;" onclick="wpquery_term_filter('<?php echo $ob->term_id ?>','<?php echo $property['id'] ?>')">
+                                           <?php echo $ob->name  ?>
+                                       </a>
+                                    </i>   
+                                </p><br>
+                                 <script>
+                                    setTimeout(function(){
+                                        append_category_properties('<?php echo $ob->term_id ?>',0,'<?php echo $property_id ?>');
+                                    }, 3000);
+                                </script>
+                                <?php
+                            }
+                        }  
+                    }
+                }
+            }
+        }
+        
+        if($cont===0){
+             echo '<p>' . __('empty field', 'tainacan') . '</p>';
+        }
+    }
+    
+    /**
+     * funcao que busca o postmeta e retorna seu valor
+     */
+    public function sdb_get_post_meta($meta_id) {
+        global $wpdb;
+        $query = "SELECT * FROM $wpdb->postmeta WHERE meta_id = $meta_id";
+        $result = $wpdb->get_results($query);
+        if ($result && is_array($result)) {
+            return $result[0];
+        } elseif ($result && isset($result->ID)) {
+            return $result;
+        } else {
+            return false;
+        }
     }
 } // ViewHelper

@@ -29,6 +29,14 @@ class FormItemCategory extends FormItem{
                 color: black;
                 margin-left: -30px;
             }
+
+            .col-md-3 .category-properties h2{
+                margin-left: 0px;
+            }
+
+            .col-md-3 .category-properties input {
+                margin-left: 7px;
+            }
         </style>
         <div id="meta-item-<?php echo $property['id']; ?>" class="form-group" >
              <h2>

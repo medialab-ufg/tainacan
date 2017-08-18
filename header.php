@@ -9,7 +9,6 @@
 include_once('helpers/view_helper.php');
 
 global $current_user;
-get_currentuserinfo();
 $socialdb_logo = get_option('socialdb_logo');
 $socialdb_title = get_option('blogname');
 $col_root_id = get_option('collection_root_id');
@@ -196,9 +195,6 @@ $_src_ = get_template_directory_uri();
                               </a>
                             </li>
                           <?php else : ?> <!-- is not logged in -->
-                          
-                          
-                            
                             <li>
                               <div id="login-box" class="login-dropdown">
                                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

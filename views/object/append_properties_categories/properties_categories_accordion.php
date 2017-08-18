@@ -182,20 +182,9 @@ foreach($original_properties as $property):
             </h2>
             <div>
                 <?php if($is_view_mode  || (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true' && !isset($not_block))): ?>
-                     <div id="labels_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">
-                        <?php if (!empty($property['metas']['objects']) && !empty($property['metas']['value'])) { ?>
-                            <?php foreach ($property['metas']['objects'] as $object) { // percoro todos os objetos  ?>
-                                <?php
-                                if (isset($property['metas']['value']) && !empty($property['metas']['value']) && in_array($object->ID, $property['metas']['value'])): // verifico se ele esta na lista de objetos da colecao
-                                    echo '<input type="hidden" name="socialdb_property_'.$property['id'].'[]" value="'.$object->ID.'"><b><a  href="' . get_the_permalink($property['metas']['collection_data'][0]->ID) . '?item=' . $object->post_name . '" >' . $object->post_title . '</a></b><br>';
-                                endif;
-                                ?>
-                            <?php } ?>
-                            <?php
-                        }else {
-                            echo '<p>' . __('empty field', 'tainacan') . '</p>';
-                        }
-                        ?>
+                    <?php $meta = get_post_meta($object_id, 'socialdb_property_helper_' . $property['id'], true); ?> 
+                    <div id="labels_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">
+                        <?php  $view_helper->getValuesViewSingle($meta,$property['id']); ?>
                     </div>
                 <?php else: 
                      $object_properties_widgets_helper->generateWidgetPropertyRelated($property,$object_id,$collection_id) ;
@@ -254,6 +243,7 @@ foreach($original_properties as $property):
                 ?>
             </h2>
             <?php if($is_view_mode  || (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true' && !isset($not_block))): ?>
+                <?php $meta = get_post_meta($object_id, 'socialdb_property_helper_' . $property['id'], true); ?>
                 <div>
                     <!--?php if(isset($property['metas']['value'][0])): ?>
                         <p>< ?php  echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $property['metas']['value'][0] . "'" . ',' . $property['id'] . ')">' . $property['metas']['value'][0] . '</a>';  ?></p>
@@ -264,26 +254,8 @@ foreach($original_properties as $property):
                     <?php if (is_plugin_active('data_aacr2/data_aacr2.php') && $property['type'] == 'date' && get_post_meta($object_id, "socialdb_property_{$property['id']}_0_date", true)): ?>
                         <?php $value = get_post_meta($object_id, "socialdb_property_{$property['id']}_0_date", true); ?>
                         <p><?php echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $value . "'" . ',' . $property['id'] . ')">' . $value . '</a>'; ?></p>
-                    <?php elseif (isset($property['metas']['value'][0])): ?>
-                        <?php $is_property_date = false; ?>
-                        <?php if ($property['type'] == 'date'): ?>
-                            <?php $is_property_date = true; ?>
-                        <?php endif; ?>
-                        <?php foreach ($property['metas']['value'] as $value): if (empty($value)) continue; ?>
-                            <?php
-                            if ($is_property_date):
-                                $date_temp = explode('-', $value);
-                                if (count($date_temp)>1):
-                                    $value = $date_temp[2].'/'.$date_temp[1].'/'.$date_temp[0];
-                                endif;
-                            endif;
-                            ?>
-                            <p><?php echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $value . "'" . ',' . $property['id'] . ')">' . $value . '</a>'; ?></p>
-                            <?php
-                        endforeach;
-                        ?>
-                    <?php else: ?>
-                        <p><?php _e('empty field', 'tainacan') ?></p>
+                     <?php else: ?>
+                        <?php $object_properties_widgets_helper->getValuesViewSingle($meta,$property['id']) ?>
                     <?php endif ?>
                 </div> 
             <?php else: ?> 
@@ -428,6 +400,7 @@ foreach($original_properties as $property):
             <div class="form-group">
                <?php
                 if($is_view_mode  || (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true' && !isset($not_block))):
+                    $meta = get_post_meta($object_id, 'socialdb_property_helper_' . $property['id'], true);
                     switch ($property['type']){
                         case 'radio';
                             $properties_terms_radio[] = $property['id'];
@@ -450,7 +423,7 @@ foreach($original_properties as $property):
                     }
 
               ?>
-                  <div id='labels_<?php echo $property['id']; ?>_<?php echo $object_id; ?>'></div>  
+                  <div><?php $view_helper->getValuesViewSingle($meta,$property['id']); ?></div>  
               <?php
                 else:
               ?>

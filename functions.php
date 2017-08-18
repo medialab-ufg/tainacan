@@ -578,22 +578,22 @@ function tainacan_comments($comment, $args, $depth) {
             <div class="row reply" id="reply_<?php comment_ID(); ?>">
 
                 <div class="col-md-12 left">
-                    <div class="col-md-1 no-padding">
-                        <a href=".div-comment-<?php comment_ID(); ?>" onclick="showModalReply('<?php comment_ID(); ?>');"><b><?php _e("Reply", 'tainacan'); ?></b></a>&nbsp;&nbsp;
+                    <div class="col-md-1 no-padding comment-item">
+                        <a onclick="showModalReply('<?php comment_ID(); ?>');"><b><?php _e("Reply", 'tainacan'); ?></b></a>&nbsp;&nbsp;
                     </div>
 
                     <?php if (!CollectionModel::is_moderator($global_collection_id, get_current_user_id()) && get_userdata(get_current_user_id())->display_name !== get_comment_author()): ?>
                         <?php if (verify_allowed_action($global_collection_id, 'socialdb_collection_permission_delete_comment')): ?>
-                            <div class="col-md-1 no-padding">
-                                <a href=".div-comment-<?php comment_ID(); ?>" onclick="showModalReportAbuseComment('<?php comment_ID(); ?>');"><span class="glyphicon glyphicon-bullhorn"></span>&nbsp;<?php _e("Report Abuse", 'tainacan'); ?></a>
+                            <div class="col-md-1 no-padding comment-item">
+                                <a onclick="showModalReportAbuseComment('<?php comment_ID(); ?>');"><span class="glyphicon glyphicon-bullhorn"></span>&nbsp;<?php _e("Report Abuse", 'tainacan'); ?></a>
                             </div>
                         <?php endif; ?>
                     <?php else: ?>
-                        <div class="col-md-1 no-padding">
-                            <a href=".div-comment-<?php comment_ID(); ?>" onclick="showEditComment('<?php comment_ID(); ?>');"><span class="glyphicon glyphicon-pencil"></span>&nbsp;<?php _e("Edit", 'tainacan'); ?></a>&nbsp;
+                        <div class="col-md-1 no-padding comment-item">
+                            <a onclick="showEditComment('<?php comment_ID(); ?>');"><span class="glyphicon glyphicon-pencil"></span>&nbsp;<?php _e("Edit", 'tainacan'); ?></a>&nbsp;
                         </div>
-                        <div class="col-md-1 no-padding">
-                            <a href=".div-comment-<?php comment_ID(); ?>" onclick="showAlertDeleteComment('<?php comment_ID(); ?>', '<?php _e('Attention!') ?>', '<?php _e('Delete this comment?', 'tainacan') ?>', '<?php echo mktime(); ?>');"><span class="glyphicon glyphicon-remove"></span>&nbsp;<?php _e("Delete", 'tainacan'); ?></a>
+                        <div class="col-md-1 no-padding comment-item">
+                            <a onclick="showAlertDeleteComment('<?php comment_ID(); ?>', '<?php _e('Attention!') ?>', '<?php _e('Delete this comment?', 'tainacan') ?>', '<?php echo mktime(); ?>');"><span class="glyphicon glyphicon-remove"></span>&nbsp;<?php _e("Delete", 'tainacan'); ?></a>
                         </div>
                     <?php endif; ?>
 
@@ -1042,6 +1042,7 @@ function verify_allowed_action($collection_id, $name_permission, $object_id = 0)
     $user_id = get_current_user_id();
     $permission = get_post_meta($collection_id, $name_permission, true);
     $is_admin = verify_collection_moderators($collection_id, $user_id);
+
     if (!$is_admin && $object_id != 0) {
         $item = get_post($object_id);
         $is_admin = ($item->post_author == $user_id) ? true : false;
@@ -1049,7 +1050,7 @@ function verify_allowed_action($collection_id, $name_permission, $object_id = 0)
     if ($is_admin) {
         return true;
     } else {
-        if ($permission == 'unallowed') {
+        if ($permission == 'unallowed' /*|| $permission == "approval"*/) {
             return false;
         } else {
             return true;
@@ -1915,8 +1916,8 @@ if (!function_exists("theme_js")) {
         wp_register_script("routes", get_template_directory_uri() . '/libraries/js/router/jquery.routes.js');
 
         /* PDF Thumbnail */
-        wp_register_script("pdf_thumbnail", get_template_directory_uri() . '/libraries/js/pdfThumb/pdf.js');
-        wp_register_script("pdf_thumbnail_worker", get_template_directory_uri() . '/libraries/js/pdfThumb/pdf.worker.js');
+        wp_register_script("pdf_thumbnail", get_template_directory_uri() . '/libraries/js/pdfThumb/pdfJS/build/pdf.js');
+        wp_register_script("pdf_thumbnail_worker", get_template_directory_uri() . '/libraries/js/pdfThumb/pdfJS/build/pdf.worker.js');
 
         $js_files = ['jquery_min', 'jqueryUi', 'bootstrap.min', 'JitJs', 'JitExcanvasJs', 'tainacan', 'DynatreeJs', 'ckeditorjs',
             'contextMenu', 'ColorPicker', 'SweetAlert', 'SweetAlertJS','js-xls', 'FileSaver', 'jsPDF', 'jsPDF_auto_table', 'tableExport', 'jquerydataTablesmin', 'data_table', 'raty',
@@ -3196,7 +3197,7 @@ function home_header_bg($bg_id) {
     return '<header style="background-image: url(' . $image_url . ')">';
 }
 
-function repository_bg($col_id) {
+function repository_bg() {
     $cover_id = get_option( 'socialdb_repository_cover_id');
     $image_url = ( $cover_id ) ? wp_get_attachment_url($cover_id) : get_template_directory_uri() . '/libraries/images/bg-home' . rand(1, 5) . '.jpg';
     
@@ -3269,7 +3270,7 @@ function get_item_thumb_image($item_id, $size="thumbnail") {
 
             $html_image = $DOM->asXML();
         }
-        
+
         return $html_image;
     }
 }
@@ -3596,6 +3597,81 @@ function get_add_office_document_text($post_id, $item_id)
         $model = new Model();
         $model->set_common_field_values($post_id, "socialdb_property_$item_id", $document_text);
         update_post_meta($post_id, "socialdb_office_document_text", true);
+    }
+}
+
+function get_documents_text($ids)
+{
+    //Gera texto de documentos do office e pdf
+    $posts = [];
+    foreach($ids as $id)
+    {
+        $posts[] = get_post($id);
+    }
+
+    $PDFidPostAttachmentURL = [];
+    $OFFICEidPostAttachmentURL = [];
+
+    /*
+     * MIME TYPES:
+     *
+     * PDF: application/pdf
+     * Word .doc: application/msword
+     * Word .docx: application/vnd.openxmlformats-officedocument.wordprocessingml.document
+     * Excel .xlsx: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+     * Power Point .pptx: application/vnd.openxmlformats-officedocument.presentationml.presentation
+     */
+
+    $office_mimes = array(
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+    );
+
+    $postID_pdfURL = [];
+    foreach($posts as $post)
+    {
+        $post_meta = get_post_meta($post->ID);
+        $attachment_id = $post_meta['socialdb_object_content'][0];
+        $url_file = wp_get_attachment_url($attachment_id);
+        if($url_file)
+        {
+            $post_mime = get_post_mime_type($attachment_id);
+            if(strcmp($post_mime, 'application/pdf') == 0)
+            {
+                $PDFidPostAttachmentURL[$post->ID] = array("post_meta" => $post_meta, 'url' => $url_file, 'attachment_id' => $attachment_id);
+                $postID_pdfURL[$post->ID] = $url_file;
+            }elseif(in_array($post_mime, $office_mimes))
+            {
+                $OFFICEidPostAttachmentURL[$post->ID] = array("post_meta" => $post_meta, 'url' => $url_file, 'attachment_id' => $attachment_id);
+            }
+        }
+    }
+
+    foreach($PDFidPostAttachmentURL as $post_id => $info)
+    {
+        if(!array_key_exists('socialdb_pdf_text', $info['post_meta']))
+        {
+            get_add_pdf_text($post_id, $info['attachment_id']);
+        }
+    }
+
+    foreach($OFFICEidPostAttachmentURL as $post_id => $info)
+    {
+        if(!array_key_exists('socialdb_office_document_text', $info['post_meta']))
+        {
+            get_add_office_document_text($post_id, $info['attachment_id']);
+        }
+    }
+
+    if(!empty($postID_pdfURL))
+    {
+        return $postID_pdfURL;
+    }
+    else
+    {
+        return false;
     }
 }
 ################# INSTANCIA OS MODULOS SE ESTIVEREM ATIVADOS#################

@@ -127,7 +127,7 @@ global $config;
         </form>
     </div>    
 </div> 
-<ul id="myMenu" class="contextMenu" style="display:none;">
+<ul id="myMenu" class="contextMenu" style="display:none; position: fixed;">
     <li class="add"><a href="#add"><?php echo __('Add', 'tainacan'); ?></a></li>  
     <li class="edit"><a href="#edit"><?php echo __('Edit', 'tainacan'); ?></a></li>
     <!--   <li class="cut separator"><a href="#cut">Cut</a></li>

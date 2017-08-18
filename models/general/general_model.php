@@ -118,8 +118,6 @@ class Model {
             }
             if(get_post($attach_id)->guid)
               update_post_meta($attach_id, 'md5_inicial', md5_file(get_post($attach_id)->guid));
-            else
-                var_dump($attach_id);
         }
         return $attach_id;
     }
@@ -419,7 +417,8 @@ class Model {
 				WHERE p.post_id = {$collection_id}
 		";
         $collections_data = $wpdb->get_results($query);
-        foreach ($collections_data as $collection_data) {
+        foreach ($collections_data as $collection_data)
+        {
             if ($collection_data->meta_key == 'socialdb_collection_facets') {
                 if ($collection_data->meta_value != '') {
                     $config[$collection_data->meta_key][] = get_term_by('id', $collection_data->meta_value, 'socialdb_category_type');
@@ -432,6 +431,7 @@ class Model {
                 $config[$collection_data->meta_key] = $collection_data->meta_value;
             }
         }
+
         $config['sociadb_collection_privacity'] = wp_get_post_terms($collection_id, 'socialdb_collection_type');
         $config['socialdb_collection_property_object_facets'] = $this->get_property_object_facets($this->get_category_root_of($collection_id));
         $data['collection_metas'] = $config;
@@ -1414,7 +1414,7 @@ class Model {
      * @return json com o id e o nome de cada objeto
      * @author Eduardo Humberto
      */
-    public function get_objects_by_property_json_advanced_search($data,$is_search = false) {
+    public function get_objects_by_property_json_advanced_search($data,$is_search = false,$where = " p.post_status like 'publish'  AND ") {
         global $wpdb;
         $wp_posts = $wpdb->prefix . "posts";
         $term_relationships = $wpdb->prefix . "term_relationships";
@@ -1422,16 +1422,16 @@ class Model {
         if ($data['collection_id'] != get_option('collection_root_id') && (!$mask || $mask!=='repository_key')) {
             $category_root_id = $this->get_collection_category_root($data['collection_id']);
             $category_root_id = get_term_by('id', $category_root_id, 'socialdb_category_type');
-            $where = "t.term_taxonomy_id = {$category_root_id->term_taxonomy_id} AND ";
+            $where = "t.term_taxonomy_id = {$category_root_id->term_taxonomy_id} AND ".$where;
             $inner_join = " INNER JOIN $term_relationships t ON p.ID = t.object_id ";
         } else {
-            $where = "";
+            $where = "".$where;
             $inner_join = '';
         }
         $query = "
                         SELECT p.* FROM $wp_posts p
                         $inner_join    
-                        WHERE $where p.post_type like 'socialdb_object' AND p.post_status like 'publish' and ( p.post_title LIKE '%{$data['term']}%' OR p.post_content LIKE '%{$data['term']}%')
+                        WHERE $where p.post_type like 'socialdb_object' and ( p.post_title LIKE '%{$data['term']}%' OR p.post_content LIKE '%{$data['term']}%')
                 ";                  
         $result = $wpdb->get_results($query);
         if($is_search){

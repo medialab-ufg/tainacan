@@ -965,7 +965,7 @@
             resetAllForms();
         }
         
-        setTimeout(function(){  $('#meta-'+type+' input[type=text]').first().trigger('focus');cl( $('#meta-'+type+' input[type=text]').first()); }, 1000);
+        setTimeout(function(){  $('#meta-'+type+' input[type=text]').first().trigger('focus'); }, 1000);
        
     }
 

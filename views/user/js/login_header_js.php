@@ -22,7 +22,8 @@ $(function() {
     
     
     $('#open_myModalForgotPasswordHeader').click(function (e) {
-        $('#myModalForgotPasswordHeader').modal('show');
+        //$('#myModalForgotPasswordHeader').modal('show');
+        $("#forgot_password").toggleClass("hide_elem");
     });
     
     $( '#formUserForgotPasswordHeader' ).submit( function( e ) {

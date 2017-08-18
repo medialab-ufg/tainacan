@@ -76,7 +76,7 @@ class FormItemCompound extends FormItem {
             <div>
                <?php $first = false;
                   foreach ($this->value as $index => $value):  ?>
-                    <div id="container-field" 
+                    <div id="container-field-<?php echo $property['id'] ?>-<?php echo $index ?>"
                          class="row" style="padding-bottom: 10px;margin-bottom: 10px;">
                         <div class="col-md-11">
                             <?php if (is_array($childrenProperties)): ?>
@@ -134,7 +134,7 @@ class FormItemCompound extends FormItem {
                         </div>
                     <?php if ($first): ?>
                             <div class="col-md-1">
-                                <a style="cursor: pointer;" onclick="remove_container(<?php echo $property['id'] ?>,<?php echo $$index ?>)" class="pull-right">
+                                <a style="cursor: pointer;" onclick="remove_container_compounds(<?php echo $property['id'] ?>,<?php echo $index ?>,<?php echo $item_id ?>)" class="pull-right">
                                     <span class="glyphicon glyphicon-remove"></span>
                                 </a>
                             </div> 
@@ -236,7 +236,7 @@ class FormItemCompound extends FormItem {
     public function initScriptsCompoundsContainer($property, $item_id, $index) {
         ?>
         <script>
-            var index = <?php echo $index; ?> + 1;
+            var index_<?php echo $property['id'] ?> = <?php echo $index; ?> + 1;
 
             $('.js-append-property-<?php echo $property['id'] ?>').click(function(){
                 $.ajax({
@@ -247,11 +247,11 @@ class FormItemCompound extends FormItem {
                         operation: 'appendContainerCompounds',
                         item_id:'<?php echo $item_id ?>',
                         property_details: "<?php echo htmlentities(serialize($property)) ?>",
-                        index: index
+                        index: index_<?php echo $property['id'] ?>
                     }
                 }).done(function (result) {
                     $('#meta-item-<?php echo $property['id']; ?> #appendCompoundsContainer').append(result);
-                    index++;
+                    index_<?php echo $property['id'] ?>++;
                 });
             });
             

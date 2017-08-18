@@ -76,7 +76,11 @@ class FormItemText extends FormItemMultiple {
                         <?php endif; ?>
                     </div>
                 <?php endforeach; ?>
-                    <div id="appendTextContainer"></div>
+                    <div id="appendTextContainer">
+                         <span style="display: none;"  id="loader-new-fields-<?php echo $property['id'] ?>">
+                            <center style="margin-top: -20px;"><img width="25" heigth="50" src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>"><?php _e('Loading new field', 'tainacan') ?></center>
+                        </span>
+                    </div>
                 <?php if ($isMultiple && $showButton): ?>
                     <button type="button"
                             class="btn btn-primary btn-lg btn-xs btn-block js-append-property-<?php echo $property['id'] ?>">
@@ -118,7 +122,7 @@ class FormItemText extends FormItemMultiple {
                 <?php endif; ?>
             </div>
             <div class="col-md-1">
-                <a style="cursor: pointer;" onclick="remove_container('<?php echo $property['id'] ?>','<?php echo $index ?>',<?php echo $item_id ?>)" class="pull-right">
+                <a style="cursor: pointer;" onclick="remove_container('<?php echo $property['id'] ?>','<?php echo $index ?>','<?php echo $item_id ?>')" class="pull-right">
                     <span class="glyphicon glyphicon-remove"></span>
                 </a>
             </div>
@@ -146,6 +150,7 @@ class FormItemText extends FormItemMultiple {
             var index = <?php echo $index; ?> + 1;
 
             $('.js-append-property-<?php echo $property['id'] ?>').click(function(){
+                $('#loader-new-fields-<?php echo $property['id'] ?>').show();
                 $.ajax({
                     url: $('#src').val() + '/controllers/object/form_item_controller.php',
                     type: 'POST',
@@ -157,19 +162,22 @@ class FormItemText extends FormItemMultiple {
                         index: index
                     }
                 }).done(function (result) {
-                    $('#meta-item-<?php echo $property['id']; ?> #appendTextContainer').append(result);
+                    $('#loader-new-fields-<?php echo $property['id'] ?>').hide();
+                    $(result).insertBefore('#meta-item-<?php echo $property['id']; ?> #loader-new-fields-<?php echo $property['id'] ?>')
+                    //$('#meta-item-<?php echo $property['id']; ?> #appendTextContainer').append(result);
                     index++;
                 });
             });
 
             function remove_container(property_id,index_id,item_id){
                 $('#container-field-'+property_id+'-'+index_id).remove();
+                $('.js-append-property-'+property_id).show();
                 $.ajax({
                        url: $('#src').val() + '/controllers/object/form_item_controller.php',
                        type: 'POST',
                        data: {
                            operation: 'removeIndexValues',
-                           item_id:item_id,
+                           item_id: $('#item-multiple-selected').val().trim(),
                            compound_id:property_id,
                            index: index_id
                        }

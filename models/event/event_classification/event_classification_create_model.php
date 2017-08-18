@@ -54,17 +54,23 @@ class EventClassificationCreateModel extends EventModel {
     public function verify_event($data,$automatically_verified = false) {
        $collection_id = get_post_meta($data['event_id'],'socialdb_event_collection_id',true); 
        $actual_state = get_post_meta($data['event_id'], 'socialdb_event_confirmed',true);
-       if($actual_state!='confirmed'&&$automatically_verified||(isset($data['socialdb_event_confirmed'])&&$data['socialdb_event_confirmed']=='true')){// se o evento foi confirmado automaticamente ou pelos moderadores
+
+       if($actual_state != 'confirmed' && $automatically_verified || (isset($data['socialdb_event_confirmed']) && $data['socialdb_event_confirmed'] == 'true'))// se o evento foi confirmado automaticamente ou pelos moderadores
+       {
            $object_id = get_post(get_post_meta($data['event_id'], 'socialdb_event_classification_object_id',true)); // pego o objeto
            $type = get_post_meta($data['event_id'], 'socialdb_event_classification_type',true);// pego o tipo
-           if($type=='category'){// se for categoria
+
+           if($type == 'category')// se for categoria
+           {
               $data = $this->insert_event_category($object_id->ID, $data,$collection_id, $automatically_verified);
-           }elseif($type=='tag'){
+           }elseif($type == 'tag')
+           {
               $data = $this->insert_event_tag($object_id->ID, $data, $automatically_verified);
-           }else{
+           }else
+           {
               $data =  $this->insert_event_property($object_id->ID, $data, $automatically_verified); 
            }      
-       }elseif($actual_state!='confirmed'){
+       }elseif($actual_state != 'confirmed'){
            $this->set_approval_metas($data['event_id'], $data['socialdb_event_observation'], $automatically_verified);
            $this->update_event_state('not_confirmed', $data['event_id']);
            $data['success'] = true;
@@ -88,16 +94,19 @@ class EventClassificationCreateModel extends EventModel {
         $class = new ObjectSaveValuesModel();
         //pego a categoria
         $category = get_term_by('id',  get_post_meta($data['event_id'], 'socialdb_event_classification_term_id',true),'socialdb_category_type');
-        if($category&&$object_id){// se a categoria ou objeto forem validos
+        //print_r($data);
+        //print $this->getPropertyCategory( $category->term_id, $collection_id);
+        if($category && $object_id)// se a categoria e objeto forem validos
+        {
             $class->saveValue($object_id,
-                        $this->getPropertyCategory( $category->term_id, $collection_id),
+                        $data['socialdb_event_classification_property_id'],
                         0,
                         'term',
                         rand(1, 199),
                         $category->term_id,  rand(1, 199)
                         );
-//            wp_set_object_terms( $object_id, $category->term_id,'socialdb_category_type',true);
-//            $this->concatenate_commom_field_value( $object_id, "socialdb_propertyterm_".$this->get_category_property($category->term_id, $collection_id), $category->term_id);
+            /*wp_set_object_terms( $object_id, $category->term_id,'socialdb_category_type',true);
+            $this->concatenate_commom_field_value( $object_id, "socialdb_propertyterm_".$this->get_category_property($category->term_id, $collection_id), $category->term_id);*/
             $this->set_approval_metas($data['event_id'], $data['socialdb_event_observation'], $automatically_verified);
             $this->update_event_state('confirmed', $data['event_id']);
             $data['msg'] = __('The event was successful','tainacan');

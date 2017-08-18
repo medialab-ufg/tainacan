@@ -84,7 +84,11 @@ class FormItemText extends FormItem {
                         <?php endif; ?>
                     </div>
                 <?php endforeach; ?>
-                    <div id="appendTextContainer"></div>
+                    <div id="appendTextContainer">
+                        <span style="display: none;"  id="loader-new-fields-<?php echo $property['id'] ?>">
+                            <center style="margin-top: -20px;"><img width="25" heigth="50" src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>"><?php _e('Loading new field', 'tainacan') ?></center>
+                        </span>
+                    </div>
                 <?php if ($isMultiple && $showButton): ?>
                     <button type="button"
                             class="btn btn-primary btn-lg btn-xs btn-block js-append-property-<?php echo $property['id'] ?>">
@@ -151,9 +155,10 @@ class FormItemText extends FormItem {
     public function initScriptsTextContainer($property, $item_id, $index) {
         ?>
         <script>
-            var index = <?php echo $index; ?> + 1;
+            var index_<?php echo $property['id'] ?> = <?php echo $index; ?> + 1;
 
             $('.js-append-property-<?php echo $property['id'] ?>').click(function(){
+                $('#loader-new-fields-<?php echo $property['id'] ?>').show();
                 $.ajax({
                     url: $('#src').val() + '/controllers/object/form_item_controller.php',
                     type: 'POST',
@@ -162,16 +167,19 @@ class FormItemText extends FormItem {
                         operation: 'appendContainerText',
                         item_id:'<?php echo $item_id ?>',
                         property_details: '<?php echo serialize($property) ?>',
-                        index: index
+                        index: index_<?php echo $property['id'] ?>
                     }
                 }).done(function (result) {
-                    $('#meta-item-<?php echo $property['id']; ?> #appendTextContainer').append(result);
-                    index++;
+                    $('#loader-new-fields-<?php echo $property['id'] ?>').hide();
+                    $(result).insertBefore('#meta-item-<?php echo $property['id']; ?> #loader-new-fields-<?php echo $property['id'] ?>')
+                    //$('#meta-item-<?php echo $property['id']; ?> #appendTextContainer').append(result);
+                    index_<?php echo $property['id'] ?>++;
                 });
             });
 
             function remove_container(property_id,index_id,item_id){
                 $('#container-field-'+property_id+'-'+index_id).remove();
+                $('.js-append-property-'+property_id).show();
                 $.ajax({
                        url: $('#src').val() + '/controllers/object/form_item_controller.php',
                        type: 'POST',
