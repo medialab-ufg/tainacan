@@ -3,16 +3,10 @@ include_once ( dirname(__FILE__) . '/../../helpers/view_helper.php');
 include_once ( dirname(__FILE__) . '/../../views/property/js/tabs_js.php');
 include_once ( dirname(__FILE__) . '/../../views/property/js/compounds_js.php');
 include_once ( dirname(__FILE__) . '/../../views/property/js/list_metadata_js.php');
-
-/*
-include_once('../../helpers/view_helper.php');
-include_once('js/compounds_js.php');
-include_once ('js/list_metadata_js.php'); */
-
 $view_helper = new ViewHelper();
 ?>
 
-<?php $view_helper->render_header_config_steps('metadata') ?>
+<?php // $view_helper->render_header_config_steps('metadata') ?>
 <style>
     #properties_tabs ul.metadata-container li{
         border: 1px solid #e3e3e3 !important;
@@ -134,7 +128,9 @@ $view_helper = new ViewHelper();
                 </div>
             </div>
 
-            <?php include_once "metadata_forms.php"; ?>
+            <?php // include_once "metadata_forms.php"; ?>
+
+            <?php include_once (dirname(__FILE__) . "../../views/theme_options/property/metadata_forms.php"); ?>
 
             <input type="hidden" id="collection_list_ranking_id" name="collection_id" value="">
         </div>
