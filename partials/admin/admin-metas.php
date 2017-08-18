@@ -1,34 +1,15 @@
 <?php
 include_once ( dirname(__FILE__) . '/../../helpers/view_helper.php');
-include_once ( dirname(__FILE__) . '/../../views/property/js/tabs_js.php');
-include_once ( dirname(__FILE__) . '/../../views/property/js/compounds_js.php');
-include_once ( dirname(__FILE__) . '/../../views/property/js/list_metadata_js.php');
+include_once ( dirname(__FILE__) . '/../../views/theme_options/property/js/compounds_js.php');
+include_once ( dirname(__FILE__) . '/../../views/theme_options/property/js/list_metadata_js.php');
 $view_helper = new ViewHelper();
 ?>
 
 <?php // $view_helper->render_header_config_steps('metadata') ?>
-<style>
-    #properties_tabs ul.metadata-container li{
-        border: 1px solid #e3e3e3 !important;
-    }
-    .gallery li {
-        padding: 0.4em;
-        margin: 0;
-    }
-    .list-compounded{
-        margin-left: 15px;
-        margin-top: 15px;
-    }
-    .list-compounded li{
-        cursor: pointer;
-    }
-</style>
 <input type="hidden" name="property_category_id" id="property_category_id" value="<?php echo $category->term_id; ?>"/>
+<input type="hidden" id="src" value="<?php echo site_url(); ?>"/>
 <div class="categories_menu col-md-12 no-padding"  id="properties_tabs">
 
-    <!--div id="preset-filters" class="col-md-4 preset-filters ui-widget-header no-padding">
-        <ul id="filters-accordion" class="connectedSortable"></ul>
-    </div-->
     <div class="categories_menu col-md-12 no-padding"  id="properties_tabs" style="margin-top: 10px;">
         <!-- Fitros -->
         <div id="preset-filters" class="col-md-3 preset-filters ui-widget-header no-padding">
@@ -53,7 +34,7 @@ $view_helper = new ViewHelper();
         </div>
 
         <!-- METADADOS -->
-        <div class="col-md-9 ui-widget-content metadata-actions" >
+        <div class="col-md-9 metadata-actions" >
 
             <div class="col-md-12 no-padding action-messages" >
                 <div id="alert_success_properties" class="alert alert-success" style="display: none; margin-top: 20px;">
@@ -73,10 +54,6 @@ $view_helper = new ViewHelper();
                 <button class="btn btn-default btn-lg dropdown-toggle" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true" onclick="resetAllForms()">
                     <?php _e('Add Property', 'tainacan'); ?> <span class="caret"></span>
                 </button>
-
-                <!--<div class="alert alert-info" style="float: left; margin-left: 20px; padding: 13px 20px 13px 20px; font-size: 12px;">
-                    <i> * Arraste um metadado para o lado esquerdo para utiliza-lo como filtro </i>
-                </div>-->
 
                 <ul class="dropdown-menu add-property-dropdown">
                     <?php foreach( $view_helper->get_metadata_types() as $type => $label):  ?>
@@ -128,9 +105,7 @@ $view_helper = new ViewHelper();
                 </div>
             </div>
 
-            <?php // include_once "metadata_forms.php"; ?>
-
-            <?php include_once (dirname(__FILE__) . "../../views/theme_options/property/metadata_forms.php"); ?>
+            <?php include_once ( get_stylesheet_directory() . "/views/theme_options/property/metadata_forms.php"); ?>
 
             <input type="hidden" id="collection_list_ranking_id" name="collection_id" value="">
         </div>

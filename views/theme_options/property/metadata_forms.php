@@ -1,6 +1,5 @@
 <?php
 $property_data_types = $view_helper->get_property_data_types();
-
 foreach( $view_helper->get_metadata_types() as $type => $label):
     if ( ! in_array($type, $view_helper->get_special_metadata()) ): ?>
         <div class="modal fade" id="meta-<?php echo $type ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel-<?php echo $type ?>">
@@ -145,7 +144,7 @@ foreach( $view_helper->get_metadata_types() as $type => $label):
 endforeach;
 
 foreach( ['object', 'term', 'voting', 'filter', 'tag','compounds'] as $metadata ) {
-    include_once "metadata/form_$metadata.php";
+    include_once (dirname(__FILE__) ."/metadata/form_$metadata.php");
 }
 ?>
 
