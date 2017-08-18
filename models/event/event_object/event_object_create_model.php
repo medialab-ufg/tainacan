@@ -87,7 +87,7 @@ class EventObjectCreateModel extends EventModel {
         $category_model = new CategoryModel();
         $all_properties = $category_model->get_properties($data['collection_id'], []);
         $this->insert_autoincrement($all_properties,$object_id);
-        if ($value>0) {
+        if ($value) {
             $this->set_approval_metas($data['event_id'], $data['socialdb_event_observation'], $automatically_verified);
             $this->update_event_state('confirmed', $data['event_id']);
             $data['msg'] = __('The event was successful','tainacan');

@@ -99,6 +99,11 @@ class FormItemText extends FormItem {
         </div>
         <?php
         $this->initScriptsTextContainer($property, $item_id, $index);
+
+        //action para edicao dos widget de texto
+        if(has_action('alter_text_helper')){
+            do_action('alter_text_helper');
+        }
     }
 
     public function appendContainerText($property,$item_id,$index) {

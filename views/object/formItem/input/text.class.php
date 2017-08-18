@@ -70,7 +70,11 @@ class TextClass extends FormItem{
             <script>
                 $('#text-field-<?php echo $compound['id'] ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').trigger('blur');
             </script>
-        <?php endif;     
+        <?php endif;
+        //action para edicao dos widget de texto
+        if(has_action('alter_widget_text_helper')){
+            do_action('alter_widget_text_helper',$property,"text-field-". $compound['id'] ."-". $property_id ."-". $index_id);
+        }
     }
 
     /**
@@ -98,6 +102,15 @@ class TextClass extends FormItem{
             });
             //enviando valores
             $('#text-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').blur(function(){
+                //validando campos dentro do mesmo metadado
+                if( Hook.is_register('validate_unique_fields')){
+                    Hook.call('validate_unique_fields',['<?php echo $compound_id; ?>',$(this).val(),'text-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>']);
+                    if(Hook.result){
+                        $('#text-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val('');
+                        toastr.error('<?php _e('this value is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                    }
+                }
+
                 <?php if($this->isRequired):  ?>
                     validateFieldsMetadataText($(this).val().trim(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>')
                 <?php endif; ?>
