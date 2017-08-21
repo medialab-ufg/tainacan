@@ -11,10 +11,14 @@ class LogController extends Controller {
             case "user_events":
                 $log = new Log();
                 $_evt = $this->getEventType($data['parent'], $data['event']);
-                return $log->user_events($_evt, $data['event'], $data['from'], $data['to'], $data['collec_id'], $data['filter']);
+                return $log->user_events($_evt, $data['event'], $data['from'], $data['to'], $data['collec_id'], $data['filter'], $data['operation']);
             case "add_log":
                 Log::addLog(['collection_id' => $data['collection_id'], 'event_type' => 'collection_search',
                     'event' => $data['event'], 'resource_id' => $data['resource_id'] ]);
+                break;
+            case "detail":
+                $log = new Log();
+                return $log->user_events($data['parent'], $data['event'], $data['from'], $data['to'], $data['collec_id'], $data['filter'], $data['operation']);
                 break;
         endswitch;
     }
