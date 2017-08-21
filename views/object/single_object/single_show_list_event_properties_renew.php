@@ -6,6 +6,7 @@
 include_once ('js/show_list_event_properties_js.php');
 include_once('./../../helpers/view_helper.php');
 include_once('./../../helpers/object/single_properties_widgets_helper.php');
+include_once('./../../helpers/object/object_properties_widgets_helper.php');
 $objectHelper = new ObjectSingleWidgetsHelper();
 $properties_autocomplete = [];
 $properties_terms_radio = [];
@@ -174,7 +175,7 @@ if (isset($property_data)):
                     <p>
                         <?php
                         $is_url = filter_var($value, FILTER_VALIDATE_URL);
-                        if(!$is_url)
+                        /*if(!$is_url)
                         {
                             $is_url = filter_var("http://".$value, FILTER_VALIDATE_URL);
                             if(!$is_url)
@@ -185,10 +186,10 @@ if (isset($property_data)):
                                      $value_href = "http://www.".$value;
                                 }
                             }else $value_href = "http://".$value;
-                        }else $value_href = $value;
+                        }else $value_href = $value;*/
 
                         if ($is_url):
-                            echo '<b><a class="can_short" target="_blank" href="' . $value_href . '" >' . $value . '</a></b>';
+                            echo '<b><a class="can_short" target="_blank" href="' . $value . '" >' . $value . '</a></b>';
                         elseif (filter_var(trim($value), FILTER_VALIDATE_EMAIL)):
                             echo '<b><a class="can_short" target="_blank" href="mailto:' . $value . '">' . $value . '</a></b>';
                         elseif ($value):
@@ -215,40 +216,113 @@ if (isset($property_data)):
             <!-- Widgets para edicao -->
                 <?php
 
-                  if(has_action('modificate_single_item_properties_data')){
-                       do_action('modificate_single_item_properties_data',$property,$object_id);
-                  }else if ($property['type'] === 'text') {?>
-                    <input style="display: none;" disabled="disabled" value="<?php if ($property['metas']['value']) echo $property['metas']['value'][0]; ?>" type="text" id="single_property_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>" class="form-control" name="socialdb_property_<?php echo $property['id']; ?>" <?php
-                    if (!$property['metas']['socialdb_property_required']): echo 'required="required"';
-                    endif;
-                    ?>>
-                <?php } elseif ($property['type'] === 'textarea') {?>
-                    <textarea style="display: none;" disabled="disabled" id="single_property_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>" class="form-control" name="socialdb_property_<?php echo $property['id']; ?>" <?php
-                    if (!$property['metas']['socialdb_property_required']): echo 'required="required"';
-                    endif;
-                    ?>><?php if ($property['metas']['value']) echo $property['metas']['value'][0]; ?>
-                    </textarea>
-              <?php }elseif ($property['type'] === 'date' && !has_action('modificate_single_item_properties_data')) {
-                  ?>
-                    <input style="display: none;"
-                           disabled="disabled"
-                           value="<?php if ($property['metas']['value']) echo $property['metas']['value'][0]; ?>"
-                           id="single_property_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"
-                           type="text" class="form-control input_date"
-                           name="socialdb_property_<?php echo $property['id']; ?>"
-                           >
-              <?php}
-                else{
+                $object_properties_widgets_helper = new ObjectWidgetsHelper();
+                $meta = unserialize(get_post_meta($object_id, 'socialdb_property_helper_' . $property['id'], true));
+                $indexed_properties = [];
+                if($meta && !empty($meta))
+                {
+                    foreach ($meta as $property_index => $property_helper) {
+                        foreach ($property_helper as $atom) {
+                            $type = $atom['type'];
+                            $values = $atom['values'];
+
+                            foreach ($values as $value) {
+                                $meta_value = $object_properties_widgets_helper->sdb_get_post_meta($value);
+                                //$indexed_properties[$meta_value->meta_id] = $meta_value->meta_value;
+                                if(isset($meta_value->meta_value))
+                                {
+                                    $indexed_properties[$meta_value->meta_id] = $meta_value->meta_value;
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+                if(empty($indexed_properties))
+                {
+                    $indexed_properties[] = '';
+                }
+
+                if(has_action('modificate_single_item_properties_data')){
+                   do_action('modificate_single_item_properties_data',$property,$object_id);
+                }else if ($property['type'] === 'text')
+                {
+                    foreach($indexed_properties as $index => $value)
+                    {
+                      ?>
+                      <input id="single_property_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>_<?php echo $index?>" style="display: none; margin: 7px 0px 7px 0px;" disabled="disabled" value="<?php if ($value) echo $value ?>" type="text" class="form-control"
+                             name="socialdb_property_<?php echo $property['id']; ?>"
+                             data-index="<?php echo $index; ?>"
+                              <?php
+                              if (!$property['metas']['socialdb_property_required']):
+                                  echo 'required="required"';
+                              endif;
+                              ?>
+                      >
+                      <?php
+                    }
+                } elseif ($property['type'] === 'textarea')
+                {
+                    foreach($indexed_properties as $index => $value)
+                    {
+                        ?>
+                        <textarea style="display: none;" disabled="disabled"
+                                  id="single_property_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"
+                                  class="form-control" name="socialdb_property_<?php echo $property['id']; ?>"
+                                  data-index="<?php echo $index; ?>"
+                                <?php
+                                    if (!$property['metas']['socialdb_property_required']):
+                                        echo 'required="required"';
+                                    endif;
+                                ?>
+                        >
+                            <?php
+                            if ($value)
+                                echo $value;
+                            ?>
+                        </textarea>
+                        <?php
+                    }
+                }elseif ($property['type'] === 'date' && !has_action('modificate_single_item_properties_data'))
+                {
+                    foreach($indexed_properties as $index => $value)
+                    {
+                        ?>
+                        <input style="display: none;"
+                               disabled="disabled"
+                               value="<?php if ($value) echo $value ?>"
+                               id="single_property_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"
+                               type="text" class="form-control input_date"
+                               name="socialdb_property_<?php echo $property['id']; ?>"
+                               data-index="<?php echo $index; ?>"
+                        >
+                        <?php
+                    }
+                }
+                else
+                {
+                    foreach($indexed_properties as $index => $value)
+                    {
+                        ?>
+                        <input style="display: none;" disabled="disabled"
+                               value="<?php if ($value) echo $value ?>"
+                               id="single_property_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"
+                               type="text" class="form-control"
+                               data-index="<?php echo $index; ?>"
+                               name="socialdb_property_<?php echo $property['id']; ?>"
+                            <?php
+                                if (!$property['metas']['socialdb_property_required']):
+                                    echo 'required="required"';
+                                endif;
+                            ?>
+                        >
+                        <?php
+                    }
+                }
                 ?>
-                    <input style="display: none;" disabled="disabled" value="<?php if ($property['metas']['value']) echo $property['metas']['value'][0]; ?>" id="single_property_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>" type="text" class="form-control" name="socialdb_property_<?php echo $property['id']; ?>" <?php
-                    if (!$property['metas']['socialdb_property_required']): echo 'required="required"';
-                    endif;
-                    ?>>
-               <?php } ?>
-                <input style="display: none;" disabled="disabled" value="<?php if ($property['metas']['value']) echo $property['metas']['value'][0]; ?>" id="single_property_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>" type="text" class="form-control" name="socialdb_property_<?php echo $property['id']; ?>" <?php
-                if (!$property['metas']['socialdb_property_required']): echo 'required="required"';
-                endif;
-                ?>>
+
+                <!-- arrumar num -->
                 <input style="display: none;" type="hidden" id="single_property_<?php echo $property['id']; ?>_<?php echo $object_id; ?>_value_before" name="property_<?php echo $property['id']; ?>_<?php echo $object_id; ?>_value_before" value="<?php if (is_array($property['metas']['value'])) echo implode(',', $property['metas']['value']); ?>">
             </p>
 

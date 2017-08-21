@@ -51,8 +51,8 @@ class NumericClass extends FormItem{
                             value="<?php echo ($autoValidate) ? 'true' : 'false' ?>">
             <?php endif;  ?>
             <input type="text" 
-                   id="numeric-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>" 
-                   value="" 
+                   id="numeric-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>"
+                   value="<?php echo ($values && isset($values[0]) && !empty($values[0])) ? $values[0] : ''; ?>"
                    class="form-control auto-save form_autocomplete_value_<?php echo $property_id; ?>" 
                    onkeypress='return onlyNumbers(event)'
                    name="socialdb_property_<?php echo $property_id; ?>[]">

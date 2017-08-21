@@ -997,7 +997,8 @@ class PropertyModel extends Model {
      * @return array com os metas ou false se estiver vazio.
      * @author: Eduardo Humberto 
      */
-    public function get_object_property_value($object_id, $property_id) {
+    public function get_object_property_value($object_id, $property_id)
+    {
         $value = get_post_meta($object_id, 'socialdb_property_' . $property_id);
         $return = $this->eliminate_invalid_values($value);
         if ($return) {
@@ -1006,17 +1007,24 @@ class PropertyModel extends Model {
             return false;
         }
     }
+
     /**
      * function eliminate_invalid_values($postmeta)
      * @param array $postmeta O id do objeto
      * @return array com os metas validos ou false se estiver vazio.
      * @author: Eduardo Humberto 
      */
-    public function eliminate_invalid_values($postmeta) {
+    public function eliminate_invalid_values($postmeta)
+    {
           $array = [];
-         if($postmeta&&is_array($postmeta)){
+         if($postmeta && is_array($postmeta)){
              foreach ($postmeta as $meta) {
-                 if($meta&&trim($meta)!=''){
+
+                 if(is_array($meta))
+                 {
+                     $array[] = trim($meta['val']);
+                 }else
+                 if($meta && trim($meta) != ''){
                      $array[] = trim($meta);
                  }
              }

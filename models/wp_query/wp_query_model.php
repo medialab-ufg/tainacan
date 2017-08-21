@@ -595,7 +595,14 @@ class WPQueryModel extends Model {
                 $args['s'] = $recover_data['keyword'];
             }
             if(isset($recover_data['advanced_search']) && isset($recover_data['keyword'])){
-                $args['s'] = $recover_data['keyword'];
+                if(has_filter('alter_s_wpquery_search')){
+                    $s = apply_filters('alter_s_wpquery_search',$recover_data['keyword']);
+                    if($s){
+                        $args['s'] = $s;
+                    }
+                }else{
+                    $args['s'] = $recover_data['keyword'];
+                }
             }
             if(isset($recover_data['author']) && $recover_data['author'] != ''){
                 $args['author'] = $recover_data['author'];
@@ -922,6 +929,12 @@ class WPQueryModel extends Model {
                     'compare' => 'IN'
                 );
             }
+        }
+
+        if(has_filter('alter_advanced_search_filter')){
+            $new_filter =  apply_filters('alter_advanced_search_filter',$recover_data);
+            if($new_filter)
+                $meta_query[] = $new_filter;
         }
          // busca propriedade de dados do dynatree
         if (isset($recover_data['properties_data_tree'])) {

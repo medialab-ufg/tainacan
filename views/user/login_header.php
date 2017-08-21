@@ -94,7 +94,7 @@ if (!empty($app['app_id']) && !empty($app['app_secret'])) {
             <label for="user_login"><?php _e('Username or Email','tainacan'); ?><span style="color: #EE0000;"> *</span></label>
             <input type="text" required="required" class="form-control" name="user_login_forgot" id="user_login_forgot" placeholder="<?php _e('Username or e-mail that you use to login','tainacan'); ?>">
 
-            <button type="submit" class="btn btn-default pull-right" style="color: black;"><?php _e('Send','tainacan'); ?></button>
+            <button type="submit" class="btn btn-default pull-right" style="background-color: #0c698b ;color: white;"><?php _e('Send','tainacan'); ?></button>
         </form>
     </div>
 </div>

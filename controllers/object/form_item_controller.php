@@ -123,7 +123,7 @@ class FormItemController extends Controller {
                         [
                         'collection_id'=> $data['collection_id'],
                         'term'=>$data['value']
-                        ],true," p.post_status in ('publish','inherit')  AND "));
+                        ],true," p.post_status in ('publish','inherit','draft')  AND "));
                     if($json && is_array($json) && count($json) > 0){
                         foreach ($json as $value) {
                             if(strtolower($value->label) === strtolower($data['value']) && $value->ID != $data['item_id'] ){

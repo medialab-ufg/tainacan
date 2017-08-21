@@ -134,9 +134,11 @@ require_once(dirname(__FILE__).'../../../models/object/object_model.php');
       //property_data_edit_value
       case 'add_event_property_data_edit_value':
         $event_property_data_edit_value_model = new EventPropertyDataEditValue();
+
         if(!isset($data['socialdb_event_property_data_edit_value_suggested_value'])||empty($data['socialdb_event_property_data_edit_value_suggested_value'])){
           $data['socialdb_event_property_data_edit_value_suggested_value'] = '';
         }
+
         return $event_property_data_edit_value_model->create_event($data);
       case 'socialdb_event_property_data_edit_value';
         $event_property_data_edit_value_model = new EventPropertyDataEditValue();

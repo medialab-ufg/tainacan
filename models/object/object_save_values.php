@@ -105,9 +105,6 @@ class ObjectSaveValuesModel extends Model {
         if($meta)
         {
             $array = unserialize($meta);
-            //print_r($array);
-            //print $index;
-            //print_r($array);
             // verifico se o metadato pai ja esta inserido , verifico se o indice tb ja esta inserido,
             // e se o metadado filho tb ja esta inserido naquele indice
             if(is_array($array) && isset($array[$index]) && isset($array[$index][$property_children_id]))

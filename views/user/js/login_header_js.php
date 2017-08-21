@@ -22,10 +22,13 @@ $(function() {
     
     
     $('#open_myModalForgotPasswordHeader').click(function (e) {
-        //$('#myModalForgotPasswordHeader').modal('show');
         $("#forgot_password").toggleClass("hide_elem");
     });
-    
+
+    $('#dropdownMenuButton').click(function(){
+        $("#forgot_password").addClass("hide_elem");
+    });
+
     $( '#formUserForgotPasswordHeader' ).submit( function( e ) {
        $.ajax( {
               url: $('#src_login').val()+'/controllers/user/user_controller.php',
