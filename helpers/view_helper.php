@@ -641,7 +641,8 @@ class ViewHelper {
      */
     public function getValuesViewSingle($meta,$property_id, $property_type = null) {
         $cont = 0;
-        if ($meta && $meta != '') {
+        if ($meta && $meta != '')
+        {
             $array = unserialize($meta);
             foreach ($array as $property) {
                 foreach ($property as $atom) {

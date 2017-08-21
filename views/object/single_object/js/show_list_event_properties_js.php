@@ -23,14 +23,17 @@
         $("#single_edit_" + property_id + "_" + object_id).hide();
         $("#single_cancel_" + property_id + "_" + object_id).show();
         $("#single_save_" + property_id + "_" + object_id).show();
-        $("#single_property_value_" + property_id + "_" + object_id).prop({
-            disabled: false
-        });
-        $("#single_property_value_" + property_id + "_" + object_id).show();
+
         $(".single_socialdb_property_" + property_id ).prop({
             disabled: false
         });
         $("#value_" + property_id + "_" + object_id).hide();
+
+        //Show edition box
+        $("input[id ^= 'single_property_value_" + property_id + "_" + object_id + "']").prop({
+            disabled: false
+        });
+        $("input[id ^= 'single_property_value_" + property_id + "_" + object_id + "']").show();
     }
     function cancel_data_property(property_id, object_id) {
 //        $("#single_property_value_" + property_id + "_" + object_id).val($("#property_" + property_id + "_" + object_id + "_value_before").val());
@@ -56,27 +59,13 @@
                 $("#single_cancel_" + property_id + "_" + object_id).hide();
                 $("#single_edit_" + property_id + "_" + object_id).show();
                 $("#single_save_" + property_id + "_" + object_id).hide();
-                $("#single_property_value_" + property_id + "_" + object_id).prop({
+                $("input[id ^= 'single_property_value_" + property_id + "_" + object_id + "']").prop({
                     disabled: true
                 });
                 $(".single_socialdb_property_" + property_id ).prop({
                     disabled: true
                 });
-                $("#single_property_value_" + property_id + "_" + object_id).hide();
-                $("#value_" + property_id + "_" + object_id).show();
-            } else {
-
-                $("#single_property_value_" + property_id + "_" + object_id).val($("#single_property_" + property_id + "_" + object_id + "_value_before").val());
-                $("#single_cancel_" + property_id + "_" + object_id).hide();
-                $("#single_edit_" + property_id + "_" + object_id).show();
-                $("#single_save_" + property_id + "_" + object_id).hide();
-                $("#single_property_value_" + property_id + "_" + object_id).prop({
-                    disabled: true
-                });
-                $(".single_socialdb_property_" + property_id ).prop({
-                    disabled: true
-                });
-                $("#single_property_value_" + property_id + "_" + object_id).hide();
+                $("input[id ^= 'single_property_value_" + property_id + "_" + object_id + "']").hide();
                 $("#value_" + property_id + "_" + object_id).show();
             }
         });
@@ -90,6 +79,15 @@
                 return false;
             }
         }
+
+        var index_val_list = [];
+        $("input[id ^= 'single_property_value_" + property_id + "_" + object_id + "']").each(function(){
+            index_val_list.push({
+                val: $(this).val(),
+                index: $(this).attr('data-index')
+            });
+        });
+
         //inserindo a propriedade
         if(Hook.is_register( 'tainacan_insert_single_save_data_property')){
              Hook.call( 'tainacan_insert_single_save_data_property', [ property_id,object_id,'<?php echo mktime(); ?>'] );
@@ -104,7 +102,8 @@
                     socialdb_event_user_id: $('#current_user_id').val(),
                     socialdb_event_property_data_edit_value_object_id: object_id,
                     socialdb_event_property_data_edit_value_property_id: property_id,
-                    socialdb_event_property_data_edit_value_attribute_value: $("#single_property_value_" + property_id + "_" + object_id).val()}
+                    socialdb_event_property_data_edit_value_attribute_value: index_val_list
+                }
             }).done(function (result) {
                 verifyPublishedItem(object_id);
                 elem = jQuery.parseJSON(result);
