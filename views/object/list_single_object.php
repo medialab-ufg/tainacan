@@ -504,7 +504,7 @@ $view_helper = new ObjectHelper($collection_id);
 
 
 
-<div class="modal fade modal-share-network" id="modal_share_network<?php echo $object->ID ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade modal-share-network" id="modal_share_network_item<?php echo $object->ID ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
 

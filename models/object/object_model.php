@@ -1609,8 +1609,6 @@ class ObjectModel extends Model {
         }
     }
     
-    
-    
     /**
      * function get_objects_by_selected_categories()
      * @param string $categories Os dados vindo do formulario
@@ -1961,6 +1959,13 @@ class ObjectModel extends Model {
     }
 
     public function restoreItem($object_id) {
+        if(has_filter('before_restore_item')){
+            $result = apply_filters('before_restore_item',$object_id);
+            if($result){
+                return json_encode($result);
+            }
+        }
+
         $my_post = array(
             'ID' => $object_id,
             'post_status' => 'publish'
@@ -1994,21 +1999,6 @@ class ObjectModel extends Model {
           return false;
           } */
     }
-
-    /* public function delete_permanently_collection($collection_id){
-      $items = $this->get_collection_posts($collection_id, '*', 'trash');
-      if(!empty($items)){
-      foreach ($items as $item){
-      wp_delete_post( $item->ID, true );
-      }
-      }
-
-      if(wp_delete_post( $collection_id, true )){
-      return true;
-      }else{
-      return false;
-      }
-      } */
 
     /**
      * 
@@ -2409,6 +2399,34 @@ class ObjectModel extends Model {
         foreach ($items as $item) {
             delete_post_meta($item->ID, 'socialdb_property_'.$property_id, $item_id);
         }
+    }
+
+    public function getItemTabs($collection_id) {
+        if($collection_id && ctype_digit($collection_id)) {
+            return [
+                'order' => get_post_meta($collection_id, 'socialdb_collection_properties_ordenation'),
+                'organize' => unserialize(get_post_meta($collection_id, 'socialdb_collection_update_tab_organization', true))[0],
+                'names' => get_post_meta($collection_id, 'socialdb_collection_tab')
+            ];
+        }
+
+        return [];
+    }
+
+    public function getPDFBase($post_id) {
+        $obj = get_post($post_id);
+
+        if( is_object($obj) ) {
+            return [
+                "author" => $this->user_model->get_user($obj->post_author)['name'],
+                "title" => $obj->post_title,
+                "desc" => $obj->post_content,
+                "output" => substr($obj->post_name, 0, 15) . mktime(),
+                "data_c" => explode(" ", $obj->post_date)[0]
+            ];
+        }
+
+        return false;
     }
 
 }

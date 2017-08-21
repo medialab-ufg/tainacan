@@ -62,6 +62,7 @@ if (jQuery)
                                 // Detect mouse position
                                 var d = {}, x, y;
                                 if (self.innerHeight) {
+
                                     d.pageYOffset = self.pageYOffset;
                                     d.pageXOffset = self.pageXOffset;
                                     d.innerHeight = self.innerHeight;
@@ -78,14 +79,18 @@ if (jQuery)
                                     d.innerHeight = document.body.clientHeight;
                                     d.innerWidth = document.body.clientWidth;
                                 }
+
                                 (e.pageX) ? x = e.pageX : x = e.clientX + d.scrollLeft;
                                 (e.pageY) ? y = e.pageY : y = e.clientY + d.scrollTop;
 
+                                y = e.clientY;
+
                                 // Show the menu
                                 $(document).unbind('click');
-                                                        $(menu).css({ top: y, left: x }).fadeIn(o.inSpeed);
+                                $(menu).css({top: y, left: x }).fadeIn(o.inSpeed);
+
                                 // Hover events
-                                                        $(menu).find('A').mouseover( function() {
+                                    $(menu).find('A').mouseover( function() {
                                     $(menu).find('LI.hover').removeClass('hover');
                                     $(this).parent().addClass('hover');
                                 }).mouseout(function () {
@@ -200,8 +205,10 @@ if (jQuery)
                     d.innerHeight = document.body.clientHeight;
                     d.innerWidth = document.body.clientWidth;
                 }
+
                 (e.pageX) ? x = e.pageX : x = e.clientX + d.scrollLeft;
                 (e.pageY) ? y = e.pageY : y = e.clientY + d.scrollTop;
+
 
                 // Show the menu
                 $(document).unbind('click');

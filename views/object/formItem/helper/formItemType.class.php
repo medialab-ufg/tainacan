@@ -23,6 +23,7 @@ class FormItemType extends FormItem {
                           <option <?php echo ($type=='audio') ? 'selected' : ''; ?> value="audio"><?php _e('Audio','tainacan') ?></option>
                           <option <?php echo ($type=='video') ? 'selected' : ''; ?> value="video"><?php _e('Video','tainacan') ?></option>
                           <option <?php echo ($type=='image') ? 'selected' : ''; ?> value="image"><?php _e('Image','tainacan') ?></option>
+                          <option <?php echo ($type=='other') ? 'selected' : ''; ?> value="other"><?php _e('Other','tainacan') ?></option>
                       </select>
                       <span style="display: none;" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
                       <span style="display: none;" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>

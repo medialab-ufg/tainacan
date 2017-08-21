@@ -48,7 +48,6 @@
             if(!is_empty){
                 let itens_id = formData.get('items_id');
                 itens_id = itens_id.split(",");
-
                 let itemsFetcher = itens_id.map(function(item, index) {
                     if (formData.get("type_" + item) === 'pdf')
                     {

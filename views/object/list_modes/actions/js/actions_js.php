@@ -156,17 +156,15 @@
                     pressPDF.text(desc_xDist, desc_yDist+10, descricao);
 
                     var extra_yDist = 0;
-                    if(item_desc) {
-                      if(itm.breaks && itm.breaks > 0) {
-                          if(itm.tbn) {
-                              extra_yDist = itm.breaks * 30;
-                          } else {
-                              extra_yDist = itm.breaks * 20;
-                          }
-                      }
+                    if(item_desc && itm.breaks && itm.breaks > 0) {
+                        if(itm.tbn) {
+                            extra_yDist = itm.breaks * 5;
+                        } else {
+                            extra_yDist = itm.breaks * 2;
+                        }
                     }
 
-                    var desc_height = Math.round(Math.round(pressPDF.getTextDimensions(descricao).h) * 1.5);
+                    var desc_height = Math.round(Math.round(pressPDF.getTextDimensions(descricao).h) * 1.3);
                     if(item_desc) {
                         var base_count = desc_yDist + desc_height + (baseX*2) + extra_yDist;
                     } else {
@@ -190,7 +188,6 @@
                         base_count += base_top;
                     }
 
-                    // var max = itm.set.length;
                     for( idx in itm.set ) {
                         if(itm.set[idx] != 'null' && itm.set[idx] !== null) {
                             if(base_count >= maxHeightOffset) {
@@ -205,7 +202,8 @@
                             }
 
                             var extra_padding = 0;
-                            if( itm.set[idx].is_submeta ) {
+                            var check_submeta = itm.set[idx].is_submeta;
+                            if( check_submeta && (check_submeta === true) ) {
                                 extra_padding = 20;
                             }
                             pressPDF.setFontStyle('bold');
@@ -224,6 +222,43 @@
                                 pressPDF.text(default_val, (baseX*2 + extra_padding), f);
                                 base_count = p + extra_line_height;
                             }
+
+                            var meta_extras = itm.set[idx].extras;
+                            if( meta_extras && (meta_extras.length > 0)  ) {
+                                var count = 1;
+                                for( ex in itm.set[idx].extras ) {
+                                    var title = itm.set[idx].extras[ex].meta;
+                                    var is_extra_sub_compound = itm.set[idx].extras[ex].extra_submeta;
+                                    var plusX = 0;
+                                    if(is_extra_sub_compound && (is_extra_sub_compound == true))
+                                        plusX = 20;
+
+                                    var extra_p = (p + 40);
+                                    if(count > 1)
+                                        extra_p = extra_p + (count*20);
+
+                                    var is_extra_sub_padding = itm.set[idx].extras[ex].extra_padding;
+                                    if(is_extra_sub_padding)
+                                        extra_p += is_extra_sub_padding - 20;
+
+                                    if(title) {
+                                        pressPDF.setFontStyle('bold');
+                                        pressPDF.text( title, (baseX*2 + 20 + plusX), extra_p);
+                                        var extra_f = extra_p + 20;
+
+                                        var vl = itm.set[idx].extras[ex].value;
+                                        var extra_val = "---";
+                                        if(vl)
+                                            extra_val = vl;
+
+                                        pressPDF.setFontStyle('normal');
+                                        pressPDF.text(extra_val, (baseX*2 + 20 + plusX), extra_f);
+                                        base_count = extra_f + extra_line_height;
+                                    }
+                                    count++;
+                                }
+                            }
+
                         }
                     }
 

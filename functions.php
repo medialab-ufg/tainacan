@@ -631,55 +631,26 @@ function tainacan_comments($comment, $args, $depth) {
 
                 <div class="row reply" id="reply_<?php comment_ID(); ?>">
 
-                    <div class="col-md-12 left">
-                        <div class="col-md-1 no-padding">
-                            <a href=".div-comment-<?php comment_ID(); ?>" onclick="showModalReply('<?php comment_ID(); ?>');"><b><?php _e("Reply", 'tainacan'); ?></b></a>&nbsp;&nbsp;
-                        </div>
+                <div class="col-md-12 left">
+                    <div class="col-md-1 no-padding comment-item">
+                        <a onclick="showModalReply('<?php comment_ID(); ?>');"><b><?php _e("Reply", 'tainacan'); ?></b></a>&nbsp;&nbsp;
+                    </div>
 
-                        <?php if (!CollectionModel::is_moderator($global_collection_id, get_current_user_id()) && get_userdata(get_current_user_id())->display_name !== get_comment_author()): ?>
-                            <?php if (verify_allowed_action($global_collection_id, 'socialdb_collection_permission_delete_comment')): ?>
-                                <div class="col-md-1 no-padding">
-                                    <a href=".div-comment-<?php comment_ID(); ?>" onclick="showModalReportAbuseComment('<?php comment_ID(); ?>');"><span class="glyphicon glyphicon-bullhorn"></span>&nbsp;<?php _e("Report Abuse", 'tainacan'); ?></a>
-                                </div>
-                            <?php endif; ?>
-                        <?php else: ?>
-                            <div class="col-md-1 no-padding">
-                                <a href=".div-comment-<?php comment_ID(); ?>" onclick="showEditComment('<?php comment_ID(); ?>');"><span class="glyphicon glyphicon-pencil"></span>&nbsp;<?php _e("Edit", 'tainacan'); ?></a>&nbsp;
-                            </div>
-                            <div class="col-md-1 no-padding">
-                                <a href=".div-comment-<?php comment_ID(); ?>" onclick="showAlertDeleteComment('<?php comment_ID(); ?>', '<?php _e('Attention!') ?>', '<?php _e('Delete this comment?', 'tainacan') ?>', '<?php echo mktime(); ?>');"><span class="glyphicon glyphicon-remove"></span>&nbsp;<?php _e("Delete", 'tainacan'); ?></a>
+                    <?php if (!CollectionModel::is_moderator($global_collection_id, get_current_user_id()) && get_userdata(get_current_user_id())->display_name !== get_comment_author()): ?>
+                        <?php if (verify_allowed_action($global_collection_id, 'socialdb_collection_permission_delete_comment')): ?>
+                            <div class="col-md-1 no-padding comment-item">
+                                <a onclick="showModalReportAbuseComment('<?php comment_ID(); ?>');"><span class="glyphicon glyphicon-bullhorn"></span>&nbsp;<?php _e("Report Abuse", 'tainacan'); ?></a>
                             </div>
                         <?php endif; ?>
-
-                        <div class="col-md-2 no-padding">
-                            <a href="javascript:void(0)" id="resources_collection_button" class="dropdown-toggle"  data-toggle="dropdown" role="button" aria-expanded="false" style="display:inline-block;">
-                                <div style="display: inline-block">
-                                    <div style="font-size:1em; cursor:pointer;" data-icon="&#xe00b;"></div>
-                                </div>
-                                <span> <?php _e('Share', 'tainacan') ?> </span>
-                            </a>
-                            <ul id="resources_collection_dropdown" class="dropdown-menu" role="menu">
-                                <li>
-                                    <!-- ******************** FACEBOOK ******************** -->
-                                    <a target="_blank" href="http://www.facebook.com/sharer/sharer.php?s=100&amp;p[url]=<?php echo get_the_permalink($global_collection_id) . '?item=' . $object->post_name; ?>&amp;p[images][0]=<?php echo wp_get_attachment_url(get_post_thumbnail_id($object->ID)); ?>&amp;p[title]=<?php _e("Comment", 'tainacan'); ?> - <?php echo htmlentities($object->post_title); ?>&amp;p[summary]=<?php comment_text(); ?>">
-                                        <img src="<?php echo get_template_directory_uri() ?>/libraries/images/icon_facebook.png" style="max-width: 32px;" />
-                                    </a>
-                                </li>
-                                <li>
-                                    <!-- ******************** GOOGLE PLUS ******************** -->
-                                    <a target="_blank" href="https://plus.google.com/share?url=<?php echo get_the_permalink($global_collection_id) . '?item=' . $object->post_name; ?>">
-                                        <img src="<?php echo get_template_directory_uri() ?>/libraries/images/icon_googleplus.png" style="max-width: 32px;" />
-                                    </a>
-                                </li>
-                                <li>
-                                    <!-- ******************** TWITTER ******************** -->
-                                    <a target="_blank" href="https://twitter.com/intent/tweet?url=<?php echo get_the_permalink($global_collection_id) . '?item=' . $object->post_name; ?>&amp;text=<?php echo strip_tags(get_comment_text()); ?>&amp;via=socialdb">
-                                        <img src="<?php echo get_template_directory_uri() ?>/libraries/images/icon_twitter.png" style="max-width: 32px;" />
-                                    </a>
-                                </li>
-                            </ul>
+                    <?php else: ?>
+                        <div class="col-md-1 no-padding comment-item">
+                            <a onclick="showEditComment('<?php comment_ID(); ?>');"><span class="glyphicon glyphicon-pencil"></span>&nbsp;<?php _e("Edit", 'tainacan'); ?></a>&nbsp;
                         </div>
-
+                        <div class="col-md-1 no-padding comment-item">
+                            <a onclick="showAlertDeleteComment('<?php comment_ID(); ?>', '<?php _e('Attention!') ?>', '<?php _e('Delete this comment?', 'tainacan') ?>', '<?php echo mktime(); ?>');"><span class="glyphicon glyphicon-remove"></span>&nbsp;<?php _e("Delete", 'tainacan'); ?></a>
+                            
+                        </div>
+                    <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -1108,7 +1079,7 @@ function verify_allowed_action($collection_id, $name_permission, $object_id = 0)
     if ($is_admin) {
         return true;
     } else {
-        if ($permission == 'unallowed' || $permission == "approval") {
+        if ($permission == 'unallowed' /*|| $permission == "approval"*/) {
             return false;
         } else {
             return true;
@@ -3627,6 +3598,80 @@ function get_add_office_document_text($post_id, $item_id) {
     }
 }
 
+function get_documents_text($ids)
+{
+    //Gera texto de documentos do office e pdf
+    $posts = [];
+    foreach($ids as $id)
+    {
+        $posts[] = get_post($id);
+    }
+
+    $PDFidPostAttachmentURL = [];
+    $OFFICEidPostAttachmentURL = [];
+
+    /*
+     * MIME TYPES:
+     *
+     * PDF: application/pdf
+     * Word .doc: application/msword
+     * Word .docx: application/vnd.openxmlformats-officedocument.wordprocessingml.document
+     * Excel .xlsx: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+     * Power Point .pptx: application/vnd.openxmlformats-officedocument.presentationml.presentation
+     */
+
+    $office_mimes = array(
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+    );
+
+    $postID_pdfURL = [];
+    foreach($posts as $post)
+    {
+        $post_meta = get_post_meta($post->ID);
+        $attachment_id = $post_meta['socialdb_object_content'][0];
+        $url_file = wp_get_attachment_url($attachment_id);
+        if($url_file)
+        {
+            $post_mime = get_post_mime_type($attachment_id);
+            if(strcmp($post_mime, 'application/pdf') == 0)
+            {
+                $PDFidPostAttachmentURL[$post->ID] = array("post_meta" => $post_meta, 'url' => $url_file, 'attachment_id' => $attachment_id);
+                $postID_pdfURL[$post->ID] = $url_file;
+            }elseif(in_array($post_mime, $office_mimes))
+            {
+                $OFFICEidPostAttachmentURL[$post->ID] = array("post_meta" => $post_meta, 'url' => $url_file, 'attachment_id' => $attachment_id);
+            }
+        }
+    }
+
+    foreach($PDFidPostAttachmentURL as $post_id => $info)
+    {
+        if(!array_key_exists('socialdb_pdf_text', $info['post_meta']))
+        {
+            get_add_pdf_text($post_id, $info['attachment_id']);
+        }
+    }
+
+    foreach($OFFICEidPostAttachmentURL as $post_id => $info)
+    {
+        if(!array_key_exists('socialdb_office_document_text', $info['post_meta']))
+        {
+            get_add_office_document_text($post_id, $info['attachment_id']);
+        }
+    }
+
+    if(!empty($postID_pdfURL))
+    {
+        return $postID_pdfURL;
+    }
+    else
+    {
+        return false;
+    }
+}
 ################# INSTANCIA OS MODULOS SE ESTIVEREM ATIVADOS#################
 instantiate_modules();
 ################################################################################

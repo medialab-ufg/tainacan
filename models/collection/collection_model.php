@@ -175,28 +175,42 @@ class CollectionModel extends Model {
      * Autor: Eduardo Humberto 
      */
     function insert_permissions_default_values($collection_id) {
+        /*Category*/
         update_post_meta($collection_id, 'socialdb_collection_permission_create_category', 'members');
         update_post_meta($collection_id, 'socialdb_collection_permission_edit_category', 'approval');
         update_post_meta($collection_id, 'socialdb_collection_permission_delete_category', 'approval');
+
+        /*Classification*/
         update_post_meta($collection_id, 'socialdb_collection_permission_add_classification', 'members');
         update_post_meta($collection_id, 'socialdb_collection_permission_delete_classification', 'approval');
+
+        /*Object*/
         update_post_meta($collection_id, 'socialdb_collection_permission_create_object', 'members');
+        //update_post_meta($collection_id, 'socialdb_collection_permission_edit_object', 'unallowed');
         update_post_meta($collection_id, 'socialdb_collection_permission_delete_object', 'approval');
+
+        /*Property data*/
         update_post_meta($collection_id, 'socialdb_collection_permission_create_property_data', 'members');
         update_post_meta($collection_id, 'socialdb_collection_permission_edit_property_data', 'approval');
         update_post_meta($collection_id, 'socialdb_collection_permission_delete_property_data', 'approval');
         update_post_meta($collection_id, 'socialdb_collection_permission_edit_property_data_value', 'approval');
+
+        /*Property Objects*/
         update_post_meta($collection_id, 'socialdb_collection_permission_create_property_object', 'members');
         update_post_meta($collection_id, 'socialdb_collection_permission_edit_property_object', 'approval');
         update_post_meta($collection_id, 'socialdb_collection_permission_delete_property_object', 'approval');
         update_post_meta($collection_id, 'socialdb_collection_permission_edit_property_object_value', 'approval');
+
+        /*Property term*/
         update_post_meta($collection_id, 'socialdb_collection_permission_create_property_term', 'members');
         update_post_meta($collection_id, 'socialdb_collection_permission_edit_property_term', 'approval');
         update_post_meta($collection_id, 'socialdb_collection_permission_delete_property_term', 'approval');
+
         //Permissions Comments
         update_post_meta($collection_id, 'socialdb_collection_permission_create_comment', 'member');
         update_post_meta($collection_id, 'socialdb_collection_permission_edit_comment', 'approval');
         update_post_meta($collection_id, 'socialdb_collection_permission_delete_comment', 'approval');
+
         //Permissions Comments
         update_post_meta($collection_id, 'socialdb_collection_permission_create_tags', 'member');
         update_post_meta($collection_id, 'socialdb_collection_permission_edit_tags', 'approval');
@@ -324,32 +338,46 @@ class CollectionModel extends Model {
         update_post_meta($post_id, 'socialdb_collection_download_control', $data['socialdb_collection_download_control']);
 
         //Permissions
+        /*Category*/
         update_post_meta($post_id, 'socialdb_collection_permission_create_category', $data['socialdb_collection_permission_create_category']);
         update_post_meta($post_id, 'socialdb_collection_permission_edit_category', $data['socialdb_collection_permission_edit_category']);
         update_post_meta($post_id, 'socialdb_collection_permission_delete_category', $data['socialdb_collection_permission_delete_category']);
+
+        /*Classification*/
         update_post_meta($post_id, 'socialdb_collection_permission_add_classification', $data['socialdb_collection_permission_add_classification']);
         update_post_meta($post_id, 'socialdb_collection_permission_delete_classification', $data['socialdb_collection_permission_delete_classification']);
+
+        /*Object*/
         update_post_meta($post_id, 'socialdb_collection_permission_create_object', $data['socialdb_collection_permission_create_object']);
         update_post_meta($post_id, 'socialdb_collection_permission_delete_object', $data['socialdb_collection_permission_delete_object']);
+
+        /*Property data*/
         update_post_meta($post_id, 'socialdb_collection_permission_create_property_data', $data['socialdb_collection_permission_create_property_data']);
         update_post_meta($post_id, 'socialdb_collection_permission_edit_property_data', $data['socialdb_collection_permission_edit_property_data']);
         update_post_meta($post_id, 'socialdb_collection_permission_delete_property_data', $data['socialdb_collection_permission_delete_property_data']);
         update_post_meta($post_id, 'socialdb_collection_permission_edit_property_data_value', $data['socialdb_collection_permission_edit_property_data_value']);
+
+        /*Property object*/
         update_post_meta($post_id, 'socialdb_collection_permission_create_property_object', $data['socialdb_collection_permission_create_property_object']);
         update_post_meta($post_id, 'socialdb_collection_permission_edit_property_object', $data['socialdb_collection_permission_edit_property_object']);
         update_post_meta($post_id, 'socialdb_collection_permission_delete_property_object', $data['socialdb_collection_permission_delete_property_object']);
         update_post_meta($post_id, 'socialdb_collection_permission_edit_property_object_value', $data['socialdb_collection_permission_edit_property_object_value']);
+
+        /*Property term*/
         update_post_meta($post_id, 'socialdb_collection_permission_create_property_term', $data['socialdb_collection_permission_create_property_term']);
         update_post_meta($post_id, 'socialdb_collection_permission_edit_property_term', $data['socialdb_collection_permission_edit_property_term']);
         update_post_meta($post_id, 'socialdb_collection_permission_delete_property_term', $data['socialdb_collection_permission_delete_property_term']);
+
         //Permissions Comments
         update_post_meta($post_id, 'socialdb_collection_permission_create_comment', $data['socialdb_collection_permission_create_comment']);
         update_post_meta($post_id, 'socialdb_collection_permission_edit_comment', $data['socialdb_collection_permission_edit_comment']);
         update_post_meta($post_id, 'socialdb_collection_permission_delete_comment', $data['socialdb_collection_permission_delete_comment']);
+
         //Permissions Tags
         update_post_meta($post_id, 'socialdb_collection_permission_create_tags', $data['socialdb_collection_permission_create_tags']);
         update_post_meta($post_id, 'socialdb_collection_permission_edit_tags', $data['socialdb_collection_permission_edit_tags']);
         update_post_meta($post_id, 'socialdb_collection_permission_delete_tags', $data['socialdb_collection_permission_delete_tags']);
+
         $data['collection_id'] = $post_id;
         if (has_action('update_collection_configuration')) {
             do_action('update_collection_configuration', $data);

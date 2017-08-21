@@ -141,7 +141,7 @@ $ids = [];
                            id="single_property_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"
                            type="text" class="form-control input_date"
                            name="socialdb_property_<?php echo $property['id']; ?>"
-                           >
+                    >
               <?php
               }else{
                 ?>

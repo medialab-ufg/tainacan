@@ -21,19 +21,25 @@ class FormItemContent extends FormItem {
                   <div class="form-group"
                        id="validation-<?php echo $property['id'] ?>-0-0"
                        style="border-bottom:none;padding: 0px;">
-                        <textarea class="form-control auto-save"
-                                  id="item_content"
-                                  name="item_content"
-                                  placeholder="<?php _e('Object Content', 'tainacan'); ?>"><?php echo $content; ?></textarea>
-                        <span style="display: none;" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
-                        <span style="display: none;" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
-                        <span id="input2Status" class="sr-only">(status)</span>
-                        <?php if($this->isRequired === 'true'): ?>
-                        <input type="hidden"
-                               property="<?php echo $property['id'] ?>"
-                               class="validate-class validate-compound-<?php echo $property['id'] ?>"
-                               value="false">
-                       <?php endif; ?>
+                      <?php $is_file = get_post($content); ?>
+                      <?php if($is_file && is_object($is_file)): ?>
+                          <?php $url = wp_get_attachment_url($is_file->ID) ?>
+                          <a target="_blank" href="<?php echo $url ?>"><?php echo $url ?></a>
+                      <?php  else: ?>
+                                    <textarea class="form-control auto-save"
+                                              id="item_content"
+                                              name="item_content"
+                                              placeholder="<?php _e('Object Content', 'tainacan'); ?>"><?php echo $content; ?></textarea>
+                                    <span style="display: none;" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                                    <span style="display: none;" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                                    <span id="input2Status" class="sr-only">(status)</span>
+                                    <?php if($this->isRequired === 'true'): ?>
+                                    <input type="hidden"
+                                           property="<?php echo $property['id'] ?>"
+                                           class="validate-class validate-compound-<?php echo $property['id'] ?>"
+                                           value="false">
+                                   <?php endif; ?>
+                      <?php endif; ?>
                   </div>
            </div>
         </div>
@@ -51,25 +57,27 @@ class FormItemContent extends FormItem {
     public function initScriptsContentContainer($property, $item_id) {
         ?>
         <script>
-            showCKEditor('item_content');
-            CKEDITOR.instances.item_content.on('contentDom', function() {
-                CKEDITOR.instances.item_content.document.on('keyup', function(event) {
-                      <?php if($this->isRequired === 'true'):  ?>
-                          validateFieldsMetadataText(CKEDITOR.instances.item_content.getData(),'<?php echo $property['id'] ?>','0','0')
-                      <?php endif; ?>
-                      $.ajax({
-                          url: $('#src').val() + '/controllers/object/form_item_controller.php',
-                          type: 'POST',
-                          data: {
-                              operation: 'saveContent',
-                              value: CKEDITOR.instances.item_content.getData(),
-                              item_id:'<?php echo $item_id ?>'
-                          }
-                      }).done(function (result) {
+            if($('#item_content').length>0) {
+                showCKEditor('item_content');
+                CKEDITOR.instances.item_content.on('contentDom', function () {
+                    CKEDITOR.instances.item_content.document.on('keyup', function (event) {
+                        <?php if($this->isRequired === 'true'):  ?>
+                        validateFieldsMetadataText(CKEDITOR.instances.item_content.getData(), '<?php echo $property['id'] ?>', '0', '0')
+                        <?php endif; ?>
+                        $.ajax({
+                            url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                            type: 'POST',
+                            data: {
+                                operation: 'saveContent',
+                                value: CKEDITOR.instances.item_content.getData(),
+                                item_id: '<?php echo $item_id ?>'
+                            }
+                        }).done(function (result) {
 
-                      });
-              });
-            });
+                        });
+                    });
+                });
+            }
         </script>
         <?php
     }

@@ -21,6 +21,9 @@ body.home {
 
   .menu-ibram {
     padding-left: 25px !important;
+    .dropdown-menu > .active > a {
+      background: none !important;
+    }
   }
 
   #login-out {

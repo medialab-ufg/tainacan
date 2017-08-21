@@ -705,3 +705,13 @@ table.sorting-table tbody tr:not(.sorting-row) td {opacity: 0.2;}
     text-overflow: ellipsis;
     display: block;
 }
+
+.hide_elem
+{
+    display: none;
+}
+
+.comment-item
+{
+    cursor: pointer;
+}

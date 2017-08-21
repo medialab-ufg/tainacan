@@ -215,7 +215,9 @@ while (have_posts()) : the_post();
         <div id="container_three_columns" class="container-fluid">
             <div class="row">
                 <!-- TAINACAN: esta div (AJAX) mostra os widgets para pesquisa que estao setadas na esquerda  -->
-                <div id="div_left" class="col-md-3"></div>
+                <div id="div_left" class="col-md-3">
+                    <!-- Div left content -->
+                </div>
 
                 <!-- TAINACAN: esta div agrupa a listagem de itens ,submissao de novos itens e ordencao -->
                 <div id="div_central" class="col-md-9">
@@ -239,8 +241,8 @@ while (have_posts()) : the_post();
                                         </div>
 
                                         <div class="search-colecao">
-                                            <div class="input-group" style="z-index: 1;">
-                                                <input  style="font-size: 13px;z-index: 1;" class="form-control input-medium placeholder ui-autocomplete-input" id="search_objects"
+                                            <div class="input-group">
+                                                <input class="form-control input-medium placeholder ui-autocomplete-input" id="search_objects"
                                                         onkeyup="set_value(this)" 
                                                         onkeydown="if (event.keyCode === 13)
                                                                     document.getElementById('search_main').click();"
@@ -254,6 +256,7 @@ while (have_posts()) : the_post();
                                                 </span>
                                             </div>
                                         </div>
+
                                     </div>
 
                                 </div>
@@ -289,7 +292,10 @@ while (have_posts()) : the_post();
                                         <h3><?php _e('Please wait...', 'tainacan') ?></h3>
                                     </center>
                                 </div>
-                            </form>    
+                            </form>
+                            <div id="items_not_found" class="alert alert-danger" style="display: none;">
+                                <span class="glyphicon glyphicon-warning-sign"></span> <?php _e("Itens not found!", "tainacan"); ?>
+                            </div>
                         </div>
 
                         <!-- TAINACAN: esta div estao o botao que abre o formulario completo para submissao de itens, botao para ordenacao asc e desc, e o selectbox para selecionar a ordenacao  - col-md-6 (bootstrap) -->
@@ -569,7 +575,7 @@ while (have_posts()) : the_post();
     <!-- TAINACAN: esta div é mostrada quando é clicado com o botao direito sobre categorias e tags no dynatree  -->
     <?php do_action('insert_new_contextmenu_dynatree') ?>
 
-    <ul id="myMenuSingle" class="contextMenu" style="display:none;">
+    <ul id="myMenuSingle" class="contextMenu" style="display:none; position: fixed">
         <?php if (!$visualization_page_category || $visualization_page_category === 'right_button'): ?>   
             <li class="see">
                 <a href="#see" style="background-position: 6px 40%;padding:1px 5px 1px 28px;background-repeat:no-repeat;background-image:url('<?php echo get_template_directory_uri() ?>/libraries/css/images/see.png')">
@@ -660,11 +666,15 @@ while (have_posts()) : the_post();
 
     <!-- TAINACAN: esta div (AJAX) mostra as configuracoes da colecao  -->
     <div id='container-fluid-configuration' class="container-fluid no-padding" style="background-color: #f1f2f2">
-        <div id="configuration" class="col-md-12 no-padding" style="margin-top: 0;"></div>
+        <div id="configuration" class="col-md-12 no-padding" style="margin-top: 0;">
+
+        </div>
     </div>
 
     <div id='container-fluid-users' class="container-fluid no-padding" style="background-color: #f1f2f2">
-        <div id="users_div"  class="col-md-12" style="margin-top: 0;"></div>
+        <div id="users_div"  class="col-md-12" style="margin-top: 0;">
+
+        </div>
     </div>
 
     <!-- TAINACAN: scripts utilizados para criacao e montagem dos widgets de pesquisa  -->
@@ -1458,6 +1468,8 @@ while (have_posts()) : the_post();
             </div>
         </div>
     </div>
+
+
 
     <?php
     if (has_action('add_new_modals')) {

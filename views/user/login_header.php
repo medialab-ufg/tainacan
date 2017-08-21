@@ -86,14 +86,23 @@ if (!empty($app['app_id']) && !empty($app['app_secret'])) {
             <button class="btn btn-lg btn-primary pull-right send-login" type="submit"><?php _e("Login",'tainacan'); ?></button>
             <br><label><a style="cursor: pointer;" id="open_myModalForgotPasswordHeader"><?php _e("Forgot password?",'tainacan'); ?></a></label>
         </form>
+    </div>
+    <div id="forgot_password" class="hide_elem">
+        <hr style="margin-top: 0px; margin-bottom: 8px">
+        <form  id="formUserForgotPasswordHeader" name="formUserForgotPassword" >
+            <input type="hidden" name="operation" value="forgot_password">
+            <label for="user_login"><?php _e('Username or Email','tainacan'); ?><span style="color: #EE0000;"> *</span></label>
+            <input type="text" required="required" class="form-control" name="user_login_forgot" id="user_login_forgot" placeholder="<?php _e('Username or e-mail that you use to login','tainacan'); ?>">
 
+            <button type="submit" class="btn btn-default pull-right" style="color: black;"><?php _e('Send','tainacan'); ?></button>
+        </form>
     </div>
 </div>
 
-<div class="modal fade" id="myModalForgotPasswordHeader" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="myModalForgotPasswordHeader" tabindex="-1" style="z-index: 100;" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form  id="formUserForgotPasswordHeader" name="formUserForgotPassword" >  
+            <form  id="formUserForgotPasswordHeader" name="formUserForgotPassword" >
                 <input type="hidden" name="operation" value="forgot_password">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -107,10 +116,10 @@ if (!empty($app['app_id']) && !empty($app['app_secret'])) {
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal"><?php _e('Close','tainacan'); ?></button>
-                    <button type="submit" class="btn btn-primary"><?php _e('Send','tainacan'); ?></button>
+                    <button type="button" class="btn btn-default" style="color: black;" data-dismiss="myModalForgotPasswordHeader"><?php _e('Close','tainacan'); ?></button>
+                    <button type="submit" class="btn btn-primary" style="color: black;"><?php _e('Send','tainacan'); ?></button>
                 </div>
-            </form>    
+            </form>
         </div>
     </div>
 </div>

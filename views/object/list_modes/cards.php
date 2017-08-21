@@ -33,7 +33,7 @@ $_trim_desc = $_object_description;
 
             <div class="item-info">
 
-                <div class="col-md-4 colFoto no-padding">
+                <div class="colFoto no-padding img-thumbnail">
                     <?php if(empty($trash_list)): ?>
                         <a href="<?php echo get_collection_item_href($collection_id, $curr_id, $viewHelper); ?>"
                            onclick="<?php get_item_click_event($collection_id, $curr_id) ?>">
@@ -42,7 +42,7 @@ $_trim_desc = $_object_description;
                     <?php elseif ($trash_list): echo get_item_thumb_image($curr_id); endif; ?>
                 </div>
 
-                <div class="col-md-8 flex-box item-meta-box" style="flex-direction:column;">
+                <div class="col-md-9 flex-box item-meta-box no-padding">
                     <div class="item-meta col-md-12 no-padding">
 
                         <h4 class="item-display-title">
@@ -115,7 +115,7 @@ $_trim_desc = $_object_description;
                     <?php if(empty($trash_list)): ?>
                         <div class="show-item-metadata">
                             <!-- CATEGORIES AND TAGS -->
-                            <button id="show_classificiations_<?php echo $curr_id ?>" style="width:100%" class="btn btn-default"
+                            <button id="show_classificiations_<?php echo $curr_id ?>" style="width:100%" class="btn btn-default cards-voting"
                                     onclick="show_classifications('<?php echo $curr_id ?>')">
                                 <?php _e('Metadata', 'tainacan'); ?>
                             </button>
