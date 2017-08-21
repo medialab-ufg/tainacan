@@ -98,31 +98,34 @@
         });
        }
     }
-    //SUBMISSAO DO METADADO COMPOSTO
-    $('#submit_form_compounds').submit(function (e) {
-        e.preventDefault();
-        $('.modal').modal('hide');
-        $('#modalImportMain').modal('show');
-        $.ajax({
-            url: src + '/controllers/property/property_controller.php',
-            type: 'POST',
-            data: new FormData(this),
-            processData: false,
-            contentType: false
-        }).done(function (result) {
-            $('#modalImportMain').modal('hide');
-             $('#compounds_id').val('');
-            elem = jQuery.parseJSON(result);
-            if ( elem != null ) {
-                 if(elem.operation != 'update_property_compounds'){     
-                    list_collection_metadata();
-                }else{
-                    $('#meta-item-'+elem.compound_id+' .property-name').first().text(elem.compounds_name);
-                    $( "#list-compounded-"+elem.compound_id ).html('');
-                    get_children_compounds(elem.compound_id,elem.compounds_id);
+
+    $(function() {
+        //SUBMISSAO DO METADADO COMPOSTO
+        $('#submit_form_compounds').submit(function (e) {
+            e.preventDefault();
+            $('.modal').modal('hide');
+            $('#modalImportMain').modal('show');
+            $.ajax({
+                url: src + '/controllers/property/property_controller.php',
+                type: 'POST',
+                data: new FormData(this),
+                processData: false,
+                contentType: false
+            }).done(function (result) {
+                $('#modalImportMain').modal('hide');
+                $('#compounds_id').val('');
+                elem = jQuery.parseJSON(result);
+                if ( elem != null ) {
+                    if(elem.operation != 'update_property_compounds'){
+                        list_collection_metadata();
+                    }else{
+                        $('#meta-item-'+elem.compound_id+' .property-name').first().text(elem.compounds_name);
+                        $( "#list-compounded-"+elem.compound_id ).html('');
+                        get_children_compounds(elem.compound_id,elem.compounds_id);
+                    }
+                    getRequestFeedback(elem.type, elem.msg);
                 }
-                getRequestFeedback(elem.type, elem.msg);
-            }
+            });
         });
     });
     

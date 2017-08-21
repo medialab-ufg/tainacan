@@ -3,10 +3,12 @@ include_once ( dirname(__FILE__) . '/../../helpers/view_helper.php');
 include_once ( dirname(__FILE__) . '/../../views/theme_options/property/js/compounds_js.php');
 include_once ( dirname(__FILE__) . '/../../views/theme_options/property/js/list_metadata_js.php');
 $view_helper = new ViewHelper();
+
+$category = get_term_by("slug", "socialdb_category", "socialdb_category_type");
 ?>
 
 <?php // $view_helper->render_header_config_steps('metadata') ?>
-<input type="hidden" name="property_category_id" id="property_category_id" value="<?php echo $category->term_id; ?>"/>
+<input type="hidden" name="property_category_id" id="property_category_id" value="<?php echo $category->term_id ?>"/>
 <input type="hidden" id="src" value="<?php echo site_url(); ?>"/>
 <div class="categories_menu col-md-12 no-padding"  id="properties_tabs">
 
@@ -70,13 +72,9 @@ $view_helper = new ViewHelper();
                     <?php endforeach; ?>
                 </ul>
                 <div class="col-md-2 right back-to-collection" style="padding: 0 2% 0 0;">
-                    <!--button onclick="backToMainPage();" id="btn_back_collection" class="btn btn-default pull-right white"><?php _e('Back to collection','tainacan') ?></button-->
-                    <button onclick="routerGo($('#slug_collection').val());" id="btn_back_collection" class="btn btn-default pull-right white"><?php _e('Back to collection','tainacan') ?></button>
-
+                    <button onclick='window.history.back()' class='btn btn-default pull-right'> <?php _t("Back",1); ?> </button>
                 </div>
             </div>
-
-            <?php $selected_menu_style_id = get_post_meta( $collection_id, 'socialdb_collection_facet_' . $f_id . '_menu_style', true); ?>
 
             <div id="tab-content-metadata" class="tab-content ui-widget ui-helper-clearfix col-md-12" style="background: white; padding-bottom: 20px">
                 <ul id="metadata-container" class="gallery ui-helper-reset ui-helper-clearfix connectedSortable  metadata-container">
@@ -97,7 +95,7 @@ $view_helper = new ViewHelper();
                         </li>
                     <?php endforeach; ?>
                 </ul>
-                <div id="loader_metadados_page" style="display: none;font-style: normal; font-variant: normal; font-weight: normal; font-stretch: normal; font-size: 11px; line-height: normal; font-family: Arial;">
+                <div id="loader_metadados_page" style="display: none;">
                     <center>
                         <img src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>">
                         <h4><?php _e('Loading metadata...', 'tainacan') ?></h4>

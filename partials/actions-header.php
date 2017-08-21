@@ -41,7 +41,8 @@ $stat_page = get_page_by_title(__('Statistics', 'tainacan'))->ID;
                             </a>
                         </li>
                         <li>
-                            <a onclick="repoConfig('<?php echo $_src_ ?>', 'list_repository', 'property');/*updateStateRepositorio('metadata');*/">
+                            <?php /* <a onclick="repoConfig('<?php echo $_src_ ?>', 'list_repository', 'property'); updateStateRepositorio('metadata'); "> */ ?>
+                            <a href="<?php getAdmin('metas'); ?>">
                                 <span class="glyphicon glyphicon-list-alt"></span> <?php _t('Metadata', 1); ?>
                             </a>
                         </li>

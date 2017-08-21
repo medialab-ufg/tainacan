@@ -8,7 +8,6 @@
 
      //inicia o dynatree de propriedades
      var types_compounds = []; // array que mostra o tipo das propriedades compostas
-    initDynatreeFilterProperties(src);
     $("#tainacan-breadcrumbs").show();
     
     $("#tainacan-breadcrumbs .current-config").text('<?php _e('Repository Metadata','tainacan') ?>');
@@ -117,7 +116,12 @@
 
     /* Executed by script's start */
     $(function () {
+        var src = $('#src').val();
         var current_collection_id = $('#collection_id').val();
+        var current_meta_type = $("#property_metadata_type").val();
+        var $current_meta_form = "#submit_form_property_data_" + current_meta_type;
+        initDynatreeFilterProperties(src);
+
         if ($('#open_wizard').val() == 'true') {
             $('#btn_back_collection').hide();
             $('#submit_configuration').hide();
@@ -137,6 +141,76 @@
         showPropertyCategoryDynatree(src);
         showTermsDynatree(src); //mostra o dynatree
         list_collection_metadata();
+
+        $('form.form_property_data').each(function(idx, el) {
+            $(el).submit(function(e) {
+                e.preventDefault();
+                var current_data = $(el).serialize();
+                var path = src + '/controllers/property/property_controller.php';
+                $('.modal').modal('hide');
+                $('#modalImportMain').modal('show');
+
+                $.ajax({
+                    url: path,
+                    data: current_data,
+                    processData: false
+                }).done(function(result) {
+                    $('#modalImportMain').modal('hide');
+
+                    var current_modal = get_open_model_id();
+                    elem = $.parseJSON(result);
+
+                    var current_operation = elem.operation;
+                    var current_type = elem.property_data_widget;
+                    // var current_modal = "#meta-" + current_type;
+                    var new_property_id = elem.new_property_id;
+                    var current_property_id = elem.property_data_id;
+                    var property_widget = elem.search_data_widget;
+                    var color_facet = elem.color_facet;
+                    var ordenation_facet = elem.filter_ordenation;
+                    var collection_id = $('#collection_id').val();
+
+                    if ( elem.property_data_use_filter == "use_filter" )
+                    {
+                        var range_obj = {};
+
+                        if( (current_type == "date" || current_type == "numeric") && property_widget == "range")
+                        {
+                            var range_obj = { counter_range: elem.counter_data_range, sent_data: elem };
+                        }
+
+                        if ( current_operation == "add_property_data" )
+                        {
+                            setCollectionFacet( "add", new_property_id, property_widget, ordenation_facet, color_facet, range_obj);
+                        } else if( current_operation == "update_property_data" ) {
+                            var item_was_dragged = $(current_modal + " .data-widget").hasClass('select-meta-filter');
+                            if( item_was_dragged ) {
+                                setCollectionFacet( "add", current_property_id, property_widget, ordenation_facet, color_facet );
+                                $(current_modal + " .data-widget").removeClass('select-meta-filter');
+                            } else {
+                                setCollectionFacet( "update", current_property_id, property_widget, ordenation_facet, color_facet, range_obj );
+                            }
+                        }
+                    }
+
+                    if ( current_operation == "add_property_data" ) {
+                        add_property_data_ordenation(collection_id, new_property_id);
+                    }
+
+                    $(current_modal).modal('hide');
+                    $("#dynatree_properties_filter").dynatree("getTree").reload();
+                    if(elem.operation != 'update_property_data'){
+                        list_collection_metadata();
+                    }else{
+                        $('#meta-item-'+elem.property_data_id+' .property-name').text(elem.property_data_name)
+                    }
+                    getRequestFeedback(elem.type, elem.msg);
+                    //limpando caches
+                    delete_all_cache_collection();
+                });
+            })
+        });
+
     });
 
 
@@ -494,74 +568,7 @@
      ************************* PROPERTY DATA FUNCTIONS *********************************
      ****************************************************************************
      **/
-    $('form.form_property_data').each(function(idx, el) {
-        $(el).submit(function(e) {
-            e.preventDefault();
-            var current_data = $(el).serialize();
-            var path = src + '/controllers/property/property_controller.php';
-            $('.modal').modal('hide');		
-            $('#modalImportMain').modal('show');		
 
-            $.ajax({
-                url: path,
-                data: current_data,
-                processData: false
-            }).done(function(result) {
-                $('#modalImportMain').modal('hide');
-
-                var current_modal = get_open_model_id();
-                elem = $.parseJSON(result);
-
-                var current_operation = elem.operation;
-				var current_type = elem.property_data_widget;
-                // var current_modal = "#meta-" + current_type;
-                var new_property_id = elem.new_property_id;
-                var current_property_id = elem.property_data_id;
-                var property_widget = elem.search_data_widget;
-                var color_facet = elem.color_facet;
-                var ordenation_facet = elem.filter_ordenation;
-                var collection_id = $('#collection_id').val();
-
-                if ( elem.property_data_use_filter == "use_filter" )
-                {
-                    var range_obj = {};
-
-                    if( (current_type == "date" || current_type == "numeric") && property_widget == "range")
-                    {
-                        var range_obj = { counter_range: elem.counter_data_range, sent_data: elem };
-                    }
-
-                    if ( current_operation == "add_property_data" )
-                    {
-                        setCollectionFacet( "add", new_property_id, property_widget, ordenation_facet, color_facet, range_obj);
-                    } else if( current_operation == "update_property_data" ) {
-                        var item_was_dragged = $(current_modal + " .data-widget").hasClass('select-meta-filter');
-                        if( item_was_dragged ) {
-                            setCollectionFacet( "add", current_property_id, property_widget, ordenation_facet, color_facet );
-                            $(current_modal + " .data-widget").removeClass('select-meta-filter');
-                        } else {
-                            setCollectionFacet( "update", current_property_id, property_widget, ordenation_facet, color_facet, range_obj );
-                        }
-                    }
-                }
-
-                if ( current_operation == "add_property_data" ) {
-                    add_property_data_ordenation(collection_id, new_property_id);
-                }
-
-                $(current_modal).modal('hide');
-                $("#dynatree_properties_filter").dynatree("getTree").reload();
-                if(elem.operation != 'update_property_data'){     
-                    list_collection_metadata();
-                }else{
-                    $('#meta-item-'+elem.property_data_id+' .property-name').text(elem.property_data_name)
-                }
-                getRequestFeedback(elem.type, elem.msg);
-                //limpando caches
-                delete_all_cache_collection();
-            });
-        })
-    });
 
     function get_selected( col_id ) {
         var path = src + '/controllers/search/search_controller.php';
@@ -892,7 +899,6 @@
             /*if (is_fixed_meta)
             {
                 setCollectionFacet("add", item_id, "tree", 'alphabetic');
-                showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Metadata inserted as filter successfully', 'tainacan') ?>', 'success');
                 $('.data-widget').addClass('select-meta-filter').show();
                 $('.term-widget').addClass('select-meta-filter').show();
             } else {*/
@@ -900,8 +906,7 @@
                 {
                     $("#" + item_id + " .edit_property_data").click();
                     $("#" + item_id + " .edit_ranking").click();
-                    $(".property_data_use_filter").click();
-                    $(".property_data_use_filter").attr('checked', 'checked');
+                    $(".property_data_use_filter").click().attr('checked', 'checked');
 
                     $('.data-widget').addClass('select-meta-filter').show();
                     $('.term-widget').addClass('select-meta-filter').show();

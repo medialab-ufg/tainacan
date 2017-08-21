@@ -121,7 +121,6 @@ foreach( $view_helper->get_metadata_types() as $type => $label):
                                 <input type="hidden" name="orientation" value="left-column">
                             </div>
 
-
                             <input type="hidden" name="property_category_id" value="<?php echo $category->term_id; ?>">
                             <input type="hidden" name="property_metadata_type" value="<?php echo $type ?>" id="property_metadata_type">
                             <input type="hidden" id="property_data_collection_id" name="collection_id" value="<?php echo $collection_id ?>">
