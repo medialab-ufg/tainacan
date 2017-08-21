@@ -803,13 +803,26 @@ $('form#createCollection').submit(function() {
         $('#result_username').html(result);
     });
 });
+
+function toggle_disable_input(id)
+{
+    var elem = document.getElementById(id);
+
+    if($(elem).prop('disabled'))
+    {
+        $(elem).prop('disabled', false);
+    }else
+    {
+        $(elem).prop('disabled', true);
+    }
+}
     
 /**
  * funcao que redireciona para a home da colecao para a busca avancada
 * @type o campo que sera buscado 
 */    
 function redirectAdvancedSearch(field){
-    if(field===false)
+    if(field === false)
          window.location = $('#collection_root_url').val()+'?search-advanced-text=@'
     else if($(field).val()!=='')
         window.location = $('#collection_root_url').val()+'?search-advanced-text='+$(field).val()
@@ -1445,7 +1458,7 @@ function list_main_ordenation(has_category_properties) {
         } else {
             $("#collection_single_ordenation").val(default_ordenation);
         }
-        if ($('#is_filter').val() != '1') {
+        if ($('#is_filter').val() != '1' && $('#search-advanced-text').val() ==='') {
             showList($('#src').val());
         }
         $('.dropdown-toggle').dropdown();
@@ -3176,6 +3189,49 @@ $(document).on("submit", "#reindexation_form", function (event) {
         });
     }
 });
+
+function verify_empty_box(elements_id, email_id, button_id)
+{
+    let ids = elements_id.split(",");
+    let button = $("#"+button_id);
+
+    if(email_id.length === 0)
+    {
+        var valide_email = true;
+    }else var valide_email = validate_email(email_id);
+
+    for(let element_id of ids)
+    {
+        let text_box = $("#"+element_id);
+        if($(text_box).val().trim().length === 0 || valide_email === false)
+        {
+            $(button).attr("disabled", true);
+            return;
+        }
+    }
+
+    $("#"+button_id).attr("disabled", false);
+}
+
+function validate_email(email_id)
+{
+    let email_box_value = $("#"+email_id).val().trim();
+
+    if(email_box_value.length > 0)
+    {
+        let email_parts = email_box_value.split("@");
+        if(email_parts.length === 2 && email_parts[0].length > 0 && email_parts[1].length > 0)
+        {
+            let where = email_parts[1].split(".");
+            if(where.length === 2 && where[0].length > 0 && where[1].length > 0)
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
 
 /*Verifica se a página está sendo acessada através de um dispositivo movél*/
 function isMobile(){

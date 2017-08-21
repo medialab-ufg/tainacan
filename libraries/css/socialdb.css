@@ -710,3 +710,8 @@ table.sorting-table tbody tr:not(.sorting-row) td {opacity: 0.2;}
 {
     display: none;
 }
+
+.comment-item
+{
+    cursor: pointer;
+}

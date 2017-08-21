@@ -66,6 +66,10 @@ class SelectboxClass extends FormItem{
         </script>
         <?php
         endif;
+        if(has_action('alter_selectbox_property')){
+            $property['value_real'] = $values;
+            do_action('alter_selectbox_property',$property,'selectbox-field-'. $compound_id. '-' .$property_id. '-'.$index_id );
+        }
     }
 
     /**

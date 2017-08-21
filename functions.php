@@ -563,22 +563,23 @@ function tainacan_comments($comment, $args, $depth) {
             <div class="row reply" id="reply_<?php comment_ID(); ?>">
 
                 <div class="col-md-12 left">
-                    <div class="col-md-1 no-padding">
-                        <a href=".div-comment-<?php comment_ID(); ?>" onclick="showModalReply('<?php comment_ID(); ?>');"><b><?php _e("Reply", 'tainacan'); ?></b></a>&nbsp;&nbsp;
+                    <div class="col-md-1 no-padding comment-item">
+                        <a onclick="showModalReply('<?php comment_ID(); ?>');"><b><?php _e("Reply", 'tainacan'); ?></b></a>&nbsp;&nbsp;
                     </div>
 
                     <?php if (!CollectionModel::is_moderator($global_collection_id, get_current_user_id()) && get_userdata(get_current_user_id())->display_name !== get_comment_author()): ?>
                         <?php if (verify_allowed_action($global_collection_id, 'socialdb_collection_permission_delete_comment')): ?>
-                            <div class="col-md-1 no-padding">
-                                <a href=".div-comment-<?php comment_ID(); ?>" onclick="showModalReportAbuseComment('<?php comment_ID(); ?>');"><span class="glyphicon glyphicon-bullhorn"></span>&nbsp;<?php _e("Report Abuse", 'tainacan'); ?></a>
+                            <div class="col-md-1 no-padding comment-item">
+                                <a onclick="showModalReportAbuseComment('<?php comment_ID(); ?>');"><span class="glyphicon glyphicon-bullhorn"></span>&nbsp;<?php _e("Report Abuse", 'tainacan'); ?></a>
                             </div>
                         <?php endif; ?>
                     <?php else: ?>
-                        <div class="col-md-1 no-padding">
-                            <a href=".div-comment-<?php comment_ID(); ?>" onclick="showEditComment('<?php comment_ID(); ?>');"><span class="glyphicon glyphicon-pencil"></span>&nbsp;<?php _e("Edit", 'tainacan'); ?></a>&nbsp;
+                        <div class="col-md-1 no-padding comment-item">
+                            <a onclick="showEditComment('<?php comment_ID(); ?>');"><span class="glyphicon glyphicon-pencil"></span>&nbsp;<?php _e("Edit", 'tainacan'); ?></a>&nbsp;
                         </div>
-                        <div class="col-md-1 no-padding">
-                            <a href=".div-comment-<?php comment_ID(); ?>" onclick="showAlertDeleteComment('<?php comment_ID(); ?>', '<?php _e('Attention!') ?>', '<?php _e('Delete this comment?', 'tainacan') ?>', '<?php echo time(); ?>');"><span class="glyphicon glyphicon-remove"></span>&nbsp;<?php _e("Delete", 'tainacan'); ?></a>
+
+                        <div class="col-md-1 no-padding comment-item">
+                            <a onclick="showAlertDeleteComment('<?php comment_ID(); ?>', '<?php _e('Attention!') ?>', '<?php _e('Delete this comment?', 'tainacan') ?>', '<?php echo time(); ?>');"><span class="glyphicon glyphicon-remove"></span>&nbsp;<?php _e("Delete", 'tainacan'); ?></a>
                         </div>
                     <?php endif; ?>
 

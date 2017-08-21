@@ -644,7 +644,7 @@ class ViewHelper {
     /**
      * 
      */
-    public function getValuesViewSingle($meta,$property_id) {
+    public function getValuesViewSingle($meta,$property_id, $property_type = null) {
         $cont = 0;
         if ($meta && $meta != '') {
             $array = unserialize($meta);
@@ -657,11 +657,35 @@ class ViewHelper {
                         if(isset($value) && trim($value) != ''){
                             $cont++;
                         }
-                        
+
                         if($type == 'data'){
-                            ?>
-                                <p><i><?php echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $value . "'" . ',' . $property['id'] . ')">' . $value . '</a>'; ?></i></p>
-                            <?php
+                            if($property_type != null && strcmp($property_type, 'textarea') == 0)
+                            {
+                                ?>
+                                <p>
+                                    <i>
+                                        <?php echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . preg_replace('/\s+/', ' ', $value) . "'" . ',' . $property_id . ')">
+                                                    <textarea class="form-control" rows="9" disabled="disabled">'.
+                                                        $value.
+                                                    '</textarea>
+                                                    </a>'; ?>
+                                    </i>
+                                </p>
+                                <?php
+                            }
+                            else
+                            {
+                                ?>
+                                <p>
+                                    <i>
+                                        <?php echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $value . "'" . ',' . $property_id . ')">' .
+                                            $value
+                                            . '</a>'; ?>
+                                    </i>
+                                </p>
+                                <?php
+                            }
+
                         }else if($type == 'object'){
                             $ob = get_post($value);
                             if ($ob && $ob->post_status == 'publish') {

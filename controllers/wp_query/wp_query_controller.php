@@ -349,6 +349,7 @@ class WPQueryController extends Controller {
                 $data['is_moderator'] = CollectionModel::is_moderator($args['collection_id'], get_current_user_id());
                 $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($args['collection_id'], "socialdb_collection_table_metas", true)));
                 $data['pagid'] = $args['pagid'];
+                $return['has_post'] = $data['has_post'];
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($args);
                 if(empty($wpquery_model->get_collection_posts($data['collection_id']))){

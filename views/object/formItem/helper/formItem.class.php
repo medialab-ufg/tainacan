@@ -93,6 +93,13 @@ class FormItem extends Model {
                        <hr style="border-color: white;">
                        <div id="accordeon-default" class="multiple-items-accordion" style="margin-top:-20px;">
                            <?php $this->listPropertiesbyTab('default') ?>
+                           <?php
+                           if ($allTabs && is_array($allTabs)) {
+                               foreach ($allTabs as $tab) {
+                                    $this->listPropertiesbyTab($tab->meta_id);
+                               }
+                           }
+                           ?>
                        </div>
                    </div>
                 </div>

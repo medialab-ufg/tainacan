@@ -56,31 +56,43 @@
                 elem = jQuery.parseJSON(result);
                 hide_modal_main();
                 if (elem.args_collection) {
+
                     search_collections_query = elem.args_collection;
                     $('#wp_query_args').val(search_collections_query);
-                    if (elem.args_item) {
+                    if (elem.args_item)
+                    {
                         search_items_query = elem.args_item;
                     }
-                    if(elem.has_collection && elem.has_item){
+
+                    $("#items_not_found").hide();
+
+                    if(elem.has_collection && elem.has_item)
+                    {
                         $('#click_ad_search_collection').parent().show();
                         $('#click_ad_search_items').parent().show();
                         $('#click_ad_search_collection').trigger('click');
-                    }else if(elem.has_collection && !elem.has_item){
+                    }else if(elem.has_collection && !elem.has_item)
+                    {
                         $('#click_ad_search_collection').trigger('click');
                         $('#click_ad_search_collection').parent().show();
                         $('#click_ad_search_items').parent().hide();
-                    }else if(!elem.has_collection && elem.has_item){
+                    }else if(!elem.has_collection && elem.has_item)
+                    {
                         $('#click_ad_search_collection').parent().hide();
                         $('#click_ad_search_items').parent().show();
                         $('#click_ad_search_items').trigger('click');
-                    }else if(!elem.has_collection && !elem.has_item){
-                         $('#click_ad_search_items').trigger('click');
+                    }else if(!elem.has_collection && !elem.has_item)
+                    {
+                        $('#click_ad_search_items').trigger('click');
                         $('#click_ad_search_collection').parent().hide();
                         $('#click_ad_search_items').parent().hide();
+                        $("#items_not_found").show();
+
                     }
                     
                 }
-                else if (elem.args_item) {
+                else if (elem.args_item)
+                {
                     search_items_query = elem.args_item;
                     $('#wp_query_args').val(search_items_query);
                     if( $('#click_ad_search_items').length>0){
@@ -195,6 +207,7 @@
             if($('#collection_id').val()===$('#collection_root_id').val() && $('#search-advanced-text').val() != ''){
                 if($('#search-advanced-text').val()!=='@')
                     $('#advanced_search_title').val($('#search-advanced-text').val());
+
                 slideFormAdvancedDown();
                 $('#advanced_search_collection_form').trigger('submit');
                 $('#search-advanced-text').val('');
@@ -236,7 +249,10 @@
 
 
     function submit_comment(object_id) {
-        if ($('#comment').val().trim() === '') {
+        let comment_content = $('#comment').val().trim();
+        comment_content = remove_script_tags(comment_content);
+
+        if (comment_content === '') {
             showAlertGeneral('<?php _e('Attention!', 'tainacan') ?>', '<?php _e('Fill your comment', 'tainacan') ?>', 'info');
         } else {
             show_modal_main();
@@ -248,7 +264,7 @@
                     socialdb_event_create_date: '<?php echo time() ?>',
                     socialdb_event_user_id: $('#current_user_id').val(),
                     socialdb_event_comment_create_object_id: object_id,
-                    socialdb_event_comment_create_content: $('#comment').val(),
+                    socialdb_event_comment_create_content: comment_content,
                     socialdb_event_comment_author_name: $('#author').val(),
                     socialdb_event_comment_author_email: $('#email').val(),
                     socialdb_event_comment_author_website: $('#url').val(),
@@ -264,6 +280,20 @@
             });
         }
     }
+
+    function remove_script_tags(text)
+    {
+        //Opening tags
+        var div = document.createElement('div');
+        div.innerHTML = text;
+        var scripts = div.getElementsByTagName('script');
+        var i = scripts.length;
+        while (i--) {
+            scripts[i].parentNode.removeChild(scripts[i]);
+        }
+        return div.innerHTML;
+    }
+
     // submissao da resposta a um comentario
     function submit_comment_reply(object_id) {
         if ($('#comment_msg_reply').val().trim() === '') {
@@ -1360,7 +1390,7 @@
                 search_items_query = $('#wp_query_args').val();
             }
             set_popover_content($("#socialdb_permalink_collection").val() + '?' + elem.url + '&is_filter=1');
-            show_filters($('#collection_id').val(), elem.args);
+            //show_filters($('#collection_id').val(), elem.args);
             $('#list').show();
             if (elem.empty_collection) {
                 $('#collection_empty').show();

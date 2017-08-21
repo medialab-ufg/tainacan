@@ -41,11 +41,11 @@ if ($global_data_permissions['create'] == 'anonymous') {
                     <div class="col-md-12 tainacan-comment-fields no-padding">
                         <div class="col-md-4">
                             <label for="author"><?php _e('Name:', 'tainacan'); ?></label>
-                            <input type="text" class="form-control" name="author" id="author" value="<?php echo $comment_author; ?>" />
+                            <input type="text" class="form-control" name="author" id="author" value="<?php echo $comment_author;?>" onkeyup="verify_empty_box('author,comment', 'email', 'commenting_button')" />
                         </div>
                         <div class="col-md-4">
                             <label for="email"><?php _e('Email:', 'tainacan'); ?></label>
-                            <input type="text" class="form-control" name="email" id="email" value="<?php echo $comment_author_email; ?>" />
+                            <input type="text" class="form-control" name="email" id="email" value="<?php echo $comment_author_email; ?>" onkeyup="verify_empty_box('author,comment', 'email', 'commenting_button')"/>
                         </div>
 
                         <div class="col-md-3">
@@ -60,9 +60,22 @@ if ($global_data_permissions['create'] == 'anonymous') {
                         <div style="float: left;" class="user-avatar">
                             <?php echo get_avatar($user_ID, 64); ?>
                         </div>
-                        <textarea style="float: left" name="comment" id="comment" class="form-control leave-comment"></textarea>
+                        <textarea style="float: left" name="comment" id="comment" class="form-control leave-comment"
+                                  onkeyup="<?php
+                                  if($user_ID)
+                                  {
+                                      ?>
+                                          verify_empty_box('comment', '', 'commenting_button')
+                                      <?php
+                                  }else
+                                  {
+                                      ?>
+                                          verify_empty_box('author,comment', 'email', 'commenting_button');
+                                      <?php
+                                  }
+                                  ?>"></textarea>
                         <div style="float: left; margin-left: 10px;" class="submit-comment-container">
-                            <input type="button" onclick="submit_comment(<?php echo $post->ID ?>)" class="commentsubmit btn btn-primary" value="<?php _e('Comment', 'tainacan'); ?>" />
+                            <input type="button" id="commenting_button" disabled="true" onclick="submit_comment(<?php echo $post->ID ?>)" class="commentsubmit btn btn-primary" value="<?php _e('Comment', 'tainacan'); ?>" />
                         </div>
                     </div>
                     <input type="hidden" name="redirect_to" value="#" />
@@ -114,23 +127,40 @@ if ($global_data_permissions['create'] == 'anonymous') {
                     <?php else : ?>
 
                         <label for="author">Nome:</label>
-                        <input type="text" name="author" id="author_reply" value="<?php echo $comment_author; ?>" /><br>
+                        <input class="form-control" type="text" name="author" id="author_reply" value="<?php echo $comment_author; ?>"
+                               onkeyup="verify_empty_box('author_reply,comment_msg_reply', 'email_reply', 'commenting_button_reply')" /><br>
 
                         <label for="email">Email:</label>
-                        <input type="text" name="email" id="email_reply" value="<?php echo $comment_author_email; ?>" /><br>
+                        <input class="form-control" type="text" name="email" id="email_reply" value="<?php echo $comment_author_email; ?>"
+                               onkeyup="verify_empty_box('author_reply,comment_msg_reply', 'email_reply', 'commenting_button_reply')"/><br>
 
                         <label for="url">Website:</label>
-                        <input type="text" name="url" id="url_reply" value="<?php echo $comment_author_url; ?>" /><br>
+                        <input class="form-control" type="text" name="url" id="url_reply" value="<?php echo $comment_author_url; ?>" /><br>
 
                     <?php endif; ?>
 
                     <label for="comment">Mensagem:</label>
-                    <textarea name="comment_msg_reply" id="comment_msg_reply" class="form-control" rows="" cols=""></textarea>
+                    <textarea name="comment_msg_reply" id="comment_msg_reply" class="form-control" rows="" cols=""
+                              onkeyup="
+                              <?php
+                                if($user_ID)
+                                {
+                                    ?>
+                                        verify_empty_box('comment_msg_reply', '', 'commenting_button_reply')
+                                    <?php
+                                }else
+                                {
+                                    ?>
+                                        verify_empty_box('author_reply,comment_msg_reply', 'email_reply', 'commenting_button_reply');
+                                    <?php
+                                }
+                              ?>
+                              "></textarea>
                 </div> 
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo __('Close','tainacan'); ?></button>
-                    <button type="button" onclick="submit_comment_reply(<?php echo $post->ID ?>)" class="btn btn-primary"><?php echo __('Send','tainacan'); ?></button>
+                    <button type="button" disabled="true" id="commenting_button_reply" onclick="submit_comment_reply(<?php echo $post->ID ?>)" class="btn btn-primary"><?php echo __('Send','tainacan'); ?></button>
                 </div>
             </form>  
         </div>

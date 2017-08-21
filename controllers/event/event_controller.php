@@ -316,6 +316,12 @@ require_once(dirname(__FILE__).'../../../models/object/object_model.php');
       //create comment
       case 'add_event_comment_create':
           $event_comment_create_model = new EventCommentCreate();
+
+          if(isset($data['socialdb_event_comment_create_content']))
+          {
+              $data['socialdb_event_comment_create_content'] = strip_tags($data['socialdb_event_comment_create_content']);
+          }
+
           return $event_comment_create_model->create_event($data);
       case 'socialdb_event_comment_create';
           $event_comment_create_model = new EventCommentCreate();
