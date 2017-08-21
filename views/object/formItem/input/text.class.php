@@ -104,7 +104,7 @@ class TextClass extends FormItem{
             $('#text-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').blur(function(){
                 //validando campos dentro do mesmo metadado
                 if( Hook.is_register('validate_unique_fields')){
-                    Hook.call('validate_unique_fields',['<?php echo $compound_id; ?>',$(this).val(),'text-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>']);
+                    Hook.call('validate_unique_fields',['<?php echo $compound_id; ?>',$(this).val(),'text-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>','<?php echo $property_id ?>']);
                     if(Hook.result){
                         $('#text-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val('');
                         toastr.error('<?php _e('this value is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});

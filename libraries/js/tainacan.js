@@ -1452,7 +1452,7 @@ function list_main_ordenation(has_category_properties) {
         } else {
             $("#collection_single_ordenation").val(default_ordenation);
         }
-        if ($('#is_filter').val() != '1') {
+        if ($('#is_filter').val() != '1' && $('#search-advanced-text').val() !='') {
             showList($('#src').val());
         }
         $('.dropdown-toggle').dropdown();

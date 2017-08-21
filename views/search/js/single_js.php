@@ -207,6 +207,7 @@
             if($('#collection_id').val()===$('#collection_root_id').val() && $('#search-advanced-text').val() != ''){
                 if($('#search-advanced-text').val()!=='@')
                     $('#advanced_search_title').val($('#search-advanced-text').val());
+
                 slideFormAdvancedDown();
                 $('#advanced_search_collection_form').trigger('submit');
                 $('#search-advanced-text').val('');
@@ -1389,7 +1390,7 @@
                 search_items_query = $('#wp_query_args').val();
             }
             set_popover_content($("#socialdb_permalink_collection").val() + '?' + elem.url + '&is_filter=1');
-            show_filters($('#collection_id').val(), elem.args);
+            //show_filters($('#collection_id').val(), elem.args);
             $('#list').show();
             if (elem.empty_collection) {
                 $('#collection_empty').show();

@@ -31,7 +31,6 @@ class FormItemText extends FormItem {
         $isMultiple = ($property['metas']['socialdb_property_data_cardinality'] == 'n') ? true : false;
         $filledValues = ($values) ? count($values) : 1;
         $isKey = (isset($property['metas']['socialdb_property_data_mask']) && $property['metas']['socialdb_property_data_mask'] !== '') ? true:false;
-
         $isRequired = ($property['metas'] && $property['metas']['socialdb_property_required']&&$property['metas']['socialdb_property_required'] != 'false') ? true : false;
         ?>
         <div id="meta-item-<?php echo $property['id']; ?>" class="form-group" >
