@@ -21,9 +21,8 @@ $stat_page = get_page_by_title(__('Statistics', 'tainacan'))->ID;
                     <li> <a href="javascript:void(0)" onclick="showProfileScreen('<?php echo $_src_ ?>');"> <?php _e('Profile', 'tainacan'); ?></a> </li>
 
                     <li>
-                        <a onclick="showCategoriesConfiguration('<?php echo $_src_; ?>', '<?php echo is_front_page(); ?>');/*updateStateRepositorio('categories');*/" >
-                            <?php _e('My Categories', 'tainacan'); ?>
-                        </a>
+                        <?php /* <a onclick="showCategoriesConfiguration('<?php echo $_src_; ?>', '<?php echo is_front_page(); ?>'); updateStateRepositorio('categories'); "> */ ?>
+                        <a href="<?php getAdmin('categories'); ?>"> <?php _t('My Categories', 1); ?> </a>
                     </li>
 
                     <li> <a href="<?php echo wp_logout_url(get_permalink()); ?>"> <?php _t('Logout', 1); ?> </a> </li>
