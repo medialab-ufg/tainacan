@@ -121,7 +121,9 @@ $_src_ = get_template_directory_uri();
                                 </a>
                               </li>
                               <li>
-                                <a href="<?php echo wp_logout_url(get_permalink()); ?>"> <?php _e('Logout', 'tainacan'); ?> </a>
+                                <a id="logout-user" data-tologout="<?php echo wp_logout_url(get_permalink()); ?>" href="<?php echo wp_logout_url(get_permalink()); ?>">
+                                    <?php _e('Logout', 'tainacan'); ?>
+                                </a>
                               </li>
 
                                 <?php if (current_user_can('manage_options')) : ?>
