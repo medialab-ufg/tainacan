@@ -26,11 +26,11 @@ include_once('js/list_js.php');
                 <div class="date-range-filter period-config">
                     <div> 
                         <h6> <?php _e('From: ', 'tainacan'); ?></h6>
-                        <input type="text" class="input_date input-size form-control" value="" id="from_period" name="from_period">
+                        <input type="text" class="input-size form-control" value="" id="from_period" name="from_period">
                     </div>
                     <div> 
                         <h6><?php _e('Until: ', 'tainacan'); ?></h6>
-                        <input type="text" class="input_date input-size form-control" value="" id="to_period" name="to_period"> <br />
+                        <input type="text" class="input-size form-control" value="" id="to_period" name="to_period"> <br />
                     </div>
                     <!-- Dynatree filter-->
                     <div>
@@ -45,7 +45,6 @@ include_once('js/list_js.php');
                     <div>
                         <input type="radio" id="nofilter" name="optradio" value="nofilter"> <?php _e('No temporal scale', 'tainacan'); ?>
                     </div>
-                    <!--<div id="report-filters"></div>-->
                 </div>
             </div>
 
@@ -92,16 +91,6 @@ include_once('js/list_js.php');
                         </ul>
                     </div>
                     <!-- Fim botão tipo de gráfico -->
-
-                <!-- Filters -->
-                    <!-- <div class="col-md-10 pull-left no-padding"> 
-                        <div class="col-md-5" style="width: auto">
-                        <span class="config-title"><?php _e('Filters: '); ?></span>
-                        <label class="label-from"><?php _e('from: ')?></label><input type="text" class="inputPeriod" value="" placeholder="<?php _e('from: dd/mm/aaaa')?>" id="from_period" name="from_period">
-                        <label class="label-until"><?php _e('until: ')?></label><input type="text" class="inputPeriod"  value="" placeholder="<?php _e('until: dd/mm/aaaa')?>" id="to_period" name="to_period">
-                        </div>
-                        <span class="current-chart"><?php //_t('User Stats',1); ?></span>
-                    </div> -->
                 </div>
             </div>
 
@@ -113,7 +102,7 @@ include_once('js/list_js.php');
                 <div class="hide" id="curvelinechart_div" style="width: 100%; height: 500px;"></div>
 
                 <!-- Mensagem 'não há dados' -->
-                <div id="no_chart_data" class="hide">
+                <div id="no_chart_data" class="hide text-center">
                     <h3> <?php _t('There is no data yet for this report!', 1); ?> </h3>
                 </div>
 

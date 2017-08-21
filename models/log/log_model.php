@@ -233,7 +233,7 @@ class Log extends Model {
                 ", self::_table() );
         }
         else {
-            // Collection id isn't null
+            // Has collection id
 
             if($filter == 'months'){
                 $fr = substr($from, 0, 7);
@@ -421,6 +421,13 @@ class Log extends Model {
                         )", self::_table(), self::_table());
                 }
             }
+            else if($filter == 'nofilter'){
+                $SQL_query = sprintf(
+                    "SELECT event, count(id) AS total
+                        FROM %s
+                        WHERE event_type = '$event_type' AND event = '$event' AND  collection_id = '$collection_id'
+                    ", self::_table() );
+            }
         }
 
         if($encoded){
@@ -478,7 +485,7 @@ class Log extends Model {
             $vdtl_data = array();
             
             foreach ($value_detail as $valdt => $data) {
-                if($event_type == 'users' || $event_type == 'administration' || $event_type == 'busca'){
+                if($event_type == 'users' || $event_type == 'administration' || $event_type == 'busca' || $event_type == 'importexport'){
                     array_push($vdtl_data, [$data->user, $data->date]);
                 }
                 else if($event_type == 'c_items'){
@@ -942,8 +949,8 @@ class Log extends Model {
                         ", self::_users_table(), self::_table(), self::_posts_table(), self::_users_table(), self::_posts_table());
                 }
             }
-            else if($report == 'administration' || $report == 'busca'){
-                $evtype = ($report == 'administration') ? 'event_type = \'admin\'' : 'event_type like \'%%search%%\'';
+            else if($report == 'administration' || $report == 'busca' || $report == 'importexport'){
+                $evtype = ($report == 'administration') ? 'event_type = \'collection_admin\'' : ($report == 'busca') ? 'event_type like \'collection_search\'' : 'event_type = \'imports\'';
 
                 $SQL_query = sprintf(
                     "SELECT user_login AS user, event_date AS date 
@@ -953,7 +960,81 @@ class Log extends Model {
             }
         }
         else{
+            if($report == 'items'){
+                if($event == 'publish' || $event == 'draft' || $event == 'trash'){
+                    $SQL_query = sprintf(
+                        "SELECT user_login AS user, post_title AS item, post_date AS date
+                            FROM %s, %s
+                            WHERE post_author = %s.ID AND post_type = 'socialdb_object' AND post_status = '$event' 
+                                AND (substring(post_date, 1, 10)) BETWEEN '$from' AND '$to' AND %s.id = '$collection_id'
+                        ", self::_users_table(), self::_posts_table(), self::_users_table(), self::_posts_table());
+                        
+                }
+                else{
+                    $SQL_query = sprintf(
+                        "SELECT user_login AS user, post_title AS item, event_date AS date
+                            FROM %s, %s, %s
+                            WHERE %s.ID = item_id AND user_id = %s.ID AND event = '$event' AND (substring(event_date, 1, 10)) BETWEEN '$from' AND '$to' 
+                                AND %s.collection_id = '$collection_id'
+                        ", self::_table(), self::_users_table(), self::_posts_table(), self::_posts_table(), self::_users_table(), self::_table());
+                } 
+            }
+            else if($report == 'collections' || $report == 'c_items'){
+                    $SQL_query = sprintf(
+                        "SELECT user, item, collection, date 
+                            FROM (
+                                (
+                                    SELECT post_title AS collection, ID 
+                                        FROM %s 
+                                        WHERE post_type = 'socialdb_collection' AND post_status = 'publish' AND post_title = '$event' AND id = '$collection_id'
+                                ) A 
+                                JOIN (
+                                    SELECT post_title AS item, post_date AS date, post_parent, user_login AS user 
+                                        FROM %s, %s
+                                        WHERE post_author = %s.ID AND post_type = 'socialdb_object' AND substring(post_date, 1, 10) BETWEEN '$from' AND '$to' 
+                                            AND %s.id = '$collection_id'
+                                    ) B 
+                                ON A.ID = B.post_parent)
+                        ", self::_posts_table(), self::_posts_table(), self::_users_table(), self::_users_table(), self::_posts_table());
+            }
+            else if($report == 'comments'){
+                $SQL_query = sprintf(
+                    "SELECT user_login AS user, post_title AS item, event_date AS date 
+                        FROM %s, %s, %s 
+                        WHERE item_id = %s.ID AND %s.ID = post_author AND user_id = post_author AND event='$event' AND event_type = 'comment' 
+                            AND substring(event_date, 1, 10) BETWEEN '$from' AND '$to' AND %s.collection_id = '$collection_id'
+                    ", self::_table(), self::_posts_table(), self::_users_table(), self::_posts_table(), self::_users_table(), self::_table());
+            }
+            else if($report == 'categories' || $report == 'tags'){
+                if($event == 'add' || $event == 'edit' || $event == 'delete'){
+                    $SQL_query = sprintf(
+                        "SELECT user_login AS user, substring(post_title, locate('(', post_title)) AS item, post_date AS date 
+                            FROM %s, %s, %s 
+                            WHERE post_author = %s.ID AND event = '$event' AND substring(post_date, 1, 10) BETWEEN '$from' AND '$to'
+                                AND collection_id = '$collection_id' AND resource_id = %s.id
+                        ", self::_users_table(), self::_posts_table(), self::_table(), self::_users_table(), self::_posts_table());
+                }
+                else if($event == 'view'){
+                    $evtype = ($report == 'categories') ? 'user_category' : 'tags';
+                    
+                    $SQL_query = sprintf(
+                        "SELECT user_login AS user, substring(post_title, locate('(', post_title)) AS item, post_date AS date 
+                            FROM %s, %s, %s 
+                            WHERE post_author = %s.ID AND post_author = user_id AND resource_id = %s.ID AND event = '$event' AND event_type = '". $evtype ."' 
+                                AND substring(post_date, 1, 10) BETWEEN '$from' AND '$to' AND %s.collection_id = '$collection_id'
+                        ", self::_users_table(), self::_table(), self::_posts_table(), self::_users_table(), self::_posts_table(), self::_table());
+                }
+            }
+            else if($report == 'administration' || $report == 'busca' || $report == 'importexport'){
+                $evtype = ($report == 'administration') ? 'event_type = \'collection_admin\'' : ($report == 'busca') ? 'event_type like \'collection_search\'' : 'event_type = \'collection_imports\'';
 
+                $SQL_query = sprintf(
+                    "SELECT user_login AS user, event_date AS date 
+                        FROM %s, %s 
+                        WHERE user_id = %s.ID AND ". $evtype ." AND event = '$event' AND substring(event_date, 1, 10) BETWEEN '$from' AND '$to'
+                            AND collection_id = '$collection_id'
+                    ", self::_users_table(), self::_table(), self::_users_table());
+            }
         }
 
         $value_detail = $wpdb->get_results($SQL_query);

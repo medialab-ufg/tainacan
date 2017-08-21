@@ -79,10 +79,6 @@
         );
     };
 
-    // TainacanChart.prototype.getStatDesc = function(title, desc) {
-    //     return title + "<p>"+ desc +"</p>";
-    // };
-
     TainacanChart.prototype.createCsvFile = function(csvData) {
         var csvContent = "data:text/csv;charset=utf-8,";
         csvContent += "Evento, Qtd\n";
@@ -486,7 +482,70 @@
             fetchData('c_items', eventName, 'detail');
         }
         else if(title == 'Import / Export' || title == 'Importar / Exportar'){
+            switch (eventName){
+                case 'CSV Exportation':
+                case 'Exportação CSV':
+                    var thead = {
+                        column1: 'Usuário: '+ eventName,
+                        column2: 'Data - Horário'
+                    }
 
+                    renderDetailThead(thead);
+                    fetchData('importexport', 'export_csv', 'detail');
+                    break;
+                case 'CSV Importation':
+                case 'Importação CSV':
+                    var thead = {
+                        column1: 'Usuário: '+ eventName,
+                        column2: 'Data - Horário'
+                    }
+
+                    renderDetailThead(thead);
+                    fetchData('importexport', 'import_csv', 'detail');
+                    break;
+                case 'Harvesting OAI-PMH':
+                case 'Coleta OAI-PMH':
+                    var thead = {
+                        column1: 'Usuário: '+ eventName,
+                        column2: 'Data - Horário'
+                    }
+
+                    renderDetailThead(thead);
+                    fetchData('importexport', 'harvesting_oai_pmh', 'detail');
+                    break;
+                case 'OAI-PMH Accesses':
+                case 'Acessos OAI-PMH':
+                    var thead = {
+                        column1: 'Usuário: '+ eventName,
+                        column2: 'Data - Horário'
+                    }
+
+                    renderDetailThead(thead);
+                    fetchData('importexport', 'access_oai_pmh', 'detail');
+                    break;
+                case 'Tainacan Importation':
+                case 'Importação Tainacan':
+                    var thead = {
+                        column1: 'Usuário: '+ eventName,
+                        column2: 'Data - Horário'
+                    }
+
+                    renderDetailThead(thead);
+                    fetchData('importexport', 'import_tainacan', 'detail');
+                    break;
+                case 'Tainacan Exportation':
+                case 'Exportação Tainacan':
+                    var thead = {
+                        column1: 'Usuário: '+ eventName,
+                        column2: 'Data - Horário'
+                    }
+
+                    renderDetailThead(thead);
+                    fetchData('importexport', 'export_tainacan', 'detail');
+                    break;
+                default:
+                    break;
+            }
         }
         else if(title == 'Administration' || title == 'Administração'){
             switch (eventName) {
@@ -610,6 +669,24 @@
         toggleElements(["#values-details", "#no_chart_data"], true);
     }
 
+    //On set from and to
+    function today() {
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1; //January is 0!
+        var yyyy = today.getFullYear();
+
+        if(dd<10) {
+            dd='0'+dd
+        }
+
+        if(mm<10) {
+            mm='0'+mm
+        }
+
+        return today = dd+'/'+mm+'/'+yyyy;
+    }
+
     $(function() {
         // Specific functions to repository or collections stat page
         normalizeStatPage();
@@ -620,7 +697,9 @@
         $("#from_period").datepicker({
             dateFormat: 'dd/mm/yy',
             showButtonPanel: false,
-            showAnim: 'clip',
+            showAnim: 'drop',
+            showWeek: true,
+            firstDay: 1,
             changeMonth: true,
             changeYear: true,
             minDate: '01-01-2016',
@@ -638,8 +717,12 @@
             changeMonth: true,
             changeYear: true,
             showButtonPanel: false,
-            showAnim: 'clip',
+            showAnim: 'drop',
+            showWeek: true,
+            firstDay: 1,
             maxDate: '0',
+            onSelect: function(dateText, obj) {
+            }
         }).on("change", function () {
             $("#from_period").datepicker("option", "maxDate", getDate(this));
         });
@@ -657,26 +740,8 @@
         }
 
         //Default period
-        $("#from_period").val('01/01/'+today().substring(6,10));
+        $("#from_period").val('01/01/'+ today().substring(6,10));
         $("#to_period").val(today());
-
-        //On set from and to
-        function today() {
-            var today = new Date();
-            var dd = today.getDate();
-            var mm = today.getMonth()+1; //January is 0!
-            var yyyy = today.getFullYear();
-
-            if(dd<10) {
-                dd='0'+dd
-            }
-
-            if(mm<10) {
-                mm='0'+mm
-            }
-
-            return today = dd+'/'+mm+'/'+yyyy;
-        }
     });
 
     function disableEnableWeekMonth(bool) {
@@ -684,7 +749,7 @@
         $("#months").prop('disabled', bool);
     }
 
-    function verifyDiff(diff) {
+    function verifyDiff(dife) {
         if(diffe < 7){
             disableEnableWeekMonth(true);
         }
@@ -698,19 +763,25 @@
 
     //  On change period
     $("#from_period").on('change', function () {
-        var diffe = Math.ceil( ($("#to_period").datepicker('getDate') - $("#from_period").datepicker('getDate')) / (1000 * 60 * 60 * 24) ) + 1;
-        
-        verifyDiff(diff);
+        var thisDatepickerDate = $(this).datepicker('getDate');
+        var otherDatepickerDate = $("#to_period").datepicker('getDate');
+
+        var diffe = +Math.ceil( (otherDatepickerDate - thisDatepickerDate) / (1000 * 60 * 60 * 24) ) + 1;
+            
+        verifyDiff(diffe);
         loadChart();
     });
 
     $("#to_period").on('change', function () {
-        var diffe = Math.ceil( ($("#to_period").datepicker('getDate') - $("#from_period").datepicker('getDate')) / (1000 * 60 * 60 * 24) ) + 1;
-        
-        verifyDiff(diff)
-        loadChart();
+        var thisDatepickerDate = $(this).datepicker('getDate');
+        var otherDatepickerDate = $("#from_period").datepicker('getDate');
+
+        var diffe = +Math.ceil( (thisDatepickerDate - otherDatepickerDate) / (1000 * 60 * 60 * 24) ) + 1;
+            
+        verifyDiff(diffe)
+        loadChart(); 
     });
-    // -------
+    // // -------
 
     // On change filter type week, day, month
     $("input[type=radio][name=optradio]").on('change', function () {
@@ -805,8 +876,7 @@
         onPostInit: function(isReloading, isError) {
             if( $('body').hasClass('single-socialdb_collection') ) { // Collection's Statistics
                 $('.repoOnly').hide();
-                var fst_col_dyna = $('.dynatree-radio').get(1);
-                $(fst_col_dyna).click();
+                $('.dynatree-radio').get(1).click();
             } else {
                 $('.dynatree-radio').first().click();
             }
@@ -846,7 +916,7 @@
         * top_collections_items
         */
         return [
-            { title: "Usuário <p> visualizados / votados </p>", id: "user" },
+            { title: "Usuário <p> visualizados / votados </p>", id: "user"},
             { title: "Status <p> ativos / rascunhos / lixeira / excluídos / <br/> adicionados / editados / excluídos / <br/> visualizados / baixados </p>", id: "general_status" },
            // { title: "Coleção <p> número de itens por coleção </p>", id: "top_collections", addClass: 'repoOnly' }
         ];
@@ -856,9 +926,6 @@
         return [
             { title: "Status <p> adicionadas / visualizadas / editadas / excluídas </p>", id: "user_collection", addClass: 'repoOnly'},
             { title: "Itens <p> ilustrações (número de itens por <br/> coleção) </p>", id: "top_collections", addClass: 'repoOnly' },
-            // Independem de parent:
-            //{ title: "Buscas Frequentes <p> ranking das buscas mais realizadas </p>", id: "repo_searches", addClass: 'repoOnly'},
-            { title: "Buscas <p> termos mais pesquisados </p>", id: "collection_searches", addClass: 'collecOnly'}
         ];
     }
     // Comments
@@ -888,6 +955,7 @@
             { title: "Páginas <p> Configurações / metadados / chaves / licenças /<br /> e-mail boas vindas / ferramentas </p>", id: 'admin', addClass: 'repoOnly'},
             { title: "Páginas <p> Configurações / metadados / layout / redes sociais <br /> licenças / importação / exportação </p>", id: 'collection_admin', addClass: 'collecOnly' },
             { title: "Buscas Frequentes <p> ranking das buscas mais realizadas em <br/> todo o site (buscas avançadas e não avançadas) </p>", id: "repo_searches", addClass: 'repoOnly'},
+            { title: "Buscas <p> termos mais pesquisados </p>", id: "collection_searches", addClass: 'collecOnly'}
         ];
     }
 
@@ -896,7 +964,7 @@
         return [
             { title: $('.stats-users').text(), addClass: 'repoOnly', noLink: true, expand: true, unselectable: true, hideCheckbox: true, children: statusChildren() },
             { title: $('.stats-items').text(), noLink: true, unselectable: true, hideCheckbox: true, children: itensChildren() },
-            { title: $('.stats-collections').text(), noLink: true, hideCheckbox: true, children: collectionsChildren() },
+            { title: $('.stats-collections').text(), addClass: 'repoOnly', noLink: true, hideCheckbox: true, children: collectionsChildren() },
             { title: $('.stats-comments').text(), noLink: true, hideCheckbox: true, children: commentsChildren() },
             { title: $('.stats-categories').text(), noLink: true, hideCheckbox: true, children: categoryChildren() },
             { title: $('.stats-tags').text(), noLink: true, hideCheckbox: true, children: tagsChildren()},
@@ -951,6 +1019,15 @@
         var to = getPeriodFilter()['to'];
 
         var filter = getFilterSelected();
+        
+        if(filter == 'nofilter'){
+            from = '2016-01-01';
+
+            var t = today().split('/');
+            var dto = new Date(t[2], t[1] - 1, t[0]);
+            
+            to = dto.toISOString().split('T')[0];
+        }
 
         $.ajax({
             url: stat_path + '/controllers/log/log_controller.php', type: 'POST',
