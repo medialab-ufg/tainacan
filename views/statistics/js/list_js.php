@@ -3,94 +3,91 @@
     google.charts.setOnLoadCallback(loadChart);
     
     var TainacanChart = function(){};
-    TainacanChart.prototype.getMappedTitles = function() {
-        return {
-            add: '<?php _t("Added", 1); ?>',
-            edit: '<?php _t("Edited", 1); ?>',
-            view: '<?php _t("Viewed", 1); ?>',
-            download: '<?php _t("Downloaded", 1); ?>',
-            delete: '<?php _t("Deleted", 1); ?>',
-            comment: '<?php _t("Commented", 1); ?>',
-            vote: '<?php _t("Voted", 1); ?>',
-            login: 'Logins',
-            register: '<?php _t("Registers", 1); ?>',
-            delete_user: '<?php _t("Excluded", 1); ?>',
-            administrator: '<?php _t("Administrator", 1); ?>',
-            author: '<?php _t("Author", 1); ?>',
-            editor: '<?php _t("Editor", 1); ?>',
-            subscriber: '<?php _t("Subscriber", 1); ?>',
-            contributor: '<?php _t("Colaborator", 1); ?>',
-            access_oai_pmh: '<?php _t("OAI-PMH Accesses", 1); ?>',
-            harvest_oai_pmh: '<?php _t("Harvesting OAI-PMH", 1); ?>',
-            import_csv: '<?php _t("CSV Importation", 1); ?>',
-            export_csv: '<?php _t("CSV Exportation", 1); ?>',
-            import: '<?php _t("Importation", 1); ?>',
-            export: '<?php _t("Exportation", 1); ?>',
-            import_tainacan: '<?php _t("Tainacan Importation", 1); ?>',
-            export_tainacan: '<?php _t("Tainacan Exportation", 1); ?>',
-            publish: '<?php _t("Active", 1); ?>',
-            draft: '<?php _t("Draft", 1); ?>',
-            trash: '<?php _t("Trash", 1); ?>',
-            //total_delete: '<?php _t("Deleted", 1); ?>',
-            config: '<?php _t("Configurations", 1); ?>',
-            welcome_mail: '<?php _t("Welcome Mail", 1); ?>',
-            licenses: '<?php _t("Licenses", 1); ?>',
-            keys: '<?php _t("Keys", 1); ?>',
-            tools: '<?php _t("Tools", 1); ?>',
-            metadata: '<?php _t("Metadata", 1); ?>',
-            layout: '<?php _t("Layout", 1); ?>',
-            social_media: '<?php _t("Social Media", 1); ?>'
-        };
-    };
+    
+    TainacanChart.prototype = {
+    
+        getMappedTitles: function() {
+            return {
+                add: '<?php _t("Added", 1); ?>',
+                edit: '<?php _t("Edited", 1); ?>',
+                view: '<?php _t("Viewed", 1); ?>',
+                download: '<?php _t("Downloaded", 1); ?>',
+                delete: '<?php _t("Deleted", 1); ?>',
+                comment: '<?php _t("Commented", 1); ?>',
+                vote: '<?php _t("Voted", 1); ?>',
+                login: 'Logins',
+                register: '<?php _t("Registers", 1); ?>',
+                delete_user: '<?php _t("Excluded", 1); ?>',
+                administrator: '<?php _t("Administrator", 1); ?>',
+                author: '<?php _t("Author", 1); ?>',
+                editor: '<?php _t("Editor", 1); ?>',
+                subscriber: '<?php _t("Subscriber", 1); ?>',
+                contributor: '<?php _t("Colaborator", 1); ?>',
+                access_oai_pmh: '<?php _t("OAI-PMH Accesses", 1); ?>',
+                harvest_oai_pmh: '<?php _t("Harvesting OAI-PMH", 1); ?>',
+                import_csv: '<?php _t("CSV Importation", 1); ?>',
+                export_csv: '<?php _t("CSV Exportation", 1); ?>',
+                import: '<?php _t("Importation", 1); ?>',
+                export: '<?php _t("Exportation", 1); ?>',
+                import_tainacan: '<?php _t("Tainacan Importation", 1); ?>',
+                export_tainacan: '<?php _t("Tainacan Exportation", 1); ?>',
+                publish: '<?php _t("Active", 1); ?>',
+                draft: '<?php _t("Draft", 1); ?>',
+                trash: '<?php _t("Trash", 1); ?>',
+                //total_delete: '<?php _t("Deleted", 1); ?>',
+                config: '<?php _t("Configurations", 1); ?>',
+                welcome_mail: '<?php _t("Welcome Mail", 1); ?>',
+                licenses: '<?php _t("Licenses", 1); ?>',
+                keys: '<?php _t("Keys", 1); ?>',
+                tools: '<?php _t("Tools", 1); ?>',
+                metadata: '<?php _t("Metadata", 1); ?>',
+                layout: '<?php _t("Layout", 1); ?>',
+                social_media: '<?php _t("Social Media", 1); ?>'
+            };
+        },
+        displayFixedBase: function() {
+            $("#charts-resume table tr.headers").html("<th class='curr-parent'> Status </th>");
+            var parent_title = $(".current_parent_report").val();
+            $("#charts-resume table tr.content").html("<td class='curr-filter'> "+ parent_title +" </td>");
+        },
+        displayBaseAppend: function(title, value) {
+            $("#charts-resume table tr.headers").append("<th>"+ title +"</th>");
+            $("#charts-resume table tr.quality-content").remove();
+            $("#charts-resume table tr.content").append("<td> <a id='"+ title +"' onclick='javascript:renderDetail(this)' href='javascript:void(0)' id='detail-base' class='a-color'>"+ value +" <span class='glyphicon glyphicon-info-sign'></span> </a> </td>");
+        },
+        appendQualityBase: function() {
+            $("#charts-resume table tr.headers").html("<th>Coleção</th><th>Nº de itens</th>");
+            $("#charts-resume table tr.content").html("");
+            $("#charts-resume table tr.quality-content").remove();
+        },
+        appendSearchesBase: function(){
+            $("#charts-resume table tr.headers").html("<th>Termo</th><th>Quantidade de buscas</th>");
+            $("#charts-resume table tr.content").html("");
+            $("#charts-resume table tr.quality-content").remove();
+        },
+        appendNoFilterBase: function () {
+            $("#charts-resume table tr.headers").html("<th>Status</th><th>Total</th>");
+            $("#charts-resume table tr.content").html("");
+            $("#charts-resume table tr.quality-content").remove();
+        },
+        appendQualityData: function(title, qtd) {
+            $("#charts-resume table tbody").append(
+                "<tr class='quality-content'><td>"+ title +"</td><td> <a id='"+ title +"' onclick='javascript:renderDetail(this)' href='javascript:void(0)' id='detail-quality' class='a-color'>"+ qtd +" <span class='glyphicon glyphicon-info-sign'></span> </a> </td></tr>"
+            );
+        },
+        createCsvFile: function(csvData) {
+            var csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "Evento, Qtd\n";
+            csvData.forEach(function(infoArray, index) {
+                var dataString = infoArray.join(",");
+                csvContent += index < csvData.length ? dataString + "\n" : dataString;
+            });
+            var encodedURI = encodeURI(csvContent);
 
-    TainacanChart.prototype.displayFixedBase = function() {
-        $("#charts-resume table tr.headers").html("<th class='curr-parent'> Status </th>");
-        var parent_title = $(".current_parent_report").val();
-        $("#charts-resume table tr.content").html("<td class='curr-filter'> "+ parent_title +" </td>");
-    };
-
-    TainacanChart.prototype.displayBaseAppend = function(title, value) {
-        $("#charts-resume table tr.headers").append("<th>"+ title +"</th>");
-        $("#charts-resume table tr.quality-content").remove();
-        $("#charts-resume table tr.content").append("<td> <a id='"+ title +"' onclick='javascript:renderDetail(this)' href='javascript:void(0)' id='detail-base' class='a-color'>"+ value +" <span class='glyphicon glyphicon-info-sign'></span> </a> </td>");
-    };
-
-    TainacanChart.prototype.appendQualityBase = function() {
-        $("#charts-resume table tr.headers").html("<th>Coleção</th><th>Nº de itens</th>");
-        $("#charts-resume table tr.content").html("");
-        $("#charts-resume table tr.quality-content").remove();
-    };
-
-    TainacanChart.prototype.appendSearchesBase = function(){
-        $("#charts-resume table tr.headers").html("<th>Termo</th><th>Quantidade de buscas</th>");
-        $("#charts-resume table tr.content").html("");
-        $("#charts-resume table tr.quality-content").remove();
+            $('a.dl-csv').attr('href', encodedURI);
+            $('a.dl-csv').attr('download', 'exported-chart.csv');
+        }
     }
-
-    TainacanChart.prototype.appendNoFilterBase = function () {
-        $("#charts-resume table tr.headers").html("<th>Status</th><th>Total</th>");
-        $("#charts-resume table tr.content").html("");
-        $("#charts-resume table tr.quality-content").remove();
-    }
-
-    TainacanChart.prototype.appendQualityData = function(title, qtd) {
-        $("#charts-resume table tbody").append(
-            "<tr class='quality-content'><td>"+ title +"</td><td> <a id='"+ title +"' onclick='javascript:renderDetail(this)' href='javascript:void(0)' id='detail-quality' class='a-color'>"+ qtd +" <span class='glyphicon glyphicon-info-sign'></span> </a> </td></tr>"
-        );
-    };
-
-    TainacanChart.prototype.createCsvFile = function(csvData) {
-        var csvContent = "data:text/csv;charset=utf-8,";
-        csvContent += "Evento, Qtd\n";
-        csvData.forEach(function(infoArray, index) {
-            var dataString = infoArray.join(",");
-            csvContent += index < csvData.length ? dataString + "\n" : dataString;
-        });
-        var encodedURI = encodeURI(csvContent);
-
-        $('a.dl-csv').attr('href', encodedURI);
-        $('a.dl-csv').attr('download', 'exported-chart.csv');
-    };
     
     function renderDetailThead(thead) {
         $('#thead-detail tr').html('');
@@ -902,10 +899,7 @@
         */
         return [
             { title: "Status <p> logins / registrados / excluídos </p>", id: "status", addClass: 'repoOnly'},
-            //{ title: "Itens <p> criaram / editaram / apagaram / <br/> visualizaram / baixaram</p>", id: "items" },
             { title: "Perfil <p> assinante / administrador / <br/> editor / autor / colaborador </p>", id: "profile", addClass: 'repoOnly'},
-            //{ title: "Categorias <p> criaram / editaram / apagaram / visualizaram </p>", id: "category" },
-            //{ title: "Coleção <p> criaram / editaram / apagaram / visualizaram </p>", id: "collection", addClass: 'repoOnly' }
         ];
     }
     // Items
@@ -918,7 +912,6 @@
         return [
             { title: "Usuário <p> visualizados / votados </p>", id: "user"},
             { title: "Status <p> ativos / rascunhos / lixeira / excluídos / <br/> adicionados / editados / excluídos / <br/> visualizados / baixados </p>", id: "general_status" },
-           // { title: "Coleção <p> número de itens por coleção </p>", id: "top_collections", addClass: 'repoOnly' }
         ];
     }
     // Collections
@@ -1239,7 +1232,6 @@
     } // drawChart()
 
     function renderChart(current_title, type, stat_data, filter) {
-        // var color = chart_color || '#79a6ce';
         // Google Charts objects
         var legendOpt = {position: 'top', alignment: 'center', textStyle: {fontSize: 11}, maxLines: 3};
         if(filter == "nofilter"){
@@ -1304,7 +1296,6 @@
         else if( type == 'curveline'){
             var linechart = new google.visualization.LineChart(document.getElementById('curvelinechart_div'));
             var curveOptions = {
-                //curveType: 'function',
                 legend: legendOpt,
                 fontSize: 10,
                 selectionMode: 'multiple',
@@ -1319,7 +1310,6 @@
 
             linechart.draw(stat_data, curveOptions);
         }
-        //$('.chartChanger').removeClass('hide');
     }
 
     $('a.dl-pdf').click(function() {
