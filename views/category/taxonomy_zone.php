@@ -68,7 +68,7 @@ if($category_meta){
             <input type="hidden" id="operation" name="operation" value="taxonomy_zone_submit">
             <input type="hidden" id="save_and_next" name="save_and_next" value="false">
             
-            <button type="button" class="btn btn-default pull-left btn-lg" onclick="backToMainPage()"> <?php _e('Cancel', 'tainacan'); ?> </button>
+            <button type="button" class="btn btn-default pull-left btn-lg" onclick="backToMainPage()"> <?php _e('Back to collection', 'tainacan'); ?> </button>
             
             <button type="submit" 
                     id="submit_configuration"

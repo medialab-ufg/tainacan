@@ -32,7 +32,7 @@ if ( $loop->have_posts() ) { ?>
 
 <?php } else { ?> <!-- TAINACAN: se a pesquisa nao encontrou nenhum item -->
 
-    <div id="items_not_found" class="alert alert-danger">
+    <div id="items_not_found" class="alert alert-danger" display="none">
         <span class="glyphicon glyphicon-warning-sign"></span> <?php _t('No objects found!', 1); ?>
     </div>
 
