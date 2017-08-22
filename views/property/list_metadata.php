@@ -103,7 +103,7 @@ unset($_SESSION['tainacan-categories']);
         <!-- Abas para a Listagem dos metadados -->
         <div style="background: white;">
             <ul class="nav nav-tabs" style="background: white;margin-left: 15px;margin-right: 15px;">
-                <li  role="presentation" class="active">
+                <li  role="presentation" class="active my_tab" data-id="default" >
                     <a id="click-tab-default" href="#tab_default" aria-controls="tab_default" role="tab" data-toggle="tab">
                         <span ondblclick="alter_tab_title('default')" id="default-tab-title"><?php echo (!$default_tab) ? _e('Default', 'tainacan') : $default_tab ?></span>
                         <input id="default-tab-title-input" 
