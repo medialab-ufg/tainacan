@@ -3740,9 +3740,10 @@ include_once 'extras/json-rest-api/plugin.php';
 
 function load_repository_configs() {
     $request = $_SERVER['REQUEST_URI'];
-    $basic_path = basename(site_url());
-    $check = str_replace("/$basic_path/", "", $request);
-    if (strpos($check, "adm/") === 0 && preg_match('/\badm\b/', $request) == 1) {
+    $_site_url = parse_url(site_url());
+    $check = str_replace( $_site_url["path"], "", $request );
+
+    if (strpos($check, "/adm/") === 0 && preg_match('/\badm{1}\b/', $request) == 1) {
         locate_template( "configs.php" , true, false );
         die();
     }
