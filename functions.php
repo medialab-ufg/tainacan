@@ -593,19 +593,19 @@ function tainacan_comments($comment, $args, $depth) {
                         <ul id="resources_collection_dropdown" class="dropdown-menu" role="menu">
                             <li>
                                 <!-- ******************** FACEBOOK ******************** -->
-                                <a target="_blank" href="http://www.facebook.com/sharer/sharer.php?s=100&amp;p[url]=<?php echo get_the_permalink($global_collection_id) . '?item=' . $object->post_name; ?>&amp;p[images][0]=<?php echo wp_get_attachment_url(get_post_thumbnail_id($object->ID)); ?>&amp;p[title]=<?php _e("Comment", 'tainacan'); ?> - <?php echo htmlentities($object->post_title); ?>&amp;p[summary]=<?php comment_text(); ?>">
+                                <a target="_blank" rel="noopener" href="http://www.facebook.com/sharer/sharer.php?s=100&amp;p[url]=<?php echo get_the_permalink($global_collection_id) . '?item=' . $object->post_name; ?>&amp;p[images][0]=<?php echo wp_get_attachment_url(get_post_thumbnail_id($object->ID)); ?>&amp;p[title]=<?php _e("Comment", 'tainacan'); ?> - <?php echo htmlentities($object->post_title); ?>&amp;p[summary]=<?php comment_text(); ?>">
                                     <img src="<?php echo get_template_directory_uri() ?>/libraries/images/icon_facebook.png" style="max-width: 32px;" />
                                 </a>
                             </li>
                             <li>
                                 <!-- ******************** GOOGLE PLUS ******************** -->
-                                <a target="_blank" href="https://plus.google.com/share?url=<?php echo get_the_permalink($global_collection_id) . '?item=' . $object->post_name; ?>">
+                                <a target="_blank" rel="noopener" href="https://plus.google.com/share?url=<?php echo get_the_permalink($global_collection_id) . '?item=' . $object->post_name; ?>">
                                     <img src="<?php echo get_template_directory_uri() ?>/libraries/images/icon_googleplus.png" style="max-width: 32px;" />
                                 </a>
                             </li>
                             <li>
                                 <!-- ******************** TWITTER ******************** -->
-                                <a target="_blank" href="https://twitter.com/intent/tweet?url=<?php echo get_the_permalink($global_collection_id) . '?item=' . $object->post_name; ?>&amp;text=<?php echo strip_tags(get_comment_text()); ?>&amp;via=socialdb">
+                                <a target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?url=<?php echo get_the_permalink($global_collection_id) . '?item=' . $object->post_name; ?>&amp;text=<?php echo strip_tags(get_comment_text()); ?>&amp;via=socialdb">
                                     <img src="<?php echo get_template_directory_uri() ?>/libraries/images/icon_twitter.png" style="max-width: 32px;" />
                                 </a>
                             </li>
@@ -3155,7 +3155,7 @@ function format_item_text_source($source) {
         return '--';
     else:
         if (filter_var($source, FILTER_VALIDATE_URL) != false) {
-            return '<a class="btn btn-default" href="' . $source . '" target="_blank">' . __('Visit original page', 'tainacan') . '</a>';
+            return '<a class="btn btn-default" href="' . $source . '" target="_blank" rel="noopener">' . __('Visit original page', 'tainacan') . '</a>';
         } else {
             return $source;
         }

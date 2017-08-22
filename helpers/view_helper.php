@@ -59,23 +59,24 @@ class ViewHelper {
     public function renderRepositoryLogo($_logo_id, $fallback_title) {
         $extraClass = "";
         $home = home_url();
+        $logo = _t("Logo");
         if(isset($_logo_id)) {
             $former_logo = get_the_post_thumbnail($_logo_id, 'thumbnail');
             if($former_logo) {
                 $extraClass = "repository-logo";
-                $_img_url = wp_get_attachment_url( get_post_thumbnail_id($_logo_id) );
-                $ret = "<img class='tainacan-repo-logo' src='$_img_url' />";
+                $logo_src = wp_get_attachment_url( get_post_thumbnail_id($_logo_id) );
             } else {
                 $logo_obj = get_post($_logo_id);
                 if(is_object($logo_obj) && $logo_obj->post_type === "attachment") {
-                    $crop_logo = $logo_obj->guid;
-                    $ret = "<img class='tainacan-repo-logo' src='$crop_logo' />";
+                    $logo_src = $logo_obj->guid;
                 } else {
                     $extraClass = "logo-tainacan";
-                    $default_logo = get_template_directory_uri() . '/libraries/images/Tainacan_pb.svg';
-                    $ret = "<img class='tainacan-repo-logo' src='$default_logo' />";
+                    $logo_src = get_template_directory_uri() . '/libraries/images/Tainacan_pb.svg';
                 }
             }
+
+            $ret = "<img class='tainacan-repo-logo' alt='$logo' title='$logo' src='$logo_src'/>";
+
         } else {
             $ret = empty($fallback_title) ? _t("Tainacan") : $fallback_title;
         }
