@@ -22,14 +22,16 @@ $current_user_metas = get_user_meta($current_user->ID);
                 </div>
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-md-3 col-lg-3 hoverzoom" align="center"> 
-                            <img alt="User Pic" src="<?php echo get_template_directory_uri() ?>/libraries/images/profile-avatar.jpg" class="img-circle img-responsive"> 
-                            <div class="retina">
-                                <button type="button" class="btn btn-primary"><?php _e('Change','tainacan'); ?></button>
-                            </div>
-                        </div>
+                        <!-- User image profile -->
+                        <!--<div class="col-md-3 col-lg-3 hoverzoom" align="center">
+                            <img alt="User Pic" src="<?php echo get_template_directory_uri() ?>/libraries/images/profile-avatar.jpg" class="img-circle img-responsive">
 
-                        <div class=" col-md-9 col-lg-9 "> 
+                            <div class="retina">
+                                <button type="button" class="btn btn-primary" ><?php _e('Change','tainacan'); ?></button>
+                            </div>
+                        </div>-->
+
+                        <div class=" col-md-12 col-lg-12 ">
                             <table class="table table-user-information">
                                 <tbody>
                                     <tr>
