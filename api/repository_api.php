@@ -77,7 +77,7 @@ abstract class RepositoryApi {
                     $details['real-name'] = $details['name'];
                     $details['name'] = (isset($params['labels_collection'][$property['id']])) ? $params['labels_collection'][$property['id']] : $details['name'];
                     if ($params['includeMetadata'] === '1') {
-                        $details['visibility'] = ($visibility === 'hide' || in_array($property['id'], $params['visibility'])) ? 'off' : 'on';
+                        $details['visibility'] = ($visibility === 'hide' ||(is_array($params['visibility']) && in_array($property['id'], $params['visibility']))) ? 'off' : 'on';
                         $required = get_post_meta($params['id'], 'socialdb_collection_property_' . $property['id'] . '_required', true);
                         $details['required'] = ($required != '') ? true : false;
                         $is_mask = get_post_meta($params['id'], 'socialdb_collection_property_' . $property['id'] . '_mask_key', true);
