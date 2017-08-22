@@ -1,10 +1,13 @@
 <?php get_header(); ?>
 
     <header class="custom-header" style="<?php echo home_header_bg($socialdb_logo)?>">
-        <div id="main_part" class="home">
-            <?php if(has_action('alter_home_page')): ?>
-                <?php do_action('alter_home_page') ?>
-            <?php else: ?>
+        <div class="menu-transp-cover"></div>
+
+        <?php
+        if(has_action('alter_home_page')):
+            do_action('alter_home_page');
+        else: ?>
+            <div id="main_part" class="home">
                 <div class="row container-fluid">
                     <div class="project-info">
                         <h1> <?php bloginfo('name') ?> </h1>
@@ -24,8 +27,9 @@
                         </a>
                     </div>
                 </div>
-            <?php endif; ?>
-        </div>
+            </div>
+        <?php endif; ?>
+
     </header>
     <!-- </header> closes opening header tag at header.php -->
 

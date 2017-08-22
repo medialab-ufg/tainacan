@@ -91,12 +91,10 @@ ul.repository-settings, .admin-configs {
 
 .header-navbar {
   // padding: 5px 0 5px 0;
-  // height: 50px;
-  // position: fixed;
-  margin-bottom: 0px;
+  position: absolute;
+  top: 0;
   width: 100%;
   z-index: 99;
-  top: 0;
 
   a.logo-tainacan {
     padding: 0;
