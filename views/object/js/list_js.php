@@ -361,8 +361,12 @@
         if($setViewMode) {
             $setViewMode = $setViewMode.split(" ")[0];
             if("table" === $setViewMode) {
+                if (isMobile()) {
+                    changeViewMode("cards");
+                }
+
                 $(window).resize(function() {
-                    if ($(window).width() < 820) {
+                    if (isMobile()) {
                         changeViewMode("cards");
                     } else {
                         changeViewMode($setViewMode);

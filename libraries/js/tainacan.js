@@ -743,6 +743,7 @@ function show_modal_edit_category(title, key) {
         $('.dropdown-toggle').dropdown();
     });
 }
+
 /***************** END: funcao para gerar o modal para edicao de categoria *******/
 /***************** funcao para gerar o modal para edicao de tag *******/
 function show_modal_edit_tag(title, key) {
@@ -752,6 +753,7 @@ function show_modal_edit_tag(title, key) {
     $("#operation").val('update');
     $('.dropdown-toggle').dropdown();
 }
+
 /***************** END: funcao para gerar o modal para edicao de tag *******/
 //buscando um termo
 function get_category_promise(category_id, property_id) {
@@ -762,6 +764,7 @@ function get_category_promise(category_id, property_id) {
     });
     return promise;
 }
+
 // verificando a privacidade de uma colecao
 function check_privacity(src)
 {
@@ -779,6 +782,7 @@ function check_privacity(src)
         }
     });
 }
+
 //modal_block modal que bloqueia acoes do usuario
 function showModalImportCollection() {
     $("#myModal").modal('hide');
@@ -822,7 +826,6 @@ function redirectAdvancedSearch(field){
         window.location = $('#collection_root_url').val()+'?search-advanced-text='+$(field).val()
 }
 
-
 $("#expand-top-search").hover(function () {
     $("#expand-top-search").css('border', '1px solid whitesmoke');
 }, function () {
@@ -837,6 +840,7 @@ function show_modal_main() {
 function hide_modal_main() {
     $("#modalImportMain").modal('hide');
 }
+
 //mostra como o username vai ficar para o usuario
 function showUserName(selector) {
     $.ajax({
@@ -847,6 +851,7 @@ function showUserName(selector) {
         $('#result_username').html(result);
     });
 }
+
 // lista os autores mais participativos
 function show_most_participatory_authors(src) {
     $.ajax({
@@ -894,6 +899,7 @@ function populateList(src) {
     ;
 
 }
+
 // Mostra a listagem inicial
 function showList(src) {
     if($('#search-advanced-text').val() == '') {
@@ -970,6 +976,7 @@ function showListSharedCollections(src) {
     });
 
 }
+
 function showTrash(src) {
     show_modal_main();
     $.ajax({
@@ -996,10 +1003,12 @@ function showTrash(src) {
     });
 
 }
+
 // funcao antiga que realiza a filtragem dos items
 function list_all_objects(classifications, collection_id, ordered_id, order_by, keyword) {
     wpquery_filter();
 }
+
 // mostar os filtros do dynatree
 function show_dynatree_filters(classifications, collection_id, keyword) {
     $.ajax({
@@ -1015,6 +1024,7 @@ function show_dynatree_filters(classifications, collection_id, keyword) {
         $('#dynatree_filters').html(result);
     });
 }
+
 /**
  * funcao eu mostra o container dos sinonimos
  */
@@ -1225,6 +1235,7 @@ function showDynatreeSingleEdit(src) {
         }
     });
 }
+
 /**
  * limpa os dynatree dos sinonimos
  * @returns {undefined}
@@ -1247,7 +1258,6 @@ function reinit_tag_tree() {
     $("#dynatree_tags").dynatree("getTree").reload();
 }
 
-
 function showHeaderCollection(src) {
     $.ajax({
         url: src + '/controllers/collection/collection_controller.php',
@@ -1259,7 +1269,6 @@ function showHeaderCollection(src) {
         $('.dropdown-toggle').dropdown();
     });
 }
-
 
 function showCollectionConfiguration(src) {
     $.ajax({
@@ -1403,6 +1412,7 @@ function showPropertiesConfigurationWizard(src) {
         $("#configuration").animate({width: 'toggle'}, 400).html(result).show();
     });
 }
+
 // funcao que mostra os itens disponiveis na ordenacao na pagina single.php
 function list_main_ordenation(has_category_properties) {
     var default_ordenation = '';
@@ -1458,6 +1468,7 @@ function list_main_ordenation(has_category_properties) {
         $('.dropdown-toggle').dropdown();
     });
 }
+
 // funcao que mostra os itens disponiveis na ordenacao na pagina single.php
 function list_main_ordenation_filter(has_category_properties) {
     var default_ordenation = '';
@@ -1605,6 +1616,7 @@ function showFormCreateURLFile(url, type) {
         $('#configuration').html(result).show();
     });
 }
+
 /*************** LISTA COMENTARIOS DA COLECAO ************/
 /**
  * @function showPageCollectionPage
@@ -1629,6 +1641,7 @@ function showPageCollectionPage() {
         }
     });
 }
+
 /*************** LISTA COMENTARIOS DE TERMOS ************/
 /**
  * @function list_comments_term
@@ -1647,7 +1660,6 @@ function list_comments_term(seletor, term_id) {
         $('.nav-tabs').tab();
     });
 }
-/***********************************************************/
 
 function showDesignConfiguration(src) {
     $.ajax({
@@ -1705,6 +1717,7 @@ function showEventsRepository(src, collection_root_id) {
         $('#configuration').html(result);
     });
 }
+
 /**
  *
  * @param {type} action
@@ -1773,6 +1786,7 @@ function showSingleObjectVersion(object_id, src) {
         $('#configuration').html(result).show();
     });
 }
+
 /***************************** funcoes para mostrar paginas especificas  *******/
 //PARA ITEMS
 function showSingleObjectByName(object_name, src) {
@@ -1793,6 +1807,7 @@ function showSingleObjectByName(object_name, src) {
         }
     });
 }
+
 //PARA CRIAR NOVOS ITEMS
 function createItemPage(src) {
     $.ajax({
@@ -1809,7 +1824,6 @@ function createItemPage(src) {
         $('.nav-tabs').tab();
     });
 }
-
 
 //PARA CATEGORIAS
 function showPageCategories(slug_category, src) {
@@ -1839,6 +1853,7 @@ function showPageCategories(slug_category, src) {
         }
     });
 }
+
 //funcao essencial para retornar o link da pagina das categorias
 function get_url_category(term_id) {
     return $.ajax({
@@ -1851,6 +1866,7 @@ function get_url_category(term_id) {
         }
     });
 }
+
 //PARA PROPRIEDADES
 function showPageProperties(slug_property, src) {
     $("#menu_object").hide();
@@ -1882,6 +1898,7 @@ function showPageProperties(slug_property, src) {
 
     });
 }
+
 //funcao essencial para retornar o slug da pagina das propriedades
 function get_slug_property(term_id) {
     return $.ajax({
@@ -1894,6 +1911,7 @@ function get_slug_property(term_id) {
         }
     });
 }
+
 //PARA TAGS
 function showPageTags(slug_tag, src) {
     $("#menu_object").hide();
@@ -1923,6 +1941,7 @@ function showPageTags(slug_tag, src) {
 
     });
 }
+
 function showGraph(url) {
     $("#category_page").val('');
     $("#property_page").val('');
@@ -1941,6 +1960,7 @@ function showGraph(url) {
         scrollTop: $('#form').offset().top
     }, 2000);
 }
+
 /***************************** Fim: funcoes para mostrar paginas especificas  *******/
 $(function () {
     var nav = $('#hypertree');
@@ -2189,6 +2209,7 @@ function fast_insert() {
     }
     $('#fast_insert_object').val('');
 }
+
 //INSERE A IMAGEM PELA URL
 function insert_image_url(image_url, classifications) {
     $.ajax({
@@ -2219,6 +2240,7 @@ function insert_image_url(image_url, classifications) {
         }
     });
 }
+
 // INSERINDO OBJETO PELA URL
 function insert_object_url(url, classifications) {
     var key = $('#socialdb_embed_api_id').val();
@@ -2367,6 +2389,7 @@ function show_form_item() {
         $('#create_button').hide();
     });
 }
+
 //##################################### REPOSITORY ########################################//
 //notification events repository
 function notification_events_repository() {
@@ -2380,6 +2403,7 @@ function notification_events_repository() {
         /* $('.dropdown-toggle').dropdown(); $('.nav-tabs').tab(); */
     });
 }
+
 //properties
 // funcao que mostras o menu das propriedades
 function showPropertiesRepository(src) {
@@ -2564,6 +2588,7 @@ function bytesToSize(bytes) {
     var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
     return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
 }
+
 // apenas numeros no input
 function onlyNumbers(e) {
     var tecla = (window.event) ? event.keyCode : e.which;
@@ -2576,6 +2601,7 @@ function onlyNumbers(e) {
             return false;
     }
 }
+
 // validacao para float
 function isFloat(evt) {
     var charCode = (event.which) ? event.which : event.keyCode;
@@ -2626,6 +2652,7 @@ function display_view_main_page() {
         $("#display_view_main_page").html(result);
     });
 }
+
 // FACEBOOK METHODS
 function graphStreamPublish(message, link, picture, name, description) {
     //showLoader(true);
@@ -2647,9 +2674,8 @@ function graphStreamPublish(message, link, picture, name, description) {
         }
     });
 }
+
 //************************ TELA DE ADICAO DE ITEM *******************************//
-
-
 function showAddItemText() {
     var src = $('#src').val();
     $("#form").html('');
@@ -2673,6 +2699,7 @@ function showAddItemText() {
         $('#configuration').html(result).show();
     });
 }
+
 /**
  *
  * @param {type} id
@@ -2870,6 +2897,7 @@ jQuery.fn.darken = function (darkenPercent) {
 $(".list-group .list-group").each(function () {
     $(this).children('.list-group-item').darken(10);
 });
+
 //************************  CACHE  *******************************//
 function save_cache(html, operation, collection_id) {
     var src = $('#src').val();
@@ -2885,6 +2913,7 @@ function save_cache(html, operation, collection_id) {
     }).done(function (result) {
     });
 }
+
 function delete_cache(operation, collection_id) {
     var src = $('#src').val();
     $.ajax({
@@ -3182,6 +3211,14 @@ function validate_email(email_id)
     }
 
     return false;
+}
+
+function change_to_cards()
+{
+    if(isMobile())
+    {
+        $("#collectionViewMode")
+    }
 }
 
 /*Verifica se a página está sendo acessada através de um dispositivo movél*/

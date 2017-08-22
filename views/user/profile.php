@@ -31,7 +31,7 @@ $current_user_metas = get_user_meta($current_user->ID);
                             </div>
                         </div>-->
 
-                        <div class=" col-md-12 col-lg-12 ">
+                        <div class=" col-md-12 col-lg-12">
                             <table class="table table-user-information">
                                 <tbody>
                                     <tr>
