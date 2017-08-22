@@ -115,7 +115,9 @@ if (isset($property_data)):
             <?php if ($is_view_mode || (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true')): ?>
                 <?php $meta = get_post_meta($object_id, 'socialdb_property_helper_' . $property['id'], true); ?>
                 <div>
-                    <?php if (is_plugin_active('data_aacr2/data_aacr2.php') && $property['type'] == 'date' && get_post_meta($object_id, "socialdb_property_{$property['id']}_0_date", true)): ?>
+                    <?php if(has_action('alter_data_property_view')): ?>
+                        <?php do_action('alter_data_property_view',$property) ?>
+                    <?php elseif (is_plugin_active('data_aacr2/data_aacr2.php') && $property['type'] == 'date' && get_post_meta($object_id, "socialdb_property_{$property['id']}_0_date", true)): ?>
                         <?php $value = get_post_meta($object_id, "socialdb_property_{$property['id']}_0_date", true); ?>
                         <?php $value = str_replace('[','',str_replace(']','',$value)); ?>
                         <p><?php echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $value . "'" . ',' . $property['id'] . ')">[ ' . $value . ' ]</a>'; ?></p>

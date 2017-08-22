@@ -192,7 +192,7 @@ class ObjectClass extends FormItem {
                             toastr.error(ui.item.label + ' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
                             return false;
                         }
-                        if ($('#avoid_selected_items_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>').val() === 'false') {
+                        //if ($('#avoid_selected_items_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>').val() === 'false') {
                             if ($('#inserted_property_object_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>_' + ui.item.value).length === 0) {
                                 <?php if(!$isMultiple): ?>
                                     $('#results_property_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?> ul').html('');
@@ -204,9 +204,9 @@ class ObjectClass extends FormItem {
                                 //validacao do campo
                                 original_add_in_item_value_compound_<?php echo $compound_id ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>(ui.item.value);
                             }
-                        } else {
-                            $("#advanced_search_title_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>").val(ui.item.label);
-                        }
+                        //} else {
+                           // $("#advanced_search_title_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>").val(ui.item.label);
+                        //}
                     }
                 });
 
