@@ -75,11 +75,15 @@
                 "<tr class='quality-content'><td>"+ title +"</td><td> <a id='"+ title +"' onclick='javascript:renderDetail(this)' href='javascript:void(0)' id='detail-quality' class='a-color'>"+ qtd +" <span class='glyphicon glyphicon-info-sign'></span> </a> </td></tr>"
             );
         },
-        createCsvFile: function(csvData) {
+        createCsvFile: function(csvData, filter) {
             var csvContent = "data:text/csv;charset=utf-8,";
-            csvContent += "Evento, Qtd\n";
+
+            csvContent += (filter == "nofilter") ? "Evento, Quantidade\n" : "Evento, Data, Quantidade, Total\n";
+
+            var dataString;
+
             csvData.forEach(function(infoArray, index) {
-                var dataString = infoArray.join(",");
+                dataString = infoArray.join(",");
                 csvContent += index < csvData.length ? dataString + "\n" : dataString;
             });
             var encodedURI = encodeURI(csvContent);
@@ -117,7 +121,7 @@
     function renderDetail(e) {
         var chart = $('.selected_chart_type').val();
 
-        toggleElements(["#"+chart+"chart_div", "#charts-resume"], true);
+        toggleElements(["#"+chart+"chart_div", "#charts-resume", ".user-config-control"], true);
         toggleElements(["#charts-container #values-details"]);
 
         var report = $(".current_parent_report").val();
@@ -662,7 +666,7 @@
     function closeDetail() {
         var chart = $('.selected_chart_type').val();
 
-        toggleElements(["#"+chart+"chart_div", "#charts-resume"]);
+        toggleElements(["#"+chart+"chart_div", "#charts-resume", ".user-config-control"]);
         toggleElements(["#values-details", "#no_chart_data"], true);
     }
 
@@ -830,22 +834,26 @@
     });
 
     function normalizeStatPage() {
+        var chartHeaderH3Topo = $('.chart-header h3.topo');
+        var body = $('body');
+
         var stats_title = [
             $('.stats-i18n .repo-stats').text(),
             $('.stats-i18n .collection-stats').text()
         ];
+
         // Repository Statistics
-        if( $('body').hasClass('page-template-page-statistics') ) {
-            $('.chart-header h3.topo').text(stats_title[0]);
-        } else if( $('body').hasClass('single-socialdb_collection') ) { // Collection's Statistics
-            $('.chart-header h3.topo').text(stats_title[1]);
+        if( body.hasClass('page-template-page-statistics') ) {
+            chartHeaderH3Topo.text(stats_title[0]);
+        } else if( body.hasClass('single-socialdb_collection') ) { // Collection's Statistics
+            chartHeaderH3Topo.text(stats_title[1]);
         }
     }
 
     var tChart = new TainacanChart();
 
     // Report type configs
-    var statsDynatreeData = {
+    var STATSDYNATREE = {
         minExpandLevel: 1,
         selectionVisible: true,
         checkbox:  true,
@@ -986,16 +994,21 @@
     function getFilterSelected(params) {
         var filter = 'months';
         
-        if($('#days').is(":checked")){
+        var dayChecked = $('#days').is(":checked");
+        var weekCheckedEnabled = $('#weeks').is(":checked") && $('#weeks').is(":enabled");
+        var monthCheckedEnabled = $('#months').is(":checked") && $('#months').is(":enabled");
+        var nofilterChecked = $('#nofilter').is(":checked");
+
+        if(dayChecked){
             filter = $('#days').val();
         }
-        else if($('#weeks').is(":checked") && $('#weeks').is(":enabled")){
+        else if(weekCheckedEnabled){
             filter = $('#weeks').val();
         }
-        else if($('#months').is(":checked") && $('#months').is(":enabled")){
+        else if(monthCheckedEnabled){
             filter = $('#months').val();
         }
-        else if($('#nofilter').is(":checked")){
+        else if(nofilterChecked){
             filter = $('#nofilter').val();
         }
         
@@ -1005,8 +1018,8 @@
     // POST
     function fetchData(parent, action, operation = 'user_events') {
 
-        var stat_path = $('.stat_path').val() || $('#src').val(); //url do tema
-        var c_id = $('.get_collection_stats').val() || null; //id da coleção ?!
+        var statisticsPath = $('.stat_path').val() || $('#src').val(); //url do tema
+        var collectionID = $('.get_collection_stats').val() || null; //id da coleção ?!
 
         var from = getPeriodFilter()['from'];
         var to = getPeriodFilter()['to'];
@@ -1023,20 +1036,18 @@
         }
 
         $.ajax({
-            url: stat_path + '/controllers/log/log_controller.php', type: 'POST',
-            data: { operation: operation, parent: parent, event: action, from: from, to: to, collec_id: c_id, filter: filter}
+            url: statisticsPath + '/controllers/log/log_controller.php', type: 'POST',
+            data: { operation: operation, parent: parent, event: action, from: from, to: to, collec_id: collectionID, filter: filter}
         }).done(function(resp) {
-            console.log(resp);
             var resJSON = JSON.parse(resp);
-            console.log(resJSON);
             var chart = $('.selected_chart_type').val(); //tipo de chart selecionado
 
             if(operation == 'user_events'){
                 if( (resJSON.stat_object == null) || resJSON.stat_object.length == 0) {
-                    toggleElements(["#charts-container div", "#charts-resume"], true);
+                    toggleElements(["#charts-container div", "#charts-resume", ".user-config-control"], true);
                     toggleElements(["#charts-container #no_chart_data"]);
                 } else {
-                    toggleElements(["#"+ chart +"chart_div", "#charts-resume"]);
+                    toggleElements(["#"+ chart +"chart_div", "#charts-resume", ".user-config-control"]);
                     toggleElements(["#no_chart_data", "#values-details"], true);
                     
                     setTimeout( function() {
@@ -1064,63 +1075,67 @@
 
     function drawChart(chart_type, title, data_obj, filter) {
         if(data_obj) {
-            var tai_chart = new TainacanChart(); // New instance of TainacanChart
+            var taiChart = new TainacanChart(); // New instance of TainacanChart
             var csvData = []; // The Array to create CSV file
             var chart_data = new google.visualization.DataTable(); // The DataTable to insert in Charts      
+            
             if(data_obj.columns.events){
                 var columnsData = data_obj.columns.events; // Array that contains name of events (login, add, etc.) 
             }
             else if(data_obj.columns){
                 var columnsData = data_obj.columns;
             }
+            
             // Preparation of DataTables to different filters
-
-            if(filter == "days" || filter == "months"){
+            if(filter == "days" || filter == "months" || filter == "weeks"){
                 chart_data.addColumn('string', 'date');
                 for(evnt in columnsData){
-                    chart_data.addColumn('number', tai_chart.getMappedTitles()[columnsData[evnt]] ? tai_chart.getMappedTitles()[columnsData[evnt]] : columnsData[evnt]);
-                }
-            }
-            else if(filter == "weeks"){
-                chart_data.addColumn('string', 'week_number');
-                for(evnt in columnsData){
-                    chart_data.addColumn('number', tai_chart.getMappedTitles()[columnsData[evnt]] ? tai_chart.getMappedTitles()[columnsData[evnt]] : columnsData[evnt]);
+                    chart_data.addColumn('number', taiChart.getMappedTitles()[columnsData[evnt]] ? taiChart.getMappedTitles()[columnsData[evnt]] : columnsData[evnt]);
                 }
             }
             else if(filter == "nofilter"){
                 chart_data.addColumn('string', 'eventName');
                 chart_data.addColumn('number', 'total');
             }
-
             //
 
             // If stat object has values
             if(data_obj.stat_object && data_obj.stat_object[0] && filter != "nofilter") {
-
                 // Show in statistics page footer with stats and totals
-                tai_chart.displayFixedBase();
+                taiChart.displayFixedBase();
 
-                    var rows = [[]]; // Array that contains rows of DataTable
-                    var flag = ''; // Var that contains name of actual event
-                    var cole_flag = 0;
-                    
-                    rows[0] = ['-'];
+                var rows = [[]]; // Array that contains rows of DataTable
+                var flag = ''; // Var that contains name of actual event
+                var coleFlag = 0;
+
+                var array_n; 
+                var le2; 
+
+                var temp;
+                var el;
+
+                var indCol;
+                var indColu;
+
+                var le;
+
+                rows[0] = ['-'];
 
                     for( j in data_obj.stat_object ) {
-                        var array_n = data_obj.stat_object[j]; // Array that contains the actual array from stat_object
-                        var le2 = columnsData.length; // Var that contains total of events
+                        array_n = data_obj.stat_object[j]; // Array that contains the actual array from stat_object
+                        le2 = columnsData.length; // Var that contains total of events
 
                         // If has value in first array
                         if(rows[0][0]) {
                             // If date is equal to date of an existing element and array exist
-                            var temp  = existIn(array_n, rows);
-                            var el = rows[Number(temp[1])]; // Var that contains actual array from rows
+                            temp = existIn(array_n, rows);
+                            el = rows[Number(temp[1])]; // Var that contains actual array from rows
 
                             if(temp[0] == false){ 
                                 for(x in columnsData){
                                     //If event is equal to event in existing element
                                     if(columnsData[Number(x)] == array_n[0]){ 
-                                        var indCol = Number(x)+1; // Var that contains the index of event
+                                        indCol = Number(x)+1; // Var that contains the index of event
                                         break;
                                     }
                                 }
@@ -1140,11 +1155,11 @@
                                 for(z in columnsData){
                                 //If event is equal to event in existing element
                                     if(columnsData[Number(z)] == array_n[0]){ 
-                                        var indColu = Number(z)+1; // Var that contains the index of event
+                                        indColu = Number(z)+1; // Var that contains the index of event
                                         break;
                                     }
                                 }
-                                var le = rows.length-1; // Var that contains the total of rows
+                                le = rows.length-1; // Var that contains the total of rows
                                  
                                  
                                 rows[le][0] = array_n[1]; // Add new date to array
@@ -1163,31 +1178,33 @@
                             }
                         }
 
-                        csvData.push( array_n );
+                        csvData.push(array_n);
+
+                        var currentEventTitle;
 
                         if(flag != array_n[0]){
                            flag = array_n[0];
                            
-                           var curr_evt_title = tai_chart.getMappedTitles()[flag] ? tai_chart.getMappedTitles()[flag] : flag;
+                           currentEventTitle = taiChart.getMappedTitles()[flag] ? taiChart.getMappedTitles()[flag] : flag;
                            if(title == 'top_collections'){
-                               if (cole_flag == 0){
-                                   tai_chart.appendQualityBase();
-                                   cole_flag = 1;
+                               if (coleFlag == 0){
+                                   taiChart.appendQualityBase();
+                                   coleFlag = 1;
                                }
                                // Display collections e items (total) 
-                               tai_chart.appendQualityData(curr_evt_title, array_n[3]);
+                               taiChart.appendQualityData(currentEventTitle, array_n[3]);
                            }
                            else if(title == 'repo_searches' || title == 'collection_searches'){
-                               if(cole_flag == 0){
-                                   tai_chart.appendSearchesBase();
-                                   cole_flag = 1;
+                               if(coleFlag == 0){
+                                   taiChart.appendSearchesBase();
+                                   coleFlag = 1;
                                }
                                // Display term and searches (total)
-                               tai_chart.appendQualityData(curr_evt_title, array_n[3]);
+                               taiChart.appendQualityData(currentEventTitle, array_n[3]);
                            }
                            else{
                                // Display status and total
-                               tai_chart.displayBaseAppend(curr_evt_title, array_n[3]);
+                               taiChart.displayBaseAppend(currentEventTitle, array_n[3]);
                            }
                         }
                     } // end of for
@@ -1197,7 +1214,7 @@
                     chart_data.addRows(rows);
             }
             else if(data_obj.stat_object && data_obj.stat_object[0] && filter == "nofilter"){
-                var cole_flag = 0;
+                var coleFlag = 0;
                 var objStats = data_obj.stat_object;
                 
                 if(data_obj.columns.events){
@@ -1207,21 +1224,23 @@
                     var objColumn = data_obj.columns;
                 }
 
-                tai_chart.appendNoFilterBase();
+                taiChart.appendNoFilterBase();
                 for(var key in objStats){
-                    currentColData = tai_chart.getMappedTitles()[objColumn[key]] ? tai_chart.getMappedTitles()[objColumn[key]] : objColumn[key];
+                    currentColData = taiChart.getMappedTitles()[objColumn[key]] ? taiChart.getMappedTitles()[objColumn[key]] : objColumn[key];
+
+                    csvData.push([currentColData, objStats[key][1]]);
 
                     chart_data.addRow([currentColData, objStats[key][1]]);
-                    tai_chart.appendQualityData(currentColData, objStats[key][1]);
+                    taiChart.appendQualityData(currentColData, objStats[key][1]);
                 }
             }
             else if(!data_obj.stat_object[0]){
                 chart_data.addRow();
-                tai_chart.displayFixedBase();
+                taiChart.displayFixedBase();
             }
 
             // Generate CSV file for current chart
-            tai_chart.createCsvFile(csvData);
+            taiChart.createCsvFile(csvData, filter);
 
             var div_chart = $("#charts-container").get(0);
             $(div_chart).removeClass('hide');
@@ -1234,11 +1253,12 @@
     function renderChart(current_title, type, stat_data, filter) {
         // Google Charts objects
         var legendOpt = {position: 'top', alignment: 'center', textStyle: {fontSize: 11}, maxLines: 3};
+        
         if(filter == "nofilter"){
             legendOpt = {position: 'none'};
         }
 
-        if( type == 'pie' ) {
+        if(type == 'pie') {
             var piechart = new google.visualization.PieChart(document.getElementById('piechart_div'));
             var pieOptions = {
                 is3D: true,
@@ -1257,7 +1277,7 @@
 
             piechart.draw(stat_data, pieOptions);
         }
-        else if ( type == 'bar' ) {
+        else if(type == 'bar') {
             var barchart = new google.visualization.BarChart(document.getElementById('barchart_div'));
             var barOptions = {
                 bars: 'horizontal',
@@ -1275,7 +1295,7 @@
 
             barchart.draw(stat_data, barOptions);
         }
-        else if( type == 'default' ) {
+        else if(type == 'default') {
             var default_chart = new google.visualization.ColumnChart(document.getElementById('defaultchart_div'));
             var defaOptions = {
                 bars: 'vertical',
@@ -1293,7 +1313,7 @@
 
             default_chart.draw(stat_data, defaOptions);
         }
-        else if( type == 'curveline'){
+        else if(type == 'curveline'){
             var linechart = new google.visualization.LineChart(document.getElementById('curvelinechart_div'));
             var curveOptions = {
                 legend: legendOpt,
@@ -1335,14 +1355,14 @@
         var to = $(".period-config #to_period").val();
 
         if(from) {
-            var text_from = formatChartDate( new Date(from) );
+            var text_from = from;
         } else {
             var text_from = "01/01/" + new Date().getFullYear();
         }
         if (to) {
-            var text_to = " a " + formatChartDate( new Date(to) );
+            var text_to = " a " + to;
         } else {
-            var text_to = " a " + formatChartDate( new Date() );
+            var text_to = " a " + formatChartDate(new Date());
         }
 
         var period_consult = $(".stats-i18n .consult-period").text();
@@ -1354,14 +1374,15 @@
         var projectLogo = new Image();
         projectLogo.src = $(logo).attr("src");
         var logo_settings = { width: (projectLogo.naturalWidth * 0.48), height: (projectLogo.naturalHeight * 0.48) };
-        pdf.addImage(projectLogo, 'PNG', line_dims.startX + 15, line_dims.startY - 45, logo_settings.width, logo_settings.height);
+        pdf.addImage(projectLogo, 'PNG', line_dims.startX + 15, line_dims.startY - 53, logo_settings.width, logo_settings.height);
 
         // wether stat has chart or not
         var no_chart_stat = $('tr.headers td').length;
+        
         if( no_chart_stat == 2 ) {
             var chart_table_YDist = 120;
         } else if ( no_chart_stat == 0 ) {
-            var chart_table_YDist = 300;
+            var chart_table_YDist = 500;
             var chartImg = new Image();
             chartImg.src = $('.chart-img img.dynamic-chart-img').attr('src');
             var chart_settings = { width: (chartImg.naturalWidth * 0.6), height: (chartImg.naturalHeight * 0.6) };
@@ -1378,6 +1399,7 @@
         var current_pdf_chart = $(".chart-header h3.topo").text();
         var repository_chart_title = $(".stats-i18n .repo-stats").text();
         var colleciton_chart_title = $(".stats-i18n .collection-stats").text();
+        
         if( current_pdf_chart == repository_chart_title ) {
             var current_pdf_title_xDist = (same_x_dist+20);
         } else if(current_pdf_chart == colleciton_chart_title) {
@@ -1386,12 +1408,12 @@
 
         pdf.setFontSize(14);
         pdf.setFontType('bold');
-        pdf.text(current_pdf_chart, current_pdf_title_xDist,(line_dims.startY - 17) ); // Estatísticas ...
+        pdf.text(current_pdf_chart, current_pdf_title_xDist,(line_dims.startY - 20) ); // Estatísticas ...
 
         pdf.setFontSize(8);
         pdf.setTextColor(100);
         pdf.setFontType('normal');
-        pdf.text(consultDate, same_x_dist + 50, line_dims.startY - 5); // Consultado em
+        pdf.text(consultDate, same_x_dist + 50, line_dims.startY - 8); // Consultado em
 
         pdf.setTextColor(0);
         pdf.setFontSize(9.5);
@@ -1411,7 +1433,7 @@
         pdf.rect(line_dims.startX, line_dims.startY + 30, line_dims.length, line_dims.thickness, 'F');
 
         var resume_data = pdf.autoTableHtmlToJson( $('#charts-resume table').get(0) );
-
+        resume_data.rows.splice(0,1);
         // headerStyles: { textColor: [12,105,139], lineColor: [0,0,0], fillColor: 255 }
         var autoTable_opts = { theme: 'striped', startY: chart_table_YDist, headerStyles: { fillColor: [44, 62, 80] } };
         pdf.autoTable( resume_data.columns, resume_data.data, autoTable_opts);
@@ -1436,7 +1458,7 @@
     }
 
     // Load dynatree
-    $("#report-type-stat").dynatree(statsDynatreeData);
+    $("#report-type-stat").dynatree(STATSDYNATREE);
 
     // On Load page or change filters
     function loadChart(){
