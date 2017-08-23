@@ -1306,50 +1306,9 @@
                         }, 1200);
                     }, 600);
                 }
-            } 
-//            else if (elem.metas.socialdb_property_object_category_id) {
-//                if ($("#property_category_dynatree")) {
-//                    $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
-//                        node.select(false);
-//                    });
-//                    var value = elem.metas.socialdb_property_object_category_id;
-//                    $('#selected_categories_relationship').html('');
-//                    //if (contador === 0) {
-//                        $('#selected_categories_relationship').html('');
-//                        $.ajax({
-//                            type: "POST",
-//                            url: $('#src').val() + "/controllers/category/category_controller.php",
-//                            data: {category_id: elem.metas.socialdb_property_object_category_id, operation: 'get_metas'}
-//                        }).done(function (result) {
-//                            elem = jQuery.parseJSON(result);
-//                            var contador = 0;
-//                            $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
-//                                console.log(value == node.data.key,value , node.data.key);
-//                                if (value == node.data.key) {
-//                                    contador++;
-//                                    if(node.bSelected === false)
-//                                        node.select(true);
-//                                    ids = $('#property_object_category_id').val().split(',');
-//                                    index = ids.indexOf(node.data.key);
-//                                    if (index < 0) {
-//                                        ids.push(node.data.key);
-//                                        $('#property_object_category_id').val(ids.join(','));
-//                                    }
-//                                }
-//                            });
-//                            if(contador === 0){
-//                                add_label_box(elem.term.term_id, elem.term.name, '#selected_categories_relationship');
-//                                ids = $('#property_object_category_id').val().split(',');
-//                                index = ids.indexOf(elem.term.term_id);
-//                                if (index < 0) {
-//                                    ids.push(elem.term.term_id);
-//                                    $('#property_object_category_id').val(ids.join(','));
-//                                }
-//                            }
-//                        });
-//                    //}
-//                }
-//            }
+            }else{
+                localStorage.setItem("is_init", false); 
+            }
 
 
             $("#meta-relationship .modal-title").text('<?php _e('Edit property', 'tainacan') ?>');
