@@ -103,7 +103,7 @@ include_once('js/list_js.php');
 
                 <!-- Mensagem 'não há dados' -->
                 <div id="no_chart_data" class="hide text-center">
-                    <h3> <?php _t('There is no data yet for this report!', 1); ?> </h3>
+                    <h4> <?php _t('There is no data for this report or report filter!', 1); ?> </h4>
                 </div>
 
                 <!-- Tabela de exibição dos detalhes dos valores -->

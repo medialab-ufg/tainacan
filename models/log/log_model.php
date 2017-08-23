@@ -628,7 +628,7 @@ class Log extends Model {
                         (
                             SELECT event, week_number, count(event) AS total 
                             FROM (
-                                SELECT post_parent AS event, yearweek(substring(post_date, 1, 10)) AS week_number 
+                                SELECT post_parent AS event, INSERT((yearweek(substring(post_date, 1, 10))), 5, 0, '/ week-') AS week_number 
                                 FROM %s 
                                     WHERE post_parent > 0 AND post_type = 'socialdb_object' AND substring(post_date, 1, 10) between '$from' AND '$to'
                             ) res1 
@@ -705,16 +705,16 @@ class Log extends Model {
                             ON res1.event = res2.event2
                     ) ORDER BY event_total DESC ", self::_table(), self::_table());
             } 
-            else if($filter == 'weeks' ){
+            else if($filter == 'weeks'){
 
                 $SQL_query = sprintf(
                     "SELECT event, week_number, total, event_total
                     FROM (
                         (
-                            SELECT event, yearweek(substring(event_date, 1, 10)) as week_number, count(event) AS total
+                            SELECT event, INSERT((yearweek(substring(event_date, 1, 10))), 5, 0, '/ week-') AS week_number, count(event) AS total
                             FROM %s
                                 WHERE event_type like '". $event_type ."'  AND (substring(event_date, 1, 10)) between '$from' AND '$to'
-                                GROUP BY event, (yearweek(substring(event_date, 1, 10)))
+                                GROUP BY event, INSERT((yearweek(substring(event_date, 1, 10))), 5, 0, '/ week-')
                         ) res1
                         JOIN (
                             SELECT event AS event2, count(event) AS event_total
@@ -795,10 +795,10 @@ class Log extends Model {
                     "SELECT event, week_number, total, event_total
                     FROM (
                         (
-                            SELECT event, yearweek(substring(event_date, 1, 10)) as week_number, count(event) AS total
+                            SELECT event, INSERT((yearweek(substring(event_date, 1, 10))), 5, 0, '/ week-') AS week_number, count(event) AS total
                             FROM %s
                                 WHERE event_type = '$event_type' AND collection_id = '$collection_id' AND (substring(event_date, 1, 10)) between '$from' AND '$to'
-                                GROUP BY event, (yearweek(substring(event_date, 1, 10)))
+                                GROUP BY event,INSERT((yearweek(substring(event_date, 1, 10))), 5, 0, '/ week-')
                         ) res1
                         JOIN (
                             SELECT event AS event2, count(event) AS event_total
@@ -950,7 +950,7 @@ class Log extends Model {
                 }
             }
             else if($report == 'administration' || $report == 'busca' || $report == 'importexport'){
-                $evtype = ($report == 'administration') ? 'event_type = \'collection_admin\'' : ($report == 'busca') ? 'event_type like \'collection_search\'' : 'event_type = \'imports\'';
+                $evtype = ($report == 'administration') ? 'event_type = \'admin\'' : (($report == 'busca') ? 'event_type like \'collection_search\'' : 'event_type = \'imports\'');
 
                 $SQL_query = sprintf(
                     "SELECT user_login AS user, event_date AS date 
@@ -1026,7 +1026,7 @@ class Log extends Model {
                 }
             }
             else if($report == 'administration' || $report == 'busca' || $report == 'importexport'){
-                $evtype = ($report == 'administration') ? 'event_type = \'collection_admin\'' : ($report == 'busca') ? 'event_type like \'collection_search\'' : 'event_type = \'collection_imports\'';
+                $evtype = ($report == 'administration') ? 'event_type = \'collection_admin\'' : (($report == 'busca') ? 'event_type like \'collection_search\'' : 'event_type = \'collection_imports\'');
 
                 $SQL_query = sprintf(
                     "SELECT user_login AS user, event_date AS date 

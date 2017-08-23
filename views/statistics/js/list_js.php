@@ -658,7 +658,6 @@
                     renderDetailThead(thead);
                     fetchData('busca', eventName, 'detail');
                     break;
-                    break;
             }
         }
     }
@@ -897,7 +896,7 @@
 
     // Dynatrees report's children
     // User
-    function statusChildren() {
+    function usersChildren() {
         /* 
         * user_status 
         * user_items
@@ -911,7 +910,7 @@
         ];
     }
     // Items
-    function itensChildren() {
+    function itemsChildren() {
         /* 
         * user_items
         * general_status_items
@@ -963,8 +962,8 @@
     //Report type list
     function getStatsTree() {
         return [
-            { title: $('.stats-users').text(), addClass: 'repoOnly', noLink: true, expand: true, unselectable: true, hideCheckbox: true, children: statusChildren() },
-            { title: $('.stats-items').text(), noLink: true, unselectable: true, hideCheckbox: true, children: itensChildren() },
+            { title: $('.stats-users').text(), addClass: 'repoOnly', noLink: true, expand: true, unselectable: true, hideCheckbox: true, children: usersChildren() },
+            { title: $('.stats-items').text(), noLink: true, unselectable: true, hideCheckbox: true, children: itemsChildren() },
             { title: $('.stats-collections').text(), addClass: 'repoOnly', noLink: true, hideCheckbox: true, children: collectionsChildren() },
             { title: $('.stats-comments').text(), noLink: true, hideCheckbox: true, children: commentsChildren() },
             { title: $('.stats-categories').text(), noLink: true, hideCheckbox: true, children: categoryChildren() },
