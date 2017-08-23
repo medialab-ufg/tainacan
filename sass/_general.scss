@@ -732,6 +732,9 @@ section.admin-configs {
   background: $collections-bg-color;
   width: 100%;
   float: left;
+  ul.dynatree-container {
+    border: 1px solid $collections-bg-color;
+  }
 }
 
 .navbar-default .navbar-nav > .open > a,
