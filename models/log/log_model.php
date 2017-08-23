@@ -684,7 +684,7 @@ class Log extends Model {
         global $wpdb;
 
         if(($collection_id == 'null' || is_null($collection_id))){
-            $event_type = '%%search%%'; //this don't work
+            $event_type = '%%search%%';
            
             if($filter == 'days' ) {
                 $SQL_query = sprintf(
@@ -787,7 +787,6 @@ class Log extends Model {
                             ) res2
                             ON res1.event = res2.event2
                     )", self::_table(), self::_table());
-                //$sql = sprintf("SELECT event AS term, COUNT(*) AS t_count FROM %s WHERE event_type = 'advanced_search' GROUP BY event ORDER BY COUNT(*) DESC", self::_table());
             } 
             else if($filter == 'weeks' ){
 
