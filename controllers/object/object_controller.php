@@ -23,8 +23,9 @@ class ObjectController extends Controller {
                 //classe que executa toda a logica
                 include_once dirname(__FILE__) . '../../../views/object/formItem/helper/formItem.class.php';
                 //sessao
+
                 if(!session_id()) {
-                        session_start();
+                    session_start();
                 }
                 //verificacoes para edicao ou criacao deitem
                 if(isset($data['item_id'])){
@@ -1218,4 +1219,3 @@ if($_POST['operation_priority']){
 
 $object_controller = new ObjectController();
 echo $object_controller->operation($operation, $data);
-?>

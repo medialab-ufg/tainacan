@@ -89,12 +89,17 @@ ul.repository-settings, .admin-configs {
 //     margin-top: 0; // remove the gap so it doesn't close
 // }
 
-.header-navbar {
-  // padding: 5px 0 5px 0;
+
+.home .header-navbar {
   position: absolute;
   top: 0;
   width: 100%;
   z-index: 99;
+}
+
+.header-navbar {
+  // padding: 5px 0 5px 0;
+  margin-bottom: 0 !important;
 
   a.logo-tainacan {
     padding: 0;

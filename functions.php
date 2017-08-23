@@ -395,6 +395,12 @@ function socialdb_catch_uri() {
     } else if (strpos($actual_link, '.rdf') !== false) {
         require_once 'controllers/export/rdf_controller.php';
         exit();
+    } else if (get_query_var('add')) {
+        require_once dirname(__FILE__) . '/partials/item/add.php';
+        exit();
+    } else if ( get_query_var('edit') ) {
+        require_once dirname(__FILE__) . '/partials/item/edit.php';
+        exit();
     }
 }
 
@@ -430,6 +436,8 @@ function custom_rewrite_tag() {
     add_rewrite_tag('%categories%', '([^&]+)');
     add_rewrite_tag('%edit-item%', '([^&]+)');
     add_rewrite_tag('%add-item%', '([^&]+)');
+    add_rewrite_tag('%add%', '([^&]+)');
+    add_rewrite_tag('%edit%', '([^&]+)');
 }
 
 add_action('init', 'custom_rewrite_tag', 10, 0);
@@ -452,7 +460,8 @@ function custom_rewrite_basic() {
     add_rewrite_rule('^([^/]*)/admin/'.__('export','tainacan'), 'index.php?collection=$matches[1]&export=true', 'top');
     add_rewrite_rule('^([^/]*)/admin/'.__('statistics','tainacan'), 'index.php?collection=$matches[1]&statistics=true', 'top');
 
-    //paginas do repositorio
+    // Páginas do Repositorio
+    /*
     add_rewrite_rule('^admin/'.__('metadata','tainacan'), 'index.php?collection='.$collection->post_name.'&metadata=true', 'top');
     add_rewrite_rule('^admin/'.__('events','tainacan'), 'index.php?collection='.$collection->post_name.'&events=true', 'top');
     add_rewrite_rule('^admin/'.__('configuration','tainacan'), 'index.php?collection='.$collection->post_name.'&configuration=true', 'top');
@@ -464,15 +473,21 @@ function custom_rewrite_basic() {
     add_rewrite_rule('^admin/'.__('export','tainacan'), 'index.php?collection='.$collection->post_name.'&export=true', 'top');
     add_rewrite_rule('^admin/'.__('statistics','tainacan'), 'index.php?collection='.$collection->post_name.'&statistics=true', 'top');
     add_rewrite_rule('^admin/'.__('categories','tainacan'), 'index.php?collection='.$collection->post_name.'&categories=true', 'top');
+    */
+
     //login
     add_rewrite_rule('^log-in', 'index.php?log-in=true', 'top');
     add_rewrite_rule('^'.__('signin','tainacan'), 'index.php?log-in=true', 'top');
-    add_rewrite_rule('^'.__('signin','tainacan'), 'index.php?log-in=true', 'top');
 
+    /*
     add_rewrite_rule('^([^/]*)/([^/]*)/editar', 'index.php?collection=$matches[1]&item=$matches[2]&edit-item=true', 'top');
-    add_rewrite_rule('^([^/]*)/criar-item', 'index.php?collection=$matches[1]&add-item=true', 'top');
+    add_rewrite_rule('^colecao/([^/]*)/criar-item', 'index.php?collection=$matches[1]&add-item=true', 'top');
     // add_rewrite_rule('^([^/]*)/([^/]*)', 'index.php?collection=$matches[1]&item=$matches[2]', 'top');
     //flush_rewrite_rules();
+    */
+
+    add_rewrite_rule('^colecao/([^/]*)/add', 'index.php?collection=$matches[1]&add=true', 'top');
+    add_rewrite_rule('^item/([^/]*)/edit', 'index.php?object=$matches[1]&edit=true', 'top');
 }
 
 add_action('init', 'custom_rewrite_basic', 10, 0);
@@ -1842,26 +1857,26 @@ if (!function_exists("theme_js")) {
         /* ColorPicker Bootstrap JS */
         wp_register_script('ColorPicker', get_template_directory_uri() . '/libraries/js/colorpicker/js/bootstrap-colorpicker.js');
         /* SweetAlert Bootstrap JS */
-        wp_register_script('SweetAlert', get_template_directory_uri() . '/libraries/js/SweetAlert/sweet-alert.js');
-        wp_register_script('SweetAlertJS', get_template_directory_uri() . '/libraries/js/SweetAlert/functionsAlert.js');
+        wp_register_script('SweetAlert', get_template_directory_uri() . '/libraries/js/SweetAlert/sweet-alert.js', false, true);
+        wp_register_script('SweetAlertJS', get_template_directory_uri() . '/libraries/js/SweetAlert/functionsAlert.js', false, true);
 
         /* js-xls */
-        wp_register_script('js-xls', get_template_directory_uri() . '/libraries/js/js-xlsx/xls.core.min.js');
+        wp_register_script('js-xls', get_template_directory_uri() . '/libraries/js/js-xlsx/xls.core.min.js', false, true);
 
         /* FileSaver */
-        wp_register_script('FileSaver', get_template_directory_uri() . '/libraries/js/FileSaver/FileSaver.min.js', array('jquery', 'bootstrap.min'));
+        wp_register_script('FileSaver', get_template_directory_uri() . '/libraries/js/FileSaver/FileSaver.min.js', array('jquery', 'bootstrap.min'), false, true);
 
         /* jsPDF */
-        wp_register_script("jsPDF", get_template_directory_uri() . '/libraries/js/jspdf/jspdf.min.js', array('jquery'));
+        wp_register_script("jsPDF", get_template_directory_uri() . '/libraries/js/jspdf/jspdf.min.js', array('jquery'), false, true);
         /* jsPDF Auto Table */
-        wp_register_script("jsPDF_auto_table", get_template_directory_uri() . '/libraries/js/jspdf/jspdf.plugin.autotable.js', array('jquery'));
+        wp_register_script("jsPDF_auto_table", get_template_directory_uri() . '/libraries/js/jspdf/jspdf.plugin.autotable.js', array('jquery'), false, true);
 
         /* tableExport */
-        wp_register_script('tableExport', get_template_directory_uri() . '/libraries/js/tableExport/tableExport.min.js', array('FileSaver', 'js-xls'));
+        wp_register_script('tableExport', get_template_directory_uri() . '/libraries/js/tableExport/tableExport.min.js', array('FileSaver', 'js-xls'), false, true);
 
         /* Data Table */
-        wp_register_script('jquerydataTablesmin', get_template_directory_uri() . '/libraries/js/bootstrap_data_table/jquery.dataTables.min.js');
-        wp_register_script('data_table', get_template_directory_uri() . '/libraries/js/bootstrap_data_table/data_table.js');
+        wp_register_script('jquerydataTablesmin', get_template_directory_uri() . '/libraries/js/bootstrap_data_table/jquery.dataTables.min.js', false, true);
+        wp_register_script('data_table', get_template_directory_uri() . '/libraries/js/bootstrap_data_table/data_table.js', false, true);
         /* Raty */
         wp_register_script('raty', get_template_directory_uri() . '/libraries/js/raty/jquery.raty.js');
         /* Pagination */
@@ -1894,7 +1909,7 @@ if (!function_exists("theme_js")) {
         /* Time Picker */
         wp_register_script("timepicker", get_template_directory_uri() .'/libraries/js/timepicker/timepicker.js', array('jquery'));
         /* Croppic */
-        wp_register_script("croppic", get_template_directory_uri() . '/libraries/js/croppic/croppic.js', array('jquery'));
+        wp_register_script("croppic", get_template_directory_uri() . '/libraries/js/croppic/croppic.js', array('jquery'), false, true);
 
         /* Google Charts Loader */
         wp_register_script("gloader", get_template_directory_uri() . '/libraries/js/gchart/gloader.js');
