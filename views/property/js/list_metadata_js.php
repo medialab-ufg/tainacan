@@ -1,5 +1,6 @@
 <script type="text/javascript">
     var src = $('#src').val();
+    localStorage.setItem("is_init",false);
     $('.dropdown-toggle').dropdown();
     var current_meta_type = $("#property_metadata_type").val();
     var $current_meta_form = "#submit_form_property_data_" + current_meta_type;
@@ -2488,7 +2489,6 @@
             },
             onSelect: function (flag, node) {
                 var is_init = localStorage.getItem("is_init");
-                console.log(is_init)
                 if(is_init === 'false') {
                     if (concatenate_in_array(node.data.key, '#property_object_category_id')) {
                         add_label_box(node.data.key, node.data.title, '#selected_categories_relationship');
