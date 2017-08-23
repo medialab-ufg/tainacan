@@ -553,6 +553,19 @@ $(window).load(function () {
         });
     });
 
+    $(document).on('keyup', "#category_name, #category_description, #category_permission, #cat_get_users, #chosen-selected-user", function(event){
+        if(event.keyCode != 37 && event.keyCode != 38 && event.keyCode != 39 && event.keyCode != 40 && event.keyCode != 9 && event.keyCode != 27)
+        {
+            sessionStorage.setItem('editing_category', true);
+        }
+    });
+
+    document.addEventListener('scroll', function (event) {
+        if($("#myMenu").is(":visible"))
+        {
+            $("#myMenu").hide();
+        }
+    }, true);
 }); // On load Tainacan' main page
 
 $(document).ready(function () {
@@ -3220,6 +3233,68 @@ function change_to_cards()
         $("#collectionViewMode")
     }
 }
+
+function get_category_info(category_root_name, node)
+{
+    $("#category_name").val(node.data.title);
+    $("#category_id").val(node.data.key);
+    $("#operation_category_form").val('update');
+    $('#category_property').html('');
+    $.ajax({
+        type: "POST",
+        url: $('#src').val() + "/controllers/category/category_controller.php",
+        data: {category_id: node.data.key, operation: 'get_parent'}
+    }).done(function (result) {
+        elem = jQuery.parseJSON(result);
+        if (elem.name && elem.name!=='socialdb_taxonomy' && elem.name!=='socialdb_category') {
+            $("#category_parent_name").val(elem.name);
+            $("#category_parent_id").val(elem.term_id);
+        } else {
+            $("#category_parent_name").val(category_root_name);
+            if(elem.term_id){
+                $("#category_parent_id").val(elem.term_id);
+            }else{
+                $("#category_parent_id").val('0');
+            }
+
+        }
+        $("#show_category_property").show();
+        $('.dropdown-toggle').dropdown();
+    });
+
+    // metas
+    $.ajax({
+        type: "POST",
+        url: $('#src').val() + "/controllers/category/category_controller.php",
+        data: {category_id: node.data.key, operation: 'get_metas'}
+    }).done(function (result) {
+        elem = jQuery.parseJSON(result);
+        if(elem.term.description) {
+            $("#category_description").val(elem.term.description);
+        }
+        if (elem.socialdb_category_permission) {
+            $("#category_permission").val(elem.socialdb_category_permission);
+        }
+
+        if(elem.socialdb_category_owner) {
+            $('.change-category-own').show();
+            var owner = elem.socialdb_category_owner;
+            $("#submit_form_category #category_owner").val(owner);
+        }
+
+        if (elem.socialdb_category_moderators) {
+            $("#chosen-selected2-user").html('');
+            $.each(elem.socialdb_category_moderators, function (idx, user) {
+                if (user && user !== false) {
+                    $("#chosen-selected2-user").append("<option class='selected' value='" + user.id + "' selected='selected' >" + user.name + "</option>");
+                }
+            });
+        }
+        set_fields_archive_mode(elem);
+        $('.dropdown-toggle').dropdown();
+    });
+}
+
 
 /*Verifica se a página está sendo acessada através de um dispositivo movél*/
 function isMobile(){
