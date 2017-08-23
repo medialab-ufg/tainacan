@@ -560,6 +560,33 @@ $(window).load(function () {
         }
     });
 
+    $(document).on('mouseover', ".config-temp-box", function () {
+        $(document).off('click', 'body');
+    });
+
+    $(document).on('mouseleave', ".config-temp-box", function () {
+        $(document).on('click', 'body', function (event) {
+            swal({
+                title: "Finalizar configuração?",
+                text: "Você ainda não finalizou a configuração da coleção",
+                type: "warning",
+                showCancelButton: true,
+                cancelButtonText: "Continuar editando",
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Finalizar criação",
+                closeOnConfirm: false
+            },function() {
+                $(document).off('click', 'body');
+                swal("Coleção salva!", "Sua coleção foi salva com sucesso.", "success");
+                $("#conclude_config").click();
+                }
+            );
+
+            event.preventDefault();
+            console.log(this);
+        });
+    });
+
     document.addEventListener('scroll', function (event) {
         if($("#myMenu").is(":visible"))
         {
