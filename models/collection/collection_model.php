@@ -530,6 +530,7 @@ class CollectionModel extends Model {
      * @author: Eduardo Humberto 
      */
     public function get_collection_by_user($user_id) {
+        error_reporting(0);
         global $wpdb;
         $wp_posts = $wpdb->prefix . "posts";
 //        $query_old = "
