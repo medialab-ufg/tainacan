@@ -658,7 +658,7 @@ class CollectionModel extends Model {
     public static function is_moderator($collection_id, $user_id) {
         $owner = get_post($collection_id)->post_author;
         $moderators = get_post_meta($collection_id, 'socialdb_collection_moderator');
-        if ($user_id != 0 && ($user_id == $owner || (is_array($moderators) && in_array($user_id, $moderators)))) {
+        if ($user_id != 0 && ($user_id == $owner || (is_array($moderators) && in_array($user_id, $moderators)) || user_can($user_id, 'manage_options'))) {
             return true;
         } else {
             return false;

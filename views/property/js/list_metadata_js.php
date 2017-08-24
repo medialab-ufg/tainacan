@@ -308,15 +308,15 @@
             success: function (data) {
                 if (data) {
                     $("#filters-accordion").html('');
-                    let facetsObj = $.parseJSON(data);
+                    var facetsObj = $.parseJSON(data);
 
                     /*
                         Remove facetas repetidas, faceta do repositorio que estava anteriormente na coleção e foi adicionada ao repositorio
                      */
-                    let unique_ids = [];
+                    var unique_ids = [];
                     facetsObj.forEach(function(elemento, idx){
-                        let id = elemento.id;
-                        let id_rep = $.inArray(id, unique_ids);
+                        var id = elemento.id;
+                        var id_rep = $.inArray(id, unique_ids);
                         if(id_rep === -1)
                         {
                             unique_ids.push(id);
@@ -2465,7 +2465,7 @@
 //                        operation: 'findDynatreeChild'
 //                    }
 //                });
-                let property_id = localStorage.getItem("property_id");
+                var property_id = localStorage.getItem("property_id");
                 $.when(
                     node.appendAjax({
                         url: src + '/controllers/category/category_controller.php',
